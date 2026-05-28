@@ -3,6 +3,9 @@
 ## Project Setup
 
 To run the project, open it in the latest Version of Android Studio and build the project as usual.
+The default local development variant is `freeDebug`, which does not require Google services credentials.
+Play variants include Firebase, Crashlytics, Remote Config, and Play review dependencies.
+Play builds require `app/src/play/google-services.json`; CI writes this file from the release secret.
 
 By default, there is not enough memory configured for gradle. You can fix this by running.
 
@@ -36,7 +39,7 @@ To run the unit tests, run the following command:
 To run the instrumentation tests, run the following command:
 
 ```sh
-./gradlew voiceDeviceGithubDebugAndroidTest
+./gradlew voiceDeviceFreeDebugAndroidTest
 ```
 
 ## Developer Menu
@@ -74,10 +77,29 @@ chmod +x .git/hooks/pre-commit
 
 ## Releasing
 
-To release a new version, trigger the [Release Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/trigger_release.yml)
+To release a new version, trigger the [Release Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/release.yml)
 
 This pushes a tag and publishes the release to the Play Store’s internal track. From there, promotion to production must be done
 manually.
+
+The release workflow uses the protected `release` GitHub environment. CI signs through Gradle's injected signing properties,
+keeps keystores as base64 file secrets, and passes store passwords, key aliases, and key passwords as environment variables;
+no checked-in or generated signing properties files are required.
+
+The `release` environment requires these secrets:
+
+| Secret                        | Purpose                                             |
+|-------------------------------|-----------------------------------------------------|
+| `PLAY_SERVICE_ACCOUNT`        | Google Play service account JSON, base64 encoded.   |
+| `GOOGLE_SERVICES`             | Play flavor `google-services.json`, base64 encoded. |
+| `PLAY_SIGNING_KEYSTORE`       | Play release keystore, base64 encoded.              |
+| `PLAY_SIGNING_STORE_PASSWORD` | Play release keystore password.                     |
+| `PLAY_SIGNING_KEY_ALIAS`      | Play release key alias.                             |
+| `PLAY_SIGNING_KEY_PASSWORD`   | Play release key password.                          |
+| `GH_SIGNING_KEYSTORE`         | GitHub/free release keystore, base64 encoded.       |
+| `GH_SIGNING_STORE_PASSWORD`   | GitHub/free release keystore password.              |
+| `GH_SIGNING_KEY_ALIAS`        | GitHub/free release key alias.                      |
+| `GH_SIGNING_KEY_PASSWORD`     | GitHub/free release key password.                   |
 
 F-Droid builds are handled by their team and usually appear a few days after a stable (non-RC) release.
 

@@ -1,8 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
-import com.android.build.api.dsl.ApkSigningConfig
 import com.android.build.api.dsl.ManagedVirtualDevice
-import java.util.Properties
+import java.io.File
 
 plugins {
   id("voice.app")
@@ -13,20 +12,9 @@ plugins {
   alias(libs.plugins.googleServices) apply false
 }
 
-fun includeProprietaryLibraries(): Boolean {
-  val includeProprietaryLibraries = providers.gradleProperty("voice.includeProprietaryLibraries").get().toBooleanStrict()
-  if (!includeProprietaryLibraries) {
-    return false
-  }
-  return file("google-services.json").exists()
-    .also { present ->
-      if (!present) {
-        logger.warn("Google Services JSON file not found, disabling proprietary libraries.")
-      }
-    }
-}
+val playGoogleServicesJson = layout.projectDirectory.file("src/play/google-services.json")
 
-if (includeProprietaryLibraries()) {
+if (playGoogleServicesJson.asFile.canRead()) {
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }
@@ -59,35 +47,16 @@ android {
     }
   }
 
-  fun createSigningConfig(name: String): ApkSigningConfig {
-    return signingConfigs.create(name) {
-      val properties = Properties()
-      val propertiesFile = layout.settingsDirectory.file("signing/$name/signing.properties").asFile
-        .takeIf { it.canRead() }
-        ?: layout.settingsDirectory.file("signing/ci/signing.properties").asFile
-      propertiesFile.inputStream().use { input ->
-        properties.load(input)
-      }
-      storeFile = File(propertiesFile.parentFile, "signing.keystore")
-      storePassword = properties["STORE_PASSWORD"] as String
-      keyAlias = properties["KEY_ALIAS"] as String
-      keyPassword = properties["KEY_PASSWORD"] as String
-    }
-  }
-
-  val playSigningConfig = createSigningConfig("play")
-  val githubSigningConfig = createSigningConfig("github")
-
-  val signingFlavor = "signing"
-  flavorDimensions += signingFlavor
+  val distributionFlavor = "distribution"
+  flavorDimensions += distributionFlavor
   productFlavors {
-    register("github") {
-      dimension = signingFlavor
-      signingConfig = githubSigningConfig
+    register("free") {
+      dimension = distributionFlavor
+      buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "false")
     }
     register("play") {
-      dimension = signingFlavor
-      signingConfig = playSigningConfig
+      dimension = distributionFlavor
+      buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "true")
     }
   }
 
@@ -108,7 +77,6 @@ android {
           "proguard.pro",
         ),
       )
-      buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = includeProprietaryLibraries().toString())
     }
   }
 
@@ -146,6 +114,21 @@ android {
   }
 }
 
+val validatePlayGoogleServices by tasks.registering {
+  val playGoogleServicesJsonPath = playGoogleServicesJson.asFile.absolutePath
+
+  doLast {
+    check(File(playGoogleServicesJsonPath).canRead()) {
+      "app/src/play/google-services.json is required for Play builds. " +
+        "Use the free variant for F-Droid/GitHub builds."
+    }
+  }
+}
+
+tasks.matching { it.name in setOf("prePlayDebugBuild", "prePlayReleaseBuild") }.configureEach {
+  dependsOn(validatePlayGoogleServices)
+}
+
 dependencies {
   implementation(projects.core.strings)
   implementation(projects.core.ui)
@@ -180,28 +163,19 @@ dependencies {
 
   implementation(libs.coil)
 
-  if (includeProprietaryLibraries()) {
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.analytics)
-    implementation(projects.core.logging.crashlytics)
-    implementation(projects.features.review.play)
-  } else {
-    implementation(projects.features.review.noop)
-  }
+  add("playImplementation", libs.firebase.crashlytics)
+  add("playImplementation", libs.firebase.analytics)
+  add("playImplementation", projects.core.logging.crashlytics)
+  add("playImplementation", projects.features.review.play)
+  add("freeImplementation", projects.features.review.noop)
 
   implementation(projects.core.remoteconfig.api)
-  if (includeProprietaryLibraries()) {
-    implementation(projects.core.remoteconfig.firebase)
-  } else {
-    implementation(projects.core.remoteconfig.noop)
-  }
+  add("playImplementation", projects.core.remoteconfig.firebase)
+  add("freeImplementation", projects.core.remoteconfig.noop)
 
   implementation(projects.core.analytics.api)
-  if (includeProprietaryLibraries()) {
-    implementation(projects.core.analytics.firebase)
-  } else {
-    implementation(projects.core.analytics.noop)
-  }
+  add("playImplementation", projects.core.analytics.firebase)
+  add("freeImplementation", projects.core.analytics.noop)
 
   debugImplementation(projects.core.logging.debug)
 

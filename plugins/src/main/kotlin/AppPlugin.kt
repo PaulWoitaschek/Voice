@@ -10,7 +10,7 @@ class AppPlugin : Plugin<Project> {
       withPlugin("com.android.application") {
         target.baseSetup()
         target.tasks.register("voiceUnitTest") {
-          dependsOn("testPlayDebugUnitTest")
+          dependsOn("testFreeDebugUnitTest")
         }
       }
     }
