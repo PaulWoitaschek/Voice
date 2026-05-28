@@ -21,9 +21,9 @@ end
 def signing_properties(name, signing_dir)
   {
     "android.injected.signing.store.file" => File.expand_path(File.join(signing_dir, "signing.keystore")),
-    "android.injected.signing.store.password" => env!("SIGNING_STORE_PASSWORD_#{name}"),
-    "android.injected.signing.key.alias" => env!("SIGNING_KEY_ALIAS_#{name}"),
-    "android.injected.signing.key.password" => env!("SIGNING_KEY_PASSWORD_#{name}")
+    "android.injected.signing.store.password" => env!("#{name}_SIGNING_STORE_PASSWORD"),
+    "android.injected.signing.key.alias" => env!("#{name}_SIGNING_KEY_ALIAS"),
+    "android.injected.signing.key.password" => env!("#{name}_SIGNING_KEY_PASSWORD")
   }
 end
 
