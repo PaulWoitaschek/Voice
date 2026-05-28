@@ -44,7 +44,6 @@ jobs:
     environment: release
     permissions:
       contents: write
-      discussions: write
     env:
       PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
       PLAY_SIGNING_KEYSTORE: ${{ secrets.PLAY_SIGNING_KEYSTORE }}
@@ -82,9 +81,10 @@ jobs:
         run: fastlane android build_github version:${{ needs.prepare_version.outputs.version }}
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ needs.prepare_version.outputs.version }}
-          files: artifacts/*.apk
-          generate_release_notes: true
-          discussion_category_name: Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ needs.prepare_version.outputs.version }}" \
+            artifacts/*.apk \
+            --draft \
+            --generate-notes
