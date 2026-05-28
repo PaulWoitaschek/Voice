@@ -14,7 +14,7 @@ jobs:
   upload:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    environment: google-play
+    environment: release
     env:
       PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
     steps:

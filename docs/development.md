@@ -77,14 +77,29 @@ chmod +x .git/hooks/pre-commit
 
 ## Releasing
 
-To release a new version, trigger the [Release Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/trigger_release.yml)
+To release a new version, trigger the [Release Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/release.yml)
 
 This pushes a tag and publishes the release to the Play Store’s internal track. From there, promotion to production must be done
 manually.
 
-The release workflow signs through Gradle's injected signing properties. CI keeps keystores as base64 file secrets and passes
-store passwords, key aliases, and key passwords as environment variables; no checked-in or generated signing properties files
-are required.
+The release workflow uses the protected `release` GitHub environment. CI signs through Gradle's injected signing properties,
+keeps keystores as base64 file secrets, and passes store passwords, key aliases, and key passwords as environment variables;
+no checked-in or generated signing properties files are required.
+
+The `release` environment requires these secrets:
+
+| Secret | Purpose |
+| --- | --- |
+| `PLAY_SERVICE_ACCOUNT` | Google Play service account JSON, base64 encoded. |
+| `GOOGLE_SERVICES` | Play flavor `google-services.json`, base64 encoded. |
+| `SIGNING_KEYSTORE` | Play release keystore, base64 encoded. |
+| `SIGNING_STORE_PASSWORD` | Play release keystore password. |
+| `SIGNING_KEY_ALIAS` | Play release key alias. |
+| `SIGNING_KEY_PASSWORD` | Play release key password. |
+| `SIGNING_KEYSTORE_GITHUB` | GitHub/free release keystore, base64 encoded. |
+| `SIGNING_STORE_PASSWORD_GITHUB` | GitHub/free release keystore password. |
+| `SIGNING_KEY_ALIAS_GITHUB` | GitHub/free release key alias. |
+| `SIGNING_KEY_PASSWORD_GITHUB` | GitHub/free release key password. |
 
 F-Droid builds are handled by their team and usually appear a few days after a stable (non-RC) release.
 
