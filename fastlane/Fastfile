@@ -12,21 +12,35 @@ def parse_version_option!(options)
   [version_name, version_code]
 end
 
+def env!(name)
+  value = ENV[name].to_s
+  UI.user_error!("Environment variable #{name} is required") if value.strip.empty?
+  value
+end
+
+def signing_properties(name, signing_dir)
+  {
+    "android.injected.signing.store.file" => File.expand_path(File.join(signing_dir, "signing.keystore")),
+    "android.injected.signing.store.password" => env!("#{name}_SIGNING_STORE_PASSWORD"),
+    "android.injected.signing.key.alias" => env!("#{name}_SIGNING_KEY_ALIAS"),
+    "android.injected.signing.key.password" => env!("#{name}_SIGNING_KEY_PASSWORD")
+  }
+end
+
 platform :android do
 
   lane :build_github do |options|
     version_name, version_code = parse_version_option!(options)
 
     gradle(
-      task: ":app:assembleGithubRelease",
+      task: ":app:assembleFreeRelease",
       properties: {
         "voice.versionName" => version_name,
-        "voice.versionCode" => version_code,
-        "voice.includeProprietaryLibraries" => "false"
-      }
+        "voice.versionCode" => version_code
+      }.merge(signing_properties("GITHUB", "signing/free"))
     )
     copy_artifacts(
-      artifacts: ["app/build/outputs/apk/github/release/app-github-release.apk"]
+      artifacts: ["app/build/outputs/apk/free/release/app-free-release.apk"]
     )
   end
 
@@ -37,9 +51,8 @@ platform :android do
       task: ":app:bundlePlayRelease",
       properties: {
         "voice.versionName" => version_name,
-        "voice.versionCode" => version_code,
-        "voice.includeProprietaryLibraries" => "true"
-      }
+        "voice.versionCode" => version_code
+      }.merge(signing_properties("PLAY", "signing/play"))
     )
 
     copy_artifacts(

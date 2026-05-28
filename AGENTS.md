@@ -8,7 +8,7 @@ The project architecture and gradle module structure is defined in [the Architec
 
 ## Commands
 
-- Assemble the app: `./gradlew :app:assemblePlayDebug`
+- Assemble the app: `./gradlew :app:assembleFreeDebug`
 - Run all tests `./gradlew voiceUnitTest`
 - Run tests of a module: `./gradlew :<moduleName>:testDebugUnitTest`
 - Create and register a new gradle module: `./scripts/new_module.kts :features:<name>`
