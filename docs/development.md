@@ -88,18 +88,18 @@ no checked-in or generated signing properties files are required.
 
 The `release` environment requires these secrets:
 
-| Secret                          | Purpose                                             |
-|---------------------------------|-----------------------------------------------------|
-| `PLAY_SERVICE_ACCOUNT`          | Google Play service account JSON, base64 encoded.   |
-| `GOOGLE_SERVICES`               | Play flavor `google-services.json`, base64 encoded. |
-| `PLAY_SIGNING_KEYSTORE`         | Play release keystore, base64 encoded.              |
-| `PLAY_SIGNING_STORE_PASSWORD`   | Play release keystore password.                     |
-| `PLAY_SIGNING_KEY_ALIAS`        | Play release key alias.                             |
-| `PLAY_SIGNING_KEY_PASSWORD`     | Play release key password.                          |
-| `GITHUB_SIGNING_KEYSTORE`       | GitHub/free release keystore, base64 encoded.       |
-| `GITHUB_SIGNING_STORE_PASSWORD` | GitHub/free release keystore password.              |
-| `GITHUB_SIGNING_KEY_ALIAS`      | GitHub/free release key alias.                      |
-| `GITHUB_SIGNING_KEY_PASSWORD`   | GitHub/free release key password.                   |
+| Secret                        | Purpose                                             |
+|-------------------------------|-----------------------------------------------------|
+| `PLAY_SERVICE_ACCOUNT`        | Google Play service account JSON, base64 encoded.   |
+| `GOOGLE_SERVICES`             | Play flavor `google-services.json`, base64 encoded. |
+| `PLAY_SIGNING_KEYSTORE`       | Play release keystore, base64 encoded.              |
+| `PLAY_SIGNING_STORE_PASSWORD` | Play release keystore password.                     |
+| `PLAY_SIGNING_KEY_ALIAS`      | Play release key alias.                             |
+| `PLAY_SIGNING_KEY_PASSWORD`   | Play release key password.                          |
+| `GH_SIGNING_KEYSTORE`         | GitHub/free release keystore, base64 encoded.       |
+| `GH_SIGNING_STORE_PASSWORD`   | GitHub/free release keystore password.              |
+| `GH_SIGNING_KEY_ALIAS`        | GitHub/free release key alias.                      |
+| `GH_SIGNING_KEY_PASSWORD`     | GitHub/free release key password.                   |
 
 F-Droid builds are handled by their team and usually appear a few days after a stable (non-RC) release.
 
