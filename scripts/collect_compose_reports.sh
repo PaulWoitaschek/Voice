@@ -5,7 +5,7 @@ destination="build/compose_compiler_reports"
 composables_destination="$destination/composables.txt"
 classes_destination="$destination/classes.txt"
 
-./gradlew :app:assemblePlayRelease -Pvoice.composeCompilerReports=true
+./gradlew :app:assembleFreeRelease -Pvoice.composeCompilerReports=true
 
 mkdir -p "$destination"
 rm -rf "${destination:?}"/*
