@@ -99,7 +99,7 @@ internal class MediaAnalyzer(
         builder.title = builder.title ?: mediaInfo.title
       }
     } catch (e: MatroskaParseException) {
-      Logger.e(e, "Error parsing Matroska metadata")
+      Logger.w(e, "Error parsing Matroska metadata")
     }
   }
 

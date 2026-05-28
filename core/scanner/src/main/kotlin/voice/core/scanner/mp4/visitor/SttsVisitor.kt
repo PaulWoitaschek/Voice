@@ -4,6 +4,7 @@ import androidx.media3.common.util.ParsableByteArray
 import dev.zacsweers.metro.Inject
 import voice.core.logging.api.Logger
 import voice.core.scanner.mp4.Mp4ChpaterExtractorOutput
+import voice.core.scanner.mp4.SttsEntry
 
 // https://developer.apple.com/documentation/quicktime-file-format/time-to-sample_atom
 @Inject
@@ -22,15 +23,13 @@ internal class SttsVisitor : AtomVisitor {
       buffer.skipBytes(3) // flags
       val numberOfEntriesInSttsTable = buffer.readUnsignedIntToInt()
       Logger.v("Number of entries in stts: $numberOfEntriesInSttsTable")
-      val individualSampleDurations = mutableListOf<Long>()
-      repeat(numberOfEntriesInSttsTable) {
-        val count = buffer.readUnsignedInt().toInt()
-        val delta = buffer.readUnsignedInt()
-        repeat(count) {
-          individualSampleDurations.add(delta)
-        }
+      val durations = (0 until numberOfEntriesInSttsTable).map {
+        SttsEntry(
+          sampleCount = buffer.readUnsignedInt(),
+          sampleDuration = buffer.readUnsignedInt(),
+        )
       }
-      parseOutput.durations.add(individualSampleDurations)
+      parseOutput.durations.add(durations)
     }
   }
 }
