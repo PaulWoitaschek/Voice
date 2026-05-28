@@ -68,7 +68,7 @@ internal class MatroskaCoverExtractor(private val context: Context) {
       }
     } catch (e: RuntimeException) {
       // jebml throws undeclared exceptions, so we need to wrap them
-      Logger.e(e, "Error extracting cover from Matroska file: $input")
+      Logger.w(e, "Error extracting cover from Matroska file: $input")
       return false
     }
   }
