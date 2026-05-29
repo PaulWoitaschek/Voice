@@ -1,6 +1,8 @@
 default_platform(:android)
 require 'fileutils'
 
+REPO_ROOT = File.expand_path("..", __dir__)
+
 def parse_version_option!(options)
   v = options[:version]
   UI.user_error!("version is required (e.g. version:1.2.3-123456)") if v.to_s.strip.empty?
@@ -20,7 +22,7 @@ end
 
 def signing_properties(name, signing_dir)
   {
-    "android.injected.signing.store.file" => File.expand_path(File.join(signing_dir, "signing.keystore")),
+    "android.injected.signing.store.file" => File.join(REPO_ROOT, signing_dir, "signing.keystore"),
     "android.injected.signing.store.password" => env!("#{name}_SIGNING_STORE_PASSWORD"),
     "android.injected.signing.key.alias" => env!("#{name}_SIGNING_KEY_ALIAS"),
     "android.injected.signing.key.password" => env!("#{name}_SIGNING_KEY_PASSWORD")
