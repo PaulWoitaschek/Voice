@@ -67,7 +67,6 @@ android {
     }
     getByName("debug") {
       isMinifyEnabled = false
-      versionNameSuffix = "-debug"
     }
     all {
       setProguardFiles(
@@ -126,6 +125,16 @@ val validatePlayGoogleServices by tasks.registering {
 
 tasks.matching { it.name in setOf("prePlayDebugBuild", "prePlayReleaseBuild") }.configureEach {
   dependsOn(validatePlayGoogleServices)
+}
+
+tasks.matching {
+  val isPlayTask = it.name.contains("Play")
+  !isPlayTask && (
+    it.name.startsWith("process") && it.name.endsWith("GoogleServices") ||
+      it.name.startsWith("injectCrashlytics")
+    )
+}.configureEach {
+  enabled = false
 }
 
 dependencies {
