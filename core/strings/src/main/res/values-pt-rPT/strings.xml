@@ -101,4 +101,39 @@
     <string name="select_folder_type_folder">Pasta</string>
     <string name="onboarding.button_next">Próximo</string>
     <string name="onboarding.completion.next_button">Começar a ouvir</string>
+    <string name="cover_search_template_no_author">Capa do audiobook %s</string>
+    <string name="cover_search_template_with_author">Capa do audiobook %1$s, feito por %2$s</string>
+    <string name="cover_search.icon_recent">Pesquisa recente</string>
+    <string name="folder_mode_root">Modo de Livro de Nível Superior: As sub-pastas são livros</string>
+    <string name="folder_mode_single">Pasta única de Audiobook. Cada pasta representa um único livro.</string>
+    <string name="folder_mode_author">Modo Autor de Livro: Subpastas são autores, sub-subpasta são livros.</string>
+    <string name="storage_bug_title">Permissão necessária</string>
+    <string name="storage_bug_subtitle">Em certos dispositivos, a app do sistema pode exigir permissões para aceder o armazenamento externo. Este acesso é essencial para Voice ler os seus audiobooks.</string>
+    <string name="select_folder_title_onboarding">Adicione o Seu Primeiro Audiobook</string>
+    <string name="select_folder_title_default">Adicionar os seus Audiobook(s)</string>
+    <string name="select_folder_subtitle">Gostaria de adicionar um único ficheiro como um livro ou pasta?</string>
+    <string name="onboarding_welcome_title">Seja bem vindo ao Voice!</string>
+    <string name="onboarding_welcome_subtitle">O seu reprodutor de bolso pessoal de audiobook. Vamos preparar-nos para isso.</string>
+    <string name="onboarding.explanation.title">A sua Livraria, do Seu Jeito</string>
+    <string name="onboarding.explanation.subtitle">Com Voice, pode adicionar livros como ficheiros individuais ou organizar eles em pastas. Voçê decide como!</string>
+    <string name="onboarding.completion.title">Está tudo pronto!</string>
+    <string name="onboarding.completion.subtitle">O seu primeiro audiolivro está pronto para ser reproduzido. Aproveite a sua jornada com o Voice!</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Política de Privacidade</string>
+    <string name="settings_analytics_consent_title">Análises</string>
+    <string name="review.request.title">Gosta de Voice?</string>
+    <string name="review.request.content">O seu feedback é importante para nós! Se tiver um momento, avalie-nos e partilhe a sua experiência. Ele ajuda a gente a melhorar ainda mais as suas lidas.</string>
+    <string name="review.feedback.title">Sentimos muito por isso!</string>
+    <string name="review.feedback.content">Poderia dizer-nos o que deu errado? Valorizamos o seu feedback e com ele sabemos como melhorar a sua experiência.</string>
+    <string name="review.feedback.button.yes">Enviar Feedback</string>
+    <string name="sleep_timer.title">Bons sonhos! 🌙</string>
+    <string name="sleep_timer.button.increment">Mais longo</string>
+    <string name="sleep_timer.button.decrement">Mais curto</string>
+    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Definir horário de início</string>
+    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Definir horário de término</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="many">%d minutos</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
+    <string name="playback.current_chapter">Capítulo atual</string>
 </resources>

@@ -2,7 +2,7 @@
 <resources>
     <string name="cover">Omslag</string>
     <string name="play_pause">Spela / Pausa</string>
-    <string name="action_sleep">Insomningstimer</string>
+    <string name="action_sleep">Sovtimer</string>
     <string name="rewind">Spola bakåt</string>
     <string name="fast_forward">Snabbspola framåt</string>
     <string name="previous_track">Föregående spår</string>
@@ -12,7 +12,7 @@
     <string name="more">Mer</string>
     <string name="dialog_confirm">Ställ in</string>
     <string name="dialog_cancel">Avbryt</string>
-    <string name="content_cover">Visar omslag att välja</string>
+    <string name="content_cover">Visar omslag att välja mellan</string>
     <string name="change_book_name">Namn</string>
     <string name="download_book_cover">Omslag från internet</string>
     <string name="pick_book_cover">Omslag från filsystemet</string>
@@ -31,7 +31,7 @@
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekunder</item>
     </plurals>
-    <string name="pref_seek_time">Hoppa över mängd</string>
+    <string name="pref_seek_time">Hopplängd</string>
     <string name="pref_theme_dark">Mörkt tema</string>
     <string name="pref_auto_rewind_title">Automatisk bakåtspolning</string>
     <string name="pref_suggest_idea">Föreslå en idé</string>
@@ -45,7 +45,7 @@
     <string name="play_current">Spela aktuell</string>
     <string name="book_header_current">Aktuella</string>
     <string name="book_header_not_started">Inte påbörjade ännu</string>
-    <string name="book_header_completed">Avslutad</string>
+    <string name="book_header_completed">Avslutade</string>
     <string name="close">Stäng</string>
     <string name="delete">Ta bort</string>
     <string name="add">Lägg till</string>
@@ -93,14 +93,14 @@
     <string name="play">Spela</string>
     <string name="pause">Pausa</string>
     <string name="cover_search.author">Författare</string>
-    <string name="storage_bug_button">Tillåta behörigheter</string>
-    <string name="select_folder_subtitle">Vill du lägga till en enskild fil som en bok eller en mapp?</string>
+    <string name="storage_bug_button">Ge behörigheter</string>
+    <string name="select_folder_subtitle">Vill du lägga till en enskild fil som bok eller en hel mapp?</string>
     <string name="onboarding.explanation.subtitle">Med Voice kan du lägga till böcker som enskilda filer eller organisera dem i mappar. Du väljer!</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt sätt</string>
     <string name="onboarding.completion.subtitle">Din första ljudbok är redo att spelas. Njut av din resa med Voice!</string>
     <string name="onboarding.completion.next_button">Börja lyssna</string>
-    <string name="storage_bug_subtitle">För vissa enheter saknar appen vissa nödvändiga behörigheter för att komma åt den externa lagringen. Den åtkomst är nödvändig för att Voice ska kunna läsa dina ljudböcker.</string>
-    <string name="storage_bug_title">Tillstånd krävs</string>
+    <string name="storage_bug_subtitle">För vissa enheter saknar appen vissa nödvändiga behörigheter för att komma åt den externa lagringen. Den åtkomsten är nödvändig för att Voice ska kunna läsa dina ljudböcker.</string>
+    <string name="storage_bug_title">Behörighet krävs</string>
     <string name="cover_search_template_no_author">%s ljudboksomslag</string>
     <string name="select_folder_title_onboarding">Lägg till din första ljudbok</string>
     <string name="select_folder_title_default">Lägg till dina ljudböcker</string>
@@ -129,15 +129,15 @@
         <item quantity="other">%d minuter</item>
     </plurals>
     <string name="pref_faq">Vanliga frågor</string>
-    <string name="auto_sleep_timer.subtitle">Starta en insomningstimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
+    <string name="auto_sleep_timer.subtitle">Starta en sovtimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
     <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Ange starttid</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Ange sluttid</string>
     <string name="playback.current_chapter">Aktuellt kapitel</string>
-    <string name="auto_sleep_timer.title">Automatisk insomningstimer</string>
+    <string name="auto_sleep_timer.title">Automatisk sovtimer</string>
     <string name="end_of_chapter">Slut på kapitlet</string>
     <string name="pref_audiobook_folders_explanation">Hantera mappar som skannas efter ljudböcker</string>
     <string name="onboarding_analytics_consent_title">Hjälp till att förbättra Voice</string>
-    <string name="onboarding_analytics_consent_description">Tillåt oss att samla in anonym användningsdata för att kunna förbättra appen. Du kan ändra på inställningen senare.</string>
+    <string name="onboarding_analytics_consent_description">Tillåt oss att samla in anonym användningsdata för att kunna förbättra appen. Du kan ändra inställningen senare.</string>
     <string name="onboarding_analytics_consent_button_enable">Fortsätt med analys</string>
     <string name="onboarding_analytics_consent_button_disable">Fortsätt utan analys</string>
     <string name="onboarding_analytics_consent_privacy_policy">Integritetspolicy</string>
