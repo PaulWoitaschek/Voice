@@ -53,8 +53,10 @@ android {
     register("free") {
       dimension = distributionFlavor
       buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "false")
-      extensions.configure<CrashlyticsExtension>("firebaseCrashlytics") {
-        mappingFileUploadEnabled = false
+      pluginManager.withPlugin(libs.plugins.crashlytics.get().pluginId) {
+        extensions.configure<CrashlyticsExtension>("firebaseCrashlytics") {
+          mappingFileUploadEnabled = false
+        }
       }
     }
     register("play") {
