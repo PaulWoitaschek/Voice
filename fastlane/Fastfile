@@ -1,67 +1,12 @@
 default_platform(:android)
-require 'fileutils'
 
-REPO_ROOT = File.expand_path("..", __dir__)
-
-def parse_version_option!(options)
-  v = options[:version]
-  UI.user_error!("version is required (e.g. version:1.2.3-123456)") if v.to_s.strip.empty?
-  parts = v.split('-', 2)
-  UI.user_error!("version must be in the form name-code, e.g. 1.2.3-123456") if parts.length != 2
-  version_name = parts[0]
-  version_code = parts[1].to_i
-  UI.user_error!("version_code must be numeric, got '#{parts[1]}'") if version_code <= 0
-  [version_name, version_code]
-end
-
-def env!(name)
-  value = ENV[name].to_s
-  UI.user_error!("Environment variable #{name} is required") if value.strip.empty?
-  value
-end
-
-def signing_properties(name, signing_dir)
-  {
-    "android.injected.signing.store.file" => File.join(REPO_ROOT, signing_dir, "signing.keystore"),
-    "android.injected.signing.store.password" => env!("#{name}_SIGNING_STORE_PASSWORD"),
-    "android.injected.signing.key.alias" => env!("#{name}_SIGNING_KEY_ALIAS"),
-    "android.injected.signing.key.password" => env!("#{name}_SIGNING_KEY_PASSWORD")
-  }
+def parse_version_code_option!(options)
+  version_code = options[:version_code].to_i
+  UI.user_error!("version_code must be numeric") if version_code <= 0
+  version_code
 end
 
 platform :android do
-
-  lane :build_github do |options|
-    version_name, version_code = parse_version_option!(options)
-
-    gradle(
-      task: ":app:assembleFreeRelease",
-      properties: {
-        "voice.versionName" => version_name,
-        "voice.versionCode" => version_code
-      }.merge(signing_properties("GITHUB", "signing/free"))
-    )
-    copy_artifacts(
-      artifacts: ["app/build/outputs/apk/free/release/app-free-release.apk"]
-    )
-  end
-
-  lane :build_play_aab do |options|
-    version_name, version_code = parse_version_option!(options)
-
-    gradle(
-      task: ":app:bundlePlayRelease",
-      properties: {
-        "voice.versionName" => version_name,
-        "voice.versionCode" => version_code
-      }.merge(signing_properties("PLAY", "signing/play"))
-    )
-
-    copy_artifacts(
-      artifacts: ["app/build/outputs/bundle/playRelease/app-play-release.aab"]
-    )
-  end
-
   lane :upload_internal do |options|
     aab_path = options[:aab_path]
     upload_to_play_store(
@@ -85,7 +30,7 @@ platform :android do
   end
 
   lane :promote do |options|
-    _version_name, version_code = parse_version_option!(options)
+    version_code = parse_version_code_option!(options)
 
     supply(
       track: 'internal',
