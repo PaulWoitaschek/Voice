@@ -5,6 +5,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.first
+import voice.core.common.formatTime
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
@@ -24,18 +25,26 @@ class AudiologRecorder(
   var pausedDueToSleeping: Boolean = false
   private var lastShortSkipTime: Instant = Instant.MIN
 
-  suspend fun record(reason: String) {
+  suspend fun record(
+    reason: String,
+    newPositionMs: Long? = null,
+  ) {
     lastShortSkipTime = Instant.MIN
-    writeEntry(reason)
+    writeEntry(label(reason, newPositionMs))
   }
 
-  suspend fun recordShortSkip() {
+  suspend fun recordShortSkip(newPositionMs: Long) {
     val now = Instant.now()
     val withinWindow = Duration.between(lastShortSkipTime, now) <= SHORT_SKIP_WINDOW
     lastShortSkipTime = now
     if (withinWindow) return
-    writeEntry("skipping")
+    writeEntry(label("skipping", newPositionMs))
   }
+
+  private fun label(
+    reason: String,
+    newPositionMs: Long?,
+  ): String = if (newPositionMs != null) "$reason to ${formatTime(newPositionMs)}" else reason
 
   private suspend fun writeEntry(reason: String) {
     val bookId = currentBookStore.data.first() ?: return

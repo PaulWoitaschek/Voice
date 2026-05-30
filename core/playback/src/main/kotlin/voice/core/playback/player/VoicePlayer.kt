@@ -57,7 +57,6 @@ class VoicePlayer(
 
   fun forceSeekToNext() {
     scope.launch {
-      audiologRecorder.record("skipping chapter")
       val currentMediaItem = player.currentMediaItem ?: return@launch
       val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
       val currentMarkIndex = marks.indexOfFirst { mark ->
@@ -65,8 +64,10 @@ class VoicePlayer(
       }
       val nextMark = marks.getOrNull(currentMarkIndex + 1)
       if (nextMark != null) {
+        audiologRecorder.record("skipping chapter", nextMark.startMs)
         player.seekTo(nextMark.startMs)
       } else {
+        audiologRecorder.record("skipping chapter", 0)
         player.seekToNext()
       }
     }
@@ -80,7 +81,6 @@ class VoicePlayer(
 
   fun forceSeekToPrevious() {
     scope.launch {
-      audiologRecorder.record("skipping chapter")
       val currentMediaItem = player.currentMediaItem ?: return@launch
       val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
       val currentPosition = player.currentPosition
@@ -89,11 +89,13 @@ class VoicePlayer(
       } ?: marks.last()
 
       if (currentPosition - currentMark.startMs > THRESHOLD_FOR_BACK_SEEK_MS) {
+        audiologRecorder.record("skipping chapter", currentMark.startMs)
         player.seekTo(currentMark.startMs)
       } else {
         val currentMarkIndex = marks.indexOf(currentMark)
         val previousMark = marks.getOrNull(currentMarkIndex - 1)
         if (previousMark != null) {
+          audiologRecorder.record("skipping chapter", previousMark.startMs)
           player.seekTo(previousMark.startMs)
         } else {
           val currentMediaItemIndex = player.currentMediaItemIndex
@@ -101,8 +103,11 @@ class VoicePlayer(
             val previousMediaItemIndex = currentMediaItemIndex - 1
             val previousMediaItemMarks = player.getMediaItemAt(previousMediaItemIndex).chapter()?.chapterMarks
               ?: return@launch
-            player.seekTo(previousMediaItemIndex, previousMediaItemMarks.last().startMs)
+            val newPosition = previousMediaItemMarks.last().startMs
+            audiologRecorder.record("skipping chapter", newPosition)
+            player.seekTo(previousMediaItemIndex, newPosition)
           } else {
+            audiologRecorder.record("skipping chapter", 0)
             player.seekTo(0)
           }
         }
@@ -147,7 +152,6 @@ class VoicePlayer(
 
   override fun seekBack() {
     scope.launch {
-      audiologRecorder.recordShortSkip()
       val skipAmount = seekTimeStore.data.first().seconds
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
@@ -159,14 +163,18 @@ class VoicePlayer(
       if (newPosition < ZERO) {
         val previousMediaItemIndex = previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
         if (previousMediaItemIndex == null) {
+          audiologRecorder.recordShortSkip(0)
           player.seekTo(0)
         } else {
           val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
           val chapter = previousMediaItem.chapter() ?: return@launch
           val previousMediaItemDuration = chapter.duration.milliseconds
-          player.seekTo(previousMediaItemIndex, (previousMediaItemDuration - newPosition.absoluteValue).inWholeMilliseconds)
+          val target = (previousMediaItemDuration - newPosition.absoluteValue).inWholeMilliseconds
+          audiologRecorder.recordShortSkip(target)
+          player.seekTo(previousMediaItemIndex, target)
         }
       } else {
+        audiologRecorder.recordShortSkip(newPosition.inWholeMilliseconds)
         player.seekTo(newPosition.inWholeMilliseconds)
       }
     }
@@ -174,7 +182,6 @@ class VoicePlayer(
 
   override fun seekForward() {
     scope.launch {
-      audiologRecorder.recordShortSkip()
       val skipAmount = seekTimeStore.data.first().seconds
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
@@ -190,8 +197,11 @@ class VoicePlayer(
       if (newPosition > duration) {
         val nextMediaItemIndex = nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
           ?: return@launch
-        player.seekTo(nextMediaItemIndex, (duration - newPosition).absoluteValue.inWholeMilliseconds)
+        val target = (duration - newPosition).absoluteValue.inWholeMilliseconds
+        audiologRecorder.recordShortSkip(target)
+        player.seekTo(nextMediaItemIndex, target)
       } else {
+        audiologRecorder.recordShortSkip(newPosition.inWholeMilliseconds)
         player.seekTo(newPosition.inWholeMilliseconds)
       }
     }

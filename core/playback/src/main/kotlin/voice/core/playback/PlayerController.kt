@@ -75,7 +75,7 @@ class PlayerController(
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
     val index = book.chapters.indexOfFirst { it.id == id }
     if (index != -1) {
-      audiologRecorder.record("setting position")
+      audiologRecorder.record("setting position", time)
       controller.seekTo(index, time)
     }
   }
