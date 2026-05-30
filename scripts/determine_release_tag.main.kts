@@ -1,0 +1,110 @@
+#!/usr/bin/env kotlin
+
+import java.io.File
+import java.time.LocalDate
+
+data class Version(val major: Int, val minor: Int, val patch: Int) : Comparable<Version> {
+
+  fun toVersionString(): String = "$major.$minor.$patch"
+
+  override fun compareTo(other: Version): Int {
+    return compareValuesBy(this, other, Version::major, Version::minor, Version::patch)
+  }
+
+  companion object {
+    fun parse(version: String): Version? {
+      val base = version.removePrefix("v").substringBefore("-")
+      val split = base.split(".").mapNotNull(String::toIntOrNull)
+      return if (split.size == 3) Version(split[0], split[1], split[2]) else null
+    }
+  }
+}
+
+fun runCommand(vararg args: String): String {
+  val process = ProcessBuilder(*args)
+    .redirectErrorStream(true)
+    .start()
+  val output = process.inputStream.bufferedReader().readText().trim()
+  val exitCode = process.waitFor()
+  check(exitCode == 0) {
+    buildString {
+      append("Command ${args.joinToString(" ")} failed with exit $exitCode")
+      if (output.isNotBlank()) {
+        append('\n')
+        append(output)
+      }
+    }
+  }
+  return output
+}
+
+fun existingVersions(): List<Version> {
+  return runCommand("git", "tag").lines()
+    .mapNotNull(Version::parse)
+}
+
+fun Version.calculateVersionCode(): Int {
+  val majorPart = major + 28
+  val minorPart = "%02d".format(minor)
+  val patchPart = "%03d".format(patch)
+  return "$majorPart$minorPart$patchPart".toInt()
+}
+
+fun Version.calculateGitTag(): String {
+  val versionName = toVersionString()
+  val versionCode = this.calculateVersionCode()
+  return "$versionName-$versionCode"
+}
+
+fun newVersion(today: LocalDate, existingVersions: List<Version>): Version {
+  val major = today.year - 2000
+  val minor = today.monthValue
+  val lastReleaseThisMonth = existingVersions
+    .filter { it.major == major && it.minor == minor }
+    .maxOfOrNull { it.patch }
+  val patch = if (lastReleaseThisMonth == null) 1 else lastReleaseThisMonth + 1
+  return Version(major = major, minor = minor, patch = patch)
+}
+
+fun newVersionTests() {
+  fun test(
+    today: LocalDate,
+    versions: List<String>,
+    expectedVersion: String,
+  ) {
+    val newVersion = newVersion(today, versions.map { Version.parse(it)!! })
+    if (newVersion != Version.parse(expectedVersion)!!) {
+      throw IllegalStateException("Expected $expectedVersion but got $newVersion")
+    }
+  }
+  test(today = LocalDate.of(2025, 1, 1), versions = listOf(), expectedVersion = "25.1.1")
+  test(today = LocalDate.of(2025, 1, 1), versions = listOf("25.1.5"), expectedVersion = "25.1.6")
+  test(today = LocalDate.of(2025, 2, 5), versions = listOf("25.1.5"), expectedVersion = "25.2.1")
+  test(today = LocalDate.of(2024, 12, 1), versions = listOf("24.11.2", "25.1.1"), expectedVersion = "24.12.1")
+
+  val tag = Version(25, 1, 6).calculateGitTag()
+  if (tag != "25.1.6-5301006") {
+    throw IllegalStateException("Expected 25.1.6-5301006 but got $tag")
+  }
+}
+
+if ("--test" in args) {
+  newVersionTests()
+} else {
+  val newVersion = newVersion(LocalDate.now(), existingVersions())
+  val tag = newVersion.calculateGitTag()
+  val githubOutput = System.getenv("GITHUB_OUTPUT")
+
+  println("Release tag: $tag")
+
+  if (!githubOutput.isNullOrBlank()) {
+    File(githubOutput).appendText(
+      """
+      |tag=$tag
+      |version_name=${newVersion.toVersionString()}
+      |version_code=${newVersion.calculateVersionCode()}
+      |
+      """.trimMargin(),
+    )
+  }
+}
