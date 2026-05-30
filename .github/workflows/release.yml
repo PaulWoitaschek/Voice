@@ -67,7 +67,7 @@ jobs:
         run: fastlane android upload_internal aab_path:artifacts/app-play-release.aab
 
       - name: Promote INTERNAL -> PRODUCTION (0.1%)
-        run: fastlane android promote tag:${{ steps.tag.outputs.tag }}
+        run: fastlane android promote version_code:${{ steps.tag.outputs.version_code }}
 
       - name: Build GitHub APKs
         env:

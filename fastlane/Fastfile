@@ -1,14 +1,9 @@
 default_platform(:android)
 
-def parse_tag_option!(options)
-  tag = options[:tag]
-  UI.user_error!("tag is required (e.g. tag:1.2.3-123456)") if tag.to_s.strip.empty?
-  parts = tag.split('-', 2)
-  UI.user_error!("tag must be in the form name-code, e.g. 1.2.3-123456") if parts.length != 2
-  version_name = parts[0]
-  version_code = parts[1].to_i
-  UI.user_error!("version_code must be numeric, got '#{parts[1]}'") if version_code <= 0
-  [version_name, version_code]
+def parse_version_code_option!(options)
+  version_code = options[:version_code].to_i
+  UI.user_error!("version_code must be numeric") if version_code <= 0
+  version_code
 end
 
 platform :android do
@@ -35,7 +30,7 @@ platform :android do
   end
 
   lane :promote do |options|
-    _version_name, version_code = parse_tag_option!(options)
+    version_code = parse_version_code_option!(options)
 
     supply(
       track: 'internal',
