@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.dsl.ManagedVirtualDevice
-import java.io.File
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 
 plugins {
   id("voice.app")
@@ -53,6 +53,9 @@ android {
     register("free") {
       dimension = distributionFlavor
       buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "false")
+      extensions.configure<CrashlyticsExtension>("firebaseCrashlytics") {
+        mappingFileUploadEnabled = false
+      }
     }
     register("play") {
       dimension = distributionFlavor
