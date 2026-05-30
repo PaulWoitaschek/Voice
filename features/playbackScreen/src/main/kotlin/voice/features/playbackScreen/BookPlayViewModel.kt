@@ -40,7 +40,7 @@ import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.ImmutableFile
-import voice.core.ui.formatTime
+import voice.core.common.formatTime
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.features.sleepTimer.SleepTimerViewState
 import voice.navigation.Destination

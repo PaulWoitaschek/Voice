@@ -18,7 +18,7 @@ import org.junit.Test
 import voice.core.data.BookId
 import voice.core.logging.api.Logger
 import voice.core.ui.ImmutableFile
-import voice.core.ui.formatTime
+import voice.core.common.formatTime
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode

@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
 import voice.core.ui.ImmutableFile
-import voice.core.ui.formatTime
+import voice.core.common.formatTime
 import voice.features.playbackScreen.BookPlayViewState
 
 @Composable

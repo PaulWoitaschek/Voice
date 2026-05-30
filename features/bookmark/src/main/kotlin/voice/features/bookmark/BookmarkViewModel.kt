@@ -23,7 +23,7 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.strings.R
-import voice.core.ui.formatTime
+import voice.core.common.formatTime
 import voice.navigation.Navigator
 import java.time.Instant
 import java.time.temporal.ChronoUnit

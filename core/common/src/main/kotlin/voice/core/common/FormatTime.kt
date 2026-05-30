@@ -1,4 +1,4 @@
-package voice.core.ui
+package voice.core.common
 
 import java.util.concurrent.TimeUnit
 

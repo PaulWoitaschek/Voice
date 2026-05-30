@@ -5,7 +5,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.logging.api.Logger
 import voice.core.ui.ImmutableFile
-import voice.core.ui.formatTime
+import voice.core.common.formatTime
 
 @Immutable
 data class BookOverviewItemViewState(
