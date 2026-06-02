@@ -2,8 +2,12 @@
 set -euo pipefail
 
 main_branch="${MAIN_BRANCH:-main}"
+origin_remote="${ORIGIN_REMOTE:-origin}"
 strings_remote="${STRINGS_REMOTE:-weblate-strings}"
 metadata_remote="${METADATA_REMOTE:-weblate-metadata}"
+origin_url="${ORIGIN_URL:-git@github.com:PaulWoitaschek/Voice.git}"
+strings_url="${STRINGS_URL:-https://hosted.weblate.org/git/voice/strings}"
+metadata_url="${METADATA_URL:-https://hosted.weblate.org/git/voice/metadata/}"
 strings_dir="core/strings/src/main/res"
 metadata_dir="fastlane/metadata/android"
 
@@ -22,12 +26,32 @@ if [[ -n "$untracked_target_files" ]]; then
   exit 1
 fi
 
-git fetch origin "$main_branch"
+ensure_remote() {
+  local remote="$1"
+  local url="$2"
+
+  if git remote get-url "$remote" >/dev/null 2>&1; then
+    return
+  fi
+
+  git remote add "$remote" "$url"
+}
+
+ensure_remote "$origin_remote" "$origin_url"
+ensure_remote "$strings_remote" "$strings_url"
+ensure_remote "$metadata_remote" "$metadata_url"
+
+git fetch "$origin_remote" "$main_branch"
 git fetch "$strings_remote" main
 git fetch "$metadata_remote" main
 
-git switch "$main_branch"
-git pull --ff-only origin "$main_branch"
+if git show-ref --verify --quiet "refs/heads/$main_branch"; then
+  git switch "$main_branch"
+else
+  git switch --track -c "$main_branch" "$origin_remote/$main_branch"
+fi
+
+git pull --ff-only "$origin_remote" "$main_branch"
 
 git restore --source="$strings_remote/main" --staged --worktree -- "$strings_dir"
 git restore --source="$metadata_remote/main" --staged --worktree -- "$metadata_dir"
