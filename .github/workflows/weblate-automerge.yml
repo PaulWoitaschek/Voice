@@ -1,0 +1,22 @@
+name: Auto-merge Weblate PRs
+
+on:
+  pull_request:
+    types: [ opened, synchronize ]
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  weblate-automerge:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.user.login == 'weblate'
+
+    steps:
+      - name: Enable Auto-Merge
+        run: gh pr merge --auto --merge "$PR_NUMBER"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
