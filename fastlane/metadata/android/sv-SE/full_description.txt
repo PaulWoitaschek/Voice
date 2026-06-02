@@ -1,20 +1,26 @@
-Letar du efter en enkel, minimal ljudboksspelare som bara fungerar?
-En som låter dig fokusera på vad du faktiskt vill göra: Lyssna på ljudböcker?
-Du lägger helt enkelt till din huvudsakliga ljudboksmapp, och varje mapp i den känns igen som en enda bok. Detta håller ditt bibliotek enkelt och överskådligt.
+Letar du efter en ren, minimalistisk ljudboksspelare som bara fungerar? Voice är din ultimata offline-följeslagare för att lyssna på dina favoritljudböcker utan DRM-störningar. Vi anser att din lyssningsupplevelse ska vara sömlös, vilket är anledningen till att Voice är 100 % gratis, öppen källkod och innehåller absolut ingen reklam.
 
-Vad den kan göra:
+Voice är utformad för ljudboksentusiaster som hanterar sina egna lokala filer (M4B, MP3, M4A, OGG, OGA, OPUS, etc.) och låter dig fokusera på det som är viktigast: berättelsen. Lägg bara till din huvudsakliga ljudboksmapp, så känner appen automatiskt igen varje undermapp som en enda bok. Ingen komplex synkronisering, inga tvingade molnkonton – bara dina lokala filer, spelade perfekt.
 
-- Kommer ihåg sista positionen
-- Ställ in uppspelningshastighet
-- Vacker materialdesign
-- Dag & natt teman. Lätt för ögonen
-- Bokmärken
-- Android Auto
-- Insomningstimer. Du behöver inte stänga av spelaren mitt i natten.
+Trots sitt rena gränssnitt har Voice kraftfulla funktioner för avancerade användare:
+• 100 % offline och reklamfritt: Njut av oavbruten lyssnande var som helst. Ingen internetanslutning krävs, inga prenumerationer och ingen reklam.
+• Avancerade ljudkontroller: Justera uppspelningshastigheten, aktivera volymökning för tysta inspelningar och använd reglaget för att hoppa över tystnad för att smidigt bläddra igenom pauser.
+• Konfigurerbar automatisk återspolning: Pausad ett tag? Appen spolar automatiskt tillbaka några sekunder när du återupptar, så att du enkelt kan se sammanhanget.
 
-Voice är fri och har öppen källkod. Det betyder att alla kan se vad den gör. Den använder minimala behörigheter.
+• Smart sökning: Sök enkelt i hela ditt bibliotek efter titlar och författare för att direkt hitta exakt den bok du vill höra.
 
-Om du har förslag eller hittar fel, rapportera dem här:
-https://github.com/VoiceAudiobook/Voice/issues
+• Smarta bokmärken och positionsspårning: Appen kommer exakt ihåg din senaste uppspelningsposition för varje enskild bok. Du kan också enkelt lägga till, hantera och byta namn på anpassade bokmärken.
 
-Licensen för öppen källkod är Gnu GPLv3
+• Sovtimer: Ställ in en anpassad timer, spela upp till slutet av kapitlet eller definiera ett dagligt tidsfönster (t.ex. 22:00 - 06:00) för automatisk paus. Skaka enheten för att snabbt återställa timern utan att låsa upp skärmen!
+
+• Hantering av omslagsbilder: Använd inbäddad omslagsbild, välj lokala bilder eller låt appen söka online efter saknade omslag.
+
+• Systemintegration: Styr uppspelningen direkt via startskärmswidgeten, medieaviseringar eller säkert från bilens instrumentpanel med fullt stöd för Android Auto.
+
+• Mappbaserat bibliotek: Filtrera böcker efter "Aktuell", "Slutförd" och "Inte startad". Växla enkelt mellan listor och rutnät.
+
+Voice är en helt gratis programvara med öppen källkod (GNU GPLv3-licens). Det betyder att communityn kan se exakt vad den gör. Vi respekterar din integritet och använder endast de minimala Android-behörigheter som krävs för att läsa dina lokala ljudfiler.
+
+Förvandla din Android-enhet till den perfekta ljudfristaden offline idag!
+
+Återkoppling eller fel? Gå med i vår gemenskap och rapportera dem på vår GitHub-sida: https://github.com/PaulWoitaschek/Voice/issues
