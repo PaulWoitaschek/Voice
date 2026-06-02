@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Enable Auto-Merge
-        run: gh pr merge --auto --merge "$PR_NUMBER"
+        run: gh pr merge --repo "$GITHUB_REPOSITORY" --auto --merge "$PR_NUMBER"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
