@@ -11,7 +11,7 @@ import okio.sink
 import voice.core.logging.api.Logger
 import java.io.File
 import java.io.IOException
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 @Inject
 class CoverDownloader(
@@ -38,7 +38,7 @@ class CoverDownloader(
       try {
         response.body.source().use { source ->
           // select a random name so on updating this, the old image is not cached
-          val file = File(tempFolder, UUID.randomUUID().toString())
+          val file = File(tempFolder, Uuid.random().toString())
           file.sink().use { sink ->
             source.readAll(sink)
           }

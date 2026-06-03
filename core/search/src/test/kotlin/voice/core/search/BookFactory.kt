@@ -6,14 +6,14 @@ import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import java.time.Instant
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 fun book(
   chapters: List<Chapter> = listOf(chapter(), chapter()),
   time: Long = 42,
   currentChapter: ChapterId = chapters.first().id,
-  name: String = UUID.randomUUID().toString(),
-  author: String? = UUID.randomUUID().toString(),
+  name: String = Uuid.random().toString(),
+  author: String? = Uuid.random().toString(),
   genre: String? = "Genre",
   narrator: String? = "Narrator",
   series: String? = null,
@@ -32,7 +32,7 @@ fun book(
       isActive = true,
       lastPlayedAt = Instant.EPOCH,
       skipSilence = false,
-      id = BookId(UUID.randomUUID().toString()),
+      id = BookId(Uuid.random().toString()),
       gain = 0F,
       genre = genre,
       narrator = narrator,
@@ -45,11 +45,11 @@ fun book(
 
 fun chapter(
   duration: Long = 10000,
-  id: ChapterId = ChapterId(UUID.randomUUID().toString()),
+  id: ChapterId = ChapterId(Uuid.random().toString()),
 ): Chapter {
   return Chapter(
     id = id,
-    name = UUID.randomUUID().toString(),
+    name = Uuid.random().toString(),
     duration = duration,
     fileLastModified = Instant.EPOCH,
     markData = emptyList(),

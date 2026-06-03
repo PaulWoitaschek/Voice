@@ -16,7 +16,7 @@ import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
 import voice.core.data.repo.internals.moveToNextLoop
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 @ContributesIntoSet(
   scope = AppScope::class,
@@ -110,7 +110,7 @@ public class Migration43to44 : IncrementalMigration(43) {
       val active = bookCursor.getInt("BOOK_ACTIVE")
       val loudnessGain = bookCursor.getIntOrNull("loudnessGain") ?: 0
 
-      val newId = UUID.randomUUID().toString()
+      val newId = Uuid.random().toString()
 
       db.insert("bookMetaData") {
         put("id", newId)

@@ -18,7 +18,7 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookRepository
 import java.time.Instant
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 class BookSearchHandlerTest {
 
@@ -101,13 +101,13 @@ class BookSearchHandlerTest {
 
 fun book(
   chapters: List<Chapter>,
-  id: BookId = BookId(UUID.randomUUID().toString()),
+  id: BookId = BookId(Uuid.random().toString()),
   positionInChapter: Long = 0,
 ): Book {
   return Book(
     content = BookContent(
-      author = UUID.randomUUID().toString(),
-      name = UUID.randomUUID().toString(),
+      author = Uuid.random().toString(),
+      name = Uuid.random().toString(),
       positionInChapter = positionInChapter,
       playbackSpeed = 1F,
       addedAt = Instant.EPOCH,
@@ -130,8 +130,8 @@ fun book(
 
 private fun chapter(): Chapter {
   return Chapter(
-    id = ChapterId(UUID.randomUUID().toString()),
-    name = UUID.randomUUID().toString(),
+    id = ChapterId(Uuid.random().toString()),
+    name = Uuid.random().toString(),
     duration = 10000,
     fileLastModified = Instant.EPOCH,
     markData = emptyList(),

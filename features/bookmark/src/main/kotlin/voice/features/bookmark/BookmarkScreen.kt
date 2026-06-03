@@ -56,7 +56,7 @@ import voice.features.bookmark.dialogs.AddBookmarkDialog
 import voice.features.bookmark.dialogs.EditBookmarkDialog
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import java.util.UUID
+import kotlin.uuid.Uuid
 import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
@@ -292,7 +292,7 @@ private fun BookmarkItemPreview() {
     bookmark = BookmarkItemViewState(
       title = "Bookmark 1",
       subtitle = "10:10:10 / 12:12:12",
-      id = Bookmark.Id(UUID.randomUUID()),
+      id = Bookmark.Id(Uuid.random()),
       showSleepIcon = true,
     ),
     onDelete = {},

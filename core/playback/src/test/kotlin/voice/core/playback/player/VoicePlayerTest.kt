@@ -37,8 +37,8 @@ import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.search.book
 import voice.core.playback.session.toMediaIdOrNull
 import java.time.Instant
-import java.util.UUID
 import java.util.concurrent.TimeUnit
+import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
 class VoicePlayerTest {
@@ -86,7 +86,7 @@ class VoicePlayerTest {
 
   private val scope = TestScope()
   private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), mockk())
-  private val bookId = BookId(UUID.randomUUID().toString())
+  private val bookId = BookId(Uuid.random().toString())
   private lateinit var currentBook: Book
   private val player = VoicePlayer(
     player = internalPlayer,
@@ -319,7 +319,7 @@ class VoicePlayerTest {
 
   private fun chapter(vararg marks: ChapterMark): Chapter {
     return Chapter(
-      id = ChapterId(UUID.randomUUID().toString()),
+      id = ChapterId(Uuid.random().toString()),
       name = "chapter",
       duration = marks.maxOf { it.endMs },
       fileLastModified = Instant.EPOCH,
