@@ -1,5 +1,5 @@
 [versions]
-sdk-compile = "36"
+sdk-compile = "37"
 sdk-min = "28"
 sdk-target = "36"
 sdk-robolectric = "35"
@@ -29,7 +29,7 @@ retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-se
 robolectric = "org.robolectric:robolectric:4.16.1"
 coil = "io.coil-kt:coil-compose:2.7.0"
 appCompat = "androidx.appcompat:appcompat:1.7.1"
-androidxCore = "androidx.core:core-ktx:1.18.0"
+androidxCore = "androidx.core:core-ktx:1.19.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 documentFile = "androidx.documentfile:documentfile:1.1.0"
