@@ -73,7 +73,7 @@ class BookPlayViewModelTest {
 
   private val player = mockk<PlayerController>()
   private val playStateManager = mockk<PlayStateManager> {
-    every { flow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
+    every { playStateFlow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
   }
   private val currentBookStoreId = MemoryDataStore<BookId?>(null)
   private val currentBookResolver = mockk<CurrentBookResolver> {
@@ -321,7 +321,7 @@ class BookPlayViewModelTest {
       },
       sleepTimer = sleepTimer,
       playStateManager = mockk {
-        every { flow } returns playStateFlow
+        every { this.playStateFlow } returns playStateFlow
         every { playState } returns playStateFlow.value
       },
       currentBookStoreId = MemoryDataStore(null),

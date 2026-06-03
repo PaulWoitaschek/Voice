@@ -10,16 +10,14 @@ import kotlinx.coroutines.flow.StateFlow
 @Inject
 class PlayStateManager {
 
-  private val _playState = MutableStateFlow(PlayState.Paused)
-
-  val flow: StateFlow<PlayState>
-    get() = _playState
+  val playStateFlow: StateFlow<PlayState>
+    field = MutableStateFlow(PlayState.Paused)
 
   var playState: PlayState
     set(value) {
-      _playState.value = value
+      playStateFlow.value = value
     }
-    get() = _playState.value
+    get() = playStateFlow.value
 
   enum class PlayState {
     Playing,

@@ -41,7 +41,7 @@ class PositionUpdater(
     player.addListener(this)
 
     updateJob = scope.launch {
-      playStateManager.flow
+      playStateManager.playStateFlow
         .map { it == PlayStateManager.PlayState.Playing }
         .distinctUntilChanged()
         .collectLatest { playing ->

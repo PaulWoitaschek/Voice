@@ -1,6 +1,5 @@
 package voice.features.bookOverview.bottomSheet
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Inject
@@ -16,8 +15,9 @@ class BottomSheetViewModel(private val viewModels: Set<@JvmSuppressWildcards Bot
 
   private val scope = MainScope()
 
-  private val _state: MutableState<EditBookBottomSheetState> = mutableStateOf(EditBookBottomSheetState(emptyList()))
-  internal val state: State<EditBookBottomSheetState> get() = _state
+  internal val state: State<EditBookBottomSheetState>
+    field = mutableStateOf(EditBookBottomSheetState(emptyList()))
+
   var bookId: BookId? = null
     private set
 
@@ -27,7 +27,7 @@ class BottomSheetViewModel(private val viewModels: Set<@JvmSuppressWildcards Bot
       val items = viewModels.flatMap { it.items(bookId) }
         .toSet()
         .sorted()
-      _state.value = EditBookBottomSheetState(items)
+      state.value = EditBookBottomSheetState(items)
     }
   }
 
