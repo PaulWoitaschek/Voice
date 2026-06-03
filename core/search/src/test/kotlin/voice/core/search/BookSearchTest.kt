@@ -13,7 +13,7 @@ import voice.core.data.repo.BookContentRepoImpl
 import voice.core.data.repo.BookRepositoryImpl
 import voice.core.data.repo.ChapterRepoImpl
 import voice.core.data.repo.internals.AppDb
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
 class BookSearchTest {
@@ -173,7 +173,7 @@ class BookSearchTest {
 private fun Book.withNewIdAndInactive(): Book {
   return update {
     it.copy(
-      id = BookId(UUID.randomUUID().toString()),
+      id = BookId(Uuid.random().toString()),
       isActive = false,
     )
   }

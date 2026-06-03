@@ -41,8 +41,8 @@ class SleepTimerImpl internal constructor(
 ) : SleepTimer {
 
   private val scope = MainScope(dispatcherProvider)
-  private val _state = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
-  override val state: StateFlow<SleepTimerState> get() = _state
+  override val state: StateFlow<SleepTimerState>
+    field = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
 
   private var job: Job? = null
 
@@ -58,7 +58,7 @@ class SleepTimerImpl internal constructor(
           startCountdown(pref.duration)
         }
         SleepTimerMode.EndOfChapter -> {
-          _state.value = SleepTimerState.Enabled.WithEndOfChapter
+          state.value = SleepTimerState.Enabled.WithEndOfChapter
         }
       }
     }
@@ -68,14 +68,14 @@ class SleepTimerImpl internal constructor(
     tracker.disabled()
     job?.cancel()
     job = null
-    _state.value = SleepTimerState.Disabled
+    state.value = SleepTimerState.Disabled
     playerController.setVolume(1F)
   }
 
   private tailrec suspend fun startCountdown(duration: Duration) {
     Logger.d("startCountdown(duration=$duration)")
     var left = duration
-    _state.value = SleepTimerState.Enabled.WithDuration(left)
+    state.value = SleepTimerState.Enabled.WithDuration(left)
     playerController.setVolume(1F)
 
     val fadeOutDuration = fadeOutStore.data.first()
@@ -89,10 +89,10 @@ class SleepTimerImpl internal constructor(
       }
       delay(interval)
       left = max((left - interval).inWholeMilliseconds, 0).milliseconds
-      _state.value = SleepTimerState.Enabled.WithDuration(left)
+      state.value = SleepTimerState.Enabled.WithDuration(left)
     }
     playerController.setVolume(1f)
-    _state.value = SleepTimerState.Disabled
+    state.value = SleepTimerState.Disabled
 
     playerController.pauseWithRewind(fadeOutDuration)
 
@@ -125,7 +125,7 @@ class SleepTimerImpl internal constructor(
   private suspend fun suspendUntilPlaying() {
     if (playStateManager.playState != Playing) {
       Logger.i("Not playing. Waiting for playback to continue.")
-      playStateManager.flow.first { it == Playing }
+      playStateManager.playStateFlow.first { it == Playing }
       Logger.i("Playback resumed.")
     }
   }

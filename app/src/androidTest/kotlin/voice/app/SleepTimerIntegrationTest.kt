@@ -27,9 +27,9 @@ import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerState
 import java.io.File
 import java.time.Instant
-import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
+import kotlin.uuid.Uuid
 
 class SleepTimerIntegrationTest {
 
@@ -65,13 +65,13 @@ class SleepTimerIntegrationTest {
 
     // play the book and wait for it to start
     playerController.play()
-    playStateManager.flow.first { it == PlayStateManager.PlayState.Playing }
+    playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Playing }
 
     sleepTimer.enable(SleepTimerMode.TimedWithDuration(3.seconds))
 
     // wait for the sleep timer to trigger
     sleepTimer.state.first { it == SleepTimerState.Disabled }
-    playStateManager.flow.first { it == PlayStateManager.PlayState.Paused }
+    playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Paused }
 
     bookContentRepo.get(bookId)!!.positionInChapter.shouldBeGreaterThan(0)
   }
@@ -87,12 +87,12 @@ class SleepTimerIntegrationTest {
 
     // play the book and wait for it to start
     playerController.play()
-    playStateManager.flow.first { it == PlayStateManager.PlayState.Playing }
+    playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Playing }
 
     sleepTimer.enable(SleepTimerMode.EndOfChapter)
 
     // wait for the sleep timer to trigger
-    playStateManager.flow.first { it == PlayStateManager.PlayState.Paused }
+    playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Paused }
     sleepTimer.state.first { it == SleepTimerState.Disabled }
 
     // suspend until the position is updated to the end of the chapter
@@ -103,7 +103,7 @@ class SleepTimerIntegrationTest {
   private suspend fun prepareTestBook(): BookId {
     val audioFile = copyTestAudioFile()
 
-    val bookId = BookId(UUID.randomUUID().toString())
+    val bookId = BookId(Uuid.random().toString())
     val chapterId = ChapterId(audioFile.toUri())
 
     val chapter = Chapter(

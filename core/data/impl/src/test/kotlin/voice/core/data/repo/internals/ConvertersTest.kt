@@ -5,7 +5,7 @@ import org.junit.Test
 import voice.core.data.MarkData
 import java.io.File
 import java.time.Instant
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 class ConvertersTest {
 
@@ -16,7 +16,7 @@ class ConvertersTest {
 
   @Test
   fun uuid() {
-    test(UUID.randomUUID(), Converters::fromUUID, Converters::toUUID)
+    test(Uuid.random(), Converters::fromUuid, Converters::toUuid)
   }
 
   @Test

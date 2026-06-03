@@ -14,14 +14,14 @@ import voice.core.logging.api.Logger
 @Inject
 public class DeviceHasStoragePermissionBug(private val context: Context) {
 
-  private val _hasBug = MutableStateFlow(false)
-  public val hasBug: StateFlow<Boolean> get() = _hasBug
+  public val hasBug: StateFlow<Boolean>
+    field = MutableStateFlow(false)
 
   internal suspend fun checkForBugAndSet(probeFile: CachedDocumentFile): Boolean {
     return deviceHasPermissionBug(probeFile)
       .also {
         Logger.d("update hasBug to $it")
-        _hasBug.emit(it)
+        hasBug.emit(it)
       }
   }
 

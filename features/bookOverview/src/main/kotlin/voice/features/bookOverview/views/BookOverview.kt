@@ -48,7 +48,7 @@ import voice.features.bookOverview.search.BookSearchViewState
 import voice.features.bookOverview.views.topbar.BookOverviewTopBar
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 @ContributesTo(AppScope::class)
 interface BookOverviewProvider {
@@ -252,7 +252,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       author = "Author",
       cover = null,
       progress = 0.8F,
-      id = BookId(UUID.randomUUID().toString()),
+      id = BookId(Uuid.random().toString()),
       remainingTime = "01:04",
     )
   }
@@ -263,7 +263,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
         BookOverviewCategory.CURRENT to buildMap {
           repeat(10) {
             put(
-              BookId(UUID.randomUUID().toString()),
+              BookId(Uuid.random().toString()),
               mutableStateOf(book()),
             )
           }
@@ -271,7 +271,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
         BookOverviewCategory.FINISHED to buildMap {
           repeat(2) {
             put(
-              BookId(UUID.randomUUID().toString()),
+              BookId(Uuid.random().toString()),
               mutableStateOf(book()),
             )
           }

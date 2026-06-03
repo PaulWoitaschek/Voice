@@ -41,9 +41,9 @@ import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
 import voice.features.sleepTimer.SleepTimerViewState
 import java.time.Instant
-import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.uuid.Uuid
 
 class BookPlayViewModelTest {
 
@@ -73,7 +73,7 @@ class BookPlayViewModelTest {
 
   private val player = mockk<PlayerController>()
   private val playStateManager = mockk<PlayStateManager> {
-    every { flow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
+    every { playStateFlow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
   }
   private val currentBookStoreId = MemoryDataStore<BookId?>(null)
   private val currentBookResolver = mockk<CurrentBookResolver> {
@@ -98,7 +98,7 @@ class BookPlayViewModelTest {
         chapterId = book.currentChapter.id,
         addedAt = Instant.now(),
         setBySleepTimer = true,
-        id = Bookmark.Id(UUID.randomUUID()),
+        id = Bookmark.Id(Uuid.random()),
         time = 0L,
         title = null,
       )
@@ -321,7 +321,7 @@ class BookPlayViewModelTest {
       },
       sleepTimer = sleepTimer,
       playStateManager = mockk {
-        every { flow } returns playStateFlow
+        every { this@mockk.playStateFlow } returns playStateFlow
         every { playState } returns playStateFlow.value
       },
       currentBookStoreId = MemoryDataStore(null),
@@ -348,7 +348,7 @@ private fun book(
   )
   return Book(
     content = BookContent(
-      author = UUID.randomUUID().toString(),
+      author = Uuid.random().toString(),
       name = name,
       positionInChapter = 2.5.minutes.inWholeMilliseconds,
       playbackSpeed = 1F,
@@ -359,7 +359,7 @@ private fun book(
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
-      id = BookId(UUID.randomUUID().toString()),
+      id = BookId(Uuid.random().toString()),
       gain = 0F,
       genre = null,
       narrator = null,
@@ -372,7 +372,7 @@ private fun book(
 
 private fun chapter(): Chapter {
   return Chapter(
-    id = ChapterId("http://${UUID.randomUUID()}"),
+    id = ChapterId("http://${Uuid.random()}"),
     duration = 5.minutes.inWholeMilliseconds,
     fileLastModified = Instant.EPOCH,
     markData = listOf(

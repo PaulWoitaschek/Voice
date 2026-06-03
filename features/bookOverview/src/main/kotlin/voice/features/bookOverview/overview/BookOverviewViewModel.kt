@@ -78,7 +78,7 @@ class BookOverviewViewModel(
 
   @Composable
   internal fun state(): BookOverviewViewState {
-    val playState = remember { playStateManager.flow }
+    val playState = remember { playStateManager.playStateFlow }
       .collectAsState(initial = PlayStateManager.PlayState.Paused).value
     val hasStoragePermissionBug = remember { deviceHasStoragePermissionBug.hasBug }
       .collectAsState().value

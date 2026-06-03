@@ -20,7 +20,6 @@ fun Project.baseSetup() {
     compilerOptions {
       jvmTarget.set(JvmTarget.fromTarget(jvmBytecodeVersion.toString()))
       freeCompilerArgs.addAll(
-        "-Xannotation-default-target=param-property",
         "-Xreturn-value-checker=full",
       )
       optIn.addAll(

@@ -30,8 +30,8 @@ internal constructor(
   private val documentFileFactory: CachedDocumentFileFactory,
 ) {
 
-  private val _scannerActive = MutableStateFlow(false)
-  public val scannerActive: Flow<Boolean> = _scannerActive
+  public val scannerActive: Flow<Boolean>
+    field = MutableStateFlow(false)
 
   private val scope = CoroutineScope(Dispatchers.IO)
   private var scanningJob: Job? = null
@@ -43,7 +43,7 @@ internal constructor(
     }
     val oldJob = scanningJob
     scanningJob = scope.launch {
-      _scannerActive.value = true
+      scannerActive.value = true
       oldJob?.cancelAndJoin()
 
       measureTime {
@@ -58,7 +58,7 @@ internal constructor(
       }.also {
         Logger.i("scan took $it")
       }
-      _scannerActive.value = false
+      scannerActive.value = false
 
       val books = bookRepo.all()
       coverScanner.scan(books)

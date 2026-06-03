@@ -73,11 +73,11 @@ class BookPlayViewModel(
 
   private val scope = MainScope(dispatcherProvider)
 
-  private val _viewEffects = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
-  internal val viewEffects: Flow<BookPlayViewEffect> get() = _viewEffects
+  internal val viewEffects: Flow<BookPlayViewEffect>
+    field = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
 
-  private val _dialogState = mutableStateOf<BookPlayDialogViewState?>(null)
-  internal val dialogState: State<BookPlayDialogViewState?> get() = _dialogState
+  internal val dialogState: State<BookPlayDialogViewState?>
+    field = mutableStateOf<BookPlayDialogViewState?>(null)
 
   init {
     scope.launch {
@@ -100,7 +100,7 @@ class BookPlayViewModel(
       null
     }
     val managerPlayState by remember {
-      playStateManager.flow
+      playStateManager.playStateFlow
     }.collectAsState()
 
     val book = if (livePlaybackState != null) {
@@ -135,7 +135,7 @@ class BookPlayViewModel(
 
   fun dismissDialog() {
     Logger.d("dismissDialog")
-    _dialogState.value = null
+    dialogState.value = null
   }
 
   fun incrementSleepTime() {
@@ -188,17 +188,17 @@ class BookPlayViewModel(
       } else {
         update(SleepTimerViewState(sleepTimerPreferenceStore.data.first().duration.inWholeMinutes.toInt()))
       }
-      _dialogState.value = updated?.let(BookPlayDialogViewState::SleepTimer)
+      dialogState.value = updated?.let(BookPlayDialogViewState::SleepTimer)
     }
   }
 
   fun onPlaybackSpeedChanged(speed: Float) {
-    _dialogState.value = BookPlayDialogViewState.SpeedDialog(speed)
+    dialogState.value = BookPlayDialogViewState.SpeedDialog(speed)
     player.setSpeed(speed)
   }
 
   fun onVolumeGainChanged(gain: Decibel) {
-    _dialogState.value = volumeGainDialogViewState(gain)
+    dialogState.value = volumeGainDialogViewState(gain)
     player.setGain(gain)
   }
 
@@ -214,7 +214,7 @@ class BookPlayViewModel(
     if (playStateManager.playState != PlayStateManager.PlayState.Playing) {
       scope.launch {
         if (batteryOptimization.shouldRequest()) {
-          _viewEffects.tryEmit(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
+          viewEffects.tryEmit(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
           batteryOptimization.onBatteryOptimizationsRequested()
         }
       }
@@ -237,7 +237,7 @@ class BookPlayViewModel(
   fun onCurrentChapterClick() {
     scope.launch {
       val book = currentBook() ?: return@launch
-      _dialogState.value = BookPlayDialogViewState.SelectChapterDialog(
+      dialogState.value = BookPlayDialogViewState.SelectChapterDialog(
         items = book.chapters.flatMapIndexed { chapterIndex, chapter ->
           chapter.chapterMarks.mapIndexed { markIndex, chapterMark ->
             val previousChapters = book.chapters.take(chapterIndex)
@@ -262,7 +262,7 @@ class BookPlayViewModel(
           currentIndex++
           if (currentIndex == number - 1) {
             player.setPosition(mark.startMs, chapter.id)
-            _dialogState.value = null
+            dialogState.value = null
             return@launch
           }
         }
@@ -273,14 +273,14 @@ class BookPlayViewModel(
   fun onPlaybackSpeedIconClick() {
     scope.launch {
       val playbackSpeed = currentBook()?.content?.playbackSpeed ?: return@launch
-      _dialogState.value = BookPlayDialogViewState.SpeedDialog(playbackSpeed)
+      dialogState.value = BookPlayDialogViewState.SpeedDialog(playbackSpeed)
     }
   }
 
   fun onVolumeGainIconClick() {
     scope.launch {
       val content = currentBook()?.content ?: return@launch
-      _dialogState.value = volumeGainDialogViewState(Decibel(content.gain))
+      dialogState.value = volumeGainDialogViewState(Decibel(content.gain))
     }
   }
 
@@ -304,7 +304,7 @@ class BookPlayViewModel(
         title = null,
         setBySleepTimer = false,
       )
-      _viewEffects.tryEmit(BookPlayViewEffect.BookmarkAdded)
+      viewEffects.tryEmit(BookPlayViewEffect.BookmarkAdded)
     }
   }
 
@@ -322,9 +322,9 @@ class BookPlayViewModel(
       Logger.d("toggleSleepTimer while active=${sleepTimer.state.value}")
       if (sleepTimer.state.value.enabled) {
         sleepTimer.disable()
-        _dialogState.value = null
+        dialogState.value = null
       } else {
-        _dialogState.value = BookPlayDialogViewState.SleepTimer(
+        dialogState.value = BookPlayDialogViewState.SleepTimer(
           viewState = SleepTimerViewState(
             customSleepTime = sleepTimerPreferenceStore.data.first().duration.inWholeMinutes.toInt(),
           ),
