@@ -321,7 +321,7 @@ class BookPlayViewModelTest {
       },
       sleepTimer = sleepTimer,
       playStateManager = mockk {
-        every { this.playStateFlow } returns playStateFlow
+        every { this@mockk.playStateFlow } returns playStateFlow
         every { playState } returns playStateFlow.value
       },
       currentBookStoreId = MemoryDataStore(null),
