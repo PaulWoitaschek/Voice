@@ -1,1 +1,1 @@
-Minimalistischer Offline-Player. Werbefrei, Volume Boost, Widget & Sleep-Timer.
+Klarer Hörbuch-Player für eigene Dateien, mit Sleep Timer und Lesezeichen.

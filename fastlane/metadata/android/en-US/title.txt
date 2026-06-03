@@ -1,1 +1,1 @@
-Voice: Offline Audiobook Player
+Voice Audiobook Player
