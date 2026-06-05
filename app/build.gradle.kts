@@ -41,12 +41,6 @@ android {
     testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
   }
 
-  sourceSets {
-    named("androidTest") {
-      assets.directories += layout.projectDirectory.dir("../Images").asFile.path
-    }
-  }
-
   val distributionFlavor = "distribution"
   flavorDimensions += distributionFlavor
   productFlavors {
