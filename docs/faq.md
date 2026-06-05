@@ -38,10 +38,10 @@ If you’re running an Android release that’s not supported by the latest Voic
 | Android Version | API Level (SDK) | Voice Version                                                           |
 |-----------------|-----------------|-------------------------------------------------------------------------|
 | Android 9+      | 28+             | Supported in the latest version 🎉                                      |
-| Android 8.1     | 27              | [8.2.4‑2](https://github.com/VoiceAudiobook/Voice/releases/tag/8.2.4-2) |
-| Android 8       | 26              | [8.2.4‑2](https://github.com/VoiceAudiobook/Voice/releases/tag/8.2.4-2) |
-| Android 7.1     | 25              | [8.2.4‑2](https://github.com/VoiceAudiobook/Voice/releases/tag/8.2.4-2) |
-| Android 7.0     | 24              | [6.0.10](https://github.com/VoiceAudiobook/Voice/releases/tag/6.0.10)   |
+| Android 8.1     | 27              | [8.2.4‑2](https://github.com/PaulWoitaschek/Voice/releases/tag/8.2.4-2) |
+| Android 8       | 26              | [8.2.4‑2](https://github.com/PaulWoitaschek/Voice/releases/tag/8.2.4-2) |
+| Android 7.1     | 25              | [8.2.4‑2](https://github.com/PaulWoitaschek/Voice/releases/tag/8.2.4-2) |
+| Android 7.0     | 24              | [6.0.10](https://github.com/PaulWoitaschek/Voice/releases/tag/6.0.10)   |
 
 ### How do I resume playback after the sleep timer stops?
 

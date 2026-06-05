@@ -47,3 +47,25 @@
 .md-typeset .md-button {
   margin: 0.25rem 0.25rem 0.25rem 0;
 }
+
+.voice-screenshots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 1.5rem 0 2rem;
+  max-width: 760px;
+}
+
+.voice-screenshots img {
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 640px) {
+  .voice-screenshots {
+    grid-template-columns: repeat(3, minmax(110px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+}

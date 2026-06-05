@@ -15,6 +15,6 @@
 Voice 是免费且开源的，这意味着每个人都可以了解它在干什么。只要求最低的权限
 
 如果您有任何建议或者发现了问题，请在这里描述：
-https://github.com/VoiceAudiobook/Voice/issues
+https://github.com/PaulWoitaschek/Voice/issues
 
 开源许可证 Gnu GPLv3

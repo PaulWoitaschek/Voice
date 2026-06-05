@@ -103,6 +103,27 @@ The `release` environment requires these secrets:
 
 F-Droid builds are handled by their team and usually appear a few days after a stable (non-RC) release.
 
+## Play Store Artwork
+
+Play Store artwork is generated from the `artwork/` Node project and written to `fastlane/metadata/android/*/images`.
+
+Use:
+
+```sh
+./scripts/generate_artworks.sh
+```
+
+The generator uses:
+
+- `artwork/public/logo.svg` for the Play Store icon.
+- `artwork/public/raw/phone/*.png` for raw app screenshots.
+- `artwork/src/templates/` and `artwork/src/styles/` for the rendered Play Store images.
+- `fastlane/metadata/android/*/marketing.yml` for localized feature graphic text and screenshot captions.
+
+Only locales with `marketing.yml` get localized generated images. The script removes old generated screenshot folders before writing the current output, so deleted tablet screenshots do not remain in the repository.
+
+The `artwork/package-lock.json` file is intentionally not checked in. CI and local generation use `npm install` from `artwork/package.json` to keep this small tool out of regular lockfile update churn.
+
 ## Versioning
 
 Voice uses [calendar versioning (CalVer)](https://calver.org/).
@@ -135,4 +156,4 @@ To projects [Website](https://voice.woitaschek.de/) uses Github Pages and Mkdocs
 To deploy a new website, use dispatch a workflow
 manually.
 
-[👉 Dispatch Workflow](https://github.com/VoiceAudiobook/Voice/actions/workflows/deploy_pages.yml)
+[👉 Dispatch Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/deploy_pages.yml)

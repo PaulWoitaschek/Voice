@@ -15,6 +15,6 @@ Capabilități:
 Voice este gratuit și open source. Asta înseamnă că toată lumea poate să vadă ce se întâmplă "sub capotă". Folosește doar permisiunile absolut necesare.
 
 Dacă ai sugestii sau ai găsit un bug, te așteptăm aici:
-https://github.com/VoiceAudiobook/Voice/issues
+https://github.com/PaulWoitaschek/Voice/issues
 
 Licența open source folosită este Gnu GPLv3

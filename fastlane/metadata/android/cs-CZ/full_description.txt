@@ -15,6 +15,6 @@ Co umí:
 Voice je zdarma a s otevřeným zdrojovým kódem. To znamená, že se každý může podívat, co dělá. Používá minimální oprávnění.
 
 Pokud máte návrhy nebo najdete chyby, nahlaste je zde:
-https://github.com/VoiceAudiobook/Voice/issues
+https://github.com/PaulWoitaschek/Voice/issues
 
 Licence open source je GNU GPLv3

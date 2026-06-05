@@ -15,6 +15,6 @@ Ce qu'il peut faire:
 Voice est gratuit et open source. Cela signifie que chacun peut voir ce qu'il fait. Il ne requiert que des permissions minimales.
 
 Si vous avez des suggestions ou avez trouvé un bug, signalez-le à l'adresse :
-https://github.com/VoiceAudiobook/Voice/issues
+https://github.com/PaulWoitaschek/Voice/issues
 
 La licence open source est la Gnu GPLv3
