@@ -33,7 +33,7 @@ public data class BookContent(
   @Ignore
   val currentChapterIndex: Int = chapters.indexOf(currentChapter)
 
-  val coverUrl: String? get() = cover?.let { "file://${it.absolutePath}" }
+  val coverUrl: String? get() = cover?.toURI()?.toString()
 
   init {
     require(currentChapter in chapters && positionInChapter >= 0) {
