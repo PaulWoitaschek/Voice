@@ -2,7 +2,6 @@ package voice.features.playbackScreen
 
 import androidx.compose.runtime.Immutable
 import voice.core.playback.misc.Decibel
-import voice.core.ui.ImmutableFile
 import voice.features.sleepTimer.SleepTimerViewState
 import kotlin.time.Duration
 
@@ -15,7 +14,7 @@ data class BookPlayViewState(
   val playedTime: Duration,
   val duration: Duration,
   val playing: Boolean,
-  val cover: ImmutableFile?,
+  val cover: String?,
   val skipSilence: Boolean,
 ) {
 

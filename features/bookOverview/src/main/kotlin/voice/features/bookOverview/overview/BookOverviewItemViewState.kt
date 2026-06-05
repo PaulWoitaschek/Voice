@@ -4,14 +4,13 @@ import androidx.compose.runtime.Immutable
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.logging.api.Logger
-import voice.core.ui.ImmutableFile
 import voice.core.ui.formatTime
 
 @Immutable
 data class BookOverviewItemViewState(
   val name: String,
   val author: String?,
-  val cover: ImmutableFile?,
+  val cover: String?,
   val progress: Float,
   val id: BookId,
   val remainingTime: String,
@@ -20,7 +19,7 @@ data class BookOverviewItemViewState(
 internal fun Book.toItemViewState() = BookOverviewItemViewState(
   name = content.name,
   author = content.author,
-  cover = content.cover?.let(::ImmutableFile),
+  cover = content.coverUrl,
   id = id,
   progress = progress(),
   remainingTime = formatTime(duration - position),

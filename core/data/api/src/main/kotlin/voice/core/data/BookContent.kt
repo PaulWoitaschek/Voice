@@ -33,6 +33,8 @@ public data class BookContent(
   @Ignore
   val currentChapterIndex: Int = chapters.indexOf(currentChapter)
 
+  val coverUrl: String? get() = cover?.let { "file://${it.absolutePath}" }
+
   init {
     require(currentChapter in chapters && positionInChapter >= 0) {
       "invalid data in $this"

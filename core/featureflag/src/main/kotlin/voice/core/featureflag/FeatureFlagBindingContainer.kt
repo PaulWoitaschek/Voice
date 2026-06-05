@@ -78,6 +78,20 @@ interface FeatureFlagBindingContainer {
   @Binds
   @IntoSet
   fun bindMedia3AudioOffloadFeatureFlag(@Media3AudioOffloadFeatureFlagQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @KioskModeFeatureFlagQualifier
+  fun kioskModeFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
+    return factory.boolean(
+      key = "kiosk_mode",
+      description = "Shows demo content on the overview, playback, and bookmark screens.",
+    )
+  }
+
+  @Binds
+  @IntoSet
+  fun bindKioskModeFeatureFlag(@KioskModeFeatureFlagQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
 }
 
 @Qualifier
@@ -94,3 +108,6 @@ annotation class ExperimentalPlaybackPersistenceQualifier
 
 @Qualifier
 annotation class Media3AudioOffloadFeatureFlagQualifier
+
+@Qualifier
+annotation class KioskModeFeatureFlagQualifier

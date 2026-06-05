@@ -19,6 +19,7 @@ import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.KioskModeDemoData
 import voice.core.data.durationMs
 import voice.core.data.markForPosition
 import voice.core.data.repo.BookRepository
@@ -28,6 +29,7 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
+import voice.core.featureflag.KioskModeFeatureFlagQualifier
 import voice.core.logging.api.Logger
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.PlayerController
@@ -39,13 +41,13 @@ import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
-import voice.core.ui.ImmutableFile
 import voice.core.ui.formatTime
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
 import voice.features.sleepTimer.SleepTimerViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 
@@ -67,6 +69,8 @@ class BookPlayViewModel(
   private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   @ExperimentalPlaybackPersistenceQualifier
   private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
+  @KioskModeFeatureFlagQualifier
+  private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -88,6 +92,9 @@ class BookPlayViewModel(
 
   @Composable
   fun viewState(): BookPlayViewState? {
+    val kioskMode = remember { kioskModeFeatureFlag.get() }
+    if (kioskMode) return kioskModeViewState()
+
     val persistedBook = remember(bookId) {
       bookRepository.flow(bookId).filterNotNull()
     }.collectAsState(initial = null).value ?: return null
@@ -128,8 +135,24 @@ class BookPlayViewModel(
       chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
       duration = currentMark.durationMs.milliseconds,
       playedTime = positionInCurrentMark.milliseconds,
-      cover = book.content.cover?.let(::ImmutableFile),
+      cover = book.content.coverUrl,
       skipSilence = book.content.skipSilence,
+    )
+  }
+
+  private fun kioskModeViewState(): BookPlayViewState {
+    val currentlyPlaying = KioskModeDemoData.currentlyPlaying
+    val book = KioskModeDemoData.currentlyPlayingBook
+    return BookPlayViewState(
+      sleepTimerState = BookPlayViewState.SleepTimerViewState.Disabled,
+      playing = true,
+      title = currentlyPlaying.screenTitle,
+      showPreviousNextButtons = true,
+      chapterName = currentlyPlaying.chapter,
+      duration = 14.hours + 27.minutes,
+      playedTime = 10.hours + 24.minutes,
+      cover = book.coverUrl,
+      skipSilence = false,
     )
   }
 

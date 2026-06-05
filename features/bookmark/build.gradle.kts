@@ -11,4 +11,5 @@ dependencies {
   implementation(projects.core.playback)
   implementation(projects.navigation)
   implementation(projects.core.data.api)
+  implementation(projects.core.featureflag)
 }

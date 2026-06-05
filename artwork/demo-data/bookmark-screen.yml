@@ -1,0 +1,12 @@
+bookmarkScreen:
+  bookId: "echoes_of_tomorrow"
+  title: "Bookmarks"
+  items:
+    - title: "The first signal"
+      timestamp: "02:14:08"
+    - title: "Mira's theory"
+      timestamp: "06:42:31"
+    - title: "The hidden message"
+      timestamp: "10:18:55"
+    - title: "Return to this later"
+      timestamp: "12:03:44"

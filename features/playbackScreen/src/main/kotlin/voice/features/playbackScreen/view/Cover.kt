@@ -12,14 +12,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import voice.core.ui.ImmutableFile
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 
 @Composable
 internal fun Cover(
   onDoubleClick: () -> Unit,
-  cover: ImmutableFile?,
+  cover: String?,
 ) {
   AsyncImage(
     modifier = Modifier
@@ -33,7 +32,7 @@ internal fun Cover(
       }
       .clip(RoundedCornerShape(20.dp)),
     contentScale = ContentScale.Crop,
-    model = cover?.file,
+    model = cover,
     placeholder = painterResource(id = UiR.drawable.album_art),
     error = painterResource(id = UiR.drawable.album_art),
     contentDescription = stringResource(id = StringsR.string.cover),

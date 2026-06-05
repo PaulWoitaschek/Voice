@@ -34,7 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import voice.core.data.BookId
-import voice.core.ui.ImmutableFile
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.core.ui.R as UiR
@@ -172,7 +171,7 @@ internal fun ListBookRow(
 }
 
 @Composable
-private fun CoverImage(cover: ImmutableFile?) {
+private fun CoverImage(cover: String?) {
   val startPadding = 16.dp
   val endPadding = 16.dp
   AsyncImage(
@@ -180,7 +179,7 @@ private fun CoverImage(cover: ImmutableFile?) {
       .padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
       .size(76.dp)
       .clip(RoundedCornerShape(topStart = startPadding, bottomStart = startPadding, topEnd = endPadding, bottomEnd = endPadding)),
-    model = cover?.file,
+    model = cover,
     placeholder = painterResource(id = UiR.drawable.album_art),
     error = painterResource(id = UiR.drawable.album_art),
     contentScale = ContentScale.Crop,
