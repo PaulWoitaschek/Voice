@@ -47,6 +47,7 @@ class SettingsViewModelTest {
     every { useGridAsDefault() } returns true
   }
   private val folderPickerFeatureFlag = MemoryFeatureFlag(false)
+  private val kioskModeFeatureFlag = MemoryFeatureFlag(false)
 
   private val viewModel = SettingsViewModel(
     useDarkThemeStore = useDarkThemeStore,
@@ -59,6 +60,7 @@ class SettingsViewModelTest {
     analyticsConsentStore = analyticsConsentStore,
     gridCount = gridCount,
     folderPickerInSettingsFeatureFlag = folderPickerFeatureFlag,
+    kioskModeFeatureFlag = kioskModeFeatureFlag,
     developerMenuUnlockedStore = developerMenuUnlockedStore,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
@@ -95,6 +97,20 @@ class SettingsViewModelTest {
 
     verify(exactly = 1) {
       navigator.goTo(Destination.DeveloperSettings)
+    }
+  }
+
+  @Test
+  fun `view state exposes kiosk mode`() = scope.runTest {
+    kioskModeFeatureFlag.value = true
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem().let {
+        it.kioskMode shouldBe true
+        it.showFolderPickerEntry shouldBe true
+      }
     }
   }
 }

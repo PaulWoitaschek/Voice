@@ -99,21 +99,23 @@ private fun FolderOverviewView(
       )
     },
     floatingActionButton = {
-      val text = stringResource(id = StringsR.string.add)
-      ExtendedFloatingActionButton(
-        text = {
-          Text(text)
-        },
-        onClick = {
-          onAddClick()
-        },
-        icon = {
-          Icon(
-            imageVector = Icons.Outlined.Add,
-            contentDescription = text,
-          )
-        },
-      )
+      if (viewState.showActions) {
+        val text = stringResource(id = StringsR.string.add)
+        ExtendedFloatingActionButton(
+          text = {
+            Text(text)
+          },
+          onClick = {
+            onAddClick()
+          },
+          icon = {
+            Icon(
+              imageVector = Icons.Outlined.Add,
+              contentDescription = text,
+            )
+          },
+        )
+      }
     },
   ) { contentPadding ->
     LazyColumn(contentPadding = contentPadding) {
@@ -123,18 +125,22 @@ private fun FolderOverviewView(
           leadingContent = {
             FolderTypeIcon(folderType = item.folderType)
           },
-          trailingContent = {
-            IconButton(
-              onClick = {
-                onDeleteClick(item)
-              },
-              content = {
-                Icon(
-                  imageVector = Icons.Outlined.Delete,
-                  contentDescription = stringResource(StringsR.string.delete),
-                )
-              },
-            )
+          trailingContent = if (viewState.showActions) {
+            {
+              IconButton(
+                onClick = {
+                  onDeleteClick(item)
+                },
+                content = {
+                  Icon(
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = stringResource(StringsR.string.delete),
+                  )
+                },
+              )
+            }
+          } else {
+            null
           },
           headlineContent = {
             Text(text = item.name)

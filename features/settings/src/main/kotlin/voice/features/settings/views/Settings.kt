@@ -92,7 +92,7 @@ private fun Settings(
     },
   ) { contentPadding ->
     LazyColumn(contentPadding = contentPadding) {
-      if (viewState.showDeveloperMenu) {
+      if (viewState.showDeveloperMenu && !viewState.kioskMode) {
         item {
           DeveloperMenuItem(
             onClick = listener::openDeveloperMenu,
@@ -123,7 +123,7 @@ private fun Settings(
           DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
         }
       }
-      if (viewState.showAnalyticSetting) {
+      if (viewState.showAnalyticSetting && !viewState.kioskMode) {
         item {
           AnalyticsRow(analyticsEnabled = viewState.analyticsEnabled, toggle = listener::toggleAnalytics)
         }
@@ -244,6 +244,20 @@ private fun Settings(
           appVersion = viewState.appVersion,
           onClick = listener::onAppVersionClick,
         )
+      }
+      if (viewState.kioskMode) {
+        if (viewState.showAnalyticSetting) {
+          item {
+            AnalyticsRow(analyticsEnabled = viewState.analyticsEnabled, toggle = listener::toggleAnalytics)
+          }
+        }
+        if (viewState.showDeveloperMenu) {
+          item {
+            DeveloperMenuItem(
+              onClick = listener::openDeveloperMenu,
+            )
+          }
+        }
       }
     }
     Dialog(viewState, listener)
