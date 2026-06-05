@@ -41,12 +41,6 @@ android {
     testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
   }
 
-  sourceSets {
-    named("androidTest") {
-      assets.directories += layout.projectDirectory.dir("../Images").asFile.path
-    }
-  }
-
   val distributionFlavor = "distribution"
   flavorDimensions += distributionFlavor
   productFlavors {
@@ -210,14 +204,12 @@ dependencies {
   debugImplementation(libs.compose.ui.testManifest)
 
   androidTestImplementation(platform(libs.compose.bom))
-  androidTestImplementation(libs.androidX.test.espresso.core)
   androidTestImplementation(libs.androidX.test.runner)
   androidTestImplementation(libs.androidX.test.rules)
   androidTestImplementation(libs.androidX.test.junit)
   androidTestImplementation(libs.media3.testUtils.core)
   androidTestImplementation(libs.koTest.assert)
   androidTestImplementation(libs.androidX.test.services)
-  androidTestImplementation(libs.androidX.test.uiautomator)
   androidTestImplementation(libs.compose.ui.testJunit)
   androidTestImplementation(libs.coroutines.test)
   androidTestUtil(libs.androidX.test.orchestrator)
