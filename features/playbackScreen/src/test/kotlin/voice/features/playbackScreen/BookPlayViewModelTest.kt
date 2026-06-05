@@ -313,9 +313,9 @@ class BookPlayViewModelTest {
       viewModel.viewState()
     }.test {
       val state = awaitItem()!!
-      state.title shouldBe KioskModeDemoData.currentlyPlaying.screenTitle
+      state.title shouldBe KioskModeDemoData.currentlyPlaying.title
       state.chapterName shouldBe KioskModeDemoData.currentlyPlaying.chapter
-      state.cover shouldBe KioskModeDemoData.COVER_URL
+      state.cover shouldBe KioskModeDemoData.currentlyPlaying.coverUrl
     }
   }
 

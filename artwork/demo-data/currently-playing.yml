@@ -1,8 +1,0 @@
-currentlyPlaying:
-  bookId: "echoes_of_tomorrow"
-  screenTitle: "Echoes of Tomorrow"
-  screenAuthor: "by Daniel Hartwell"
-  chapter: "Chapter 12: The Signal"
-  position: "10:24"
-  duration: "14:27"
-  coverUrl: "https://raw.githubusercontent.com/PaulWoitaschek/Voice/kiosk/artwork/demo-data/echoes.webp"

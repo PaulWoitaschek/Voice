@@ -146,7 +146,7 @@ class BookPlayViewModel(
     return BookPlayViewState(
       sleepTimerState = BookPlayViewState.SleepTimerViewState.Disabled,
       playing = true,
-      title = currentlyPlaying.screenTitle,
+      title = currentlyPlaying.title,
       showPreviousNextButtons = true,
       chapterName = currentlyPlaying.chapter,
       duration = 14.hours + 27.minutes,
