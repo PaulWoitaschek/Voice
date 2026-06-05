@@ -126,7 +126,7 @@ internal fun GridBook(
         AsyncImage(
           modifier = Modifier.fillMaxSize(),
           contentScale = ContentScale.Crop,
-          model = book.cover?.file,
+          model = book.cover,
           placeholder = painterResource(id = UiR.drawable.album_art),
           error = painterResource(id = UiR.drawable.album_art),
           contentDescription = null,

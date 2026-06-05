@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
@@ -16,10 +17,13 @@ import kotlinx.coroutines.launch
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
+import voice.core.data.KioskModeDemoData
 import voice.core.data.markForPosition
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
+import voice.core.featureflag.FeatureFlag
+import voice.core.featureflag.KioskModeFeatureFlagQualifier
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.strings.R
@@ -30,6 +34,7 @@ import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import kotlin.uuid.Uuid
 
 @AssistedInject
 class BookmarkViewModel(
@@ -41,6 +46,8 @@ class BookmarkViewModel(
   private val playerController: PlayerController,
   private val navigator: Navigator,
   private val context: Context,
+  @KioskModeFeatureFlagQualifier
+  private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -54,6 +61,9 @@ class BookmarkViewModel(
 
   @Composable
   fun viewState(): BookmarkViewState {
+    val kioskMode = remember { kioskModeFeatureFlag.get() }
+    if (kioskMode) return kioskModeViewState()
+
     LaunchedEffect(bookId) {
       val book = repo.get(bookId)
       if (book != null) {
@@ -94,6 +104,21 @@ class BookmarkViewModel(
       },
       shouldScrollTo = shouldScrollTo,
       dialogViewState = dialogViewState,
+    )
+  }
+
+  private fun kioskModeViewState(): BookmarkViewState {
+    return BookmarkViewState(
+      bookmarks = KioskModeDemoData.bookmarkScreen.items.mapIndexed { index, item ->
+        BookmarkItemViewState(
+          title = item.title,
+          subtitle = item.timestamp,
+          id = Bookmark.Id(Uuid.parse("00000000-0000-0000-0000-${(index + 1).toString().padStart(12, '0')}")),
+          showSleepIcon = false,
+        )
+      },
+      shouldScrollTo = null,
+      dialogViewState = BookmarkDialogViewState.None,
     )
   }
 

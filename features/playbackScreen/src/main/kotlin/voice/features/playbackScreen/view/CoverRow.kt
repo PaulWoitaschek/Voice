@@ -12,13 +12,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
-import voice.core.ui.ImmutableFile
 import voice.core.ui.formatTime
 import voice.features.playbackScreen.BookPlayViewState
 
 @Composable
 internal fun CoverRow(
-  cover: ImmutableFile?,
+  cover: String?,
   sleepTimerState: BookPlayViewState.SleepTimerViewState,
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,

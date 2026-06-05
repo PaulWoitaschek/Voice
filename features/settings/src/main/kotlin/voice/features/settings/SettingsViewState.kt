@@ -15,6 +15,7 @@ data class SettingsViewState(
   val analyticsEnabled: Boolean,
   val showFolderPickerEntry: Boolean,
   val showDeveloperMenu: Boolean,
+  val kioskMode: Boolean,
 ) {
 
   enum class Dialog {
@@ -37,6 +38,7 @@ data class SettingsViewState(
         showAnalyticSetting = true,
         showFolderPickerEntry = false,
         showDeveloperMenu = true,
+        kioskMode = false,
       )
     }
   }

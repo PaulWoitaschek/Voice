@@ -18,6 +18,7 @@ import kotlinx.coroutines.yield
 import org.junit.Test
 import voice.core.data.BookId
 import voice.core.data.GridMode
+import voice.core.data.KioskModeDemoData
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
@@ -70,6 +71,7 @@ class BookOverviewViewModelTest {
       },
       folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
+      kioskModeFeatureFlag = MemoryFeatureFlag(false),
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -98,6 +100,48 @@ class BookOverviewViewModelTest {
       initial.currentBook(currentBook.id) shouldBe currentBook.overlay(livePlaybackState).toItemViewState()
       initial.currentBook(otherBook.id) shouldBe initialOtherItem
       expectNoEvents()
+    }
+  }
+
+  @Test
+  fun `state uses demo books in kiosk mode`() = runTest {
+    val viewModel = BookOverviewViewModel(
+      repo = mockk<BookRepository> {
+        every { flow() } returns MutableStateFlow(emptyList())
+      },
+      mediaScanner = mockk<MediaScanTrigger> {
+        every { scannerActive } returns MutableStateFlow(false)
+        every { scan(any()) } just Runs
+      },
+      playStateManager = PlayStateManager(),
+      playerController = mockk(),
+      currentBookStoreDataStore = MemoryDataStore(null),
+      gridModeStore = MemoryDataStore(GridMode.LIST),
+      gridCount = mockk<GridCount> {
+        every { useGridAsDefault() } returns false
+      },
+      navigator = mockk<Navigator>(),
+      recentBookSearchDao = mockk<RecentBookSearchDao> {
+        every { recentBookSearches() } returns MutableStateFlow(emptyList())
+      },
+      search = mockk<BookSearch> {
+        coEvery { search(any()) } returns emptyList()
+      },
+      contentRepo = mockk<BookContentRepo>(),
+      deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
+        every { hasBug } returns MutableStateFlow(false)
+      },
+      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
+      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
+      kioskModeFeatureFlag = MemoryFeatureFlag(true),
+    )
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      val state = awaitItem()
+      state.books.getValue(BookOverviewCategory.CURRENT).keys.toList() shouldBe KioskModeDemoData.demoAudiobooks.map { it.id }
+      state.currentBook(KioskModeDemoData.currentlyPlaying.id).name shouldBe "Echoes of Tomorrow"
     }
   }
 
