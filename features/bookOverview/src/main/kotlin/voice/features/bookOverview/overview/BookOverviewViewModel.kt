@@ -82,8 +82,7 @@ class BookOverviewViewModel(
 
   @Composable
   internal fun state(): BookOverviewViewState {
-    val kioskMode = remember { kioskModeFeatureFlag.flow }
-      .collectAsState(initial = null).value?.value ?: kioskModeFeatureFlag.get()
+    val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeState()
 
     val playState = remember { playStateManager.playStateFlow }
