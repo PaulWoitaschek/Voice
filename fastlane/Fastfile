@@ -19,13 +19,15 @@ platform :android do
     )
   end
 
-  lane :upload_metadata do
+  lane :upload_metadata do |options|
+    version_code = parse_version_code_option!(options)
+
     supply(
       skip_upload_apk: true,
       skip_upload_aab: true,
-      skip_upload_images: true,
-      skip_upload_screenshots: true,
-      skip_upload_changelogs: true
+      skip_upload_changelogs: true,
+      sync_image_upload: true,
+      version_code: version_code
     )
   end
 

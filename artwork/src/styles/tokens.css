@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,500..900&family=Inter:wght@500;600;700&display=swap');
+
+:root {
+  --voice-bg-1: #0a1733;
+  --voice-bg-2: #1d3a7a;
+  --voice-bg-3: #3d6fd6;
+  --voice-bg-4: #6aa3ff;
+  --voice-glow-warm: #ffb547;
+  --voice-glow-cool: #7df9ff;
+  --voice-text: #ffffff;
+  --voice-text-muted: rgba(255, 255, 255, 0.82);
+  --voice-bezel: #0d0d10;
+  --voice-bezel-edge: #25272e;
+
+  --voice-bg-gradient:
+    radial-gradient(ellipse 70% 50% at 18% 12%, rgba(125, 249, 255, 0.22), transparent 60%),
+    radial-gradient(ellipse 60% 60% at 85% 88%, rgba(255, 181, 71, 0.18), transparent 65%),
+    radial-gradient(ellipse 90% 60% at 60% 100%, rgba(106, 163, 255, 0.35), transparent 70%),
+    linear-gradient(135deg, var(--voice-bg-1) 0%, var(--voice-bg-2) 45%, var(--voice-bg-3) 100%);
+
+  --voice-font-display: 'Bricolage Grotesque', 'Helvetica Neue', system-ui, -apple-system, 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans JP', 'Noto Sans Hebrew', sans-serif;
+  --voice-font: 'Inter', 'Helvetica Neue', system-ui, -apple-system, 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans JP', 'Noto Sans Hebrew', sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: #000;
+  font-family: var(--voice-font);
+  color: var(--voice-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.canvas {
+  position: relative;
+  overflow: hidden;
+  background: var(--voice-bg-gradient);
+  background-color: var(--voice-bg-1);
+}
+
+.canvas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(255,255,255,0.04), transparent 45%);
+  pointer-events: none;
+  z-index: 0;
+}

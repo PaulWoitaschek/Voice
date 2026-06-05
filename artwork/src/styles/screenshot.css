@@ -1,0 +1,128 @@
+.canvas.screenshot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+
+.canvas.screenshot.phone {
+  width: 1080px;
+  height: 2340px;
+  padding: 160px 110px 140px;
+}
+.canvas.screenshot.tablet-7 {
+  width: 1200px;
+  height: 1920px;
+  padding: 140px 130px 120px;
+  gap: 70px;
+}
+.canvas.screenshot.tablet-10 {
+  width: 2560px;
+  height: 1600px;
+  flex-direction: row;
+  padding: 140px 160px;
+  gap: 120px;
+  align-items: center;
+}
+
+.canvas.screenshot .caption {
+  font-family: var(--voice-font-display);
+  font-size: 92px;
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin: 0;
+  padding: 0 0 0.1em;
+  max-width: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, #cfe1ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  z-index: 2;
+  position: relative;
+}
+
+.canvas.screenshot.tablet-7 .caption { font-size: 76px; }
+.canvas.screenshot.tablet-10 .caption {
+  font-size: 116px;
+  text-align: left;
+  flex: 1;
+  max-width: 55%;
+}
+
+.canvas.screenshot .device {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.canvas.screenshot.tablet-10 .device {
+  width: auto;
+  height: 100%;
+  flex: 1.1;
+}
+
+.canvas.screenshot .device-frame {
+  position: relative;
+  padding: 14px;
+  background: linear-gradient(160deg, #2a2c33 0%, #0a0a0c 55%, #1a1c22 100%);
+  box-shadow:
+    0 50px 120px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 2px 0 rgba(255, 255, 255, 0.22) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.5) inset;
+  display: inline-flex;
+  max-width: 100%;
+  max-height: 100%;
+  z-index: 2;
+}
+
+/* Each form factor: frame radius, aspect-locked to the raw screenshot.    */
+.canvas.screenshot.phone .device-frame {
+  border-radius: 72px;
+  aspect-ratio: 1080 / 2340;
+  height: 100%;
+}
+.canvas.screenshot.tablet-7 .device-frame {
+  border-radius: 60px;
+  aspect-ratio: 1200 / 1920;
+  height: 100%;
+}
+.canvas.screenshot.tablet-10 .device-frame {
+  border-radius: 44px;
+  padding: 18px;
+  aspect-ratio: 2560 / 1600;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
+.canvas.screenshot .device-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 58px;
+}
+
+.canvas.screenshot.tablet-7 .device-frame img { border-radius: 46px; }
+.canvas.screenshot.tablet-10 .device-frame img { border-radius: 26px; }
+
+.canvas.screenshot .device::before {
+  content: '';
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(125, 249, 255, 0.28) 0%, transparent 65%);
+  filter: blur(40px);
+  z-index: 0;
+}
+
+.canvas.screenshot.tablet-10 .device::before { width: 80%; height: 80%; }

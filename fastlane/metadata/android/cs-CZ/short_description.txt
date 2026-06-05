@@ -1,1 +1,1 @@
-minimalistický - intuitivní - rychlý
+Čistý přehrávač audioknih pro vlastní soubory, s časovačem a záložkami.
