@@ -1,9 +1,9 @@
 package voice.core.data
 
 public object KioskModeDemoData {
-  public const val ECHOES_COVER_URL: String = "https://raw.githubusercontent.com/PaulWoitaschek/Voice/kiosk/artwork/demo-data/echoes.webp"
+  public const val ECHOES_COVER_URL: String = "https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/artwork/demo-data/echoes.webp"
   public const val BOOKSHOP_COVER_URL: String =
-    "https://raw.githubusercontent.com/PaulWoitaschek/Voice/kiosk/artwork/demo-data/bookshop.webp"
+    "https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/artwork/demo-data/bookshop.webp"
   public const val COVER_URL: String = ECHOES_COVER_URL
 
   public val echoesOfTomorrow: DemoAudiobook = DemoAudiobook(
@@ -56,7 +56,7 @@ public object KioskModeDemoData {
       DemoBookmark(title = "Crossing the ridge", timestamp = "03:41:10"),
       DemoBookmark(title = "The compass turns", timestamp = "05:08:29"),
     ),
-    coverUrl = "https://raw.githubusercontent.com/PaulWoitaschek/Voice/kiosk/artwork/demo-data/horizon.webp",
+    coverUrl = "https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/artwork/demo-data/horizon.webp",
   )
   public val demoAudiobooks: List<DemoAudiobook> = listOf(
     echoesOfTomorrow,
