@@ -141,7 +141,7 @@ class BookOverviewViewModelTest {
     }.test {
       val state = awaitItem()
       state.books.getValue(BookOverviewCategory.CURRENT).keys.toList() shouldBe KioskModeDemoData.demoAudiobooks.map { it.id }
-      state.currentBook(KioskModeDemoData.currentlyPlaying.bookId).name shouldBe "Echoes of Tomorrow"
+      state.currentBook(KioskModeDemoData.currentlyPlaying.id).name shouldBe "Echoes of Tomorrow"
     }
   }
 
