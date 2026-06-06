@@ -29,7 +29,7 @@ internal fun AutoSleepTimerRow(
     Icon(
       modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp),
       imageVector = Icons.Outlined.Bedtime,
-      contentDescription = stringResource(StringsR.string.settings_auto_sleep_timer_summary),
+      contentDescription = stringResource(StringsR.string.settings_auto_sleep_timer_title),
     )
     Column(
       Modifier
