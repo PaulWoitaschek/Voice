@@ -36,6 +36,7 @@ class SettingsViewModelTest {
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val analyticsConsentStore = MemoryDataStore(false)
   private val developerMenuUnlockedStore = MemoryDataStore(false)
+  private val supporterBadgeVisibleStore = MemoryDataStore(false)
   private val navigator = mockk<Navigator> {
     every { goTo(any()) } just Runs
   }
@@ -62,6 +63,7 @@ class SettingsViewModelTest {
     folderPickerInSettingsFeatureFlag = folderPickerFeatureFlag,
     kioskModeFeatureFlag = kioskModeFeatureFlag,
     developerMenuUnlockedStore = developerMenuUnlockedStore,
+    supporterBadgeVisibleStore = supporterBadgeVisibleStore,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
 
@@ -101,6 +103,15 @@ class SettingsViewModelTest {
   }
 
   @Test
+  fun `openSupportVoice navigates to support screen`() {
+    viewModel.openSupportVoice()
+
+    verify(exactly = 1) {
+      navigator.goTo(Destination.SupportVoice)
+    }
+  }
+
+  @Test
   fun `view state exposes kiosk mode`() = scope.runTest {
     kioskModeFeatureFlag.value = true
 
@@ -111,6 +122,24 @@ class SettingsViewModelTest {
         it.kioskMode shouldBe true
         it.showFolderPickerEntry shouldBe true
       }
+    }
+  }
+
+  @Test
+  fun `view state exposes supporter badge visibility`() = scope.runTest {
+    supporterBadgeVisibleStore.updateData { true }
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      val item = awaitItem().let {
+        if (it.supporterBadgeVisible) {
+          it
+        } else {
+          awaitItem()
+        }
+      }
+      item.supporterBadgeVisible shouldBe true
     }
   }
 }

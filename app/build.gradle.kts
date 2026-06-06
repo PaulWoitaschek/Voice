@@ -170,7 +170,9 @@ dependencies {
   add("playImplementation", libs.firebase.analytics)
   add("playImplementation", projects.core.logging.crashlytics)
   add("playImplementation", projects.features.review.play)
+  add("playImplementation", projects.features.support.play)
   add("freeImplementation", projects.features.review.noop)
+  add("freeImplementation", projects.features.support.free)
 
   implementation(projects.core.remoteconfig.api)
   add("playImplementation", projects.core.remoteconfig.firebase)

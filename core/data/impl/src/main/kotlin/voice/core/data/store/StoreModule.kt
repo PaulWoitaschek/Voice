@@ -179,4 +179,11 @@ public interface StoreModule {
       fileName = "featureFlagOverrides",
     )
   }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @SupporterBadgeVisibleStore
+  private fun supporterBadgeVisible(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("supporterBadgeVisible", defaultValue = false)
+  }
 }

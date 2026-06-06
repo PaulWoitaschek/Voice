@@ -225,8 +225,30 @@
     <string name="settings.support.help_translating.title">Help translating Voice</string>
     <!-- Settings support row for reporting a problem. -->
     <string name="settings.support.report_issue.title">Report a problem</string>
+    <!-- Settings row for opening the donation/support screen. -->
+    <string name="settings.support.support_voice.title">Support Voice</string>
     <!-- Settings support row for suggesting a product idea. -->
     <string name="settings.support.suggest_idea.title">Suggest an idea</string>
+    <!-- Support screen action for hiding the local supporter badge. -->
+    <string name="support.action.hide_badge">Hide badge</string>
+    <!-- Support screen action for marking that the user supported through Ko-fi. -->
+    <string name="support.action.i_supported_kofi">I supported on Ko-fi</string>
+    <!-- Support screen action for opening the Ko-fi support page. -->
+    <string name="support.action.open_kofi">Support on Ko-fi</string>
+    <!-- Short supporter badge label. -->
+    <string name="support.badge.label">Supporter</string>
+    <!-- Support screen text explaining there are no paid features. -->
+    <string name="support.description.no_benefits">All features stay available whether you support or not.</string>
+    <!-- Support screen text explaining the local-only Ko-fi badge. -->
+    <string name="support.description.local_badge">This only shows a local badge on this device.</string>
+    <!-- Support screen text explaining why support is useful. -->
+    <string name="support.description.maintenance">Voice is free and independent. Supporting helps keep it maintained.</string>
+    <!-- Support screen message for Play builds until Play Billing is implemented. -->
+    <string name="support.play_unavailable.message">In-app support is not available in this build yet.</string>
+    <!-- Support screen thank-you message after enabling the local supporter badge. -->
+    <string name="support.thank_you">Thanks for supporting Voice.</string>
+    <!-- Title of the support screen. -->
+    <string name="support.title">Support Voice</string>
     <!-- Short label for the launcher shortcut that plays the current book. -->
     <string name="shortcut.play_current.short_label">Play current</string>
     <!-- Content description for opening the sleep timer. -->
