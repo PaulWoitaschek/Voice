@@ -15,6 +15,6 @@ Lehetőségek:
 A Voice ingyenes és nyílt forráskódú. Ez azt jelenti, hogy mindenki láthatja, mit csinál. Minimális engedélyeket igényel.
 
 Ha javaslatai vannak, vagy hibákat talál, jelentse azokat itt:
-https://github.com/VoiceAudiobook/Voice/issues
+https://github.com/PaulWoitaschek/Voice/issues
 
 A nyílt forráskódú licenc a Gnu GPLv3

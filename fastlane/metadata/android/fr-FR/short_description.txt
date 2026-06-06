@@ -1,1 +1,1 @@
-minimaliste - intuitif - rapide
+Lecteur de livres audio clair pour vos fichiers, avec minuteur et marque-pages.

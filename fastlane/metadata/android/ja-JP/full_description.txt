@@ -15,6 +15,6 @@
 Voiceはフリーでオープンソースです。ゆえに、誰もがその中身を確認できます。そして、最小限の権限で利用できます。
 
 提案がある場合やバグを見つけた場合は、ここで報告してください：
-https://github.com/VoiceAudiobook/Voice/issues
+https://github.com/PaulWoitaschek/Voice/issues
 
 オープンソースライセンスはGnuGPLv3です

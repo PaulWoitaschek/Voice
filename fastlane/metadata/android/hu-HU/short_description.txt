@@ -1,1 +1,1 @@
-minimalista - intuitív - gyors
+Letisztult hangoskönyv-lejátszó saját fájlokhoz, időzítővel és könyvjelzőkkel.

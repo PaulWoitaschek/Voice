@@ -1,0 +1,36 @@
+Voice é un reprodutor claro de audiolibros para quen trae os seus propios libros.
+
+Engade unha vez o cartafol cos teus audiolibros e Voice converte os teus ficheiros de son locais nunha biblioteca sinxela. Lembra a posición de cada libro, mantén os controis de reprodución á man e non se interpón.
+
+<b>Feito para audiolibros</b>
+
+• Continúa exactamente onde o deixaches
+• Temporizador de sono con esvaecemento suave
+• Deter ao final do capítulo actual
+• Sacudir para ampliar o temporizador
+• Control da velocidade de reprodución
+• Aumento de volume para gravacións baixas
+• Omitir silencios
+• Rebobinado automático tras pausas longas
+• Marcadores con marcas de tempo e nomes personalizados
+• Busca por título e autor
+• Filtros de actuais, completados e non iniciados
+• Vistas de lista e grade
+• Portadas desde imaxes incrustadas, ficheiros locais ou busca en liña
+• Widget da pantalla de inicio, notificación multimedia e compatibilidade con Android Auto
+
+<b>Trae os teus propios ficheiros</b>
+
+Voice funciona con ficheiros de audiolibro sen DRM, como M4B, MP3, M4A, OGG, OGA e OPUS. Garda os libros en cartafoles como prefiras; Voice recoñéceos e organiza a biblioteca.
+
+<b>Sen borralla</b>
+
+• Non require conta
+• Sen anuncios
+• Sen sincronización forzada coa nube
+• Todas as funcións están dispoñibles sen melloras de pago
+
+Voice é código aberto baixo a licenza GNU GPLv3.
+
+Comentarios e informes de erros:
+https://github.com/PaulWoitaschek/Voice/issues

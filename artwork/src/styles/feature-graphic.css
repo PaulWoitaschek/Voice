@@ -1,0 +1,112 @@
+.canvas.feature-graphic {
+  width: 1024px;
+  height: 500px;
+  display: grid;
+  grid-template-columns: 1.3fr 0.85fr;
+  align-items: center;
+  padding: 0 56px 0 72px;
+}
+
+.canvas.feature-graphic .left {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.canvas.feature-graphic .logo {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #003b7f;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.4),
+    0 0 50px rgba(125, 249, 255, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.canvas.feature-graphic .logo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* The vector content has built-in 108dp safe-zone padding around the waves. */
+  /* Scale ~1.30 matches Android Studio's launcher mask crop — same factor as  */
+  /* render-icon.ts uses for icon.png so the two stay visually consistent.     */
+  transform: scale(1.5);
+  transform-origin: center;
+}
+
+.canvas.feature-graphic .headline {
+  font-family: var(--voice-font-display);
+  font-size: 68px;
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  margin: 0;
+  padding-bottom: 0.06em;
+  max-width: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, #cfe1ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.canvas.feature-graphic .tagline {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--voice-text-muted);
+  line-height: 1.25;
+  margin: 0;
+  max-width: 100%;
+  letter-spacing: -0.005em;
+}
+
+.canvas.feature-graphic .right {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.canvas.feature-graphic .phone-frame {
+  position: relative;
+  z-index: 2;
+  height: 524px;
+  aspect-ratio: 1080 / 2340;
+  transform: translateX(-40px) rotate(4deg);
+  border-radius: 44px;
+  background: linear-gradient(160deg, #2a2c33 0%, #0a0a0c 100%);
+  padding: 6px;
+  /* Tighter, directional shadow — the previous 70px blur diffused so much that
+   * the 4° rotation was invisible and the shadow read as an axis-aligned mass.
+   * Two stacked shadows: a soft ambient + a tighter contact shadow that
+   * follows the rotated outline clearly. */
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.45),
+    0 30px 48px rgba(0, 0, 0, 0.25);
+}
+
+.canvas.feature-graphic .phone-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 38px;
+  display: block;
+}
+
+.canvas.feature-graphic .right::before {
+  content: '';
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(125, 249, 255, 0.35) 0%, transparent 70%);
+  filter: blur(20px);
+  z-index: 0;
+}

@@ -1,1 +1,1 @@
-Voice: player de cărți audio
+Voice player de cărți audio

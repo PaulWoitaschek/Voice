@@ -15,6 +15,6 @@ Kenmerken:
 Voice is gratis en openbronsoftware. Dit betekent dat iedereen kan zien hoe het werkt en wat het doet. De app vereist slechts een minimaal aantal rechten.
 
 Als je suggesties hebt of bugs vindt, meld ze dan hier:
-https://github.com/VoiceAudiobook/Voice/issues
+https://github.com/PaulWoitaschek/Voice/issues
 
 De openbronlicentie is GNU GPLv3

@@ -15,6 +15,6 @@ Co potrafi:
 Voice jest wolnym i otwartym oprogramowaniem. To oznacza, że wszyscy mogą zobaczyć w jaki sposób on działa. Wykorzystuje on minimalny zestaw uprawnień.
 
 Jeśli masz jakieś sugestie, lub znajdziesz błędy, zgłoś je tutaj:
-https://github.com/VoiceAudiobook/Voice/issues
+https://github.com/PaulWoitaschek/Voice/issues
 
 Wykorzystana licencja open source to GNU GPLv3

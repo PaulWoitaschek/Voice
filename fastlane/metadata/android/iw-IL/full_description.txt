@@ -15,6 +15,6 @@
 Voice הוא חינמי ובקוד פתוח. משמעות הדבר היא שכולם יכולים לראות מה הוא עושה. הוא משתמש בהרשאות מינימליות.
 
 אם יש לכם הצעות או שאתם מוצאים באגים, דווחו עליהם כאן:
-https://github.com/VoiceAudiobook/Voice/issues
+https://github.com/PaulWoitaschek/Voice/issues
 
 רישיון הקוד הפתוח הוא Gnu GPLv3

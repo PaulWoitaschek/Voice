@@ -6,7 +6,19 @@
 
 **A minimalistic, user-focused audiobook player for Android, built for reliability and simplicity.**
 
-Voice keeps the things that matter: chapter navigation, sleep timer, variable speed, and resume-where-you-left-off. No ads, no upsells. Your library stays on your device.
+Voice turns your own audiobook files into a calm, focused listening library. It remembers where you stopped, keeps playback controls close, and includes the audiobook-specific details that generic music players miss: chapter navigation, sleep timer, bookmarks, playback speed, silence skipping, and auto-rewind after pauses.
+
+<p align="center">
+  <img alt="Voice library view" width="30%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" />
+  <img alt="Voice player view" width="30%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" />
+  <img alt="Voice sleep timer" width="30%" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" />
+</p>
+
+## Why Voice?
+
+- **Made for your files:** Add a folder once and Voice organizes your local M4B, MP3, M4A, OGG, OGA, and OPUS audiobooks.
+- **Built for listening:** Resume positions, bookmarks, sleep timer fade-out, volume boost, speed control, and Android Auto support are part of the core experience.
+- **Private and uncluttered:** No account, no ads, no forced cloud sync. Your library stays on your device.
 
 ## Download
 

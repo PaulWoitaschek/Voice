@@ -1,7 +1,12 @@
 name: Upload Play Metadata
 
 on:
-  workflow_dispatch: { }
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: Version code of the Play release to update
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -13,15 +18,38 @@ concurrency:
 jobs:
   upload:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     environment: release
     env:
       PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
     steps:
       - uses: actions/checkout@v6
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: artwork/package.json
+
+      - name: Install artwork deps
+        working-directory: artwork
+        run: npm install
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('artwork/package.json') }}
+
+      - name: Install Chromium
+        working-directory: artwork
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate Play Store artworks
+        run: ./scripts/generate_artworks.sh
+
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
 
       - name: Upload Play Metadata
-        run: fastlane android upload_metadata
+        run: fastlane android upload_metadata version_code:${{ inputs.version_code }}
