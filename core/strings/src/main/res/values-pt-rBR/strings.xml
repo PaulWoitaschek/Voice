@@ -118,4 +118,13 @@
     <string name="playback.current_chapter">Capítulo atual</string>
     <string name="auto_sleep_timer.title">Modo Soneca</string>
     <string name="auto_sleep_timer.subtitle">Ativa o modo soneca automaticamente quando a reprodução estiver entre %1$s e %2$s</string>
+    <string name="pref_audiobook_folders_explanation">Gerenciar pastas verificadas para audiolivros</string>
+    <string name="end_of_chapter">Fim do capítulo</string>
+    <string name="onboarding_analytics_consent_title">Ajude a melhorar o Voice</string>
+    <string name="onboarding_analytics_consent_description">Permita a coleta de dados de uso anônimos para ajudar a melhorar o app. Você pode alterar isso depois nas configurações.</string>
+    <string name="onboarding_analytics_consent_button_enable">Continuar com análises</string>
+    <string name="onboarding_analytics_consent_button_disable">Continuar sem análises</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Política de Privacidade</string>
+    <string name="settings_analytics_consent_title">Análises</string>
+    <string name="settings_analytics_consent_description">Permitir a coleta de dados de uso anônimos para ajudar a melhorar o app</string>
 </resources>
