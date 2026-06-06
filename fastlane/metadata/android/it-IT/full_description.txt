@@ -1,0 +1,36 @@
+Voice è un lettore di audiolibri pulito per chi porta con sé i propri libri.
+
+Aggiungi una volta la cartella dei tuoi audiolibri e Voice trasforma i file audio locali in una libreria semplice. Ricorda la posizione per ogni libro, tiene i controlli di riproduzione a portata di mano e resta fuori dai piedi.
+
+<b>Creato per gli audiolibri</b>
+
+• Riprendi esattamente da dove eri rimasto
+• Timer di spegnimento con dissolvenza graduale
+• Arresto alla fine del capitolo corrente
+• Scuoti per estendere il timer
+• Controllo della velocità di riproduzione
+• Aumento del volume per registrazioni silenziose
+• Salto dei silenzi
+• Riavvolgimento automatico dopo pause lunghe
+• Segnalibri con timestamp e nomi personalizzati
+• Ricerca per titolo e autore
+• Filtri per attuali, completati e non iniziati
+• Viste elenco e griglia
+• Copertine da immagini incorporate, file locali o ricerca online
+• Widget schermata Home, notifica multimediale e supporto Android Auto
+
+<b>Usa i tuoi file</b>
+
+Voice funziona con file di audiolibri senza DRM come M4B, MP3, M4A, OGG, OGA e OPUS. Tieni i libri nelle cartelle come preferisci; Voice li riconosce e organizza la tua libreria.
+
+<b>Senza confusione</b>
+
+• Nessun account richiesto
+• Nessuna pubblicità
+• Nessuna sincronizzazione cloud obbligatoria
+• Tutte le funzioni sono disponibili senza upgrade a pagamento
+
+Voice è open source con licenza GNU GPLv3.
+
+Feedback e segnalazioni di bug:
+https://github.com/PaulWoitaschek/Voice/issues
