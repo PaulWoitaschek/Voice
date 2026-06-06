@@ -49,22 +49,9 @@
     </plurals>
     <string name="folder_type_book_example_header">Bu, aşağıdaki kitapların algılanmasını sağlayacaktır</string>
     <string name="bookmark_just_now">Şimdi</string>
-    <string name="migration_hint_title">Eski kitap konumlarına erişiliyor</string>
-    <string name="migration_hint_confirm">Anladım</string>
-    <string name="migration_detail_content_root">Kök dizin</string>
-    <string name="migration_detail_content_position">Konum</string>
-    <string name="migration_detail_content_bookmarks">Yer imleri</string>
-    <string name="migration_detail_content_position_current_chapter_title">Geçerli bölüm</string>
-    <string name="migration_detail_content_position_current_chapter_position">Bölüm içindeki konum</string>
-    <string name="migration_delete_dialog_title">Konumları Sil</string>
-    <string name="migration_delete_dialog_content">Eski konumları sildikten sonra eski oynatma konumlarınızı kurtaramazsınız.</string>
-    <string name="migration_delete_dialog_action_delete">Sil</string>
-    <string name="migration_delete_dialog_action_keep">Tut</string>
     <string name="delete_book_dialog_deletion_confirmation">Dosyalarımı sil</string>
     <string name="battery_optimization_rationale">Güç kısıtlamalarınız nedeniyle oynatma kesintileri olabilir.</string>
     <string name="media_session_recent">Son açılanlar</string>
-    <string name="notification_sleep_timer_enable">Uyku Zamanlayıcısını Etkinleştir</string>
-    <string name="notification_sleep_timer_disable">Uyku Zamanlayıcısını Devre Dışı Bırak</string>
     <string name="mark_as_current">Geçerli olan olarak işaretle</string>
     <string name="volume_boost">Ses yükseltme</string>
     <string name="mark_as_completed">Tamamlandı olarak işaretle</string>
@@ -75,13 +62,7 @@
     <string name="close">Kapat</string>
     <string name="delete">Sil</string>
     <string name="folder_type_no_books">Voice herhangi bir kitap algılayamadı. Hiç ses dosyası var mı?</string>
-    <string name="migration_detail_title">Eski kitap konumları</string>
-    <string name="migration_detail_content_position_current_file_title">Geçerli dosya</string>
     <string name="voice_intro_first_book">Dinlemeye başlayabilmeniz için sesli kitap dizininizi ekleyelim!</string>
-    <string name="migration_hint_content">Daha yeni Android sürümlerindeki değişiklikler nedeniyle, sistem seçicisini kullanarak sesli kitap dizininizi seçmeniz gerekir. \n \nEski kitap konumlarınızı görüntülemek için yukarıdaki simgeye tıklayın.</string>
-    <string name="migration_detail_content_name">Ad</string>
-    <string name="migration_detail_content_added_at">Eklendi</string>
-    <string name="migration_detail_content_position_current_file_position">Dosyadaki konum</string>
     <string name="delete_book_dialog_title">Kitabı Sil</string>
     <string name="battery_optimization_action">Güncelle</string>
     <string name="delete_book_dialog_content">Bu, aygıtınızdaki dosyaları silecektir.</string>

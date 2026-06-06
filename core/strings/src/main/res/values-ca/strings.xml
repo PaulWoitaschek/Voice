@@ -50,23 +50,9 @@
     <string name="folder_type_title">Com s\'estructuren els fitxers?</string>
     <string name="bookmark_just_now">Ara mateix</string>
     <string name="voice_intro_first_book">Afegiu la carpeta de l\'audiollibre perquè pugueu començar a escoltar-lo.</string>
-    <string name="migration_hint_confirm">Entesos</string>
-    <string name="migration_detail_content_name">Nom</string>
-    <string name="migration_detail_content_bookmarks">Punts de llibre</string>
-    <string name="migration_detail_content_root">Carpeta arrel</string>
-    <string name="migration_detail_content_added_at">Afegit el</string>
-    <string name="migration_detail_content_position_current_file_title">Fitxer actual</string>
-    <string name="migration_detail_title">Posicions del llibre antigues</string>
     <string name="delete_book_bottom_sheet_title">Suprimeix el llibre</string>
-    <string name="migration_delete_dialog_action_delete">Suprimeix</string>
-    <string name="migration_delete_dialog_action_keep">Manté</string>
-    <string name="migration_detail_content_position_current_chapter_title">Capítol actual</string>
-    <string name="migration_detail_content_position_current_file_position">Posició en el fitxer</string>
-    <string name="migration_detail_content_position_current_chapter_position">Posició al capítol</string>
     <string name="delete_book_dialog_content">Això suprimirà els fitxers del dispositiu.</string>
-    <string name="migration_delete_dialog_content">Un cop suprimiu les posicions antigues no les podreu recuperar.</string>
     <string name="battery_optimization_action">Actualitza</string>
-    <string name="notification_sleep_timer_enable">Activa el temporitzador de repòs</string>
     <string name="search_hint">Què busqueu?</string>
     <string name="battery_optimization_rationale">A causa de les restriccions d\'energia, és possible que es produeixin interrupcions en la reproducció.</string>
     <string name="storage_bug_title">Es requereix el permís</string>
@@ -75,7 +61,6 @@
     <string name="select_folder_type_file">Fitxer</string>
     <string name="select_folder_type_folder">Carpeta</string>
     <string name="onboarding.button_next">Següent</string>
-    <string name="notification_sleep_timer_disable">Desactiva el temporitzador de repòs</string>
     <string name="select_folder_title_default">Afegeix audiollibres</string>
     <string name="onboarding_welcome_title">Us donem la benvinguda a Voice!</string>
     <string name="generic_error_message">Alguna cosa ha anat malament 😢</string>
@@ -121,14 +106,10 @@
     <string name="book_header_completed">Completat</string>
     <string name="delete">Suprimeix</string>
     <string name="folder_type_book_example_header">Això faria que es detectessin els llibres següents</string>
-    <string name="migration_hint_title">Accedint a les posicions antigues del llibre</string>
     <string name="delete_book_dialog_title">Suprimeix el llibre</string>
     <string name="media_session_root">Tots els audiollibres</string>
-    <string name="migration_detail_content_position">Posició</string>
     <string name="media_session_recent">Recent</string>
-    <string name="migration_delete_dialog_title">Suprimeix les posicions</string>
     <string name="delete_book_dialog_deletion_confirmation">Suprimeix els fitxers</string>
     <string name="review.request.content">Els seus comentaris ens importen. Si teniu un moment, valoreu-nos i compartiu la seva experiència. Ens ajuda a fer millores i a oferir una millor experiència.</string>
     <string name="storage_bug_subtitle">Per a determinats dispositius, a una aplicació del sistema li falta el permís necessari per accedir a l\'emmagatzematge extern. Aquest accés és essencial perquè el Voice llegeixi els audiollibres.</string>
-    <string name="migration_hint_content">A causa dels canvis en les versions més noves d\'Android, és necessari seleccionar la carpeta de l\'audiollibre utilitzant el selector del sistema. \n \nFeu clic a la icona de dalt per veure les posicions antigues del llibre.</string>
 </resources>

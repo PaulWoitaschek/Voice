@@ -45,12 +45,9 @@
     <string name="book_header_current">جاری</string>
     <string name="close">بستن</string>
     <string name="bookmark_just_now">همین الان</string>
-    <string name="migration_detail_content_position_current_chapter_position">موقعیت در فصل</string>
-    <string name="migration_delete_dialog_title">پاک کردن موقعیت ها</string>
     <string name="delete_book_dialog_content">با این کار فایل های موجود در دستگاه شما حذف می شود.</string>
     <string name="battery_optimization_action">بروزرسانی</string>
     <string name="media_session_recent">به تازگی</string>
-    <string name="notification_sleep_timer_enable">فعال کردن تایمر خواب</string>
     <string name="onboarding.explanation.subtitle">با Voice می‌توانید کتاب‌ها را به‌عنوان فایل‌های جداگانه اضافه کنید یا آنها را در پوشه‌ها سازماندهی کنید.به انتخاب خودتان!</string>
     <string name="onboarding.completion.next_button">شروع به گوش دادن</string>
     <string name="sleep_timer.title">رویاهای شیرین! 🌙</string>
@@ -62,30 +59,17 @@
     </plurals>
     <string name="folder_mode_single">حالت تک کتاب: یک پوشه برابر با یک کتاب است.</string>
     <string name="folder_mode_root">حالت کتاب سطح بالا: زیرپوشه ها کتاب هستند</string>
-    <string name="migration_detail_title">موقعیت های کتاب قدیمی</string>
-    <string name="migration_hint_confirm">فهمیده شد</string>
-    <string name="migration_detail_content_position">موقعیت</string>
-    <string name="migration_detail_content_position_current_file_title">فایل جاری</string>
-    <string name="migration_detail_content_bookmarks">نشانه ها</string>
-    <string name="migration_detail_content_root">پوشه ریشه</string>
-    <string name="migration_detail_content_added_at">اضافه شده در</string>
     <string name="search_hint">دنبال چه چیزی میگردید؟</string>
-    <string name="migration_delete_dialog_content">پس از حذف موقعیت های قدیمی، نمی توانید موقعیت های پخش قدیمی خود را بازیابی کنید.</string>
     <string name="battery_optimization_rationale">به دلیل تنظیمات شما مربوط به محدودیت های استفاده از برق، ممکن است وقفه در پخش اتفاق بیفتد.</string>
     <string name="delete_book_dialog_deletion_confirmation">فایلهای من را پاک کن</string>
     <string name="delete_book_dialog_title">پاک کردن کتاب</string>
     <string name="media_session_root">همه کتاب های صوتی</string>
-    <string name="notification_sleep_timer_disable">غیرفعال کردن تایمر خواب</string>
     <string name="review.feedback.button.no">لغو</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d فایل صوتی</item>
         <item quantity="other">%d فایل های صوتی</item>
     </plurals>
     <string name="folder_type_book_example_header">این کار منجر به شناسایی کتاب های زیر می شود</string>
-    <string name="migration_hint_title">دسترسی به موقعیت های کتاب قدیمی</string>
-    <string name="migration_detail_content_name">نام</string>
-    <string name="migration_detail_content_position_current_file_position">موقعیت در فایل</string>
-    <string name="migration_detail_content_position_current_chapter_title">فصل کنونی</string>
     <string name="storage_bug_title">مجوز لازم است</string>
     <string name="select_folder_title_default">کتاب[های] صوتی خود را اضافه کنید</string>
     <string name="storage_bug_button">اعطا مجوز</string>
@@ -104,14 +88,12 @@
     <string name="select_folder_title_onboarding">اولین کتاب صوتی خود را اضافه کنید</string>
     <string name="cover_search.author">نویسنده</string>
     <string name="mark_as_current">علامت زدن به عنوان جاری</string>
-    <string name="migration_delete_dialog_action_delete">پاک کردن</string>
     <string name="onboarding.completion.title">همه چیز آماده است!</string>
     <string name="onboarding.explanation.title">کتابخانه شما، به روش شما</string>
     <string name="book_header_completed">تمام شده</string>
     <string name="folder_mode_author">حالت نویسنده-کتاب: زیرپوشه ها نویسنده هستند، زیر-زیرپوشه ها کتابها هستند.</string>
     <string name="folder_type_no_books">Voice نتوانست هیچ کتابی را شناسایی کند. آیا فایل های صوتی وجود دارد؟</string>
     <string name="folder_type_title">ساختار فایل های شما چگونه است؟</string>
-    <string name="migration_delete_dialog_action_keep">نگه داری</string>
     <string name="delete_book_bottom_sheet_title">پاک کردن کتاب</string>
     <string name="generic_error_retry">تلاش مجدد</string>
     <string name="select_folder_type_file">فایل</string>
@@ -127,7 +109,6 @@
     <string name="review.request.button.yes">الان امتیاز بدهید</string>
     <string name="onboarding_welcome_subtitle">پخش کننده کتاب صوتی جیبی شخصی شما. بیایید نرم افزار را راه اندازی کنیم.</string>
     <string name="onboarding.button_next">بعدی</string>
-    <string name="migration_hint_content">با توجه به تغییرات نسخه های جدیدتر اندروید، لازم است پوشه کتاب صوتی خود را با استفاده از انتخابگر سیستم انتخاب کنید. \n \nبرای مشاهده موقعیت های کتاب قدیمی خود روی آیکن بالا کلیک کنید.</string>
     <string name="pref_faq">سوالات متداول</string>
     <string name="end_of_chapter">پایان فصل</string>
     <string name="onboarding_analytics_consent_title">به بهبود Voice کمک کنید</string>

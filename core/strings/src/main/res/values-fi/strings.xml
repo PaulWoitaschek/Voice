@@ -66,7 +66,6 @@
     <string name="delete_book_dialog_content">Tämä poistaa tiedostot laitteeltasi.</string>
     <string name="search_hint">Mitä etsit?</string>
     <string name="bookmark_just_now">Juuri äskettäin</string>
-    <string name="migration_hint_title">Vanhojen kirjan paikkohin pääsy</string>
     <string name="onboarding.explanation.subtitle">Voicella voit lisätä kirjoja yksittäisinä tiedostoina tai järjestellä ne kansioissa. Sinä saat valita!</string>
     <string name="onboarding.completion.title">Olet valmiina!</string>
     <string name="onboarding.completion.subtitle">Ensimmäinen äänikirjasi on valmiina kuunneltavaksi. Nauti matkastasi Voicen kanssa!</string>
@@ -109,25 +108,7 @@
     <string name="pref_suggest_idea">Ehdota ideaa</string>
     <string name="pref_use_grid">Käytä ruudukkoasettelua</string>
     <string name="onboarding_welcome_subtitle">Henkilökohtainen taskuäänikirjasoittimesi. Laitetaanpas homma rullaamaan.</string>
-    <string name="migration_detail_content_position">Sijainti</string>
-    <string name="migration_detail_content_bookmarks">Kirjanmerkit</string>
-    <string name="migration_detail_content_added_at">Lisätty aikaan</string>
-    <string name="migration_detail_content_position_current_file_title">Nykyinen tiedosto</string>
-    <string name="migration_detail_content_position_current_file_position">Sijainti tiedostossa</string>
-    <string name="migration_detail_content_position_current_chapter_title">Nykyinen luku</string>
-    <string name="migration_detail_content_position_current_chapter_position">Sijainti luvussa</string>
-    <string name="migration_delete_dialog_title">Poista sijainnit</string>
-    <string name="migration_delete_dialog_content">Poistettaessasi vanhat sijainnit et enää voi saada takaisin vanhoja sijaintejasi.</string>
-    <string name="migration_delete_dialog_action_delete">Poista</string>
-    <string name="migration_delete_dialog_action_keep">Säilytä</string>
     <string name="folder_type_title">Miten tiedostosi ovat järjestelty?</string>
-    <string name="migration_hint_content">Johtuen muutoksista uusimmissa Android-versioissa, äänikirjakansiosi täytyy valita järjestelmän valitsimella \n \nPaina yllä olevaa kuvaketta nähdäksesi vanhat sijaintisi kirjassa.</string>
-    <string name="migration_hint_confirm">Ymmärretty</string>
-    <string name="migration_detail_title">Vanhat sijainnit kirjoissa</string>
-    <string name="migration_detail_content_name">Nimi</string>
-    <string name="migration_detail_content_root">Juurikansio</string>
-    <string name="notification_sleep_timer_disable">Laita uniajastin pois päältä</string>
-    <string name="notification_sleep_timer_enable">Laita uniajastin päälle</string>
     <string name="auto_sleep_timer.subtitle">Aloita uniajastin automaattisesti, kun toisto alkaa välillä %1$s ja %2$s</string>
     <string name="auto_sleep_timer.title">Automaattinen uniajastin</string>
     <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Päättymisaika</string>

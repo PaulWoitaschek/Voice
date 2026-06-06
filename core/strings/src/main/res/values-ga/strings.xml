@@ -26,9 +26,6 @@
     <string name="pref_report_issue">Tuairiscigh fadhb</string>
     <string name="pref_theme_dark">Téama Dorcha</string>
     <string name="folder_type_title">Cén struchtúr atá ar do chuid comhad?</string>
-    <string name="migration_detail_content_added_at">Curtha leis ag</string>
-    <string name="migration_detail_content_position_current_chapter_position">Seasamh sa chaibidil</string>
-    <string name="migration_delete_dialog_title">Scrios Poist</string>
     <string name="search_hint">Cad atá tú ag féachaint faoi?</string>
     <string name="battery_optimization_rationale">Mar gheall ar do shrianta Cumhachta, d\'fhéadfadh go gcuirfí isteach ar athsheinm.</string>
     <plurals name="minutes">
@@ -38,8 +35,6 @@
         <item quantity="many">%d nóiméad</item>
         <item quantity="other">%d nóiméad</item>
     </plurals>
-    <string name="migration_detail_content_name">Ainm</string>
-    <string name="migration_detail_title">Seasamh leabhar sean</string>
     <string name="review.feedback.button.yes">Seol Aiseolas</string>
     <string name="storage_bug_title">Cead ag teastáil</string>
     <string name="select_folder_subtitle">Ar mhaith leat comhad amháin a chur leis mar leabhar nó mar fhillteán?</string>
@@ -71,7 +66,6 @@
     </plurals>
     <string name="pref_use_grid">Bain úsáid as leagan amach na greille</string>
     <string name="select_folder_type_file">Comhad</string>
-    <string name="migration_delete_dialog_action_keep">Coinnigh</string>
     <string name="onboarding.button_next">Ar aghaidh</string>
     <string name="onboarding.explanation.title">Do Leabharlann, Do Bhealach Féin</string>
     <string name="onboarding.explanation.subtitle">Le Guth, is féidir leat leabhair a chur leis mar chomhaid aonair nó iad a eagrú i bhfillteáin. Roghnaíonn tú!</string>
@@ -82,7 +76,6 @@
     <string name="pref_help_translating">Cabhrú le Guth a aistriú</string>
     <string name="pref_app_version">Leagan aip</string>
     <string name="play_current">Seinn reatha</string>
-    <string name="migration_delete_dialog_content">Nuair a scriosann tú na seanphoist ní bheidh tú in ann do sheansuímh athsheinm a ghnóthú.</string>
     <string name="book_header_current">Reatha</string>
     <string name="delete">Scrios</string>
     <string name="folder_mode_single">Mód Leabhar Aonair: Is ionann fillteán amháin agus leabhar amháin.</string>
@@ -101,26 +94,14 @@
     <string name="folder_type_no_books">Níorbh fhéidir le Voice aon leabhar a bhrath. An bhfuil aon chomhaid fuaime ann?</string>
     <string name="bookmark_just_now">Anois féin</string>
     <string name="voice_intro_first_book">Cuirimis d’fhillteán closleabhar leis ionas gur féidir leat tosú ag éisteacht!</string>
-    <string name="migration_hint_title">Teacht ar phoist na Seanleabhar</string>
-    <string name="migration_hint_content">De bharr athruithe ar Leaganacha Android níos nuaí, ní mór d’fhillteán closleabhar a roghnú ag baint úsáide as an roghnóir córais. \n \nCliceáil ar an deilbhín thuas chun féachaint ar do sheanleabhair.</string>
-    <string name="migration_hint_confirm">Tuigeadh</string>
-    <string name="migration_detail_content_position_current_file_title">Comhad reatha</string>
-    <string name="migration_detail_content_root">Fillteán fréimhe</string>
-    <string name="migration_detail_content_position">Post</string>
-    <string name="migration_detail_content_position_current_file_position">Seasamh sa chomhad</string>
-    <string name="migration_detail_content_position_current_chapter_title">Caibidil reatha</string>
-    <string name="migration_detail_content_bookmarks">Leabharmharcanna</string>
     <string name="media_session_root">Gach closleabhair</string>
-    <string name="notification_sleep_timer_enable">Cumasaigh Uaineadóir Codlata</string>
     <string name="onboarding_welcome_subtitle">Seinnteoir fuaime do phóca pearsanta. A ligean ar a fháil tú a shocrú.</string>
-    <string name="migration_delete_dialog_action_delete">Scrios</string>
     <string name="delete_book_bottom_sheet_title">Scrios Leabhar</string>
     <string name="storage_bug_subtitle">I gcás feistí áirithe, tá an cead riachtanach chun rochtain a fháil ar an stóras seachtrach in easnamh ar aip córais. Tá an rochtain seo riachtanach do Voice chun do chlosleabhair a léamh.</string>
     <string name="onboarding_welcome_title">Fáilte go Guth!</string>
     <string name="delete_book_dialog_title">Scrios Leabhar</string>
     <string name="delete_book_dialog_content">Scriosfaidh sé seo na comhaid ar do ghléas.</string>
     <string name="battery_optimization_action">Nuashonrú</string>
-    <string name="notification_sleep_timer_disable">Díchumasaigh an lasc ama codlata</string>
     <string name="generic_error_message">Chuaigh rud éigin mícheart 😢</string>
     <string name="delete_book_dialog_deletion_confirmation">Scrios mo chomhaid</string>
     <string name="storage_bug_button">Cead a dheonú</string>

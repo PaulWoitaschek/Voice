@@ -47,9 +47,7 @@
     <string name="folder_mode_root">Režim knihy nejvyšší úrovně: Podsložky jsou knihy</string>
     <string name="folder_type_title">Jak jsou organizované vaše soubory?</string>
     <string name="bookmark_just_now">Právě teď</string>
-    <string name="migration_hint_title">Zpřístupnění starých pozic knih</string>
     <string name="select_folder_type_folder">Složka</string>
-    <string name="notification_sleep_timer_disable">Vypnout časovač vypnutí</string>
     <string name="select_folder_title_default">Přidejte své audoknihy</string>
     <string name="select_folder_type_file">Soubor</string>
     <string name="select_folder_subtitle">Chcete přidat jeden soubor jako knihu nebo jako složku?</string>
@@ -59,14 +57,6 @@
     <string name="onboarding.completion.subtitle">Vaše první audiokniha je připravena k přehrání. Užijte si svou cestu s Voice!</string>
     <string name="review.request.content">Vaše zpětná vazba je pro nás důležitá! Pokud máte chvilku, ohodnoťte nás a podělte se o své zkušenosti. Pomáhá nám to vylepšovat a nabízet lepší zážitek z poslechu.</string>
     <string name="folder_type_no_books">Voice nenalezl žádné knihy. Jsou ve složkách opravdu zvukové soubory?</string>
-    <string name="migration_detail_content_name">Název</string>
-    <string name="migration_detail_content_bookmarks">Záložky</string>
-    <string name="migration_detail_title">Staré pozice knih</string>
-    <string name="migration_hint_confirm">Rozumím</string>
-    <string name="migration_detail_content_added_at">Přidáno v</string>
-    <string name="migration_delete_dialog_title">Odstranit pozice</string>
-    <string name="migration_hint_content">Vzhledem ke změnám v novějších verzích Androidu, je potřeba vybrat hlavní složku audioknih pomocí systémového výběru.\n\nKliknutím na ikonu výše zobrazíte pozice svých starých knih.</string>
-    <string name="migration_delete_dialog_content">Jakmile odstraníte staré pozice, nebudete moci obnovit své staré pozice přehrávání.</string>
     <string name="delete_book_bottom_sheet_title">Odstranit knihu</string>
     <string name="delete_book_dialog_title">Odstranit knihu</string>
     <string name="delete_book_dialog_deletion_confirmation">Odstranit mé soubory</string>
@@ -90,8 +80,6 @@
         <item quantity="other">%d zvukových souborů</item>
     </plurals>
     <string name="voice_intro_first_book">Pojďme přidat vaši složku s audioknihami ať můžete začít poslouchat!</string>
-    <string name="migration_detail_content_position">Pozice</string>
-    <string name="notification_sleep_timer_enable">Zapnout časovač spánku</string>
     <string name="storage_bug_title">Vyžadováno povolení</string>
     <string name="storage_bug_subtitle">U některých zařízení chybí systémové aplikaci potřebná oprávnění pro přístup k externímu úložišti. Tento přístup je nezbytný, aby Voice mohl číst vaše audioknihy.</string>
     <string name="storage_bug_button">Udělit oprávnění</string>
@@ -99,8 +87,6 @@
     <string name="pref_help_translating">Pomoc s překladem Voice</string>
     <string name="close">Zavřít</string>
     <string name="folder_type_book_example_header">Povede k nalezení následujících knih</string>
-    <string name="migration_detail_content_root">Kořenová složka</string>
-    <string name="migration_delete_dialog_action_delete">Odstranit</string>
     <string name="delete_book_dialog_content">Toto odstraní soubory z vašeho zařízení.</string>
     <string name="onboarding.button_next">Další</string>
     <string name="onboarding.explanation.title">Vaše knihovna, váš způsob</string>
@@ -119,16 +105,11 @@
     <string name="generic_error_retry">Znovu</string>
     <string name="play">Přehrát</string>
     <string name="pause">Pozastavit</string>
-    <string name="migration_delete_dialog_action_keep">Ponechat</string>
     <string name="cover_search.icon_recent">Nedávné hledání</string>
     <string name="cover_search.author">Autor</string>
     <string name="pref_theme_dark">Tmavé téma</string>
     <string name="pref_use_grid">Použít rozložení mřížky</string>
     <string name="pref_app_version">Verze aplikace</string>
-    <string name="migration_detail_content_position_current_file_position">Pozice v souboru</string>
-    <string name="migration_detail_content_position_current_file_title">Aktuální soubor</string>
-    <string name="migration_detail_content_position_current_chapter_position">Pozice v kapitole</string>
-    <string name="migration_detail_content_position_current_chapter_title">Aktuální kapitola</string>
     <string name="media_session_root">Všechny audioknihy</string>
     <string name="media_session_recent">Nedávné</string>
     <string name="battery_optimization_rationale">Kvůli nastavení omezení spotřeby může docházet k přerušování přehrávání.</string>

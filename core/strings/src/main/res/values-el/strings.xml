@@ -45,10 +45,7 @@
     <string name="pref_get_support">Λήψη υποστήριξης</string>
     <string name="close">Κλείσιμο</string>
     <string name="folder_mode_single">Φάκελος ενός βιβλίου</string>
-    <string name="migration_detail_content_added_at">Προστέθηκε στις</string>
     <string name="folder_type_title">Πώς είναι δομημένα τα αρχεία σας;</string>
-    <string name="migration_delete_dialog_title">Διαγραφή Θέσεων</string>
-    <string name="migration_delete_dialog_action_keep">Διατήρηση</string>
     <string name="delete_book_bottom_sheet_title">Διαγραφή Βιβλίου</string>
     <string name="delete_book_dialog_title">Διαγραφή Βιβλίου</string>
     <string name="delete_book_dialog_deletion_confirmation">Διαγραφή των αρχείων μου</string>
@@ -60,34 +57,18 @@
     <string name="delete">Διαγραφή</string>
     <string name="folder_mode_root">Αρχικός φάκελος βιβλίων. Ένας υποφάκελος = ένα βιβλίο.</string>
     <string name="folder_type_no_books">Το Voice δεν μπόρεσε να εντοπίσει βιβλία. Υπάρχουν αρχεία ήχου;</string>
-    <string name="migration_detail_content_name">Όνομα</string>
-    <string name="migration_detail_content_bookmarks">Σελιδοδείκτες</string>
-    <string name="migration_detail_content_position_current_file_title">Τρέχον αρχείο</string>
-    <string name="migration_detail_content_position_current_chapter_title">Τρέχον κεφάλαιο</string>
-    <string name="notification_sleep_timer_disable">Απενεργοποίηση χρονοδιακόπτη ύπνου</string>
     <string name="pref_app_version">Έκδοση εφαρμογής</string>
-    <string name="migration_detail_content_position_current_chapter_position">Θέση στο κεφάλαιο</string>
-    <string name="migration_detail_title">Παλιές θέσεις βιβλίων</string>
-    <string name="notification_sleep_timer_enable">Ενεργοποίηση χρονοδιακόπτη ύπνου</string>
     <string name="generic_error_message">Κάτι πήγε στραβά 😢</string>
     <string name="voice_intro_first_book">Ας προσθέσουμε το φάκελο των ηχητικών βιβλίων για να αρχίσετε την ακρόαση!</string>
-    <string name="migration_detail_content_root">Ριζικός φάκελος</string>
-    <string name="migration_delete_dialog_action_delete">Διαγραφή</string>
     <plurals name="folder_type_file_count">
         <item quantity="one">%d αρχείο ήχου</item>
         <item quantity="other">%d αρχεία ήχου</item>
     </plurals>
     <string name="folder_type_book_example_header">Αυτό θα οδηγήσει στον εντοπισμό των παρακάτω βιβλίων</string>
-    <string name="migration_hint_confirm">Κατανοητό</string>
-    <string name="migration_detail_content_position">Θέση</string>
-    <string name="migration_hint_content">Λόγω των αλλαγών στις νεότερες εκδόσεις Android, είναι απαραίτητο να επιλέξετε το φάκελο του ηχητικού βιβλίου σας χρησιμοποιώντας τον επιλογέα του συστήματος. \n \nΚάντε κλικ στο παραπάνω εικονίδιο για να δείτε τις παλιές θέσεις των βιβλίων σας.</string>
-    <string name="migration_detail_content_position_current_file_position">Θέση στο αρχείο</string>
-    <string name="migration_delete_dialog_content">Μόλις διαγράψετε τις παλιές θέσεις, δεν θα μπορείτε να ανακτήσετε τα παλιά σημεία αναπαραγωγής.</string>
     <string name="battery_optimization_action">Αλλαγή</string>
     <string name="pref_help_translating">Βοήθεια στη μετάφραση του Voice</string>
     <string name="pref_suggest_idea">Προτείνετε μια ιδέα</string>
     <string name="media_session_root">Όλα τα ηχητικά βιβλία</string>
-    <string name="migration_hint_title">Πρόσβαση σε παλιές θέσεις βιβλίων</string>
     <string name="generic_error_retry">Ξαναδοκιμάστε</string>
     <string name="play">Αναπαραγωγή</string>
     <string name="pause">Παύση</string>

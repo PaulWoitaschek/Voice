@@ -45,19 +45,6 @@
     <string name="add">Додати</string>
     <string name="bookmark_just_now">Щойно</string>
     <string name="voice_intro_first_book">Давайте додамо папку з аудіокнигами, щоб ви могли почати прослуховування!</string>
-    <string name="migration_hint_title">Триває читання старих місць відтворення книг</string>
-    <string name="migration_hint_content">Через зміни в нових версіях Android папку з аудіокнигами потрібно вибирати за допомогою системного диспетчера файлів. \n \nНатисніть значок вгорі, щоб переглянути ваші старі місця розташування книг.</string>
-    <string name="migration_hint_confirm">Зрозуміло</string>
-    <string name="migration_detail_title">Старі місця розташування книг</string>
-    <string name="migration_detail_content_name">Назва</string>
-    <string name="migration_detail_content_root">Коренева папка</string>
-    <string name="migration_detail_content_position">Місце розташування</string>
-    <string name="migration_detail_content_bookmarks">Закладки</string>
-    <string name="migration_detail_content_added_at">Додано</string>
-    <string name="migration_delete_dialog_title">Видалити місця відтворення</string>
-    <string name="migration_delete_dialog_content">Якщо ви видалите старі місця відтворення, відновити їх буде неможливо.</string>
-    <string name="migration_delete_dialog_action_delete">Видалити</string>
-    <string name="migration_delete_dialog_action_keep">Зберегти</string>
     <string name="delete_book_bottom_sheet_title">Видалити книгу</string>
     <string name="delete_book_dialog_title">Видалити книгу</string>
     <string name="delete_book_dialog_deletion_confirmation">Видалити мої файли</string>
@@ -81,16 +68,10 @@
     </plurals>
     <string name="folder_type_book_example_header">Пошук книг</string>
     <string name="folder_type_no_books">Voice не виявив жодної книги. Тут є аудіофайли?</string>
-    <string name="migration_detail_content_position_current_file_title">Поточний файл</string>
-    <string name="migration_detail_content_position_current_file_position">Позиція в файлі</string>
-    <string name="migration_detail_content_position_current_chapter_title">Поточна частина</string>
-    <string name="notification_sleep_timer_disable">Вимкнути таймер сну</string>
-    <string name="notification_sleep_timer_enable">Увімкнути таймер сну</string>
     <string name="media_session_root">Всі аудіокниги</string>
     <string name="search_hint">Що ви шукаєте?</string>
     <string name="battery_optimization_rationale">Налаштування енергозбереження пристрою можуть призвести до переривань у відтворенні аудіокниг.</string>
     <string name="media_session_recent">Нещодавні</string>
-    <string name="migration_detail_content_position_current_chapter_position">Місце у розділі</string>
     <string name="battery_optimization_action">Оновити</string>
     <string name="generic_error_message">Щось пішло не так 😢</string>
     <string name="generic_error_retry">Повторити</string>
