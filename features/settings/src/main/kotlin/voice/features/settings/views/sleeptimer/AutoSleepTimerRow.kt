@@ -29,7 +29,7 @@ internal fun AutoSleepTimerRow(
     Icon(
       modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp),
       imageVector = Icons.Outlined.Bedtime,
-      contentDescription = stringResource(StringsR.string.auto_sleep_timer_subtitle),
+      contentDescription = stringResource(StringsR.string.settings_auto_sleep_timer_title),
     )
     Column(
       Modifier
@@ -37,13 +37,13 @@ internal fun AutoSleepTimerRow(
         .padding(start = 8.dp, end = 8.dp),
     ) {
       Text(
-        text = stringResource(id = StringsR.string.auto_sleep_timer_title),
+        text = stringResource(id = StringsR.string.settings_auto_sleep_timer_title),
         style = MaterialTheme.typography.bodyLarge,
       )
       val localTimeFormatter = rememberLocalTimeFormatter()
       Text(
         text = stringResource(
-          id = StringsR.string.auto_sleep_timer_subtitle,
+          id = StringsR.string.settings_auto_sleep_timer_summary,
           localTimeFormatter.format(start),
           localTimeFormatter.format(end),
         ),

@@ -35,7 +35,7 @@ internal fun CoverSearchBar(
           IconButton(onClick = onCloseClick) {
             Icon(
               imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-              contentDescription = stringResource(id = R.string.close),
+              contentDescription = stringResource(id = R.string.common_action_close),
             )
           }
         },
@@ -47,7 +47,7 @@ internal fun CoverSearchBar(
           ) {
             Icon(
               imageVector = Icons.Outlined.Close,
-              contentDescription = stringResource(id = R.string.delete),
+              contentDescription = stringResource(id = R.string.common_action_delete),
             )
           }
         },

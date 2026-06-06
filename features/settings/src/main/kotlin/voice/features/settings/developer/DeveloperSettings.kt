@@ -50,7 +50,7 @@ private fun DeveloperSettings(
           IconButton(onClick = viewModel::close) {
             Icon(
               imageVector = Icons.Outlined.Close,
-              contentDescription = stringResource(StringsR.string.close),
+              contentDescription = stringResource(StringsR.string.common_action_close),
             )
           }
         },

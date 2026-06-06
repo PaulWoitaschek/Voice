@@ -54,12 +54,12 @@ private fun ErrorContent(onRetry: () -> Unit) {
     verticalArrangement = Arrangement.Center,
   ) {
     Text(
-      text = stringResource(id = R.string.generic_error_message),
+      text = stringResource(id = R.string.common_error_generic_message),
       style = MaterialTheme.typography.headlineSmall,
     )
     Spacer(modifier = Modifier.size(16.dp))
     Button(onClick = onRetry) {
-      Text(text = stringResource(id = R.string.generic_error_retry))
+      Text(text = stringResource(id = R.string.common_error_generic_retry))
     }
   }
 }

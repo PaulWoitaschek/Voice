@@ -21,11 +21,11 @@ internal fun SpeedDialog(
     onDismissRequest = { viewModel.dismissDialog() },
     confirmButton = {},
     title = {
-      Text(stringResource(id = StringsR.string.playback_speed))
+      Text(stringResource(id = StringsR.string.playback_speed_title))
     },
     text = {
       Column {
-        Text(stringResource(id = StringsR.string.playback_speed) + ": " + speedFormatter.format(dialogState.speed))
+        Text(stringResource(id = StringsR.string.playback_speed_title) + ": " + speedFormatter.format(dialogState.speed))
         val valueRange = 0.5F..dialogState.maxSpeed
         val rangeSize = valueRange.endInclusive - valueRange.start
         val stepSize = 0.05

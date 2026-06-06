@@ -19,18 +19,18 @@ internal fun AskForFeedbackDialog(
       Text(stringResource(StringsR.string.review_feedback_title))
     },
     text = {
-      Text(stringResource(StringsR.string.review_feedback_content))
+      Text(stringResource(StringsR.string.review_feedback_message))
     },
     dismissButton = {
       TextButton(onClick = onDismiss) {
-        Text(stringResource(StringsR.string.review_feedback_button_no))
+        Text(stringResource(StringsR.string.review_feedback_action_cancel))
       }
     },
     confirmButton = {
       TextButton(
         onClick = onFeedback,
       ) {
-        Text(stringResource(StringsR.string.review_feedback_button_yes))
+        Text(stringResource(StringsR.string.review_feedback_action_send))
       }
     },
   )

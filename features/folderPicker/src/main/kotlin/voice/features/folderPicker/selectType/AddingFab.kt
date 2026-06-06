@@ -45,12 +45,12 @@ internal fun AddingFab(
     ExtendedFloatingActionButton(
       onClick = onAddClick,
       text = {
-        Text(text = stringResource(id = StringsR.string.add))
+        Text(text = stringResource(id = StringsR.string.common_action_add))
       },
       icon = {
         Icon(
           imageVector = Icons.Outlined.Check,
-          contentDescription = stringResource(id = StringsR.string.add),
+          contentDescription = stringResource(id = StringsR.string.common_action_add),
         )
       },
     )

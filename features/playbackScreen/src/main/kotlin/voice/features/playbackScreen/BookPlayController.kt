@@ -34,9 +34,9 @@ fun BookPlayScreen(bookId: BookId) {
   val dialogState = viewModel.dialogState.value
   val viewState = viewModel.viewState()
     ?: return
-  val bookmarkAddedMessage = stringResource(StringsR.string.bookmark_added)
-  val batteryOptimizationMessage = stringResource(StringsR.string.battery_optimization_rationale)
-  val batteryOptimizationAction = stringResource(StringsR.string.battery_optimization_action)
+  val bookmarkAddedMessage = stringResource(StringsR.string.bookmark_added_snackbar)
+  val batteryOptimizationMessage = stringResource(StringsR.string.playback_battery_optimization_rationale)
+  val batteryOptimizationAction = stringResource(StringsR.string.playback_battery_optimization_action)
   LaunchedEffect(viewModel) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {

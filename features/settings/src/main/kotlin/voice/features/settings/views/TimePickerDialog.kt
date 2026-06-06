@@ -26,7 +26,7 @@ fun TimePickerDialog(
     onDismissRequest = onDismiss,
     dismissButton = {
       TextButton(onClick = { onDismiss() }) {
-        Text(stringResource(id = StringsR.string.dialog_cancel))
+        Text(stringResource(id = StringsR.string.common_dialog_cancel))
       }
     },
     confirmButton = {
@@ -35,7 +35,7 @@ fun TimePickerDialog(
           onConfirm(timePickerState)
         },
       ) {
-        Text(stringResource(id = StringsR.string.dialog_confirm))
+        Text(stringResource(id = StringsR.string.common_dialog_confirm))
       }
     },
     text = {

@@ -48,7 +48,7 @@ private fun OnboardingWelcome(
     modifier = modifier,
     floatingActionButton = {
       ExtendedFloatingActionButton(onClick = onNext) {
-        Text(text = stringResource(StringsR.string.onboarding_button_next))
+        Text(text = stringResource(StringsR.string.onboarding_action_next))
       }
     },
     topBar = {

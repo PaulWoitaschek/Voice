@@ -24,14 +24,14 @@ internal fun PermissionBugCard(onPermissionBugCardClick: () -> Unit) {
       .fillMaxWidth(),
   ) {
     Column(Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
-      Text(text = stringResource(id = StringsR.string.storage_bug_title), style = MaterialTheme.typography.titleLarge)
+      Text(text = stringResource(id = StringsR.string.library_storage_permission_bug_title), style = MaterialTheme.typography.titleLarge)
       Spacer(modifier = Modifier.size(4.dp))
-      Text(text = stringResource(id = StringsR.string.storage_bug_subtitle))
+      Text(text = stringResource(id = StringsR.string.library_storage_permission_bug_message))
       Spacer(modifier = Modifier.size(16.dp))
       Button(
         onClick = onPermissionBugCardClick,
       ) {
-        Text(text = stringResource(id = StringsR.string.storage_bug_button))
+        Text(text = stringResource(id = StringsR.string.library_storage_permission_bug_action))
       }
     }
   }

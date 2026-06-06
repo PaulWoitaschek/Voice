@@ -80,7 +80,7 @@ class BookmarkViewModel(
           bookmark.setBySleepTimer -> {
             val justNowThreshold = 1.minutes
             if (ChronoUnit.MILLIS.between(bookmark.addedAt, Instant.now()).milliseconds < justNowThreshold) {
-              context.getString(R.string.bookmark_just_now)
+              context.getString(R.string.bookmark_created_just_now)
             } else {
               DateUtils.getRelativeDateTimeString(
                 context,

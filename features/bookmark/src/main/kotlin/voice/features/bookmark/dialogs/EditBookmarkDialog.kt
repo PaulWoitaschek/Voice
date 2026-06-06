@@ -54,7 +54,7 @@ internal fun EditBookmarkDialog(
         OutlinedTextField(
           value = bookmarkTitle,
           onValueChange = { bookmarkTitle = it },
-          label = { Text(stringResource(StringsR.string.bookmark_edit_hint)) },
+          label = { Text(stringResource(StringsR.string.bookmark_edit_name_label)) },
           modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
@@ -86,12 +86,12 @@ internal fun EditBookmarkDialog(
         },
         enabled = bookmarkTitle.text.isNotEmpty(),
       ) {
-        Text(stringResource(StringsR.string.dialog_confirm))
+        Text(stringResource(StringsR.string.common_dialog_confirm))
       }
     },
     dismissButton = {
       TextButton(onClick = onDismissRequest) {
-        Text(stringResource(StringsR.string.dialog_cancel))
+        Text(stringResource(StringsR.string.common_dialog_cancel))
       }
     },
   )

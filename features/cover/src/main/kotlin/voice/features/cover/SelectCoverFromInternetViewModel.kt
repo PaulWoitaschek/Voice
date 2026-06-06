@@ -53,10 +53,10 @@ class SelectCoverFromInternetViewModel(
     var query: String by remember(bookNameWithAuthor) {
       val query = bookNameWithAuthor?.let { bookNameWithAuthor ->
         if (bookNameWithAuthor.author == null) {
-          context.getString(StringsR.string.cover_search_template_no_author, bookNameWithAuthor.bookName)
+          context.getString(StringsR.string.cover_search_query_without_author, bookNameWithAuthor.bookName)
         } else {
           context.getString(
-            StringsR.string.cover_search_template_with_author,
+            StringsR.string.cover_search_query_with_author,
             bookNameWithAuthor.bookName,
             bookNameWithAuthor.author,
           )

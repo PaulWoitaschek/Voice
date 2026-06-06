@@ -72,12 +72,12 @@ fun EditCoverDialog(
 
   AlertDialog(
     onDismissRequest = { onDismiss() },
-    title = { Text(text = stringResource(StringsR.string.cover)) },
+    title = { Text(text = stringResource(StringsR.string.cover_title)) },
     text = {
       Box {
         AsyncImage(
           model = coverUri,
-          contentDescription = stringResource(StringsR.string.content_cover),
+          contentDescription = stringResource(StringsR.string.cover_content_description_selectable),
           modifier = Modifier
             .fillMaxWidth()
             .onSizeChanged {
@@ -133,12 +133,12 @@ fun EditCoverDialog(
           }
         },
       ) {
-        Text(text = stringResource(StringsR.string.dialog_confirm))
+        Text(text = stringResource(StringsR.string.common_dialog_confirm))
       }
     },
     dismissButton = {
       TextButton(onClick = { onDismiss() }) {
-        Text(text = stringResource(StringsR.string.dialog_cancel))
+        Text(text = stringResource(StringsR.string.common_dialog_cancel))
       }
     },
   )

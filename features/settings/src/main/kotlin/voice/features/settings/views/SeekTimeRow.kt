@@ -27,16 +27,16 @@ internal fun SeekTimeRow(
     leadingContent = {
       Icon(
         imageVector = Icons.Outlined.Timelapse,
-        contentDescription = stringResource(StringsR.string.pref_seek_time),
+        contentDescription = stringResource(StringsR.string.settings_playback_seek_time_title),
       )
     },
     headlineContent = {
-      Text(text = stringResource(StringsR.string.pref_seek_time))
+      Text(text = stringResource(StringsR.string.settings_playback_seek_time_title))
     },
     supportingContent = {
       Text(
         text = LocalResources.current.getQuantityString(
-          StringsR.plurals.seconds,
+          StringsR.plurals.duration_seconds,
           seekTimeInSeconds,
           seekTimeInSeconds,
         ),
@@ -52,11 +52,11 @@ internal fun SeekAmountDialog(
   onDismiss: () -> Unit,
 ) {
   TimeSettingDialog(
-    title = stringResource(StringsR.string.pref_seek_time),
+    title = stringResource(StringsR.string.settings_playback_seek_time_title),
     currentSeconds = currentSeconds,
     minSeconds = 3,
     maxSeconds = 60,
-    textPluralRes = StringsR.plurals.seconds,
+    textPluralRes = StringsR.plurals.duration_seconds,
     onSecondsConfirm = onSecondsConfirm,
     onDismiss = onDismiss,
   )

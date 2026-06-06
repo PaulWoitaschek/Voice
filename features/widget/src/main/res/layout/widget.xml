@@ -12,7 +12,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:adjustViewBounds="true"
-    android:contentDescription="@string/content_cover" />
+    android:contentDescription="@string/cover.content_description.selectable" />
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/rewind"
+        android:contentDescription="@string/playback.action.rewind"
         android:padding="8dp"
         android:src="@drawable/ic_rewind_white_36dp" />
 
@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/play_pause"
+        android:contentDescription="@string/playback.action.play_pause"
         android:padding="8dp"
         android:src="@drawable/ic_play_white_36dp" />
 
@@ -83,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/fast_forward"
+        android:contentDescription="@string/playback.action.fast_forward"
         android:padding="8dp"
         android:src="@drawable/ic_fast_forward_white_36dp" />
 

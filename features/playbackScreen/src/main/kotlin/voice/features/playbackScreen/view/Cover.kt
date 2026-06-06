@@ -35,6 +35,6 @@ internal fun Cover(
     model = cover,
     placeholder = painterResource(id = UiR.drawable.album_art),
     error = painterResource(id = UiR.drawable.album_art),
-    contentDescription = stringResource(id = StringsR.string.cover),
+    contentDescription = stringResource(id = StringsR.string.cover_title),
   )
 }

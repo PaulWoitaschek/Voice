@@ -81,9 +81,9 @@ private fun FolderModeColumn(
 @StringRes
 private fun FolderMode.title(): Int {
   return when (this) {
-    FolderMode.Audiobooks -> StringsR.string.folder_mode_root
-    FolderMode.SingleBook -> StringsR.string.folder_mode_single
-    FolderMode.Authors -> StringsR.string.folder_mode_author
+    FolderMode.Audiobooks -> StringsR.string.folder_mode_root_title
+    FolderMode.SingleBook -> StringsR.string.folder_mode_single_title
+    FolderMode.Authors -> StringsR.string.folder_mode_author_title
   }
 }
 

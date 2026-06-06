@@ -39,9 +39,9 @@ fun PlayButton(
       painter = rememberPlayIconPainter(playing = playing),
       contentDescription = stringResource(
         id = if (playing) {
-          StringsR.string.pause
+          StringsR.string.playback_action_pause
         } else {
-          StringsR.string.play
+          StringsR.string.playback_action_play
         },
       ),
     )

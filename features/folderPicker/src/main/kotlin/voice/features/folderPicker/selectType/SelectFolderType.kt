@@ -162,7 +162,7 @@ private fun Content(
           key = "noBooksDetected",
           span = { GridItemSpan(maxLineSpan) },
         ) {
-          Text(text = stringResource(id = StringsR.string.folder_type_no_books))
+          Text(text = stringResource(id = StringsR.string.folder_type_book_example_empty))
         }
       } else {
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -191,7 +191,7 @@ private fun AppBar(
       IconButton(onClick = onBackClick) {
         Icon(
           imageVector = Icons.Outlined.Close,
-          contentDescription = stringResource(id = StringsR.string.close),
+          contentDescription = stringResource(id = StringsR.string.common_action_close),
         )
       }
     },

@@ -31,7 +31,7 @@ internal fun ColumnScope.TopBarLeadingIcon(
     IconButton(onClick = { onActiveChange(false) }) {
       Icon(
         imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-        contentDescription = stringResource(id = R.string.close),
+        contentDescription = stringResource(id = R.string.common_action_close),
       )
     }
   }
@@ -43,7 +43,7 @@ internal fun ColumnScope.TopBarLeadingIcon(
     Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
       Icon(
         imageVector = Icons.Outlined.Search,
-        contentDescription = stringResource(id = R.string.search_hint),
+        contentDescription = stringResource(id = R.string.library_search_hint),
       )
     }
   }

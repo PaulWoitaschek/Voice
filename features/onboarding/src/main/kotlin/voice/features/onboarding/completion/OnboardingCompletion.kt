@@ -81,7 +81,7 @@ private fun OnboardingCompletion(
           IconButton(onClick = onBack) {
             Icon(
               imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-              contentDescription = stringResource(id = StringsR.string.close),
+              contentDescription = stringResource(id = StringsR.string.common_action_close),
             )
           }
         },
@@ -89,7 +89,7 @@ private fun OnboardingCompletion(
     },
     floatingActionButton = {
       ExtendedFloatingActionButton(onClick = onNext) {
-        Text(text = stringResource(StringsR.string.onboarding_completion_next_button))
+        Text(text = stringResource(StringsR.string.onboarding_completion_action_start_listening))
       }
     },
     content = { contentPadding ->

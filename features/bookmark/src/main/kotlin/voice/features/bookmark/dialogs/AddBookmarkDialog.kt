@@ -35,13 +35,13 @@ internal fun AddBookmarkDialog(
   val focusRequester = remember { FocusRequester() }
   AlertDialog(
     onDismissRequest = onDismissRequest,
-    title = { Text(text = stringResource(StringsR.string.bookmark)) },
+    title = { Text(text = stringResource(StringsR.string.bookmark_title)) },
     text = {
       Column {
         OutlinedTextField(
           value = bookmarkName,
           onValueChange = { bookmarkName = it },
-          label = { Text(stringResource(StringsR.string.bookmark_edit_hint)) },
+          label = { Text(stringResource(StringsR.string.bookmark_edit_name_label)) },
           modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
@@ -67,12 +67,12 @@ internal fun AddBookmarkDialog(
           onDismissRequest()
         },
       ) {
-        Text(stringResource(StringsR.string.dialog_confirm))
+        Text(stringResource(StringsR.string.common_dialog_confirm))
       }
     },
     dismissButton = {
       TextButton(onClick = onDismissRequest) {
-        Text(stringResource(StringsR.string.dialog_cancel))
+        Text(stringResource(StringsR.string.common_dialog_cancel))
       }
     },
   )

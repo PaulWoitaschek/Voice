@@ -42,7 +42,7 @@ internal fun SelectFolderButtonRow(onAdd: (FileTypeSelection, Uri) -> Unit) {
 
     SelectFolderButton(
       icon = Icons.Outlined.Folder,
-      text = stringResource(id = R.string.select_folder_type_folder),
+      text = stringResource(id = R.string.folder_add_type_folder),
       onClick = {
         try {
           documentTreeLauncher.launch(null)
@@ -54,7 +54,7 @@ internal fun SelectFolderButtonRow(onAdd: (FileTypeSelection, Uri) -> Unit) {
     Spacer(modifier = Modifier.size(8.dp))
     SelectFolderButton(
       icon = Icons.Outlined.AudioFile,
-      text = stringResource(id = R.string.select_folder_type_file),
+      text = stringResource(id = R.string.folder_add_type_file),
       onClick = {
         try {
           openDocumentLauncher.launch(arrayOf("*/*"))

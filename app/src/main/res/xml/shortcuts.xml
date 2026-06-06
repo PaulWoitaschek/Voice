@@ -2,7 +2,7 @@
   <shortcut
     android:icon="@drawable/ic_shortcut_play"
     android:shortcutId="playCurrent"
-    android:shortcutShortLabel="@string/play_current">
+    android:shortcutShortLabel="@string/shortcut.play_current.short_label">
     <intent
       android:action="playCurrent"
       android:targetClass="voice.app.MainActivity"

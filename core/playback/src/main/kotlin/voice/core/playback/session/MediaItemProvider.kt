@@ -34,7 +34,7 @@ class MediaItemProvider(
 ) {
 
   fun root(): MediaItem = MediaItem(
-    title = application.getString(StringsR.string.media_session_root),
+    title = application.getString(StringsR.string.media_session_library_root),
     browsable = true,
     isPlayable = false,
     mediaId = MediaId.Root,
@@ -42,7 +42,7 @@ class MediaItemProvider(
   )
 
   fun recent(): MediaItem? = MediaItem(
-    title = application.getString(StringsR.string.media_session_recent),
+    title = application.getString(StringsR.string.media_session_library_recent),
     browsable = true,
     isPlayable = false,
     mediaId = MediaId.Recent,

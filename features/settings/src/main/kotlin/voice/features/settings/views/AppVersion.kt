@@ -27,12 +27,12 @@ internal fun AppVersion(
     leadingContent = {
       Icon(
         imageVector = Icons.Outlined.Tag,
-        contentDescription = stringResource(StringsR.string.pref_app_version),
+        contentDescription = stringResource(StringsR.string.settings_about_app_version_title),
       )
     },
     headlineContent = {
       Text(
-        text = stringResource(StringsR.string.pref_app_version),
+        text = stringResource(StringsR.string.settings_about_app_version_title),
         color = LocalContentColor.current.copy(alpha = 0.5F),
       )
     },
