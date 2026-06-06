@@ -12,13 +12,6 @@
     <string name="delete">मेटाउनुहोस्</string>
     <string name="add">थप्नुहोस्</string>
     <string name="bookmark_just_now">भर्खरै</string>
-    <string name="migration_hint_confirm">बुझे</string>
-    <string name="migration_detail_title">पुरानो पुस्तकको ठाउँ</string>
-    <string name="migration_detail_content_name">नाम</string>
-    <string name="migration_detail_content_position">ठाउँ</string>
-    <string name="migration_detail_content_added_at">मा थपियो</string>
-    <string name="migration_delete_dialog_action_delete">मेटाउनुहोस्</string>
-    <string name="migration_delete_dialog_action_keep">राख्नुहोस्</string>
     <string name="delete_book_bottom_sheet_title">पुस्तक मेटाउनुहोस्</string>
     <string name="delete_book_dialog_title">पुस्तक मेटाउनुहोस्</string>
     <string name="delete_book_dialog_deletion_confirmation">मेरो फाइलहरू मेटाउनुहोस्</string>
@@ -44,17 +37,13 @@
         <item quantity="other">%d अडियो फाइलहरू</item>
     </plurals>
     <string name="folder_type_title">तपाईंको फाइलहरू कसरी संरचित छन्?</string>
-    <string name="migration_detail_content_root">रूट फोल्डर</string>
     <string name="search_hint">तपाईं के खोज्दै हुनुन्छ?</string>
-    <string name="notification_sleep_timer_disable">सुत्ने-टाइमर असक्षम गर्नुहोस्</string>
-    <string name="notification_sleep_timer_enable">सुत्ने-टाइमर सक्षम गर्नुहोस्</string>
     <string name="cover">कभर</string>
     <string name="content_cover">छनोट गर्न कभर देखाउँछ</string>
     <string name="audiobook_folders_title">अडियोबूक फोल्डरहरू</string>
     <string name="action_settings">प्राथमिकताहरू</string>
     <string name="download_book_cover">इन्टरनेटबाट कभर लिनुहोस्</string>
     <string name="media_session_root">सबै अडियोबूक</string>
-    <string name="migration_detail_content_bookmarks">पुस्तकचिनोहरू</string>
     <string name="battery_optimization_action">अपडेट</string>
     <string name="storage_bug_subtitle">केहि यन्त्रहरूको लागि, प्रणाली एपले बाह्य भण्डारण पहुँच गर्न आवश्यक अनुमति गुमाएको छ। तपाईंको अडियोबूकहरू पढ्नको लागि Voice को लागि यो पहुँच आवश्यक छ।</string>
     <string name="review.request.title">Voice को मजा लिदै हुनुहुन्छ?</string>
@@ -67,7 +56,6 @@
     <string name="bookmark_edit_title">पुस्तकचिनो सम्पादन गर्नुहोस्</string>
     <string name="bookmark_edit_hint">पुस्तकचिनो को नाम</string>
     <string name="pref_theme_dark">अँध्यारो थीम</string>
-    <string name="migration_detail_content_position_current_file_title">हालको फाइल</string>
     <string name="play">प्ले</string>
     <string name="pause">पज</string>
     <string name="next_track">अर्को ट्र्याक</string>
@@ -91,14 +79,10 @@
     <string name="edit_book_title">पुस्तक सम्पादन गर्नुहोस्</string>
     <string name="cover_search.author">लेखक</string>
     <string name="voice_intro_first_book">तपाईंको अडियोबूक फोल्डर थप्नुहोस् ताकि तपाईं सुन्न सुरु गर्न सक्नुहुन्छ!</string>
-    <string name="migration_hint_title">पुरानो पुस्तक ठाउँहरू पहुँच गर्दै</string>
     <string name="bookmark_added">पुस्तकचिनो राखियो</string>
-    <string name="migration_detail_content_position_current_chapter_title">हालको अध्याय</string>
-    <string name="migration_detail_content_position_current_chapter_position">अध्यायमा ठाउँ</string>
     <string name="generic_error_message">केही गडबड भयो 😢</string>
     <string name="select_folder_title_onboarding">आफ्नो पहिलो अडियोबूक थप्नुहोस्</string>
     <string name="select_folder_title_default">आफ्नो अडियोबूक(हरू) थप्नुहोस्</string>
-    <string name="migration_delete_dialog_content">एकचोटि तपाईंले पुरानो ठाउँहरू मेटाउनुभएपछि तपाईं आफ्नो पुरानो प्लेब्याक ठाउँहरू पुन: प्राप्त गर्न सक्षम हुनुहुने छैन।</string>
     <string name="select_folder_type_file">फाइल</string>
     <string name="select_folder_type_folder">फोल्डर</string>
     <string name="onboarding_welcome_title">Voice मा तपाईंलाई स्वागत छ!</string>
@@ -113,9 +97,6 @@
     <string name="review.feedback.title">सुनेर दुख लाग्यो!</string>
     <string name="review.feedback.content">के तपाई हामीलाई बताउन सक्नुहुन्छ के गलत भयो? हामी तपाईंको प्रतिक्रियाको कदर गर्छौं र यसले हामीलाई तपाईंको अनुभव सुधार गर्न मद्दत गर्छ।</string>
     <string name="review.feedback.button.no">रद्द गर्नहोस्</string>
-    <string name="migration_hint_content">नयाँ एन्ड्रोइड संस्करणहरूमा परिवर्तनहरूको कारणले, यो प्रणाली पिकर प्रयोग गरेर आफ्नो अडियोबूक फोल्डर चयन गर्न आवश्यक छ। \n \nतपाईंको पुरानो पुस्तक ठाउँहरू हेर्न माथिको आइकनमा क्लिक गर्नुहोस्।</string>
-    <string name="migration_detail_content_position_current_file_position">फाइलमा ठाउँ</string>
-    <string name="migration_delete_dialog_title">ठाउँहरू मेटाउनुहोस्</string>
     <string name="battery_optimization_rationale">तपाईंको पावर प्रतिबन्धहरूको कारण, प्लेब्याक अवरोधहरू हुन सक्छ।</string>
     <string name="generic_error_retry">पुन: प्रयास गर्नुहोस्</string>
     <string name="media_session_recent">हालैको</string>

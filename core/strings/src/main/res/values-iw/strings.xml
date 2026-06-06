@@ -8,7 +8,6 @@
     <string name="review.request.content">המשוב שלך חשוב לנו! אם יש לך רגע פנוי, דרג אותנו ושתפו אותנו בחווייתך. זה עוזר לנו לשפר את החוויה ולהציע חוויית האזנה טובה יותר.</string>
     <string name="more">עוד</string>
     <string name="pref_get_support">תמיכה</string>
-    <string name="migration_hint_content">עקב שינויים בגרסאות חדשות יותר של אנדרואיד, יש צורך לבחור את תיקיית ספרי האודיו שלך באמצעות בורר המערכת.\n\nלחץ על הסמל למעלה כדי להציג את מיקומי הספרים הישנים שלך.</string>
     <string name="storage_bug_subtitle">עבור מכשירים מסוימים, לאפליקציית מערכת חסרה את ההרשאה הנדרשת לגישה לאחסון החיצוני. גישה זו חיונית כדי ש-Voice יוכל לקרוא את ספרי האודיו שלך.</string>
     <string name="onboarding.completion.next_button">התחל להאזין</string>
     <string name="onboarding.explanation.subtitle">בעזרת Voice, תוכלו להוסיף ספרים כקבצים בודדים או לארגן אותם בתיקיות. בחרו!</string>
@@ -65,18 +64,8 @@
     <string name="folder_type_no_books">Voice לא זיהה ספרים. האם יש קבצי שמע?</string>
     <string name="folder_type_title">איך הקבצים שלך מסודרים?</string>
     <string name="bookmark_just_now">ממש עכשיו</string>
-    <string name="migration_hint_confirm">מובן</string>
-    <string name="migration_detail_title">מיקומי ספרים ישנים</string>
-    <string name="migration_detail_content_name">שם</string>
-    <string name="migration_detail_content_root">תיקייה ראשית</string>
     <string name="voice_intro_first_book">בואו נוסיף את תיקיית הקולספר שלכם כדי שתוכלו להתחיל להאזין!</string>
     <string name="mark_as_current">סמן כנוכחי</string>
-    <string name="migration_detail_content_added_at">נוסף ב</string>
-    <string name="migration_detail_content_position_current_file_title">קובץ נוכחי</string>
-    <string name="migration_detail_content_position_current_chapter_title">פרק נוכחי</string>
-    <string name="migration_delete_dialog_title">מחק מיקומים</string>
-    <string name="migration_delete_dialog_content">לאחר שתמחק את המיקומים הישנים, לא תוכל לשחזר את מיקומי ההפעלה הישנים שלך.</string>
-    <string name="migration_delete_dialog_action_keep">שמור</string>
     <string name="delete_book_bottom_sheet_title">מחק ספר</string>
     <string name="delete_book_dialog_title">מחק ספר</string>
     <string name="delete_book_dialog_deletion_confirmation">מחק את הקבצים שלי</string>
@@ -86,8 +75,6 @@
     <string name="battery_optimization_action">עדכן</string>
     <string name="media_session_root">כל הקולספרים</string>
     <string name="media_session_recent">אחרונים</string>
-    <string name="notification_sleep_timer_enable">הפעל טיימר שינה</string>
-    <string name="notification_sleep_timer_disable">בטל טיימר שינה</string>
     <string name="generic_error_message">משהו השתבש 😢</string>
     <string name="generic_error_retry">נסה שוב</string>
     <string name="storage_bug_title">נדרש אישור</string>
@@ -118,19 +105,13 @@
         <item quantity="two">%d דקות</item>
         <item quantity="other">%d דקות</item>
     </plurals>
-    <string name="migration_detail_content_position_current_file_position">מיקום בקובץ</string>
     <string name="play">הפעל</string>
     <string name="skip_silence">דלג על קטעים שקטים</string>
     <string name="content_cover">להציג עטיפות לבחירה</string>
-    <string name="migration_detail_content_position">מיקום</string>
     <string name="change_book_name">שם</string>
-    <string name="migration_hint_title">ניגש למיקומי ספרים ישנים</string>
     <string name="audiobook_folders_title">תיקיית קולספר</string>
     <string name="bookmark_edit_title">ערוך סימנייה</string>
     <string name="folder_mode_single">מצב ספר בודד: תיקייה אחת שווה ספר אחד.</string>
-    <string name="migration_delete_dialog_action_delete">הסר</string>
-    <string name="migration_detail_content_bookmarks">סימניות</string>
-    <string name="migration_detail_content_position_current_chapter_position">מיקום בפרק</string>
     <string name="auto_sleep_timer.title">שעון עצר אוטומטי לשינה</string>
     <string name="pref_faq">שאלות נפוצות</string>
     <string name="auto_sleep_timer.subtitle">תפעיל את שעון השינה ­האוטומטי כשההפעלה מגיעה ל- %1$s ו- %2$s</string>

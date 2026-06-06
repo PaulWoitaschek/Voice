@@ -43,25 +43,11 @@
     <string name="add">Hozzáadás</string>
     <string name="bookmark_just_now">Éppen most</string>
     <string name="voice_intro_first_book">Adjon hozzá a hangoskönyv mappát, hogy elkezdhesse a hallgatást!</string>
-    <string name="migration_hint_title">Hozzáférés a régi könyvek helyéhez</string>
-    <string name="migration_hint_content">Az újabb Android-verziók változásai miatt ki kell választani a hangoskönyv mappát a rendszerválasztóval.\n\nKattintson a fenti ikonra a régi könyvek helyének megtekintéséhez.</string>
-    <string name="migration_hint_confirm">Értem</string>
-    <string name="migration_detail_title">Régi könyvek helye</string>
-    <string name="migration_detail_content_name">Cím</string>
-    <string name="migration_detail_content_root">Főmappa</string>
-    <string name="migration_detail_content_position">Hely</string>
-    <string name="migration_detail_content_bookmarks">Könyvjelzők</string>
-    <string name="migration_detail_content_added_at">Hozzáadva</string>
-    <string name="migration_delete_dialog_title">Pozíciók törlése</string>
-    <string name="migration_delete_dialog_content">Ha törli a régi pozíciókat, nem fogja tudni visszaállítani a régi lejátszási pozíciókat.</string>
-    <string name="migration_delete_dialog_action_delete">Törlés</string>
-    <string name="migration_delete_dialog_action_keep">Megtartás</string>
     <string name="delete_book_bottom_sheet_title">Könyv törlése</string>
     <string name="delete_book_dialog_title">Könyv törlése</string>
     <string name="delete_book_dialog_deletion_confirmation">Fájlok törlése</string>
     <string name="delete_book_dialog_content">Ezzel törli az eszközről a könyv hangfájljait is.</string>
     <string name="volume_boost">Hangerőnövelés</string>
-    <string name="migration_detail_content_position_current_file_title">Jelenlegi fájl</string>
     <string name="battery_optimization_action">Frissítés</string>
     <string name="onboarding.completion.next_button">Lejátszás elkezdése</string>
     <string name="onboarding.completion.subtitle">Az ön első könyve várja a lejátszást. A Voice jó szórakozást kíván!</string>
@@ -69,8 +55,6 @@
         <item quantity="one">%d perc</item>
         <item quantity="other">%d perc</item>
     </plurals>
-    <string name="migration_detail_content_position_current_file_position">Pozició a fájlban</string>
-    <string name="notification_sleep_timer_enable">Elalváskapcsoló engedélyezése</string>
     <string name="review.feedback.title">Sajnáljuk ezt hallani!</string>
     <string name="review.feedback.content">Meg tudná mondani hol tudnánk javítani? Értékeljük az ön véleményét és segít minket továbbfejleszteni az applikációt.</string>
     <string name="storage_bug_title">Hozzáférés szükséges</string>
@@ -82,7 +66,6 @@
     </plurals>
     <string name="folder_type_no_books">Voice nem talált egy könyvet se. Léteznek erre hangfájlok?</string>
     <string name="folder_type_title">Hogyan vannak elrendezve a hangfájlok?</string>
-    <string name="migration_detail_content_position_current_chapter_position">Pozició a fejezetben</string>
     <string name="generic_error_message">Valami balul sült el 😢</string>
     <string name="generic_error_retry">Újra</string>
     <string name="storage_bug_button">Hozzáférés engedélyezése</string>
@@ -120,9 +103,7 @@
     <string name="more">Tovább</string>
     <string name="pref_app_version">Applikáció verzió</string>
     <string name="folder_mode_single">Könyv üzemmód: minden mappa egy-egy könyv.</string>
-    <string name="migration_detail_content_position_current_chapter_title">Jelenlegi fejezet</string>
     <string name="battery_optimization_rationale">Lejátszási szakadozások történhetnek az ön energiabeállítasai miatt.</string>
-    <string name="notification_sleep_timer_disable">Elalváskapcsoló megállítasa</string>
     <string name="sleep_timer.button.decrement">Rövidebb</string>
     <string name="storage_bug_subtitle">Egyes eszközökön, egy rendszerapplikációnak hiányzanak bizonyos hozzáférések a külső tárolóhoz. Ezek a hozzáférések lényegesek ahhoz hogy Voice sikeresen tudja felolvasni az ön könyvjeit.</string>
     <string name="review.request.content">Mi értékeljük az ön vélemenyét! Ha van egy pillanata, ossza meg velünk az ön tapasztalatát és hagyjon egy értékelést. Segít minket jobbátenni mások tapasztalatát.</string>
