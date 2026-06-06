@@ -11,15 +11,15 @@ enum class BookOverviewCategory(
   val comparator: Comparator<Book>,
 ) {
   CURRENT(
-    nameRes = StringsR.string.book_header_current,
+    nameRes = StringsR.string.library_category_current_title,
     comparator = BookComparator.ByLastPlayed,
   ),
   NOT_STARTED(
-    nameRes = StringsR.string.book_header_not_started,
+    nameRes = StringsR.string.library_category_not_started_title,
     comparator = BookComparator.ByName,
   ),
   FINISHED(
-    nameRes = StringsR.string.book_header_completed,
+    nameRes = StringsR.string.library_category_completed_title,
     comparator = BookComparator.ByLastPlayed,
   ),
 }

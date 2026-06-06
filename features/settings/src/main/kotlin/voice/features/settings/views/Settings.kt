@@ -74,7 +74,7 @@ private fun Settings(
       TopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
-          Text(stringResource(StringsR.string.action_settings))
+          Text(stringResource(StringsR.string.settings_action_open))
         },
         navigationIcon = {
           IconButton(
@@ -84,7 +84,7 @@ private fun Settings(
           ) {
             Icon(
               imageVector = Icons.Outlined.Close,
-              contentDescription = stringResource(StringsR.string.close),
+              contentDescription = stringResource(StringsR.string.common_action_close),
             )
           }
         },
@@ -106,14 +106,14 @@ private fun Settings(
             leadingContent = {
               Icon(
                 imageVector = Icons.Outlined.Book,
-                contentDescription = stringResource(StringsR.string.audiobook_folders_title),
+                contentDescription = stringResource(StringsR.string.library_folders_title),
               )
             },
             headlineContent = {
-              Text(stringResource(StringsR.string.audiobook_folders_title))
+              Text(stringResource(StringsR.string.library_folders_title))
             },
             supportingContent = {
-              Text(stringResource(StringsR.string.pref_audiobook_folders_explanation))
+              Text(stringResource(StringsR.string.settings_library_folders_summary))
             },
           )
         }
@@ -137,9 +137,9 @@ private fun Settings(
             } else {
               Icons.AutoMirrored.Outlined.ViewList
             }
-            Icon(imageVector, stringResource(StringsR.string.pref_use_grid))
+            Icon(imageVector, stringResource(StringsR.string.settings_library_use_grid_title))
           },
-          headlineContent = { Text(stringResource(StringsR.string.pref_use_grid)) },
+          headlineContent = { Text(stringResource(StringsR.string.settings_library_use_grid_title)) },
           trailingContent = {
             Switch(
               checked = viewState.useGrid,
@@ -173,11 +173,11 @@ private fun Settings(
           leadingContent = {
             Icon(
               imageVector = Icons.Outlined.Lightbulb,
-              contentDescription = stringResource(StringsR.string.pref_suggest_idea),
+              contentDescription = stringResource(StringsR.string.settings_support_suggest_idea_title),
             )
           },
           headlineContent = {
-            Text(stringResource(StringsR.string.pref_suggest_idea))
+            Text(stringResource(StringsR.string.settings_support_suggest_idea_title))
           },
         )
       }
@@ -188,11 +188,11 @@ private fun Settings(
           leadingContent = {
             Icon(
               imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
-              contentDescription = stringResource(StringsR.string.pref_get_support),
+              contentDescription = stringResource(StringsR.string.settings_support_get_support_title),
             )
           },
           headlineContent = {
-            Text(stringResource(StringsR.string.pref_get_support))
+            Text(stringResource(StringsR.string.settings_support_get_support_title))
           },
         )
       }
@@ -203,11 +203,11 @@ private fun Settings(
           leadingContent = {
             Icon(
               imageVector = Icons.Outlined.BugReport,
-              contentDescription = stringResource(StringsR.string.pref_report_issue),
+              contentDescription = stringResource(StringsR.string.settings_support_report_issue_title),
             )
           },
           headlineContent = {
-            Text(stringResource(StringsR.string.pref_report_issue))
+            Text(stringResource(StringsR.string.settings_support_report_issue_title))
           },
         )
       }
@@ -217,11 +217,11 @@ private fun Settings(
           leadingContent = {
             Icon(
               imageVector = Icons.Outlined.Language,
-              contentDescription = stringResource(StringsR.string.pref_help_translating),
+              contentDescription = stringResource(StringsR.string.settings_support_help_translating_title),
             )
           },
           headlineContent = {
-            Text(stringResource(StringsR.string.pref_help_translating))
+            Text(stringResource(StringsR.string.settings_support_help_translating_title))
           },
         )
       }
@@ -231,11 +231,11 @@ private fun Settings(
           leadingContent = {
             Icon(
               imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
-              contentDescription = stringResource(StringsR.string.pref_faq),
+              contentDescription = stringResource(StringsR.string.settings_support_faq_title),
             )
           },
           headlineContent = {
-            Text(stringResource(StringsR.string.pref_faq))
+            Text(stringResource(StringsR.string.settings_support_faq_title))
           },
         )
       }

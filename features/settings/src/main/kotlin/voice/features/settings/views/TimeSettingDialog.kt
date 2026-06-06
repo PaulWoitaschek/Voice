@@ -57,7 +57,7 @@ fun TimeSettingDialog(
           onDismiss()
         },
       ) {
-        Text(stringResource(StringsR.string.dialog_confirm))
+        Text(stringResource(StringsR.string.common_dialog_confirm))
       }
     },
     dismissButton = {
@@ -66,7 +66,7 @@ fun TimeSettingDialog(
           onDismiss()
         },
       ) {
-        Text(stringResource(StringsR.string.dialog_cancel))
+        Text(stringResource(StringsR.string.common_dialog_cancel))
       }
     },
   )

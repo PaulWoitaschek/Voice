@@ -72,7 +72,7 @@ fun OnboardingExplanation(
           IconButton(onClick = onClose) {
             Icon(
               imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-              contentDescription = stringResource(id = StringsR.string.close),
+              contentDescription = stringResource(id = StringsR.string.common_action_close),
             )
           }
         },
@@ -92,18 +92,18 @@ fun OnboardingExplanation(
             modifier = Modifier.fillMaxWidth(),
             onClick = onContinueWithoutAnalytics,
           ) {
-            Text(stringResource(StringsR.string.onboarding_analytics_consent_button_disable))
+            Text(stringResource(StringsR.string.onboarding_analytics_consent_action_disable))
           }
 
           ExtendedFloatingActionButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = onContinueWithAnalytics,
           ) {
-            Text(stringResource(StringsR.string.onboarding_analytics_consent_button_enable))
+            Text(stringResource(StringsR.string.onboarding_analytics_consent_action_enable))
           }
 
           Text(
-            text = stringResource(StringsR.string.onboarding_analytics_consent_privacy_policy),
+            text = stringResource(StringsR.string.onboarding_analytics_consent_action_privacy_policy),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
@@ -114,7 +114,7 @@ fun OnboardingExplanation(
         }
       } else {
         ExtendedFloatingActionButton(onClick = onContinueWithoutAnalytics) {
-          Text(stringResource(StringsR.string.onboarding_button_next))
+          Text(stringResource(StringsR.string.onboarding_action_next))
         }
       }
     },

@@ -17,7 +17,7 @@ internal fun SelectFolderAppBar(onBack: () -> Unit) {
       IconButton(onClick = onBack) {
         Icon(
           imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-          contentDescription = stringResource(id = R.string.close),
+          contentDescription = stringResource(id = R.string.common_action_close),
         )
       }
     },

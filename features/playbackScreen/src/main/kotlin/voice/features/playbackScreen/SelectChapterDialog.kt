@@ -40,7 +40,7 @@ internal fun SelectChapterDialog(
         content = {
           items(dialogState.items) { chapter ->
             val isCurrentChapter = chapter.active
-            val description = stringResource(StringsR.string.playback_current_chapter)
+            val description = stringResource(StringsR.string.playback_chapter_current_content_description)
             val backgroundColor = if (chapter.active) {
               MaterialTheme.colorScheme.primaryContainer
             } else {

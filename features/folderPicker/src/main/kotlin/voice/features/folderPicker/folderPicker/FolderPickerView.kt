@@ -86,13 +86,13 @@ private fun FolderOverviewView(
       MediumTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
-          Text(text = stringResource(StringsR.string.audiobook_folders_title))
+          Text(text = stringResource(StringsR.string.library_folders_title))
         },
         navigationIcon = {
           IconButton(onClick = onCloseClick) {
             Icon(
               imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-              contentDescription = stringResource(StringsR.string.close),
+              contentDescription = stringResource(StringsR.string.common_action_close),
             )
           }
         },
@@ -100,7 +100,7 @@ private fun FolderOverviewView(
     },
     floatingActionButton = {
       if (viewState.showActions) {
-        val text = stringResource(id = StringsR.string.add)
+        val text = stringResource(id = StringsR.string.common_action_add)
         ExtendedFloatingActionButton(
           text = {
             Text(text)
@@ -134,7 +134,7 @@ private fun FolderOverviewView(
                 content = {
                   Icon(
                     imageVector = Icons.Outlined.Delete,
-                    contentDescription = stringResource(StringsR.string.delete),
+                    contentDescription = stringResource(StringsR.string.common_action_delete),
                   )
                 },
               )

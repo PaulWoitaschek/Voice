@@ -32,9 +32,9 @@ internal fun SkipButton(
     imageVector = Icons.AutoMirrored.Filled.Undo,
     contentDescription = stringResource(
       id = if (forward) {
-        R.string.fast_forward
+        R.string.playback_action_fast_forward
       } else {
-        R.string.rewind
+        R.string.playback_action_rewind
       },
     ),
   )

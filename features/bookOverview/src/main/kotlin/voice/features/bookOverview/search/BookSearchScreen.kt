@@ -52,7 +52,7 @@ internal fun BookSearchContent(
             leadingContent = {
               Icon(
                 imageVector = Icons.Outlined.History,
-                contentDescription = stringResource(id = StringsR.string.cover_search_icon_recent),
+                contentDescription = stringResource(id = StringsR.string.cover_search_recent_content_description),
               )
             },
           )
@@ -65,7 +65,7 @@ internal fun BookSearchContent(
             leadingContent = {
               Icon(
                 imageVector = Icons.Outlined.SentimentSatisfied,
-                contentDescription = stringResource(id = StringsR.string.cover_search_author),
+                contentDescription = stringResource(id = StringsR.string.cover_search_author_content_description),
               )
             },
           )

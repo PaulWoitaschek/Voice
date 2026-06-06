@@ -119,12 +119,12 @@ internal fun BookmarkScreen(
     },
     topBar = {
       TopAppBar(
-        title = { Text(text = stringResource(id = StringsR.string.bookmark)) },
+        title = { Text(text = stringResource(id = StringsR.string.bookmark_title)) },
         navigationIcon = {
           IconButton(onClick = onClose) {
             Icon(
               imageVector = Icons.Default.Close,
-              contentDescription = stringResource(id = StringsR.string.close),
+              contentDescription = stringResource(id = StringsR.string.common_action_close),
             )
           }
         },
@@ -134,7 +134,7 @@ internal fun BookmarkScreen(
       FloatingActionButton(
         onClick = onAdd,
         content = {
-          Icon(Icons.Default.Add, contentDescription = stringResource(id = StringsR.string.add))
+          Icon(Icons.Default.Add, contentDescription = stringResource(id = StringsR.string.common_action_add))
         },
       )
     },
@@ -217,7 +217,7 @@ internal fun BookmarkItem(
             .padding(start = 16.dp)
             .align(Alignment.CenterStart),
           imageVector = Icons.Outlined.Delete,
-          contentDescription = stringResource(id = StringsR.string.delete),
+          contentDescription = stringResource(id = StringsR.string.common_action_delete),
           tint = Color.White,
         )
       }
@@ -238,7 +238,7 @@ internal fun BookmarkItem(
                   .padding(start = 4.dp)
                   .size(16.dp),
                 imageVector = Icons.Outlined.Timer,
-                contentDescription = stringResource(StringsR.string.action_sleep),
+                contentDescription = stringResource(StringsR.string.sleep_timer_action_open),
               )
             }
           }
@@ -252,7 +252,7 @@ internal fun BookmarkItem(
               content = {
                 Icon(
                   imageVector = Icons.Default.MoreVert,
-                  contentDescription = stringResource(id = StringsR.string.popup_edit),
+                  contentDescription = stringResource(id = StringsR.string.common_action_edit),
                 )
               },
             )
@@ -261,14 +261,14 @@ internal fun BookmarkItem(
               onDismissRequest = { expanded = false },
             ) {
               DropdownMenuItem(
-                text = { Text(stringResource(id = StringsR.string.popup_edit)) },
+                text = { Text(stringResource(id = StringsR.string.common_action_edit)) },
                 onClick = {
                   expanded = false
                   onEdit(bookmark.id)
                 },
               )
               DropdownMenuItem(
-                text = { Text(stringResource(id = StringsR.string.remove)) },
+                text = { Text(stringResource(id = StringsR.string.common_action_remove)) },
                 onClick = {
                   expanded = false
                   onDelete(bookmark.id)

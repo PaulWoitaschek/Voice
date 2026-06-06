@@ -42,7 +42,7 @@ internal fun ChapterRow(
         Icon(
           modifier = Modifier.size(36.dp),
           imageVector = Icons.Outlined.ChevronLeft,
-          contentDescription = stringResource(id = R.string.previous_track),
+          contentDescription = stringResource(id = R.string.playback_chapter_previous),
         )
       }
     }
@@ -67,7 +67,7 @@ internal fun ChapterRow(
         Icon(
           modifier = Modifier.size(28.dp),
           imageVector = Icons.Outlined.ExpandMore,
-          contentDescription = stringResource(id = R.string.next_track),
+          contentDescription = stringResource(id = R.string.playback_chapter_next),
         )
       }
     }
@@ -76,7 +76,7 @@ internal fun ChapterRow(
         Icon(
           modifier = Modifier.size(36.dp),
           imageVector = Icons.Outlined.ChevronRight,
-          contentDescription = stringResource(id = R.string.next_track),
+          contentDescription = stringResource(id = R.string.playback_chapter_next),
         )
       }
     }

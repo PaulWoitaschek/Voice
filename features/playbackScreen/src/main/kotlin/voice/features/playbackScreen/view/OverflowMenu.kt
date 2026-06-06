@@ -32,7 +32,7 @@ internal fun OverflowMenu(
     ) {
       Icon(
         imageVector = Icons.Outlined.MoreVert,
-        contentDescription = stringResource(id = R.string.more),
+        contentDescription = stringResource(id = R.string.common_action_more),
       )
     }
     DropdownMenu(
@@ -45,7 +45,7 @@ internal fun OverflowMenu(
           onSkipSilenceClick()
         },
         text = {
-          Text(text = stringResource(id = R.string.skip_silence))
+          Text(text = stringResource(id = R.string.playback_option_skip_silence))
         },
         trailingIcon = {
           Checkbox(
@@ -63,7 +63,7 @@ internal fun OverflowMenu(
           onVolumeBoostClick()
         },
         text = {
-          Text(text = stringResource(id = R.string.volume_boost))
+          Text(text = stringResource(id = R.string.playback_option_volume_boost))
         },
       )
     }

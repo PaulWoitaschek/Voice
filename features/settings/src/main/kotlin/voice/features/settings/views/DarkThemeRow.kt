@@ -22,7 +22,7 @@ internal fun DarkThemeRow(
       }
       .fillMaxWidth(),
     headlineContent = {
-      Text(text = stringResource(StringsR.string.pref_theme_dark))
+      Text(text = stringResource(StringsR.string.settings_appearance_dark_theme_title))
     },
     trailingContent = {
       Switch(

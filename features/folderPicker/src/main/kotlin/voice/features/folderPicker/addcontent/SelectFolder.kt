@@ -57,8 +57,8 @@ internal fun SelectFolder(
             modifier = Modifier.padding(horizontal = 24.dp),
             text = stringResource(
               when (origin) {
-                Origin.Default -> StringsR.string.select_folder_title_default
-                Origin.Onboarding -> StringsR.string.select_folder_title_onboarding
+                Origin.Default -> StringsR.string.folder_add_title_default
+                Origin.Onboarding -> StringsR.string.folder_add_title_onboarding
               },
             ),
             style = MaterialTheme.typography.displayMedium,
@@ -66,7 +66,7 @@ internal fun SelectFolder(
           Spacer(modifier = Modifier.size(4.dp))
           Text(
             modifier = Modifier.padding(horizontal = 24.dp),
-            text = stringResource(StringsR.string.select_folder_subtitle),
+            text = stringResource(StringsR.string.folder_add_type_subtitle),
             style = MaterialTheme.typography.bodyLarge,
           )
           Spacer(modifier = Modifier.size(24.dp))

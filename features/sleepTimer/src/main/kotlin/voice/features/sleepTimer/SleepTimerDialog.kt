@@ -58,7 +58,7 @@ fun SleepTimerDialog(
         modifier = Modifier
           .padding(horizontal = 16.dp)
           .fillMaxWidth(),
-        text = stringResource(id = StringsR.string.sleep_timer_title),
+        text = stringResource(id = StringsR.string.sleep_timer_dialog_title),
         style = MaterialTheme.typography.headlineSmall,
         textAlign = TextAlign.Center,
       )
@@ -87,12 +87,12 @@ fun SleepTimerDialog(
             ContinuousPressIcon(
               onEmit = onDecrementSleepTime,
               icon = Icons.Outlined.Remove,
-              contentDescription = stringResource(id = StringsR.string.sleep_timer_button_decrement),
+              contentDescription = stringResource(id = StringsR.string.sleep_timer_dialog_action_decrement),
             )
             ContinuousPressIcon(
               onEmit = onIncrementSleepTime,
               icon = Icons.Outlined.Add,
-              contentDescription = stringResource(id = StringsR.string.sleep_timer_button_increment),
+              contentDescription = stringResource(id = StringsR.string.sleep_timer_dialog_action_increment),
             )
           }
         },
@@ -101,7 +101,7 @@ fun SleepTimerDialog(
         modifier = Modifier.clickable(onClick = onAcceptSleepAtEndOfChapter),
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
         headlineContent = {
-          Text(text = stringResource(id = StringsR.string.end_of_chapter))
+          Text(text = stringResource(id = StringsR.string.sleep_timer_end_of_chapter))
         },
       )
       Spacer(modifier = Modifier.size(32.dp))
@@ -155,5 +155,5 @@ private fun ContinuousPressIcon(
 @Composable
 @ReadOnlyComposable
 private fun minutes(minutes: Int): String {
-  return pluralStringResource(StringsR.plurals.minutes, minutes, minutes)
+  return pluralStringResource(StringsR.plurals.duration_minutes, minutes, minutes)
 }

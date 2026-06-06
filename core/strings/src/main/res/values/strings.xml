@@ -1,127 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
-    <string name="cover">Cover</string>
-    <string name="play_pause">Play / Pause</string>
-    <string name="play">Play</string>
-    <string name="pause">Pause</string>
-    <string name="action_sleep">Sleep-Timer</string>
-    <string name="rewind">Rewind</string>
-    <string name="fast_forward">Fast forward</string>
-    <string name="previous_track">Previous track</string>
-    <string name="next_track">Next track</string>
-    <string name="skip_silence">Skip Silence</string>
-    <string name="volume_boost">Volume boost</string>
-    <string name="more">More</string>
-    <string name="dialog_confirm">Set</string>
-    <string name="dialog_cancel">Cancel</string>
-    <string name="content_cover">Shows cover to choose</string>
-    <string name="change_book_name">Name</string>
-    <string name="download_book_cover">Cover from the Internet</string>
-    <string name="pick_book_cover">Cover from the file system</string>
-    <string name="cover_search_template_no_author">%s audiobook cover</string>
-    <string name="cover_search_template_with_author">%1$s by %2$s audiobook cover</string>
-    <string name="cover_search.icon_recent">Recent query</string>
-    <string name="cover_search.author">Author</string>
-    <string name="edit_book_title">Edit book</string>
-    <string name="mark_as_completed">Mark as Completed</string>
-    <string name="mark_as_current">Mark as Current</string>
-    <string name="mark_as_not_started">Mark as Not Started Yet</string>
-    <string name="audiobook_folders_title">Audiobook folders</string>
-    <string name="pref_audiobook_folders_explanation">Manage folders scanned for audiobooks</string>
-    <string name="playback_speed">Playback speed</string>
-    <string name="bookmark">Bookmark</string>
-    <string name="bookmark_edit_title">Edit bookmark</string>
-    <string name="bookmark_edit_hint">Bookmark name</string>
-    <string name="bookmark_added">Bookmark added</string>
-    <string name="action_settings">Preferences</string>
-    <plurals name="seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
-    </plurals>
-    <string name="pref_seek_time">Skip amount</string>
-    <string name="pref_theme_dark">Dark Theme</string>
-    <string name="pref_auto_rewind_title">Auto rewind</string>
-    <string name="pref_suggest_idea">Suggest an idea</string>
-    <string name="pref_use_grid">Use grid layout</string>
-    <string name="pref_report_issue">Report a problem</string>
-    <string name="pref_help_translating">Help translating Voice</string>
-    <string name="pref_get_support">Get support</string>
-    <string name="pref_app_version">App version</string>
-    <string name="pref_faq">FAQ</string>
-    <string name="popup_edit">Edit</string>
-    <string name="remove">Remove</string>
-    <string name="play_current">Play current</string>
-    <string name="book_header_current">Current</string>
-    <string name="book_header_not_started">Not started Yet</string>
-    <string name="book_header_completed">Completed</string>
-    <string name="close">Close</string>
-    <string name="delete">Delete</string>
-    <string name="add">Add</string>
-    <string name="folder_mode_root">Top-Level Book Mode: Subfolders are books</string>
-    <string name="folder_mode_single">Single Book Mode: One folder equals one book.</string>
-    <string name="folder_mode_author">Author-Book Mode: Subfolders are authors, sub-subfolders are books.</string>
-    <plurals name="folder_type_file_count">
-        <item quantity="one">%d audio file</item>
-        <item quantity="other">%d audio files</item>
-    </plurals>
-    <string name="folder_type_book_example_header">This would lead to the following books being detected</string>
-    <string name="folder_type_no_books">Voice could not detect any books. Are there any audio files?</string>
-    <string name="folder_type_title">How are your files structured?</string>
-    <string name="bookmark_just_now">Just now</string>
-    <string name="voice_intro_first_book">Let\'s add your audiobook folder so you can start listening!</string>
-    <string name="delete_book_bottom_sheet_title">Delete Book</string>
-    <string name="delete_book_dialog_title">Delete Book</string>
-    <string name="delete_book_dialog_deletion_confirmation">Delete my files</string>
-    <string name="delete_book_dialog_content">This will delete the files on your device.</string>
-    <string name="search_hint">What are you looking for?</string>
-    <string name="battery_optimization_rationale">Due to your Power restrictions, playback interruptions might happen.</string>
-    <string name="battery_optimization_action">Update</string>
-    <string name="media_session_root">All audiobooks</string>
-    <string name="media_session_recent">Recent</string>
-    <string name="end_of_chapter">End of Chapter</string>
-    <string name="generic_error_message">Something went wrong 😢</string>
-    <string name="generic_error_retry">Retry</string>
-    <string name="storage_bug_title">Permission required</string>
-    <string name="storage_bug_subtitle">For certain devices, a system app is missing the necessary permission to access the external storage. This access is essential for Voice to read your audiobooks.</string>
-    <string name="storage_bug_button">Grant permission</string>
-    <string name="select_folder_title_onboarding">Add Your First Audiobook</string>
-    <string name="select_folder_title_default">Add your Audiobook(s)</string>
-    <string name="select_folder_type_file">File</string>
-    <string name="select_folder_type_folder">Folder</string>
-    <string name="select_folder_subtitle">Would you like to add a single file as a book or a folder?</string>
-    <string name="onboarding_welcome_title">Welcome to Voice!</string>
-    <string name="onboarding_welcome_subtitle">Your personal pocket audiobook player. Let\'s get you set up.</string>
-    <string name="onboarding.button_next">Next</string>
-    <string name="onboarding.explanation.title">Your Library, Your Way</string>
-    <string name="onboarding.explanation.subtitle">With Voice, you can add books as individual files or organize them in folders. You choose!</string>
-    <string name="onboarding.completion.title">You\'re All Set!</string>
-    <string name="onboarding.completion.subtitle">Your first audiobook is ready to play. Enjoy your journey with Voice!</string>
-    <string name="onboarding.completion.next_button">Start Listening</string>
-    <string name="onboarding_analytics_consent_title">Help improve Voice</string>
-    <string name="onboarding_analytics_consent_description">Allow us to collect anonymous usage data to help improve the app. You can change this later in settings.</string>
-    <string name="onboarding_analytics_consent_button_enable">Continue with analytics</string>
-    <string name="onboarding_analytics_consent_button_disable">Continue without analytics</string>
-    <string name="onboarding_analytics_consent_privacy_policy">Privacy Policy</string>
-    <string name="settings_analytics_consent_title">Analytics</string>
-    <string name="settings_analytics_consent_description">Allow anonymous usage data collection to help improve the app</string>
-    <string name="review.request.title">Enjoying Voice?</string>
-    <string name="review.request.content">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
-    <string name="review.request.button.yes">Rate Now</string>
-    <string name="review.request.button.no">No, Thanks</string>
-    <string name="review.feedback.title">We\'re sorry to hear that!</string>
-    <string name="review.feedback.content">Could you tell us what went wrong? We appreciate your feedback and it helps us to improve your experience.</string>
-    <string name="review.feedback.button.yes">Send Feedback</string>
-    <string name="review.feedback.button.no">Cancel</string>
-    <string name="sleep_timer.title">Sweet dreams! 🌙</string>
-    <string name="sleep_timer.button.increment">Longer</string>
-    <string name="sleep_timer.button.decrement">Shorter</string>
-    <string name="auto_sleep_timer.title">Automatic Sleep Timer</string>
-    <string name="auto_sleep_timer.subtitle">Start a sleep timer automatically when playback begins between %1$s and %2$s</string>
-    <string name="auto_sleep_timer.start" weblate-flags="max-length:16">Set start time</string>
-    <string name="auto_sleep_timer.end" weblate-flags="max-length:16">Set end time</string>
-    <plurals name="minutes">
+    <!-- Bottom-sheet action for moving a book to the completed category. -->
+    <string name="book.category.action.mark_completed">Mark as Completed</string>
+    <!-- Bottom-sheet action for moving a book to the current category. -->
+    <string name="book.category.action.mark_current">Mark as Current</string>
+    <!-- Bottom-sheet action for moving a book to the not-started category. -->
+    <string name="book.category.action.mark_not_started">Mark as Not Started Yet</string>
+    <!-- Bottom-sheet action title for deleting a book. -->
+    <string name="book.delete.bottom_sheet.title">Delete Book</string>
+    <!-- Checkbox label confirming that book files should be deleted. -->
+    <string name="book.delete.dialog.confirm_files">Delete my files</string>
+    <!-- Warning message in the delete-book confirmation dialog. -->
+    <string name="book.delete.dialog.message">This will delete the files on your device.</string>
+    <!-- Title for the delete-book confirmation dialog. -->
+    <string name="book.delete.dialog.title">Delete Book</string>
+    <!-- Bottom-sheet item for choosing a cover from local files. -->
+    <string name="book.edit.cover.file">Cover from the file system</string>
+    <!-- Bottom-sheet item for choosing a cover from an internet search. -->
+    <string name="book.edit.cover.internet">Cover from the Internet</string>
+    <!-- Label for the editable book-name field and bottom-sheet item. -->
+    <string name="book.edit.name.label">Name</string>
+    <!-- Title for the dialog that edits a book title. -->
+    <string name="book.edit.title">Edit book</string>
+    <!-- Snackbar message shown after creating a bookmark. -->
+    <string name="bookmark.added.snackbar">Bookmark added</string>
+    <!-- Relative timestamp for a bookmark created moments ago. -->
+    <string name="bookmark.created.just_now">Just now</string>
+    <!-- Label for a bookmark-name text field. -->
+    <string name="bookmark.edit.name.label">Bookmark name</string>
+    <!-- Title for the dialog that edits a bookmark. -->
+    <string name="bookmark.edit.title">Edit bookmark</string>
+    <!-- Title for bookmark screens and bookmark actions. -->
+    <string name="bookmark.title">Bookmark</string>
+    <!-- Generic add action and content description. -->
+    <string name="common.action.add">Add</string>
+    <!-- Generic content description for closing the current screen or dialog. -->
+    <string name="common.action.close">Close</string>
+    <!-- Generic delete action and content description. -->
+    <string name="common.action.delete">Delete</string>
+    <!-- Generic edit action in popup menus. -->
+    <string name="common.action.edit">Edit</string>
+    <!-- Content description for an overflow menu button. -->
+    <string name="common.action.more">More</string>
+    <!-- Generic remove action in menus. -->
+    <string name="common.action.remove">Remove</string>
+    <!-- Generic action for dismissing a dialog without applying changes. -->
+    <string name="common.dialog.cancel">Cancel</string>
+    <!-- Generic confirmation action in dialogs that apply a value. -->
+    <string name="common.dialog.confirm">Set</string>
+    <!-- Generic error message shown when cover search or loading fails. -->
+    <string name="common.error.generic.message">Something went wrong 😢</string>
+    <!-- Retry action shown after a generic error. -->
+    <string name="common.error.generic.retry">Retry</string>
+    <!-- Content description for a cover preview that can be selected. -->
+    <string name="cover.content_description.selectable">Shows cover to choose</string>
+    <!-- Content description for an icon indicating the author in cover search results. -->
+    <string name="cover.search.author.content_description">Author</string>
+    <!-- Search query template for cover lookup when title and author are known. -->
+    <string name="cover.search.query.with_author">%1$s by %2$s audiobook cover</string>
+    <!-- Search query template for cover lookup when only the book title is known. -->
+    <string name="cover.search.query.without_author">%s audiobook cover</string>
+    <!-- Content description for an icon indicating a recent cover-search query. -->
+    <string name="cover.search.recent.content_description">Recent query</string>
+    <!-- Generic title for artwork shown for a book or cover editor. -->
+    <string name="cover.title">Cover</string>
+    <!-- Pluralized duration text for sleep timer minutes. -->
+    <plurals name="duration.minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
-    <string name="playback.current_chapter">Current chapter</string>
+    <!-- Pluralized duration text for settings that use seconds. -->
+    <plurals name="duration.seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+    <!-- Title for the folder picker during normal app use. -->
+    <string name="folder.add.title.default">Add your Audiobook(s)</string>
+    <!-- Title for the folder picker when adding the first audiobook during onboarding. -->
+    <string name="folder.add.title.onboarding">Add Your First Audiobook</string>
+    <!-- Button label for adding a single audio file as a book. -->
+    <string name="folder.add.type.file">File</string>
+    <!-- Button label for adding a folder of audiobooks. -->
+    <string name="folder.add.type.folder">Folder</string>
+    <!-- Subtitle asking whether the user wants to add a file or folder. -->
+    <string name="folder.add.type.subtitle">Would you like to add a single file as a book or a folder?</string>
+    <!-- Title for folder mode where subfolders are authors and nested folders are books. -->
+    <string name="folder.mode.author.title">Author-Book Mode: Subfolders are authors, sub-subfolders are books.</string>
+    <!-- Title for folder mode where top-level subfolders are books. -->
+    <string name="folder.mode.root.title">Top-Level Book Mode: Subfolders are books</string>
+    <!-- Title for folder mode where the selected folder is one book. -->
+    <string name="folder.mode.single.title">Single Book Mode: One folder equals one book.</string>
+    <!-- Empty-state message when no books are detected from selected files. -->
+    <string name="folder.type.book_example.empty">Voice could not detect any books. Are there any audio files?</string>
+    <!-- Header above the preview of books detected from a folder structure. -->
+    <string name="folder.type.book_example.header">This would lead to the following books being detected</string>
+    <!-- Pluralized file count shown in folder structure previews. -->
+    <plurals name="folder.type.file_count">
+        <item quantity="one">%d audio file</item>
+        <item quantity="other">%d audio files</item>
+    </plurals>
+    <!-- Title for choosing how audiobook files are structured. -->
+    <string name="folder.type.title">How are your files structured?</string>
+    <!-- Library category header for completed books. -->
+    <string name="library.category.completed.title">Completed</string>
+    <!-- Library category header for books currently being listened to. -->
+    <string name="library.category.current.title">Current</string>
+    <!-- Library category header for books not started yet. -->
+    <string name="library.category.not_started.title">Not started Yet</string>
+    <!-- Library empty-state prompt shown before the first audiobook is added. -->
+    <string name="library.empty.add_first_book">Let\'s add your audiobook folder so you can start listening!</string>
+    <!-- Title for screens and rows that manage audiobook folders. -->
+    <string name="library.folders.title">Audiobook folders</string>
+    <!-- Hint text for searching books in the library. -->
+    <string name="library.search.hint">What are you looking for?</string>
+    <!-- Button label for granting the storage permission workaround. -->
+    <string name="library.storage_permission_bug.action">Grant permission</string>
+    <!-- Message explaining why a storage permission workaround is needed. -->
+    <string name="library.storage_permission_bug.message">For certain devices, a system app is missing the necessary permission to access the external storage. This access is essential for Voice to read your audiobooks.</string>
+    <!-- Title for the card explaining a required storage permission workaround. -->
+    <string name="library.storage_permission_bug.title">Permission required</string>
+    <!-- Media browser title for recently played audiobooks. -->
+    <string name="media_session.library.recent">Recent</string>
+    <!-- Media browser root title for all audiobooks. -->
+    <string name="media_session.library.root">All audiobooks</string>
+    <!-- Button label for advancing to the next onboarding step. -->
+    <string name="onboarding.action.next">Next</string>
+    <!-- Button label for continuing with analytics disabled. -->
+    <string name="onboarding.analytics_consent.action.disable">Continue without analytics</string>
+    <!-- Button label for continuing with analytics enabled. -->
+    <string name="onboarding.analytics_consent.action.enable">Continue with analytics</string>
+    <!-- Link label for opening the privacy policy from analytics consent. -->
+    <string name="onboarding.analytics_consent.action.privacy_policy">Privacy Policy</string>
+    <!-- Description for analytics consent during onboarding. -->
+    <string name="onboarding.analytics_consent.description">Allow us to collect anonymous usage data to help improve the app. You can change this later in settings.</string>
+    <!-- Title for analytics consent during onboarding. -->
+    <string name="onboarding.analytics_consent.title">Help improve Voice</string>
+    <!-- Button label for leaving onboarding and starting playback. -->
+    <string name="onboarding.completion.action.start_listening">Start Listening</string>
+    <!-- Subtitle on the onboarding completion screen. -->
+    <string name="onboarding.completion.subtitle">Your first audiobook is ready to play. Enjoy your journey with Voice!</string>
+    <!-- Title on the onboarding completion screen. -->
+    <string name="onboarding.completion.title">You\'re All Set!</string>
+    <!-- Subtitle explaining file and folder choices in onboarding. -->
+    <string name="onboarding.explanation.subtitle">With Voice, you can add books as individual files or organize them in folders. You choose!</string>
+    <!-- Title on the onboarding explanation screen. -->
+    <string name="onboarding.explanation.title">Your Library, Your Way</string>
+    <!-- Subtitle on the onboarding welcome screen. -->
+    <string name="onboarding.welcome.subtitle">Your personal pocket audiobook player. Let\'s get you set up.</string>
+    <!-- Title on the onboarding welcome screen. -->
+    <string name="onboarding.welcome.title">Welcome to Voice!</string>
+    <!-- Label for the playback action that skips forward. -->
+    <string name="playback.action.fast_forward">Fast forward</string>
+    <!-- Content description for a playback button that pauses audio. -->
+    <string name="playback.action.pause">Pause</string>
+    <!-- Content description for a playback button that starts audio. -->
+    <string name="playback.action.play">Play</string>
+    <!-- Content description for a control that toggles playback between play and pause. -->
+    <string name="playback.action.play_pause">Play / Pause</string>
+    <!-- Label for the playback action that skips backward. -->
+    <string name="playback.action.rewind">Rewind</string>
+    <!-- Action label for opening battery optimization settings. -->
+    <string name="playback.battery_optimization.action">Update</string>
+    <!-- Snackbar or prompt text explaining playback issues caused by power restrictions. -->
+    <string name="playback.battery_optimization.rationale">Due to your Power restrictions, playback interruptions might happen.</string>
+    <!-- Content description prefix for the currently playing chapter. -->
+    <string name="playback.chapter.current.content_description">Current chapter</string>
+    <!-- Content description for moving to the next chapter or track. -->
+    <string name="playback.chapter.next">Next track</string>
+    <!-- Content description for moving to the previous chapter or track. -->
+    <string name="playback.chapter.previous">Previous track</string>
+    <!-- Menu label for toggling silence skipping during playback. -->
+    <string name="playback.option.skip_silence">Skip Silence</string>
+    <!-- Menu and dialog title for changing volume gain. -->
+    <string name="playback.option.volume_boost">Volume boost</string>
+    <!-- Title and content description for playback-speed controls. -->
+    <string name="playback.speed.title">Playback speed</string>
+    <!-- Negative button for cancelling feedback. -->
+    <string name="review.feedback.action.cancel">Cancel</string>
+    <!-- Positive button for sending feedback. -->
+    <string name="review.feedback.action.send">Send Feedback</string>
+    <!-- Message for the dialog asking unhappy users for feedback. -->
+    <string name="review.feedback.message">Could you tell us what went wrong? We appreciate your feedback and it helps us to improve your experience.</string>
+    <!-- Title for the dialog asking unhappy users for feedback. -->
+    <string name="review.feedback.title">We\'re sorry to hear that!</string>
+    <!-- Negative button for dismissing the rating request. -->
+    <string name="review.request.action.dismiss">No, Thanks</string>
+    <!-- Positive button for opening the rating flow. -->
+    <string name="review.request.action.rate">Rate Now</string>
+    <!-- Message for the dialog asking happy users to rate the app. -->
+    <string name="review.request.message">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
+    <!-- Title for the dialog asking happy users to rate the app. -->
+    <string name="review.request.title">Enjoying Voice?</string>
+    <!-- Settings about row showing the app version. -->
+    <string name="settings.about.app_version.title">App version</string>
+    <!-- Title and content description for opening settings. -->
+    <string name="settings.action.open">Preferences</string>
+    <!-- Settings row description for analytics consent. -->
+    <string name="settings.analytics_consent.description">Allow anonymous usage data collection to help improve the app</string>
+    <!-- Settings row title for analytics consent. -->
+    <string name="settings.analytics_consent.title">Analytics</string>
+    <!-- Title for the dark theme setting. -->
+    <string name="settings.appearance.dark_theme.title">Dark Theme</string>
+    <!-- Label for selecting the automatic sleep timer end time. -->
+    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Set end time</string>
+    <!-- Label for selecting the automatic sleep timer start time. -->
+    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Set start time</string>
+    <!-- Settings summary for the automatic sleep timer time window. -->
+    <string name="settings.auto_sleep_timer.summary">Start a sleep timer automatically when playback begins between %1$s and %2$s</string>
+    <!-- Settings title for automatically starting a sleep timer. -->
+    <string name="settings.auto_sleep_timer.title">Automatic Sleep Timer</string>
+    <!-- Summary text for the audiobook folders settings row. -->
+    <string name="settings.library.folders.summary">Manage folders scanned for audiobooks</string>
+    <!-- Settings row for toggling grid layout in the library. -->
+    <string name="settings.library.use_grid.title">Use grid layout</string>
+    <!-- Title for the setting that rewinds automatically when playback resumes. -->
+    <string name="settings.playback.auto_rewind.title">Auto rewind</string>
+    <!-- Title for the setting that controls skip-forward and rewind duration. -->
+    <string name="settings.playback.seek_time.title">Skip amount</string>
+    <!-- Settings support row for opening the FAQ. -->
+    <string name="settings.support.faq.title">FAQ</string>
+    <!-- Settings support row for getting help. -->
+    <string name="settings.support.get_support.title">Get support</string>
+    <!-- Settings support row for helping translate the app. -->
+    <string name="settings.support.help_translating.title">Help translating Voice</string>
+    <!-- Settings support row for reporting a problem. -->
+    <string name="settings.support.report_issue.title">Report a problem</string>
+    <!-- Settings support row for suggesting a product idea. -->
+    <string name="settings.support.suggest_idea.title">Suggest an idea</string>
+    <!-- Short label for the launcher shortcut that plays the current book. -->
+    <string name="shortcut.play_current.short_label">Play current</string>
+    <!-- Content description for opening the sleep timer. -->
+    <string name="sleep_timer.action.open">Sleep-Timer</string>
+    <!-- Content description for decreasing the sleep timer duration. -->
+    <string name="sleep_timer.dialog.action.decrement">Shorter</string>
+    <!-- Content description for increasing the sleep timer duration. -->
+    <string name="sleep_timer.dialog.action.increment">Longer</string>
+    <!-- Title of the sleep timer dialog. -->
+    <string name="sleep_timer.dialog.title">Sweet dreams! 🌙</string>
+    <!-- Sleep timer option and playback status for stopping at the end of a chapter. -->
+    <string name="sleep_timer.end_of_chapter">End of Chapter</string>
 </resources>

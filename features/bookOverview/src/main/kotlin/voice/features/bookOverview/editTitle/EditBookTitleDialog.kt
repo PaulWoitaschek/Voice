@@ -19,19 +19,19 @@ internal fun EditBookTitleDialog(
   AlertDialog(
     onDismissRequest = onDismissEditTitleClick,
     title = {
-      Text(text = stringResource(StringsR.string.edit_book_title))
+      Text(text = stringResource(StringsR.string.book_edit_title))
     },
     confirmButton = {
       Button(
         onClick = onConfirmEditTitle,
         enabled = viewState.confirmButtonEnabled,
       ) {
-        Text(stringResource(id = StringsR.string.dialog_confirm))
+        Text(stringResource(id = StringsR.string.common_dialog_confirm))
       }
     },
     dismissButton = {
       TextButton(onClick = onDismissEditTitleClick) {
-        Text(stringResource(id = StringsR.string.dialog_cancel))
+        Text(stringResource(id = StringsR.string.common_dialog_cancel))
       }
     },
     text = {
@@ -39,7 +39,7 @@ internal fun EditBookTitleDialog(
         value = viewState.title,
         onValueChange = onUpdateEditTitle,
         label = {
-          Text(stringResource(StringsR.string.change_book_name))
+          Text(stringResource(StringsR.string.book_edit_name_label))
         },
       )
     },

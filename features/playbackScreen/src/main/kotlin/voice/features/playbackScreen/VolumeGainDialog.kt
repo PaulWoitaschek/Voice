@@ -19,7 +19,7 @@ internal fun VolumeGainDialog(
     confirmButton = {},
     text = {
       Column {
-        Text(stringResource(id = StringsR.string.volume_boost) + ": " + dialogState.valueFormatted)
+        Text(stringResource(id = StringsR.string.playback_option_volume_boost) + ": " + dialogState.valueFormatted)
         Slider(
           valueRange = 0F..dialogState.maxGain.value,
           value = dialogState.gain.value,

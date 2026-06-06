@@ -31,7 +31,7 @@ internal fun DeleteBookDialog(
   AlertDialog(
     onDismissRequest = onDismiss,
     title = {
-      Text(stringResource(StringsR.string.delete_book_dialog_title))
+      Text(stringResource(StringsR.string.book_delete_dialog_title))
     },
     confirmButton = {
       Button(
@@ -42,19 +42,19 @@ internal fun DeleteBookDialog(
           contentColor = MaterialTheme.colorScheme.error,
         ),
       ) {
-        Text(stringResource(id = StringsR.string.delete))
+        Text(stringResource(id = StringsR.string.common_action_delete))
       }
     },
     dismissButton = {
       TextButton(
         onClick = onDismiss,
       ) {
-        Text(stringResource(id = StringsR.string.dialog_cancel))
+        Text(stringResource(id = StringsR.string.common_dialog_cancel))
       }
     },
     text = {
       Column {
-        Text(stringResource(id = StringsR.string.delete_book_dialog_content))
+        Text(stringResource(id = StringsR.string.book_delete_dialog_message))
 
         Spacer(modifier = Modifier.heightIn(8.dp))
         Text(viewState.fileToDelete, style = MaterialTheme.typography.bodyLarge)
@@ -72,7 +72,7 @@ internal fun DeleteBookDialog(
             checked = viewState.deleteCheckBoxChecked,
             onCheckedChange = onDeleteCheckBoxCheck,
           )
-          Text(stringResource(id = StringsR.string.delete_book_dialog_deletion_confirmation))
+          Text(stringResource(id = StringsR.string.book_delete_dialog_confirm_files))
         }
       }
     },

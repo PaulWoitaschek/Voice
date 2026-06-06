@@ -40,7 +40,7 @@ internal fun AskForReviewDialog(
     },
     text = {
       Column {
-        Text(stringResource(StringsR.string.review_request_content))
+        Text(stringResource(StringsR.string.review_request_message))
         Spacer(Modifier.size(16.dp))
         Row(
           modifier = Modifier.fillMaxWidth(),
@@ -71,7 +71,7 @@ internal fun AskForReviewDialog(
     },
     dismissButton = {
       TextButton(onClick = onReviewDeny) {
-        Text(stringResource(StringsR.string.review_request_button_no))
+        Text(stringResource(StringsR.string.review_request_action_dismiss))
       }
     },
     confirmButton = {
@@ -80,7 +80,7 @@ internal fun AskForReviewDialog(
           onReview(selectedStars)
         },
       ) {
-        Text(stringResource(StringsR.string.review_request_button_yes))
+        Text(stringResource(StringsR.string.review_request_action_rate))
       }
     },
   )

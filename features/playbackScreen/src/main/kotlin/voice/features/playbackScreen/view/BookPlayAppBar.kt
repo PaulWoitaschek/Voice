@@ -44,7 +44,7 @@ internal fun BookPlayAppBar(
         } else {
           Icons.Outlined.BedtimeOff
         },
-        contentDescription = stringResource(id = R.string.action_sleep),
+        contentDescription = stringResource(id = R.string.sleep_timer_action_open),
       )
     }
     Box(
@@ -60,13 +60,13 @@ internal fun BookPlayAppBar(
     ) {
       Icon(
         imageVector = Icons.Outlined.CollectionsBookmark,
-        contentDescription = stringResource(id = R.string.bookmark),
+        contentDescription = stringResource(id = R.string.bookmark_title),
       )
     }
     IconButton(onClick = onSpeedChangeClick) {
       Icon(
         imageVector = Icons.Outlined.Speed,
-        contentDescription = stringResource(id = R.string.playback_speed),
+        contentDescription = stringResource(id = R.string.playback_speed_title),
       )
     }
     OverflowMenu(

@@ -20,7 +20,7 @@ internal fun BookFolderIcon(
     IconButton(onClick = onClick) {
       Icon(
         imageVector = Icons.Outlined.Book,
-        contentDescription = stringResource(StringsR.string.audiobook_folders_title),
+        contentDescription = stringResource(StringsR.string.library_folders_title),
       )
     }
     if (withHint) {

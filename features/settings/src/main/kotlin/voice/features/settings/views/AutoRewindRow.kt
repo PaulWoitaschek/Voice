@@ -27,16 +27,16 @@ internal fun AutoRewindRow(
     leadingContent = {
       Icon(
         imageVector = Icons.Outlined.FastRewind,
-        contentDescription = stringResource(StringsR.string.pref_auto_rewind_title),
+        contentDescription = stringResource(StringsR.string.settings_playback_auto_rewind_title),
       )
     },
     headlineContent = {
-      Text(text = stringResource(StringsR.string.pref_auto_rewind_title))
+      Text(text = stringResource(StringsR.string.settings_playback_auto_rewind_title))
     },
     supportingContent = {
       Text(
         text = LocalResources.current.getQuantityString(
-          StringsR.plurals.seconds,
+          StringsR.plurals.duration_seconds,
           autoRewindInSeconds,
           autoRewindInSeconds,
         ),
@@ -52,11 +52,11 @@ internal fun AutoRewindAmountDialog(
   onDismiss: () -> Unit,
 ) {
   TimeSettingDialog(
-    title = stringResource(StringsR.string.pref_auto_rewind_title),
+    title = stringResource(StringsR.string.settings_playback_auto_rewind_title),
     currentSeconds = currentSeconds,
     minSeconds = 0,
     maxSeconds = 20,
-    textPluralRes = StringsR.plurals.seconds,
+    textPluralRes = StringsR.plurals.duration_seconds,
     onSecondsConfirm = onSecondsConfirm,
     onDismiss = onDismiss,
   )

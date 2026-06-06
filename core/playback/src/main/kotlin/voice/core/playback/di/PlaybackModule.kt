@@ -106,12 +106,12 @@ interface PlaybackModule {
       .setMediaButtonPreferences(
         listOf(
           CommandButton.Builder(CommandButton.ICON_SKIP_BACK)
-            .setDisplayName(context.getString(StringsR.string.rewind))
+            .setDisplayName(context.getString(StringsR.string.playback_action_rewind))
             .setPlayerCommand(Player.COMMAND_SEEK_BACK)
             .setSlots(CommandButton.SLOT_BACK)
             .build(),
           CommandButton.Builder(CommandButton.ICON_SKIP_FORWARD)
-            .setDisplayName(context.getString(StringsR.string.fast_forward))
+            .setDisplayName(context.getString(StringsR.string.playback_action_fast_forward))
             .setPlayerCommand(Player.COMMAND_SEEK_FORWARD)
             .setSlots(CommandButton.SLOT_FORWARD)
             .build(),

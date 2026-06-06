@@ -41,7 +41,7 @@ internal fun CoverRow(
             is BookPlayViewState.SleepTimerViewState.Enabled.WithDuration -> formatTime(
               timeMs = sleepTimerState.leftDuration.inWholeMilliseconds,
             )
-            BookPlayViewState.SleepTimerViewState.Enabled.WithEndOfChapter -> stringResource(R.string.end_of_chapter)
+            BookPlayViewState.SleepTimerViewState.Enabled.WithEndOfChapter -> stringResource(R.string.sleep_timer_end_of_chapter)
           },
           color = Color.White,
         )

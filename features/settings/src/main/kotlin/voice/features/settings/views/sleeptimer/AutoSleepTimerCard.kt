@@ -30,13 +30,13 @@ internal fun AutoSleepTimerCard(
       Row(Modifier.padding(start = 36.dp)) {
         AutoSleepTimerSetting(
           time = viewState.startTime,
-          label = stringResource(StringsR.string.auto_sleep_timer_start),
+          label = stringResource(StringsR.string.settings_auto_sleep_timer_start_label),
           enabled = viewState.enabled,
           setAutoSleepTime = listener::setAutoSleepTimerStart,
         )
         AutoSleepTimerSetting(
           time = viewState.endTime,
-          label = stringResource(StringsR.string.auto_sleep_timer_end),
+          label = stringResource(StringsR.string.settings_auto_sleep_timer_end_label),
           enabled = viewState.enabled,
           setAutoSleepTime = listener::setAutoSleepTimerEnd,
         )
