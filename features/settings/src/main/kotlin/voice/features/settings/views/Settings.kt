@@ -171,26 +171,6 @@ private fun Settings(
 
       item {
         ListItem(
-          modifier = Modifier.clickable { listener.openSupportVoice() },
-          leadingContent = {
-            Icon(
-              imageVector = Icons.Outlined.FavoriteBorder,
-              contentDescription = stringResource(StringsR.string.settings_support_support_voice_title),
-            )
-          },
-          headlineContent = {
-            Text(stringResource(StringsR.string.settings_support_support_voice_title))
-          },
-          trailingContent = {
-            if (viewState.supporterBadgeVisible) {
-              SupporterBadge()
-            }
-          },
-        )
-      }
-
-      item {
-        ListItem(
           modifier = Modifier.clickable { listener.suggestIdea() },
           leadingContent = {
             Icon(
@@ -258,6 +238,28 @@ private fun Settings(
           },
           headlineContent = {
             Text(stringResource(StringsR.string.settings_support_faq_title))
+          },
+        )
+      }
+      item {
+        ListItem(
+          modifier = Modifier.clickable { listener.openSupportVoice() },
+          leadingContent = {
+            Icon(
+              imageVector = Icons.Outlined.FavoriteBorder,
+              contentDescription = stringResource(StringsR.string.settings_support_support_voice_title),
+            )
+          },
+          headlineContent = {
+            Text(stringResource(StringsR.string.settings_support_support_voice_title))
+          },
+          supportingContent = {
+            Text(stringResource(StringsR.string.settings_support_support_voice_summary))
+          },
+          trailingContent = {
+            if (viewState.supporterBadgeVisible) {
+              SupporterBadge()
+            }
           },
         )
       }

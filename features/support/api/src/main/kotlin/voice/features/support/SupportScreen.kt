@@ -1,23 +1,27 @@
 package voice.features.support
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.retain
@@ -79,14 +83,6 @@ private fun Support(
         .padding(24.dp),
       verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-      Text(
-        text = stringResource(StringsR.string.support_description_maintenance),
-        style = MaterialTheme.typography.bodyLarge,
-      )
-      Text(
-        text = stringResource(StringsR.string.support_description_no_benefits),
-        style = MaterialTheme.typography.bodyMedium,
-      )
       when (viewState.backendState) {
         is SupportBackendState.Free -> {
           FreeSupportContent(
@@ -95,6 +91,10 @@ private fun Support(
           )
         }
         SupportBackendState.PlayUnavailable -> {
+          Text(
+            text = stringResource(StringsR.string.support_description_maintenance),
+            style = MaterialTheme.typography.bodyLarge,
+          )
           Text(
             text = stringResource(StringsR.string.support_play_unavailable_message),
             style = MaterialTheme.typography.bodyMedium,
@@ -110,16 +110,99 @@ private fun FreeSupportContent(
   supporterBadgeVisible: Boolean,
   listener: SupportListener,
 ) {
-  Column {
-    if (supporterBadgeVisible) {
+  if (supporterBadgeVisible) {
+    SupportedContent(listener)
+  } else {
+    DonationContent(listener)
+  }
+}
+
+@Composable
+private fun DonationContent(listener: SupportListener) {
+  Column(
+    modifier = Modifier.fillMaxWidth(),
+    verticalArrangement = Arrangement.spacedBy(16.dp),
+  ) {
+    Text(
+      text = stringResource(StringsR.string.support_description_maintenance),
+      style = MaterialTheme.typography.bodyLarge,
+    )
+
+    OutlinedCard(
+      modifier = Modifier.fillMaxWidth(),
+      shape = RoundedCornerShape(8.dp),
+    ) {
       Text(
-        text = stringResource(StringsR.string.support_thank_you),
+        modifier = Modifier.padding(16.dp),
+        text = stringResource(StringsR.string.support_description_no_benefits),
         style = MaterialTheme.typography.bodyMedium,
       )
-      SupporterBadge()
     }
 
     Button(
+      modifier = Modifier.fillMaxWidth(),
+      onClick = listener::openSupport,
+    ) {
+      Icon(
+        imageVector = Icons.Outlined.FavoriteBorder,
+        contentDescription = null,
+      )
+      Text(stringResource(StringsR.string.support_action_donate_kofi))
+    }
+
+    Text(
+      text = stringResource(StringsR.string.support_already_donated),
+      style = MaterialTheme.typography.titleSmall,
+    )
+
+    OutlinedButton(
+      modifier = Modifier.fillMaxWidth(),
+      onClick = {
+        listener.setSupporterBadgeVisible(true)
+      },
+    ) {
+      Text(stringResource(StringsR.string.support_action_show_badge))
+    }
+
+    Text(
+      text = stringResource(StringsR.string.support_description_local_badge),
+      style = MaterialTheme.typography.bodySmall,
+    )
+  }
+}
+
+@Composable
+private fun SupportedContent(listener: SupportListener) {
+  Column(
+    modifier = Modifier.fillMaxWidth(),
+    verticalArrangement = Arrangement.spacedBy(16.dp),
+  ) {
+    OutlinedCard(
+      modifier = Modifier.fillMaxWidth(),
+      shape = RoundedCornerShape(8.dp),
+    ) {
+      Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+      ) {
+        Text(
+          text = stringResource(StringsR.string.support_badge_label),
+          style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+          text = stringResource(StringsR.string.support_thank_you),
+          style = MaterialTheme.typography.bodyMedium,
+        )
+        Text(
+          text = stringResource(StringsR.string.support_description_local_badge),
+          style = MaterialTheme.typography.bodySmall,
+        )
+        SupporterBadge()
+      }
+    }
+
+    Button(
+      modifier = Modifier.fillMaxWidth(),
       onClick = listener::openSupport,
     ) {
       Icon(
@@ -129,31 +212,25 @@ private fun FreeSupportContent(
       Text(stringResource(StringsR.string.support_action_open_kofi))
     }
 
-    if (supporterBadgeVisible) {
-      TextButton(
-        onClick = {
+    ListItem(
+      modifier = Modifier
+        .fillMaxWidth()
+        .clickable {
           listener.setSupporterBadgeVisible(false)
         },
-      ) {
-        Text(stringResource(StringsR.string.support_action_hide_badge))
-      }
-    } else {
-      OutlinedButton(
-        onClick = {
-          listener.setSupporterBadgeVisible(true)
-        },
-      ) {
-        Icon(
-          imageVector = Icons.Outlined.CheckCircle,
-          contentDescription = null,
+      headlineContent = {
+        Text(stringResource(StringsR.string.support_badge_setting))
+      },
+      supportingContent = {
+        Text(stringResource(StringsR.string.support_badge_setting_summary))
+      },
+      trailingContent = {
+        Switch(
+          checked = true,
+          onCheckedChange = listener::setSupporterBadgeVisible,
         )
-        Text(stringResource(StringsR.string.support_action_i_supported_kofi))
-      }
-      Text(
-        text = stringResource(StringsR.string.support_description_local_badge),
-        style = MaterialTheme.typography.bodySmall,
-      )
-    }
+      },
+    )
   }
 }
 
