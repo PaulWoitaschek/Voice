@@ -121,4 +121,10 @@
     <string name="end_of_chapter">Fin du chapitre</string>
     <string name="onboarding_analytics_consent_title">Aidez-nous à améliorer Voice</string>
     <string name="onboarding_analytics_consent_description">Autorisez-nous à collecter des données d\'utilisation anonymes afin d\'améliorer l\'application. Vous pouvez modifier ce paramètre ultérieurement dans les réglages.</string>
+    <string name="pref_audiobook_folders_explanation">Gérer les dossiers analysés pour les livres audio</string>
+    <string name="onboarding_analytics_consent_button_enable">Continuer avec les analyses</string>
+    <string name="onboarding_analytics_consent_button_disable">Continuer sans les analyses</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Politique de confidentialité</string>
+    <string name="settings_analytics_consent_title">Analyses</string>
+    <string name="settings_analytics_consent_description">Autoriser la collecte de données d\'utilisation anonymes afin d\'améliorer l\'application</string>
 </resources>

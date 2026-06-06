@@ -23,10 +23,6 @@ android {
 
   namespace = "voice.app"
 
-  androidResources {
-    generateLocaleConfig = true
-  }
-
   dependenciesInfo {
     // disable the dependencies info in apks to allow reproducible builds
     // see https://github.com/PaulWoitaschek/Voice/discussions/2862#discussioncomment-13622836

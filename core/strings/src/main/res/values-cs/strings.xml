@@ -122,4 +122,12 @@
     <string name="playback.current_chapter">Aktuální kapitola</string>
     <string name="auto_sleep_timer.subtitle">Automatické spuštění časovače spánku při zahájení přehrávání mezi %1$s a %2$s</string>
     <string name="end_of_chapter">Konec kapitoly</string>
+    <string name="pref_audiobook_folders_explanation">Spravovat složky pro prohledávání audioknih</string>
+    <string name="onboarding_analytics_consent_title">Pomozte zlepšit Voice</string>
+    <string name="onboarding_analytics_consent_description">Povolte nám shromažďovat anonymní údaje o používání, abychom mohli aplikaci zlepšovat. Toto nastavení můžete později změnit v nastavení.</string>
+    <string name="onboarding_analytics_consent_button_enable">Pokračovat s analytikou</string>
+    <string name="onboarding_analytics_consent_button_disable">Pokračovat bez analytiky</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Zásady ochrany osobních údajů</string>
+    <string name="settings_analytics_consent_title">Analytika</string>
+    <string name="settings_analytics_consent_description">Povolit shromažďování anonymních údajů o používání pro zlepšení aplikace</string>
 </resources>

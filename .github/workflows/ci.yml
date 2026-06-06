@@ -30,6 +30,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/build_setup
+      - name: Check locale config
+        run: ./scripts/check_locale_config.main.kts
       - name: Tests + Formatting + Build
         run: ./gradlew voiceUnitTest lintKotlin :app:assembleFreeDebug
       - name: Publish JUnit Report

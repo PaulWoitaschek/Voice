@@ -115,4 +115,13 @@
     <string name="pref_faq">Veelgestelde vragen</string>
     <string name="auto_sleep_timer.title">Automatische Slaaptimer</string>
     <string name="auto_sleep_timer.subtitle">Start automatisch een slaaptimer wanneer het afspelen begint tussen %1$s en %2$s</string>
+    <string name="pref_audiobook_folders_explanation">Beheer mappen die op luisterboeken worden gescand</string>
+    <string name="end_of_chapter">Einde van hoofdstuk</string>
+    <string name="onboarding_analytics_consent_title">Help Voice verbeteren</string>
+    <string name="onboarding_analytics_consent_description">Sta ons toe anonieme gebruiksgegevens te verzamelen om de app te verbeteren. Je kunt dit later wijzigen in de instellingen.</string>
+    <string name="onboarding_analytics_consent_button_enable">Doorgaan met analysegegevens</string>
+    <string name="onboarding_analytics_consent_button_disable">Doorgaan zonder analysegegevens</string>
+    <string name="onboarding_analytics_consent_privacy_policy">Privacybeleid</string>
+    <string name="settings_analytics_consent_title">Analyse</string>
+    <string name="settings_analytics_consent_description">Anonieme gebruiksgegevens verzamelen toestaan om de app te verbeteren</string>
 </resources>
