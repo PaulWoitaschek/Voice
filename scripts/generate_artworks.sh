@@ -6,7 +6,7 @@ cd "$repo_root/artwork"
 
 if [[ ! -d node_modules ]]; then
   npm install
-  npx playwright install chromium
 fi
+npx playwright install chromium
 
 npm run render
