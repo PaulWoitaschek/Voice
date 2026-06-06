@@ -6,6 +6,7 @@ import sharp from 'sharp'
 import { createServer, type ViteDevServer } from 'vite'
 import { listLocaleDirs, listLocales, imagesDir } from './locales.ts'
 import { readMarketing } from './strings.ts'
+import os from 'node:os';
 
 type AssetKind = 'feature-graphic' | 'phone' | 'tablet-7' | 'tablet-10'
 
@@ -40,7 +41,7 @@ const ASSETS: AssetSpec[] = [
   }
 ]
 
-const CONCURRENCY = 4
+const CONCURRENCY = os.availableParallelism();
 const PNG_OPTIONS = {
   adaptiveFiltering: true,
   compressionLevel: 9,
@@ -74,7 +75,7 @@ async function renderOne(
   })
   try {
     await page.goto(url, { waitUntil: 'load' })
-    await page.waitForFunction(() => document.body.dataset.ready === '1', undefined, { timeout: 15000 })
+    await page.waitForFunction(() => document.body.dataset.ready === '1', undefined, { timeout: 30000 })
     const dir = asset.outDir(locale)
     mkdirSync(dir, { recursive: true })
     const out = join(dir, asset.outName(locale, index))
@@ -132,7 +133,7 @@ async function main() {
     console.error('No locales with marketing.yml found.')
     process.exit(1)
   }
-  console.log(`Rendering for ${locales.length} locales: ${locales.join(', ')}`)
+  console.log(`Rendering for ${locales.length} locales: ${locales.join(', ')} with concurrency: ${CONCURRENCY}`)
 
   for (const locale of listLocaleDirs()) {
     cleanGeneratedImages(locale)
