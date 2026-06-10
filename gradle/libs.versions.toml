@@ -14,7 +14,7 @@ agp = "9.2.1"
 ktlint-core = "1.8.0"
 ktlint-gradlePlugin = "0.14.0"
 retrofit = "3.0.0"
-metro = "1.1.1"
+metro = "1.2.0"
 navigation3 = "1.1.2"
 
 [libraries]
