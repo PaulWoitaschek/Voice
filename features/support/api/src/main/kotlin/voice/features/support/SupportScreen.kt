@@ -2,9 +2,11 @@ package voice.features.support
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,11 +46,11 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
-import voice.features.support.api.R
 import voice.navigation.BottomSheetNav
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 
 @Composable
 @Preview
@@ -138,13 +141,32 @@ private fun SupportHeader() {
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-      Image(
+      Box(
         modifier = Modifier
           .size(40.dp)
           .clip(CircleShape),
-        painter = painterResource(R.drawable.laun),
-        contentDescription = null,
-      )
+      ) {
+        val iconInset = 1.5F
+        Box(
+          modifier = Modifier
+            .fillMaxSize()
+            .graphicsLayer(
+              scaleX = iconInset,
+              scaleY = iconInset,
+            ),
+        ) {
+          Image(
+            modifier = Modifier.fillMaxSize(),
+            painter = painterResource(UiR.drawable.ic_launcher_background),
+            contentDescription = null,
+          )
+          Image(
+            modifier = Modifier.fillMaxSize(),
+            painter = painterResource(UiR.drawable.ic_launcher_foreground),
+            contentDescription = null,
+          )
+        }
+      }
       Text(
         text = stringResource(StringsR.string.support_title),
         style = MaterialTheme.typography.titleLarge,
