@@ -81,14 +81,6 @@ private fun Support(
         DonationContent(listener)
       }
       SupportBackendState.PlayUnavailable -> {
-        Text(
-          text = stringResource(StringsR.string.support_description_maintenance),
-          style = MaterialTheme.typography.bodyLarge,
-        )
-        Text(
-          text = stringResource(StringsR.string.support_play_unavailable_message),
-          style = MaterialTheme.typography.bodyMedium,
-        )
       }
     }
   }

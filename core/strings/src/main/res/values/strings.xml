@@ -245,8 +245,6 @@
     <string name="support.helps.features">New features</string>
     <!-- Support screen list item: keeping Voice free, open source, and ad-free. -->
     <string name="support.helps.open_source">Keeping Voice ad-free</string>
-    <!-- Support screen message for Play builds until Play Billing is implemented. -->
-    <string name="support.play_unavailable.message">In-app support is not available in this build yet.</string>
     <!-- Title of the support screen. -->
     <string name="support.title">Support development</string>
     <!-- Short label for the launcher shortcut that plays the current book. -->
