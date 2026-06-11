@@ -104,6 +104,7 @@ class SettingsViewModel(
       showAnalyticSetting = appInfoProvider.analyticsIncluded,
       showFolderPickerEntry = showFolderPickerEntry,
       showDeveloperMenu = showDeveloperMenu,
+      showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
       kioskMode = kioskMode,
     )
   }

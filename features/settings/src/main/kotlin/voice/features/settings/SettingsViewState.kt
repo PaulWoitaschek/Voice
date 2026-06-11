@@ -15,6 +15,7 @@ data class SettingsViewState(
   val analyticsEnabled: Boolean,
   val showFolderPickerEntry: Boolean,
   val showDeveloperMenu: Boolean,
+  val showSupportDevelopment: Boolean,
   val kioskMode: Boolean,
 ) {
 
@@ -38,6 +39,7 @@ data class SettingsViewState(
         showAnalyticSetting = true,
         showFolderPickerEntry = false,
         showDeveloperMenu = true,
+        showSupportDevelopment = true,
         kioskMode = false,
       )
     }

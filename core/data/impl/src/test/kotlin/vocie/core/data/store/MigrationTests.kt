@@ -57,6 +57,7 @@ interface MigrationTestGraph {
     get() = object : AppInfoProvider {
       override val versionName: String get() = "1.2.3"
       override val analyticsIncluded: Boolean get() = false
+      override val supportDevelopmentIncluded: Boolean get() = false
     }
 
   val sharedPreferences: SharedPreferences

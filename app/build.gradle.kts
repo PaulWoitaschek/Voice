@@ -43,6 +43,7 @@ android {
     register("free") {
       dimension = distributionFlavor
       buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "false")
+      buildConfigField(type = "Boolean", name = "SUPPORT_DEVELOPMENT_INCLUDED", value = "true")
       pluginManager.withPlugin(libs.plugins.crashlytics.get().pluginId) {
         extensions.configure<CrashlyticsExtension>("firebaseCrashlytics") {
           mappingFileUploadEnabled = false
@@ -52,6 +53,7 @@ android {
     register("play") {
       dimension = distributionFlavor
       buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "true")
+      buildConfigField(type = "Boolean", name = "SUPPORT_DEVELOPMENT_INCLUDED", value = "false")
     }
   }
 
