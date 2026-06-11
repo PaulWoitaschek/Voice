@@ -114,7 +114,7 @@
     <string name="settings.playback.auto_rewind.title">Keri automaatselt tagasi</string>
     <string name="settings.playback.seek_time.title">Kerimise samm</string>
     <string name="settings.support.faq.title">KKK</string>
-    <string name="settings.support.get_support.title">Kasutajatugi</string>
+    <string name="settings.support.get_support.title">Küsi abi</string>
     <string name="settings.support.help_translating.title">Aita tõlkida rakendust Voice</string>
     <string name="settings.support.report_issue.title">Teata veast</string>
     <string name="settings.support.suggest_idea.title">Soovita uut ideed</string>
