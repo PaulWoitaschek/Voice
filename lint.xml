@@ -17,7 +17,8 @@
   <!-- renovate takes care of this -->
   <issue id="NewerVersionAvailable" severity="informational" />
   <!-- renovate takes care of this -->
-  <issue id="GradleDependency" severity="informational" />
+  <issue id="GradleDependency" severity="ignore" />
+  <issue id="VectorRaster" severity="ignore" />
   <!-- renovate takes care of this -->
   <issue id="AndroidGradlePluginVersion" severity="informational" />
   <issue id="UnusedQuantity" severity="informational" />
