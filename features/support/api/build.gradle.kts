@@ -4,9 +4,6 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-android{
-  androidResources.enable=true
-}
 dependencies {
   implementation(projects.core.common)
   implementation(projects.core.strings)
