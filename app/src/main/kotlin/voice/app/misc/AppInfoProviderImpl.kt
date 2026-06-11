@@ -8,4 +8,5 @@ import voice.core.common.AppInfoProvider
 class AppInfoProviderImpl : AppInfoProvider {
   override val versionName: String = BuildConfig.VERSION_NAME
   override val analyticsIncluded: Boolean = BuildConfig.INCLUDE_ANALYTICS
+  override val supportDevelopmentIncluded: Boolean = BuildConfig.SUPPORT_DEVELOPMENT_INCLUDED
 }

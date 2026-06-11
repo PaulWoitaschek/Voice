@@ -9,12 +9,14 @@ import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -165,6 +167,27 @@ private fun Settings(
 
       item {
         AutoSleepTimerCard(viewState.autoSleepTimer, listener)
+      }
+
+      if (viewState.showSupportDevelopment) {
+        item {
+          ListItem(
+            modifier = Modifier.clickable { listener.openSupportVoice() },
+            leadingContent = {
+              Icon(
+                imageVector = Icons.Outlined.Favorite,
+                contentDescription = stringResource(StringsR.string.settings_support_support_voice_title),
+                tint = MaterialTheme.colorScheme.primary,
+              )
+            },
+            headlineContent = {
+              Text(stringResource(StringsR.string.settings_support_support_voice_title))
+            },
+            supportingContent = {
+              Text(stringResource(StringsR.string.settings_support_support_voice_summary))
+            },
+          )
+        }
       }
 
       item {

@@ -67,6 +67,11 @@
     <string name="media_session.library.recent">Viimeisin</string>
     <string name="media_session.library.root">Kaikki äänikirjat</string>
     <string name="onboarding.action.next">Seuraava</string>
+    <string name="onboarding.analytics_consent.action.disable">Jatka ilman analytiikkaa</string>
+    <string name="onboarding.analytics_consent.action.enable">Jatka analytiikan kanssa</string>
+    <string name="onboarding.analytics_consent.action.privacy_policy">Tietosuojakäytäntö</string>
+    <string name="onboarding.analytics_consent.description">Salli meidän kerätä anonyymejä käyttötietoja sovelluksen parantamiseksi. Voit muuttaa tätä myöhemmin asetuksissa.</string>
+    <string name="onboarding.analytics_consent.title">Auta parantamaan Voicea</string>
     <string name="onboarding.completion.action.start_listening">Aloita kuuntelemaan</string>
     <string name="onboarding.completion.subtitle">Ensimmäinen äänikirjasi on valmiina kuunneltavaksi. Nauti matkastasi Voicen kanssa!</string>
     <string name="onboarding.completion.title">Olet valmiina!</string>
@@ -97,11 +102,14 @@
     <string name="review.request.title">Pidätkö Voicesta?</string>
     <string name="settings.about.app_version.title">Sovelluksen versio</string>
     <string name="settings.action.open">Asetukset</string>
+    <string name="settings.analytics_consent.description">Salli anonyymien käyttötietojen kerääminen sovelluksen parantamiseksi</string>
+    <string name="settings.analytics_consent.title">Analytiikka</string>
     <string name="settings.appearance.dark_theme.title">Tumma teema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Päättymisaika</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Aloitusaika</string>
     <string name="settings.auto_sleep_timer.summary">Aloita uniajastin automaattisesti, kun toisto alkaa välillä %1$s ja %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automaattinen uniajastin</string>
+    <string name="settings.library.folders.summary">Hallitse kansioita, joista etsitään äänikirjoja</string>
     <string name="settings.library.use_grid.title">Käytä ruudukkoasettelua</string>
     <string name="settings.playback.auto_rewind.title">Automaattinen takaisinkelaus</string>
     <string name="settings.playback.seek_time.title">Ohita määrä</string>
@@ -110,9 +118,20 @@
     <string name="settings.support.help_translating.title">Auta kääntämään Voicea</string>
     <string name="settings.support.report_issue.title">Ilmoita ongelmasta</string>
     <string name="settings.support.suggest_idea.title">Ehdota ideaa</string>
+    <string name="settings.support.support_voice.summary">Lahjoitukset auttavat pitämään Voicen yllä</string>
+    <string name="settings.support.support_voice.title">Tue kehitystä</string>
+    <string name="support.action.donate_kofi">Lahjoita Ko-fissa</string>
+    <string name="support.description.maintenance">Voice on ilmainen avoimen lähdekoodin sovellus, jota ylläpitää yksi kehittäjä.</string>
+    <string name="support.description.maintenance_subtitle">Lahjoitukset auttavat rahoittamaan jatkuvaa ylläpitoa ja kehitystä.</string>
+    <string name="support.helps.title">Tuki auttaa</string>
+    <string name="support.helps.maintenance">Virhekorjaukset ja ylläpito</string>
+    <string name="support.helps.features">Uudet ominaisuudet</string>
+    <string name="support.helps.open_source">Pidetään Voice mainoksettomana</string>
+    <string name="support.title">Tue kehitystä</string>
     <string name="shortcut.play_current.short_label">Toista nykyinen</string>
     <string name="sleep_timer.action.open">Uni-ajastin</string>
     <string name="sleep_timer.dialog.action.decrement">Lyhyempään</string>
     <string name="sleep_timer.dialog.action.increment">Pidempään</string>
     <string name="sleep_timer.dialog.title">Hyviä unia! 🌙</string>
+    <string name="sleep_timer.end_of_chapter">Luvun loppu</string>
 </resources>

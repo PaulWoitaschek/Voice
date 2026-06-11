@@ -118,6 +118,16 @@
     <string name="settings.support.help_translating.title">Hjälp med att översätta Voice</string>
     <string name="settings.support.report_issue.title">Rapportera ett problem</string>
     <string name="settings.support.suggest_idea.title">Föreslå en idé</string>
+    <string name="settings.support.support_voice.summary">Donationer hjälper till att underhålla Voice</string>
+    <string name="settings.support.support_voice.title">Stöd utvecklingen</string>
+    <string name="support.action.donate_kofi">Donera på Ko-fi</string>
+    <string name="support.description.maintenance">Voice är gratis, öppen källkod och underhålls av en utvecklare.</string>
+    <string name="support.description.maintenance_subtitle">Donationer hjälper till att finansiera löpande underhåll och utveckling.</string>
+    <string name="support.helps.title">Stöd hjälper med</string>
+    <string name="support.helps.maintenance">Buggfixar och underhåll</string>
+    <string name="support.helps.features">Nya funktioner</string>
+    <string name="support.helps.open_source">Hålla Voice reklamfri</string>
+    <string name="support.title">Stöd utvecklingen</string>
     <string name="shortcut.play_current.short_label">Spela aktuell</string>
     <string name="sleep_timer.action.open">Sovtimer</string>
     <string name="sleep_timer.dialog.action.decrement">Kortare</string>

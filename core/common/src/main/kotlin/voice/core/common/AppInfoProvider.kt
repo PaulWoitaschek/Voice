@@ -4,4 +4,6 @@ interface AppInfoProvider {
   val versionName: String
 
   val analyticsIncluded: Boolean
+
+  val supportDevelopmentIncluded: Boolean
 }

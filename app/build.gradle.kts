@@ -43,6 +43,7 @@ android {
     register("free") {
       dimension = distributionFlavor
       buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "false")
+      buildConfigField(type = "Boolean", name = "SUPPORT_DEVELOPMENT_INCLUDED", value = "true")
       pluginManager.withPlugin(libs.plugins.crashlytics.get().pluginId) {
         extensions.configure<CrashlyticsExtension>("firebaseCrashlytics") {
           mappingFileUploadEnabled = false
@@ -52,6 +53,7 @@ android {
     register("play") {
       dimension = distributionFlavor
       buildConfigField(type = "Boolean", name = "INCLUDE_ANALYTICS", value = "true")
+      buildConfigField(type = "Boolean", name = "SUPPORT_DEVELOPMENT_INCLUDED", value = "false")
     }
   }
 
@@ -158,6 +160,7 @@ dependencies {
   implementation(projects.features.widget)
 
   implementation(libs.appCompat)
+  implementation(libs.lifecycle.compose)
   implementation(libs.datastore)
 
   implementation(libs.navigation3.ui)
@@ -170,7 +173,9 @@ dependencies {
   add("playImplementation", libs.firebase.analytics)
   add("playImplementation", projects.core.logging.crashlytics)
   add("playImplementation", projects.features.review.play)
+  add("playImplementation", projects.features.support.play)
   add("freeImplementation", projects.features.review.noop)
+  add("freeImplementation", projects.features.support.free)
 
   implementation(projects.core.remoteconfig.api)
   add("playImplementation", projects.core.remoteconfig.firebase)

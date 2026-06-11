@@ -104,6 +104,7 @@ class SettingsViewModel(
       showAnalyticSetting = appInfoProvider.analyticsIncluded,
       showFolderPickerEntry = showFolderPickerEntry,
       showDeveloperMenu = showDeveloperMenu,
+      showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
       kioskMode = kioskMode,
     )
   }
@@ -184,6 +185,10 @@ class SettingsViewModel(
 
   override fun openFaq() {
     navigator.goTo(Destination.Website("https://voice.woitaschek.de/faq/"))
+  }
+
+  override fun openSupportVoice() {
+    navigator.goTo(Destination.SupportVoice)
   }
 
   override fun openFolderPicker() {

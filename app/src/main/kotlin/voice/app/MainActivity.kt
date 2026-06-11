@@ -17,6 +17,7 @@ import androidx.navigation3.ui.NavDisplay
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
+import voice.app.navigation.BottomSheetSceneStrategy
 import voice.app.navigation.NavEntryResolver
 import voice.app.navigation.StartDestinationProvider
 import voice.core.analytics.api.Analytics
@@ -60,11 +61,12 @@ class MainActivity : AppCompatActivity() {
         analytics.screenView(backStack.last().trackingName)
       }
       VoiceTheme {
+        val bottomSheetStrategy = remember { BottomSheetSceneStrategy<Destination.Compose>() }
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
 
         NavDisplay(
           backStack = backStack,
-          sceneStrategies = listOf(dialogStrategy),
+          sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy),
           onBack = {
             if (backStack.size > 1) {
               backStack.removeLastOrNull()

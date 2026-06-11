@@ -124,6 +124,16 @@
     <string name="settings.support.help_translating.title">Дапамагчы з перакладам Voice</string>
     <string name="settings.support.report_issue.title">Паведаміць пра праблему</string>
     <string name="settings.support.suggest_idea.title">Прапанаваць ідэю</string>
+    <string name="settings.support.support_voice.summary">Ахвяраванні дапамагаюць падтрымліваць Voice</string>
+    <string name="settings.support.support_voice.title">Падтрымаць распрацоўку</string>
+    <string name="support.action.donate_kofi">Ахвяраваць на Ko-fi</string>
+    <string name="support.description.maintenance">Voice бясплатны, з адкрытым зыходным кодам і падтрымліваецца адным распрацоўшчыкам.</string>
+    <string name="support.description.maintenance_subtitle">Ахвяраванні дапамагаюць фінансаваць пастаянную падтрымку і распрацоўку.</string>
+    <string name="support.helps.title">Падтрымка дапамагае з</string>
+    <string name="support.helps.maintenance">Выпраўленне памылак і падтрымка</string>
+    <string name="support.helps.features">Новыя функцыі</string>
+    <string name="support.helps.open_source">Захаванне Voice без рэкламы</string>
+    <string name="support.title">Падтрымаць распрацоўку</string>
     <string name="shortcut.play_current.short_label">Прайграць бягучую</string>
     <string name="sleep_timer.action.open">Таймер сну</string>
     <string name="sleep_timer.dialog.action.decrement">Карацей</string>

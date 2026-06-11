@@ -10,3 +10,9 @@ dependencies {
   implementation(libs.compose.material3)
   testImplementation(kotlin("reflect"))
 }
+
+kotlin{
+  compilerOptions {
+    optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
+  }
+}

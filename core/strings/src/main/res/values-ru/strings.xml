@@ -124,6 +124,16 @@
     <string name="settings.support.help_translating.title">Помочь с переводом</string>
     <string name="settings.support.report_issue.title">Сообщить о проблеме</string>
     <string name="settings.support.suggest_idea.title">Предложить идею</string>
+    <string name="settings.support.support_voice.summary">Пожертвования помогают поддерживать Voice</string>
+    <string name="settings.support.support_voice.title">Поддержать разработку</string>
+    <string name="support.action.donate_kofi">Пожертвовать на Ko-fi</string>
+    <string name="support.description.maintenance">Voice бесплатен, имеет открытый исходный код и поддерживается одним разработчиком.</string>
+    <string name="support.description.maintenance_subtitle">Пожертвования помогают финансировать постоянную поддержку и разработку.</string>
+    <string name="support.helps.title">Поддержка помогает с</string>
+    <string name="support.helps.maintenance">Исправлениями ошибок и поддержкой</string>
+    <string name="support.helps.features">Новыми функциями</string>
+    <string name="support.helps.open_source">Сохранением Voice без рекламы</string>
+    <string name="support.title">Поддержать разработку</string>
     <string name="shortcut.play_current.short_label">Воспроизвести текущую</string>
     <string name="sleep_timer.action.open">Таймер сна</string>
     <string name="sleep_timer.dialog.action.decrement">Короче</string>

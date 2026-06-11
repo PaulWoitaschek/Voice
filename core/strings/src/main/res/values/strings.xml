@@ -176,21 +176,21 @@
     <!-- Title and content description for playback-speed controls. -->
     <string name="playback.speed.title">Playback speed</string>
     <!-- Negative button for cancelling feedback. -->
-    <string name="review.feedback.action.cancel">Cancel</string>
+    <string name="review.feedback.action.cancel" tools:ignore="UnusedResources">Cancel</string>
     <!-- Positive button for sending feedback. -->
-    <string name="review.feedback.action.send">Send Feedback</string>
+    <string name="review.feedback.action.send" tools:ignore="UnusedResources">Send Feedback</string>
     <!-- Message for the dialog asking unhappy users for feedback. -->
-    <string name="review.feedback.message">Could you tell us what went wrong? We appreciate your feedback and it helps us to improve your experience.</string>
+    <string name="review.feedback.message" tools:ignore="UnusedResources">Could you tell us what went wrong? We appreciate your feedback and it helps us to improve your experience.</string>
     <!-- Title for the dialog asking unhappy users for feedback. -->
-    <string name="review.feedback.title">We\'re sorry to hear that!</string>
+    <string name="review.feedback.title" tools:ignore="UnusedResources">We\'re sorry to hear that!</string>
     <!-- Negative button for dismissing the rating request. -->
-    <string name="review.request.action.dismiss">No, Thanks</string>
+    <string name="review.request.action.dismiss" tools:ignore="UnusedResources">No, Thanks</string>
     <!-- Positive button for opening the rating flow. -->
-    <string name="review.request.action.rate">Rate Now</string>
+    <string name="review.request.action.rate" tools:ignore="UnusedResources">Rate Now</string>
     <!-- Message for the dialog asking happy users to rate the app. -->
-    <string name="review.request.message">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
+    <string name="review.request.message" tools:ignore="UnusedResources">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
     <!-- Title for the dialog asking happy users to rate the app. -->
-    <string name="review.request.title">Enjoying Voice?</string>
+    <string name="review.request.title" tools:ignore="UnusedResources">Enjoying Voice?</string>
     <!-- Settings about row showing the app version. -->
     <string name="settings.about.app_version.title">App version</string>
     <!-- Title and content description for opening settings. -->
@@ -220,13 +220,33 @@
     <!-- Settings support row for opening the FAQ. -->
     <string name="settings.support.faq.title">FAQ</string>
     <!-- Settings support row for getting help. -->
-    <string name="settings.support.get_support.title">Get support</string>
+    <string name="settings.support.get_support.title">Get help</string>
     <!-- Settings support row for helping translate the app. -->
     <string name="settings.support.help_translating.title">Help translating Voice</string>
     <!-- Settings support row for reporting a problem. -->
     <string name="settings.support.report_issue.title">Report a problem</string>
+    <!-- Settings row description for opening the donation/support screen. -->
+    <string name="settings.support.support_voice.summary">Donations help keep Voice maintained</string>
+    <!-- Settings row for opening the donation/support screen. -->
+    <string name="settings.support.support_voice.title">Support development</string>
     <!-- Settings support row for suggesting a product idea. -->
     <string name="settings.support.suggest_idea.title">Suggest an idea</string>
+    <!-- Support screen action for donating through Ko-fi. -->
+    <string name="support.action.donate_kofi">Donate on Ko-fi</string>
+    <!-- Support screen text explaining why support is useful. -->
+    <string name="support.description.maintenance">Voice is free, open source, and maintained by one developer.</string>
+    <!-- Support screen text under the main description. -->
+    <string name="support.description.maintenance_subtitle">Donations help fund ongoing maintenance and development.</string>
+    <!-- Support screen heading above the list of what donations enable. -->
+    <string name="support.helps.title">Support helps with</string>
+    <!-- Support screen list item: bug fixes and ongoing maintenance. -->
+    <string name="support.helps.maintenance">Bug fixes and maintenance</string>
+    <!-- Support screen list item: new features. -->
+    <string name="support.helps.features">New features</string>
+    <!-- Support screen list item: keeping Voice free, open source, and ad-free. -->
+    <string name="support.helps.open_source">Keeping Voice ad-free</string>
+    <!-- Title of the support screen. -->
+    <string name="support.title">Support development</string>
     <!-- Short label for the launcher shortcut that plays the current book. -->
     <string name="shortcut.play_current.short_label">Play current</string>
     <!-- Content description for opening the sleep timer. -->

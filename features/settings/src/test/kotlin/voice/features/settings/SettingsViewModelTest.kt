@@ -42,6 +42,7 @@ class SettingsViewModelTest {
   private val appInfoProvider = mockk<AppInfoProvider> {
     every { versionName } returns "1.2.3"
     every { analyticsIncluded } returns true
+    every { supportDevelopmentIncluded } returns true
   }
   private val gridCount = mockk<GridCount> {
     every { useGridAsDefault() } returns true
@@ -97,6 +98,37 @@ class SettingsViewModelTest {
 
     verify(exactly = 1) {
       navigator.goTo(Destination.DeveloperSettings)
+    }
+  }
+
+  @Test
+  fun `openSupportVoice navigates to support screen`() {
+    viewModel.openSupportVoice()
+
+    verify(exactly = 1) {
+      navigator.goTo(Destination.SupportVoice)
+    }
+  }
+
+  @Test
+  fun `view state shows support development when included`() = scope.runTest {
+    every { appInfoProvider.supportDevelopmentIncluded } returns true
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem().showSupportDevelopment shouldBe true
+    }
+  }
+
+  @Test
+  fun `view state hides support development when not included`() = scope.runTest {
+    every { appInfoProvider.supportDevelopmentIncluded } returns false
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem().showSupportDevelopment shouldBe false
     }
   }
 

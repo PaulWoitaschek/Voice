@@ -118,6 +118,16 @@
     <string name="settings.support.help_translating.title">Aita tõlkida rakendust Voice</string>
     <string name="settings.support.report_issue.title">Teata veast</string>
     <string name="settings.support.suggest_idea.title">Soovita uut ideed</string>
+    <string name="settings.support.support_voice.summary">Annetused aitavad rakendust Voice hooldada</string>
+    <string name="settings.support.support_voice.title">Toeta arendust</string>
+    <string name="support.action.donate_kofi">Anneta Ko-fis</string>
+    <string name="support.description.maintenance">Voice on tasuta, avatud lähtekoodiga ja seda hooldab üks arendaja.</string>
+    <string name="support.description.maintenance_subtitle">Annetused aitavad rahastada pidevat hooldust ja arendust.</string>
+    <string name="support.helps.title">Toetus aitab</string>
+    <string name="support.helps.maintenance">Veaparanduste ja hooldusega</string>
+    <string name="support.helps.features">Uute funktsioonidega</string>
+    <string name="support.helps.open_source">Hoida Voice reklaamivabana</string>
+    <string name="support.title">Toeta arendust</string>
     <string name="shortcut.play_current.short_label">Kuula praegust heliraamatut</string>
     <string name="sleep_timer.action.open">Unetaimer</string>
     <string name="sleep_timer.dialog.action.decrement">Vähem</string>

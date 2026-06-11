@@ -67,6 +67,11 @@
     <string name="media_session.library.recent">Recente</string>
     <string name="media_session.library.root">Tote le audiolibros</string>
     <string name="onboarding.action.next">Sequente</string>
+    <string name="onboarding.analytics_consent.action.disable">Continuar sin analytica</string>
+    <string name="onboarding.analytics_consent.action.enable">Continuar con analytica</string>
+    <string name="onboarding.analytics_consent.action.privacy_policy">Politica de confidentialitate</string>
+    <string name="onboarding.analytics_consent.description">Permitte nos colliger datos de uso anonyme pro adjutar a meliorar le app. Tu pote cambiar isto plus tarde in le parametros.</string>
+    <string name="onboarding.analytics_consent.title">Adjuta a meliorar Voice</string>
     <string name="onboarding.completion.action.start_listening">Comenciar a ascoltar</string>
     <string name="onboarding.completion.subtitle">Tu prime audiolibro es preste pro reproducer. Gaude tu viage con Voice!</string>
     <string name="onboarding.completion.title">Jam es toto preste!</string>
@@ -97,10 +102,14 @@
     <string name="review.request.title">Gaude tu de Voice?</string>
     <string name="settings.about.app_version.title">Version del application</string>
     <string name="settings.action.open">Preferentias</string>
+    <string name="settings.analytics_consent.description">Permitter le collection de datos de uso anonyme pro adjutar a meliorar le app</string>
+    <string name="settings.analytics_consent.title">Analytica</string>
     <string name="settings.appearance.dark_theme.title">Thema obscur</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Definir tempore de fin</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Definir tempore initial</string>
+    <string name="settings.auto_sleep_timer.summary">Initiar automaticamente un temporisator de somno quando le reproduction comencia inter %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporisator de somno automatic</string>
+    <string name="settings.library.folders.summary">Gerer dossiers scandite pro audiolibros</string>
     <string name="settings.library.use_grid.title">Usar le disposition in grillia</string>
     <string name="settings.playback.auto_rewind.title">Auto rebobinar</string>
     <string name="settings.playback.seek_time.title">Saltar quantitate</string>
@@ -109,9 +118,20 @@
     <string name="settings.support.help_translating.title">Adjuta in traducer Voice</string>
     <string name="settings.support.report_issue.title">Signalar un defecto</string>
     <string name="settings.support.suggest_idea.title">Suggerer un idea</string>
+    <string name="settings.support.support_voice.summary">Le donationes adjuta a mantener Voice</string>
+    <string name="settings.support.support_voice.title">Supportar le disveloppamento</string>
+    <string name="support.action.donate_kofi">Donar in Ko-fi</string>
+    <string name="support.description.maintenance">Voice es gratuite, open source, e mantenite per un sol disveloppator.</string>
+    <string name="support.description.maintenance_subtitle">Le donationes adjuta a financiar le mantenimento e le disveloppamento continue.</string>
+    <string name="support.helps.title">Le supporto adjuta con</string>
+    <string name="support.helps.maintenance">Correctiones de defectos e mantenimento</string>
+    <string name="support.helps.features">Nove functiones</string>
+    <string name="support.helps.open_source">Mantener Voice sin annuncios</string>
+    <string name="support.title">Supportar le disveloppamento</string>
     <string name="shortcut.play_current.short_label">Reproducer le actual</string>
     <string name="sleep_timer.action.open">Temporisator de somno</string>
     <string name="sleep_timer.dialog.action.decrement">Plus curte</string>
     <string name="sleep_timer.dialog.action.increment">Plus longe</string>
     <string name="sleep_timer.dialog.title">Suave sonios! 🌙</string>
+    <string name="sleep_timer.end_of_chapter">Fin del capitulo</string>
 </resources>

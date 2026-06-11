@@ -118,6 +118,16 @@
     <string name="settings.support.help_translating.title">குரலை மொழிபெயர்க்க உதவுங்கள்</string>
     <string name="settings.support.report_issue.title">ஒரு சிக்கலைப் புகாரளிக்கவும்</string>
     <string name="settings.support.suggest_idea.title">ஒரு யோசனையை பரிந்துரைக்கவும்</string>
+    <string name="settings.support.support_voice.summary">நன்கொடைகள் Voice-ஐ பராமரிக்க உதவுகின்றன</string>
+    <string name="settings.support.support_voice.title">மேம்பாட்டை ஆதரிக்கவும்</string>
+    <string name="support.action.donate_kofi">Ko-fi-யில் நன்கொடை அளிக்கவும்</string>
+    <string name="support.description.maintenance">Voice இலவசம், திறந்த மூலமாகும், மேலும் ஒரே ஒரு உருவாக்குநரால் பராமரிக்கப்படுகிறது.</string>
+    <string name="support.description.maintenance_subtitle">நன்கொடைகள் தொடர்ச்சியான பராமரிப்பு மற்றும் மேம்பாட்டிற்கு நிதியளிக்க உதவுகின்றன.</string>
+    <string name="support.helps.title">ஆதரவு உதவுவது</string>
+    <string name="support.helps.maintenance">பிழை திருத்தங்கள் மற்றும் பராமரிப்பு</string>
+    <string name="support.helps.features">புதிய அம்சங்கள்</string>
+    <string name="support.helps.open_source">Voice-ஐ விளம்பரமின்றி வைத்திருப்பது</string>
+    <string name="support.title">மேம்பாட்டை ஆதரிக்கவும்</string>
     <string name="shortcut.play_current.short_label">மின்னோட்டத்தை விளையாடுங்கள்</string>
     <string name="sleep_timer.action.open">ச்லீப்-டைமர்</string>
     <string name="sleep_timer.dialog.action.decrement">குறுகிய</string>

@@ -16,6 +16,7 @@ ktlint-gradlePlugin = "0.14.0"
 retrofit = "3.0.0"
 metro = "1.2.0"
 navigation3 = "1.1.2"
+androidx-lifecycle = "2.10.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -74,8 +75,8 @@ media3-inspector = { module = "androidx.media3:media3-inspector", version.ref = 
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
 
-lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:2.10.0"
-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0"
+lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+lifecycle-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
 compose-bom = "androidx.compose:compose-bom:2026.05.01"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
