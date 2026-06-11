@@ -114,7 +114,7 @@
     <string name="settings.playback.auto_rewind.title">Otomatik geri sar</string>
     <string name="settings.playback.seek_time.title">Değeri atla</string>
     <string name="settings.support.faq.title">SSS</string>
-    <string name="settings.support.get_support.title">Destek al</string>
+    <string name="settings.support.get_support.title">Yardım al</string>
     <string name="settings.support.help_translating.title">Voice\'u çevirmeye yardım et</string>
     <string name="settings.support.report_issue.title">Sorun bildir</string>
     <string name="settings.support.suggest_idea.title">Fikir öner</string>
