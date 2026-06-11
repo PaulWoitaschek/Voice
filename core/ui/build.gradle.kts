@@ -14,5 +14,5 @@ dependencies {
   implementation(projects.core.data.api)
   implementation(projects.core.initializer)
   implementation(projects.core.strings)
-  implementation(libs.lifecycle.viewmodel.compose)
+  implementation(libs.lifecycle.compose)
 }
