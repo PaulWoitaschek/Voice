@@ -1,7 +1,7 @@
 package voice.core.ui
 
 import android.os.Build
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun VoiceTheme(content: @Composable () -> Unit) {
-  MaterialTheme(
+  MaterialExpressiveTheme(
     colorScheme = if (isDarkTheme()) {
       if (Build.VERSION.SDK_INT >= 31) {
         dynamicDarkColorScheme(LocalContext.current)
