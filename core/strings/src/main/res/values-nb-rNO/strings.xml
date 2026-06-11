@@ -67,7 +67,11 @@
     <string name="media_session.library.recent">Nylig</string>
     <string name="media_session.library.root">Alle lydbøker</string>
     <string name="onboarding.action.next">Neste</string>
+    <string name="onboarding.analytics_consent.action.disable">Fortsett uten analyse</string>
+    <string name="onboarding.analytics_consent.action.enable">Fortsett med analyse</string>
     <string name="onboarding.analytics_consent.action.privacy_policy">Personvernpraksis</string>
+    <string name="onboarding.analytics_consent.description">La oss samle inn anonyme bruksdata for å bidra til å forbedre appen. Du kan endre dette senere i innstillingene.</string>
+    <string name="onboarding.analytics_consent.title">Hjelp til med å forbedre Voice</string>
     <string name="onboarding.completion.action.start_listening">Start lytting</string>
     <string name="onboarding.completion.subtitle">Din første lydbok er klar til å spilles av. Nyt din reise med Voice!</string>
     <string name="onboarding.completion.title">Du er ferdig!</string>
@@ -98,6 +102,8 @@
     <string name="review.request.title">Liker du Voice?</string>
     <string name="settings.about.app_version.title">Programversjon</string>
     <string name="settings.action.open">Innstillinger</string>
+    <string name="settings.analytics_consent.description">Tillat anonym innsamling av bruksdata for å bidra til å forbedre appen</string>
+    <string name="settings.analytics_consent.title">Analyse</string>
     <string name="settings.appearance.dark_theme.title">Mørk drakt</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Sett sluttid</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Sett starttid</string>
@@ -112,6 +118,16 @@
     <string name="settings.support.help_translating.title">Bistå oversettelsen</string>
     <string name="settings.support.report_issue.title">Rapporter problem</string>
     <string name="settings.support.suggest_idea.title">Foreslå idé</string>
+    <string name="settings.support.support_voice.summary">Donasjoner bidrar til å vedlikeholde Voice</string>
+    <string name="settings.support.support_voice.title">Støtt utviklingen</string>
+    <string name="support.action.donate_kofi">Doner på Ko-fi</string>
+    <string name="support.description.maintenance">Voice er gratis, åpen kildekode og vedlikeholdes av én utvikler.</string>
+    <string name="support.description.maintenance_subtitle">Donasjoner bidrar til å finansiere løpende vedlikehold og utvikling.</string>
+    <string name="support.helps.title">Støtte hjelper med</string>
+    <string name="support.helps.maintenance">Feilrettinger og vedlikehold</string>
+    <string name="support.helps.features">Nye funksjoner</string>
+    <string name="support.helps.open_source">Holde Voice reklamefri</string>
+    <string name="support.title">Støtt utviklingen</string>
     <string name="shortcut.play_current.short_label">Spill nåværende</string>
     <string name="sleep_timer.action.open">Innsovningstidsur</string>
     <string name="sleep_timer.dialog.action.decrement">Kortere</string>

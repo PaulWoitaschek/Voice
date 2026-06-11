@@ -115,6 +115,16 @@
     <string name="settings.support.help_translating.title">Bantu terjemahkan Voice</string>
     <string name="settings.support.report_issue.title">Laporkan masalah</string>
     <string name="settings.support.suggest_idea.title">Sarankan ide</string>
+    <string name="settings.support.support_voice.summary">Donasi membantu menjaga Voice tetap terawat</string>
+    <string name="settings.support.support_voice.title">Dukung pengembangan</string>
+    <string name="support.action.donate_kofi">Donasi di Ko-fi</string>
+    <string name="support.description.maintenance">Voice gratis, bersumber terbuka, dan dirawat oleh satu pengembang.</string>
+    <string name="support.description.maintenance_subtitle">Donasi membantu membiayai perawatan dan pengembangan berkelanjutan.</string>
+    <string name="support.helps.title">Dukungan membantu untuk</string>
+    <string name="support.helps.maintenance">Perbaikan bug dan perawatan</string>
+    <string name="support.helps.features">Fitur baru</string>
+    <string name="support.helps.open_source">Menjaga Voice bebas iklan</string>
+    <string name="support.title">Dukung pengembangan</string>
     <string name="shortcut.play_current.short_label">Putar saat ini</string>
     <string name="sleep_timer.action.open">Pengatur Waktu Tidur</string>
     <string name="sleep_timer.dialog.action.decrement">Lebih singkat</string>

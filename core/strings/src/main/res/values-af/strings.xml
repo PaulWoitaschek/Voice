@@ -109,6 +109,7 @@
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Stel begintyd</string>
     <string name="settings.auto_sleep_timer.summary">Begin outomaties ’n slaaptimer wanneer afspeel tussen %1$s en %2$s begin</string>
     <string name="settings.auto_sleep_timer.title">Outomatiese slaaptimer</string>
+    <string name="settings.library.folders.summary">Bestuur vouers wat vir oudioboeke geskandeer word</string>
     <string name="settings.library.use_grid.title">Gebruik rooster uitleg</string>
     <string name="settings.playback.auto_rewind.title">Outomatiese terugdraai</string>
     <string name="settings.playback.seek_time.title">Skip hoeveelheid</string>
@@ -117,6 +118,16 @@
     <string name="settings.support.help_translating.title">Help met vertaling</string>
     <string name="settings.support.report_issue.title">Rapporteer \'n probleem</string>
     <string name="settings.support.suggest_idea.title">Deel \'n idee</string>
+    <string name="settings.support.support_voice.summary">Donasies help om Voice onderhou te hou</string>
+    <string name="settings.support.support_voice.title">Ondersteun ontwikkeling</string>
+    <string name="support.action.donate_kofi">Skenk op Ko-fi</string>
+    <string name="support.description.maintenance">Voice is gratis, oopbron, en word deur een ontwikkelaar onderhou.</string>
+    <string name="support.description.maintenance_subtitle">Donasies help om voortdurende instandhouding en ontwikkeling te finansier.</string>
+    <string name="support.helps.title">Ondersteuning help met</string>
+    <string name="support.helps.maintenance">Foutoplossings en instandhouding</string>
+    <string name="support.helps.features">Nuwe funksies</string>
+    <string name="support.helps.open_source">Hou Voice advertensievry</string>
+    <string name="support.title">Ondersteun ontwikkeling</string>
     <string name="shortcut.play_current.short_label">Speel huidig</string>
     <string name="sleep_timer.action.open">Slaap-Timer</string>
     <string name="sleep_timer.dialog.action.decrement">Korter</string>

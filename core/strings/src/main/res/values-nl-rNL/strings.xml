@@ -118,6 +118,16 @@
     <string name="settings.support.help_translating.title">Helpen met vertalen</string>
     <string name="settings.support.report_issue.title">Probleem melden</string>
     <string name="settings.support.suggest_idea.title">Idee delen</string>
+    <string name="settings.support.support_voice.summary">Donaties helpen Voice onderhouden</string>
+    <string name="settings.support.support_voice.title">Ontwikkeling steunen</string>
+    <string name="support.action.donate_kofi">Doneren op Ko-fi</string>
+    <string name="support.description.maintenance">Voice is gratis, open source en wordt onderhouden door één ontwikkelaar.</string>
+    <string name="support.description.maintenance_subtitle">Donaties helpen doorlopend onderhoud en ontwikkeling te financieren.</string>
+    <string name="support.helps.title">Steun helpt met</string>
+    <string name="support.helps.maintenance">Bugfixes en onderhoud</string>
+    <string name="support.helps.features">Nieuwe functies</string>
+    <string name="support.helps.open_source">Voice advertentievrij houden</string>
+    <string name="support.title">Ontwikkeling steunen</string>
     <string name="shortcut.play_current.short_label">Huidig boek afspelen</string>
     <string name="sleep_timer.action.open">Slaaptimer</string>
     <string name="sleep_timer.dialog.action.decrement">Korter</string>

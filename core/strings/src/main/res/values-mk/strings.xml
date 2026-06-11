@@ -67,6 +67,11 @@
     <string name="media_session.library.recent">Скорешни</string>
     <string name="media_session.library.root">Сите аудио книги</string>
     <string name="onboarding.action.next">Наредна</string>
+    <string name="onboarding.analytics_consent.action.disable">Продолжи без аналитика</string>
+    <string name="onboarding.analytics_consent.action.enable">Продолжи со аналитика</string>
+    <string name="onboarding.analytics_consent.action.privacy_policy">Политика за приватност</string>
+    <string name="onboarding.analytics_consent.description">Дозволете ни да собираме анонимни податоци за користење за да ја подобриме апликацијата. Ова може да го промените подоцна во поставките.</string>
+    <string name="onboarding.analytics_consent.title">Помогнете да го подобриме Voice</string>
     <string name="onboarding.completion.action.start_listening">Почнете со слушање</string>
     <string name="onboarding.completion.subtitle">Вашата прва аудио книга е спремна за слушање. Уживајте во патувањето со Voice!</string>
     <string name="onboarding.completion.title">Спремни сте!</string>
@@ -97,11 +102,14 @@
     <string name="review.request.title">Дали ви се допаѓа Voice?</string>
     <string name="settings.about.app_version.title">Верзија на апликацијата</string>
     <string name="settings.action.open">Поставувања</string>
+    <string name="settings.analytics_consent.description">Дозволете анонимно собирање податоци за користење за да се подобри апликацијата</string>
+    <string name="settings.analytics_consent.title">Аналитика</string>
     <string name="settings.appearance.dark_theme.title">Темна тема</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Внеси време за крај</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Внеси време за старт</string>
     <string name="settings.auto_sleep_timer.summary">Стартувај го тајмерот за спиење автоматски штом аудиото почнува меѓу %1$s и %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматски тајмер за спиење</string>
+    <string name="settings.library.folders.summary">Управувајте со папките што се скенираат за аудиокниги</string>
     <string name="settings.library.use_grid.title">Прикажи како коцки</string>
     <string name="settings.playback.auto_rewind.title">Автоматско враќање назад</string>
     <string name="settings.playback.seek_time.title">Прескокни секунди</string>
@@ -110,9 +118,20 @@
     <string name="settings.support.help_translating.title">Поможете за превод на Voice</string>
     <string name="settings.support.report_issue.title">Пријави проблем</string>
     <string name="settings.support.suggest_idea.title">Предложете идеја</string>
+    <string name="settings.support.support_voice.summary">Донациите помагаат Voice да се одржува</string>
+    <string name="settings.support.support_voice.title">Поддржете го развојот</string>
+    <string name="support.action.donate_kofi">Донирајте на Ko-fi</string>
+    <string name="support.description.maintenance">Voice е бесплатен, со отворен код и го одржува еден развивач.</string>
+    <string name="support.description.maintenance_subtitle">Донациите помагаат да се финансираат тековното одржување и развој.</string>
+    <string name="support.helps.title">Поддршката помага со</string>
+    <string name="support.helps.maintenance">Поправки на грешки и одржување</string>
+    <string name="support.helps.features">Нови функции</string>
+    <string name="support.helps.open_source">Voice да остане без реклами</string>
+    <string name="support.title">Поддржете го развојот</string>
     <string name="shortcut.play_current.short_label">Пушти тековна</string>
     <string name="sleep_timer.action.open">Тајмер за спиење</string>
     <string name="sleep_timer.dialog.action.decrement">Пократко</string>
     <string name="sleep_timer.dialog.action.increment">Подолго</string>
     <string name="sleep_timer.dialog.title">Слатки соништа! 🌙</string>
+    <string name="sleep_timer.end_of_chapter">Крај на поглавје</string>
 </resources>

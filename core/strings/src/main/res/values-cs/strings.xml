@@ -124,6 +124,16 @@
     <string name="settings.support.help_translating.title">Pomoc s překladem Voice</string>
     <string name="settings.support.report_issue.title">Nahlásit problém</string>
     <string name="settings.support.suggest_idea.title">Navrhnout nápad</string>
+    <string name="settings.support.support_voice.summary">Dary pomáhají udržovat Voice</string>
+    <string name="settings.support.support_voice.title">Podpořit vývoj</string>
+    <string name="support.action.donate_kofi">Přispět na Ko-fi</string>
+    <string name="support.description.maintenance">Voice je zdarma, open source a udržuje ho jeden vývojář.</string>
+    <string name="support.description.maintenance_subtitle">Dary pomáhají financovat průběžnou údržbu a vývoj.</string>
+    <string name="support.helps.title">Podpora pomáhá s</string>
+    <string name="support.helps.maintenance">Opravami chyb a údržbou</string>
+    <string name="support.helps.features">Novými funkcemi</string>
+    <string name="support.helps.open_source">Udržením Voice bez reklam</string>
+    <string name="support.title">Podpořit vývoj</string>
     <string name="shortcut.play_current.short_label">Přehrát aktuální</string>
     <string name="sleep_timer.action.open">Časovač spánku</string>
     <string name="sleep_timer.dialog.action.decrement">Zkrátit</string>

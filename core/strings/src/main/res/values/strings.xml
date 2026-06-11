@@ -176,20 +176,28 @@
     <!-- Title and content description for playback-speed controls. -->
     <string name="playback.speed.title">Playback speed</string>
     <!-- Negative button for cancelling feedback. -->
+    <!--suppress UnusedResources -->
     <string name="review.feedback.action.cancel">Cancel</string>
     <!-- Positive button for sending feedback. -->
+    <!--suppress UnusedResources -->
     <string name="review.feedback.action.send">Send Feedback</string>
     <!-- Message for the dialog asking unhappy users for feedback. -->
+    <!--suppress UnusedResources -->
     <string name="review.feedback.message">Could you tell us what went wrong? We appreciate your feedback and it helps us to improve your experience.</string>
     <!-- Title for the dialog asking unhappy users for feedback. -->
+    <!--suppress UnusedResources -->
     <string name="review.feedback.title">We\'re sorry to hear that!</string>
     <!-- Negative button for dismissing the rating request. -->
+    <!--suppress UnusedResources -->
     <string name="review.request.action.dismiss">No, Thanks</string>
     <!-- Positive button for opening the rating flow. -->
+    <!--suppress UnusedResources -->
     <string name="review.request.action.rate">Rate Now</string>
     <!-- Message for the dialog asking happy users to rate the app. -->
+    <!--suppress UnusedResources -->
     <string name="review.request.message">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
     <!-- Title for the dialog asking happy users to rate the app. -->
+    <!--suppress UnusedResources -->
     <string name="review.request.title">Enjoying Voice?</string>
     <!-- Settings about row showing the app version. -->
     <string name="settings.about.app_version.title">App version</string>

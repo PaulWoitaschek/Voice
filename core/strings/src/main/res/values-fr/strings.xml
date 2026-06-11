@@ -121,6 +121,16 @@
     <string name="settings.support.help_translating.title">Aidez à traduire Voice</string>
     <string name="settings.support.report_issue.title">Signaler un problème</string>
     <string name="settings.support.suggest_idea.title">Suggérer une idée</string>
+    <string name="settings.support.support_voice.summary">Les dons aident à maintenir Voice</string>
+    <string name="settings.support.support_voice.title">Soutenir le développement</string>
+    <string name="support.action.donate_kofi">Faire un don sur Ko-fi</string>
+    <string name="support.description.maintenance">Voice est gratuit, open source et maintenu par un seul développeur.</string>
+    <string name="support.description.maintenance_subtitle">Les dons aident à financer la maintenance et le développement continus.</string>
+    <string name="support.helps.title">Votre soutien aide pour</string>
+    <string name="support.helps.maintenance">Corrections de bugs et maintenance</string>
+    <string name="support.helps.features">Nouvelles fonctionnalités</string>
+    <string name="support.helps.open_source">Garder Voice sans publicité</string>
+    <string name="support.title">Soutenir le développement</string>
     <string name="shortcut.play_current.short_label">Lire l\'actuel</string>
     <string name="sleep_timer.action.open">Minuterie de mise en veille</string>
     <string name="sleep_timer.dialog.action.decrement">Moins long</string>

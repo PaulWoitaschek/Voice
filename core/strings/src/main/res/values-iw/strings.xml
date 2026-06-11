@@ -70,6 +70,10 @@
     <string name="media_session.library.recent">אחרונים</string>
     <string name="media_session.library.root">כל הקולספרים</string>
     <string name="onboarding.action.next">הבא</string>
+    <string name="onboarding.analytics_consent.action.disable">המשך ללא ניתוח נתונים</string>
+    <string name="onboarding.analytics_consent.action.enable">המשך עם ניתוח נתונים</string>
+    <string name="onboarding.analytics_consent.action.privacy_policy">מדיניות פרטיות</string>
+    <string name="onboarding.analytics_consent.description">אפשרו לנו לאסוף נתוני שימוש אנונימיים כדי לעזור לשפר את האפליקציה. ניתן לשנות זאת מאוחר יותר בהגדרות.</string>
     <string name="onboarding.analytics_consent.title">עזרו לשפר את Voice</string>
     <string name="onboarding.completion.action.start_listening">התחל להאזין</string>
     <string name="onboarding.completion.subtitle">נגן הקולספר הראשון שלך מוכן להשמעה. תהנה מהמסע שלך עם Voice!</string>
@@ -101,11 +105,14 @@
     <string name="review.request.title">נהנים מ-Voice?</string>
     <string name="settings.about.app_version.title">גרסת יישום</string>
     <string name="settings.action.open">העדפות</string>
+    <string name="settings.analytics_consent.description">אפשר איסוף נתוני שימוש אנונימיים כדי לעזור לשפר את האפליקציה</string>
+    <string name="settings.analytics_consent.title">ניתוח נתונים</string>
     <string name="settings.appearance.dark_theme.title">מצב כהה</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">בחר זמן סיום</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">בחר זמן התחלה</string>
     <string name="settings.auto_sleep_timer.summary">תפעיל את שעון השינה ­האוטומטי כשההפעלה מגיעה ל- %1$s ו- %2$s</string>
     <string name="settings.auto_sleep_timer.title">שעון עצר אוטומטי לשינה</string>
+    <string name="settings.library.folders.summary">ניהול תיקיות שנסרקות עבור ספרי שמע</string>
     <string name="settings.library.use_grid.title">תשתמש בפריסת רשת</string>
     <string name="settings.playback.auto_rewind.title">הרצה אוטומטית</string>
     <string name="settings.playback.seek_time.title">דלג כמות</string>
@@ -114,6 +121,16 @@
     <string name="settings.support.help_translating.title">עזור לתרגם את Voice</string>
     <string name="settings.support.report_issue.title">דווח על תקלה</string>
     <string name="settings.support.suggest_idea.title">הצע רעיון</string>
+    <string name="settings.support.support_voice.summary">תרומות עוזרות לשמור על Voice מתוחזקת</string>
+    <string name="settings.support.support_voice.title">תמיכה בפיתוח</string>
+    <string name="support.action.donate_kofi">לתרום ב-Ko-fi</string>
+    <string name="support.description.maintenance">Voice חינמית, בקוד פתוח, ומתוחזקת בידי מפתח אחד.</string>
+    <string name="support.description.maintenance_subtitle">תרומות עוזרות לממן תחזוקה ופיתוח שוטפים.</string>
+    <string name="support.helps.title">התמיכה עוזרת ב</string>
+    <string name="support.helps.maintenance">תיקוני באגים ותחזוקה</string>
+    <string name="support.helps.features">תכונות חדשות</string>
+    <string name="support.helps.open_source">שמירה על Voice ללא פרסומות</string>
+    <string name="support.title">תמיכה בפיתוח</string>
     <string name="shortcut.play_current.short_label">השמע את הנוכחי</string>
     <string name="sleep_timer.action.open">טיימר-שינה</string>
     <string name="sleep_timer.dialog.action.decrement">קצר יותר</string>

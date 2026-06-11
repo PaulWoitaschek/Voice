@@ -109,6 +109,7 @@
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">زمان شروع</string>
     <string name="settings.auto_sleep_timer.summary">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>
     <string name="settings.auto_sleep_timer.title">زمان خواب خودکار</string>
+    <string name="settings.library.folders.summary">مدیریت پوشه‌هایی که برای کتاب‌های صوتی اسکن می‌شوند</string>
     <string name="settings.library.use_grid.title">چینش بصورت شبکه ای</string>
     <string name="settings.playback.auto_rewind.title">عقب بردن خودکار</string>
     <string name="settings.playback.seek_time.title">میزان پرش</string>
@@ -117,6 +118,16 @@
     <string name="settings.support.help_translating.title">کمک برای ترجمه Voice</string>
     <string name="settings.support.report_issue.title">گزارش مشکل</string>
     <string name="settings.support.suggest_idea.title">یک ایده پیشنهاد کنید</string>
+    <string name="settings.support.support_voice.summary">کمک‌های مالی به نگهداری Voice کمک می‌کنند</string>
+    <string name="settings.support.support_voice.title">حمایت از توسعه</string>
+    <string name="support.action.donate_kofi">کمک مالی در Ko-fi</string>
+    <string name="support.description.maintenance">Voice رایگان، متن‌باز، و توسط یک توسعه‌دهنده نگهداری می‌شود.</string>
+    <string name="support.description.maintenance_subtitle">کمک‌های مالی به تأمین هزینه نگهداری و توسعه مداوم کمک می‌کنند.</string>
+    <string name="support.helps.title">حمایت کمک می‌کند به</string>
+    <string name="support.helps.maintenance">رفع اشکال‌ها و نگهداری</string>
+    <string name="support.helps.features">ویژگی‌های جدید</string>
+    <string name="support.helps.open_source">بدون تبلیغ نگه داشتن Voice</string>
+    <string name="support.title">حمایت از توسعه</string>
     <string name="shortcut.play_current.short_label">پخش فایل جاری</string>
     <string name="sleep_timer.action.open">تایمر خواب</string>
     <string name="sleep_timer.dialog.action.decrement">کوتاه تر</string>

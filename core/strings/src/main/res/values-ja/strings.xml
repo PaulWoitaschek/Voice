@@ -115,6 +115,16 @@
     <string name="settings.support.help_translating.title">翻訳の手助け</string>
     <string name="settings.support.report_issue.title">問題の報告</string>
     <string name="settings.support.suggest_idea.title">アイデアの提案</string>
+    <string name="settings.support.support_voice.summary">寄付はVoiceの維持に役立ちます</string>
+    <string name="settings.support.support_voice.title">開発を支援</string>
+    <string name="support.action.donate_kofi">Ko-fiで寄付</string>
+    <string name="support.description.maintenance">Voiceは無料のオープンソースで、1人の開発者が保守しています。</string>
+    <string name="support.description.maintenance_subtitle">寄付は継続的な保守と開発の資金になります。</string>
+    <string name="support.helps.title">支援でできること</string>
+    <string name="support.helps.maintenance">バグ修正と保守</string>
+    <string name="support.helps.features">新機能</string>
+    <string name="support.helps.open_source">Voiceを広告なしに保つ</string>
+    <string name="support.title">開発を支援</string>
     <string name="shortcut.play_current.short_label">現在を再生</string>
     <string name="sleep_timer.action.open">スリープタイマー</string>
     <string name="sleep_timer.dialog.action.decrement">短くする</string>

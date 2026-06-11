@@ -118,6 +118,16 @@
     <string name="settings.support.help_translating.title">Voice\'u çevirmeye yardım et</string>
     <string name="settings.support.report_issue.title">Sorun bildir</string>
     <string name="settings.support.suggest_idea.title">Fikir öner</string>
+    <string name="settings.support.support_voice.summary">Bağışlar Voice\'un bakımına yardımcı olur</string>
+    <string name="settings.support.support_voice.title">Geliştirmeyi destekle</string>
+    <string name="support.action.donate_kofi">Ko-fi üzerinden bağış yap</string>
+    <string name="support.description.maintenance">Voice ücretsiz, açık kaynaklıdır ve tek bir geliştirici tarafından sürdürülür.</string>
+    <string name="support.description.maintenance_subtitle">Bağışlar sürekli bakım ve geliştirmeyi finanse etmeye yardımcı olur.</string>
+    <string name="support.helps.title">Destek şunlara yardımcı olur</string>
+    <string name="support.helps.maintenance">Hata düzeltmeleri ve bakım</string>
+    <string name="support.helps.features">Yeni özellikler</string>
+    <string name="support.helps.open_source">Voice\'u reklamsız tutmak</string>
+    <string name="support.title">Geliştirmeyi destekle</string>
     <string name="shortcut.play_current.short_label">Geçerli oynatma</string>
     <string name="sleep_timer.action.open">Uyku Zamanlayıcısı</string>
     <string name="sleep_timer.dialog.action.decrement">Daha kısa</string>
