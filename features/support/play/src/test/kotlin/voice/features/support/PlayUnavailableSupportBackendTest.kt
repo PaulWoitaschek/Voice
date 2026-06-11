@@ -15,7 +15,6 @@ class PlayUnavailableSupportBackendTest {
       awaitItem() shouldBe SupportBackendState.PlayUnavailable
 
       backend.openSupport()
-      backend.setSupporterBadgeVisible(true)
 
       expectNoEvents()
     }

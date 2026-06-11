@@ -14,7 +14,4 @@ class PlayUnavailableSupportBackend : SupportBackend {
 
   override fun openSupport() {
   }
-
-  override fun setSupporterBadgeVisible(visible: Boolean) {
-  }
 }

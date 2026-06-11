@@ -25,7 +25,6 @@ import voice.core.data.store.DeveloperMenuUnlockedStore
 import voice.core.data.store.GridModeStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
-import voice.core.data.store.SupporterBadgeVisibleStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.FolderPickerInSettingsFeatureFlagQualifier
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
@@ -58,8 +57,6 @@ class SettingsViewModel(
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   @DeveloperMenuUnlockedStore
   private val developerMenuUnlockedStore: DataStore<Boolean>,
-  @SupporterBadgeVisibleStore
-  private val supporterBadgeVisibleStore: DataStore<Boolean>,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
@@ -86,7 +83,6 @@ class SettingsViewModel(
       folderPickerInSettingsFeatureFlag.get() || kioskMode
     }
     val showDeveloperMenu by remember { developerMenuUnlockedStore.data }.collectAsState(initial = false)
-    val supporterBadgeVisible by remember { supporterBadgeVisibleStore.data }.collectAsState(initial = false)
     return SettingsViewState(
       useDarkTheme = useDarkTheme,
       showDarkThemePref = DARK_THEME_SETTABLE,
@@ -109,7 +105,6 @@ class SettingsViewModel(
       showFolderPickerEntry = showFolderPickerEntry,
       showDeveloperMenu = showDeveloperMenu,
       kioskMode = kioskMode,
-      supporterBadgeVisible = supporterBadgeVisible,
     )
   }
 

@@ -1,32 +1,38 @@
 package voice.features.support
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material3.AssistChip
+import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.Coffee
+import androidx.compose.material.icons.outlined.Construction
+import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +43,8 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
+import voice.features.support.api.R
+import voice.navigation.BottomSheetNav
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
@@ -57,193 +65,152 @@ private fun Support(
   viewState: SupportViewState,
   listener: SupportListener,
 ) {
-  Scaffold(
-    topBar = {
-      TopAppBar(
-        title = {
-          Text(stringResource(StringsR.string.support_title))
-        },
-        navigationIcon = {
-          IconButton(
-            onClick = listener::close,
-          ) {
-            Icon(
-              imageVector = Icons.Outlined.Close,
-              contentDescription = stringResource(StringsR.string.common_action_close),
-            )
-          }
-        },
-      )
-    },
-  ) { contentPadding ->
-    Column(
-      modifier = Modifier
-        .fillMaxSize()
-        .padding(contentPadding)
-        .padding(24.dp),
-      verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-      when (viewState.backendState) {
-        is SupportBackendState.Free -> {
-          FreeSupportContent(
-            supporterBadgeVisible = viewState.backendState.supporterBadgeVisible,
-            listener = listener,
-          )
-        }
-        SupportBackendState.PlayUnavailable -> {
-          Text(
-            text = stringResource(StringsR.string.support_description_maintenance),
-            style = MaterialTheme.typography.bodyLarge,
-          )
-          Text(
-            text = stringResource(StringsR.string.support_play_unavailable_message),
-            style = MaterialTheme.typography.bodyMedium,
-          )
-        }
+  Column(
+    modifier = Modifier
+      .fillMaxWidth()
+      .verticalScroll(rememberScrollState())
+      .padding(horizontal = 24.dp)
+      .padding(bottom = 48.dp),
+    verticalArrangement = Arrangement.spacedBy(16.dp),
+  ) {
+    when (viewState.backendState) {
+      SupportBackendState.Free -> {
+        DonationContent(listener)
+      }
+      SupportBackendState.PlayUnavailable -> {
+        Text(
+          text = stringResource(StringsR.string.support_description_maintenance),
+          style = MaterialTheme.typography.bodyLarge,
+        )
+        Text(
+          text = stringResource(StringsR.string.support_play_unavailable_message),
+          style = MaterialTheme.typography.bodyMedium,
+        )
       }
     }
   }
 }
 
 @Composable
-private fun FreeSupportContent(
-  supporterBadgeVisible: Boolean,
-  listener: SupportListener,
-) {
-  if (supporterBadgeVisible) {
-    SupportedContent(listener)
-  } else {
-    DonationContent(listener)
-  }
-}
-
-@Composable
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 private fun DonationContent(listener: SupportListener) {
   Column(
     modifier = Modifier.fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(16.dp),
   ) {
+    SupportHeader()
+
+    val size = ButtonDefaults.MediumContainerHeight
+    Button(
+      modifier = Modifier
+        .fillMaxWidth()
+        .heightIn(size),
+      onClick = listener::openSupport,
+      contentPadding = ButtonDefaults.contentPaddingFor(size, hasStartIcon = true),
+      colors = ButtonDefaults.buttonColors(
+        containerColor = SupportLogoBlue,
+        contentColor = Color.White,
+      ),
+    ) {
+      Icon(
+        imageVector = Icons.Outlined.Coffee,
+        contentDescription = null,
+        modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
+      )
+      Spacer(Modifier.size(ButtonDefaults.iconSpacingFor(size)))
+      Text(
+        text = stringResource(StringsR.string.support_action_donate_kofi),
+        style = ButtonDefaults.textStyleFor(size),
+      )
+    }
+
+    SupportHelpsList()
+  }
+}
+
+@Composable
+private fun SupportHeader() {
+  Column(
+    modifier = Modifier.fillMaxWidth(),
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+  ) {
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+      Image(
+        modifier = Modifier
+          .size(40.dp)
+          .clip(CircleShape),
+        painter = painterResource(R.drawable.laun),
+        contentDescription = null,
+      )
+      Text(
+        text = stringResource(StringsR.string.support_title),
+        style = MaterialTheme.typography.titleLarge,
+      )
+    }
     Text(
       text = stringResource(StringsR.string.support_description_maintenance),
       style = MaterialTheme.typography.bodyLarge,
     )
-
-    OutlinedCard(
-      modifier = Modifier.fillMaxWidth(),
-      shape = RoundedCornerShape(8.dp),
-    ) {
-      Text(
-        modifier = Modifier.padding(16.dp),
-        text = stringResource(StringsR.string.support_description_no_benefits),
-        style = MaterialTheme.typography.bodyMedium,
-      )
-    }
-
-    Button(
-      modifier = Modifier.fillMaxWidth(),
-      onClick = listener::openSupport,
-    ) {
-      Icon(
-        imageVector = Icons.Outlined.FavoriteBorder,
-        contentDescription = null,
-      )
-      Text(stringResource(StringsR.string.support_action_donate_kofi))
-    }
-
     Text(
-      text = stringResource(StringsR.string.support_already_donated),
-      style = MaterialTheme.typography.titleSmall,
-    )
-
-    OutlinedButton(
-      modifier = Modifier.fillMaxWidth(),
-      onClick = {
-        listener.setSupporterBadgeVisible(true)
-      },
-    ) {
-      Text(stringResource(StringsR.string.support_action_show_badge))
-    }
-
-    Text(
-      text = stringResource(StringsR.string.support_description_local_badge),
-      style = MaterialTheme.typography.bodySmall,
+      text = stringResource(StringsR.string.support_description_maintenance_subtitle),
+      style = MaterialTheme.typography.bodyMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
   }
 }
 
 @Composable
-private fun SupportedContent(listener: SupportListener) {
+private fun SupportHelpsList() {
   Column(
     modifier = Modifier.fillMaxWidth(),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
   ) {
-    OutlinedCard(
-      modifier = Modifier.fillMaxWidth(),
-      shape = RoundedCornerShape(8.dp),
-    ) {
-      Column(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-      ) {
-        Text(
-          text = stringResource(StringsR.string.support_badge_label),
-          style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-          text = stringResource(StringsR.string.support_thank_you),
-          style = MaterialTheme.typography.bodyMedium,
-        )
-        Text(
-          text = stringResource(StringsR.string.support_description_local_badge),
-          style = MaterialTheme.typography.bodySmall,
-        )
-        SupporterBadge()
-      }
-    }
-
-    Button(
-      modifier = Modifier.fillMaxWidth(),
-      onClick = listener::openSupport,
-    ) {
-      Icon(
-        imageVector = Icons.Outlined.FavoriteBorder,
-        contentDescription = null,
-      )
-      Text(stringResource(StringsR.string.support_action_open_kofi))
-    }
-
-    ListItem(
-      modifier = Modifier
-        .fillMaxWidth()
-        .clickable {
-          listener.setSupporterBadgeVisible(false)
-        },
-      headlineContent = {
-        Text(stringResource(StringsR.string.support_badge_setting))
-      },
-      supportingContent = {
-        Text(stringResource(StringsR.string.support_badge_setting_summary))
-      },
-      trailingContent = {
-        Switch(
-          checked = true,
-          onCheckedChange = listener::setSupporterBadgeVisible,
-        )
-      },
+    Text(
+      text = stringResource(StringsR.string.support_helps_title),
+      style = MaterialTheme.typography.labelLarge,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    Spacer(Modifier.size(4.dp))
+    SupportInfoRow(
+      icon = Icons.Outlined.Construction,
+      title = stringResource(StringsR.string.support_helps_maintenance),
+    )
+    HorizontalDivider()
+    SupportInfoRow(
+      icon = Icons.Outlined.AutoAwesome,
+      title = stringResource(StringsR.string.support_helps_features),
+    )
+    HorizontalDivider()
+    SupportInfoRow(
+      icon = Icons.Outlined.LockOpen,
+      title = stringResource(StringsR.string.support_helps_open_source),
     )
   }
 }
 
 @Composable
-private fun SupporterBadge() {
+private fun SupportInfoRow(
+  icon: ImageVector,
+  title: String,
+) {
   Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(vertical = 10.dp),
     verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(16.dp),
   ) {
-    AssistChip(
-      onClick = {},
-      label = {
-        Text(stringResource(StringsR.string.support_badge_label))
-      },
+    Icon(
+      modifier = Modifier.size(22.dp),
+      imageVector = icon,
+      contentDescription = null,
+      tint = MaterialTheme.colorScheme.primary,
+    )
+    Text(
+      text = title,
+      style = MaterialTheme.typography.bodyLarge,
     )
   }
 }
@@ -259,7 +226,12 @@ interface SupportProvider {
   @Provides
   @IntoSet
   fun supportNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.SupportVoice> { key ->
-    NavEntry(key) {
+    NavEntry(
+      key,
+      metadata = BottomSheetNav.bottomSheet(
+        ModalBottomSheetProperties(),
+      ),
+    ) {
       Support()
     }
   }
@@ -270,3 +242,5 @@ fun Support() {
   val viewModel = retain<SupportViewModel> { rootGraphAs<SupportGraph>().supportViewModel }
   Support(viewModel.viewState(), viewModel)
 }
+
+private val SupportLogoBlue = Color(0xFF0F4687)

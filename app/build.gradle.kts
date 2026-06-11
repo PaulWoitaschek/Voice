@@ -158,6 +158,7 @@ dependencies {
   implementation(projects.features.widget)
 
   implementation(libs.appCompat)
+  implementation(libs.lifecycle)
   implementation(libs.datastore)
 
   implementation(libs.navigation3.ui)

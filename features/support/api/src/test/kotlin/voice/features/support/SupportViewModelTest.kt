@@ -1,8 +1,10 @@
 package voice.features.support
 
+import androidx.navigation3.runtime.get
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.every
@@ -13,6 +15,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import voice.navigation.BottomSheetNav
+import voice.navigation.Destination
+import voice.navigation.NavEntryProvider
 import voice.navigation.Navigator
 
 class SupportViewModelTest {
@@ -32,11 +37,7 @@ class SupportViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().backendState shouldBe SupportBackendState.Free(supporterBadgeVisible = false)
-
-      backend.mutableState.value = SupportBackendState.Free(supporterBadgeVisible = true)
-
-      awaitItem().backendState shouldBe SupportBackendState.Free(supporterBadgeVisible = true)
+      awaitItem().backendState shouldBe SupportBackendState.Free
     }
   }
 
@@ -48,27 +49,25 @@ class SupportViewModelTest {
   }
 
   @Test
-  fun `setSupporterBadgeVisible delegates to backend`() {
-    viewModel.setSupporterBadgeVisible(true)
+  @Suppress("UNCHECKED_CAST")
+  fun `support nav entry is bottom sheet`() {
+    val provider = object : SupportProvider {}
+      .supportNavEntryProvider() as NavEntryProvider<Destination.SupportVoice>
+    val navEntry = provider.create(Destination.SupportVoice)
 
-    backend.lastSupporterBadgeVisible shouldBe true
+    navEntry.metadata[BottomSheetNav.BottomSheetKey].shouldNotBeNull()
   }
 }
 
 private class FakeSupportBackend : SupportBackend {
   val mutableState = MutableStateFlow<SupportBackendState>(
-    SupportBackendState.Free(supporterBadgeVisible = false),
+    SupportBackendState.Free,
   )
   var openSupportCount = 0
-  var lastSupporterBadgeVisible = false
 
   override val state: StateFlow<SupportBackendState> = mutableState
 
   override fun openSupport() {
     openSupportCount++
-  }
-
-  override fun setSupporterBadgeVisible(visible: Boolean) {
-    lastSupporterBadgeVisible = visible
   }
 }

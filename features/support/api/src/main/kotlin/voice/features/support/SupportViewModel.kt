@@ -25,8 +25,4 @@ class SupportViewModel(
   override fun openSupport() {
     backend.openSupport()
   }
-
-  override fun setSupporterBadgeVisible(visible: Boolean) {
-    backend.setSupporterBadgeVisible(visible)
-  }
 }
