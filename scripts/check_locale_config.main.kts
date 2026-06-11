@@ -113,6 +113,6 @@ if (missing.isNotEmpty() || unexpected.isNotEmpty()) {
 
 println("Locale config matches localization coverage.")
 localizedCoverages.sortedByDescending { it.percentage }.forEach {
-  val status = if (it.percentage > minCoverage) "included" else "excluded"
+  val status = if (it.percentage >= minCoverage) "included" else "excluded"
   println("- ${it.locale}: ${it.present}/${it.total} (${String.format("%.1f", it.percentage)}%) $status")
 }
