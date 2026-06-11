@@ -169,6 +169,27 @@ private fun Settings(
         AutoSleepTimerCard(viewState.autoSleepTimer, listener)
       }
 
+      if (viewState.showSupportDevelopment) {
+        item {
+          ListItem(
+            modifier = Modifier.clickable { listener.openSupportVoice() },
+            leadingContent = {
+              Icon(
+                imageVector = Icons.Outlined.Favorite,
+                contentDescription = stringResource(StringsR.string.settings_support_support_voice_title),
+                tint = MaterialTheme.colorScheme.primary,
+              )
+            },
+            headlineContent = {
+              Text(stringResource(StringsR.string.settings_support_support_voice_title))
+            },
+            supportingContent = {
+              Text(stringResource(StringsR.string.settings_support_support_voice_summary))
+            },
+          )
+        }
+      }
+
       item {
         ListItem(
           modifier = Modifier.clickable { listener.suggestIdea() },
@@ -240,26 +261,6 @@ private fun Settings(
             Text(stringResource(StringsR.string.settings_support_faq_title))
           },
         )
-      }
-      if (viewState.showSupportDevelopment) {
-        item {
-          ListItem(
-            modifier = Modifier.clickable { listener.openSupportVoice() },
-            leadingContent = {
-              Icon(
-                imageVector = Icons.Outlined.Favorite,
-                contentDescription = stringResource(StringsR.string.settings_support_support_voice_title),
-                tint = MaterialTheme.colorScheme.primary,
-              )
-            },
-            headlineContent = {
-              Text(stringResource(StringsR.string.settings_support_support_voice_title))
-            },
-            supportingContent = {
-              Text(stringResource(StringsR.string.settings_support_support_voice_summary))
-            },
-          )
-        }
       }
       item {
         AppVersion(
