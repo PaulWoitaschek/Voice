@@ -19,6 +19,7 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.launch
+import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.common.comparator.sortedNaturally
@@ -48,6 +49,7 @@ import voice.features.bookOverview.di.BookOverviewScope
 import voice.features.bookOverview.search.BookSearchViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import kotlin.time.Instant
 
 @SingleIn(BookOverviewScope::class)
 @Inject
@@ -64,6 +66,7 @@ class BookOverviewViewModel(
   private val gridModeStore: DataStore<GridMode>,
   private val gridCount: GridCount,
   private val navigator: Navigator,
+  private val appInfoProvider: AppInfoProvider,
   private val recentBookSearchDao: RecentBookSearchDao,
   private val search: BookSearch,
   private val contentRepo: BookContentRepo,
@@ -74,7 +77,7 @@ class BookOverviewViewModel(
   private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
   @KioskModeFeatureFlagQualifier
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
-  private val dispatcherProvider: DispatcherProvider,
+  dispatcherProvider: DispatcherProvider,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -161,7 +164,9 @@ class BookOverviewViewModel(
       searchActive = searchActive,
       searchViewState = bookSearchViewState,
       showStoragePermissionBugCard = hasStoragePermissionBug,
-      showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get() && !folderPickerMovedDialogShown,
+      showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get() &&
+        !folderPickerMovedDialogShown &&
+        appInfoProvider.installTime < FolderPickerMigrationInstallTimeCutoff,
       dialog = dialog,
     )
   }
@@ -298,6 +303,8 @@ class BookOverviewViewModel(
     }
   }
 }
+
+private val FolderPickerMigrationInstallTimeCutoff = Instant.parse("2026-06-17T00:00:00Z")
 
 @Composable
 private fun Book.itemViewState(

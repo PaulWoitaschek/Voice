@@ -18,6 +18,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import org.junit.Test
+import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.BookId
 import voice.core.data.GridMode
@@ -37,6 +38,7 @@ import voice.core.ui.GridCount
 import voice.features.bookOverview.book
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import kotlin.time.Instant
 
 class BookOverviewViewModelTest {
 
@@ -67,6 +69,7 @@ class BookOverviewViewModelTest {
         every { useGridAsDefault() } returns false
       },
       navigator = mockk<Navigator>(),
+      appInfoProvider = appInfoProvider(),
       recentBookSearchDao = mockk<RecentBookSearchDao> {
         every { recentBookSearches() } returns MutableStateFlow(emptyList())
       },
@@ -131,6 +134,7 @@ class BookOverviewViewModelTest {
         every { useGridAsDefault() } returns false
       },
       navigator = mockk<Navigator>(),
+      appInfoProvider = appInfoProvider(),
       recentBookSearchDao = mockk<RecentBookSearchDao> {
         every { recentBookSearches() } returns MutableStateFlow(emptyList())
       },
@@ -202,6 +206,22 @@ class BookOverviewViewModelTest {
   }
 
   @Test
+  fun `folder picker icon is hidden for installs on migration cutoff date`() = runTest {
+    val viewModel = viewModel(
+      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
+      folderPickerMovedDialogShownStore = MemoryDataStore(false),
+      appInfoProvider = appInfoProvider(installTime = Instant.parse("2026-06-17T00:00:00Z")),
+    )
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      awaitItem() shouldBe BookOverviewViewState.Loading
+      awaitItem().showFolderPickerIcon shouldBe false
+    }
+  }
+
+  @Test
   fun `folder picker click shows moved dialog instead of navigating`() = runTest {
     val navigator = mockk<Navigator>(relaxed = true)
     val viewModel = viewModel(
@@ -262,6 +282,7 @@ class BookOverviewViewModelTest {
     folderPickerInSettingsFeatureFlag: MemoryFeatureFlag<Boolean>,
     folderPickerMovedDialogShownStore: DataStore<Boolean>,
     navigator: Navigator = mockk(),
+    appInfoProvider: AppInfoProvider = appInfoProvider(),
   ): BookOverviewViewModel {
     return BookOverviewViewModel(
       repo = mockk<BookRepository> {
@@ -280,6 +301,7 @@ class BookOverviewViewModelTest {
         every { useGridAsDefault() } returns false
       },
       navigator = navigator,
+      appInfoProvider = appInfoProvider,
       recentBookSearchDao = mockk<RecentBookSearchDao> {
         every { recentBookSearches() } returns MutableStateFlow(emptyList())
       },
@@ -295,6 +317,12 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = MemoryFeatureFlag(false),
       dispatcherProvider = dispatcherProvider,
     )
+  }
+
+  private fun appInfoProvider(installTime: Instant = Instant.parse("2026-06-16T00:00:00Z")): AppInfoProvider {
+    return mockk {
+      every { this@mockk.installTime } returns installTime
+    }
   }
 }
 

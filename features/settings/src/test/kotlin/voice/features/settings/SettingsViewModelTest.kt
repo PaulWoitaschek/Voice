@@ -25,6 +25,7 @@ import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import kotlin.time.Instant
 
 class SettingsViewModelTest {
 
@@ -43,6 +44,7 @@ class SettingsViewModelTest {
     every { versionName } returns "1.2.3"
     every { analyticsIncluded } returns true
     every { supportDevelopmentIncluded } returns true
+    every { installTime } returns Instant.parse("2026-06-01T00:00:00Z")
   }
   private val gridCount = mockk<GridCount> {
     every { useGridAsDefault() } returns true
