@@ -29,6 +29,7 @@ import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.FolderPickerMovedDialogShownStore
 import voice.core.data.store.GridModeStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
@@ -56,6 +57,8 @@ class BookOverviewViewModel(
   private val playerController: PlayerController,
   @CurrentBookStore
   private val currentBookStoreDataStore: DataStore<BookId?>,
+  @FolderPickerMovedDialogShownStore
+  private val folderPickerMovedDialogShownStore: DataStore<Boolean>,
   @GridModeStore
   private val gridModeStore: DataStore<GridMode>,
   private val gridCount: GridCount,
@@ -75,6 +78,7 @@ class BookOverviewViewModel(
   private val scope = MainScope()
   private var searchActive by mutableStateOf(false)
   private var query by mutableStateOf("")
+  private var dialog by mutableStateOf<BookOverviewViewState.Dialog?>(null)
 
   fun attach() {
     mediaScanner.scan()
@@ -94,6 +98,8 @@ class BookOverviewViewModel(
     val currentBookId = remember { currentBookStoreDataStore.data }
       .collectAsState(initial = null).value
     val scannerActive = remember { mediaScanner.scannerActive }
+      .collectAsState(initial = false).value
+    val folderPickerMovedDialogShown = remember { folderPickerMovedDialogShownStore.data }
       .collectAsState(initial = false).value
     val gridMode = remember { gridModeStore.data }
       .collectAsState(initial = null).value
@@ -153,7 +159,8 @@ class BookOverviewViewModel(
       searchActive = searchActive,
       searchViewState = bookSearchViewState,
       showStoragePermissionBugCard = hasStoragePermissionBug,
-      showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get(),
+      showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get() && !folderPickerMovedDialogShown,
+      dialog = dialog,
     )
   }
 
@@ -229,6 +236,7 @@ class BookOverviewViewModel(
       ),
       showStoragePermissionBugCard = false,
       showFolderPickerIcon = false,
+      dialog = null,
     )
   }
 
@@ -241,7 +249,14 @@ class BookOverviewViewModel(
   }
 
   fun onBookFolderClick() {
-    navigator.goTo(Destination.FolderPicker)
+    dialog = BookOverviewViewState.Dialog.FolderPickerMovedToSettings
+  }
+
+  fun onFolderPickerMovedDialogDismiss() {
+    dialog = null
+    scope.launch {
+      folderPickerMovedDialogShownStore.updateData { true }
+    }
   }
 
   fun onSearchActiveChange(active: Boolean) {

@@ -101,24 +101,22 @@ private fun Settings(
           )
         }
       }
-      if (viewState.showFolderPickerEntry) {
-        item {
-          ListItem(
-            modifier = Modifier.clickable { listener.openFolderPicker() },
-            leadingContent = {
-              Icon(
-                imageVector = Icons.Outlined.Book,
-                contentDescription = stringResource(StringsR.string.library_folders_title),
-              )
-            },
-            headlineContent = {
-              Text(stringResource(StringsR.string.library_folders_title))
-            },
-            supportingContent = {
-              Text(stringResource(StringsR.string.settings_library_folders_summary))
-            },
-          )
-        }
+      item {
+        ListItem(
+          modifier = Modifier.clickable { listener.openFolderPicker() },
+          leadingContent = {
+            Icon(
+              imageVector = Icons.Outlined.Book,
+              contentDescription = stringResource(StringsR.string.library_folders_title),
+            )
+          },
+          headlineContent = {
+            Text(stringResource(StringsR.string.library_folders_title))
+          },
+          supportingContent = {
+            Text(stringResource(StringsR.string.settings_library_folders_summary))
+          },
+        )
       }
       if (viewState.showDarkThemePref) {
         item {

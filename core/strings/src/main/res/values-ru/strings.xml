@@ -24,6 +24,7 @@
     <string name="common.action.remove">Убрать</string>
     <string name="common.dialog.cancel">Отмена</string>
     <string name="common.dialog.confirm">Установить</string>
+    <string name="common.dialog.ok">ОК</string>
     <string name="common.error.generic.message">Что-то пошло не так 😢</string>
     <string name="common.error.generic.retry">Повторить</string>
     <string name="cover.content_description.selectable">Показать выбранную обложку</string>
@@ -66,6 +67,8 @@
     <string name="library.category.not_started.title">Непрослушанные</string>
     <string name="library.empty.add_first_book">Давайте выберем папку с аудиокнигами!</string>
     <string name="library.folders.title">Папки с аудиокнигами</string>
+    <string name="library.folders.moved.dialog.title">Папки аудиокниг перенесены</string>
+    <string name="library.folders.moved.dialog.message">Теперь папками аудиокниг можно управлять в настройках.</string>
     <string name="library.search.hint">Что вы ищете?</string>
     <string name="library.storage_permission_bug.action">Предоставить разрешение</string>
     <string name="library.storage_permission_bug.message">На некоторых устройствах системное приложение не имеет необходимого разрешения для доступа к внешнему хранилищу. Этот доступ необходим для того, чтобы Voice мог читать ваши аудиокниги.</string>

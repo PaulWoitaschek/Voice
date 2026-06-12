@@ -24,6 +24,7 @@
     <string name="common.action.remove">Eemalda</string>
     <string name="common.dialog.cancel">Katkesta</string>
     <string name="common.dialog.confirm">Salvesta</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Midagi läks valesti 😢</string>
     <string name="common.error.generic.retry">Proovi uuesti</string>
     <string name="cover.content_description.selectable">Näita kaanepilte, mille vahel valida</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Kuulamise ootel</string>
     <string name="library.empty.add_first_book">Lisame nüüd üheskoos heliraamatute kausta ja sa saad alustada kuulamisega!</string>
     <string name="library.folders.title">Heliraamatute kaustad</string>
+    <string name="library.folders.moved.dialog.title">Audioraamatute kaustad teisaldati</string>
+    <string name="library.folders.moved.dialog.message">Nüüd saad audioraamatute kaustu hallata eelistustes.</string>
     <string name="library.search.hint">Mida sa otsid?</string>
     <string name="library.storage_permission_bug.action">Anna õigused</string>
     <string name="library.storage_permission_bug.message">Mõnedes seadmetes puudub ühel süsteemirakendusel vajalik õigus lugeda andmeid väliselt andmekandjalt. See ligipääs on vajalik, et Voice saaks lugeda sinu heliraamatute faile.</string>

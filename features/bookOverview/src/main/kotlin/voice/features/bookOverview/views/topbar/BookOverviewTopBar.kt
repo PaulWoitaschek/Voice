@@ -85,6 +85,7 @@ private fun BookOverviewTopBarPreview() {
         ),
         showStoragePermissionBugCard = false,
         showFolderPickerIcon = true,
+        dialog = null,
       ),
       onBookFolderClick = {},
       onSettingsClick = {},

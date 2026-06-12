@@ -24,6 +24,7 @@
     <string name="common.action.remove">Buang</string>
     <string name="common.dialog.cancel">Batalkan</string>
     <string name="common.dialog.confirm">Atur</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Terjadi kesalahan 😢</string>
     <string name="common.error.generic.retry">Coba Lagi</string>
     <string name="cover.content_description.selectable">Tampilkan sampul untuk dipilih</string>
@@ -57,6 +58,8 @@
     <string name="library.category.not_started.title">Belum dimulai</string>
     <string name="library.empty.add_first_book">Mari tambahkan folder buku audio Anda sehingga Anda dapat mulai mendengarkan!</string>
     <string name="library.folders.title">Folder buku audio</string>
+    <string name="library.folders.moved.dialog.title">Folder buku audio dipindahkan</string>
+    <string name="library.folders.moved.dialog.message">Sekarang Anda dapat mengelola folder buku audio di Preferensi.</string>
     <string name="library.search.hint">Apa yang Anda cari?</string>
     <string name="library.storage_permission_bug.action">Berikan izin</string>
     <string name="library.storage_permission_bug.message">Untuk perangkat tertentu, aplikasi sistem tidak memiliki izin yang diperlukan untuk mengakses penyimpanan eksternal. Akses ini penting agar Voice dapat membaca buku audio Anda.</string>

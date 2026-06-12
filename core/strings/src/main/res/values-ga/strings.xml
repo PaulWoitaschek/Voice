@@ -24,6 +24,7 @@
     <string name="common.action.remove">Bain de</string>
     <string name="common.dialog.cancel">Cealaigh</string>
     <string name="common.dialog.confirm">Socraigh</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Chuaigh rud éigin mícheart 😢</string>
     <string name="common.error.generic.retry">Bain triail eile as</string>
     <string name="cover.content_description.selectable">Taispeáin clúdach a roghnú</string>
@@ -69,6 +70,8 @@
     <string name="library.category.not_started.title">Níl tosnaithe go fóill</string>
     <string name="library.empty.add_first_book">Cuirimis d’fhillteán closleabhar leis ionas gur féidir leat tosú ag éisteacht!</string>
     <string name="library.folders.title">Fillteáin na closleabhar</string>
+    <string name="library.folders.moved.dialog.title">Bogadh fillteáin closleabhar</string>
+    <string name="library.folders.moved.dialog.message">Is féidir leat fillteáin closleabhar a bhainistiú anois sna Sainroghanna.</string>
     <string name="library.search.hint">Cad atá tú ag féachaint faoi?</string>
     <string name="library.storage_permission_bug.action">Cead a dheonú</string>
     <string name="library.storage_permission_bug.message">I gcás feistí áirithe, tá an cead riachtanach chun rochtain a fháil ar an stóras seachtrach in easnamh ar aip córais. Tá an rochtain seo riachtanach do Voice chun do chlosleabhair a léamh.</string>

@@ -24,6 +24,7 @@
     <string name="common.action.remove">Entfernen</string>
     <string name="common.dialog.cancel">Abbrechen</string>
     <string name="common.dialog.confirm">Okay</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Etwas ist schiefgelaufen 😢</string>
     <string name="common.error.generic.retry">Erneut versuchen</string>
     <string name="cover.content_description.selectable">Zeigt Cover zur Auswahl an</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Neu</string>
     <string name="library.empty.add_first_book">Füge Deinen Hörbuchordner hinzu, damit Du mit dem Hören beginnen kannst!</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
+    <string name="library.folders.moved.dialog.title">Hörbuch-Ordner verschoben</string>
+    <string name="library.folders.moved.dialog.message">Du kannst Hörbuch-Ordner jetzt in den Einstellungen verwalten.</string>
     <string name="library.search.hint">Wonach suchst Du?</string>
     <string name="library.storage_permission_bug.action">Berechtigung erteilen</string>
     <string name="library.storage_permission_bug.message">Für bestimmte Geräte fehlt einer System-App die notwendige Berechtigung, auf den externen Speicher zuzugreifen. Dieser Zugriff ist jedoch für Voice essentiell, um Deine Hörbücher lesen zu können.</string>

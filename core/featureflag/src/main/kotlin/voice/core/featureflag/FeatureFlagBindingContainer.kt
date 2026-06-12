@@ -44,6 +44,7 @@ interface FeatureFlagBindingContainer {
     return factory.boolean(
       key = "folder_picker_in_settings",
       description = "Shows the folder picker entry directly in settings.",
+      defaultValue = false,
     )
   }
 

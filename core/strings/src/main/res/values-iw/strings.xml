@@ -24,6 +24,7 @@
     <string name="common.action.remove">מחק</string>
     <string name="common.dialog.cancel">ביטול</string>
     <string name="common.dialog.confirm">אישור</string>
+    <string name="common.dialog.ok">אישור</string>
     <string name="common.error.generic.message">משהו השתבש 😢</string>
     <string name="common.error.generic.retry">נסה שוב</string>
     <string name="cover.content_description.selectable">להציג עטיפות לבחירה</string>
@@ -63,6 +64,8 @@
     <string name="library.category.not_started.title">לא שמעתי עדיין</string>
     <string name="library.empty.add_first_book">בואו נוסיף את תיקיית הקולספר שלכם כדי שתוכלו להתחיל להאזין!</string>
     <string name="library.folders.title">תיקיית קולספר</string>
+    <string name="library.folders.moved.dialog.title">תיקיות ספרי השמע הועברו</string>
+    <string name="library.folders.moved.dialog.message">כעת ניתן לנהל תיקיות ספרי שמע בהעדפות.</string>
     <string name="library.search.hint">מה את.ה מחפש.ת?</string>
     <string name="library.storage_permission_bug.action">הענקת הרשאה</string>
     <string name="library.storage_permission_bug.message">עבור מכשירים מסוימים, לאפליקציית מערכת חסרה את ההרשאה הנדרשת לגישה לאחסון החיצוני. גישה זו חיונית כדי ש-Voice יוכל לקרוא את ספרי האודיו שלך.</string>

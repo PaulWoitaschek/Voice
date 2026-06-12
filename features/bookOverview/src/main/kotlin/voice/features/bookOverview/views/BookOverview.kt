@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue.Expanded
 import androidx.compose.material3.SheetValue.Hidden
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
@@ -23,6 +26,7 @@ import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -51,6 +55,7 @@ import voice.features.bookOverview.views.topbar.BookOverviewTopBar
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import kotlin.uuid.Uuid
+import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface BookOverviewProvider {
@@ -102,6 +107,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
       showBottomSheet = true
     },
     onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
+    onFolderPickerMovedDialogDismiss = bookOverviewViewModel::onFolderPickerMovedDialogDismiss,
     onPlayButtonClick = bookOverviewViewModel::playPause,
     onSearchActiveChange = bookOverviewViewModel::onSearchActiveChange,
     onSearchQueryChange = bookOverviewViewModel::onSearchQueryChange,
@@ -164,6 +170,7 @@ internal fun BookOverview(
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   onBookFolderClick: () -> Unit,
+  onFolderPickerMovedDialogDismiss: () -> Unit,
   onPlayButtonClick: () -> Unit,
   onSearchActiveChange: (Boolean) -> Unit,
   onSearchQueryChange: (String) -> Unit,
@@ -224,6 +231,36 @@ internal fun BookOverview(
       }
     }
   }
+  Dialog(
+    dialog = viewState.dialog,
+    onFolderPickerMovedDialogDismiss = onFolderPickerMovedDialogDismiss,
+  )
+}
+
+@Composable
+private fun Dialog(
+  dialog: BookOverviewViewState.Dialog?,
+  onFolderPickerMovedDialogDismiss: () -> Unit,
+) {
+  when (dialog) {
+    BookOverviewViewState.Dialog.FolderPickerMovedToSettings -> {
+      AlertDialog(
+        onDismissRequest = onFolderPickerMovedDialogDismiss,
+        title = {
+          Text(stringResource(StringsR.string.library_folders_moved_dialog_title) + " ⚙\uFE0F")
+        },
+        text = {
+          Text(stringResource(StringsR.string.library_folders_moved_dialog_message))
+        },
+        confirmButton = {
+          TextButton(onClick = onFolderPickerMovedDialogDismiss) {
+            Text(stringResource(StringsR.string.common_dialog_ok))
+          }
+        },
+      )
+    }
+    null -> Unit
+  }
 }
 
 @Suppress("ktlint:compose:preview-public-check")
@@ -240,6 +277,7 @@ fun BookOverviewPreview(
       onBookClick = {},
       onBookLongClick = {},
       onBookFolderClick = {},
+      onFolderPickerMovedDialogDismiss = {},
       onPlayButtonClick = {},
       onSearchActiveChange = {},
       onSearchQueryChange = {},
@@ -295,6 +333,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       ),
       showStoragePermissionBugCard = false,
       showFolderPickerIcon = true,
+      dialog = null,
     ),
   )
 }

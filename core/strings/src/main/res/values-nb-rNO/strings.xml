@@ -24,6 +24,7 @@
     <string name="common.action.remove">Fjern</string>
     <string name="common.dialog.cancel">Avbryt</string>
     <string name="common.dialog.confirm">Sett</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Noe gikk galt 😢</string>
     <string name="common.error.generic.retry">Prøv igjen</string>
     <string name="cover.content_description.selectable">Viser omslag å velge</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Ikke startet enda</string>
     <string name="library.empty.add_first_book">Legg til lydbokmappen din så du kan begynne å lytte!</string>
     <string name="library.folders.title">Lydbokmapper</string>
+    <string name="library.folders.moved.dialog.title">Lydbokmapper flyttet</string>
+    <string name="library.folders.moved.dialog.message">Du kan nå administrere lydbokmapper i Innstillinger.</string>
     <string name="library.search.hint">Hva leter du etter?</string>
     <string name="library.storage_permission_bug.action">Innvilg tillatelse</string>
     <string name="library.storage_permission_bug.message">På enkelte enheter mangler en systemapp den nødvendige tillatelsen for å få tilgang til det eksterne lagringsmediet. Denne tilgangen er avgjørende for at Voice skal kunne lese lydbøkene dine.</string>

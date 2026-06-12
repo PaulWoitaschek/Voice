@@ -24,6 +24,7 @@
     <string name="common.action.remove">Enlever</string>
     <string name="common.dialog.cancel">Annuler</string>
     <string name="common.dialog.confirm">Définir</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Quelque chose s\'est mal passé 😢</string>
     <string name="common.error.generic.retry">Réessayer</string>
     <string name="cover.content_description.selectable">Montre la couverture à choisir</string>
@@ -63,6 +64,8 @@
     <string name="library.category.not_started.title">Pas encore commencé</string>
     <string name="library.empty.add_first_book">Ajoutons un dossier de livres audio pour commencer à les écouter !</string>
     <string name="library.folders.title">Dossiers de livres audio</string>
+    <string name="library.folders.moved.dialog.title">Dossiers de livres audio déplacés</string>
+    <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Préférences.</string>
     <string name="library.search.hint">Que cherchez-vous ?</string>
     <string name="library.storage_permission_bug.action">Accorder la permission</string>
     <string name="library.storage_permission_bug.message">Sur certains appareils, il manque les permissions nécessaires à une application système pour accéder au stockage externe. Cet accès est essentiel pour que Voice puisse lire les livres audio.</string>

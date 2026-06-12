@@ -24,6 +24,7 @@
     <string name="common.action.remove">Smazat</string>
     <string name="common.dialog.cancel">Ukončit</string>
     <string name="common.dialog.confirm">Nastavit</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Něco se pokazilo 😢</string>
     <string name="common.error.generic.retry">Znovu</string>
     <string name="cover.content_description.selectable">Zobrazí obaly pro vybrání</string>
@@ -66,6 +67,8 @@
     <string name="library.category.not_started.title">Doposud nespuštěno</string>
     <string name="library.empty.add_first_book">Pojďme přidat vaši složku s audioknihami ať můžete začít poslouchat!</string>
     <string name="library.folders.title">Složky s audioknihami</string>
+    <string name="library.folders.moved.dialog.title">Složky audioknih přesunuty</string>
+    <string name="library.folders.moved.dialog.message">Složky audioknih teď můžete spravovat v Nastavení.</string>
     <string name="library.search.hint">Co hledáte?</string>
     <string name="library.storage_permission_bug.action">Udělit oprávnění</string>
     <string name="library.storage_permission_bug.message">U některých zařízení chybí systémové aplikaci potřebná oprávnění pro přístup k externímu úložišti. Tento přístup je nezbytný, aby Voice mohl číst vaše audioknihy.</string>

@@ -24,6 +24,7 @@
     <string name="common.action.remove">Verwyder</string>
     <string name="common.dialog.cancel">Kanselleer</string>
     <string name="common.dialog.confirm">Stel</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Iets het skeef geloop 😢</string>
     <string name="common.error.generic.retry">Probeer weer</string>
     <string name="cover.content_description.selectable">Wys voorblad om te kies</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Nog nie begin nie</string>
     <string name="library.empty.add_first_book">Kom ons voeg jou audioboek gids sodat jy kan begin luister!</string>
     <string name="library.folders.title">Klankboekgids</string>
+    <string name="library.folders.moved.dialog.title">Oudioboekvouers geskuif</string>
+    <string name="library.folders.moved.dialog.message">Jy kan nou oudioboekvouers in Voorkeure bestuur.</string>
     <string name="library.search.hint">Waarna is jy opsoek?</string>
     <string name="library.storage_permission_bug.action">Gee toestemming</string>
     <string name="library.storage_permission_bug.message">Vir sekere toestelle ontbreek die nodige toestemming vir ’n stelseltoep om toegang tot die eksterne berging te kry. Hierdie toegang is noodsaaklik sodat Voice jou luisterboeke kan lees.</string>

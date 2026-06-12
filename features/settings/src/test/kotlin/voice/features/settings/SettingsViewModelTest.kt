@@ -47,7 +47,6 @@ class SettingsViewModelTest {
   private val gridCount = mockk<GridCount> {
     every { useGridAsDefault() } returns true
   }
-  private val folderPickerFeatureFlag = MemoryFeatureFlag(false)
   private val kioskModeFeatureFlag = MemoryFeatureFlag(false)
 
   private val viewModel = SettingsViewModel(
@@ -60,7 +59,6 @@ class SettingsViewModelTest {
     sleepTimerPreferenceStore = sleepTimerPreferenceStore,
     analyticsConsentStore = analyticsConsentStore,
     gridCount = gridCount,
-    folderPickerInSettingsFeatureFlag = folderPickerFeatureFlag,
     kioskModeFeatureFlag = kioskModeFeatureFlag,
     developerMenuUnlockedStore = developerMenuUnlockedStore,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
@@ -111,6 +109,15 @@ class SettingsViewModelTest {
   }
 
   @Test
+  fun `openFolderPicker navigates to folder picker`() {
+    viewModel.openFolderPicker()
+
+    verify(exactly = 1) {
+      navigator.goTo(Destination.FolderPicker)
+    }
+  }
+
+  @Test
   fun `view state shows support development when included`() = scope.runTest {
     every { appInfoProvider.supportDevelopmentIncluded } returns true
 
@@ -141,7 +148,6 @@ class SettingsViewModelTest {
     }.test {
       awaitItem().let {
         it.kioskMode shouldBe true
-        it.showFolderPickerEntry shouldBe true
       }
     }
   }

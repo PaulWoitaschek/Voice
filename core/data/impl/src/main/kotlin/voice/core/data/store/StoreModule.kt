@@ -157,6 +157,13 @@ public interface StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
+  @FolderPickerMovedDialogShownStore
+  private fun folderPickerMovedDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("folderPickerMovedDialogShown", defaultValue = false)
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
   @AnalyticsConsentStore
   private fun analyticsConsent(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("analyticsConsent", defaultValue = false)

@@ -24,6 +24,7 @@
     <string name="common.action.remove">Remover</string>
     <string name="common.dialog.cancel">Cancelar</string>
     <string name="common.dialog.confirm">Definir</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Algo deu errado 😢</string>
     <string name="common.error.generic.retry">Tentar novamente</string>
     <string name="cover.content_description.selectable">Mostra capas para escolher</string>
@@ -63,6 +64,8 @@
     <string name="library.category.not_started.title">Não iniciado ainda</string>
     <string name="library.empty.add_first_book">Vamos adicionar uma pasta de Audiolivros para começar a ouvir!</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
+    <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
+    <string name="library.folders.moved.dialog.message">Agora você pode gerenciar as pastas de audiolivros nas Preferências.</string>
     <string name="library.search.hint">O que procura?</string>
     <string name="library.storage_permission_bug.action">Conceder permissão</string>
     <string name="library.storage_permission_bug.message">Em certos dispositivos, o aplicativo pode exigir permissões para acessar o armazenamento externo. Esse acesso é essencial para Voice ler os seus audiobooks.</string>
