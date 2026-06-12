@@ -4,9 +4,10 @@ Yes, Voice fully supports Android Auto!
 
 !!! warning
 
-    For Android Auto functionality to work, you must install Voice directly from the
+    For officially supported Android Auto functionality, install Voice from the
     [Google Play Store](https://play.google.com/store/apps/details?id=de.ph1b.audiobook).
-    This is because Android Auto integration requires versions that have been reviewed and approved by the Google Play team.
+    Other sources may work on some setups, but are not guaranteed.
+    See the [download source comparison](download-sources.md) for details.
 
 ### Why doesn't Voice support the xyz Media Format?
 
