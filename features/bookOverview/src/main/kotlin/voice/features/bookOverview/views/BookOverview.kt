@@ -3,11 +3,17 @@ package voice.features.bookOverview.views
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetValue.Expanded
@@ -246,8 +252,15 @@ private fun Dialog(
     BookOverviewViewState.Dialog.FolderPickerMovedToSettings -> {
       AlertDialog(
         onDismissRequest = onFolderPickerMovedDialogDismiss,
+        icon = {
+          Row {
+            Icon(imageVector = Icons.AutoMirrored.Default.ArrowForward, contentDescription = null)
+            Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)
+            Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
+          }
+        },
         title = {
-          Text(stringResource(StringsR.string.library_folders_moved_dialog_title) + " ⚙\uFE0F")
+          Text(stringResource(StringsR.string.library_folders_moved_dialog_title))
         },
         text = {
           Text(stringResource(StringsR.string.library_folders_moved_dialog_message))

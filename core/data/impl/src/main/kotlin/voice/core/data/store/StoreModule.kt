@@ -159,7 +159,7 @@ public interface StoreModule {
   @SingleIn(AppScope::class)
   @FolderPickerMovedDialogShownStore
   private fun folderPickerMovedDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
-    return factory.boolean("folderPickerMovedDialogShown", defaultValue = false)
+    return factory.boolean("folderPickerMovedDialogShow2n", defaultValue = false)
   }
 
   @Provides
