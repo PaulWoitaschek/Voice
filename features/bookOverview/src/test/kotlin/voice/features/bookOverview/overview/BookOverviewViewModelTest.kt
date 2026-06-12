@@ -11,19 +11,14 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import kotlinx.coroutines.yield
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
+import voice.core.common.DispatcherProvider
 import voice.core.data.BookId
 import voice.core.data.GridMode
 import voice.core.data.KioskModeDemoData
@@ -43,20 +38,10 @@ import voice.features.bookOverview.book
 import voice.navigation.Destination
 import voice.navigation.Navigator
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class BookOverviewViewModelTest {
 
   private val testDispatcher = UnconfinedTestDispatcher()
-
-  @Before
-  fun setUp() {
-    Dispatchers.setMain(testDispatcher)
-  }
-
-  @After
-  fun tearDown() {
-    Dispatchers.resetMain()
-  }
+  private val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
 
   @Test
   fun `state updates the current book item from live playback`() = runTest {
@@ -95,6 +80,7 @@ class BookOverviewViewModelTest {
       folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
       kioskModeFeatureFlag = MemoryFeatureFlag(false),
+      dispatcherProvider = dispatcherProvider,
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -158,6 +144,7 @@ class BookOverviewViewModelTest {
       folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
       kioskModeFeatureFlag = MemoryFeatureFlag(true),
+      dispatcherProvider = dispatcherProvider,
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -306,6 +293,7 @@ class BookOverviewViewModelTest {
       folderPickerInSettingsFeatureFlag = folderPickerInSettingsFeatureFlag,
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
       kioskModeFeatureFlag = MemoryFeatureFlag(false),
+      dispatcherProvider = dispatcherProvider,
     )
   }
 }

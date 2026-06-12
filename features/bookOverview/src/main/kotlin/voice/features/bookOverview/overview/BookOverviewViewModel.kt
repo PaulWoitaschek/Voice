@@ -18,8 +18,9 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import voice.core.common.DispatcherProvider
+import voice.core.common.MainScope
 import voice.core.common.comparator.sortedNaturally
 import voice.core.data.Book
 import voice.core.data.BookId
@@ -73,9 +74,10 @@ class BookOverviewViewModel(
   private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
   @KioskModeFeatureFlagQualifier
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
+  private val dispatcherProvider: DispatcherProvider,
 ) {
 
-  private val scope = MainScope()
+  private val scope = MainScope(dispatcherProvider)
   private var searchActive by mutableStateOf(false)
   private var query by mutableStateOf("")
   private var dialog by mutableStateOf<BookOverviewViewState.Dialog?>(null)
