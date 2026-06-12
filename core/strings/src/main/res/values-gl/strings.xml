@@ -24,6 +24,7 @@
     <string name="common.action.remove">Retirar</string>
     <string name="common.dialog.cancel">Desbotar</string>
     <string name="common.dialog.confirm">Establecer</string>
+    <string name="common.dialog.ok">Aceptar</string>
     <string name="common.error.generic.message">Algo fallou 😢</string>
     <string name="common.error.generic.retry">Reintentar</string>
     <string name="cover.content_description.selectable">Mostra a portada a elixir</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Aínda non escoitado</string>
     <string name="library.empty.add_first_book">Imos engadir un cartafol de audiolibros para comezar a escoitar!</string>
     <string name="library.folders.title">Cartafoles de audiolibros</string>
+    <string name="library.folders.moved.dialog.title">Cartafoles de audiolibros movidos</string>
+    <string name="library.folders.moved.dialog.message">Agora podes xestionar os cartafoles de audiolibros nas Preferencias.</string>
     <string name="library.search.hint">Que estás a buscar?</string>
     <string name="library.storage_permission_bug.action">Conceder permiso</string>
     <string name="library.storage_permission_bug.message">En certos dispositivos, a unha app do sistema fáltanlle o permiso necesario para acceder á almacenaxe externa. Este acceso é esencial para que Voice poida ler os teus audiolibros.</string>

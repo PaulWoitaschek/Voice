@@ -24,6 +24,7 @@
     <string name="common.action.remove">Verwijderen</string>
     <string name="common.dialog.cancel">Annuleren</string>
     <string name="common.dialog.confirm">Instellen</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Er is iets fout gegaan 😢</string>
     <string name="common.error.generic.retry">Opnieuw proberen</string>
     <string name="cover.content_description.selectable">Omslag kiezen</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Nog niet begonnen</string>
     <string name="library.empty.add_first_book">Laten we je luisterboekmap toevoegen om te beginnen met luisteren!</string>
     <string name="library.folders.title">Luisterboekmappen</string>
+    <string name="library.folders.moved.dialog.title">Audioboekmappen verplaatst</string>
+    <string name="library.folders.moved.dialog.message">Je kunt audioboekmappen nu beheren in Voorkeuren.</string>
     <string name="library.search.hint">Waar ben je naar op zoek?</string>
     <string name="library.storage_permission_bug.action">Toegang geven</string>
     <string name="library.storage_permission_bug.message">Voor sommige toestellen mist een systeem applicatie toegang tot de externe opslag. Deze toegang is essentieel voor Voice om de je luisterboeken te kunnen lezen.</string>

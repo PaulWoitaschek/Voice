@@ -24,6 +24,7 @@
     <string name="common.action.remove">Kaldır</string>
     <string name="common.dialog.cancel">İptal</string>
     <string name="common.dialog.confirm">Kur</string>
+    <string name="common.dialog.ok">Tamam</string>
     <string name="common.error.generic.message">Bir şeyler ters gitti😢</string>
     <string name="common.error.generic.retry">Tekrar dene</string>
     <string name="cover.content_description.selectable">Seçmek için kapak gösterir</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Henüz başlamadı</string>
     <string name="library.empty.add_first_book">Dinlemeye başlayabilmeniz için sesli kitap dizininizi ekleyelim!</string>
     <string name="library.folders.title">Sesli kitap dizinleri</string>
+    <string name="library.folders.moved.dialog.title">Sesli kitap klasörleri taşındı</string>
+    <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Tercihler\'de yönetebilirsiniz.</string>
     <string name="library.search.hint">Ne arıyorsunuz?</string>
     <string name="library.storage_permission_bug.action">İzin ver</string>
     <string name="library.storage_permission_bug.message">Belirli aygıtlarda, bir sistem uygulamasının harici depolamaya erişim için gerekli izni yoktur. Bu erişim, Voice\'un sesli kitaplarınızı okuyabilmesi için gereklidir.</string>

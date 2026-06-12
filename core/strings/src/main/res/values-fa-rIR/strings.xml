@@ -24,6 +24,7 @@
     <string name="common.action.remove">حذف</string>
     <string name="common.dialog.cancel">لغو</string>
     <string name="common.dialog.confirm">انتخاب</string>
+    <string name="common.dialog.ok">باشه</string>
     <string name="common.error.generic.message">مشکلی پیش آمد 😢</string>
     <string name="common.error.generic.retry">تلاش مجدد</string>
     <string name="cover.content_description.selectable">نمایش کاور برای انتخاب</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">هنوز شروع نشده</string>
     <string name="library.empty.add_first_book">پوشه کتاب صوتی خود را اضافه کنید تا بتوانید شروع به گوش دادن کنید!</string>
     <string name="library.folders.title">پوشه‌های کتاب صوتی</string>
+    <string name="library.folders.moved.dialog.title">پوشه‌های کتاب صوتی منتقل شدند</string>
+    <string name="library.folders.moved.dialog.message">اکنون می‌توانید پوشه‌های کتاب صوتی را در تنظیمات مدیریت کنید.</string>
     <string name="library.search.hint">دنبال چه چیزی میگردید؟</string>
     <string name="library.storage_permission_bug.action">اعطا مجوز</string>
     <string name="library.storage_permission_bug.message">در برخی از دستگاه‌ها، یک برنامه سیستم مجوز لازم برای دسترسی به کارت حافظه خارجی را ندارد. این دسترسی برای Voice برای خواندن کتاب‌های صوتی شما ضروری است.</string>

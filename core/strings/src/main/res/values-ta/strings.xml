@@ -24,6 +24,7 @@
     <string name="common.action.remove">அகற்று</string>
     <string name="common.dialog.cancel">ரத்துசெய்</string>
     <string name="common.dialog.confirm">கணம்</string>
+    <string name="common.dialog.ok">சரி</string>
     <string name="common.error.generic.message">ஏதோ தவறு நடந்தது</string>
     <string name="common.error.generic.retry">மீண்டும் முயற்சிக்கவும்</string>
     <string name="cover.content_description.selectable">தேர்வு செய்ய சூ கவர்</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">இன்னும் தொடங்கப்படவில்லை</string>
     <string name="library.empty.add_first_book">உங்கள் ஆடியோபுக் கோப்புறையைச் சேர்ப்போம், எனவே நீங்கள் கேட்கத் தொடங்கலாம்!</string>
     <string name="library.folders.title">ஆடியோபுக் கோப்புறைகள்</string>
+    <string name="library.folders.moved.dialog.title">ஒலிப்புத்தகக் கோப்புறைகள் நகர்த்தப்பட்டன</string>
+    <string name="library.folders.moved.dialog.message">இப்போது ஒலிப்புத்தகக் கோப்புறைகளை விருப்பங்களில் நிர்வகிக்கலாம்.</string>
     <string name="library.search.hint">நீங்கள் எதைத் தேடுகிறீர்கள்?</string>
     <string name="library.storage_permission_bug.action">இசைவு வழங்கவும்</string>
     <string name="library.storage_permission_bug.message">சில சாதனங்களுக்கு, ஒரு கணினி பயன்பாடு வெளிப்புற சேமிப்பிடத்தை அணுக தேவையான அனுமதியைக் காணவில்லை. குரல் உங்கள் ஆடியோபுக்குகளைப் படிக்க இந்த அணுகல் தேவை.</string>

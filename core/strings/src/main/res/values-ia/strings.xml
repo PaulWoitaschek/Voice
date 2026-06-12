@@ -24,6 +24,7 @@
     <string name="common.action.remove">Remover</string>
     <string name="common.dialog.cancel">Cancellar</string>
     <string name="common.dialog.confirm">Definir</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Habeva qualcosa improprie 😢</string>
     <string name="common.error.generic.retry">Retentar</string>
     <string name="cover.content_description.selectable">Monstra le copertura seligite</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Ancora non ha comenciate</string>
     <string name="library.empty.add_first_book">Nos adde tu dossier de audiolibro dunque tu pote comenciar a ascoltar lo!</string>
     <string name="library.folders.title">Dossieres de audiolibros</string>
+    <string name="library.folders.moved.dialog.title">Dossieres de audiolibros movite</string>
+    <string name="library.folders.moved.dialog.message">Tu pote ora gerer le dossieres de audiolibros in Preferentias.</string>
     <string name="library.search.hint">Que cerca tu?</string>
     <string name="library.storage_permission_bug.action">Conceder le permission</string>
     <string name="library.storage_permission_bug.message">In certe apparatos, un application de systema manca le permissiones necessari pro acceder al immagazinage externe. Iste accesso es essential pro que Voice pote leger tu audiolibros.</string>

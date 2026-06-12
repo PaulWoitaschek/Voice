@@ -24,6 +24,7 @@
     <string name="common.action.remove">Poista</string>
     <string name="common.dialog.cancel">Peruuta</string>
     <string name="common.dialog.confirm">Aseta</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Jotakin meni pieleen 😢</string>
     <string name="common.error.generic.retry">Yritä uudelleen</string>
     <string name="cover.content_description.selectable">Näyttää kannen jonka valita</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Ei vielä aloitettu</string>
     <string name="library.empty.add_first_book">Lisätään äänikirjakansiosi jotta voit aloittaa kuuntelemisen!</string>
     <string name="library.folders.title">Äänikirjakansiot</string>
+    <string name="library.folders.moved.dialog.title">Äänikirjakansiot siirretty</string>
+    <string name="library.folders.moved.dialog.message">Voit nyt hallita äänikirjakansioita asetuksissa.</string>
     <string name="library.search.hint">Mitä etsit?</string>
     <string name="library.storage_permission_bug.action">Anna käyttöoikeus</string>
     <string name="library.storage_permission_bug.message">Eräillä laitteilla joltakin järjestelmän sovellukselta puuttuu tarvittava käyttöoikeus ulkoiseen tallennustilaan. Tämä oikeus on välttämätön jotta Voice voi lukea äänikirjojasi.</string>

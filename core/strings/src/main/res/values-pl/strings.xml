@@ -24,6 +24,7 @@
     <string name="common.action.remove">Usuń</string>
     <string name="common.dialog.cancel">Anuluj</string>
     <string name="common.dialog.confirm">Wybierz</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Coś poszło nie tak 😢</string>
     <string name="common.error.generic.retry">Ponów</string>
     <string name="cover.content_description.selectable">Pokazuje okładki do wyboru</string>
@@ -66,6 +67,8 @@
     <string name="library.category.not_started.title">Nierozpoczęte</string>
     <string name="library.empty.add_first_book">Dodajmy twój folder z audiobookami aby rozpocząć słuchanie!</string>
     <string name="library.folders.title">Foldery audiobooków</string>
+    <string name="library.folders.moved.dialog.title">Foldery audiobooków przeniesione</string>
+    <string name="library.folders.moved.dialog.message">Folderami audiobooków możesz teraz zarządzać w Preferencjach.</string>
     <string name="library.search.hint">Czego szukasz?</string>
     <string name="library.storage_permission_bug.action">Przyznaj uprawnienie</string>
     <string name="library.storage_permission_bug.message">W przypadku niektórych urządzeń aplikacja systemowa nie ma uprawnień niezbędnych do uzyskania dostępu do pamięci zewnętrznej. Dostęp ten jest niezbędny, aby aplikacja Voice mogła odczytywać książki audio.</string>

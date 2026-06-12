@@ -48,6 +48,8 @@
     <string name="common.dialog.cancel">Cancel</string>
     <!-- Generic confirmation action in dialogs that apply a value. -->
     <string name="common.dialog.confirm">Set</string>
+    <!-- Generic action for acknowledging a dialog message. -->
+    <string name="common.dialog.ok">OK</string>
     <!-- Generic error message shown when cover search or loading fails. -->
     <string name="common.error.generic.message">Something went wrong 😢</string>
     <!-- Retry action shown after a generic error. -->
@@ -111,6 +113,10 @@
     <string name="library.empty.add_first_book">Let\'s add your audiobook folder so you can start listening!</string>
     <!-- Title for screens and rows that manage audiobook folders. -->
     <string name="library.folders.title">Audiobook folders</string>
+    <!-- Title for the one-time dialog shown from the old audiobook folders shortcut. -->
+    <string name="library.folders.moved.dialog.title">Audiobook folders moved</string>
+    <!-- Body for the one-time dialog shown from the old audiobook folders shortcut. -->
+    <string name="library.folders.moved.dialog.message">You can now manage audiobook folders in Preferences.</string>
     <!-- Hint text for searching books in the library. -->
     <string name="library.search.hint">What are you looking for?</string>
     <!-- Button label for granting the storage permission workaround. -->

@@ -24,6 +24,7 @@
     <string name="common.action.remove">削除</string>
     <string name="common.dialog.cancel">キャンセル</string>
     <string name="common.dialog.confirm">設定</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">問題が発生しました 😢</string>
     <string name="common.error.generic.retry">再試行</string>
     <string name="cover.content_description.selectable">選択するカバーを表示</string>
@@ -57,6 +58,8 @@
     <string name="library.category.not_started.title">未再生</string>
     <string name="library.empty.add_first_book">オーディオブックのフォルダーを追加して、聴き始めましょう！</string>
     <string name="library.folders.title">オーディオブック フォルダー</string>
+    <string name="library.folders.moved.dialog.title">オーディオブックフォルダーを移動しました</string>
+    <string name="library.folders.moved.dialog.message">オーディオブックフォルダーは設定で管理できるようになりました。</string>
     <string name="library.search.hint">何をお探しですか？</string>
     <string name="library.storage_permission_bug.action">権限を付与</string>
     <string name="library.storage_permission_bug.message">一部のデバイスでは、システムアプリに外部ストレージへアクセスするために必要な権限がありません。このアクセスは、Voice がオーディオブックを読み取るために必要です。</string>

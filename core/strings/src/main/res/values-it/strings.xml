@@ -24,6 +24,7 @@
     <string name="common.action.remove">Rimuovi</string>
     <string name="common.dialog.cancel">Annulla</string>
     <string name="common.dialog.confirm">Conferma</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Qualcosa è andato storto 😢</string>
     <string name="common.error.generic.retry">Riprova</string>
     <string name="cover.content_description.selectable">Mostra la copertina da scegliere</string>
@@ -63,6 +64,8 @@
     <string name="library.category.not_started.title">Non ancora iniziato</string>
     <string name="library.empty.add_first_book">Aggiungiamo la tua cartella degli audiolibri per iniziare ad ascoltare!</string>
     <string name="library.folders.title">Cartelle audiolibri</string>
+    <string name="library.folders.moved.dialog.title">Cartelle degli audiolibri spostate</string>
+    <string name="library.folders.moved.dialog.message">Ora puoi gestire le cartelle degli audiolibri nelle Preferenze.</string>
     <string name="library.search.hint">Cosa stai cercando?</string>
     <string name="library.storage_permission_bug.action">Concedere l\'autorizzazione</string>
     <string name="library.storage_permission_bug.message">Per alcuni dispositivi, un\'app di sistema non dispone dell\'autorizzazione necessaria per accedere alla memoria esterna. Questo accesso è essenziale per consentire a Voice di leggere i tuoi audiolibri.</string>
