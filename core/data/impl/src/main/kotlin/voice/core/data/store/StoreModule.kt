@@ -3,6 +3,8 @@ package voice.core.data.store
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
+import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
@@ -13,8 +15,11 @@ import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.core.data.BookId
 import voice.core.data.GridMode
+import voice.core.data.ThemeColorScheme
+import voice.core.data.ThemeMode
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.FeatureFlagOverride
+import java.io.File
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -32,17 +37,30 @@ public interface StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  @DarkThemeStore
-  private fun darkTheme(
+  @ThemeModeStore
+  private fun themeMode(
     factory: VoiceDataStoreFactory,
+    application: Application,
     sharedPreferences: SharedPreferences,
-  ): DataStore<Boolean> {
-    return factory.boolean(
-      fileName = "darkTheme",
-      defaultValue = false,
+  ): DataStore<ThemeMode> {
+    return factory.create(
+      serializer = ThemeMode.serializer(),
+      fileName = "themeMode",
+      defaultValue = ThemeMode.FollowSystem,
       migrations = listOf(
-        booleanPrefsDataMigration(sharedPreferences, "darkTheme"),
+        LegacyDarkThemeMigration(application, sharedPreferences),
       ),
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @ThemeColorSchemeStore
+  private fun themeColorScheme(factory: VoiceDataStoreFactory): DataStore<ThemeColorScheme> {
+    return factory.create(
+      serializer = ThemeColorScheme.serializer(),
+      fileName = "themeColorScheme",
+      defaultValue = ThemeColorScheme.VoiceBlue,
     )
   }
 
@@ -178,5 +196,37 @@ public interface StoreModule {
       defaultValue = emptyMap(),
       fileName = "featureFlagOverrides",
     )
+  }
+}
+
+private class LegacyDarkThemeMigration(
+  application: Application,
+  private val sharedPreferences: SharedPreferences,
+) : DataMigration<ThemeMode> {
+
+  private val oldDataStoreFile = File(application.applicationContext.filesDir, "datastore/darkTheme")
+
+  override suspend fun cleanUp() {
+    oldDataStoreFile.delete()
+    sharedPreferences.edit {
+      remove("darkTheme")
+    }
+  }
+
+  override suspend fun migrate(currentData: ThemeMode): ThemeMode {
+    val legacyValue = when {
+      oldDataStoreFile.exists() -> oldDataStoreFile.readText().trim().toBooleanStrictOrNull()
+      sharedPreferences.contains("darkTheme") -> sharedPreferences.getBoolean("darkTheme", false)
+      else -> null
+    }
+    return when (legacyValue) {
+      true -> ThemeMode.Dark
+      false -> ThemeMode.Light
+      null -> currentData
+    }
+  }
+
+  override suspend fun shouldMigrate(currentData: ThemeMode): Boolean {
+    return oldDataStoreFile.exists() || sharedPreferences.contains("darkTheme")
   }
 }

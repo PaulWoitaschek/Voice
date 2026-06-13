@@ -20,8 +20,11 @@ import org.junit.Test
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.GridMode
+import voice.core.data.ThemeColorScheme
+import voice.core.data.ThemeMode
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -29,7 +32,8 @@ import voice.navigation.Navigator
 class SettingsViewModelTest {
 
   private val scope = TestScope()
-  private val useDarkThemeStore = MemoryDataStore(false)
+  private val themeModeStore = MemoryDataStore(ThemeMode.FollowSystem)
+  private val themeColorSchemeStore = MemoryDataStore(ThemeColorScheme.VoiceBlue)
   private val autoRewindAmountStore = MemoryDataStore(10)
   private val seekTimeStore = MemoryDataStore(30)
   private val gridModeStore = MemoryDataStore(GridMode.GRID)
@@ -49,9 +53,13 @@ class SettingsViewModelTest {
   }
   private val folderPickerFeatureFlag = MemoryFeatureFlag(false)
   private val kioskModeFeatureFlag = MemoryFeatureFlag(false)
+  private val dynamicColorAvailability = mockk<DynamicColorAvailability> {
+    every { isSupported() } returns true
+  }
 
   private val viewModel = SettingsViewModel(
-    useDarkThemeStore = useDarkThemeStore,
+    themeModeStore = themeModeStore,
+    themeColorSchemeStore = themeColorSchemeStore,
     autoRewindAmountStore = autoRewindAmountStore,
     seekTimeStore = seekTimeStore,
     navigator = navigator,
@@ -63,8 +71,74 @@ class SettingsViewModelTest {
     folderPickerInSettingsFeatureFlag = folderPickerFeatureFlag,
     kioskModeFeatureFlag = kioskModeFeatureFlag,
     developerMenuUnlockedStore = developerMenuUnlockedStore,
+    dynamicColorAvailability = dynamicColorAvailability,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
+
+  @Test
+  fun `view state defaults to follow system and voice blue`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem().let {
+        it.themeMode shouldBe ThemeMode.FollowSystem
+        it.themeColorScheme shouldBe ThemeColorScheme.VoiceBlue
+      }
+    }
+  }
+
+  @Test
+  fun `theme mode changes update view state`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem().themeMode shouldBe ThemeMode.FollowSystem
+
+      viewModel.setThemeMode(ThemeMode.Dark)
+      awaitItem().themeMode shouldBe ThemeMode.Dark
+
+      viewModel.setThemeMode(ThemeMode.Light)
+      awaitItem().themeMode shouldBe ThemeMode.Light
+
+      viewModel.setThemeMode(ThemeMode.FollowSystem)
+      awaitItem().themeMode shouldBe ThemeMode.FollowSystem
+    }
+  }
+
+  @Test
+  fun `color scheme setting is visible when dynamic color is supported`() = scope.runTest {
+    every { dynamicColorAvailability.isSupported() } returns true
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem().showThemeColorSchemePref shouldBe true
+    }
+  }
+
+  @Test
+  fun `color scheme setting is hidden when dynamic color is unsupported`() = scope.runTest {
+    every { dynamicColorAvailability.isSupported() } returns false
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem().showThemeColorSchemePref shouldBe false
+    }
+  }
+
+  @Test
+  fun `selecting dynamic color updates view state`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      awaitItem().themeColorScheme shouldBe ThemeColorScheme.VoiceBlue
+
+      viewModel.setThemeColorScheme(ThemeColorScheme.Dynamic)
+
+      awaitItem().themeColorScheme shouldBe ThemeColorScheme.Dynamic
+    }
+  }
 
   @Test
   fun `developer menu is hidden until app version tapped 13 times`() = scope.runTest {

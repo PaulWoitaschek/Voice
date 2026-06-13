@@ -120,9 +120,12 @@ private fun Settings(
           )
         }
       }
-      if (viewState.showDarkThemePref) {
+      item {
+        ThemeModeRow(viewState.themeMode, listener::onThemeModeRowClick)
+      }
+      if (viewState.showThemeColorSchemePref) {
         item {
-          DarkThemeRow(viewState.useDarkTheme, listener::toggleDarkTheme)
+          ThemeColorSchemeRow(viewState.themeColorScheme, listener::onThemeColorSchemeRowClick)
         }
       }
       if (viewState.showAnalyticSetting && !viewState.kioskMode) {
@@ -368,6 +371,20 @@ private fun Dialog(
       SeekAmountDialog(
         currentSeconds = viewState.seekTimeInSeconds,
         onSecondsConfirm = listener::seekAmountChanged,
+        onDismiss = listener::dismissDialog,
+      )
+    }
+    SettingsViewState.Dialog.Theme -> {
+      ThemeModeDialog(
+        selectedThemeMode = viewState.themeMode,
+        onThemeModeSelected = listener::setThemeMode,
+        onDismiss = listener::dismissDialog,
+      )
+    }
+    SettingsViewState.Dialog.ColorScheme -> {
+      ThemeColorSchemeDialog(
+        selectedThemeColorScheme = viewState.themeColorScheme,
+        onThemeColorSchemeSelected = listener::setThemeColorScheme,
         onDismiss = listener::dismissDialog,
       )
     }

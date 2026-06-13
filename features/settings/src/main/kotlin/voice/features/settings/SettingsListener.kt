@@ -1,10 +1,15 @@
 package voice.features.settings
 
+import voice.core.data.ThemeColorScheme
+import voice.core.data.ThemeMode
 import java.time.LocalTime
 
 interface SettingsListener {
   fun close()
-  fun toggleDarkTheme()
+  fun onThemeModeRowClick()
+  fun onThemeColorSchemeRowClick()
+  fun setThemeMode(themeMode: ThemeMode)
+  fun setThemeColorScheme(themeColorScheme: ThemeColorScheme)
   fun toggleGrid()
   fun seekAmountChanged(seconds: Int)
   fun onSeekAmountRowClick()
@@ -29,7 +34,10 @@ interface SettingsListener {
   companion object {
     fun noop() = object : SettingsListener {
       override fun close() {}
-      override fun toggleDarkTheme() {}
+      override fun onThemeModeRowClick() {}
+      override fun onThemeColorSchemeRowClick() {}
+      override fun setThemeMode(themeMode: ThemeMode) {}
+      override fun setThemeColorScheme(themeColorScheme: ThemeColorScheme) {}
       override fun toggleGrid() {}
       override fun seekAmountChanged(seconds: Int) {}
       override fun onSeekAmountRowClick() {}

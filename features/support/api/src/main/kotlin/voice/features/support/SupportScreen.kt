@@ -44,6 +44,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
+import voice.core.ui.VoiceBlue
 import voice.core.ui.VoiceTheme
 import voice.navigation.BottomSheetNav
 import voice.navigation.Destination
@@ -102,7 +103,7 @@ private fun DonationContent(listener: SupportListener) {
       onClick = listener::openSupport,
       contentPadding = ButtonDefaults.contentPaddingFor(size, hasStartIcon = true),
       colors = ButtonDefaults.buttonColors(
-        containerColor = SupportLogoBlue,
+        containerColor = VoiceBlue,
         contentColor = Color.White,
       ),
     ) {
@@ -253,5 +254,3 @@ fun Support() {
   val viewModel = retain<SupportViewModel> { rootGraphAs<SupportGraph>().supportViewModel }
   Support(viewModel.viewState(), viewModel)
 }
-
-private val SupportLogoBlue = Color(0xFF0F4687)
