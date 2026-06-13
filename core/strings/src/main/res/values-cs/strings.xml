@@ -114,6 +114,14 @@
     <string name="settings.analytics_consent.description">Povolit shromažďování anonymních údajů o používání pro zlepšení aplikace</string>
     <string name="settings.analytics_consent.title">Analytika</string>
     <string name="settings.appearance.dark_theme.title">Tmavé téma</string>
+    <string name="settings.appearance.color_scheme.title">Barevné schéma</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dynamická barva</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Používá barvy z tapety a systémového motivu.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Modrá Voice</string>
+    <string name="settings.appearance.theme.dark">Tmavé</string>
+    <string name="settings.appearance.theme.follow_system">Podle systému</string>
+    <string name="settings.appearance.theme.light">Světlé</string>
+    <string name="settings.appearance.theme.title">Motiv</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Nastavit čas konce</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Nastavit čas startu</string>
     <string name="settings.auto_sleep_timer.summary">Automatické spuštění časovače spánku při zahájení přehrávání mezi %1$s a %2$s</string>

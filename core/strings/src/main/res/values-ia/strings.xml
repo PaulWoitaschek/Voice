@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">Permitter le collection de datos de uso anonyme pro adjutar a meliorar le app</string>
     <string name="settings.analytics_consent.title">Analytica</string>
     <string name="settings.appearance.dark_theme.title">Thema obscur</string>
+    <string name="settings.appearance.color_scheme.title">Schema de colores</string>
+    <string name="settings.appearance.color_scheme.dynamic">Color dynamic</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Usa le colores de tu fundo de schermo e del thema del systema.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Blau Voice</string>
+    <string name="settings.appearance.theme.dark">Obscur</string>
+    <string name="settings.appearance.theme.follow_system">Sequer le systema</string>
+    <string name="settings.appearance.theme.light">Clar</string>
+    <string name="settings.appearance.theme.title">Thema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Definir tempore de fin</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Definir tempore initial</string>
     <string name="settings.auto_sleep_timer.summary">Initiar automaticamente un temporisator de somno quando le reproduction comencia inter %1$s e %2$s</string>

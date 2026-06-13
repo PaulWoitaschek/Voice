@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">Erlaube die Freigabe anonymer Nutzungsdaten zur Verbesserung der App</string>
     <string name="settings.analytics_consent.title">Nutzungsdaten</string>
     <string name="settings.appearance.dark_theme.title">Dunkles Design</string>
+    <string name="settings.appearance.color_scheme.title">Farbschema</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dynamische Farben</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Verwendet Farben aus Deinem Hintergrundbild und Systemdesign.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice-Blau</string>
+    <string name="settings.appearance.theme.dark">Dunkel</string>
+    <string name="settings.appearance.theme.follow_system">Systemeinstellung</string>
+    <string name="settings.appearance.theme.light">Hell</string>
+    <string name="settings.appearance.theme.title">Design</string>
     <string name="settings.auto_sleep_timer.end.label">Endzeit</string>
     <string name="settings.auto_sleep_timer.start.label">Startzeit</string>
     <string name="settings.auto_sleep_timer.summary">Den Einschlaf-Timer automatisch starten, wenn die Wiedergabe zwischen %1$s und %2$s Uhr beginnt</string>

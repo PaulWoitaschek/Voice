@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">Laat anonieme gebruiksdata insamel om die toep te verbeter</string>
     <string name="settings.analytics_consent.title">Analise</string>
     <string name="settings.appearance.dark_theme.title">Donker tema</string>
+    <string name="settings.appearance.color_scheme.title">Kleurskema</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dinamiese kleur</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Gebruik kleure van jou muurpapier en stelseltema.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice-blou</string>
+    <string name="settings.appearance.theme.dark">Donker</string>
+    <string name="settings.appearance.theme.follow_system">Volg stelsel</string>
+    <string name="settings.appearance.theme.light">Lig</string>
+    <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Stel eindtyd</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Stel begintyd</string>
     <string name="settings.auto_sleep_timer.summary">Begin outomaties ’n slaaptimer wanneer afspeel tussen %1$s en %2$s begin</string>

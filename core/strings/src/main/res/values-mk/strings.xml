@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">Дозволете анонимно собирање податоци за користење за да се подобри апликацијата</string>
     <string name="settings.analytics_consent.title">Аналитика</string>
     <string name="settings.appearance.dark_theme.title">Темна тема</string>
+    <string name="settings.appearance.color_scheme.title">Шема на бои</string>
+    <string name="settings.appearance.color_scheme.dynamic">Динамична боја</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Користи бои од вашата позадина и системска тема.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice сина</string>
+    <string name="settings.appearance.theme.dark">Темна</string>
+    <string name="settings.appearance.theme.follow_system">Следи систем</string>
+    <string name="settings.appearance.theme.light">Светла</string>
+    <string name="settings.appearance.theme.title">Тема</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Внеси време за крај</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Внеси време за старт</string>
     <string name="settings.auto_sleep_timer.summary">Стартувај го тајмерот за спиење автоматски штом аудиото почнува меѓу %1$s и %2$s</string>

@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">பயன்பாட்டை மேம்படுத்த உதவ அநாமதேய பயன்பாட்டுத் தரவு சேகரிப்பை அனுமதி</string>
     <string name="settings.analytics_consent.title">பகுப்பாய்வு</string>
     <string name="settings.appearance.dark_theme.title">இருண்ட கருப்பொருள்</string>
+    <string name="settings.appearance.color_scheme.title">வண்ணத் திட்டம்</string>
+    <string name="settings.appearance.color_scheme.dynamic">மாறும் வண்ணம்</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">உங்கள் வால்பேப்பர் மற்றும் அமைப்பு தீமிலிருந்து வண்ணங்களைப் பயன்படுத்துகிறது.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice நீலம்</string>
+    <string name="settings.appearance.theme.dark">இருண்ட</string>
+    <string name="settings.appearance.theme.follow_system">அமைப்பைப் பின்பற்று</string>
+    <string name="settings.appearance.theme.light">வெளிர்</string>
+    <string name="settings.appearance.theme.title">தீம்</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">இறுதி நேரத்தை அமை</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">தொடக்க நேரத்தை அமை</string>
     <string name="settings.auto_sleep_timer.summary">பிளேபேக் %1$s மற்றும் %2$s க்கு இடையில் தொடங்கும்போது தானாக ஒரு தூக்க நேரத்தைத் தொடங்குங்கள்</string>

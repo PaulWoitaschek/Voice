@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">Permite sa regorta de datos anònimos de impreu pro agiudare a megiorare s\'aplicatzione</string>
     <string name="settings.analytics_consent.title">Analìtica</string>
     <string name="settings.appearance.dark_theme.title">Tema iscuru</string>
+    <string name="settings.appearance.color_scheme.title">Schema de colores</string>
+    <string name="settings.appearance.color_scheme.dynamic">Colore dinàmicu</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Impreat colores dae s\'isfundu e dae su tema de sistema.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Blu Voice</string>
+    <string name="settings.appearance.theme.dark">Iscuru</string>
+    <string name="settings.appearance.theme.follow_system">Sighi su sistema</string>
+    <string name="settings.appearance.theme.light">Craru</string>
+    <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.auto_sleep_timer.end.label">Ora de fine</string>
     <string name="settings.auto_sleep_timer.start.label">Ora de cumintzu</string>
     <string name="settings.auto_sleep_timer.summary">Allughe unu temporizadore de suspensione cando sa riprodutzione incumintzat intre %1$s e %2$s</string>

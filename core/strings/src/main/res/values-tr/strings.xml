@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">Uygulamayı iyileştirmeye katkı sağlaması için anonim kullanım verileri toplanmasına izin ver</string>
     <string name="settings.analytics_consent.title">Analitik</string>
     <string name="settings.appearance.dark_theme.title">Koyu Tema</string>
+    <string name="settings.appearance.color_scheme.title">Renk şeması</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dinamik renk</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Duvar kağıdınızdan ve sistem temasından renkleri kullanır.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice mavisi</string>
+    <string name="settings.appearance.theme.dark">Koyu</string>
+    <string name="settings.appearance.theme.follow_system">Sistemi takip et</string>
+    <string name="settings.appearance.theme.light">Açık</string>
+    <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Bitiş zamanı</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Başlama zamanı</string>
     <string name="settings.auto_sleep_timer.summary">Eğer oynatıcı saat %1$s ile %2$s arasında başlatılırsa otomatik olarak bir uyku zamanlayıcısı başlat</string>

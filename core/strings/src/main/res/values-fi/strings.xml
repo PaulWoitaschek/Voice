@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">Salli anonyymien käyttötietojen kerääminen sovelluksen parantamiseksi</string>
     <string name="settings.analytics_consent.title">Analytiikka</string>
     <string name="settings.appearance.dark_theme.title">Tumma teema</string>
+    <string name="settings.appearance.color_scheme.title">Väriteema</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dynaaminen väri</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Käyttää taustakuvan ja järjestelmän teeman värejä.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice-sininen</string>
+    <string name="settings.appearance.theme.dark">Tumma</string>
+    <string name="settings.appearance.theme.follow_system">Seuraa järjestelmää</string>
+    <string name="settings.appearance.theme.light">Vaalea</string>
+    <string name="settings.appearance.theme.title">Teema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Päättymisaika</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Aloitusaika</string>
     <string name="settings.auto_sleep_timer.summary">Aloita uniajastin automaattisesti, kun toisto alkaa välillä %1$s ja %2$s</string>

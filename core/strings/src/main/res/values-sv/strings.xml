@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">Tillåt anonym insamling av användningsdata för att förbättra appen</string>
     <string name="settings.analytics_consent.title">Analys</string>
     <string name="settings.appearance.dark_theme.title">Mörkt tema</string>
+    <string name="settings.appearance.color_scheme.title">Färgschema</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dynamisk färg</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Använder färger från bakgrunden och systemtemat.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice-blå</string>
+    <string name="settings.appearance.theme.dark">Mörkt</string>
+    <string name="settings.appearance.theme.follow_system">Följ systemet</string>
+    <string name="settings.appearance.theme.light">Ljust</string>
+    <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Ange sluttid</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Ange starttid</string>
     <string name="settings.auto_sleep_timer.summary">Starta en sovtimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>

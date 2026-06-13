@@ -108,6 +108,14 @@
     <string name="settings.analytics_consent.description">Permite recoller datos anónimos de uso para axudar a mellorar a app</string>
     <string name="settings.analytics_consent.title">Análise</string>
     <string name="settings.appearance.dark_theme.title">Decorado escuro</string>
+    <string name="settings.appearance.color_scheme.title">Esquema de cores</string>
+    <string name="settings.appearance.color_scheme.dynamic">Cor dinámica</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Usa as cores do teu fondo de pantalla e do tema do sistema.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Azul Voice</string>
+    <string name="settings.appearance.theme.dark">Escuro</string>
+    <string name="settings.appearance.theme.follow_system">Seguir o sistema</string>
+    <string name="settings.appearance.theme.light">Claro</string>
+    <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Hora de fin</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Hora de inicio</string>
     <string name="settings.auto_sleep_timer.summary">Iniciar o temporizador automáticamente cando a escoita comece entre as %1$s e as %2$s</string>

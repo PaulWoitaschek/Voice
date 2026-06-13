@@ -111,6 +111,14 @@
     <string name="settings.analytics_consent.description">Consenti la raccolta anonima dei dati di utilizzo per contribuire a migliorare l\'app</string>
     <string name="settings.analytics_consent.title">Analytics</string>
     <string name="settings.appearance.dark_theme.title">Tema scuro</string>
+    <string name="settings.appearance.color_scheme.title">Schema colori</string>
+    <string name="settings.appearance.color_scheme.dynamic">Colore dinamico</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Usa i colori dello sfondo e del tema di sistema.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Blu Voice</string>
+    <string name="settings.appearance.theme.dark">Scuro</string>
+    <string name="settings.appearance.theme.follow_system">Segui il sistema</string>
+    <string name="settings.appearance.theme.light">Chiaro</string>
+    <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Ora di fine</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Ora di inizio</string>
     <string name="settings.auto_sleep_timer.summary">Avvia automaticamente un timer di spegnimento automatico quando la riproduzione inizia tra %1$s e %2$s</string>
