@@ -126,7 +126,7 @@
     <string name="settings.playback.auto_rewind.title">Athchasadh uathoibríoch</string>
     <string name="settings.playback.seek_time.title">Scipeáil méid</string>
     <string name="settings.support.faq.title">Ceisteanna Coitianta</string>
-    <string name="settings.support.get_support.title">Faigh tacaíocht</string>
+    <string name="settings.support.get_support.title">Faigh cabhair</string>
     <string name="settings.support.help_translating.title">Cabhrú le Guth a aistriú</string>
     <string name="settings.support.report_issue.title">Tuairiscigh fadhb</string>
     <string name="settings.support.suggest_idea.title">Mol smaoineamh</string>
