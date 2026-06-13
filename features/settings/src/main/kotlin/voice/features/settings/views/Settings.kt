@@ -375,14 +375,14 @@ private fun Dialog(
     SettingsViewState.Dialog.Theme -> {
       ThemeModeDialog(
         selectedThemeMode = viewState.themeMode,
-        onThemeModeSelected = listener::setThemeMode,
+        onThemeModeSelect = listener::setThemeMode,
         onDismiss = listener::dismissDialog,
       )
     }
     SettingsViewState.Dialog.ColorScheme -> {
       ThemeColorSchemeDialog(
         selectedThemeColorScheme = viewState.themeColorScheme,
-        onThemeColorSchemeSelected = listener::setThemeColorScheme,
+        onThemeColorSchemeSelect = listener::setThemeColorScheme,
         onDismiss = listener::dismissDialog,
       )
     }
