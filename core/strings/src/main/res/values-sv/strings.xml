@@ -24,6 +24,7 @@
     <string name="common.action.remove">Ta bort</string>
     <string name="common.dialog.cancel">Avbryt</string>
     <string name="common.dialog.confirm">Ställ in</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Något gick fel 😢</string>
     <string name="common.error.generic.retry">Försök igen</string>
     <string name="cover.content_description.selectable">Visar omslag att välja mellan</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Inte påbörjade ännu</string>
     <string name="library.empty.add_first_book">Lägg till din ljudboksmapp så att du kan börja lyssna!</string>
     <string name="library.folders.title">Ljudboksmappar</string>
+    <string name="library.folders.moved.dialog.title">Ljudboksmappar flyttade</string>
+    <string name="library.folders.moved.dialog.message">Du kan nu hantera ljudboksmappar i Inställningar.</string>
     <string name="library.search.hint">Vad letar du efter?</string>
     <string name="library.storage_permission_bug.action">Ge behörigheter</string>
     <string name="library.storage_permission_bug.message">För vissa enheter saknar appen vissa nödvändiga behörigheter för att komma åt den externa lagringen. Den åtkomsten är nödvändig för att Voice ska kunna läsa dina ljudböcker.</string>

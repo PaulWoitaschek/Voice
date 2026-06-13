@@ -24,6 +24,7 @@
     <string name="common.action.remove">Вилучити</string>
     <string name="common.dialog.cancel">Скасувати</string>
     <string name="common.dialog.confirm">Установити</string>
+    <string name="common.dialog.ok">ОК</string>
     <string name="common.error.generic.message">Щось пішло не так 😢</string>
     <string name="common.error.generic.retry">Повторити</string>
     <string name="cover.content_description.selectable">Показує вибір обкладинки</string>
@@ -66,6 +67,8 @@
     <string name="library.category.not_started.title">Ще не початі</string>
     <string name="library.empty.add_first_book">Давайте додамо папку з аудіокнигами, щоб ви могли почати прослуховування!</string>
     <string name="library.folders.title">Папки з аудіокнигами</string>
+    <string name="library.folders.moved.dialog.title">Папки аудіокниг переміщено</string>
+    <string name="library.folders.moved.dialog.message">Тепер папками аудіокниг можна керувати в налаштуваннях.</string>
     <string name="library.search.hint">Що ви шукаєте?</string>
     <string name="library.storage_permission_bug.action">Надати дозвіл</string>
     <string name="library.storage_permission_bug.message">На деяких пристроях системні програми не мають необхідного дозволу на доступ до зовнішнього накопичувача. Цей дозвіл необхідний для того, аби Voice мав змогу читати ваші аудіокниги.</string>

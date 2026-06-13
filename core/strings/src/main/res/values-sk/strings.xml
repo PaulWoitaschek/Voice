@@ -24,6 +24,7 @@
     <string name="common.action.remove">Vymazať</string>
     <string name="common.dialog.cancel">Zrušiť</string>
     <string name="common.dialog.confirm">Nastaviť</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Niečo sa pokazilo 😢</string>
     <string name="common.error.generic.retry">Skúsiť znovu</string>
     <string name="cover.content_description.selectable">Zobrazí výber obálky</string>
@@ -66,6 +67,8 @@
     <string name="library.category.not_started.title">Ešte nepočúvané</string>
     <string name="library.empty.add_first_book">Pridajte si priečinok so zvukovými knihami, aby ste mohli začať počúvať!</string>
     <string name="library.folders.title">Priečinok so zvukovými knihami</string>
+    <string name="library.folders.moved.dialog.title">Priečinky audiokníh presunuté</string>
+    <string name="library.folders.moved.dialog.message">Priečinky audiokníh teraz môžete spravovať v nastaveniach.</string>
     <string name="library.search.hint">Čo hľadáte?</string>
     <string name="library.storage_permission_bug.action">Udeliť oprávnenie</string>
     <string name="library.storage_permission_bug.message">Systémová aplikácia na niektorých zariadeniach nemá udelené potrebné povolenie pristupovať k externému úložisku. Tento prístup je nevyhnutný, aby mohla aplikácia Voice čítať vaše zvukové knihy.</string>

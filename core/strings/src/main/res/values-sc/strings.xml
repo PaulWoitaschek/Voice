@@ -24,6 +24,7 @@
     <string name="common.action.remove">Boga</string>
     <string name="common.dialog.cancel">Annulla</string>
     <string name="common.dialog.confirm">Cunfigura</string>
+    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">B\'at àpidu carchi problema 😢</string>
     <string name="common.error.generic.retry">Torra a proare</string>
     <string name="cover.content_description.selectable">Mustra sa cobertedda de isseberare</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Galu no incumintzadu</string>
     <string name="library.empty.add_first_book">Agiunghimus sa cartella de audiolibros tua in manera chi potzas incumintzare a ascurtare!</string>
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
+    <string name="library.folders.moved.dialog.title">Cartellas de audiolibros tramudadas</string>
+    <string name="library.folders.moved.dialog.message">Como podes manigiare sas cartellas de audiolibros in sas Preferèntzias.</string>
     <string name="library.search.hint">Ite ses chirchende?</string>
     <string name="library.storage_permission_bug.action">Dae su permissu</string>
     <string name="library.storage_permission_bug.message">Pro unos cantos dispositivos, un\'aplicatzione de sistema non tenet s\'autorizatzione netzessària pro atzèdere a sa memòria esterna. Bisòngiat a tènnere custu atzessu pro chi Voice potzat lèghere sos audiolibros tuos.</string>

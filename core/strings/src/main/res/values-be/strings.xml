@@ -24,6 +24,7 @@
     <string name="common.action.remove">Выдаліць</string>
     <string name="common.dialog.cancel">Скасаваць</string>
     <string name="common.dialog.confirm">Задаць</string>
+    <string name="common.dialog.ok">ОК</string>
     <string name="common.error.generic.message">Нешта пайшло не так 😢</string>
     <string name="common.error.generic.retry">Паспрабаваць зноў</string>
     <string name="cover.content_description.selectable">Паказаць вокладкі для выбару</string>
@@ -66,6 +67,8 @@
     <string name="library.category.not_started.title">Яшчэ не пачатыя</string>
     <string name="library.empty.add_first_book">Давайце вызначым папку з аўдыякнігамі!</string>
     <string name="library.folders.title">Папкі з аўдыякнігамі</string>
+    <string name="library.folders.moved.dialog.title">Папкі аўдыякніг перамешчаны</string>
+    <string name="library.folders.moved.dialog.message">Цяпер вы можаце кіраваць папкамі аўдыякніг у наладах.</string>
     <string name="library.search.hint">Што вы шукаеце?</string>
     <string name="library.storage_permission_bug.action">Даць дазвол</string>
     <string name="library.storage_permission_bug.message">На асобных прыладах сістэма не мае дазволу на доступ да знешняга сховішча. Гэты доступ патрэбны Voice, каб чытаць вашы кнігі.</string>

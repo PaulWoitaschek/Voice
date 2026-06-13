@@ -24,6 +24,7 @@
     <string name="common.action.remove">Отстрани</string>
     <string name="common.dialog.cancel">Откажи</string>
     <string name="common.dialog.confirm">Намести</string>
+    <string name="common.dialog.ok">ОК</string>
     <string name="common.error.generic.message">Настана грешка 😢</string>
     <string name="common.error.generic.retry">Пробај повторно</string>
     <string name="cover.content_description.selectable">Прикажува избор од корици</string>
@@ -60,6 +61,8 @@
     <string name="library.category.not_started.title">Непочнати</string>
     <string name="library.empty.add_first_book">Ајде да ги додадеме вашите аудио книги за да почнете со слушање!</string>
     <string name="library.folders.title">Фолдери со аудио книги</string>
+    <string name="library.folders.moved.dialog.title">Папките со аудиокниги се преместени</string>
+    <string name="library.folders.moved.dialog.message">Сега можете да управувате со папките со аудиокниги во Поставки.</string>
     <string name="library.search.hint">Што пребарувате?</string>
     <string name="library.storage_permission_bug.action">Дај пермисија</string>
     <string name="library.storage_permission_bug.message">Кај некои уреди, системска апликација нема доволно пермисии да го пристапи надворешното складиште за податоци. Овој пристап е клучен за Voice да може да ги вчита вашите аудио книги.</string>
