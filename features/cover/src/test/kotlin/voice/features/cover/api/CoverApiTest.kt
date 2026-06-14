@@ -17,13 +17,11 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.junit.runner.RunWith
-import voice.core.ui.SharedGraph
 
 @Suppress("SUSPICIOUS_UNUSED_MULTIBINDING")
 @SingleIn(AppScope::class)
 @DependencyGraph(
   scope = AppScope::class,
-  excludes = [SharedGraph::class],
 )
 interface TestGraph {
   val coverApi: CoverApi
