@@ -11,19 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import voice.core.data.BookId
 import voice.core.strings.R
 import voice.core.ui.formatTime
 import voice.features.playbackScreen.BookPlayViewState
 
 @Composable
 internal fun CoverRow(
+  bookId: BookId,
   cover: String?,
   sleepTimerState: BookPlayViewState.SleepTimerViewState,
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Box(modifier) {
-    Cover(onDoubleClick = onPlayClick, cover = cover)
+    Cover(bookId = bookId, onDoubleClick = onPlayClick, cover = cover)
     when (sleepTimerState) {
       BookPlayViewState.SleepTimerViewState.Disabled -> {
       }

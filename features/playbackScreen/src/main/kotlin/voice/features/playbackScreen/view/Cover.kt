@@ -1,5 +1,6 @@
 package voice.features.playbackScreen.view
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,18 +12,35 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import coil.compose.AsyncImage
+import voice.core.data.BookId
+import voice.core.ui.LocalSharedTransitionScope
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun Cover(
+  bookId: BookId,
   onDoubleClick: () -> Unit,
   cover: String?,
 ) {
+  val sharedTransitionScope = LocalSharedTransitionScope.current
+  val sharedElementModifier = if (sharedTransitionScope != null) {
+    with(sharedTransitionScope) {
+      Modifier.sharedElement(
+        sharedContentState = rememberSharedContentState(key = sharedCoverKey(bookId)),
+        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+      )
+    }
+  } else {
+    Modifier
+  }
   AsyncImage(
     modifier = Modifier
       .fillMaxSize()
+      .then(sharedElementModifier)
       .pointerInput(Unit) {
         detectTapGestures(
           onDoubleTap = {
@@ -38,3 +56,5 @@ internal fun Cover(
     contentDescription = stringResource(id = StringsR.string.cover_title),
   )
 }
+
+private fun sharedCoverKey(bookId: BookId) = "book-cover-${bookId.value}"

@@ -8,6 +8,9 @@ import android.provider.Settings
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
@@ -23,6 +26,7 @@ import voice.app.navigation.StartDestinationProvider
 import voice.core.analytics.api.Analytics
 import voice.core.common.rootGraphAs
 import voice.core.logging.api.Logger
+import voice.core.ui.LocalSharedTransitionScope
 import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
 import voice.navigation.Destination
@@ -48,6 +52,7 @@ class MainActivity : AppCompatActivity() {
   @Inject
   private lateinit var analytics: Analytics
 
+  @OptIn(ExperimentalSharedTransitionApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     rootGraphAs<MainActivityGraph>().inject(this)
     super.onCreate(savedInstanceState)
@@ -64,18 +69,23 @@ class MainActivity : AppCompatActivity() {
         val bottomSheetStrategy = remember { BottomSheetSceneStrategy<Destination.Compose>() }
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
 
-        NavDisplay(
-          backStack = backStack,
-          sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy),
-          onBack = {
-            if (backStack.size > 1) {
-              backStack.removeLastOrNull()
-            }
-          },
-          entryProvider = { key ->
-            navEntryResolver.create(key)
-          },
-        )
+        SharedTransitionLayout {
+          CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+            NavDisplay(
+              backStack = backStack,
+              sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy),
+              sharedTransitionScope = this,
+              onBack = {
+                if (backStack.size > 1) {
+                  backStack.removeLastOrNull()
+                }
+              },
+              entryProvider = { key ->
+                navEntryResolver.create(key)
+              },
+            )
+          }
+        }
 
         LaunchedEffect(navigator) {
           navigator.navigationCommands.collect { command ->

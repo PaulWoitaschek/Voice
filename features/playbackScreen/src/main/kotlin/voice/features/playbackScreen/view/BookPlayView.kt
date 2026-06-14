@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import voice.core.data.BookId
 import voice.core.ui.VoiceTheme
 import voice.features.playbackScreen.BookPlayViewState
 import kotlin.time.Duration
@@ -16,6 +17,7 @@ import kotlin.time.Duration.Companion.minutes
 @Composable
 internal fun BookPlayView(
   viewState: BookPlayViewState,
+  bookId: BookId,
   useLandscapeLayout: Boolean,
   onPlayClick: () -> Unit,
   onRewindClick: () -> Unit,
@@ -54,6 +56,7 @@ internal fun BookPlayView(
       BookPlayContent(
         contentPadding = it,
         viewState = viewState,
+        bookId = bookId,
         onPlayClick = onPlayClick,
         onRewindClick = onRewindClick,
         onFastForwardClick = onFastForwardClick,
@@ -76,6 +79,7 @@ private fun BookPlayPreview(
   VoiceTheme {
     BookPlayView(
       viewState = viewState,
+      bookId = BookId("preview"),
       onPlayClick = {},
       onRewindClick = {},
       onFastForwardClick = {},

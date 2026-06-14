@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import voice.core.data.BookId
 import voice.features.playbackScreen.BookPlayViewState
 import kotlin.time.Duration
 
@@ -19,6 +20,7 @@ import kotlin.time.Duration
 internal fun BookPlayContent(
   contentPadding: PaddingValues,
   viewState: BookPlayViewState,
+  bookId: BookId,
   onPlayClick: () -> Unit,
   onRewindClick: () -> Unit,
   onFastForwardClick: () -> Unit,
@@ -31,6 +33,7 @@ internal fun BookPlayContent(
   if (useLandscapeLayout) {
     Row(Modifier.padding(contentPadding)) {
       CoverRow(
+        bookId = bookId,
         cover = viewState.cover,
         onPlayClick = onPlayClick,
         sleepTimerState = viewState.sleepTimerState,
@@ -72,6 +75,7 @@ internal fun BookPlayContent(
   } else {
     Column(Modifier.padding(contentPadding)) {
       CoverRow(
+        bookId = bookId,
         onPlayClick = onPlayClick,
         cover = viewState.cover,
         sleepTimerState = viewState.sleepTimerState,

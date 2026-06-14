@@ -1,5 +1,6 @@
 package voice.features.bookOverview.views
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,8 +33,10 @@ import androidx.compose.ui.text.intl.LocaleList
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import coil.compose.AsyncImage
 import voice.core.data.BookId
+import voice.core.ui.LocalSharedTransitionScope
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.core.ui.R as UiR
@@ -105,7 +108,7 @@ internal fun ListBookRow(
   ) {
     Column(Modifier.padding()) {
       Row(verticalAlignment = Alignment.CenterVertically) {
-        CoverImage(book.cover)
+        CoverImage(book.id, book.cover)
 
         Column(
           Modifier
@@ -170,14 +173,30 @@ internal fun ListBookRow(
   }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun CoverImage(cover: String?) {
+private fun CoverImage(
+  bookId: BookId,
+  cover: String?,
+) {
   val startPadding = 16.dp
   val endPadding = 16.dp
+  val sharedTransitionScope = LocalSharedTransitionScope.current
+  val sharedElementModifier = if (sharedTransitionScope != null) {
+    with(sharedTransitionScope) {
+      Modifier.sharedElement(
+        sharedContentState = rememberSharedContentState(key = sharedCoverKey(bookId)),
+        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+      )
+    }
+  } else {
+    Modifier
+  }
   AsyncImage(
     modifier = Modifier
       .padding(top = 8.dp, start = 8.dp, bottom = 8.dp)
       .size(76.dp)
+      .then(sharedElementModifier)
       .clip(RoundedCornerShape(topStart = startPadding, bottomStart = startPadding, topEnd = endPadding, bottomEnd = endPadding)),
     model = cover,
     placeholder = painterResource(id = UiR.drawable.album_art),
@@ -186,6 +205,8 @@ private fun CoverImage(cover: String?) {
     contentDescription = null,
   )
 }
+
+private fun sharedCoverKey(bookId: BookId) = "book-cover-${bookId.value}"
 
 @Composable
 @Preview
