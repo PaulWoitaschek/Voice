@@ -113,7 +113,14 @@
     <string name="settings.action.open">Настройки</string>
     <string name="settings.analytics_consent.description">Разрешить анонимный сбор данных об использовании, чтобы улучшить приложение</string>
     <string name="settings.analytics_consent.title">Аналитика</string>
-    <string name="settings.appearance.dark_theme.title">Темная тема</string>
+    <string name="settings.appearance.color_scheme.title">Цветовая схема</string>
+    <string name="settings.appearance.color_scheme.dynamic">Динамический цвет</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Использует цвета ваших обоев и системной темы.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Синий Voice</string>
+    <string name="settings.appearance.theme.dark">Тёмная</string>
+    <string name="settings.appearance.theme.follow_system">Как в системе</string>
+    <string name="settings.appearance.theme.light">Светлая</string>
+    <string name="settings.appearance.theme.title">Тема</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Время конца</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Время начала</string>
     <string name="settings.auto_sleep_timer.summary">Запускать таймер сна автоматически когда воспроизведение начинается между %1$s и %2$s</string>

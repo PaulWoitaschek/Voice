@@ -96,7 +96,6 @@
     <string name="review.request.title">Voice का आनंद ले रहे हैं?</string>
     <string name="settings.about.app_version.title">ऐप संस्करण</string>
     <string name="settings.action.open">प्राथमिकताएँ</string>
-    <string name="settings.appearance.dark_theme.title">गहरी थीम</string>
     <string name="settings.library.folders.summary">ऑडियोबुक के लिए स्कैन किए गए फ़ोल्डर मैनेज करें</string>
     <string name="settings.library.use_grid.title">ग्रिड लेआउट का प्रयोग</string>
     <string name="settings.playback.auto_rewind.title">ऑटो रिवाइंड</string>

@@ -107,7 +107,14 @@
     <string name="settings.action.open">Innstillinger</string>
     <string name="settings.analytics_consent.description">Tillat anonym innsamling av bruksdata for å bidra til å forbedre appen</string>
     <string name="settings.analytics_consent.title">Analyse</string>
-    <string name="settings.appearance.dark_theme.title">Mørk drakt</string>
+    <string name="settings.appearance.color_scheme.title">Fargeoppsett</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dynamisk farge</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Bruker farger fra bakgrunnen og systemdrakten din.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice-blå</string>
+    <string name="settings.appearance.theme.dark">Mørk</string>
+    <string name="settings.appearance.theme.follow_system">Følg systemet</string>
+    <string name="settings.appearance.theme.light">Lys</string>
+    <string name="settings.appearance.theme.title">Drakt</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Sett sluttid</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Sett starttid</string>
     <string name="settings.auto_sleep_timer.summary">Start en søvn-timer automatisk når avspillingen begynner mellom %1$s og %2$s</string>

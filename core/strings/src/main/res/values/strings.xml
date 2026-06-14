@@ -206,7 +206,22 @@
     <!-- Settings row title for analytics consent. -->
     <string name="settings.analytics_consent.title">Analytics</string>
     <!-- Title for the dark theme setting. -->
-    <string name="settings.appearance.dark_theme.title">Dark Theme</string>
+    <!-- Settings row title for selecting the app color scheme. -->
+    <string name="settings.appearance.color_scheme.title">Color scheme</string>
+    <!-- Label for selecting Android dynamic color as app color scheme. -->
+    <string name="settings.appearance.color_scheme.dynamic">Dynamic color</string>
+    <!-- Description for Android dynamic color. -->
+    <string name="settings.appearance.color_scheme.dynamic.summary">Uses colors from your wallpaper and system theme.</string>
+    <!-- Label for selecting Voice blue as app color scheme. -->
+    <string name="settings.appearance.color_scheme.voice_blue">Voice blue</string>
+    <!-- Label for forcing dark mode. -->
+    <string name="settings.appearance.theme.dark">Dark</string>
+    <!-- Label for following the system light or dark setting. -->
+    <string name="settings.appearance.theme.follow_system">Follow system</string>
+    <!-- Label for forcing light mode. -->
+    <string name="settings.appearance.theme.light">Light</string>
+    <!-- Settings row title for selecting light or dark mode behavior. -->
+    <string name="settings.appearance.theme.title">Theme</string>
     <!-- Label for selecting the automatic sleep timer end time. -->
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Set end time</string>
     <!-- Label for selecting the automatic sleep timer start time. -->

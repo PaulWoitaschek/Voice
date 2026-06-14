@@ -77,7 +77,6 @@
     <string name="playback.speed.title">播放速度</string>
     <string name="settings.about.app_version.title">软件版本</string>
     <string name="settings.action.open">偏好设置</string>
-    <string name="settings.appearance.dark_theme.title">暗黑主题</string>
     <string name="settings.library.use_grid.title">使用网格布局</string>
     <string name="settings.playback.auto_rewind.title">自动回退</string>
     <string name="settings.playback.seek_time.title">跳过时间</string>

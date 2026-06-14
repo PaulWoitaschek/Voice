@@ -107,7 +107,14 @@
     <string name="settings.action.open">Eelistused</string>
     <string name="settings.analytics_consent.description">Parandamaks rakendust luba meil koguda anonüümseid andmeid tema kasutuse kohta</string>
     <string name="settings.analytics_consent.title">Analüütika</string>
-    <string name="settings.appearance.dark_theme.title">Tume kujundus</string>
+    <string name="settings.appearance.color_scheme.title">Värviskeem</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dünaamiline värv</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Kasutab sinu taustapildi ja süsteemiteema värve.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice\'i sinine</string>
+    <string name="settings.appearance.theme.dark">Tume</string>
+    <string name="settings.appearance.theme.follow_system">Järgi süsteemi</string>
+    <string name="settings.appearance.theme.light">Hele</string>
+    <string name="settings.appearance.theme.title">Kujundus</string>
     <string name="settings.auto_sleep_timer.end.label">Seadista lõpuaeg</string>
     <string name="settings.auto_sleep_timer.start.label">Määra algusaeg</string>
     <string name="settings.auto_sleep_timer.summary">Käivita unetaimer automaatselt, kui taasesitus on %1$s ja %2$s vahel</string>

@@ -20,12 +20,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import voice.core.common.AppInfoProvider
 import voice.core.data.GridMode
+import voice.core.data.ThemeColorScheme
+import voice.core.data.ThemeMode
 import voice.core.data.store.AutoRewindAmountStore
-import voice.core.data.store.DarkThemeStore
 import voice.core.data.store.GridModeStore
 import voice.core.data.store.SeekTimeStore
+import voice.core.data.store.ThemeColorSchemeStore
+import voice.core.data.store.ThemeModeStore
 import voice.core.data.store.VoiceDataStoreFactory
 import voice.core.data.store.intPrefsDataMigration
+import java.io.File
 import kotlin.time.Instant
 
 @Suppress("SUSPICIOUS_UNUSED_MULTIBINDING")
@@ -41,8 +45,11 @@ interface MigrationTestGraph {
   @AutoRewindAmountStore
   val autoRewindAmountStore: DataStore<Int>
 
-  @DarkThemeStore
-  val darkThemeStore: DataStore<Boolean>
+  @ThemeModeStore
+  val themeModeStore: DataStore<ThemeMode>
+
+  @ThemeColorSchemeStore
+  val themeColorSchemeStore: DataStore<ThemeColorScheme>
 
   @GridModeStore
   val gridModeStore: DataStore<GridMode>
@@ -101,16 +108,39 @@ class MigrationTests {
   }
 
   @Test
-  fun `darkTheme migrates from SharedPreferences and cleans up`() = runTest {
-    val expected = true
+  fun `legacy darkTheme true migrates to dark and cleans up`() = runTest {
     sharedPreferences.edit {
       clear()
-      putBoolean("darkTheme", expected)
+      putBoolean("darkTheme", true)
     }
 
-    val store = testGraph.darkThemeStore
-    store.data.first() shouldBe expected
+    val store = testGraph.themeModeStore
+    store.data.first() shouldBe ThemeMode.Dark
     sharedPreferences.contains("darkTheme") shouldBe false
+  }
+
+  @Test
+  fun `legacy darkTheme false migrates to light and cleans up`() = runTest {
+    sharedPreferences.edit {
+      clear()
+      putBoolean("darkTheme", false)
+    }
+
+    val store = testGraph.themeModeStore
+    store.data.first() shouldBe ThemeMode.Light
+    sharedPreferences.contains("darkTheme") shouldBe false
+  }
+
+  @Test
+  fun `legacy darkTheme DataStore migrates and cleans up`() = runTest {
+    sharedPreferences.edit { clear() }
+    val oldDataStoreFile = File(ApplicationProvider.getApplicationContext<Application>().filesDir, "datastore/darkTheme")
+    oldDataStoreFile.parentFile!!.mkdirs()
+    oldDataStoreFile.writeText("true")
+
+    val store = testGraph.themeModeStore
+    store.data.first() shouldBe ThemeMode.Dark
+    oldDataStoreFile.exists() shouldBe false
   }
 
   @Test
@@ -119,7 +149,8 @@ class MigrationTests {
 
     testGraph.seekTimeStore.data.first() shouldBe 20
     testGraph.autoRewindAmountStore.data.first() shouldBe 2
-    testGraph.darkThemeStore.data.first() shouldBe false
+    testGraph.themeModeStore.data.first() shouldBe ThemeMode.FollowSystem
+    testGraph.themeColorSchemeStore.data.first() shouldBe ThemeColorScheme.VoiceBlue
   }
 
   @Test
@@ -144,7 +175,7 @@ class MigrationTests {
 
     testGraph.seekTimeStore.data.first() shouldBe 15
     testGraph.autoRewindAmountStore.data.first() shouldBe 5
-    testGraph.darkThemeStore.data.first() shouldBe true
+    testGraph.themeModeStore.data.first() shouldBe ThemeMode.Dark
 
     listOf("SLEEP_TIME", "SEEK_TIME", "AUTO_REWIND", "darkTheme")
       .forEach {
