@@ -11,13 +11,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import voice.core.data.store.DarkThemeStore
+import voice.core.data.ThemeMode
+import voice.core.data.store.ThemeModeStore
 import voice.core.initializer.AppInitializer
 
 @ContributesIntoSet(AppScope::class)
 class UIAppStartInitializer(
-  @DarkThemeStore
-  private val useDarkThemeStore: DataStore<Boolean>,
+  @ThemeModeStore
+  private val themeModeStore: DataStore<ThemeMode>,
   private val scope: CoroutineScope,
 ) : AppInitializer {
 
@@ -27,14 +28,16 @@ class UIAppStartInitializer(
         .addLastModifiedToFileCacheKey(false)
         .build(),
     )
-    if (DARK_THEME_SETTABLE) {
-      useDarkThemeStore.data
-        .distinctUntilChanged()
-        .onEach { useDarkTheme ->
-          val nightMode = if (useDarkTheme) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-          AppCompatDelegate.setDefaultNightMode(nightMode)
+    themeModeStore.data
+      .distinctUntilChanged()
+      .onEach { themeMode ->
+        val nightMode = when (themeMode) {
+          ThemeMode.FollowSystem -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+          ThemeMode.Light -> AppCompatDelegate.MODE_NIGHT_NO
+          ThemeMode.Dark -> AppCompatDelegate.MODE_NIGHT_YES
         }
-        .launchIn(scope)
-    }
+        AppCompatDelegate.setDefaultNightMode(nightMode)
+      }
+      .launchIn(scope)
   }
 }

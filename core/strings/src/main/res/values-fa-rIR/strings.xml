@@ -107,7 +107,14 @@
     <string name="settings.action.open">تنظیمات</string>
     <string name="settings.analytics_consent.description">اجازه بدهید برای بهبود دادن برنامه اطلاعات استفاده شما به شکل ناشناس گردآوری شود</string>
     <string name="settings.analytics_consent.title">تجزیه‌وتحلیل آماری</string>
-    <string name="settings.appearance.dark_theme.title">تم مشکی</string>
+    <string name="settings.appearance.color_scheme.title">طرح رنگ</string>
+    <string name="settings.appearance.color_scheme.dynamic">رنگ پویا</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">از رنگ‌های تصویر زمینه و تم سیستم شما استفاده می‌کند.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">آبی Voice</string>
+    <string name="settings.appearance.theme.dark">تیره</string>
+    <string name="settings.appearance.theme.follow_system">پیروی از سیستم</string>
+    <string name="settings.appearance.theme.light">روشن</string>
+    <string name="settings.appearance.theme.title">تم</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">زمان پایان</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">زمان شروع</string>
     <string name="settings.auto_sleep_timer.summary">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>

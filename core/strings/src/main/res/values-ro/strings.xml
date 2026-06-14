@@ -99,7 +99,6 @@
     <string name="review.request.title">Îți place Voice?</string>
     <string name="settings.about.app_version.title">Versiune aplicație</string>
     <string name="settings.action.open">Preferințe</string>
-    <string name="settings.appearance.dark_theme.title">Temă întunecată</string>
     <string name="settings.library.use_grid.title">Folosiți aspect grilă</string>
     <string name="settings.playback.auto_rewind.title">Reluare automată</string>
     <string name="settings.playback.seek_time.title">Pas derulare</string>

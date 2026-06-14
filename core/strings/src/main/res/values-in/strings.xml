@@ -104,7 +104,14 @@
     <string name="settings.action.open">Preferensi</string>
     <string name="settings.analytics_consent.description">Izinkan pengumpulan data penggunaan anonim untuk membantu meningkatkan aplikasi</string>
     <string name="settings.analytics_consent.title">Analitik</string>
-    <string name="settings.appearance.dark_theme.title">Tema Gelap</string>
+    <string name="settings.appearance.color_scheme.title">Skema warna</string>
+    <string name="settings.appearance.color_scheme.dynamic">Warna dinamis</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Menggunakan warna dari wallpaper dan tema sistem Anda.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Biru Voice</string>
+    <string name="settings.appearance.theme.dark">Gelap</string>
+    <string name="settings.appearance.theme.follow_system">Ikuti sistem</string>
+    <string name="settings.appearance.theme.light">Terang</string>
+    <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Atur waktu selesai</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Atur waktu mulai</string>
     <string name="settings.auto_sleep_timer.summary">Mulai pengatur waktu tidur secara otomatis saat pemutaran dimulai antara %1$s dan %2$s</string>

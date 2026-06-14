@@ -107,7 +107,14 @@
     <string name="settings.action.open">Instellingen</string>
     <string name="settings.analytics_consent.description">Anonieme gebruiksgegevens verzamelen toestaan om de app te verbeteren</string>
     <string name="settings.analytics_consent.title">Analyse</string>
-    <string name="settings.appearance.dark_theme.title">Donker thema</string>
+    <string name="settings.appearance.color_scheme.title">Kleurenschema</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dynamische kleur</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Gebruikt kleuren van je achtergrond en systeemthema.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Voice-blauw</string>
+    <string name="settings.appearance.theme.dark">Donker</string>
+    <string name="settings.appearance.theme.follow_system">Systeem volgen</string>
+    <string name="settings.appearance.theme.light">Licht</string>
+    <string name="settings.appearance.theme.title">Thema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Zet eindtijd</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Zet starttijd</string>
     <string name="settings.auto_sleep_timer.summary">Start automatisch een slaaptimer wanneer het afspelen begint tussen %1$s en %2$s</string>

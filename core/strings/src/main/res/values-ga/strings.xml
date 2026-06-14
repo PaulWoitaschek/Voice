@@ -116,7 +116,14 @@
     <string name="settings.action.open">Socruithe</string>
     <string name="settings.analytics_consent.description">Ceadaigh bailiú sonraí úsáide gan ainm chun cabhrú le feabhas a chur ar an aip</string>
     <string name="settings.analytics_consent.title">Anailísíocht</string>
-    <string name="settings.appearance.dark_theme.title">Téama Dorcha</string>
+    <string name="settings.appearance.color_scheme.title">Scéim dathanna</string>
+    <string name="settings.appearance.color_scheme.dynamic">Dath dinimiciúil</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Úsáideann sé dathanna ó do pháipéar balla agus ó théama an chórais.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Gorm Voice</string>
+    <string name="settings.appearance.theme.dark">Dorcha</string>
+    <string name="settings.appearance.theme.follow_system">Lean an córas</string>
+    <string name="settings.appearance.theme.light">Geal</string>
+    <string name="settings.appearance.theme.title">Téama</string>
     <string name="settings.auto_sleep_timer.end.label">Socraigh am deiridh</string>
     <string name="settings.auto_sleep_timer.start.label">Socraigh am tosaithe</string>
     <string name="settings.auto_sleep_timer.summary">Tosaigh lasc ama codlata go huathoibríoch nuair a thosaíonn an athsheinm idir %1$s agus %2$s</string>

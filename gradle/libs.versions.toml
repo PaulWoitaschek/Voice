@@ -21,6 +21,7 @@ androidx-lifecycle = "2.10.0"
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 junit = "junit:junit:4.13.2"
+materialKolor = "com.materialkolor:material-kolor:5.0.0-alpha07"
 mockk = "io.mockk:mockk:1.14.11"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.5.0"
 paging-compose = "androidx.paging:paging-compose:3.5.0"
@@ -91,7 +92,7 @@ compose-material-icons-core = { module = "androidx.compose.material:material-ico
 compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
-compose-material3 = { module = "androidx.compose.material3:material3" , version="1.5.0-alpha21"}
+compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha21" }
 compose-activity = "androidx.activity:activity-compose:1.13.0"
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }

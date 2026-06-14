@@ -15,4 +15,5 @@ dependencies {
   implementation(projects.core.initializer)
   implementation(projects.core.strings)
   implementation(libs.lifecycle.compose)
+  implementation(libs.materialKolor)
 }

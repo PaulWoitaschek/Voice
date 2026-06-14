@@ -99,7 +99,6 @@
     <string name="review.request.title">Esteu gaudint del Voice?</string>
     <string name="settings.about.app_version.title">Versió de l\'aplicació</string>
     <string name="settings.action.open">Preferències</string>
-    <string name="settings.appearance.dark_theme.title">Tema fosc</string>
     <string name="settings.library.use_grid.title">Utilitza la disposició en quadrícula</string>
     <string name="settings.playback.auto_rewind.title">Rebobina automàticament</string>
     <string name="settings.playback.seek_time.title">Omet la quantitat</string>

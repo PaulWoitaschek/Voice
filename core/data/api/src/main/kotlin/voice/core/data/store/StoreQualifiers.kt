@@ -21,7 +21,10 @@ public annotation class SleepTimerPreferenceStore
 public annotation class GridModeStore
 
 @Qualifier
-public annotation class DarkThemeStore
+public annotation class ThemeModeStore
+
+@Qualifier
+public annotation class ThemeColorSchemeStore
 
 @Qualifier
 public annotation class FadeOutStore

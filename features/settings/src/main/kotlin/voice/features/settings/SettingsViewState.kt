@@ -1,10 +1,13 @@
 package voice.features.settings
 
+import voice.core.data.ThemeColorScheme
+import voice.core.data.ThemeMode
 import java.time.LocalTime
 
 data class SettingsViewState(
-  val useDarkTheme: Boolean,
-  val showDarkThemePref: Boolean,
+  val themeMode: ThemeMode,
+  val themeColorScheme: ThemeColorScheme,
+  val showThemeColorSchemePref: Boolean,
   val seekTimeInSeconds: Int,
   val autoRewindInSeconds: Int,
   val appVersion: String,
@@ -21,13 +24,16 @@ data class SettingsViewState(
   enum class Dialog {
     AutoRewindAmount,
     SeekTime,
+    Theme,
+    ColorScheme,
   }
 
   companion object {
     fun preview(): SettingsViewState {
       return SettingsViewState(
-        useDarkTheme = false,
-        showDarkThemePref = true,
+        themeMode = ThemeMode.FollowSystem,
+        themeColorScheme = ThemeColorScheme.VoiceBlue,
+        showThemeColorSchemePref = true,
         seekTimeInSeconds = 42,
         autoRewindInSeconds = 12,
         dialog = null,
