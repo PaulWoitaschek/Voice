@@ -12,8 +12,10 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
+import androidx.datastore.core.DataStore
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.scene.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
@@ -25,6 +27,10 @@ import voice.app.navigation.NavEntryResolver
 import voice.app.navigation.StartDestinationProvider
 import voice.core.analytics.api.Analytics
 import voice.core.common.rootGraphAs
+import voice.core.data.ThemeColorScheme
+import voice.core.data.ThemeMode
+import voice.core.data.store.ThemeColorSchemeStore
+import voice.core.data.store.ThemeModeStore
 import voice.core.logging.api.Logger
 import voice.core.ui.LocalSharedTransitionScope
 import voice.core.ui.VoiceTheme
@@ -52,6 +58,14 @@ class MainActivity : AppCompatActivity() {
   @Inject
   private lateinit var analytics: Analytics
 
+  @Inject
+  @ThemeModeStore
+  private lateinit var themeModeStore: DataStore<ThemeMode>
+
+  @Inject
+  @ThemeColorSchemeStore
+  private lateinit var themeColorSchemeStore: DataStore<ThemeColorScheme>
+
   @OptIn(ExperimentalSharedTransitionApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     rootGraphAs<MainActivityGraph>().inject(this)
@@ -65,7 +79,14 @@ class MainActivity : AppCompatActivity() {
       LaunchedEffect(backStack.last()) {
         analytics.screenView(backStack.last().trackingName)
       }
-      VoiceTheme {
+      val themeMode = themeModeStore.data.collectAsState(initial = null).value
+        ?: return@setContent
+      val themeColorScheme = themeColorSchemeStore.data.collectAsState(initial = null).value
+        ?: return@setContent
+      VoiceTheme(
+        themeMode = themeMode,
+        themeColorScheme = themeColorScheme,
+      ) {
         val bottomSheetStrategy = remember { BottomSheetSceneStrategy<Destination.Compose>() }
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
 

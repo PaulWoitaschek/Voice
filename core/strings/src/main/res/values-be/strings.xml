@@ -113,7 +113,14 @@
     <string name="settings.action.open">Налады</string>
     <string name="settings.analytics_consent.description">Дазволіць ананімны збор даных аб выкарыстанні, каб палепшыць праграму</string>
     <string name="settings.analytics_consent.title">Аналітыка</string>
-    <string name="settings.appearance.dark_theme.title">Цёмная тэма</string>
+    <string name="settings.appearance.color_scheme.title">Колеравая схема</string>
+    <string name="settings.appearance.color_scheme.dynamic">Дынамічны колер</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Выкарыстоўвае колеры вашых шпалер і сістэмнай тэмы.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Сіні Voice</string>
+    <string name="settings.appearance.theme.dark">Цёмная</string>
+    <string name="settings.appearance.theme.follow_system">Паводле сістэмы</string>
+    <string name="settings.appearance.theme.light">Светлая</string>
+    <string name="settings.appearance.theme.title">Тэма</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Час заканчэння</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Час пачатку</string>
     <string name="settings.auto_sleep_timer.summary">Запускаць таймер сну аўтаматычна калі прайграванне пачынаецца паміж %1$s і %2$s</string>

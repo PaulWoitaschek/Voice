@@ -110,7 +110,14 @@
     <string name="settings.action.open">Preferências</string>
     <string name="settings.analytics_consent.description">Permitir a coleta de dados de uso anônimos para ajudar a melhorar o app</string>
     <string name="settings.analytics_consent.title">Análises</string>
-    <string name="settings.appearance.dark_theme.title">Tema Escuro</string>
+    <string name="settings.appearance.color_scheme.title">Esquema de cores</string>
+    <string name="settings.appearance.color_scheme.dynamic">Cor dinâmica</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Usa as cores do seu papel de parede e do tema do sistema.</string>
+    <string name="settings.appearance.color_scheme.voice_blue">Azul Voice</string>
+    <string name="settings.appearance.theme.dark">Escuro</string>
+    <string name="settings.appearance.theme.follow_system">Seguir sistema</string>
+    <string name="settings.appearance.theme.light">Claro</string>
+    <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Definir final</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Definir início</string>
     <string name="settings.auto_sleep_timer.summary">Ativa o modo soneca automaticamente quando a reprodução estiver entre %1$s e %2$s</string>

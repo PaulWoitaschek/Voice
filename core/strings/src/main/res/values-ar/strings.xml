@@ -100,7 +100,6 @@
     <string name="review.request.title">هل يعجبك فويس؟</string>
     <string name="settings.about.app_version.title">إصدارة التطبيق</string>
     <string name="settings.action.open">التفضيلات</string>
-    <string name="settings.appearance.dark_theme.title">السمة الداكنة</string>
     <string name="settings.library.use_grid.title">استخدم تخطيط الشبكة</string>
     <string name="settings.playback.auto_rewind.title">إرجاع آلي</string>
     <string name="settings.playback.seek_time.title">مقدار التقدم</string>

@@ -92,7 +92,6 @@
     <string name="review.request.title">Voice को मजा लिदै हुनुहुन्छ?</string>
     <string name="settings.about.app_version.title">एप संस्करण</string>
     <string name="settings.action.open">प्राथमिकताहरू</string>
-    <string name="settings.appearance.dark_theme.title">अँध्यारो थीम</string>
     <string name="settings.library.use_grid.title">ग्रिड लेआउट प्रयोग गर्नुहोस्</string>
     <string name="settings.playback.auto_rewind.title">स्वतः पछाडि</string>
     <string name="settings.playback.seek_time.title">स्किप गर्ने मात्रा</string>

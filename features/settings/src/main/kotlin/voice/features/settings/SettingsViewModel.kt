@@ -17,17 +17,20 @@ import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.GridMode
+import voice.core.data.ThemeColorScheme
+import voice.core.data.ThemeMode
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
-import voice.core.data.store.DarkThemeStore
 import voice.core.data.store.DeveloperMenuUnlockedStore
 import voice.core.data.store.GridModeStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
+import voice.core.data.store.ThemeColorSchemeStore
+import voice.core.data.store.ThemeModeStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
-import voice.core.ui.DARK_THEME_SETTABLE
+import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -35,8 +38,10 @@ import java.time.LocalTime
 
 @Inject
 class SettingsViewModel(
-  @DarkThemeStore
-  private val useDarkThemeStore: DataStore<Boolean>,
+  @ThemeModeStore
+  private val themeModeStore: DataStore<ThemeMode>,
+  @ThemeColorSchemeStore
+  private val themeColorSchemeStore: DataStore<ThemeColorScheme>,
   @AutoRewindAmountStore
   private val autoRewindAmountStore: DataStore<Int>,
   @SeekTimeStore
@@ -54,6 +59,7 @@ class SettingsViewModel(
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   @DeveloperMenuUnlockedStore
   private val developerMenuUnlockedStore: DataStore<Boolean>,
+  private val dynamicColorAvailability: DynamicColorAvailability,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
@@ -65,7 +71,8 @@ class SettingsViewModel(
 
   @Composable
   fun viewState(): SettingsViewState {
-    val useDarkTheme by remember { useDarkThemeStore.data }.collectAsState(initial = false)
+    val themeMode by remember { themeModeStore.data }.collectAsState(initial = ThemeMode.FollowSystem)
+    val themeColorScheme by remember { themeColorSchemeStore.data }.collectAsState(initial = ThemeColorScheme.VoiceBlue)
     val autoRewindAmount by remember { autoRewindAmountStore.data }.collectAsState(initial = 0)
     val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
     val gridMode by remember { gridModeStore.data }.collectAsState(initial = GridMode.GRID)
@@ -77,9 +84,13 @@ class SettingsViewModel(
       kioskModeFeatureFlag.get()
     }
     val showDeveloperMenu by remember { developerMenuUnlockedStore.data }.collectAsState(initial = false)
+    val showThemeColorSchemePref = remember {
+      dynamicColorAvailability.isSupported()
+    }
     return SettingsViewState(
-      useDarkTheme = useDarkTheme,
-      showDarkThemePref = DARK_THEME_SETTABLE,
+      themeMode = themeMode,
+      themeColorScheme = themeColorScheme,
+      showThemeColorSchemePref = showThemeColorSchemePref,
       seekTimeInSeconds = seekTime,
       autoRewindInSeconds = autoRewindAmount,
       dialog = dialog.value,
@@ -106,10 +117,26 @@ class SettingsViewModel(
     navigator.goBack()
   }
 
-  override fun toggleDarkTheme() {
+  override fun onThemeModeRowClick() {
+    dialog.value = SettingsViewState.Dialog.Theme
+  }
+
+  override fun onThemeColorSchemeRowClick() {
+    dialog.value = SettingsViewState.Dialog.ColorScheme
+  }
+
+  override fun setThemeMode(themeMode: ThemeMode) {
     mainScope.launch {
-      useDarkThemeStore.updateData { !it }
+      themeModeStore.updateData { themeMode }
     }
+    dialog.value = null
+  }
+
+  override fun setThemeColorScheme(themeColorScheme: ThemeColorScheme) {
+    mainScope.launch {
+      themeColorSchemeStore.updateData { themeColorScheme }
+    }
+    dialog.value = null
   }
 
   override fun toggleGrid() {
