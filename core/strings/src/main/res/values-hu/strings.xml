@@ -96,7 +96,6 @@
     <string name="review.request.title">Jól teljesít a Voice?</string>
     <string name="settings.about.app_version.title">Applikáció verzió</string>
     <string name="settings.action.open">Beállítások</string>
-    <string name="settings.appearance.dark_theme.title">Sötét téma</string>
     <string name="settings.library.use_grid.title">Rácsos elrendezés</string>
     <string name="settings.playback.auto_rewind.title">Automatikus visszatekerés</string>
     <string name="settings.playback.seek_time.title">Kihagyás mértéke</string>

@@ -107,7 +107,6 @@
     <string name="settings.action.open">Поставувања</string>
     <string name="settings.analytics_consent.description">Дозволете анонимно собирање податоци за користење за да се подобри апликацијата</string>
     <string name="settings.analytics_consent.title">Аналитика</string>
-    <string name="settings.appearance.dark_theme.title">Темна тема</string>
     <string name="settings.appearance.color_scheme.title">Шема на бои</string>
     <string name="settings.appearance.color_scheme.dynamic">Динамична боја</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Користи бои од вашата позадина и системска тема.</string>

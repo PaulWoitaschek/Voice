@@ -116,7 +116,6 @@
     <string name="settings.action.open">Socruithe</string>
     <string name="settings.analytics_consent.description">Ceadaigh bailiú sonraí úsáide gan ainm chun cabhrú le feabhas a chur ar an aip</string>
     <string name="settings.analytics_consent.title">Anailísíocht</string>
-    <string name="settings.appearance.dark_theme.title">Téama Dorcha</string>
     <string name="settings.appearance.color_scheme.title">Scéim dathanna</string>
     <string name="settings.appearance.color_scheme.dynamic">Dath dinimiciúil</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Úsáideann sé dathanna ó do pháipéar balla agus ó théama an chórais.</string>

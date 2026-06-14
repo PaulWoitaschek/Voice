@@ -107,7 +107,6 @@
     <string name="settings.action.open">விருப்பத்தேர்வுகள்</string>
     <string name="settings.analytics_consent.description">பயன்பாட்டை மேம்படுத்த உதவ அநாமதேய பயன்பாட்டுத் தரவு சேகரிப்பை அனுமதி</string>
     <string name="settings.analytics_consent.title">பகுப்பாய்வு</string>
-    <string name="settings.appearance.dark_theme.title">இருண்ட கருப்பொருள்</string>
     <string name="settings.appearance.color_scheme.title">வண்ணத் திட்டம்</string>
     <string name="settings.appearance.color_scheme.dynamic">மாறும் வண்ணம்</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">உங்கள் வால்பேப்பர் மற்றும் அமைப்பு தீமிலிருந்து வண்ணங்களைப் பயன்படுத்துகிறது.</string>

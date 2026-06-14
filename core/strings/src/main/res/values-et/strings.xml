@@ -107,7 +107,6 @@
     <string name="settings.action.open">Eelistused</string>
     <string name="settings.analytics_consent.description">Parandamaks rakendust luba meil koguda anonüümseid andmeid tema kasutuse kohta</string>
     <string name="settings.analytics_consent.title">Analüütika</string>
-    <string name="settings.appearance.dark_theme.title">Tume kujundus</string>
     <string name="settings.appearance.color_scheme.title">Värviskeem</string>
     <string name="settings.appearance.color_scheme.dynamic">Dünaamiline värv</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Kasutab sinu taustapildi ja süsteemiteema värve.</string>

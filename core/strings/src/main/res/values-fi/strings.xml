@@ -107,7 +107,6 @@
     <string name="settings.action.open">Asetukset</string>
     <string name="settings.analytics_consent.description">Salli anonyymien käyttötietojen kerääminen sovelluksen parantamiseksi</string>
     <string name="settings.analytics_consent.title">Analytiikka</string>
-    <string name="settings.appearance.dark_theme.title">Tumma teema</string>
     <string name="settings.appearance.color_scheme.title">Väriteema</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynaaminen väri</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Käyttää taustakuvan ja järjestelmän teeman värejä.</string>

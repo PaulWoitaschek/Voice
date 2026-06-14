@@ -107,7 +107,6 @@
     <string name="settings.action.open">Preferèntzias</string>
     <string name="settings.analytics_consent.description">Permite sa regorta de datos anònimos de impreu pro agiudare a megiorare s\'aplicatzione</string>
     <string name="settings.analytics_consent.title">Analìtica</string>
-    <string name="settings.appearance.dark_theme.title">Tema iscuru</string>
     <string name="settings.appearance.color_scheme.title">Schema de colores</string>
     <string name="settings.appearance.color_scheme.dynamic">Colore dinàmicu</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Impreat colores dae s\'isfundu e dae su tema de sistema.</string>

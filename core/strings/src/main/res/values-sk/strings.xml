@@ -113,7 +113,6 @@
     <string name="settings.action.open">Predvoľby</string>
     <string name="settings.analytics_consent.description">Povoliť zber anonymných údajov o používaní s cieľom ďalej vylepšovať aplikáciu</string>
     <string name="settings.analytics_consent.title">Analytické údaje</string>
-    <string name="settings.appearance.dark_theme.title">Tmavá téma</string>
     <string name="settings.appearance.color_scheme.title">Farebná schéma</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamická farba</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Používa farby z tapety a systémovej témy.</string>

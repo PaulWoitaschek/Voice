@@ -63,7 +63,6 @@
     <string name="playback.speed.title">Ταχύτητα αναπαραγωγής</string>
     <string name="settings.about.app_version.title">Έκδοση εφαρμογής</string>
     <string name="settings.action.open">Προτιμήσεις</string>
-    <string name="settings.appearance.dark_theme.title">Σκούρο θέμα</string>
     <string name="settings.library.use_grid.title">Χρήση πλέγματος</string>
     <string name="settings.playback.auto_rewind.title">Αυτόματη αναζήτηση προς τα πίσω</string>
     <string name="settings.playback.seek_time.title">Χρονική μετακίνηση</string>

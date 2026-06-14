@@ -107,7 +107,6 @@
     <string name="settings.action.open">Einstellungen</string>
     <string name="settings.analytics_consent.description">Erlaube die Freigabe anonymer Nutzungsdaten zur Verbesserung der App</string>
     <string name="settings.analytics_consent.title">Nutzungsdaten</string>
-    <string name="settings.appearance.dark_theme.title">Dunkles Design</string>
     <string name="settings.appearance.color_scheme.title">Farbschema</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamische Farben</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Verwendet Farben aus Deinem Hintergrundbild und Systemdesign.</string>

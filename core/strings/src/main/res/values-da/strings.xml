@@ -96,7 +96,6 @@
     <string name="review.request.title">Kan du lide Voice?</string>
     <string name="settings.about.app_version.title">App version</string>
     <string name="settings.action.open">Indstillinger</string>
-    <string name="settings.appearance.dark_theme.title">Mørkt tema</string>
     <string name="settings.library.use_grid.title">Brug gitterlayout</string>
     <string name="settings.playback.auto_rewind.title">Automatisk tilbagespoling</string>
     <string name="settings.playback.seek_time.title">Spring over mængde</string>

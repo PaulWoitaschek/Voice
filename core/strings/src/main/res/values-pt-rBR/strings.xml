@@ -110,7 +110,6 @@
     <string name="settings.action.open">Preferências</string>
     <string name="settings.analytics_consent.description">Permitir a coleta de dados de uso anônimos para ajudar a melhorar o app</string>
     <string name="settings.analytics_consent.title">Análises</string>
-    <string name="settings.appearance.dark_theme.title">Tema Escuro</string>
     <string name="settings.appearance.color_scheme.title">Esquema de cores</string>
     <string name="settings.appearance.color_scheme.dynamic">Cor dinâmica</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Usa as cores do seu papel de parede e do tema do sistema.</string>

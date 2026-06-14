@@ -107,7 +107,6 @@
     <string name="settings.action.open">Preferentias</string>
     <string name="settings.analytics_consent.description">Permitter le collection de datos de uso anonyme pro adjutar a meliorar le app</string>
     <string name="settings.analytics_consent.title">Analytica</string>
-    <string name="settings.appearance.dark_theme.title">Thema obscur</string>
     <string name="settings.appearance.color_scheme.title">Schema de colores</string>
     <string name="settings.appearance.color_scheme.dynamic">Color dynamic</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Usa le colores de tu fundo de schermo e del thema del systema.</string>

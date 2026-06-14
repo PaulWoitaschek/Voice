@@ -113,7 +113,6 @@
     <string name="settings.action.open">Настройки</string>
     <string name="settings.analytics_consent.description">Разрешить анонимный сбор данных об использовании, чтобы улучшить приложение</string>
     <string name="settings.analytics_consent.title">Аналитика</string>
-    <string name="settings.appearance.dark_theme.title">Темная тема</string>
     <string name="settings.appearance.color_scheme.title">Цветовая схема</string>
     <string name="settings.appearance.color_scheme.dynamic">Динамический цвет</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Использует цвета ваших обоев и системной темы.</string>

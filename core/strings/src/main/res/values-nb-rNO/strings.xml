@@ -107,7 +107,6 @@
     <string name="settings.action.open">Innstillinger</string>
     <string name="settings.analytics_consent.description">Tillat anonym innsamling av bruksdata for å bidra til å forbedre appen</string>
     <string name="settings.analytics_consent.title">Analyse</string>
-    <string name="settings.appearance.dark_theme.title">Mørk drakt</string>
     <string name="settings.appearance.color_scheme.title">Fargeoppsett</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamisk farge</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Bruker farger fra bakgrunnen og systemdrakten din.</string>

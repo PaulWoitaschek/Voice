@@ -104,7 +104,6 @@
     <string name="settings.action.open">Preferensi</string>
     <string name="settings.analytics_consent.description">Izinkan pengumpulan data penggunaan anonim untuk membantu meningkatkan aplikasi</string>
     <string name="settings.analytics_consent.title">Analitik</string>
-    <string name="settings.appearance.dark_theme.title">Tema Gelap</string>
     <string name="settings.appearance.color_scheme.title">Skema warna</string>
     <string name="settings.appearance.color_scheme.dynamic">Warna dinamis</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Menggunakan warna dari wallpaper dan tema sistem Anda.</string>

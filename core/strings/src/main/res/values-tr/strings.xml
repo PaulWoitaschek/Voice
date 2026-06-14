@@ -107,7 +107,6 @@
     <string name="settings.action.open">Tercihler</string>
     <string name="settings.analytics_consent.description">Uygulamayı iyileştirmeye katkı sağlaması için anonim kullanım verileri toplanmasına izin ver</string>
     <string name="settings.analytics_consent.title">Analitik</string>
-    <string name="settings.appearance.dark_theme.title">Koyu Tema</string>
     <string name="settings.appearance.color_scheme.title">Renk şeması</string>
     <string name="settings.appearance.color_scheme.dynamic">Dinamik renk</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Duvar kağıdınızdan ve sistem temasından renkleri kullanır.</string>

@@ -107,7 +107,6 @@
     <string name="settings.action.open">Instellingen</string>
     <string name="settings.analytics_consent.description">Anonieme gebruiksgegevens verzamelen toestaan om de app te verbeteren</string>
     <string name="settings.analytics_consent.title">Analyse</string>
-    <string name="settings.appearance.dark_theme.title">Donker thema</string>
     <string name="settings.appearance.color_scheme.title">Kleurenschema</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamische kleur</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Gebruikt kleuren van je achtergrond en systeemthema.</string>

@@ -104,7 +104,6 @@
     <string name="settings.action.open">設定</string>
     <string name="settings.analytics_consent.description">アプリ改善のため、匿名の利用状況データの収集を許可する</string>
     <string name="settings.analytics_consent.title">分析</string>
-    <string name="settings.appearance.dark_theme.title">ダークテーマ</string>
     <string name="settings.appearance.color_scheme.title">カラースキーム</string>
     <string name="settings.appearance.color_scheme.dynamic">ダイナミックカラー</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">壁紙とシステムテーマの色を使用します。</string>

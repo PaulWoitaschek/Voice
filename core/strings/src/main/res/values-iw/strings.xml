@@ -110,7 +110,6 @@
     <string name="settings.action.open">העדפות</string>
     <string name="settings.analytics_consent.description">אפשר איסוף נתוני שימוש אנונימיים כדי לעזור לשפר את האפליקציה</string>
     <string name="settings.analytics_consent.title">ניתוח נתונים</string>
-    <string name="settings.appearance.dark_theme.title">מצב כהה</string>
     <string name="settings.appearance.color_scheme.title">ערכת צבעים</string>
     <string name="settings.appearance.color_scheme.dynamic">צבע דינמי</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">משתמש בצבעים מהרקע ומערכת הנושא של המערכת.</string>

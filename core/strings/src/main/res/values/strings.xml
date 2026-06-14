@@ -206,7 +206,6 @@
     <!-- Settings row title for analytics consent. -->
     <string name="settings.analytics_consent.title">Analytics</string>
     <!-- Title for the dark theme setting. -->
-    <string name="settings.appearance.dark_theme.title">Dark Theme</string>
     <!-- Settings row title for selecting the app color scheme. -->
     <string name="settings.appearance.color_scheme.title">Color scheme</string>
     <!-- Label for selecting Android dynamic color as app color scheme. -->

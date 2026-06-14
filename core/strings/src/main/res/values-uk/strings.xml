@@ -113,7 +113,6 @@
     <string name="settings.action.open">Налаштування</string>
     <string name="settings.analytics_consent.description">Дозволити анонімне збирання данних для покращення додатку</string>
     <string name="settings.analytics_consent.title">Аналітика</string>
-    <string name="settings.appearance.dark_theme.title">Темна тема</string>
     <string name="settings.appearance.color_scheme.title">Колірна схема</string>
     <string name="settings.appearance.color_scheme.dynamic">Динамічний колір</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Використовує кольори з ваших шпалер і системної теми.</string>
