@@ -27,41 +27,18 @@ internal class Mp4ChapterExtractor(
       dataSource.open(DataSpec(uri))
       val input = DefaultExtractorInput(dataSource, 0, C.LENGTH_UNSET.toLong())
       val topLevelResult = boxParser(input)
-      Logger.e(
-        "BOX RESULT trackId=${topLevelResult.chapterTrackId} " +
-          "chunkOffsets=${topLevelResult.chunkOffsets.size} " +
-          "timeScales=${topLevelResult.timeScales.size} " +
-          "durations=${topLevelResult.durations.size} " +
-          "stsc=${topLevelResult.stscEntries.size}"
-      )
       val trackId = topLevelResult.chapterTrackId
       when {
         topLevelResult.chplChapters.isNotEmpty() -> {
           topLevelResult.chplChapters
         }
         trackId != null -> {
-          Logger.e(
-            "CALLING ChapterTrackProcessor trackId=$trackId"
-          )
-
-          val chapters =
-            chapterTrackProcessor(
-              uri,
-              dataSource,
-              trackId,
-              topLevelResult,
-            )
-
-          Logger.e(
-            "EXTRACTOR RESULT chapters=${chapters.size} first=${chapters.firstOrNull()} last=${chapters.lastOrNull()}"
-          )
-
-          chapters
+          chapterTrackProcessor(uri, dataSource, trackId, topLevelResult)
         }
         else -> emptyList()
       }
     } catch (e: Exception) {
-      Logger.e(e, "REAL MP4 ERROR")
+      Logger.w(e, "Failed to extract MP4 chapters")
       emptyList()
     } finally {
       try {

@@ -2,7 +2,6 @@ package voice.core.scanner.mp4.visitor
 
 import androidx.media3.common.util.ParsableByteArray
 import dev.zacsweers.metro.Inject
-import voice.core.logging.api.Logger
 import voice.core.scanner.mp4.Mp4ChpaterExtractorOutput
 
 @Inject
@@ -27,8 +26,6 @@ internal class TkhdVisitor : AtomVisitor {
         buffer.skipBytes(8)
         buffer.readInt()
       }
-
-    Logger.e("TKHD trackId=$trackId")
 
     parseOutput.trackIds.add(trackId)
   }

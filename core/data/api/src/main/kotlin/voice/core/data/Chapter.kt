@@ -12,7 +12,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import voice.core.logging.api.Logger
 import java.time.Instant
 
 @Entity(tableName = "chapters2")
@@ -37,18 +36,10 @@ public data class Chapter(
 
 private fun Chapter.parseMarkData(): List<ChapterMark> {
   return try {
-    markData.forEachIndexed { index, mark ->
-      Logger.e(
-        "RAW MARK[$index] start=${mark.startMs} name=${mark.name}"
-      )
-    }
-
-    val sorted = markData.filterNot { it.startMs < 0 }
+    val positions = markData.map { it.startMs }.toSet()
+    val sorted = markData.filterNot { it.startMs - 1 in positions || it.startMs < 0 }
       .distinctBy { it.startMs }
       .sortedBy { it.startMs }
-    Logger.e(
-      "PARSE MARK DATA markData=${markData.size} sorted=${sorted.size}"
-    )
     val maxEndMs = (duration - 1).coerceAtLeast(1)
     if (sorted.isEmpty()) {
       return listOf(ChapterMark(name, 0L, maxEndMs))

@@ -29,9 +29,7 @@ internal class ChplVisitor : AtomVisitor {
     }
 
     val chapterCount = buffer.readUnsignedByte()
-    Logger.e("CHPL DEBUG version=$version chapterCount=$chapterCount")
-
-    val chapters = (0 until chapterCount).map { index ->
+    val chapters = (0 until chapterCount).map {
       val timestamp = if (version == 0) {
         buffer.readUnsignedInt()
       } else {
@@ -39,24 +37,10 @@ internal class ChplVisitor : AtomVisitor {
       }
 
       val titleLength = buffer.readUnsignedByte()
-      val title = if (titleLength > 0) {
-        val titleBytes = ByteArray(titleLength)
-        buffer.readBytes(titleBytes, 0, titleLength)
-        String(titleBytes, Charsets.UTF_8)
-      } else {
-        ""
-      }
+      val title = buffer.readString(titleLength)
 
-      val padding = (4 - ((1 + titleLength) % 4)) % 4
-      if (padding > 0) {
-        buffer.skipBytes(padding)
-      }
-
+      // Convert from 100ns units to milliseconds (10,000 units per ms)
       val startTimeMs = timestamp / 10_000
-      if (index < 12) {
-        Logger.e("CHPL ENTRY $index ts=$timestamp startTimeMs=$startTimeMs titleLength=$titleLength title=$title padding=$padding")
-      }
-
       MarkData(startMs = startTimeMs, name = title)
     }
 

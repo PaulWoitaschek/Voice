@@ -26,11 +26,6 @@ internal class StszVisitor : AtomVisitor {
 
     val sampleSize = buffer.readUnsignedIntToInt()
     val sampleCount = buffer.readUnsignedIntToInt()
-
-    Logger.e(
-      "STSZ sampleSize=$sampleSize sampleCount=$sampleCount"
-    )
-
     val sampleSizes =
       if (sampleSize != 0) {
         List(sampleCount) { sampleSize }
@@ -39,8 +34,6 @@ internal class StszVisitor : AtomVisitor {
           buffer.readUnsignedIntToInt()
         }
       }
-
-    Logger.e("STSZ sizes=${sampleSizes.size}")
 
     parseOutput.sampleSizes.add(sampleSizes)
   }

@@ -6,7 +6,6 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.internals.dao.ChapterDao
 import voice.core.data.runForMaxSqlVariableNumber
-import voice.core.logging.api.Logger
 
 @ContributesBinding(AppScope::class)
 public class ChapterRepoImpl(private val dao: ChapterDao) : ChapterRepo {
@@ -17,9 +16,6 @@ public class ChapterRepoImpl(private val dao: ChapterDao) : ChapterRepo {
     // this does not use getOrPut because a `null` value should also be cached
     if (!cache.containsKey(id)) {
       cache[id] = dao.chapter(id)
-      cache[id]?.let { chapter ->
-        Logger.e("CHAPTER REPO GET id=${id.value} markData=${chapter.markData.size} chapterMarks=${chapter.chapterMarks.size}")
-      }
     }
     return cache[id]
   }

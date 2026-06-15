@@ -26,8 +26,6 @@ internal class Co64Visitor : AtomVisitor {
 
     val numberOfEntries = buffer.readUnsignedIntToInt()
 
-    Logger.e("CO64 entries=$numberOfEntries")
-
     val chunkOffsets =
       (0 until numberOfEntries).map {
         buffer.readUnsignedLongToLong()

@@ -81,16 +81,11 @@ internal class Mp4BoxParser(
         atomSize = scratch.readUnsignedLongToLong()
         headerSize = Mp4Box.LONG_HEADER_SIZE
       }
-      val payloadSizeLong = atomSize - headerSize
-
-      Logger.e(
-        "ATOM DEBUG: atomType=$atomType atomSize=$atomSize headerSize=$headerSize payloadSize=$payloadSizeLong"
-      )
 
       val payloadSize = atomSize - headerSize
       val payloadEnd = input.position + payloadSize
       val currentPath = path + atomType
-      Logger.w("Current path: $currentPath, atomType: $atomType")
+      Logger.d("Current path: $currentPath, atomType: $atomType")
 
       val visitor = visitorByPath[currentPath]
 
@@ -136,16 +131,7 @@ internal class Mp4BoxParser(
         }
 
         else -> {
-          Logger.e(
-            "DEBUG before mdat: chapterTrackId=${parseOutput.chapterTrackId} " +
-              "chunkOffsets=${parseOutput.chunkOffsets.size} " +
-              "timeScales=${parseOutput.timeScales.size} " +
-              "durations=${parseOutput.durations.size} " +
-              "stsc=${parseOutput.stscEntries.size}"
-          )
-
           if (atomType == "mdat") {
-            Logger.e("STOPPING AT MDAT")
             return
           }
 
@@ -156,11 +142,6 @@ internal class Mp4BoxParser(
       }
       if (input.position < payloadEnd) {
         val remaining = payloadEnd - input.position
-
-        Logger.e(
-          "atom=$atomType currentPath=$currentPath payloadEnd=$payloadEnd position=${input.position} remaining=$remaining"
-        )
-
         if (!skipLarge(input, remaining)) {
           return
         }

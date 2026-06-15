@@ -7,7 +7,6 @@ import voice.core.data.isAudioFile
 import voice.core.data.repo.ChapterRepo
 import voice.core.data.repo.getOrPut
 import voice.core.documentfile.CachedDocumentFile
-import voice.core.logging.api.Logger
 import java.time.Instant
 
 internal data class ChapterParseResult(
@@ -34,10 +33,6 @@ internal class ChapterParser(
           fileSize = file.length,
         ) {
           val metaData = mediaAnalyzer.analyze(file) ?: return@getOrPut null
-          Logger.e(
-            "CHAPTER PARSER markData=${metaData.chapters.size} values=${metaData.chapters.take(12).joinToString { "(${it.startMs},${it.name})" }}"
-          )
-
           analyzedMetadata[id] = metaData
           Chapter(
             id = id,
@@ -49,9 +44,6 @@ internal class ChapterParser(
           )
         }
         if (chapter != null) {
-          Logger.e(
-            "CHAPTER REPO RESULT markData=${chapter.markData.size}"
-          )
           result.add(chapter)
         }
       } else if (file.isDirectory) {
