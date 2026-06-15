@@ -29,6 +29,7 @@ internal class ChplVisitor : AtomVisitor {
     }
 
     val chapterCount = buffer.readUnsignedByte()
+
     val chapters = (0 until chapterCount).map {
       val timestamp = if (version == 0) {
         buffer.readUnsignedInt()

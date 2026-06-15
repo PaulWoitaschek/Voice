@@ -82,6 +82,7 @@ internal class MediaAnalyzer(
     if (fileType == FileTypes.MATROSKA || extension == "mka" || extension == "mkv") {
       parseMatroskaMetaData(file, builder)
     }
+
     return builder.build(duration)
   }
 
