@@ -127,6 +127,7 @@ class BookPlayViewModel(
 
     val sleepTime = remember { sleepTimer.state }.collectAsState().value
     val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
+    Logger.e("BOOK DEBUG id=${book.id.value} chapters=${book.chapters.size} chapterMarksCounts=${book.chapters.map { it.chapterMarks.count() }} hasMoreThanOneChapter=$hasMoreThanOneChapter")
     return BookPlayViewState(
       sleepTimerState = sleepTime.toViewState(),
       playing = isPlaying,

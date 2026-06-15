@@ -17,45 +17,130 @@ internal class ChapterTrackProcessor {
     trackId: Int,
     output: Mp4ChpaterExtractorOutput,
   ): List<MarkData> {
-    val chunkOffsets = output.chunkOffsets.getOrNull(trackId - 1)
+    Logger.e(
+      "TRACK MAP trackId=$trackId " +
+        "chunkOffsetsSize=${output.chunkOffsets.size} " +
+        "timeScalesSize=${output.timeScales.size} " +
+        "durationsSize=${output.durations.size} " +
+        "stscSize=${output.stscEntries.size}"
+    )
+    Logger.w(
+      "trackId=$trackId " +
+        "chunkOffsets=${output.chunkOffsets.size} " +
+        "timeScales=${output.timeScales.size} " +
+        "durations=${output.durations.size} " +
+        "stsc=${output.stscEntries.size}"
+    )
+    val trackIndex =
+      output.trackIds.indexOf(trackId)
+
+    Logger.e(
+      "TRACK LOOKUP trackId=$trackId trackIndex=$trackIndex trackIds=${output.trackIds}"
+    )
+
+    if (trackIndex == -1) {
+      Logger.w("Track ID $trackId not found")
+      return emptyList()
+    }
+    val chunkOffsets = output.chunkOffsets.getOrNull(trackIndex)
+    Logger.e(
+      "TRACK DEBUG trackId=$trackId chunkOffsets=${chunkOffsets?.size}"
+    )
     if (chunkOffsets == null) {
       Logger.w("No chunk offsets found for track ID $trackId")
       return emptyList()
     }
-    val timeScale = output.timeScales.getOrNull(trackId - 1)
+
+    val timeScale = output.timeScales.getOrNull(trackIndex)
+    Logger.e(
+      "TRACK DEBUG trackId=$trackId timeScale=$timeScale"
+    )
     if (timeScale == null) {
       Logger.w("No time scale found for track ID $trackId")
       return emptyList()
     }
-    val durations = output.durations.getOrNull(trackId - 1)
+
+    val durations = output.durations.getOrNull(trackIndex)
+    Logger.e(
+      "TRACK DEBUG trackId=$trackId durations=${durations?.size}"
+    )
     if (durations == null) {
       Logger.w("No durations found for track ID $trackId")
       return emptyList()
     }
-    val stscEntries = output.stscEntries.getOrNull(trackId - 1)
+    durations.forEachIndexed { index, entry ->
+      Logger.e(
+        "STTS[$index] sampleCount=${entry.sampleCount} sampleDuration=${entry.sampleDuration}"
+      )
+    }
+
+    val stscEntries = output.stscEntries.getOrNull(trackIndex)
+
+    Logger.e("STSC ENTRIES = $stscEntries")
+
+    stscEntries?.forEach {
+      Logger.e(
+        "STSC firstChunk=${it.firstChunk} samplesPerChunk=${it.samplesPerChunk}"
+      )
+    }
+
     if (stscEntries == null) {
       Logger.w("No stsc entries found for track ID $trackId")
       return emptyList()
     }
+    val sampleSizes = output.sampleSizes.getOrNull(trackIndex)
+    Logger.e(
+      "CHAPTER TRACK sampleSizes=${sampleSizes?.size} first5=${sampleSizes?.take(5)}"
+    )
+    Logger.e(
+      "SAMPLE SIZES first10=${sampleSizes?.take(10)}"
+    )
 
-    val numberOfChaptersToProcess = chunkOffsets.size
+    Logger.e(
+      "TRACK DEBUG trackId=$trackId sampleSizes=${sampleSizes?.size}"
+    )
 
-    val names = chunkOffsets.map { offset ->
-      dataSource.close()
-      dataSource.open(
-        DataSpec.Builder()
-          .setUri(uri)
-          .setPosition(offset)
-          .build(),
-      )
-      val buffer = ParsableByteArray()
-      buffer.reset(2)
-      dataSource.read(buffer.data, 0, 2)
-      val textLength = buffer.readShort().toInt()
-      buffer.reset(textLength)
-      dataSource.read(buffer.data, 0, textLength)
-      buffer.readString(textLength)
+    if (sampleSizes == null) {
+      Logger.w("No sample sizes found for track ID $trackId")
+      return emptyList()
     }
+    Logger.e(
+      "CHAPTER STRUCTURE chunkOffsets=${chunkOffsets.size} sampleSizes=${sampleSizes.size}"
+    )
+
+    val chapterChunkOffset = chunkOffsets.first()
+
+    dataSource.close()
+    dataSource.open(
+      DataSpec.Builder()
+        .setUri(uri)
+        .setPosition(chapterChunkOffset)
+        .build(),
+    )
+
+    val names =
+      sampleSizes.mapIndexed { index, sampleSize ->
+        val sampleBuffer = ParsableByteArray()
+        sampleBuffer.reset(sampleSize)
+
+        dataSource.read(sampleBuffer.data, 0, sampleSize)
+
+        val textLength = sampleBuffer.readShort().toInt()
+
+        val name = sampleBuffer.readString(textLength)
+
+        Logger.e(
+          "CHAPTER[$index] sampleSize=$sampleSize textLength=$textLength name=$name"
+        )
+
+        name
+      }
+
+    val numberOfChaptersToProcess = names.size
+
+    Logger.e(
+      "CHAPTER NAMES count=${names.size} first=${names.firstOrNull()}"
+    )
 
     if (names.size != numberOfChaptersToProcess) {
       Logger.w("Mismatch in names size and chunk offsets size for track ID $trackId")
@@ -66,31 +151,50 @@ internal class ChapterTrackProcessor {
     var durationEntryIndex = 0
     var samplesConsumedInDurationEntry = 0L
 
-    return (0 until numberOfChaptersToProcess)
+    val result = (0 until numberOfChaptersToProcess)
       .map { chunkIndex ->
         val chapterName = names[chunkIndex]
 
-        val samplesInThisChunk = getSamplesPerChunk(chunkIndex, stscEntries)
+        val samplesInThisChunk =
+          if (chunkOffsets.size == 1 && sampleSizes.size == durations.size) {
+            1
+          } else {
+            getSamplesPerChunk(chunkIndex, stscEntries)
+          }
         val chunkDuration = consumeDuration(
           sampleCount = samplesInThisChunk,
           durations = durations,
           durationEntryIndex = durationEntryIndex,
           samplesConsumedInDurationEntry = samplesConsumedInDurationEntry,
         )
+
         durationEntryIndex = chunkDuration.durationEntryIndex
         samplesConsumedInDurationEntry = chunkDuration.samplesConsumedInDurationEntry
-        if (!chunkDuration.hasEnoughDurations) {
-          Logger.w("Not enough sample durations for chunk ${chunkIndex + 1}")
-        }
+        Logger.e(
+          "POSITION chunk=$chunkIndex " +
+            "name=$chapterName " +
+            "position=$position " +
+            "samplesInChunk=$samplesInThisChunk " +
+            "chunkDuration=${chunkDuration.duration}"
+        )
 
         MarkData(
           startMs = position * 1000 / timeScale,
           name = chapterName,
         ).also {
           position += chunkDuration.duration
+          Logger.e(
+            "NEW POSITION=$position"
+          )
         }
       }
       .sorted()
+
+    Logger.e("CHAPTER RESULT count=${result.size}")
+    Logger.e("FIRST MARK=${result.firstOrNull()}")
+    Logger.e("LAST MARK=${result.lastOrNull()}")
+
+    return result
   }
 
   private fun consumeDuration(

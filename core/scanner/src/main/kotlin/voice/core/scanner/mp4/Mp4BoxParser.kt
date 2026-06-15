@@ -11,6 +11,9 @@ import voice.core.scanner.mp4.visitor.MdhdVisitor
 import voice.core.scanner.mp4.visitor.StcoVisitor
 import voice.core.scanner.mp4.visitor.StscVisitor
 import voice.core.scanner.mp4.visitor.SttsVisitor
+import voice.core.scanner.mp4.visitor.Co64Visitor
+import voice.core.scanner.mp4.visitor.TkhdVisitor
+import voice.core.scanner.mp4.visitor.StszVisitor
 
 @Inject
 internal class Mp4BoxParser(
@@ -18,8 +21,11 @@ internal class Mp4BoxParser(
   mdhdVisitor: MdhdVisitor,
   sttsVisitor: SttsVisitor,
   stcoVisitor: StcoVisitor,
+  co64Visitor: Co64Visitor,
   chplVisitor: ChplVisitor,
+  tkhdVisitor: TkhdVisitor,
   chapVisitor: ChapVisitor,
+  stszVisitor: StszVisitor,
 ) {
 
   private val visitors = listOf(
@@ -27,8 +33,11 @@ internal class Mp4BoxParser(
     mdhdVisitor,
     sttsVisitor,
     stcoVisitor,
+    co64Visitor,
     chplVisitor,
     chapVisitor,
+    tkhdVisitor,
+    stszVisitor,
   )
   private val visitorByPath = visitors.associateBy { it.path }
 
@@ -72,21 +81,40 @@ internal class Mp4BoxParser(
         atomSize = scratch.readUnsignedLongToLong()
         headerSize = Mp4Box.LONG_HEADER_SIZE
       }
+      val payloadSizeLong = atomSize - headerSize
 
-      val payloadSize = (atomSize - headerSize).toInt()
+      Logger.e(
+        "ATOM DEBUG: atomType=$atomType atomSize=$atomSize headerSize=$headerSize payloadSize=$payloadSizeLong"
+      )
+
+      val payloadSize = atomSize - headerSize
       val payloadEnd = input.position + payloadSize
       val currentPath = path + atomType
-      Logger.d("Current path: $currentPath, atomType: $atomType")
+      Logger.w("Current path: $currentPath, atomType: $atomType")
 
       val visitor = visitorByPath[currentPath]
 
       when {
         visitor != null -> {
           Logger.v("Found ${visitor.path.last()}!")
-          scratch.reset(payloadSize)
-          if (!input.readFully(scratch.data, 0, payloadSize, true)) {
+
+          if (payloadSize > Int.MAX_VALUE) {
+            Logger.w("Visitor payload too large: $atomType")
             return
           }
+
+          scratch.reset(payloadSize.toInt())
+
+          if (!input.readFully(
+              scratch.data,
+              0,
+              payloadSize.toInt(),
+              true,
+            )
+          ) {
+            return
+          }
+
           visitor.visit(scratch, parseOutput)
 
           if (parseOutput.chplChapters.isNotEmpty()) {
@@ -106,22 +134,60 @@ internal class Mp4BoxParser(
             return
           }
         }
+
         else -> {
-          if (!input.skipFully(payloadSize, true)) {
+          Logger.e(
+            "DEBUG before mdat: chapterTrackId=${parseOutput.chapterTrackId} " +
+              "chunkOffsets=${parseOutput.chunkOffsets.size} " +
+              "timeScales=${parseOutput.timeScales.size} " +
+              "durations=${parseOutput.durations.size} " +
+              "stsc=${parseOutput.stscEntries.size}"
+          )
+
+          if (atomType == "mdat") {
+            Logger.e("STOPPING AT MDAT")
+            return
+          }
+
+          if (!skipLarge(input, payloadSize)) {
             return
           }
         }
       }
-
       if (input.position < payloadEnd) {
-        if (!input.skipFully((payloadEnd - input.position).toInt(), true)) {
+        val remaining = payloadEnd - input.position
+
+        Logger.e(
+          "atom=$atomType currentPath=$currentPath payloadEnd=$payloadEnd position=${input.position} remaining=$remaining"
+        )
+
+        if (!skipLarge(input, remaining)) {
           return
         }
       }
     }
+  }
+  private fun skipLarge(
+    input: ExtractorInput,
+    bytesToSkip: Long,
+  ): Boolean {
+    var remaining = bytesToSkip
+
+    while (remaining > 0) {
+      val chunk = minOf(remaining, Int.MAX_VALUE.toLong())
+
+      if (!input.skipFully(chunk.toInt(), true)) {
+        return false
+      }
+
+      remaining -= chunk
+    }
+
+    return true
   }
 
   private fun List<String>.startsWith(other: List<String>): Boolean {
     return take(other.size) == other
   }
 }
+

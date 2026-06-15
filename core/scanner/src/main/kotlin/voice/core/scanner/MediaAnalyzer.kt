@@ -83,7 +83,13 @@ internal class MediaAnalyzer(
       parseMatroskaMetaData(file, builder)
     }
 
-    return builder.build(duration)
+    val metadata = builder.build(duration)
+
+    Logger.e(
+      "FINAL METADATA chapters=${metadata.chapters.size}"
+    )
+
+    return metadata
   }
 
   private fun parseMatroskaMetaData(
@@ -108,7 +114,15 @@ internal class MediaAnalyzer(
     builder: Metadata.Builder,
   ) {
     val chapters = mp4ChapterExtractor.extractChapters(file.uri)
+    Logger.e(
+      "MEDIA ANALYZER chapters=${chapters.size} first=${chapters.firstOrNull()} last=${chapters.lastOrNull()}"
+    )
+
     builder.chapters += chapters
+
+    Logger.e(
+      "BUILDER chapters=${builder.chapters.size}"
+    )
   }
 
   private fun visitMdta(

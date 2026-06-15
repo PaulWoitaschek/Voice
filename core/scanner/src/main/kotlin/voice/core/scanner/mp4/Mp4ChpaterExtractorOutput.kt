@@ -4,6 +4,8 @@ import voice.core.data.MarkData
 
 internal data class Mp4ChpaterExtractorOutput(
   val chunkOffsets: MutableList<List<Long>> = mutableListOf(),
+  val trackIds: MutableList<Int> = mutableListOf(),
+  val sampleSizes: MutableList<List<Int>> = mutableListOf(),
   val durations: MutableList<List<SttsEntry>> = mutableListOf(),
   val stscEntries: MutableList<List<StscEntry>> = mutableListOf(),
   val timeScales: MutableList<Long> = mutableListOf(),
