@@ -41,10 +41,9 @@ class NavEntryResolverTest {
     }
     val testGraph: NavEntryResolverTestGraph = createGraph()
     val resolver = testGraph.resolver
-    assertEquals(expected = allDestinations.asCountMap(), actual = resolver.registeredClasses().asCountMap())
+    assertEquals(
+      expected = allDestinations.sortedBy { it.simpleName },
+      actual = resolver.registeredClasses().sortedBy { it.simpleName },
+    )
   }
-}
-
-private fun Iterable<*>.asCountMap(): Map<Any?, Int> {
-  return groupingBy { it }.eachCount()
 }

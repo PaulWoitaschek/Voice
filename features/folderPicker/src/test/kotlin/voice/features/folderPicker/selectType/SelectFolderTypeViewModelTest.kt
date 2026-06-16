@@ -48,10 +48,13 @@ class SelectFolderTypeViewModelTest {
     }.test {
       suspend fun expectItem(
         folderMode: FolderMode,
-        vararg books: SelectFolderTypeViewState.Book,
+        vararg expectedBooks: SelectFolderTypeViewState.Book,
       ) {
         with(awaitItem()) {
-          assertEquals(expected = books.toList().asCountMap(), actual = this.books.asCountMap())
+          assertEquals(
+            expected = expectedBooks.toList().sortedBy { it.name },
+            actual = this.books.sortedBy { it.name },
+          )
           assertEquals(expected = folderMode, actual = this.selectedFolderMode)
         }
       }
@@ -77,8 +80,4 @@ class SelectFolderTypeViewModelTest {
       )
     }
   }
-}
-
-private fun Iterable<*>.asCountMap(): Map<Any?, Int> {
-  return groupingBy { it }.eachCount()
 }

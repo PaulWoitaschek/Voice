@@ -278,7 +278,10 @@ class MediaScannerTest {
           )
         }
         .let { actual ->
-          assertEquals(expected = expected.toList().asCountMap(), actual = actual.asCountMap())
+          assertEquals(
+            expected = expected.sortedBy { it.id },
+            actual = actual.sortedBy { it.id },
+          )
         }
     }
 
@@ -291,8 +294,4 @@ class MediaScannerTest {
     val id: File,
     val chapters: List<File>,
   )
-}
-
-private fun Iterable<*>.asCountMap(): Map<Any?, Int> {
-  return groupingBy { it }.eachCount()
 }
