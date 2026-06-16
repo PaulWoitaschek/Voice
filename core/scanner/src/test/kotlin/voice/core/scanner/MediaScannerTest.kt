@@ -5,12 +5,9 @@ import androidx.core.net.toUri
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import org.junit.runner.RunWith
 import voice.core.data.BookId
 import voice.core.data.ChapterId
@@ -25,6 +22,8 @@ import voice.core.documentfile.FileBasedDocumentFile
 import java.io.Closeable
 import java.io.File
 import java.nio.file.Files
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class MediaScannerTest {
@@ -80,7 +79,7 @@ class MediaScannerTest {
     audioFile(book1, "2.mp3")
     audioFile(book1, "10.mp3")
 
-    bookContentRepo.get(book1Id) shouldBe contentWithPositionAtLastChapter
+    assertEquals(expected = contentWithPositionAtLastChapter, actual = bookContentRepo.get(book1Id))
   }
 
   @Test
@@ -166,7 +165,7 @@ class MediaScannerTest {
 
     scan(FolderType.SingleFolder, folder)
 
-    analyzeCalls shouldBe 2
+    assertEquals(expected = 2, actual = analyzeCalls)
   }
 
   @Test
@@ -278,7 +277,12 @@ class MediaScannerTest {
             },
           )
         }
-        .shouldContainExactlyInAnyOrder(expected.toList())
+        .let { actual ->
+          assertEquals(
+            expected = expected.sortedBy { it.id },
+            actual = actual.sortedBy { it.id },
+          )
+        }
     }
 
     override fun close() {

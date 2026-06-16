@@ -1,7 +1,6 @@
 package voice.core.scanner
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.matchers.collections.shouldContainExactly
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.just
@@ -9,13 +8,14 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.data.repo.ChapterRepoImpl
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.FileBasedDocumentFile
 import voice.core.documentfile.nameWithoutExtension
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class ChapterParserTest {
@@ -70,15 +70,17 @@ class ChapterParserTest {
         }
       },
     )
-    chapterParser.parse(FileBasedDocumentFile(audiobook))
-      .chapters
-      .map { it.name }
-      .shouldContainExactly(
+    assertEquals(
+      expected = listOf(
         "Chapter 1",
         "Chapter 2",
         "Chapter 3",
         "Chapter 20",
         "Chapter 30",
-      )
+      ),
+      actual = chapterParser.parse(FileBasedDocumentFile(audiobook))
+        .chapters
+        .map { it.name },
+    )
   }
 }

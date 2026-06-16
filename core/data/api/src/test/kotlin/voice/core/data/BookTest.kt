@@ -1,9 +1,7 @@
 package voice.core.data
 
-import io.kotest.matchers.ints.shouldBeExactly
-import io.kotest.matchers.longs.shouldBeExactly
-import io.kotest.matchers.shouldBe
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class BookTest {
 
@@ -11,7 +9,7 @@ class BookTest {
   fun bookPositionForSingleFile() {
     val chapter = chapter(1000)
     val position = bookPosition(chapters = listOf(chapter), currentChapter = chapter.id, positionInChapter = 500)
-    position shouldBeExactly 500
+    assertEquals(expected = 500, actual = position)
   }
 
   @Test
@@ -19,7 +17,7 @@ class BookTest {
     val chapterOne = chapter(1000)
     val chapterTwo = chapter(500)
     val position = bookPosition(chapters = listOf(chapterOne, chapterTwo), currentChapter = chapterOne.id, positionInChapter = 500)
-    position shouldBeExactly 500
+    assertEquals(expected = 500, actual = position)
   }
 
   @Test
@@ -27,7 +25,7 @@ class BookTest {
     val chapterOne = chapter(1000)
     val chapterTwo = chapter(500)
     val position = bookPosition(chapters = listOf(chapterOne, chapterTwo), currentChapter = chapterTwo.id, positionInChapter = 500)
-    position shouldBeExactly 1500
+    assertEquals(expected = 1500, actual = position)
   }
 
   @Test
@@ -38,7 +36,7 @@ class BookTest {
       chapters = chapters,
       currentChapter = chapters.first().id,
     )
-    book.position shouldBeExactly 0L
+    assertEquals(expected = 0L, actual = book.position)
   }
 
   @Test
@@ -49,7 +47,7 @@ class BookTest {
       chapters = chapters,
       currentChapter = chapters.first().id,
     )
-    book.position shouldBeExactly 23
+    assertEquals(expected = 23, actual = book.position)
   }
 
   @Test
@@ -65,7 +63,7 @@ class BookTest {
       ),
       currentChapter = lastChapterId,
     )
-    book.position shouldBeExactly 123 + 234 + 345
+    assertEquals(expected = 123 + 234 + 345, actual = book.position)
   }
 
   @Test
@@ -81,7 +79,7 @@ class BookTest {
       ),
       currentChapter = targetChapter,
     )
-    book.position shouldBeExactly 123 + 234 + 23
+    assertEquals(expected = 123 + 234 + 23, actual = book.position)
   }
 
   @Test
@@ -95,7 +93,7 @@ class BookTest {
       ),
     )
 
-    book.duration shouldBeExactly 123 + 234 + 345 + 456
+    assertEquals(expected = 123 + 234 + 345 + 456, actual = book.duration)
   }
 
   @Test
@@ -107,7 +105,7 @@ class BookTest {
       chapters = listOf(ch1, ch2, ch3),
       currentChapter = ch2.id,
     )
-    book.currentChapter shouldBe ch2
+    assertEquals(expected = ch2, actual = book.currentChapter)
   }
 
   @Test
@@ -120,7 +118,7 @@ class BookTest {
       currentChapter = ch2.id,
     )
 
-    book.content.currentChapterIndex shouldBeExactly 1
+    assertEquals(expected = 1, actual = book.content.currentChapterIndex)
   }
 
   @Test
@@ -134,8 +132,8 @@ class BookTest {
 
     val updated = book.withElapsedPosition(elapsedTime = 100, playbackSpeed = 1F)
 
-    updated.content.currentChapter shouldBe chapter.id
-    updated.content.positionInChapter shouldBeExactly 300
+    assertEquals(expected = chapter.id, actual = updated.content.currentChapter)
+    assertEquals(expected = 300, actual = updated.content.positionInChapter)
   }
 
   @Test
@@ -150,8 +148,8 @@ class BookTest {
 
     val updated = book.withElapsedPosition(elapsedTime = 200, playbackSpeed = 1F)
 
-    updated.content.currentChapter shouldBe secondChapter.id
-    updated.content.positionInChapter shouldBeExactly 100
+    assertEquals(expected = secondChapter.id, actual = updated.content.currentChapter)
+    assertEquals(expected = 100, actual = updated.content.positionInChapter)
   }
 
   @Test
@@ -166,8 +164,8 @@ class BookTest {
 
     val updated = book.withElapsedPosition(elapsedTime = 100, playbackSpeed = 1.5F)
 
-    updated.content.currentChapter shouldBe secondChapter.id
-    updated.content.positionInChapter shouldBeExactly 50
+    assertEquals(expected = secondChapter.id, actual = updated.content.currentChapter)
+    assertEquals(expected = 50, actual = updated.content.positionInChapter)
   }
 
   @Test
@@ -182,8 +180,8 @@ class BookTest {
 
     val updated = book.withElapsedPosition(elapsedTime = 100, playbackSpeed = 1F)
 
-    updated.content.currentChapter shouldBe secondChapter.id
-    updated.content.positionInChapter shouldBeExactly 0
+    assertEquals(expected = secondChapter.id, actual = updated.content.currentChapter)
+    assertEquals(expected = 0, actual = updated.content.positionInChapter)
   }
 
   @Test
@@ -198,8 +196,8 @@ class BookTest {
 
     val updated = book.withElapsedPosition(elapsedTime = 1000, playbackSpeed = 1F)
 
-    updated.content.currentChapter shouldBe secondChapter.id
-    updated.content.positionInChapter shouldBeExactly secondChapter.duration
+    assertEquals(expected = secondChapter.id, actual = updated.content.currentChapter)
+    assertEquals(expected = secondChapter.duration, actual = updated.content.positionInChapter)
   }
 
   @Suppress("SameParameterValue")

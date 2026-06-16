@@ -1,9 +1,9 @@
 package voice.features.bookOverview
 
-import io.kotest.matchers.shouldBe
-import org.junit.Test
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.category
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class BookOverviewCategoryTest {
 
@@ -18,7 +18,7 @@ class BookOverviewCategoryTest {
         ),
       )
     }
-    book.category shouldBe BookOverviewCategory.FINISHED
+    assertEquals(expected = BookOverviewCategory.FINISHED, actual = book.category)
   }
 
   @Test
@@ -32,7 +32,7 @@ class BookOverviewCategoryTest {
         ),
       )
     }
-    book.category shouldBe BookOverviewCategory.NOT_STARTED
+    assertEquals(expected = BookOverviewCategory.NOT_STARTED, actual = book.category)
   }
 
   @Test
@@ -45,6 +45,6 @@ class BookOverviewCategoryTest {
         ),
       )
     }
-    book.category shouldBe BookOverviewCategory.CURRENT
+    assertEquals(expected = BookOverviewCategory.CURRENT, actual = book.category)
   }
 }

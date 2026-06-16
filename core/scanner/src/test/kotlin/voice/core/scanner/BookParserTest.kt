@@ -2,10 +2,8 @@ package voice.core.scanner
 
 import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.data.BookId
@@ -14,6 +12,8 @@ import voice.core.data.ChapterId
 import voice.core.documentfile.FileBasedDocumentFile
 import java.io.File
 import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class BookParserTest {
@@ -42,7 +42,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFolder),
     )
 
-    content.name shouldBe "My Audiobook"
+    assertEquals(expected = "My Audiobook", actual = content.name)
   }
 
   @Test
@@ -57,7 +57,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFolder),
     )
 
-    content.name shouldBe "Harry Potter 3"
+    assertEquals(expected = "Harry Potter 3", actual = content.name)
   }
 
   @Test
@@ -72,7 +72,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFile),
     )
 
-    content.name shouldBe "The Title"
+    assertEquals(expected = "The Title", actual = content.name)
   }
 
   @Test
@@ -90,7 +90,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFolder),
     )
 
-    content.name shouldBe "Album Name"
+    assertEquals(expected = "Album Name", actual = content.name)
   }
 
   @Test
@@ -108,7 +108,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFolder),
     )
 
-    content.name shouldBe "Fallback Folder"
+    assertEquals(expected = "Fallback Folder", actual = content.name)
   }
 
   private fun chapter(file: File): Chapter = Chapter(

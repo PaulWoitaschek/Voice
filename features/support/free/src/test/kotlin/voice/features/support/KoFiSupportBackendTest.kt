@@ -1,16 +1,16 @@
 package voice.features.support
 
 import app.cash.turbine.test
-import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class KoFiSupportBackendTest {
 
@@ -19,7 +19,7 @@ class KoFiSupportBackendTest {
     val backend = createBackend()
 
     backend.state.test {
-      awaitItem() shouldBe SupportBackendState.Free
+      assertEquals(expected = SupportBackendState.Free, actual = awaitItem())
     }
   }
 

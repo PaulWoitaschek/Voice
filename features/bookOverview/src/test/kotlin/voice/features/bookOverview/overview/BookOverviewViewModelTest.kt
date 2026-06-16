@@ -4,7 +4,6 @@ import androidx.datastore.core.DataStore
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
-import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
-import org.junit.Test
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.BookId
@@ -38,6 +36,8 @@ import voice.core.ui.GridCount
 import voice.features.bookOverview.book
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.time.Instant
 
 class BookOverviewViewModelTest {
@@ -89,14 +89,14 @@ class BookOverviewViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.state()
     }.test {
-      awaitItem() shouldBe BookOverviewViewState.Loading
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
       val initial = awaitItem()
       val initialCurrentItem = initial.currentBook(currentBook.id)
       val initialOtherItem = initial.currentBook(otherBook.id)
       val initialKeys = initial.books.getValue(BookOverviewCategory.CURRENT).keys.toList()
 
-      initialCurrentItem shouldBe currentBook.toItemViewState()
-      initialOtherItem shouldBe otherBook.toItemViewState()
+      assertEquals(expected = currentBook.toItemViewState(), actual = initialCurrentItem)
+      assertEquals(expected = otherBook.toItemViewState(), actual = initialOtherItem)
 
       val livePlaybackState = LivePlaybackState(
         bookId = currentBook.id,
@@ -108,9 +108,9 @@ class BookOverviewViewModelTest {
       livePlaybackFlow.value = livePlaybackState
       yield()
 
-      initial.books.getValue(BookOverviewCategory.CURRENT).keys.toList() shouldBe initialKeys
-      initial.currentBook(currentBook.id) shouldBe currentBook.overlay(livePlaybackState).toItemViewState()
-      initial.currentBook(otherBook.id) shouldBe initialOtherItem
+      assertEquals(expected = initialKeys, actual = initial.books.getValue(BookOverviewCategory.CURRENT).keys.toList())
+      assertEquals(expected = currentBook.overlay(livePlaybackState).toItemViewState(), actual = initial.currentBook(currentBook.id))
+      assertEquals(expected = initialOtherItem, actual = initial.currentBook(otherBook.id))
       expectNoEvents()
     }
   }
@@ -155,8 +155,13 @@ class BookOverviewViewModelTest {
       viewModel.state()
     }.test {
       val state = awaitItem()
-      state.books.getValue(BookOverviewCategory.CURRENT).keys.toList() shouldBe KioskModeDemoData.demoAudiobooks.map { it.id }
-      state.currentBook(KioskModeDemoData.currentlyPlaying.id).name shouldBe "Echoes of Tomorrow"
+      assertEquals(
+        expected = KioskModeDemoData.demoAudiobooks.map {
+          it.id
+        },
+        actual = state.books.getValue(BookOverviewCategory.CURRENT).keys.toList(),
+      )
+      assertEquals(expected = "Echoes of Tomorrow", actual = state.currentBook(KioskModeDemoData.currentlyPlaying.id).name)
     }
   }
 
@@ -170,8 +175,8 @@ class BookOverviewViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.state()
     }.test {
-      awaitItem() shouldBe BookOverviewViewState.Loading
-      awaitItem().showFolderPickerIcon shouldBe false
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
     }
   }
 
@@ -185,8 +190,8 @@ class BookOverviewViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.state()
     }.test {
-      awaitItem() shouldBe BookOverviewViewState.Loading
-      awaitItem().showFolderPickerIcon shouldBe true
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = true, actual = awaitItem().showFolderPickerIcon)
     }
   }
 
@@ -200,8 +205,8 @@ class BookOverviewViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.state()
     }.test {
-      awaitItem() shouldBe BookOverviewViewState.Loading
-      awaitItem().showFolderPickerIcon shouldBe false
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
     }
   }
 
@@ -216,8 +221,8 @@ class BookOverviewViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.state()
     }.test {
-      awaitItem() shouldBe BookOverviewViewState.Loading
-      awaitItem().showFolderPickerIcon shouldBe false
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
     }
   }
 
@@ -233,12 +238,12 @@ class BookOverviewViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.state()
     }.test {
-      awaitItem() shouldBe BookOverviewViewState.Loading
-      awaitItem().dialog shouldBe null
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = null, actual = awaitItem().dialog)
 
       viewModel.onBookFolderClick()
 
-      awaitItem().dialog shouldBe BookOverviewViewState.Dialog.FolderPickerMovedToSettings
+      assertEquals(expected = BookOverviewViewState.Dialog.FolderPickerMovedToSettings, actual = awaitItem().dialog)
       verify(exactly = 0) {
         navigator.goTo(Destination.FolderPicker)
       }
@@ -256,20 +261,20 @@ class BookOverviewViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.state()
     }.test {
-      awaitItem() shouldBe BookOverviewViewState.Loading
-      awaitItem().showFolderPickerIcon shouldBe true
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = true, actual = awaitItem().showFolderPickerIcon)
 
       viewModel.onBookFolderClick()
-      awaitItem().dialog shouldBe BookOverviewViewState.Dialog.FolderPickerMovedToSettings
+      assertEquals(expected = BookOverviewViewState.Dialog.FolderPickerMovedToSettings, actual = awaitItem().dialog)
 
       viewModel.onFolderPickerMovedDialogDismiss()
 
       val dismissed = awaitItem()
-      dismissed.dialog shouldBe null
+      assertEquals(expected = null, actual = dismissed.dialog)
       if (dismissed.showFolderPickerIcon) {
-        awaitItem().showFolderPickerIcon shouldBe false
+        assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
       } else {
-        dismissed.showFolderPickerIcon shouldBe false
+        assertEquals(expected = false, actual = dismissed.showFolderPickerIcon)
       }
     }
   }

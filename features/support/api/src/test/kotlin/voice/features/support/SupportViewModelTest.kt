@@ -4,8 +4,6 @@ import androidx.navigation3.runtime.get
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -14,11 +12,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import voice.navigation.BottomSheetNav
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.Navigator
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class SupportViewModelTest {
 
@@ -37,7 +37,7 @@ class SupportViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().backendState shouldBe SupportBackendState.Free
+      assertEquals(expected = SupportBackendState.Free, actual = awaitItem().backendState)
     }
   }
 
@@ -45,7 +45,7 @@ class SupportViewModelTest {
   fun `openSupport delegates to backend`() {
     viewModel.openSupport()
 
-    backend.openSupportCount shouldBe 1
+    assertEquals(expected = 1, actual = backend.openSupportCount)
   }
 
   @Test
@@ -55,7 +55,7 @@ class SupportViewModelTest {
       .supportNavEntryProvider() as NavEntryProvider<Destination.SupportVoice>
     val navEntry = provider.create(Destination.SupportVoice)
 
-    navEntry.metadata[BottomSheetNav.BottomSheetKey].shouldNotBeNull()
+    assertNotNull(navEntry.metadata[BottomSheetNav.BottomSheetKey])
   }
 }
 

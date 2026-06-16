@@ -5,10 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.testing.MigrationTestHelper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.allMigrations
@@ -18,6 +15,8 @@ import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
 import voice.core.data.repo.internals.mapRows
 import kotlin.random.Random
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
@@ -107,9 +106,12 @@ class DataBaseMigratorTest {
         positionInChapter = getInt("positionInChapter"),
       )
     }
-    migratedBookSettings.shouldContainExactly(
-      correctBookSettings,
-      BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0),
+    assertEquals(
+      expected = listOf(
+        correctBookSettings,
+        BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0),
+      ),
+      actual = migratedBookSettings,
     )
   }
 
@@ -249,37 +251,37 @@ class DataBaseMigratorTest {
     val metaDataCursor = migratedDb.query("SELECT * FROM bookMetaData")
     val bookSettingsCursor = migratedDb.query("SELECT * FROM bookSettings")
 
-    metaDataCursor.count shouldBe books.size
-    bookSettingsCursor.count shouldBe books.size
+    assertEquals(expected = books.size, actual = metaDataCursor.count)
+    assertEquals(expected = books.size, actual = bookSettingsCursor.count)
 
     books.forEachIndexed { bookIndex, book ->
       metaDataCursor.moveToPosition(bookIndex)
       val metaDataId = metaDataCursor.getString("id")
-      metaDataCursor.getStringOrNull("author") shouldBe book.author
-      metaDataCursor.getString("name") shouldBe book.name
-      metaDataCursor.getString("root") shouldBe book.root
+      assertEquals(expected = book.author, actual = metaDataCursor.getStringOrNull("author"))
+      assertEquals(expected = book.name, actual = metaDataCursor.getString("name"))
+      assertEquals(expected = book.root, actual = metaDataCursor.getString("root"))
 
       bookSettingsCursor.moveToPosition(bookIndex)
       val bookSettingsId = bookSettingsCursor.getString("id")
-      bookSettingsCursor.getString("currentFile") shouldBe book.currentMediaPath
-      bookSettingsCursor.getInt("positionInChapter") shouldBe book.time
-      bookSettingsCursor.getFloat("playbackSpeed") shouldBe book.playbackSpeed
-      bookSettingsCursor.getInt("loudnessGain") shouldBe book.loudnessGain
-      bookSettingsCursor.getInt("skipSilence") shouldBe 0
-      bookSettingsCursor.getInt("active") shouldBe book.active
-      bookSettingsCursor.getInt("lastPlayedAtMillis") shouldBe 0
+      assertEquals(expected = book.currentMediaPath, actual = bookSettingsCursor.getString("currentFile"))
+      assertEquals(expected = book.time, actual = bookSettingsCursor.getInt("positionInChapter"))
+      assertEquals(expected = book.playbackSpeed, actual = bookSettingsCursor.getFloat("playbackSpeed"))
+      assertEquals(expected = book.loudnessGain, actual = bookSettingsCursor.getInt("loudnessGain"))
+      assertEquals(expected = 0, actual = bookSettingsCursor.getInt("skipSilence"))
+      assertEquals(expected = book.active, actual = bookSettingsCursor.getInt("active"))
+      assertEquals(expected = 0, actual = bookSettingsCursor.getInt("lastPlayedAtMillis"))
 
-      metaDataId shouldBe bookSettingsId
+      assertEquals(expected = bookSettingsId, actual = metaDataId)
 
       val chapterCursor = migratedDb.query("SELECT * FROM chapters WHERE bookId = \"$metaDataId\"")
-      chapterCursor.count shouldBe book.chapters.size
+      assertEquals(expected = book.chapters.size, actual = chapterCursor.count)
       book.chapters.forEachIndexed { chapterIndex, chapter ->
         chapterCursor.moveToPosition(chapterIndex)
-        chapterCursor.getString("file") shouldBe chapter.path
-        chapterCursor.getInt("duration") shouldBe chapter.duration
-        chapterCursor.getString("name") shouldBe chapter.name
-        chapterCursor.getInt("fileLastModified") shouldBe chapter.lastModified
-        chapterCursor.getStringOrNull("marks") shouldBe (chapter.marks ?: "{}")
+        assertEquals(expected = chapter.path, actual = chapterCursor.getString("file"))
+        assertEquals(expected = chapter.duration, actual = chapterCursor.getInt("duration"))
+        assertEquals(expected = chapter.name, actual = chapterCursor.getString("name"))
+        assertEquals(expected = chapter.lastModified, actual = chapterCursor.getInt("fileLastModified"))
+        assertEquals(expected = (chapter.marks ?: "{}"), actual = chapterCursor.getStringOrNull("marks"))
       }
       chapterCursor.close()
     }
@@ -287,12 +289,12 @@ class DataBaseMigratorTest {
     bookSettingsCursor.close()
 
     val bookmarkCursor = migratedDb.query("SELECT * FROM bookmark")
-    bookmarkCursor.count shouldBe bookmarks.size
+    assertEquals(expected = bookmarks.size, actual = bookmarkCursor.count)
     bookmarks.forEachIndexed { index, bookmark ->
       bookmarkCursor.moveToPosition(index)
-      bookmarkCursor.getString("file") shouldBe bookmark.path
-      bookmarkCursor.getInt("time") shouldBe bookmark.time
-      bookmarkCursor.getString("title") shouldBe bookmark.title
+      assertEquals(expected = bookmark.path, actual = bookmarkCursor.getString("file"))
+      assertEquals(expected = bookmark.time, actual = bookmarkCursor.getInt("time"))
+      assertEquals(expected = bookmark.title, actual = bookmarkCursor.getString("title"))
     }
 
     bookmarkCursor.close()

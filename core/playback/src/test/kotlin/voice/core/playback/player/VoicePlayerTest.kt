@@ -8,9 +8,6 @@ import androidx.media3.test.utils.TestExoPlayerBuilder
 import androidx.media3.test.utils.robolectric.TestPlayerRunHelper
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.matchers.Matcher
-import io.kotest.matchers.MatcherResult
-import io.kotest.matchers.should
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
@@ -21,7 +18,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import org.junit.runner.RunWith
 import voice.core.data.Book
 import voice.core.data.BookId
@@ -38,6 +34,8 @@ import voice.core.playback.session.search.book
 import voice.core.playback.session.toMediaIdOrNull
 import java.time.Instant
 import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
@@ -340,24 +338,8 @@ class VoicePlayerTest {
     currentPosition: Long,
   ): Player {
     scope.advanceUntilIdle()
-    this should havePosition(currentMediaItemIndex, currentPosition)
+    assertEquals(expected = currentMediaItemIndex, actual = this.currentMediaItemIndex)
+    assertEquals(expected = currentPosition, actual = this.currentPosition)
     return this
-  }
-}
-
-private fun havePosition(
-  currentMediaItemIndex: Int,
-  currentPosition: Long,
-) = object : Matcher<Player> {
-  override fun test(value: Player): MatcherResult {
-    val actualCurrentMediaItemIndex = value.currentMediaItemIndex
-    val actualCurrentPosition = value.currentPosition
-    return MatcherResult(
-      passed = actualCurrentMediaItemIndex == currentMediaItemIndex && actualCurrentPosition == currentPosition,
-      failureMessageFn = {
-        "position was ($actualCurrentMediaItemIndex,$actualCurrentPosition) but we expected ($currentMediaItemIndex,$currentPosition)"
-      },
-      negatedFailureMessageFn = { "position should not be ($actualCurrentMediaItemIndex,$actualCurrentPosition)" },
-    )
   }
 }
