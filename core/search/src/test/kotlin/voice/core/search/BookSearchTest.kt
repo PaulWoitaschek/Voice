@@ -3,9 +3,7 @@ package voice.core.search
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import org.junit.runner.RunWith
 import voice.core.data.Book
 import voice.core.data.BookId
@@ -13,6 +11,8 @@ import voice.core.data.repo.BookContentRepoImpl
 import voice.core.data.repo.BookRepositoryImpl
 import voice.core.data.repo.ChapterRepoImpl
 import voice.core.data.repo.internals.AppDb
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
@@ -186,7 +186,7 @@ private class TestBase(private val search: BookSearch) {
     vararg expected: Book,
   ) {
     val result = search.search(query)
-    result shouldContainExactly expected.toList()
+    assertEquals(expected = expected.toList(), actual = result)
   }
 
   suspend fun search(query: String) {

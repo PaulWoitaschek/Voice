@@ -2,24 +2,15 @@ package voice.core.scanner
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.assertions.assertSoftly
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldHaveElementAt
-import io.kotest.matchers.longs.shouldBeWithinPercentageOf
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.runBlocking
 import org.junit.BeforeClass
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.data.MarkData
 import voice.core.documentfile.FileBasedDocumentFile
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
-import voice.core.scanner.MediaAnalyzer
-import voice.core.scanner.Metadata
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
 import voice.core.scanner.mp4.ChapterTrackProcessor
 import voice.core.scanner.mp4.Mp4BoxParser
@@ -31,6 +22,10 @@ import voice.core.scanner.mp4.visitor.StcoVisitor
 import voice.core.scanner.mp4.visitor.StscVisitor
 import voice.core.scanner.mp4.visitor.SttsVisitor
 import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.minutes
 
 @RunWith(AndroidJUnit4::class)
@@ -78,124 +73,115 @@ internal class MediaAnalyzerTest {
 
   @Test
   fun mp3() {
-    val metadata = parse("auphonic_chapters_demo.mp3")
+    val metadata = assertNotNull(parse("auphonic_chapters_demo.mp3"))
 
-    assertSoftly {
-      metadata.shouldNotBeNull()
-      metadata.duration.shouldBeWithinPercentageOf(119040L, 0.2)
-      metadata.fileName shouldBe "auphonic_chapters_demo"
-      metadata.title shouldBe "Auphonic Chapter Marks Demo"
-      metadata.artist shouldBe "Auphonic"
-      metadata.album shouldBe "Auphonic Examples"
-      metadata.genre shouldBe "Podcast"
-      metadata.narrator shouldBe "Auphonic Narrator"
-      metadata.series shouldBe "Auphonic Movement"
-      metadata.part shouldBe "2.1"
-      metadata.chapters shouldContainExactly auphonicChapters
-    }
+    assertWithinPercentage(119040L, metadata.duration, 0.2)
+    assertEquals(expected = "auphonic_chapters_demo", actual = metadata.fileName)
+    assertEquals(expected = "Auphonic Chapter Marks Demo", actual = metadata.title)
+    assertEquals(expected = "Auphonic", actual = metadata.artist)
+    assertEquals(expected = "Auphonic Examples", actual = metadata.album)
+    assertEquals(expected = "Podcast", actual = metadata.genre)
+    assertEquals(expected = "Auphonic Narrator", actual = metadata.narrator)
+    assertEquals(expected = "Auphonic Movement", actual = metadata.series)
+    assertEquals(expected = "2.1", actual = metadata.part)
+    assertEquals(expected = auphonicChapters, actual = metadata.chapters)
   }
 
   @Test
   fun ogg() {
-    val metadata = parse("auphonic_chapters_demo.ogg")
+    val metadata = assertNotNull(parse("auphonic_chapters_demo.ogg"))
 
-    assertSoftly {
-      metadata.shouldNotBeNull()
-      metadata.duration.shouldBeWithinPercentageOf(119040L, 0.2)
-      metadata.fileName shouldBe "auphonic_chapters_demo"
-      metadata.title shouldBe "Auphonic Chapter Marks Demo"
-      metadata.artist shouldBe "Auphonic"
-      metadata.album shouldBe "Auphonic Examples"
-      metadata.chapters shouldContainExactly auphonicChapters
-    }
+    assertWithinPercentage(119040L, metadata.duration, 0.2)
+    assertEquals(expected = "auphonic_chapters_demo", actual = metadata.fileName)
+    assertEquals(expected = "Auphonic Chapter Marks Demo", actual = metadata.title)
+    assertEquals(expected = "Auphonic", actual = metadata.artist)
+    assertEquals(expected = "Auphonic Examples", actual = metadata.album)
+    assertEquals(expected = auphonicChapters, actual = metadata.chapters)
   }
 
   @Test
   fun mka_simple_chapters() {
-    val metadata = parse("mka_simple_chapters.mka")
-    assertSoftly {
-      metadata.shouldNotBeNull()
-      metadata.title shouldBe "Your Album Title"
-      metadata.artist shouldBe "Your Artist Name"
-      metadata.album shouldBe "Your Album Name"
-      metadata.chapters.shouldContainExactly(
+    val metadata = assertNotNull(parse("mka_simple_chapters.mka"))
+
+    assertEquals(expected = "Your Album Title", actual = metadata.title)
+    assertEquals(expected = "Your Artist Name", actual = metadata.artist)
+    assertEquals(expected = "Your Album Name", actual = metadata.album)
+    assertEquals(
+      expected = listOf(
         MarkData(startMs = 0L, name = "Intro"),
         MarkData(startMs = 150000L, name = "Baby prepares to rock"),
         MarkData(startMs = 162300L, name = "Baby rocks the house"),
-      )
-    }
+      ),
+      actual = metadata.chapters,
+    )
   }
 
   @Test
   fun mka_nested_chapters() {
-    val metadata = parse("mka_nested_chapters.mka")
-    assertSoftly {
-      metadata.shouldNotBeNull()
-      metadata.title shouldBe "Your Album Title"
-      metadata.artist shouldBe "Your Artist Name"
-      metadata.album shouldBe "Your Album Name"
-      println(metadata.chapters)
-      metadata.chapters.shouldContainExactly(
+    val metadata = assertNotNull(parse("mka_nested_chapters.mka"))
+
+    assertEquals(expected = "Your Album Title", actual = metadata.title)
+    assertEquals(expected = "Your Artist Name", actual = metadata.artist)
+    assertEquals(expected = "Your Album Name", actual = metadata.album)
+    assertEquals(
+      expected = listOf(
         MarkData(startMs = 0L, name = "Introduction"),
         MarkData(startMs = 10.minutes.inWholeMilliseconds, name = "Main Content"),
         MarkData(startMs = 20.minutes.inWholeMilliseconds, name = "Conclusion"),
-      )
-    }
+      ),
+      actual = metadata.chapters,
+    )
   }
 
   @Test
   fun chapterTrackId() {
-    val chapters = parse("chapter_track_id.m4b")
-      .shouldNotBeNull()
-      .chapters
-    chapters.shouldHaveElementAt(0, MarkData(0, "Opening Credits"))
-    chapters.shouldHaveElementAt(107, MarkData(103121056, "Closing Credits"))
+    val chapters = assertNotNull(parse("chapter_track_id.m4b")).chapters
+    assertEquals(expected = MarkData(0, "Opening Credits"), actual = chapters[0])
+    assertEquals(expected = MarkData(103121056, "Closing Credits"), actual = chapters[107])
   }
 
   @Test
   fun opus() {
-    val metadata = parse("auphonic_chapters_demo.opus")
+    val metadata = assertNotNull(parse("auphonic_chapters_demo.opus"))
 
-    assertSoftly {
-      metadata.shouldNotBeNull()
-      metadata.duration.shouldBeWithinPercentageOf(119040L, 0.2)
-      metadata.fileName shouldBe "auphonic_chapters_demo"
-      metadata.title shouldBe "Auphonic Chapter Marks Demo"
-      metadata.artist shouldBe "Auphonic"
-      metadata.album shouldBe "Auphonic Examples"
-      metadata.chapters shouldContainExactly auphonicChapters
-    }
+    assertWithinPercentage(119040L, metadata.duration, 0.2)
+    assertEquals(expected = "auphonic_chapters_demo", actual = metadata.fileName)
+    assertEquals(expected = "Auphonic Chapter Marks Demo", actual = metadata.title)
+    assertEquals(expected = "Auphonic", actual = metadata.artist)
+    assertEquals(expected = "Auphonic Examples", actual = metadata.album)
+    assertEquals(expected = auphonicChapters, actual = metadata.chapters)
   }
 
   @Test
   fun m4a() {
-    val metadata = parse("auphonic_chapters_demo.m4a")
-    assertSoftly {
-      metadata.shouldNotBeNull()
-      metadata.duration.shouldBeWithinPercentageOf(119040L, 0.2)
-      metadata.fileName shouldBe "auphonic_chapters_demo"
-      metadata.title shouldBe "Auphonic Chapter Marks Demo"
-      metadata.artist shouldBe "Auphonic"
-      metadata.album shouldBe "Auphonic Examples"
-      metadata.chapters shouldContainExactly auphonicChapters.filter {
+    val metadata = assertNotNull(parse("auphonic_chapters_demo.m4a"))
+
+    assertWithinPercentage(119040L, metadata.duration, 0.2)
+    assertEquals(expected = "auphonic_chapters_demo", actual = metadata.fileName)
+    assertEquals(expected = "Auphonic Chapter Marks Demo", actual = metadata.title)
+    assertEquals(expected = "Auphonic", actual = metadata.artist)
+    assertEquals(expected = "Auphonic Examples", actual = metadata.album)
+    assertEquals(
+      expected = auphonicChapters.filter {
         // for some reason only this one is missing in the test files
         it.name != "Creating a new production"
-      }
-    }
+      },
+      actual = metadata.chapters,
+    )
   }
 
   @Test
   fun `m4a with chpl chapters`() {
-    val metadata = parse("chpl.m4a")
+    val metadata = assertNotNull(parse("chpl.m4a"))
 
-    assertSoftly {
-      metadata.shouldNotBeNull()
-      metadata.chapters.shouldContainExactly(
+    assertEquals(
+      expected = listOf(
         MarkData(startMs = 0L, name = "Introduction"),
         MarkData(startMs = 10000L, name = "Chapter 1"),
         MarkData(startMs = 20000L, name = "Chapter 2"),
-      )
-    }
+      ),
+      actual = metadata.chapters,
+    )
   }
 
   companion object {
@@ -224,4 +210,13 @@ internal class MediaAnalyzerTest {
       )
     }
   }
+}
+
+private fun assertWithinPercentage(
+  expected: Long,
+  actual: Long,
+  percentage: Double,
+) {
+  val tolerance = expected * percentage / 100
+  assertTrue(actual in (expected - tolerance).toLong()..(expected + tolerance).toLong())
 }

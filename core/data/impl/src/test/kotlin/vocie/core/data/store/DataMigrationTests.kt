@@ -6,16 +6,16 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import voice.core.data.store.VoiceDataStoreFactory
 import voice.core.data.store.booleanPrefsDataMigration
 import voice.core.data.store.intPrefsDataMigration
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class DataMigrationTests {
@@ -41,8 +41,8 @@ class DataMigrationTests {
       defaultValue = 0,
       migrations = listOf(intPrefsDataMigration(sharedPreferences, "TEST_INT_KEY")),
     )
-    dataStore.data.first() shouldBe 123
-    sharedPreferences.contains("TEST_INT_KEY") shouldBe false
+    assertEquals(expected = 123, actual = dataStore.data.first())
+    assertEquals(expected = false, actual = sharedPreferences.contains("TEST_INT_KEY"))
   }
 
   @Test
@@ -56,7 +56,7 @@ class DataMigrationTests {
       defaultValue = false,
       migrations = listOf(booleanPrefsDataMigration(sharedPreferences, "testBoolKey")),
     )
-    dataStore.data.first() shouldBe true
-    sharedPreferences.contains("testBoolKey") shouldBe false
+    assertEquals(expected = true, actual = dataStore.data.first())
+    assertEquals(expected = false, actual = sharedPreferences.contains("testBoolKey"))
   }
 }

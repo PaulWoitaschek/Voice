@@ -9,7 +9,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
-import org.junit.Test
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
@@ -18,6 +17,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
+import kotlin.test.Test
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds

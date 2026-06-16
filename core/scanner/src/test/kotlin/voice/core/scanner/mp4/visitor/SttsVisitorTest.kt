@@ -1,11 +1,11 @@
 package voice.core.scanner.mp4.visitor
 
 import androidx.media3.common.util.ParsableByteArray
-import io.kotest.matchers.shouldBe
-import org.junit.Test
 import voice.core.scanner.mp4.Mp4ChpaterExtractorOutput
 import voice.core.scanner.mp4.SttsEntry
 import java.nio.ByteBuffer
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class SttsVisitorTest {
 
@@ -21,11 +21,14 @@ internal class SttsVisitorTest {
       parseOutput = output,
     )
 
-    output.durations.single() shouldBe listOf(
-      SttsEntry(
-        sampleCount = 3_000_000_000,
-        sampleDuration = 1024,
+    assertEquals(
+      expected = listOf(
+        SttsEntry(
+          sampleCount = 3_000_000_000,
+          sampleDuration = 1024,
+        ),
       ),
+      actual = output.durations.single(),
     )
   }
 

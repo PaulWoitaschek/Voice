@@ -1,10 +1,5 @@
 package voice.core.sleeptimer.impl
 
-import io.kotest.matchers.collections.shouldBeStrictlyDecreasing
-import io.kotest.matchers.collections.shouldContainOnly
-import io.kotest.matchers.collections.shouldEndWith
-import io.kotest.matchers.collections.shouldNotBeEmpty
-import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.coVerify
 import io.mockk.every
@@ -19,7 +14,6 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import org.junit.BeforeClass
-import org.junit.Test
 import voice.core.common.DispatcherProvider
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.logging.api.LogWriter
@@ -31,6 +25,9 @@ import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerImpl
 import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerState
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 
 private class TestShakeDetector : ShakeDetector {
@@ -85,7 +82,7 @@ class SleepTimerImplTest {
 
   @Test
   fun `initial state is disabled`() {
-    sleepTimer.state.value shouldBe SleepTimerState.Disabled
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
   }
 
   @Test
@@ -93,7 +90,7 @@ class SleepTimerImplTest {
     sleepTimer.enable(SleepTimerMode.TimedWithDuration(1.seconds))
 
     advanceTimeBy(2.seconds)
-    sleepTimer.state.value shouldBe SleepTimerState.Disabled
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
     coVerify(exactly = 1) { playerController.pauseWithRewind(any()) }
   }
 
@@ -102,7 +99,7 @@ class SleepTimerImplTest {
     sleepTimer.enable(SleepTimerMode.EndOfChapter)
 
     advanceTimeBy(1)
-    sleepTimer.state.value shouldBe SleepTimerState.Enabled.WithEndOfChapter
+    assertEquals(expected = SleepTimerState.Enabled.WithEndOfChapter, actual = sleepTimer.state.value)
   }
 
   @Test
@@ -112,7 +109,7 @@ class SleepTimerImplTest {
 
     sleepTimer.disable()
 
-    sleepTimer.state.value shouldBe SleepTimerState.Disabled
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
   }
 
   @Test
@@ -122,20 +119,20 @@ class SleepTimerImplTest {
     yield()
 
     // after the first 3 seconds, the volume should not have been decreased
-    setVolumeSlots.shouldContainOnly(1F)
+    assertEquals(expected = setOf(1F), actual = setVolumeSlots.toSet())
 
     setVolumeSlots.clear()
     advanceTimeBy(1.seconds)
     yield()
     // now we're in fade-out phase, volume should decrease
-    setVolumeSlots.shouldNotBeEmpty()
-      .shouldBeStrictlyDecreasing()
+    assertTrue(setVolumeSlots.isNotEmpty())
+    assertTrue(setVolumeSlots.zipWithNext().all { (previous, next) -> previous > next })
 
     // after the timer finished, volume should be reset
     setVolumeSlots.clear()
     advanceTimeBy(2.seconds)
     yield()
-    setVolumeSlots.shouldEndWith(1f)
+    assertEquals(expected = 1f, actual = setVolumeSlots.last())
   }
 
   @Test
@@ -149,13 +146,13 @@ class SleepTimerImplTest {
     advanceTimeBy(longDuration + 1.seconds)
     runCurrent()
     coVerify(exactly = 1) { playerController.pauseWithRewind(any()) }
-    sleepTimer.state.value shouldBe SleepTimerState.Disabled
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
 
     // 2) Trigger the shake → a new countdown should start independently of the old timeout
     shakeDetector.shake()
     runCurrent()
     verify(exactly = 1) { playerController.play() }
-    sleepTimer.state.value shouldBe SleepTimerState.Enabled.WithDuration(longDuration)
+    assertEquals(expected = SleepTimerState.Enabled.WithDuration(longDuration), actual = sleepTimer.state.value)
 
     // 3) Advance past the original 30s shake window and allow the second countdown to finish
     advanceTimeBy(SleepTimerImpl.SHAKE_TO_RESET_TIME + longDuration + 2.seconds)
@@ -163,7 +160,7 @@ class SleepTimerImplTest {
 
     // The second countdown should complete normally
     coVerify(exactly = 2) { playerController.pauseWithRewind(any()) }
-    sleepTimer.state.value shouldBe SleepTimerState.Disabled
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
   }
 
   companion object {

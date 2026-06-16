@@ -3,12 +3,12 @@ package voice.core.data.repo.internals
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class RecentBookSearchTest {
@@ -22,22 +22,22 @@ class RecentBookSearchTest {
       .build()
 
     with(db.recentBookSearchDao()) {
-      recentBookSearch().shouldBeEmpty()
+      assertTrue(recentBookSearch().isEmpty())
 
       add("cats")
-      recentBookSearch().shouldContainExactly("cats")
+      assertEquals(expected = listOf("cats"), actual = recentBookSearch())
 
       add("dogs")
-      recentBookSearch().shouldContainExactly("cats", "dogs")
+      assertEquals(expected = listOf("cats", "dogs"), actual = recentBookSearch())
 
       add("unicorns")
-      recentBookSearch().shouldContainExactly("cats", "dogs", "unicorns")
+      assertEquals(expected = listOf("cats", "dogs", "unicorns"), actual = recentBookSearch())
 
       delete("dogs")
-      recentBookSearch().shouldContainExactly("cats", "unicorns")
+      assertEquals(expected = listOf("cats", "unicorns"), actual = recentBookSearch())
 
       add("cats")
-      recentBookSearch().shouldContainExactly("unicorns", "cats")
+      assertEquals(expected = listOf("unicorns", "cats"), actual = recentBookSearch())
     }
     db.close()
   }
@@ -56,8 +56,7 @@ class RecentBookSearchTest {
       dao.add(it)
     }
 
-    dao.recentBookSearch()
-      .shouldContainExactly(terms.takeLast(RecentBookSearchDao.Companion.LIMIT))
+    assertEquals(expected = terms.takeLast(RecentBookSearchDao.Companion.LIMIT), actual = dao.recentBookSearch())
 
     db.close()
   }

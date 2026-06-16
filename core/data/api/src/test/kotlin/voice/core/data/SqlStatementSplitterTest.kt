@@ -1,8 +1,8 @@
 package voice.core.data
 
-import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldContainExactly
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class SqlStatementSplitterTest {
 
@@ -14,13 +14,14 @@ class SqlStatementSplitterTest {
       recordedChunks += chunk
       chunk.map { it.toString() }
     }
-    recordedChunks.shouldContainExactly(
-      listOf(
+    assertEquals(
+      expected = listOf(
         listOf(1, 2),
         listOf(3),
       ),
+      actual = recordedChunks,
     )
-    result.shouldContainExactly("1", "2", "3")
+    assertEquals(expected = listOf("1", "2", "3"), actual = result)
   }
 
   @Test
@@ -31,12 +32,13 @@ class SqlStatementSplitterTest {
       recordedChunks += chunk
       chunk.map { it.toString() }
     }
-    recordedChunks.shouldContainExactly(
-      listOf(
+    assertEquals(
+      expected = listOf(
         listOf(1, 2, 3),
       ),
+      actual = recordedChunks,
     )
-    result.shouldContainExactly("1", "2", "3")
+    assertEquals(expected = listOf("1", "2", "3"), actual = result)
   }
 
   @Test
@@ -46,7 +48,7 @@ class SqlStatementSplitterTest {
     val result = numbers.runForMaxSqlVariableNumber<Int, String>(4) {
       error("Should not be called")
     }
-    recordedChunks.shouldBeEmpty()
-    result.shouldBeEmpty()
+    assertTrue(recordedChunks.isEmpty())
+    assertTrue(result.isEmpty())
   }
 }

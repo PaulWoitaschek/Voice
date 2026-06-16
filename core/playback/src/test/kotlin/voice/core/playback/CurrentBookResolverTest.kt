@@ -1,16 +1,16 @@
 package voice.core.playback
 
-import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.session.search.book
 import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class CurrentBookResolverTest {
 
@@ -47,7 +47,7 @@ class CurrentBookResolverTest {
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
     )
 
-    resolver.currentBook() shouldBe book
+    assertEquals(expected = book, actual = resolver.currentBook())
   }
 
   @Test
@@ -69,8 +69,8 @@ class CurrentBookResolverTest {
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
     )
 
-    resolver.currentBook()?.content?.currentChapter shouldBe book.chapters.last().id
-    resolver.currentBook()?.content?.positionInChapter shouldBe 1234L
+    assertEquals(expected = book.chapters.last().id, actual = resolver.currentBook()?.content?.currentChapter)
+    assertEquals(expected = 1234L, actual = resolver.currentBook()?.content?.positionInChapter)
   }
 
   @Test
@@ -86,6 +86,6 @@ class CurrentBookResolverTest {
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
     )
 
-    resolver.currentBook() shouldBe book
+    assertEquals(expected = book, actual = resolver.currentBook())
   }
 }

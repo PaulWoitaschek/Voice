@@ -1,10 +1,10 @@
 package voice.core.data.repo.internals
 
-import io.kotest.matchers.shouldBe
-import org.junit.Test
 import voice.core.data.MarkData
 import java.io.File
 import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.uuid.Uuid
 
 class ConvertersTest {
@@ -50,6 +50,6 @@ class ConvertersTest {
     val converters = Converters()
     val serialized: S = converters.serialize(value)
     val deSerialized: D = converters.deSerialize(serialized)
-    deSerialized shouldBe value
+    assertEquals(expected = value, actual = deSerialized)
   }
 }

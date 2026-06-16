@@ -1,17 +1,17 @@
 package voice.features.review
 
-import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import org.junit.Test
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.playstate.PlayStateManager
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -105,6 +105,6 @@ class ShouldShowReviewDialogTest {
     val showsReviewDialog = runBlocking {
       shouldShowReviewDialog.shouldShow()
     }
-    showsReviewDialog shouldBe expected
+    assertEquals(expected = expected, actual = showsReviewDialog)
   }
 }

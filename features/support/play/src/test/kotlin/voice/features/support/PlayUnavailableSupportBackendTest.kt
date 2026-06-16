@@ -1,9 +1,9 @@
 package voice.features.support
 
 import app.cash.turbine.test
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class PlayUnavailableSupportBackendTest {
 
@@ -12,7 +12,7 @@ class PlayUnavailableSupportBackendTest {
   @Test
   fun `state is always PlayUnavailable`() = runTest {
     backend.state.test {
-      awaitItem() shouldBe SupportBackendState.PlayUnavailable
+      assertEquals(expected = SupportBackendState.PlayUnavailable, actual = awaitItem())
 
       backend.openSupport()
 

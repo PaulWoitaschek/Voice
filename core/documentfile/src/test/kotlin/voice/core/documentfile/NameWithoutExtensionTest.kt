@@ -1,9 +1,9 @@
 package voice.core.documentfile
 
-import io.kotest.matchers.shouldBe
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class NameWithoutExtensionTest {
 
@@ -14,13 +14,13 @@ class NameWithoutExtensionTest {
   fun keepsDotsForDirectoryNames() {
     val folder = testFolder.newFolder("Author.Name")
 
-    FileBasedDocumentFile(folder).nameWithoutExtension() shouldBe "Author.Name"
+    assertEquals(expected = "Author.Name", actual = FileBasedDocumentFile(folder).nameWithoutExtension())
   }
 
   @Test
   fun stripsExtensionForFileNames() {
     val file = testFolder.newFile("Chapter.01.m4b")
 
-    FileBasedDocumentFile(file).nameWithoutExtension() shouldBe "Chapter.01"
+    assertEquals(expected = "Chapter.01", actual = FileBasedDocumentFile(file).nameWithoutExtension())
   }
 }

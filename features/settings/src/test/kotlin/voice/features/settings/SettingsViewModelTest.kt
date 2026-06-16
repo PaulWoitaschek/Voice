@@ -4,8 +4,6 @@ import androidx.datastore.core.DataStore
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -16,7 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.GridMode
@@ -28,6 +25,9 @@ import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.time.Instant
 
 class SettingsViewModelTest {
@@ -81,8 +81,8 @@ class SettingsViewModelTest {
       viewModel.viewState()
     }.test {
       awaitItem().let {
-        it.themeMode shouldBe ThemeMode.FollowSystem
-        it.themeColorScheme shouldBe ThemeColorScheme.VoiceBlue
+        assertEquals(expected = ThemeMode.FollowSystem, actual = it.themeMode)
+        assertEquals(expected = ThemeColorScheme.VoiceBlue, actual = it.themeColorScheme)
       }
     }
   }
@@ -92,16 +92,16 @@ class SettingsViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().themeMode shouldBe ThemeMode.FollowSystem
+      assertEquals(expected = ThemeMode.FollowSystem, actual = awaitItem().themeMode)
 
       viewModel.setThemeMode(ThemeMode.Dark)
-      awaitItem().themeMode shouldBe ThemeMode.Dark
+      assertEquals(expected = ThemeMode.Dark, actual = awaitItem().themeMode)
 
       viewModel.setThemeMode(ThemeMode.Light)
-      awaitItem().themeMode shouldBe ThemeMode.Light
+      assertEquals(expected = ThemeMode.Light, actual = awaitItem().themeMode)
 
       viewModel.setThemeMode(ThemeMode.FollowSystem)
-      awaitItem().themeMode shouldBe ThemeMode.FollowSystem
+      assertEquals(expected = ThemeMode.FollowSystem, actual = awaitItem().themeMode)
     }
   }
 
@@ -112,7 +112,7 @@ class SettingsViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().showThemeColorSchemePref shouldBe true
+      assertEquals(expected = true, actual = awaitItem().showThemeColorSchemePref)
     }
   }
 
@@ -123,7 +123,7 @@ class SettingsViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().showThemeColorSchemePref shouldBe false
+      assertEquals(expected = false, actual = awaitItem().showThemeColorSchemePref)
     }
   }
 
@@ -132,11 +132,11 @@ class SettingsViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().themeColorScheme shouldBe ThemeColorScheme.VoiceBlue
+      assertEquals(expected = ThemeColorScheme.VoiceBlue, actual = awaitItem().themeColorScheme)
 
       viewModel.setThemeColorScheme(ThemeColorScheme.Dynamic)
 
-      awaitItem().themeColorScheme shouldBe ThemeColorScheme.Dynamic
+      assertEquals(expected = ThemeColorScheme.Dynamic, actual = awaitItem().themeColorScheme)
     }
   }
 
@@ -145,13 +145,13 @@ class SettingsViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().showDeveloperMenu shouldBe false
+      assertEquals(expected = false, actual = awaitItem().showDeveloperMenu)
 
       repeat(13) {
         viewModel.onAppVersionClick()
       }
 
-      awaitItem().showDeveloperMenu shouldBe true
+      assertEquals(expected = true, actual = awaitItem().showDeveloperMenu)
     }
   }
 
@@ -162,7 +162,7 @@ class SettingsViewModelTest {
         viewModel.onAppVersionClick()
       }
 
-      awaitItem().shouldBeInstanceOf<SettingsViewEffect.DeveloperMenuUnlocked>()
+      assertIs<SettingsViewEffect.DeveloperMenuUnlocked>(awaitItem())
     }
   }
 
@@ -200,7 +200,7 @@ class SettingsViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().showSupportDevelopment shouldBe true
+      assertEquals(expected = true, actual = awaitItem().showSupportDevelopment)
     }
   }
 
@@ -211,7 +211,7 @@ class SettingsViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().showSupportDevelopment shouldBe false
+      assertEquals(expected = false, actual = awaitItem().showSupportDevelopment)
     }
   }
 
@@ -223,7 +223,7 @@ class SettingsViewModelTest {
       viewModel.viewState()
     }.test {
       awaitItem().let {
-        it.kioskMode shouldBe true
+        assertEquals(expected = true, actual = it.kioskMode)
       }
     }
   }

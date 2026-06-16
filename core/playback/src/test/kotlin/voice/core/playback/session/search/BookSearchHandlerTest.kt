@@ -2,15 +2,12 @@ package voice.core.playback.session.search
 
 import android.provider.MediaStore
 import androidx.datastore.core.DataStore
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -18,6 +15,9 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookRepository
 import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.uuid.Uuid
 
 class BookSearchHandlerTest {
@@ -39,25 +39,25 @@ class BookSearchHandlerTest {
   @Test
   fun unstructuredSearchByBook() = runTest {
     val bookSearch = VoiceSearch(query = bookToFind.content.name)
-    searchHandler.handle(bookSearch) shouldBe bookToFind
+    assertEquals(expected = bookToFind, actual = searchHandler.handle(bookSearch))
   }
 
   @Test
   fun unstructuredSearchByArtist() = runTest {
     val bookSearch = VoiceSearch(query = bookToFind.content.author)
-    searchHandler.handle(bookSearch) shouldBe bookToFind
+    assertEquals(expected = bookToFind, actual = searchHandler.handle(bookSearch))
   }
 
   @Test
   fun unstructuredSearchByChapter() = runTest {
     val bookSearch = VoiceSearch(query = bookToFind.chapters.first().name)
-    searchHandler.handle(bookSearch) shouldBe bookToFind
+    assertEquals(expected = bookToFind, actual = searchHandler.handle(bookSearch))
   }
 
   @Test
   fun mediaFocusAnyNoneFoundButPlayed() = runTest {
     val bookSearch = VoiceSearch(mediaFocus = "vnd.android.cursor.item/*")
-    searchHandler.handle(bookSearch).shouldBeNull()
+    assertNull(searchHandler.handle(bookSearch))
   }
 
   @Test
@@ -66,7 +66,7 @@ class BookSearchHandlerTest {
       mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
       artist = bookToFind.content.author,
     )
-    searchHandler.handle(bookSearch) shouldBe bookToFind
+    assertEquals(expected = bookToFind, actual = searchHandler.handle(bookSearch))
   }
 
   @Test
@@ -84,7 +84,7 @@ class BookSearchHandlerTest {
       query = "Tim",
       artist = "Tim",
     )
-    searchHandler.handle(bookSearch) shouldBe bookToFind
+    assertEquals(expected = bookToFind, actual = searchHandler.handle(bookSearch))
   }
 
   @Test
@@ -95,7 +95,7 @@ class BookSearchHandlerTest {
       album = bookToFind.content.name,
       query = null,
     )
-    searchHandler.handle(bookSearch) shouldBe bookToFind
+    assertEquals(expected = bookToFind, actual = searchHandler.handle(bookSearch))
   }
 }
 

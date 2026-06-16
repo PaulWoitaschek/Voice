@@ -1,12 +1,12 @@
 package voice.navigation
 
-import io.kotest.matchers.nulls.shouldNotBeNull
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializerOrNull
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import kotlin.reflect.KClass
+import kotlin.test.Test
+import kotlin.test.assertNotNull
 
 @OptIn(InternalSerializationApi::class)
 @RunWith(Parameterized::class)
@@ -18,7 +18,7 @@ class DestinationTest(val destinationClass: KClass<out Destination>) {
    */
   @Test
   fun allDestinationsAreSerializable() {
-    destinationClass.serializerOrNull().shouldNotBeNull()
+    assertNotNull(destinationClass.serializerOrNull())
   }
 
   companion object {

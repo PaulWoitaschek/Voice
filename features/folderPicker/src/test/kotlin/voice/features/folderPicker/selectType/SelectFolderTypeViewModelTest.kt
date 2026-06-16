@@ -6,17 +6,16 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.common.DispatcherProvider
 import voice.core.documentfile.FileBasedDocumentFactory
 import voice.navigation.Origin
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class SelectFolderTypeViewModelTest {
@@ -52,8 +51,8 @@ class SelectFolderTypeViewModelTest {
         vararg books: SelectFolderTypeViewState.Book,
       ) {
         with(awaitItem()) {
-          this.books.shouldContainExactlyInAnyOrder(books.toList())
-          this.selectedFolderMode shouldBe folderMode
+          assertEquals(expected = books.toList().asCountMap(), actual = this.books.asCountMap())
+          assertEquals(expected = folderMode, actual = this.selectedFolderMode)
         }
       }
       expectItem(FolderMode.Audiobooks)
@@ -78,4 +77,8 @@ class SelectFolderTypeViewModelTest {
       )
     }
   }
+}
+
+private fun Iterable<*>.asCountMap(): Map<Any?, Int> {
+  return groupingBy { it }.eachCount()
 }

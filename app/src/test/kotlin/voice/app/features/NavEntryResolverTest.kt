@@ -7,11 +7,11 @@ import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraph
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import org.junit.Test
 import voice.app.navigation.NavEntryResolver
 import voice.navigation.Destination
 import kotlin.reflect.KClass
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @Suppress("SUSPICIOUS_UNUSED_MULTIBINDING")
 @SingleIn(AppScope::class)
@@ -41,6 +41,10 @@ class NavEntryResolverTest {
     }
     val testGraph: NavEntryResolverTestGraph = createGraph()
     val resolver = testGraph.resolver
-    resolver.registeredClasses().shouldContainExactlyInAnyOrder(allDestinations)
+    assertEquals(expected = allDestinations.asCountMap(), actual = resolver.registeredClasses().asCountMap())
   }
+}
+
+private fun Iterable<*>.asCountMap(): Map<Any?, Int> {
+  return groupingBy { it }.eachCount()
 }

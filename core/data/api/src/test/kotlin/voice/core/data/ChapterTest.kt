@@ -1,9 +1,8 @@
 package voice.core.data
 
-import io.kotest.assertions.withClue
-import io.kotest.matchers.collections.shouldContainInOrder
-import org.junit.Test
 import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ChapterTest {
 
@@ -156,16 +155,16 @@ class ChapterTest {
     val expectedPositions = coverageToPositions(expectedCoverage)
     val actualCoverage = positionsToCoverage(actualPositions, timelineLen)
 
-    withClue(
-      """
+    assertEquals(
+      expected = expectedPositions,
+      actual = actualPositions,
+      message = """
       Expected: $expectedCoverage
       Actual  : $actualCoverage
       Starts  : ${marks.map { it.startMs }.sorted()}
       Duration: $duration
       """.trimIndent(),
-    ) {
-      actualPositions.shouldContainInOrder(expectedPositions)
-    }
+    )
   }
 
   private fun coverageToPositions(coverage: String): List<MarkPosition> {

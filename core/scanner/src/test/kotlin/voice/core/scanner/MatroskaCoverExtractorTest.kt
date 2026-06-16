@@ -3,17 +3,16 @@ package voice.core.scanner
 import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.matchers.booleans.shouldBeTrue
-import io.kotest.matchers.file.shouldBeAFile
 import org.junit.BeforeClass
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaCoverExtractor
 import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class MatroskaCoverExtractorTest {
@@ -30,8 +29,8 @@ class MatroskaCoverExtractorTest {
       input = testFile.toUri(),
       outputFile = coverFile,
     )
-    extracted.shouldBeTrue()
-    coverFile.shouldBeAFile()
+    assertTrue(extracted)
+    assertTrue(coverFile.isFile)
   }
 
   companion object {

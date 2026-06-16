@@ -1,9 +1,9 @@
 package voice.app.misc
 
-import io.kotest.matchers.shouldBe
-import org.junit.Test
 import voice.core.ui.formatTime
 import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class FormatTimeKtTest {
 
@@ -11,21 +11,21 @@ class FormatTimeKtTest {
   fun withSeconds_noDuration_no_hours_multipleDigits() {
     val ms = ms(hours = 0, minutes = 59, seconds = 12)
     val formatted = formatTime(ms)
-    formatted shouldBe "59:12"
+    assertEquals(expected = "59:12", actual = formatted)
   }
 
   @Test
   fun withSeconds_noDuration_no_hours_singleDigit() {
     val ms = ms(hours = 0, minutes = 5, seconds = 7)
     val formatted = formatTime(ms)
-    formatted shouldBe "5:07"
+    assertEquals(expected = "5:07", actual = formatted)
   }
 
   @Test
   fun withSeconds_noDuration_with_hours_multipleDigits() {
     val ms = ms(hours = 123, minutes = 59, seconds = 12)
     val formatted = formatTime(ms)
-    formatted shouldBe "123:59:12"
+    assertEquals(expected = "123:59:12", actual = formatted)
   }
 
   @Test
@@ -33,13 +33,13 @@ class FormatTimeKtTest {
     val durationMs = ms(hours = 999, minutes = 59, seconds = 12)
     val time = ms(0, 12, 13)
     val formatted = formatTime(time, durationMs)
-    formatted shouldBe "000:12:13"
+    assertEquals(expected = "000:12:13", actual = formatted)
   }
 
   @Test
   fun zero() {
     val formatted = formatTime(0)
-    formatted shouldBe "0:00"
+    assertEquals(expected = "0:00", actual = formatted)
   }
 
   private fun ms(

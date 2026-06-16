@@ -11,9 +11,25 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.powerassert.gradle.PowerAssertGradleExtension
 
 fun Project.baseSetup() {
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+  pluginManager.apply("org.jetbrains.kotlin.plugin.power-assert")
+  extensions.configure<PowerAssertGradleExtension> {
+    functions.set(
+      setOf(
+        "kotlin.assert",
+        "kotlin.test.assertTrue",
+        "kotlin.test.assertFalse",
+        "kotlin.test.assertEquals",
+        "kotlin.test.assertNotEquals",
+        "kotlin.test.assertNull",
+        "kotlin.test.assertNotNull",
+        "kotlin.test.assertIs",
+      ),
+    )
+  }
   val jvmBytecodeVersion = libs.findVersion("jvm-bytecode").get().requiredVersion.toInt()
   val jvmToolchainVersion = libs.findVersion("jvm-toolchain").get().requiredVersion.toInt()
   tasks.withType<KotlinCompile>().configureEach {
