@@ -6,10 +6,8 @@ import androidx.datastore.core.DataStore
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.zacsweers.metro.Inject
-import io.kotest.matchers.longs.shouldBeGreaterThan
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import voice.core.common.rootGraphAs
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -27,6 +25,8 @@ import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerState
 import java.io.File
 import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertTrue
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
@@ -73,7 +73,7 @@ class SleepTimerIntegrationTest {
     sleepTimer.state.first { it == SleepTimerState.Disabled }
     playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Paused }
 
-    bookContentRepo.get(bookId)!!.positionInChapter.shouldBeGreaterThan(0)
+    assertTrue(bookContentRepo.get(bookId)!!.positionInChapter > 0)
   }
 
   @Test

@@ -26,5 +26,4 @@ dependencies {
   testImplementation(libs.mockk)
   testImplementation(libs.coroutines.test)
   testImplementation(libs.robolectric)
-  testImplementation(libs.koTest.assert)
 }

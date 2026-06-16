@@ -18,7 +18,6 @@ dependencies {
 
   testImplementation(libs.junit)
   testImplementation(libs.mockk)
-  testImplementation(libs.koTest.assert)
   testImplementation(libs.coroutines.test)
   testImplementation(libs.androidX.test.core)
   testImplementation(libs.androidX.test.junit)

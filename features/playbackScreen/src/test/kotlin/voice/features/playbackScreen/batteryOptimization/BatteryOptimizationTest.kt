@@ -1,10 +1,10 @@
 package voice.features.playbackScreen.batteryOptimization
 
-import io.kotest.matchers.booleans.shouldBeFalse
-import io.kotest.matchers.booleans.shouldBeTrue
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import voice.features.playbackScreen.MemoryDataStore
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class BatteryOptimizationTest {
 
@@ -15,19 +15,19 @@ class BatteryOptimizationTest {
       amountOfBatteryOptimizationsRequested = MemoryDataStore(0),
     )
 
-    batteryOptimization.shouldRequest().shouldBeTrue()
+    assertTrue(batteryOptimization.shouldRequest())
 
     batteryOptimization.onBatteryOptimizationsRequested()
-    batteryOptimization.shouldRequest().shouldBeTrue()
+    assertTrue(batteryOptimization.shouldRequest())
 
     batteryOptimization.onBatteryOptimizationsRequested()
-    batteryOptimization.shouldRequest().shouldBeTrue()
+    assertTrue(batteryOptimization.shouldRequest())
 
     batteryOptimization.onBatteryOptimizationsRequested()
-    batteryOptimization.shouldRequest().shouldBeTrue()
+    assertTrue(batteryOptimization.shouldRequest())
 
     batteryOptimization.onBatteryOptimizationsRequested()
-    batteryOptimization.shouldRequest().shouldBeFalse()
+    assertFalse(batteryOptimization.shouldRequest())
   }
 
   @Test
@@ -37,6 +37,6 @@ class BatteryOptimizationTest {
       amountOfBatteryOptimizationsRequested = MemoryDataStore(0),
     )
 
-    batteryOptimization.shouldRequest().shouldBeFalse()
+    assertFalse(batteryOptimization.shouldRequest())
   }
 }

@@ -2,15 +2,14 @@ package voice.core.common.comparator
 
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class NaturalOrderComparatorTest {
@@ -68,7 +67,7 @@ class NaturalOrderComparatorTest {
       "folder10/1.mp3",
     )
     val sorted = expected.sortedWith(NaturalOrderComparator.stringComparator)
-    sorted shouldBe expected
+    assertEquals(expected = expected, actual = sorted)
   }
 
   @Test
@@ -106,8 +105,7 @@ class NaturalOrderComparatorTest {
         .build()
     }
 
-    uris.sortedWith(NaturalOrderComparator.uriComparator)
-      .shouldContainExactly(uris)
+    assertEquals(expected = uris, actual = uris.sortedWith(NaturalOrderComparator.uriComparator))
   }
 
   @Test
@@ -115,8 +113,7 @@ class NaturalOrderComparatorTest {
     val expected = testFiles()
     val uris = expected.map { Uri.fromFile(it) }
 
-    uris.sortedWith(NaturalOrderComparator.uriComparator)
-      .shouldContainExactly(uris)
+    assertEquals(expected = uris, actual = uris.sortedWith(NaturalOrderComparator.uriComparator))
   }
 
   @After

@@ -33,9 +33,11 @@ coil = "io.coil-kt:coil-compose:2.7.0"
 appCompat = "androidx.appcompat:appcompat:1.7.1"
 androidxCore = "androidx.core:core-ktx:1.19.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-powerAssert = { module = "org.jetbrains.kotlin:kotlin-power-assert", version.ref = "kotlin" }
+kotlin-powerAssert-runtime = { module = "org.jetbrains.kotlin:kotlin-power-assert-runtime", version.ref = "kotlin" }
+kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 documentFile = "androidx.documentfile:documentfile:1.1.0"
-koTest-assert = "io.kotest:kotest-assertions-core:6.1.11"
 datastore = "androidx.datastore:datastore-core:1.2.1"
 seismic = "com.squareup:seismic:1.0.3"
 turbine = "app.cash.turbine:turbine:1.2.1"
@@ -52,7 +54,7 @@ coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-bom = "com.google.firebase:firebase-bom:34.14.1"
+firebase-bom = "com.google.firebase:firebase-bom:34.15.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-remoteconfig = { module = "com.google.firebase:firebase-config" }
@@ -126,7 +128,7 @@ testing-jvm = [
   "robolectric",
   "coroutines-test",
   "mockk",
-  "koTest-assert",
+  "kotlin-testJunit",
   "turbine",
   "junit"
 ]
@@ -142,7 +144,7 @@ android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.7" }
-googleServices = { id = "com.google.gms.google-services", version = "4.4.4" }
+googleServices = { id = "com.google.gms.google-services", version = "4.5.0" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

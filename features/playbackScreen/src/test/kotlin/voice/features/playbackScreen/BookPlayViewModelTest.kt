@@ -3,9 +3,6 @@ package voice.features.playbackScreen
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
@@ -19,7 +16,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
-import org.junit.Test
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -42,6 +38,9 @@ import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
 import voice.features.sleepTimer.SleepTimerViewState
 import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
@@ -116,7 +115,7 @@ class BookPlayViewModelTest {
   @Test
   fun sleepTimerValueChanging() = scope.runTest {
     fun assertDialogSleepTime(expected: Int) {
-      viewModel.dialogState.value shouldBe BookPlayDialogViewState.SleepTimer(SleepTimerViewState(expected))
+      assertEquals(expected = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(expected)), actual = viewModel.dialogState.value)
     }
 
     viewModel.toggleSleepTimer()
@@ -150,7 +149,7 @@ class BookPlayViewModelTest {
   fun sleepTimerSettingFixedValue() = scope.runTest {
     viewModel.toggleSleepTimer()
     viewModel.onAcceptSleepTime(10)
-    sleepTimerDataStore.data.first().duration shouldBe 5.minutes
+    assertEquals(expected = 5.minutes, actual = sleepTimerDataStore.data.first().duration)
     yield()
     verify(exactly = 1) {
       sleepTimer.enable(TimedWithDuration(10.minutes))
@@ -167,7 +166,7 @@ class BookPlayViewModelTest {
       sleepTimer.enable(TimedWithDuration(10.minutes))
       sleepTimer.disable()
     }
-    sleepTimer.state.value.shouldBeInstanceOf<SleepTimerState.Disabled>()
+    assertIs<SleepTimerState.Disabled>(sleepTimer.state.value)
   }
 
   @Test
@@ -175,46 +174,48 @@ class BookPlayViewModelTest {
     viewModel.onCurrentChapterClick()
     yield()
 
-    val dialogState = viewModel.dialogState.value
-      .shouldBeInstanceOf<BookPlayDialogViewState.SelectChapterDialog>()
+    val dialogState = assertIs<BookPlayDialogViewState.SelectChapterDialog>(viewModel.dialogState.value)
 
-    dialogState.items.shouldContainExactly(
-      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-        number = 1,
-        name = "Chapter Start",
-        active = false,
-        time = "0:00",
+    assertEquals(
+      expected = listOf(
+        BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+          number = 1,
+          name = "Chapter Start",
+          active = false,
+          time = "0:00",
+        ),
+        BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+          number = 2,
+          name = "Middle Section",
+          active = false,
+          time = "2:00",
+        ),
+        BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+          number = 3,
+          name = "Final Section",
+          active = false,
+          time = "4:00",
+        ),
+        BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+          number = 4,
+          name = "Chapter Start",
+          active = false,
+          time = "5:00",
+        ),
+        BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+          number = 5,
+          name = "Middle Section",
+          active = true,
+          time = "7:00",
+        ),
+        BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
+          number = 6,
+          name = "Final Section",
+          active = false,
+          time = "9:00",
+        ),
       ),
-      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-        number = 2,
-        name = "Middle Section",
-        active = false,
-        time = "2:00",
-      ),
-      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-        number = 3,
-        name = "Final Section",
-        active = false,
-        time = "4:00",
-      ),
-      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-        number = 4,
-        name = "Chapter Start",
-        active = false,
-        time = "5:00",
-      ),
-      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-        number = 5,
-        name = "Middle Section",
-        active = true,
-        time = "7:00",
-      ),
-      BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-        number = 6,
-        name = "Final Section",
-        active = false,
-        time = "9:00",
-      ),
+      actual = dialogState.items,
     )
   }
 
@@ -225,7 +226,7 @@ class BookPlayViewModelTest {
     viewModel.onCurrentChapterClick()
     yield()
 
-    viewModel.dialogState.value.shouldBeInstanceOf<BookPlayDialogViewState.SelectChapterDialog>()
+    assertIs<BookPlayDialogViewState.SelectChapterDialog>(viewModel.dialogState.value)
 
     viewModel.onChapterClick(number = 2)
     yield()
@@ -236,7 +237,7 @@ class BookPlayViewModelTest {
       player.setPosition(time = 2.minutes.inWholeMilliseconds, id = book.chapters.first().id)
     }
 
-    viewModel.dialogState.value shouldBe null
+    assertEquals(expected = null, actual = viewModel.dialogState.value)
   }
 
   @Test
@@ -252,8 +253,8 @@ class BookPlayViewModelTest {
       ),
     )
 
-    overlaidBook.currentChapter.id shouldBe persistedBook.chapters.first().id
-    overlaidBook.content.positionInChapter shouldBe 1.minutes.inWholeMilliseconds
+    assertEquals(expected = persistedBook.chapters.first().id, actual = overlaidBook.currentChapter.id)
+    assertEquals(expected = 1.minutes.inWholeMilliseconds, actual = overlaidBook.content.positionInChapter)
   }
 
   @Test
@@ -269,8 +270,8 @@ class BookPlayViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem() shouldBe null
-      awaitItem()!!.playedTime shouldBe 30.seconds
+      assertEquals(expected = null, actual = awaitItem())
+      assertEquals(expected = 30.seconds, actual = awaitItem()!!.playedTime)
 
       livePlaybackFlow.value = LivePlaybackState(
         bookId = persistedBook.id,
@@ -281,9 +282,9 @@ class BookPlayViewModelTest {
       )
 
       val state = awaitItem()!!
-      state.playing shouldBe true
-      state.chapterName shouldBe "Chapter Start"
-      state.playedTime shouldBe 1.minutes
+      assertEquals(expected = true, actual = state.playing)
+      assertEquals(expected = "Chapter Start", actual = state.chapterName)
+      assertEquals(expected = 1.minutes, actual = state.playedTime)
     }
   }
 
@@ -298,10 +299,10 @@ class BookPlayViewModelTest {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem() shouldBe null
+      assertEquals(expected = null, actual = awaitItem())
       val state = awaitItem()!!
-      state.playing shouldBe true
-      state.playedTime shouldBe 30.seconds
+      assertEquals(expected = true, actual = state.playing)
+      assertEquals(expected = 30.seconds, actual = state.playedTime)
     }
   }
 
@@ -313,9 +314,9 @@ class BookPlayViewModelTest {
       viewModel.viewState()
     }.test {
       val state = awaitItem()!!
-      state.title shouldBe KioskModeDemoData.currentlyPlaying.title
-      state.chapterName shouldBe KioskModeDemoData.currentlyPlaying.chapter
-      state.cover shouldBe KioskModeDemoData.currentlyPlaying.coverUrl
+      assertEquals(expected = KioskModeDemoData.currentlyPlaying.title, actual = state.title)
+      assertEquals(expected = KioskModeDemoData.currentlyPlaying.chapter, actual = state.chapterName)
+      assertEquals(expected = KioskModeDemoData.currentlyPlaying.coverUrl, actual = state.cover)
     }
   }
 

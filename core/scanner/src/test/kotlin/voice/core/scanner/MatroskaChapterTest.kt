@@ -1,10 +1,10 @@
 package voice.core.scanner
 
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.shouldBe
-import org.junit.Test
 import voice.core.scanner.matroska.MatroskaChapter
 import voice.core.scanner.matroska.MatroskaChapterName
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class MatroskaChapterTest {
 
@@ -18,14 +18,14 @@ class MatroskaChapterTest {
         MatroskaChapterName("サブパート1", setOf("jpn")),
       ),
     )
-    chapter.bestName(emptyList()) shouldBe "Podczęść 1"
-    chapter.bestName(listOf("ger", "jpn")) shouldBe "Subpart 1"
-    chapter.bestName(listOf("ind", "kac", "jpn", "eng")) shouldBe "サブパート1"
+    assertEquals(expected = "Podczęść 1", actual = chapter.bestName(emptyList()))
+    assertEquals(expected = "Subpart 1", actual = chapter.bestName(listOf("ger", "jpn")))
+    assertEquals(expected = "サブパート1", actual = chapter.bestName(listOf("ind", "kac", "jpn", "eng")))
   }
 
   @Test
   fun noContentsLeadsToNull() {
     val actual = MatroskaChapter(0L, listOf()).bestName(emptyList())
-    actual.shouldBeNull()
+    assertNull(actual)
   }
 }

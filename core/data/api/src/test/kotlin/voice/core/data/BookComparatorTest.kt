@@ -1,7 +1,7 @@
 package voice.core.data
 
-import io.kotest.matchers.collections.shouldContainExactly
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class BookComparatorTest {
 
@@ -15,12 +15,12 @@ class BookComparatorTest {
   @Test
   fun byLastPlayed() {
     val sorted = books.sortedWith(BookComparator.ByLastPlayed)
-    sorted.shouldContainExactly(b4, b5, b3, b1, b2)
+    assertEquals(expected = listOf(b4, b5, b3, b1, b2), actual = sorted)
   }
 
   @Test
   fun byName() {
     val sorted = books.sortedWith(BookComparator.ByName)
-    sorted.shouldContainExactly(b1, b2, b3, b5, b4)
+    assertEquals(expected = listOf(b1, b2, b3, b5, b4), actual = sorted)
   }
 }

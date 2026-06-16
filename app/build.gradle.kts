@@ -209,7 +209,7 @@ dependencies {
   androidTestImplementation(libs.androidX.test.rules)
   androidTestImplementation(libs.androidX.test.junit)
   androidTestImplementation(libs.media3.testUtils.core)
-  androidTestImplementation(libs.koTest.assert)
+  androidTestImplementation(libs.kotlin.testJunit)
   androidTestImplementation(libs.androidX.test.services)
   androidTestImplementation(libs.compose.ui.testJunit)
   androidTestImplementation(libs.coroutines.test)
