@@ -7,13 +7,13 @@ import dev.zacsweers.metro.Inject
 import voice.core.logging.api.Logger
 import voice.core.scanner.mp4.visitor.ChapVisitor
 import voice.core.scanner.mp4.visitor.ChplVisitor
+import voice.core.scanner.mp4.visitor.Co64Visitor
 import voice.core.scanner.mp4.visitor.MdhdVisitor
 import voice.core.scanner.mp4.visitor.StcoVisitor
 import voice.core.scanner.mp4.visitor.StscVisitor
-import voice.core.scanner.mp4.visitor.SttsVisitor
-import voice.core.scanner.mp4.visitor.Co64Visitor
-import voice.core.scanner.mp4.visitor.TkhdVisitor
 import voice.core.scanner.mp4.visitor.StszVisitor
+import voice.core.scanner.mp4.visitor.SttsVisitor
+import voice.core.scanner.mp4.visitor.TkhdVisitor
 
 @Inject
 internal class Mp4BoxParser(
@@ -129,7 +129,6 @@ internal class Mp4BoxParser(
             return
           }
         }
-
         else -> {
           if (atomType == "mdat") {
             return
@@ -171,4 +170,3 @@ internal class Mp4BoxParser(
     return take(other.size) == other
   }
 }
-
