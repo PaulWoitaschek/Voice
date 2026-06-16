@@ -103,12 +103,12 @@
     <string name="playback.speed.title">Rychlost přehrávání</string>
     <string name="review.feedback.action.cancel">Zrušit</string>
     <string name="review.feedback.action.send">Odeslat zpětnou vazbu</string>
-    <string name="review.feedback.message">Můžete nám sdělit, co se pokazilo? Vážíme si vaší zpětné vazby a pomáhá nám zlepšovat uživatelskou zkušenost.</string>
+    <string name="review.feedback.message">Můžete nám sdělit, co se pokazilo? Vaší zpětné vazby si vážíme, pomáhá nám zlepšovat uživatelský zážitek z používání aplikace.</string>
     <string name="review.feedback.title">To je nám líto!</string>
     <string name="review.request.action.dismiss">Ne, děkuji</string>
     <string name="review.request.action.rate">Ohodnotit nyní</string>
     <string name="review.request.message">Vaše zpětná vazba je pro nás důležitá! Pokud máte chvilku, ohodnoťte nás a podělte se o své zkušenosti. Pomáhá nám to vylepšovat a nabízet lepší zážitek z poslechu.</string>
-    <string name="review.request.title">Spokojeni s Voice?</string>
+    <string name="review.request.title">Jste s aplikací Voice spokojeni?</string>
     <string name="settings.about.app_version.title">Verze aplikace</string>
     <string name="settings.action.open">Nastavení</string>
     <string name="settings.analytics_consent.description">Povolit shromažďování anonymních údajů o používání pro zlepšení aplikace</string>
@@ -117,9 +117,9 @@
     <string name="settings.appearance.color_scheme.dynamic">Dynamická barva</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Používá barvy z tapety a systémového motivu.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Modrá Voice</string>
-    <string name="settings.appearance.theme.dark">Tmavé</string>
+    <string name="settings.appearance.theme.dark">Temný</string>
     <string name="settings.appearance.theme.follow_system">Podle systému</string>
-    <string name="settings.appearance.theme.light">Světlé</string>
+    <string name="settings.appearance.theme.light">Světlý</string>
     <string name="settings.appearance.theme.title">Motiv</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Nastavit čas konce</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Nastavit čas startu</string>
@@ -130,19 +130,19 @@
     <string name="settings.playback.auto_rewind.title">Automaticky přetočit</string>
     <string name="settings.playback.seek_time.title">Přeskočit o</string>
     <string name="settings.support.faq.title">Často kladené dotazy (FAQ)</string>
-    <string name="settings.support.get_support.title">Získat podporu</string>
-    <string name="settings.support.help_translating.title">Pomoc s překladem Voice</string>
+    <string name="settings.support.get_support.title">Potřebuji pomoct</string>
+    <string name="settings.support.help_translating.title">Pomohu s přeložením aplikace Voice</string>
     <string name="settings.support.report_issue.title">Nahlásit problém</string>
     <string name="settings.support.suggest_idea.title">Navrhnout nápad</string>
-    <string name="settings.support.support_voice.summary">Dary pomáhají udržovat Voice</string>
+    <string name="settings.support.support_voice.summary">Dary pomáhají udržovat aplikaci Voice</string>
     <string name="settings.support.support_voice.title">Podpořit vývoj</string>
     <string name="support.action.donate_kofi">Přispět na Ko-fi</string>
-    <string name="support.description.maintenance">Voice je zdarma, open source a udržuje ho jeden vývojář.</string>
+    <string name="support.description.maintenance">Aplikace Voice je zdarma, má otevřený zdrojový kód a udržuje ji jeden vývojář.</string>
     <string name="support.description.maintenance_subtitle">Dary pomáhají financovat průběžnou údržbu a vývoj.</string>
     <string name="support.helps.title">Podpora pomáhá s</string>
     <string name="support.helps.maintenance">Opravami chyb a údržbou</string>
     <string name="support.helps.features">Novými funkcemi</string>
-    <string name="support.helps.open_source">Udržením Voice bez reklam</string>
+    <string name="support.helps.open_source">Udržením aplikace Voice bez reklam</string>
     <string name="support.title">Podpořit vývoj</string>
     <string name="shortcut.play_current.short_label">Přehrát aktuální</string>
     <string name="sleep_timer.action.open">Časovač spánku</string>
