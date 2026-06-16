@@ -33,9 +33,16 @@ private val pathForAnimation =
     cubicTo(0.208333f, 0.82f, 0.25f, 1f, 1f, 1f)
   }
 
+@Suppress("ktlint:standard:property-naming")
 private const val DurationMedium1 = 250
+
+@Suppress("ktlint:standard:property-naming")
 private const val DurationMedium2 = 300
+
+@Suppress("ktlint:standard:property-naming")
 private const val DurationLong1 = 450
+
+@Suppress("ktlint:standard:property-naming")
 private const val DurationLong2 = 500
 private val EmphasizedEasing = PathEasing(pathForAnimation)
 private val EmphasizedAccelerateEasing = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f)
