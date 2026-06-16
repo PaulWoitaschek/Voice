@@ -34,6 +34,7 @@ appCompat = "androidx.appcompat:appcompat:1.7.1"
 androidxCore = "androidx.core:core-ktx:1.19.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-powerAssert = { module = "org.jetbrains.kotlin:kotlin-power-assert", version.ref = "kotlin" }
+kotlin-powerAssert-runtime = { module = "org.jetbrains.kotlin:kotlin-power-assert-runtime", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 documentFile = "androidx.documentfile:documentfile:1.1.0"

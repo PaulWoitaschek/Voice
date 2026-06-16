@@ -1,5 +1,9 @@
+import com.android.build.api.dsl.AndroidTest
 import com.android.build.api.dsl.ApplicationDefaultConfig
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.TestFixtures
+import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.UnitTest
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
@@ -14,22 +18,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.powerassert.gradle.PowerAssertGradleExtension
 
 fun Project.baseSetup() {
+  val project = this
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
-  pluginManager.apply("org.jetbrains.kotlin.plugin.power-assert")
-  extensions.configure<PowerAssertGradleExtension> {
-    functions.set(
-      setOf(
-        "kotlin.assert",
-        "kotlin.test.assertTrue",
-        "kotlin.test.assertFalse",
-        "kotlin.test.assertEquals",
-        "kotlin.test.assertNotEquals",
-        "kotlin.test.assertNull",
-        "kotlin.test.assertNotNull",
-        "kotlin.test.assertIs",
-      ),
-    )
-  }
+  configurePowerAssert(libs)
+
   val jvmBytecodeVersion = libs.findVersion("jvm-bytecode").get().requiredVersion.toInt()
   val jvmToolchainVersion = libs.findVersion("jvm-toolchain").get().requiredVersion.toInt()
   tasks.withType<KotlinCompile>().configureEach {
@@ -91,5 +83,31 @@ fun Project.baseSetup() {
       add("implementation", project(":core:logging:api"))
     }
     add("testImplementation", libs.findBundle("testing-jvm").get())
+  }
+}
+
+@Suppress("OPT_IN_USAGE")
+private fun Project.configurePowerAssert(libs: VersionCatalog) {
+  pluginManager.apply("org.jetbrains.kotlin.plugin.power-assert")
+  extensions.configure<PowerAssertGradleExtension> {
+    addRuntimeDependency.set(false)
+  }
+  extensions.getByType(AndroidComponentsExtension::class.java)
+    .onVariants(extensions.getByType(AndroidComponentsExtension::class.java).selector().all()) { variant ->
+      val testSourceSets = variant.nestedComponents.filter {
+        it is UnitTest || it is AndroidTest || it is TestFixtures
+      }.map {
+        it.name
+      }
+      extensions.configure<PowerAssertGradleExtension> {
+        includedSourceSets.addAll(
+          testSourceSets,
+        )
+      }
+    }
+
+  dependencies.run {
+    add("testImplementation", libs.findLibrary("kotlin.powerAssert.runtime").get())
+    add("androidTestImplementation", libs.findLibrary("kotlin.powerAssert.runtime").get())
   }
 }
