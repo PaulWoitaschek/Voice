@@ -2,6 +2,7 @@ package voice.features.bookOverview.views
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -38,6 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
@@ -45,6 +47,8 @@ import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.launch
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
+import voice.core.ui.LocalSharedTransitionScope
+import voice.core.ui.PLAY_BUTTON_SHARED_ELEMENT_KEY
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
 import voice.features.bookOverview.bottomSheet.BottomSheetContent
@@ -205,6 +209,7 @@ internal fun BookOverview(
           fabSize = 56.dp,
           iconSize = 24.dp,
           onPlayClick = onPlayButtonClick,
+          sharedElementModifier = playButtonSharedElementModifier(),
         )
       }
     },
@@ -241,6 +246,22 @@ internal fun BookOverview(
     dialog = viewState.dialog,
     onFolderPickerMovedDialogDismiss = onFolderPickerMovedDialogDismiss,
   )
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+private fun playButtonSharedElementModifier(): Modifier {
+  val sharedTransitionScope = LocalSharedTransitionScope.current
+  return if (sharedTransitionScope != null) {
+    with(sharedTransitionScope) {
+      Modifier.sharedElement(
+        sharedContentState = rememberSharedContentState(key = PLAY_BUTTON_SHARED_ELEMENT_KEY),
+        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
+      )
+    }
+  } else {
+    Modifier
+  }
 }
 
 @Composable

@@ -8,3 +8,5 @@ import androidx.compose.runtime.staticCompositionLocalOf
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 val LocalSharedTransitionScope = staticCompositionLocalOf<SharedTransitionScope?> { null }
+
+const val PLAY_BUTTON_SHARED_ELEMENT_KEY = "play-button"

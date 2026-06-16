@@ -24,13 +24,16 @@ fun PlayButton(
   iconSize: Dp,
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,
+  sharedElementModifier: Modifier = Modifier,
 ) {
   val cornerSize by animateDpAsState(
     targetValue = if (playing) 16.dp else fabSize / 2,
     label = "cornerSize",
   )
   FloatingActionButton(
-    modifier = modifier.size(fabSize),
+    modifier = modifier
+      .size(fabSize)
+      .then(sharedElementModifier),
     onClick = onPlayClick,
     shape = RoundedCornerShape(cornerSize),
   ) {
