@@ -10,10 +10,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalDensity
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -89,6 +91,7 @@ class MainActivity : AppCompatActivity() {
       ) {
         val bottomSheetStrategy = remember { BottomSheetSceneStrategy<Destination.Compose>() }
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
+        val density = LocalDensity.current
 
         SharedTransitionLayout {
           CompositionLocalProvider(LocalSharedTransitionScope provides this) {
@@ -96,6 +99,19 @@ class MainActivity : AppCompatActivity() {
               backStack = backStack,
               sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy),
               sharedTransitionScope = this,
+              transitionSpec = {
+                if (isBookOverviewPlaybackTransition(initialState.destination(), targetState.destination())) {
+                  SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+                } else {
+                  SharedXAxisEnterTransition(density) togetherWith SharedXAxisExitTransition(density)
+                }
+              },
+              popTransitionSpec = {
+                SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+              },
+              predictivePopTransitionSpec = {
+                SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+              },
               onBack = {
                 if (backStack.size > 1) {
                   backStack.removeLastOrNull()
