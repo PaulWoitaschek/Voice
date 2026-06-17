@@ -1,3 +1,38 @@
+/*
+ * This file contains code copied or adapted from:
+ * https://github.com/c5inco/compose-pokedexer/blob/main/app/src/main/kotlin/des/c5inco/pokedexer/ui/common/Transitions.kt
+ *
+ * Original project:
+ * compose-pokedexer by Chris Sinco
+ * https://github.com/c5inco/compose-pokedexer
+ *
+ * MIT License
+ *
+ * Copyright (c) 2022 Chris Sinco
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * Modifications:
+ * Copyright (c) 2026 Paul Woitaschek
+ *
+ * This file is distributed as part of Voice under the GNU GPL v3.
+ */
 package voice.app
 
 import androidx.compose.animation.EnterTransition
@@ -19,12 +54,6 @@ import androidx.navigation3.runtime.get
 import androidx.navigation3.scene.Scene
 import voice.app.navigation.DestinationMetadataKey
 import voice.navigation.Destination
-
-/**
- * Transitions code coming from compose-pokedexer. Credits to c5inco; they look awesome!
- * https://github.com/c5inco/compose-pokedexer/blob/main/app%2Fsrc%2Fmain%2Fkotlin%2Fdes%2Fc5inco%2Fpokedexer%2Fui%2Fcommon%2FTransitions.kt#L103
- * This was originally licensed as MIT
- */
 
 private val pathForAnimation =
   Path().apply {
