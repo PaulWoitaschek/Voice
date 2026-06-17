@@ -1,20 +1,36 @@
-Szukasz prostego, minimalistycznego odtwarzacza audiobooków który po prostu działa?
-Takiego który pozwala Ci się skupić na tym co faktycznie chcesz robić czyli słuchaniu audiobooka?
-Po prostu dodaj swój główny folder z audiobookami, a każdy folder wewnątrz zostanie rozpoznany jako pojedyncza książka. Dzięki temu struktura twojej biblioteki jest prosta i niezaśmiecona.
+Voice to przejrzysty odtwarzacz audiobooków dla osób, które korzystają z własnych książek.
 
-Co potrafi:
+Wystarczy raz dodać folder z audiobookami, a Voice przekształci lokalne pliki audio w prostą bibliotekę. Aplikacja zapamiętuje miejsce, w którym skończyłeś słuchanie każdej książki, zapewnia łatwy dostęp do elementów sterujących odtwarzaniem i nie przeszkadza w pracy.
 
-- Zapamiętuje pozycję w książce
-- Ustawienia szybkości odtwarzania
-- Piękny Material Design
-- Motywy dzienny i nocny. Przyjemne dla oczu
-- Zakładki
-- Android Auto
-- Wyłącznik czasowy. Nie musisz specjalnie wyłączać odtwarzacza w środku nocy
+<b>Stworzona z myślą o audiobookach</b>
 
-Voice jest wolnym i otwartym oprogramowaniem. To oznacza, że wszyscy mogą zobaczyć w jaki sposób on działa. Wykorzystuje on minimalny zestaw uprawnień.
+• Kontynuuj od dokładnie tego miejsca, w którym skończyłeś
+• Timer uśpienia z łagodnym wyciszaniem
+• Zatrzymaj się na końcu bieżącego rozdziału
+• Potrząśnij, aby przedłużyć czas wygaszania
+• Regulacja prędkości odtwarzania
+• Wzmocnienie głośności w przypadku cichych nagrań
+• Pomijanie ciszy
+• Automatyczne przewijanie do tyłu po dłuższych przerwach
+• Zakładki z oznaczeniami czasowymi i własnymi nazwami
+• Wyszukiwanie według tytułu i autora
+• Filtry: bieżące, ukończone i nie rozpoczęte
+• Widok listy i siatki
+• Okładki z osadzonych obrazów, plików lokalnych lub wyszukiwania online
+• Widżet na ekranie głównym, powiadomienia multimedialne i obsługa Android Auto
 
-Jeśli masz jakieś sugestie, lub znajdziesz błędy, zgłoś je tutaj:
+<b>Dodaj własne pliki</b>
+
+Aplikacja Voice obsługuje pliki audiobooków bez zabezpieczeń DRM, takie jak M4B, MP3, M4A, OGG, OGA i OPUS. Przechowuj swoje książki w folderach tak, jak chcesz; Voice rozpoznaje je i porządkuje Twoją bibliotekę.
+
+<b>Bez bałaganu</b>
+
+• Nie wymaga zakładania konta
+• Brak reklam
+• Brak wymuszonej synchronizacji z chmurą
+• Wszystkie funkcje są dostępne bez płatnych aktualizacji
+
+Aplikacja Voice jest oprogramowaniem typu open source na licencji GNU GPLv3.
+
+Opinie i zgłoszenia błędów:
 https://github.com/PaulWoitaschek/Voice/issues
-
-Wykorzystana licencja open source to GNU GPLv3
