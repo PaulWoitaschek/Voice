@@ -1,7 +1,6 @@
 package voice.features.bookOverview.views
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,8 +16,6 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -95,14 +92,11 @@ internal fun ListBookRow(
   onBookLongClick: (BookId) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  ElevatedCard(
-    shape = MaterialTheme.shapes.extraLarge,
-    modifier = modifier
-      .fillMaxWidth()
-      .combinedClickable(
-        onClick = { onBookClick(book.id) },
-        onLongClick = { onBookLongClick(book.id) },
-      ),
+  BookCard(
+    bookId = book.id,
+    onBookClick = onBookClick,
+    onBookLongClick = onBookLongClick,
+    modifier = modifier,
   ) {
     Column(Modifier.padding()) {
       Row(verticalAlignment = Alignment.CenterVertically) {
@@ -129,36 +123,21 @@ internal fun ListBookRow(
             maxLines = 2,
           )
 
-          Row(
+          BookRemainingProgressRow(
             modifier = Modifier
-              .fillMaxWidth()
               .padding(end = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-          ) {
-            Text(
-              text = book.remainingTime,
-              style = MaterialTheme.typography.labelMedium,
-              color = MaterialTheme.colorScheme.onSurfaceVariant,
-              maxLines = 1,
-            )
-
-            if (book.progress > 0f) {
-              Text(
-                text = "${(book.progress * 100).toInt()}%",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-              )
-            }
-          }
+            remainingTime = book.remainingTime,
+            progress = book.progress,
+            remainingTimeMaxLines = 1,
+            progressMaxLines = 1,
+          )
         }
       }
 
       if (book.progress > 0.05f) {
         Spacer(Modifier.size(0.dp))
-        LinearProgressIndicator(
-          progress = { book.progress },
+        BookProgressIndicator(
+          progress = book.progress,
           modifier = Modifier
             .fillMaxWidth()
             .clip(MaterialTheme.shapes.small)
