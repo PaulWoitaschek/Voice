@@ -1,6 +1,6 @@
 /*
  * This file contains code copied or adapted from:
- * https://github.com/c5inco/compose-pokedexer/blob/main/app/src/main/kotlin/des/c5inco/pokedexer/ui/common/Transitions.kt
+ * https://github.com/c5inco/compose-pokedexer/blob/d516f64e62d29d14e5ea82fdd6bf0a7d274287cc/app/src/main/kotlin/des/c5inco/pokedexer/ui/common/Transitions.kt
  *
  * Original project:
  * compose-pokedexer by Chris Sinco
