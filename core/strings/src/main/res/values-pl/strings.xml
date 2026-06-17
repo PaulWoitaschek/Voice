@@ -130,7 +130,7 @@
     <string name="settings.playback.auto_rewind.title">Automatyczne cofnięcie</string>
     <string name="settings.playback.seek_time.title">Przewiń o</string>
     <string name="settings.support.faq.title">Najczęściej zadawane pytania (FAQ)</string>
-    <string name="settings.support.get_support.title">Wsparcie</string>
+    <string name="settings.support.get_support.title">Uzyskaj pomoc</string>
     <string name="settings.support.help_translating.title">Pomóż w tłumaczeniu</string>
     <string name="settings.support.report_issue.title">Zgłoś problem</string>
     <string name="settings.support.suggest_idea.title">Zasugeruj pomysł</string>
