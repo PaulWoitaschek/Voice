@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import voice.core.ui.PlayButton
 import voice.core.ui.playButtonSharedBoundsModifier
 
@@ -34,7 +33,7 @@ internal fun PlaybackRow(
       fabSize = 80.dp,
       iconSize = 36.dp,
       onPlayClick = onPlayClick,
-      sharedElementModifier = Modifier.playButtonSharedBoundsModifier(LocalNavAnimatedContentScope.current),
+      sharedElementModifier = Modifier.playButtonSharedBoundsModifier(),
     )
     Spacer(modifier = Modifier.size(16.dp))
     SkipButton(forward = true, onClick = onFastForwardClick)

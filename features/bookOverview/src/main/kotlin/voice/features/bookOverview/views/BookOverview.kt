@@ -38,7 +38,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
@@ -207,7 +206,7 @@ internal fun BookOverview(
           fabSize = 56.dp,
           iconSize = 24.dp,
           onPlayClick = onPlayButtonClick,
-          sharedElementModifier = Modifier.playButtonSharedBoundsModifier(LocalNavAnimatedContentScope.current),
+          sharedElementModifier = Modifier.playButtonSharedBoundsModifier(),
         )
       }
     },

@@ -1,6 +1,5 @@
 package voice.features.bookOverview.views
 
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,11 +36,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import coil.compose.AsyncImage
 import voice.core.data.BookId
-import voice.core.ui.LocalSharedTransitionScope
-import voice.core.ui.sharedCoverKey
+import voice.core.ui.sharedCoverElementModifier
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import kotlin.math.roundToInt
@@ -101,24 +98,12 @@ internal fun GridBooks(
   }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun GridBook(
   book: BookOverviewItemViewState,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
 ) {
-  val sharedTransitionScope = LocalSharedTransitionScope.current
-  val sharedElementModifier = if (sharedTransitionScope != null) {
-    with(sharedTransitionScope) {
-      Modifier.sharedElement(
-        sharedContentState = rememberSharedContentState(key = sharedCoverKey(book.id)),
-        animatedVisibilityScope = LocalNavAnimatedContentScope.current,
-      )
-    }
-  } else {
-    Modifier
-  }
   ElevatedCard(
     shape = MaterialTheme.shapes.extraLarge,
     modifier = Modifier
@@ -135,7 +120,7 @@ internal fun GridBook(
         modifier = Modifier
           .fillMaxWidth()
           .aspectRatio(4f / 3f)
-          .then(sharedElementModifier)
+          .sharedCoverElementModifier(book.id)
           .clip(MaterialTheme.shapes.large)
           .background(MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center,
