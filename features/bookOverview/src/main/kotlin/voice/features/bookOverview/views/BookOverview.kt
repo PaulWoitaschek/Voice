@@ -47,6 +47,7 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
+import voice.core.ui.playButtonSharedBoundsModifier
 import voice.features.bookOverview.bottomSheet.BottomSheetContent
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.deleteBook.DeleteBookDialog
@@ -205,6 +206,7 @@ internal fun BookOverview(
           fabSize = 56.dp,
           iconSize = 24.dp,
           onPlayClick = onPlayButtonClick,
+          sharedElementModifier = Modifier.playButtonSharedBoundsModifier(),
         )
       }
     },

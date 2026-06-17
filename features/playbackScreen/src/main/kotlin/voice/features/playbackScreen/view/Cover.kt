@@ -12,17 +12,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import voice.core.data.BookId
+import voice.core.ui.sharedCoverElementModifier
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 
 @Composable
 internal fun Cover(
+  bookId: BookId,
   onDoubleClick: () -> Unit,
   cover: String?,
 ) {
   AsyncImage(
     modifier = Modifier
       .fillMaxSize()
+      .sharedCoverElementModifier(bookId)
       .pointerInput(Unit) {
         detectTapGestures(
           onDoubleTap = {

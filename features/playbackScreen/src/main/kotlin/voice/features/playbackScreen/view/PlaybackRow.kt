@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import voice.core.ui.PlayButton
+import voice.core.ui.playButtonSharedBoundsModifier
 
 @Composable
 internal fun PlaybackRow(
@@ -27,7 +28,13 @@ internal fun PlaybackRow(
     SkipButton(forward = false, onClick = onRewindClick)
     Spacer(modifier = Modifier.size(16.dp))
 
-    PlayButton(playing = playing, fabSize = 80.dp, iconSize = 36.dp, onPlayClick = onPlayClick)
+    PlayButton(
+      playing = playing,
+      fabSize = 80.dp,
+      iconSize = 36.dp,
+      onPlayClick = onPlayClick,
+      sharedElementModifier = Modifier.playButtonSharedBoundsModifier(),
+    )
     Spacer(modifier = Modifier.size(16.dp))
     SkipButton(forward = true, onClick = onFastForwardClick)
   }

@@ -11,9 +11,10 @@ android {
 dependencies {
   api(libs.datastore)
   implementation(libs.appCompat)
-  implementation(projects.core.data.api)
+  api(projects.core.data.api)
   implementation(projects.core.initializer)
   implementation(projects.core.strings)
   implementation(libs.lifecycle.compose)
   implementation(libs.materialKolor)
+  implementation(libs.navigation3.ui)
 }

@@ -8,9 +8,14 @@ import android.provider.Settings
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.togetherWith
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalDensity
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -29,6 +34,7 @@ import voice.core.data.ThemeMode
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
 import voice.core.logging.api.Logger
+import voice.core.ui.LocalSharedTransitionScope
 import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
 import voice.navigation.Destination
@@ -62,6 +68,7 @@ class MainActivity : AppCompatActivity() {
   @ThemeColorSchemeStore
   private lateinit var themeColorSchemeStore: DataStore<ThemeColorScheme>
 
+  @OptIn(ExperimentalSharedTransitionApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     rootGraphAs<MainActivityGraph>().inject(this)
     super.onCreate(savedInstanceState)
@@ -84,19 +91,38 @@ class MainActivity : AppCompatActivity() {
       ) {
         val bottomSheetStrategy = remember { BottomSheetSceneStrategy<Destination.Compose>() }
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
+        val density = LocalDensity.current
 
-        NavDisplay(
-          backStack = backStack,
-          sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy),
-          onBack = {
-            if (backStack.size > 1) {
-              backStack.removeLastOrNull()
-            }
-          },
-          entryProvider = { key ->
-            navEntryResolver.create(key)
-          },
-        )
+        SharedTransitionLayout {
+          CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+            NavDisplay(
+              backStack = backStack,
+              sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy),
+              sharedTransitionScope = this,
+              transitionSpec = {
+                if (isBookOverviewPlaybackTransition(initialState.destination(), targetState.destination())) {
+                  SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+                } else {
+                  SharedXAxisEnterTransition(density) togetherWith SharedXAxisExitTransition(density)
+                }
+              },
+              popTransitionSpec = {
+                SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+              },
+              predictivePopTransitionSpec = {
+                SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+              },
+              onBack = {
+                if (backStack.size > 1) {
+                  backStack.removeLastOrNull()
+                }
+              },
+              entryProvider = { key ->
+                navEntryResolver.create(key)
+              },
+            )
+          }
+        }
 
         LaunchedEffect(navigator) {
           navigator.navigationCommands.collect { command ->

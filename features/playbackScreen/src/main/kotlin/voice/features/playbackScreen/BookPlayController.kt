@@ -58,6 +58,7 @@ fun BookPlayScreen(bookId: BookId) {
   }
   BookPlayView(
     viewState,
+    bookId = bookId,
     onPlayClick = viewModel::playPause,
     onFastForwardClick = viewModel::fastForward,
     onRewindClick = viewModel::rewind,
