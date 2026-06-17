@@ -41,6 +41,7 @@ import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import coil.compose.AsyncImage
 import voice.core.data.BookId
 import voice.core.ui.LocalSharedTransitionScope
+import voice.core.ui.sharedCoverKey
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import kotlin.math.roundToInt
@@ -198,8 +199,6 @@ internal fun gridColumnCount(): Int {
   val columns = (widthPx / desiredPx).roundToInt()
   return columns.coerceAtLeast(2)
 }
-
-private fun sharedCoverKey(bookId: BookId) = "book-cover-${bookId.value}"
 
 @Composable
 @Preview(widthDp = 200)

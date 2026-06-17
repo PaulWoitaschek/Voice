@@ -16,6 +16,7 @@ import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import coil.compose.AsyncImage
 import voice.core.data.BookId
 import voice.core.ui.LocalSharedTransitionScope
+import voice.core.ui.sharedCoverKey
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 
@@ -56,5 +57,3 @@ internal fun Cover(
     contentDescription = stringResource(id = StringsR.string.cover_title),
   )
 }
-
-private fun sharedCoverKey(bookId: BookId) = "book-cover-${bookId.value}"

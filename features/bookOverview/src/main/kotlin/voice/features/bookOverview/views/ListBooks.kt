@@ -37,6 +37,7 @@ import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import coil.compose.AsyncImage
 import voice.core.data.BookId
 import voice.core.ui.LocalSharedTransitionScope
+import voice.core.ui.sharedCoverKey
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.core.ui.R as UiR
@@ -205,8 +206,6 @@ private fun CoverImage(
     contentDescription = null,
   )
 }
-
-private fun sharedCoverKey(bookId: BookId) = "book-cover-${bookId.value}"
 
 @Composable
 @Preview

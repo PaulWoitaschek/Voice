@@ -10,9 +10,12 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import voice.core.data.BookId
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 val LocalSharedTransitionScope = staticCompositionLocalOf<SharedTransitionScope?> { null }
+
+fun sharedCoverKey(bookId: BookId): String = "book-cover-${bookId.value}"
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
