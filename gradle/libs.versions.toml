@@ -16,7 +16,7 @@ ktlint-gradlePlugin = "0.14.0"
 retrofit = "3.0.0"
 metro = "1.2.1"
 navigation3 = "1.1.3"
-androidx-lifecycle = "2.10.0"
+androidx-lifecycle = "2.11.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
