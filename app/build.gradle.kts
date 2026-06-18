@@ -2,6 +2,7 @@
 
 import com.android.build.api.dsl.ManagedVirtualDevice
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
+import java.util.Properties
 
 plugins {
   id("voice.app")
@@ -13,7 +14,6 @@ plugins {
 }
 
 val playGoogleServicesJson = layout.projectDirectory.file("src/play/google-services.json")
-
 if (playGoogleServicesJson.asFile.canRead()) {
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
@@ -32,7 +32,7 @@ android {
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
     versionName = providers.gradleProperty("voice.versionName").orNull ?: "1.0.0"
-    versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: 1
+    versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: Int.MAX_VALUE
 
     testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
   }
@@ -57,6 +57,22 @@ android {
     }
   }
 
+  val singingPropertiesFile = layout.projectDirectory.file("../signing/signing.properties").asFile
+  val signingKeystoreFile = layout.projectDirectory.file("../signing/signing.keystore").asFile
+  val appSigningConfig = if (singingPropertiesFile.isFile) {
+    val signingProperties = Properties().apply {
+      singingPropertiesFile.inputStream().use(::load)
+    }
+    signingConfigs.create("signing") {
+      storeFile = signingKeystoreFile
+      storePassword = signingProperties.getProperty("STORE_PASSWORD")
+      keyAlias = signingProperties.getProperty("KEY_ALIAS")
+      keyPassword = signingProperties.getProperty("KEY_PASSWORD")
+    }
+  } else {
+    null
+  }
+
   buildTypes {
     getByName("release") {
       isMinifyEnabled = true
@@ -66,6 +82,7 @@ android {
       isMinifyEnabled = false
     }
     all {
+      signingConfig = appSigningConfig
       setProguardFiles(
         listOf(
           getDefaultProguardFile("proguard-android-optimize.txt"),
