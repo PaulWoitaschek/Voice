@@ -10,14 +10,14 @@
  */
 package voice.core.common.comparator
 
-import java.text.Collator
+import android.icu.text.Collator
 import java.util.Locale
 
 internal class NaturalComparator : Comparator<String> {
 
   private val collator: Collator = Collator.getInstance(Locale.getDefault()).apply {
     strength = Collator.PRIMARY
-  }
+  }.freeze()
 
   override fun compare(
     s1: String,
