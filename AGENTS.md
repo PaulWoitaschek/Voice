@@ -1,21 +1,54 @@
-## Project Overview
+# AGENTS.md
 
-Voice is a minimal, user‑focused audiobook player for Android, built for reliability and minimalism.
+## Scope
 
-## Architecture
+- This file is the root agent contract for the whole repository. `CLAUDE.md` is a symlink to it; keep `AGENTS.md` canonical.
+- Keep it short, current, and repo-specific. Do not add task-only prompts, secrets, generic Kotlin/Android advice, or rules already enforced
+  by ktlint/lint.
+- If a rule only applies under one subtree, prefer a nested `AGENTS.md` there instead of growing this file.
 
-The project architecture and gradle module structure is defined in [the Architecture Docs](docs/architecture.md)
+## Source Of Truth
+
+- Architecture and module boundaries: `docs/architecture.md`. Read it before changing dependencies, DI wiring, navigation, playback,
+  scanning, data, or module structure.
+- Module inventory: `settings.gradle.kts`.
+- Dependency versions and plugin aliases: `gradle/libs.versions.toml`.
+- Build conventions: `plugins/src/main/kotlin`.
 
 ## Commands
 
-- Assemble the app: `./gradlew :app:assembleFreeDebug`
-- Run all tests `./gradlew voiceUnitTest`
-- Run tests of a module: `./gradlew :<moduleName>:testDebugUnitTest`
-- Create and register a new gradle module: `./scripts/new_module.kts :features:<name>`
+- Assemble the free debug app: `./gradlew :app:assembleFreeDebug`.
+- Run all unit tests: `./gradlew voiceUnitTest`.
+- Run unit tests for a library module: `./gradlew :<moduleName>:testDebugUnitTest`.
+- Run app unit tests: `./gradlew :app:testFreeDebugUnitTest`.
+- Create and register a new module: `./scripts/new_module.main.kts :features:<name>`.
+- Discover available Gradle tasks with `./gradlew tasks --all` when unsure.
 
-## Testing Conventions
+## Architecture Rules
 
-- For Compose view state tests, use Molecule + Turbine. Minimal pattern:
+- Put user-facing screens and flows in `:features:*`.
+- Put reusable services, data contracts, playback, scanning, logging, strings, and shared UI in `:core:*`.
+- Keep `:app` and `:navigation` focused on app wiring and navigation integration.
+- Do not introduce feature-to-feature dependencies. Feature modules should depend on core modules and infrastructure abstractions.
+- Core modules must not depend on feature modules.
+- Define project dependencies in Gradle files using version catalog entries; do not hardcode dependency versions outside
+  `gradle/libs.versions.toml`.
+
+## Implementation Rules
+
+- Make the smallest change that satisfies the request and fits the existing module boundary.
+- Prefer existing project patterns, fakes, stores, dispatchers, DI modules, and UI components over new abstractions.
+- Keep functions small and names clear. Avoid comments unless they explain a non-obvious reason, workaround, or side effect.
+- Formatting is handled by ktlint. Do not churn code just to reformat unrelated lines.
+- Do not touch signing, release, Fastlane, CI, dependency upgrades, or large generated assets unless the task requires it.
+
+## Testing
+
+- Add or update focused tests for changed behavior, especially domain logic, state reducers/view models, persistence, navigation, and bug
+  fixes.
+- Prefer lightweight in-memory fakes such as `MemoryFeatureFlag` and `MemoryDataStore` when available.
+- For Compose view state tests, use Molecule plus Turbine:
+
   ```kotlin
   backgroundScope.launchMolecule(RecompositionMode.Immediate) {
     viewModel.viewState()
@@ -23,29 +56,14 @@ The project architecture and gradle module structure is defined in [the Architec
     awaitItem()
   }
   ```
-- Prefer lightweight in-memory fakes (e.g., `MemoryFeatureFlag`, `MemoryDataStore`) over mocks when available
 
-## Information Lookup
+- Run the narrowest meaningful test first. Broaden to `./gradlew voiceUnitTest` when touching shared behavior, cross-module contracts, or
+  risky refactors.
+- If tests cannot be run, state the concrete reason and the command that should be run.
 
-- Project Dependencies are declared in `gradle/libs.versions.toml`
-- Get an overview of all current modules from the `settings.gradle.kts` file
+## Done Criteria
 
-## Code Style
-
-* Ignore formatting, this is done by ktlint
-* Prefer small functions and clear identifiers
-* Minimal inline comments
-
-## Minimal Code Documentation
-
-* **Self‑Describing Code**
-  * Clear, concise names; one purpose per function/variable.
-* **Comment Only “Why”**
-  * Don’t explain “what” or “how.” Refactor if unclear.
-  * Use comments solely for rationale, workarounds, non‑obvious side‑effects.
-* **KDoc Sparingly**
-  * Public API: only when names and signatures don’t fully convey behavior or contracts.
-* **Tests as Documentation**
-  * Write descriptive tests illustrating usage and edge cases.
-* **Continuous Pruning**
-  * Remove or update any comments that outlive their usefulness.
+- Relevant tests or build checks have passed, or the reason they were not run is explicit.
+- The diff is scoped to the requested behavior and does not rewrite unrelated code.
+- New public behavior is covered by tests or clearly justified if not.
+- Instructions in this file stay accurate. Fix stale commands or misleading guidance when found.
