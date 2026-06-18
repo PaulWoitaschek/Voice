@@ -71,6 +71,20 @@ class NaturalOrderComparatorTest {
   }
 
   @Test
+  fun diacrytics() {
+    val expected = listOf(
+      "Čtyři dohody",
+      "Čtyři tisíce týdnů",
+      "Maryša",
+      "R.U.R.",
+      "Zákony lidské přirozenosti",
+      "Život s vysokou inteligencí",
+    )
+    val sorted = expected.sortedWith(NaturalOrderComparator.stringComparator)
+    assertEquals(expected = expected, actual = sorted)
+  }
+
+  @Test
   fun uriComparatorContent() {
     val expected = listOf(
       "folder1/1.mp3",

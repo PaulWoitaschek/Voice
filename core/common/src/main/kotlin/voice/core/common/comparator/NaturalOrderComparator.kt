@@ -4,7 +4,7 @@ import android.net.Uri
 
 object NaturalOrderComparator {
 
-  val stringComparator: Comparator<String> = IntelliJStringComparator
+  val stringComparator: Comparator<String> = NaturalComparator()
 
   val uriComparator = object : Comparator<Uri> {
     override fun compare(
