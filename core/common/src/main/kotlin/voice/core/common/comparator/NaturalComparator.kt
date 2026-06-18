@@ -1,6 +1,6 @@
 /*
  * This file contains code copied or adapted from:
- * https://github.com/JetBrains/intellij-community/blob/fc5900ddec25d8b603f315ee92c7538f29b32a8f/platform/util/base/src/com/intellij/openapi/util/text/NaturalComparator.java#L16 *
+ * https://github.com/JetBrains/intellij-community/blob/fc5900ddec25d8b603f315ee92c7538f29b32a8f/platform/util/base/src/com/intellij/openapi/util/text/NaturalComparator.java#L16
  * Original License: Apache V2
  *
  * Modifications:
