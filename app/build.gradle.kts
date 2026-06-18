@@ -82,7 +82,9 @@ android {
       isMinifyEnabled = false
     }
     all {
-      signingConfig = appSigningConfig
+      if (appSigningConfig != null) {
+        signingConfig = appSigningConfig
+      }
       setProguardFiles(
         listOf(
           getDefaultProguardFile("proguard-android-optimize.txt"),
