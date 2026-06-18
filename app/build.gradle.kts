@@ -57,11 +57,11 @@ android {
     }
   }
 
-  val singingPropertiesFile = layout.projectDirectory.file("../signing/signing.properties").asFile
+  val signingPropertiesFile = layout.projectDirectory.file("../signing/signing.properties").asFile
   val signingKeystoreFile = layout.projectDirectory.file("../signing/signing.keystore").asFile
-  val appSigningConfig = if (singingPropertiesFile.isFile) {
+  val appSigningConfig = if (signingPropertiesFile.isFile) {
     val signingProperties = Properties().apply {
-      singingPropertiesFile.inputStream().use(::load)
+      signingPropertiesFile.inputStream().use(::load)
     }
     signingConfigs.create("signing") {
       storeFile = signingKeystoreFile
