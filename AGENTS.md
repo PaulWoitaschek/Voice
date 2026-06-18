@@ -39,7 +39,7 @@
 - Make the smallest change that satisfies the request and fits the existing module boundary.
 - Prefer existing project patterns, fakes, stores, dispatchers, DI modules, and UI components over new abstractions.
 - Keep functions small and names clear. Avoid comments unless they explain a non-obvious reason, workaround, or side effect.
-- Formatting is handled by ktlint. Do not churn code just to reformat unrelated lines.
+- Formatting is handled automatically by ktlint. Do not churn code just to reformat unrelated lines.
 - Do not touch signing, release, Fastlane, CI, dependency upgrades, or large generated assets unless the task requires it.
 
 ## Testing
