@@ -71,7 +71,7 @@ class NaturalOrderComparatorTest {
   }
 
   @Test
-  fun diacrytics() {
+  fun diacritics() {
     val expected = listOf(
       "Čtyři dohody",
       "Čtyři tisíce týdnů",
