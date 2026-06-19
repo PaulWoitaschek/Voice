@@ -124,7 +124,7 @@
     <string name="settings.playback.auto_rewind.title">Automatisk bakåtspolning</string>
     <string name="settings.playback.seek_time.title">Hopplängd</string>
     <string name="settings.support.faq.title">Vanliga frågor</string>
-    <string name="settings.support.get_support.title">Få support</string>
+    <string name="settings.support.get_support.title">Få hjälp</string>
     <string name="settings.support.help_translating.title">Hjälp med att översätta Voice</string>
     <string name="settings.support.report_issue.title">Rapportera ett problem</string>
     <string name="settings.support.suggest_idea.title">Föreslå en idé</string>
@@ -142,6 +142,6 @@
     <string name="sleep_timer.action.open">Sovtimer</string>
     <string name="sleep_timer.dialog.action.decrement">Kortare</string>
     <string name="sleep_timer.dialog.action.increment">Längre</string>
-    <string name="sleep_timer.dialog.title">Söta drömmar! 🌙</string>
+    <string name="sleep_timer.dialog.title">Sov gott! 🌙</string>
     <string name="sleep_timer.end_of_chapter">Slut på kapitlet</string>
 </resources>
