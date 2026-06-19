@@ -15,7 +15,7 @@ import java.util.Locale
 
 internal class NaturalComparator : Comparator<String> {
 
-  private val collator: Collator = Collator.getInstance(Locale.getDefault()).apply {
+  private val collator: Collator = Collator.getInstance(Locale.ROOT).apply {
     strength = Collator.PRIMARY
   }.freeze()
 
