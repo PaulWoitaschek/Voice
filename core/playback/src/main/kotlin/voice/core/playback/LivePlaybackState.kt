@@ -5,6 +5,7 @@ import androidx.media3.session.MediaController
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.ChapterId
+import voice.core.playback.session.EXTRA_MARK_START_MS
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.toMediaIdOrNull
 
@@ -17,15 +18,20 @@ data class LivePlaybackState(
 )
 
 internal fun MediaController.livePlaybackStateSnapshot(bookId: BookId? = null): LivePlaybackState? {
-  val mediaId = currentMediaItem?.mediaId?.toMediaIdOrNull() as? MediaId.Chapter ?: return null
+  val currentItem = currentMediaItem ?: return null
+  val mediaId = currentItem.mediaId.toMediaIdOrNull() as? MediaId.Chapter ?: return null
   if (bookId != null && mediaId.bookId != bookId) {
     return null
   }
   val positionMs = currentPosition.takeUnless { it == C.TIME_UNSET || it < 0 } ?: return null
+  // The MediaSession exposes mark-relative positions for the notification seek bar.
+  // Translate back to file-relative for in-app state, using the markStartMs we encode
+  // in the current MediaItem's metadata extras.
+  val markStartMs = currentItem.mediaMetadata.extras?.getLong(EXTRA_MARK_START_MS, 0L) ?: 0L
   return LivePlaybackState(
     bookId = mediaId.bookId,
     chapterId = mediaId.chapterId,
-    positionMs = positionMs,
+    positionMs = positionMs + markStartMs,
     isPlaying = isPlaying,
     playbackSpeed = playbackParameters.speed,
   )

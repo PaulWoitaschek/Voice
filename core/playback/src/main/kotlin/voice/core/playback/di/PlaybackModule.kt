@@ -23,8 +23,8 @@ import voice.core.featureflag.Media3AudioOffloadFeatureFlagQualifier
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.playback.player.DurationInconsistenciesUpdater
+import voice.core.playback.player.MarkAwarePlayer
 import voice.core.playback.player.OnlyAudioRenderersFactory
-import voice.core.playback.player.VoicePlayer
 import voice.core.playback.player.onAudioSessionIdChanged
 import voice.core.playback.playstate.PlayStateDelegatingListener
 import voice.core.playback.playstate.PositionUpdater
@@ -96,7 +96,7 @@ interface PlaybackModule {
   @SingleIn(PlaybackScope::class)
   fun session(
     service: PlaybackService,
-    player: VoicePlayer,
+    player: MarkAwarePlayer,
     callback: LibrarySessionCallback,
     mainActivityIntentProvider: MainActivityIntentProvider,
     context: Context,

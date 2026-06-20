@@ -2,6 +2,7 @@ package voice.core.playback.session
 
 import android.app.Application
 import android.net.Uri
+import android.os.Bundle
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -14,6 +15,7 @@ import voice.core.data.BookComparator
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Chapter
+import voice.core.data.ChapterMark
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
@@ -140,8 +142,32 @@ class MediaItemProvider(
     sourceUri = chapter.id.toUri(),
     imageUri = content.cover?.toProvidedUri(),
     artist = content.author,
+    album = content.name,
     mediaType = MediaType.AudioBookChapter,
   )
 
+  internal fun mediaItemForMark(
+    chapter: Chapter,
+    mark: ChapterMark,
+    content: BookContent,
+  ): MediaItem {
+    val title = mark.name ?: chapter.name ?: content.name
+    val extras = Bundle().apply { putLong(EXTRA_MARK_START_MS, mark.startMs) }
+    return MediaItem(
+      title = title,
+      mediaId = MediaId.Chapter(bookId = content.id, chapterId = chapter.id),
+      browsable = false,
+      isPlayable = true,
+      sourceUri = chapter.id.toUri(),
+      imageUri = content.cover?.toProvidedUri(),
+      artist = content.author,
+      album = content.name,
+      mediaType = MediaType.AudioBookChapter,
+      extras = extras,
+    )
+  }
+
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
 }
+
+internal const val EXTRA_MARK_START_MS = "voice.markStartMs"

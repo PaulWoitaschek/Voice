@@ -1,6 +1,7 @@
 package voice.core.playback.session
 
 import android.net.Uri
+import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import kotlinx.serialization.SerializationException
@@ -23,6 +24,7 @@ internal fun MediaItem(
   sourceUri: Uri? = null,
   imageUri: Uri? = null,
   mediaType: MediaType,
+  extras: Bundle? = null,
 ): MediaItem {
   val metadata =
     MediaMetadata.Builder()
@@ -40,6 +42,7 @@ internal fun MediaItem(
           MediaType.AudioBookRoot -> MediaMetadata.MEDIA_TYPE_FOLDER_AUDIO_BOOKS
         },
       )
+      .setExtras(extras)
       .build()
 
   return MediaItem.Builder()
