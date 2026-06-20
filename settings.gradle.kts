@@ -3,6 +3,7 @@
 rootProject.name = "voice"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("NO_IMPLICIT_LOOKUP_IN_PARENT_PROJECTS")
 
 pluginManagement {
   repositories {
