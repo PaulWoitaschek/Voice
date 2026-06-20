@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import voice.core.ui.icons.VoiceIcons
+import kotlin.time.Duration.Companion.seconds
 import voice.core.strings.R as StringsR
 
 @Composable
@@ -27,7 +28,7 @@ internal fun AddingFab(
   var fabVisible by remember { mutableStateOf(false) }
   LaunchedEffect(addButtonVisible) {
     fabVisible = if (addButtonVisible) {
-      delay(1000)
+      delay(1.seconds)
       true
     } else {
       false

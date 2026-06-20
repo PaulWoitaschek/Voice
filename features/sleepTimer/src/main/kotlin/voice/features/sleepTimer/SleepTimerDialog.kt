@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import voice.core.ui.icons.VoiceIcons
+import kotlin.time.Duration.Companion.milliseconds
 import voice.core.strings.R as StringsR
 
 @Composable
@@ -123,10 +124,10 @@ private fun ContinuousPressIcon(
 
   LaunchedEffect(isPressed, onEmit) {
     if (isPressed) {
-      delay(500)
+      delay(500.milliseconds)
       while (isPressed) {
         onEmit()
-        delay(100)
+        delay(100.milliseconds)
       }
     }
   }
