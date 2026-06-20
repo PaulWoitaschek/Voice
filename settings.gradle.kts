@@ -16,6 +16,9 @@ FeaturePreviews.Feature.entries.forEach { feature ->
       -> false
   }
   if (enable) {
+    check(feature.isActive){
+      "Feature $feature is not active"
+    }
     enableFeaturePreview(feature.name)
   }
 }
