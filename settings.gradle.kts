@@ -1,8 +1,27 @@
 @file:Suppress("UnstableApiUsage")
 
+import org.gradle.api.internal.FeaturePreviews
+
 rootProject.name = "voice"
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+FeaturePreviews.Feature.entries.forEach { feature ->
+  val enable = when (feature) {
+    FeaturePreviews.Feature.TYPESAFE_PROJECT_ACCESSORS,
+    FeaturePreviews.Feature.STABLE_CONFIGURATION_CACHE,
+    FeaturePreviews.Feature.NO_IMPLICIT_LOOKUP_IN_PARENT_PROJECTS,
+      -> true
+    FeaturePreviews.Feature.GROOVY_COMPILATION_AVOIDANCE,
+    FeaturePreviews.Feature.INTERNAL_BUILD_SERVICE_USAGE,
+    FeaturePreviews.Feature.ALWAYS_INACTIVE,
+      -> false
+  }
+  if (enable) {
+    check(feature.isActive){
+      "Feature $feature is not active"
+    }
+    enableFeaturePreview(feature.name)
+  }
+}
 
 pluginManagement {
   repositories {
