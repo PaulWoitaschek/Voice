@@ -1,15 +1,11 @@
 package voice.features.folderPicker
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
-import androidx.compose.material.icons.outlined.AudioFile
-import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import voice.core.data.folders.FolderType
+import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
 @Composable
@@ -21,10 +17,10 @@ internal fun FolderTypeIcon(folderType: FolderType) {
 }
 
 private fun FolderType.icon(): ImageVector = when (this) {
-  FolderType.SingleFile -> Icons.Outlined.AudioFile
-  FolderType.SingleFolder -> Icons.Outlined.Folder
-  FolderType.Root -> Icons.AutoMirrored.Outlined.LibraryBooks
-  FolderType.Author -> Icons.Outlined.Person
+  FolderType.SingleFile -> VoiceIcons.AudioFile
+  FolderType.SingleFolder -> VoiceIcons.Folder
+  FolderType.Root -> VoiceIcons.LibraryBooks
+  FolderType.Author -> VoiceIcons.Person
 }
 
 @Composable

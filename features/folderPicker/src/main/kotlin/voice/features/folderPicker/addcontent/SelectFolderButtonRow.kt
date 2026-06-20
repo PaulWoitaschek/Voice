@@ -9,15 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AudioFile
-import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.logging.api.Logger
 import voice.core.strings.R
+import voice.core.ui.icons.VoiceIcons
 import voice.features.folderPicker.folderPicker.FileTypeSelection
 
 @Composable
@@ -41,7 +39,7 @@ internal fun SelectFolderButtonRow(onAdd: (FileTypeSelection, Uri) -> Unit) {
       }
 
     SelectFolderButton(
-      icon = Icons.Outlined.Folder,
+      icon = VoiceIcons.Folder,
       text = stringResource(id = R.string.folder_add_type_folder),
       onClick = {
         try {
@@ -53,7 +51,7 @@ internal fun SelectFolderButtonRow(onAdd: (FileTypeSelection, Uri) -> Unit) {
     )
     Spacer(modifier = Modifier.size(8.dp))
     SelectFolderButton(
-      icon = Icons.Outlined.AudioFile,
+      icon = VoiceIcons.AudioFile,
       text = stringResource(id = R.string.folder_add_type_file),
       onClick = {
         try {

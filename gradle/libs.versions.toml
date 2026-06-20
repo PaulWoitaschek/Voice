@@ -90,8 +90,6 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test" }
 compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
 compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha22" }
@@ -111,8 +109,6 @@ compose = [
   "compose-ui-ui",
   "compose-ui-tooling-preview",
   "compose-foundation",
-  "compose-material-icons-core",
-  "compose-material-icons-extended",
   "compose-animation-graphics",
   "compose-animation-animation",
   "androidxCore",

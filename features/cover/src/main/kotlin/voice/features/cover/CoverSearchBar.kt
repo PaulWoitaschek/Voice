@@ -2,9 +2,6 @@ package voice.features.cover
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.SearchBar
@@ -14,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
+import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun CoverSearchBar(
@@ -34,7 +32,7 @@ internal fun CoverSearchBar(
         leadingIcon = {
           IconButton(onClick = onCloseClick) {
             Icon(
-              imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+              imageVector = VoiceIcons.ArrowBack,
               contentDescription = stringResource(id = R.string.common_action_close),
             )
           }
@@ -46,7 +44,7 @@ internal fun CoverSearchBar(
             },
           ) {
             Icon(
-              imageVector = Icons.Outlined.Close,
+              imageVector = VoiceIcons.Close,
               contentDescription = stringResource(id = R.string.common_action_delete),
             )
           }

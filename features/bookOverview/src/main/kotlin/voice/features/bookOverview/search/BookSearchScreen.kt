@@ -11,9 +11,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.SentimentSatisfied
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -24,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
+import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.plus
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.views.GridBook
@@ -51,7 +49,7 @@ internal fun BookSearchContent(
             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
             leadingContent = {
               Icon(
-                imageVector = Icons.Outlined.History,
+                imageVector = VoiceIcons.History,
                 contentDescription = stringResource(id = StringsR.string.cover_search_recent_content_description),
               )
             },
@@ -64,7 +62,7 @@ internal fun BookSearchContent(
             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
             leadingContent = {
               Icon(
-                imageVector = Icons.Outlined.SentimentSatisfied,
+                imageVector = VoiceIcons.SentimentSatisfied,
                 contentDescription = stringResource(id = StringsR.string.cover_search_author_content_description),
               )
             },

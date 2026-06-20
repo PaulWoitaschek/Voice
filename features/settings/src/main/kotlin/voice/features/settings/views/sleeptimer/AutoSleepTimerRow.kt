@@ -3,8 +3,6 @@ package voice.features.settings.views.sleeptimer
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -15,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.ui.VoiceTheme
+import voice.core.ui.icons.VoiceIcons
 import java.time.LocalTime
 import voice.core.strings.R as StringsR
 
@@ -28,7 +27,7 @@ internal fun AutoSleepTimerRow(
   Row(Modifier.padding(top = 8.dp)) {
     Icon(
       modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp),
-      imageVector = Icons.Outlined.Bedtime,
+      imageVector = VoiceIcons.Bedtime,
       contentDescription = stringResource(StringsR.string.settings_auto_sleep_timer_title),
     )
     Column(

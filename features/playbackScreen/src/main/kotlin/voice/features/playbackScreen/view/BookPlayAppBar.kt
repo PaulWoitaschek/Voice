@@ -5,11 +5,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Bedtime
-import androidx.compose.material.icons.outlined.BedtimeOff
-import androidx.compose.material.icons.outlined.CollectionsBookmark
-import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -22,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
+import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState
 
 @Composable
@@ -38,12 +34,13 @@ internal fun BookPlayAppBar(
 ) {
   val appBarActions: @Composable RowScope.() -> Unit = {
     IconButton(onClick = onSleepTimerClick) {
+      val sleepTimerIcon = if (viewState.sleepTimerState is BookPlayViewState.SleepTimerViewState.Disabled) {
+        VoiceIcons.Bedtime
+      } else {
+        VoiceIcons.BedtimeOff
+      }
       Icon(
-        imageVector = if (viewState.sleepTimerState is BookPlayViewState.SleepTimerViewState.Disabled) {
-          Icons.Outlined.Bedtime
-        } else {
-          Icons.Outlined.BedtimeOff
-        },
+        imageVector = sleepTimerIcon,
         contentDescription = stringResource(id = R.string.sleep_timer_action_open),
       )
     }
@@ -59,13 +56,13 @@ internal fun BookPlayAppBar(
       contentAlignment = Alignment.Center,
     ) {
       Icon(
-        imageVector = Icons.Outlined.CollectionsBookmark,
+        imageVector = VoiceIcons.CollectionsBookmark,
         contentDescription = stringResource(id = R.string.bookmark_title),
       )
     }
     IconButton(onClick = onSpeedChangeClick) {
       Icon(
-        imageVector = Icons.Outlined.Speed,
+        imageVector = VoiceIcons.Speed,
         contentDescription = stringResource(id = R.string.playback_speed_title),
       )
     }

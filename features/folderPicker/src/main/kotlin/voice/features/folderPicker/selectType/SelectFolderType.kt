@@ -12,8 +12,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +37,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
+import voice.core.ui.icons.VoiceIcons
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.Origin
@@ -190,7 +189,7 @@ private fun AppBar(
     navigationIcon = {
       IconButton(onClick = onBackClick) {
         Icon(
-          imageVector = Icons.Outlined.Close,
+          imageVector = VoiceIcons.Close,
           contentDescription = stringResource(id = StringsR.string.common_action_close),
         )
       }
