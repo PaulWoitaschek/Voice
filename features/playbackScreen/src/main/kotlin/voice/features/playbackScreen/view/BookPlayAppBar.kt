@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -83,7 +84,7 @@ internal fun BookPlayAppBar(
       },
     )
   } else {
-    LargeTopAppBar(
+    MediumTopAppBar(
       navigationIcon = {
         CloseIcon(onCloseClick)
       },

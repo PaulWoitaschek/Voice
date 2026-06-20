@@ -35,7 +35,7 @@ internal fun Cover(
         )
       }
       .clip(RoundedCornerShape(20.dp)),
-    contentScale = ContentScale.Crop,
+    contentScale = ContentScale.Fit,
     model = cover,
     placeholder = painterResource(id = UiR.drawable.album_art),
     error = painterResource(id = UiR.drawable.album_art),
