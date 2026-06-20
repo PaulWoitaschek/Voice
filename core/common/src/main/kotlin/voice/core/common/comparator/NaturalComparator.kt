@@ -10,14 +10,15 @@
  */
 package voice.core.common.comparator
 
-import android.icu.text.Collator
+import java.text.Collator
 import java.util.Locale
 
-internal class NaturalComparator : Comparator<String> {
-
-  private val collator: Collator = Collator.getInstance(Locale.ROOT).apply {
-    strength = Collator.PRIMARY
-  }.freeze()
+internal object NaturalComparator : Comparator<String> {
+  private val collatorThreadLocal = ThreadLocal.withInitial {
+    Collator.getInstance(Locale.ROOT).apply {
+      strength = Collator.PRIMARY
+    }
+  }
 
   override fun compare(
     s1: String,
@@ -26,11 +27,14 @@ internal class NaturalComparator : Comparator<String> {
     if (s1 == s2) {
       return 0
     }
-    return naturalCompare(s1 = s1, s2 = s2, length1 = s1.length, length2 = s2.length, ignoreCase = true, likeFileNames = true)
+    return with(collatorThreadLocal.get()!!) {
+      naturalCompare(s1 = s1, s2 = s2, length1 = s1.length, length2 = s2.length, ignoreCase = true, likeFileNames = true)
+    }
   }
 
   private fun isDecimalDigit(c: Char) = c in '0'..'9'
 
+  context(collator: Collator)
   private fun naturalCompare(
     s1: String,
     s2: String,
@@ -121,6 +125,7 @@ internal class NaturalComparator : Comparator<String> {
     return 0
   }
 
+  context(collator: Collator)
   private fun compareChars(
     lhs: Char,
     rhs: Char,
