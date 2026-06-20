@@ -29,16 +29,6 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.Analytics
-import voice.core.ui.icons.Book
-import voice.core.ui.icons.BugReport
-import voice.core.ui.icons.Close
-import voice.core.ui.icons.Favorite
-import voice.core.ui.icons.GridView
-import voice.core.ui.icons.Help
-import voice.core.ui.icons.Language
-import voice.core.ui.icons.Lightbulb
-import voice.core.ui.icons.ViewList
 import voice.core.ui.icons.VoiceIcons
 import voice.features.settings.SettingsListener
 import voice.features.settings.SettingsViewEffect

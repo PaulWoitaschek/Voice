@@ -41,10 +41,6 @@ import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceBlue
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.AutoAwesome
-import voice.core.ui.icons.Coffee
-import voice.core.ui.icons.Construction
-import voice.core.ui.icons.LockOpen
 import voice.core.ui.icons.VoiceIcons
 import voice.navigation.BottomSheetNav
 import voice.navigation.Destination

@@ -6,7 +6,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import voice.core.ui.icons.Book
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 

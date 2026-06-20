@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import voice.core.ui.icons.Tag
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 

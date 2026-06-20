@@ -15,8 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.logging.api.Logger
 import voice.core.strings.R
-import voice.core.ui.icons.AudioFile
-import voice.core.ui.icons.Folder
 import voice.core.ui.icons.VoiceIcons
 import voice.features.folderPicker.folderPicker.FileTypeSelection
 

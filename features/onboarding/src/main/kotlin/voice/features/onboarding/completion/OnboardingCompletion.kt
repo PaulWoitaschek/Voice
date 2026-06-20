@@ -30,7 +30,6 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.ArrowBack
 import voice.core.ui.icons.VoiceIcons
 import voice.features.onboarding.R
 import voice.navigation.Destination

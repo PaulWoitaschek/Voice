@@ -27,9 +27,6 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.folders.FolderType
-import voice.core.ui.icons.Add
-import voice.core.ui.icons.ArrowBack
-import voice.core.ui.icons.Delete
 import voice.core.ui.icons.VoiceIcons
 import voice.features.folderPicker.FolderTypeIcon
 import voice.navigation.Destination

@@ -2,13 +2,6 @@ package voice.features.bookOverview.bottomSheet
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
-import voice.core.ui.icons.Delete
-import voice.core.ui.icons.Done
-import voice.core.ui.icons.Download
-import voice.core.ui.icons.HourglassEmpty
-import voice.core.ui.icons.Image
-import voice.core.ui.icons.NotStarted
-import voice.core.ui.icons.Title
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 

@@ -43,9 +43,6 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.ArrowBack
-import voice.core.ui.icons.ArrowForward
-import voice.core.ui.icons.Settings
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.playButtonSharedBoundsModifier
 import voice.features.bookOverview.bottomSheet.BottomSheetContent

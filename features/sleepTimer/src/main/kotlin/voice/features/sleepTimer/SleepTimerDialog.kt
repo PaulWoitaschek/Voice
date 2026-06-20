@@ -35,8 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import voice.core.ui.icons.Add
-import voice.core.ui.icons.Remove
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 

@@ -33,7 +33,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.ArrowBack
 import voice.core.ui.icons.VoiceIcons
 import voice.features.onboarding.R
 import voice.core.strings.R as StringsR

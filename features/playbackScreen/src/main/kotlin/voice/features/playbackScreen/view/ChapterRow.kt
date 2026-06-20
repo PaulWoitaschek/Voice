@@ -18,9 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
-import voice.core.ui.icons.ChevronLeft
-import voice.core.ui.icons.ChevronRight
-import voice.core.ui.icons.ExpandMore
 import voice.core.ui.icons.VoiceIcons
 
 @Composable

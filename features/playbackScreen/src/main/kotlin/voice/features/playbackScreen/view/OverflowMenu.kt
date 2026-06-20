@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import voice.core.strings.R
-import voice.core.ui.icons.MoreVert
 import voice.core.ui.icons.VoiceIcons
 
 @Composable

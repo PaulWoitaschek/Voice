@@ -11,8 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
-import voice.core.ui.icons.ArrowBack
-import voice.core.ui.icons.Close
 import voice.core.ui.icons.VoiceIcons
 
 @Composable

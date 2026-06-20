@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import voice.core.ui.icons.Check
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 

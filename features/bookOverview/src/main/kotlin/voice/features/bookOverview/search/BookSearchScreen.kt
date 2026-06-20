@@ -21,8 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
-import voice.core.ui.icons.History
-import voice.core.ui.icons.SentimentSatisfied
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.plus
 import voice.features.bookOverview.overview.BookOverviewLayoutMode

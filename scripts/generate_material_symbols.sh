@@ -13,29 +13,39 @@ find "${OUT_DIR}" -maxdepth 1 -type f -name '*.kt' -delete
 cat > "${OUT_DIR}/VoiceIcons.kt" <<EOF
 package ${PACKAGE}
 
-public object VoiceIcons
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.unit.dp
+
+public object VoiceIcons {
 EOF
 
 generate_icon() {
   local icon_name="$1"
   local property_name="$2"
   local source_url="${BASE_URL}/${icon_name}.kt?var=${VARIANT}"
-  local output_file="${OUT_DIR}/${property_name}.kt"
 
   {
-    printf 'package %s\n\n' "${PACKAGE}"
+    printf '\n'
     printf '/*\n'
     printf ' * Source: %s\n' "${source_url}"
     printf ' * Generated: %s\n' "${GENERATED_AT}"
     printf ' */\n'
     curl --compressed --fail --silent --show-error --location "${source_url}" |
       perl -0pe '
-        s/^package com\.example\.test\n\n//;
-        s/\@Suppress\("CheckReturnValue"\)\npublic val '"${icon_name}"': ImageVector\n  get\(\) \{\n    if \(_'"${icon_name}"' != null\) \{\n      return _'"${icon_name}"'!!\n    \}\n    _'"${icon_name}"' =/\@Suppress("UnusedReceiverParameter")\npublic val VoiceIcons.'"${property_name}"': ImageVector\n  get() =/;
+        s/^package com\.example\.test\n\n(?:import [^\n]+\n)+\n//;
+        s/\@Suppress\("CheckReturnValue"\)\npublic val '"${icon_name}"': ImageVector\n  get\(\) \{\n    if \(_'"${icon_name}"' != null\) \{\n      return _'"${icon_name}"'!!\n    \}\n    _'"${icon_name}"' =/internal val '"${property_name}"'Icon: ImageVector =/;
+        s/internal val '"${property_name}"'Icon: ImageVector =/  public val '"${property_name}"': ImageVector =/;
         s/name = "'"${icon_name}"'"/name = "'"${property_name}"'"/g;
+        s/PathFillType\.Companion\./PathFillType./g;
         s/\n    return _'"${icon_name}"'!!\n  \}\n\nprivate var _'"${icon_name}"': ImageVector\? = null\n?/\n/s;
       '
-  } > "${output_file}"
+  } >> "${OUT_DIR}/VoiceIcons.kt"
 }
 
 generate_icon add Add
@@ -86,3 +96,5 @@ generate_icon timer Timer
 generate_icon title Title
 generate_icon undo Undo
 generate_icon view_list ViewList
+
+printf '}\n' >> "${OUT_DIR}/VoiceIcons.kt"

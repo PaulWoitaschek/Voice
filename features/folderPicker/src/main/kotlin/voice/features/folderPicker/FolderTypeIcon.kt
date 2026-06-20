@@ -5,10 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import voice.core.data.folders.FolderType
-import voice.core.ui.icons.AudioFile
-import voice.core.ui.icons.Folder
-import voice.core.ui.icons.LibraryBooks
-import voice.core.ui.icons.Person
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
