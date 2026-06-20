@@ -128,7 +128,7 @@ android {
   }
 }
 
-val validatePlayGoogleServices by tasks.registering {
+val validatePlayGoogleServices = tasks.register("validatePlayGoogleServices") {
   val playGoogleServicesJsonPath = playGoogleServicesJson.asFile.absolutePath
 
   doLast {
