@@ -13,6 +13,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -91,6 +92,7 @@ class VoicePlayerTest {
     repo = mockk {
       coEvery { get(bookId) } answers { currentBook }
       coEvery { updateBook(any(), any()) } just Runs
+      every { flow(any()) } returns emptyFlow()
     },
     currentBookStoreId = mockk {
       every { data } returns flowOf(bookId)

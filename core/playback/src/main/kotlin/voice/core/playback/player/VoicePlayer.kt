@@ -10,6 +10,9 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.PlayerMessage
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -52,6 +55,8 @@ class VoicePlayer(
   private val sleepTimer: SleepTimer,
   private val analytics: Analytics,
 ) : ForwardingPlayer(player) {
+
+  private var bookMetadataJob: Job? = null
 
   fun forceSeekToNext() {
     scope.launch {
@@ -296,10 +301,29 @@ class VoicePlayer(
             book.content.positionInChapter,
           )
           registerChapterMarkCallbacks(book.chapters)
+          observeBookMetadata(mediaId.id)
         }
       } else {
         Logger.w("Unexpected mediaId=$mediaId")
       }
+    }
+  }
+
+  private fun observeBookMetadata(bookId: BookId) {
+    bookMetadataJob?.cancel()
+    bookMetadataJob = scope.launch {
+      repo.flow(bookId)
+        .filterNotNull()
+        .distinctUntilChangedBy { book -> book.content.name to book.content.cover }
+        .collect { book ->
+          val itemCount = player.mediaItemCount
+          val chapters = mediaItemProvider.chapters(book)
+          chapters.forEachIndexed { index, newItem ->
+            if (index < itemCount) {
+              player.replaceMediaItem(index, newItem)
+            }
+          }
+        }
     }
   }
 
