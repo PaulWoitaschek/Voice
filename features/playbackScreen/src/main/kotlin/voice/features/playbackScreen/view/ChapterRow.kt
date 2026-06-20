@@ -7,10 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ChevronLeft
-import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
+import voice.core.ui.icons.ChevronLeft
+import voice.core.ui.icons.ChevronRight
+import voice.core.ui.icons.ExpandMore
+import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun ChapterRow(
@@ -41,7 +41,7 @@ internal fun ChapterRow(
       IconButton(onClick = onSkipToPrevious) {
         Icon(
           modifier = Modifier.size(36.dp),
-          imageVector = Icons.Outlined.ChevronLeft,
+          imageVector = VoiceIcons.ChevronLeft,
           contentDescription = stringResource(id = R.string.playback_chapter_previous),
         )
       }
@@ -66,7 +66,7 @@ internal fun ChapterRow(
       if (nextPreviousVisible) {
         Icon(
           modifier = Modifier.size(28.dp),
-          imageVector = Icons.Outlined.ExpandMore,
+          imageVector = VoiceIcons.ExpandMore,
           contentDescription = stringResource(id = R.string.playback_chapter_next),
         )
       }
@@ -75,7 +75,7 @@ internal fun ChapterRow(
       IconButton(onClick = onSkipToNext) {
         Icon(
           modifier = Modifier.size(36.dp),
-          imageVector = Icons.Outlined.ChevronRight,
+          imageVector = VoiceIcons.ChevronRight,
           contentDescription = stringResource(id = R.string.playback_chapter_next),
         )
       }

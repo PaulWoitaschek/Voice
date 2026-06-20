@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -47,6 +43,10 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
+import voice.core.ui.icons.ArrowBack
+import voice.core.ui.icons.ArrowForward
+import voice.core.ui.icons.Settings
+import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.playButtonSharedBoundsModifier
 import voice.features.bookOverview.bottomSheet.BottomSheetContent
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
@@ -256,9 +256,9 @@ private fun Dialog(
         onDismissRequest = onFolderPickerMovedDialogDismiss,
         icon = {
           Row {
-            Icon(imageVector = Icons.AutoMirrored.Default.ArrowForward, contentDescription = null)
-            Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)
-            Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
+            Icon(imageVector = VoiceIcons.ArrowForward, contentDescription = null)
+            Icon(imageVector = VoiceIcons.Settings, contentDescription = null)
+            Icon(imageVector = VoiceIcons.ArrowBack, contentDescription = null)
           }
         },
         title = {

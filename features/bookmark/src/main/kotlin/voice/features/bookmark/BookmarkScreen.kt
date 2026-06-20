@@ -11,12 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
@@ -52,6 +46,12 @@ import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.data.Bookmark
+import voice.core.ui.icons.Add
+import voice.core.ui.icons.Close
+import voice.core.ui.icons.Delete
+import voice.core.ui.icons.MoreVert
+import voice.core.ui.icons.Timer
+import voice.core.ui.icons.VoiceIcons
 import voice.features.bookmark.dialogs.AddBookmarkDialog
 import voice.features.bookmark.dialogs.EditBookmarkDialog
 import voice.navigation.Destination
@@ -123,7 +123,7 @@ internal fun BookmarkScreen(
         navigationIcon = {
           IconButton(onClick = onClose) {
             Icon(
-              imageVector = Icons.Default.Close,
+              imageVector = VoiceIcons.Close,
               contentDescription = stringResource(id = StringsR.string.common_action_close),
             )
           }
@@ -134,7 +134,7 @@ internal fun BookmarkScreen(
       FloatingActionButton(
         onClick = onAdd,
         content = {
-          Icon(Icons.Default.Add, contentDescription = stringResource(id = StringsR.string.common_action_add))
+          Icon(imageVector = VoiceIcons.Add, contentDescription = stringResource(id = StringsR.string.common_action_add))
         },
       )
     },
@@ -216,7 +216,7 @@ internal fun BookmarkItem(
           modifier = Modifier
             .padding(start = 16.dp)
             .align(Alignment.CenterStart),
-          imageVector = Icons.Outlined.Delete,
+          imageVector = VoiceIcons.Delete,
           contentDescription = stringResource(id = StringsR.string.common_action_delete),
           tint = Color.White,
         )
@@ -237,7 +237,7 @@ internal fun BookmarkItem(
                 modifier = Modifier
                   .padding(start = 4.dp)
                   .size(16.dp),
-                imageVector = Icons.Outlined.Timer,
+                imageVector = VoiceIcons.Timer,
                 contentDescription = stringResource(StringsR.string.sleep_timer_action_open),
               )
             }
@@ -251,7 +251,7 @@ internal fun BookmarkItem(
               },
               content = {
                 Icon(
-                  imageVector = Icons.Default.MoreVert,
+                  imageVector = VoiceIcons.MoreVert,
                   contentDescription = stringResource(id = StringsR.string.common_action_edit),
                 )
               },

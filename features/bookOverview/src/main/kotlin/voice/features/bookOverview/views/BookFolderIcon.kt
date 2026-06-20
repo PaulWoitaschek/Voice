@@ -1,13 +1,13 @@
 package voice.features.bookOverview.views
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import voice.core.ui.icons.Book
+import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
 @Composable
@@ -19,7 +19,7 @@ internal fun BookFolderIcon(
   Box(modifier) {
     IconButton(onClick = onClick) {
       Icon(
-        imageVector = Icons.Outlined.Book,
+        imageVector = VoiceIcons.Book,
         contentDescription = stringResource(StringsR.string.library_folders_title),
       )
     }

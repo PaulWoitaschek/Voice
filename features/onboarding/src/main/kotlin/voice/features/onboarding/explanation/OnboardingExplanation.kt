@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
@@ -35,6 +33,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
+import voice.core.ui.icons.ArrowBack
+import voice.core.ui.icons.VoiceIcons
 import voice.features.onboarding.R
 import voice.core.strings.R as StringsR
 
@@ -71,7 +71,7 @@ fun OnboardingExplanation(
         navigationIcon = {
           IconButton(onClick = onClose) {
             Icon(
-              imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+              imageVector = VoiceIcons.ArrowBack,
               contentDescription = stringResource(id = StringsR.string.common_action_close),
             )
           }

@@ -5,10 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +27,10 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.folders.FolderType
+import voice.core.ui.icons.Add
+import voice.core.ui.icons.ArrowBack
+import voice.core.ui.icons.Delete
+import voice.core.ui.icons.VoiceIcons
 import voice.features.folderPicker.FolderTypeIcon
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -91,7 +91,7 @@ private fun FolderOverviewView(
         navigationIcon = {
           IconButton(onClick = onCloseClick) {
             Icon(
-              imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+              imageVector = VoiceIcons.ArrowBack,
               contentDescription = stringResource(StringsR.string.common_action_close),
             )
           }
@@ -110,7 +110,7 @@ private fun FolderOverviewView(
           },
           icon = {
             Icon(
-              imageVector = Icons.Outlined.Add,
+              imageVector = VoiceIcons.Add,
               contentDescription = text,
             )
           },
@@ -133,7 +133,7 @@ private fun FolderOverviewView(
                 },
                 content = {
                   Icon(
-                    imageVector = Icons.Outlined.Delete,
+                    imageVector = VoiceIcons.Delete,
                     contentDescription = stringResource(StringsR.string.common_action_delete),
                   )
                 },

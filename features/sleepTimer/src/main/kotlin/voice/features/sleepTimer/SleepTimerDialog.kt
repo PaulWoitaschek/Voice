@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -38,6 +35,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import voice.core.ui.icons.Add
+import voice.core.ui.icons.Remove
+import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
 @Composable
@@ -91,12 +91,12 @@ fun SleepTimerDialog(
           Row {
             ContinuousPressIcon(
               onEmit = onDecrementSleepTime,
-              icon = Icons.Outlined.Remove,
+              icon = VoiceIcons.Remove,
               contentDescription = stringResource(id = StringsR.string.sleep_timer_dialog_action_decrement),
             )
             ContinuousPressIcon(
               onEmit = onIncrementSleepTime,
-              icon = Icons.Outlined.Add,
+              icon = VoiceIcons.Add,
               contentDescription = stringResource(id = StringsR.string.sleep_timer_dialog_action_increment),
             )
           }

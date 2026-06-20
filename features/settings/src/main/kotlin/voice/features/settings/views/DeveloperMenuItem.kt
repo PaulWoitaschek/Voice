@@ -2,13 +2,13 @@ package voice.features.settings.views
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Laptop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import voice.core.ui.icons.Laptop
+import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun DeveloperMenuItem(onClick: () -> Unit) {
@@ -20,7 +20,7 @@ internal fun DeveloperMenuItem(onClick: () -> Unit) {
       },
     leadingContent = {
       Icon(
-        imageVector = Icons.Outlined.Laptop,
+        imageVector = VoiceIcons.Laptop,
         contentDescription = null,
       )
     },

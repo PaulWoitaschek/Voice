@@ -2,17 +2,6 @@ package voice.features.settings.views
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material.icons.automirrored.outlined.ViewList
-import androidx.compose.material.icons.outlined.Analytics
-import androidx.compose.material.icons.outlined.Book
-import androidx.compose.material.icons.outlined.BugReport
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -40,6 +29,17 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceTheme
+import voice.core.ui.icons.Analytics
+import voice.core.ui.icons.Book
+import voice.core.ui.icons.BugReport
+import voice.core.ui.icons.Close
+import voice.core.ui.icons.Favorite
+import voice.core.ui.icons.GridView
+import voice.core.ui.icons.Help
+import voice.core.ui.icons.Language
+import voice.core.ui.icons.Lightbulb
+import voice.core.ui.icons.ViewList
+import voice.core.ui.icons.VoiceIcons
 import voice.features.settings.SettingsListener
 import voice.features.settings.SettingsViewEffect
 import voice.features.settings.SettingsViewModel
@@ -85,7 +85,7 @@ private fun Settings(
             },
           ) {
             Icon(
-              imageVector = Icons.Outlined.Close,
+              imageVector = VoiceIcons.Close,
               contentDescription = stringResource(StringsR.string.common_action_close),
             )
           }
@@ -106,7 +106,7 @@ private fun Settings(
           modifier = Modifier.clickable { listener.openFolderPicker() },
           leadingContent = {
             Icon(
-              imageVector = Icons.Outlined.Book,
+              imageVector = VoiceIcons.Book,
               contentDescription = stringResource(StringsR.string.library_folders_title),
             )
           },
@@ -135,12 +135,15 @@ private fun Settings(
         ListItem(
           modifier = Modifier.clickable { listener.toggleGrid() },
           leadingContent = {
-            val imageVector = if (viewState.useGrid) {
-              Icons.Outlined.GridView
+            val icon = if (viewState.useGrid) {
+              VoiceIcons.GridView
             } else {
-              Icons.AutoMirrored.Outlined.ViewList
+              VoiceIcons.ViewList
             }
-            Icon(imageVector, stringResource(StringsR.string.settings_library_use_grid_title))
+            Icon(
+              imageVector = icon,
+              contentDescription = stringResource(StringsR.string.settings_library_use_grid_title),
+            )
           },
           headlineContent = { Text(stringResource(StringsR.string.settings_library_use_grid_title)) },
           trailingContent = {
@@ -176,7 +179,7 @@ private fun Settings(
             modifier = Modifier.clickable { listener.openSupportVoice() },
             leadingContent = {
               Icon(
-                imageVector = Icons.Outlined.Favorite,
+                imageVector = VoiceIcons.Favorite,
                 contentDescription = stringResource(StringsR.string.settings_support_support_voice_title),
                 tint = MaterialTheme.colorScheme.primary,
               )
@@ -196,7 +199,7 @@ private fun Settings(
           modifier = Modifier.clickable { listener.suggestIdea() },
           leadingContent = {
             Icon(
-              imageVector = Icons.Outlined.Lightbulb,
+              imageVector = VoiceIcons.Lightbulb,
               contentDescription = stringResource(StringsR.string.settings_support_suggest_idea_title),
             )
           },
@@ -211,7 +214,7 @@ private fun Settings(
           modifier = Modifier.clickable { listener.getSupport() },
           leadingContent = {
             Icon(
-              imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
+              imageVector = VoiceIcons.Help,
               contentDescription = stringResource(StringsR.string.settings_support_get_support_title),
             )
           },
@@ -226,7 +229,7 @@ private fun Settings(
           modifier = Modifier.clickable { listener.openBugReport() },
           leadingContent = {
             Icon(
-              imageVector = Icons.Outlined.BugReport,
+              imageVector = VoiceIcons.BugReport,
               contentDescription = stringResource(StringsR.string.settings_support_report_issue_title),
             )
           },
@@ -240,7 +243,7 @@ private fun Settings(
           modifier = Modifier.clickable { listener.openTranslations() },
           leadingContent = {
             Icon(
-              imageVector = Icons.Outlined.Language,
+              imageVector = VoiceIcons.Language,
               contentDescription = stringResource(StringsR.string.settings_support_help_translating_title),
             )
           },
@@ -254,7 +257,7 @@ private fun Settings(
           modifier = Modifier.clickable { listener.openFaq() },
           leadingContent = {
             Icon(
-              imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
+              imageVector = VoiceIcons.Help,
               contentDescription = stringResource(StringsR.string.settings_support_faq_title),
             )
           },
@@ -297,7 +300,7 @@ private fun AnalyticsRow(
     modifier = Modifier.clickable { toggle() },
     leadingContent = {
       Icon(
-        imageVector = Icons.Outlined.Analytics,
+        imageVector = VoiceIcons.Analytics,
         contentDescription = null,
       )
     },

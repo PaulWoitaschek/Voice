@@ -14,11 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AutoAwesome
-import androidx.compose.material.icons.outlined.Coffee
-import androidx.compose.material.icons.outlined.Construction
-import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -46,6 +41,11 @@ import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.ui.VoiceBlue
 import voice.core.ui.VoiceTheme
+import voice.core.ui.icons.AutoAwesome
+import voice.core.ui.icons.Coffee
+import voice.core.ui.icons.Construction
+import voice.core.ui.icons.LockOpen
+import voice.core.ui.icons.VoiceIcons
 import voice.navigation.BottomSheetNav
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -108,7 +108,7 @@ private fun DonationContent(listener: SupportListener) {
       ),
     ) {
       Icon(
-        imageVector = Icons.Outlined.Coffee,
+        imageVector = VoiceIcons.Coffee,
         contentDescription = null,
         modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
       )
@@ -188,17 +188,17 @@ private fun SupportHelpsList() {
     )
     Spacer(Modifier.size(4.dp))
     SupportInfoRow(
-      icon = Icons.Outlined.Construction,
+      icon = VoiceIcons.Construction,
       title = stringResource(StringsR.string.support_helps_maintenance),
     )
     HorizontalDivider()
     SupportInfoRow(
-      icon = Icons.Outlined.AutoAwesome,
+      icon = VoiceIcons.AutoAwesome,
       title = stringResource(StringsR.string.support_helps_features),
     )
     HorizontalDivider()
     SupportInfoRow(
-      icon = Icons.Outlined.LockOpen,
+      icon = VoiceIcons.LockOpen,
       title = stringResource(StringsR.string.support_helps_open_source),
     )
   }

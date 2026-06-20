@@ -3,8 +3,6 @@ package voice.features.settings.developer
 import android.content.ClipData
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -28,6 +26,8 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.launch
 import voice.core.common.rootGraphAs
+import voice.core.ui.icons.Close
+import voice.core.ui.icons.VoiceIcons
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
@@ -49,7 +49,7 @@ private fun DeveloperSettings(
         navigationIcon = {
           IconButton(onClick = viewModel::close) {
             Icon(
-              imageVector = Icons.Outlined.Close,
+              imageVector = VoiceIcons.Close,
               contentDescription = stringResource(StringsR.string.common_action_close),
             )
           }

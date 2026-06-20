@@ -1,8 +1,6 @@
 package voice.features.playbackScreen.view
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -16,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import voice.core.strings.R
+import voice.core.ui.icons.MoreVert
+import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun OverflowMenu(
@@ -31,7 +31,7 @@ internal fun OverflowMenu(
       },
     ) {
       Icon(
-        imageVector = Icons.Outlined.MoreVert,
+        imageVector = VoiceIcons.MoreVert,
         contentDescription = stringResource(id = R.string.common_action_more),
       )
     }
