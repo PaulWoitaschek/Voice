@@ -8,6 +8,8 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import voice.core.data.Book
@@ -42,6 +44,7 @@ class MarkAwarePlayer(
 
   private var currentBook: Book? = null
   private var markTickJob: Job? = null
+  private var bookObserverJob: Job? = null
 
   init {
     voicePlayer.addListener(
@@ -66,21 +69,36 @@ class MarkAwarePlayer(
         }
       },
     )
+
+    // Apply translation immediately when the wrapper is created in case the underlying
+    // player is already prepared/playing (e.g., service was recreated mid-playback).
+    syncCurrentBook(voicePlayer.currentMediaItem)
+    if (voicePlayer.isPlaying) startMarkTicking()
   }
 
   private fun syncCurrentBook(mediaItem: MediaItem?) {
     val bookId = (mediaItem?.mediaId?.toMediaIdOrNull() as? MediaId.Chapter)?.bookId
     if (bookId == null) {
       currentBook = null
+      bookObserverJob?.cancel()
+      bookObserverJob = null
       return
     }
     if (currentBook?.id == bookId) {
       maybeReplaceMediaItemForMark()
       return
     }
-    scope.launch {
-      currentBook = repo.get(bookId)
-      maybeReplaceMediaItemForMark()
+    bookObserverJob?.cancel()
+    bookObserverJob = scope.launch {
+      repo.flow(bookId)
+        .filterNotNull()
+        .distinctUntilChangedBy { it.content.name to it.content.cover }
+        .collect { book ->
+          currentBook = book
+          // Force the current MediaItem to be rebuilt so renames / cover changes propagate
+          // to the notification, even when the active mark hasn't moved.
+          maybeReplaceMediaItemForMark(force = true)
+        }
     }
   }
 
@@ -97,17 +115,19 @@ class MarkAwarePlayer(
     return chapter.markForPosition(rawPos)
   }
 
-  private fun maybeReplaceMediaItemForMark() {
+  private fun maybeReplaceMediaItemForMark(force: Boolean = false) {
     val book = currentBook ?: return
     val chapter = currentChapter() ?: return
     val mark = currentMark() ?: return
     val index = voicePlayer.currentMediaItemIndex
     if (index < 0 || index >= voicePlayer.mediaItemCount) return
-    val current = voicePlayer.getMediaItemAt(index)
-    val currentMarkStart = current.mediaMetadata.extras
-      ?.getLong(EXTRA_MARK_START_MS, Long.MIN_VALUE)
-      ?: Long.MIN_VALUE
-    if (currentMarkStart == mark.startMs) return
+    if (!force) {
+      val current = voicePlayer.getMediaItemAt(index)
+      val currentMarkStart = current.mediaMetadata.extras
+        ?.getLong(EXTRA_MARK_START_MS, Long.MIN_VALUE)
+        ?: Long.MIN_VALUE
+      if (currentMarkStart == mark.startMs) return
+    }
     voicePlayer.replaceMediaItem(index, mediaItemProvider.mediaItemForMark(chapter, mark, book.content))
   }
 
@@ -126,6 +146,16 @@ class MarkAwarePlayer(
     markTickJob = null
   }
 
+  /**
+   * Cancel any long-running observers/tickers started by this wrapper. Safe to call multiple
+   * times. Mainly useful when the owning scope is not torn down (e.g. in tests).
+   */
+  fun releaseObservers() {
+    bookObserverJob?.cancel()
+    bookObserverJob = null
+    stopMarkTicking()
+  }
+
   override fun getDuration(): Long {
     val mark = currentMark() ?: return super.getDuration()
     return mark.endMs - mark.startMs + 1
@@ -137,7 +167,8 @@ class MarkAwarePlayer(
     val pos = super.getCurrentPosition()
     val mark = currentMark() ?: return pos
     if (pos == C.TIME_UNSET) return pos
-    return (pos - mark.startMs).coerceAtLeast(0L)
+    val markDuration = mark.endMs - mark.startMs + 1
+    return (pos - mark.startMs).coerceIn(0L, markDuration)
   }
 
   override fun getContentPosition(): Long = currentPosition
@@ -146,7 +177,8 @@ class MarkAwarePlayer(
     val buf = super.getBufferedPosition()
     val mark = currentMark() ?: return buf
     if (buf == C.TIME_UNSET) return buf
-    return (buf - mark.startMs).coerceAtLeast(0L)
+    val markDuration = mark.endMs - mark.startMs + 1
+    return (buf - mark.startMs).coerceIn(0L, markDuration)
   }
 
   override fun seekTo(positionMs: Long) {
@@ -154,7 +186,9 @@ class MarkAwarePlayer(
     if (mark == null) {
       super.seekTo(positionMs)
     } else {
-      super.seekTo(mark.startMs + positionMs.coerceAtLeast(0L))
+      val markDuration = mark.endMs - mark.startMs + 1
+      val clamped = positionMs.coerceIn(0L, markDuration)
+      super.seekTo(mark.startMs + clamped)
     }
   }
 }
