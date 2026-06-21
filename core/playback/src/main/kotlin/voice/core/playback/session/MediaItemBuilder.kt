@@ -56,6 +56,6 @@ internal fun MediaItem(
 
 fun String.toMediaIdOrNull(): MediaId? = try {
   Json.decodeFromString(MediaId.serializer(), this)
-} catch (e: SerializationException) {
+} catch (_: SerializationException) {
   null
 }
