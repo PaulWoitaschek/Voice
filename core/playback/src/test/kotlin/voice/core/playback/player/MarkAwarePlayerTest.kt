@@ -34,15 +34,11 @@ import voice.core.data.repo.BookRepository
 import voice.core.playback.session.EXTRA_MARK_START_MS
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
-import voice.core.playback.session.MediaType
-import voice.core.playback.session.toMediaIdOrNull
 import java.time.Instant
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.uuid.Uuid
 
