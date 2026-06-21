@@ -23,6 +23,16 @@ sealed interface MediaId {
   ) : MediaId
 
   @Serializable
+  @SerialName("chapterMark")
+  data class ChapterMark(
+    val bookId: BookId,
+    val chapterId: ChapterId,
+    val markIndex: Int,
+    val startMs: Long,
+    val endMs: Long,
+  ) : MediaId
+
+  @Serializable
   @SerialName("recent")
   data object Recent : MediaId
 }

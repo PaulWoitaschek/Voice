@@ -2,6 +2,7 @@ package voice.core.playback.session
 
 import android.net.Uri
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaItem.ClippingConfiguration
 import androidx.media3.common.MediaMetadata
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -22,6 +23,8 @@ internal fun MediaItem(
   genre: String? = null,
   sourceUri: Uri? = null,
   imageUri: Uri? = null,
+  durationMs: Long? = null,
+  clippingConfiguration: ClippingConfiguration = ClippingConfiguration.UNSET,
   mediaType: MediaType,
 ): MediaItem {
   val metadata =
@@ -33,6 +36,7 @@ internal fun MediaItem(
       .setIsBrowsable(browsable)
       .setIsPlayable(isPlayable)
       .setArtworkUri(imageUri)
+      .setDurationMs(durationMs)
       .setMediaType(
         when (mediaType) {
           MediaType.AudioBook -> MediaMetadata.MEDIA_TYPE_AUDIO_BOOK
@@ -46,6 +50,7 @@ internal fun MediaItem(
     .setMediaId(Json.encodeToString(MediaId.serializer(), mediaId))
     .setMediaMetadata(metadata)
     .setUri(sourceUri)
+    .setClippingConfiguration(clippingConfiguration)
     .build()
 }
 

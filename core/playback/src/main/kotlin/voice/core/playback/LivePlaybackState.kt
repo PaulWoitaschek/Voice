@@ -5,7 +5,9 @@ import androidx.media3.session.MediaController
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.ChapterId
-import voice.core.playback.session.MediaId
+import voice.core.playback.session.bookId
+import voice.core.playback.session.positionInChapter
+import voice.core.playback.session.realChapterId
 import voice.core.playback.session.toMediaIdOrNull
 
 data class LivePlaybackState(
@@ -17,15 +19,18 @@ data class LivePlaybackState(
 )
 
 internal fun MediaController.livePlaybackStateSnapshot(bookId: BookId? = null): LivePlaybackState? {
-  val mediaId = currentMediaItem?.mediaId?.toMediaIdOrNull() as? MediaId.Chapter ?: return null
-  if (bookId != null && mediaId.bookId != bookId) {
+  val mediaId = currentMediaItem?.mediaId?.toMediaIdOrNull() ?: return null
+  val mediaItemBookId = mediaId.bookId ?: return null
+  if (bookId != null && mediaItemBookId != bookId) {
     return null
   }
   val positionMs = currentPosition.takeUnless { it == C.TIME_UNSET || it < 0 } ?: return null
+  val chapterId = mediaId.realChapterId ?: return null
+  val positionInChapter = mediaId.positionInChapter(positionMs) ?: return null
   return LivePlaybackState(
-    bookId = mediaId.bookId,
-    chapterId = mediaId.chapterId,
-    positionMs = positionMs,
+    bookId = mediaItemBookId,
+    chapterId = chapterId,
+    positionMs = positionInChapter,
     isPlaying = isPlaying,
     playbackSpeed = playbackParameters.speed,
   )

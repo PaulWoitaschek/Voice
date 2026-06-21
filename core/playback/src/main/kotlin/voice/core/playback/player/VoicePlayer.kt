@@ -16,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.BookId
-import voice.core.data.Chapter
+import voice.core.data.durationMs
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
 import voice.core.data.store.AutoRewindAmountStore
@@ -27,10 +27,16 @@ import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
+import voice.core.playback.session.PlaybackItem
+import voice.core.playback.session.markDurationMs
+import voice.core.playback.session.playbackItemForPosition
+import voice.core.playback.session.playbackItems
+import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.toMediaIdOrNull
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerState
 import java.time.Instant
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -55,52 +61,23 @@ class VoicePlayer(
 
   fun forceSeekToNext() {
     scope.launch {
-      val currentMediaItem = player.currentMediaItem ?: return@launch
-      val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
-      val currentMarkIndex = marks.indexOfFirst { mark ->
-        player.currentPosition in mark.startMs..mark.endMs
-      }
-      val nextMark = marks.getOrNull(currentMarkIndex + 1)
-      if (nextMark != null) {
-        player.seekTo(nextMark.startMs)
-      } else {
-        player.seekToNext()
-      }
+      val nextMediaItemIndex = player.nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
+        ?: return@launch
+      player.seekTo(nextMediaItemIndex, 0)
     }
-  }
-
-  private suspend fun MediaItem.chapter(): Chapter? {
-    val mediaId = mediaId.toMediaIdOrNull() ?: return null
-    if (mediaId !is MediaId.Chapter) return null
-    return chapterRepo.get(mediaId.chapterId)
   }
 
   fun forceSeekToPrevious() {
     scope.launch {
-      val currentMediaItem = player.currentMediaItem ?: return@launch
-      val marks = currentMediaItem.chapter()?.chapterMarks ?: return@launch
       val currentPosition = player.currentPosition
-      val currentMark = marks.firstOrNull { mark ->
-        currentPosition in mark.startMs..mark.endMs
-      } ?: marks.last()
-
-      if (currentPosition - currentMark.startMs > THRESHOLD_FOR_BACK_SEEK_MS) {
-        player.seekTo(currentMark.startMs)
+      if (currentPosition > THRESHOLD_FOR_BACK_SEEK_MS) {
+        player.seekTo(0)
       } else {
-        val currentMarkIndex = marks.indexOf(currentMark)
-        val previousMark = marks.getOrNull(currentMarkIndex - 1)
-        if (previousMark != null) {
-          player.seekTo(previousMark.startMs)
+        val previousMediaItemIndex = player.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
+        if (previousMediaItemIndex != null) {
+          player.seekTo(previousMediaItemIndex, 0)
         } else {
-          val currentMediaItemIndex = player.currentMediaItemIndex
-          if (currentMediaItemIndex > 0) {
-            val previousMediaItemIndex = currentMediaItemIndex - 1
-            val previousMediaItemMarks = player.getMediaItemAt(previousMediaItemIndex).chapter()?.chapterMarks
-              ?: return@launch
-            player.seekTo(previousMediaItemIndex, previousMediaItemMarks.last().startMs)
-          } else {
-            player.seekTo(0)
-          }
+          player.seekTo(0)
         }
       }
     }
@@ -143,28 +120,45 @@ class VoicePlayer(
 
   override fun seekBack() {
     scope.launch {
-      val skipAmount = seekTimeStore.data.first().seconds
-
-      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
-        ?.milliseconds
-        ?.coerceAtLeast(ZERO)
-        ?: return@launch
-
-      val newPosition = currentPosition - skipAmount
-      if (newPosition < ZERO) {
-        val previousMediaItemIndex = previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
-        if (previousMediaItemIndex == null) {
-          player.seekTo(0)
-        } else {
-          val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
-          val chapter = previousMediaItem.chapter() ?: return@launch
-          val previousMediaItemDuration = chapter.duration.milliseconds
-          player.seekTo(previousMediaItemIndex, (previousMediaItemDuration - newPosition.absoluteValue).inWholeMilliseconds)
-        }
-      } else {
-        player.seekTo(newPosition.inWholeMilliseconds)
-      }
+      seekBackBy(seekTimeStore.data.first().seconds)
     }
+  }
+
+  private suspend fun seekBackBy(skipAmount: Duration) {
+    seekBackBy(
+      skipAmount = skipAmount,
+      crossMediaItems = true,
+    )
+  }
+
+  private suspend fun seekBackBy(
+    skipAmount: Duration,
+    crossMediaItems: Boolean,
+  ) {
+    var currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
+      ?.milliseconds
+      ?.coerceAtLeast(ZERO)
+      ?: return
+    var remaining = skipAmount
+    var mediaItemIndex = player.currentMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: return
+
+    while (remaining > currentPosition) {
+      if (!crossMediaItems) {
+        player.seekTo(mediaItemIndex, 0)
+        return
+      }
+      remaining -= currentPosition
+      val previousMediaItemIndex = mediaItemIndex - 1
+      if (previousMediaItemIndex < 0) {
+        player.seekTo(0)
+        return
+      }
+      val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
+      currentPosition = previousMediaItem.durationMs(chapterRepo)?.milliseconds ?: return
+      mediaItemIndex = previousMediaItemIndex
+    }
+
+    player.seekTo(mediaItemIndex, (currentPosition - remaining).inWholeMilliseconds)
   }
 
   override fun seekForward() {
@@ -204,12 +198,12 @@ class VoicePlayer(
     } else {
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: ZERO
       if (currentPosition > ZERO) {
-        val autoRewindAmount = runBlocking { autoRewindAmountStore.data.first().seconds }
-        seekTo(
-          (currentPosition - autoRewindAmount)
-            .coerceAtLeast(ZERO)
-            .inWholeMilliseconds,
-        )
+        scope.launch {
+          seekBackBy(
+            skipAmount = autoRewindAmountStore.data.first().seconds,
+            crossMediaItems = false,
+          )
+        }
       }
     }
     super.setPlayWhenReady(playWhenReady)
@@ -289,13 +283,18 @@ class VoicePlayer(
           player.setPlaybackSpeed(book.content.playbackSpeed)
           setSkipSilenceEnabled(book.content.skipSilence)
           volumeGain.gain = Decibel(book.content.gain)
-          val chapters = mediaItemProvider.chapters(book)
+          val playbackItems = book.playbackItems()
+          val currentPlaybackItem = book.playbackItemForPosition(
+            chapterId = book.content.currentChapter,
+            positionInChapterMs = book.content.positionInChapter,
+          ) ?: return
+          val mediaItems = mediaItemProvider.playbackItems(book)
           player.setMediaItems(
-            chapters,
-            book.content.currentChapterIndex,
-            book.content.positionInChapter,
+            mediaItems,
+            currentPlaybackItem.index,
+            currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
           )
-          registerChapterMarkCallbacks(book.chapters)
+          registerChapterMarkCallbacks(playbackItems)
         }
       } else {
         Logger.w("Unexpected mediaId=$mediaId")
@@ -303,7 +302,7 @@ class VoicePlayer(
     }
   }
 
-  private fun registerChapterMarkCallbacks(chapters: List<Chapter>) {
+  private fun registerChapterMarkCallbacks(playbackItems: List<PlaybackItem>) {
     if (player is ExoPlayer) {
       val boundaryHandler = PlayerMessage.Target { _, payload ->
         if (payload is ChapterPausePayload &&
@@ -316,15 +315,14 @@ class VoicePlayer(
           sleepTimer.disable()
         }
       }
-      chapters.forEachIndexed { chapterIndex, chapter ->
-        chapter.chapterMarks.forEach { chapterMark ->
-          player.createMessage(boundaryHandler)
-            .setPosition(chapterIndex, chapterMark.startMs + 1)
-            .setPayload(ChapterPausePayload(chapterIndex, chapterMark.startMs))
-            .setDeleteAfterDelivery(false)
-            .setLooper(Looper.getMainLooper())
-            .send()
-        }
+      playbackItems.forEach { playbackItem ->
+        val pausePosition = playbackItem.mark.durationMs.coerceAtLeast(1)
+        player.createMessage(boundaryHandler)
+          .setPosition(playbackItem.index, pausePosition)
+          .setPayload(ChapterPausePayload(playbackItem.index, pausePosition))
+          .setDeleteAfterDelivery(false)
+          .setLooper(Looper.getMainLooper())
+          .send()
       }
     }
   }
@@ -368,3 +366,15 @@ class VoicePlayer(
 }
 
 private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000
+
+private suspend fun MediaItem.durationMs(chapterRepo: ChapterRepo? = null): Long? {
+  return when (val mediaId = mediaId.toMediaIdOrNull()) {
+    is MediaId.ChapterMark -> mediaId.markDurationMs
+    is MediaId.Chapter -> chapterRepo?.get(mediaId.chapterId)?.duration
+    is MediaId.Book,
+    MediaId.Recent,
+    MediaId.Root,
+    null,
+    -> null
+  }
+}
