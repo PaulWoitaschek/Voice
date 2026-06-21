@@ -8,7 +8,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -464,7 +463,7 @@ class MarkAwarePlayerTest {
     name: String?,
     marks: Array<out ChapterMark>,
   ): Chapter {
-    val duration = if (marks.isEmpty()) 9_999L else marks.maxOf { it.endMs }
+    val duration = (marks.maxOfOrNull { it.endMs } ?: 9_999L) + 1
     return Chapter(
       id = ChapterId(Uuid.random().toString()),
       name = name,

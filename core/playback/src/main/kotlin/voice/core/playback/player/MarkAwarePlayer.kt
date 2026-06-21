@@ -185,10 +185,11 @@ class MarkAwarePlayer(
     val mark = currentMark()
     if (mark == null) {
       super.seekTo(positionMs)
-    } else {
-      val markDuration = mark.endMs - mark.startMs + 1
-      val clamped = positionMs.coerceIn(0L, markDuration)
-      super.seekTo(mark.startMs + clamped)
+      return
     }
+
+    val maxOffset = (mark.endMs - mark.startMs).coerceAtLeast(0L)
+    val clamped = positionMs.coerceIn(0L, maxOffset)
+    super.seekTo(mark.startMs + clamped)
   }
 }
