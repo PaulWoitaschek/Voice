@@ -14,6 +14,7 @@ class PlaybackItemsTest {
   @Test
   fun `maps file chapter position to clipped playback item`() {
     val chapter = chapter(
+      duration = 20_000,
       MarkData(startMs = 0, name = "Intro"),
       MarkData(startMs = 12_000, name = "Chapter 1"),
     )
@@ -30,12 +31,32 @@ class PlaybackItemsTest {
   }
 
   @Test
+  fun `maps chapter duration position to last playback item`() {
+    val chapter = chapter(
+      duration = 20_000,
+      MarkData(startMs = 0, name = "Intro"),
+      MarkData(startMs = 12_000, name = "Chapter 1"),
+    )
+    val book = book(listOf(chapter))
+
+    val playbackItem = book.playbackItemForPosition(
+      chapterId = chapter.id,
+      positionInChapterMs = chapter.duration,
+    )
+
+    assertEquals(expected = 1, actual = playbackItem?.index)
+    assertEquals(expected = 7_999, actual = playbackItem?.positionInMediaItem(chapter.duration))
+  }
+
+  @Test
   fun `indexes marks across file chapters`() {
     val firstChapter = chapter(
+      duration = 20_000,
       MarkData(startMs = 0, name = "One"),
       MarkData(startMs = 5_000, name = "Two"),
     )
     val secondChapter = chapter(
+      duration = 20_000,
       MarkData(startMs = 0, name = "Three"),
       MarkData(startMs = 7_000, name = "Four"),
     )
@@ -51,11 +72,14 @@ class PlaybackItemsTest {
     assertEquals(expected = 1_000, actual = playbackItem?.positionInMediaItem(8_000))
   }
 
-  private fun chapter(vararg marks: MarkData): Chapter {
+  private fun chapter(
+    @Suppress("SameParameterValue") duration: Long,
+    vararg marks: MarkData,
+  ): Chapter {
     return Chapter(
       id = ChapterId(Uuid.random().toString()),
       name = "chapter",
-      duration = 20_000,
+      duration = duration,
       fileLastModified = Instant.EPOCH,
       markData = marks.toList(),
       fileSize = 0,

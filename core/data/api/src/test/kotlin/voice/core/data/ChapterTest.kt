@@ -82,6 +82,28 @@ class ChapterTest {
     """,
   )
 
+  @Test
+  fun `markForPosition clamps positions to chapter bounds`() {
+    val chapter = chapter(
+      duration = 20,
+      MarkData(startMs = 0, name = "First"),
+      MarkData(startMs = 12, name = "Last"),
+    )
+    val cases = listOf(
+      -1L to "First",
+      0L to "First",
+      11L to "First",
+      12L to "Last",
+      19L to "Last",
+      20L to "Last",
+      21L to "Last",
+    )
+
+    cases.forEach { (position, expectedMarkName) ->
+      assertEquals(expected = expectedMarkName, actual = chapter.markForPosition(position).name)
+    }
+  }
+
   /**
    * Visual DSL:
    *
@@ -164,6 +186,20 @@ class ChapterTest {
       Starts  : ${marks.map { it.startMs }.sorted()}
       Duration: $duration
       """.trimIndent(),
+    )
+  }
+
+  private fun chapter(
+    duration: Long,
+    vararg marks: MarkData,
+  ): Chapter {
+    return Chapter(
+      duration = duration,
+      fileLastModified = Instant.now(),
+      id = ChapterId(""),
+      markData = marks.toList(),
+      name = "Chapter",
+      fileSize = 0,
     )
   }
 
