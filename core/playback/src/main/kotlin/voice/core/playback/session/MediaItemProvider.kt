@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaItem.ClippingConfiguration
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
@@ -14,6 +15,7 @@ import voice.core.data.BookComparator
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Chapter
+import voice.core.data.durationMs
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
@@ -62,6 +64,21 @@ class MediaItemProvider(
           mediaItem(it, content)
         }
       }
+      is MediaId.ChapterMark -> {
+        val content = contentRepo.get(mediaId.bookId) ?: return null
+        val chapter = chapterRepo.get(mediaId.chapterId) ?: return null
+        val mark = chapter.chapterMarks.getOrNull(mediaId.markIndex) ?: return null
+        mediaItem(
+          playbackItem = PlaybackItem(
+            index = 0,
+            bookId = mediaId.bookId,
+            chapter = chapter,
+            markIndex = mediaId.markIndex,
+            mark = mark,
+          ),
+          content = content,
+        )
+      }
       MediaId.Recent -> recent()
     }
   }
@@ -80,21 +97,18 @@ class MediaItemProvider(
         val book = bookRepository.get(mediaId.id) ?: return null
         mediaItemsWithStartPosition(book)
       }
-      is MediaId.Chapter, MediaId.Root, MediaId.Recent, null -> null
+      is MediaId.Chapter, is MediaId.ChapterMark, MediaId.Root, MediaId.Recent, null -> null
     }
   }
 
   suspend fun chapters(bookId: BookId): List<MediaItem>? {
     val book = bookRepository.get(bookId) ?: return null
-    return chapters(book)
+    return playbackItems(book)
   }
 
-  internal fun chapters(book: Book): List<MediaItem> {
-    return book.chapters.map { chapter ->
-      mediaItem(
-        chapter = chapter,
-        content = book.content,
-      )
+  internal fun playbackItems(book: Book): List<MediaItem> {
+    return book.playbackItems().map { playbackItem ->
+      mediaItem(playbackItem, book.content)
     }
   }
 
@@ -108,10 +122,8 @@ class MediaItemProvider(
             mediaItem(book)
           }
       }
-      is MediaId.Book -> {
-        chapters(mediaId.id)
-      }
-      is MediaId.Chapter -> null
+      is MediaId.Book -> chapters(mediaId.id)
+      is MediaId.Chapter, is MediaId.ChapterMark -> null
       MediaId.Recent -> {
         val bookId = currentBookStoreId.data.first() ?: return null
         val book = bookRepository.get(bookId) ?: return null
@@ -140,6 +152,27 @@ class MediaItemProvider(
     sourceUri = chapter.id.toUri(),
     imageUri = content.cover?.toProvidedUri(),
     artist = content.author,
+    mediaType = MediaType.AudioBookChapter,
+  )
+
+  private fun mediaItem(
+    playbackItem: PlaybackItem,
+    content: BookContent,
+  ) = MediaItem(
+    title = playbackItem.mark.name
+      ?: playbackItem.chapter.name
+      ?: playbackItem.chapter.id.value,
+    mediaId = playbackItem.mediaId,
+    browsable = false,
+    isPlayable = true,
+    sourceUri = playbackItem.chapter.id.toUri(),
+    imageUri = content.cover?.toProvidedUri(),
+    artist = content.author,
+    durationMs = playbackItem.mark.durationMs,
+    clippingConfiguration = ClippingConfiguration.Builder()
+      .setStartPositionMs(playbackItem.mark.startMs)
+      .setEndPositionMs(playbackItem.mark.endMs)
+      .build(),
     mediaType = MediaType.AudioBookChapter,
   )
 

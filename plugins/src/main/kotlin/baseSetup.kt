@@ -91,6 +91,12 @@ private fun Project.configurePowerAssert(libs: VersionCatalog) {
   pluginManager.apply("org.jetbrains.kotlin.plugin.power-assert")
   extensions.configure<PowerAssertGradleExtension> {
     addRuntimeDependency.set(false)
+    functions.addAll(
+      "kotlin.assert",
+      "kotlin.test.assertTrue",
+      "kotlin.test.assertEquals",
+      "kotlin.test.assertNull",
+    )
   }
   extensions.getByType(AndroidComponentsExtension::class.java)
     .onVariants(extensions.getByType(AndroidComponentsExtension::class.java).selector().all()) { variant ->

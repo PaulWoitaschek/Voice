@@ -7,8 +7,8 @@ import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.MediaSource
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaLibraryService
@@ -41,7 +41,7 @@ interface PlaybackModule {
     val dataSourceFactory = DefaultDataSource.Factory(context)
     val extractorsFactory = DefaultExtractorsFactory()
       .setConstantBitrateSeekingEnabled(true)
-    return ProgressiveMediaSource.Factory(dataSourceFactory, extractorsFactory)
+    return DefaultMediaSourceFactory(dataSourceFactory, extractorsFactory)
   }
 
   @Provides

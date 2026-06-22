@@ -28,8 +28,8 @@ import voice.core.data.MarkData
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
-import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
+import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
 import voice.core.playback.session.toMediaIdOrNull
 import java.time.Instant
@@ -57,6 +57,7 @@ class VoicePlayerTest {
   }
 
   private val seekTimeStore = MemoryDataStore(2)
+  private val autoRewindAmountStore = MemoryDataStore(2)
 
   private val internalPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
     .setMediaSourceFactory(
@@ -65,7 +66,7 @@ class VoicePlayerTest {
           val mediaItem = arg<MediaItem>(0)
           val mediaId = mediaItem.mediaId
           val chapter = currentBook.chapters.single {
-            it.id == (mediaId.toMediaIdOrNull()!! as MediaId.Chapter).chapterId
+            it.id == mediaId.toMediaIdOrNull()!!.realChapterId
           }
           FakeMediaSource(
             FakeTimeline(
@@ -96,7 +97,7 @@ class VoicePlayerTest {
       every { data } returns flowOf(bookId)
     },
     seekTimeStore = seekTimeStore,
-    autoRewindAmountStore = mockk(),
+    autoRewindAmountStore = autoRewindAmountStore,
     scope = scope,
     chapterRepo = mockk {
       coEvery { this@mockk.get(any()) } answers {
@@ -170,19 +171,19 @@ class VoicePlayerTest {
     player.prepare()
     awaitReady()
 
-    player.shouldHavePosition(1, 12_000)
+    player.shouldHavePosition(1, 11_999)
 
     player.seekToPrevious()
-    player.shouldHavePosition(1, 7_000)
+    player.shouldHavePosition(1, 6_999)
 
     player.seekToPrevious()
-    player.shouldHavePosition(1, 2_000)
+    player.shouldHavePosition(1, 1_999)
 
     player.seekToPrevious()
-    player.shouldHavePosition(0, 9_000)
+    player.shouldHavePosition(0, 1_998)
 
     player.seekToPrevious()
-    player.shouldHavePosition(0, 4_000)
+    player.shouldHavePosition(0, 0)
 
     player.seekToPrevious()
     player.shouldHavePosition(0, 0)
@@ -208,16 +209,16 @@ class VoicePlayerTest {
     player.shouldHavePosition(0, 0)
 
     player.forceSeekToNext()
-    player.shouldHavePosition(0, 12_000)
-
-    player.forceSeekToNext()
     player.shouldHavePosition(1, 0)
 
     player.forceSeekToNext()
-    player.shouldHavePosition(1, 12_000)
+    player.shouldHavePosition(2, 0)
 
     player.forceSeekToNext()
-    player.shouldHavePosition(1, 12_000)
+    player.shouldHavePosition(3, 0)
+
+    player.forceSeekToNext()
+    player.shouldHavePosition(3, 0)
   }
 
   @Test
@@ -235,19 +236,19 @@ class VoicePlayerTest {
       ),
     )
 
-    player.seekTo(1, 18_000)
+    player.seekTo(3, 6_000)
     player.prepare()
     awaitReady()
-    player.shouldHavePosition(1, 18_000)
+    player.shouldHavePosition(3, 6_000)
 
     player.forceSeekToPrevious()
-    player.shouldHavePosition(1, 12_000)
+    player.shouldHavePosition(3, 0)
+
+    player.forceSeekToPrevious()
+    player.shouldHavePosition(2, 0)
 
     player.forceSeekToPrevious()
     player.shouldHavePosition(1, 0)
-
-    player.forceSeekToPrevious()
-    player.shouldHavePosition(0, 12_000)
 
     player.forceSeekToPrevious()
     player.shouldHavePosition(0, 0)
@@ -268,21 +269,71 @@ class VoicePlayerTest {
       ),
     )
 
-    player.seekTo(1, 13_000)
+    player.seekTo(2, 1_000)
     player.prepare()
     awaitReady()
-    player.shouldHavePosition(1, 13_000)
+    player.shouldHavePosition(2, 1_000)
 
     player.forceSeekToPrevious()
     player.shouldHavePosition(1, 0)
 
     player.seekTo(1, 1_000)
     player.forceSeekToPrevious()
-    player.shouldHavePosition(0, 12_000)
+    player.shouldHavePosition(0, 0)
   }
 
-  private fun TestScope.setMediaItems(chapters: List<Chapter>) {
-    currentBook = book(chapters, bookId)
+  @Test
+  fun `setBook resumes inside matching chapter mark`() = scope.runTest {
+    val chapter = chapter(
+      ChapterMark(startMs = 0, endMs = 11_999, name = null),
+      ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
+    )
+    setMediaItems(
+      chapters = listOf(chapter),
+      currentChapter = chapter,
+      positionInChapter = 15_000,
+    )
+
+    player.prepare()
+    awaitReady()
+
+    player.shouldHavePosition(1, 3_000)
+  }
+
+  @Test
+  fun `auto rewind clamps to current chapter start`() = scope.runTest {
+    setMediaItems(
+      listOf(
+        chapter(
+          ChapterMark(startMs = 0, endMs = 11_999, name = null),
+          ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
+        ),
+      ),
+    )
+
+    autoRewindAmountStore.updateData { 5 }
+
+    player.seekTo(1, 3_000)
+    player.prepare()
+    awaitReady()
+    player.shouldHavePosition(1, 3_000)
+
+    player.pause()
+
+    player.shouldHavePosition(1, 0)
+  }
+
+  private fun TestScope.setMediaItems(
+    chapters: List<Chapter>,
+    currentChapter: Chapter = chapters.first(),
+    positionInChapter: Long = 0,
+  ) {
+    currentBook = book(chapters, bookId).update {
+      it.copy(
+        currentChapter = currentChapter.id,
+        positionInChapter = positionInChapter,
+      )
+    }
     player.setMediaItem(mediaItemProvider.mediaItem(currentBook))
     runCurrent()
   }
@@ -302,15 +353,15 @@ class VoicePlayerTest {
       ),
     )
 
-    player.seekTo(1, 15_000)
+    player.seekTo(2, 3_000)
     player.prepare()
     awaitReady()
-    player.shouldHavePosition(1, 15_000)
+    player.shouldHavePosition(2, 3_000)
 
     player.forceSeekToPrevious()
-    player.shouldHavePosition(1, 12_000)
+    player.shouldHavePosition(2, 0)
 
-    player.seekTo(1, 5_000)
+    player.seekTo(2, 1_000)
     player.forceSeekToPrevious()
     player.shouldHavePosition(1, 0)
   }

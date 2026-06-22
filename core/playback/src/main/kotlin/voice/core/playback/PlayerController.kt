@@ -3,6 +3,8 @@ package voice.core.playback
 import android.content.ComponentName
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.media3.common.C
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
@@ -32,6 +34,10 @@ import voice.core.playback.session.CustomCommand
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.PlaybackService
+import voice.core.playback.session.bookId
+import voice.core.playback.session.markDurationMs
+import voice.core.playback.session.playbackItemForPosition
+import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.sendCustomCommand
 import voice.core.playback.session.toMediaIdOrNull
 import kotlin.time.Duration
@@ -72,9 +78,12 @@ class PlayerController(
   ) = executeAfterPrepare { controller ->
     val bookId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
-    val index = book.chapters.indexOfFirst { it.id == id }
-    if (index != -1) {
-      controller.seekTo(index, time)
+    val playbackItem = book.playbackItemForPosition(
+      chapterId = id,
+      positionInChapterMs = time,
+    )
+    if (playbackItem != null) {
+      controller.seekTo(playbackItem.index, playbackItem.positionInMediaItem(time))
     }
   }
 
@@ -136,17 +145,43 @@ class PlayerController(
   private fun MediaController.currentBookId(): BookId? {
     val currentMediaItem = currentMediaItem ?: return null
     val mediaId = currentMediaItem.mediaId.toMediaIdOrNull() ?: return null
-    return when (mediaId) {
-      is MediaId.Book -> mediaId.id
-      is MediaId.Chapter -> mediaId.bookId
-      MediaId.Recent -> null
-      MediaId.Root -> null
-    }
+    return mediaId.bookId
   }
 
   fun pauseWithRewind(rewind: Duration) = executeAfterPrepare { controller ->
     controller.pause()
-    controller.seekTo((controller.currentPosition - rewind.inWholeMilliseconds).coerceAtLeast(0))
+    controller.seekBackBy(
+      rewind = rewind,
+      crossMediaItems = false,
+    )
+  }
+
+  private fun MediaController.seekBackBy(
+    rewind: Duration,
+    crossMediaItems: Boolean,
+  ) {
+    var currentPosition = currentPosition.takeUnless { it == C.TIME_UNSET }
+      ?.milliseconds
+      ?: return
+    var remaining = rewind
+    var mediaItemIndex = currentMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: return
+
+    while (remaining > currentPosition) {
+      if (!crossMediaItems) {
+        seekTo(mediaItemIndex, 0)
+        return
+      }
+      remaining -= currentPosition
+      val previousMediaItemIndex = mediaItemIndex - 1
+      if (previousMediaItemIndex < 0) {
+        seekTo(0)
+        return
+      }
+      currentPosition = getMediaItemAt(previousMediaItemIndex).duration()?.milliseconds ?: return
+      mediaItemIndex = previousMediaItemIndex
+    }
+
+    seekTo(mediaItemIndex, (currentPosition - remaining).inWholeMilliseconds)
   }
 
   fun setSpeed(speed: Float) = executeAfterPrepare { controller ->
@@ -235,6 +270,15 @@ class PlayerController(
       if (maybePrepare(controller)) {
         action(controller)
       }
+    }
+  }
+
+  private fun MediaItem.duration(): Long? {
+    val mediaId = mediaId.toMediaIdOrNull()
+    return if (mediaId is MediaId.ChapterMark) {
+      mediaId.markDurationMs
+    } else {
+      null
     }
   }
 

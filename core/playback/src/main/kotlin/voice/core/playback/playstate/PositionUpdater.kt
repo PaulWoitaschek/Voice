@@ -16,7 +16,9 @@ import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
 import voice.core.logging.api.Logger
 import voice.core.playback.di.PlaybackScope
-import voice.core.playback.session.MediaId
+import voice.core.playback.session.bookId
+import voice.core.playback.session.positionInChapter
+import voice.core.playback.session.realChapterId
 import voice.core.playback.session.toMediaIdOrNull
 import java.time.Instant
 import kotlin.time.Duration.Companion.milliseconds
@@ -101,14 +103,15 @@ class PositionUpdater(
     val currentPosition = player.currentPosition
       .takeIf { it >= 0 } ?: return
     val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
-    mediaId as MediaId.Chapter
-    val chapterId = mediaId.chapterId
-    bookRepo.updateBook(mediaId.bookId) { content ->
+    val bookId = mediaId.bookId ?: return
+    val chapterId = mediaId.realChapterId ?: return
+    val positionInChapter = mediaId.positionInChapter(currentPosition) ?: return
+    bookRepo.updateBook(bookId) { content ->
       if (chapterId in content.chapters) {
-        Logger.d("$currentPosition is the new position!")
+        Logger.d("$positionInChapter is the new position!")
         content.copy(
           currentChapter = chapterId,
-          positionInChapter = currentPosition,
+          positionInChapter = positionInChapter,
           lastPlayedAt = Instant.now(),
         )
       } else {

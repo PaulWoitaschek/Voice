@@ -33,7 +33,10 @@ public data class ChapterMark(
 public val ChapterMark.durationMs: Long get() = (endMs - startMs).coerceAtLeast(0L)
 
 public fun Chapter.markForPosition(positionInChapterMs: Long): ChapterMark {
-  return chapterMarks.find { positionInChapterMs in it.startMs..it.endMs }
-    ?: chapterMarks.firstOrNull { positionInChapterMs == it.endMs }
+  val clampedPositionInChapterMs = positionInChapterMs.coerceIn(
+    0L,
+    (duration - 1).coerceAtLeast(0L),
+  )
+  return chapterMarks.find { clampedPositionInChapterMs in it.startMs..it.endMs }
     ?: chapterMarks.first()
 }
