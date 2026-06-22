@@ -96,7 +96,7 @@
     <string name="playback.chapter.next">Pista siguiente</string>
     <string name="playback.chapter.previous">Pista anterior</string>
     <string name="playback.option.skip_silence">Saltar silencio</string>
-    <string name="playback.option.volume_boost">Incremento del volumen</string>
+    <string name="playback.option.volume_boost">Potenciar volumen</string>
     <string name="playback.speed.title">Velocidad de reproducción</string>
     <string name="review.feedback.action.cancel">Cancelar</string>
     <string name="review.feedback.action.send">Envía tus comentarios</string>
@@ -118,8 +118,8 @@
     <string name="settings.appearance.theme.follow_system">Seguir sistema</string>
     <string name="settings.appearance.theme.light">Claro</string>
     <string name="settings.appearance.theme.title">Tema</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Definir hora fin</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Definir hora inicio</string>
+    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Hora fin</string>
+    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Hora inicio</string>
     <string name="settings.auto_sleep_timer.summary">Activa automáticamente el temporizador al iniciar la reproducción entre las %1$s y %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador automático</string>
     <string name="settings.library.folders.summary">Administrar directorios escaneados en busca de audiolibros</string>
@@ -127,7 +127,7 @@
     <string name="settings.playback.auto_rewind.title">Retroceso automático</string>
     <string name="settings.playback.seek_time.title">Cantidad a omitir</string>
     <string name="settings.support.faq.title">Preguntas frecuentes</string>
-    <string name="settings.support.get_support.title">Conseguir ayuda</string>
+    <string name="settings.support.get_support.title">Obtener ayuda</string>
     <string name="settings.support.help_translating.title">Ayudar a traducir Voice</string>
     <string name="settings.support.report_issue.title">Reportar un problema</string>
     <string name="settings.support.suggest_idea.title">Sugerir una idea</string>
