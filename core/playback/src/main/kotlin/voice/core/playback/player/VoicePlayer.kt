@@ -59,17 +59,20 @@ class VoicePlayer(
       newPosition: Player.PositionInfo,
       reason: Int,
     ) {
-      if (reason != DISCONTINUITY_REASON_AUTO_TRANSITION) return
-      if (sleepTimer.state.value !is SleepTimerState.Enabled.WithEndOfChapter) return
-      Logger.v("Playback item ended. Pausing as per sleep timer")
-      sleepTimer.disable()
-      player.pause()
+      if (reason == DISCONTINUITY_REASON_AUTO_TRANSITION) {
+        pauseAndDisableSleepTimerIfEndOfChapter()
+      }
     }
 
     override fun onPlaybackStateChanged(playbackState: Int) {
-      if (playbackState != Player.STATE_ENDED) return
+      if (playbackState == STATE_ENDED) {
+        pauseAndDisableSleepTimerIfEndOfChapter()
+      }
+    }
+
+    private fun pauseAndDisableSleepTimerIfEndOfChapter() {
       if (sleepTimer.state.value !is SleepTimerState.Enabled.WithEndOfChapter) return
-      Logger.v("Playback ended. Pausing as per sleep timer")
+      Logger.v("Pausing due to EndOfChapter")
       sleepTimer.disable()
       player.pause()
     }
