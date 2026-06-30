@@ -18,14 +18,14 @@ class PopulateTestFiles : CliktCommand() {
   private val testFilesRoot = File("build/testfiles/")
   private val tempBooksRoot = File(testFilesRoot, "_generated_books")
   private val baseAudio = File("core/scanner/src/test/resources/auphonic_chapters_demo.mp3")
-  private val coversRoot = File("Images/covers")
+  private val demoArtworksRoot = File("artwork/demo-data")
 
   private val folderBooks = listOf(
     BookSpec(
       id = "dream_in_a_boat",
       title = "Dream in a Boat",
       author = "Amelia Winters",
-      coverDir = "Dream in a boat",
+      artwork = "horizon.webp",
       chapters = listOf(
         ChapterSpec("Gliding into Dawn", loopCount = 4),
         ChapterSpec("Harbor Whispers", loopCount = 5),
@@ -36,7 +36,7 @@ class PopulateTestFiles : CliktCommand() {
       id = "el_guitarrero",
       title = "El Guitarrero",
       author = "Lucia Marquez",
-      coverDir = "El Guitarrero",
+      artwork = "bookshop.webp",
       chapters = listOf(
         ChapterSpec("Strings Awake", loopCount = 4),
         ChapterSpec("Courtyard Echoes", loopCount = 5),
@@ -47,7 +47,7 @@ class PopulateTestFiles : CliktCommand() {
       id = "fabulous_geysha",
       title = "The Fabulous Geysha",
       author = "Lucia Marquez",
-      coverDir = "The fabulous Geysha",
+      artwork = "echoes.webp",
       chapters = listOf(
         ChapterSpec("Lantern Lights", loopCount = 4),
         ChapterSpec("Winding Garden", loopCount = 4),
@@ -58,7 +58,7 @@ class PopulateTestFiles : CliktCommand() {
       id = "boy_and_the_cave",
       title = "The Boy and the Cave",
       author = "June Porter",
-      coverDir = "The boy and the cave",
+      artwork = "horizon.webp",
       chapters = listOf(
         ChapterSpec("Footsteps Below", loopCount = 3),
         ChapterSpec("Hidden Paintings", loopCount = 4),
@@ -72,7 +72,7 @@ class PopulateTestFiles : CliktCommand() {
       id = "treeman_single",
       title = "Treeman",
       author = "Amelia Winters",
-      coverDir = "Treeman",
+      artwork = "bookshop.webp",
       chapters = listOf(
         ChapterSpec("Treeman", loopCount = 8),
       ),
@@ -81,7 +81,7 @@ class PopulateTestFiles : CliktCommand() {
       id = "snakey_single",
       title = "Snakey",
       author = "Harlan Pike",
-      coverDir = "Snakey",
+      artwork = "echoes.webp",
       chapters = listOf(
         ChapterSpec("Snakey", loopCount = 7),
       ),
@@ -114,10 +114,10 @@ class PopulateTestFiles : CliktCommand() {
 
   private fun validateEnvironment() {
     require(baseAudio.exists()) { "Base audio not found: ${baseAudio.absolutePath}" }
-    require(coversRoot.exists()) { "Covers folder not found: ${coversRoot.absolutePath}" }
+    require(demoArtworksRoot.exists()) { "Demo artworks folder not found: ${demoArtworksRoot.absolutePath}" }
     (folderBooks + singleBooks).forEach { book ->
       require(book.coverFile().exists()) {
-        "Missing cover image for ${book.title} in ${book.coverFile().parentFile?.absolutePath}"
+        "Missing demo artwork for ${book.title}: ${book.coverFile().absolutePath}"
       }
     }
   }
@@ -186,7 +186,7 @@ class PopulateTestFiles : CliktCommand() {
       "-i", coverFile.absolutePath,
       "-map", "0:a",
       "-map", "1:0",
-      "-c:v", "copy",
+      "-c:v", "mjpeg",
       "-c:a", "libmp3lame",
       "-b:a", "160k",
       "-id3v2_version", "3",
@@ -313,11 +313,11 @@ class PopulateTestFiles : CliktCommand() {
     val id: String,
     val title: String,
     val author: String,
-    val coverDir: String,
+    val artwork: String,
     val chapters: List<ChapterSpec>,
   ) {
     fun directoryName(): String = title
-    fun coverFile(): File = File("Images/covers/$coverDir/cover.jpg")
+    fun coverFile(): File = File("artwork/demo-data/$artwork")
   }
 
   private data class ChapterSpec(
