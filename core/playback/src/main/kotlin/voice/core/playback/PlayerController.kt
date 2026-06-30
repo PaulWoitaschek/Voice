@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
@@ -31,11 +30,9 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.misc.Decibel
 import voice.core.playback.session.CustomCommand
-import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.PlaybackService
 import voice.core.playback.session.bookId
-import voice.core.playback.session.markDurationMs
 import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.sendCustomCommand
@@ -177,7 +174,7 @@ class PlayerController(
         seekTo(0)
         return
       }
-      currentPosition = getMediaItemAt(previousMediaItemIndex).duration()?.milliseconds ?: return
+      currentPosition = getMediaItemAt(previousMediaItemIndex).mediaMetadata.durationMs?.milliseconds ?: return
       mediaItemIndex = previousMediaItemIndex
     }
 
@@ -270,15 +267,6 @@ class PlayerController(
       if (maybePrepare(controller)) {
         action(controller)
       }
-    }
-  }
-
-  private fun MediaItem.duration(): Long? {
-    val mediaId = mediaId.toMediaIdOrNull()
-    return if (mediaId is MediaId.ChapterMark) {
-      mediaId.markDurationMs
-    } else {
-      null
     }
   }
 

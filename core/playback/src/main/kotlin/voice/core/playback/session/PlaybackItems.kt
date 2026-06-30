@@ -82,9 +82,6 @@ internal fun MediaId.positionInChapter(positionInCurrentMediaItemMs: Long): Long
   }
 }
 
-internal val MediaId.ChapterMark.markDurationMs: Long
-  get() = (endMs - startMs).coerceAtLeast(0L)
-
 internal fun PlaybackItem.positionInMediaItem(positionInChapterMs: Long): Long {
   return (positionInChapterMs - mark.startMs).coerceIn(0L, mark.durationMs)
 }
