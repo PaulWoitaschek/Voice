@@ -1,13 +1,11 @@
 package voice.core.playback.player
 
-import android.os.Looper
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.PlayerMessage
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -16,7 +14,6 @@ import kotlinx.coroutines.runBlocking
 import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.BookId
-import voice.core.data.durationMs
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
 import voice.core.data.store.AutoRewindAmountStore
@@ -27,10 +24,8 @@ import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
-import voice.core.playback.session.PlaybackItem
 import voice.core.playback.session.markDurationMs
 import voice.core.playback.session.playbackItemForPosition
-import voice.core.playback.session.playbackItems
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.toMediaIdOrNull
 import voice.core.sleeptimer.SleepTimer
@@ -53,11 +48,39 @@ class VoicePlayer(
   private val autoRewindAmountStore: DataStore<Int>,
   private val mediaItemProvider: MediaItemProvider,
   private val scope: CoroutineScope,
-  private val chapterRepo: ChapterRepo,
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,
   private val analytics: Analytics,
 ) : ForwardingPlayer(player) {
+
+  private val endOfChapterSleepTimerListener = object : Player.Listener {
+    override fun onPositionDiscontinuity(
+      oldPosition: Player.PositionInfo,
+      newPosition: Player.PositionInfo,
+      reason: Int,
+    ) {
+      if (reason == DISCONTINUITY_REASON_AUTO_TRANSITION) {
+        pauseAndDisableSleepTimerIfEndOfChapter()
+      }
+    }
+
+    override fun onPlaybackStateChanged(playbackState: Int) {
+      if (playbackState == STATE_ENDED) {
+        pauseAndDisableSleepTimerIfEndOfChapter()
+      }
+    }
+
+    private fun pauseAndDisableSleepTimerIfEndOfChapter() {
+      if (sleepTimer.state.value !is SleepTimerState.Enabled.WithEndOfChapter) return
+      Logger.v("Pausing due to EndOfChapter")
+      sleepTimer.disable()
+      player.pause()
+    }
+  }
+
+  init {
+    player.addListener(endOfChapterSleepTimerListener)
+  }
 
   fun forceSeekToNext() {
     scope.launch {
@@ -154,7 +177,7 @@ class VoicePlayer(
         return
       }
       val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
-      currentPosition = previousMediaItem.durationMs(chapterRepo)?.milliseconds ?: return
+      currentPosition = previousMediaItem.durationMs()?.milliseconds ?: return
       mediaItemIndex = previousMediaItemIndex
     }
 
@@ -283,7 +306,6 @@ class VoicePlayer(
           player.setPlaybackSpeed(book.content.playbackSpeed)
           setSkipSilenceEnabled(book.content.skipSilence)
           volumeGain.gain = Decibel(book.content.gain)
-          val playbackItems = book.playbackItems()
           val currentPlaybackItem = book.playbackItemForPosition(
             chapterId = book.content.currentChapter,
             positionInChapterMs = book.content.positionInChapter,
@@ -294,45 +316,10 @@ class VoicePlayer(
             currentPlaybackItem.index,
             currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
           )
-          registerChapterMarkCallbacks(playbackItems)
         }
       } else {
         Logger.w("Unexpected mediaId=$mediaId")
       }
-    }
-  }
-
-  private fun registerChapterMarkCallbacks(playbackItems: List<PlaybackItem>) {
-    if (player is ExoPlayer) {
-      val boundaryHandler = PlayerMessage.Target { _, payload ->
-        if (payload is ChapterPausePayload &&
-          payload != ChapterPausePayload.Zero &&
-          sleepTimer.state.value is SleepTimerState.Enabled.WithEndOfChapter
-        ) {
-          Logger.v("Chapter mark reached at $payload, pausing as per sleep timer")
-          player.seekTo(payload.chapterIndex, payload.positionMs)
-          player.pause()
-          sleepTimer.disable()
-        }
-      }
-      playbackItems.forEach { playbackItem ->
-        val pausePosition = playbackItem.mark.durationMs.coerceAtLeast(1)
-        player.createMessage(boundaryHandler)
-          .setPosition(playbackItem.index, pausePosition)
-          .setPayload(ChapterPausePayload(playbackItem.index, pausePosition))
-          .setDeleteAfterDelivery(false)
-          .setLooper(Looper.getMainLooper())
-          .send()
-      }
-    }
-  }
-
-  private data class ChapterPausePayload(
-    val chapterIndex: Int,
-    val positionMs: Long,
-  ) {
-    companion object {
-      val Zero = ChapterPausePayload(0, 0L)
     }
   }
 
