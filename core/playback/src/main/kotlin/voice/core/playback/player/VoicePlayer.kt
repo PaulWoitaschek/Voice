@@ -15,7 +15,6 @@ import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
-import voice.core.data.repo.ChapterRepo
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SeekTimeStore
@@ -24,7 +23,6 @@ import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
-import voice.core.playback.session.markDurationMs
 import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.toMediaIdOrNull
@@ -177,7 +175,7 @@ class VoicePlayer(
         return
       }
       val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
-      currentPosition = previousMediaItem.durationMs()?.milliseconds ?: return
+      currentPosition = previousMediaItem.mediaMetadata.durationMs?.milliseconds ?: return
       mediaItemIndex = previousMediaItemIndex
     }
 
@@ -353,15 +351,3 @@ class VoicePlayer(
 }
 
 private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000
-
-private suspend fun MediaItem.durationMs(chapterRepo: ChapterRepo? = null): Long? {
-  return when (val mediaId = mediaId.toMediaIdOrNull()) {
-    is MediaId.ChapterMark -> mediaId.markDurationMs
-    is MediaId.Chapter -> chapterRepo?.get(mediaId.chapterId)?.duration
-    is MediaId.Book,
-    MediaId.Recent,
-    MediaId.Root,
-    null,
-    -> null
-  }
-}
