@@ -1,20 +1,20 @@
-Voice är en snygg ljudboksspelare för personer som tar med sig sina egna böcker.
+Voice är en ren och avskalad ljudboksspelare för dig som har egna ljudboksfiler.
 
-Lägg till din ljudboksmapp en gång, så förvandlar Voice dina lokala ljudfiler till ett enkelt bibliotek. Den kommer ihåg din position för varje bok, håller uppspelningskontrollerna nära och ur vägen.
+Lägg till din ljudboksmapp en gång, så förvandlar Voice dina lokala ljudfiler till ett enkelt bibliotek. Den kommer ihåg din position för varje bok, håller uppspelningskontrollerna nära till hands utan att vara i vägen.
 
 <b>Gjord för ljudböcker</b>
 
-• Fortsätt exakt där du stoppade
+• Fortsätt exakt där du slutade
 • Insomningstimer med mjuk uttoning
-• Stoppa i slutet av det aktuella kapitlet
+• Stanna vid slutet av det pågående kapitlet
 • Skaka för att förlänga timern
 • Kontroll av uppspelningshastighet
 • Volymökning för tysta inspelningar
 • Hoppa över tystnad
-• Automatisk spolning tillbaka efter längre pauser
+• Automatisk tillbakaspolning efter längre pauser
 • Bokmärken med tidsstämplar och anpassade namn
 • Sök efter titel och författare
-• Filter för aktuella, slutförda och ej påbörjade
+• Filter för pågående, färdiglyssnade och inte påbörjade böcker
 • List- och rutnätsvyer
 • Omslagsbild från inbäddade bilder, lokala filer eller onlinesökning
 • Widget för startskärmen, medieaviseringar och stöd för Android Auto
@@ -23,7 +23,7 @@ Lägg till din ljudboksmapp en gång, så förvandlar Voice dina lokala ljudfile
 
 Voice fungerar med DRM-fria ljudboksfiler som M4B, MP3, M4A, OGG, OGA och OPUS. Förvara dina böcker i mappar precis som du vill; Voice känner igen dem och organiserar ditt bibliotek.
 
-<b>Inget skräp</b>
+<b>Inget onödigt</b>
 
 • Inget konto krävs
 • Inga annonser
