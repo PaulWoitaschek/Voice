@@ -49,7 +49,7 @@
     <string name="folder.mode.author.title">Författarbokläge: Undermappar är författare och deras undermappar är böcker.</string>
     <string name="folder.mode.root.title">Bokläge på översta nivån: undermappar är böcker</string>
     <string name="folder.mode.single.title">Enboksläge: En mapp motsvarar en bok.</string>
-    <string name="folder.type.book_example.empty">Voice kunde inte upptäcka några böcker. Finns det några ljudfiler?</string>
+    <string name="folder.type.book_example.empty">Voice kunde inte hitta några böcker. Finns det några ljudfiler?</string>
     <string name="folder.type.book_example.header">Då skulle följande böcker upptäckas</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d ljudfil</item>
@@ -133,7 +133,7 @@
     <string name="support.action.donate_kofi">Donera på Ko-fi</string>
     <string name="support.description.maintenance">Voice är gratis, öppen källkod och underhålls av en utvecklare.</string>
     <string name="support.description.maintenance_subtitle">Donationer hjälper till att finansiera löpande underhåll och utveckling.</string>
-    <string name="support.helps.title">Ditt stöd möjliggör</string>
+    <string name="support.helps.title">Ditt stöd bidrar till</string>
     <string name="support.helps.maintenance">Buggfixar och underhåll</string>
     <string name="support.helps.features">Nya funktioner</string>
     <string name="support.helps.open_source">Att Voice förblir reklamfri</string>
