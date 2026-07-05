@@ -47,10 +47,10 @@
     <string name="folder.add.type.folder">Mapp</string>
     <string name="folder.add.type.subtitle">Vill du lägga till en enskild fil som bok eller en hel mapp?</string>
     <string name="folder.mode.author.title">Författarbokläge: Undermappar är författare och deras undermappar är böcker.</string>
-    <string name="folder.mode.root.title">Bokläge på högsta nivå: Undermappar är böcker</string>
+    <string name="folder.mode.root.title">Bokläge på översta nivån: undermappar är böcker</string>
     <string name="folder.mode.single.title">Enboksläge: En mapp motsvarar en bok.</string>
     <string name="folder.type.book_example.empty">Voice kunde inte upptäcka några böcker. Finns det några ljudfiler?</string>
-    <string name="folder.type.book_example.header">Detta skulle leda till att följande böcker upptäcks</string>
+    <string name="folder.type.book_example.header">Då skulle följande böcker upptäckas</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d ljudfil</item>
         <item quantity="other">%d ljudfiler</item>
@@ -61,7 +61,7 @@
     <string name="library.category.not_started.title">Inte påbörjade ännu</string>
     <string name="library.empty.add_first_book">Lägg till din ljudboksmapp så att du kan börja lyssna!</string>
     <string name="library.folders.title">Ljudboksmappar</string>
-    <string name="library.folders.moved.dialog.title">Ljudboksmappar flyttade</string>
+    <string name="library.folders.moved.dialog.title">Ljudboksmapparna har flyttats</string>
     <string name="library.folders.moved.dialog.message">Du kan nu hantera ljudboksmappar i Inställningar.</string>
     <string name="library.search.hint">Vad letar du efter?</string>
     <string name="library.storage_permission_bug.action">Ge behörighet</string>
@@ -73,7 +73,7 @@
     <string name="onboarding.analytics_consent.action.disable">Fortsätt utan användningsstatistik</string>
     <string name="onboarding.analytics_consent.action.enable">Fortsätt med användningsstatistik</string>
     <string name="onboarding.analytics_consent.action.privacy_policy">Integritetspolicy</string>
-    <string name="onboarding.analytics_consent.description">Tillåt oss att samla in anonym användningsdata för att kunna förbättra appen. Du kan ändra inställningen senare.</string>
+    <string name="onboarding.analytics_consent.description">Tillåt oss att samla in anonym användningsstatistik för att kunna förbättra appen. Du kan ändra inställningen senare.</string>
     <string name="onboarding.analytics_consent.title">Hjälp till att förbättra Voice</string>
     <string name="onboarding.completion.action.start_listening">Börja lyssna</string>
     <string name="onboarding.completion.subtitle">Din första ljudbok är redo att spelas upp. Trevlig lyssning med Voice!</string>
@@ -89,7 +89,7 @@
     <string name="playback.action.rewind">Spola bakåt</string>
     <string name="playback.battery_optimization.action">Öppna inställningar</string>
     <string name="playback.battery_optimization.rationale">På grund av enhetens strömbegränsningar kan uppspelningen avbrytas.</string>
-    <string name="playback.chapter.current.content_description">Pågående kapitel</string>
+    <string name="playback.chapter.current.content_description">Aktuellt kapitel</string>
     <string name="playback.chapter.next">Nästa spår</string>
     <string name="playback.chapter.previous">Föregående spår</string>
     <string name="playback.option.skip_silence">Hoppa över tystnad</string>
@@ -105,11 +105,11 @@
     <string name="review.request.title">Gillar du Voice?</string>
     <string name="settings.about.app_version.title">Appversion</string>
     <string name="settings.action.open">Inställningar</string>
-    <string name="settings.analytics_consent.description">Tillåt anonym insamling av användningsdata för att förbättra appen</string>
+    <string name="settings.analytics_consent.description">Tillåt anonym insamling av användningsstatistik för att förbättra appen</string>
     <string name="settings.analytics_consent.title">Analys</string>
     <string name="settings.appearance.color_scheme.title">Färgschema</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamisk färg</string>
-    <string name="settings.appearance.color_scheme.dynamic.summary">Använder färger från bakgrunden och systemtemat.</string>
+    <string name="settings.appearance.color_scheme.dynamic.summary">Använder färger från bakgrundsbilden och systemtemat.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice-blå</string>
     <string name="settings.appearance.theme.dark">Mörkt</string>
     <string name="settings.appearance.theme.follow_system">Följ systemet</string>
@@ -117,8 +117,8 @@
     <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Ange sluttid</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Ange starttid</string>
-    <string name="settings.auto_sleep_timer.summary">Starta en sovtimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
-    <string name="settings.auto_sleep_timer.title">Automatisk sovtimer</string>
+    <string name="settings.auto_sleep_timer.summary">Starta en insomningstimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
+    <string name="settings.auto_sleep_timer.title">Automatisk insomningstimer</string>
     <string name="settings.library.folders.summary">Hantera mappar som skannas efter ljudböcker</string>
     <string name="settings.library.use_grid.title">Använd rutnätslayout</string>
     <string name="settings.playback.auto_rewind.title">Automatisk bakåtspolning</string>
@@ -128,17 +128,17 @@
     <string name="settings.support.help_translating.title">Hjälp med att översätta Voice</string>
     <string name="settings.support.report_issue.title">Rapportera ett problem</string>
     <string name="settings.support.suggest_idea.title">Föreslå en idé</string>
-    <string name="settings.support.support_voice.summary">Donationer hjälper till att underhålla Voice</string>
+    <string name="settings.support.support_voice.summary">Donationer bidrar till att Voice kan underhållas</string>
     <string name="settings.support.support_voice.title">Stöd utvecklingen</string>
     <string name="support.action.donate_kofi">Donera på Ko-fi</string>
     <string name="support.description.maintenance">Voice är gratis, öppen källkod och underhålls av en utvecklare.</string>
     <string name="support.description.maintenance_subtitle">Donationer hjälper till att finansiera löpande underhåll och utveckling.</string>
-    <string name="support.helps.title">Ditt stöd bidrar till</string>
+    <string name="support.helps.title">Ditt stöd möjliggör</string>
     <string name="support.helps.maintenance">Buggfixar och underhåll</string>
     <string name="support.helps.features">Nya funktioner</string>
-    <string name="support.helps.open_source">Att hålla Voice reklamfri</string>
+    <string name="support.helps.open_source">Att Voice förblir reklamfri</string>
     <string name="support.title">Stöd utvecklingen</string>
-    <string name="shortcut.play_current.short_label">Spela pågående</string>
+    <string name="shortcut.play_current.short_label">Fortsätt spela</string>
     <string name="sleep_timer.action.open">Insomningstimer</string>
     <string name="sleep_timer.dialog.action.decrement">Kortare</string>
     <string name="sleep_timer.dialog.action.increment">Längre</string>
