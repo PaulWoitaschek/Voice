@@ -77,6 +77,8 @@ class BookOverviewViewModel(
   private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
   @KioskModeFeatureFlagQualifier
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
+  @voice.core.data.store.GroupByAuthorStore
+  private val groupByAuthorStore: DataStore<Boolean>,
   dispatcherProvider: DispatcherProvider,
 ) {
 
@@ -84,6 +86,7 @@ class BookOverviewViewModel(
   private var searchActive by mutableStateOf(false)
   private var query by mutableStateOf("")
   private var dialog by mutableStateOf<BookOverviewViewState.Dialog?>(null)
+  private val expandedAuthors = mutableStateOf<Set<String>>(emptySet())
 
   fun attach() {
     mediaScanner.scan()
@@ -132,21 +135,53 @@ class BookOverviewViewModel(
       remember { mutableStateOf(null) }
     }
 
+    val groupByAuthor = remember { groupByAuthorStore.data }
+      .collectAsState(initial = false).value
+    val expandedAuthorsSet = expandedAuthors.value
+
     return BookOverviewViewState(
       layoutMode = layoutMode,
       books = books
         .groupBy {
           it.category
         }
-        .mapValues { (category, books) ->
-          books
-            .sortedWith(category.comparator)
-            .associate { book ->
-              book.id to book.itemViewState(
-                currentBookId = currentBookId,
-                livePlaybackState = { livePlaybackState.value },
-              )
+        .mapValues { (category, booksInCategory) ->
+          val sortedBooks = booksInCategory.sortedWith(category.comparator)
+          if (groupByAuthor) {
+            val items = mutableListOf<BookOverviewItem>()
+            val groupedByAuthor = sortedBooks.groupBy { it.content.author }
+            groupedByAuthor.forEach { (author, authorBooks) ->
+              if (author == null) {
+                items.addAll(
+                  authorBooks.map { book ->
+                    androidx.compose.runtime.key(book.id.value) {
+                      BookOverviewItem.SingleBook(book.itemViewState(currentBookId, { livePlaybackState.value }))
+                    }
+                  },
+                )
+              } else {
+                items.add(
+                  BookOverviewItem.AuthorGroup(
+                    author = author,
+                    category = category,
+                    books = authorBooks.map { book ->
+                      androidx.compose.runtime.key(book.id.value) {
+                        book.itemViewState(currentBookId, { livePlaybackState.value })
+                      }
+                    },
+                    isExpanded = expandedAuthorsSet.contains("${category.name}_$author"),
+                  ),
+                )
+              }
             }
+            items.toList()
+          } else {
+            sortedBooks.map { book ->
+              androidx.compose.runtime.key(book.id.value) {
+                BookOverviewItem.SingleBook(book.itemViewState(currentBookId, { livePlaybackState.value }))
+              }
+            }
+          }
         }
         .toSortedMap(),
       playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
@@ -218,15 +253,17 @@ class BookOverviewViewModel(
     return BookOverviewViewState(
       layoutMode = BookOverviewLayoutMode.List,
       books = mapOf(
-        BookOverviewCategory.CURRENT to KioskModeDemoData.demoAudiobooks.associate { book ->
-          book.id to mutableStateOf(
-            BookOverviewItemViewState(
-              name = book.title,
-              author = book.author,
-              cover = book.coverUrl,
-              progress = book.progress / 100F,
-              id = book.id,
-              remainingTime = book.remaining,
+        BookOverviewCategory.CURRENT to KioskModeDemoData.demoAudiobooks.map { book ->
+          BookOverviewItem.SingleBook(
+            mutableStateOf(
+              BookOverviewItemViewState(
+                name = book.title,
+                author = book.author,
+                cover = book.coverUrl,
+                progress = book.progress / 100F,
+                id = book.id,
+                remainingTime = book.remaining,
+              ),
             ),
           )
         },
@@ -263,6 +300,16 @@ class BookOverviewViewModel(
     dialog = null
     scope.launch {
       folderPickerMovedDialogShownStore.updateData { true }
+    }
+  }
+
+  fun toggleAuthorExpanded(category: BookOverviewCategory, author: String) {
+    val key = "${category.name}_$author"
+    val current = expandedAuthors.value
+    expandedAuthors.value = if (current.contains(key)) {
+      current - key
+    } else {
+      current + key
     }
   }
 

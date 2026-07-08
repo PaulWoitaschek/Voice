@@ -204,6 +204,13 @@ public interface StoreModule {
       fileName = "featureFlagOverrides",
     )
   }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @GroupByAuthorStore
+  private fun groupByAuthor(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("groupByAuthor", defaultValue = false)
+  }
 }
 
 private class LegacyDarkThemeMigration(

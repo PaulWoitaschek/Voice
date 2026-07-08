@@ -40,13 +40,20 @@ import voice.features.bookOverview.overview.BookOverviewItemViewState
 import kotlin.math.roundToInt
 import voice.core.ui.R as UiR
 
+import voice.features.bookOverview.overview.BookOverviewItem
+import voice.core.ui.icons.VoiceIcons
+import androidx.compose.material3.Icon
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+
 @Composable
 internal fun GridBooks(
-  books: Map<BookOverviewCategory, Map<BookId, State<BookOverviewItemViewState>>>,
+  books: Map<BookOverviewCategory, List<BookOverviewItem>>,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   showPermissionBugCard: Boolean,
   onPermissionBugCardClick: () -> Unit,
+  onToggleAuthorExpanded: (BookOverviewCategory, String) -> Unit,
 ) {
   val cellCount = gridColumnCount()
   LazyVerticalGrid(
@@ -62,8 +69,8 @@ internal fun GridBooks(
         PermissionBugCard(onPermissionBugCardClick)
       }
     }
-    books.forEach { (category, books) ->
-      if (books.isEmpty()) return@forEach
+    books.forEach { (category, booksInCategory) ->
+      if (booksInCategory.isEmpty()) return@forEach
       item(
         span = { GridItemSpan(maxLineSpan) },
         key = category,
@@ -74,16 +81,48 @@ internal fun GridBooks(
           category = category,
         )
       }
-      items(
-        items = books.toList(),
-        key = { (bookId, _) -> bookId.value },
-        contentType = { "item" },
-      ) { (_, bookState) ->
-        GridBook(
-          book = bookState.value,
-          onBookClick = onBookClick,
-          onBookLongClick = onBookLongClick,
-        )
+      booksInCategory.forEach { item ->
+        when (item) {
+          is BookOverviewItem.SingleBook -> {
+            item(
+              key = item.id,
+              contentType = "item",
+            ) {
+              GridBook(
+                book = item.state.value,
+                onBookClick = onBookClick,
+                onBookLongClick = onBookLongClick,
+              )
+            }
+          }
+          is BookOverviewItem.AuthorGroup -> {
+            item(
+              span = { GridItemSpan(maxLineSpan) },
+              key = item.id,
+              contentType = "author_group",
+            ) {
+              AuthorGroupGridHeader(
+                author = item.author,
+                isExpanded = item.isExpanded,
+                bookCount = item.books.size,
+                onToggleExpanded = { onToggleAuthorExpanded(item.category, item.author) },
+              )
+            }
+            if (item.isExpanded) {
+              items(
+                items = item.books,
+                key = { bookState -> bookState.value.id.value },
+                contentType = { "item" },
+              ) { bookState ->
+                GridBook(
+                  book = bookState.value,
+                  onBookClick = onBookClick,
+                  onBookLongClick = onBookLongClick,
+                )
+              }
+            }
+          }
+        }
       }
       item(
         span = { GridItemSpan(maxLineSpan) },
@@ -91,6 +130,50 @@ internal fun GridBooks(
         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
       }
     }
+  }
+}
+
+@Composable
+internal fun AuthorGroupGridHeader(
+  author: String,
+  isExpanded: Boolean,
+  bookCount: Int,
+  onToggleExpanded: () -> Unit,
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .clip(MaterialTheme.shapes.medium)
+      .clickable { onToggleExpanded() }
+      .padding(horizontal = 8.dp, vertical = 12.dp),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Icon(
+      imageVector = VoiceIcons.Person,
+      contentDescription = null,
+      tint = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    Column(
+      modifier = Modifier
+        .weight(1f)
+        .padding(horizontal = 16.dp),
+    ) {
+      Text(
+        text = author,
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onSurface,
+      )
+      Text(
+        text = "$bookCount books",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+    }
+    Icon(
+      imageVector = if (isExpanded) VoiceIcons.ExpandMore else VoiceIcons.ChevronRight,
+      contentDescription = null,
+      tint = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
   }
 }
 

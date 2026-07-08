@@ -66,6 +66,8 @@
     <string name="cover.search.recent.content_description">Recent query</string>
     <!-- Generic title for artwork shown for a book or cover editor. -->
     <string name="cover.title">Cover</string>
+    <!-- Title for the group by author setting -->
+    <string name="settings_library_group_by_author_title">Group by Author</string>
     <!-- Pluralized duration text for sleep timer minutes. -->
     <plurals name="duration.minutes">
         <item quantity="one">%d minute</item>

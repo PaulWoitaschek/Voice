@@ -30,7 +30,7 @@ android {
   }
 
   defaultConfig {
-    applicationId = "de.ph1b.audiobook"
+    applicationId = "de.ph1b.audiobook.test"
     versionName = providers.gradleProperty("voice.versionName").orNull ?: "1.0.0"
     versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: Int.MAX_VALUE
 

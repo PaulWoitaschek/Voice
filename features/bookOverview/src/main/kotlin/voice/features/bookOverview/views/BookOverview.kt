@@ -51,6 +51,7 @@ import voice.features.bookOverview.deleteBook.DeleteBookDialog
 import voice.features.bookOverview.di.BookOverviewGraph
 import voice.features.bookOverview.editTitle.EditBookTitleDialog
 import voice.features.bookOverview.overview.BookOverviewCategory
+import voice.features.bookOverview.overview.BookOverviewItem
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
@@ -117,6 +118,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onSearchQueryChange = bookOverviewViewModel::onSearchQueryChange,
     onSearchBookClick = bookOverviewViewModel::onSearchBookClick,
     onPermissionBugCardClick = bookOverviewViewModel::onPermissionBugCardClick,
+    onToggleAuthorExpanded = bookOverviewViewModel::toggleAuthorExpanded,
   )
   val deleteBookViewState = deleteBookViewModel.state.value
   if (deleteBookViewState != null) {
@@ -180,6 +182,7 @@ internal fun BookOverview(
   onSearchQueryChange: (String) -> Unit,
   onSearchBookClick: (BookId) -> Unit,
   onPermissionBugCardClick: () -> Unit,
+  onToggleAuthorExpanded: (BookOverviewCategory, String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -222,6 +225,7 @@ internal fun BookOverview(
             onBookLongClick = onBookLongClick,
             showPermissionBugCard = viewState.showStoragePermissionBugCard,
             onPermissionBugCardClick = onPermissionBugCardClick,
+            onToggleAuthorExpanded = onToggleAuthorExpanded,
           )
         }
         BookOverviewLayoutMode.Grid -> {
@@ -231,6 +235,7 @@ internal fun BookOverview(
             onBookLongClick = onBookLongClick,
             showPermissionBugCard = viewState.showStoragePermissionBugCard,
             onPermissionBugCardClick = onPermissionBugCardClick,
+            onToggleAuthorExpanded = onToggleAuthorExpanded,
           )
         }
       }
@@ -295,6 +300,7 @@ fun BookOverviewPreview(
       onSearchQueryChange = {},
       onSearchBookClick = {},
       onPermissionBugCardClick = {},
+      onToggleAuthorExpanded = { _, _ -> },
     )
   }
 }
@@ -315,19 +321,17 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
   override val values = sequenceOf(
     BookOverviewViewState(
       books = mapOf(
-        BookOverviewCategory.CURRENT to buildMap {
+        BookOverviewCategory.CURRENT to buildList {
           repeat(10) {
-            put(
-              BookId(Uuid.random().toString()),
-              mutableStateOf(book()),
+            add(
+              BookOverviewItem.SingleBook(mutableStateOf(book())),
             )
           }
         },
-        BookOverviewCategory.FINISHED to buildMap {
+        BookOverviewCategory.FINISHED to buildList {
           repeat(2) {
-            put(
-              BookId(Uuid.random().toString()),
-              mutableStateOf(book()),
+            add(
+              BookOverviewItem.SingleBook(mutableStateOf(book())),
             )
           }
         },
