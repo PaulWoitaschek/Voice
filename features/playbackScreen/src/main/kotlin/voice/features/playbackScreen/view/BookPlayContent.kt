@@ -57,7 +57,12 @@ internal fun BookPlayContent(
             onCurrentChapterClick = onCurrentChapterClick,
           )
         }
-        Spacer(modifier = Modifier.size(20.dp))
+        Spacer(modifier = Modifier.size(8.dp))
+        TotalProgressRow(
+          totalDuration = viewState.totalDuration,
+          totalPlayedTime = viewState.totalPlayedTime,
+        )
+        Spacer(modifier = Modifier.size(16.dp))
         SliderRow(
           duration = viewState.duration,
           playedTime = viewState.playedTime,
@@ -94,7 +99,12 @@ internal fun BookPlayContent(
           onCurrentChapterClick = onCurrentChapterClick,
         )
       }
-      Spacer(modifier = Modifier.size(20.dp))
+      Spacer(modifier = Modifier.size(8.dp))
+      TotalProgressRow(
+        totalDuration = viewState.totalDuration,
+        totalPlayedTime = viewState.totalPlayedTime,
+      )
+      Spacer(modifier = Modifier.size(16.dp))
       SliderRow(
         duration = viewState.duration,
         playedTime = viewState.playedTime,
