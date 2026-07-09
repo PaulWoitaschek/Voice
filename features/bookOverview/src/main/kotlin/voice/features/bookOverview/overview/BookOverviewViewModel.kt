@@ -79,6 +79,8 @@ class BookOverviewViewModel(
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   @voice.core.data.store.GroupByAuthorStore
   private val groupByAuthorStore: DataStore<Boolean>,
+  @voice.core.data.store.ExpandedAuthorsStore
+  private val expandedAuthorsStore: DataStore<Set<String>>,
   dispatcherProvider: DispatcherProvider,
 ) {
 
@@ -86,7 +88,6 @@ class BookOverviewViewModel(
   private var searchActive by mutableStateOf(false)
   private var query by mutableStateOf("")
   private var dialog by mutableStateOf<BookOverviewViewState.Dialog?>(null)
-  private val expandedAuthors = mutableStateOf<Set<String>>(emptySet())
 
   fun attach() {
     mediaScanner.scan()
@@ -137,7 +138,8 @@ class BookOverviewViewModel(
 
     val groupByAuthor = remember { groupByAuthorStore.data }
       .collectAsState(initial = false).value
-    val expandedAuthorsSet = expandedAuthors.value
+    val expandedAuthorsSet = remember { expandedAuthorsStore.data }
+      .collectAsState(initial = emptySet()).value
 
     return BookOverviewViewState(
       layoutMode = layoutMode,
@@ -318,11 +320,14 @@ class BookOverviewViewModel(
 
   fun toggleAuthorExpanded(category: BookOverviewCategory, author: String) {
     val key = "${category.name}_$author"
-    val current = expandedAuthors.value
-    expandedAuthors.value = if (current.contains(key)) {
-      current - key
-    } else {
-      current + key
+    scope.launch {
+      expandedAuthorsStore.updateData { current ->
+        if (current.contains(key)) {
+          current - key
+        } else {
+          current + key
+        }
+      }
     }
   }
 

@@ -49,3 +49,6 @@ public annotation class FeatureFlagOverridesStore
 
 @Qualifier
 public annotation class GroupByAuthorStore
+
+@Qualifier
+public annotation class ExpandedAuthorsStore
