@@ -19,6 +19,7 @@ data class SettingsViewState(
   val showDeveloperMenu: Boolean,
   val showSupportDevelopment: Boolean,
   val kioskMode: Boolean,
+  val adjustTimeForPlaybackSpeed: Boolean,
 ) {
 
   enum class Dialog {
@@ -45,6 +46,7 @@ data class SettingsViewState(
         showDeveloperMenu = true,
         showSupportDevelopment = true,
         kioskMode = false,
+        adjustTimeForPlaybackSpeed = false,
       )
     }
   }
