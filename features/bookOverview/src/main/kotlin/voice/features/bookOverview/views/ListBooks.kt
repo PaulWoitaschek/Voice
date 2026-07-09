@@ -95,22 +95,32 @@ internal fun ListBooks(
               AuthorGroupRow(
                 author = item.author,
                 isExpanded = item.isExpanded,
-                bookCount = item.books.size,
+                bookCount = item.bookCount,
                 onToggleExpanded = { onToggleAuthorExpanded(item.category, item.author) },
               )
             }
             if (item.isExpanded) {
-              items(
-                items = item.books,
-                key = { bookState -> bookState.value.id.value },
-                contentType = { "item" },
-              ) { bookState ->
-                ListBookRow(
-                  modifier = Modifier.padding(start = 16.dp),
-                  book = bookState.value,
-                  onBookClick = onBookClick,
-                  onBookLongClick = onBookLongClick,
-                )
+              item.seriesGroups.forEach { seriesGroup ->
+                if (seriesGroup.seriesName != null) {
+                  item(
+                    key = "${item.id}_series_${seriesGroup.seriesName}",
+                    contentType = "series_group",
+                  ) {
+                    SeriesListHeader(seriesName = seriesGroup.seriesName)
+                  }
+                }
+                items(
+                  items = seriesGroup.books,
+                  key = { bookState -> bookState.value.id.value },
+                  contentType = { "item" },
+                ) { bookState ->
+                  ListBookRow(
+                    modifier = Modifier.padding(start = 16.dp),
+                    book = bookState.value,
+                    onBookClick = onBookClick,
+                    onBookLongClick = onBookLongClick,
+                  )
+                }
               }
             }
           }
@@ -205,6 +215,16 @@ internal fun ListBookRow(
             maxLines = 2,
           )
 
+          if (book.series != null) {
+            val partString = if (!book.seriesPart.isNullOrBlank()) ", Part ${book.seriesPart}" else ""
+            Text(
+              text = "${book.series}$partString",
+              style = MaterialTheme.typography.labelMedium,
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
+              maxLines = 1,
+            )
+          }
+
           BookRemainingProgressRow(
             modifier = Modifier
               .padding(end = 12.dp),
@@ -264,3 +284,14 @@ private fun ListBookRowPreviewWithProgress() {
 private fun ListBookRowPreviewWithoutProgress() {
   ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 0f), {}, {})
 }
+
+@Composable
+internal fun SeriesListHeader(seriesName: String) {
+  Text(
+    text = seriesName,
+    style = MaterialTheme.typography.titleSmall,
+    color = MaterialTheme.colorScheme.primary,
+    modifier = Modifier.padding(start = 32.dp, top = 8.dp, bottom = 4.dp),
+  )
+}
+

@@ -14,10 +14,16 @@ sealed interface BookOverviewItem {
       get() = state.value.id.value
   }
 
+  data class SeriesGroup(
+    val seriesName: String?,
+    val books: List<State<BookOverviewItemViewState>>
+  )
+
   data class AuthorGroup(
     val author: String,
     val category: BookOverviewCategory,
-    val books: List<State<BookOverviewItemViewState>>,
+    val seriesGroups: List<SeriesGroup>,
+    val bookCount: Int,
     val isExpanded: Boolean,
   ) : BookOverviewItem {
     override val id: String

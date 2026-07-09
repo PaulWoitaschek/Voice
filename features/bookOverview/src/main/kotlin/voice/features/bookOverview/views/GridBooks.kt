@@ -104,21 +104,32 @@ internal fun GridBooks(
               AuthorGroupGridHeader(
                 author = item.author,
                 isExpanded = item.isExpanded,
-                bookCount = item.books.size,
+                bookCount = item.bookCount,
                 onToggleExpanded = { onToggleAuthorExpanded(item.category, item.author) },
               )
             }
             if (item.isExpanded) {
-              items(
-                items = item.books,
-                key = { bookState -> bookState.value.id.value },
-                contentType = { "item" },
-              ) { bookState ->
-                GridBook(
-                  book = bookState.value,
-                  onBookClick = onBookClick,
-                  onBookLongClick = onBookLongClick,
-                )
+              item.seriesGroups.forEach { seriesGroup ->
+                if (seriesGroup.seriesName != null) {
+                  item(
+                    span = { GridItemSpan(maxLineSpan) },
+                    key = "${item.id}_series_${seriesGroup.seriesName}",
+                    contentType = "series_group",
+                  ) {
+                    SeriesGridHeader(seriesName = seriesGroup.seriesName)
+                  }
+                }
+                items(
+                  items = seriesGroup.books,
+                  key = { bookState -> bookState.value.id.value },
+                  contentType = { "item" },
+                ) { bookState ->
+                  GridBook(
+                    book = bookState.value,
+                    onBookClick = onBookClick,
+                    onBookLongClick = onBookLongClick,
+                  )
+                }
               }
             }
           }
@@ -220,6 +231,17 @@ internal fun GridBook(
         overflow = TextOverflow.Ellipsis,
       )
 
+      if (book.series != null) {
+        val partString = if (!book.seriesPart.isNullOrBlank()) ", Part ${book.seriesPart}" else ""
+        Text(
+          text = "${book.series}$partString",
+          style = MaterialTheme.typography.labelMedium,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+        )
+      }
+
       BookRemainingProgressRow(
         remainingTime = book.remainingTime,
         progress = book.progress,
@@ -253,3 +275,14 @@ private fun GridBookPreviewWithProgress() {
 private fun GridBookPreviewWithoutProgress() {
   GridBook(BookOverviewPreviewParameterProvider().book().copy(progress = 0f), {}, {})
 }
+
+@Composable
+internal fun SeriesGridHeader(seriesName: String) {
+  Text(
+    text = seriesName,
+    style = MaterialTheme.typography.titleSmall,
+    color = MaterialTheme.colorScheme.primary,
+    modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 4.dp),
+  )
+}
+

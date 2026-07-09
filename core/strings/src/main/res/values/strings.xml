@@ -22,6 +22,14 @@
     <string name="book.edit.name.label">Name</string>
     <!-- Title for the dialog that edits a book title. -->
     <string name="book.edit.title">Edit book</string>
+    <!-- Title for the dialog that edits a book's series. -->
+    <string name="book.edit.series.title">Edit series</string>
+    <!-- Label for a book series text field. -->
+    <string name="book.edit.series.label">Series</string>
+    <!-- Dropdown hint for a book series. -->
+    <string name="book.edit.series.dropdown_hint">Select an existing series or type a new one</string>
+    <!-- Action in the bottom sheet to edit series. -->
+    <string name="book.edit.series.action">Add to series</string>
     <!-- Snackbar message shown after creating a bookmark. -->
     <string name="bookmark.added.snackbar">Bookmark added</string>
     <!-- Relative timestamp for a bookmark created moments ago. -->

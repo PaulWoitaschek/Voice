@@ -49,6 +49,7 @@ import voice.features.bookOverview.bottomSheet.BottomSheetContent
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.deleteBook.DeleteBookDialog
 import voice.features.bookOverview.di.BookOverviewGraph
+import voice.features.bookOverview.editSeries.EditBookSeriesDialog
 import voice.features.bookOverview.editTitle.EditBookTitleDialog
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItem
@@ -82,6 +83,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
   }
   val bookOverviewViewModel = bookGraph.bookOverviewViewModel
   val editBookTitleViewModel = bookGraph.editBookTitleViewModel
+  val editBookSeriesViewModel = bookGraph.editBookSeriesViewModel
   val bottomSheetViewModel = bookGraph.bottomSheetViewModel
   val deleteBookViewModel = bookGraph.deleteBookViewModel
   val fileCoverViewModel = bookGraph.fileCoverViewModel
@@ -136,6 +138,16 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
       onConfirmEditTitle = editBookTitleViewModel::onConfirmEditTitle,
       viewState = editBookTitleState,
       onUpdateEditTitle = editBookTitleViewModel::onUpdateEditTitle,
+    )
+  }
+  val editBookSeriesState = editBookSeriesViewModel.state.value
+  if (editBookSeriesState != null) {
+    EditBookSeriesDialog(
+      onDismiss = editBookSeriesViewModel::onDismiss,
+      onConfirm = editBookSeriesViewModel::onConfirm,
+      viewState = editBookSeriesState,
+      onUpdateSeries = editBookSeriesViewModel::onUpdateSeries,
+      onUpdatePart = editBookSeriesViewModel::onUpdatePart,
     )
   }
 
@@ -315,6 +327,8 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       progress = 0.8F,
       id = BookId(Uuid.random().toString()),
       remainingTime = "01:04",
+      series = "Test Series",
+      seriesPart = "1",
     )
   }
 

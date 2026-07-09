@@ -164,11 +164,22 @@ class BookOverviewViewModel(
                   BookOverviewItem.AuthorGroup(
                     author = author,
                     category = category,
-                    books = authorBooks.map { book ->
-                      androidx.compose.runtime.key(book.id.value) {
-                        book.itemViewState(currentBookId, { livePlaybackState.value })
-                      }
-                    },
+                    seriesGroups = authorBooks.groupBy { it.content.series }
+                      .map { (series, seriesBooks) ->
+                        BookOverviewItem.SeriesGroup(
+                          seriesName = series,
+                          books = seriesBooks.sortedWith { book1, book2 ->
+                            var cmp = nullsLast(String.CASE_INSENSITIVE_ORDER).compare(book1.content.part, book2.content.part)
+                            if (cmp != 0) return@sortedWith cmp
+                            String.CASE_INSENSITIVE_ORDER.compare(book1.content.name, book2.content.name)
+                          }.map { book ->
+                            androidx.compose.runtime.key(book.id.value) {
+                              book.itemViewState(currentBookId, { livePlaybackState.value })
+                            }
+                          }
+                        )
+                      }.sortedWith(compareBy(nullsLast(String.CASE_INSENSITIVE_ORDER)) { it.seriesName }),
+                    bookCount = authorBooks.size,
                     isExpanded = expandedAuthorsSet.contains("${category.name}_$author"),
                   ),
                 )
@@ -263,6 +274,8 @@ class BookOverviewViewModel(
                 progress = book.progress / 100F,
                 id = book.id,
                 remainingTime = book.remaining,
+                series = null,
+                seriesPart = null,
               ),
             ),
           )
