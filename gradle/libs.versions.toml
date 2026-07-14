@@ -21,7 +21,7 @@ androidx-lifecycle = "2.11.0"
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 junit = "junit:junit:4.13.2"
-materialKolor = "com.materialkolor:material-kolor:5.0.0-alpha07"
+materialKolor = "com.materialkolor:material-kolor:5.0.0"
 mockk = "io.mockk:mockk:1.14.11"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.5.0"
 paging-compose = "androidx.paging:paging-compose:3.5.0"
