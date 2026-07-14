@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="fr">
     <string name="book.category.action.mark_completed">Marquer comme Terminé</string>
     <string name="book.category.action.mark_current">Marquer comme En cours</string>
-    <string name="book.category.action.mark_not_started">Marquer comme Non Commencé</string>
+    <string name="book.category.action.mark_not_started">Marquer comme Non commencé</string>
     <string name="book.delete.bottom_sheet.title">Supprimer le livre</string>
     <string name="book.delete.dialog.confirm_files">Supprimer mes fichiers</string>
     <string name="book.delete.dialog.message">Ceci supprimera les fichiers sur votre appareil.</string>
@@ -127,7 +127,7 @@
     <string name="settings.playback.auto_rewind.title">Rembobinage automatique</string>
     <string name="settings.playback.seek_time.title">Sauter de</string>
     <string name="settings.support.faq.title">FAQ</string>
-    <string name="settings.support.get_support.title">Demander de l\'aide</string>
+    <string name="settings.support.get_support.title">Obtenir de l\'aide</string>
     <string name="settings.support.help_translating.title">Aidez à traduire Voice</string>
     <string name="settings.support.report_issue.title">Signaler un problème</string>
     <string name="settings.support.suggest_idea.title">Suggérer une idée</string>
