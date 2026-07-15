@@ -27,6 +27,7 @@ import voice.core.data.repo.BookmarkRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SleepTimerPreferenceStore
+import voice.core.data.store.AdjustTimeForPlaybackSpeedStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
@@ -67,6 +68,8 @@ class BookPlayViewModel(
   dispatcherProvider: DispatcherProvider,
   @SleepTimerPreferenceStore
   private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
+  @AdjustTimeForPlaybackSpeedStore
+  private val adjustTimeForPlaybackSpeedStore: DataStore<Boolean>,
   @ExperimentalPlaybackPersistenceQualifier
   private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
   @KioskModeFeatureFlagQualifier
@@ -93,6 +96,7 @@ class BookPlayViewModel(
   @Composable
   fun viewState(): BookPlayViewState? {
     val kioskMode = remember { kioskModeFeatureFlag.get() }
+    val adjustTimeForSpeed by remember { adjustTimeForPlaybackSpeedStore.data }.collectAsState(initial = false)
     if (kioskMode) return kioskModeViewState()
 
     val persistedBook = remember(bookId) {
@@ -127,14 +131,19 @@ class BookPlayViewModel(
 
     val sleepTime = remember { sleepTimer.state }.collectAsState().value
     val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
+    
+    val playbackSpeed = book.content.playbackSpeed.takeIf { adjustTimeForSpeed && it > 0 } ?: 1f
+    val adjustedDurationMs = (currentMark.durationMs / playbackSpeed).toLong()
+    val adjustedPlayedTimeMs = (positionInCurrentMark / playbackSpeed).toLong()
+
     return BookPlayViewState(
       sleepTimerState = sleepTime.toViewState(),
       playing = isPlaying,
       title = book.content.name,
       showPreviousNextButtons = hasMoreThanOneChapter,
       chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
-      duration = currentMark.durationMs.milliseconds,
-      playedTime = positionInCurrentMark.milliseconds,
+      duration = adjustedDurationMs.milliseconds,
+      playedTime = adjustedPlayedTimeMs.milliseconds,
       cover = book.content.coverUrl,
       skipSilence = book.content.skipSilence,
     )
