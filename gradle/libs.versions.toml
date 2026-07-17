@@ -92,7 +92,7 @@ compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha22" }
+compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha24" }
 compose-activity = "androidx.activity:activity-compose:1.13.0"
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
