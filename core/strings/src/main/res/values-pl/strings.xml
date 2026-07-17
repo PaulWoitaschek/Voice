@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="pl">
-    <string name="book.category.action.mark_completed">Oznacz jako ukończona</string>
+    <string name="book.category.action.mark_completed">Oznacz jako Ukończona</string>
     <string name="book.category.action.mark_current">Oznacz jako aktualna</string>
     <string name="book.category.action.mark_not_started">Oznacz jako nierozpoczęta</string>
     <string name="book.delete.bottom_sheet.title">Usuń książkę</string>
