@@ -28,7 +28,7 @@ interface SettingsListener {
   fun toggleAnalytics()
   fun openFolderPicker()
   fun onAppVersionClick()
-
+  fun toggleLockscreenSeeking()
   fun openDeveloperMenu()
 
   companion object {
@@ -56,6 +56,7 @@ interface SettingsListener {
       override fun toggleAnalytics() {}
       override fun openFolderPicker() {}
       override fun onAppVersionClick() {}
+      override fun toggleLockscreenSeeking() {}
       override fun openDeveloperMenu() {}
     }
   }

@@ -238,6 +238,8 @@
     <string name="settings.playback.auto_rewind.title">Auto rewind</string>
     <!-- Title for the setting that controls skip-forward and rewind duration. -->
     <string name="settings.playback.seek_time.title">Skip amount</string>
+    <string name="settings.playback.lockscreen_seeking.title">Allow seeking on lockscreen</string>
+    <string name="settings.playback.lockscreen_seeking.summary">When enabled, the timeline cursor is actionable on the lockscreen.</string>
     <!-- Settings support row for opening the FAQ. -->
     <string name="settings.support.faq.title">FAQ</string>
     <!-- Settings support row for getting help. -->
