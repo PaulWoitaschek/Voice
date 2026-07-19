@@ -36,13 +36,19 @@ import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.core.ui.R as UiR
 
+import voice.features.bookOverview.overview.BookOverviewItem
+import voice.core.ui.icons.VoiceIcons
+import androidx.compose.material3.Icon
+import androidx.compose.foundation.clickable
+
 @Composable
 internal fun ListBooks(
-  books: Map<BookOverviewCategory, Map<BookId, State<BookOverviewItemViewState>>>,
+  books: Map<BookOverviewCategory, List<BookOverviewItem>>,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   showPermissionBugCard: Boolean,
   onPermissionBugCardClick: () -> Unit,
+  onToggleAuthorExpanded: (BookOverviewCategory, String) -> Unit,
 ) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -53,8 +59,8 @@ internal fun ListBooks(
         PermissionBugCard(onPermissionBugCardClick)
       }
     }
-    books.forEach { (category, books) ->
-      if (books.isEmpty()) return@forEach
+    books.forEach { (category, booksInCategory) ->
+      if (booksInCategory.isEmpty()) return@forEach
       stickyHeader(
         key = category,
         contentType = "header",
@@ -67,21 +73,107 @@ internal fun ListBooks(
           category = category,
         )
       }
-      items(
-        items = books.toList(),
-        key = { (bookId, _) -> bookId.value },
-        contentType = { "item" },
-      ) { (_, bookState) ->
-        ListBookRow(
-          book = bookState.value,
-          onBookClick = onBookClick,
-          onBookLongClick = onBookLongClick,
-        )
+      booksInCategory.forEach { item ->
+        when (item) {
+          is BookOverviewItem.SingleBook -> {
+            item(
+              key = item.id,
+              contentType = "item",
+            ) {
+              ListBookRow(
+                book = item.state.value,
+                onBookClick = onBookClick,
+                onBookLongClick = onBookLongClick,
+              )
+            }
+          }
+          is BookOverviewItem.AuthorGroup -> {
+            item(
+              key = item.id,
+              contentType = "author_group",
+            ) {
+              AuthorGroupRow(
+                author = item.author,
+                isExpanded = item.isExpanded,
+                bookCount = item.bookCount,
+                onToggleExpanded = { onToggleAuthorExpanded(item.category, item.author) },
+              )
+            }
+            if (item.isExpanded) {
+              item.seriesGroups.forEach { seriesGroup ->
+                if (seriesGroup.seriesName != null) {
+                  item(
+                    key = "${item.id}_series_${seriesGroup.seriesName}",
+                    contentType = "series_group",
+                  ) {
+                    SeriesListHeader(seriesName = seriesGroup.seriesName)
+                  }
+                }
+                items(
+                  items = seriesGroup.books,
+                  key = { bookState -> bookState.value.id.value },
+                  contentType = { "item" },
+                ) { bookState ->
+                  ListBookRow(
+                    modifier = Modifier.padding(start = 16.dp),
+                    book = bookState.value,
+                    onBookClick = onBookClick,
+                    onBookLongClick = onBookLongClick,
+                  )
+                }
+              }
+            }
+          }
+        }
       }
       item {
         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
       }
     }
+  }
+}
+
+@Composable
+internal fun AuthorGroupRow(
+  author: String,
+  isExpanded: Boolean,
+  bookCount: Int,
+  onToggleExpanded: () -> Unit,
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .clip(MaterialTheme.shapes.medium)
+      .clickable { onToggleExpanded() }
+      .padding(horizontal = 16.dp, vertical = 12.dp),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Icon(
+      imageVector = VoiceIcons.Person,
+      contentDescription = null,
+      tint = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    Column(
+      modifier = Modifier
+        .weight(1f)
+        .padding(horizontal = 16.dp),
+    ) {
+      Text(
+        text = author,
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onSurface,
+      )
+      Text(
+        text = "$bookCount books",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+    }
+    Icon(
+      imageVector = if (isExpanded) VoiceIcons.ExpandMore else VoiceIcons.ChevronRight,
+      contentDescription = null,
+      tint = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
   }
 }
 
@@ -122,6 +214,16 @@ internal fun ListBookRow(
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 2,
           )
+
+          if (book.series != null) {
+            val partString = if (!book.seriesPart.isNullOrBlank()) ", Part ${book.seriesPart}" else ""
+            Text(
+              text = "${book.series}$partString",
+              style = MaterialTheme.typography.labelMedium,
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
+              maxLines = 1,
+            )
+          }
 
           BookRemainingProgressRow(
             modifier = Modifier
@@ -182,3 +284,14 @@ private fun ListBookRowPreviewWithProgress() {
 private fun ListBookRowPreviewWithoutProgress() {
   ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 0f), {}, {})
 }
+
+@Composable
+internal fun SeriesListHeader(seriesName: String) {
+  Text(
+    text = seriesName,
+    style = MaterialTheme.typography.titleSmall,
+    color = MaterialTheme.colorScheme.primary,
+    modifier = Modifier.padding(start = 32.dp, top = 8.dp, bottom = 4.dp),
+  )
+}
+

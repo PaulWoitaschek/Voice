@@ -77,6 +77,10 @@ class BookOverviewViewModel(
   private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
   @KioskModeFeatureFlagQualifier
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
+  @voice.core.data.store.GroupByAuthorStore
+  private val groupByAuthorStore: DataStore<Boolean>,
+  @voice.core.data.store.ExpandedAuthorsStore
+  private val expandedAuthorsStore: DataStore<Set<String>>,
   dispatcherProvider: DispatcherProvider,
 ) {
 
@@ -132,21 +136,65 @@ class BookOverviewViewModel(
       remember { mutableStateOf(null) }
     }
 
+    val groupByAuthor = remember { groupByAuthorStore.data }
+      .collectAsState(initial = false).value
+    val expandedAuthorsSet = remember { expandedAuthorsStore.data }
+      .collectAsState(initial = emptySet()).value
+
     return BookOverviewViewState(
       layoutMode = layoutMode,
       books = books
         .groupBy {
           it.category
         }
-        .mapValues { (category, books) ->
-          books
-            .sortedWith(category.comparator)
-            .associate { book ->
-              book.id to book.itemViewState(
-                currentBookId = currentBookId,
-                livePlaybackState = { livePlaybackState.value },
-              )
+        .mapValues { (category, booksInCategory) ->
+          val sortedBooks = booksInCategory.sortedWith(category.comparator)
+          if (groupByAuthor) {
+            val items = mutableListOf<BookOverviewItem>()
+            val groupedByAuthor = sortedBooks.groupBy { it.content.author }
+            groupedByAuthor.forEach { (author, authorBooks) ->
+              if (author == null) {
+                items.addAll(
+                  authorBooks.map { book ->
+                    androidx.compose.runtime.key(book.id.value) {
+                      BookOverviewItem.SingleBook(book.itemViewState(currentBookId, { livePlaybackState.value }))
+                    }
+                  },
+                )
+              } else {
+                items.add(
+                  BookOverviewItem.AuthorGroup(
+                    author = author,
+                    category = category,
+                    seriesGroups = authorBooks.groupBy { it.content.series }
+                      .map { (series, seriesBooks) ->
+                        BookOverviewItem.SeriesGroup(
+                          seriesName = series,
+                          books = seriesBooks.sortedWith { book1, book2 ->
+                            var cmp = nullsLast(String.CASE_INSENSITIVE_ORDER).compare(book1.content.part, book2.content.part)
+                            if (cmp != 0) return@sortedWith cmp
+                            String.CASE_INSENSITIVE_ORDER.compare(book1.content.name, book2.content.name)
+                          }.map { book ->
+                            androidx.compose.runtime.key(book.id.value) {
+                              book.itemViewState(currentBookId, { livePlaybackState.value })
+                            }
+                          }
+                        )
+                      }.sortedWith(compareBy(nullsLast(String.CASE_INSENSITIVE_ORDER)) { it.seriesName }),
+                    bookCount = authorBooks.size,
+                    isExpanded = expandedAuthorsSet.contains("${category.name}_$author"),
+                  ),
+                )
+              }
             }
+            items.toList()
+          } else {
+            sortedBooks.map { book ->
+              androidx.compose.runtime.key(book.id.value) {
+                BookOverviewItem.SingleBook(book.itemViewState(currentBookId, { livePlaybackState.value }))
+              }
+            }
+          }
         }
         .toSortedMap(),
       playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
@@ -218,15 +266,19 @@ class BookOverviewViewModel(
     return BookOverviewViewState(
       layoutMode = BookOverviewLayoutMode.List,
       books = mapOf(
-        BookOverviewCategory.CURRENT to KioskModeDemoData.demoAudiobooks.associate { book ->
-          book.id to mutableStateOf(
-            BookOverviewItemViewState(
-              name = book.title,
-              author = book.author,
-              cover = book.coverUrl,
-              progress = book.progress / 100F,
-              id = book.id,
-              remainingTime = book.remaining,
+        BookOverviewCategory.CURRENT to KioskModeDemoData.demoAudiobooks.map { book ->
+          BookOverviewItem.SingleBook(
+            mutableStateOf(
+              BookOverviewItemViewState(
+                name = book.title,
+                author = book.author,
+                cover = book.coverUrl,
+                progress = book.progress / 100F,
+                id = book.id,
+                remainingTime = book.remaining,
+                series = null,
+                seriesPart = null,
+              ),
             ),
           )
         },
@@ -263,6 +315,19 @@ class BookOverviewViewModel(
     dialog = null
     scope.launch {
       folderPickerMovedDialogShownStore.updateData { true }
+    }
+  }
+
+  fun toggleAuthorExpanded(category: BookOverviewCategory, author: String) {
+    val key = "${category.name}_$author"
+    scope.launch {
+      expandedAuthorsStore.updateData { current ->
+        if (current.contains(key)) {
+          current - key
+        } else {
+          current + key
+        }
+      }
     }
   }
 

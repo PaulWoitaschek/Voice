@@ -60,6 +60,8 @@ class SettingsViewModel(
   @DeveloperMenuUnlockedStore
   private val developerMenuUnlockedStore: DataStore<Boolean>,
   private val dynamicColorAvailability: DynamicColorAvailability,
+  @voice.core.data.store.GroupByAuthorStore
+  private val groupByAuthorStore: DataStore<Boolean>,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
@@ -87,6 +89,7 @@ class SettingsViewModel(
     val showThemeColorSchemePref = remember {
       dynamicColorAvailability.isSupported()
     }
+    val groupByAuthor by remember { groupByAuthorStore.data }.collectAsState(initial = false)
     return SettingsViewState(
       themeMode = themeMode,
       themeColorScheme = themeColorScheme,
@@ -110,6 +113,7 @@ class SettingsViewModel(
       showDeveloperMenu = showDeveloperMenu,
       showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
       kioskMode = kioskMode,
+      groupByAuthor = groupByAuthor,
     )
   }
 
@@ -259,5 +263,11 @@ class SettingsViewModel(
 
   override fun openDeveloperMenu() {
     navigator.goTo(Destination.DeveloperSettings)
+  }
+
+  override fun toggleGroupByAuthor() {
+    mainScope.launch {
+      groupByAuthorStore.updateData { !it }
+    }
   }
 }
