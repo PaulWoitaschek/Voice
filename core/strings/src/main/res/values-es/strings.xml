@@ -125,7 +125,7 @@
     <string name="settings.library.folders.summary">Administrar directorios escaneados en busca de audiolibros</string>
     <string name="settings.library.use_grid.title">Utilizar el diseño en cuadrícula</string>
     <string name="settings.playback.auto_rewind.title">Retroceso automático</string>
-    <string name="settings.playback.seek_time.title">Cantidad a omitir</string>
+    <string name="settings.playback.seek_time.title">Segundos de avance/retroceso</string>
     <string name="settings.support.faq.title">Preguntas frecuentes</string>
     <string name="settings.support.get_support.title">Obtener ayuda</string>
     <string name="settings.support.help_translating.title">Ayudar a traducir Voice</string>
