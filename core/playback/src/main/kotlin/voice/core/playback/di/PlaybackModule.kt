@@ -18,6 +18,7 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import voice.core.data.playback.RemoteAuthHeaderProvider
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.Media3AudioOffloadFeatureFlagQualifier
 import voice.core.playback.misc.VolumeGain
@@ -28,6 +29,7 @@ import voice.core.playback.player.VoicePlayer
 import voice.core.playback.player.onAudioSessionIdChanged
 import voice.core.playback.playstate.PlayStateDelegatingListener
 import voice.core.playback.playstate.PositionUpdater
+import voice.core.playback.session.HeaderInjectingHttpDataSourceFactory
 import voice.core.playback.session.LibrarySessionCallback
 import voice.core.playback.session.PlaybackService
 import voice.core.strings.R as StringsR
@@ -37,8 +39,12 @@ interface PlaybackModule {
 
   @Provides
   @SingleIn(PlaybackScope::class)
-  fun mediaSourceFactory(context: Context): MediaSource.Factory {
-    val dataSourceFactory = DefaultDataSource.Factory(context)
+  fun mediaSourceFactory(
+    context: Context,
+    remoteAuthHeaderProviders: Set<@JvmSuppressWildcards RemoteAuthHeaderProvider>,
+  ): MediaSource.Factory {
+    val httpDataSourceFactory = HeaderInjectingHttpDataSourceFactory(remoteAuthHeaderProviders)
+    val dataSourceFactory = DefaultDataSource.Factory(context, httpDataSourceFactory)
     val extractorsFactory = DefaultExtractorsFactory()
       .setConstantBitrateSeekingEnabled(true)
     return DefaultMediaSourceFactory(dataSourceFactory, extractorsFactory)

@@ -4,10 +4,13 @@ import kotlinx.coroutines.flow.Flow
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookSource
 
 public interface BookRepository {
 
   public fun flow(): Flow<List<Book>>
+
+  public fun flow(source: BookSource): Flow<List<Book>>
 
   public suspend fun all(): List<Book>
 

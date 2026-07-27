@@ -10,6 +10,7 @@ import kotlinx.coroutines.sync.withLock
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookSource
 import voice.core.logging.api.Logger
 
 @SingleIn(AppScope::class)
@@ -38,6 +39,16 @@ public class BookRepositoryImpl(
     return contentRepo.flow()
       .map { contents ->
         contents.filter { it.isActive }
+          .mapNotNull { content ->
+            content.book()
+          }
+      }
+  }
+
+  override fun flow(source: BookSource): Flow<List<Book>> {
+    return contentRepo.flow()
+      .map { contents ->
+        contents.filter { it.isActive && it.source == source }
           .mapNotNull { content ->
             content.book()
           }

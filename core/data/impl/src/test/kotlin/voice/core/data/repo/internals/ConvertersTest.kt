@@ -1,5 +1,6 @@
 package voice.core.data.repo.internals
 
+import voice.core.data.BookSource
 import voice.core.data.MarkData
 import java.io.File
 import java.time.Instant
@@ -12,6 +13,13 @@ class ConvertersTest {
   @Test
   fun instant() {
     test(Instant.now(), Converters::fromInstant, Converters::toInstant)
+  }
+
+  @Test
+  fun bookSource() {
+    BookSource.entries.forEach { source ->
+      test(source, Converters::fromBookSource, Converters::toBookSource)
+    }
   }
 
   @Test

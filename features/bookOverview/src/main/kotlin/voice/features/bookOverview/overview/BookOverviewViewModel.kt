@@ -25,6 +25,7 @@ import voice.core.common.MainScope
 import voice.core.common.comparator.sortedNaturally
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.BookSource
 import voice.core.data.GridMode
 import voice.core.data.KioskModeDemoData
 import voice.core.data.repo.BookContentRepo
@@ -98,7 +99,7 @@ class BookOverviewViewModel(
       .collectAsState(initial = PlayStateManager.PlayState.Paused).value
     val hasStoragePermissionBug = remember { deviceHasStoragePermissionBug.hasBug }
       .collectAsState().value
-    val books = remember { repo.flow() }
+    val books = remember { repo.flow(BookSource.LOCAL) }
       .collectAsState(initial = emptyList()).value
     val currentBookId = remember { currentBookStoreDataStore.data }
       .collectAsState(initial = null).value

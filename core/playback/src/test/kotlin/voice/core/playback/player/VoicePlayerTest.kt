@@ -27,6 +27,7 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.ChapterMark
 import voice.core.data.MarkData
+import voice.core.data.playback.ChapterUriResolver
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
@@ -90,7 +91,7 @@ class VoicePlayerTest {
     .build()
 
   private val scope = TestScope()
-  private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), mockk())
+  private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), emptySet<ChapterUriResolver>(), mockk())
   private val bookId = BookId(Uuid.random().toString())
   private lateinit var currentBook: Book
   private val sleepTimer = FakeSleepTimer()

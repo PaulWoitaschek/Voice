@@ -28,6 +28,8 @@ public data class BookContent(
   val narrator: String?,
   val series: String?,
   val part: String?,
+  @ColumnInfo(defaultValue = "LOCAL")
+  val source: BookSource = BookSource.LOCAL,
 ) {
 
   @Ignore

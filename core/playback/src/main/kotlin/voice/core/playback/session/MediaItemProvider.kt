@@ -16,6 +16,7 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.durationMs
+import voice.core.data.playback.ChapterUriResolver
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
@@ -31,9 +32,14 @@ class MediaItemProvider(
   private val chapterRepo: ChapterRepo,
   private val contentRepo: BookContentRepo,
   private val imageFileProvider: ImageFileProvider,
+  private val chapterUriResolvers: Set<@JvmSuppressWildcards ChapterUriResolver>,
   @CurrentBookStore
   private val currentBookStoreId: DataStore<BookId?>,
 ) {
+
+  private fun Chapter.resolveUri(content: BookContent): Uri {
+    return chapterUriResolvers.firstNotNullOfOrNull { it.resolve(this, content) } ?: id.toUri()
+  }
 
   fun root(): MediaItem = MediaItem(
     title = application.getString(StringsR.string.media_session_library_root),
@@ -149,7 +155,7 @@ class MediaItemProvider(
     mediaId = MediaId.Chapter(bookId = content.id, chapterId = chapter.id),
     browsable = false,
     isPlayable = true,
-    sourceUri = chapter.id.toUri(),
+    sourceUri = chapter.resolveUri(content),
     imageUri = content.cover?.toProvidedUri(),
     artist = content.author,
     mediaType = MediaType.AudioBookChapter,
@@ -165,7 +171,7 @@ class MediaItemProvider(
     mediaId = playbackItem.mediaId,
     browsable = false,
     isPlayable = true,
-    sourceUri = playbackItem.chapter.id.toUri(),
+    sourceUri = playbackItem.chapter.resolveUri(content),
     imageUri = content.cover?.toProvidedUri(),
     artist = content.author,
     durationMs = playbackItem.mark.durationMs,
