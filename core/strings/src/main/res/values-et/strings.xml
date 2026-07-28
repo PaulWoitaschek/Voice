@@ -80,8 +80,8 @@
     <string name="onboarding.completion.title">Kõik on tehtud!</string>
     <string name="onboarding.explanation.subtitle">Voice\'i puhul saad sa heliraamatuid lisada üksikute failidena või koondada neid kaustadesse. Tee nii, nagu soovid!</string>
     <string name="onboarding.explanation.title">Sinu raamatukogu, just nii nagu soovid</string>
-    <string name="onboarding.welcome.subtitle">Sinu isiklik heliraamatute esitaja taskus. Võtame nüüd ette algseadistamise.</string>
-    <string name="onboarding.welcome.title">Tere tulemast heliraamatuesitajasse Voice!</string>
+    <string name="onboarding.welcome.subtitle">Sinu isiklik heliraamatute esitaja (pleier) taskus. Võtame nüüd ette algseadistamise.</string>
+    <string name="onboarding.welcome.title">Tere tulemast - see on Voice!</string>
     <string name="playback.action.fast_forward">Keri edasi</string>
     <string name="playback.action.pause">Peata esitus</string>
     <string name="playback.action.play">Esita</string>
