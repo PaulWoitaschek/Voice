@@ -128,7 +128,7 @@
     <string name="settings.support.help_translating.title">Auta kääntämään Voicea</string>
     <string name="settings.support.report_issue.title">Ilmoita ongelmasta</string>
     <string name="settings.support.suggest_idea.title">Ehdota ideaa</string>
-    <string name="settings.support.support_voice.summary">Lahjoitukset auttavat pitämään Voicen yllä</string>
+    <string name="settings.support.support_voice.summary">Lahjoitukset auttavat Voicen ylläpidossa</string>
     <string name="settings.support.support_voice.title">Tue kehitystä</string>
     <string name="support.action.donate_kofi">Lahjoita Ko-fissa</string>
     <string name="support.description.maintenance">Voice on ilmainen avoimen lähdekoodin sovellus, jota ylläpitää yksi kehittäjä.</string>
