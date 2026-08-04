@@ -122,9 +122,9 @@
     <string name="settings.library.folders.summary">Hallitse kansioita, joista etsitään äänikirjoja</string>
     <string name="settings.library.use_grid.title">Käytä ruudukkoasettelua</string>
     <string name="settings.playback.auto_rewind.title">Automaattinen takaisinkelaus</string>
-    <string name="settings.playback.seek_time.title">Ohita määrä</string>
+    <string name="settings.playback.seek_time.title">Siirtymän pituus</string>
     <string name="settings.support.faq.title">UKK</string>
-    <string name="settings.support.get_support.title">Hanki tukea</string>
+    <string name="settings.support.get_support.title">Hanki apua</string>
     <string name="settings.support.help_translating.title">Auta kääntämään Voicea</string>
     <string name="settings.support.report_issue.title">Ilmoita ongelmasta</string>
     <string name="settings.support.suggest_idea.title">Ehdota ideaa</string>
@@ -139,9 +139,9 @@
     <string name="support.helps.open_source">Pidetään Voice mainoksettomana</string>
     <string name="support.title">Tue kehitystä</string>
     <string name="shortcut.play_current.short_label">Toista nykyinen</string>
-    <string name="sleep_timer.action.open">Uni-ajastin</string>
-    <string name="sleep_timer.dialog.action.decrement">Lyhyempään</string>
-    <string name="sleep_timer.dialog.action.increment">Pidempään</string>
+    <string name="sleep_timer.action.open">Uniajastin</string>
+    <string name="sleep_timer.dialog.action.decrement">Lyhennä</string>
+    <string name="sleep_timer.dialog.action.increment">Pidennä</string>
     <string name="sleep_timer.dialog.title">Hyviä unia! 🌙</string>
     <string name="sleep_timer.end_of_chapter">Luvun loppu</string>
 </resources>
