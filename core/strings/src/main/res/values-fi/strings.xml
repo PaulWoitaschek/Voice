@@ -88,11 +88,11 @@
     <string name="playback.action.play_pause">Toisto / Tauko</string>
     <string name="playback.action.rewind">Takaisinkelaus</string>
     <string name="playback.battery_optimization.action">Päivitä</string>
-    <string name="playback.battery_optimization.rationale">Laitteesi virtarajoitusten takija äänentoisto voi katkeilla.</string>
+    <string name="playback.battery_optimization.rationale">Virrankäyttörajoitusten vuoksi äänentoisto saattaa keskeytyä.</string>
     <string name="playback.chapter.current.content_description">Nykyinen luku</string>
     <string name="playback.chapter.next">Seuraava ääniraita</string>
     <string name="playback.chapter.previous">Edellinen ääniraita</string>
-    <string name="playback.option.skip_silence">Ohita Hiljaisuus</string>
+    <string name="playback.option.skip_silence">Ohita hiljaisuus</string>
     <string name="playback.option.volume_boost">Äänenvoimakkuuden tehostus</string>
     <string name="playback.speed.title">Toiston nopeus</string>
     <string name="review.feedback.action.cancel">Peruuta</string>
