@@ -111,4 +111,5 @@
     <string name="sleep_timer.dialog.action.decrement">Més curt</string>
     <string name="sleep_timer.dialog.action.increment">Més llarg</string>
     <string name="sleep_timer.dialog.title">Bona nit! 🌙</string>
+    <string name="common.dialog.ok">Acceptar</string>
 </resources>
