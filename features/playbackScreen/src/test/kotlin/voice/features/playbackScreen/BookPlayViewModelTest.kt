@@ -307,6 +307,48 @@ class BookPlayViewModelTest {
   }
 
   @Test
+  fun `viewState follows the current book id when it changes underneath the screen`() = scope.runTest {
+    val bookA = book(name = "BookA")
+    val bookB = book(name = "BookB")
+    val currentBookStoreId = MemoryDataStore<BookId?>(bookA.id)
+    val viewModel = BookPlayViewModel(
+      bookRepository = mockk {
+        coEvery { get(bookA.id) } returns bookA
+        coEvery { get(bookB.id) } returns bookB
+        every { flow(bookA.id) } returns MutableStateFlow(bookA)
+        every { flow(bookB.id) } returns MutableStateFlow(bookB)
+      },
+      currentBookResolver = currentBookResolver,
+      player = mockk {
+        every { pauseIfCurrentBookDifferentFrom(bookA.id) } just Runs
+      },
+      sleepTimer = sleepTimer,
+      playStateManager = playStateManager,
+      currentBookStoreId = currentBookStoreId,
+      navigator = mockk(),
+      bookmarkRepository = mockk(),
+      volumeGainFormatter = mockk(),
+      batteryOptimization = mockk(),
+      sleepTimerPreferenceStore = sleepTimerDataStore,
+      bookId = bookA.id,
+      dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
+      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
+      kioskModeFeatureFlag = MemoryFeatureFlag(false),
+    )
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = null, actual = awaitItem())
+      assertEquals(expected = "BookA", actual = awaitItem()!!.title)
+
+      currentBookStoreId.updateData { bookB.id }
+
+      assertEquals(expected = "BookB", actual = awaitItem()!!.title)
+    }
+  }
+
+  @Test
   fun `viewState uses currently playing demo book in kiosk mode`() = scope.runTest {
     val viewModel = viewModel(kioskMode = true)
 
