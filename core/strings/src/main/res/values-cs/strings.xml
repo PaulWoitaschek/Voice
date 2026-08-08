@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="book.category.action.mark_completed">Označit jako dokončené</string>
-    <string name="book.category.action.mark_current">Označit jako aktuální</string>
+    <string name="book.category.action.mark_current">Označit knihu jako aktuální</string>
     <string name="book.category.action.mark_not_started">Označit jako dosud nezahájené</string>
     <string name="book.delete.bottom_sheet.title">Odstranit knihu</string>
     <string name="book.delete.dialog.confirm_files">Odstranit mé soubory</string>

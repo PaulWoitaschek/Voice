@@ -1,20 +1,36 @@
-Hledáte jednoduchý, minimální přehrávač audioknih, který prostě funguje?
-Takový, který vám umožní soustředit se na to, co chcete dělat: Poslouchat audioknihy?
-Jednoduše přidáte hlavní složku audioknih a každá složka v ní bude rozpoznána jako jedna kniha. Díky tomu bude vaše knihovna jednoduchá a nepřeplněná.
+Aplikace Voice je jednoduchý a přehledný přehrávač audioknih pro ty, kteří mají své vlastní knihy.
 
-Co umí:
+Stačí jednou přidat složku s audioknihami a aplikace Voice promění vaše soubory se zvukovými nahrávkami v jednoduchou knihovnu. Pamatuje si pozici pro každou knihu, ovládání přehrávání máte vždy po ruce a zbytečně vám nepřekáží.
 
-- Pamatuje si poslední pozici
-- Nastavit rychlost přehrávání
-- Krásný material design
-- Denní a noční téma. Příjemné pro oči
-- Záložky
-- Android Auto
-- Časovač spánku. Není třeba vypínat přehrávač uprostřed noci.
+<b>Stvořena pro audioknihy</b>
 
-Voice je zdarma a s otevřeným zdrojovým kódem. To znamená, že se každý může podívat, co dělá. Používá minimální oprávnění.
+• Pokračujte přesně tam, kde jste skončili
+• Časovač režimu spánku s postupným ztišením
+• Zastavení na konci aktuální kapitoly
+• Prodloužení časovače zatřesením
+• Ovládání rychlosti přehrávání
+• Zesílení hlasitosti u tichých nahrávek
+• Přeskakování ticha
+• Automatické přetočení zpět po delších pauzách
+• Záložky s časovými značkami a vlastními názvy
+• Vyhledávání podle názvu knihy a autora
+• Filtrování podle stavu: rozposlouchané, poslechnuté a nové
+• Zobrazení v seznamu nebo mřížce
+• Přebaly knih z vložených obrázků, souborů na vašem zařízení nebo z obrázků vyhledaných na internetu
+• Widget na domovskou obrazovku, oznámení přehrávače s ovládacími prvky a podpora Android Auto
 
-Pokud máte návrhy nebo najdete chyby, nahlaste je zde:
+<b>Funguje s vašimi soubory</b>
+
+Aplikace Voice pracuje s audioknihami bez DRM ochrany, které jsou uloženy jako soubory ve formátech M4B, MP3, M4A, OGG, OGA, OPUS apod. Knihy si můžete uložit do složek, jak vám to vyhovuje; aplikace Voice je rozpozná a uspořádá do knihovny.
+
+<b>Bez zbytečností</b>
+
+• Nepotřebujete účet
+• Bez reklam
+• Žádná vynucená synchronizace s cloudem
+• Všechny funkce jsou dostupné bez nutnosti platit za rozšiřující balíčky
+
+Aplikace Voice má otevřený zdrojový kód chráněný licencí GNU GPLv3.
+
+Zpětná vazba a chybová hlášení (v angličtině):
 https://github.com/PaulWoitaschek/Voice/issues
-
-Licence open source je GNU GPLv3
