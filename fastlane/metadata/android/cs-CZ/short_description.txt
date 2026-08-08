@@ -1,1 +1,1 @@
-Čistý přehrávač audioknih pro vlastní soubory, s časovačem a záložkami.
+Jednoduchý přehrávač audioknih pro vlastní soubory s časovačem a záložkami.
