@@ -22,6 +22,7 @@ import voice.core.data.ThemeMode
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
+import voice.core.data.store.AdjustTimeForPlaybackSpeedStore
 import voice.core.data.store.DeveloperMenuUnlockedStore
 import voice.core.data.store.GridModeStore
 import voice.core.data.store.SeekTimeStore
@@ -60,6 +61,8 @@ class SettingsViewModel(
   @DeveloperMenuUnlockedStore
   private val developerMenuUnlockedStore: DataStore<Boolean>,
   private val dynamicColorAvailability: DynamicColorAvailability,
+  @AdjustTimeForPlaybackSpeedStore
+  private val adjustTimeForPlaybackSpeedStore: DataStore<Boolean>,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
@@ -84,6 +87,7 @@ class SettingsViewModel(
       kioskModeFeatureFlag.get()
     }
     val showDeveloperMenu by remember { developerMenuUnlockedStore.data }.collectAsState(initial = false)
+    val adjustTimeForPlaybackSpeed by remember { adjustTimeForPlaybackSpeedStore.data }.collectAsState(initial = false)
     val showThemeColorSchemePref = remember {
       dynamicColorAvailability.isSupported()
     }
@@ -110,6 +114,7 @@ class SettingsViewModel(
       showDeveloperMenu = showDeveloperMenu,
       showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
       kioskMode = kioskMode,
+      adjustTimeForPlaybackSpeed = adjustTimeForPlaybackSpeed,
     )
   }
 
@@ -242,6 +247,12 @@ class SettingsViewModel(
   override fun toggleAnalytics() {
     mainScope.launch {
       analyticsConsentStore.updateData { !it }
+    }
+  }
+
+  override fun toggleAdjustTimeForPlaybackSpeed() {
+    mainScope.launch {
+      adjustTimeForPlaybackSpeedStore.updateData { !it }
     }
   }
 
