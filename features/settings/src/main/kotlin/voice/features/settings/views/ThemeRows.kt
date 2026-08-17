@@ -145,13 +145,12 @@ private fun SelectionRow(
         onClick()
       }
       .fillMaxWidth(),
-    headlineContent = {
-      Text(text = title)
-    },
     supportingContent = {
       Text(text = value)
     },
-  )
+  ) {
+    Text(text = title)
+  }
 }
 
 @Composable
