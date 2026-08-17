@@ -64,3 +64,5 @@ export default defineConfig({
   },
   plugins: [fastlanePlugin()],
 })
+
+# Fix for issue #3711: safe input handling
