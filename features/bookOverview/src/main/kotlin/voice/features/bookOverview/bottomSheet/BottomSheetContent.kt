@@ -26,16 +26,15 @@ internal fun BottomSheetContent(
         modifier = Modifier.clickable {
           onItemClick(item)
         },
-        headlineContent = {
-          Text(text = stringResource(item.titleRes))
-        },
         leadingContent = {
           Icon(
             imageVector = item.icon,
             contentDescription = stringResource(item.titleRes),
           )
         },
-      )
+      ) {
+        Text(text = stringResource(item.titleRes))
+      }
     }
     Spacer(modifier = Modifier.size(24.dp))
   }

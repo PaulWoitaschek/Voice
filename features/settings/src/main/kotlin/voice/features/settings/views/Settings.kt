@@ -100,13 +100,12 @@ private fun Settings(
               contentDescription = stringResource(StringsR.string.library_folders_title),
             )
           },
-          headlineContent = {
-            Text(stringResource(StringsR.string.library_folders_title))
-          },
           supportingContent = {
             Text(stringResource(StringsR.string.settings_library_folders_summary))
           },
-        )
+        ) {
+          Text(stringResource(StringsR.string.library_folders_title))
+        }
       }
       item {
         ThemeModeRow(viewState.themeMode, listener::onThemeModeRowClick)
@@ -135,7 +134,6 @@ private fun Settings(
               contentDescription = stringResource(StringsR.string.settings_library_use_grid_title),
             )
           },
-          headlineContent = { Text(stringResource(StringsR.string.settings_library_use_grid_title)) },
           trailingContent = {
             Switch(
               checked = viewState.useGrid,
@@ -144,7 +142,9 @@ private fun Settings(
               },
             )
           },
-        )
+        ) {
+          Text(stringResource(StringsR.string.settings_library_use_grid_title))
+        }
       }
 
       item {
@@ -174,13 +174,12 @@ private fun Settings(
                 tint = MaterialTheme.colorScheme.primary,
               )
             },
-            headlineContent = {
-              Text(stringResource(StringsR.string.settings_support_support_voice_title))
-            },
             supportingContent = {
               Text(stringResource(StringsR.string.settings_support_support_voice_summary))
             },
-          )
+          ) {
+            Text(stringResource(StringsR.string.settings_support_support_voice_title))
+          }
         }
       }
 
@@ -193,10 +192,9 @@ private fun Settings(
               contentDescription = stringResource(StringsR.string.settings_support_suggest_idea_title),
             )
           },
-          headlineContent = {
-            Text(stringResource(StringsR.string.settings_support_suggest_idea_title))
-          },
-        )
+        ) {
+          Text(stringResource(StringsR.string.settings_support_suggest_idea_title))
+        }
       }
 
       item {
@@ -208,10 +206,9 @@ private fun Settings(
               contentDescription = stringResource(StringsR.string.settings_support_get_support_title),
             )
           },
-          headlineContent = {
-            Text(stringResource(StringsR.string.settings_support_get_support_title))
-          },
-        )
+        ) {
+          Text(stringResource(StringsR.string.settings_support_get_support_title))
+        }
       }
 
       item {
@@ -223,10 +220,9 @@ private fun Settings(
               contentDescription = stringResource(StringsR.string.settings_support_report_issue_title),
             )
           },
-          headlineContent = {
-            Text(stringResource(StringsR.string.settings_support_report_issue_title))
-          },
-        )
+        ) {
+          Text(stringResource(StringsR.string.settings_support_report_issue_title))
+        }
       }
       item {
         ListItem(
@@ -237,10 +233,9 @@ private fun Settings(
               contentDescription = stringResource(StringsR.string.settings_support_help_translating_title),
             )
           },
-          headlineContent = {
-            Text(stringResource(StringsR.string.settings_support_help_translating_title))
-          },
-        )
+        ) {
+          Text(stringResource(StringsR.string.settings_support_help_translating_title))
+        }
       }
       item {
         ListItem(
@@ -251,10 +246,9 @@ private fun Settings(
               contentDescription = stringResource(StringsR.string.settings_support_faq_title),
             )
           },
-          headlineContent = {
-            Text(stringResource(StringsR.string.settings_support_faq_title))
-          },
-        )
+        ) {
+          Text(stringResource(StringsR.string.settings_support_faq_title))
+        }
       }
       item {
         AppVersion(
@@ -294,9 +288,6 @@ private fun AnalyticsRow(
         contentDescription = null,
       )
     },
-    headlineContent = {
-      Text(text = stringResource(StringsR.string.settings_analytics_consent_title))
-    },
     supportingContent = {
       Text(text = stringResource(StringsR.string.settings_analytics_consent_description))
     },
@@ -306,7 +297,9 @@ private fun AnalyticsRow(
         onCheckedChange = { toggle() },
       )
     },
-  )
+  ) {
+    Text(text = stringResource(StringsR.string.settings_analytics_consent_title))
+  }
 }
 
 @ContributesTo(AppScope::class)
