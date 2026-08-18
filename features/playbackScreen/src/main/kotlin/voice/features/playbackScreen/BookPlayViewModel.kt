@@ -95,13 +95,15 @@ class BookPlayViewModel(
     val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeViewState()
 
-    val persistedBook = remember(bookId) {
-      bookRepository.flow(bookId).filterNotNull()
+    val currentBookId = remember { currentBookStoreId.data }.collectAsState(initial = bookId).value ?: bookId
+
+    val persistedBook = remember(currentBookId) {
+      bookRepository.flow(currentBookId).filterNotNull()
     }.collectAsState(initial = null).value ?: return null
 
     val experimentalPlaybackPersistence = experimentalPlaybackPersistenceFeatureFlag.get()
     val livePlaybackState = if (experimentalPlaybackPersistence) {
-      remember(bookId) { player.livePlaybackStateFlow(bookId) }
+      remember(currentBookId) { player.livePlaybackStateFlow(currentBookId) }
         .collectAsState(null).value
     } else {
       null
@@ -316,7 +318,10 @@ class BookPlayViewModel(
   }
 
   fun onBookmarkClick() {
-    navigator.goTo(Destination.Bookmarks(bookId))
+    scope.launch {
+      val book = currentBook() ?: return@launch
+      navigator.goTo(Destination.Bookmarks(book.id))
+    }
   }
 
   fun onBookmarkLongClick() {
@@ -368,7 +373,8 @@ class BookPlayViewModel(
   }
 
   private suspend fun currentBook(): Book? {
-    return currentBookResolver.book(bookId)
+    val id = currentBookStoreId.data.first() ?: bookId
+    return currentBookResolver.book(id)
   }
 
   @AssistedFactory
