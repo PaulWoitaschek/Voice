@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Als „Abgeschlossen“ markieren</string>
     <string name="book.category.action.mark_current">Als „Aktuell“ markieren</string>
     <string name="book.category.action.mark_not_started">Als „Neu“ markieren</string>
+    <string name="book.category.action.play_next">Als nächstes spielen</string>
+    <string name="book.category.action.remove_up_next">Aus „Als nächstes“ entfernen</string>
     <string name="book.delete.bottom_sheet.title">Buch löschen</string>
     <string name="book.delete.dialog.confirm_files">Lösche meine Dateien</string>
     <string name="book.delete.dialog.message">Dies wird die Dateien auf Deinem Gerät löschen.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">Abgeschlossen</string>
     <string name="library.category.current.title">Aktuell</string>
     <string name="library.category.not_started.title">Neu</string>
+    <string name="library.category.up_next.title">Als nächstes</string>
     <string name="library.empty.add_first_book">Füge Deinen Hörbuchordner hinzu, damit Du mit dem Hören beginnen kannst!</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
     <string name="library.folders.moved.dialog.title">Hörbuch-Ordner verschoben</string>

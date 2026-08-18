@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Marca com a completat</string>
     <string name="book.category.action.mark_current">Marca com a actual</string>
     <string name="book.category.action.mark_not_started">Marca com a no començat encara</string>
+    <string name="book.category.action.play_next">Reproduir el següent</string>
+    <string name="book.category.action.remove_up_next">Eliminar de A continuació</string>
     <string name="book.delete.bottom_sheet.title">Suprimeix el llibre</string>
     <string name="book.delete.dialog.confirm_files">Suprimeix els fitxers</string>
     <string name="book.delete.dialog.message">Això suprimirà els fitxers del dispositiu.</string>
@@ -61,6 +63,7 @@
     <string name="library.category.completed.title">Completat</string>
     <string name="library.category.current.title">Actual</string>
     <string name="library.category.not_started.title">Encara no s\'ha iniciat</string>
+    <string name="library.category.up_next.title">A continuació</string>
     <string name="library.empty.add_first_book">Afegiu la carpeta de l\'audiollibre perquè pugueu començar a escoltar-lo.</string>
     <string name="library.folders.title">Carpetes de l\'audiollibre</string>
     <string name="library.search.hint">Què busqueu?</string>
