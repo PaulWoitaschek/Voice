@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.folders.FolderType
+import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookContentRepoImpl
 import voice.core.data.repo.BookRepositoryImpl
 import voice.core.data.repo.ChapterRepoImpl
@@ -192,6 +193,24 @@ class MediaScannerTest {
     )
   }
 
+  @Test
+  fun scanAuthorParsesEachBookOnce() = test {
+    val audioBooks = folder("audiobooks")
+
+    audioFile(parent = audioBooks, "test.mp3")
+    audioFile(parent = audioBooks, "author1/test.mp3")
+    audioFile(parent = File(audioBooks, "author1/book1"), "c1.mp3")
+    audioFile(parent = File(audioBooks, "author1/book1"), "c2.mp3")
+    audioFile(parent = File(audioBooks, "author1/book2"), "a.mp3")
+
+    scan(FolderType.Author, audioBooks)
+
+    // Four books: three below author1, plus the one directly in the root folder.
+    // Expanding an author folder used to re-emit its whole child list once per child,
+    // so author1's three books were scanned three times each, giving 10 scans instead of 4.
+    assertEquals(expected = 4, actual = scannedBooks.size)
+  }
+
   private fun test(test: suspend TestEnvironment.() -> Unit) {
     runTest {
       TestEnvironment().use { test(it) }
@@ -207,8 +226,10 @@ class MediaScannerTest {
     private val chapterRepo = ChapterRepoImpl(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
     var analyzeCalls = 0
+    private val scannedRepo = ScannedBooksRecordingRepo(bookContentRepo)
+    val scannedBooks: List<BookId> get() = scannedRepo.scannedBooks
     private val scanner = MediaScanner(
-      contentRepo = bookContentRepo,
+      contentRepo = scannedRepo,
       chapterParser = ChapterParser(
         chapterRepo = chapterRepo,
         mediaAnalyzer = mediaAnalyzer,
@@ -294,4 +315,17 @@ class MediaScannerTest {
     val id: File,
     val chapters: List<File>,
   )
+
+  /** Records the candidate list the scanner builds, so tests can assert each book is scanned once. */
+  private class ScannedBooksRecordingRepo(
+    private val delegate: BookContentRepo,
+  ) : BookContentRepo by delegate {
+
+    val scannedBooks = mutableListOf<BookId>()
+
+    override suspend fun setAllInactiveExcept(ids: List<BookId>) {
+      scannedBooks += ids
+      delegate.setAllInactiveExcept(ids)
+    }
+  }
 }
