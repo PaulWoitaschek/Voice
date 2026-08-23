@@ -205,9 +205,6 @@ class MediaScannerTest {
 
     scan(FolderType.Author, audioBooks)
 
-    // Four books: three below author1, plus the one directly in the root folder.
-    // Expanding an author folder used to re-emit its whole child list once per child,
-    // so author1's three books were scanned three times each, giving 10 scans instead of 4.
     assertEquals(expected = 4, actual = scannedBooks.size)
   }
 
@@ -316,7 +313,6 @@ class MediaScannerTest {
     val chapters: List<File>,
   )
 
-  /** Records the candidate list the scanner builds, so tests can assert each book is scanned once. */
   private class ScannedBooksRecordingRepo(
     private val delegate: BookContentRepo,
   ) : BookContentRepo by delegate {
