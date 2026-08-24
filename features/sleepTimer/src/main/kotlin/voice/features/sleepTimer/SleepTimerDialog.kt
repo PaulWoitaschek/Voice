@@ -73,19 +73,15 @@ fun SleepTimerDialog(
             onAcceptSleepTime(time)
           },
           colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-          headlineContent = {
-            Text(text = minutes(minutes = time))
-          },
-        )
+        ) {
+          Text(text = minutes(minutes = time))
+        }
       }
       ListItem(
         modifier = Modifier.clickable {
           onAcceptSleepTime(viewState.customSleepTime)
         },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-        headlineContent = {
-          Text(text = minutes(minutes = viewState.customSleepTime))
-        },
         trailingContent = {
           Row {
             ContinuousPressIcon(
@@ -100,14 +96,15 @@ fun SleepTimerDialog(
             )
           }
         },
-      )
+      ) {
+        Text(text = minutes(minutes = viewState.customSleepTime))
+      }
       ListItem(
         modifier = Modifier.clickable(onClick = onAcceptSleepAtEndOfChapter),
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-        headlineContent = {
-          Text(text = stringResource(id = StringsR.string.sleep_timer_end_of_chapter))
-        },
-      )
+      ) {
+        Text(text = stringResource(id = StringsR.string.sleep_timer_end_of_chapter))
+      }
       Spacer(modifier = Modifier.size(32.dp))
     }
   }

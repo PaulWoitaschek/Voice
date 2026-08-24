@@ -23,10 +23,9 @@ internal fun DeveloperMenuItem(onClick: () -> Unit) {
         contentDescription = null,
       )
     },
-    headlineContent = {
-      Text(
-        text = "Developer Menu",
-      )
-    },
-  )
+  ) {
+    Text(
+      text = "Developer Menu",
+    )
+  }
 }

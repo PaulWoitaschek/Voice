@@ -63,16 +63,15 @@ internal fun SelectChapterDialog(
                 .clickable {
                   viewModel.onChapterClick(number = chapter.number)
                 },
-              headlineContent = {
-                Text(text = chapter.name)
-              },
               leadingContent = {
                 Text(text = chapter.number.toString())
               },
               trailingContent = {
                 Text(text = chapter.time)
               },
-            )
+            ) {
+              Text(text = chapter.name)
+            }
           }
         },
       )

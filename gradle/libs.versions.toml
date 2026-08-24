@@ -10,7 +10,7 @@ kotlin = "2.4.10"
 media3 = "1.10.1"
 jvm-bytecode = "17"
 jvm-toolchain = "25"
-agp = "9.3.1"
+agp = "9.3.2"
 ktlint-core = "1.8.0"
 ktlint-gradlePlugin = "0.14.0"
 retrofit = "3.0.0"
@@ -42,7 +42,7 @@ datastore = "androidx.datastore:datastore-core:1.2.1"
 seismic = "com.squareup:seismic:1.0.3"
 turbine = "app.cash.turbine:turbine:1.2.1"
 molecule = "app.cash.molecule:molecule-runtime:2.2.0"
-okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.4.0"
+okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.5.0"
 review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.7.1"
 clikt = "com.github.ajalt.clikt:clikt:5.1.0"
@@ -54,7 +54,7 @@ coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", 
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-bom = "com.google.firebase:firebase-bom:34.17.0"
+firebase-bom = "com.google.firebase:firebase-bom:34.18.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-remoteconfig = { module = "com.google.firebase:firebase-config" }
@@ -92,7 +92,7 @@ compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha22" }
+compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha26" }
 compose-activity = "androidx.activity:activity-compose:1.13.0"
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
@@ -139,7 +139,7 @@ retrofit = [
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.7" }
+crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.8" }
 googleServices = { id = "com.google.gms.google-services", version = "4.5.0" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
