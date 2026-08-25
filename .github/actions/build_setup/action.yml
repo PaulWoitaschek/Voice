@@ -13,7 +13,7 @@ runs:
       shell: bash
       run: echo "version=$(awk -F'"' '/jvm-toolchain/ {print $2}' gradle/libs.versions.toml)" >> "$GITHUB_OUTPUT"
     - name: Set up JDK
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v6
       with:
         distribution: zulu
         java-version: ${{ steps.jvm-version.outputs.version }}
