@@ -133,7 +133,7 @@
     <string name="settings.playback.auto_rewind.title">Аўтаматычна перамотваць назад</string>
     <string name="settings.playback.seek_time.title">Перамотваць па</string>
     <string name="settings.support.faq.title">FAQ</string>
-    <string name="settings.support.get_support.title">Падтрымка</string>
+    <string name="settings.support.get_support.title">Даведка</string>
     <string name="settings.support.help_translating.title">Дапамагчы з перакладам Voice</string>
     <string name="settings.support.report_issue.title">Паведаміць пра праблему</string>
     <string name="settings.support.suggest_idea.title">Прапанаваць ідэю</string>
