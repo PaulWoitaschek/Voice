@@ -113,6 +113,47 @@ class UpNextAdvancerTest {
     verify(exactly = 0) { player.setMediaItem(any()) }
   }
 
+  @Test
+  fun `clears the queue when the up-next book was deleted`() = scope.runTest {
+    val deletedUpNextBook = upNextBook.copy(content = upNextBook.content.copy(isActive = false))
+    coEvery { bookRepository.get(upNextBook.id) } returns deletedUpNextBook
+
+    advancer.onPlaybackStateChanged(Player.STATE_ENDED)
+    runCurrent()
+
+    assertNull(upNextBookStore.data.first())
+    assertEquals(expected = currentBook.id, actual = currentBookStore.data.first())
+    verify(exactly = 0) { player.setMediaItem(any()) }
+  }
+
+  @Test
+  fun `clears the up-next book once it actually starts playing`() = scope.runTest {
+    currentBookStore.updateData { upNextBook.id }
+
+    advancer.onIsPlayingChanged(true)
+    runCurrent()
+
+    assertNull(upNextBookStore.data.first())
+  }
+
+  @Test
+  fun `loading the up-next book into the session without playing it leaves the queue untouched`() = scope.runTest {
+    // e.g. adjusting volume boost or speed from the book's detail screen loads it into the
+    // session but never starts playback.
+    advancer.onIsPlayingChanged(false)
+    runCurrent()
+
+    assertEquals(expected = upNextBook.id, actual = upNextBookStore.data.first())
+  }
+
+  @Test
+  fun `does not clear the queue when a different book starts playing`() = scope.runTest {
+    advancer.onIsPlayingChanged(true)
+    runCurrent()
+
+    assertEquals(expected = upNextBook.id, actual = upNextBookStore.data.first())
+  }
+
   private fun chapter(): Chapter {
     return Chapter(
       id = ChapterId(Uuid.random().toString()),
