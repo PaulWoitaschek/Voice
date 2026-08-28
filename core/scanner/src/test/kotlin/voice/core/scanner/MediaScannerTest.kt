@@ -313,9 +313,7 @@ class MediaScannerTest {
     val chapters: List<File>,
   )
 
-  private class ScannedBooksRecordingRepo(
-    private val delegate: BookContentRepo,
-  ) : BookContentRepo by delegate {
+  private class ScannedBooksRecordingRepo(private val delegate: BookContentRepo) : BookContentRepo by delegate {
 
     val scannedBooks = mutableListOf<BookId>()
 
