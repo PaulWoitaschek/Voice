@@ -148,6 +148,27 @@ private fun Settings(
       }
 
       item {
+        ListItem(
+          modifier = Modifier.clickable { listener.toggleGroupByAuthor() },
+          leadingContent = {
+            Icon(
+              imageVector = VoiceIcons.Person,
+              contentDescription = stringResource(StringsR.string.settings_library_group_by_author_title),
+            )
+          },
+          headlineContent = { Text(stringResource(StringsR.string.settings_library_group_by_author_title)) },
+          trailingContent = {
+            Switch(
+              checked = viewState.groupByAuthor,
+              onCheckedChange = {
+                listener.toggleGroupByAuthor()
+              },
+            )
+          },
+        )
+      }
+
+      item {
         SeekTimeRow(viewState.seekTimeInSeconds) {
           listener.onSeekAmountRowClick()
         }
