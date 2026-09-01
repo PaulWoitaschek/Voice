@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">علّمه مكتمل</string>
     <string name="book.category.action.mark_current">علّمه الحالي</string>
     <string name="book.category.action.mark_not_started">علّمه أنه لم يبدأ</string>
+    <string name="book.category.action.play_next">العب التالي</string>
+    <string name="book.category.action.remove_up_next">إزالة من التالي</string>
     <string name="book.delete.bottom_sheet.title">احذف الكتاب</string>
     <string name="book.delete.dialog.confirm_files">احذف ملفاتي</string>
     <string name="book.delete.dialog.message">ستحذف هذه الملفات من على جهازك.</string>
@@ -62,6 +64,7 @@
     <string name="library.category.completed.title">انتهى</string>
     <string name="library.category.current.title">الحالي</string>
     <string name="library.category.not_started.title">لم يبدأ بعد</string>
+    <string name="library.category.up_next.title">التالي</string>
     <string name="library.empty.add_first_book">دعنا نضيف مجلد كتبك الصوتية لتبدأ الاستماع!</string>
     <string name="library.folders.title">مجلدات الكتب الصوتية</string>
     <string name="library.search.hint">هل أنت متحقق من ذلك؟</string>

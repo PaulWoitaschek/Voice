@@ -24,6 +24,7 @@ import voice.core.playback.misc.VolumeGain
 import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.playback.player.DurationInconsistenciesUpdater
 import voice.core.playback.player.OnlyAudioRenderersFactory
+import voice.core.playback.player.UpNextAdvancer
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.player.onAudioSessionIdChanged
 import voice.core.playback.playstate.PlayStateDelegatingListener
@@ -100,7 +101,9 @@ interface PlaybackModule {
     callback: LibrarySessionCallback,
     mainActivityIntentProvider: MainActivityIntentProvider,
     context: Context,
+    upNextAdvancer: UpNextAdvancer,
   ): MediaLibraryService.MediaLibrarySession {
+    upNextAdvancer.attachTo(player)
     return MediaLibraryService.MediaLibrarySession.Builder(service, player, callback)
       .setSessionActivity(mainActivityIntentProvider.toCurrentBook())
       .setMediaButtonPreferences(

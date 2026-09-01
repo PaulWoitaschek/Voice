@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Marchează ca terminată</string>
     <string name="book.category.action.mark_current">Marchează ca fiind curentă</string>
     <string name="book.category.action.mark_not_started">Marchează ca neîncepută încă</string>
+    <string name="book.category.action.play_next">Redă următorul</string>
+    <string name="book.category.action.remove_up_next">Eliminați din Următorul</string>
     <string name="book.delete.bottom_sheet.title">Șterge cartea</string>
     <string name="book.delete.dialog.confirm_files">Șterge fișierele mele</string>
     <string name="book.delete.dialog.message">Astfel veți șterge de pe dispozitiv și fișierele corespunzătoare cărții.</string>
@@ -61,6 +63,7 @@
     <string name="library.category.completed.title">Cărți citite</string>
     <string name="library.category.current.title">Cărți în lectură</string>
     <string name="library.category.not_started.title">Cărți neascultate încă</string>
+    <string name="library.category.up_next.title">Următorul</string>
     <string name="library.empty.add_first_book">Adaugă directorul cu cărțile tale și poți să începi!</string>
     <string name="library.folders.title">Directoare cărți</string>
     <string name="library.search.hint">Ce anume căutați?</string>

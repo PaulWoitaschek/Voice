@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">முடிக்கப்பட்டபடி குறி</string>
     <string name="book.category.action.mark_current">மின்னோட்டமாக குறிக்கவும்</string>
     <string name="book.category.action.mark_not_started">மார்க் இன்னும் தொடங்கவில்லை</string>
+    <string name="book.category.action.play_next">அடுத்து விளையாடு</string>
+    <string name="book.category.action.remove_up_next">அடுத்ததில் இருந்து அகற்று</string>
     <string name="book.delete.bottom_sheet.title">புத்தகத்தை நீக்கு</string>
     <string name="book.delete.dialog.confirm_files">எனது கோப்புகளை நீக்கவும்</string>
     <string name="book.delete.dialog.message">இது உங்கள் சாதனத்தில் உள்ள கோப்புகளை நீக்கும்.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">முடிந்தது</string>
     <string name="library.category.current.title">மின்னோட்ட்ம், ஓட்டம்</string>
     <string name="library.category.not_started.title">இன்னும் தொடங்கப்படவில்லை</string>
+    <string name="library.category.up_next.title">அடுத்தது</string>
     <string name="library.empty.add_first_book">உங்கள் ஆடியோபுக் கோப்புறையைச் சேர்ப்போம், எனவே நீங்கள் கேட்கத் தொடங்கலாம்!</string>
     <string name="library.folders.title">ஆடியோபுக் கோப்புறைகள்</string>
     <string name="library.folders.moved.dialog.title">ஒலிப்புத்தகக் கோப்புறைகள் நகர்த்தப்பட்டன</string>

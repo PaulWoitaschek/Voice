@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Marcáil mar Críochnaithe</string>
     <string name="book.category.action.mark_current">Marcáil mar Reatha</string>
     <string name="book.category.action.mark_not_started">Marcáil mar Gan Tosú fós</string>
+    <string name="book.category.action.play_next">Seinn Ar Aghaidh</string>
+    <string name="book.category.action.remove_up_next">Bain as Suas Ar Aghaidh</string>
     <string name="book.delete.bottom_sheet.title">Scrios Leabhar</string>
     <string name="book.delete.dialog.confirm_files">Scrios mo chomhaid</string>
     <string name="book.delete.dialog.message">Scriosfaidh sé seo na comhaid ar do ghléas.</string>
@@ -68,6 +70,7 @@
     <string name="library.category.completed.title">Críochnaithe</string>
     <string name="library.category.current.title">Reatha</string>
     <string name="library.category.not_started.title">Níl tosnaithe go fóill</string>
+    <string name="library.category.up_next.title">Suas Ar Aghaidh</string>
     <string name="library.empty.add_first_book">Cuirimis d’fhillteán closleabhar leis ionas gur féidir leat tosú ag éisteacht!</string>
     <string name="library.folders.title">Fillteáin na closleabhar</string>
     <string name="library.folders.moved.dialog.title">Bogadh fillteáin closleabhar</string>

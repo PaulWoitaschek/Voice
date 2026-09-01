@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Markera som färdiglyssnad</string>
     <string name="book.category.action.mark_current">Markera som pågående</string>
     <string name="book.category.action.mark_not_started">Markera som inte påbörjad</string>
+    <string name="book.category.action.play_next">Spela Nästa</string>
+    <string name="book.category.action.remove_up_next">Ta bort från Härnäst</string>
     <string name="book.delete.bottom_sheet.title">Ta bort bok</string>
     <string name="book.delete.dialog.confirm_files">Ta bort mina filer</string>
     <string name="book.delete.dialog.message">Detta kommer att radera filerna på din enhet.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">Färdiglyssnade</string>
     <string name="library.category.current.title">Pågående</string>
     <string name="library.category.not_started.title">Inte påbörjade</string>
+    <string name="library.category.up_next.title">Härnäst</string>
     <string name="library.empty.add_first_book">Lägg till din ljudboksmapp för att börja lyssna!</string>
     <string name="library.folders.title">Ljudboksmappar</string>
     <string name="library.folders.moved.dialog.title">Ljudboksmapparna har flyttats</string>
