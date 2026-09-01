@@ -18,6 +18,8 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SeekTimeStore
+import voice.core.featureflag.FeatureFlag
+import voice.core.featureflag.Media3AudioOffloadFeatureFlagQualifier
 import voice.core.logging.api.Logger
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
@@ -49,6 +51,8 @@ class VoicePlayer(
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,
   private val analytics: Analytics,
+  @Media3AudioOffloadFeatureFlagQualifier
+  private val media3AudioOffloadFeatureFlag: FeatureFlag<Boolean>,
 ) : ForwardingPlayer(player) {
 
   private val endOfChapterSleepTimerListener = object : Player.Listener {
@@ -333,7 +337,13 @@ class VoicePlayer(
       updateBook { it.copy(skipSilence = enabled) }
     }
     if (player is ExoPlayer) {
+      if (enabled) {
+        player.setAudioOffloadEnabled(false)
+      }
       player.skipSilenceEnabled = enabled
+      if (!enabled && media3AudioOffloadFeatureFlag.get()) {
+        player.setAudioOffloadEnabled(true)
+      }
     }
   }
 
