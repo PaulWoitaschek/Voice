@@ -9,6 +9,7 @@ import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.MediaSource
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaLibraryService
@@ -20,6 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.Media3AudioOffloadFeatureFlagQualifier
+import voice.core.playback.mediasource.Mp4AwareMediaSourceFactory
+import voice.core.playback.mediasource.PlatformMediaExtractor
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.playback.player.DurationInconsistenciesUpdater
@@ -41,7 +44,10 @@ interface PlaybackModule {
     val dataSourceFactory = DefaultDataSource.Factory(context)
     val extractorsFactory = DefaultExtractorsFactory()
       .setConstantBitrateSeekingEnabled(true)
-    return DefaultMediaSourceFactory(dataSourceFactory, extractorsFactory)
+    return Mp4AwareMediaSourceFactory(
+      default = DefaultMediaSourceFactory(dataSourceFactory, extractorsFactory),
+      mp4 = ProgressiveMediaSource.Factory(dataSourceFactory, PlatformMediaExtractor.Factory(context)),
+    )
   }
 
   @Provides
