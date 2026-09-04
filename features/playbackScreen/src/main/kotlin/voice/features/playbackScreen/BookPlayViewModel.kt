@@ -268,7 +268,7 @@ class BookPlayViewModel(
               number = previousChapters.sumOf { it.chapterMarks.count() } + markIndex + 1,
               name = chapterMark.name ?: "",
               active = chapterMark == book.currentMark && chapter == book.currentChapter,
-              time = formatTime(previousChapters.sumOf { it.duration } + chapterMark.startMs),
+              duration = formatTime(chapterMark.durationMs),
             )
           }
         },
