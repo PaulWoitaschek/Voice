@@ -135,6 +135,8 @@ class BookPlayViewModel(
       chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
       duration = currentMark.durationMs.milliseconds,
       playedTime = positionInCurrentMark.milliseconds,
+      totalDuration = book.duration.milliseconds,
+      totalPlayedTime = book.position.milliseconds,
       cover = book.content.coverUrl,
       skipSilence = book.content.skipSilence,
     )
@@ -151,6 +153,8 @@ class BookPlayViewModel(
       chapterName = currentlyPlaying.chapter,
       duration = 14.hours + 27.minutes,
       playedTime = 10.hours + 24.minutes,
+      totalDuration = 20.hours,
+      totalPlayedTime = 10.hours + 24.minutes,
       cover = book.coverUrl,
       skipSilence = false,
     )
