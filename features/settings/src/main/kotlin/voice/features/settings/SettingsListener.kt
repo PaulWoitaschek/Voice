@@ -28,6 +28,7 @@ interface SettingsListener {
   fun toggleAnalytics()
   fun openFolderPicker()
   fun onAppVersionClick()
+  fun toggleAdjustTimeForPlaybackSpeed()
 
   fun openDeveloperMenu()
 
@@ -57,6 +58,7 @@ interface SettingsListener {
       override fun openFolderPicker() {}
       override fun onAppVersionClick() {}
       override fun openDeveloperMenu() {}
+      override fun toggleAdjustTimeForPlaybackSpeed() {}
     }
   }
 }
