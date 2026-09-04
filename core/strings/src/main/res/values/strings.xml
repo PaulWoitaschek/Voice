@@ -171,6 +171,8 @@
     <string name="playback.battery_optimization.rationale">Due to your Power restrictions, playback interruptions might happen.</string>
     <!-- Content description prefix for the currently playing chapter. -->
     <string name="playback.chapter.current.content_description">Current chapter</string>
+    <!-- Content description prefix for a chapter's duration in the chapter list. -->
+    <string name="playback.chapter.duration.content_description">Chapter duration</string>
     <!-- Content description for moving to the next chapter or track. -->
     <string name="playback.chapter.next">Next track</string>
     <!-- Content description for moving to the previous chapter or track. -->

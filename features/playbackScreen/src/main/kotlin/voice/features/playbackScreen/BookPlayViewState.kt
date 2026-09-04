@@ -54,7 +54,7 @@ internal sealed interface BookPlayDialogViewState {
       val number: Int,
       val name: String,
       val active: Boolean,
-      val time: String,
+      val duration: String,
     )
   }
 
