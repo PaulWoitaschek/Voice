@@ -13,6 +13,7 @@ import voice.core.data.BookId
 import voice.features.bookOverview.search.BookSearchContent
 import voice.features.bookOverview.search.BookSearchViewState
 
+@Suppress("DEPRECATION")
 @Composable
 internal fun ColumnScope.BookOverviewSearchBar(
   horizontalPadding: Dp,

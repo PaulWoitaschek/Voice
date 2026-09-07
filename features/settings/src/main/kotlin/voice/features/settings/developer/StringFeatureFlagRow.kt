@@ -24,9 +24,6 @@ internal fun StringFeatureFlagRow(
     modifier = Modifier.clickable {
       showDialog = true
     },
-    headlineContent = {
-      Text(viewState.key)
-    },
     supportingContent = {
       Column {
         Text(viewState.description)
@@ -53,7 +50,9 @@ internal fun StringFeatureFlagRow(
         }
       }
     },
-  )
+  ) {
+    Text(viewState.key)
+  }
   if (showDialog) {
     EditStringFeatureFlagDialog(
       key = viewState.key,

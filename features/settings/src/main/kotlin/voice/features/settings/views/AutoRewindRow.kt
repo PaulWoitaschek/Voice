@@ -29,9 +29,6 @@ internal fun AutoRewindRow(
         contentDescription = stringResource(StringsR.string.settings_playback_auto_rewind_title),
       )
     },
-    headlineContent = {
-      Text(text = stringResource(StringsR.string.settings_playback_auto_rewind_title))
-    },
     supportingContent = {
       Text(
         text = LocalResources.current.getQuantityString(
@@ -41,7 +38,9 @@ internal fun AutoRewindRow(
         ),
       )
     },
-  )
+  ) {
+    Text(text = stringResource(StringsR.string.settings_playback_auto_rewind_title))
+  }
 }
 
 @Composable

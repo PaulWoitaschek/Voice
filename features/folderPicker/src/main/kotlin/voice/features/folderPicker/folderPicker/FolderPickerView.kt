@@ -139,10 +139,9 @@ private fun FolderOverviewView(
           } else {
             null
           },
-          headlineContent = {
-            Text(text = item.name)
-          },
-        )
+        ) {
+          Text(text = item.name)
+        }
       }
     }
   }

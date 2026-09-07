@@ -20,9 +20,6 @@ internal fun BooleanFeatureFlagRow(
     modifier = Modifier.clickable {
       setOverride(!viewState.value)
     },
-    headlineContent = {
-      Text(viewState.key)
-    },
     supportingContent = {
       Column {
         Text(viewState.description)
@@ -48,5 +45,7 @@ internal fun BooleanFeatureFlagRow(
         )
       }
     },
-  )
+  ) {
+    Text(viewState.key)
+  }
 }

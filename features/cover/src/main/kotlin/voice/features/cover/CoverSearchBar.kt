@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import voice.core.strings.R
 import voice.core.ui.icons.VoiceIcons
 
+@Suppress("DEPRECATION")
 @Composable
 internal fun CoverSearchBar(
   onCloseClick: () -> Unit,

@@ -224,20 +224,6 @@ internal fun BookmarkItem(
           .clickable {
             onClick(bookmark.id)
           },
-        headlineContent = {
-          Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = bookmark.title)
-            if (bookmark.showSleepIcon) {
-              Icon(
-                modifier = Modifier
-                  .padding(start = 4.dp)
-                  .size(16.dp),
-                imageVector = VoiceIcons.Timer,
-                contentDescription = stringResource(StringsR.string.sleep_timer_action_open),
-              )
-            }
-          }
-        },
         trailingContent = {
           Box {
             IconButton(
@@ -275,7 +261,20 @@ internal fun BookmarkItem(
         supportingContent = {
           Text(text = bookmark.subtitle)
         },
-      )
+      ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+          Text(text = bookmark.title)
+          if (bookmark.showSleepIcon) {
+            Icon(
+              modifier = Modifier
+                .padding(start = 4.dp)
+                .size(16.dp),
+              imageVector = VoiceIcons.Timer,
+              contentDescription = stringResource(StringsR.string.sleep_timer_action_open),
+            )
+          }
+        }
+      }
     },
   )
 }

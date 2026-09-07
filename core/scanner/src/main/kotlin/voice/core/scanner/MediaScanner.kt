@@ -35,9 +35,7 @@ internal class MediaScanner(
               if (author.isFile) {
                 listOf(author)
               } else {
-                author.children.flatMap {
-                  author.children
-                }
+                author.children
               }
             }
           }

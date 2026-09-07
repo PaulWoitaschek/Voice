@@ -29,9 +29,6 @@ internal fun SeekTimeRow(
         contentDescription = stringResource(StringsR.string.settings_playback_seek_time_title),
       )
     },
-    headlineContent = {
-      Text(text = stringResource(StringsR.string.settings_playback_seek_time_title))
-    },
     supportingContent = {
       Text(
         text = LocalResources.current.getQuantityString(
@@ -41,7 +38,9 @@ internal fun SeekTimeRow(
         ),
       )
     },
-  )
+  ) {
+    Text(text = stringResource(StringsR.string.settings_playback_seek_time_title))
+  }
 }
 
 @Composable

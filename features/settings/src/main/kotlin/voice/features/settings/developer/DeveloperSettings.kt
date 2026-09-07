@@ -59,9 +59,6 @@ private fun DeveloperSettings(
     LazyColumn(contentPadding = contentPadding) {
       item {
         ListItem(
-          headlineContent = {
-            Text("Refresh FCM")
-          },
           trailingContent = {
             TextButton(
               onClick = {
@@ -72,7 +69,9 @@ private fun DeveloperSettings(
               },
             )
           },
-        )
+        ) {
+          Text("Refresh FCM")
+        }
       }
 
       val fcmToken = viewState.fcmToken
@@ -81,9 +80,6 @@ private fun DeveloperSettings(
           val clipboard = LocalClipboard.current
           val scope = rememberCoroutineScope()
           ListItem(
-            headlineContent = {
-              Text("FCM Token")
-            },
             trailingContent = {
               TextButton(
                 onClick = {
@@ -98,7 +94,9 @@ private fun DeveloperSettings(
                 },
               )
             },
-          )
+          ) {
+            Text("FCM Token")
+          }
         }
       }
 
