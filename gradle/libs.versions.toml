@@ -5,7 +5,7 @@ sdk-target = "36"
 sdk-robolectric = "35"
 
 coroutines = "1.11.0"
-room = "2.8.4"
+room = "2.8.5"
 kotlin = "2.4.20"
 media3 = "1.10.1"
 jvm-bytecode = "17"
