@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
-import androidx.media3.common.TrackSelectionParameters
+import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.audio.SilenceSkippingAudioProcessor
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.extractor.DefaultExtractorsFactory
+import androidx.media3.extractor.mp3.Mp3Extractor
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaLibraryService
 import dev.zacsweers.metro.ContributesTo
@@ -23,9 +25,12 @@ import voice.core.featureflag.Media3AudioOffloadFeatureFlagQualifier
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.playback.player.DurationInconsistenciesUpdater
+import voice.core.playback.player.IndexSeekingMp3DataSource
 import voice.core.playback.player.OnlyAudioRenderersFactory
 import voice.core.playback.player.VoicePlayer
+import voice.core.playback.player.audiobookSilenceSkippingAudioProcessor
 import voice.core.playback.player.onAudioSessionIdChanged
+import voice.core.playback.player.setAudioOffloadEnabled
 import voice.core.playback.playstate.PlayStateDelegatingListener
 import voice.core.playback.playstate.PositionUpdater
 import voice.core.playback.session.LibrarySessionCallback
@@ -37,10 +42,20 @@ interface PlaybackModule {
 
   @Provides
   @SingleIn(PlaybackScope::class)
+  fun silenceSkippingAudioProcessor(): SilenceSkippingAudioProcessor {
+    return audiobookSilenceSkippingAudioProcessor()
+  }
+
+  @Provides
+  @SingleIn(PlaybackScope::class)
   fun mediaSourceFactory(context: Context): MediaSource.Factory {
-    val dataSourceFactory = DefaultDataSource.Factory(context)
+    val upstreamDataSourceFactory = DefaultDataSource.Factory(context)
+    val dataSourceFactory = DataSource.Factory {
+      IndexSeekingMp3DataSource(upstreamDataSourceFactory.createDataSource())
+    }
     val extractorsFactory = DefaultExtractorsFactory()
       .setConstantBitrateSeekingEnabled(true)
+      .setMp3ExtractorFlags(Mp3Extractor.FLAG_ENABLE_INDEX_SEEKING)
     return DefaultMediaSourceFactory(dataSourceFactory, extractorsFactory)
   }
 
@@ -68,16 +83,7 @@ interface PlaybackModule {
       .build()
       .also { player ->
         if (media3AudioOffloadFeatureFlag.get()) {
-          player.trackSelectionParameters = player.trackSelectionParameters
-            .buildUpon()
-            .setAudioOffloadPreferences(
-              TrackSelectionParameters.AudioOffloadPreferences.Builder()
-                .setAudioOffloadMode(TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
-                .setIsGaplessSupportRequired(true)
-                .setIsSpeedChangeSupportRequired(true)
-                .build(),
-            )
-            .build()
+          player.setAudioOffloadEnabled(true)
         }
         playStateDelegatingListener.attachTo(player)
         positionUpdater.attachTo(player)
