@@ -238,6 +238,10 @@
     <string name="settings.playback.auto_rewind.title">Auto rewind</string>
     <!-- Title for the setting that controls skip-forward and rewind duration. -->
     <string name="settings.playback.seek_time.title">Skip amount</string>
+    <!-- Settings row title for adjusting displayed times by playback speed. -->
+    <string name="settings.playback.adjust_time_for_speed.title">Adjust times for playback speed</string>
+    <!-- Settings row description for adjusting displayed times by playback speed. -->
+    <string name="settings.playback.adjust_time_for_speed.summary">Divide displayed times by the current playback speed</string>
     <!-- Settings support row for opening the FAQ. -->
     <string name="settings.support.faq.title">FAQ</string>
     <!-- Settings support row for getting help. -->
