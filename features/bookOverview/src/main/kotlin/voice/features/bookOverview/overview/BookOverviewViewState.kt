@@ -6,8 +6,34 @@ import voice.core.data.BookId
 import voice.features.bookOverview.search.BookSearchViewState
 
 @Immutable
+sealed interface BookOverviewItem {
+  val id: String
+
+  data class SingleBook(val state: State<BookOverviewItemViewState>) : BookOverviewItem {
+    override val id: String
+      get() = state.value.id.value
+  }
+
+  data class SeriesGroup(
+    val seriesName: String?,
+    val books: List<State<BookOverviewItemViewState>>
+  )
+
+  data class AuthorGroup(
+    val author: String,
+    val category: BookOverviewCategory,
+    val seriesGroups: List<SeriesGroup>,
+    val bookCount: Int,
+    val isExpanded: Boolean,
+  ) : BookOverviewItem {
+    override val id: String
+      get() = "author_${category.name}_$author"
+  }
+}
+
+@Immutable
 data class BookOverviewViewState(
-  val books: Map<BookOverviewCategory, Map<BookId, State<BookOverviewItemViewState>>>,
+  val books: Map<BookOverviewCategory, List<BookOverviewItem>>,
   val layoutMode: BookOverviewLayoutMode,
   val playButtonState: PlayButtonState?,
   val showAddBookHint: Boolean,

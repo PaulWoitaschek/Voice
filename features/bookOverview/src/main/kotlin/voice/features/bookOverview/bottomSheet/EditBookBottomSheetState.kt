@@ -18,4 +18,5 @@ enum class BottomSheetItem(
   BookCategoryMarkAsNotStarted(StringsR.string.book_category_action_mark_not_started, VoiceIcons.HourglassEmpty),
   BookCategoryMarkAsCurrent(StringsR.string.book_category_action_mark_current, VoiceIcons.NotStarted),
   BookCategoryMarkAsCompleted(StringsR.string.book_category_action_mark_completed, VoiceIcons.Done),
+  BookSeries(StringsR.string.book_edit_series_action, VoiceIcons.CollectionsBookmark),
 }
