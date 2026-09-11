@@ -119,6 +119,22 @@
     <string name="library.folders.moved.dialog.message">You can now manage audiobook folders in Preferences.</string>
     <!-- Hint text for searching books in the library. -->
     <string name="library.search.hint">What are you looking for?</string>
+    <!-- Bottom-sheet action and screen title for local listening statistics. -->
+    <string name="listening_stats.title">Listening stats</string>
+    <!-- Empty-state text shown before any listening time has been recorded for a book. -->
+    <string name="listening_stats.empty">Play this book and your listening time will appear here.</string>
+    <!-- Label for filtering listening statistics to the current day. -->
+    <string name="listening_stats.period.day">Day</string>
+    <!-- Label for filtering listening statistics to the current week. -->
+    <string name="listening_stats.period.week">Week</string>
+    <!-- Label for filtering listening statistics to the current month. -->
+    <string name="listening_stats.period.month">Month</string>
+    <!-- Headline for the total listened time in the selected period. -->
+    <string name="listening_stats.total.title">Listened in this period</string>
+    <!-- Duration text that combines whole hours and minutes. -->
+    <string name="listening_stats.duration.hours_minutes">%1$dh %2$dm</string>
+    <!-- Duration text for values under one hour. -->
+    <string name="listening_stats.duration.minutes">%dm</string>
     <!-- Button label for granting the storage permission workaround. -->
     <string name="library.storage_permission_bug.action">Grant permission</string>
     <!-- Message explaining why a storage permission workaround is needed. -->
