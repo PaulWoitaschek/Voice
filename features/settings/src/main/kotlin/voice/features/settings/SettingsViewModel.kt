@@ -260,4 +260,8 @@ class SettingsViewModel(
   override fun openDeveloperMenu() {
     navigator.goTo(Destination.DeveloperSettings)
   }
+
+  override fun openMediaNotificationSettings() {
+    navigator.goTo(Destination.MediaNotificationSettings)
+  }
 }

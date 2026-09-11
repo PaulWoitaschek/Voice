@@ -10,7 +10,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.extractor.DefaultExtractorsFactory
-import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaLibraryService
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
@@ -29,8 +28,8 @@ import voice.core.playback.player.onAudioSessionIdChanged
 import voice.core.playback.playstate.PlayStateDelegatingListener
 import voice.core.playback.playstate.PositionUpdater
 import voice.core.playback.session.LibrarySessionCallback
+import voice.core.playback.session.MediaButtonPreferencesUpdater
 import voice.core.playback.session.PlaybackService
-import voice.core.strings.R as StringsR
 
 @ContributesTo(PlaybackScope::class)
 interface PlaybackModule {
@@ -99,24 +98,14 @@ interface PlaybackModule {
     player: VoicePlayer,
     callback: LibrarySessionCallback,
     mainActivityIntentProvider: MainActivityIntentProvider,
-    context: Context,
+    mediaButtonPreferencesUpdater: MediaButtonPreferencesUpdater,
   ): MediaLibraryService.MediaLibrarySession {
     return MediaLibraryService.MediaLibrarySession.Builder(service, player, callback)
       .setSessionActivity(mainActivityIntentProvider.toCurrentBook())
-      .setMediaButtonPreferences(
-        listOf(
-          CommandButton.Builder(CommandButton.ICON_SKIP_BACK)
-            .setDisplayName(context.getString(StringsR.string.playback_action_rewind))
-            .setPlayerCommand(Player.COMMAND_SEEK_BACK)
-            .setSlots(CommandButton.SLOT_BACK)
-            .build(),
-          CommandButton.Builder(CommandButton.ICON_SKIP_FORWARD)
-            .setDisplayName(context.getString(StringsR.string.playback_action_fast_forward))
-            .setPlayerCommand(Player.COMMAND_SEEK_FORWARD)
-            .setSlots(CommandButton.SLOT_FORWARD)
-            .build(),
-        ),
-      )
+      .setMediaButtonPreferences(mediaButtonPreferencesUpdater.preferences())
       .build()
+      .also { session ->
+        mediaButtonPreferencesUpdater.attachTo(session)
+      }
   }
 }

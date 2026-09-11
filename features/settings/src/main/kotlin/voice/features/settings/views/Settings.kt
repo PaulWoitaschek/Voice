@@ -160,6 +160,18 @@ private fun Settings(
       }
 
       item {
+        ListItem(
+          modifier = Modifier.clickable { listener.openMediaNotificationSettings() },
+          headlineContent = {
+            Text(stringResource(StringsR.string.settings_media_notification_title))
+          },
+          supportingContent = {
+            Text(stringResource(StringsR.string.settings_media_notification_summary))
+          },
+        )
+      }
+
+      item {
         AutoSleepTimerCard(viewState.autoSleepTimer, listener)
       }
 
