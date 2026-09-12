@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Merkitse valmiiksi</string>
     <string name="book.category.action.mark_current">Merkitse nykyiseksi</string>
     <string name="book.category.action.mark_not_started">Merkitse ei vielä aloitetuksi</string>
+    <string name="book.category.action.play_next">Toista seuraavaksi</string>
+    <string name="book.category.action.remove_up_next">Poista Seuraavaksi-jonosta</string>
     <string name="book.delete.bottom_sheet.title">Poista kirja</string>
     <string name="book.delete.dialog.confirm_files">Poista tiedostoni</string>
     <string name="book.delete.dialog.message">Tämä poistaa tiedostot laitteeltasi.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">Valmiina</string>
     <string name="library.category.current.title">Nykyinen</string>
     <string name="library.category.not_started.title">Ei vielä aloitettu</string>
+    <string name="library.category.up_next.title">Seuraavana</string>
     <string name="library.empty.add_first_book">Lisätään äänikirjakansiosi jotta voit aloittaa kuuntelemisen!</string>
     <string name="library.folders.title">Äänikirjakansiot</string>
     <string name="library.folders.moved.dialog.title">Äänikirjakansiot siirretty</string>

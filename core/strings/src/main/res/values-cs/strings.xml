@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Označit jako dokončené</string>
     <string name="book.category.action.mark_current">Označit knihu jako aktuální</string>
     <string name="book.category.action.mark_not_started">Označit jako dosud nezahájené</string>
+    <string name="book.category.action.play_next">Přehrát jako další</string>
+    <string name="book.category.action.remove_up_next">Odebrat z Následující</string>
     <string name="book.delete.bottom_sheet.title">Odstranit knihu</string>
     <string name="book.delete.dialog.confirm_files">Odstranit mé soubory</string>
     <string name="book.delete.dialog.message">Toto odstraní soubory z vašeho zařízení.</string>
@@ -65,6 +67,7 @@
     <string name="library.category.completed.title">Dokončeno</string>
     <string name="library.category.current.title">Aktuální</string>
     <string name="library.category.not_started.title">Doposud nespuštěno</string>
+    <string name="library.category.up_next.title">Následující</string>
     <string name="library.empty.add_first_book">Pojďme přidat vaši složku s audioknihami ať můžete začít poslouchat!</string>
     <string name="library.folders.title">Složky s audioknihami</string>
     <string name="library.folders.moved.dialog.title">Složky audioknih přesunuty</string>

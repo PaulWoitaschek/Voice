@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Tandai Selesai</string>
     <string name="book.category.action.mark_current">Tandai Sedang Dibaca</string>
     <string name="book.category.action.mark_not_started">Tandai Belum Dibaca</string>
+    <string name="book.category.action.play_next">Mainkan Berikutnya</string>
+    <string name="book.category.action.remove_up_next">Hapus dari Berikutnya</string>
     <string name="book.delete.bottom_sheet.title">Hapus Buku</string>
     <string name="book.delete.dialog.confirm_files">Hapus berkas saya</string>
     <string name="book.delete.dialog.message">Ini akan menghapus berkas di perangkat Anda.</string>
@@ -56,6 +58,7 @@
     <string name="library.category.completed.title">Selesai</string>
     <string name="library.category.current.title">Saat ini</string>
     <string name="library.category.not_started.title">Belum dimulai</string>
+    <string name="library.category.up_next.title">Berikutnya</string>
     <string name="library.empty.add_first_book">Mari tambahkan folder buku audio Anda sehingga Anda dapat mulai mendengarkan!</string>
     <string name="library.folders.title">Folder buku audio</string>
     <string name="library.folders.moved.dialog.title">Folder buku audio dipindahkan</string>

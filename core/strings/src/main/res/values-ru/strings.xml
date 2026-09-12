@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Пометить как прослушанную</string>
     <string name="book.category.action.mark_current">Пометить как открытую</string>
     <string name="book.category.action.mark_not_started">Пометить как непрослушанную</string>
+    <string name="book.category.action.play_next">Воспроизвести следующим</string>
+    <string name="book.category.action.remove_up_next">Удалить из списка «Далее»</string>
     <string name="book.delete.bottom_sheet.title">Удалить книгу</string>
     <string name="book.delete.dialog.confirm_files">Удалить файлы</string>
     <string name="book.delete.dialog.message">Это действие удалит файлы книги с устройства.</string>
@@ -65,6 +67,7 @@
     <string name="library.category.completed.title">Прослушанные</string>
     <string name="library.category.current.title">Слушаю</string>
     <string name="library.category.not_started.title">Непрослушанные</string>
+    <string name="library.category.up_next.title">Далее</string>
     <string name="library.empty.add_first_book">Давайте выберем папку с аудиокнигами!</string>
     <string name="library.folders.title">Папки с аудиокнигами</string>
     <string name="library.folders.moved.dialog.title">Папки аудиокниг перенесены</string>

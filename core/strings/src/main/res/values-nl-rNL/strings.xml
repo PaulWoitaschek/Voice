@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Markeren als afgerond</string>
     <string name="book.category.action.mark_current">Markeren als huidig boek</string>
     <string name="book.category.action.mark_not_started">Markeren als nog niet aan begonnen</string>
+    <string name="book.category.action.play_next">Speel Volgende</string>
+    <string name="book.category.action.remove_up_next">Verwijderen uit Volgende</string>
     <string name="book.delete.bottom_sheet.title">Boek verwijderen</string>
     <string name="book.delete.dialog.confirm_files">Mijn bestanden verwijderen</string>
     <string name="book.delete.dialog.message">Hierdoor worden alle bestanden op je apparaat verwijderd.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">Voltooid</string>
     <string name="library.category.current.title">Huidig</string>
     <string name="library.category.not_started.title">Nog niet begonnen</string>
+    <string name="library.category.up_next.title">Volgende</string>
     <string name="library.empty.add_first_book">Laten we je luisterboekmap toevoegen om te beginnen met luisteren!</string>
     <string name="library.folders.title">Luisterboekmappen</string>
     <string name="library.folders.moved.dialog.title">Audioboekmappen verplaatst</string>

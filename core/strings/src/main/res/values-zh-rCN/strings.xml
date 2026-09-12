@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">标记为已结束播放</string>
     <string name="book.category.action.mark_current">标记为正在播放</string>
     <string name="book.category.action.mark_not_started">标记为尚未开始播放</string>
+    <string name="book.category.action.play_next">播放下一个</string>
+    <string name="book.category.action.remove_up_next">从下一个中删除</string>
     <string name="book.delete.bottom_sheet.title">删除有声书</string>
     <string name="book.delete.dialog.confirm_files">删除我的文件</string>
     <string name="book.delete.dialog.message">这样做将从您的设备上删除文件。</string>
@@ -50,6 +52,7 @@
     <string name="library.category.completed.title">已结束播放</string>
     <string name="library.category.current.title">正在播放中</string>
     <string name="library.category.not_started.title">尚未开始播放</string>
+    <string name="library.category.up_next.title">下一个</string>
     <string name="library.empty.add_first_book">首先添加有声书文件夹，然后就可以开始听书啦！</string>
     <string name="library.folders.title">有声书文件夹</string>
     <string name="library.search.hint">您在找什么？</string>

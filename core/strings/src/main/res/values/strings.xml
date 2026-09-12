@@ -6,6 +6,10 @@
     <string name="book.category.action.mark_current">Mark as Current</string>
     <!-- Bottom-sheet action for moving a book to the not-started category. -->
     <string name="book.category.action.mark_not_started">Mark as Not Started Yet</string>
+    <!-- Bottom-sheet action for queuing a book to play after the current one finishes. -->
+    <string name="book.category.action.play_next">Play Next</string>
+    <!-- Bottom-sheet action for un-queuing a book that was marked to play next. -->
+    <string name="book.category.action.remove_up_next">Remove from Up Next</string>
     <!-- Bottom-sheet action title for deleting a book. -->
     <string name="book.delete.bottom_sheet.title">Delete Book</string>
     <!-- Checkbox label confirming that book files should be deleted. -->
@@ -109,6 +113,8 @@
     <string name="library.category.current.title">Current</string>
     <!-- Library category header for books not started yet. -->
     <string name="library.category.not_started.title">Not started Yet</string>
+    <!-- Library category header for the book queued to play next. -->
+    <string name="library.category.up_next.title">Up Next</string>
     <!-- Library empty-state prompt shown before the first audiobook is added. -->
     <string name="library.empty.add_first_book">Let\'s add your audiobook folder so you can start listening!</string>
     <!-- Title for screens and rows that manage audiobook folders. -->

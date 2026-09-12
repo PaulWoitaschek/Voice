@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Пазначыць як завершаную</string>
     <string name="book.category.action.mark_current">Пазначыць як бягучую</string>
     <string name="book.category.action.mark_not_started">Пазначыць як непачатую</string>
+    <string name="book.category.action.play_next">Гуляць наступным</string>
+    <string name="book.category.action.remove_up_next">Выдаліць са спіса «Далей»</string>
     <string name="book.delete.bottom_sheet.title">Выдаліць кнігу</string>
     <string name="book.delete.dialog.confirm_files">Выдаліць мае файлы</string>
     <string name="book.delete.dialog.message">Будуць выдаленыя файлы на вашай прыладзе.</string>
@@ -65,6 +67,7 @@
     <string name="library.category.completed.title">Завершаныя</string>
     <string name="library.category.current.title">Чытанае зараз</string>
     <string name="library.category.not_started.title">Яшчэ не пачатыя</string>
+    <string name="library.category.up_next.title">Далей</string>
     <string name="library.empty.add_first_book">Давайце вызначым папку з аўдыякнігамі!</string>
     <string name="library.folders.title">Папкі з аўдыякнігамі</string>
     <string name="library.folders.moved.dialog.title">Папкі аўдыякніг перамешчаны</string>

@@ -14,6 +14,8 @@ enum class BottomSheetItem(
   Title(StringsR.string.book_edit_name_label, VoiceIcons.Title),
   InternetCover(StringsR.string.book_edit_cover_internet, VoiceIcons.Download),
   FileCover(StringsR.string.book_edit_cover_file, VoiceIcons.Image),
+  PlayNext(StringsR.string.book_category_action_play_next, VoiceIcons.SkipNext),
+  RemoveFromUpNext(StringsR.string.book_category_action_remove_up_next, VoiceIcons.Remove),
   DeleteBook(StringsR.string.book_delete_bottom_sheet_title, VoiceIcons.Delete),
   BookCategoryMarkAsNotStarted(StringsR.string.book_category_action_mark_not_started, VoiceIcons.HourglassEmpty),
   BookCategoryMarkAsCurrent(StringsR.string.book_category_action_mark_current, VoiceIcons.NotStarted),

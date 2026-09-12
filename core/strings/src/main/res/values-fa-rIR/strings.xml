@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">علامت زدن به عنوان تکمیل شده</string>
     <string name="book.category.action.mark_current">علامت زدن به عنوان جاری</string>
     <string name="book.category.action.mark_not_started">علامت زدن به عنوان شروع نشده</string>
+    <string name="book.category.action.play_next">پخش بعدی</string>
+    <string name="book.category.action.remove_up_next">حذف از در انتظار پخش</string>
     <string name="book.delete.bottom_sheet.title">پاک کردن کتاب</string>
     <string name="book.delete.dialog.confirm_files">فایلهای من را پاک کن</string>
     <string name="book.delete.dialog.message">با این کار فایل های موجود در دستگاه شما حذف می شود.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">تمام شده</string>
     <string name="library.category.current.title">جاری</string>
     <string name="library.category.not_started.title">هنوز شروع نشده</string>
+    <string name="library.category.up_next.title">در انتظار پخش</string>
     <string name="library.empty.add_first_book">پوشه کتاب صوتی خود را اضافه کنید تا بتوانید شروع به گوش دادن کنید!</string>
     <string name="library.folders.title">پوشه‌های کتاب صوتی</string>
     <string name="library.folders.moved.dialog.title">پوشه‌های کتاب صوتی منتقل شدند</string>

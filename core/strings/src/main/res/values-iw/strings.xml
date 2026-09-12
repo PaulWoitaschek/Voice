@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">סמן כהושלם</string>
     <string name="book.category.action.mark_current">סמן כנוכחי</string>
     <string name="book.category.action.mark_not_started">סמן כ-עוד לא התחלתי</string>
+    <string name="book.category.action.play_next">שחק הבא</string>
+    <string name="book.category.action.remove_up_next">הסר מ-הבאים בתור</string>
     <string name="book.delete.bottom_sheet.title">מחק ספר</string>
     <string name="book.delete.dialog.confirm_files">מחק את הקבצים שלי</string>
     <string name="book.delete.dialog.message">פעולה זו תמחק את הקבצים במכשיר שלך.</string>
@@ -62,6 +64,7 @@
     <string name="library.category.completed.title">הושלמו</string>
     <string name="library.category.current.title">נוכחי</string>
     <string name="library.category.not_started.title">לא שמעתי עדיין</string>
+    <string name="library.category.up_next.title">הבאים בתור</string>
     <string name="library.empty.add_first_book">בואו נוסיף את תיקיית הקולספר שלכם כדי שתוכלו להתחיל להאזין!</string>
     <string name="library.folders.title">תיקיית קולספר</string>
     <string name="library.folders.moved.dialog.title">תיקיות ספרי השמע הועברו</string>

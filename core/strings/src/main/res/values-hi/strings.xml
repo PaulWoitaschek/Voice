@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">पूर्ण चिह्नित करें</string>
     <string name="book.category.action.mark_current">वर्तमान चिह्नित करें</string>
     <string name="book.category.action.mark_not_started">अभी प्रारंभ नहीं चिह्नित करें</string>
+    <string name="book.category.action.play_next">अगला खेलें</string>
+    <string name="book.category.action.remove_up_next">\'अगला\' से हटाएं</string>
     <string name="book.delete.bottom_sheet.title">पुस्तक हटाएँ</string>
     <string name="book.delete.dialog.confirm_files">मेरी फाइलें हटाएं</string>
     <string name="book.delete.dialog.message">इससे आपके डिवाइस पर फाइलें हटा दी जाएंगी।</string>
@@ -58,6 +60,7 @@
     <string name="library.category.completed.title">पूर्ण</string>
     <string name="library.category.current.title">वर्तमान</string>
     <string name="library.category.not_started.title">अभी प्रारंभ नही</string>
+    <string name="library.category.up_next.title">अगला</string>
     <string name="library.empty.add_first_book">चलिए आपका ऑडियोबुक फोल्डर जोड़ते हैं ताकि आप सुनना शुरू कर सकें!</string>
     <string name="library.folders.title">ऑडिओबुक के फोल्डर</string>
     <string name="library.search.hint">आप क्या ढूंढ रहे हैं?</string>

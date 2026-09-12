@@ -3,12 +3,14 @@ package voice.features.bookOverview.deleteBook
 import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.datastore.core.DataStore
 import androidx.documentfile.provider.DocumentFile
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.data.BookId
+import voice.core.data.store.UpNextBookStore
 import voice.core.logging.api.Logger
 import voice.core.scanner.MediaScanTrigger
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
@@ -20,6 +22,8 @@ import voice.features.bookOverview.di.BookOverviewScope
 class DeleteBookViewModel(
   private val application: Application,
   private val mediaScanTrigger: MediaScanTrigger,
+  @UpNextBookStore
+  private val upNextBookStore: DataStore<BookId?>,
 ) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
@@ -68,6 +72,7 @@ class DeleteBookViewModel(
       scope.launch {
         val uri = state.id.toUri()
         val documentFile = DocumentFile.fromSingleUri(application, uri)
+        upNextBookStore.updateData { current -> current.takeUnless { it == state.id } }
         scope.launch {
           documentFile?.delete()
           mediaScanTrigger.scan(restartIfScanning = true)

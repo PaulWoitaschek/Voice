@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">सम्पन्न भयो भनि टिक लगाउनुहोस्</string>
     <string name="book.category.action.mark_current">हालको भनि टिक लगाउनुहोस्</string>
     <string name="book.category.action.mark_not_started">सुरु भएको छैन भनि टिक लगाउनुहोस्</string>
+    <string name="book.category.action.play_next">अर्को खेल्नुहोस्</string>
+    <string name="book.category.action.remove_up_next">अर्कोबाट हटाउनुहोस्</string>
     <string name="book.delete.bottom_sheet.title">पुस्तक मेटाउनुहोस्</string>
     <string name="book.delete.dialog.confirm_files">मेरो फाइलहरू मेटाउनुहोस्</string>
     <string name="book.delete.dialog.message">यसले तपाईंको यन्त्रमा फाइलहरू मेटाउनेछ।</string>
@@ -54,6 +56,7 @@
     <string name="library.category.completed.title">सम्पन्न भयो</string>
     <string name="library.category.current.title">हालको</string>
     <string name="library.category.not_started.title">सुरु भएको छैन</string>
+    <string name="library.category.up_next.title">त्यसपछि</string>
     <string name="library.empty.add_first_book">तपाईंको अडियोबूक फोल्डर थप्नुहोस् ताकि तपाईं सुन्न सुरु गर्न सक्नुहुन्छ!</string>
     <string name="library.folders.title">अडियोबूक फोल्डरहरू</string>
     <string name="library.search.hint">तपाईं के खोज्दै हुनुन्छ?</string>

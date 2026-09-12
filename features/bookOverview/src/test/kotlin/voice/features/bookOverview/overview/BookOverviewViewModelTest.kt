@@ -10,9 +10,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
@@ -33,6 +31,7 @@ import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.search.BookSearch
 import voice.core.ui.GridCount
+import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -63,6 +62,7 @@ class BookOverviewViewModelTest {
         every { livePlaybackStateFlow(currentBook.id) } returns livePlaybackFlow
       },
       currentBookStoreDataStore = MemoryDataStore(currentBook.id),
+      upNextBookStore = MemoryDataStore(null),
       folderPickerMovedDialogShownStore = MemoryDataStore(false),
       gridModeStore = MemoryDataStore(GridMode.LIST),
       gridCount = mockk<GridCount> {
@@ -128,6 +128,7 @@ class BookOverviewViewModelTest {
       playStateManager = PlayStateManager(),
       playerController = mockk(),
       currentBookStoreDataStore = MemoryDataStore(null),
+      upNextBookStore = MemoryDataStore(null),
       folderPickerMovedDialogShownStore = MemoryDataStore(false),
       gridModeStore = MemoryDataStore(GridMode.LIST),
       gridCount = mockk<GridCount> {
@@ -300,6 +301,7 @@ class BookOverviewViewModelTest {
       playStateManager = PlayStateManager(),
       playerController = mockk(),
       currentBookStoreDataStore = MemoryDataStore(null),
+      upNextBookStore = MemoryDataStore(null),
       folderPickerMovedDialogShownStore = folderPickerMovedDialogShownStore,
       gridModeStore = MemoryDataStore(GridMode.LIST),
       gridCount = mockk<GridCount> {
@@ -328,16 +330,5 @@ class BookOverviewViewModelTest {
     return mockk {
       every { this@mockk.installTime } returns installTime
     }
-  }
-}
-
-private class MemoryDataStore<T>(initial: T) : DataStore<T> {
-
-  private val value = MutableStateFlow(initial)
-
-  override val data: Flow<T> get() = value
-
-  override suspend fun updateData(transform: suspend (t: T) -> T): T {
-    return value.updateAndGet { transform(it) }
   }
 }

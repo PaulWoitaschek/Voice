@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Merk as klaar</string>
     <string name="book.category.action.mark_current">Merk as huidige boek</string>
     <string name="book.category.action.mark_not_started">Merk as nog nie begin nie</string>
+    <string name="book.category.action.play_next">Speel Volgende</string>
+    <string name="book.category.action.remove_up_next">Verwyder van Volgende</string>
     <string name="book.delete.bottom_sheet.title">Skrap boek</string>
     <string name="book.delete.dialog.confirm_files">Skrap my lêers</string>
     <string name="book.delete.dialog.message">Die aksie sal die lêers op jou toestel verwyder of skrap.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">Voltooi</string>
     <string name="library.category.current.title">Huidig</string>
     <string name="library.category.not_started.title">Nog nie begin nie</string>
+    <string name="library.category.up_next.title">Volgende</string>
     <string name="library.empty.add_first_book">Kom ons voeg jou audioboek gids sodat jy kan begin luister!</string>
     <string name="library.folders.title">Klankboekgids</string>
     <string name="library.folders.moved.dialog.title">Oudioboekvouers geskuif</string>

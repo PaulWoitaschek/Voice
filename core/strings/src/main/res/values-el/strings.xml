@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Επισήμανση ως ολοκληρωμένο</string>
     <string name="book.category.action.mark_current">Επισήμανση ως τρέχον</string>
     <string name="book.category.action.mark_not_started">Επισήμανση ως μη διαβασμένου</string>
+    <string name="book.category.action.play_next">Αναπαραγωγή επόμενου</string>
+    <string name="book.category.action.remove_up_next">Αφαίρεση από τα Επόμενα</string>
     <string name="book.delete.bottom_sheet.title">Διαγραφή Βιβλίου</string>
     <string name="book.delete.dialog.confirm_files">Διαγραφή των αρχείων μου</string>
     <string name="book.delete.dialog.message">Αυτό θα διαγράψει τα αρχεία στη συσκευή σας.</string>
@@ -44,6 +46,7 @@
     <string name="library.category.completed.title">Ολοκληρωμένα</string>
     <string name="library.category.current.title">Τρέχον</string>
     <string name="library.category.not_started.title">Μη διαβασμένα</string>
+    <string name="library.category.up_next.title">Επόμενα</string>
     <string name="library.empty.add_first_book">Ας προσθέσουμε το φάκελο των ηχητικών βιβλίων για να αρχίσετε την ακρόαση!</string>
     <string name="library.folders.title">Φάκελοι Audiobook</string>
     <string name="library.search.hint">Τι ψάχνετε;</string>
