@@ -5,30 +5,30 @@ sdk-target = "36"
 sdk-robolectric = "35"
 
 coroutines = "1.11.0"
-room = "2.8.4"
-kotlin = "2.4.10"
+room = "2.8.5"
+kotlin = "2.4.20"
 media3 = "1.10.1"
 jvm-bytecode = "17"
 jvm-toolchain = "25"
-agp = "9.3.2"
+agp = "9.4.0"
 ktlint-core = "1.8.0"
 ktlint-gradlePlugin = "0.14.0"
 retrofit = "3.0.0"
 metro = "1.4.2"
-navigation3 = "1.1.6"
+navigation3 = "1.1.7"
 androidx-lifecycle = "2.11.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 junit = "junit:junit:4.13.2"
-materialKolor = "com.materialkolor:material-kolor:5.0.0"
+materialKolor = "com.materialkolor:material-kolor:5.0.1"
 mockk = "io.mockk:mockk:1.14.11"
 paging-runtime = "androidx.paging:paging-runtime-ktx:3.5.1"
 paging-compose = "androidx.paging:paging-compose:3.5.1"
 retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
-robolectric = "org.robolectric:robolectric:4.16.1"
+robolectric = "org.robolectric:robolectric:4.17"
 coil = "io.coil-kt:coil-compose:2.7.0"
 appCompat = "androidx.appcompat:appcompat:1.8.0"
 androidxCore = "androidx.core:core-ktx:1.19.0"
@@ -47,14 +47,14 @@ review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.7.1"
 clikt = "com.github.ajalt.clikt:clikt:5.1.0"
 jebml = "org.jitsi:jebml:2.4.4-6-gb310849"
-slf4j-noop = "org.slf4j:slf4j-nop:2.0.18"
+slf4j-noop = "org.slf4j:slf4j-nop:2.0.19"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
-firebase-bom = "com.google.firebase:firebase-bom:34.18.0"
+firebase-bom = "com.google.firebase:firebase-bom:34.19.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-remoteconfig = { module = "com.google.firebase:firebase-config" }
@@ -81,7 +81,7 @@ media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-rob
 lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 lifecycle-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
-compose-bom = "androidx.compose:compose-bom:2026.08.00"
+compose-bom = "androidx.compose:compose-bom:2026.09.00"
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-tooling-core = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
@@ -92,7 +92,7 @@ compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha26" }
+compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha27" }
 compose-activity = "androidx.activity:activity-compose:1.13.0"
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
@@ -102,7 +102,7 @@ metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" 
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ktlint-compose = "io.nlopez.compose.rules:ktlint:0.6.4"
+ktlint-compose = "io.nlopez.compose.rules:ktlint:0.6.6"
 
 [bundles]
 compose = [
