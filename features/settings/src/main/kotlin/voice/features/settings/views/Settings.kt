@@ -160,6 +160,26 @@ private fun Settings(
       }
 
       item {
+        ListItem(
+          modifier = Modifier.clickable { listener.toggleLockscreenSeeking() },
+          leadingContent = {
+            Icon(
+              imageVector = VoiceIcons.LockOpen,
+              contentDescription = stringResource(StringsR.string.settings_playback_lockscreen_seeking_title),
+            )
+          },
+          headlineContent = { Text(stringResource(StringsR.string.settings_playback_lockscreen_seeking_title)) },
+          supportingContent = { Text(stringResource(StringsR.string.settings_playback_lockscreen_seeking_summary)) },
+          trailingContent = {
+            Switch(
+              checked = viewState.lockscreenSeekingEnabled,
+              onCheckedChange = { listener.toggleLockscreenSeeking() },
+            )
+          },
+        )
+      }
+
+      item {
         AutoSleepTimerCard(viewState.autoSleepTimer, listener)
       }
 
