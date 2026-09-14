@@ -46,6 +46,7 @@ internal fun SelectChapterDialog(
           items(dialogState.items) { chapter ->
             val isCurrentChapter = chapter.active
             val description = stringResource(StringsR.string.playback_chapter_current_content_description)
+            val durationLabel = stringResource(StringsR.string.playback_chapter_duration_content_description)
             val backgroundColor = if (chapter.active) {
               MaterialTheme.colorScheme.primaryContainer
             } else {
@@ -67,7 +68,12 @@ internal fun SelectChapterDialog(
                 Text(text = chapter.number.toString())
               },
               trailingContent = {
-                Text(text = chapter.time)
+                Text(
+                  modifier = Modifier.semantics {
+                    contentDescription = "$durationLabel: ${chapter.duration}"
+                  },
+                  text = chapter.duration,
+                )
               },
             ) {
               Text(text = chapter.name)
