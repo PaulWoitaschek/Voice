@@ -234,6 +234,12 @@
     <string name="settings.library.folders.summary">Manage folders scanned for audiobooks</string>
     <!-- Settings row for toggling grid layout in the library. -->
     <string name="settings.library.use_grid.title">Use grid layout</string>
+    <!-- Label for one of the three configurable notification button slots, %1$d is 1, 2 or 3. -->
+    <string name="settings.media_notification.button_label">Button %1$d</string>
+    <!-- Settings row summary explaining the notification button customization screen. -->
+    <string name="settings.media_notification.summary">Choose which actions appear in the playback notification</string>
+    <!-- Settings row and screen title for customizing the playback notification buttons. -->
+    <string name="settings.media_notification.title">Notification buttons</string>
     <!-- Title for the setting that rewinds automatically when playback resumes. -->
     <string name="settings.playback.auto_rewind.title">Auto rewind</string>
     <!-- Title for the setting that controls skip-forward and rewind duration. -->

@@ -61,6 +61,11 @@ sealed interface Destination {
   }
 
   @Serializable
+  data object MediaNotificationSettings : Compose {
+    override val trackingName: String get() = "MediaNotificationSettings"
+  }
+
+  @Serializable
   data object BookOverview : Compose {
     override val trackingName: String get() = "BookOverview"
   }
