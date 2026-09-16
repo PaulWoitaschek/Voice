@@ -20,6 +20,11 @@ sealed interface Destination {
   }
 
   @Serializable
+  data class ListeningStats(val bookId: BookId) : Compose {
+    override val trackingName: String get() = "ListeningStats"
+  }
+
+  @Serializable
   data class CoverFromInternet(val bookId: BookId) : Compose {
     override val trackingName: String get() = "CoverFromInternet"
   }
