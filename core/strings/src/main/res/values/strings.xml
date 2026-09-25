@@ -280,4 +280,6 @@
     <string name="sleep_timer.dialog.title">Sweet dreams! 🌙</string>
     <!-- Sleep timer option and playback status for stopping at the end of a chapter. -->
     <string name="sleep_timer.end_of_chapter">End of Chapter</string>
+    <!-- Summary text for total book progress on the playback screen. -->
+    <string name="playback_total_progress_summary">%1$d%% Complete • %2$s remaining</string>
 </resources>
