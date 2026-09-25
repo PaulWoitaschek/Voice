@@ -5,27 +5,23 @@ import android.hardware.SensorManager
 import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.awaitCancellation
 import com.squareup.seismic.ShakeDetector as SeismicShakeDetector
 
 @ContributesBinding(AppScope::class)
 class ShakeDetectorImpl(private val context: Context) : ShakeDetector {
 
   override suspend fun detect() {
-    suspendCancellableCoroutine { cont ->
-      val sensorManager = context.getSystemService<SensorManager>()
-        ?: return@suspendCancellableCoroutine
-      val listener = SeismicShakeDetector.Listener {
-        if (!cont.isCompleted) {
-          cont.resume(Unit)
-        }
-      }
-      val shakeDetector = SeismicShakeDetector(listener)
-      shakeDetector.start(sensorManager, SensorManager.SENSOR_DELAY_GAME)
-      cont.invokeOnCancellation {
-        shakeDetector.stop()
-      }
+    val sensorManager = context.getSystemService<SensorManager>() ?: awaitCancellation()
+    val shaken = CompletableDeferred<Unit>()
+    val listener = SeismicShakeDetector.Listener { shaken.complete(Unit) }
+    val shakeDetector = SeismicShakeDetector(listener)
+    shakeDetector.start(sensorManager, SensorManager.SENSOR_DELAY_GAME)
+    try {
+      shaken.await()
+    } finally {
+      shakeDetector.stop()
     }
   }
 }
