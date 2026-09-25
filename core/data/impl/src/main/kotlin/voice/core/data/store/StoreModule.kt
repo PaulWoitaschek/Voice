@@ -17,6 +17,7 @@ import voice.core.data.BookId
 import voice.core.data.GridMode
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.data.notification.MediaNotificationPreferences
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.FeatureFlagOverride
 import java.io.File
@@ -111,6 +112,17 @@ public interface StoreModule {
       serializer = SleepTimerPreference.Companion.serializer(),
       fileName = "sleepTime3",
       defaultValue = SleepTimerPreference.Default,
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @MediaNotificationPreferencesStore
+  private fun mediaNotificationPreferences(factory: VoiceDataStoreFactory): DataStore<MediaNotificationPreferences> {
+    return factory.create(
+      serializer = MediaNotificationPreferences.Companion.serializer(),
+      fileName = "mediaNotificationPreferences",
+      defaultValue = MediaNotificationPreferences.Default,
     )
   }
 
