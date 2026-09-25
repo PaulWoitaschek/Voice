@@ -72,6 +72,7 @@ class SettingsViewModelTest {
     kioskModeFeatureFlag = kioskModeFeatureFlag,
     developerMenuUnlockedStore = developerMenuUnlockedStore,
     dynamicColorAvailability = dynamicColorAvailability,
+    adjustTimeForPlaybackSpeedStore = MemoryDataStore(false),
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
 
