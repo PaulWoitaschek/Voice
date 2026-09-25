@@ -30,6 +30,7 @@ interface SettingsListener {
   fun onAppVersionClick()
 
   fun openDeveloperMenu()
+  fun toggleGroupByAuthor()
 
   companion object {
     fun noop() = object : SettingsListener {
@@ -57,6 +58,7 @@ interface SettingsListener {
       override fun openFolderPicker() {}
       override fun onAppVersionClick() {}
       override fun openDeveloperMenu() {}
+      override fun toggleGroupByAuthor() {}
     }
   }
 }
