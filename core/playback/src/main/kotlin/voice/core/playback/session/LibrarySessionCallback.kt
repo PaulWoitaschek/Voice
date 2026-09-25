@@ -28,6 +28,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.LockscreenSeekingEnabledStore
 import voice.core.logging.api.Logger
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.session.search.BookSearchHandler
@@ -42,6 +43,8 @@ class LibrarySessionCallback(
   private val bookSearchHandler: BookSearchHandler,
   @CurrentBookStore
   private val currentBookStoreId: DataStore<BookId?>,
+  @LockscreenSeekingEnabledStore
+  private val lockscreenSeekingEnabledStore: DataStore<Boolean>,
   private val bookRepository: BookRepository,
 ) : MediaLibrarySession.Callback {
 
@@ -179,6 +182,20 @@ class LibrarySessionCallback(
       .buildUpon()
       .add(SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY))
       .build()
+      
+    scope.launch {
+      lockscreenSeekingEnabledStore.data.collect { enabled ->
+        val playerCommands = if (enabled) {
+          connectionResult.availablePlayerCommands
+        } else {
+          connectionResult.availablePlayerCommands.buildUpon()
+            .remove(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM)
+            .build()
+        }
+        session.setAvailableCommands(controller, sessionCommands, playerCommands)
+      }
+    }
+
     return ConnectionResult.accept(
       sessionCommands,
       connectionResult.availablePlayerCommands,

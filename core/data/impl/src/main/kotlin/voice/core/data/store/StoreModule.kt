@@ -204,6 +204,13 @@ public interface StoreModule {
       fileName = "featureFlagOverrides",
     )
   }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @LockscreenSeekingEnabledStore
+  private fun lockscreenSeekingEnabled(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("lockscreenSeekingEnabled", defaultValue = false)
+  }
 }
 
 private class LegacyDarkThemeMigration(
