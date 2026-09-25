@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Märgi kuulatuks</string>
     <string name="book.category.action.mark_current">Märgi kuulamisel olevaks</string>
     <string name="book.category.action.mark_not_started">Märgi ootel olevaks</string>
+    <string name="book.category.action.play_next">Esita järgmisena</string>
+    <string name="book.category.action.remove_up_next">Eemalda järjekorrast</string>
     <string name="book.delete.bottom_sheet.title">Kustuta heliraamat</string>
     <string name="book.delete.dialog.confirm_files">Kustuta minu failid</string>
     <string name="book.delete.dialog.message">Järgnevaga kustutad need failid oma nutiseadmest.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">Kuulatud</string>
     <string name="library.category.current.title">Praegune</string>
     <string name="library.category.not_started.title">Kuulamise ootel</string>
+    <string name="library.category.up_next.title">Järgmisena</string>
     <string name="library.empty.add_first_book">Lisame nüüd üheskoos heliraamatute kausta ja sa saad alustada kuulamisega!</string>
     <string name="library.folders.title">Heliraamatute kaustad</string>
     <string name="library.folders.moved.dialog.title">Audioraamatute kaustad teisaldati</string>

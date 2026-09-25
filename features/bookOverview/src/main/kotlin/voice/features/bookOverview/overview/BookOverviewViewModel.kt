@@ -33,6 +33,7 @@ import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.FolderPickerMovedDialogShownStore
 import voice.core.data.store.GridModeStore
+import voice.core.data.store.UpNextBookStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.FolderPickerInSettingsFeatureFlagQualifier
@@ -60,6 +61,8 @@ class BookOverviewViewModel(
   private val playerController: PlayerController,
   @CurrentBookStore
   private val currentBookStoreDataStore: DataStore<BookId?>,
+  @UpNextBookStore
+  private val upNextBookStore: DataStore<BookId?>,
   @FolderPickerMovedDialogShownStore
   private val folderPickerMovedDialogShownStore: DataStore<Boolean>,
   @GridModeStore
@@ -102,6 +105,8 @@ class BookOverviewViewModel(
       .collectAsState(initial = emptyList()).value
     val currentBookId = remember { currentBookStoreDataStore.data }
       .collectAsState(initial = null).value
+    val upNextBookId = remember { upNextBookStore.data }
+      .collectAsState(initial = null).value
     val scannerActive = remember { mediaScanner.scannerActive }
       .collectAsState(initial = false).value
     val folderPickerMovedDialogShown = remember { folderPickerMovedDialogShownStore.data }
@@ -135,8 +140,8 @@ class BookOverviewViewModel(
     return BookOverviewViewState(
       layoutMode = layoutMode,
       books = books
-        .groupBy {
-          it.category
+        .groupBy { book ->
+          if (book.id == upNextBookId) BookOverviewCategory.UP_NEXT else book.category
         }
         .mapValues { (category, books) ->
           books

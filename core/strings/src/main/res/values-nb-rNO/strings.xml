@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Marker som fullført</string>
     <string name="book.category.action.mark_current">Marker som pågående</string>
     <string name="book.category.action.mark_not_started">Marker som ikke startet enda</string>
+    <string name="book.category.action.play_next">Spill Neste</string>
+    <string name="book.category.action.remove_up_next">Fjern fra Neste</string>
     <string name="book.delete.bottom_sheet.title">Slett bok</string>
     <string name="book.delete.dialog.confirm_files">Slett filene mine</string>
     <string name="book.delete.dialog.message">Dette sletter filene på enheten din.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">Fullført</string>
     <string name="library.category.current.title">Nåværende</string>
     <string name="library.category.not_started.title">Ikke startet enda</string>
+    <string name="library.category.up_next.title">Neste</string>
     <string name="library.empty.add_first_book">Legg til lydbokmappen din så du kan begynne å lytte!</string>
     <string name="library.folders.title">Lydbokmapper</string>
     <string name="library.folders.moved.dialog.title">Lydbokmapper flyttet</string>

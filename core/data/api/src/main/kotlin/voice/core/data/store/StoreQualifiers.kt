@@ -9,6 +9,9 @@ public annotation class OnboardingCompletedStore
 public annotation class CurrentBookStore
 
 @Qualifier
+public annotation class UpNextBookStore
+
+@Qualifier
 public annotation class AutoRewindAmountStore
 
 @Qualifier

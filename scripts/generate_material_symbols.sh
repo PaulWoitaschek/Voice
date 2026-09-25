@@ -89,6 +89,7 @@ generate_icon remove Remove
 generate_icon search Search
 generate_icon sentiment_satisfied SentimentSatisfied
 generate_icon settings Settings
+generate_icon skip_next SkipNext
 generate_icon speed Speed
 generate_icon tag Tag
 generate_icon timelapse Timelapse

@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Jelölés meghallgatottnak</string>
     <string name="book.category.action.mark_current">Megjelölés aktuálisként</string>
     <string name="book.category.action.mark_not_started">Megjelölés még el nem kezdettként</string>
+    <string name="book.category.action.play_next">Következő lejátszása</string>
+    <string name="book.category.action.remove_up_next">Eltávolítás a Következőkből</string>
     <string name="book.delete.bottom_sheet.title">Könyv törlése</string>
     <string name="book.delete.dialog.confirm_files">Fájlok törlése</string>
     <string name="book.delete.dialog.message">Ezzel törli az eszközről a könyv hangfájljait is.</string>
@@ -58,6 +60,7 @@
     <string name="library.category.completed.title">Befejezett</string>
     <string name="library.category.current.title">Jelenlegi</string>
     <string name="library.category.not_started.title">Még nem elkezdett</string>
+    <string name="library.category.up_next.title">Következő</string>
     <string name="library.empty.add_first_book">Adjon hozzá a hangoskönyv mappát, hogy elkezdhesse a hallgatást!</string>
     <string name="library.folders.title">Hangoskönyv mappák</string>
     <string name="library.search.hint">Mit keres?</string>

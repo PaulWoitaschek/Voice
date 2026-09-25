@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Marcar como completate</string>
     <string name="book.category.action.mark_current">Marcar como actual</string>
     <string name="book.category.action.mark_not_started">Marcar como non comenciate</string>
+    <string name="book.category.action.play_next">Reproducer proxime</string>
+    <string name="book.category.action.remove_up_next">Remover ab Proxime</string>
     <string name="book.delete.bottom_sheet.title">Deler le libro</string>
     <string name="book.delete.dialog.confirm_files">Deler mi files</string>
     <string name="book.delete.dialog.message">Isto delera le files in tu apparato.</string>
@@ -59,6 +61,7 @@
     <string name="library.category.completed.title">Completate</string>
     <string name="library.category.current.title">Actual</string>
     <string name="library.category.not_started.title">Ancora non ha comenciate</string>
+    <string name="library.category.up_next.title">Proxime</string>
     <string name="library.empty.add_first_book">Nos adde tu dossier de audiolibro dunque tu pote comenciar a ascoltar lo!</string>
     <string name="library.folders.title">Dossieres de audiolibros</string>
     <string name="library.folders.moved.dialog.title">Dossieres de audiolibros movite</string>
