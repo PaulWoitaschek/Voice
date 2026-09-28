@@ -137,7 +137,7 @@ internal class MediaAnalyzerTest {
   fun chapterTrackId() {
     val chapters = assertNotNull(parse("chapter_track_id.m4b")).chapters
     assertEquals(expected = MarkData(0, "Opening Credits"), actual = chapters[0])
-    assertEquals(expected = MarkData(103121056, "Closing Credits"), actual = chapters[107])
+    assertEquals(expected = MarkData(103121057, "Closing Credits"), actual = chapters[107])
   }
 
   @Test

@@ -9,7 +9,7 @@ import androidx.media3.container.MdtaMetadataEntry
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.TrackGroupArray
 import androidx.media3.extractor.DefaultExtractorsFactory
-import androidx.media3.extractor.metadata.id3.ChapterFrame
+import androidx.media3.extractor.metadata.Chapter
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
 import androidx.media3.extractor.metadata.vorbis.VorbisComment
 import androidx.media3.inspector.MetadataRetriever
@@ -63,7 +63,7 @@ internal class MediaAnalyzer(
             repeat(metadata.length()) { metadataIndex ->
               when (val entry = metadata.get(metadataIndex)) {
                 is TextInformationFrame -> visitText(entry, builder)
-                is ChapterFrame -> visitChapter(entry, builder)
+                is Chapter -> visitChapter(entry, builder)
                 is VorbisComment -> visitVorbis(entry, builder)
                 is MdtaMetadataEntry -> visitMdta(entry, builder)
                 else -> Logger.d("Unknown metadata entry: $entry")
@@ -161,15 +161,11 @@ internal class MediaAnalyzer(
   }
 
   private fun visitChapter(
-    entry: ChapterFrame,
+    entry: Chapter,
     builder: Metadata.Builder,
   ) {
-    repeat(entry.subFrameCount) { subFrameIndex ->
-      val subFrame = entry.getSubFrame(subFrameIndex)
-      if (subFrame is TextInformationFrame) {
-        builder.chapters.add(MarkData(startMs = entry.startTimeMs.toLong(), name = subFrame.values.first()))
-      }
-    }
+    // possible improvement: endTimeMs and multiLanguage Label cannot be fully transferred into MarkData
+    builder.chapters.add(MarkData(startMs = entry.startTimeMs, name = entry.title?.value ?: ""))
   }
 
   private fun visitText(
