@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
@@ -230,8 +231,9 @@ interface SupportGraph {
   val supportViewModel: SupportViewModel
 }
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface SupportProvider {
+object SupportProvider {
 
   @Provides
   @IntoSet

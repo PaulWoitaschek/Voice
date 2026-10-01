@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.documentfile.provider.DocumentFile
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
@@ -48,8 +49,9 @@ interface SelectFolderTypeGraph {
   val selectFolderTypeViewModelFactory: SelectFolderTypeViewModel.Factory
 }
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface SelectFolderTypeProvider {
+object SelectFolderTypeProvider {
 
   @Provides
   @IntoSet

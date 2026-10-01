@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
@@ -61,8 +62,9 @@ import voice.navigation.NavEntryProvider
 import kotlin.uuid.Uuid
 import voice.core.strings.R as StringsR
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface BookOverviewProvider {
+object BookOverviewProvider {
 
   @Provides
   @IntoSet

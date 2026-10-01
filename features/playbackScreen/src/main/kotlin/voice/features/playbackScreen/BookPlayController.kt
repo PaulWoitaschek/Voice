@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
@@ -106,8 +107,9 @@ interface BookPlayGraph {
   val bookPlayViewModelFactory: BookPlayViewModel.Factory
 }
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface BookPlayProvider {
+object BookPlayProvider {
 
   @Provides
   @IntoSet

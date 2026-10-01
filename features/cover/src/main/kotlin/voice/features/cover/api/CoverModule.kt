@@ -1,6 +1,7 @@
 package voice.features.cover.api
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -14,8 +15,9 @@ import retrofit2.create
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.UserAgentFeatureFlagQualifier
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface CoverModule {
+object CoverModule {
 
   @Provides
   @SingleIn(AppScope::class)

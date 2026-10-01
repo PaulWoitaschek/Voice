@@ -5,6 +5,7 @@ import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
@@ -19,8 +20,9 @@ interface AddContentGraph {
   val viewModelFactory: AddContentViewModel.Factory
 }
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface AddContentProvider {
+object AddContentProvider {
 
   @Provides
   @IntoSet
