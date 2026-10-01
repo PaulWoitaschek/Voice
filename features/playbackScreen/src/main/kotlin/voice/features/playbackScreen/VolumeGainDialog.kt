@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSliderState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import voice.core.playback.misc.Decibel
@@ -20,10 +21,14 @@ internal fun VolumeGainDialog(
     text = {
       Column {
         Text(stringResource(id = StringsR.string.playback_option_volume_boost) + ": " + dialogState.valueFormatted)
-        Slider(
-          valueRange = 0F..dialogState.maxGain.value,
+        val sliderState = rememberSliderState(
           value = dialogState.gain.value,
+          trackRange = 0F..dialogState.maxGain.value,
+        )
+        Slider(
+          state = sliderState,
           onValueChange = {
+            sliderState.value = it
             viewModel.onVolumeGainChanged(Decibel(it))
           },
         )

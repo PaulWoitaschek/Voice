@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSliderState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
@@ -30,11 +31,15 @@ internal fun SpeedDialog(
         val rangeSize = valueRange.endInclusive - valueRange.start
         val stepSize = 0.05
         val steps = (rangeSize / stepSize).toInt() - 1
-        Slider(
-          steps = steps,
-          valueRange = valueRange,
+        val sliderState = rememberSliderState(
           value = dialogState.speed,
+          steps = steps,
+          trackRange = valueRange,
+        )
+        Slider(
+          state = sliderState,
           onValueChange = {
+            sliderState.value = it
             viewModel.onPlaybackSpeedChanged(it)
           },
         )
