@@ -24,14 +24,14 @@ import voice.core.documentfile.nameWithoutExtension
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
 import voice.core.scanner.matroska.MatroskaParseException
-import voice.core.scanner.mp4.Mp4ChapterExtractor
+// import voice.core.scanner.mp4.Mp4ChapterExtractor
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 
 @Inject
 internal class MediaAnalyzer(
   private val context: Context,
-  private val mp4ChapterExtractor: Mp4ChapterExtractor,
+  // private val mp4ChapterExtractor: Mp4ChapterExtractor,
   private val matroskaExtractorFactory: MatroskaMetaDataExtractor.Factory,
 ) {
 
@@ -76,9 +76,9 @@ internal class MediaAnalyzer(
 
     val fileType = FileTypes.inferFileTypeFromUri(file.uri)
     val extension = (file.name ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
-    if (fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b") {
-      parseMp4Chapters(file, builder)
-    }
+//    if (fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b") {
+//      parseMp4Chapters(file, builder)
+//    }
     if (fileType == FileTypes.MATROSKA || extension == "mka" || extension == "mkv") {
       parseMatroskaMetaData(file, builder)
     }
@@ -102,7 +102,7 @@ internal class MediaAnalyzer(
       Logger.w(e, "Error parsing Matroska metadata")
     }
   }
-
+  /*
   private suspend fun parseMp4Chapters(
     file: CachedDocumentFile,
     builder: Metadata.Builder,
@@ -110,7 +110,7 @@ internal class MediaAnalyzer(
     val chapters = mp4ChapterExtractor.extractChapters(file.uri)
     builder.chapters += chapters
   }
-
+  */
   private fun visitMdta(
     entry: MdtaMetadataEntry,
     builder: Metadata.Builder,
