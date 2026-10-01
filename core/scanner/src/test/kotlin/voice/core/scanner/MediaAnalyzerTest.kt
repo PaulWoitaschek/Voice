@@ -12,17 +12,6 @@ import voice.core.documentfile.FileBasedDocumentFile
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
-/*
-import voice.core.scanner.mp4.ChapterTrackProcessor
-import voice.core.scanner.mp4.Mp4BoxParser
-import voice.core.scanner.mp4.Mp4ChapterExtractor
-import voice.core.scanner.mp4.visitor.ChapVisitor
-import voice.core.scanner.mp4.visitor.ChplVisitor
-import voice.core.scanner.mp4.visitor.MdhdVisitor
-import voice.core.scanner.mp4.visitor.StcoVisitor
-import voice.core.scanner.mp4.visitor.StscVisitor
-import voice.core.scanner.mp4.visitor.SttsVisitor
- */
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -39,19 +28,6 @@ internal class MediaAnalyzerTest {
 
   private val analyzer = MediaAnalyzer(
     context = ApplicationProvider.getApplicationContext(),
-    /*
-    mp4ChapterExtractor = Mp4ChapterExtractor(
-      context = ApplicationProvider.getApplicationContext(),
-      boxParser = Mp4BoxParser(
-        stscVisitor = StscVisitor(),
-        mdhdVisitor = MdhdVisitor(),
-        sttsVisitor = SttsVisitor(),
-        stcoVisitor = StcoVisitor(),
-        chplVisitor = ChplVisitor(),
-        chapVisitor = ChapVisitor(),
-      ),
-      chapterTrackProcessor = ChapterTrackProcessor(),
-    ),*/
     matroskaExtractorFactory = MatroskaMetaDataExtractor.Factory(
       context = ApplicationProvider.getApplicationContext(),
     ),
