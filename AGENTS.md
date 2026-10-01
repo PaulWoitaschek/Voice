@@ -60,6 +60,10 @@
 - Run the narrowest meaningful test first. Broaden to `./gradlew voiceUnitTest` when touching shared behavior, cross-module contracts, or
   risky refactors.
 - If tests cannot be run, state the concrete reason and the command that should be run.
+- Don't add Compose UI/semantics-tree tests (`ComposeTestRule`, `onNodeWith*`) or screenshot tests. This repo verifies screens through
+  ViewModel state (Molecule/Turbine), never rendered UI.
+- Don't write one test per enum branch or per trivial `when` case; spot-check a couple of representative branches and rely on the
+  compiler's exhaustive `when` to catch the rest.
 
 ## Done Criteria
 
