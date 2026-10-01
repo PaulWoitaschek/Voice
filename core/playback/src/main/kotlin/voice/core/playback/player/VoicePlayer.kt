@@ -5,7 +5,6 @@ import androidx.media3.common.C
 import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -23,6 +22,7 @@ import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
+import voice.core.playback.session.chapterMarkPlaylist
 import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.toMediaIdOrNull
@@ -36,7 +36,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Inject
 class VoicePlayer(
-  private val player: Player,
+  private val player: ChapterMarkPlayer,
   private val repo: BookRepository,
   @CurrentBookStore
   private val currentBookStoreId: DataStore<BookId?>,
@@ -308,11 +308,15 @@ class VoicePlayer(
             chapterId = book.content.currentChapter,
             positionInChapterMs = book.content.positionInChapter,
           ) ?: return
-          val mediaItems = mediaItemProvider.playbackItems(book)
-          player.setMediaItems(
-            mediaItems,
-            currentPlaybackItem.index,
-            currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
+          val playlist = book.chapterMarkPlaylist()
+          val markMediaItems = mediaItemProvider.playbackItems(book)
+          val fileMediaItems = mediaItemProvider.chapterMediaItems(book)
+          player.setBook(
+            playlist = playlist,
+            markMediaItems = markMediaItems,
+            fileMediaItems = fileMediaItems,
+            startItemIndex = currentPlaybackItem.index,
+            positionInItemMs = currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
           )
         }
       } else {
@@ -332,9 +336,7 @@ class VoicePlayer(
     scope.launch {
       updateBook { it.copy(skipSilence = enabled) }
     }
-    if (player is ExoPlayer) {
-      player.skipSilenceEnabled = enabled
-    }
+    player.setSkipSilenceEnabled(enabled)
   }
 
   fun setGain(gain: Decibel) {
