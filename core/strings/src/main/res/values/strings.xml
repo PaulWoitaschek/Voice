@@ -236,6 +236,8 @@
     <string name="settings.library.use_grid.title">Use grid layout</string>
     <!-- Title for the setting that rewinds automatically when playback resumes. -->
     <string name="settings.playback.auto_rewind.title">Auto rewind</string>
+    <!-- Title for the setting that controls the playback speed new books start with. -->
+    <string name="settings.playback.default_speed.title">Default playback speed</string>
     <!-- Title for the setting that controls skip-forward and rewind duration. -->
     <string name="settings.playback.seek_time.title">Skip amount</string>
     <!-- Settings support row for opening the FAQ. -->

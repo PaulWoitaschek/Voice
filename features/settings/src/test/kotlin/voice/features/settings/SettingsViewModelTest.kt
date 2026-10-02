@@ -36,6 +36,7 @@ class SettingsViewModelTest {
   private val themeModeStore = MemoryDataStore(ThemeMode.FollowSystem)
   private val themeColorSchemeStore = MemoryDataStore(ThemeColorScheme.VoiceBlue)
   private val autoRewindAmountStore = MemoryDataStore(10)
+  private val defaultPlaybackSpeedStore = MemoryDataStore(1F)
   private val seekTimeStore = MemoryDataStore(30)
   private val gridModeStore = MemoryDataStore(GridMode.GRID)
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
@@ -62,6 +63,7 @@ class SettingsViewModelTest {
     themeModeStore = themeModeStore,
     themeColorSchemeStore = themeColorSchemeStore,
     autoRewindAmountStore = autoRewindAmountStore,
+    defaultPlaybackSpeedStore = defaultPlaybackSpeedStore,
     seekTimeStore = seekTimeStore,
     navigator = navigator,
     appInfoProvider = appInfoProvider,
@@ -102,6 +104,30 @@ class SettingsViewModelTest {
 
       viewModel.setThemeMode(ThemeMode.FollowSystem)
       assertEquals(expected = ThemeMode.FollowSystem, actual = awaitItem().themeMode)
+    }
+  }
+
+  @Test
+  fun `default playback speed changes update view state`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = 1F, actual = awaitItem().defaultPlaybackSpeed)
+
+      viewModel.defaultPlaybackSpeedChanged(1.25F)
+      assertEquals(expected = 1.25F, actual = awaitItem().defaultPlaybackSpeed)
+    }
+  }
+
+  @Test
+  fun `default playback speed row opens its dialog`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = null, actual = awaitItem().dialog)
+
+      viewModel.onDefaultPlaybackSpeedRowClick()
+      assertEquals(expected = SettingsViewState.Dialog.DefaultPlaybackSpeed, actual = awaitItem().dialog)
     }
   }
 

@@ -32,6 +32,7 @@ import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
 import voice.core.logging.api.Logger
 import voice.core.playback.CurrentBookResolver
+import voice.core.playback.DefaultPlaybackSpeedApplier
 import voice.core.playback.PlayerController
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
@@ -56,6 +57,7 @@ class BookPlayViewModel(
   private val bookRepository: BookRepository,
   private val currentBookResolver: CurrentBookResolver,
   private val player: PlayerController,
+  private val defaultPlaybackSpeedApplier: DefaultPlaybackSpeedApplier,
   private val sleepTimer: SleepTimer,
   private val playStateManager: PlayStateManager,
   @CurrentBookStore
@@ -87,6 +89,7 @@ class BookPlayViewModel(
     scope.launch {
       player.pauseIfCurrentBookDifferentFrom(bookId)
       currentBookStoreId.updateData { bookId }
+      bookRepository.get(bookId)?.let { defaultPlaybackSpeedApplier.applyTo(it.content) }
     }
   }
 

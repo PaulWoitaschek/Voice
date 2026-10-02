@@ -161,6 +161,12 @@ private fun Settings(
       }
 
       item {
+        DefaultPlaybackSpeedRow(viewState.defaultPlaybackSpeed) {
+          listener.onDefaultPlaybackSpeedRowClick()
+        }
+      }
+
+      item {
         AutoSleepTimerCard(viewState.autoSleepTimer, listener)
       }
 
@@ -350,6 +356,13 @@ private fun Dialog(
       AutoRewindAmountDialog(
         currentSeconds = viewState.autoRewindInSeconds,
         onSecondsConfirm = listener::autoRewindAmountChang,
+        onDismiss = listener::dismissDialog,
+      )
+    }
+    SettingsViewState.Dialog.DefaultPlaybackSpeed -> {
+      DefaultPlaybackSpeedDialog(
+        currentSpeed = viewState.defaultPlaybackSpeed,
+        onSpeedConfirm = listener::defaultPlaybackSpeedChanged,
         onDismiss = listener::dismissDialog,
       )
     }
