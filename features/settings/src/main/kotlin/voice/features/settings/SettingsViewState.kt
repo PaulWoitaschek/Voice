@@ -10,6 +10,7 @@ data class SettingsViewState(
   val showThemeColorSchemePref: Boolean,
   val seekTimeInSeconds: Int,
   val autoRewindInSeconds: Int,
+  val defaultPlaybackSpeed: Float,
   val appVersion: String,
   val dialog: Dialog?,
   val useGrid: Boolean,
@@ -23,6 +24,7 @@ data class SettingsViewState(
 
   enum class Dialog {
     AutoRewindAmount,
+    DefaultPlaybackSpeed,
     SeekTime,
     Theme,
     ColorScheme,
@@ -36,6 +38,7 @@ data class SettingsViewState(
         showThemeColorSchemePref = true,
         seekTimeInSeconds = 42,
         autoRewindInSeconds = 12,
+        defaultPlaybackSpeed = 1.25F,
         dialog = null,
         appVersion = "1.2.3",
         useGrid = true,

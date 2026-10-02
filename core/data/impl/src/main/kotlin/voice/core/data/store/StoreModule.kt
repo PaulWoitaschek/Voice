@@ -82,6 +82,16 @@ public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
+  @DefaultPlaybackSpeedStore
+  private fun defaultPlaybackSpeed(factory: VoiceDataStoreFactory): DataStore<Float> {
+    return factory.float(
+      fileName = "defaultPlaybackSpeed",
+      defaultValue = 1F,
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
   @FadeOutStore
   private fun fadeOut(factory: VoiceDataStoreFactory): DataStore<Duration> {
     return factory.create(

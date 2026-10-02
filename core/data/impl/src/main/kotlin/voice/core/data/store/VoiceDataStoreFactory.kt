@@ -47,6 +47,17 @@ internal class VoiceDataStoreFactory(
     )
   }
 
+  fun float(
+    fileName: String,
+    defaultValue: Float,
+  ): DataStore<Float> {
+    return create(
+      serializer = Float.serializer(),
+      defaultValue = defaultValue,
+      fileName = fileName,
+    )
+  }
+
   fun boolean(
     fileName: String,
     defaultValue: Boolean,

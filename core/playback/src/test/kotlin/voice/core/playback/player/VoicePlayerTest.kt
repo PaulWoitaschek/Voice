@@ -10,6 +10,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -27,8 +28,10 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.ChapterMark
 import voice.core.data.MarkData
+import voice.core.data.repo.BookRepository
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
+import voice.core.playback.DefaultPlaybackSpeedApplier
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
@@ -64,6 +67,7 @@ class VoicePlayerTest {
 
   private val seekTimeStore = MemoryDataStore(2)
   private val autoRewindAmountStore = MemoryDataStore(2)
+  private val defaultPlaybackSpeedStore = MemoryDataStore(1F)
 
   private val internalPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
     .setMediaSourceFactory(
@@ -94,17 +98,19 @@ class VoicePlayerTest {
   private val bookId = BookId(Uuid.random().toString())
   private lateinit var currentBook: Book
   private val sleepTimer = FakeSleepTimer()
+  private val repo = mockk<BookRepository> {
+    coEvery { get(bookId) } answers { currentBook }
+    coEvery { updateBook(any(), any()) } just Runs
+  }
   private val player = VoicePlayer(
     player = internalPlayer,
-    repo = mockk {
-      coEvery { get(bookId) } answers { currentBook }
-      coEvery { updateBook(any(), any()) } just Runs
-    },
+    repo = repo,
     currentBookStoreId = mockk {
       every { data } returns flowOf(bookId)
     },
     seekTimeStore = seekTimeStore,
     autoRewindAmountStore = autoRewindAmountStore,
+    defaultPlaybackSpeedApplier = DefaultPlaybackSpeedApplier(defaultPlaybackSpeedStore, repo),
     scope = scope,
     mediaItemProvider = mediaItemProvider,
     volumeGain = mockk(relaxed = true),
@@ -367,15 +373,53 @@ class VoicePlayerTest {
     player.shouldHavePosition(1, 0)
   }
 
+  @Test
+  fun `never played book starts at the default playback speed`() = scope.runTest {
+    defaultPlaybackSpeedStore.updateData { 1.25F }
+
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 10_000, name = null))))
+
+    assertEquals(expected = 1.25F, actual = internalPlayer.playbackParameters.speed)
+    coVerify { repo.updateBook(bookId, any()) }
+  }
+
+  @Test
+  fun `book that was played keeps its own playback speed`() = scope.runTest {
+    defaultPlaybackSpeedStore.updateData { 1.25F }
+
+    setMediaItems(
+      listOf(chapter(ChapterMark(startMs = 0, endMs = 10_000, name = null))),
+      lastPlayedAt = Instant.ofEpochMilli(1_000),
+    )
+
+    assertEquals(expected = 1F, actual = internalPlayer.playbackParameters.speed)
+  }
+
+  @Test
+  fun `never played book with a custom speed keeps it`() = scope.runTest {
+    defaultPlaybackSpeedStore.updateData { 1.25F }
+
+    setMediaItems(
+      listOf(chapter(ChapterMark(startMs = 0, endMs = 10_000, name = null))),
+      playbackSpeed = 1.5F,
+    )
+
+    assertEquals(expected = 1.5F, actual = internalPlayer.playbackParameters.speed)
+  }
+
   private fun TestScope.setMediaItems(
     chapters: List<Chapter>,
     currentChapter: Chapter = chapters.first(),
     positionInChapter: Long = 0,
+    playbackSpeed: Float = 1F,
+    lastPlayedAt: Instant = Instant.EPOCH,
   ) {
     currentBook = book(chapters, bookId).update {
       it.copy(
         currentChapter = currentChapter.id,
         positionInChapter = positionInChapter,
+        playbackSpeed = playbackSpeed,
+        lastPlayedAt = lastPlayedAt,
       )
     }
     player.setMediaItem(mediaItemProvider.mediaItem(currentBook))

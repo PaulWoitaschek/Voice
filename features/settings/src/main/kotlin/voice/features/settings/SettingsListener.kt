@@ -15,6 +15,8 @@ interface SettingsListener {
   fun onSeekAmountRowClick()
   fun autoRewindAmountChang(seconds: Int)
   fun onAutoRewindRowClick()
+  fun defaultPlaybackSpeedChanged(speed: Float)
+  fun onDefaultPlaybackSpeedRowClick()
   fun dismissDialog()
   fun getSupport()
   fun suggestIdea()
@@ -43,6 +45,8 @@ interface SettingsListener {
       override fun onSeekAmountRowClick() {}
       override fun autoRewindAmountChang(seconds: Int) {}
       override fun onAutoRewindRowClick() {}
+      override fun defaultPlaybackSpeedChanged(speed: Float) {}
+      override fun onDefaultPlaybackSpeedRowClick() {}
       override fun dismissDialog() {}
       override fun getSupport() {}
       override fun suggestIdea() {}

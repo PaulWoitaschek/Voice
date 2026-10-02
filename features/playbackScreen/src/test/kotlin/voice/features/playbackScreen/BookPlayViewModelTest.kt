@@ -5,6 +5,7 @@ import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.common.DispatcherProvider
@@ -28,6 +30,7 @@ import voice.core.data.MarkData
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.CurrentBookResolver
+import voice.core.playback.DefaultPlaybackSpeedApplier
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
@@ -72,6 +75,7 @@ class BookPlayViewModelTest {
   }
 
   private val player = mockk<PlayerController>()
+  private val defaultPlaybackSpeedApplier = mockk<DefaultPlaybackSpeedApplier>(relaxed = true)
   private val playStateManager = mockk<PlayStateManager> {
     every { playStateFlow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
   }
@@ -88,6 +92,7 @@ class BookPlayViewModelTest {
     player = player.apply {
       every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
     },
+    defaultPlaybackSpeedApplier = defaultPlaybackSpeedApplier,
     sleepTimer = sleepTimer,
     playStateManager = playStateManager,
     currentBookStoreId = currentBookStoreId,
@@ -111,6 +116,13 @@ class BookPlayViewModelTest {
     experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
     kioskModeFeatureFlag = MemoryFeatureFlag(false),
   )
+
+  @Test
+  fun openingABookAppliesTheDefaultPlaybackSpeed() = scope.runTest {
+    runCurrent()
+
+    coVerify { defaultPlaybackSpeedApplier.applyTo(book.content) }
+  }
 
   @Test
   fun sleepTimerValueChanging() = scope.runTest {
@@ -337,6 +349,7 @@ class BookPlayViewModelTest {
         every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
         every { livePlaybackStateFlow(book.id) } returns livePlaybackFlow
       },
+      defaultPlaybackSpeedApplier = mockk(relaxed = true),
       sleepTimer = sleepTimer,
       playStateManager = mockk {
         every { this@mockk.playStateFlow } returns playStateFlow
