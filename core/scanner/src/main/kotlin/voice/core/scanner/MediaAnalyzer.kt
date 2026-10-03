@@ -69,6 +69,7 @@ internal class MediaAnalyzer(
             }
           }
         }
+        builder.chapters.sortBy {c -> c.startMs}
       }
     }
 
@@ -88,7 +89,7 @@ internal class MediaAnalyzer(
     try {
       matroskaExtractorFactory.create(file.uri).use { extractor ->
         val mediaInfo = extractor.readMediaInfo()
-        builder.chapters.addAll(mediaInfo.chapters)
+        // builder.chapters.addAll(mediaInfo.chapters)
         builder.artist = builder.artist ?: mediaInfo.artist
         builder.album = builder.album ?: mediaInfo.album
         builder.title = builder.title ?: mediaInfo.title
