@@ -78,94 +78,87 @@ internal class MediaAnalyzerTest {
     assertEquals(expected = auphonicChapters, actual = metadata.chapters)
   }
 
-    @Test
-    fun mka_simple_chapters() {
-      val metadata = assertNotNull(parse("mka_simple_chapters.mka"))
+  @Test
+  fun mka_simple_chapters() {
+    val metadata = assertNotNull(parse("mka_simple_chapters.mka"))
 
-      assertEquals(expected = "Your Album Title", actual = metadata.title)
-      assertEquals(expected = "Your Artist Name", actual = metadata.artist)
-      assertEquals(expected = "Your Album Name", actual = metadata.album)
-      assertEquals(
-        expected = listOf(
-          MarkData(startMs = 0L, name = "Intro"),
-          MarkData(startMs = 150000L, name = "Baby prepares to rock"),
-          MarkData(startMs = 162300L, name = "Baby rocks the house"),
-        ),
-        actual = metadata.chapters,
-      )
-    }
+    assertEquals(expected = "Your Album Title", actual = metadata.title)
+    assertEquals(expected = "Your Artist Name", actual = metadata.artist)
+    assertEquals(expected = "Your Album Name", actual = metadata.album)
+    assertEquals(
+      expected = listOf(
+        MarkData(startMs = 0L, name = "Intro"),
+        MarkData(startMs = 150000L, name = "Baby prepares to rock"),
+        MarkData(startMs = 162300L, name = "Baby rocks the house"),
+      ),
+      actual = metadata.chapters,
+    )
+  }
 
+  @Test
+  fun mka_nested_chapters() {
+    val metadata = assertNotNull(parse("mka_nested_chapters.mka"))
 
+    assertEquals(expected = "Your Album Title", actual = metadata.title)
+    assertEquals(expected = "Your Artist Name", actual = metadata.artist)
+    assertEquals(expected = "Your Album Name", actual = metadata.album)
+    assertEquals(
+      expected = listOf(
+        MarkData(startMs = 0L, name = "Introduction"),
+        MarkData(startMs = 10.minutes.inWholeMilliseconds, name = "Main Content"),
+        MarkData(startMs = 20.minutes.inWholeMilliseconds, name = "Conclusion"),
+      ),
+      actual = metadata.chapters,
+    )
+  }
 
-/*
-    @Test
-    fun mka_nested_chapters() {
-      val metadata = assertNotNull(parse("mka_nested_chapters.mka"))
+  @Test
+  fun chapterTrackId() {
+    val chapters = assertNotNull(parse("chapter_track_id.m4b")).chapters
+    assertEquals(expected = MarkData(0, "Opening Credits"), actual = chapters[0])
+    assertEquals(expected = MarkData(103121057, "Closing Credits"), actual = chapters[107])
+  }
 
-      assertEquals(expected = "Your Album Title", actual = metadata.title)
-      assertEquals(expected = "Your Artist Name", actual = metadata.artist)
-      assertEquals(expected = "Your Album Name", actual = metadata.album)
-      assertEquals(
-        expected = listOf(
-          MarkData(startMs = 0L, name = "Introduction"),
-          MarkData(startMs = 10.minutes.inWholeMilliseconds, name = "Main Content"),
-          MarkData(startMs = 20.minutes.inWholeMilliseconds, name = "Conclusion"),
-        ),
-        actual = metadata.chapters,
-      )
-    }
-*/
+  @Test
+  fun opus() {
+    val metadata = assertNotNull(parse("auphonic_chapters_demo.opus"))
 
+    assertWithinPercentage(119040L, metadata.duration, 0.2)
+    assertEquals(expected = "auphonic_chapters_demo", actual = metadata.fileName)
+    assertEquals(expected = "Auphonic Chapter Marks Demo", actual = metadata.title)
+    assertEquals(expected = "Auphonic", actual = metadata.artist)
+    assertEquals(expected = "Auphonic Examples", actual = metadata.album)
+    assertEquals(expected = auphonicChapters, actual = metadata.chapters)
+  }
 
+  @Test
+  fun m4a() {
+    val metadata = assertNotNull(parse("auphonic_chapters_demo.m4a"))
 
+    assertWithinPercentage(119040L, metadata.duration, 0.2)
+    assertEquals(expected = "auphonic_chapters_demo", actual = metadata.fileName)
+    assertEquals(expected = "Auphonic Chapter Marks Demo", actual = metadata.title)
+    assertEquals(expected = "Auphonic", actual = metadata.artist)
+    assertEquals(expected = "Auphonic Examples", actual = metadata.album)
+    assertEquals(
+      expected = auphonicChapters,
+      actual = metadata.chapters,
+    )
+  }
 
-      @Test
-      fun chapterTrackId() {
-        val chapters = assertNotNull(parse("chapter_track_id.m4b")).chapters
-        assertEquals(expected = MarkData(0, "Opening Credits"), actual = chapters[0])
-        assertEquals(expected = MarkData(103121057, "Closing Credits"), actual = chapters[107])
-      }
+  @Test
+  fun `m4a with chpl chapters`() {
+    val metadata = assertNotNull(parse("chpl.m4a"))
 
-      @Test
-      fun opus() {
-        val metadata = assertNotNull(parse("auphonic_chapters_demo.opus"))
-
-        assertWithinPercentage(119040L, metadata.duration, 0.2)
-        assertEquals(expected = "auphonic_chapters_demo", actual = metadata.fileName)
-        assertEquals(expected = "Auphonic Chapter Marks Demo", actual = metadata.title)
-        assertEquals(expected = "Auphonic", actual = metadata.artist)
-        assertEquals(expected = "Auphonic Examples", actual = metadata.album)
-        assertEquals(expected = auphonicChapters, actual = metadata.chapters)
-      }
-
-      @Test
-      fun m4a() {
-        val metadata = assertNotNull(parse("auphonic_chapters_demo.m4a"))
-
-        assertWithinPercentage(119040L, metadata.duration, 0.2)
-        assertEquals(expected = "auphonic_chapters_demo", actual = metadata.fileName)
-        assertEquals(expected = "Auphonic Chapter Marks Demo", actual = metadata.title)
-        assertEquals(expected = "Auphonic", actual = metadata.artist)
-        assertEquals(expected = "Auphonic Examples", actual = metadata.album)
-        assertEquals(
-          expected = auphonicChapters,
-          actual = metadata.chapters,
-        )
-      }
-
-      @Test
-      fun `m4a with chpl chapters`() {
-        val metadata = assertNotNull(parse("chpl.m4a"))
-
-        assertEquals(
-          expected = listOf(
-            MarkData(startMs = 0L, name = "Introduction"),
-            MarkData(startMs = 10000L, name = "Chapter 1"),
-            MarkData(startMs = 20000L, name = "Chapter 2"),
-          ),
-          actual = metadata.chapters,
-        )
-      }
+    assertEquals(
+      expected = listOf(
+        MarkData(startMs = 0L, name = "Introduction"),
+        MarkData(startMs = 10000L, name = "Chapter 1"),
+        MarkData(startMs = 20000L, name = "Chapter 2"),
+      ),
+      actual = metadata.chapters,
+    )
+  }
 
   companion object {
 

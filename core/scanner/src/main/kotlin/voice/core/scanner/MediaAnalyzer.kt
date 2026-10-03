@@ -69,7 +69,7 @@ internal class MediaAnalyzer(
             }
           }
         }
-        builder.chapters.sortBy {c -> c.startMs}
+        builder.chapters.sortBy { c -> c.startMs }
       }
     }
 
