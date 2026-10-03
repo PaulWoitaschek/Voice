@@ -12,6 +12,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.core.data.BookId
@@ -204,6 +205,24 @@ public object StoreModule {
       serializer = MapSerializer(String.serializer(), FeatureFlagOverride.serializer()),
       defaultValue = emptyMap(),
       fileName = "featureFlagOverrides",
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @GroupByAuthorStore
+  private fun groupByAuthor(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("groupByAuthor", defaultValue = false)
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @ExpandedAuthorsStore
+  private fun expandedAuthors(factory: VoiceDataStoreFactory): DataStore<Set<String>> {
+    return factory.create(
+      serializer = SetSerializer(String.serializer()),
+      defaultValue = emptySet(),
+      fileName = "expandedAuthors",
     )
   }
 }

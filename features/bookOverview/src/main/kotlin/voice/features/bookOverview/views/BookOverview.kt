@@ -50,8 +50,10 @@ import voice.features.bookOverview.bottomSheet.BottomSheetContent
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.deleteBook.DeleteBookDialog
 import voice.features.bookOverview.di.BookOverviewGraph
+import voice.features.bookOverview.editSeries.EditBookSeriesDialog
 import voice.features.bookOverview.editTitle.EditBookTitleDialog
 import voice.features.bookOverview.overview.BookOverviewCategory
+import voice.features.bookOverview.overview.BookOverviewItem
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
@@ -83,6 +85,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
   }
   val bookOverviewViewModel = bookGraph.bookOverviewViewModel
   val editBookTitleViewModel = bookGraph.editBookTitleViewModel
+  val editBookSeriesViewModel = bookGraph.editBookSeriesViewModel
   val bottomSheetViewModel = bookGraph.bottomSheetViewModel
   val deleteBookViewModel = bookGraph.deleteBookViewModel
   val fileCoverViewModel = bookGraph.fileCoverViewModel
@@ -119,6 +122,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onSearchQueryChange = bookOverviewViewModel::onSearchQueryChange,
     onSearchBookClick = bookOverviewViewModel::onSearchBookClick,
     onPermissionBugCardClick = bookOverviewViewModel::onPermissionBugCardClick,
+    onToggleAuthorExpanded = bookOverviewViewModel::toggleAuthorExpanded,
   )
   val deleteBookViewState = deleteBookViewModel.state.value
   if (deleteBookViewState != null) {
@@ -136,6 +140,16 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
       onConfirmEditTitle = editBookTitleViewModel::onConfirmEditTitle,
       viewState = editBookTitleState,
       onUpdateEditTitle = editBookTitleViewModel::onUpdateEditTitle,
+    )
+  }
+  val editBookSeriesState = editBookSeriesViewModel.state.value
+  if (editBookSeriesState != null) {
+    EditBookSeriesDialog(
+      onDismiss = editBookSeriesViewModel::onDismiss,
+      onConfirm = editBookSeriesViewModel::onConfirm,
+      viewState = editBookSeriesState,
+      onUpdateSeries = editBookSeriesViewModel::onUpdateSeries,
+      onUpdatePart = editBookSeriesViewModel::onUpdatePart,
     )
   }
 
@@ -182,6 +196,7 @@ internal fun BookOverview(
   onSearchQueryChange: (String) -> Unit,
   onSearchBookClick: (BookId) -> Unit,
   onPermissionBugCardClick: () -> Unit,
+  onToggleAuthorExpanded: (BookOverviewCategory, String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -224,6 +239,7 @@ internal fun BookOverview(
             onBookLongClick = onBookLongClick,
             showPermissionBugCard = viewState.showStoragePermissionBugCard,
             onPermissionBugCardClick = onPermissionBugCardClick,
+            onToggleAuthorExpanded = onToggleAuthorExpanded,
           )
         }
         BookOverviewLayoutMode.Grid -> {
@@ -233,6 +249,7 @@ internal fun BookOverview(
             onBookLongClick = onBookLongClick,
             showPermissionBugCard = viewState.showStoragePermissionBugCard,
             onPermissionBugCardClick = onPermissionBugCardClick,
+            onToggleAuthorExpanded = onToggleAuthorExpanded,
           )
         }
       }
@@ -297,6 +314,7 @@ fun BookOverviewPreview(
       onSearchQueryChange = {},
       onSearchBookClick = {},
       onPermissionBugCardClick = {},
+      onToggleAuthorExpanded = { _, _ -> },
     )
   }
 }
@@ -311,25 +329,25 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       progress = 0.8F,
       id = BookId(Uuid.random().toString()),
       remainingTime = "01:04",
+      series = "Test Series",
+      seriesPart = "1",
     )
   }
 
   override val values = sequenceOf(
     BookOverviewViewState(
       books = mapOf(
-        BookOverviewCategory.CURRENT to buildMap {
+        BookOverviewCategory.CURRENT to buildList {
           repeat(10) {
-            put(
-              BookId(Uuid.random().toString()),
-              mutableStateOf(book()),
+            add(
+              BookOverviewItem.SingleBook(mutableStateOf(book())),
             )
           }
         },
-        BookOverviewCategory.FINISHED to buildMap {
+        BookOverviewCategory.FINISHED to buildList {
           repeat(2) {
-            put(
-              BookId(Uuid.random().toString()),
-              mutableStateOf(book()),
+            add(
+              BookOverviewItem.SingleBook(mutableStateOf(book())),
             )
           }
         },

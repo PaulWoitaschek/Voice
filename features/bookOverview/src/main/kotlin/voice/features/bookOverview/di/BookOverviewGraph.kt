@@ -6,6 +6,7 @@ import dev.zacsweers.metro.GraphExtension
 import voice.features.bookOverview.bottomSheet.BottomSheetViewModel
 import voice.features.bookOverview.deleteBook.DeleteBookViewModel
 import voice.features.bookOverview.editTitle.EditBookTitleViewModel
+import voice.features.bookOverview.editSeries.EditBookSeriesViewModel
 import voice.features.bookOverview.fileCover.FileCoverViewModel
 import voice.features.bookOverview.overview.BookOverviewViewModel
 
@@ -18,6 +19,7 @@ interface BookOverviewGraph {
   val bottomSheetViewModel: BottomSheetViewModel
   val deleteBookViewModel: DeleteBookViewModel
   val fileCoverViewModel: FileCoverViewModel
+  val editBookSeriesViewModel: EditBookSeriesViewModel
 
   @GraphExtension.Factory
   @ContributesTo(AppScope::class)
