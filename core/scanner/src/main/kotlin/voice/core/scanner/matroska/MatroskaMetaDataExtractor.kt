@@ -43,9 +43,11 @@ internal class MatroskaMetaDataExtractor(
 
     segment.forEachChild { element ->
       when {
+        /*
         element isType MatroskaDocTypes.Chapters -> {
           chapters = readChapters(element)
         }
+         */
         element isType MatroskaDocTypes.Info -> {
           title = readTitle(element) ?: title
         }

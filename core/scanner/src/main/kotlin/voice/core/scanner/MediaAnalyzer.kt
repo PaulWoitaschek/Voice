@@ -9,7 +9,7 @@ import androidx.media3.container.MdtaMetadataEntry
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.source.TrackGroupArray
 import androidx.media3.extractor.DefaultExtractorsFactory
-import androidx.media3.extractor.metadata.id3.ChapterFrame
+import androidx.media3.extractor.metadata.Chapter
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
 import androidx.media3.extractor.metadata.vorbis.VorbisComment
 import androidx.media3.inspector.MetadataRetriever
@@ -24,14 +24,12 @@ import voice.core.documentfile.nameWithoutExtension
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
 import voice.core.scanner.matroska.MatroskaParseException
-import voice.core.scanner.mp4.Mp4ChapterExtractor
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
 
 @Inject
 internal class MediaAnalyzer(
   private val context: Context,
-  private val mp4ChapterExtractor: Mp4ChapterExtractor,
   private val matroskaExtractorFactory: MatroskaMetaDataExtractor.Factory,
 ) {
 
@@ -63,7 +61,7 @@ internal class MediaAnalyzer(
             repeat(metadata.length()) { metadataIndex ->
               when (val entry = metadata.get(metadataIndex)) {
                 is TextInformationFrame -> visitText(entry, builder)
-                is ChapterFrame -> visitChapter(entry, builder)
+                is Chapter -> visitChapter(entry, builder)
                 is VorbisComment -> visitVorbis(entry, builder)
                 is MdtaMetadataEntry -> visitMdta(entry, builder)
                 else -> Logger.d("Unknown metadata entry: $entry")
@@ -71,14 +69,12 @@ internal class MediaAnalyzer(
             }
           }
         }
+        builder.chapters.sortBy { c -> c.startMs }
       }
     }
 
     val fileType = FileTypes.inferFileTypeFromUri(file.uri)
     val extension = (file.name ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
-    if (fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b") {
-      parseMp4Chapters(file, builder)
-    }
     if (fileType == FileTypes.MATROSKA || extension == "mka" || extension == "mkv") {
       parseMatroskaMetaData(file, builder)
     }
@@ -93,7 +89,7 @@ internal class MediaAnalyzer(
     try {
       matroskaExtractorFactory.create(file.uri).use { extractor ->
         val mediaInfo = extractor.readMediaInfo()
-        builder.chapters.addAll(mediaInfo.chapters)
+        // builder.chapters.addAll(mediaInfo.chapters)
         builder.artist = builder.artist ?: mediaInfo.artist
         builder.album = builder.album ?: mediaInfo.album
         builder.title = builder.title ?: mediaInfo.title
@@ -101,14 +97,6 @@ internal class MediaAnalyzer(
     } catch (e: MatroskaParseException) {
       Logger.w(e, "Error parsing Matroska metadata")
     }
-  }
-
-  private suspend fun parseMp4Chapters(
-    file: CachedDocumentFile,
-    builder: Metadata.Builder,
-  ) {
-    val chapters = mp4ChapterExtractor.extractChapters(file.uri)
-    builder.chapters += chapters
   }
 
   private fun visitMdta(
@@ -161,15 +149,11 @@ internal class MediaAnalyzer(
   }
 
   private fun visitChapter(
-    entry: ChapterFrame,
+    entry: Chapter,
     builder: Metadata.Builder,
   ) {
-    repeat(entry.subFrameCount) { subFrameIndex ->
-      val subFrame = entry.getSubFrame(subFrameIndex)
-      if (subFrame is TextInformationFrame) {
-        builder.chapters.add(MarkData(startMs = entry.startTimeMs.toLong(), name = subFrame.values.first()))
-      }
-    }
+    // possible improvement: endTimeMs and multiLanguage Label cannot be fully transferred into MarkData
+    builder.chapters.add(MarkData(startMs = entry.startTimeMs, name = entry.title?.value ?: ""))
   }
 
   private fun visitText(

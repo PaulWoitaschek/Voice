@@ -12,15 +12,6 @@ import voice.core.documentfile.FileBasedDocumentFile
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
-import voice.core.scanner.mp4.ChapterTrackProcessor
-import voice.core.scanner.mp4.Mp4BoxParser
-import voice.core.scanner.mp4.Mp4ChapterExtractor
-import voice.core.scanner.mp4.visitor.ChapVisitor
-import voice.core.scanner.mp4.visitor.ChplVisitor
-import voice.core.scanner.mp4.visitor.MdhdVisitor
-import voice.core.scanner.mp4.visitor.StcoVisitor
-import voice.core.scanner.mp4.visitor.StscVisitor
-import voice.core.scanner.mp4.visitor.SttsVisitor
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -37,18 +28,6 @@ internal class MediaAnalyzerTest {
 
   private val analyzer = MediaAnalyzer(
     context = ApplicationProvider.getApplicationContext(),
-    mp4ChapterExtractor = Mp4ChapterExtractor(
-      context = ApplicationProvider.getApplicationContext(),
-      boxParser = Mp4BoxParser(
-        stscVisitor = StscVisitor(),
-        mdhdVisitor = MdhdVisitor(),
-        sttsVisitor = SttsVisitor(),
-        stcoVisitor = StcoVisitor(),
-        chplVisitor = ChplVisitor(),
-        chapVisitor = ChapVisitor(),
-      ),
-      chapterTrackProcessor = ChapterTrackProcessor(),
-    ),
     matroskaExtractorFactory = MatroskaMetaDataExtractor.Factory(
       context = ApplicationProvider.getApplicationContext(),
     ),
@@ -137,7 +116,7 @@ internal class MediaAnalyzerTest {
   fun chapterTrackId() {
     val chapters = assertNotNull(parse("chapter_track_id.m4b")).chapters
     assertEquals(expected = MarkData(0, "Opening Credits"), actual = chapters[0])
-    assertEquals(expected = MarkData(103121056, "Closing Credits"), actual = chapters[107])
+    assertEquals(expected = MarkData(103121057, "Closing Credits"), actual = chapters[107])
   }
 
   @Test
@@ -162,10 +141,7 @@ internal class MediaAnalyzerTest {
     assertEquals(expected = "Auphonic", actual = metadata.artist)
     assertEquals(expected = "Auphonic Examples", actual = metadata.album)
     assertEquals(
-      expected = auphonicChapters.filter {
-        // for some reason only this one is missing in the test files
-        it.name != "Creating a new production"
-      },
+      expected = auphonicChapters,
       actual = metadata.chapters,
     )
   }
