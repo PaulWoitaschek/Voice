@@ -27,11 +27,16 @@ import kotlinx.coroutines.launch
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
+import voice.core.data.repo.BookmarkRepo
+import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.logging.api.Logger
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.session.search.BookSearchHandler
 import voice.core.playback.session.search.BookSearchParser
+import voice.core.sleeptimer.SleepTimer
+import voice.core.sleeptimer.SleepTimerMode
 
 @Inject
 class LibrarySessionCallback(
@@ -43,7 +48,27 @@ class LibrarySessionCallback(
   @CurrentBookStore
   private val currentBookStoreId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
+  private val bookmarkRepo: BookmarkRepo,
+  private val sleepTimer: SleepTimer,
+  @SleepTimerPreferenceStore
+  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
 ) : MediaLibrarySession.Callback {
+
+  companion object {
+    const val ACTION_SLEEP_TIMER = "voice.playback.action.SLEEP_TIMER"
+    const val ACTION_NEXT_CHAPTER = "voice.playback.action.NEXT_CHAPTER"
+    const val ACTION_PREVIOUS_CHAPTER = "voice.playback.action.PREVIOUS_CHAPTER"
+    const val ACTION_SKIP_SILENCE = "voice.playback.action.SKIP_SILENCE"
+    const val ACTION_BOOKMARK = "voice.playback.action.BOOKMARK"
+
+    private val NOTIFICATION_ACTIONS = setOf(
+      ACTION_SLEEP_TIMER,
+      ACTION_NEXT_CHAPTER,
+      ACTION_PREVIOUS_CHAPTER,
+      ACTION_SKIP_SILENCE,
+      ACTION_BOOKMARK,
+    )
+  }
 
   override fun onAddMediaItems(
     mediaSession: MediaSession,
@@ -178,6 +203,11 @@ class LibrarySessionCallback(
     val sessionCommands = connectionResult.availableSessionCommands
       .buildUpon()
       .add(SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY))
+      .apply {
+        NOTIFICATION_ACTIONS.forEach { action ->
+          add(SessionCommand(action, Bundle.EMPTY))
+        }
+      }
       .build()
     return ConnectionResult.accept(
       sessionCommands,
@@ -199,23 +229,55 @@ class LibrarySessionCallback(
     customCommand: SessionCommand,
     args: Bundle,
   ): ListenableFuture<SessionResult> {
-    val command = CustomCommand.parse(customCommand, args)
-      ?: return super.onCustomCommand(session, controller, customCommand, args)
-    when (command) {
-      CustomCommand.ForceSeekToNext -> {
-        player.forceSeekToNext()
-      }
-      CustomCommand.ForceSeekToPrevious -> {
-        player.forceSeekToPrevious()
-      }
-      is CustomCommand.SetSkipSilence -> {
-        player.setSkipSilenceEnabled(command.skipSilence)
-      }
-      is CustomCommand.SetGain -> {
-        player.setGain(command.gain)
+    when (customCommand.customAction) {
+      ACTION_SLEEP_TIMER -> scope.launch { toggleSleepTimer() }
+      ACTION_NEXT_CHAPTER -> player.forceSeekToNext()
+      ACTION_PREVIOUS_CHAPTER -> player.forceSeekToPrevious()
+      ACTION_SKIP_SILENCE -> scope.launch { toggleSkipSilence() }
+      ACTION_BOOKMARK -> scope.launch { addBookmarkAtCurrentPosition() }
+      else -> {
+        val command = CustomCommand.parse(customCommand, args)
+          ?: return super.onCustomCommand(session, controller, customCommand, args)
+        when (command) {
+          CustomCommand.ForceSeekToNext -> {
+            player.forceSeekToNext()
+          }
+          CustomCommand.ForceSeekToPrevious -> {
+            player.forceSeekToPrevious()
+          }
+          is CustomCommand.SetSkipSilence -> {
+            player.setSkipSilenceEnabled(command.skipSilence)
+          }
+          is CustomCommand.SetGain -> {
+            player.setGain(command.gain)
+          }
+        }
       }
     }
 
     return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+  }
+
+  private suspend fun toggleSleepTimer() {
+    if (sleepTimer.state.value.enabled) {
+      sleepTimer.disable()
+    } else {
+      val duration = sleepTimerPreferenceStore.data.first().duration
+      sleepTimer.enable(SleepTimerMode.TimedWithDuration(duration))
+    }
+  }
+
+  private suspend fun toggleSkipSilence() {
+    val book = currentBook() ?: return
+    player.setSkipSilenceEnabled(!book.content.skipSilence)
+  }
+
+  private suspend fun addBookmarkAtCurrentPosition() {
+    val book = currentBook() ?: return
+    bookmarkRepo.addBookmarkAtBookPosition(
+      book = book,
+      title = null,
+      setBySleepTimer = false,
+    )
   }
 }
