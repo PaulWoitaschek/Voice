@@ -163,6 +163,17 @@ public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
+  @UpNextBookStore
+  private fun upNextBook(factory: VoiceDataStoreFactory): DataStore<BookId?> {
+    return factory.create(
+      serializer = BookId.serializer().nullable,
+      fileName = "upNextBook",
+      defaultValue = null,
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
   @AmountOfBatteryOptimizationRequestedStore
   private fun amountOfBatteryOptimizationsRequestedStore(factory: VoiceDataStoreFactory): DataStore<Int> {
     return factory.int("amountOfBatteryOptimizationsRequestedStore", 0)

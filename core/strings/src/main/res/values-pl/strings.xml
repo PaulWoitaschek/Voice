@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Oznacz jako Ukończona</string>
     <string name="book.category.action.mark_current">Oznacz jako aktualna</string>
     <string name="book.category.action.mark_not_started">Oznacz jako nierozpoczęta</string>
+    <string name="book.category.action.play_next">Odtwórz jako następne</string>
+    <string name="book.category.action.remove_up_next">Usuń z kolejki</string>
     <string name="book.delete.bottom_sheet.title">Usuń książkę</string>
     <string name="book.delete.dialog.confirm_files">Usuń moje pliki</string>
     <string name="book.delete.dialog.message">Ta akcja usunie pliki z twojego urządzenia.</string>
@@ -65,6 +67,7 @@
     <string name="library.category.completed.title">Ukończone</string>
     <string name="library.category.current.title">Aktualne</string>
     <string name="library.category.not_started.title">Nierozpoczęte</string>
+    <string name="library.category.up_next.title">Dalej</string>
     <string name="library.empty.add_first_book">Dodajmy twój folder z audiobookami aby rozpocząć słuchanie!</string>
     <string name="library.folders.title">Foldery audiobooków</string>
     <string name="library.folders.moved.dialog.title">Foldery audiobooków przeniesione</string>

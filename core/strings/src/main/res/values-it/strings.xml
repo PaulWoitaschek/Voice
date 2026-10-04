@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Segna come completato</string>
     <string name="book.category.action.mark_current">Contrassegna come corrente</string>
     <string name="book.category.action.mark_not_started">Contrassegna come non ancora iniziato</string>
+    <string name="book.category.action.play_next">Riproduci successivo</string>
+    <string name="book.category.action.remove_up_next">Rimuovi da Successivi</string>
     <string name="book.delete.bottom_sheet.title">Elimina libro</string>
     <string name="book.delete.dialog.confirm_files">Elimina i miei file</string>
     <string name="book.delete.dialog.message">Questo eliminerà i file sul tuo dispositivo.</string>
@@ -62,6 +64,7 @@
     <string name="library.category.completed.title">Completato</string>
     <string name="library.category.current.title">Corrente</string>
     <string name="library.category.not_started.title">Non ancora iniziato</string>
+    <string name="library.category.up_next.title">Successivi</string>
     <string name="library.empty.add_first_book">Aggiungiamo la tua cartella degli audiolibri per iniziare ad ascoltare!</string>
     <string name="library.folders.title">Cartelle audiolibri</string>
     <string name="library.folders.moved.dialog.title">Cartelle degli audiolibri spostate</string>

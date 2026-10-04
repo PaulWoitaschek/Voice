@@ -3,6 +3,8 @@
     <string name="book.category.action.mark_completed">Marcar como Concluído</string>
     <string name="book.category.action.mark_current">Marca com Actual</string>
     <string name="book.category.action.mark_not_started">Marca como não iniciado</string>
+    <string name="book.category.action.play_next">Reproduzir a seguir</string>
+    <string name="book.category.action.remove_up_next">Remover do Próximo</string>
     <string name="book.delete.bottom_sheet.title">Deletar livro</string>
     <string name="book.delete.dialog.confirm_files">Deletar os meus ficheiros</string>
     <string name="book.delete.dialog.message">Isto apagará os ficheiros no seu aparelho.</string>
@@ -62,6 +64,7 @@
     <string name="library.category.completed.title">Concluído</string>
     <string name="library.category.current.title">Actual</string>
     <string name="library.category.not_started.title">Não iniciado ainda</string>
+    <string name="library.category.up_next.title">A seguir</string>
     <string name="library.empty.add_first_book">Vamos adicionar uma pasta de Audiolivros para começar a ouvir!</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
     <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
