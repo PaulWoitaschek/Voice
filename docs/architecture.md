@@ -12,10 +12,6 @@ At a high level:
 * **Feature modules** implement user-facing screens, composed from core logic and UI components.
 * **Feature flags** are defined per-feature and implemented via `:core:featureflag`, sourced through remote config.
 
-## Layers
-
-The module inventory lives in `settings.gradle.kts`. This section describes how modules are grouped, not every module.
-
 ### Infrastructure
 
 * `:app` – Application entry point, dependency injection graph, and product flavor wiring (`free` / `play`)
@@ -25,13 +21,13 @@ The module inventory lives in `settings.gradle.kts`. This section describes how 
 
 ### Core (Shared Logic)
 
-`:core:*` modules hold reusable services and abstractions: data and storage, playback, scanning, search, logging, analytics, remote
-config, feature flags, localized strings, and shared Compose UI and theming.
+`:core:*` modules hold reusable services and abstractions: data and storage, playback, scanning, search, logging, analytics, remote config,
+feature flags, localized strings, and shared Compose UI and theming.
 
 ### Features
 
-`:features:*` modules are screen- or flow-based. Each owns its UI (Compose) and presentation logic and delegates to `:core` modules for
-data and services.
+`:features:*` modules are screen- or flow-based. Each owns its UI (Compose) and presentation logic and delegates to `:core` modules for data
+and services.
 
 ### API / Implementation Splits
 
@@ -54,23 +50,23 @@ Infrastructure → Core → Features
 
 ````mermaid
 flowchart LR
-    subgraph Infrastructure
-        app(":app")
-        navigation(":navigation")
-    end
+  subgraph Infrastructure
+    app(":app")
+    navigation(":navigation")
+  end
 
-    subgraph Core
-        core(":core")
-    end
+  subgraph Core
+    core(":core")
+  end
 
-    subgraph Features
-        features(":features")
-    end
+  subgraph Features
+    features(":features")
+  end
 
-    app --> navigation
-    app --> features
-    features --> core
-    features --> navigation
+  app --> navigation
+  app --> features
+  features --> core
+  features --> navigation
 ````
 
 ## Tech Decisions
