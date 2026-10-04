@@ -12,61 +12,27 @@ At a high level:
 * **Feature modules** implement user-facing screens, composed from core logic and UI components.
 * **Feature flags** are defined per-feature and implemented via `:core:featureflag`, sourced through remote config.
 
-## Layers
-
 ### Infrastructure
 
-* `:app` – Main application entry point, dependency injection setup
-* `:navigation` – Navigation framework abstractions and route definitions
-* `:plugins` – Gradle build plugins for consistency and convention
-* `:scripts` – Build and utility scripts
+* `:app` – Application entry point, dependency injection graph, and product flavor wiring (`free` / `play`)
+* `:navigation` – Navigation abstractions and route definitions
+* `plugins/` – Included Gradle build with convention plugins
+* `scripts/` – Build and utility scripts
 
 ### Core (Shared Logic)
 
-Core modules provide the underlying services and abstractions:
-
-* **UI & Theming**
-
-  * `:core:ui` – Shared UI components, typography, colors, Material 3 theming
-
-* **Data & Storage**
-
-  * `:core:data:api` – Interfaces for repositories and data sources
-  * `:core:data:impl` – Implementations for Room, network, or file access
-  * `:core:documentfile` – File system abstractions
-
-* **Playback & Media**
-
-  * `:core:playback` – Audio playback logic using ExoPlayer
-  * `:core:sleeptimer:api` & `:core:sleeptimer:impl` – Sleep timer contracts and implementation
-
-* **Utility Modules**
-
-  * `:core:scanner` – File scanning and metadata extraction
-  * `:core:search` – Search logic
-  * `:core:strings` – Localized string resources
-
-* **Cross-Cutting Concerns**
-
-  * Logging: `:core:logging:core`, `:core:logging:crashlytics`, `:core:logging:debug`
-  * Feature Flags: `:core:featureflag` – Feature flag abstractions backed by remote config
-  * Remote Config: `:core:remoteconfig:core`, `:core:remoteconfig:firebase`, `:core:remoteconfig:noop`
+`:core:*` modules hold reusable services and abstractions: data and storage, playback, scanning, search, logging, analytics, remote config,
+feature flags, localized strings, and shared Compose UI and theming.
 
 ### Features
 
-Feature modules are screen- or flow-based. Each module owns its UI (Compose) and presentation logic, while delegating to `:core` modules for
-data and services:
+`:features:*` modules are screen- or flow-based. Each owns its UI (Compose) and presentation logic and delegates to `:core` modules for data
+and services.
 
-* `:features:playbackScreen` – Main playback interface
-* `:features:bookOverview` – Library / book list
-* `:features:sleepTimer` – Sleep timer control UI
-* `:features:settings` – App settings
-* `:features:folderPicker` – Folder selection flow
-* `:features:cover` – Cover art management
-* `:features:onboarding` – First-time user flow
-* `:features:bookmark` – Bookmark management
-* `:features:widget` – Homescreen widget support
-* `:features:review:play` & `:features:review:noop` – App review prompts
+### API / Implementation Splits
+
+When a contract has several implementations, it is split into an `:api` module plus implementation modules (for example `noop`,
+`firebase`, `play`, `free`, or `impl`). Consumers depend only on `:api`; `:app` picks the implementation, often per product flavor.
 
 ## Dependency Flow
 
@@ -84,23 +50,23 @@ Infrastructure → Core → Features
 
 ````mermaid
 flowchart LR
-    subgraph Infrastructure
-        app(":app")
-        navigation(":navigation")
-    end
+  subgraph Infrastructure
+    app(":app")
+    navigation(":navigation")
+  end
 
-    subgraph Core
-        core(":core")
-    end
+  subgraph Core
+    core(":core")
+  end
 
-    subgraph Features
-        features(":features")
-    end
+  subgraph Features
+    features(":features")
+  end
 
-    app --> navigation
-    app --> features
-    features --> core
-    features --> navigation
+  app --> navigation
+  app --> features
+  features --> core
+  features --> navigation
 ````
 
 ## Tech Decisions
