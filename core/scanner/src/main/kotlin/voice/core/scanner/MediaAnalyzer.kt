@@ -12,6 +12,7 @@ import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.extractor.metadata.id3.ChapterFrame
 import androidx.media3.extractor.metadata.id3.TextInformationFrame
 import androidx.media3.extractor.metadata.vorbis.VorbisComment
+import androidx.media3.extractor.mp4.Mp4Extractor
 import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
@@ -39,7 +40,8 @@ internal class MediaAnalyzer(
   // retriever also extracts the covers
   private val mediaSourceFactory = DefaultMediaSourceFactory(
     context,
-    DefaultExtractorsFactory(),
+    DefaultExtractorsFactory()
+      .setMp4ExtractorFlags(Mp4Extractor.FLAG_OMIT_TRACK_SAMPLE_TABLE),
   )
 
   suspend fun analyze(file: CachedDocumentFile): Metadata? {
