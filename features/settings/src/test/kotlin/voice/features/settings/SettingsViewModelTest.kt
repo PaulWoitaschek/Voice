@@ -41,6 +41,7 @@ class SettingsViewModelTest {
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val analyticsConsentStore = MemoryDataStore(false)
   private val developerMenuUnlockedStore = MemoryDataStore(false)
+  private val lockscreenSeekingEnabledStore = MemoryDataStore(false)
   private val navigator = mockk<Navigator> {
     every { goTo(any()) } just Runs
   }
@@ -71,6 +72,7 @@ class SettingsViewModelTest {
     gridCount = gridCount,
     kioskModeFeatureFlag = kioskModeFeatureFlag,
     developerMenuUnlockedStore = developerMenuUnlockedStore,
+    lockscreenSeekingEnabledStore = lockscreenSeekingEnabledStore,
     dynamicColorAvailability = dynamicColorAvailability,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )

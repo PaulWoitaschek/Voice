@@ -24,6 +24,7 @@ import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DeveloperMenuUnlockedStore
 import voice.core.data.store.GridModeStore
+import voice.core.data.store.LockscreenSeekingEnabledStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.data.store.ThemeColorSchemeStore
@@ -59,6 +60,8 @@ class SettingsViewModel(
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   @DeveloperMenuUnlockedStore
   private val developerMenuUnlockedStore: DataStore<Boolean>,
+  @LockscreenSeekingEnabledStore
+  private val lockscreenSeekingEnabledStore: DataStore<Boolean>,
   private val dynamicColorAvailability: DynamicColorAvailability,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
@@ -84,6 +87,7 @@ class SettingsViewModel(
       kioskModeFeatureFlag.get()
     }
     val showDeveloperMenu by remember { developerMenuUnlockedStore.data }.collectAsState(initial = false)
+    val lockscreenSeekingEnabled by remember { lockscreenSeekingEnabledStore.data }.collectAsState(initial = false)
     val showThemeColorSchemePref = remember {
       dynamicColorAvailability.isSupported()
     }
@@ -110,6 +114,7 @@ class SettingsViewModel(
       showDeveloperMenu = showDeveloperMenu,
       showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
       kioskMode = kioskMode,
+      lockscreenSeekingEnabled = lockscreenSeekingEnabled,
     )
   }
 
@@ -259,5 +264,11 @@ class SettingsViewModel(
 
   override fun openDeveloperMenu() {
     navigator.goTo(Destination.DeveloperSettings)
+  }
+
+  override fun toggleLockscreenSeeking() {
+    mainScope.launch {
+      lockscreenSeekingEnabledStore.updateData { !it }
+    }
   }
 }
