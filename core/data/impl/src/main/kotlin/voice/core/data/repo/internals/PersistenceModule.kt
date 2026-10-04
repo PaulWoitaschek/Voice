@@ -12,6 +12,7 @@ import dev.zacsweers.metro.SingleIn
 import voice.core.data.repo.internals.dao.BookContentDao
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.dao.ChapterDao
+import voice.core.data.repo.internals.dao.ListeningSessionDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 
 @BindingContainer
@@ -29,6 +30,9 @@ public object PersistenceModule {
 
   @Provides
   private fun recentBookSearchDao(appDb: AppDb): RecentBookSearchDao = appDb.recentBookSearchDao()
+
+  @Provides
+  private fun listeningSessionDao(appDb: AppDb): ListeningSessionDao = appDb.listeningSessionDao()
 
   @Provides
   @SingleIn(AppScope::class)
