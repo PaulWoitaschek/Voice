@@ -13,6 +13,8 @@ data class BookPlayViewState(
   val sleepTimerState: SleepTimerViewState,
   val playedTime: Duration,
   val duration: Duration,
+  val totalPlayedTime: Duration,
+  val totalDuration: Duration,
   val playing: Boolean,
   val cover: String?,
   val skipSilence: Boolean,
