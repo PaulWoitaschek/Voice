@@ -2,6 +2,7 @@ package voice.core.playback.player
 
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.test.utils.FakeMediaSource
 import androidx.media3.test.utils.FakeTimeline
 import androidx.media3.test.utils.TestExoPlayerBuilder
@@ -27,6 +28,7 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.ChapterMark
 import voice.core.data.MarkData
+import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
@@ -42,6 +44,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
@@ -110,7 +113,27 @@ class VoicePlayerTest {
     volumeGain = mockk(relaxed = true),
     sleepTimer = sleepTimer,
     analytics = mockk(relaxed = true),
+    media3AudioOffloadFeatureFlag = MemoryFeatureFlag(true),
   )
+
+  @Test
+  fun `skip silence disables incompatible audio offload`() = scope.runTest {
+    player.setSkipSilenceEnabled(true)
+
+    assertTrue(internalPlayer.skipSilenceEnabled)
+    assertEquals(
+      TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_DISABLED,
+      internalPlayer.trackSelectionParameters.audioOffloadPreferences.audioOffloadMode,
+    )
+
+    player.setSkipSilenceEnabled(false)
+
+    assertFalse(internalPlayer.skipSilenceEnabled)
+    assertEquals(
+      TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED,
+      internalPlayer.trackSelectionParameters.audioOffloadPreferences.audioOffloadMode,
+    )
+  }
 
   @Test
   fun `seekToNext does not clip`() = scope.runTest {

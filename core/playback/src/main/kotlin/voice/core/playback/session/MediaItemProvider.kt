@@ -158,23 +158,31 @@ class MediaItemProvider(
   private fun mediaItem(
     playbackItem: PlaybackItem,
     content: BookContent,
-  ) = MediaItem(
-    title = playbackItem.mark.name
-      ?: playbackItem.chapter.name
-      ?: playbackItem.chapter.id.value,
-    mediaId = playbackItem.mediaId,
-    browsable = false,
-    isPlayable = true,
-    sourceUri = playbackItem.chapter.id.toUri(),
-    imageUri = content.cover?.toProvidedUri(),
-    artist = content.author,
-    durationMs = playbackItem.mark.durationMs,
-    clippingConfiguration = ClippingConfiguration.Builder()
+  ): MediaItem {
+    val clippingConfiguration = ClippingConfiguration.Builder()
       .setStartPositionMs(playbackItem.mark.startMs)
-      .setEndPositionMs(playbackItem.mark.endMs)
-      .build(),
-    mediaType = MediaType.AudioBookChapter,
-  )
+      .apply {
+        if (playbackItem.markIndex != playbackItem.chapter.chapterMarks.lastIndex) {
+          setEndPositionMs(playbackItem.mark.endMs)
+        }
+      }
+      .build()
+
+    return MediaItem(
+      title = playbackItem.mark.name
+        ?: playbackItem.chapter.name
+        ?: playbackItem.chapter.id.value,
+      mediaId = playbackItem.mediaId,
+      browsable = false,
+      isPlayable = true,
+      sourceUri = playbackItem.chapter.id.toUri(),
+      imageUri = content.cover?.toProvidedUri(),
+      artist = content.author,
+      durationMs = playbackItem.mark.durationMs,
+      clippingConfiguration = clippingConfiguration,
+      mediaType = MediaType.AudioBookChapter,
+    )
+  }
 
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
 }
