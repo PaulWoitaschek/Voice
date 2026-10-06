@@ -233,4 +233,10 @@ dependencies {
   androidTestImplementation(libs.compose.ui.testJunit)
   androidTestImplementation(libs.coroutines.test)
   androidTestUtil(libs.androidX.test.orchestrator)
+
+  constraints {
+    // The androidTest classpath must resolve the same versions as the app.
+    // Espresso needs a newer version than the app pulls in, so the app is raised to match.
+    implementation(libs.errorProne.annotations)
+  }
 }
