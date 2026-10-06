@@ -128,6 +128,14 @@ android {
   }
 }
 
+androidComponents {
+  // Lets free debug builds be installed next to the store version.
+  // Play keeps the real id because google-services.json only contains that package.
+  onVariants(selector().withBuildType("debug").withFlavor("distribution" to "free")) { variant ->
+    variant.applicationId.set("de.ph1b.audiobook.debug")
+  }
+}
+
 val validatePlayGoogleServices = tasks.register("validatePlayGoogleServices") {
   val playGoogleServicesJsonPath = playGoogleServicesJson.asFile.absolutePath
 

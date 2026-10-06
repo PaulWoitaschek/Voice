@@ -1,0 +1,12 @@
+<!-- Copy of src/main/res/xml/shortcuts.xml: free debug builds use the de.ph1b.audiobook.debug application id. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+  <shortcut
+    android:icon="@drawable/ic_shortcut_play"
+    android:shortcutId="playCurrent"
+    android:shortcutShortLabel="@string/shortcut.play_current.short_label">
+    <intent
+      android:action="playCurrent"
+      android:targetClass="voice.app.MainActivity"
+      android:targetPackage="de.ph1b.audiobook.debug" />
+  </shortcut>
+</shortcuts>
