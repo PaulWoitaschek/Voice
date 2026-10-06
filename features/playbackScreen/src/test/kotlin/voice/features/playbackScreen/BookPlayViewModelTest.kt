@@ -76,8 +76,9 @@ class BookPlayViewModelTest {
   }
 
   private val player = mockk<PlayerController>()
+  private val playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Paused)
   private val playStateManager = mockk<PlayStateManager> {
-    every { playStateFlow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
+    every { playStateFlow } returns this@BookPlayViewModelTest.playStateFlow
   }
   private val currentBookStoreId = MemoryDataStore<BookId?>(null)
   private val currentBookResolver = mockk<CurrentBookResolver> {
@@ -264,8 +265,41 @@ class BookPlayViewModelTest {
   }
 
   @Test
-  fun `undo seek hides after timeout`() = scope.runTest {
+  fun `undo seek stays while paused`() = scope.runTest {
     every { player.setPosition(any(), any()) } just Runs
+
+    viewModel.seekTo(1.minutes)
+    runCurrent()
+    advanceTimeBy(BookPlayViewModel.UndoSeekTimeout * 4)
+
+    assertNotNull(viewModel.undoSeekState.value)
+    viewModel.undoSeek()
+    verify { player.setPosition(time = 2.5.minutes.inWholeMilliseconds, id = book.currentChapter.id) }
+  }
+
+  @Test
+  fun `undo seek countdown restarts when playback resumes`() = scope.runTest {
+    every { player.setPosition(any(), any()) } just Runs
+    playStateFlow.value = PlayStateManager.PlayState.Playing
+
+    viewModel.seekTo(1.minutes)
+    runCurrent()
+    advanceTimeBy(BookPlayViewModel.UndoSeekTimeout - 2.seconds)
+    playStateFlow.value = PlayStateManager.PlayState.Paused
+    advanceTimeBy(BookPlayViewModel.UndoSeekTimeout * 2)
+    assertNotNull(viewModel.undoSeekState.value)
+
+    playStateFlow.value = PlayStateManager.PlayState.Playing
+    advanceTimeBy(BookPlayViewModel.UndoSeekTimeout - 1.seconds)
+    assertNotNull(viewModel.undoSeekState.value)
+    advanceTimeBy(2.seconds)
+    assertNull(viewModel.undoSeekState.value)
+  }
+
+  @Test
+  fun `undo seek hides after timeout while playing`() = scope.runTest {
+    every { player.setPosition(any(), any()) } just Runs
+    playStateFlow.value = PlayStateManager.PlayState.Playing
 
     viewModel.seekTo(1.minutes)
     runCurrent()

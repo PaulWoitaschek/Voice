@@ -14,6 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -370,9 +371,14 @@ class BookPlayViewModel(
   private fun showUndoSeek(delta: Duration) {
     undoSeekState.value = UndoSeekViewState(delta)
     hideUndoSeekJob?.cancel()
+    // only counts down while playing: when paused the user is still deciding, and a resume restarts the countdown
     hideUndoSeekJob = scope.launch {
-      delay(UndoSeekTimeout)
-      hideUndoSeek()
+      playStateManager.playStateFlow.collectLatest { playState ->
+        if (playState == PlayStateManager.PlayState.Playing) {
+          delay(UndoSeekTimeout)
+          hideUndoSeek()
+        }
+      }
     }
   }
 
@@ -421,7 +427,7 @@ class BookPlayViewModel(
   )
 
   internal companion object {
-    val UndoSeekTimeout = 10.seconds
+    val UndoSeekTimeout = 5.seconds
   }
 
   @AssistedFactory
