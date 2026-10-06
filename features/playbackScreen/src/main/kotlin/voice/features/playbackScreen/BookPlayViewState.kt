@@ -36,6 +36,13 @@ data class BookPlayViewState(
   }
 }
 
+/**
+ * Offered for a short time after seeking with the progress bar.
+ * [delta] is the total jump from where the user was before they started seeking.
+ */
+@JvmInline
+internal value class UndoSeekViewState(val delta: Duration)
+
 internal sealed interface BookPlayDialogViewState {
   data class SpeedDialog(val speed: Float) : BookPlayDialogViewState {
 

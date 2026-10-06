@@ -179,6 +179,8 @@
     <string name="playback.option.skip_silence">Skip Silence</string>
     <!-- Menu and dialog title for changing volume gain. -->
     <string name="playback.option.volume_boost">Volume boost</string>
+    <!-- Button shown briefly after seeking with the progress bar; returns to the position before the seek. -->
+    <string name="playback.seek.undo">Undo</string>
     <!-- Title and content description for playback-speed controls. -->
     <string name="playback.speed.title">Playback speed</string>
     <!-- Negative button for cancelling feedback. -->

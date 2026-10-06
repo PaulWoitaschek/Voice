@@ -9,8 +9,10 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,7 @@ internal fun SliderRow(
   duration: Duration,
   playedTime: Duration,
   onSeek: (Duration) -> Unit,
+  onSeekDeltaChange: (Duration?) -> Unit,
 ) {
   Row(
     modifier = Modifier
@@ -35,10 +38,18 @@ internal fun SliderRow(
     if (!dragging) {
       sliderState.value = (playedTime / duration).toFloat().coerceIn(0F, 1F)
     }
+    val sliderTime = duration * sliderState.value.toDouble()
+    // captured when the drag starts so ongoing playback doesn't shift the delta
+    val dragStartTime = remember(dragging) { playedTime }
+    val seekDelta = if (dragging) sliderTime - dragStartTime else null
+    val currentOnSeekDeltaChange by rememberUpdatedState(onSeekDeltaChange)
+    LaunchedEffect(seekDelta) {
+      currentOnSeekDeltaChange(seekDelta)
+    }
     Text(
       text = formatTime(
         timeMs = if (dragging) {
-          (duration * sliderState.value.toDouble()).inWholeMilliseconds
+          sliderTime.inWholeMilliseconds
         } else {
           playedTime.inWholeMilliseconds
         },

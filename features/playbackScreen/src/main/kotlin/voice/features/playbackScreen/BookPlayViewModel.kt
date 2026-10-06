@@ -10,6 +10,8 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -19,6 +21,7 @@ import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.ChapterId
 import voice.core.data.KioskModeDemoData
 import voice.core.data.durationMs
 import voice.core.data.markForPosition
@@ -50,6 +53,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @AssistedInject
 class BookPlayViewModel(
@@ -82,6 +86,12 @@ class BookPlayViewModel(
 
   internal val dialogState: State<BookPlayDialogViewState?>
     field = mutableStateOf<BookPlayDialogViewState?>(null)
+
+  internal val undoSeekState: State<UndoSeekViewState?>
+    field = mutableStateOf<UndoSeekViewState?>(null)
+
+  private var undoSeekPosition: SeekPosition? = null
+  private var hideUndoSeekJob: Job? = null
 
   init {
     scope.launch {
@@ -242,6 +252,7 @@ class BookPlayViewModel(
         }
       }
     }
+    hideUndoSeek()
     player.playPause()
   }
 
@@ -336,8 +347,40 @@ class BookPlayViewModel(
       val book = currentBook() ?: return@launch
       val currentChapter = book.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
-      player.setPosition(currentMark.startMs + position.inWholeMilliseconds, currentChapter.id)
+      // keep the original position while undo is still offered, so several seeks in a row undo back to where scrubbing started
+      val undoPosition = undoSeekPosition
+        ?: SeekPosition(
+          chapterId = currentChapter.id,
+          positionInChapter = book.content.positionInChapter,
+          positionInBook = book.position,
+        ).also { undoSeekPosition = it }
+      val targetInChapter = currentMark.startMs + position.inWholeMilliseconds
+      val targetInBook = book.position - book.content.positionInChapter + targetInChapter
+      player.setPosition(targetInChapter, currentChapter.id)
+      showUndoSeek(delta = (targetInBook - undoPosition.positionInBook).milliseconds)
     }
+  }
+
+  fun undoSeek() {
+    val position = undoSeekPosition ?: return
+    hideUndoSeek()
+    player.setPosition(position.positionInChapter, position.chapterId)
+  }
+
+  private fun showUndoSeek(delta: Duration) {
+    undoSeekState.value = UndoSeekViewState(delta)
+    hideUndoSeekJob?.cancel()
+    hideUndoSeekJob = scope.launch {
+      delay(UndoSeekTimeout)
+      hideUndoSeek()
+    }
+  }
+
+  private fun hideUndoSeek() {
+    hideUndoSeekJob?.cancel()
+    hideUndoSeekJob = null
+    undoSeekPosition = null
+    undoSeekState.value = null
   }
 
   fun toggleSleepTimer() {
@@ -369,6 +412,16 @@ class BookPlayViewModel(
 
   private suspend fun currentBook(): Book? {
     return currentBookResolver.book(bookId)
+  }
+
+  private data class SeekPosition(
+    val chapterId: ChapterId,
+    val positionInChapter: Long,
+    val positionInBook: Long,
+  )
+
+  internal companion object {
+    val UndoSeekTimeout = 10.seconds
   }
 
   @AssistedFactory

@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.common.DispatcherProvider
@@ -41,6 +43,8 @@ import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
@@ -238,6 +242,77 @@ class BookPlayViewModelTest {
     }
 
     assertEquals(expected = null, actual = viewModel.dialogState.value)
+  }
+
+  @Test
+  fun `undo seek returns to the position before the seek`() = scope.runTest {
+    every { player.setPosition(any(), any()) } just Runs
+
+    viewModel.seekTo(1.minutes)
+    runCurrent()
+    // from 2:30 to 3:00 in the chapter
+    assertEquals(expected = UndoSeekViewState(30.seconds), actual = viewModel.undoSeekState.value)
+
+    viewModel.undoSeek()
+
+    verifyOrder {
+      // current mark "Middle Section" starts at 2 minutes
+      player.setPosition(time = 3.minutes.inWholeMilliseconds, id = book.currentChapter.id)
+      player.setPosition(time = 2.5.minutes.inWholeMilliseconds, id = book.currentChapter.id)
+    }
+    assertNull(viewModel.undoSeekState.value)
+  }
+
+  @Test
+  fun `undo seek hides after timeout`() = scope.runTest {
+    every { player.setPosition(any(), any()) } just Runs
+
+    viewModel.seekTo(1.minutes)
+    runCurrent()
+    advanceTimeBy(BookPlayViewModel.UndoSeekTimeout - 1.seconds)
+    assertNotNull(viewModel.undoSeekState.value)
+
+    advanceTimeBy(2.seconds)
+    assertNull(viewModel.undoSeekState.value)
+
+    viewModel.undoSeek()
+    verify(exactly = 1) { player.setPosition(any(), any()) }
+  }
+
+  @Test
+  fun `consecutive seeks undo back to where seeking started`() = scope.runTest {
+    every { player.setPosition(any(), any()) } just Runs
+    val afterFirstSeek = book.copy(content = book.content.copy(positionInChapter = 3.minutes.inWholeMilliseconds))
+    coEvery { currentBookResolver.book(book.id) } returnsMany listOf(book, afterFirstSeek)
+
+    viewModel.seekTo(1.minutes)
+    runCurrent()
+    viewModel.seekTo(1.5.minutes)
+    runCurrent()
+    // total jump from the original 2:30 to 3:30
+    assertEquals(expected = UndoSeekViewState(1.minutes), actual = viewModel.undoSeekState.value)
+    viewModel.undoSeek()
+
+    verify(exactly = 1) {
+      player.setPosition(time = 2.5.minutes.inWholeMilliseconds, id = book.currentChapter.id)
+    }
+  }
+
+  @Test
+  fun `pressing play dismisses undo seek`() = scope.runTest {
+    every { player.setPosition(any(), any()) } just Runs
+    every { player.playPause() } just Runs
+    every { playStateManager.playState } returns PlayStateManager.PlayState.Playing
+
+    viewModel.seekTo(1.minutes)
+    runCurrent()
+    assertNotNull(viewModel.undoSeekState.value)
+
+    viewModel.playPause()
+
+    assertNull(viewModel.undoSeekState.value)
+    viewModel.undoSeek()
+    verify(exactly = 1) { player.setPosition(any(), any()) }
   }
 
   @Test

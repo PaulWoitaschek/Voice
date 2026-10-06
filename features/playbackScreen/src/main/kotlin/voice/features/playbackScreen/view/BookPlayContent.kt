@@ -10,10 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
 import voice.features.playbackScreen.BookPlayViewState
+import voice.features.playbackScreen.UndoSeekViewState
 import kotlin.time.Duration
 
 @Composable
@@ -29,7 +34,10 @@ internal fun BookPlayContent(
   onSkipToPrevious: () -> Unit,
   onCurrentChapterClick: () -> Unit,
   useLandscapeLayout: Boolean,
+  undoSeek: UndoSeekViewState?,
+  onUndoSeek: () -> Unit,
 ) {
+  var dragDelta by remember { mutableStateOf<Duration?>(null) }
   if (useLandscapeLayout) {
     Row(Modifier.padding(contentPadding)) {
       CoverRow(
@@ -37,6 +45,10 @@ internal fun BookPlayContent(
         cover = viewState.cover,
         onPlayClick = onPlayClick,
         sleepTimerState = viewState.sleepTimerState,
+        dragDelta = dragDelta,
+        duration = viewState.duration,
+        undoSeek = undoSeek,
+        onUndoSeek = onUndoSeek,
         modifier = Modifier
           .fillMaxHeight()
           .weight(1F)
@@ -62,6 +74,7 @@ internal fun BookPlayContent(
           duration = viewState.duration,
           playedTime = viewState.playedTime,
           onSeek = onSeek,
+          onSeekDeltaChange = { dragDelta = it },
         )
         Spacer(modifier = Modifier.size(16.dp))
         PlaybackRow(
@@ -79,6 +92,10 @@ internal fun BookPlayContent(
         onPlayClick = onPlayClick,
         cover = viewState.cover,
         sleepTimerState = viewState.sleepTimerState,
+        dragDelta = dragDelta,
+        duration = viewState.duration,
+        undoSeek = undoSeek,
+        onUndoSeek = onUndoSeek,
         modifier = Modifier
           .fillMaxWidth()
           .weight(1F)
@@ -99,6 +116,7 @@ internal fun BookPlayContent(
         duration = viewState.duration,
         playedTime = viewState.playedTime,
         onSeek = onSeek,
+        onSeekDeltaChange = { dragDelta = it },
       )
       Spacer(modifier = Modifier.size(16.dp))
       PlaybackRow(

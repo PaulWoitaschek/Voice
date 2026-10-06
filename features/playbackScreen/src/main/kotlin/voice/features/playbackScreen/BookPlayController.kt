@@ -64,6 +64,8 @@ fun BookPlayScreen(bookId: BookId) {
     onFastForwardClick = viewModel::fastForward,
     onRewindClick = viewModel::rewind,
     onSeek = viewModel::seekTo,
+    undoSeek = viewModel.undoSeekState.value,
+    onUndoSeek = viewModel::undoSeek,
     onBookmarkClick = viewModel::onBookmarkClick,
     onBookmarkLongClick = viewModel::onBookmarkLongClick,
     onSkipSilenceClick = viewModel::toggleSkipSilence,

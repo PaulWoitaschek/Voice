@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import voice.core.data.BookId
 import voice.core.ui.VoiceTheme
 import voice.features.playbackScreen.BookPlayViewState
+import voice.features.playbackScreen.UndoSeekViewState
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
@@ -33,6 +34,8 @@ internal fun BookPlayView(
   onSkipToPrevious: () -> Unit,
   onCloseClick: () -> Unit,
   onCurrentChapterClick: () -> Unit,
+  undoSeek: UndoSeekViewState?,
+  onUndoSeek: () -> Unit,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   Scaffold(
@@ -65,6 +68,8 @@ internal fun BookPlayView(
         onSkipToPrevious = onSkipToPrevious,
         onCurrentChapterClick = onCurrentChapterClick,
         useLandscapeLayout = useLandscapeLayout,
+        undoSeek = undoSeek,
+        onUndoSeek = onUndoSeek,
       )
     },
   )
@@ -95,6 +100,8 @@ private fun BookPlayPreview(
       onCloseClick = {},
       onCurrentChapterClick = {},
       useLandscapeLayout = false,
+      undoSeek = null,
+      onUndoSeek = {},
     )
   }
 }
