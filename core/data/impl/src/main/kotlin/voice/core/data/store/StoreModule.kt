@@ -19,6 +19,7 @@ import voice.core.data.GridMode
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
 import voice.core.data.sleeptimer.SleepTimerPreference
+import voice.core.data.sleeptimer.SleepTimerRewind
 import voice.core.featureflag.FeatureFlagOverride
 import java.io.File
 import kotlin.time.Duration
@@ -157,6 +158,17 @@ public object StoreModule {
     return factory.create(
       serializer = BookId.serializer().nullable,
       fileName = "currentBook",
+      defaultValue = null,
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @SleepTimerRewindStore
+  private fun sleepTimerRewind(factory: VoiceDataStoreFactory): DataStore<SleepTimerRewind?> {
+    return factory.create(
+      serializer = SleepTimerRewind.serializer().nullable,
+      fileName = "sleepTimerRewind",
       defaultValue = null,
     )
   }

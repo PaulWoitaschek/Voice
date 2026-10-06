@@ -18,6 +18,9 @@ public annotation class SeekTimeStore
 public annotation class SleepTimerPreferenceStore
 
 @Qualifier
+public annotation class SleepTimerRewindStore
+
+@Qualifier
 public annotation class GridModeStore
 
 @Qualifier

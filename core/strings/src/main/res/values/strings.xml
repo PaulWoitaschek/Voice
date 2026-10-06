@@ -282,4 +282,12 @@
     <string name="sleep_timer.dialog.title">Sweet dreams! 🌙</string>
     <!-- Sleep timer option and playback status for stopping at the end of a chapter. -->
     <string name="sleep_timer.end_of_chapter">End of Chapter</string>
+    <!-- Title of the dialog shown when the app is opened after the sleep timer stopped playback. -->
+    <string name="sleep_timer.rewind.title">Fell asleep?</string>
+    <!-- Message of the dialog shown when the app is opened after the sleep timer stopped playback. -->
+    <string name="sleep_timer.rewind.message">The sleep timer stopped playback. How far do you want to go back?</string>
+    <!-- Supporting text under the rewind option that goes back to where the sleep timer was started. -->
+    <string name="sleep_timer.rewind.timer_start">Where the timer started</string>
+    <!-- Button that closes the sleep timer rewind dialog without changing the position. -->
+    <string name="sleep_timer.rewind.dismiss">Don’t rewind</string>
 </resources>

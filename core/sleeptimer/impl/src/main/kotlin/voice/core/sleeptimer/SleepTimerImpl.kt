@@ -38,6 +38,7 @@ class SleepTimerImpl internal constructor(
   private val fadeOutStore: DataStore<Duration>,
   dispatcherProvider: DispatcherProvider,
   private val tracker: SleepTimerTracker,
+  private val rewindRecorder: SleepTimerRewindRecorder,
 ) : SleepTimer {
 
   private val scope = MainScope(dispatcherProvider)
@@ -77,6 +78,7 @@ class SleepTimerImpl internal constructor(
     var left = duration
     state.value = SleepTimerState.Enabled.WithDuration(left)
     playerController.setVolume(1F)
+    rewindRecorder.onCountdownStarted()
 
     val fadeOutDuration = fadeOutStore.data.first()
     var interval = 500.milliseconds
@@ -95,6 +97,7 @@ class SleepTimerImpl internal constructor(
     state.value = SleepTimerState.Disabled
 
     playerController.pauseWithRewind(fadeOutDuration)
+    rewindRecorder.onCountdownFinished(timerDuration = duration)
 
     val shakeDetected = detectShakeWithTimeout()
     playerController.setVolume(1F)

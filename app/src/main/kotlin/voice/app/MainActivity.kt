@@ -37,6 +37,7 @@ import voice.core.logging.api.Logger
 import voice.core.ui.LocalSharedTransitionScope
 import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
+import voice.features.sleepTimer.rewind.SleepTimerRewindPrompt
 import voice.navigation.Destination
 import voice.navigation.NavigationCommand
 import voice.navigation.Navigator
@@ -161,6 +162,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         ReviewFeature()
+        SleepTimerRewindPrompt()
       }
     }
   }

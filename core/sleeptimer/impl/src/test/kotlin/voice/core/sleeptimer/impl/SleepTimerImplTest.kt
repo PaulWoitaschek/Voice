@@ -24,6 +24,7 @@ import voice.core.sleeptimer.ShakeDetector
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerImpl
 import voice.core.sleeptimer.SleepTimerMode
+import voice.core.sleeptimer.SleepTimerRewindRecorder
 import voice.core.sleeptimer.SleepTimerState
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -65,6 +66,8 @@ class SleepTimerImplTest {
   private val testDispatcher = StandardTestDispatcher()
   private val testScope = TestScope(testDispatcher)
 
+  private val rewindRecorder = mockk<SleepTimerRewindRecorder>(relaxed = true)
+
   private val sleepTimer: SleepTimer
 
   init {
@@ -77,7 +80,31 @@ class SleepTimerImplTest {
       fadeOutStore,
       dispatcherProvider,
       tracker = mockk(relaxed = true),
+      rewindRecorder = rewindRecorder,
     )
+  }
+
+  @Test
+  fun `finished countdown is recorded for rewinding`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(3.seconds))
+    runCurrent()
+    coVerify(exactly = 1) { rewindRecorder.onCountdownStarted() }
+    coVerify(exactly = 0) { rewindRecorder.onCountdownFinished(any()) }
+
+    advanceTimeBy(4.seconds)
+    runCurrent()
+
+    coVerify(exactly = 1) { rewindRecorder.onCountdownFinished(3.seconds) }
+  }
+
+  @Test
+  fun `disabled countdown is not recorded for rewinding`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(3.seconds))
+    advanceTimeBy(1.seconds)
+    sleepTimer.disable()
+    advanceTimeBy(5.seconds)
+
+    coVerify(exactly = 0) { rewindRecorder.onCountdownFinished(any()) }
   }
 
   @Test
