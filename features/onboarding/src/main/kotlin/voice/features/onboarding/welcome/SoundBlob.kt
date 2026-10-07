@@ -15,6 +15,7 @@ import androidx.compose.material3.toPath
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -72,7 +73,7 @@ internal fun SoundBlob(
   val morphProgress = remember { Animatable(0F) }
   val taps = remember { Channel<Unit>(Channel.CONFLATED) }
   // every tap and morph sends out a ring, which the clock carries away
-  var pulseStart by remember { mutableStateOf(Float.NEGATIVE_INFINITY) }
+  var pulseStart by remember { mutableFloatStateOf(Float.NEGATIVE_INFINITY) }
   var pressed by remember { mutableStateOf(false) }
   val squish by animateFloatAsState(
     targetValue = if (pressed) 0.86F else 1F,
