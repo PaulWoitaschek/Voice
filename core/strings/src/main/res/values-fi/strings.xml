@@ -167,8 +167,8 @@
     <string name="settings.appearance.theme.light">Vaalea</string>
     <string name="settings.appearance.theme.title">Teema</string>
     <string name="settings.appearance.title">Ulkoasu</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Päättymisaika</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Aloitusaika</string>
+    <string name="settings.auto_sleep_timer.end.label">Päättymisaika</string>
+    <string name="settings.auto_sleep_timer.start.label">Aloitusaika</string>
     <string name="settings.auto_sleep_timer.summary">Aloita uniajastin automaattisesti, kun toisto alkaa välillä %1$s ja %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automaattinen uniajastin</string>
     <string name="settings.library.folders.summary">Hallitse kansioita, joista etsitään äänikirjoja</string>
@@ -177,7 +177,6 @@
     <string name="settings.playback.seek_time.title">Siirtymän pituus</string>
     <string name="settings.support.faq.title">UKK</string>
     <string name="settings.support.get_support.title">Hanki apua</string>
-    <string name="settings.support.help_translating.title">Auta kääntämään Voicea</string>
     <string name="settings.support.report_issue.title">Ilmoita ongelmasta</string>
     <string name="settings.support.suggest_idea.title">Ehdota ideaa</string>
     <string name="settings.support.support_voice.summary">Lahjoitukset auttavat Voicen ylläpidossa</string>

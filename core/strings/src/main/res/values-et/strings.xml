@@ -177,7 +177,6 @@
     <string name="settings.playback.seek_time.title">Kerimise samm</string>
     <string name="settings.support.faq.title">KKK</string>
     <string name="settings.support.get_support.title">Küsi abi</string>
-    <string name="settings.support.help_translating.title">Aita tõlkida rakendust Voice</string>
     <string name="settings.support.report_issue.title">Teata veast</string>
     <string name="settings.support.suggest_idea.title">Soovita uut ideed</string>
     <string name="settings.support.support_voice.summary">Annetused aitavad rakendust Voice hooldada</string>

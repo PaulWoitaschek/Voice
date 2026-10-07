@@ -10,7 +10,6 @@ Thanks for wanting to help with Voice! Please read this page before you open a p
 | Suggest a feature or change                             | [Open a feature request](https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas) |
 | Fix a bug                                               | Open a pull request                                                                              |
 | Build anything else (features, UI, settings, refactors) | Get approval from the maintainer **first**, then open a pull request                             |
-| Translate                                               | Use [Weblate](https://hosted.weblate.org/engage/voice/)                                          |
 
 ## Bug reports and feature requests
 
@@ -64,9 +63,3 @@ Dependencies are updated by Renovate. Please don't open pull requests for versio
 - Read [Development](https://voice.woitaschek.de/development/) and [Architecture](https://voice.woitaschek.de/architecture/).
 - Run `./gradlew voiceUnitTest lintKotlin` and make sure it passes.
 - Fill out the pull request template.
-
-## <a name="trans">Translations</a>
-
-The project page is on [Weblate](https://hosted.weblate.org/engage/voice/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words.
-
-Or you can start translating a new language if you speak it 🤗

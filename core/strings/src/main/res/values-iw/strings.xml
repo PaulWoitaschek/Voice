@@ -176,8 +176,8 @@
     <string name="settings.appearance.theme.light">בהיר</string>
     <string name="settings.appearance.theme.title">ערכת נושא</string>
     <string name="settings.appearance.title">מראה</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">בחר זמן סיום</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">בחר זמן התחלה</string>
+    <string name="settings.auto_sleep_timer.end.label">בחר זמן סיום</string>
+    <string name="settings.auto_sleep_timer.start.label">בחר זמן התחלה</string>
     <string name="settings.auto_sleep_timer.summary">תפעיל את שעון השינה ­האוטומטי כשההפעלה מגיעה ל- %1$s ו- %2$s</string>
     <string name="settings.auto_sleep_timer.title">שעון עצר אוטומטי לשינה</string>
     <string name="settings.library.folders.summary">ניהול תיקיות שנסרקות עבור ספרי שמע</string>
@@ -186,7 +186,6 @@
     <string name="settings.playback.seek_time.title">דלג כמות</string>
     <string name="settings.support.faq.title">שאלות נפוצות</string>
     <string name="settings.support.get_support.title">תמיכה</string>
-    <string name="settings.support.help_translating.title">עזור לתרגם את Voice</string>
     <string name="settings.support.report_issue.title">דווח על תקלה</string>
     <string name="settings.support.suggest_idea.title">הצע רעיון</string>
     <string name="settings.support.support_voice.summary">תרומות עוזרות לשמור על Voice מתוחזקת</string>

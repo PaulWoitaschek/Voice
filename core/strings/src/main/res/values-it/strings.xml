@@ -176,8 +176,8 @@
     <string name="settings.appearance.theme.light">Chiaro</string>
     <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.appearance.title">Aspetto</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Ora di fine</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Ora di inizio</string>
+    <string name="settings.auto_sleep_timer.end.label">Ora di fine</string>
+    <string name="settings.auto_sleep_timer.start.label">Ora di inizio</string>
     <string name="settings.auto_sleep_timer.summary">Avvia automaticamente un timer di spegnimento automatico quando la riproduzione inizia tra %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Timer di spegnimento automatico</string>
     <string name="settings.library.folders.summary">Gestisci cartelle audiolibri</string>
@@ -186,7 +186,6 @@
     <string name="settings.playback.seek_time.title">Salta tempo</string>
     <string name="settings.support.faq.title">Domande frequenti</string>
     <string name="settings.support.get_support.title">Ottieni supporto</string>
-    <string name="settings.support.help_translating.title">Aiuta a tradurre Voice</string>
     <string name="settings.support.report_issue.title">Segnala un problema</string>
     <string name="settings.support.suggest_idea.title">Suggerisci un\'idea</string>
     <string name="settings.support.support_voice.summary">Le donazioni aiutano a mantenere Voice</string>

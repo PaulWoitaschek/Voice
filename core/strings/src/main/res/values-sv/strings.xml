@@ -167,8 +167,8 @@
     <string name="settings.appearance.theme.light">Ljust</string>
     <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.appearance.title">Utseende</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Ange sluttid</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Ange starttid</string>
+    <string name="settings.auto_sleep_timer.end.label">Ange sluttid</string>
+    <string name="settings.auto_sleep_timer.start.label">Ange starttid</string>
     <string name="settings.auto_sleep_timer.summary">Starta en insomningstimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatisk insomningstimer</string>
     <string name="settings.library.folders.summary">Hantera mappar som genomsöks efter ljudböcker</string>
@@ -177,7 +177,6 @@
     <string name="settings.playback.seek_time.title">Hopplängd</string>
     <string name="settings.support.faq.title">Vanliga frågor</string>
     <string name="settings.support.get_support.title">Få hjälp</string>
-    <string name="settings.support.help_translating.title">Hjälp till att översätta Voice</string>
     <string name="settings.support.report_issue.title">Rapportera ett problem</string>
     <string name="settings.support.suggest_idea.title">Föreslå en idé</string>
     <string name="settings.support.support_voice.summary">Donationer hjälper till att finansiera underhållet av Voice</string>

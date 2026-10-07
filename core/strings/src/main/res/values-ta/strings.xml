@@ -167,8 +167,8 @@
     <string name="settings.appearance.theme.light">வெளிர்</string>
     <string name="settings.appearance.theme.title">தீம்</string>
     <string name="settings.appearance.title">தோற்றம்</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">இறுதி நேரத்தை அமை</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">தொடக்க நேரத்தை அமை</string>
+    <string name="settings.auto_sleep_timer.end.label">இறுதி நேரத்தை அமை</string>
+    <string name="settings.auto_sleep_timer.start.label">தொடக்க நேரத்தை அமை</string>
     <string name="settings.auto_sleep_timer.summary">பிளேபேக் %1$s மற்றும் %2$s க்கு இடையில் தொடங்கும்போது தானாக ஒரு தூக்க நேரத்தைத் தொடங்குங்கள்</string>
     <string name="settings.auto_sleep_timer.title">தானியங்கி தூக்க நேரங்காட்டி</string>
     <string name="settings.library.folders.summary">ஒலிபுத்தகங்களுக்காக வருடல் செய்யப்பட்ட கோப்புறைகளை நிர்வகி</string>
@@ -177,7 +177,6 @@
     <string name="settings.playback.seek_time.title">தொகையைத் தவிர்க்கவும்</string>
     <string name="settings.support.faq.title">கேள்விகள்</string>
     <string name="settings.support.get_support.title">ஆதரவை பெறு</string>
-    <string name="settings.support.help_translating.title">குரலை மொழிபெயர்க்க உதவுங்கள்</string>
     <string name="settings.support.report_issue.title">ஒரு சிக்கலைப் புகாரளிக்கவும்</string>
     <string name="settings.support.suggest_idea.title">ஒரு யோசனையை பரிந்துரைக்கவும்</string>
     <string name="settings.support.support_voice.summary">நன்கொடைகள் Voice-ஐ பராமரிக்க உதவுகின்றன</string>

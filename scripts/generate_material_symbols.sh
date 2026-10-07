@@ -77,7 +77,6 @@ generate_icon history History
 generate_icon hourglass_empty HourglassEmpty
 generate_icon image Image
 generate_icon keyboard_arrow_down KeyboardArrowDown
-generate_icon language Language
 generate_icon laptop_mac Laptop
 generate_icon library_books LibraryBooks
 generate_icon lightbulb Lightbulb

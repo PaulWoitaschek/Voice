@@ -167,8 +167,8 @@
     <string name="settings.appearance.theme.light">Licht</string>
     <string name="settings.appearance.theme.title">Thema</string>
     <string name="settings.appearance.title">Uiterlijk</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Zet eindtijd</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Zet starttijd</string>
+    <string name="settings.auto_sleep_timer.end.label">Zet eindtijd</string>
+    <string name="settings.auto_sleep_timer.start.label">Zet starttijd</string>
     <string name="settings.auto_sleep_timer.summary">Start automatisch een slaaptimer wanneer het afspelen begint tussen %1$s en %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatische Slaaptimer</string>
     <string name="settings.library.folders.summary">Beheer mappen die op luisterboeken worden gescand</string>
@@ -177,7 +177,6 @@
     <string name="settings.playback.seek_time.title">Aantal overslaan</string>
     <string name="settings.support.faq.title">Veelgestelde vragen</string>
     <string name="settings.support.get_support.title">Ondersteuning vragen</string>
-    <string name="settings.support.help_translating.title">Helpen met vertalen</string>
     <string name="settings.support.report_issue.title">Probleem melden</string>
     <string name="settings.support.suggest_idea.title">Idee delen</string>
     <string name="settings.support.support_voice.summary">Donaties helpen Voice onderhouden</string>

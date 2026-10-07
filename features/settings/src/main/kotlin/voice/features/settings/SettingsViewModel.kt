@@ -188,11 +188,6 @@ class SettingsViewModel(
     navigator.goTo(Destination.Website(url))
   }
 
-  override fun openTranslations() {
-    dismissDialog()
-    navigator.goTo(Destination.Website("https://hosted.weblate.org/engage/voice/"))
-  }
-
   override fun openFaq() {
     navigator.goTo(Destination.Website("https://voice.woitaschek.de/faq/"))
   }

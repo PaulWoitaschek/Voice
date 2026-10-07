@@ -228,19 +228,6 @@ private fun Settings(
       }
       item {
         ListItem(
-          modifier = Modifier.clickable { listener.openTranslations() },
-          leadingContent = {
-            Icon(
-              imageVector = VoiceIcons.Language,
-              contentDescription = stringResource(StringsR.string.settings_support_help_translating_title),
-            )
-          },
-        ) {
-          Text(stringResource(StringsR.string.settings_support_help_translating_title))
-        }
-      }
-      item {
-        ListItem(
           modifier = Modifier.clickable { listener.openFaq() },
           leadingContent = {
             Icon(

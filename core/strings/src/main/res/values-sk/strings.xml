@@ -185,8 +185,8 @@
     <string name="settings.appearance.theme.light">Svetlé</string>
     <string name="settings.appearance.theme.title">Téma</string>
     <string name="settings.appearance.title">Vzhľad</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Nastaviť konečný čas</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Nastaviť počiatočný čas</string>
+    <string name="settings.auto_sleep_timer.end.label">Nastaviť konečný čas</string>
+    <string name="settings.auto_sleep_timer.start.label">Nastaviť počiatočný čas</string>
     <string name="settings.auto_sleep_timer.summary">Automaticky aktivovať časovač zastavenia, ak sa prehrávanie spustí medzi %1$s a %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatický časovač zastavenia</string>
     <string name="settings.library.folders.summary">Spravovať priečinky určené na vyhľadávanie zvukových kníh</string>
@@ -195,7 +195,6 @@
     <string name="settings.playback.seek_time.title">Preskočiť o</string>
     <string name="settings.support.faq.title">Často kladené otázky</string>
     <string name="settings.support.get_support.title">Podpora</string>
-    <string name="settings.support.help_translating.title">Pomôcť s prekladom</string>
     <string name="settings.support.report_issue.title">Nahlásiť problém</string>
     <string name="settings.support.suggest_idea.title">Navrhnúť vylepšenia</string>
     <string name="settings.support.support_voice.summary">Dary pomáhajú udržiavať Voice</string>

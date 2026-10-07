@@ -159,7 +159,6 @@
     <string name="settings.playback.auto_rewind.title">إرجاع آلي</string>
     <string name="settings.playback.seek_time.title">مقدار التقدم</string>
     <string name="settings.support.get_support.title">احصل على دعم</string>
-    <string name="settings.support.help_translating.title">ساعد في تعريب فويس</string>
     <string name="settings.support.report_issue.title">أبلغ عن مشكلة</string>
     <string name="settings.support.suggest_idea.title">اقترح فكرة</string>
     <string name="shortcut.play_current.short_label">شغل الحالي</string>

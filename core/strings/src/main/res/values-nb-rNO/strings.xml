@@ -167,8 +167,8 @@
     <string name="settings.appearance.theme.light">Lys</string>
     <string name="settings.appearance.theme.title">Drakt</string>
     <string name="settings.appearance.title">Utseende</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Sett sluttid</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Sett starttid</string>
+    <string name="settings.auto_sleep_timer.end.label">Sett sluttid</string>
+    <string name="settings.auto_sleep_timer.start.label">Sett starttid</string>
     <string name="settings.auto_sleep_timer.summary">Start en søvn-timer automatisk når avspillingen begynner mellom %1$s og %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatisk søvn-timer</string>
     <string name="settings.library.folders.summary">Håndter mapper som er skannet for lydbøker</string>
@@ -177,7 +177,6 @@
     <string name="settings.playback.seek_time.title">Hoppintervall</string>
     <string name="settings.support.faq.title">Ofte stilte spørsmål</string>
     <string name="settings.support.get_support.title">Få støtte</string>
-    <string name="settings.support.help_translating.title">Bistå oversettelsen</string>
     <string name="settings.support.report_issue.title">Rapporter problem</string>
     <string name="settings.support.suggest_idea.title">Foreslå idé</string>
     <string name="settings.support.support_voice.summary">Donasjoner bidrar til å vedlikeholde Voice</string>

@@ -185,8 +185,8 @@
     <string name="settings.appearance.theme.light">Světlý</string>
     <string name="settings.appearance.theme.title">Motiv</string>
     <string name="settings.appearance.title">Vzhled</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Nastavit čas konce</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Nastavit čas startu</string>
+    <string name="settings.auto_sleep_timer.end.label">Nastavit čas konce</string>
+    <string name="settings.auto_sleep_timer.start.label">Nastavit čas startu</string>
     <string name="settings.auto_sleep_timer.summary">Automatické spuštění časovače spánku při zahájení přehrávání mezi %1$s a %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatický časovač spánku</string>
     <string name="settings.library.folders.summary">Spravovat složky pro prohledávání audioknih</string>
@@ -195,7 +195,6 @@
     <string name="settings.playback.seek_time.title">Přeskočit o</string>
     <string name="settings.support.faq.title">Často kladené dotazy (FAQ)</string>
     <string name="settings.support.get_support.title">Potřebuji pomoct</string>
-    <string name="settings.support.help_translating.title">Pomohu s přeložením aplikace Voice</string>
     <string name="settings.support.report_issue.title">Nahlásit problém</string>
     <string name="settings.support.suggest_idea.title">Navrhnout nápad</string>
     <string name="settings.support.support_voice.summary">Dary pomáhají udržovat aplikaci Voice</string>

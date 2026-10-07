@@ -111,7 +111,6 @@
     <string name="settings.playback.auto_rewind.title">自动回退</string>
     <string name="settings.playback.seek_time.title">跳过时间</string>
     <string name="settings.support.get_support.title">寻求支持</string>
-    <string name="settings.support.help_translating.title">帮助翻译</string>
     <string name="settings.support.report_issue.title">报告问题</string>
     <string name="settings.support.suggest_idea.title">提出建议</string>
     <string name="shortcut.play_current.short_label">播放当前有声书</string>

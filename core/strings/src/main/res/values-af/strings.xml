@@ -167,8 +167,8 @@
     <string name="settings.appearance.theme.light">Lig</string>
     <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.appearance.title">Voorkoms</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Stel eindtyd</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Stel begintyd</string>
+    <string name="settings.auto_sleep_timer.end.label">Stel eindtyd</string>
+    <string name="settings.auto_sleep_timer.start.label">Stel begintyd</string>
     <string name="settings.auto_sleep_timer.summary">Begin outomaties ’n slaaptimer wanneer afspeel tussen %1$s en %2$s begin</string>
     <string name="settings.auto_sleep_timer.title">Outomatiese slaaptimer</string>
     <string name="settings.library.folders.summary">Bestuur vouers wat vir oudioboeke geskandeer word</string>
@@ -177,7 +177,6 @@
     <string name="settings.playback.seek_time.title">Skip hoeveelheid</string>
     <string name="settings.support.faq.title">Gereelde vrae</string>
     <string name="settings.support.get_support.title">Kry ondersteuning</string>
-    <string name="settings.support.help_translating.title">Help met vertaling</string>
     <string name="settings.support.report_issue.title">Rapporteer \'n probleem</string>
     <string name="settings.support.suggest_idea.title">Deel \'n idee</string>
     <string name="settings.support.support_voice.summary">Donasies help om Voice onderhou te hou</string>

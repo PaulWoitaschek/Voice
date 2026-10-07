@@ -143,7 +143,6 @@
     <string name="settings.playback.auto_rewind.title">Reluare automată</string>
     <string name="settings.playback.seek_time.title">Pas derulare</string>
     <string name="settings.support.get_support.title">Obțineți asistență</string>
-    <string name="settings.support.help_translating.title">Ajutați la traducerea Voice</string>
     <string name="settings.support.report_issue.title">Raportați o problemă</string>
     <string name="settings.support.suggest_idea.title">Propuneți o idee</string>
     <string name="shortcut.play_current.short_label">Redare curentă</string>
