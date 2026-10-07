@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">مشکلی پیش آمد 😢</string>
     <string name="common.error.generic.retry">تلاش مجدد</string>
     <string name="cover.content_description.selectable">نمایش کاور برای انتخاب</string>
-    <string name="cover.search.author.content_description">نویسنده</string>
     <string name="cover.search.query.with_author">%1$s توسط %2$s کاور کتاب صوتی</string>
     <string name="cover.search.query.without_author">%s کاور کتاب صوتی</string>
-    <string name="cover.search.recent.content_description">لیست اخیر</string>
     <string name="cover.title">کاور</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d دقیقه</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d کتاب در حال گوش دادن</item>
         <item quantity="other">%d کتاب در حال گوش دادن</item>
     </plurals>
-    <string name="library.search.hint">دنبال چه چیزی میگردید؟</string>
+    <string name="library.search.browse.title">مرور</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d کتاب</item>
+        <item quantity="other">%d کتاب</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d تمام شده</item>
+        <item quantity="other">%d تمام شده</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d در حال گوش دادن</item>
+        <item quantity="other">%d در حال گوش دادن</item>
+    </plurals>
+    <string name="library.search.clear">پاک کردن جستجو</string>
+    <string name="library.search.field.all">همه</string>
+    <string name="library.search.field.authors">نویسندگان</string>
+    <string name="library.search.field.genres">ژانرها</string>
+    <string name="library.search.field.narrators">گویندگان</string>
+    <string name="library.search.field.series">مجموعه‌ها</string>
+    <string name="library.search.field.titles">عنوان‌ها</string>
+    <string name="library.search.hint">جستجو در کتابخانه‌ی شما</string>
+    <string name="library.search.match.genre">ژانر · %s</string>
+    <string name="library.search.match.narrator">با صدای %s</string>
+    <string name="library.search.match.series">مجموعه · %s</string>
+    <string name="library.search.no_results.folders_hint">در فهرست نیست؟ شاید پوشه‌ی آن هنوز به Voice اضافه نشده باشد.</string>
+    <string name="library.search.no_results.message">جستجو در عنوان‌ها، نویسندگان، گویندگان، مجموعه‌ها و ژانرها انجام می‌شود.</string>
+    <string name="library.search.no_results.search_everything">جستجو در همه</string>
+    <string name="library.search.no_results.title">هیچ کتابی با «%s» مطابقت ندارد</string>
+    <string name="library.search.recent.clear_all">پاک کردن همه</string>
+    <string name="library.search.recent.remove">حذف %s</string>
+    <string name="library.search.recent.title">جستجوهای اخیر</string>
     <string name="library.storage_permission_bug.action">اعطا مجوز</string>
     <string name="library.storage_permission_bug.message">در برخی از دستگاه‌ها، یک برنامه سیستم مجوز لازم برای دسترسی به کارت حافظه خارجی را ندارد. این دسترسی برای Voice برای خواندن کتاب‌های صوتی شما ضروری است.</string>
     <string name="library.storage_permission_bug.title">مجوز لازم است</string>

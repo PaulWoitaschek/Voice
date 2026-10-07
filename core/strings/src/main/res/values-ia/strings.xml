@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Habeva qualcosa improprie 😢</string>
     <string name="common.error.generic.retry">Retentar</string>
     <string name="cover.content_description.selectable">Monstra le copertura seligite</string>
-    <string name="cover.search.author.content_description">Autor</string>
     <string name="cover.search.query.with_author">Copertura del audiolibro %1$s per %2$s</string>
     <string name="cover.search.query.without_author">Copertura del audiolibro %s</string>
-    <string name="cover.search.recent.content_description">Consulta recente</string>
     <string name="cover.title">Copertura</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minuta</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d libro in curso</item>
         <item quantity="other">%d libros in curso</item>
     </plurals>
-    <string name="library.search.hint">Que cerca tu?</string>
+    <string name="library.search.browse.title">Explorar</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d libro</item>
+        <item quantity="other">%d libros</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d completate</item>
+        <item quantity="other">%d completate</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d in curso</item>
+        <item quantity="other">%d in curso</item>
+    </plurals>
+    <string name="library.search.clear">Vacuar le recerca</string>
+    <string name="library.search.field.all">Toto</string>
+    <string name="library.search.field.authors">Autores</string>
+    <string name="library.search.field.genres">Generes</string>
+    <string name="library.search.field.narrators">Narratores</string>
+    <string name="library.search.field.series">Series</string>
+    <string name="library.search.field.titles">Titulos</string>
+    <string name="library.search.hint">Cerca in tu bibliotheca</string>
+    <string name="library.search.match.genre">Genere · %s</string>
+    <string name="library.search.match.narrator">Narrate per %s</string>
+    <string name="library.search.match.series">Serie · %s</string>
+    <string name="library.search.no_results.folders_hint">Non in le lista? Su dossier forsan non ha ancora essite addite a Voice.</string>
+    <string name="library.search.no_results.message">Le recerca examina titulos, autores, narratores, series e generes.</string>
+    <string name="library.search.no_results.search_everything">Cercar in toto</string>
+    <string name="library.search.no_results.title">Nulle libro corresponde a “%s”</string>
+    <string name="library.search.recent.clear_all">Vacuar toto</string>
+    <string name="library.search.recent.remove">Remover %s</string>
+    <string name="library.search.recent.title">Recente</string>
     <string name="library.storage_permission_bug.action">Conceder le permission</string>
     <string name="library.storage_permission_bug.message">In certe apparatos, un application de systema manca le permissiones necessari pro acceder al immagazinage externe. Iste accesso es essential pro que Voice pote leger tu audiolibros.</string>
     <string name="library.storage_permission_bug.title">Permission requirite</string>

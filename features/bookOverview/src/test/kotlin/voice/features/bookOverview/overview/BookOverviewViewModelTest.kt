@@ -5,14 +5,11 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.mockk.Runs
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
@@ -22,9 +19,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.GridMode
 import voice.core.data.KioskModeDemoData
-import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
-import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
@@ -32,8 +27,8 @@ import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
-import voice.core.search.BookSearch
 import voice.core.ui.GridCount
+import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -71,13 +66,6 @@ class BookOverviewViewModelTest {
       },
       navigator = mockk<Navigator>(),
       appInfoProvider = appInfoProvider(),
-      recentBookSearchDao = mockk<RecentBookSearchDao> {
-        every { recentBookSearches() } returns MutableStateFlow(emptyList())
-      },
-      search = mockk<BookSearch> {
-        coEvery { search(any()) } returns emptyList()
-      },
-      contentRepo = mockk<BookContentRepo>(),
       deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
         every { hasBug } returns MutableStateFlow(false)
       },
@@ -137,13 +125,6 @@ class BookOverviewViewModelTest {
       },
       navigator = mockk<Navigator>(),
       appInfoProvider = appInfoProvider(),
-      recentBookSearchDao = mockk<RecentBookSearchDao> {
-        every { recentBookSearches() } returns MutableStateFlow(emptyList())
-      },
-      search = mockk<BookSearch> {
-        coEvery { search(any()) } returns emptyList()
-      },
-      contentRepo = mockk<BookContentRepo>(),
       deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
         every { hasBug } returns MutableStateFlow(false)
       },
@@ -295,6 +276,18 @@ class BookOverviewViewModelTest {
     }
   }
 
+  @Test
+  fun `search click opens the search`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel = viewModel(navigator = navigator)
+
+    viewModel.onSearchClick()
+
+    verify {
+      navigator.goTo(Destination.LibrarySearch)
+    }
+  }
+
   private fun BookOverviewViewState.currentBook(bookId: BookId): BookOverviewItemViewState {
     return books.getValue(BookOverviewCategory.CURRENT).getValue(bookId).value
   }
@@ -325,13 +318,6 @@ class BookOverviewViewModelTest {
       },
       navigator = navigator,
       appInfoProvider = appInfoProvider,
-      recentBookSearchDao = mockk<RecentBookSearchDao> {
-        every { recentBookSearches() } returns MutableStateFlow(emptyList())
-      },
-      search = mockk<BookSearch> {
-        coEvery { search(any()) } returns emptyList()
-      },
-      contentRepo = mockk<BookContentRepo>(),
       deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
         every { hasBug } returns MutableStateFlow(false)
       },
@@ -346,16 +332,5 @@ class BookOverviewViewModelTest {
     return mockk {
       every { this@mockk.installTime } returns installTime
     }
-  }
-}
-
-private class MemoryDataStore<T>(initial: T) : DataStore<T> {
-
-  private val value = MutableStateFlow(initial)
-
-  override val data: Flow<T> get() = value
-
-  override suspend fun updateData(transform: suspend (t: T) -> T): T {
-    return value.updateAndGet { transform(it) }
   }
 }
