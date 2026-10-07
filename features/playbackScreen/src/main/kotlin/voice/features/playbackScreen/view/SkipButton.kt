@@ -42,8 +42,8 @@ import voice.core.strings.R
 import voice.core.ui.icons.VoiceIcons
 
 /**
- * Rewind / fast forward. Pressing stretches the button (nudging its neighbours aside), a click kicks
- * the arrows in their direction and sends the skipped amount ("+20") floating up.
+ * Rewind / fast forward. Pressing stretches the button (nudging its neighbours aside), a click spins
+ * the arrow in its direction and sends the skipped amount ("+20") floating up.
  */
 @Composable
 internal fun SkipButton(
@@ -93,11 +93,11 @@ internal fun SkipButton(
           modifier = Modifier
             .size(height * 0.5F)
             .graphicsLayer {
-              translationX = nudge.value * height.toPx() * if (forward) 0.12F else -0.12F
-              // there is no fast forward symbol, it's the mirrored fast rewind one
+              rotationZ = nudge.value * if (forward) 40F else -40F
+              // the same circular arrows media3 uses in the notification, forward is the mirrored replay symbol
               scaleX = if (forward) -1F else 1F
             },
-          imageVector = VoiceIcons.FastRewind,
+          imageVector = VoiceIcons.Replay,
           contentDescription = stringResource(
             id = if (forward) R.string.playback_action_fast_forward else R.string.playback_action_rewind,
           ),

@@ -69,7 +69,6 @@ generate_icon delete Delete
 generate_icon done Done
 generate_icon download Download
 generate_icon expand_more ExpandMore
-generate_icon fast_rewind FastRewind
 generate_icon favorite Favorite
 generate_icon folder Folder
 generate_icon grid_view GridView
@@ -89,6 +88,7 @@ generate_icon pause Pause
 generate_icon person Person
 generate_icon play_arrow PlayArrow
 generate_icon remove Remove
+generate_icon replay Replay
 generate_icon search Search
 generate_icon sentiment_satisfied SentimentSatisfied
 generate_icon settings Settings

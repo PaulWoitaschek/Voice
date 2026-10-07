@@ -25,7 +25,7 @@ internal fun AutoRewindRow(
       .fillMaxWidth(),
     leadingContent = {
       Icon(
-        imageVector = VoiceIcons.FastRewind,
+        imageVector = VoiceIcons.Replay,
         contentDescription = stringResource(StringsR.string.settings_playback_auto_rewind_title),
       )
     },
