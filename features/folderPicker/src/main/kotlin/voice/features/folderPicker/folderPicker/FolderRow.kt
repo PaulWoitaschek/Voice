@@ -5,7 +5,6 @@ package voice.features.folderPicker.folderPicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,19 +21,20 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import voice.core.data.folders.FolderType
+import voice.core.ui.ShapedIcon
 import voice.core.ui.icons.VoiceIcons
-import voice.features.folderPicker.FolderTypeIcon
+import voice.features.folderPicker.icon
 import voice.features.folderPicker.label
 import voice.core.strings.R as StringsR
 
@@ -50,6 +50,7 @@ internal fun FolderRow(
   onDeleteClick: (() -> Unit)?,
   modifier: Modifier = Modifier,
 ) {
+  val style = item.folderType.style()
   Surface(
     modifier = modifier,
     shape = shape,
@@ -58,13 +59,25 @@ internal fun FolderRow(
     val changeLabel = stringResource(StringsR.string.folder_review_action_change)
     Row(
       modifier = Modifier
-        .then(if (onClick != null) Modifier.clickable(onClickLabel = changeLabel, onClick = onClick) else Modifier)
+        .then(
+          if (onClick != null) {
+            Modifier.clickable(onClickLabel = changeLabel, onClick = onClick)
+          } else {
+            // still read as one, like the name and type of a clickable row
+            Modifier.semantics(mergeDescendants = true) {}
+          },
+        )
         .heightIn(min = 80.dp)
         // the delete button brings its own room around the icon
         .padding(start = 12.dp, end = if (onDeleteClick != null) 4.dp else 16.dp, top = 12.dp, bottom = 12.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
-      FolderTypeBadge(item.folderType)
+      ShapedIcon(
+        icon = item.folderType.icon(),
+        shape = style.shape,
+        containerColor = style.color,
+        contentColor = style.onColor,
+      )
       Spacer(Modifier.width(16.dp))
       Column(
         modifier = Modifier.weight(1F),
@@ -76,7 +89,7 @@ internal fun FolderRow(
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
-        FolderTypeChip(folderType = item.folderType, changeable = onClick != null)
+        FolderTypeChip(folderType = item.folderType, style = style, changeable = onClick != null)
       }
       if (onDeleteClick != null) {
         Spacer(Modifier.width(4.dp))
@@ -86,7 +99,8 @@ internal fun FolderRow(
         ) {
           Icon(
             imageVector = VoiceIcons.Delete,
-            contentDescription = stringResource(StringsR.string.common_action_delete),
+            // every row has one, so say which folder goes
+            contentDescription = "${stringResource(StringsR.string.common_action_delete)}, ${item.name}",
           )
         }
       }
@@ -94,27 +108,13 @@ internal fun FolderRow(
   }
 }
 
-/** The icon of how a folder's books are found, like a sticker on a playful shape. */
-@Composable
-private fun FolderTypeBadge(folderType: FolderType) {
-  val style = folderType.style()
-  Box(
-    modifier = Modifier
-      .size(48.dp)
-      .background(style.color, style.shape.toShape()),
-    contentAlignment = Alignment.Center,
-  ) {
-    FolderTypeIcon(folderType = folderType, tint = style.onColor)
-  }
-}
-
 /** How a folder's books are found. Folders that can change it get an arrow, like a dropdown. */
 @Composable
 private fun FolderTypeChip(
   folderType: FolderType,
+  style: FolderTypeStyle,
   changeable: Boolean,
 ) {
-  val style = folderType.style()
   Row(
     modifier = Modifier
       .background(style.container, CircleShape)

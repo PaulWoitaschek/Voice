@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import voice.core.ui.ShapedIcon
 import voice.core.ui.icons.VoiceIcons
 
 @Composable

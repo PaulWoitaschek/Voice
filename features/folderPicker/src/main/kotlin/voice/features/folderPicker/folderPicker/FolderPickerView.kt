@@ -193,8 +193,7 @@ private fun LazyListScope.folders(
   }
   itemsIndexed(
     items = viewState.items,
-    // the made up folders of the kiosk mode share an empty uri
-    key = { _, item -> "${item.folderType}/${item.id}/${item.name}" },
+    key = { _, item -> "${item.folderType}/${item.id}" },
   ) { index, item ->
     // a single file is always one book, a folder can change how its books are found
     val canChangeType = viewState.showActions && item.folderType != FolderType.SingleFile

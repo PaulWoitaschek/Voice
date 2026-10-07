@@ -90,20 +90,21 @@ class FolderPickerViewModel(
   }
 
   private companion object {
+    // made up folders, each with its own uri, as the uri tells them apart
     val kioskModeItems = listOf(
       FolderPickerViewState.Item(
         name = "Audiobooks",
-        id = Uri.EMPTY,
+        id = Uri.parse("kiosk:audiobooks"),
         folderType = FolderType.Root,
       ),
       FolderPickerViewState.Item(
         name = "Sci-Fi",
-        id = Uri.EMPTY,
+        id = Uri.parse("kiosk:sci-fi"),
         folderType = FolderType.SingleFolder,
       ),
       FolderPickerViewState.Item(
         name = "Non-Fiction",
-        id = Uri.EMPTY,
+        id = Uri.parse("kiosk:non-fiction"),
         folderType = FolderType.SingleFolder,
       ),
     )
