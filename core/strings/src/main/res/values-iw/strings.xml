@@ -147,9 +147,16 @@
     <string name="settings.auto_sleep_timer.summary">תפעיל את שעון השינה ­האוטומטי כשההפעלה מגיעה ל- %1$s ו- %2$s</string>
     <string name="settings.auto_sleep_timer.title">שעון עצר אוטומטי לשינה</string>
     <string name="settings.library.folders.summary">ניהול תיקיות שנסרקות עבור ספרי שמע</string>
-    <string name="settings.library.use_grid.title">תשתמש בפריסת רשת</string>
+    <string name="settings.library.layout.grid">רשת</string>
+    <string name="settings.library.layout.list">רשימה</string>
+    <string name="settings.library.title">ספרייה</string>
+    <string name="settings.listening.title">האזנה</string>
+    <string name="settings.playback.auto_rewind.off">כבוי</string>
+    <string name="settings.playback.auto_rewind.summary">חוזר מעט אחורה כשממשיכים, כדי שלא תאבדו את החוט</string>
     <string name="settings.playback.auto_rewind.title">הרצה אוטומטית</string>
+    <string name="settings.playback.seek_time.summary">כמה רחוק קופצים הרצה אחורה וקדימה</string>
     <string name="settings.playback.seek_time.title">דלג כמות</string>
+    <string name="settings.subtitle">הפכו את Voice לשלכם</string>
     <string name="settings.support.faq.title">שאלות נפוצות</string>
     <string name="settings.support.get_support.title">תמיכה</string>
     <string name="settings.support.help_translating.title">עזור לתרגם את Voice</string>
@@ -157,6 +164,7 @@
     <string name="settings.support.suggest_idea.title">הצע רעיון</string>
     <string name="settings.support.support_voice.summary">תרומות עוזרות לשמור על Voice מתוחזקת</string>
     <string name="settings.support.support_voice.title">תמיכה בפיתוח</string>
+    <string name="settings.support.title">עזרה ומשוב</string>
     <string name="support.action.donate_kofi">לתרום ב-Ko-fi</string>
     <string name="support.description.maintenance">Voice חינמית, בקוד פתוח, ומתוחזקת בידי מפתח אחד.</string>
     <string name="support.description.maintenance_subtitle">תרומות עוזרות לממן תחזוקה ופיתוח שוטפים.</string>

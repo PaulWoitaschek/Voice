@@ -143,9 +143,16 @@
     <string name="settings.auto_sleep_timer.summary">Eğer oynatıcı saat %1$s ile %2$s arasında başlatılırsa otomatik olarak bir uyku zamanlayıcısı başlat</string>
     <string name="settings.auto_sleep_timer.title">Otomatik Uyku Zamanlayıcısı</string>
     <string name="settings.library.folders.summary">Sesli kitaplar için taranan dizinleri yönetin</string>
-    <string name="settings.library.use_grid.title">Izgara düzenini kullan</string>
+    <string name="settings.library.layout.grid">Izgara</string>
+    <string name="settings.library.layout.list">Liste</string>
+    <string name="settings.library.title">Kitaplık</string>
+    <string name="settings.listening.title">Dinleme</string>
+    <string name="settings.playback.auto_rewind.off">Kapalı</string>
+    <string name="settings.playback.auto_rewind.summary">Devam ettiğinizde biraz geri sarar, böylece konuyu kaçırmazsınız</string>
     <string name="settings.playback.auto_rewind.title">Otomatik geri sar</string>
+    <string name="settings.playback.seek_time.summary">Geri ve ileri sarmanın ne kadar atlayacağı</string>
     <string name="settings.playback.seek_time.title">Değeri atla</string>
+    <string name="settings.subtitle">Voice\'u kendinize göre ayarlayın</string>
     <string name="settings.support.faq.title">SSS</string>
     <string name="settings.support.get_support.title">Yardım al</string>
     <string name="settings.support.help_translating.title">Voice\'u çevirmeye yardım et</string>
@@ -153,6 +160,7 @@
     <string name="settings.support.suggest_idea.title">Fikir öner</string>
     <string name="settings.support.support_voice.summary">Bağışlar Voice\'un bakımına yardımcı olur</string>
     <string name="settings.support.support_voice.title">Geliştirmeyi destekle</string>
+    <string name="settings.support.title">Yardım ve geri bildirim</string>
     <string name="support.action.donate_kofi">Ko-fi üzerinden bağış yap</string>
     <string name="support.description.maintenance">Voice ücretsiz, açık kaynaklıdır ve tek bir geliştirici tarafından sürdürülür.</string>
     <string name="support.description.maintenance_subtitle">Bağışlar sürekli bakım ve geliştirmeyi finanse etmeye yardımcı olur.</string>

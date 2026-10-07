@@ -151,9 +151,16 @@
     <string name="settings.auto_sleep_timer.summary">Запускаць таймер сну аўтаматычна калі прайграванне пачынаецца паміж %1$s і %2$s</string>
     <string name="settings.auto_sleep_timer.title">Аўтаматычны таймер сну</string>
     <string name="settings.library.folders.summary">Кіраванне папкамі, адсканаванымі для пошуку аўдыякніг</string>
-    <string name="settings.library.use_grid.title">Выкарыстоўваць сетку</string>
+    <string name="settings.library.layout.grid">Сетка</string>
+    <string name="settings.library.layout.list">Спіс</string>
+    <string name="settings.library.title">Бібліятэка</string>
+    <string name="settings.listening.title">Праслухоўванне</string>
+    <string name="settings.playback.auto_rewind.off">Выключана</string>
+    <string name="settings.playback.auto_rewind.summary">Пры аднаўленні крыху перамотвае назад, каб вы не страцілі нітку</string>
     <string name="settings.playback.auto_rewind.title">Аўтаматычна перамотваць назад</string>
+    <string name="settings.playback.seek_time.summary">Наколькі далёка перамотваюць кнопкі назад і наперад</string>
     <string name="settings.playback.seek_time.title">Перамотваць па</string>
+    <string name="settings.subtitle">Зрабіце Voice сваім</string>
     <string name="settings.support.faq.title">FAQ</string>
     <string name="settings.support.get_support.title">Даведка</string>
     <string name="settings.support.help_translating.title">Дапамагчы з перакладам Voice</string>
@@ -161,6 +168,7 @@
     <string name="settings.support.suggest_idea.title">Прапанаваць ідэю</string>
     <string name="settings.support.support_voice.summary">Ахвяраванні дапамагаюць падтрымліваць Voice</string>
     <string name="settings.support.support_voice.title">Падтрымаць распрацоўку</string>
+    <string name="settings.support.title">Даведка і водгукі</string>
     <string name="support.action.donate_kofi">Ахвяраваць на Ko-fi</string>
     <string name="support.description.maintenance">Voice бясплатны, з адкрытым зыходным кодам і падтрымліваецца адным распрацоўшчыкам.</string>
     <string name="support.description.maintenance_subtitle">Ахвяраванні дапамагаюць фінансаваць пастаянную падтрымку і распрацоўку.</string>

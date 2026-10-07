@@ -5,6 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
@@ -37,6 +38,24 @@ fun VoiceTheme(
   }
   MaterialExpressiveTheme(
     colorScheme = animateColorScheme(rememberThemeColorScheme(themeColorScheme, darkTheme)),
+    content = content,
+  )
+}
+
+/**
+ * Shows [content] in the dark colors of [themeColorScheme] while it's [night], whatever the app's
+ * theme. Day and night blend over into each other.
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun NightTheme(
+  themeColorScheme: ThemeColorScheme,
+  night: Boolean,
+  content: @Composable () -> Unit,
+) {
+  val nightColors = rememberThemeColorScheme(themeColorScheme, dark = true)
+  MaterialExpressiveTheme(
+    colorScheme = animateColorScheme(if (night) nightColors else MaterialTheme.colorScheme),
     content = content,
   )
 }

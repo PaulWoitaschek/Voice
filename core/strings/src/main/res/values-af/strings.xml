@@ -143,9 +143,16 @@
     <string name="settings.auto_sleep_timer.summary">Begin outomaties ’n slaaptimer wanneer afspeel tussen %1$s en %2$s begin</string>
     <string name="settings.auto_sleep_timer.title">Outomatiese slaaptimer</string>
     <string name="settings.library.folders.summary">Bestuur vouers wat vir oudioboeke geskandeer word</string>
-    <string name="settings.library.use_grid.title">Gebruik rooster uitleg</string>
+    <string name="settings.library.layout.grid">Rooster</string>
+    <string name="settings.library.layout.list">Lys</string>
+    <string name="settings.library.title">Biblioteek</string>
+    <string name="settings.listening.title">Luister</string>
+    <string name="settings.playback.auto_rewind.off">Af</string>
+    <string name="settings.playback.auto_rewind.summary">Spring \'n bietjie terug wanneer jy hervat, sodat jy nie die draad verloor nie</string>
     <string name="settings.playback.auto_rewind.title">Outomatiese terugdraai</string>
+    <string name="settings.playback.seek_time.summary">Hoe ver terugspoel en vorentoe spoel spring</string>
     <string name="settings.playback.seek_time.title">Skip hoeveelheid</string>
+    <string name="settings.subtitle">Maak Voice joune</string>
     <string name="settings.support.faq.title">Gereelde vrae</string>
     <string name="settings.support.get_support.title">Kry ondersteuning</string>
     <string name="settings.support.help_translating.title">Help met vertaling</string>
@@ -153,6 +160,7 @@
     <string name="settings.support.suggest_idea.title">Deel \'n idee</string>
     <string name="settings.support.support_voice.summary">Donasies help om Voice onderhou te hou</string>
     <string name="settings.support.support_voice.title">Ondersteun ontwikkeling</string>
+    <string name="settings.support.title">Hulp en terugvoer</string>
     <string name="support.action.donate_kofi">Skenk op Ko-fi</string>
     <string name="support.description.maintenance">Voice is gratis, oopbron, en word deur een ontwikkelaar onderhou.</string>
     <string name="support.description.maintenance_subtitle">Donasies help om voortdurende instandhouding en ontwikkeling te finansier.</string>

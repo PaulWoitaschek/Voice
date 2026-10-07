@@ -60,6 +60,7 @@ generate_icon book Book
 generate_icon bookmark_add BookmarkAdd
 generate_icon bug_report BugReport
 generate_icon check Check
+generate_icon chevron_right ChevronRight
 generate_icon close Close
 generate_icon coffee Coffee
 generate_icon collections_bookmark CollectionsBookmark
@@ -71,6 +72,7 @@ generate_icon download Download
 generate_icon expand_more ExpandMore
 generate_icon favorite Favorite
 generate_icon folder Folder
+generate_icon forum Forum
 generate_icon grid_view GridView
 generate_icon help Help
 generate_icon history History
@@ -80,6 +82,7 @@ generate_icon keyboard_arrow_down KeyboardArrowDown
 generate_icon language Language
 generate_icon laptop_mac Laptop
 generate_icon library_books LibraryBooks
+generate_icon light_mode LightMode
 generate_icon lightbulb Lightbulb
 generate_icon lock_open LockOpen
 generate_icon more_vert MoreVert
@@ -99,6 +102,7 @@ generate_icon tag Tag
 generate_icon timelapse Timelapse
 generate_icon timer Timer
 generate_icon title Title
+generate_icon vibration Vibration
 generate_icon view_list ViewList
 generate_icon volume_up VolumeUp
 

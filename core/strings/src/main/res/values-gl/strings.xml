@@ -143,9 +143,16 @@
     <string name="settings.auto_sleep_timer.summary">Iniciar o temporizador automáticamente cando a escoita comece entre as %1$s e as %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador automático</string>
     <string name="settings.library.folders.summary">Xestionar cartafoles onde buscar audiolibros</string>
-    <string name="settings.library.use_grid.title">Usar disposición en grella</string>
+    <string name="settings.library.layout.grid">Grella</string>
+    <string name="settings.library.layout.list">Lista</string>
+    <string name="settings.library.title">Biblioteca</string>
+    <string name="settings.listening.title">Escoita</string>
+    <string name="settings.playback.auto_rewind.off">Desactivado</string>
+    <string name="settings.playback.auto_rewind.summary">Retrocede un pouco ao continuar para que non perdas o fío</string>
     <string name="settings.playback.auto_rewind.title">Retroceso automático</string>
+    <string name="settings.playback.seek_time.summary">Canto saltan o retroceso e o avance rápido</string>
     <string name="settings.playback.seek_time.title">Tempo a omitir</string>
+    <string name="settings.subtitle">Fai Voice á túa medida</string>
     <string name="settings.support.faq.title">PMF</string>
     <string name="settings.support.get_support.title">Obter axuda</string>
     <string name="settings.support.help_translating.title">Axuda a traducir Voice</string>
@@ -153,6 +160,7 @@
     <string name="settings.support.suggest_idea.title">Suxerir ideas</string>
     <string name="settings.support.support_voice.summary">As doazóns axudan a manter Voice</string>
     <string name="settings.support.support_voice.title">Apoiar o desenvolvemento</string>
+    <string name="settings.support.title">Axuda e comentarios</string>
     <string name="support.action.donate_kofi">Doar en Ko-fi</string>
     <string name="support.description.maintenance">Voice é gratuíto, de código aberto e mantido por unha soa persoa desenvolvedora.</string>
     <string name="support.description.maintenance_subtitle">As doazóns axudan a financiar o mantemento e desenvolvemento continuos.</string>

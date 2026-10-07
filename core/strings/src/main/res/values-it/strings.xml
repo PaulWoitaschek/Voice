@@ -147,9 +147,16 @@
     <string name="settings.auto_sleep_timer.summary">Avvia automaticamente un timer di spegnimento automatico quando la riproduzione inizia tra %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Timer di spegnimento automatico</string>
     <string name="settings.library.folders.summary">Gestisci cartelle audiolibri</string>
-    <string name="settings.library.use_grid.title">Usa la disposizione a griglia</string>
+    <string name="settings.library.layout.grid">Griglia</string>
+    <string name="settings.library.layout.list">Elenco</string>
+    <string name="settings.library.title">Libreria</string>
+    <string name="settings.listening.title">Ascolto</string>
+    <string name="settings.playback.auto_rewind.off">Disattivato</string>
+    <string name="settings.playback.auto_rewind.summary">Torna un po\' indietro quando riprendi, così non perdi il filo</string>
     <string name="settings.playback.auto_rewind.title">Riavvolgimento automatico</string>
+    <string name="settings.playback.seek_time.summary">Di quanto saltano il riavvolgimento e l\'avanzamento veloce</string>
     <string name="settings.playback.seek_time.title">Salta tempo</string>
+    <string name="settings.subtitle">Rendi Voice tuo</string>
     <string name="settings.support.faq.title">Domande frequenti</string>
     <string name="settings.support.get_support.title">Ottieni supporto</string>
     <string name="settings.support.help_translating.title">Aiuta a tradurre Voice</string>
@@ -157,6 +164,7 @@
     <string name="settings.support.suggest_idea.title">Suggerisci un\'idea</string>
     <string name="settings.support.support_voice.summary">Le donazioni aiutano a mantenere Voice</string>
     <string name="settings.support.support_voice.title">Sostieni lo sviluppo</string>
+    <string name="settings.support.title">Aiuto e feedback</string>
     <string name="support.action.donate_kofi">Dona su Ko-fi</string>
     <string name="support.description.maintenance">Voice è gratuito, open source e mantenuto da un solo sviluppatore.</string>
     <string name="support.description.maintenance_subtitle">Le donazioni aiutano a finanziare manutenzione e sviluppo continui.</string>

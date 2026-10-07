@@ -151,9 +151,16 @@
     <string name="settings.auto_sleep_timer.summary">Automatycznie uruchamia wyłącznik czasowy po rozpoczęciu odtwarzania pomiędzy %1$s a %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatyczny Wyłącznik Czasowy</string>
     <string name="settings.library.folders.summary">Zarządzaj folderami skanowanymi w poszukiwaniu audiobooków</string>
-    <string name="settings.library.use_grid.title">Włącz tryb siatki</string>
+    <string name="settings.library.layout.grid">Siatka</string>
+    <string name="settings.library.layout.list">Lista</string>
+    <string name="settings.library.title">Biblioteka</string>
+    <string name="settings.listening.title">Słuchanie</string>
+    <string name="settings.playback.auto_rewind.off">Wyłączone</string>
+    <string name="settings.playback.auto_rewind.summary">Po wznowieniu cofa się trochę, żeby nie zgubić wątku</string>
     <string name="settings.playback.auto_rewind.title">Automatyczne cofnięcie</string>
+    <string name="settings.playback.seek_time.summary">O ile przewijają przyciski do tyłu i do przodu</string>
     <string name="settings.playback.seek_time.title">Przewiń o</string>
+    <string name="settings.subtitle">Voice na Twoją modłę</string>
     <string name="settings.support.faq.title">Najczęściej zadawane pytania (FAQ)</string>
     <string name="settings.support.get_support.title">Uzyskaj pomoc</string>
     <string name="settings.support.help_translating.title">Pomóż w tłumaczeniu</string>
@@ -161,6 +168,7 @@
     <string name="settings.support.suggest_idea.title">Zasugeruj pomysł</string>
     <string name="settings.support.support_voice.summary">Darowizny pomagają utrzymać Voice</string>
     <string name="settings.support.support_voice.title">Wesprzyj rozwój</string>
+    <string name="settings.support.title">Pomoc i opinie</string>
     <string name="support.action.donate_kofi">Przekaż darowiznę na Ko-fi</string>
     <string name="support.description.maintenance">Voice jest darmowy, open source i utrzymywany przez jednego programistę.</string>
     <string name="support.description.maintenance_subtitle">Darowizny pomagają finansować bieżące utrzymanie i rozwój.</string>

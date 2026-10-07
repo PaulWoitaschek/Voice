@@ -743,6 +743,42 @@ object VoiceIcons {
       }
       .build()
 
+/*
+ * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/chevron_right.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+ * Generated: 2026-10-07T16:07:28Z
+ */
+  val ChevronRight: ImageVector =
+    ImageVector.Builder(
+      name = "ChevronRight",
+      defaultWidth = 24.dp,
+      defaultHeight = 24.dp,
+      viewportWidth = 24f,
+      viewportHeight = 24f,
+    )
+      .apply {
+        path(
+          fill = SolidColor(Color.Black),
+          fillAlpha = 1f,
+          stroke = null,
+          strokeAlpha = 1f,
+          strokeLineWidth = 1f,
+          strokeLineCap = StrokeCap.Butt,
+          strokeLineJoin = StrokeJoin.Bevel,
+          strokeLineMiter = 1f,
+          pathFillType = PathFillType.NonZero,
+        ) {
+          moveTo(12.6f, 12f)
+          lineTo(8f, 7.4f)
+          lineTo(9.4f, 6f)
+          lineToRelative(6f, 6f)
+          lineToRelative(-6f, 6f)
+          lineTo(8f, 16.6f)
+          lineTo(12.6f, 12f)
+          close()
+        }
+      }
+      .build()
+
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/close.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
@@ -1422,6 +1458,73 @@ object VoiceIcons {
       }
       .build()
 
+/*
+ * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/forum.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+ * Generated: 2026-10-07T16:07:28Z
+ */
+  val Forum: ImageVector =
+    ImageVector.Builder(
+      name = "Forum",
+      defaultWidth = 24.dp,
+      defaultHeight = 24.dp,
+      viewportWidth = 24f,
+      viewportHeight = 24f,
+    )
+      .apply {
+        path(
+          fill = SolidColor(Color.Black),
+          fillAlpha = 1f,
+          stroke = null,
+          strokeAlpha = 1f,
+          strokeLineWidth = 1f,
+          strokeLineCap = StrokeCap.Butt,
+          strokeLineJoin = StrokeJoin.Bevel,
+          strokeLineMiter = 1f,
+          pathFillType = PathFillType.NonZero,
+        ) {
+          moveTo(22f, 22f)
+          lineTo(18f, 18f)
+          horizontalLineTo(8f)
+          quadTo(7.18f, 18f, 6.59f, 17.41f)
+          reflectiveQuadTo(6f, 16f)
+          verticalLineTo(15f)
+          horizontalLineTo(17f)
+          quadToRelative(0.82f, 0f, 1.41f, -0.59f)
+          reflectiveQuadTo(19f, 13f)
+          verticalLineTo(6f)
+          horizontalLineToRelative(1f)
+          quadToRelative(0.83f, 0f, 1.41f, 0.59f)
+          quadTo(22f, 7.18f, 22f, 8f)
+          verticalLineTo(22f)
+          close()
+          moveTo(4f, 12.18f)
+          lineTo(5.18f, 11f)
+          horizontalLineTo(15f)
+          verticalLineTo(4f)
+          horizontalLineTo(4f)
+          verticalLineToRelative(8.17f)
+          close()
+          moveTo(2f, 17f)
+          verticalLineTo(4f)
+          quadTo(2f, 3.17f, 2.59f, 2.59f)
+          reflectiveQuadTo(4f, 2f)
+          horizontalLineTo(15f)
+          quadToRelative(0.83f, 0f, 1.41f, 0.59f)
+          reflectiveQuadTo(17f, 4f)
+          verticalLineToRelative(7f)
+          quadToRelative(0f, 0.82f, -0.59f, 1.41f)
+          reflectiveQuadTo(15f, 13f)
+          horizontalLineTo(6f)
+          lineTo(2f, 17f)
+          close()
+          moveTo(4f, 11f)
+          verticalLineTo(4f)
+          verticalLineToRelative(7f)
+          close()
+        }
+      }
+      .build()
+
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/grid_view.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
@@ -2091,6 +2194,104 @@ object VoiceIcons {
           moveTo(8f, 4f)
           verticalLineTo(16f)
           verticalLineTo(4f)
+          close()
+        }
+      }
+      .build()
+
+/*
+ * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/light_mode.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+ * Generated: 2026-10-07T16:07:28Z
+ */
+  val LightMode: ImageVector =
+    ImageVector.Builder(
+      name = "LightMode",
+      defaultWidth = 24.dp,
+      defaultHeight = 24.dp,
+      viewportWidth = 24f,
+      viewportHeight = 24f,
+    )
+      .apply {
+        path(
+          fill = SolidColor(Color.Black),
+          fillAlpha = 1f,
+          stroke = null,
+          strokeAlpha = 1f,
+          strokeLineWidth = 1f,
+          strokeLineCap = StrokeCap.Butt,
+          strokeLineJoin = StrokeJoin.Bevel,
+          strokeLineMiter = 1f,
+          pathFillType = PathFillType.NonZero,
+        ) {
+          moveTo(14.13f, 14.13f)
+          quadTo(15f, 13.25f, 15f, 12f)
+          reflectiveQuadTo(14.13f, 9.88f)
+          reflectiveQuadTo(12f, 9f)
+          reflectiveQuadTo(9.88f, 9.88f)
+          reflectiveQuadTo(9f, 12f)
+          reflectiveQuadToRelative(0.88f, 2.13f)
+          reflectiveQuadTo(12f, 15f)
+          reflectiveQuadToRelative(2.13f, -0.88f)
+          close()
+          moveTo(8.46f, 15.54f)
+          quadTo(7f, 14.08f, 7f, 12f)
+          quadTo(7f, 9.92f, 8.46f, 8.46f)
+          reflectiveQuadTo(12f, 7f)
+          reflectiveQuadToRelative(3.54f, 1.46f)
+          reflectiveQuadTo(17f, 12f)
+          reflectiveQuadToRelative(-1.46f, 3.54f)
+          reflectiveQuadTo(12f, 17f)
+          quadTo(9.93f, 17f, 8.46f, 15.54f)
+          close()
+          moveTo(5f, 13f)
+          horizontalLineTo(1f)
+          verticalLineTo(11f)
+          horizontalLineTo(5f)
+          verticalLineToRelative(2f)
+          close()
+          moveToRelative(18f, 0f)
+          horizontalLineTo(19f)
+          verticalLineTo(11f)
+          horizontalLineToRelative(4f)
+          verticalLineToRelative(2f)
+          close()
+          moveTo(11f, 5f)
+          verticalLineTo(1f)
+          horizontalLineToRelative(2f)
+          verticalLineTo(5f)
+          horizontalLineTo(11f)
+          close()
+          moveToRelative(0f, 18f)
+          verticalLineTo(19f)
+          horizontalLineToRelative(2f)
+          verticalLineToRelative(4f)
+          horizontalLineTo(11f)
+          close()
+          moveTo(6.4f, 7.75f)
+          lineTo(3.88f, 5.32f)
+          lineTo(5.3f, 3.85f)
+          lineToRelative(2.4f, 2.5f)
+          lineTo(6.4f, 7.75f)
+          close()
+          moveToRelative(12.3f, 12.4f)
+          lineTo(16.28f, 17.63f)
+          lineTo(17.6f, 16.25f)
+          lineToRelative(2.52f, 2.43f)
+          lineTo(18.7f, 20.15f)
+          close()
+          moveTo(16.25f, 6.4f)
+          lineTo(18.68f, 3.88f)
+          lineTo(20.15f, 5.3f)
+          lineToRelative(-2.5f, 2.4f)
+          lineTo(16.25f, 6.4f)
+          close()
+          moveTo(3.85f, 18.7f)
+          lineTo(6.38f, 16.27f)
+          lineTo(7.75f, 17.6f)
+          lineTo(5.33f, 20.13f)
+          lineTo(3.85f, 18.7f)
+          close()
+          moveTo(12f, 12f)
           close()
         }
       }
@@ -3286,6 +3487,92 @@ object VoiceIcons {
           horizontalLineTo(13.5f)
           verticalLineTo(20f)
           horizontalLineToRelative(-3f)
+          close()
+        }
+      }
+      .build()
+
+/*
+ * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/vibration.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+ * Generated: 2026-10-07T16:07:28Z
+ */
+  val Vibration: ImageVector =
+    ImageVector.Builder(
+      name = "Vibration",
+      defaultWidth = 24.dp,
+      defaultHeight = 24.dp,
+      viewportWidth = 24f,
+      viewportHeight = 24f,
+    )
+      .apply {
+        path(
+          fill = SolidColor(Color.Black),
+          fillAlpha = 1f,
+          stroke = null,
+          strokeAlpha = 1f,
+          strokeLineWidth = 1f,
+          strokeLineCap = StrokeCap.Butt,
+          strokeLineJoin = StrokeJoin.Bevel,
+          strokeLineMiter = 1f,
+          pathFillType = PathFillType.NonZero,
+        ) {
+          moveTo(8f, 21f)
+          quadTo(7.18f, 21f, 6.59f, 20.41f)
+          reflectiveQuadTo(6f, 19f)
+          verticalLineTo(5f)
+          quadTo(6f, 4.17f, 6.59f, 3.59f)
+          reflectiveQuadTo(8f, 3f)
+          horizontalLineToRelative(8f)
+          quadToRelative(0.82f, 0f, 1.41f, 0.59f)
+          reflectiveQuadTo(18f, 5f)
+          verticalLineTo(19f)
+          quadToRelative(0f, 0.82f, -0.59f, 1.41f)
+          reflectiveQuadTo(16f, 21f)
+          horizontalLineTo(8f)
+          close()
+          moveToRelative(8f, -2f)
+          verticalLineTo(5f)
+          horizontalLineTo(8f)
+          verticalLineTo(19f)
+          horizontalLineToRelative(8f)
+          close()
+          moveTo(12.71f, 7.71f)
+          quadTo(13f, 7.43f, 13f, 7f)
+          reflectiveQuadTo(12.71f, 6.29f)
+          reflectiveQuadTo(12f, 6f)
+          reflectiveQuadTo(11.29f, 6.29f)
+          reflectiveQuadTo(11f, 7f)
+          reflectiveQuadToRelative(0.29f, 0.71f)
+          reflectiveQuadTo(12f, 8f)
+          reflectiveQuadTo(12.71f, 7.71f)
+          close()
+          moveTo(0f, 15f)
+          verticalLineTo(9f)
+          horizontalLineTo(2f)
+          verticalLineToRelative(6f)
+          horizontalLineTo(0f)
+          close()
+          moveToRelative(3f, 2f)
+          verticalLineTo(7f)
+          horizontalLineTo(5f)
+          verticalLineTo(17f)
+          horizontalLineTo(3f)
+          close()
+          moveTo(22f, 15f)
+          verticalLineTo(9f)
+          horizontalLineToRelative(2f)
+          verticalLineToRelative(6f)
+          horizontalLineTo(22f)
+          close()
+          moveToRelative(-3f, 2f)
+          verticalLineTo(7f)
+          horizontalLineToRelative(2f)
+          verticalLineTo(17f)
+          horizontalLineTo(19f)
+          close()
+          moveTo(8f, 19f)
+          verticalLineTo(5f)
+          verticalLineTo(19f)
           close()
         }
       }

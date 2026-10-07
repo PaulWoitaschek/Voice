@@ -151,9 +151,16 @@
     <string name="settings.auto_sleep_timer.summary">Запускать таймер сна автоматически когда воспроизведение начинается между %1$s и %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматический таймер сна</string>
     <string name="settings.library.folders.summary">Управление папками, отсканированными на наличие аудиокниг</string>
-    <string name="settings.library.use_grid.title">Использовать сетку</string>
+    <string name="settings.library.layout.grid">Сетка</string>
+    <string name="settings.library.layout.list">Список</string>
+    <string name="settings.library.title">Библиотека</string>
+    <string name="settings.listening.title">Прослушивание</string>
+    <string name="settings.playback.auto_rewind.off">Выкл.</string>
+    <string name="settings.playback.auto_rewind.summary">При возобновлении немного отматывает назад, чтобы вы не потеряли нить</string>
     <string name="settings.playback.auto_rewind.title">Автоперемотка назад</string>
+    <string name="settings.playback.seek_time.summary">Насколько далеко перематывают кнопки назад и вперёд</string>
     <string name="settings.playback.seek_time.title">Интервал перемотки</string>
+    <string name="settings.subtitle">Сделайте Voice своим</string>
     <string name="settings.support.faq.title">Частые Вопросы (ЧаВо)</string>
     <string name="settings.support.get_support.title">Поддержка</string>
     <string name="settings.support.help_translating.title">Помочь с переводом</string>
@@ -161,6 +168,7 @@
     <string name="settings.support.suggest_idea.title">Предложить идею</string>
     <string name="settings.support.support_voice.summary">Пожертвования помогают поддерживать Voice</string>
     <string name="settings.support.support_voice.title">Поддержать разработку</string>
+    <string name="settings.support.title">Помощь и отзывы</string>
     <string name="support.action.donate_kofi">Пожертвовать на Ko-fi</string>
     <string name="support.description.maintenance">Voice бесплатен, имеет открытый исходный код и поддерживается одним разработчиком.</string>
     <string name="support.description.maintenance_subtitle">Пожертвования помогают финансировать постоянную поддержку и разработку.</string>

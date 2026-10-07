@@ -11,15 +11,22 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.GridMode
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.data.folders.AudiobookFolders
+import voice.core.data.folders.DocumentFileWithUri
+import voice.core.data.folders.FolderType
 import voice.core.data.sleeptimer.SleepTimerPreference
+import voice.core.documentfile.CachedDocumentFile
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
@@ -57,6 +64,9 @@ class SettingsViewModelTest {
   private val dynamicColorAvailability = mockk<DynamicColorAvailability> {
     every { isSupported() } returns true
   }
+  private val audiobookFolders = mockk<AudiobookFolders> {
+    every { all() } returns flowOf(emptyMap())
+  }
 
   private val viewModel = SettingsViewModel(
     themeModeStore = themeModeStore,
@@ -72,6 +82,7 @@ class SettingsViewModelTest {
     kioskModeFeatureFlag = kioskModeFeatureFlag,
     developerMenuUnlockedStore = developerMenuUnlockedStore,
     dynamicColorAvailability = dynamicColorAvailability,
+    audiobookFolders = audiobookFolders,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
 
@@ -216,18 +227,96 @@ class SettingsViewModelTest {
   }
 
   @Test
-  fun `view state exposes kiosk mode`() = scope.runTest {
+  fun `view state lists the audiobook folder names alphabetically`() = scope.runTest {
+    every { audiobookFolders.all() } returns flowOf(
+      mapOf(
+        FolderType.Root to listOf(folder("Sci-Fi")),
+        FolderType.SingleFolder to listOf(folder("crime"), folder("Audiobooks")),
+      ),
+    )
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      runCurrent()
+      assertEquals(expected = listOf("Audiobooks", "crime", "Sci-Fi"), actual = expectMostRecentItem().folderNames)
+    }
+  }
+
+  @Test
+  fun `kiosk mode shows sample folder names`() = scope.runTest {
     kioskModeFeatureFlag.value = true
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      awaitItem().let {
-        assertEquals(expected = true, actual = it.kioskMode)
-      }
+      runCurrent()
+      assertEquals(expected = listOf("Audiobooks", "Sci-Fi", "Non-Fiction"), actual = expectMostRecentItem().folderNames)
     }
   }
+
+  @Test
+  fun `setUseGrid stores the layout`() = scope.runTest {
+    viewModel.setUseGrid(false)
+    runCurrent()
+    assertEquals(expected = GridMode.LIST, actual = gridModeStore.data.first())
+
+    viewModel.setUseGrid(true)
+    runCurrent()
+    assertEquals(expected = GridMode.GRID, actual = gridModeStore.data.first())
+  }
+
+  @Test
+  fun `follow device layout resolves through the grid count`() = scope.runTest {
+    gridModeStore.updateData { GridMode.FOLLOW_DEVICE }
+    every { gridCount.useGridAsDefault() } returns false
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      runCurrent()
+      assertEquals(expected = false, actual = expectMostRecentItem().useGrid)
+    }
+  }
+
+  @Test
+  fun `skip amount stays within its range`() = scope.runTest {
+    viewModel.seekAmountChanged(15)
+    runCurrent()
+    assertEquals(expected = 15, actual = seekTimeStore.data.first())
+
+    viewModel.seekAmountChanged(1)
+    runCurrent()
+    assertEquals(expected = 3, actual = seekTimeStore.data.first())
+
+    viewModel.seekAmountChanged(90)
+    runCurrent()
+    assertEquals(expected = 60, actual = seekTimeStore.data.first())
+  }
+
+  @Test
+  fun `auto rewind stays within its range`() = scope.runTest {
+    viewModel.autoRewindAmountChanged(0)
+    runCurrent()
+    assertEquals(expected = 0, actual = autoRewindAmountStore.data.first())
+
+    viewModel.autoRewindAmountChanged(-1)
+    runCurrent()
+    assertEquals(expected = 0, actual = autoRewindAmountStore.data.first())
+
+    viewModel.autoRewindAmountChanged(25)
+    runCurrent()
+    assertEquals(expected = 20, actual = autoRewindAmountStore.data.first())
+  }
 }
+
+private fun folder(name: String) = DocumentFileWithUri(
+  documentFile = mockk<CachedDocumentFile> {
+    every { this@mockk.name } returns name
+    every { isFile } returns false
+  },
+  uri = mockk(),
+)
 
 private class MemoryDataStore<T>(initial: T) : DataStore<T> {
 

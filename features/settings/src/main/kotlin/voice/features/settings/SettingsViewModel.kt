@@ -4,21 +4,25 @@ import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.GridMode
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.data.folders.AudiobookFolders
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
@@ -28,6 +32,7 @@ import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
+import voice.core.documentfile.nameWithoutExtension
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
 import voice.core.ui.DynamicColorAvailability
@@ -60,13 +65,13 @@ class SettingsViewModel(
   @DeveloperMenuUnlockedStore
   private val developerMenuUnlockedStore: DataStore<Boolean>,
   private val dynamicColorAvailability: DynamicColorAvailability,
-  dispatcherProvider: DispatcherProvider,
+  private val audiobookFolders: AudiobookFolders,
+  private val dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
   private val mainScope = MainScope(dispatcherProvider)
   internal val viewEffects: SharedFlow<SettingsViewEffect>
     field = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
-  private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
   private var appVersionTapCount = 0
 
   @Composable
@@ -80,9 +85,7 @@ class SettingsViewModel(
       initial = SleepTimerPreference.Default,
     )
     val analyticsEnabled by remember { analyticsConsentStore.data }.collectAsState(initial = false)
-    val kioskMode = remember {
-      kioskModeFeatureFlag.get()
-    }
+    val folderNames by remember { folderNames() }.collectAsState(initial = emptyList())
     val showDeveloperMenu by remember { developerMenuUnlockedStore.data }.collectAsState(initial = false)
     val dynamicColorAvailable = remember {
       dynamicColorAvailability.isSupported()
@@ -93,7 +96,6 @@ class SettingsViewModel(
       dynamicColorAvailable = dynamicColorAvailable,
       seekTimeInSeconds = seekTime,
       autoRewindInSeconds = autoRewindAmount,
-      dialog = dialog.value,
       appVersion = appInfoProvider.versionName,
       useGrid = when (gridMode) {
         GridMode.LIST -> false
@@ -109,8 +111,21 @@ class SettingsViewModel(
       showAnalyticSetting = appInfoProvider.analyticsIncluded,
       showDeveloperMenu = showDeveloperMenu,
       showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
-      kioskMode = kioskMode,
+      folderNames = folderNames,
     )
+  }
+
+  private fun folderNames(): Flow<List<String>> {
+    if (kioskModeFeatureFlag.get()) {
+      return flowOf(listOf("Audiobooks", "Sci-Fi", "Non-Fiction"))
+    }
+    return audiobookFolders.all().map { folders ->
+      withContext(dispatcherProvider.io) {
+        folders.values.flatten()
+          .map { it.documentFile.nameWithoutExtension() }
+          .sortedWith(String.CASE_INSENSITIVE_ORDER)
+      }
+    }
   }
 
   override fun close() {
@@ -129,44 +144,24 @@ class SettingsViewModel(
     }
   }
 
-  override fun toggleGrid() {
+  override fun setUseGrid(useGrid: Boolean) {
     mainScope.launch {
-      gridModeStore.updateData { currentMode ->
-        when (currentMode) {
-          GridMode.LIST -> GridMode.GRID
-          GridMode.GRID -> GridMode.LIST
-          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-            GridMode.LIST
-          } else {
-            GridMode.GRID
-          }
-        }
+      gridModeStore.updateData {
+        if (useGrid) GridMode.GRID else GridMode.LIST
       }
     }
   }
 
   override fun seekAmountChanged(seconds: Int) {
     mainScope.launch {
-      seekTimeStore.updateData { seconds }
+      seekTimeStore.updateData { seconds.coerceIn(SEEK_TIME_RANGE) }
     }
   }
 
-  override fun onSeekAmountRowClick() {
-    dialog.value = SettingsViewState.Dialog.SeekTime
-  }
-
-  override fun autoRewindAmountChang(seconds: Int) {
+  override fun autoRewindAmountChanged(seconds: Int) {
     mainScope.launch {
-      autoRewindAmountStore.updateData { seconds }
+      autoRewindAmountStore.updateData { seconds.coerceIn(AUTO_REWIND_RANGE) }
     }
-  }
-
-  override fun onAutoRewindRowClick() {
-    dialog.value = SettingsViewState.Dialog.AutoRewindAmount
-  }
-
-  override fun dismissDialog() {
-    dialog.value = null
   }
 
   override fun getSupport() {
@@ -189,7 +184,6 @@ class SettingsViewModel(
   }
 
   override fun openTranslations() {
-    dismissDialog()
     navigator.goTo(Destination.Website("https://hosted.weblate.org/engage/voice/"))
   }
 
@@ -251,3 +245,6 @@ class SettingsViewModel(
     navigator.goTo(Destination.DeveloperSettings)
   }
 }
+
+internal val SEEK_TIME_RANGE = 3..60
+internal val AUTO_REWIND_RANGE = 0..20

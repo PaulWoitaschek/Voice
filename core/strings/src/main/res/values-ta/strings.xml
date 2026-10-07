@@ -143,9 +143,16 @@
     <string name="settings.auto_sleep_timer.summary">பிளேபேக் %1$s மற்றும் %2$s க்கு இடையில் தொடங்கும்போது தானாக ஒரு தூக்க நேரத்தைத் தொடங்குங்கள்</string>
     <string name="settings.auto_sleep_timer.title">தானியங்கி தூக்க நேரங்காட்டி</string>
     <string name="settings.library.folders.summary">ஒலிபுத்தகங்களுக்காக வருடல் செய்யப்பட்ட கோப்புறைகளை நிர்வகி</string>
-    <string name="settings.library.use_grid.title">கட்டம் தளவமைப்பைப் பயன்படுத்தவும்</string>
+    <string name="settings.library.layout.grid">கட்டம்</string>
+    <string name="settings.library.layout.list">பட்டியல்</string>
+    <string name="settings.library.title">நூலகம்</string>
+    <string name="settings.listening.title">கேட்டல்</string>
+    <string name="settings.playback.auto_rewind.off">முடக்கு</string>
+    <string name="settings.playback.auto_rewind.summary">மீண்டும் தொடங்கும்போது சற்று பின்னோக்கிச் செல்லும், அதனால் நீங்கள் கதையின் இழையை இழக்க மாட்டீர்கள்</string>
     <string name="settings.playback.auto_rewind.title">ஆட்டோ ரிவைண்ட்</string>
+    <string name="settings.playback.seek_time.summary">பின்னோக்கியும் முன்னோக்கியும் எவ்வளவு தாவும்</string>
     <string name="settings.playback.seek_time.title">தொகையைத் தவிர்க்கவும்</string>
+    <string name="settings.subtitle">Voice-ஐ உங்களுடையதாக்குங்கள்</string>
     <string name="settings.support.faq.title">கேள்விகள்</string>
     <string name="settings.support.get_support.title">ஆதரவை பெறு</string>
     <string name="settings.support.help_translating.title">குரலை மொழிபெயர்க்க உதவுங்கள்</string>
@@ -153,6 +160,7 @@
     <string name="settings.support.suggest_idea.title">ஒரு யோசனையை பரிந்துரைக்கவும்</string>
     <string name="settings.support.support_voice.summary">நன்கொடைகள் Voice-ஐ பராமரிக்க உதவுகின்றன</string>
     <string name="settings.support.support_voice.title">மேம்பாட்டை ஆதரிக்கவும்</string>
+    <string name="settings.support.title">உதவி மற்றும் கருத்து</string>
     <string name="support.action.donate_kofi">Ko-fi-யில் நன்கொடை அளிக்கவும்</string>
     <string name="support.description.maintenance">Voice இலவசம், திறந்த மூலமாகும், மேலும் ஒரே ஒரு உருவாக்குநரால் பராமரிக்கப்படுகிறது.</string>
     <string name="support.description.maintenance_subtitle">நன்கொடைகள் தொடர்ச்சியான பராமரிப்பு மற்றும் மேம்பாட்டிற்கு நிதியளிக்க உதவுகின்றன.</string>

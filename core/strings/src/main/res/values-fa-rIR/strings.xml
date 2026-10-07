@@ -143,9 +143,16 @@
     <string name="settings.auto_sleep_timer.summary">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>
     <string name="settings.auto_sleep_timer.title">زمان خواب خودکار</string>
     <string name="settings.library.folders.summary">مدیریت پوشه‌هایی که برای کتاب‌های صوتی اسکن می‌شوند</string>
-    <string name="settings.library.use_grid.title">چینش بصورت شبکه ای</string>
+    <string name="settings.library.layout.grid">شبکه</string>
+    <string name="settings.library.layout.list">فهرست</string>
+    <string name="settings.library.title">کتابخانه</string>
+    <string name="settings.listening.title">گوش دادن</string>
+    <string name="settings.playback.auto_rewind.off">خاموش</string>
+    <string name="settings.playback.auto_rewind.summary">هنگام ادامه کمی به عقب برمی‌گردد تا رشته‌ی داستان از دستتان نرود</string>
     <string name="settings.playback.auto_rewind.title">عقب بردن خودکار</string>
+    <string name="settings.playback.seek_time.summary">میزان پرش عقب و جلو بردن سریع</string>
     <string name="settings.playback.seek_time.title">میزان پرش</string>
+    <string name="settings.subtitle">Voice را مال خودتان کنید</string>
     <string name="settings.support.faq.title">سوالات متداول</string>
     <string name="settings.support.get_support.title">دریافت پشتیبانی</string>
     <string name="settings.support.help_translating.title">کمک برای ترجمه Voice</string>
@@ -153,6 +160,7 @@
     <string name="settings.support.suggest_idea.title">یک ایده پیشنهاد کنید</string>
     <string name="settings.support.support_voice.summary">کمک‌های مالی به نگهداری Voice کمک می‌کنند</string>
     <string name="settings.support.support_voice.title">حمایت از توسعه</string>
+    <string name="settings.support.title">راهنما و بازخورد</string>
     <string name="support.action.donate_kofi">کمک مالی در Ko-fi</string>
     <string name="support.description.maintenance">Voice رایگان، متن‌باز، و توسط یک توسعه‌دهنده نگهداری می‌شود.</string>
     <string name="support.description.maintenance_subtitle">کمک‌های مالی به تأمین هزینه نگهداری و توسعه مداوم کمک می‌کنند.</string>

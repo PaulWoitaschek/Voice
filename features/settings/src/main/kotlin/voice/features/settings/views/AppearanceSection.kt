@@ -38,6 +38,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -93,20 +94,12 @@ internal fun AppearanceSection(
   } else {
     themeColorScheme
   }
-  Surface(
-    modifier = modifier
-      .fillMaxWidth()
-      .padding(horizontal = 16.dp, vertical = 8.dp),
-    shape = RoundedCornerShape(28.dp),
-    color = MaterialTheme.colorScheme.surfaceContainer,
+  SettingsIsland(
+    modifier = modifier,
+    title = stringResource(StringsR.string.settings_appearance_title),
+    containerColor = MaterialTheme.colorScheme.primaryContainer,
   ) {
-    Column(Modifier.padding(vertical = 20.dp)) {
-      Text(
-        modifier = Modifier.padding(horizontal = 20.dp),
-        text = stringResource(StringsR.string.settings_appearance_title),
-        style = MaterialTheme.typography.titleLargeEmphasized,
-      )
-      Spacer(Modifier.height(16.dp))
+    Column {
       SectionLabel(stringResource(StringsR.string.settings_appearance_theme_title))
       Row(
         modifier = Modifier
@@ -151,11 +144,9 @@ internal fun AppearanceSection(
 
 @Composable
 private fun SectionLabel(text: String) {
-  Text(
-    modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 12.dp),
+  IslandLabel(
+    modifier = Modifier.padding(bottom = 12.dp),
     text = text,
-    style = MaterialTheme.typography.labelLarge,
-    color = MaterialTheme.colorScheme.primary,
   )
 }
 
@@ -240,7 +231,7 @@ private fun ThemeModeTile(
     Text(
       text = themeMode.label(),
       style = MaterialTheme.typography.labelLarge,
-      color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+      color = LocalContentColor.current.copy(alpha = if (selected) 1F else 0.7F),
       textAlign = TextAlign.Center,
     )
   }
@@ -384,38 +375,11 @@ private fun PaletteSwatch(
   }
 }
 
-@Composable
-private fun CheckBadge(
-  visible: Boolean,
-  modifier: Modifier = Modifier,
-) {
-  AnimatedVisibility(
-    modifier = modifier,
-    visible = visible,
-    enter = scaleIn(spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium)) + fadeIn(),
-    exit = scaleOut() + fadeOut(),
-  ) {
-    Box(
-      modifier = Modifier
-        .size(24.dp)
-        .background(MaterialTheme.colorScheme.primary, CircleShape),
-      contentAlignment = Alignment.Center,
-    ) {
-      Icon(
-        imageVector = VoiceIcons.Check,
-        contentDescription = null,
-        tint = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier.size(16.dp),
-      )
-    }
-  }
-}
-
 /** The name of the selected color scheme, rolling over to the next one when it changes. */
 @Composable
 private fun SelectedColorScheme(themeColorScheme: ThemeColorScheme) {
   AnimatedContent(
-    modifier = Modifier.padding(horizontal = 20.dp),
+    modifier = Modifier.padding(horizontal = IslandContentPadding),
     targetState = themeColorScheme,
     transitionSpec = {
       (slideInVertically { it / 2 } + fadeIn()) togetherWith (slideOutVertically { -it / 2 } + fadeOut())
@@ -431,7 +395,7 @@ private fun SelectedColorScheme(themeColorScheme: ThemeColorScheme) {
         Text(
           text = stringResource(StringsR.string.settings_appearance_color_scheme_dynamic_summary),
           style = MaterialTheme.typography.bodyMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          color = LocalContentColor.current.copy(alpha = 0.8F),
         )
       }
     }

@@ -11,20 +11,14 @@ data class SettingsViewState(
   val seekTimeInSeconds: Int,
   val autoRewindInSeconds: Int,
   val appVersion: String,
-  val dialog: Dialog?,
   val useGrid: Boolean,
   val autoSleepTimer: AutoSleepTimerViewState,
   val showAnalyticSetting: Boolean,
   val analyticsEnabled: Boolean,
   val showDeveloperMenu: Boolean,
   val showSupportDevelopment: Boolean,
-  val kioskMode: Boolean,
+  val folderNames: List<String>,
 ) {
-
-  enum class Dialog {
-    AutoRewindAmount,
-    SeekTime,
-  }
 
   companion object {
     fun preview(): SettingsViewState {
@@ -32,9 +26,8 @@ data class SettingsViewState(
         themeMode = ThemeMode.FollowSystem,
         themeColorScheme = ThemeColorScheme.VoiceBlue,
         dynamicColorAvailable = true,
-        seekTimeInSeconds = 42,
-        autoRewindInSeconds = 12,
-        dialog = null,
+        seekTimeInSeconds = 20,
+        autoRewindInSeconds = 2,
         appVersion = "1.2.3",
         useGrid = true,
         autoSleepTimer = AutoSleepTimerViewState.preview(),
@@ -42,7 +35,7 @@ data class SettingsViewState(
         showAnalyticSetting = true,
         showDeveloperMenu = true,
         showSupportDevelopment = true,
-        kioskMode = false,
+        folderNames = listOf("Audiobooks", "Sci-Fi", "Non-Fiction"),
       )
     }
   }

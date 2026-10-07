@@ -147,9 +147,16 @@
     <string name="settings.auto_sleep_timer.summary">Activa automáticamente el temporizador al iniciar la reproducción entre las %1$s y %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador automático</string>
     <string name="settings.library.folders.summary">Administrar directorios escaneados en busca de audiolibros</string>
-    <string name="settings.library.use_grid.title">Utilizar el diseño en cuadrícula</string>
+    <string name="settings.library.layout.grid">Cuadrícula</string>
+    <string name="settings.library.layout.list">Lista</string>
+    <string name="settings.library.title">Biblioteca</string>
+    <string name="settings.listening.title">Escucha</string>
+    <string name="settings.playback.auto_rewind.off">Desactivado</string>
+    <string name="settings.playback.auto_rewind.summary">Retrocede un poco al reanudar para que no pierdas el hilo</string>
     <string name="settings.playback.auto_rewind.title">Retroceso automático</string>
+    <string name="settings.playback.seek_time.summary">Cuánto saltan el retroceso y el avance rápido</string>
     <string name="settings.playback.seek_time.title">Segundos de avance/retroceso</string>
+    <string name="settings.subtitle">Haz Voice a tu medida</string>
     <string name="settings.support.faq.title">Preguntas frecuentes</string>
     <string name="settings.support.get_support.title">Obtener ayuda</string>
     <string name="settings.support.help_translating.title">Ayudar a traducir Voice</string>
@@ -157,6 +164,7 @@
     <string name="settings.support.suggest_idea.title">Sugerir una idea</string>
     <string name="settings.support.support_voice.summary">Las donaciones ayudan a mantener Voice</string>
     <string name="settings.support.support_voice.title">Apoyar el desarrollo</string>
+    <string name="settings.support.title">Ayuda y comentarios</string>
     <string name="support.action.donate_kofi">Donar en Ko-fi</string>
     <string name="support.description.maintenance">Voice es gratis, de código abierto y lo mantiene un desarrollador.</string>
     <string name="support.description.maintenance_subtitle">Las donaciones ayudan a financiar el mantenimiento y desarrollo continuos.</string>

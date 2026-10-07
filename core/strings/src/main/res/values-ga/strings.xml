@@ -155,9 +155,16 @@
     <string name="settings.auto_sleep_timer.summary">Tosaigh lasc ama codlata go huathoibríoch nuair a thosaíonn an athsheinm idir %1$s agus %2$s</string>
     <string name="settings.auto_sleep_timer.title">Uaineadóir Codlata Uathoibríoch</string>
     <string name="settings.library.folders.summary">Bainistigh fillteáin scanta le haghaidh closleabhair</string>
-    <string name="settings.library.use_grid.title">Bain úsáid as leagan amach na greille</string>
+    <string name="settings.library.layout.grid">Greille</string>
+    <string name="settings.library.layout.list">Liosta</string>
+    <string name="settings.library.title">Leabharlann</string>
+    <string name="settings.listening.title">Éisteacht</string>
+    <string name="settings.playback.auto_rewind.off">As</string>
+    <string name="settings.playback.auto_rewind.summary">Téann sé siar beagán nuair a atosaíonn tú, ionas nach gcailleann tú an snáithe</string>
     <string name="settings.playback.auto_rewind.title">Athchasadh uathoibríoch</string>
+    <string name="settings.playback.seek_time.summary">Cé chomh fada a léimeann athchasadh agus mearchasadh</string>
     <string name="settings.playback.seek_time.title">Scipeáil méid</string>
+    <string name="settings.subtitle">Déan do chuid féin de Voice</string>
     <string name="settings.support.faq.title">Ceisteanna Coitianta</string>
     <string name="settings.support.get_support.title">Faigh cabhair</string>
     <string name="settings.support.help_translating.title">Cabhrú le Guth a aistriú</string>
@@ -165,6 +172,7 @@
     <string name="settings.support.suggest_idea.title">Mol smaoineamh</string>
     <string name="settings.support.support_voice.summary">Cuidíonn síntiúis le Voice a chothabháil</string>
     <string name="settings.support.support_voice.title">Tacaigh leis an bhforbairt</string>
+    <string name="settings.support.title">Cabhair agus aiseolas</string>
     <string name="support.action.donate_kofi">Tabhair síntiús ar Ko-fi</string>
     <string name="support.description.maintenance">Tá Voice saor in aisce, foinse oscailte, agus á chothabháil ag forbróir amháin.</string>
     <string name="support.description.maintenance_subtitle">Cuidíonn síntiúis le cothabháil agus forbairt leanúnach a mhaoiniú.</string>
