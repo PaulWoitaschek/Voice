@@ -21,6 +21,7 @@
     <string name="common.action.delete">Vymazať</string>
     <string name="common.action.edit">Upraviť</string>
     <string name="common.action.remove">Vymazať</string>
+    <string name="common.action.save">Uložiť</string>
     <string name="common.dialog.cancel">Zrušiť</string>
     <string name="common.dialog.confirm">Nastaviť</string>
     <string name="common.dialog.ok">OK</string>
@@ -44,23 +45,61 @@
         <item quantity="many">%d sekúnd</item>
         <item quantity="other">%d sekúnd</item>
     </plurals>
+    <string name="folder.add.action.file">Radšej pridať jeden súbor</string>
+    <string name="folder.add.action.folder">Vybrať priečinok</string>
+    <string name="folder.add.subtitle">Vyberte priečinok so zvukovými knihami. Môže obsahovať jednu knihu alebo celú vašu knižnicu.</string>
     <string name="folder.add.title.default">Pridajte si zvukové knihy</string>
     <string name="folder.add.title.onboarding">Pridajte si vašu prvú zvukovú knihu</string>
-    <string name="folder.add.type.file">Súbor</string>
-    <string name="folder.add.type.folder">Priečinok</string>
-    <string name="folder.add.type.subtitle">Želáte si pridať jediný súbor so zvukovou knihou alebo priečinok?</string>
-    <string name="folder.mode.author.title">Režim autorov a kníh: Podpriečinky sú pomenované podľa mien autorov, v ktorých sú vnorené priečinky pomenované podľa názvov kníh.</string>
-    <string name="folder.mode.root.title">Režim nadradeného priečinka: Podpriečinky predstavujú jednotlivé knihy.</string>
-    <string name="folder.mode.single.title">Režim jedinej knihy: Priečinok predstavuje samostatnú knihu.</string>
-    <string name="folder.type.book_example.empty">Nie je možné identifikovať žiadne knihy. Sú vo vybratom umiestnení zvukové súbory?</string>
-    <string name="folder.type.book_example.header">Podľa zvoleného nastavenia sú identifikované nasledujúce knihy</string>
+    <string name="folder.mode.author.label">Priečinky sú autori</string>
+    <string name="folder.mode.author.option">Priečinky v %s sú autori</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d kniha</item>
+        <item quantity="few">%d knihy</item>
+        <item quantity="many">%d kníh</item>
+        <item quantity="other">%d kníh</item>
+    </plurals>
+    <string name="folder.mode.file.label">Jeden súbor</string>
+    <string name="folder.mode.guess">Zrejme váš prípad</string>
+    <string name="folder.mode.root.label">Každý priečinok je kniha</string>
+    <string name="folder.mode.root.option">Každý priečinok alebo súbor v %s je kniha</string>
+    <string name="folder.mode.sheet.title">Ako je usporiadaný priečinok %s?</string>
+    <string name="folder.mode.single.label">Jedna kniha</string>
+    <string name="folder.mode.single.option">%s je jedna kniha</string>
+    <string name="folder.mode.single.summary">Všetky súbory sa stanú kapitolami, aj tie v priečinkoch ako CD 1 a CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Pridať %d knihu</item>
+        <item quantity="few">Pridať %d knihy</item>
+        <item quantity="many">Pridať %d kníh</item>
+        <item quantity="other">Pridať %d kníh</item>
+    </plurals>
+    <string name="folder.review.action.change">Zmeniť spôsob hľadania kníh</string>
+    <string name="folder.review.empty.subtitle">Vyberte priečinok, v ktorom sú vaše zvukové knihy.</string>
+    <string name="folder.review.empty.title">V priečinku %s nie sú žiadne zvukové súbory</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d priečinok</item>
+        <item quantity="few">%d priečinky</item>
+        <item quantity="many">%d priečinkov</item>
+        <item quantity="other">%d priečinkov</item>
+    </plurals>
+    <string name="folder.review.loading">Prehľadávame %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Vyzerá to na %d knihu</item>
+        <item quantity="few">Vyzerá to na %d knihy</item>
+        <item quantity="many">Vyzerá to na %d kníh</item>
+        <item quantity="other">Vyzerá to na %d kníh</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Našli sme %d knihu</item>
+        <item quantity="few">Našli sme %d knihy</item>
+        <item quantity="many">Našli sme %d kníh</item>
+        <item quantity="other">Našli sme %d kníh</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d zvukový súbor</item>
         <item quantity="few">%d zvukové súbory</item>
         <item quantity="many">%d zvukových súborov</item>
         <item quantity="other">%d zvukových súborov</item>
     </plurals>
-    <string name="folder.type.title">Ako sú organizované vaše súbory?</string>
     <string name="library.category.completed.title">Vypočuté</string>
     <string name="library.category.current.title">Rozpočúvané</string>
     <string name="library.category.not_started.title">Ešte nepočúvané</string>
@@ -94,7 +133,7 @@
     <string name="onboarding.completion.action.start_listening">Začať počúvať</string>
     <string name="onboarding.completion.subtitle">Vaša prvá kniha je pripravená na počúvanie. Užite si to s aplikáciou Voice!</string>
     <string name="onboarding.completion.title">Všetko je nastavené!</string>
-    <string name="onboarding.explanation.subtitle">Do aplikácie Voice si môžete pridať samostatné súbory s knihami, alebo si pridať knihy usporiadané v priečinkoch. Výber je na vás!</string>
+    <string name="onboarding.explanation.subtitle.folder">Vyberte priečinok so zvukovými knihami. Voice vám pred pridaním ukáže knihy, ktoré v ňom nájde.</string>
     <string name="onboarding.explanation.title">Vaša knižnica, vaše podmienky</string>
     <string name="onboarding.welcome.action.start">Ideme na to</string>
     <string name="onboarding.welcome.subtitle">Váš osobný vreckový prehrávač zvukových kníh. Poďme hneď nastaviť všetko potrebné.</string>

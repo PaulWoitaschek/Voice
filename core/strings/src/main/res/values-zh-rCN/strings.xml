@@ -21,6 +21,7 @@
     <string name="common.action.delete">删除</string>
     <string name="common.action.edit">编辑</string>
     <string name="common.action.remove">删除</string>
+    <string name="common.action.save">保存</string>
     <string name="common.dialog.cancel">取消</string>
     <string name="common.dialog.confirm">设置</string>
     <string name="common.error.generic.message">发生了错误😢</string>
@@ -32,20 +33,43 @@
     <plurals name="duration.seconds">
         <item quantity="other">%d 秒</item>
     </plurals>
+    <string name="folder.add.action.file">改为添加单个文件</string>
+    <string name="folder.add.action.folder">选择文件夹</string>
+    <string name="folder.add.subtitle">选择存放有声书的文件夹。里面可以只有一本书，也可以是你的整个图书馆。</string>
     <string name="folder.add.title.default">添加你的有声书</string>
     <string name="folder.add.title.onboarding">添加你的第一本有声书</string>
-    <string name="folder.add.type.file">文件</string>
-    <string name="folder.add.type.folder">文件夹</string>
-    <string name="folder.add.type.subtitle">你想将单个文件添加为书本还是文件夹？</string>
-    <string name="folder.mode.author.title">作者-书籍模式：子文件夹为作者，子文件夹下的文件夹为书籍。</string>
-    <string name="folder.mode.root.title">顶层书籍模式：子文件夹是书籍</string>
-    <string name="folder.mode.single.title">单本书模式：一个文件夹等于一本书。</string>
-    <string name="folder.type.book_example.empty">Voice没有找到任何有声书。声音文件是否存在？</string>
-    <string name="folder.type.book_example.header">这样操作将找到以下有声书</string>
+    <string name="folder.mode.author.label">文件夹为作者</string>
+    <string name="folder.mode.author.option">%s 中的文件夹为作者</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="other">%d 本书</item>
+    </plurals>
+    <string name="folder.mode.file.label">单个文件</string>
+    <string name="folder.mode.guess">看起来最匹配</string>
+    <string name="folder.mode.root.label">每个文件夹都是一本书</string>
+    <string name="folder.mode.root.option">%s 中的每个文件夹或文件都是一本书</string>
+    <string name="folder.mode.sheet.title">%s 是如何组织的？</string>
+    <string name="folder.mode.single.label">一本书</string>
+    <string name="folder.mode.single.option">%s 是一本书</string>
+    <string name="folder.mode.single.summary">其中的文件都会成为章节，包括 CD 1 和 CD 2 等文件夹中的文件。</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="other">添加 %d 本书</item>
+    </plurals>
+    <string name="folder.review.action.change">更改查找书籍的方式</string>
+    <string name="folder.review.empty.subtitle">请选择存放有声书的文件夹。</string>
+    <string name="folder.review.empty.title">%s 中没有声音文件</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="other">%d 个文件夹</item>
+    </plurals>
+    <string name="folder.review.loading">正在查看 %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="other">看起来像 %d 本书</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="other">找到了 %d 本书</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="other">%d个声音文件</item>
     </plurals>
-    <string name="folder.type.title">您的文件是如何组织的？</string>
     <string name="library.category.completed.title">已结束播放</string>
     <string name="library.category.current.title">正在播放中</string>
     <string name="library.category.not_started.title">尚未开始播放</string>
@@ -58,7 +82,7 @@
     <string name="media_session.library.recent">最近</string>
     <string name="media_session.library.root">所有有声书</string>
     <string name="onboarding.completion.subtitle">您的第一本有声书已准备好播放。与 Voice 一起享受您的旅程！</string>
-    <string name="onboarding.explanation.subtitle">使用 Voice，您可以单独添加书籍文件或将它们组织到文件夹中。您来选择！</string>
+    <string name="onboarding.explanation.subtitle.folder">选择存放有声书的文件夹。Voice 会先向您展示找到的书籍，然后再添加。</string>
     <string name="onboarding.explanation.title">您的图书馆，您的风格</string>
     <string name="onboarding.welcome.action.start">开始吧</string>
     <string name="onboarding.welcome.subtitle">你的个人口袋有声读物播放器。现在来进行配置吧。</string>

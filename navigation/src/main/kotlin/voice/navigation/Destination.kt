@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 import voice.core.common.serialization.UriSerializer
 import voice.core.data.BookId
+import voice.core.data.folders.FolderType
 
 sealed interface Destination {
 
@@ -76,6 +77,8 @@ sealed interface Destination {
     @Serializable(with = UriSerializer::class)
     Uri,
     val origin: Origin,
+    // set when changing the type of a folder that was added before
+    val currentType: FolderType? = null,
   ) : Compose {
     override val trackingName: String = "SelectFolderType"
   }

@@ -21,6 +21,7 @@
     <string name="common.action.delete">Удалить</string>
     <string name="common.action.edit">Редактировать</string>
     <string name="common.action.remove">Убрать</string>
+    <string name="common.action.save">Сохранить</string>
     <string name="common.dialog.cancel">Отмена</string>
     <string name="common.dialog.confirm">Установить</string>
     <string name="common.dialog.ok">ОК</string>
@@ -44,23 +45,61 @@
         <item quantity="many">%d секунд</item>
         <item quantity="other">%d секунд</item>
     </plurals>
+    <string name="folder.add.action.file">Добавить один файл вместо папки</string>
+    <string name="folder.add.action.folder">Выбрать папку</string>
+    <string name="folder.add.subtitle">Выберите папку с аудиокнигами. В ней может быть одна книга или вся ваша библиотека.</string>
     <string name="folder.add.title.default">Добавьте свои аудиокниги</string>
     <string name="folder.add.title.onboarding">Добавьте свою первую аудиокнигу</string>
-    <string name="folder.add.type.file">Файл</string>
-    <string name="folder.add.type.folder">Папка</string>
-    <string name="folder.add.type.subtitle">Хотите добавить один файл в виде книги или папки?</string>
-    <string name="folder.mode.author.title">Режим автор-книга: подпапки - авторы, подподпапки - книги.</string>
-    <string name="folder.mode.root.title">Книжный режим верхнего уровня: подпапки — это книги</string>
-    <string name="folder.mode.single.title">Режим одной книги: одна папка соответствует одной книге.</string>
-    <string name="folder.type.book_example.empty">Не удалось обнаружить аудиокниги. Присутствуют ли аудиофайлы?</string>
-    <string name="folder.type.book_example.header">Будут обнаружены следующие книги</string>
+    <string name="folder.mode.author.label">Папки — это авторы</string>
+    <string name="folder.mode.author.option">Папки в «%s» — это авторы</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d книга</item>
+        <item quantity="few">%d книги</item>
+        <item quantity="many">%d книг</item>
+        <item quantity="other">%d книг</item>
+    </plurals>
+    <string name="folder.mode.file.label">Один файл</string>
+    <string name="folder.mode.guess">Похоже на ваш вариант</string>
+    <string name="folder.mode.root.label">Каждая папка — книга</string>
+    <string name="folder.mode.root.option">Каждая папка или файл в «%s» — это книга</string>
+    <string name="folder.mode.sheet.title">Как устроена папка «%s»?</string>
+    <string name="folder.mode.single.label">Одна книга</string>
+    <string name="folder.mode.single.option">«%s» — это одна книга</string>
+    <string name="folder.mode.single.summary">Все файлы станут главами, даже в папках вроде CD 1 и CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Добавить %d книгу</item>
+        <item quantity="few">Добавить %d книги</item>
+        <item quantity="many">Добавить %d книг</item>
+        <item quantity="other">Добавить %d книг</item>
+    </plurals>
+    <string name="folder.review.action.change">Изменить способ поиска книг</string>
+    <string name="folder.review.empty.subtitle">Выберите папку, в которой лежат ваши аудиокниги.</string>
+    <string name="folder.review.empty.title">В папке «%s» нет аудиофайлов</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d папка</item>
+        <item quantity="few">%d папки</item>
+        <item quantity="many">%d папок</item>
+        <item quantity="other">%d папок</item>
+    </plurals>
+    <string name="folder.review.loading">Просматриваем папку «%s»…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Похоже, здесь %d книга</item>
+        <item quantity="few">Похоже, здесь %d книги</item>
+        <item quantity="many">Похоже, здесь %d книг</item>
+        <item quantity="other">Похоже, здесь %d книг</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Мы нашли %d книгу</item>
+        <item quantity="few">Мы нашли %d книги</item>
+        <item quantity="many">Мы нашли %d книг</item>
+        <item quantity="other">Мы нашли %d книг</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d аудиофайл</item>
         <item quantity="few">%d аудиофайла</item>
         <item quantity="many">%d аудиофайлов</item>
         <item quantity="other">%d аудиофайлов</item>
     </plurals>
-    <string name="folder.type.title">Как упорядочены ваши файлы?</string>
     <string name="library.category.completed.title">Прослушанные</string>
     <string name="library.category.current.title">Слушаю</string>
     <string name="library.category.not_started.title">Непрослушанные</string>
@@ -94,7 +133,7 @@
     <string name="onboarding.completion.action.start_listening">Начать прослушивание</string>
     <string name="onboarding.completion.subtitle">Ваша первая аудиокнига готова к воспроизведению. Наслаждайтесь своим путешествием с Voice!</string>
     <string name="onboarding.completion.title">Все готово!</string>
-    <string name="onboarding.explanation.subtitle">С помощью Voice вы можете добавлять книги в виде отдельных файлов или формировать их в папкам. Выбирайте!</string>
+    <string name="onboarding.explanation.subtitle.folder">Выберите папку с аудиокнигами. Voice покажет найденные книги, прежде чем добавить их.</string>
     <string name="onboarding.explanation.title">Ваша библиотека, Ваш выбор</string>
     <string name="onboarding.welcome.action.start">Поехали</string>
     <string name="onboarding.welcome.subtitle">Ваш личный карманный проигрыватель аудиокниг. Давайте настроим.</string>

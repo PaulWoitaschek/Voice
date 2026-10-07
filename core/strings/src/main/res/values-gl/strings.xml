@@ -21,6 +21,7 @@
     <string name="common.action.delete">Eliminar</string>
     <string name="common.action.edit">Editar</string>
     <string name="common.action.remove">Retirar</string>
+    <string name="common.action.save">Gardar</string>
     <string name="common.dialog.cancel">Desbotar</string>
     <string name="common.dialog.confirm">Establecer</string>
     <string name="common.dialog.ok">Aceptar</string>
@@ -40,21 +41,49 @@
         <item quantity="one">%d segundo</item>
         <item quantity="other">%d segundos</item>
     </plurals>
+    <string name="folder.add.action.file">Engadir só un ficheiro</string>
+    <string name="folder.add.action.folder">Escoller un cartafol</string>
+    <string name="folder.add.subtitle">Escolle o cartafol cos teus audiolibros. Pode conter un só libro ou toda a túa biblioteca.</string>
     <string name="folder.add.title.default">Engadir Audiolibro(s)</string>
     <string name="folder.add.title.onboarding">Engade o teu primeiro Audiolibro</string>
-    <string name="folder.add.type.file">Ficheiro</string>
-    <string name="folder.add.type.folder">Cartafol</string>
-    <string name="folder.add.type.subtitle">Queres engadir un só ficheiro como libro ou un cartafol?</string>
-    <string name="folder.mode.author.title">Modo Libro-Autoría: cada subcartafol equivale a unha autoría, os sub-subcartafoles son libros.</string>
-    <string name="folder.mode.root.title">Modo Libro do nivel superior: os subcartafoles son libros</string>
-    <string name="folder.mode.single.title">Modo de Libro Simple: un cartafol equivale a un libro.</string>
-    <string name="folder.type.book_example.empty">Voice non atopou ningún libro. Hai aí algún ficheiro de audio?</string>
-    <string name="folder.type.book_example.header">Isto fai que se detecten os seguintes libros</string>
+    <string name="folder.mode.author.label">Cartafoles por autoría</string>
+    <string name="folder.mode.author.option">Cada cartafol en %s é unha autoría</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d libro</item>
+        <item quantity="other">%d libros</item>
+    </plurals>
+    <string name="folder.mode.file.label">Ficheiro único</string>
+    <string name="folder.mode.guess">Parécese ao teu</string>
+    <string name="folder.mode.root.label">Cada cartafol é un libro</string>
+    <string name="folder.mode.root.option">Cada cartafol ou ficheiro en %s é un libro</string>
+    <string name="folder.mode.sheet.title">Como se organiza %s?</string>
+    <string name="folder.mode.single.label">Un só libro</string>
+    <string name="folder.mode.single.option">%s é un só libro</string>
+    <string name="folder.mode.single.summary">Os seus ficheiros convértense en capítulos, mesmo en cartafoles como CD 1 e CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Engadir %d libro</item>
+        <item quantity="other">Engadir %d libros</item>
+    </plurals>
+    <string name="folder.review.action.change">Cambiar como se atopan os libros</string>
+    <string name="folder.review.empty.subtitle">Escolle o cartafol que contén os teus audiolibros.</string>
+    <string name="folder.review.empty.title">Non hai ficheiros de audio en %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d cartafol</item>
+        <item quantity="other">%d cartafoles</item>
+    </plurals>
+    <string name="folder.review.loading">Buscando en %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Parece conter %d libro</item>
+        <item quantity="other">Parece conter %d libros</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Atopamos %d libro</item>
+        <item quantity="other">Atopamos %d libros</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d ficheiro de audio</item>
         <item quantity="other">%d ficheiros de audio</item>
     </plurals>
-    <string name="folder.type.title">Como se organizan os ficheiros?</string>
     <string name="library.category.completed.title">Escoitado</string>
     <string name="library.category.current.title">Actual</string>
     <string name="library.category.not_started.title">Aínda non escoitado</string>
@@ -86,7 +115,7 @@
     <string name="onboarding.completion.action.start_listening">Comezar a escoita</string>
     <string name="onboarding.completion.subtitle">O teu primeiro audiolibro está listo para a escoita. Desfruta usando Voice!</string>
     <string name="onboarding.completion.title">Todo preparado!</string>
-    <string name="onboarding.explanation.subtitle">Con Voice, podes engadir libros como ficheiros individuais ou organizalos en cartafoles. Ti elixes!</string>
+    <string name="onboarding.explanation.subtitle.folder">Escolle o cartafol cos teus audiolibros. Voice amósache os libros que atopa antes de engadilos.</string>
     <string name="onboarding.explanation.title">A túa Biblioteca, ao teu xeito</string>
     <string name="onboarding.welcome.action.start">Imos alá</string>
     <string name="onboarding.welcome.subtitle">O teu reprodutor de peto para audiolibros. Imos comezar cos axustes.</string>

@@ -21,6 +21,7 @@
     <string name="common.action.delete">Suprimeix</string>
     <string name="common.action.edit">Edita</string>
     <string name="common.action.remove">Suprimeix</string>
+    <string name="common.action.save">Desa</string>
     <string name="common.dialog.cancel">Cancel·la</string>
     <string name="common.dialog.confirm">Estableix</string>
     <string name="common.error.generic.message">Alguna cosa ha anat malament 😢</string>
@@ -41,22 +42,55 @@
         <item quantity="many">%d segons</item>
         <item quantity="other">%d segons</item>
     </plurals>
+    <string name="folder.add.action.file">O afegeix un sol fitxer</string>
+    <string name="folder.add.action.folder">Tria una carpeta</string>
+    <string name="folder.add.subtitle">Trieu la carpeta amb els vostres audiollibres. Pot contenir un sol llibre o tota la biblioteca.</string>
     <string name="folder.add.title.default">Afegeix audiollibres</string>
     <string name="folder.add.title.onboarding">Afegeix el primer audiollibre</string>
-    <string name="folder.add.type.file">Fitxer</string>
-    <string name="folder.add.type.folder">Carpeta</string>
-    <string name="folder.add.type.subtitle">Voleu afegir un sol fitxer com a llibre o una carpeta?</string>
-    <string name="folder.mode.author.title">Mode llibre d\'autor: les subcarpetes són autors, les subcarpetes de les subcarpetes són llibres.</string>
-    <string name="folder.mode.root.title">Mode llibre de nivell superior: les subcarpetes són llibres</string>
-    <string name="folder.mode.single.title">Mode llibre: cada carpeta és un llibre.</string>
-    <string name="folder.type.book_example.empty">El Voice no ha pogut detectar cap llibre. Hi ha cap fitxer d\'àudio?</string>
-    <string name="folder.type.book_example.header">Això faria que es detectessin els llibres següents</string>
+    <string name="folder.mode.author.label">Les carpetes són autors</string>
+    <string name="folder.mode.author.option">Les carpetes de %s són autors</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d llibre</item>
+        <item quantity="many">%d llibres</item>
+        <item quantity="other">%d llibres</item>
+    </plurals>
+    <string name="folder.mode.file.label">Un sol fitxer</string>
+    <string name="folder.mode.guess">Sembla el vostre cas</string>
+    <string name="folder.mode.root.label">Cada carpeta és un llibre</string>
+    <string name="folder.mode.root.option">Cada carpeta o fitxer de %s és un llibre</string>
+    <string name="folder.mode.sheet.title">Com s\'organitza %s?</string>
+    <string name="folder.mode.single.label">Un llibre</string>
+    <string name="folder.mode.single.option">%s és un llibre</string>
+    <string name="folder.mode.single.summary">Els seus fitxers esdevenen capítols, fins i tot dins de carpetes com CD 1 i CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Afegeix %d llibre</item>
+        <item quantity="many">Afegeix %d llibres</item>
+        <item quantity="other">Afegeix %d llibres</item>
+    </plurals>
+    <string name="folder.review.action.change">Canvia com es troben els llibres</string>
+    <string name="folder.review.empty.subtitle">Trieu la carpeta que conté els vostres audiollibres.</string>
+    <string name="folder.review.empty.title">No hi ha fitxers d\'àudio a %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d carpeta</item>
+        <item quantity="many">%d carpetes</item>
+        <item quantity="other">%d carpetes</item>
+    </plurals>
+    <string name="folder.review.loading">S\'està cercant a %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Sembla que hi ha %d llibre</item>
+        <item quantity="many">Sembla que hi ha %d llibres</item>
+        <item quantity="other">Sembla que hi ha %d llibres</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Hem trobat %d llibre</item>
+        <item quantity="many">Hem trobat %d llibres</item>
+        <item quantity="other">Hem trobat %d llibres</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d fitxer d\'àudio</item>
         <item quantity="many">%d fitxers d\'àudio</item>
         <item quantity="other">%d fitxers d\'àudio</item>
     </plurals>
-    <string name="folder.type.title">Com s\'estructuren els fitxers?</string>
     <string name="library.category.completed.title">Completat</string>
     <string name="library.category.current.title">Actual</string>
     <string name="library.category.not_started.title">Encara no s\'ha iniciat</string>
@@ -72,7 +106,7 @@
     <string name="onboarding.completion.action.start_listening">Comenceu a escoltar-lo</string>
     <string name="onboarding.completion.subtitle">El seu primer audiollibre està a punt per reproduir-se. Gaudiu del teu viatge amb Voice!</string>
     <string name="onboarding.completion.title">Esteu a punt!</string>
-    <string name="onboarding.explanation.subtitle">Amb Voice, podeu afegir llibres com a fitxers individuals o organitzar-los en carpetes. Com vulgueu.</string>
+    <string name="onboarding.explanation.subtitle.folder">Trieu la carpeta amb els vostres audiollibres. El Voice us mostra els llibres que troba abans d\'afegir-los.</string>
     <string name="onboarding.explanation.title">La teva biblioteca, a la teva manera</string>
     <string name="onboarding.welcome.action.start">Som-hi</string>
     <string name="onboarding.welcome.subtitle">El teu reproductor d\'audiollibres de butxaca. Comencem.</string>

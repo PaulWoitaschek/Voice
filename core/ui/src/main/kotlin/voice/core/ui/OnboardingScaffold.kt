@@ -145,6 +145,7 @@ fun OnboardingButton(
   modifier: Modifier = Modifier,
   primary: Boolean = true,
   trailingArrow: Boolean = false,
+  enabled: Boolean = true,
 ) {
   val height = ButtonDefaults.MediumContainerHeight
   val content: @Composable RowScope.() -> Unit = {
@@ -162,6 +163,7 @@ fun OnboardingButton(
     Button(
       onClick = onClick,
       shapes = ButtonDefaults.shapes(),
+      enabled = enabled,
       modifier = buttonModifier,
       contentPadding = contentPadding,
       content = content,
@@ -170,6 +172,7 @@ fun OnboardingButton(
     OutlinedButton(
       onClick = onClick,
       shapes = ButtonDefaults.shapes(),
+      enabled = enabled,
       modifier = buttonModifier,
       contentPadding = contentPadding,
       content = content,
@@ -195,13 +198,15 @@ private fun NudgingArrow(modifier: Modifier = Modifier) {
   )
 }
 
+/** The bar on top of the onboarding steps, with a back button and the progress wave for the [step]. */
 @Composable
-private fun OnboardingTopBar(
+fun OnboardingTopBar(
   step: OnboardingStep?,
   onBack: (() -> Unit)?,
+  modifier: Modifier = Modifier,
 ) {
   Row(
-    modifier = Modifier
+    modifier = modifier
       .fillMaxWidth()
       .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))
       .height(64.dp)

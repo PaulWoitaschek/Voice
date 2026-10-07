@@ -21,6 +21,7 @@
     <string name="common.action.delete">Slett</string>
     <string name="common.action.edit">Rediger</string>
     <string name="common.action.remove">Fjern</string>
+    <string name="common.action.save">Lagre</string>
     <string name="common.dialog.cancel">Avbryt</string>
     <string name="common.dialog.confirm">Sett</string>
     <string name="common.dialog.ok">OK</string>
@@ -40,21 +41,49 @@
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekunder</item>
     </plurals>
+    <string name="folder.add.action.file">Legg til en enkelt fil i stedet</string>
+    <string name="folder.add.action.folder">Velg en mappe</string>
+    <string name="folder.add.subtitle">Velg mappen med lydbøkene dine. Den kan inneholde én bok eller hele biblioteket ditt.</string>
     <string name="folder.add.title.default">Legg til dine lydbøker</string>
     <string name="folder.add.title.onboarding">Legg til din første lydbok</string>
-    <string name="folder.add.type.file">Fil</string>
-    <string name="folder.add.type.folder">Mappe</string>
-    <string name="folder.add.type.subtitle">Vil du legge til en enkelt fil som en bok eller en mappe?</string>
-    <string name="folder.mode.author.title">Samlet forfatter/kategori-modus: undermapper er forfattere, hver mappe under er én bok.</string>
-    <string name="folder.mode.root.title">Samlet lydboksmappe: hver undermappe er én bok</string>
-    <string name="folder.mode.single.title">Enkelvis lydboksmappe: denne mappen er én bok.</string>
-    <string name="folder.type.book_example.empty">Voice klarte ikke å finne noen bøker. Finnes det noen lydfiler?</string>
-    <string name="folder.type.book_example.header">Dette vil føre til at følgende bøker oppdages</string>
+    <string name="folder.mode.author.label">Mapper er forfattere</string>
+    <string name="folder.mode.author.option">Mapper i %s er forfattere</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d bok</item>
+        <item quantity="other">%d bøker</item>
+    </plurals>
+    <string name="folder.mode.file.label">Enkeltfil</string>
+    <string name="folder.mode.guess">Ligner på din</string>
+    <string name="folder.mode.root.label">Hver mappe er en bok</string>
+    <string name="folder.mode.root.option">Hver mappe eller fil i %s er en bok</string>
+    <string name="folder.mode.sheet.title">Hvordan er %s organisert?</string>
+    <string name="folder.mode.single.label">Én bok</string>
+    <string name="folder.mode.single.option">%s er én bok</string>
+    <string name="folder.mode.single.summary">Filene blir kapitler, også i mapper som CD 1 og CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Legg til %d bok</item>
+        <item quantity="other">Legg til %d bøker</item>
+    </plurals>
+    <string name="folder.review.action.change">Endre hvordan bøker blir funnet</string>
+    <string name="folder.review.empty.subtitle">Velg mappen som inneholder lydbøkene dine.</string>
+    <string name="folder.review.empty.title">Ingen lydfiler i %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d mappe</item>
+        <item quantity="other">%d mapper</item>
+    </plurals>
+    <string name="folder.review.loading">Ser gjennom %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Ser ut som %d bok</item>
+        <item quantity="other">Ser ut som %d bøker</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Vi fant %d bok</item>
+        <item quantity="other">Vi fant %d bøker</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d lydfil</item>
         <item quantity="other">%d lydfiler</item>
     </plurals>
-    <string name="folder.type.title">Hvilken struktur har filene dine?</string>
     <string name="library.category.completed.title">Fullført</string>
     <string name="library.category.current.title">Nåværende</string>
     <string name="library.category.not_started.title">Ikke startet enda</string>
@@ -86,7 +115,7 @@
     <string name="onboarding.completion.action.start_listening">Start lytting</string>
     <string name="onboarding.completion.subtitle">Din første lydbok er klar til å spilles av. Nyt din reise med Voice!</string>
     <string name="onboarding.completion.title">Du er ferdig!</string>
-    <string name="onboarding.explanation.subtitle">Med Voice kan du legge til bøker som individuelle filer eller organisere dem i mapper. Ditt valg!</string>
+    <string name="onboarding.explanation.subtitle.folder">Velg mappen med lydbøkene dine. Voice viser deg bøkene den finner før de legges til.</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt opplegg</string>
     <string name="onboarding.welcome.action.start">Kom i gang</string>
     <string name="onboarding.welcome.subtitle">Din personlige lydbokspiller. La oss gjøre deg klar.</string>

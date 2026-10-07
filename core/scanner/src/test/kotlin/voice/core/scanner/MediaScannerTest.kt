@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import voice.core.data.BookId
@@ -23,6 +24,7 @@ import voice.core.documentfile.FileBasedDocumentFile
 import java.io.Closeable
 import java.io.File
 import java.nio.file.Files
+import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -208,6 +210,88 @@ class MediaScannerTest {
     assertEquals(expected = 4, actual = scannedBooks.size)
   }
 
+  @Test
+  fun `progress follows the chapter when a single book becomes a library`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book1 = File(audiobookFolder, "book1")
+    audioFile(book1, "1.mp3")
+    audioFile(book1, "2.mp3")
+    val book2 = File(audiobookFolder, "book2")
+    audioFile(book2, "1.mp3")
+    val book2Chapter2 = audioFile(book2, "2.mp3")
+
+    scan(FolderType.SingleFolder, audiobookFolder)
+    val playedAt = Instant.parse("2026-01-01T10:00:00Z")
+    play(BookId(audiobookFolder.toUri()), book2Chapter2, position = 500, playedAt = playedAt)
+
+    scan(FolderType.Root, audiobookFolder)
+
+    val book2Content = bookContentRepo.get(BookId(book2.toUri()))!!
+    assertEquals(expected = ChapterId(book2Chapter2.toUri()), actual = book2Content.currentChapter)
+    assertEquals(expected = 500, actual = book2Content.positionInChapter)
+    assertEquals(expected = playedAt, actual = book2Content.lastPlayedAt)
+    assertEquals(expected = 1.5F, actual = book2Content.playbackSpeed)
+    assertEquals(expected = 0, actual = bookContentRepo.get(BookId(book1.toUri()))!!.positionInChapter)
+  }
+
+  @Test
+  fun `progress follows the most recently played book when a library becomes a single book`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book1 = File(audiobookFolder, "book1")
+    val book1Chapter2 = audioFile(book1, "2.mp3")
+    audioFile(book1, "1.mp3")
+    val book2 = File(audiobookFolder, "book2")
+    val book2Chapter1 = audioFile(book2, "1.mp3")
+
+    scan(FolderType.Root, audiobookFolder)
+    play(BookId(book1.toUri()), book1Chapter2, position = 100, playedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    play(BookId(book2.toUri()), book2Chapter1, position = 200, playedAt = Instant.parse("2026-01-02T10:00:00Z"))
+
+    scan(FolderType.SingleFolder, audiobookFolder)
+
+    val content = bookContentRepo.get(BookId(audiobookFolder.toUri()))!!
+    assertEquals(expected = ChapterId(book2Chapter1.toUri()), actual = content.currentChapter)
+    assertEquals(expected = 200, actual = content.positionInChapter)
+  }
+
+  @Test
+  fun `the current book and bookmarks follow a book into its new folder mode`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter = audioFile(book, "1.mp3")
+
+    scan(FolderType.SingleFolder, book)
+    val oldId = BookId(book.toUri())
+    play(oldId, chapter, position = 100, playedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    currentBookStore.updateData { oldId }
+    val bookmark = bookmarkRepo.addBookmarkAtBookPosition(bookRepo.get(oldId)!!, title = null, setBySleepTimer = false)
+
+    scan(FolderType.SingleFile, chapter)
+
+    val newId = BookId(chapter.toUri())
+    assertEquals(expected = newId, actual = currentBookStore.data.first())
+    assertEquals(expected = listOf(bookmark.copy(bookId = newId)), actual = bookmarkRepo.all)
+  }
+
+  @Test
+  fun `a book played after the carry over keeps its own progress on the next scan`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter1 = audioFile(book, "1.mp3")
+    val chapter2 = audioFile(book, "2.mp3")
+
+    scan(FolderType.SingleFolder, audiobookFolder)
+    play(BookId(audiobookFolder.toUri()), chapter1, position = 100, playedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    scan(FolderType.Root, audiobookFolder)
+    play(BookId(book.toUri()), chapter2, position = 300, playedAt = Instant.parse("2026-01-02T10:00:00Z"))
+
+    scan(FolderType.Root, audiobookFolder)
+
+    val content = bookContentRepo.get(BookId(book.toUri()))!!
+    assertEquals(expected = ChapterId(chapter2.toUri()), actual = content.currentChapter)
+    assertEquals(expected = 300, actual = content.positionInChapter)
+  }
+
   private fun test(test: suspend TestEnvironment.() -> Unit) {
     runTest {
       TestEnvironment().use { test(it) }
@@ -223,6 +307,8 @@ class MediaScannerTest {
     private val chapterRepo = ChapterRepoImpl(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
     var analyzeCalls = 0
+    val bookmarkRepo = MemoryBookmarkRepo()
+    val currentBookStore = MemoryDataStore<BookId?>(null)
     private val scannedRepo = ScannedBooksRecordingRepo(bookContentRepo)
     val scannedBooks: List<BookId> get() = scannedRepo.scannedBooks
     private val scanner = MediaScanner(
@@ -237,6 +323,10 @@ class MediaScannerTest {
         fileFactory = FileBasedDocumentFactory,
       ),
       deviceHasPermissionBug = mockk(),
+      progressCarryOver = ProgressCarryOver(
+        bookmarkRepo = bookmarkRepo,
+        currentBookStore = currentBookStore,
+      ),
     )
 
     val bookRepo = BookRepositoryImpl(chapterRepo, bookContentRepo)
@@ -278,6 +368,23 @@ class MediaScannerTest {
             )
           }
         }
+    }
+
+    suspend fun play(
+      id: BookId,
+      chapter: File,
+      position: Long,
+      playedAt: Instant,
+    ) {
+      val content = bookContentRepo.get(id)!!
+      bookContentRepo.put(
+        content.copy(
+          currentChapter = ChapterId(chapter.toUri()),
+          positionInChapter = position,
+          lastPlayedAt = playedAt,
+          playbackSpeed = 1.5F,
+        ),
+      )
     }
 
     fun folder(name: String): File {

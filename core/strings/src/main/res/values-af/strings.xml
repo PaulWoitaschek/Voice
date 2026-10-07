@@ -21,6 +21,7 @@
     <string name="common.action.delete">Skrap</string>
     <string name="common.action.edit">Wysig</string>
     <string name="common.action.remove">Verwyder</string>
+    <string name="common.action.save">Stoor</string>
     <string name="common.dialog.cancel">Kanselleer</string>
     <string name="common.dialog.confirm">Stel</string>
     <string name="common.dialog.ok">OK</string>
@@ -40,21 +41,49 @@
         <item quantity="one">%d sekonde</item>
         <item quantity="other">%d sekondes</item>
     </plurals>
+    <string name="folder.add.action.file">Voeg eerder ’n enkele lêer by</string>
+    <string name="folder.add.action.folder">Kies ’n vouer</string>
+    <string name="folder.add.subtitle">Kies die vouer met jou luisterboeke. Dit kan ’n enkele boek of jou hele biblioteek bevat.</string>
     <string name="folder.add.title.default">Voeg jou luisterboek(e) by</string>
     <string name="folder.add.title.onboarding">Voeg jou eerste luisterboek by</string>
-    <string name="folder.add.type.file">Lêer</string>
-    <string name="folder.add.type.folder">Gids</string>
-    <string name="folder.add.type.subtitle">Wil jy ’n enkele lêer as ’n boek byvoeg, of ’n gids?</string>
-    <string name="folder.mode.author.title">In hierdie modus is subgidse outeurs, en sub-subgidse boeke.</string>
-    <string name="folder.mode.root.title">Boeke-op-hoofvlak-modus: Subgidse is boeke</string>
-    <string name="folder.mode.single.title">Enkelboek-modus: Een gids staan vir een boek.</string>
-    <string name="folder.type.book_example.empty">Geen boeke wat opgetel nie. Is daar enige Audio lêers?</string>
-    <string name="folder.type.book_example.header">Dit sal lei tot die volgende boeke wat opgetel word</string>
+    <string name="folder.mode.author.label">Vouers is outeurs</string>
+    <string name="folder.mode.author.option">Vouers in %s is outeurs</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d boek</item>
+        <item quantity="other">%d boeke</item>
+    </plurals>
+    <string name="folder.mode.file.label">Enkele lêer</string>
+    <string name="folder.mode.guess">Lyk soos joune</string>
+    <string name="folder.mode.root.label">Elke vouer is ’n boek</string>
+    <string name="folder.mode.root.option">Elke vouer of lêer in %s is ’n boek</string>
+    <string name="folder.mode.sheet.title">Hoe is %s georganiseer?</string>
+    <string name="folder.mode.single.label">Een boek</string>
+    <string name="folder.mode.single.option">%s is een boek</string>
+    <string name="folder.mode.single.summary">Die lêers daarin word hoofstukke, selfs in vouers soos CD 1 en CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Voeg %d boek by</item>
+        <item quantity="other">Voeg %d boeke by</item>
+    </plurals>
+    <string name="folder.review.action.change">Verander hoe boeke gevind word</string>
+    <string name="folder.review.empty.subtitle">Kies die vouer waarin jou luisterboeke is.</string>
+    <string name="folder.review.empty.title">Geen oudiolêers in %s nie</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d vouer</item>
+        <item quantity="other">%d vouers</item>
+    </plurals>
+    <string name="folder.review.loading">Deursoek tans %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Lyk soos %d boek</item>
+        <item quantity="other">Lyk soos %d boeke</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Ons het %d boek gevind</item>
+        <item quantity="other">Ons het %d boeke gevind</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d Audio lêer</item>
         <item quantity="other">%d Audio lêers</item>
     </plurals>
-    <string name="folder.type.title">Hoe is jou lêers onderverdeel?</string>
     <string name="library.category.completed.title">Voltooi</string>
     <string name="library.category.current.title">Huidig</string>
     <string name="library.category.not_started.title">Nog nie begin nie</string>
@@ -86,7 +115,7 @@
     <string name="onboarding.completion.action.start_listening">Begin om te luister</string>
     <string name="onboarding.completion.subtitle">Jou eerste luisterboek is gereed om te speel. Geniet jou reis met Voice!</string>
     <string name="onboarding.completion.title">Alles is gereed!</string>
-    <string name="onboarding.explanation.subtitle">Met Voice kan jy boeke as individuele lêers byvoeg of dit in gidse organiseer. Jy kies!</string>
+    <string name="onboarding.explanation.subtitle.folder">Kies die vouer met jou luisterboeke. Voice wys jou die boeke wat dit vind voordat dit bygevoeg word.</string>
     <string name="onboarding.explanation.title">Jou biblioteek, op jou manier</string>
     <string name="onboarding.welcome.action.start">Kom ons begin</string>
     <string name="onboarding.welcome.subtitle">Jou persoonlike sak-luisterboekspeler. Kom ons kry jou opgestel.</string>
