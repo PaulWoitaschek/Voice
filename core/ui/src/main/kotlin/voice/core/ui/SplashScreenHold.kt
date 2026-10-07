@@ -25,7 +25,7 @@ class SplashScreenHolds {
   }
 }
 
-/** Provided by the activity while its splash screen is up. */
+/** Provided by the activity. Holds only matter until it has drawn its first frame. */
 val LocalSplashScreenHolds = staticCompositionLocalOf<SplashScreenHolds?> { null }
 
 /** Keeps the splash screen up while [loading]. Only the screen the app opens on is affected. */

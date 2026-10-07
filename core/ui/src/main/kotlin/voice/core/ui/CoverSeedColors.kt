@@ -12,12 +12,14 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import coil.imageLoader
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.materialkolor.ktx.themeColorOrNull
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import voice.core.data.store.CoverSeedColorsStore
+import voice.core.logging.api.Logger
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -52,11 +55,20 @@ class CoverSeedColors(
   private val memory = ConcurrentHashMap<String, Color>()
 
   private val restored = scope.async(start = CoroutineStart.LAZY) {
-    store.data.first().forEach { (cover, argb) ->
+    val colors = try {
+      store.data.first()
+    } catch (e: CancellationException) {
+      throw e
+    } catch (e: Exception) {
+      // only a cache: without it, covers are just analyzed again
+      Logger.w(e, "Can't restore the cover colors")
+      emptyMap()
+    }
+    colors.forEach { (cover, argb) ->
       memory.putIfAbsent(cover, if (argb == NO_COLOR) Color.Unspecified else Color(argb))
     }
     scope.launch(Dispatchers.IO) {
-      store.updateData { colors -> colors.filterKeys(::coverExists) }
+      persist { stored -> stored.filterKeys(::coverExists) }
     }
   }
 
@@ -75,6 +87,8 @@ class CoverSeedColors(
       .data(cover)
       .size(128)
       .allowHardware(false)
+      // its key would be the full size cover's, which this small software bitmap would replace
+      .memoryCachePolicy(CachePolicy.DISABLED)
       .build()
     // failed loads are not cached so they are retried the next time
     val result = application.imageLoader.execute(request) as? SuccessResult
@@ -84,11 +98,22 @@ class CoverSeedColors(
     } ?: Color.Unspecified
     memory[cover] = color
     scope.launch {
-      store.updateData { colors ->
-        colors + (cover to if (color.isSpecified) color.toArgb() else NO_COLOR)
+      persist { stored ->
+        stored + (cover to if (color.isSpecified) color.toArgb() else NO_COLOR)
       }
     }
     return color
+  }
+
+  private suspend fun persist(transform: (Map<String, Int>) -> Map<String, Int>) {
+    try {
+      store.updateData(transform)
+    } catch (e: CancellationException) {
+      throw e
+    } catch (e: Exception) {
+      // e.g. a full disk; the colors stay in memory for this session
+      Logger.w(e, "Can't persist the cover colors")
+    }
   }
 
   private fun coverExists(cover: String): Boolean {

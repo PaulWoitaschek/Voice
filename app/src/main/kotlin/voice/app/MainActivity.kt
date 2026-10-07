@@ -91,8 +91,11 @@ class MainActivity : AppCompatActivity() {
     enableEdgeToEdge()
 
     setContent {
+      // only used initially, and computing them has side effects like starting playback
+      val startDestinations = remember { startDestinationProvider(intent).toTypedArray() }
+
       @Suppress("UNCHECKED_CAST")
-      val backStack = rememberNavBackStack(*startDestinationProvider(intent).toTypedArray()) as MutableList<Destination.Compose>
+      val backStack = rememberNavBackStack(*startDestinations) as MutableList<Destination.Compose>
       LaunchedEffect(backStack.last()) {
         analytics.screenView(backStack.last().trackingName)
       }
@@ -197,9 +200,8 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-    if (savedInstanceState == null) {
-      keepSplashScreenUntilContentIsReady()
-    }
+    // also with saved state: after process death, the app cold starts with a splash screen too
+    keepSplashScreenUntilContentIsReady()
   }
 
   /**
