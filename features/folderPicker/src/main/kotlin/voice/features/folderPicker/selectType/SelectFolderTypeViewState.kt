@@ -1,5 +1,7 @@
 package voice.features.folderPicker.selectType
 
+import kotlin.time.Duration
+
 internal data class SelectFolderTypeViewState(
   val folderName: String,
   val loading: Boolean,
@@ -19,6 +21,9 @@ internal data class SelectFolderTypeViewState(
     val partCount: Int,
     // sub folders that look like books of their own
     val possibleBookCount: Int,
+    // known once its files are analyzed, which also replaces the name and author with the ones from the tags
+    val duration: Duration? = null,
+    val analyzing: Boolean = false,
   )
 
   data class Option(

@@ -69,7 +69,7 @@ class FolderStructureTest {
   fun `a book that looks like several books is flagged`() {
     val folder = folder("Discworld/Mort/1.mp3", "Discworld/Eric/1.mp3", "Dune/1.mp3", "Dune/CD 2/1.mp3")
 
-    val books = folder.books(FolderMode.Audiobooks).associateBy { it.name }
+    val books = folder.books(FolderMode.Audiobooks).map { it.book }.associateBy { it.name }
 
     assertEquals(expected = 2, actual = books.getValue("Discworld").possibleBookCount)
     assertEquals(expected = 0, actual = books.getValue("Dune").possibleBookCount)
@@ -85,7 +85,7 @@ class FolderStructureTest {
         SelectFolderTypeViewState.Book("Hyperion", author = "Dan Simmons", fileCount = 2, partCount = 0, possibleBookCount = 0),
         SelectFolderTypeViewState.Book("Loose", author = null, fileCount = 1, partCount = 0, possibleBookCount = 0),
       ),
-      actual = folder.books(FolderMode.Authors).sortedBy { it.name },
+      actual = folder.books(FolderMode.Authors).map { it.book }.sortedBy { it.name },
     )
   }
 
@@ -93,7 +93,7 @@ class FolderStructureTest {
   fun `folders without audio are no books`() {
     val folder = folder("Dune/01.mp3", "Covers/dune.jpg")
 
-    assertEquals(expected = listOf("Dune"), actual = folder.books(FolderMode.Audiobooks).map { it.name })
+    assertEquals(expected = listOf("Dune"), actual = folder.books(FolderMode.Audiobooks).map { it.book.name })
   }
 
   private fun assertGuess(

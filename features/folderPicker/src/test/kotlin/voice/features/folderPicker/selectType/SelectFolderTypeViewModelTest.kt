@@ -18,12 +18,16 @@ import voice.core.common.DispatcherProvider
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.documentfile.FileBasedDocumentFactory
+import voice.core.documentfile.nameWithoutExtension
+import voice.core.scanner.BookPreview
+import voice.core.scanner.BookPreviewer
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import voice.navigation.Origin
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.hours
 
 @RunWith(AndroidJUnit4::class)
 class SelectFolderTypeViewModelTest {
@@ -33,6 +37,12 @@ class SelectFolderTypeViewModelTest {
 
   private val audiobookFolders = mockk<AudiobookFolders>(relaxed = true)
   private val navigator = mockk<Navigator>(relaxed = true)
+  private val previewed = mutableListOf<String>()
+  private val bookPreviewer = BookPreviewer { file ->
+    val name = file.nameWithoutExtension()
+    previewed += name
+    BookPreview(name = "Tagged $name", author = "Author", duration = 2.hours)
+  }
 
   @Test
   fun `the guessed mode is selected and shows its books`() = runTest {
@@ -63,6 +73,47 @@ class SelectFolderTypeViewModelTest {
       assertEquals(expected = FolderMode.SingleBook, actual = viewState.selectedMode)
       assertEquals(expected = listOf(book("audiobooks", fileCount = 3)), actual = viewState.books)
     }
+  }
+
+  @Test
+  fun `books fill in what the library will show once they are analyzed`() = runTest {
+    val folder = library()
+    val viewModel = viewModel(folder)
+
+    viewStates(viewModel) {
+      var viewState = awaitLoaded()
+      while (viewState.books.any { it.duration == null }) {
+        viewState = awaitItem()
+      }
+      assertEquals(
+        expected = listOf(
+          book("Tagged FirstBook", fileCount = 1).copy(author = "Author", duration = 2.hours),
+          book("Tagged SecondBook", fileCount = 2).copy(author = "Author", duration = 2.hours),
+        ),
+        actual = viewState.books.sortedBy { it.name },
+      )
+    }
+  }
+
+  @Test
+  fun `only the books of the selected mode are analyzed, and each only once`() = runTest {
+    val folder = library()
+    val viewModel = viewModel(folder)
+
+    viewStates(viewModel) {
+      awaitLoaded()
+      viewModel.selectMode(FolderMode.SingleBook)
+      var viewState = awaitLoaded()
+      while (viewState.selectedMode != FolderMode.SingleBook || viewState.books.any { it.duration == null }) {
+        viewState = awaitItem()
+      }
+      viewModel.selectMode(FolderMode.Audiobooks)
+      while (viewState.selectedMode != FolderMode.Audiobooks || viewState.books.any { it.duration == null }) {
+        viewState = awaitItem()
+      }
+    }
+
+    assertEquals(expected = listOf("FirstBook", "SecondBook", "audiobooks"), actual = previewed.sorted())
   }
 
   @Test
@@ -134,6 +185,7 @@ class SelectFolderTypeViewModelTest {
     audiobookFolders = audiobookFolders,
     navigator = navigator,
     documentFileFactory = FileBasedDocumentFactory,
+    bookPreviewer = bookPreviewer,
     uri = folder.toUri(),
     documentFile = DocumentFile.fromFile(folder),
     origin = origin,
@@ -146,7 +198,11 @@ class SelectFolderTypeViewModelTest {
   ) {
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
-    }.test(validate = validate)
+    }.test {
+      validate()
+      // the books keep filling in after what a test looks at
+      cancelAndIgnoreRemainingEvents()
+    }
   }
 
   @IgnorableReturnValue
