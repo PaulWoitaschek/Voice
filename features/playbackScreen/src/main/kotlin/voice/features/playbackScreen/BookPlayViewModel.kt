@@ -10,10 +10,12 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -89,8 +91,8 @@ class BookPlayViewModel(
 
   private val scope = MainScope(dispatcherProvider)
 
-  internal val viewEffects: Flow<BookPlayViewEffect>
-    field = MutableSharedFlow<BookPlayViewEffect>(extraBufferCapacity = 1)
+  private val viewEffectChannel = Channel<BookPlayViewEffect>(Channel.UNLIMITED)
+  internal val viewEffects: Flow<BookPlayViewEffect> = viewEffectChannel.receiveAsFlow()
 
   internal val dialogState: State<BookPlayDialogViewState?>
     field = mutableStateOf<BookPlayDialogViewState?>(null)
@@ -145,10 +147,12 @@ class BookPlayViewModel(
     val hasMoreThanOneChapter = chapterCount > 1
     val chapterNumber = book.chapters.take(book.content.currentChapterIndex).sumOf { it.chapterMarks.count() } +
       book.currentChapter.chapterMarks.indexOf(currentMark) + 1
+    // waits for the bookmarks, so the cover doesn't shrink when their pins come in
     val bookmarks = remember(book.id, book.content.chapters) {
       bookmarkRepository.bookmarksFlow(book.content)
-    }.collectAsState(initial = emptyList()).value
-      .sortedBy { book.positionOf(it) }
+    }.collectAsState(initial = null).value
+      ?.sortedBy { book.positionOf(it) }
+      ?: return null
     val lastJump = remember { historyRecorder.lastJump }.collectAsState().value
     return BookPlayViewState(
       sleepTimerState = sleepTime.toViewState(),
@@ -187,8 +191,6 @@ class BookPlayViewModel(
     currentChapterNumber: Int,
   ): BookPlayViewState.JumpBackViewState? {
     if (jump.from.bookId != book.id) return null
-    val remaining = JUMP_BACK_VISIBLE - (clock.millis() - jump.at.toEpochMilli()).milliseconds
-    if (remaining <= Duration.ZERO) return null
     val chapterIndex = book.chapters.indexOfFirst { it.id == jump.from.chapterId }
     if (chapterIndex == -1) return null
     val chapter = book.chapters[chapterIndex]
@@ -198,8 +200,7 @@ class BookPlayViewModel(
       id = jump.at.toEpochMilli(),
       time = formatTime(jump.from.time - mark.startMs, mark.durationMs),
       chapterNumber = number.takeIf { it != currentChapterNumber },
-      remaining = remaining,
-      visibleFor = JUMP_BACK_VISIBLE,
+      elapsed = (clock.millis() - jump.at.toEpochMilli()).milliseconds.coerceAtLeast(Duration.ZERO),
     )
   }
 
@@ -317,7 +318,7 @@ class BookPlayViewModel(
     if (playStateManager.playState != PlayStateManager.PlayState.Playing) {
       scope.launch {
         if (batteryOptimization.shouldRequest()) {
-          viewEffects.tryEmit(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
+          viewEffectChannel.trySend(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
           batteryOptimization.onBatteryOptimizationsRequested()
         }
       }
@@ -407,8 +408,13 @@ class BookPlayViewModel(
         title = null,
         setBySleepTimer = false,
       )
+      viewEffectChannel.trySend(BookPlayViewEffect.BookmarkAdded(bookmark.id))
+      // the pin pops once, and not again when the screen is recreated
       addedBookmark.value = bookmark.id
-      viewEffects.tryEmit(BookPlayViewEffect.BookmarkAdded(bookmark.id))
+      delay(PIN_POP_DURATION)
+      if (addedBookmark.value == bookmark.id) {
+        addedBookmark.value = null
+      }
     }
   }
 
@@ -416,14 +422,20 @@ class BookPlayViewModel(
     navigator.goTo(Destination.Bookmarks(bookId, editBookmarkId = id.value.toString()))
   }
 
-  fun onJumpBackClick() {
-    val jump = historyRecorder.lastJump.value ?: return
+  fun onJumpBackClick(id: Long) {
+    val jump = jump(id) ?: return
     player.setPosition(jump.from.time, jump.from.chapterId, ListeningEvent.Type.JumpBack)
   }
 
-  fun onJumpBackExpire() {
-    historyRecorder.clearJump()
+  fun onJumpBackExpire(id: Long) {
+    val jump = jump(id) ?: return
+    historyRecorder.clearJump(jump)
   }
+
+  /**
+   * The jump the pill with [id] was showing, unless a newer jump replaced it.
+   */
+  private fun jump(id: Long): Jump? = historyRecorder.lastJump.value?.takeIf { it.at.toEpochMilli() == id }
 
   fun seekTo(position: Duration) {
     scope.launch {
@@ -472,7 +484,7 @@ class BookPlayViewModel(
 }
 
 private const val DEFAULT_SKIP_SECONDS = 20
-private val JUMP_BACK_VISIBLE = 10.seconds
+private val PIN_POP_DURATION = 2.seconds
 
 private fun Book.positionOf(bookmark: Bookmark): Long {
   val chapterIndex = chapters.indexOfFirst { it.id == bookmark.chapterId }

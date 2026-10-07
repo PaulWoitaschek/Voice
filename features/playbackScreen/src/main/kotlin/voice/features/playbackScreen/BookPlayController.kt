@@ -46,7 +46,11 @@ fun BookPlayScreen(bookId: BookId) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {
         is BookPlayViewEffect.BookmarkAdded -> {
-          val result = snackbarHostState.showSnackbar(message = bookmarkAddedMessage, actionLabel = addNoteAction)
+          val result = snackbarHostState.showSnackbar(
+            message = bookmarkAddedMessage,
+            actionLabel = addNoteAction,
+            duration = SnackbarDuration.Short,
+          )
           if (result == SnackbarResult.ActionPerformed) {
             viewModel.onAddBookmarkNote(viewEffect.id)
           }

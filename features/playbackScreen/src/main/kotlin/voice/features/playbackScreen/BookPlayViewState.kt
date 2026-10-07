@@ -36,14 +36,14 @@ data class BookPlayViewState(
    *
    * @param id identifies the jump, a new jump restarts the countdown
    * @param chapterNumber set if the jump left the chapter
+   * @param elapsed since the jump. The pill decides how long it stays.
    */
   @Immutable
   data class JumpBackViewState(
     val id: Long,
     val time: String,
     val chapterNumber: Int?,
-    val remaining: Duration,
-    val visibleFor: Duration,
+    val elapsed: Duration,
   )
 
   val bookProgress: Float

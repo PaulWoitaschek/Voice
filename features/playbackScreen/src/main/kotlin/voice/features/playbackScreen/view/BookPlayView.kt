@@ -45,8 +45,8 @@ internal fun BookPlayView(
   onSkipToPrevious: () -> Unit,
   onCloseClick: () -> Unit,
   onCurrentChapterClick: () -> Unit,
-  onJumpBack: () -> Unit,
-  onJumpBackExpire: () -> Unit,
+  onJumpBack: (id: Long) -> Unit,
+  onJumpBackExpire: (id: Long) -> Unit,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   val clock = rememberAnimationClock(running = viewState.playing)
@@ -165,8 +165,7 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
         id = 1,
         time = "34:18",
         chapterNumber = null,
-        remaining = 10.seconds,
-        visibleFor = 10.seconds,
+        elapsed = 3.seconds,
       ),
     )
     yield(initial)

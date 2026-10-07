@@ -49,6 +49,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
@@ -381,7 +382,7 @@ class BookPlayViewModelTest {
   }
 
   @Test
-  fun `a big jump offers the way back for ten seconds`() = scope.runTest {
+  fun `a big jump offers the way back`() = scope.runTest {
     val player = mockk<PlayerController> {
       every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
       every { setPosition(any(), any(), any()) } just Runs
@@ -404,24 +405,49 @@ class BookPlayViewModelTest {
       val jumpBack = awaitItem()!!.jumpBack!!
       assertEquals(expected = "0:30", actual = jumpBack.time)
       assertEquals(expected = 2, actual = jumpBack.chapterNumber)
-      assertEquals(expected = 10.seconds, actual = jumpBack.remaining)
+      assertEquals(expected = Duration.ZERO, actual = jumpBack.elapsed)
 
-      viewModel.onJumpBackClick()
+      viewModel.onJumpBackClick(jumpBack.id)
       verify(exactly = 1) {
         player.setPosition(time = from.time, id = from.chapterId, type = ListeningEvent.Type.JumpBack)
       }
+
+      viewModel.onJumpBackExpire(jumpBack.id)
+      assertNull(awaitItem()!!.jumpBack)
     }
   }
 
   @Test
-  fun `the way back is not offered once the jump is too old`() = scope.runTest {
+  fun `an older pill expiring keeps the newer jump`() = scope.runTest {
+    val viewModel = viewModel()
+    val start = PlaybackPosition(bookId = book.id, chapterId = book.chapters[0].id, time = 0)
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = null, actual = awaitItem())
+      assertNull(awaitItem()!!.jumpBack)
+
+      historyRecorder.record(ListeningEvent.Type.BookmarkJump, ListeningEvent.Source.App, position = start)
+      val older = awaitItem()!!.jumpBack!!
+      clock.advanceBy(9.seconds)
+      historyRecorder.record(ListeningEvent.Type.BookmarkJump, ListeningEvent.Source.App, position = start.copy(time = 1000))
+      val newer = awaitItem()!!.jumpBack!!
+
+      viewModel.onJumpBackExpire(older.id)
+      expectNoEvents()
+      assertEquals(expected = newer.id, actual = historyRecorder.lastJump.value?.at?.toEpochMilli())
+    }
+  }
+
+  @Test
+  fun `the way back is not offered for a jump in another book`() = scope.runTest {
     val viewModel = viewModel()
     historyRecorder.record(
       type = ListeningEvent.Type.BookmarkJump,
       source = ListeningEvent.Source.App,
-      position = PlaybackPosition(bookId = book.id, chapterId = book.chapters[0].id, time = 0),
+      position = PlaybackPosition(bookId = BookId("other"), chapterId = book.chapters[0].id, time = 0),
     )
-    clock.advanceBy(11.seconds)
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()

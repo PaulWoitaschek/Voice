@@ -83,8 +83,8 @@ internal fun SeekSection(
   clock: () -> Float,
   onSeek: (Duration) -> Unit,
   jumpBack: BookPlayViewState.JumpBackViewState?,
-  onJumpBack: () -> Unit,
-  onJumpBackExpire: () -> Unit,
+  onJumpBack: (id: Long) -> Unit,
+  onJumpBackExpire: (id: Long) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var dragFraction by remember { mutableStateOf<Float?>(null) }

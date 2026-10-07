@@ -36,26 +36,49 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalAccessibilityManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import voice.core.strings.R
 import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState.JumpBackViewState
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+
+private val JUMP_BACK_VISIBLE = 10.seconds
 
 /**
  * Offers the way back after a big jump. A ring around the undo icon counts down until the pill
- * goes away by itself.
+ * goes away by itself. It stays longer when the accessibility settings ask for more time to act.
  */
 @Composable
 internal fun JumpBackPill(
   jumpBack: JumpBackViewState?,
-  onClick: () -> Unit,
-  onExpire: () -> Unit,
+  onClick: (id: Long) -> Unit,
+  onExpire: (id: Long) -> Unit,
   modifier: Modifier = Modifier,
 ) {
+  val accessibilityManager = LocalAccessibilityManager.current
+  val visibleFor = remember(accessibilityManager) {
+    val millis = JUMP_BACK_VISIBLE.inWholeMilliseconds
+    (
+      accessibilityManager?.calculateRecommendedTimeoutMillis(
+        originalTimeoutMillis = millis,
+        containsIcons = true,
+        containsText = true,
+        containsControls = true,
+      ) ?: millis
+      ).milliseconds
+  }
   AnimatedContent(
-    targetState = jumpBack,
+    targetState = jumpBack?.takeIf { it.elapsed < visibleFor },
     contentKey = { it?.id },
     transitionSpec = {
       (scaleIn(spring(dampingRatio = Spring.DampingRatioMediumBouncy)) + fadeIn())
@@ -66,7 +89,12 @@ internal fun JumpBackPill(
     label = "jumpBack",
   ) { state ->
     if (state != null) {
-      Pill(state = state, onClick = onClick, onExpire = onExpire)
+      Pill(
+        state = state,
+        visibleFor = visibleFor,
+        onClick = { onClick(state.id) },
+        onExpire = { onExpire(state.id) },
+      )
     } else {
       Spacer(Modifier.size(0.dp))
     }
@@ -76,18 +104,24 @@ internal fun JumpBackPill(
 @Composable
 private fun Pill(
   state: JumpBackViewState,
+  visibleFor: Duration,
   onClick: () -> Unit,
   onExpire: () -> Unit,
 ) {
   val currentOnExpire by rememberUpdatedState(onExpire)
+  val remaining = remember(state.id) { (visibleFor - state.elapsed).coerceAtLeast(Duration.ZERO) }
   val countdown = remember(state.id) {
-    Animatable((state.remaining / state.visibleFor).toFloat().coerceIn(0F, 1F))
+    Animatable((remaining / visibleFor).toFloat().coerceIn(0F, 1F))
   }
   LaunchedEffect(state.id) {
-    countdown.animateTo(
-      targetValue = 0F,
-      animationSpec = tween(durationMillis = state.remaining.inWholeMilliseconds.toInt(), easing = LinearEasing),
-    )
+    // the ring is only decoration, so it may skip ahead when animations are off
+    launch {
+      countdown.animateTo(
+        targetValue = 0F,
+        animationSpec = tween(durationMillis = remaining.inWholeMilliseconds.toInt(), easing = LinearEasing),
+      )
+    }
+    delay(remaining)
     currentOnExpire()
   }
   val colors = MaterialTheme.colorScheme
@@ -96,7 +130,9 @@ private fun Pill(
     shape = CircleShape,
     color = colors.tertiaryContainer,
     contentColor = colors.onTertiaryContainer,
-    modifier = Modifier.height(32.dp),
+    modifier = Modifier
+      .height(32.dp)
+      .semantics { liveRegion = LiveRegionMode.Polite },
   ) {
     Row(
       modifier = Modifier.padding(start = 6.dp, end = 12.dp),

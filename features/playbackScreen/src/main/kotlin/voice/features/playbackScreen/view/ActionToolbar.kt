@@ -178,6 +178,7 @@ private fun BookmarkAction(
         burstCount++
         onLongClick()
       },
+      onLongClickLabel = stringResource(R.string.bookmark_save_moment),
       selectable = false,
     )
   }
@@ -192,6 +193,7 @@ private fun ToolbarAction(
   modifier: Modifier = Modifier,
   label: String? = null,
   onLongClick: (() -> Unit)? = null,
+  onLongClickLabel: String? = null,
   selectable: Boolean = true,
   toggle: Boolean = false,
   showTooltipOnClick: Boolean = false,
@@ -220,6 +222,7 @@ private fun ToolbarAction(
         }
       },
       onLongClick = onLongClick,
+      onLongClickLabel = onLongClickLabel,
     )
   }
 }
@@ -234,6 +237,7 @@ private fun ToolbarActionContent(
   toggle: Boolean,
   onClick: () -> Unit,
   onLongClick: (() -> Unit)?,
+  onLongClickLabel: String?,
   modifier: Modifier = Modifier,
 ) {
   val interactionSource = remember { MutableInteractionSource() }
@@ -276,6 +280,7 @@ private fun ToolbarActionContent(
         role = if (toggle) Role.Switch else Role.Button,
         onClick = onClick,
         onLongClick = onLongClick,
+        onLongClickLabel = onLongClickLabel,
       )
       .semantics {
         this.contentDescription = contentDescription

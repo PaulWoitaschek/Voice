@@ -83,8 +83,11 @@ class ListeningHistoryRecorder(
     }
   }
 
-  fun clearJump() {
-    lastJump.value = null
+  /**
+   * Clears [jump] unless a newer jump replaced it in the meantime.
+   */
+  fun clearJump(jump: Jump) {
+    lastJump.compareAndSet(jump, null)
   }
 
   private fun updateLastJump(
