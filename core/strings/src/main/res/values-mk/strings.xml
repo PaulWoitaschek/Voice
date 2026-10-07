@@ -172,9 +172,16 @@
     <string name="settings.auto_sleep_timer.summary">Стартувај го тајмерот за спиење автоматски штом аудиото почнува меѓу %1$s и %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматски тајмер за спиење</string>
     <string name="settings.library.folders.summary">Управувајте со папките што се скенираат за аудиокниги</string>
-    <string name="settings.library.use_grid.title">Прикажи како коцки</string>
+    <string name="settings.library.layout.grid">Мрежа</string>
+    <string name="settings.library.layout.list">Листа</string>
+    <string name="settings.library.title">Библиотека</string>
+    <string name="settings.listening.title">Слушање</string>
+    <string name="settings.playback.auto_rewind.off">Исклучено</string>
+    <string name="settings.playback.auto_rewind.summary">При продолжување се враќа малку назад, за да не ја изгубите нишката</string>
     <string name="settings.playback.auto_rewind.title">Автоматско враќање назад</string>
+    <string name="settings.playback.seek_time.summary">Колку далеку скокаат враќањето и брзото премотување</string>
     <string name="settings.playback.seek_time.title">Прескокни секунди</string>
+    <string name="settings.subtitle">Направете го Voice свој</string>
     <string name="settings.support.faq.title">ЧПП</string>
     <string name="settings.support.get_support.title">Побарај поддршка</string>
     <string name="settings.support.help_translating.title">Поможете за превод на Voice</string>
@@ -182,6 +189,7 @@
     <string name="settings.support.suggest_idea.title">Предложете идеја</string>
     <string name="settings.support.support_voice.summary">Донациите помагаат Voice да се одржува</string>
     <string name="settings.support.support_voice.title">Поддржете го развојот</string>
+    <string name="settings.support.title">Помош и повратни информации</string>
     <string name="support.action.donate_kofi">Донирајте на Ko-fi</string>
     <string name="support.description.maintenance">Voice е бесплатен, со отворен код и го одржува еден развивач.</string>
     <string name="support.description.maintenance_subtitle">Донациите помагаат да се финансираат тековното одржување и развој.</string>

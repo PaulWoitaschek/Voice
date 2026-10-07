@@ -163,9 +163,16 @@
     <string name="settings.auto_sleep_timer.summary">%1$s から %2$s の間に再生が始まった場合、自動的にスリープタイマーを開始します</string>
     <string name="settings.auto_sleep_timer.title">自動スリープタイマー</string>
     <string name="settings.library.folders.summary">オーディオブックをスキャンするフォルダーを管理</string>
-    <string name="settings.library.use_grid.title">グリッド表示の使用</string>
+    <string name="settings.library.layout.grid">グリッド</string>
+    <string name="settings.library.layout.list">リスト</string>
+    <string name="settings.library.title">ライブラリ</string>
+    <string name="settings.listening.title">再生</string>
+    <string name="settings.playback.auto_rewind.off">オフ</string>
+    <string name="settings.playback.auto_rewind.summary">再開時に少し巻き戻すので、話の流れを見失いません</string>
     <string name="settings.playback.auto_rewind.title">自動巻き戻し</string>
+    <string name="settings.playback.seek_time.summary">巻き戻しと早送りでスキップする長さ</string>
     <string name="settings.playback.seek_time.title">スキップ量</string>
+    <string name="settings.subtitle">Voice を自分好みに</string>
     <string name="settings.support.faq.title">よくある質問</string>
     <string name="settings.support.get_support.title">サポート</string>
     <string name="settings.support.help_translating.title">翻訳の手助け</string>
@@ -173,6 +180,7 @@
     <string name="settings.support.suggest_idea.title">アイデアの提案</string>
     <string name="settings.support.support_voice.summary">寄付はVoiceの維持に役立ちます</string>
     <string name="settings.support.support_voice.title">開発を支援</string>
+    <string name="settings.support.title">ヘルプとフィードバック</string>
     <string name="support.action.donate_kofi">Ko-fiで寄付</string>
     <string name="support.description.maintenance">Voiceは無料のオープンソースで、1人の開発者が保守しています。</string>
     <string name="support.description.maintenance_subtitle">寄付は継続的な保守と開発の資金になります。</string>

@@ -91,7 +91,7 @@
     <string name="library.empty.add_first_book">Nos adde tu dossier de audiolibro dunque tu pote comenciar a ascoltar lo!</string>
     <string name="library.folders.title">Dossieres de audiolibros</string>
     <string name="library.folders.moved.dialog.title">Dossieres de audiolibros movite</string>
-    <string name="library.folders.moved.dialog.message">Tu pote ora gerer le dossieres de audiolibros in Preferentias.</string>
+    <string name="library.folders.moved.dialog.message">Tu pote ora gerer le dossieres de audiolibros in Parametros.</string>
     <string name="library.greeting.afternoon">Bon postmeridie</string>
     <string name="library.greeting.evening">Bon vespere</string>
     <string name="library.greeting.morning">Bon matino</string>
@@ -150,7 +150,7 @@
     <string name="review.request.message">Tu commentos nos importa! Si tu habe un momento, evaluta nos e comparti tu experientia. Illo nos adjuta a facer melioramentos e offerer un melior experientia de ascoltamento.</string>
     <string name="review.request.title">Gaude tu de Voice?</string>
     <string name="settings.about.app_version.title">Version del application</string>
-    <string name="settings.action.open">Preferentias</string>
+    <string name="settings.action.open">Parametros</string>
     <string name="settings.analytics_consent.description">Permitter le collection de datos de uso anonyme pro adjutar a meliorar le app</string>
     <string name="settings.analytics_consent.title">Analytica</string>
     <string name="settings.appearance.color_scheme.berry">Baca</string>
@@ -172,9 +172,16 @@
     <string name="settings.auto_sleep_timer.summary">Initiar automaticamente un temporisator de somno quando le reproduction comencia inter %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporisator de somno automatic</string>
     <string name="settings.library.folders.summary">Gerer dossiers scandite pro audiolibros</string>
-    <string name="settings.library.use_grid.title">Usar le disposition in grillia</string>
+    <string name="settings.library.layout.grid">Grillia</string>
+    <string name="settings.library.layout.list">Lista</string>
+    <string name="settings.library.title">Bibliotheca</string>
+    <string name="settings.listening.title">Ascolta</string>
+    <string name="settings.playback.auto_rewind.off">Disactivate</string>
+    <string name="settings.playback.auto_rewind.summary">Retorna un poco quando tu reprende, assi tu non perde le filo</string>
     <string name="settings.playback.auto_rewind.title">Auto rebobinar</string>
+    <string name="settings.playback.seek_time.summary">Quanto salta le rebobinar e le avantiar rapide</string>
     <string name="settings.playback.seek_time.title">Saltar quantitate</string>
+    <string name="settings.subtitle">Face Voice tue</string>
     <string name="settings.support.faq.title">FAQ</string>
     <string name="settings.support.get_support.title">Obtener assistentia</string>
     <string name="settings.support.help_translating.title">Adjuta in traducer Voice</string>
@@ -182,6 +189,7 @@
     <string name="settings.support.suggest_idea.title">Suggerer un idea</string>
     <string name="settings.support.support_voice.summary">Le donationes adjuta a mantener Voice</string>
     <string name="settings.support.support_voice.title">Supportar le disveloppamento</string>
+    <string name="settings.support.title">Adjuta e commentos</string>
     <string name="support.action.donate_kofi">Donar in Ko-fi</string>
     <string name="support.description.maintenance">Voice es gratuite, open source, e mantenite per un sol disveloppator.</string>
     <string name="support.description.maintenance_subtitle">Le donationes adjuta a financiar le mantenimento e le disveloppamento continue.</string>

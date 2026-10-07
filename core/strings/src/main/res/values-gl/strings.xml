@@ -91,7 +91,7 @@
     <string name="library.empty.add_first_book">Imos engadir un cartafol de audiolibros para comezar a escoitar!</string>
     <string name="library.folders.title">Cartafoles de audiolibros</string>
     <string name="library.folders.moved.dialog.title">Cartafoles de audiolibros movidos</string>
-    <string name="library.folders.moved.dialog.message">Agora podes xestionar os cartafoles de audiolibros nas Preferencias.</string>
+    <string name="library.folders.moved.dialog.message">Agora podes xestionar os cartafoles de audiolibros nos Axustes.</string>
     <string name="library.greeting.afternoon">Boas tardes</string>
     <string name="library.greeting.evening">Boas noites</string>
     <string name="library.greeting.morning">Bos días</string>
@@ -150,7 +150,7 @@
     <string name="review.request.message">A túa opinión é importante! Se tes un momento, valora a aplicación e comparte a túa experiencia. Axudarasnos a mellorar e a ofrecer una experiencia de escoita mellorada.</string>
     <string name="review.request.title">Desfrutas de Voice?</string>
     <string name="settings.about.app_version.title">Versión da app</string>
-    <string name="settings.action.open">Preferencias</string>
+    <string name="settings.action.open">Axustes</string>
     <string name="settings.analytics_consent.description">Permite recoller datos anónimos de uso para axudar a mellorar a app</string>
     <string name="settings.analytics_consent.title">Análise</string>
     <string name="settings.appearance.color_scheme.berry">Baga</string>
@@ -172,9 +172,16 @@
     <string name="settings.auto_sleep_timer.summary">Iniciar o temporizador automáticamente cando a escoita comece entre as %1$s e as %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador automático</string>
     <string name="settings.library.folders.summary">Xestionar cartafoles onde buscar audiolibros</string>
-    <string name="settings.library.use_grid.title">Usar disposición en grella</string>
+    <string name="settings.library.layout.grid">Grella</string>
+    <string name="settings.library.layout.list">Lista</string>
+    <string name="settings.library.title">Biblioteca</string>
+    <string name="settings.listening.title">Escoita</string>
+    <string name="settings.playback.auto_rewind.off">Desactivado</string>
+    <string name="settings.playback.auto_rewind.summary">Retrocede un pouco ao continuar para que non perdas o fío</string>
     <string name="settings.playback.auto_rewind.title">Retroceso automático</string>
+    <string name="settings.playback.seek_time.summary">Canto saltan o retroceso e o avance rápido</string>
     <string name="settings.playback.seek_time.title">Tempo a omitir</string>
+    <string name="settings.subtitle">Fai Voice á túa medida</string>
     <string name="settings.support.faq.title">PMF</string>
     <string name="settings.support.get_support.title">Obter axuda</string>
     <string name="settings.support.help_translating.title">Axuda a traducir Voice</string>
@@ -182,6 +189,7 @@
     <string name="settings.support.suggest_idea.title">Suxerir ideas</string>
     <string name="settings.support.support_voice.summary">As doazóns axudan a manter Voice</string>
     <string name="settings.support.support_voice.title">Apoiar o desenvolvemento</string>
+    <string name="settings.support.title">Axuda e comentarios</string>
     <string name="support.action.donate_kofi">Doar en Ko-fi</string>
     <string name="support.description.maintenance">Voice é gratuíto, de código aberto e mantido por unha soa persoa desenvolvedora.</string>
     <string name="support.description.maintenance_subtitle">As doazóns axudan a financiar o mantemento e desenvolvemento continuos.</string>

@@ -91,7 +91,7 @@
     <string name="library.empty.add_first_book">Dinlemeye başlayabilmeniz için sesli kitap dizininizi ekleyelim!</string>
     <string name="library.folders.title">Sesli kitap dizinleri</string>
     <string name="library.folders.moved.dialog.title">Sesli kitap klasörleri taşındı</string>
-    <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Tercihler\'de yönetebilirsiniz.</string>
+    <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Ayarlar\'da yönetebilirsiniz.</string>
     <string name="library.greeting.afternoon">Tünaydın</string>
     <string name="library.greeting.evening">İyi akşamlar</string>
     <string name="library.greeting.morning">Günaydın</string>
@@ -150,7 +150,7 @@
     <string name="review.request.message">Geri bildiriminiz bizim için önemli! Vaktiniz varsa bizi değerlendirin ve deneyiminizi paylaşın. Bu bizim iyileştirmeler yapmamıza ve daha iyi bir dinleme deneyimi sunmamıza yardımcı olur.</string>
     <string name="review.request.title">Voice\'den memnun musun?</string>
     <string name="settings.about.app_version.title">Uygulama sürümü</string>
-    <string name="settings.action.open">Tercihler</string>
+    <string name="settings.action.open">Ayarlar</string>
     <string name="settings.analytics_consent.description">Uygulamayı iyileştirmeye katkı sağlaması için anonim kullanım verileri toplanmasına izin ver</string>
     <string name="settings.analytics_consent.title">Analitik</string>
     <string name="settings.appearance.color_scheme.berry">Orman meyvesi</string>
@@ -172,9 +172,16 @@
     <string name="settings.auto_sleep_timer.summary">Eğer oynatıcı saat %1$s ile %2$s arasında başlatılırsa otomatik olarak bir uyku zamanlayıcısı başlat</string>
     <string name="settings.auto_sleep_timer.title">Otomatik Uyku Zamanlayıcısı</string>
     <string name="settings.library.folders.summary">Sesli kitaplar için taranan dizinleri yönetin</string>
-    <string name="settings.library.use_grid.title">Izgara düzenini kullan</string>
+    <string name="settings.library.layout.grid">Izgara</string>
+    <string name="settings.library.layout.list">Liste</string>
+    <string name="settings.library.title">Kitaplık</string>
+    <string name="settings.listening.title">Dinleme</string>
+    <string name="settings.playback.auto_rewind.off">Kapalı</string>
+    <string name="settings.playback.auto_rewind.summary">Devam ettiğinizde biraz geri sarar, böylece konuyu kaçırmazsınız</string>
     <string name="settings.playback.auto_rewind.title">Otomatik geri sar</string>
+    <string name="settings.playback.seek_time.summary">Geri ve ileri sarmanın ne kadar atlayacağı</string>
     <string name="settings.playback.seek_time.title">Değeri atla</string>
+    <string name="settings.subtitle">Voice\'u kendinize göre ayarlayın</string>
     <string name="settings.support.faq.title">SSS</string>
     <string name="settings.support.get_support.title">Yardım al</string>
     <string name="settings.support.help_translating.title">Voice\'u çevirmeye yardım et</string>
@@ -182,6 +189,7 @@
     <string name="settings.support.suggest_idea.title">Fikir öner</string>
     <string name="settings.support.support_voice.summary">Bağışlar Voice\'un bakımına yardımcı olur</string>
     <string name="settings.support.support_voice.title">Geliştirmeyi destekle</string>
+    <string name="settings.support.title">Yardım ve geri bildirim</string>
     <string name="support.action.donate_kofi">Ko-fi üzerinden bağış yap</string>
     <string name="support.description.maintenance">Voice ücretsiz, açık kaynaklıdır ve tek bir geliştirici tarafından sürdürülür.</string>
     <string name="support.description.maintenance_subtitle">Bağışlar sürekli bakım ve geliştirmeyi finanse etmeye yardımcı olur.</string>

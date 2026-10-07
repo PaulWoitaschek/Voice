@@ -91,7 +91,7 @@
     <string name="library.empty.add_first_book">உங்கள் ஆடியோபுக் கோப்புறையைச் சேர்ப்போம், எனவே நீங்கள் கேட்கத் தொடங்கலாம்!</string>
     <string name="library.folders.title">ஆடியோபுக் கோப்புறைகள்</string>
     <string name="library.folders.moved.dialog.title">ஒலிப்புத்தகக் கோப்புறைகள் நகர்த்தப்பட்டன</string>
-    <string name="library.folders.moved.dialog.message">இப்போது ஒலிப்புத்தகக் கோப்புறைகளை விருப்பங்களில் நிர்வகிக்கலாம்.</string>
+    <string name="library.folders.moved.dialog.message">இப்போது ஒலிப்புத்தகக் கோப்புறைகளை அமைப்புகளில் நிர்வகிக்கலாம்.</string>
     <string name="library.greeting.afternoon">மதிய வணக்கம்</string>
     <string name="library.greeting.evening">மாலை வணக்கம்</string>
     <string name="library.greeting.morning">காலை வணக்கம்</string>
@@ -150,7 +150,7 @@
     <string name="review.request.message">உங்கள் கருத்து எங்களுக்கு முக்கியமானது! உங்களுக்கு ஒரு கணம் இருந்தால், எங்களை மதிப்பிட்டு உங்கள் அனுபவத்தைப் பகிர்ந்து கொள்ளுங்கள். இது மேம்பாடுகளைச் செய்ய உதவுகிறது மற்றும் சிறந்த கேட்கும் அனுபவத்தை வழங்குகிறது.</string>
     <string name="review.request.title">குரலை அனுபவிக்கிறீர்களா?</string>
     <string name="settings.about.app_version.title">பயன்பாட்டு பதிப்பு</string>
-    <string name="settings.action.open">விருப்பத்தேர்வுகள்</string>
+    <string name="settings.action.open">அமைப்புகள்</string>
     <string name="settings.analytics_consent.description">பயன்பாட்டை மேம்படுத்த உதவ அநாமதேய பயன்பாட்டுத் தரவு சேகரிப்பை அனுமதி</string>
     <string name="settings.analytics_consent.title">பகுப்பாய்வு</string>
     <string name="settings.appearance.color_scheme.berry">பெர்ரி</string>
@@ -172,9 +172,16 @@
     <string name="settings.auto_sleep_timer.summary">பிளேபேக் %1$s மற்றும் %2$s க்கு இடையில் தொடங்கும்போது தானாக ஒரு தூக்க நேரத்தைத் தொடங்குங்கள்</string>
     <string name="settings.auto_sleep_timer.title">தானியங்கி தூக்க நேரங்காட்டி</string>
     <string name="settings.library.folders.summary">ஒலிபுத்தகங்களுக்காக வருடல் செய்யப்பட்ட கோப்புறைகளை நிர்வகி</string>
-    <string name="settings.library.use_grid.title">கட்டம் தளவமைப்பைப் பயன்படுத்தவும்</string>
+    <string name="settings.library.layout.grid">கட்டம்</string>
+    <string name="settings.library.layout.list">பட்டியல்</string>
+    <string name="settings.library.title">நூலகம்</string>
+    <string name="settings.listening.title">கேட்டல்</string>
+    <string name="settings.playback.auto_rewind.off">முடக்கு</string>
+    <string name="settings.playback.auto_rewind.summary">மீண்டும் தொடங்கும்போது சற்று பின்னோக்கிச் செல்லும், அதனால் நீங்கள் கதையின் இழையை இழக்க மாட்டீர்கள்</string>
     <string name="settings.playback.auto_rewind.title">ஆட்டோ ரிவைண்ட்</string>
+    <string name="settings.playback.seek_time.summary">பின்னோக்கியும் முன்னோக்கியும் எவ்வளவு தாவும்</string>
     <string name="settings.playback.seek_time.title">தொகையைத் தவிர்க்கவும்</string>
+    <string name="settings.subtitle">Voice-ஐ உங்களுடையதாக்குங்கள்</string>
     <string name="settings.support.faq.title">கேள்விகள்</string>
     <string name="settings.support.get_support.title">ஆதரவை பெறு</string>
     <string name="settings.support.help_translating.title">குரலை மொழிபெயர்க்க உதவுங்கள்</string>
@@ -182,6 +189,7 @@
     <string name="settings.support.suggest_idea.title">ஒரு யோசனையை பரிந்துரைக்கவும்</string>
     <string name="settings.support.support_voice.summary">நன்கொடைகள் Voice-ஐ பராமரிக்க உதவுகின்றன</string>
     <string name="settings.support.support_voice.title">மேம்பாட்டை ஆதரிக்கவும்</string>
+    <string name="settings.support.title">உதவி மற்றும் கருத்து</string>
     <string name="support.action.donate_kofi">Ko-fi-யில் நன்கொடை அளிக்கவும்</string>
     <string name="support.description.maintenance">Voice இலவசம், திறந்த மூலமாகும், மேலும் ஒரே ஒரு உருவாக்குநரால் பராமரிக்கப்படுகிறது.</string>
     <string name="support.description.maintenance_subtitle">நன்கொடைகள் தொடர்ச்சியான பராமரிப்பு மற்றும் மேம்பாட்டிற்கு நிதியளிக்க உதவுகின்றன.</string>

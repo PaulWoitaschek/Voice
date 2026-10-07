@@ -190,9 +190,16 @@
     <string name="settings.auto_sleep_timer.summary">Automatické spuštění časovače spánku při zahájení přehrávání mezi %1$s a %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatický časovač spánku</string>
     <string name="settings.library.folders.summary">Spravovat složky pro prohledávání audioknih</string>
-    <string name="settings.library.use_grid.title">Použít rozložení mřížky</string>
+    <string name="settings.library.layout.grid">Mřížka</string>
+    <string name="settings.library.layout.list">Seznam</string>
+    <string name="settings.library.title">Knihovna</string>
+    <string name="settings.listening.title">Poslech</string>
+    <string name="settings.playback.auto_rewind.off">Vypnuto</string>
+    <string name="settings.playback.auto_rewind.summary">Při obnovení přehrávání se kousek vrátí, abyste neztratili nit</string>
     <string name="settings.playback.auto_rewind.title">Automaticky přetočit</string>
+    <string name="settings.playback.seek_time.summary">Jak daleko skáče přetočení zpět a vpřed</string>
     <string name="settings.playback.seek_time.title">Přeskočit o</string>
+    <string name="settings.subtitle">Udělejte si Voice po svém</string>
     <string name="settings.support.faq.title">Často kladené dotazy (FAQ)</string>
     <string name="settings.support.get_support.title">Potřebuji pomoct</string>
     <string name="settings.support.help_translating.title">Pomohu s přeložením aplikace Voice</string>
@@ -200,6 +207,7 @@
     <string name="settings.support.suggest_idea.title">Navrhnout nápad</string>
     <string name="settings.support.support_voice.summary">Dary pomáhají udržovat aplikaci Voice</string>
     <string name="settings.support.support_voice.title">Podpořit vývoj</string>
+    <string name="settings.support.title">Nápověda a zpětná vazba</string>
     <string name="support.action.donate_kofi">Přispět na Ko-fi</string>
     <string name="support.description.maintenance">Aplikace Voice je zdarma, má otevřený zdrojový kód a udržuje ji jeden vývojář.</string>
     <string name="support.description.maintenance_subtitle">Dary pomáhají financovat průběžnou údržbu a vývoj.</string>
