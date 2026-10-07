@@ -22,7 +22,7 @@ internal fun FolderTypeIcon(
   )
 }
 
-private fun FolderType.icon(): ImageVector = when (this) {
+internal fun FolderType.icon(): ImageVector = when (this) {
   FolderType.SingleFile -> VoiceIcons.AudioFile
   FolderType.SingleFolder -> VoiceIcons.Folder
   FolderType.Root -> VoiceIcons.LibraryBooks

@@ -246,7 +246,7 @@
     <string name="library.category.not_started.title">Not started Yet</string>
     <!-- Label above the hero card on the library screen that resumes the current audiobook. -->
     <string name="library.continue_listening">Continue listening</string>
-    <!-- Library empty-state prompt shown before the first audiobook is added. -->
+    <!-- Empty-state prompt shown in the library before the first audiobook is added, and on the audiobook folders screen while there are no folders. -->
     <string name="library.empty.add_first_book">Let\'s add your audiobook folder so you can start listening!</string>
     <!-- Title for screens and rows that manage audiobook folders. -->
     <string name="library.folders.title">Audiobook folders</string>
@@ -412,7 +412,7 @@
     <string name="settings.auto_sleep_timer.summary">Start a sleep timer automatically when playback begins between %1$s and %2$s</string>
     <!-- Settings title for automatically starting a sleep timer. -->
     <string name="settings.auto_sleep_timer.title">Automatic Sleep Timer</string>
-    <!-- Summary text for the audiobook folders settings row. -->
+    <!-- Summary text for the audiobook folders settings row. Also the subtitle of the audiobook folders screen. -->
     <string name="settings.library.folders.summary">Manage folders scanned for audiobooks</string>
     <string name="settings.listening_history.clear">Clear listening history</string>
     <string name="settings.listening_history.clear.confirm">Clear</string>

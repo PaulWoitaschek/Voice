@@ -34,7 +34,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -42,16 +41,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.graphics.shapes.RoundedPolygon
 import voice.core.ui.icons.VoiceIcons
 
 internal val IslandShape = RoundedCornerShape(32.dp)
@@ -217,36 +213,6 @@ private fun IslandRowLayout(
       }
     }
     trailing()
-  }
-}
-
-/** An icon in a Material shape, like a sticker. */
-@Composable
-internal fun ShapedIcon(
-  icon: ImageVector,
-  shape: RoundedPolygon,
-  containerColor: Color,
-  contentColor: Color,
-  modifier: Modifier = Modifier,
-  size: Dp = 48.dp,
-  shapeRotation: Float = 0F,
-) {
-  Box(
-    modifier = modifier.size(size),
-    contentAlignment = Alignment.Center,
-  ) {
-    Box(
-      Modifier
-        .size(size)
-        .graphicsLayer { rotationZ = shapeRotation }
-        .background(containerColor, shape.toShape()),
-    )
-    Icon(
-      modifier = Modifier.size(size * 0.5F),
-      imageVector = icon,
-      contentDescription = null,
-      tint = contentColor,
-    )
   }
 }
 
