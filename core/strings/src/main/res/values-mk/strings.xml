@@ -20,7 +20,6 @@
     <string name="common.action.close">Затвори</string>
     <string name="common.action.delete">Избриши</string>
     <string name="common.action.edit">Уреди</string>
-    <string name="common.action.more">Повеќе</string>
     <string name="common.action.remove">Отстрани</string>
     <string name="common.dialog.cancel">Откажи</string>
     <string name="common.dialog.confirm">Намести</string>
@@ -59,10 +58,19 @@
     <string name="library.category.completed.title">Комплетирани</string>
     <string name="library.category.current.title">Тековни</string>
     <string name="library.category.not_started.title">Непочнати</string>
+    <string name="library.continue_listening">Продолжи со слушање</string>
     <string name="library.empty.add_first_book">Ајде да ги додадеме вашите аудио книги за да почнете со слушање!</string>
     <string name="library.folders.title">Фолдери со аудио книги</string>
     <string name="library.folders.moved.dialog.title">Папките со аудиокниги се преместени</string>
     <string name="library.folders.moved.dialog.message">Сега можете да управувате со папките со аудиокниги во Поставки.</string>
+    <string name="library.greeting.afternoon">Добро попладне</string>
+    <string name="library.greeting.evening">Добра вечер</string>
+    <string name="library.greeting.morning">Добро утро</string>
+    <string name="library.greeting.night">Здраво, ноќна птицо</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d книга во тек</item>
+        <item quantity="other">%d книги во тек</item>
+    </plurals>
     <string name="library.search.hint">Што пребарувате?</string>
     <string name="library.storage_permission_bug.action">Дај пермисија</string>
     <string name="library.storage_permission_bug.message">Кај некои уреди, системска апликација нема доволно пермисии да го пристапи надворешното складиште за податоци. Овој пристап е клучен за Voice да може да ги вчита вашите аудио книги.</string>
@@ -89,12 +97,20 @@
     <string name="playback.action.rewind">Врати назад</string>
     <string name="playback.battery_optimization.action">Ажурирај</string>
     <string name="playback.battery_optimization.rationale">Може да настанат прекини во слушањето заради вашите рестрикции за управување со батеријата на уредот.</string>
+    <string name="playback.book_progress.read">%1$s од книгата</string>
+    <string name="playback.book_progress.remaining">Уште %1$s</string>
+    <string name="playback.book_progress.remaining_at_speed">Уште %1$s при %2$s</string>
+    <string name="playback.chapter.counter">Поглавје %1$d од %2$d</string>
     <string name="playback.chapter.current.content_description">Тековно поглавје</string>
     <string name="playback.chapter.next">Наредно аудио</string>
     <string name="playback.chapter.previous">Претходно аудио</string>
+    <string name="playback.chapters.title">Поглавја</string>
     <string name="playback.option.skip_silence">Прескокни тишина</string>
     <string name="playback.option.volume_boost">Појачување на звук</string>
+    <string name="playback.speed.decrease">Побавно</string>
+    <string name="playback.speed.increase">Побрзо</string>
     <string name="playback.speed.title">Брзина на читање</string>
+    <string name="playback.volume_boost.off">Исклучено</string>
     <string name="review.feedback.action.cancel">Откажи</string>
     <string name="review.feedback.action.send">Испрати мислење</string>
     <string name="review.feedback.message">Можете ли да ни кажете што не беше добро? Го цениме вашето мислење и ни помага да го подобриме вашето искуство.</string>
@@ -142,6 +158,8 @@
     <string name="sleep_timer.action.open">Тајмер за спиење</string>
     <string name="sleep_timer.dialog.action.decrement">Пократко</string>
     <string name="sleep_timer.dialog.action.increment">Подолго</string>
-    <string name="sleep_timer.dialog.title">Слатки соништа! 🌙</string>
+    <string name="sleep_timer.dialog.minutes_short">мин</string>
+    <string name="sleep_timer.dialog.shake_hint">Протресете го телефонот веднаш по истекот на тајмерот за да го рестартирате.</string>
+    <string name="sleep_timer.dialog.title">Тајмер за спиење</string>
     <string name="sleep_timer.end_of_chapter">Крај на поглавје</string>
 </resources>

@@ -17,9 +17,12 @@ import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
 
 @Composable
-internal fun PermissionBugCard(onPermissionBugCardClick: () -> Unit) {
+internal fun PermissionBugCard(
+  onPermissionBugCardClick: () -> Unit,
+  modifier: Modifier = Modifier,
+) {
   Card(
-    Modifier
+    modifier
       .padding(horizontal = 8.dp)
       .fillMaxWidth(),
   ) {

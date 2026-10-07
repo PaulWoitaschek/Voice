@@ -20,7 +20,6 @@
     <string name="common.action.close">Tanca</string>
     <string name="common.action.delete">Suprimeix</string>
     <string name="common.action.edit">Edita</string>
-    <string name="common.action.more">Més</string>
     <string name="common.action.remove">Suprimeix</string>
     <string name="common.dialog.cancel">Cancel·la</string>
     <string name="common.dialog.confirm">Estableix</string>
@@ -110,6 +109,7 @@
     <string name="sleep_timer.action.open">Temporitzador de repòs</string>
     <string name="sleep_timer.dialog.action.decrement">Més curt</string>
     <string name="sleep_timer.dialog.action.increment">Més llarg</string>
-    <string name="sleep_timer.dialog.title">Bona nit! 🌙</string>
+    <string name="sleep_timer.dialog.shake_hint">Sacseja el telèfon just després que s\'acabi el temporitzador per tornar-lo a iniciar.</string>
+    <string name="sleep_timer.dialog.title">Temporitzador de repòs</string>
     <string name="common.dialog.ok">Acceptar</string>
 </resources>

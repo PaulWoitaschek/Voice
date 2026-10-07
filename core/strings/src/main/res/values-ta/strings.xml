@@ -20,7 +20,6 @@
     <string name="common.action.close">மூடு</string>
     <string name="common.action.delete">நீக்கு</string>
     <string name="common.action.edit">தொகு</string>
-    <string name="common.action.more">மேலும்</string>
     <string name="common.action.remove">அகற்று</string>
     <string name="common.dialog.cancel">ரத்துசெய்</string>
     <string name="common.dialog.confirm">கணம்</string>
@@ -59,10 +58,19 @@
     <string name="library.category.completed.title">முடிந்தது</string>
     <string name="library.category.current.title">மின்னோட்ட்ம், ஓட்டம்</string>
     <string name="library.category.not_started.title">இன்னும் தொடங்கப்படவில்லை</string>
+    <string name="library.continue_listening">தொடர்ந்து கேளுங்கள்</string>
     <string name="library.empty.add_first_book">உங்கள் ஆடியோபுக் கோப்புறையைச் சேர்ப்போம், எனவே நீங்கள் கேட்கத் தொடங்கலாம்!</string>
     <string name="library.folders.title">ஆடியோபுக் கோப்புறைகள்</string>
     <string name="library.folders.moved.dialog.title">ஒலிப்புத்தகக் கோப்புறைகள் நகர்த்தப்பட்டன</string>
     <string name="library.folders.moved.dialog.message">இப்போது ஒலிப்புத்தகக் கோப்புறைகளை விருப்பங்களில் நிர்வகிக்கலாம்.</string>
+    <string name="library.greeting.afternoon">மதிய வணக்கம்</string>
+    <string name="library.greeting.evening">மாலை வணக்கம்</string>
+    <string name="library.greeting.morning">காலை வணக்கம்</string>
+    <string name="library.greeting.night">வணக்கம், இரவு ஆந்தையே</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d புத்தகம் கேட்கப்படுகிறது</item>
+        <item quantity="other">%d புத்தகங்கள் கேட்கப்படுகின்றன</item>
+    </plurals>
     <string name="library.search.hint">நீங்கள் எதைத் தேடுகிறீர்கள்?</string>
     <string name="library.storage_permission_bug.action">இசைவு வழங்கவும்</string>
     <string name="library.storage_permission_bug.message">சில சாதனங்களுக்கு, ஒரு கணினி பயன்பாடு வெளிப்புற சேமிப்பிடத்தை அணுக தேவையான அனுமதியைக் காணவில்லை. குரல் உங்கள் ஆடியோபுக்குகளைப் படிக்க இந்த அணுகல் தேவை.</string>
@@ -89,12 +97,20 @@
     <string name="playback.action.rewind">முன்னாடி</string>
     <string name="playback.battery_optimization.action">புதுப்பிப்பு</string>
     <string name="playback.battery_optimization.rationale">உங்கள் ஆற்றல் கட்டுப்பாடுகள் காரணமாக, பின்னணி குறுக்கீடுகள் ஏற்படக்கூடும்.</string>
+    <string name="playback.book_progress.read">புத்தகத்தின் %1$s</string>
+    <string name="playback.book_progress.remaining">%1$s மீதமுள்ளது</string>
+    <string name="playback.book_progress.remaining_at_speed">%2$s வேகத்தில் %1$s மீதமுள்ளது</string>
+    <string name="playback.chapter.counter">அத்தியாயம் %1$d / %2$d</string>
     <string name="playback.chapter.current.content_description">தற்போதைய பாடம்</string>
     <string name="playback.chapter.next">அடுத்த பாடல்</string>
     <string name="playback.chapter.previous">முந்தைய பாடல்</string>
+    <string name="playback.chapters.title">அத்தியாயங்கள்</string>
     <string name="playback.option.skip_silence">ம .னத்தைத் தவிர்க்கவும்</string>
     <string name="playback.option.volume_boost">தொகுதி ஊக்க</string>
+    <string name="playback.speed.decrease">மெதுவாக</string>
+    <string name="playback.speed.increase">வேகமாக</string>
     <string name="playback.speed.title">பின்னணி விரைவு</string>
+    <string name="playback.volume_boost.off">முடக்கு</string>
     <string name="review.feedback.action.cancel">ரத்துசெய்</string>
     <string name="review.feedback.action.send">கருத்துக்களை அனுப்பவும்</string>
     <string name="review.feedback.message">என்ன தவறு நடந்தது என்று சொல்ல முடியுமா? உங்கள் கருத்தை நாங்கள் பாராட்டுகிறோம், இது உங்கள் அனுபவத்தை மேம்படுத்த எங்களுக்கு உதவுகிறது.</string>
@@ -139,9 +155,11 @@
     <string name="support.helps.open_source">Voice-ஐ விளம்பரமின்றி வைத்திருப்பது</string>
     <string name="support.title">மேம்பாட்டை ஆதரிக்கவும்</string>
     <string name="shortcut.play_current.short_label">மின்னோட்டத்தை விளையாடுங்கள்</string>
-    <string name="sleep_timer.action.open">ச்லீப்-டைமர்</string>
+    <string name="sleep_timer.action.open">ஸ்லீப் டைமர்</string>
     <string name="sleep_timer.dialog.action.decrement">குறுகிய</string>
     <string name="sleep_timer.dialog.action.increment">நீண்ட</string>
-    <string name="sleep_timer.dialog.title">இனிமையான கனவுகள்! 🌙</string>
+    <string name="sleep_timer.dialog.minutes_short">நிமி</string>
+    <string name="sleep_timer.dialog.shake_hint">டைமர் முடிந்தவுடன் அதை மீண்டும் தொடங்க உங்கள் போனை குலுக்கவும்.</string>
+    <string name="sleep_timer.dialog.title">ஸ்லீப் டைமர்</string>
     <string name="sleep_timer.end_of_chapter">அத்தியாயத்தின் முடிவு</string>
 </resources>

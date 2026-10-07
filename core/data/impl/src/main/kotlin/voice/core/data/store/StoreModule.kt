@@ -206,6 +206,17 @@ public object StoreModule {
       fileName = "featureFlagOverrides",
     )
   }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @CoverSeedColorsStore
+  private fun coverSeedColors(factory: VoiceDataStoreFactory): DataStore<Map<String, Int>> {
+    return factory.create(
+      serializer = MapSerializer(String.serializer(), Int.serializer()),
+      defaultValue = emptyMap(),
+      fileName = "coverSeedColors",
+    )
+  }
 }
 
 private class LegacyDarkThemeMigration(
