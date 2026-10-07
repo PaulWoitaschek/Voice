@@ -19,11 +19,13 @@ data class SettingsViewState(
   val showDeveloperMenu: Boolean,
   val showSupportDevelopment: Boolean,
   val kioskMode: Boolean,
+  val listeningHistoryEnabled: Boolean,
 ) {
 
   enum class Dialog {
     AutoRewindAmount,
     SeekTime,
+    ClearListeningHistory,
   }
 
   companion object {
@@ -43,6 +45,7 @@ data class SettingsViewState(
         showDeveloperMenu = true,
         showSupportDevelopment = true,
         kioskMode = false,
+        listeningHistoryEnabled = true,
       )
     }
   }

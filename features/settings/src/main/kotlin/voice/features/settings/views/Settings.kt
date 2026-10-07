@@ -165,6 +165,14 @@ private fun Settings(
         AutoSleepTimerCard(viewState.autoSleepTimer, listener)
       }
 
+      item {
+        ListeningHistoryRows(
+          enabled = viewState.listeningHistoryEnabled,
+          onToggle = listener::toggleListeningHistory,
+          onClearClick = listener::onClearListeningHistoryClick,
+        )
+      }
+
       if (viewState.showSupportDevelopment) {
         item {
           ListItem(
@@ -328,11 +336,15 @@ fun Settings() {
   val snackbarHostState = remember { SnackbarHostState() }
   val viewState = viewModel.viewState()
   val currentDeveloperMenuUnlockedMessage = rememberUpdatedState("Developer Menu unlocked")
+  val currentHistoryClearedMessage = rememberUpdatedState(stringResource(StringsR.string.settings_listening_history_cleared))
   LaunchedEffect(viewModel) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {
         SettingsViewEffect.DeveloperMenuUnlocked -> {
           snackbarHostState.showSnackbar(currentDeveloperMenuUnlockedMessage.value)
+        }
+        SettingsViewEffect.ListeningHistoryCleared -> {
+          snackbarHostState.showSnackbar(currentHistoryClearedMessage.value)
         }
       }
     }
@@ -358,6 +370,12 @@ private fun Dialog(
       SeekAmountDialog(
         currentSeconds = viewState.seekTimeInSeconds,
         onSecondsConfirm = listener::seekAmountChanged,
+        onDismiss = listener::dismissDialog,
+      )
+    }
+    SettingsViewState.Dialog.ClearListeningHistory -> {
+      ClearListeningHistoryDialog(
+        onConfirm = listener::clearListeningHistory,
         onDismiss = listener::dismissDialog,
       )
     }

@@ -12,6 +12,7 @@ import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -24,23 +25,30 @@ import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.KioskModeDemoData
+import voice.core.data.ListeningEvent
 import voice.core.data.MarkData
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
+import voice.core.playback.history.ListeningHistoryRecorder
+import voice.core.playback.history.PlaybackPosition
 import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
+import voice.core.ui.BookBarPin
 import voice.features.sleepTimer.SleepTimerViewState
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneId
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
@@ -48,6 +56,8 @@ import kotlin.uuid.Uuid
 class BookPlayViewModelTest {
 
   private val scope = TestScope()
+  private val clock = TestClock()
+  private val historyRecorder = ListeningHistoryRecorder(repo = mockk(relaxed = true), clock = clock, scope = scope)
   private val sleepTimerDataStore = MemoryDataStore(SleepTimerPreference.Default.copy(duration = 5.minutes))
   private val book = book()
   private val sleepTimer = mockk<SleepTimer> {
@@ -102,6 +112,7 @@ class BookPlayViewModelTest {
         time = 0L,
         title = null,
       )
+      every { bookmarksFlow(any()) } returns flowOf(emptyList())
     },
     volumeGainFormatter = mockk(),
     batteryOptimization = mockk(),
@@ -111,6 +122,8 @@ class BookPlayViewModelTest {
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
     experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
     kioskModeFeatureFlag = MemoryFeatureFlag(false),
+    historyRecorder = historyRecorder,
+    clock = clock,
   )
 
   @Test
@@ -222,7 +235,7 @@ class BookPlayViewModelTest {
 
   @Test
   fun onChapterClickSetsPositionAndDismissesDialog() = scope.runTest {
-    every { player.setPosition(any(), any()) } just Runs
+    every { player.setPosition(any(), any(), any()) } just Runs
 
     viewModel.onCurrentChapterClick()
     yield()
@@ -235,7 +248,11 @@ class BookPlayViewModelTest {
     // Verify player.setPosition was called with correct parameters
     // The second mark starts at 2 minutes position in the first chapter
     verify(exactly = 1) {
-      player.setPosition(time = 2.minutes.inWholeMilliseconds, id = book.chapters.first().id)
+      player.setPosition(
+        time = 2.minutes.inWholeMilliseconds,
+        id = book.chapters.first().id,
+        type = ListeningEvent.Type.ChapterChange,
+      )
     }
 
     assertEquals(expected = null, actual = viewModel.dialogState.value)
@@ -340,8 +357,84 @@ class BookPlayViewModelTest {
     }
   }
 
+  @Test
+  fun `viewState pins bookmarks on the book bar in story order`() = scope.runTest {
+    val second = bookmark(chapterId = book.chapters[1].id, time = 1.minutes.inWholeMilliseconds, kind = Bookmark.Kind.Favorite)
+    val first = bookmark(chapterId = book.chapters[0].id, time = 2.5.minutes.inWholeMilliseconds, setBySleepTimer = true)
+    val viewModel = viewModel(bookmarks = listOf(second, first))
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      var state = awaitItem()
+      while (state?.bookmarkPins.isNullOrEmpty()) {
+        state = awaitItem()
+      }
+      assertEquals(
+        expected = listOf(
+          BookBarPin(position = 0.25F, kind = Bookmark.Kind.Note, setBySleepTimer = true),
+          BookBarPin(position = 0.6F, kind = Bookmark.Kind.Favorite, setBySleepTimer = false),
+        ),
+        actual = state.bookmarkPins,
+      )
+    }
+  }
+
+  @Test
+  fun `a big jump offers the way back for ten seconds`() = scope.runTest {
+    val player = mockk<PlayerController> {
+      every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
+      every { setPosition(any(), any(), any()) } just Runs
+    }
+    val viewModel = viewModel(player = player)
+    val from = PlaybackPosition(bookId = book.id, chapterId = book.chapters[0].id, time = 2.5.minutes.inWholeMilliseconds)
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = null, actual = awaitItem())
+      assertNull(awaitItem()!!.jumpBack)
+
+      historyRecorder.record(
+        type = ListeningEvent.Type.ChapterChange,
+        source = ListeningEvent.Source.App,
+        position = from,
+        to = from.copy(chapterId = book.chapters[1].id, time = 0),
+      )
+      val jumpBack = awaitItem()!!.jumpBack!!
+      assertEquals(expected = "0:30", actual = jumpBack.time)
+      assertEquals(expected = 2, actual = jumpBack.chapterNumber)
+      assertEquals(expected = 10.seconds, actual = jumpBack.remaining)
+
+      viewModel.onJumpBackClick()
+      verify(exactly = 1) {
+        player.setPosition(time = from.time, id = from.chapterId, type = ListeningEvent.Type.JumpBack)
+      }
+    }
+  }
+
+  @Test
+  fun `the way back is not offered once the jump is too old`() = scope.runTest {
+    val viewModel = viewModel()
+    historyRecorder.record(
+      type = ListeningEvent.Type.BookmarkJump,
+      source = ListeningEvent.Source.App,
+      position = PlaybackPosition(bookId = book.id, chapterId = book.chapters[0].id, time = 0),
+    )
+    clock.advanceBy(11.seconds)
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = null, actual = awaitItem())
+      assertNull(awaitItem()!!.jumpBack)
+    }
+  }
+
   private fun viewModel(
     book: Book = this.book,
+    player: PlayerController? = null,
+    bookmarks: List<Bookmark> = emptyList(),
     experimentalPlaybackPersistence: Boolean = false,
     kioskMode: Boolean = false,
     livePlaybackFlow: MutableStateFlow<LivePlaybackState?> = MutableStateFlow(null),
@@ -353,7 +446,7 @@ class BookPlayViewModelTest {
         every { flow(book.id) } returns MutableStateFlow(book)
       },
       currentBookResolver = currentBookResolver,
-      player = mockk {
+      player = (player ?: mockk()).apply {
         every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
         every { livePlaybackStateFlow(book.id) } returns livePlaybackFlow
       },
@@ -364,7 +457,9 @@ class BookPlayViewModelTest {
       },
       currentBookStoreId = MemoryDataStore(null),
       navigator = mockk(),
-      bookmarkRepository = mockk(),
+      bookmarkRepository = mockk {
+        every { bookmarksFlow(any()) } returns flowOf(bookmarks)
+      },
       volumeGainFormatter = mockk(),
       batteryOptimization = mockk(),
       sleepTimerPreferenceStore = sleepTimerDataStore,
@@ -373,8 +468,43 @@ class BookPlayViewModelTest {
       dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),
       kioskModeFeatureFlag = MemoryFeatureFlag(kioskMode),
+      historyRecorder = historyRecorder,
+      clock = clock,
     )
   }
+}
+
+private fun bookmark(
+  chapterId: ChapterId,
+  time: Long,
+  kind: Bookmark.Kind = Bookmark.Kind.Note,
+  setBySleepTimer: Boolean = false,
+): Bookmark {
+  return Bookmark(
+    bookId = BookId("book"),
+    chapterId = chapterId,
+    title = null,
+    time = time,
+    addedAt = Instant.EPOCH,
+    setBySleepTimer = setBySleepTimer,
+    id = Bookmark.Id.random(),
+    kind = kind,
+  )
+}
+
+private class TestClock : Clock() {
+
+  private var instant = Instant.parse("2026-10-07T08:00:00Z")
+
+  fun advanceBy(duration: kotlin.time.Duration) {
+    instant = instant.plusMillis(duration.inWholeMilliseconds)
+  }
+
+  override fun getZone(): ZoneId = ZoneId.of("UTC")
+
+  override fun withZone(zone: ZoneId?): Clock = this
+
+  override fun instant(): Instant = instant
 }
 
 private fun book(

@@ -13,11 +13,17 @@ import kotlinx.coroutines.runBlocking
 import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.logging.api.Logger
+import voice.core.playback.history.CommandSource
+import voice.core.playback.history.CommandSourceResolver
+import voice.core.playback.history.ListeningHistoryRecorder
+import voice.core.playback.history.PlaybackPosition
+import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
@@ -46,6 +52,8 @@ class VoicePlayer(
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,
   private val analytics: Analytics,
+  private val historyRecorder: ListeningHistoryRecorder,
+  private val commandSourceResolver: CommandSourceResolver,
 ) : ForwardingPlayer(player) {
 
   private val endOfChapterSleepTimerListener = object : Player.Listener {
@@ -70,6 +78,13 @@ class VoicePlayer(
       Logger.v("Pausing due to EndOfChapter")
       sleepTimer.disable()
       player.pause()
+      player.playbackPosition()?.let { position ->
+        historyRecorder.record(
+          type = ListeningEvent.Type.SleepTimerEnded,
+          source = ListeningEvent.Source.SleepTimer,
+          position = position,
+        )
+      }
     }
   }
 
@@ -137,8 +152,12 @@ class VoicePlayer(
   }
 
   override fun seekBack() {
+    val source = commandSourceResolver.current()
+    val position = player.playbackPosition()
     scope.launch {
-      seekBackBy(seekTimeStore.data.first().seconds)
+      val skipAmount = seekTimeStore.data.first().seconds
+      recordExternalCommand(source, ListeningEvent.Type.SkipBack, position, value = skipAmount.inWholeSeconds.toString())
+      seekBackBy(skipAmount)
     }
   }
 
@@ -180,8 +199,11 @@ class VoicePlayer(
   }
 
   override fun seekForward() {
+    val source = commandSourceResolver.current()
+    val position = player.playbackPosition()
     scope.launch {
       val skipAmount = seekTimeStore.data.first().seconds
+      recordExternalCommand(source, ListeningEvent.Type.SkipForward, position, value = skipAmount.inWholeSeconds.toString())
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
         ?.milliseconds
@@ -203,6 +225,60 @@ class VoicePlayer(
     }
   }
 
+  override fun seekTo(positionMs: Long) {
+    recordExternalSeek(currentMediaItemIndex, positionMs)
+    super.seekTo(positionMs)
+  }
+
+  override fun seekTo(
+    mediaItemIndex: Int,
+    positionMs: Long,
+  ) {
+    recordExternalSeek(mediaItemIndex, positionMs)
+    super.seekTo(mediaItemIndex, positionMs)
+  }
+
+  override fun seekToDefaultPosition(mediaItemIndex: Int) {
+    recordExternalSeek(mediaItemIndex, 0)
+    super.seekToDefaultPosition(mediaItemIndex)
+  }
+
+  private fun recordExternalSeek(
+    mediaItemIndex: Int,
+    positionMs: Long,
+  ) {
+    val source = commandSourceResolver.current() ?: return
+    val type = if (mediaItemIndex == currentMediaItemIndex) {
+      ListeningEvent.Type.Seek
+    } else {
+      ListeningEvent.Type.ChapterChange
+    }
+    recordExternalCommand(
+      source = source,
+      type = type,
+      position = player.playbackPosition(),
+      to = player.playbackPosition(mediaItemIndex, positionMs),
+    )
+  }
+
+  private fun recordExternalCommand(
+    source: CommandSource?,
+    type: ListeningEvent.Type,
+    position: PlaybackPosition?,
+    to: PlaybackPosition? = null,
+    value: String? = null,
+  ) {
+    if (source == null || position == null) return
+    historyRecorder.record(
+      type = type,
+      source = source.source,
+      position = position,
+      to = to,
+      value = value,
+      sourcePackage = source.packageName,
+    )
+  }
+
   override fun play() {
     playWhenReady = true
   }
@@ -210,6 +286,13 @@ class VoicePlayer(
   override fun setPlayWhenReady(playWhenReady: Boolean) {
     Logger.d("setPlayWhenReady=$playWhenReady")
     analytics.event(if (playWhenReady) "play" else "pause")
+    if (playWhenReady != getPlayWhenReady()) {
+      recordExternalCommand(
+        source = commandSourceResolver.current(),
+        type = if (playWhenReady) ListeningEvent.Type.Play else ListeningEvent.Type.Pause,
+        position = player.playbackPosition(),
+      )
+    }
 
     if (playWhenReady) {
       updateLastPlayedAt()
@@ -318,6 +401,12 @@ class VoicePlayer(
   }
 
   override fun setPlaybackSpeed(speed: Float) {
+    recordExternalCommand(
+      source = commandSourceResolver.current(),
+      type = ListeningEvent.Type.SpeedChanged,
+      position = player.playbackPosition(),
+      value = speed.toString(),
+    )
     super.setPlaybackSpeed(speed)
     scope.launch {
       updateBook { it.copy(playbackSpeed = speed) }

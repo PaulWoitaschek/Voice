@@ -15,7 +15,11 @@ sealed interface Destination {
   }
 
   @Serializable
-  data class Bookmarks(val bookId: BookId) : Compose {
+  data class Bookmarks(
+    val bookId: BookId,
+    /** Opens the editor for this bookmark, e.g. to add a note right after saving it. */
+    val editBookmarkId: String? = null,
+  ) : Compose {
     override val trackingName: String get() = "Bookmarks"
   }
 

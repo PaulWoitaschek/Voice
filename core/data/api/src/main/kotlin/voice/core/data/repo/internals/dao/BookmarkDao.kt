@@ -16,6 +16,9 @@ public interface BookmarkDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   public suspend fun addBookmark(bookmark: Bookmark)
 
+  @Query("SELECT * FROM bookmark2 WHERE id = :id")
+  public suspend fun bookmark(id: Bookmark.Id): Bookmark?
+
   @Query("SELECT * FROM bookmark2 WHERE chapterId IN(:chapters)")
   public suspend fun allForChapters(chapters: List<@JvmSuppressWildcards ChapterId>): List<Bookmark>
 }

@@ -42,6 +42,9 @@ public annotation class FolderPickerMovedDialogShownStore
 public annotation class AnalyticsConsentStore
 
 @Qualifier
+public annotation class ListeningHistoryEnabledStore
+
+@Qualifier
 public annotation class DeveloperMenuUnlockedStore
 
 @Qualifier

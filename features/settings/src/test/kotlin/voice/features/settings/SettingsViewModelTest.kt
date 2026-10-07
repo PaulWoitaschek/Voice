@@ -5,6 +5,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -19,6 +21,7 @@ import voice.core.common.DispatcherProvider
 import voice.core.data.GridMode
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.ui.DynamicColorAvailability
@@ -41,6 +44,10 @@ class SettingsViewModelTest {
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val analyticsConsentStore = MemoryDataStore(false)
   private val developerMenuUnlockedStore = MemoryDataStore(false)
+  private val listeningHistoryEnabledStore = MemoryDataStore(true)
+  private val listeningHistoryRepo = mockk<ListeningHistoryRepo> {
+    coEvery { clear() } just Runs
+  }
   private val navigator = mockk<Navigator> {
     every { goTo(any()) } just Runs
   }
@@ -72,6 +79,8 @@ class SettingsViewModelTest {
     kioskModeFeatureFlag = kioskModeFeatureFlag,
     developerMenuUnlockedStore = developerMenuUnlockedStore,
     dynamicColorAvailability = dynamicColorAvailability,
+    listeningHistoryEnabledStore = listeningHistoryEnabledStore,
+    listeningHistoryRepo = listeningHistoryRepo,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
 
@@ -212,6 +221,41 @@ class SettingsViewModelTest {
       viewModel.viewState()
     }.test {
       assertEquals(expected = false, actual = awaitItem().showSupportDevelopment)
+    }
+  }
+
+  @Test
+  fun `listening history can be turned off and on`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = true, actual = awaitItem().listeningHistoryEnabled)
+
+      viewModel.toggleListeningHistory()
+      assertEquals(expected = false, actual = awaitItem().listeningHistoryEnabled)
+
+      viewModel.toggleListeningHistory()
+      assertEquals(expected = true, actual = awaitItem().listeningHistoryEnabled)
+    }
+  }
+
+  @Test
+  fun `clearing listening history asks first`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = null, actual = awaitItem().dialog)
+
+      viewModel.onClearListeningHistoryClick()
+      assertEquals(expected = SettingsViewState.Dialog.ClearListeningHistory, actual = awaitItem().dialog)
+      coVerify(exactly = 0) { listeningHistoryRepo.clear() }
+
+      viewModel.viewEffects.test {
+        viewModel.clearListeningHistory()
+        assertEquals(expected = SettingsViewEffect.ListeningHistoryCleared, actual = awaitItem())
+      }
+      assertEquals(expected = null, actual = awaitItem().dialog)
+      coVerify(exactly = 1) { listeningHistoryRepo.clear() }
     }
   }
 

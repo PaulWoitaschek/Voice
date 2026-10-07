@@ -22,26 +22,90 @@
     <string name="book.edit.name.label">Name</string>
     <!-- Title for the dialog that edits a book title. -->
     <string name="book.edit.title">Edit book</string>
+    <!-- Snackbar action after saving a bookmark from the player. Opens the editor to add a note to it. -->
+    <string name="bookmark.action.add_note">Add note</string>
+    <!-- Hint after the position of a bookmark without a note, inviting to add one by long pressing the row. -->
+    <string name="bookmark.add_note_hint">Add a note</string>
     <!-- Snackbar message shown after creating a bookmark. -->
     <string name="bookmark.added.snackbar">Bookmark added</string>
+    <!-- Filter chip on the bookmarks screen showing all bookmarks. Followed by the count. -->
+    <string name="bookmark.category.all">All</string>
+    <!-- Filter chip on the bookmarks screen showing only favorite bookmarks. Followed by the count. -->
+    <string name="bookmark.category.favorites">Favorites</string>
+    <!-- Filter chip on the bookmarks screen showing only plain note bookmarks. Followed by the count. -->
+    <string name="bookmark.category.notes">Notes</string>
+    <!-- Filter chip on the bookmarks screen showing only quote bookmarks. Followed by the count. -->
+    <string name="bookmark.category.quotes">Quotes</string>
+    <!-- Filter chip on the bookmarks screen showing only bookmarks marked to come back to. Followed by the count. -->
+    <string name="bookmark.category.revisit">Revisit</string>
+    <!-- Chapter header in the bookmark list when the chapter has no meaningful name. %1$d is the chapter number. -->
+    <string name="bookmark.chapter">Chapter %1$d</string>
+    <!-- Chapter header in the bookmark list. %1$d is the chapter number, %2$s the chapter name, e.g. Chapter 12 · The Signal. -->
+    <string name="bookmark.chapter_with_name">Chapter %1$d · %2$s</string>
     <!-- Relative timestamp for a bookmark created moments ago. -->
     <string name="bookmark.created.just_now">Just now</string>
-    <!-- Label for a bookmark-name text field. -->
-    <string name="bookmark.edit.name.label">Bookmark name</string>
+    <!-- Snackbar message after deleting a bookmark. Comes with an Undo action. -->
+    <string name="bookmark.deleted">Bookmark deleted</string>
+    <!-- Label for bookmarks the sleep timer set where playback stopped, and the filter chip for them. Means the listener fell asleep. -->
+    <string name="bookmark.dozed_off">Dozed off</string>
     <!-- Title for the dialog that edits a bookmark. -->
     <string name="bookmark.edit.title">Edit bookmark</string>
+    <!-- Message on the bookmarks screen while the book has no bookmarks. -->
+    <string name="bookmark.empty.message">Long press the bookmark button while listening to save a moment.</string>
+    <!-- Title on the bookmarks screen while the book has no bookmarks. -->
+    <string name="bookmark.empty.title">No bookmarks yet</string>
+    <!-- Kind of bookmark the listener can pick: a moment they loved. -->
+    <string name="bookmark.kind.favorite">Favorite</string>
+    <!-- Kind of bookmark the listener can pick: a plain bookmark, the default. -->
+    <string name="bookmark.kind.note">Note</string>
+    <!-- Kind of bookmark the listener can pick: a passage worth quoting. -->
+    <string name="bookmark.kind.quote">Quote</string>
+    <!-- Kind of bookmark the listener can pick: a part to come back to later. -->
+    <string name="bookmark.kind.revisit">Revisit</string>
+    <!-- Label of the optional free text field when saving or editing a bookmark. -->
+    <string name="bookmark.note.label">Note (optional)</string>
+    <!-- Accessibility label of the button that moves a bookmark 15 seconds earlier. -->
+    <string name="bookmark.nudge.earlier">15 seconds earlier</string>
+    <!-- Label above the buttons that move an existing bookmark 15 seconds earlier or later. -->
+    <string name="bookmark.nudge.edit">Move the mark</string>
+    <!-- Accessibility label of the button that moves a bookmark 15 seconds later. -->
+    <string name="bookmark.nudge.later">15 seconds later</string>
+    <!-- Label above the buttons that move a just saved bookmark, as the moment people want is often a few seconds back. -->
+    <string name="bookmark.nudge.new">Mark it a bit earlier?</string>
+    <!-- Button on the bookmarks screen that saves a bookmark at the current position right away. -->
+    <string name="bookmark.save_moment">Save this moment</string>
+    <!-- Title of the sheet that opens after saving a bookmark. The bookmark is already saved. -->
+    <string name="bookmark.saved">Saved</string>
+    <!-- Accessibility label of the menu that changes the order of bookmarks. -->
+    <string name="bookmark.sort">Sort</string>
+    <!-- Bookmark order: the most recently saved first. -->
+    <string name="bookmark.sort.recent">Recently saved</string>
+    <!-- Bookmark order: by their position in the book. -->
+    <string name="bookmark.sort.story">Story order</string>
+    <!-- Tab on the bookmarks screen listing the bookmarks of the book. -->
+    <string name="bookmark.tab.bookmarks">Bookmarks</string>
+    <!-- Tab on the bookmarks screen listing what happened while listening: plays, pauses, jumps. -->
+    <string name="bookmark.tab.history">History</string>
     <!-- Title for bookmark screens and bookmark actions. -->
     <string name="bookmark.title">Bookmark</string>
+    <!-- Row in the bookmark list marking the current playback position between the bookmarks. -->
+    <string name="bookmark.you_are_here">You are here</string>
     <!-- Generic add action and content description. -->
     <string name="common.action.add">Add</string>
+    <!-- Generic content description for going back to the previous screen. -->
+    <string name="common.action.back">Back</string>
     <!-- Generic content description for closing the current screen or dialog. -->
     <string name="common.action.close">Close</string>
     <!-- Generic delete action and content description. -->
     <string name="common.action.delete">Delete</string>
+    <!-- Generic action that finishes editing and keeps the changes. -->
+    <string name="common.action.done">Done</string>
     <!-- Generic edit action in popup menus. -->
     <string name="common.action.edit">Edit</string>
     <!-- Generic remove action in menus. -->
     <string name="common.action.remove">Remove</string>
+    <!-- Generic action that reverts what was just done. -->
+    <string name="common.action.undo">Undo</string>
     <!-- Generic action for dismissing a dialog without applying changes. -->
     <string name="common.dialog.cancel">Cancel</string>
     <!-- Generic confirmation action in dialogs that apply a value. -->
@@ -101,6 +165,132 @@
     </plurals>
     <!-- Title for choosing how audiobook files are structured. -->
     <string name="folder.type.title">How are your files structured?</string>
+    <!-- Button on a listening history row about a changed setting, like the speed. Sets it back to what it was before. -->
+    <string name="history.action.change_back">Change back</string>
+    <!-- Button on the listening history row of the last thing touched before falling asleep. Goes to that position. -->
+    <string name="history.action.go_there">Go there</string>
+    <!-- Accessibility label of the button that saves the position of a listening history row as a bookmark. -->
+    <string name="history.action.pin">Save as bookmark</string>
+    <!-- Button on the listening history row of a deleted bookmark. Brings the bookmark back. -->
+    <string name="history.action.restore">Restore</string>
+    <!-- Snackbar message after setting a setting back from the listening history. -->
+    <string name="history.changed_back">Changed back</string>
+    <!-- Shown in the listening history when the selected filters hide everything. -->
+    <string name="history.empty.filtered">Nothing matches this filter.</string>
+    <!-- Message in the listening history while nothing has been recorded for the book yet. -->
+    <string name="history.empty.message">Plays, pauses and jumps show up here for 30 days, so you can always find your way back.</string>
+    <!-- Title in the listening history while nothing has been recorded for the book yet. -->
+    <string name="history.empty.title">Nothing here yet</string>
+    <!-- Listening history row: a bookmark was saved. -->
+    <string name="history.event.bookmark_added">Saved a bookmark</string>
+    <!-- Listening history row: a bookmark was saved. %1$s is its note. -->
+    <string name="history.event.bookmark_added.note">Saved “%1$s”</string>
+    <!-- Listening history row: a bookmark was deleted. -->
+    <string name="history.event.bookmark_deleted">Deleted a bookmark</string>
+    <!-- Listening history row: a bookmark was deleted. %1$s is its note. -->
+    <string name="history.event.bookmark_deleted.note">Deleted “%1$s”</string>
+    <!-- Listening history row: playback jumped to a bookmark. -->
+    <string name="history.event.bookmark_jump">Went to a bookmark</string>
+    <!-- Listening history row: playback went to another chapter. Can be followed by a count like ×3. -->
+    <string name="history.event.chapter_change">Changed chapter</string>
+    <!-- Listening history row: the sleep timer ended and paused playback, the listener fell asleep. -->
+    <string name="history.event.dozed_off">Dozed off · timer ended</string>
+    <!-- Listening history row: playback went back to where it was before a jump. -->
+    <string name="history.event.jump_back">Jumped back</string>
+    <!-- Prefix of the listening history row of the last thing the listener did before falling asleep, usually the last part they remember. -->
+    <string name="history.event.last_touch">Last touch</string>
+    <!-- Listening history row: the position was moved on the seek bar. Can be followed by a count like ×3. -->
+    <string name="history.event.moved">Moved</string>
+    <!-- Listening history row: playback was paused. -->
+    <string name="history.event.paused">Paused</string>
+    <!-- Listening history row: playback was paused and resumed later. %1$s is how long, e.g. Paused 3 min. -->
+    <string name="history.event.paused_for">Paused %1$s</string>
+    <!-- Listening history row: playback started. -->
+    <string name="history.event.played">Played</string>
+    <!-- Listening history row: skipping silence was turned off. -->
+    <string name="history.event.skip_silence.off">Skip silence off</string>
+    <!-- Listening history row: skipping silence was turned on. -->
+    <string name="history.event.skip_silence.on">Skip silence on</string>
+    <!-- Listening history row: the rewind button was used. Can be followed by a count like ×3. -->
+    <string name="history.event.skipped_back">Skipped back</string>
+    <!-- Listening history row: the fast forward button was used. Can be followed by a count like ×3. -->
+    <string name="history.event.skipped_forward">Skipped forward</string>
+    <!-- Listening history row: the sleep timer started again because the phone was shaken. -->
+    <string name="history.event.sleep_timer_extended">Sleep timer restarted by shaking</string>
+    <!-- Listening history row: a sleep timer was set. Followed by its duration, e.g. Sleep timer · 30 min. -->
+    <string name="history.event.sleep_timer_set">Sleep timer</string>
+    <!-- Listening history row: the playback speed changed. %1$s is the change, e.g. 1.0× → 1.8×. -->
+    <string name="history.event.speed">Speed %1$s</string>
+    <!-- Listening history row: the volume boost changed. %1$s is the change, e.g. 0 dB → +3 dB. -->
+    <string name="history.event.volume_boost">Volume boost %1$s</string>
+    <!-- Filter chip in the listening history showing everything. -->
+    <string name="history.filter.all">All</string>
+    <!-- Filter in the listening history to show events from any source, like the app, a headset or a car. -->
+    <string name="history.filter.any_source">Any source</string>
+    <!-- Filter chip in the listening history showing saved, deleted and visited bookmarks. -->
+    <string name="history.filter.bookmarks">Bookmarks</string>
+    <!-- Filter chip in the listening history showing seeks, skips and chapter changes. -->
+    <string name="history.filter.jumps">Jumps</string>
+    <!-- Filter chip in the listening history showing plays and pauses. -->
+    <string name="history.filter.play_pause">Play &amp; pause</string>
+    <!-- Filter chip in the listening history showing changes of speed, volume boost and skip silence. -->
+    <string name="history.filter.settings">Settings</string>
+    <!-- Filter chip in the listening history showing sleep timer events. -->
+    <string name="history.filter.sleep">Sleep</string>
+    <!-- A position in the listening history. Ch. is short for chapter. %1$d is the chapter number, %2$s the time in that chapter, e.g. Ch. 12 · 14:48. -->
+    <string name="history.location.chapter">Ch. %1$d · %2$s</string>
+    <!-- Button that turns the listening history on. -->
+    <string name="history.off.action">Turn on</string>
+    <!-- Message in the listening history while recording is turned off in the settings. -->
+    <string name="history.off.message">Turn it on to undo accidental plays, pauses and jumps. It stays on this device.</string>
+    <!-- Title in the listening history while recording is turned off in the settings. -->
+    <string name="history.off.title">Listening history is off</string>
+    <!-- Snackbar message after saving a position from the listening history as a bookmark. -->
+    <string name="history.pinned">Saved as bookmark</string>
+    <!-- Snackbar message after restoring a deleted bookmark from the listening history. -->
+    <string name="history.restored">Bookmark restored</string>
+    <!-- What started or paused playback: a button in this app. -->
+    <string name="history.source.app">In the app</string>
+    <!-- What paused playback: something else needed the audio, like a phone call. -->
+    <string name="history.source.audio_focus">Interrupted</string>
+    <!-- What started or paused playback: a connected Bluetooth device. -->
+    <string name="history.source.bluetooth">Bluetooth device</string>
+    <!-- What started or paused playback: the car, through Android Auto or the car's controls. -->
+    <string name="history.source.car">Car</string>
+    <!-- What started or paused playback: a button on a headset. -->
+    <string name="history.source.headset">Headset button</string>
+    <!-- What started or paused playback: the playback notification. -->
+    <string name="history.source.notification">Notification</string>
+    <!-- What started or paused playback: another app on the device. -->
+    <string name="history.source.other_app">Another app</string>
+    <!-- What paused playback: the sleep timer. -->
+    <string name="history.source.sleep_timer">Sleep timer</string>
+    <!-- What started or paused playback, when it is not known. -->
+    <string name="history.source.unknown">Unknown</string>
+    <!-- What paused playback: headphones were unplugged or disconnected. -->
+    <string name="history.source.unplugged">Audio disconnected</string>
+    <!-- What started or paused playback: a smart watch. -->
+    <string name="history.source.watch">Watch</string>
+    <!-- What started or paused playback: the home screen widget. -->
+    <string name="history.source.widget">Widget</string>
+    <!-- Card on top of the listening history after a big jump in the last minutes. %1$s is the time of day it happened. -->
+    <string name="history.suggestion.jumped.message">Playback jumped at %1$s.</string>
+    <!-- Title of the card on top of the listening history after a big jump in the last minutes. -->
+    <string name="history.suggestion.jumped.title">Lost your place?</string>
+    <!-- Button on the listening history card that dismisses it and keeps the current position. -->
+    <string name="history.suggestion.keep">Keep</string>
+    <!-- Card on top of the listening history when something else started playback. %1$s is how long it played, e.g. 19 min. -->
+    <string name="history.suggestion.played">%1$s played since. Not you?</string>
+    <!-- Card on top of the listening history when a Bluetooth device started playback. %1$s is the time of day. -->
+    <string name="history.suggestion.started_by.bluetooth">A Bluetooth device started the book at %1$s</string>
+    <!-- Card on top of the listening history when the car started playback. %1$s is the time of day. -->
+    <string name="history.suggestion.started_by.car">Your car started the book at %1$s</string>
+    <!-- Card on top of the listening history when a headset button started playback. %1$s is the time of day. -->
+    <string name="history.suggestion.started_by.headset">A headset button started the book at %1$s</string>
+    <!-- Card on top of the listening history when another app started playback. %1$s is the time of day. -->
+    <string name="history.suggestion.started_by.other_app">Another app started the book at %1$s</string>
+    <!-- Card on top of the listening history when a watch started playback. %1$s is the time of day. -->
+    <string name="history.suggestion.started_by.watch">Your watch started the book at %1$s</string>
     <!-- Library category header for completed books. -->
     <string name="library.category.completed.title">Completed</string>
     <!-- Library category header for books currently being listened to. -->
@@ -200,6 +390,10 @@
     <string name="playback.chapter.previous">Previous track</string>
     <!-- Title of the sheet that lists all chapters of a book. -->
     <string name="playback.chapters.title">Chapters</string>
+    <!-- Button on the player shown for a few seconds after a big jump within the chapter. Goes back to where playback was before. The placeholder is the time in the chapter, e.g. 34:18. -->
+    <string name="playback.jump_back">Back to %1$s</string>
+    <!-- Button on the player shown for a few seconds after jumping to another chapter. Goes back to where playback was before. Ch. is short for chapter. %1$d is the chapter number, %2$s the time in that chapter, e.g. Back to Ch. 12 · 14:48. -->
+    <string name="playback.jump_back.chapter">Back to Ch. %1$d · %2$s</string>
     <!-- Menu label for toggling silence skipping during playback. -->
     <string name="playback.option.skip_silence">Skip Silence</string>
     <!-- Menu and dialog title for changing volume gain. -->
@@ -277,6 +471,20 @@
     <string name="settings.library.folders.summary">Manage folders scanned for audiobooks</string>
     <!-- Settings row for toggling grid layout in the library. -->
     <string name="settings.library.use_grid.title">Use grid layout</string>
+    <!-- Settings row that deletes the listening history of all books. -->
+    <string name="settings.listening_history.clear">Clear listening history</string>
+    <!-- Confirm button of the dialog that deletes the listening history. -->
+    <string name="settings.listening_history.clear.confirm">Clear</string>
+    <!-- Message of the dialog that deletes the listening history. -->
+    <string name="settings.listening_history.clear.message">This removes the recorded plays, pauses and jumps of all books. Bookmarks stay.</string>
+    <!-- Title of the dialog that deletes the listening history. -->
+    <string name="settings.listening_history.clear.title">Clear listening history?</string>
+    <!-- Snackbar message after deleting the listening history. -->
+    <string name="settings.listening_history.cleared">Listening history cleared</string>
+    <!-- Description of the setting that records plays, pauses and jumps. -->
+    <string name="settings.listening_history.summary">Keeps plays, pauses and jumps for 30 days on this device, so you can undo accidents</string>
+    <!-- Setting that records plays, pauses and jumps so they can be undone. -->
+    <string name="settings.listening_history.title">Listening history</string>
     <!-- Title for the setting that rewinds automatically when playback resumes. -->
     <string name="settings.playback.auto_rewind.title">Auto rewind</string>
     <!-- Title for the setting that controls skip-forward and rewind duration. -->
@@ -327,4 +535,14 @@
     <string name="sleep_timer.dialog.title">Sleep timer</string>
     <!-- Sleep timer option and playback status for stopping at the end of a chapter. -->
     <string name="sleep_timer.end_of_chapter">End of Chapter</string>
+    <!-- When something happened: yesterday evening or tonight before 5 in the morning. -->
+    <string name="time.relative.last_night">Last night</string>
+    <!-- When something happened: today between noon and 6 in the evening. -->
+    <string name="time.relative.this_afternoon">This afternoon</string>
+    <!-- When something happened: today after 6 in the evening. -->
+    <string name="time.relative.this_evening">This evening</string>
+    <!-- When something happened: today before noon. -->
+    <string name="time.relative.this_morning">This morning</string>
+    <!-- When something happened: yesterday. -->
+    <string name="time.relative.yesterday">Yesterday</string>
 </resources>

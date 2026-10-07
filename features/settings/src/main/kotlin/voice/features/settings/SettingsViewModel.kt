@@ -19,11 +19,13 @@ import voice.core.common.MainScope
 import voice.core.data.GridMode
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DeveloperMenuUnlockedStore
 import voice.core.data.store.GridModeStore
+import voice.core.data.store.ListeningHistoryEnabledStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.data.store.ThemeColorSchemeStore
@@ -60,6 +62,9 @@ class SettingsViewModel(
   @DeveloperMenuUnlockedStore
   private val developerMenuUnlockedStore: DataStore<Boolean>,
   private val dynamicColorAvailability: DynamicColorAvailability,
+  @ListeningHistoryEnabledStore
+  private val listeningHistoryEnabledStore: DataStore<Boolean>,
+  private val listeningHistoryRepo: ListeningHistoryRepo,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
@@ -80,6 +85,7 @@ class SettingsViewModel(
       initial = SleepTimerPreference.Default,
     )
     val analyticsEnabled by remember { analyticsConsentStore.data }.collectAsState(initial = false)
+    val listeningHistoryEnabled by remember { listeningHistoryEnabledStore.data }.collectAsState(initial = true)
     val kioskMode = remember {
       kioskModeFeatureFlag.get()
     }
@@ -110,6 +116,7 @@ class SettingsViewModel(
       showDeveloperMenu = showDeveloperMenu,
       showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
       kioskMode = kioskMode,
+      listeningHistoryEnabled = listeningHistoryEnabled,
     )
   }
 
@@ -232,6 +239,24 @@ class SettingsViewModel(
   override fun toggleAnalytics() {
     mainScope.launch {
       analyticsConsentStore.updateData { !it }
+    }
+  }
+
+  override fun toggleListeningHistory() {
+    mainScope.launch {
+      listeningHistoryEnabledStore.updateData { !it }
+    }
+  }
+
+  override fun onClearListeningHistoryClick() {
+    dialog.value = SettingsViewState.Dialog.ClearListeningHistory
+  }
+
+  override fun clearListeningHistory() {
+    dismissDialog()
+    mainScope.launch {
+      listeningHistoryRepo.clear()
+      viewEffects.emit(SettingsViewEffect.ListeningHistoryCleared)
     }
   }
 

@@ -32,6 +32,7 @@ import voice.core.data.MarkData
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
+import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
@@ -112,6 +113,8 @@ class VoicePlayerTest {
     volumeGain = mockk(relaxed = true),
     sleepTimer = sleepTimer,
     analytics = mockk(relaxed = true),
+    historyRecorder = mockk(relaxed = true),
+    commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
   )
 
   @Test

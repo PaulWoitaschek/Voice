@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.progressBarRangeInfo
@@ -58,6 +59,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import voice.core.ui.formatTime
+import voice.features.playbackScreen.BookPlayViewState
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.min
@@ -71,7 +73,7 @@ private val HorizontalInset = 12.dp
 /**
  * Seek bar for the current chapter: a wave that ripples while audio plays and flattens when paused
  * or grabbed. Dragging pops up a bubble with the target time. Tap the right label to toggle
- * between remaining and total time.
+ * between remaining and total time. After a big jump, a pill between the labels offers the way back.
  */
 @Composable
 internal fun SeekSection(
@@ -80,6 +82,9 @@ internal fun SeekSection(
   playing: Boolean,
   clock: () -> Float,
   onSeek: (Duration) -> Unit,
+  jumpBack: BookPlayViewState.JumpBackViewState?,
+  onJumpBack: () -> Unit,
+  onJumpBackExpire: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var dragFraction by remember { mutableStateOf<Float?>(null) }
@@ -132,7 +137,24 @@ internal fun SeekSection(
         style = MaterialTheme.typography.labelLargeEmphasized,
         color = elapsedColor,
       )
-      Spacer(Modifier.weight(1F))
+      // the pill is a bit taller than the labels, it may overlap the space around the row
+      Box(
+        modifier = Modifier
+          .weight(1F)
+          .layout { measurable, constraints ->
+            val placeable = measurable.measure(constraints.copy(minHeight = 0, maxHeight = Constraints.Infinity))
+            layout(constraints.maxWidth, 0) {
+              placeable.place((constraints.maxWidth - placeable.width) / 2, -placeable.height / 2)
+            }
+          },
+      ) {
+        JumpBackPill(
+          jumpBack = jumpBack,
+          onClick = onJumpBack,
+          onExpire = onJumpBackExpire,
+          modifier = Modifier.padding(horizontal = 4.dp),
+        )
+      }
       RollingText(
         modifier = Modifier
           .clip(RoundedCornerShape(8.dp))

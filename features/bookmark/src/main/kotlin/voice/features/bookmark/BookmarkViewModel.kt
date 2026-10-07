@@ -1,9 +1,8 @@
 package voice.features.bookmark
 
-import android.content.Context
-import android.text.format.DateUtils
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,197 +11,279 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import voice.core.common.DispatcherProvider
+import voice.core.common.MainScope
+import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Bookmark
-import voice.core.data.Chapter
-import voice.core.data.KioskModeDemoData
-import voice.core.data.markForPosition
+import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
+import voice.core.playback.CurrentBookResolver
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
-import voice.core.strings.R
-import voice.core.ui.formatTime
+import voice.core.sleeptimer.SleepTimer
 import voice.navigation.Navigator
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
-import kotlin.uuid.Uuid
+import java.time.Clock
+import kotlin.time.Duration.Companion.seconds
 
 @AssistedInject
 class BookmarkViewModel(
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
-  private val repo: BookRepository,
+  private val bookRepository: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
+  private val currentBookResolver: CurrentBookResolver,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
+  private val sleepTimer: SleepTimer,
   private val navigator: Navigator,
-  private val context: Context,
+  private val clock: Clock,
+  dispatcherProvider: DispatcherProvider,
   @KioskModeFeatureFlagQualifier
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   @Assisted
   private val bookId: BookId,
+  @Assisted
+  private val editBookmarkId: String?,
 ) {
 
-  private val scope = MainScope()
-  private var bookmarks by mutableStateOf<List<Bookmark>>(emptyList())
-  private var chapters by mutableStateOf<List<Chapter>>(emptyList())
+  private val scope = MainScope(dispatcherProvider)
 
-  private var shouldScrollTo by mutableStateOf<Bookmark.Id?>(null)
-  private var dialogViewState: BookmarkDialogViewState by mutableStateOf(BookmarkDialogViewState.None)
+  internal val viewEffects: Flow<BookmarkViewEffect>
+    field = MutableSharedFlow<BookmarkViewEffect>(extraBufferCapacity = 1)
+
+  private var sort by mutableStateOf(BookmarkSort.Story)
+  private var selectedCategory by mutableStateOf<BookmarkCategory?>(null)
+  private var draft by mutableStateOf<Draft?>(null)
+  private var openedEditorFromNavigation = false
+
+  // the latest values, for the actions that need them
+  private var book: Book? = null
+  private var bookmarks: List<Bookmark> = emptyList()
 
   @Composable
-  fun viewState(): BookmarkViewState {
+  internal fun viewState(): BookmarkViewState? {
     val kioskMode = remember { kioskModeFeatureFlag.get() }
-    if (kioskMode) return kioskModeViewState()
+    if (kioskMode) return kioskModeBookmarkViewState()
 
-    LaunchedEffect(bookId) {
-      val book = repo.get(bookId)
-      if (book != null) {
-        bookmarks = bookmarkRepo.bookmarks(book.content)
-          .sortedByDescending { it.addedAt }
-        chapters = book.chapters
+    val book = remember(bookId) { bookRepository.flow(bookId) }
+      .collectAsState(initial = null).value ?: return null
+    val bookmarks = remember(book.id, book.content.chapters) {
+      bookmarkRepo.bookmarksFlow(book.content)
+    }.collectAsState(initial = null).value ?: return null
+    this.book = book
+    this.bookmarks = bookmarks
+
+    LaunchedEffect(Unit) {
+      if (!openedEditorFromNavigation && editBookmarkId != null) {
+        openedEditorFromNavigation = true
+        bookmarks.find { it.id.value.toString() == editBookmarkId }?.let { edit(it, isNew = false) }
       }
     }
-    return BookmarkViewState(
-      bookmarks = bookmarks.map { bookmark ->
-        val currentChapter = chapters.single { it.id == bookmark.chapterId }
-        val bookmarkTitle = bookmark.title
-        val title: String = when {
-          bookmark.setBySleepTimer -> {
-            val justNowThreshold = 1.minutes
-            if (ChronoUnit.MILLIS.between(bookmark.addedAt, Instant.now()).milliseconds < justNowThreshold) {
-              context.getString(R.string.bookmark_created_just_now)
-            } else {
-              DateUtils.getRelativeDateTimeString(
-                context,
-                bookmark.addedAt.toEpochMilli(),
-                justNowThreshold.inWholeMilliseconds,
-                2.days.inWholeMilliseconds,
-                0,
-              ).toString()
-            }
-          }
-          !bookmarkTitle.isNullOrEmpty() -> bookmarkTitle
-          else -> currentChapter.markForPosition(bookmark.time).name ?: ""
-        }
 
-        BookmarkItemViewState(
-          title = title,
-          subtitle = formatTime(bookmark.time),
-          id = bookmark.id,
-          showSleepIcon = bookmark.setBySleepTimer,
-        )
-      },
-      shouldScrollTo = shouldScrollTo,
-      dialogViewState = dialogViewState,
+    val playState by remember { playStateManager.playStateFlow }.collectAsState()
+    val sleepTimerState by remember { sleepTimer.state }.collectAsState()
+    val index = remember(book) { BookIndex(book) }
+    val category = selectedCategory?.takeIf { selected -> bookmarks.any { it.category == selected } }
+    val visible = if (category == null) bookmarks else bookmarks.filter { it.category == category }
+    val now = clock.instant()
+    return BookmarkViewState(
+      bookTitle = book.content.name,
+      bookAuthor = book.content.author,
+      cover = book.content.coverUrl,
+      playing = playState == PlayStateManager.PlayState.Playing,
+      sleepTimerActive = sleepTimerState.enabled,
+      bookBar = bookBar(index, visible, book.content.playbackSpeed),
+      sort = sort,
+      categories = categoryCounts(bookmarks),
+      selectedCategory = category,
+      items = bookmarkListItems(index, visible, sort, now, clock.zone),
+      totalCount = bookmarks.size,
+      editor = draft?.let { editorViewState(index, it) },
     )
   }
 
-  private fun kioskModeViewState(): BookmarkViewState {
-    return BookmarkViewState(
-      bookmarks = KioskModeDemoData.bookmarkScreen.items.mapIndexed { index, item ->
-        BookmarkItemViewState(
-          title = item.title,
-          subtitle = item.timestamp,
-          id = Bookmark.Id(Uuid.parse("00000000-0000-0000-0000-${(index + 1).toString().padStart(12, '0')}")),
-          showSleepIcon = false,
-        )
-      },
-      shouldScrollTo = null,
-      dialogViewState = BookmarkDialogViewState.None,
+  private fun editorViewState(
+    index: BookIndex,
+    draft: Draft,
+  ): BookmarkEditorViewState? {
+    val location = index.locate(draft.bookmark.chapterId, draft.time) ?: return null
+    val chapterDuration = index.chapterDuration(draft.bookmark.chapterId) ?: 0L
+    return BookmarkEditorViewState(
+      id = draft.bookmark.id,
+      isNew = draft.isNew,
+      note = draft.note,
+      kind = draft.kind,
+      setBySleepTimer = draft.setBySleepTimer,
+      wasSetBySleepTimer = draft.bookmark.setBySleepTimer,
+      chapterNumber = location.chapterNumber,
+      chapterName = location.chapterName,
+      showChapter = index.chapterCount > 1,
+      time = location.time,
+      percent = location.percent,
+      canMoveEarlier = draft.time > 0,
+      canMoveLater = draft.time < chapterDuration,
     )
   }
 
-  fun deleteBookmark(id: Bookmark.Id) {
-    scope.launch {
-      bookmarkRepo.deleteBookmark(id)
-      bookmarks = bookmarks.filter { it.id != id }
-    }
+  internal fun onSortChange(sort: BookmarkSort) {
+    this.sort = sort
   }
 
-  fun selectBookmark(id: Bookmark.Id) {
-    val bookmark = bookmarks.find { it.id == id }
-      ?: return
+  internal fun onCategoryClick(category: BookmarkCategory?) {
+    selectedCategory = if (selectedCategory == category) null else category
+  }
 
+  fun onBookmarkClick(id: Bookmark.Id) {
+    val bookmark = bookmarks.find { it.id == id } ?: return
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
-
     scope.launch {
       currentBookStore.updateData { bookId }
+      playerController.setPosition(bookmark.time, bookmark.chapterId, ListeningEvent.Type.BookmarkJump)
+      if (wasPlaying) {
+        playerController.play()
+      }
+      navigator.goBack()
     }
-    playerController.setPosition(bookmark.time, bookmark.chapterId)
-
-    if (wasPlaying) {
-      playerController.play()
-    }
-
-    navigator.goBack()
   }
 
-  fun editBookmark(
-    id: Bookmark.Id,
-    newTitle: String,
-  ) {
+  fun onBookmarkLongClick(id: Bookmark.Id) {
+    val bookmark = bookmarks.find { it.id == id } ?: return
+    edit(bookmark, isNew = false)
+  }
+
+  /** Saves the current position right away, the sheet only offers to add details. */
+  fun onSaveClick() {
     scope.launch {
-      bookmarks.find { it.id == id }?.let {
-        val withNewTitle = it.copy(
-          title = newTitle,
-          setBySleepTimer = false,
-        )
-        bookmarkRepo.addBookmark(withNewTitle)
-        val index = bookmarks.indexOfFirst { bookmarkId -> bookmarkId.id == id }
-        bookmarks = bookmarks.toMutableList().apply {
-          this[index] = withNewTitle
-        }
+      val book = currentBookResolver.book(bookId) ?: return@launch
+      val bookmark = bookmarkRepo.addBookmarkAtBookPosition(
+        book = book,
+        title = null,
+        setBySleepTimer = false,
+      )
+      edit(bookmark, isNew = true)
+    }
+  }
+
+  internal fun onNoteChange(note: String) {
+    draft = draft?.copy(note = note)
+  }
+
+  internal fun onKindChange(kind: Bookmark.Kind) {
+    draft = draft?.copy(kind = kind, setBySleepTimer = false)
+  }
+
+  /** Keeps a sleep timer bookmark a "Dozed off" one. */
+  internal fun onSleepKindClick() {
+    draft = draft?.let { it.copy(kind = it.bookmark.kind, setBySleepTimer = it.bookmark.setBySleepTimer) }
+  }
+
+  internal fun onMoveEarlier() {
+    moveBy(-NUDGE.inWholeMilliseconds)
+  }
+
+  internal fun onMoveLater() {
+    moveBy(NUDGE.inWholeMilliseconds)
+  }
+
+  private fun moveBy(offset: Long) {
+    val draft = draft ?: return
+    val book = book ?: return
+    val chapterDuration = BookIndex(book).chapterDuration(draft.bookmark.chapterId) ?: return
+    this.draft = draft.copy(time = (draft.time + offset).coerceIn(0L, chapterDuration))
+  }
+
+  /** Done, or the sheet was swiped away: either way the changes are kept. */
+  internal fun onEditorDone() {
+    val draft = draft ?: return
+    this.draft = null
+    val updated = draft.bookmark.copy(
+      title = draft.note.trim().takeIf { it.isNotEmpty() },
+      kind = draft.kind,
+      setBySleepTimer = draft.setBySleepTimer,
+      time = draft.time,
+    )
+    if (updated != draft.bookmark) {
+      scope.launch {
+        bookmarkRepo.addBookmark(updated)
       }
     }
   }
 
-  fun addBookmark(name: String) {
+  /** Undoes saving a new bookmark. */
+  internal fun onEditorUndo() {
+    val draft = draft ?: return
+    this.draft = null
     scope.launch {
-      val book = repo.get(bookId) ?: return@launch
-      val newBookmark = bookmarkRepo.addBookmarkAtBookPosition(
-        book = book,
-        title = name,
-        setBySleepTimer = false,
-      )
-      bookmarks = (bookmarks + newBookmark)
-        .sortedByDescending { it.addedAt }
-      shouldScrollTo = newBookmark.id
+      bookmarkRepo.deleteBookmark(draft.bookmark.id)
     }
   }
 
-  fun onScrollConfirm() {
-    shouldScrollTo = null
+  internal fun onEditorDelete() {
+    val draft = draft ?: return
+    this.draft = null
+    delete(draft.bookmark)
   }
 
-  fun closeDialog() {
-    dialogViewState = BookmarkDialogViewState.None
-  }
-
-  fun onAddClick() {
-    dialogViewState = BookmarkDialogViewState.AddBookmark
-  }
-
-  fun onEditClick(id: Bookmark.Id) {
+  fun onDelete(id: Bookmark.Id) {
     val bookmark = bookmarks.find { it.id == id } ?: return
-    dialogViewState = BookmarkDialogViewState.EditBookmark(id, bookmark.title)
+    delete(bookmark)
   }
 
-  fun closeScreen() {
+  private fun delete(bookmark: Bookmark) {
+    scope.launch {
+      bookmarkRepo.deleteBookmark(bookmark.id)
+      viewEffects.tryEmit(BookmarkViewEffect.Deleted(bookmark))
+    }
+  }
+
+  internal fun onUndoDelete(bookmark: Bookmark) {
+    scope.launch {
+      bookmarkRepo.addBookmark(bookmark)
+    }
+  }
+
+  fun onCloseClick() {
     navigator.goBack()
   }
+
+  private fun edit(
+    bookmark: Bookmark,
+    isNew: Boolean,
+  ) {
+    draft = Draft(
+      bookmark = bookmark,
+      isNew = isNew,
+      note = bookmark.title.orEmpty(),
+      kind = bookmark.kind,
+      setBySleepTimer = bookmark.setBySleepTimer,
+      time = bookmark.time,
+    )
+  }
+
+  private data class Draft(
+    val bookmark: Bookmark,
+    val isNew: Boolean,
+    val note: String,
+    val kind: Bookmark.Kind,
+    val setBySleepTimer: Boolean,
+    val time: Long,
+  )
 
   @AssistedFactory
   interface Factory {
-    fun create(bookId: BookId): BookmarkViewModel
+    fun create(
+      bookId: BookId,
+      editBookmarkId: String?,
+    ): BookmarkViewModel
   }
 }
+
+private val NUDGE = 15.seconds

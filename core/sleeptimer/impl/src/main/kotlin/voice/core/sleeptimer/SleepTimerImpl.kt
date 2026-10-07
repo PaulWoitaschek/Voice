@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
+import voice.core.data.ListeningEvent
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.FadeOutStore
 import voice.core.data.store.SleepTimerPreferenceStore
@@ -52,16 +53,29 @@ class SleepTimerImpl internal constructor(
 
     job = scope.launch {
       when (mode) {
-        is SleepTimerMode.TimedWithDuration -> startCountdown(mode.duration)
+        is SleepTimerMode.TimedWithDuration -> {
+          recordEnabled(ListeningEvent.Source.App, mode.duration.inWholeMinutes.toString())
+          startCountdown(mode.duration)
+        }
         SleepTimerMode.TimedWithDefault -> {
           val pref = sleepTimerPreferenceStore.data.first()
+          // the default duration is only used when the sleep timer turns on by itself
+          recordEnabled(ListeningEvent.Source.SleepTimer, pref.duration.inWholeMinutes.toString())
           startCountdown(pref.duration)
         }
         SleepTimerMode.EndOfChapter -> {
+          recordEnabled(ListeningEvent.Source.App, value = null)
           state.value = SleepTimerState.Enabled.WithEndOfChapter
         }
       }
     }
+  }
+
+  private fun recordEnabled(
+    source: ListeningEvent.Source,
+    value: String?,
+  ) {
+    playerController.record(ListeningEvent.Type.SleepTimerSet, source, value)
   }
 
   override fun disable() {
@@ -94,13 +108,19 @@ class SleepTimerImpl internal constructor(
     playerController.setVolume(1f)
     state.value = SleepTimerState.Disabled
 
+    playerController.record(ListeningEvent.Type.SleepTimerEnded, ListeningEvent.Source.SleepTimer)
     playerController.pauseWithRewind(fadeOutDuration)
 
     val shakeDetected = detectShakeWithTimeout()
     playerController.setVolume(1F)
     if (shakeDetected) {
       Logger.i("Shake detected, resetting timer")
-      playerController.play()
+      playerController.record(
+        ListeningEvent.Type.SleepTimerExtended,
+        ListeningEvent.Source.SleepTimer,
+        duration.inWholeMinutes.toString(),
+      )
+      playerController.play(source = null)
       startCountdown(duration)
     }
   }
