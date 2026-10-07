@@ -2,17 +2,25 @@ package voice.features.bookmark.history
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.BookId
@@ -23,6 +31,7 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.DismissedHistorySuggestionsStore
 import voice.core.data.store.ListeningHistoryEnabledStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
@@ -34,6 +43,9 @@ import voice.features.bookmark.kioskModeHistoryViewState
 import voice.navigation.Navigator
 import java.time.Clock
 
+/** A suggestion shows for a day at most, so only the latest dismissals matter. */
+private const val MAX_DISMISSED_SUGGESTIONS = 20
+
 @AssistedInject
 class HistoryViewModel(
   @CurrentBookStore
@@ -43,11 +55,13 @@ class HistoryViewModel(
   private val listeningHistoryRepo: ListeningHistoryRepo,
   @ListeningHistoryEnabledStore
   private val enabledStore: DataStore<Boolean>,
+  @DismissedHistorySuggestionsStore
+  private val dismissedSuggestionsStore: DataStore<List<Long>>,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
   private val navigator: Navigator,
   private val clock: Clock,
-  dispatcherProvider: DispatcherProvider,
+  private val dispatcherProvider: DispatcherProvider,
   @KioskModeFeatureFlagQualifier
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   @Assisted
@@ -55,69 +69,86 @@ class HistoryViewModel(
 ) {
 
   private val scope = MainScope(dispatcherProvider)
+  private val pinMutex = Mutex()
 
   internal val viewEffects: Flow<HistoryViewEffect>
     field = MutableSharedFlow<HistoryViewEffect>(extraBufferCapacity = 1)
 
-  private var selectedFilter by mutableStateOf<HistoryFilter?>(null)
-  private var selectedSource by mutableStateOf<ListeningEvent.Source?>(null)
-  private var dismissedSuggestion by mutableStateOf<Long?>(null)
+  private val selection = MutableStateFlow(Selection(filter = null, source = null))
 
   @Composable
   internal fun viewState(): HistoryViewState? {
     val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeHistoryViewState()
 
-    val book = remember(bookId) { bookRepository.flow(bookId) }
+    val timeline = remember { timeline() }.collectAsState(initial = null).value ?: return null
+    val dismissedSuggestions = remember { dismissedSuggestionsStore.data }
       .collectAsState(initial = null).value ?: return null
-    val events = remember(bookId) { listeningHistoryRepo.events(bookId) }
-      .collectAsState(initial = null).value ?: return null
-    val bookmarks = remember(book.id, book.content.chapters) {
-      bookmarkRepo.bookmarksFlow(book.content)
-    }.collectAsState(initial = null).value ?: return null
-    val enabled = remember { enabledStore.data }.collectAsState(initial = null).value ?: return null
-    val playState by remember { playStateManager.playStateFlow }.collectAsState()
-    val index = remember(book) { BookIndex(book) }
-    return historyViewState(
-      events = events,
-      index = index,
-      bookmarks = bookmarks,
-      enabled = enabled,
-      playing = playState == PlayStateManager.PlayState.Playing,
-      selectedFilter = selectedFilter,
-      selectedSource = selectedSource,
-      dismissedSuggestion = dismissedSuggestion,
+    // the position only matters while a session is ongoing, so it's not even collected otherwise
+    val currentProgress = if (timeline.isOngoing) currentProgress(timeline.index) else null
+    return timeline.viewState(
       now = clock.instant(),
-      zone = clock.zone,
+      currentProgress = currentProgress,
+      dismissedSuggestions = dismissedSuggestions,
     )
   }
 
+  @Composable
+  private fun currentProgress(index: BookIndex): Float? {
+    val book = remember { bookRepository.flow(bookId) }.collectAsState(initial = null).value ?: return null
+    return index.locate(book.content.currentChapter, book.content.positionInChapter)?.progress
+  }
+
+  /**
+   * The position changes many times a second while playing, but the history only depends on the
+   * chapters, so it's built off the main thread only when something it shows changes.
+   */
+  private fun timeline(): Flow<HistoryTimeline> {
+    val playing = playStateManager.playStateFlow
+      .map { it == PlayStateManager.PlayState.Playing }
+      .distinctUntilChanged()
+    return bookRepository.flow(bookId)
+      .filterNotNull()
+      .distinctUntilChanged { old, new -> old.chapters == new.chapters }
+      .mapLatest { book -> withContext(dispatcherProvider.io) { book.content to BookIndex(book) } }
+      .flatMapLatest { (content, index) ->
+        combine(
+          listeningHistoryRepo.events(bookId),
+          bookmarkRepo.bookmarksFlow(content),
+          enabledStore.data,
+          playing,
+          selection,
+        ) { events, bookmarks, enabled, isPlaying, selected ->
+          withContext(dispatcherProvider.io) {
+            historyTimeline(
+              events = events,
+              index = index,
+              bookmarks = bookmarks,
+              enabled = enabled,
+              playing = isPlaying,
+              selectedFilter = selected.filter,
+              selectedSource = selected.source,
+              now = clock.instant(),
+              zone = clock.zone,
+            )
+          }
+        }
+      }
+  }
+
   internal fun onFilterClick(filter: HistoryFilter?) {
-    selectedFilter = if (selectedFilter == filter) null else filter
+    selection.update { it.copy(filter = if (it.filter == filter) null else filter) }
   }
 
   internal fun onSourceChange(source: ListeningEvent.Source?) {
-    selectedSource = source
+    selection.update { it.copy(source = source) }
   }
 
   internal fun onActionClick(action: HistoryAction) {
     when (action) {
       is HistoryAction.JumpBack -> goTo(action.chapterId, action.time, ListeningEvent.Type.JumpBack)
       is HistoryAction.GoThere -> goTo(action.chapterId, action.time, ListeningEvent.Type.Seek)
-      is HistoryAction.Pin -> scope.launch {
-        bookmarkRepo.addBookmark(
-          Bookmark(
-            bookId = bookId,
-            chapterId = action.chapterId,
-            title = null,
-            time = action.time,
-            addedAt = clock.instant(),
-            setBySleepTimer = false,
-            id = Bookmark.Id.random(),
-          ),
-        )
-        viewEffects.tryEmit(HistoryViewEffect.Pinned)
-      }
+      is HistoryAction.Pin -> pin(action)
       is HistoryAction.Restore -> scope.launch {
         bookmarkRepo.addBookmark(action.bookmark)
         viewEffects.tryEmit(HistoryViewEffect.Restored)
@@ -127,17 +158,52 @@ class HistoryViewModel(
   }
 
   internal fun onSuggestionBack(suggestion: HistorySuggestion) {
-    dismissedSuggestion = suggestion.key
+    dismiss(suggestion)
     onActionClick(suggestion.back)
   }
 
   internal fun onSuggestionKeep(suggestion: HistorySuggestion) {
-    dismissedSuggestion = suggestion.key
+    dismiss(suggestion)
   }
 
   internal fun onTurnOnClick() {
     scope.launch {
       enabledStore.updateData { true }
+    }
+  }
+
+  private fun dismiss(suggestion: HistorySuggestion) {
+    scope.launch {
+      dismissedSuggestionsStore.updateData { keys ->
+        (keys - suggestion.key + suggestion.key).takeLast(MAX_DISMISSED_SUGGESTIONS)
+      }
+    }
+  }
+
+  private fun pin(action: HistoryAction.Pin) {
+    scope.launch {
+      // the pin stays until the bookmarks are reloaded, so tapping it twice must not save it twice
+      val pinned = pinMutex.withLock {
+        val book = bookRepository.get(bookId) ?: return@withLock false
+        val exists = bookmarkRepo.bookmarks(book.content).any { it.chapterId == action.chapterId && it.time == action.time }
+        if (!exists) {
+          bookmarkRepo.addBookmark(
+            Bookmark(
+              bookId = bookId,
+              chapterId = action.chapterId,
+              title = null,
+              time = action.time,
+              addedAt = clock.instant(),
+              setBySleepTimer = false,
+              id = Bookmark.Id.random(),
+            ),
+          )
+        }
+        !exists
+      }
+      if (pinned) {
+        viewEffects.tryEmit(HistoryViewEffect.Pinned)
+      }
     }
   }
 
@@ -169,6 +235,11 @@ class HistoryViewModel(
       navigator.goBack()
     }
   }
+
+  private data class Selection(
+    val filter: HistoryFilter?,
+    val source: ListeningEvent.Source?,
+  )
 
   @AssistedFactory
   interface Factory {

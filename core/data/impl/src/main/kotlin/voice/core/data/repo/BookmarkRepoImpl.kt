@@ -42,6 +42,7 @@ internal constructor(
           bookmarkId = bookmark.id,
           bookmarkKind = bookmark.kind,
           bookmarkSetBySleepTimer = bookmark.setBySleepTimer,
+          bookmarkAddedAtMillis = bookmark.addedAt.toEpochMilli(),
         ),
       )
     }
@@ -79,6 +80,8 @@ internal constructor(
             time = bookMark.time,
             bookmarkId = bookMark.id,
             bookmarkKind = bookMark.kind,
+            bookmarkSetBySleepTimer = bookMark.setBySleepTimer,
+            bookmarkAddedAtMillis = bookMark.addedAt.toEpochMilli(),
           ),
         )
       }

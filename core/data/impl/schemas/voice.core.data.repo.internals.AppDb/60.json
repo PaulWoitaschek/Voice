@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 60,
-    "identityHash": "c6140cd038ab1e52a42801a88b7616b7",
+    "identityHash": "dee94a8d74d9f6db532e64d7d6c43e50",
     "entities": [
       {
         "tableName": "chapters2",
@@ -314,7 +314,7 @@
       },
       {
         "tableName": "listening_event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `type` TEXT NOT NULL, `source` TEXT NOT NULL, `atMillis` INTEGER NOT NULL, `chapterId` TEXT NOT NULL, `time` INTEGER NOT NULL, `toChapterId` TEXT, `toTime` INTEGER, `value` TEXT, `sourcePackage` TEXT, `bookmarkId` TEXT, `bookmarkKind` TEXT, `bookmarkSetBySleepTimer` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `type` TEXT NOT NULL, `source` TEXT NOT NULL, `atMillis` INTEGER NOT NULL, `chapterId` TEXT NOT NULL, `time` INTEGER NOT NULL, `toChapterId` TEXT, `toTime` INTEGER, `value` TEXT, `sourcePackage` TEXT, `bookmarkId` TEXT, `bookmarkKind` TEXT, `bookmarkSetBySleepTimer` INTEGER, `bookmarkAddedAtMillis` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "bookId",
@@ -388,6 +388,11 @@
             "affinity": "INTEGER"
           },
           {
+            "fieldPath": "bookmarkAddedAtMillis",
+            "columnName": "bookmarkAddedAtMillis",
+            "affinity": "INTEGER"
+          },
+          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -416,7 +421,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c6140cd038ab1e52a42801a88b7616b7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dee94a8d74d9f6db532e64d7d6c43e50')"
     ]
   }
 }

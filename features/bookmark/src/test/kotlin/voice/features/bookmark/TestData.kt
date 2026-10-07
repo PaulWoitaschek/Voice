@@ -24,6 +24,12 @@ internal fun today(
   minute: Int = 0,
 ): Instant = ZonedDateTime.of(2026, 10, 7, hour, minute, 0, 0, testZone).toInstant()
 
+/** Tuesday, 6 October 2026 at the given time in [testZone]. */
+internal fun yesterday(
+  hour: Int,
+  minute: Int = 0,
+): Instant = ZonedDateTime.of(2026, 10, 6, hour, minute, 0, 0, testZone).toInstant()
+
 internal fun testChapter(
   duration: Duration = 10.minutes,
   name: String? = null,
@@ -106,6 +112,7 @@ internal fun testEvent(
   bookmarkId = bookmark?.id,
   bookmarkKind = bookmark?.kind,
   bookmarkSetBySleepTimer = bookmark?.setBySleepTimer,
+  bookmarkAddedAtMillis = bookmark?.addedAt?.toEpochMilli(),
   id = nextEventId++,
 )
 

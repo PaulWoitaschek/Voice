@@ -11,6 +11,8 @@ import java.time.Instant
  *
  * [chapterId] and [time] are where playback was when the event happened. For
  * jumps, [toChapterId] and [toTime] are where playback went.
+ *
+ * Bookmark events also store the bookmark, so that a deleted one can be restored as it was.
  */
 @Entity(
   tableName = "listening_event",
@@ -30,6 +32,7 @@ public data class ListeningEvent(
   val bookmarkId: Bookmark.Id? = null,
   val bookmarkKind: Bookmark.Kind? = null,
   val bookmarkSetBySleepTimer: Boolean? = null,
+  val bookmarkAddedAtMillis: Long? = null,
   @PrimaryKey(autoGenerate = true)
   val id: Long = 0,
 ) {

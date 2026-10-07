@@ -44,6 +44,12 @@ public annotation class AnalyticsConsentStore
 @Qualifier
 public annotation class ListeningHistoryEnabledStore
 
+/**
+ * The keys of the listening history suggestions the listener dismissed, oldest first.
+ */
+@Qualifier
+public annotation class DismissedHistorySuggestionsStore
+
 @Qualifier
 public annotation class DeveloperMenuUnlockedStore
 

@@ -12,6 +12,7 @@ import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
 import kotlin.math.absoluteValue
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -33,8 +34,13 @@ private val STARTED_BY_RECENT = 24.hours
 private val STARTED_BY_MIN_PLAYED = 1.minutes
 private val JUMPED_RECENT = 10.minutes
 
+private val playTypes = setOf(Type.Play, Type.SleepTimerExtended)
+private val stopTypes = setOf(Type.Pause, Type.SleepTimerEnded)
 private val mergeableTypes = setOf(Type.Seek, Type.SkipBack, Type.SkipForward, Type.ChapterChange)
 private val jumpTypes = setOf(Type.Seek, Type.SkipBack, Type.SkipForward, Type.ChapterChange, Type.BookmarkJump)
+
+/** Events that leave playback at a spot someone chose, so going there again makes sense. */
+private val positionTypes = jumpTypes + setOf(Type.Play, Type.Pause, Type.JumpBack, Type.SleepTimerSet)
 
 /** Sources that mean a person did something on purpose. */
 private val touchSources = setOf(
@@ -50,7 +56,125 @@ private val touchSources = setOf(
 /** Sources that can start playback without the listener meaning to. */
 private val startedBySources = setOf(Source.Car, Source.Bluetooth, Source.Headset, Source.Watch, Source.OtherApp)
 
-internal fun historyViewState(
+/**
+ * The history without what changes while listening.
+ *
+ * Building it sorts, splits and formats all events, too much for every position update, so it's
+ * only built when the events, bookmarks or settings change. [viewState] adds the rest.
+ */
+internal data class HistoryTimeline(
+  val index: BookIndex,
+  private val zone: ZoneId,
+  private val state: HistoryViewState,
+  private val ongoing: OngoingSession?,
+  private val startedBy: StartedByCandidate?,
+  private val jumped: JumpedCandidate?,
+) {
+
+  /** Whether the newest session is still playing, so it grows with time and the position. */
+  val isOngoing: Boolean get() = ongoing != null
+
+  /**
+   * The view state at [now]. [currentProgress] is where playback is in the book, from 0 to 1.
+   */
+  fun viewState(
+    now: Instant,
+    currentProgress: Float?,
+    dismissedSuggestions: Collection<Long>,
+  ): HistoryViewState {
+    val suggestion = listOfNotNull(startedBy?.at(now, isOngoing, zone), jumped?.at(now))
+      .maxByOrNull { it.key }
+      ?.takeIf { it.key !in dismissedSuggestions }
+    val sessions = if (ongoing == null) {
+      state.sessions
+    } else {
+      state.sessions.map { session ->
+        if (session.key == ongoing.key) ongoing.at(session, now, currentProgress, zone) else session
+      }
+    }
+    return state.copy(suggestion = suggestion, sessions = sessions)
+  }
+}
+
+/**
+ * The newest session while it plays on. [barStart] and [barEnd] are how far its events reached.
+ */
+internal data class OngoingSession(
+  val key: Long,
+  val playTime: PlayTime,
+  val barStart: Float?,
+  val barEnd: Float?,
+) {
+
+  fun at(
+    session: HistorySession,
+    now: Instant,
+    currentProgress: Float?,
+    zone: ZoneId,
+  ): HistorySession {
+    val reach = listOfNotNull(barStart, barEnd, currentProgress)
+    return session.copy(
+      end = now.localTime(zone),
+      listened = playTime.until(now.toEpochMilli()),
+      barStart = reach.minOrNull() ?: 0F,
+      barEnd = reach.maxOrNull() ?: 0F,
+    )
+  }
+}
+
+/** Playback that a car, headset or watch started, which is offered to undo for a while. */
+internal data class StartedByCandidate(
+  val play: ListeningEvent,
+  val back: HistoryAction.JumpBack,
+  val played: PlayTime,
+  val sessionEndMillis: Long,
+) {
+
+  fun at(
+    now: Instant,
+    ongoing: Boolean,
+    zone: ZoneId,
+  ): HistorySuggestion.StartedBy? {
+    if ((now.toEpochMilli() - play.atMillis).milliseconds > STARTED_BY_RECENT) return null
+    val played = played.until(if (ongoing) now.toEpochMilli() else sessionEndMillis)
+    if (played < STARTED_BY_MIN_PLAYED) return null
+    return HistorySuggestion.StartedBy(
+      key = play.id,
+      back = back,
+      source = play.source,
+      at = play.at.localTime(zone),
+      played = played,
+    )
+  }
+}
+
+/** A big jump, which is offered to undo for a few minutes after [lastJumpMillis]. */
+internal data class JumpedCandidate(
+  val suggestion: HistorySuggestion.Jumped,
+  val lastJumpMillis: Long,
+) {
+
+  fun at(now: Instant): HistorySuggestion.Jumped? {
+    return suggestion.takeIf { (now.toEpochMilli() - lastJumpMillis).milliseconds <= JUMPED_RECENT }
+  }
+}
+
+/**
+ * How long playback went: [closedMillis] in stretches that ended, plus the time since [openSince]
+ * when it was still going after the last event.
+ */
+internal data class PlayTime(
+  val closedMillis: Long,
+  val openSince: Long?,
+) {
+
+  fun until(endMillis: Long): Duration {
+    val open = openSince?.let { endMillis - it } ?: 0L
+    return (closedMillis + open).coerceAtLeast(0L).milliseconds
+  }
+}
+
+internal fun historyTimeline(
   events: List<ListeningEvent>,
   index: BookIndex,
   bookmarks: List<Bookmark>,
@@ -58,18 +182,18 @@ internal fun historyViewState(
   playing: Boolean,
   selectedFilter: HistoryFilter?,
   selectedSource: Source?,
-  dismissedSuggestion: Long?,
   now: Instant,
   zone: ZoneId,
-): HistoryViewState {
+): HistoryTimeline {
   val ascending = events.sortedWith(compareBy({ it.atMillis }, { it.id }))
-  val previousValues = previousSettingValues(ascending)
-  val bookmarkIds = bookmarks.mapTo(mutableSetOf()) { it.id }
-  val rawSessions = splitSessions(ascending)
-  val sessions = rawSessions.mapIndexed { sessionIndex, session ->
-    val ongoing = sessionIndex == rawSessions.lastIndex && playing
-    buildSession(session, ongoing, index, previousValues, bookmarkIds, now, zone)
-  }
+  val context = TimelineContext(index, bookmarks, previousSettingValues(ascending), zone)
+  val rawSessions = splitSessions(ascending).map { RawSession(it, index) }
+  val latest = rawSessions.lastOrNull()
+  // only the newest session can still be playing, and only when it wasn't paused or recorded since
+  val ongoing = latest
+    ?.takeIf { playing && enabled && it.playTime.openSince != null }
+    ?.let { OngoingSession(key = it.events.first().id, playTime = it.playTime, barStart = it.barStart, barEnd = it.barEnd) }
+  val sessions = rawSessions.map { context.buildSession(it, now) }
   val allEntries = sessions.flatMap { it.entries }
   val filters = HistoryFilter.entries.filter { filter -> allEntries.any { filter in it.filters() } }
   val sources = allEntries.map { it.source }.distinct().sorted()
@@ -85,15 +209,22 @@ internal fun historyViewState(
     }
     .filter { it.entries.isNotEmpty() }
     .reversed()
-  return HistoryViewState(
-    enabled = enabled,
-    suggestion = suggestion(rawSessions, index, playing, now, zone)?.takeIf { it.key != dismissedSuggestion },
-    filters = filters,
-    selectedFilter = filter,
-    sources = sources,
-    selectedSource = source,
-    sessions = visibleSessions,
-    hasEvents = events.isNotEmpty(),
+  return HistoryTimeline(
+    index = index,
+    zone = zone,
+    state = HistoryViewState(
+      enabled = enabled,
+      suggestion = null,
+      filters = filters,
+      selectedFilter = filter,
+      sources = sources,
+      selectedSource = source,
+      sessions = visibleSessions,
+      hasEvents = events.isNotEmpty(),
+    ),
+    ongoing = ongoing,
+    startedBy = latest?.let { context.startedByCandidate(it) },
+    jumped = latest?.let { context.jumpedCandidate(it) },
   )
 }
 
@@ -115,8 +246,11 @@ internal fun HistoryEntry.filters(): Set<HistoryFilter> {
 }
 
 /**
- * Splits the events, oldest first, into listening sessions. Only a pause starts a new session,
+ * Splits the events, oldest first, into listening sessions. A pause starts a new session,
  * listening for hours without touching anything stays one session.
+ *
+ * A play while already playing means the pause before it was lost: the book ended, the app was
+ * killed, or the history was off. A long gap before such a play starts a new session as well.
  */
 internal fun splitSessions(events: List<ListeningEvent>): List<List<ListeningEvent>> {
   val sessions = mutableListOf<MutableList<ListeningEvent>>()
@@ -124,13 +258,14 @@ internal fun splitSessions(events: List<ListeningEvent>): List<List<ListeningEve
   var previous: ListeningEvent? = null
   events.forEach { event ->
     val gap = previous?.let { (event.atMillis - it.atMillis).milliseconds }
-    if (gap == null || (!playing && gap >= SESSION_GAP)) {
+    val pauseLost = playing && event.type in playTypes
+    if (gap == null || ((!playing || pauseLost) && gap >= SESSION_GAP)) {
       sessions += mutableListOf<ListeningEvent>()
     }
     sessions.last() += event
     playing = when (event.type) {
-      Type.Play, Type.SleepTimerExtended -> true
-      Type.Pause, Type.SleepTimerEnded -> false
+      in playTypes -> true
+      in stopTypes -> false
       else -> playing
     }
     previous = event
@@ -138,69 +273,88 @@ internal fun splitSessions(events: List<ListeningEvent>): List<List<ListeningEve
   return sessions
 }
 
-private fun buildSession(
-  events: List<ListeningEvent>,
-  ongoing: Boolean,
+/**
+ * The time listened in [events], oldest first. When a play comes while already playing, the
+ * pause before it was lost, so that stretch ends with the event before the play.
+ */
+internal fun playTime(events: List<ListeningEvent>): PlayTime {
+  var closed = 0L
+  var openSince: Long? = null
+  var previousMillis = 0L
+  events.forEach { event ->
+    val start = openSince
+    when (event.type) {
+      in playTypes -> {
+        if (start != null) closed += previousMillis - start
+        openSince = event.atMillis
+      }
+      in stopTypes -> {
+        if (start != null) closed += event.atMillis - start
+        openSince = null
+      }
+      else -> {}
+    }
+    previousMillis = event.atMillis
+  }
+  return PlayTime(closedMillis = closed, openSince = openSince)
+}
+
+/** What building the rows needs besides the events. */
+private class TimelineContext(
+  val index: BookIndex,
+  bookmarks: List<Bookmark>,
+  val previousValues: Map<Long, String?>,
+  val zone: ZoneId,
+) {
+  val bookmarksById: Map<Bookmark.Id, Bookmark> = bookmarks.associateBy { it.id }
+  val bookmarkSpots: Set<Pair<ChapterId, Long>> = bookmarks.mapTo(HashSet()) { it.chapterId to it.time }
+}
+
+/** The events of one session, oldest first, with what is derived from them. */
+private class RawSession(
+  val events: List<ListeningEvent>,
   index: BookIndex,
-  previousValues: Map<Long, String?>,
-  bookmarkIds: Set<Bookmark.Id>,
-  now: Instant,
-  zone: ZoneId,
-): HistorySession {
-  val first = events.first()
-  val endMillis = if (ongoing) now.toEpochMilli() else events.last().atMillis
-  val positions = events.flatMap { event ->
+) {
+  val rows: List<Row> = rows(events)
+  val playTime: PlayTime = playTime(events)
+  private val reach = events.flatMap { event ->
     listOfNotNull(
       index.locate(event.chapterId, event.time)?.progress,
       event.toChapterId?.let { chapterId -> index.locate(chapterId, event.toTime ?: 0L)?.progress },
     )
-  } + listOfNotNull(index.current?.progress?.takeIf { ongoing })
+  }
+  val barStart: Float? = reach.minOrNull()
+  val barEnd: Float? = reach.maxOrNull()
+}
+
+private fun TimelineContext.buildSession(
+  session: RawSession,
+  now: Instant,
+): HistorySession {
+  val first = session.events.first()
+  val last = session.events.last()
   return HistorySession(
     key = first.id,
     label = sessionLabel(first.at, now, zone),
     start = first.at.localTime(zone),
-    end = Instant.ofEpochMilli(endMillis).localTime(zone),
-    listened = listenedMillis(events, endMillis).milliseconds,
-    barStart = positions.minOrNull() ?: 0F,
-    barEnd = positions.maxOrNull() ?: 0F,
-    entries = buildEntries(events, index, previousValues, bookmarkIds, zone).reversed(),
+    end = last.at.localTime(zone),
+    listened = session.playTime.until(last.atMillis),
+    barStart = session.barStart ?: 0F,
+    barEnd = session.barEnd ?: 0F,
+    entries = buildEntries(session.rows).reversed(),
   )
-}
-
-private fun listenedMillis(
-  events: List<ListeningEvent>,
-  endMillis: Long,
-): Long {
-  var listened = 0L
-  var playStart: Long? = null
-  events.forEach { event ->
-    when (event.type) {
-      Type.Play, Type.SleepTimerExtended -> if (playStart == null) playStart = event.atMillis
-      Type.Pause, Type.SleepTimerEnded -> {
-        playStart?.let { listened += event.atMillis - it }
-        playStart = null
-      }
-      else -> {}
-    }
-  }
-  playStart?.let { listened += endMillis - it }
-  return listened.coerceAtLeast(0L)
 }
 
 /** Events that make up one row: repeats merged, and a pause with the play that ended it. */
 private class Row(val first: ListeningEvent) {
-  var last: ListeningEvent = first
-  var count: Int = 1
+  /** The merged repeats, oldest first. */
+  val events: MutableList<ListeningEvent> = mutableListOf(first)
+  val last: ListeningEvent get() = events.last()
+  val count: Int get() = events.size
   var resumedAt: Long? = null
 }
 
-private fun buildEntries(
-  events: List<ListeningEvent>,
-  index: BookIndex,
-  previousValues: Map<Long, String?>,
-  bookmarkIds: Set<Bookmark.Id>,
-  zone: ZoneId,
-): List<HistoryEntry> {
+private fun rows(events: List<ListeningEvent>): List<Row> {
   val rows = mutableListOf<Row>()
   events.forEach { event ->
     if (event.isTinySeek()) return@forEach
@@ -210,8 +364,7 @@ private fun buildEntries(
         event.type in mergeableTypes &&
         previous.first.type == event.type &&
         (event.atMillis - previous.last.atMillis).milliseconds <= MERGE_WINDOW -> {
-        previous.last = event
-        previous.count++
+        previous.events += event
       }
       previous != null &&
         event.type == Type.Play &&
@@ -223,6 +376,10 @@ private fun buildEntries(
       else -> rows += Row(event)
     }
   }
+  return rows
+}
+
+private fun TimelineContext.buildEntries(rows: List<Row>): List<HistoryEntry> {
   val lastTouches = lastTouches(rows)
   return rows.mapIndexed { rowIndex, row ->
     val first = row.first
@@ -235,29 +392,29 @@ private fun buildEntries(
       count = row.count,
       where = index.historyLocation(first.chapterId, first.time),
       to = row.last.toChapterId?.let { index.historyLocation(it, row.last.toTime ?: 0L) },
-      detail = detail(row, previousValues),
+      detail = detail(row),
       lastTouch = lastTouch,
-      action = if (lastTouch) {
-        val (chapterId, time) = row.last.landedAt()
-        HistoryAction.GoThere(chapterId, time)
-      } else {
-        action(row, index, previousValues, bookmarkIds)
-      },
+      action = if (lastTouch) goThere(row.last) else action(row),
     )
   }
 }
 
-/** For every time the sleep timer ended, the last row someone touched before that. */
+/**
+ * For every time the sleep timer ended, the last row before that where someone moved playback or
+ * played or paused it.
+ */
 private fun lastTouches(rows: List<Row>): Set<Int> {
   val touches = mutableSetOf<Int>()
   rows.forEachIndexed { rowIndex, row ->
     if (row.first.type == Type.SleepTimerEnded) {
-      val touch = (rowIndex - 1 downTo 0).firstOrNull { rows[it].first.source in touchSources }
+      val touch = (rowIndex - 1 downTo 0).firstOrNull { rows[it].isTouch() }
       if (touch != null) touches += touch
     }
   }
   return touches
 }
+
+private fun Row.isTouch(): Boolean = first.source in touchSources && first.type in positionTypes
 
 private fun ListeningEvent.landedAt(): Pair<ChapterId, Long> {
   val toChapterId = toChapterId
@@ -280,10 +437,7 @@ private fun ListeningEvent.isBigJump(): Boolean {
   }
 }
 
-private fun detail(
-  row: Row,
-  previousValues: Map<Long, String?>,
-): HistoryDetail? {
+private fun TimelineContext.detail(row: Row): HistoryDetail? {
   val event = row.first
   val previous = previousValues[event.id]
   return when (event.type) {
@@ -298,60 +452,80 @@ private fun detail(
     }
     Type.SkipSilenceChanged -> event.value?.toBooleanStrictOrNull()?.let { HistoryDetail.SkipSilence(it) }
     Type.SleepTimerSet, Type.SleepTimerExtended -> HistoryDetail.SleepTimer(event.value?.toIntOrNull())
-    Type.BookmarkAdded, Type.BookmarkDeleted -> HistoryDetail.BookmarkInfo(
-      kind = event.bookmarkKind ?: Bookmark.Kind.Note,
-      setBySleepTimer = event.bookmarkSetBySleepTimer ?: false,
-      note = event.value,
-    )
+    Type.BookmarkAdded, Type.BookmarkDeleted -> {
+      // the event is a snapshot, a bookmark that still exists may have been edited since
+      val bookmark = event.bookmarkId?.let { bookmarksById[it] }
+      if (bookmark != null) {
+        HistoryDetail.BookmarkInfo(kind = bookmark.kind, setBySleepTimer = bookmark.setBySleepTimer, note = bookmark.title)
+      } else {
+        HistoryDetail.BookmarkInfo(
+          kind = event.bookmarkKind ?: Bookmark.Kind.Note,
+          setBySleepTimer = event.bookmarkSetBySleepTimer ?: false,
+          note = event.value,
+        )
+      }
+    }
     else -> null
   }
 }
 
-private fun action(
-  row: Row,
-  index: BookIndex,
-  previousValues: Map<Long, String?>,
-  bookmarkIds: Set<Bookmark.Id>,
-): HistoryAction? {
+private fun TimelineContext.action(row: Row): HistoryAction? {
   val event = row.first
   return when (event.type) {
     Type.Seek, Type.SkipBack, Type.SkipForward, Type.ChapterChange, Type.BookmarkJump -> index.jumpBack(event)
     Type.Play -> if (event.source in startedBySources) {
       index.jumpBack(event)
     } else {
-      HistoryAction.Pin(event.chapterId, event.time)
+      pin(event.chapterId, event.time)
     }
     Type.JumpBack -> {
       val (chapterId, time) = event.landedAt()
-      HistoryAction.Pin(chapterId, time)
+      pin(chapterId, time)
     }
-    Type.Pause, Type.SleepTimerEnded, Type.SleepTimerSet, Type.SleepTimerExtended -> {
-      HistoryAction.Pin(event.chapterId, event.time)
-    }
+    Type.Pause, Type.SleepTimerEnded, Type.SleepTimerSet, Type.SleepTimerExtended -> pin(event.chapterId, event.time)
     Type.SpeedChanged, Type.VolumeBoostChanged -> {
       previousValues[event.id]?.let { HistoryAction.ChangeBack(event.type, it) }
     }
     Type.SkipSilenceChanged -> {
       event.value?.toBooleanStrictOrNull()?.let { HistoryAction.ChangeBack(event.type, (!it).toString()) }
     }
-    Type.BookmarkDeleted -> {
-      val id = event.bookmarkId ?: return null
-      if (id in bookmarkIds) return null
-      HistoryAction.Restore(
-        Bookmark(
-          bookId = event.bookId,
-          chapterId = event.chapterId,
-          title = event.value,
-          time = event.time,
-          addedAt = event.at,
-          setBySleepTimer = event.bookmarkSetBySleepTimer ?: false,
-          id = id,
-          kind = event.bookmarkKind ?: Bookmark.Kind.Note,
-        ),
-      )
-    }
+    Type.BookmarkDeleted -> restore(event)
     Type.BookmarkAdded -> null
   }
+}
+
+/** Null when the spot is gone after a rescan, or already has a bookmark. */
+private fun TimelineContext.pin(
+  chapterId: ChapterId,
+  time: Long,
+): HistoryAction.Pin? {
+  if (index.locate(chapterId, time) == null || (chapterId to time) in bookmarkSpots) return null
+  return HistoryAction.Pin(chapterId, time)
+}
+
+/** Null when the spot is gone after a rescan. */
+private fun TimelineContext.goThere(event: ListeningEvent): HistoryAction.GoThere? {
+  val (chapterId, time) = event.landedAt()
+  if (index.locate(chapterId, time) == null) return null
+  return HistoryAction.GoThere(chapterId, time)
+}
+
+/** Null when the bookmark is back already, or its spot is gone after a rescan. */
+private fun TimelineContext.restore(event: ListeningEvent): HistoryAction.Restore? {
+  val id = event.bookmarkId ?: return null
+  if (id in bookmarksById || index.locate(event.chapterId, event.time) == null) return null
+  return HistoryAction.Restore(
+    Bookmark(
+      bookId = event.bookId,
+      chapterId = event.chapterId,
+      title = event.value,
+      time = event.time,
+      addedAt = event.bookmarkAddedAtMillis?.let(Instant::ofEpochMilli) ?: event.at,
+      setBySleepTimer = event.bookmarkSetBySleepTimer ?: false,
+      id = id,
+      kind = event.bookmarkKind ?: Bookmark.Kind.Note,
+    ),
+  )
 }
 
 /**
@@ -371,62 +545,39 @@ private fun previousSettingValues(ascending: List<ListeningEvent>): Map<Long, St
 }
 
 /**
- * The newest thing that looks like an accident: playback started by a car, headset or watch,
- * or a big jump in the last minutes that wasn't undone.
+ * Playback started by a car, headset or watch in the newest session, unless someone touched the
+ * app afterwards. How long it played and whether it's recent is up to [StartedByCandidate.at].
  */
-private fun suggestion(
-  rawSessions: List<List<ListeningEvent>>,
-  index: BookIndex,
-  playing: Boolean,
-  now: Instant,
-  zone: ZoneId,
-): HistorySuggestion? {
-  val latest = rawSessions.lastOrNull() ?: return null
-  val startedBy = startedBySuggestion(latest, index, playing, now, zone)
-  val jumped = jumpedSuggestion(latest, index, now, zone)
-  return listOfNotNull(startedBy, jumped).maxByOrNull { it.key }
-}
-
-private fun startedBySuggestion(
-  session: List<ListeningEvent>,
-  index: BookIndex,
-  playing: Boolean,
-  now: Instant,
-  zone: ZoneId,
-): HistorySuggestion.StartedBy? {
-  val play = session.firstOrNull { it.type == Type.Play } ?: return null
+private fun TimelineContext.startedByCandidate(session: RawSession): StartedByCandidate? {
+  val events = session.events
+  val play = events.firstOrNull { it.type == Type.Play } ?: return null
   if (play.source !in startedBySources) return null
-  if ((now.toEpochMilli() - play.atMillis).milliseconds > STARTED_BY_RECENT) return null
-  val after = session.dropWhile { it !== play }.drop(1)
+  val after = events.dropWhile { it !== play }.drop(1)
   // touching the app afterwards, or going back already, means it was fine
   if (after.any { it.source == Source.App || it.type == Type.JumpBack }) return null
-  val endMillis = if (playing) now.toEpochMilli() else session.last().atMillis
-  val played = listenedMillis(listOf(play) + after, endMillis).milliseconds
-  if (played < STARTED_BY_MIN_PLAYED) return null
   val back = index.jumpBack(play) ?: return null
-  return HistorySuggestion.StartedBy(
-    key = play.id,
+  return StartedByCandidate(
+    play = play,
     back = back,
-    source = play.source,
-    at = play.at.localTime(zone),
-    played = played,
+    played = playTime(listOf(play) + after),
+    sessionEndMillis = events.last().atMillis,
   )
 }
 
-private fun jumpedSuggestion(
-  session: List<ListeningEvent>,
-  index: BookIndex,
-  now: Instant,
-  zone: ZoneId,
-): HistorySuggestion.Jumped? {
-  val jump = session.lastOrNull { it.type in jumpTypes && it.isBigJump() } ?: return null
-  if ((now.toEpochMilli() - jump.atMillis).milliseconds > JUMPED_RECENT) return null
-  if (session.any { it.atMillis >= jump.atMillis && it.type == Type.JumpBack }) return null
-  val back = index.jumpBack(jump) ?: return null
-  return HistorySuggestion.Jumped(
-    key = jump.id,
-    back = back,
-    at = jump.at.localTime(zone),
+/**
+ * The newest big jump in the newest session that wasn't undone. Repeats merge into one row, and
+ * like that row, the suggestion goes back to before the first of them.
+ */
+private fun TimelineContext.jumpedCandidate(session: RawSession): JumpedCandidate? {
+  val row = session.rows.lastOrNull { row ->
+    row.first.type in jumpTypes && row.events.any { it.isBigJump() }
+  } ?: return null
+  val first = row.first
+  if (session.events.any { it.atMillis >= first.atMillis && it.type == Type.JumpBack }) return null
+  val back = index.jumpBack(first) ?: return null
+  return JumpedCandidate(
+    suggestion = HistorySuggestion.Jumped(key = first.id, back = back, at = first.at.localTime(zone)),
+    lastJumpMillis = row.last.atMillis,
   )
 }
 
