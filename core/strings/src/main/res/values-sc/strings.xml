@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">B\'at àpidu carchi problema 😢</string>
     <string name="common.error.generic.retry">Torra a proare</string>
     <string name="cover.content_description.selectable">Mustra sa cobertedda de isseberare</string>
-    <string name="cover.search.author.content_description">Autore</string>
     <string name="cover.search.query.with_author">Cobertedda de s\'audiolibru %1$s de %2$s</string>
     <string name="cover.search.query.without_author">cobertedda de audiolibru %s</string>
-    <string name="cover.search.recent.content_description">Pregunta reghente</string>
     <string name="cover.title">Cobertedda</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minutu</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d libru in cursu</item>
         <item quantity="other">%d libros in cursu</item>
     </plurals>
-    <string name="library.search.hint">Ite ses chirchende?</string>
+    <string name="library.search.browse.title">Esplora</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d libru</item>
+        <item quantity="other">%d libros</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d acabbadu</item>
+        <item quantity="other">%d acabbados</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d in cursu</item>
+        <item quantity="other">%d in cursu</item>
+    </plurals>
+    <string name="library.search.clear">Isbòida sa chirca</string>
+    <string name="library.search.field.all">Totu</string>
+    <string name="library.search.field.authors">Autores</string>
+    <string name="library.search.field.genres">Gèneres</string>
+    <string name="library.search.field.narrators">Narradores</string>
+    <string name="library.search.field.series">Sèries</string>
+    <string name="library.search.field.titles">Tìtulos</string>
+    <string name="library.search.hint">Chirca in sa biblioteca tua</string>
+    <string name="library.search.match.genre">Gènere · %s</string>
+    <string name="library.search.match.narrator">Narradu dae %s</string>
+    <string name="library.search.match.series">Sèrie · %s</string>
+    <string name="library.search.no_results.folders_hint">No est in sa lista? Fortzis sa cartella sua no est galu agiunta a Voice.</string>
+    <string name="library.search.no_results.message">Sa chirca cumprendet tìtulos, autores, narradores, sèries e gèneres.</string>
+    <string name="library.search.no_results.search_everything">Chirca in totue</string>
+    <string name="library.search.no_results.title">Nissunu libru currispondet a “%s”</string>
+    <string name="library.search.recent.clear_all">Isbòida totu</string>
+    <string name="library.search.recent.remove">Boga %s</string>
+    <string name="library.search.recent.title">Reghentes</string>
     <string name="library.storage_permission_bug.action">Dae su permissu</string>
     <string name="library.storage_permission_bug.message">Pro unos cantos dispositivos, un\'aplicatzione de sistema non tenet s\'autorizatzione netzessària pro atzèdere a sa memòria esterna. Bisòngiat a tènnere custu atzessu pro chi Voice potzat lèghere sos audiolibros tuos.</string>
     <string name="library.storage_permission_bug.title">Permissu netzessàriu</string>

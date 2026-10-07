@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">ஏதோ தவறு நடந்தது</string>
     <string name="common.error.generic.retry">மீண்டும் முயற்சிக்கவும்</string>
     <string name="cover.content_description.selectable">தேர்வு செய்ய சூ கவர்</string>
-    <string name="cover.search.author.content_description">நூலாசிரியர்</string>
     <string name="cover.search.query.with_author">%1$s ஆல் %2$s ஆடியோபுக் கவர்</string>
     <string name="cover.search.query.without_author">%s ஆடியோபுக் கவர்</string>
-    <string name="cover.search.recent.content_description">அண்மைக் கால வினவல்</string>
     <string name="cover.title">கவர்</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d மணித்துளி</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d புத்தகம் கேட்கப்படுகிறது</item>
         <item quantity="other">%d புத்தகங்கள் கேட்கப்படுகின்றன</item>
     </plurals>
-    <string name="library.search.hint">நீங்கள் எதைத் தேடுகிறீர்கள்?</string>
+    <string name="library.search.browse.title">உலாவு</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d புத்தகம்</item>
+        <item quantity="other">%d புத்தகங்கள்</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d முடிந்தது</item>
+        <item quantity="other">%d முடிந்தன</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d கேட்கப்படுகிறது</item>
+        <item quantity="other">%d கேட்கப்படுகின்றன</item>
+    </plurals>
+    <string name="library.search.clear">தேடலை அழி</string>
+    <string name="library.search.field.all">அனைத்தும்</string>
+    <string name="library.search.field.authors">ஆசிரியர்கள்</string>
+    <string name="library.search.field.genres">வகைகள்</string>
+    <string name="library.search.field.narrators">வாசிப்பாளர்கள்</string>
+    <string name="library.search.field.series">தொடர்கள்</string>
+    <string name="library.search.field.titles">தலைப்புகள்</string>
+    <string name="library.search.hint">உங்கள் நூலகத்தில் தேடுங்கள்</string>
+    <string name="library.search.match.genre">வகை · %s</string>
+    <string name="library.search.match.narrator">%s குரலில்</string>
+    <string name="library.search.match.series">தொடர் · %s</string>
+    <string name="library.search.no_results.folders_hint">பட்டியலில் இல்லையா? அதன் கோப்புறை இன்னும் Voice இல் சேர்க்கப்படாமல் இருக்கலாம்.</string>
+    <string name="library.search.no_results.message">தலைப்புகள், ஆசிரியர்கள், வாசிப்பாளர்கள், தொடர்கள், வகைகள் ஆகியவற்றில் தேடல் நடைபெறும்.</string>
+    <string name="library.search.no_results.search_everything">அனைத்திலும் தேடு</string>
+    <string name="library.search.no_results.title">“%s” உடன் பொருந்தும் புத்தகங்கள் இல்லை</string>
+    <string name="library.search.recent.clear_all">அனைத்தையும் அழி</string>
+    <string name="library.search.recent.remove">%s ஐ அகற்று</string>
+    <string name="library.search.recent.title">அண்மையவை</string>
     <string name="library.storage_permission_bug.action">இசைவு வழங்கவும்</string>
     <string name="library.storage_permission_bug.message">சில சாதனங்களுக்கு, ஒரு கணினி பயன்பாடு வெளிப்புற சேமிப்பிடத்தை அணுக தேவையான அனுமதியைக் காணவில்லை. குரல் உங்கள் ஆடியோபுக்குகளைப் படிக்க இந்த அணுகல் தேவை.</string>
     <string name="library.storage_permission_bug.title">இசைவு தேவை</string>

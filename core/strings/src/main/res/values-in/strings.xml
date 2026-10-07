@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Terjadi kesalahan 😢</string>
     <string name="common.error.generic.retry">Coba Lagi</string>
     <string name="cover.content_description.selectable">Tampilkan sampul untuk dipilih</string>
-    <string name="cover.search.author.content_description">Penulis</string>
     <string name="cover.search.query.with_author">%1$s oleh %2$s sampul buku audio</string>
     <string name="cover.search.query.without_author">%s sampul buku audio</string>
-    <string name="cover.search.recent.content_description">Permintaan terbaru</string>
     <string name="cover.title">Cover</string>
     <plurals name="duration.minutes">
         <item quantity="other">%d menit</item>
@@ -185,7 +183,34 @@
     <plurals name="library.header.in_progress">
         <item quantity="other">%d buku sedang didengarkan</item>
     </plurals>
-    <string name="library.search.hint">Apa yang Anda cari?</string>
+    <string name="library.search.browse.title">Jelajahi</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="other">%d buku</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="other">%d selesai</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="other">%d sedang didengarkan</item>
+    </plurals>
+    <string name="library.search.clear">Hapus pencarian</string>
+    <string name="library.search.field.all">Semua</string>
+    <string name="library.search.field.authors">Penulis</string>
+    <string name="library.search.field.genres">Genre</string>
+    <string name="library.search.field.narrators">Narator</string>
+    <string name="library.search.field.series">Seri</string>
+    <string name="library.search.field.titles">Judul</string>
+    <string name="library.search.hint">Cari di pustaka Anda</string>
+    <string name="library.search.match.genre">Genre · %s</string>
+    <string name="library.search.match.narrator">Dibacakan oleh %s</string>
+    <string name="library.search.match.series">Seri · %s</string>
+    <string name="library.search.no_results.folders_hint">Tidak ada di daftar? Foldernya mungkin belum ditambahkan ke Voice.</string>
+    <string name="library.search.no_results.message">Pencarian mencakup judul, penulis, narator, seri, dan genre.</string>
+    <string name="library.search.no_results.search_everything">Cari di semua</string>
+    <string name="library.search.no_results.title">Tidak ada buku yang cocok dengan “%s”</string>
+    <string name="library.search.recent.clear_all">Hapus semua</string>
+    <string name="library.search.recent.remove">Hapus %s</string>
+    <string name="library.search.recent.title">Terbaru</string>
     <string name="library.storage_permission_bug.action">Berikan izin</string>
     <string name="library.storage_permission_bug.message">Untuk perangkat tertentu, aplikasi sistem tidak memiliki izin yang diperlukan untuk mengakses penyimpanan eksternal. Akses ini penting agar Voice dapat membaca buku audio Anda.</string>
     <string name="library.storage_permission_bug.title">Izin diperlukan</string>

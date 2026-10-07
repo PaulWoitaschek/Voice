@@ -71,6 +71,11 @@ sealed interface Destination {
   }
 
   @Serializable
+  data object LibrarySearch : Compose {
+    override val trackingName: String get() = "LibrarySearch"
+  }
+
+  @Serializable
   data object FolderPicker : Compose {
     override val trackingName: String get() = "FolderPicker"
   }

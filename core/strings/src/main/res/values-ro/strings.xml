@@ -58,10 +58,8 @@
     <string name="common.error.generic.message">S-a produs o eroare 😢</string>
     <string name="common.error.generic.retry">Reîncearcă</string>
     <string name="cover.content_description.selectable">Afișează alegere copertă</string>
-    <string name="cover.search.author.content_description">Autor</string>
     <string name="cover.search.query.with_author">Coperta cărții %1$s de %2$s</string>
     <string name="cover.search.query.without_author">Coperta cărții %s</string>
-    <string name="cover.search.recent.content_description">Interogarea recentă</string>
     <string name="cover.title">Copertă</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minut</item>
@@ -190,7 +188,40 @@
     <string name="library.category.not_started.title">Cărți neascultate încă</string>
     <string name="library.empty.add_first_book">Adaugă directorul cu cărțile tale și poți să începi!</string>
     <string name="library.folders.title">Directoare cărți</string>
-    <string name="library.search.hint">Ce anume căutați?</string>
+    <string name="library.search.browse.title">Răsfoiește</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d carte</item>
+        <item quantity="few">%d cărți</item>
+        <item quantity="other">%d de cărți</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d terminată</item>
+        <item quantity="few">%d terminate</item>
+        <item quantity="other">%d terminate</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d în curs</item>
+        <item quantity="few">%d în curs</item>
+        <item quantity="other">%d în curs</item>
+    </plurals>
+    <string name="library.search.clear">Șterge căutarea</string>
+    <string name="library.search.field.all">Toate</string>
+    <string name="library.search.field.authors">Autori</string>
+    <string name="library.search.field.genres">Genuri</string>
+    <string name="library.search.field.narrators">Naratori</string>
+    <string name="library.search.field.series">Serii</string>
+    <string name="library.search.field.titles">Titluri</string>
+    <string name="library.search.hint">Caută în biblioteca ta</string>
+    <string name="library.search.match.genre">Gen · %s</string>
+    <string name="library.search.match.narrator">Narată de %s</string>
+    <string name="library.search.match.series">Serie · %s</string>
+    <string name="library.search.no_results.folders_hint">Nu e în listă? Poate că directorul ei nu a fost încă adăugat în Voice.</string>
+    <string name="library.search.no_results.message">Căutarea include titluri, autori, naratori, serii și genuri.</string>
+    <string name="library.search.no_results.search_everything">Caută peste tot</string>
+    <string name="library.search.no_results.title">Nicio carte nu corespunde cu „%s”</string>
+    <string name="library.search.recent.clear_all">Șterge tot</string>
+    <string name="library.search.recent.remove">Elimină %s</string>
+    <string name="library.search.recent.title">Recente</string>
     <string name="library.storage_permission_bug.action">Acordă permisiune</string>
     <string name="library.storage_permission_bug.message">Pe anumite dispozitive, o aplicație de sistem are nevoie de anumite permisiuni pentru a accesa stocarea externă. Aceste permisiuni sunt esențiale pentru ca Voice să poată citi cărțile tale audio.</string>
     <string name="library.storage_permission_bug.title">Permisiune necesară</string>
