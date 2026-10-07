@@ -24,10 +24,12 @@ import voice.core.data.ThemeMode
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import java.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -48,6 +50,11 @@ class SettingsViewModelTest {
   private val listeningHistoryRepo = mockk<ListeningHistoryRepo> {
     coEvery { clear() } just Runs
   }
+  private val listeningHistoryRecorder = ListeningHistoryRecorder(
+    repo = listeningHistoryRepo,
+    clock = Clock.systemUTC(),
+    scope = scope,
+  )
   private val navigator = mockk<Navigator> {
     every { goTo(any()) } just Runs
   }
@@ -80,7 +87,7 @@ class SettingsViewModelTest {
     developerMenuUnlockedStore = developerMenuUnlockedStore,
     dynamicColorAvailability = dynamicColorAvailability,
     listeningHistoryEnabledStore = listeningHistoryEnabledStore,
-    listeningHistoryRepo = listeningHistoryRepo,
+    listeningHistoryRecorder = listeningHistoryRecorder,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
 

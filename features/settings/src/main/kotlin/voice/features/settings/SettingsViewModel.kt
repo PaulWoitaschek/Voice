@@ -19,7 +19,6 @@ import voice.core.common.MainScope
 import voice.core.data.GridMode
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
-import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
@@ -32,6 +31,7 @@ import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
+import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
@@ -64,7 +64,7 @@ class SettingsViewModel(
   private val dynamicColorAvailability: DynamicColorAvailability,
   @ListeningHistoryEnabledStore
   private val listeningHistoryEnabledStore: DataStore<Boolean>,
-  private val listeningHistoryRepo: ListeningHistoryRepo,
+  private val listeningHistoryRecorder: ListeningHistoryRecorder,
   dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
@@ -255,7 +255,7 @@ class SettingsViewModel(
   override fun clearListeningHistory() {
     dismissDialog()
     mainScope.launch {
-      listeningHistoryRepo.clear()
+      listeningHistoryRecorder.clear()
       viewEffects.emit(SettingsViewEffect.ListeningHistoryCleared)
     }
   }

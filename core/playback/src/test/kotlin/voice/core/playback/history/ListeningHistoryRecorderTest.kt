@@ -85,6 +85,40 @@ class ListeningHistoryRecorderTest {
     advanceUntilIdle()
     assertEquals(expected = listOf("1.3"), actual = repo.events.map { it.value })
   }
+
+  @Test
+  fun `speed changes of different books are each recorded`() = scope.runTest {
+    val otherBook = PlaybackPosition(BookId("other"), chapter, 0)
+    recorder.record(ListeningEvent.Type.SpeedChanged, ListeningEvent.Source.App, at(0), value = "1.2")
+    recorder.record(ListeningEvent.Type.SpeedChanged, ListeningEvent.Source.App, otherBook, value = "1.5")
+
+    advanceUntilIdle()
+    assertEquals(
+      expected = listOf(BookId("book") to "1.2", BookId("other") to "1.5"),
+      actual = repo.events.map { it.bookId to it.value },
+    )
+  }
+
+  @Test
+  fun `clearing drops what was recorded but not written yet`() = scope.runTest {
+    recorder.record(ListeningEvent.Type.SpeedChanged, ListeningEvent.Source.App, at(0), value = "1.2")
+    seek(at(0), at(60_000))
+
+    recorder.clear()
+    advanceUntilIdle()
+
+    assertEquals(expected = emptyList(), actual = repo.events)
+    assertNull(recorder.lastJump.value)
+  }
+
+  @Test
+  fun `what is recorded after clearing is kept`() = scope.runTest {
+    recorder.clear()
+    seek(at(0), at(60_000))
+
+    advanceUntilIdle()
+    assertEquals(expected = listOf(ListeningEvent.Type.Seek), actual = repo.events.map { it.type })
+  }
 }
 
 class RecordingRepo : ListeningHistoryRepo {
