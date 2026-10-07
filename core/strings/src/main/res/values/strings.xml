@@ -159,7 +159,7 @@
     <!-- Title for the one-time dialog shown from the old audiobook folders shortcut. -->
     <string name="library.folders.moved.dialog.title">Audiobook folders moved</string>
     <!-- Body for the one-time dialog shown from the old audiobook folders shortcut. -->
-    <string name="library.folders.moved.dialog.message">You can now manage audiobook folders in Preferences.</string>
+    <string name="library.folders.moved.dialog.message">You can now manage audiobook folders in Settings.</string>
     <!-- Library screen greeting shown in the afternoon. -->
     <string name="library.greeting.afternoon">Good afternoon</string>
     <!-- Library screen greeting shown in the evening. -->
@@ -274,7 +274,7 @@
     <!-- Settings about row showing the app version. -->
     <string name="settings.about.app_version.title">App version</string>
     <!-- Title and content description for opening settings. -->
-    <string name="settings.action.open">Preferences</string>
+    <string name="settings.action.open">Settings</string>
     <!-- Settings row description for analytics consent. -->
     <string name="settings.analytics_consent.description">Allow anonymous usage data collection to help improve the app</string>
     <!-- Settings row title for analytics consent. -->
@@ -318,12 +318,26 @@
     <string name="settings.auto_sleep_timer.title">Automatic Sleep Timer</string>
     <!-- Summary text for the audiobook folders settings row. -->
     <string name="settings.library.folders.summary">Manage folders scanned for audiobooks</string>
-    <!-- Settings row for toggling grid layout in the library. -->
-    <string name="settings.library.use_grid.title">Use grid layout</string>
+    <!-- Label of the preview tile that shows the library as a grid of covers. -->
+    <string name="settings.library.layout.grid">Grid</string>
+    <!-- Label of the preview tile that shows the library as a list. -->
+    <string name="settings.library.layout.list">List</string>
+    <!-- Title of the settings section for the audiobook folders and the library layout. -->
+    <string name="settings.library.title">Library</string>
+    <!-- Title of the settings section for the skip amount and auto rewind. -->
+    <string name="settings.listening.title">Listening</string>
+    <!-- Auto rewind preset and value when it doesn't rewind at all. -->
+    <string name="settings.playback.auto_rewind.off">Off</string>
+    <!-- Explains the auto rewind setting. -->
+    <string name="settings.playback.auto_rewind.summary">Jumps back a little when you resume, so you don\'t lose the thread</string>
     <!-- Title for the setting that rewinds automatically when playback resumes. -->
     <string name="settings.playback.auto_rewind.title">Auto rewind</string>
+    <!-- Explains the skip amount setting. -->
+    <string name="settings.playback.seek_time.summary">How far rewind and fast forward jump</string>
     <!-- Title for the setting that controls skip-forward and rewind duration. -->
     <string name="settings.playback.seek_time.title">Skip amount</string>
+    <!-- Playful subtitle below the settings title. -->
+    <string name="settings.subtitle">Make Voice yours</string>
     <!-- Settings support row for opening the FAQ. -->
     <string name="settings.support.faq.title">FAQ</string>
     <!-- Settings support row for getting help. -->
@@ -337,6 +351,8 @@
     <string name="settings.support.support_voice.title">Support development</string>
     <!-- Settings support row for suggesting a product idea. -->
     <string name="settings.support.suggest_idea.title">Suggest an idea</string>
+    <!-- Title of the settings section with the FAQ, getting help, reporting problems, suggesting ideas and translating. -->
+    <string name="settings.support.title">Help and feedback</string>
     <!-- Support screen action for donating through Ko-fi. -->
     <string name="support.action.donate_kofi">Donate on Ko-fi</string>
     <!-- Support screen text explaining why support is useful. -->

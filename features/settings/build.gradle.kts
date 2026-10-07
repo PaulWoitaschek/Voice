@@ -13,6 +13,7 @@ dependencies {
   implementation(projects.core.ui)
   implementation(projects.core.remoteconfig.api)
   implementation(projects.core.data.api)
+  implementation(projects.core.documentfile)
 
   implementation(libs.androidxCore)
 

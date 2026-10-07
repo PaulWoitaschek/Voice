@@ -77,6 +77,8 @@ public object KioskModeDemoData {
   )
 
   public val currentlyPlayingBook: DemoAudiobook = demoAudiobooks.single { it.id == currentlyPlaying.id }
+
+  public val folderNames: List<String> = listOf("Audiobooks", "Sci-Fi", "Non-Fiction")
 }
 
 public data class DemoAudiobook(
