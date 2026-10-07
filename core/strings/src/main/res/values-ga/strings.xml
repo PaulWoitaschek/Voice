@@ -20,7 +20,6 @@
     <string name="common.action.close">Dún</string>
     <string name="common.action.delete">Scrios</string>
     <string name="common.action.edit">Athraigh</string>
-    <string name="common.action.more">Tuilleadh</string>
     <string name="common.action.remove">Bain de</string>
     <string name="common.dialog.cancel">Cealaigh</string>
     <string name="common.dialog.confirm">Socraigh</string>
@@ -68,10 +67,22 @@
     <string name="library.category.completed.title">Críochnaithe</string>
     <string name="library.category.current.title">Reatha</string>
     <string name="library.category.not_started.title">Níl tosnaithe go fóill</string>
+    <string name="library.continue_listening">Lean ort ag éisteacht</string>
     <string name="library.empty.add_first_book">Cuirimis d’fhillteán closleabhar leis ionas gur féidir leat tosú ag éisteacht!</string>
     <string name="library.folders.title">Fillteáin na closleabhar</string>
     <string name="library.folders.moved.dialog.title">Bogadh fillteáin closleabhar</string>
     <string name="library.folders.moved.dialog.message">Is féidir leat fillteáin closleabhar a bhainistiú anois sna Sainroghanna.</string>
+    <string name="library.greeting.afternoon">Tráthnóna maith</string>
+    <string name="library.greeting.evening">Tráthnóna maith</string>
+    <string name="library.greeting.morning">Maidin mhaith</string>
+    <string name="library.greeting.night">Dia duit, a ulchabháin oíche</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d leabhar ar siúl</item>
+        <item quantity="two">%d leabhar ar siúl</item>
+        <item quantity="few">%d leabhar ar siúl</item>
+        <item quantity="many">%d leabhar ar siúl</item>
+        <item quantity="other">%d leabhar ar siúl</item>
+    </plurals>
     <string name="library.search.hint">Cad atá tú ag féachaint faoi?</string>
     <string name="library.storage_permission_bug.action">Cead a dheonú</string>
     <string name="library.storage_permission_bug.message">I gcás feistí áirithe, tá an cead riachtanach chun rochtain a fháil ar an stóras seachtrach in easnamh ar aip córais. Tá an rochtain seo riachtanach do Voice chun do chlosleabhair a léamh.</string>
@@ -98,12 +109,20 @@
     <string name="playback.action.rewind">Athchasadh</string>
     <string name="playback.battery_optimization.action">Nuashonrú</string>
     <string name="playback.battery_optimization.rationale">Mar gheall ar do shrianta Cumhachta, d\'fhéadfadh go gcuirfí isteach ar athsheinm.</string>
+    <string name="playback.book_progress.read">%1$s den leabhar</string>
+    <string name="playback.book_progress.remaining">%1$s fágtha</string>
+    <string name="playback.book_progress.remaining_at_speed">%1$s fágtha ag %2$s</string>
+    <string name="playback.chapter.counter">Caibidil %1$d de %2$d</string>
     <string name="playback.chapter.current.content_description">Caibidil reatha</string>
     <string name="playback.chapter.next">An rian ina dhiaidh</string>
     <string name="playback.chapter.previous">An rian roimhe</string>
+    <string name="playback.chapters.title">Caibidlí</string>
     <string name="playback.option.skip_silence">Scipeáil ar Chiúin</string>
     <string name="playback.option.volume_boost">Treisiú toirte</string>
+    <string name="playback.speed.decrease">Níos moille</string>
+    <string name="playback.speed.increase">Níos tapúla</string>
     <string name="playback.speed.title">Luas an seinntora</string>
+    <string name="playback.volume_boost.off">As</string>
     <string name="review.feedback.action.cancel">Cealaigh</string>
     <string name="review.feedback.action.send">Seol Aiseolas</string>
     <string name="review.feedback.message">An bhféadfá a insint dúinn cad a chuaigh mícheart? Is mór againn d’aiseolas agus cabhraíonn sé linn d’eispéireas a fheabhsú.</string>
@@ -151,6 +170,8 @@
     <string name="sleep_timer.action.open">Orláiste codalta</string>
     <string name="sleep_timer.dialog.action.decrement">Níos giorra</string>
     <string name="sleep_timer.dialog.action.increment">Níos faide</string>
-    <string name="sleep_timer.dialog.title">Codladh sámh! 🌙</string>
+    <string name="sleep_timer.dialog.minutes_short">nóim</string>
+    <string name="sleep_timer.dialog.shake_hint">Croith do ghuthán díreach tar éis don orláiste codalta críochnú chun é a atosú.</string>
+    <string name="sleep_timer.dialog.title">Orláiste codalta</string>
     <string name="sleep_timer.end_of_chapter">Deireadh na Caibidle</string>
 </resources>

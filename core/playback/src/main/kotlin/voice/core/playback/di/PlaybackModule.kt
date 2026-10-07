@@ -12,6 +12,7 @@ import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.extractor.DefaultExtractorsFactory
 import androidx.media3.session.CommandButton
 import androidx.media3.session.MediaLibraryService
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -32,8 +33,9 @@ import voice.core.playback.session.LibrarySessionCallback
 import voice.core.playback.session.PlaybackService
 import voice.core.strings.R as StringsR
 
+@BindingContainer
 @ContributesTo(PlaybackScope::class)
-interface PlaybackModule {
+object PlaybackModule {
 
   @Provides
   @SingleIn(PlaybackScope::class)

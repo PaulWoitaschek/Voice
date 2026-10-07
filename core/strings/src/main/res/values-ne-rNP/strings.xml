@@ -20,7 +20,6 @@
     <string name="common.action.close">बन्द गर्नुहोस्</string>
     <string name="common.action.delete">मेटाउनुहोस्</string>
     <string name="common.action.edit">सम्पादन गर्नुहोस्</string>
-    <string name="common.action.more">थप</string>
     <string name="common.action.remove">हटाउनुहोस्</string>
     <string name="common.dialog.cancel">रद्द गर्नुहोस्</string>
     <string name="common.dialog.confirm">सेट</string>
@@ -101,4 +100,6 @@
     <string name="settings.support.suggest_idea.title">विचार सुझाव गर्नुहोस्</string>
     <string name="shortcut.play_current.short_label">हालको प्ले गर्नुहोस्</string>
     <string name="sleep_timer.action.open">सुत्ने-टाइमर</string>
+    <string name="sleep_timer.dialog.shake_hint">टाइमर सकिनेबित्तिकै फेरि सुरु गर्न आफ्नो फोन हल्लाउनुहोस्।</string>
+    <string name="sleep_timer.dialog.title">सुत्ने-टाइमर</string>
 </resources>

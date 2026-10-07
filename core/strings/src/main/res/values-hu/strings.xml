@@ -20,7 +20,6 @@
     <string name="common.action.close">Bezárás</string>
     <string name="common.action.delete">Törlés</string>
     <string name="common.action.edit">Szerkesztés</string>
-    <string name="common.action.more">Tovább</string>
     <string name="common.action.remove">Eltávolítás</string>
     <string name="common.dialog.cancel">Mégse</string>
     <string name="common.dialog.confirm">Beállítás</string>
@@ -107,5 +106,6 @@
     <string name="sleep_timer.action.open">Alvásidőzítő</string>
     <string name="sleep_timer.dialog.action.decrement">Rövidebb</string>
     <string name="sleep_timer.dialog.action.increment">Hosszabb</string>
-    <string name="sleep_timer.dialog.title">Szép álmokat! 🌙</string>
+    <string name="sleep_timer.dialog.shake_hint">Közvetlenül az időzítő lejárta után rázd meg a telefont az újraindításhoz.</string>
+    <string name="sleep_timer.dialog.title">Alvásidőzítő</string>
 </resources>

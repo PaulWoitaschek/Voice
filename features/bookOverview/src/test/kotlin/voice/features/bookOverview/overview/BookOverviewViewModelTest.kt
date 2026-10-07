@@ -18,6 +18,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
+import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.GridMode
 import voice.core.data.KioskModeDemoData
@@ -97,6 +98,7 @@ class BookOverviewViewModelTest {
 
       assertEquals(expected = currentBook.toItemViewState(), actual = initialCurrentItem)
       assertEquals(expected = otherBook.toItemViewState(), actual = initialOtherItem)
+      assertEquals(expected = currentBook.id, actual = initial.currentBookId)
 
       val livePlaybackState = LivePlaybackState(
         bookId = currentBook.id,
@@ -162,6 +164,7 @@ class BookOverviewViewModelTest {
         actual = state.books.getValue(BookOverviewCategory.CURRENT).keys.toList(),
       )
       assertEquals(expected = "Echoes of Tomorrow", actual = state.currentBook(KioskModeDemoData.currentlyPlaying.id).name)
+      assertEquals(expected = KioskModeDemoData.currentlyPlaying.id, actual = state.currentBookId)
     }
   }
 
@@ -279,19 +282,34 @@ class BookOverviewViewModelTest {
     }
   }
 
+  @Test
+  fun `current book id is dropped when the book is no longer in the library`() = runTest {
+    val book = book(name = "Present", time = 1_000)
+    val viewModel = viewModel(books = listOf(book), currentBookId = BookId("removed"))
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = null, actual = awaitItem().currentBookId)
+    }
+  }
+
   private fun BookOverviewViewState.currentBook(bookId: BookId): BookOverviewItemViewState {
     return books.getValue(BookOverviewCategory.CURRENT).getValue(bookId).value
   }
 
   private fun viewModel(
-    folderPickerInSettingsFeatureFlag: MemoryFeatureFlag<Boolean>,
-    folderPickerMovedDialogShownStore: DataStore<Boolean>,
+    folderPickerInSettingsFeatureFlag: MemoryFeatureFlag<Boolean> = MemoryFeatureFlag(false),
+    folderPickerMovedDialogShownStore: DataStore<Boolean> = MemoryDataStore(false),
     navigator: Navigator = mockk(),
     appInfoProvider: AppInfoProvider = appInfoProvider(),
+    books: List<Book> = emptyList(),
+    currentBookId: BookId? = null,
   ): BookOverviewViewModel {
     return BookOverviewViewModel(
       repo = mockk<BookRepository> {
-        every { flow() } returns MutableStateFlow(emptyList())
+        every { flow() } returns MutableStateFlow(books)
       },
       mediaScanner = mockk<MediaScanTrigger> {
         every { scannerActive } returns MutableStateFlow(false)
@@ -299,7 +317,7 @@ class BookOverviewViewModelTest {
       },
       playStateManager = PlayStateManager(),
       playerController = mockk(),
-      currentBookStoreDataStore = MemoryDataStore(null),
+      currentBookStoreDataStore = MemoryDataStore(currentBookId),
       folderPickerMovedDialogShownStore = folderPickerMovedDialogShownStore,
       gridModeStore = MemoryDataStore(GridMode.LIST),
       gridCount = mockk<GridCount> {

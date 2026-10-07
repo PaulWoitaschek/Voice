@@ -40,8 +40,6 @@
     <string name="common.action.delete">Delete</string>
     <!-- Generic edit action in popup menus. -->
     <string name="common.action.edit">Edit</string>
-    <!-- Content description for an overflow menu button. -->
-    <string name="common.action.more">More</string>
     <!-- Generic remove action in menus. -->
     <string name="common.action.remove">Remove</string>
     <!-- Generic action for dismissing a dialog without applying changes. -->
@@ -109,6 +107,8 @@
     <string name="library.category.current.title">Current</string>
     <!-- Library category header for books not started yet. -->
     <string name="library.category.not_started.title">Not started Yet</string>
+    <!-- Label above the hero card on the library screen that resumes the current audiobook. -->
+    <string name="library.continue_listening">Continue listening</string>
     <!-- Library empty-state prompt shown before the first audiobook is added. -->
     <string name="library.empty.add_first_book">Let\'s add your audiobook folder so you can start listening!</string>
     <!-- Title for screens and rows that manage audiobook folders. -->
@@ -117,6 +117,19 @@
     <string name="library.folders.moved.dialog.title">Audiobook folders moved</string>
     <!-- Body for the one-time dialog shown from the old audiobook folders shortcut. -->
     <string name="library.folders.moved.dialog.message">You can now manage audiobook folders in Preferences.</string>
+    <!-- Library screen greeting shown in the afternoon. -->
+    <string name="library.greeting.afternoon">Good afternoon</string>
+    <!-- Library screen greeting shown in the evening. -->
+    <string name="library.greeting.evening">Good evening</string>
+    <!-- Library screen greeting shown in the morning. -->
+    <string name="library.greeting.morning">Good morning</string>
+    <!-- Playful library screen greeting shown late at night. -->
+    <string name="library.greeting.night">Hello, night owl</string>
+    <!-- Subtitle below the library greeting counting audiobooks that were started but not finished. -->
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d book in progress</item>
+        <item quantity="other">%d books in progress</item>
+    </plurals>
     <!-- Hint text for searching books in the library. -->
     <string name="library.search.hint">What are you looking for?</string>
     <!-- Button label for granting the storage permission workaround. -->
@@ -169,18 +182,34 @@
     <string name="playback.battery_optimization.action">Update</string>
     <!-- Snackbar or prompt text explaining playback issues caused by power restrictions. -->
     <string name="playback.battery_optimization.rationale">Due to your Power restrictions, playback interruptions might happen.</string>
+    <!-- Global book progress on the playback screen. The placeholder is a localized percentage, e.g. "72%". -->
+    <string name="playback.book_progress.read">%1$s of book</string>
+    <!-- Remaining listening time for the whole book on the playback screen, adjusted for playback speed. The placeholder is a duration like "4:03:15". -->
+    <string name="playback.book_progress.remaining">%1$s left</string>
+    <!-- Remaining listening time for the whole book when playing faster or slower than normal. Placeholders are a duration like "4:03:15" and a playback speed like "1.5×". -->
+    <string name="playback.book_progress.remaining_at_speed">%1$s left at %2$s</string>
+    <!-- Position of the current chapter within the book, e.g. "Chapter 3 of 24". -->
+    <string name="playback.chapter.counter">Chapter %1$d of %2$d</string>
     <!-- Content description prefix for the currently playing chapter. -->
     <string name="playback.chapter.current.content_description">Current chapter</string>
     <!-- Content description for moving to the next chapter or track. -->
     <string name="playback.chapter.next">Next track</string>
     <!-- Content description for moving to the previous chapter or track. -->
     <string name="playback.chapter.previous">Previous track</string>
+    <!-- Title of the sheet that lists all chapters of a book. -->
+    <string name="playback.chapters.title">Chapters</string>
     <!-- Menu label for toggling silence skipping during playback. -->
     <string name="playback.option.skip_silence">Skip Silence</string>
     <!-- Menu and dialog title for changing volume gain. -->
     <string name="playback.option.volume_boost">Volume boost</string>
+    <!-- Content description for lowering the playback speed by a small step. -->
+    <string name="playback.speed.decrease">Slower</string>
+    <!-- Content description for raising the playback speed by a small step. -->
+    <string name="playback.speed.increase">Faster</string>
     <!-- Title and content description for playback-speed controls. -->
     <string name="playback.speed.title">Playback speed</string>
+    <!-- Button that turns volume boost off. -->
+    <string name="playback.volume_boost.off">Off</string>
     <!-- Negative button for cancelling feedback. -->
     <string name="review.feedback.action.cancel" tools:ignore="UnusedResources">Cancel</string>
     <!-- Positive button for sending feedback. -->
@@ -271,13 +300,17 @@
     <!-- Short label for the launcher shortcut that plays the current book. -->
     <string name="shortcut.play_current.short_label">Play current</string>
     <!-- Content description for opening the sleep timer. -->
-    <string name="sleep_timer.action.open">Sleep-Timer</string>
+    <string name="sleep_timer.action.open">Sleep timer</string>
     <!-- Content description for decreasing the sleep timer duration. -->
     <string name="sleep_timer.dialog.action.decrement">Shorter</string>
     <!-- Content description for increasing the sleep timer duration. -->
     <string name="sleep_timer.dialog.action.increment">Longer</string>
+    <!-- Short unit label for minutes, shown below a sleep timer preset number like "15". -->
+    <string name="sleep_timer.dialog.minutes_short">min</string>
+    <!-- Hint at the bottom of the sleep timer dialog: shaking the phone shortly after the timer ran out resumes playback and restarts the timer. -->
+    <string name="sleep_timer.dialog.shake_hint">Shake your phone right after the timer ends to restart it.</string>
     <!-- Title of the sleep timer dialog. -->
-    <string name="sleep_timer.dialog.title">Sweet dreams! 🌙</string>
+    <string name="sleep_timer.dialog.title">Sleep timer</string>
     <!-- Sleep timer option and playback status for stopping at the end of a chapter. -->
     <string name="sleep_timer.end_of_chapter">End of Chapter</string>
 </resources>

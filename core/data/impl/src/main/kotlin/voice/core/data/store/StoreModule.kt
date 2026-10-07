@@ -7,6 +7,7 @@ import androidx.core.content.edit
 import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -23,8 +24,9 @@ import java.io.File
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-public interface StoreModule {
+public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
@@ -202,6 +204,17 @@ public interface StoreModule {
       serializer = MapSerializer(String.serializer(), FeatureFlagOverride.serializer()),
       defaultValue = emptyMap(),
       fileName = "featureFlagOverrides",
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @CoverSeedColorsStore
+  private fun coverSeedColors(factory: VoiceDataStoreFactory): DataStore<Map<String, Int>> {
+    return factory.create(
+      serializer = MapSerializer(String.serializer(), Int.serializer()),
+      defaultValue = emptyMap(),
+      fileName = "coverSeedColors",
     )
   }
 }

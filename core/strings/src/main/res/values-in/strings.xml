@@ -20,7 +20,6 @@
     <string name="common.action.close">Tutup</string>
     <string name="common.action.delete">Hapus</string>
     <string name="common.action.edit">Edit</string>
-    <string name="common.action.more">Lainnya</string>
     <string name="common.action.remove">Buang</string>
     <string name="common.dialog.cancel">Batalkan</string>
     <string name="common.dialog.confirm">Atur</string>
@@ -56,10 +55,18 @@
     <string name="library.category.completed.title">Selesai</string>
     <string name="library.category.current.title">Saat ini</string>
     <string name="library.category.not_started.title">Belum dimulai</string>
+    <string name="library.continue_listening">Lanjutkan mendengarkan</string>
     <string name="library.empty.add_first_book">Mari tambahkan folder buku audio Anda sehingga Anda dapat mulai mendengarkan!</string>
     <string name="library.folders.title">Folder buku audio</string>
     <string name="library.folders.moved.dialog.title">Folder buku audio dipindahkan</string>
     <string name="library.folders.moved.dialog.message">Sekarang Anda dapat mengelola folder buku audio di Preferensi.</string>
+    <string name="library.greeting.afternoon">Selamat siang</string>
+    <string name="library.greeting.evening">Selamat malam</string>
+    <string name="library.greeting.morning">Selamat pagi</string>
+    <string name="library.greeting.night">Halo, burung hantu malam</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="other">%d buku sedang didengarkan</item>
+    </plurals>
     <string name="library.search.hint">Apa yang Anda cari?</string>
     <string name="library.storage_permission_bug.action">Berikan izin</string>
     <string name="library.storage_permission_bug.message">Untuk perangkat tertentu, aplikasi sistem tidak memiliki izin yang diperlukan untuk mengakses penyimpanan eksternal. Akses ini penting agar Voice dapat membaca buku audio Anda.</string>
@@ -86,12 +93,20 @@
     <string name="playback.action.rewind">Memundurkan</string>
     <string name="playback.battery_optimization.action">Perbarui</string>
     <string name="playback.battery_optimization.rationale">Karena pembatasan Daya Anda, gangguan pemutaran mungkin terjadi.</string>
+    <string name="playback.book_progress.read">%1$s dari buku</string>
+    <string name="playback.book_progress.remaining">Sisa %1$s</string>
+    <string name="playback.book_progress.remaining_at_speed">Sisa %1$s pada %2$s</string>
+    <string name="playback.chapter.counter">Bab %1$d dari %2$d</string>
     <string name="playback.chapter.current.content_description">Bab saat ini</string>
     <string name="playback.chapter.next">Trek selanjutnya</string>
     <string name="playback.chapter.previous">Trek sebelumnya</string>
+    <string name="playback.chapters.title">Bab</string>
     <string name="playback.option.skip_silence">Lewati Keheningan</string>
     <string name="playback.option.volume_boost">Peningkatan volume</string>
+    <string name="playback.speed.decrease">Lebih lambat</string>
+    <string name="playback.speed.increase">Lebih cepat</string>
     <string name="playback.speed.title">Kecepatan pemutaran</string>
+    <string name="playback.volume_boost.off">Mati</string>
     <string name="review.feedback.action.cancel">Batal</string>
     <string name="review.feedback.action.send">Kirim Masukan</string>
     <string name="review.feedback.message">Bisakah Anda memberi tahu kami apa yang salah? Kami menghargai masukan Anda dan ini membantu kami meningkatkan pengalaman Anda.</string>
@@ -139,6 +154,8 @@
     <string name="sleep_timer.action.open">Pengatur Waktu Tidur</string>
     <string name="sleep_timer.dialog.action.decrement">Lebih singkat</string>
     <string name="sleep_timer.dialog.action.increment">Lebih lama</string>
-    <string name="sleep_timer.dialog.title">Selamat beristirahat! 🌙</string>
+    <string name="sleep_timer.dialog.minutes_short">mnt</string>
+    <string name="sleep_timer.dialog.shake_hint">Goyangkan ponsel Anda segera setelah pengatur waktu berakhir untuk memulainya lagi.</string>
+    <string name="sleep_timer.dialog.title">Pengatur Waktu Tidur</string>
     <string name="sleep_timer.end_of_chapter">Akhir Bab</string>
 </resources>

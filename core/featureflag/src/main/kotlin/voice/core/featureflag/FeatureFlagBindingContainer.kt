@@ -1,15 +1,16 @@
 package voice.core.featureflag
 
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.IntoSet
+import dev.zacsweers.metro.ElementsIntoSet
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.Qualifier
 import dev.zacsweers.metro.SingleIn
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface FeatureFlagBindingContainer {
+object FeatureFlagBindingContainer {
 
   @Provides
   @SingleIn(AppScope::class)
@@ -21,10 +22,6 @@ interface FeatureFlagBindingContainer {
       defaultValue = false,
     )
   }
-
-  @Binds
-  @IntoSet
-  fun bindReviewEnabledFeatureFlag(@ReviewEnabledFeatureFlagQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
 
   @Provides
   @SingleIn(AppScope::class)
@@ -48,10 +45,6 @@ interface FeatureFlagBindingContainer {
     )
   }
 
-  @Binds
-  @IntoSet
-  fun bindFolderPickerInSettingsFeatureFlag(@FolderPickerInSettingsFeatureFlagQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
-
   @Provides
   @SingleIn(AppScope::class)
   @ExperimentalPlaybackPersistenceQualifier
@@ -61,10 +54,6 @@ interface FeatureFlagBindingContainer {
       description = "Uses the experimental playback persistence implementation.",
     )
   }
-
-  @Binds
-  @IntoSet
-  fun bindExperimentalPlaybackPersistenceFeatureFlag(@ExperimentalPlaybackPersistenceQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
 
   @Provides
   @SingleIn(AppScope::class)
@@ -76,10 +65,6 @@ interface FeatureFlagBindingContainer {
     )
   }
 
-  @Binds
-  @IntoSet
-  fun bindMedia3AudioOffloadFeatureFlag(@Media3AudioOffloadFeatureFlagQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
-
   @Provides
   @SingleIn(AppScope::class)
   @KioskModeFeatureFlagQualifier
@@ -90,9 +75,21 @@ interface FeatureFlagBindingContainer {
     )
   }
 
-  @Binds
-  @IntoSet
-  fun bindKioskModeFeatureFlag(@KioskModeFeatureFlagQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*>
+  @Provides
+  @ElementsIntoSet
+  fun featureFlags(
+    @ReviewEnabledFeatureFlagQualifier reviewEnabled: FeatureFlag<Boolean>,
+    @FolderPickerInSettingsFeatureFlagQualifier folderPickerInSettings: FeatureFlag<Boolean>,
+    @ExperimentalPlaybackPersistenceQualifier experimentalPlaybackPersistence: FeatureFlag<Boolean>,
+    @Media3AudioOffloadFeatureFlagQualifier media3AudioOffload: FeatureFlag<Boolean>,
+    @KioskModeFeatureFlagQualifier kioskMode: FeatureFlag<Boolean>,
+  ): Set<FeatureFlag<*>> = setOf(
+    reviewEnabled,
+    folderPickerInSettings,
+    experimentalPlaybackPersistence,
+    media3AudioOffload,
+    kioskMode,
+  )
 }
 
 @Qualifier

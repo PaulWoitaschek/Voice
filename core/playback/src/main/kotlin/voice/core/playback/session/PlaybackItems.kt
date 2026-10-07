@@ -40,6 +40,42 @@ internal fun Book.playbackItems(): List<PlaybackItem> {
   }
 }
 
+/**
+ * The playlist as the session and the UI see it: one entry per chapter mark, together with the
+ * index of the audio file each entry lives in. The underlying player only holds one item per file.
+ */
+internal class ChapterMarkPlaylist(
+  val items: List<PlaybackItem>,
+  private val fileIndexByItem: IntArray,
+) {
+
+  fun fileIndexOf(itemIndex: Int): Int = fileIndexByItem[itemIndex]
+
+  fun itemIndexFor(
+    fileIndex: Int,
+    positionInFileMs: Long,
+  ): Int? {
+    var result: Int? = null
+    for (index in items.indices) {
+      if (fileIndexByItem[index] != fileIndex) continue
+      if (result == null || items[index].mark.startMs <= positionInFileMs) {
+        result = index
+      }
+      if (items[index].mark.startMs > positionInFileMs) break
+    }
+    return result
+  }
+}
+
+internal fun Book.chapterMarkPlaylist(): ChapterMarkPlaylist {
+  val items = playbackItems()
+  val fileIndexByChapterId = chapters.withIndex().associate { (index, chapter) -> chapter.id to index }
+  return ChapterMarkPlaylist(
+    items = items,
+    fileIndexByItem = IntArray(items.size) { fileIndexByChapterId.getValue(items[it].chapter.id) },
+  )
+}
+
 internal fun Book.playbackItemForPosition(
   chapterId: ChapterId,
   positionInChapterMs: Long,

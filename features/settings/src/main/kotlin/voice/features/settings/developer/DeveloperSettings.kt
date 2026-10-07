@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
@@ -131,8 +132,9 @@ interface DeveloperSettingsGraph {
   val developerSettingsViewModel: DeveloperSettingsViewModel
 }
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface DeveloperSettingsProvider {
+object DeveloperSettingsProvider {
 
   @Provides
   @IntoSet

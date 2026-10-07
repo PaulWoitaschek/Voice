@@ -20,7 +20,6 @@
     <string name="common.action.close">أغلق</string>
     <string name="common.action.delete">احذف</string>
     <string name="common.action.edit">حرر</string>
-    <string name="common.action.more">المزيد</string>
     <string name="common.action.remove">أزل</string>
     <string name="common.dialog.cancel">ألغ</string>
     <string name="common.dialog.confirm">عيّن</string>
@@ -111,5 +110,6 @@
     <string name="sleep_timer.action.open">مؤقت النوم</string>
     <string name="sleep_timer.dialog.action.decrement">أقصر</string>
     <string name="sleep_timer.dialog.action.increment">أطول</string>
-    <string name="sleep_timer.dialog.title">أحلام سعيدة! 🌙</string>
+    <string name="sleep_timer.dialog.shake_hint">هزّ هاتفك فور انتهاء المؤقت لإعادة تشغيله.</string>
+    <string name="sleep_timer.dialog.title">مؤقت النوم</string>
 </resources>

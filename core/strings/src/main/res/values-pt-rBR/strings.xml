@@ -20,7 +20,6 @@
     <string name="common.action.close">Fechar</string>
     <string name="common.action.delete">Apagar</string>
     <string name="common.action.edit">Editar</string>
-    <string name="common.action.more">Mais</string>
     <string name="common.action.remove">Remover</string>
     <string name="common.dialog.cancel">Cancelar</string>
     <string name="common.dialog.confirm">Definir</string>
@@ -62,10 +61,20 @@
     <string name="library.category.completed.title">Concluído</string>
     <string name="library.category.current.title">Actual</string>
     <string name="library.category.not_started.title">Não iniciado ainda</string>
+    <string name="library.continue_listening">Continuar ouvindo</string>
     <string name="library.empty.add_first_book">Vamos adicionar uma pasta de Audiolivros para começar a ouvir!</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
     <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
     <string name="library.folders.moved.dialog.message">Agora você pode gerenciar as pastas de audiolivros nas Preferências.</string>
+    <string name="library.greeting.afternoon">Boa tarde</string>
+    <string name="library.greeting.evening">Boa noite</string>
+    <string name="library.greeting.morning">Bom dia</string>
+    <string name="library.greeting.night">Olá, coruja noturna</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d livro em andamento</item>
+        <item quantity="many">%d livros em andamento</item>
+        <item quantity="other">%d livros em andamento</item>
+    </plurals>
     <string name="library.search.hint">O que procura?</string>
     <string name="library.storage_permission_bug.action">Conceder permissão</string>
     <string name="library.storage_permission_bug.message">Em certos dispositivos, o aplicativo pode exigir permissões para acessar o armazenamento externo. Esse acesso é essencial para Voice ler os seus audiobooks.</string>
@@ -92,12 +101,20 @@
     <string name="playback.action.rewind">Retroceder</string>
     <string name="playback.battery_optimization.action">Atualizar</string>
     <string name="playback.battery_optimization.rationale">Devido à restrições de energia, podem haver interrupções durante a reprodução do livro.</string>
+    <string name="playback.book_progress.read">%1$s do livro</string>
+    <string name="playback.book_progress.remaining">Faltam %1$s</string>
+    <string name="playback.book_progress.remaining_at_speed">Faltam %1$s em %2$s</string>
+    <string name="playback.chapter.counter">Capítulo %1$d de %2$d</string>
     <string name="playback.chapter.current.content_description">Capítulo atual</string>
     <string name="playback.chapter.next">Próximo capítulo</string>
     <string name="playback.chapter.previous">Capítulo anterior</string>
+    <string name="playback.chapters.title">Capítulos</string>
     <string name="playback.option.skip_silence">Pular silêncio</string>
     <string name="playback.option.volume_boost">Aumento de volume</string>
+    <string name="playback.speed.decrease">Mais devagar</string>
+    <string name="playback.speed.increase">Mais rápido</string>
     <string name="playback.speed.title">Velocidade de reprodução</string>
+    <string name="playback.volume_boost.off">Desligado</string>
     <string name="review.feedback.action.cancel">Cancelar</string>
     <string name="review.feedback.action.send">Enviar Feedback</string>
     <string name="review.feedback.message">Poderia nos dizer o que errado? A gente valoriza o seu feedback e com ele sabemos como melhorar a sua experiência.</string>
@@ -145,6 +162,8 @@
     <string name="sleep_timer.action.open">Desligamento automático</string>
     <string name="sleep_timer.dialog.action.decrement">Mais curto</string>
     <string name="sleep_timer.dialog.action.increment">Mais longo</string>
-    <string name="sleep_timer.dialog.title">Bons sonhos! 🌙</string>
+    <string name="sleep_timer.dialog.minutes_short">min</string>
+    <string name="sleep_timer.dialog.shake_hint">Agite o celular logo após o desligamento automático para reiniciá-lo.</string>
+    <string name="sleep_timer.dialog.title">Desligamento automático</string>
     <string name="sleep_timer.end_of_chapter">Fim do capítulo</string>
 </resources>

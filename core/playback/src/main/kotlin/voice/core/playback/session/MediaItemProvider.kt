@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaItem.ClippingConfiguration
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
@@ -106,6 +105,12 @@ class MediaItemProvider(
     return playbackItems(book)
   }
 
+  internal fun chapterMediaItems(book: Book): List<MediaItem> {
+    return book.chapters.map { chapter ->
+      mediaItem(chapter, book.content)
+    }
+  }
+
   internal fun playbackItems(book: Book): List<MediaItem> {
     return book.playbackItems().map { playbackItem ->
       mediaItem(playbackItem, book.content)
@@ -169,10 +174,6 @@ class MediaItemProvider(
     imageUri = content.cover?.toProvidedUri(),
     artist = content.author,
     durationMs = playbackItem.mark.durationMs,
-    clippingConfiguration = ClippingConfiguration.Builder()
-      .setStartPositionMs(playbackItem.mark.startMs)
-      .setEndPositionMs(playbackItem.mark.endMs)
-      .build(),
     mediaType = MediaType.AudioBookChapter,
   )
 

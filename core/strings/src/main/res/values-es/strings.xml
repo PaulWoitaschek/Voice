@@ -20,7 +20,6 @@
     <string name="common.action.close">Cerrar</string>
     <string name="common.action.delete">Eliminar</string>
     <string name="common.action.edit">Editar</string>
-    <string name="common.action.more">Más</string>
     <string name="common.action.remove">Eliminar</string>
     <string name="common.dialog.cancel">Cancelar</string>
     <string name="common.dialog.confirm">Establecer</string>
@@ -62,10 +61,20 @@
     <string name="library.category.completed.title">Completado</string>
     <string name="library.category.current.title">Actual</string>
     <string name="library.category.not_started.title">Aún no comenzado</string>
+    <string name="library.continue_listening">Seguir escuchando</string>
     <string name="library.empty.add_first_book">¡Agreguemos tu carpeta de audiolibros para que puedas empezar a escuchar!</string>
     <string name="library.folders.title">Directorios de audiolibros</string>
     <string name="library.folders.moved.dialog.title">Carpetas de audiolibros trasladadas</string>
     <string name="library.folders.moved.dialog.message">Ahora puedes gestionar las carpetas de audiolibros en Preferencias.</string>
+    <string name="library.greeting.afternoon">Buenas tardes</string>
+    <string name="library.greeting.evening">Buenas noches</string>
+    <string name="library.greeting.morning">Buenos días</string>
+    <string name="library.greeting.night">Hola, búho nocturno</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d libro en curso</item>
+        <item quantity="many">%d libros en curso</item>
+        <item quantity="other">%d libros en curso</item>
+    </plurals>
     <string name="library.search.hint">¿Qué estás buscando?</string>
     <string name="library.storage_permission_bug.action">Conceder permiso</string>
     <string name="library.storage_permission_bug.message">En algunos dispositivos, una aplicación del sistema carece del permiso necesario para acceder al almacenamiento externo. Este acceso es esencial para que Voice pueda leer tus audiolibros.</string>
@@ -92,12 +101,20 @@
     <string name="playback.action.rewind">Retroceder</string>
     <string name="playback.battery_optimization.action">Actualizar</string>
     <string name="playback.battery_optimization.rationale">Debido a tus restricciones de energía, pueden ocurrir interrupciones en la reproducción.</string>
+    <string name="playback.book_progress.read">%1$s del libro</string>
+    <string name="playback.book_progress.remaining">Quedan %1$s</string>
+    <string name="playback.book_progress.remaining_at_speed">Quedan %1$s a %2$s</string>
+    <string name="playback.chapter.counter">Capítulo %1$d de %2$d</string>
     <string name="playback.chapter.current.content_description">Capítulo actual</string>
     <string name="playback.chapter.next">Pista siguiente</string>
     <string name="playback.chapter.previous">Pista anterior</string>
+    <string name="playback.chapters.title">Capítulos</string>
     <string name="playback.option.skip_silence">Saltar silencio</string>
     <string name="playback.option.volume_boost">Potenciar volumen</string>
+    <string name="playback.speed.decrease">Más lento</string>
+    <string name="playback.speed.increase">Más rápido</string>
     <string name="playback.speed.title">Velocidad de reproducción</string>
+    <string name="playback.volume_boost.off">Desactivado</string>
     <string name="review.feedback.action.cancel">Cancelar</string>
     <string name="review.feedback.action.send">Envía tus comentarios</string>
     <string name="review.feedback.message">¿Podrías decirnos qué salió mal? Agradecemos tus comentarios ya que nos ayudan a mejorar tu experiencia.</string>
@@ -142,9 +159,11 @@
     <string name="support.helps.open_source">Mantener Voice sin anuncios</string>
     <string name="support.title">Apoyar el desarrollo</string>
     <string name="shortcut.play_current.short_label">Reproducir actual</string>
-    <string name="sleep_timer.action.open">Temporizador</string>
+    <string name="sleep_timer.action.open">Temporizador de apagado</string>
     <string name="sleep_timer.dialog.action.decrement">Más corto</string>
     <string name="sleep_timer.dialog.action.increment">Más largo</string>
-    <string name="sleep_timer.dialog.title">¡Dulces sueños! 🌙</string>
+    <string name="sleep_timer.dialog.minutes_short">min</string>
+    <string name="sleep_timer.dialog.shake_hint">Agita el teléfono justo después de que termine el temporizador para reiniciarlo.</string>
+    <string name="sleep_timer.dialog.title">Temporizador de apagado</string>
     <string name="sleep_timer.end_of_chapter">Fin del capítulo</string>
 </resources>

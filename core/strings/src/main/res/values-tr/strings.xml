@@ -20,7 +20,6 @@
     <string name="common.action.close">Kapat</string>
     <string name="common.action.delete">Sil</string>
     <string name="common.action.edit">Düzenle</string>
-    <string name="common.action.more">Daha fazla</string>
     <string name="common.action.remove">Kaldır</string>
     <string name="common.dialog.cancel">İptal</string>
     <string name="common.dialog.confirm">Kur</string>
@@ -59,10 +58,19 @@
     <string name="library.category.completed.title">Tamamlandı</string>
     <string name="library.category.current.title">Geçerli</string>
     <string name="library.category.not_started.title">Henüz başlamadı</string>
+    <string name="library.continue_listening">Dinlemeye devam et</string>
     <string name="library.empty.add_first_book">Dinlemeye başlayabilmeniz için sesli kitap dizininizi ekleyelim!</string>
     <string name="library.folders.title">Sesli kitap dizinleri</string>
     <string name="library.folders.moved.dialog.title">Sesli kitap klasörleri taşındı</string>
     <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Tercihler\'de yönetebilirsiniz.</string>
+    <string name="library.greeting.afternoon">Tünaydın</string>
+    <string name="library.greeting.evening">İyi akşamlar</string>
+    <string name="library.greeting.morning">Günaydın</string>
+    <string name="library.greeting.night">Merhaba, gece kuşu</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d kitap devam ediyor</item>
+        <item quantity="other">%d kitap devam ediyor</item>
+    </plurals>
     <string name="library.search.hint">Ne arıyorsunuz?</string>
     <string name="library.storage_permission_bug.action">İzin ver</string>
     <string name="library.storage_permission_bug.message">Belirli aygıtlarda, bir sistem uygulamasının harici depolamaya erişim için gerekli izni yoktur. Bu erişim, Voice\'un sesli kitaplarınızı okuyabilmesi için gereklidir.</string>
@@ -89,12 +97,20 @@
     <string name="playback.action.rewind">Geri sar</string>
     <string name="playback.battery_optimization.action">Güncelle</string>
     <string name="playback.battery_optimization.rationale">Güç kısıtlamalarınız nedeniyle oynatma kesintileri olabilir.</string>
+    <string name="playback.book_progress.read">Kitabın %1$s kadarı</string>
+    <string name="playback.book_progress.remaining">%1$s kaldı</string>
+    <string name="playback.book_progress.remaining_at_speed">%2$s hızda %1$s kaldı</string>
+    <string name="playback.chapter.counter">Bölüm %1$d / %2$d</string>
     <string name="playback.chapter.current.content_description">Şu anki bölüm</string>
     <string name="playback.chapter.next">Sonraki parça</string>
     <string name="playback.chapter.previous">Önceki parça</string>
+    <string name="playback.chapters.title">Bölümler</string>
     <string name="playback.option.skip_silence">Sessizliği Geç</string>
     <string name="playback.option.volume_boost">Ses yükseltme</string>
+    <string name="playback.speed.decrease">Daha yavaş</string>
+    <string name="playback.speed.increase">Daha hızlı</string>
     <string name="playback.speed.title">Oynatma hızı</string>
+    <string name="playback.volume_boost.off">Kapalı</string>
     <string name="review.feedback.action.cancel">İptal et</string>
     <string name="review.feedback.action.send">Geri Bildirim Gönder</string>
     <string name="review.feedback.message">Bize neyin yanlış gittiğini söyleyebilir misiniz? Geri bildiriminizi takdir ediyoruz ve bu, deneyiminizi geliştirmemize yardımcı oluyor.</string>
@@ -139,9 +155,11 @@
     <string name="support.helps.open_source">Voice\'u reklamsız tutmak</string>
     <string name="support.title">Geliştirmeyi destekle</string>
     <string name="shortcut.play_current.short_label">Geçerli oynatma</string>
-    <string name="sleep_timer.action.open">Uyku Zamanlayıcısı</string>
+    <string name="sleep_timer.action.open">Uyku zamanlayıcısı</string>
     <string name="sleep_timer.dialog.action.decrement">Daha kısa</string>
     <string name="sleep_timer.dialog.action.increment">Daha uzun</string>
-    <string name="sleep_timer.dialog.title">Tatlı rüyalar! 🌙</string>
+    <string name="sleep_timer.dialog.minutes_short">dk</string>
+    <string name="sleep_timer.dialog.shake_hint">Zamanlayıcıyı yeniden başlatmak için süre dolduktan hemen sonra telefonunu salla.</string>
+    <string name="sleep_timer.dialog.title">Uyku Zamanlayıcısı</string>
     <string name="sleep_timer.end_of_chapter">Bölüm Sonu</string>
 </resources>

@@ -1,5 +1,6 @@
 package voice.core.playback.player
 
+import android.os.Looper
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.test.utils.FakeMediaSource
@@ -21,6 +22,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Chapter
@@ -94,8 +96,9 @@ class VoicePlayerTest {
   private val bookId = BookId(Uuid.random().toString())
   private lateinit var currentBook: Book
   private val sleepTimer = FakeSleepTimer()
+  private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
   private val player = VoicePlayer(
-    player = internalPlayer,
+    player = chapterMarkPlayer,
     repo = mockk {
       coEvery { get(bookId) } answers { currentBook }
       coEvery { updateBook(any(), any()) } just Runs
@@ -106,14 +109,13 @@ class VoicePlayerTest {
     seekTimeStore = seekTimeStore,
     autoRewindAmountStore = autoRewindAmountStore,
     scope = scope,
-    mediaItemProvider = mediaItemProvider,
     volumeGain = mockk(relaxed = true),
     sleepTimer = sleepTimer,
     analytics = mockk(relaxed = true),
   )
 
   @Test
-  fun `seekToNext does not clip`() = scope.runTest {
+  fun `seekToNext carries over into the next chapter mark`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -139,21 +141,22 @@ class VoicePlayerTest {
     player.seekToNext()
     player.shouldHavePosition(0, 14_000)
 
+    // the first mark ends at 19_999, so the remainder carries over into the second one
     player.seekToNext()
-    player.shouldHavePosition(0, 21_000)
+    player.shouldHavePosition(1, 1_001)
 
     player.seekToNext()
-    player.shouldHavePosition(0, 28_000)
+    player.shouldHavePosition(1, 8_001)
 
     player.seekToNext()
-    player.shouldHavePosition(1, 5_000)
+    player.shouldHavePosition(2, 5_002)
 
     player.seekToNext()
-    player.shouldHavePosition(1, 12_000)
+    player.shouldHavePosition(2, 12_002)
   }
 
   @Test
-  fun `seekToPrevious does not clip`() = scope.runTest {
+  fun `seekToPrevious carries over into the previous chapter mark`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -173,9 +176,7 @@ class VoicePlayerTest {
     player.prepare()
     awaitReady()
 
-    player.shouldHavePosition(1, 11_999)
-
-    player.seekToPrevious()
+    // the mark only spans 7s, so the seek is clamped to its end
     player.shouldHavePosition(1, 6_999)
 
     player.seekToPrevious()
@@ -342,6 +343,30 @@ class VoicePlayerTest {
     player.shouldHavePosition(1, 0)
     assertFalse(player.playWhenReady)
     assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+  }
+
+  @Test
+  fun `end of chapter sleep timer survives skipping to the next chapter`() = scope.runTest {
+    setMediaItems(
+      listOf(
+        chapter(
+          ChapterMark(startMs = 0, endMs = 4_999, name = null),
+          ChapterMark(startMs = 5_000, endMs = 9_999, name = null),
+          ChapterMark(startMs = 10_000, endMs = 20_000, name = null),
+        ),
+      ),
+    )
+    player.prepare()
+    awaitReady()
+    sleepTimer.enable(SleepTimerMode.EndOfChapter)
+
+    player.forceSeekToNext()
+    player.shouldHavePosition(1, 0)
+    awaitReady()
+    shadowOf(Looper.getMainLooper()).idle()
+    scope.advanceUntilIdle()
+
+    assertEquals(expected = SleepTimerState.Enabled.WithEndOfChapter, actual = sleepTimer.state.value)
   }
 
   @Test

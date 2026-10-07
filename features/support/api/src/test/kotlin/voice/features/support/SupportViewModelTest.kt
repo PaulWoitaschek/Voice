@@ -51,8 +51,7 @@ class SupportViewModelTest {
   @Test
   @Suppress("UNCHECKED_CAST")
   fun `support nav entry is bottom sheet`() {
-    val provider = object : SupportProvider {}
-      .supportNavEntryProvider() as NavEntryProvider<Destination.SupportVoice>
+    val provider = SupportProvider.supportNavEntryProvider() as NavEntryProvider<Destination.SupportVoice>
     val navEntry = provider.create(Destination.SupportVoice)
 
     assertNotNull(navEntry.metadata[BottomSheetNav.BottomSheetKey])

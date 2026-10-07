@@ -2,12 +2,18 @@ package voice.features.bookOverview.views
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -20,6 +26,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +35,7 @@ import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -35,6 +43,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
@@ -44,7 +53,6 @@ import voice.core.data.BookId
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
-import voice.core.ui.playButtonSharedBoundsModifier
 import voice.features.bookOverview.bottomSheet.BottomSheetContent
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.deleteBook.DeleteBookDialog
@@ -61,8 +69,9 @@ import voice.navigation.NavEntryProvider
 import kotlin.uuid.Uuid
 import voice.core.strings.R as StringsR
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface BookOverviewProvider {
+object BookOverviewProvider {
 
   @Provides
   @IntoSet
@@ -183,6 +192,7 @@ internal fun BookOverview(
   modifier: Modifier = Modifier,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+  val gridState = rememberLazyGridState()
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
@@ -196,50 +206,52 @@ internal fun BookOverview(
       )
     },
     floatingActionButton = {
-      if (viewState.playButtonState != null) {
+      val playButtonState = viewState.playButtonState
+      AnimatedVisibility(
+        visible = playButtonState != null && !gridState.heroPlayButtonVisible(),
+        enter = scaleIn() + fadeIn(),
+        exit = scaleOut() + fadeOut(),
+      ) {
         PlayButton(
+          playing = playButtonState == BookOverviewViewState.PlayButtonState.Playing,
+          onClick = onPlayButtonClick,
           modifier = Modifier.navigationBarsPadding(),
-          playing = viewState.playButtonState == BookOverviewViewState.PlayButtonState.Playing,
-          fabSize = 56.dp,
-          iconSize = 24.dp,
-          onPlayClick = onPlayButtonClick,
-          sharedElementModifier = Modifier.playButtonSharedBoundsModifier(),
+          size = 64.dp,
         )
       }
     },
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
   ) { contentPadding ->
-    Box(
-      Modifier
+    Library(
+      viewState = viewState,
+      gridState = gridState,
+      onBookClick = onBookClick,
+      onBookLongClick = onBookLongClick,
+      onPlayClick = onPlayButtonClick,
+      onPermissionBugCardClick = onPermissionBugCardClick,
+      modifier = Modifier
         .padding(contentPadding)
         .consumeWindowInsets(contentPadding),
-    ) {
-      when (viewState.layoutMode) {
-        BookOverviewLayoutMode.List -> {
-          ListBooks(
-            books = viewState.books,
-            onBookClick = onBookClick,
-            onBookLongClick = onBookLongClick,
-            showPermissionBugCard = viewState.showStoragePermissionBugCard,
-            onPermissionBugCardClick = onPermissionBugCardClick,
-          )
-        }
-        BookOverviewLayoutMode.Grid -> {
-          GridBooks(
-            books = viewState.books,
-            onBookClick = onBookClick,
-            onBookLongClick = onBookLongClick,
-            showPermissionBugCard = viewState.showStoragePermissionBugCard,
-            onPermissionBugCardClick = onPermissionBugCardClick,
-          )
-        }
-      }
-    }
+    )
   }
   Dialog(
     dialog = viewState.dialog,
     onFolderPickerMovedDialogDismiss = onFolderPickerMovedDialogDismiss,
   )
+}
+
+/** Whether the hero card's play button is on screen, which makes a floating one redundant. */
+@Composable
+private fun LazyGridState.heroPlayButtonVisible(): Boolean {
+  // the play button sits at the bottom of the card
+  val playButtonInset = with(LocalDensity.current) { 56.dp.roundToPx() }
+  val visible by remember(this, playButtonInset) {
+    derivedStateOf {
+      val hero = layoutInfo.visibleItemsInfo.firstOrNull { it.key == HERO_KEY }
+      hero != null && hero.offset.y + hero.size.height - playButtonInset > layoutInfo.viewportStartOffset
+    }
+  }
+  return visible
 }
 
 @Composable
@@ -314,6 +326,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
 
   override val values = sequenceOf(
     BookOverviewViewState(
+      currentBookId = null,
       books = mapOf(
         BookOverviewCategory.CURRENT to buildMap {
           repeat(10) {

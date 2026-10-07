@@ -106,6 +106,7 @@ class BookPlayViewModelTest {
     volumeGainFormatter = mockk(),
     batteryOptimization = mockk(),
     sleepTimerPreferenceStore = sleepTimerDataStore,
+    seekTimeStore = MemoryDataStore(20),
     bookId = book.id,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
     experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
@@ -307,6 +308,25 @@ class BookPlayViewModelTest {
   }
 
   @Test
+  fun `viewState exposes progress through the whole book`() = scope.runTest {
+    val viewModel = viewModel()
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = null, actual = awaitItem())
+      val state = awaitItem()!!
+      assertEquals(expected = 7.5.minutes, actual = state.bookPlayedTime)
+      assertEquals(expected = 10.minutes, actual = state.bookDuration)
+      assertEquals(expected = 0.75F, actual = state.bookProgress)
+      assertEquals(expected = 5, actual = state.chapterNumber)
+      assertEquals(expected = 6, actual = state.chapterCount)
+      assertEquals(expected = 6, actual = state.chapterSegments.size)
+      assertEquals(expected = 1F, actual = state.chapterSegments.sum(), absoluteTolerance = 0.001F)
+    }
+  }
+
+  @Test
   fun `viewState uses currently playing demo book in kiosk mode`() = scope.runTest {
     val viewModel = viewModel(kioskMode = true)
 
@@ -348,6 +368,7 @@ class BookPlayViewModelTest {
       volumeGainFormatter = mockk(),
       batteryOptimization = mockk(),
       sleepTimerPreferenceStore = sleepTimerDataStore,
+      seekTimeStore = MemoryDataStore(20),
       bookId = book.id,
       dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),

@@ -4,13 +4,21 @@ import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 
 @Inject
+@SingleIn(AppScope::class)
 class ImageFileProvider(private val application: Application) {
 
-  internal fun uri(file: File): Uri {
+  private val uris = ConcurrentHashMap<File, Uri>()
+
+  internal fun uri(file: File): Uri = uris.computeIfAbsent(file) { grantedUri(file) }
+
+  private fun grantedUri(file: File): Uri {
     return FileProvider
       .getUriForFile(
         application,
