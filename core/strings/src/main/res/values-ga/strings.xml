@@ -174,7 +174,7 @@
     <string name="support.helps.open_source">Voice a choinneáil saor ó fhógraí</string>
     <string name="support.title">Tacaigh leis an bhforbairt</string>
     <string name="shortcut.play_current.short_label">Seinn reatha</string>
-    <string name="sleep_timer.action.open">Orláiste codalta</string>
+    <string name="sleep_timer.action.open">Lasc ama codlata</string>
     <string name="sleep_timer.dialog.action.decrement">Níos giorra</string>
     <string name="sleep_timer.dialog.action.increment">Níos faide</string>
     <string name="sleep_timer.dialog.minutes_short">nóim</string>
