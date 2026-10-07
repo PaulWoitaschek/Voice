@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.view.RollingText
@@ -68,10 +69,12 @@ internal fun SpeedSheet(
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Text(
+        modifier = Modifier.fillMaxWidth(),
         text = stringResource(StringsR.string.playback_speed_title),
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = MaterialTheme.typography.headlineSmallEmphasized,
+        textAlign = TextAlign.Center,
       )
+      Spacer(Modifier.height(16.dp))
       RollingText(
         text = speedFormat.format(speed) + "×",
         style = MaterialTheme.typography.displayLargeEmphasized,

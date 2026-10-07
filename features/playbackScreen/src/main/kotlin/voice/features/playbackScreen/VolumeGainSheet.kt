@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import voice.core.playback.misc.Decibel
 import voice.features.playbackScreen.view.RollingText
@@ -64,10 +65,12 @@ internal fun VolumeGainSheet(
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Text(
+        modifier = Modifier.fillMaxWidth(),
         text = stringResource(StringsR.string.playback_option_volume_boost),
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = MaterialTheme.typography.headlineSmallEmphasized,
+        textAlign = TextAlign.Center,
       )
+      Spacer(Modifier.height(16.dp))
       RollingText(
         text = "+" + dialogState.valueFormatted,
         style = MaterialTheme.typography.displayMediumEmphasized,
