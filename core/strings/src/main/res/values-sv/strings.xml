@@ -53,6 +53,7 @@
     <string name="common.action.edit">Redigera</string>
     <string name="common.action.remove">Ta bort</string>
     <string name="common.action.undo">Ångra</string>
+    <string name="common.action.save">Spara</string>
     <string name="common.dialog.cancel">Avbryt</string>
     <string name="common.dialog.confirm">Bekräfta</string>
     <string name="common.dialog.ok">OK</string>
@@ -72,21 +73,49 @@
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekunder</item>
     </plurals>
+    <string name="folder.add.action.file">Lägg till en enskild fil i stället</string>
+    <string name="folder.add.action.folder">Välj en mapp</string>
+    <string name="folder.add.subtitle">Välj mappen med dina ljudböcker. Den kan innehålla en enda bok eller hela ditt bibliotek.</string>
     <string name="folder.add.title.default">Lägg till dina ljudböcker</string>
     <string name="folder.add.title.onboarding">Lägg till din första ljudbok</string>
-    <string name="folder.add.type.file">Fil</string>
-    <string name="folder.add.type.folder">Mapp</string>
-    <string name="folder.add.type.subtitle">Vill du lägga till en enskild fil som bok eller en hel mapp?</string>
-    <string name="folder.mode.author.title">Författarläge: Undermappar är författare och deras undermappar är böcker.</string>
-    <string name="folder.mode.root.title">Bokläge på översta nivån: Undermappar är böcker</string>
-    <string name="folder.mode.single.title">Enboksläge: En mapp motsvarar en bok.</string>
-    <string name="folder.type.book_example.empty">Voice kunde inte hitta några böcker. Finns det några ljudfiler?</string>
-    <string name="folder.type.book_example.header">Följande böcker skulle då hittas</string>
+    <string name="folder.mode.author.label">Mappar är författare</string>
+    <string name="folder.mode.author.option">Mapparna i %s är författare</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d bok</item>
+        <item quantity="other">%d böcker</item>
+    </plurals>
+    <string name="folder.mode.file.label">Enskild fil</string>
+    <string name="folder.mode.guess">Ser ut som din</string>
+    <string name="folder.mode.root.label">Varje mapp är en bok</string>
+    <string name="folder.mode.root.option">Varje mapp eller fil i %s är en bok</string>
+    <string name="folder.mode.sheet.title">Hur är %s organiserad?</string>
+    <string name="folder.mode.single.label">En bok</string>
+    <string name="folder.mode.single.option">%s är en bok</string>
+    <string name="folder.mode.single.summary">Filerna blir kapitel, även i mappar som CD 1 och CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Lägg till %d bok</item>
+        <item quantity="other">Lägg till %d böcker</item>
+    </plurals>
+    <string name="folder.review.action.change">Ändra hur böcker hittas</string>
+    <string name="folder.review.empty.subtitle">Välj mappen där dina ljudböcker finns.</string>
+    <string name="folder.review.empty.title">Inga ljudfiler i %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d mapp</item>
+        <item quantity="other">%d mappar</item>
+    </plurals>
+    <string name="folder.review.loading">Söker igenom %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Ser ut som %d bok</item>
+        <item quantity="other">Ser ut som %d böcker</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Vi hittade %d bok</item>
+        <item quantity="other">Vi hittade %d böcker</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d ljudfil</item>
         <item quantity="other">%d ljudfiler</item>
     </plurals>
-    <string name="folder.type.title">Hur är dina filer organiserade?</string>
     <string name="history.action.change_back">Ändra tillbaka</string>
     <string name="history.action.go_there">Gå dit</string>
     <string name="history.action.pin">Spara som bokmärke</string>
@@ -181,7 +210,7 @@
     <string name="onboarding.completion.action.start_listening">Börja lyssna</string>
     <string name="onboarding.completion.subtitle">Din första ljudbok är redo att spelas upp. Trevlig lyssning!</string>
     <string name="onboarding.completion.title">Du är redo!</string>
-    <string name="onboarding.explanation.subtitle">Med Voice kan du lägga till böcker som enskilda filer eller organisera dem i mappar. Du väljer själv!</string>
+    <string name="onboarding.explanation.subtitle.folder">Välj mappen med dina ljudböcker. Voice visar böckerna den hittar innan de läggs till.</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt sätt</string>
     <string name="onboarding.welcome.action.start">Nu kör vi</string>
     <string name="onboarding.welcome.subtitle">Din personliga ljudboksspelare i fickan. Nu sätter vi igång.</string>

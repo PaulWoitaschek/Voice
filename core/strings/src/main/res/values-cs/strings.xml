@@ -53,6 +53,7 @@
     <string name="common.action.edit">Upravit</string>
     <string name="common.action.remove">Smazat</string>
     <string name="common.action.undo">Vrátit zpět</string>
+    <string name="common.action.save">Uložit</string>
     <string name="common.dialog.cancel">Ukončit</string>
     <string name="common.dialog.confirm">Nastavit</string>
     <string name="common.dialog.ok">OK</string>
@@ -76,23 +77,61 @@
         <item quantity="many">%d sekund</item>
         <item quantity="other">%d sekund</item>
     </plurals>
+    <string name="folder.add.action.file">Přidat místo toho jeden soubor</string>
+    <string name="folder.add.action.folder">Vybrat složku</string>
+    <string name="folder.add.subtitle">Vyberte složku se svými audioknihami. Může obsahovat jednu knihu nebo celou vaši knihovnu.</string>
     <string name="folder.add.title.default">Přidejte své audoknihy</string>
     <string name="folder.add.title.onboarding">Přidejte svou první audioknihu</string>
-    <string name="folder.add.type.file">Soubor</string>
-    <string name="folder.add.type.folder">Složka</string>
-    <string name="folder.add.type.subtitle">Chcete přidat jeden soubor jako knihu nebo jako složku?</string>
-    <string name="folder.mode.author.title">Režim autor-kniha: Podsložky jsou autoři, pod-podsložky jsou knihy.</string>
-    <string name="folder.mode.root.title">Režim knihy nejvyšší úrovně: Podsložky jsou knihy</string>
-    <string name="folder.mode.single.title">Režim jedné knihy: Jedna složka se rovná jedné knize.</string>
-    <string name="folder.type.book_example.empty">Voice nenalezl žádné knihy. Jsou ve složkách opravdu zvukové soubory?</string>
-    <string name="folder.type.book_example.header">Povede k nalezení následujících knih</string>
+    <string name="folder.mode.author.label">Složky jsou autoři</string>
+    <string name="folder.mode.author.option">Složky ve složce %s jsou autoři</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d kniha</item>
+        <item quantity="few">%d knihy</item>
+        <item quantity="many">%d knih</item>
+        <item quantity="other">%d knih</item>
+    </plurals>
+    <string name="folder.mode.file.label">Jeden soubor</string>
+    <string name="folder.mode.guess">Nejspíš váš případ</string>
+    <string name="folder.mode.root.label">Každá složka je kniha</string>
+    <string name="folder.mode.root.option">Každá složka nebo soubor ve složce %s je kniha</string>
+    <string name="folder.mode.sheet.title">Jak je uspořádaná složka %s?</string>
+    <string name="folder.mode.single.label">Jedna kniha</string>
+    <string name="folder.mode.single.option">%s je jedna kniha</string>
+    <string name="folder.mode.single.summary">Její soubory se stanou kapitolami, i ve složkách jako CD 1 a CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Přidat %d knihu</item>
+        <item quantity="few">Přidat %d knihy</item>
+        <item quantity="many">Přidat %d knih</item>
+        <item quantity="other">Přidat %d knih</item>
+    </plurals>
+    <string name="folder.review.action.change">Změnit způsob hledání knih</string>
+    <string name="folder.review.empty.subtitle">Vyberte složku, ve které jsou vaše audioknihy.</string>
+    <string name="folder.review.empty.title">Ve složce %s nejsou žádné zvukové soubory</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d složka</item>
+        <item quantity="few">%d složky</item>
+        <item quantity="many">%d složek</item>
+        <item quantity="other">%d složek</item>
+    </plurals>
+    <string name="folder.review.loading">Prohledáváme složku %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Vypadá jako %d kniha</item>
+        <item quantity="few">Vypadá jako %d knihy</item>
+        <item quantity="many">Vypadá jako %d knih</item>
+        <item quantity="other">Vypadá jako %d knih</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Našli jsme %d knihu</item>
+        <item quantity="few">Našli jsme %d knihy</item>
+        <item quantity="many">Našli jsme %d knih</item>
+        <item quantity="other">Našli jsme %d knih</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d zvukový soubor</item>
         <item quantity="few">%d zvukové soubory</item>
         <item quantity="many">%d zvukových souborů</item>
         <item quantity="other">%d zvukových souborů</item>
     </plurals>
-    <string name="folder.type.title">Jak jsou organizované vaše soubory?</string>
     <string name="history.action.change_back">Vrátit</string>
     <string name="history.action.go_there">Přejít tam</string>
     <string name="history.action.pin">Uložit jako záložku</string>
@@ -189,7 +228,7 @@
     <string name="onboarding.completion.action.start_listening">Začít poslouchat</string>
     <string name="onboarding.completion.subtitle">Vaše první audiokniha je připravena k přehrání. Užijte si svou cestu s Voice!</string>
     <string name="onboarding.completion.title">Vše je připraveno!</string>
-    <string name="onboarding.explanation.subtitle">Pomocí aplikace Voice můžete přidávat knihy jako jednotlivé soubory nebo je organizovat do složek. Je to na vás!</string>
+    <string name="onboarding.explanation.subtitle.folder">Vyberte složku se svými audioknihami. Voice vám před přidáním ukáže knihy, které v ní najde.</string>
     <string name="onboarding.explanation.title">Vaše knihovna, váš způsob</string>
     <string name="onboarding.welcome.action.start">Jdeme na to</string>
     <string name="onboarding.welcome.subtitle">Váš osobní kapesní přehrávač audioknih. Pojďme ho nastavit.</string>

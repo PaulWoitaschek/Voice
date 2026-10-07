@@ -53,6 +53,7 @@
     <string name="common.action.edit">編集</string>
     <string name="common.action.remove">削除</string>
     <string name="common.action.undo">元に戻す</string>
+    <string name="common.action.save">保存</string>
     <string name="common.dialog.cancel">キャンセル</string>
     <string name="common.dialog.confirm">設定</string>
     <string name="common.dialog.ok">OK</string>
@@ -70,20 +71,43 @@
     <plurals name="duration.seconds">
         <item quantity="other">%d 秒</item>
     </plurals>
+    <string name="folder.add.action.file">代わりに単一ファイルを追加</string>
+    <string name="folder.add.action.folder">フォルダーを選択</string>
+    <string name="folder.add.subtitle">オーディオブックが入ったフォルダーを選んでください。1冊のブックでも、ライブラリ全体でも大丈夫です。</string>
     <string name="folder.add.title.default">オーディオブックを追加</string>
     <string name="folder.add.title.onboarding">最初のオーディオブックを追加</string>
-    <string name="folder.add.type.file">ファイル</string>
-    <string name="folder.add.type.folder">フォルダー</string>
-    <string name="folder.add.type.subtitle">単一ファイルをブックとして追加しますか、それともフォルダーを追加しますか？</string>
-    <string name="folder.mode.author.title">著者・ブックモード: サブフォルダーが著者、その下のサブフォルダーがブックです。</string>
-    <string name="folder.mode.root.title">オーディオブックのルートフォルダー (1つのサブフォルダーが1冊のブック)</string>
-    <string name="folder.mode.single.title">単一のオーディオブックフォルダー</string>
-    <string name="folder.type.book_example.empty">Voiceはブックを検出できませんでした。音声ファイルはありますか？</string>
-    <string name="folder.type.book_example.header">この場合、以下のブックが検出されます。</string>
+    <string name="folder.mode.author.label">著者別フォルダー</string>
+    <string name="folder.mode.author.option">%s 内のフォルダーが著者</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="other">%d 冊のブック</item>
+    </plurals>
+    <string name="folder.mode.file.label">単一ファイル</string>
+    <string name="folder.mode.guess">おすすめ</string>
+    <string name="folder.mode.root.label">各フォルダーが1冊のブック</string>
+    <string name="folder.mode.root.option">%s 内の各フォルダーやファイルが1冊のブック</string>
+    <string name="folder.mode.sheet.title">%s はどのように整理されていますか？</string>
+    <string name="folder.mode.single.label">1冊のブック</string>
+    <string name="folder.mode.single.option">%s は1冊のブック</string>
+    <string name="folder.mode.single.summary">中のファイルがチャプターになります。CD 1 や CD 2 のようなフォルダー内のファイルも含みます。</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="other">%d 冊のブックを追加</item>
+    </plurals>
+    <string name="folder.review.action.change">ブックの検出方法を変更</string>
+    <string name="folder.review.empty.subtitle">オーディオブックが入ったフォルダーを選んでください。</string>
+    <string name="folder.review.empty.title">%s に音声ファイルがありません</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="other">%d 個のフォルダー</item>
+    </plurals>
+    <string name="folder.review.loading">%s を検索中…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="other">%d 冊のブックのようです</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="other">%d 冊のブックが見つかりました</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="other">%d 音声ファイル</item>
     </plurals>
-    <string name="folder.type.title">ファイルの構成はどうなっていますか？</string>
     <string name="history.action.change_back">元に戻す</string>
     <string name="history.action.go_there">そこへ移動</string>
     <string name="history.action.pin">ブックマークとして保存</string>
@@ -177,7 +201,7 @@
     <string name="onboarding.completion.action.start_listening">聴き始める</string>
     <string name="onboarding.completion.subtitle">最初のオーディオブックを再生する準備ができました。Voice でのリスニングをお楽しみください。</string>
     <string name="onboarding.completion.title">準備ができました！</string>
-    <string name="onboarding.explanation.subtitle">Voice では、ブックを個別のファイルとして追加したり、フォルダーで整理したりできます。使い方はあなた次第です。</string>
+    <string name="onboarding.explanation.subtitle.folder">オーディオブックが入ったフォルダーを選んでください。Voice が見つけたブックを、追加する前に表示します。</string>
     <string name="onboarding.explanation.title">ライブラリを自由に管理</string>
     <string name="onboarding.welcome.action.start">はじめよう</string>
     <string name="onboarding.welcome.subtitle">あなた専用のポケットオーディオブックプレーヤーです。設定を始めましょう。</string>

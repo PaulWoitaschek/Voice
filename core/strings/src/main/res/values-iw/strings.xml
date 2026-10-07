@@ -53,6 +53,7 @@
     <string name="common.action.edit">ערוך</string>
     <string name="common.action.remove">מחק</string>
     <string name="common.action.undo">ביטול</string>
+    <string name="common.action.save">שמור</string>
     <string name="common.dialog.cancel">ביטול</string>
     <string name="common.dialog.confirm">אישור</string>
     <string name="common.dialog.ok">אישור</string>
@@ -74,22 +75,55 @@
         <item quantity="two">%d שניות</item>
         <item quantity="other">%d שניות</item>
     </plurals>
+    <string name="folder.add.action.file">הוספת קובץ בודד במקום זאת</string>
+    <string name="folder.add.action.folder">בחירת תיקייה</string>
+    <string name="folder.add.subtitle">בחרו את התיקייה עם הקולספרים שלכם. היא יכולה להכיל ספר אחד או את כל הספרייה שלכם.</string>
     <string name="folder.add.title.default">הוסף קולספר.ים</string>
     <string name="folder.add.title.onboarding">הוסף את הקולספר הראשון שלך</string>
-    <string name="folder.add.type.file">קובץ</string>
-    <string name="folder.add.type.folder">תיקייה</string>
-    <string name="folder.add.type.subtitle">האם ברצונך להוסיף קובץ בודד כספר או כתיקייה?</string>
-    <string name="folder.mode.author.title">מצב מחבר-ספר: תיקיות משנה הן מחברים, תיקיות משנה הן ספרים.</string>
-    <string name="folder.mode.root.title">מצב ספר ברמה עליונה: תיקיות משנה הן ספרים</string>
-    <string name="folder.mode.single.title">מצב ספר בודד: תיקייה אחת שווה ספר אחד.</string>
-    <string name="folder.type.book_example.empty">Voice לא זיהה ספרים. האם יש קבצי שמע?</string>
-    <string name="folder.type.book_example.header">זה יוביל לגילוי הספרים הבאים</string>
+    <string name="folder.mode.author.label">תיקיות הן מחברים</string>
+    <string name="folder.mode.author.option">התיקיות ב-%s הן מחברים</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d ספר</item>
+        <item quantity="two">%d ספרים</item>
+        <item quantity="other">%d ספרים</item>
+    </plurals>
+    <string name="folder.mode.file.label">קובץ בודד</string>
+    <string name="folder.mode.guess">דומה לשלך</string>
+    <string name="folder.mode.root.label">כל תיקייה היא ספר</string>
+    <string name="folder.mode.root.option">כל תיקייה או קובץ ב-%s הוא ספר</string>
+    <string name="folder.mode.sheet.title">איך מאורגנת התיקייה %s?</string>
+    <string name="folder.mode.single.label">ספר אחד</string>
+    <string name="folder.mode.single.option">%s הוא ספר אחד</string>
+    <string name="folder.mode.single.summary">הקבצים שבה הופכים לפרקים, גם בתיקיות כמו CD 1 ו-CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">הוספת %d ספר</item>
+        <item quantity="two">הוספת %d ספרים</item>
+        <item quantity="other">הוספת %d ספרים</item>
+    </plurals>
+    <string name="folder.review.action.change">שינוי אופן זיהוי הספרים</string>
+    <string name="folder.review.empty.subtitle">בחרו את התיקייה שבה נמצאים הקולספרים שלכם.</string>
+    <string name="folder.review.empty.title">אין קבצי שמע ב-%s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d תיקייה</item>
+        <item quantity="two">%d תיקיות</item>
+        <item quantity="other">%d תיקיות</item>
+    </plurals>
+    <string name="folder.review.loading">סורקים את %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">נראה כמו %d ספר</item>
+        <item quantity="two">נראה כמו %d ספרים</item>
+        <item quantity="other">נראה כמו %d ספרים</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">מצאנו %d ספר</item>
+        <item quantity="two">מצאנו %d ספרים</item>
+        <item quantity="other">מצאנו %d ספרים</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d קובץ שמע</item>
         <item quantity="two">%d קבצי שמע</item>
         <item quantity="other">%d קבצי שמע</item>
     </plurals>
-    <string name="folder.type.title">איך הקבצים שלך מסודרים?</string>
     <string name="history.action.change_back">החזר לקודם</string>
     <string name="history.action.go_there">עבור לשם</string>
     <string name="history.action.pin">שמור כסימנייה</string>
@@ -185,7 +219,7 @@
     <string name="onboarding.completion.action.start_listening">התחל להאזין</string>
     <string name="onboarding.completion.subtitle">נגן הקולספר הראשון שלך מוכן להשמעה. תהנה מהמסע שלך עם Voice!</string>
     <string name="onboarding.completion.title">הכל מוכן!</string>
-    <string name="onboarding.explanation.subtitle">בעזרת Voice, תוכלו להוסיף ספרים כקבצים בודדים או לארגן אותם בתיקיות. בחרו!</string>
+    <string name="onboarding.explanation.subtitle.folder">בחרו את התיקייה עם הקולספרים שלכם. Voice יציג לכם את הספרים שהוא מוצא לפני שהם יתווספו.</string>
     <string name="onboarding.explanation.title">הספרייה שלך, בדרך שלך</string>
     <string name="onboarding.welcome.action.start">יוצאים לדרך</string>
     <string name="onboarding.welcome.subtitle">נגן ספרי הקולספרים האישי שלך בכיס. בואו נתאים את Voice אליכם.</string>

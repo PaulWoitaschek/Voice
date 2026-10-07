@@ -16,6 +16,7 @@ internal class MediaScanner(
   private val chapterParser: ChapterParser,
   private val bookParser: BookParser,
   private val deviceHasPermissionBug: DeviceHasStoragePermissionBug,
+  private val progressCarryOver: ProgressCarryOver,
 ) {
 
   suspend fun scan(folders: Map<FolderType, List<CachedDocumentFile>>) {
@@ -43,7 +44,8 @@ internal class MediaScanner(
       }
     }
 
-    contentRepo.setAllInactiveExcept(files.map { BookId(it.uri) })
+    val bookIds = files.map { BookId(it.uri) }
+    contentRepo.setAllInactiveExcept(bookIds)
 
     val probeFile = folders.values.flatten().findProbeFile()
     if (probeFile != null) {
@@ -53,10 +55,11 @@ internal class MediaScanner(
       }
     }
 
+    val previousBooks = PreviousBooks(contentRepo.all(), scanned = bookIds.toSet())
     files
       .sortedBy { it.audioFileCount() }
       .forEach { file ->
-        scan(file)
+        scan(file, previousBooks)
       }
   }
 
@@ -67,7 +70,10 @@ internal class MediaScanner(
       }
   }
 
-  private suspend fun scan(file: CachedDocumentFile) {
+  private suspend fun scan(
+    file: CachedDocumentFile,
+    previousBooks: PreviousBooks,
+  ) {
     val parseResult = chapterParser.parse(file)
     val chapters = parseResult.chapters
     if (chapters.isEmpty()) return
@@ -78,11 +84,14 @@ internal class MediaScanner(
     val currentChapterGone = content.currentChapter !in chapterIds
     val currentChapter = if (currentChapterGone) chapterIds.first() else content.currentChapter
     val positionInChapter = if (currentChapterGone) 0 else content.positionInChapter
-    val updated = content.copy(
-      chapters = chapterIds,
-      currentChapter = currentChapter,
-      positionInChapter = positionInChapter,
-      isActive = true,
+    val updated = progressCarryOver.carryOver(
+      content = content.copy(
+        chapters = chapterIds,
+        currentChapter = currentChapter,
+        positionInChapter = positionInChapter,
+        isActive = true,
+      ),
+      previousBooks = previousBooks,
     )
     if (content != updated) {
       validateIntegrity(updated, chapters)

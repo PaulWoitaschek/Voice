@@ -53,6 +53,7 @@
     <string name="common.action.edit">सम्पादन गर्नुहोस्</string>
     <string name="common.action.remove">हटाउनुहोस्</string>
     <string name="common.action.undo">पूर्ववत् गर्नुहोस्</string>
+    <string name="common.action.save">सेभ गर्नुहोस्</string>
     <string name="common.dialog.cancel">रद्द गर्नुहोस्</string>
     <string name="common.dialog.confirm">सेट</string>
     <string name="common.error.generic.message">केही गडबड भयो 😢</string>
@@ -67,21 +68,49 @@
         <item quantity="one">%d सेकेण्ड</item>
         <item quantity="other">%d सेकेण्ड</item>
     </plurals>
+    <string name="folder.add.action.file">बरु एउटा मात्र फाइल थप्नुहोस्</string>
+    <string name="folder.add.action.folder">फोल्डर छान्नुहोस्</string>
+    <string name="folder.add.subtitle">तपाईंका अडियोबूकहरू भएको फोल्डर छान्नुहोस्। यसमा एउटा मात्र पुस्तक वा तपाईंको सम्पूर्ण पुस्तकालय हुन सक्छ।</string>
     <string name="folder.add.title.default">आफ्नो अडियोबूक(हरू) थप्नुहोस्</string>
     <string name="folder.add.title.onboarding">आफ्नो पहिलो अडियोबूक थप्नुहोस्</string>
-    <string name="folder.add.type.file">फाइल</string>
-    <string name="folder.add.type.folder">फोल्डर</string>
-    <string name="folder.add.type.subtitle">के तपाईं एउटा एकल फाइललाई पुस्तक वा फोल्डर को रूपमा थप्न चाहनुहुन्छ?</string>
-    <string name="folder.mode.author.title">लेखक-पुस्तक मोड: सबफोल्डरहरू लेखकहरू हुन्, उप-सबफोल्डरहरू पुस्तक हुन्।</string>
-    <string name="folder.mode.root.title">शीर्ष-स्तर पुस्तक मोड: सबफोल्डरहरू पुस्तक हुन्</string>
-    <string name="folder.mode.single.title">एकल पुस्तक मोड: एउटा फोल्डर एक पुस्तक बराबर।</string>
-    <string name="folder.type.book_example.empty">Voice ले कुनै पनि पुस्तकहरू पत्ता लगाउन सकेन। के त्यहाँ कुनै अडियो फाइलहरू छन्?</string>
-    <string name="folder.type.book_example.header">यसले निम्न पुस्तकहरू पत्ता लगाउन नेतृत्व गर्नेछ</string>
+    <string name="folder.mode.author.label">फोल्डरहरू लेखक हुन्</string>
+    <string name="folder.mode.author.option">%s भित्रका फोल्डरहरू लेखक हुन्</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d पुस्तक</item>
+        <item quantity="other">%d पुस्तकहरू</item>
+    </plurals>
+    <string name="folder.mode.file.label">एकल फाइल</string>
+    <string name="folder.mode.guess">तपाईंको जस्तै देखिन्छ</string>
+    <string name="folder.mode.root.label">हरेक फोल्डर एउटा पुस्तक हो</string>
+    <string name="folder.mode.root.option">%s भित्रको हरेक फोल्डर वा फाइल एउटा पुस्तक हो</string>
+    <string name="folder.mode.sheet.title">%s कसरी व्यवस्थित छ?</string>
+    <string name="folder.mode.single.label">एउटा पुस्तक</string>
+    <string name="folder.mode.single.option">%s एउटा पुस्तक हो</string>
+    <string name="folder.mode.single.summary">यसका फाइलहरू अध्याय बन्छन्, CD 1 र CD 2 जस्ता फोल्डरहरूमा भए पनि।</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">%d पुस्तक थप्नुहोस्</item>
+        <item quantity="other">%d पुस्तकहरू थप्नुहोस्</item>
+    </plurals>
+    <string name="folder.review.action.change">पुस्तकहरू फेला पार्ने तरिका बदल्नुहोस्</string>
+    <string name="folder.review.empty.subtitle">तपाईंका अडियोबूकहरू भएको फोल्डर छान्नुहोस्।</string>
+    <string name="folder.review.empty.title">%s मा कुनै अडियो फाइल छैन</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d फोल्डर</item>
+        <item quantity="other">%d फोल्डरहरू</item>
+    </plurals>
+    <string name="folder.review.loading">%s हेर्दै…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">%d पुस्तक जस्तो देखिन्छ</item>
+        <item quantity="other">%d पुस्तकहरू जस्तो देखिन्छ</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">हामीले %d पुस्तक भेट्टायौं</item>
+        <item quantity="other">हामीले %d पुस्तकहरू भेट्टायौं</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d अडियो फाइल</item>
         <item quantity="other">%d अडियो फाइलहरू</item>
     </plurals>
-    <string name="folder.type.title">तपाईंको फाइलहरू कसरी संरचित छन्?</string>
     <string name="history.action.change_back">पहिलेजस्तै गर्नुहोस्</string>
     <string name="history.action.go_there">त्यहाँ जानुहोस्</string>
     <string name="history.action.pin">पुस्तकचिनोको रूपमा सुरक्षित गर्नुहोस्</string>
@@ -160,7 +189,7 @@
     <string name="onboarding.completion.action.start_listening">सुन्न सुरु गर्नुहोस्</string>
     <string name="onboarding.completion.subtitle">तपाईंको पहिलो अडियोबूक प्ले गर्न तयार छ। Voice सँग आफ्नो यात्राको आनन्द लिनुहोस्!</string>
     <string name="onboarding.completion.title">तपाईं पुरै सेट हुनुहुन्छ!</string>
-    <string name="onboarding.explanation.subtitle">Voice को साथ, तपाईंले पुस्तकहरूलाई व्यक्तिगत फाइलहरूको रूपमा थप्न वा फोल्डरहरूमा व्यवस्थित गर्न सक्नुहुन्छ। तपाईं छान्नुहोस्!</string>
+    <string name="onboarding.explanation.subtitle.folder">तपाईंका अडियोबूकहरू भएको फोल्डर छान्नुहोस्। Voice ले भेट्टाएका पुस्तकहरू थप्नुअघि तपाईंलाई देखाउँछ।</string>
     <string name="onboarding.explanation.title">तपाईंको पुस्तकालय, तपाईंको इच्छा अनुसार</string>
     <string name="onboarding.welcome.action.start">सुरु गरौं</string>
     <string name="onboarding.welcome.subtitle">तपाईंको व्यक्तिगत पकेट अडियोबूक प्लेयर। तपाईलाई सेट अप गरौं।</string>

@@ -2,17 +2,23 @@ package voice.features.folderPicker
 
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import voice.core.data.folders.FolderType
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
+// decorative, the label next to it tells the type
 @Composable
-internal fun FolderTypeIcon(folderType: FolderType) {
+internal fun FolderTypeIcon(
+  folderType: FolderType,
+  modifier: Modifier = Modifier,
+) {
   Icon(
+    modifier = modifier,
     imageVector = folderType.icon(),
-    contentDescription = folderType.contentDescription(),
+    contentDescription = null,
   )
 }
 
@@ -24,13 +30,12 @@ private fun FolderType.icon(): ImageVector = when (this) {
 }
 
 @Composable
-private fun FolderType.contentDescription(): String {
+internal fun FolderType.label(): String {
   val res = when (this) {
-    FolderType.SingleFile,
-    FolderType.SingleFolder,
-    -> StringsR.string.folder_mode_single_title
-    FolderType.Root -> StringsR.string.folder_mode_root_title
-    FolderType.Author -> StringsR.string.folder_mode_author_title
+    FolderType.SingleFile -> StringsR.string.folder_mode_file_label
+    FolderType.SingleFolder -> StringsR.string.folder_mode_single_label
+    FolderType.Root -> StringsR.string.folder_mode_root_label
+    FolderType.Author -> StringsR.string.folder_mode_author_label
   }
   return stringResource(res)
 }

@@ -69,7 +69,7 @@ fun OnboardingExplanation(
     step = OnboardingStep.Explanation,
     onBack = onClose,
     title = stringResource(StringsR.string.onboarding_explanation_title),
-    subtitle = stringResource(StringsR.string.onboarding_explanation_subtitle),
+    subtitle = stringResource(StringsR.string.onboarding_explanation_subtitle_folder),
     hero = { clock ->
       Bookshelf(clock = clock, modifier = Modifier.fillMaxSize())
     },

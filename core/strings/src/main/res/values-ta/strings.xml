@@ -53,6 +53,7 @@
     <string name="common.action.edit">தொகு</string>
     <string name="common.action.remove">அகற்று</string>
     <string name="common.action.undo">செயல்தவிர்</string>
+    <string name="common.action.save">சேமி</string>
     <string name="common.dialog.cancel">ரத்துசெய்</string>
     <string name="common.dialog.confirm">கணம்</string>
     <string name="common.dialog.ok">சரி</string>
@@ -72,21 +73,49 @@
         <item quantity="one">%d இரண்டாவது</item>
         <item quantity="other">%d விநாடிகள்</item>
     </plurals>
+    <string name="folder.add.action.file">பதிலாக ஒரு கோப்பை மட்டும் சேர்க்கவும்</string>
+    <string name="folder.add.action.folder">கோப்புறையைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="folder.add.subtitle">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும். அதில் ஒரு புத்தகமோ உங்கள் முழு நூலகமோ இருக்கலாம்.</string>
     <string name="folder.add.title.default">உங்கள் ஆடியோபுக் (களை) சேர்க்கவும்</string>
     <string name="folder.add.title.onboarding">உங்கள் முதல் ஆடியோபுக்கைச் சேர்க்கவும்</string>
-    <string name="folder.add.type.file">கோப்பு</string>
-    <string name="folder.add.type.folder">கோப்புறை</string>
-    <string name="folder.add.type.subtitle">ஒற்றை கோப்பை ஒரு புத்தகமாக அல்லது கோப்புறையாக சேர்க்க விரும்புகிறீர்களா?</string>
-    <string name="folder.mode.author.title">ஆசிரியர்-புத்தக பயன்முறை: துணை கோப்புறைகள் ஆசிரியர்கள், துணை துணைக் கலர்கள் புத்தகங்கள்.</string>
-    <string name="folder.mode.root.title">உயர்மட்ட புத்தக பயன்முறை: துணை கோப்புறைகள் புத்தகங்கள்</string>
-    <string name="folder.mode.single.title">ஒற்றை புத்தக முறை: ஒரு கோப்புறை ஒரு புத்தகத்திற்கு சமம்.</string>
-    <string name="folder.type.book_example.empty">குரலால் எந்த புத்தகங்களையும் கண்டறிய முடியவில்லை. ஏதேனும் ஆடியோ கோப்புகள் உள்ளதா?</string>
-    <string name="folder.type.book_example.header">இது பின்வரும் புத்தகங்கள் கண்டறியப்படுவதற்கு வழிவகுக்கும்</string>
+    <string name="folder.mode.author.label">கோப்புறைகள் ஆசிரியர்கள்</string>
+    <string name="folder.mode.author.option">%s இல் உள்ள கோப்புறைகள் ஆசிரியர்கள்</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d புத்தகம்</item>
+        <item quantity="other">%d புத்தகங்கள்</item>
+    </plurals>
+    <string name="folder.mode.file.label">ஒற்றைக் கோப்பு</string>
+    <string name="folder.mode.guess">உங்களுடையது போல் தெரிகிறது</string>
+    <string name="folder.mode.root.label">ஒவ்வொரு கோப்புறையும் ஒரு புத்தகம்</string>
+    <string name="folder.mode.root.option">%s இல் உள்ள ஒவ்வொரு கோப்புறையும் கோப்பும் ஒரு புத்தகம்</string>
+    <string name="folder.mode.sheet.title">%s எவ்வாறு ஒழுங்கமைக்கப்பட்டுள்ளது?</string>
+    <string name="folder.mode.single.label">ஒரு புத்தகம்</string>
+    <string name="folder.mode.single.option">%s ஒரு புத்தகம்</string>
+    <string name="folder.mode.single.summary">CD 1, CD 2 போன்ற கோப்புறைகளில் இருந்தாலும், இதன் கோப்புகள் அத்தியாயங்களாகும்.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">%d புத்தகத்தைச் சேர்</item>
+        <item quantity="other">%d புத்தகங்களைச் சேர்</item>
+    </plurals>
+    <string name="folder.review.action.change">புத்தகங்கள் கண்டறியப்படும் விதத்தை மாற்று</string>
+    <string name="folder.review.empty.subtitle">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="folder.review.empty.title">%s இல் ஆடியோ கோப்புகள் இல்லை</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d கோப்புறை</item>
+        <item quantity="other">%d கோப்புறைகள்</item>
+    </plurals>
+    <string name="folder.review.loading">%s இல் தேடுகிறது…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">%d புத்தகம் போல் தெரிகிறது</item>
+        <item quantity="other">%d புத்தகங்கள் போல் தெரிகிறது</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">%d புத்தகத்தைக் கண்டறிந்தோம்</item>
+        <item quantity="other">%d புத்தகங்களைக் கண்டறிந்தோம்</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d ஆடியோ கோப்பு</item>
         <item quantity="other">%d ஆடியோ கோப்புகள்</item>
     </plurals>
-    <string name="folder.type.title">உங்கள் கோப்புகள் எவ்வாறு கட்டமைக்கப்பட்டுள்ளன?</string>
     <string name="history.action.change_back">பழையபடி மாற்று</string>
     <string name="history.action.go_there">அங்கே செல்</string>
     <string name="history.action.pin">புக்மார்க்காகச் சேமி</string>
@@ -181,7 +210,7 @@
     <string name="onboarding.completion.action.start_listening">கேட்கத் தொடங்குங்கள்</string>
     <string name="onboarding.completion.subtitle">உங்கள் முதல் ஆடியோபுக் விளையாட தயாராக உள்ளது. குரலுடன் உங்கள் பயணத்தை அனுபவிக்கவும்!</string>
     <string name="onboarding.completion.title">நீங்கள் அனைவரும் அமைக்கப்பட்டிருக்கிறீர்கள்!</string>
-    <string name="onboarding.explanation.subtitle">குரல் மூலம், நீங்கள் புத்தகங்களை தனிப்பட்ட கோப்புகளாக சேர்க்கலாம் அல்லது கோப்புறைகளில் அவற்றை ஒழுங்கமைக்கலாம். நீங்கள் தேர்வு செய்கிறீர்கள்!</string>
+    <string name="onboarding.explanation.subtitle.folder">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும். சேர்ப்பதற்கு முன், Voice கண்டறிந்த புத்தகங்களை உங்களுக்குக் காட்டும்.</string>
     <string name="onboarding.explanation.title">உங்கள் நூலகம், உங்கள் வழி</string>
     <string name="onboarding.welcome.action.start">தொடங்குவோம்</string>
     <string name="onboarding.welcome.subtitle">உங்கள் தனிப்பட்ட பாக்கெட் ஆடியோபுக் பிளேயர். நீங்கள் அமைப்போம்.</string>

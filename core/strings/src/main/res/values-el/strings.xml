@@ -53,6 +53,7 @@
     <string name="common.action.edit">Επεξεργασία</string>
     <string name="common.action.remove">Αφαίρεση</string>
     <string name="common.action.undo">Αναίρεση</string>
+    <string name="common.action.save">Αποθήκευση</string>
     <string name="common.dialog.cancel">Ακύρωση</string>
     <string name="common.dialog.confirm">Ορισμός</string>
     <string name="common.error.generic.message">Κάτι πήγε στραβά 😢</string>
@@ -63,15 +64,47 @@
         <item quantity="one">%d δευτερόλεπτο</item>
         <item quantity="other">%d δευτερόλεπτα</item>
     </plurals>
-    <string name="folder.mode.root.title">Αρχικός φάκελος βιβλίων. Ένας υποφάκελος = ένα βιβλίο.</string>
-    <string name="folder.mode.single.title">Φάκελος ενός βιβλίου</string>
-    <string name="folder.type.book_example.empty">Το Voice δεν μπόρεσε να εντοπίσει βιβλία. Υπάρχουν αρχεία ήχου;</string>
-    <string name="folder.type.book_example.header">Αυτό θα οδηγήσει στον εντοπισμό των παρακάτω βιβλίων</string>
+    <string name="folder.add.action.file">Προσθήκη μεμονωμένου αρχείου</string>
+    <string name="folder.add.action.folder">Επιλογή φακέλου</string>
+    <string name="folder.add.subtitle">Επιλέξτε τον φάκελο με τα ηχητικά σας βιβλία. Μπορεί να περιέχει ένα βιβλίο ή ολόκληρη τη βιβλιοθήκη σας.</string>
+    <string name="folder.mode.author.label">Οι φάκελοι είναι συγγραφείς</string>
+    <string name="folder.mode.author.option">Οι φάκελοι στο %s είναι συγγραφείς</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d βιβλίο</item>
+        <item quantity="other">%d βιβλία</item>
+    </plurals>
+    <string name="folder.mode.file.label">Μεμονωμένο αρχείο</string>
+    <string name="folder.mode.guess">Μοιάζει με τον δικό σας</string>
+    <string name="folder.mode.root.label">Κάθε φάκελος είναι ένα βιβλίο</string>
+    <string name="folder.mode.root.option">Κάθε φάκελος ή αρχείο στο %s είναι ένα βιβλίο</string>
+    <string name="folder.mode.sheet.title">Πώς είναι οργανωμένο το %s;</string>
+    <string name="folder.mode.single.label">Ένα βιβλίο</string>
+    <string name="folder.mode.single.option">Το %s είναι ένα βιβλίο</string>
+    <string name="folder.mode.single.summary">Τα αρχεία του γίνονται κεφάλαια, ακόμη και σε φακέλους όπως CD 1 και CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Προσθήκη %d βιβλίου</item>
+        <item quantity="other">Προσθήκη %d βιβλίων</item>
+    </plurals>
+    <string name="folder.review.action.change">Αλλαγή τρόπου εύρεσης βιβλίων</string>
+    <string name="folder.review.empty.subtitle">Επιλέξτε τον φάκελο που περιέχει τα ηχητικά σας βιβλία.</string>
+    <string name="folder.review.empty.title">Δεν υπάρχουν αρχεία ήχου στο %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d φάκελος</item>
+        <item quantity="other">%d φάκελοι</item>
+    </plurals>
+    <string name="folder.review.loading">Αναζήτηση στο %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Μοιάζει με %d βιβλίο</item>
+        <item quantity="other">Μοιάζει με %d βιβλία</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Βρήκαμε %d βιβλίο</item>
+        <item quantity="other">Βρήκαμε %d βιβλία</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d αρχείο ήχου</item>
         <item quantity="other">%d αρχεία ήχου</item>
     </plurals>
-    <string name="folder.type.title">Πώς είναι δομημένα τα αρχεία σας;</string>
     <string name="history.action.change_back">Αναίρεση αλλαγής</string>
     <string name="history.action.go_there">Μετάβαση</string>
     <string name="history.action.pin">Αποθήκευση ως σελιδοδείκτη</string>
@@ -143,6 +176,7 @@
     <string name="library.search.hint">Τι ψάχνετε;</string>
     <string name="media_session.library.recent">Πρόσφατα</string>
     <string name="media_session.library.root">Όλα τα ηχητικά βιβλία</string>
+    <string name="onboarding.explanation.subtitle.folder">Επιλέξτε τον φάκελο με τα ηχητικά σας βιβλία. Το Voice σάς δείχνει τα βιβλία που βρίσκει πριν τα προσθέσει.</string>
     <string name="onboarding.welcome.action.start">Πάμε</string>
     <string name="playback.action.fast_forward">Γρήγορη προώθηση</string>
     <string name="playback.action.pause">Παύση</string>

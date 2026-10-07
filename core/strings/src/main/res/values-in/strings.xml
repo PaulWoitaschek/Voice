@@ -53,6 +53,7 @@
     <string name="common.action.edit">Edit</string>
     <string name="common.action.remove">Buang</string>
     <string name="common.action.undo">Urungkan</string>
+    <string name="common.action.save">Simpan</string>
     <string name="common.dialog.cancel">Batalkan</string>
     <string name="common.dialog.confirm">Atur</string>
     <string name="common.dialog.ok">OK</string>
@@ -70,20 +71,43 @@
     <plurals name="duration.seconds">
         <item quantity="other">%d detik</item>
     </plurals>
+    <string name="folder.add.action.file">Tambahkan satu berkas saja</string>
+    <string name="folder.add.action.folder">Pilih folder</string>
+    <string name="folder.add.subtitle">Pilih folder berisi buku audio Anda. Folder ini bisa berisi satu buku atau seluruh perpustakaan Anda.</string>
     <string name="folder.add.title.default">Tambahkan Buku Audio Anda</string>
     <string name="folder.add.title.onboarding">Tambahkan Buku Audio Pertama Anda</string>
-    <string name="folder.add.type.file">Berkas</string>
-    <string name="folder.add.type.folder">Folder</string>
-    <string name="folder.add.type.subtitle">Apakah Anda ingin menambahkan satu berkas sebagai buku atau sebuah folder?</string>
-    <string name="folder.mode.author.title">Mode Penulis-Buku: Subfolder adalah penulis, sub-subfolder adalah buku.</string>
-    <string name="folder.mode.root.title">Mode Buku Tingkat Atas: Subfolder adalah buku</string>
-    <string name="folder.mode.single.title">Mode Buku Tunggal: Satu folder sama dengan satu buku.</string>
-    <string name="folder.type.book_example.empty">Suara tidak dapat mendeteksi buku apa pun. Apakah ada file audio?</string>
-    <string name="folder.type.book_example.header">Hal ini akan menyebabkan buku-buku berikut ini terdeteksi</string>
+    <string name="folder.mode.author.label">Folder adalah penulis</string>
+    <string name="folder.mode.author.option">Folder di dalam %s adalah penulis</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="other">%d buku</item>
+    </plurals>
+    <string name="folder.mode.file.label">Satu berkas</string>
+    <string name="folder.mode.guess">Mirip milik Anda</string>
+    <string name="folder.mode.root.label">Setiap folder adalah buku</string>
+    <string name="folder.mode.root.option">Setiap folder atau berkas di dalam %s adalah buku</string>
+    <string name="folder.mode.sheet.title">Bagaimana %s diatur?</string>
+    <string name="folder.mode.single.label">Satu buku</string>
+    <string name="folder.mode.single.option">%s adalah satu buku</string>
+    <string name="folder.mode.single.summary">Berkasnya menjadi bab, bahkan di folder seperti CD 1 dan CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="other">Tambahkan %d buku</item>
+    </plurals>
+    <string name="folder.review.action.change">Ubah cara buku ditemukan</string>
+    <string name="folder.review.empty.subtitle">Pilih folder yang berisi buku audio Anda.</string>
+    <string name="folder.review.empty.title">Tidak ada file audio di %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="other">%d folder</item>
+    </plurals>
+    <string name="folder.review.loading">Mencari di %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="other">Sepertinya %d buku</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="other">Kami menemukan %d buku</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="other">%d file audio</item>
     </plurals>
-    <string name="folder.type.title">Bagaimana file Anda terstruktur?</string>
     <string name="history.action.change_back">Kembalikan</string>
     <string name="history.action.go_there">Ke sana</string>
     <string name="history.action.pin">Simpan sebagai markah</string>
@@ -177,7 +201,7 @@
     <string name="onboarding.completion.action.start_listening">Mulai Mendengarkan</string>
     <string name="onboarding.completion.subtitle">Buku audio pertama Anda siap diputar. Nikmati perjalanan Anda bersama Voice!</string>
     <string name="onboarding.completion.title">Semua Siap!</string>
-    <string name="onboarding.explanation.subtitle">Dengan Voice, Anda dapat menambahkan buku sebagai berkas individual atau mengaturnya dalam folder. Anda yang memilih!</string>
+    <string name="onboarding.explanation.subtitle.folder">Pilih folder berisi buku audio Anda. Voice menampilkan buku yang ditemukan sebelum menambahkannya.</string>
     <string name="onboarding.explanation.title">Perpustakaan Anda, Sesuai Keinginan Anda</string>
     <string name="onboarding.welcome.action.start">Ayo mulai</string>
     <string name="onboarding.welcome.subtitle">Pemutar buku audio saku pribadi Anda. Mari kita siapkan semuanya.</string>

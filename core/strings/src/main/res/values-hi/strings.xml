@@ -53,6 +53,7 @@
     <string name="common.action.edit">संपादन</string>
     <string name="common.action.remove">हटाएं</string>
     <string name="common.action.undo">पहले जैसा करें</string>
+    <string name="common.action.save">सहेजें</string>
     <string name="common.dialog.cancel">रद्द</string>
     <string name="common.dialog.confirm">निर्धारित</string>
     <string name="common.error.generic.message">कुछ गलत हो गया 😢</string>
@@ -71,21 +72,49 @@
         <item quantity="one">%d सेकंड</item>
         <item quantity="other">%d सेकंड</item>
     </plurals>
+    <string name="folder.add.action.file">इसके बजाय एक फाइल जोड़ें</string>
+    <string name="folder.add.action.folder">फोल्डर चुनें</string>
+    <string name="folder.add.subtitle">अपनी ऑडियोबुक वाला फोल्डर चुनें। इसमें एक पुस्तक या आपकी पूरी लाइब्रेरी हो सकती है।</string>
     <string name="folder.add.title.default">अपनी ऑडियोबुक जोड़ें</string>
     <string name="folder.add.title.onboarding">अपनी पहली ऑडियोबुक जोड़ें</string>
-    <string name="folder.add.type.file">फाइल</string>
-    <string name="folder.add.type.folder">फोल्डर</string>
-    <string name="folder.add.type.subtitle">क्या आप एक फाइल को पुस्तक या फोल्डर के रूप में जोड़ना चाहेंगे?</string>
-    <string name="folder.mode.author.title">लेखक-पुस्तक मोड: सबफोल्डर लेखक हैं, उप-सबफोल्डर पुस्तकें हैं।</string>
-    <string name="folder.mode.root.title">शीर्ष-स्तरीय पुस्तक मोड: सबफोल्डर पुस्तकें हैं</string>
-    <string name="folder.mode.single.title">एकल पुस्तक मोड: एक फोल्डर एक पुस्तक के बराबर है।</string>
-    <string name="folder.type.book_example.empty">Voice किसी भी किताब का पता नहीं लगा सकी। क्या कोई ऑडियो फाइल है?</string>
-    <string name="folder.type.book_example.header">इससे निम्नलिखित पुस्तकों का पता चलेगा</string>
+    <string name="folder.mode.author.label">फोल्डर लेखक हैं</string>
+    <string name="folder.mode.author.option">%s के फोल्डर लेखक हैं</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d पुस्तक</item>
+        <item quantity="other">%d पुस्तकें</item>
+    </plurals>
+    <string name="folder.mode.file.label">एकल फाइल</string>
+    <string name="folder.mode.guess">आपके जैसा लगता है</string>
+    <string name="folder.mode.root.label">हर फोल्डर एक पुस्तक है</string>
+    <string name="folder.mode.root.option">%s का हर फोल्डर या फाइल एक पुस्तक है</string>
+    <string name="folder.mode.sheet.title">%s कैसे व्यवस्थित है?</string>
+    <string name="folder.mode.single.label">एक पुस्तक</string>
+    <string name="folder.mode.single.option">%s एक पुस्तक है</string>
+    <string name="folder.mode.single.summary">इसकी फाइलें अध्याय बन जाती हैं, CD 1 और CD 2 जैसे फोल्डरों में भी।</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">%d पुस्तक जोड़ें</item>
+        <item quantity="other">%d पुस्तकें जोड़ें</item>
+    </plurals>
+    <string name="folder.review.action.change">पुस्तकें ढूँढने का तरीका बदलें</string>
+    <string name="folder.review.empty.subtitle">वह फोल्डर चुनें जिसमें आपकी ऑडियोबुक हैं।</string>
+    <string name="folder.review.empty.title">%s में कोई ऑडियो फाइल नहीं</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d फोल्डर</item>
+        <item quantity="other">%d फोल्डर</item>
+    </plurals>
+    <string name="folder.review.loading">%s में ढूँढ रहे हैं…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">%d पुस्तक लगती है</item>
+        <item quantity="other">%d पुस्तकें लगती हैं</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">हमें %d पुस्तक मिली</item>
+        <item quantity="other">हमें %d पुस्तकें मिलीं</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d ऑडियो फाइल</item>
         <item quantity="other">%d ऑडियो फाइलें</item>
     </plurals>
-    <string name="folder.type.title">आपकी फाइलें कैसे संरचित हैं?</string>
     <string name="history.action.change_back">वापस बदलें</string>
     <string name="history.action.go_there">वहाँ जाएँ</string>
     <string name="history.action.pin">बुकमार्क के रूप में सहेजें</string>
@@ -164,7 +193,7 @@
     <string name="onboarding.completion.action.start_listening">सुनना शुरू करें</string>
     <string name="onboarding.completion.subtitle">आपकी पहली ऑडियोबुक चलने के लिए तैयार है। Voice के साथ अपनी यात्रा का आनंद लें!</string>
     <string name="onboarding.completion.title">आप पूरी तरह तैयार हैं!</string>
-    <string name="onboarding.explanation.subtitle">Voice के साथ, आप पुस्तकों को अलग-अलग फाइलों के रूप में जोड़ सकते हैं या उन्हें फोल्डरों में व्यवस्थित कर सकते हैं। आप चुनें!</string>
+    <string name="onboarding.explanation.subtitle.folder">अपनी ऑडियोबुक वाला फोल्डर चुनें। Voice जोड़ने से पहले आपको मिली हुई पुस्तकें दिखाती है।</string>
     <string name="onboarding.explanation.title">आपकी लाइब्रेरी, आपका तरीका</string>
     <string name="onboarding.welcome.action.start">चलिए शुरू करें</string>
     <string name="onboarding.welcome.subtitle">आपका व्यक्तिगत पॉकेट ऑडियोबुक प्लेयर। आइए आपको सेट अप करने में मदद करें।</string>

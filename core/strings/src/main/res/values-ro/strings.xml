@@ -53,6 +53,7 @@
     <string name="common.action.edit">Modificare</string>
     <string name="common.action.remove">Eliminare</string>
     <string name="common.action.undo">Anulează</string>
+    <string name="common.action.save">Salvează</string>
     <string name="common.dialog.cancel">Anulare</string>
     <string name="common.dialog.confirm">Setare</string>
     <string name="common.error.generic.message">S-a produs o eroare 😢</string>
@@ -73,22 +74,55 @@
         <item quantity="few">%d secunde</item>
         <item quantity="other">%d secunde</item>
     </plurals>
+    <string name="folder.add.action.file">Adaugă doar un fișier</string>
+    <string name="folder.add.action.folder">Alege un director</string>
+    <string name="folder.add.subtitle">Alege directorul cu cărțile tale audio. Poate conține o singură carte sau întreaga ta bibliotecă.</string>
     <string name="folder.add.title.default">Adaugă cărțile tale</string>
     <string name="folder.add.title.onboarding">Adaugă prima ta carte</string>
-    <string name="folder.add.type.file">Fișier</string>
-    <string name="folder.add.type.folder">Director</string>
-    <string name="folder.add.type.subtitle">Doriți să adăugați o carte bazată pe un singur fișier sau pe un director?</string>
-    <string name="folder.mode.author.title">Modul Autor: Fiecare subdirector reprezintă un autor, iar în fiecare sub-subdirector găsim câte-o carte.</string>
-    <string name="folder.mode.root.title">Modul Director: Fiecare subdirector conține o singură carte</string>
-    <string name="folder.mode.single.title">Modul Carte: Un director, o singură carte.</string>
-    <string name="folder.type.book_example.empty">Voice nu a găsit nicio carte. Există fișiere audio?</string>
-    <string name="folder.type.book_example.header">În acest fel, au fost detectate următoarele cărți</string>
+    <string name="folder.mode.author.label">Directoarele sunt autori</string>
+    <string name="folder.mode.author.option">Directoarele din %s sunt autori</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d carte</item>
+        <item quantity="few">%d cărți</item>
+        <item quantity="other">%d de cărți</item>
+    </plurals>
+    <string name="folder.mode.file.label">Un singur fișier</string>
+    <string name="folder.mode.guess">Seamănă cu al tău</string>
+    <string name="folder.mode.root.label">Fiecare director este o carte</string>
+    <string name="folder.mode.root.option">Fiecare director sau fișier din %s este o carte</string>
+    <string name="folder.mode.sheet.title">Cum este organizat directorul %s?</string>
+    <string name="folder.mode.single.label">O carte</string>
+    <string name="folder.mode.single.option">%s este o carte</string>
+    <string name="folder.mode.single.summary">Fișierele sale devin capitole, chiar și în directoare precum CD 1 și CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Adaugă %d carte</item>
+        <item quantity="few">Adaugă %d cărți</item>
+        <item quantity="other">Adaugă %d de cărți</item>
+    </plurals>
+    <string name="folder.review.action.change">Schimbă modul în care sunt găsite cărțile</string>
+    <string name="folder.review.empty.subtitle">Alege directorul în care se află cărțile tale audio.</string>
+    <string name="folder.review.empty.title">Niciun fișier audio în %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d director</item>
+        <item quantity="few">%d directoare</item>
+        <item quantity="other">%d de directoare</item>
+    </plurals>
+    <string name="folder.review.loading">Se caută în %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Pare a fi %d carte</item>
+        <item quantity="few">Par a fi %d cărți</item>
+        <item quantity="other">Par a fi %d de cărți</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Am găsit %d carte</item>
+        <item quantity="few">Am găsit %d cărți</item>
+        <item quantity="other">Am găsit %d de cărți</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d fișier audio</item>
         <item quantity="few">%d fișiere audio</item>
         <item quantity="other">%d fișiere audio</item>
     </plurals>
-    <string name="folder.type.title">Cum sunt structurate fișierele dumneavoastră?</string>
     <string name="history.action.change_back">Revino</string>
     <string name="history.action.go_there">Mergi acolo</string>
     <string name="history.action.pin">Salvează ca semn de carte</string>
@@ -167,7 +201,7 @@
     <string name="onboarding.completion.action.start_listening">Dă start ascultării</string>
     <string name="onboarding.completion.subtitle">Prima ta carte este pregătită. Ascultare plăcută cu Voice!</string>
     <string name="onboarding.completion.title">Ai parcurs cu succes acest ghid.</string>
-    <string name="onboarding.explanation.subtitle">Cu Voice, cărțile tale pot fi adăugate sub forma unui singur fișier sau a unui director de fișiere audio. Tu decizi!</string>
+    <string name="onboarding.explanation.subtitle.folder">Alege directorul cu cărțile tale audio. Voice îți arată cărțile găsite înainte de a le adăuga.</string>
     <string name="onboarding.explanation.title">O bibliotecă așa cum ți-o dorești tu</string>
     <string name="onboarding.welcome.action.start">Să începem</string>
     <string name="onboarding.welcome.subtitle">Player-ul tău personal de cărți audio - să parcurgem împreună un scurt ghid.</string>
