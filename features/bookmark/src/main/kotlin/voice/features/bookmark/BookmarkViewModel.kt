@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
@@ -68,7 +69,6 @@ class BookmarkViewModel(
   private var sort by mutableStateOf(BookmarkSort.Story)
   private var selectedCategory by mutableStateOf<BookmarkCategory?>(null)
   private var draft by mutableStateOf<Draft?>(null)
-  private var openedEditorFromNavigation = false
   private var saving = false
 
   // a jump or close leaves the screen, so a second tap must not go back once more
@@ -83,6 +83,8 @@ class BookmarkViewModel(
     val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeBookmarkViewState()
 
+    // saved, so that the editor does not open again once the screen comes back after process death
+    var openedEditorFromNavigation by rememberSaveable { mutableStateOf(false) }
     val persistedBook = remember(bookId) { bookRepository.flow(bookId) }
       .collectAsState(initial = null).value ?: return null
     // with the experimental playback persistence, the stored position lags behind while playing

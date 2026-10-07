@@ -1,5 +1,8 @@
 package voice.features.bookmark
 
+import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
+import androidx.compose.runtime.saveable.SaveableStateRegistry
+import androidx.compose.runtime.withCompositionLocal
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.ReceiveTurbine
@@ -286,6 +289,33 @@ class BookmarkViewModelTest {
       assertEquals(expected = "Static", actual = editor.note)
     }
   }
+
+  @Test
+  fun `the details opened for a bookmark stay closed once the screen comes back`() = scope.runTest {
+    val bookmark = testBookmark(signal, 2.minutes, title = "Static")
+    bookmarkRepo.bookmarks.value = listOf(bookmark)
+    val editBookmarkId = bookmark.id.value.toString()
+    val registry = SaveableStateRegistry(restoredValues = null, canBeSaved = { true })
+    viewModel(editBookmarkId = editBookmarkId).states(registry).test {
+      awaitState { it.editor != null }
+      cancelAndIgnoreRemainingEvents()
+    }
+
+    // as after process death: a new view model, with what the screen saved
+    val restored = SaveableStateRegistry(restoredValues = registry.performSave(), canBeSaved = { true })
+    viewModel(editBookmarkId = editBookmarkId).states(restored).test {
+      assertNull(awaitState().editor)
+      testScheduler.runCurrent()
+      expectNoEvents()
+    }
+  }
+
+  private fun BookmarkViewModel.states(registry: SaveableStateRegistry) =
+    scope.backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      withCompositionLocal(LocalSaveableStateRegistry provides registry) {
+        viewState()
+      }
+    }
 
   @Test
   fun `a sleep timer bookmark can be made dozed off again`() {
