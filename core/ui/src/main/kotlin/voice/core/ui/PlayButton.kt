@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -32,9 +33,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
 import voice.core.strings.R as StringsR
@@ -96,16 +99,19 @@ fun PlayButton(
       },
     contentAlignment = Alignment.Center,
   ) {
-    Icon(
-      modifier = Modifier
-        .fillMaxSize(0.4F)
-        .graphicsLayer { rotationZ = -rotation },
-      painter = rememberPlayPausePainter(playing),
-      contentDescription = stringResource(
-        id = if (playing) StringsR.string.playback_action_pause else StringsR.string.playback_action_play,
-      ),
-      tint = contentColor,
-    )
+    // animated vectors always mirror in right to left layouts, but a play arrow never points left
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+      Icon(
+        modifier = Modifier
+          .fillMaxSize(0.4F)
+          .graphicsLayer { rotationZ = -rotation },
+        painter = rememberPlayPausePainter(playing),
+        contentDescription = stringResource(
+          id = if (playing) StringsR.string.playback_action_pause else StringsR.string.playback_action_play,
+        ),
+        tint = contentColor,
+      )
+    }
   }
 }
 

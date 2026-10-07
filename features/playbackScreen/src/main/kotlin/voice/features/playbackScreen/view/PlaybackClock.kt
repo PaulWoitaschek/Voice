@@ -9,12 +9,13 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.withFrameNanos
+import androidx.compose.ui.MotionDurationScale
 import kotlinx.coroutines.flow.first
 
 /**
  * A clock in seconds that only ticks while audio plays. Its speed eases in and out, so everything
  * driven by it (the seek bar wave, the aurora) glides to a halt instead of freezing abruptly.
- * When paused it stops requesting frames entirely.
+ * When paused, or with animations turned off, it stops requesting frames entirely.
  */
 @Composable
 internal fun rememberPlaybackClock(playing: Boolean): State<Float> {
@@ -25,10 +26,13 @@ internal fun rememberPlaybackClock(playing: Boolean): State<Float> {
     label = "clockSpeed",
   )
   LaunchedEffect(time, speed) {
+    // zero when animations are turned off in the system settings
+    val motionDurationScale = coroutineContext[MotionDurationScale]
+    fun ticking() = speed.value > 0F && (motionDurationScale?.scaleFactor ?: 1F) > 0F
     while (true) {
-      snapshotFlow { speed.value > 0F }.first { it }
+      snapshotFlow { ticking() }.first { it }
       var lastFrame = withFrameNanos { it }
-      while (speed.value > 0F) {
+      while (ticking()) {
         withFrameNanos { frame ->
           time.floatValue += (frame - lastFrame) / 1_000_000_000F * speed.value
           lastFrame = frame

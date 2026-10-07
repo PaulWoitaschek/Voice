@@ -46,6 +46,10 @@ internal fun AuroraBackground(
   Spacer(
     modifier = modifier.drawWithCache {
       val sparkle = sparklePath()
+      // built once and moved around per frame, as every new gradient allocates a shader
+      val primaryBlob = blobBrush(colorScheme.primaryContainer.copy(alpha = strength))
+      val tertiaryBlob = blobBrush(colorScheme.tertiaryContainer.copy(alpha = strength * 0.8F))
+      val secondaryBlob = blobBrush(colorScheme.secondaryContainer.copy(alpha = strength * 0.85F))
       onDrawBehind {
         val t = clock()
         val w = size.width
@@ -53,17 +57,17 @@ internal fun AuroraBackground(
         val radius = max(w, h) * 0.7F
         drawRect(colorScheme.surface)
         drawBlob(
-          color = colorScheme.primaryContainer.copy(alpha = strength),
+          brush = primaryBlob,
           center = Offset(w * (0.25F + 0.2F * sin(t * 0.21F)), h * (0.18F + 0.1F * cos(t * 0.17F))),
           radius = radius * (1F + 0.08F * sin(t * 0.5F)),
         )
         drawBlob(
-          color = colorScheme.tertiaryContainer.copy(alpha = strength * 0.8F),
+          brush = tertiaryBlob,
           center = Offset(w * (0.85F + 0.15F * cos(t * 0.19F + 1F)), h * (0.5F + 0.12F * sin(t * 0.23F))),
           radius = radius * 0.85F,
         )
         drawBlob(
-          color = colorScheme.secondaryContainer.copy(alpha = strength * 0.85F),
+          brush = secondaryBlob,
           center = Offset(w * (0.2F + 0.25F * sin(t * 0.13F + 2F)), h * (0.95F + 0.06F * cos(t * 0.29F))),
           radius = radius * (1F + 0.1F * cos(t * 0.4F)),
         )
@@ -86,21 +90,27 @@ internal fun AuroraBackground(
   )
 }
 
+/** A soft blob with a radius of 1, centered at the origin. */
+private fun blobBrush(color: Color): Brush = Brush.radialGradient(
+  0F to color,
+  1F to color.copy(alpha = 0F),
+  center = Offset.Zero,
+  radius = 1F,
+)
+
 private fun DrawScope.drawBlob(
-  color: Color,
+  brush: Brush,
   center: Offset,
   radius: Float,
 ) {
-  drawCircle(
-    brush = Brush.radialGradient(
-      0F to color,
-      1F to color.copy(alpha = 0F),
-      center = center,
-      radius = radius,
-    ),
-    radius = radius,
-    center = center,
-  )
+  withTransform(
+    {
+      translate(left = center.x, top = center.y)
+      scale(scaleX = radius, scaleY = radius, pivot = Offset.Zero)
+    },
+  ) {
+    drawCircle(brush = brush, radius = 1F, center = Offset.Zero)
+  }
 }
 
 private class Star(

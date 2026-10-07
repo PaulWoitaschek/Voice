@@ -60,6 +60,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import voice.core.strings.R
@@ -77,7 +79,10 @@ import java.text.DecimalFormat
  */
 @Composable
 internal fun ActionToolbar(
-  viewState: BookPlayViewState,
+  sleepTimerState: BookPlayViewState.SleepTimerViewState,
+  playbackSpeed: Float,
+  skipSilence: Boolean,
+  volumeBoostActive: Boolean,
   onSleepTimerClick: () -> Unit,
   onSpeedClick: () -> Unit,
   onBookmarkClick: () -> Unit,
@@ -92,21 +97,22 @@ internal fun ActionToolbar(
     modifier = modifier,
     colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(),
   ) {
-    val sleepTimerState = viewState.sleepTimerState
+    val sleepTimerActive = sleepTimerState is BookPlayViewState.SleepTimerViewState.Enabled
     ToolbarAction(
-      active = sleepTimerState is BookPlayViewState.SleepTimerViewState.Enabled,
-      icon = VoiceIcons.Bedtime,
+      active = sleepTimerActive,
+      // a click cancels a running timer
+      icon = if (sleepTimerActive) VoiceIcons.BedtimeOff else VoiceIcons.Bedtime,
       contentDescription = stringResource(R.string.sleep_timer_action_open),
       label = (sleepTimerState as? BookPlayViewState.SleepTimerViewState.Enabled.WithDuration)
         ?.let { formatTime(it.leftDuration.inWholeMilliseconds) },
       onClick = onSleepTimerClick,
     )
-    val speedChanged = viewState.playbackSpeed !in 0.99F..1.01F
+    val speedChanged = playbackSpeed !in 0.99F..1.01F
     ToolbarAction(
       active = speedChanged,
       icon = VoiceIcons.Speed,
       contentDescription = stringResource(R.string.playback_speed_title),
-      label = if (speedChanged) speedFormat.format(viewState.playbackSpeed) + "×" else null,
+      label = if (speedChanged) speedFormat.format(playbackSpeed) + "×" else null,
       onClick = onSpeedClick,
     )
     BookmarkAction(
@@ -114,14 +120,15 @@ internal fun ActionToolbar(
       onLongClick = onBookmarkLongClick,
     )
     ToolbarAction(
-      active = viewState.skipSilence,
+      active = skipSilence,
       icon = VoiceIcons.ContentCut,
       contentDescription = stringResource(R.string.playback_option_skip_silence),
       onClick = onSkipSilenceClick,
+      toggle = true,
       showTooltipOnClick = true,
     )
     ToolbarAction(
-      active = viewState.volumeBoostActive,
+      active = volumeBoostActive,
       icon = VoiceIcons.VolumeUp,
       contentDescription = stringResource(R.string.playback_option_volume_boost),
       onClick = onVolumeBoostClick,
@@ -186,6 +193,7 @@ private fun ToolbarAction(
   label: String? = null,
   onLongClick: (() -> Unit)? = null,
   selectable: Boolean = true,
+  toggle: Boolean = false,
   showTooltipOnClick: Boolean = false,
 ) {
   val scope = rememberCoroutineScope()
@@ -204,6 +212,7 @@ private fun ToolbarAction(
       contentDescription = contentDescription,
       label = label,
       selectable = selectable,
+      toggle = toggle,
       onClick = {
         onClick()
         if (showTooltipOnClick) {
@@ -222,6 +231,7 @@ private fun ToolbarActionContent(
   contentDescription: String,
   label: String?,
   selectable: Boolean,
+  toggle: Boolean,
   onClick: () -> Unit,
   onLongClick: (() -> Unit)?,
   modifier: Modifier = Modifier,
@@ -263,13 +273,16 @@ private fun ToolbarActionContent(
       .combinedClickable(
         interactionSource = interactionSource,
         indication = ripple(),
-        role = Role.Button,
+        role = if (toggle) Role.Switch else Role.Button,
         onClick = onClick,
         onLongClick = onLongClick,
       )
       .semantics {
         this.contentDescription = contentDescription
-        if (selectable) selected = active
+        when {
+          toggle -> toggleableState = ToggleableState(active)
+          selectable -> selected = active
+        }
       }
       .padding(horizontal = if (label != null) 10.dp else 12.dp),
     verticalAlignment = Alignment.CenterVertically,

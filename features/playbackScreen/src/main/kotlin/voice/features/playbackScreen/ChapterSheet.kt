@@ -48,6 +48,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import voice.features.playbackScreen.view.rememberPlaybackClock
 import kotlin.math.PI
 import kotlin.math.sin
 import voice.core.strings.R as StringsR
@@ -178,17 +179,14 @@ private fun NowPlayingBars(
   color: Color,
   modifier: Modifier = Modifier,
 ) {
-  val phase = rememberInfiniteTransition(label = "bars").animateFloat(
-    initialValue = 0F,
-    targetValue = 2F * PI.toFloat(),
-    animationSpec = infiniteRepeatable(tween(durationMillis = 1100, easing = LinearEasing)),
-    label = "barsPhase",
-  )
+  // unlike an infinite transition, the clock stops requesting frames while paused
+  val clock = rememberPlaybackClock(playing)
   val amplitude by animateFloatAsState(if (playing) 1F else 0F, label = "barsAmplitude")
   Canvas(modifier = modifier.size(20.dp)) {
     val barWidth = size.width / 5
+    val phase = clock.value * 2F * PI.toFloat() / 1.1F
     repeat(3) { index ->
-      val wave = 0.5F + 0.5F * sin(phase.value * (1 + index * 0.35F) + index * 2.1F)
+      val wave = 0.5F + 0.5F * sin(phase * (1 + index * 0.35F) + index * 2.1F)
       val height = size.height * (0.3F + 0.7F * amplitude * wave)
       drawRoundRect(
         color = color,

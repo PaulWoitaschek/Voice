@@ -218,9 +218,10 @@ private suspend fun settleSwipe(
     return
   }
   val toNext = offset < 0
+  // switch right away: a quick follow-up swipe cancels this animation and must not lose the switch
+  if (toNext) onNext() else onPrevious()
   val exit = if (toNext) -width * 1.3F else width * 1.3F
   offsetX.animateTo(exit, tween(durationMillis = 160, easing = FastOutLinearInEasing))
-  if (toNext) onNext() else onPrevious()
   offsetX.snapTo(-exit)
   offsetX.animateTo(0F, spring(dampingRatio = 0.65F, stiffness = Spring.StiffnessLow))
 }

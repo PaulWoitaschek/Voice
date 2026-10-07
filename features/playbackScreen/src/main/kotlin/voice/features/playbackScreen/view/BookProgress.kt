@@ -86,9 +86,9 @@ internal fun BookProgress(
     )
     Spacer(Modifier.height(6.dp))
     Row(verticalAlignment = Alignment.CenterVertically) {
-      RollingText(
+      Text(
         text = stringResource(R.string.playback_book_progress_read, percent),
-        style = MaterialTheme.typography.labelLargeEmphasized,
+        style = MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
         color = colors.primary,
       )
       Spacer(Modifier.weight(1F))
