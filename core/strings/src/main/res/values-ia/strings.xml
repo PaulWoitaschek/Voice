@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">Jam es toto preste!</string>
     <string name="onboarding.explanation.subtitle">Con Voice, tu pote adder libros como files individual o arrangiar los in dossieres. Tu selige!</string>
     <string name="onboarding.explanation.title">Tu bibliotheca, tu maniera</string>
+    <string name="onboarding.welcome.action.start">Que nos comencia</string>
     <string name="onboarding.welcome.subtitle">Tu reproductor personal de audiolibros de tasca. Que nos comencia.</string>
     <string name="onboarding.welcome.title">Benvenite a Voice!</string>
     <string name="playback.action.fast_forward">Avantiar rapidemente</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">Preferentias</string>
     <string name="settings.analytics_consent.description">Permitter le collection de datos de uso anonyme pro adjutar a meliorar le app</string>
     <string name="settings.analytics_consent.title">Analytica</string>
+    <string name="settings.appearance.color_scheme.berry">Baca</string>
+    <string name="settings.appearance.color_scheme.forest">Foreste</string>
+    <string name="settings.appearance.color_scheme.lagoon">Laguna</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavanda</string>
+    <string name="settings.appearance.color_scheme.sunset">Crepusculo</string>
     <string name="settings.appearance.color_scheme.title">Schema de colores</string>
     <string name="settings.appearance.color_scheme.dynamic">Color dynamic</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Usa le colores de tu fundo de schermo e del thema del systema.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">Sequer le systema</string>
     <string name="settings.appearance.theme.light">Clar</string>
     <string name="settings.appearance.theme.title">Thema</string>
+    <string name="settings.appearance.title">Apparentia</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Definir tempore de fin</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Definir tempore initial</string>
     <string name="settings.auto_sleep_timer.summary">Initiar automaticamente un temporisator de somno quando le reproduction comencia inter %1$s e %2$s</string>

@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">Alles is gereed!</string>
     <string name="onboarding.explanation.subtitle">Met Voice kan jy boeke as individuele lêers byvoeg of dit in gidse organiseer. Jy kies!</string>
     <string name="onboarding.explanation.title">Jou biblioteek, op jou manier</string>
+    <string name="onboarding.welcome.action.start">Kom ons begin</string>
     <string name="onboarding.welcome.subtitle">Jou persoonlike sak-luisterboekspeler. Kom ons kry jou opgestel.</string>
     <string name="onboarding.welcome.title">Welkom by Voice!</string>
     <string name="playback.action.fast_forward">Vinnig vorentoe</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">Voorkeure</string>
     <string name="settings.analytics_consent.description">Laat anonieme gebruiksdata insamel om die toep te verbeter</string>
     <string name="settings.analytics_consent.title">Analise</string>
+    <string name="settings.appearance.color_scheme.berry">Bessie</string>
+    <string name="settings.appearance.color_scheme.forest">Woud</string>
+    <string name="settings.appearance.color_scheme.lagoon">Strandmeer</string>
+    <string name="settings.appearance.color_scheme.lavender">Laventel</string>
+    <string name="settings.appearance.color_scheme.sunset">Sonsondergang</string>
     <string name="settings.appearance.color_scheme.title">Kleurskema</string>
     <string name="settings.appearance.color_scheme.dynamic">Dinamiese kleur</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Gebruik kleure van jou muurpapier en stelseltema.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">Volg stelsel</string>
     <string name="settings.appearance.theme.light">Lig</string>
     <string name="settings.appearance.theme.title">Tema</string>
+    <string name="settings.appearance.title">Voorkoms</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Stel eindtyd</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Stel begintyd</string>
     <string name="settings.auto_sleep_timer.summary">Begin outomaties ’n slaaptimer wanneer afspeel tussen %1$s en %2$s begin</string>

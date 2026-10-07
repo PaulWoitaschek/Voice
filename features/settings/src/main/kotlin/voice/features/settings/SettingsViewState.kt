@@ -7,7 +7,7 @@ import java.time.LocalTime
 data class SettingsViewState(
   val themeMode: ThemeMode,
   val themeColorScheme: ThemeColorScheme,
-  val showThemeColorSchemePref: Boolean,
+  val dynamicColorAvailable: Boolean,
   val seekTimeInSeconds: Int,
   val autoRewindInSeconds: Int,
   val appVersion: String,
@@ -24,8 +24,6 @@ data class SettingsViewState(
   enum class Dialog {
     AutoRewindAmount,
     SeekTime,
-    Theme,
-    ColorScheme,
   }
 
   companion object {
@@ -33,7 +31,7 @@ data class SettingsViewState(
       return SettingsViewState(
         themeMode = ThemeMode.FollowSystem,
         themeColorScheme = ThemeColorScheme.VoiceBlue,
-        showThemeColorSchemePref = true,
+        dynamicColorAvailable = true,
         seekTimeInSeconds = 42,
         autoRewindInSeconds = 12,
         dialog = null,

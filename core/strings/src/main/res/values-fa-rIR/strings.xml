@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">همه چیز آماده است!</string>
     <string name="onboarding.explanation.subtitle">با Voice می‌توانید کتاب‌ها را به‌عنوان فایل‌های جداگانه اضافه کنید یا آنها را در پوشه‌ها سازماندهی کنید.به انتخاب خودتان!</string>
     <string name="onboarding.explanation.title">کتابخانه شما، به روش شما</string>
+    <string name="onboarding.welcome.action.start">بزن بریم</string>
     <string name="onboarding.welcome.subtitle">پخش کننده کتاب صوتی جیبی شخصی شما. بیایید نرم افزار را راه اندازی کنیم.</string>
     <string name="onboarding.welcome.title">به برنامه Voice خوش آمدید!</string>
     <string name="playback.action.fast_forward">رو به جلو بردن سریع</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">تنظیمات</string>
     <string name="settings.analytics_consent.description">اجازه بدهید برای بهبود دادن برنامه اطلاعات استفاده شما به شکل ناشناس گردآوری شود</string>
     <string name="settings.analytics_consent.title">تجزیه‌وتحلیل آماری</string>
+    <string name="settings.appearance.color_scheme.berry">توت</string>
+    <string name="settings.appearance.color_scheme.forest">جنگل</string>
+    <string name="settings.appearance.color_scheme.lagoon">تالاب</string>
+    <string name="settings.appearance.color_scheme.lavender">اسطوخودوس</string>
+    <string name="settings.appearance.color_scheme.sunset">غروب</string>
     <string name="settings.appearance.color_scheme.title">طرح رنگ</string>
     <string name="settings.appearance.color_scheme.dynamic">رنگ پویا</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">از رنگ‌های تصویر زمینه و تم سیستم شما استفاده می‌کند.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">پیروی از سیستم</string>
     <string name="settings.appearance.theme.light">روشن</string>
     <string name="settings.appearance.theme.title">تم</string>
+    <string name="settings.appearance.title">ظاهر</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">زمان پایان</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">زمان شروع</string>
     <string name="settings.auto_sleep_timer.summary">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>

@@ -96,6 +96,7 @@
     <string name="onboarding.completion.title">Vše je připraveno!</string>
     <string name="onboarding.explanation.subtitle">Pomocí aplikace Voice můžete přidávat knihy jako jednotlivé soubory nebo je organizovat do složek. Je to na vás!</string>
     <string name="onboarding.explanation.title">Vaše knihovna, váš způsob</string>
+    <string name="onboarding.welcome.action.start">Jdeme na to</string>
     <string name="onboarding.welcome.subtitle">Váš osobní kapesní přehrávač audioknih. Pojďme ho nastavit.</string>
     <string name="onboarding.welcome.title">Vítejte ve Voice!</string>
     <string name="playback.action.fast_forward">Posun vpřed</string>
@@ -131,6 +132,11 @@
     <string name="settings.action.open">Nastavení</string>
     <string name="settings.analytics_consent.description">Povolit shromažďování anonymních údajů o používání pro zlepšení aplikace</string>
     <string name="settings.analytics_consent.title">Analytika</string>
+    <string name="settings.appearance.color_scheme.berry">Bobule</string>
+    <string name="settings.appearance.color_scheme.forest">Les</string>
+    <string name="settings.appearance.color_scheme.lagoon">Laguna</string>
+    <string name="settings.appearance.color_scheme.lavender">Levandule</string>
+    <string name="settings.appearance.color_scheme.sunset">Západ slunce</string>
     <string name="settings.appearance.color_scheme.title">Barevné schéma</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamická barva</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Používá barvy z tapety a systémového motivu.</string>
@@ -139,6 +145,7 @@
     <string name="settings.appearance.theme.follow_system">Podle systému</string>
     <string name="settings.appearance.theme.light">Světlý</string>
     <string name="settings.appearance.theme.title">Motiv</string>
+    <string name="settings.appearance.title">Vzhled</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Nastavit čas konce</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Nastavit čas startu</string>
     <string name="settings.auto_sleep_timer.summary">Automatické spuštění časovače spánku při zahájení přehrávání mezi %1$s a %2$s</string>

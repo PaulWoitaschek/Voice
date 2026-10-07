@@ -74,6 +74,7 @@
     <string name="onboarding.completion.title">Esteu a punt!</string>
     <string name="onboarding.explanation.subtitle">Amb Voice, podeu afegir llibres com a fitxers individuals o organitzar-los en carpetes. Com vulgueu.</string>
     <string name="onboarding.explanation.title">La teva biblioteca, a la teva manera</string>
+    <string name="onboarding.welcome.action.start">Som-hi</string>
     <string name="onboarding.welcome.subtitle">El teu reproductor d\'audiollibres de butxaca. Comencem.</string>
     <string name="onboarding.welcome.title">Us donem la benvinguda a Voice!</string>
     <string name="playback.action.fast_forward">Avança ràpidament</string>
@@ -98,6 +99,12 @@
     <string name="review.request.title">Esteu gaudint del Voice?</string>
     <string name="settings.about.app_version.title">Versió de l\'aplicació</string>
     <string name="settings.action.open">Preferències</string>
+    <string name="settings.appearance.color_scheme.berry">Baia</string>
+    <string name="settings.appearance.color_scheme.forest">Bosc</string>
+    <string name="settings.appearance.color_scheme.lagoon">Llacuna</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavanda</string>
+    <string name="settings.appearance.color_scheme.sunset">Posta de sol</string>
+    <string name="settings.appearance.title">Aparença</string>
     <string name="settings.library.use_grid.title">Utilitza la disposició en quadrícula</string>
     <string name="settings.playback.auto_rewind.title">Rebobina automàticament</string>
     <string name="settings.playback.seek_time.title">Omet la quantitat</string>

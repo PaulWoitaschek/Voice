@@ -71,6 +71,7 @@
     <string name="onboarding.completion.title">Gyorstalpaló vége!</string>
     <string name="onboarding.explanation.subtitle">A Voice segítségével, ön eltudja rendezni a könyveit mint egyedi fájlok vagy mint hangfájlmappák. Ön dönt!</string>
     <string name="onboarding.explanation.title">Az ön könyvtára, az ön döntései</string>
+    <string name="onboarding.welcome.action.start">Kezdjük</string>
     <string name="onboarding.welcome.subtitle">Az ön személyes hangoskönyvlejátszója. Nézzünk szét!</string>
     <string name="onboarding.welcome.title">Üdv a Voice-ban!</string>
     <string name="playback.action.fast_forward">Előretekerés</string>
@@ -95,6 +96,12 @@
     <string name="review.request.title">Jól teljesít a Voice?</string>
     <string name="settings.about.app_version.title">Applikáció verzió</string>
     <string name="settings.action.open">Beállítások</string>
+    <string name="settings.appearance.color_scheme.berry">Bogyó</string>
+    <string name="settings.appearance.color_scheme.forest">Erdő</string>
+    <string name="settings.appearance.color_scheme.lagoon">Lagúna</string>
+    <string name="settings.appearance.color_scheme.lavender">Levendula</string>
+    <string name="settings.appearance.color_scheme.sunset">Naplemente</string>
+    <string name="settings.appearance.title">Megjelenés</string>
     <string name="settings.library.use_grid.title">Rácsos elrendezés</string>
     <string name="settings.playback.auto_rewind.title">Automatikus visszatekerés</string>
     <string name="settings.playback.seek_time.title">Kihagyás mértéke</string>

@@ -109,12 +109,13 @@ private fun Settings(
         }
       }
       item {
-        ThemeModeRow(viewState.themeMode, listener::onThemeModeRowClick)
-      }
-      if (viewState.showThemeColorSchemePref) {
-        item {
-          ThemeColorSchemeRow(viewState.themeColorScheme, listener::onThemeColorSchemeRowClick)
-        }
+        AppearanceSection(
+          themeMode = viewState.themeMode,
+          themeColorScheme = viewState.themeColorScheme,
+          dynamicColorAvailable = viewState.dynamicColorAvailable,
+          onThemeModeSelect = listener::setThemeMode,
+          onThemeColorSchemeSelect = listener::setThemeColorScheme,
+        )
       }
       if (viewState.showAnalyticSetting && !viewState.kioskMode) {
         item {
@@ -357,20 +358,6 @@ private fun Dialog(
       SeekAmountDialog(
         currentSeconds = viewState.seekTimeInSeconds,
         onSecondsConfirm = listener::seekAmountChanged,
-        onDismiss = listener::dismissDialog,
-      )
-    }
-    SettingsViewState.Dialog.Theme -> {
-      ThemeModeDialog(
-        selectedThemeMode = viewState.themeMode,
-        onThemeModeSelect = listener::setThemeMode,
-        onDismiss = listener::dismissDialog,
-      )
-    }
-    SettingsViewState.Dialog.ColorScheme -> {
-      ThemeColorSchemeDialog(
-        selectedThemeColorScheme = viewState.themeColorScheme,
-        onThemeColorSchemeSelect = listener::setThemeColorScheme,
         onDismiss = listener::dismissDialog,
       )
     }

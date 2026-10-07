@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">Du er ferdig!</string>
     <string name="onboarding.explanation.subtitle">Med Voice kan du legge til bøker som individuelle filer eller organisere dem i mapper. Ditt valg!</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt opplegg</string>
+    <string name="onboarding.welcome.action.start">Kom i gang</string>
     <string name="onboarding.welcome.subtitle">Din personlige lydbokspiller. La oss gjøre deg klar.</string>
     <string name="onboarding.welcome.title">Velkommen til Voice!</string>
     <string name="playback.action.fast_forward">Spol raskt framover</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">Innstillinger</string>
     <string name="settings.analytics_consent.description">Tillat anonym innsamling av bruksdata for å bidra til å forbedre appen</string>
     <string name="settings.analytics_consent.title">Analyse</string>
+    <string name="settings.appearance.color_scheme.berry">Bær</string>
+    <string name="settings.appearance.color_scheme.forest">Skog</string>
+    <string name="settings.appearance.color_scheme.lagoon">Lagune</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
+    <string name="settings.appearance.color_scheme.sunset">Solnedgang</string>
     <string name="settings.appearance.color_scheme.title">Fargeoppsett</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamisk farge</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Bruker farger fra bakgrunnen og systemdrakten din.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">Følg systemet</string>
     <string name="settings.appearance.theme.light">Lys</string>
     <string name="settings.appearance.theme.title">Drakt</string>
+    <string name="settings.appearance.title">Utseende</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Sett sluttid</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Sett starttid</string>
     <string name="settings.auto_sleep_timer.summary">Start en søvn-timer automatisk når avspillingen begynner mellom %1$s og %2$s</string>

@@ -71,6 +71,7 @@
     <string name="onboarding.completion.title">Så er du klar!</string>
     <string name="onboarding.explanation.subtitle">Med Voice kan du tilføje bøger som individuelle filer eller organisere dem i mapper. Du vælger selv!</string>
     <string name="onboarding.explanation.title">Dit bibliotek - På din måde</string>
+    <string name="onboarding.welcome.action.start">Lad os komme i gang</string>
     <string name="onboarding.welcome.subtitle">Din personlige lydbogsafspiller. Lad os få dig i gang.</string>
     <string name="onboarding.welcome.title">Velkommen til Voice!</string>
     <string name="playback.action.fast_forward">Spol fremad</string>
@@ -95,6 +96,12 @@
     <string name="review.request.title">Kan du lide Voice?</string>
     <string name="settings.about.app_version.title">App version</string>
     <string name="settings.action.open">Indstillinger</string>
+    <string name="settings.appearance.color_scheme.berry">Bær</string>
+    <string name="settings.appearance.color_scheme.forest">Skov</string>
+    <string name="settings.appearance.color_scheme.lagoon">Lagune</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
+    <string name="settings.appearance.color_scheme.sunset">Solnedgang</string>
+    <string name="settings.appearance.title">Udseende</string>
     <string name="settings.library.use_grid.title">Brug gitterlayout</string>
     <string name="settings.playback.auto_rewind.title">Automatisk tilbagespoling</string>
     <string name="settings.playback.seek_time.title">Spring over mængde</string>

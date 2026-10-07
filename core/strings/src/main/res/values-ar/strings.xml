@@ -75,6 +75,7 @@
     <string name="onboarding.completion.title">أنت جاهز!</string>
     <string name="onboarding.explanation.subtitle">مع فويس يمكنك إضافة كتب من ملفات فردية أو تنظيمها في مجلدات. أنت تختار!</string>
     <string name="onboarding.explanation.title">مكتبتك، طريقك</string>
+    <string name="onboarding.welcome.action.start">هيا بنا</string>
     <string name="onboarding.welcome.subtitle">مشغلك للكتب الصوتية. دعنا نجهز كتبك.</string>
     <string name="onboarding.welcome.title">مرحبا بك في فويس!</string>
     <string name="playback.action.fast_forward">بسرعة للأمام</string>
@@ -99,6 +100,12 @@
     <string name="review.request.title">هل يعجبك فويس؟</string>
     <string name="settings.about.app_version.title">إصدارة التطبيق</string>
     <string name="settings.action.open">التفضيلات</string>
+    <string name="settings.appearance.color_scheme.berry">توت</string>
+    <string name="settings.appearance.color_scheme.forest">غابة</string>
+    <string name="settings.appearance.color_scheme.lagoon">بحيرة</string>
+    <string name="settings.appearance.color_scheme.lavender">خزامى</string>
+    <string name="settings.appearance.color_scheme.sunset">غروب</string>
+    <string name="settings.appearance.title">المظهر</string>
     <string name="settings.library.use_grid.title">استخدم تخطيط الشبكة</string>
     <string name="settings.playback.auto_rewind.title">إرجاع آلي</string>
     <string name="settings.playback.seek_time.title">مقدار التقدم</string>

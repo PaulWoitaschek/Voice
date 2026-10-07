@@ -15,7 +15,7 @@ import androidx.graphics.shapes.Morph
 /**
  * A [Shape] that renders a [Morph] between two Material shapes at the given [progress].
  */
-internal class MorphShape(
+class MorphShape(
   private val morph: Morph,
   private val progress: Float,
 ) : Shape {

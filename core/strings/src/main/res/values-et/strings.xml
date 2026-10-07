@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">Kõik on tehtud!</string>
     <string name="onboarding.explanation.subtitle">Voice\'i puhul saad sa heliraamatuid lisada üksikute failidena või koondada neid kaustadesse. Tee nii, nagu soovid!</string>
     <string name="onboarding.explanation.title">Sinu raamatukogu, just nii nagu soovid</string>
+    <string name="onboarding.welcome.action.start">Läheme</string>
     <string name="onboarding.welcome.subtitle">Sinu isiklik heliraamatute esitaja (pleier) taskus. Võtame nüüd ette algseadistamise.</string>
     <string name="onboarding.welcome.title">Tere tulemast - see on Voice!</string>
     <string name="playback.action.fast_forward">Keri edasi</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">Eelistused</string>
     <string name="settings.analytics_consent.description">Parandamaks rakendust luba meil koguda anonüümseid andmeid tema kasutuse kohta</string>
     <string name="settings.analytics_consent.title">Analüütika</string>
+    <string name="settings.appearance.color_scheme.berry">Mari</string>
+    <string name="settings.appearance.color_scheme.forest">Mets</string>
+    <string name="settings.appearance.color_scheme.lagoon">Laguun</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
+    <string name="settings.appearance.color_scheme.sunset">Päikeseloojang</string>
     <string name="settings.appearance.color_scheme.title">Värviskeem</string>
     <string name="settings.appearance.color_scheme.dynamic">Dünaamiline värv</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Kasutab sinu taustapildi ja süsteemiteema värve.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">Järgi süsteemi</string>
     <string name="settings.appearance.theme.light">Hele</string>
     <string name="settings.appearance.theme.title">Kujundus</string>
+    <string name="settings.appearance.title">Välimus</string>
     <string name="settings.auto_sleep_timer.end.label">Seadista lõpuaeg</string>
     <string name="settings.auto_sleep_timer.start.label">Määra algusaeg</string>
     <string name="settings.auto_sleep_timer.summary">Käivita unetaimer automaatselt, kui taasesitus on %1$s ja %2$s vahel</string>

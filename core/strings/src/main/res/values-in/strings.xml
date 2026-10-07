@@ -84,6 +84,7 @@
     <string name="onboarding.completion.title">Semua Siap!</string>
     <string name="onboarding.explanation.subtitle">Dengan Voice, Anda dapat menambahkan buku sebagai berkas individual atau mengaturnya dalam folder. Anda yang memilih!</string>
     <string name="onboarding.explanation.title">Perpustakaan Anda, Sesuai Keinginan Anda</string>
+    <string name="onboarding.welcome.action.start">Ayo mulai</string>
     <string name="onboarding.welcome.subtitle">Pemutar buku audio saku pribadi Anda. Mari kita siapkan semuanya.</string>
     <string name="onboarding.welcome.title">Selamat datang di Voice!</string>
     <string name="playback.action.fast_forward">Percepat</string>
@@ -119,6 +120,11 @@
     <string name="settings.action.open">Preferensi</string>
     <string name="settings.analytics_consent.description">Izinkan pengumpulan data penggunaan anonim untuk membantu meningkatkan aplikasi</string>
     <string name="settings.analytics_consent.title">Analitik</string>
+    <string name="settings.appearance.color_scheme.berry">Beri</string>
+    <string name="settings.appearance.color_scheme.forest">Hutan</string>
+    <string name="settings.appearance.color_scheme.lagoon">Laguna</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavender</string>
+    <string name="settings.appearance.color_scheme.sunset">Senja</string>
     <string name="settings.appearance.color_scheme.title">Skema warna</string>
     <string name="settings.appearance.color_scheme.dynamic">Warna dinamis</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Menggunakan warna dari wallpaper dan tema sistem Anda.</string>
@@ -127,6 +133,7 @@
     <string name="settings.appearance.theme.follow_system">Ikuti sistem</string>
     <string name="settings.appearance.theme.light">Terang</string>
     <string name="settings.appearance.theme.title">Tema</string>
+    <string name="settings.appearance.title">Tampilan</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Atur waktu selesai</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Atur waktu mulai</string>
     <string name="settings.auto_sleep_timer.summary">Mulai pengatur waktu tidur secara otomatis saat pemutaran dimulai antara %1$s dan %2$s</string>

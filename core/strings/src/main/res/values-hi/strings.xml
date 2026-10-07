@@ -71,6 +71,7 @@
     <string name="onboarding.completion.title">आप पूरी तरह तैयार हैं!</string>
     <string name="onboarding.explanation.subtitle">Voice के साथ, आप पुस्तकों को अलग-अलग फाइलों के रूप में जोड़ सकते हैं या उन्हें फोल्डरों में व्यवस्थित कर सकते हैं। आप चुनें!</string>
     <string name="onboarding.explanation.title">आपकी लाइब्रेरी, आपका तरीका</string>
+    <string name="onboarding.welcome.action.start">चलिए शुरू करें</string>
     <string name="onboarding.welcome.subtitle">आपका व्यक्तिगत पॉकेट ऑडियोबुक प्लेयर। आइए आपको सेट अप करने में मदद करें।</string>
     <string name="onboarding.welcome.title">Voice में आपका स्वागत है!</string>
     <string name="playback.action.fast_forward">आगे बढ़ें</string>
@@ -95,6 +96,12 @@
     <string name="review.request.title">Voice का आनंद ले रहे हैं?</string>
     <string name="settings.about.app_version.title">ऐप संस्करण</string>
     <string name="settings.action.open">प्राथमिकताएँ</string>
+    <string name="settings.appearance.color_scheme.berry">बेरी</string>
+    <string name="settings.appearance.color_scheme.forest">जंगल</string>
+    <string name="settings.appearance.color_scheme.lagoon">लैगून</string>
+    <string name="settings.appearance.color_scheme.lavender">लैवेंडर</string>
+    <string name="settings.appearance.color_scheme.sunset">सूर्यास्त</string>
+    <string name="settings.appearance.title">दिखावट</string>
     <string name="settings.library.folders.summary">ऑडियोबुक के लिए स्कैन किए गए फ़ोल्डर मैनेज करें</string>
     <string name="settings.library.use_grid.title">ग्रिड लेआउट का प्रयोग</string>
     <string name="settings.playback.auto_rewind.title">ऑटो रिवाइंड</string>
