@@ -138,7 +138,7 @@
     <string name="support.helps.open_source">Manter Voice sen anuncios</string>
     <string name="support.title">Apoiar o desenvolvemento</string>
     <string name="shortcut.play_current.short_label">Escoita actual</string>
-    <string name="sleep_timer.action.open">Temporizador</string>
+    <string name="sleep_timer.action.open">Temporizador de apagado</string>
     <string name="sleep_timer.dialog.action.decrement">Máis curto</string>
     <string name="sleep_timer.dialog.action.increment">Máis longo</string>
     <string name="sleep_timer.dialog.title">Felices soños! 🌙</string>

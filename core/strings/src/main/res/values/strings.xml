@@ -300,7 +300,7 @@
     <!-- Short label for the launcher shortcut that plays the current book. -->
     <string name="shortcut.play_current.short_label">Play current</string>
     <!-- Content description for opening the sleep timer. -->
-    <string name="sleep_timer.action.open">Sleep-Timer</string>
+    <string name="sleep_timer.action.open">Sleep timer</string>
     <!-- Content description for decreasing the sleep timer duration. -->
     <string name="sleep_timer.dialog.action.decrement">Shorter</string>
     <!-- Content description for increasing the sleep timer duration. -->
