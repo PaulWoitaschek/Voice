@@ -118,7 +118,11 @@ internal fun BookmarkList(
     }
     if (viewState.totalCount == 0) {
       item(key = "empty") {
-        EmptyHero(Modifier.padding(top = 32.dp))
+        EmptyHero(
+          Modifier
+            .animateItem()
+            .padding(top = 32.dp, bottom = 24.dp),
+        )
       }
     }
     items(viewState.items, key = { it.key }, contentType = { it::class }) { item ->
