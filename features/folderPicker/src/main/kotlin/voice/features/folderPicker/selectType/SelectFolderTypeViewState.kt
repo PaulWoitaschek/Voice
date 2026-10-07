@@ -21,7 +21,7 @@ internal data class SelectFolderTypeViewState(
     val partCount: Int,
     // sub folders that look like books of their own
     val possibleBookCount: Int,
-    // known once its files are analyzed, which also replaces the name and author with the ones from the tags
+    // known once its files are analyzed, which also replaces the name and author with the ones the library will show
     val duration: Duration? = null,
     val analyzing: Boolean = false,
   )

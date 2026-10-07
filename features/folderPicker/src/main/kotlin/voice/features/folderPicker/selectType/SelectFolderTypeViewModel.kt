@@ -6,13 +6,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.documentfile.provider.DocumentFile
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 import voice.core.common.DispatcherProvider
 import voice.core.data.folders.AudiobookFolders
@@ -20,6 +21,7 @@ import voice.core.data.folders.FolderType
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.documentfile.nameWithoutExtension
+import voice.core.logging.api.Logger
 import voice.core.scanner.BookPreview
 import voice.core.scanner.BookPreviewer
 import voice.navigation.Destination
@@ -50,7 +52,9 @@ class SelectFolderTypeViewModel(
 
   // what the library will show for the analyzed books, by their uri. Books without playable files map to null.
   private val previews = mutableStateMapOf<Uri, BookPreview?>()
-  private var analyzing by mutableStateOf<Uri?>(null)
+
+  // books whose analysis failed keep showing what their files tell
+  private val failedPreviews = mutableStateSetOf<Uri>()
 
   internal fun selectMode(mode: FolderMode) {
     selectedMode.value = mode
@@ -106,16 +110,18 @@ class SelectFolderTypeViewModel(
     LaunchedEffect(selectedBooks) {
       analyze(selectedBooks)
     }
+    // the books are analyzed from the top, so this is the one in the works
+    val analyzing = selectedBooks.firstOrNull { !it.isAnalyzed() }?.file?.uri
     return SelectFolderTypeViewState(
       folderName = folderName,
       loading = loadedStructure == null,
       selectedMode = selectedMode,
       guessedMode = loadedStructure?.guess,
-      books = selectedBooks.map { it.withPreview() },
+      books = selectedBooks.withPreviews(analyzing),
       options = FolderMode.entries.map { mode ->
         SelectFolderTypeViewState.Option(
           mode = mode,
-          books = loadedStructure?.books?.get(mode).orEmpty().map { it.withPreview() },
+          books = loadedStructure?.books?.get(mode).orEmpty().withPreviews(analyzing),
         )
       },
       editing = currentType != null,
@@ -126,24 +132,34 @@ class SelectFolderTypeViewModel(
   // one book after the other, so the books on top fill in first
   private suspend fun analyze(books: List<FolderBook>) {
     books.forEach { book ->
+      if (book.isAnalyzed()) return@forEach
       val uri = book.file.uri
-      if (uri in previews) return@forEach
-      analyzing = uri
-      previews[uri] = withContext(dispatcherProvider.io) {
-        bookPreviewer.preview(book.file)
+      try {
+        previews[uri] = withContext(dispatcherProvider.io) {
+          bookPreviewer.preview(book.file)
+        }
+      } catch (e: CancellationException) {
+        throw e
+      } catch (e: Exception) {
+        Logger.w(e, "Could not analyze ${book.file}")
+        failedPreviews += uri
       }
     }
-    analyzing = null
   }
 
-  private fun FolderBook.withPreview(): SelectFolderTypeViewState.Book {
-    val preview = previews[file.uri]
-    return book.copy(
-      name = preview?.name ?: book.name,
-      author = preview?.author ?: book.author,
-      duration = preview?.duration,
-      analyzing = file.uri == analyzing,
-    )
+  private fun FolderBook.isAnalyzed(): Boolean = file.uri in previews || file.uri in failedPreviews
+
+  // books without playable files are left out, the scan skips them as well
+  private fun List<FolderBook>.withPreviews(analyzing: Uri?): List<SelectFolderTypeViewState.Book> {
+    return mapNotNull { folderBook ->
+      val uri = folderBook.file.uri
+      if (uri in previews) {
+        val preview = previews[uri] ?: return@mapNotNull null
+        folderBook.book.copy(name = preview.name, author = preview.author, duration = preview.duration)
+      } else {
+        folderBook.book.copy(analyzing = uri == analyzing)
+      }
+    }
   }
 
   private class FolderStructure(

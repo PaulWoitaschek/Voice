@@ -78,6 +78,23 @@ class MediaScannerTest {
   }
 
   @Test
+  fun `a book in the library is previewed the way the library shows it`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    audioFile(book, "1.mp3")
+    audioFile(book, "2.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    val content = bookContentRepo.get(BookId(book.toUri()))!!
+    bookContentRepo.put(content.copy(name = "Renamed", author = null))
+    val analyzeCallsAfterScan = analyzeCalls
+
+    val preview = previewer.preview(FileBasedDocumentFile(book))
+
+    assertEquals(expected = BookPreview(name = "Renamed", author = null, duration = 2.seconds), actual = preview)
+    assertEquals(expected = analyzeCallsAfterScan, actual = analyzeCalls)
+  }
+
+  @Test
   fun metadataPreservedOnDeletion() = test {
     val audiobookFolder = folder("audiobooks")
 
@@ -354,6 +371,7 @@ class MediaScannerTest {
 
     // with its own chapter repo like in the app, so only the database is shared with the scanner
     val previewer = BookPreviewerImpl(
+      contentRepo = bookContentRepo,
       chapterParser = ChapterParser(
         chapterRepo = ChapterRepoImpl(db.chapterDao()),
         mediaAnalyzer = mediaAnalyzer,
