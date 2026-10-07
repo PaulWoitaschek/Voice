@@ -79,13 +79,12 @@ class ChapterMarkPlayerTest {
 
     assertEquals(expected = 1, actual = player.currentMediaItemIndex)
     assertEquals(expected = 500, actual = player.currentPosition)
-    assertTrue(seeks.isNotEmpty())
-    seeks.forEach { (old, new) ->
-      assertEquals(expected = 0, actual = old.mediaItemIndex)
-      assertEquals(expected = 0, actual = old.positionMs)
-      assertEquals(expected = 1, actual = new.mediaItemIndex)
-      assertEquals(expected = 500, actual = new.positionMs)
-    }
+    assertEquals(expected = 1, actual = seeks.size)
+    val (old, new) = seeks.single()
+    assertEquals(expected = 0, actual = old.mediaItemIndex)
+    assertEquals(expected = 0, actual = old.positionMs)
+    assertEquals(expected = 1, actual = new.mediaItemIndex)
+    assertEquals(expected = 500, actual = new.positionMs)
   }
 
   @Test

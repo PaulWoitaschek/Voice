@@ -95,7 +95,7 @@ class ChapterMarkPlayer(private val player: Player) : ForwardingSimpleBasePlayer
     val state = super.getState()
     val playlist = playlist ?: return state
     // The wrapped playlist is set asynchronously, so ignore states that do not match it yet.
-    if (state.playlist.size != fileItemCount || markItems.isEmpty()) return state
+    if (state.timeline.windowCount != fileItemCount || markItems.isEmpty()) return state
 
     val fileIndex = state.currentMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: 0
     val positionInFileSupplier = state.contentPositionMsSupplier
