@@ -3,11 +3,15 @@ Please read CONTRIBUTING.md first: https://github.com/PaulWoitaschek/Voice/blob/
 Only bug fixes can be opened without prior approval. Anything else needs an OK from the maintainer first.
 -->
 
+## Type of change
+
+- [ ] Bug fix
+- [ ] Approved by the maintainer: <!-- link to the approval -->
+
 ## Summary
 
-<!-- A short, high-level summary. Link the bug report or the maintainer's approval. -->
+<!-- A short, high-level summary. -->
 
 ## Checklist
 
-- [ ] This is a bug fix, or the maintainer approved it.
 - [ ] I understand every change in this pull request and tested it myself.
