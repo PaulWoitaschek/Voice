@@ -13,7 +13,6 @@ dependencies {
   implementation(projects.core.analytics.api)
 
   implementation(libs.androidxCore)
-  implementation(libs.seismic)
   implementation(libs.appCompat)
 
   testImplementation(libs.junit)

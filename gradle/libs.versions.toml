@@ -39,7 +39,6 @@ kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 documentFile = "androidx.documentfile:documentfile:1.1.0"
 datastore = "androidx.datastore:datastore-core:1.2.1"
-seismic = "com.squareup:seismic:1.0.3"
 turbine = "app.cash.turbine:turbine:1.2.1"
 molecule = "app.cash.molecule:molecule-runtime:2.2.0"
 okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.5.0"
