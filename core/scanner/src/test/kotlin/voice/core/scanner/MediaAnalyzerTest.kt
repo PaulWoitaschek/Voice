@@ -171,6 +171,14 @@ internal class MediaAnalyzerTest {
   }
 
   @Test
+  fun `raw aac has a duration`() {
+    val metadata = assertNotNull(parse("adts.aac"))
+
+    assertWithinPercentage(30000L, metadata.duration, 5.0)
+    assertEquals(expected = "adts", actual = metadata.fileName)
+  }
+
+  @Test
   fun `m4a with chpl chapters`() {
     val metadata = assertNotNull(parse("chpl.m4a"))
 
