@@ -46,13 +46,13 @@ import androidx.graphics.shapes.RoundedPolygon
 import voice.core.data.ThemeColorScheme
 import voice.core.ui.AuroraBackground
 import voice.core.ui.NightTheme
+import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.features.settings.SettingsViewState
 import voice.features.settings.views.IslandShape
 import voice.features.settings.views.IslandSwitchRow
-import voice.features.settings.views.ShapedIcon
 import voice.features.settings.views.TimePickerDialog
 import java.time.LocalTime
 import voice.core.strings.R as StringsR
