@@ -65,4 +65,9 @@ class PreviousJumpTypeTest {
   fun `nothing is recorded at the start of the first chapter`() {
     assertNull(previousJumpType(from = at(0), to = at(0), sameItem = true))
   }
+
+  @Test
+  fun `nothing is recorded while the chapters are not known yet`() {
+    assertNull(previousJumpType(from = at(7_000), to = null, sameItem = true))
+  }
 }

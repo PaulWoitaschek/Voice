@@ -375,14 +375,15 @@ private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000
 /**
  * Skipping back restarts the current chapter when it already played for a while, or when there is no chapter
  * before it. That is only a seek, so it can be undone only when it goes back far enough. Returns null when
- * playback is already where it would go.
+ * playback is already where it would go, or when it's not known where it goes, as right after preparing, before
+ * the book is split into its chapters.
  */
 internal fun previousJumpType(
   from: PlaybackPosition?,
   to: PlaybackPosition?,
   sameItem: Boolean,
 ): ListeningEvent.Type? = when {
-  to != null && to == from -> null
+  to == null || to == from -> null
   sameItem -> ListeningEvent.Type.Seek
   else -> ListeningEvent.Type.ChapterChange
 }
