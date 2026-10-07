@@ -20,7 +20,6 @@
     <string name="common.action.close">Luk</string>
     <string name="common.action.delete">Slet</string>
     <string name="common.action.edit">Rediger</string>
-    <string name="common.action.more">Mere</string>
     <string name="common.action.remove">Fjern</string>
     <string name="common.dialog.cancel">Annuller</string>
     <string name="common.dialog.confirm">Angiv</string>

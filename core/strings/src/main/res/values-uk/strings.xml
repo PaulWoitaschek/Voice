@@ -20,7 +20,6 @@
     <string name="common.action.close">Закрити</string>
     <string name="common.action.delete">Видалити</string>
     <string name="common.action.edit">Редагувати</string>
-    <string name="common.action.more">Більше</string>
     <string name="common.action.remove">Вилучити</string>
     <string name="common.dialog.cancel">Скасувати</string>
     <string name="common.dialog.confirm">Установити</string>

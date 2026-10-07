@@ -20,7 +20,6 @@
     <string name="common.action.close">Închide</string>
     <string name="common.action.delete">Șterge</string>
     <string name="common.action.edit">Modificare</string>
-    <string name="common.action.more">Mai multe</string>
     <string name="common.action.remove">Eliminare</string>
     <string name="common.dialog.cancel">Anulare</string>
     <string name="common.dialog.confirm">Setare</string>

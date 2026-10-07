@@ -20,7 +20,6 @@
     <string name="common.action.close">Κλείσιμο</string>
     <string name="common.action.delete">Διαγραφή</string>
     <string name="common.action.edit">Επεξεργασία</string>
-    <string name="common.action.more">Περισσότερα</string>
     <string name="common.action.remove">Αφαίρεση</string>
     <string name="common.dialog.cancel">Ακύρωση</string>
     <string name="common.dialog.confirm">Ορισμός</string>

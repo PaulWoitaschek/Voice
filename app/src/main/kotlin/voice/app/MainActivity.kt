@@ -101,16 +101,24 @@ class MainActivity : AppCompatActivity() {
               sharedTransitionScope = this,
               transitionSpec = {
                 if (isBookOverviewPlaybackTransition(initialState.destination(), targetState.destination())) {
-                  SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+                  SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
                 } else {
                   SharedXAxisEnterTransition(density) togetherWith SharedXAxisExitTransition(density)
                 }
               },
               popTransitionSpec = {
-                SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+                if (isBookOverviewPlaybackTransition(initialState.destination(), targetState.destination())) {
+                  SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
+                } else {
+                  SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+                }
               },
               predictivePopTransitionSpec = {
-                SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+                if (isBookOverviewPlaybackTransition(initialState.destination(), targetState.destination())) {
+                  SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
+                } else {
+                  SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
+                }
               },
               onBack = {
                 if (backStack.size > 1) {

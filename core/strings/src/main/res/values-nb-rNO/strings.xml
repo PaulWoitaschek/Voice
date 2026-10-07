@@ -20,7 +20,6 @@
     <string name="common.action.close">Lukk</string>
     <string name="common.action.delete">Slett</string>
     <string name="common.action.edit">Rediger</string>
-    <string name="common.action.more">Mer</string>
     <string name="common.action.remove">Fjern</string>
     <string name="common.dialog.cancel">Avbryt</string>
     <string name="common.dialog.confirm">Sett</string>

@@ -1,90 +1,87 @@
 package voice.features.bookOverview.views
 
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import voice.core.data.BookId
+import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.sharedCoverElementModifier
+import voice.core.ui.R as UiR
+
+/** Percentage based so covers keep their look while shared element transitions resize them. */
+internal val CoverShape = RoundedCornerShape(CornerSize(14F))
 
 @Composable
-internal fun BookCard(
+internal fun BookCover(
   bookId: BookId,
-  onBookClick: (BookId) -> Unit,
-  onBookLongClick: (BookId) -> Unit,
+  cover: String?,
   modifier: Modifier = Modifier,
-  content: @Composable () -> Unit,
+  shape: Shape = CoverShape,
+  finished: Boolean = false,
 ) {
-  ElevatedCard(
-    shape = MaterialTheme.shapes.extraLarge,
-    modifier = modifier
-      .fillMaxWidth()
-      .combinedClickable(
-        onClick = { onBookClick(bookId) },
-        onLongClick = { onBookLongClick(bookId) },
-      ),
-  ) {
-    content()
-  }
-}
-
-@Composable
-internal fun BookRemainingProgressRow(
-  remainingTime: String,
-  progress: Float,
-  modifier: Modifier = Modifier,
-  remainingTimeMaxLines: Int = Int.MAX_VALUE,
-  progressMaxLines: Int = Int.MAX_VALUE,
-) {
-  Row(
-    modifier = modifier.fillMaxWidth(),
-    horizontalArrangement = Arrangement.SpaceBetween,
-    verticalAlignment = Alignment.CenterVertically,
-  ) {
-    Text(
-      text = remainingTime,
-      style = MaterialTheme.typography.labelMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-      maxLines = remainingTimeMaxLines,
+  Box(modifier = modifier) {
+    AsyncImage(
+      modifier = Modifier
+        .fillMaxSize()
+        .sharedCoverElementModifier(bookId)
+        .clip(shape),
+      model = rememberCoverThumbnailRequest(cover),
+      placeholder = painterResource(id = UiR.drawable.album_art),
+      error = painterResource(id = UiR.drawable.album_art),
+      contentScale = ContentScale.Crop,
+      contentDescription = null,
     )
-    if (progress > 0f) {
-      Text(
-        text = "${(progress * 100).toInt()}%",
-        style = MaterialTheme.typography.labelMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        maxLines = progressMaxLines,
-      )
+    if (finished) {
+      Box(
+        modifier = Modifier
+          .align(Alignment.BottomEnd)
+          .offset(x = 4.dp, y = 4.dp)
+          .size(24.dp)
+          .background(MaterialTheme.colorScheme.surface, CircleShape)
+          .padding(2.dp)
+          .background(MaterialTheme.colorScheme.primary, CircleShape),
+        contentAlignment = Alignment.Center,
+      ) {
+        Icon(
+          modifier = Modifier.size(14.dp),
+          imageVector = VoiceIcons.Check,
+          contentDescription = null,
+          tint = MaterialTheme.colorScheme.onPrimary,
+        )
+      }
     }
   }
 }
 
-@Composable
-internal fun BookProgressIndicator(
-  progress: Float,
-  modifier: Modifier = Modifier,
-  color: Color? = null,
-  trackColor: Color? = null,
-) {
-  if (progress > 0.05f) {
-    if (color != null && trackColor != null) {
-      LinearProgressIndicator(
-        progress = { progress },
-        modifier = modifier,
-        color = color,
-        trackColor = trackColor,
-      )
-    } else {
-      LinearProgressIndicator(
-        progress = { progress },
-        modifier = modifier,
-      )
-    }
+/** Shapes for a group of connected list items: big outer corners, small inner ones. */
+internal fun segmentedShape(
+  index: Int,
+  count: Int,
+): Shape {
+  val large = 24.dp
+  val small = 6.dp
+  return when {
+    count == 1 -> RoundedCornerShape(large)
+    index == 0 -> RoundedCornerShape(topStart = large, topEnd = large, bottomStart = small, bottomEnd = small)
+    index == count - 1 -> RoundedCornerShape(topStart = small, topEnd = small, bottomStart = large, bottomEnd = large)
+    else -> RoundedCornerShape(small)
   }
 }

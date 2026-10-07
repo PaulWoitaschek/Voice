@@ -114,6 +114,17 @@ val SharedZAxisExitTransition =
       animationSpec = tween(durationMillis = DurationMedium2, easing = EmphasizedAccelerateEasing),
     )
 
+/**
+ * Library <-> player: the cover and play button fly between the screens as shared elements, so the
+ * screens themselves only cross-fade. Scaling them as well makes the shared elements chase a moving
+ * target and overshoot.
+ */
+val SharedElementFadeEnterTransition =
+  fadeIn(animationSpec = tween(durationMillis = DurationLong1, easing = EmphasizedEasing))
+
+val SharedElementFadeExitTransition =
+  fadeOut(animationSpec = tween(durationMillis = DurationMedium1, easing = EmphasizedAccelerateEasing))
+
 internal fun Scene<Destination.Compose>.destination(): Destination.Compose? {
   return entries.lastOrNull()?.metadata?.get(DestinationMetadataKey)
 }

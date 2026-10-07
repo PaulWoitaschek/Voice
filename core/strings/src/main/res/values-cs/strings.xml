@@ -20,7 +20,6 @@
     <string name="common.action.close">Zavřít</string>
     <string name="common.action.delete">Odstranit</string>
     <string name="common.action.edit">Upravit</string>
-    <string name="common.action.more">Více</string>
     <string name="common.action.remove">Smazat</string>
     <string name="common.dialog.cancel">Ukončit</string>
     <string name="common.dialog.confirm">Nastavit</string>

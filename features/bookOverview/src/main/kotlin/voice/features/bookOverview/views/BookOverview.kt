@@ -2,11 +2,9 @@ package voice.features.bookOverview.views
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -32,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
@@ -42,10 +39,8 @@ import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.launch
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
-import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
-import voice.core.ui.playButtonSharedBoundsModifier
 import voice.features.bookOverview.bottomSheet.BottomSheetContent
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.deleteBook.DeleteBookDialog
@@ -197,46 +192,18 @@ internal fun BookOverview(
         onSearchBookClick = onSearchBookClick,
       )
     },
-    floatingActionButton = {
-      if (viewState.playButtonState != null) {
-        PlayButton(
-          modifier = Modifier.navigationBarsPadding(),
-          playing = viewState.playButtonState == BookOverviewViewState.PlayButtonState.Playing,
-          fabSize = 56.dp,
-          iconSize = 24.dp,
-          onPlayClick = onPlayButtonClick,
-          sharedElementModifier = Modifier.playButtonSharedBoundsModifier(),
-        )
-      }
-    },
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
   ) { contentPadding ->
-    Box(
-      Modifier
+    Library(
+      viewState = viewState,
+      onBookClick = onBookClick,
+      onBookLongClick = onBookLongClick,
+      onPlayClick = onPlayButtonClick,
+      onPermissionBugCardClick = onPermissionBugCardClick,
+      modifier = Modifier
         .padding(contentPadding)
         .consumeWindowInsets(contentPadding),
-    ) {
-      when (viewState.layoutMode) {
-        BookOverviewLayoutMode.List -> {
-          ListBooks(
-            books = viewState.books,
-            onBookClick = onBookClick,
-            onBookLongClick = onBookLongClick,
-            showPermissionBugCard = viewState.showStoragePermissionBugCard,
-            onPermissionBugCardClick = onPermissionBugCardClick,
-          )
-        }
-        BookOverviewLayoutMode.Grid -> {
-          GridBooks(
-            books = viewState.books,
-            onBookClick = onBookClick,
-            onBookLongClick = onBookLongClick,
-            showPermissionBugCard = viewState.showStoragePermissionBugCard,
-            onPermissionBugCardClick = onPermissionBugCardClick,
-          )
-        }
-      }
-    }
+    )
   }
   Dialog(
     dialog = viewState.dialog,
@@ -316,6 +283,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
 
   override val values = sequenceOf(
     BookOverviewViewState(
+      currentBookId = null,
       books = mapOf(
         BookOverviewCategory.CURRENT to buildMap {
           repeat(10) {

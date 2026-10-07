@@ -18,6 +18,7 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
+import voice.core.ui.CoverTheme
 import voice.features.playbackScreen.view.BookPlayView
 import voice.features.sleepTimer.SleepTimerDialog
 import voice.navigation.Destination
@@ -57,36 +58,50 @@ fun BookPlayScreen(bookId: BookId) {
       }
     }
   }
-  BookPlayView(
-    viewState,
-    bookId = bookId,
-    onPlayClick = viewModel::playPause,
-    onFastForwardClick = viewModel::fastForward,
-    onRewindClick = viewModel::rewind,
-    onSeek = viewModel::seekTo,
-    onBookmarkClick = viewModel::onBookmarkClick,
-    onBookmarkLongClick = viewModel::onBookmarkLongClick,
-    onSkipSilenceClick = viewModel::toggleSkipSilence,
-    onSleepTimerClick = viewModel::toggleSleepTimer,
-    onVolumeBoostClick = viewModel::onVolumeGainIconClick,
-    onSpeedChangeClick = viewModel::onPlaybackSpeedIconClick,
-    onCloseClick = viewModel::onCloseClick,
-    onSkipToNext = viewModel::next,
-    onSkipToPrevious = viewModel::previous,
-    onCurrentChapterClick = viewModel::onCurrentChapterClick,
-    useLandscapeLayout = LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE,
-    snackbarHostState = snackbarHostState,
-  )
-  if (dialogState != null) {
+  CoverTheme(cover = viewState.cover) {
+    BookPlayView(
+      viewState,
+      bookId = bookId,
+      onPlayClick = viewModel::playPause,
+      onFastForwardClick = viewModel::fastForward,
+      onRewindClick = viewModel::rewind,
+      onSeek = viewModel::seekTo,
+      onBookmarkClick = viewModel::onBookmarkClick,
+      onBookmarkLongClick = viewModel::onBookmarkLongClick,
+      onSkipSilenceClick = viewModel::toggleSkipSilence,
+      onSleepTimerClick = viewModel::toggleSleepTimer,
+      onVolumeBoostClick = viewModel::onVolumeGainIconClick,
+      onSpeedChangeClick = viewModel::onPlaybackSpeedIconClick,
+      onCloseClick = viewModel::onCloseClick,
+      onSkipToNext = viewModel::next,
+      onSkipToPrevious = viewModel::previous,
+      onCurrentChapterClick = viewModel::onCurrentChapterClick,
+      useLandscapeLayout = LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE,
+      snackbarHostState = snackbarHostState,
+    )
     when (dialogState) {
+      null -> {}
       is BookPlayDialogViewState.SpeedDialog -> {
-        SpeedDialog(dialogState, viewModel)
+        SpeedSheet(
+          dialogState = dialogState,
+          onSpeedChange = viewModel::onPlaybackSpeedChanged,
+          onDismiss = viewModel::dismissDialog,
+        )
       }
       is BookPlayDialogViewState.VolumeGainDialog -> {
-        VolumeGainDialog(dialogState, viewModel)
+        VolumeGainSheet(
+          dialogState = dialogState,
+          onGainChange = viewModel::onVolumeGainChanged,
+          onDismiss = viewModel::dismissDialog,
+        )
       }
       is BookPlayDialogViewState.SelectChapterDialog -> {
-        SelectChapterDialog(dialogState, viewModel)
+        ChapterSheet(
+          dialogState = dialogState,
+          playing = viewState.playing,
+          onChapterClick = viewModel::onChapterClick,
+          onDismiss = viewModel::dismissDialog,
+        )
       }
       is BookPlayDialogViewState.SleepTimer -> {
         SleepTimerDialog(

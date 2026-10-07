@@ -20,7 +20,6 @@
     <string name="common.action.close">Sulje</string>
     <string name="common.action.delete">Poista</string>
     <string name="common.action.edit">Muokkaa</string>
-    <string name="common.action.more">Enemmän</string>
     <string name="common.action.remove">Poista</string>
     <string name="common.dialog.cancel">Peruuta</string>
     <string name="common.dialog.confirm">Aseta</string>

@@ -20,7 +20,6 @@
     <string name="common.action.close">बन्द गर्नुहोस्</string>
     <string name="common.action.delete">मेटाउनुहोस्</string>
     <string name="common.action.edit">सम्पादन गर्नुहोस्</string>
-    <string name="common.action.more">थप</string>
     <string name="common.action.remove">हटाउनुहोस्</string>
     <string name="common.dialog.cancel">रद्द गर्नुहोस्</string>
     <string name="common.dialog.confirm">सेट</string>

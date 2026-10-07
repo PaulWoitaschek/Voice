@@ -20,7 +20,6 @@
     <string name="common.action.close">Schließen</string>
     <string name="common.action.delete">Löschen</string>
     <string name="common.action.edit">Bearbeiten</string>
-    <string name="common.action.more">Mehr</string>
     <string name="common.action.remove">Entfernen</string>
     <string name="common.dialog.cancel">Abbrechen</string>
     <string name="common.dialog.confirm">Okay</string>

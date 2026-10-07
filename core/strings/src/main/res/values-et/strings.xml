@@ -20,7 +20,6 @@
     <string name="common.action.close">Sulge</string>
     <string name="common.action.delete">Kustuta</string>
     <string name="common.action.edit">Muuda</string>
-    <string name="common.action.more">Veel</string>
     <string name="common.action.remove">Eemalda</string>
     <string name="common.dialog.cancel">Katkesta</string>
     <string name="common.dialog.confirm">Salvesta</string>

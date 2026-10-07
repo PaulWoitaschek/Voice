@@ -20,7 +20,6 @@
     <string name="common.action.close">閉じる</string>
     <string name="common.action.delete">削除</string>
     <string name="common.action.edit">編集</string>
-    <string name="common.action.more">さらに表示</string>
     <string name="common.action.remove">削除</string>
     <string name="common.dialog.cancel">キャンセル</string>
     <string name="common.dialog.confirm">設定</string>

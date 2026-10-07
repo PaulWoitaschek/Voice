@@ -20,7 +20,6 @@
     <string name="common.action.close">بستن</string>
     <string name="common.action.delete">پاک کردن</string>
     <string name="common.action.edit">ویرایش</string>
-    <string name="common.action.more">گزینه های بیشتر</string>
     <string name="common.action.remove">حذف</string>
     <string name="common.dialog.cancel">لغو</string>
     <string name="common.dialog.confirm">انتخاب</string>

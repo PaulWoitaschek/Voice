@@ -149,6 +149,7 @@ class BookOverviewViewModel(
             }
         }
         .toSortedMap(),
+      currentBookId = currentBookId?.takeIf { id -> books.any { it.id == id } },
       playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
         BookOverviewViewState.PlayButtonState.Playing
       } else {
@@ -231,6 +232,7 @@ class BookOverviewViewModel(
           )
         },
       ),
+      currentBookId = KioskModeDemoData.currentlyPlaying.id,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
       showAddBookHint = false,
       showSearchIcon = true,

@@ -20,7 +20,6 @@
     <string name="common.action.close">关闭</string>
     <string name="common.action.delete">删除</string>
     <string name="common.action.edit">编辑</string>
-    <string name="common.action.more">更多</string>
     <string name="common.action.remove">删除</string>
     <string name="common.dialog.cancel">取消</string>
     <string name="common.dialog.confirm">设置</string>
