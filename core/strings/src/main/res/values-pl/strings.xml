@@ -51,7 +51,6 @@
     <string name="common.action.delete">Skasuj</string>
     <string name="common.action.done">Gotowe</string>
     <string name="common.action.edit">Edytuj</string>
-    <string name="common.action.remove">Usuń</string>
     <string name="common.action.undo">Cofnij</string>
     <string name="common.action.save">Zapisz</string>
     <string name="common.dialog.cancel">Anuluj</string>

@@ -51,7 +51,6 @@
     <string name="common.action.delete">Slet</string>
     <string name="common.action.done">Færdig</string>
     <string name="common.action.edit">Rediger</string>
-    <string name="common.action.remove">Fjern</string>
     <string name="common.action.undo">Fortryd</string>
     <string name="common.action.save">Gem</string>
     <string name="common.dialog.cancel">Annuller</string>

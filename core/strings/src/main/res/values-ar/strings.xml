@@ -51,7 +51,6 @@
     <string name="common.action.delete">احذف</string>
     <string name="common.action.done">تم</string>
     <string name="common.action.edit">حرر</string>
-    <string name="common.action.remove">أزل</string>
     <string name="common.action.undo">تراجع</string>
     <string name="common.action.save">احفظ</string>
     <string name="common.dialog.cancel">ألغ</string>

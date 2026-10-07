@@ -72,7 +72,6 @@
     <!-- Generic edit action in popup menus. -->
     <string name="common.action.edit">Edit</string>
     <!-- Generic remove action in menus. -->
-    <string name="common.action.remove">Remove</string>
     <string name="common.action.undo">Undo</string>
     <!-- Generic action for saving changes. -->
     <string name="common.action.save">Save</string>

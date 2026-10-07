@@ -51,7 +51,6 @@
     <string name="common.action.delete">Kustuta</string>
     <string name="common.action.done">Valmis</string>
     <string name="common.action.edit">Muuda</string>
-    <string name="common.action.remove">Eemalda</string>
     <string name="common.action.undo">Võta tagasi</string>
     <string name="common.action.save">Salvesta</string>
     <string name="common.dialog.cancel">Katkesta</string>

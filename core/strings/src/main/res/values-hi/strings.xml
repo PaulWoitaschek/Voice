@@ -51,7 +51,6 @@
     <string name="common.action.delete">हटाएँ</string>
     <string name="common.action.done">हो गया</string>
     <string name="common.action.edit">संपादन</string>
-    <string name="common.action.remove">हटाएं</string>
     <string name="common.action.undo">पहले जैसा करें</string>
     <string name="common.action.save">सहेजें</string>
     <string name="common.dialog.cancel">रद्द</string>

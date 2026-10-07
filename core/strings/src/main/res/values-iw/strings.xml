@@ -51,7 +51,6 @@
     <string name="common.action.delete">הסר</string>
     <string name="common.action.done">סיום</string>
     <string name="common.action.edit">ערוך</string>
-    <string name="common.action.remove">מחק</string>
     <string name="common.action.undo">ביטול</string>
     <string name="common.action.save">שמור</string>
     <string name="common.dialog.cancel">ביטול</string>

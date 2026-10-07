@@ -51,7 +51,6 @@
     <string name="common.action.delete">Διαγραφή</string>
     <string name="common.action.done">Τέλος</string>
     <string name="common.action.edit">Επεξεργασία</string>
-    <string name="common.action.remove">Αφαίρεση</string>
     <string name="common.action.undo">Αναίρεση</string>
     <string name="common.action.save">Αποθήκευση</string>
     <string name="common.dialog.cancel">Ακύρωση</string>

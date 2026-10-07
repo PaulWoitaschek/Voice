@@ -51,7 +51,6 @@
     <string name="common.action.delete">Skrap</string>
     <string name="common.action.done">Klaar</string>
     <string name="common.action.edit">Wysig</string>
-    <string name="common.action.remove">Verwyder</string>
     <string name="common.action.undo">Ontdoen</string>
     <string name="common.action.save">Stoor</string>
     <string name="common.dialog.cancel">Kanselleer</string>

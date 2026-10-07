@@ -51,7 +51,6 @@
     <string name="common.action.delete">मेटाउनुहोस्</string>
     <string name="common.action.done">सम्पन्न</string>
     <string name="common.action.edit">सम्पादन गर्नुहोस्</string>
-    <string name="common.action.remove">हटाउनुहोस्</string>
     <string name="common.action.undo">पूर्ववत् गर्नुहोस्</string>
     <string name="common.action.save">सेभ गर्नुहोस्</string>
     <string name="common.dialog.cancel">रद्द गर्नुहोस्</string>

@@ -51,7 +51,6 @@
     <string name="common.action.delete">Suprimeix</string>
     <string name="common.action.done">Fet</string>
     <string name="common.action.edit">Edita</string>
-    <string name="common.action.remove">Suprimeix</string>
     <string name="common.action.undo">Desfés</string>
     <string name="common.action.save">Desa</string>
     <string name="common.dialog.cancel">Cancel·la</string>

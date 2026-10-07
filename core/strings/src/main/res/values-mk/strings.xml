@@ -51,7 +51,6 @@
     <string name="common.action.delete">Избриши</string>
     <string name="common.action.done">Готово</string>
     <string name="common.action.edit">Уреди</string>
-    <string name="common.action.remove">Отстрани</string>
     <string name="common.action.undo">Врати</string>
     <string name="common.action.save">Зачувај</string>
     <string name="common.dialog.cancel">Откажи</string>

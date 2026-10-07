@@ -51,7 +51,6 @@
     <string name="common.action.delete">Deler</string>
     <string name="common.action.done">Facite</string>
     <string name="common.action.edit">Modificar</string>
-    <string name="common.action.remove">Remover</string>
     <string name="common.action.undo">Disfacer</string>
     <string name="common.action.save">Salvar</string>
     <string name="common.dialog.cancel">Cancellar</string>

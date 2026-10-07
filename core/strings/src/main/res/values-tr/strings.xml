@@ -51,7 +51,6 @@
     <string name="common.action.delete">Sil</string>
     <string name="common.action.done">Bitti</string>
     <string name="common.action.edit">Düzenle</string>
-    <string name="common.action.remove">Kaldır</string>
     <string name="common.action.undo">Geri al</string>
     <string name="common.action.save">Kaydet</string>
     <string name="common.dialog.cancel">İptal</string>
