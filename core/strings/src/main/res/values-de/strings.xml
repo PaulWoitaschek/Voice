@@ -180,7 +180,7 @@
     <string name="library.empty.add_first_book">Füge Deinen Hörbuchordner hinzu, damit Du mit dem Hören beginnen kannst!</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
     <string name="library.folders.moved.dialog.title">Hörbuch-Ordner verschoben</string>
-    <string name="library.folders.moved.dialog.message">Du kannst Hörbuch-Ordner jetzt in den Einstellungen verwalten.</string>
+    <string name="library.folders.moved.dialog.message">Du kannst jetzt Hörbuchordner in den Einstellungen verwalten.</string>
     <string name="library.greeting.afternoon">Guten Tag</string>
     <string name="library.greeting.evening">Guten Abend</string>
     <string name="library.greeting.morning">Guten Morgen</string>
