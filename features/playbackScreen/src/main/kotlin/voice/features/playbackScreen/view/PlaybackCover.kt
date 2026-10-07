@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -42,6 +43,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
@@ -80,7 +82,7 @@ internal fun PlaybackCover(
     label = "coverScale",
   )
   val cornerPercent by animateFloatAsState(
-    targetValue = if (playing) 10F else 16F,
+    targetValue = if (playing) 8F else 14F,
     animationSpec = spring(dampingRatio = 0.7F, stiffness = Spring.StiffnessLow),
     label = "coverCorner",
   )
@@ -90,7 +92,7 @@ internal fun PlaybackCover(
     label = "coverElevation",
   )
   // percentage corners scale with the cover, so they stay consistent during shared element transitions
-  val shape = RoundedCornerShape(CornerSize(cornerPercent))
+  val shape = RoundedCornerShape(PercentCornerSize(cornerPercent))
   val glow = MaterialTheme.colorScheme.primary
 
   val offsetX = remember { Animatable(0F) }
@@ -221,4 +223,12 @@ private suspend fun settleSwipe(
   if (toNext) onNext() else onPrevious()
   offsetX.snapTo(-exit)
   offsetX.animateTo(0F, spring(dampingRatio = 0.65F, stiffness = Spring.StiffnessLow))
+}
+
+/** Like `CornerSize(percent: Int)`, but fractional, so the corners animate smoothly. */
+private data class PercentCornerSize(private val percent: Float) : CornerSize {
+  override fun toPx(
+    shapeSize: Size,
+    density: Density,
+  ): Float = shapeSize.minDimension * percent / 100F
 }

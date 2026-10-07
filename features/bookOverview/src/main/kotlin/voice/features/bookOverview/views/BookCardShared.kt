@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +27,7 @@ import voice.core.ui.sharedCoverElementModifier
 import voice.core.ui.R as UiR
 
 /** Percentage based so covers keep their look while shared element transitions resize them. */
-internal val CoverShape = RoundedCornerShape(CornerSize(14F))
+internal val CoverShape = RoundedCornerShape(percent = 12)
 
 @Composable
 internal fun BookCover(

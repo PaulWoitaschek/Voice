@@ -71,8 +71,9 @@ import java.text.DecimalFormat
 /**
  * Floating toolbar with the secondary playback options. Every option that deviates from its
  * default lights up and, where useful, grows a label (sleep timer countdown, playback speed).
- * Long pressing an option names it. Skip silence names itself on every toggle, as it is the only
- * option that doesn't open a titled sheet and its icon alone is ambiguous.
+ * Long pressing an option names it, except for bookmarks, where a long press quickly adds a
+ * bookmark and confirms that with a snackbar. Skip silence names itself on every toggle, as it is
+ * the only option that doesn't open a titled screen and its icon alone is ambiguous.
  */
 @Composable
 internal fun ActionToolbar(
