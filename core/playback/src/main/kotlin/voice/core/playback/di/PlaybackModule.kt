@@ -21,6 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.Media3AudioOffloadFeatureFlagQualifier
+import voice.core.playback.history.AutomaticPauseRecorder
+import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.playback.player.DurationInconsistenciesUpdater
@@ -56,6 +58,7 @@ object PlaybackModule {
     positionUpdater: PositionUpdater,
     volumeGain: VolumeGain,
     durationInconsistenciesUpdater: DurationInconsistenciesUpdater,
+    automaticPauseRecorder: AutomaticPauseRecorder,
     @Media3AudioOffloadFeatureFlagQualifier media3AudioOffloadFeatureFlag: FeatureFlag<Boolean>,
   ): Player {
     val audioAttributes = AudioAttributes.Builder()
@@ -84,6 +87,7 @@ object PlaybackModule {
         playStateDelegatingListener.attachTo(player)
         positionUpdater.attachTo(player)
         durationInconsistenciesUpdater.attachTo(player)
+        automaticPauseRecorder.attachTo(player)
         player.onAudioSessionIdChanged {
           volumeGain.audioSessionId = it
         }
@@ -102,6 +106,7 @@ object PlaybackModule {
     callback: LibrarySessionCallback,
     mainActivityIntentProvider: MainActivityIntentProvider,
     context: Context,
+    commandSourceResolver: CommandSourceResolver,
   ): MediaLibraryService.MediaLibrarySession {
     return MediaLibraryService.MediaLibrarySession.Builder(service, player, callback)
       .setSessionActivity(mainActivityIntentProvider.toCurrentBook())
@@ -120,5 +125,6 @@ object PlaybackModule {
         ),
       )
       .build()
+      .also { commandSourceResolver.session = it }
   }
 }

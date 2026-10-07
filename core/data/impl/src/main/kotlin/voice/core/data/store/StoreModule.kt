@@ -11,6 +11,7 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
@@ -187,6 +188,24 @@ public object StoreModule {
   @AnalyticsConsentStore
   private fun analyticsConsent(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("analyticsConsent", defaultValue = false)
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @ListeningHistoryEnabledStore
+  private fun listeningHistoryEnabled(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("listeningHistoryEnabled", defaultValue = true)
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @DismissedHistorySuggestionsStore
+  private fun dismissedHistorySuggestions(factory: VoiceDataStoreFactory): DataStore<List<Long>> {
+    return factory.create(
+      serializer = ListSerializer(Long.serializer()),
+      defaultValue = emptyList(),
+      fileName = "dismissedHistorySuggestions",
+    )
   }
 
   @Provides

@@ -1,5 +1,6 @@
 package voice.core.playback.session
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
@@ -29,6 +30,7 @@ import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
+import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.session.search.BookSearchHandler
 import voice.core.playback.session.search.BookSearchParser
@@ -43,7 +45,17 @@ class LibrarySessionCallback(
   @CurrentBookStore
   private val currentBookStoreId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
+  private val commandSourceResolver: CommandSourceResolver,
 ) : MediaLibrarySession.Callback {
+
+  override fun onMediaButtonEvent(
+    session: MediaSession,
+    controllerInfo: ControllerInfo,
+    intent: Intent,
+  ): Boolean {
+    commandSourceResolver.onMediaButtonEvent(controllerInfo)
+    return super.onMediaButtonEvent(session, controllerInfo, intent)
+  }
 
   override fun onAddMediaItems(
     mediaSession: MediaSession,

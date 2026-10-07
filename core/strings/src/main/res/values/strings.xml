@@ -22,26 +22,57 @@
     <string name="book.edit.name.label">Name</string>
     <!-- Title for the dialog that edits a book title. -->
     <string name="book.edit.title">Edit book</string>
+    <string name="bookmark.action.add_note">Add note</string>
+    <string name="bookmark.add_note_hint">Add a note</string>
     <!-- Snackbar message shown after creating a bookmark. -->
     <string name="bookmark.added.snackbar">Bookmark added</string>
+    <string name="bookmark.category.all">All</string>
+    <string name="bookmark.category.favorites">Favorites</string>
+    <string name="bookmark.category.notes">Notes</string>
+    <string name="bookmark.category.quotes">Quotes</string>
+    <string name="bookmark.category.revisit">Revisit</string>
+    <string name="bookmark.chapter">Chapter %1$d</string>
+    <string name="bookmark.chapter_with_name">Chapter %1$d · %2$s</string>
     <!-- Relative timestamp for a bookmark created moments ago. -->
     <string name="bookmark.created.just_now">Just now</string>
+    <string name="bookmark.deleted">Bookmark deleted</string>
+    <string name="bookmark.dozed_off">Dozed off</string>
     <!-- Label for a bookmark-name text field. -->
-    <string name="bookmark.edit.name.label">Bookmark name</string>
     <!-- Title for the dialog that edits a bookmark. -->
     <string name="bookmark.edit.title">Edit bookmark</string>
+    <string name="bookmark.empty.message">Long press the bookmark button while listening to save a moment.</string>
+    <string name="bookmark.empty.title">No bookmarks yet</string>
+    <string name="bookmark.kind.favorite">Favorite</string>
+    <string name="bookmark.kind.note">Note</string>
+    <string name="bookmark.kind.quote">Quote</string>
+    <string name="bookmark.kind.revisit">Revisit</string>
+    <string name="bookmark.note.label">Note (optional)</string>
+    <string name="bookmark.nudge.earlier">15 seconds earlier</string>
+    <string name="bookmark.nudge.edit">Move the mark</string>
+    <string name="bookmark.nudge.later">15 seconds later</string>
+    <string name="bookmark.nudge.new">Mark it a bit earlier?</string>
+    <string name="bookmark.save_moment">Save this moment</string>
+    <string name="bookmark.saved">Saved</string>
+    <string name="bookmark.sort">Sort</string>
+    <string name="bookmark.sort.recent">Recently saved</string>
+    <string name="bookmark.sort.story">Story order</string>
+    <string name="bookmark.tab.bookmarks">Bookmarks</string>
+    <string name="bookmark.tab.history">History</string>
     <!-- Title for bookmark screens and bookmark actions. -->
     <string name="bookmark.title">Bookmark</string>
+    <string name="bookmark.you_are_here">You are here</string>
     <!-- Generic add action and content description. -->
     <string name="common.action.add">Add</string>
+    <string name="common.action.back">Back</string>
     <!-- Generic content description for closing the current screen or dialog. -->
     <string name="common.action.close">Close</string>
     <!-- Generic delete action and content description. -->
     <string name="common.action.delete">Delete</string>
+    <string name="common.action.done">Done</string>
     <!-- Generic edit action in popup menus. -->
     <string name="common.action.edit">Edit</string>
+    <string name="common.action.undo">Undo</string>
     <!-- Generic remove action in menus. -->
-    <string name="common.action.remove">Remove</string>
     <!-- Generic action for saving changes. -->
     <string name="common.action.save">Save</string>
     <!-- Generic action for dismissing a dialog without applying changes. -->
@@ -144,6 +175,69 @@
         <item quantity="one">%d audio file</item>
         <item quantity="other">%d audio files</item>
     </plurals>
+    <string name="history.action.change_back">Change back</string>
+    <string name="history.action.go_there">Go there</string>
+    <string name="history.action.pin">Save as bookmark</string>
+    <string name="history.action.restore">Restore</string>
+    <string name="history.changed_back">Changed back</string>
+    <string name="history.empty.filtered">Nothing matches this filter.</string>
+    <string name="history.empty.message">Plays, pauses and jumps show up here, so you can always find your way back.</string>
+    <string name="history.empty.title">Nothing here yet</string>
+    <string name="history.event.bookmark_added">Saved a bookmark</string>
+    <string name="history.event.bookmark_added.note">Saved “%1$s”</string>
+    <string name="history.event.bookmark_deleted">Deleted a bookmark</string>
+    <string name="history.event.bookmark_deleted.note">Deleted “%1$s”</string>
+    <string name="history.event.bookmark_jump">Went to a bookmark</string>
+    <string name="history.event.chapter_change">Changed chapter</string>
+    <string name="history.event.dozed_off">Dozed off · timer ended</string>
+    <string name="history.event.jump_back">Jumped back</string>
+    <string name="history.event.last_touch">Last touch</string>
+    <string name="history.event.moved">Moved</string>
+    <string name="history.event.paused">Paused</string>
+    <string name="history.event.paused_for">Paused %1$s</string>
+    <string name="history.event.played">Played</string>
+    <string name="history.event.skip_silence.off">Skip silence off</string>
+    <string name="history.event.skip_silence.on">Skip silence on</string>
+    <string name="history.event.skipped_back">Skipped back</string>
+    <string name="history.event.skipped_forward">Skipped forward</string>
+    <string name="history.event.sleep_timer_extended">Sleep timer restarted by shaking</string>
+    <string name="history.event.sleep_timer_set">Sleep timer</string>
+    <string name="history.event.speed">Speed %1$s</string>
+    <string name="history.event.volume_boost">Volume boost %1$s</string>
+    <string name="history.filter.all">All</string>
+    <string name="history.filter.any_source">Any source</string>
+    <string name="history.filter.bookmarks">Bookmarks</string>
+    <string name="history.filter.jumps">Jumps</string>
+    <string name="history.filter.play_pause">Play &amp; pause</string>
+    <string name="history.filter.settings">Settings</string>
+    <string name="history.filter.sleep">Sleep</string>
+    <string name="history.location.chapter">Ch. %1$d · %2$s</string>
+    <string name="history.off.action">Turn on</string>
+    <string name="history.off.message">Turn it on to undo accidental plays, pauses and jumps. It stays on this device.</string>
+    <string name="history.off.title">Listening history is off</string>
+    <string name="history.pinned">Saved as bookmark</string>
+    <string name="history.restored">Bookmark restored</string>
+    <string name="history.source.app">In the app</string>
+    <string name="history.source.audio_focus">Interrupted</string>
+    <string name="history.source.bluetooth">Bluetooth device</string>
+    <string name="history.source.car">Car</string>
+    <string name="history.source.headset">Headset button</string>
+    <string name="history.source.notification">Notification</string>
+    <string name="history.source.other_app">Another app</string>
+    <string name="history.source.sleep_timer">Sleep timer</string>
+    <string name="history.source.unknown">Unknown</string>
+    <string name="history.source.unplugged">Audio disconnected</string>
+    <string name="history.source.watch">Watch</string>
+    <string name="history.source.widget">Widget</string>
+    <string name="history.suggestion.jumped.message">Playback jumped at %1$s.</string>
+    <string name="history.suggestion.jumped.title">Lost your place?</string>
+    <string name="history.suggestion.keep">Keep</string>
+    <string name="history.suggestion.played">%1$s played since. Not you?</string>
+    <string name="history.suggestion.started_by.bluetooth">A Bluetooth device started the book at %1$s</string>
+    <string name="history.suggestion.started_by.car">Your car started the book at %1$s</string>
+    <string name="history.suggestion.started_by.headset">A headset button started the book at %1$s</string>
+    <string name="history.suggestion.started_by.other_app">Another app started the book at %1$s</string>
+    <string name="history.suggestion.started_by.watch">Your watch started the book at %1$s</string>
     <!-- Library category header for completed books. -->
     <string name="library.category.completed.title">Completed</string>
     <!-- Library category header for books currently being listened to. -->
@@ -243,6 +337,8 @@
     <string name="playback.chapter.previous">Previous track</string>
     <!-- Title of the sheet that lists all chapters of a book. -->
     <string name="playback.chapters.title">Chapters</string>
+    <string name="playback.jump_back">Back to %1$s</string>
+    <string name="playback.jump_back.chapter">Back to Ch. %1$d · %2$s</string>
     <!-- Menu label for toggling silence skipping during playback. -->
     <string name="playback.option.skip_silence">Skip Silence</string>
     <!-- Menu and dialog title for changing volume gain. -->
@@ -318,6 +414,13 @@
     <string name="settings.auto_sleep_timer.title">Automatic Sleep Timer</string>
     <!-- Summary text for the audiobook folders settings row. -->
     <string name="settings.library.folders.summary">Manage folders scanned for audiobooks</string>
+    <string name="settings.listening_history.clear">Clear listening history</string>
+    <string name="settings.listening_history.clear.confirm">Clear</string>
+    <string name="settings.listening_history.clear.message">This removes the recorded plays, pauses and jumps of all books. Bookmarks stay.</string>
+    <string name="settings.listening_history.clear.title">Clear listening history?</string>
+    <string name="settings.listening_history.cleared">Listening history cleared</string>
+    <string name="settings.listening_history.summary">Keeps plays, pauses and jumps on this device, so you can undo accidents</string>
+    <string name="settings.listening_history.title">Listening history</string>
     <!-- Label of the preview tile that shows the library as a grid of covers. -->
     <string name="settings.library.layout.grid">Grid</string>
     <!-- Label of the preview tile that shows the library as a list. -->
@@ -386,4 +489,9 @@
     <string name="sleep_timer.dialog.title">Sleep timer</string>
     <!-- Sleep timer option and playback status for stopping at the end of a chapter. -->
     <string name="sleep_timer.end_of_chapter">End of Chapter</string>
+    <string name="time.relative.last_night">Last night</string>
+    <string name="time.relative.this_afternoon">This afternoon</string>
+    <string name="time.relative.this_evening">This evening</string>
+    <string name="time.relative.this_morning">This morning</string>
+    <string name="time.relative.yesterday">Yesterday</string>
 </resources>

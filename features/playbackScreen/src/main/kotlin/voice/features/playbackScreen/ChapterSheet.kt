@@ -2,13 +2,6 @@
 
 package voice.features.playbackScreen
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,21 +29,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import voice.core.ui.rememberAnimationClock
-import kotlin.math.PI
-import kotlin.math.sin
+import voice.core.ui.NowPlayingBars
+import voice.core.ui.segmentedShape
 import voice.core.strings.R as StringsR
 
 @Composable
@@ -169,45 +157,5 @@ private fun ChapterItem(
         color = colors.onSurfaceVariant,
       )
     }
-  }
-}
-
-/** Three little bars bouncing to the audio while the chapter plays. */
-@Composable
-private fun NowPlayingBars(
-  playing: Boolean,
-  color: Color,
-  modifier: Modifier = Modifier,
-) {
-  // unlike an infinite transition, the clock stops requesting frames while paused
-  val clock = rememberAnimationClock(running = playing)
-  val amplitude by animateFloatAsState(if (playing) 1F else 0F, label = "barsAmplitude")
-  Canvas(modifier = modifier.size(20.dp)) {
-    val barWidth = size.width / 5
-    val phase = clock.value * 2F * PI.toFloat() / 1.1F
-    repeat(3) { index ->
-      val wave = 0.5F + 0.5F * sin(phase * (1 + index * 0.35F) + index * 2.1F)
-      val height = size.height * (0.3F + 0.7F * amplitude * wave)
-      drawRoundRect(
-        color = color,
-        topLeft = Offset(index * 2 * barWidth, (size.height - height) / 2),
-        size = Size(barWidth, height),
-        cornerRadius = CornerRadius(barWidth / 2),
-      )
-    }
-  }
-}
-
-private fun segmentedShape(
-  index: Int,
-  count: Int,
-): RoundedCornerShape {
-  val large = 24.dp
-  val small = 6.dp
-  return when {
-    count == 1 -> RoundedCornerShape(large)
-    index == 0 -> RoundedCornerShape(topStart = large, topEnd = large, bottomStart = small, bottomEnd = small)
-    index == count - 1 -> RoundedCornerShape(topStart = small, topEnd = small, bottomStart = large, bottomEnd = large)
-    else -> RoundedCornerShape(small)
   }
 }

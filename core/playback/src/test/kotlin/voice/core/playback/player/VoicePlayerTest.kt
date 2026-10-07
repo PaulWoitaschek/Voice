@@ -28,10 +28,15 @@ import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.ChapterMark
+import voice.core.data.ListeningEvent
 import voice.core.data.MarkData
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
+import voice.core.playback.history.CommandSourceResolver
+import voice.core.playback.history.ListeningHistoryRecorder
+import voice.core.playback.history.PlaybackPosition
+import voice.core.playback.history.RecordingRepo
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
@@ -39,7 +44,9 @@ import voice.core.playback.session.toMediaIdOrNull
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerState
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -96,6 +103,7 @@ class VoicePlayerTest {
   private val bookId = BookId(Uuid.random().toString())
   private lateinit var currentBook: Book
   private val sleepTimer = FakeSleepTimer()
+  private val historyRepo = RecordingRepo()
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
   private val player = VoicePlayer(
     player = chapterMarkPlayer,
@@ -112,6 +120,12 @@ class VoicePlayerTest {
     volumeGain = mockk(relaxed = true),
     sleepTimer = sleepTimer,
     analytics = mockk(relaxed = true),
+    historyRecorder = ListeningHistoryRecorder(
+      repo = historyRepo,
+      clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+      scope = scope,
+    ),
+    commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
   )
 
   @Test
@@ -343,6 +357,32 @@ class VoicePlayerTest {
     player.shouldHavePosition(1, 0)
     assertFalse(player.playWhenReady)
     assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+  }
+
+  @Test
+  fun `end of chapter sleep timer records once where it paused`() = scope.runTest {
+    val chapter = chapter(
+      ChapterMark(startMs = 0, endMs = 1_000, name = null),
+      ChapterMark(startMs = 1_000, endMs = 2_000, name = null),
+    )
+    setMediaItems(listOf(chapter))
+
+    player.prepare()
+    awaitReady()
+    sleepTimer.enable(SleepTimerMode.EndOfChapter)
+
+    TestPlayerRunHelper.play(internalPlayer).untilPlayWhenReadyIs(false)
+    shadowOf(Looper.getMainLooper()).idle()
+    advanceUntilIdle()
+
+    assertEquals(
+      expected = listOf(ListeningEvent.Type.SleepTimerEnded to ListeningEvent.Source.SleepTimer),
+      actual = historyRepo.events.map { it.type to it.source },
+    )
+    assertEquals(
+      expected = PlaybackPosition(bookId, chapter.id, 1_000),
+      actual = historyRepo.events.single().let { PlaybackPosition(it.bookId, it.chapterId, it.time) },
+    )
   }
 
   @Test

@@ -54,8 +54,9 @@ class SleepTimerImplTest {
     every { pauseWithRewind(any()) } answers {
       playStateManager.playState = PlayStateManager.PlayState.Paused
     }
+    every { record(any(), any(), any()) } just Runs
     every {
-      play()
+      play(any())
     } answers {
       playStateManager.playState = PlayStateManager.PlayState.Playing
     }
@@ -151,7 +152,7 @@ class SleepTimerImplTest {
     // 2) Trigger the shake → a new countdown should start independently of the old timeout
     shakeDetector.shake()
     runCurrent()
-    verify(exactly = 1) { playerController.play() }
+    verify(exactly = 1) { playerController.play(source = null) }
     assertEquals(expected = SleepTimerState.Enabled.WithDuration(longDuration), actual = sleepTimer.state.value)
 
     // 3) Advance past the original 30s shake window and allow the second countdown to finish

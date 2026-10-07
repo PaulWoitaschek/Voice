@@ -70,6 +70,8 @@ internal fun BookPlayContent(
   onSkipSilenceClick: () -> Unit,
   onVolumeBoostClick: () -> Unit,
   onCloseClick: () -> Unit,
+  onJumpBack: (id: Long) -> Unit,
+  onJumpBackExpire: (id: Long) -> Unit,
 ) {
   val entrance = rememberEntranceState()
   val cover: @Composable (Modifier) -> Unit = { modifier ->
@@ -128,6 +130,9 @@ internal fun BookPlayContent(
         playing = viewState.playing,
         clock = clock,
         onSeek = onSeek,
+        jumpBack = viewState.jumpBack,
+        onJumpBack = onJumpBack,
+        onJumpBackExpire = onJumpBackExpire,
         modifier = Modifier
           .fillMaxWidth()
           .entrance(entrance, 3),

@@ -363,6 +363,7 @@ class MediaScannerTest {
       deviceHasPermissionBug = mockk(),
       progressCarryOver = ProgressCarryOver(
         bookmarkRepo = bookmarkRepo,
+        listeningHistoryRepo = MemoryListeningHistoryRepo(),
         currentBookStore = currentBookStore,
       ),
     )

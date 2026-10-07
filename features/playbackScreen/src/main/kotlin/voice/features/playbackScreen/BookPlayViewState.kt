@@ -2,6 +2,7 @@ package voice.features.playbackScreen
 
 import androidx.compose.runtime.Immutable
 import voice.core.playback.misc.Decibel
+import voice.core.ui.BookBarPin
 import voice.features.sleepTimer.SleepTimerViewState
 import kotlin.time.Duration
 
@@ -25,7 +26,25 @@ data class BookPlayViewState(
   val bookDuration: Duration,
   val chapterSegments: List<Float>,
   val skipSeconds: Int,
+  val bookmarkPins: List<BookBarPin>,
+  val poppedPin: Int?,
+  val jumpBack: JumpBackViewState?,
 ) {
+
+  /**
+   * Offers to undo the last big jump for a few seconds.
+   *
+   * @param id identifies the jump, a new jump restarts the countdown
+   * @param chapterNumber set if the jump left the chapter
+   * @param elapsed since the jump. The pill decides how long it stays.
+   */
+  @Immutable
+  data class JumpBackViewState(
+    val id: Long,
+    val time: String,
+    val chapterNumber: Int?,
+    val elapsed: Duration,
+  )
 
   val bookProgress: Float
     get() = if (bookDuration > Duration.ZERO) {

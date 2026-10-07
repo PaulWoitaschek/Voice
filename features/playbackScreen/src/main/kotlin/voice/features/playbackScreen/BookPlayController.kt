@@ -39,13 +39,21 @@ fun BookPlayScreen(bookId: BookId) {
   HoldSplashScreenWhile(loading = viewState == null)
   if (viewState == null) return
   val bookmarkAddedMessage = stringResource(StringsR.string.bookmark_added_snackbar)
+  val addNoteAction = stringResource(StringsR.string.bookmark_action_add_note)
   val batteryOptimizationMessage = stringResource(StringsR.string.playback_battery_optimization_rationale)
   val batteryOptimizationAction = stringResource(StringsR.string.playback_battery_optimization_action)
   LaunchedEffect(viewModel) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {
-        BookPlayViewEffect.BookmarkAdded -> {
-          snackbarHostState.showSnackbar(message = bookmarkAddedMessage)
+        is BookPlayViewEffect.BookmarkAdded -> {
+          val result = snackbarHostState.showSnackbar(
+            message = bookmarkAddedMessage,
+            actionLabel = addNoteAction,
+            duration = SnackbarDuration.Short,
+          )
+          if (result == SnackbarResult.ActionPerformed) {
+            viewModel.onAddBookmarkNote(viewEffect.id)
+          }
         }
         BookPlayViewEffect.RequestIgnoreBatteryOptimization -> {
           val result = snackbarHostState.showSnackbar(
@@ -78,6 +86,8 @@ fun BookPlayScreen(bookId: BookId) {
       onSkipToNext = viewModel::next,
       onSkipToPrevious = viewModel::previous,
       onCurrentChapterClick = viewModel::onCurrentChapterClick,
+      onJumpBack = viewModel::onJumpBackClick,
+      onJumpBackExpire = viewModel::onJumpBackExpire,
       useLandscapeLayout = LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE,
       snackbarHostState = snackbarHostState,
     )

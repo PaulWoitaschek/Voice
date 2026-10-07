@@ -14,7 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import voice.core.data.BookId
+import voice.core.data.Bookmark
 import voice.core.ui.AuroraBackground
+import voice.core.ui.BookBarPin
 import voice.core.ui.CoverTheme
 import voice.core.ui.VoiceTheme
 import voice.core.ui.rememberAnimationClock
@@ -22,6 +24,7 @@ import voice.features.playbackScreen.BookPlayViewState
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 internal fun BookPlayView(
@@ -42,6 +45,8 @@ internal fun BookPlayView(
   onSkipToPrevious: () -> Unit,
   onCloseClick: () -> Unit,
   onCurrentChapterClick: () -> Unit,
+  onJumpBack: (id: Long) -> Unit,
+  onJumpBackExpire: (id: Long) -> Unit,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   val clock = rememberAnimationClock(running = viewState.playing)
@@ -87,6 +92,8 @@ internal fun BookPlayView(
           onSkipSilenceClick = onSkipSilenceClick,
           onVolumeBoostClick = onVolumeBoostClick,
           onCloseClick = onCloseClick,
+          onJumpBack = onJumpBack,
+          onJumpBackExpire = onJumpBackExpire,
         )
       },
     )
@@ -118,6 +125,8 @@ private fun BookPlayPreview(
         onSkipToPrevious = {},
         onCloseClick = {},
         onCurrentChapterClick = {},
+        onJumpBack = {},
+        onJumpBackExpire = {},
         useLandscapeLayout = false,
       )
     }
@@ -145,6 +154,19 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
       bookDuration = 9.hours + 30.minutes,
       chapterSegments = List(12) { 1F / 12 },
       skipSeconds = 20,
+      bookmarkPins = listOf(
+        BookBarPin(position = 0.12F, kind = Bookmark.Kind.Favorite, setBySleepTimer = false),
+        BookBarPin(position = 0.38F, kind = Bookmark.Kind.Quote, setBySleepTimer = false),
+        BookBarPin(position = 0.39F, kind = Bookmark.Kind.Note, setBySleepTimer = true),
+        BookBarPin(position = 0.8F, kind = Bookmark.Kind.Revisit, setBySleepTimer = false),
+      ),
+      poppedPin = null,
+      jumpBack = BookPlayViewState.JumpBackViewState(
+        id = 1,
+        time = "34:18",
+        chapterNumber = null,
+        elapsed = 3.seconds,
+      ),
     )
     yield(initial)
     yield(
@@ -162,6 +184,8 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
         chapterCount = 1,
         chapterNumber = 1,
         chapterSegments = listOf(1F),
+        bookmarkPins = emptyList(),
+        jumpBack = null,
       ),
     )
   }

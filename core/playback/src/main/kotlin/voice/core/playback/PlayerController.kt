@@ -25,9 +25,14 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import voice.core.data.BookId
 import voice.core.data.ChapterId
+import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.SeekTimeStore
 import voice.core.logging.api.Logger
+import voice.core.playback.history.ListeningHistoryRecorder
+import voice.core.playback.history.PlaybackPosition
+import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.session.CustomCommand
 import voice.core.playback.session.MediaItemProvider
@@ -47,6 +52,9 @@ class PlayerController(
   private val currentBookStoreId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
   private val mediaItemProvider: MediaItemProvider,
+  private val historyRecorder: ListeningHistoryRecorder,
+  @SeekTimeStore
+  private val seekTimeStore: DataStore<Int>,
 ) {
 
   private var _controller: Deferred<MediaController> = newControllerAsync()
@@ -69,9 +77,14 @@ class PlayerController(
     }
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
+  /**
+   * @param type how the jump is recorded in the listening history: [ListeningEvent.Type.Seek],
+   * [ListeningEvent.Type.ChapterChange], [ListeningEvent.Type.BookmarkJump] or [ListeningEvent.Type.JumpBack].
+   */
   fun setPosition(
     time: Long,
     id: ChapterId,
+    type: ListeningEvent.Type = ListeningEvent.Type.Seek,
   ) = executeAfterPrepare { controller ->
     val bookId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
@@ -80,6 +93,7 @@ class PlayerController(
       positionInChapterMs = time,
     )
     if (playbackItem != null) {
+      controller.record(type, to = PlaybackPosition(bookId, id, time))
       controller.seekTo(playbackItem.index, playbackItem.positionInMediaItem(time))
     }
   }
@@ -89,41 +103,113 @@ class PlayerController(
       val controller = awaitConnect() ?: return@launch
       val currentBookId = controller.currentBookId()
       if (currentBookId != null && currentBookId != id) {
+        if (controller.playWhenReady) {
+          controller.record(ListeningEvent.Type.Pause)
+        }
         controller.pause()
       }
     }
   }
 
   fun skipSilence(skip: Boolean) = executeAfterPrepare { controller ->
+    controller.record(ListeningEvent.Type.SkipSilenceChanged, value = skip.toString())
     controller.sendCustomCommand(CustomCommand.SetSkipSilence(skip))
   }
 
-  fun fastForward() = executeAfterPrepare { controller ->
+  fun fastForward(source: ListeningEvent.Source = ListeningEvent.Source.App) = executeAfterPrepare { controller ->
+    controller.record(ListeningEvent.Type.SkipForward, source, value = seekTimeStore.data.first().toString())
     controller.seekForward()
   }
 
-  fun rewind() = executeAfterPrepare { controller ->
+  fun rewind(source: ListeningEvent.Source = ListeningEvent.Source.App) = executeAfterPrepare { controller ->
+    controller.record(ListeningEvent.Type.SkipBack, source, value = seekTimeStore.data.first().toString())
     controller.seekBack()
   }
 
   fun previous() = executeAfterPrepare { controller ->
+    val currentIndex = controller.currentMediaItemIndex
+    val index = if (controller.currentPosition > THRESHOLD_FOR_BACK_SEEK_MS) {
+      currentIndex
+    } else {
+      controller.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentIndex
+    }
+    val to = controller.playbackPosition(index, 0)
+    val type = previousJumpType(
+      from = controller.playbackPosition(),
+      to = to,
+      sameItem = index == currentIndex,
+    )
+    if (type != null) {
+      controller.record(type, to = to)
+    }
     controller.sendCustomCommand(CustomCommand.ForceSeekToPrevious)
   }
 
   fun next() = executeAfterPrepare { controller ->
+    val index = controller.nextMediaItemIndex
+    if (index != C.INDEX_UNSET) {
+      controller.record(ListeningEvent.Type.ChapterChange, to = controller.playbackPosition(index, 0))
+    }
     controller.sendCustomCommand(CustomCommand.ForceSeekToNext)
   }
 
-  fun play() = executeAfterPrepare { controller ->
+  /**
+   * @param source recorded in the listening history, or null to not record it.
+   */
+  fun play(source: ListeningEvent.Source? = ListeningEvent.Source.App) = executeAfterPrepare { controller ->
+    if (source != null && !controller.playWhenReady) {
+      controller.record(ListeningEvent.Type.Play, source)
+    }
     controller.play()
   }
 
-  fun playPause() = executeAfterPrepare { controller ->
+  fun playPause(source: ListeningEvent.Source = ListeningEvent.Source.App) = executeAfterPrepare { controller ->
     if (controller.isPlaying) {
+      controller.record(ListeningEvent.Type.Pause, source)
       controller.pause()
     } else {
+      controller.record(ListeningEvent.Type.Play, source)
       controller.play()
     }
+  }
+
+  /**
+   * Records an event at the current position in the listening history.
+   */
+  fun record(
+    type: ListeningEvent.Type,
+    source: ListeningEvent.Source,
+    value: String? = null,
+  ) {
+    scope.launch {
+      awaitConnect()?.record(type, source, value = value)
+    }
+  }
+
+  private suspend fun MediaController.record(
+    type: ListeningEvent.Type,
+    source: ListeningEvent.Source = ListeningEvent.Source.App,
+    to: PlaybackPosition? = null,
+    value: String? = null,
+  ) {
+    val position = playbackPosition() ?: storedPosition() ?: return
+    historyRecorder.record(
+      type = type,
+      source = source,
+      position = position,
+      to = to,
+      value = value,
+    )
+  }
+
+  /**
+   * Right after [maybePrepare] the player only holds the book until the service expands it into chapters,
+   * so the position comes from the book itself.
+   */
+  private suspend fun storedPosition(): PlaybackPosition? {
+    val bookId = currentBookStoreId.data.first() ?: return null
+    val content = bookRepository.get(bookId)?.content ?: return null
+    return PlaybackPosition(bookId, content.currentChapter, content.positionInChapter)
   }
 
   private suspend fun maybePrepare(controller: MediaController): Boolean {
@@ -182,10 +268,12 @@ class PlayerController(
   }
 
   fun setSpeed(speed: Float) = executeAfterPrepare { controller ->
+    controller.record(ListeningEvent.Type.SpeedChanged, value = speed.toString())
     controller.setPlaybackSpeed(speed)
   }
 
   fun setGain(gain: Decibel) = executeAfterPrepare { controller ->
+    controller.record(ListeningEvent.Type.VolumeBoostChanged, value = gain.value.toString())
     controller.sendCustomCommand(CustomCommand.SetGain(gain))
   }
 
@@ -280,4 +368,22 @@ class PlayerController(
       null
     }
   }
+}
+
+private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000
+
+/**
+ * Skipping back restarts the current chapter when it already played for a while, or when there is no chapter
+ * before it. That is only a seek, so it can be undone only when it goes back far enough. Returns null when
+ * playback is already where it would go, or when it's not known where it goes, as right after preparing, before
+ * the book is split into its chapters.
+ */
+internal fun previousJumpType(
+  from: PlaybackPosition?,
+  to: PlaybackPosition?,
+  sameItem: Boolean,
+): ListeningEvent.Type? = when {
+  to == null || to == from -> null
+  sameItem -> ListeningEvent.Type.Seek
+  else -> ListeningEvent.Type.ChapterChange
 }

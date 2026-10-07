@@ -12,6 +12,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import voice.core.common.rootGraphAs
+import voice.core.data.ListeningEvent
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import kotlin.time.Duration.Companion.seconds
@@ -39,14 +40,14 @@ class WidgetButtonReceiver : BroadcastReceiver() {
         withTimeout(20.seconds) {
           player.awaitConnect()
           when (action) {
-            Action.PlayPause -> player.playPause()
+            Action.PlayPause -> player.playPause(ListeningEvent.Source.Widget)
             Action.FastForward -> {
-              player.fastForward()
-              player.play()
+              player.fastForward(ListeningEvent.Source.Widget)
+              player.play(ListeningEvent.Source.Widget)
             }
             Action.Rewind -> {
-              player.rewind()
-              player.play()
+              player.rewind(ListeningEvent.Source.Widget)
+              player.play(ListeningEvent.Source.Widget)
             }
           }
         }

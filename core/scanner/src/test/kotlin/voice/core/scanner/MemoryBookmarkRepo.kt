@@ -1,5 +1,9 @@
 package voice.core.scanner
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.Bookmark
@@ -8,16 +12,16 @@ import java.time.Instant
 
 class MemoryBookmarkRepo : BookmarkRepo {
 
-  private val bookmarks = mutableMapOf<Bookmark.Id, Bookmark>()
+  private val bookmarks = MutableStateFlow(mapOf<Bookmark.Id, Bookmark>())
 
-  val all: List<Bookmark> get() = bookmarks.values.toList()
+  val all: List<Bookmark> get() = bookmarks.value.values.toList()
 
   override suspend fun deleteBookmark(id: Bookmark.Id) {
-    bookmarks -= id
+    bookmarks.update { it - id }
   }
 
   override suspend fun addBookmark(bookmark: Bookmark) {
-    bookmarks[bookmark.id] = bookmark
+    bookmarks.update { it + (bookmark.id to bookmark) }
   }
 
   override suspend fun addBookmarkAtBookPosition(
@@ -37,6 +41,10 @@ class MemoryBookmarkRepo : BookmarkRepo {
   }
 
   override suspend fun bookmarks(book: BookContent): List<Bookmark> {
-    return bookmarks.values.filter { it.chapterId in book.chapters }
+    return bookmarks.value.values.filter { it.chapterId in book.chapters }
+  }
+
+  override fun bookmarksFlow(book: BookContent): Flow<List<Bookmark>> {
+    return bookmarks.map { all -> all.values.filter { it.chapterId in book.chapters } }
   }
 }
