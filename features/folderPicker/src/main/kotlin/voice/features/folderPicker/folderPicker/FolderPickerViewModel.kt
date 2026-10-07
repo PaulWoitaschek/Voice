@@ -1,10 +1,10 @@
 package voice.features.folderPicker.folderPicker
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.core.net.toUri
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -94,17 +94,17 @@ class FolderPickerViewModel(
     val kioskModeItems = listOf(
       FolderPickerViewState.Item(
         name = "Audiobooks",
-        id = Uri.parse("kiosk:audiobooks"),
+        id = "kiosk:audiobooks".toUri(),
         folderType = FolderType.Root,
       ),
       FolderPickerViewState.Item(
         name = "Sci-Fi",
-        id = Uri.parse("kiosk:sci-fi"),
+        id = "kiosk:sci-fi".toUri(),
         folderType = FolderType.SingleFolder,
       ),
       FolderPickerViewState.Item(
         name = "Non-Fiction",
-        id = Uri.parse("kiosk:non-fiction"),
+        id = "kiosk:non-fiction".toUri(),
         folderType = FolderType.SingleFolder,
       ),
     )
