@@ -7,8 +7,8 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -71,8 +72,12 @@ class HistoryViewModel(
   private val scope = MainScope(dispatcherProvider)
   private val pinMutex = Mutex()
 
-  internal val viewEffects: Flow<HistoryViewEffect>
-    field = MutableSharedFlow<HistoryViewEffect>(extraBufferCapacity = 1)
+  // buffered, so that no snackbar gets lost when two actions follow quickly
+  private val viewEffectChannel = Channel<HistoryViewEffect>(Channel.UNLIMITED)
+  internal val viewEffects: Flow<HistoryViewEffect> = viewEffectChannel.receiveAsFlow()
+
+  // going somewhere leaves the screen, so a second tap must not go back once more
+  private var leaving = false
 
   private val selection = MutableStateFlow(Selection(filter = null, source = null))
 
@@ -151,7 +156,7 @@ class HistoryViewModel(
       is HistoryAction.Pin -> pin(action)
       is HistoryAction.Restore -> scope.launch {
         bookmarkRepo.addBookmark(action.bookmark)
-        viewEffects.tryEmit(HistoryViewEffect.Restored)
+        viewEffectChannel.trySend(HistoryViewEffect.Restored)
       }
       is HistoryAction.ChangeBack -> changeBack(action)
     }
@@ -202,7 +207,7 @@ class HistoryViewModel(
         !exists
       }
       if (pinned) {
-        viewEffects.tryEmit(HistoryViewEffect.Pinned)
+        viewEffectChannel.trySend(HistoryViewEffect.Pinned)
       }
     }
   }
@@ -216,7 +221,7 @@ class HistoryViewModel(
         ListeningEvent.Type.SkipSilenceChanged -> action.value.toBooleanStrictOrNull()?.let { playerController.skipSilence(it) }
         else -> {}
       }
-      viewEffects.tryEmit(HistoryViewEffect.ChangedBack)
+      viewEffectChannel.trySend(HistoryViewEffect.ChangedBack)
     }
   }
 
@@ -225,6 +230,8 @@ class HistoryViewModel(
     time: Long,
     type: ListeningEvent.Type,
   ) {
+    if (leaving) return
+    leaving = true
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
     scope.launch {
       currentBookStore.updateData { bookId }

@@ -18,6 +18,7 @@ import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Bookmark
+import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
@@ -171,6 +172,21 @@ class HistoryViewModelTest {
   }
 
   @Test
+  fun `a double tap on jump back closes the screen once`() {
+    historyRepo.seed(testEvent(Type.Seek, today(9, 55), signal, 1.minutes, to = signal to 8.minutes))
+    test { viewModel ->
+      val jumpBack = assertIs<HistoryAction.JumpBack>(awaitState().entries().single().action)
+      viewModel.onActionClick(jumpBack)
+      viewModel.onActionClick(jumpBack)
+      scope.testScheduler.advanceUntilIdle()
+      verify(exactly = 1) {
+        playerController.setPosition(1.minutes.inWholeMilliseconds, signal.id, Type.JumpBack)
+        navigator.goBack()
+      }
+    }
+  }
+
+  @Test
   fun `going to the last touch records a seek and closes the screen`() {
     test { viewModel ->
       awaitState()
@@ -302,4 +318,10 @@ private class FakeListeningHistoryRepo : ListeningHistoryRepo {
   override suspend fun clear() {
     events.value = emptyList()
   }
+
+  override suspend fun moveToBook(
+    from: List<BookId>,
+    to: BookId,
+    chapters: Map<ChapterId, ChapterId>,
+  ) = error("not needed")
 }
