@@ -19,6 +19,7 @@ import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.ui.CoverTheme
+import voice.core.ui.HoldSplashScreenWhile
 import voice.features.playbackScreen.view.BookPlayView
 import voice.features.sleepTimer.SleepTimerDialog
 import voice.navigation.Destination
@@ -35,7 +36,8 @@ fun BookPlayScreen(bookId: BookId) {
   val snackbarHostState = remember { SnackbarHostState() }
   val dialogState = viewModel.dialogState.value
   val viewState = viewModel.viewState()
-    ?: return
+  HoldSplashScreenWhile(loading = viewState == null)
+  if (viewState == null) return
   val bookmarkAddedMessage = stringResource(StringsR.string.bookmark_added_snackbar)
   val batteryOptimizationMessage = stringResource(StringsR.string.playback_battery_optimization_rationale)
   val batteryOptimizationAction = stringResource(StringsR.string.playback_battery_optimization_action)

@@ -4,7 +4,10 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.Settings
+import android.view.View
+import android.view.ViewTreeObserver
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +16,7 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -38,6 +42,8 @@ import voice.core.logging.api.Logger
 import voice.core.ui.CoverSeedColors
 import voice.core.ui.LocalCoverSeedColors
 import voice.core.ui.LocalSharedTransitionScope
+import voice.core.ui.LocalSplashScreenHolds
+import voice.core.ui.SplashScreenHolds
 import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
 import voice.navigation.Destination
@@ -74,6 +80,9 @@ class MainActivity : AppCompatActivity() {
   @Inject
   private lateinit var coverSeedColors: CoverSeedColors
 
+  private val splashScreenHolds = SplashScreenHolds()
+  private var contentComposed = false
+
   @OptIn(ExperimentalSharedTransitionApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     rootGraphAs<MainActivityGraph>().inject(this)
@@ -96,6 +105,7 @@ class MainActivity : AppCompatActivity() {
         value = true
       }.value
       if (!coverSeedColorsRestored) return@setContent
+      SideEffect { contentComposed = true }
       VoiceTheme(
         themeMode = themeMode,
         themeColorScheme = themeColorScheme,
@@ -108,6 +118,7 @@ class MainActivity : AppCompatActivity() {
           CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
             LocalCoverSeedColors provides coverSeedColors,
+            LocalSplashScreenHolds provides splashScreenHolds,
           ) {
             NavDisplay(
               backStack = backStack,
@@ -185,6 +196,31 @@ class MainActivity : AppCompatActivity() {
         ReviewFeature()
       }
     }
+
+    if (savedInstanceState == null) {
+      keepSplashScreenUntilContentIsReady()
+    }
+  }
+
+  /**
+   * Holds back the first frame, which keeps the splash screen up, until the start screen has its
+   * content (see [SplashScreenHolds]). A timeout makes sure a slow load never traps the user on it.
+   */
+  private fun keepSplashScreenUntilContentIsReady() {
+    val content = findViewById<View>(android.R.id.content)
+    val releaseAt = SystemClock.uptimeMillis() + SPLASH_SCREEN_TIMEOUT_MS
+    content.viewTreeObserver.addOnPreDrawListener(
+      object : ViewTreeObserver.OnPreDrawListener {
+        override fun onPreDraw(): Boolean {
+          val ready = contentComposed && !splashScreenHolds.holding
+          if (ready || SystemClock.uptimeMillis() > releaseAt) {
+            content.viewTreeObserver.removeOnPreDrawListener(this)
+            return true
+          }
+          return false
+        }
+      },
+    )
   }
 
   private fun toBatteryOptimizations() {
@@ -202,6 +238,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   companion object {
+    private const val SPLASH_SCREEN_TIMEOUT_MS = 2000L
 
     const val NI_GO_TO_BOOK = "niGotoBook"
 

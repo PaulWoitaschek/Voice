@@ -13,19 +13,26 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
 import voice.core.strings.R
+import voice.core.ui.HoldSplashScreenWhile
+import voice.core.ui.entrance
+import voice.core.ui.rememberEntranceState
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
@@ -34,6 +41,9 @@ import java.util.Calendar
 /**
  * The library: a greeting, a hero card for the book you are listening to, a carousel of the other
  * books in progress and the rest of the library below, as a list or grid.
+ *
+ * Opening the app keeps the splash screen up until the library is loaded, then the sections float in
+ * one after another. That only happens once, not when coming back from another screen.
  */
 @Composable
 internal fun Library(
@@ -44,6 +54,16 @@ internal fun Library(
   onPermissionBugCardClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
+  var entered by rememberSaveable { mutableStateOf(false) }
+  val loading = viewState == BookOverviewViewState.Loading
+  HoldSplashScreenWhile(loading = loading)
+  if (loading) return
+  val entrance = rememberEntranceState(animate = !entered)
+  LaunchedEffect(Unit) { entered = true }
+  // sections further down join the stagger at the same time, so they don't lag behind when scrolled to
+  var nextEntranceIndex = 0
+  fun entranceIndex() = nextEntranceIndex++.coerceAtMost(MAX_ENTRANCE_INDEX)
+
   val grid = viewState.layoutMode == BookOverviewLayoutMode.Grid
   val columns = if (grid) gridColumnCount() else 1
   val heroId = viewState.currentBookId
@@ -58,17 +78,22 @@ internal fun Library(
     horizontalArrangement = Arrangement.spacedBy(8.dp),
   ) {
     if (viewState.showStoragePermissionBugCard) {
+      val index = entranceIndex()
       item(span = { GridItemSpan(maxLineSpan) }) {
-        PermissionBugCard(onPermissionBugCardClick)
+        PermissionBugCard(onPermissionBugCardClick, Modifier.entrance(entrance, index))
       }
     }
+    val greetingIndex = entranceIndex()
     item(key = "greeting", span = { GridItemSpan(maxLineSpan) }, contentType = "greeting") {
       LibraryGreeting(
         inProgressCount = inProgress.size,
-        modifier = Modifier.padding(top = 16.dp, bottom = 20.dp, start = 4.dp),
+        modifier = Modifier
+          .entrance(entrance, greetingIndex)
+          .padding(top = 16.dp, bottom = 20.dp, start = 4.dp),
       )
     }
     if (hero != null) {
+      val index = entranceIndex()
       item(key = "hero", span = { GridItemSpan(maxLineSpan) }, contentType = "hero") {
         ContinueListeningCard(
           book = hero.value,
@@ -76,22 +101,28 @@ internal fun Library(
           onClick = { onBookClick(hero.value.id) },
           onLongClick = { onBookLongClick(hero.value.id) },
           onPlayClick = onPlayClick,
+          modifier = Modifier.entrance(entrance, index),
         )
       }
     }
     if (inProgressOthers.isNotEmpty()) {
+      val headerIndex = entranceIndex()
       item(key = BookOverviewCategory.CURRENT, span = { GridItemSpan(maxLineSpan) }, contentType = "header") {
         Header(
           category = BookOverviewCategory.CURRENT,
           count = inProgressOthers.size,
-          modifier = Modifier.padding(top = 32.dp, bottom = 12.dp, start = 4.dp),
+          modifier = Modifier
+            .entrance(entrance, headerIndex)
+            .padding(top = 32.dp, bottom = 12.dp, start = 4.dp),
         )
       }
+      val carouselIndex = entranceIndex()
       item(key = "carousel", span = { GridItemSpan(maxLineSpan) }, contentType = "carousel") {
         InProgressCarousel(
           books = inProgressOthers,
           onBookClick = onBookClick,
           onBookLongClick = onBookLongClick,
+          modifier = Modifier.entrance(entrance, carouselIndex),
         )
       }
     }
@@ -99,25 +130,31 @@ internal fun Library(
       val books = viewState.books[category].orEmpty().filterKeys { it != heroId }.toList()
       if (books.isEmpty()) return@forEach
       val finished = category == BookOverviewCategory.FINISHED
+      val headerIndex = entranceIndex()
       item(key = category, span = { GridItemSpan(maxLineSpan) }, contentType = "header") {
         Header(
           category = category,
           count = books.size,
-          modifier = Modifier.padding(top = 32.dp, bottom = 12.dp, start = 4.dp),
+          modifier = Modifier
+            .entrance(entrance, headerIndex)
+            .padding(top = 32.dp, bottom = 12.dp, start = 4.dp),
         )
       }
+      val bookIndexes = books.map { entranceIndex() }
       if (grid) {
-        items(
+        itemsIndexed(
           items = books,
-          key = { (bookId, _) -> bookId.value },
-          contentType = { "gridBook" },
-        ) { (_, book) ->
+          key = { _, (bookId, _) -> bookId.value },
+          contentType = { _, _ -> "gridBook" },
+        ) { index, (_, book) ->
           GridBook(
             book = book.value,
             onBookClick = onBookClick,
             onBookLongClick = onBookLongClick,
             finished = finished,
-            modifier = Modifier.padding(bottom = 8.dp),
+            modifier = Modifier
+              .entrance(entrance, bookIndexes[index])
+              .padding(bottom = 8.dp),
           )
         }
       } else {
@@ -132,7 +169,9 @@ internal fun Library(
             onBookLongClick = onBookLongClick,
             finished = finished,
             shape = segmentedShape(index, books.size),
-            modifier = Modifier.padding(bottom = 2.dp),
+            modifier = Modifier
+              .entrance(entrance, bookIndexes[index])
+              .padding(bottom = 2.dp),
           )
         }
       }
@@ -142,6 +181,8 @@ internal fun Library(
     }
   }
 }
+
+private const val MAX_ENTRANCE_INDEX = 6
 
 @Composable
 private fun LibraryGreeting(

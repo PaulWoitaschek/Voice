@@ -21,6 +21,8 @@ fun rememberCoverThumbnailRequest(cover: String?): ImageRequest {
       .data(cover)
       .size(THUMBNAIL_SIZE_PX)
       .memoryCacheKey(cover?.let(::thumbnailMemoryCacheKey))
+      // only fades when loaded from disk, covers already in memory show right away
+      .crossfade(true)
       .build()
   }
 }

@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -44,7 +45,8 @@ internal fun BookCover(
         .sharedCoverElementModifier(bookId)
         .clip(shape),
       model = rememberCoverThumbnailRequest(cover),
-      placeholder = painterResource(id = UiR.drawable.album_art),
+      // a soft fill the cover fades in on, instead of the dark default art flashing up
+      placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
       error = painterResource(id = UiR.drawable.album_art),
       contentScale = ContentScale.Crop,
       contentDescription = null,

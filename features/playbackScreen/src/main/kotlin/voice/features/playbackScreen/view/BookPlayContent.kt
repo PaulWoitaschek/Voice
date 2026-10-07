@@ -30,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
+import voice.core.ui.entrance
+import voice.core.ui.rememberEntranceState
 import voice.features.playbackScreen.BookPlayViewState
 import kotlin.time.Duration
 

@@ -1,4 +1,4 @@
-package voice.features.playbackScreen.view
+package voice.core.ui
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOutBack
@@ -14,20 +14,22 @@ import androidx.compose.ui.unit.dp
 
 /** Drives a staggered entrance: sections float up one after another when the screen opens. */
 @Stable
-internal class EntranceState {
-  internal val progress = Animatable(0F)
+class EntranceState internal constructor(initialProgress: Float) {
+  internal val progress = Animatable(initialProgress)
 }
 
+/** Plays the entrance once composed. Without [animate], everything shows right away. */
 @Composable
-internal fun rememberEntranceState(): EntranceState {
-  val state = remember { EntranceState() }
+fun rememberEntranceState(animate: Boolean = true): EntranceState {
+  val state = remember { EntranceState(initialProgress = if (animate) 0F else 1F) }
   LaunchedEffect(state) {
     state.progress.animateTo(1F, tween(durationMillis = 900, easing = LinearEasing))
   }
   return state
 }
 
-internal fun Modifier.entrance(
+/** Sections with a higher [index] enter later. */
+fun Modifier.entrance(
   state: EntranceState,
   index: Int,
 ): Modifier = graphicsLayer {

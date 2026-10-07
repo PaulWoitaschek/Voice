@@ -18,6 +18,7 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
@@ -98,17 +99,22 @@ class BookOverviewViewModel(
       .collectAsState(initial = PlayStateManager.PlayState.Paused).value
     val hasStoragePermissionBug = remember { deviceHasStoragePermissionBug.hasBug }
       .collectAsState().value
+    // Everything shown on the first frame stays loading until known, so the library never shows a
+    // half loaded state (e.g. no hero card, or top bar icons that disappear again).
     val books = remember { repo.flow() }
-      .collectAsState(initial = emptyList()).value
-    val currentBookId = remember { currentBookStoreDataStore.data }
+      .collectAsState(initial = null).value
+    val currentBook = remember { currentBookStoreDataStore.data.map(::CurrentBook) }
       .collectAsState(initial = null).value
     val scannerActive = remember { mediaScanner.scannerActive }
       .collectAsState(initial = false).value
     val folderPickerMovedDialogShown = remember { folderPickerMovedDialogShownStore.data }
-      .collectAsState(initial = false).value
+      .collectAsState(initial = null).value
     val gridMode = remember { gridModeStore.data }
       .collectAsState(initial = null).value
-      ?: return BookOverviewViewState.Loading
+    if (books == null || currentBook == null || folderPickerMovedDialogShown == null || gridMode == null) {
+      return BookOverviewViewState.Loading
+    }
+    val currentBookId = currentBook.id
 
     val noBooks = !scannerActive && books.isEmpty()
 
@@ -328,3 +334,6 @@ private fun Book.itemViewState(
     }
   }
 }
+
+/** Distinguishes "no current book" from "not loaded yet". */
+private data class CurrentBook(val id: BookId?)
