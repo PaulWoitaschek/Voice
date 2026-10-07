@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.os.PowerManager
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -17,8 +18,9 @@ import voice.core.common.MainScope
 import voice.core.playback.notification.MainActivityIntentProvider
 import java.time.Clock
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface AndroidModule {
+object AndroidModule {
 
   @Provides
   fun provideContext(app: Application): Context = app

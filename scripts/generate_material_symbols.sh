@@ -57,14 +57,14 @@ generate_icon auto_awesome AutoAwesome
 generate_icon bedtime Bedtime
 generate_icon bedtime_off BedtimeOff
 generate_icon book Book
+generate_icon bookmark_add BookmarkAdd
 generate_icon bug_report BugReport
 generate_icon check Check
-generate_icon chevron_left ChevronLeft
-generate_icon chevron_right ChevronRight
 generate_icon close Close
 generate_icon coffee Coffee
 generate_icon collections_bookmark CollectionsBookmark
 generate_icon construction Construction
+generate_icon content_cut ContentCut
 generate_icon delete Delete
 generate_icon done Done
 generate_icon download Download
@@ -77,6 +77,7 @@ generate_icon help Help
 generate_icon history History
 generate_icon hourglass_empty HourglassEmpty
 generate_icon image Image
+generate_icon keyboard_arrow_down KeyboardArrowDown
 generate_icon language Language
 generate_icon laptop_mac Laptop
 generate_icon library_books LibraryBooks
@@ -84,17 +85,21 @@ generate_icon lightbulb Lightbulb
 generate_icon lock_open LockOpen
 generate_icon more_vert MoreVert
 generate_icon not_started NotStarted
+generate_icon pause Pause
 generate_icon person Person
+generate_icon play_arrow PlayArrow
 generate_icon remove Remove
 generate_icon search Search
 generate_icon sentiment_satisfied SentimentSatisfied
 generate_icon settings Settings
+generate_icon skip_next SkipNext
+generate_icon skip_previous SkipPrevious
 generate_icon speed Speed
 generate_icon tag Tag
 generate_icon timelapse Timelapse
 generate_icon timer Timer
 generate_icon title Title
-generate_icon undo Undo
 generate_icon view_list ViewList
+generate_icon volume_up VolumeUp
 
 printf '}\n' >> "${OUT_DIR}/VoiceIcons.kt"

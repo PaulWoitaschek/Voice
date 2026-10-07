@@ -6,11 +6,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberSliderState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import kotlin.math.roundToInt
@@ -26,7 +23,10 @@ fun TimeSettingDialog(
   onSecondsConfirm: (Int) -> Unit,
   onDismiss: () -> Unit,
 ) {
-  var sliderValue by remember { mutableFloatStateOf(currentSeconds.toFloat()) }
+  val sliderState = rememberSliderState(
+    value = currentSeconds.toFloat(),
+    trackRange = minSeconds.toFloat()..maxSeconds.toFloat(),
+  )
   AlertDialog(
     onDismissRequest = onDismiss,
     title = {
@@ -37,15 +37,14 @@ fun TimeSettingDialog(
         Text(
           LocalResources.current.getQuantityString(
             textPluralRes,
-            sliderValue.roundToInt(),
-            sliderValue.roundToInt(),
+            sliderState.value.roundToInt(),
+            sliderState.value.roundToInt(),
           ),
         )
         Slider(
-          valueRange = minSeconds.toFloat()..maxSeconds.toFloat(),
-          value = sliderValue,
+          state = sliderState,
           onValueChange = {
-            sliderValue = it
+            sliderState.value = it
           },
         )
       }
@@ -53,7 +52,7 @@ fun TimeSettingDialog(
     confirmButton = {
       TextButton(
         onClick = {
-          onSecondsConfirm(sliderValue.roundToInt())
+          onSecondsConfirm(sliderState.value.roundToInt())
           onDismiss()
         },
       ) {

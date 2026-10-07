@@ -20,7 +20,6 @@
     <string name="common.action.close">Sluit</string>
     <string name="common.action.delete">Skrap</string>
     <string name="common.action.edit">Wysig</string>
-    <string name="common.action.more">Meer</string>
     <string name="common.action.remove">Verwyder</string>
     <string name="common.dialog.cancel">Kanselleer</string>
     <string name="common.dialog.confirm">Stel</string>
@@ -59,10 +58,19 @@
     <string name="library.category.completed.title">Voltooi</string>
     <string name="library.category.current.title">Huidig</string>
     <string name="library.category.not_started.title">Nog nie begin nie</string>
+    <string name="library.continue_listening">Luister verder</string>
     <string name="library.empty.add_first_book">Kom ons voeg jou audioboek gids sodat jy kan begin luister!</string>
     <string name="library.folders.title">Klankboekgids</string>
     <string name="library.folders.moved.dialog.title">Oudioboekvouers geskuif</string>
     <string name="library.folders.moved.dialog.message">Jy kan nou oudioboekvouers in Voorkeure bestuur.</string>
+    <string name="library.greeting.afternoon">Goeiemiddag</string>
+    <string name="library.greeting.evening">Goeienaand</string>
+    <string name="library.greeting.morning">Goeiemôre</string>
+    <string name="library.greeting.night">Hallo, naguil</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d boek aan die gang</item>
+        <item quantity="other">%d boeke aan die gang</item>
+    </plurals>
     <string name="library.search.hint">Waarna is jy opsoek?</string>
     <string name="library.storage_permission_bug.action">Gee toestemming</string>
     <string name="library.storage_permission_bug.message">Vir sekere toestelle ontbreek die nodige toestemming vir ’n stelseltoep om toegang tot die eksterne berging te kry. Hierdie toegang is noodsaaklik sodat Voice jou luisterboeke kan lees.</string>
@@ -89,12 +97,20 @@
     <string name="playback.action.rewind">Terugdraai</string>
     <string name="playback.battery_optimization.action">Opdateer</string>
     <string name="playback.battery_optimization.rationale">As geval van energiebeperkinge kan daar onderbrekings ervaar word.</string>
+    <string name="playback.book_progress.read">%1$s van die boek</string>
+    <string name="playback.book_progress.remaining">%1$s oor</string>
+    <string name="playback.book_progress.remaining_at_speed">%1$s oor teen %2$s</string>
+    <string name="playback.chapter.counter">Hoofstuk %1$d van %2$d</string>
     <string name="playback.chapter.current.content_description">Huidige hoofstuk</string>
     <string name="playback.chapter.next">Volgende snit</string>
     <string name="playback.chapter.previous">Vorige snit</string>
+    <string name="playback.chapters.title">Hoofstukke</string>
     <string name="playback.option.skip_silence">Skip Stilte</string>
     <string name="playback.option.volume_boost">Volumeverhooging</string>
+    <string name="playback.speed.decrease">Stadiger</string>
+    <string name="playback.speed.increase">Vinniger</string>
     <string name="playback.speed.title">Terugspeel spoed</string>
+    <string name="playback.volume_boost.off">Af</string>
     <string name="review.feedback.action.cancel">Kanselleer</string>
     <string name="review.feedback.action.send">Stuur terugvoer</string>
     <string name="review.feedback.message">Kan jy vir ons sê wat verkeerd gegaan het? Ons waardeer jou terugvoer, dit help ons om jou ervaring te verbeter.</string>
@@ -142,6 +158,8 @@
     <string name="sleep_timer.action.open">Slaap-Timer</string>
     <string name="sleep_timer.dialog.action.decrement">Korter</string>
     <string name="sleep_timer.dialog.action.increment">Langer</string>
-    <string name="sleep_timer.dialog.title">Lekker slaap! 🌙</string>
+    <string name="sleep_timer.dialog.minutes_short">min</string>
+    <string name="sleep_timer.dialog.shake_hint">Skud jou foon dadelik nadat die timer afgeloop het om dit weer te begin.</string>
+    <string name="sleep_timer.dialog.title">Slaap-Timer</string>
     <string name="sleep_timer.end_of_chapter">Einde van Hoofstuk</string>
 </resources>

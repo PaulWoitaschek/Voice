@@ -9,6 +9,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
@@ -21,8 +22,9 @@ import voice.features.cover.api.SearchResponse
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface SelectCoverFromInternetProvider {
+object SelectCoverFromInternetProvider {
 
   @Provides
   @IntoSet

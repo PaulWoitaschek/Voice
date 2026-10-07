@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Feature Request
+    url: https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas
+    about: Suggest a feature or change. Please don't open a pull request for a feature until the maintainer has approved it.
   - name: Discussion
     url: https://github.com/PaulWoitaschek/Voice/discussions
-    about: Please use the discussions for feature ideas, upvotes and general ideas.
+    about: Questions, upvotes and general ideas.

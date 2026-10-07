@@ -28,6 +28,7 @@ import coil.compose.AsyncImage
 import coil.imageLoader
 import coil.request.ImageRequest
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
@@ -45,8 +46,9 @@ interface EditCoverComponent {
   val coverSaver: CoverSaver
 }
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-interface EditCoverDialogProvider {
+object EditCoverDialogProvider {
 
   @Provides
   @IntoSet

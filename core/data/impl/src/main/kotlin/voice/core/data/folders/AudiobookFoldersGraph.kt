@@ -3,6 +3,7 @@ package voice.core.data.folders
 import android.net.Uri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
@@ -10,8 +11,9 @@ import kotlinx.serialization.builtins.SetSerializer
 import voice.core.common.serialization.UriSerializer
 import voice.core.data.store.VoiceDataStoreFactory
 
+@BindingContainer
 @ContributesTo(AppScope::class)
-public interface AudiobookFoldersGraph {
+public object AudiobookFoldersGraph {
 
   @Provides
   @SingleIn(AppScope::class)

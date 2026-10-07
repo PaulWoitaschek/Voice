@@ -20,7 +20,6 @@
     <string name="common.action.close">关闭</string>
     <string name="common.action.delete">删除</string>
     <string name="common.action.edit">编辑</string>
-    <string name="common.action.more">更多</string>
     <string name="common.action.remove">删除</string>
     <string name="common.dialog.cancel">取消</string>
     <string name="common.dialog.confirm">设置</string>
@@ -86,4 +85,6 @@
     <string name="settings.support.suggest_idea.title">提出建议</string>
     <string name="shortcut.play_current.short_label">播放当前有声书</string>
     <string name="sleep_timer.action.open">睡眠定时器</string>
+    <string name="sleep_timer.dialog.shake_hint">定时器结束后立即摇一摇手机，即可重新开始计时。</string>
+    <string name="sleep_timer.dialog.title">睡眠定时器</string>
 </resources>

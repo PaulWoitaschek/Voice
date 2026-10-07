@@ -20,7 +20,6 @@
     <string name="common.action.close">Κλείσιμο</string>
     <string name="common.action.delete">Διαγραφή</string>
     <string name="common.action.edit">Επεξεργασία</string>
-    <string name="common.action.more">Περισσότερα</string>
     <string name="common.action.remove">Αφαίρεση</string>
     <string name="common.dialog.cancel">Ακύρωση</string>
     <string name="common.dialog.confirm">Ορισμός</string>
@@ -72,4 +71,6 @@
     <string name="settings.support.suggest_idea.title">Προτείνετε μια ιδέα</string>
     <string name="shortcut.play_current.short_label">Αναπαραγωγή τρέχοντος</string>
     <string name="sleep_timer.action.open">Χρονοδιακόπτης ύπνου</string>
+    <string name="sleep_timer.dialog.shake_hint">Κουνήστε το τηλέφωνό σας αμέσως μόλις λήξει ο χρονοδιακόπτης για να τον ξεκινήσετε ξανά.</string>
+    <string name="sleep_timer.dialog.title">Χρονοδιακόπτης ύπνου</string>
 </resources>

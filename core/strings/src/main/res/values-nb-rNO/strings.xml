@@ -20,7 +20,6 @@
     <string name="common.action.close">Lukk</string>
     <string name="common.action.delete">Slett</string>
     <string name="common.action.edit">Rediger</string>
-    <string name="common.action.more">Mer</string>
     <string name="common.action.remove">Fjern</string>
     <string name="common.dialog.cancel">Avbryt</string>
     <string name="common.dialog.confirm">Sett</string>
@@ -59,10 +58,19 @@
     <string name="library.category.completed.title">Fullført</string>
     <string name="library.category.current.title">Nåværende</string>
     <string name="library.category.not_started.title">Ikke startet enda</string>
+    <string name="library.continue_listening">Fortsett å lytte</string>
     <string name="library.empty.add_first_book">Legg til lydbokmappen din så du kan begynne å lytte!</string>
     <string name="library.folders.title">Lydbokmapper</string>
     <string name="library.folders.moved.dialog.title">Lydbokmapper flyttet</string>
     <string name="library.folders.moved.dialog.message">Du kan nå administrere lydbokmapper i Innstillinger.</string>
+    <string name="library.greeting.afternoon">God ettermiddag</string>
+    <string name="library.greeting.evening">God kveld</string>
+    <string name="library.greeting.morning">God morgen</string>
+    <string name="library.greeting.night">Hei, nattugle</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d påbegynt bok</item>
+        <item quantity="other">%d påbegynte bøker</item>
+    </plurals>
     <string name="library.search.hint">Hva leter du etter?</string>
     <string name="library.storage_permission_bug.action">Innvilg tillatelse</string>
     <string name="library.storage_permission_bug.message">På enkelte enheter mangler en systemapp den nødvendige tillatelsen for å få tilgang til det eksterne lagringsmediet. Denne tilgangen er avgjørende for at Voice skal kunne lese lydbøkene dine.</string>
@@ -89,12 +97,20 @@
     <string name="playback.action.rewind">Spol tilbake</string>
     <string name="playback.battery_optimization.action">Gjenoppfrisk</string>
     <string name="playback.battery_optimization.rationale">På grunn av strømsparingsinnstillinger kan det forekomme avbrudd i avspillingen.</string>
+    <string name="playback.book_progress.read">%1$s av boken</string>
+    <string name="playback.book_progress.remaining">%1$s igjen</string>
+    <string name="playback.book_progress.remaining_at_speed">%1$s igjen ved %2$s</string>
+    <string name="playback.chapter.counter">Kapittel %1$d av %2$d</string>
     <string name="playback.chapter.current.content_description">Gjeldende kapittel</string>
     <string name="playback.chapter.next">Neste spor</string>
     <string name="playback.chapter.previous">Forrige spor</string>
+    <string name="playback.chapters.title">Kapitler</string>
     <string name="playback.option.skip_silence">Hopp over stillhet</string>
     <string name="playback.option.volume_boost">Lydstyrkeforsterkning</string>
+    <string name="playback.speed.decrease">Saktere</string>
+    <string name="playback.speed.increase">Raskere</string>
     <string name="playback.speed.title">Avspillingshastighet</string>
+    <string name="playback.volume_boost.off">Av</string>
     <string name="review.feedback.action.cancel">Avbryt</string>
     <string name="review.feedback.action.send">Send tilbakemelding</string>
     <string name="review.feedback.message">Kan du fortelle oss hva som gikk galt? Vi setter pris på tilbakemeldingen din, og det hjelper oss med å forbedre opplevelsen din.</string>
@@ -142,6 +158,8 @@
     <string name="sleep_timer.action.open">Innsovningstidsur</string>
     <string name="sleep_timer.dialog.action.decrement">Kortere</string>
     <string name="sleep_timer.dialog.action.increment">Lengre</string>
-    <string name="sleep_timer.dialog.title">Sov godt! 🌙</string>
+    <string name="sleep_timer.dialog.minutes_short">min</string>
+    <string name="sleep_timer.dialog.shake_hint">Rist telefonen rett etter at tidsuret er ferdig for å starte det på nytt.</string>
+    <string name="sleep_timer.dialog.title">Innsovningstidsur</string>
     <string name="sleep_timer.end_of_chapter">Kapittelslutt</string>
 </resources>

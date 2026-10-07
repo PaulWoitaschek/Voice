@@ -26,6 +26,7 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
@@ -50,6 +51,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @AssistedInject
 class BookPlayViewModel(
@@ -67,6 +69,8 @@ class BookPlayViewModel(
   dispatcherProvider: DispatcherProvider,
   @SleepTimerPreferenceStore
   private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
+  @SeekTimeStore
+  private val seekTimeStore: DataStore<Int>,
   @ExperimentalPlaybackPersistenceQualifier
   private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
   @KioskModeFeatureFlagQualifier
@@ -126,17 +130,30 @@ class BookPlayViewModel(
     }
 
     val sleepTime = remember { sleepTimer.state }.collectAsState().value
-    val hasMoreThanOneChapter = book.chapters.sumOf { it.chapterMarks.count() } > 1
+    val skipSeconds = remember { seekTimeStore.data }.collectAsState(initial = null).value ?: DEFAULT_SKIP_SECONDS
+    val chapterCount = book.chapters.sumOf { it.chapterMarks.count() }
+    val hasMoreThanOneChapter = chapterCount > 1
+    val chapterNumber = book.chapters.take(book.content.currentChapterIndex).sumOf { it.chapterMarks.count() } +
+      book.currentChapter.chapterMarks.indexOf(currentMark) + 1
     return BookPlayViewState(
       sleepTimerState = sleepTime.toViewState(),
       playing = isPlaying,
       title = book.content.name,
+      author = book.content.author,
       showPreviousNextButtons = hasMoreThanOneChapter,
       chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
       duration = currentMark.durationMs.milliseconds,
       playedTime = positionInCurrentMark.milliseconds,
       cover = book.content.coverUrl,
       skipSilence = book.content.skipSilence,
+      playbackSpeed = book.content.playbackSpeed,
+      volumeBoostActive = book.content.gain > 0F,
+      chapterNumber = chapterNumber.coerceAtLeast(1),
+      chapterCount = chapterCount,
+      bookPlayedTime = book.position.coerceIn(0L, book.duration).milliseconds,
+      bookDuration = book.duration.milliseconds,
+      chapterSegments = book.chapterSegments(),
+      skipSeconds = skipSeconds,
     )
   }
 
@@ -147,12 +164,21 @@ class BookPlayViewModel(
       sleepTimerState = BookPlayViewState.SleepTimerViewState.Disabled,
       playing = true,
       title = currentlyPlaying.title,
+      author = currentlyPlaying.author,
       showPreviousNextButtons = true,
       chapterName = currentlyPlaying.chapter,
       duration = 14.hours + 27.minutes,
       playedTime = 10.hours + 24.minutes,
       cover = book.coverUrl,
       skipSilence = false,
+      playbackSpeed = 1F,
+      volumeBoostActive = false,
+      chapterNumber = 12,
+      chapterCount = 24,
+      bookPlayedTime = 10.hours + 24.minutes + 18.seconds,
+      bookDuration = 14.hours + 27.minutes + 33.seconds,
+      chapterSegments = List(24) { 1F / 24 },
+      skipSeconds = DEFAULT_SKIP_SECONDS,
     )
   }
 
@@ -374,6 +400,15 @@ class BookPlayViewModel(
   @AssistedFactory
   interface Factory {
     fun create(bookId: BookId): BookPlayViewModel
+  }
+}
+
+private const val DEFAULT_SKIP_SECONDS = 20
+
+private fun Book.chapterSegments(): List<Float> {
+  if (duration <= 0L) return emptyList()
+  return chapters.flatMap { chapter ->
+    chapter.chapterMarks.map { mark -> mark.durationMs.toFloat() / duration }
   }
 }
 

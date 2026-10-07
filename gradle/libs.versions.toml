@@ -10,12 +10,12 @@ kotlin = "2.4.20"
 media3 = "1.10.1"
 jvm-bytecode = "17"
 jvm-toolchain = "25"
-agp = "9.4.0"
+agp = "9.4.1"
 ktlint-core = "1.8.0"
 ktlint-gradlePlugin = "0.14.0"
 retrofit = "3.0.0"
-metro = "1.4.2"
-navigation3 = "1.1.7"
+metro = "1.4.5"
+navigation3 = "1.2.0"
 androidx-lifecycle = "2.11.0"
 
 [libraries]
@@ -31,7 +31,7 @@ retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-se
 robolectric = "org.robolectric:robolectric:4.17"
 coil = "io.coil-kt:coil-compose:2.7.0"
 appCompat = "androidx.appcompat:appcompat:1.8.0"
-androidxCore = "androidx.core:core-ktx:1.19.0"
+androidxCore = "androidx.core:core-ktx:1.19.1"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-powerAssert = { module = "org.jetbrains.kotlin:kotlin-power-assert", version.ref = "kotlin" }
 kotlin-powerAssert-runtime = { module = "org.jetbrains.kotlin:kotlin-power-assert-runtime", version.ref = "kotlin" }
@@ -47,7 +47,7 @@ review = "com.google.android.play:review-ktx:2.0.1"
 lottie = "com.airbnb.android:lottie-compose:6.7.1"
 clikt = "com.github.ajalt.clikt:clikt:5.1.0"
 jebml = "org.jitsi:jebml:2.4.4-6-gb310849"
-slf4j-noop = "org.slf4j:slf4j-nop:2.0.19"
+slf4j-noop = "org.slf4j:slf4j-nop:2.0.20"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
@@ -92,7 +92,7 @@ compose-ui-testJunit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-testManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
 compose-animation-animation = { module = "androidx.compose.animation:animation" }
-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha27" }
+compose-material3 = { module = "androidx.compose.material3:material3", version = "1.5.0-alpha29" }
 compose-activity = "androidx.activity:activity-compose:1.13.0"
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
@@ -102,7 +102,7 @@ metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" 
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ktlint-compose = "io.nlopez.compose.rules:ktlint:0.6.6"
+ktlint-compose = "io.nlopez.compose.rules:ktlint:0.6.7"
 
 [bundles]
 compose = [
@@ -144,6 +144,6 @@ googleServices = { id = "com.google.gms.google-services", version = "4.5.0" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.11" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.12" }
 ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }

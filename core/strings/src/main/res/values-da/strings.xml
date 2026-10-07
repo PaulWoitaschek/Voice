@@ -20,7 +20,6 @@
     <string name="common.action.close">Luk</string>
     <string name="common.action.delete">Slet</string>
     <string name="common.action.edit">Rediger</string>
-    <string name="common.action.more">Mere</string>
     <string name="common.action.remove">Fjern</string>
     <string name="common.dialog.cancel">Annuller</string>
     <string name="common.dialog.confirm">Angiv</string>
@@ -107,5 +106,6 @@
     <string name="sleep_timer.action.open">Sleep-Timer</string>
     <string name="sleep_timer.dialog.action.decrement">Kortere</string>
     <string name="sleep_timer.dialog.action.increment">Længre</string>
-    <string name="sleep_timer.dialog.title">Sov godt! 🌙</string>
+    <string name="sleep_timer.dialog.shake_hint">Ryst telefonen lige efter, at timeren er udløbet, for at starte den igen.</string>
+    <string name="sleep_timer.dialog.title">Sleep-Timer</string>
 </resources>
