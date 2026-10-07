@@ -268,7 +268,6 @@
     <string name="settings.auto_sleep_timer.summary">Den Einschlaf-Timer automatisch starten, wenn die Wiedergabe zwischen %1$s und %2$s Uhr beginnt</string>
     <string name="settings.auto_sleep_timer.title">Automatischer Einschlaf-Timer</string>
     <string name="settings.library.folders.summary">Ordner verwalten, die nach Hörbüchern durchsucht werden sollen</string>
-    <string name="settings.library.use_grid.title">Raster-Layout verwenden</string>
     <string name="settings.listening_history.clear">Hörverlauf löschen</string>
     <string name="settings.listening_history.clear.confirm">Löschen</string>
     <string name="settings.listening_history.clear.message">Dadurch werden die gespeicherten Wiedergaben, Pausen und Sprünge aller Bücher entfernt. Lesezeichen bleiben erhalten.</string>
@@ -276,8 +275,16 @@
     <string name="settings.listening_history.cleared">Hörverlauf gelöscht</string>
     <string name="settings.listening_history.summary">Speichert Wiedergaben, Pausen und Sprünge auf diesem Gerät, damit Du Versehen rückgängig machen kannst</string>
     <string name="settings.listening_history.title">Hörverlauf</string>
+    <string name="settings.library.layout.grid">Raster</string>
+    <string name="settings.library.layout.list">Liste</string>
+    <string name="settings.library.title">Bibliothek</string>
+    <string name="settings.listening.title">Wiedergabe</string>
+    <string name="settings.playback.auto_rewind.off">Aus</string>
+    <string name="settings.playback.auto_rewind.summary">Springt beim Fortsetzen ein Stück zurück, damit Du den Faden nicht verlierst</string>
     <string name="settings.playback.auto_rewind.title">Automatisch zurückspulen</string>
+    <string name="settings.playback.seek_time.summary">Wie weit Zurück- und Vorspulen springen</string>
     <string name="settings.playback.seek_time.title">Vor- und zurückspulen</string>
+    <string name="settings.subtitle">Mach Voice zu Deinem</string>
     <string name="settings.support.faq.title">Häufige Fragen</string>
     <string name="settings.support.get_support.title">Hilfe erhalten</string>
     <string name="settings.support.help_translating.title">Bei der Übersetzung von Voice helfen</string>
@@ -285,6 +292,7 @@
     <string name="settings.support.suggest_idea.title">Eine Idee vorschlagen</string>
     <string name="settings.support.support_voice.summary">Spenden helfen, Voice zu pflegen</string>
     <string name="settings.support.support_voice.title">Entwicklung unterstützen</string>
+    <string name="settings.support.title">Hilfe und Feedback</string>
     <string name="support.action.donate_kofi">Auf Ko-fi spenden</string>
     <string name="support.description.maintenance">Voice ist kostenlos, quelloffen und wird von einem Entwickler betreut.</string>
     <string name="support.description.maintenance_subtitle">Spenden helfen, laufende Wartung und Entwicklung zu finanzieren.</string>

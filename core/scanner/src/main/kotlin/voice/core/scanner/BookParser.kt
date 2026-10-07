@@ -25,12 +25,23 @@ internal class BookParser(
     file: CachedDocumentFile,
     firstChapterMetadata: Metadata?,
   ): BookContent {
-    val id = BookId(file.uri)
-    return contentRepo.getOrPut(id) {
-      val analyzed = firstChapterMetadata
-        ?: mediaAnalyzer.analyze(fileFactory.create(chapters.first().id.toUri()))
-      parse(chapters, id, analyzed, file)
+    return contentRepo.getOrPut(BookId(file.uri)) {
+      parse(chapters, file, firstChapterMetadata)
     }
+  }
+
+  /**
+   * The book the [chapters] make up, without storing it. Unless the [firstChapterMetadata] is passed,
+   * the first chapter is analyzed for it.
+   */
+  suspend fun parse(
+    chapters: List<Chapter>,
+    file: CachedDocumentFile,
+    firstChapterMetadata: Metadata?,
+  ): BookContent {
+    val analyzed = firstChapterMetadata
+      ?: mediaAnalyzer.analyze(fileFactory.create(chapters.first().id.toUri()))
+    return parse(chapters, BookId(file.uri), analyzed, file)
   }
 
   fun parse(

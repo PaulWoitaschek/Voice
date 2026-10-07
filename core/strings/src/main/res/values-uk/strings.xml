@@ -286,7 +286,6 @@
     <string name="settings.auto_sleep_timer.summary">Автоматично запустити таймер сну, коли програш починається між %1$s та %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматичний таймер сну</string>
     <string name="settings.library.folders.summary">Налаштування папок, які скануються для пошуку аудіокних</string>
-    <string name="settings.library.use_grid.title">Сіточний макет</string>
     <string name="settings.listening_history.clear">Очистити історію прослуховування</string>
     <string name="settings.listening_history.clear.confirm">Очистити</string>
     <string name="settings.listening_history.clear.message">Записані відтворення, паузи й переходи всіх книг буде видалено. Закладки залишаться.</string>
@@ -294,8 +293,16 @@
     <string name="settings.listening_history.cleared">Історію прослуховування очищено</string>
     <string name="settings.listening_history.summary">Зберігає відтворення, паузи й переходи на цьому пристрої, щоб ви могли скасувати випадкові дії</string>
     <string name="settings.listening_history.title">Історія прослуховування</string>
+    <string name="settings.library.layout.grid">Сітка</string>
+    <string name="settings.library.layout.list">Список</string>
+    <string name="settings.library.title">Бібліотека</string>
+    <string name="settings.listening.title">Прослуховування</string>
+    <string name="settings.playback.auto_rewind.off">Вимкнено</string>
+    <string name="settings.playback.auto_rewind.summary">Під час відновлення трохи відмотує назад, щоб ви не втратили нитку</string>
     <string name="settings.playback.auto_rewind.title">Інтервал автовідмотування</string>
+    <string name="settings.playback.seek_time.summary">Наскільки далеко перемотують кнопки назад і вперед</string>
     <string name="settings.playback.seek_time.title">Інтервал перемотування</string>
+    <string name="settings.subtitle">Зробіть Voice своїм</string>
     <string name="settings.support.faq.title">ЧаПи</string>
     <string name="settings.support.get_support.title">Підтримка</string>
     <string name="settings.support.help_translating.title">Допомога в перекладі Voice</string>
@@ -303,6 +310,7 @@
     <string name="settings.support.suggest_idea.title">Пропозиції</string>
     <string name="settings.support.support_voice.summary">Донати допомагають підтримувати Voice</string>
     <string name="settings.support.support_voice.title">Підтримати розробку</string>
+    <string name="settings.support.title">Довідка та відгуки</string>
     <string name="support.action.donate_kofi">Задонатити на Ko-fi</string>
     <string name="support.description.maintenance">Voice безкоштовний, з відкритим кодом і підтримується одним розробником.</string>
     <string name="support.description.maintenance_subtitle">Донати допомагають фінансувати постійну підтримку та розробку.</string>

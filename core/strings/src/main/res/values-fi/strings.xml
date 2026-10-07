@@ -268,7 +268,6 @@
     <string name="settings.auto_sleep_timer.summary">Aloita uniajastin automaattisesti, kun toisto alkaa välillä %1$s ja %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automaattinen uniajastin</string>
     <string name="settings.library.folders.summary">Hallitse kansioita, joista etsitään äänikirjoja</string>
-    <string name="settings.library.use_grid.title">Käytä ruudukkoasettelua</string>
     <string name="settings.listening_history.clear">Tyhjennä kuunteluhistoria</string>
     <string name="settings.listening_history.clear.confirm">Tyhjennä</string>
     <string name="settings.listening_history.clear.message">Tämä poistaa kaikkien kirjojen tallennetut toistot, tauot ja siirtymät. Kirjanmerkit säilyvät.</string>
@@ -276,8 +275,16 @@
     <string name="settings.listening_history.cleared">Kuunteluhistoria tyhjennetty</string>
     <string name="settings.listening_history.summary">Säilyttää toistot, tauot ja siirtymät tällä laitteella, jotta voit kumota vahingot</string>
     <string name="settings.listening_history.title">Kuunteluhistoria</string>
+    <string name="settings.library.layout.grid">Ruudukko</string>
+    <string name="settings.library.layout.list">Luettelo</string>
+    <string name="settings.library.title">Kirjasto</string>
+    <string name="settings.listening.title">Kuuntelu</string>
+    <string name="settings.playback.auto_rewind.off">Pois</string>
+    <string name="settings.playback.auto_rewind.summary">Kelaa jatkettaessa hieman taaksepäin, jotta et putoa kärryiltä</string>
     <string name="settings.playback.auto_rewind.title">Automaattinen takaisinkelaus</string>
+    <string name="settings.playback.seek_time.summary">Kuinka pitkälle taakse- ja eteenpäinkelaus hyppäävät</string>
     <string name="settings.playback.seek_time.title">Siirtymän pituus</string>
+    <string name="settings.subtitle">Tee Voicesta omasi</string>
     <string name="settings.support.faq.title">UKK</string>
     <string name="settings.support.get_support.title">Hanki apua</string>
     <string name="settings.support.help_translating.title">Auta kääntämään Voicea</string>
@@ -285,6 +292,7 @@
     <string name="settings.support.suggest_idea.title">Ehdota ideaa</string>
     <string name="settings.support.support_voice.summary">Lahjoitukset auttavat Voicen ylläpidossa</string>
     <string name="settings.support.support_voice.title">Tue kehitystä</string>
+    <string name="settings.support.title">Ohjeet ja palaute</string>
     <string name="support.action.donate_kofi">Lahjoita Ko-fissa</string>
     <string name="support.description.maintenance">Voice on ilmainen avoimen lähdekoodin sovellus, jota ylläpitää yksi kehittäjä.</string>
     <string name="support.description.maintenance_subtitle">Lahjoitukset auttavat rahoittamaan jatkuvaa ylläpitoa ja kehitystä.</string>

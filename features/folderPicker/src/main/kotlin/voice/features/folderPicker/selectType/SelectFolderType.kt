@@ -2,6 +2,9 @@
 
 package voice.features.folderPicker.selectType
 
+import android.icu.text.MeasureFormat
+import android.icu.util.Measure
+import android.icu.util.MeasureUnit
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +40,7 @@ import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -44,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -69,6 +74,9 @@ import voice.core.ui.rememberAnimationClock
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.Origin
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
@@ -270,7 +278,11 @@ private fun BookRow(
       modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
-      BookInitial(name = book.name, index = index)
+      if (book.analyzing) {
+        LoadingIndicator(Modifier.size(44.dp))
+      } else {
+        BookInitial(name = book.name, index = index)
+      }
       Spacer(Modifier.size(16.dp))
       Column(Modifier.weight(1F)) {
         Text(
@@ -283,7 +295,7 @@ private fun BookRow(
           text = book.details(),
           style = MaterialTheme.typography.bodyMedium,
           color = MaterialTheme.colorScheme.onSurfaceVariant,
-          maxLines = 1,
+          maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
       }
@@ -305,9 +317,26 @@ private fun BookRow(
 private fun SelectFolderTypeViewState.Book.details(): String {
   return listOfNotNull(
     author,
+    duration?.let { formatDuration(it) },
     pluralStringResource(StringsR.plurals.folder_type_file_count, fileCount, fileCount),
     if (partCount > 1) pluralStringResource(StringsR.plurals.folder_review_folder_count, partCount, partCount) else null,
   ).joinToString(separator = " · ")
+}
+
+// "21 hr, 2 min" in the user's language, without own translations
+@Composable
+private fun formatDuration(duration: Duration): String {
+  val locale = LocalConfiguration.current.locales[0]
+  val format = remember(locale) { MeasureFormat.getInstance(locale, MeasureFormat.FormatWidth.SHORT) }
+  val hours = duration.inWholeHours
+  val minutes = duration.inWholeMinutes % 60
+  val measures = when {
+    hours > 0 && minutes > 0 -> listOf(Measure(hours, MeasureUnit.HOUR), Measure(minutes, MeasureUnit.MINUTE))
+    hours > 0 -> listOf(Measure(hours, MeasureUnit.HOUR))
+    minutes > 0 -> listOf(Measure(minutes, MeasureUnit.MINUTE))
+    else -> listOf(Measure(duration.inWholeSeconds, MeasureUnit.SECOND))
+  }
+  return format.formatMeasures(*measures.toTypedArray())
 }
 
 private val initialShapes = listOf(
@@ -413,8 +442,22 @@ private fun ReviewActions(
 @Composable
 private fun SelectFolderTypePreview() {
   val books = listOf(
-    SelectFolderTypeViewState.Book("Dune", author = null, fileCount = 24, partCount = 0, possibleBookCount = 0),
-    SelectFolderTypeViewState.Book("Hyperion", author = null, fileCount = 31, partCount = 2, possibleBookCount = 0),
+    SelectFolderTypeViewState.Book(
+      name = "Dune",
+      author = "Frank Herbert",
+      fileCount = 24,
+      partCount = 0,
+      possibleBookCount = 0,
+      duration = 21.hours + 2.minutes,
+    ),
+    SelectFolderTypeViewState.Book(
+      name = "Hyperion",
+      author = null,
+      fileCount = 31,
+      partCount = 2,
+      possibleBookCount = 0,
+      analyzing = true,
+    ),
     SelectFolderTypeViewState.Book("Discworld", author = null, fileCount = 312, partCount = 0, possibleBookCount = 41),
   )
   VoiceTheme {

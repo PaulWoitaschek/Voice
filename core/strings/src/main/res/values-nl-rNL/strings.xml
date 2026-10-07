@@ -185,7 +185,7 @@
     <string name="library.empty.add_first_book">Laten we je luisterboekmap toevoegen om te beginnen met luisteren!</string>
     <string name="library.folders.title">Luisterboekmappen</string>
     <string name="library.folders.moved.dialog.title">Audioboekmappen verplaatst</string>
-    <string name="library.folders.moved.dialog.message">Je kunt audioboekmappen nu beheren in Voorkeuren.</string>
+    <string name="library.folders.moved.dialog.message">Je kunt audioboekmappen nu beheren in Instellingen.</string>
     <string name="library.greeting.afternoon">Goedemiddag</string>
     <string name="library.greeting.evening">Goedenavond</string>
     <string name="library.greeting.morning">Goedemorgen</string>
@@ -268,7 +268,6 @@
     <string name="settings.auto_sleep_timer.summary">Start automatisch een slaaptimer wanneer het afspelen begint tussen %1$s en %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatische Slaaptimer</string>
     <string name="settings.library.folders.summary">Beheer mappen die op luisterboeken worden gescand</string>
-    <string name="settings.library.use_grid.title">Roosterindeling gebruiken</string>
     <string name="settings.listening_history.clear">Luistergeschiedenis wissen</string>
     <string name="settings.listening_history.clear.confirm">Wissen</string>
     <string name="settings.listening_history.clear.message">Hiermee worden de vastgelegde afspeelmomenten, pauzes en sprongen van alle boeken verwijderd. Bladwijzers blijven bewaard.</string>
@@ -276,8 +275,16 @@
     <string name="settings.listening_history.cleared">Luistergeschiedenis gewist</string>
     <string name="settings.listening_history.summary">Bewaart afspelen, pauzes en sprongen op dit apparaat, zodat je ongelukjes ongedaan kunt maken</string>
     <string name="settings.listening_history.title">Luistergeschiedenis</string>
+    <string name="settings.library.layout.grid">Raster</string>
+    <string name="settings.library.layout.list">Lijst</string>
+    <string name="settings.library.title">Bibliotheek</string>
+    <string name="settings.listening.title">Luisteren</string>
+    <string name="settings.playback.auto_rewind.off">Uit</string>
+    <string name="settings.playback.auto_rewind.summary">Springt een stukje terug als je verdergaat, zodat je de draad niet kwijtraakt</string>
     <string name="settings.playback.auto_rewind.title">Automatisch terugspoelen</string>
+    <string name="settings.playback.seek_time.summary">Hoe ver terugspoelen en vooruitspoelen springen</string>
     <string name="settings.playback.seek_time.title">Aantal overslaan</string>
+    <string name="settings.subtitle">Maak Voice helemaal van jou</string>
     <string name="settings.support.faq.title">Veelgestelde vragen</string>
     <string name="settings.support.get_support.title">Ondersteuning vragen</string>
     <string name="settings.support.help_translating.title">Helpen met vertalen</string>
@@ -285,6 +292,7 @@
     <string name="settings.support.suggest_idea.title">Idee delen</string>
     <string name="settings.support.support_voice.summary">Donaties helpen Voice onderhouden</string>
     <string name="settings.support.support_voice.title">Ontwikkeling steunen</string>
+    <string name="settings.support.title">Hulp en feedback</string>
     <string name="support.action.donate_kofi">Doneren op Ko-fi</string>
     <string name="support.description.maintenance">Voice is gratis, open source en wordt onderhouden door één ontwikkelaar.</string>
     <string name="support.description.maintenance_subtitle">Donaties helpen doorlopend onderhoud en ontwikkeling te financieren.</string>

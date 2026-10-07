@@ -177,7 +177,7 @@
     <string name="library.empty.add_first_book">Mari tambahkan folder buku audio Anda sehingga Anda dapat mulai mendengarkan!</string>
     <string name="library.folders.title">Folder buku audio</string>
     <string name="library.folders.moved.dialog.title">Folder buku audio dipindahkan</string>
-    <string name="library.folders.moved.dialog.message">Sekarang Anda dapat mengelola folder buku audio di Preferensi.</string>
+    <string name="library.folders.moved.dialog.message">Sekarang Anda dapat mengelola folder buku audio di Setelan.</string>
     <string name="library.greeting.afternoon">Selamat siang</string>
     <string name="library.greeting.evening">Selamat malam</string>
     <string name="library.greeting.morning">Selamat pagi</string>
@@ -237,7 +237,7 @@
     <string name="review.request.message">Masukan Anda berarti bagi kami! Jika Anda punya waktu, beri kami penilaian dan bagikan pengalaman Anda. Ini membantu kami melakukan perbaikan dan memberikan pengalaman mendengarkan yang lebih baik.</string>
     <string name="review.request.title">Menikmati Voice?</string>
     <string name="settings.about.app_version.title">Versi aplikasi</string>
-    <string name="settings.action.open">Preferensi</string>
+    <string name="settings.action.open">Setelan</string>
     <string name="settings.analytics_consent.description">Izinkan pengumpulan data penggunaan anonim untuk membantu meningkatkan aplikasi</string>
     <string name="settings.analytics_consent.title">Analitik</string>
     <string name="settings.appearance.color_scheme.berry">Beri</string>
@@ -259,7 +259,6 @@
     <string name="settings.auto_sleep_timer.summary">Mulai pengatur waktu tidur secara otomatis saat pemutaran dimulai antara %1$s dan %2$s</string>
     <string name="settings.auto_sleep_timer.title">Pengatur Waktu Tidur Otomatis</string>
     <string name="settings.library.folders.summary">Kelola folder yang dipindai untuk buku audio</string>
-    <string name="settings.library.use_grid.title">Gunakan tata letak kisi</string>
     <string name="settings.listening_history.clear">Hapus riwayat mendengarkan</string>
     <string name="settings.listening_history.clear.confirm">Hapus</string>
     <string name="settings.listening_history.clear.message">Ini akan menghapus pemutaran, jeda, dan lompatan yang tercatat dari semua buku. Markah tetap ada.</string>
@@ -267,8 +266,16 @@
     <string name="settings.listening_history.cleared">Riwayat mendengarkan dihapus</string>
     <string name="settings.listening_history.summary">Menyimpan pemutaran, jeda, dan lompatan di perangkat ini, jadi Anda bisa mengurungkan kesalahan</string>
     <string name="settings.listening_history.title">Riwayat mendengarkan</string>
+    <string name="settings.library.layout.grid">Kisi</string>
+    <string name="settings.library.layout.list">Daftar</string>
+    <string name="settings.library.title">Pustaka</string>
+    <string name="settings.listening.title">Mendengarkan</string>
+    <string name="settings.playback.auto_rewind.off">Mati</string>
+    <string name="settings.playback.auto_rewind.summary">Mundur sedikit saat Anda melanjutkan, agar Anda tidak kehilangan alur</string>
     <string name="settings.playback.auto_rewind.title">Mundur otomatis</string>
+    <string name="settings.playback.seek_time.summary">Seberapa jauh mundur dan maju cepat melompat</string>
     <string name="settings.playback.seek_time.title">Lewati jumlah</string>
+    <string name="settings.subtitle">Jadikan Voice milik Anda</string>
     <string name="settings.support.faq.title">FAQ</string>
     <string name="settings.support.get_support.title">Dapatkan bantuan</string>
     <string name="settings.support.help_translating.title">Bantu terjemahkan Voice</string>
@@ -276,6 +283,7 @@
     <string name="settings.support.suggest_idea.title">Sarankan ide</string>
     <string name="settings.support.support_voice.summary">Donasi membantu menjaga Voice tetap terawat</string>
     <string name="settings.support.support_voice.title">Dukung pengembangan</string>
+    <string name="settings.support.title">Bantuan dan masukan</string>
     <string name="support.action.donate_kofi">Donasi di Ko-fi</string>
     <string name="support.description.maintenance">Voice gratis, bersumber terbuka, dan dirawat oleh satu pengembang.</string>
     <string name="support.description.maintenance_subtitle">Donasi membantu membiayai perawatan dan pengembangan berkelanjutan.</string>

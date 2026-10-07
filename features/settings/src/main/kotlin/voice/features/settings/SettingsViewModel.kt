@@ -3,22 +3,25 @@ package voice.features.settings
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.GridMode
+import voice.core.data.KioskModeDemoData
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.data.folders.AudiobookFolders
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
@@ -29,6 +32,7 @@ import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
+import voice.core.documentfile.nameWithoutExtension
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
 import voice.core.playback.history.ListeningHistoryRecorder
@@ -62,36 +66,51 @@ class SettingsViewModel(
   @DeveloperMenuUnlockedStore
   private val developerMenuUnlockedStore: DataStore<Boolean>,
   private val dynamicColorAvailability: DynamicColorAvailability,
+  private val audiobookFolders: AudiobookFolders,
   @ListeningHistoryEnabledStore
   private val listeningHistoryEnabledStore: DataStore<Boolean>,
   private val listeningHistoryRecorder: ListeningHistoryRecorder,
-  dispatcherProvider: DispatcherProvider,
+  private val dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
   private val mainScope = MainScope(dispatcherProvider)
   internal val viewEffects: SharedFlow<SettingsViewEffect>
     field = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
-  private val dialog = mutableStateOf<SettingsViewState.Dialog?>(null)
   private var appVersionTapCount = 0
 
+  /**
+   * Null until every setting is read. Placeholder values would show for a moment and then animate
+   * over to the real ones, as if they had just been changed.
+   */
   @Composable
-  fun viewState(): SettingsViewState {
-    val themeMode by remember { themeModeStore.data }.collectAsState(initial = ThemeMode.FollowSystem)
-    val themeColorScheme by remember { themeColorSchemeStore.data }.collectAsState(initial = ThemeColorScheme.VoiceBlue)
-    val autoRewindAmount by remember { autoRewindAmountStore.data }.collectAsState(initial = 0)
-    val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
-    val gridMode by remember { gridModeStore.data }.collectAsState(initial = GridMode.GRID)
-    val autoSleepTimer by remember { sleepTimerPreferenceStore.data }.collectAsState(
-      initial = SleepTimerPreference.Default,
-    )
-    val analyticsEnabled by remember { analyticsConsentStore.data }.collectAsState(initial = false)
-    val listeningHistoryEnabled by remember { listeningHistoryEnabledStore.data }.collectAsState(initial = true)
-    val kioskMode = remember {
-      kioskModeFeatureFlag.get()
-    }
-    val showDeveloperMenu by remember { developerMenuUnlockedStore.data }.collectAsState(initial = false)
+  fun viewState(): SettingsViewState? {
+    val themeMode = remember { themeModeStore.data }.collectAsState(initial = null).value
+    val themeColorScheme = remember { themeColorSchemeStore.data }.collectAsState(initial = null).value
+    val autoRewindAmount = remember { autoRewindAmountStore.data }.collectAsState(initial = null).value
+    val seekTime = remember { seekTimeStore.data }.collectAsState(initial = null).value
+    val gridMode = remember { gridModeStore.data }.collectAsState(initial = null).value
+    val autoSleepTimer = remember { sleepTimerPreferenceStore.data }.collectAsState(initial = null).value
+    val analyticsEnabled = remember { analyticsConsentStore.data }.collectAsState(initial = null).value
+    val listeningHistoryEnabled = remember { listeningHistoryEnabledStore.data }.collectAsState(initial = null).value
+    // reading the folders and their names asks other processes, so that's kept off the main thread
+    val folderNames = remember { folderNames() }.collectAsState(initial = null, context = dispatcherProvider.io).value
+    val showDeveloperMenu = remember { developerMenuUnlockedStore.data }.collectAsState(initial = null).value
     val dynamicColorAvailable = remember {
       dynamicColorAvailability.isSupported()
+    }
+    if (
+      themeMode == null ||
+      themeColorScheme == null ||
+      autoRewindAmount == null ||
+      seekTime == null ||
+      gridMode == null ||
+      autoSleepTimer == null ||
+      analyticsEnabled == null ||
+      listeningHistoryEnabled == null ||
+      folderNames == null ||
+      showDeveloperMenu == null
+    ) {
+      return null
     }
     return SettingsViewState(
       themeMode = themeMode,
@@ -99,7 +118,6 @@ class SettingsViewModel(
       dynamicColorAvailable = dynamicColorAvailable,
       seekTimeInSeconds = seekTime,
       autoRewindInSeconds = autoRewindAmount,
-      dialog = dialog.value,
       appVersion = appInfoProvider.versionName,
       useGrid = when (gridMode) {
         GridMode.LIST -> false
@@ -115,9 +133,20 @@ class SettingsViewModel(
       showAnalyticSetting = appInfoProvider.analyticsIncluded,
       showDeveloperMenu = showDeveloperMenu,
       showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
-      kioskMode = kioskMode,
+      folderNames = folderNames,
       listeningHistoryEnabled = listeningHistoryEnabled,
     )
+  }
+
+  private fun folderNames(): Flow<List<String>> {
+    if (kioskModeFeatureFlag.get()) {
+      return flowOf(KioskModeDemoData.folderNames)
+    }
+    return audiobookFolders.all().map { folders ->
+      folders.values.flatten()
+        .map { it.documentFile.nameWithoutExtension() }
+        .sortedWith(String.CASE_INSENSITIVE_ORDER)
+    }
   }
 
   override fun close() {
@@ -136,44 +165,37 @@ class SettingsViewModel(
     }
   }
 
-  override fun toggleGrid() {
+  override fun setUseGrid(useGrid: Boolean) {
     mainScope.launch {
-      gridModeStore.updateData { currentMode ->
-        when (currentMode) {
-          GridMode.LIST -> GridMode.GRID
-          GridMode.GRID -> GridMode.LIST
-          GridMode.FOLLOW_DEVICE -> if (gridCount.useGridAsDefault()) {
-            GridMode.LIST
-          } else {
-            GridMode.GRID
-          }
-        }
+      gridModeStore.updateData {
+        if (useGrid) GridMode.GRID else GridMode.LIST
       }
     }
   }
 
   override fun seekAmountChanged(seconds: Int) {
     mainScope.launch {
-      seekTimeStore.updateData { seconds }
+      seekTimeStore.updateData { seconds.coerceIn(SEEK_TIME_RANGE) }
     }
   }
 
-  override fun onSeekAmountRowClick() {
-    dialog.value = SettingsViewState.Dialog.SeekTime
-  }
-
-  override fun autoRewindAmountChang(seconds: Int) {
+  override fun seekAmountStepped(step: Int) {
     mainScope.launch {
-      autoRewindAmountStore.updateData { seconds }
+      // relative to the stored amount, so quick taps add up before the screen catches up
+      seekTimeStore.updateData { (it + step).coerceIn(SEEK_TIME_RANGE) }
     }
   }
 
-  override fun onAutoRewindRowClick() {
-    dialog.value = SettingsViewState.Dialog.AutoRewindAmount
+  override fun autoRewindAmountChanged(seconds: Int) {
+    mainScope.launch {
+      autoRewindAmountStore.updateData { seconds.coerceIn(AUTO_REWIND_RANGE) }
+    }
   }
 
-  override fun dismissDialog() {
-    dialog.value = null
+  override fun autoRewindAmountStepped(step: Int) {
+    mainScope.launch {
+      autoRewindAmountStore.updateData { (it + step).coerceIn(AUTO_REWIND_RANGE) }
+    }
   }
 
   override fun getSupport() {
@@ -196,7 +218,6 @@ class SettingsViewModel(
   }
 
   override fun openTranslations() {
-    dismissDialog()
     navigator.goTo(Destination.Website("https://hosted.weblate.org/engage/voice/"))
   }
 
@@ -248,12 +269,7 @@ class SettingsViewModel(
     }
   }
 
-  override fun onClearListeningHistoryClick() {
-    dialog.value = SettingsViewState.Dialog.ClearListeningHistory
-  }
-
   override fun clearListeningHistory() {
-    dismissDialog()
     mainScope.launch {
       listeningHistoryRecorder.clear()
       viewEffects.emit(SettingsViewEffect.ListeningHistoryCleared)
@@ -276,3 +292,6 @@ class SettingsViewModel(
     navigator.goTo(Destination.DeveloperSettings)
   }
 }
+
+internal val SEEK_TIME_RANGE = 3..60
+internal val AUTO_REWIND_RANGE = 0..20

@@ -193,7 +193,7 @@
     <string name="library.empty.add_first_book">Ajoutons un dossier de livres audio pour commencer à les écouter !</string>
     <string name="library.folders.title">Dossiers de livres audio</string>
     <string name="library.folders.moved.dialog.title">Dossiers de livres audio déplacés</string>
-    <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Préférences.</string>
+    <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Paramètres.</string>
     <string name="library.greeting.afternoon">Bon après-midi</string>
     <string name="library.greeting.evening">Bonsoir</string>
     <string name="library.greeting.morning">Bonjour</string>
@@ -255,7 +255,7 @@
     <string name="review.request.message">Vos retours comptent pour nous ! Si vous avez un peu de temps, partagez votre expérience. Cela nous aide à améliorer Voice et à vous offrir un plus grand confort d\'écoute.</string>
     <string name="review.request.title">Vous aimez Voice ?</string>
     <string name="settings.about.app_version.title">Version de l\'application</string>
-    <string name="settings.action.open">Préférences</string>
+    <string name="settings.action.open">Paramètres</string>
     <string name="settings.analytics_consent.description">Autoriser la collecte de données d\'utilisation anonymes afin d\'améliorer l\'application</string>
     <string name="settings.analytics_consent.title">Analyses</string>
     <string name="settings.appearance.color_scheme.berry">Baie</string>
@@ -277,7 +277,6 @@
     <string name="settings.auto_sleep_timer.summary">Démarrer automatiquement le minuteur de veille lorsque la lecture commence entre %1$s et %2$s</string>
     <string name="settings.auto_sleep_timer.title">Minuteur de veille automatique</string>
     <string name="settings.library.folders.summary">Gérer les dossiers analysés pour les livres audio</string>
-    <string name="settings.library.use_grid.title">Utiliser la mise en page en grille</string>
     <string name="settings.listening_history.clear">Effacer l\'historique d\'écoute</string>
     <string name="settings.listening_history.clear.confirm">Effacer</string>
     <string name="settings.listening_history.clear.message">Les lectures, pauses et sauts enregistrés pour tous les livres seront supprimés. Les marque-pages sont conservés.</string>
@@ -285,8 +284,16 @@
     <string name="settings.listening_history.cleared">Historique d\'écoute effacé</string>
     <string name="settings.listening_history.summary">Conserve les lectures, pauses et sauts sur cet appareil pour pouvoir annuler les fausses manipulations</string>
     <string name="settings.listening_history.title">Historique d\'écoute</string>
+    <string name="settings.library.layout.grid">Grille</string>
+    <string name="settings.library.layout.list">Liste</string>
+    <string name="settings.library.title">Bibliothèque</string>
+    <string name="settings.listening.title">Écoute</string>
+    <string name="settings.playback.auto_rewind.off">Désactivé</string>
+    <string name="settings.playback.auto_rewind.summary">Revient un peu en arrière à la reprise pour que vous ne perdiez pas le fil</string>
     <string name="settings.playback.auto_rewind.title">Rembobinage automatique</string>
+    <string name="settings.playback.seek_time.summary">De combien le retour et l\'avance rapide sautent</string>
     <string name="settings.playback.seek_time.title">Sauter de</string>
+    <string name="settings.subtitle">Faites de Voice le vôtre</string>
     <string name="settings.support.faq.title">FAQ</string>
     <string name="settings.support.get_support.title">Obtenir de l\'aide</string>
     <string name="settings.support.help_translating.title">Aidez à traduire Voice</string>
@@ -294,6 +301,7 @@
     <string name="settings.support.suggest_idea.title">Suggérer une idée</string>
     <string name="settings.support.support_voice.summary">Les dons aident à maintenir Voice</string>
     <string name="settings.support.support_voice.title">Soutenir le développement</string>
+    <string name="settings.support.title">Aide et commentaires</string>
     <string name="support.action.donate_kofi">Faire un don sur Ko-fi</string>
     <string name="support.description.maintenance">Voice est gratuit, open source et maintenu par un seul développeur.</string>
     <string name="support.description.maintenance_subtitle">Les dons aident à financer la maintenance et le développement continus.</string>

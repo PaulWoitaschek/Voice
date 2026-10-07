@@ -8,12 +8,11 @@ interface SettingsListener {
   fun close()
   fun setThemeMode(themeMode: ThemeMode)
   fun setThemeColorScheme(themeColorScheme: ThemeColorScheme)
-  fun toggleGrid()
+  fun setUseGrid(useGrid: Boolean)
   fun seekAmountChanged(seconds: Int)
-  fun onSeekAmountRowClick()
-  fun autoRewindAmountChang(seconds: Int)
-  fun onAutoRewindRowClick()
-  fun dismissDialog()
+  fun seekAmountStepped(step: Int)
+  fun autoRewindAmountChanged(seconds: Int)
+  fun autoRewindAmountStepped(step: Int)
   fun getSupport()
   fun suggestIdea()
   fun openBugReport()
@@ -25,7 +24,6 @@ interface SettingsListener {
   fun setAutoSleepTimerEnd(time: LocalTime)
   fun toggleAnalytics()
   fun toggleListeningHistory()
-  fun onClearListeningHistoryClick()
   fun clearListeningHistory()
   fun openFolderPicker()
   fun onAppVersionClick()
@@ -37,12 +35,11 @@ interface SettingsListener {
       override fun close() {}
       override fun setThemeMode(themeMode: ThemeMode) {}
       override fun setThemeColorScheme(themeColorScheme: ThemeColorScheme) {}
-      override fun toggleGrid() {}
+      override fun setUseGrid(useGrid: Boolean) {}
       override fun seekAmountChanged(seconds: Int) {}
-      override fun onSeekAmountRowClick() {}
-      override fun autoRewindAmountChang(seconds: Int) {}
-      override fun onAutoRewindRowClick() {}
-      override fun dismissDialog() {}
+      override fun seekAmountStepped(step: Int) {}
+      override fun autoRewindAmountChanged(seconds: Int) {}
+      override fun autoRewindAmountStepped(step: Int) {}
       override fun getSupport() {}
       override fun suggestIdea() {}
       override fun openBugReport() {}
@@ -54,7 +51,6 @@ interface SettingsListener {
       override fun setAutoSleepTimerEnd(time: LocalTime) {}
       override fun toggleAnalytics() {}
       override fun toggleListeningHistory() {}
-      override fun onClearListeningHistoryClick() {}
       override fun clearListeningHistory() {}
       override fun openFolderPicker() {}
       override fun onAppVersionClick() {}

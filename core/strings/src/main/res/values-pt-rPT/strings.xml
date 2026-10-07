@@ -193,7 +193,7 @@
     <string name="library.empty.add_first_book">Vamos adicionar uma pasta de Audiolivros para começar a ouvir!</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
     <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
-    <string name="library.folders.moved.dialog.message">Agora pode gerir as pastas de audiolivros nas Preferências.</string>
+    <string name="library.folders.moved.dialog.message">Agora pode gerir as pastas de audiolivros nas Definições.</string>
     <string name="library.greeting.afternoon">Boa tarde</string>
     <string name="library.greeting.evening">Boa noite</string>
     <string name="library.greeting.morning">Bom dia</string>
@@ -255,7 +255,7 @@
     <string name="review.request.message">O seu feedback é importante para nós! Se tiver um momento, avalie-nos e partilhe a sua experiência. Ele ajuda a gente a melhorar ainda mais as suas lidas.</string>
     <string name="review.request.title">Gosta de Voice?</string>
     <string name="settings.about.app_version.title">Versão</string>
-    <string name="settings.action.open">Preferências</string>
+    <string name="settings.action.open">Definições</string>
     <string name="settings.analytics_consent.description">Permitir a recolha de dados de utilização anónimos para ajudar a melhorar a aplicação</string>
     <string name="settings.analytics_consent.title">Análises</string>
     <string name="settings.appearance.color_scheme.berry">Frutos vermelhos</string>
@@ -277,7 +277,6 @@
     <string name="settings.auto_sleep_timer.summary">Iniciar um temporizador de sono automaticamente quando a reprodução começa entre %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador de sono automático</string>
     <string name="settings.library.folders.summary">Gerir pastas analisadas para audiolivros</string>
-    <string name="settings.library.use_grid.title">Utilizar a disposição da grelha</string>
     <string name="settings.listening_history.clear">Limpar histórico de audição</string>
     <string name="settings.listening_history.clear.confirm">Limpar</string>
     <string name="settings.listening_history.clear.message">Isto remove as reproduções, pausas e saltos registados de todos os livros. Os marcadores mantêm-se.</string>
@@ -285,8 +284,16 @@
     <string name="settings.listening_history.cleared">Histórico de audição limpo</string>
     <string name="settings.listening_history.summary">Guarda reproduções, pausas e saltos neste dispositivo, para poder anular acidentes</string>
     <string name="settings.listening_history.title">Histórico de audição</string>
+    <string name="settings.library.layout.grid">Grelha</string>
+    <string name="settings.library.layout.list">Lista</string>
+    <string name="settings.library.title">Biblioteca</string>
+    <string name="settings.listening.title">Audição</string>
+    <string name="settings.playback.auto_rewind.off">Desligado</string>
+    <string name="settings.playback.auto_rewind.summary">Recua um pouco ao retomar, para não perder o fio à meada</string>
     <string name="settings.playback.auto_rewind.title">Rebobin automaticamente</string>
+    <string name="settings.playback.seek_time.summary">Quanto recuar e avançar saltam</string>
     <string name="settings.playback.seek_time.title">Quantidade de Salto</string>
+    <string name="settings.subtitle">Torne o Voice seu</string>
     <string name="settings.support.faq.title">Perguntas frequentes</string>
     <string name="settings.support.get_support.title">Obter apoio</string>
     <string name="settings.support.help_translating.title">Ajuda traduzindo Voice</string>
@@ -294,6 +301,7 @@
     <string name="settings.support.suggest_idea.title">Sugerir uma ideia</string>
     <string name="settings.support.support_voice.summary">As doações ajudam a manter o Voice</string>
     <string name="settings.support.support_voice.title">Apoiar o desenvolvimento</string>
+    <string name="settings.support.title">Ajuda e comentários</string>
     <string name="support.action.donate_kofi">Doar no Ko-fi</string>
     <string name="support.description.maintenance">O Voice é gratuito, de código aberto e mantido por um único programador.</string>
     <string name="support.description.maintenance_subtitle">As doações ajudam a financiar a manutenção e o desenvolvimento contínuos.</string>
