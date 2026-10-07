@@ -62,7 +62,7 @@
     <string name="playback.option.volume_boost">Ενίσχυση έντασης</string>
     <string name="playback.speed.title">Ταχύτητα αναπαραγωγής</string>
     <string name="settings.about.app_version.title">Έκδοση εφαρμογής</string>
-    <string name="settings.action.open">Προτιμήσεις</string>
+    <string name="settings.action.open">Ρυθμίσεις</string>
     <string name="settings.appearance.color_scheme.berry">Μούρο</string>
     <string name="settings.appearance.color_scheme.forest">Δάσος</string>
     <string name="settings.appearance.color_scheme.lagoon">Λιμνοθάλασσα</string>

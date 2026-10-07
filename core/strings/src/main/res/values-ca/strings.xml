@@ -98,7 +98,7 @@
     <string name="review.request.message">Els seus comentaris ens importen. Si teniu un moment, valoreu-nos i compartiu la seva experiència. Ens ajuda a fer millores i a oferir una millor experiència.</string>
     <string name="review.request.title">Esteu gaudint del Voice?</string>
     <string name="settings.about.app_version.title">Versió de l\'aplicació</string>
-    <string name="settings.action.open">Preferències</string>
+    <string name="settings.action.open">Configuració</string>
     <string name="settings.appearance.color_scheme.berry">Baia</string>
     <string name="settings.appearance.color_scheme.forest">Bosc</string>
     <string name="settings.appearance.color_scheme.lagoon">Llacuna</string>

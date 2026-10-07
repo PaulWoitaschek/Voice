@@ -62,7 +62,7 @@
     <string name="library.empty.add_first_book">Lisame nüüd üheskoos heliraamatute kausta ja sa saad alustada kuulamisega!</string>
     <string name="library.folders.title">Heliraamatute kaustad</string>
     <string name="library.folders.moved.dialog.title">Audioraamatute kaustad teisaldati</string>
-    <string name="library.folders.moved.dialog.message">Nüüd saad audioraamatute kaustu hallata eelistustes.</string>
+    <string name="library.folders.moved.dialog.message">Nüüd saad audioraamatute kaustu hallata seadetes.</string>
     <string name="library.greeting.afternoon">Tere päevast</string>
     <string name="library.greeting.evening">Tere õhtust</string>
     <string name="library.greeting.morning">Tere hommikust</string>
@@ -121,7 +121,7 @@
     <string name="review.request.message">Sinu tagasiside on meile oluline! Kui sul on hetk aega, siis koosta selle rakenduse kohta arvustus ja jaga seal oma kogemusi. Selle põhjal saame rakendust arendada ning paremaks muuta.</string>
     <string name="review.request.title">Kas sulle meeldib Voice?</string>
     <string name="settings.about.app_version.title">Rakenduse versioon</string>
-    <string name="settings.action.open">Eelistused</string>
+    <string name="settings.action.open">Seaded</string>
     <string name="settings.analytics_consent.description">Parandamaks rakendust luba meil koguda anonüümseid andmeid tema kasutuse kohta</string>
     <string name="settings.analytics_consent.title">Analüütika</string>
     <string name="settings.appearance.color_scheme.berry">Mari</string>

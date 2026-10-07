@@ -65,7 +65,7 @@
     <string name="library.empty.add_first_book">¡Agreguemos tu carpeta de audiolibros para que puedas empezar a escuchar!</string>
     <string name="library.folders.title">Directorios de audiolibros</string>
     <string name="library.folders.moved.dialog.title">Carpetas de audiolibros trasladadas</string>
-    <string name="library.folders.moved.dialog.message">Ahora puedes gestionar las carpetas de audiolibros en Preferencias.</string>
+    <string name="library.folders.moved.dialog.message">Ahora puedes gestionar las carpetas de audiolibros en Ajustes.</string>
     <string name="library.greeting.afternoon">Buenas tardes</string>
     <string name="library.greeting.evening">Buenas noches</string>
     <string name="library.greeting.morning">Buenos días</string>
@@ -125,7 +125,7 @@
     <string name="review.request.message">¡Tu opinión nos importa! Si tienes un momento, valóranos y comparte tu experiencia. Nos ayuda a mejorar y a ofrecerte una mejor experiencia de escucha.</string>
     <string name="review.request.title">¿Disfrutando de Voice?</string>
     <string name="settings.about.app_version.title">Versión de la aplicación</string>
-    <string name="settings.action.open">Preferencias</string>
+    <string name="settings.action.open">Ajustes</string>
     <string name="settings.analytics_consent.description">Permite recopilar datos de uso anónimos para ayudar a mejorar la aplicación</string>
     <string name="settings.analytics_consent.title">Analíticas</string>
     <string name="settings.appearance.color_scheme.berry">Baya</string>

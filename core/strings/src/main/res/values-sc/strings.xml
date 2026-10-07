@@ -62,7 +62,7 @@
     <string name="library.empty.add_first_book">Agiunghimus sa cartella de audiolibros tua in manera chi potzas incumintzare a ascurtare!</string>
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
     <string name="library.folders.moved.dialog.title">Cartellas de audiolibros tramudadas</string>
-    <string name="library.folders.moved.dialog.message">Como podes manigiare sas cartellas de audiolibros in sas Preferèntzias.</string>
+    <string name="library.folders.moved.dialog.message">Como podes manigiare sas cartellas de audiolibros in sas Impostatziones.</string>
     <string name="library.greeting.afternoon">Bona die</string>
     <string name="library.greeting.evening">Bona sera</string>
     <string name="library.greeting.morning">Bona die</string>
@@ -121,7 +121,7 @@
     <string name="review.request.message">Su parre tuo nos importat! Si tenes unu momentu, dae·nos unu votu e cumpartzi s\'esperièntzia tua. Noa agiudat a megiorare e a dare un\'esperièntzia de ascurtu prus bona.</string>
     <string name="review.request.title">Ti ses ispassiende cun Voice?</string>
     <string name="settings.about.app_version.title">Versione de s\'aplicatzione</string>
-    <string name="settings.action.open">Preferèntzias</string>
+    <string name="settings.action.open">Impostatziones</string>
     <string name="settings.analytics_consent.description">Permite sa regorta de datos anònimos de impreu pro agiudare a megiorare s\'aplicatzione</string>
     <string name="settings.analytics_consent.title">Analìtica</string>
     <string name="settings.appearance.color_scheme.berry">Baca</string>

@@ -62,7 +62,7 @@
     <string name="library.empty.add_first_book">Dinlemeye başlayabilmeniz için sesli kitap dizininizi ekleyelim!</string>
     <string name="library.folders.title">Sesli kitap dizinleri</string>
     <string name="library.folders.moved.dialog.title">Sesli kitap klasörleri taşındı</string>
-    <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Tercihler\'de yönetebilirsiniz.</string>
+    <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Ayarlar\'da yönetebilirsiniz.</string>
     <string name="library.greeting.afternoon">Tünaydın</string>
     <string name="library.greeting.evening">İyi akşamlar</string>
     <string name="library.greeting.morning">Günaydın</string>
@@ -121,7 +121,7 @@
     <string name="review.request.message">Geri bildiriminiz bizim için önemli! Vaktiniz varsa bizi değerlendirin ve deneyiminizi paylaşın. Bu bizim iyileştirmeler yapmamıza ve daha iyi bir dinleme deneyimi sunmamıza yardımcı olur.</string>
     <string name="review.request.title">Voice\'den memnun musun?</string>
     <string name="settings.about.app_version.title">Uygulama sürümü</string>
-    <string name="settings.action.open">Tercihler</string>
+    <string name="settings.action.open">Ayarlar</string>
     <string name="settings.analytics_consent.description">Uygulamayı iyileştirmeye katkı sağlaması için anonim kullanım verileri toplanmasına izin ver</string>
     <string name="settings.analytics_consent.title">Analitik</string>
     <string name="settings.appearance.color_scheme.berry">Orman meyvesi</string>

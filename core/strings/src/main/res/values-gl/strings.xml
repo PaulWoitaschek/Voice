@@ -62,7 +62,7 @@
     <string name="library.empty.add_first_book">Imos engadir un cartafol de audiolibros para comezar a escoitar!</string>
     <string name="library.folders.title">Cartafoles de audiolibros</string>
     <string name="library.folders.moved.dialog.title">Cartafoles de audiolibros movidos</string>
-    <string name="library.folders.moved.dialog.message">Agora podes xestionar os cartafoles de audiolibros nas Preferencias.</string>
+    <string name="library.folders.moved.dialog.message">Agora podes xestionar os cartafoles de audiolibros nos Axustes.</string>
     <string name="library.greeting.afternoon">Boas tardes</string>
     <string name="library.greeting.evening">Boas noites</string>
     <string name="library.greeting.morning">Bos días</string>
@@ -121,7 +121,7 @@
     <string name="review.request.message">A túa opinión é importante! Se tes un momento, valora a aplicación e comparte a túa experiencia. Axudarasnos a mellorar e a ofrecer una experiencia de escoita mellorada.</string>
     <string name="review.request.title">Desfrutas de Voice?</string>
     <string name="settings.about.app_version.title">Versión da app</string>
-    <string name="settings.action.open">Preferencias</string>
+    <string name="settings.action.open">Axustes</string>
     <string name="settings.analytics_consent.description">Permite recoller datos anónimos de uso para axudar a mellorar a app</string>
     <string name="settings.analytics_consent.title">Análise</string>
     <string name="settings.appearance.color_scheme.berry">Baga</string>

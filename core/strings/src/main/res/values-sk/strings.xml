@@ -129,7 +129,7 @@
     <string name="review.request.message">Vaša spätná väzba je pre nás dôležitá! Ak si nájdete chvíľočku, prosím ohodnoťte nás a podeľte sa o svoje skúsenosti. Pomáha nám to aplikáciu ďalej vyvíjať a poskytovať tak lepší zážitok s počúvania.</string>
     <string name="review.request.title">Páči sa vám aplikácia Voice?</string>
     <string name="settings.about.app_version.title">Verzia aplikácie</string>
-    <string name="settings.action.open">Predvoľby</string>
+    <string name="settings.action.open">Nastavenia</string>
     <string name="settings.analytics_consent.description">Povoliť zber anonymných údajov o používaní s cieľom ďalej vylepšovať aplikáciu</string>
     <string name="settings.analytics_consent.title">Analytické údaje</string>
     <string name="settings.appearance.color_scheme.berry">Bobuľa</string>

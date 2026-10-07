@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.ButtonGroupDefaults
@@ -278,7 +279,8 @@ private fun SecondsPresets(
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = IslandContentPadding),
+      .padding(horizontal = IslandContentPadding)
+      .selectableGroup(),
     horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
   ) {
     presets.forEachIndexed { index, preset ->

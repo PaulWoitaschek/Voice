@@ -99,7 +99,7 @@
     <string name="review.request.message">ملاحظاتك تهمنا! إذا كان لديك لحظة، قيمنا وشاركنا تجربتك. يساعدنا على إجراء تحسينات وتقديم تجربة استماع أفضل.</string>
     <string name="review.request.title">هل يعجبك فويس؟</string>
     <string name="settings.about.app_version.title">إصدارة التطبيق</string>
-    <string name="settings.action.open">التفضيلات</string>
+    <string name="settings.action.open">الإعدادات</string>
     <string name="settings.appearance.color_scheme.berry">توت</string>
     <string name="settings.appearance.color_scheme.forest">غابة</string>
     <string name="settings.appearance.color_scheme.lagoon">بحيرة</string>

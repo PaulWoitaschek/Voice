@@ -76,7 +76,7 @@
     <string name="playback.option.volume_boost">音量提升</string>
     <string name="playback.speed.title">播放速度</string>
     <string name="settings.about.app_version.title">软件版本</string>
-    <string name="settings.action.open">偏好设置</string>
+    <string name="settings.action.open">设置</string>
     <string name="settings.appearance.color_scheme.berry">莓果</string>
     <string name="settings.appearance.color_scheme.forest">森林</string>
     <string name="settings.appearance.color_scheme.lagoon">泻湖</string>

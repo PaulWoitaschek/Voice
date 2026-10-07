@@ -95,7 +95,7 @@
     <string name="review.request.message">आपकी प्रतिक्रिया हमारे लिए मायने रखती है! यदि आपके पास कुछ समय है, तो हमें रेट करें और अपना अनुभव साझा करें। यह हमें सुधार करने और बेहतर सुनने का अनुभव प्रदान करने में मदद करता है।</string>
     <string name="review.request.title">Voice का आनंद ले रहे हैं?</string>
     <string name="settings.about.app_version.title">ऐप संस्करण</string>
-    <string name="settings.action.open">प्राथमिकताएँ</string>
+    <string name="settings.action.open">सेटिंग्स</string>
     <string name="settings.appearance.color_scheme.berry">बेरी</string>
     <string name="settings.appearance.color_scheme.forest">जंगल</string>
     <string name="settings.appearance.color_scheme.lagoon">लैगून</string>

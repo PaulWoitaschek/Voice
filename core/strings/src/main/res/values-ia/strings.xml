@@ -62,7 +62,7 @@
     <string name="library.empty.add_first_book">Nos adde tu dossier de audiolibro dunque tu pote comenciar a ascoltar lo!</string>
     <string name="library.folders.title">Dossieres de audiolibros</string>
     <string name="library.folders.moved.dialog.title">Dossieres de audiolibros movite</string>
-    <string name="library.folders.moved.dialog.message">Tu pote ora gerer le dossieres de audiolibros in Preferentias.</string>
+    <string name="library.folders.moved.dialog.message">Tu pote ora gerer le dossieres de audiolibros in Parametros.</string>
     <string name="library.greeting.afternoon">Bon postmeridie</string>
     <string name="library.greeting.evening">Bon vespere</string>
     <string name="library.greeting.morning">Bon matino</string>
@@ -121,7 +121,7 @@
     <string name="review.request.message">Tu commentos nos importa! Si tu habe un momento, evaluta nos e comparti tu experientia. Illo nos adjuta a facer melioramentos e offerer un melior experientia de ascoltamento.</string>
     <string name="review.request.title">Gaude tu de Voice?</string>
     <string name="settings.about.app_version.title">Version del application</string>
-    <string name="settings.action.open">Preferentias</string>
+    <string name="settings.action.open">Parametros</string>
     <string name="settings.analytics_consent.description">Permitter le collection de datos de uso anonyme pro adjutar a meliorar le app</string>
     <string name="settings.analytics_consent.title">Analytica</string>
     <string name="settings.appearance.color_scheme.berry">Baca</string>

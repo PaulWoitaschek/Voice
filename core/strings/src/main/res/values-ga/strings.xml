@@ -71,7 +71,7 @@
     <string name="library.empty.add_first_book">Cuirimis d’fhillteán closleabhar leis ionas gur féidir leat tosú ag éisteacht!</string>
     <string name="library.folders.title">Fillteáin na closleabhar</string>
     <string name="library.folders.moved.dialog.title">Bogadh fillteáin closleabhar</string>
-    <string name="library.folders.moved.dialog.message">Is féidir leat fillteáin closleabhar a bhainistiú anois sna Sainroghanna.</string>
+    <string name="library.folders.moved.dialog.message">Is féidir leat fillteáin closleabhar a bhainistiú anois sna Socruithe.</string>
     <string name="library.greeting.afternoon">Tráthnóna maith</string>
     <string name="library.greeting.evening">Tráthnóna maith</string>
     <string name="library.greeting.morning">Maidin mhaith</string>

@@ -62,7 +62,7 @@
     <string name="library.empty.add_first_book">Laten we je luisterboekmap toevoegen om te beginnen met luisteren!</string>
     <string name="library.folders.title">Luisterboekmappen</string>
     <string name="library.folders.moved.dialog.title">Audioboekmappen verplaatst</string>
-    <string name="library.folders.moved.dialog.message">Je kunt audioboekmappen nu beheren in Voorkeuren.</string>
+    <string name="library.folders.moved.dialog.message">Je kunt audioboekmappen nu beheren in Instellingen.</string>
     <string name="library.greeting.afternoon">Goedemiddag</string>
     <string name="library.greeting.evening">Goedenavond</string>
     <string name="library.greeting.morning">Goedemorgen</string>

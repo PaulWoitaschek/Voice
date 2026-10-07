@@ -59,7 +59,7 @@
     <string name="library.empty.add_first_book">Mari tambahkan folder buku audio Anda sehingga Anda dapat mulai mendengarkan!</string>
     <string name="library.folders.title">Folder buku audio</string>
     <string name="library.folders.moved.dialog.title">Folder buku audio dipindahkan</string>
-    <string name="library.folders.moved.dialog.message">Sekarang Anda dapat mengelola folder buku audio di Preferensi.</string>
+    <string name="library.folders.moved.dialog.message">Sekarang Anda dapat mengelola folder buku audio di Setelan.</string>
     <string name="library.greeting.afternoon">Selamat siang</string>
     <string name="library.greeting.evening">Selamat malam</string>
     <string name="library.greeting.morning">Selamat pagi</string>
@@ -117,7 +117,7 @@
     <string name="review.request.message">Masukan Anda berarti bagi kami! Jika Anda punya waktu, beri kami penilaian dan bagikan pengalaman Anda. Ini membantu kami melakukan perbaikan dan memberikan pengalaman mendengarkan yang lebih baik.</string>
     <string name="review.request.title">Menikmati Voice?</string>
     <string name="settings.about.app_version.title">Versi aplikasi</string>
-    <string name="settings.action.open">Preferensi</string>
+    <string name="settings.action.open">Setelan</string>
     <string name="settings.analytics_consent.description">Izinkan pengumpulan data penggunaan anonim untuk membantu meningkatkan aplikasi</string>
     <string name="settings.analytics_consent.title">Analitik</string>
     <string name="settings.appearance.color_scheme.berry">Beri</string>

@@ -65,7 +65,7 @@
     <string name="library.empty.add_first_book">Aggiungiamo la tua cartella degli audiolibri per iniziare ad ascoltare!</string>
     <string name="library.folders.title">Cartelle audiolibri</string>
     <string name="library.folders.moved.dialog.title">Cartelle degli audiolibri spostate</string>
-    <string name="library.folders.moved.dialog.message">Ora puoi gestire le cartelle degli audiolibri nelle Preferenze.</string>
+    <string name="library.folders.moved.dialog.message">Ora puoi gestire le cartelle degli audiolibri nelle Impostazioni.</string>
     <string name="library.greeting.afternoon">Buon pomeriggio</string>
     <string name="library.greeting.evening">Buonasera</string>
     <string name="library.greeting.morning">Buongiorno</string>
@@ -125,7 +125,7 @@
     <string name="review.request.message">I tuoi commenti sono importanti per noi! Se hai un momento, votaci e condividi la tua esperienza. Ci aiuta a migliorare e offrire una migliore esperienza di ascolto.</string>
     <string name="review.request.title">Ti stai divertendo con Voice?</string>
     <string name="settings.about.app_version.title">Versione dell\'app</string>
-    <string name="settings.action.open">Preferenze</string>
+    <string name="settings.action.open">Impostazioni</string>
     <string name="settings.analytics_consent.description">Consenti la raccolta anonima dei dati di utilizzo per contribuire a migliorare l\'app</string>
     <string name="settings.analytics_consent.title">Analytics</string>
     <string name="settings.appearance.color_scheme.berry">Bacca</string>

@@ -68,7 +68,7 @@
     <string name="library.empty.add_first_book">Dodajmy twój folder z audiobookami aby rozpocząć słuchanie!</string>
     <string name="library.folders.title">Foldery audiobooków</string>
     <string name="library.folders.moved.dialog.title">Foldery audiobooków przeniesione</string>
-    <string name="library.folders.moved.dialog.message">Folderami audiobooków możesz teraz zarządzać w Preferencjach.</string>
+    <string name="library.folders.moved.dialog.message">Folderami audiobooków możesz teraz zarządzać w Ustawieniach.</string>
     <string name="library.greeting.afternoon">Dzień dobry</string>
     <string name="library.greeting.evening">Dobry wieczór</string>
     <string name="library.greeting.morning">Dzień dobry</string>
@@ -129,7 +129,7 @@
     <string name="review.request.message">Twoja opinia ma dla nas znaczenie! Jeśli masz chwilę, oceń nas i podziel się swoimi doświadczeniami. Pomaga nam to wprowadzać ulepszenia i oferować lepsze wrażenia słuchowe.</string>
     <string name="review.request.title">Podoba ci się Voice?</string>
     <string name="settings.about.app_version.title">Wersja aplikacji</string>
-    <string name="settings.action.open">Preferencje</string>
+    <string name="settings.action.open">Ustawienia</string>
     <string name="settings.analytics_consent.description">Zezwól na gromadzenie anonimowych danych dotyczących użytkowania, aby pomóc ulepszyć aplikację</string>
     <string name="settings.analytics_consent.title">Analityka</string>
     <string name="settings.appearance.color_scheme.berry">Jagoda</string>

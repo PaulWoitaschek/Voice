@@ -65,7 +65,7 @@
     <string name="library.empty.add_first_book">בואו נוסיף את תיקיית הקולספר שלכם כדי שתוכלו להתחיל להאזין!</string>
     <string name="library.folders.title">תיקיית קולספר</string>
     <string name="library.folders.moved.dialog.title">תיקיות ספרי השמע הועברו</string>
-    <string name="library.folders.moved.dialog.message">כעת ניתן לנהל תיקיות ספרי שמע בהעדפות.</string>
+    <string name="library.folders.moved.dialog.message">כעת ניתן לנהל תיקיות ספרי שמע בהגדרות.</string>
     <string name="library.greeting.afternoon">צהריים טובים</string>
     <string name="library.greeting.evening">ערב טוב</string>
     <string name="library.greeting.morning">בוקר טוב</string>
@@ -125,7 +125,7 @@
     <string name="review.request.message">המשוב שלך חשוב לנו! אם יש לך רגע פנוי, דרג אותנו ושתפו אותנו בחווייתך. זה עוזר לנו לשפר את החוויה ולהציע חוויית האזנה טובה יותר.</string>
     <string name="review.request.title">נהנים מ-Voice?</string>
     <string name="settings.about.app_version.title">גרסת יישום</string>
-    <string name="settings.action.open">העדפות</string>
+    <string name="settings.action.open">הגדרות</string>
     <string name="settings.analytics_consent.description">אפשר איסוף נתוני שימוש אנונימיים כדי לעזור לשפר את האפליקציה</string>
     <string name="settings.analytics_consent.title">ניתוח נתונים</string>
     <string name="settings.appearance.color_scheme.berry">פירות יער</string>

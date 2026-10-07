@@ -62,7 +62,7 @@
     <string name="library.empty.add_first_book">Kom ons voeg jou audioboek gids sodat jy kan begin luister!</string>
     <string name="library.folders.title">Klankboekgids</string>
     <string name="library.folders.moved.dialog.title">Oudioboekvouers geskuif</string>
-    <string name="library.folders.moved.dialog.message">Jy kan nou oudioboekvouers in Voorkeure bestuur.</string>
+    <string name="library.folders.moved.dialog.message">Jy kan nou oudioboekvouers in Instellings bestuur.</string>
     <string name="library.greeting.afternoon">Goeiemiddag</string>
     <string name="library.greeting.evening">Goeienaand</string>
     <string name="library.greeting.morning">Goeiemôre</string>
@@ -121,7 +121,7 @@
     <string name="review.request.message">Jou terugvoer beteken baie vir ons! As jy ’n oomblik het, gee vir ons ’n gradering en deel jou ervaring. Dit help ons om verbeteringe aan te bring en ’n beter luisterervaring te bied.</string>
     <string name="review.request.title">Geniet jy Voice?</string>
     <string name="settings.about.app_version.title">Toep weergawe</string>
-    <string name="settings.action.open">Voorkeure</string>
+    <string name="settings.action.open">Instellings</string>
     <string name="settings.analytics_consent.description">Laat anonieme gebruiksdata insamel om die toep te verbeter</string>
     <string name="settings.analytics_consent.title">Analise</string>
     <string name="settings.appearance.color_scheme.berry">Bessie</string>

@@ -65,7 +65,7 @@
     <string name="library.empty.add_first_book">Vamos adicionar uma pasta de Audiolivros para começar a ouvir!</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
     <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
-    <string name="library.folders.moved.dialog.message">Agora você pode gerenciar as pastas de audiolivros nas Preferências.</string>
+    <string name="library.folders.moved.dialog.message">Agora você pode gerenciar as pastas de audiolivros nas Configurações.</string>
     <string name="library.greeting.afternoon">Boa tarde</string>
     <string name="library.greeting.evening">Boa noite</string>
     <string name="library.greeting.morning">Bom dia</string>
@@ -125,7 +125,7 @@
     <string name="review.request.message">O seu feedback é importante para nós! Se você tiver um momento, nos avalie e compartilhe a sua experiência. Ele ajuda a gente a melhorar ainda mais as suas lidas.</string>
     <string name="review.request.title">Está gostando de Voice?</string>
     <string name="settings.about.app_version.title">Versão</string>
-    <string name="settings.action.open">Preferências</string>
+    <string name="settings.action.open">Configurações</string>
     <string name="settings.analytics_consent.description">Permitir a coleta de dados de uso anônimos para ajudar a melhorar o app</string>
     <string name="settings.analytics_consent.title">Análises</string>
     <string name="settings.appearance.color_scheme.berry">Frutas vermelhas</string>

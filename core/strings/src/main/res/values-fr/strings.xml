@@ -65,7 +65,7 @@
     <string name="library.empty.add_first_book">Ajoutons un dossier de livres audio pour commencer à les écouter !</string>
     <string name="library.folders.title">Dossiers de livres audio</string>
     <string name="library.folders.moved.dialog.title">Dossiers de livres audio déplacés</string>
-    <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Préférences.</string>
+    <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Paramètres.</string>
     <string name="library.greeting.afternoon">Bon après-midi</string>
     <string name="library.greeting.evening">Bonsoir</string>
     <string name="library.greeting.morning">Bonjour</string>
@@ -125,7 +125,7 @@
     <string name="review.request.message">Vos retours comptent pour nous ! Si vous avez un peu de temps, partagez votre expérience. Cela nous aide à améliorer Voice et à vous offrir un plus grand confort d\'écoute.</string>
     <string name="review.request.title">Vous aimez Voice ?</string>
     <string name="settings.about.app_version.title">Version de l\'application</string>
-    <string name="settings.action.open">Préférences</string>
+    <string name="settings.action.open">Paramètres</string>
     <string name="settings.analytics_consent.description">Autoriser la collecte de données d\'utilisation anonymes afin d\'améliorer l\'application</string>
     <string name="settings.analytics_consent.title">Analyses</string>
     <string name="settings.appearance.color_scheme.berry">Baie</string>
