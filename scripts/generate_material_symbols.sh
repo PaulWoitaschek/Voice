@@ -60,8 +60,6 @@ generate_icon book Book
 generate_icon bookmark_add BookmarkAdd
 generate_icon bug_report BugReport
 generate_icon check Check
-generate_icon chevron_left ChevronLeft
-generate_icon chevron_right ChevronRight
 generate_icon close Close
 generate_icon coffee Coffee
 generate_icon collections_bookmark CollectionsBookmark
@@ -91,7 +89,6 @@ generate_icon pause Pause
 generate_icon person Person
 generate_icon play_arrow PlayArrow
 generate_icon remove Remove
-generate_icon replay Replay
 generate_icon search Search
 generate_icon sentiment_satisfied SentimentSatisfied
 generate_icon settings Settings
@@ -102,7 +99,6 @@ generate_icon tag Tag
 generate_icon timelapse Timelapse
 generate_icon timer Timer
 generate_icon title Title
-generate_icon undo Undo
 generate_icon view_list ViewList
 generate_icon volume_up VolumeUp
 

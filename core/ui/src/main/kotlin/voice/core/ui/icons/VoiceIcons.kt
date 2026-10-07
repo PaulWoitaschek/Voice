@@ -744,78 +744,6 @@ object VoiceIcons {
       .build()
 
   /*
-   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/chevron_left.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
-   * Generated: 2026-06-20T11:13:08Z
-   */
-  val ChevronLeft: ImageVector =
-    ImageVector.Builder(
-      name = "ChevronLeft",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
-      .apply {
-        path(
-          fill = SolidColor(Color.Black),
-          fillAlpha = 1f,
-          stroke = null,
-          strokeAlpha = 1f,
-          strokeLineWidth = 1f,
-          strokeLineCap = StrokeCap.Butt,
-          strokeLineJoin = StrokeJoin.Bevel,
-          strokeLineMiter = 1f,
-          pathFillType = PathFillType.NonZero,
-        ) {
-          moveTo(14f, 18f)
-          lineTo(8f, 12f)
-          lineTo(14f, 6f)
-          lineToRelative(1.4f, 1.4f)
-          lineTo(10.8f, 12f)
-          lineToRelative(4.6f, 4.6f)
-          lineTo(14f, 18f)
-          close()
-        }
-      }
-      .build()
-
-  /*
-   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/chevron_right.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
-   * Generated: 2026-06-20T11:13:08Z
-   */
-  val ChevronRight: ImageVector =
-    ImageVector.Builder(
-      name = "ChevronRight",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
-      .apply {
-        path(
-          fill = SolidColor(Color.Black),
-          fillAlpha = 1f,
-          stroke = null,
-          strokeAlpha = 1f,
-          strokeLineWidth = 1f,
-          strokeLineCap = StrokeCap.Butt,
-          strokeLineJoin = StrokeJoin.Bevel,
-          strokeLineMiter = 1f,
-          pathFillType = PathFillType.NonZero,
-        ) {
-          moveTo(12.6f, 12f)
-          lineTo(8f, 7.4f)
-          lineTo(9.4f, 6f)
-          lineToRelative(6f, 6f)
-          lineToRelative(-6f, 6f)
-          lineTo(8f, 16.6f)
-          lineTo(12.6f, 12f)
-          close()
-        }
-      }
-      .build()
-
-  /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/close.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
@@ -2699,63 +2627,6 @@ object VoiceIcons {
       .build()
 
   /*
-   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/replay.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
-   * Generated: 2026-10-04T10:20:30Z
-   */
-  val Replay: ImageVector =
-    ImageVector.Builder(
-      name = "Replay",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
-      .apply {
-        path(
-          fill = SolidColor(Color.Black),
-          fillAlpha = 1f,
-          stroke = null,
-          strokeAlpha = 1f,
-          strokeLineWidth = 1f,
-          strokeLineCap = StrokeCap.Butt,
-          strokeLineJoin = StrokeJoin.Bevel,
-          strokeLineMiter = 1f,
-          pathFillType = PathFillType.NonZero,
-        ) {
-          moveTo(8.49f, 21.29f)
-          quadTo(6.85f, 20.58f, 5.64f, 19.36f)
-          reflectiveQuadTo(3.71f, 16.51f)
-          reflectiveQuadTo(3f, 13f)
-          horizontalLineTo(5f)
-          quadToRelative(0f, 2.92f, 2.04f, 4.96f)
-          reflectiveQuadTo(12f, 20f)
-          reflectiveQuadToRelative(4.96f, -2.04f)
-          quadTo(19f, 15.93f, 19f, 13f)
-          quadTo(19f, 10.07f, 16.96f, 8.04f)
-          reflectiveQuadTo(12f, 6f)
-          horizontalLineTo(11.85f)
-          lineTo(13.4f, 7.55f)
-          lineTo(12f, 9f)
-          lineTo(8f, 5f)
-          lineTo(12f, 1f)
-          lineToRelative(1.4f, 1.45f)
-          lineTo(11.85f, 4f)
-          horizontalLineTo(12f)
-          quadToRelative(1.88f, 0f, 3.51f, 0.71f)
-          quadToRelative(1.64f, 0.71f, 2.85f, 1.93f)
-          reflectiveQuadToRelative(1.93f, 2.85f)
-          reflectiveQuadTo(21f, 13f)
-          reflectiveQuadToRelative(-0.71f, 3.51f)
-          reflectiveQuadToRelative(-1.93f, 2.85f)
-          reflectiveQuadToRelative(-2.85f, 1.93f)
-          reflectiveQuadTo(12f, 22f)
-          reflectiveQuadTo(8.49f, 21.29f)
-          close()
-        }
-      }
-      .build()
-
-  /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/search.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
@@ -3410,55 +3281,6 @@ object VoiceIcons {
           horizontalLineTo(13.5f)
           verticalLineTo(20f)
           horizontalLineToRelative(-3f)
-          close()
-        }
-      }
-      .build()
-
-  /*
-   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/undo.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
-   * Generated: 2026-06-20T11:13:08Z
-   */
-  val Undo: ImageVector =
-    ImageVector.Builder(
-      name = "Undo",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
-      .apply {
-        path(
-          fill = SolidColor(Color.Black),
-          fillAlpha = 1f,
-          stroke = null,
-          strokeAlpha = 1f,
-          strokeLineWidth = 1f,
-          strokeLineCap = StrokeCap.Butt,
-          strokeLineJoin = StrokeJoin.Bevel,
-          strokeLineMiter = 1f,
-          pathFillType = PathFillType.NonZero,
-        ) {
-          moveTo(7f, 19f)
-          verticalLineTo(17f)
-          horizontalLineToRelative(7.1f)
-          quadToRelative(1.57f, 0f, 2.74f, -1f)
-          reflectiveQuadTo(18f, 13.5f)
-          reflectiveQuadTo(16.84f, 11f)
-          reflectiveQuadTo(14.1f, 10f)
-          horizontalLineTo(7.8f)
-          lineToRelative(2.6f, 2.6f)
-          lineTo(9f, 14f)
-          lineTo(4f, 9f)
-          lineTo(9f, 4f)
-          lineToRelative(1.4f, 1.4f)
-          lineTo(7.8f, 8f)
-          horizontalLineToRelative(6.3f)
-          quadToRelative(2.43f, 0f, 4.16f, 1.57f)
-          reflectiveQuadTo(20f, 13.5f)
-          reflectiveQuadToRelative(-1.74f, 3.93f)
-          quadTo(16.53f, 19f, 14.1f, 19f)
-          horizontalLineTo(7f)
           close()
         }
       }
