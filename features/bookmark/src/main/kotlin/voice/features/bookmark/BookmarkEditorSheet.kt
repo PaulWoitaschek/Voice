@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
@@ -52,6 +55,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -211,7 +215,7 @@ private fun Nudge(
       shapes = ButtonDefaults.shapes(),
       modifier = Modifier.semantics { contentDescription = earlier },
     ) {
-      Text("−15 s")
+      Text(signedSecondsText(-NUDGE.inWholeSeconds))
     }
     Text(
       text = time,
@@ -225,7 +229,7 @@ private fun Nudge(
       shapes = ButtonDefaults.shapes(),
       modifier = Modifier.semantics { contentDescription = later },
     ) {
-      Text("+15 s")
+      Text(signedSecondsText(NUDGE.inWholeSeconds))
     }
   }
 }
@@ -236,6 +240,7 @@ private fun KindPicker(
   onKindChange: (Bookmark.Kind) -> Unit,
   onSleepKindClick: () -> Unit,
 ) {
+  // the tiles share the width: five of them don't fit side by side at full size on a phone
   Row(
     modifier = Modifier
       .fillMaxWidth()
@@ -248,6 +253,7 @@ private fun KindPicker(
         setBySleepTimer = true,
         selected = editor.setBySleepTimer,
         onClick = onSleepKindClick,
+        modifier = Modifier.weight(1F),
       )
     }
     Bookmark.Kind.entries.forEach { kind ->
@@ -256,6 +262,7 @@ private fun KindPicker(
         setBySleepTimer = false,
         selected = !editor.setBySleepTimer && editor.kind == kind,
         onClick = { onKindChange(kind) },
+        modifier = Modifier.weight(1F),
       )
     }
   }
@@ -268,6 +275,7 @@ private fun KindTile(
   setBySleepTimer: Boolean,
   selected: Boolean,
   onClick: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
   val style = bookmarkStyle(kind, setBySleepTimer)
@@ -278,7 +286,7 @@ private fun KindTile(
     label = "kindMorph",
   )
   Column(
-    modifier = Modifier
+    modifier = modifier
       .clip(MaterialTheme.shapes.large)
       .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
       .padding(4.dp),
@@ -286,7 +294,9 @@ private fun KindTile(
   ) {
     Box(
       modifier = Modifier
-        .size(64.dp)
+        .widthIn(max = 64.dp)
+        .fillMaxWidth()
+        .aspectRatio(1F)
         .border(
           width = 2.dp,
           color = if (selected) colors.primary else Color.Transparent,
@@ -297,7 +307,7 @@ private fun KindTile(
     ) {
       Box(
         modifier = Modifier
-          .size(52.dp)
+          .fillMaxSize()
           .graphicsLayer { rotationZ = progress * 20F }
           .clip(MorphShape(morph, progress))
           .background(if (selected) style.container else colors.surfaceContainerHighest),
@@ -317,8 +327,11 @@ private fun KindTile(
     Spacer(Modifier.height(4.dp))
     Text(
       text = kindLabel(kind, setBySleepTimer),
-      style = MaterialTheme.typography.labelMedium,
+      style = MaterialTheme.typography.labelMedium.copy(hyphens = Hyphens.Auto),
       color = if (selected) colors.onSurface else colors.onSurfaceVariant,
+      textAlign = TextAlign.Center,
+      maxLines = 2,
+      overflow = TextOverflow.Ellipsis,
     )
   }
 }

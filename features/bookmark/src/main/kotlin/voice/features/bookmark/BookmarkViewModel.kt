@@ -11,8 +11,9 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -23,10 +24,12 @@ import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
+import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.PlayerController
+import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimer
 import voice.navigation.Navigator
@@ -48,6 +51,8 @@ class BookmarkViewModel(
   dispatcherProvider: DispatcherProvider,
   @KioskModeFeatureFlagQualifier
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
+  @ExperimentalPlaybackPersistenceQualifier
+  private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
   @Assisted
   private val bookId: BookId,
   @Assisted
@@ -56,13 +61,18 @@ class BookmarkViewModel(
 
   private val scope = MainScope(dispatcherProvider)
 
-  internal val viewEffects: Flow<BookmarkViewEffect>
-    field = MutableSharedFlow<BookmarkViewEffect>(extraBufferCapacity = 1)
+  // buffered, so that no undo gets lost while the screen still shows the snackbar of an earlier one
+  private val viewEffectChannel = Channel<BookmarkViewEffect>(Channel.UNLIMITED)
+  internal val viewEffects: Flow<BookmarkViewEffect> = viewEffectChannel.receiveAsFlow()
 
   private var sort by mutableStateOf(BookmarkSort.Story)
   private var selectedCategory by mutableStateOf<BookmarkCategory?>(null)
   private var draft by mutableStateOf<Draft?>(null)
   private var openedEditorFromNavigation = false
+  private var saving = false
+
+  // a jump or close leaves the screen, so a second tap must not go back once more
+  private var leaving = false
 
   // the latest values, for the actions that need them
   private var book: Book? = null
@@ -73,8 +83,17 @@ class BookmarkViewModel(
     val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeBookmarkViewState()
 
-    val book = remember(bookId) { bookRepository.flow(bookId) }
+    val persistedBook = remember(bookId) { bookRepository.flow(bookId) }
       .collectAsState(initial = null).value ?: return null
+    // with the experimental playback persistence, the stored position lags behind while playing
+    val experimentalPlaybackPersistence = remember { experimentalPlaybackPersistenceFeatureFlag.get() }
+    val livePlaybackState = if (experimentalPlaybackPersistence) {
+      remember(bookId) { playerController.livePlaybackStateFlow(bookId) }
+        .collectAsState(initial = null).value
+    } else {
+      null
+    }
+    val book = if (livePlaybackState != null) persistedBook.overlay(livePlaybackState) else persistedBook
     val bookmarks = remember(book.id, book.content.chapters) {
       bookmarkRepo.bookmarksFlow(book.content)
     }.collectAsState(initial = null).value ?: return null
@@ -98,7 +117,7 @@ class BookmarkViewModel(
       bookTitle = book.content.name,
       bookAuthor = book.content.author,
       cover = book.content.coverUrl,
-      playing = playState == PlayStateManager.PlayState.Playing,
+      playing = livePlaybackState?.isPlaying ?: (playState == PlayStateManager.PlayState.Playing),
       sleepTimerActive = sleepTimerState.enabled,
       bookBar = bookBar(index, visible, book.content.playbackSpeed),
       sort = sort,
@@ -142,7 +161,9 @@ class BookmarkViewModel(
   }
 
   fun onBookmarkClick(id: Bookmark.Id) {
+    if (leaving) return
     val bookmark = bookmarks.find { it.id == id } ?: return
+    leaving = true
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
     scope.launch {
       currentBookStore.updateData { bookId }
@@ -161,14 +182,23 @@ class BookmarkViewModel(
 
   /** Saves the current position right away, the sheet only offers to add details. */
   fun onSaveClick() {
+    // a double tap would save the moment twice
+    if (saving || draft != null) return
+    saving = true
     scope.launch {
-      val book = currentBookResolver.book(bookId) ?: return@launch
-      val bookmark = bookmarkRepo.addBookmarkAtBookPosition(
-        book = book,
-        title = null,
-        setBySleepTimer = false,
-      )
-      edit(bookmark, isNew = true)
+      try {
+        val book = currentBookResolver.book(bookId) ?: return@launch
+        val bookmark = bookmarkRepo.addBookmarkAtBookPosition(
+          book = book,
+          title = null,
+          setBySleepTimer = false,
+        )
+        // a filter for another kind would hide the new bookmark
+        selectedCategory = null
+        edit(bookmark, isNew = true)
+      } finally {
+        saving = false
+      }
     }
   }
 
@@ -240,7 +270,7 @@ class BookmarkViewModel(
   private fun delete(bookmark: Bookmark) {
     scope.launch {
       bookmarkRepo.deleteBookmark(bookmark.id)
-      viewEffects.tryEmit(BookmarkViewEffect.Deleted(bookmark))
+      viewEffectChannel.send(BookmarkViewEffect.Deleted(bookmark))
     }
   }
 
@@ -251,6 +281,8 @@ class BookmarkViewModel(
   }
 
   fun onCloseClick() {
+    if (leaving) return
+    leaving = true
     navigator.goBack()
   }
 
@@ -286,4 +318,4 @@ class BookmarkViewModel(
   }
 }
 
-private val NUDGE = 15.seconds
+internal val NUDGE = 15.seconds

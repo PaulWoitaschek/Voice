@@ -89,11 +89,13 @@ fun BookBar(
   val pinArea = if (pins.isEmpty()) 0.dp else pinSize + pinSize * PIN_LIFT * maxLift + PIN_GAP
   val currentOnPinClick = rememberUpdatedState(onPinClick)
   val tapModifier = if (onPinClick != null && pins.isNotEmpty()) {
-    Modifier.pointerInput(pins) {
+    Modifier.pointerInput(pins, segments) {
       detectTapGestures { offset ->
-        val nearest = pins.indices.minByOrNull { abs(pins[it].position * size.width - offset.x) }
+        val width = size.width.toFloat()
+        val pinXs = pins.map { bookBarX(it.position, segments, width, SEGMENT_GAP.toPx(), MIN_SEGMENT_WIDTH.toPx()) }
+        val nearest = pins.indices.minByOrNull { abs(pinXs[it] - offset.x) }
           ?: return@detectTapGestures
-        if (abs(pins[nearest].position * size.width - offset.x) <= 20.dp.toPx()) {
+        if (abs(pinXs[nearest] - offset.x) <= 20.dp.toPx()) {
           currentOnPinClick.value?.invoke(nearest)
         }
       }
@@ -110,14 +112,19 @@ fun BookBar(
         val barTop = pinArea.toPx()
         val barHeightPx = barHeight.toPx()
         val pinPx = pinSize.toPx()
+        val gap = SEGMENT_GAP.toPx()
+        val minSegmentWidth = MIN_SEGMENT_WIDTH.toPx()
         val outlines = pins.map { pin ->
           pinStyles.of(pin).shape.createOutline(Size(pinPx, pinPx), layoutDirection, this)
         }
+        val pinXs = pins.map { bookBarX(it.position, segments, size.width, gap, minSegmentWidth) }
         onDrawBehind {
           translate(top = barTop) {
             drawBookBar(
               barSize = Size(size.width, barHeightPx),
               segments = segments,
+              gap = gap,
+              minSegmentWidth = minSegmentWidth,
               currentSegment = currentSegment,
               progress = progress,
               activeColor = colors.primary,
@@ -128,7 +135,8 @@ fun BookBar(
           if (showPositionMarker) {
             val markerRadius = barHeightPx * 0.75F
             val center = Offset(
-              x = (progress * size.width).coerceIn(markerRadius, size.width - markerRadius),
+              x = bookBarX(progress, segments, size.width, gap, minSegmentWidth)
+                .coerceIn(markerRadius, size.width - markerRadius),
               y = barTop + barHeightPx / 2,
             )
             drawCircle(color = colors.surface, radius = markerRadius + 2.dp.toPx(), center = center)
@@ -136,7 +144,7 @@ fun BookBar(
           }
           pins.forEachIndexed { index, pin ->
             val scale = if (index == popPin) pop.value else 1F
-            val left = (pin.position * size.width - pinPx / 2).coerceIn(0F, size.width - pinPx)
+            val left = (pinXs[index] - pinPx / 2).coerceIn(0F, size.width - pinPx)
             val top = barTop - PIN_GAP.toPx() - pinPx - lifts[index] * pinPx * PIN_LIFT
             withTransform(
               {
@@ -172,6 +180,49 @@ private const val PIN_OVERLAP = 0.02F
 private const val PIN_LIFT = 0.6F
 private const val MAX_LIFT = 2
 private val PIN_GAP = 3.dp
+private val SEGMENT_GAP = 3.dp
+private val MIN_SEGMENT_WIDTH = 3.dp
+
+/**
+ * Whether the bar shows a segment per chapter. Too many or too thin segments make it one bar.
+ */
+private fun isSegmented(
+  segments: List<Float>,
+  width: Float,
+  gap: Float,
+  minSegmentWidth: Float,
+): Boolean {
+  val available = width - gap * (segments.size - 1).coerceAtLeast(0)
+  return segments.size in 2..MAX_SEGMENTS && available / segments.size >= minSegmentWidth
+}
+
+/**
+ * Where [fraction] of the book is on a bar [width] wide, laid out the way [drawBookBar] lays out
+ * the segments: each segment gets its share of the width the gaps leave, so a spot in a later
+ * chapter is further right by the gaps before it.
+ */
+internal fun bookBarX(
+  fraction: Float,
+  segments: List<Float>,
+  width: Float,
+  gap: Float,
+  minSegmentWidth: Float,
+): Float {
+  if (!isSegmented(segments, width, gap, minSegmentWidth)) {
+    return (fraction * width).coerceIn(0F, width)
+  }
+  val available = width - gap * (segments.size - 1)
+  var left = 0F
+  var start = 0F
+  var index = 0
+  // a spot right where a segment ends belongs to the next one, like a chapter's first second
+  while (index < segments.lastIndex && fraction >= start + segments[index]) {
+    left += available * segments[index] + gap
+    start += segments[index]
+    index++
+  }
+  return (left + available * (fraction - start)).coerceIn(0F, width)
+}
 
 private class PinStyle(
   val shape: Shape,
@@ -209,22 +260,21 @@ private class PinStyles(
 private fun DrawScope.drawBookBar(
   barSize: Size,
   segments: List<Float>,
+  gap: Float,
+  minSegmentWidth: Float,
   currentSegment: Int,
   progress: Float,
   activeColor: Color,
   trackColor: Color,
   currentTrackColor: Color,
 ) {
-  val gap = 3.dp.toPx()
   val thin = barSize.height / 2
   val thick = barSize.height
-  val totalGap = gap * (segments.size - 1).coerceAtLeast(0)
-  val available = barSize.width - totalGap
-  val segmented = segments.size in 2..MAX_SEGMENTS && available / segments.size >= 3.dp.toPx()
-  if (!segmented) {
+  if (!isSegmented(segments, barSize.width, gap, minSegmentWidth)) {
     drawSegment(barSize, 0F, barSize.width, thin, fill = progress, activeColor = activeColor, trackColor = trackColor)
     return
   }
+  val available = barSize.width - gap * (segments.size - 1)
   var x = 0F
   var start = 0F
   segments.forEachIndexed { index, segment ->

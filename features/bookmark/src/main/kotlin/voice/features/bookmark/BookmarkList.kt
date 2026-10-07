@@ -32,18 +32,21 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxDefaults
+import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -182,6 +185,8 @@ private fun CategoryChips(
   selected: BookmarkCategory?,
   onClick: (BookmarkCategory?) -> Unit,
 ) {
+  val locale = LocalConfiguration.current.locales[0]
+  val countFormat = remember(locale) { NumberFormat.getIntegerInstance(locale) }
   LazyRow(
     horizontalArrangement = Arrangement.spacedBy(8.dp),
     contentPadding = PaddingValues(bottom = 8.dp),
@@ -190,20 +195,32 @@ private fun CategoryChips(
       FilterChip(
         selected = selected == null,
         onClick = { onClick(null) },
-        label = { Text("${stringResource(R.string.bookmark_category_all)}  $total") },
+        label = { ChipLabel(stringResource(R.string.bookmark_category_all), countFormat.format(total.toLong())) },
       )
     }
     items(categories, key = { it.category }) { (category, count) ->
       FilterChip(
         selected = selected == category,
         onClick = { onClick(category) },
-        label = { Text("${categoryLabel(category)}  $count") },
+        label = { ChipLabel(categoryLabel(category), countFormat.format(count.toLong())) },
         leadingIcon = {
           val (kind, sleep) = category.badge()
           BookmarkBadge(kind = kind, setBySleepTimer = sleep, size = 18.dp)
         },
       )
     }
+  }
+}
+
+/** The label and its count side by side, in the order of the layout direction. */
+@Composable
+private fun ChipLabel(
+  label: String,
+  count: String,
+) {
+  Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Text(label)
+    Text(count)
   }
 }
 
@@ -309,11 +326,17 @@ private fun BookmarkRow(
   val deleteLabel = stringResource(R.string.common_action_delete)
   val description = listOf(kind, headline, meta, savedAt).joinToString(", ")
 
-  val dismissState = rememberSwipeToDismissBoxState()
+  // Not saveable: the list keeps saved state per key, so a row brought back by undo would come
+  // back swiped away and be deleted again.
+  val positionalThreshold = SwipeToDismissBoxDefaults.positionalThreshold
+  val dismissState = remember { SwipeToDismissBoxState(SwipeToDismissBoxValue.Settled, positionalThreshold) }
+  // a new callback would restart the box's effect and delete the swiped away row once more
+  val currentOnDelete by rememberUpdatedState(onDelete)
+  val onDismiss = remember(row.id) { { _: SwipeToDismissBoxValue -> currentOnDelete(row.id) } }
   SwipeToDismissBox(
     state = dismissState,
     modifier = modifier,
-    onDismiss = { onDelete(row.id) },
+    onDismiss = onDismiss,
     backgroundContent = { DeleteBackground(progress = dismissState.progress, direction = dismissState.dismissDirection) },
   ) {
     Surface(
