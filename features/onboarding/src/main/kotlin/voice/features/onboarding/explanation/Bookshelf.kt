@@ -48,6 +48,7 @@ internal fun Bookshelf(
   val haptics = LocalHapticFeedback.current
   val scope = rememberCoroutineScope()
   val colors = MaterialTheme.colorScheme
+  val bookColors = BOOKS.map { it.colors(colors) }
   // 1 is still up in the air, 0 is standing on the shelf
   val drops = remember { BOOKS.map { Animatable(1F) } }
   val hops = remember { BOOKS.map { Animatable(0F) } }
@@ -64,7 +65,8 @@ internal fun Bookshelf(
     val random = Random(seed = 7)
     delay(2200)
     while (true) {
-      hop(hops[random.nextInt(hops.size)], height = 0.6F)
+      // a tap's hop interrupts this one by cancelling its job, which mustn't end the whole loop
+      launch { hop(hops[random.nextInt(hops.size)], height = 0.6F) }.join()
       delay(1800L + random.nextLong(1600L))
     }
   }
@@ -115,7 +117,7 @@ internal fun Bookshelf(
       val bookWidth = book.width * unit
       val bookHeight = book.height * maxBookHeight
       if (book.leaning) x += leanGap
-      val (cover, accent) = book.colors(colors)
+      val (cover, accent) = bookColors[index]
       // the springs overshoot below zero. Mirroring that makes the books bounce off the shelf instead
       // of sinking into it.
       val drop = abs(drops[index].value)

@@ -118,14 +118,7 @@ internal fun SoundBlob(
     drawSoundRings(t = t, pulseStart = pulseStart, center = center, radius = radius, color = colors.primary)
 
     // orbiting shapes behind the blob are drawn first and a bit smaller, which fakes some depth
-    val satellites = SATELLITES.mapIndexed { index, satellite ->
-      val angle = t * satellite.speed + satellite.phase
-      val depth = sin(angle)
-      Triple(index, angle, depth)
-    }
-    satellites.filter { it.third < 0F }.forEach { (index, angle, depth) ->
-      drawSatellite(index, angle, depth, t, center, radius, satellitePaths[index], satelliteColors[index])
-    }
+    drawSatellites(t = t, center = center, radius = radius, paths = satellitePaths, colors = satelliteColors, front = false)
 
     morphs[shapeIndex].toPath(progress = morphProgress.value, path = blobPath)
     val blobSize = radius * 2F * squish * (1F + 0.03F * sin(t * 2.2F))
@@ -138,9 +131,7 @@ internal fun SoundBlob(
     }
     drawEqualizer(t = t, center = center, radius = radius * squish, color = colors.onPrimary)
 
-    satellites.filter { it.third >= 0F }.forEach { (index, angle, depth) ->
-      drawSatellite(index, angle, depth, t, center, radius, satellitePaths[index], satelliteColors[index])
-    }
+    drawSatellites(t = t, center = center, radius = radius, paths = satellitePaths, colors = satelliteColors, front = true)
   }
 }
 
@@ -204,27 +195,30 @@ private fun DrawScope.drawEqualizer(
   }
 }
 
-private fun DrawScope.drawSatellite(
-  index: Int,
-  angle: Float,
-  depth: Float,
+/** Draws the satellites that are currently in [front] of the blob, or the ones behind it. */
+private fun DrawScope.drawSatellites(
   t: Float,
   center: Offset,
   radius: Float,
-  path: Path,
-  color: Color,
+  paths: List<Path>,
+  colors: List<Color>,
+  front: Boolean,
 ) {
-  val satellite = SATELLITES[index]
-  val orbitX = radius * satellite.orbit * 1.55F
-  val orbitY = radius * satellite.orbit * 0.42F
-  // a tilted orbit, so they swing around the blob instead of circling flat
-  val x = center.x + cos(angle) * orbitX
-  val y = center.y + sin(angle) * orbitY - cos(angle) * radius * 0.25F
-  val sizePx = satellite.size.dp.toPx() * (0.75F + 0.25F * (depth + 1F))
-  translate(left = x - sizePx / 2, top = y - sizePx / 2) {
-    rotate(degrees = t * satellite.spin, pivot = Offset(sizePx / 2, sizePx / 2)) {
-      scale(scaleX = sizePx, scaleY = sizePx, pivot = Offset.Zero) {
-        drawPath(path = path, color = color, alpha = 0.65F + 0.35F * abs(depth))
+  SATELLITES.forEachIndexed { index, satellite ->
+    val angle = t * satellite.speed + satellite.phase
+    val depth = sin(angle)
+    if ((depth >= 0F) != front) return@forEachIndexed
+    val orbitX = radius * satellite.orbit * 1.55F
+    val orbitY = radius * satellite.orbit * 0.42F
+    // a tilted orbit, so they swing around the blob instead of circling flat
+    val x = center.x + cos(angle) * orbitX
+    val y = center.y + depth * orbitY - cos(angle) * radius * 0.25F
+    val sizePx = satellite.size.dp.toPx() * (0.75F + 0.25F * (depth + 1F))
+    translate(left = x - sizePx / 2, top = y - sizePx / 2) {
+      rotate(degrees = t * satellite.spin, pivot = Offset(sizePx / 2, sizePx / 2)) {
+        scale(scaleX = sizePx, scaleY = sizePx, pivot = Offset.Zero) {
+          drawPath(path = paths[index], color = colors[index], alpha = 0.65F + 0.35F * abs(depth))
+        }
       }
     }
   }

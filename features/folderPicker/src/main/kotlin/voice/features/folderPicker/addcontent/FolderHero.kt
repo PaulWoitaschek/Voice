@@ -51,6 +51,7 @@ internal fun FolderHero(
   val haptics = LocalHapticFeedback.current
   val scope = rememberCoroutineScope()
   val colors = MaterialTheme.colorScheme
+  val fileColors = FILES.map { it.colors(colors) }
   val open = remember { Animatable(0F) }
   val hops = remember { FILES.map { Animatable(0F) } }
   val badgePath = remember { MaterialShapes.Sunny.toAndroidPath().asComposePath() }
@@ -91,7 +92,7 @@ internal fun FolderHero(
     )
 
     FILES.forEachIndexed { index, file ->
-      val (paper, ink) = file.colors(colors)
+      val (paper, ink) = fileColors[index]
       val bob = sin(t * 2.2F + index * 1.9F) * width * 0.025F
       val hop = hops[index].value
       val cardWidth = width * 0.27F
