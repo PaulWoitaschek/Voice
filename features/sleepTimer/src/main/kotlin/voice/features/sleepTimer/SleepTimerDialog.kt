@@ -23,10 +23,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -129,6 +132,8 @@ fun SleepTimerDialog(
               MaterialTheme.colorScheme.onTertiaryContainer
             },
             onClick = { onAcceptSleepTime(time) },
+            // shrinks evenly when four don't fit, e.g. with a large display size
+            modifier = Modifier.weight(1F, fill = false),
           )
         }
       }
@@ -233,7 +238,8 @@ private fun PresetButton(
   val description = minutes(minutes = minutes)
   Box(
     modifier = modifier
-      .size(76.dp)
+      .widthIn(max = 76.dp)
+      .aspectRatio(1F)
       .graphicsLayer {
         scaleX = scale
         scaleY = scale
@@ -249,7 +255,7 @@ private fun PresetButton(
   ) {
     Box(
       modifier = Modifier
-        .size(76.dp)
+        .fillMaxSize()
         .graphicsLayer { rotationZ = rotation }
         .background(containerColor, shape),
     )
