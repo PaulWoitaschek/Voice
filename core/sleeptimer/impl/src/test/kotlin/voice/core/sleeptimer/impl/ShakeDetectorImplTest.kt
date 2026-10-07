@@ -11,8 +11,8 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.shadows.SensorBuilder
 import org.robolectric.shadows.SensorEventBuilder
-import org.robolectric.shadows.ShadowSensor
 import voice.core.sleeptimer.ShakeDetectorImpl
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -23,7 +23,7 @@ class ShakeDetectorImplTest {
 
   private val context = ApplicationProvider.getApplicationContext<Context>()
   private val sensorManager = shadowOf(context.getSystemService<SensorManager>()!!)
-  private val accelerometer = ShadowSensor.newInstance(Sensor.TYPE_ACCELEROMETER).also {
+  private val accelerometer = SensorBuilder.newBuilder().setType(Sensor.TYPE_ACCELEROMETER).build().also {
     sensorManager.addSensor(it)
   }
   private val shakeDetector = ShakeDetectorImpl(context)
@@ -56,9 +56,7 @@ class ShakeDetectorImplTest {
   private fun shake() {
     // Seismic reports a shake once most samples over at least 250ms exceed its acceleration threshold.
     repeat(4) { index ->
-      val event = SensorEventBuilder.newBuilder()
-        .setSensor(accelerometer)
-        .setValues(floatArrayOf(20F, 0F, 0F))
+      val event = SensorEventBuilder.newBuilder(accelerometer, floatArrayOf(20F, 0F, 0F))
         .setTimestamp((index * 100).milliseconds.inWholeNanoseconds)
         .build()
       sensorManager.sendSensorEventToListeners(event)
