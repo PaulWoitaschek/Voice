@@ -15,6 +15,7 @@ import org.robolectric.shadows.SensorBuilder
 import org.robolectric.shadows.SensorEventBuilder
 import voice.core.sleeptimer.ShakeDetectorImpl
 import kotlin.test.Test
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -42,6 +43,18 @@ class ShakeDetectorImplTest {
   }
 
   @Test
+  fun `detect ignores the device lying still`() = runTest {
+    val detection = launch { shakeDetector.detect() }
+    runCurrent()
+
+    shake(acceleration = SensorManager.GRAVITY_EARTH)
+    runCurrent()
+
+    assertFalse(detection.isCompleted)
+    detection.cancel()
+  }
+
+  @Test
   fun `detect stops listening when cancelled`() = runTest {
     val detection = launch { shakeDetector.detect() }
     runCurrent()
@@ -53,10 +66,10 @@ class ShakeDetectorImplTest {
     assertTrue(sensorManager.getListeners().isEmpty())
   }
 
-  private fun shake() {
-    // Seismic reports a shake once most samples over at least 250ms exceed its acceleration threshold.
+  private fun shake(acceleration: Float = 20F) {
+    // A shake is reported once most samples over at least 250ms exceed the acceleration threshold.
     repeat(4) { index ->
-      val event = SensorEventBuilder.newBuilder(accelerometer, floatArrayOf(20F, 0F, 0F))
+      val event = SensorEventBuilder.newBuilder(accelerometer, floatArrayOf(acceleration, 0F, 0F))
         .setTimestamp((index * 100).milliseconds.inWholeNanoseconds)
         .build()
       sensorManager.sendSensorEventToListeners(event)
