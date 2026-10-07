@@ -35,17 +35,15 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import voice.core.strings.R
 import voice.core.ui.icons.VoiceIcons
 
 /**
- * Rewind / fast forward. Pressing stretches the button (nudging its neighbours aside), a click spins
- * the arrow a full turn and sends a "+20" floating up.
+ * Rewind / fast forward. Pressing stretches the button (nudging its neighbours aside), a click kicks
+ * the arrows in their direction and sends the skipped amount ("+20") floating up.
  */
 @Composable
 internal fun SkipButton(
@@ -69,7 +67,7 @@ internal fun SkipButton(
     animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
     label = "skipCorner",
   )
-  val spin = remember { Animatable(0F) }
+  val nudge = remember { Animatable(0F) }
   var bursts by remember { mutableStateOf(emptyList<Long>()) }
   var nextBurstId by remember { mutableLongStateOf(0L) }
   Box(modifier = modifier, contentAlignment = Alignment.Center) {
@@ -79,11 +77,9 @@ internal fun SkipButton(
         onClick()
         bursts = bursts + nextBurstId++
         scope.launch {
-          spin.snapTo(0F)
-          spin.animateTo(
-            targetValue = if (forward) 360F else -360F,
-            animationSpec = spring(dampingRatio = 0.7F, stiffness = Spring.StiffnessLow),
-          )
+          nudge.snapTo(0F)
+          nudge.animateTo(1F, tween(durationMillis = 90, easing = FastOutSlowInEasing))
+          nudge.animateTo(0F, spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMediumLow))
         }
       },
       modifier = Modifier.size(width = width, height = height),
@@ -95,21 +91,16 @@ internal fun SkipButton(
       Box(contentAlignment = Alignment.Center) {
         Icon(
           modifier = Modifier
-            .size(height * 0.55F)
+            .size(height * 0.5F)
             .graphicsLayer {
-              rotationZ = spin.value
+              translationX = nudge.value * height.toPx() * if (forward) 0.12F else -0.12F
+              // there is no fast forward symbol, it's the mirrored fast rewind one
               scaleX = if (forward) -1F else 1F
             },
-          imageVector = VoiceIcons.Replay,
+          imageVector = VoiceIcons.FastRewind,
           contentDescription = stringResource(
             id = if (forward) R.string.playback_action_fast_forward else R.string.playback_action_rewind,
           ),
-        )
-        Text(
-          modifier = Modifier.clearAndSetSemantics {},
-          text = seconds.toString(),
-          fontSize = 10.sp,
-          fontWeight = FontWeight.Black,
         )
       }
     }
