@@ -16,7 +16,6 @@ import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
 import voice.core.playback.session.MediaItemProvider
-import voice.core.playback.session.chapterMarkPlaylist
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
 import voice.core.playback.session.toMediaIdOrNull
@@ -33,6 +32,9 @@ class ChapterMarkPlayerTest {
 
   private lateinit var book: Book
 
+  /** Durations the wrapped player resolves when they differ from the stored ones. */
+  private val resolvedDurations = mutableMapOf<ChapterId, Long>()
+
   private val exoPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
     .setMediaSourceFactory(
       mockk {
@@ -46,7 +48,7 @@ class ChapterMarkPlayerTest {
               FakeTimeline.TimelineWindowDefinition.Builder()
                 .setPeriodCount(1)
                 .setSeekable(true)
-                .setDurationUs(TimeUnit.MILLISECONDS.toMicros(chapter.duration))
+                .setDurationUs(TimeUnit.MILLISECONDS.toMicros(resolvedDurations[chapter.id] ?: chapter.duration))
                 .setMediaItem(mediaItem)
                 .build(),
             ),
@@ -57,7 +59,7 @@ class ChapterMarkPlayerTest {
     .build()
 
   private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), mockk())
-  private val player = ChapterMarkPlayer(exoPlayer)
+  private val player = ChapterMarkPlayer(exoPlayer, mediaItemProvider)
 
   @Test
   fun `presents one media item per mark while the wrapped player holds one per file`() {
@@ -163,6 +165,64 @@ class ChapterMarkPlayerTest {
     assertTrue(player.isCommandAvailable(Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM))
   }
 
+  @Test
+  fun `follows the file duration resolved by the wrapped player`() {
+    val chapter = chapter(duration = 10_000, MarkData(0, "One"), MarkData(5_000, "Two"))
+    resolvedDurations[chapter.id] = 15_000
+    setBook(listOf(chapter))
+
+    player.seekTo(1, 8_000)
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 9_999, actual = player.duration)
+    assertEquals(expected = 9_999, actual = player.mediaMetadata.durationMs)
+    assertEquals(expected = 8_000, actual = player.currentPosition)
+    assertEquals(expected = 13_000, actual = exoPlayer.currentPosition)
+  }
+
+  @Test
+  fun `ignores edits of single chapters`() {
+    setBook(listOf(singleFileWithThreeMarks()))
+
+    val lastItem = player.getMediaItemAt(2)
+
+    player.removeMediaItem(0)
+    player.addMediaItem(lastItem)
+    player.moveMediaItem(0, 2)
+    player.replaceMediaItem(1, lastItem)
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 1, actual = exoPlayer.mediaItemCount)
+    assertEquals(expected = 3, actual = player.mediaItemCount)
+    assertEquals(expected = "Intro", actual = player.getMediaItemAt(0).mediaMetadata.title)
+    assertEquals(expected = "One", actual = player.getMediaItemAt(1).mediaMetadata.title)
+  }
+
+  @Test
+  fun `clearing removes the whole book`() {
+    setBook(listOf(singleFileWithThreeMarks()))
+
+    player.clearMediaItems()
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 0, actual = exoPlayer.mediaItemCount)
+    assertEquals(expected = 0, actual = player.mediaItemCount)
+  }
+
+  @Test
+  fun `does not offer repeat or shuffle because they would apply to whole files`() {
+    setBook(listOf(singleFileWithThreeMarks()))
+
+    assertFalse(player.isCommandAvailable(Player.COMMAND_SET_REPEAT_MODE))
+    assertFalse(player.isCommandAvailable(Player.COMMAND_SET_SHUFFLE_MODE))
+
+    player.repeatMode = Player.REPEAT_MODE_ONE
+    player.shuffleModeEnabled = true
+
+    assertEquals(expected = Player.REPEAT_MODE_OFF, actual = exoPlayer.repeatMode)
+    assertFalse(exoPlayer.shuffleModeEnabled)
+  }
+
   private fun recordDiscontinuities(reason: Int): List<Pair<Player.PositionInfo, Player.PositionInfo>> {
     val recorded = mutableListOf<Pair<Player.PositionInfo, Player.PositionInfo>>()
     player.addListener(
@@ -188,9 +248,7 @@ class ChapterMarkPlayerTest {
   ) {
     book = book(chapters)
     player.setBook(
-      playlist = book.chapterMarkPlaylist(),
-      markMediaItems = mediaItemProvider.playbackItems(book),
-      fileMediaItems = mediaItemProvider.chapterMediaItems(book),
+      book = book,
       startItemIndex = startItemIndex,
       positionInItemMs = positionInItemMs,
     )

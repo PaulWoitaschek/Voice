@@ -96,7 +96,7 @@ class VoicePlayerTest {
   private val bookId = BookId(Uuid.random().toString())
   private lateinit var currentBook: Book
   private val sleepTimer = FakeSleepTimer()
-  private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer)
+  private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
   private val player = VoicePlayer(
     player = chapterMarkPlayer,
     repo = mockk {
@@ -109,7 +109,6 @@ class VoicePlayerTest {
     seekTimeStore = seekTimeStore,
     autoRewindAmountStore = autoRewindAmountStore,
     scope = scope,
-    mediaItemProvider = mediaItemProvider,
     volumeGain = mockk(relaxed = true),
     sleepTimer = sleepTimer,
     analytics = mockk(relaxed = true),

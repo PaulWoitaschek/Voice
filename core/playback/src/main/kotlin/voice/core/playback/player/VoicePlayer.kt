@@ -21,8 +21,6 @@ import voice.core.logging.api.Logger
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
-import voice.core.playback.session.MediaItemProvider
-import voice.core.playback.session.chapterMarkPlaylist
 import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.toMediaIdOrNull
@@ -44,7 +42,6 @@ class VoicePlayer(
   private val seekTimeStore: DataStore<Int>,
   @AutoRewindAmountStore
   private val autoRewindAmountStore: DataStore<Int>,
-  private val mediaItemProvider: MediaItemProvider,
   private val scope: CoroutineScope,
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,
@@ -308,13 +305,8 @@ class VoicePlayer(
             chapterId = book.content.currentChapter,
             positionInChapterMs = book.content.positionInChapter,
           ) ?: return
-          val playlist = book.chapterMarkPlaylist()
-          val markMediaItems = mediaItemProvider.playbackItems(book)
-          val fileMediaItems = mediaItemProvider.chapterMediaItems(book)
           player.setBook(
-            playlist = playlist,
-            markMediaItems = markMediaItems,
-            fileMediaItems = fileMediaItems,
+            book = book,
             startItemIndex = currentPlaybackItem.index,
             positionInItemMs = currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
           )
