@@ -281,8 +281,8 @@
     <string name="settings.appearance.theme.light">Светлая</string>
     <string name="settings.appearance.theme.title">Тэма</string>
     <string name="settings.appearance.title">Выгляд</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Час заканчэння</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Час пачатку</string>
+    <string name="settings.auto_sleep_timer.end.label">Час заканчэння</string>
+    <string name="settings.auto_sleep_timer.start.label">Час пачатку</string>
     <string name="settings.auto_sleep_timer.summary">Запускаць таймер сну аўтаматычна калі прайграванне пачынаецца паміж %1$s і %2$s</string>
     <string name="settings.auto_sleep_timer.title">Аўтаматычны таймер сну</string>
     <string name="settings.library.folders.summary">Кіраванне папкамі, адсканаванымі для пошуку аўдыякніг</string>
@@ -305,7 +305,6 @@
     <string name="settings.subtitle">Зрабіце Voice сваім</string>
     <string name="settings.support.faq.title">FAQ</string>
     <string name="settings.support.get_support.title">Даведка</string>
-    <string name="settings.support.help_translating.title">Дапамагчы з перакладам Voice</string>
     <string name="settings.support.report_issue.title">Паведаміць пра праблему</string>
     <string name="settings.support.suggest_idea.title">Прапанаваць ідэю</string>
     <string name="settings.support.support_voice.summary">Ахвяраванні дапамагаюць падтрымліваць Voice</string>

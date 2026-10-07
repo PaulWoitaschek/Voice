@@ -25,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -57,7 +56,6 @@ internal fun HelpSection(
   onGetHelpClick: () -> Unit,
   onReportClick: () -> Unit,
   onSuggestClick: () -> Unit,
-  onTranslateClick: () -> Unit,
   onAnalyticsToggle: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -94,21 +92,13 @@ internal fun HelpSection(
     contentColor = colors.onTertiaryContainer,
     onClick = onSuggestClick,
   )
-  val translate = HelpTile(
-    title = stringResource(StringsR.string.settings_support_help_translating_title),
-    icon = VoiceIcons.Language,
-    shape = MaterialShapes.Flower,
-    containerColor = colors.primaryContainer,
-    contentColor = colors.onPrimaryContainer,
-    onClick = onTranslateClick,
-  )
   SettingsIsland(
     modifier = modifier,
     title = stringResource(StringsR.string.settings_support_title),
     containerColor = colors.surfaceContainerHigh,
   ) {
     if (LocalDensity.current.fontScale >= 1.5F) {
-      listOf(faq, getHelp, report, suggest, translate).forEach { tile ->
+      listOf(faq, getHelp, report, suggest).forEach { tile ->
         IslandRow(
           title = tile.title,
           onClick = tile.onClick,
@@ -122,7 +112,6 @@ internal fun HelpSection(
       ) {
         TileRow(faq, getHelp)
         TileRow(report, suggest)
-        TileButton(translate, wide = true, modifier = Modifier.fillMaxWidth())
       }
     }
     if (showAnalytics) {
@@ -175,7 +164,6 @@ private fun TileRow(
 private fun TileButton(
   tile: HelpTile,
   modifier: Modifier = Modifier,
-  wide: Boolean = false,
 ) {
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
@@ -191,28 +179,13 @@ private fun TileButton(
     color = MaterialTheme.colorScheme.surfaceBright,
     interactionSource = interactionSource,
   ) {
-    if (wide) {
-      Row(
-        modifier = Modifier.padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-      ) {
-        TileIcon(tile, rotation)
-        Text(
-          modifier = Modifier.weight(1F),
-          text = tile.title,
-          style = MaterialTheme.typography.titleSmall,
-        )
-      }
-    } else {
-      Column(Modifier.padding(16.dp)) {
-        TileIcon(tile, rotation)
-        Spacer(Modifier.height(12.dp))
-        Text(
-          text = tile.title,
-          style = MaterialTheme.typography.titleSmall,
-        )
-      }
+    Column(Modifier.padding(16.dp)) {
+      TileIcon(tile, rotation)
+      Spacer(Modifier.height(12.dp))
+      Text(
+        text = tile.title,
+        style = MaterialTheme.typography.titleSmall,
+      )
     }
   }
 }

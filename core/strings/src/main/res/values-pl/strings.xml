@@ -281,8 +281,8 @@
     <string name="settings.appearance.theme.light">Jasny</string>
     <string name="settings.appearance.theme.title">Motyw</string>
     <string name="settings.appearance.title">Wygląd</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Zakończ</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Rozpocznij</string>
+    <string name="settings.auto_sleep_timer.end.label">Zakończ</string>
+    <string name="settings.auto_sleep_timer.start.label">Rozpocznij</string>
     <string name="settings.auto_sleep_timer.summary">Automatycznie uruchamia wyłącznik czasowy po rozpoczęciu odtwarzania pomiędzy %1$s a %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatyczny Wyłącznik Czasowy</string>
     <string name="settings.library.folders.summary">Zarządzaj folderami skanowanymi w poszukiwaniu audiobooków</string>
@@ -305,7 +305,6 @@
     <string name="settings.subtitle">Voice na Twoją modłę</string>
     <string name="settings.support.faq.title">Najczęściej zadawane pytania (FAQ)</string>
     <string name="settings.support.get_support.title">Uzyskaj pomoc</string>
-    <string name="settings.support.help_translating.title">Pomóż w tłumaczeniu</string>
     <string name="settings.support.report_issue.title">Zgłoś problem</string>
     <string name="settings.support.suggest_idea.title">Zasugeruj pomysł</string>
     <string name="settings.support.support_voice.summary">Darowizny pomagają utrzymać Voice</string>

@@ -253,7 +253,6 @@
     <string name="settings.playback.seek_time.title">Omet la quantitat</string>
     <string name="settings.subtitle">Fes que Voice sigui teu</string>
     <string name="settings.support.get_support.title">Obtingueu ajuda</string>
-    <string name="settings.support.help_translating.title">Ajudeu a traduir el Voice</string>
     <string name="settings.support.report_issue.title">Informeu d\'un problema</string>
     <string name="settings.support.suggest_idea.title">Suggeriu una idea</string>
     <string name="settings.support.title">Ajuda i comentaris</string>

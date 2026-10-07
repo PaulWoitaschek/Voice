@@ -263,8 +263,8 @@
     <string name="settings.appearance.theme.light">Açık</string>
     <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.appearance.title">Görünüm</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Bitiş zamanı</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Başlama zamanı</string>
+    <string name="settings.auto_sleep_timer.end.label">Bitiş zamanı</string>
+    <string name="settings.auto_sleep_timer.start.label">Başlama zamanı</string>
     <string name="settings.auto_sleep_timer.summary">Eğer oynatıcı saat %1$s ile %2$s arasında başlatılırsa otomatik olarak bir uyku zamanlayıcısı başlat</string>
     <string name="settings.auto_sleep_timer.title">Otomatik Uyku Zamanlayıcısı</string>
     <string name="settings.library.folders.summary">Sesli kitaplar için taranan dizinleri yönetin</string>
@@ -287,7 +287,6 @@
     <string name="settings.subtitle">Voice\'u kendinize göre ayarlayın</string>
     <string name="settings.support.faq.title">SSS</string>
     <string name="settings.support.get_support.title">Yardım al</string>
-    <string name="settings.support.help_translating.title">Voice\'u çevirmeye yardım et</string>
     <string name="settings.support.report_issue.title">Sorun bildir</string>
     <string name="settings.support.suggest_idea.title">Fikir öner</string>
     <string name="settings.support.support_voice.summary">Bağışlar Voice\'un bakımına yardımcı olur</string>

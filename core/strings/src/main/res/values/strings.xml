@@ -405,9 +405,9 @@
     <!-- Title of the settings section for the theme and the color scheme. -->
     <string name="settings.appearance.title">Appearance</string>
     <!-- Label for selecting the automatic sleep timer end time. -->
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Set end time</string>
+    <string name="settings.auto_sleep_timer.end.label">Set end time</string>
     <!-- Label for selecting the automatic sleep timer start time. -->
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Set start time</string>
+    <string name="settings.auto_sleep_timer.start.label">Set start time</string>
     <!-- Settings summary for the automatic sleep timer time window. -->
     <string name="settings.auto_sleep_timer.summary">Start a sleep timer automatically when playback begins between %1$s and %2$s</string>
     <!-- Settings title for automatically starting a sleep timer. -->
@@ -446,7 +446,6 @@
     <!-- Settings support row for getting help. -->
     <string name="settings.support.get_support.title">Get help</string>
     <!-- Settings support row for helping translate the app. -->
-    <string name="settings.support.help_translating.title">Help translating Voice</string>
     <!-- Settings support row for reporting a problem. -->
     <string name="settings.support.report_issue.title">Report a problem</string>
     <!-- Settings row description for opening the donation/support screen. -->

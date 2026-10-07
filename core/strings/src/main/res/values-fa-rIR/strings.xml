@@ -263,8 +263,8 @@
     <string name="settings.appearance.theme.light">روشن</string>
     <string name="settings.appearance.theme.title">تم</string>
     <string name="settings.appearance.title">ظاهر</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">زمان پایان</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">زمان شروع</string>
+    <string name="settings.auto_sleep_timer.end.label">زمان پایان</string>
+    <string name="settings.auto_sleep_timer.start.label">زمان شروع</string>
     <string name="settings.auto_sleep_timer.summary">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>
     <string name="settings.auto_sleep_timer.title">زمان خواب خودکار</string>
     <string name="settings.library.folders.summary">مدیریت پوشه‌هایی که برای کتاب‌های صوتی اسکن می‌شوند</string>
@@ -287,7 +287,6 @@
     <string name="settings.subtitle">Voice را مال خودتان کنید</string>
     <string name="settings.support.faq.title">سوالات متداول</string>
     <string name="settings.support.get_support.title">دریافت پشتیبانی</string>
-    <string name="settings.support.help_translating.title">کمک برای ترجمه Voice</string>
     <string name="settings.support.report_issue.title">گزارش مشکل</string>
     <string name="settings.support.suggest_idea.title">یک ایده پیشنهاد کنید</string>
     <string name="settings.support.support_voice.summary">کمک‌های مالی به نگهداری Voice کمک می‌کنند</string>

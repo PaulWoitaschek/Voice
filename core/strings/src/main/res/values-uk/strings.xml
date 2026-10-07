@@ -281,8 +281,8 @@
     <string name="settings.appearance.theme.light">Світла</string>
     <string name="settings.appearance.theme.title">Тема</string>
     <string name="settings.appearance.title">Вигляд</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Час кінця</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Час початку</string>
+    <string name="settings.auto_sleep_timer.end.label">Час кінця</string>
+    <string name="settings.auto_sleep_timer.start.label">Час початку</string>
     <string name="settings.auto_sleep_timer.summary">Автоматично запустити таймер сну, коли програш починається між %1$s та %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматичний таймер сну</string>
     <string name="settings.library.folders.summary">Налаштування папок, які скануються для пошуку аудіокних</string>
@@ -305,7 +305,6 @@
     <string name="settings.subtitle">Зробіть Voice своїм</string>
     <string name="settings.support.faq.title">ЧаПи</string>
     <string name="settings.support.get_support.title">Підтримка</string>
-    <string name="settings.support.help_translating.title">Допомога в перекладі Voice</string>
     <string name="settings.support.report_issue.title">Повідомити про проблему</string>
     <string name="settings.support.suggest_idea.title">Пропозиції</string>
     <string name="settings.support.support_voice.summary">Донати допомагають підтримувати Voice</string>

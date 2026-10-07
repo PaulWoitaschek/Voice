@@ -246,7 +246,6 @@
     <string name="settings.playback.seek_time.title">आगे बढ़ाने की मात्रा</string>
     <string name="settings.subtitle">Voice को अपना बनाएँ</string>
     <string name="settings.support.get_support.title">सहायता प्राप्त करें</string>
-    <string name="settings.support.help_translating.title">Voice का अनुवाद करने में मदद करें</string>
     <string name="settings.support.report_issue.title">समस्या की रिपोर्ट करें</string>
     <string name="settings.support.suggest_idea.title">विचार सुझाएं</string>
     <string name="settings.support.title">सहायता और फ़ीडबैक</string>

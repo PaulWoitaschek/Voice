@@ -217,7 +217,6 @@
     <string name="settings.playback.seek_time.title">Χρονική μετακίνηση</string>
     <string name="settings.subtitle">Κάντε το Voice δικό σας</string>
     <string name="settings.support.get_support.title">Λήψη υποστήριξης</string>
-    <string name="settings.support.help_translating.title">Βοήθεια στη μετάφραση του Voice</string>
     <string name="settings.support.report_issue.title">Αναφορά προβλήματος</string>
     <string name="settings.support.suggest_idea.title">Προτείνετε μια ιδέα</string>
     <string name="settings.support.title">Βοήθεια και σχόλια</string>

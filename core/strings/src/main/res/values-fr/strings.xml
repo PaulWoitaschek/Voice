@@ -272,8 +272,8 @@
     <string name="settings.appearance.theme.light">Clair</string>
     <string name="settings.appearance.theme.title">Thème</string>
     <string name="settings.appearance.title">Apparence</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Heure de fin</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Heure de début</string>
+    <string name="settings.auto_sleep_timer.end.label">Heure de fin</string>
+    <string name="settings.auto_sleep_timer.start.label">Heure de début</string>
     <string name="settings.auto_sleep_timer.summary">Démarrer automatiquement le minuteur de veille lorsque la lecture commence entre %1$s et %2$s</string>
     <string name="settings.auto_sleep_timer.title">Minuteur de veille automatique</string>
     <string name="settings.library.folders.summary">Gérer les dossiers analysés pour les livres audio</string>
@@ -296,7 +296,6 @@
     <string name="settings.subtitle">Faites de Voice le vôtre</string>
     <string name="settings.support.faq.title">FAQ</string>
     <string name="settings.support.get_support.title">Obtenir de l\'aide</string>
-    <string name="settings.support.help_translating.title">Aidez à traduire Voice</string>
     <string name="settings.support.report_issue.title">Signaler un problème</string>
     <string name="settings.support.suggest_idea.title">Suggérer une idée</string>
     <string name="settings.support.support_voice.summary">Les dons aident à maintenir Voice</string>

@@ -281,8 +281,8 @@
     <string name="settings.appearance.theme.light">Светлая</string>
     <string name="settings.appearance.theme.title">Тема</string>
     <string name="settings.appearance.title">Оформление</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Время конца</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Время начала</string>
+    <string name="settings.auto_sleep_timer.end.label">Время конца</string>
+    <string name="settings.auto_sleep_timer.start.label">Время начала</string>
     <string name="settings.auto_sleep_timer.summary">Запускать таймер сна автоматически когда воспроизведение начинается между %1$s и %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматический таймер сна</string>
     <string name="settings.library.folders.summary">Управление папками, отсканированными на наличие аудиокниг</string>
@@ -305,7 +305,6 @@
     <string name="settings.subtitle">Сделайте Voice своим</string>
     <string name="settings.support.faq.title">Частые Вопросы (ЧаВо)</string>
     <string name="settings.support.get_support.title">Поддержка</string>
-    <string name="settings.support.help_translating.title">Помочь с переводом</string>
     <string name="settings.support.report_issue.title">Сообщить о проблеме</string>
     <string name="settings.support.suggest_idea.title">Предложить идею</string>
     <string name="settings.support.support_voice.summary">Пожертвования помогают поддерживать Voice</string>

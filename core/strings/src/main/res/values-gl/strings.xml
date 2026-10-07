@@ -263,8 +263,8 @@
     <string name="settings.appearance.theme.light">Claro</string>
     <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.appearance.title">Aparencia</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Hora de fin</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Hora de inicio</string>
+    <string name="settings.auto_sleep_timer.end.label">Hora de fin</string>
+    <string name="settings.auto_sleep_timer.start.label">Hora de inicio</string>
     <string name="settings.auto_sleep_timer.summary">Iniciar o temporizador automáticamente cando a escoita comece entre as %1$s e as %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador automático</string>
     <string name="settings.library.folders.summary">Xestionar cartafoles onde buscar audiolibros</string>
@@ -287,7 +287,6 @@
     <string name="settings.subtitle">Fai Voice á túa medida</string>
     <string name="settings.support.faq.title">PMF</string>
     <string name="settings.support.get_support.title">Obter axuda</string>
-    <string name="settings.support.help_translating.title">Axuda a traducir Voice</string>
     <string name="settings.support.report_issue.title">Informar dun problema</string>
     <string name="settings.support.suggest_idea.title">Suxerir ideas</string>
     <string name="settings.support.support_voice.summary">As doazóns axudan a manter Voice</string>

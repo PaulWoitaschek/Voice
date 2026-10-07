@@ -1,7 +1,6 @@
 # Voice
 
 [![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/PaulWoitaschek/Voice/actions/workflows/ci.yml)
-[![Translation status](https://hosted.weblate.org/widgets/voice/-/svg-badge.svg)](https://hosted.weblate.org/engage/voice/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://voice.woitaschek.de/license/)
 
 **A minimalistic, user-focused audiobook player for Android, built for reliability and simplicity.**
@@ -39,7 +38,7 @@ The [documentation website](https://voice.woitaschek.de) covers features, the ph
 
 ## Contributing
 
-Bug reports, feature requests, bug fixes and translations are very welcome. Anything other than a bug fix needs the maintainer's approval before you open a pull request, so please read the [Contributing guide](https://voice.woitaschek.de/contributing/) first. For code, start with [Development](https://voice.woitaschek.de/development/) and [Architecture](https://voice.woitaschek.de/architecture/), or help translate Voice on [Weblate](https://hosted.weblate.org/engage/voice/).
+Bug reports, feature requests, and bug fixes are very welcome. Anything other than a bug fix needs the maintainer's approval before you open a pull request, so please read the [Contributing guide](https://voice.woitaschek.de/contributing/) first. For code, start with [Development](https://voice.woitaschek.de/development/) and [Architecture](https://voice.woitaschek.de/architecture/).
 
 ## Support Voice
 

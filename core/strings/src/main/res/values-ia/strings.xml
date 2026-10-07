@@ -263,8 +263,8 @@
     <string name="settings.appearance.theme.light">Clar</string>
     <string name="settings.appearance.theme.title">Thema</string>
     <string name="settings.appearance.title">Apparentia</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Definir tempore de fin</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Definir tempore initial</string>
+    <string name="settings.auto_sleep_timer.end.label">Definir tempore de fin</string>
+    <string name="settings.auto_sleep_timer.start.label">Definir tempore initial</string>
     <string name="settings.auto_sleep_timer.summary">Initiar automaticamente un temporisator de somno quando le reproduction comencia inter %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporisator de somno automatic</string>
     <string name="settings.library.folders.summary">Gerer dossiers scandite pro audiolibros</string>
@@ -287,7 +287,6 @@
     <string name="settings.subtitle">Face Voice tue</string>
     <string name="settings.support.faq.title">FAQ</string>
     <string name="settings.support.get_support.title">Obtener assistentia</string>
-    <string name="settings.support.help_translating.title">Adjuta in traducer Voice</string>
     <string name="settings.support.report_issue.title">Signalar un defecto</string>
     <string name="settings.support.suggest_idea.title">Suggerer un idea</string>
     <string name="settings.support.support_voice.summary">Le donationes adjuta a mantener Voice</string>

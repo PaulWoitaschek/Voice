@@ -245,7 +245,6 @@
     <string name="settings.playback.seek_time.title">Kihagyás mértéke</string>
     <string name="settings.subtitle">Tedd a Voice-t a sajátoddá</string>
     <string name="settings.support.get_support.title">Segítségkérés</string>
-    <string name="settings.support.help_translating.title">Segíts lefordítani a Voice applikációt</string>
     <string name="settings.support.report_issue.title">Hibajelentés</string>
     <string name="settings.support.suggest_idea.title">Javasolj egy ötletet</string>
     <string name="settings.support.title">Súgó és visszajelzés</string>

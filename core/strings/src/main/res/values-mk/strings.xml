@@ -263,8 +263,8 @@
     <string name="settings.appearance.theme.light">Светла</string>
     <string name="settings.appearance.theme.title">Тема</string>
     <string name="settings.appearance.title">Изглед</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Внеси време за крај</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Внеси време за старт</string>
+    <string name="settings.auto_sleep_timer.end.label">Внеси време за крај</string>
+    <string name="settings.auto_sleep_timer.start.label">Внеси време за старт</string>
     <string name="settings.auto_sleep_timer.summary">Стартувај го тајмерот за спиење автоматски штом аудиото почнува меѓу %1$s и %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматски тајмер за спиење</string>
     <string name="settings.library.folders.summary">Управувајте со папките што се скенираат за аудиокниги</string>
@@ -287,7 +287,6 @@
     <string name="settings.subtitle">Направете го Voice свој</string>
     <string name="settings.support.faq.title">ЧПП</string>
     <string name="settings.support.get_support.title">Побарај поддршка</string>
-    <string name="settings.support.help_translating.title">Поможете за превод на Voice</string>
     <string name="settings.support.report_issue.title">Пријави проблем</string>
     <string name="settings.support.suggest_idea.title">Предложете идеја</string>
     <string name="settings.support.support_voice.summary">Донациите помагаат Voice да се одржува</string>

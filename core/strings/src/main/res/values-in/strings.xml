@@ -254,8 +254,8 @@
     <string name="settings.appearance.theme.light">Terang</string>
     <string name="settings.appearance.theme.title">Tema</string>
     <string name="settings.appearance.title">Tampilan</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Atur waktu selesai</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Atur waktu mulai</string>
+    <string name="settings.auto_sleep_timer.end.label">Atur waktu selesai</string>
+    <string name="settings.auto_sleep_timer.start.label">Atur waktu mulai</string>
     <string name="settings.auto_sleep_timer.summary">Mulai pengatur waktu tidur secara otomatis saat pemutaran dimulai antara %1$s dan %2$s</string>
     <string name="settings.auto_sleep_timer.title">Pengatur Waktu Tidur Otomatis</string>
     <string name="settings.library.folders.summary">Kelola folder yang dipindai untuk buku audio</string>
@@ -278,7 +278,6 @@
     <string name="settings.subtitle">Jadikan Voice milik Anda</string>
     <string name="settings.support.faq.title">FAQ</string>
     <string name="settings.support.get_support.title">Dapatkan bantuan</string>
-    <string name="settings.support.help_translating.title">Bantu terjemahkan Voice</string>
     <string name="settings.support.report_issue.title">Laporkan masalah</string>
     <string name="settings.support.suggest_idea.title">Sarankan ide</string>
     <string name="settings.support.support_voice.summary">Donasi membantu menjaga Voice tetap terawat</string>

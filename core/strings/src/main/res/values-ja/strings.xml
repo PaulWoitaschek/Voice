@@ -254,8 +254,8 @@
     <string name="settings.appearance.theme.light">ライト</string>
     <string name="settings.appearance.theme.title">テーマ</string>
     <string name="settings.appearance.title">外観</string>
-    <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">終了時刻を設定</string>
-    <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">開始時刻を設定</string>
+    <string name="settings.auto_sleep_timer.end.label">終了時刻を設定</string>
+    <string name="settings.auto_sleep_timer.start.label">開始時刻を設定</string>
     <string name="settings.auto_sleep_timer.summary">%1$s から %2$s の間に再生が始まった場合、自動的にスリープタイマーを開始します</string>
     <string name="settings.auto_sleep_timer.title">自動スリープタイマー</string>
     <string name="settings.library.folders.summary">オーディオブックをスキャンするフォルダーを管理</string>
@@ -278,7 +278,6 @@
     <string name="settings.subtitle">Voice を自分好みに</string>
     <string name="settings.support.faq.title">よくある質問</string>
     <string name="settings.support.get_support.title">サポート</string>
-    <string name="settings.support.help_translating.title">翻訳の手助け</string>
     <string name="settings.support.report_issue.title">問題の報告</string>
     <string name="settings.support.suggest_idea.title">アイデアの提案</string>
     <string name="settings.support.support_voice.summary">寄付はVoiceの維持に役立ちます</string>

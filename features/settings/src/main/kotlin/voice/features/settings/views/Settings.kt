@@ -210,7 +210,6 @@ private fun LazyListScope.sections(
       onGetHelpClick = listener::getSupport,
       onReportClick = listener::openBugReport,
       onSuggestClick = listener::suggestIdea,
-      onTranslateClick = listener::openTranslations,
       onAnalyticsToggle = listener::toggleAnalytics,
     )
   }

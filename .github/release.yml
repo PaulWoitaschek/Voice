@@ -1,7 +1,4 @@
 changelog:
-  exclude:
-    authors:
-      - weblate
   categories:
     - title: 🚀 New
       labels:

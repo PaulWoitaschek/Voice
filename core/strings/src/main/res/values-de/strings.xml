@@ -287,7 +287,6 @@
     <string name="settings.subtitle">Mach Voice zu Deinem</string>
     <string name="settings.support.faq.title">Häufige Fragen</string>
     <string name="settings.support.get_support.title">Hilfe erhalten</string>
-    <string name="settings.support.help_translating.title">Bei der Übersetzung von Voice helfen</string>
     <string name="settings.support.report_issue.title">Ein Problem melden</string>
     <string name="settings.support.suggest_idea.title">Eine Idee vorschlagen</string>
     <string name="settings.support.support_voice.summary">Spenden helfen, Voice zu pflegen</string>
