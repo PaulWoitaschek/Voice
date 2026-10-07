@@ -195,6 +195,9 @@ private fun LayoutTile(
     if (selected && !wasSelected) {
       pop.snapTo(0F)
       pop.animateTo(1F, tween(durationMillis = 800, easing = LinearEasing))
+    } else {
+      // deselected while still popping in, which would leave covers missing
+      pop.snapTo(1F)
     }
     wasSelected = selected
   }

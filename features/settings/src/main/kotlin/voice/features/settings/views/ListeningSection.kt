@@ -14,7 +14,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,6 +52,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
@@ -60,6 +60,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -95,7 +96,9 @@ internal fun ListeningSection(
   seekTimeInSeconds: Int,
   autoRewindInSeconds: Int,
   onSeekTimeChange: (Int) -> Unit,
+  onSeekTimeStep: (Int) -> Unit,
   onAutoRewindChange: (Int) -> Unit,
+  onAutoRewindStep: (Int) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   SettingsIsland(
@@ -110,6 +113,7 @@ internal fun ListeningSection(
       range = SEEK_TIME_RANGE,
       presets = SEEK_TIME_PRESETS,
       onSecondsChange = onSeekTimeChange,
+      onStep = onSeekTimeStep,
       illustration = { SkipIllustration(seekTimeInSeconds) },
     )
     Spacer(Modifier.height(28.dp))
@@ -120,6 +124,7 @@ internal fun ListeningSection(
       range = AUTO_REWIND_RANGE,
       presets = AUTO_REWIND_PRESETS,
       onSecondsChange = onAutoRewindChange,
+      onStep = onAutoRewindStep,
       illustration = { RewindIllustration(autoRewindInSeconds, maxSeconds = AUTO_REWIND_RANGE.last) },
     )
   }
@@ -133,6 +138,7 @@ private fun SecondsSetting(
   range: IntRange,
   presets: List<Int>,
   onSecondsChange: (Int) -> Unit,
+  onStep: (Int) -> Unit,
   illustration: @Composable () -> Unit,
 ) {
   Column {
@@ -157,8 +163,9 @@ private fun SecondsSetting(
     ) {
       Stepper(
         increase = false,
+        settingTitle = title,
         enabled = seconds > range.first,
-        onClick = { onSecondsChange(seconds - 1) },
+        onClick = { onStep(-1) },
       )
       Column(
         modifier = Modifier
@@ -180,8 +187,9 @@ private fun SecondsSetting(
       }
       Stepper(
         increase = true,
+        settingTitle = title,
         enabled = seconds < range.last,
-        onClick = { onSecondsChange(seconds + 1) },
+        onClick = { onStep(1) },
       )
     }
     Spacer(Modifier.height(12.dp))
@@ -196,9 +204,13 @@ private fun SecondsSetting(
 @Composable
 private fun Stepper(
   increase: Boolean,
+  settingTitle: String,
   enabled: Boolean,
   onClick: () -> Unit,
 ) {
+  val action = stringResource(
+    if (increase) StringsR.string.sleep_timer_dialog_action_increment else StringsR.string.sleep_timer_dialog_action_decrement,
+  )
   FilledIconButton(
     onClick = onClick,
     shapes = IconButtonDefaults.shapes(),
@@ -210,9 +222,8 @@ private fun Stepper(
   ) {
     Icon(
       imageVector = if (increase) VoiceIcons.Add else VoiceIcons.Remove,
-      contentDescription = stringResource(
-        if (increase) StringsR.string.sleep_timer_dialog_action_increment else StringsR.string.sleep_timer_dialog_action_decrement,
-      ),
+      // both settings have steppers, so say which one this is
+      contentDescription = "$action, $settingTitle",
     )
   }
 }
@@ -229,8 +240,13 @@ private fun secondsText(seconds: Int): String {
 /** The current value, rolling up when it grows and down when it shrinks. */
 @Composable
 private fun SecondsValue(seconds: Int) {
+  val text = secondsText(seconds)
   AnimatedContent(
-    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+    // while rolling, both the old and the new value are shown, but only the new one is announced
+    modifier = Modifier.clearAndSetSemantics {
+      contentDescription = text
+      liveRegion = LiveRegionMode.Polite
+    },
     targetState = seconds,
     transitionSpec = {
       val up = targetState > initialState
@@ -268,6 +284,8 @@ private fun SecondsPresets(
     presets.forEachIndexed { index, preset ->
       val description = secondsText(preset)
       val labelStyle = MaterialTheme.typography.labelLarge
+      // "Off" is a long word in some languages. When it doesn't fit, the number says the same.
+      var wordFits by remember(description, LocalDensity.current.fontScale) { mutableStateOf(true) }
       ToggleButton(
         checked = seconds == preset,
         onCheckedChange = { onSecondsChange(preset) },
@@ -291,10 +309,14 @@ private fun SecondsPresets(
         contentPadding = PaddingValues(horizontal = 4.dp),
       ) {
         Text(
-          text = if (preset == 0) description else numberFormat.format(preset),
+          text = if (preset == 0 && wordFits) description else numberFormat.format(preset),
           style = labelStyle,
           maxLines = 1,
+          softWrap = false,
           autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = labelStyle.fontSize),
+          onTextLayout = { layout ->
+            if (preset == 0 && layout.hasVisualOverflow) wordFits = false
+          },
         )
       }
     }
@@ -428,65 +450,71 @@ private fun RewindIllustration(
   }
   val colors = MaterialTheme.colorScheme
   val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-  val wave = remember { Path() }
-  val arc = remember { Path() }
-  Canvas(Modifier.fillMaxSize()) {
-    val lineY = size.height * 0.72F
-    val strokeWidth = 4.dp.toPx()
-    val pauseX = size.width * 0.82F
-    val playheadX = pauseX - rewind.value * size.width * 0.6F
-    scale(scaleX = if (rtl) -1F else 1F, scaleY = 1F) {
-      drawLine(
-        color = colors.secondary.copy(alpha = 0.25F),
-        start = Offset(strokeWidth, lineY),
-        end = Offset(size.width - strokeWidth, lineY),
-        strokeWidth = strokeWidth,
-        cap = StrokeCap.Round,
-      )
-      // what was heard already
-      wave.reset()
-      val amplitude = 2.5.dp.toPx()
-      val wavelength = 16.dp.toPx()
-      val phase = clock.value * 2 * PI.toFloat() * 0.6F
-      var x = strokeWidth
-      wave.moveTo(x, lineY)
-      while (x < playheadX) {
-        x = (x + 2F).coerceAtMost(playheadX)
-        wave.lineTo(x, lineY + amplitude * sin(x / wavelength * 2 * PI.toFloat() - phase))
-      }
-      drawPath(wave, color = colors.secondary, style = Stroke(width = strokeWidth, cap = StrokeCap.Round))
-      // where it was paused
-      drawCircle(
-        color = colors.onSecondaryContainer.copy(alpha = 0.45F),
-        radius = 5.dp.toPx(),
-        center = Offset(pauseX, lineY),
-        style = Stroke(width = 2.dp.toPx()),
-      )
-      val distance = pauseX - playheadX
-      if (distance > 6.dp.toPx()) {
-        arc.reset()
-        arc.moveTo(pauseX, lineY - 8.dp.toPx())
-        arc.quadraticTo(
-          (pauseX + playheadX) / 2,
-          lineY - 8.dp.toPx() - (distance * 0.35F).coerceAtMost(size.height * 0.6F),
-          playheadX + 3.dp.toPx(),
-          lineY - 10.dp.toPx(),
+  // the wave moves with every frame, so everything that doesn't is only created when the size changes
+  Spacer(
+    Modifier
+      .fillMaxSize()
+      .drawWithCache {
+        val wave = Path()
+        val arc = Path()
+        val lineY = size.height * 0.72F
+        val strokeWidth = 4.dp.toPx()
+        val pauseX = size.width * 0.82F
+        val amplitude = 2.5.dp.toPx()
+        val wavelength = 16.dp.toPx()
+        val waveStroke = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+        val pauseStroke = Stroke(width = 2.dp.toPx())
+        val arcStroke = Stroke(
+          width = 2.dp.toPx(),
+          cap = StrokeCap.Round,
+          pathEffect = PathEffect.dashPathEffect(floatArrayOf(4.dp.toPx(), 4.dp.toPx())),
         )
-        drawPath(
-          path = arc,
-          color = colors.tertiary,
-          style = Stroke(
-            width = 2.dp.toPx(),
-            cap = StrokeCap.Round,
-            pathEffect = PathEffect.dashPathEffect(floatArrayOf(4.dp.toPx(), 4.dp.toPx())),
-          ),
-        )
-      }
-      drawCircle(
-        color = colors.primary,
-        radius = 7.dp.toPx(),
-        center = Offset(playheadX, lineY),
-      )
-    }
-  }
+        onDrawBehind {
+          val playheadX = pauseX - rewind.value * size.width * 0.6F
+          scale(scaleX = if (rtl) -1F else 1F, scaleY = 1F) {
+            drawLine(
+              color = colors.secondary.copy(alpha = 0.25F),
+              start = Offset(strokeWidth, lineY),
+              end = Offset(size.width - strokeWidth, lineY),
+              strokeWidth = strokeWidth,
+              cap = StrokeCap.Round,
+            )
+            // what was heard already
+            wave.reset()
+            val phase = clock.value * 2 * PI.toFloat() * 0.6F
+            var x = strokeWidth
+            wave.moveTo(x, lineY)
+            while (x < playheadX) {
+              x = (x + 2F).coerceAtMost(playheadX)
+              wave.lineTo(x, lineY + amplitude * sin(x / wavelength * 2 * PI.toFloat() - phase))
+            }
+            drawPath(wave, color = colors.secondary, style = waveStroke)
+            // where it was paused
+            drawCircle(
+              color = colors.onSecondaryContainer.copy(alpha = 0.45F),
+              radius = 5.dp.toPx(),
+              center = Offset(pauseX, lineY),
+              style = pauseStroke,
+            )
+            val distance = pauseX - playheadX
+            if (distance > 6.dp.toPx()) {
+              arc.reset()
+              arc.moveTo(pauseX, lineY - 8.dp.toPx())
+              arc.quadraticTo(
+                (pauseX + playheadX) / 2,
+                lineY - 8.dp.toPx() - (distance * 0.35F).coerceAtMost(size.height * 0.6F),
+                playheadX + 3.dp.toPx(),
+                lineY - 10.dp.toPx(),
+              )
+              drawPath(path = arc, color = colors.tertiary, style = arcStroke)
+            }
+            drawCircle(
+              color = colors.primary,
+              radius = 7.dp.toPx(),
+              center = Offset(playheadX, lineY),
+            )
+          }
+        }
+      },
+  )
 }

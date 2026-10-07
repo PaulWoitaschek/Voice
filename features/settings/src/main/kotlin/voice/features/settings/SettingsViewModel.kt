@@ -3,7 +3,6 @@ package voice.features.settings
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
@@ -15,11 +14,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.GridMode
+import voice.core.data.KioskModeDemoData
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
 import voice.core.data.folders.AudiobookFolders
@@ -74,21 +73,37 @@ class SettingsViewModel(
     field = MutableSharedFlow<SettingsViewEffect>(extraBufferCapacity = 1)
   private var appVersionTapCount = 0
 
+  /**
+   * Null until every setting is read. Placeholder values would show for a moment and then animate
+   * over to the real ones, as if they had just been changed.
+   */
   @Composable
-  fun viewState(): SettingsViewState {
-    val themeMode by remember { themeModeStore.data }.collectAsState(initial = ThemeMode.FollowSystem)
-    val themeColorScheme by remember { themeColorSchemeStore.data }.collectAsState(initial = ThemeColorScheme.VoiceBlue)
-    val autoRewindAmount by remember { autoRewindAmountStore.data }.collectAsState(initial = 0)
-    val seekTime by remember { seekTimeStore.data }.collectAsState(initial = 0)
-    val gridMode by remember { gridModeStore.data }.collectAsState(initial = GridMode.GRID)
-    val autoSleepTimer by remember { sleepTimerPreferenceStore.data }.collectAsState(
-      initial = SleepTimerPreference.Default,
-    )
-    val analyticsEnabled by remember { analyticsConsentStore.data }.collectAsState(initial = false)
-    val folderNames by remember { folderNames() }.collectAsState(initial = emptyList())
-    val showDeveloperMenu by remember { developerMenuUnlockedStore.data }.collectAsState(initial = false)
+  fun viewState(): SettingsViewState? {
+    val themeMode = remember { themeModeStore.data }.collectAsState(initial = null).value
+    val themeColorScheme = remember { themeColorSchemeStore.data }.collectAsState(initial = null).value
+    val autoRewindAmount = remember { autoRewindAmountStore.data }.collectAsState(initial = null).value
+    val seekTime = remember { seekTimeStore.data }.collectAsState(initial = null).value
+    val gridMode = remember { gridModeStore.data }.collectAsState(initial = null).value
+    val autoSleepTimer = remember { sleepTimerPreferenceStore.data }.collectAsState(initial = null).value
+    val analyticsEnabled = remember { analyticsConsentStore.data }.collectAsState(initial = null).value
+    // reading the folders and their names asks other processes, so that's kept off the main thread
+    val folderNames = remember { folderNames() }.collectAsState(initial = null, context = dispatcherProvider.io).value
+    val showDeveloperMenu = remember { developerMenuUnlockedStore.data }.collectAsState(initial = null).value
     val dynamicColorAvailable = remember {
       dynamicColorAvailability.isSupported()
+    }
+    if (
+      themeMode == null ||
+      themeColorScheme == null ||
+      autoRewindAmount == null ||
+      seekTime == null ||
+      gridMode == null ||
+      autoSleepTimer == null ||
+      analyticsEnabled == null ||
+      folderNames == null ||
+      showDeveloperMenu == null
+    ) {
+      return null
     }
     return SettingsViewState(
       themeMode = themeMode,
@@ -117,14 +132,12 @@ class SettingsViewModel(
 
   private fun folderNames(): Flow<List<String>> {
     if (kioskModeFeatureFlag.get()) {
-      return flowOf(listOf("Audiobooks", "Sci-Fi", "Non-Fiction"))
+      return flowOf(KioskModeDemoData.folderNames)
     }
     return audiobookFolders.all().map { folders ->
-      withContext(dispatcherProvider.io) {
-        folders.values.flatten()
-          .map { it.documentFile.nameWithoutExtension() }
-          .sortedWith(String.CASE_INSENSITIVE_ORDER)
-      }
+      folders.values.flatten()
+        .map { it.documentFile.nameWithoutExtension() }
+        .sortedWith(String.CASE_INSENSITIVE_ORDER)
     }
   }
 
@@ -158,9 +171,22 @@ class SettingsViewModel(
     }
   }
 
+  override fun seekAmountStepped(step: Int) {
+    mainScope.launch {
+      // relative to the stored amount, so quick taps add up before the screen catches up
+      seekTimeStore.updateData { (it + step).coerceIn(SEEK_TIME_RANGE) }
+    }
+  }
+
   override fun autoRewindAmountChanged(seconds: Int) {
     mainScope.launch {
       autoRewindAmountStore.updateData { seconds.coerceIn(AUTO_REWIND_RANGE) }
+    }
+  }
+
+  override fun autoRewindAmountStepped(step: Int) {
+    mainScope.launch {
+      autoRewindAmountStore.updateData { (it + step).coerceIn(AUTO_REWIND_RANGE) }
     }
   }
 

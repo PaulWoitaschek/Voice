@@ -83,7 +83,7 @@ private fun SettingsPreview() {
  */
 @Composable
 private fun Settings(
-  viewState: SettingsViewState,
+  viewState: SettingsViewState?,
   listener: SettingsListener,
   confetti: ConfettiState = rememberConfettiState(),
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
@@ -91,8 +91,9 @@ private fun Settings(
   val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
   val clock = rememberAnimationClock(running = true)
   var entered by rememberSaveable { mutableStateOf(false) }
-  val entrance = rememberEntranceState(animate = !entered)
-  LaunchedEffect(Unit) { entered = true }
+  // the sections float in once the settings are read
+  val entrance = if (viewState != null) rememberEntranceState(animate = !entered) else null
+  LaunchedEffect(entrance) { if (entrance != null) entered = true }
   Box(Modifier.fillMaxSize()) {
     AuroraBackground(
       clock = { clock.value },
@@ -119,7 +120,9 @@ private fun Settings(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
       ) {
-        sections(viewState, listener, confetti, entrance)
+        if (viewState != null && entrance != null) {
+          sections(viewState, listener, confetti, entrance)
+        }
       }
     }
   }
@@ -172,7 +175,9 @@ private fun LazyListScope.sections(
       seekTimeInSeconds = viewState.seekTimeInSeconds,
       autoRewindInSeconds = viewState.autoRewindInSeconds,
       onSeekTimeChange = listener::seekAmountChanged,
+      onSeekTimeStep = listener::seekAmountStepped,
       onAutoRewindChange = listener::autoRewindAmountChanged,
+      onAutoRewindStep = listener::autoRewindAmountStepped,
     )
   }
   section("sleepTimer") { modifier ->

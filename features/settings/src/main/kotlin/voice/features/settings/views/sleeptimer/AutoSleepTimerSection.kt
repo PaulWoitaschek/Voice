@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,11 +72,13 @@ internal fun AutoSleepTimerSection(
 ) {
   val night = viewState.enabled
   NightTheme(themeColorScheme = themeColorScheme, night = night) {
-    val skyAlpha by animateFloatAsState(
+    // read while drawing, so fading doesn't recompose everything with every frame
+    val skyAlpha = animateFloatAsState(
       targetValue = if (night) 1F else 0F,
       animationSpec = tween(durationMillis = 1200),
       label = "skyAlpha",
     )
+    val showSky by remember { derivedStateOf { skyAlpha.value > 0F } }
     val clock = rememberAnimationClock(running = night)
     Surface(
       modifier = modifier.fillMaxWidth(),
@@ -84,13 +87,13 @@ internal fun AutoSleepTimerSection(
       contentColor = MaterialTheme.colorScheme.onSurface,
     ) {
       Box {
-        if (skyAlpha > 0F) {
+        if (showSky) {
           AuroraBackground(
             clock = { clock.value },
             showStars = night,
             modifier = Modifier
               .matchParentSize()
-              .graphicsLayer { alpha = skyAlpha },
+              .graphicsLayer { alpha = skyAlpha.value },
           )
         }
         Column(Modifier.padding(vertical = 12.dp)) {

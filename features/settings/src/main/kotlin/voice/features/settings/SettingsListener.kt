@@ -10,7 +10,9 @@ interface SettingsListener {
   fun setThemeColorScheme(themeColorScheme: ThemeColorScheme)
   fun setUseGrid(useGrid: Boolean)
   fun seekAmountChanged(seconds: Int)
+  fun seekAmountStepped(step: Int)
   fun autoRewindAmountChanged(seconds: Int)
+  fun autoRewindAmountStepped(step: Int)
   fun getSupport()
   fun suggestIdea()
   fun openBugReport()
@@ -33,7 +35,9 @@ interface SettingsListener {
       override fun setThemeColorScheme(themeColorScheme: ThemeColorScheme) {}
       override fun setUseGrid(useGrid: Boolean) {}
       override fun seekAmountChanged(seconds: Int) {}
+      override fun seekAmountStepped(step: Int) {}
       override fun autoRewindAmountChanged(seconds: Int) {}
+      override fun autoRewindAmountStepped(step: Int) {}
       override fun getSupport() {}
       override fun suggestIdea() {}
       override fun openBugReport() {}

@@ -73,7 +73,6 @@ generate_icon expand_more ExpandMore
 generate_icon favorite Favorite
 generate_icon folder Folder
 generate_icon forum Forum
-generate_icon grid_view GridView
 generate_icon help Help
 generate_icon history History
 generate_icon hourglass_empty HourglassEmpty
@@ -98,8 +97,6 @@ generate_icon settings Settings
 generate_icon skip_next SkipNext
 generate_icon skip_previous SkipPrevious
 generate_icon speed Speed
-generate_icon tag Tag
-generate_icon timelapse Timelapse
 generate_icon timer Timer
 generate_icon title Title
 generate_icon vibration Vibration
