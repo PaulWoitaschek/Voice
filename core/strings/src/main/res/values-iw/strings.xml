@@ -92,6 +92,7 @@
     <string name="onboarding.completion.title">הכל מוכן!</string>
     <string name="onboarding.explanation.subtitle">בעזרת Voice, תוכלו להוסיף ספרים כקבצים בודדים או לארגן אותם בתיקיות. בחרו!</string>
     <string name="onboarding.explanation.title">הספרייה שלך, בדרך שלך</string>
+    <string name="onboarding.welcome.action.start">יוצאים לדרך</string>
     <string name="onboarding.welcome.subtitle">נגן ספרי הקולספרים האישי שלך בכיס. בואו נתאים את Voice אליכם.</string>
     <string name="onboarding.welcome.title">ברוכים הבאים ל-Voice!</string>
     <string name="playback.action.fast_forward">הרץ קדימה</string>
@@ -127,6 +128,11 @@
     <string name="settings.action.open">העדפות</string>
     <string name="settings.analytics_consent.description">אפשר איסוף נתוני שימוש אנונימיים כדי לעזור לשפר את האפליקציה</string>
     <string name="settings.analytics_consent.title">ניתוח נתונים</string>
+    <string name="settings.appearance.color_scheme.berry">פירות יער</string>
+    <string name="settings.appearance.color_scheme.forest">יער</string>
+    <string name="settings.appearance.color_scheme.lagoon">לגונה</string>
+    <string name="settings.appearance.color_scheme.lavender">לבנדר</string>
+    <string name="settings.appearance.color_scheme.sunset">שקיעה</string>
     <string name="settings.appearance.color_scheme.title">ערכת צבעים</string>
     <string name="settings.appearance.color_scheme.dynamic">צבע דינמי</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">משתמש בצבעים מהרקע ומערכת הנושא של המערכת.</string>
@@ -135,6 +141,7 @@
     <string name="settings.appearance.theme.follow_system">לפי המערכת</string>
     <string name="settings.appearance.theme.light">בהיר</string>
     <string name="settings.appearance.theme.title">ערכת נושא</string>
+    <string name="settings.appearance.title">מראה</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">בחר זמן סיום</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">בחר זמן התחלה</string>
     <string name="settings.auto_sleep_timer.summary">תפעיל את שעון השינה ­האוטומטי כשההפעלה מגיעה ל- %1$s ו- %2$s</string>

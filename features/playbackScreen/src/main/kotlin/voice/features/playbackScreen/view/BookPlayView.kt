@@ -14,8 +14,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import voice.core.data.BookId
+import voice.core.ui.AuroraBackground
 import voice.core.ui.CoverTheme
 import voice.core.ui.VoiceTheme
+import voice.core.ui.rememberAnimationClock
 import voice.features.playbackScreen.BookPlayViewState
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
@@ -42,7 +44,7 @@ internal fun BookPlayView(
   onCurrentChapterClick: () -> Unit,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
-  val clock = rememberPlaybackClock(viewState.playing)
+  val clock = rememberAnimationClock(running = viewState.playing)
   Box(Modifier.fillMaxSize()) {
     AuroraBackground(
       clock = { clock.value },

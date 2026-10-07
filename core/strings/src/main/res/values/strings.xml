@@ -164,6 +164,8 @@
     <string name="onboarding.explanation.subtitle">With Voice, you can add books as individual files or organize them in folders. You choose!</string>
     <!-- Title on the onboarding explanation screen. -->
     <string name="onboarding.explanation.title">Your Library, Your Way</string>
+    <!-- Button label for starting the onboarding from the welcome screen. -->
+    <string name="onboarding.welcome.action.start">Let\'s go</string>
     <!-- Subtitle on the onboarding welcome screen. -->
     <string name="onboarding.welcome.subtitle">Your personal pocket audiobook player. Let\'s get you set up.</string>
     <!-- Title on the onboarding welcome screen. -->
@@ -243,6 +245,16 @@
     <string name="settings.appearance.color_scheme.dynamic.summary">Uses colors from your wallpaper and system theme.</string>
     <!-- Label for selecting Voice blue as app color scheme. -->
     <string name="settings.appearance.color_scheme.voice_blue">Voice blue</string>
+    <!-- Label for selecting a teal, sea inspired app color scheme. -->
+    <string name="settings.appearance.color_scheme.lagoon">Lagoon</string>
+    <!-- Label for selecting a green, forest inspired app color scheme. -->
+    <string name="settings.appearance.color_scheme.forest">Forest</string>
+    <!-- Label for selecting an orange, sunset inspired app color scheme. -->
+    <string name="settings.appearance.color_scheme.sunset">Sunset</string>
+    <!-- Label for selecting a pink, berry inspired app color scheme. -->
+    <string name="settings.appearance.color_scheme.berry">Berry</string>
+    <!-- Label for selecting a purple, lavender inspired app color scheme. -->
+    <string name="settings.appearance.color_scheme.lavender">Lavender</string>
     <!-- Label for forcing dark mode. -->
     <string name="settings.appearance.theme.dark">Dark</string>
     <!-- Label for following the system light or dark setting. -->
@@ -251,6 +263,8 @@
     <string name="settings.appearance.theme.light">Light</string>
     <!-- Settings row title for selecting light or dark mode behavior. -->
     <string name="settings.appearance.theme.title">Theme</string>
+    <!-- Title of the settings section for the theme and the color scheme. -->
+    <string name="settings.appearance.title">Appearance</string>
     <!-- Label for selecting the automatic sleep timer end time. -->
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Set end time</string>
     <!-- Label for selecting the automatic sleep timer start time. -->

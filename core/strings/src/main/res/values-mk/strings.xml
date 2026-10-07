@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">Спремни сте!</string>
     <string name="onboarding.explanation.subtitle">Со Voice можете да додавате поединечни датотеки како посебни книги или можете да ги организирате во фолдери. Изборот е Ваш!</string>
     <string name="onboarding.explanation.title">Вашата библиотека, на Ваш начин</string>
+    <string name="onboarding.welcome.action.start">Да почнеме</string>
     <string name="onboarding.welcome.subtitle">Ваш личен џебен читач на аудио книги. Ајде да Ве спремиме.</string>
     <string name="onboarding.welcome.title">Добредојдовте во Voice!</string>
     <string name="playback.action.fast_forward">Побрзо напред</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">Поставувања</string>
     <string name="settings.analytics_consent.description">Дозволете анонимно собирање податоци за користење за да се подобри апликацијата</string>
     <string name="settings.analytics_consent.title">Аналитика</string>
+    <string name="settings.appearance.color_scheme.berry">Бобинка</string>
+    <string name="settings.appearance.color_scheme.forest">Шума</string>
+    <string name="settings.appearance.color_scheme.lagoon">Лагуна</string>
+    <string name="settings.appearance.color_scheme.lavender">Лаванда</string>
+    <string name="settings.appearance.color_scheme.sunset">Зајдисонце</string>
     <string name="settings.appearance.color_scheme.title">Шема на бои</string>
     <string name="settings.appearance.color_scheme.dynamic">Динамична боја</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Користи бои од вашата позадина и системска тема.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">Следи систем</string>
     <string name="settings.appearance.theme.light">Светла</string>
     <string name="settings.appearance.theme.title">Тема</string>
+    <string name="settings.appearance.title">Изглед</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Внеси време за крај</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Внеси време за старт</string>
     <string name="settings.auto_sleep_timer.summary">Стартувај го тајмерот за спиење автоматски штом аудиото почнува меѓу %1$s и %2$s</string>

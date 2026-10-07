@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">Hazırsın!</string>
     <string name="onboarding.explanation.subtitle">Voice\'u kullanarak kitapları tek tek dosyalar halinde ekleyebilir veya klasörler halinde düzenleyebilirsiniz. Sen seç!</string>
     <string name="onboarding.explanation.title">Senin kütüphanen, senin tarzın</string>
+    <string name="onboarding.welcome.action.start">Hadi başlayalım</string>
     <string name="onboarding.welcome.subtitle">Cebinizdeki kişisel sesli kitap oynatıcınız! Hadi başlayalım.</string>
     <string name="onboarding.welcome.title">Voice\'e hoş geldiniz!</string>
     <string name="playback.action.fast_forward">Hızlı ilerlet</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">Tercihler</string>
     <string name="settings.analytics_consent.description">Uygulamayı iyileştirmeye katkı sağlaması için anonim kullanım verileri toplanmasına izin ver</string>
     <string name="settings.analytics_consent.title">Analitik</string>
+    <string name="settings.appearance.color_scheme.berry">Orman meyvesi</string>
+    <string name="settings.appearance.color_scheme.forest">Orman</string>
+    <string name="settings.appearance.color_scheme.lagoon">Lagün</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavanta</string>
+    <string name="settings.appearance.color_scheme.sunset">Gün batımı</string>
     <string name="settings.appearance.color_scheme.title">Renk şeması</string>
     <string name="settings.appearance.color_scheme.dynamic">Dinamik renk</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Duvar kağıdınızdan ve sistem temasından renkleri kullanır.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">Sistemi takip et</string>
     <string name="settings.appearance.theme.light">Açık</string>
     <string name="settings.appearance.theme.title">Tema</string>
+    <string name="settings.appearance.title">Görünüm</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Bitiş zamanı</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Başlama zamanı</string>
     <string name="settings.auto_sleep_timer.summary">Eğer oynatıcı saat %1$s ile %2$s arasında başlatılırsa otomatik olarak bir uyku zamanlayıcısı başlat</string>

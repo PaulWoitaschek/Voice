@@ -106,24 +106,24 @@ class SettingsViewModelTest {
   }
 
   @Test
-  fun `color scheme setting is visible when dynamic color is supported`() = scope.runTest {
+  fun `dynamic color is offered when supported`() = scope.runTest {
     every { dynamicColorAvailability.isSupported() } returns true
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      assertEquals(expected = true, actual = awaitItem().showThemeColorSchemePref)
+      assertEquals(expected = true, actual = awaitItem().dynamicColorAvailable)
     }
   }
 
   @Test
-  fun `color scheme setting is hidden when dynamic color is unsupported`() = scope.runTest {
+  fun `dynamic color is not offered when unsupported`() = scope.runTest {
     every { dynamicColorAvailability.isSupported() } returns false
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {
-      assertEquals(expected = false, actual = awaitItem().showThemeColorSchemePref)
+      assertEquals(expected = false, actual = awaitItem().dynamicColorAvailable)
     }
   }
 

@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">நீங்கள் அனைவரும் அமைக்கப்பட்டிருக்கிறீர்கள்!</string>
     <string name="onboarding.explanation.subtitle">குரல் மூலம், நீங்கள் புத்தகங்களை தனிப்பட்ட கோப்புகளாக சேர்க்கலாம் அல்லது கோப்புறைகளில் அவற்றை ஒழுங்கமைக்கலாம். நீங்கள் தேர்வு செய்கிறீர்கள்!</string>
     <string name="onboarding.explanation.title">உங்கள் நூலகம், உங்கள் வழி</string>
+    <string name="onboarding.welcome.action.start">தொடங்குவோம்</string>
     <string name="onboarding.welcome.subtitle">உங்கள் தனிப்பட்ட பாக்கெட் ஆடியோபுக் பிளேயர். நீங்கள் அமைப்போம்.</string>
     <string name="onboarding.welcome.title">குரலுக்கு வருக!</string>
     <string name="playback.action.fast_forward">வேகமாக முன்னோக்கி</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">விருப்பத்தேர்வுகள்</string>
     <string name="settings.analytics_consent.description">பயன்பாட்டை மேம்படுத்த உதவ அநாமதேய பயன்பாட்டுத் தரவு சேகரிப்பை அனுமதி</string>
     <string name="settings.analytics_consent.title">பகுப்பாய்வு</string>
+    <string name="settings.appearance.color_scheme.berry">பெர்ரி</string>
+    <string name="settings.appearance.color_scheme.forest">காடு</string>
+    <string name="settings.appearance.color_scheme.lagoon">கடற்காயல்</string>
+    <string name="settings.appearance.color_scheme.lavender">லாவெண்டர்</string>
+    <string name="settings.appearance.color_scheme.sunset">சூரிய அஸ்தமனம்</string>
     <string name="settings.appearance.color_scheme.title">வண்ணத் திட்டம்</string>
     <string name="settings.appearance.color_scheme.dynamic">மாறும் வண்ணம்</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">உங்கள் வால்பேப்பர் மற்றும் அமைப்பு தீமிலிருந்து வண்ணங்களைப் பயன்படுத்துகிறது.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">அமைப்பைப் பின்பற்று</string>
     <string name="settings.appearance.theme.light">வெளிர்</string>
     <string name="settings.appearance.theme.title">தீம்</string>
+    <string name="settings.appearance.title">தோற்றம்</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">இறுதி நேரத்தை அமை</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">தொடக்க நேரத்தை அமை</string>
     <string name="settings.auto_sleep_timer.summary">பிளேபேக் %1$s மற்றும் %2$s க்கு இடையில் தொடங்கும்போது தானாக ஒரு தூக்க நேரத்தைத் தொடங்குங்கள்</string>

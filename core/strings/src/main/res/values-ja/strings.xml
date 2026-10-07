@@ -84,6 +84,7 @@
     <string name="onboarding.completion.title">準備ができました！</string>
     <string name="onboarding.explanation.subtitle">Voice では、ブックを個別のファイルとして追加したり、フォルダーで整理したりできます。使い方はあなた次第です。</string>
     <string name="onboarding.explanation.title">ライブラリを自由に管理</string>
+    <string name="onboarding.welcome.action.start">はじめよう</string>
     <string name="onboarding.welcome.subtitle">あなた専用のポケットオーディオブックプレーヤーです。設定を始めましょう。</string>
     <string name="onboarding.welcome.title">Voice へようこそ！</string>
     <string name="playback.action.fast_forward">早送り</string>
@@ -119,6 +120,11 @@
     <string name="settings.action.open">設定</string>
     <string name="settings.analytics_consent.description">アプリ改善のため、匿名の利用状況データの収集を許可する</string>
     <string name="settings.analytics_consent.title">分析</string>
+    <string name="settings.appearance.color_scheme.berry">ベリー</string>
+    <string name="settings.appearance.color_scheme.forest">フォレスト</string>
+    <string name="settings.appearance.color_scheme.lagoon">ラグーン</string>
+    <string name="settings.appearance.color_scheme.lavender">ラベンダー</string>
+    <string name="settings.appearance.color_scheme.sunset">サンセット</string>
     <string name="settings.appearance.color_scheme.title">カラースキーム</string>
     <string name="settings.appearance.color_scheme.dynamic">ダイナミックカラー</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">壁紙とシステムテーマの色を使用します。</string>
@@ -127,6 +133,7 @@
     <string name="settings.appearance.theme.follow_system">システムに合わせる</string>
     <string name="settings.appearance.theme.light">ライト</string>
     <string name="settings.appearance.theme.title">テーマ</string>
+    <string name="settings.appearance.title">外観</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">終了時刻を設定</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">開始時刻を設定</string>
     <string name="settings.auto_sleep_timer.summary">%1$s から %2$s の間に再生が始まった場合、自動的にスリープタイマーを開始します</string>

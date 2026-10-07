@@ -74,6 +74,7 @@
     <string name="onboarding.completion.title">Ai parcurs cu succes acest ghid.</string>
     <string name="onboarding.explanation.subtitle">Cu Voice, cărțile tale pot fi adăugate sub forma unui singur fișier sau a unui director de fișiere audio. Tu decizi!</string>
     <string name="onboarding.explanation.title">O bibliotecă așa cum ți-o dorești tu</string>
+    <string name="onboarding.welcome.action.start">Să începem</string>
     <string name="onboarding.welcome.subtitle">Player-ul tău personal de cărți audio - să parcurgem împreună un scurt ghid.</string>
     <string name="onboarding.welcome.title">Acesta este Voice.</string>
     <string name="playback.action.fast_forward">Derulare înainte rapid</string>
@@ -98,6 +99,12 @@
     <string name="review.request.title">Îți place Voice?</string>
     <string name="settings.about.app_version.title">Versiune aplicație</string>
     <string name="settings.action.open">Preferințe</string>
+    <string name="settings.appearance.color_scheme.berry">Fructe de pădure</string>
+    <string name="settings.appearance.color_scheme.forest">Pădure</string>
+    <string name="settings.appearance.color_scheme.lagoon">Lagună</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavandă</string>
+    <string name="settings.appearance.color_scheme.sunset">Apus</string>
+    <string name="settings.appearance.title">Aspect</string>
     <string name="settings.library.use_grid.title">Folosiți aspect grilă</string>
     <string name="settings.playback.auto_rewind.title">Reluare automată</string>
     <string name="settings.playback.seek_time.title">Pas derulare</string>

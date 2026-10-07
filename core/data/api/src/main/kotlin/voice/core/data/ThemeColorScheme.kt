@@ -10,4 +10,19 @@ public enum class ThemeColorScheme {
 
   @SerialName("Dynamic")
   Dynamic,
+
+  @SerialName("Lagoon")
+  Lagoon,
+
+  @SerialName("Forest")
+  Forest,
+
+  @SerialName("Sunset")
+  Sunset,
+
+  @SerialName("Berry")
+  Berry,
+
+  @SerialName("Lavender")
+  Lavender,
 }

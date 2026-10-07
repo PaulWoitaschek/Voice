@@ -92,6 +92,7 @@
     <string name="onboarding.completion.title">Tout est en ordre !</string>
     <string name="onboarding.explanation.subtitle">Avec Voice, vous pouvez ajouter des livres comme des fichiers individuels, ou les organiser en dossier. Comme vous préférez !</string>
     <string name="onboarding.explanation.title">Votre bibliothèque sur mesure</string>
+    <string name="onboarding.welcome.action.start">C\'est parti</string>
     <string name="onboarding.welcome.subtitle">Votre lecteur de livres audio personnel. Configurons votre application.</string>
     <string name="onboarding.welcome.title">Bienvenue dans Voice !</string>
     <string name="playback.action.fast_forward">Avance rapide</string>
@@ -127,6 +128,11 @@
     <string name="settings.action.open">Préférences</string>
     <string name="settings.analytics_consent.description">Autoriser la collecte de données d\'utilisation anonymes afin d\'améliorer l\'application</string>
     <string name="settings.analytics_consent.title">Analyses</string>
+    <string name="settings.appearance.color_scheme.berry">Baie</string>
+    <string name="settings.appearance.color_scheme.forest">Forêt</string>
+    <string name="settings.appearance.color_scheme.lagoon">Lagon</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavande</string>
+    <string name="settings.appearance.color_scheme.sunset">Coucher de soleil</string>
     <string name="settings.appearance.color_scheme.title">Jeu de couleurs</string>
     <string name="settings.appearance.color_scheme.dynamic">Couleur dynamique</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Utilise les couleurs de votre fond d’écran et du thème système.</string>
@@ -135,6 +141,7 @@
     <string name="settings.appearance.theme.follow_system">Suivre le système</string>
     <string name="settings.appearance.theme.light">Clair</string>
     <string name="settings.appearance.theme.title">Thème</string>
+    <string name="settings.appearance.title">Apparence</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Heure de fin</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Heure de début</string>
     <string name="settings.auto_sleep_timer.summary">Démarrer automatiquement le minuteur de veille lorsque la lecture commence entre %1$s et %2$s</string>

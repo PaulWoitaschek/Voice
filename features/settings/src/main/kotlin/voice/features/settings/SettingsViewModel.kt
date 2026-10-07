@@ -84,13 +84,13 @@ class SettingsViewModel(
       kioskModeFeatureFlag.get()
     }
     val showDeveloperMenu by remember { developerMenuUnlockedStore.data }.collectAsState(initial = false)
-    val showThemeColorSchemePref = remember {
+    val dynamicColorAvailable = remember {
       dynamicColorAvailability.isSupported()
     }
     return SettingsViewState(
       themeMode = themeMode,
       themeColorScheme = themeColorScheme,
-      showThemeColorSchemePref = showThemeColorSchemePref,
+      dynamicColorAvailable = dynamicColorAvailable,
       seekTimeInSeconds = seekTime,
       autoRewindInSeconds = autoRewindAmount,
       dialog = dialog.value,
@@ -117,26 +117,16 @@ class SettingsViewModel(
     navigator.goBack()
   }
 
-  override fun onThemeModeRowClick() {
-    dialog.value = SettingsViewState.Dialog.Theme
-  }
-
-  override fun onThemeColorSchemeRowClick() {
-    dialog.value = SettingsViewState.Dialog.ColorScheme
-  }
-
   override fun setThemeMode(themeMode: ThemeMode) {
     mainScope.launch {
       themeModeStore.updateData { themeMode }
     }
-    dialog.value = null
   }
 
   override fun setThemeColorScheme(themeColorScheme: ThemeColorScheme) {
     mainScope.launch {
       themeColorSchemeStore.updateData { themeColorScheme }
     }
-    dialog.value = null
   }
 
   override fun toggleGrid() {

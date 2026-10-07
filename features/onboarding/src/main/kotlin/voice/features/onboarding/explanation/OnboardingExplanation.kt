@@ -1,40 +1,42 @@
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package voice.features.onboarding.explanation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FabPosition
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.retain
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import voice.core.common.rootGraphAs
+import voice.core.ui.OnboardingButton
+import voice.core.ui.OnboardingScaffold
+import voice.core.ui.OnboardingStep
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
-import voice.features.onboarding.R
 import voice.core.strings.R as StringsR
 
 @Composable
@@ -62,115 +64,85 @@ fun OnboardingExplanation(
   onPrivacyPolicyClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Scaffold(
+  OnboardingScaffold(
     modifier = modifier,
-    topBar = {
-      TopAppBar(
-        title = { },
-        navigationIcon = {
-          IconButton(onClick = onClose) {
-            Icon(
-              imageVector = VoiceIcons.ArrowBack,
-              contentDescription = stringResource(id = StringsR.string.common_action_close),
-            )
-          }
-        },
-      )
+    step = OnboardingStep.Explanation,
+    onBack = onClose,
+    title = stringResource(StringsR.string.onboarding_explanation_title),
+    subtitle = stringResource(StringsR.string.onboarding_explanation_subtitle),
+    hero = { clock ->
+      Bookshelf(clock = clock, modifier = Modifier.fillMaxSize())
     },
-    floatingActionButtonPosition = if (viewState.askForAnalytics) FabPosition.Center else FabPosition.End,
-    floatingActionButton = {
+    details = {
       if (viewState.askForAnalytics) {
-        Column(
-          modifier = Modifier
-            .sizeIn(maxWidth = 320.dp)
-            .padding(horizontal = 24.dp, vertical = 16.dp),
-          horizontalAlignment = CenterHorizontally,
-          verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-          OutlinedButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = onContinueWithoutAnalytics,
-          ) {
-            Text(stringResource(StringsR.string.onboarding_analytics_consent_action_disable))
-          }
-
-          ExtendedFloatingActionButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = onContinueWithAnalytics,
-          ) {
-            Text(stringResource(StringsR.string.onboarding_analytics_consent_action_enable))
-          }
-
-          Text(
-            text = stringResource(StringsR.string.onboarding_analytics_consent_action_privacy_policy),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier
-              .padding(top = 4.dp)
-              .align(CenterHorizontally)
-              .clickable { onPrivacyPolicyClick() },
-          )
-        }
-      } else {
-        ExtendedFloatingActionButton(onClick = onContinueWithoutAnalytics) {
-          Text(stringResource(StringsR.string.onboarding_action_next))
-        }
+        Spacer(Modifier.height(24.dp))
+        AnalyticsConsentCard(onPrivacyPolicyClick = onPrivacyPolicyClick)
       }
     },
-    content = { contentPadding ->
-      Column(Modifier.padding(contentPadding)) {
-        if (shouldShowImage()) {
-          Image(
-            modifier = Modifier
-              .padding(top = 32.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
-              .weight(1F)
-              .heightIn(max = 400.dp)
-              .padding(horizontal = 32.dp)
-              .align(CenterHorizontally),
-            painter = painterResource(id = R.drawable.bookshelf_artwork),
-            contentDescription = null,
-          )
-        }
-        Column(Modifier.weight(2F)) {
-          Spacer(modifier = Modifier.size(16.dp))
-          Text(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            text = stringResource(StringsR.string.onboarding_explanation_title),
-            style = MaterialTheme.typography.displayMedium,
-          )
-          Spacer(modifier = Modifier.size(4.dp))
-          Text(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            text = stringResource(StringsR.string.onboarding_explanation_subtitle),
-            style = MaterialTheme.typography.bodyLarge,
-          )
-
-          if (viewState.askForAnalytics) {
-            Spacer(modifier = Modifier.size(32.dp))
-
-            Text(
-              modifier = Modifier.padding(horizontal = 24.dp),
-              text = stringResource(StringsR.string.onboarding_analytics_consent_title),
-              style = MaterialTheme.typography.titleMedium,
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(
-              modifier = Modifier.padding(horizontal = 24.dp),
-              text = stringResource(StringsR.string.onboarding_analytics_consent_description),
-              style = MaterialTheme.typography.bodyMedium,
-            )
-          }
-        }
+    actions = {
+      if (viewState.askForAnalytics) {
+        OnboardingButton(
+          text = stringResource(StringsR.string.onboarding_analytics_consent_action_disable),
+          onClick = onContinueWithoutAnalytics,
+          primary = false,
+        )
+        OnboardingButton(
+          text = stringResource(StringsR.string.onboarding_analytics_consent_action_enable),
+          onClick = onContinueWithAnalytics,
+        )
+      } else {
+        OnboardingButton(
+          text = stringResource(StringsR.string.onboarding_action_next),
+          onClick = onContinueWithoutAnalytics,
+          trailingArrow = true,
+        )
       }
     },
   )
 }
 
 @Composable
-private fun shouldShowImage(): Boolean {
-  val localWindowInfo = LocalWindowInfo.current
-  val thresholdPx = with(LocalDensity.current) { 500.dp.toPx() }
-  return localWindowInfo.containerSize.height > thresholdPx
+private fun AnalyticsConsentCard(onPrivacyPolicyClick: () -> Unit) {
+  Surface(
+    modifier = Modifier.fillMaxWidth(),
+    shape = RoundedCornerShape(28.dp),
+    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+  ) {
+    Row(Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 4.dp)) {
+      Box(
+        modifier = Modifier
+          .size(44.dp)
+          .background(MaterialTheme.colorScheme.secondaryContainer, MaterialShapes.Clover4Leaf.toShape()),
+        contentAlignment = Alignment.Center,
+      ) {
+        Icon(
+          imageVector = VoiceIcons.Analytics,
+          contentDescription = null,
+          tint = MaterialTheme.colorScheme.onSecondaryContainer,
+          modifier = Modifier.size(22.dp),
+        )
+      }
+      Spacer(Modifier.width(16.dp))
+      Column(Modifier.weight(1F)) {
+        Text(
+          text = stringResource(StringsR.string.onboarding_analytics_consent_title),
+          style = MaterialTheme.typography.titleMediumEmphasized,
+        )
+        Spacer(Modifier.height(4.dp))
+        Text(
+          text = stringResource(StringsR.string.onboarding_analytics_consent_description),
+          style = MaterialTheme.typography.bodyMedium,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        TextButton(
+          onClick = onPrivacyPolicyClick,
+          modifier = Modifier.padding(top = 4.dp),
+        ) {
+          Text(stringResource(StringsR.string.onboarding_analytics_consent_action_privacy_policy))
+        }
+      }
+    }
+  }
 }
 
 private class OnboardingExplanationPreviewParameterProvider : PreviewParameterProvider<OnboardingExplanationViewState> {

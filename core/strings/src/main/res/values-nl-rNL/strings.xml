@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">Je bent helemaal klaar!</string>
     <string name="onboarding.explanation.subtitle">Met Voice kan je individuele boeken toevoegen of ze organiseren in folders. Jij kiest!</string>
     <string name="onboarding.explanation.title">Jouw bibliotheek, jouw manier</string>
+    <string name="onboarding.welcome.action.start">Aan de slag</string>
     <string name="onboarding.welcome.subtitle">Jouw persoonlijke luisterboekspeler. Laten we je installatie afmaken.</string>
     <string name="onboarding.welcome.title">Welkom bij Voice!</string>
     <string name="playback.action.fast_forward">Vooruitspoelen</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">Instellingen</string>
     <string name="settings.analytics_consent.description">Anonieme gebruiksgegevens verzamelen toestaan om de app te verbeteren</string>
     <string name="settings.analytics_consent.title">Analyse</string>
+    <string name="settings.appearance.color_scheme.berry">Bes</string>
+    <string name="settings.appearance.color_scheme.forest">Bos</string>
+    <string name="settings.appearance.color_scheme.lagoon">Lagune</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
+    <string name="settings.appearance.color_scheme.sunset">Zonsondergang</string>
     <string name="settings.appearance.color_scheme.title">Kleurenschema</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamische kleur</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Gebruikt kleuren van je achtergrond en systeemthema.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">Systeem volgen</string>
     <string name="settings.appearance.theme.light">Licht</string>
     <string name="settings.appearance.theme.title">Thema</string>
+    <string name="settings.appearance.title">Uiterlijk</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Zet eindtijd</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Zet starttijd</string>
     <string name="settings.auto_sleep_timer.summary">Start automatisch een slaaptimer wanneer het afspelen begint tussen %1$s en %2$s</string>

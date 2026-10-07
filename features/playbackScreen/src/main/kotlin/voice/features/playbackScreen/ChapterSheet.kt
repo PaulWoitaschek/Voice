@@ -48,7 +48,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import voice.features.playbackScreen.view.rememberPlaybackClock
+import voice.core.ui.rememberAnimationClock
 import kotlin.math.PI
 import kotlin.math.sin
 import voice.core.strings.R as StringsR
@@ -180,7 +180,7 @@ private fun NowPlayingBars(
   modifier: Modifier = Modifier,
 ) {
   // unlike an infinite transition, the clock stops requesting frames while paused
-  val clock = rememberPlaybackClock(playing)
+  val clock = rememberAnimationClock(running = playing)
   val amplitude by animateFloatAsState(if (playing) 1F else 0F, label = "barsAmplitude")
   Canvas(modifier = modifier.size(20.dp)) {
     val barWidth = size.width / 5

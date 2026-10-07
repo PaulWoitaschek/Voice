@@ -96,6 +96,7 @@
     <string name="onboarding.completion.title">Все готово!</string>
     <string name="onboarding.explanation.subtitle">С помощью Voice вы можете добавлять книги в виде отдельных файлов или формировать их в папкам. Выбирайте!</string>
     <string name="onboarding.explanation.title">Ваша библиотека, Ваш выбор</string>
+    <string name="onboarding.welcome.action.start">Поехали</string>
     <string name="onboarding.welcome.subtitle">Ваш личный карманный проигрыватель аудиокниг. Давайте настроим.</string>
     <string name="onboarding.welcome.title">Добро пожаловать в Voice!</string>
     <string name="playback.action.fast_forward">Перемотать вперед</string>
@@ -131,6 +132,11 @@
     <string name="settings.action.open">Настройки</string>
     <string name="settings.analytics_consent.description">Разрешить анонимный сбор данных об использовании, чтобы улучшить приложение</string>
     <string name="settings.analytics_consent.title">Аналитика</string>
+    <string name="settings.appearance.color_scheme.berry">Ягода</string>
+    <string name="settings.appearance.color_scheme.forest">Лес</string>
+    <string name="settings.appearance.color_scheme.lagoon">Лагуна</string>
+    <string name="settings.appearance.color_scheme.lavender">Лаванда</string>
+    <string name="settings.appearance.color_scheme.sunset">Закат</string>
     <string name="settings.appearance.color_scheme.title">Цветовая схема</string>
     <string name="settings.appearance.color_scheme.dynamic">Динамический цвет</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Использует цвета ваших обоев и системной темы.</string>
@@ -139,6 +145,7 @@
     <string name="settings.appearance.theme.follow_system">Как в системе</string>
     <string name="settings.appearance.theme.light">Светлая</string>
     <string name="settings.appearance.theme.title">Тема</string>
+    <string name="settings.appearance.title">Оформление</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Время конца</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Время начала</string>
     <string name="settings.auto_sleep_timer.summary">Запускать таймер сна автоматически когда воспроизведение начинается между %1$s и %2$s</string>

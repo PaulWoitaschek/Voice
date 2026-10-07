@@ -1,4 +1,4 @@
-package voice.features.playbackScreen.view
+package voice.core.ui
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -24,11 +24,12 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 /**
- * Soft blobs of the cover-derived container colors drifting around while audio plays.
- * When a sleep timer is running, a field of twinkling sparkles fades in.
+ * Soft blobs of the theme's container colors drifting around as the [clock] ticks.
+ * With [showStars], a field of twinkling sparkles fades in (the player shows them while a sleep
+ * timer runs).
  */
 @Composable
-internal fun AuroraBackground(
+fun AuroraBackground(
   clock: () -> Float,
   showStars: Boolean,
   modifier: Modifier = Modifier,

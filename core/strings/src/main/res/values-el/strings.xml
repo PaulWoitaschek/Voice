@@ -48,6 +48,7 @@
     <string name="library.search.hint">Τι ψάχνετε;</string>
     <string name="media_session.library.recent">Πρόσφατα</string>
     <string name="media_session.library.root">Όλα τα ηχητικά βιβλία</string>
+    <string name="onboarding.welcome.action.start">Πάμε</string>
     <string name="playback.action.fast_forward">Γρήγορη προώθηση</string>
     <string name="playback.action.pause">Παύση</string>
     <string name="playback.action.play">Αναπαραγωγή</string>
@@ -62,6 +63,12 @@
     <string name="playback.speed.title">Ταχύτητα αναπαραγωγής</string>
     <string name="settings.about.app_version.title">Έκδοση εφαρμογής</string>
     <string name="settings.action.open">Προτιμήσεις</string>
+    <string name="settings.appearance.color_scheme.berry">Μούρο</string>
+    <string name="settings.appearance.color_scheme.forest">Δάσος</string>
+    <string name="settings.appearance.color_scheme.lagoon">Λιμνοθάλασσα</string>
+    <string name="settings.appearance.color_scheme.lavender">Λεβάντα</string>
+    <string name="settings.appearance.color_scheme.sunset">Ηλιοβασίλεμα</string>
+    <string name="settings.appearance.title">Εμφάνιση</string>
     <string name="settings.library.use_grid.title">Χρήση πλέγματος</string>
     <string name="settings.playback.auto_rewind.title">Αυτόματη αναζήτηση προς τα πίσω</string>
     <string name="settings.playback.seek_time.title">Χρονική μετακίνηση</string>

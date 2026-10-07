@@ -1,25 +1,14 @@
 package voice.features.folderPicker.addcontent
 
 import android.net.Uri
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import voice.features.folderPicker.R
+import voice.core.ui.OnboardingScaffold
+import voice.core.ui.OnboardingStep
+import voice.core.ui.VoiceTheme
 import voice.features.folderPicker.folderPicker.FileTypeSelection
 import voice.navigation.Origin
 import voice.core.strings.R as StringsR
@@ -31,65 +20,38 @@ internal fun SelectFolder(
   origin: Origin,
   modifier: Modifier = Modifier,
 ) {
-  Scaffold(
+  OnboardingScaffold(
     modifier = modifier,
-    topBar = {
-      SelectFolderAppBar(onBack)
+    // outside of the onboarding there are no steps to count
+    step = when (origin) {
+      Origin.Default -> null
+      Origin.Onboarding -> OnboardingStep.AddContent
     },
-    content = { contentPadding ->
-      Column(Modifier.padding(contentPadding)) {
-        if (shouldShowImage()) {
-          Image(
-            modifier = Modifier
-              .weight(1F)
-              .heightIn(max = 400.dp)
-              .padding(top = 32.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
-              .align(Alignment.CenterHorizontally),
-            painter = painterResource(id = R.drawable.folder_type_artwork),
-            contentDescription = null,
-          )
-        }
-
-        Column(Modifier.weight(2F)) {
-          Spacer(modifier = Modifier.size(16.dp))
-
-          Text(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            text = stringResource(
-              when (origin) {
-                Origin.Default -> StringsR.string.folder_add_title_default
-                Origin.Onboarding -> StringsR.string.folder_add_title_onboarding
-              },
-            ),
-            style = MaterialTheme.typography.displayMedium,
-          )
-          Spacer(modifier = Modifier.size(4.dp))
-          Text(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            text = stringResource(StringsR.string.folder_add_type_subtitle),
-            style = MaterialTheme.typography.bodyLarge,
-          )
-          Spacer(modifier = Modifier.size(24.dp))
-          SelectFolderButtonRow(onAdd)
-        }
-      }
+    onBack = onBack,
+    title = stringResource(
+      when (origin) {
+        Origin.Default -> StringsR.string.folder_add_title_default
+        Origin.Onboarding -> StringsR.string.folder_add_title_onboarding
+      },
+    ),
+    subtitle = stringResource(StringsR.string.folder_add_type_subtitle),
+    hero = { clock ->
+      FolderHero(clock = clock, modifier = Modifier.fillMaxSize())
+    },
+    actions = {
+      ContentTypeChoices(onAdd = onAdd)
     },
   )
-}
-
-@Composable
-private fun shouldShowImage(): Boolean {
-  val localWindowInfo = LocalWindowInfo.current
-  val thresholdPx = with(LocalDensity.current) { 600.dp.toPx() }
-  return localWindowInfo.containerSize.height > thresholdPx
 }
 
 @Composable
 @Preview
 private fun SelectFolderPreview() {
-  SelectFolder(
-    onBack = {},
-    onAdd = { _, _ -> },
-    origin = Origin.Default,
-  )
+  VoiceTheme {
+    SelectFolder(
+      onBack = {},
+      onAdd = { _, _ -> },
+      origin = Origin.Onboarding,
+    )
+  }
 }

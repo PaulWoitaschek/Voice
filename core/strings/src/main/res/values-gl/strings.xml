@@ -88,6 +88,7 @@
     <string name="onboarding.completion.title">Todo preparado!</string>
     <string name="onboarding.explanation.subtitle">Con Voice, podes engadir libros como ficheiros individuais ou organizalos en cartafoles. Ti elixes!</string>
     <string name="onboarding.explanation.title">A túa Biblioteca, ao teu xeito</string>
+    <string name="onboarding.welcome.action.start">Imos alá</string>
     <string name="onboarding.welcome.subtitle">O teu reprodutor de peto para audiolibros. Imos comezar cos axustes.</string>
     <string name="onboarding.welcome.title">Benvida a Voice!</string>
     <string name="playback.action.fast_forward">Avanzar</string>
@@ -123,6 +124,11 @@
     <string name="settings.action.open">Preferencias</string>
     <string name="settings.analytics_consent.description">Permite recoller datos anónimos de uso para axudar a mellorar a app</string>
     <string name="settings.analytics_consent.title">Análise</string>
+    <string name="settings.appearance.color_scheme.berry">Baga</string>
+    <string name="settings.appearance.color_scheme.forest">Bosque</string>
+    <string name="settings.appearance.color_scheme.lagoon">Lagoa</string>
+    <string name="settings.appearance.color_scheme.lavender">Lavanda</string>
+    <string name="settings.appearance.color_scheme.sunset">Solpor</string>
     <string name="settings.appearance.color_scheme.title">Esquema de cores</string>
     <string name="settings.appearance.color_scheme.dynamic">Cor dinámica</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Usa as cores do teu fondo de pantalla e do tema do sistema.</string>
@@ -131,6 +137,7 @@
     <string name="settings.appearance.theme.follow_system">Seguir o sistema</string>
     <string name="settings.appearance.theme.light">Claro</string>
     <string name="settings.appearance.theme.title">Tema</string>
+    <string name="settings.appearance.title">Aparencia</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Hora de fin</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Hora de inicio</string>
     <string name="settings.auto_sleep_timer.summary">Iniciar o temporizador automáticamente cando a escoita comece entre as %1$s e as %2$s</string>

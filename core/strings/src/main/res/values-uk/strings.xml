@@ -96,6 +96,7 @@
     <string name="onboarding.completion.title">Ви все зробили!</string>
     <string name="onboarding.explanation.subtitle">За допомогою Voice ви можете додавати книги як окремі файли, або зібрані у каталогах. Вибір за вами!</string>
     <string name="onboarding.explanation.title">Ваша бібліотека, ваш спосіб</string>
+    <string name="onboarding.welcome.action.start">Почнімо</string>
     <string name="onboarding.welcome.subtitle">Ваш особистий кишеньковий програвач аудіокниг. Налаштуймо його.</string>
     <string name="onboarding.welcome.title">Ласкаво просимо до Voice!</string>
     <string name="playback.action.fast_forward">Перемотати вперед</string>
@@ -131,6 +132,11 @@
     <string name="settings.action.open">Налаштування</string>
     <string name="settings.analytics_consent.description">Дозволити анонімне збирання данних для покращення додатку</string>
     <string name="settings.analytics_consent.title">Аналітика</string>
+    <string name="settings.appearance.color_scheme.berry">Ягода</string>
+    <string name="settings.appearance.color_scheme.forest">Ліс</string>
+    <string name="settings.appearance.color_scheme.lagoon">Лагуна</string>
+    <string name="settings.appearance.color_scheme.lavender">Лаванда</string>
+    <string name="settings.appearance.color_scheme.sunset">Захід сонця</string>
     <string name="settings.appearance.color_scheme.title">Колірна схема</string>
     <string name="settings.appearance.color_scheme.dynamic">Динамічний колір</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Використовує кольори з ваших шпалер і системної теми.</string>
@@ -139,6 +145,7 @@
     <string name="settings.appearance.theme.follow_system">Як у системі</string>
     <string name="settings.appearance.theme.light">Світла</string>
     <string name="settings.appearance.theme.title">Тема</string>
+    <string name="settings.appearance.title">Вигляд</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Час кінця</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Час початку</string>
     <string name="settings.auto_sleep_timer.summary">Автоматично запустити таймер сну, коли програш починається між %1$s та %2$s</string>

@@ -96,6 +96,7 @@
     <string name="onboarding.completion.title">Усё гатова!</string>
     <string name="onboarding.explanation.subtitle">Voice дазваляе дадаваць кнігі як паасобныя файлы або парадкаваць іх па папках. Выбар за Вамі!</string>
     <string name="onboarding.explanation.title">Ваша бібліятэка, ваш шлях</string>
+    <string name="onboarding.welcome.action.start">Пачнём</string>
     <string name="onboarding.welcome.subtitle">Ваш асабісты кішэнны прайгравальнік аўдыякніг. Наладзьце яго.</string>
     <string name="onboarding.welcome.title">Вас вітае Voice!</string>
     <string name="playback.action.fast_forward">Пераматаць наперад</string>
@@ -131,6 +132,11 @@
     <string name="settings.action.open">Налады</string>
     <string name="settings.analytics_consent.description">Дазволіць ананімны збор даных аб выкарыстанні, каб палепшыць праграму</string>
     <string name="settings.analytics_consent.title">Аналітыка</string>
+    <string name="settings.appearance.color_scheme.berry">Ягада</string>
+    <string name="settings.appearance.color_scheme.forest">Лес</string>
+    <string name="settings.appearance.color_scheme.lagoon">Лагуна</string>
+    <string name="settings.appearance.color_scheme.lavender">Лаванда</string>
+    <string name="settings.appearance.color_scheme.sunset">Захад</string>
     <string name="settings.appearance.color_scheme.title">Колеравая схема</string>
     <string name="settings.appearance.color_scheme.dynamic">Дынамічны колер</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Выкарыстоўвае колеры вашых шпалер і сістэмнай тэмы.</string>
@@ -139,6 +145,7 @@
     <string name="settings.appearance.theme.follow_system">Паводле сістэмы</string>
     <string name="settings.appearance.theme.light">Светлая</string>
     <string name="settings.appearance.theme.title">Тэма</string>
+    <string name="settings.appearance.title">Выгляд</string>
     <string name="settings.auto_sleep_timer.end.label" weblate-flags="max-length:16">Час заканчэння</string>
     <string name="settings.auto_sleep_timer.start.label" weblate-flags="max-length:16">Час пачатку</string>
     <string name="settings.auto_sleep_timer.summary">Запускаць таймер сну аўтаматычна калі прайграванне пачынаецца паміж %1$s і %2$s</string>
