@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookRepository
@@ -30,6 +31,7 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.misc.Decibel
 import voice.core.playback.session.CustomCommand
+import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.PlaybackService
 import voice.core.playback.session.bookId
@@ -39,20 +41,35 @@ import voice.core.playback.session.sendCustomCommand
 import voice.core.playback.session.toMediaIdOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
-@Inject
-class PlayerController(
+class PlayerController internal constructor(
   private val context: Context,
-  @CurrentBookStore
   private val currentBookStoreId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
   private val mediaItemProvider: MediaItemProvider,
+  private val sessionToken: SessionToken,
 ) {
+
+  @Inject
+  constructor(
+    context: Context,
+    @CurrentBookStore
+    currentBookStoreId: DataStore<BookId?>,
+    bookRepository: BookRepository,
+    mediaItemProvider: MediaItemProvider,
+  ) : this(
+    context = context,
+    currentBookStoreId = currentBookStoreId,
+    bookRepository = bookRepository,
+    mediaItemProvider = mediaItemProvider,
+    sessionToken = SessionToken(context, ComponentName(context, PlaybackService::class.java)),
+  )
 
   private var _controller: Deferred<MediaController> = newControllerAsync()
 
   private fun newControllerAsync() = MediaController
-    .Builder(context, SessionToken(context, ComponentName(context, PlaybackService::class.java)))
+    .Builder(context, sessionToken)
     .buildAsync()
     .asDeferred()
 
@@ -128,22 +145,48 @@ class PlayerController(
 
   private suspend fun maybePrepare(controller: MediaController): Boolean {
     val bookId = currentBookStoreId.data.first() ?: return false
-    if (controller.currentBookId() == bookId &&
-      controller.playbackState in listOf(Player.STATE_READY, Player.STATE_BUFFERING)
+    if (controller.currentBookId() != bookId ||
+      controller.playbackState !in listOf(Player.STATE_READY, Player.STATE_BUFFERING)
     ) {
-      return true
+      val book = bookRepository.get(bookId) ?: return false
+      controller.setMediaItem(mediaItemProvider.mediaItem(book))
+      controller.prepare()
     }
-    val book = bookRepository.get(bookId) ?: return false
-    controller.setMediaItem(mediaItemProvider.mediaItem(book))
-    controller.prepare()
+    controller.awaitBookSetBySession()
     return true
   }
 
-  private fun MediaController.currentBookId(): BookId? {
-    val currentMediaItem = currentMediaItem ?: return null
-    val mediaId = currentMediaItem.mediaId.toMediaIdOrNull() ?: return null
-    return mediaId.bookId
+  /**
+   * Until the session has resolved the [MediaId.Book] item from [maybePrepare] into the book's playback items,
+   * the controller only shows that item as a placeholder.
+   * Media3 queues player commands behind the pending [MediaController.setMediaItem], but custom commands are
+   * dispatched right away and would run against a player without the book.
+   */
+  private suspend fun MediaController.awaitBookSetBySession() {
+    val bookSet = withTimeoutOrNull(5.seconds) {
+      callbackFlow {
+        val listener = object : Player.Listener {
+          override fun onEvents(
+            player: Player,
+            events: Player.Events,
+          ) {
+            trySend(currentMediaId())
+          }
+        }
+        addListener(listener)
+        send(currentMediaId())
+        awaitClose { removeListener(listener) }
+      }.first { it !is MediaId.Book }
+      true
+    }
+    if (bookSet == null) {
+      Logger.w("Timed out waiting for the session to set the book")
+    }
   }
+
+  private fun MediaController.currentMediaId(): MediaId? = currentMediaItem?.mediaId?.toMediaIdOrNull()
+
+  private fun MediaController.currentBookId(): BookId? = currentMediaId()?.bookId
 
   fun pauseWithRewind(rewind: Duration) = executeAfterPrepare { controller ->
     controller.pause()
