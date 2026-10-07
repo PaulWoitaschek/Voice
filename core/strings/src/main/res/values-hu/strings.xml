@@ -121,7 +121,7 @@
     <string name="history.action.restore">Visszaállítás</string>
     <string name="history.changed_back">Visszaállítva</string>
     <string name="history.empty.filtered">Semmi sem felel meg ennek a szűrőnek.</string>
-    <string name="history.empty.message">A lejátszások, szünetek és ugrások 30 napig itt láthatók, így mindig visszatalál.</string>
+    <string name="history.empty.message">A lejátszások, szünetek és ugrások itt láthatók, így mindig visszatalál.</string>
     <string name="history.empty.title">Még nincs itt semmi</string>
     <string name="history.event.bookmark_added">Könyvjelző mentve</string>
     <string name="history.event.bookmark_added.note">„%1$s” mentve</string>
@@ -234,7 +234,7 @@
     <string name="settings.listening_history.clear.message">Ez az összes könyv rögzített lejátszásait, szüneteit és ugrásait törli. A könyvjelzők megmaradnak.</string>
     <string name="settings.listening_history.clear.title">Törli a hallgatási előzményeket?</string>
     <string name="settings.listening_history.cleared">Hallgatási előzmények törölve</string>
-    <string name="settings.listening_history.summary">30 napig megőrzi a lejátszásokat, szüneteket és ugrásokat ezen az eszközön, így visszavonhatók a véletlen műveletek</string>
+    <string name="settings.listening_history.summary">Megőrzi a lejátszásokat, szüneteket és ugrásokat ezen az eszközön, így visszavonhatók a véletlen műveletek</string>
     <string name="settings.listening_history.title">Hallgatási előzmények</string>
     <string name="settings.playback.auto_rewind.title">Automatikus visszatekerés</string>
     <string name="settings.playback.seek_time.title">Kihagyás mértéke</string>

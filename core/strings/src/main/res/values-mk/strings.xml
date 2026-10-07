@@ -122,7 +122,7 @@
     <string name="history.action.restore">Врати</string>
     <string name="history.changed_back">Вратено како што беше</string>
     <string name="history.empty.filtered">Ништо не одговара на овој филтер.</string>
-    <string name="history.empty.message">Пуштањата, паузите и скоковите се прикажуваат тука 30 дена, за секогаш да можете да се вратите.</string>
+    <string name="history.empty.message">Пуштањата, паузите и скоковите се прикажуваат тука, за секогаш да можете да се вратите.</string>
     <string name="history.empty.title">Сè уште нема ништо</string>
     <string name="history.event.bookmark_added">Зачуван обележувач</string>
     <string name="history.event.bookmark_added.note">Зачувано „%1$s“</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Ова ги отстранува зачуваните пуштања, паузи и скокови за сите книги. Обележувачите остануваат.</string>
     <string name="settings.listening_history.clear.title">Да се избрише историјата на слушање?</string>
     <string name="settings.listening_history.cleared">Историјата на слушање е избришана</string>
-    <string name="settings.listening_history.summary">Ги чува пуштањата, паузите и скоковите 30 дена на овој уред, за да можете да ги поништите случајните грешки</string>
+    <string name="settings.listening_history.summary">Ги чува пуштањата, паузите и скоковите на овој уред, за да можете да ги поништите случајните грешки</string>
     <string name="settings.listening_history.title">Историја на слушање</string>
     <string name="settings.playback.auto_rewind.title">Автоматско враќање назад</string>
     <string name="settings.playback.seek_time.title">Прескокни секунди</string>

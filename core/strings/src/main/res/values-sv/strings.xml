@@ -122,7 +122,7 @@
     <string name="history.action.restore">Återställ</string>
     <string name="history.changed_back">Ändrat tillbaka</string>
     <string name="history.empty.filtered">Inget matchar det här filtret.</string>
-    <string name="history.empty.message">Uppspelningar, pauser och hopp visas här i 30 dagar, så att du alltid hittar tillbaka.</string>
+    <string name="history.empty.message">Uppspelningar, pauser och hopp visas här, så att du alltid hittar tillbaka.</string>
     <string name="history.empty.title">Inget här än</string>
     <string name="history.event.bookmark_added">Sparade ett bokmärke</string>
     <string name="history.event.bookmark_added.note">Sparade ”%1$s”</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Detta tar bort sparade uppspelningar, pauser och hopp för alla böcker. Bokmärkena finns kvar.</string>
     <string name="settings.listening_history.clear.title">Rensa lyssningshistoriken?</string>
     <string name="settings.listening_history.cleared">Lyssningshistoriken har rensats</string>
-    <string name="settings.listening_history.summary">Sparar uppspelningar, pauser och hopp i 30 dagar på den här enheten så att du kan ångra misstag</string>
+    <string name="settings.listening_history.summary">Sparar uppspelningar, pauser och hopp på den här enheten så att du kan ångra misstag</string>
     <string name="settings.listening_history.title">Lyssningshistorik</string>
     <string name="settings.playback.auto_rewind.title">Automatisk bakåtspolning</string>
     <string name="settings.playback.seek_time.title">Hopplängd</string>

@@ -122,7 +122,7 @@
     <string name="history.action.restore">Herstel</string>
     <string name="history.changed_back">Teruggestel</string>
     <string name="history.empty.filtered">Niks pas by hierdie filter nie.</string>
-    <string name="history.empty.message">Wanneer jy speel, pouseer of spring, verskyn dit 30 dae lank hier, sodat jy altyd jou plek kan terugvind.</string>
+    <string name="history.empty.message">Wanneer jy speel, pouseer of spring, verskyn dit hier, sodat jy altyd jou plek kan terugvind.</string>
     <string name="history.empty.title">Nog niks hier nie</string>
     <string name="history.event.bookmark_added">Boekmerk gestoor</string>
     <string name="history.event.bookmark_added.note">“%1$s” gestoor</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Dit verwyder die aangetekende speel-, pouse- en springaksies van alle boeke. Boekmerke bly.</string>
     <string name="settings.listening_history.clear.title">Vee luistergeskiedenis uit?</string>
     <string name="settings.listening_history.cleared">Luistergeskiedenis uitgevee</string>
-    <string name="settings.listening_history.summary">Hou speel-, pouse- en springaksies 30 dae lank op hierdie toestel, sodat jy ongelukke kan ontdoen</string>
+    <string name="settings.listening_history.summary">Hou speel-, pouse- en springaksies op hierdie toestel, sodat jy ongelukke kan ontdoen</string>
     <string name="settings.listening_history.title">Luistergeskiedenis</string>
     <string name="settings.playback.auto_rewind.title">Outomatiese terugdraai</string>
     <string name="settings.playback.seek_time.title">Skip hoeveelheid</string>

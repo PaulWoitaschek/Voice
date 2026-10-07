@@ -130,7 +130,7 @@
     <string name="history.action.restore">Restaurer</string>
     <string name="history.changed_back">Rétabli</string>
     <string name="history.empty.filtered">Aucun résultat pour ce filtre.</string>
-    <string name="history.empty.message">Les lectures, pauses et sauts s\'affichent ici pendant 30 jours, pour que vous retrouviez toujours où vous en étiez.</string>
+    <string name="history.empty.message">Les lectures, pauses et sauts s\'affichent ici, pour que vous retrouviez toujours où vous en étiez.</string>
     <string name="history.empty.title">Rien pour l\'instant</string>
     <string name="history.event.bookmark_added">Marque-page enregistré</string>
     <string name="history.event.bookmark_added.note">« %1$s » enregistré</string>
@@ -284,7 +284,7 @@
     <string name="settings.listening_history.clear.message">Les lectures, pauses et sauts enregistrés pour tous les livres seront supprimés. Les marque-pages sont conservés.</string>
     <string name="settings.listening_history.clear.title">Effacer l\'historique d\'écoute ?</string>
     <string name="settings.listening_history.cleared">Historique d\'écoute effacé</string>
-    <string name="settings.listening_history.summary">Conserve les lectures, pauses et sauts pendant 30 jours sur cet appareil pour pouvoir annuler les fausses manipulations</string>
+    <string name="settings.listening_history.summary">Conserve les lectures, pauses et sauts sur cet appareil pour pouvoir annuler les fausses manipulations</string>
     <string name="settings.listening_history.title">Historique d\'écoute</string>
     <string name="settings.playback.auto_rewind.title">Rembobinage automatique</string>
     <string name="settings.playback.seek_time.title">Sauter de</string>

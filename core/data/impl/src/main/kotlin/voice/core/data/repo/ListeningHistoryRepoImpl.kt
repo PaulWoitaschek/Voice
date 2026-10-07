@@ -9,8 +9,6 @@ import voice.core.data.BookId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.internals.dao.ListeningEventDao
 import voice.core.data.store.ListeningHistoryEnabledStore
-import java.time.Clock
-import kotlin.time.Duration.Companion.days
 
 @ContributesBinding(AppScope::class)
 public class ListeningHistoryRepoImpl
@@ -18,7 +16,6 @@ internal constructor(
   private val dao: ListeningEventDao,
   @ListeningHistoryEnabledStore
   private val enabledStore: DataStore<Boolean>,
-  private val clock: Clock,
 ) : ListeningHistoryRepo {
 
   override fun events(bookId: BookId): Flow<List<ListeningEvent>> = dao.events(bookId)
@@ -26,6 +23,7 @@ internal constructor(
   override suspend fun add(event: ListeningEvent) {
     if (enabledStore.data.first()) {
       dao.insert(event)
+      dao.keepNewest(event.bookId, MAX_EVENTS_PER_BOOK)
     }
   }
 
@@ -33,11 +31,10 @@ internal constructor(
     dao.deleteAll()
   }
 
-  override suspend fun removeExpired() {
-    dao.deleteOlderThan(clock.millis() - RETENTION.inWholeMilliseconds)
-  }
-
   internal companion object {
-    val RETENTION = 30.days
+    /**
+     * Enough for a few dozen listening sessions, while the table stays small.
+     */
+    const val MAX_EVENTS_PER_BOOK = 250
   }
 }

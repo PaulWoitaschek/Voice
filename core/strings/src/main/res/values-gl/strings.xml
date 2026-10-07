@@ -122,7 +122,7 @@
     <string name="history.action.restore">Restaurar</string>
     <string name="history.changed_back">Revertido</string>
     <string name="history.empty.filtered">Nada coincide con este filtro.</string>
-    <string name="history.empty.message">As reproducións, pausas e saltos aparecen aquí durante 30 días, para que sempre poidas volver onde estabas.</string>
+    <string name="history.empty.message">As reproducións, pausas e saltos aparecen aquí, para que sempre poidas volver onde estabas.</string>
     <string name="history.empty.title">Aínda non hai nada</string>
     <string name="history.event.bookmark_added">Marcador gardado</string>
     <string name="history.event.bookmark_added.note">«%1$s» gardado</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Isto elimina as reproducións, pausas e saltos rexistrados de todos os libros. Os marcadores mantéñense.</string>
     <string name="settings.listening_history.clear.title">Borrar o historial de escoita?</string>
     <string name="settings.listening_history.cleared">Historial de escoita borrado</string>
-    <string name="settings.listening_history.summary">Garda as reproducións, pausas e saltos durante 30 días neste dispositivo, para que poidas desfacer erros</string>
+    <string name="settings.listening_history.summary">Garda as reproducións, pausas e saltos neste dispositivo, para que poidas desfacer erros</string>
     <string name="settings.listening_history.title">Historial de escoita</string>
     <string name="settings.playback.auto_rewind.title">Retroceso automático</string>
     <string name="settings.playback.seek_time.title">Tempo a omitir</string>

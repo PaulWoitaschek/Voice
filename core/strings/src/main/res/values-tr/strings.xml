@@ -122,7 +122,7 @@
     <string name="history.action.restore">Geri yükle</string>
     <string name="history.changed_back">Geri döndürüldü</string>
     <string name="history.empty.filtered">Bu filtreye uyan bir şey yok.</string>
-    <string name="history.empty.message">Oynatma, duraklatma ve atlamalar 30 gün boyunca burada görünür, böylece kaldığınız yeri her zaman bulabilirsiniz.</string>
+    <string name="history.empty.message">Oynatma, duraklatma ve atlamalar burada görünür, böylece kaldığınız yeri her zaman bulabilirsiniz.</string>
     <string name="history.empty.title">Henüz burada bir şey yok</string>
     <string name="history.event.bookmark_added">Yer imi kaydedildi</string>
     <string name="history.event.bookmark_added.note">“%1$s” kaydedildi</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Bu işlem, tüm kitapların kaydedilen oynatma, duraklatma ve atlamalarını kaldırır. Yer imleri kalır.</string>
     <string name="settings.listening_history.clear.title">Dinleme geçmişi temizlensin mi?</string>
     <string name="settings.listening_history.cleared">Dinleme geçmişi temizlendi</string>
-    <string name="settings.listening_history.summary">Yanlışlıkla yapılanları geri alabilmeniz için oynatma, duraklatma ve atlamaları bu aygıtta 30 gün saklar</string>
+    <string name="settings.listening_history.summary">Yanlışlıkla yapılanları geri alabilmeniz için oynatma, duraklatma ve atlamaları bu aygıtta saklar</string>
     <string name="settings.listening_history.title">Dinleme geçmişi</string>
     <string name="settings.playback.auto_rewind.title">Otomatik geri sar</string>
     <string name="settings.playback.seek_time.title">Değeri atla</string>

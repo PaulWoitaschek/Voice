@@ -12,11 +12,9 @@ public interface ListeningHistoryRepo {
   public fun events(bookId: BookId): Flow<List<ListeningEvent>>
 
   /**
-   * Stores the event, unless listening history is turned off.
+   * Stores the event, unless listening history is turned off. Only the newest events of each book are kept.
    */
   public suspend fun add(event: ListeningEvent)
 
   public suspend fun clear()
-
-  public suspend fun removeExpired()
 }

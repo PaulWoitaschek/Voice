@@ -129,7 +129,7 @@
     <string name="history.action.restore">Restabilește</string>
     <string name="history.changed_back">Setarea a fost restabilită</string>
     <string name="history.empty.filtered">Nimic nu corespunde acestui filtru.</string>
-    <string name="history.empty.message">Redările, pauzele și salturile apar aici timp de 30 de zile, ca să găsești mereu drumul înapoi.</string>
+    <string name="history.empty.message">Redările, pauzele și salturile apar aici, ca să găsești mereu drumul înapoi.</string>
     <string name="history.empty.title">Încă nimic aici</string>
     <string name="history.event.bookmark_added">Semn de carte salvat</string>
     <string name="history.event.bookmark_added.note">„%1$s” salvat</string>
@@ -242,7 +242,7 @@
     <string name="settings.listening_history.clear.message">Se vor elimina redările, pauzele și salturile înregistrate pentru toate cărțile. Semnele de carte rămân.</string>
     <string name="settings.listening_history.clear.title">Ștergi istoricul de ascultare?</string>
     <string name="settings.listening_history.cleared">Istoricul de ascultare a fost șters</string>
-    <string name="settings.listening_history.summary">Păstrează redările, pauzele și salturile timp de 30 de zile pe acest dispozitiv, ca să poți anula greșelile</string>
+    <string name="settings.listening_history.summary">Păstrează redările, pauzele și salturile pe acest dispozitiv, ca să poți anula greșelile</string>
     <string name="settings.listening_history.title">Istoric de ascultare</string>
     <string name="settings.playback.auto_rewind.title">Reluare automată</string>
     <string name="settings.playback.seek_time.title">Pas derulare</string>

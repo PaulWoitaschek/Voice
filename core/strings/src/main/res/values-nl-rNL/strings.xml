@@ -122,7 +122,7 @@
     <string name="history.action.restore">Herstellen</string>
     <string name="history.changed_back">Teruggezet</string>
     <string name="history.empty.filtered">Niets komt overeen met dit filter.</string>
-    <string name="history.empty.message">Afspelen, pauzes en sprongen worden hier 30 dagen getoond, zodat je altijd je weg terugvindt.</string>
+    <string name="history.empty.message">Afspelen, pauzes en sprongen worden hier getoond, zodat je altijd je weg terugvindt.</string>
     <string name="history.empty.title">Nog niets te zien</string>
     <string name="history.event.bookmark_added">Bladwijzer opgeslagen</string>
     <string name="history.event.bookmark_added.note">“%1$s” opgeslagen</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Hiermee worden de vastgelegde afspeelmomenten, pauzes en sprongen van alle boeken verwijderd. Bladwijzers blijven bewaard.</string>
     <string name="settings.listening_history.clear.title">Luistergeschiedenis wissen?</string>
     <string name="settings.listening_history.cleared">Luistergeschiedenis gewist</string>
-    <string name="settings.listening_history.summary">Bewaart afspelen, pauzes en sprongen 30 dagen op dit apparaat, zodat je ongelukjes ongedaan kunt maken</string>
+    <string name="settings.listening_history.summary">Bewaart afspelen, pauzes en sprongen op dit apparaat, zodat je ongelukjes ongedaan kunt maken</string>
     <string name="settings.listening_history.title">Luistergeschiedenis</string>
     <string name="settings.playback.auto_rewind.title">Automatisch terugspoelen</string>
     <string name="settings.playback.seek_time.title">Aantal overslaan</string>

@@ -122,7 +122,7 @@
     <string name="history.action.restore">Riprìstina</string>
     <string name="history.changed_back">Torradu comente fiat</string>
     <string name="history.empty.filtered">Nudda currispondet a custu filtru.</string>
-    <string name="history.empty.message">Riprodutziones, pàusas e brincos aparint inoghe pro 30 dies, gasi podes semper torrare a agatare in ue fias.</string>
+    <string name="history.empty.message">Riprodutziones, pàusas e brincos aparint inoghe, gasi podes semper torrare a agatare in ue fias.</string>
     <string name="history.empty.title">Galu nudda inoghe</string>
     <string name="history.event.bookmark_added">Sinnalibru sarvadu</string>
     <string name="history.event.bookmark_added.note">Sarvadu «%1$s»</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Custu bogat sas riprodutziones, pàusas e brincos registrados de totu sos libros. Sos sinnalibros abarrant.</string>
     <string name="settings.listening_history.clear.title">Boles isbòidare sa cronologia de ascurtu?</string>
     <string name="settings.listening_history.cleared">Cronologia de ascurtu isbòidada</string>
-    <string name="settings.listening_history.summary">Mantenet riprodutziones, pàusas e brincos pro 30 dies in custu dispositivu, gasi podes annullare sos errores</string>
+    <string name="settings.listening_history.summary">Mantenet riprodutziones, pàusas e brincos in custu dispositivu, gasi podes annullare sos errores</string>
     <string name="settings.listening_history.title">Cronologia de ascurtu</string>
     <string name="settings.playback.auto_rewind.title">Torra in segus in automàticu</string>
     <string name="settings.playback.seek_time.title">Tempus de brincare</string>

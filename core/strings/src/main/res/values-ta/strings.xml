@@ -122,7 +122,7 @@
     <string name="history.action.restore">மீட்டெடு</string>
     <string name="history.changed_back">பழையபடி மாற்றப்பட்டது</string>
     <string name="history.empty.filtered">இந்த வடிப்பானுக்குப் பொருந்துவது எதுவும் இல்லை.</string>
-    <string name="history.empty.message">இயக்கங்கள், இடைநிறுத்தங்கள், தாவல்கள் 30 நாட்கள் இங்கே காட்டப்படும், எனவே விட்ட இடத்திற்கு நீங்கள் எப்போதும் திரும்பலாம்.</string>
+    <string name="history.empty.message">இயக்கங்கள், இடைநிறுத்தங்கள், தாவல்கள் இங்கே காட்டப்படும், எனவே விட்ட இடத்திற்கு நீங்கள் எப்போதும் திரும்பலாம்.</string>
     <string name="history.empty.title">இங்கே இன்னும் எதுவும் இல்லை</string>
     <string name="history.event.bookmark_added">ஒரு புக்மார்க் சேமிக்கப்பட்டது</string>
     <string name="history.event.bookmark_added.note">“%1$s” சேமிக்கப்பட்டது</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">இது எல்லாப் புத்தகங்களின் பதிவுசெய்யப்பட்ட இயக்கங்கள், இடைநிறுத்தங்கள், தாவல்களை நீக்கும். புக்மார்க்குகள் அப்படியே இருக்கும்.</string>
     <string name="settings.listening_history.clear.title">கேட்டல் வரலாற்றை அழிக்கவா?</string>
     <string name="settings.listening_history.cleared">கேட்டல் வரலாறு அழிக்கப்பட்டது</string>
-    <string name="settings.listening_history.summary">தவறுதலாக நடந்தவற்றைச் செயல்தவிர்க்க, இயக்கங்கள், இடைநிறுத்தங்கள், தாவல்களை இந்தச் சாதனத்தில் 30 நாட்கள் வைத்திருக்கும்</string>
+    <string name="settings.listening_history.summary">தவறுதலாக நடந்தவற்றைச் செயல்தவிர்க்க, இயக்கங்கள், இடைநிறுத்தங்கள், தாவல்களை இந்தச் சாதனத்தில் வைத்திருக்கும்</string>
     <string name="settings.listening_history.title">கேட்டல் வரலாறு</string>
     <string name="settings.playback.auto_rewind.title">ஆட்டோ ரிவைண்ட்</string>
     <string name="settings.playback.seek_time.title">தொகையைத் தவிர்க்கவும்</string>

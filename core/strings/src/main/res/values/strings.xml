@@ -182,7 +182,7 @@
     <string name="history.action.restore">Restore</string>
     <string name="history.changed_back">Changed back</string>
     <string name="history.empty.filtered">Nothing matches this filter.</string>
-    <string name="history.empty.message">Plays, pauses and jumps show up here for 30 days, so you can always find your way back.</string>
+    <string name="history.empty.message">Plays, pauses and jumps show up here, so you can always find your way back.</string>
     <string name="history.empty.title">Nothing here yet</string>
     <string name="history.event.bookmark_added">Saved a bookmark</string>
     <string name="history.event.bookmark_added.note">Saved “%1$s”</string>
@@ -422,7 +422,7 @@
     <string name="settings.listening_history.clear.message">This removes the recorded plays, pauses and jumps of all books. Bookmarks stay.</string>
     <string name="settings.listening_history.clear.title">Clear listening history?</string>
     <string name="settings.listening_history.cleared">Listening history cleared</string>
-    <string name="settings.listening_history.summary">Keeps plays, pauses and jumps for 30 days on this device, so you can undo accidents</string>
+    <string name="settings.listening_history.summary">Keeps plays, pauses and jumps on this device, so you can undo accidents</string>
     <string name="settings.listening_history.title">Listening history</string>
     <!-- Title for the setting that rewinds automatically when playback resumes. -->
     <string name="settings.playback.auto_rewind.title">Auto rewind</string>

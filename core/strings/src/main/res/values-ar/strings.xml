@@ -145,7 +145,7 @@
     <string name="history.action.restore">استعد</string>
     <string name="history.changed_back">أُعيد كما كان</string>
     <string name="history.empty.filtered">لا شيء يطابق هذه التصفية.</string>
-    <string name="history.empty.message">يظهر هنا التشغيل والإيقاف المؤقت والقفزات لمدة 30 يومًا، لتجد طريق العودة دائمًا.</string>
+    <string name="history.empty.message">يظهر هنا التشغيل والإيقاف المؤقت والقفزات، لتجد طريق العودة دائمًا.</string>
     <string name="history.empty.title">لا شيء هنا بعد</string>
     <string name="history.event.bookmark_added">حُفظت علامة مرجعية</string>
     <string name="history.event.bookmark_added.note">حُفظت «%1$s»</string>
@@ -258,7 +258,7 @@
     <string name="settings.listening_history.clear.message">سيزيل هذا التشغيل والإيقاف والقفزات المسجلة لكل الكتب. تبقى العلامات المرجعية.</string>
     <string name="settings.listening_history.clear.title">أتريد مسح سجل الاستماع؟</string>
     <string name="settings.listening_history.cleared">مُسح سجل الاستماع</string>
-    <string name="settings.listening_history.summary">يحتفظ بالتشغيل والإيقاف والقفزات لمدة 30 يومًا على هذا الجهاز، لتتمكن من التراجع عن الأخطاء</string>
+    <string name="settings.listening_history.summary">يحتفظ بالتشغيل والإيقاف والقفزات على هذا الجهاز، لتتمكن من التراجع عن الأخطاء</string>
     <string name="settings.listening_history.title">سجل الاستماع</string>
     <string name="settings.playback.auto_rewind.title">إرجاع آلي</string>
     <string name="settings.playback.seek_time.title">مقدار التقدم</string>

@@ -122,7 +122,7 @@
     <string name="history.action.restore">Wiederherstellen</string>
     <string name="history.changed_back">Zurückgesetzt</string>
     <string name="history.empty.filtered">Nichts passt zu diesem Filter.</string>
-    <string name="history.empty.message">Wiedergaben, Pausen und Sprünge erscheinen hier 30 Tage lang, damit Du immer zurückfindest.</string>
+    <string name="history.empty.message">Wiedergaben, Pausen und Sprünge erscheinen hier, damit Du immer zurückfindest.</string>
     <string name="history.empty.title">Noch nichts da</string>
     <string name="history.event.bookmark_added">Lesezeichen gespeichert</string>
     <string name="history.event.bookmark_added.note">„%1$s“ gespeichert</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Dadurch werden die gespeicherten Wiedergaben, Pausen und Sprünge aller Bücher entfernt. Lesezeichen bleiben erhalten.</string>
     <string name="settings.listening_history.clear.title">Hörverlauf löschen?</string>
     <string name="settings.listening_history.cleared">Hörverlauf gelöscht</string>
-    <string name="settings.listening_history.summary">Speichert Wiedergaben, Pausen und Sprünge 30 Tage lang auf diesem Gerät, damit Du Versehen rückgängig machen kannst</string>
+    <string name="settings.listening_history.summary">Speichert Wiedergaben, Pausen und Sprünge auf diesem Gerät, damit Du Versehen rückgängig machen kannst</string>
     <string name="settings.listening_history.title">Hörverlauf</string>
     <string name="settings.playback.auto_rewind.title">Automatisch zurückspulen</string>
     <string name="settings.playback.seek_time.title">Vor- und zurückspulen</string>

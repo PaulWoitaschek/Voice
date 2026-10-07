@@ -121,7 +121,7 @@
     <string name="history.action.restore">वापस लाएँ</string>
     <string name="history.changed_back">वापस बदल दिया गया</string>
     <string name="history.empty.filtered">इस फ़िल्टर से कुछ भी मेल नहीं खाता।</string>
-    <string name="history.empty.message">चलाने, रोकने और जंप का रिकॉर्ड यहाँ 30 दिनों तक दिखता है, ताकि आप हमेशा अपनी जगह पर वापस पहुँच सकें।</string>
+    <string name="history.empty.message">चलाने, रोकने और जंप का रिकॉर्ड यहाँ दिखता है, ताकि आप हमेशा अपनी जगह पर वापस पहुँच सकें।</string>
     <string name="history.empty.title">अभी यहाँ कुछ नहीं है</string>
     <string name="history.event.bookmark_added">बुकमार्क सहेजा गया</string>
     <string name="history.event.bookmark_added.note">“%1$s” सहेजा गया</string>
@@ -235,7 +235,7 @@
     <string name="settings.listening_history.clear.message">इससे सभी पुस्तकों के चलाने, रोकने और जंप का रिकॉर्ड हट जाएगा। बुकमार्क बने रहेंगे।</string>
     <string name="settings.listening_history.clear.title">सुनने का इतिहास साफ़ करें?</string>
     <string name="settings.listening_history.cleared">सुनने का इतिहास साफ़ किया गया</string>
-    <string name="settings.listening_history.summary">चलाने, रोकने और जंप का रिकॉर्ड इस डिवाइस पर 30 दिनों तक रखता है, ताकि आप गलतियाँ सुधार सकें</string>
+    <string name="settings.listening_history.summary">चलाने, रोकने और जंप का रिकॉर्ड इस डिवाइस पर रखता है, ताकि आप गलतियाँ सुधार सकें</string>
     <string name="settings.listening_history.title">सुनने का इतिहास</string>
     <string name="settings.playback.auto_rewind.title">ऑटो रिवाइंड</string>
     <string name="settings.playback.seek_time.title">आगे बढ़ाने की मात्रा</string>

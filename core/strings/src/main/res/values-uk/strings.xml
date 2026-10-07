@@ -138,7 +138,7 @@
     <string name="history.action.restore">Відновити</string>
     <string name="history.changed_back">Зміну скасовано</string>
     <string name="history.empty.filtered">Під цей фільтр нічого не підходить.</string>
-    <string name="history.empty.message">Відтворення, паузи й переходи зберігаються тут 30 днів, тож ви завжди знайдете, де зупинилися.</string>
+    <string name="history.empty.message">Відтворення, паузи й переходи зберігаються тут, тож ви завжди знайдете, де зупинилися.</string>
     <string name="history.empty.title">Тут поки порожньо</string>
     <string name="history.event.bookmark_added">Збережено закладку</string>
     <string name="history.event.bookmark_added.note">Збережено «%1$s»</string>
@@ -293,7 +293,7 @@
     <string name="settings.listening_history.clear.message">Записані відтворення, паузи й переходи всіх книг буде видалено. Закладки залишаться.</string>
     <string name="settings.listening_history.clear.title">Очистити історію прослуховування?</string>
     <string name="settings.listening_history.cleared">Історію прослуховування очищено</string>
-    <string name="settings.listening_history.summary">Зберігає відтворення, паузи й переходи 30 днів на цьому пристрої, щоб ви могли скасувати випадкові дії</string>
+    <string name="settings.listening_history.summary">Зберігає відтворення, паузи й переходи на цьому пристрої, щоб ви могли скасувати випадкові дії</string>
     <string name="settings.listening_history.title">Історія прослуховування</string>
     <string name="settings.playback.auto_rewind.title">Інтервал автовідмотування</string>
     <string name="settings.playback.seek_time.title">Інтервал перемотування</string>

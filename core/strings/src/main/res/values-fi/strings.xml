@@ -122,7 +122,7 @@
     <string name="history.action.restore">Palauta</string>
     <string name="history.changed_back">Palautettu</string>
     <string name="history.empty.filtered">Mikään ei vastaa tätä suodatinta.</string>
-    <string name="history.empty.message">Toistot, tauot ja siirtymät näkyvät täällä 30 päivän ajan, joten löydät aina takaisin.</string>
+    <string name="history.empty.message">Toistot, tauot ja siirtymät näkyvät täällä, joten löydät aina takaisin.</string>
     <string name="history.empty.title">Täällä ei ole vielä mitään</string>
     <string name="history.event.bookmark_added">Kirjanmerkki tallennettu</string>
     <string name="history.event.bookmark_added.note">”%1$s” tallennettu</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Tämä poistaa kaikkien kirjojen tallennetut toistot, tauot ja siirtymät. Kirjanmerkit säilyvät.</string>
     <string name="settings.listening_history.clear.title">Tyhjennetäänkö kuunteluhistoria?</string>
     <string name="settings.listening_history.cleared">Kuunteluhistoria tyhjennetty</string>
-    <string name="settings.listening_history.summary">Säilyttää toistot, tauot ja siirtymät 30 päivää tällä laitteella, jotta voit kumota vahingot</string>
+    <string name="settings.listening_history.summary">Säilyttää toistot, tauot ja siirtymät tällä laitteella, jotta voit kumota vahingot</string>
     <string name="settings.listening_history.title">Kuunteluhistoria</string>
     <string name="settings.playback.auto_rewind.title">Automaattinen takaisinkelaus</string>
     <string name="settings.playback.seek_time.title">Siirtymän pituus</string>

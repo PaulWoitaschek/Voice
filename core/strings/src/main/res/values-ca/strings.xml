@@ -129,7 +129,7 @@
     <string name="history.action.restore">Restaura</string>
     <string name="history.changed_back">S\'ha desfet el canvi</string>
     <string name="history.empty.filtered">No hi ha res que coincideixi amb aquest filtre.</string>
-    <string name="history.empty.message">Les reproduccions, pauses i salts apareixen aquí durant 30 dies, perquè sempre pugueu tornar on éreu.</string>
+    <string name="history.empty.message">Les reproduccions, pauses i salts apareixen aquí, perquè sempre pugueu tornar on éreu.</string>
     <string name="history.empty.title">Encara no hi ha res</string>
     <string name="history.event.bookmark_added">S\'ha desat un punt de llibre</string>
     <string name="history.event.bookmark_added.note">S\'ha desat «%1$s»</string>
@@ -242,7 +242,7 @@
     <string name="settings.listening_history.clear.message">Això elimina les reproduccions, pauses i salts registrats de tots els llibres. Els punts de llibre es mantenen.</string>
     <string name="settings.listening_history.clear.title">Voleu esborrar l\'historial d\'escolta?</string>
     <string name="settings.listening_history.cleared">S\'ha esborrat l\'historial d\'escolta</string>
-    <string name="settings.listening_history.summary">Desa les reproduccions, pauses i salts durant 30 dies en aquest dispositiu, perquè pugueu desfer els accidents</string>
+    <string name="settings.listening_history.summary">Desa les reproduccions, pauses i salts en aquest dispositiu, perquè pugueu desfer els accidents</string>
     <string name="settings.listening_history.title">Historial d\'escolta</string>
     <string name="settings.playback.auto_rewind.title">Rebobina automàticament</string>
     <string name="settings.playback.seek_time.title">Omet la quantitat</string>

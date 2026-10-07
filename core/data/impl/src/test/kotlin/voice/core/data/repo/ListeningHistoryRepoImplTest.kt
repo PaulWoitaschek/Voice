@@ -12,13 +12,10 @@ import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.MemoryDataStore
-import java.time.Clock
 import java.time.Instant
-import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 
 @RunWith(AndroidJUnit4::class)
@@ -32,7 +29,6 @@ class ListeningHistoryRepoImplTest {
   private val repo = ListeningHistoryRepoImpl(
     dao = db.listeningEventDao(),
     enabledStore = enabledStore,
-    clock = Clock.fixed(now, ZoneOffset.UTC),
   )
   private val bookId = BookId("book")
 
@@ -76,13 +72,18 @@ class ListeningHistoryRepoImplTest {
   }
 
   @Test
-  fun `events older than 30 days expire`() = runTest {
-    repo.add(event(ListeningEvent.Type.Play, ago(31.days)))
-    repo.add(event(ListeningEvent.Type.Pause, ago(29.days)))
+  fun `only the newest events of each book are kept`() = runTest {
+    repo.add(event(ListeningEvent.Type.Play, ago(1000.minutes)))
+    repeat(ListeningHistoryRepoImpl.MAX_EVENTS_PER_BOOK) { index ->
+      repo.add(event(ListeningEvent.Type.Pause, ago((999 - index).minutes)))
+    }
+    repo.add(event(ListeningEvent.Type.Play, ago(2000.minutes), bookId = BookId("other")))
 
-    repo.removeExpired()
-
-    assertEquals(expected = listOf(ListeningEvent.Type.Pause), actual = types())
+    assertEquals(
+      expected = List(ListeningHistoryRepoImpl.MAX_EVENTS_PER_BOOK) { ListeningEvent.Type.Pause },
+      actual = types(),
+    )
+    assertEquals(expected = 1, actual = repo.events(BookId("other")).first().size)
   }
 
   @Test

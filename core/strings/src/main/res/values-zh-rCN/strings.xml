@@ -108,7 +108,7 @@
     <string name="history.action.restore">恢复</string>
     <string name="history.changed_back">已改回</string>
     <string name="history.empty.filtered">没有符合此筛选条件的内容。</string>
-    <string name="history.empty.message">播放、暂停和跳转记录会在这里保留 30 天，方便您随时找回原来的位置。</string>
+    <string name="history.empty.message">播放、暂停和跳转记录会在这里保留，方便您随时找回原来的位置。</string>
     <string name="history.empty.title">这里还没有内容</string>
     <string name="history.event.bookmark_added">保存了书签</string>
     <string name="history.event.bookmark_added.note">保存了“%1$s”</string>
@@ -210,7 +210,7 @@
     <string name="settings.listening_history.clear.message">这将移除所有有声书已记录的播放、暂停和跳转。书签会保留。</string>
     <string name="settings.listening_history.clear.title">要清除收听历史吗？</string>
     <string name="settings.listening_history.cleared">已清除收听历史</string>
-    <string name="settings.listening_history.summary">在此设备上保留 30 天的播放、暂停和跳转记录，方便撤销误操作</string>
+    <string name="settings.listening_history.summary">在此设备上保留播放、暂停和跳转记录，方便撤销误操作</string>
     <string name="settings.listening_history.title">收听历史</string>
     <string name="settings.playback.auto_rewind.title">自动回退</string>
     <string name="settings.playback.seek_time.title">跳过时间</string>

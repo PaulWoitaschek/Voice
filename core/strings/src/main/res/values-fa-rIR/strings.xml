@@ -122,7 +122,7 @@
     <string name="history.action.restore">بازیابی</string>
     <string name="history.changed_back">بازگردانده شد</string>
     <string name="history.empty.filtered">موردی با این فیلتر پیدا نشد.</string>
-    <string name="history.empty.message">پخش‌ها، توقف‌ها و پرش‌ها تا ۳۰ روز اینجا نمایش داده می‌شوند تا همیشه بتوانید راه برگشت را پیدا کنید.</string>
+    <string name="history.empty.message">پخش‌ها، توقف‌ها و پرش‌ها اینجا نمایش داده می‌شوند تا همیشه بتوانید راه برگشت را پیدا کنید.</string>
     <string name="history.empty.title">هنوز چیزی اینجا نیست</string>
     <string name="history.event.bookmark_added">نشانه ذخیره شد</string>
     <string name="history.event.bookmark_added.note">«%1$s» ذخیره شد</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">پخش‌ها، توقف‌ها و پرش‌های ثبت‌شدهٔ همهٔ کتاب‌ها پاک می‌شوند. نشانه‌ها باقی می‌مانند.</string>
     <string name="settings.listening_history.clear.title">تاریخچهٔ گوش دادن پاک شود؟</string>
     <string name="settings.listening_history.cleared">تاریخچهٔ گوش دادن پاک شد</string>
-    <string name="settings.listening_history.summary">پخش‌ها، توقف‌ها و پرش‌ها را ۳۰ روز روی این دستگاه نگه می‌دارد تا بتوانید اشتباهات را برگردانید</string>
+    <string name="settings.listening_history.summary">پخش‌ها، توقف‌ها و پرش‌ها را روی این دستگاه نگه می‌دارد تا بتوانید اشتباهات را برگردانید</string>
     <string name="settings.listening_history.title">تاریخچهٔ گوش دادن</string>
     <string name="settings.playback.auto_rewind.title">عقب بردن خودکار</string>
     <string name="settings.playback.seek_time.title">میزان پرش</string>

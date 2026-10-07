@@ -121,7 +121,7 @@
     <string name="history.action.restore">Gendan</string>
     <string name="history.changed_back">Skiftet tilbage</string>
     <string name="history.empty.filtered">Intet matcher dette filter.</string>
-    <string name="history.empty.message">Afspilninger, pauser og spring vises her i 30 dage, så du altid kan finde tilbage.</string>
+    <string name="history.empty.message">Afspilninger, pauser og spring vises her, så du altid kan finde tilbage.</string>
     <string name="history.empty.title">Intet her endnu</string>
     <string name="history.event.bookmark_added">Gemte et bogmærke</string>
     <string name="history.event.bookmark_added.note">Gemte »%1$s«</string>
@@ -234,7 +234,7 @@
     <string name="settings.listening_history.clear.message">Dette fjerner de registrerede afspilninger, pauser og spring for alle bøger. Bogmærker bevares.</string>
     <string name="settings.listening_history.clear.title">Ryd lyttehistorik?</string>
     <string name="settings.listening_history.cleared">Lyttehistorik ryddet</string>
-    <string name="settings.listening_history.summary">Gemmer afspilninger, pauser og spring i 30 dage på denne enhed, så du kan fortryde uheld</string>
+    <string name="settings.listening_history.summary">Gemmer afspilninger, pauser og spring på denne enhed, så du kan fortryde uheld</string>
     <string name="settings.listening_history.title">Lyttehistorik</string>
     <string name="settings.playback.auto_rewind.title">Automatisk tilbagespoling</string>
     <string name="settings.playback.seek_time.title">Spring over mængde</string>

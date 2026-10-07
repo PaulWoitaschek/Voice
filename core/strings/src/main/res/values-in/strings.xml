@@ -114,7 +114,7 @@
     <string name="history.action.restore">Pulihkan</string>
     <string name="history.changed_back">Dikembalikan</string>
     <string name="history.empty.filtered">Tidak ada yang cocok dengan filter ini.</string>
-    <string name="history.empty.message">Pemutaran, jeda, dan lompatan muncul di sini selama 30 hari, jadi Anda selalu bisa kembali ke posisi semula.</string>
+    <string name="history.empty.message">Pemutaran, jeda, dan lompatan muncul di sini, jadi Anda selalu bisa kembali ke posisi semula.</string>
     <string name="history.empty.title">Belum ada apa-apa</string>
     <string name="history.event.bookmark_added">Markah disimpan</string>
     <string name="history.event.bookmark_added.note">“%1$s” disimpan</string>
@@ -266,7 +266,7 @@
     <string name="settings.listening_history.clear.message">Ini akan menghapus pemutaran, jeda, dan lompatan yang tercatat dari semua buku. Markah tetap ada.</string>
     <string name="settings.listening_history.clear.title">Hapus riwayat mendengarkan?</string>
     <string name="settings.listening_history.cleared">Riwayat mendengarkan dihapus</string>
-    <string name="settings.listening_history.summary">Menyimpan pemutaran, jeda, dan lompatan selama 30 hari di perangkat ini, jadi Anda bisa mengurungkan kesalahan</string>
+    <string name="settings.listening_history.summary">Menyimpan pemutaran, jeda, dan lompatan di perangkat ini, jadi Anda bisa mengurungkan kesalahan</string>
     <string name="settings.listening_history.title">Riwayat mendengarkan</string>
     <string name="settings.playback.auto_rewind.title">Mundur otomatis</string>
     <string name="settings.playback.seek_time.title">Lewati jumlah</string>

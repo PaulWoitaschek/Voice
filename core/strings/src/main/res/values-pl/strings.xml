@@ -138,7 +138,7 @@
     <string name="history.action.restore">Przywróć</string>
     <string name="history.changed_back">Przywrócono</string>
     <string name="history.empty.filtered">Nic nie pasuje do tego filtra.</string>
-    <string name="history.empty.message">Odtworzenia, pauzy i skoki są tu widoczne przez 30 dni, więc zawsze odnajdziesz drogę powrotną.</string>
+    <string name="history.empty.message">Odtworzenia, pauzy i skoki są tu widoczne, więc zawsze odnajdziesz drogę powrotną.</string>
     <string name="history.empty.title">Na razie nic tu nie ma</string>
     <string name="history.event.bookmark_added">Zapisano zakładkę</string>
     <string name="history.event.bookmark_added.note">Zapisano „%1$s”</string>
@@ -293,7 +293,7 @@
     <string name="settings.listening_history.clear.message">Spowoduje to usunięcie zapisanych odtworzeń, pauz i skoków ze wszystkich książek. Zakładki pozostaną.</string>
     <string name="settings.listening_history.clear.title">Wyczyścić historię słuchania?</string>
     <string name="settings.listening_history.cleared">Historia słuchania wyczyszczona</string>
-    <string name="settings.listening_history.summary">Przechowuje odtworzenia, pauzy i skoki przez 30 dni na tym urządzeniu, aby można było cofnąć pomyłki</string>
+    <string name="settings.listening_history.summary">Przechowuje odtworzenia, pauzy i skoki na tym urządzeniu, aby można było cofnąć pomyłki</string>
     <string name="settings.listening_history.title">Historia słuchania</string>
     <string name="settings.playback.auto_rewind.title">Automatyczne cofnięcie</string>
     <string name="settings.playback.seek_time.title">Przewiń o</string>

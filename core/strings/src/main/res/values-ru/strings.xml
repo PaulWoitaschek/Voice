@@ -138,7 +138,7 @@
     <string name="history.action.restore">Восстановить</string>
     <string name="history.changed_back">Изменение отменено</string>
     <string name="history.empty.filtered">Под этот фильтр ничего не подходит.</string>
-    <string name="history.empty.message">Воспроизведения, паузы и переходы хранятся здесь 30 дней, чтобы вы всегда могли найти, где остановились.</string>
+    <string name="history.empty.message">Воспроизведения, паузы и переходы хранятся здесь, чтобы вы всегда могли найти, где остановились.</string>
     <string name="history.empty.title">Здесь пока пусто</string>
     <string name="history.event.bookmark_added">Сохранена закладка</string>
     <string name="history.event.bookmark_added.note">Сохранено «%1$s»</string>
@@ -293,7 +293,7 @@
     <string name="settings.listening_history.clear.message">Записанные воспроизведения, паузы и переходы всех книг будут удалены. Закладки останутся.</string>
     <string name="settings.listening_history.clear.title">Очистить историю прослушивания?</string>
     <string name="settings.listening_history.cleared">История прослушивания очищена</string>
-    <string name="settings.listening_history.summary">Хранит воспроизведения, паузы и переходы 30 дней на этом устройстве, чтобы вы могли отменить случайные действия</string>
+    <string name="settings.listening_history.summary">Хранит воспроизведения, паузы и переходы на этом устройстве, чтобы вы могли отменить случайные действия</string>
     <string name="settings.listening_history.title">История прослушивания</string>
     <string name="settings.playback.auto_rewind.title">Автоперемотка назад</string>
     <string name="settings.playback.seek_time.title">Интервал перемотки</string>

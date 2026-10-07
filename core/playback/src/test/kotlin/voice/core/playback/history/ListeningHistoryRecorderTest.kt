@@ -100,6 +100,4 @@ private class RecordingRepo : ListeningHistoryRepo {
   override suspend fun clear() {
     events.clear()
   }
-
-  override suspend fun removeExpired() {}
 }

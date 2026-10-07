@@ -122,7 +122,7 @@
     <string name="history.action.restore">Gjenopprett</string>
     <string name="history.changed_back">Endret tilbake</string>
     <string name="history.empty.filtered">Ingenting samsvarer med dette filteret.</string>
-    <string name="history.empty.message">Avspillinger, pauser og hopp vises her i 30 dager, så du alltid finner tilbake.</string>
+    <string name="history.empty.message">Avspillinger, pauser og hopp vises her, så du alltid finner tilbake.</string>
     <string name="history.empty.title">Ingenting her ennå</string>
     <string name="history.event.bookmark_added">Lagret et bokmerke</string>
     <string name="history.event.bookmark_added.note">Lagret «%1$s»</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Dette fjerner de registrerte avspillingene, pausene og hoppene for alle bøker. Bokmerkene blir værende.</string>
     <string name="settings.listening_history.clear.title">Tømme lyttehistorikken?</string>
     <string name="settings.listening_history.cleared">Lyttehistorikk tømt</string>
-    <string name="settings.listening_history.summary">Lagrer avspillinger, pauser og hopp i 30 dager på denne enheten, så du kan angre uhell</string>
+    <string name="settings.listening_history.summary">Lagrer avspillinger, pauser og hopp på denne enheten, så du kan angre uhell</string>
     <string name="settings.listening_history.title">Lyttehistorikk</string>
     <string name="settings.playback.auto_rewind.title">Auto-tilbakespoling</string>
     <string name="settings.playback.seek_time.title">Hoppintervall</string>

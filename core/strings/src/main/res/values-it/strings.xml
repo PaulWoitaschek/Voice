@@ -130,7 +130,7 @@
     <string name="history.action.restore">Ripristina</string>
     <string name="history.changed_back">Ripristinato</string>
     <string name="history.empty.filtered">Nessun risultato per questo filtro.</string>
-    <string name="history.empty.message">Riproduzioni, pause e salti compaiono qui per 30 giorni, così puoi sempre ritrovare il punto in cui eri.</string>
+    <string name="history.empty.message">Riproduzioni, pause e salti compaiono qui, così puoi sempre ritrovare il punto in cui eri.</string>
     <string name="history.empty.title">Ancora niente qui</string>
     <string name="history.event.bookmark_added">Segnalibro salvato</string>
     <string name="history.event.bookmark_added.note">“%1$s” salvato</string>
@@ -284,7 +284,7 @@
     <string name="settings.listening_history.clear.message">Verranno rimossi riproduzioni, pause e salti registrati di tutti i libri. I segnalibri restano.</string>
     <string name="settings.listening_history.clear.title">Cancellare la cronologia di ascolto?</string>
     <string name="settings.listening_history.cleared">Cronologia di ascolto cancellata</string>
-    <string name="settings.listening_history.summary">Conserva riproduzioni, pause e salti per 30 giorni su questo dispositivo, così puoi annullare gli errori</string>
+    <string name="settings.listening_history.summary">Conserva riproduzioni, pause e salti su questo dispositivo, così puoi annullare gli errori</string>
     <string name="settings.listening_history.title">Cronologia di ascolto</string>
     <string name="settings.playback.auto_rewind.title">Riavvolgimento automatico</string>
     <string name="settings.playback.seek_time.title">Salta tempo</string>

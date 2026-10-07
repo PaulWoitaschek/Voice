@@ -138,7 +138,7 @@
     <string name="history.action.restore">Obnovit</string>
     <string name="history.changed_back">Vráceno zpět</string>
     <string name="history.empty.filtered">Tomuto filtru nic neodpovídá.</string>
-    <string name="history.empty.message">Přehrávání, pozastavení a skoky se tu zobrazují 30 dní, takže vždy najdete cestu zpět.</string>
+    <string name="history.empty.message">Přehrávání, pozastavení a skoky se tu zobrazují, takže vždy najdete cestu zpět.</string>
     <string name="history.empty.title">Zatím tu nic není</string>
     <string name="history.event.bookmark_added">Uložena záložka</string>
     <string name="history.event.bookmark_added.note">Uloženo „%1$s“</string>
@@ -293,7 +293,7 @@
     <string name="settings.listening_history.clear.message">Tímto odstraníte zaznamenaná přehrávání, pozastavení a skoky všech knih. Záložky zůstanou.</string>
     <string name="settings.listening_history.clear.title">Vymazat historii poslechu?</string>
     <string name="settings.listening_history.cleared">Historie poslechu vymazána</string>
-    <string name="settings.listening_history.summary">Uchovává přehrávání, pozastavení a skoky 30 dní v tomto zařízení, abyste mohli vrátit nechtěné akce</string>
+    <string name="settings.listening_history.summary">Uchovává přehrávání, pozastavení a skoky v tomto zařízení, abyste mohli vrátit nechtěné akce</string>
     <string name="settings.listening_history.title">Historie poslechu</string>
     <string name="settings.playback.auto_rewind.title">Automaticky přetočit</string>
     <string name="settings.playback.seek_time.title">Přeskočit o</string>

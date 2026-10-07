@@ -117,7 +117,7 @@
     <string name="history.action.restore">पुनर्स्थापना गर्नुहोस्</string>
     <string name="history.changed_back">पहिलेजस्तै गरियो</string>
     <string name="history.empty.filtered">यो फिल्टरसँग केही पनि मेल खाँदैन।</string>
-    <string name="history.empty.message">प्ले, पज र जम्पहरू यहाँ 30 दिनसम्म देखिन्छन्, ताकि तपाईं सधैं फर्कने बाटो भेट्टाउन सक्नुहुन्छ।</string>
+    <string name="history.empty.message">प्ले, पज र जम्पहरू यहाँ देखिन्छन्, ताकि तपाईं सधैं फर्कने बाटो भेट्टाउन सक्नुहुन्छ।</string>
     <string name="history.empty.title">अहिलेसम्म यहाँ केही छैन</string>
     <string name="history.event.bookmark_added">पुस्तकचिनो सुरक्षित गरियो</string>
     <string name="history.event.bookmark_added.note">“%1$s” सुरक्षित गरियो</string>
@@ -230,7 +230,7 @@
     <string name="settings.listening_history.clear.message">यसले सबै पुस्तकहरूका रेकर्ड गरिएका प्ले, पज र जम्पहरू हटाउँछ। पुस्तकचिनोहरू रहन्छन्।</string>
     <string name="settings.listening_history.clear.title">सुनाइ इतिहास खाली गर्ने?</string>
     <string name="settings.listening_history.cleared">सुनाइ इतिहास खाली गरियो</string>
-    <string name="settings.listening_history.summary">प्ले, पज र जम्पहरू यस यन्त्रमा 30 दिनसम्म राख्छ, ताकि तपाईं गल्तीहरू पूर्ववत् गर्न सक्नुहुन्छ</string>
+    <string name="settings.listening_history.summary">प्ले, पज र जम्पहरू यस यन्त्रमा राख्छ, ताकि तपाईं गल्तीहरू पूर्ववत् गर्न सक्नुहुन्छ</string>
     <string name="settings.listening_history.title">सुनाइ इतिहास</string>
     <string name="settings.playback.auto_rewind.title">स्वतः पछाडि</string>
     <string name="settings.playback.seek_time.title">स्किप गर्ने मात्रा</string>

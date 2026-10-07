@@ -122,7 +122,7 @@
     <string name="history.action.restore">Taasta</string>
     <string name="history.changed_back">Tagasi muudetud</string>
     <string name="history.empty.filtered">Selle filtriga ei leitud midagi.</string>
-    <string name="history.empty.message">Esitused, pausid ja hüpped on siin näha 30 päeva, nii et leiad alati tee tagasi.</string>
+    <string name="history.empty.message">Esitused, pausid ja hüpped on siin näha, nii et leiad alati tee tagasi.</string>
     <string name="history.empty.title">Siin pole veel midagi</string>
     <string name="history.event.bookmark_added">Järjehoidja salvestatud</string>
     <string name="history.event.bookmark_added.note">Salvestatud „%1$s“</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">See eemaldab kõigi raamatute salvestatud esitused, pausid ja hüpped. Järjehoidjad jäävad alles.</string>
     <string name="settings.listening_history.clear.title">Kas tühjendada kuulamisajalugu?</string>
     <string name="settings.listening_history.cleared">Kuulamisajalugu tühjendatud</string>
-    <string name="settings.listening_history.summary">Hoiab esitusi, pause ja hüppeid 30 päeva selles seadmes, et saaksid kogemata tehtu tagasi võtta</string>
+    <string name="settings.listening_history.summary">Hoiab esitusi, pause ja hüppeid selles seadmes, et saaksid kogemata tehtu tagasi võtta</string>
     <string name="settings.listening_history.title">Kuulamisajalugu</string>
     <string name="settings.playback.auto_rewind.title">Keri automaatselt tagasi</string>
     <string name="settings.playback.seek_time.title">Kerimise samm</string>

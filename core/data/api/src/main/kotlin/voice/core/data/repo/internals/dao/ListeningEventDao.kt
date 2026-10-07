@@ -16,8 +16,17 @@ public interface ListeningEventDao {
   @Query("SELECT * FROM listening_event WHERE bookId = :bookId ORDER BY atMillis DESC, id DESC")
   public fun events(bookId: BookId): Flow<List<ListeningEvent>>
 
-  @Query("DELETE FROM listening_event WHERE atMillis < :atMillis")
-  public suspend fun deleteOlderThan(atMillis: Long)
+  @Query(
+    """
+    DELETE FROM listening_event WHERE bookId = :bookId AND id NOT IN (
+      SELECT id FROM listening_event WHERE bookId = :bookId ORDER BY atMillis DESC, id DESC LIMIT :count
+    )
+    """,
+  )
+  public suspend fun keepNewest(
+    bookId: BookId,
+    count: Int,
+  )
 
   @Query("DELETE FROM listening_event")
   public suspend fun deleteAll()

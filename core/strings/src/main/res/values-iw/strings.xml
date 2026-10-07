@@ -130,7 +130,7 @@
     <string name="history.action.restore">שחזר</string>
     <string name="history.changed_back">הוחזר לקודם</string>
     <string name="history.empty.filtered">אין פריטים שתואמים למסנן הזה.</string>
-    <string name="history.empty.message">הפעלות, השהיות וקפיצות מופיעות כאן למשך 30 יום, כך שתמיד אפשר למצוא את הדרך חזרה.</string>
+    <string name="history.empty.message">הפעלות, השהיות וקפיצות מופיעות כאן, כך שתמיד אפשר למצוא את הדרך חזרה.</string>
     <string name="history.empty.title">אין כאן עדיין כלום</string>
     <string name="history.event.bookmark_added">שמירת סימנייה</string>
     <string name="history.event.bookmark_added.note">שמירת \"%1$s\"</string>
@@ -284,7 +284,7 @@
     <string name="settings.listening_history.clear.message">פעולה זו תסיר את ההפעלות, ההשהיות והקפיצות שתועדו בכל הספרים. הסימניות יישארו.</string>
     <string name="settings.listening_history.clear.title">לנקות את היסטוריית ההאזנה?</string>
     <string name="settings.listening_history.cleared">היסטוריית ההאזנה נוקתה</string>
-    <string name="settings.listening_history.summary">שומרת הפעלות, השהיות וקפיצות למשך 30 יום במכשיר הזה, כדי שאפשר יהיה לבטל טעויות</string>
+    <string name="settings.listening_history.summary">שומרת הפעלות, השהיות וקפיצות במכשיר הזה, כדי שאפשר יהיה לבטל טעויות</string>
     <string name="settings.listening_history.title">היסטוריית האזנה</string>
     <string name="settings.playback.auto_rewind.title">הרצה אוטומטית</string>
     <string name="settings.playback.seek_time.title">דלג כמות</string>

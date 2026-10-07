@@ -138,7 +138,7 @@
     <string name="history.action.restore">Аднавіць</string>
     <string name="history.changed_back">Вернута як было</string>
     <string name="history.empty.filtered">Нічога не адпавядае гэтаму фільтру.</string>
-    <string name="history.empty.message">Прайграванні, паўзы і пераходы захоўваюцца тут 30 дзён, каб вы заўсёды маглі вярнуцца.</string>
+    <string name="history.empty.message">Прайграванні, паўзы і пераходы захоўваюцца тут, каб вы заўсёды маглі вярнуцца.</string>
     <string name="history.empty.title">Тут пакуль пуста</string>
     <string name="history.event.bookmark_added">Захавана закладка</string>
     <string name="history.event.bookmark_added.note">Захавана «%1$s»</string>
@@ -293,7 +293,7 @@
     <string name="settings.listening_history.clear.message">Будуць выдалены запісаныя прайграванні, паўзы і пераходы ўсіх кніг. Закладкі застануцца.</string>
     <string name="settings.listening_history.clear.title">Ачысціць гісторыю праслухоўвання?</string>
     <string name="settings.listening_history.cleared">Гісторыя праслухоўвання ачышчана</string>
-    <string name="settings.listening_history.summary">Захоўвае прайграванні, паўзы і пераходы 30 дзён на гэтай прыладзе, каб можна было адмяніць выпадковыя дзеянні</string>
+    <string name="settings.listening_history.summary">Захоўвае прайграванні, паўзы і пераходы на гэтай прыладзе, каб можна было адмяніць выпадковыя дзеянні</string>
     <string name="settings.listening_history.title">Гісторыя праслухоўвання</string>
     <string name="settings.playback.auto_rewind.title">Аўтаматычна перамотваць назад</string>
     <string name="settings.playback.seek_time.title">Перамотваць па</string>

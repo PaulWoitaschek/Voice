@@ -146,7 +146,7 @@
     <string name="history.action.restore">Athchóirigh</string>
     <string name="history.changed_back">Athraithe ar ais</string>
     <string name="history.empty.filtered">Níl aon rud ag teacht leis an scagaire seo.</string>
-    <string name="history.empty.message">Feicfidh tú seinm, sosanna agus léimeanna anseo ar feadh 30 lá, ionas gur féidir leat d\'áit a aimsiú arís i gcónaí.</string>
+    <string name="history.empty.message">Feicfidh tú seinm, sosanna agus léimeanna anseo, ionas gur féidir leat d\'áit a aimsiú arís i gcónaí.</string>
     <string name="history.empty.title">Níl aon rud anseo fós</string>
     <string name="history.event.bookmark_added">Sábháladh ga leabhair</string>
     <string name="history.event.bookmark_added.note">Sábháladh “%1$s”</string>
@@ -302,7 +302,7 @@
     <string name="settings.listening_history.clear.message">Bainfidh sé seo gach seinm, sos agus léim a taifeadadh i ngach leabhar. Fanfaidh na gathanna leabhair.</string>
     <string name="settings.listening_history.clear.title">Glan an stair éisteachta?</string>
     <string name="settings.listening_history.cleared">Glanadh an stair éisteachta</string>
-    <string name="settings.listening_history.summary">Coinnítear seinm, sosanna agus léimeanna ar feadh 30 lá ar an ngléas seo, ionas gur féidir leat botúin a chealú</string>
+    <string name="settings.listening_history.summary">Coinnítear seinm, sosanna agus léimeanna ar an ngléas seo, ionas gur féidir leat botúin a chealú</string>
     <string name="settings.listening_history.title">Stair éisteachta</string>
     <string name="settings.playback.auto_rewind.title">Athchasadh uathoibríoch</string>
     <string name="settings.playback.seek_time.title">Scipeáil méid</string>

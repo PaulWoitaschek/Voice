@@ -114,7 +114,7 @@
     <string name="history.action.restore">復元</string>
     <string name="history.changed_back">元に戻しました</string>
     <string name="history.empty.filtered">このフィルタに一致する項目はありません。</string>
-    <string name="history.empty.message">再生・一時停止・ジャンプの記録が 30 日間ここに表示されるので、いつでも元の位置に戻れます。</string>
+    <string name="history.empty.message">再生・一時停止・ジャンプの記録がここに表示されるので、いつでも元の位置に戻れます。</string>
     <string name="history.empty.title">まだ何もありません</string>
     <string name="history.event.bookmark_added">ブックマークを保存</string>
     <string name="history.event.bookmark_added.note">「%1$s」を保存</string>
@@ -266,7 +266,7 @@
     <string name="settings.listening_history.clear.message">すべてのブックの再生・一時停止・ジャンプの記録が削除されます。ブックマークは残ります。</string>
     <string name="settings.listening_history.clear.title">再生履歴を消去しますか？</string>
     <string name="settings.listening_history.cleared">再生履歴を消去しました</string>
-    <string name="settings.listening_history.summary">再生・一時停止・ジャンプを 30 日間この端末に記録し、誤操作を元に戻せるようにします</string>
+    <string name="settings.listening_history.summary">再生・一時停止・ジャンプをこの端末に記録し、誤操作を元に戻せるようにします</string>
     <string name="settings.listening_history.title">再生履歴</string>
     <string name="settings.playback.auto_rewind.title">自動巻き戻し</string>
     <string name="settings.playback.seek_time.title">スキップ量</string>

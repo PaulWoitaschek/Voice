@@ -111,7 +111,7 @@
     <string name="history.action.restore">Επαναφορά</string>
     <string name="history.changed_back">Η αλλαγή αναιρέθηκε</string>
     <string name="history.empty.filtered">Τίποτα δεν ταιριάζει με αυτό το φίλτρο.</string>
-    <string name="history.empty.message">Οι αναπαραγωγές, οι παύσεις και τα άλματα εμφανίζονται εδώ για 30 ημέρες, ώστε να βρίσκετε πάντα τον δρόμο της επιστροφής.</string>
+    <string name="history.empty.message">Οι αναπαραγωγές, οι παύσεις και τα άλματα εμφανίζονται εδώ, ώστε να βρίσκετε πάντα τον δρόμο της επιστροφής.</string>
     <string name="history.empty.title">Τίποτα εδώ ακόμη</string>
     <string name="history.event.bookmark_added">Αποθηκεύτηκε σελιδοδείκτης</string>
     <string name="history.event.bookmark_added.note">Αποθηκεύτηκε «%1$s»</string>
@@ -206,7 +206,7 @@
     <string name="settings.listening_history.clear.message">Αυτό καταργεί τις καταγεγραμμένες αναπαραγωγές, παύσεις και άλματα όλων των βιβλίων. Οι σελιδοδείκτες παραμένουν.</string>
     <string name="settings.listening_history.clear.title">Διαγραφή ιστορικού ακρόασης;</string>
     <string name="settings.listening_history.cleared">Το ιστορικό ακρόασης διαγράφηκε</string>
-    <string name="settings.listening_history.summary">Διατηρεί αναπαραγωγές, παύσεις και άλματα για 30 ημέρες σε αυτήν τη συσκευή, ώστε να μπορείτε να αναιρείτε τα λάθη</string>
+    <string name="settings.listening_history.summary">Διατηρεί αναπαραγωγές, παύσεις και άλματα σε αυτήν τη συσκευή, ώστε να μπορείτε να αναιρείτε τα λάθη</string>
     <string name="settings.listening_history.title">Ιστορικό ακρόασης</string>
     <string name="settings.playback.auto_rewind.title">Αυτόματη αναζήτηση προς τα πίσω</string>
     <string name="settings.playback.seek_time.title">Χρονική μετακίνηση</string>

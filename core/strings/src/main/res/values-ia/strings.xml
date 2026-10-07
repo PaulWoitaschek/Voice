@@ -122,7 +122,7 @@
     <string name="history.action.restore">Restaurar</string>
     <string name="history.changed_back">Revertite</string>
     <string name="history.empty.filtered">Nihil corresponde a iste filtro.</string>
-    <string name="history.empty.message">Reproductiones, pausas e saltos appare hic durante 30 dies, assi tu pote sempre retrovar tu position.</string>
+    <string name="history.empty.message">Reproductiones, pausas e saltos appare hic, assi tu pote sempre retrovar tu position.</string>
     <string name="history.empty.title">Nihil hic ancora</string>
     <string name="history.event.bookmark_added">Marcapagina salvate</string>
     <string name="history.event.bookmark_added.note">“%1$s” salvate</string>
@@ -275,7 +275,7 @@
     <string name="settings.listening_history.clear.message">Isto remove le reproductiones, pausas e saltos registrate de tote le libros. Le marcapaginas resta.</string>
     <string name="settings.listening_history.clear.title">Vacuar le historia de ascolta?</string>
     <string name="settings.listening_history.cleared">Historia de ascolta vacuate</string>
-    <string name="settings.listening_history.summary">Conserva reproductiones, pausas e saltos durante 30 dies sur iste apparato, assi tu pote disfacer errores</string>
+    <string name="settings.listening_history.summary">Conserva reproductiones, pausas e saltos sur iste apparato, assi tu pote disfacer errores</string>
     <string name="settings.listening_history.title">Historia de ascolta</string>
     <string name="settings.playback.auto_rewind.title">Auto rebobinar</string>
     <string name="settings.playback.seek_time.title">Saltar quantitate</string>

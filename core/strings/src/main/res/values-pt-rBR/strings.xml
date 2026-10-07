@@ -130,7 +130,7 @@
     <string name="history.action.restore">Restaurar</string>
     <string name="history.changed_back">Revertido</string>
     <string name="history.empty.filtered">Nada corresponde a este filtro.</string>
-    <string name="history.empty.message">Reproduções, pausas e saltos aparecem aqui por 30 dias, para você sempre encontrar o caminho de volta.</string>
+    <string name="history.empty.message">Reproduções, pausas e saltos aparecem aqui, para você sempre encontrar o caminho de volta.</string>
     <string name="history.empty.title">Nada aqui ainda</string>
     <string name="history.event.bookmark_added">Marcador salvo</string>
     <string name="history.event.bookmark_added.note">“%1$s” salvo</string>
@@ -284,7 +284,7 @@
     <string name="settings.listening_history.clear.message">Isso remove as reproduções, pausas e saltos registrados de todos os livros. Os marcadores continuam.</string>
     <string name="settings.listening_history.clear.title">Limpar histórico de audição?</string>
     <string name="settings.listening_history.cleared">Histórico de audição limpo</string>
-    <string name="settings.listening_history.summary">Guarda reproduções, pausas e saltos por 30 dias neste dispositivo, para você desfazer acidentes</string>
+    <string name="settings.listening_history.summary">Guarda reproduções, pausas e saltos neste dispositivo, para você desfazer acidentes</string>
     <string name="settings.listening_history.title">Histórico de audição</string>
     <string name="settings.playback.auto_rewind.title">Rebobin automaticamente</string>
     <string name="settings.playback.seek_time.title">Quantidade de Salto</string>
