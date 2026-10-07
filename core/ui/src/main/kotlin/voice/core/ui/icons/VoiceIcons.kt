@@ -1082,6 +1082,100 @@ object VoiceIcons {
       .build()
 
   /*
+   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/content_cut.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+   * Generated: 2026-10-07T05:36:18Z
+   */
+  val ContentCut: ImageVector =
+    ImageVector.Builder(
+      name = "ContentCut",
+      defaultWidth = 24.dp,
+      defaultHeight = 24.dp,
+      viewportWidth = 24f,
+      viewportHeight = 24f,
+    )
+      .apply {
+        path(
+          fill = SolidColor(Color.Black),
+          fillAlpha = 1f,
+          stroke = null,
+          strokeAlpha = 1f,
+          strokeLineWidth = 1f,
+          strokeLineCap = StrokeCap.Butt,
+          strokeLineJoin = StrokeJoin.Bevel,
+          strokeLineMiter = 1f,
+          pathFillType = PathFillType.NonZero,
+        ) {
+          moveTo(19f, 21f)
+          lineTo(12f, 14f)
+          lineTo(9.65f, 16.35f)
+          quadToRelative(0.2f, 0.38f, 0.28f, 0.8f)
+          quadTo(10f, 17.58f, 10f, 18f)
+          quadToRelative(0f, 1.65f, -1.17f, 2.82f)
+          reflectiveQuadTo(6f, 22f)
+          reflectiveQuadTo(3.18f, 20.83f)
+          reflectiveQuadTo(2f, 18f)
+          reflectiveQuadTo(3.18f, 15.18f)
+          reflectiveQuadTo(6f, 14f)
+          quadToRelative(0.43f, 0f, 0.85f, 0.07f)
+          reflectiveQuadToRelative(0.8f, 0.28f)
+          lineTo(10f, 12f)
+          lineTo(7.65f, 9.65f)
+          quadTo(7.28f, 9.85f, 6.85f, 9.92f)
+          reflectiveQuadTo(6f, 10f)
+          quadTo(4.35f, 10f, 3.18f, 8.82f)
+          reflectiveQuadTo(2f, 6f)
+          reflectiveQuadTo(3.18f, 3.17f)
+          reflectiveQuadTo(6f, 2f)
+          reflectiveQuadTo(8.83f, 3.17f)
+          reflectiveQuadTo(10f, 6f)
+          quadTo(10f, 6.43f, 9.93f, 6.85f)
+          reflectiveQuadTo(9.65f, 7.65f)
+          lineTo(22f, 20f)
+          verticalLineToRelative(1f)
+          horizontalLineTo(19f)
+          close()
+          moveTo(15f, 11f)
+          lineTo(13f, 9f)
+          lineTo(19f, 3f)
+          horizontalLineToRelative(3f)
+          verticalLineTo(4f)
+          lineToRelative(-7f, 7f)
+          close()
+          moveTo(7.41f, 7.41f)
+          quadTo(8f, 6.82f, 8f, 6f)
+          reflectiveQuadTo(7.41f, 4.59f)
+          reflectiveQuadTo(6f, 4f)
+          reflectiveQuadTo(4.59f, 4.59f)
+          quadTo(4f, 5.18f, 4f, 6f)
+          reflectiveQuadTo(4.59f, 7.41f)
+          reflectiveQuadTo(6f, 8f)
+          quadTo(6.83f, 8f, 7.41f, 7.41f)
+          close()
+          moveToRelative(4.94f, 4.94f)
+          quadTo(12.5f, 12.2f, 12.5f, 12f)
+          reflectiveQuadTo(12.35f, 11.65f)
+          reflectiveQuadTo(12f, 11.5f)
+          reflectiveQuadToRelative(-0.35f, 0.15f)
+          reflectiveQuadTo(11.5f, 12f)
+          reflectiveQuadToRelative(0.15f, 0.35f)
+          reflectiveQuadTo(12f, 12.5f)
+          reflectiveQuadToRelative(0.35f, -0.15f)
+          close()
+          moveTo(7.41f, 19.41f)
+          quadTo(8f, 18.83f, 8f, 18f)
+          reflectiveQuadTo(7.41f, 16.59f)
+          reflectiveQuadTo(6f, 16f)
+          reflectiveQuadTo(4.59f, 16.59f)
+          quadTo(4f, 17.18f, 4f, 18f)
+          reflectiveQuadToRelative(0.59f, 1.41f)
+          reflectiveQuadTo(6f, 20f)
+          quadToRelative(0.83f, 0f, 1.41f, -0.59f)
+          close()
+        }
+      }
+      .build()
+
+  /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/delete.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
@@ -1447,64 +1541,6 @@ object VoiceIcons {
           verticalLineTo(6f)
           verticalLineTo(8f)
           verticalLineTo(18f)
-          close()
-        }
-      }
-      .build()
-
-  /*
-   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/graphic_eq.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
-   * Generated: 2026-10-04T10:20:30Z
-   */
-  val GraphicEq: ImageVector =
-    ImageVector.Builder(
-      name = "GraphicEq",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
-      .apply {
-        path(
-          fill = SolidColor(Color.Black),
-          fillAlpha = 1f,
-          stroke = null,
-          strokeAlpha = 1f,
-          strokeLineWidth = 1f,
-          strokeLineCap = StrokeCap.Butt,
-          strokeLineJoin = StrokeJoin.Bevel,
-          strokeLineMiter = 1f,
-          pathFillType = PathFillType.NonZero,
-        ) {
-          moveTo(7f, 18f)
-          verticalLineTo(6f)
-          horizontalLineTo(9f)
-          verticalLineTo(18f)
-          horizontalLineTo(7f)
-          close()
-          moveToRelative(4f, 4f)
-          verticalLineTo(2f)
-          horizontalLineToRelative(2f)
-          verticalLineTo(22f)
-          horizontalLineTo(11f)
-          close()
-          moveTo(3f, 14f)
-          verticalLineTo(10f)
-          horizontalLineTo(5f)
-          verticalLineToRelative(4f)
-          horizontalLineTo(3f)
-          close()
-          moveToRelative(12f, 4f)
-          verticalLineTo(6f)
-          horizontalLineToRelative(2f)
-          verticalLineTo(18f)
-          horizontalLineTo(15f)
-          close()
-          moveToRelative(4f, -4f)
-          verticalLineTo(10f)
-          horizontalLineToRelative(2f)
-          verticalLineToRelative(4f)
-          horizontalLineTo(19f)
           close()
         }
       }

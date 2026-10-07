@@ -66,6 +66,7 @@ generate_icon close Close
 generate_icon coffee Coffee
 generate_icon collections_bookmark CollectionsBookmark
 generate_icon construction Construction
+generate_icon content_cut ContentCut
 generate_icon delete Delete
 generate_icon done Done
 generate_icon download Download
@@ -73,7 +74,6 @@ generate_icon expand_more ExpandMore
 generate_icon fast_rewind FastRewind
 generate_icon favorite Favorite
 generate_icon folder Folder
-generate_icon graphic_eq GraphicEq
 generate_icon grid_view GridView
 generate_icon help Help
 generate_icon history History

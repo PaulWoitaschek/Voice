@@ -104,7 +104,7 @@ internal fun ActionToolbar(
     )
     ToolbarAction(
       active = viewState.skipSilence,
-      icon = VoiceIcons.GraphicEq,
+      icon = VoiceIcons.ContentCut,
       contentDescription = stringResource(R.string.playback_option_skip_silence),
       onClick = onSkipSilenceClick,
     )
