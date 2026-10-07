@@ -21,6 +21,7 @@
     <string name="common.action.delete">احذف</string>
     <string name="common.action.edit">حرر</string>
     <string name="common.action.remove">أزل</string>
+    <string name="common.action.save">احفظ</string>
     <string name="common.dialog.cancel">ألغ</string>
     <string name="common.dialog.confirm">عيّن</string>
     <string name="common.error.generic.message">حدث خطأ ما 😢</string>
@@ -39,16 +40,65 @@
         <item quantity="many">%d ثانية</item>
         <item quantity="other">%d ثانية</item>
     </plurals>
+    <string name="folder.add.action.file">أضف ملفًا واحدًا بدلًا من ذلك</string>
+    <string name="folder.add.action.folder">اختر مجلدًا</string>
+    <string name="folder.add.subtitle">اختر المجلد الذي يحوي كتبك الصوتية. قد يضم كتابًا واحدًا أو مكتبتك كاملة.</string>
     <string name="folder.add.title.default">أضف كتبك الصوتية</string>
     <string name="folder.add.title.onboarding">أضف أول كتاب صوتي</string>
-    <string name="folder.add.type.file">ملف</string>
-    <string name="folder.add.type.folder">مجلد</string>
-    <string name="folder.add.type.subtitle">هل تريد إضافة ملف مفرد ككتاب أو مجلد؟</string>
-    <string name="folder.mode.author.title">وضع المؤلفين: كل مجلد فرعي مؤلف وكل مجلد فرعي في ذاك المجلد كتاب لذاك المؤلف.</string>
-    <string name="folder.mode.root.title">وضع المجلد الحاوي للكتب: كل مجلد فرعي كتاب مستقل</string>
-    <string name="folder.mode.single.title">وضع الكتاب المفرد: كل مجلد يعني كتاب واحد.</string>
-    <string name="folder.type.book_example.empty">لم يتمكن فويس من اكتشاف أي كتب. هل هناك أي ملفات صوتية؟</string>
-    <string name="folder.type.book_example.header">سيؤدي هذا إلى اكتشاف الكتاب التالي</string>
+    <string name="folder.mode.author.label">المجلدات هي المؤلفون</string>
+    <string name="folder.mode.author.option">المجلدات في %s هي المؤلفون</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="zero">%d كتاب</item>
+        <item quantity="one">%d كتاب</item>
+        <item quantity="two">%d كتابان</item>
+        <item quantity="few">%d كتب</item>
+        <item quantity="many">%d كتابًا</item>
+        <item quantity="other">%d كتاب</item>
+    </plurals>
+    <string name="folder.mode.file.label">ملف واحد</string>
+    <string name="folder.mode.guess">يشبه مجلدك</string>
+    <string name="folder.mode.root.label">كل مجلد هو كتاب</string>
+    <string name="folder.mode.root.option">كل مجلد أو ملف في %s هو كتاب</string>
+    <string name="folder.mode.sheet.title">كيف تم تنظيم %s؟</string>
+    <string name="folder.mode.single.label">كتاب واحد</string>
+    <string name="folder.mode.single.option">%s هو كتاب واحد</string>
+    <string name="folder.mode.single.summary">تصبح ملفاته فصولًا، حتى داخل مجلدات مثل CD 1 وCD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="zero">أضف %d كتاب</item>
+        <item quantity="one">أضف %d كتاب</item>
+        <item quantity="two">أضف %d كتابين</item>
+        <item quantity="few">أضف %d كتب</item>
+        <item quantity="many">أضف %d كتابًا</item>
+        <item quantity="other">أضف %d كتاب</item>
+    </plurals>
+    <string name="folder.review.action.change">غيّر طريقة العثور على الكتب</string>
+    <string name="folder.review.empty.subtitle">اختر المجلد الذي يحوي كتبك الصوتية.</string>
+    <string name="folder.review.empty.title">لا توجد ملفات صوتية في %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="zero">%d مجلد</item>
+        <item quantity="one">%d مجلد</item>
+        <item quantity="two">%d مجلدان</item>
+        <item quantity="few">%d مجلدات</item>
+        <item quantity="many">%d مجلدًا</item>
+        <item quantity="other">%d مجلد</item>
+    </plurals>
+    <string name="folder.review.loading">جارٍ البحث في %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="zero">يبدو أنه %d كتاب</item>
+        <item quantity="one">يبدو أنه %d كتاب</item>
+        <item quantity="two">يبدو أنه %d كتابان</item>
+        <item quantity="few">يبدو أنه %d كتب</item>
+        <item quantity="many">يبدو أنه %d كتابًا</item>
+        <item quantity="other">يبدو أنه %d كتاب</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="zero">وجدنا %d كتاب</item>
+        <item quantity="one">وجدنا %d كتاب</item>
+        <item quantity="two">وجدنا %d كتابين</item>
+        <item quantity="few">وجدنا %d كتب</item>
+        <item quantity="many">وجدنا %d كتابًا</item>
+        <item quantity="other">وجدنا %d كتاب</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="zero">%dملف صوتي</item>
         <item quantity="one">%d ملف صوتي واحد</item>
@@ -57,7 +107,6 @@
         <item quantity="many">%d ملفاً صوتياً</item>
         <item quantity="other">%d ملف صوتي</item>
     </plurals>
-    <string name="folder.type.title">ما هي هيكلية ملفاتك؟</string>
     <string name="library.category.completed.title">انتهى</string>
     <string name="library.category.current.title">الحالي</string>
     <string name="library.category.not_started.title">لم يبدأ بعد</string>
@@ -73,7 +122,7 @@
     <string name="onboarding.completion.action.start_listening">ابدأ بالاستماع</string>
     <string name="onboarding.completion.subtitle">كتابك الصوتي الأول يعمل. استمتع برحلتك مع فويس!</string>
     <string name="onboarding.completion.title">أنت جاهز!</string>
-    <string name="onboarding.explanation.subtitle">مع فويس يمكنك إضافة كتب من ملفات فردية أو تنظيمها في مجلدات. أنت تختار!</string>
+    <string name="onboarding.explanation.subtitle.folder">اختر المجلد الذي يحوي كتبك الصوتية. يعرض لك فويس الكتب التي يجدها قبل إضافتها.</string>
     <string name="onboarding.explanation.title">مكتبتك، طريقك</string>
     <string name="onboarding.welcome.action.start">هيا بنا</string>
     <string name="onboarding.welcome.subtitle">مشغلك للكتب الصوتية. دعنا نجهز كتبك.</string>

@@ -21,6 +21,7 @@
     <string name="common.action.delete">Törlés</string>
     <string name="common.action.edit">Szerkesztés</string>
     <string name="common.action.remove">Eltávolítás</string>
+    <string name="common.action.save">Mentés</string>
     <string name="common.dialog.cancel">Mégse</string>
     <string name="common.dialog.confirm">Beállítás</string>
     <string name="common.error.generic.message">Valami balul sült el 😢</string>
@@ -39,21 +40,49 @@
         <item quantity="one">%d másodperc</item>
         <item quantity="other">%d másodperc</item>
     </plurals>
+    <string name="folder.add.action.file">Inkább egyetlen fájl hozzáadása</string>
+    <string name="folder.add.action.folder">Mappa kiválasztása</string>
+    <string name="folder.add.subtitle">Válassza ki a hangoskönyveit tartalmazó mappát. Tartalmazhat egyetlen könyvet vagy a teljes könyvtárát.</string>
     <string name="folder.add.title.default">Hangoskönyv(ek) hozzáadása</string>
     <string name="folder.add.title.onboarding">Az ön első hangoskönyve</string>
-    <string name="folder.add.type.file">Fájl</string>
-    <string name="folder.add.type.folder">Mappa</string>
-    <string name="folder.add.type.subtitle">Hogyan kívánja hozzáadni a könyvet: egyedi fájlként vagy hangfájlmappaként?</string>
-    <string name="folder.mode.author.title">Szerző üzemmód: az almappák szerzők, az alalmappák könyvek.</string>
-    <string name="folder.mode.root.title">Főmappa üzemmód: minden almappa egy-egy könyv</string>
-    <string name="folder.mode.single.title">Könyv üzemmód: minden mappa egy-egy könyv.</string>
-    <string name="folder.type.book_example.empty">Voice nem talált egy könyvet se. Léteznek erre hangfájlok?</string>
-    <string name="folder.type.book_example.header">Ezzel az akcióval ezeket a könyveket találtuk meg</string>
+    <string name="folder.mode.author.label">A mappák szerzők</string>
+    <string name="folder.mode.author.option">%s almappái a szerzők</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d könyv</item>
+        <item quantity="other">%d könyv</item>
+    </plurals>
+    <string name="folder.mode.file.label">Egyetlen fájl</string>
+    <string name="folder.mode.guess">Az önéhez hasonló</string>
+    <string name="folder.mode.root.label">Minden mappa külön könyv</string>
+    <string name="folder.mode.root.option">%s minden mappája vagy fájlja külön könyv</string>
+    <string name="folder.mode.sheet.title">Hogyan épül fel %s?</string>
+    <string name="folder.mode.single.label">Egy könyv</string>
+    <string name="folder.mode.single.option">%s egyetlen könyv</string>
+    <string name="folder.mode.single.summary">A fájljai fejezetek lesznek, még az olyan mappákban is, mint a CD 1 és a CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">%d könyv hozzáadása</item>
+        <item quantity="other">%d könyv hozzáadása</item>
+    </plurals>
+    <string name="folder.review.action.change">Könyvkeresés módosítása</string>
+    <string name="folder.review.empty.subtitle">Válassza ki azt a mappát, amelyben a hangoskönyvei vannak.</string>
+    <string name="folder.review.empty.title">Nincsenek hangfájlok itt: %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d mappa</item>
+        <item quantity="other">%d mappa</item>
+    </plurals>
+    <string name="folder.review.loading">Keresés itt: %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Úgy tűnik, %d könyv</item>
+        <item quantity="other">Úgy tűnik, %d könyv</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">%d könyvet találtunk</item>
+        <item quantity="other">%d könyvet találtunk</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d hangfájl</item>
         <item quantity="other">%d hangfájl</item>
     </plurals>
-    <string name="folder.type.title">Hogyan vannak elrendezve a hangfájlok?</string>
     <string name="library.category.completed.title">Befejezett</string>
     <string name="library.category.current.title">Jelenlegi</string>
     <string name="library.category.not_started.title">Még nem elkezdett</string>
@@ -69,7 +98,7 @@
     <string name="onboarding.completion.action.start_listening">Lejátszás elkezdése</string>
     <string name="onboarding.completion.subtitle">Az ön első könyve várja a lejátszást. A Voice jó szórakozást kíván!</string>
     <string name="onboarding.completion.title">Gyorstalpaló vége!</string>
-    <string name="onboarding.explanation.subtitle">A Voice segítségével, ön eltudja rendezni a könyveit mint egyedi fájlok vagy mint hangfájlmappák. Ön dönt!</string>
+    <string name="onboarding.explanation.subtitle.folder">Válassza ki a hangoskönyveit tartalmazó mappát. A Voice megmutatja a talált könyveket, mielőtt hozzáadná őket.</string>
     <string name="onboarding.explanation.title">Az ön könyvtára, az ön döntései</string>
     <string name="onboarding.welcome.action.start">Kezdjük</string>
     <string name="onboarding.welcome.subtitle">Az ön személyes hangoskönyvlejátszója. Nézzünk szét!</string>

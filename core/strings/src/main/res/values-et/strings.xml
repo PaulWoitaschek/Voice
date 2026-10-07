@@ -21,6 +21,7 @@
     <string name="common.action.delete">Kustuta</string>
     <string name="common.action.edit">Muuda</string>
     <string name="common.action.remove">Eemalda</string>
+    <string name="common.action.save">Salvesta</string>
     <string name="common.dialog.cancel">Katkesta</string>
     <string name="common.dialog.confirm">Salvesta</string>
     <string name="common.dialog.ok">OK</string>
@@ -40,21 +41,49 @@
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekundit</item>
     </plurals>
+    <string name="folder.add.action.file">Lisa hoopis üksik fail</string>
+    <string name="folder.add.action.folder">Vali kaust</string>
+    <string name="folder.add.subtitle">Vali kaust, kus on sinu heliraamatud. Selles võib olla üks raamat või kogu sinu raamatukogu.</string>
     <string name="folder.add.title.default">Lisa oma heliraamat(ud)</string>
     <string name="folder.add.title.onboarding">Lisa oma esimene heliraamat</string>
-    <string name="folder.add.type.file">Fail</string>
-    <string name="folder.add.type.folder">Kaust</string>
-    <string name="folder.add.type.subtitle">Kas sa sooviksid üheks raamatuks lisada faili või kausta?</string>
-    <string name="folder.mode.author.title">Autoritega kaustavaade: alamkaustad on autorid, nende alamkaustad on raamatud.</string>
-    <string name="folder.mode.root.title">Kahetasemeline raamatuvaade: alamkaustad on raamatud</string>
-    <string name="folder.mode.single.title">Ühetasemeline raamatuvaade: iga kaust on raamat.</string>
-    <string name="folder.type.book_example.empty">Voice ei suutnud tuvastada ühtegi heliraamatut. Kas nutiseadmes üldse on helifaile?</string>
-    <string name="folder.type.book_example.header">Sellega tuvastatakse järgnevad raamatud</string>
+    <string name="folder.mode.author.label">Kaustad on autorid</string>
+    <string name="folder.mode.author.option">Kausta %s alamkaustad on autorid</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d raamat</item>
+        <item quantity="other">%d raamatut</item>
+    </plurals>
+    <string name="folder.mode.file.label">Üksik fail</string>
+    <string name="folder.mode.guess">Sarnaneb sinu omaga</string>
+    <string name="folder.mode.root.label">Iga kaust on raamat</string>
+    <string name="folder.mode.root.option">Iga kaust või fail kaustas %s on raamat</string>
+    <string name="folder.mode.sheet.title">Kuidas on kaust %s korraldatud?</string>
+    <string name="folder.mode.single.label">Üks raamat</string>
+    <string name="folder.mode.single.option">%s on üks raamat</string>
+    <string name="folder.mode.single.summary">Selle failid muutuvad peatükkideks, ka sellistes kaustades nagu CD 1 ja CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Lisa %d raamat</item>
+        <item quantity="other">Lisa %d raamatut</item>
+    </plurals>
+    <string name="folder.review.action.change">Muuda, kuidas raamatuid leitakse</string>
+    <string name="folder.review.empty.subtitle">Vali kaust, milles on sinu heliraamatud.</string>
+    <string name="folder.review.empty.title">Kaustas %s pole helifaile</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d kaust</item>
+        <item quantity="other">%d kausta</item>
+    </plurals>
+    <string name="folder.review.loading">Otsime kaustast %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Näib olevat %d raamat</item>
+        <item quantity="other">Näib olevat %d raamatut</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Leidsime %d raamatu</item>
+        <item quantity="other">Leidsime %d raamatut</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d helifail</item>
         <item quantity="other">%d helifaili</item>
     </plurals>
-    <string name="folder.type.title">Kuidas on sinu heliraamatute failid struktureeritud?</string>
     <string name="library.category.completed.title">Kuulatud</string>
     <string name="library.category.current.title">Praegune</string>
     <string name="library.category.not_started.title">Kuulamise ootel</string>
@@ -86,7 +115,7 @@
     <string name="onboarding.completion.action.start_listening">Alusta kuulamist</string>
     <string name="onboarding.completion.subtitle">Sinu esimene heliraamat on kuulamiseks valmis. Naudi järgnevat teekonda Voice\'iga!</string>
     <string name="onboarding.completion.title">Kõik on tehtud!</string>
-    <string name="onboarding.explanation.subtitle">Voice\'i puhul saad sa heliraamatuid lisada üksikute failidena või koondada neid kaustadesse. Tee nii, nagu soovid!</string>
+    <string name="onboarding.explanation.subtitle.folder">Vali kaust, kus on sinu heliraamatud. Voice näitab sulle leitud raamatuid enne nende lisamist.</string>
     <string name="onboarding.explanation.title">Sinu raamatukogu, just nii nagu soovid</string>
     <string name="onboarding.welcome.action.start">Läheme</string>
     <string name="onboarding.welcome.subtitle">Sinu isiklik heliraamatute esitaja (pleier) taskus. Võtame nüüd ette algseadistamise.</string>

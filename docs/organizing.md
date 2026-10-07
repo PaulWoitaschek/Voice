@@ -1,12 +1,13 @@
 # Organizing Audiobooks
 
-Voice offers three simple ways to organize your audiobooks based on how you store them on your device. Pick the option that matches your
-setup best:
+Pick the folder with your audiobooks. Voice looks at how the files inside are organized and shows you the books it found before
+adding them. If the books don't look right, tap **Change how books are found** and pick one of the three options below. You can
+change this later in the settings under **Audiobook folders** by tapping the folder. Your progress and bookmarks stay with your books.
 
-## 1. **Audiobooks in Separate Folders** (recommended)
+## 1. **Every folder is a book**
 
-Each folder within your selected directory is treated as a separate audiobook. Any audio files directly inside that directory (not in a
-subfolder) will also be recognized as individual audiobooks.
+Each folder within your selected folder is a separate audiobook. Any audio files directly inside the selected folder (not in a
+subfolder) are audiobooks as well.
 
 **Example:**
 
@@ -23,9 +24,10 @@ subfolder) will also be recognized as individual audiobooks.
 
 Voice recognizes three audiobooks: `TheHobbit`, `MobyDick`, and the single-file book `LittlePrince`.
 
-## 2. **Single Audiobook Folder**
+## 2. **One book**
 
-The selected folder itself is one audiobook, with files inside treated as chapters.
+The selected folder itself is one audiobook, with files inside treated as chapters. This includes files in subfolders, such as
+`CD 1` and `CD 2`.
 
 **Example:**
 
@@ -38,9 +40,9 @@ The selected folder itself is one audiobook, with files inside treated as chapte
 
 Voice recognizes one audiobook: `PrideAndPrejudice`.
 
-## 3. **Audiobooks Organized by Author**
+## 3. **Folders are authors**
 
-First-level folders represent authors, and subfolders represent audiobooks.
+First-level folders represent authors (or series), and their subfolders represent audiobooks.
 
 **Example:**
 

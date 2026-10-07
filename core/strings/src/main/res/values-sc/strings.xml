@@ -21,6 +21,7 @@
     <string name="common.action.delete">Iscantzella</string>
     <string name="common.action.edit">Modifica</string>
     <string name="common.action.remove">Boga</string>
+    <string name="common.action.save">Sarva</string>
     <string name="common.dialog.cancel">Annulla</string>
     <string name="common.dialog.confirm">Cunfigura</string>
     <string name="common.dialog.ok">OK</string>
@@ -40,21 +41,49 @@
         <item quantity="one">%d segundu</item>
         <item quantity="other">%d segundos</item>
     </plurals>
+    <string name="folder.add.action.file">Agiunghe imbetzes unu documentu sìngulu</string>
+    <string name="folder.add.action.folder">Issèbera una cartella</string>
+    <string name="folder.add.subtitle">Issèbera sa cartella cun sos audiolibros tuos. Podet cuntènnere unu libru sìngulu o totu sa biblioteca tua.</string>
     <string name="folder.add.title.default">Agiunghe sos audiolibros tuos</string>
     <string name="folder.add.title.onboarding">Agiunghe su primu audiolibru tuo</string>
-    <string name="folder.add.type.file">Documentu</string>
-    <string name="folder.add.type.folder">Cartella</string>
-    <string name="folder.add.type.subtitle">Boles annànghere unu documentu sìngulu comente libru o cartella?</string>
-    <string name="folder.mode.author.title">Modalidade autore-libru: Sas sutacartella sunt autores, sas suta-sutacartellas sunt libros.</string>
-    <string name="folder.mode.root.title">Modalidade libru de livellu superiore: sas suta-cartellas sunt libros</string>
-    <string name="folder.mode.single.title">Modalidade libru sìngulu: una cartella bolet nàrrere unu libru.</string>
-    <string name="folder.type.book_example.empty">Voice no at pòdidu rilevare perunu libru. Bi sunt documentos àudio?</string>
-    <string name="folder.type.book_example.header">Custu diat causare su rilevamentu de sos libros chi sighint</string>
+    <string name="folder.mode.author.label">Sas cartellas sunt autores</string>
+    <string name="folder.mode.author.option">Sas cartellas in %s sunt autores</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d libru</item>
+        <item quantity="other">%d libros</item>
+    </plurals>
+    <string name="folder.mode.file.label">Documentu sìngulu</string>
+    <string name="folder.mode.guess">Paret su tuo</string>
+    <string name="folder.mode.root.label">Onni cartella est unu libru</string>
+    <string name="folder.mode.root.option">Onni cartella o documentu in %s est unu libru</string>
+    <string name="folder.mode.sheet.title">Comente est organizada sa cartella %s?</string>
+    <string name="folder.mode.single.label">Unu libru</string>
+    <string name="folder.mode.single.option">%s est unu libru ebbia</string>
+    <string name="folder.mode.single.summary">Sos documentos suos diventant capìtulos, fintzas in cartellas comente CD 1 e CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Agiunghe %d libru</item>
+        <item quantity="other">Agiunghe %d libros</item>
+    </plurals>
+    <string name="folder.review.action.change">Cambia sa manera de agatare sos libros</string>
+    <string name="folder.review.empty.subtitle">Issèbera sa cartella chi cuntenet sos audiolibros tuos.</string>
+    <string name="folder.review.empty.title">Nissunu documentu àudio in %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d cartella</item>
+        <item quantity="other">%d cartellas</item>
+    </plurals>
+    <string name="folder.review.loading">Chirchende in %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Paret %d libru</item>
+        <item quantity="other">Parent %d libros</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Amus agatadu %d libru</item>
+        <item quantity="other">Amus agatadu %d libros</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d documentu àudio</item>
         <item quantity="other">%d documentos àudio</item>
     </plurals>
-    <string name="folder.type.title">Comente sunt istruturados sos documentos tuos?</string>
     <string name="library.category.completed.title">Acabbadu</string>
     <string name="library.category.current.title">Atuale</string>
     <string name="library.category.not_started.title">Galu no incumintzadu</string>
@@ -86,7 +115,7 @@
     <string name="onboarding.completion.action.start_listening">Incumintza a ascurtare</string>
     <string name="onboarding.completion.subtitle">Su primu audiolibru tuo est prontu pro sa riprodutzione. Gosa·ti su biàgiu tuo cun Voice!</string>
     <string name="onboarding.completion.title">Ses prontu!</string>
-    <string name="onboarding.explanation.subtitle">Cun Voice, podes agiùnghere libros comente documentos individuales o los organizare in cartellas. Issèbera tue!</string>
+    <string name="onboarding.explanation.subtitle.folder">Issèbera sa cartella cun sos audiolibros tuos. Voice ti mustrat sos libros chi agatat in antis de los agiùnghere.</string>
     <string name="onboarding.explanation.title">Sa biblioteca tua, sa manera tua</string>
     <string name="onboarding.welcome.action.start">Andamus</string>
     <string name="onboarding.welcome.subtitle">Su leghidore de butzaca de audiolibros personale tuo. Preparamus·nos.</string>

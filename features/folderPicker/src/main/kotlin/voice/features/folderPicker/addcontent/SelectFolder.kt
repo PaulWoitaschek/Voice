@@ -34,7 +34,7 @@ internal fun SelectFolder(
         Origin.Onboarding -> StringsR.string.folder_add_title_onboarding
       },
     ),
-    subtitle = stringResource(StringsR.string.folder_add_type_subtitle),
+    subtitle = stringResource(StringsR.string.folder_add_subtitle),
     hero = { clock ->
       FolderHero(clock = clock, modifier = Modifier.fillMaxSize())
     },

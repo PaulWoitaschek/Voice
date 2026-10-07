@@ -71,6 +71,16 @@ class FolderPickerViewModel(
     )
   }
 
+  internal fun changeType(item: FolderPickerViewState.Item) {
+    navigator.goTo(
+      Destination.SelectFolderType(
+        uri = item.id,
+        origin = Origin.Default,
+        currentType = item.folderType,
+      ),
+    )
+  }
+
   fun removeFolder(item: FolderPickerViewState.Item) {
     audiobookFolders.remove(item.id, item.folderType)
   }

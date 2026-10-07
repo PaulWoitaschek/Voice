@@ -21,6 +21,7 @@
     <string name="common.action.delete">Poista</string>
     <string name="common.action.edit">Muokkaa</string>
     <string name="common.action.remove">Poista</string>
+    <string name="common.action.save">Tallenna</string>
     <string name="common.dialog.cancel">Peruuta</string>
     <string name="common.dialog.confirm">Aseta</string>
     <string name="common.dialog.ok">OK</string>
@@ -40,21 +41,49 @@
         <item quantity="one">%d sekunti</item>
         <item quantity="other">%d sekuntia</item>
     </plurals>
+    <string name="folder.add.action.file">Lisää sen sijaan yksittäinen tiedosto</string>
+    <string name="folder.add.action.folder">Valitse kansio</string>
+    <string name="folder.add.subtitle">Valitse kansio, jossa äänikirjasi ovat. Siinä voi olla yksi kirja tai koko kirjastosi.</string>
     <string name="folder.add.title.default">Lisää äänikirjasi</string>
     <string name="folder.add.title.onboarding">Lisää ensimmäinen äänikirjasi</string>
-    <string name="folder.add.type.file">Tiedosto</string>
-    <string name="folder.add.type.folder">Kansio</string>
-    <string name="folder.add.type.subtitle">Haluatko lisätä yksittäisen kirjan tiedostona vai kansiona?</string>
-    <string name="folder.mode.author.title">Tekijä-Kirja-tila: Alikansiot ovat tekijöitä, ali-alikansiot ovat kirjoja.</string>
-    <string name="folder.mode.root.title">Ylätasokirjatila: Alikansiot ovat kirjoja</string>
-    <string name="folder.mode.single.title">Yksittäisten kirjojen tila: Yksi kansio on yhtä kuin yksi kirja.</string>
-    <string name="folder.type.book_example.empty">Voice ei havainnut yhtään kirjaa. Onko äänitiedostoja olemassa?</string>
-    <string name="folder.type.book_example.header">Tämä johtaisi seuraavien kirjojen havaitsemiseen</string>
+    <string name="folder.mode.author.label">Kansiot ovat tekijöitä</string>
+    <string name="folder.mode.author.option">Kansion %s alikansiot ovat tekijöitä</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d kirja</item>
+        <item quantity="other">%d kirjaa</item>
+    </plurals>
+    <string name="folder.mode.file.label">Yksittäinen tiedosto</string>
+    <string name="folder.mode.guess">Näyttää sopivalta</string>
+    <string name="folder.mode.root.label">Jokainen kansio on kirja</string>
+    <string name="folder.mode.root.option">Kansion %s jokainen alikansio tai tiedosto on kirja</string>
+    <string name="folder.mode.sheet.title">Miten kansio %s on järjestelty?</string>
+    <string name="folder.mode.single.label">Yksi kirja</string>
+    <string name="folder.mode.single.option">Kansio %s on yksi kirja</string>
+    <string name="folder.mode.single.summary">Sen tiedostoista tulee lukuja, myös kansioissa kuten CD 1 ja CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Lisää %d kirja</item>
+        <item quantity="other">Lisää %d kirjaa</item>
+    </plurals>
+    <string name="folder.review.action.change">Muuta, miten kirjat löydetään</string>
+    <string name="folder.review.empty.subtitle">Valitse kansio, jossa äänikirjasi ovat.</string>
+    <string name="folder.review.empty.title">Kansiossa %s ei ole äänitiedostoja</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d kansio</item>
+        <item quantity="other">%d kansiota</item>
+    </plurals>
+    <string name="folder.review.loading">Käydään läpi kansiota %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Näyttää olevan %d kirja</item>
+        <item quantity="other">Näyttää olevan %d kirjaa</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Löysimme %d kirjan</item>
+        <item quantity="other">Löysimme %d kirjaa</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d äänitiedosto</item>
         <item quantity="other">%d äänitiedostoa</item>
     </plurals>
-    <string name="folder.type.title">Miten tiedostosi on järjestelty?</string>
     <string name="library.category.completed.title">Valmiina</string>
     <string name="library.category.current.title">Nykyinen</string>
     <string name="library.category.not_started.title">Ei vielä aloitettu</string>
@@ -86,7 +115,7 @@
     <string name="onboarding.completion.action.start_listening">Aloita kuunteleminen</string>
     <string name="onboarding.completion.subtitle">Ensimmäinen äänikirjasi on valmiina kuunneltavaksi. Nauti matkastasi Voicen kanssa!</string>
     <string name="onboarding.completion.title">Olet valmiina!</string>
-    <string name="onboarding.explanation.subtitle">Voicella voit lisätä kirjoja yksittäisinä tiedostoina tai järjestellä ne kansioissa. Sinä saat valita!</string>
+    <string name="onboarding.explanation.subtitle.folder">Valitse kansio, jossa äänikirjasi ovat. Voice näyttää löytämänsä kirjat ennen niiden lisäämistä.</string>
     <string name="onboarding.explanation.title">Sinun kirjastosi, sinun tavallasi</string>
     <string name="onboarding.welcome.action.start">Aloitetaan</string>
     <string name="onboarding.welcome.subtitle">Henkilökohtainen taskuäänikirjasoittimesi. Laitetaanpas homma rullaamaan.</string>

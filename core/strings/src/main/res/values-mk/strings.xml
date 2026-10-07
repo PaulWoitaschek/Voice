@@ -21,6 +21,7 @@
     <string name="common.action.delete">Избриши</string>
     <string name="common.action.edit">Уреди</string>
     <string name="common.action.remove">Отстрани</string>
+    <string name="common.action.save">Зачувај</string>
     <string name="common.dialog.cancel">Откажи</string>
     <string name="common.dialog.confirm">Намести</string>
     <string name="common.dialog.ok">ОК</string>
@@ -40,21 +41,49 @@
         <item quantity="one">%d секунда</item>
         <item quantity="other">%d секунди</item>
     </plurals>
+    <string name="folder.add.action.file">Наместо тоа, додај една датотека</string>
+    <string name="folder.add.action.folder">Избери фолдер</string>
+    <string name="folder.add.subtitle">Изберете го фолдерот со вашите аудио книги. Може да содржи една книга или цела библиотека.</string>
     <string name="folder.add.title.default">Додајте ги вашите аудио книги</string>
     <string name="folder.add.title.onboarding">Додајте ја вашата прва аудио книга</string>
-    <string name="folder.add.type.file">Датотека</string>
-    <string name="folder.add.type.folder">Фолдер</string>
-    <string name="folder.add.type.subtitle">Дали сакате да додадете една датотека како една книга или еден фолдер како книга?</string>
-    <string name="folder.mode.author.title">Режим на автор-книга: Подфолдерите се автори, под-подфолдерите се книги.</string>
-    <string name="folder.mode.root.title">Режим на книги на највисоко ниво: Подфолдерите се книги</string>
-    <string name="folder.mode.single.title">Режим на поединечна книга: Еден фолдер е една книга.</string>
-    <string name="folder.type.book_example.empty">Voice не можеше да пронајде книги. Дали сте сигурни дека има аудио датотеки?</string>
-    <string name="folder.type.book_example.header">Следните книги ќе бидат детектирани</string>
+    <string name="folder.mode.author.label">Фолдерите се автори</string>
+    <string name="folder.mode.author.option">Фолдерите во %s се автори</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d книга</item>
+        <item quantity="other">%d книги</item>
+    </plurals>
+    <string name="folder.mode.file.label">Една датотека</string>
+    <string name="folder.mode.guess">Најдобро одговара</string>
+    <string name="folder.mode.root.label">Секој фолдер е книга</string>
+    <string name="folder.mode.root.option">Секој фолдер или датотека во %s е книга</string>
+    <string name="folder.mode.sheet.title">Како е организиран фолдерот %s?</string>
+    <string name="folder.mode.single.label">Една книга</string>
+    <string name="folder.mode.single.option">%s е една книга</string>
+    <string name="folder.mode.single.summary">Неговите датотеки стануваат поглавја, дури и во фолдери како CD 1 и CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Додај %d книга</item>
+        <item quantity="other">Додај %d книги</item>
+    </plurals>
+    <string name="folder.review.action.change">Промени како се пронаоѓаат книгите</string>
+    <string name="folder.review.empty.subtitle">Изберете го фолдерот во кој се наоѓаат вашите аудио книги.</string>
+    <string name="folder.review.empty.title">Нема аудио датотеки во %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d фолдер</item>
+        <item quantity="other">%d фолдери</item>
+    </plurals>
+    <string name="folder.review.loading">Пребарување низ %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Изгледа како %d книга</item>
+        <item quantity="other">Изгледа како %d книги</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Најдовме %d книга</item>
+        <item quantity="other">Најдовме %d книги</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d аудио датотека</item>
         <item quantity="other">%d аудио датотеки</item>
     </plurals>
-    <string name="folder.type.title">Како се структурирани вашите датотеки?</string>
     <string name="library.category.completed.title">Комплетирани</string>
     <string name="library.category.current.title">Тековни</string>
     <string name="library.category.not_started.title">Непочнати</string>
@@ -86,7 +115,7 @@
     <string name="onboarding.completion.action.start_listening">Почнете со слушање</string>
     <string name="onboarding.completion.subtitle">Вашата прва аудио книга е спремна за слушање. Уживајте во патувањето со Voice!</string>
     <string name="onboarding.completion.title">Спремни сте!</string>
-    <string name="onboarding.explanation.subtitle">Со Voice можете да додавате поединечни датотеки како посебни книги или можете да ги организирате во фолдери. Изборот е Ваш!</string>
+    <string name="onboarding.explanation.subtitle.folder">Изберете го фолдерот со вашите аудио книги. Voice ќе ви ги прикаже пронајдените книги пред да ги додаде.</string>
     <string name="onboarding.explanation.title">Вашата библиотека, на Ваш начин</string>
     <string name="onboarding.welcome.action.start">Да почнеме</string>
     <string name="onboarding.welcome.subtitle">Ваш личен џебен читач на аудио книги. Ајде да Ве спремиме.</string>

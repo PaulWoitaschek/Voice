@@ -21,6 +21,7 @@
     <string name="common.action.delete">Sil</string>
     <string name="common.action.edit">Düzenle</string>
     <string name="common.action.remove">Kaldır</string>
+    <string name="common.action.save">Kaydet</string>
     <string name="common.dialog.cancel">İptal</string>
     <string name="common.dialog.confirm">Kur</string>
     <string name="common.dialog.ok">Tamam</string>
@@ -40,21 +41,49 @@
         <item quantity="one">%d saniye</item>
         <item quantity="other">%d saniye</item>
     </plurals>
+    <string name="folder.add.action.file">Bunun yerine tek bir dosya ekle</string>
+    <string name="folder.add.action.folder">Klasör seç</string>
+    <string name="folder.add.subtitle">Sesli kitaplarının bulunduğu klasörü seç. Bu klasörde tek bir kitap da olabilir, tüm kütüphanen de.</string>
     <string name="folder.add.title.default">Sesli kitabını (kitaplarını) ekle</string>
     <string name="folder.add.title.onboarding">İlk sesli kitabını ekle</string>
-    <string name="folder.add.type.file">Dosya</string>
-    <string name="folder.add.type.folder">Klasör</string>
-    <string name="folder.add.type.subtitle">Tek bir dosyayı kitap olarak mı yoksa klasör olarak mı eklemek istiyorsunuz?</string>
-    <string name="folder.mode.author.title">Yazar-Kitap Modu: Alt klasörler yazarlar, onların alt klasörleri kitaplardır.</string>
-    <string name="folder.mode.root.title">EnÜst Seviye Kitap Modu: Alt klasörler kitaplardır</string>
-    <string name="folder.mode.single.title">Tek kitap modu: Bir dosyada bir kitap bulunur.</string>
-    <string name="folder.type.book_example.empty">Voice herhangi bir kitap algılayamadı. Hiç ses dosyası var mı?</string>
-    <string name="folder.type.book_example.header">Bu, aşağıdaki kitapların algılanmasını sağlayacaktır</string>
+    <string name="folder.mode.author.label">Klasörler yazarlardır</string>
+    <string name="folder.mode.author.option">%s içindeki klasörler yazarlardır</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d kitap</item>
+        <item quantity="other">%d kitap</item>
+    </plurals>
+    <string name="folder.mode.file.label">Tek dosya</string>
+    <string name="folder.mode.guess">Seninkine benziyor</string>
+    <string name="folder.mode.root.label">Her klasör bir kitaptır</string>
+    <string name="folder.mode.root.option">%s içindeki her klasör veya dosya bir kitaptır</string>
+    <string name="folder.mode.sheet.title">%s nasıl düzenlenmiş?</string>
+    <string name="folder.mode.single.label">Tek kitap</string>
+    <string name="folder.mode.single.option">%s tek bir kitaptır</string>
+    <string name="folder.mode.single.summary">İçindeki dosyalar bölüm olur, CD 1 ve CD 2 gibi klasörlerdekiler de.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">%d kitap ekle</item>
+        <item quantity="other">%d kitap ekle</item>
+    </plurals>
+    <string name="folder.review.action.change">Kitapların nasıl bulunacağını değiştir</string>
+    <string name="folder.review.empty.subtitle">Sesli kitaplarının bulunduğu klasörü seç.</string>
+    <string name="folder.review.empty.title">%s içinde ses dosyası yok</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d klasör</item>
+        <item quantity="other">%d klasör</item>
+    </plurals>
+    <string name="folder.review.loading">%s taranıyor…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">%d kitap gibi görünüyor</item>
+        <item quantity="other">%d kitap gibi görünüyor</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">%d kitap bulduk</item>
+        <item quantity="other">%d kitap bulduk</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d ses dosyası</item>
         <item quantity="other">%d ses dosyası</item>
     </plurals>
-    <string name="folder.type.title">Dosyalarınız nasıl yapılandırılıyor?</string>
     <string name="library.category.completed.title">Tamamlandı</string>
     <string name="library.category.current.title">Geçerli</string>
     <string name="library.category.not_started.title">Henüz başlamadı</string>
@@ -86,7 +115,7 @@
     <string name="onboarding.completion.action.start_listening">Dinlemeye başla</string>
     <string name="onboarding.completion.subtitle">İlk sesli kitabın dinlemen için hazır. Voice ile yolculuğunda iyi eğlenceler!</string>
     <string name="onboarding.completion.title">Hazırsın!</string>
-    <string name="onboarding.explanation.subtitle">Voice\'u kullanarak kitapları tek tek dosyalar halinde ekleyebilir veya klasörler halinde düzenleyebilirsiniz. Sen seç!</string>
+    <string name="onboarding.explanation.subtitle.folder">Sesli kitaplarının bulunduğu klasörü seç. Voice, eklemeden önce bulduğu kitapları sana gösterir.</string>
     <string name="onboarding.explanation.title">Senin kütüphanen, senin tarzın</string>
     <string name="onboarding.welcome.action.start">Hadi başlayalım</string>
     <string name="onboarding.welcome.subtitle">Cebinizdeki kişisel sesli kitap oynatıcınız! Hadi başlayalım.</string>

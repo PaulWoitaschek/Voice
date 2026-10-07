@@ -21,6 +21,7 @@
     <string name="common.action.delete">Skasuj</string>
     <string name="common.action.edit">Edytuj</string>
     <string name="common.action.remove">Usuń</string>
+    <string name="common.action.save">Zapisz</string>
     <string name="common.dialog.cancel">Anuluj</string>
     <string name="common.dialog.confirm">Wybierz</string>
     <string name="common.dialog.ok">OK</string>
@@ -44,23 +45,61 @@
         <item quantity="many">%d sekund</item>
         <item quantity="other">%d sekund</item>
     </plurals>
+    <string name="folder.add.action.file">Zamiast tego dodaj pojedynczy plik</string>
+    <string name="folder.add.action.folder">Wybierz folder</string>
+    <string name="folder.add.subtitle">Wybierz folder ze swoimi audiobookami. Może zawierać jedną książkę albo całą twoją bibliotekę.</string>
     <string name="folder.add.title.default">Dodaj swoje Audiobooki</string>
     <string name="folder.add.title.onboarding">Dodaj Swój Pierwszy Audiobook</string>
-    <string name="folder.add.type.file">Plik</string>
-    <string name="folder.add.type.folder">Folder</string>
-    <string name="folder.add.type.subtitle">Chcesz dodać książkę w formie pojedynczego pliku czy folderu?</string>
-    <string name="folder.mode.author.title">Tryb autor-książka: Podfoldery to autorzy a dalsze podfoldery to książki.</string>
-    <string name="folder.mode.root.title">Tryb folderu z wieloma audiobookami: Jeden podfolder to jedna książka</string>
-    <string name="folder.mode.single.title">Tryb pojedynczej książki: Jeden folder równa się jednej książce.</string>
-    <string name="folder.type.book_example.empty">Voice nie wykrył żadnych książek. Czy na pewno są tam pliki audio?</string>
-    <string name="folder.type.book_example.header">Będzie to skutkowało wykryciem następujących książek</string>
+    <string name="folder.mode.author.label">Foldery to autorzy</string>
+    <string name="folder.mode.author.option">Foldery w %s to autorzy</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d książka</item>
+        <item quantity="few">%d książki</item>
+        <item quantity="many">%d książek</item>
+        <item quantity="other">%d książek</item>
+    </plurals>
+    <string name="folder.mode.file.label">Pojedynczy plik</string>
+    <string name="folder.mode.guess">Najlepiej pasuje</string>
+    <string name="folder.mode.root.label">Każdy folder to książka</string>
+    <string name="folder.mode.root.option">Każdy folder lub plik w %s to książka</string>
+    <string name="folder.mode.sheet.title">Jak zorganizowany jest folder %s?</string>
+    <string name="folder.mode.single.label">Jedna książka</string>
+    <string name="folder.mode.single.option">%s to jedna książka</string>
+    <string name="folder.mode.single.summary">Jego pliki stają się rozdziałami, także te w folderach takich jak CD 1 i CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Dodaj %d książkę</item>
+        <item quantity="few">Dodaj %d książki</item>
+        <item quantity="many">Dodaj %d książek</item>
+        <item quantity="other">Dodaj %d książek</item>
+    </plurals>
+    <string name="folder.review.action.change">Zmień sposób wyszukiwania książek</string>
+    <string name="folder.review.empty.subtitle">Wybierz folder, w którym są twoje audiobooki.</string>
+    <string name="folder.review.empty.title">Brak plików audio w %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d folder</item>
+        <item quantity="few">%d foldery</item>
+        <item quantity="many">%d folderów</item>
+        <item quantity="other">%d folderów</item>
+    </plurals>
+    <string name="folder.review.loading">Przeszukiwanie folderu %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Wygląda na %d książkę</item>
+        <item quantity="few">Wygląda na %d książki</item>
+        <item quantity="many">Wygląda na %d książek</item>
+        <item quantity="other">Wygląda na %d książek</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Znaleźliśmy %d książkę</item>
+        <item quantity="few">Znaleźliśmy %d książki</item>
+        <item quantity="many">Znaleźliśmy %d książek</item>
+        <item quantity="other">Znaleźliśmy %d książek</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d plik audio</item>
         <item quantity="few">%d pliki audio</item>
         <item quantity="many">%d plików audio</item>
         <item quantity="other">%d plików audio</item>
     </plurals>
-    <string name="folder.type.title">Jaka jest struktura twoich plików?</string>
     <string name="library.category.completed.title">Ukończone</string>
     <string name="library.category.current.title">Aktualne</string>
     <string name="library.category.not_started.title">Nierozpoczęte</string>
@@ -94,7 +133,7 @@
     <string name="onboarding.completion.action.start_listening">Zacznij Słuchać</string>
     <string name="onboarding.completion.subtitle">Twój pierwszy audiobook jest gotowy do odtworzenia. Ciesz się podróżą z aplikacją Voice!</string>
     <string name="onboarding.completion.title">Wszystko gotowe!</string>
-    <string name="onboarding.explanation.subtitle">Aplikacja Voice umożliwia dodawanie książek jako pojedynczych plików lub organizowanie ich w folderach. To ty wybierasz!</string>
+    <string name="onboarding.explanation.subtitle.folder">Wybierz folder ze swoimi audiobookami. Voice pokaże ci znalezione książki, zanim je doda.</string>
     <string name="onboarding.explanation.title">Twoja Biblioteka, Twój Wybór</string>
     <string name="onboarding.welcome.action.start">Zaczynamy</string>
     <string name="onboarding.welcome.subtitle">W twoim osobistym kieszonkowym odtwarzaczu audiobooków. Zacznijmy konfigurację.</string>

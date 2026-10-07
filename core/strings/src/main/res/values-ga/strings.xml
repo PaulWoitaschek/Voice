@@ -21,6 +21,7 @@
     <string name="common.action.delete">Scrios</string>
     <string name="common.action.edit">Athraigh</string>
     <string name="common.action.remove">Bain de</string>
+    <string name="common.action.save">Sábháil</string>
     <string name="common.dialog.cancel">Cealaigh</string>
     <string name="common.dialog.confirm">Socraigh</string>
     <string name="common.dialog.ok">OK</string>
@@ -46,16 +47,60 @@
         <item quantity="many">%d soicindí</item>
         <item quantity="other">%d soicindí</item>
     </plurals>
+    <string name="folder.add.action.file">Cuir comhad amháin leis ina ionad</string>
+    <string name="folder.add.action.folder">Roghnaigh fillteán</string>
+    <string name="folder.add.subtitle">Roghnaigh an fillteán ina bhfuil do chuid closleabhar. Is féidir leabhar amháin nó do leabharlann iomlán a bheith ann.</string>
     <string name="folder.add.title.default">Cuir do Closleabhair leis</string>
     <string name="folder.add.title.onboarding">Cuir Do Chéad Leabhar Closleabhar leis</string>
-    <string name="folder.add.type.file">Comhad</string>
-    <string name="folder.add.type.folder">Fillteán</string>
-    <string name="folder.add.type.subtitle">Ar mhaith leat comhad amháin a chur leis mar leabhar nó mar fhillteán?</string>
-    <string name="folder.mode.author.title">Mód Údair-Leabhar: Is údair iad fofhillteáin, is leabhair iad fo-fhillteáin.</string>
-    <string name="folder.mode.root.title">Mód Leabhar Barrleibhéil: Is leabhair iad fofhillteáin</string>
-    <string name="folder.mode.single.title">Mód Leabhar Aonair: Is ionann fillteán amháin agus leabhar amháin.</string>
-    <string name="folder.type.book_example.empty">Níorbh fhéidir le Voice aon leabhar a bhrath. An bhfuil aon chomhaid fuaime ann?</string>
-    <string name="folder.type.book_example.header">D’fhágfadh sin go mbraithfí na leabhair seo a leanas</string>
+    <string name="folder.mode.author.label">Is údair iad na fillteáin</string>
+    <string name="folder.mode.author.option">Is údair iad na fillteáin in %s</string>
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d leabhar</item>
+        <item quantity="two">%d leabhar</item>
+        <item quantity="few">%d leabhar</item>
+        <item quantity="many">%d leabhar</item>
+        <item quantity="other">%d leabhar</item>
+    </plurals>
+    <string name="folder.mode.file.label">Comhad aonair</string>
+    <string name="folder.mode.guess">Cosúil le do cheannsa</string>
+    <string name="folder.mode.root.label">Is leabhar é gach fillteán</string>
+    <string name="folder.mode.root.option">Is leabhar é gach fillteán nó comhad in %s</string>
+    <string name="folder.mode.sheet.title">Conas atá %s eagraithe?</string>
+    <string name="folder.mode.single.label">Leabhar amháin</string>
+    <string name="folder.mode.single.option">Is leabhar amháin é %s</string>
+    <string name="folder.mode.single.summary">Déantar caibidlí dá chuid comhad, fiú i bhfillteáin mar CD 1 agus CD 2.</string>
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Cuir %d leabhar leis</item>
+        <item quantity="two">Cuir %d leabhar leis</item>
+        <item quantity="few">Cuir %d leabhar leis</item>
+        <item quantity="many">Cuir %d leabhar leis</item>
+        <item quantity="other">Cuir %d leabhar leis</item>
+    </plurals>
+    <string name="folder.review.action.change">Athraigh conas a aimsítear leabhair</string>
+    <string name="folder.review.empty.subtitle">Roghnaigh an fillteán ina bhfuil do chuid closleabhar.</string>
+    <string name="folder.review.empty.title">Níl aon chomhad fuaime in %s</string>
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d fillteán</item>
+        <item quantity="two">%d fillteán</item>
+        <item quantity="few">%d fillteán</item>
+        <item quantity="many">%d fillteán</item>
+        <item quantity="other">%d fillteán</item>
+    </plurals>
+    <string name="folder.review.loading">Ag cuardach in %s…</string>
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Cosúil le %d leabhar</item>
+        <item quantity="two">Cosúil le %d leabhar</item>
+        <item quantity="few">Cosúil le %d leabhar</item>
+        <item quantity="many">Cosúil le %d leabhar</item>
+        <item quantity="other">Cosúil le %d leabhar</item>
+    </plurals>
+    <plurals name="folder.review.title">
+        <item quantity="one">Fuaireamar %d leabhar</item>
+        <item quantity="two">Fuaireamar %d leabhar</item>
+        <item quantity="few">Fuaireamar %d leabhar</item>
+        <item quantity="many">Fuaireamar %d leabhar</item>
+        <item quantity="other">Fuaireamar %d leabhar</item>
+    </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d comhad fuaime</item>
         <item quantity="two">%d comhaid fuaime</item>
@@ -63,7 +108,6 @@
         <item quantity="many">%d comhaid fuaime</item>
         <item quantity="other">%d comhaid fuaime</item>
     </plurals>
-    <string name="folder.type.title">Cén struchtúr atá ar do chuid comhad?</string>
     <string name="library.category.completed.title">Críochnaithe</string>
     <string name="library.category.current.title">Reatha</string>
     <string name="library.category.not_started.title">Níl tosnaithe go fóill</string>
@@ -98,7 +142,7 @@
     <string name="onboarding.completion.action.start_listening">Tosaigh Éisteacht</string>
     <string name="onboarding.completion.subtitle">Tá do chéad chlosleabhar réidh le himirt. Bain sult as do thuras le Voice!</string>
     <string name="onboarding.completion.title">Tá tú Socraithe go léir!</string>
-    <string name="onboarding.explanation.subtitle">Le Guth, is féidir leat leabhair a chur leis mar chomhaid aonair nó iad a eagrú i bhfillteáin. Roghnaíonn tú!</string>
+    <string name="onboarding.explanation.subtitle.folder">Roghnaigh an fillteán ina bhfuil do chuid closleabhar. Taispeánann Voice duit na leabhair a aimsíonn sé sula gcuirtear leis iad.</string>
     <string name="onboarding.explanation.title">Do Leabharlann, Do Bhealach Féin</string>
     <string name="onboarding.welcome.action.start">Ar aghaidh linn</string>
     <string name="onboarding.welcome.subtitle">Seinnteoir fuaime do phóca pearsanta. A ligean ar a fháil tú a shocrú.</string>

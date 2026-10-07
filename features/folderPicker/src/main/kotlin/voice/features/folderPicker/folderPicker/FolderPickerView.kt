@@ -1,6 +1,7 @@
 package voice.features.folderPicker.folderPicker
 
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +31,7 @@ import voice.core.common.rootGraphAs
 import voice.core.data.folders.FolderType
 import voice.core.ui.icons.VoiceIcons
 import voice.features.folderPicker.FolderTypeIcon
+import voice.features.folderPicker.label
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
@@ -67,6 +69,7 @@ fun FolderOverview() {
     onDeleteClick = {
       viewModel.removeFolder(it)
     },
+    onFolderClick = viewModel::changeType,
     onCloseClick = viewModel::onCloseClick,
   )
 }
@@ -76,6 +79,7 @@ private fun FolderOverviewView(
   viewState: FolderPickerViewState,
   onAddClick: () -> Unit,
   onDeleteClick: (FolderPickerViewState.Item) -> Unit,
+  onFolderClick: (FolderPickerViewState.Item) -> Unit,
   onCloseClick: () -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -120,9 +124,15 @@ private fun FolderOverviewView(
     LazyColumn(contentPadding = contentPadding) {
       item { Spacer(modifier = Modifier.size(16.dp)) }
       items(viewState.items) { item ->
+        // a single file is always one book, a folder can change how its books are found
+        val canChangeType = viewState.showActions && item.folderType != FolderType.SingleFile
         ListItem(
+          modifier = if (canChangeType) Modifier.clickable { onFolderClick(item) } else Modifier,
           leadingContent = {
             FolderTypeIcon(folderType = item.folderType)
+          },
+          supportingContent = {
+            Text(text = item.folderType.label())
           },
           trailingContent = if (viewState.showActions) {
             {
@@ -175,6 +185,7 @@ fun FolderOverviewPreview() {
     ),
     onAddClick = { },
     onDeleteClick = {},
+    onFolderClick = {},
   ) {
   }
 }

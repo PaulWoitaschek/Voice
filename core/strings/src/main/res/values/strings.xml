@@ -42,6 +42,8 @@
     <string name="common.action.edit">Edit</string>
     <!-- Generic remove action in menus. -->
     <string name="common.action.remove">Remove</string>
+    <!-- Generic action for saving changes. -->
+    <string name="common.action.save">Save</string>
     <!-- Generic action for dismissing a dialog without applying changes. -->
     <string name="common.dialog.cancel">Cancel</string>
     <!-- Generic confirmation action in dialogs that apply a value. -->
@@ -74,33 +76,74 @@
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
+    <!-- Text button on the add content screen for adding one audio file instead of a folder. -->
+    <string name="folder.add.action.file">Add a single file instead</string>
+    <!-- Main button on the add content screen that opens the system folder picker. Also shown when a picked folder has no audio files. -->
+    <string name="folder.add.action.folder">Choose a folder</string>
+    <!-- Subtitle on the add content screen. Explains that picking a folder works for one book as well as for a whole library. -->
+    <string name="folder.add.subtitle">Pick the folder with your audiobooks. It can hold a single book or your whole library.</string>
     <!-- Title for the folder picker during normal app use. -->
     <string name="folder.add.title.default">Add your Audiobook(s)</string>
     <!-- Title for the folder picker when adding the first audiobook during onboarding. -->
     <string name="folder.add.title.onboarding">Add Your First Audiobook</string>
-    <!-- Button label for adding a single audio file as a book. -->
-    <string name="folder.add.type.file">File</string>
-    <!-- Button label for adding a folder of audiobooks. -->
-    <string name="folder.add.type.folder">Folder</string>
-    <!-- Subtitle asking whether the user wants to add a file or folder. -->
-    <string name="folder.add.type.subtitle">Would you like to add a single file as a book or a folder?</string>
-    <!-- Title for folder mode where subfolders are authors and nested folders are books. -->
-    <string name="folder.mode.author.title">Author-Book Mode: Subfolders are authors, sub-subfolders are books.</string>
-    <!-- Title for folder mode where top-level subfolders are books. -->
-    <string name="folder.mode.root.title">Top-Level Book Mode: Subfolders are books</string>
-    <!-- Title for folder mode where the selected folder is one book. -->
-    <string name="folder.mode.single.title">Single Book Mode: One folder equals one book.</string>
-    <!-- Empty-state message when no books are detected from selected files. -->
-    <string name="folder.type.book_example.empty">Voice could not detect any books. Are there any audio files?</string>
-    <!-- Header above the preview of books detected from a folder structure. -->
-    <string name="folder.type.book_example.header">This would lead to the following books being detected</string>
+    <!-- Short label in the folder settings for a folder whose subfolders are authors, each holding book folders. -->
+    <string name="folder.mode.author.label">Folders are authors</string>
+    <!-- Option for how books are found in a picked folder. %s is the folder name. Its subfolders are authors, their subfolders are books. -->
+    <string name="folder.mode.author.option">Folders in %s are authors</string>
+    <!-- Number of books an option for finding books would lead to. -->
+    <plurals name="folder.mode.book_count">
+        <item quantity="one">%d book</item>
+        <item quantity="other">%d books</item>
+    </plurals>
+    <!-- Short label in the folder settings for a single audio file added as a book. -->
+    <string name="folder.mode.file.label">Single file</string>
+    <!-- Badge on the option for finding books that matches the picked folder best. -->
+    <string name="folder.mode.guess">Looks like yours</string>
+    <!-- Short label in the folder settings for a folder where every subfolder or audio file is a book. -->
+    <string name="folder.mode.root.label">Every folder is a book</string>
+    <!-- Option for how books are found in a picked folder. %s is the folder name. Each subfolder or audio file in it is a book. -->
+    <string name="folder.mode.root.option">Every folder or file in %s is a book</string>
+    <!-- Title of the sheet with the options for how books are found in a folder. %s is the folder name. -->
+    <string name="folder.mode.sheet.title">How is %s organized?</string>
+    <!-- Short label in the folder settings for a folder that is one book. -->
+    <string name="folder.mode.single.label">One book</string>
+    <!-- Option for how books are found in a picked folder. %s is the folder name. The whole folder is one book. -->
+    <string name="folder.mode.single.option">%s is one book</string>
+    <!-- Explains the option where a folder is one book: all its audio files become chapters, including those in disc folders. -->
+    <string name="folder.mode.single.summary">Its files become chapters, even in folders like CD 1 and CD 2.</string>
+    <!-- Button that adds a picked folder with the books found in it. -->
+    <plurals name="folder.review.action.add">
+        <item quantity="one">Add %d book</item>
+        <item quantity="other">Add %d books</item>
+    </plurals>
+    <!-- Text button that opens the options for how books are found in a picked folder. -->
+    <string name="folder.review.action.change">Change how books are found</string>
+    <!-- Subtitle when a picked folder has no audio files. -->
+    <string name="folder.review.empty.subtitle">Pick the folder that has your audiobooks in it.</string>
+    <!-- Title when a picked folder has no audio files. %s is the folder name. -->
+    <string name="folder.review.empty.title">No audio files in %s</string>
+    <!-- Number of disc folders (like CD 1 and CD 2) that are joined into one book. -->
+    <plurals name="folder.review.folder_count">
+        <item quantity="one">%d folder</item>
+        <item quantity="other">%d folders</item>
+    </plurals>
+    <!-- Title while Voice looks for books in a picked folder. %s is the folder name. -->
+    <string name="folder.review.loading">Looking through %s…</string>
+    <!-- Hint on a book whose subfolders look like books of their own. Tapping it shows the options for how books are found. -->
+    <plurals name="folder.review.possible_books">
+        <item quantity="one">Looks like %d book</item>
+        <item quantity="other">Looks like %d books</item>
+    </plurals>
+    <!-- Title above the books found in a picked folder. -->
+    <plurals name="folder.review.title">
+        <item quantity="one">We found %d book</item>
+        <item quantity="other">We found %d books</item>
+    </plurals>
     <!-- Pluralized file count shown in folder structure previews. -->
     <plurals name="folder.type.file_count">
         <item quantity="one">%d audio file</item>
         <item quantity="other">%d audio files</item>
     </plurals>
-    <!-- Title for choosing how audiobook files are structured. -->
-    <string name="folder.type.title">How are your files structured?</string>
     <!-- Library category header for completed books. -->
     <string name="library.category.completed.title">Completed</string>
     <!-- Library category header for books currently being listened to. -->
@@ -160,8 +203,8 @@
     <string name="onboarding.completion.subtitle">Your first audiobook is ready to play. Enjoy your journey with Voice!</string>
     <!-- Title on the onboarding completion screen. -->
     <string name="onboarding.completion.title">You\'re All Set!</string>
-    <!-- Subtitle explaining file and folder choices in onboarding. -->
-    <string name="onboarding.explanation.subtitle">With Voice, you can add books as individual files or organize them in folders. You choose!</string>
+    <!-- Subtitle on the onboarding explanation screen. Explains that the user picks a folder and sees the books found in it before adding them. -->
+    <string name="onboarding.explanation.subtitle.folder">Pick the folder with your audiobooks. Voice shows you the books it finds before adding them.</string>
     <!-- Title on the onboarding explanation screen. -->
     <string name="onboarding.explanation.title">Your Library, Your Way</string>
     <!-- Button label for starting the onboarding from the welcome screen. -->
