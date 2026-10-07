@@ -144,6 +144,6 @@
     <string name="sleep_timer.action.open">Timer sospensione</string>
     <string name="sleep_timer.dialog.action.decrement">Più breve</string>
     <string name="sleep_timer.dialog.action.increment">Più a lungo</string>
-    <string name="sleep_timer.dialog.title">Sogni d\'oro! 🌙</string>
+    <string name="sleep_timer.dialog.title">Timer sospensione</string>
     <string name="sleep_timer.end_of_chapter">Fine del capitolo</string>
 </resources>

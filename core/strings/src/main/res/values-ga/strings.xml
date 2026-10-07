@@ -150,6 +150,6 @@
     <string name="sleep_timer.action.open">Orláiste codalta</string>
     <string name="sleep_timer.dialog.action.decrement">Níos giorra</string>
     <string name="sleep_timer.dialog.action.increment">Níos faide</string>
-    <string name="sleep_timer.dialog.title">Codladh sámh! 🌙</string>
+    <string name="sleep_timer.dialog.title">Orláiste codalta</string>
     <string name="sleep_timer.end_of_chapter">Deireadh na Caibidle</string>
 </resources>

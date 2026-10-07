@@ -138,6 +138,6 @@
     <string name="sleep_timer.action.open">スリープタイマー</string>
     <string name="sleep_timer.dialog.action.decrement">短くする</string>
     <string name="sleep_timer.dialog.action.increment">長くする</string>
-    <string name="sleep_timer.dialog.title">おやすみなさい！ 🌙</string>
+    <string name="sleep_timer.dialog.title">スリープタイマー</string>
     <string name="sleep_timer.end_of_chapter">チャプターの終わり</string>
 </resources>

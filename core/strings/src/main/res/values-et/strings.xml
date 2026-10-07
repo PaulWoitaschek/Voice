@@ -141,6 +141,6 @@
     <string name="sleep_timer.action.open">Unetaimer</string>
     <string name="sleep_timer.dialog.action.decrement">Vähem</string>
     <string name="sleep_timer.dialog.action.increment">Kauem</string>
-    <string name="sleep_timer.dialog.title">Ilusaid unenägusid! 🌙</string>
+    <string name="sleep_timer.dialog.title">Unetaimer</string>
     <string name="sleep_timer.end_of_chapter">Peatüki lõpp</string>
 </resources>

@@ -100,4 +100,5 @@
     <string name="settings.support.suggest_idea.title">विचार सुझाव गर्नुहोस्</string>
     <string name="shortcut.play_current.short_label">हालको प्ले गर्नुहोस्</string>
     <string name="sleep_timer.action.open">सुत्ने-टाइमर</string>
+    <string name="sleep_timer.dialog.title">सुत्ने-टाइमर</string>
 </resources>

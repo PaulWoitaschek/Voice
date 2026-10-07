@@ -85,4 +85,5 @@
     <string name="settings.support.suggest_idea.title">提出建议</string>
     <string name="shortcut.play_current.short_label">播放当前有声书</string>
     <string name="sleep_timer.action.open">睡眠定时器</string>
+    <string name="sleep_timer.dialog.title">睡眠定时器</string>
 </resources>

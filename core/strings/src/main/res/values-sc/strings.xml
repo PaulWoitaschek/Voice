@@ -141,6 +141,6 @@
     <string name="sleep_timer.action.open">Temporizadore de suspensione</string>
     <string name="sleep_timer.dialog.action.decrement">Prus curtzu</string>
     <string name="sleep_timer.dialog.action.increment">Prus longu</string>
-    <string name="sleep_timer.dialog.title">Bona note! 🌙</string>
+    <string name="sleep_timer.dialog.title">Temporizadore de suspensione</string>
     <string name="sleep_timer.end_of_chapter">Fine de capìtulu</string>
 </resources>

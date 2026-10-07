@@ -107,5 +107,5 @@
     <string name="sleep_timer.action.open">स्लीप-टाइमर</string>
     <string name="sleep_timer.dialog.action.decrement">छोटा</string>
     <string name="sleep_timer.dialog.action.increment">लंबे समय तक</string>
-    <string name="sleep_timer.dialog.title">मधुर स्वप्न! 🌙</string>
+    <string name="sleep_timer.dialog.title">स्लीप-टाइमर</string>
 </resources>

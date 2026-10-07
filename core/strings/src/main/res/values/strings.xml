@@ -308,7 +308,7 @@
     <!-- Short unit label for minutes, shown below a sleep timer preset number like "15". -->
     <string name="sleep_timer.dialog.minutes_short">min</string>
     <!-- Title of the sleep timer dialog. -->
-    <string name="sleep_timer.dialog.title">Sweet dreams! 🌙</string>
+    <string name="sleep_timer.dialog.title">Sleep timer</string>
     <!-- Sleep timer option and playback status for stopping at the end of a chapter. -->
     <string name="sleep_timer.end_of_chapter">End of Chapter</string>
 </resources>

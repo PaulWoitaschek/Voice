@@ -141,6 +141,6 @@
     <string name="sleep_timer.action.open">تایمر خواب</string>
     <string name="sleep_timer.dialog.action.decrement">کوتاه تر</string>
     <string name="sleep_timer.dialog.action.increment">طولانی تر</string>
-    <string name="sleep_timer.dialog.title">رویاهای شیرین! 🌙</string>
+    <string name="sleep_timer.dialog.title">تایمر خواب</string>
     <string name="sleep_timer.end_of_chapter">پایان فصل</string>
 </resources>

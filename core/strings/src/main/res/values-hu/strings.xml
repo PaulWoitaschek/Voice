@@ -106,5 +106,5 @@
     <string name="sleep_timer.action.open">Alvásidőzítő</string>
     <string name="sleep_timer.dialog.action.decrement">Rövidebb</string>
     <string name="sleep_timer.dialog.action.increment">Hosszabb</string>
-    <string name="sleep_timer.dialog.title">Szép álmokat! 🌙</string>
+    <string name="sleep_timer.dialog.title">Alvásidőzítő</string>
 </resources>

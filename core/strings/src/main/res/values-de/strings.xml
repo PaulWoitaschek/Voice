@@ -141,6 +141,6 @@
     <string name="sleep_timer.action.open">Einschlaf-Timer</string>
     <string name="sleep_timer.dialog.action.decrement">Kürzer</string>
     <string name="sleep_timer.dialog.action.increment">Länger</string>
-    <string name="sleep_timer.dialog.title">Schlaf gut! 🌙</string>
+    <string name="sleep_timer.dialog.title">Einschlaf-Timer</string>
     <string name="sleep_timer.end_of_chapter">Kapitelende</string>
 </resources>

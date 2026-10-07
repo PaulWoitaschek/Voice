@@ -147,6 +147,6 @@
     <string name="sleep_timer.action.open">Wyłącznik czasowy</string>
     <string name="sleep_timer.dialog.action.decrement">Krócej</string>
     <string name="sleep_timer.dialog.action.increment">Dłużej</string>
-    <string name="sleep_timer.dialog.title">Słodkich snów! 🌙</string>
+    <string name="sleep_timer.dialog.title">Wyłącznik czasowy</string>
     <string name="sleep_timer.end_of_chapter">Koniec rozdziału</string>
 </resources>

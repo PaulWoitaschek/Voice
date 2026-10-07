@@ -141,6 +141,6 @@
     <string name="sleep_timer.action.open">Uniajastin</string>
     <string name="sleep_timer.dialog.action.decrement">Lyhennä</string>
     <string name="sleep_timer.dialog.action.increment">Pidennä</string>
-    <string name="sleep_timer.dialog.title">Hyviä unia! 🌙</string>
+    <string name="sleep_timer.dialog.title">Uniajastin</string>
     <string name="sleep_timer.end_of_chapter">Luvun loppu</string>
 </resources>

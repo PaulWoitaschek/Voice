@@ -147,6 +147,6 @@
     <string name="sleep_timer.action.open">Таймер сну</string>
     <string name="sleep_timer.dialog.action.decrement">Коротше</string>
     <string name="sleep_timer.dialog.action.increment">Довше</string>
-    <string name="sleep_timer.dialog.title">На добраніч! 🌙</string>
+    <string name="sleep_timer.dialog.title">Таймер сну</string>
     <string name="sleep_timer.end_of_chapter">Кінець розділу</string>
 </resources>

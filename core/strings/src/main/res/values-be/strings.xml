@@ -147,6 +147,6 @@
     <string name="sleep_timer.action.open">Таймер сну</string>
     <string name="sleep_timer.dialog.action.decrement">Карацей</string>
     <string name="sleep_timer.dialog.action.increment">Даўжэй</string>
-    <string name="sleep_timer.dialog.title">Дабранач! 🌙</string>
+    <string name="sleep_timer.dialog.title">Таймер сну</string>
     <string name="sleep_timer.end_of_chapter">Канец раздзела</string>
 </resources>

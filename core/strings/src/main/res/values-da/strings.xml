@@ -106,5 +106,5 @@
     <string name="sleep_timer.action.open">Sleep-Timer</string>
     <string name="sleep_timer.dialog.action.decrement">Kortere</string>
     <string name="sleep_timer.dialog.action.increment">Længre</string>
-    <string name="sleep_timer.dialog.title">Sov godt! 🌙</string>
+    <string name="sleep_timer.dialog.title">Sleep-Timer</string>
 </resources>

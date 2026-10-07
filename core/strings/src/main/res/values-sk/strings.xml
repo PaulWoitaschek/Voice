@@ -147,6 +147,6 @@
     <string name="sleep_timer.action.open">Časovač spánku</string>
     <string name="sleep_timer.dialog.action.decrement">Kradšie</string>
     <string name="sleep_timer.dialog.action.increment">Dlhšie</string>
-    <string name="sleep_timer.dialog.title">Sladké sny! 🌙</string>
+    <string name="sleep_timer.dialog.title">Časovač spánku</string>
     <string name="sleep_timer.end_of_chapter">Koniec kapitoly</string>
 </resources>

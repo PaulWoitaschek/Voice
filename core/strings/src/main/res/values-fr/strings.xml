@@ -144,6 +144,6 @@
     <string name="sleep_timer.action.open">Minuterie de mise en veille</string>
     <string name="sleep_timer.dialog.action.decrement">Moins long</string>
     <string name="sleep_timer.dialog.action.increment">Plus long</string>
-    <string name="sleep_timer.dialog.title">Bonne nuit ! 🌙</string>
+    <string name="sleep_timer.dialog.title">Minuterie de mise en veille</string>
     <string name="sleep_timer.end_of_chapter">Fin du chapitre</string>
 </resources>

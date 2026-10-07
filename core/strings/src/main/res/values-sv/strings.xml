@@ -141,6 +141,6 @@
     <string name="sleep_timer.action.open">Insomningstimer</string>
     <string name="sleep_timer.dialog.action.decrement">Kortare</string>
     <string name="sleep_timer.dialog.action.increment">Längre</string>
-    <string name="sleep_timer.dialog.title">Sov gott! 🌙</string>
+    <string name="sleep_timer.dialog.title">Insomningstimer</string>
     <string name="sleep_timer.end_of_chapter">Vid kapitlets slut</string>
 </resources>

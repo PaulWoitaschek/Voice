@@ -141,6 +141,6 @@
     <string name="sleep_timer.action.open">Uyku Zamanlayıcısı</string>
     <string name="sleep_timer.dialog.action.decrement">Daha kısa</string>
     <string name="sleep_timer.dialog.action.increment">Daha uzun</string>
-    <string name="sleep_timer.dialog.title">Tatlı rüyalar! 🌙</string>
+    <string name="sleep_timer.dialog.title">Uyku Zamanlayıcısı</string>
     <string name="sleep_timer.end_of_chapter">Bölüm Sonu</string>
 </resources>
