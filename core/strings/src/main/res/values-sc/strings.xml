@@ -58,10 +58,19 @@
     <string name="library.category.completed.title">Acabbadu</string>
     <string name="library.category.current.title">Atuale</string>
     <string name="library.category.not_started.title">Galu no incumintzadu</string>
+    <string name="library.continue_listening">Sighi a ascurtare</string>
     <string name="library.empty.add_first_book">Agiunghimus sa cartella de audiolibros tua in manera chi potzas incumintzare a ascurtare!</string>
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
     <string name="library.folders.moved.dialog.title">Cartellas de audiolibros tramudadas</string>
     <string name="library.folders.moved.dialog.message">Como podes manigiare sas cartellas de audiolibros in sas Preferèntzias.</string>
+    <string name="library.greeting.afternoon">Bona die</string>
+    <string name="library.greeting.evening">Bona sera</string>
+    <string name="library.greeting.morning">Bona die</string>
+    <string name="library.greeting.night">Salude, nottàmbulu</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="one">%d libru in cursu</item>
+        <item quantity="other">%d libros in cursu</item>
+    </plurals>
     <string name="library.search.hint">Ite ses chirchende?</string>
     <string name="library.storage_permission_bug.action">Dae su permissu</string>
     <string name="library.storage_permission_bug.message">Pro unos cantos dispositivos, un\'aplicatzione de sistema non tenet s\'autorizatzione netzessària pro atzèdere a sa memòria esterna. Bisòngiat a tènnere custu atzessu pro chi Voice potzat lèghere sos audiolibros tuos.</string>
@@ -88,12 +97,20 @@
     <string name="playback.action.rewind">Torra in segus</string>
     <string name="playback.battery_optimization.action">Atualiza</string>
     <string name="playback.battery_optimization.rationale">Pro neghe de sas limitatziones de alimentatzione tuas, bi diant pòdere èssere interrutziones in sa riprodutzione.</string>
+    <string name="playback.book_progress.read">%1$s de su libru</string>
+    <string name="playback.book_progress.remaining">Mancant %1$s</string>
+    <string name="playback.book_progress.remaining_at_speed">Mancant %1$s a %2$s</string>
+    <string name="playback.chapter.counter">Capìtulu %1$d de %2$d</string>
     <string name="playback.chapter.current.content_description">Capìtulu atuale</string>
     <string name="playback.chapter.next">Rasta imbeniente</string>
     <string name="playback.chapter.previous">Rasta anteposta</string>
+    <string name="playback.chapters.title">Capìtulos</string>
     <string name="playback.option.skip_silence">Brinca su silèntziu</string>
     <string name="playback.option.volume_boost">Crèschida de volùmene</string>
+    <string name="playback.speed.decrease">Prus lentu</string>
+    <string name="playback.speed.increase">Prus lestru</string>
     <string name="playback.speed.title">Lestresa de riprodutzione</string>
+    <string name="playback.volume_boost.off">Disativadu</string>
     <string name="review.feedback.action.cancel">Annulla</string>
     <string name="review.feedback.action.send">Imbia su parre tuo</string>
     <string name="review.feedback.message">Nos podes nàrrere ite b\'at àpidu de isballiadu? Apretziamus su parre tuo e nos agiudat a megiorare s\'esperièntzia tua.</string>
@@ -141,6 +158,8 @@
     <string name="sleep_timer.action.open">Temporizadore de suspensione</string>
     <string name="sleep_timer.dialog.action.decrement">Prus curtzu</string>
     <string name="sleep_timer.dialog.action.increment">Prus longu</string>
+    <string name="sleep_timer.dialog.minutes_short">min</string>
+    <string name="sleep_timer.dialog.shake_hint">Iscude su telèfonu luego a pustis chi su temporizadore acabbat pro lu torrare a aviare.</string>
     <string name="sleep_timer.dialog.title">Temporizadore de suspensione</string>
     <string name="sleep_timer.end_of_chapter">Fine de capìtulu</string>
 </resources>

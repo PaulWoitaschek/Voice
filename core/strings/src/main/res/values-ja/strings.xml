@@ -55,10 +55,18 @@
     <string name="library.category.completed.title">完了</string>
     <string name="library.category.current.title">現在</string>
     <string name="library.category.not_started.title">未再生</string>
+    <string name="library.continue_listening">続きを聴く</string>
     <string name="library.empty.add_first_book">オーディオブックのフォルダーを追加して、聴き始めましょう！</string>
     <string name="library.folders.title">オーディオブック フォルダー</string>
     <string name="library.folders.moved.dialog.title">オーディオブックフォルダーを移動しました</string>
     <string name="library.folders.moved.dialog.message">オーディオブックフォルダーは設定で管理できるようになりました。</string>
+    <string name="library.greeting.afternoon">こんにちは</string>
+    <string name="library.greeting.evening">こんばんは</string>
+    <string name="library.greeting.morning">おはようございます</string>
+    <string name="library.greeting.night">こんばんは、夜更かしさん</string>
+    <plurals name="library.header.in_progress">
+        <item quantity="other">聴きかけの本 %d 冊</item>
+    </plurals>
     <string name="library.search.hint">何をお探しですか？</string>
     <string name="library.storage_permission_bug.action">権限を付与</string>
     <string name="library.storage_permission_bug.message">一部のデバイスでは、システムアプリに外部ストレージへアクセスするために必要な権限がありません。このアクセスは、Voice がオーディオブックを読み取るために必要です。</string>
@@ -85,12 +93,20 @@
     <string name="playback.action.rewind">巻き戻し</string>
     <string name="playback.battery_optimization.action">更新</string>
     <string name="playback.battery_optimization.rationale">端末側のバッテリー節約設定の制限により、再生が中断されるかもしれません。</string>
+    <string name="playback.book_progress.read">本全体の %1$s</string>
+    <string name="playback.book_progress.remaining">残り %1$s</string>
+    <string name="playback.book_progress.remaining_at_speed">%2$s で残り %1$s</string>
+    <string name="playback.chapter.counter">チャプター %1$d / %2$d</string>
     <string name="playback.chapter.current.content_description">現在のチャプター</string>
     <string name="playback.chapter.next">次のトラック</string>
     <string name="playback.chapter.previous">前のトラック</string>
+    <string name="playback.chapters.title">チャプター</string>
     <string name="playback.option.skip_silence">無音をスキップ</string>
     <string name="playback.option.volume_boost">音量ブースト</string>
+    <string name="playback.speed.decrease">遅く</string>
+    <string name="playback.speed.increase">速く</string>
     <string name="playback.speed.title">再生速度</string>
+    <string name="playback.volume_boost.off">オフ</string>
     <string name="review.feedback.action.cancel">キャンセル</string>
     <string name="review.feedback.action.send">フィードバックを送信</string>
     <string name="review.feedback.message">何がうまくいかなかったか教えていただけますか？いただいたフィードバックは体験の改善に役立ちます。</string>
@@ -138,6 +154,7 @@
     <string name="sleep_timer.action.open">スリープタイマー</string>
     <string name="sleep_timer.dialog.action.decrement">短くする</string>
     <string name="sleep_timer.dialog.action.increment">長くする</string>
+    <string name="sleep_timer.dialog.minutes_short">分</string>
     <string name="sleep_timer.dialog.shake_hint">タイマー終了直後にスマートフォンを振ると、タイマーを再開できます。</string>
     <string name="sleep_timer.dialog.title">スリープタイマー</string>
     <string name="sleep_timer.end_of_chapter">チャプターの終わり</string>
