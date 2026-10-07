@@ -114,17 +114,23 @@ internal fun ContinueListeningCard(
                 amplitude = { if (playing) 1F else 0F },
               )
               Spacer(Modifier.height(8.dp))
+              // the time left gets its full width first, the percentage gives way on narrow cards
               Row {
                 Text(
+                  modifier = Modifier.weight(1F),
                   text = stringResource(R.string.playback_book_progress_read, percentFormat.format(book.progress.toDouble())),
                   style = MaterialTheme.typography.labelLargeEmphasized,
                   color = colors.primary,
+                  maxLines = 1,
+                  overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(Modifier.weight(1F))
+                Spacer(Modifier.width(8.dp))
                 Text(
                   text = stringResource(R.string.playback_book_progress_remaining, book.remainingTime),
                   style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
                   maxLines = 1,
+                  softWrap = false,
+                  overflow = TextOverflow.Ellipsis,
                 )
               }
             }

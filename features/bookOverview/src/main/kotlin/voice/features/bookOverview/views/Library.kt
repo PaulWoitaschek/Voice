@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -48,6 +49,7 @@ import java.util.Calendar
 @Composable
 internal fun Library(
   viewState: BookOverviewViewState,
+  gridState: LazyGridState,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   onPlayClick: () -> Unit,
@@ -55,7 +57,8 @@ internal fun Library(
   modifier: Modifier = Modifier,
 ) {
   var entered by rememberSaveable { mutableStateOf(false) }
-  val loading = viewState == BookOverviewViewState.Loading
+  // by identity, as a loaded empty library can equal the loading state
+  val loading = viewState === BookOverviewViewState.Loading
   HoldSplashScreenWhile(loading = loading)
   if (loading) return
   val entrance = rememberEntranceState(animate = !entered)
@@ -73,8 +76,15 @@ internal fun Library(
 
   LazyVerticalGrid(
     modifier = modifier,
+    state = gridState,
     columns = GridCells.Fixed(columns),
-    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
+    contentPadding = PaddingValues(
+      start = 16.dp,
+      end = 16.dp,
+      top = 8.dp,
+      // room to scroll the last books above the floating play button
+      bottom = if (viewState.playButtonState != null) 104.dp else 24.dp,
+    ),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
   ) {
     if (viewState.showStoragePermissionBugCard) {
@@ -94,7 +104,7 @@ internal fun Library(
     }
     if (hero != null) {
       val index = entranceIndex()
-      item(key = "hero", span = { GridItemSpan(maxLineSpan) }, contentType = "hero") {
+      item(key = HERO_KEY, span = { GridItemSpan(maxLineSpan) }, contentType = "hero") {
         ContinueListeningCard(
           book = hero.value,
           playing = viewState.playButtonState == BookOverviewViewState.PlayButtonState.Playing,
@@ -183,6 +193,8 @@ internal fun Library(
 }
 
 private const val MAX_ENTRANCE_INDEX = 6
+
+internal const val HERO_KEY = "hero"
 
 @Composable
 private fun LibraryGreeting(

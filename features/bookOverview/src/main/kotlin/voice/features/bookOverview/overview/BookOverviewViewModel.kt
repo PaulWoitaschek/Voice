@@ -114,7 +114,8 @@ class BookOverviewViewModel(
     if (books == null || currentBook == null || folderPickerMovedDialogShown == null || gridMode == null) {
       return BookOverviewViewState.Loading
     }
-    val currentBookId = currentBook.id
+    // a deleted book can stay the current one
+    val currentBookId = currentBook.id?.takeIf { id -> books.any { it.id == id } }
 
     val noBooks = !scannerActive && books.isEmpty()
 
@@ -155,7 +156,7 @@ class BookOverviewViewModel(
             }
         }
         .toSortedMap(),
-      currentBookId = currentBookId?.takeIf { id -> books.any { it.id == id } },
+      currentBookId = currentBookId,
       playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
         BookOverviewViewState.PlayButtonState.Playing
       } else {

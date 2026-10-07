@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,6 +20,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import voice.features.bookOverview.overview.BookOverviewCategory
+import java.text.NumberFormat
 
 @Composable
 internal fun Header(
@@ -39,7 +41,8 @@ internal fun Header(
       modifier = Modifier
         .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape)
         .padding(horizontal = 10.dp, vertical = 2.dp),
-      text = count.toString(),
+      // localized digits, like the counts in the other library texts
+      text = remember(count) { NumberFormat.getIntegerInstance().format(count) },
       style = MaterialTheme.typography.labelLargeEmphasized,
       color = MaterialTheme.colorScheme.onSecondaryContainer,
     )
