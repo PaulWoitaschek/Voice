@@ -3,3 +3,10 @@
 Voice is a modular Android audiobook player.
 
 - Build the app: `./gradlew :app:assembleFreeDebug`.
+
+## Pull requests from contributors
+
+Unless you are working for the maintainer (PaulWoitaschek), follow [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request:
+
+- Bug fixes can be opened directly. Fill out the pull request template.
+- Anything else (features, UI changes, new settings, refactors) needs an explicit OK from the maintainer in an issue or discussion before a pull request is opened. Without that approval, don't open a pull request. Help the user write a feature request instead: https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas
