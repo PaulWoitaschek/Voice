@@ -87,7 +87,7 @@ class ListeningHistoryRecorderTest {
   }
 }
 
-private class RecordingRepo : ListeningHistoryRepo {
+class RecordingRepo : ListeningHistoryRepo {
 
   val events = mutableListOf<ListeningEvent>()
 
@@ -100,4 +100,10 @@ private class RecordingRepo : ListeningHistoryRepo {
   override suspend fun clear() {
     events.clear()
   }
+
+  override suspend fun moveToBook(
+    from: List<BookId>,
+    to: BookId,
+    chapters: Map<ChapterId, ChapterId>,
+  ) = Unit
 }

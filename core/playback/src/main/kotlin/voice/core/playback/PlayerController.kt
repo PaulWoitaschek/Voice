@@ -127,12 +127,21 @@ class PlayerController(
   }
 
   fun previous() = executeAfterPrepare { controller ->
+    val currentIndex = controller.currentMediaItemIndex
     val index = if (controller.currentPosition > THRESHOLD_FOR_BACK_SEEK_MS) {
-      controller.currentMediaItemIndex
+      currentIndex
     } else {
-      controller.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: controller.currentMediaItemIndex
+      controller.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentIndex
     }
-    controller.record(ListeningEvent.Type.ChapterChange, to = controller.playbackPosition(index, 0))
+    val to = controller.playbackPosition(index, 0)
+    val type = previousJumpType(
+      from = controller.playbackPosition(),
+      to = to,
+      sameItem = index == currentIndex,
+    )
+    if (type != null) {
+      controller.record(type, to = to)
+    }
     controller.sendCustomCommand(CustomCommand.ForceSeekToPrevious)
   }
 
@@ -362,3 +371,18 @@ class PlayerController(
 }
 
 private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000
+
+/**
+ * Skipping back restarts the current chapter when it already played for a while, or when there is no chapter
+ * before it. That is only a seek, so it can be undone only when it goes back far enough. Returns null when
+ * playback is already where it would go.
+ */
+internal fun previousJumpType(
+  from: PlaybackPosition?,
+  to: PlaybackPosition?,
+  sameItem: Boolean,
+): ListeningEvent.Type? = when {
+  to != null && to == from -> null
+  sameItem -> ListeningEvent.Type.Seek
+  else -> ListeningEvent.Type.ChapterChange
+}

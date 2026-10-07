@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import voice.core.data.BookId
+import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 
 @Dao
@@ -30,4 +31,27 @@ public interface ListeningEventDao {
 
   @Query("DELETE FROM listening_event")
   public suspend fun deleteAll()
+
+  /**
+   * Moves the events of the [from] books that happened in [oldChapterId] to [newChapterId] of the [to] book.
+   */
+  @Query(
+    """
+    UPDATE listening_event SET bookId = :to, chapterId = :newChapterId
+    WHERE bookId IN (:from) AND chapterId = :oldChapterId
+    """,
+  )
+  public suspend fun moveChapter(
+    from: List<@JvmSuppressWildcards BookId>,
+    to: BookId,
+    oldChapterId: ChapterId,
+    newChapterId: ChapterId,
+  )
+
+  @Query("UPDATE listening_event SET toChapterId = :newChapterId WHERE bookId = :bookId AND toChapterId = :oldChapterId")
+  public suspend fun moveJumpTarget(
+    bookId: BookId,
+    oldChapterId: ChapterId,
+    newChapterId: ChapterId,
+  )
 }

@@ -9,6 +9,7 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookmarkRepo
+import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.store.CurrentBookStore
 
 /**
@@ -19,6 +20,7 @@ import voice.core.data.store.CurrentBookStore
 @Inject
 internal class ProgressCarryOver(
   private val bookmarkRepo: BookmarkRepo,
+  private val listeningHistoryRepo: ListeningHistoryRepo,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
 ) {
@@ -32,6 +34,7 @@ internal class ProgressCarryOver(
     if (previous.isEmpty()) return content
 
     moveBookmarks(previous, content.id, chapterByKey)
+    moveListeningHistory(previous, content.id, chapterByKey)
 
     val playedHere = previous.filter { it.currentChapter.documentKey() in chapterByKey }
     moveCurrentBook(playedHere, content.id)
@@ -83,6 +86,23 @@ internal class ProgressCarryOver(
           bookmarkRepo.addBookmark(moved)
         }
       }
+  }
+
+  private suspend fun moveListeningHistory(
+    previous: List<BookContent>,
+    bookId: BookId,
+    chapterByKey: Map<String, ChapterId>,
+  ) {
+    val chapters = previous
+      .flatMap { it.chapters }
+      .distinct()
+      .mapNotNull { chapter -> chapterByKey[chapter.documentKey()]?.let { chapter to it } }
+      .toMap()
+    listeningHistoryRepo.moveToBook(
+      from = previous.map { it.id },
+      to = bookId,
+      chapters = chapters,
+    )
   }
 }
 

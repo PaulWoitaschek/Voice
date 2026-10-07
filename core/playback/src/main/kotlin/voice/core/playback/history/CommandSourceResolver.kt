@@ -25,35 +25,47 @@ class CommandSourceResolver(private val context: Context) {
 
   internal var session: MediaSession? = null
 
-  private var lastMediaButton: CommandSource? = null
-  private var lastMediaButtonAt = 0L
+  private var lastMediaButton: MediaButton? = null
 
   internal fun onMediaButtonEvent(controller: MediaSession.ControllerInfo) {
     val session = session ?: return
-    lastMediaButton = when {
+    val source = when {
       session.isMediaNotificationController(controller) -> CommandSource(ListeningEvent.Source.Notification)
       controller.packageName == BLUETOOTH_PACKAGE -> CommandSource(ListeningEvent.Source.Bluetooth)
       else -> sourceForPackage(session, controller)
         ?.takeUnless { it.source == ListeningEvent.Source.OtherApp || it.source == ListeningEvent.Source.Unknown }
         ?: CommandSource(ListeningEvent.Source.Headset)
     }
-    lastMediaButtonAt = SystemClock.elapsedRealtime()
+    lastMediaButton = MediaButton(
+      source = source,
+      callerPackage = controller.packageName,
+      callerUid = controller.uid,
+      atMillis = SystemClock.elapsedRealtime(),
+    )
   }
 
   internal fun current(): CommandSource? {
     val session = session ?: return null
     val controller = session.controllerForCurrentRequest ?: return null
+    return sourceFor(session, controller)
+  }
+
+  internal fun sourceFor(
+    session: MediaSession,
+    controller: MediaSession.ControllerInfo,
+  ): CommandSource? {
+    val mediaButton = lastMediaButton
+      ?.takeIf { SystemClock.elapsedRealtime() - it.atMillis < MEDIA_BUTTON_WINDOW_MS }
     if (session.isMediaNotificationController(controller)) {
       // media buttons from headsets are passed on as if the notification sent them
-      val mediaButton = lastMediaButton
-      return if (mediaButton != null && SystemClock.elapsedRealtime() - lastMediaButtonAt < MEDIA_BUTTON_WINDOW_MS) {
-        mediaButton
-      } else {
-        CommandSource(ListeningEvent.Source.Notification)
-      }
+      return mediaButton?.source ?: CommandSource(ListeningEvent.Source.Notification)
     }
     if (controller.packageName == context.packageName) {
       return null
+    }
+    if (mediaButton != null && mediaButton.sentBy(controller)) {
+      // a single press on play / pause waits for a possible double tap and is then sent by the caller of the media button
+      return mediaButton.source
     }
     return sourceForPackage(session, controller)
   }
@@ -73,6 +85,18 @@ class CommandSourceResolver(private val context: Context) {
       packageName == MediaSession.ControllerInfo.LEGACY_CONTROLLER_PACKAGE_NAME -> CommandSource(ListeningEvent.Source.Unknown)
       packageName == context.packageName -> null
       else -> CommandSource(ListeningEvent.Source.OtherApp, packageName)
+    }
+  }
+
+  private data class MediaButton(
+    val source: CommandSource,
+    val callerPackage: String,
+    val callerUid: Int,
+    val atMillis: Long,
+  ) {
+
+    fun sentBy(controller: MediaSession.ControllerInfo): Boolean {
+      return controller.packageName == callerPackage && controller.uid == callerUid
     }
   }
 

@@ -28,6 +28,7 @@ class ListeningHistoryRepoImplTest {
   private val now = Instant.parse("2026-10-07T10:00:00Z")
   private val repo = ListeningHistoryRepoImpl(
     dao = db.listeningEventDao(),
+    appDb = db,
     enabledStore = enabledStore,
   )
   private val bookId = BookId("book")
@@ -41,13 +42,16 @@ class ListeningHistoryRepoImplTest {
     type: ListeningEvent.Type,
     at: Instant,
     bookId: BookId = this.bookId,
+    chapterId: ChapterId = ChapterId("chapter"),
+    toChapterId: ChapterId? = null,
   ) = ListeningEvent(
     bookId = bookId,
     type = type,
     source = ListeningEvent.Source.App,
     atMillis = at.toEpochMilli(),
-    chapterId = ChapterId("chapter"),
+    chapterId = chapterId,
     time = 0,
+    toChapterId = toChapterId,
   )
 
   private fun ago(duration: Duration): Instant = now.minusMillis(duration.inWholeMilliseconds)
@@ -84,6 +88,58 @@ class ListeningHistoryRepoImplTest {
       actual = types(),
     )
     assertEquals(expected = 1, actual = repo.events(BookId("other")).first().size)
+  }
+
+  @Test
+  fun `a moved book takes the history of its chapters along`() = runTest {
+    val oldChapters = List(3) { ChapterId("old/$it") }
+    val newChapters = List(2) { ChapterId("new/$it") }
+    val newBook = BookId("new")
+    val unrelatedBook = BookId("unrelated")
+    repo.add(event(ListeningEvent.Type.Play, ago(3.minutes), chapterId = oldChapters[0]))
+    repo.add(
+      event(ListeningEvent.Type.ChapterChange, ago(2.minutes), chapterId = oldChapters[0], toChapterId = oldChapters[1]),
+    )
+    repo.add(event(ListeningEvent.Type.Pause, ago(1.minutes), chapterId = oldChapters[2]))
+    repo.add(event(ListeningEvent.Type.Play, now, bookId = unrelatedBook, chapterId = oldChapters[0]))
+
+    repo.moveToBook(
+      from = listOf(bookId),
+      to = newBook,
+      chapters = mapOf(oldChapters[0] to newChapters[0], oldChapters[1] to newChapters[1]),
+    )
+
+    assertEquals(
+      expected = listOf(
+        Triple(ListeningEvent.Type.ChapterChange, newChapters[0], newChapters[1]),
+        Triple(ListeningEvent.Type.Play, newChapters[0], null),
+      ),
+      actual = repo.events(newBook).first().map { Triple(it.type, it.chapterId, it.toChapterId) },
+    )
+    // the chapter that is not part of the new book stays where it was
+    assertEquals(
+      expected = listOf(oldChapters[2]),
+      actual = repo.events(bookId).first().map { it.chapterId },
+    )
+    assertEquals(
+      expected = listOf(oldChapters[0]),
+      actual = repo.events(unrelatedBook).first().map { it.chapterId },
+    )
+  }
+
+  @Test
+  fun `a book that keeps its chapters under a new id takes its history along`() = runTest {
+    val chapter = ChapterId("chapter")
+    val newBook = BookId("new")
+    repo.add(event(ListeningEvent.Type.Play, now, chapterId = chapter))
+
+    repo.moveToBook(from = listOf(bookId), to = newBook, chapters = mapOf(chapter to chapter))
+
+    assertEquals(expected = emptyList(), actual = types())
+    assertEquals(
+      expected = listOf(ListeningEvent.Type.Play),
+      actual = repo.events(newBook).first().map { it.type },
+    )
   }
 
   @Test
