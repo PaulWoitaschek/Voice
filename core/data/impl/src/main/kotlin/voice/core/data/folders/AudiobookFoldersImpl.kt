@@ -88,12 +88,14 @@ internal constructor(
       Logger.w("Could not release uri permission for $uri")
     }
     scope.launch {
-      // a folder has one type, so adding it again with another type moves it
-      FolderType.entries.forEach { folderType ->
-        dataStore(folderType).updateData { folders ->
-          if (folderType == type) folders + uri else folders - uri
+      dataStore(type).updateData { it + uri }
+      // a folder has one type, so adding it again with another type moves it. It's added first so a scan in
+      // between never misses its books.
+      FolderType.entries
+        .filter { it != type }
+        .forEach { otherType ->
+          dataStore(otherType).updateData { it - uri }
         }
-      }
     }
   }
 

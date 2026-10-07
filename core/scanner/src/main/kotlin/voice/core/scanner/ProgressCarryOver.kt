@@ -5,7 +5,6 @@ import android.provider.DocumentsContract
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
-import kotlinx.coroutines.flow.first
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ChapterId
@@ -34,15 +33,13 @@ internal class ProgressCarryOver(
 
     moveBookmarks(previous, content.id, chapterByKey)
 
-    val source = previous
-      .filter { it.currentChapter.documentKey() in chapterByKey }
+    val playedHere = previous.filter { it.currentChapter.documentKey() in chapterByKey }
+    moveCurrentBook(playedHere, content.id)
+
+    val source = playedHere
       .maxByOrNull { it.lastPlayedAt }
       ?.takeIf { it.lastPlayedAt > content.lastPlayedAt }
       ?: return content
-
-    if (currentBookStore.data.first() == source.id) {
-      currentBookStore.updateData { content.id }
-    }
 
     // only the same book keeps what the user set up for it, a split up book gets the names from its files
     val sameBook = source.id.toUri().documentKey() == content.id.toUri().documentKey()
@@ -57,6 +54,18 @@ internal class ProgressCarryOver(
       cover = if (sameBook) source.cover ?: content.cover else content.cover,
       addedAt = if (sameBook) source.addedAt else content.addedAt,
     )
+  }
+
+  // the book the user is on is gone, so they go on with the book that now holds its current chapter
+  private suspend fun moveCurrentBook(
+    playedHere: List<BookContent>,
+    bookId: BookId,
+  ) {
+    if (playedHere.isEmpty()) return
+    val movedIds = playedHere.map { it.id }.toSet()
+    currentBookStore.updateData { current ->
+      if (current in movedIds) bookId else current
+    }
   }
 
   private suspend fun moveBookmarks(

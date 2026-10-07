@@ -102,6 +102,52 @@ class ProgressCarryOverTest {
     assertEquals(expected = new.copy(lastPlayedAt = old.lastPlayedAt), actual = carried)
   }
 
+  @Test
+  fun `the current book moves into a merged book even when another book was played later`() = runTest {
+    val chapters = listOf("Dune/1.mp3", "Hyperion/1.mp3").map {
+      ChapterId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/$it"))
+    }
+    val dune = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Dune")),
+      chapters = chapters.take(1),
+    ).copy(lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    val hyperion = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Hyperion")),
+      chapters = chapters.drop(1),
+    ).copy(lastPlayedAt = Instant.parse("2026-01-02T10:00:00Z"))
+    currentBookStore.updateData { dune.id }
+    val merged = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks")),
+      chapters = chapters,
+    )
+
+    val carried = carryOver.carryOver(merged, PreviousBooks(listOf(dune, hyperion), scanned = setOf(merged.id)))
+
+    assertEquals(expected = chapters[1], actual = carried.currentChapter)
+    assertEquals(expected = merged.id, actual = currentBookStore.data.first())
+  }
+
+  @Test
+  fun `switching back to a mode moves the current book back`() = runTest {
+    val chapter = ChapterId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Dune/1.mp3"))
+    val lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z")
+    val merged = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks")),
+      chapters = listOf(chapter),
+    ).copy(lastPlayedAt = lastPlayedAt)
+    currentBookStore.updateData { merged.id }
+    // it still has the progress it handed over to the merged book
+    val dune = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Dune")),
+      chapters = listOf(chapter),
+    ).copy(lastPlayedAt = lastPlayedAt)
+
+    val carried = carryOver.carryOver(dune, PreviousBooks(listOf(merged), scanned = setOf(dune.id)))
+
+    assertEquals(expected = dune, actual = carried)
+    assertEquals(expected = dune.id, actual = currentBookStore.data.first())
+  }
+
   private fun documentUri(
     tree: String,
     document: String,

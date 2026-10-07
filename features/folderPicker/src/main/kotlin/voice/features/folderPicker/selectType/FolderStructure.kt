@@ -12,17 +12,14 @@ import voice.core.documentfile.nameWithoutExtension
  * - Otherwise: a library where every folder or audiobook file is a book.
  */
 internal fun CachedDocumentFile.guessFolderMode(): FolderMode {
-  val audioFiles = children.filter { it.isAudioFile() }
   val folders = audioFolders()
-  if (folders.isEmpty()) {
-    val wholeBooks = audioFiles.size > 1 && audioFiles.all { it.looksLikeWholeBook() }
-    return if (wholeBooks) FolderMode.Audiobooks else FolderMode.SingleBook
-  }
-  if (folders.all { it.isPartFolder() }) {
+  if (folders.isNotEmpty() && folders.all { it.isPartFolder() }) {
     return FolderMode.SingleBook
   }
-  val looseChapters = audioFiles.count { !it.looksLikeWholeBook() }
-  if (looseChapters > folders.size) {
+  val (wholeBooks, looseChapters) = children
+    .filter { it.isAudioFile() }
+    .partition { it.looksLikeWholeBook() }
+  if (looseChapters.size > folders.size + wholeBooks.size) {
     return FolderMode.SingleBook
   }
   val authorFolders = folders.count { it.looksLikeAuthor() }

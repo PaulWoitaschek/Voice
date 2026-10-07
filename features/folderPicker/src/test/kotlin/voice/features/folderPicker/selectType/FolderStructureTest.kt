@@ -41,6 +41,16 @@ class FolderStructureTest {
   }
 
   @Test
+  fun `a single audiobook file is a library`() {
+    assertGuess(FolderMode.Audiobooks, "Dune.m4b")
+  }
+
+  @Test
+  fun `audiobook files with a stray chapter file are a library`() {
+    assertGuess(FolderMode.Audiobooks, "Dune.m4b", "Hyperion.m4b", "intro.mp3")
+  }
+
+  @Test
   fun `book folders are a library`() {
     assertGuess(FolderMode.Audiobooks, "Dune/01.mp3", "Hyperion/01.mp3", "Hyperion/CD 2/01.mp3", "Neuromancer.m4b")
   }
