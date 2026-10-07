@@ -109,6 +109,7 @@
     <string name="sleep_timer.action.open">Temporitzador de repòs</string>
     <string name="sleep_timer.dialog.action.decrement">Més curt</string>
     <string name="sleep_timer.dialog.action.increment">Més llarg</string>
+    <string name="sleep_timer.dialog.shake_hint">Sacseja el telèfon just després que s\'acabi el temporitzador per tornar-lo a iniciar.</string>
     <string name="sleep_timer.dialog.title">Temporitzador de repòs</string>
     <string name="common.dialog.ok">Acceptar</string>
 </resources>

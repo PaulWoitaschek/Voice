@@ -195,6 +195,14 @@ fun SleepTimerDialog(
         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
         Text(text = stringResource(id = StringsR.string.sleep_timer_end_of_chapter))
       }
+      Spacer(modifier = Modifier.height(16.dp))
+      Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = stringResource(id = StringsR.string.sleep_timer_dialog_shake_hint),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
+      )
     }
   }
 }

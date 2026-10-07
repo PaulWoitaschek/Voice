@@ -71,5 +71,6 @@
     <string name="settings.support.suggest_idea.title">Προτείνετε μια ιδέα</string>
     <string name="shortcut.play_current.short_label">Αναπαραγωγή τρέχοντος</string>
     <string name="sleep_timer.action.open">Χρονοδιακόπτης ύπνου</string>
+    <string name="sleep_timer.dialog.shake_hint">Κουνήστε το τηλέφωνό σας αμέσως μόλις λήξει ο χρονοδιακόπτης για να τον ξεκινήσετε ξανά.</string>
     <string name="sleep_timer.dialog.title">Χρονοδιακόπτης ύπνου</string>
 </resources>

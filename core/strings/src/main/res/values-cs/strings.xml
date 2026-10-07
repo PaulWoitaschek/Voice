@@ -147,6 +147,7 @@
     <string name="sleep_timer.action.open">Časovač spánku</string>
     <string name="sleep_timer.dialog.action.decrement">Zkrátit</string>
     <string name="sleep_timer.dialog.action.increment">Prodloužit</string>
+    <string name="sleep_timer.dialog.shake_hint">Zatřeste telefonem hned po skončení časovače a znovu ho spustíte.</string>
     <string name="sleep_timer.dialog.title">Časovač spánku</string>
     <string name="sleep_timer.end_of_chapter">Konec kapitoly</string>
 </resources>

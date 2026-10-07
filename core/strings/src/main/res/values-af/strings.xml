@@ -141,6 +141,7 @@
     <string name="sleep_timer.action.open">Slaap-Timer</string>
     <string name="sleep_timer.dialog.action.decrement">Korter</string>
     <string name="sleep_timer.dialog.action.increment">Langer</string>
+    <string name="sleep_timer.dialog.shake_hint">Skud jou foon dadelik nadat die timer afgeloop het om dit weer te begin.</string>
     <string name="sleep_timer.dialog.title">Slaap-Timer</string>
     <string name="sleep_timer.end_of_chapter">Einde van Hoofstuk</string>
 </resources>

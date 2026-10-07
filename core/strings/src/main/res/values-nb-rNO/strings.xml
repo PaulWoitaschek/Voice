@@ -141,6 +141,7 @@
     <string name="sleep_timer.action.open">Innsovningstidsur</string>
     <string name="sleep_timer.dialog.action.decrement">Kortere</string>
     <string name="sleep_timer.dialog.action.increment">Lengre</string>
+    <string name="sleep_timer.dialog.shake_hint">Rist telefonen rett etter at tidsuret er ferdig for å starte det på nytt.</string>
     <string name="sleep_timer.dialog.title">Innsovningstidsur</string>
     <string name="sleep_timer.end_of_chapter">Kapittelslutt</string>
 </resources>

@@ -107,5 +107,6 @@
     <string name="sleep_timer.action.open">स्लीप-टाइमर</string>
     <string name="sleep_timer.dialog.action.decrement">छोटा</string>
     <string name="sleep_timer.dialog.action.increment">लंबे समय तक</string>
+    <string name="sleep_timer.dialog.shake_hint">टाइमर खत्म होते ही उसे फिर से शुरू करने के लिए अपना फ़ोन हिलाएँ।</string>
     <string name="sleep_timer.dialog.title">स्लीप-टाइमर</string>
 </resources>

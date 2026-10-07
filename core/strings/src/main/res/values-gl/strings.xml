@@ -141,6 +141,7 @@
     <string name="sleep_timer.action.open">Temporizador de apagado</string>
     <string name="sleep_timer.dialog.action.decrement">Máis curto</string>
     <string name="sleep_timer.dialog.action.increment">Máis longo</string>
+    <string name="sleep_timer.dialog.shake_hint">Axita o teléfono xusto despois de que remate o temporizador para reinicialo.</string>
     <string name="sleep_timer.dialog.title">Temporizador de apagado</string>
     <string name="sleep_timer.end_of_chapter">Fin do capítulo</string>
 </resources>

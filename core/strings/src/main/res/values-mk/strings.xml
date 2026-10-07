@@ -141,6 +141,7 @@
     <string name="sleep_timer.action.open">Тајмер за спиење</string>
     <string name="sleep_timer.dialog.action.decrement">Пократко</string>
     <string name="sleep_timer.dialog.action.increment">Подолго</string>
+    <string name="sleep_timer.dialog.shake_hint">Протресете го телефонот веднаш по истекот на тајмерот за да го рестартирате.</string>
     <string name="sleep_timer.dialog.title">Тајмер за спиење</string>
     <string name="sleep_timer.end_of_chapter">Крај на поглавје</string>
 </resources>

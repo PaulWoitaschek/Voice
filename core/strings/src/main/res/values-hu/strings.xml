@@ -106,5 +106,6 @@
     <string name="sleep_timer.action.open">Alvásidőzítő</string>
     <string name="sleep_timer.dialog.action.decrement">Rövidebb</string>
     <string name="sleep_timer.dialog.action.increment">Hosszabb</string>
+    <string name="sleep_timer.dialog.shake_hint">Közvetlenül az időzítő lejárta után rázd meg a telefont az újraindításhoz.</string>
     <string name="sleep_timer.dialog.title">Alvásidőzítő</string>
 </resources>

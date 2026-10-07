@@ -141,6 +141,7 @@
     <string name="sleep_timer.action.open">Temporisator de somno</string>
     <string name="sleep_timer.dialog.action.decrement">Plus curte</string>
     <string name="sleep_timer.dialog.action.increment">Plus longe</string>
+    <string name="sleep_timer.dialog.shake_hint">Scute tu telephono justo post le fin del temporisator pro reinitiar lo.</string>
     <string name="sleep_timer.dialog.title">Temporisator de somno</string>
     <string name="sleep_timer.end_of_chapter">Fin del capitulo</string>
 </resources>

@@ -109,5 +109,6 @@
     <string name="sleep_timer.action.open">Oprire temporizată</string>
     <string name="sleep_timer.dialog.action.decrement">Mai scurtă</string>
     <string name="sleep_timer.dialog.action.increment">Mai lungă</string>
+    <string name="sleep_timer.dialog.shake_hint">Scuturați telefonul imediat după ce expiră temporizatorul pentru a-l reporni.</string>
     <string name="sleep_timer.dialog.title">Oprire temporizată</string>
 </resources>

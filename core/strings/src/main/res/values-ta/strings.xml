@@ -141,6 +141,7 @@
     <string name="sleep_timer.action.open">ஸ்லீப் டைமர்</string>
     <string name="sleep_timer.dialog.action.decrement">குறுகிய</string>
     <string name="sleep_timer.dialog.action.increment">நீண்ட</string>
+    <string name="sleep_timer.dialog.shake_hint">டைமர் முடிந்தவுடன் அதை மீண்டும் தொடங்க உங்கள் போனை குலுக்கவும்.</string>
     <string name="sleep_timer.dialog.title">ஸ்லீப் டைமர்</string>
     <string name="sleep_timer.end_of_chapter">அத்தியாயத்தின் முடிவு</string>
 </resources>

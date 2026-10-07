@@ -138,6 +138,7 @@
     <string name="sleep_timer.action.open">Pengatur Waktu Tidur</string>
     <string name="sleep_timer.dialog.action.decrement">Lebih singkat</string>
     <string name="sleep_timer.dialog.action.increment">Lebih lama</string>
+    <string name="sleep_timer.dialog.shake_hint">Goyangkan ponsel Anda segera setelah pengatur waktu berakhir untuk memulainya lagi.</string>
     <string name="sleep_timer.dialog.title">Pengatur Waktu Tidur</string>
     <string name="sleep_timer.end_of_chapter">Akhir Bab</string>
 </resources>

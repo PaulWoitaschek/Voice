@@ -141,6 +141,7 @@
     <string name="sleep_timer.action.open">Slaaptimer</string>
     <string name="sleep_timer.dialog.action.decrement">Korter</string>
     <string name="sleep_timer.dialog.action.increment">Langer</string>
+    <string name="sleep_timer.dialog.shake_hint">Schud je telefoon direct nadat de timer is afgelopen om hem opnieuw te starten.</string>
     <string name="sleep_timer.dialog.title">Slaaptimer</string>
     <string name="sleep_timer.end_of_chapter">Einde van hoofdstuk</string>
 </resources>

@@ -144,6 +144,7 @@
     <string name="sleep_timer.action.open">Desligamento automático</string>
     <string name="sleep_timer.dialog.action.decrement">Mais curto</string>
     <string name="sleep_timer.dialog.action.increment">Mais longo</string>
+    <string name="sleep_timer.dialog.shake_hint">Agite o celular logo após o desligamento automático para reiniciá-lo.</string>
     <string name="sleep_timer.dialog.title">Desligamento automático</string>
     <string name="sleep_timer.end_of_chapter">Fim do capítulo</string>
 </resources>

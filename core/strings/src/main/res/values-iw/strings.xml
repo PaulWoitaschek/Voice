@@ -144,6 +144,7 @@
     <string name="sleep_timer.action.open">טיימר-שינה</string>
     <string name="sleep_timer.dialog.action.decrement">קצר יותר</string>
     <string name="sleep_timer.dialog.action.increment">ארוך יותר</string>
+    <string name="sleep_timer.dialog.shake_hint">נער את הטלפון מיד לאחר שהטיימר מסתיים כדי להפעיל אותו מחדש.</string>
     <string name="sleep_timer.dialog.title">טיימר-שינה</string>
     <string name="sleep_timer.end_of_chapter">סוף פרק</string>
 </resources>
