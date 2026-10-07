@@ -14,6 +14,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.core.net.toUri
@@ -34,6 +35,8 @@ import voice.core.data.ThemeMode
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
 import voice.core.logging.api.Logger
+import voice.core.ui.CoverSeedColors
+import voice.core.ui.LocalCoverSeedColors
 import voice.core.ui.LocalSharedTransitionScope
 import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
@@ -68,6 +71,9 @@ class MainActivity : AppCompatActivity() {
   @ThemeColorSchemeStore
   private lateinit var themeColorSchemeStore: DataStore<ThemeColorScheme>
 
+  @Inject
+  private lateinit var coverSeedColors: CoverSeedColors
+
   @OptIn(ExperimentalSharedTransitionApi::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     rootGraphAs<MainActivityGraph>().inject(this)
@@ -85,6 +91,11 @@ class MainActivity : AppCompatActivity() {
         ?: return@setContent
       val themeColorScheme = themeColorSchemeStore.data.collectAsState(initial = null).value
         ?: return@setContent
+      val coverSeedColorsRestored = produceState(initialValue = false) {
+        coverSeedColors.restore()
+        value = true
+      }.value
+      if (!coverSeedColorsRestored) return@setContent
       VoiceTheme(
         themeMode = themeMode,
         themeColorScheme = themeColorScheme,
@@ -94,7 +105,10 @@ class MainActivity : AppCompatActivity() {
         val density = LocalDensity.current
 
         SharedTransitionLayout {
-          CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+          CompositionLocalProvider(
+            LocalSharedTransitionScope provides this,
+            LocalCoverSeedColors provides coverSeedColors,
+          ) {
             NavDisplay(
               backStack = backStack,
               sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy),
