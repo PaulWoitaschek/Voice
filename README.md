@@ -39,7 +39,7 @@ The [documentation website](https://voice.woitaschek.de) covers features, the ph
 
 ## Contributing
 
-Contributions are very welcome: code, translations, bug reports, or ideas. Start with [Development](https://voice.woitaschek.de/development/) and [Architecture](https://voice.woitaschek.de/architecture/), or help translate Voice on [Weblate](https://hosted.weblate.org/engage/voice/).
+Bug reports, feature requests, bug fixes and translations are very welcome. Anything other than a bug fix needs the maintainer's approval before you open a pull request, so please read the [Contributing guide](https://voice.woitaschek.de/contributing/) first. For code, start with [Development](https://voice.woitaschek.de/development/) and [Architecture](https://voice.woitaschek.de/architecture/), or help translate Voice on [Weblate](https://hosted.weblate.org/engage/voice/).
 
 ## Support Voice
 
