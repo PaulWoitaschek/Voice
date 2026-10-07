@@ -110,8 +110,10 @@ To send a build to testers, trigger the
 [Firebase App Distribution Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/firebase_app_distribution.yml)
 on the branch to test. Testers install the build through the Firebase App Tester app.
 
-The workflow builds a signed `playRelease` APK with the version code of the upcoming release and a version name suffixed
+The workflow builds a `playRelease` APK with the version code of the upcoming release and a version name suffixed
 with the commit, then uploads it with the Firebase CLI. Optionally, it notifies the given tester groups.
+The APK is signed with the GitHub key, which is the app signing key Google Play re-signs with, so tester builds install
+over the Play Store version.
 App Distribution is not part of the Gradle build, so the free flavor and F-Droid builds don't depend on it.
 
 It runs in the `release` environment and needs `FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT`: a service account with the

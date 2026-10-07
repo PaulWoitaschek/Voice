@@ -40,19 +40,21 @@ jobs:
           GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
         run: ./scripts/ci_signing_setup.sh
 
+      # The GitHub key is the app signing key Google Play re-signs with, while the Play keystore
+      # is only the upload key. Signing with it lets tester builds install over Play Store installs.
       - name: Build Play APK
         env:
-          PLAY_SIGNING_STORE_PASSWORD: ${{ secrets.PLAY_SIGNING_STORE_PASSWORD }}
-          PLAY_SIGNING_KEY_ALIAS: ${{ secrets.PLAY_SIGNING_KEY_ALIAS }}
-          PLAY_SIGNING_KEY_PASSWORD: ${{ secrets.PLAY_SIGNING_KEY_PASSWORD }}
+          GITHUB_SIGNING_STORE_PASSWORD: ${{ secrets.GH_SIGNING_STORE_PASSWORD }}
+          GITHUB_SIGNING_KEY_ALIAS: ${{ secrets.GH_SIGNING_KEY_ALIAS }}
+          GITHUB_SIGNING_KEY_PASSWORD: ${{ secrets.GH_SIGNING_KEY_PASSWORD }}
         run: |
           ./gradlew :app:assemblePlayRelease \
             -Pvoice.versionName="${{ steps.version.outputs.version_name }}-${GITHUB_SHA::7}" \
             -Pvoice.versionCode="${{ steps.version.outputs.version_code }}" \
-            -Pandroid.injected.signing.store.file="$PWD/signing/play/signing.keystore" \
-            -Pandroid.injected.signing.store.password="$PLAY_SIGNING_STORE_PASSWORD" \
-            -Pandroid.injected.signing.key.alias="$PLAY_SIGNING_KEY_ALIAS" \
-            -Pandroid.injected.signing.key.password="$PLAY_SIGNING_KEY_PASSWORD"
+            -Pandroid.injected.signing.store.file="$PWD/signing/free/signing.keystore" \
+            -Pandroid.injected.signing.store.password="$GITHUB_SIGNING_STORE_PASSWORD" \
+            -Pandroid.injected.signing.key.alias="$GITHUB_SIGNING_KEY_ALIAS" \
+            -Pandroid.injected.signing.key.password="$GITHUB_SIGNING_KEY_PASSWORD"
 
       - uses: actions/setup-node@v7
         with:
