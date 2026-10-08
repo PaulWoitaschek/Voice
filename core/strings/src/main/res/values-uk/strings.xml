@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Щось пішло не так 😢</string>
     <string name="common.error.generic.retry">Повторити</string>
     <string name="cover.content_description.selectable">Показує вибір обкладинки</string>
-    <string name="cover.search.author.content_description">Автор</string>
     <string name="cover.search.query.with_author">Обкладинка аудіокниги %1$s автора %2$s</string>
     <string name="cover.search.query.without_author">Обкладинка аудіокниги %s</string>
-    <string name="cover.search.recent.content_description">Недавній запит</string>
     <string name="cover.title">Обкладинка</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d хвилина</item>
@@ -212,7 +210,43 @@
         <item quantity="many">%d книг у процесі</item>
         <item quantity="other">%d книг у процесі</item>
     </plurals>
-    <string name="library.search.hint">Що ви шукаєте?</string>
+    <string name="library.search.browse.title">Огляд</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d книга</item>
+        <item quantity="few">%d книги</item>
+        <item quantity="many">%d книг</item>
+        <item quantity="other">%d книг</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d завершена</item>
+        <item quantity="few">%d завершені</item>
+        <item quantity="many">%d завершених</item>
+        <item quantity="other">%d завершених</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d в процесі</item>
+        <item quantity="few">%d в процесі</item>
+        <item quantity="many">%d у процесі</item>
+        <item quantity="other">%d у процесі</item>
+    </plurals>
+    <string name="library.search.clear">Очистити пошук</string>
+    <string name="library.search.field.all">Усі</string>
+    <string name="library.search.field.authors">Автори</string>
+    <string name="library.search.field.genres">Жанри</string>
+    <string name="library.search.field.narrators">Читці</string>
+    <string name="library.search.field.series">Серії</string>
+    <string name="library.search.field.titles">Назви</string>
+    <string name="library.search.hint">Пошук у бібліотеці</string>
+    <string name="library.search.match.genre">Жанр · %s</string>
+    <string name="library.search.match.narrator">Читає %s</string>
+    <string name="library.search.match.series">Серія · %s</string>
+    <string name="library.search.no_results.folders_hint">Книги немає у списку? Можливо, її папку ще не додано до Voice.</string>
+    <string name="library.search.no_results.message">Пошук охоплює назви, авторів, читців, серії та жанри.</string>
+    <string name="library.search.no_results.search_everything">Шукати всюди</string>
+    <string name="library.search.no_results.title">Немає книг за запитом «%s»</string>
+    <string name="library.search.recent.clear_all">Очистити все</string>
+    <string name="library.search.recent.remove">Видалити %s</string>
+    <string name="library.search.recent.title">Нещодавні</string>
     <string name="library.storage_permission_bug.action">Надати дозвіл</string>
     <string name="library.storage_permission_bug.message">На деяких пристроях системні програми не мають необхідного дозволу на доступ до зовнішнього накопичувача. Цей дозвіл необхідний для того, аби Voice мав змогу читати ваші аудіокниги.</string>
     <string name="library.storage_permission_bug.title">Потрібен дозвіл</string>

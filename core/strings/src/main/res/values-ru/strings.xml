@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Что-то пошло не так 😢</string>
     <string name="common.error.generic.retry">Повторить</string>
     <string name="cover.content_description.selectable">Показать выбранную обложку</string>
-    <string name="cover.search.author.content_description">Автор</string>
     <string name="cover.search.query.with_author">Обложка аудиокниги %1$s автора %2$s</string>
     <string name="cover.search.query.without_author">Обложка аудиокниги %s</string>
-    <string name="cover.search.recent.content_description">Недавний запрос</string>
     <string name="cover.title">Обложка</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d минута</item>
@@ -212,7 +210,43 @@
         <item quantity="many">%d книг в процессе</item>
         <item quantity="other">%d книг в процессе</item>
     </plurals>
-    <string name="library.search.hint">Что вы ищете?</string>
+    <string name="library.search.browse.title">Обзор</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d книга</item>
+        <item quantity="few">%d книги</item>
+        <item quantity="many">%d книг</item>
+        <item quantity="other">%d книг</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d прослушана</item>
+        <item quantity="few">%d прослушаны</item>
+        <item quantity="many">%d прослушано</item>
+        <item quantity="other">%d прослушано</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d в процессе</item>
+        <item quantity="few">%d в процессе</item>
+        <item quantity="many">%d в процессе</item>
+        <item quantity="other">%d в процессе</item>
+    </plurals>
+    <string name="library.search.clear">Очистить поиск</string>
+    <string name="library.search.field.all">Все</string>
+    <string name="library.search.field.authors">Авторы</string>
+    <string name="library.search.field.genres">Жанры</string>
+    <string name="library.search.field.narrators">Чтецы</string>
+    <string name="library.search.field.series">Серии</string>
+    <string name="library.search.field.titles">Названия</string>
+    <string name="library.search.hint">Поиск в библиотеке</string>
+    <string name="library.search.match.genre">Жанр · %s</string>
+    <string name="library.search.match.narrator">Читает %s</string>
+    <string name="library.search.match.series">Серия · %s</string>
+    <string name="library.search.no_results.folders_hint">Книги нет в списке? Возможно, её папка ещё не добавлена в Voice.</string>
+    <string name="library.search.no_results.message">Поиск ведётся по названиям, авторам, чтецам, сериям и жанрам.</string>
+    <string name="library.search.no_results.search_everything">Искать везде</string>
+    <string name="library.search.no_results.title">Нет книг по запросу «%s»</string>
+    <string name="library.search.recent.clear_all">Очистить всё</string>
+    <string name="library.search.recent.remove">Удалить %s</string>
+    <string name="library.search.recent.title">Недавние</string>
     <string name="library.storage_permission_bug.action">Предоставить разрешение</string>
     <string name="library.storage_permission_bug.message">На некоторых устройствах системное приложение не имеет необходимого разрешения для доступа к внешнему хранилищу. Этот доступ необходим для того, чтобы Voice мог читать ваши аудиокниги.</string>
     <string name="library.storage_permission_bug.title">Требуется разрешение</string>

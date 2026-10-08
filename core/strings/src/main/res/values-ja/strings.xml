@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">問題が発生しました 😢</string>
     <string name="common.error.generic.retry">再試行</string>
     <string name="cover.content_description.selectable">選択するカバーを表示</string>
-    <string name="cover.search.author.content_description">著者</string>
     <string name="cover.search.query.with_author">%1$s（%2$s 著）オーディオブック カバー</string>
     <string name="cover.search.query.without_author">%s オーディオブック カバー</string>
-    <string name="cover.search.recent.content_description">最近の検索</string>
     <string name="cover.title">カバー</string>
     <plurals name="duration.minutes">
         <item quantity="other">%d 分</item>
@@ -185,7 +183,34 @@
     <plurals name="library.header.in_progress">
         <item quantity="other">聴きかけの本 %d 冊</item>
     </plurals>
-    <string name="library.search.hint">何をお探しですか？</string>
+    <string name="library.search.browse.title">ブラウズ</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="other">%d 冊</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="other">完了 %d 冊</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="other">聴きかけ %d 冊</item>
+    </plurals>
+    <string name="library.search.clear">検索をクリア</string>
+    <string name="library.search.field.all">すべて</string>
+    <string name="library.search.field.authors">著者</string>
+    <string name="library.search.field.genres">ジャンル</string>
+    <string name="library.search.field.narrators">ナレーター</string>
+    <string name="library.search.field.series">シリーズ</string>
+    <string name="library.search.field.titles">タイトル</string>
+    <string name="library.search.hint">ライブラリを検索</string>
+    <string name="library.search.match.genre">ジャンル · %s</string>
+    <string name="library.search.match.narrator">ナレーター · %s</string>
+    <string name="library.search.match.series">シリーズ · %s</string>
+    <string name="library.search.no_results.folders_hint">見つかりませんか？そのフォルダーがまだ Voice に追加されていない可能性があります。</string>
+    <string name="library.search.no_results.message">タイトル、著者、ナレーター、シリーズ、ジャンルから検索します。</string>
+    <string name="library.search.no_results.search_everything">すべてを検索</string>
+    <string name="library.search.no_results.title">「%s」に一致する本はありません</string>
+    <string name="library.search.recent.clear_all">すべて消去</string>
+    <string name="library.search.recent.remove">「%s」を削除</string>
+    <string name="library.search.recent.title">最近の検索</string>
     <string name="library.storage_permission_bug.action">権限を付与</string>
     <string name="library.storage_permission_bug.message">一部のデバイスでは、システムアプリに外部ストレージへアクセスするために必要な権限がありません。このアクセスは、Voice がオーディオブックを読み取るために必要です。</string>
     <string name="library.storage_permission_bug.title">権限が必要です</string>

@@ -6,6 +6,7 @@ import voice.core.data.folders.FolderType
 data class FolderPickerViewState(
   val items: List<Item>,
   val showActions: Boolean = true,
+  val loading: Boolean = false,
 ) {
 
   data class Item(

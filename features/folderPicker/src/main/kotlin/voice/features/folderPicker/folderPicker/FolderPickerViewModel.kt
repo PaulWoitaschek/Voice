@@ -1,10 +1,10 @@
 package voice.features.folderPicker.folderPicker
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.core.net.toUri
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -37,10 +37,14 @@ class FolderPickerViewModel(
       )
     }
 
-    val folders: List<FolderPickerViewState.Item> by remember {
+    val folders: List<FolderPickerViewState.Item>? by remember {
       items()
-    }.collectAsState(initial = emptyList())
-    return FolderPickerViewState(folders)
+    }.collectAsState(initial = null)
+    return FolderPickerViewState(
+      items = folders.orEmpty(),
+      // keeps the empty state from flashing up while the folders are read
+      loading = folders == null,
+    )
   }
 
   private fun items(): Flow<List<FolderPickerViewState.Item>> {
@@ -86,20 +90,21 @@ class FolderPickerViewModel(
   }
 
   private companion object {
+    // made up folders, each with its own uri, as the uri tells them apart
     val kioskModeItems = listOf(
       FolderPickerViewState.Item(
         name = "Audiobooks",
-        id = Uri.EMPTY,
+        id = "kiosk:audiobooks".toUri(),
         folderType = FolderType.Root,
       ),
       FolderPickerViewState.Item(
         name = "Sci-Fi",
-        id = Uri.EMPTY,
+        id = "kiosk:sci-fi".toUri(),
         folderType = FolderType.SingleFolder,
       ),
       FolderPickerViewState.Item(
         name = "Non-Fiction",
-        id = Uri.EMPTY,
+        id = "kiosk:non-fiction".toUri(),
         folderType = FolderType.SingleFolder,
       ),
     )

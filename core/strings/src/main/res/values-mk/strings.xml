@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Настана грешка 😢</string>
     <string name="common.error.generic.retry">Пробај повторно</string>
     <string name="cover.content_description.selectable">Прикажува избор од корици</string>
-    <string name="cover.search.author.content_description">Автор</string>
     <string name="cover.search.query.with_author">%1$s од %2$s корица на книга</string>
     <string name="cover.search.query.without_author">%s корица на аудио книга</string>
-    <string name="cover.search.recent.content_description">Скорешно пребарување</string>
     <string name="cover.title">Корица</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d минута</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d книга во тек</item>
         <item quantity="other">%d книги во тек</item>
     </plurals>
-    <string name="library.search.hint">Што пребарувате?</string>
+    <string name="library.search.browse.title">Прегледај</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d книга</item>
+        <item quantity="other">%d книги</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d завршена</item>
+        <item quantity="other">%d завршени</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d во тек</item>
+        <item quantity="other">%d во тек</item>
+    </plurals>
+    <string name="library.search.clear">Исчисти го пребарувањето</string>
+    <string name="library.search.field.all">Сите</string>
+    <string name="library.search.field.authors">Автори</string>
+    <string name="library.search.field.genres">Жанрови</string>
+    <string name="library.search.field.narrators">Наратори</string>
+    <string name="library.search.field.series">Серијали</string>
+    <string name="library.search.field.titles">Наслови</string>
+    <string name="library.search.hint">Пребарајте ја вашата библиотека</string>
+    <string name="library.search.match.genre">Жанр · %s</string>
+    <string name="library.search.match.narrator">Нарира %s</string>
+    <string name="library.search.match.series">Серијал · %s</string>
+    <string name="library.search.no_results.folders_hint">Не е на листата? Можеби нејзиниот фолдер сè уште не е додаден во Voice.</string>
+    <string name="library.search.no_results.message">Пребарувањето опфаќа наслови, автори, наратори, серијали и жанрови.</string>
+    <string name="library.search.no_results.search_everything">Пребарај сè</string>
+    <string name="library.search.no_results.title">Ниедна книга не одговара на „%s“</string>
+    <string name="library.search.recent.clear_all">Избриши сè</string>
+    <string name="library.search.recent.remove">Отстрани %s</string>
+    <string name="library.search.recent.title">Скорешни</string>
     <string name="library.storage_permission_bug.action">Дај пермисија</string>
     <string name="library.storage_permission_bug.message">Кај некои уреди, системска апликација нема доволно пермисии да го пристапи надворешното складиште за податоци. Овој пристап е клучен за Voice да може да ги вчита вашите аудио книги.</string>
     <string name="library.storage_permission_bug.title">Потребна е пермисија</string>

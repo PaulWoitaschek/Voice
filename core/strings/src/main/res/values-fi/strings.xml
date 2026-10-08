@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Jotakin meni pieleen 😢</string>
     <string name="common.error.generic.retry">Yritä uudelleen</string>
     <string name="cover.content_description.selectable">Näyttää kannen jonka valita</string>
-    <string name="cover.search.author.content_description">Tekijä</string>
     <string name="cover.search.query.with_author">Tekijän %2$s äänikirjan %1$s kansi</string>
     <string name="cover.search.query.without_author">%s äänikirjan kansi</string>
-    <string name="cover.search.recent.content_description">Viimeisin haku</string>
     <string name="cover.title">Kansi</string>
     <plurals name="duration.minutes">
         <item quantity="one">1 minuutti</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d kirja kesken</item>
         <item quantity="other">%d kirjaa kesken</item>
     </plurals>
-    <string name="library.search.hint">Mitä etsit?</string>
+    <string name="library.search.browse.title">Selaa</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d kirja</item>
+        <item quantity="other">%d kirjaa</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d kuunneltu</item>
+        <item quantity="other">%d kuunneltua</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d kesken</item>
+        <item quantity="other">%d kesken</item>
+    </plurals>
+    <string name="library.search.clear">Tyhjennä haku</string>
+    <string name="library.search.field.all">Kaikki</string>
+    <string name="library.search.field.authors">Tekijät</string>
+    <string name="library.search.field.genres">Lajityypit</string>
+    <string name="library.search.field.narrators">Lukijat</string>
+    <string name="library.search.field.series">Sarjat</string>
+    <string name="library.search.field.titles">Nimet</string>
+    <string name="library.search.hint">Hae kirjastostasi</string>
+    <string name="library.search.match.genre">Lajityyppi · %s</string>
+    <string name="library.search.match.narrator">Lukijana %s</string>
+    <string name="library.search.match.series">Sarja · %s</string>
+    <string name="library.search.no_results.folders_hint">Eikö kirjaa ole listalla? Sen kansiota ei ehkä ole vielä lisätty Voiceen.</string>
+    <string name="library.search.no_results.message">Haku kattaa nimet, tekijät, lukijat, sarjat ja lajityypit.</string>
+    <string name="library.search.no_results.search_everything">Hae kaikesta</string>
+    <string name="library.search.no_results.title">Haulla ”%s” ei löytynyt kirjoja</string>
+    <string name="library.search.recent.clear_all">Tyhjennä kaikki</string>
+    <string name="library.search.recent.remove">Poista %s</string>
+    <string name="library.search.recent.title">Viimeisimmät</string>
     <string name="library.storage_permission_bug.action">Anna käyttöoikeus</string>
     <string name="library.storage_permission_bug.message">Eräillä laitteilla joltakin järjestelmän sovellukselta puuttuu tarvittava käyttöoikeus ulkoiseen tallennustilaan. Tämä oikeus on välttämätön jotta Voice voi lukea äänikirjojasi.</string>
     <string name="library.storage_permission_bug.title">Käyttöoikeus tarvitaan</string>

@@ -58,10 +58,8 @@
     <string name="common.error.generic.message">Alguna cosa ha anat malament 😢</string>
     <string name="common.error.generic.retry">Torna-ho a provar</string>
     <string name="cover.content_description.selectable">Mostra la portada a escollir</string>
-    <string name="cover.search.author.content_description">Autor</string>
     <string name="cover.search.query.with_author">Portada de l\'audiollibre %1$s per %2$s</string>
     <string name="cover.search.query.without_author">Portada de l\'audiollibre %s</string>
-    <string name="cover.search.recent.content_description">Consulta recent</string>
     <string name="cover.title">Portada</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minut</item>
@@ -190,7 +188,40 @@
     <string name="library.category.not_started.title">Encara no s\'ha iniciat</string>
     <string name="library.empty.add_first_book">Afegiu la carpeta de l\'audiollibre perquè pugueu començar a escoltar-lo.</string>
     <string name="library.folders.title">Carpetes de l\'audiollibre</string>
-    <string name="library.search.hint">Què busqueu?</string>
+    <string name="library.search.browse.title">Explora</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d llibre</item>
+        <item quantity="many">%d llibres</item>
+        <item quantity="other">%d llibres</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d completat</item>
+        <item quantity="many">%d completats</item>
+        <item quantity="other">%d completats</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d en curs</item>
+        <item quantity="many">%d en curs</item>
+        <item quantity="other">%d en curs</item>
+    </plurals>
+    <string name="library.search.clear">Esborra la cerca</string>
+    <string name="library.search.field.all">Tot</string>
+    <string name="library.search.field.authors">Autors</string>
+    <string name="library.search.field.genres">Gèneres</string>
+    <string name="library.search.field.narrators">Narradors</string>
+    <string name="library.search.field.series">Sèries</string>
+    <string name="library.search.field.titles">Títols</string>
+    <string name="library.search.hint">Cerqueu a la biblioteca</string>
+    <string name="library.search.match.genre">Gènere · %s</string>
+    <string name="library.search.match.narrator">Narrat per %s</string>
+    <string name="library.search.match.series">Sèrie · %s</string>
+    <string name="library.search.no_results.folders_hint">No surt a la llista? Potser la seva carpeta encara no s\'ha afegit al Voice.</string>
+    <string name="library.search.no_results.message">La cerca inclou títols, autors, narradors, sèries i gèneres.</string>
+    <string name="library.search.no_results.search_everything">Cerca-ho tot</string>
+    <string name="library.search.no_results.title">Cap llibre coincideix amb «%s»</string>
+    <string name="library.search.recent.clear_all">Esborra-ho tot</string>
+    <string name="library.search.recent.remove">Suprimeix %s</string>
+    <string name="library.search.recent.title">Recents</string>
     <string name="library.storage_permission_bug.action">Autoritzeu el permís</string>
     <string name="library.storage_permission_bug.message">Per a determinats dispositius, a una aplicació del sistema li falta el permís necessari per accedir a l\'emmagatzematge extern. Aquest accés és essencial perquè el Voice llegeixi els audiollibres.</string>
     <string name="library.storage_permission_bug.title">Es requereix el permís</string>

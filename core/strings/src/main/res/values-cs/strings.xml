@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Něco se pokazilo 😢</string>
     <string name="common.error.generic.retry">Znovu</string>
     <string name="cover.content_description.selectable">Zobrazí obaly pro vybrání</string>
-    <string name="cover.search.author.content_description">Autor</string>
     <string name="cover.search.query.with_author">%1$s obal audioknihy od %2$s</string>
     <string name="cover.search.query.without_author">%s obal audioknihy</string>
-    <string name="cover.search.recent.content_description">Nedávné hledání</string>
     <string name="cover.title">Obal</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minuta</item>
@@ -212,7 +210,43 @@
         <item quantity="many">%d rozposlouchaných knih</item>
         <item quantity="other">%d rozposlouchaných knih</item>
     </plurals>
-    <string name="library.search.hint">Co hledáte?</string>
+    <string name="library.search.browse.title">Procházet</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d kniha</item>
+        <item quantity="few">%d knihy</item>
+        <item quantity="many">%d knih</item>
+        <item quantity="other">%d knih</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d dokončená</item>
+        <item quantity="few">%d dokončené</item>
+        <item quantity="many">%d dokončených</item>
+        <item quantity="other">%d dokončených</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d rozposlouchaná</item>
+        <item quantity="few">%d rozposlouchané</item>
+        <item quantity="many">%d rozposlouchaných</item>
+        <item quantity="other">%d rozposlouchaných</item>
+    </plurals>
+    <string name="library.search.clear">Vymazat hledání</string>
+    <string name="library.search.field.all">Vše</string>
+    <string name="library.search.field.authors">Autoři</string>
+    <string name="library.search.field.genres">Žánry</string>
+    <string name="library.search.field.narrators">Interpreti</string>
+    <string name="library.search.field.series">Série</string>
+    <string name="library.search.field.titles">Názvy</string>
+    <string name="library.search.hint">Prohledat knihovnu</string>
+    <string name="library.search.match.genre">Žánr · %s</string>
+    <string name="library.search.match.narrator">Čte %s</string>
+    <string name="library.search.match.series">Série · %s</string>
+    <string name="library.search.no_results.folders_hint">Není v seznamu? Její složka možná ještě nebyla do Voice přidána.</string>
+    <string name="library.search.no_results.message">Hledání prochází názvy, autory, interprety, série a žánry.</string>
+    <string name="library.search.no_results.search_everything">Hledat všude</string>
+    <string name="library.search.no_results.title">Žádná kniha neodpovídá „%s“</string>
+    <string name="library.search.recent.clear_all">Vymazat vše</string>
+    <string name="library.search.recent.remove">Odstranit %s</string>
+    <string name="library.search.recent.title">Nedávné</string>
     <string name="library.storage_permission_bug.action">Udělit oprávnění</string>
     <string name="library.storage_permission_bug.message">U některých zařízení chybí systémové aplikaci potřebná oprávnění pro přístup k externímu úložišti. Tento přístup je nezbytný, aby Voice mohl číst vaše audioknihy.</string>
     <string name="library.storage_permission_bug.title">Vyžadováno povolení</string>

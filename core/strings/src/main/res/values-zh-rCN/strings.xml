@@ -58,8 +58,6 @@
     <string name="common.error.generic.message">发生了错误😢</string>
     <string name="common.error.generic.retry">重试</string>
     <string name="cover.content_description.selectable">显示可选封面</string>
-    <string name="cover.search.author.content_description">作者</string>
-    <string name="cover.search.recent.content_description">近期查询</string>
     <string name="cover.title">封面</string>
     <plurals name="duration.seconds">
         <item quantity="other">%d 秒</item>
@@ -169,7 +167,34 @@
     <string name="library.category.not_started.title">尚未开始播放</string>
     <string name="library.empty.add_first_book">首先添加有声书文件夹，然后就可以开始听书啦！</string>
     <string name="library.folders.title">有声书文件夹</string>
-    <string name="library.search.hint">您在找什么？</string>
+    <string name="library.search.browse.title">浏览</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="other">%d 本书</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="other">已听完 %d 本</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="other">在听 %d 本</item>
+    </plurals>
+    <string name="library.search.clear">清除搜索</string>
+    <string name="library.search.field.all">全部</string>
+    <string name="library.search.field.authors">作者</string>
+    <string name="library.search.field.genres">类型</string>
+    <string name="library.search.field.narrators">朗读者</string>
+    <string name="library.search.field.series">系列</string>
+    <string name="library.search.field.titles">书名</string>
+    <string name="library.search.hint">搜索书库</string>
+    <string name="library.search.match.genre">类型 · %s</string>
+    <string name="library.search.match.narrator">%s 朗读</string>
+    <string name="library.search.match.series">系列 · %s</string>
+    <string name="library.search.no_results.folders_hint">不在列表中？它所在的文件夹可能尚未添加到 Voice。</string>
+    <string name="library.search.no_results.message">搜索范围包括书名、作者、朗读者、系列和类型。</string>
+    <string name="library.search.no_results.search_everything">搜索全部</string>
+    <string name="library.search.no_results.title">没有与“%s”匹配的书</string>
+    <string name="library.search.recent.clear_all">全部清除</string>
+    <string name="library.search.recent.remove">移除 %s</string>
+    <string name="library.search.recent.title">最近搜索</string>
     <string name="library.storage_permission_bug.action">给予权限</string>
     <string name="library.storage_permission_bug.message">对于某些设备，系统应用程序缺少访问外部存储的必要权限。此访问对于Voice阅读您的有声读物至关重要。</string>
     <string name="library.storage_permission_bug.title">需要权限</string>

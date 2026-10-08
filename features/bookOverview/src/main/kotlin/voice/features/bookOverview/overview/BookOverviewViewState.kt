@@ -3,7 +3,6 @@ package voice.features.bookOverview.overview
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import voice.core.data.BookId
-import voice.features.bookOverview.search.BookSearchViewState
 
 @Immutable
 data class BookOverviewViewState(
@@ -14,8 +13,6 @@ data class BookOverviewViewState(
   val showAddBookHint: Boolean,
   val showSearchIcon: Boolean,
   val isLoading: Boolean,
-  val searchActive: Boolean,
-  val searchViewState: BookSearchViewState,
   val showStoragePermissionBugCard: Boolean,
   val showFolderPickerIcon: Boolean,
   val dialog: Dialog?,
@@ -30,12 +27,6 @@ data class BookOverviewViewState(
       showAddBookHint = false,
       showSearchIcon = false,
       isLoading = true,
-      searchActive = false,
-      searchViewState = BookSearchViewState.EmptySearch(
-        suggestedAuthors = emptyList(),
-        recentQueries = emptyList(),
-        query = "",
-      ),
       showStoragePermissionBugCard = false,
       showFolderPickerIcon = true,
       dialog = null,

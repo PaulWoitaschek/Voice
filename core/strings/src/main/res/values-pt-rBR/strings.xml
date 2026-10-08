@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Algo deu errado 😢</string>
     <string name="common.error.generic.retry">Tentar novamente</string>
     <string name="cover.content_description.selectable">Mostra capas para escolher</string>
-    <string name="cover.search.author.content_description">Autor</string>
     <string name="cover.search.query.with_author">Capa do audiobook %1$s, feito por %2$s</string>
     <string name="cover.search.query.without_author">Capa do audiobook %s</string>
-    <string name="cover.search.recent.content_description">Pesquisa recente</string>
     <string name="cover.title">Capa</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minuto</item>
@@ -203,7 +201,40 @@
         <item quantity="many">%d livros em andamento</item>
         <item quantity="other">%d livros em andamento</item>
     </plurals>
-    <string name="library.search.hint">O que procura?</string>
+    <string name="library.search.browse.title">Explorar</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d livro</item>
+        <item quantity="many">%d livros</item>
+        <item quantity="other">%d livros</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d concluído</item>
+        <item quantity="many">%d concluídos</item>
+        <item quantity="other">%d concluídos</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d em andamento</item>
+        <item quantity="many">%d em andamento</item>
+        <item quantity="other">%d em andamento</item>
+    </plurals>
+    <string name="library.search.clear">Limpar pesquisa</string>
+    <string name="library.search.field.all">Tudo</string>
+    <string name="library.search.field.authors">Autores</string>
+    <string name="library.search.field.genres">Gêneros</string>
+    <string name="library.search.field.narrators">Narradores</string>
+    <string name="library.search.field.series">Séries</string>
+    <string name="library.search.field.titles">Títulos</string>
+    <string name="library.search.hint">Pesquisar na sua biblioteca</string>
+    <string name="library.search.match.genre">Gênero · %s</string>
+    <string name="library.search.match.narrator">Narrado por %s</string>
+    <string name="library.search.match.series">Série · %s</string>
+    <string name="library.search.no_results.folders_hint">Não está na lista? Talvez a pasta dele ainda não tenha sido adicionada ao Voice.</string>
+    <string name="library.search.no_results.message">A pesquisa abrange títulos, autores, narradores, séries e gêneros.</string>
+    <string name="library.search.no_results.search_everything">Pesquisar em tudo</string>
+    <string name="library.search.no_results.title">Nenhum livro corresponde a “%s”</string>
+    <string name="library.search.recent.clear_all">Limpar tudo</string>
+    <string name="library.search.recent.remove">Remover %s</string>
+    <string name="library.search.recent.title">Recentes</string>
     <string name="library.storage_permission_bug.action">Conceder permissão</string>
     <string name="library.storage_permission_bug.message">Em certos dispositivos, o aplicativo pode exigir permissões para acessar o armazenamento externo. Esse acesso é essencial para Voice ler os seus audiobooks.</string>
     <string name="library.storage_permission_bug.title">Permissão necessária</string>

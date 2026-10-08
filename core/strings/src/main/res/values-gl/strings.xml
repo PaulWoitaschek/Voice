@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Algo fallou 😢</string>
     <string name="common.error.generic.retry">Reintentar</string>
     <string name="cover.content_description.selectable">Mostra a portada a elixir</string>
-    <string name="cover.search.author.content_description">Autoría</string>
     <string name="cover.search.query.with_author">Portada do audiolibro %1$s por %2$s</string>
     <string name="cover.search.query.without_author">portada do audiolibro %s</string>
-    <string name="cover.search.recent.content_description">Consulta recente</string>
     <string name="cover.title">Portada</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minuto</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d libro en curso</item>
         <item quantity="other">%d libros en curso</item>
     </plurals>
-    <string name="library.search.hint">Que estás a buscar?</string>
+    <string name="library.search.browse.title">Explorar</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d libro</item>
+        <item quantity="other">%d libros</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d escoitado</item>
+        <item quantity="other">%d escoitados</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d en curso</item>
+        <item quantity="other">%d en curso</item>
+    </plurals>
+    <string name="library.search.clear">Borrar a busca</string>
+    <string name="library.search.field.all">Todo</string>
+    <string name="library.search.field.authors">Autoría</string>
+    <string name="library.search.field.genres">Xéneros</string>
+    <string name="library.search.field.narrators">Narración</string>
+    <string name="library.search.field.series">Series</string>
+    <string name="library.search.field.titles">Títulos</string>
+    <string name="library.search.hint">Busca na túa biblioteca</string>
+    <string name="library.search.match.genre">Xénero · %s</string>
+    <string name="library.search.match.narrator">Narrado por %s</string>
+    <string name="library.search.match.series">Serie · %s</string>
+    <string name="library.search.no_results.folders_hint">Non está na lista? Quizais o seu cartafol aínda non se engadiu a Voice.</string>
+    <string name="library.search.no_results.message">A busca abrangue títulos, autoría, narración, series e xéneros.</string>
+    <string name="library.search.no_results.search_everything">Buscar en todo</string>
+    <string name="library.search.no_results.title">Ningún libro coincide con «%s»</string>
+    <string name="library.search.recent.clear_all">Borrar todo</string>
+    <string name="library.search.recent.remove">Quitar %s</string>
+    <string name="library.search.recent.title">Recentes</string>
     <string name="library.storage_permission_bug.action">Conceder permiso</string>
     <string name="library.storage_permission_bug.message">En certos dispositivos, a unha app do sistema fáltanlle o permiso necesario para acceder á almacenaxe externa. Este acceso é esencial para que Voice poida ler os teus audiolibros.</string>
     <string name="library.storage_permission_bug.title">Requírese o permiso</string>

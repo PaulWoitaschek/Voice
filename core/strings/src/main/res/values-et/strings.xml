@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Midagi läks valesti 😢</string>
     <string name="common.error.generic.retry">Proovi uuesti</string>
     <string name="cover.content_description.selectable">Näita kaanepilte, mille vahel valida</string>
-    <string name="cover.search.author.content_description">Autor</string>
     <string name="cover.search.query.with_author">Heliraamatu kaanepilt: %2$s - %1$s</string>
     <string name="cover.search.query.without_author">Heliraamatu kaanepilt: %s</string>
-    <string name="cover.search.recent.content_description">Hiljutine päring</string>
     <string name="cover.title">Kaanepilt</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minut</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d pooleli raamat</item>
         <item quantity="other">%d pooleli raamatut</item>
     </plurals>
-    <string name="library.search.hint">Mida sa otsid?</string>
+    <string name="library.search.browse.title">Sirvi</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d raamat</item>
+        <item quantity="other">%d raamatut</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d kuulatud</item>
+        <item quantity="other">%d kuulatud</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d pooleli</item>
+        <item quantity="other">%d pooleli</item>
+    </plurals>
+    <string name="library.search.clear">Tühjenda otsing</string>
+    <string name="library.search.field.all">Kõik</string>
+    <string name="library.search.field.authors">Autorid</string>
+    <string name="library.search.field.genres">Žanrid</string>
+    <string name="library.search.field.narrators">Lugejad</string>
+    <string name="library.search.field.series">Sarjad</string>
+    <string name="library.search.field.titles">Pealkirjad</string>
+    <string name="library.search.hint">Otsi oma raamatukogust</string>
+    <string name="library.search.match.genre">Žanr · %s</string>
+    <string name="library.search.match.narrator">Loeb %s</string>
+    <string name="library.search.match.series">Sari · %s</string>
+    <string name="library.search.no_results.folders_hint">Pole loendis? Võimalik, et selle kausta pole veel Voice\'i lisatud.</string>
+    <string name="library.search.no_results.message">Otsing hõlmab pealkirju, autoreid, lugejaid, sarju ja žanre.</string>
+    <string name="library.search.no_results.search_everything">Otsi kõikjalt</string>
+    <string name="library.search.no_results.title">„%s“ kohta ei leitud ühtegi raamatut</string>
+    <string name="library.search.recent.clear_all">Tühjenda kõik</string>
+    <string name="library.search.recent.remove">Eemalda %s</string>
+    <string name="library.search.recent.title">Hiljutised</string>
     <string name="library.storage_permission_bug.action">Anna õigused</string>
     <string name="library.storage_permission_bug.message">Mõnedes seadmetes puudub ühel süsteemirakendusel vajalik õigus lugeda andmeid väliselt andmekandjalt. See ligipääs on vajalik, et Voice saaks lugeda sinu heliraamatute faile.</string>
     <string name="library.storage_permission_bug.title">Õigused on vajalikud</string>

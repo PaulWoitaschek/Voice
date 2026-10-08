@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Qualcosa è andato storto 😢</string>
     <string name="common.error.generic.retry">Riprova</string>
     <string name="cover.content_description.selectable">Mostra la copertina da scegliere</string>
-    <string name="cover.search.author.content_description">Autore</string>
     <string name="cover.search.query.with_author">%1$s di %2$s copertina dell\'audiolibro</string>
     <string name="cover.search.query.without_author">%s copertina dell\'audiolibro</string>
-    <string name="cover.search.recent.content_description">Interrogazione recente</string>
     <string name="cover.title">Copertina</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minuto</item>
@@ -203,7 +201,40 @@
         <item quantity="many">%d libri in corso</item>
         <item quantity="other">%d libri in corso</item>
     </plurals>
-    <string name="library.search.hint">Cosa stai cercando?</string>
+    <string name="library.search.browse.title">Sfoglia</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d libro</item>
+        <item quantity="many">%d libri</item>
+        <item quantity="other">%d libri</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d completato</item>
+        <item quantity="many">%d completati</item>
+        <item quantity="other">%d completati</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d in corso</item>
+        <item quantity="many">%d in corso</item>
+        <item quantity="other">%d in corso</item>
+    </plurals>
+    <string name="library.search.clear">Cancella ricerca</string>
+    <string name="library.search.field.all">Tutti</string>
+    <string name="library.search.field.authors">Autori</string>
+    <string name="library.search.field.genres">Generi</string>
+    <string name="library.search.field.narrators">Narratori</string>
+    <string name="library.search.field.series">Serie</string>
+    <string name="library.search.field.titles">Titoli</string>
+    <string name="library.search.hint">Cerca nella tua libreria</string>
+    <string name="library.search.match.genre">Genere · %s</string>
+    <string name="library.search.match.narrator">Letto da %s</string>
+    <string name="library.search.match.series">Serie · %s</string>
+    <string name="library.search.no_results.folders_hint">Non è nell\'elenco? La sua cartella potrebbe non essere ancora stata aggiunta a Voice.</string>
+    <string name="library.search.no_results.message">La ricerca include titoli, autori, narratori, serie e generi.</string>
+    <string name="library.search.no_results.search_everything">Cerca in tutto</string>
+    <string name="library.search.no_results.title">Nessun libro corrisponde a «%s»</string>
+    <string name="library.search.recent.clear_all">Cancella tutto</string>
+    <string name="library.search.recent.remove">Rimuovi %s</string>
+    <string name="library.search.recent.title">Recenti</string>
     <string name="library.storage_permission_bug.action">Concedere l\'autorizzazione</string>
     <string name="library.storage_permission_bug.message">Per alcuni dispositivi, un\'app di sistema non dispone dell\'autorizzazione necessaria per accedere alla memoria esterna. Questo accesso è essenziale per consentire a Voice di leggere i tuoi audiolibri.</string>
     <string name="library.storage_permission_bug.title">Autorizzazione richiesta</string>

@@ -1,0 +1,90 @@
+name: Firebase App Distribution
+
+on:
+  workflow_dispatch:
+    inputs:
+      groups:
+        description: Comma-separated tester group aliases to notify. Leave empty to only upload.
+        required: false
+        type: string
+      release_notes:
+        description: Release notes shown in App Tester. Defaults to the branch, commit and commit message.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: release
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      # Tester builds carry the version code of the upcoming release.
+      - name: Determine version
+        id: version
+        run: ./scripts/determine_release_tag.main.kts
+
+      - uses: ./.github/actions/build_setup
+
+      - name: Setup Signing
+        env:
+          PLAY_SIGNING_KEYSTORE: ${{ secrets.PLAY_SIGNING_KEYSTORE }}
+          GITHUB_SIGNING_KEYSTORE: ${{ secrets.GH_SIGNING_KEYSTORE }}
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        run: ./scripts/ci_signing_setup.sh
+
+      # The GitHub key is the app signing key Google Play re-signs with, while the Play keystore
+      # is only the upload key. Signing with it lets tester builds install over Play Store installs.
+      - name: Build Play APK
+        env:
+          GITHUB_SIGNING_STORE_PASSWORD: ${{ secrets.GH_SIGNING_STORE_PASSWORD }}
+          GITHUB_SIGNING_KEY_ALIAS: ${{ secrets.GH_SIGNING_KEY_ALIAS }}
+          GITHUB_SIGNING_KEY_PASSWORD: ${{ secrets.GH_SIGNING_KEY_PASSWORD }}
+        run: |
+          ./gradlew :app:assemblePlayRelease \
+            -Pvoice.versionName="${{ steps.version.outputs.version_name }}-${GITHUB_SHA::7}" \
+            -Pvoice.versionCode="${{ steps.version.outputs.version_code }}" \
+            -Pandroid.injected.signing.store.file="$PWD/signing/free/signing.keystore" \
+            -Pandroid.injected.signing.store.password="$GITHUB_SIGNING_STORE_PASSWORD" \
+            -Pandroid.injected.signing.key.alias="$GITHUB_SIGNING_KEY_ALIAS" \
+            -Pandroid.injected.signing.key.password="$GITHUB_SIGNING_KEY_PASSWORD"
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Setup Firebase Access
+        env:
+          FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT }}
+        run: |
+          credentials="$RUNNER_TEMP/firebase_app_distribution_service_account.json"
+          echo "$FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT" | base64 --decode > "$credentials"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$credentials" >> "$GITHUB_ENV"
+
+      - name: Upload to Firebase App Distribution
+        env:
+          TESTER_GROUPS: ${{ inputs.groups }}
+          RELEASE_NOTES: ${{ inputs.release_notes }}
+        run: |
+          app_id=$(jq -er '.client[]
+            | select(.client_info.android_client_info.package_name == "de.ph1b.audiobook")
+            | .client_info.mobilesdk_app_id' app/src/play/google-services.json)
+          if [[ -z "$RELEASE_NOTES" ]]; then
+            RELEASE_NOTES="$GITHUB_REF_NAME@${GITHUB_SHA::7}: $(git log -1 --format=%s)"
+          fi
+
+          args=(--app "$app_id" --release-notes "$RELEASE_NOTES")
+          if [[ -n "$TESTER_GROUPS" ]]; then
+            args+=(--groups "$TESTER_GROUPS")
+          fi
+
+          npx --yes firebase-tools@15.32.1 appdistribution:distribute \
+            app/build/outputs/apk/play/release/app-play-release.apk \
+            "${args[@]}"

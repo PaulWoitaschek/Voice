@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Noe gikk galt 😢</string>
     <string name="common.error.generic.retry">Prøv igjen</string>
     <string name="cover.content_description.selectable">Viser omslag å velge</string>
-    <string name="cover.search.author.content_description">Forfatter</string>
     <string name="cover.search.query.with_author">%1$s av %2$s lydbokomslag</string>
     <string name="cover.search.query.without_author">%s lydbokomslag</string>
-    <string name="cover.search.recent.content_description">Siste søk</string>
     <string name="cover.title">Omslag</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minutt</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d påbegynt bok</item>
         <item quantity="other">%d påbegynte bøker</item>
     </plurals>
-    <string name="library.search.hint">Hva leter du etter?</string>
+    <string name="library.search.browse.title">Bla gjennom</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d bok</item>
+        <item quantity="other">%d bøker</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d fullført</item>
+        <item quantity="other">%d fullførte</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d påbegynt</item>
+        <item quantity="other">%d påbegynte</item>
+    </plurals>
+    <string name="library.search.clear">Tøm søket</string>
+    <string name="library.search.field.all">Alle</string>
+    <string name="library.search.field.authors">Forfattere</string>
+    <string name="library.search.field.genres">Sjangre</string>
+    <string name="library.search.field.narrators">Opplesere</string>
+    <string name="library.search.field.series">Serier</string>
+    <string name="library.search.field.titles">Titler</string>
+    <string name="library.search.hint">Søk i biblioteket ditt</string>
+    <string name="library.search.match.genre">Sjanger · %s</string>
+    <string name="library.search.match.narrator">Lest av %s</string>
+    <string name="library.search.match.series">Serie · %s</string>
+    <string name="library.search.no_results.folders_hint">Står den ikke på listen? Mappen er kanskje ikke lagt til i Voice ennå.</string>
+    <string name="library.search.no_results.message">Søket går gjennom titler, forfattere, opplesere, serier og sjangre.</string>
+    <string name="library.search.no_results.search_everything">Søk i alt</string>
+    <string name="library.search.no_results.title">Ingen bøker samsvarer med «%s»</string>
+    <string name="library.search.recent.clear_all">Tøm alt</string>
+    <string name="library.search.recent.remove">Fjern %s</string>
+    <string name="library.search.recent.title">Nylig</string>
     <string name="library.storage_permission_bug.action">Innvilg tillatelse</string>
     <string name="library.storage_permission_bug.message">På enkelte enheter mangler en systemapp den nødvendige tillatelsen for å få tilgang til det eksterne lagringsmediet. Denne tilgangen er avgjørende for at Voice skal kunne lese lydbøkene dine.</string>
     <string name="library.storage_permission_bug.title">Tillatelse kreves</string>

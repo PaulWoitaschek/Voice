@@ -3,6 +3,7 @@ package voice.core.data.repo.internals
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
@@ -58,6 +59,59 @@ class RecentBookSearchTest {
 
     assertEquals(expected = terms.takeLast(RecentBookSearchDao.Companion.LIMIT), actual = dao.recentBookSearch())
 
+    db.close()
+  }
+
+  @Test
+  fun `flow emits newest first`() = runTest {
+    val db = Room.inMemoryDatabaseBuilder(
+      ApplicationProvider.getApplicationContext(),
+      AppDb::class.java,
+    )
+      .build()
+
+    with(db.recentBookSearchDao()) {
+      add("cats")
+      add("dogs")
+      add("unicorns")
+      add("cats")
+      assertEquals(expected = listOf("cats", "unicorns", "dogs"), actual = recentBookSearches().first())
+    }
+    db.close()
+  }
+
+  @Test
+  fun `add replaces the same search in another case`() = runTest {
+    val db = Room.inMemoryDatabaseBuilder(
+      ApplicationProvider.getApplicationContext(),
+      AppDb::class.java,
+    )
+      .build()
+
+    with(db.recentBookSearchDao()) {
+      add("Stephen King")
+      add("dogs")
+      add("stephen king")
+      assertEquals(expected = listOf("stephen king", "dogs"), actual = recentBookSearches().first())
+    }
+    db.close()
+  }
+
+  @Test
+  fun `clear removes all`() = runTest {
+    val db = Room.inMemoryDatabaseBuilder(
+      ApplicationProvider.getApplicationContext(),
+      AppDb::class.java,
+    )
+      .build()
+
+    with(db.recentBookSearchDao()) {
+      add("cats")
+      add("dogs")
+      clear()
+      assertTrue(recentBookSearch().isEmpty())
+      assertTrue(recentBookSearches().first().isEmpty())
+    }
     db.close()
   }
 }
