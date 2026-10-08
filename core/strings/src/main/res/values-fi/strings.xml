@@ -69,7 +69,7 @@
     <string name="cover.search.query.without_author">%s äänikirjan kansi</string>
     <string name="cover.title">Kansi</string>
     <plurals name="duration.minutes">
-        <item quantity="one">1 minuutti</item>
+        <item quantity="one">%d minuutti</item>
         <item quantity="other">%d minuuttia</item>
     </plurals>
     <plurals name="duration.seconds">

@@ -68,15 +68,6 @@
       "tip_medium": { "title": "Pourboire moyen", "description": "Un merci ponctuel pour Voice. Ne débloque aucune fonction." },
       "tip_large": { "title": "Gros pourboire", "description": "Un merci ponctuel pour Voice. Ne débloque aucune fonction." }
     },
-    "gl-ES": {
-      "benefits": ["Unha insignia que medra cada mes", "Apoia a un desenvolvedor independente", "Mantén Voice gratis e sen anuncios", "Un agradecemento: non desbloquea nada"],
-      "tea": { "title": "Cunca de té", "description": "Unha cunca de té para o narrador. Mantén a luz acesa." },
-      "honey_tea": { "title": "Té con mel", "description": "Té con mel para o narrador. Financia os capítulos longos." },
-      "golden_mic": { "title": "Micro de ouro", "description": "Un micro de ouro para o narrador. Unha ovación para Voice." },
-      "tip_small": { "title": "Propina pequena", "description": "Un agradecemento único para Voice. Non desbloquea funcións." },
-      "tip_medium": { "title": "Propina mediana", "description": "Un agradecemento único para Voice. Non desbloquea funcións." },
-      "tip_large": { "title": "Propina grande", "description": "Un agradecemento único para Voice. Non desbloquea funcións." }
-    },
     "hu-HU": {
       "benefits": ["Havonta növekvő jelvény", "Egy független fejlesztőt támogat", "A Voice ingyenes és reklámmentes marad", "Köszönet: nem old fel semmit"],
       "tea": { "title": "Egy csésze tea", "description": "Egy csésze tea a felolvasónak. Hogy égve maradjon a lámpa." },
@@ -112,15 +103,6 @@
       "tip_small": { "title": "小さなチップ", "description": "Voice への一度きりの感謝。機能は解放されません。" },
       "tip_medium": { "title": "ふつうのチップ", "description": "Voice への一度きりの感謝。機能は解放されません。" },
       "tip_large": { "title": "大きなチップ", "description": "Voice への一度きりの感謝。機能は解放されません。" }
-    },
-    "lt": {
-      "benefits": ["Ženklelis, kuris auga kas mėnesį", "Remia nepriklausomą kūrėją", "Voice lieka nemokama ir be reklamų", "Padėka: nieko neatrakina"],
-      "tea": { "title": "Puodelis arbatos", "description": "Puodelis arbatos skaitovui. Kad šviesa degtų." },
-      "honey_tea": { "title": "Arbata su medumi", "description": "Arbata su medumi skaitovui. Ilgiems skyriams." },
-      "golden_mic": { "title": "Auksinis mikrofonas", "description": "Auksinis mikrofonas skaitovui. Ovacijos Voice." },
-      "tip_small": { "title": "Maži arbatpinigiai", "description": "Vienkartinė padėka Voice. Neatrakina jokių funkcijų." },
-      "tip_medium": { "title": "Vidutiniai arbatpinigiai", "description": "Vienkartinė padėka Voice. Neatrakina jokių funkcijų." },
-      "tip_large": { "title": "Dideli arbatpinigiai", "description": "Vienkartinė padėka Voice. Neatrakina jokių funkcijų." }
     },
     "nl-NL": {
       "benefits": ["Een badge die elke maand groeit", "Steunt een onafhankelijke ontwikkelaar", "Houdt Voice gratis en zonder reclame", "Een bedankje: ontgrendelt niets"],
