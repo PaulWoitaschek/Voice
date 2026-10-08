@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import yaml from 'js-yaml'
+import { load } from 'js-yaml'
 import { FASTLANE_DIR } from './locales.ts'
 
 export interface MarketingStrings {
@@ -10,5 +10,5 @@ export interface MarketingStrings {
 
 export function readMarketing(locale: string): MarketingStrings {
   const file = join(FASTLANE_DIR, locale, 'marketing.yml')
-  return yaml.load(readFileSync(file, 'utf8')) as MarketingStrings
+  return load(readFileSync(file, 'utf8')) as MarketingStrings
 }

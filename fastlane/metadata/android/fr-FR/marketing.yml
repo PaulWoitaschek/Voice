@@ -1,11 +1,13 @@
 featureGraphic:
-  headline: "Vos livres audio, sans distraction"
-  tagline: "Un lecteur épuré pour vos propres livres audio"
+  headline: "Un havre de paix pour vos livres audio"
+  tagline: "Sans compte. Sans publicité. Juste vos histoires."
 
 screenshots:
-  - caption: "Tous vos livres audio au même endroit"
-  - caption: "Reprenez exactement où vous vous êtes arrêté"
-  - caption: "Endormez-vous sans coupure brutale"
+  - caption: "Vos histoires, prêtes quand vous l'êtes"
+  - caption: "Chaque livre a ses propres couleurs"
+  - caption: "Endormez-vous sans rien manquer"
   - caption: "Gardez vos moments préférés"
-  - caption: "Vos fichiers, organisés automatiquement"
-  - caption: "Sans compte. Sans publicité. Sans distraction."
+  - caption: "Perdu le fil ? Retour en un geste"
+  - caption: "Votre livre, sur votre écran d'accueil"
+  - caption: "Faites de Voice le vôtre"
+  - caption: "Ajoutez un dossier. Voice fait le reste."

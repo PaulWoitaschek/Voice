@@ -1,1 +1,1 @@
-Lecteur de livres audio clair pour vos fichiers, avec minuteur et marque-pages.
+Un lecteur de livres audio paisible pour vos fichiers. Sans compte ni publicité.

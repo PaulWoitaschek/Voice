@@ -132,8 +132,11 @@ Use:
 The generator uses:
 
 - `artwork/public/logo.svg` for the Play Store icon.
-- `artwork/public/raw/phone/*.png` for raw app screenshots.
-- `artwork/src/templates/` and `artwork/src/styles/` for the rendered Play Store images.
+- `artwork/public/raw/phone/*.png` for raw app screenshots, captured at 1080×2424 on a Pixel 9 emulator with the
+  system UI demo mode on.
+- `artwork/public/raw/feature/1.png` for the phone in the feature graphic.
+- `artwork/src/templates/` and `artwork/src/styles/` for the rendered Play Store images. `PHONE_TONES` in
+  `template.ts` gives each screenshot a background that matches the colors of its screen.
 - `fastlane/metadata/android/*/marketing.yml` for localized feature graphic text and screenshot captions.
 
 Only locales with `marketing.yml` get localized generated images. The script removes old generated screenshot folders before writing the current output, so deleted tablet screenshots do not remain in the repository.

@@ -1,1 +1,1 @@
-A clean audiobook player for your own files, with sleep timer and bookmarks.
+A calm audiobook player for your own files. No account, no ads.

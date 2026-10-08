@@ -1,11 +1,13 @@
 featureGraphic:
-  headline: "Audiobooki bez bałaganu"
-  tagline: "Przejrzysty odtwarzacz dla twoich audiobooków"
+  headline: "Spokojna przystań dla audiobooków"
+  tagline: "Bez konta. Bez reklam. Tylko twoje historie."
 
 screenshots:
-  - caption: "Wszystkie audiobooki w jednym miejscu"
-  - caption: "Wracaj dokładnie tam, gdzie skończyłeś"
-  - caption: "Zasypiaj bez nagłego przerwania"
-  - caption: "Zapisuj ulubione momenty"
-  - caption: "Twoje pliki, automatycznie uporządkowane"
-  - caption: "Bez konta. Bez reklam. Bez bałaganu."
+  - caption: "Twoje historie czekają na ciebie"
+  - caption: "Każda książka ma swoje kolory"
+  - caption: "Zasypiaj, nie gubiąc miejsca"
+  - caption: "Zapisuj ulubione chwile"
+  - caption: "Zgubione miejsce? Wróć od razu"
+  - caption: "Twoja książka na ekranie głównym"
+  - caption: "Voice na Twoją modłę"
+  - caption: "Dodaj folder. Resztą zajmie się Voice."

@@ -1,20 +1,54 @@
-Zoek je een eenvoudige luisterboekspeler die alleen het broodnodige bevat?
-Eentje die je gewoon laat luisteren, niets meer en niets minder?
-Voeg gewoon je hoofdmap met luisterboeken toe en elke onderliggende map zal worden herkend als een los boek. Hierdoor blijft je bibliotheek netjes en overzichtelijk.
+Voice is een rustige luisterboekspeler voor mensen die van verhalen houden en hun eigen boeken meebrengen.
 
-Kenmerken:
+Kies de map met je luisterboeken. Voice laat je de gevonden boeken zien, voegt ze toe aan je bibliotheek en onthoudt in elk boek waar je gebleven bent. Daarna blijft Voice op de achtergrond, zodat je gewoon kunt luisteren.
 
-- Onthoudt de laatste locatie
-- Wijzig de afspeelsnelheid
-- Prachtig Material Design
-- Licht en donker thema
-- Bladwijzers
-- Android Auto-ondersteuning
-- Slaapklok: je hoeft de speler niet midden in de nacht te stoppen
+<b>Een speler die bij je boek past</b>
 
-Voice is gratis en openbronsoftware. Dit betekent dat iedereen kan zien hoe het werkt en wat het doet. De app vereist slechts een minimaal aantal rechten.
+• De speler kleurt mee met het omslag van het boek waar je naar luistert
+• Voice onthoudt in elk boek waar je gebleven bent
+• Afspeelsnelheid, stilte overslaan en volumeversterking voor zachte opnames
+• Te ver gesprongen? Eén tik brengt je terug
+• Automatisch terugspoelen na een pauze, zodat je de draad niet kwijtraakt
 
-Als je suggesties hebt of bugs vindt, meld ze dan hier:
+<b>In slaap vallen bij een verhaal</b>
+
+• Slaaptimer die het geluid zacht laat wegsterven, of stoppen aan het einde van het hoofdstuk
+• Schud je telefoon direct nadat de timer is afgelopen om hem opnieuw te starten
+• Een rustige nachtweergave zolang de timer loopt
+
+<b>Nooit meer kwijt waar je was</b>
+
+• Bewaar een moment door lang te drukken, en voeg later een naam of notitie toe
+• Markeer bladwijzers als favoriet, citaat, notitie of plek om terug te luisteren
+• Je luistergeschiedenis toont elke start, pauze en sprong, zodat je altijd je weg terugvindt
+• Startte je auto, koptelefoon of horloge een boek? Dan biedt Voice aan om je terug te brengen
+
+<b>Jouw bibliotheek, jouw manier</b>
+
+• Verder luisteren, meteen bovenaan je bibliotheek
+• Boeken ingedeeld in huidig, nog niet begonnen en voltooid
+• Zoeken op titel en auteur
+• Lijst- en rasterweergave
+• Omslagen uit het bestand, van je telefoon of via online zoeken
+• Widgets voor je startscherm: “Speelt nu”, “Boekenplank” en “Slaaptimer”
+• Mediamelding en Android Auto
+• Licht en donker thema, Dynamische kleur en kleurenschema's om Voice helemaal van jou te maken
+• Beschikbaar in 25 talen
+
+<b>Neem je eigen bestanden mee</b>
+
+Voice speelt DRM-vrije luisterboeken af, zoals M4B, MP3, M4A, OGG, OGA en OPUS. Bewaar je boeken in mappen zoals jij dat wilt. Een map kan één boek bevatten of je hele bibliotheek, en Voice zet alles voor je op orde.
+
+<b>Alleen jij en je verhalen</b>
+
+• Geen account
+• Geen reclame
+• Niets achter een betaalmuur
+• Je boeken blijven op je apparaat
+
+Vind je Voice fijn? Dan kun je het steunen via de instellingen. Dat is een bedankje en ontgrendelt niets.
+
+Voice is open source onder de GNU GPLv3-licentie.
+
+Feedback en bugmeldingen:
 https://github.com/PaulWoitaschek/Voice/issues
-
-De openbronlicentie is GNU GPLv3

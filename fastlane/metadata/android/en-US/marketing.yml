@@ -1,11 +1,13 @@
 featureGraphic:
-  headline: "Audiobooks without the clutter"
-  tagline: "A clean player for your own audiobooks"
+  headline: "A calm home for your audiobooks"
+  tagline: "No account. No ads. Just your stories."
 
 screenshots:
-  - caption: "All your audiobooks in one place"
-  - caption: "Continue exactly where you stopped"
-  - caption: "Fall asleep without the hard stop"
-  - caption: "Save every favorite moment"
-  - caption: "Your files, organized automatically"
-  - caption: "No account. No ads. No clutter."
+  - caption: "Your stories, ready when you are"
+  - caption: "Every book brings its own colors"
+  - caption: "Drift off without losing your place"
+  - caption: "Save the moments you love"
+  - caption: "Lost your place? Jump right back"
+  - caption: "Your book, right on your home screen"
+  - caption: "Make Voice yours"
+  - caption: "Add a folder. Voice does the rest."
