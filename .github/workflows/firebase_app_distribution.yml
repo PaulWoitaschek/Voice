@@ -7,6 +7,7 @@ on:
         description: Comma-separated tester group aliases to notify. Leave empty to only upload.
         required: false
         type: string
+        default: beta-testers
       release_notes:
         description: Release notes shown in App Tester. Defaults to the branch, commit and commit message.
         required: false
