@@ -5,7 +5,7 @@
     <!-- Bottom-sheet action for moving a book to the current category. -->
     <string name="book.category.action.mark_current">Mark as Current</string>
     <!-- Bottom-sheet action for moving a book to the not-started category. -->
-    <string name="book.category.action.mark_not_started">Mark as Not Started Yet</string>
+    <string name="book.category.action.mark_not_started">Mark as not started yet</string>
     <!-- Bottom-sheet action title for deleting a book. -->
     <string name="book.delete.bottom_sheet.title">Delete Book</string>
     <!-- Checkbox label confirming that book files should be deleted. -->

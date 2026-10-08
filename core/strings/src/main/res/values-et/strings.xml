@@ -316,7 +316,7 @@
     <string name="settings.listening.title">Kuulamine</string>
     <string name="settings.playback.auto_rewind.off">Väljas</string>
     <string name="settings.playback.auto_rewind.summary">Jätkamisel kerib veidi tagasi, et sa järge ei kaotaks</string>
-    <string name="settings.playback.auto_rewind.title">Keri automaatselt tagasi</string>
+    <string name="settings.playback.auto_rewind.title">Automaatne tagasikerimine</string>
     <string name="settings.playback.seek_time.summary">Kui kaugele tagasi- ja edasikerimine hüppavad</string>
     <string name="settings.playback.seek_time.title">Kerimise samm</string>
     <string name="settings.subtitle">Tee Voice enda omaks</string>

@@ -5,7 +5,7 @@
     <string name="book.category.action.mark_not_started">סימון כ\"לא שמעתי עדיין\"</string>
     <string name="book.delete.bottom_sheet.title">מחיקת ספר</string>
     <string name="book.delete.dialog.confirm_files">מחיקת הקבצים שלי</string>
-    <string name="book.delete.dialog.message">פעולה זו תמחק את הקבצים במכשיר שלך.</string>
+    <string name="book.delete.dialog.message">פעולה זו תמחק את הקבצים במכשיר שלכם.</string>
     <string name="book.delete.dialog.title">מחיקת ספר</string>
     <string name="book.edit.cover.file">עטיפות מקובץ קיים</string>
     <string name="book.edit.cover.internet">עטיפות מהאינטרנט</string>
@@ -48,7 +48,7 @@
     <string name="common.action.add">הוספה</string>
     <string name="common.action.back">חזרה</string>
     <string name="common.action.close">סגירה</string>
-    <string name="common.action.delete">מחיקה</string>
+    <string name="common.action.delete">הסרה</string>
     <string name="common.action.done">סיום</string>
     <string name="common.action.edit">עריכה</string>
     <string name="common.action.undo">ביטול</string>
@@ -90,7 +90,7 @@
         <item quantity="other">%d ספרים</item>
     </plurals>
     <string name="folder.mode.file.label">קובץ בודד</string>
-    <string name="folder.mode.guess">דומה לשלך</string>
+    <string name="folder.mode.guess">דומה לשלכם</string>
     <string name="folder.mode.root.label">כל תיקייה היא ספר</string>
     <string name="folder.mode.root.option">כל תיקייה או קובץ ב-%s הוא ספר</string>
     <string name="folder.mode.sheet.title">איך מאורגנת התיקייה %s?</string>
@@ -178,14 +178,14 @@
     <string name="history.source.watch">שעון</string>
     <string name="history.source.widget">ווידג׳ט</string>
     <string name="history.suggestion.jumped.message">ההשמעה קפצה ב-%1$s.</string>
-    <string name="history.suggestion.jumped.title">איבדת את המקום?</string>
+    <string name="history.suggestion.jumped.title">איבדתם את המקום?</string>
     <string name="history.suggestion.keep">להשאיר</string>
     <string name="history.suggestion.played">מאז הושמעו %1$s. לא בכוונה?</string>
     <string name="history.suggestion.started_by.bluetooth">מכשיר Bluetooth הפעיל את הספר ב-%1$s</string>
-    <string name="history.suggestion.started_by.car">הרכב שלך הפעיל את הספר ב-%1$s</string>
+    <string name="history.suggestion.started_by.car">הרכב שלכם הפעיל את הספר ב-%1$s</string>
     <string name="history.suggestion.started_by.headset">כפתור באוזניות הפעיל את הספר ב-%1$s</string>
     <string name="history.suggestion.started_by.other_app">אפליקציה אחרת הפעילה את הספר ב-%1$s</string>
-    <string name="history.suggestion.started_by.watch">השעון שלך הפעיל את הספר ב-%1$s</string>
+    <string name="history.suggestion.started_by.watch">השעון שלכם הפעיל את הספר ב-%1$s</string>
     <string name="library.category.completed.title">הושלמו</string>
     <string name="library.category.current.title">נוכחי</string>
     <string name="library.category.not_started.title">לא שמעתי עדיין</string>
@@ -226,7 +226,7 @@
     <string name="library.search.field.narrators">קריינים</string>
     <string name="library.search.field.series">סדרות</string>
     <string name="library.search.field.titles">כותרים</string>
-    <string name="library.search.hint">חיפוש בספרייה שלך</string>
+    <string name="library.search.hint">חיפוש בספרייה שלכם</string>
     <string name="library.search.match.genre">ז׳אנר · %s</string>
     <string name="library.search.match.narrator">בקריינות %s</string>
     <string name="library.search.match.series">סדרה · %s</string>
@@ -238,7 +238,7 @@
     <string name="library.search.recent.remove">הסרת %s</string>
     <string name="library.search.recent.title">אחרונים</string>
     <string name="library.storage_permission_bug.action">הענקת הרשאה</string>
-    <string name="library.storage_permission_bug.message">עבור מכשירים מסוימים, לאפליקציית מערכת חסרה את ההרשאה הנדרשת לגישה לאחסון החיצוני. גישה זו חיונית כדי ש-Voice יוכל לקרוא את ספרי האודיו שלך.</string>
+    <string name="library.storage_permission_bug.message">עבור מכשירים מסוימים, לאפליקציית מערכת חסרה את ההרשאה הנדרשת לגישה לאחסון החיצוני. גישה זו חיונית כדי ש-Voice יוכל לקרוא את ספרי האודיו שלכם.</string>
     <string name="library.storage_permission_bug.title">נדרש אישור</string>
     <string name="media_session.library.recent">אחרונים</string>
     <string name="media_session.library.root">כל הקולספרים</string>
@@ -252,16 +252,16 @@
     <string name="onboarding.completion.subtitle">הקולספר הראשון שלכם מוכן להשמעה. תיהנו מהמסע עם Voice!</string>
     <string name="onboarding.completion.title">הכל מוכן!</string>
     <string name="onboarding.explanation.subtitle.folder">בחרו את התיקייה עם הקולספרים שלכם. Voice יציג לכם את הספרים שהוא מוצא לפני שהם יתווספו.</string>
-    <string name="onboarding.explanation.title">הספרייה שלך, בדרך שלך</string>
+    <string name="onboarding.explanation.title">הספרייה שלכם, בדרך שלכם</string>
     <string name="onboarding.welcome.action.start">יוצאים לדרך</string>
-    <string name="onboarding.welcome.subtitle">נגן ספרי הקולספרים האישי שלך בכיס. בואו נתאים את Voice אליכם.</string>
+    <string name="onboarding.welcome.subtitle">נגן הקולספרים האישי שלכם, תמיד בכיס. בואו נתאים את Voice אליכם.</string>
     <string name="onboarding.welcome.title">ברוכים הבאים ל-Voice!</string>
     <string name="playback.action.fast_forward">הרצה קדימה</string>
     <string name="playback.action.pause">השהיה</string>
     <string name="playback.action.play">הפעלה</string>
     <string name="playback.action.rewind">הרצה אחורה</string>
     <string name="playback.battery_optimization.action">עדכון</string>
-    <string name="playback.battery_optimization.rationale">עקב מגבלות חסכון החשמל שלך, ייתכנו הפרעות בהשמעה.</string>
+    <string name="playback.battery_optimization.rationale">עקב מגבלות חיסכון החשמל שלכם, ייתכנו הפרעות בהשמעה.</string>
     <string name="playback.book_progress.read">%1$s מהספר</string>
     <string name="playback.book_progress.remaining">נותרו %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">נותרו %1$s במהירות %2$s</string>
@@ -330,7 +330,7 @@
     <string name="settings.playback.auto_rewind.off">כבוי</string>
     <string name="settings.playback.auto_rewind.summary">חוזר מעט אחורה כשממשיכים, כדי שלא תאבדו את החוט</string>
     <string name="settings.playback.auto_rewind.title">הרצה אחורה אוטומטית</string>
-    <string name="settings.playback.seek_time.summary">כמה רחוק קופצים הרצה אחורה וקדימה</string>
+    <string name="settings.playback.seek_time.summary">כמה רחוק מדלגים בהרצה אחורה וקדימה</string>
     <string name="settings.playback.seek_time.title">משך הדילוג</string>
     <string name="settings.subtitle">הפכו את Voice לשלכם</string>
     <string name="settings.support.faq.title">שאלות נפוצות</string>
@@ -385,7 +385,7 @@
     <string name="support.tips.title">טיפ חד-פעמי</string>
     <string name="support.unavailable.message">אין כרגע גישה לחיוב של Google Play במכשיר הזה.</string>
     <string name="support.unavailable.title">אי אפשר לתמוך כרגע</string>
-    <string name="shortcut.play_current.short_label">הפעלת הנוכחי</string>
+    <string name="shortcut.play_current.short_label">המשך האזנה</string>
     <string name="sleep_timer.action.open">טיימר-שינה</string>
     <string name="sleep_timer.dialog.action.decrement">קצר יותר</string>
     <string name="sleep_timer.dialog.action.increment">ארוך יותר</string>
