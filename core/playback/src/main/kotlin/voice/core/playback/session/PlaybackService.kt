@@ -30,8 +30,7 @@ class PlaybackService : MediaLibraryService() {
   @Inject
   lateinit var listeningSessionRecorder: ListeningSessionRecorder
 
-  @Inject
-  lateinit var voiceNotificationProvider: VoiceMediaNotificationProvider
+  private var released = false
 
   override fun onCreate() {
     super.onCreate()
@@ -39,10 +38,10 @@ class PlaybackService : MediaLibraryService() {
       .playbackGraphFactory
       .create(this)
       .inject(this)
-    setMediaNotificationProvider(voiceNotificationProvider)
   }
 
   private fun release() {
+    released = true
     runBlocking {
       positionUpdater.flushPositionNow()
     }
@@ -54,29 +53,16 @@ class PlaybackService : MediaLibraryService() {
   }
 
   override fun onDestroy() {
-    super.onDestroy()
     release()
+    super.onDestroy()
   }
 
   override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
-    return session.takeUnless { session ->
-      session.invokeIsReleased
-    }.also {
-      if (it == null) {
-        Logger.w("onGetSession returns null because the session is already released")
-      }
+    // Media3 rejects a released session, and controllers can still connect while the service shuts down.
+    if (released) {
+      Logger.w("onGetSession returns null because the session is already released")
+      return null
     }
+    return session
   }
 }
-
-private val MediaSession.invokeIsReleased: Boolean
-  get() = try {
-    // temporarily checked to debug
-    // https://github.com/androidx/media/issues/422
-    MediaSession::class.java.getDeclaredMethod("isReleased")
-      .apply { isAccessible = true }
-      .invoke(this) as Boolean
-  } catch (e: Exception) {
-    Logger.w(e, "Couldn't check if it's released")
-    false
-  }
