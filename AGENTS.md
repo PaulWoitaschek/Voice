@@ -3,6 +3,7 @@
 Voice is a modular Android audiobook player.
 
 - Build the app: `./gradlew :app:assembleFreeDebug`.
+- If installing a debug build fails with `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, this checkout has no `signing/` files, so the APK got the default debug key. Never uninstall the installed app to get around it, as that wipes the user's library. Ask the user instead.
 - Only write code comments when absolutely necessary, to explain a non-obvious *why*. Don't restate what the code does or describe the change you made.
 
 ## Pull requests from contributors
