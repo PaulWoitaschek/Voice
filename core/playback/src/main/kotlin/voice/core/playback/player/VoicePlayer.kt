@@ -3,13 +3,11 @@ package voice.core.playback.player
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.ForwardingPlayer
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -26,10 +24,6 @@ import voice.core.playback.history.PlaybackPosition
 import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
-import voice.core.playback.session.MediaId
-import voice.core.playback.session.playbackItemForPosition
-import voice.core.playback.session.positionInMediaItem
-import voice.core.playback.session.toMediaIdOrNull
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerState
 import java.time.Instant
@@ -330,74 +324,6 @@ class VoicePlayer(
     // redirect buffering to ready to prevent visual artifacts on seeking
     STATE_BUFFERING -> STATE_READY
     else -> state
-  }
-
-  override fun setMediaItem(
-    mediaItem: MediaItem,
-    startPositionMs: Long,
-  ) {
-    setBook(mediaItem)
-  }
-
-  override fun setMediaItem(
-    mediaItem: MediaItem,
-    resetPosition: Boolean,
-  ) {
-    setBook(mediaItem)
-  }
-
-  override fun setMediaItems(mediaItems: List<MediaItem>) {
-    val first = mediaItems.firstOrNull() ?: return
-    setBook(first)
-  }
-
-  override fun setMediaItems(
-    mediaItems: List<MediaItem>,
-    resetPosition: Boolean,
-  ) {
-    val first = mediaItems.firstOrNull() ?: return
-    setBook(first)
-  }
-
-  override fun setMediaItem(mediaItem: MediaItem) {
-    setBook(mediaItem)
-  }
-
-  override fun setMediaItems(
-    mediaItems: List<MediaItem>,
-    startIndex: Int,
-    startPositionMs: Long,
-  ) {
-    val first = mediaItems.firstOrNull() ?: return
-    setBook(first)
-  }
-
-  private fun setBook(mediaItem: MediaItem) {
-    Logger.v("setBook(${mediaItem.mediaId})")
-    val mediaId = mediaItem.mediaId.toMediaIdOrNull()
-    if (mediaId != null) {
-      if (mediaId is MediaId.Book) {
-        val book = runBlocking {
-          repo.get(mediaId.id)
-        }
-        if (book != null) {
-          player.setPlaybackSpeed(book.content.playbackSpeed)
-          setSkipSilenceEnabled(book.content.skipSilence)
-          volumeGain.gain = Decibel(book.content.gain)
-          val currentPlaybackItem = book.playbackItemForPosition(
-            chapterId = book.content.currentChapter,
-            positionInChapterMs = book.content.positionInChapter,
-          ) ?: return
-          player.setBook(
-            book = book,
-            startItemIndex = currentPlaybackItem.index,
-            positionInItemMs = currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
-          )
-        }
-      } else {
-        Logger.w("Unexpected mediaId=$mediaId")
-      }
-    }
   }
 
   override fun setPlaybackSpeed(speed: Float) {

@@ -12,9 +12,13 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.runner.RunWith
 import voice.core.data.Book
+import voice.core.data.BookContent
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
+import voice.core.playback.misc.Decibel
+import voice.core.playback.misc.VolumeGain
+import voice.core.playback.misc.VolumeGainSetter
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
@@ -59,7 +63,8 @@ class ChapterMarkPlayerTest {
     .build()
 
   private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), mockk())
-  private val player = ChapterMarkPlayer(exoPlayer, mediaItemProvider)
+  private val volumeGain = VolumeGain(VolumeGainSetter())
+  private val player = ChapterMarkPlayer(exoPlayer, mediaItemProvider, volumeGain)
 
   @Test
   fun `presents one media item per mark while the wrapped player holds one per file`() {
@@ -199,6 +204,71 @@ class ChapterMarkPlayerTest {
   }
 
   @Test
+  fun `setting no media items removes the whole book`() {
+    setBook(listOf(singleFileWithThreeMarks()))
+
+    player.setMediaItems(emptyList())
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 0, actual = exoPlayer.mediaItemCount)
+    assertEquals(expected = 0, actual = player.mediaItemCount)
+  }
+
+  @Test
+  fun `resetting the position starts at the first chapter mark`() {
+    setBook(listOf(singleFileWithThreeMarks()), startItemIndex = 2, positionInItemMs = 1_000)
+
+    player.setMediaItems(mediaItemProvider.playbackItems(book), true)
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 0, actual = player.currentMediaItemIndex)
+    assertEquals(expected = 0, actual = player.currentPosition)
+  }
+
+  @Test
+  fun `restores the settings of the book`() {
+    setBook(listOf(singleFileWithThreeMarks())) {
+      it.copy(playbackSpeed = 1.5F, skipSilence = true, gain = 3F)
+    }
+
+    assertEquals(expected = 1.5F, actual = exoPlayer.playbackParameters.speed)
+    assertTrue(exoPlayer.skipSilenceEnabled)
+    assertEquals(expected = Decibel(3F), actual = volumeGain.gain)
+  }
+
+  @Test
+  fun `starts at the first chapter mark when the position of the previous book does not fit`() {
+    setBook(listOf(singleFileWithThreeMarks()), startItemIndex = 2, positionInItemMs = 1_000)
+
+    book = book(listOf(chapter(duration = 10_000, MarkData(0, "Only"))))
+    player.setMediaItems(mediaItemProvider.playbackItems(book), false)
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 1, actual = player.mediaItemCount)
+    assertEquals(expected = 0, actual = player.currentMediaItemIndex)
+    assertEquals(expected = 0, actual = player.currentPosition)
+  }
+
+  @Test
+  fun `ignores adding media items while no book is loaded`() {
+    player.addMediaItem(MediaItem.fromUri("file:///other.mp3"))
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 0, actual = exoPlayer.mediaItemCount)
+  }
+
+  @Test
+  fun `ignores media items that are not the chapter marks of a book`() {
+    setBook(listOf(singleFileWithThreeMarks()))
+
+    player.setMediaItem(MediaItem.fromUri("file:///other.mp3"))
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = book.chapters.single().id, actual = exoPlayer.currentMediaItem?.mediaId?.toMediaIdOrNull()?.realChapterId)
+    assertEquals(expected = 3, actual = player.mediaItemCount)
+  }
+
+  @Test
   fun `clearing removes the whole book`() {
     setBook(listOf(singleFileWithThreeMarks()))
 
@@ -245,13 +315,10 @@ class ChapterMarkPlayerTest {
     chapters: List<Chapter>,
     startItemIndex: Int = 0,
     positionInItemMs: Long = 0,
+    content: (BookContent) -> BookContent = { it },
   ) {
-    book = book(chapters)
-    player.setBook(
-      book = book,
-      startItemIndex = startItemIndex,
-      positionInItemMs = positionInItemMs,
-    )
+    book = book(chapters).update(content)
+    player.setMediaItems(mediaItemProvider.playbackItems(book), startItemIndex, positionInItemMs)
     player.prepare()
     TestPlayerRunHelper.runUntilPlaybackState(exoPlayer, Player.STATE_READY)
   }

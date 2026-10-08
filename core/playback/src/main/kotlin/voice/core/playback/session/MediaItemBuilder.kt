@@ -26,6 +26,7 @@ internal fun MediaItem(
   durationMs: Long? = null,
   clippingConfiguration: ClippingConfiguration = ClippingConfiguration.UNSET,
   mediaType: MediaType,
+  tag: Any? = null,
 ): MediaItem {
   val metadata =
     MediaMetadata.Builder()
@@ -51,6 +52,7 @@ internal fun MediaItem(
     .setMediaMetadata(metadata)
     .setUri(sourceUri)
     .setClippingConfiguration(clippingConfiguration)
+    .setTag(tag)
     .build()
 }
 

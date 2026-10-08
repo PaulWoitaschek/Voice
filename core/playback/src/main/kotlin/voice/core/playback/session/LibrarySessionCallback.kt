@@ -78,30 +78,25 @@ class LibrarySessionCallback(
     startPositionMs: Long,
   ): ListenableFuture<MediaItemsWithStartPosition> {
     Logger.d("onSetMediaItems(mediaItems.size=${mediaItems.size}, startIndex=$startIndex, startPosition=$startPositionMs)")
-    val item = mediaItems.singleOrNull()
-    return if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
-      scope.future {
-        onSetMediaItemsForSingleItem(item)
-          ?: super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs).await()
-      }
-    } else {
-      super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs)
+    val item = mediaItems.firstOrNull()
+      ?: return super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs)
+    return scope.future {
+      onSetMediaItemsForFirstItem(item)
+        ?: super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs).await()
     }
   }
 
-  private suspend fun onSetMediaItemsForSingleItem(item: MediaItem): MediaItemsWithStartPosition? {
+  private suspend fun onSetMediaItemsForFirstItem(item: MediaItem): MediaItemsWithStartPosition? {
     val searchQuery = item.requestMetadata.searchQuery
-    return if (searchQuery != null) {
+    val book = if (searchQuery != null) {
       val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
-      val searchResult = bookSearchHandler.handle(search) ?: return null
-      currentBookStoreId.updateData { searchResult.id }
-      mediaItemProvider.mediaItemsWithStartPosition(searchResult)
+      bookSearchHandler.handle(search)
     } else {
-      (item.mediaId.toMediaIdOrNull() as? MediaId.Book)?.let { bookId ->
-        currentBookStoreId.updateData { bookId.id }
-      }
-      mediaItemProvider.mediaItemsWithStartPosition(item.mediaId)
-    }
+      (item.mediaId.toMediaIdOrNull() as? MediaId.Book)?.let { bookRepository.get(it.id) }
+    } ?: return null
+    val items = mediaItemProvider.mediaItemsWithStartPosition(book) ?: return null
+    currentBookStoreId.updateData { book.id }
+    return items
   }
 
   override fun onGetLibraryRoot(
@@ -156,11 +151,12 @@ class LibrarySessionCallback(
   ): ListenableFuture<MediaItemsWithStartPosition> {
     Logger.d("onPlaybackResumption")
     return scope.future {
-      val currentBook = currentBook()
-      if (currentBook != null) {
-        mediaItemProvider.mediaItemsWithStartPosition(currentBook)
+      val book = currentBook() ?: throw UnsupportedOperationException()
+      if (isForPlayback) {
+        mediaItemProvider.mediaItemsWithStartPosition(book) ?: throw UnsupportedOperationException()
       } else {
-        throw UnsupportedOperationException()
+        // only shown on System UI's resumption card after a reboot, which should show the book
+        MediaItemsWithStartPosition(listOf(mediaItemProvider.mediaItem(book)), C.INDEX_UNSET, C.TIME_UNSET)
       }
     }
   }
@@ -198,10 +194,9 @@ class LibrarySessionCallback(
   }
 
   private suspend fun prepareCurrentBook() {
-    val bookId = currentBookStoreId.data.first() ?: return
-    val book = bookRepository.get(bookId) ?: return
-    val item = mediaItemProvider.mediaItem(book)
-    player.setMediaItem(item)
+    val book = currentBook() ?: return
+    val items = mediaItemProvider.mediaItemsWithStartPosition(book) ?: return
+    player.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     player.prepare()
   }
 

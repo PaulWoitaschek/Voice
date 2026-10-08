@@ -3,7 +3,6 @@ package voice.core.playback.session
 import android.app.Application
 import android.net.Uri
 import androidx.datastore.core.DataStore
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import dev.zacsweers.metro.Inject
@@ -82,22 +81,18 @@ class MediaItemProvider(
     }
   }
 
-  fun mediaItemsWithStartPosition(book: Book): MediaItemsWithStartPosition {
-    return MediaItemsWithStartPosition(
-      listOf(mediaItem(book)),
-      C.INDEX_UNSET,
-      C.TIME_UNSET,
+  fun mediaItemsWithStartPosition(book: Book): MediaItemsWithStartPosition? {
+    val items = playbackItems(book).takeUnless { it.isEmpty() } ?: return null
+    val content = book.content
+    val startItem = book.playbackItemForPosition(
+      chapterId = content.currentChapter,
+      positionInChapterMs = content.positionInChapter,
     )
-  }
-
-  suspend fun mediaItemsWithStartPosition(id: String): MediaItemsWithStartPosition? {
-    return when (val mediaId = id.toMediaIdOrNull()) {
-      is MediaId.Book -> {
-        val book = bookRepository.get(mediaId.id) ?: return null
-        mediaItemsWithStartPosition(book)
-      }
-      is MediaId.Chapter, is MediaId.ChapterMark, MediaId.Root, MediaId.Recent, null -> null
-    }
+    return MediaItemsWithStartPosition(
+      items,
+      startItem?.index ?: 0,
+      startItem?.positionInMediaItem(content.positionInChapter) ?: 0,
+    )
   }
 
   suspend fun chapters(bookId: BookId): List<MediaItem>? {
@@ -111,9 +106,12 @@ class MediaItemProvider(
     }
   }
 
+  /**
+   * Each item carries its [Book] as the tag, so the player can split the book's files into these items.
+   */
   internal fun playbackItems(book: Book): List<MediaItem> {
     return book.playbackItems().map { playbackItem ->
-      mediaItem(playbackItem, book.content)
+      mediaItem(playbackItem, book.content, tag = book)
     }
   }
 
@@ -163,6 +161,7 @@ class MediaItemProvider(
   private fun mediaItem(
     playbackItem: PlaybackItem,
     content: BookContent,
+    tag: Book? = null,
   ) = MediaItem(
     title = playbackItem.mark.name
       ?: playbackItem.chapter.name
@@ -175,6 +174,7 @@ class MediaItemProvider(
     artist = content.author,
     durationMs = playbackItem.mark.durationMs,
     mediaType = MediaType.AudioBookChapter,
+    tag = tag,
   )
 
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)

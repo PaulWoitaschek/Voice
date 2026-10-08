@@ -111,7 +111,7 @@ class PlayerController(
     }
   }
 
-  fun skipSilence(skip: Boolean) = executeAfterPrepare { controller ->
+  fun skipSilence(skip: Boolean) = executeAfterConnect { controller ->
     controller.record(ListeningEvent.Type.SkipSilenceChanged, value = skip.toString())
     controller.sendCustomCommand(CustomCommand.SetSkipSilence(skip))
   }
@@ -272,7 +272,7 @@ class PlayerController(
     controller.setPlaybackSpeed(speed)
   }
 
-  fun setGain(gain: Decibel) = executeAfterPrepare { controller ->
+  fun setGain(gain: Decibel) = executeAfterConnect { controller ->
     controller.record(ListeningEvent.Type.VolumeBoostChanged, value = gain.value.toString())
     controller.sendCustomCommand(CustomCommand.SetGain(gain))
   }
@@ -346,6 +346,17 @@ class PlayerController(
     awaitClose {
       tickJob?.cancel()
       controller.removeListener(listener)
+    }
+  }
+
+  /**
+   * For settings that are stored with the book. The player restores them when it gets the book, so preparing it here
+   * would only let a book that is still loading restore the old value after this one.
+   */
+  private inline fun executeAfterConnect(crossinline action: suspend (MediaController) -> Unit) {
+    scope.launch {
+      val controller = awaitConnect() ?: return@launch
+      action(controller)
     }
   }
 

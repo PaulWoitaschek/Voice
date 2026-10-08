@@ -104,7 +104,7 @@ class VoicePlayerTest {
   private lateinit var currentBook: Book
   private val sleepTimer = FakeSleepTimer()
   private val historyRepo = RecordingRepo()
-  private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
+  private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider, mockk(relaxed = true))
   private val player = VoicePlayer(
     player = chapterMarkPlayer,
     repo = mockk {
@@ -300,7 +300,7 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `setBook resumes inside matching chapter mark`() = scope.runTest {
+  fun `resumes inside the chapter mark the book was left in`() = scope.runTest {
     val chapter = chapter(
       ChapterMark(startMs = 0, endMs = 11_999, name = null),
       ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
@@ -443,7 +443,8 @@ class VoicePlayerTest {
         positionInChapter = positionInChapter,
       )
     }
-    player.setMediaItem(mediaItemProvider.mediaItem(currentBook))
+    val items = mediaItemProvider.mediaItemsWithStartPosition(currentBook)!!
+    player.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     runCurrent()
   }
 

@@ -12,13 +12,17 @@ import com.google.common.util.concurrent.ListenableFuture
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import voice.core.data.Book
+import voice.core.data.BookContent
 import voice.core.data.ChapterMark
 import voice.core.data.durationMs
 import voice.core.logging.api.Logger
 import voice.core.playback.di.PlaybackScope
+import voice.core.playback.misc.Decibel
+import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.ChapterMarkPlaylist
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.chapterMarkPlaylist
+import voice.core.playback.session.playbackItems
 
 /**
  * Presents the wrapped player, which holds one media item per audio file, as a playlist with one
@@ -32,6 +36,7 @@ import voice.core.playback.session.chapterMarkPlaylist
 class ChapterMarkPlayer(
   private val player: Player,
   private val mediaItemProvider: MediaItemProvider,
+  private val volumeGain: VolumeGain,
 ) : ForwardingSimpleBasePlayer(player) {
 
   private var book: Book? = null
@@ -53,26 +58,66 @@ class ChapterMarkPlayer(
     )
   }
 
-  internal fun setBook(
+  /**
+   * Plays the chapter marks of a book. [MediaItemProvider.playbackItems] tags them with their book, which tells how the
+   * marks are spread over the book's files.
+   */
+  override fun handleSetMediaItems(
+    mediaItems: List<MediaItem>,
+    startIndex: Int,
+    startPositionMs: Long,
+  ): ListenableFuture<*> {
+    if (mediaItems.isEmpty()) {
+      clear()
+      return Futures.immediateVoidFuture()
+    }
+    val book = mediaItems.first().localConfiguration?.tag as? Book
+    if (book == null || mediaItems.size != book.playbackItems().size) {
+      Logger.w("Ignoring media items that are not the chapter marks of a book")
+      return Futures.immediateVoidFuture()
+    }
+    restoreSettings(book.content)
+    // keeping the position of the previous book can point past the end of this one
+    val startsAtItem = startIndex in mediaItems.indices
+    setBook(
+      book = book,
+      markMediaItems = mediaItems,
+      startItemIndex = if (startsAtItem) startIndex else 0,
+      positionInItemMs = if (startsAtItem && startPositionMs != C.TIME_UNSET) startPositionMs else 0,
+    )
+    return Futures.immediateVoidFuture()
+  }
+
+  private fun restoreSettings(content: BookContent) {
+    player.setPlaybackSpeed(content.playbackSpeed)
+    setSkipSilenceEnabled(content.skipSilence)
+    volumeGain.gain = Decibel(content.gain)
+  }
+
+  private fun setBook(
     book: Book,
+    markMediaItems: List<MediaItem>,
     startItemIndex: Int,
     positionInItemMs: Long,
   ) {
-    val playlist = applyBook(book)
+    val playlist = applyBook(book, markMediaItems)
+    val mark = playlist.items[startItemIndex].mark
     reportedItemIndex = startItemIndex
     player.setMediaItems(
       mediaItemProvider.chapterMediaItems(book),
       playlist.fileIndexOf(startItemIndex),
-      playlist.items[startItemIndex].mark.startMs + positionInItemMs,
+      mark.startMs + positionInItemMs.coerceIn(0L, mark.durationMs),
     )
     registerBoundaryMessages(playlist)
     invalidateState()
   }
 
-  private fun applyBook(book: Book): ChapterMarkPlaylist {
+  private fun applyBook(
+    book: Book,
+    markMediaItems: List<MediaItem> = mediaItemProvider.playbackItems(book),
+  ): ChapterMarkPlaylist {
     clearBoundaryMessages()
     val playlist = book.chapterMarkPlaylist()
-    val markMediaItems = mediaItemProvider.playbackItems(book)
     this.book = book
     this.playlist = playlist
     markItems = playlist.items.mapIndexed { index, item ->
@@ -267,35 +312,26 @@ class ChapterMarkPlayer(
     return Futures.immediateVoidFuture()
   }
 
-  // Controllers can replace the whole book, which VoicePlayer maps to setBook, or clear it. Editing
-  // single chapters would have to be translated into edits of the files of the wrapped player, so
-  // such requests are ignored.
+  // Controllers can replace the whole book or clear it. Adding or editing single chapters would have to be
+  // translated into edits of the files of the wrapped player, so such requests are ignored, also while no book is
+  // loaded: items that come without their book have no file to play.
 
   override fun handleAddMediaItems(
     index: Int,
     mediaItems: List<MediaItem>,
-  ): ListenableFuture<*> {
-    if (book == null) return super.handleAddMediaItems(index, mediaItems)
-    return ignoreChapterEdit("add")
-  }
+  ): ListenableFuture<*> = ignoreChapterEdit("add")
 
   override fun handleMoveMediaItems(
     fromIndex: Int,
     toIndex: Int,
     newIndex: Int,
-  ): ListenableFuture<*> {
-    if (book == null) return super.handleMoveMediaItems(fromIndex, toIndex, newIndex)
-    return ignoreChapterEdit("move")
-  }
+  ): ListenableFuture<*> = ignoreChapterEdit("move")
 
   override fun handleReplaceMediaItems(
     fromIndex: Int,
     toIndex: Int,
     mediaItems: List<MediaItem>,
-  ): ListenableFuture<*> {
-    if (book == null) return super.handleReplaceMediaItems(fromIndex, toIndex, mediaItems)
-    return ignoreChapterEdit("replace")
-  }
+  ): ListenableFuture<*> = ignoreChapterEdit("replace")
 
   override fun handleRemoveMediaItems(
     fromIndex: Int,
@@ -303,13 +339,17 @@ class ChapterMarkPlayer(
   ): ListenableFuture<*> {
     if (book == null) return super.handleRemoveMediaItems(fromIndex, toIndex)
     if (fromIndex > 0 || toIndex < markItems.size) return ignoreChapterEdit("remove")
+    clear()
+    return Futures.immediateVoidFuture()
+  }
+
+  private fun clear() {
     clearBoundaryMessages()
     book = null
     playlist = null
     markItems = emptyList()
     reportedItemIndex = null
     player.clearMediaItems()
-    return Futures.immediateVoidFuture()
   }
 
   private fun ignoreChapterEdit(operation: String): ListenableFuture<*> {
