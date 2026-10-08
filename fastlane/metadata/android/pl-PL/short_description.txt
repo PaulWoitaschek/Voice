@@ -1,1 +1,1 @@
-Prosty odtwarzacz audiobooków dla własnych plików, z timerem snu i zakładkami.
+Spokojny odtwarzacz audiobooków dla twoich plików. Bez konta, bez reklam.

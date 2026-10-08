@@ -1,33 +1,70 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,500..900&family=Inter:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wdth,wght,ROND@6..144,25..151,100..1000,0..100&family=M+PLUS+Rounded+1c:wght@500;800&family=Rubik:wght@500..800&display=swap');
 
 :root {
-  --voice-bg-1: #0a1733;
-  --voice-bg-2: #1d3a7a;
-  --voice-bg-3: #3d6fd6;
-  --voice-bg-4: #6aa3ff;
-  --voice-glow-warm: #ffb547;
-  --voice-glow-cool: #7df9ff;
-  --voice-text: #ffffff;
-  --voice-text-muted: rgba(255, 255, 255, 0.82);
-  --voice-bezel: #0d0d10;
-  --voice-bezel-edge: #25272e;
+  --voice-font-display: 'Google Sans Flex', 'Rubik', 'M PLUS Rounded 1c', 'Noto Sans', system-ui, sans-serif;
+  --voice-font: 'Google Sans Flex', 'Rubik', 'M PLUS Rounded 1c', 'Noto Sans', system-ui, sans-serif;
+}
 
-  --voice-bg-gradient:
-    radial-gradient(ellipse 70% 50% at 18% 12%, rgba(125, 249, 255, 0.22), transparent 60%),
-    radial-gradient(ellipse 60% 60% at 85% 88%, rgba(255, 181, 71, 0.18), transparent 65%),
-    radial-gradient(ellipse 90% 60% at 60% 100%, rgba(106, 163, 255, 0.35), transparent 70%),
-    linear-gradient(135deg, var(--voice-bg-1) 0%, var(--voice-bg-2) 45%, var(--voice-bg-3) 100%);
+/* Google Sans Flex has no Cyrillic, so these locales use Rubik for Latin too and stay in one typeface. */
+:lang(ru),
+:lang(uk) {
+  --voice-font-display: 'Rubik', 'Noto Sans', system-ui, sans-serif;
+  --voice-font: 'Rubik', 'Noto Sans', system-ui, sans-serif;
+}
 
-  --voice-font-display: 'Bricolage Grotesque', 'Helvetica Neue', system-ui, -apple-system, 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans JP', 'Noto Sans Hebrew', sans-serif;
-  --voice-font: 'Inter', 'Helvetica Neue', system-ui, -apple-system, 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans JP', 'Noto Sans Hebrew', sans-serif;
+:lang(ja) {
+  --voice-font-display: 'M PLUS Rounded 1c', 'Noto Sans JP', system-ui, sans-serif;
+  --voice-font: 'M PLUS Rounded 1c', 'Noto Sans JP', system-ui, sans-serif;
+}
+
+/* The tones follow Voice's Material 3 tonal palettes: the default seed, a warm cover, and the night theme. */
+.canvas {
+  --surface: #f6f7ff;
+  --blob-1: #c4d6ff;
+  --blob-2: #e4dcff;
+  --blob-3: #cfeaff;
+  --shape-1: #d8e4ff;
+  --shape-2: #e6defc;
+  --star: #6d8de0;
+  --ink: #0d2a5c;
+  --ink-muted: #3e5280;
+  --frame: #191b21;
+  --frame-shadow: rgba(24, 46, 110, 0.28);
+}
+
+.canvas[data-tone='amber'] {
+  --surface: #fff7ec;
+  --blob-1: #ffd59a;
+  --blob-2: #ffe4c4;
+  --blob-3: #ffd0b4;
+  --shape-1: #ffe1b3;
+  --shape-2: #ffd8c4;
+  --star: #d38716;
+  --ink: #4a2900;
+  --ink-muted: #7a4f1c;
+  --frame-shadow: rgba(110, 64, 10, 0.26);
+}
+
+.canvas[data-tone='night'] {
+  --surface: #0b1636;
+  --blob-1: #1f3d8c;
+  --blob-2: #2f2b7c;
+  --blob-3: #10316f;
+  --shape-1: #172c66;
+  --shape-2: #222a70;
+  --star: #c8d7ff;
+  --ink: #ffffff;
+  --ink-muted: #c6d3f5;
+  --frame: #05070d;
+  --frame-shadow: rgba(0, 0, 0, 0.5);
 }
 
 * { box-sizing: border-box; }
 html, body {
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
   background: #000;
   font-family: var(--voice-font);
-  color: var(--voice-text);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -35,17 +72,26 @@ html, body {
 .canvas {
   position: relative;
   overflow: hidden;
-  background: var(--voice-bg-gradient);
-  background-color: var(--voice-bg-1);
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse 75% 45% at 10% 8%, var(--blob-1), transparent 70%),
+    radial-gradient(ellipse 70% 45% at 95% 40%, var(--blob-2), transparent 70%),
+    radial-gradient(ellipse 85% 45% at 25% 98%, var(--blob-3), transparent 70%),
+    var(--surface);
 }
 
-.canvas::after {
-  content: '';
+.decor {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 40%),
-    radial-gradient(circle at 80% 90%, rgba(255,255,255,0.04), transparent 45%);
   pointer-events: none;
   z-index: 0;
 }
+
+.decor svg {
+  position: absolute;
+  overflow: visible;
+}
+
+.decor .shape-1 { fill: var(--shape-1); }
+.decor .shape-2 { fill: var(--shape-2); }
+.decor .star { fill: var(--star); }

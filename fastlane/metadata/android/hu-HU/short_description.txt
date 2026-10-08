@@ -1,1 +1,1 @@
-Letisztult hangoskönyv-lejátszó saját fájlokhoz, időzítővel és könyvjelzőkkel.
+Nyugodt hangoskönyv-lejátszó saját fájlokhoz. Fiók és reklámok nélkül.

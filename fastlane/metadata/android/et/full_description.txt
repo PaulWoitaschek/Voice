@@ -1,36 +1,54 @@
-Voice on lihtne heliraamatute kuulamisrakendus neile, kes kasutavad oma raamatufaile.
+Voice on rahulik heliraamatute pleier neile, kes armastavad lugusid ja kellel on omaenda raamatud.
 
-Lisa oma heliraamatute kaust üks kord ja Voice muudab su kohalikud helifailid lihtsaks raamatukoguks. Rakendus mäletab iga raamatu lugemiskohta, hoiab taasesitusnupud käepärast ja ei sega sind.
+Vali kaust, kus on sinu heliraamatud. Voice näitab sulle leitud raamatuid, lisab need sinu raamatukokku ja jätab meelde, kus sa igas raamatus pooleli oled. Seejärel jääb Voice tagaplaanile, et saaksid lihtsalt kuulata.
 
-<b>Loodud audioraamatute jaoks</b>
+<b>Pleier, mis sobib sinu raamatuga</b>
 
-• Jätka täpselt sealt, kus pooleli jäid
-• Unetaimer sujuva helivaljuse vähendamisega
-• Võimalus peatuda praeguse peatüki lõppedes
-• Raputamine lükkab taimerit edasi
-• Taasesituse kiiruse kohendamine
-• Valjuse suurendamine vaiksete salvestuste puhul
-• Vaikuse vahelejätmise võimalus
-• Automaatne tagasikerimine pärast pikemaid pause
-• Järjehoidjad koos ajamärkide ja sinu lisatud nimedega
+• Pleier võtab oma värvid parajasti kuulatava raamatu kaanepildilt
+• Voice jätab meelde, kus sa igas raamatus pooleli oled
+• Taasesituse kiirus, vaikuse vahelejätmine ja helivõimendus vaiksete salvestuste jaoks
+• Hüppasid liiga kaugele? Üks puudutus viib sind tagasi
+• Automaatne tagasikerimine pärast pausi, et sa järge ei kaotaks
+
+<b>Jää loo saatel magama</b>
+
+• Unetaimer, mis keerab heli sujuvalt vaiksemaks, või peatumine peatüki lõpus
+• Raputa telefoni kohe pärast taimeri lõppu, et see uuesti käivitada
+• Rahulik öine välimus, kuni taimer töötab
+
+<b>Koht ei lähe kunagi kaduma</b>
+
+• Salvesta hetk pika vajutusega ning lisa nimi või märkus hiljem
+• Märgi järjehoidjad lemmikuteks, tsitaatideks, märkusteks või kohtadeks, mida uuesti kuulata
+• Kuulamisajalugu näitab iga esitust, pausi ja hüpet, nii et leiad alati tee tagasi
+• Kui raamatu käivitas sinu auto, kõrvaklapid või nutikell, pakub Voice sulle võimalust tagasi minna
+
+<b>Sinu raamatukogu, just nii nagu soovid</b>
+
+• Jätka kuulamist otse raamatukogu ülaosast
+• Raamatud on jaotatud rühmadesse: praegused, kuulamise ootel ja kuulatud
 • Otsing pealkirja ja autori järgi
-• Filtrid, mille valikuteks on kuulamisel, lõpetatud ja alustamata heliraamatud
-• Loendi- ja ruudustikuvaated
-• Kaanepilt lõimitud piltidest, kohalikest failidest või veebist otsides
-• Avakuva vidin, meediumiteated ja Android Auto tugi
+• Loendi- ja ruudustikuvaade
+• Kaanepildid failist, telefonist või veebiotsingust
+• Avakuva vidinad: „Praegu mängib“, „Raamaturiiul“ ja „Unetaimer“
+• Meediumimärguanne ja Android Auto
+• Hele ja tume kujundus, Dünaamiline värv ja värviskeemid, et teha Voice enda omaks
+• Saadaval 25 keeles
 
-<b>Laadi üles oma failid</b>
+<b>Kasuta oma faile</b>
 
-Voice toimib DRM-vabade heliraamatufailidega, nagu M4B, MP3, M4A, OGG, OGA ja OPUS. Hoia oma raamatuid kaustades just nii, nagu soovid; Voice tunneb need ära ja korraldab su raamatukogu loogilisel viisil.
+Voice esitab DRM-vabu heliraamatuid, nagu M4B, MP3, M4A, OGG, OGA ja OPUS. Hoia oma raamatuid kaustades just nii, nagu sulle meeldib. Kaustas võib olla üks raamat või kogu sinu raamatukogu – Voice korraldab selle sinu eest.
 
-<b>Ei mingit müra</b>
+<b>Ainult sina ja sinu lood</b>
 
-• Kasutajakontot ei ole vaja
-• Ei mingeid reklaame
-• Pole sundkorras pilvesünkroonimist
-• Täisfunktsionaalsus on saadaval ilma tasuliste lisateenusteta
+• Kontot pole vaja
+• Reklaame pole
+• Midagi pole maksumüüri taga
+• Sinu raamatud jäävad sinu seadmesse
 
-Voice on avatud lähtekoodiga tarkvara, mis on avaldatud GNU GPLv3 litsentsi alusel.
+Kui Voice sulle meeldib, saad seda seadetes toetada. See on lihtsalt tänuavaldus ega ava midagi lisaks.
+
+Voice on avatud lähtekoodiga ja avaldatud GNU GPLv3 litsentsi alusel.
 
 Tagasiside ja veateated:
 https://github.com/PaulWoitaschek/Voice/issues

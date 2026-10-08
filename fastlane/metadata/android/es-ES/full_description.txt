@@ -1,34 +1,52 @@
-Voice es un reproductor de audiolibros claro para quienes traen sus propios libros.
+Voice es un reproductor de audiolibros tranquilo para quienes aman las historias y tienen sus propios libros.
 
-Añade una vez tu carpeta de audiolibros y Voice convierte tus archivos de audio locales en una biblioteca sencilla. Recuerda la posición de cada libro, mantiene los controles de reproducción a mano y no se interpone.
+Elige la carpeta con tus audiolibros. Voice te muestra los libros que encuentra, los añade a tu biblioteca y recuerda dónde te quedaste en cada uno. Después pasa a un segundo plano para que solo tengas que escuchar.
 
-<b>Hecho para audiolibros</b>
+<b>Un reproductor que combina con tu libro</b>
 
-• Continúa exactamente donde lo dejaste
-• Temporizador de sueño con desvanecimiento suave
-• Detente al final del capítulo actual
-• Agita para ampliar el temporizador
-• Control de velocidad de reproducción
-• Aumento de volumen para grabaciones silenciosas
-• Salto de silencios
-• Rebobinado automático tras pausas largas
-• Marcadores con marcas de tiempo y nombres personalizados
+• El reproductor toma sus colores de la portada del libro que estás escuchando
+• Voice recuerda dónde te quedaste en cada libro
+• Velocidad de reproducción, saltar silencio y potenciar volumen para grabaciones que se oyen bajo
+• ¿Saltaste demasiado lejos? Con un toque vuelves atrás
+• Retroceso automático tras una pausa, para que no pierdas el hilo
+
+<b>Duérmete escuchando una historia</b>
+
+• Temporizador de apagado que baja el volumen poco a poco, o que se detiene al final del capítulo
+• Agita el teléfono justo después de que termine el temporizador para reiniciarlo
+• Un aspecto nocturno y tranquilo mientras corre el temporizador
+
+<b>Nunca pierdas por dónde ibas</b>
+
+• Guarda un momento con una pulsación larga y ponle un nombre o una nota más tarde
+• Clasifica tus marcadores como favoritos, citas, notas o para repasar
+• Tu historial de escucha muestra cada reproducción, pausa y salto, para que siempre puedas volver
+• Si tu coche, tus auriculares o tu reloj inician un libro, Voice te ofrece volver a donde lo dejaste
+
+<b>Tu biblioteca, a tu manera</b>
+
+• Sigue escuchando directamente desde la parte superior de tu biblioteca
+• Libros agrupados en «Actual», «Aún no comenzado» y «Completado»
 • Búsqueda por título y autor
-• Filtros de actual, completados y no iniciados
-• Vistas de lista y cuadrícula
-• Portadas desde imágenes incrustadas, archivos locales o búsqueda en línea
-• Widget de inicio, notificación multimedia y compatibilidad con Android Auto
+• Vista de lista y de cuadrícula
+• Portadas del propio archivo, de tu teléfono o de una búsqueda en internet
+• Widgets para la pantalla de inicio: «Reproduciendo ahora», «Estantería» y «Temporizador de apagado»
+• Notificación multimedia y Android Auto
+• Tema claro y oscuro, Color dinámico y esquemas de colores para hacer Voice a tu medida
+• Disponible en 25 idiomas
 
 <b>Trae tus propios archivos</b>
 
-Voice funciona con archivos de audiolibros sin DRM como M4B, MP3, M4A, OGG, OGA y OPUS. Guarda tus libros en carpetas como prefieras; Voice los reconoce y organiza tu biblioteca.
+Voice reproduce audiolibros sin DRM, como M4B, MP3, M4A, OGG, OGA y OPUS. Guarda tus libros en carpetas como más te guste. Una carpeta puede contener un solo libro o toda tu biblioteca, y Voice la organiza por ti.
 
-<b>Sin distracciones</b>
+<b>Solo tú y tus historias</b>
 
-• No requiere cuenta
+• Sin cuenta
 • Sin anuncios
-• Sin sincronización obligatoria en la nube
-• Todas las funciones están disponibles sin mejoras de pago
+• Ninguna función de pago
+• Tus libros se quedan en tu dispositivo
+
+Si te gusta Voice, puedes apoyarlo desde los ajustes. Es un agradecimiento y no desbloquea nada.
 
 Voice es de código abierto bajo la licencia GNU GPLv3.
 

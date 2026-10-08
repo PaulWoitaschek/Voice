@@ -1,20 +1,54 @@
-Egyszerű, minimál kinézetű hangoskönyv-lejátszót keres, amely egyszerűen csak működik?
-Olyat, amely lehetővé teszi, hogy arra összpontosítson, amit valójában szeretne: Hangoskönyveket hallgatni?
-Csak hozzá kell adnia a fő hangoskönyv-mappát, és a rendszer minden mappát egyetlen könyvként felismer. Így a könyvtár egyszerű és rendezett marad.
+A Voice nyugodt hangulatú hangoskönyv-lejátszó azoknak, akik szeretik a történeteket, és a saját könyveiket hallgatják.
 
-Lehetőségek:
+Válassza ki a hangoskönyveit tartalmazó mappát. A Voice megmutatja a talált könyveket, hozzáadja őket a könyvtárához, és mindegyiknél megjegyzi, hol tart. Aztán háttérbe húzódik, hogy Ön egyszerűen csak hallgathasson.
 
-- Emlékezés az utolsó pozícióra
-- Lejátszási sebesség beállítása
-- Gyönyörű material kinézet
-- Nappali és éjszakai témák. Könnyebbség a szemnek
-- Könyvjelzők
-- Android Auto
-- Alvásidőzítő. Nem kell kikapcsolni a lejátszót az éjszaka közepén.
+<b>A könyvhöz illő lejátszó</b>
 
-A Voice ingyenes és nyílt forráskódú. Ez azt jelenti, hogy mindenki láthatja, mit csinál. Minimális engedélyeket igényel.
+• A lejátszó az éppen hallgatott könyv borítójából veszi a színeit
+• A Voice minden könyvnél megjegyzi, hol tart
+• Lejátszási sebesség, csend kihagyása és hangerőnövelés a halk felvételekhez
+• Túl messzire ugrott? Egy koppintással visszatérhet
+• Automatikus visszatekerés szünet után, hogy ne veszítse el a fonalat
 
-Ha javaslatai vannak, vagy hibákat talál, jelentse azokat itt:
+<b>Történettel az álomba</b>
+
+• Alvásidőzítő lágy elhalkulással, vagy megállás a fejezet végén
+• Közvetlenül az időzítő lejárta után rázza meg a telefont az újraindításhoz
+• Nyugodt éjszakai megjelenés, amíg az időzítő fut
+
+<b>Mindig tudja, hol tart</b>
+
+• Hosszú lenyomással elmenthet egy pillanatot, és később nevet vagy jegyzetet adhat hozzá
+• Jelölje meg a könyvjelzőket kedvencként, idézetként, jegyzetként vagy újrahallgatásra
+• A hallgatási előzmények minden lejátszást, szünetet és ugrást mutatnak, így mindig visszatalál
+• Ha az autója, a fejhallgatója vagy az órája indított el egy könyvet, a Voice felajánlja a visszatérést oda, ahol tartott
+
+<b>Könyvtár az Ön ízlése szerint</b>
+
+• Folytassa a hallgatást rögtön a könyvtár tetejéről
+• Jelenlegi, még nem elkezdett és befejezett könyvek külön csoportokban
+• Keresés cím és szerző szerint
+• Lista- és rácsnézet
+• Borítók a fájlból, a telefonjáról vagy online keresésből
+• Kezdőképernyő-widgetek: Most szól, Könyvespolc és Alvásidőzítő
+• Lejátszásvezérlés az értesítésben és Android Auto
+• Világos és sötét téma, dinamikus színek és színsémák, hogy a Voice-t a sajátjává tehesse
+• 25 nyelven érhető el
+
+<b>A saját fájljaival működik</b>
+
+A Voice DRM-mentes hangoskönyveket játszik le, például M4B, MP3, M4A, OGG, OGA és OPUS formátumban. Tárolja a könyveit mappákban, ahogy Önnek tetszik. Egy mappában lehet egyetlen könyv vagy a teljes könyvtára, a Voice pedig rendet tesz benne.
+
+<b>Csak Ön és a történetei</b>
+
+• Nincs fiók
+• Nincs reklám
+• Nincsenek fizetős funkciók
+• A könyvei az eszközén maradnak
+
+Ha tetszik a Voice, a beállításokban támogathatja. Ez egy köszönet, és nem old fel semmit.
+
+A Voice nyílt forráskódú, és a GNU GPLv3 licenc alatt érhető el.
+
+Visszajelzés és hibajelentés:
 https://github.com/PaulWoitaschek/Voice/issues
-
-A nyílt forráskódú licenc a Gnu GPLv3

@@ -1,20 +1,54 @@
-Cauți un player simplu și minimalist pentru cărți audio care pur și simplu își face treaba?
-Un player care îți permite să te focusezi pe ceea ce într-adevăr vrei să faci: să-ți asculți cărțile?
-E nevoie doar să-ți alegi directorul principal și fiecare subdirector va fi identificat ca o singură carte. Astfel, biblioteca ta va fi simplă și ordonată.
+Voice este un player liniștit de cărți audio, pentru cei care iubesc poveștile și își ascultă propriile cărți.
 
-Capabilități:
+Alege directorul cu cărțile tale audio. Voice îți arată cărțile găsite, le adaugă în biblioteca ta și reține unde ai rămas în fiecare. Apoi se dă la o parte, ca tu să poți pur și simplu să asculți.
 
-- Reține ultima poziție.
-- Viteză de playback customizabilă.
-- Design familiar și intuitiv
-- Temă întunecată disponibilă pentru serile liniștite
-- Semne de carte
-- Android Auto
-- Oprire temporizată. Nu e nevoie să te trezești în mijlocul nopții ca să oprești player-ul.
+<b>Un player asortat cu cartea ta</b>
 
-Voice este gratuit și open source. Asta înseamnă că toată lumea poate să vadă ce se întâmplă "sub capotă". Folosește doar permisiunile absolut necesare.
+• Player-ul preia culorile de pe coperta cărții pe care o asculți
+• Voice reține unde ai rămas în fiecare carte
+• Viteză de redare, omitere liniște și amplificare volum pentru înregistrările cu sunet slab
+• Ai sărit prea departe? O atingere te duce înapoi
+• Reluare automată: după o pauză, Voice sare puțin înapoi, ca să nu pierzi firul
 
-Dacă ai sugestii sau ai găsit un bug, te așteptăm aici:
+<b>Adormi ascultând o poveste</b>
+
+• Oprire temporizată cu sunet care se stinge treptat sau oprire la sfârșitul capitolului
+• Scutură telefonul imediat după ce expiră temporizatorul pentru a-l reporni
+• Un aspect de noapte liniștit cât timp temporizatorul e pornit
+
+<b>Știi mereu unde ai rămas</b>
+
+• Salvează un moment ținând apăsat și adaugă mai târziu un nume sau o notă
+• Marchează semnele de carte ca favorite, citate, note sau pasaje de reascultat
+• Istoricul de ascultare arată fiecare redare, pauză și salt, ca să găsești mereu drumul înapoi
+• Dacă mașina, căștile sau ceasul au pornit o carte, Voice îți propune să revii unde erai
+
+<b>Biblioteca ta, cum îți place</b>
+
+• Continuă ascultarea direct din partea de sus a bibliotecii
+• Cărți împărțite pe categorii: în lectură, neascultate încă și citite
+• Căutare după titlu și autor
+• Afișare ca listă sau grilă
+• Coperte din fișier, din telefon sau dintr-o căutare online
+• Widgeturi pentru ecranul de pornire: „Se redă acum”, „Raft” și „Oprire temporizată”
+• Notificare media și Android Auto
+• Temă luminoasă și întunecată, Culori dinamice și scheme de culori, ca să faci Voice al tău
+• Disponibil în 25 de limbi
+
+<b>Adu-ți propriile fișiere</b>
+
+Voice redă cărți audio fără DRM, cum ar fi M4B, MP3, M4A, OGG, OGA și OPUS. Păstrează-ți cărțile în directoare, după cum vrei. Un director poate conține o singură carte sau toată biblioteca ta, iar Voice o organizează pentru tine.
+
+<b>Doar tu și poveștile tale</b>
+
+• Fără cont
+• Fără reclame
+• Nicio funcție contra cost
+• Cărțile tale rămân pe dispozitivul tău
+
+Dacă îți place Voice, îl poți susține din setări. E un mulțumesc și nu deblochează nimic.
+
+Voice este open source, sub licența GNU GPLv3.
+
+Feedback și raportări de erori:
 https://github.com/PaulWoitaschek/Voice/issues
-
-Licența open source folosită este Gnu GPLv3

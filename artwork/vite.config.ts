@@ -2,7 +2,7 @@ import { defineConfig, type Plugin } from 'vite'
 import { readdirSync, readFileSync, existsSync } from 'node:fs'
 import { resolve, join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import yaml from 'js-yaml'
+import { load } from 'js-yaml'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(HERE, '..')
@@ -19,7 +19,7 @@ function listRawScreenshots(formFactor: string): string[] {
 
 function readMarketing(locale: string): unknown {
   const file = join(FASTLANE_DIR, locale, 'marketing.yml')
-  return yaml.load(readFileSync(file, 'utf8'))
+  return load(readFileSync(file, 'utf8'))
 }
 
 function fastlanePlugin(): Plugin {

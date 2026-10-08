@@ -1,34 +1,52 @@
-Voice è un lettore di audiolibri pulito per chi porta con sé i propri libri.
+Voice è un lettore di audiolibri tranquillo, per chi ama le storie e ha già i propri libri.
 
-Aggiungi una volta la cartella dei tuoi audiolibri e Voice trasforma i file audio locali in una libreria semplice. Ricorda la posizione per ogni libro, tiene i controlli di riproduzione a portata di mano e resta fuori dai piedi.
+Scegli la cartella con i tuoi audiolibri. Voice ti mostra i libri che trova, li aggiunge alla tua libreria e ricorda a che punto sei in ognuno. Poi si fa da parte, così puoi semplicemente ascoltare.
 
-<b>Creato per gli audiolibri</b>
+<b>Un lettore in tinta con il tuo libro</b>
 
-• Riprendi esattamente da dove eri rimasto
-• Timer di spegnimento con dissolvenza graduale
-• Arresto alla fine del capitolo corrente
-• Scuoti per estendere il timer
-• Controllo della velocità di riproduzione
-• Aumento del volume per registrazioni silenziose
-• Salto dei silenzi
-• Riavvolgimento automatico dopo pause lunghe
-• Segnalibri con timestamp e nomi personalizzati
+• Il lettore prende i colori dalla copertina del libro che stai ascoltando
+• Voice ricorda a che punto sei in ogni libro
+• Velocità di riproduzione, salto dei silenzi e aumento del volume per le registrazioni troppo basse
+• Un salto di troppo? Con un tocco torni indietro
+• Riavvolgimento automatico dopo una pausa, così non perdi il filo
+
+<b>Addormentati con una storia</b>
+
+• Timer sospensione con una dolce dissolvenza, oppure arresto a fine capitolo
+• Scuoti il telefono subito dopo la fine del timer per farlo ripartire
+• Un aspetto notturno rilassante mentre il timer è in corso
+
+<b>Non perdere mai il segno</b>
+
+• Salva un momento tenendo premuto, poi aggiungi un nome o una nota quando vuoi
+• Classifica i segnalibri come preferiti, citazioni, note o da riascoltare
+• La cronologia d'ascolto mostra ogni riproduzione, pausa e salto, così puoi sempre ritrovare il punto in cui eri
+• Se la tua auto, le cuffie o l'orologio hanno avviato un libro, Voice ti propone di tornare dov'eri
+
+<b>La tua libreria, a modo tuo</b>
+
+• Riprendi l'ascolto direttamente in cima alla tua libreria
+• Libri suddivisi in «Corrente», «Non ancora iniziato» e «Completato»
 • Ricerca per titolo e autore
-• Filtri per attuali, completati e non iniziati
-• Viste elenco e griglia
-• Copertine da immagini incorporate, file locali o ricerca online
-• Widget schermata Home, notifica multimediale e supporto Android Auto
+• Visualizzazione a elenco e a griglia
+• Copertine dal file, dal telefono o da una ricerca online
+• Widget per la schermata Home: «In riproduzione», «Scaffale» e «Timer sospensione»
+• Notifica multimediale e Android Auto
+• Tema chiaro e scuro, Colore dinamico e schemi colori per rendere Voice tuo
+• Disponibile in 25 lingue
 
 <b>Usa i tuoi file</b>
 
-Voice funziona con file di audiolibri senza DRM come M4B, MP3, M4A, OGG, OGA e OPUS. Tieni i libri nelle cartelle come preferisci; Voice li riconosce e organizza la tua libreria.
+Voice riproduce audiolibri senza DRM come M4B, MP3, M4A, OGG, OGA e OPUS. Organizza i libri in cartelle come preferisci. Una cartella può contenere un solo libro o tutta la tua libreria, e Voice la mette in ordine per te.
 
-<b>Senza confusione</b>
+<b>Solo tu e le tue storie</b>
 
-• Nessun account richiesto
+• Nessun account
 • Nessuna pubblicità
-• Nessuna sincronizzazione cloud obbligatoria
-• Tutte le funzioni sono disponibili senza upgrade a pagamento
+• Nessuna funzione a pagamento
+• I tuoi libri restano sul tuo dispositivo
+
+Se Voice ti piace, puoi sostenerlo dalle impostazioni. È un grazie e non sblocca nulla.
 
 Voice è open source con licenza GNU GPLv3.
 

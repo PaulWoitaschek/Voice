@@ -1,34 +1,52 @@
-Voice ist ein klarer Hörbuch-Player für alle, die ihre eigenen Bücher mitbringen.
+Voice ist ein ruhiger Hörbuch-Player für alle, die Geschichten lieben und ihre eigenen Bücher mitbringen.
 
-Füge deinen Hörbuch-Ordner einmal hinzu, und Voice macht daraus eine einfache Bibliothek. Die App merkt sich die Position für jedes Buch, hält die wichtigsten Steuerungen griffbereit und bleibt sonst im Hintergrund.
+Wähle den Ordner mit Deinen Hörbüchern. Voice zeigt Dir die gefundenen Bücher, fügt sie Deiner Bibliothek hinzu und merkt sich in jedem Buch Deine Stelle. Danach hält sich Voice im Hintergrund, damit Du einfach zuhören kannst.
 
-<b>Gemacht für Hörbücher</b>
+<b>Ein Player, der zu Deinem Buch passt</b>
 
-• Genau dort weiterhören, wo du aufgehört hast
-• Sleep Timer mit sanftem Fade-out
-• Am Ende des aktuellen Kapitels stoppen
-• Timer durch Schütteln verlängern
-• Wiedergabegeschwindigkeit anpassen
-• Lautstärke-Boost für leise Aufnahmen
-• Stille überspringen
-• Automatisch kurz zurückspulen nach längeren Pausen
-• Lesezeichen mit Zeitstempel und eigenem Namen
+• Der Player übernimmt die Farben vom Cover des Buchs, das Du gerade hörst
+• Voice merkt sich Deine Stelle in jedem Buch
+• Abspielgeschwindigkeit anpassen, Stille überspringen und bei leisen Aufnahmen die Lautstärke erhöhen
+• Zu weit gesprungen? Mit einem Tippen bist Du wieder zurück
+• Nach einer Pause automatisch ein Stück zurückspulen, damit Du den Faden nicht verlierst
+
+<b>Mit einer Geschichte einschlafen</b>
+
+• Einschlaf-Timer mit sanftem Ausblenden oder Stopp am Kapitelende
+• Schüttle Dein Handy direkt nach Ablauf des Timers, um ihn neu zu starten
+• Eine ruhige Nachtansicht, solange der Timer läuft
+
+<b>Keine Stelle geht verloren</b>
+
+• Einen Moment mit langem Tippen speichern und später einen Namen oder eine Notiz ergänzen
+• Lesezeichen als Favorit, Zitat, Notiz oder „Nochmal hören“ markieren
+• Dein Hörverlauf zeigt jede Wiedergabe, jede Pause und jeden Sprung, damit Du immer zurückfindest
+• Hat Dein Auto, Dein Kopfhörer oder Deine Smartwatch ein Buch gestartet, bietet Voice Dir den Weg zurück an
+
+<b>Deine Bibliothek, Deine Wahl</b>
+
+• Ganz oben in Deiner Bibliothek direkt weiterhören
+• Bücher übersichtlich sortiert: aktuell, neu und abgeschlossen
 • Suche nach Titel und Autor
-• Filter für aktuell, abgeschlossen und nicht gestartet
 • Listen- und Rasteransicht
-• Cover aus eingebetteten Bildern, lokalen Dateien oder Online-Suche
-• Homescreen-Widget, Medienbenachrichtigung und Android Auto
+• Cover aus der Datei, von Deinem Handy oder aus der Online-Suche
+• Widgets für den Startbildschirm: „Läuft gerade“, „Bücherregal“ und „Einschlaf-Timer“
+• Medienbenachrichtigung und Android Auto
+• Helles und dunkles Design, Dynamische Farben und Farbschemas, mit denen Du Voice zu Deinem machst
+• In 25 Sprachen verfügbar
 
-<b>Bring deine eigenen Dateien mit</b>
+<b>Bring Deine eigenen Dateien mit</b>
 
-Voice funktioniert mit DRM-freien Hörbuch-Dateien wie M4B, MP3, M4A, OGG, OGA und OPUS. Du kannst deine Bücher in Ordnern so ablegen, wie es für dich passt; Voice erkennt sie und organisiert deine Bibliothek.
+Voice spielt DRM-freie Hörbücher wie M4B, MP3, M4A, OGG, OGA und OPUS. Leg Deine Bücher in Ordnern ab, wie es Dir gefällt. Ein Ordner kann ein einzelnes Buch oder Deine ganze Bibliothek enthalten, und Voice ordnet alles für Dich.
 
-<b>Kein Ballast</b>
+<b>Nur Du und Deine Geschichten</b>
 
-• Kein Account nötig
+• Kein Konto
 • Keine Werbung
-• Kein erzwungener Cloud-Sync
-• Alle Funktionen sind ohne bezahlte Upgrades verfügbar
+• Nichts hinter einer Bezahlschranke
+• Deine Bücher bleiben auf Deinem Gerät
+
+Wenn Dir Voice gefällt, kannst Du es in den Einstellungen unterstützen. Das ist ein Dankeschön und schaltet nichts frei.
 
 Voice ist Open Source unter der GNU GPLv3-Lizenz.
 
