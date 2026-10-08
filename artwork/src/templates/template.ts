@@ -5,10 +5,10 @@ interface Marketing {
   screenshots: { caption: string }[]
 }
 
-type Tone = 'day' | 'amber' | 'night' | 'sunset'
+type Tone = 'day' | 'amber' | 'night'
 
 // One tone per raw phone screenshot, matching the colors on that screen.
-const PHONE_TONES: Tone[] = ['day', 'amber', 'night', 'day', 'day', 'day', 'sunset', 'day']
+const PHONE_TONES: Tone[] = ['day', 'amber', 'night', 'day', 'day', 'day', 'day', 'day']
 
 async function fetchMarketing(locale: string): Promise<Marketing> {
   const res = await fetch(`/api/marketing/${encodeURIComponent(locale)}.json`)

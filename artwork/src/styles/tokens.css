@@ -17,7 +17,7 @@
   --voice-font: 'M PLUS Rounded 1c', 'Noto Sans JP', system-ui, sans-serif;
 }
 
-/* The tones follow Voice's Material 3 tonal palettes: the default seed, a warm cover, the night theme, and Sunset. */
+/* The tones follow Voice's Material 3 tonal palettes: the default seed, a warm cover, and the night theme. */
 .canvas {
   --surface: #f6f7ff;
   --blob-1: #c4d6ff;
@@ -57,19 +57,6 @@
   --ink-muted: #c6d3f5;
   --frame: #05070d;
   --frame-shadow: rgba(0, 0, 0, 0.5);
-}
-
-.canvas[data-tone='sunset'] {
-  --surface: #fff4ef;
-  --blob-1: #ffc6ad;
-  --blob-2: #ffdccc;
-  --blob-3: #ffe2c2;
-  --shape-1: #ffd6c4;
-  --shape-2: #ffe4cf;
-  --star: #df6c33;
-  --ink: #561d00;
-  --ink-muted: #85401c;
-  --frame-shadow: rgba(120, 44, 10, 0.24);
 }
 
 * { box-sizing: border-box; }
