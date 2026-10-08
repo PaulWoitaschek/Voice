@@ -5,7 +5,8 @@ description: Voice's tone of voice and translating its UI strings into all local
 
 # Translating strings
 
-English source: `core/strings/src/main/res/values/strings.xml`. Translations: `values-<locale>/strings.xml`, 38 locales.
+English source: `core/strings/src/main/res/values/strings.xml`. Translations: `values-<locale>/strings.xml`, one folder
+per locale in [locales.md](locales.md).
 Since Weblate was removed, agents write the translations and no translator community catches mistakes. Every string
 has to read as if a native speaker wrote it for this app.
 
@@ -27,7 +28,7 @@ system or an ad. This applies to new English strings as well as translations.
 
 ## Rules
 
-- Translate every new or changed string into all 38 locales in the same PR. CI runs
+- Translate every new or changed string into every locale in the same PR. CI runs
   `scripts/check_locale_config.main.kts`, which requires `app/src/main/res/xml/locales_config.xml` to list exactly the
   locales at 100% coverage, so a single missing translation in a complete locale fails the build.
 - A backfill that brings a locale to 100% adds it to `locales_config.xml` with its BCP 47 tag (folder `in` is `id`,
@@ -47,8 +48,8 @@ system or an ad. This applies to new English strings as well as translations.
 ## Format
 
 - Keep placeholders (`%s`, `%d`, `%1$s`). Reorder positional arguments when the grammar needs it.
-- Every plural item keeps its `%d`, including `one`: in ru, uk, be, and mk, `one` also covers 21, 31, …, and in fr and
-  pt-rBR it also covers 0.
+- Every plural item keeps its `%d`, including `one`: in ru and uk, `one` also covers 21, 31, …, and in fr and pt-rBR it
+  also covers 0.
 - Escape `'` as `\'` and `"` as `\"`, and write `&` as `&amp;`. Typographic quotes (“ „ « 「) need no escaping.
 - Use `…`, never `...`.
 - Insert each entry at its position in `values/strings.xml`, after the key that precedes it there. Locale files have
