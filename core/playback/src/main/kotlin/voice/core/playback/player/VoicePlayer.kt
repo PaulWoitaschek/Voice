@@ -88,8 +88,24 @@ class VoicePlayer(
     }
   }
 
+  /**
+   * Rewinds when playback actually paused, so a pause command while already paused doesn't rewind again, and the
+   * pauses ExoPlayer does on its own rewind as well.
+   */
+  private val autoRewindListener = object : Player.Listener {
+    override fun onPlayWhenReadyChanged(
+      playWhenReady: Boolean,
+      reason: Int,
+    ) {
+      if (!playWhenReady && reason in autoRewindReasons) {
+        autoRewind()
+      }
+    }
+  }
+
   init {
     player.addListener(endOfChapterSleepTimerListener)
+    player.addListener(autoRewindListener)
   }
 
   fun forceSeekToNext() {
@@ -296,18 +312,22 @@ class VoicePlayer(
 
     if (playWhenReady) {
       updateLastPlayedAt()
-    } else {
-      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: ZERO
-      if (currentPosition > ZERO) {
-        scope.launch {
-          seekBackBy(
-            skipAmount = autoRewindAmountStore.data.first().seconds,
-            crossMediaItems = false,
-          )
-        }
-      }
     }
     super.setPlayWhenReady(playWhenReady)
+  }
+
+  private fun autoRewind() {
+    // a finished book stays at its end
+    if (player.playbackState == STATE_ENDED) return
+    val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: ZERO
+    if (currentPosition > ZERO) {
+      scope.launch {
+        seekBackBy(
+          skipAmount = autoRewindAmountStore.data.first().seconds,
+          crossMediaItems = false,
+        )
+      }
+    }
   }
 
   override fun pause() {
@@ -434,3 +454,9 @@ class VoicePlayer(
 }
 
 private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000
+
+private val autoRewindReasons = setOf(
+  Player.PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST,
+  Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS,
+  Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY,
+)
