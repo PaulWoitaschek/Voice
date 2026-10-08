@@ -24,7 +24,15 @@ abstract class WidgetReceiver : GlanceAppWidgetReceiver() {
   }
 }
 
+class SmallNowPlayingWidgetReceiver : WidgetReceiver() {
+  override val glanceAppWidget = NowPlayingWidget()
+}
+
 class ShelfWidgetReceiver : WidgetReceiver() {
+  override val glanceAppWidget = ShelfWidget()
+}
+
+class SmallShelfWidgetReceiver : WidgetReceiver() {
   override val glanceAppWidget = ShelfWidget()
 }
 

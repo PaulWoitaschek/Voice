@@ -70,17 +70,17 @@ class TriggerWidgetOnChange(
   @RequiresApi(35)
   private suspend fun updatePreviews() {
     val manager = GlanceAppWidgetManager(context)
-    WidgetKind.entries.forEach { kind ->
+    WidgetKind.entries.flatMap { it.receivers }.forEach { receiver ->
       try {
-        val result = manager.setWidgetPreviews(kind.receiver.kotlin)
+        val result = manager.setWidgetPreviews(receiver.kotlin)
         if (result != GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_SUCCESS) {
           // the system rate limits this, which is fine as the previews don't have to be current
-          Logger.d("The preview of the $kind widget wasn't set: $result")
+          Logger.d("The preview of ${receiver.simpleName} wasn't set: $result")
         }
       } catch (e: CancellationException) {
         throw e
       } catch (e: Exception) {
-        Logger.w(e, "Can't set the preview of the $kind widget")
+        Logger.w(e, "Can't set the preview of ${receiver.simpleName}")
       }
     }
   }

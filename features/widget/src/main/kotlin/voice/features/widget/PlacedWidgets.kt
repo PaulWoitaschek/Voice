@@ -19,10 +19,11 @@ import kotlinx.coroutines.launch
 import voice.app.features.widget.BaseWidgetProvider
 import voice.core.logging.api.Logger
 
-internal enum class WidgetKind(val receiver: Class<out GlanceAppWidgetReceiver>) {
-  NowPlaying(BaseWidgetProvider::class.java),
-  Shelf(ShelfWidgetReceiver::class.java),
-  SleepTimer(SleepTimerWidgetReceiver::class.java),
+/** A widget can have several receivers, so the picker offers it in more than one default size. */
+internal enum class WidgetKind(val receivers: List<Class<out GlanceAppWidgetReceiver>>) {
+  NowPlaying(listOf(BaseWidgetProvider::class.java, SmallNowPlayingWidgetReceiver::class.java)),
+  Shelf(listOf(ShelfWidgetReceiver::class.java, SmallShelfWidgetReceiver::class.java)),
+  SleepTimer(listOf(SleepTimerWidgetReceiver::class.java)),
   ;
 
   fun widget(): GlanceAppWidget = when (this) {
@@ -55,7 +56,9 @@ class PlacedWidgets(
       placed.value = try {
         val manager = AppWidgetManager.getInstance(context)
         WidgetKind.entries
-          .filter { manager.getAppWidgetIds(ComponentName(context, it.receiver)).isNotEmpty() }
+          .filter { kind ->
+            kind.receivers.any { manager.getAppWidgetIds(ComponentName(context, it)).isNotEmpty() }
+          }
           .toSet()
       } catch (e: RuntimeException) {
         // the widget service is missing on some devices
