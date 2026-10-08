@@ -41,10 +41,7 @@ import kotlinx.coroutines.launch
 import voice.core.strings.R
 import voice.core.ui.icons.VoiceIcons
 
-/**
- * Rewind / fast forward. Pressing stretches the button (nudging its neighbours aside), a click spins
- * the arrow in its direction and sends the skipped amount ("+20") floating up.
- */
+/** Pressing stretches the button, nudging its neighbours aside. */
 @Composable
 internal fun SkipButton(
   forward: Boolean,

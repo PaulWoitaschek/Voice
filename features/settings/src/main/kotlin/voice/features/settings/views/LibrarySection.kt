@@ -63,10 +63,6 @@ import voice.core.ui.ShapedIcon
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
-/**
- * The audiobook folders, showing their names, and the layout of the library, picked by looking at
- * little previews of it.
- */
 @Composable
 internal fun LibrarySection(
   folderNames: List<String>,
@@ -120,7 +116,6 @@ internal fun LibrarySection(
   }
 }
 
-/** The first few folder names as little chips, or what this row is about while there are none. */
 @Composable
 private fun FolderNames(folderNames: List<String>) {
   if (folderNames.isEmpty()) {
@@ -164,10 +159,6 @@ private fun FolderChip(text: String) {
 
 private const val MAX_FOLDER_CHIPS = 3
 
-/**
- * A tiny library, as a list or as a [grid] of covers. Selecting it makes the covers pop in one
- * after another.
- */
 @Composable
 private fun LayoutTile(
   grid: Boolean,

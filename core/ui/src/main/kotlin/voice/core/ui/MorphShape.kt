@@ -12,9 +12,6 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.graphics.shapes.Morph
 
-/**
- * A [Shape] that renders a [Morph] between two Material shapes at the given [progress].
- */
 class MorphShape(
   private val morph: Morph,
   private val progress: Float,

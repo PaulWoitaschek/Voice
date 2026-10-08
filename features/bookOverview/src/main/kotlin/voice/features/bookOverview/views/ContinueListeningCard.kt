@@ -37,11 +37,7 @@ import voice.core.ui.playButtonSharedElementModifier
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import java.text.NumberFormat
 
-/**
- * The book you are listening to, front and center. Tinted with its cover's colors (the same theme
- * the player uses, so cover and play button hand over seamlessly), with a progress wave that
- * ripples while audio plays.
- */
+/** Uses the same cover theme as the player, so cover and play button hand over seamlessly. */
 @Composable
 internal fun ContinueListeningCard(
   book: BookOverviewItemViewState,

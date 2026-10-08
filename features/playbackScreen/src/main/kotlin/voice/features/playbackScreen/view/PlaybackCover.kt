@@ -59,10 +59,6 @@ import voice.core.ui.R as UiR
 
 private const val SWIPE_THRESHOLD = 0.28F
 
-/**
- * The cover breathes with playback: full size with a colored glow while playing, shrinking back
- * with softer corners when paused. Swipe it sideways to change chapters, double tap to play / pause.
- */
 @Composable
 internal fun PlaybackCover(
   bookId: BookId,

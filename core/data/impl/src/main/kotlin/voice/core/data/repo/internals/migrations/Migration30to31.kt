@@ -17,7 +17,6 @@ import voice.core.data.repo.internals.moveToNextLoop
 public class Migration30to31 : IncrementalMigration(30) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    // book keys
     val bookIdColumn = "bookId"
     val tableBook = "tableBooks"
     val tableChapters = "tableChapters"

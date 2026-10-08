@@ -17,8 +17,6 @@ import com.materialkolor.ktx.animateColorScheme
 import com.materialkolor.rememberDynamicColorScheme
 
 /**
- * Re-themes its content with a color scheme seeded from the book [cover].
- *
  * Seeds are cached (see [CoverSeedColors]), so a cover that was analyzed before themes the screen
  * from its very first frame. Until a seed is known the surrounding theme is used unchanged, and the
  * switch animates.

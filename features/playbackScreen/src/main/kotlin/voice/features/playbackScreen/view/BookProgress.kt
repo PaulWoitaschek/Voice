@@ -30,11 +30,6 @@ import voice.features.playbackScreen.BookPlayViewState
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
-/**
- * Progress through the whole book, drawn as one segment per chapter so the book's shape is
- * visible at a glance. The current chapter's segment stands out and bookmarks sit on top as pins;
- * below sits the percentage and the listening time left at the current playback speed.
- */
 @Composable
 internal fun BookProgress(
   viewState: BookPlayViewState,

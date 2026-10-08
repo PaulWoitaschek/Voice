@@ -216,7 +216,6 @@ private fun CategoryChips(
   }
 }
 
-/** The label and its count side by side, in the order of the layout direction. */
 @Composable
 private fun ChipLabel(
   label: String,
@@ -497,7 +496,6 @@ private fun YouAreHereRow(
   }
 }
 
-/** A bookmark that wiggles when tapped, like the onboarding heroes. */
 @Composable
 private fun EmptyHero(modifier: Modifier = Modifier) {
   val colors = MaterialTheme.colorScheme

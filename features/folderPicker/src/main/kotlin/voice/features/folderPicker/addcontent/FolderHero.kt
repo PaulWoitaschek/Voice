@@ -39,10 +39,6 @@ import kotlin.math.min
 import kotlin.math.sin
 import androidx.graphics.shapes.toPath as toAndroidPath
 
-/**
- * A folder full of audio files bobbing about. Tapping it (just for fun, so it's hidden from
- * accessibility services) makes the flap jump open and the files hop out and back in.
- */
 @Composable
 internal fun FolderHero(
   clock: () -> Float,
@@ -62,6 +58,7 @@ internal fun FolderHero(
   }
   Canvas(
     modifier = modifier
+      // tapping is just for fun, so it's hidden from accessibility services
       .clearAndSetSemantics {}
       .pointerInput(Unit) {
         detectTapGestures {
@@ -125,7 +122,6 @@ internal fun FolderHero(
       )
     }
 
-    // a little plus badge, saying "add me"
     val badgeSize = width * 0.28F * (1F + open.value * 0.25F)
     val badgeCenter = Offset(left + width * 0.92F, flapTop + width * 0.02F)
     translate(left = badgeCenter.x - badgeSize / 2, top = badgeCenter.y - badgeSize / 2) {
@@ -169,7 +165,6 @@ private suspend fun toss(
   }
 }
 
-/** A sheet of paper with a little waveform on it. */
 private fun DrawScope.drawFile(
   t: Float,
   left: Float,

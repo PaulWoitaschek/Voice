@@ -35,10 +35,6 @@ import androidx.compose.ui.unit.dp
 import voice.core.strings.R
 import voice.core.ui.icons.VoiceIcons
 
-/**
- * Previous / next chapter buttons around a pill naming the current chapter. The name slides in
- * from the direction you are moving through the book. Tapping the pill opens the chapter list.
- */
 @Composable
 internal fun ChapterSwitcher(
   chapterName: String?,

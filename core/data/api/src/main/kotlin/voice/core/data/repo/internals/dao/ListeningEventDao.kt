@@ -29,9 +29,6 @@ public interface ListeningEventDao {
     count: Int,
   )
 
-  /**
-   * Moves the events of the [from] books that happened in [oldChapterId] to [newChapterId] of the [to] book.
-   */
   @Query(
     """
     UPDATE listening_event SET bookId = :to, chapterId = :newChapterId

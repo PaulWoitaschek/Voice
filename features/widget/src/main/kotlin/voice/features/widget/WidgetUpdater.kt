@@ -141,8 +141,6 @@ class WidgetUpdater(
     }
     remoteViews.setImageViewResource(R.id.playPause, playIcon)
 
-    // if we have any book, init the views and have a click on the whole widget start BookPlay.
-    // if we have no book, simply have a click on the whole widget start BookChoose.
     remoteViews.setTextViewText(R.id.title, book.content.name)
     val name = book.currentChapter.name
 
@@ -190,24 +188,20 @@ class WidgetUpdater(
     // widget height because cover is square
     var summarizedItemWidth = 3 * singleButtonSize + coverSize
 
-    // set all views visible
     remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE)
     remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE)
     remoteViews.setViewVisibility(R.id.fastForward, View.VISIBLE)
 
-    // hide cover if we need space
     if (summarizedItemWidth > widgetWidth) {
       remoteViews.setViewVisibility(R.id.imageView, View.GONE)
       summarizedItemWidth -= coverSize
     }
 
-    // hide fast forward if we need space
     if (summarizedItemWidth > widgetWidth) {
       remoteViews.setViewVisibility(R.id.fastForward, View.GONE)
       summarizedItemWidth -= singleButtonSize
     }
 
-    // hide rewind if we need space
     if (summarizedItemWidth > widgetWidth) {
       remoteViews.setViewVisibility(R.id.rewind, View.GONE)
     }
@@ -224,17 +218,14 @@ class WidgetUpdater(
 
     var summarizedItemsHeight = buttonSize + titleSize + summarySize
 
-    // first setting all views visible
     remoteViews.setViewVisibility(R.id.summary, View.VISIBLE)
     remoteViews.setViewVisibility(R.id.title, View.VISIBLE)
 
-    // when we are in a single chapter or we are to high, hide summary
     if (singleChapter || widgetHeight < summarizedItemsHeight) {
       remoteViews.setViewVisibility(R.id.summary, View.GONE)
       summarizedItemsHeight -= summarySize
     }
 
-    // if we ar still to high, hide title
     if (summarizedItemsHeight > widgetHeight) {
       remoteViews.setViewVisibility(R.id.title, View.GONE)
     }

@@ -19,8 +19,5 @@ public interface BookmarkRepo {
 
   public suspend fun bookmarks(book: BookContent): List<Bookmark>
 
-  /**
-   * Emits the bookmarks of the book, and again whenever bookmarks change.
-   */
   public fun bookmarksFlow(book: BookContent): Flow<List<Bookmark>>
 }

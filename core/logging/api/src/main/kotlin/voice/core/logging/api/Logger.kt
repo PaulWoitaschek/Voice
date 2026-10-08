@@ -60,7 +60,7 @@ object Logger {
     var messageResult = message
     if (messageResult.isNullOrEmpty()) {
       if (throwable == null) {
-        return // Swallow message if it's null and there's no throwable.
+        return
       }
       messageResult = getStackTraceString(throwable)
     } else {

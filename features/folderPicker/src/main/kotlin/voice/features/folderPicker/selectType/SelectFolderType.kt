@@ -125,10 +125,6 @@ fun SelectFolderType(
   )
 }
 
-/**
- * Shows the books Voice finds in a folder before adding it. How the books are found can be changed
- * in a sheet, which names the options after the folder itself.
- */
 @Composable
 private fun SelectFolderType(
   viewState: SelectFolderTypeViewState,
@@ -255,10 +251,6 @@ private fun ReviewHeader(
   }
 }
 
-/**
- * A book in an expressive group: the corners are only round at the ends of the list. Books that
- * look like several books carry a hint and open the options when tapped.
- */
 @Composable
 private fun BookRow(
   book: SelectFolderTypeViewState.Book,

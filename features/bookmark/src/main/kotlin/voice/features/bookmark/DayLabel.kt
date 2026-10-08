@@ -30,10 +30,7 @@ private val nightEnd = LocalTime.of(5, 0)
 private val eveningStart = LocalTime.of(18, 0)
 private val afternoonStart = LocalTime.of(12, 0)
 
-/**
- * The label for when a bookmark was saved. Only sleep timer bookmarks talk about the night, as
- * those are about falling asleep.
- */
+/** Only sleep timer bookmarks talk about the night, as those are about falling asleep. */
 internal fun savedAtLabel(
   at: Instant,
   now: Instant,
@@ -54,9 +51,6 @@ internal fun savedAtLabel(
   return dayLabel(dateTime.toLocalDate(), today)
 }
 
-/**
- * The label for when a listening session started.
- */
 internal fun sessionLabel(
   at: Instant,
   now: Instant,

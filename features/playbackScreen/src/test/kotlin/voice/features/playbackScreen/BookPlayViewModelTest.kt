@@ -246,7 +246,6 @@ class BookPlayViewModelTest {
     viewModel.onChapterClick(number = 2)
     yield()
 
-    // Verify player.setPosition was called with correct parameters
     // The second mark starts at 2 minutes position in the first chapter
     verify(exactly = 1) {
       player.setPosition(

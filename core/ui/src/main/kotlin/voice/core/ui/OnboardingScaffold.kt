@@ -77,9 +77,6 @@ enum class OnboardingStep {
 }
 
 /**
- * The frame all onboarding steps share: the drifting aurora with its sparkles, a progress wave that
- * fills up step by step, a playful [hero] taking up the free space and below it the [title],
- * [subtitle], optional [details] and the [actions]. Everything floats in one after another, once.
  * The [hero] gets the seconds of the clock driving the aurora, so it can move along with it.
  *
  * The hero gives up space for large fonts. When even its minimum size doesn't fit, the screen
@@ -137,7 +134,6 @@ fun OnboardingScaffold(
   }
 }
 
-/** A big, squishy button for the onboarding [OnboardingScaffold.actions]. */
 @Composable
 fun OnboardingButton(
   text: String,
@@ -180,7 +176,6 @@ fun OnboardingButton(
   }
 }
 
-/** An arrow that keeps nudging forward, as if it can't wait to get going. */
 @Composable
 private fun NudgingArrow(modifier: Modifier = Modifier) {
   val clock = rememberAnimationClock(running = true)
@@ -198,7 +193,6 @@ private fun NudgingArrow(modifier: Modifier = Modifier) {
   )
 }
 
-/** The bar on top of the onboarding steps, with a back button and the progress wave for the [step]. */
 @Composable
 fun OnboardingTopBar(
   step: OnboardingStep?,

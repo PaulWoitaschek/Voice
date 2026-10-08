@@ -50,9 +50,6 @@ import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 import voice.core.strings.R as StringsR
 
-/**
- * Search with nothing typed: the recent searches, and the library to browse by authors, series, narrators or genres.
- */
 @Composable
 internal fun IdleSearch(
   viewState: BookSearchViewState.Idle,

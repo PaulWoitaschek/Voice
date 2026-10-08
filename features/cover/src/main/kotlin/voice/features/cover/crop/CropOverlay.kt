@@ -21,9 +21,6 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
-/**
- * Layout that enables a crop selection. Put this on top of over another view.
- */
 class CropOverlay @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
@@ -120,13 +117,11 @@ class CropOverlay @JvmOverloads constructor(
   override fun onTouchEvent(event: MotionEvent): Boolean {
     if (!selectionOn) return super.onTouchEvent(event)
 
-    // use the cache rect to detect changes
     dragRectCache.set(dragRect)
 
     scaleGestureDetector.onTouchEvent(event)
     val gestureDetectorIsHandling = scaleGestureDetector.isInProgress
     if (gestureDetectorIsHandling) {
-      // pinch handles this
       resizeType = null
       eventType = null
       lastTouchPoint.set(0f, 0f)
@@ -137,7 +132,6 @@ class CropOverlay @JvmOverloads constructor(
 
       when (action) {
         MotionEvent.ACTION_DOWN -> {
-          // prepare operation
           resizeType = event.asResizeType()
           when {
             resizeType != null -> {
@@ -157,10 +151,8 @@ class CropOverlay @JvmOverloads constructor(
           lastTouchPoint.set(x, y)
 
           if (eventType == EventType.DRAG) {
-            // just offset by drag
             dragRect.offset(deltaX, deltaY)
           } else if (eventType == EventType.RESIZE) {
-            // resize depending on which side touched
             val inset = when (resizeType!!) {
               Resize.TOP -> y - dragRect.top
               Resize.RIGHT -> dragRect.right - x
@@ -171,16 +163,13 @@ class CropOverlay @JvmOverloads constructor(
           }
         }
         MotionEvent.ACTION_UP -> {
-          // reset
           lastTouchPoint.set(0f, 0f)
         }
       }
     }
 
-    // make sure the drag rect sits perfect
     preserveSize()
     preserveBounds()
-    // only invalidate if there are changes
     if (dragRect != dragRectCache) invalidate()
     return true
   }
@@ -210,7 +199,6 @@ class CropOverlay @JvmOverloads constructor(
   private fun preserveSize() {
     val circleSize = bottomCircle.width
 
-    // preserve min size
     val minSize = minRectSize()
     val w = dragRect.width()
     if (w < minSize) {
@@ -218,7 +206,6 @@ class CropOverlay @JvmOverloads constructor(
       dragRect.squareInset(-diff / 2f)
     }
 
-    // preserve max size
     val dragW = dragRect.width()
     val boundsSize = min(bounds.width(), bounds.height()) - circleSize
     val diff = dragW - boundsSize
@@ -235,7 +222,6 @@ class CropOverlay @JvmOverloads constructor(
   ) {
     super.onSizeChanged(w, h, oldW, oldH)
 
-    // resets values
     lastTouchPoint.set(0f, 0f)
     val wf = w.toFloat()
     val hf = h.toFloat()
@@ -246,10 +232,6 @@ class CropOverlay @JvmOverloads constructor(
     dragRect.offset(bounds.centerX() - dragSize / 2f, bounds.centerY() - dragSize / 2f)
   }
 
-  /**
-   * Calculates the position of the chosen cropped rect.
-   * @return the rect selection
-   */
   val selectedRect: Rect
     get() {
       val widthScaleFactor = 1
@@ -278,10 +260,10 @@ class CropOverlay @JvmOverloads constructor(
       val centerX = left + dragRect.width() / 2f
       val centerY = top + dragRect.height() / 2f
 
-      canvas.drawRect(0f, 0f, left, boundsHeight, darkeningPaint) // left
-      canvas.drawRect(left, 0f, right, top, darkeningPaint) // top
-      canvas.drawRect(right, 0f, boundsWidth, boundsHeight, darkeningPaint) // right
-      canvas.drawRect(left, bottom, right, boundsHeight, darkeningPaint) // bottom
+      canvas.drawRect(0f, 0f, left, boundsHeight, darkeningPaint)
+      canvas.drawRect(left, 0f, right, top, darkeningPaint)
+      canvas.drawRect(right, 0f, boundsWidth, boundsHeight, darkeningPaint)
+      canvas.drawRect(left, bottom, right, boundsHeight, darkeningPaint)
 
       topCircle.center(centerX, top)
       leftCircle.center(left, centerY)

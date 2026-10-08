@@ -52,10 +52,7 @@ import voice.core.ui.icons.VoiceIcons
 
 internal val IslandShape = RoundedCornerShape(32.dp)
 
-/**
- * A rounded island of related settings with a big [title], in one of the theme's container colors.
- * Content lines up with the title when it keeps [IslandContentPadding] to the island's edges.
- */
+/** Content lines up with the title when it keeps [IslandContentPadding] to the island's edges. */
 @Composable
 internal fun SettingsIsland(
   title: String,
@@ -94,7 +91,6 @@ internal fun IslandTitle(
   )
 }
 
-/** A small heading inside an island, e.g. above a group of tiles. */
 @Composable
 internal fun IslandLabel(
   text: String,
@@ -110,8 +106,8 @@ internal fun IslandLabel(
 }
 
 /**
- * A row inside an island, leading with a shaped icon. Its ripple keeps a little distance to the
- * island's edges, while the text still lines up with the island's title.
+ * Its ripple keeps a little distance to the island's edges, while the text still lines up with the
+ * island's title.
  */
 @Composable
 internal fun IslandRow(
@@ -135,7 +131,7 @@ internal fun IslandRow(
   )
 }
 
-/** An [IslandRow] that toggles a switch. The whole row is the switch for accessibility services. */
+/** The whole row is the switch for accessibility services. */
 @Composable
 internal fun IslandSwitchRow(
   title: String,
@@ -216,7 +212,6 @@ private fun IslandRowLayout(
   }
 }
 
-/** Points to where a row leads, mirrored for right to left languages. */
 @Composable
 internal fun Chevron(modifier: Modifier = Modifier) {
   val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
@@ -227,7 +222,6 @@ internal fun Chevron(modifier: Modifier = Modifier) {
   )
 }
 
-/** A check that pops in on top of a selected tile. */
 @Composable
 internal fun CheckBadge(
   visible: Boolean,

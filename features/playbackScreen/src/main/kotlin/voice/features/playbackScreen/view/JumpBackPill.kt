@@ -54,10 +54,6 @@ import kotlin.time.Duration.Companion.seconds
 
 private val JUMP_BACK_VISIBLE = 10.seconds
 
-/**
- * Offers the way back after a big jump. A ring around the undo icon counts down until the pill
- * goes away by itself. It stays longer when the accessibility settings ask for more time to act.
- */
 @Composable
 internal fun JumpBackPill(
   jumpBack: JumpBackViewState?,

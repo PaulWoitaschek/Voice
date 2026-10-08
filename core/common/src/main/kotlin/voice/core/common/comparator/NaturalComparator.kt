@@ -59,7 +59,6 @@ internal object NaturalComparator : Comparator<String> {
         val lengthDiff = (end1 - start1) - (end2 - start2)
         if (lengthDiff != 0) return lengthDiff
 
-        // compare numbers with equal digit count
         val numberDiff = compareCharRange(s1, s2, start1, start2, end1)
         if (numberDiff != 0) return numberDiff
 

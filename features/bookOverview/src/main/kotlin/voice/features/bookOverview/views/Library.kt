@@ -40,9 +40,6 @@ import voice.features.bookOverview.overview.BookOverviewViewState
 import java.util.Calendar
 
 /**
- * The library: a greeting, a hero card for the book you are listening to, a carousel of the other
- * books in progress and the rest of the library below, as a list or grid.
- *
  * Opening the app keeps the splash screen up until the library is loaded, then the sections float in
  * one after another. That only happens once, not when coming back from another screen.
  */
