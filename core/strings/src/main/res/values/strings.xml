@@ -246,7 +246,7 @@
     <!-- Library category header for books currently being listened to. -->
     <string name="library.category.current.title">Current</string>
     <!-- Library category header for books not started yet. -->
-    <string name="library.category.not_started.title">Not started Yet</string>
+    <string name="library.category.not_started.title">Not started yet</string>
     <!-- Label above the hero card on the library screen that resumes the current audiobook. -->
     <string name="library.continue_listening">Continue listening</string>
     <!-- Empty-state prompt shown in the library before the first audiobook is added, and on the audiobook folders screen while there are no folders. -->

@@ -261,7 +261,7 @@
     <string name="playback.jump_back">Tagasi: %1$s</string>
     <string name="playback.jump_back.chapter">Tagasi: ptk %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Jäta vaikus vahele</string>
-    <string name="playback.option.volume_boost">Lubatust valjem heli</string>
+    <string name="playback.option.volume_boost">Helivõimendus</string>
     <string name="playback.speed.decrease">Aeglasemalt</string>
     <string name="playback.speed.increase">Kiiremini</string>
     <string name="playback.speed.title">Taasesituse kiirus</string>
@@ -315,7 +315,7 @@
     <string name="settings.library.title">Raamatukogu</string>
     <string name="settings.listening.title">Kuulamine</string>
     <string name="settings.playback.auto_rewind.off">Väljas</string>
-    <string name="settings.playback.auto_rewind.summary">Jätkamisel kerib veidi tagasi, et sa lõnga kaotsi ei läheks</string>
+    <string name="settings.playback.auto_rewind.summary">Jätkamisel kerib veidi tagasi, et sa järge ei kaotaks</string>
     <string name="settings.playback.auto_rewind.title">Keri automaatselt tagasi</string>
     <string name="settings.playback.seek_time.summary">Kui kaugele tagasi- ja edasikerimine hüppavad</string>
     <string name="settings.playback.seek_time.title">Kerimise samm</string>

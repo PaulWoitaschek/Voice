@@ -329,7 +329,7 @@
     <string name="settings.listening.title">Ascultare</string>
     <string name="settings.playback.auto_rewind.off">Dezactivat</string>
     <string name="settings.playback.auto_rewind.summary">Sare puțin înapoi la reluare, ca să nu pierzi firul</string>
-    <string name="settings.playback.auto_rewind.title">Reluare automată</string>
+    <string name="settings.playback.auto_rewind.title">Derulare înapoi automată</string>
     <string name="settings.playback.seek_time.summary">Cât de mult sar derularea înapoi și înainte</string>
     <string name="settings.playback.seek_time.title">Pas derulare</string>
     <string name="settings.subtitle">Fă Voice al tău</string>

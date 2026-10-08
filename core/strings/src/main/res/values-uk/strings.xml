@@ -342,7 +342,7 @@
     <string name="settings.listening.title">Прослуховування</string>
     <string name="settings.playback.auto_rewind.off">Вимкнено</string>
     <string name="settings.playback.auto_rewind.summary">Під час відновлення трохи відмотує назад, щоб ви не втратили нитку</string>
-    <string name="settings.playback.auto_rewind.title">Інтервал автовідмотування</string>
+    <string name="settings.playback.auto_rewind.title">Автовідмотування назад</string>
     <string name="settings.playback.seek_time.summary">Наскільки далеко перемотують кнопки назад і вперед</string>
     <string name="settings.playback.seek_time.title">Інтервал перемотування</string>
     <string name="settings.subtitle">Зробіть Voice своїм</string>

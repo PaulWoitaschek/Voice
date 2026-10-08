@@ -264,7 +264,7 @@
     <string name="onboarding.completion.subtitle">Twój pierwszy audiobook jest gotowy do odtworzenia. Ciesz się podróżą z aplikacją Voice!</string>
     <string name="onboarding.completion.title">Wszystko gotowe!</string>
     <string name="onboarding.explanation.subtitle.folder">Wybierz folder ze swoimi audiobookami. Voice pokaże ci znalezione książki, zanim je doda.</string>
-    <string name="onboarding.explanation.title">Twoja Biblioteka, Twój Wybór</string>
+    <string name="onboarding.explanation.title">Twoja biblioteka, twój wybór</string>
     <string name="onboarding.welcome.action.start">Zaczynamy</string>
     <string name="onboarding.welcome.subtitle">W twoim osobistym kieszonkowym odtwarzaczu audiobooków. Zacznijmy konfigurację.</string>
     <string name="onboarding.welcome.title">Witaj w Voice!</string>
@@ -345,7 +345,7 @@
     <string name="settings.playback.auto_rewind.title">Automatyczne cofnięcie</string>
     <string name="settings.playback.seek_time.summary">O ile przewijają przyciski do tyłu i do przodu</string>
     <string name="settings.playback.seek_time.title">Przewiń o</string>
-    <string name="settings.subtitle">Voice na Twoją modłę</string>
+    <string name="settings.subtitle">Voice na twoją modłę</string>
     <string name="settings.support.faq.title">Najczęściej zadawane pytania (FAQ)</string>
     <string name="settings.support.get_support.title">Uzyskaj pomoc</string>
     <string name="settings.support.report_issue.title">Zgłoś problem</string>

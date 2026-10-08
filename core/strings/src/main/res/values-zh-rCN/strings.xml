@@ -228,7 +228,7 @@
     <string name="onboarding.completion.subtitle">您的第一本有声书已准备好播放。与 Voice 一起享受您的旅程！</string>
     <string name="onboarding.completion.title">一切就绪！</string>
     <string name="onboarding.explanation.subtitle.folder">选择存放有声书的文件夹。Voice 会先向您展示找到的书籍，然后再添加。</string>
-    <string name="onboarding.explanation.title">您的图书馆，您的风格</string>
+    <string name="onboarding.explanation.title">您的书库，您的风格</string>
     <string name="onboarding.welcome.action.start">开始吧</string>
     <string name="onboarding.welcome.subtitle">您的个人口袋有声书播放器。现在来进行设置吧。</string>
     <string name="onboarding.welcome.title">欢迎使用 Voice！</string>

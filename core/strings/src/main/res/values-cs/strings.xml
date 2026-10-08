@@ -326,7 +326,7 @@
     <string name="settings.appearance.color_scheme.dynamic">Dynamická barva</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Používá barvy z tapety a systémového motivu.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Modrá Voice</string>
-    <string name="settings.appearance.theme.dark">Temný</string>
+    <string name="settings.appearance.theme.dark">Tmavý</string>
     <string name="settings.appearance.theme.follow_system">Podle systému</string>
     <string name="settings.appearance.theme.light">Světlý</string>
     <string name="settings.appearance.theme.title">Motiv</string>
