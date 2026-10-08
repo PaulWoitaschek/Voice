@@ -145,7 +145,7 @@ class ChapterMarkPlayer(
   }
 
   override fun getState(): State {
-    val state = super.getState().withoutFileCommands()
+    val state = super.getState().withoutFileCommands().withoutBuffering()
     val book = book ?: return state
     val playlist = playlist ?: return state
     // The wrapped playlist is set asynchronously, so ignore states that do not match it yet.
@@ -195,6 +195,15 @@ class ChapterMarkPlayer(
           .build(),
       )
       .build()
+  }
+
+  /**
+   * The wrapped player buffers for a moment on every seek. Reporting that causes visual glitches while seeking, so
+   * buffering is presented as ready.
+   */
+  private fun State.withoutBuffering(): State {
+    if (playbackState != STATE_BUFFERING) return this
+    return buildUpon().setPlaybackState(STATE_READY).build()
   }
 
   private fun State.isSeekDiscontinuity(): Boolean {

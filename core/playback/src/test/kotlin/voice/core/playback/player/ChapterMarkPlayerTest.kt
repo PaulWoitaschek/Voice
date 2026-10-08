@@ -152,6 +152,28 @@ class ChapterMarkPlayerTest {
   }
 
   @Test
+  fun `presents buffering after a seek as ready`() {
+    setBook(listOf(singleFileWithThreeMarks()))
+    val states = mutableListOf<Int>()
+    player.addListener(
+      object : Player.Listener {
+        override fun onPlaybackStateChanged(playbackState: Int) {
+          states += playbackState
+        }
+      },
+    )
+
+    player.playWhenReady = true
+    player.seekTo(1, 500)
+
+    assertEquals(expected = Player.STATE_BUFFERING, actual = exoPlayer.playbackState)
+    assertEquals(expected = Player.STATE_READY, actual = player.playbackState)
+    assertTrue(player.isPlaying)
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+    assertEquals(expected = emptyList(), actual = states)
+  }
+
+  @Test
   fun `advertises seeking between the marks of a single file`() {
     setBook(listOf(singleFileWithThreeMarks()))
 
