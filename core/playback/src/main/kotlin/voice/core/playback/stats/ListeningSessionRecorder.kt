@@ -72,7 +72,8 @@ class ListeningSessionRecorder(
 
         override fun onPlaybackStateChanged(playbackState: Int) {
           if (playbackState == Player.STATE_ENDED) {
-            bookEnded()
+            val bookId = player.currentMediaItem?.bookId() ?: return
+            bookEnded(bookId)
           }
         }
       },
@@ -126,8 +127,11 @@ class ListeningSessionRecorder(
     save()
   }
 
-  fun bookEnded() {
+  fun bookEnded(bookId: BookId) {
     val session = session ?: return
+    // A book that is opened at its end was not finished just now, and neither was the last one listened to.
+    val justListened = playing || clock.millis() - session.endedAtMillis <= CONTINUE_WITHIN
+    if (session.bookId != bookId || !justListened) return
     count()
     session.reachedEnd = true
     save()

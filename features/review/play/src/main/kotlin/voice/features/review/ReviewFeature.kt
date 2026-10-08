@@ -37,7 +37,8 @@ fun ReviewFeature(canShow: Boolean) {
     }
   }
   val context = LocalContext.current
-  prompt?.let { current ->
+  // Away from the library, the prompt waits and comes back with it.
+  prompt?.takeIf { canShow }?.let { current ->
     ReviewPromptSheet(
       prompt = current,
       onAnswer = { answer ->

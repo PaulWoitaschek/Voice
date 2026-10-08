@@ -161,6 +161,44 @@ class ListeningSessionRecorderTest {
   }
 
   @Test
+  fun `the book that ends finishes the session`() = scope.runTest {
+    recorder.playing(dune, speed = 1F)
+    advanceTimeBy(5.minutes)
+    recorder.stopped()
+    advanceTimeBy(1.minutes)
+    recorder.bookEnded(dune)
+    runCurrent()
+
+    assertEquals(
+      expected = listOf(session(started = 0.minutes, ended = 5.minutes, listened = 5.minutes, reachedEnd = true)),
+      actual = repo.all,
+    )
+  }
+
+  @Test
+  fun `another book that ends doesn't finish the session`() = scope.runTest {
+    recorder.playing(dune, speed = 1F)
+    advanceTimeBy(5.minutes)
+    recorder.stopped()
+    recorder.bookEnded(hyperion)
+    runCurrent()
+
+    assertEquals(expected = listOf(session(started = 0.minutes, ended = 5.minutes, listened = 5.minutes)), actual = repo.all)
+  }
+
+  @Test
+  fun `a book that ends long after it was listened to doesn't finish the session`() = scope.runTest {
+    recorder.playing(dune, speed = 1F)
+    advanceTimeBy(5.minutes)
+    recorder.stopped()
+    advanceTimeBy(1.hours)
+    recorder.bookEnded(dune)
+    runCurrent()
+
+    assertEquals(expected = listOf(session(started = 0.minutes, ended = 5.minutes, listened = 5.minutes)), actual = repo.all)
+  }
+
+  @Test
   fun `the player's playback is recorded until the book ends`() = scope.runTest {
     val player = FakePlayer()
     recorder.attachTo(player)
