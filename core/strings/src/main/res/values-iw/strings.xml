@@ -343,7 +343,7 @@
     <string name="settings.support.get_support.title">תמיכה</string>
     <string name="settings.support.report_issue.title">דווח על תקלה</string>
     <string name="settings.support.suggest_idea.title">הצע רעיון</string>
-    <string name="settings.support.support_voice.summary">תרומות עוזרות לשמור על Voice מתוחזקת</string>
+    <string name="settings.support.support_voice.summary">שומר על Voice חינמית וללא פרסומות</string>
     <string name="settings.support.support_voice.title">תמיכה בפיתוח</string>
     <string name="settings.support.title">עזרה ומשוב</string>
     <string name="support.action.donate_kofi">לתרום ב-Ko-fi</string>

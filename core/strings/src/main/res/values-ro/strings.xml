@@ -300,6 +300,7 @@
     <string name="settings.support.get_support.title">Obțineți asistență</string>
     <string name="settings.support.report_issue.title">Raportați o problemă</string>
     <string name="settings.support.suggest_idea.title">Propuneți o idee</string>
+    <string name="settings.support.support_voice.summary">Menține Voice gratuit și fără reclame</string>
     <string name="settings.support.title">Ajutor și feedback</string>
     <string name="shortcut.play_current.short_label">Redare curentă</string>
     <string name="sleep_timer.action.open">Oprire temporizată</string>

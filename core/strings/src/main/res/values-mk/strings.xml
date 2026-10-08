@@ -330,7 +330,7 @@
     <string name="settings.support.get_support.title">Побарај поддршка</string>
     <string name="settings.support.report_issue.title">Пријави проблем</string>
     <string name="settings.support.suggest_idea.title">Предложете идеја</string>
-    <string name="settings.support.support_voice.summary">Донациите помагаат Voice да се одржува</string>
+    <string name="settings.support.support_voice.summary">Го одржува Voice бесплатен и без реклами</string>
     <string name="settings.support.support_voice.title">Поддржете го развојот</string>
     <string name="settings.support.title">Помош и повратни информации</string>
     <string name="support.action.donate_kofi">Донирајте на Ko-fi</string>

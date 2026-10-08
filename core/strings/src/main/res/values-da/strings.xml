@@ -288,6 +288,7 @@
     <string name="settings.support.get_support.title">Få support</string>
     <string name="settings.support.report_issue.title">Rapporter et problem</string>
     <string name="settings.support.suggest_idea.title">Foreslå en ide</string>
+    <string name="settings.support.support_voice.summary">Holder Voice gratis og uden reklamer</string>
     <string name="settings.support.title">Hjælp og feedback</string>
     <string name="shortcut.play_current.short_label">Spil nuværende</string>
     <string name="sleep_timer.action.open">Sleep-Timer</string>

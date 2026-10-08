@@ -330,7 +330,7 @@
     <string name="settings.support.get_support.title">Få hjälp</string>
     <string name="settings.support.report_issue.title">Rapportera ett problem</string>
     <string name="settings.support.suggest_idea.title">Föreslå en idé</string>
-    <string name="settings.support.support_voice.summary">Donationer hjälper till att finansiera underhållet av Voice</string>
+    <string name="settings.support.support_voice.summary">Håller Voice gratis och reklamfritt</string>
     <string name="settings.support.support_voice.title">Stöd utvecklingen</string>
     <string name="settings.support.title">Hjälp och feedback</string>
     <string name="support.action.donate_kofi">Donera på Ko-fi</string>

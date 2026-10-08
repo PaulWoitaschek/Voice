@@ -284,6 +284,7 @@
     <string name="settings.support.get_support.title">सहायता लिनुहोस्</string>
     <string name="settings.support.report_issue.title">समस्या रिपोर्ट गर्नुहोस्</string>
     <string name="settings.support.suggest_idea.title">विचार सुझाव गर्नुहोस्</string>
+    <string name="settings.support.support_voice.summary">Voice लाई निःशुल्क र विज्ञापनरहित राख्छ</string>
     <string name="settings.support.title">सहायता र प्रतिक्रिया</string>
     <string name="shortcut.play_current.short_label">हालको प्ले गर्नुहोस्</string>
     <string name="sleep_timer.action.open">सुत्ने-टाइमर</string>

@@ -330,7 +330,7 @@
     <string name="settings.support.get_support.title">Obtener assistentia</string>
     <string name="settings.support.report_issue.title">Signalar un defecto</string>
     <string name="settings.support.suggest_idea.title">Suggerer un idea</string>
-    <string name="settings.support.support_voice.summary">Le donationes adjuta a mantener Voice</string>
+    <string name="settings.support.support_voice.summary">Mantene Voice gratuite e sin annuncios</string>
     <string name="settings.support.support_voice.title">Supportar le disveloppamento</string>
     <string name="settings.support.title">Adjuta e commentos</string>
     <string name="support.action.donate_kofi">Donar in Ko-fi</string>

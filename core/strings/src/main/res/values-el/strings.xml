@@ -270,6 +270,7 @@
     <string name="settings.support.get_support.title">Λήψη υποστήριξης</string>
     <string name="settings.support.report_issue.title">Αναφορά προβλήματος</string>
     <string name="settings.support.suggest_idea.title">Προτείνετε μια ιδέα</string>
+    <string name="settings.support.support_voice.summary">Κρατά το Voice δωρεάν και χωρίς διαφημίσεις</string>
     <string name="settings.support.title">Βοήθεια και σχόλια</string>
     <string name="shortcut.play_current.short_label">Αναπαραγωγή τρέχοντος</string>
     <string name="sleep_timer.action.open">Χρονοδιακόπτης ύπνου</string>

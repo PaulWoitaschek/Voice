@@ -330,7 +330,7 @@
     <string name="settings.support.get_support.title">Yardım al</string>
     <string name="settings.support.report_issue.title">Sorun bildir</string>
     <string name="settings.support.suggest_idea.title">Fikir öner</string>
-    <string name="settings.support.support_voice.summary">Bağışlar Voice\'un bakımına yardımcı olur</string>
+    <string name="settings.support.support_voice.summary">Voice\'u ücretsiz ve reklamsız tutar</string>
     <string name="settings.support.support_voice.title">Geliştirmeyi destekle</string>
     <string name="settings.support.title">Yardım ve geri bildirim</string>
     <string name="support.action.donate_kofi">Ko-fi üzerinden bağış yap</string>

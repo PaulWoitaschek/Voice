@@ -330,7 +330,7 @@
     <string name="settings.support.get_support.title">Hilfe erhalten</string>
     <string name="settings.support.report_issue.title">Ein Problem melden</string>
     <string name="settings.support.suggest_idea.title">Eine Idee vorschlagen</string>
-    <string name="settings.support.support_voice.summary">Spenden helfen, Voice zu pflegen</string>
+    <string name="settings.support.support_voice.summary">Hält Voice kostenlos und werbefrei</string>
     <string name="settings.support.support_voice.title">Entwicklung unterstützen</string>
     <string name="settings.support.title">Hilfe und Feedback</string>
     <string name="support.action.donate_kofi">Auf Ko-fi spenden</string>

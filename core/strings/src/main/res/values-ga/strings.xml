@@ -369,7 +369,7 @@
     <string name="settings.support.get_support.title">Faigh cabhair</string>
     <string name="settings.support.report_issue.title">Tuairiscigh fadhb</string>
     <string name="settings.support.suggest_idea.title">Mol smaoineamh</string>
-    <string name="settings.support.support_voice.summary">Cuidíonn síntiúis le Voice a chothabháil</string>
+    <string name="settings.support.support_voice.summary">Coinníonn sé Voice saor in aisce agus gan fógraí</string>
     <string name="settings.support.support_voice.title">Tacaigh leis an bhforbairt</string>
     <string name="settings.support.title">Cabhair agus aiseolas</string>
     <string name="support.action.donate_kofi">Tabhair síntiús ar Ko-fi</string>

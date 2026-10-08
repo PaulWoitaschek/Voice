@@ -356,7 +356,7 @@
     <string name="settings.support.get_support.title">Підтримка</string>
     <string name="settings.support.report_issue.title">Повідомити про проблему</string>
     <string name="settings.support.suggest_idea.title">Пропозиції</string>
-    <string name="settings.support.support_voice.summary">Донати допомагають підтримувати Voice</string>
+    <string name="settings.support.support_voice.summary">Зберігає Voice безкоштовним і без реклами</string>
     <string name="settings.support.support_voice.title">Підтримати розробку</string>
     <string name="settings.support.title">Довідка та відгуки</string>
     <string name="support.action.donate_kofi">Задонатити на Ko-fi</string>

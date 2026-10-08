@@ -356,7 +356,7 @@
     <string name="settings.support.get_support.title">Potřebuji pomoct</string>
     <string name="settings.support.report_issue.title">Nahlásit problém</string>
     <string name="settings.support.suggest_idea.title">Navrhnout nápad</string>
-    <string name="settings.support.support_voice.summary">Dary pomáhají udržovat aplikaci Voice</string>
+    <string name="settings.support.support_voice.summary">Udržuje Voice zdarma a bez reklam</string>
     <string name="settings.support.support_voice.title">Podpořit vývoj</string>
     <string name="settings.support.title">Nápověda a zpětná vazba</string>
     <string name="support.action.donate_kofi">Přispět na Ko-fi</string>

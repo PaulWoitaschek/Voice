@@ -300,6 +300,7 @@
     <string name="settings.support.get_support.title">Obtingueu ajuda</string>
     <string name="settings.support.report_issue.title">Informeu d\'un problema</string>
     <string name="settings.support.suggest_idea.title">Suggeriu una idea</string>
+    <string name="settings.support.support_voice.summary">Manté Voice gratuït i sense anuncis</string>
     <string name="settings.support.title">Ajuda i comentaris</string>
     <string name="shortcut.play_current.short_label">Reprodueix l\'actual</string>
     <string name="sleep_timer.action.open">Temporitzador de repòs</string>

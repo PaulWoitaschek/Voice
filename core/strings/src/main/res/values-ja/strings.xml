@@ -317,7 +317,7 @@
     <string name="settings.support.get_support.title">サポート</string>
     <string name="settings.support.report_issue.title">問題の報告</string>
     <string name="settings.support.suggest_idea.title">アイデアの提案</string>
-    <string name="settings.support.support_voice.summary">寄付はVoiceの維持に役立ちます</string>
+    <string name="settings.support.support_voice.summary">Voiceを無料・広告なしに保ちます</string>
     <string name="settings.support.support_voice.title">開発を支援</string>
     <string name="settings.support.title">ヘルプとフィードバック</string>
     <string name="support.action.donate_kofi">Ko-fiで寄付</string>

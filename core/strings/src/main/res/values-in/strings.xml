@@ -317,7 +317,7 @@
     <string name="settings.support.get_support.title">Dapatkan bantuan</string>
     <string name="settings.support.report_issue.title">Laporkan masalah</string>
     <string name="settings.support.suggest_idea.title">Sarankan ide</string>
-    <string name="settings.support.support_voice.summary">Donasi membantu menjaga Voice tetap terawat</string>
+    <string name="settings.support.support_voice.summary">Menjaga Voice tetap gratis dan bebas iklan</string>
     <string name="settings.support.support_voice.title">Dukung pengembangan</string>
     <string name="settings.support.title">Bantuan dan masukan</string>
     <string name="support.action.donate_kofi">Donasi di Ko-fi</string>

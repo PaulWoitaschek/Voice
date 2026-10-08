@@ -330,7 +330,7 @@
     <string name="settings.support.get_support.title">ஆதரவை பெறு</string>
     <string name="settings.support.report_issue.title">ஒரு சிக்கலைப் புகாரளிக்கவும்</string>
     <string name="settings.support.suggest_idea.title">ஒரு யோசனையை பரிந்துரைக்கவும்</string>
-    <string name="settings.support.support_voice.summary">நன்கொடைகள் Voice-ஐ பராமரிக்க உதவுகின்றன</string>
+    <string name="settings.support.support_voice.summary">Voice-ஐ இலவசமாகவும் விளம்பரமின்றியும் வைத்திருக்கிறது</string>
     <string name="settings.support.support_voice.title">மேம்பாட்டை ஆதரிக்கவும்</string>
     <string name="settings.support.title">உதவி மற்றும் கருத்து</string>
     <string name="support.action.donate_kofi">Ko-fi-யில் நன்கொடை அளிக்கவும்</string>

@@ -288,6 +288,7 @@
     <string name="settings.support.get_support.title">Segítségkérés</string>
     <string name="settings.support.report_issue.title">Hibajelentés</string>
     <string name="settings.support.suggest_idea.title">Javasolj egy ötletet</string>
+    <string name="settings.support.support_voice.summary">Ingyenesen és reklámmentesen tartja a Voice-t</string>
     <string name="settings.support.title">Súgó és visszajelzés</string>
     <string name="shortcut.play_current.short_label">Jelenlegi lejátszása</string>
     <string name="sleep_timer.action.open">Alvásidőzítő</string>

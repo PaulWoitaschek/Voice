@@ -328,6 +328,7 @@
     <string name="settings.support.get_support.title">احصل على دعم</string>
     <string name="settings.support.report_issue.title">أبلغ عن مشكلة</string>
     <string name="settings.support.suggest_idea.title">اقترح فكرة</string>
+    <string name="settings.support.support_voice.summary">يُبقي Voice مجانيًا وخاليًا من الإعلانات</string>
     <string name="settings.support.title">المساعدة والملاحظات</string>
     <string name="shortcut.play_current.short_label">شغل الحالي</string>
     <string name="sleep_timer.action.open">مؤقت النوم</string>

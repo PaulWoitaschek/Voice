@@ -518,8 +518,8 @@
     <!-- Settings support row for helping translate the app. -->
     <!-- Settings support row for reporting a problem. -->
     <string name="settings.support.report_issue.title">Report a problem</string>
-    <!-- Settings row description for opening the donation/support screen. -->
-    <string name="settings.support.support_voice.summary">Donations help keep Voice maintained</string>
+    <!-- Description on the settings card that opens the support screen, for subscribing, tipping or donating. -->
+    <string name="settings.support.support_voice.summary">Keeps Voice free and ad-free</string>
     <!-- Settings row for opening the donation/support screen. -->
     <string name="settings.support.support_voice.title">Support development</string>
     <!-- Settings support row for suggesting a product idea. -->
