@@ -1,6 +1,2 @@
-# Release credentials (app/play_service_account.json, signing/play/, signing/github/) stay out on purpose.
-local.properties
-plugins/local.properties
-signing/signing.keystore
-signing/signing.properties
+/local.properties
 app/src/play/google-services.json
