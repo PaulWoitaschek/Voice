@@ -1,5 +1,5 @@
 package voice.features.review
 
-@Suppress("FunctionName")
-fun ReviewFeature() {
+@Suppress("FunctionName", "UNUSED_PARAMETER")
+fun ReviewFeature(canShow: Boolean) {
 }

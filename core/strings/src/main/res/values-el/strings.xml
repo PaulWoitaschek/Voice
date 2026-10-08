@@ -221,6 +221,27 @@
     <string name="playback.option.skip_silence">Παράλειψη ησυχίας</string>
     <string name="playback.option.volume_boost">Ενίσχυση έντασης</string>
     <string name="playback.speed.title">Ταχύτητα αναπαραγωγής</string>
+    <string name="review.prompt.action.feedback">Κοινοποίηση σχολίων</string>
+    <string name="review.prompt.action.later">Όχι τώρα</string>
+    <string name="review.prompt.action.rate">Αξιολόγηση στο Google Play</string>
+    <string name="review.prompt.email.subject">Σχόλια για το Voice</string>
+    <string name="review.prompt.feedback.bug.subtitle">Ανοίγει αναφορά σφάλματος στο GitHub</string>
+    <string name="review.prompt.feedback.bug.title">Αναφορά σφάλματος</string>
+    <string name="review.prompt.feedback.email.title">Αποστολή email</string>
+    <string name="review.prompt.feedback.idea.subtitle">Ξεκινά συζήτηση στο GitHub</string>
+    <string name="review.prompt.feedback.idea.title">Προτείνετε μια ιδέα</string>
+    <string name="review.prompt.feedback.title">Τι έχετε στο μυαλό σας;</string>
+    <string name="review.prompt.finished.title">Το βιβλίο ολοκληρώθηκε!</string>
+    <string name="review.prompt.message">Ευχαριστούμε που ακούτε με το Voice! Αν σας αρέσει, μια αξιολόγηση στο Google Play βοηθά άλλους ακροατές να το βρουν.</string>
+    <plurals name="review.prompt.milestone.title">
+        <item quantity="one">%d ώρα ιστοριών!</item>
+        <item quantity="other">%d ώρες ιστοριών!</item>
+    </plurals>
+    <string name="review.prompt.stat.authors">Συγγραφείς</string>
+    <string name="review.prompt.stat.finished">Ολοκληρωμένα βιβλία</string>
+    <string name="review.prompt.stat.hours">Ώρες ακρόασης</string>
+    <string name="review.prompt.thanks.message">Μετάβαση στο Google Play…</string>
+    <string name="review.prompt.thanks.title">Ευχαριστούμε!</string>
     <string name="settings.about.app_version.title">Έκδοση εφαρμογής</string>
     <string name="settings.action.open">Ρυθμίσεις</string>
     <string name="settings.appearance.color_scheme.berry">Μούρο</string>

@@ -11,6 +11,7 @@ import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
+import voice.core.data.ListeningSession
 import java.io.File
 import java.time.Instant
 import kotlin.test.Test
@@ -21,8 +22,9 @@ class ProgressCarryOverTest {
 
   private val bookmarkRepo = MemoryBookmarkRepo()
   private val listeningHistoryRepo = MemoryListeningHistoryRepo()
+  private val listeningStatsRepo = MemoryListeningStatsRepo()
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val carryOver = ProgressCarryOver(bookmarkRepo, listeningHistoryRepo, currentBookStore)
+  private val carryOver = ProgressCarryOver(bookmarkRepo, listeningHistoryRepo, listeningStatsRepo, currentBookStore)
 
   @Test
   fun `a document has the same key in every folder it is opened through`() {
@@ -111,6 +113,39 @@ class ProgressCarryOverTest {
       expected = listOf(chapterChange.copy(bookId = new.id, chapterId = newChapters[0], toChapterId = newChapters[1])),
       actual = listeningHistoryRepo.all,
     )
+  }
+
+  @Test
+  fun `a book added through another folder keeps its listening sessions`() = runTest {
+    val oldChapters = listOf("1.mp3", "2.mp3").map {
+      ChapterId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book/$it"))
+    }
+    val old = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
+      chapters = oldChapters,
+    )
+    val session = ListeningSession(
+      bookId = old.id,
+      startedAtMillis = 0,
+      endedAtMillis = 60_000,
+      listenedMillis = 60_000,
+      audioMillis = 60_000,
+      utcOffsetSeconds = 0,
+      reachedEnd = false,
+    )
+    val sessionId = listeningStatsRepo.save(session)
+
+    val newChapters = listOf("1.mp3", "2.mp3").map {
+      ChapterId(documentUri(tree = "primary:Audiobooks/Book", document = "primary:Audiobooks/Book/$it"))
+    }
+    val new = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks/Book", document = "primary:Audiobooks/Book")),
+      chapters = newChapters,
+    )
+
+    val _ = carryOver.carryOver(new, PreviousBooks(listOf(old), scanned = setOf(new.id)))
+
+    assertEquals(expected = listOf(session.copy(bookId = new.id, id = sessionId)), actual = listeningStatsRepo.all)
   }
 
   @Test

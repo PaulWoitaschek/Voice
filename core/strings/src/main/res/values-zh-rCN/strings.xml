@@ -220,6 +220,26 @@
     <string name="playback.option.skip_silence">跳过空白部分</string>
     <string name="playback.option.volume_boost">音量提升</string>
     <string name="playback.speed.title">播放速度</string>
+    <string name="review.prompt.action.feedback">分享反馈</string>
+    <string name="review.prompt.action.later">以后再说</string>
+    <string name="review.prompt.action.rate">在 Google Play 上评分</string>
+    <string name="review.prompt.email.subject">关于 Voice 的反馈</string>
+    <string name="review.prompt.feedback.bug.subtitle">在 GitHub 上提交错误报告</string>
+    <string name="review.prompt.feedback.bug.title">报告错误</string>
+    <string name="review.prompt.feedback.email.title">发送电子邮件</string>
+    <string name="review.prompt.feedback.idea.subtitle">在 GitHub 上发起讨论</string>
+    <string name="review.prompt.feedback.idea.title">提出建议</string>
+    <string name="review.prompt.feedback.title">你有什么想法？</string>
+    <string name="review.prompt.finished.title">书听完了！</string>
+    <string name="review.prompt.message">感谢使用 Voice 收听！如果你喜欢它，在 Google Play 上评分可以帮助其他听众发现它。</string>
+    <plurals name="review.prompt.milestone.title">
+        <item quantity="other">%d 小时的故事！</item>
+    </plurals>
+    <string name="review.prompt.stat.authors">作者</string>
+    <string name="review.prompt.stat.finished">听完的书</string>
+    <string name="review.prompt.stat.hours">收听小时数</string>
+    <string name="review.prompt.thanks.message">正在前往 Google Play…</string>
+    <string name="review.prompt.thanks.title">谢谢！</string>
     <string name="settings.about.app_version.title">软件版本</string>
     <string name="settings.action.open">设置</string>
     <string name="settings.appearance.color_scheme.berry">莓果</string>

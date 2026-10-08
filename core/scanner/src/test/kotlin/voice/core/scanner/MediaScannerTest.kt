@@ -364,6 +364,7 @@ class MediaScannerTest {
       progressCarryOver = ProgressCarryOver(
         bookmarkRepo = bookmarkRepo,
         listeningHistoryRepo = MemoryListeningHistoryRepo(),
+        listeningStatsRepo = MemoryListeningStatsRepo(),
         currentBookStore = currentBookStore,
       ),
     )

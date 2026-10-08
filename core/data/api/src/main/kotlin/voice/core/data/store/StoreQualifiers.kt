@@ -33,7 +33,7 @@ public annotation class FadeOutStore
 public annotation class AmountOfBatteryOptimizationRequestedStore
 
 @Qualifier
-public annotation class ReviewDialogShownStore
+public annotation class ReviewPromptStateStore
 
 @Qualifier
 public annotation class FolderPickerMovedDialogShownStore

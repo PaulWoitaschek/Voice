@@ -11,6 +11,7 @@ import voice.core.logging.api.Logger
 import voice.core.playback.di.PlaybackGraph
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.playstate.PositionUpdater
+import voice.core.playback.stats.ListeningSessionRecorder
 
 class PlaybackService : MediaLibraryService() {
 
@@ -25,6 +26,9 @@ class PlaybackService : MediaLibraryService() {
 
   @Inject
   lateinit var positionUpdater: PositionUpdater
+
+  @Inject
+  lateinit var listeningSessionRecorder: ListeningSessionRecorder
 
   @Inject
   lateinit var voiceNotificationProvider: VoiceMediaNotificationProvider
@@ -43,6 +47,7 @@ class PlaybackService : MediaLibraryService() {
       positionUpdater.flushPositionNow()
     }
     positionUpdater.release()
+    listeningSessionRecorder.stopped()
     player.release()
     session.release()
     scope.cancel()

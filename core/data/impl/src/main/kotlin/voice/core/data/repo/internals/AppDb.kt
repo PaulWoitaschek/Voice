@@ -8,12 +8,14 @@ import voice.core.data.BookContent
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ListeningEvent
+import voice.core.data.ListeningSession
 import voice.core.data.RecentBookSearch
 import voice.core.data.repo.internals.dao.BookContentDao
 import voice.core.data.repo.internals.dao.BookSearchFts
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.dao.ChapterDao
 import voice.core.data.repo.internals.dao.ListeningEventDao
+import voice.core.data.repo.internals.dao.ListeningSessionDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.data.repo.internals.migrations.Migration56
 
@@ -25,6 +27,7 @@ import voice.core.data.repo.internals.migrations.Migration56
     BookSearchFts::class,
     RecentBookSearch::class,
     ListeningEvent::class,
+    ListeningSession::class,
   ],
   version = AppDb.VERSION,
   autoMigrations = [
@@ -36,6 +39,7 @@ import voice.core.data.repo.internals.migrations.Migration56
     AutoMigration(from = 57, to = 58),
     AutoMigration(from = 58, to = 59),
     AutoMigration(from = 59, to = 60),
+    AutoMigration(from = 60, to = 61),
   ],
 )
 @TypeConverters(Converters::class)
@@ -49,8 +53,10 @@ public abstract class AppDb : RoomDatabase() {
 
   public abstract fun listeningEventDao(): ListeningEventDao
 
+  public abstract fun listeningSessionDao(): ListeningSessionDao
+
   internal companion object {
-    const val VERSION = 60
+    const val VERSION = 61
     const val DATABASE_NAME = "autoBookDB"
   }
 }
