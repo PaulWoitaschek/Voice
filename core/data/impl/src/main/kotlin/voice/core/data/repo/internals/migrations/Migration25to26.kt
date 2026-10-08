@@ -14,7 +14,6 @@ import org.json.JSONObject
 public class Migration25to26 : IncrementalMigration(25) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    // get all books
     val cursor = db.query(
       "TABLE_BOOK",
       arrayOf("BOOK_ID", "BOOK_JSON"),
@@ -29,7 +28,6 @@ public class Migration25to26 : IncrementalMigration(25) {
       }
     }
 
-    // delete empty books
     for (b in allBooks) {
       val chapters = b.getJSONArray("chapters")
       if (chapters.length() == 0) {

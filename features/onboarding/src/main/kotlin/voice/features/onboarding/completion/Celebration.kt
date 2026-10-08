@@ -43,10 +43,7 @@ import kotlin.math.min
 import kotlin.math.sin
 import androidx.graphics.shapes.toPath as toAndroidPath
 
-/**
- * A badge that pops in, ticks itself off and throws confetti made of Material shapes. Tapping it
- * (just for fun, so it's hidden from accessibility services) throws another handful.
- */
+/** Tapping it throws more confetti just for fun, so it's hidden from accessibility services. */
 @Composable
 internal fun Celebration(
   clock: () -> Float,

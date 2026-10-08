@@ -38,7 +38,6 @@ public class Migration32to34 : Migration(32, 34) {
 
   @SuppressLint("Recycle")
   override fun migrate(db: SupportSQLiteDatabase) {
-    // retrieve old bookmarks
     val cursor = db.query("SELECT * FROM $BOOKMARK_TABLE_NAME")
     val entries = cursor.mapRows {
       val path = getString(BM_PATH)
@@ -48,14 +47,11 @@ public class Migration32to34 : Migration(32, 34) {
     }
     Logger.i("Restored bookmarks=$entries")
 
-    // delete table
     db.execSQL("DROP TABLE $BOOKMARK_TABLE_NAME")
 
-    // create new bookmark scheme
     db.execSQL(CREATE_TABLE_BOOKMARKS)
     Logger.i("Created $CREATE_TABLE_BOOKMARKS")
 
-    // add old bookmarks to new bookmark scheme
     db.transaction {
       entries.forEach {
         val cv = ContentValues().apply {

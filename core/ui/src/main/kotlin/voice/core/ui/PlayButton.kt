@@ -43,9 +43,6 @@ import androidx.graphics.shapes.Morph
 import voice.core.strings.R as StringsR
 
 /**
- * The hero play button. Paused it is a playful scalloped cookie that invites a tap; playing it
- * settles into a calm rounded square. Every toggle spins it a quarter turn and presses squish it.
- *
  * The icon scales with the button's measured size, so it stays proportional while a shared element
  * transition animates the button between screens.
  */

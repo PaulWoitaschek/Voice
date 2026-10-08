@@ -16,7 +16,6 @@ import voice.core.data.repo.internals.transaction
 public class Migration37to38 : IncrementalMigration(37) {
   override fun migrate(db: SupportSQLiteDatabase) {
     db.transaction {
-      // add new chapter mark table
       db.execSQL("ALTER TABLE tableChapters ADD marks TEXT")
 
       // invalidate modification time stamps so the chapters will be re-scanned

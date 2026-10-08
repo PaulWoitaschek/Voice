@@ -268,7 +268,6 @@ private fun KindPicker(
   }
 }
 
-/** Picking a kind morphs its circle into the kind's shape and rings it. */
 @Composable
 private fun KindTile(
   kind: Bookmark.Kind,

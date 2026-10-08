@@ -3,6 +3,7 @@
 Voice is a modular Android audiobook player.
 
 - Build the app: `./gradlew :app:assembleFreeDebug`.
+- Only write code comments when absolutely necessary, to explain a non-obvious *why*. Don't restate what the code does or describe the change you made.
 
 ## Pull requests from contributors
 

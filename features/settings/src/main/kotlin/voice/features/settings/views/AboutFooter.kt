@@ -38,10 +38,7 @@ import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.core.strings.R as StringsR
 
-/**
- * The app version below a slowly turning play badge. Tapping squishes and spins the badge. Unlocking
- * the developer menu (the 13th tap) is celebrated with [confetti] bursting out of it.
- */
+/** Unlocking the developer menu (the 13th tap) is celebrated with [confetti] bursting out of the badge. */
 @Composable
 internal fun AboutFooter(
   appVersion: String,

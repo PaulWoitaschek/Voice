@@ -19,9 +19,6 @@ import voice.core.data.repo.internals.migrations.Migration40to41
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-/**
- * Test the migration from 40 to 41
- */
 @RunWith(AndroidJUnit4::class)
 class Migration40to41Test {
 

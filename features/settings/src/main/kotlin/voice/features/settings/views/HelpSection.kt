@@ -45,10 +45,6 @@ private class HelpTile(
   val onClick: () -> Unit,
 )
 
-/**
- * Where to get help and give feedback, as a grid of tiles with colorful stickers that twist when
- * pressed. With large fonts, the tiles turn into a plain list.
- */
 @Composable
 internal fun HelpSection(
   showAnalytics: Boolean,

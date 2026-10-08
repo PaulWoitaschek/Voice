@@ -11,7 +11,6 @@ import dev.zacsweers.metro.binding
 import org.json.JSONObject
 import voice.core.data.repo.internals.moveToNextLoop
 
-// tables
 private const val TABLE_BOOK = "tableBooks"
 private const val TABLE_CHAPTERS = "tableChapters"
 private const val TABLE_BOOKMARKS = "tableBookmarks"
@@ -27,12 +26,10 @@ private const val BOOK_TYPE = "bookType"
 private const val BOOK_USE_COVER_REPLACEMENT = "bookUseCoverReplacement"
 private const val BOOK_ACTIVE = "BOOK_ACTIVE"
 
-// chapter keys
 private const val CHAPTER_DURATION = "chapterDuration"
 private const val CHAPTER_NAME = "chapterName"
 private const val CHAPTER_PATH = "chapterPath"
 
-// bookmark keys
 private const val BOOKMARK_TIME = "bookmarkTime"
 private const val BOOKMARK_PATH = "bookmarkPath"
 private const val BOOKMARK_TITLE = "bookmarkTitle"
@@ -79,7 +76,6 @@ private const val CREATE_TABLE_BOOKMARKS = """
 public class Migration29to30 : IncrementalMigration(29) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    // fetching old contents
     val cursor = db.query(
       "TABLE_BOOK",
       arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
@@ -92,12 +88,10 @@ public class Migration29to30 : IncrementalMigration(29) {
     }
     db.execSQL("DROP TABLE TABLE_BOOK")
 
-    // drop tables in case they exist
     db.execSQL("DROP TABLE IF EXISTS $TABLE_BOOK")
     db.execSQL("DROP TABLE IF EXISTS $TABLE_CHAPTERS")
     db.execSQL("DROP TABLE IF EXISTS $TABLE_BOOKMARKS")
 
-    // create new tables
     db.execSQL(CREATE_TABLE_BOOK)
     db.execSQL(CREATE_TABLE_CHAPTERS)
     db.execSQL(CREATE_TABLE_BOOKMARKS)

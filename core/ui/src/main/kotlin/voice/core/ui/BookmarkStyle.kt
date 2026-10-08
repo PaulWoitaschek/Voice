@@ -24,7 +24,7 @@ import voice.core.ui.icons.VoiceIcons
 
 /**
  * Each kind of bookmark has its own shape, color and icon, so the meaning doesn't depend on color
- * alone. Bookmarks the sleep timer set are a moon on a plain circle.
+ * alone.
  */
 @Immutable
 data class BookmarkStyle(
@@ -82,7 +82,6 @@ fun bookmarkStyle(
   }
 }
 
-/** The kind's shape with its icon on top. */
 @Composable
 fun BookmarkBadge(
   kind: Bookmark.Kind,

@@ -63,13 +63,11 @@ class SleepTimerIntegrationTest {
     // speed up the tests by using shorter fade out and sleep times
     fadeOutStore.updateData { 1.seconds }
 
-    // play the book and wait for it to start
     playerController.play()
     playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Playing }
 
     sleepTimer.enable(SleepTimerMode.TimedWithDuration(3.seconds))
 
-    // wait for the sleep timer to trigger
     sleepTimer.state.first { it == SleepTimerState.Disabled }
     playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Paused }
 
@@ -85,13 +83,11 @@ class SleepTimerIntegrationTest {
     // speed up the tests by using shorter fade out and sleep times
     fadeOutStore.updateData { 1.seconds }
 
-    // play the book and wait for it to start
     playerController.play()
     playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Playing }
 
     sleepTimer.enable(SleepTimerMode.EndOfChapter)
 
-    // wait for the sleep timer to trigger
     playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Paused }
     sleepTimer.state.first { it == SleepTimerState.Disabled }
 

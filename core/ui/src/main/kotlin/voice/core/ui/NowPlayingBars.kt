@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.PI
 import kotlin.math.sin
 
-/** Three little bars bouncing to the audio while it plays. */
 @Composable
 fun NowPlayingBars(
   playing: Boolean,

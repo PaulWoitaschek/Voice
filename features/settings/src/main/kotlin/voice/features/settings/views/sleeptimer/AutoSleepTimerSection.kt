@@ -57,10 +57,7 @@ import voice.features.settings.views.TimePickerDialog
 import java.time.LocalTime
 import voice.core.strings.R as StringsR
 
-/**
- * The automatic sleep timer. Turning it on turns the island into a night sky with twinkling stars,
- * whatever the app's theme. The moon and the sun pick when the night starts and ends.
- */
+/** Turning it on turns the island into a night sky with twinkling stars, whatever the app's theme. */
 @Composable
 internal fun AutoSleepTimerSection(
   viewState: SettingsViewState.AutoSleepTimerViewState,
@@ -159,7 +156,6 @@ internal fun AutoSleepTimerSection(
   }
 }
 
-/** The [time] the night starts or ends. Tapping it opens a time picker. */
 @Composable
 private fun TimeTile(
   icon: ImageVector,

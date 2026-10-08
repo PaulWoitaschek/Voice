@@ -38,10 +38,6 @@ import voice.features.folderPicker.icon
 import voice.features.folderPicker.label
 import voice.core.strings.R as StringsR
 
-/**
- * A folder in an expressive group, leading with a sticker for how its books are found. Tapping it
- * changes that, so it's left out for a single file, which is always one book.
- */
 @Composable
 internal fun FolderRow(
   item: FolderPickerViewState.Item,
@@ -108,7 +104,6 @@ internal fun FolderRow(
   }
 }
 
-/** How a folder's books are found. Folders that can change it get an arrow, like a dropdown. */
 @Composable
 private fun FolderTypeChip(
   folderType: FolderType,
@@ -148,7 +143,6 @@ private class FolderTypeStyle(
   val onContainer: Color,
 )
 
-// libraries are primary or tertiary, folders and files that are one book are secondary
 @Composable
 private fun FolderType.style(): FolderTypeStyle {
   val colors = MaterialTheme.colorScheme

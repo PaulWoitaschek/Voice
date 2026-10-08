@@ -19,7 +19,8 @@ fun resourceNames(file: File): Set<String> {
   for (index in 0 until resources.length) {
     val node = resources.item(index)
     val name = node.attributes?.getNamedItem("name")?.nodeValue
-    if (name != null) {
+    val translatable = node.attributes?.getNamedItem("translatable")?.nodeValue != "false"
+    if (name != null && translatable) {
       names += name
     }
   }

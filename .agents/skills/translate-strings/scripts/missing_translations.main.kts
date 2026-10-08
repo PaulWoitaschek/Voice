@@ -38,7 +38,9 @@ fun parse(file: File): Map<String, Resource> {
           mapOf("" to node.textContent)
         }
         val name = node.getAttribute("name")
-        resources[name] = Resource(name, texts, comment)
+        if (node.getAttribute("translatable") != "false") {
+          resources[name] = Resource(name, texts, comment)
+        }
         comment = null
       }
     }

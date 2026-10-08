@@ -30,7 +30,6 @@ object NaturalOrderComparator {
         i++
       }
 
-      // if sizes are the same
       return if (leftSize == rightSize) {
         stringComparator.compare(lhsSegments.lastOrNull() ?: "", rhsSegments.lastOrNull() ?: "")
       } else {

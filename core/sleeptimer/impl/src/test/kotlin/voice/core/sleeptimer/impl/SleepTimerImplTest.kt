@@ -119,17 +119,14 @@ class SleepTimerImplTest {
     advanceTimeBy(3.seconds)
     yield()
 
-    // after the first 3 seconds, the volume should not have been decreased
     assertEquals(expected = setOf(1F), actual = setVolumeSlots.toSet())
 
     setVolumeSlots.clear()
     advanceTimeBy(1.seconds)
     yield()
-    // now we're in fade-out phase, volume should decrease
     assertTrue(setVolumeSlots.isNotEmpty())
     assertTrue(setVolumeSlots.zipWithNext().all { (previous, next) -> previous > next })
 
-    // after the timer finished, volume should be reset
     setVolumeSlots.clear()
     advanceTimeBy(2.seconds)
     yield()
@@ -159,7 +156,6 @@ class SleepTimerImplTest {
     advanceTimeBy(SleepTimerImpl.SHAKE_TO_RESET_TIME + longDuration + 2.seconds)
     runCurrent()
 
-    // The second countdown should complete normally
     coVerify(exactly = 2) { playerController.pauseWithRewind(any()) }
     assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
   }

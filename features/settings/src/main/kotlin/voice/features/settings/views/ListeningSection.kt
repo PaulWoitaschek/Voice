@@ -88,10 +88,6 @@ import voice.core.strings.R as StringsR
 private val SEEK_TIME_PRESETS = listOf(10, 15, 20, 30, 60)
 private val AUTO_REWIND_PRESETS = listOf(0, 2, 5, 10, 20)
 
-/**
- * How far skipping jumps and how far resuming rewinds. Both are set right here, with a few presets
- * and fine tuning, and each comes with a little illustration of what it does.
- */
 @Composable
 internal fun ListeningSection(
   seekTimeInSeconds: Int,
@@ -238,7 +234,6 @@ private fun secondsText(seconds: Int): String {
   }
 }
 
-/** The current value, rolling up when it grows and down when it shrinks. */
 @Composable
 private fun SecondsValue(seconds: Int) {
   val text = secondsText(seconds)
@@ -330,10 +325,6 @@ private class SkipBurst(
   val seconds: Int,
 )
 
-/**
- * The player's skip buttons in small. Whenever the skip amount changes, they twitch and send the new
- * amount floating up, just like skipping does in the player.
- */
 @Composable
 private fun SkipIllustration(seconds: Int) {
   val nudge = remember { Animatable(0F) }
@@ -432,10 +423,6 @@ private fun FloatingAmount(
   )
 }
 
-/**
- * A wavy timeline that was paused at the ghost marker. The playhead springs back from there by the
- * rewind amount, along a dashed arc, so it's clear what will be heard again.
- */
 @Composable
 private fun RewindIllustration(
   seconds: Int,
@@ -481,7 +468,6 @@ private fun RewindIllustration(
               strokeWidth = strokeWidth,
               cap = StrokeCap.Round,
             )
-            // what was heard already
             wave.reset()
             val phase = clock.value * 2 * PI.toFloat() * 0.6F
             var x = strokeWidth
@@ -491,7 +477,6 @@ private fun RewindIllustration(
               wave.lineTo(x, lineY + amplitude * sin(x / wavelength * 2 * PI.toFloat() - phase))
             }
             drawPath(wave, color = colors.secondary, style = waveStroke)
-            // where it was paused
             drawCircle(
               color = colors.onSecondaryContainer.copy(alpha = 0.45F),
               radius = 5.dp.toPx(),
