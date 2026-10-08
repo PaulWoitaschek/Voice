@@ -96,9 +96,6 @@ internal fun ListeningSection(
   onSeekTimeStep: (Int) -> Unit,
   onAutoRewindChange: (Int) -> Unit,
   onAutoRewindStep: (Int) -> Unit,
-  listeningHistoryEnabled: Boolean,
-  onListeningHistoryToggle: () -> Unit,
-  onClearListeningHistory: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   SettingsIsland(
@@ -126,12 +123,6 @@ internal fun ListeningSection(
       onSecondsChange = onAutoRewindChange,
       onStep = onAutoRewindStep,
       illustration = { RewindIllustration(autoRewindInSeconds, maxSeconds = AUTO_REWIND_RANGE.last) },
-    )
-    Spacer(Modifier.height(20.dp))
-    ListeningHistoryRows(
-      enabled = listeningHistoryEnabled,
-      onToggle = onListeningHistoryToggle,
-      onClear = onClearListeningHistory,
     )
   }
 }

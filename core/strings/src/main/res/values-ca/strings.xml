@@ -157,9 +157,6 @@
     <string name="history.filter.settings">Configuració</string>
     <string name="history.filter.sleep">Son</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.off.action">Activa</string>
-    <string name="history.off.message">Activeu-lo per desfer reproduccions, pauses i salts accidentals. Es queda en aquest dispositiu.</string>
-    <string name="history.off.title">L\'historial d\'escolta està desactivat</string>
     <string name="history.pinned">S\'ha desat com a punt de llibre</string>
     <string name="history.restored">S\'ha restaurat el punt de llibre</string>
     <string name="history.source.app">A l\'aplicació</string>
@@ -280,13 +277,6 @@
     <string name="settings.appearance.color_scheme.lavender">Lavanda</string>
     <string name="settings.appearance.color_scheme.sunset">Posta de sol</string>
     <string name="settings.appearance.title">Aparença</string>
-    <string name="settings.listening_history.clear">Esborra l\'historial d\'escolta</string>
-    <string name="settings.listening_history.clear.confirm">Esborra</string>
-    <string name="settings.listening_history.clear.message">Això elimina les reproduccions, pauses i salts registrats de tots els llibres. Els punts de llibre es mantenen.</string>
-    <string name="settings.listening_history.clear.title">Voleu esborrar l\'historial d\'escolta?</string>
-    <string name="settings.listening_history.cleared">S\'ha esborrat l\'historial d\'escolta</string>
-    <string name="settings.listening_history.summary">Desa les reproduccions, pauses i salts en aquest dispositiu, perquè pugueu desfer els accidents</string>
-    <string name="settings.listening_history.title">Historial d\'escolta</string>
     <string name="settings.library.layout.grid">Quadrícula</string>
     <string name="settings.library.layout.list">Llista</string>
     <string name="settings.library.title">Biblioteca</string>

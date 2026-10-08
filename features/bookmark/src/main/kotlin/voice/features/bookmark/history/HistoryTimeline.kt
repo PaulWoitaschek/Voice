@@ -176,7 +176,6 @@ internal fun historyTimeline(
   events: List<ListeningEvent>,
   index: BookIndex,
   bookmarks: List<Bookmark>,
-  enabled: Boolean,
   playing: Boolean,
   selectedFilter: HistoryFilter?,
   selectedSource: Source?,
@@ -189,7 +188,7 @@ internal fun historyTimeline(
   val latest = rawSessions.lastOrNull()
   // only the newest session can still be playing, and only when it wasn't paused or recorded since
   val ongoing = latest
-    ?.takeIf { playing && enabled && it.playTime.openSince != null }
+    ?.takeIf { playing && it.playTime.openSince != null }
     ?.let { OngoingSession(key = it.events.first().id, playTime = it.playTime, barStart = it.barStart, barEnd = it.barEnd) }
   val sessions = rawSessions.map { context.buildSession(it, now) }
   val allEntries = sessions.flatMap { it.entries }
@@ -211,7 +210,6 @@ internal fun historyTimeline(
     index = index,
     zone = zone,
     state = HistoryViewState(
-      enabled = enabled,
       suggestion = null,
       filters = filters,
       selectedFilter = filter,

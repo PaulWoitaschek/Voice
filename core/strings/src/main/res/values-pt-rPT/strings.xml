@@ -158,9 +158,6 @@
     <string name="history.filter.settings">Definições</string>
     <string name="history.filter.sleep">Sono</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.off.action">Ativar</string>
-    <string name="history.off.message">Ative para anular reproduções, pausas e saltos acidentais. Os dados ficam neste dispositivo.</string>
-    <string name="history.off.title">O histórico de audição está desativado</string>
     <string name="history.pinned">Guardado como marcador</string>
     <string name="history.restored">Marcador restaurado</string>
     <string name="history.source.app">Na aplicação</string>
@@ -322,13 +319,6 @@
     <string name="settings.auto_sleep_timer.summary">Iniciar um temporizador de sono automaticamente quando a reprodução começa entre %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador de sono automático</string>
     <string name="settings.library.folders.summary">Gerir pastas analisadas para audiolivros</string>
-    <string name="settings.listening_history.clear">Limpar histórico de audição</string>
-    <string name="settings.listening_history.clear.confirm">Limpar</string>
-    <string name="settings.listening_history.clear.message">Isto remove as reproduções, pausas e saltos registados de todos os livros. Os marcadores mantêm-se.</string>
-    <string name="settings.listening_history.clear.title">Limpar o histórico de audição?</string>
-    <string name="settings.listening_history.cleared">Histórico de audição limpo</string>
-    <string name="settings.listening_history.summary">Guarda reproduções, pausas e saltos neste dispositivo, para poder anular acidentes</string>
-    <string name="settings.listening_history.title">Histórico de audição</string>
     <string name="settings.library.layout.grid">Grelha</string>
     <string name="settings.library.layout.list">Lista</string>
     <string name="settings.library.title">Biblioteca</string>

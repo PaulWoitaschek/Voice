@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Instellings</string>
     <string name="history.filter.sleep">Slaap</string>
     <string name="history.location.chapter">Hfst. %1$d · %2$s</string>
-    <string name="history.off.action">Skakel aan</string>
-    <string name="history.off.message">Skakel dit aan om per ongeluk speel, pouses en spronge te ontdoen. Dit bly op hierdie toestel.</string>
-    <string name="history.off.title">Luistergeskiedenis is af</string>
     <string name="history.pinned">As boekmerk gestoor</string>
     <string name="history.restored">Boekmerk herstel</string>
     <string name="history.source.app">In die toep</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Begin outomaties ’n slaaptimer wanneer afspeel tussen %1$s en %2$s begin</string>
     <string name="settings.auto_sleep_timer.title">Outomatiese slaaptimer</string>
     <string name="settings.library.folders.summary">Bestuur vouers wat vir oudioboeke geskandeer word</string>
-    <string name="settings.listening_history.clear">Vee luistergeskiedenis uit</string>
-    <string name="settings.listening_history.clear.confirm">Vee uit</string>
-    <string name="settings.listening_history.clear.message">Dit verwyder die aangetekende speel-, pouse- en springaksies van alle boeke. Boekmerke bly.</string>
-    <string name="settings.listening_history.clear.title">Vee luistergeskiedenis uit?</string>
-    <string name="settings.listening_history.cleared">Luistergeskiedenis uitgevee</string>
-    <string name="settings.listening_history.summary">Hou speel-, pouse- en springaksies op hierdie toestel, sodat jy ongelukke kan ontdoen</string>
-    <string name="settings.listening_history.title">Luistergeskiedenis</string>
     <string name="settings.library.layout.grid">Rooster</string>
     <string name="settings.library.layout.list">Lys</string>
     <string name="settings.library.title">Biblioteek</string>

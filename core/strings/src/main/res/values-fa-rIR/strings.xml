@@ -150,9 +150,6 @@
     <string name="history.filter.settings">تنظیمات</string>
     <string name="history.filter.sleep">خواب</string>
     <string name="history.location.chapter">فصل %1$d · %2$s</string>
-    <string name="history.off.action">روشن کردن</string>
-    <string name="history.off.message">آن را روشن کنید تا بتوانید پخش‌ها، توقف‌ها و پرش‌های ناخواسته را برگردانید. فقط روی همین دستگاه می‌ماند.</string>
-    <string name="history.off.title">تاریخچهٔ گوش دادن خاموش است</string>
     <string name="history.pinned">به‌عنوان نشانه ذخیره شد</string>
     <string name="history.restored">نشانه بازیابی شد</string>
     <string name="history.source.app">درون برنامه</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>
     <string name="settings.auto_sleep_timer.title">زمان خواب خودکار</string>
     <string name="settings.library.folders.summary">مدیریت پوشه‌هایی که برای کتاب‌های صوتی اسکن می‌شوند</string>
-    <string name="settings.listening_history.clear">پاک کردن تاریخچهٔ گوش دادن</string>
-    <string name="settings.listening_history.clear.confirm">پاک کردن</string>
-    <string name="settings.listening_history.clear.message">پخش‌ها، توقف‌ها و پرش‌های ثبت‌شدهٔ همهٔ کتاب‌ها پاک می‌شوند. نشانه‌ها باقی می‌مانند.</string>
-    <string name="settings.listening_history.clear.title">تاریخچهٔ گوش دادن پاک شود؟</string>
-    <string name="settings.listening_history.cleared">تاریخچهٔ گوش دادن پاک شد</string>
-    <string name="settings.listening_history.summary">پخش‌ها، توقف‌ها و پرش‌ها را روی این دستگاه نگه می‌دارد تا بتوانید اشتباهات را برگردانید</string>
-    <string name="settings.listening_history.title">تاریخچهٔ گوش دادن</string>
     <string name="settings.library.layout.grid">شبکه</string>
     <string name="settings.library.layout.list">فهرست</string>
     <string name="settings.library.title">کتابخانه</string>

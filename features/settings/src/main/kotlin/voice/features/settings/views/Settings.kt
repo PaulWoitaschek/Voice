@@ -174,9 +174,6 @@ private fun LazyListScope.sections(
       onSeekTimeStep = listener::seekAmountStepped,
       onAutoRewindChange = listener::autoRewindAmountChanged,
       onAutoRewindStep = listener::autoRewindAmountStepped,
-      listeningHistoryEnabled = viewState.listeningHistoryEnabled,
-      onListeningHistoryToggle = listener::toggleListeningHistory,
-      onClearListeningHistory = listener::clearListeningHistory,
     )
   }
   section("sleepTimer") { modifier ->
@@ -282,16 +279,12 @@ fun Settings() {
   val confetti = rememberConfettiState()
   val viewState = viewModel.viewState()
   val currentDeveloperMenuUnlockedMessage = rememberUpdatedState("Developer Menu unlocked")
-  val currentHistoryClearedMessage = rememberUpdatedState(stringResource(StringsR.string.settings_listening_history_cleared))
   LaunchedEffect(viewModel) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {
         SettingsViewEffect.DeveloperMenuUnlocked -> {
           confetti.burst()
           snackbarHostState.showSnackbar(currentDeveloperMenuUnlockedMessage.value)
-        }
-        SettingsViewEffect.ListeningHistoryCleared -> {
-          snackbarHostState.showSnackbar(currentHistoryClearedMessage.value)
         }
       }
     }

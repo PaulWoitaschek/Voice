@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Поставки</string>
     <string name="history.filter.sleep">Спиење</string>
     <string name="history.location.chapter">Погл. %1$d · %2$s</string>
-    <string name="history.off.action">Вклучи</string>
-    <string name="history.off.message">Вклучете ја за да ги поништувате случајните пуштања, паузи и скокови. Останува само на овој уред.</string>
-    <string name="history.off.title">Историјата на слушање е исклучена</string>
     <string name="history.pinned">Зачувано како обележувач</string>
     <string name="history.restored">Обележувачот е вратен</string>
     <string name="history.source.app">Во апликацијата</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Стартувај го тајмерот за спиење автоматски штом аудиото почнува меѓу %1$s и %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматски тајмер за спиење</string>
     <string name="settings.library.folders.summary">Управувајте со папките што се скенираат за аудиокниги</string>
-    <string name="settings.listening_history.clear">Избриши ја историјата на слушање</string>
-    <string name="settings.listening_history.clear.confirm">Избриши</string>
-    <string name="settings.listening_history.clear.message">Ова ги отстранува зачуваните пуштања, паузи и скокови за сите книги. Обележувачите остануваат.</string>
-    <string name="settings.listening_history.clear.title">Да се избрише историјата на слушање?</string>
-    <string name="settings.listening_history.cleared">Историјата на слушање е избришана</string>
-    <string name="settings.listening_history.summary">Ги чува пуштањата, паузите и скоковите на овој уред, за да можете да ги поништите случајните грешки</string>
-    <string name="settings.listening_history.title">Историја на слушање</string>
     <string name="settings.library.layout.grid">Мрежа</string>
     <string name="settings.library.layout.list">Листа</string>
     <string name="settings.library.title">Библиотека</string>

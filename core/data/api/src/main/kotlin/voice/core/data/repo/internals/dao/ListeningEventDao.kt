@@ -29,9 +29,6 @@ public interface ListeningEventDao {
     count: Int,
   )
 
-  @Query("DELETE FROM listening_event")
-  public suspend fun deleteAll()
-
   @Query(
     """
     UPDATE listening_event SET bookId = :to, chapterId = :newChapterId

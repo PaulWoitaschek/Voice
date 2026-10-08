@@ -18,7 +18,6 @@ data class SettingsViewState(
   val showDeveloperMenu: Boolean,
   val showSupportDevelopment: Boolean,
   val folderNames: List<String>,
-  val listeningHistoryEnabled: Boolean,
 ) {
 
   companion object {
@@ -37,7 +36,6 @@ data class SettingsViewState(
         showDeveloperMenu = true,
         showSupportDevelopment = true,
         folderNames = listOf("Audiobooks", "Sci-Fi", "Non-Fiction"),
-        listeningHistoryEnabled = true,
       )
     }
   }
