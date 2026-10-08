@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 
-/** An icon in a Material shape, like a sticker. */
 @Composable
 fun ShapedIcon(
   icon: ImageVector,

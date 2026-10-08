@@ -212,7 +212,6 @@ fun SleepTimerDialog(
   }
 }
 
-/** A preset drawn in a playful Material shape that twists and squishes when pressed. */
 @Composable
 private fun PresetButton(
   minutes: Int,

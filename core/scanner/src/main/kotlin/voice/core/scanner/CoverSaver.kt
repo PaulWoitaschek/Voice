@@ -30,7 +30,6 @@ internal constructor(
     val newCover = newBookCoverFile()
 
     withContext(Dispatchers.IO) {
-      // scale down if bitmap is too large
       val preferredSize = 1920
       val bitmapToSave = if (max(cover.width, cover.height) > preferredSize) {
         cover.scale(preferredSize, preferredSize)

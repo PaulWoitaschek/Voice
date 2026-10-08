@@ -36,9 +36,6 @@ internal fun dayLabelText(label: DayLabel): String {
   }
 }
 
-/**
- * A time of day, with or without AM and PM as the system's 24-hour setting says.
- */
 @Composable
 internal fun timeText(time: LocalTime): String {
   val context = LocalContext.current

@@ -42,7 +42,6 @@ class BookSearchHandler(
     return null
   }
 
-  // Look for anything that might match the query
   private suspend fun searchUnstructured(query: String?): Book? {
     if (!query.isNullOrBlank()) {
       val foundMatch = findBook {
@@ -75,7 +74,6 @@ class BookSearchHandler(
     return null
   }
 
-  // Play the first book that matches to a selector. Returns if a book is being played
   private suspend inline fun findBook(selector: (Book) -> Boolean): Book? {
     return repo.all().find(selector)
   }

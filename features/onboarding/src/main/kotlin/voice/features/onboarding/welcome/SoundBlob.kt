@@ -50,13 +50,7 @@ import kotlin.math.min
 import kotlin.math.sin
 import androidx.graphics.shapes.toPath as toAndroidPath
 
-/**
- * Voice's mascot of sorts: a blob that keeps morphing through Material shapes while an equalizer
- * dances inside it, sound rings ripple outwards and a few tiny shapes orbit it.
- *
- * Tapping it (just for fun, so it's hidden from accessibility services) squishes it and jumps to the
- * next shape right away.
- */
+/** Tapping it is just for fun, so it's hidden from accessibility services. */
 @Composable
 internal fun SoundBlob(
   clock: () -> Float,
@@ -72,7 +66,6 @@ internal fun SoundBlob(
   var shapeIndex by remember { mutableIntStateOf(0) }
   val morphProgress = remember { Animatable(0F) }
   val taps = remember { Channel<Unit>(Channel.CONFLATED) }
-  // every tap and morph sends out a ring, which the clock carries away
   var pulseStart by remember { mutableFloatStateOf(Float.NEGATIVE_INFINITY) }
   var pressed by remember { mutableStateOf(false) }
   val squish by animateFloatAsState(
@@ -85,7 +78,6 @@ internal fun SoundBlob(
     val animationsOff = coroutineContext[MotionDurationScale]?.scaleFactor == 0F
     while (true) {
       val tapped = withTimeoutOrNull(MORPH_INTERVAL_MS) { taps.receive() } != null
-      // with animations off the blob holds still, unless it's tapped
       if (!tapped && animationsOff) continue
       pulseStart = currentClock()
       morphProgress.animateTo(1F, spring(dampingRatio = 0.55F, stiffness = Spring.StiffnessLow))
@@ -143,7 +135,6 @@ private fun DrawScope.drawSoundRings(
   color: Color,
 ) {
   val maxRadius = min(size.width, size.height) / 2F
-  // three calm rings that keep rippling outwards
   repeat(3) { ring ->
     val phase = ((t * 0.35F) + ring / 3F) % 1F
     val ringRadius = radius + (maxRadius - radius) * phase
@@ -155,7 +146,6 @@ private fun DrawScope.drawSoundRings(
       style = Stroke(width = 2.dp.toPx()),
     )
   }
-  // plus a bold one whenever the blob changes its shape
   val pulse = (t - pulseStart) / 0.9F
   if (pulse in 0F..1F) {
     drawCircle(

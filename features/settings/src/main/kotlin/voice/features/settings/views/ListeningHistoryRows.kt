@@ -20,10 +20,6 @@ import voice.core.ui.ShapedIcon
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
-/**
- * The listening history behind the "Back to" pill and the History tab: on by default, kept on
- * the device, and clearable after a confirmation.
- */
 @Composable
 internal fun ListeningHistoryRows(
   enabled: Boolean,

@@ -101,7 +101,6 @@ internal fun VolumeGainSheet(
   }
 }
 
-/** A row of bars growing in height, lit up to the current gain like a volume meter. */
 @Composable
 private fun GainMeter(
   fraction: Float,

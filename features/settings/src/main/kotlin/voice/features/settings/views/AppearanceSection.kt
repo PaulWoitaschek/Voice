@@ -74,10 +74,6 @@ import voice.core.ui.rememberThemeColorScheme
 import androidx.graphics.shapes.toPath as toAndroidPath
 import voice.core.strings.R as StringsR
 
-/**
- * Light or dark and the color scheme, picked by looking at them: little screens previewing each
- * mode and swatches for every palette, all in the colors they'd give the app.
- */
 @Composable
 internal fun AppearanceSection(
   themeMode: ThemeMode,
@@ -149,7 +145,6 @@ private fun SectionLabel(text: String) {
   )
 }
 
-/** A tiny screen in the colors of [themeMode]. Follow system shows both, split diagonally. */
 @Composable
 private fun ThemeModeTile(
   themeMode: ThemeMode,
@@ -297,10 +292,6 @@ private fun playIconPath(): Path = Path().apply {
   close()
 }
 
-/**
- * A swatch with the main colors of [themeColorScheme]. Selecting it puffs it up from a circle into
- * a cookie.
- */
 @Composable
 private fun PaletteSwatch(
   themeColorScheme: ThemeColorScheme,
@@ -374,7 +365,6 @@ private fun PaletteSwatch(
   }
 }
 
-/** The name of the selected color scheme, rolling over to the next one when it changes. */
 @Composable
 private fun SelectedColorScheme(themeColorScheme: ThemeColorScheme) {
   AnimatedContent(

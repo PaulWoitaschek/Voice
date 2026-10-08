@@ -93,7 +93,6 @@ internal fun Bookshelf(
     val shelfTop = center.y + maxBookHeight / 2F
     val shelfLeft = center.x - shelfWidth / 2F
 
-    // sparkles twinkling above the shelf
     SPARKLES.forEach { spark ->
       val twinkle = 0.5F + 0.5F * sin(t * spark.speed + spark.phase)
       val sparkSize = spark.size.dp.toPx() * (0.6F + 0.4F * twinkle)
@@ -122,7 +121,6 @@ internal fun Bookshelf(
       // of sinking into it.
       val drop = abs(drops[index].value)
       val lift = drop * (shelfTop + bookHeight) + abs(hops[index].value) * 22.dp.toPx()
-      // tumbling a bit while falling, alternating directions
       val wobble = drop * if (index % 2 == 0) 18F else -18F
       val tilt = if (book.leaning) -16F * (1F - drop) else 0F
       val left = x

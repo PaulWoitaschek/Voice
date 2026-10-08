@@ -104,11 +104,6 @@ fun FolderOverview() {
   )
 }
 
-/**
- * The audiobook folders over the drifting aurora, grouped like the books on the review screen. Each
- * leads with a sticker for how its books are found. Without any, the bobbing folder from adding
- * books asks for the first one.
- */
 @Composable
 private fun FolderOverviewView(
   viewState: FolderPickerViewState,
@@ -120,7 +115,6 @@ private fun FolderOverviewView(
   val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
   val clock = rememberAnimationClock(running = true)
   var entered by rememberSaveable { mutableStateOf(false) }
-  // the folders float in once they are read
   val entrance = if (viewState.loading) null else rememberEntranceState(animate = !entered)
   LaunchedEffect(entrance) { if (entrance != null) entered = true }
   Box(Modifier.fillMaxSize()) {

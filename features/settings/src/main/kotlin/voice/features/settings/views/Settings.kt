@@ -77,10 +77,6 @@ private fun SettingsPreview() {
   }
 }
 
-/**
- * The settings, as colorful islands floating over the drifting aurora. They float in one after
- * another when the screen opens.
- */
 @Composable
 private fun Settings(
   viewState: SettingsViewState?,

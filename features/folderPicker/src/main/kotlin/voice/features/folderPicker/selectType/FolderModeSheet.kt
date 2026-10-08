@@ -39,10 +39,6 @@ import voice.core.ui.icons.VoiceIcons
 import voice.features.folderPicker.FolderTypeIcon
 import voice.core.strings.R as StringsR
 
-/**
- * The ways Voice can find books in a folder, named after the folder itself and each with the books
- * it would lead to. The option matching the folder best is marked.
- */
 @Composable
 internal fun FolderModeSheet(
   viewState: SelectFolderTypeViewState,

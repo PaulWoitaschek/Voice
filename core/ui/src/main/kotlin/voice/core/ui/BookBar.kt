@@ -37,11 +37,7 @@ import kotlin.math.abs
 
 private const val MAX_SEGMENTS = 120
 
-/**
- * A bookmark drawn on the [BookBar].
- *
- * @param position where in the book, from 0 to 1.
- */
+/** [position] is where in the book, from 0 to 1. */
 @Immutable
 data class BookBarPin(
   val position: Float,
@@ -183,9 +179,6 @@ private val PIN_GAP = 3.dp
 private val SEGMENT_GAP = 3.dp
 private val MIN_SEGMENT_WIDTH = 3.dp
 
-/**
- * Whether the bar shows a segment per chapter. Too many or too thin segments make it one bar.
- */
 private fun isSegmented(
   segments: List<Float>,
   width: Float,

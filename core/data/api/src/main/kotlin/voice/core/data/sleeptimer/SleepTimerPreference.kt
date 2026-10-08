@@ -8,13 +8,7 @@ import kotlin.time.Duration.Companion.minutes
 
 @Serializable
 public data class SleepTimerPreference(
-  /**
-   * The custom sleep time duration
-   */
   val duration: Duration,
-  /**
-   * If the sleep timer should be automatically enabled between [autoSleepStartTime] and [autoSleepEndTime]
-   */
   val autoSleepTimerEnabled: Boolean,
   @Serializable(with = LocalTimeSerializer::class)
   val autoSleepStartTime: LocalTime,

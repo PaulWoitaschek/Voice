@@ -74,9 +74,7 @@ internal data class HistoryTimeline(
   /** Whether the newest session is still playing, so it grows with time and the position. */
   val isOngoing: Boolean get() = ongoing != null
 
-  /**
-   * The view state at [now]. [currentProgress] is where playback is in the book, from 0 to 1.
-   */
+  /** [currentProgress] is where playback is in the book, from 0 to 1. */
   fun viewState(
     now: Instant,
     currentProgress: Float?,
@@ -299,7 +297,6 @@ internal fun playTime(events: List<ListeningEvent>): PlayTime {
   return PlayTime(closedMillis = closed, openSince = openSince)
 }
 
-/** What building the rows needs besides the events. */
 private class TimelineContext(
   val index: BookIndex,
   bookmarks: List<Bookmark>,

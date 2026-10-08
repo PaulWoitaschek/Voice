@@ -31,7 +31,6 @@ import kotlin.math.max
 import kotlin.math.sin
 import voice.core.strings.R as StringsR
 
-/** Asks for a donation, with a heart beating in a slowly turning burst. */
 @Composable
 internal fun SupportCard(
   onClick: () -> Unit,

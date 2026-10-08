@@ -50,7 +50,7 @@ class SelectFolderTypeViewModel(
   // until the user picks one, this is the current mode or the guess
   private val selectedMode = mutableStateOf(currentMode)
 
-  // what the library will show for the analyzed books, by their uri. Books without playable files map to null.
+  // books without playable files map to null
   private val previews = mutableStateMapOf<Uri, BookPreview?>()
 
   // books whose analysis failed keep showing what their files tell

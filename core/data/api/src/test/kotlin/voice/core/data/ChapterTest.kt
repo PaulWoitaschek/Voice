@@ -136,7 +136,7 @@ class ChapterTest {
     // Enforce visual alignment: starts and expected must share the same timeline length.
     startLines.forEach { line ->
       when {
-        '@' in line -> Unit // numeric form
+        '@' in line -> Unit
         else -> {
           check(line.length == timelineLen + 1) {
             "Start line must be 1(label) + $timelineLen(timeline) chars, got ${line.length}: `$line`"

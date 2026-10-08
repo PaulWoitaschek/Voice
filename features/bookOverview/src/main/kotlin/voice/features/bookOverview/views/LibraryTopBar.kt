@@ -42,10 +42,6 @@ import voice.features.bookOverview.search.searchBarSharedBounds
 import kotlin.time.Duration.Companion.seconds
 import voice.core.strings.R as StringsR
 
-/**
- * The library's app bar: a search pill that opens the search, with the settings next to it. It hides while
- * scrolling down the library and comes back when scrolling up.
- */
 @Composable
 internal fun LibraryTopBar(
   showSearch: Boolean,

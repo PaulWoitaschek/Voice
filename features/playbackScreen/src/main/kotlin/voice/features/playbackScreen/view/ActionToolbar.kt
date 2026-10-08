@@ -70,13 +70,6 @@ import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState
 import java.text.DecimalFormat
 
-/**
- * Floating toolbar with the secondary playback options. Every option that deviates from its
- * default lights up and, where useful, grows a label (sleep timer countdown, playback speed).
- * Long pressing an option names it, except for bookmarks, where a long press quickly adds a
- * bookmark and confirms that with a snackbar. Skip silence names itself on every toggle, as it is
- * the only option that doesn't open a titled screen and its icon alone is ambiguous.
- */
 @Composable
 internal fun ActionToolbar(
   sleepTimerState: BookPlayViewState.SleepTimerViewState,
@@ -125,6 +118,7 @@ internal fun ActionToolbar(
       contentDescription = stringResource(R.string.playback_option_skip_silence),
       onClick = onSkipSilenceClick,
       toggle = true,
+      // the only option that doesn't open a titled screen, and its icon alone is ambiguous
       showTooltipOnClick = true,
     )
     ToolbarAction(

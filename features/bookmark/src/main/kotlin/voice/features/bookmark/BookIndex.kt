@@ -7,9 +7,6 @@ import voice.core.data.markForPosition
 import voice.core.ui.formatTime
 
 /**
- * A spot in the book, as people talk about it: chapter number and name, the time inside that
- * chapter, and how far into the whole book it is.
- *
  * Chapters here are the book's chapter marks, numbered across all files, the same way the player
  * counts them.
  */

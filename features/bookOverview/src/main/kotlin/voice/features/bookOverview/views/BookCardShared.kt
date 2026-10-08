@@ -72,7 +72,6 @@ internal fun BookCover(
   }
 }
 
-/** Shapes for a group of connected list items: big outer corners, small inner ones. */
 internal fun segmentedShape(
   index: Int,
   count: Int,
