@@ -92,49 +92,18 @@ class VoicePlayer(
     player.addListener(endOfChapterSleepTimerListener)
   }
 
+  // The app changes chapters through custom commands that end up here, because its controller can still hold the book
+  // before it was split into chapters.
   fun forceSeekToNext() {
-    scope.launch {
-      val nextMediaItemIndex = player.nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
-        ?: return@launch
-      player.seekTo(nextMediaItemIndex, 0)
-    }
+    player.seekToNextMediaItem()
   }
 
   fun forceSeekToPrevious() {
-    scope.launch {
-      val currentPosition = player.currentPosition
-      if (currentPosition > THRESHOLD_FOR_BACK_SEEK_MS) {
-        player.seekTo(0)
-      } else {
-        val previousMediaItemIndex = player.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
-        if (previousMediaItemIndex != null) {
-          player.seekTo(previousMediaItemIndex, 0)
-        } else {
-          player.seekTo(0)
-        }
-      }
-    }
+    player.seekToPrevious()
   }
 
-  override fun getAvailableCommands(): Player.Commands {
-    // On Android 13, the notification always shows the "skip to next" and "skip to previous"
-    // actions.
-    // However these are also used internally when seeking for example through a bluetooth headset
-    // We use these and delegate them to fast forward / rewind.
-    // The player however only advertises the seek to next and previous item in the case
-    // that it's not the first or last track. Therefore we manually advertise that these
-    // are available.
-    return super.getAvailableCommands()
-      .buildUpon()
-      .addAll(
-        COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM,
-        COMMAND_SEEK_TO_PREVIOUS,
-        COMMAND_SEEK_TO_NEXT,
-        COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
-      )
-      .build()
-  }
-
+  // Next and previous from headsets, cars and watches skip instead of changing the chapter, so listeners keep their
+  // place.
   override fun seekToPreviousMediaItem() {
     seekBack()
   }
@@ -432,5 +401,3 @@ class VoicePlayer(
     repo.updateBook(bookId, update)
   }
 }
-
-private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000
