@@ -2,7 +2,9 @@ package voice.features.settings
 
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.data.supporter.SupporterBadge
 import java.time.LocalTime
+import java.time.YearMonth
 
 data class SettingsViewState(
   val themeMode: ThemeMode,
@@ -17,6 +19,9 @@ data class SettingsViewState(
   val analyticsEnabled: Boolean,
   val showDeveloperMenu: Boolean,
   val showSupportDevelopment: Boolean,
+  /** The badge of someone who supports Voice, shown on the support card as a thank-you. */
+  val supporterBadge: SupporterBadge?,
+  val supporterSince: YearMonth?,
   val folderNames: List<String>,
   val listeningHistoryEnabled: Boolean,
 ) {
@@ -36,6 +41,8 @@ data class SettingsViewState(
         showAnalyticSetting = true,
         showDeveloperMenu = true,
         showSupportDevelopment = true,
+        supporterBadge = null,
+        supporterSince = null,
         folderNames = listOf("Audiobooks", "Sci-Fi", "Non-Fiction"),
         listeningHistoryEnabled = true,
       )

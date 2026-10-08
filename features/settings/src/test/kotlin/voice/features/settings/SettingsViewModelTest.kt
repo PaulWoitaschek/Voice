@@ -34,6 +34,8 @@ import voice.core.data.folders.DocumentFileWithUri
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
+import voice.core.data.supporter.SupporterBadge
+import voice.core.data.supporter.SupporterStatus
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.history.ListeningHistoryRecorder
@@ -42,6 +44,8 @@ import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import java.time.Clock
+import java.time.YearMonth
+import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -49,6 +53,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
+import java.time.Instant as JavaInstant
 
 class SettingsViewModelTest {
 
@@ -76,13 +81,14 @@ class SettingsViewModelTest {
   private val appInfoProvider = mockk<AppInfoProvider> {
     every { versionName } returns "1.2.3"
     every { analyticsIncluded } returns true
-    every { supportDevelopmentIncluded } returns true
     every { installTime } returns Instant.parse("2026-06-01T00:00:00Z")
   }
   private val gridCount = mockk<GridCount> {
     every { useGridAsDefault() } returns true
   }
   private val kioskModeFeatureFlag = MemoryFeatureFlag(false)
+  private val supportDevelopmentFeatureFlag = MemoryFeatureFlag(true)
+  private val supporterStatusStore = MemoryDataStore(SupporterStatus())
   private val dynamicColorAvailability = mockk<DynamicColorAvailability> {
     every { isSupported() } returns true
   }
@@ -107,6 +113,9 @@ class SettingsViewModelTest {
     audiobookFolders = audiobookFolders,
     listeningHistoryEnabledStore = listeningHistoryEnabledStore,
     listeningHistoryRecorder = listeningHistoryRecorder,
+    supportDevelopmentFeatureFlag = supportDevelopmentFeatureFlag,
+    supporterStatusStore = supporterStatusStore,
+    clock = Clock.fixed(JavaInstant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
 
@@ -229,8 +238,8 @@ class SettingsViewModelTest {
   }
 
   @Test
-  fun `view state shows support development when included`() = scope.runTest {
-    every { appInfoProvider.supportDevelopmentIncluded } returns true
+  fun `view state shows support development when turned on`() = scope.runTest {
+    supportDevelopmentFeatureFlag.value = true
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
@@ -240,13 +249,41 @@ class SettingsViewModelTest {
   }
 
   @Test
-  fun `view state hides support development when not included`() = scope.runTest {
-    every { appInfoProvider.supportDevelopmentIncluded } returns false
+  fun `view state hides support development when turned off`() = scope.runTest {
+    supportDevelopmentFeatureFlag.value = false
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.filterNotNull().test {
       assertEquals(expected = false, actual = awaitItem().showSupportDevelopment)
+    }
+  }
+
+  @Test
+  fun `view state shows the supporter badge`() = scope.runTest {
+    supporterStatusStore.updateData {
+      SupporterStatus(
+        supporterSince = JavaInstant.parse("2025-11-02T00:00:00Z").toEpochMilli(),
+        subscribedMonths = 12,
+      )
+    }
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.filterNotNull().test {
+      awaitItem().let {
+        assertEquals(expected = SupporterBadge.OneYear, actual = it.supporterBadge)
+        assertEquals(expected = YearMonth.of(2025, 11), actual = it.supporterSince)
+      }
+    }
+  }
+
+  @Test
+  fun `view state has no badge without support`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.filterNotNull().test {
+      assertNull(awaitItem().supporterBadge)
     }
   }
 

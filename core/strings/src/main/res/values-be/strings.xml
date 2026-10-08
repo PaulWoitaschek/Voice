@@ -317,7 +317,6 @@
     <string name="support.helps.maintenance">Выпраўленне памылак і падтрымка</string>
     <string name="support.helps.features">Новыя функцыі</string>
     <string name="support.helps.open_source">Захаванне Voice без рэкламы</string>
-    <string name="support.title">Падтрымаць распрацоўку</string>
     <string name="shortcut.play_current.short_label">Прайграць бягучую</string>
     <string name="sleep_timer.action.open">Таймер сну</string>
     <string name="sleep_timer.dialog.action.decrement">Карацей</string>

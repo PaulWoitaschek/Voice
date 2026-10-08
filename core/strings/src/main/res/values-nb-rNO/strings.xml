@@ -299,7 +299,6 @@
     <string name="support.helps.maintenance">Feilrettinger og vedlikehold</string>
     <string name="support.helps.features">Nye funksjoner</string>
     <string name="support.helps.open_source">Holde Voice reklamefri</string>
-    <string name="support.title">Støtt utviklingen</string>
     <string name="shortcut.play_current.short_label">Spill nåværende</string>
     <string name="sleep_timer.action.open">Innsovningstidsur</string>
     <string name="sleep_timer.dialog.action.decrement">Kortere</string>

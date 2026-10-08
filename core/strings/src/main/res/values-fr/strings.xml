@@ -308,7 +308,6 @@
     <string name="support.helps.maintenance">Corrections de bugs et maintenance</string>
     <string name="support.helps.features">Nouvelles fonctionnalités</string>
     <string name="support.helps.open_source">Garder Voice sans publicité</string>
-    <string name="support.title">Soutenir le développement</string>
     <string name="shortcut.play_current.short_label">Lire l\'actuel</string>
     <string name="sleep_timer.action.open">Minuterie de mise en veille</string>
     <string name="sleep_timer.dialog.action.decrement">Moins long</string>

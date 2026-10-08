@@ -1,36 +1,29 @@
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+
 package voice.features.support
 
-import androidx.compose.foundation.Image
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
@@ -40,21 +33,40 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
-import voice.core.ui.VoiceBlue
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.navigation.BottomSheetNav
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
-import voice.core.ui.R as UiR
 
 @Composable
 @Preview
-private fun SupportPreview() {
+private fun SupportPlayPreview() {
   VoiceTheme {
     Support(
       viewState = SupportViewState.preview(),
+      listener = SupportListener.noop(),
+    )
+  }
+}
+
+@Composable
+@Preview
+private fun SupportKoFiPreview() {
+  VoiceTheme {
+    Support(
+      viewState = SupportViewState.preview(content = SupportViewState.Content.KoFi).copy(badge = null, supporterSince = null),
+      listener = SupportListener.noop(),
+    )
+  }
+}
+
+@Composable
+@Preview
+private fun SupportThankYouPreview() {
+  VoiceTheme {
+    Support(
+      viewState = SupportViewState.preview().copy(thankYou = true),
       listener = SupportListener.noop(),
     )
   }
@@ -65,164 +77,77 @@ private fun Support(
   viewState: SupportViewState,
   listener: SupportListener,
 ) {
-  Column(
-    modifier = Modifier
-      .fillMaxWidth()
-      .verticalScroll(rememberScrollState())
-      .padding(horizontal = 24.dp)
-      .padding(bottom = 48.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    when (viewState.backendState) {
-      SupportBackendState.Free -> {
-        DonationContent(listener)
-      }
-      SupportBackendState.PlayUnavailable -> {
-      }
-    }
-  }
-}
-
-@Composable
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-private fun DonationContent(listener: SupportListener) {
-  Column(
-    modifier = Modifier.fillMaxWidth(),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    SupportHeader()
-
-    val size = ButtonDefaults.MediumContainerHeight
-    Button(
+  AnimatedContent(
+    targetState = viewState.thankYou,
+    transitionSpec = { fadeIn() togetherWith fadeOut() },
+    label = "thankYou",
+  ) { thankYou ->
+    Column(
       modifier = Modifier
         .fillMaxWidth()
-        .heightIn(size),
-      onClick = listener::openSupport,
-      contentPadding = ButtonDefaults.contentPaddingFor(size, hasStartIcon = true),
-      colors = ButtonDefaults.buttonColors(
-        containerColor = VoiceBlue,
-        contentColor = Color.White,
-      ),
+        .verticalScroll(rememberScrollState())
+        .padding(horizontal = 24.dp)
+        .padding(bottom = 32.dp),
+      verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-      Icon(
-        imageVector = VoiceIcons.Coffee,
-        contentDescription = null,
-        modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
-      )
-      Spacer(Modifier.size(ButtonDefaults.iconSpacingFor(size)))
-      Text(
-        text = stringResource(StringsR.string.support_action_donate_kofi),
-        style = ButtonDefaults.textStyleFor(size),
-      )
-    }
-
-    SupportHelpsList()
-  }
-}
-
-@Composable
-private fun SupportHeader() {
-  Column(
-    modifier = Modifier.fillMaxWidth(),
-    verticalArrangement = Arrangement.spacedBy(8.dp),
-  ) {
-    Row(
-      verticalAlignment = Alignment.CenterVertically,
-      horizontalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-      Box(
-        modifier = Modifier
-          .size(40.dp)
-          .clip(CircleShape),
-      ) {
-        val iconInset = 1.5F
-        Box(
-          modifier = Modifier
-            .fillMaxSize()
-            .graphicsLayer(
-              scaleX = iconInset,
-              scaleY = iconInset,
-            ),
-        ) {
-          Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = painterResource(UiR.drawable.ic_launcher_background),
-            contentDescription = null,
-          )
-          Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = painterResource(UiR.drawable.ic_launcher_foreground),
-            contentDescription = null,
+      if (thankYou) {
+        ThankYou(
+          badge = viewState.badge,
+          onDone = listener::close,
+        )
+      } else {
+        SupportHero(
+          badge = viewState.badge,
+          supporterSince = viewState.supporterSince,
+          description = stringResource(
+            if (viewState.content == SupportViewState.Content.KoFi) {
+              StringsR.string.support_description_maintenance_subtitle
+            } else {
+              StringsR.string.support_description_play
+            },
+          ),
+        )
+        when (val content = viewState.content) {
+          SupportViewState.Content.KoFi -> KoFiContent(onKoFiClick = listener::openKoFi)
+          SupportViewState.Content.Loading -> {
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+              LoadingIndicator()
+            }
+          }
+          SupportViewState.Content.Unavailable -> Unavailable(onRetry = listener::retry)
+          is SupportViewState.Content.Play -> PlayContent(
+            content = content,
+            message = viewState.message,
+            badge = viewState.badge,
+            listener = listener,
           )
         }
       }
-      Text(
-        text = stringResource(StringsR.string.support_title),
-        style = MaterialTheme.typography.titleLarge,
-      )
     }
-    Text(
-      text = stringResource(StringsR.string.support_description_maintenance),
-      style = MaterialTheme.typography.bodyLarge,
-    )
-    Text(
-      text = stringResource(StringsR.string.support_description_maintenance_subtitle),
-      style = MaterialTheme.typography.bodyMedium,
-      color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
   }
 }
 
 @Composable
-private fun SupportHelpsList() {
+private fun Unavailable(onRetry: () -> Unit) {
   Column(
     modifier = Modifier.fillMaxWidth(),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.spacedBy(8.dp),
   ) {
     Text(
-      text = stringResource(StringsR.string.support_helps_title),
-      style = MaterialTheme.typography.labelLarge,
+      text = stringResource(StringsR.string.support_unavailable_title),
+      style = MaterialTheme.typography.titleMedium,
+      textAlign = TextAlign.Center,
+    )
+    Text(
+      text = stringResource(StringsR.string.support_unavailable_message),
+      style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onSurfaceVariant,
+      textAlign = TextAlign.Center,
     )
-    Spacer(Modifier.size(4.dp))
-    SupportInfoRow(
-      icon = VoiceIcons.Construction,
-      title = stringResource(StringsR.string.support_helps_maintenance),
-    )
-    HorizontalDivider()
-    SupportInfoRow(
-      icon = VoiceIcons.AutoAwesome,
-      title = stringResource(StringsR.string.support_helps_features),
-    )
-    HorizontalDivider()
-    SupportInfoRow(
-      icon = VoiceIcons.LockOpen,
-      title = stringResource(StringsR.string.support_helps_open_source),
-    )
-  }
-}
-
-@Composable
-private fun SupportInfoRow(
-  icon: ImageVector,
-  title: String,
-) {
-  Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(vertical = 10.dp),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    Icon(
-      modifier = Modifier.size(22.dp),
-      imageVector = icon,
-      contentDescription = null,
-      tint = MaterialTheme.colorScheme.primary,
-    )
-    Text(
-      text = title,
-      style = MaterialTheme.typography.bodyLarge,
-    )
+    FilledTonalButton(onClick = onRetry) {
+      Text(stringResource(StringsR.string.common_error_generic_retry))
+    }
   }
 }
 

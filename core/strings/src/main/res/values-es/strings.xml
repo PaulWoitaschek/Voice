@@ -308,7 +308,6 @@
     <string name="support.helps.maintenance">Correcciones de errores y mantenimiento</string>
     <string name="support.helps.features">Nuevas funciones</string>
     <string name="support.helps.open_source">Mantener Voice sin anuncios</string>
-    <string name="support.title">Apoyar el desarrollo</string>
     <string name="shortcut.play_current.short_label">Reproducir actual</string>
     <string name="sleep_timer.action.open">Temporizador de apagado</string>
     <string name="sleep_timer.dialog.action.decrement">Más corto</string>

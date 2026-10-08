@@ -299,7 +299,6 @@
     <string name="support.helps.maintenance">Foutoplossings en instandhouding</string>
     <string name="support.helps.features">Nuwe funksies</string>
     <string name="support.helps.open_source">Hou Voice advertensievry</string>
-    <string name="support.title">Ondersteun ontwikkeling</string>
     <string name="shortcut.play_current.short_label">Speel huidig</string>
     <string name="sleep_timer.action.open">Slaap-Timer</string>
     <string name="sleep_timer.dialog.action.decrement">Korter</string>

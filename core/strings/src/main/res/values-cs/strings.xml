@@ -317,7 +317,6 @@
     <string name="support.helps.maintenance">Opravami chyb a údržbou</string>
     <string name="support.helps.features">Novými funkcemi</string>
     <string name="support.helps.open_source">Udržením aplikace Voice bez reklam</string>
-    <string name="support.title">Podpořit vývoj</string>
     <string name="shortcut.play_current.short_label">Přehrát aktuální</string>
     <string name="sleep_timer.action.open">Časovač spánku</string>
     <string name="sleep_timer.dialog.action.decrement">Zkrátit</string>

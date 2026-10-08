@@ -299,7 +299,6 @@
     <string name="support.helps.maintenance">Veaparanduste ja hooldusega</string>
     <string name="support.helps.features">Uute funktsioonidega</string>
     <string name="support.helps.open_source">Hoida Voice reklaamivabana</string>
-    <string name="support.title">Toeta arendust</string>
     <string name="shortcut.play_current.short_label">Kuula praegust heliraamatut</string>
     <string name="sleep_timer.action.open">Unetaimer</string>
     <string name="sleep_timer.dialog.action.decrement">Vähem</string>

@@ -290,7 +290,6 @@
     <string name="support.helps.maintenance">バグ修正と保守</string>
     <string name="support.helps.features">新機能</string>
     <string name="support.helps.open_source">Voiceを広告なしに保つ</string>
-    <string name="support.title">開発を支援</string>
     <string name="shortcut.play_current.short_label">現在を再生</string>
     <string name="sleep_timer.action.open">スリープタイマー</string>
     <string name="sleep_timer.dialog.action.decrement">短くする</string>

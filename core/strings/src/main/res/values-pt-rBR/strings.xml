@@ -308,7 +308,6 @@
     <string name="support.helps.maintenance">Correções de bugs e manutenção</string>
     <string name="support.helps.features">Novos recursos</string>
     <string name="support.helps.open_source">Manter o Voice sem anúncios</string>
-    <string name="support.title">Apoiar o desenvolvimento</string>
     <string name="shortcut.play_current.short_label">Reproduzir atual</string>
     <string name="sleep_timer.action.open">Desligamento automático</string>
     <string name="sleep_timer.dialog.action.decrement">Mais curto</string>

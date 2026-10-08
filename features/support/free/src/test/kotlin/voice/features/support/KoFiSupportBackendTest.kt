@@ -15,22 +15,22 @@ import kotlin.test.assertEquals
 class KoFiSupportBackendTest {
 
   @Test
-  fun `state is free`() = runTest {
+  fun `state is Ko-fi`() = runTest {
     val backend = createBackend()
 
     backend.state.test {
-      assertEquals(expected = SupportBackendState.Free, actual = awaitItem())
+      assertEquals(expected = SupportBackendState.KoFi, actual = awaitItem())
     }
   }
 
   @Test
-  fun `openSupport opens Ko-fi`() = runTest {
+  fun `openKoFi opens Ko-fi`() = runTest {
     val navigator = mockk<Navigator> {
       every { goTo(any()) } just Runs
     }
     val backend = createBackend(navigator = navigator)
 
-    backend.openSupport()
+    backend.openKoFi()
 
     verify(exactly = 1) {
       navigator.goTo(Destination.Website("https://ko-fi.com/paul_voice"))

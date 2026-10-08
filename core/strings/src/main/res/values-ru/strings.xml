@@ -317,7 +317,6 @@
     <string name="support.helps.maintenance">Исправлениями ошибок и поддержкой</string>
     <string name="support.helps.features">Новыми функциями</string>
     <string name="support.helps.open_source">Сохранением Voice без рекламы</string>
-    <string name="support.title">Поддержать разработку</string>
     <string name="shortcut.play_current.short_label">Воспроизвести текущую</string>
     <string name="sleep_timer.action.open">Таймер сна</string>
     <string name="sleep_timer.dialog.action.decrement">Короче</string>

@@ -299,7 +299,6 @@
     <string name="support.helps.maintenance">Felrättningar och underhåll</string>
     <string name="support.helps.features">Nya funktioner</string>
     <string name="support.helps.open_source">Att Voice kan förbli reklamfri</string>
-    <string name="support.title">Stöd utvecklingen</string>
     <string name="shortcut.play_current.short_label">Fortsätt lyssna</string>
     <string name="sleep_timer.action.open">Insomningstimer</string>
     <string name="sleep_timer.dialog.action.decrement">Kortare</string>

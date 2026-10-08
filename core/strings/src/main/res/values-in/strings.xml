@@ -290,7 +290,6 @@
     <string name="support.helps.maintenance">Perbaikan bug dan perawatan</string>
     <string name="support.helps.features">Fitur baru</string>
     <string name="support.helps.open_source">Menjaga Voice bebas iklan</string>
-    <string name="support.title">Dukung pengembangan</string>
     <string name="shortcut.play_current.short_label">Putar saat ini</string>
     <string name="sleep_timer.action.open">Pengatur Waktu Tidur</string>
     <string name="sleep_timer.dialog.action.decrement">Lebih singkat</string>

@@ -299,7 +299,6 @@
     <string name="support.helps.maintenance">பிழை திருத்தங்கள் மற்றும் பராமரிப்பு</string>
     <string name="support.helps.features">புதிய அம்சங்கள்</string>
     <string name="support.helps.open_source">Voice-ஐ விளம்பரமின்றி வைத்திருப்பது</string>
-    <string name="support.title">மேம்பாட்டை ஆதரிக்கவும்</string>
     <string name="shortcut.play_current.short_label">மின்னோட்டத்தை விளையாடுங்கள்</string>
     <string name="sleep_timer.action.open">ஸ்லீப் டைமர்</string>
     <string name="sleep_timer.dialog.action.decrement">குறுகிய</string>

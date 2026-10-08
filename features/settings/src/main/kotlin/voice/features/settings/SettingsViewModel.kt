@@ -30,17 +30,23 @@ import voice.core.data.store.GridModeStore
 import voice.core.data.store.ListeningHistoryEnabledStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
+import voice.core.data.store.SupporterStatusStore
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
+import voice.core.data.supporter.SupporterStatus
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
+import voice.core.featureflag.SupportDevelopmentFeatureFlagQualifier
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import java.time.Clock
+import java.time.Instant
 import java.time.LocalTime
+import java.time.YearMonth
 
 @Inject
 class SettingsViewModel(
@@ -70,6 +76,11 @@ class SettingsViewModel(
   @ListeningHistoryEnabledStore
   private val listeningHistoryEnabledStore: DataStore<Boolean>,
   private val listeningHistoryRecorder: ListeningHistoryRecorder,
+  @SupportDevelopmentFeatureFlagQualifier
+  private val supportDevelopmentFeatureFlag: FeatureFlag<Boolean>,
+  @SupporterStatusStore
+  private val supporterStatusStore: DataStore<SupporterStatus>,
+  private val clock: Clock,
   private val dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
@@ -95,6 +106,8 @@ class SettingsViewModel(
     // reading the folders and their names asks other processes, so that's kept off the main thread
     val folderNames = remember { folderNames() }.collectAsState(initial = null, context = dispatcherProvider.io).value
     val showDeveloperMenu = remember { developerMenuUnlockedStore.data }.collectAsState(initial = null).value
+    val showSupportDevelopment = remember { supportDevelopmentFeatureFlag.flow.map { it.value } }.collectAsState(initial = null).value
+    val supporterStatus = remember { supporterStatusStore.data }.collectAsState(initial = null).value
     val dynamicColorAvailable = remember {
       dynamicColorAvailability.isSupported()
     }
@@ -108,7 +121,9 @@ class SettingsViewModel(
       analyticsEnabled == null ||
       listeningHistoryEnabled == null ||
       folderNames == null ||
-      showDeveloperMenu == null
+      showDeveloperMenu == null ||
+      showSupportDevelopment == null ||
+      supporterStatus == null
     ) {
       return null
     }
@@ -132,7 +147,11 @@ class SettingsViewModel(
       analyticsEnabled = analyticsEnabled,
       showAnalyticSetting = appInfoProvider.analyticsIncluded,
       showDeveloperMenu = showDeveloperMenu,
-      showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
+      showSupportDevelopment = showSupportDevelopment,
+      supporterBadge = supporterStatus.badge,
+      supporterSince = supporterStatus.supporterSince?.let {
+        YearMonth.from(Instant.ofEpochMilli(it).atZone(clock.zone))
+      },
       folderNames = folderNames,
       listeningHistoryEnabled = listeningHistoryEnabled,
     )

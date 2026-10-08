@@ -58,3 +58,6 @@ public annotation class FeatureFlagOverridesStore
 
 @Qualifier
 public annotation class CoverSeedColorsStore
+
+@Qualifier
+public annotation class SupporterStatusStore

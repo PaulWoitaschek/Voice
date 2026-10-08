@@ -299,7 +299,6 @@
     <string name="support.helps.maintenance">رفع اشکال‌ها و نگهداری</string>
     <string name="support.helps.features">ویژگی‌های جدید</string>
     <string name="support.helps.open_source">بدون تبلیغ نگه داشتن Voice</string>
-    <string name="support.title">حمایت از توسعه</string>
     <string name="shortcut.play_current.short_label">پخش فایل جاری</string>
     <string name="sleep_timer.action.open">تایمر خواب</string>
     <string name="sleep_timer.dialog.action.decrement">کوتاه تر</string>

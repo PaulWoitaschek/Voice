@@ -299,7 +299,6 @@
     <string name="support.helps.maintenance">Hata düzeltmeleri ve bakım</string>
     <string name="support.helps.features">Yeni özellikler</string>
     <string name="support.helps.open_source">Voice\'u reklamsız tutmak</string>
-    <string name="support.title">Geliştirmeyi destekle</string>
     <string name="shortcut.play_current.short_label">Geçerli oynatma</string>
     <string name="sleep_timer.action.open">Uyku zamanlayıcısı</string>
     <string name="sleep_timer.dialog.action.decrement">Daha kısa</string>

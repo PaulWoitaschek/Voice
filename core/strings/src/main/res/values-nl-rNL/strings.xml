@@ -299,7 +299,6 @@
     <string name="support.helps.maintenance">Bugfixes en onderhoud</string>
     <string name="support.helps.features">Nieuwe functies</string>
     <string name="support.helps.open_source">Voice advertentievrij houden</string>
-    <string name="support.title">Ontwikkeling steunen</string>
     <string name="shortcut.play_current.short_label">Huidig boek afspelen</string>
     <string name="sleep_timer.action.open">Slaaptimer</string>
     <string name="sleep_timer.dialog.action.decrement">Korter</string>
