@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Obal ze souborového systému</string>
     <string name="book.edit.cover.internet">Obal z internetu</string>
     <string name="book.edit.name.label">Název</string>
-    <string name="book.edit.title">Upravit knihu</string>
+    <string name="book.edit.rename">Přejmenovat</string>
     <string name="bookmark.action.add_note">Přidat poznámku</string>
     <string name="bookmark.add_note_hint">Přidat poznámku</string>
     <string name="bookmark.added.snackbar">Záložka přidána</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Něco se pokazilo 😢</string>
     <string name="common.error.generic.retry">Znovu</string>
     <string name="cover.content_description.selectable">Zobrazí obaly pro vybrání</string>
+    <string name="cover.crop.hint">Přetažením posunete, sevřením prstů nebo tažením za roh změníte velikost.</string>
+    <string name="cover.crop.title">Oříznout obal</string>
+    <string name="cover.search.download_failed">Tento obal se nepodařilo stáhnout. Zkuste jiný.</string>
+    <string name="cover.search.hint">Hledat obal</string>
+    <string name="cover.search.no_results.message">Zkuste méně slov nebo vynechte autora.</string>
+    <string name="cover.search.no_results.title">Nebyly nalezeny žádné obaly</string>
     <string name="cover.search.query.with_author">%1$s obal audioknihy od %2$s</string>
     <string name="cover.search.query.without_author">%s obal audioknihy</string>
     <string name="cover.title">Obal</string>

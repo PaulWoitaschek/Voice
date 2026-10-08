@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Dosyalardan kapak</string>
     <string name="book.edit.cover.internet">İnternetten kitap kapağı</string>
     <string name="book.edit.name.label">Ad</string>
-    <string name="book.edit.title">Kitabı düzenle</string>
+    <string name="book.edit.rename">Yeniden adlandır</string>
     <string name="bookmark.action.add_note">Not ekle</string>
     <string name="bookmark.add_note_hint">Not ekleyin</string>
     <string name="bookmark.added.snackbar">Yer imi eklendi</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Bir şeyler ters gitti😢</string>
     <string name="common.error.generic.retry">Tekrar dene</string>
     <string name="cover.content_description.selectable">Seçmek için kapak gösterir</string>
+    <string name="cover.crop.hint">Taşımak için sürükleyin; boyutlandırmak için sıkıştırın veya bir köşeyi sürükleyin.</string>
+    <string name="cover.crop.title">Kapağı kırp</string>
+    <string name="cover.search.download_failed">Bu kapak indirilemedi. Başka bir tane deneyin.</string>
+    <string name="cover.search.hint">Kapak ara</string>
+    <string name="cover.search.no_results.message">Daha az kelime deneyin veya yazarı çıkarın.</string>
+    <string name="cover.search.no_results.title">Kapak bulunamadı</string>
     <string name="cover.search.query.with_author">%2$s taneden %1$s tane sesli kitap kapağı</string>
     <string name="cover.search.query.without_author">%s Sesli kitap kapağı</string>
     <string name="cover.title">Kapak</string>

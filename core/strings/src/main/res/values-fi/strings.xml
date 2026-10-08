@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Kansi tiedostojärjestelmästä</string>
     <string name="book.edit.cover.internet">Kansi internetistä</string>
     <string name="book.edit.name.label">Nimi</string>
-    <string name="book.edit.title">Muokkaa kirjaa</string>
+    <string name="book.edit.rename">Nimeä uudelleen</string>
     <string name="bookmark.action.add_note">Lisää muistiinpano</string>
     <string name="bookmark.add_note_hint">Lisää muistiinpano</string>
     <string name="bookmark.added.snackbar">Kirjanmerkki lisätty</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Jotakin meni pieleen 😢</string>
     <string name="common.error.generic.retry">Yritä uudelleen</string>
     <string name="cover.content_description.selectable">Näyttää kannen jonka valita</string>
+    <string name="cover.crop.hint">Siirrä vetämällä; muuta kokoa nipistämällä tai vetämällä kulmasta.</string>
+    <string name="cover.crop.title">Rajaa kansi</string>
+    <string name="cover.search.download_failed">Tätä kantta ei voitu ladata. Kokeile toista.</string>
+    <string name="cover.search.hint">Hae kantta</string>
+    <string name="cover.search.no_results.message">Kokeile vähemmillä sanoilla tai jätä kirjailija pois.</string>
+    <string name="cover.search.no_results.title">Kansia ei löytynyt</string>
     <string name="cover.search.query.with_author">Tekijän %2$s äänikirjan %1$s kansi</string>
     <string name="cover.search.query.without_author">%s äänikirjan kansi</string>
     <string name="cover.title">Kansi</string>

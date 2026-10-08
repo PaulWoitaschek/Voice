@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Okładka z pamięci wewnętrznej</string>
     <string name="book.edit.cover.internet">Okładka z internetu</string>
     <string name="book.edit.name.label">Nazwa</string>
-    <string name="book.edit.title">Edytuj książkę</string>
+    <string name="book.edit.rename">Zmień nazwę</string>
     <string name="bookmark.action.add_note">Dodaj notatkę</string>
     <string name="bookmark.add_note_hint">Dodaj notatkę</string>
     <string name="bookmark.added.snackbar">Zakładka dodana</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Coś poszło nie tak 😢</string>
     <string name="common.error.generic.retry">Ponów</string>
     <string name="cover.content_description.selectable">Pokazuje okładki do wyboru</string>
+    <string name="cover.crop.hint">Przeciągnij, aby przesunąć; zsuń palce lub przeciągnij róg, aby zmienić rozmiar.</string>
+    <string name="cover.crop.title">Przytnij okładkę</string>
+    <string name="cover.search.download_failed">Nie udało się pobrać tej okładki. Spróbuj innej.</string>
+    <string name="cover.search.hint">Szukaj okładki</string>
+    <string name="cover.search.no_results.message">Spróbuj użyć mniej słów lub pomiń autora.</string>
+    <string name="cover.search.no_results.title">Nie znaleziono okładek</string>
     <string name="cover.search.query.with_author">Okładka audiobooka %1$s autorstwa %2$s</string>
     <string name="cover.search.query.without_author">Okładka audiobooka %s</string>
     <string name="cover.title">Okładka</string>

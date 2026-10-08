@@ -5,10 +5,6 @@ plugins {
   alias(libs.plugins.metro)
 }
 
-android {
-  androidResources.enable = true
-}
-
 dependencies {
   implementation(projects.core.data.api)
   implementation(projects.navigation)
@@ -26,6 +22,7 @@ dependencies {
   implementation(libs.serialization.json)
   testImplementation(projects.core.data.impl)
   testImplementation(libs.bundles.testing.jvm)
+  testImplementation(libs.molecule)
   testImplementation(projects.core.remoteconfig.noop)
   testImplementation(projects.core.analytics.noop)
 }
