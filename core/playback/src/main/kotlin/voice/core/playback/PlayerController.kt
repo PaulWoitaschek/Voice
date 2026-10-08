@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.Player
+import androidx.media3.common.util.Util
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import dev.zacsweers.metro.Inject
@@ -164,7 +165,7 @@ class PlayerController(
   }
 
   fun playPause(source: ListeningEvent.Source = ListeningEvent.Source.App) = executeAfterPrepare { controller ->
-    if (controller.isPlaying) {
+    if (!Util.shouldShowPlayButton(controller)) {
       controller.record(ListeningEvent.Type.Pause, source)
       controller.pause()
     } else {
