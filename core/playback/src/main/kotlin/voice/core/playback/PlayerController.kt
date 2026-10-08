@@ -232,11 +232,12 @@ class PlayerController(
   }
 
   fun pauseWithRewind(rewind: Duration) = executeAfterPrepare { controller ->
-    controller.pause()
+    // Seeking first lets the auto rewind of the pause go back from there, instead of racing with it.
     controller.seekBackBy(
       rewind = rewind,
       crossMediaItems = false,
     )
+    controller.pause()
   }
 
   private fun MediaController.seekBackBy(
