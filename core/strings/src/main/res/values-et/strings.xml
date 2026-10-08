@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Seaded</string>
     <string name="history.filter.sleep">Uni</string>
     <string name="history.location.chapter">Ptk %1$d · %2$s</string>
-    <string name="history.off.action">Lülita sisse</string>
-    <string name="history.off.message">Lülita see sisse, et kogemata tehtud esitused, pausid ja hüpped tagasi võtta. See jääb sellesse seadmesse.</string>
-    <string name="history.off.title">Kuulamisajalugu on väljas</string>
     <string name="history.pinned">Salvestatud järjehoidjana</string>
     <string name="history.restored">Järjehoidja taastatud</string>
     <string name="history.source.app">Rakenduses</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Käivita unetaimer automaatselt, kui taasesitus on %1$s ja %2$s vahel</string>
     <string name="settings.auto_sleep_timer.title">Automaatne unetaimer</string>
     <string name="settings.library.folders.summary">Halda kaustu, kust otsitakse heliraamatuid</string>
-    <string name="settings.listening_history.clear">Tühjenda kuulamisajalugu</string>
-    <string name="settings.listening_history.clear.confirm">Tühjenda</string>
-    <string name="settings.listening_history.clear.message">See eemaldab kõigi raamatute salvestatud esitused, pausid ja hüpped. Järjehoidjad jäävad alles.</string>
-    <string name="settings.listening_history.clear.title">Kas tühjendada kuulamisajalugu?</string>
-    <string name="settings.listening_history.cleared">Kuulamisajalugu tühjendatud</string>
-    <string name="settings.listening_history.summary">Hoiab esitusi, pause ja hüppeid selles seadmes, et saaksid kogemata tehtu tagasi võtta</string>
-    <string name="settings.listening_history.title">Kuulamisajalugu</string>
     <string name="settings.library.layout.grid">Ruudustik</string>
     <string name="settings.library.layout.list">Loend</string>
     <string name="settings.library.title">Raamatukogu</string>

@@ -22,7 +22,6 @@ data class SettingsViewState(
   val supporterBadge: SupporterBadge?,
   val supporterSince: YearMonth?,
   val folderNames: List<String>,
-  val listeningHistoryEnabled: Boolean,
 ) {
 
   companion object {
@@ -43,7 +42,6 @@ data class SettingsViewState(
         supporterBadge = null,
         supporterSince = null,
         folderNames = listOf("Audiobooks", "Sci-Fi", "Non-Fiction"),
-        listeningHistoryEnabled = true,
       )
     }
   }

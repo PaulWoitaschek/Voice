@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Einstellungen</string>
     <string name="history.filter.sleep">Schlaf</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
-    <string name="history.off.action">Einschalten</string>
-    <string name="history.off.message">Schalte ihn ein, um versehentliches Abspielen, Pausieren und Springen rückgängig zu machen. Die Daten bleiben auf diesem Gerät.</string>
-    <string name="history.off.title">Hörverlauf ist aus</string>
     <string name="history.pinned">Als Lesezeichen gespeichert</string>
     <string name="history.restored">Lesezeichen wiederhergestellt</string>
     <string name="history.source.app">In der App</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Den Einschlaf-Timer automatisch starten, wenn die Wiedergabe zwischen %1$s und %2$s Uhr beginnt</string>
     <string name="settings.auto_sleep_timer.title">Automatischer Einschlaf-Timer</string>
     <string name="settings.library.folders.summary">Ordner verwalten, die nach Hörbüchern durchsucht werden sollen</string>
-    <string name="settings.listening_history.clear">Hörverlauf löschen</string>
-    <string name="settings.listening_history.clear.confirm">Löschen</string>
-    <string name="settings.listening_history.clear.message">Dadurch werden die gespeicherten Wiedergaben, Pausen und Sprünge aller Bücher entfernt. Lesezeichen bleiben erhalten.</string>
-    <string name="settings.listening_history.clear.title">Hörverlauf löschen?</string>
-    <string name="settings.listening_history.cleared">Hörverlauf gelöscht</string>
-    <string name="settings.listening_history.summary">Speichert Wiedergaben, Pausen und Sprünge auf diesem Gerät, damit Du Versehen rückgängig machen kannst</string>
-    <string name="settings.listening_history.title">Hörverlauf</string>
     <string name="settings.library.layout.grid">Raster</string>
     <string name="settings.library.layout.list">Liste</string>
     <string name="settings.library.title">Bibliothek</string>

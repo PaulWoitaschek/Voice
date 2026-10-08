@@ -150,9 +150,6 @@
     <string name="history.filter.settings">அமைப்புகள்</string>
     <string name="history.filter.sleep">தூக்கம்</string>
     <string name="history.location.chapter">அத். %1$d · %2$s</string>
-    <string name="history.off.action">இயக்கு</string>
-    <string name="history.off.message">தவறுதலாக நடந்த இயக்கங்கள், இடைநிறுத்தங்கள், தாவல்களைச் செயல்தவிர்க்க இதை இயக்கவும். இது இந்தச் சாதனத்திலேயே இருக்கும்.</string>
-    <string name="history.off.title">கேட்டல் வரலாறு முடக்கப்பட்டுள்ளது</string>
     <string name="history.pinned">புக்மார்க்காகச் சேமிக்கப்பட்டது</string>
     <string name="history.restored">புக்மார்க் மீட்டெடுக்கப்பட்டது</string>
     <string name="history.source.app">பயன்பாட்டில்</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">பிளேபேக் %1$s மற்றும் %2$s க்கு இடையில் தொடங்கும்போது தானாக ஒரு தூக்க நேரத்தைத் தொடங்குங்கள்</string>
     <string name="settings.auto_sleep_timer.title">தானியங்கி தூக்க நேரங்காட்டி</string>
     <string name="settings.library.folders.summary">ஒலிபுத்தகங்களுக்காக வருடல் செய்யப்பட்ட கோப்புறைகளை நிர்வகி</string>
-    <string name="settings.listening_history.clear">கேட்டல் வரலாற்றை அழி</string>
-    <string name="settings.listening_history.clear.confirm">அழி</string>
-    <string name="settings.listening_history.clear.message">இது எல்லாப் புத்தகங்களின் பதிவுசெய்யப்பட்ட இயக்கங்கள், இடைநிறுத்தங்கள், தாவல்களை நீக்கும். புக்மார்க்குகள் அப்படியே இருக்கும்.</string>
-    <string name="settings.listening_history.clear.title">கேட்டல் வரலாற்றை அழிக்கவா?</string>
-    <string name="settings.listening_history.cleared">கேட்டல் வரலாறு அழிக்கப்பட்டது</string>
-    <string name="settings.listening_history.summary">தவறுதலாக நடந்தவற்றைச் செயல்தவிர்க்க, இயக்கங்கள், இடைநிறுத்தங்கள், தாவல்களை இந்தச் சாதனத்தில் வைத்திருக்கும்</string>
-    <string name="settings.listening_history.title">கேட்டல் வரலாறு</string>
     <string name="settings.library.layout.grid">கட்டம்</string>
     <string name="settings.library.layout.list">பட்டியல்</string>
     <string name="settings.library.title">நூலகம்</string>

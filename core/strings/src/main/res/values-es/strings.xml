@@ -158,9 +158,6 @@
     <string name="history.filter.settings">Ajustes</string>
     <string name="history.filter.sleep">Sueño</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.off.action">Activar</string>
-    <string name="history.off.message">Actívalo para deshacer reproducciones, pausas y saltos accidentales. Se queda en este dispositivo.</string>
-    <string name="history.off.title">El historial de escucha está desactivado</string>
     <string name="history.pinned">Guardado como marcador</string>
     <string name="history.restored">Marcador restaurado</string>
     <string name="history.source.app">En la aplicación</string>
@@ -322,13 +319,6 @@
     <string name="settings.auto_sleep_timer.summary">Activa automáticamente el temporizador al iniciar la reproducción entre las %1$s y %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador automático</string>
     <string name="settings.library.folders.summary">Administrar directorios escaneados en busca de audiolibros</string>
-    <string name="settings.listening_history.clear">Borrar historial de escucha</string>
-    <string name="settings.listening_history.clear.confirm">Borrar</string>
-    <string name="settings.listening_history.clear.message">Esto elimina las reproducciones, pausas y saltos registrados de todos los libros. Los marcadores se mantienen.</string>
-    <string name="settings.listening_history.clear.title">¿Borrar historial de escucha?</string>
-    <string name="settings.listening_history.cleared">Historial de escucha borrado</string>
-    <string name="settings.listening_history.summary">Guarda reproducciones, pausas y saltos en este dispositivo para que puedas deshacer accidentes</string>
-    <string name="settings.listening_history.title">Historial de escucha</string>
     <string name="settings.library.layout.grid">Cuadrícula</string>
     <string name="settings.library.layout.list">Lista</string>
     <string name="settings.library.title">Biblioteca</string>

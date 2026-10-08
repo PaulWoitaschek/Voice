@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Ayarlar</string>
     <string name="history.filter.sleep">Uyku</string>
     <string name="history.location.chapter">Böl. %1$d · %2$s</string>
-    <string name="history.off.action">Aç</string>
-    <string name="history.off.message">Yanlışlıkla yapılan oynatma, duraklatma ve atlamaları geri almak için açın. Geçmiş yalnızca bu aygıtta kalır.</string>
-    <string name="history.off.title">Dinleme geçmişi kapalı</string>
     <string name="history.pinned">Yer imi olarak kaydedildi</string>
     <string name="history.restored">Yer imi geri yüklendi</string>
     <string name="history.source.app">Uygulamada</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Eğer oynatıcı saat %1$s ile %2$s arasında başlatılırsa otomatik olarak bir uyku zamanlayıcısı başlat</string>
     <string name="settings.auto_sleep_timer.title">Otomatik Uyku Zamanlayıcısı</string>
     <string name="settings.library.folders.summary">Sesli kitaplar için taranan dizinleri yönetin</string>
-    <string name="settings.listening_history.clear">Dinleme geçmişini temizle</string>
-    <string name="settings.listening_history.clear.confirm">Temizle</string>
-    <string name="settings.listening_history.clear.message">Bu işlem, tüm kitapların kaydedilen oynatma, duraklatma ve atlamalarını kaldırır. Yer imleri kalır.</string>
-    <string name="settings.listening_history.clear.title">Dinleme geçmişi temizlensin mi?</string>
-    <string name="settings.listening_history.cleared">Dinleme geçmişi temizlendi</string>
-    <string name="settings.listening_history.summary">Yanlışlıkla yapılanları geri alabilmeniz için oynatma, duraklatma ve atlamaları bu aygıtta saklar</string>
-    <string name="settings.listening_history.title">Dinleme geçmişi</string>
     <string name="settings.library.layout.grid">Izgara</string>
     <string name="settings.library.layout.list">Liste</string>
     <string name="settings.library.title">Kitaplık</string>

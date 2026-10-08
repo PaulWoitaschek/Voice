@@ -166,9 +166,6 @@
     <string name="history.filter.settings">Настройки</string>
     <string name="history.filter.sleep">Сон</string>
     <string name="history.location.chapter">Гл. %1$d · %2$s</string>
-    <string name="history.off.action">Включить</string>
-    <string name="history.off.message">Включите, чтобы отменять случайные запуски, паузы и переходы. История хранится только на этом устройстве.</string>
-    <string name="history.off.title">История прослушивания выключена</string>
     <string name="history.pinned">Сохранено как закладка</string>
     <string name="history.restored">Закладка восстановлена</string>
     <string name="history.source.app">В приложении</string>
@@ -335,13 +332,6 @@
     <string name="settings.auto_sleep_timer.summary">Запускать таймер сна автоматически когда воспроизведение начинается между %1$s и %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматический таймер сна</string>
     <string name="settings.library.folders.summary">Управление папками, отсканированными на наличие аудиокниг</string>
-    <string name="settings.listening_history.clear">Очистить историю прослушивания</string>
-    <string name="settings.listening_history.clear.confirm">Очистить</string>
-    <string name="settings.listening_history.clear.message">Записанные воспроизведения, паузы и переходы всех книг будут удалены. Закладки останутся.</string>
-    <string name="settings.listening_history.clear.title">Очистить историю прослушивания?</string>
-    <string name="settings.listening_history.cleared">История прослушивания очищена</string>
-    <string name="settings.listening_history.summary">Хранит воспроизведения, паузы и переходы на этом устройстве, чтобы вы могли отменить случайные действия</string>
-    <string name="settings.listening_history.title">История прослушивания</string>
     <string name="settings.library.layout.grid">Сетка</string>
     <string name="settings.library.layout.list">Список</string>
     <string name="settings.library.title">Библиотека</string>

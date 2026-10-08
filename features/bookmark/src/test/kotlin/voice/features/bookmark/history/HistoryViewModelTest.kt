@@ -42,7 +42,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.minutes
 
 class HistoryViewModelTest {
@@ -58,7 +57,6 @@ class HistoryViewModelTest {
   private val bookmarkRepo = FakeBookmarkRepo()
   private val historyRepo = FakeListeningHistoryRepo()
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val enabledStore = MemoryDataStore(true)
   private val dismissedSuggestionsStore = MemoryDataStore(emptyList<Long>())
   private val playStateManager = PlayStateManager()
   private val playerController = mockk<PlayerController>(relaxed = true)
@@ -69,7 +67,6 @@ class HistoryViewModelTest {
     bookRepository = bookRepository,
     bookmarkRepo = bookmarkRepo,
     listeningHistoryRepo = historyRepo,
-    enabledStore = enabledStore,
     dismissedSuggestionsStore = dismissedSuggestionsStore,
     playStateManager = playStateManager,
     playerController = playerController,
@@ -241,19 +238,6 @@ class HistoryViewModelTest {
       awaitState { it.sessions.single().barEnd == 0.95F }
     }
   }
-
-  @Test
-  fun `the history can be turned on`() {
-    scope.runTest {
-      enabledStore.updateData { false }
-      states { viewModel ->
-        awaitState { !it.enabled }
-        viewModel.onTurnOnClick()
-        awaitState { it.enabled }
-        assertTrue(enabledStore.data.first())
-      }
-    }
-  }
 }
 
 private class FakeBookRepository(initial: Book) : BookRepository {
@@ -313,10 +297,6 @@ private class FakeListeningHistoryRepo : ListeningHistoryRepo {
 
   fun seed(vararg events: ListeningEvent) {
     this.events.update { it + events }
-  }
-
-  override suspend fun clear() {
-    events.value = emptyList()
   }
 
   override suspend fun moveToBook(

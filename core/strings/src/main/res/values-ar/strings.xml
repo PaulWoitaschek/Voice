@@ -173,9 +173,6 @@
     <string name="history.filter.settings">الإعدادات</string>
     <string name="history.filter.sleep">النوم</string>
     <string name="history.location.chapter">فصل %1$d · %2$s</string>
-    <string name="history.off.action">فعّل</string>
-    <string name="history.off.message">فعّله لتتراجع عن التشغيل والإيقاف والقفزات غير المقصودة. يبقى على هذا الجهاز.</string>
-    <string name="history.off.title">سجل الاستماع متوقف</string>
     <string name="history.pinned">حُفظ كعلامة مرجعية</string>
     <string name="history.restored">استُعيدت العلامة المرجعية</string>
     <string name="history.source.app">من التطبيق</string>
@@ -308,13 +305,6 @@
     <string name="settings.appearance.color_scheme.lavender">خزامى</string>
     <string name="settings.appearance.color_scheme.sunset">غروب</string>
     <string name="settings.appearance.title">المظهر</string>
-    <string name="settings.listening_history.clear">امسح سجل الاستماع</string>
-    <string name="settings.listening_history.clear.confirm">امسح</string>
-    <string name="settings.listening_history.clear.message">سيزيل هذا التشغيل والإيقاف والقفزات المسجلة لكل الكتب. تبقى العلامات المرجعية.</string>
-    <string name="settings.listening_history.clear.title">أتريد مسح سجل الاستماع؟</string>
-    <string name="settings.listening_history.cleared">مُسح سجل الاستماع</string>
-    <string name="settings.listening_history.summary">يحتفظ بالتشغيل والإيقاف والقفزات على هذا الجهاز، لتتمكن من التراجع عن الأخطاء</string>
-    <string name="settings.listening_history.title">سجل الاستماع</string>
     <string name="settings.library.layout.grid">شبكة</string>
     <string name="settings.library.layout.list">قائمة</string>
     <string name="settings.library.title">المكتبة</string>

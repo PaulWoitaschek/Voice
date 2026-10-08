@@ -41,9 +41,6 @@ public annotation class FolderPickerMovedDialogShownStore
 @Qualifier
 public annotation class AnalyticsConsentStore
 
-@Qualifier
-public annotation class ListeningHistoryEnabledStore
-
 /**
  * The keys of the listening history suggestions the listener dismissed, oldest first.
  */

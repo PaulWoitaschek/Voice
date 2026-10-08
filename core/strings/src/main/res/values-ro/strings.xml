@@ -157,9 +157,6 @@
     <string name="history.filter.settings">Setări</string>
     <string name="history.filter.sleep">Somn</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.off.action">Activează</string>
-    <string name="history.off.message">Activează-l ca să anulezi redările, pauzele și salturile accidentale. Rămâne doar pe acest dispozitiv.</string>
-    <string name="history.off.title">Istoricul de ascultare este dezactivat</string>
     <string name="history.pinned">Salvat ca semn de carte</string>
     <string name="history.restored">Semn de carte restabilit</string>
     <string name="history.source.app">În aplicație</string>
@@ -280,13 +277,6 @@
     <string name="settings.appearance.color_scheme.lavender">Lavandă</string>
     <string name="settings.appearance.color_scheme.sunset">Apus</string>
     <string name="settings.appearance.title">Aspect</string>
-    <string name="settings.listening_history.clear">Șterge istoricul de ascultare</string>
-    <string name="settings.listening_history.clear.confirm">Șterge</string>
-    <string name="settings.listening_history.clear.message">Se vor elimina redările, pauzele și salturile înregistrate pentru toate cărțile. Semnele de carte rămân.</string>
-    <string name="settings.listening_history.clear.title">Ștergi istoricul de ascultare?</string>
-    <string name="settings.listening_history.cleared">Istoricul de ascultare a fost șters</string>
-    <string name="settings.listening_history.summary">Păstrează redările, pauzele și salturile pe acest dispozitiv, ca să poți anula greșelile</string>
-    <string name="settings.listening_history.title">Istoric de ascultare</string>
     <string name="settings.library.layout.grid">Grilă</string>
     <string name="settings.library.layout.list">Listă</string>
     <string name="settings.library.title">Bibliotecă</string>

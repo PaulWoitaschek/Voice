@@ -23,10 +23,6 @@ class MemoryListeningHistoryRepo : ListeningHistoryRepo {
     events.update { it + event }
   }
 
-  override suspend fun clear() {
-    events.value = emptyList()
-  }
-
   override suspend fun moveToBook(
     from: List<BookId>,
     to: BookId,

@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Parametros</string>
     <string name="history.filter.sleep">Somno</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.off.action">Activar</string>
-    <string name="history.off.message">Activa lo pro disfacer reproductiones, pausas e saltos accidental. Illo resta sur iste apparato.</string>
-    <string name="history.off.title">Le historia de ascolta es disactivate</string>
     <string name="history.pinned">Salvate como marcapagina</string>
     <string name="history.restored">Marcapagina restaurate</string>
     <string name="history.source.app">In le app</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Initiar automaticamente un temporisator de somno quando le reproduction comencia inter %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporisator de somno automatic</string>
     <string name="settings.library.folders.summary">Gerer dossiers scandite pro audiolibros</string>
-    <string name="settings.listening_history.clear">Vacuar le historia de ascolta</string>
-    <string name="settings.listening_history.clear.confirm">Vacuar</string>
-    <string name="settings.listening_history.clear.message">Isto remove le reproductiones, pausas e saltos registrate de tote le libros. Le marcapaginas resta.</string>
-    <string name="settings.listening_history.clear.title">Vacuar le historia de ascolta?</string>
-    <string name="settings.listening_history.cleared">Historia de ascolta vacuate</string>
-    <string name="settings.listening_history.summary">Conserva reproductiones, pausas e saltos sur iste apparato, assi tu pote disfacer errores</string>
-    <string name="settings.listening_history.title">Historia de ascolta</string>
     <string name="settings.library.layout.grid">Grillia</string>
     <string name="settings.library.layout.list">Lista</string>
     <string name="settings.library.title">Bibliotheca</string>

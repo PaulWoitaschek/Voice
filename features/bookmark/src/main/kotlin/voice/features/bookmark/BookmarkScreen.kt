@@ -175,7 +175,6 @@ fun BookmarkScreen(
             onActionClick = historyViewModel::onActionClick,
             onSuggestionBack = historyViewModel::onSuggestionBack,
             onSuggestionKeep = historyViewModel::onSuggestionKeep,
-            onTurnOnClick = historyViewModel::onTurnOnClick,
           )
         }
       },
@@ -254,7 +253,6 @@ private fun BookmarkScreen(
         Tabs(
           tab = tab,
           bookmarkCount = viewState.totalCount,
-          historyOff = historyViewState?.enabled == false,
           onTabChange = { tab = it },
         )
         val listPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding())
@@ -369,7 +367,6 @@ private fun SortMenu(
 private fun Tabs(
   tab: BookmarkTab,
   bookmarkCount: Int,
-  historyOff: Boolean,
   onTabChange: (BookmarkTab) -> Unit,
 ) {
   val locale = LocalConfiguration.current.locales[0]
@@ -397,7 +394,6 @@ private fun Tabs(
       badge = null,
       leading = false,
       modifier = Modifier.weight(1F),
-      dimmed = historyOff,
     )
   }
 }
@@ -411,7 +407,6 @@ private fun TabButton(
   badge: String?,
   leading: Boolean,
   modifier: Modifier = Modifier,
-  dimmed: Boolean = false,
 ) {
   ToggleButton(
     checked = checked,
@@ -429,7 +424,6 @@ private fun TabButton(
       text = label,
       maxLines = 1,
       overflow = TextOverflow.Ellipsis,
-      color = if (dimmed && !checked) MaterialTheme.colorScheme.onSurfaceVariant else Color.Unspecified,
     )
     if (badge != null) {
       Spacer(Modifier.width(6.dp))

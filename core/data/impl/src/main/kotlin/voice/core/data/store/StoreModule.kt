@@ -202,13 +202,6 @@ public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  @ListeningHistoryEnabledStore
-  private fun listeningHistoryEnabled(factory: VoiceDataStoreFactory): DataStore<Boolean> {
-    return factory.boolean("listeningHistoryEnabled", defaultValue = true)
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
   @DismissedHistorySuggestionsStore
   private fun dismissedHistorySuggestions(factory: VoiceDataStoreFactory): DataStore<List<Long>> {
     return factory.create(

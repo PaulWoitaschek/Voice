@@ -149,9 +149,6 @@
     <string name="history.filter.settings">Beállítások</string>
     <string name="history.filter.sleep">Alvás</string>
     <string name="history.location.chapter">%1$d. fej. · %2$s</string>
-    <string name="history.off.action">Bekapcsolás</string>
-    <string name="history.off.message">Kapcsolja be, hogy visszavonhassa a véletlen lejátszásokat, szüneteket és ugrásokat. Az adatok ezen az eszközön maradnak.</string>
-    <string name="history.off.title">A hallgatási előzmények ki vannak kapcsolva</string>
     <string name="history.pinned">Mentve könyvjelzőként</string>
     <string name="history.restored">Könyvjelző visszaállítva</string>
     <string name="history.source.app">Az alkalmazásban</string>
@@ -268,13 +265,6 @@
     <string name="settings.appearance.color_scheme.lavender">Levendula</string>
     <string name="settings.appearance.color_scheme.sunset">Naplemente</string>
     <string name="settings.appearance.title">Megjelenés</string>
-    <string name="settings.listening_history.clear">Hallgatási előzmények törlése</string>
-    <string name="settings.listening_history.clear.confirm">Törlés</string>
-    <string name="settings.listening_history.clear.message">Ez az összes könyv rögzített lejátszásait, szüneteit és ugrásait törli. A könyvjelzők megmaradnak.</string>
-    <string name="settings.listening_history.clear.title">Törli a hallgatási előzményeket?</string>
-    <string name="settings.listening_history.cleared">Hallgatási előzmények törölve</string>
-    <string name="settings.listening_history.summary">Megőrzi a lejátszásokat, szüneteket és ugrásokat ezen az eszközön, így visszavonhatók a véletlen műveletek</string>
-    <string name="settings.listening_history.title">Hallgatási előzmények</string>
     <string name="settings.library.layout.grid">Rács</string>
     <string name="settings.library.layout.list">Lista</string>
     <string name="settings.library.title">Könyvtár</string>

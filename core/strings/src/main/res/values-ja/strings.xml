@@ -142,9 +142,6 @@
     <string name="history.filter.settings">設定</string>
     <string name="history.filter.sleep">スリープ</string>
     <string name="history.location.chapter">第%1$d章 · %2$s</string>
-    <string name="history.off.action">オンにする</string>
-    <string name="history.off.message">オンにすると、誤って再生・一時停止・ジャンプしたときに元に戻せます。記録はこの端末にのみ保存されます。</string>
-    <string name="history.off.title">再生履歴はオフです</string>
     <string name="history.pinned">ブックマークとして保存しました</string>
     <string name="history.restored">ブックマークを復元しました</string>
     <string name="history.source.app">アプリ内</string>
@@ -296,13 +293,6 @@
     <string name="settings.auto_sleep_timer.summary">%1$s から %2$s の間に再生が始まった場合、自動的にスリープタイマーを開始します</string>
     <string name="settings.auto_sleep_timer.title">自動スリープタイマー</string>
     <string name="settings.library.folders.summary">オーディオブックをスキャンするフォルダーを管理</string>
-    <string name="settings.listening_history.clear">再生履歴を消去</string>
-    <string name="settings.listening_history.clear.confirm">消去</string>
-    <string name="settings.listening_history.clear.message">すべてのブックの再生・一時停止・ジャンプの記録が削除されます。ブックマークは残ります。</string>
-    <string name="settings.listening_history.clear.title">再生履歴を消去しますか？</string>
-    <string name="settings.listening_history.cleared">再生履歴を消去しました</string>
-    <string name="settings.listening_history.summary">再生・一時停止・ジャンプをこの端末に記録し、誤操作を元に戻せるようにします</string>
-    <string name="settings.listening_history.title">再生履歴</string>
     <string name="settings.library.layout.grid">グリッド</string>
     <string name="settings.library.layout.list">リスト</string>
     <string name="settings.library.title">ライブラリ</string>

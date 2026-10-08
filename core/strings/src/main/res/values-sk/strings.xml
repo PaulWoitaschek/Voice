@@ -166,9 +166,6 @@
     <string name="history.filter.settings">Nastavenia</string>
     <string name="history.filter.sleep">Spánok</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
-    <string name="history.off.action">Zapnúť</string>
-    <string name="history.off.message">Zapnite ju, aby ste mohli vrátiť náhodné spustenia, pozastavenia a skoky. Zostáva iba v tomto zariadení.</string>
-    <string name="history.off.title">História počúvania je vypnutá</string>
     <string name="history.pinned">Uložené ako záložka</string>
     <string name="history.restored">Záložka obnovená</string>
     <string name="history.source.app">V aplikácii</string>
@@ -335,13 +332,6 @@
     <string name="settings.auto_sleep_timer.summary">Automaticky aktivovať časovač zastavenia, ak sa prehrávanie spustí medzi %1$s a %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatický časovač zastavenia</string>
     <string name="settings.library.folders.summary">Spravovať priečinky určené na vyhľadávanie zvukových kníh</string>
-    <string name="settings.listening_history.clear">Vymazať históriu počúvania</string>
-    <string name="settings.listening_history.clear.confirm">Vymazať</string>
-    <string name="settings.listening_history.clear.message">Odstránia sa zaznamenané prehrávania, pozastavenia a skoky všetkých kníh. Záložky zostanú.</string>
-    <string name="settings.listening_history.clear.title">Vymazať históriu počúvania?</string>
-    <string name="settings.listening_history.cleared">História počúvania vymazaná</string>
-    <string name="settings.listening_history.summary">Uchováva prehrávania, pozastavenia a skoky v tomto zariadení, aby ste mohli vrátiť nechcené akcie</string>
-    <string name="settings.listening_history.title">História počúvania</string>
     <string name="settings.library.layout.grid">Mriežka</string>
     <string name="settings.library.layout.list">Zoznam</string>
     <string name="settings.library.title">Knižnica</string>

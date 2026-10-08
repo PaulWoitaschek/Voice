@@ -149,9 +149,6 @@
     <string name="history.filter.settings">सेटिंग्स</string>
     <string name="history.filter.sleep">नींद</string>
     <string name="history.location.chapter">अध्याय %1$d · %2$s</string>
-    <string name="history.off.action">चालू करें</string>
-    <string name="history.off.message">गलती से हुए चलाने, रोकने और जंप को पहले जैसा करने के लिए इसे चालू करें। यह इसी डिवाइस पर रहता है।</string>
-    <string name="history.off.title">सुनने का इतिहास बंद है</string>
     <string name="history.pinned">बुकमार्क के रूप में सहेजा गया</string>
     <string name="history.restored">बुकमार्क वापस लाया गया</string>
     <string name="history.source.app">ऐप में</string>
@@ -269,13 +266,6 @@
     <string name="settings.appearance.color_scheme.sunset">सूर्यास्त</string>
     <string name="settings.appearance.title">दिखावट</string>
     <string name="settings.library.folders.summary">ऑडियोबुक के लिए स्कैन किए गए फ़ोल्डर मैनेज करें</string>
-    <string name="settings.listening_history.clear">सुनने का इतिहास साफ़ करें</string>
-    <string name="settings.listening_history.clear.confirm">साफ़ करें</string>
-    <string name="settings.listening_history.clear.message">इससे सभी पुस्तकों के चलाने, रोकने और जंप का रिकॉर्ड हट जाएगा। बुकमार्क बने रहेंगे।</string>
-    <string name="settings.listening_history.clear.title">सुनने का इतिहास साफ़ करें?</string>
-    <string name="settings.listening_history.cleared">सुनने का इतिहास साफ़ किया गया</string>
-    <string name="settings.listening_history.summary">चलाने, रोकने और जंप का रिकॉर्ड इस डिवाइस पर रखता है, ताकि आप गलतियाँ सुधार सकें</string>
-    <string name="settings.listening_history.title">सुनने का इतिहास</string>
     <string name="settings.library.layout.grid">ग्रिड</string>
     <string name="settings.library.layout.list">सूची</string>
     <string name="settings.library.title">लाइब्रेरी</string>

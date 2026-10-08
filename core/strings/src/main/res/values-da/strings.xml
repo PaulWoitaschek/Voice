@@ -149,9 +149,6 @@
     <string name="history.filter.settings">Indstillinger</string>
     <string name="history.filter.sleep">Søvn</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
-    <string name="history.off.action">Slå til</string>
-    <string name="history.off.message">Slå den til for at fortryde utilsigtede afspilninger, pauser og spring. Den bliver på denne enhed.</string>
-    <string name="history.off.title">Lyttehistorik er slået fra</string>
     <string name="history.pinned">Gemt som bogmærke</string>
     <string name="history.restored">Bogmærke gendannet</string>
     <string name="history.source.app">I appen</string>
@@ -268,13 +265,6 @@
     <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
     <string name="settings.appearance.color_scheme.sunset">Solnedgang</string>
     <string name="settings.appearance.title">Udseende</string>
-    <string name="settings.listening_history.clear">Ryd lyttehistorik</string>
-    <string name="settings.listening_history.clear.confirm">Ryd</string>
-    <string name="settings.listening_history.clear.message">Dette fjerner de registrerede afspilninger, pauser og spring for alle bøger. Bogmærker bevares.</string>
-    <string name="settings.listening_history.clear.title">Ryd lyttehistorik?</string>
-    <string name="settings.listening_history.cleared">Lyttehistorik ryddet</string>
-    <string name="settings.listening_history.summary">Gemmer afspilninger, pauser og spring på denne enhed, så du kan fortryde uheld</string>
-    <string name="settings.listening_history.title">Lyttehistorik</string>
     <string name="settings.library.layout.grid">Gitter</string>
     <string name="settings.library.layout.list">Liste</string>
     <string name="settings.library.title">Bibliotek</string>

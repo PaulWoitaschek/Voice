@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Instellingen</string>
     <string name="history.filter.sleep">Slaap</string>
     <string name="history.location.chapter">Hfst. %1$d · %2$s</string>
-    <string name="history.off.action">Inschakelen</string>
-    <string name="history.off.message">Schakel dit in om per ongeluk afspelen, pauzeren en springen ongedaan te maken. Alles blijft op dit apparaat.</string>
-    <string name="history.off.title">Luistergeschiedenis staat uit</string>
     <string name="history.pinned">Opgeslagen als bladwijzer</string>
     <string name="history.restored">Bladwijzer hersteld</string>
     <string name="history.source.app">In de app</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Start automatisch een slaaptimer wanneer het afspelen begint tussen %1$s en %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatische Slaaptimer</string>
     <string name="settings.library.folders.summary">Beheer mappen die op luisterboeken worden gescand</string>
-    <string name="settings.listening_history.clear">Luistergeschiedenis wissen</string>
-    <string name="settings.listening_history.clear.confirm">Wissen</string>
-    <string name="settings.listening_history.clear.message">Hiermee worden de vastgelegde afspeelmomenten, pauzes en sprongen van alle boeken verwijderd. Bladwijzers blijven bewaard.</string>
-    <string name="settings.listening_history.clear.title">Luistergeschiedenis wissen?</string>
-    <string name="settings.listening_history.cleared">Luistergeschiedenis gewist</string>
-    <string name="settings.listening_history.summary">Bewaart afspelen, pauzes en sprongen op dit apparaat, zodat je ongelukjes ongedaan kunt maken</string>
-    <string name="settings.listening_history.title">Luistergeschiedenis</string>
     <string name="settings.library.layout.grid">Raster</string>
     <string name="settings.library.layout.list">Lijst</string>
     <string name="settings.library.title">Bibliotheek</string>

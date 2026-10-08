@@ -166,9 +166,6 @@
     <string name="history.filter.settings">Ustawienia</string>
     <string name="history.filter.sleep">Sen</string>
     <string name="history.location.chapter">Rozdz. %1$d · %2$s</string>
-    <string name="history.off.action">Włącz</string>
-    <string name="history.off.message">Włącz ją, aby cofać przypadkowe odtworzenia, pauzy i skoki. Dane zostają na tym urządzeniu.</string>
-    <string name="history.off.title">Historia słuchania jest wyłączona</string>
     <string name="history.pinned">Zapisano jako zakładkę</string>
     <string name="history.restored">Przywrócono zakładkę</string>
     <string name="history.source.app">W aplikacji</string>
@@ -335,13 +332,6 @@
     <string name="settings.auto_sleep_timer.summary">Automatycznie uruchamia wyłącznik czasowy po rozpoczęciu odtwarzania pomiędzy %1$s a %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatyczny Wyłącznik Czasowy</string>
     <string name="settings.library.folders.summary">Zarządzaj folderami skanowanymi w poszukiwaniu audiobooków</string>
-    <string name="settings.listening_history.clear">Wyczyść historię słuchania</string>
-    <string name="settings.listening_history.clear.confirm">Wyczyść</string>
-    <string name="settings.listening_history.clear.message">Spowoduje to usunięcie zapisanych odtworzeń, pauz i skoków ze wszystkich książek. Zakładki pozostaną.</string>
-    <string name="settings.listening_history.clear.title">Wyczyścić historię słuchania?</string>
-    <string name="settings.listening_history.cleared">Historia słuchania wyczyszczona</string>
-    <string name="settings.listening_history.summary">Przechowuje odtworzenia, pauzy i skoki na tym urządzeniu, aby można było cofnąć pomyłki</string>
-    <string name="settings.listening_history.title">Historia słuchania</string>
     <string name="settings.library.layout.grid">Siatka</string>
     <string name="settings.library.layout.list">Lista</string>
     <string name="settings.library.title">Biblioteka</string>

@@ -158,9 +158,6 @@
     <string name="history.filter.settings">Impostazioni</string>
     <string name="history.filter.sleep">Sonno</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.off.action">Attiva</string>
-    <string name="history.off.message">Attivala per annullare riproduzioni, pause e salti accidentali. Rimane solo su questo dispositivo.</string>
-    <string name="history.off.title">La cronologia di ascolto è disattivata</string>
     <string name="history.pinned">Salvato come segnalibro</string>
     <string name="history.restored">Segnalibro ripristinato</string>
     <string name="history.source.app">Nell\'app</string>
@@ -322,13 +319,6 @@
     <string name="settings.auto_sleep_timer.summary">Avvia automaticamente un timer di spegnimento automatico quando la riproduzione inizia tra %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Timer di spegnimento automatico</string>
     <string name="settings.library.folders.summary">Gestisci cartelle audiolibri</string>
-    <string name="settings.listening_history.clear">Cancella cronologia di ascolto</string>
-    <string name="settings.listening_history.clear.confirm">Cancella</string>
-    <string name="settings.listening_history.clear.message">Verranno rimossi riproduzioni, pause e salti registrati di tutti i libri. I segnalibri restano.</string>
-    <string name="settings.listening_history.clear.title">Cancellare la cronologia di ascolto?</string>
-    <string name="settings.listening_history.cleared">Cronologia di ascolto cancellata</string>
-    <string name="settings.listening_history.summary">Conserva riproduzioni, pause e salti su questo dispositivo, così puoi annullare gli errori</string>
-    <string name="settings.listening_history.title">Cronologia di ascolto</string>
     <string name="settings.library.layout.grid">Griglia</string>
     <string name="settings.library.layout.list">Elenco</string>
     <string name="settings.library.title">Libreria</string>

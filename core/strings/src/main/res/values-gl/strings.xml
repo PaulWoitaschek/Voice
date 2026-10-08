@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Axustes</string>
     <string name="history.filter.sleep">Soño</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.off.action">Activar</string>
-    <string name="history.off.message">Actívao para desfacer reproducións, pausas e saltos accidentais. Gárdase só neste dispositivo.</string>
-    <string name="history.off.title">O historial de escoita está desactivado</string>
     <string name="history.pinned">Gardado como marcador</string>
     <string name="history.restored">Marcador restaurado</string>
     <string name="history.source.app">Na app</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Iniciar o temporizador automáticamente cando a escoita comece entre as %1$s e as %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador automático</string>
     <string name="settings.library.folders.summary">Xestionar cartafoles onde buscar audiolibros</string>
-    <string name="settings.listening_history.clear">Borrar o historial de escoita</string>
-    <string name="settings.listening_history.clear.confirm">Borrar</string>
-    <string name="settings.listening_history.clear.message">Isto elimina as reproducións, pausas e saltos rexistrados de todos os libros. Os marcadores mantéñense.</string>
-    <string name="settings.listening_history.clear.title">Borrar o historial de escoita?</string>
-    <string name="settings.listening_history.cleared">Historial de escoita borrado</string>
-    <string name="settings.listening_history.summary">Garda as reproducións, pausas e saltos neste dispositivo, para que poidas desfacer erros</string>
-    <string name="settings.listening_history.title">Historial de escoita</string>
     <string name="settings.library.layout.grid">Grella</string>
     <string name="settings.library.layout.list">Lista</string>
     <string name="settings.library.title">Biblioteca</string>

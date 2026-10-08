@@ -142,9 +142,6 @@
     <string name="history.filter.settings">Pengaturan</string>
     <string name="history.filter.sleep">Tidur</string>
     <string name="history.location.chapter">Bab %1$d · %2$s</string>
-    <string name="history.off.action">Aktifkan</string>
-    <string name="history.off.message">Aktifkan untuk mengurungkan pemutaran, jeda, dan lompatan yang tidak disengaja. Riwayat hanya disimpan di perangkat ini.</string>
-    <string name="history.off.title">Riwayat mendengarkan nonaktif</string>
     <string name="history.pinned">Disimpan sebagai markah</string>
     <string name="history.restored">Markah dipulihkan</string>
     <string name="history.source.app">Di aplikasi</string>
@@ -296,13 +293,6 @@
     <string name="settings.auto_sleep_timer.summary">Mulai pengatur waktu tidur secara otomatis saat pemutaran dimulai antara %1$s dan %2$s</string>
     <string name="settings.auto_sleep_timer.title">Pengatur Waktu Tidur Otomatis</string>
     <string name="settings.library.folders.summary">Kelola folder yang dipindai untuk buku audio</string>
-    <string name="settings.listening_history.clear">Hapus riwayat mendengarkan</string>
-    <string name="settings.listening_history.clear.confirm">Hapus</string>
-    <string name="settings.listening_history.clear.message">Ini akan menghapus pemutaran, jeda, dan lompatan yang tercatat dari semua buku. Markah tetap ada.</string>
-    <string name="settings.listening_history.clear.title">Hapus riwayat mendengarkan?</string>
-    <string name="settings.listening_history.cleared">Riwayat mendengarkan dihapus</string>
-    <string name="settings.listening_history.summary">Menyimpan pemutaran, jeda, dan lompatan di perangkat ini, jadi Anda bisa mengurungkan kesalahan</string>
-    <string name="settings.listening_history.title">Riwayat mendengarkan</string>
     <string name="settings.library.layout.grid">Kisi</string>
     <string name="settings.library.layout.list">Daftar</string>
     <string name="settings.library.title">Pustaka</string>
