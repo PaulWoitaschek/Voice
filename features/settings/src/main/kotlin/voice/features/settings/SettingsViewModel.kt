@@ -1,10 +1,8 @@
 package voice.features.settings
 
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
+import voice.core.common.FeedbackLinks
 import voice.core.common.MainScope
 import voice.core.data.GridMode
 import voice.core.data.KioskModeDemoData
@@ -218,26 +217,19 @@ class SettingsViewModel(
   }
 
   override fun getSupport() {
-    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/q-a"))
+    navigator.goTo(Destination.Website(FeedbackLinks.QUESTIONS))
   }
 
   override fun suggestIdea() {
-    navigator.goTo(Destination.Website("https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas"))
+    navigator.goTo(Destination.Website(FeedbackLinks.IDEAS))
   }
 
   override fun openBugReport() {
-    val url = "https://github.com/PaulWoitaschek/Voice/issues/new".toUri()
-      .buildUpon()
-      .appendQueryParameter("template", "bug.yml")
-      .appendQueryParameter("version", appInfoProvider.versionName)
-      .appendQueryParameter("androidversion", Build.VERSION.SDK_INT.toString())
-      .appendQueryParameter("device", Build.MODEL)
-      .toString()
-    navigator.goTo(Destination.Website(url))
+    navigator.goTo(Destination.Website(FeedbackLinks.bugReport(appInfoProvider.versionName)))
   }
 
   override fun openFaq() {
-    navigator.goTo(Destination.Website("https://voice.woitaschek.de/faq/"))
+    navigator.goTo(Destination.Website(FeedbackLinks.FAQ))
   }
 
   override fun openSupportVoice() {

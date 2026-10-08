@@ -17,6 +17,7 @@ import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.core.data.BookId
 import voice.core.data.GridMode
+import voice.core.data.ReviewPromptState
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
 import voice.core.data.sleeptimer.SleepTimerPreference
@@ -172,9 +173,17 @@ public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  @ReviewDialogShownStore
-  private fun reviewDialogShown(factory: VoiceDataStoreFactory): DataStore<Boolean> {
-    return factory.create(Boolean.serializer(), false, "reviewDialogShown")
+  @ReviewPromptStateStore
+  private fun reviewPromptState(
+    factory: VoiceDataStoreFactory,
+    application: Application,
+  ): DataStore<ReviewPromptState> {
+    return factory.create(
+      serializer = ReviewPromptState.serializer(),
+      defaultValue = ReviewPromptState(),
+      fileName = "reviewPromptState",
+      migrations = listOf(ReviewDialogShownMigration(application)),
+    )
   }
 
   @Provides
@@ -279,5 +288,24 @@ private class LegacyDarkThemeMigration(
 
   override suspend fun shouldMigrate(currentData: ThemeMode): Boolean {
     return oldDataStoreFile.exists() || sharedPreferences.contains("darkTheme")
+  }
+}
+
+/**
+ * The prompt used to ask once and remember that it did. Whoever saw it isn't asked again.
+ */
+private class ReviewDialogShownMigration(application: Application) : DataMigration<ReviewPromptState> {
+
+  private val oldDataStoreFile = File(application.applicationContext.filesDir, "datastore/reviewDialogShown")
+
+  override suspend fun shouldMigrate(currentData: ReviewPromptState): Boolean = oldDataStoreFile.exists()
+
+  override suspend fun migrate(currentData: ReviewPromptState): ReviewPromptState {
+    val shown = oldDataStoreFile.readText().trim().toBooleanStrictOrNull() ?: false
+    return if (shown) currentData.copy(done = true) else currentData
+  }
+
+  override suspend fun cleanUp() {
+    oldDataStoreFile.delete()
   }
 }
