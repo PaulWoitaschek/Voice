@@ -82,7 +82,6 @@ internal fun HistoryList(
   onActionClick: (HistoryAction) -> Unit,
   onSuggestionBack: (HistorySuggestion) -> Unit,
   onSuggestionKeep: (HistorySuggestion) -> Unit,
-  onTurnOnClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   LazyColumn(
@@ -95,11 +94,6 @@ internal fun HistoryList(
     ),
     verticalArrangement = Arrangement.spacedBy(2.dp),
   ) {
-    if (!viewState.enabled) {
-      item(key = "off") {
-        HistoryOff(onTurnOnClick = onTurnOnClick, modifier = Modifier.padding(bottom = 16.dp))
-      }
-    }
     val suggestion = viewState.suggestion
     if (suggestion != null) {
       item(key = "suggestion") {
@@ -124,7 +118,7 @@ internal fun HistoryList(
           onSourceChange = onSourceChange,
         )
       }
-    } else if (viewState.enabled) {
+    } else {
       item(key = "empty") {
         HistoryEmpty(Modifier.padding(top = 32.dp))
       }
@@ -715,49 +709,6 @@ private fun HistoryEntry.icon(): ImageVector {
     Type.SleepTimerEnded -> VoiceIcons.Bedtime
     Type.BookmarkAdded -> VoiceIcons.BookmarkAdd
     Type.BookmarkDeleted -> VoiceIcons.Delete
-  }
-}
-
-@Composable
-private fun HistoryOff(
-  onTurnOnClick: () -> Unit,
-  modifier: Modifier = Modifier,
-) {
-  val colors = MaterialTheme.colorScheme
-  Surface(
-    color = colors.surfaceContainerHigh,
-    shape = RoundedCornerShape(28.dp),
-    modifier = modifier.fillMaxWidth(),
-  ) {
-    Column(Modifier.padding(20.dp)) {
-      Row(verticalAlignment = Alignment.CenterVertically) {
-        Box(
-          modifier = Modifier
-            .size(48.dp)
-            .background(colors.secondaryContainer, MaterialShapes.Cookie6Sided.toShape()),
-          contentAlignment = Alignment.Center,
-        ) {
-          Icon(VoiceIcons.History, contentDescription = null, tint = colors.onSecondaryContainer)
-        }
-        Spacer(Modifier.width(16.dp))
-        Column(Modifier.weight(1F)) {
-          Text(stringResource(R.string.history_off_title), style = MaterialTheme.typography.titleMediumEmphasized)
-          Text(
-            text = stringResource(R.string.history_off_message),
-            style = MaterialTheme.typography.bodyMedium,
-            color = colors.onSurfaceVariant,
-          )
-        }
-      }
-      Spacer(Modifier.height(12.dp))
-      Button(
-        onClick = onTurnOnClick,
-        shapes = ButtonDefaults.shapes(),
-        modifier = Modifier.align(Alignment.End),
-      ) {
-        Text(stringResource(R.string.history_off_action))
-      }
-    }
   }
 }
 

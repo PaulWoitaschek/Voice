@@ -166,9 +166,6 @@
     <string name="history.filter.settings">Налады</string>
     <string name="history.filter.sleep">Сон</string>
     <string name="history.location.chapter">Разд. %1$d · %2$s</string>
-    <string name="history.off.action">Уключыць</string>
-    <string name="history.off.message">Уключыце яе, каб адмяняць выпадковыя прайграванні, паўзы і пераходы. Яна захоўваецца толькі на гэтай прыладзе.</string>
-    <string name="history.off.title">Гісторыя праслухоўвання выключана</string>
     <string name="history.pinned">Захавана як закладка</string>
     <string name="history.restored">Закладка адноўлена</string>
     <string name="history.source.app">У праграме</string>
@@ -335,13 +332,6 @@
     <string name="settings.auto_sleep_timer.summary">Запускаць таймер сну аўтаматычна калі прайграванне пачынаецца паміж %1$s і %2$s</string>
     <string name="settings.auto_sleep_timer.title">Аўтаматычны таймер сну</string>
     <string name="settings.library.folders.summary">Кіраванне папкамі, адсканаванымі для пошуку аўдыякніг</string>
-    <string name="settings.listening_history.clear">Ачысціць гісторыю праслухоўвання</string>
-    <string name="settings.listening_history.clear.confirm">Ачысціць</string>
-    <string name="settings.listening_history.clear.message">Будуць выдалены запісаныя прайграванні, паўзы і пераходы ўсіх кніг. Закладкі застануцца.</string>
-    <string name="settings.listening_history.clear.title">Ачысціць гісторыю праслухоўвання?</string>
-    <string name="settings.listening_history.cleared">Гісторыя праслухоўвання ачышчана</string>
-    <string name="settings.listening_history.summary">Захоўвае прайграванні, паўзы і пераходы на гэтай прыладзе, каб можна было адмяніць выпадковыя дзеянні</string>
-    <string name="settings.listening_history.title">Гісторыя праслухоўвання</string>
     <string name="settings.library.layout.grid">Сетка</string>
     <string name="settings.library.layout.list">Спіс</string>
     <string name="settings.library.title">Бібліятэка</string>

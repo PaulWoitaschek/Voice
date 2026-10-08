@@ -29,9 +29,6 @@ public interface ListeningEventDao {
     count: Int,
   )
 
-  @Query("DELETE FROM listening_event")
-  public suspend fun deleteAll()
-
   /**
    * Moves the events of the [from] books that happened in [oldChapterId] to [newChapterId] of the [to] book.
    */

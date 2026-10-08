@@ -13,11 +13,9 @@ public interface ListeningHistoryRepo {
   public fun events(bookId: BookId): Flow<List<ListeningEvent>>
 
   /**
-   * Stores the event, unless listening history is turned off. Only the newest events of each book are kept.
+   * Stores the event. Only the newest events of each book are kept.
    */
   public suspend fun add(event: ListeningEvent)
-
-  public suspend fun clear()
 
   /**
    * Hands the history over when a book shows up under a new id. The events of the [from] books that happened in

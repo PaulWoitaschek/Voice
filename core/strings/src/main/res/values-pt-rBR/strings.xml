@@ -158,9 +158,6 @@
     <string name="history.filter.settings">Configurações</string>
     <string name="history.filter.sleep">Sono</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.off.action">Ativar</string>
-    <string name="history.off.message">Ative para desfazer reproduções, pausas e saltos acidentais. Os dados ficam neste dispositivo.</string>
-    <string name="history.off.title">O histórico de audição está desativado</string>
     <string name="history.pinned">Salvo como marcador</string>
     <string name="history.restored">Marcador restaurado</string>
     <string name="history.source.app">No app</string>
@@ -322,13 +319,6 @@
     <string name="settings.auto_sleep_timer.summary">Ativa o modo soneca automaticamente quando a reprodução estiver entre %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Modo Soneca</string>
     <string name="settings.library.folders.summary">Gerenciar pastas verificadas para audiolivros</string>
-    <string name="settings.listening_history.clear">Limpar histórico de audição</string>
-    <string name="settings.listening_history.clear.confirm">Limpar</string>
-    <string name="settings.listening_history.clear.message">Isso remove as reproduções, pausas e saltos registrados de todos os livros. Os marcadores continuam.</string>
-    <string name="settings.listening_history.clear.title">Limpar histórico de audição?</string>
-    <string name="settings.listening_history.cleared">Histórico de audição limpo</string>
-    <string name="settings.listening_history.summary">Guarda reproduções, pausas e saltos neste dispositivo, para você desfazer acidentes</string>
-    <string name="settings.listening_history.title">Histórico de audição</string>
     <string name="settings.library.layout.grid">Grade</string>
     <string name="settings.library.layout.list">Lista</string>
     <string name="settings.library.title">Biblioteca</string>

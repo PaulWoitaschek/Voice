@@ -10,7 +10,6 @@ import kotlin.time.Duration
 
 @Immutable
 internal data class HistoryViewState(
-  val enabled: Boolean,
   val suggestion: HistorySuggestion?,
   val filters: List<HistoryFilter>,
   val selectedFilter: HistoryFilter?,

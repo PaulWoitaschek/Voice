@@ -141,9 +141,6 @@
     <string name="history.filter.settings">Ρυθμίσεις</string>
     <string name="history.filter.sleep">Ύπνος</string>
     <string name="history.location.chapter">Κεφ. %1$d · %2$s</string>
-    <string name="history.off.action">Ενεργοποίηση</string>
-    <string name="history.off.message">Ενεργοποιήστε το για να αναιρείτε κατά λάθος αναπαραγωγές, παύσεις και άλματα. Παραμένει σε αυτήν τη συσκευή.</string>
-    <string name="history.off.title">Το ιστορικό ακρόασης είναι ανενεργό</string>
     <string name="history.pinned">Αποθηκεύτηκε ως σελιδοδείκτης</string>
     <string name="history.restored">Ο σελιδοδείκτης επαναφέρθηκε</string>
     <string name="history.source.app">Στην εφαρμογή</string>
@@ -250,13 +247,6 @@
     <string name="settings.appearance.color_scheme.lavender">Λεβάντα</string>
     <string name="settings.appearance.color_scheme.sunset">Ηλιοβασίλεμα</string>
     <string name="settings.appearance.title">Εμφάνιση</string>
-    <string name="settings.listening_history.clear">Διαγραφή ιστορικού ακρόασης</string>
-    <string name="settings.listening_history.clear.confirm">Διαγραφή</string>
-    <string name="settings.listening_history.clear.message">Αυτό καταργεί τις καταγεγραμμένες αναπαραγωγές, παύσεις και άλματα όλων των βιβλίων. Οι σελιδοδείκτες παραμένουν.</string>
-    <string name="settings.listening_history.clear.title">Διαγραφή ιστορικού ακρόασης;</string>
-    <string name="settings.listening_history.cleared">Το ιστορικό ακρόασης διαγράφηκε</string>
-    <string name="settings.listening_history.summary">Διατηρεί αναπαραγωγές, παύσεις και άλματα σε αυτήν τη συσκευή, ώστε να μπορείτε να αναιρείτε τα λάθη</string>
-    <string name="settings.listening_history.title">Ιστορικό ακρόασης</string>
     <string name="settings.library.layout.grid">Πλέγμα</string>
     <string name="settings.library.layout.list">Λίστα</string>
     <string name="settings.library.title">Βιβλιοθήκη</string>

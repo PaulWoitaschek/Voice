@@ -98,27 +98,6 @@ class ListeningHistoryRecorderTest {
       actual = repo.events.map { it.bookId to it.value },
     )
   }
-
-  @Test
-  fun `clearing drops what was recorded but not written yet`() = scope.runTest {
-    recorder.record(ListeningEvent.Type.SpeedChanged, ListeningEvent.Source.App, at(0), value = "1.2")
-    seek(at(0), at(60_000))
-
-    recorder.clear()
-    advanceUntilIdle()
-
-    assertEquals(expected = emptyList(), actual = repo.events)
-    assertNull(recorder.lastJump.value)
-  }
-
-  @Test
-  fun `what is recorded after clearing is kept`() = scope.runTest {
-    recorder.clear()
-    seek(at(0), at(60_000))
-
-    advanceUntilIdle()
-    assertEquals(expected = listOf(ListeningEvent.Type.Seek), actual = repo.events.map { it.type })
-  }
 }
 
 class RecordingRepo : ListeningHistoryRepo {
@@ -129,10 +108,6 @@ class RecordingRepo : ListeningHistoryRepo {
 
   override suspend fun add(event: ListeningEvent) {
     events += event
-  }
-
-  override suspend fun clear() {
-    events.clear()
   }
 
   override suspend fun moveToBook(
