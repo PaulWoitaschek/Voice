@@ -57,8 +57,9 @@ android {
     }
   }
 
-  val signingPropertiesFile = layout.projectDirectory.file("../signing/signing.properties").asFile
-  val signingKeystoreFile = layout.projectDirectory.file("../signing/signing.keystore").asFile
+  val signingDir = mainCheckoutDir(layout.projectDirectory.dir("..").asFile).resolve("signing")
+  val signingPropertiesFile = signingDir.resolve("signing.properties")
+  val signingKeystoreFile = signingDir.resolve("signing.keystore")
   val appSigningConfig = if (signingPropertiesFile.isFile) {
     val signingProperties = Properties().apply {
       signingPropertiesFile.inputStream().use(::load)
@@ -233,4 +234,14 @@ dependencies {
   androidTestImplementation(libs.compose.ui.testJunit)
   androidTestImplementation(libs.coroutines.test)
   androidTestUtil(libs.androidX.test.orchestrator)
+}
+
+// Git worktrees sign with the main checkout's keys, so the release key isn't copied into every worktree.
+fun mainCheckoutDir(rootDir: File): File {
+  val dotGit = rootDir.resolve(".git")
+  if (!dotGit.isFile) return rootDir
+  val gitDir = rootDir.resolve(dotGit.readText().removePrefix("gitdir:").trim())
+  val commonDirFile = gitDir.resolve("commondir")
+  if (!commonDirFile.isFile) return rootDir
+  return gitDir.resolve(commonDirFile.readText().trim()).canonicalFile.parentFile
 }
