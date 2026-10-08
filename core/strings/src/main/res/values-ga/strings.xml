@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Chuaigh rud éigin mícheart 😢</string>
     <string name="common.error.generic.retry">Bain triail eile as</string>
     <string name="cover.content_description.selectable">Taispeáin clúdach a roghnú</string>
-    <string name="cover.search.author.content_description">Údar</string>
     <string name="cover.search.query.with_author">%1$s le %2$s clúdach fuaime</string>
     <string name="cover.search.query.without_author">%s clúdach fuaime</string>
-    <string name="cover.search.recent.content_description">Ceist le déanaí</string>
     <string name="cover.title">Clúdach</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d nóiméad</item>
@@ -221,7 +219,46 @@
         <item quantity="many">%d leabhar ar siúl</item>
         <item quantity="other">%d leabhar ar siúl</item>
     </plurals>
-    <string name="library.search.hint">Cad atá tú ag féachaint faoi?</string>
+    <string name="library.search.browse.title">Brabhsáil</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d leabhar</item>
+        <item quantity="two">%d leabhar</item>
+        <item quantity="few">%d leabhar</item>
+        <item quantity="many">%d leabhar</item>
+        <item quantity="other">%d leabhar</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d críochnaithe</item>
+        <item quantity="two">%d críochnaithe</item>
+        <item quantity="few">%d críochnaithe</item>
+        <item quantity="many">%d críochnaithe</item>
+        <item quantity="other">%d críochnaithe</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d ar siúl</item>
+        <item quantity="two">%d ar siúl</item>
+        <item quantity="few">%d ar siúl</item>
+        <item quantity="many">%d ar siúl</item>
+        <item quantity="other">%d ar siúl</item>
+    </plurals>
+    <string name="library.search.clear">Glan an cuardach</string>
+    <string name="library.search.field.all">Gach rud</string>
+    <string name="library.search.field.authors">Údair</string>
+    <string name="library.search.field.genres">Seánraí</string>
+    <string name="library.search.field.narrators">Reacairí</string>
+    <string name="library.search.field.series">Sraitheanna</string>
+    <string name="library.search.field.titles">Teidil</string>
+    <string name="library.search.hint">Cuardaigh do leabharlann</string>
+    <string name="library.search.match.genre">Seánra · %s</string>
+    <string name="library.search.match.narrator">Léite ag %s</string>
+    <string name="library.search.match.series">Sraith · %s</string>
+    <string name="library.search.no_results.folders_hint">Níl sé ar an liosta? B\'fhéidir nár cuireadh a fhillteán le Voice fós.</string>
+    <string name="library.search.no_results.message">Féachann an cuardach trí theidil, údair, reacairí, sraitheanna agus seánraí.</string>
+    <string name="library.search.no_results.search_everything">Cuardaigh gach rud</string>
+    <string name="library.search.no_results.title">Níl aon leabhar ag teacht le “%s”</string>
+    <string name="library.search.recent.clear_all">Glan gach rud</string>
+    <string name="library.search.recent.remove">Bain %s</string>
+    <string name="library.search.recent.title">Le déanaí</string>
     <string name="library.storage_permission_bug.action">Cead a dheonú</string>
     <string name="library.storage_permission_bug.message">I gcás feistí áirithe, tá an cead riachtanach chun rochtain a fháil ar an stóras seachtrach in easnamh ar aip córais. Tá an rochtain seo riachtanach do Voice chun do chlosleabhair a léamh.</string>
     <string name="library.storage_permission_bug.title">Cead ag teastáil</string>

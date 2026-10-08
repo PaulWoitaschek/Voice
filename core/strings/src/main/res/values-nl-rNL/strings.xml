@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Er is iets fout gegaan 😢</string>
     <string name="common.error.generic.retry">Opnieuw proberen</string>
     <string name="cover.content_description.selectable">Omslag kiezen</string>
-    <string name="cover.search.author.content_description">Auteur</string>
     <string name="cover.search.query.with_author">%1$s door %2$s luisterboekomslag</string>
     <string name="cover.search.query.without_author">%s luisterboekomslag</string>
-    <string name="cover.search.recent.content_description">Recente zoekopdracht</string>
     <string name="cover.title">Omslag</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minuut</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d boek begonnen</item>
         <item quantity="other">%d boeken begonnen</item>
     </plurals>
-    <string name="library.search.hint">Waar ben je naar op zoek?</string>
+    <string name="library.search.browse.title">Bladeren</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d boek</item>
+        <item quantity="other">%d boeken</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d voltooid</item>
+        <item quantity="other">%d voltooid</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d begonnen</item>
+        <item quantity="other">%d begonnen</item>
+    </plurals>
+    <string name="library.search.clear">Zoekopdracht wissen</string>
+    <string name="library.search.field.all">Alles</string>
+    <string name="library.search.field.authors">Auteurs</string>
+    <string name="library.search.field.genres">Genres</string>
+    <string name="library.search.field.narrators">Vertellers</string>
+    <string name="library.search.field.series">Reeksen</string>
+    <string name="library.search.field.titles">Titels</string>
+    <string name="library.search.hint">Doorzoek je bibliotheek</string>
+    <string name="library.search.match.genre">Genre · %s</string>
+    <string name="library.search.match.narrator">Voorgelezen door %s</string>
+    <string name="library.search.match.series">Reeks · %s</string>
+    <string name="library.search.no_results.folders_hint">Staat het er niet tussen? Misschien is de map nog niet aan Voice toegevoegd.</string>
+    <string name="library.search.no_results.message">Er wordt gezocht in titels, auteurs, vertellers, reeksen en genres.</string>
+    <string name="library.search.no_results.search_everything">Alles doorzoeken</string>
+    <string name="library.search.no_results.title">Geen boeken gevonden voor “%s”</string>
+    <string name="library.search.recent.clear_all">Alles wissen</string>
+    <string name="library.search.recent.remove">%s verwijderen</string>
+    <string name="library.search.recent.title">Recent</string>
     <string name="library.storage_permission_bug.action">Toegang geven</string>
     <string name="library.storage_permission_bug.message">Voor sommige toestellen mist een systeem applicatie toegang tot de externe opslag. Deze toegang is essentieel voor Voice om de je luisterboeken te kunnen lezen.</string>
     <string name="library.storage_permission_bug.title">Toegang vereist</string>

@@ -172,7 +172,37 @@
     <string name="library.category.not_started.title">Μη διαβασμένα</string>
     <string name="library.empty.add_first_book">Ας προσθέσουμε το φάκελο των ηχητικών βιβλίων για να αρχίσετε την ακρόαση!</string>
     <string name="library.folders.title">Φάκελοι Audiobook</string>
-    <string name="library.search.hint">Τι ψάχνετε;</string>
+    <string name="library.search.browse.title">Περιήγηση</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d βιβλίο</item>
+        <item quantity="other">%d βιβλία</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d ολοκληρωμένο</item>
+        <item quantity="other">%d ολοκληρωμένα</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d σε εξέλιξη</item>
+        <item quantity="other">%d σε εξέλιξη</item>
+    </plurals>
+    <string name="library.search.clear">Εκκαθάριση αναζήτησης</string>
+    <string name="library.search.field.all">Όλα</string>
+    <string name="library.search.field.authors">Συγγραφείς</string>
+    <string name="library.search.field.genres">Είδη</string>
+    <string name="library.search.field.narrators">Αφηγητές</string>
+    <string name="library.search.field.series">Σειρές</string>
+    <string name="library.search.field.titles">Τίτλοι</string>
+    <string name="library.search.hint">Αναζήτηση στη βιβλιοθήκη σας</string>
+    <string name="library.search.match.genre">Είδος · %s</string>
+    <string name="library.search.match.narrator">Αφήγηση: %s</string>
+    <string name="library.search.match.series">Σειρά · %s</string>
+    <string name="library.search.no_results.folders_hint">Δεν υπάρχει στη λίστα; Ίσως ο φάκελός του δεν έχει προστεθεί ακόμα στο Voice.</string>
+    <string name="library.search.no_results.message">Η αναζήτηση καλύπτει τίτλους, συγγραφείς, αφηγητές, σειρές και είδη.</string>
+    <string name="library.search.no_results.search_everything">Αναζήτηση παντού</string>
+    <string name="library.search.no_results.title">Κανένα βιβλίο δεν ταιριάζει με «%s»</string>
+    <string name="library.search.recent.clear_all">Εκκαθάριση όλων</string>
+    <string name="library.search.recent.remove">Αφαίρεση %s</string>
+    <string name="library.search.recent.title">Πρόσφατα</string>
     <string name="media_session.library.recent">Πρόσφατα</string>
     <string name="media_session.library.root">Όλα τα ηχητικά βιβλία</string>
     <string name="onboarding.explanation.subtitle.folder">Επιλέξτε τον φάκελο με τα ηχητικά σας βιβλία. Το Voice σάς δείχνει τα βιβλία που βρίσκει πριν τα προσθέσει.</string>

@@ -18,6 +18,7 @@ fun book(
   narrator: String? = "Narrator",
   series: String? = null,
   part: String? = null,
+  lastPlayedAt: Instant = Instant.EPOCH,
 ): Book {
   return Book(
     content = BookContent(
@@ -30,7 +31,7 @@ fun book(
       cover = null,
       currentChapter = currentChapter,
       isActive = true,
-      lastPlayedAt = Instant.EPOCH,
+      lastPlayedAt = lastPlayedAt,
       skipSilence = false,
       id = BookId(Uuid.random().toString()),
       gain = 0F,

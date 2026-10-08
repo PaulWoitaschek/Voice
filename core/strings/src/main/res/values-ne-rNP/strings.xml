@@ -58,10 +58,8 @@
     <string name="common.error.generic.message">केही गडबड भयो 😢</string>
     <string name="common.error.generic.retry">पुन: प्रयास गर्नुहोस्</string>
     <string name="cover.content_description.selectable">छनोट गर्न कभर देखाउँछ</string>
-    <string name="cover.search.author.content_description">लेखक</string>
     <string name="cover.search.query.with_author">%1$s / %2$s अडियोबूक कभर</string>
     <string name="cover.search.query.without_author">%s अडियोबूक कभर</string>
-    <string name="cover.search.recent.content_description">हालको खोजी</string>
     <string name="cover.title">कभर</string>
     <plurals name="duration.seconds">
         <item quantity="one">%d सेकेण्ड</item>
@@ -178,7 +176,37 @@
     <string name="library.category.not_started.title">सुरु भएको छैन</string>
     <string name="library.empty.add_first_book">तपाईंको अडियोबूक फोल्डर थप्नुहोस् ताकि तपाईं सुन्न सुरु गर्न सक्नुहुन्छ!</string>
     <string name="library.folders.title">अडियोबूक फोल्डरहरू</string>
-    <string name="library.search.hint">तपाईं के खोज्दै हुनुन्छ?</string>
+    <string name="library.search.browse.title">ब्राउज गर्नुहोस्</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d पुस्तक</item>
+        <item quantity="other">%d पुस्तकहरू</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d सम्पन्न</item>
+        <item quantity="other">%d सम्पन्न</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d जारी</item>
+        <item quantity="other">%d जारी</item>
+    </plurals>
+    <string name="library.search.clear">खोज खाली गर्नुहोस्</string>
+    <string name="library.search.field.all">सबै</string>
+    <string name="library.search.field.authors">लेखकहरू</string>
+    <string name="library.search.field.genres">विधाहरू</string>
+    <string name="library.search.field.narrators">वाचकहरू</string>
+    <string name="library.search.field.series">शृङ्खलाहरू</string>
+    <string name="library.search.field.titles">शीर्षकहरू</string>
+    <string name="library.search.hint">आफ्नो पुस्तकालय खोज्नुहोस्</string>
+    <string name="library.search.match.genre">विधा · %s</string>
+    <string name="library.search.match.narrator">वाचक: %s</string>
+    <string name="library.search.match.series">शृङ्खला · %s</string>
+    <string name="library.search.no_results.folders_hint">सूचीमा छैन? यसको फोल्डर अझै Voice मा थपिएको नहुन सक्छ।</string>
+    <string name="library.search.no_results.message">खोजले शीर्षक, लेखक, वाचक, शृङ्खला र विधाहरूमा हेर्छ।</string>
+    <string name="library.search.no_results.search_everything">सबैमा खोज्नुहोस्</string>
+    <string name="library.search.no_results.title">“%s” सँग कुनै पुस्तक मेल खाँदैन</string>
+    <string name="library.search.recent.clear_all">सबै खाली गर्नुहोस्</string>
+    <string name="library.search.recent.remove">%s हटाउनुहोस्</string>
+    <string name="library.search.recent.title">हालैको</string>
     <string name="library.storage_permission_bug.action">अनुमति दिनुहोस्</string>
     <string name="library.storage_permission_bug.message">केहि यन्त्रहरूको लागि, प्रणाली एपले बाह्य भण्डारण पहुँच गर्न आवश्यक अनुमति गुमाएको छ। तपाईंको अडियोबूकहरू पढ्नको लागि Voice को लागि यो पहुँच आवश्यक छ।</string>
     <string name="library.storage_permission_bug.title">अनुमति आवश्यक छ</string>

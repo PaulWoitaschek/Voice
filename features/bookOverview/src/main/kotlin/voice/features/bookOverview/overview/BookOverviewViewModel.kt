@@ -4,13 +4,11 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
@@ -23,14 +21,11 @@ import kotlinx.coroutines.launch
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
-import voice.core.common.comparator.sortedNaturally
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.GridMode
 import voice.core.data.KioskModeDemoData
-import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
-import voice.core.data.repo.internals.dao.RecentBookSearchDao
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.FolderPickerMovedDialogShownStore
 import voice.core.data.store.GridModeStore
@@ -44,10 +39,8 @@ import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
-import voice.core.search.BookSearch
 import voice.core.ui.GridCount
 import voice.features.bookOverview.di.BookOverviewScope
-import voice.features.bookOverview.search.BookSearchViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import kotlin.time.Instant
@@ -68,9 +61,6 @@ class BookOverviewViewModel(
   private val gridCount: GridCount,
   private val navigator: Navigator,
   private val appInfoProvider: AppInfoProvider,
-  private val recentBookSearchDao: RecentBookSearchDao,
-  private val search: BookSearch,
-  private val contentRepo: BookContentRepo,
   private val deviceHasStoragePermissionBug: DeviceHasStoragePermissionBug,
   @FolderPickerInSettingsFeatureFlagQualifier
   private val folderPickerInSettingsFeatureFlag: FeatureFlag<Boolean>,
@@ -82,8 +72,6 @@ class BookOverviewViewModel(
 ) {
 
   private val scope = MainScope(dispatcherProvider)
-  private var searchActive by mutableStateOf(false)
-  private var query by mutableStateOf("")
   private var dialog by mutableStateOf<BookOverviewViewState.Dialog?>(null)
 
   fun attach() {
@@ -129,7 +117,6 @@ class BookOverviewViewModel(
       }
     }
 
-    val bookSearchViewState = bookSearchViewState(layoutMode)
     val experimentalPlaybackPersistence = experimentalPlaybackPersistenceFeatureFlag.get()
     val livePlaybackState: State<LivePlaybackState?> = if (experimentalPlaybackPersistence && currentBookId != null) {
       remember(currentBookId) {
@@ -169,57 +156,12 @@ class BookOverviewViewModel(
       },
       showSearchIcon = books.isNotEmpty(),
       isLoading = scannerActive,
-      searchActive = searchActive,
-      searchViewState = bookSearchViewState,
       showStoragePermissionBugCard = hasStoragePermissionBug,
       showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get() &&
         !folderPickerMovedDialogShown &&
         appInfoProvider.installTime < FolderPickerMigrationInstallTimeCutoff,
       dialog = dialog,
     )
-  }
-
-  @Composable
-  private fun bookSearchViewState(layoutMode: BookOverviewLayoutMode): BookSearchViewState {
-    return if (searchActive) {
-      val recentBookSearch = remember {
-        recentBookSearchDao.recentBookSearches()
-      }.collectAsState(initial = emptyList()).value.reversed()
-      var searchBooks by remember {
-        mutableStateOf(emptyList<BookOverviewItemViewState>())
-      }
-      LaunchedEffect(query) {
-        searchBooks = search.search(query).map { it.toItemViewState() }
-      }
-      val suggestedAuthors: List<String> by produceState(initialValue = emptyList()) {
-        value = contentRepo.all()
-          .filter { it.isActive }
-          .mapNotNull { it.author }
-          .toSet()
-          .sortedNaturally()
-      }
-
-      val bookSearchViewState = if (query.isNotBlank()) {
-        BookSearchViewState.SearchResults(
-          query = query,
-          books = searchBooks,
-          layoutMode = layoutMode,
-        )
-      } else {
-        BookSearchViewState.EmptySearch(
-          recentQueries = recentBookSearch,
-          suggestedAuthors = suggestedAuthors,
-          query = query,
-        )
-      }
-      bookSearchViewState
-    } else {
-      BookSearchViewState.EmptySearch(
-        recentQueries = emptyList(),
-        suggestedAuthors = emptyList(),
-        query = query,
-      )
-    }
   }
 
   private fun kioskModeState(): BookOverviewViewState {
@@ -244,12 +186,6 @@ class BookOverviewViewModel(
       showAddBookHint = false,
       showSearchIcon = true,
       isLoading = false,
-      searchActive = false,
-      searchViewState = BookSearchViewState.EmptySearch(
-        recentQueries = emptyList(),
-        suggestedAuthors = KioskModeDemoData.demoAudiobooks.map { it.author },
-        query = "",
-      ),
       showStoragePermissionBugCard = false,
       showFolderPickerIcon = false,
       dialog = null,
@@ -258,6 +194,10 @@ class BookOverviewViewModel(
 
   fun onSettingsClick() {
     navigator.goTo(Destination.Settings)
+  }
+
+  fun onSearchClick() {
+    navigator.goTo(Destination.LibrarySearch)
   }
 
   fun onBookClick(id: BookId) {
@@ -273,28 +213,6 @@ class BookOverviewViewModel(
     scope.launch {
       folderPickerMovedDialogShownStore.updateData { true }
     }
-  }
-
-  fun onSearchActiveChange(active: Boolean) {
-    if (active && !searchActive) {
-      query = ""
-    }
-    this.searchActive = active
-  }
-
-  fun onSearchQueryChange(query: String) {
-    this.query = query
-  }
-
-  fun onSearchBookClick(id: BookId) {
-    val query = query.trim()
-    if (query.isNotBlank()) {
-      scope.launch {
-        recentBookSearchDao.add(query)
-      }
-    }
-    searchActive = false
-    navigator.goTo(Destination.Playback(id))
   }
 
   fun playPause() {

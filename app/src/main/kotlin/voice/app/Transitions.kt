@@ -115,7 +115,7 @@ val SharedZAxisExitTransition =
     )
 
 /**
- * Library <-> player: the cover and play button fly between the screens as shared elements, so the
+ * Library, search and player: the cover and play button fly between the screens as shared elements, so the
  * screens themselves only cross-fade. Scaling them as well makes the shared elements chase a moving
  * target and overshoot.
  */
@@ -129,10 +129,17 @@ internal fun Scene<Destination.Compose>.destination(): Destination.Compose? {
   return entries.lastOrNull()?.metadata?.get(DestinationMetadataKey)
 }
 
-internal fun isBookOverviewPlaybackTransition(
+/**
+ * Library, search and player share the book covers, and the library's search pill grows into the search field.
+ */
+internal fun isSharedElementTransition(
   initial: Destination.Compose?,
   target: Destination.Compose?,
 ): Boolean {
-  return (initial == Destination.BookOverview && target is Destination.Playback) ||
-    (initial is Destination.Playback && target == Destination.BookOverview)
+  return initial != null && target != null && initial::class != target::class &&
+    initial.sharesElements() && target.sharesElements()
+}
+
+private fun Destination.Compose.sharesElements(): Boolean {
+  return this == Destination.BookOverview || this == Destination.LibrarySearch || this is Destination.Playback
 }

@@ -103,7 +103,7 @@ generate_icon push_pin PushPin
 generate_icon remove Remove
 generate_icon replay Replay
 generate_icon search Search
-generate_icon sentiment_satisfied SentimentSatisfied
+generate_icon search_off SearchOff
 generate_icon settings Settings
 generate_icon skip_next SkipNext
 generate_icon skip_previous SkipPrevious

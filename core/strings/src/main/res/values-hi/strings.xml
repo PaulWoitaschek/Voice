@@ -58,10 +58,8 @@
     <string name="common.error.generic.message">कुछ गलत हो गया 😢</string>
     <string name="common.error.generic.retry">पुन: प्रयास करें</string>
     <string name="cover.content_description.selectable">चुनने के लिए कवर दिखाएँ</string>
-    <string name="cover.search.author.content_description">लेखक</string>
     <string name="cover.search.query.with_author">%1$s द्वारा %2$s ऑडियोबुक कवर</string>
     <string name="cover.search.query.without_author">%s ऑडियोबुक कवर</string>
-    <string name="cover.search.recent.content_description">हाल की खोज</string>
     <string name="cover.title">कवर</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d मिनट</item>
@@ -182,7 +180,37 @@
     <string name="library.category.not_started.title">अभी प्रारंभ नही</string>
     <string name="library.empty.add_first_book">चलिए आपका ऑडियोबुक फोल्डर जोड़ते हैं ताकि आप सुनना शुरू कर सकें!</string>
     <string name="library.folders.title">ऑडिओबुक के फोल्डर</string>
-    <string name="library.search.hint">आप क्या ढूंढ रहे हैं?</string>
+    <string name="library.search.browse.title">ब्राउज़ करें</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d पुस्तक</item>
+        <item quantity="other">%d पुस्तकें</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d पूर्ण</item>
+        <item quantity="other">%d पूर्ण</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d जारी</item>
+        <item quantity="other">%d जारी</item>
+    </plurals>
+    <string name="library.search.clear">खोज साफ़ करें</string>
+    <string name="library.search.field.all">सभी</string>
+    <string name="library.search.field.authors">लेखक</string>
+    <string name="library.search.field.genres">शैलियाँ</string>
+    <string name="library.search.field.narrators">वाचक</string>
+    <string name="library.search.field.series">सीरीज़</string>
+    <string name="library.search.field.titles">शीर्षक</string>
+    <string name="library.search.hint">अपनी लाइब्रेरी में खोजें</string>
+    <string name="library.search.match.genre">शैली · %s</string>
+    <string name="library.search.match.narrator">वाचक: %s</string>
+    <string name="library.search.match.series">सीरीज़ · %s</string>
+    <string name="library.search.no_results.folders_hint">सूची में नहीं है? हो सकता है इसका फोल्डर अभी तक Voice में नहीं जोड़ा गया हो।</string>
+    <string name="library.search.no_results.message">खोज शीर्षक, लेखक, वाचक, सीरीज़ और शैलियों में की जाती है।</string>
+    <string name="library.search.no_results.search_everything">सब में खोजें</string>
+    <string name="library.search.no_results.title">“%s” से कोई पुस्तक मेल नहीं खाती</string>
+    <string name="library.search.recent.clear_all">सभी साफ़ करें</string>
+    <string name="library.search.recent.remove">%s हटाएँ</string>
+    <string name="library.search.recent.title">हालिया</string>
     <string name="library.storage_permission_bug.action">अनुमति प्रदान करें</string>
     <string name="library.storage_permission_bug.message">कुछ उपकरणों के लिए, एक सिस्टम ऐप में बाहरी स्टोरेज तक पहुंचने के लिए आवश्यक अनुमति नहीं है। Voice के लिए आपकी ऑडियोबुक पढ़ने के लिए यह पहुंच आवश्यक है।</string>
     <string name="library.storage_permission_bug.title">अनुमति आवश्यक है</string>

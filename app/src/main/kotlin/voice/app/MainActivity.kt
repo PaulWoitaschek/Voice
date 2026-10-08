@@ -128,21 +128,21 @@ class MainActivity : AppCompatActivity() {
               sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy),
               sharedTransitionScope = this,
               transitionSpec = {
-                if (isBookOverviewPlaybackTransition(initialState.destination(), targetState.destination())) {
+                if (isSharedElementTransition(initialState.destination(), targetState.destination())) {
                   SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
                 } else {
                   SharedXAxisEnterTransition(density) togetherWith SharedXAxisExitTransition(density)
                 }
               },
               popTransitionSpec = {
-                if (isBookOverviewPlaybackTransition(initialState.destination(), targetState.destination())) {
+                if (isSharedElementTransition(initialState.destination(), targetState.destination())) {
                   SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
                 } else {
                   SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
                 }
               },
               predictivePopTransitionSpec = {
-                if (isBookOverviewPlaybackTransition(initialState.destination(), targetState.destination())) {
+                if (isSharedElementTransition(initialState.destination(), targetState.destination())) {
                   SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
                 } else {
                   SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition

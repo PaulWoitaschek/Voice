@@ -59,10 +59,8 @@
     <string name="common.error.generic.message">Något gick fel 😢</string>
     <string name="common.error.generic.retry">Försök igen</string>
     <string name="cover.content_description.selectable">Visar valbara omslag</string>
-    <string name="cover.search.author.content_description">Författare</string>
     <string name="cover.search.query.with_author">%1$s av %2$s ljudboksomslag</string>
     <string name="cover.search.query.without_author">%s ljudboksomslag</string>
-    <string name="cover.search.recent.content_description">Senaste sökningen</string>
     <string name="cover.title">Omslag</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minut</item>
@@ -194,7 +192,37 @@
         <item quantity="one">%d påbörjad bok</item>
         <item quantity="other">%d påbörjade böcker</item>
     </plurals>
-    <string name="library.search.hint">Vad letar du efter?</string>
+    <string name="library.search.browse.title">Bläddra</string>
+    <plurals name="library.search.browse.book_count">
+        <item quantity="one">%d bok</item>
+        <item quantity="other">%d böcker</item>
+    </plurals>
+    <plurals name="library.search.browse.finished">
+        <item quantity="one">%d färdiglyssnad</item>
+        <item quantity="other">%d färdiglyssnade</item>
+    </plurals>
+    <plurals name="library.search.browse.in_progress">
+        <item quantity="one">%d påbörjad</item>
+        <item quantity="other">%d påbörjade</item>
+    </plurals>
+    <string name="library.search.clear">Rensa sökning</string>
+    <string name="library.search.field.all">Alla</string>
+    <string name="library.search.field.authors">Författare</string>
+    <string name="library.search.field.genres">Genrer</string>
+    <string name="library.search.field.narrators">Uppläsare</string>
+    <string name="library.search.field.series">Serier</string>
+    <string name="library.search.field.titles">Titlar</string>
+    <string name="library.search.hint">Sök i ditt bibliotek</string>
+    <string name="library.search.match.genre">Genre · %s</string>
+    <string name="library.search.match.narrator">Uppläst av %s</string>
+    <string name="library.search.match.series">Serie · %s</string>
+    <string name="library.search.no_results.folders_hint">Saknas boken i listan? Dess mapp kanske inte har lagts till i Voice ännu.</string>
+    <string name="library.search.no_results.message">Sökningen omfattar titlar, författare, uppläsare, serier och genrer.</string>
+    <string name="library.search.no_results.search_everything">Sök i allt</string>
+    <string name="library.search.no_results.title">Inga böcker matchar ”%s”</string>
+    <string name="library.search.recent.clear_all">Rensa alla</string>
+    <string name="library.search.recent.remove">Ta bort %s</string>
+    <string name="library.search.recent.title">Senaste</string>
     <string name="library.storage_permission_bug.action">Ge behörighet</string>
     <string name="library.storage_permission_bug.message">På vissa enheter saknar en systemapp den behörighet som krävs för att komma åt den externa lagringen. Den åtkomsten är nödvändig för att Voice ska kunna läsa dina ljudböcker.</string>
     <string name="library.storage_permission_bug.title">Behörighet krävs</string>
