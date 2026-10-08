@@ -17,10 +17,12 @@ import kotlinx.serialization.json.Json
 import org.junit.runner.RunWith
 import voice.core.common.AppInfoProvider
 import voice.core.data.GridMode
+import voice.core.data.ReviewPromptState
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.GridModeStore
+import voice.core.data.store.ReviewPromptStateStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
@@ -53,6 +55,9 @@ interface MigrationTestGraph {
 
   @GridModeStore
   val gridModeStore: DataStore<GridMode>
+
+  @ReviewPromptStateStore
+  val reviewPromptStateStore: DataStore<ReviewPromptState>
 
   @Provides
   val application: Application get() = ApplicationProvider.getApplicationContext()
@@ -241,5 +246,33 @@ class MigrationTests {
     val store = testGraph.gridModeStore
     assertEquals(expected = GridMode.FOLLOW_DEVICE, actual = store.data.first())
     assertEquals(expected = false, actual = sharedPreferences.contains("gridView"))
+  }
+
+  @Test
+  fun `a shown review dialog means the review prompt is done`() = runTest {
+    val oldDataStoreFile = legacyReviewDialogShownFile("true")
+
+    assertEquals(expected = ReviewPromptState(done = true), actual = testGraph.reviewPromptStateStore.data.first())
+    assertEquals(expected = false, actual = oldDataStoreFile.exists())
+  }
+
+  @Test
+  fun `a review dialog not shown yet keeps the review prompt open`() = runTest {
+    val oldDataStoreFile = legacyReviewDialogShownFile("false")
+
+    assertEquals(expected = ReviewPromptState(), actual = testGraph.reviewPromptStateStore.data.first())
+    assertEquals(expected = false, actual = oldDataStoreFile.exists())
+  }
+
+  @Test
+  fun `the review prompt starts fresh without a legacy file`() = runTest {
+    assertEquals(expected = ReviewPromptState(), actual = testGraph.reviewPromptStateStore.data.first())
+  }
+
+  private fun legacyReviewDialogShownFile(content: String): File {
+    val file = File(ApplicationProvider.getApplicationContext<Application>().filesDir, "datastore/reviewDialogShown")
+    file.parentFile!!.mkdirs()
+    file.writeText(content)
+    return file
   }
 }

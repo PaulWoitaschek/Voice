@@ -1,0 +1,507 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 61,
+    "identityHash": "55869653bd067c1bf0ada8e3d01cffcf",
+    "entities": [
+      {
+        "tableName": "chapters2",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT, `duration` INTEGER NOT NULL, `fileLastModified` TEXT NOT NULL, `fileSize` INTEGER NOT NULL DEFAULT 0, `markData` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fileLastModified",
+            "columnName": "fileLastModified",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fileSize",
+            "columnName": "fileSize",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "markData",
+            "columnName": "markData",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "content2",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `playbackSpeed` REAL NOT NULL, `skipSilence` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `lastPlayedAt` TEXT NOT NULL, `author` TEXT, `name` TEXT NOT NULL, `addedAt` TEXT NOT NULL, `chapters` TEXT NOT NULL, `currentChapter` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `cover` TEXT, `gain` REAL NOT NULL DEFAULT 0, `genre` TEXT, `narrator` TEXT, `series` TEXT, `part` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "playbackSpeed",
+            "columnName": "playbackSpeed",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "skipSilence",
+            "columnName": "skipSilence",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "isActive",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastPlayedAt",
+            "columnName": "lastPlayedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "author",
+            "columnName": "author",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addedAt",
+            "columnName": "addedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chapters",
+            "columnName": "chapters",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentChapter",
+            "columnName": "currentChapter",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "positionInChapter",
+            "columnName": "positionInChapter",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cover",
+            "columnName": "cover",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "gain",
+            "columnName": "gain",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "genre",
+            "columnName": "genre",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "narrator",
+            "columnName": "narrator",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "series",
+            "columnName": "series",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "part",
+            "columnName": "part",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "bookmark2",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `chapterId` TEXT NOT NULL, `title` TEXT, `time` INTEGER NOT NULL, `addedAt` TEXT NOT NULL, `setBySleepTimer` INTEGER NOT NULL, `id` TEXT NOT NULL, `kind` TEXT NOT NULL DEFAULT 'Note', PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "bookId",
+            "columnName": "bookId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chapterId",
+            "columnName": "chapterId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addedAt",
+            "columnName": "addedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "setBySleepTimer",
+            "columnName": "setBySleepTimer",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'Note'"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "bookSearchFts",
+        "createSql": "CREATE VIRTUAL TABLE IF NOT EXISTS `${TABLE_NAME}` USING FTS4(`name` TEXT NOT NULL, `author` TEXT, `genre` TEXT, `narrator` TEXT, `series` TEXT, `part` TEXT, `id` TEXT NOT NULL, `isActive` INTEGER NOT NULL, tokenize=unicode61, content=`content2`, notindexed=`id`, notindexed=`isActive`)",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "author",
+            "columnName": "author",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "genre",
+            "columnName": "genre",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "narrator",
+            "columnName": "narrator",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "series",
+            "columnName": "series",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "part",
+            "columnName": "part",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "isActive",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": []
+        },
+        "ftsVersion": "FTS4",
+        "ftsOptions": {
+          "tokenizer": "unicode61",
+          "tokenizerArgs": [],
+          "contentTable": "content2",
+          "languageIdColumnName": "",
+          "matchInfo": "FTS4",
+          "notIndexedColumns": [
+            "id",
+            "isActive"
+          ],
+          "prefixSizes": [],
+          "preferredOrder": "ASC"
+        },
+        "contentSyncTriggers": [
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_bookSearchFts_BEFORE_UPDATE BEFORE UPDATE ON `content2` BEGIN DELETE FROM `bookSearchFts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_bookSearchFts_BEFORE_DELETE BEFORE DELETE ON `content2` BEGIN DELETE FROM `bookSearchFts` WHERE `docid`=OLD.`rowid`; END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_bookSearchFts_AFTER_UPDATE AFTER UPDATE ON `content2` BEGIN INSERT INTO `bookSearchFts`(`docid`, `name`, `author`, `genre`, `narrator`, `series`, `part`, `id`, `isActive`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`author`, NEW.`genre`, NEW.`narrator`, NEW.`series`, NEW.`part`, NEW.`id`, NEW.`isActive`); END",
+          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_bookSearchFts_AFTER_INSERT AFTER INSERT ON `content2` BEGIN INSERT INTO `bookSearchFts`(`docid`, `name`, `author`, `genre`, `narrator`, `series`, `part`, `id`, `isActive`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`author`, NEW.`genre`, NEW.`narrator`, NEW.`series`, NEW.`part`, NEW.`id`, NEW.`isActive`); END"
+        ]
+      },
+      {
+        "tableName": "recentBookSearch",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`searchTerm` TEXT NOT NULL, PRIMARY KEY(`searchTerm`))",
+        "fields": [
+          {
+            "fieldPath": "searchTerm",
+            "columnName": "searchTerm",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "searchTerm"
+          ]
+        }
+      },
+      {
+        "tableName": "listening_event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `type` TEXT NOT NULL, `source` TEXT NOT NULL, `atMillis` INTEGER NOT NULL, `chapterId` TEXT NOT NULL, `time` INTEGER NOT NULL, `toChapterId` TEXT, `toTime` INTEGER, `value` TEXT, `sourcePackage` TEXT, `bookmarkId` TEXT, `bookmarkKind` TEXT, `bookmarkSetBySleepTimer` INTEGER, `bookmarkAddedAtMillis` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "bookId",
+            "columnName": "bookId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "atMillis",
+            "columnName": "atMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chapterId",
+            "columnName": "chapterId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "toChapterId",
+            "columnName": "toChapterId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "toTime",
+            "columnName": "toTime",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sourcePackage",
+            "columnName": "sourcePackage",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "bookmarkId",
+            "columnName": "bookmarkId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "bookmarkKind",
+            "columnName": "bookmarkKind",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "bookmarkSetBySleepTimer",
+            "columnName": "bookmarkSetBySleepTimer",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "bookmarkAddedAtMillis",
+            "columnName": "bookmarkAddedAtMillis",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_listening_event_bookId_atMillis",
+            "unique": false,
+            "columnNames": [
+              "bookId",
+              "atMillis"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_listening_event_bookId_atMillis` ON `${TABLE_NAME}` (`bookId`, `atMillis`)"
+          }
+        ]
+      },
+      {
+        "tableName": "listening_session",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `startedAtMillis` INTEGER NOT NULL, `endedAtMillis` INTEGER NOT NULL, `listenedMillis` INTEGER NOT NULL, `audioMillis` INTEGER NOT NULL, `utcOffsetSeconds` INTEGER NOT NULL, `reachedEnd` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "bookId",
+            "columnName": "bookId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startedAtMillis",
+            "columnName": "startedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endedAtMillis",
+            "columnName": "endedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "listenedMillis",
+            "columnName": "listenedMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "audioMillis",
+            "columnName": "audioMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "utcOffsetSeconds",
+            "columnName": "utcOffsetSeconds",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reachedEnd",
+            "columnName": "reachedEnd",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_listening_session_startedAtMillis",
+            "unique": false,
+            "columnNames": [
+              "startedAtMillis"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_listening_session_startedAtMillis` ON `${TABLE_NAME}` (`startedAtMillis`)"
+          },
+          {
+            "name": "index_listening_session_bookId",
+            "unique": false,
+            "columnNames": [
+              "bookId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_listening_session_bookId` ON `${TABLE_NAME}` (`bookId`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '55869653bd067c1bf0ada8e3d01cffcf')"
+    ]
+  }
+}

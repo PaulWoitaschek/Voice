@@ -33,6 +33,7 @@ import voice.core.playback.playstate.PlayStateDelegatingListener
 import voice.core.playback.playstate.PositionUpdater
 import voice.core.playback.session.LibrarySessionCallback
 import voice.core.playback.session.PlaybackService
+import voice.core.playback.stats.ListeningSessionRecorder
 import voice.core.strings.R as StringsR
 
 @BindingContainer
@@ -59,6 +60,7 @@ object PlaybackModule {
     volumeGain: VolumeGain,
     durationInconsistenciesUpdater: DurationInconsistenciesUpdater,
     automaticPauseRecorder: AutomaticPauseRecorder,
+    listeningSessionRecorder: ListeningSessionRecorder,
     @Media3AudioOffloadFeatureFlagQualifier media3AudioOffloadFeatureFlag: FeatureFlag<Boolean>,
   ): Player {
     val audioAttributes = AudioAttributes.Builder()
@@ -88,6 +90,7 @@ object PlaybackModule {
         positionUpdater.attachTo(player)
         durationInconsistenciesUpdater.attachTo(player)
         automaticPauseRecorder.attachTo(player)
+        listeningSessionRecorder.attachTo(player)
         player.onAudioSessionIdChanged {
           volumeGain.audioSessionId = it
         }
