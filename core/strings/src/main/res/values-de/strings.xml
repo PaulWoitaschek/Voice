@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Etwas ist schiefgelaufen 😢</string>
     <string name="common.error.generic.retry">Erneut versuchen</string>
-    <string name="cover.content_description.selectable">Zeigt Cover zur Auswahl an</string>
     <string name="cover.crop.hint">Zum Verschieben ziehen. Zum Ändern der Größe mit zwei Fingern zoomen oder an einer Ecke ziehen.</string>
     <string name="cover.crop.title">Cover zuschneiden</string>
     <string name="cover.search.download_failed">Dieses Cover konnte nicht heruntergeladen werden. Probiere ein anderes.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Vorspulen</string>
     <string name="playback.action.pause">Pause</string>
     <string name="playback.action.play">Abspielen</string>
-    <string name="playback.action.play_pause">Abspielen / Pausieren</string>
     <string name="playback.action.rewind">Zurückspulen</string>
     <string name="playback.battery_optimization.action">Update</string>
     <string name="playback.battery_optimization.rationale">Aufgrund Deiner Akkueinstellungen kann es zu Abspielunterbrechungen kommen.</string>
@@ -387,4 +385,27 @@
     <string name="time.relative.this_evening">Heute Abend</string>
     <string name="time.relative.this_morning">Heute Morgen</string>
     <string name="time.relative.yesterday">Gestern</string>
+    <string name="widget.chapter">Kap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Kap. %1$d von %2$d</string>
+    <string name="widget.empty.action">Ordner wählen</string>
+    <string name="widget.empty.message">Wähle den Ordner mit Deinen Hörbüchern</string>
+    <string name="widget.empty.title">Noch keine Bücher</string>
+    <string name="widget.finished.start_over">Von vorne</string>
+    <string name="widget.finished.title">Geschafft!</string>
+    <string name="widget.no_book.action">Bibliothek öffnen</string>
+    <string name="widget.no_book.message">Wähle, was Du hören möchtest</string>
+    <string name="widget.no_book.title">Wähle ein Buch</string>
+    <string name="widget.now_playing.description">Abspielen, pausieren und sehen, wie weit Du bist</string>
+    <string name="widget.now_playing.label">Läuft gerade</string>
+    <string name="widget.shelf.description">Steig wieder in die Bücher ein, die Du gerade hörst</string>
+    <string name="widget.shelf.empty">Bücher, die Du anfängst, erscheinen hier</string>
+    <string name="widget.shelf.label">Bücherregal</string>
+    <string name="widget.shelf.play">%1$s abspielen</string>
+    <string name="widget.shelf.title">Weiterhören</string>
+    <string name="widget.sleep_timer.cancel">Einschlaf-Timer abbrechen</string>
+    <string name="widget.sleep_timer.cancel_hint">Tippen zum Abbrechen</string>
+    <string name="widget.sleep_timer.description">Starte oder stoppe den Einschlaf-Timer direkt vom Bett aus</string>
+    <string name="widget.sleep_timer.label">Einschlaf-Timer</string>
+    <string name="widget.sleep_timer.start">Einschlaf-Timer starten</string>
+    <string name="widget.sleep_timer.stops_at">Stoppt um %1$s</string>
 </resources>

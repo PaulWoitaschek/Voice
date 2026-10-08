@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">باشه</string>
     <string name="common.error.generic.message">مشکلی پیش آمد 😢</string>
     <string name="common.error.generic.retry">تلاش مجدد</string>
-    <string name="cover.content_description.selectable">نمایش کاور برای انتخاب</string>
     <string name="cover.crop.hint">برای جابه‌جایی بکشید؛ برای تغییر اندازه، دو انگشت را جمع کنید یا گوشه‌ای را بکشید.</string>
     <string name="cover.crop.title">برش کاور</string>
     <string name="cover.search.download_failed">دانلود این کاور ممکن نشد. کاور دیگری را امتحان کنید.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">رو به جلو بردن سریع</string>
     <string name="playback.action.pause">توقف</string>
     <string name="playback.action.play">پخش</string>
-    <string name="playback.action.play_pause">پخش / توقف</string>
     <string name="playback.action.rewind">به عقب برگرداندن</string>
     <string name="playback.battery_optimization.action">بروزرسانی</string>
     <string name="playback.battery_optimization.rationale">به دلیل تنظیمات شما مربوط به محدودیت های استفاده از برق، ممکن است وقفه در پخش اتفاق بیفتد.</string>
@@ -387,4 +385,27 @@
     <string name="time.relative.this_evening">امشب</string>
     <string name="time.relative.this_morning">امروز صبح</string>
     <string name="time.relative.yesterday">دیروز</string>
+    <string name="widget.chapter">فصل %1$d · %2$s</string>
+    <string name="widget.chapter_counter">فصل %1$d از %2$d</string>
+    <string name="widget.empty.action">افزودن پوشه</string>
+    <string name="widget.empty.message">پوشه‌ی کتاب‌های صوتی خود را انتخاب کنید</string>
+    <string name="widget.empty.title">هنوز کتابی نیست</string>
+    <string name="widget.finished.start_over">شروع از اول</string>
+    <string name="widget.finished.title">پایان!</string>
+    <string name="widget.no_book.action">باز کردن کتابخانه</string>
+    <string name="widget.no_book.message">انتخاب کنید به چه گوش بدهید</string>
+    <string name="widget.no_book.title">یک کتاب انتخاب کنید</string>
+    <string name="widget.now_playing.description">پخش، توقف و دیدن میزان پیشرفت</string>
+    <string name="widget.now_playing.label">در حال پخش</string>
+    <string name="widget.shelf.description">به کتاب‌هایی که گوش می‌دهید برگردید</string>
+    <string name="widget.shelf.empty">کتاب‌هایی که شروع می‌کنید اینجا نمایش داده می‌شوند</string>
+    <string name="widget.shelf.label">قفسه‌ی کتاب</string>
+    <string name="widget.shelf.play">پخش %1$s</string>
+    <string name="widget.shelf.title">ادامهٔ گوش دادن</string>
+    <string name="widget.sleep_timer.cancel">لغو تایمر خواب</string>
+    <string name="widget.sleep_timer.cancel_hint">برای لغو ضربه بزنید</string>
+    <string name="widget.sleep_timer.description">تایمر خواب را از روی تخت شروع یا لغو کنید</string>
+    <string name="widget.sleep_timer.label">تایمر خواب</string>
+    <string name="widget.sleep_timer.start">شروع تایمر خواب</string>
+    <string name="widget.sleep_timer.stops_at">توقف در ساعت %1$s</string>
 </resources>

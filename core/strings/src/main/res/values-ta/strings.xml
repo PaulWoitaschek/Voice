@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">சரி</string>
     <string name="common.error.generic.message">ஏதோ தவறு நடந்தது</string>
     <string name="common.error.generic.retry">மீண்டும் முயற்சிக்கவும்</string>
-    <string name="cover.content_description.selectable">தேர்வு செய்ய சூ கவர்</string>
     <string name="cover.crop.hint">நகர்த்த இழுக்கவும்; அளவை மாற்ற பிஞ்ச் செய்யவும் அல்லது ஒரு மூலையை இழுக்கவும்.</string>
     <string name="cover.crop.title">அட்டைப்படத்தை செதுக்கு</string>
     <string name="cover.search.download_failed">இந்த அட்டைப்படத்தைப் பதிவிறக்க முடியவில்லை. வேறொன்றை முயலவும்.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">வேகமாக முன்னோக்கி</string>
     <string name="playback.action.pause">இடைநிறுத்தம்</string>
     <string name="playback.action.play">விளையாடுங்கள்</string>
-    <string name="playback.action.play_pause">விளையாடு / இடைநிறுத்தம்</string>
     <string name="playback.action.rewind">முன்னாடி</string>
     <string name="playback.battery_optimization.action">புதுப்பிப்பு</string>
     <string name="playback.battery_optimization.rationale">உங்கள் ஆற்றல் கட்டுப்பாடுகள் காரணமாக, பின்னணி குறுக்கீடுகள் ஏற்படக்கூடும்.</string>
@@ -387,4 +385,27 @@
     <string name="time.relative.this_evening">இன்று மாலை</string>
     <string name="time.relative.this_morning">இன்று காலை</string>
     <string name="time.relative.yesterday">நேற்று</string>
+    <string name="widget.chapter">அத். %1$d · %2$s</string>
+    <string name="widget.chapter_counter">அத். %1$d / %2$d</string>
+    <string name="widget.empty.action">கோப்புறையைச் சேர்</string>
+    <string name="widget.empty.message">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="widget.empty.title">இன்னும் புத்தகங்கள் இல்லை</string>
+    <string name="widget.finished.start_over">மீண்டும் தொடங்கு</string>
+    <string name="widget.finished.title">முற்றும்!</string>
+    <string name="widget.no_book.action">நூலகத்தைத் திற</string>
+    <string name="widget.no_book.message">எதைக் கேட்பது எனத் தேர்ந்தெடுக்கவும்</string>
+    <string name="widget.no_book.title">ஒரு புத்தகத்தைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="widget.now_playing.description">இயக்கவும், இடைநிறுத்தவும், எவ்வளவு கேட்டீர்கள் எனப் பார்க்கவும்</string>
+    <string name="widget.now_playing.label">இப்போது இயங்குகிறது</string>
+    <string name="widget.shelf.description">நீங்கள் கேட்கும் புத்தகங்களுக்குத் திரும்புங்கள்</string>
+    <string name="widget.shelf.empty">நீங்கள் தொடங்கும் புத்தகங்கள் இங்கே தோன்றும்</string>
+    <string name="widget.shelf.label">புத்தக அலமாரி</string>
+    <string name="widget.shelf.play">%1$s-ஐ இயக்கு</string>
+    <string name="widget.shelf.title">தொடர்ந்து கேளுங்கள்</string>
+    <string name="widget.sleep_timer.cancel">ஸ்லீப் டைமரை ரத்துசெய்</string>
+    <string name="widget.sleep_timer.cancel_hint">ரத்துசெய்யத் தட்டவும்</string>
+    <string name="widget.sleep_timer.description">படுக்கையிலிருந்தே ஸ்லீப் டைமரைத் தொடங்கவும் அல்லது ரத்துசெய்யவும்</string>
+    <string name="widget.sleep_timer.label">ஸ்லீப் டைமர்</string>
+    <string name="widget.sleep_timer.start">ஸ்லீப் டைமரைத் தொடங்கு</string>
+    <string name="widget.sleep_timer.stops_at">%1$s மணிக்கு நிற்கும்</string>
 </resources>

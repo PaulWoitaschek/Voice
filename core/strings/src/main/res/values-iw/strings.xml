@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">אישור</string>
     <string name="common.error.generic.message">משהו השתבש 😢</string>
     <string name="common.error.generic.retry">נסה שוב</string>
-    <string name="cover.content_description.selectable">להציג עטיפות לבחירה</string>
     <string name="cover.crop.hint">גררו כדי להזיז; צבטו או גררו פינה כדי לשנות את הגודל.</string>
     <string name="cover.crop.title">חיתוך העטיפה</string>
     <string name="cover.search.download_failed">לא ניתן להוריד את העטיפה הזו. נסו עטיפה אחרת.</string>
@@ -260,7 +259,6 @@
     <string name="playback.action.fast_forward">הרץ קדימה</string>
     <string name="playback.action.pause">השהה</string>
     <string name="playback.action.play">הפעל</string>
-    <string name="playback.action.play_pause">הפעל \\ השהה</string>
     <string name="playback.action.rewind">הרץ אחורה</string>
     <string name="playback.battery_optimization.action">עדכן</string>
     <string name="playback.battery_optimization.rationale">עקב מגבלות חסכון החשמל שלך, ייתכנו הפרעות בהשמעה.</string>
@@ -400,4 +398,27 @@
     <string name="time.relative.this_evening">הערב</string>
     <string name="time.relative.this_morning">הבוקר</string>
     <string name="time.relative.yesterday">אתמול</string>
+    <string name="widget.chapter">פרק %1$d · %2$s</string>
+    <string name="widget.chapter_counter">פרק %1$d מתוך %2$d</string>
+    <string name="widget.empty.action">הוספת תיקייה</string>
+    <string name="widget.empty.message">בחרו את התיקייה עם הקולספרים שלכם</string>
+    <string name="widget.empty.title">עדיין אין ספרים</string>
+    <string name="widget.finished.start_over">התחלה מחדש</string>
+    <string name="widget.finished.title">הסוף!</string>
+    <string name="widget.no_book.action">פתיחת הספרייה</string>
+    <string name="widget.no_book.message">בחרו מה לשמוע</string>
+    <string name="widget.no_book.title">בחרו ספר</string>
+    <string name="widget.now_playing.description">הפעלה, השהיה ומעקב אחר ההתקדמות</string>
+    <string name="widget.now_playing.label">מתנגן עכשיו</string>
+    <string name="widget.shelf.description">חזרה לספרים שאתם מאזינים להם</string>
+    <string name="widget.shelf.empty">ספרים שתתחילו יופיעו כאן</string>
+    <string name="widget.shelf.label">מדף ספרים</string>
+    <string name="widget.shelf.play">הפעלת %1$s</string>
+    <string name="widget.shelf.title">המשך האזנה</string>
+    <string name="widget.sleep_timer.cancel">ביטול טיימר-השינה</string>
+    <string name="widget.sleep_timer.cancel_hint">הקישו לביטול</string>
+    <string name="widget.sleep_timer.description">הפעילו או בטלו את טיימר-השינה מהמיטה</string>
+    <string name="widget.sleep_timer.label">טיימר-שינה</string>
+    <string name="widget.sleep_timer.start">הפעלת טיימר-השינה</string>
+    <string name="widget.sleep_timer.stops_at">ייעצר ב-%1$s</string>
 </resources>

@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Qualcosa è andato storto 😢</string>
     <string name="common.error.generic.retry">Riprova</string>
-    <string name="cover.content_description.selectable">Mostra la copertina da scegliere</string>
     <string name="cover.crop.hint">Trascina per spostare; pizzica o trascina un angolo per ridimensionare.</string>
     <string name="cover.crop.title">Ritaglia la copertina</string>
     <string name="cover.search.download_failed">Impossibile scaricare questa copertina. Provane un\'altra.</string>
@@ -260,7 +259,6 @@
     <string name="playback.action.fast_forward">Avanti veloce</string>
     <string name="playback.action.pause">Pausa</string>
     <string name="playback.action.play">Riproduci</string>
-    <string name="playback.action.play_pause">Riproduci / Pausa</string>
     <string name="playback.action.rewind">Riavvolgi</string>
     <string name="playback.battery_optimization.action">Aggiornamento</string>
     <string name="playback.battery_optimization.rationale">A causa delle impostazioni di risparmio energetico, potrebbero verificarsi interruzioni nella riproduzione.</string>
@@ -400,4 +398,27 @@
     <string name="time.relative.this_evening">Stasera</string>
     <string name="time.relative.this_morning">Stamattina</string>
     <string name="time.relative.yesterday">Ieri</string>
+    <string name="widget.chapter">Cap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Cap. %1$d di %2$d</string>
+    <string name="widget.empty.action">Aggiungi cartella</string>
+    <string name="widget.empty.message">Scegli la cartella con i tuoi audiolibri</string>
+    <string name="widget.empty.title">Ancora nessun libro</string>
+    <string name="widget.finished.start_over">Ricomincia</string>
+    <string name="widget.finished.title">Fine!</string>
+    <string name="widget.no_book.action">Apri la libreria</string>
+    <string name="widget.no_book.message">Scegli cosa ascoltare</string>
+    <string name="widget.no_book.title">Scegli un libro</string>
+    <string name="widget.now_playing.description">Riproduci, metti in pausa e vedi a che punto sei</string>
+    <string name="widget.now_playing.label">In riproduzione</string>
+    <string name="widget.shelf.description">Riprendi i libri che stai ascoltando</string>
+    <string name="widget.shelf.empty">Qui compaiono i libri che inizi</string>
+    <string name="widget.shelf.label">Scaffale</string>
+    <string name="widget.shelf.play">Riproduci %1$s</string>
+    <string name="widget.shelf.title">Continua ad ascoltare</string>
+    <string name="widget.sleep_timer.cancel">Annulla il timer sospensione</string>
+    <string name="widget.sleep_timer.cancel_hint">Tocca per annullare</string>
+    <string name="widget.sleep_timer.description">Avvia o annulla il timer sospensione dal letto</string>
+    <string name="widget.sleep_timer.label">Timer sospensione</string>
+    <string name="widget.sleep_timer.start">Avvia il timer sospensione</string>
+    <string name="widget.sleep_timer.stops_at">Si ferma alle %1$s</string>
 </resources>

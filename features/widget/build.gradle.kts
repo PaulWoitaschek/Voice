@@ -1,5 +1,6 @@
 plugins {
   id("voice.library")
+  id("voice.compose")
   alias(libs.plugins.metro)
 }
 
@@ -16,14 +17,14 @@ dependencies {
   implementation(projects.core.initializer)
   implementation(projects.core.data.api)
   implementation(projects.core.playback)
+  implementation(projects.core.sleeptimer.api)
+  implementation(projects.core.logging.api)
 
-  implementation(libs.appCompat)
+  implementation(libs.glance.appwidget)
+  implementation(libs.glance.material3)
+  implementation(libs.materialKolor)
   implementation(libs.coil)
   implementation(libs.androidxCore)
 
-  testImplementation(libs.junit)
-  testImplementation(libs.androidX.test.core)
-  testImplementation(libs.androidX.test.junit)
-  testImplementation(libs.androidX.test.runner)
-  testImplementation(libs.robolectric)
+  testImplementation(libs.bundles.testing.jvm)
 }

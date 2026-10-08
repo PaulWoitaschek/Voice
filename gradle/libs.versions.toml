@@ -8,6 +8,7 @@ coroutines = "1.11.0"
 room = "2.8.5"
 kotlin = "2.4.20"
 media3 = "1.10.1"
+glance = "1.2.0"
 jvm-bytecode = "17"
 jvm-toolchain = "25"
 agp = "9.4.1"
@@ -75,6 +76,9 @@ media3-session = { module = "androidx.media3:media3-session", version.ref = "med
 media3-inspector = { module = "androidx.media3:media3-inspector", version.ref = "media3" }
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }
+
+glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
+glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glance" }
 
 lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 lifecycle-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }

@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Niečo sa pokazilo 😢</string>
     <string name="common.error.generic.retry">Skúsiť znovu</string>
-    <string name="cover.content_description.selectable">Zobrazí výber obálky</string>
     <string name="cover.crop.hint">Potiahnutím posuniete, stiahnutím prstov alebo potiahnutím za roh zmeníte veľkosť.</string>
     <string name="cover.crop.title">Orezať obálku</string>
     <string name="cover.search.download_failed">Túto obálku sa nepodarilo stiahnuť. Skúste inú.</string>
@@ -272,7 +271,6 @@
     <string name="playback.action.fast_forward">Dopredu</string>
     <string name="playback.action.pause">Pozastaviť</string>
     <string name="playback.action.play">Prehrať</string>
-    <string name="playback.action.play_pause">Prehrať / Pozastaviť</string>
     <string name="playback.action.rewind">Dozadu</string>
     <string name="playback.battery_optimization.action">Aktualizovať</string>
     <string name="playback.battery_optimization.rationale">Z dôvodu obmedzenia využívania pri napájaní z batérie môže dochádzať k občasnému prerušovaniu prehrávania.</string>
@@ -413,4 +411,27 @@
     <string name="time.relative.this_evening">Dnes večer</string>
     <string name="time.relative.this_morning">Dnes ráno</string>
     <string name="time.relative.yesterday">Včera</string>
+    <string name="widget.chapter">Kap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Kap. %1$d z %2$d</string>
+    <string name="widget.empty.action">Pridať priečinok</string>
+    <string name="widget.empty.message">Vyberte priečinok so zvukovými knihami</string>
+    <string name="widget.empty.title">Zatiaľ žiadne knihy</string>
+    <string name="widget.finished.start_over">Začať odznova</string>
+    <string name="widget.finished.title">Koniec!</string>
+    <string name="widget.no_book.action">Do knižnice</string>
+    <string name="widget.no_book.message">Vyberte, čo chcete počúvať</string>
+    <string name="widget.no_book.title">Vyberte knihu</string>
+    <string name="widget.now_playing.description">Prehrávajte, pozastavujte a sledujte svoj postup</string>
+    <string name="widget.now_playing.label">Práve hrá</string>
+    <string name="widget.shelf.description">Vráťte sa ku knihám, ktoré počúvate</string>
+    <string name="widget.shelf.empty">Knihy, ktoré začnete počúvať, sa zobrazia tu</string>
+    <string name="widget.shelf.label">Polica na knihy</string>
+    <string name="widget.shelf.play">Prehrať %1$s</string>
+    <string name="widget.shelf.title">Pokračovať v počúvaní</string>
+    <string name="widget.sleep_timer.cancel">Zrušiť časovač spánku</string>
+    <string name="widget.sleep_timer.cancel_hint">Klepnutím zrušíte</string>
+    <string name="widget.sleep_timer.description">Spustite alebo zrušte časovač spánku priamo z postele</string>
+    <string name="widget.sleep_timer.label">Časovač spánku</string>
+    <string name="widget.sleep_timer.start">Spustiť časovač spánku</string>
+    <string name="widget.sleep_timer.stops_at">Vypne sa o %1$s</string>
 </resources>

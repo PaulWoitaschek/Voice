@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Coś poszło nie tak 😢</string>
     <string name="common.error.generic.retry">Ponów</string>
-    <string name="cover.content_description.selectable">Pokazuje okładki do wyboru</string>
     <string name="cover.crop.hint">Przeciągnij, aby przesunąć; zsuń palce lub przeciągnij róg, aby zmienić rozmiar.</string>
     <string name="cover.crop.title">Przytnij okładkę</string>
     <string name="cover.search.download_failed">Nie udało się pobrać tej okładki. Spróbuj innej.</string>
@@ -272,7 +271,6 @@
     <string name="playback.action.fast_forward">Do przodu</string>
     <string name="playback.action.pause">Zatrzymaj</string>
     <string name="playback.action.play">Odtwarzaj</string>
-    <string name="playback.action.play_pause">Odtwarzaj / Pauza</string>
     <string name="playback.action.rewind">Przewiń</string>
     <string name="playback.battery_optimization.action">Zaktualizuj</string>
     <string name="playback.battery_optimization.rationale">Z powodu ustawień ograniczenia zużycia baterii może dojść do przerw w odtwarzaniu.</string>
@@ -413,4 +411,27 @@
     <string name="time.relative.this_evening">Dziś wieczorem</string>
     <string name="time.relative.this_morning">Dziś rano</string>
     <string name="time.relative.yesterday">Wczoraj</string>
+    <string name="widget.chapter">Rozdz. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Rozdz. %1$d z %2$d</string>
+    <string name="widget.empty.action">Dodaj folder</string>
+    <string name="widget.empty.message">Wybierz folder ze swoimi audiobookami</string>
+    <string name="widget.empty.title">Nie ma jeszcze książek</string>
+    <string name="widget.finished.start_over">Od początku</string>
+    <string name="widget.finished.title">Koniec!</string>
+    <string name="widget.no_book.action">Do biblioteki</string>
+    <string name="widget.no_book.message">Wybierz, czego chcesz posłuchać</string>
+    <string name="widget.no_book.title">Wybierz książkę</string>
+    <string name="widget.now_playing.description">Odtwarzaj, wstrzymuj i sprawdzaj, ile już za tobą</string>
+    <string name="widget.now_playing.label">Teraz odtwarzane</string>
+    <string name="widget.shelf.description">Wróć do książek, których słuchasz</string>
+    <string name="widget.shelf.empty">Tu pojawią się rozpoczęte książki</string>
+    <string name="widget.shelf.label">Półka</string>
+    <string name="widget.shelf.play">Odtwórz %1$s</string>
+    <string name="widget.shelf.title">Słuchaj dalej</string>
+    <string name="widget.sleep_timer.cancel">Anuluj wyłącznik czasowy</string>
+    <string name="widget.sleep_timer.cancel_hint">Dotknij, aby anulować</string>
+    <string name="widget.sleep_timer.description">Włączaj i anuluj wyłącznik czasowy prosto z łóżka</string>
+    <string name="widget.sleep_timer.label">Wyłącznik czasowy</string>
+    <string name="widget.sleep_timer.start">Włącz wyłącznik czasowy</string>
+    <string name="widget.sleep_timer.stops_at">Zatrzyma się o %1$s</string>
 </resources>

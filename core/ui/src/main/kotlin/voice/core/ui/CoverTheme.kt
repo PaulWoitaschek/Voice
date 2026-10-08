@@ -2,19 +2,21 @@
 
 package voice.core.ui
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.luminance
 import com.materialkolor.PaletteStyle
+import com.materialkolor.dynamicColorScheme
 import com.materialkolor.dynamiccolor.ColorSpec
 import com.materialkolor.ktx.animateColorScheme
-import com.materialkolor.rememberDynamicColorScheme
 
 /**
  * Seeds are cached (see [CoverSeedColors]), so a cover that was analyzed before themes the screen
@@ -29,12 +31,8 @@ fun CoverTheme(
   val seed = rememberCoverSeedColor(cover)
   val baseScheme = MaterialTheme.colorScheme
   val targetScheme = if (seed != null) {
-    rememberDynamicColorScheme(
-      seedColor = seed,
-      isDark = baseScheme.surface.luminance() < 0.5F,
-      style = PaletteStyle.Vibrant,
-      specVersion = ColorSpec.SpecVersion.SPEC_2025,
-    )
+    val dark = baseScheme.surface.luminance() < 0.5F
+    remember(seed, dark) { coverColorScheme(seed, dark) }
   } else {
     baseScheme
   }
@@ -46,6 +44,17 @@ fun CoverTheme(
     content = content,
   )
 }
+
+/** The colors a cover with the theme [seed] paints, light or [dark]. */
+fun coverColorScheme(
+  seed: Color,
+  dark: Boolean,
+): ColorScheme = dynamicColorScheme(
+  seedColor = seed,
+  isDark = dark,
+  style = PaletteStyle.Vibrant,
+  specVersion = ColorSpec.SpecVersion.SPEC_2025,
+)
 
 /** The theme seed for [cover], or null while unknown or if the cover has no usable color. */
 @Composable

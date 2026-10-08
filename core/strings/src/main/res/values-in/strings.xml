@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Terjadi kesalahan 😢</string>
     <string name="common.error.generic.retry">Coba Lagi</string>
-    <string name="cover.content_description.selectable">Tampilkan sampul untuk dipilih</string>
     <string name="cover.crop.hint">Seret untuk memindahkan; cubit atau tarik sudut untuk mengubah ukuran.</string>
     <string name="cover.crop.title">Pangkas sampul</string>
     <string name="cover.search.download_failed">Tidak dapat mengunduh sampul ini. Coba sampul lain.</string>
@@ -236,7 +235,6 @@
     <string name="playback.action.fast_forward">Percepat</string>
     <string name="playback.action.pause">Berhenti</string>
     <string name="playback.action.play">Mulai</string>
-    <string name="playback.action.play_pause">Mulai / Berhenti</string>
     <string name="playback.action.rewind">Memundurkan</string>
     <string name="playback.battery_optimization.action">Perbarui</string>
     <string name="playback.battery_optimization.rationale">Karena pembatasan Daya Anda, gangguan pemutaran mungkin terjadi.</string>
@@ -374,4 +372,27 @@
     <string name="time.relative.this_evening">Malam ini</string>
     <string name="time.relative.this_morning">Pagi ini</string>
     <string name="time.relative.yesterday">Kemarin</string>
+    <string name="widget.chapter">Bab %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Bab %1$d dari %2$d</string>
+    <string name="widget.empty.action">Tambah folder</string>
+    <string name="widget.empty.message">Pilih folder berisi buku audio Anda</string>
+    <string name="widget.empty.title">Belum ada buku</string>
+    <string name="widget.finished.start_over">Putar ulang</string>
+    <string name="widget.finished.title">Tamat!</string>
+    <string name="widget.no_book.action">Buka pustaka</string>
+    <string name="widget.no_book.message">Pilih yang ingin didengarkan</string>
+    <string name="widget.no_book.title">Pilih buku</string>
+    <string name="widget.now_playing.description">Putar, jeda, dan lihat sejauh mana Anda mendengarkan</string>
+    <string name="widget.now_playing.label">Sedang diputar</string>
+    <string name="widget.shelf.description">Kembali ke buku yang sedang Anda dengarkan</string>
+    <string name="widget.shelf.empty">Buku yang Anda mulai akan muncul di sini</string>
+    <string name="widget.shelf.label">Rak buku</string>
+    <string name="widget.shelf.play">Putar %1$s</string>
+    <string name="widget.shelf.title">Lanjutkan mendengarkan</string>
+    <string name="widget.sleep_timer.cancel">Batalkan pengatur waktu tidur</string>
+    <string name="widget.sleep_timer.cancel_hint">Ketuk untuk membatalkan</string>
+    <string name="widget.sleep_timer.description">Mulai atau batalkan pengatur waktu tidur dari tempat tidur</string>
+    <string name="widget.sleep_timer.label">Pengatur waktu tidur</string>
+    <string name="widget.sleep_timer.start">Mulai pengatur waktu tidur</string>
+    <string name="widget.sleep_timer.stops_at">Berhenti pukul %1$s</string>
 </resources>

@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">Tamam</string>
     <string name="common.error.generic.message">Bir şeyler ters gitti😢</string>
     <string name="common.error.generic.retry">Tekrar dene</string>
-    <string name="cover.content_description.selectable">Seçmek için kapak gösterir</string>
     <string name="cover.crop.hint">Taşımak için sürükleyin; boyutlandırmak için sıkıştırın veya bir köşeyi sürükleyin.</string>
     <string name="cover.crop.title">Kapağı kırp</string>
     <string name="cover.search.download_failed">Bu kapak indirilemedi. Başka bir tane deneyin.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Hızlı ilerlet</string>
     <string name="playback.action.pause">Beklet</string>
     <string name="playback.action.play">Yürüt</string>
-    <string name="playback.action.play_pause">Oynat / Duraklat</string>
     <string name="playback.action.rewind">Geri sar</string>
     <string name="playback.battery_optimization.action">Güncelle</string>
     <string name="playback.battery_optimization.rationale">Güç kısıtlamalarınız nedeniyle oynatma kesintileri olabilir.</string>
@@ -387,4 +385,27 @@
     <string name="time.relative.this_evening">Bu akşam</string>
     <string name="time.relative.this_morning">Bu sabah</string>
     <string name="time.relative.yesterday">Dün</string>
+    <string name="widget.chapter">Böl. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Böl. %1$d / %2$d</string>
+    <string name="widget.empty.action">Klasör ekle</string>
+    <string name="widget.empty.message">Sesli kitaplarınızın bulunduğu klasörü seçin</string>
+    <string name="widget.empty.title">Henüz kitap yok</string>
+    <string name="widget.finished.start_over">Baştan başla</string>
+    <string name="widget.finished.title">Bitti!</string>
+    <string name="widget.no_book.action">Kitaplığı aç</string>
+    <string name="widget.no_book.message">Ne dinleyeceğinizi seçin</string>
+    <string name="widget.no_book.title">Bir kitap seçin</string>
+    <string name="widget.now_playing.description">Oynatın, duraklatın ve ne kadar ilerlediğinizi görün</string>
+    <string name="widget.now_playing.label">Şimdi çalıyor</string>
+    <string name="widget.shelf.description">Dinlediğiniz kitaplara hemen geri dönün</string>
+    <string name="widget.shelf.empty">Başladığınız kitaplar burada görünür</string>
+    <string name="widget.shelf.label">Kitap rafı</string>
+    <string name="widget.shelf.play">Oynat: %1$s</string>
+    <string name="widget.shelf.title">Dinlemeye devam et</string>
+    <string name="widget.sleep_timer.cancel">Uyku zamanlayıcısını iptal et</string>
+    <string name="widget.sleep_timer.cancel_hint">İptal etmek için dokunun</string>
+    <string name="widget.sleep_timer.description">Uyku zamanlayıcısını yataktan kalkmadan başlatın veya iptal edin</string>
+    <string name="widget.sleep_timer.label">Uyku zamanlayıcısı</string>
+    <string name="widget.sleep_timer.start">Uyku zamanlayıcısını başlat</string>
+    <string name="widget.sleep_timer.stops_at">Durma saati: %1$s</string>
 </resources>

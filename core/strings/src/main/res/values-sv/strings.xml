@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Något gick fel 😢</string>
     <string name="common.error.generic.retry">Försök igen</string>
-    <string name="cover.content_description.selectable">Visar valbara omslag</string>
     <string name="cover.crop.hint">Dra för att flytta; nyp eller dra i ett hörn för att ändra storlek.</string>
     <string name="cover.crop.title">Beskär omslaget</string>
     <string name="cover.search.download_failed">Det gick inte att ladda ned omslaget. Prova ett annat.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Snabbspola framåt</string>
     <string name="playback.action.pause">Pausa</string>
     <string name="playback.action.play">Spela</string>
-    <string name="playback.action.play_pause">Spela/pausa</string>
     <string name="playback.action.rewind">Spola bakåt</string>
     <string name="playback.battery_optimization.action">Öppna inställningar</string>
     <string name="playback.battery_optimization.rationale">På grund av enhetens strömsparbegränsningar kan uppspelningen avbrytas.</string>
@@ -387,4 +385,27 @@
     <string name="time.relative.this_evening">I kväll</string>
     <string name="time.relative.this_morning">I morse</string>
     <string name="time.relative.yesterday">I går</string>
+    <string name="widget.chapter">Kap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Kap. %1$d av %2$d</string>
+    <string name="widget.empty.action">Lägg till mapp</string>
+    <string name="widget.empty.message">Välj mappen med dina ljudböcker</string>
+    <string name="widget.empty.title">Inga böcker än</string>
+    <string name="widget.finished.start_over">Börja om</string>
+    <string name="widget.finished.title">Slut!</string>
+    <string name="widget.no_book.action">Öppna biblioteket</string>
+    <string name="widget.no_book.message">Välj vad du vill lyssna på</string>
+    <string name="widget.no_book.title">Välj en bok</string>
+    <string name="widget.now_playing.description">Spela, pausa och se hur långt du har kommit</string>
+    <string name="widget.now_playing.label">Spelas nu</string>
+    <string name="widget.shelf.description">Hoppa tillbaka in i böckerna du lyssnar på</string>
+    <string name="widget.shelf.empty">Böcker du börjar på visas här</string>
+    <string name="widget.shelf.label">Bokhylla</string>
+    <string name="widget.shelf.play">Spela %1$s</string>
+    <string name="widget.shelf.title">Fortsätt lyssna</string>
+    <string name="widget.sleep_timer.cancel">Avbryt insomningstimern</string>
+    <string name="widget.sleep_timer.cancel_hint">Tryck för att avbryta</string>
+    <string name="widget.sleep_timer.description">Starta eller avbryt insomningstimern från sängen</string>
+    <string name="widget.sleep_timer.label">Insomningstimer</string>
+    <string name="widget.sleep_timer.start">Starta insomningstimern</string>
+    <string name="widget.sleep_timer.stops_at">Stoppar kl. %1$s</string>
 </resources>

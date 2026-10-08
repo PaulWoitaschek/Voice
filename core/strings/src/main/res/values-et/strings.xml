@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Midagi läks valesti 😢</string>
     <string name="common.error.generic.retry">Proovi uuesti</string>
-    <string name="cover.content_description.selectable">Näita kaanepilte, mille vahel valida</string>
     <string name="cover.crop.hint">Lohista liigutamiseks; suuruse muutmiseks näpista või tõmba nurgast.</string>
     <string name="cover.crop.title">Kärbi kaanepilti</string>
     <string name="cover.search.download_failed">Seda kaanepilti ei õnnestunud alla laadida. Proovi mõnda teist.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Keri edasi</string>
     <string name="playback.action.pause">Peata esitus</string>
     <string name="playback.action.play">Esita</string>
-    <string name="playback.action.play_pause">Esita / Peata esitus</string>
     <string name="playback.action.rewind">Keri tagasi</string>
     <string name="playback.battery_optimization.action">Uuenda</string>
     <string name="playback.battery_optimization.rationale">Akukasutuse piirangute tõttu võib taasesituses tekkida katkestusi.</string>
@@ -387,4 +385,27 @@
     <string name="time.relative.this_evening">Täna õhtul</string>
     <string name="time.relative.this_morning">Täna hommikul</string>
     <string name="time.relative.yesterday">Eile</string>
+    <string name="widget.chapter">Ptk %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Ptk %1$d/%2$d</string>
+    <string name="widget.empty.action">Lisa kaust</string>
+    <string name="widget.empty.message">Vali kaust, kus on sinu heliraamatud</string>
+    <string name="widget.empty.title">Raamatuid veel pole</string>
+    <string name="widget.finished.start_over">Alusta algusest</string>
+    <string name="widget.finished.title">Lõpp!</string>
+    <string name="widget.no_book.action">Ava raamatukogu</string>
+    <string name="widget.no_book.message">Vali, mida kuulata</string>
+    <string name="widget.no_book.title">Vali raamat</string>
+    <string name="widget.now_playing.description">Esita, peata ja vaata, kui kaugel oled</string>
+    <string name="widget.now_playing.label">Praegu mängib</string>
+    <string name="widget.shelf.description">Jätka raamatuid, mida praegu kuulad</string>
+    <string name="widget.shelf.empty">Alustatud raamatud ilmuvad siia</string>
+    <string name="widget.shelf.label">Raamaturiiul</string>
+    <string name="widget.shelf.play">Esita %1$s</string>
+    <string name="widget.shelf.title">Jätka kuulamist</string>
+    <string name="widget.sleep_timer.cancel">Tühista unetaimer</string>
+    <string name="widget.sleep_timer.cancel_hint">Tühistamiseks puuduta</string>
+    <string name="widget.sleep_timer.description">Käivita või tühista unetaimer otse voodist</string>
+    <string name="widget.sleep_timer.label">Unetaimer</string>
+    <string name="widget.sleep_timer.start">Käivita unetaimer</string>
+    <string name="widget.sleep_timer.stops_at">Peatub kell %1$s</string>
 </resources>

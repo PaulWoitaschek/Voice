@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Er is iets fout gegaan 😢</string>
     <string name="common.error.generic.retry">Opnieuw proberen</string>
-    <string name="cover.content_description.selectable">Omslag kiezen</string>
     <string name="cover.crop.hint">Sleep om te verplaatsen; knijp of sleep een hoek om het formaat te wijzigen.</string>
     <string name="cover.crop.title">Omslag bijsnijden</string>
     <string name="cover.search.download_failed">Kan dit omslag niet downloaden. Probeer een ander.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Vooruitspoelen</string>
     <string name="playback.action.pause">Pauzeer</string>
     <string name="playback.action.play">Speel af</string>
-    <string name="playback.action.play_pause">Afspelen/Pauzeren</string>
     <string name="playback.action.rewind">Terugspoelen</string>
     <string name="playback.battery_optimization.action">Update</string>
     <string name="playback.battery_optimization.rationale">Wegens energiebeperkingen kan het afspelen zo nu en dan onderbroken worden.</string>
@@ -387,4 +385,27 @@
     <string name="time.relative.this_evening">Vanavond</string>
     <string name="time.relative.this_morning">Vanochtend</string>
     <string name="time.relative.yesterday">Gisteren</string>
+    <string name="widget.chapter">Hfst. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Hfst. %1$d van %2$d</string>
+    <string name="widget.empty.action">Map toevoegen</string>
+    <string name="widget.empty.message">Kies de map met je luisterboeken</string>
+    <string name="widget.empty.title">Nog geen boeken</string>
+    <string name="widget.finished.start_over">Opnieuw</string>
+    <string name="widget.finished.title">Het einde!</string>
+    <string name="widget.no_book.action">Bibliotheek openen</string>
+    <string name="widget.no_book.message">Kies waar je naar wilt luisteren</string>
+    <string name="widget.no_book.title">Kies een boek</string>
+    <string name="widget.now_playing.description">Afspelen, pauzeren en zien hoe ver je bent</string>
+    <string name="widget.now_playing.label">Speelt nu</string>
+    <string name="widget.shelf.description">Duik terug in de boeken waar je naar luistert</string>
+    <string name="widget.shelf.empty">Boeken die je begint, verschijnen hier</string>
+    <string name="widget.shelf.label">Boekenplank</string>
+    <string name="widget.shelf.play">Speel %1$s af</string>
+    <string name="widget.shelf.title">Verder luisteren</string>
+    <string name="widget.sleep_timer.cancel">Slaaptimer annuleren</string>
+    <string name="widget.sleep_timer.cancel_hint">Tik om te annuleren</string>
+    <string name="widget.sleep_timer.description">Start of annuleer de slaaptimer vanuit bed</string>
+    <string name="widget.sleep_timer.label">Slaaptimer</string>
+    <string name="widget.sleep_timer.start">Slaaptimer starten</string>
+    <string name="widget.sleep_timer.stops_at">Stopt om %1$s</string>
 </resources>

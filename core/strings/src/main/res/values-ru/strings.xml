@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">ОК</string>
     <string name="common.error.generic.message">Что-то пошло не так 😢</string>
     <string name="common.error.generic.retry">Повторить</string>
-    <string name="cover.content_description.selectable">Показать выбранную обложку</string>
     <string name="cover.crop.hint">Перетащите, чтобы переместить; сведите пальцы или потяните за угол, чтобы изменить размер.</string>
     <string name="cover.crop.title">Обрезать обложку</string>
     <string name="cover.search.download_failed">Не удалось скачать эту обложку. Попробуйте другую.</string>
@@ -272,7 +271,6 @@
     <string name="playback.action.fast_forward">Перемотать вперед</string>
     <string name="playback.action.pause">Пауза</string>
     <string name="playback.action.play">Воспроизведение</string>
-    <string name="playback.action.play_pause">Воспроизведение / Пауза</string>
     <string name="playback.action.rewind">Перемотать назад</string>
     <string name="playback.battery_optimization.action">Обновить</string>
     <string name="playback.battery_optimization.rationale">Чтение может прерываться из-за настроек управления расходом заряда батареи.</string>
@@ -413,4 +411,27 @@
     <string name="time.relative.this_evening">Сегодня вечером</string>
     <string name="time.relative.this_morning">Сегодня утром</string>
     <string name="time.relative.yesterday">Вчера</string>
+    <string name="widget.chapter">Гл. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Гл. %1$d из %2$d</string>
+    <string name="widget.empty.action">Добавить папку</string>
+    <string name="widget.empty.message">Выберите папку с аудиокнигами</string>
+    <string name="widget.empty.title">Пока нет книг</string>
+    <string name="widget.finished.start_over">Начать заново</string>
+    <string name="widget.finished.title">Конец!</string>
+    <string name="widget.no_book.action">В библиотеку</string>
+    <string name="widget.no_book.message">Выберите, что послушать</string>
+    <string name="widget.no_book.title">Выберите книгу</string>
+    <string name="widget.now_playing.description">Слушайте, ставьте на паузу и следите за прогрессом</string>
+    <string name="widget.now_playing.label">Сейчас играет</string>
+    <string name="widget.shelf.description">Возвращайтесь к книгам, которые вы слушаете</string>
+    <string name="widget.shelf.empty">Здесь появятся начатые книги</string>
+    <string name="widget.shelf.label">Книжная полка</string>
+    <string name="widget.shelf.play">Воспроизвести %1$s</string>
+    <string name="widget.shelf.title">Продолжить прослушивание</string>
+    <string name="widget.sleep_timer.cancel">Отменить таймер сна</string>
+    <string name="widget.sleep_timer.cancel_hint">Нажмите для отмены</string>
+    <string name="widget.sleep_timer.description">Запускайте и отменяйте таймер сна прямо из кровати</string>
+    <string name="widget.sleep_timer.label">Таймер сна</string>
+    <string name="widget.sleep_timer.start">Запустить таймер сна</string>
+    <string name="widget.sleep_timer.stops_at">Остановится в %1$s</string>
 </resources>

@@ -85,8 +85,6 @@
     <string name="common.error.generic.message">Something went wrong 😢</string>
     <!-- Retry action shown after a generic error. -->
     <string name="common.error.generic.retry">Retry</string>
-    <!-- Content description for a cover preview that can be selected. -->
-    <string name="cover.content_description.selectable">Shows cover to choose</string>
     <!-- Hint below the title of the dialog that crops a new cover. -->
     <string name="cover.crop.hint">Drag to move. Pinch or pull a corner to resize.</string>
     <!-- Title of the dialog that crops a new cover to a square. -->
@@ -369,8 +367,6 @@
     <string name="playback.action.pause">Pause</string>
     <!-- Content description for a playback button that starts audio. -->
     <string name="playback.action.play">Play</string>
-    <!-- Content description for a control that toggles playback between play and pause. -->
-    <string name="playback.action.play_pause">Play / Pause</string>
     <!-- Label for the playback action that skips backward. -->
     <string name="playback.action.rewind">Rewind</string>
     <!-- Action label for opening battery optimization settings. -->
@@ -641,4 +637,50 @@
     <string name="time.relative.this_evening">This evening</string>
     <string name="time.relative.this_morning">This morning</string>
     <string name="time.relative.yesterday">Yesterday</string>
+    <!-- Chapter line on the home screen widget, like "Ch. 42 · The Whiteness of the Whale". Keep "Ch." short. -->
+    <string name="widget.chapter">Ch. %1$d · %2$s</string>
+    <!-- Chapter position on the home screen widget, like "Ch. 42 of 135". Keep "Ch." short. -->
+    <string name="widget.chapter_counter">Ch. %1$d of %2$d</string>
+    <!-- Button on the home screen widget when the library has no books yet. Opens the app to pick a folder. -->
+    <string name="widget.empty.action">Add folder</string>
+    <!-- Shown on the home screen widget when the library has no books yet. -->
+    <string name="widget.empty.message">Pick the folder with your audiobooks</string>
+    <!-- Title on the home screen widget when the library has no books yet. -->
+    <string name="widget.empty.title">No books yet</string>
+    <!-- Button on the home screen widget once a book is finished. Plays it again from the beginning. -->
+    <string name="widget.finished.start_over">Start over</string>
+    <!-- Cheerful title on the home screen widget once the current book is finished. -->
+    <string name="widget.finished.title">The end!</string>
+    <!-- Button on a home screen widget that opens the library. -->
+    <string name="widget.no_book.action">Open library</string>
+    <!-- Shown on the home screen widget when there are books but none was picked yet. -->
+    <string name="widget.no_book.message">Choose what to listen to</string>
+    <!-- Title on the home screen widget when there are books but none was picked yet. -->
+    <string name="widget.no_book.title">Pick a book</string>
+    <!-- Description of the Now playing widget in the system widget picker. -->
+    <string name="widget.now_playing.description">Play, pause and see how far along you are</string>
+    <!-- Name of the Now playing widget in the system widget picker. -->
+    <string name="widget.now_playing.label">Now playing</string>
+    <!-- Description of the Shelf widget in the system widget picker. -->
+    <string name="widget.shelf.description">Jump back into the books you\'re listening to</string>
+    <!-- Shown on the Shelf widget when no book was started yet. -->
+    <string name="widget.shelf.empty">Books you start show up here</string>
+    <!-- Name of the Shelf widget in the system widget picker. The widget shows the covers of the books someone is listening to. -->
+    <string name="widget.shelf.label">Shelf</string>
+    <!-- Content description of a book cover on the Shelf widget. Tapping it plays the book. -->
+    <string name="widget.shelf.play">Play %1$s</string>
+    <!-- Title above the covers on the Shelf widget. -->
+    <string name="widget.shelf.title">Continue listening</string>
+    <!-- Content description of the Sleep timer widget while the timer runs. -->
+    <string name="widget.sleep_timer.cancel">Cancel the sleep timer</string>
+    <!-- Shown on the Sleep timer widget while the timer runs. -->
+    <string name="widget.sleep_timer.cancel_hint">Tap to cancel</string>
+    <!-- Description of the Sleep timer widget in the system widget picker. -->
+    <string name="widget.sleep_timer.description">Start or cancel the sleep timer from bed</string>
+    <!-- Name of the Sleep timer widget in the system widget picker and its title. -->
+    <string name="widget.sleep_timer.label">Sleep timer</string>
+    <!-- Content description of the Sleep timer widget while the timer is off. -->
+    <string name="widget.sleep_timer.start">Start the sleep timer</string>
+    <!-- Shown on the Now playing widget while the sleep timer runs, with the clock time playback stops, like "Stops at 23:10". -->
+    <string name="widget.sleep_timer.stops_at">Stops at %1$s</string>
 </resources>
