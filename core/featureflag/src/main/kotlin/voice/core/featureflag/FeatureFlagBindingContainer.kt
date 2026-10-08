@@ -18,8 +18,18 @@ object FeatureFlagBindingContainer {
   fun reviewEnabledFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
     return factory.boolean(
       key = "review_enabled",
-      description = "Shows the in-app review prompt when the review conditions are met.",
+      description = "Shows the rating prompt after a finished book or a listening milestone.",
       defaultValue = false,
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @ReviewPromptForceFeatureFlagQualifier
+  fun reviewPromptForceFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
+    return factory.boolean(
+      key = "review_prompt_force",
+      description = "Shows the rating prompt on the next visit to the library, ignoring its rules.",
     )
   }
 
@@ -79,12 +89,14 @@ object FeatureFlagBindingContainer {
   @ElementsIntoSet
   fun featureFlags(
     @ReviewEnabledFeatureFlagQualifier reviewEnabled: FeatureFlag<Boolean>,
+    @ReviewPromptForceFeatureFlagQualifier reviewPromptForce: FeatureFlag<Boolean>,
     @FolderPickerInSettingsFeatureFlagQualifier folderPickerInSettings: FeatureFlag<Boolean>,
     @ExperimentalPlaybackPersistenceQualifier experimentalPlaybackPersistence: FeatureFlag<Boolean>,
     @Media3AudioOffloadFeatureFlagQualifier media3AudioOffload: FeatureFlag<Boolean>,
     @KioskModeFeatureFlagQualifier kioskMode: FeatureFlag<Boolean>,
   ): Set<FeatureFlag<*>> = setOf(
     reviewEnabled,
+    reviewPromptForce,
     folderPickerInSettings,
     experimentalPlaybackPersistence,
     media3AudioOffload,
@@ -94,6 +106,9 @@ object FeatureFlagBindingContainer {
 
 @Qualifier
 annotation class ReviewEnabledFeatureFlagQualifier
+
+@Qualifier
+annotation class ReviewPromptForceFeatureFlagQualifier
 
 @Qualifier
 annotation class UserAgentFeatureFlagQualifier

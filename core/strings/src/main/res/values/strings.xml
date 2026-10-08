@@ -351,22 +351,45 @@
     <string name="playback.speed.title">Playback speed</string>
     <!-- Button that turns volume boost off. -->
     <string name="playback.volume_boost.off">Off</string>
-    <!-- Negative button for cancelling feedback. -->
-    <string name="review.feedback.action.cancel" tools:ignore="UnusedResources">Cancel</string>
-    <!-- Positive button for sending feedback. -->
-    <string name="review.feedback.action.send" tools:ignore="UnusedResources">Send Feedback</string>
-    <!-- Message for the dialog asking unhappy users for feedback. -->
-    <string name="review.feedback.message" tools:ignore="UnusedResources">Could you tell us what went wrong? We appreciate your feedback and it helps us to improve your experience.</string>
-    <!-- Title for the dialog asking unhappy users for feedback. -->
-    <string name="review.feedback.title" tools:ignore="UnusedResources">We\'re sorry to hear that!</string>
-    <!-- Negative button for dismissing the rating request. -->
-    <string name="review.request.action.dismiss" tools:ignore="UnusedResources">No, Thanks</string>
-    <!-- Positive button for opening the rating flow. -->
-    <string name="review.request.action.rate" tools:ignore="UnusedResources">Rate Now</string>
-    <!-- Message for the dialog asking happy users to rate the app. -->
-    <string name="review.request.message" tools:ignore="UnusedResources">Your feedback matters to us! If you have a moment, rate us and share your experience. It helps us to make improvements and offer a better listening experience.</string>
-    <!-- Title for the dialog asking happy users to rate the app. -->
-    <string name="review.request.title" tools:ignore="UnusedResources">Enjoying Voice?</string>
+    <!-- Button in the rating prompt that opens the ways to share feedback. -->
+    <string name="review.prompt.action.feedback" tools:ignore="UnusedResources">Share feedback</string>
+    <!-- Button that closes the rating prompt without rating. -->
+    <string name="review.prompt.action.later" tools:ignore="UnusedResources">Not now</string>
+    <!-- Button in the rating prompt that opens Voice on Google Play. -->
+    <string name="review.prompt.action.rate" tools:ignore="UnusedResources">Rate on Google Play</string>
+    <!-- Subject of the feedback email started from the rating prompt. -->
+    <string name="review.prompt.email.subject" tools:ignore="UnusedResources">Feedback on Voice</string>
+    <!-- Description of the rating prompt option for reporting a bug. -->
+    <string name="review.prompt.feedback.bug.subtitle" tools:ignore="UnusedResources">Opens a bug report on GitHub</string>
+    <!-- Rating prompt option for reporting a bug. -->
+    <string name="review.prompt.feedback.bug.title" tools:ignore="UnusedResources">Report a bug</string>
+    <!-- Rating prompt option for writing an email. The email address is shown below it. -->
+    <string name="review.prompt.feedback.email.title" tools:ignore="UnusedResources">Write an email</string>
+    <!-- Description of the rating prompt option for suggesting an idea. -->
+    <string name="review.prompt.feedback.idea.subtitle" tools:ignore="UnusedResources">Starts a discussion on GitHub</string>
+    <!-- Rating prompt option for suggesting an idea. -->
+    <string name="review.prompt.feedback.idea.title" tools:ignore="UnusedResources">Suggest an idea</string>
+    <!-- Title of the ways to share feedback in the rating prompt. -->
+    <string name="review.prompt.feedback.title" tools:ignore="UnusedResources">What\'s on your mind?</string>
+    <!-- Title of the rating prompt after a book was finished. The name of the book is shown above it. -->
+    <string name="review.prompt.finished.title" tools:ignore="UnusedResources">Book finished!</string>
+    <!-- Message of the rating prompt. Everyone sees it, so it must not take for granted that the listener likes Voice. -->
+    <string name="review.prompt.message" tools:ignore="UnusedResources">Thanks for listening with Voice! If you like it, a rating on Google Play helps other listeners find it.</string>
+    <!-- Title of the rating prompt that celebrates the hours of audiobooks listened to. -->
+    <plurals name="review.prompt.milestone.title" tools:ignore="UnusedResources">
+        <item quantity="one">%d hour of stories!</item>
+        <item quantity="other">%d hours of stories!</item>
+    </plurals>
+    <!-- Label below the number of different authors listened to, in the rating prompt. -->
+    <string name="review.prompt.stat.authors" tools:ignore="UnusedResources">Authors</string>
+    <!-- Label below the number of finished books, in the rating prompt. -->
+    <string name="review.prompt.stat.finished" tools:ignore="UnusedResources">Books finished</string>
+    <!-- Label below the number of hours listened, in the rating prompt. -->
+    <string name="review.prompt.stat.hours" tools:ignore="UnusedResources">Hours listened</string>
+    <!-- Message after choosing to rate Voice, right before Google Play opens. -->
+    <string name="review.prompt.thanks.message" tools:ignore="UnusedResources">Taking you to Google Play…</string>
+    <!-- Title after choosing to rate Voice. -->
+    <string name="review.prompt.thanks.title" tools:ignore="UnusedResources">Thank you!</string>
     <!-- Settings about row showing the app version. -->
     <string name="settings.about.app_version.title">App version</string>
     <!-- Title and content description for opening settings. -->

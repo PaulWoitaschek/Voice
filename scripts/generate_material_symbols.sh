@@ -92,6 +92,7 @@ generate_icon library_books LibraryBooks
 generate_icon light_mode LightMode
 generate_icon lightbulb Lightbulb
 generate_icon lock_open LockOpen
+generate_icon mail Mail
 generate_icon more_vert MoreVert
 generate_icon not_started NotStarted
 generate_icon notifications Notifications
@@ -109,6 +110,7 @@ generate_icon skip_previous SkipPrevious
 generate_icon smartphone Smartphone
 generate_icon sort Sort
 generate_icon speed Speed
+generate_icon star Star
 generate_icon swap_horiz SwapHoriz
 generate_icon timer Timer
 generate_icon title Title

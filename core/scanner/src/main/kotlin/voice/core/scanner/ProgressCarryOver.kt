@@ -10,6 +10,7 @@ import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ListeningHistoryRepo
+import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.store.CurrentBookStore
 
 /**
@@ -21,6 +22,7 @@ import voice.core.data.store.CurrentBookStore
 internal class ProgressCarryOver(
   private val bookmarkRepo: BookmarkRepo,
   private val listeningHistoryRepo: ListeningHistoryRepo,
+  private val listeningStatsRepo: ListeningStatsRepo,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
 ) {
@@ -38,6 +40,8 @@ internal class ProgressCarryOver(
 
     val playedHere = previous.filter { it.currentChapter.documentKey() in chapterByKey }
     moveCurrentBook(playedHere, content.id)
+    // sessions don't know their chapters, so they go along with where the listener was
+    listeningStatsRepo.moveToBook(from = playedHere.map { it.id }, to = content.id)
 
     val source = playedHere
       .maxByOrNull { it.lastPlayedAt }

@@ -196,7 +196,7 @@ class MainActivity : AppCompatActivity() {
           }
         }
 
-        ReviewFeature()
+        ReviewFeature(canShow = backStack.lastOrNull() is Destination.BookOverview)
       }
     }
 
