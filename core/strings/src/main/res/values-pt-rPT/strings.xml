@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Algo deu errado 😢</string>
     <string name="common.error.generic.retry">Tentar novamente</string>
-    <string name="cover.content_description.selectable">Mostra capas para escolher</string>
     <string name="cover.crop.hint">Arraste para mover; aperte ou arraste um canto para redimensionar.</string>
     <string name="cover.crop.title">Recortar a capa</string>
     <string name="cover.search.download_failed">Não foi possível transferir esta capa. Experimente outra.</string>
@@ -260,7 +259,6 @@
     <string name="playback.action.fast_forward">Avanço rápido</string>
     <string name="playback.action.pause">Parar</string>
     <string name="playback.action.play">Play</string>
-    <string name="playback.action.play_pause">Tocar / Pausar</string>
     <string name="playback.action.rewind">Retroceder</string>
     <string name="playback.battery_optimization.action">Atualizar</string>
     <string name="playback.battery_optimization.rationale">Devido à restrições de energia, podem haver interrupções durante a reprodução do livro.</string>

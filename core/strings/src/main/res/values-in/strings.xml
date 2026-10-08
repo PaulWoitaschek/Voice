@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Terjadi kesalahan 😢</string>
     <string name="common.error.generic.retry">Coba Lagi</string>
-    <string name="cover.content_description.selectable">Tampilkan sampul untuk dipilih</string>
     <string name="cover.crop.hint">Seret untuk memindahkan; cubit atau tarik sudut untuk mengubah ukuran.</string>
     <string name="cover.crop.title">Pangkas sampul</string>
     <string name="cover.search.download_failed">Tidak dapat mengunduh sampul ini. Coba sampul lain.</string>
@@ -236,7 +235,6 @@
     <string name="playback.action.fast_forward">Percepat</string>
     <string name="playback.action.pause">Berhenti</string>
     <string name="playback.action.play">Mulai</string>
-    <string name="playback.action.play_pause">Mulai / Berhenti</string>
     <string name="playback.action.rewind">Memundurkan</string>
     <string name="playback.battery_optimization.action">Perbarui</string>
     <string name="playback.battery_optimization.rationale">Karena pembatasan Daya Anda, gangguan pemutaran mungkin terjadi.</string>

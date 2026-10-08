@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Midagi läks valesti 😢</string>
     <string name="common.error.generic.retry">Proovi uuesti</string>
-    <string name="cover.content_description.selectable">Näita kaanepilte, mille vahel valida</string>
     <string name="cover.crop.hint">Lohista liigutamiseks; suuruse muutmiseks näpista või tõmba nurgast.</string>
     <string name="cover.crop.title">Kärbi kaanepilti</string>
     <string name="cover.search.download_failed">Seda kaanepilti ei õnnestunud alla laadida. Proovi mõnda teist.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Keri edasi</string>
     <string name="playback.action.pause">Peata esitus</string>
     <string name="playback.action.play">Esita</string>
-    <string name="playback.action.play_pause">Esita / Peata esitus</string>
     <string name="playback.action.rewind">Keri tagasi</string>
     <string name="playback.battery_optimization.action">Uuenda</string>
     <string name="playback.battery_optimization.rationale">Akukasutuse piirangute tõttu võib taasesituses tekkida katkestusi.</string>

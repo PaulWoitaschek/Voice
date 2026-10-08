@@ -42,13 +42,16 @@ class PlacedWidgets(
 
   private val placed = MutableStateFlow<Set<WidgetKind>?>(null)
 
+  // one at a time and in order, so a refresh that read the widgets earlier can't overwrite a newer one
+  private val refreshDispatcher = Dispatchers.IO.limitedParallelism(1)
+
   internal fun placed(kind: WidgetKind): Flow<Boolean> = placed
     .filterNotNull()
     .map { kind in it }
     .distinctUntilChanged()
 
   fun refresh() {
-    scope.launch(Dispatchers.IO) {
+    scope.launch(refreshDispatcher) {
       placed.value = try {
         val manager = AppWidgetManager.getInstance(context)
         WidgetKind.entries

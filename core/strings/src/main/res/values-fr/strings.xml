@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Quelque chose s\'est mal passé 😢</string>
     <string name="common.error.generic.retry">Réessayer</string>
-    <string name="cover.content_description.selectable">Montre la couverture à choisir</string>
     <string name="cover.crop.hint">Faites glisser pour déplacer ; pincez ou tirez un coin pour redimensionner.</string>
     <string name="cover.crop.title">Recadrer la couverture</string>
     <string name="cover.search.download_failed">Impossible de télécharger cette couverture. Essayez-en une autre.</string>
@@ -260,7 +259,6 @@
     <string name="playback.action.fast_forward">Avance rapide</string>
     <string name="playback.action.pause">Pause</string>
     <string name="playback.action.play">Lecture</string>
-    <string name="playback.action.play_pause">Lecture / Pause</string>
     <string name="playback.action.rewind">Revenir en arrière</string>
     <string name="playback.battery_optimization.action">Mise à jour</string>
     <string name="playback.battery_optimization.rationale">À cause des restrictions d\'alimentation, des interruptions de lecture pourraient survenir.</string>

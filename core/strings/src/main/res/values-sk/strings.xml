@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Niečo sa pokazilo 😢</string>
     <string name="common.error.generic.retry">Skúsiť znovu</string>
-    <string name="cover.content_description.selectable">Zobrazí výber obálky</string>
     <string name="cover.crop.hint">Potiahnutím posuniete, stiahnutím prstov alebo potiahnutím za roh zmeníte veľkosť.</string>
     <string name="cover.crop.title">Orezať obálku</string>
     <string name="cover.search.download_failed">Túto obálku sa nepodarilo stiahnuť. Skúste inú.</string>
@@ -272,7 +271,6 @@
     <string name="playback.action.fast_forward">Dopredu</string>
     <string name="playback.action.pause">Pozastaviť</string>
     <string name="playback.action.play">Prehrať</string>
-    <string name="playback.action.play_pause">Prehrať / Pozastaviť</string>
     <string name="playback.action.rewind">Dozadu</string>
     <string name="playback.battery_optimization.action">Aktualizovať</string>
     <string name="playback.battery_optimization.rationale">Z dôvodu obmedzenia využívania pri napájaní z batérie môže dochádzať k občasnému prerušovaniu prehrávania.</string>

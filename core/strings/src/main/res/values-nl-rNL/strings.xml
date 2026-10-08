@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Er is iets fout gegaan 😢</string>
     <string name="common.error.generic.retry">Opnieuw proberen</string>
-    <string name="cover.content_description.selectable">Omslag kiezen</string>
     <string name="cover.crop.hint">Sleep om te verplaatsen; knijp of sleep een hoek om het formaat te wijzigen.</string>
     <string name="cover.crop.title">Omslag bijsnijden</string>
     <string name="cover.search.download_failed">Kan dit omslag niet downloaden. Probeer een ander.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Vooruitspoelen</string>
     <string name="playback.action.pause">Pauzeer</string>
     <string name="playback.action.play">Speel af</string>
-    <string name="playback.action.play_pause">Afspelen/Pauzeren</string>
     <string name="playback.action.rewind">Terugspoelen</string>
     <string name="playback.battery_optimization.action">Update</string>
     <string name="playback.battery_optimization.rationale">Wegens energiebeperkingen kan het afspelen zo nu en dan onderbroken worden.</string>

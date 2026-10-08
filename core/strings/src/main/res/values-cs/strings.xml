@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Něco se pokazilo 😢</string>
     <string name="common.error.generic.retry">Znovu</string>
-    <string name="cover.content_description.selectable">Zobrazí obaly pro vybrání</string>
     <string name="cover.crop.hint">Přetažením posunete, sevřením prstů nebo tažením za roh změníte velikost.</string>
     <string name="cover.crop.title">Oříznout obal</string>
     <string name="cover.search.download_failed">Tento obal se nepodařilo stáhnout. Zkuste jiný.</string>
@@ -272,7 +271,6 @@
     <string name="playback.action.fast_forward">Posun vpřed</string>
     <string name="playback.action.pause">Pozastavit</string>
     <string name="playback.action.play">Přehrát</string>
-    <string name="playback.action.play_pause">Přehrát / Pozastavit</string>
     <string name="playback.action.rewind">Přetočit</string>
     <string name="playback.battery_optimization.action">Aktualizovat</string>
     <string name="playback.battery_optimization.rationale">Kvůli nastavení omezení spotřeby může docházet k přerušování přehrávání.</string>

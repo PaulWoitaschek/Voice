@@ -3,6 +3,7 @@ package voice.features.widget
 import android.app.Application
 import android.content.Context
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.updateAll
 import dev.zacsweers.metro.AppScope
@@ -66,6 +67,7 @@ class TriggerWidgetOnChange(
   }
 
   /** The widget picker shows the widgets with the current book, from Android 15 on. */
+  @RequiresApi(35)
   private suspend fun updatePreviews() {
     val manager = GlanceAppWidgetManager(context)
     WidgetKind.entries.forEach { kind ->

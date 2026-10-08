@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 
-/** Tells [PlacedWidgets] when widgets are added or removed. */
 abstract class WidgetReceiver : GlanceAppWidgetReceiver() {
 
   override fun onUpdate(

@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Qualcosa è andato storto 😢</string>
     <string name="common.error.generic.retry">Riprova</string>
-    <string name="cover.content_description.selectable">Mostra la copertina da scegliere</string>
     <string name="cover.crop.hint">Trascina per spostare; pizzica o trascina un angolo per ridimensionare.</string>
     <string name="cover.crop.title">Ritaglia la copertina</string>
     <string name="cover.search.download_failed">Impossibile scaricare questa copertina. Provane un\'altra.</string>
@@ -260,7 +259,6 @@
     <string name="playback.action.fast_forward">Avanti veloce</string>
     <string name="playback.action.pause">Pausa</string>
     <string name="playback.action.play">Riproduci</string>
-    <string name="playback.action.play_pause">Riproduci / Pausa</string>
     <string name="playback.action.rewind">Riavvolgi</string>
     <string name="playback.battery_optimization.action">Aggiornamento</string>
     <string name="playback.battery_optimization.rationale">A causa delle impostazioni di risparmio energetico, potrebbero verificarsi interruzioni nella riproduzione.</string>

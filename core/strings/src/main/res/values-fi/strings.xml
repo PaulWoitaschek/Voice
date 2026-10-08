@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Jotakin meni pieleen 😢</string>
     <string name="common.error.generic.retry">Yritä uudelleen</string>
-    <string name="cover.content_description.selectable">Näyttää kannen jonka valita</string>
     <string name="cover.crop.hint">Siirrä vetämällä; muuta kokoa nipistämällä tai vetämällä kulmasta.</string>
     <string name="cover.crop.title">Rajaa kansi</string>
     <string name="cover.search.download_failed">Tätä kantta ei voitu ladata. Kokeile toista.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Pikakelaus</string>
     <string name="playback.action.pause">Tauko</string>
     <string name="playback.action.play">Toisto</string>
-    <string name="playback.action.play_pause">Toisto / Tauko</string>
     <string name="playback.action.rewind">Takaisinkelaus</string>
     <string name="playback.battery_optimization.action">Päivitä</string>
     <string name="playback.battery_optimization.rationale">Virrankäyttörajoitusten vuoksi äänentoisto saattaa keskeytyä.</string>

@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Valami balul sült el 😢</string>
     <string name="common.error.generic.retry">Újra</string>
-    <string name="cover.content_description.selectable">Megjeleníti a választható borítót</string>
     <string name="cover.crop.hint">Húzza a mozgatáshoz; csippentsen vagy húzzon egy sarkot az átméretezéshez.</string>
     <string name="cover.crop.title">Borító körbevágása</string>
     <string name="cover.search.download_failed">Nem sikerült letölteni ezt a borítót. Próbáljon egy másikat.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Előretekerés</string>
     <string name="playback.action.pause">Szünet</string>
     <string name="playback.action.play">Lejátszás</string>
-    <string name="playback.action.play_pause">Lejátszás / Szünet</string>
     <string name="playback.action.rewind">Visszatekerés</string>
     <string name="playback.battery_optimization.action">Frissítés</string>
     <string name="playback.battery_optimization.rationale">Lejátszási szakadozások történhetnek az ön energiabeállítasai miatt.</string>

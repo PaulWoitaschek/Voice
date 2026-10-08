@@ -88,12 +88,14 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   }
 
   private suspend fun playBook(id: BookId) {
-    if (currentBookStore.data.first() == id) {
-      player.playPause(ListeningEvent.Source.Widget)
-    } else {
-      player.pauseIfCurrentBookDifferentFrom(id)
-      currentBookStore.updateData { id }
-      player.play(ListeningEvent.Source.Widget)
+    when {
+      currentBookStore.data.first() == id -> player.playPause(ListeningEvent.Source.Widget)
+      bookRepository.get(id)?.content?.isActive == true -> {
+        player.pauseIfCurrentBookDifferentFrom(id)
+        currentBookStore.updateData { id }
+        player.play(ListeningEvent.Source.Widget)
+      }
+      else -> Logger.w("Can't play $id, it's not in the library")
     }
   }
 

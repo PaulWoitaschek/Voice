@@ -13,7 +13,6 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import voice.core.strings.R as StringsR
 
-/** Like "11 hr 38 min", or with [compact] just the larger unit, like "12 hr". */
 internal fun Context.formatDuration(
   duration: Duration,
   compact: Boolean = false,

@@ -20,8 +20,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.shareIn
 import voice.core.data.Book
+import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ThemeColorScheme
+import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.CurrentBookStore
@@ -42,6 +44,7 @@ import kotlin.time.Duration.Companion.minutes
 @Inject
 class WidgetData(
   private val bookRepository: BookRepository,
+  private val bookContentRepo: BookContentRepo,
   private val currentBookResolver: Lazy<CurrentBookResolver>,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
@@ -70,7 +73,7 @@ class WidgetData(
         flowOf(null)
       } else {
         combine(
-          bookRepository.flow(id).distinctUntilChangedBy { it?.withoutPlaybackNoise() },
+          bookRepository.flow(id).distinctUntilChangedBy { it?.content?.withoutPlaybackNoise() },
           playing,
           refreshWhilePlaying(),
         ) { book, playing, _ ->
@@ -102,7 +105,7 @@ class WidgetData(
     .shareIn(scope, sharing, replay = 1)
 
   internal val shelf: Flow<ShelfModel> = combine(
-    bookRepository.flow(),
+    library(),
     currentBookId,
     playing,
     themeColorSchemeStore.data,
@@ -117,12 +120,13 @@ class WidgetData(
 
   internal val sleepTimerModel: Flow<SleepTimerModel> = combine(
     sleepTimer.state,
+    playing,
     sleepTimerPreferenceStore.data.map { it.duration },
     currentBook,
     themeColorSchemeStore.data,
-  ) { state, defaultDuration, book, themeColorScheme ->
+  ) { state, playing, defaultDuration, book, themeColorScheme ->
     SleepTimerModel(
-      sleepTimer = sleepTimerWidgetModel(state, defaultDuration, book, Instant.now()),
+      sleepTimer = sleepTimerWidgetModel(state, playing, defaultDuration, book, Instant.now()),
       cover = book?.content?.coverUrl,
       themeColorScheme = themeColorScheme,
     )
@@ -172,6 +176,15 @@ class WidgetData(
     }
     .distinctUntilChanged()
 
+  // building every book of the library for each position save would be wasted on the shelf. Books
+  // that weren't saved keep their instance, so only the one that plays is compared field by field.
+  private fun library(): Flow<List<Book>> = bookContentRepo.flow()
+    .distinctUntilChanged { old, new ->
+      old.size == new.size &&
+        old.indices.all { old[it] === new[it] || old[it].withoutPlaybackNoise() == new[it].withoutPlaybackNoise() }
+    }
+    .map { bookRepository.all() }
+
   private fun refreshWhilePlaying(): Flow<Int> = playing.flatMapLatest { playing ->
     flow {
       var tick = 0
@@ -184,10 +197,8 @@ class WidgetData(
   }
 }
 
-// the position is saved several times a second while playing, but the widget only shows minutes
-private fun Book.withoutPlaybackNoise(): Book = update {
-  it.copy(
-    positionInChapter = it.positionInChapter / 60_000,
-    lastPlayedAt = Instant.EPOCH,
-  )
-}
+// the position is saved several times a second while playing, but the widgets only show minutes
+private fun BookContent.withoutPlaybackNoise(): BookContent = copy(
+  positionInChapter = positionInChapter / 60_000,
+  lastPlayedAt = Instant.EPOCH,
+)

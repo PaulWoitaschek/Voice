@@ -21,10 +21,6 @@ import voice.core.ui.coverColorScheme
 import voice.core.ui.themeColorScheme
 import androidx.glance.material3.ColorProviders as Material3ColorProviders
 
-/**
- * Colors the widget like the player: from the cover when it has a usable color, otherwise from the
- * app's color scheme. At [night], the widget is dark whatever the system theme.
- */
 @Composable
 internal fun WidgetColors(
   theme: WidgetTheme,
@@ -55,10 +51,7 @@ private fun widgetColors(
   }
 }
 
-/**
- * The widget's background, rounded like the launcher rounds widgets, or a [pill] for widgets one row
- * high. Before Android 12 the system doesn't round widgets, so the background does.
- */
+// before Android 12 the system doesn't round widgets, so the background does
 internal fun GlanceModifier.widgetSurface(
   color: ColorProvider,
   pill: Boolean = false,
@@ -70,7 +63,6 @@ internal fun GlanceModifier.widgetSurface(
   }
 }
 
-/** A background with fully rounded ends, for chips, buttons and one row widgets. */
 internal fun GlanceModifier.pillBackground(color: ColorProvider): GlanceModifier {
   return background(ImageProvider(R.drawable.widget_pill), colorFilter = ColorFilter.tint(color))
 }

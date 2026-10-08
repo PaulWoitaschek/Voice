@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Noe gikk galt 😢</string>
     <string name="common.error.generic.retry">Prøv igjen</string>
-    <string name="cover.content_description.selectable">Viser omslag å velge</string>
     <string name="cover.crop.hint">Dra for å flytte; knip eller dra i et hjørne for å endre størrelsen.</string>
     <string name="cover.crop.title">Beskjær omslaget</string>
     <string name="cover.search.download_failed">Kunne ikke laste ned dette omslaget. Prøv et annet.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Spol raskt framover</string>
     <string name="playback.action.pause">Pause</string>
     <string name="playback.action.play">Spill</string>
-    <string name="playback.action.play_pause">Spill/pause</string>
     <string name="playback.action.rewind">Spol tilbake</string>
     <string name="playback.battery_optimization.action">Gjenoppfrisk</string>
     <string name="playback.battery_optimization.rationale">På grunn av strømsparingsinnstillinger kan det forekomme avbrudd i avspillingen.</string>

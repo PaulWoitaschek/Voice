@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">சரி</string>
     <string name="common.error.generic.message">ஏதோ தவறு நடந்தது</string>
     <string name="common.error.generic.retry">மீண்டும் முயற்சிக்கவும்</string>
-    <string name="cover.content_description.selectable">தேர்வு செய்ய சூ கவர்</string>
     <string name="cover.crop.hint">நகர்த்த இழுக்கவும்; அளவை மாற்ற பிஞ்ச் செய்யவும் அல்லது ஒரு மூலையை இழுக்கவும்.</string>
     <string name="cover.crop.title">அட்டைப்படத்தை செதுக்கு</string>
     <string name="cover.search.download_failed">இந்த அட்டைப்படத்தைப் பதிவிறக்க முடியவில்லை. வேறொன்றை முயலவும்.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">வேகமாக முன்னோக்கி</string>
     <string name="playback.action.pause">இடைநிறுத்தம்</string>
     <string name="playback.action.play">விளையாடுங்கள்</string>
-    <string name="playback.action.play_pause">விளையாடு / இடைநிறுத்தம்</string>
     <string name="playback.action.rewind">முன்னாடி</string>
     <string name="playback.battery_optimization.action">புதுப்பிப்பு</string>
     <string name="playback.battery_optimization.rationale">உங்கள் ஆற்றல் கட்டுப்பாடுகள் காரணமாக, பின்னணி குறுக்கீடுகள் ஏற்படக்கூடும்.</string>

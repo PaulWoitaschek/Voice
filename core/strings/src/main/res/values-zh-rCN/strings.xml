@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">确定</string>
     <string name="common.error.generic.message">发生了错误😢</string>
     <string name="common.error.generic.retry">重试</string>
-    <string name="cover.content_description.selectable">显示可选封面</string>
     <string name="cover.crop.hint">拖动以移动，双指缩放或拖动边角以调整大小。</string>
     <string name="cover.crop.title">裁剪封面</string>
     <string name="cover.search.download_failed">无法下载此封面。请换一张试试。</string>
@@ -236,7 +235,6 @@
     <string name="playback.action.fast_forward">快进</string>
     <string name="playback.action.pause">暂停</string>
     <string name="playback.action.play">播放</string>
-    <string name="playback.action.play_pause">播放 / 暂停</string>
     <string name="playback.action.rewind">回退</string>
     <string name="playback.battery_optimization.action">更新</string>
     <string name="playback.battery_optimization.rationale">由于您的电源限制，可能会发生播放中断。</string>

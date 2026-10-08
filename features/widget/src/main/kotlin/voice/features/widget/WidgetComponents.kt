@@ -33,7 +33,6 @@ import androidx.glance.unit.ColorProvider
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 
-/** The play button of the player: a cookie while paused that turns into a rounded square while playing. */
 @Composable
 internal fun PlayButton(
   playing: Boolean,
@@ -126,7 +125,6 @@ internal fun ShapedCover(
   )
 }
 
-/** A play or pause badge for the corner of a cover, with a ring that sets it off from the cover. */
 @Composable
 internal fun PlayBadge(
   playing: Boolean,
@@ -168,7 +166,6 @@ internal fun WidgetIcon(
   )
 }
 
-/** The whole book's progress, wavy while playing, like the player's seek bar. */
 @Composable
 internal fun ProgressWave(
   progress: Float,
@@ -216,7 +213,6 @@ internal fun SpeedChip(
   }
 }
 
-/** A filled button with an optional icon, like "Start over". */
 @Composable
 internal fun PillButton(
   text: String,
@@ -275,7 +271,6 @@ internal fun SubtitleText(
   )
 }
 
-/** A line of text that leads with a small icon, like the moon before "Stops at 23:10". */
 @Composable
 internal fun IconSubtitle(
   @DrawableRes icon: Int,

@@ -38,6 +38,8 @@ import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
+import androidx.glance.semantics.contentDescription
+import androidx.glance.semantics.semantics
 import androidx.glance.unit.ColorProvider
 import kotlinx.coroutines.flow.first
 import voice.core.strings.R as StringsR
@@ -130,8 +132,15 @@ private fun CoverLayout(
 ) {
   val size = LocalSize.current
   val coverSize = min(size.width, size.height) - 8.dp
+  val description = LocalContext.current.getString(
+    if (book.playing) StringsR.string.playback_action_pause else StringsR.string.playback_action_play,
+  )
   Box(
-    modifier = GlanceModifier.fillMaxSize().appWidgetBackground().clickable(actions.playPause()),
+    modifier = GlanceModifier
+      .fillMaxSize()
+      .appWidgetBackground()
+      .clickable(actions.playPause())
+      .semantics { contentDescription = description },
     contentAlignment = Alignment.Center,
   ) {
     Box(modifier = GlanceModifier.width(coverSize).height(coverSize), contentAlignment = Alignment.BottomEnd) {
@@ -400,7 +409,6 @@ private fun Controls(
   }
 }
 
-/** The line under the title: when the sleep timer stops playback, else the chapter or the time left. */
 @Composable
 private fun Subtitle(
   book: NowPlayingBook,
@@ -412,10 +420,13 @@ private fun Subtitle(
   when {
     sleepTimerEnd != null -> IconSubtitle(
       icon = R.drawable.widget_ic_moon,
-      text = if (sleepTimerEnd.at != null) {
-        context.getString(StringsR.string.widget_sleep_timer_stops_at, context.formatClockTime(sleepTimerEnd.at))
-      } else {
-        context.getString(StringsR.string.sleep_timer_end_of_chapter)
+      text = when (sleepTimerEnd) {
+        is SleepTimerEnd.At -> context.getString(
+          StringsR.string.widget_sleep_timer_stops_at,
+          context.formatClockTime(sleepTimerEnd.time),
+        )
+        is SleepTimerEnd.After -> context.formatTimeLeft(sleepTimerEnd.duration)
+        SleepTimerEnd.EndOfChapter -> context.getString(StringsR.string.sleep_timer_end_of_chapter)
       },
     )
     compact || book.chapterName == null -> SubtitleText(text = context.formatTimeLeft(book.remaining, compact = compact))

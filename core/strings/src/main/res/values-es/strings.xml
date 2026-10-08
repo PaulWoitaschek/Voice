@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">Aceptar</string>
     <string name="common.error.generic.message">Algo salió mal 😢</string>
     <string name="common.error.generic.retry">Reintentar</string>
-    <string name="cover.content_description.selectable">Muestra la portada a elegir</string>
     <string name="cover.crop.hint">Arrastra para mover; pellizca o tira de una esquina para cambiar el tamaño.</string>
     <string name="cover.crop.title">Recortar la portada</string>
     <string name="cover.search.download_failed">No se ha podido descargar esta portada. Prueba con otra.</string>
@@ -260,7 +259,6 @@
     <string name="playback.action.fast_forward">Avanzar</string>
     <string name="playback.action.pause">Pausar</string>
     <string name="playback.action.play">Reproducir</string>
-    <string name="playback.action.play_pause">Reproducir / Pausar</string>
     <string name="playback.action.rewind">Retroceder</string>
     <string name="playback.battery_optimization.action">Actualizar</string>
     <string name="playback.battery_optimization.rationale">Debido a tus restricciones de energía, pueden ocurrir interrupciones en la reproducción.</string>

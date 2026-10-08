@@ -85,8 +85,6 @@
     <string name="common.error.generic.message">Something went wrong 😢</string>
     <!-- Retry action shown after a generic error. -->
     <string name="common.error.generic.retry">Retry</string>
-    <!-- Content description for a cover preview that can be selected. -->
-    <string name="cover.content_description.selectable">Shows cover to choose</string>
     <!-- Hint below the title of the dialog that crops a new cover. -->
     <string name="cover.crop.hint">Drag to move. Pinch or pull a corner to resize.</string>
     <!-- Title of the dialog that crops a new cover to a square. -->
@@ -369,8 +367,6 @@
     <string name="playback.action.pause">Pause</string>
     <!-- Content description for a playback button that starts audio. -->
     <string name="playback.action.play">Play</string>
-    <!-- Content description for a control that toggles playback between play and pause. -->
-    <string name="playback.action.play_pause">Play / Pause</string>
     <!-- Label for the playback action that skips backward. -->
     <string name="playback.action.rewind">Rewind</string>
     <!-- Action label for opening battery optimization settings. -->

@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Något gick fel 😢</string>
     <string name="common.error.generic.retry">Försök igen</string>
-    <string name="cover.content_description.selectable">Visar valbara omslag</string>
     <string name="cover.crop.hint">Dra för att flytta; nyp eller dra i ett hörn för att ändra storlek.</string>
     <string name="cover.crop.title">Beskär omslaget</string>
     <string name="cover.search.download_failed">Det gick inte att ladda ned omslaget. Prova ett annat.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Snabbspola framåt</string>
     <string name="playback.action.pause">Pausa</string>
     <string name="playback.action.play">Spela</string>
-    <string name="playback.action.play_pause">Spela/pausa</string>
     <string name="playback.action.rewind">Spola bakåt</string>
     <string name="playback.battery_optimization.action">Öppna inställningar</string>
     <string name="playback.battery_optimization.rationale">På grund av enhetens strömsparbegränsningar kan uppspelningen avbrytas.</string>

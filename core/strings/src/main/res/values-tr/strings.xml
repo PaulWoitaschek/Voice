@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">Tamam</string>
     <string name="common.error.generic.message">Bir şeyler ters gitti😢</string>
     <string name="common.error.generic.retry">Tekrar dene</string>
-    <string name="cover.content_description.selectable">Seçmek için kapak gösterir</string>
     <string name="cover.crop.hint">Taşımak için sürükleyin; boyutlandırmak için sıkıştırın veya bir köşeyi sürükleyin.</string>
     <string name="cover.crop.title">Kapağı kırp</string>
     <string name="cover.search.download_failed">Bu kapak indirilemedi. Başka bir tane deneyin.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">Hızlı ilerlet</string>
     <string name="playback.action.pause">Beklet</string>
     <string name="playback.action.play">Yürüt</string>
-    <string name="playback.action.play_pause">Oynat / Duraklat</string>
     <string name="playback.action.rewind">Geri sar</string>
     <string name="playback.battery_optimization.action">Güncelle</string>
     <string name="playback.battery_optimization.rationale">Güç kısıtlamalarınız nedeniyle oynatma kesintileri olabilir.</string>

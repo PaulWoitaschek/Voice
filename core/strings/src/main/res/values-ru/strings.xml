@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">ОК</string>
     <string name="common.error.generic.message">Что-то пошло не так 😢</string>
     <string name="common.error.generic.retry">Повторить</string>
-    <string name="cover.content_description.selectable">Показать выбранную обложку</string>
     <string name="cover.crop.hint">Перетащите, чтобы переместить; сведите пальцы или потяните за угол, чтобы изменить размер.</string>
     <string name="cover.crop.title">Обрезать обложку</string>
     <string name="cover.search.download_failed">Не удалось скачать эту обложку. Попробуйте другую.</string>
@@ -272,7 +271,6 @@
     <string name="playback.action.fast_forward">Перемотать вперед</string>
     <string name="playback.action.pause">Пауза</string>
     <string name="playback.action.play">Воспроизведение</string>
-    <string name="playback.action.play_pause">Воспроизведение / Пауза</string>
     <string name="playback.action.rewind">Перемотать назад</string>
     <string name="playback.battery_optimization.action">Обновить</string>
     <string name="playback.battery_optimization.rationale">Чтение может прерываться из-за настроек управления расходом заряда батареи.</string>

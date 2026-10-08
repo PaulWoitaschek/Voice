@@ -101,7 +101,6 @@ internal fun SleepTimerContent(
   }
 }
 
-/** The timer as a single shape: a cookie that's ready, or a square that's running, like the play button. */
 @Composable
 private fun SleepTimerBadge(
   sleepTimer: SleepTimerWidgetModel,
@@ -178,7 +177,7 @@ private fun SleepTimerBar(
             TitleText(text = sleepTimer.label(context), fontSize = 15.sp)
             SubtitleText(
               text = context.getString(
-                if (sleepTimer.end.endOfChapter && sleepTimer.end.at != null) {
+                if (sleepTimer.end is SleepTimerEnd.At && sleepTimer.end.endOfChapter) {
                   StringsR.string.sleep_timer_end_of_chapter
                 } else {
                   StringsR.string.widget_sleep_timer_cancel_hint
@@ -208,6 +207,9 @@ private fun Stars(
 
 private fun SleepTimerWidgetModel.label(context: Context): String = when (this) {
   is SleepTimerWidgetModel.Ready -> context.formatDuration(duration)
-  is SleepTimerWidgetModel.Running -> end.at?.let(context::formatClockTime)
-    ?: context.getString(StringsR.string.sleep_timer_end_of_chapter)
+  is SleepTimerWidgetModel.Running -> when (end) {
+    is SleepTimerEnd.At -> context.formatClockTime(end.time)
+    is SleepTimerEnd.After -> context.formatDuration(end.duration)
+    SleepTimerEnd.EndOfChapter -> context.getString(StringsR.string.sleep_timer_end_of_chapter)
+  }
 }

@@ -105,7 +105,6 @@ class WidgetImages(private val context: Context) {
     }
   }
 
-  /** The cover filling a widget of [width] and [height], cropped from its top. */
   internal fun coverArt(
     cover: WidgetCover,
     width: Dp,

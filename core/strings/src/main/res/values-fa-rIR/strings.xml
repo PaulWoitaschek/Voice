@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">باشه</string>
     <string name="common.error.generic.message">مشکلی پیش آمد 😢</string>
     <string name="common.error.generic.retry">تلاش مجدد</string>
-    <string name="cover.content_description.selectable">نمایش کاور برای انتخاب</string>
     <string name="cover.crop.hint">برای جابه‌جایی بکشید؛ برای تغییر اندازه، دو انگشت را جمع کنید یا گوشه‌ای را بکشید.</string>
     <string name="cover.crop.title">برش کاور</string>
     <string name="cover.search.download_failed">دانلود این کاور ممکن نشد. کاور دیگری را امتحان کنید.</string>
@@ -248,7 +247,6 @@
     <string name="playback.action.fast_forward">رو به جلو بردن سریع</string>
     <string name="playback.action.pause">توقف</string>
     <string name="playback.action.play">پخش</string>
-    <string name="playback.action.play_pause">پخش / توقف</string>
     <string name="playback.action.rewind">به عقب برگرداندن</string>
     <string name="playback.battery_optimization.action">بروزرسانی</string>
     <string name="playback.battery_optimization.rationale">به دلیل تنظیمات شما مربوط به محدودیت های استفاده از برق، ممکن است وقفه در پخش اتفاق بیفتد.</string>

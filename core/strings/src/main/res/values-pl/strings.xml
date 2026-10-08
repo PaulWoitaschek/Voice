@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Coś poszło nie tak 😢</string>
     <string name="common.error.generic.retry">Ponów</string>
-    <string name="cover.content_description.selectable">Pokazuje okładki do wyboru</string>
     <string name="cover.crop.hint">Przeciągnij, aby przesunąć; zsuń palce lub przeciągnij róg, aby zmienić rozmiar.</string>
     <string name="cover.crop.title">Przytnij okładkę</string>
     <string name="cover.search.download_failed">Nie udało się pobrać tej okładki. Spróbuj innej.</string>
@@ -272,7 +271,6 @@
     <string name="playback.action.fast_forward">Do przodu</string>
     <string name="playback.action.pause">Zatrzymaj</string>
     <string name="playback.action.play">Odtwarzaj</string>
-    <string name="playback.action.play_pause">Odtwarzaj / Pauza</string>
     <string name="playback.action.rewind">Przewiń</string>
     <string name="playback.battery_optimization.action">Zaktualizuj</string>
     <string name="playback.battery_optimization.rationale">Z powodu ustawień ograniczenia zużycia baterii może dojść do przerw w odtwarzaniu.</string>

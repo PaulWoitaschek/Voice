@@ -234,7 +234,7 @@ private fun EmptySlot(
 ) {
   Image(
     provider = ImageProvider(images.shape(shape, size)),
-    contentDescription = null,
+    contentDescription = LocalContext.current.getString(StringsR.string.widget_no_book_action),
     modifier = GlanceModifier.size(size).clickable(actions.openLibrary()),
     colorFilter = ColorFilter.tint(GlanceTheme.colors.secondaryContainer),
   )

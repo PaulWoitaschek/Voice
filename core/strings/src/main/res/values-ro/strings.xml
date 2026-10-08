@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">S-a produs o eroare 😢</string>
     <string name="common.error.generic.retry">Reîncearcă</string>
-    <string name="cover.content_description.selectable">Afișează alegere copertă</string>
     <string name="cover.crop.hint">Trage pentru a muta; ciupește sau trage de un colț pentru a redimensiona.</string>
     <string name="cover.crop.title">Decupează coperta</string>
     <string name="cover.search.download_failed">Coperta nu a putut fi descărcată. Încearcă alta.</string>
@@ -260,7 +259,6 @@
     <string name="playback.action.fast_forward">Derulare înainte rapid</string>
     <string name="playback.action.pause">Pauză</string>
     <string name="playback.action.play">Redare</string>
-    <string name="playback.action.play_pause">Redare / Pauză</string>
     <string name="playback.action.rewind">Derulare înapoi</string>
     <string name="playback.battery_optimization.action">Actualizare</string>
     <string name="playback.battery_optimization.rationale">Din cauza restricțiilor de alimentare, s-ar putea să apară întreruperi în playback.</string>

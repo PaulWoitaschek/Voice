@@ -15,13 +15,12 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
-/** The colors of a widget: from the [seed] of a cover, or else from the app's [themeColorScheme]. */
 internal data class WidgetTheme(
   val seed: Int?,
   val themeColorScheme: ThemeColorScheme,
 )
 
-/** A cover ready to be drawn. The [key] identifies the cover, so its shaped versions can be cached. */
+/** The [key] identifies the cover, so its shaped versions can be cached. */
 internal data class WidgetCover(
   val key: String,
   val bitmap: Bitmap,
@@ -64,11 +63,19 @@ internal data class NowPlayingBook(
   val sleepTimerEnd: SleepTimerEnd?,
 )
 
-/** When a running sleep timer stops playback. [at] is null when that can't be known. */
-internal data class SleepTimerEnd(
-  val at: Instant?,
-  val endOfChapter: Boolean,
-)
+/** When a running sleep timer stops playback, rounded to the minute as the widgets show minutes. */
+internal sealed interface SleepTimerEnd {
+
+  data class At(
+    val time: Instant,
+    val endOfChapter: Boolean,
+  ) : SleepTimerEnd
+
+  /** The countdown waits while playback is paused, so there is no clock time yet. */
+  data class After(val duration: Duration) : SleepTimerEnd
+
+  data object EndOfChapter : SleepTimerEnd
+}
 
 internal data class ShelfModel(
   val books: List<ShelfBook>,
@@ -140,36 +147,36 @@ internal fun nowPlayingBook(
     speed = speed,
     playing = playing,
     finished = book.finished(),
-    sleepTimerEnd = sleepTimerEnd(sleepTimer, book, now),
+    sleepTimerEnd = sleepTimerEnd(sleepTimer, playing, book, now),
   )
 }
 
-/** Rounded to the minute, as it's shown as a clock time. */
 internal fun sleepTimerEnd(
   state: SleepTimerState,
+  playing: Boolean,
   book: Book?,
   now: Instant,
 ): SleepTimerEnd? {
   return when (state) {
     SleepTimerState.Disabled -> null
-    is SleepTimerState.Enabled.WithDuration -> SleepTimerEnd(
-      at = (now + state.leftDuration.toJavaDuration()).roundToMinute(),
-      endOfChapter = false,
-    )
-    SleepTimerState.Enabled.WithEndOfChapter -> SleepTimerEnd(
-      at = book?.let {
-        val leftInChapter = (it.currentMark.endMs - it.content.positionInChapter).coerceAtLeast(0).milliseconds
-        (now + (leftInChapter / it.content.playbackSpeed.atSpeed()).toJavaDuration()).roundToMinute()
-      },
-      endOfChapter = true,
-    )
+    is SleepTimerState.Enabled.WithDuration -> if (playing) {
+      SleepTimerEnd.At(time = (now + state.leftDuration.toJavaDuration()).roundToMinute(), endOfChapter = false)
+    } else {
+      SleepTimerEnd.After(state.leftDuration.roundUpToMinutes())
+    }
+    SleepTimerState.Enabled.WithEndOfChapter -> if (playing && book != null) {
+      val leftInChapter = (book.currentMark.endMs - book.content.positionInChapter).coerceAtLeast(0).milliseconds
+      SleepTimerEnd.At(
+        time = (now + (leftInChapter / book.content.playbackSpeed.atSpeed()).toJavaDuration()).roundToMinute(),
+        endOfChapter = true,
+      )
+    } else {
+      SleepTimerEnd.EndOfChapter
+    }
   }
 }
 
-/**
- * The books someone is in the middle of, the current one first, then the most recently played. The
- * current book is on it even before it was started, as it's what plays next.
- */
+/** The current book is on the shelf even before it was started, as it's what plays next. */
 internal fun shelfBooks(
   books: List<Book>,
   currentBookId: BookId?,
@@ -192,11 +199,12 @@ internal fun shelfBooks(
 
 internal fun sleepTimerWidgetModel(
   state: SleepTimerState,
+  playing: Boolean,
   defaultDuration: Duration,
   book: Book?,
   now: Instant,
 ): SleepTimerWidgetModel {
-  val end = sleepTimerEnd(state, book, now)
+  val end = sleepTimerEnd(state, playing, book, now)
   return if (end == null) {
     SleepTimerWidgetModel.Ready(defaultDuration)
   } else {

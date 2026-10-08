@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">אישור</string>
     <string name="common.error.generic.message">משהו השתבש 😢</string>
     <string name="common.error.generic.retry">נסה שוב</string>
-    <string name="cover.content_description.selectable">להציג עטיפות לבחירה</string>
     <string name="cover.crop.hint">גררו כדי להזיז; צבטו או גררו פינה כדי לשנות את הגודל.</string>
     <string name="cover.crop.title">חיתוך העטיפה</string>
     <string name="cover.search.download_failed">לא ניתן להוריד את העטיפה הזו. נסו עטיפה אחרת.</string>
@@ -260,7 +259,6 @@
     <string name="playback.action.fast_forward">הרץ קדימה</string>
     <string name="playback.action.pause">השהה</string>
     <string name="playback.action.play">הפעל</string>
-    <string name="playback.action.play_pause">הפעל \\ השהה</string>
     <string name="playback.action.rewind">הרץ אחורה</string>
     <string name="playback.battery_optimization.action">עדכן</string>
     <string name="playback.battery_optimization.rationale">עקב מגבלות חסכון החשמל שלך, ייתכנו הפרעות בהשמעה.</string>

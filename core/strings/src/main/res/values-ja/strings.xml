@@ -58,7 +58,6 @@
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">問題が発生しました 😢</string>
     <string name="common.error.generic.retry">再試行</string>
-    <string name="cover.content_description.selectable">選択するカバーを表示</string>
     <string name="cover.crop.hint">ドラッグで移動、ピンチまたは角をドラッグしてサイズを変更します。</string>
     <string name="cover.crop.title">カバーを切り抜く</string>
     <string name="cover.search.download_failed">このカバーをダウンロードできませんでした。別のカバーをお試しください。</string>
@@ -236,7 +235,6 @@
     <string name="playback.action.fast_forward">早送り</string>
     <string name="playback.action.pause">一時停止</string>
     <string name="playback.action.play">再生</string>
-    <string name="playback.action.play_pause">再生 / 一時停止</string>
     <string name="playback.action.rewind">巻き戻し</string>
     <string name="playback.battery_optimization.action">更新</string>
     <string name="playback.battery_optimization.rationale">端末側のバッテリー節約設定の制限により、再生が中断されるかもしれません。</string>
