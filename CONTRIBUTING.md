@@ -30,7 +30,7 @@ You can open a pull request for a bug fix right away.
 
 ### Everything else: discuss first, then wait for an OK
 
-New features and UI changes are built by the maintainer. Voice is intentionally [minimal](https://voice.woitaschek.de/about/), and every feature that gets merged has to be maintained for years.
+New features and UI changes are built by the maintainer. Voice is [designed](https://voice.woitaschek.de/about/) to stay clean and focused, and every feature that gets merged has to be maintained for years.
 Writing code has become cheap. Reviewing and maintaining it has not.
 
 So for anything that is **not a bug fix** (features, UI and UX changes, new settings, refactors, architecture changes):
