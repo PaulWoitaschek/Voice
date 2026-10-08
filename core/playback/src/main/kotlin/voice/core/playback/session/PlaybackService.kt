@@ -7,7 +7,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
 import voice.core.common.rootGraphAs
-import voice.core.logging.api.Logger
 import voice.core.playback.di.PlaybackGraph
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.playstate.PositionUpdater
@@ -30,8 +29,6 @@ class PlaybackService : MediaLibraryService() {
   @Inject
   lateinit var listeningSessionRecorder: ListeningSessionRecorder
 
-  private var released = false
-
   override fun onCreate() {
     super.onCreate()
     rootGraphAs<PlaybackGraph.Provider>()
@@ -41,7 +38,6 @@ class PlaybackService : MediaLibraryService() {
   }
 
   private fun release() {
-    released = true
     runBlocking {
       positionUpdater.flushPositionNow()
     }
@@ -57,12 +53,5 @@ class PlaybackService : MediaLibraryService() {
     super.onDestroy()
   }
 
-  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
-    // Media3 rejects a released session, and controllers can still connect while the service shuts down.
-    if (released) {
-      Logger.w("onGetSession returns null because the session is already released")
-      return null
-    }
-    return session
-  }
+  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession = session
 }
