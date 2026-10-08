@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Omslag fra filsystemet</string>
     <string name="book.edit.cover.internet">Omslag fra Internett</string>
     <string name="book.edit.name.label">Navn</string>
-    <string name="book.edit.title">Rediger bok</string>
+    <string name="book.edit.rename">Gi nytt navn</string>
     <string name="bookmark.action.add_note">Legg til notat</string>
     <string name="bookmark.add_note_hint">Legg til et notat</string>
     <string name="bookmark.added.snackbar">Bokmerke lagt til</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Noe gikk galt 😢</string>
     <string name="common.error.generic.retry">Prøv igjen</string>
     <string name="cover.content_description.selectable">Viser omslag å velge</string>
+    <string name="cover.crop.hint">Dra for å flytte; knip eller dra i et hjørne for å endre størrelsen.</string>
+    <string name="cover.crop.title">Beskjær omslaget</string>
+    <string name="cover.search.download_failed">Kunne ikke laste ned dette omslaget. Prøv et annet.</string>
+    <string name="cover.search.hint">Søk etter et omslag</string>
+    <string name="cover.search.no_results.message">Prøv færre ord, eller utelat forfatteren.</string>
+    <string name="cover.search.no_results.title">Fant ingen omslag</string>
     <string name="cover.search.query.with_author">%1$s av %2$s lydbokomslag</string>
     <string name="cover.search.query.without_author">%s lydbokomslag</string>
     <string name="cover.title">Omslag</string>

@@ -9,6 +9,7 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.data.BookId
+import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
 import voice.core.scanner.MediaScanTrigger
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
@@ -20,6 +21,7 @@ import voice.features.bookOverview.di.BookOverviewScope
 class DeleteBookViewModel(
   private val application: Application,
   private val mediaScanTrigger: MediaScanTrigger,
+  private val repo: BookRepository,
 ) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
@@ -36,9 +38,12 @@ class DeleteBookViewModel(
     item: BottomSheetItem,
   ) {
     if (item != BottomSheetItem.DeleteBook) return
+    val book = repo.get(bookId)
 
     _state.value = DeleteBookViewState(
       id = bookId,
+      name = book?.content?.name,
+      cover = book?.content?.coverUrl,
       deleteCheckBoxChecked = false,
       fileToDelete = bookId.toUri().pathSegments
         .let { segments ->
@@ -80,6 +85,8 @@ class DeleteBookViewModel(
 
 data class DeleteBookViewState(
   val id: BookId,
+  val name: String?,
+  val cover: String?,
   val deleteCheckBoxChecked: Boolean,
   val fileToDelete: String,
 ) {

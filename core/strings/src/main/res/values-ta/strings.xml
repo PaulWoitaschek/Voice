@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">கோப்பு முறைமையிலிருந்து மூடி</string>
     <string name="book.edit.cover.internet">இணையத்திலிருந்து மூடி</string>
     <string name="book.edit.name.label">பெயர்</string>
-    <string name="book.edit.title">புத்தகத்தைத் திருத்து</string>
+    <string name="book.edit.rename">மறுபெயரிடு</string>
     <string name="bookmark.action.add_note">குறிப்பைச் சேர்</string>
     <string name="bookmark.add_note_hint">ஒரு குறிப்பைச் சேர்க்கவும்</string>
     <string name="bookmark.added.snackbar">புக்மார்க்கு சேர்க்கப்பட்டது</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">ஏதோ தவறு நடந்தது</string>
     <string name="common.error.generic.retry">மீண்டும் முயற்சிக்கவும்</string>
     <string name="cover.content_description.selectable">தேர்வு செய்ய சூ கவர்</string>
+    <string name="cover.crop.hint">நகர்த்த இழுக்கவும்; அளவை மாற்ற பிஞ்ச் செய்யவும் அல்லது ஒரு மூலையை இழுக்கவும்.</string>
+    <string name="cover.crop.title">அட்டைப்படத்தை செதுக்கு</string>
+    <string name="cover.search.download_failed">இந்த அட்டைப்படத்தைப் பதிவிறக்க முடியவில்லை. வேறொன்றை முயலவும்.</string>
+    <string name="cover.search.hint">அட்டைப்படத்தைத் தேடுங்கள்</string>
+    <string name="cover.search.no_results.message">குறைவான சொற்களை முயலவும், அல்லது ஆசிரியர் பெயரை நீக்கவும்.</string>
+    <string name="cover.search.no_results.title">அட்டைப்படங்கள் எதுவும் கிடைக்கவில்லை</string>
     <string name="cover.search.query.with_author">%1$s ஆல் %2$s ஆடியோபுக் கவர்</string>
     <string name="cover.search.query.without_author">%s ஆடியோபுக் கவர்</string>
     <string name="cover.title">கவர்</string>

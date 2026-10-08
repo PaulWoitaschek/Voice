@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Capa do sistema de arquivo</string>
     <string name="book.edit.cover.internet">Capa da internet</string>
     <string name="book.edit.name.label">Título</string>
-    <string name="book.edit.title">Editar livro</string>
+    <string name="book.edit.rename">Mudar o nome</string>
     <string name="bookmark.action.add_note">Adicionar nota</string>
     <string name="bookmark.add_note_hint">Adicionar uma nota</string>
     <string name="bookmark.added.snackbar">Marcador adicionado</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Algo deu errado 😢</string>
     <string name="common.error.generic.retry">Tentar novamente</string>
     <string name="cover.content_description.selectable">Mostra capas para escolher</string>
+    <string name="cover.crop.hint">Arraste para mover; aperte ou arraste um canto para redimensionar.</string>
+    <string name="cover.crop.title">Recortar a capa</string>
+    <string name="cover.search.download_failed">Não foi possível transferir esta capa. Experimente outra.</string>
+    <string name="cover.search.hint">Pesquisar uma capa</string>
+    <string name="cover.search.no_results.message">Experimente menos palavras ou retire o autor.</string>
+    <string name="cover.search.no_results.title">Nenhuma capa encontrada</string>
     <string name="cover.search.query.with_author">Capa do audiobook %1$s, feito por %2$s</string>
     <string name="cover.search.query.without_author">Capa do audiobook %s</string>
     <string name="cover.title">Capa</string>

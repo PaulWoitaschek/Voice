@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Omslag kiezen van bestandssysteem</string>
     <string name="book.edit.cover.internet">Omslag ophalen van internet</string>
     <string name="book.edit.name.label">Naam</string>
-    <string name="book.edit.title">Boek bewerken</string>
+    <string name="book.edit.rename">Naam wijzigen</string>
     <string name="bookmark.action.add_note">Notitie toevoegen</string>
     <string name="bookmark.add_note_hint">Voeg een notitie toe</string>
     <string name="bookmark.added.snackbar">De bladwijzer is toegevoegd</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Er is iets fout gegaan 😢</string>
     <string name="common.error.generic.retry">Opnieuw proberen</string>
     <string name="cover.content_description.selectable">Omslag kiezen</string>
+    <string name="cover.crop.hint">Sleep om te verplaatsen; knijp of sleep een hoek om het formaat te wijzigen.</string>
+    <string name="cover.crop.title">Omslag bijsnijden</string>
+    <string name="cover.search.download_failed">Kan dit omslag niet downloaden. Probeer een ander.</string>
+    <string name="cover.search.hint">Zoek een omslag</string>
+    <string name="cover.search.no_results.message">Probeer minder woorden, of laat de auteur weg.</string>
+    <string name="cover.search.no_results.title">Geen omslagen gevonden</string>
     <string name="cover.search.query.with_author">%1$s door %2$s luisterboekomslag</string>
     <string name="cover.search.query.without_author">%s luisterboekomslag</string>
     <string name="cover.title">Omslag</string>

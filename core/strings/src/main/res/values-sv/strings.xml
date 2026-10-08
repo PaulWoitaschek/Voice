@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Omslag från filsystemet</string>
     <string name="book.edit.cover.internet">Omslag från internet</string>
     <string name="book.edit.name.label">Namn</string>
-    <string name="book.edit.title">Redigera bok</string>
+    <string name="book.edit.rename">Byt namn</string>
     <string name="bookmark.action.add_note">Lägg till anteckning</string>
     <string name="bookmark.add_note_hint">Lägg till en anteckning</string>
     <string name="bookmark.added.snackbar">Bokmärke tillagt</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Något gick fel 😢</string>
     <string name="common.error.generic.retry">Försök igen</string>
     <string name="cover.content_description.selectable">Visar valbara omslag</string>
+    <string name="cover.crop.hint">Dra för att flytta; nyp eller dra i ett hörn för att ändra storlek.</string>
+    <string name="cover.crop.title">Beskär omslaget</string>
+    <string name="cover.search.download_failed">Det gick inte att ladda ned omslaget. Prova ett annat.</string>
+    <string name="cover.search.hint">Sök efter ett omslag</string>
+    <string name="cover.search.no_results.message">Prova färre ord, eller ta bort författaren.</string>
+    <string name="cover.search.no_results.title">Inga omslag hittades</string>
     <string name="cover.search.query.with_author">%1$s av %2$s ljudboksomslag</string>
     <string name="cover.search.query.without_author">%s ljudboksomslag</string>
     <string name="cover.title">Omslag</string>

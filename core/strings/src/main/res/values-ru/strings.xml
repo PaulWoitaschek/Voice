@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Обложка с устройства</string>
     <string name="book.edit.cover.internet">Обложка из интернета</string>
     <string name="book.edit.name.label">Название</string>
-    <string name="book.edit.title">Редактировать книгу</string>
+    <string name="book.edit.rename">Переименовать</string>
     <string name="bookmark.action.add_note">Добавить заметку</string>
     <string name="bookmark.add_note_hint">Добавьте заметку</string>
     <string name="bookmark.added.snackbar">Закладка добавлена</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Что-то пошло не так 😢</string>
     <string name="common.error.generic.retry">Повторить</string>
     <string name="cover.content_description.selectable">Показать выбранную обложку</string>
+    <string name="cover.crop.hint">Перетащите, чтобы переместить; сведите пальцы или потяните за угол, чтобы изменить размер.</string>
+    <string name="cover.crop.title">Обрезать обложку</string>
+    <string name="cover.search.download_failed">Не удалось скачать эту обложку. Попробуйте другую.</string>
+    <string name="cover.search.hint">Поиск обложки</string>
+    <string name="cover.search.no_results.message">Попробуйте меньше слов или уберите автора.</string>
+    <string name="cover.search.no_results.title">Обложки не найдены</string>
     <string name="cover.search.query.with_author">Обложка аудиокниги %1$s автора %2$s</string>
     <string name="cover.search.query.without_author">Обложка аудиокниги %s</string>
     <string name="cover.title">Обложка</string>

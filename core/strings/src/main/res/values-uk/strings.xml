@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Обкладинка з файлу</string>
     <string name="book.edit.cover.internet">Обкладинка з Інтернету</string>
     <string name="book.edit.name.label">Назва</string>
-    <string name="book.edit.title">Редагувати книгу</string>
+    <string name="book.edit.rename">Перейменувати</string>
     <string name="bookmark.action.add_note">Додати нотатку</string>
     <string name="bookmark.add_note_hint">Додайте нотатку</string>
     <string name="bookmark.added.snackbar">Закладку додано</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Щось пішло не так 😢</string>
     <string name="common.error.generic.retry">Повторити</string>
     <string name="cover.content_description.selectable">Показує вибір обкладинки</string>
+    <string name="cover.crop.hint">Перетягніть, щоб перемістити; зведіть пальці або потягніть за кут, щоб змінити розмір.</string>
+    <string name="cover.crop.title">Обрізати обкладинку</string>
+    <string name="cover.search.download_failed">Не вдалося завантажити цю обкладинку. Спробуйте іншу.</string>
+    <string name="cover.search.hint">Пошук обкладинки</string>
+    <string name="cover.search.no_results.message">Спробуйте менше слів або приберіть автора.</string>
+    <string name="cover.search.no_results.title">Обкладинок не знайдено</string>
     <string name="cover.search.query.with_author">Обкладинка аудіокниги %1$s автора %2$s</string>
     <string name="cover.search.query.without_author">Обкладинка аудіокниги %s</string>
     <string name="cover.title">Обкладинка</string>

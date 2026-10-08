@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Cover aus dem Dateisystem</string>
     <string name="book.edit.cover.internet">Cover aus dem Internet</string>
     <string name="book.edit.name.label">Name</string>
-    <string name="book.edit.title">Buch bearbeiten</string>
+    <string name="book.edit.rename">Umbenennen</string>
     <string name="bookmark.action.add_note">Notiz hinzufügen</string>
     <string name="bookmark.add_note_hint">Notiz hinzufügen</string>
     <string name="bookmark.added.snackbar">Lesezeichen hinzugefügt</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Etwas ist schiefgelaufen 😢</string>
     <string name="common.error.generic.retry">Erneut versuchen</string>
     <string name="cover.content_description.selectable">Zeigt Cover zur Auswahl an</string>
+    <string name="cover.crop.hint">Zum Verschieben ziehen. Zum Ändern der Größe mit zwei Fingern zoomen oder an einer Ecke ziehen.</string>
+    <string name="cover.crop.title">Cover zuschneiden</string>
+    <string name="cover.search.download_failed">Dieses Cover konnte nicht heruntergeladen werden. Probiere ein anderes.</string>
+    <string name="cover.search.hint">Nach einem Cover suchen</string>
+    <string name="cover.search.no_results.message">Versuche es mit weniger Wörtern oder lass den Autor weg.</string>
+    <string name="cover.search.no_results.title">Keine Cover gefunden</string>
     <string name="cover.search.query.with_author">%1$s von %2$s Hörbuch-Cover</string>
     <string name="cover.search.query.without_author">%s Hörbuch-Cover</string>
     <string name="cover.title">Cover</string>

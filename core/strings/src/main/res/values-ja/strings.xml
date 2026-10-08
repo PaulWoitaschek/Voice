@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">ファイルシステムからのカバー</string>
     <string name="book.edit.cover.internet">インターネットからのカバー</string>
     <string name="book.edit.name.label">名前</string>
-    <string name="book.edit.title">ブックを編集</string>
+    <string name="book.edit.rename">名前を変更</string>
     <string name="bookmark.action.add_note">メモを追加</string>
     <string name="bookmark.add_note_hint">メモを追加</string>
     <string name="bookmark.added.snackbar">ブックマークを追加しました</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">問題が発生しました 😢</string>
     <string name="common.error.generic.retry">再試行</string>
     <string name="cover.content_description.selectable">選択するカバーを表示</string>
+    <string name="cover.crop.hint">ドラッグで移動、ピンチまたは角をドラッグしてサイズを変更します。</string>
+    <string name="cover.crop.title">カバーを切り抜く</string>
+    <string name="cover.search.download_failed">このカバーをダウンロードできませんでした。別のカバーをお試しください。</string>
+    <string name="cover.search.hint">カバーを検索</string>
+    <string name="cover.search.no_results.message">単語を減らすか、著者名を外してお試しください。</string>
+    <string name="cover.search.no_results.title">カバーが見つかりません</string>
     <string name="cover.search.query.with_author">%1$s（%2$s 著）オーディオブック カバー</string>
     <string name="cover.search.query.without_author">%s オーディオブック カバー</string>
     <string name="cover.title">カバー</string>

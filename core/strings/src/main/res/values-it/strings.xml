@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Copertina dal file system</string>
     <string name="book.edit.cover.internet">Copertina da Internet</string>
     <string name="book.edit.name.label">Nome</string>
-    <string name="book.edit.title">Modifica libro</string>
+    <string name="book.edit.rename">Rinomina</string>
     <string name="bookmark.action.add_note">Aggiungi nota</string>
     <string name="bookmark.add_note_hint">Aggiungi una nota</string>
     <string name="bookmark.added.snackbar">Segnalibro aggiunto</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Qualcosa è andato storto 😢</string>
     <string name="common.error.generic.retry">Riprova</string>
     <string name="cover.content_description.selectable">Mostra la copertina da scegliere</string>
+    <string name="cover.crop.hint">Trascina per spostare; pizzica o trascina un angolo per ridimensionare.</string>
+    <string name="cover.crop.title">Ritaglia la copertina</string>
+    <string name="cover.search.download_failed">Impossibile scaricare questa copertina. Provane un\'altra.</string>
+    <string name="cover.search.hint">Cerca una copertina</string>
+    <string name="cover.search.no_results.message">Prova con meno parole o togli l\'autore.</string>
+    <string name="cover.search.no_results.title">Nessuna copertina trovata</string>
     <string name="cover.search.query.with_author">%1$s di %2$s copertina dell\'audiolibro</string>
     <string name="cover.search.query.without_author">%s copertina dell\'audiolibro</string>
     <string name="cover.title">Copertina</string>

@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Couverture depuis le système de fichiers</string>
     <string name="book.edit.cover.internet">Couverture depuis internet</string>
     <string name="book.edit.name.label">Nom</string>
-    <string name="book.edit.title">Modifier le livre</string>
+    <string name="book.edit.rename">Renommer</string>
     <string name="bookmark.action.add_note">Ajouter une note</string>
     <string name="bookmark.add_note_hint">Ajouter une note</string>
     <string name="bookmark.added.snackbar">Marque-page ajouté</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Quelque chose s\'est mal passé 😢</string>
     <string name="common.error.generic.retry">Réessayer</string>
     <string name="cover.content_description.selectable">Montre la couverture à choisir</string>
+    <string name="cover.crop.hint">Faites glisser pour déplacer ; pincez ou tirez un coin pour redimensionner.</string>
+    <string name="cover.crop.title">Recadrer la couverture</string>
+    <string name="cover.search.download_failed">Impossible de télécharger cette couverture. Essayez-en une autre.</string>
+    <string name="cover.search.hint">Rechercher une couverture</string>
+    <string name="cover.search.no_results.message">Essayez avec moins de mots, ou sans l\'auteur.</string>
+    <string name="cover.search.no_results.title">Aucune couverture trouvée</string>
     <string name="cover.search.query.with_author">%1$s par %2$s couverture livre audio</string>
     <string name="cover.search.query.without_author">%s couverture livre audio</string>
     <string name="cover.title">Couverture</string>

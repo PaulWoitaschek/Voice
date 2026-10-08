@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">دریافت کاور از داخل سیستم</string>
     <string name="book.edit.cover.internet">دریافت کاور از طریق اینترنت</string>
     <string name="book.edit.name.label">نام</string>
-    <string name="book.edit.title">ویرایش کتاب</string>
+    <string name="book.edit.rename">تغییر نام</string>
     <string name="bookmark.action.add_note">افزودن یادداشت</string>
     <string name="bookmark.add_note_hint">یادداشتی اضافه کنید</string>
     <string name="bookmark.added.snackbar">نشانه‌گذاری انجام شد</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">مشکلی پیش آمد 😢</string>
     <string name="common.error.generic.retry">تلاش مجدد</string>
     <string name="cover.content_description.selectable">نمایش کاور برای انتخاب</string>
+    <string name="cover.crop.hint">برای جابه‌جایی بکشید؛ برای تغییر اندازه، دو انگشت را جمع کنید یا گوشه‌ای را بکشید.</string>
+    <string name="cover.crop.title">برش کاور</string>
+    <string name="cover.search.download_failed">دانلود این کاور ممکن نشد. کاور دیگری را امتحان کنید.</string>
+    <string name="cover.search.hint">جستجوی کاور</string>
+    <string name="cover.search.no_results.message">کلمات کمتری امتحان کنید یا نام نویسنده را حذف کنید.</string>
+    <string name="cover.search.no_results.title">هیچ کاوری پیدا نشد</string>
     <string name="cover.search.query.with_author">%1$s توسط %2$s کاور کتاب صوتی</string>
     <string name="cover.search.query.without_author">%s کاور کتاب صوتی</string>
     <string name="cover.title">کاور</string>

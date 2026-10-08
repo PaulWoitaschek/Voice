@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Kaanepilt nutiseadme failisüsteemist</string>
     <string name="book.edit.cover.internet">Kaanepilt internetist</string>
     <string name="book.edit.name.label">Nimi</string>
-    <string name="book.edit.title">Muuda raamatut</string>
+    <string name="book.edit.rename">Nimeta ümber</string>
     <string name="bookmark.action.add_note">Lisa märkus</string>
     <string name="bookmark.add_note_hint">Lisa märkus</string>
     <string name="bookmark.added.snackbar">Järjehoidja on lisatud</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Midagi läks valesti 😢</string>
     <string name="common.error.generic.retry">Proovi uuesti</string>
     <string name="cover.content_description.selectable">Näita kaanepilte, mille vahel valida</string>
+    <string name="cover.crop.hint">Lohista liigutamiseks; suuruse muutmiseks näpista või tõmba nurgast.</string>
+    <string name="cover.crop.title">Kärbi kaanepilti</string>
+    <string name="cover.search.download_failed">Seda kaanepilti ei õnnestunud alla laadida. Proovi mõnda teist.</string>
+    <string name="cover.search.hint">Otsi kaanepilti</string>
+    <string name="cover.search.no_results.message">Proovi vähemate sõnadega või jäta autor välja.</string>
+    <string name="cover.search.no_results.title">Kaanepilte ei leitud</string>
     <string name="cover.search.query.with_author">Heliraamatu kaanepilt: %2$s - %1$s</string>
     <string name="cover.search.query.without_author">Heliraamatu kaanepilt: %s</string>
     <string name="cover.title">Kaanepilt</string>

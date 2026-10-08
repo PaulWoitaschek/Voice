@@ -34,6 +34,7 @@ class EditBookTitleViewModel(private val repo: BookRepository) : BottomSheetItem
     _state.value = EditBookTitleState(
       title = book.content.name,
       bookId = bookId,
+      cover = book.content.coverUrl,
     )
   }
 

@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Obálka zo súboru</string>
     <string name="book.edit.cover.internet">Obálka z internetu</string>
     <string name="book.edit.name.label">Názov</string>
-    <string name="book.edit.title">Upraviť knihu</string>
+    <string name="book.edit.rename">Premenovať</string>
     <string name="bookmark.action.add_note">Pridať poznámku</string>
     <string name="bookmark.add_note_hint">Pridajte poznámku</string>
     <string name="bookmark.added.snackbar">Záložka pridaná</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Niečo sa pokazilo 😢</string>
     <string name="common.error.generic.retry">Skúsiť znovu</string>
     <string name="cover.content_description.selectable">Zobrazí výber obálky</string>
+    <string name="cover.crop.hint">Potiahnutím posuniete, stiahnutím prstov alebo potiahnutím za roh zmeníte veľkosť.</string>
+    <string name="cover.crop.title">Orezať obálku</string>
+    <string name="cover.search.download_failed">Túto obálku sa nepodarilo stiahnuť. Skúste inú.</string>
+    <string name="cover.search.hint">Hľadať obálku</string>
+    <string name="cover.search.no_results.message">Skúste menej slov alebo vynechajte autora.</string>
+    <string name="cover.search.no_results.title">Nenašli sa žiadne obálky</string>
     <string name="cover.search.query.with_author">%1$s by %2$s audiobook cover</string>
     <string name="cover.search.query.without_author">%s audiobook cover</string>
     <string name="cover.title">Obálka</string>

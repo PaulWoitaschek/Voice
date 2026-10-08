@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">从本机寻找封面图片</string>
     <string name="book.edit.cover.internet">从互联网寻找封面图片</string>
     <string name="book.edit.name.label">名称</string>
-    <string name="book.edit.title">编辑书名</string>
+    <string name="book.edit.rename">重命名</string>
     <string name="bookmark.action.add_note">添加笔记</string>
     <string name="bookmark.add_note_hint">添加笔记</string>
     <string name="bookmark.added.snackbar">已添加书签</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">发生了错误😢</string>
     <string name="common.error.generic.retry">重试</string>
     <string name="cover.content_description.selectable">显示可选封面</string>
+    <string name="cover.crop.hint">拖动以移动，双指缩放或拖动边角以调整大小。</string>
+    <string name="cover.crop.title">裁剪封面</string>
+    <string name="cover.search.download_failed">无法下载此封面。请换一张试试。</string>
+    <string name="cover.search.hint">搜索封面</string>
+    <string name="cover.search.no_results.message">试试减少关键词，或去掉作者名。</string>
+    <string name="cover.search.no_results.title">未找到封面</string>
     <string name="cover.search.query.with_author">%2$s《%1$s》有声书封面</string>
     <string name="cover.search.query.without_author">《%s》有声书封面</string>
     <string name="cover.title">封面</string>
