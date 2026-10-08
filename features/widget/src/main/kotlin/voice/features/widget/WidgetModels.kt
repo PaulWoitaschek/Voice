@@ -66,10 +66,7 @@ internal data class NowPlayingBook(
 /** When a running sleep timer stops playback, rounded to the minute as the widgets show minutes. */
 internal sealed interface SleepTimerEnd {
 
-  data class At(
-    val time: Instant,
-    val endOfChapter: Boolean,
-  ) : SleepTimerEnd
+  data class At(val time: Instant) : SleepTimerEnd
 
   /** The countdown waits while playback is paused, so there is no clock time yet. */
   data class After(val duration: Duration) : SleepTimerEnd
@@ -99,24 +96,6 @@ internal data class ShelfBook(
   val progress: Float,
   val playing: Boolean,
 )
-
-internal data class SleepTimerModel(
-  val sleepTimer: SleepTimerWidgetModel,
-  val cover: String?,
-  val themeColorScheme: ThemeColorScheme,
-)
-
-internal data class SleepTimerWidgetState(
-  val sleepTimer: SleepTimerWidgetModel,
-  val theme: WidgetTheme,
-)
-
-internal sealed interface SleepTimerWidgetModel {
-
-  data class Ready(val duration: Duration) : SleepTimerWidgetModel
-
-  data class Running(val end: SleepTimerEnd) : SleepTimerWidgetModel
-}
 
 internal const val SHELF_MAX_BOOKS = 5
 
@@ -160,16 +139,13 @@ internal fun sleepTimerEnd(
   return when (state) {
     SleepTimerState.Disabled -> null
     is SleepTimerState.Enabled.WithDuration -> if (playing) {
-      SleepTimerEnd.At(time = (now + state.leftDuration.toJavaDuration()).roundToMinute(), endOfChapter = false)
+      SleepTimerEnd.At((now + state.leftDuration.toJavaDuration()).roundToMinute())
     } else {
       SleepTimerEnd.After(state.leftDuration.roundUpToMinutes())
     }
     SleepTimerState.Enabled.WithEndOfChapter -> if (playing && book != null) {
       val leftInChapter = (book.currentMark.endMs - book.content.positionInChapter).coerceAtLeast(0).milliseconds
-      SleepTimerEnd.At(
-        time = (now + (leftInChapter / book.content.playbackSpeed.atSpeed()).toJavaDuration()).roundToMinute(),
-        endOfChapter = true,
-      )
+      SleepTimerEnd.At((now + (leftInChapter / book.content.playbackSpeed.atSpeed()).toJavaDuration()).roundToMinute())
     } else {
       SleepTimerEnd.EndOfChapter
     }
@@ -195,21 +171,6 @@ internal fun shelfBooks(
         playing = playing && book.id == currentBookId,
       )
     }
-}
-
-internal fun sleepTimerWidgetModel(
-  state: SleepTimerState,
-  playing: Boolean,
-  defaultDuration: Duration,
-  book: Book?,
-  now: Instant,
-): SleepTimerWidgetModel {
-  val end = sleepTimerEnd(state, playing, book, now)
-  return if (end == null) {
-    SleepTimerWidgetModel.Ready(defaultDuration)
-  } else {
-    SleepTimerWidgetModel.Running(end)
-  }
 }
 
 private fun progress(

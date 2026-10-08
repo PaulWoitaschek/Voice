@@ -30,7 +30,7 @@ Wybierz folder ze swoimi audiobookami. Voice pokaże ci znalezione książki, do
 • Wyszukiwanie po tytule i autorze
 • Widok listy i siatki
 • Okładki z pliku, z telefonu lub z wyszukiwania w internecie
-• Widżety na ekranie głównym: Teraz odtwarzane, Półka i Wyłącznik czasowy
+• Widżety na ekranie głównym: Teraz odtwarzane i Półka
 • Powiadomienie z odtwarzaczem i Android Auto
 • Jasny i ciemny motyw, kolor dynamiczny i schematy kolorów – Voice na twoją modłę
 • Dostępny w 25 językach

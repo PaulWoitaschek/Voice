@@ -402,10 +402,5 @@
     <string name="widget.shelf.label">புத்தக அலமாரி</string>
     <string name="widget.shelf.play">%1$s-ஐ இயக்கு</string>
     <string name="widget.shelf.title">தொடர்ந்து கேளுங்கள்</string>
-    <string name="widget.sleep_timer.cancel">ஸ்லீப் டைமரை ரத்துசெய்</string>
-    <string name="widget.sleep_timer.cancel_hint">ரத்துசெய்யத் தட்டவும்</string>
-    <string name="widget.sleep_timer.description">படுக்கையிலிருந்தே ஸ்லீப் டைமரைத் தொடங்கவும் அல்லது ரத்துசெய்யவும்</string>
-    <string name="widget.sleep_timer.label">ஸ்லீப் டைமர்</string>
-    <string name="widget.sleep_timer.start">ஸ்லீப் டைமரைத் தொடங்கு</string>
     <string name="widget.sleep_timer.stops_at">%1$s மணிக்கு நிற்கும்</string>
 </resources>

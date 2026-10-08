@@ -30,7 +30,7 @@ Kies de map met je luisterboeken. Voice laat je de gevonden boeken zien, voegt z
 • Zoeken op titel en auteur
 • Lijst- en rasterweergave
 • Omslagen uit het bestand, van je telefoon of via online zoeken
-• Widgets voor je startscherm: “Speelt nu”, “Boekenplank” en “Slaaptimer”
+• Widgets voor je startscherm: “Speelt nu” en “Boekenplank”
 • Mediamelding en Android Auto
 • Licht en donker thema, Dynamische kleur en kleurenschema's om Voice helemaal van jou te maken
 • Beschikbaar in 25 talen

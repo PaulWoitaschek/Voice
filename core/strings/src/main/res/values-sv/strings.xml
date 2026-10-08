@@ -402,10 +402,5 @@
     <string name="widget.shelf.label">Bokhylla</string>
     <string name="widget.shelf.play">Spela %1$s</string>
     <string name="widget.shelf.title">Fortsätt lyssna</string>
-    <string name="widget.sleep_timer.cancel">Avbryt insomningstimern</string>
-    <string name="widget.sleep_timer.cancel_hint">Tryck för att avbryta</string>
-    <string name="widget.sleep_timer.description">Starta eller avbryt insomningstimern från sängen</string>
-    <string name="widget.sleep_timer.label">Insomningstimer</string>
-    <string name="widget.sleep_timer.start">Starta insomningstimern</string>
     <string name="widget.sleep_timer.stops_at">Stoppar kl. %1$s</string>
 </resources>

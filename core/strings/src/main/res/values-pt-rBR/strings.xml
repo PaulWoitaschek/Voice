@@ -415,10 +415,5 @@
     <string name="widget.shelf.label">Estante</string>
     <string name="widget.shelf.play">Reproduzir %1$s</string>
     <string name="widget.shelf.title">Continuar ouvindo</string>
-    <string name="widget.sleep_timer.cancel">Cancelar o desligamento automático</string>
-    <string name="widget.sleep_timer.cancel_hint">Toque para cancelar</string>
-    <string name="widget.sleep_timer.description">Ative ou cancele o desligamento automático sem sair da cama</string>
-    <string name="widget.sleep_timer.label">Desligamento automático</string>
-    <string name="widget.sleep_timer.start">Ativar o desligamento automático</string>
     <string name="widget.sleep_timer.stops_at">Desliga às %1$s</string>
 </resources>

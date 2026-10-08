@@ -389,10 +389,5 @@
     <string name="widget.shelf.label">本棚</string>
     <string name="widget.shelf.play">%1$s を再生</string>
     <string name="widget.shelf.title">続きを聴く</string>
-    <string name="widget.sleep_timer.cancel">スリープタイマーを解除</string>
-    <string name="widget.sleep_timer.cancel_hint">タップして解除</string>
-    <string name="widget.sleep_timer.description">ベッドからスリープタイマーを開始・解除</string>
-    <string name="widget.sleep_timer.label">スリープタイマー</string>
-    <string name="widget.sleep_timer.start">スリープタイマーを開始</string>
     <string name="widget.sleep_timer.stops_at">%1$s に停止します</string>
 </resources>

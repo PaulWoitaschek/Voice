@@ -30,7 +30,7 @@ Pick the folder with your audiobooks. Voice shows you the books it finds, adds t
 • Search by title and author
 • List and grid views
 • Covers from the file, your phone, or an online search
-• Home screen widgets: Now playing, Shelf, and Sleep timer
+• Home screen widgets: Now playing and Shelf
 • Media notification and Android Auto
 • Light and dark theme, Dynamic color, and color schemes to make Voice yours
 • Available in 25 languages

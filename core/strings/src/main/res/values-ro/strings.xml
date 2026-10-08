@@ -415,10 +415,5 @@
     <string name="widget.shelf.label">Raft</string>
     <string name="widget.shelf.play">Redă %1$s</string>
     <string name="widget.shelf.title">Continuă ascultarea</string>
-    <string name="widget.sleep_timer.cancel">Anulează oprirea temporizată</string>
-    <string name="widget.sleep_timer.cancel_hint">Atinge pentru a anula</string>
-    <string name="widget.sleep_timer.description">Pornește sau anulează oprirea temporizată din pat</string>
-    <string name="widget.sleep_timer.label">Oprire temporizată</string>
-    <string name="widget.sleep_timer.start">Pornește oprirea temporizată</string>
     <string name="widget.sleep_timer.stops_at">Se oprește la %1$s</string>
 </resources>

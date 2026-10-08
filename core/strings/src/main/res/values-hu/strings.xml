@@ -402,10 +402,5 @@
     <string name="widget.shelf.label">Könyvespolc</string>
     <string name="widget.shelf.play">%1$s lejátszása</string>
     <string name="widget.shelf.title">Hallgatás folytatása</string>
-    <string name="widget.sleep_timer.cancel">Alvásidőzítő kikapcsolása</string>
-    <string name="widget.sleep_timer.cancel_hint">Koppintson a kikapcsoláshoz</string>
-    <string name="widget.sleep_timer.description">Indítsa el vagy kapcsolja ki az alvásidőzítőt az ágyból</string>
-    <string name="widget.sleep_timer.label">Alvásidőzítő</string>
-    <string name="widget.sleep_timer.start">Alvásidőzítő indítása</string>
     <string name="widget.sleep_timer.stops_at">Leáll ekkor: %1$s</string>
 </resources>

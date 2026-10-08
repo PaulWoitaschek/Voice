@@ -415,10 +415,5 @@
     <string name="widget.shelf.label">Scaffale</string>
     <string name="widget.shelf.play">Riproduci %1$s</string>
     <string name="widget.shelf.title">Continua ad ascoltare</string>
-    <string name="widget.sleep_timer.cancel">Annulla il timer sospensione</string>
-    <string name="widget.sleep_timer.cancel_hint">Tocca per annullare</string>
-    <string name="widget.sleep_timer.description">Avvia o annulla il timer sospensione dal letto</string>
-    <string name="widget.sleep_timer.label">Timer sospensione</string>
-    <string name="widget.sleep_timer.start">Avvia il timer sospensione</string>
     <string name="widget.sleep_timer.stops_at">Si ferma alle %1$s</string>
 </resources>

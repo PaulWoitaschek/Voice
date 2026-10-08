@@ -30,7 +30,7 @@ Vyberte složku se svými audioknihami. Voice vám ukáže knihy, které v ní n
 • Vyhledávání podle názvu a autora
 • Zobrazení v seznamu nebo mřížce
 • Obaly ze souboru, z telefonu nebo z vyhledávání na internetu
-• Widgety na plochu: Právě hraje, Knihovnička a Časovač spánku
+• Widgety na plochu: Právě hraje a Knihovnička
 • Ovládání přehrávání v oznámení a Android Auto
 • Světlý a tmavý motiv, dynamická barva a barevná schémata, abyste si Voice udělali po svém
 • K dispozici ve 25 jazycích

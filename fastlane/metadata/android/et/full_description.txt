@@ -30,7 +30,7 @@ Vali kaust, kus on sinu heliraamatud. Voice näitab sulle leitud raamatuid, lisa
 • Otsing pealkirja ja autori järgi
 • Loendi- ja ruudustikuvaade
 • Kaanepildid failist, telefonist või veebiotsingust
-• Avakuva vidinad: „Praegu mängib“, „Raamaturiiul“ ja „Unetaimer“
+• Avakuva vidinad: „Praegu mängib“ ja „Raamaturiiul“
 • Meediumimärguanne ja Android Auto
 • Hele ja tume kujundus, Dünaamiline värv ja värviskeemid, et teha Voice enda omaks
 • Saadaval 25 keeles

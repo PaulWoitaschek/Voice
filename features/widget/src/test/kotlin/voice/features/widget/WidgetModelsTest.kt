@@ -82,7 +82,7 @@ class WidgetModelsTest {
   fun `a timed sleep timer ends at a clock time rounded to the minute`() {
     val end = sleepTimerEnd(SleepTimerState.Enabled.WithDuration(20.minutes + 20.seconds), playing = true, book = null, now)
 
-    assertEquals(SleepTimerEnd.At(time = Instant.parse("2026-10-08T22:20:00Z"), endOfChapter = false), end)
+    assertEquals(SleepTimerEnd.At(Instant.parse("2026-10-08T22:20:00Z")), end)
   }
 
   @Test
@@ -99,7 +99,7 @@ class WidgetModelsTest {
 
     val end = sleepTimerEnd(SleepTimerState.Enabled.WithEndOfChapter, playing = true, book, now)
 
-    assertEquals(SleepTimerEnd.At(time = Instant.parse("2026-10-08T22:10:00Z"), endOfChapter = true), end)
+    assertEquals(SleepTimerEnd.At(Instant.parse("2026-10-08T22:10:00Z")), end)
   }
 
   @Test
@@ -108,13 +108,6 @@ class WidgetModelsTest {
 
     assertEquals(SleepTimerEnd.EndOfChapter, sleepTimerEnd(SleepTimerState.Enabled.WithEndOfChapter, playing = false, book, now))
     assertEquals(SleepTimerEnd.EndOfChapter, sleepTimerEnd(SleepTimerState.Enabled.WithEndOfChapter, playing = true, book = null, now))
-  }
-
-  @Test
-  fun `the sleep timer widget offers the default duration while the timer is off`() {
-    val model = sleepTimerWidgetModel(SleepTimerState.Disabled, playing = false, defaultDuration = 20.minutes, book = null, now)
-
-    assertEquals(SleepTimerWidgetModel.Ready(20.minutes), model)
   }
 
   @Test

@@ -30,7 +30,7 @@ Choisissez le dossier de vos livres audio. Voice vous montre les livres trouvés
 • Recherche par titre et par auteur
 • Affichage en liste ou en grille
 • Couvertures issues du fichier, de votre téléphone ou d'une recherche en ligne
-• Widgets pour l'écran d'accueil : « En cours de lecture », « Étagère » et « Minuterie de mise en veille »
+• Widgets pour l'écran d'accueil : « En cours de lecture » et « Étagère »
 • Notification multimédia et Android Auto
 • Thème clair et sombre, Couleur dynamique et jeux de couleurs pour faire de Voice le vôtre
 • Disponible en 25 langues

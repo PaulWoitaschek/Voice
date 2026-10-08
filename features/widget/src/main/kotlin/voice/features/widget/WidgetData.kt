@@ -25,9 +25,7 @@ import voice.core.data.BookId
 import voice.core.data.ThemeColorScheme
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
-import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.playstate.PlayStateManager
@@ -50,8 +48,6 @@ class WidgetData(
   private val currentBookStore: DataStore<BookId?>,
   private val playStateManager: PlayStateManager,
   private val sleepTimer: SleepTimer,
-  @SleepTimerPreferenceStore
-  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   @ThemeColorSchemeStore
   private val themeColorSchemeStore: DataStore<ThemeColorScheme>,
   private val coverSeedColors: CoverSeedColors,
@@ -118,22 +114,6 @@ class WidgetData(
     .distinctUntilChanged()
     .shareIn(scope, sharing, replay = 1)
 
-  internal val sleepTimerModel: Flow<SleepTimerModel> = combine(
-    sleepTimer.state,
-    playing,
-    sleepTimerPreferenceStore.data.map { it.duration },
-    currentBook,
-    themeColorSchemeStore.data,
-  ) { state, playing, defaultDuration, book, themeColorScheme ->
-    SleepTimerModel(
-      sleepTimer = sleepTimerWidgetModel(state, playing, defaultDuration, book, Instant.now()),
-      cover = book?.content?.coverUrl,
-      themeColorScheme = themeColorScheme,
-    )
-  }
-    .distinctUntilChanged()
-    .shareIn(scope, sharing, replay = 1)
-
   internal fun nowPlayingState(): Flow<NowPlayingState> = nowPlaying.mapLatest { model ->
     val theme = theme(model.book?.cover, model.themeColorScheme)
     if (model.book == null) {
@@ -147,13 +127,6 @@ class WidgetData(
     ShelfState(
       books = model.books.map { ShelfItem(it, images.cover(it.cover)) },
       theme = theme(model.books.firstOrNull()?.cover, model.themeColorScheme),
-    )
-  }
-
-  internal fun sleepTimerState(): Flow<SleepTimerWidgetState> = sleepTimerModel.mapLatest { model ->
-    SleepTimerWidgetState(
-      sleepTimer = model.sleepTimer,
-      theme = theme(model.cover, model.themeColorScheme),
     )
   }
 

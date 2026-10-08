@@ -16,13 +16,9 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
-import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
-import voice.core.sleeptimer.SleepTimer
-import voice.core.sleeptimer.SleepTimerMode
 import kotlin.time.Duration.Companion.seconds
 
 class WidgetButtonReceiver : BroadcastReceiver() {
@@ -36,15 +32,8 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   lateinit var bookRepository: BookRepository
 
   @Inject
-  lateinit var sleepTimer: SleepTimer
-
-  @Inject
   @CurrentBookStore
   lateinit var currentBookStore: DataStore<BookId?>
-
-  @Inject
-  @SleepTimerPreferenceStore
-  lateinit var sleepTimerPreferenceStore: DataStore<SleepTimerPreference>
 
   override fun onReceive(
     context: Context,
@@ -78,7 +67,6 @@ class WidgetButtonReceiver : BroadcastReceiver() {
               }
             }
             Action.StartOver -> startOver()
-            Action.ToggleSleepTimer -> toggleSleepTimer()
           }
         }
       } finally {
@@ -104,15 +92,6 @@ class WidgetButtonReceiver : BroadcastReceiver() {
     val book = bookRepository.get(bookId) ?: return
     player.setPosition(0, book.chapters.first().id)
     player.play(ListeningEvent.Source.Widget)
-  }
-
-  private suspend fun toggleSleepTimer() {
-    if (sleepTimer.state.value.enabled) {
-      sleepTimer.disable()
-    } else {
-      val duration = sleepTimerPreferenceStore.data.first().duration
-      sleepTimer.enable(SleepTimerMode.TimedWithDuration(duration))
-    }
   }
 
   @ContributesTo(AppScope::class)
@@ -151,7 +130,6 @@ class WidgetButtonReceiver : BroadcastReceiver() {
     Rewind,
     PlayBook,
     StartOver,
-    ToggleSleepTimer,
     ;
 
     companion object {
