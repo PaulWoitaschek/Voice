@@ -1,42 +1,10 @@
 package voice.app.features.widget
 
-import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import dev.zacsweers.metro.Inject
-import voice.core.common.rootGraph
-import voice.features.widget.WidgetGraph
-import voice.features.widget.WidgetUpdater
+import androidx.glance.appwidget.GlanceAppWidget
+import voice.features.widget.NowPlayingWidget
+import voice.features.widget.WidgetReceiver
 
-class BaseWidgetProvider : AppWidgetProvider() {
-
-  @Inject
-  lateinit var widgetUpdater: WidgetUpdater
-
-  override fun onReceive(
-    context: Context,
-    intent: Intent?,
-  ) {
-    (rootGraph as WidgetGraph).inject(this)
-    super.onReceive(context, intent)
-  }
-
-  override fun onUpdate(
-    context: Context,
-    appWidgetManager: AppWidgetManager,
-    appWidgetIds: IntArray,
-  ) {
-    widgetUpdater.update()
-  }
-
-  override fun onAppWidgetOptionsChanged(
-    context: Context,
-    appWidgetManager: AppWidgetManager,
-    appWidgetId: Int,
-    newOptions: Bundle,
-  ) {
-    widgetUpdater.update()
-  }
+// widgets on home screens are bound to this class name, so it must not move
+class BaseWidgetProvider : WidgetReceiver() {
+  override val glanceAppWidget: GlanceAppWidget = NowPlayingWidget()
 }

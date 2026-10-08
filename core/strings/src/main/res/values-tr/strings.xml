@@ -381,4 +381,27 @@
     <string name="time.relative.this_evening">Bu akşam</string>
     <string name="time.relative.this_morning">Bu sabah</string>
     <string name="time.relative.yesterday">Dün</string>
+    <string name="widget.chapter">Böl. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Böl. %1$d / %2$d</string>
+    <string name="widget.empty.action">Klasör ekle</string>
+    <string name="widget.empty.message">Sesli kitaplarının bulunduğu klasörü seç</string>
+    <string name="widget.empty.title">Henüz kitap yok</string>
+    <string name="widget.finished.start_over">Baştan başla</string>
+    <string name="widget.finished.title">Bitti!</string>
+    <string name="widget.no_book.action">Kitaplığı aç</string>
+    <string name="widget.no_book.message">Ne dinleyeceğini seç</string>
+    <string name="widget.no_book.title">Bir kitap seç</string>
+    <string name="widget.now_playing.description">Yürüt, beklet ve ne kadar ilerlediğini gör</string>
+    <string name="widget.now_playing.label">Şimdi çalıyor</string>
+    <string name="widget.shelf.description">Dinlediğin kitaplara hemen geri dön</string>
+    <string name="widget.shelf.empty">Başladığın kitaplar burada görünür</string>
+    <string name="widget.shelf.label">Kitap rafı</string>
+    <string name="widget.shelf.play">Yürüt: %1$s</string>
+    <string name="widget.shelf.title">Dinlemeye devam et</string>
+    <string name="widget.sleep_timer.cancel">Uyku zamanlayıcısını iptal et</string>
+    <string name="widget.sleep_timer.cancel_hint">İptal etmek için dokun</string>
+    <string name="widget.sleep_timer.description">Uyku zamanlayıcısını yataktan başlat veya iptal et</string>
+    <string name="widget.sleep_timer.label">Uyku Zamanlayıcısı</string>
+    <string name="widget.sleep_timer.start">Uyku zamanlayıcısını başlat</string>
+    <string name="widget.sleep_timer.stops_at">Durma saati: %1$s</string>
 </resources>

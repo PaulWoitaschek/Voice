@@ -341,4 +341,27 @@
     <string name="time.relative.this_evening">În seara asta</string>
     <string name="time.relative.this_morning">Azi-dimineață</string>
     <string name="time.relative.yesterday">Ieri</string>
+    <string name="widget.chapter">Cap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Cap. %1$d din %2$d</string>
+    <string name="widget.empty.action">Adaugă director</string>
+    <string name="widget.empty.message">Alege directorul cu cărțile tale audio</string>
+    <string name="widget.empty.title">Încă nu ai cărți</string>
+    <string name="widget.finished.start_over">Reîncepe</string>
+    <string name="widget.finished.title">Sfârșit!</string>
+    <string name="widget.no_book.action">Deschide biblioteca</string>
+    <string name="widget.no_book.message">Alege ce vrei să asculți</string>
+    <string name="widget.no_book.title">Alege o carte</string>
+    <string name="widget.now_playing.description">Redă, pune pauză și vezi cât ai ascultat</string>
+    <string name="widget.now_playing.label">Se redă acum</string>
+    <string name="widget.shelf.description">Revino la cărțile pe care le asculți</string>
+    <string name="widget.shelf.empty">Cărțile începute apar aici</string>
+    <string name="widget.shelf.label">Raft</string>
+    <string name="widget.shelf.play">Redă %1$s</string>
+    <string name="widget.shelf.title">Continuă să asculți</string>
+    <string name="widget.sleep_timer.cancel">Anulează oprirea temporizată</string>
+    <string name="widget.sleep_timer.cancel_hint">Atinge pentru a anula</string>
+    <string name="widget.sleep_timer.description">Pornește sau anulează oprirea temporizată din pat</string>
+    <string name="widget.sleep_timer.label">Oprire temporizată</string>
+    <string name="widget.sleep_timer.start">Pornește oprirea temporizată</string>
+    <string name="widget.sleep_timer.stops_at">Se oprește la %1$s</string>
 </resources>

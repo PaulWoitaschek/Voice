@@ -381,4 +381,27 @@
     <string name="time.relative.this_evening">Oe a sero</string>
     <string name="time.relative.this_morning">Oe a mangianu</string>
     <string name="time.relative.yesterday">Eris</string>
+    <string name="widget.chapter">Cap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Cap. %1$d de %2$d</string>
+    <string name="widget.empty.action">Agiunghe cartella</string>
+    <string name="widget.empty.message">Issèbera sa cartella cun sos audiolibros tuos</string>
+    <string name="widget.empty.title">Galu nissunu libru</string>
+    <string name="widget.finished.start_over">Torra a incumintzare</string>
+    <string name="widget.finished.title">Fine!</string>
+    <string name="widget.no_book.action">Aberi sa biblioteca</string>
+    <string name="widget.no_book.message">Issèbera ite ascurtare</string>
+    <string name="widget.no_book.title">Issèbera unu libru</string>
+    <string name="widget.now_playing.description">Reprodue, pone in pàusa e bide a ue ses arribadu</string>
+    <string name="widget.now_playing.label">In riprodutzione</string>
+    <string name="widget.shelf.description">Torra a sos libros chi ses ascurtende</string>
+    <string name="widget.shelf.empty">Sos libros chi incumintzas aparint inoghe</string>
+    <string name="widget.shelf.label">Iscafale</string>
+    <string name="widget.shelf.play">Reprodue %1$s</string>
+    <string name="widget.shelf.title">Sighi a ascurtare</string>
+    <string name="widget.sleep_timer.cancel">Annulla su temporizadore de suspensione</string>
+    <string name="widget.sleep_timer.cancel_hint">Toca pro annullare</string>
+    <string name="widget.sleep_timer.description">Allughe o annulla su temporizadore de suspensione dae su letu</string>
+    <string name="widget.sleep_timer.label">Temporizadore de suspensione</string>
+    <string name="widget.sleep_timer.start">Allughe su temporizadore de suspensione</string>
+    <string name="widget.sleep_timer.stops_at">Si firmat a sas %1$s</string>
 </resources>

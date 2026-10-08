@@ -307,4 +307,27 @@
     <string name="time.relative.this_evening">今天晚上</string>
     <string name="time.relative.this_morning">今天上午</string>
     <string name="time.relative.yesterday">昨天</string>
+    <string name="widget.chapter">第 %1$d 章 · %2$s</string>
+    <string name="widget.chapter_counter">第 %1$d / %2$d 章</string>
+    <string name="widget.empty.action">添加文件夹</string>
+    <string name="widget.empty.message">选择存放有声书的文件夹</string>
+    <string name="widget.empty.title">还没有书</string>
+    <string name="widget.finished.start_over">从头开始</string>
+    <string name="widget.finished.title">完结撒花！</string>
+    <string name="widget.no_book.action">打开书库</string>
+    <string name="widget.no_book.message">选择你想听的书</string>
+    <string name="widget.no_book.title">选一本书</string>
+    <string name="widget.now_playing.description">播放、暂停，进度一目了然</string>
+    <string name="widget.now_playing.label">正在播放</string>
+    <string name="widget.shelf.description">快速回到你正在听的书</string>
+    <string name="widget.shelf.empty">开始听的书会显示在这里</string>
+    <string name="widget.shelf.label">书架</string>
+    <string name="widget.shelf.play">播放《%1$s》</string>
+    <string name="widget.shelf.title">继续收听</string>
+    <string name="widget.sleep_timer.cancel">取消睡眠定时器</string>
+    <string name="widget.sleep_timer.cancel_hint">点按即可取消</string>
+    <string name="widget.sleep_timer.description">躺在床上就能开启或取消睡眠定时器</string>
+    <string name="widget.sleep_timer.label">睡眠定时器</string>
+    <string name="widget.sleep_timer.start">开启睡眠定时器</string>
+    <string name="widget.sleep_timer.stops_at">将于 %1$s 停止</string>
 </resources>

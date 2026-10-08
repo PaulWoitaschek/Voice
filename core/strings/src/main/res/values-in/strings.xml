@@ -368,4 +368,27 @@
     <string name="time.relative.this_evening">Malam ini</string>
     <string name="time.relative.this_morning">Pagi ini</string>
     <string name="time.relative.yesterday">Kemarin</string>
+    <string name="widget.chapter">Bab %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Bab %1$d dari %2$d</string>
+    <string name="widget.empty.action">Tambah folder</string>
+    <string name="widget.empty.message">Pilih folder berisi buku audio Anda</string>
+    <string name="widget.empty.title">Belum ada buku</string>
+    <string name="widget.finished.start_over">Mulai dari awal</string>
+    <string name="widget.finished.title">Tamat!</string>
+    <string name="widget.no_book.action">Buka pustaka</string>
+    <string name="widget.no_book.message">Pilih yang ingin didengarkan</string>
+    <string name="widget.no_book.title">Pilih buku</string>
+    <string name="widget.now_playing.description">Putar, jeda, dan lihat sejauh mana Anda mendengarkan</string>
+    <string name="widget.now_playing.label">Sedang diputar</string>
+    <string name="widget.shelf.description">Kembali ke buku yang sedang Anda dengarkan</string>
+    <string name="widget.shelf.empty">Buku yang Anda mulai akan muncul di sini</string>
+    <string name="widget.shelf.label">Rak Buku</string>
+    <string name="widget.shelf.play">Putar %1$s</string>
+    <string name="widget.shelf.title">Lanjutkan mendengarkan</string>
+    <string name="widget.sleep_timer.cancel">Batalkan pengatur waktu tidur</string>
+    <string name="widget.sleep_timer.cancel_hint">Ketuk untuk membatalkan</string>
+    <string name="widget.sleep_timer.description">Mulai atau batalkan pengatur waktu tidur dari tempat tidur</string>
+    <string name="widget.sleep_timer.label">Pengatur Waktu Tidur</string>
+    <string name="widget.sleep_timer.start">Mulai pengatur waktu tidur</string>
+    <string name="widget.sleep_timer.stops_at">Berhenti pukul %1$s</string>
 </resources>

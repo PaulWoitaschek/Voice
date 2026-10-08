@@ -381,4 +381,27 @@
     <string name="time.relative.this_evening">Vanaand</string>
     <string name="time.relative.this_morning">Vanoggend</string>
     <string name="time.relative.yesterday">Gister</string>
+    <string name="widget.chapter">Hfst. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Hfst. %1$d van %2$d</string>
+    <string name="widget.empty.action">Voeg vouer by</string>
+    <string name="widget.empty.message">Kies die vouer met jou luisterboeke</string>
+    <string name="widget.empty.title">Nog geen boeke nie</string>
+    <string name="widget.finished.start_over">Begin van voor af</string>
+    <string name="widget.finished.title">Die einde!</string>
+    <string name="widget.no_book.action">Maak biblioteek oop</string>
+    <string name="widget.no_book.message">Kies waarna jy wil luister</string>
+    <string name="widget.no_book.title">Kies ’n boek</string>
+    <string name="widget.now_playing.description">Speel, pouse en sien hoe ver jy is</string>
+    <string name="widget.now_playing.label">Speel tans</string>
+    <string name="widget.shelf.description">Spring terug in die boeke waarna jy luister</string>
+    <string name="widget.shelf.empty">Boeke wat jy begin, verskyn hier</string>
+    <string name="widget.shelf.label">Boekrak</string>
+    <string name="widget.shelf.play">Speel %1$s</string>
+    <string name="widget.shelf.title">Luister verder</string>
+    <string name="widget.sleep_timer.cancel">Kanselleer die slaap-timer</string>
+    <string name="widget.sleep_timer.cancel_hint">Tik om te kanselleer</string>
+    <string name="widget.sleep_timer.description">Begin of kanselleer die slaap-timer van jou bed af</string>
+    <string name="widget.sleep_timer.label">Slaap-Timer</string>
+    <string name="widget.sleep_timer.start">Begin die slaap-timer</string>
+    <string name="widget.sleep_timer.stops_at">Stop om %1$s</string>
 </resources>

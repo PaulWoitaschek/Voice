@@ -368,4 +368,27 @@
     <string name="time.relative.this_evening">今夜</string>
     <string name="time.relative.this_morning">今朝</string>
     <string name="time.relative.yesterday">昨日</string>
+    <string name="widget.chapter">第%1$d章 · %2$s</string>
+    <string name="widget.chapter_counter">第%1$d章 / 全%2$d章</string>
+    <string name="widget.empty.action">フォルダーを追加</string>
+    <string name="widget.empty.message">オーディオブックが入ったフォルダーを選んでください</string>
+    <string name="widget.empty.title">まだ本がありません</string>
+    <string name="widget.finished.start_over">最初から聴く</string>
+    <string name="widget.finished.title">おしまい！</string>
+    <string name="widget.no_book.action">ライブラリを開く</string>
+    <string name="widget.no_book.message">聴きたい本を選びましょう</string>
+    <string name="widget.no_book.title">本を選ぶ</string>
+    <string name="widget.now_playing.description">再生・一時停止と進み具合をひと目で確認</string>
+    <string name="widget.now_playing.label">再生中</string>
+    <string name="widget.shelf.description">聴いている本にすぐ戻れます</string>
+    <string name="widget.shelf.empty">聴き始めた本がここに表示されます</string>
+    <string name="widget.shelf.label">本棚</string>
+    <string name="widget.shelf.play">%1$s を再生</string>
+    <string name="widget.shelf.title">続きを聴く</string>
+    <string name="widget.sleep_timer.cancel">スリープタイマーを解除</string>
+    <string name="widget.sleep_timer.cancel_hint">タップして解除</string>
+    <string name="widget.sleep_timer.description">ベッドからスリープタイマーを開始・解除</string>
+    <string name="widget.sleep_timer.label">スリープタイマー</string>
+    <string name="widget.sleep_timer.start">スリープタイマーを開始</string>
+    <string name="widget.sleep_timer.stops_at">%1$s に停止します</string>
 </resources>

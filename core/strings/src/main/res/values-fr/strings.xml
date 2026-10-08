@@ -394,4 +394,27 @@
     <string name="time.relative.this_evening">Ce soir</string>
     <string name="time.relative.this_morning">Ce matin</string>
     <string name="time.relative.yesterday">Hier</string>
+    <string name="widget.chapter">Chap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Chap. %1$d sur %2$d</string>
+    <string name="widget.empty.action">Ajouter un dossier</string>
+    <string name="widget.empty.message">Choisissez le dossier de vos livres audio</string>
+    <string name="widget.empty.title">Aucun livre pour l\'instant</string>
+    <string name="widget.finished.start_over">Recommencer</string>
+    <string name="widget.finished.title">Fin !</string>
+    <string name="widget.no_book.action">Ouvrir la bibliothèque</string>
+    <string name="widget.no_book.message">Choisissez quoi écouter</string>
+    <string name="widget.no_book.title">Choisissez un livre</string>
+    <string name="widget.now_playing.description">Lecture, pause et progression en un coup d\'œil</string>
+    <string name="widget.now_playing.label">En cours de lecture</string>
+    <string name="widget.shelf.description">Reprenez les livres que vous écoutez</string>
+    <string name="widget.shelf.empty">Les livres commencés s\'affichent ici</string>
+    <string name="widget.shelf.label">Étagère</string>
+    <string name="widget.shelf.play">Lire %1$s</string>
+    <string name="widget.shelf.title">Reprendre l\'écoute</string>
+    <string name="widget.sleep_timer.cancel">Annuler la minuterie de mise en veille</string>
+    <string name="widget.sleep_timer.cancel_hint">Appuyez pour annuler</string>
+    <string name="widget.sleep_timer.description">Lancez ou annulez la minuterie de mise en veille depuis votre lit</string>
+    <string name="widget.sleep_timer.label">Minuterie de mise en veille</string>
+    <string name="widget.sleep_timer.start">Lancer la minuterie de mise en veille</string>
+    <string name="widget.sleep_timer.stops_at">S\'arrête à %1$s</string>
 </resources>

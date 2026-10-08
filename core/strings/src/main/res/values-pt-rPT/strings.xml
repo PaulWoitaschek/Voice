@@ -394,4 +394,27 @@
     <string name="time.relative.this_evening">Esta noite</string>
     <string name="time.relative.this_morning">Esta manhã</string>
     <string name="time.relative.yesterday">Ontem</string>
+    <string name="widget.chapter">Cap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Cap. %1$d de %2$d</string>
+    <string name="widget.empty.action">Adicionar pasta</string>
+    <string name="widget.empty.message">Escolha a pasta com os seus audiolivros</string>
+    <string name="widget.empty.title">Ainda sem livros</string>
+    <string name="widget.finished.start_over">Recomeçar</string>
+    <string name="widget.finished.title">Fim!</string>
+    <string name="widget.no_book.action">Abrir biblioteca</string>
+    <string name="widget.no_book.message">Escolha o que ouvir</string>
+    <string name="widget.no_book.title">Escolha um livro</string>
+    <string name="widget.now_playing.description">Reproduza, pause e veja em que ponto está</string>
+    <string name="widget.now_playing.label">A reproduzir</string>
+    <string name="widget.shelf.description">Volte aos livros que está a ouvir</string>
+    <string name="widget.shelf.empty">Os livros que começar aparecem aqui</string>
+    <string name="widget.shelf.label">Estante</string>
+    <string name="widget.shelf.play">Reproduzir %1$s</string>
+    <string name="widget.shelf.title">Continuar a ouvir</string>
+    <string name="widget.sleep_timer.cancel">Cancelar o desligamento automático</string>
+    <string name="widget.sleep_timer.cancel_hint">Toque para cancelar</string>
+    <string name="widget.sleep_timer.description">Ative ou cancele o desligamento automático sem sair da cama</string>
+    <string name="widget.sleep_timer.label">Desligamento automático</string>
+    <string name="widget.sleep_timer.start">Ativar o desligamento automático</string>
+    <string name="widget.sleep_timer.stops_at">Desliga às %1$s</string>
 </resources>

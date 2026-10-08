@@ -369,4 +369,27 @@
     <string name="time.relative.this_evening">هذا المساء</string>
     <string name="time.relative.this_morning">هذا الصباح</string>
     <string name="time.relative.yesterday">أمس</string>
+    <string name="widget.chapter">الفصل %1$d · %2$s</string>
+    <string name="widget.chapter_counter">الفصل %1$d من %2$d</string>
+    <string name="widget.empty.action">أضف مجلدًا</string>
+    <string name="widget.empty.message">اختر المجلد الذي يحوي كتبك الصوتية</string>
+    <string name="widget.empty.title">لا كتب بعد</string>
+    <string name="widget.finished.start_over">ابدأ من جديد</string>
+    <string name="widget.finished.title">النهاية!</string>
+    <string name="widget.no_book.action">افتح المكتبة</string>
+    <string name="widget.no_book.message">اختر ما تريد الاستماع إليه</string>
+    <string name="widget.no_book.title">اختر كتابًا</string>
+    <string name="widget.now_playing.description">شغّل وأوقف مؤقتًا واعرف إلى أين وصلت</string>
+    <string name="widget.now_playing.label">قيد التشغيل</string>
+    <string name="widget.shelf.description">عُد إلى الكتب التي تستمع إليها</string>
+    <string name="widget.shelf.empty">ستظهر هنا الكتب التي تبدأها</string>
+    <string name="widget.shelf.label">رف الكتب</string>
+    <string name="widget.shelf.play">شغّل %1$s</string>
+    <string name="widget.shelf.title">تابع الاستماع</string>
+    <string name="widget.sleep_timer.cancel">ألغِ مؤقت النوم</string>
+    <string name="widget.sleep_timer.cancel_hint">انقر للإلغاء</string>
+    <string name="widget.sleep_timer.description">ابدأ مؤقت النوم أو ألغِه وأنت في سريرك</string>
+    <string name="widget.sleep_timer.label">مؤقت النوم</string>
+    <string name="widget.sleep_timer.start">ابدأ مؤقت النوم</string>
+    <string name="widget.sleep_timer.stops_at">يتوقف الساعة %1$s</string>
 </resources>

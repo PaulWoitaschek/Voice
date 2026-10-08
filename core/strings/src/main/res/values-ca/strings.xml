@@ -342,4 +342,27 @@
     <string name="time.relative.this_morning">Aquest matí</string>
     <string name="time.relative.yesterday">Ahir</string>
     <string name="common.dialog.ok">Acceptar</string>
+    <string name="widget.chapter">Cap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Cap. %1$d de %2$d</string>
+    <string name="widget.empty.action">Afegeix una carpeta</string>
+    <string name="widget.empty.message">Trieu la carpeta amb els vostres audiollibres</string>
+    <string name="widget.empty.title">Encara no hi ha llibres</string>
+    <string name="widget.finished.start_over">Torna a començar</string>
+    <string name="widget.finished.title">Fi!</string>
+    <string name="widget.no_book.action">Obre la biblioteca</string>
+    <string name="widget.no_book.message">Trieu què voleu escoltar</string>
+    <string name="widget.no_book.title">Trieu un llibre</string>
+    <string name="widget.now_playing.description">Reproduïu, poseu en pausa i vegeu per on aneu</string>
+    <string name="widget.now_playing.label">Ara sona</string>
+    <string name="widget.shelf.description">Torneu als llibres que esteu escoltant</string>
+    <string name="widget.shelf.empty">Els llibres que comenceu apareixeran aquí</string>
+    <string name="widget.shelf.label">Prestatge</string>
+    <string name="widget.shelf.play">Reprodueix %1$s</string>
+    <string name="widget.shelf.title">Continua escoltant</string>
+    <string name="widget.sleep_timer.cancel">Cancel·la el temporitzador de repòs</string>
+    <string name="widget.sleep_timer.cancel_hint">Toqueu per cancel·lar</string>
+    <string name="widget.sleep_timer.description">Inicieu o cancel·leu el temporitzador de repòs des del llit</string>
+    <string name="widget.sleep_timer.label">Temporitzador de repòs</string>
+    <string name="widget.sleep_timer.start">Inicia el temporitzador de repòs</string>
+    <string name="widget.sleep_timer.stops_at">S\'atura a les %1$s</string>
 </resources>

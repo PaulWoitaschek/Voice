@@ -381,4 +381,27 @@
     <string name="time.relative.this_evening">Tänä iltana</string>
     <string name="time.relative.this_morning">Tänä aamuna</string>
     <string name="time.relative.yesterday">Eilen</string>
+    <string name="widget.chapter">Luku %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Luku %1$d/%2$d</string>
+    <string name="widget.empty.action">Lisää kansio</string>
+    <string name="widget.empty.message">Valitse kansio, jossa äänikirjasi ovat</string>
+    <string name="widget.empty.title">Ei vielä kirjoja</string>
+    <string name="widget.finished.start_over">Aloita alusta</string>
+    <string name="widget.finished.title">Loppu!</string>
+    <string name="widget.no_book.action">Avaa kirjasto</string>
+    <string name="widget.no_book.message">Valitse, mitä haluat kuunnella</string>
+    <string name="widget.no_book.title">Valitse kirja</string>
+    <string name="widget.now_playing.description">Toista, keskeytä ja näe, kuinka pitkällä olet</string>
+    <string name="widget.now_playing.label">Nyt soi</string>
+    <string name="widget.shelf.description">Palaa kirjoihin, joita kuuntelet</string>
+    <string name="widget.shelf.empty">Aloittamasi kirjat näkyvät täällä</string>
+    <string name="widget.shelf.label">Kirjahylly</string>
+    <string name="widget.shelf.play">Toista %1$s</string>
+    <string name="widget.shelf.title">Jatka kuuntelua</string>
+    <string name="widget.sleep_timer.cancel">Peruuta uniajastin</string>
+    <string name="widget.sleep_timer.cancel_hint">Peruuta napauttamalla</string>
+    <string name="widget.sleep_timer.description">Käynnistä tai peruuta uniajastin sängystä</string>
+    <string name="widget.sleep_timer.label">Uniajastin</string>
+    <string name="widget.sleep_timer.start">Käynnistä uniajastin</string>
+    <string name="widget.sleep_timer.stops_at">Pysähtyy klo %1$s</string>
 </resources>

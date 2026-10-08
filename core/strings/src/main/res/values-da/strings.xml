@@ -329,4 +329,27 @@
     <string name="time.relative.this_evening">I aften</string>
     <string name="time.relative.this_morning">I morges</string>
     <string name="time.relative.yesterday">I går</string>
+    <string name="widget.chapter">Kap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Kap. %1$d af %2$d</string>
+    <string name="widget.empty.action">Tilføj mappe</string>
+    <string name="widget.empty.message">Vælg mappen med dine lydbøger</string>
+    <string name="widget.empty.title">Ingen bøger endnu</string>
+    <string name="widget.finished.start_over">Start forfra</string>
+    <string name="widget.finished.title">Slut!</string>
+    <string name="widget.no_book.action">Åbn bibliotek</string>
+    <string name="widget.no_book.message">Vælg, hvad du vil lytte til</string>
+    <string name="widget.no_book.title">Vælg en bog</string>
+    <string name="widget.now_playing.description">Afspil, sæt på pause og se, hvor langt du er nået</string>
+    <string name="widget.now_playing.label">Afspilles nu</string>
+    <string name="widget.shelf.description">Hop tilbage i de bøger, du lytter til</string>
+    <string name="widget.shelf.empty">Bøger, du starter, vises her</string>
+    <string name="widget.shelf.label">Boghylde</string>
+    <string name="widget.shelf.play">Afspil %1$s</string>
+    <string name="widget.shelf.title">Fortsæt med at lytte</string>
+    <string name="widget.sleep_timer.cancel">Annuller sleep-timeren</string>
+    <string name="widget.sleep_timer.cancel_hint">Tryk for at annullere</string>
+    <string name="widget.sleep_timer.description">Start eller annuller sleep-timeren fra sengen</string>
+    <string name="widget.sleep_timer.label">Sleep-Timer</string>
+    <string name="widget.sleep_timer.start">Start sleep-timeren</string>
+    <string name="widget.sleep_timer.stops_at">Stopper kl. %1$s</string>
 </resources>

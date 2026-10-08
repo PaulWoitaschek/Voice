@@ -309,4 +309,27 @@
     <string name="time.relative.this_evening">Απόψε</string>
     <string name="time.relative.this_morning">Σήμερα το πρωί</string>
     <string name="time.relative.yesterday">Χθες</string>
+    <string name="widget.chapter">Κεφ. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Κεφ. %1$d από %2$d</string>
+    <string name="widget.empty.action">Προσθήκη φακέλου</string>
+    <string name="widget.empty.message">Επιλέξτε τον φάκελο με τα ηχητικά σας βιβλία</string>
+    <string name="widget.empty.title">Δεν υπάρχουν βιβλία ακόμα</string>
+    <string name="widget.finished.start_over">Από την αρχή</string>
+    <string name="widget.finished.title">Τέλος!</string>
+    <string name="widget.no_book.action">Άνοιγμα βιβλιοθήκης</string>
+    <string name="widget.no_book.message">Επιλέξτε τι θα ακούσετε</string>
+    <string name="widget.no_book.title">Επιλέξτε ένα βιβλίο</string>
+    <string name="widget.now_playing.description">Αναπαραγωγή, παύση και η πρόοδός σας με μια ματιά</string>
+    <string name="widget.now_playing.label">Παίζει τώρα</string>
+    <string name="widget.shelf.description">Επιστρέψτε στα βιβλία που ακούτε</string>
+    <string name="widget.shelf.empty">Τα βιβλία που ξεκινάτε εμφανίζονται εδώ</string>
+    <string name="widget.shelf.label">Ράφι</string>
+    <string name="widget.shelf.play">Αναπαραγωγή %1$s</string>
+    <string name="widget.shelf.title">Συνέχεια ακρόασης</string>
+    <string name="widget.sleep_timer.cancel">Ακύρωση χρονοδιακόπτη ύπνου</string>
+    <string name="widget.sleep_timer.cancel_hint">Πατήστε για ακύρωση</string>
+    <string name="widget.sleep_timer.description">Ξεκινήστε ή ακυρώστε τον χρονοδιακόπτη ύπνου από το κρεβάτι</string>
+    <string name="widget.sleep_timer.label">Χρονοδιακόπτης ύπνου</string>
+    <string name="widget.sleep_timer.start">Έναρξη χρονοδιακόπτη ύπνου</string>
+    <string name="widget.sleep_timer.stops_at">Διακοπή στις %1$s</string>
 </resources>

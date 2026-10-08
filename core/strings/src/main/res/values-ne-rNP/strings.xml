@@ -323,4 +323,27 @@
     <string name="time.relative.this_evening">आज साँझ</string>
     <string name="time.relative.this_morning">आज बिहान</string>
     <string name="time.relative.yesterday">हिजो</string>
+    <string name="widget.chapter">अध्याय %1$d · %2$s</string>
+    <string name="widget.chapter_counter">अध्याय %1$d / %2$d</string>
+    <string name="widget.empty.action">फोल्डर थप्नुहोस्</string>
+    <string name="widget.empty.message">तपाईंका अडियोबूकहरू भएको फोल्डर छान्नुहोस्</string>
+    <string name="widget.empty.title">अहिलेसम्म कुनै पुस्तक छैन</string>
+    <string name="widget.finished.start_over">फेरि सुरु गर्नुहोस्</string>
+    <string name="widget.finished.title">समाप्त!</string>
+    <string name="widget.no_book.action">पुस्तकालय खोल्नुहोस्</string>
+    <string name="widget.no_book.message">के सुन्ने छान्नुहोस्</string>
+    <string name="widget.no_book.title">पुस्तक छान्नुहोस्</string>
+    <string name="widget.now_playing.description">प्ले, पज र कति सुन्नुभयो हेर्नुहोस्</string>
+    <string name="widget.now_playing.label">अहिले बज्दैछ</string>
+    <string name="widget.shelf.description">तपाईंले सुनिरहनुभएका पुस्तकहरूमा फर्कनुहोस्</string>
+    <string name="widget.shelf.empty">तपाईंले सुरु गर्नुभएका पुस्तकहरू यहाँ देखिन्छन्</string>
+    <string name="widget.shelf.label">पुस्तक दराज</string>
+    <string name="widget.shelf.play">%1$s प्ले गर्नुहोस्</string>
+    <string name="widget.shelf.title">सुन्न जारी राख्नुहोस्</string>
+    <string name="widget.sleep_timer.cancel">सुत्ने-टाइमर रद्द गर्नुहोस्</string>
+    <string name="widget.sleep_timer.cancel_hint">रद्द गर्न ट्याप गर्नुहोस्</string>
+    <string name="widget.sleep_timer.description">ओछ्यानबाटै सुत्ने-टाइमर सुरु वा रद्द गर्नुहोस्</string>
+    <string name="widget.sleep_timer.label">सुत्ने-टाइमर</string>
+    <string name="widget.sleep_timer.start">सुत्ने-टाइमर सुरु गर्नुहोस्</string>
+    <string name="widget.sleep_timer.stops_at">%1$s बजे रोकिन्छ</string>
 </resources>

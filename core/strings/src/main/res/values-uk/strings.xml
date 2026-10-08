@@ -407,4 +407,27 @@
     <string name="time.relative.this_evening">Сьогодні ввечері</string>
     <string name="time.relative.this_morning">Сьогодні вранці</string>
     <string name="time.relative.yesterday">Учора</string>
+    <string name="widget.chapter">Розд. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Розд. %1$d з %2$d</string>
+    <string name="widget.empty.action">Додати папку</string>
+    <string name="widget.empty.message">Виберіть папку з аудіокнигами</string>
+    <string name="widget.empty.title">Поки немає книг</string>
+    <string name="widget.finished.start_over">Почати знову</string>
+    <string name="widget.finished.title">Кінець!</string>
+    <string name="widget.no_book.action">Відкрити бібліотеку</string>
+    <string name="widget.no_book.message">Виберіть, що послухати</string>
+    <string name="widget.no_book.title">Виберіть книгу</string>
+    <string name="widget.now_playing.description">Відтворюйте, призупиняйте та стежте за прогресом</string>
+    <string name="widget.now_playing.label">Зараз грає</string>
+    <string name="widget.shelf.description">Повертайтеся до книг, які ви слухаєте</string>
+    <string name="widget.shelf.empty">Тут з\'являться розпочаті книги</string>
+    <string name="widget.shelf.label">Книжкова полиця</string>
+    <string name="widget.shelf.play">Відтворити %1$s</string>
+    <string name="widget.shelf.title">Продовжити слухання</string>
+    <string name="widget.sleep_timer.cancel">Скасувати таймер сну</string>
+    <string name="widget.sleep_timer.cancel_hint">Торкніться, щоб скасувати</string>
+    <string name="widget.sleep_timer.description">Запускайте та скасовуйте таймер сну просто з ліжка</string>
+    <string name="widget.sleep_timer.label">Таймер сну</string>
+    <string name="widget.sleep_timer.start">Запустити таймер сну</string>
+    <string name="widget.sleep_timer.stops_at">Зупиниться о %1$s</string>
 </resources>

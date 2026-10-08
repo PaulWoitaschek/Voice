@@ -407,4 +407,27 @@
     <string name="time.relative.this_evening">Dnes večer</string>
     <string name="time.relative.this_morning">Dnes ráno</string>
     <string name="time.relative.yesterday">Včera</string>
+    <string name="widget.chapter">Kap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Kap. %1$d z %2$d</string>
+    <string name="widget.empty.action">Pridať priečinok</string>
+    <string name="widget.empty.message">Vyberte priečinok so zvukovými knihami</string>
+    <string name="widget.empty.title">Zatiaľ žiadne knihy</string>
+    <string name="widget.finished.start_over">Začať odznova</string>
+    <string name="widget.finished.title">Koniec!</string>
+    <string name="widget.no_book.action">Otvoriť knižnicu</string>
+    <string name="widget.no_book.message">Vyberte, čo chcete počúvať</string>
+    <string name="widget.no_book.title">Vyberte knihu</string>
+    <string name="widget.now_playing.description">Prehrávajte, pozastavujte a sledujte svoj postup</string>
+    <string name="widget.now_playing.label">Práve hrá</string>
+    <string name="widget.shelf.description">Vráťte sa ku knihám, ktoré počúvate</string>
+    <string name="widget.shelf.empty">Knihy, ktoré začnete počúvať, sa zobrazia tu</string>
+    <string name="widget.shelf.label">Polica na knihy</string>
+    <string name="widget.shelf.play">Prehrať %1$s</string>
+    <string name="widget.shelf.title">Pokračovať v počúvaní</string>
+    <string name="widget.sleep_timer.cancel">Zrušiť časovač spánku</string>
+    <string name="widget.sleep_timer.cancel_hint">Ťuknutím zrušíte</string>
+    <string name="widget.sleep_timer.description">Spustite alebo zrušte časovač spánku priamo z postele</string>
+    <string name="widget.sleep_timer.label">Časovač spánku</string>
+    <string name="widget.sleep_timer.start">Spustiť časovač spánku</string>
+    <string name="widget.sleep_timer.stops_at">Vypne sa o %1$s</string>
 </resources>

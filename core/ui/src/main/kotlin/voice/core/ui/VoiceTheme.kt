@@ -1,5 +1,6 @@
 package voice.core.ui
 
+import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
@@ -9,12 +10,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.materialkolor.PaletteStyle
+import com.materialkolor.dynamicColorScheme
 import com.materialkolor.dynamiccolor.ColorSpec
 import com.materialkolor.ktx.animateColorScheme
-import com.materialkolor.rememberDynamicColorScheme
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
 
@@ -69,11 +71,22 @@ fun rememberThemeColorScheme(
   themeColorScheme: ThemeColorScheme,
   dark: Boolean,
 ): ColorScheme {
+  val context = LocalContext.current
+  return remember(context, themeColorScheme, dark) {
+    themeColorScheme(context, themeColorScheme, dark)
+  }
+}
+
+/** The colors [themeColorScheme] produces outside of composition, see [rememberThemeColorScheme]. */
+fun themeColorScheme(
+  context: Context,
+  themeColorScheme: ThemeColorScheme,
+  dark: Boolean,
+): ColorScheme {
   if (themeColorScheme == ThemeColorScheme.Dynamic && Build.VERSION.SDK_INT >= 31) {
-    val context = LocalContext.current
     return if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
   }
-  return rememberDynamicColorScheme(
+  return dynamicColorScheme(
     // the seed as primary keeps its full saturation, e.g. the deep Voice blue of the launcher icon
     primary = seedColor(themeColorScheme),
     isDark = dark,

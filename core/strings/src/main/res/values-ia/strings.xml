@@ -381,4 +381,27 @@
     <string name="time.relative.this_evening">Iste vespere</string>
     <string name="time.relative.this_morning">Iste matino</string>
     <string name="time.relative.yesterday">Heri</string>
+    <string name="widget.chapter">Cap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Cap. %1$d de %2$d</string>
+    <string name="widget.empty.action">Adder dossier</string>
+    <string name="widget.empty.message">Selige le dossier con tu audiolibros</string>
+    <string name="widget.empty.title">Nulle libros ancora</string>
+    <string name="widget.finished.start_over">Recomenciar</string>
+    <string name="widget.finished.title">Fin!</string>
+    <string name="widget.no_book.action">Aperir bibliotheca</string>
+    <string name="widget.no_book.message">Selige lo que tu vole ascoltar</string>
+    <string name="widget.no_book.title">Selige un libro</string>
+    <string name="widget.now_playing.description">Reproduce, pausa e vide ubi tu es</string>
+    <string name="widget.now_playing.label">Ora in reproduction</string>
+    <string name="widget.shelf.description">Retorna al libros que tu ascolta</string>
+    <string name="widget.shelf.empty">Le libros que tu comencia appare hic</string>
+    <string name="widget.shelf.label">Etagère</string>
+    <string name="widget.shelf.play">Reproducer %1$s</string>
+    <string name="widget.shelf.title">Continuar ascoltar</string>
+    <string name="widget.sleep_timer.cancel">Cancellar le temporisator de somno</string>
+    <string name="widget.sleep_timer.cancel_hint">Tocca pro cancellar</string>
+    <string name="widget.sleep_timer.description">Initia o cancella le temporisator de somno ab le lecto</string>
+    <string name="widget.sleep_timer.label">Temporisator de somno</string>
+    <string name="widget.sleep_timer.start">Initiar le temporisator de somno</string>
+    <string name="widget.sleep_timer.stops_at">Se arresta a %1$s</string>
 </resources>

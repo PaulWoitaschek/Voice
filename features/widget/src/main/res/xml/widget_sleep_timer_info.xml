@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:description="@string/widget.sleep_timer.description"
+  android:initialLayout="@layout/glance_default_loading_layout"
+  android:minWidth="110dp"
+  android:minHeight="40dp"
+  android:minResizeWidth="40dp"
+  android:minResizeHeight="40dp"
+  android:previewImage="@drawable/widget_preview_sleep_timer"
+  android:resizeMode="horizontal|vertical"
+  android:targetCellWidth="2"
+  android:targetCellHeight="1"
+  android:updatePeriodMillis="0"
+  android:widgetCategory="home_screen"
+  tools:ignore="UnusedAttribute" />

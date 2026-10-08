@@ -381,4 +381,27 @@
     <string name="time.relative.this_evening">Esta noite</string>
     <string name="time.relative.this_morning">Esta mañá</string>
     <string name="time.relative.yesterday">Onte</string>
+    <string name="widget.chapter">Cap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Cap. %1$d de %2$d</string>
+    <string name="widget.empty.action">Engadir cartafol</string>
+    <string name="widget.empty.message">Escolle o cartafol cos teus audiolibros</string>
+    <string name="widget.empty.title">Aínda non hai libros</string>
+    <string name="widget.finished.start_over">Comezar de novo</string>
+    <string name="widget.finished.title">Fin!</string>
+    <string name="widget.no_book.action">Abrir biblioteca</string>
+    <string name="widget.no_book.message">Escolle que escoitar</string>
+    <string name="widget.no_book.title">Escolle un libro</string>
+    <string name="widget.now_playing.description">Reproduce, pausa e mira canto levas</string>
+    <string name="widget.now_playing.label">Reproducindo agora</string>
+    <string name="widget.shelf.description">Volve aos libros que estás escoitando</string>
+    <string name="widget.shelf.empty">Aquí aparecerán os libros que comeces</string>
+    <string name="widget.shelf.label">Andel</string>
+    <string name="widget.shelf.play">Reproducir %1$s</string>
+    <string name="widget.shelf.title">Seguir escoitando</string>
+    <string name="widget.sleep_timer.cancel">Cancelar o temporizador de apagado</string>
+    <string name="widget.sleep_timer.cancel_hint">Toca para cancelar</string>
+    <string name="widget.sleep_timer.description">Inicia ou cancela o temporizador de apagado desde a cama</string>
+    <string name="widget.sleep_timer.label">Temporizador de apagado</string>
+    <string name="widget.sleep_timer.start">Iniciar o temporizador de apagado</string>
+    <string name="widget.sleep_timer.stops_at">Apágase ás %1$s</string>
 </resources>

@@ -381,4 +381,27 @@
     <string name="time.relative.this_evening">Вечерва</string>
     <string name="time.relative.this_morning">Утрово</string>
     <string name="time.relative.yesterday">Вчера</string>
+    <string name="widget.chapter">Погл. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Погл. %1$d од %2$d</string>
+    <string name="widget.empty.action">Додај фолдер</string>
+    <string name="widget.empty.message">Изберете го фолдерот со вашите аудио книги</string>
+    <string name="widget.empty.title">Сè уште нема книги</string>
+    <string name="widget.finished.start_over">Почни одново</string>
+    <string name="widget.finished.title">Крај!</string>
+    <string name="widget.no_book.action">Отвори библиотека</string>
+    <string name="widget.no_book.message">Изберете што ќе слушате</string>
+    <string name="widget.no_book.title">Изберете книга</string>
+    <string name="widget.now_playing.description">Пуштете, паузирајте и видете докаде стигнавте</string>
+    <string name="widget.now_playing.label">Сега свири</string>
+    <string name="widget.shelf.description">Вратете се на книгите што ги слушате</string>
+    <string name="widget.shelf.empty">Книгите што ќе ги започнете ќе се појават тука</string>
+    <string name="widget.shelf.label">Полица</string>
+    <string name="widget.shelf.play">Пушти %1$s</string>
+    <string name="widget.shelf.title">Продолжи со слушање</string>
+    <string name="widget.sleep_timer.cancel">Откажи го тајмерот за спиење</string>
+    <string name="widget.sleep_timer.cancel_hint">Допрете за откажување</string>
+    <string name="widget.sleep_timer.description">Вклучете го или откажете го тајмерот за спиење од креветот</string>
+    <string name="widget.sleep_timer.label">Тајмер за спиење</string>
+    <string name="widget.sleep_timer.start">Вклучи го тајмерот за спиење</string>
+    <string name="widget.sleep_timer.stops_at">Запира во %1$s</string>
 </resources>

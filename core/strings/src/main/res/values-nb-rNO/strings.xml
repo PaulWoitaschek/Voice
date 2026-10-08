@@ -381,4 +381,27 @@
     <string name="time.relative.this_evening">I kveld</string>
     <string name="time.relative.this_morning">I morges</string>
     <string name="time.relative.yesterday">I går</string>
+    <string name="widget.chapter">Kap. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Kap. %1$d av %2$d</string>
+    <string name="widget.empty.action">Legg til mappe</string>
+    <string name="widget.empty.message">Velg mappen med lydbøkene dine</string>
+    <string name="widget.empty.title">Ingen bøker ennå</string>
+    <string name="widget.finished.start_over">Start på nytt</string>
+    <string name="widget.finished.title">Slutt!</string>
+    <string name="widget.no_book.action">Åpne biblioteket</string>
+    <string name="widget.no_book.message">Velg hva du vil lytte til</string>
+    <string name="widget.no_book.title">Velg en bok</string>
+    <string name="widget.now_playing.description">Spill av, sett på pause og se hvor langt du har kommet</string>
+    <string name="widget.now_playing.label">Spilles nå</string>
+    <string name="widget.shelf.description">Hopp tilbake til bøkene du lytter til</string>
+    <string name="widget.shelf.empty">Bøker du starter, vises her</string>
+    <string name="widget.shelf.label">Bokhylle</string>
+    <string name="widget.shelf.play">Spill %1$s</string>
+    <string name="widget.shelf.title">Fortsett å lytte</string>
+    <string name="widget.sleep_timer.cancel">Avbryt innsovningstidsuret</string>
+    <string name="widget.sleep_timer.cancel_hint">Trykk for å avbryte</string>
+    <string name="widget.sleep_timer.description">Start eller avbryt innsovningstidsuret fra sengen</string>
+    <string name="widget.sleep_timer.label">Innsovningstidsur</string>
+    <string name="widget.sleep_timer.start">Start innsovningstidsuret</string>
+    <string name="widget.sleep_timer.stops_at">Stopper kl. %1$s</string>
 </resources>

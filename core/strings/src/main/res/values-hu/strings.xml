@@ -329,4 +329,27 @@
     <string name="time.relative.this_evening">Ma este</string>
     <string name="time.relative.this_morning">Ma reggel</string>
     <string name="time.relative.yesterday">Tegnap</string>
+    <string name="widget.chapter">%1$d. fej. · %2$s</string>
+    <string name="widget.chapter_counter">%1$d. fej. / %2$d</string>
+    <string name="widget.empty.action">Mappa hozzáadása</string>
+    <string name="widget.empty.message">Válassza ki a hangoskönyveit tartalmazó mappát</string>
+    <string name="widget.empty.title">Még nincsenek könyvek</string>
+    <string name="widget.finished.start_over">Újrakezdés</string>
+    <string name="widget.finished.title">Vége!</string>
+    <string name="widget.no_book.action">Könyvtár megnyitása</string>
+    <string name="widget.no_book.message">Válassza ki, mit hallgatna</string>
+    <string name="widget.no_book.title">Válasszon egy könyvet</string>
+    <string name="widget.now_playing.description">Lejátszás, szüneteltetés és az előrehaladás egy pillantással</string>
+    <string name="widget.now_playing.label">Most szól</string>
+    <string name="widget.shelf.description">Térjen vissza az éppen hallgatott könyvekhez</string>
+    <string name="widget.shelf.empty">Az elkezdett könyvek itt jelennek meg</string>
+    <string name="widget.shelf.label">Könyvespolc</string>
+    <string name="widget.shelf.play">%1$s lejátszása</string>
+    <string name="widget.shelf.title">Hallgatás folytatása</string>
+    <string name="widget.sleep_timer.cancel">Alvásidőzítő kikapcsolása</string>
+    <string name="widget.sleep_timer.cancel_hint">Koppintson a kikapcsoláshoz</string>
+    <string name="widget.sleep_timer.description">Indítsa el vagy kapcsolja ki az alvásidőzítőt az ágyból</string>
+    <string name="widget.sleep_timer.label">Alvásidőzítő</string>
+    <string name="widget.sleep_timer.start">Alvásidőzítő indítása</string>
+    <string name="widget.sleep_timer.stops_at">Leáll ekkor: %1$s</string>
 </resources>

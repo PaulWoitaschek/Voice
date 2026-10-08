@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="100dp"
+  android:height="100dp"
+  android:viewportWidth="100"
+  android:viewportHeight="100">
+  <path
+    android:fillAlpha="0.9"
+    android:fillColor="@android:color/white"
+    android:pathData="M16,14Q16,20 22,20Q16,20 16,26Q16,20 10,20Q16,20 16,14Z" />
+  <path
+    android:fillAlpha="0.7"
+    android:fillColor="@android:color/white"
+    android:pathData="M82,10Q82,14 86,14Q82,14 82,18Q82,14 78,14Q82,14 82,10Z" />
+  <path
+    android:fillAlpha="0.8"
+    android:fillColor="@android:color/white"
+    android:pathData="M88,71Q88,76 93,76Q88,76 88,81Q88,76 83,76Q88,76 88,71Z" />
+  <path
+    android:fillAlpha="0.6"
+    android:fillColor="@android:color/white"
+    android:pathData="M10.4,78a1.6,1.6 0,1 0,3.2,0a1.6,1.6 0,1 0,-3.2,0z" />
+  <path
+    android:fillAlpha="0.5"
+    android:fillColor="@android:color/white"
+    android:pathData="M68.8,90a1.2,1.2 0,1 0,2.4,0a1.2,1.2 0,1 0,-2.4,0z" />
+  <path
+    android:fillAlpha="0.5"
+    android:fillColor="@android:color/white"
+    android:pathData="M28.8,8a1.2,1.2 0,1 0,2.4,0a1.2,1.2 0,1 0,-2.4,0z" />
+  <path
+    android:fillAlpha="0.6"
+    android:fillColor="@android:color/white"
+    android:pathData="M26,87Q26,90 29,90Q26,90 26,93Q26,90 23,90Q26,90 26,87Z" />
+</vector>

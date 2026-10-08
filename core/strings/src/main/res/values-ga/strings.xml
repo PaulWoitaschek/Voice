@@ -420,4 +420,27 @@
     <string name="time.relative.this_evening">Anocht</string>
     <string name="time.relative.this_morning">Ar maidin</string>
     <string name="time.relative.yesterday">Inné</string>
+    <string name="widget.chapter">Caib. %1$d · %2$s</string>
+    <string name="widget.chapter_counter">Caib. %1$d de %2$d</string>
+    <string name="widget.empty.action">Cuir fillteán leis</string>
+    <string name="widget.empty.message">Roghnaigh an fillteán ina bhfuil do chuid closleabhar</string>
+    <string name="widget.empty.title">Níl aon leabhar fós</string>
+    <string name="widget.finished.start_over">Tosaigh arís</string>
+    <string name="widget.finished.title">An deireadh!</string>
+    <string name="widget.no_book.action">Oscail an leabharlann</string>
+    <string name="widget.no_book.message">Roghnaigh cad a éistfidh tú leis</string>
+    <string name="widget.no_book.title">Roghnaigh leabhar</string>
+    <string name="widget.now_playing.description">Seinn, cuir ar sos agus féach cá bhfuil tú</string>
+    <string name="widget.now_playing.label">Á sheinm anois</string>
+    <string name="widget.shelf.description">Fill ar na leabhair a bhfuil tú ag éisteacht leo</string>
+    <string name="widget.shelf.empty">Taispeánfar anseo na leabhair a thosaíonn tú</string>
+    <string name="widget.shelf.label">Seilf leabhar</string>
+    <string name="widget.shelf.play">Seinn %1$s</string>
+    <string name="widget.shelf.title">Lean ort ag éisteacht</string>
+    <string name="widget.sleep_timer.cancel">Cealaigh an t-orláiste codalta</string>
+    <string name="widget.sleep_timer.cancel_hint">Tapáil chun é a chealú</string>
+    <string name="widget.sleep_timer.description">Tosaigh nó cealaigh an t-orláiste codalta ón leaba</string>
+    <string name="widget.sleep_timer.label">Orláiste codalta</string>
+    <string name="widget.sleep_timer.start">Tosaigh an t-orláiste codalta</string>
+    <string name="widget.sleep_timer.stops_at">Stadfaidh sé ag %1$s</string>
 </resources>
