@@ -7,6 +7,7 @@ import dev.zacsweers.metro.ElementsIntoSet
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.Qualifier
 import dev.zacsweers.metro.SingleIn
+import voice.core.common.AppInfoProvider
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -86,6 +87,31 @@ object FeatureFlagBindingContainer {
   }
 
   @Provides
+  @SingleIn(AppScope::class)
+  @SupportDevelopmentFeatureFlagQualifier
+  fun supportDevelopmentFeatureFlag(
+    factory: FeatureFlagFactory,
+    appInfoProvider: AppInfoProvider,
+  ): FeatureFlag<Boolean> {
+    return factory.boolean(
+      key = "support_development",
+      description = "Shows the support card in the settings. Play builds turn it on remotely once the supporter products are live.",
+      defaultValue = appInfoProvider.supportDevelopmentIncluded,
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @SupporterNoteFeatureFlagQualifier
+  fun supporterNoteFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<String> {
+    return factory.string(
+      key = "supporter_note",
+      description = "A note on the support sheet, e.g. what the support paid for this month. Hidden when empty.",
+      defaultValue = "",
+    )
+  }
+
+  @Provides
   @ElementsIntoSet
   fun featureFlags(
     @ReviewEnabledFeatureFlagQualifier reviewEnabled: FeatureFlag<Boolean>,
@@ -94,6 +120,8 @@ object FeatureFlagBindingContainer {
     @ExperimentalPlaybackPersistenceQualifier experimentalPlaybackPersistence: FeatureFlag<Boolean>,
     @Media3AudioOffloadFeatureFlagQualifier media3AudioOffload: FeatureFlag<Boolean>,
     @KioskModeFeatureFlagQualifier kioskMode: FeatureFlag<Boolean>,
+    @SupportDevelopmentFeatureFlagQualifier supportDevelopment: FeatureFlag<Boolean>,
+    @SupporterNoteFeatureFlagQualifier supporterNote: FeatureFlag<String>,
   ): Set<FeatureFlag<*>> = setOf(
     reviewEnabled,
     reviewPromptForce,
@@ -101,6 +129,8 @@ object FeatureFlagBindingContainer {
     experimentalPlaybackPersistence,
     media3AudioOffload,
     kioskMode,
+    supportDevelopment,
+    supporterNote,
   )
 }
 
@@ -124,3 +154,9 @@ annotation class Media3AudioOffloadFeatureFlagQualifier
 
 @Qualifier
 annotation class KioskModeFeatureFlagQualifier
+
+@Qualifier
+annotation class SupportDevelopmentFeatureFlagQualifier
+
+@Qualifier
+annotation class SupporterNoteFeatureFlagQualifier

@@ -74,6 +74,7 @@ generate_icon devices Devices
 generate_icon directions_car DirectionsCar
 generate_icon done Done
 generate_icon download Download
+generate_icon emoji_food_beverage EmojiFoodBeverage
 generate_icon expand_more ExpandMore
 generate_icon fast_forward FastForward
 generate_icon fast_rewind FastRewind
@@ -84,6 +85,7 @@ generate_icon forum Forum
 generate_icon headphones Headphones
 generate_icon help Help
 generate_icon history History
+generate_icon hive Hive
 generate_icon hourglass_empty HourglassEmpty
 generate_icon image Image
 generate_icon keyboard_arrow_down KeyboardArrowDown
@@ -93,6 +95,7 @@ generate_icon light_mode LightMode
 generate_icon lightbulb Lightbulb
 generate_icon lock_open LockOpen
 generate_icon mail Mail
+generate_icon mic Mic
 generate_icon more_vert MoreVert
 generate_icon not_started NotStarted
 generate_icon notifications Notifications
@@ -119,6 +122,7 @@ generate_icon undo Undo
 generate_icon vibration Vibration
 generate_icon view_list ViewList
 generate_icon volume_up VolumeUp
+generate_icon volunteer_activism VolunteerActivism
 generate_icon watch Watch
 generate_icon widgets Widgets
 

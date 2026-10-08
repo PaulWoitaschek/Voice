@@ -21,6 +21,7 @@ import voice.core.data.ReviewPromptState
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
 import voice.core.data.sleeptimer.SleepTimerPreference
+import voice.core.data.supporter.SupporterStatus
 import voice.core.featureflag.FeatureFlagOverride
 import java.io.File
 import kotlin.time.Duration
@@ -236,6 +237,17 @@ public object StoreModule {
       serializer = MapSerializer(String.serializer(), Int.serializer()),
       defaultValue = emptyMap(),
       fileName = "coverSeedColors",
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @SupporterStatusStore
+  private fun supporterStatus(factory: VoiceDataStoreFactory): DataStore<SupporterStatus> {
+    return factory.create(
+      serializer = SupporterStatus.serializer(),
+      defaultValue = SupporterStatus(),
+      fileName = "supporterStatus",
     )
   }
 }

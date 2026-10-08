@@ -508,20 +508,50 @@
     <!-- Settings support row for helping translate the app. -->
     <!-- Settings support row for reporting a problem. -->
     <string name="settings.support.report_issue.title">Report a problem</string>
-    <!-- Settings row description for opening the donation/support screen. -->
-    <string name="settings.support.support_voice.summary">Donations help keep Voice maintained</string>
+    <!-- Description on the settings card that opens the support screen, for subscribing, tipping or donating. -->
+    <string name="settings.support.support_voice.summary">Keeps Voice free and ad-free</string>
     <!-- Settings row for opening the donation/support screen. -->
     <string name="settings.support.support_voice.title">Support development</string>
     <!-- Settings support row for suggesting a product idea. -->
     <string name="settings.support.suggest_idea.title">Suggest an idea</string>
+    <!-- Title of the settings support card for someone who already supported Voice with a subscription or tip. -->
+    <string name="settings.support.supporter.title">Thanks for supporting Voice</string>
     <!-- Title of the settings section with the FAQ, getting help, reporting problems, suggesting ideas and translating. -->
     <string name="settings.support.title">Help and feedback</string>
+    <!-- Support screen button that opens the Google Play subscription settings. -->
+    <string name="support.action.manage_subscription">Manage subscription</string>
+    <!-- Support screen button that starts a supporter subscription. %1$s is the price with its period, for example "€2.99 a month". -->
+    <string name="support.action.subscribe">Support for %1$s</string>
+    <!-- Support screen button that changes a running subscription to another tier or period. %1$s is the new price with its period, for example "€29.99 a year". -->
+    <string name="support.action.switch">Switch to %1$s</string>
+    <!-- Support screen button that reveals one-time tips for people who don't want a subscription. -->
+    <string name="support.action.tip_once">Rather tip once?</string>
+    <!-- Spoken by the screen reader for a supporter badge the user has earned. -->
+    <string name="support.badge.earned">Earned</string>
+    <!-- Name of the supporter badge earned when subscribing. Playful: the narrator's first cup of tea. -->
+    <string name="support.badge.first_cup">First cup</string>
+    <!-- Spoken by the screen reader for a supporter badge the user hasn't earned yet. -->
+    <string name="support.badge.not_earned">Not earned yet</string>
+    <!-- Name of the supporter badge earned after one year of subscription. -->
+    <string name="support.badge.one_year">1 year</string>
+    <!-- Name of the supporter badge earned after six months of subscription. -->
+    <string name="support.badge.six_months">6 months</string>
+    <!-- Name of the supporter badge earned after three months of subscription. -->
+    <string name="support.badge.three_months">3 months</string>
+    <!-- Name of the supporter badge earned with a one-time tip. -->
+    <string name="support.badge.tip_jar">Tip jar</string>
+    <!-- Heading above the row of supporter badges. -->
+    <string name="support.badges.title">Your badge grows each month you support</string>
     <!-- Support screen action for donating through Ko-fi. -->
     <string name="support.action.donate_kofi">Donate on Ko-fi</string>
     <!-- Support screen text explaining why support is useful. -->
     <string name="support.description.maintenance">Voice is free, open source, and maintained by one developer.</string>
     <!-- Support screen text under the main description. -->
     <string name="support.description.maintenance_subtitle">Donations help fund ongoing maintenance and development.</string>
+    <!-- Support screen text on Google Play, explaining why a subscription helps more than a one-time tip. Written by the developer in first person. -->
+    <string name="support.description.play">Monthly support is what lets me plan the next release, not just the next fix.</string>
+    <!-- Small print below the subscribe button. Makes clear that paying gives no features. -->
+    <string name="support.fine_print">It\'s a thank-you: it unlocks nothing. Cancel anytime in Google Play.</string>
     <!-- Support screen heading above the list of what donations enable. -->
     <string name="support.helps.title">Support helps with</string>
     <!-- Support screen list item: bug fixes and ongoing maintenance. -->
@@ -530,8 +560,54 @@
     <string name="support.helps.features">New features</string>
     <!-- Support screen list item: keeping Voice free, open source, and ad-free. -->
     <string name="support.helps.open_source">Keeping Voice ad-free</string>
-    <!-- Title of the support screen. -->
-    <string name="support.title">Support development</string>
+    <!-- Title on top of the support screen. Playful: the app is called Voice, and support keeps it going. -->
+    <string name="support.hero.title">Keep Voice talking</string>
+    <!-- Hint below the Ko-fi donation button. -->
+    <string name="support.kofi.hint">Ko-fi opens in your browser. Any amount helps.</string>
+    <!-- Shown on the support screen when starting a payment failed. -->
+    <string name="support.message.failed">That didn\'t work. Try again in a moment.</string>
+    <!-- Shown on the support screen while a payment is still being processed, for example a cash payment. Playful: "brewing" refers to the tea tiers. -->
+    <string name="support.message.pending">Your tea is brewing. Your badge appears once Google confirms the payment.</string>
+    <!-- Signature of the developer below a note or thank-you message. -->
+    <string name="support.note.signature" translatable="false">— Paul</string>
+    <!-- Toggle on the support screen for paying every month. -->
+    <string name="support.period.monthly">Monthly</string>
+    <!-- Toggle on the support screen for paying once a year. -->
+    <string name="support.period.yearly">Yearly</string>
+    <!-- Price of a monthly subscription. %1$s is the price, for example "€2.99". -->
+    <string name="support.price.monthly">%1$s a month</string>
+    <!-- Price of a yearly subscription. %1$s is the price, for example "€29.99". -->
+    <string name="support.price.yearly">%1$s a year</string>
+    <!-- Since when someone supports Voice. %1$s is a month and year, for example "March 2026". -->
+    <string name="support.supporter.since">Supporter since %1$s</string>
+    <!-- Title on the support screen for someone who already supported Voice. -->
+    <string name="support.supporter.title">You\'re a supporter</string>
+    <!-- Button that closes the thank-you screen after a payment. -->
+    <string name="support.thank_you.action">Back to listening</string>
+    <!-- Thank-you message after a payment. Playful: refers to the tea tiers. -->
+    <string name="support.thank_you.message">That really hits the spot. Thank you for keeping Voice going.</string>
+    <!-- Title of the thank-you screen after a payment. -->
+    <string name="support.thank_you.title">Thank you!</string>
+    <!-- Label on the subscription tier the user currently pays for. -->
+    <string name="support.tier.current">Your tier</string>
+    <!-- Short description of the most expensive supporter tier. -->
+    <string name="support.tier.golden_mic.summary">A standing ovation</string>
+    <!-- Name of the most expensive supporter tier. Playful: a golden microphone for the narrator. -->
+    <string name="support.tier.golden_mic.title">Golden mic</string>
+    <!-- Short description of the middle supporter tier. -->
+    <string name="support.tier.honey_tea.summary">Funds the long chapters</string>
+    <!-- Name of the middle supporter tier. Playful: tea with honey soothes the narrator's voice. -->
+    <string name="support.tier.honey_tea.title">Tea with honey</string>
+    <!-- Short description of the cheapest supporter tier. -->
+    <string name="support.tier.tea.summary">Keeps the lights on</string>
+    <!-- Name of the cheapest supporter tier. Playful: a cup of tea for the narrator. -->
+    <string name="support.tier.tea.title">Cup of tea</string>
+    <!-- Heading above the one-time tip buttons. -->
+    <string name="support.tips.title">Tip once</string>
+    <!-- Shown on the support screen when Google Play billing can't be reached. -->
+    <string name="support.unavailable.message">Google Play billing can\'t be reached on this device right now.</string>
+    <!-- Title on the support screen when Google Play billing can't be reached. -->
+    <string name="support.unavailable.title">Supporting isn\'t available</string>
     <!-- Short label for the launcher shortcut that plays the current book. -->
     <string name="shortcut.play_current.short_label">Play current</string>
     <!-- Content description for opening the sleep timer. -->
