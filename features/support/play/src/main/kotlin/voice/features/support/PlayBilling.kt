@@ -136,7 +136,6 @@ class PlayBilling(context: Context) : Billing {
           setSubscriptionProductReplacementParams(
             SubscriptionProductReplacementParams.newBuilder()
               .setOldProductId(replace.productId)
-              // the time left on the running subscription is credited towards the new one
               .setReplacementMode(SubscriptionProductReplacementParams.ReplacementMode.WITH_TIME_PRORATION)
               .build(),
           )
@@ -162,10 +161,7 @@ class PlayBilling(context: Context) : Billing {
     return result.isOk()
   }
 
-  /**
-   * Connects once. After that the client reconnects on its own when it's used, and connecting again
-   * while it does would fail.
-   */
+  // connects once, as the client reconnects on its own and connecting again while it does fails
   private suspend fun connect(): Boolean = connectMutex.withLock {
     if (connected) return@withLock true
     connected = suspendCancellableCoroutine { continuation ->
@@ -188,7 +184,6 @@ class PlayBilling(context: Context) : Billing {
   }
 }
 
-/** The plain base plan of a subscription, without any special offers on top. */
 private fun ProductDetails.baseSubscriptionOffer(): ProductDetails.SubscriptionOfferDetails? {
   return subscriptionOfferDetails?.firstOrNull { it.offerId == null }
 }

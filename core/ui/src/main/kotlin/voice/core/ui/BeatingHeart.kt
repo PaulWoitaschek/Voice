@@ -21,7 +21,6 @@ import kotlin.math.PI
 import kotlin.math.max
 import kotlin.math.sin
 
-/** A heart beating in a slowly turning burst. Asks for support without saying a word. */
 @Composable
 fun BeatingHeart(
   containerColor: Color,
@@ -55,7 +54,6 @@ fun BeatingHeart(
   }
 }
 
-/** Two quick beats, then a rest. */
 private fun heartbeat(seconds: Float): Float {
   val phase = seconds % 1.4F
   fun beat(start: Float): Float {

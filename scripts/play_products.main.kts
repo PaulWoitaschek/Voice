@@ -234,7 +234,6 @@ class PlayProducts : CliktCommand() {
     }
   }
 
-  /** Fails before anything is uploaded if a text is missing or longer than Google Play allows. */
   private fun validate(
     config: JsonObject,
     listings: Map<String, JsonObject>,
@@ -274,7 +273,6 @@ class PlayProducts : CliktCommand() {
   }
 }
 
-/** The prices for every region, converted from one price. */
 class Prices(
   val regionsVersion: String,
   val regions: List<Pair<String, JsonObject>>,
@@ -297,7 +295,6 @@ class PlayApi(serviceAccount: File) {
     .createScoped(listOf("https://www.googleapis.com/auth/androidpublisher"))
   private val client = HttpClient.newHttpClient()
 
-  /** Converts a price in USD the way the Play Console does, and uses it as is in euro countries. */
   fun convert(
     packageName: String,
     price: BigDecimal,
@@ -357,7 +354,7 @@ fun money(
   put("nanos", amount.remainder(BigDecimal.ONE).movePointRight(9).toInt())
 }
 
-/** Money in JSON leaves out units and nanos that are zero. */
+// money in JSON leaves out units and nanos that are zero
 fun JsonObject.format(): String {
   val units = get("units")?.jsonPrimitive?.content?.toBigDecimal() ?: BigDecimal.ZERO
   val nanos = get("nanos")?.jsonPrimitive?.content?.toBigDecimal() ?: BigDecimal.ZERO

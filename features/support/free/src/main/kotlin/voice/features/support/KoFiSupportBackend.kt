@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.emptyFlow
 import voice.navigation.Destination
 import voice.navigation.Navigator
 
-/** Without Google Play, support goes through Ko-fi. Ko-fi doesn't tell the app about donations, so there are no events. */
 @ContributesBinding(AppScope::class)
 class KoFiSupportBackend(private val navigator: Navigator) : SupportBackend {
 

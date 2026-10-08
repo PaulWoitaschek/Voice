@@ -19,7 +19,6 @@ data class SettingsViewState(
   val analyticsEnabled: Boolean,
   val showDeveloperMenu: Boolean,
   val showSupportDevelopment: Boolean,
-  /** The badge of someone who supports Voice, shown on the support card as a thank-you. */
   val supporterBadge: SupporterBadge?,
   val supporterSince: YearMonth?,
   val folderNames: List<String>,

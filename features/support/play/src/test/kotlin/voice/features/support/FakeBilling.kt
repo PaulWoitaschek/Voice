@@ -14,6 +14,7 @@ class FakeBilling : Billing {
     SupportProducts.tips.map { BillingProduct(it, "€1") }
   var purchases: List<BillingPurchase>? = emptyList()
   var launchSucceeds = true
+  var consumeSucceeds = true
 
   val acknowledged = mutableListOf<String>()
   val consumed = mutableListOf<String>()
@@ -31,7 +32,7 @@ class FakeBilling : Billing {
   override suspend fun consume(purchaseToken: String): Boolean {
     consumed += purchaseToken
     purchases = purchases?.filterNot { it.purchaseToken == purchaseToken }
-    return true
+    return consumeSucceeds
   }
 
   override fun launch(

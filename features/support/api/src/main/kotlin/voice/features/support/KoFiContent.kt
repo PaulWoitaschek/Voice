@@ -37,7 +37,6 @@ import androidx.graphics.shapes.RoundedPolygon
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
-/** Donating through Ko-fi, with three colorful tiles of what the donations pay for. */
 @Composable
 internal fun KoFiContent(onKoFiClick: () -> Unit) {
   Column(

@@ -23,10 +23,6 @@ import voice.navigation.Navigator
 import java.time.Clock
 import java.time.Instant
 
-/**
- * Supporting Voice through Google Play. Subscriptions are acknowledged and tips consumed, so a tip
- * can be given again. Both only earn a badge, which is kept in the [SupporterStatus].
- */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class PlaySupportBackend(
@@ -110,6 +106,14 @@ class PlaySupportBackend(
         val purchased = update.purchases.filter { it.state == BillingPurchase.State.Purchased }
         if (purchased.isNotEmpty()) {
           handle(purchased)
+          val subscriptions = purchased.filter { it.productId in SupportProducts.subscriptions }
+          // set right away, so a failing reload can't lead to a second subscription instead of a switch
+          if (subscriptions.isNotEmpty()) {
+            updateSubscription(subscriptions)
+            (_state.value as? SupportBackendState.Play)?.let { state ->
+              _state.value = state.copy(activeSubscription = activeSubscription())
+            }
+          }
           load()
           purchased.forEach {
             analytics.event("support_purchased", mapOf("product" to it.productId))
@@ -123,7 +127,7 @@ class PlaySupportBackend(
       PurchaseUpdate.Failed -> {
         analytics.event("support_purchase_failed")
         _events.emit(SupportEvent.Failed)
-        // e.g. it was owned already, which a fresh look at the purchases sorts out
+        // e.g. it was owned already
         load()
       }
     }
@@ -144,17 +148,7 @@ class PlaySupportBackend(
       }
       val purchased = purchases.filter { it.state == BillingPurchase.State.Purchased }
       handle(purchased)
-      val subscriptions = purchased.filter { it.productId in SupportProducts.subscriptions }
-      // after switching tiers, the newest one is the one running
-      val subscription = subscriptions.maxByOrNull { it.purchaseTime }
-      activePurchase = subscription
-      supporterStatusStore.updateData { status ->
-        status.withSubscription(
-          activeSince = subscriptions.minOfOrNull { it.purchaseTime }?.let(Instant::ofEpochMilli),
-          now = clock.instant(),
-          zone = clock.zone,
-        )
-      }
+      updateSubscription(purchased.filter { it.productId in SupportProducts.subscriptions })
       _state.value = SupportBackendState.Play(
         subscriptions = products.mapNotNull { product ->
           val offer = SupportProducts.subscriptions[product.productId] ?: return@mapNotNull null
@@ -164,25 +158,41 @@ class PlaySupportBackend(
           val product = products.find { it.productId == productId } ?: return@mapNotNull null
           TipOffer(productId = productId, formattedPrice = product.formattedPrice)
         },
-        activeSubscription = subscription?.let { SupportProducts.subscriptions[it.productId] },
+        activeSubscription = activeSubscription(),
       )
     }
   }
 
-  /** Subscriptions must be acknowledged, or Google Play refunds them after three days. */
+  private suspend fun updateSubscription(subscriptions: List<BillingPurchase>) {
+    // after switching tiers, the newest one is the one running
+    activePurchase = subscriptions.maxByOrNull { it.purchaseTime }
+    supporterStatusStore.updateData { status ->
+      status.withSubscription(
+        activeSince = subscriptions.minOfOrNull { it.purchaseTime }?.let(Instant::ofEpochMilli),
+        now = clock.instant(),
+        zone = clock.zone,
+      )
+    }
+  }
+
+  private fun activeSubscription(): ActiveSubscription? {
+    return activePurchase?.let { SupportProducts.subscriptions[it.productId] }
+  }
+
+  // Google Play refunds subscriptions that aren't acknowledged within three days
   private suspend fun handle(purchased: List<BillingPurchase>) {
     purchased.forEach { purchase ->
       when (purchase.productId) {
         in SupportProducts.subscriptions -> {
-          // a failed one is tried again on the next refresh
           if (!purchase.acknowledged && !billing.acknowledge(purchase.purchaseToken)) {
             Logger.w("Acknowledging ${purchase.productId} failed")
           }
         }
         in SupportProducts.tips -> {
-          // consuming also acknowledges it and lets the same tip be given again
-          if (billing.consume(purchase.purchaseToken)) {
-            supporterStatusStore.updateData { it.withTip(Instant.ofEpochMilli(purchase.purchaseTime)) }
+          // credited first, as a consumed tip is gone even when the result doesn't make it back
+          supporterStatusStore.updateData { it.withTip(Instant.ofEpochMilli(purchase.purchaseTime)) }
+          if (!billing.consume(purchase.purchaseToken)) {
+            Logger.w("Consuming ${purchase.productId} failed")
           }
         }
       }

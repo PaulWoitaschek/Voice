@@ -513,8 +513,12 @@
     <string name="support.action.switch">Switch to %1$s</string>
     <!-- Support screen button that reveals one-time tips for people who don't want a subscription. -->
     <string name="support.action.tip_once">Rather tip once?</string>
+    <!-- Spoken by the screen reader for a supporter badge the user has earned. -->
+    <string name="support.badge.earned">Earned</string>
     <!-- Name of the supporter badge earned when subscribing. Playful: the narrator's first cup of tea. -->
     <string name="support.badge.first_cup">First cup</string>
+    <!-- Spoken by the screen reader for a supporter badge the user hasn't earned yet. -->
+    <string name="support.badge.not_earned">Not earned yet</string>
     <!-- Name of the supporter badge earned after one year of subscription. -->
     <string name="support.badge.one_year">1 year</string>
     <!-- Name of the supporter badge earned after six months of subscription. -->

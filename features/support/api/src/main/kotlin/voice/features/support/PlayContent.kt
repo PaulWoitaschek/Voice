@@ -9,12 +9,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -40,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
@@ -51,7 +54,6 @@ import voice.features.support.SupportViewState.Action
 import voice.features.support.SupportViewState.Message
 import voice.core.strings.R as StringsR
 
-/** Supporting through Google Play: subscription tiers first, one-time tips for whoever prefers them. */
 @Composable
 internal fun PlayContent(
   content: SupportViewState.Content.Play,
@@ -59,7 +61,6 @@ internal fun PlayContent(
   badge: SupporterBadge?,
   listener: SupportListener,
 ) {
-  // purchases are shown on top of an activity. Previews have none.
   val activity = LocalActivity.current
   Column(
     modifier = Modifier.fillMaxWidth(),
@@ -108,7 +109,6 @@ internal fun PlayContent(
       Tips(
         tips = content.tips,
         expanded = content.showTips,
-        // without subscriptions the tips are always shown, so there's nothing to toggle
         showToggle = subscription != null,
         onToggle = listener::toggleTips,
         onTip = { tip -> activity?.let { listener.tip(it, tip) } },
@@ -254,6 +254,7 @@ private fun TierCard(
         }
       }
       Text(
+        modifier = Modifier.widthIn(max = 120.dp),
         text = pricePerPeriod(tier.formattedPrice, period),
         style = MaterialTheme.typography.labelLarge,
         textAlign = TextAlign.End,
@@ -373,9 +374,10 @@ private fun Tips(
           style = MaterialTheme.typography.labelLarge,
           color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        Row(
+        FlowRow(
           modifier = Modifier.fillMaxWidth(),
           horizontalArrangement = Arrangement.spacedBy(8.dp),
+          verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
           tips.forEach { tip ->
             FilledTonalButton(
@@ -389,7 +391,7 @@ private fun Tips(
                 contentDescription = null,
               )
               Spacer(Modifier.size(6.dp))
-              Text(tip.formattedPrice, maxLines = 1)
+              Text(tip.formattedPrice, softWrap = false)
             }
           }
         }
@@ -398,7 +400,6 @@ private fun Tips(
   }
 }
 
-/** The badges a subscription grows through, with the ones already earned in color. */
 @Composable
 private fun BadgeGrowth(badge: SupporterBadge?) {
   Column(
@@ -412,22 +413,30 @@ private fun BadgeGrowth(badge: SupporterBadge?) {
     )
     Row(
       modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.SpaceEvenly,
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       SupporterBadge.growth.forEach { growth ->
+        val earned = badge != null && badge.ordinal >= growth.ordinal
+        val state = stringResource(
+          if (earned) StringsR.string.support_badge_earned else StringsR.string.support_badge_not_earned,
+        )
         Column(
+          modifier = Modifier
+            .weight(1F)
+            .semantics(mergeDescendants = true) { stateDescription = state },
           horizontalAlignment = Alignment.CenterHorizontally,
           verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
           SupporterBadgeIcon(
             badge = growth,
             size = 44.dp,
-            earned = badge != null && badge.ordinal >= growth.ordinal,
+            earned = earned,
           )
           Text(
             text = growth.label(),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
           )
         }
       }

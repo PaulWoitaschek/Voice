@@ -101,13 +101,11 @@ class SupportViewModel(
     return Content.Play(
       subscription = subscription,
       tips = state.tips,
-      // without subscriptions the tips are all there is
       showTips = showTips || subscription == null,
       note = note,
     )
   }
 
-  /** What's picked, falling back to the running subscription and then to tea with honey per month. */
   private fun selection(state: SupportBackendState.Play): Selection? {
     val active = state.activeSubscription
     val period = period ?: active?.period ?: SupportPeriod.Monthly

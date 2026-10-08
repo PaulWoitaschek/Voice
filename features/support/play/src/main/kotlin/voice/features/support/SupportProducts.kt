@@ -1,11 +1,6 @@
 package voice.features.support
 
-/**
- * The products set up in the Play Console. Each tier and period is a subscription of its own, as a
- * purchase only tells its product and not its base plan.
- *
- * `scripts/play_products.main.kts` creates them on Google Play from `fastlane/play_products.json`.
- */
+// each tier and period is its own subscription, as a purchase only tells its product and not its base plan
 internal object SupportProducts {
 
   val subscriptions: Map<String, ActiveSubscription> = SupporterTier.entries

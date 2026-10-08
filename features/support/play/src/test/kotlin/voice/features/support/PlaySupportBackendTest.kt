@@ -118,6 +118,36 @@ class PlaySupportBackendTest {
   }
 
   @Test
+  fun `a tip is credited even when the consume result gets lost`() = scope.runTest {
+    billing.consumeSucceeds = false
+    billing.purchases = listOf(purchase("tip_small", now))
+    val backend = backend()
+
+    backend.refresh()
+    runCurrent()
+
+    assertTrue(supporterStatusStore.data.first().tipped)
+  }
+
+  @Test
+  fun `a new subscription is switched even when reloading fails`() = scope.runTest {
+    val backend = backend()
+    backend.refresh()
+    runCurrent()
+    billing.purchases = null
+    val bought = purchase("supporter_tea_monthly", now)
+
+    billing.updates.emit(PurchaseUpdate.Purchases(listOf(bought)))
+    runCurrent()
+    backend.subscribe(activity, SupporterTier.GoldenMic, SupportPeriod.Yearly)
+
+    val state = assertIs<SupportBackendState.Play>(backend.state.value)
+    assertEquals(expected = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly), actual = state.activeSubscription)
+    assertEquals(expected = listOf<Pair<String, BillingPurchase?>>("supporter_golden_mic_yearly" to bought), actual = billing.launches)
+    assertEquals(expected = SupporterBadge.FirstCup, actual = supporterStatusStore.data.first().badge)
+  }
+
+  @Test
   fun `a pending purchase is announced`() = scope.runTest {
     val backend = backend()
     runCurrent()

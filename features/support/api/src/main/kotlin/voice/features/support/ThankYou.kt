@@ -21,7 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -40,7 +44,6 @@ import voice.core.ui.label
 import voice.core.ui.rememberConfettiState
 import voice.core.strings.R as StringsR
 
-/** Celebrates a fresh supporter: the badge pops in with confetti flying out of it. */
 @Composable
 internal fun ThankYou(
   badge: SupporterBadge?,
@@ -50,9 +53,12 @@ internal fun ThankYou(
   val colors = MaterialTheme.colorScheme
   val confettiColors = listOf(colors.primary, colors.secondary, colors.tertiary, colors.primaryContainer, colors.tertiaryContainer)
   val confetti = rememberConfettiState()
-  val pop = remember { Animatable(0F) }
+  var celebrated by rememberSaveable { mutableStateOf(false) }
+  val pop = remember { Animatable(if (celebrated) 1F else 0F) }
   val haptics = LocalHapticFeedback.current
   LaunchedEffect(Unit) {
+    if (celebrated) return@LaunchedEffect
+    celebrated = true
     delay(150)
     launch { pop.animateTo(1F, spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessLow)) }
     delay(150)

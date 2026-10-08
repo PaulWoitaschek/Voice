@@ -11,7 +11,6 @@ interface SupportListener {
 
   fun selectTier(tier: SupporterTier)
 
-  /** Subscribes to, switches to, or manages the selected tier, depending on the [SupportViewState.Action]. */
   fun confirm(activity: Activity)
 
   fun toggleTips()

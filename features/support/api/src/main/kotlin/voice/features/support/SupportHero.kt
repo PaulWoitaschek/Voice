@@ -24,10 +24,6 @@ import voice.core.ui.supporterSinceText
 import java.time.YearMonth
 import voice.core.strings.R as StringsR
 
-/**
- * The top of the support sheet: a beating heart asking for support, or the [badge] for someone who
- * already supports Voice.
- */
 @Composable
 internal fun SupportHero(
   badge: SupporterBadge?,

@@ -163,9 +163,9 @@
       "tea": { "title": "Kopp te", "description": "En kopp te till uppläsaren. Håller lamporna tända." },
       "honey_tea": { "title": "Te med honung", "description": "Te med honung till uppläsaren. För de långa kapitlen." },
       "golden_mic": { "title": "Guldmikrofon", "description": "En guldmikrofon till uppläsaren. Stående ovationer för Voice." },
-      "tip_small": { "title": "Litet dricks", "description": "Ett engångstack till Voice. Låser inte upp några funktioner." },
-      "tip_medium": { "title": "Mellanstort dricks", "description": "Ett engångstack till Voice. Låser inte upp några funktioner." },
-      "tip_large": { "title": "Stort dricks", "description": "Ett engångstack till Voice. Låser inte upp några funktioner." }
+      "tip_small": { "title": "Liten dricks", "description": "Ett engångstack till Voice. Låser inte upp några funktioner." },
+      "tip_medium": { "title": "Mellanstor dricks", "description": "Ett engångstack till Voice. Låser inte upp några funktioner." },
+      "tip_large": { "title": "Stor dricks", "description": "Ett engångstack till Voice. Låser inte upp några funktioner." }
     },
     "uk": {
       "benefits": ["Значок, що росте щомісяця", "Підтримка незалежного розробника", "Безкоштовний Voice без реклами", "Подяка: нічого не відкриває"],

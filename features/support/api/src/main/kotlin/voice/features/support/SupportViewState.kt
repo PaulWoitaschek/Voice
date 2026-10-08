@@ -5,10 +5,8 @@ import java.time.YearMonth
 
 data class SupportViewState(
   val content: Content,
-  /** The badge earned so far, null for someone who never supported. */
   val badge: SupporterBadge?,
   val supporterSince: YearMonth?,
-  /** Shown right after a payment went through, instead of the [content]. */
   val thankYou: Boolean,
   val message: Message?,
 ) {
@@ -22,29 +20,24 @@ data class SupportViewState(
     data object Unavailable : Content
 
     data class Play(
-      /** Null when no subscriptions are offered, which leaves the tips. */
       val subscription: Subscription?,
       val tips: List<TipOffer>,
       val showTips: Boolean,
-      /** A note from the developer, e.g. what the support paid for this month. */
       val note: String?,
     ) : Content
   }
 
   data class Subscription(
     val period: SupportPeriod,
-    /** The tiers for the [period], cheapest first. */
     val tiers: List<Tier>,
     val selectedTier: SupporterTier,
     val action: Action,
-    /** Whether a subscription is running, maybe with another tier or period than the selected one. */
     val subscribed: Boolean,
   )
 
   data class Tier(
     val tier: SupporterTier,
     val formattedPrice: String,
-    /** Whether this is the running subscription. */
     val active: Boolean,
   )
 
@@ -54,13 +47,11 @@ data class SupportViewState(
       val period: SupportPeriod,
     ) : Action
 
-    /** Changes the running subscription to the selected tier and period. */
     data class Switch(
       val formattedPrice: String,
       val period: SupportPeriod,
     ) : Action
 
-    /** The selected tier is the running subscription. */
     data object Manage : Action
   }
 

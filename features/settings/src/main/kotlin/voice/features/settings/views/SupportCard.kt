@@ -25,10 +25,6 @@ import voice.core.ui.supporterSinceText
 import java.time.YearMonth
 import voice.core.strings.R as StringsR
 
-/**
- * Asks for support with a beating heart. Someone who supports Voice already sees their [badge]
- * instead, as a thank-you.
- */
 @Composable
 internal fun SupportCard(
   badge: SupporterBadge?,

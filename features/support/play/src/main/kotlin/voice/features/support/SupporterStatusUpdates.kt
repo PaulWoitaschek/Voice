@@ -5,7 +5,6 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
-/** A tip was given [at] that time. */
 internal fun SupporterStatus.withTip(at: Instant): SupporterStatus {
   return copy(
     tipped = true,
@@ -13,10 +12,6 @@ internal fun SupporterStatus.withTip(at: Instant): SupporterStatus {
   )
 }
 
-/**
- * The running subscription, started at [activeSince] or null without one. The months count up while
- * it runs and the most months reached are kept, so the badge stays after cancelling.
- */
 internal fun SupporterStatus.withSubscription(
   activeSince: Instant?,
   now: Instant,

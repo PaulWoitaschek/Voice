@@ -30,10 +30,6 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import voice.core.strings.R as StringsR
 
-/**
- * A supporter badge, slowly turning. The longer someone supports, the more points its shape gets,
- * until it turns golden after a year. A badge that isn't [earned] yet only shows its outline.
- */
 @Composable
 fun SupporterBadgeIcon(
   badge: SupporterBadge,
@@ -71,7 +67,6 @@ fun SupporterBadgeIcon(
   }
 }
 
-/** What the [SupporterBadge] is called, e.g. below it. */
 @Composable
 fun SupporterBadge.label(): String {
   return stringResource(
@@ -85,7 +80,6 @@ fun SupporterBadge.label(): String {
   )
 }
 
-/** "Supporter since March 2026", in the month and year format of the current locale. */
 @Composable
 fun supporterSinceText(since: YearMonth): String {
   val locale = LocalConfiguration.current.locales[0]
@@ -128,8 +122,8 @@ private fun SupporterBadge.style(): BadgeStyle {
     SupporterBadge.SixMonths -> BadgeStyle(
       shape = MaterialShapes.Cookie9Sided,
       icon = VoiceIcons.Favorite,
-      container = colors.tertiary,
-      content = colors.onTertiary,
+      container = colors.primary,
+      content = colors.onPrimary,
     )
     // gold reads as gold in every theme, so it doesn't follow the color scheme
     SupporterBadge.OneYear -> BadgeStyle(
