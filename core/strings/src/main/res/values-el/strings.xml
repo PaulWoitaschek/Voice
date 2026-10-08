@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Εξώφυλλο από αρχεία του συστήματος</string>
     <string name="book.edit.cover.internet">Εξώφυλλο από το Διαδίκτυο</string>
     <string name="book.edit.name.label">Όνομα</string>
-    <string name="book.edit.title">Επεξεργασία βιβλίου</string>
+    <string name="book.edit.rename">Μετονομασία</string>
     <string name="bookmark.action.add_note">Προσθήκη σημείωσης</string>
     <string name="bookmark.add_note_hint">Προσθέστε σημείωση</string>
     <string name="bookmark.added.snackbar">Ο σελιδοδείκτης προστέθηκε</string>
@@ -58,6 +58,12 @@
     <string name="common.error.generic.message">Κάτι πήγε στραβά 😢</string>
     <string name="common.error.generic.retry">Ξαναδοκιμάστε</string>
     <string name="cover.content_description.selectable">Εμφανίζει εξώφυλλο για να επιλέξετε</string>
+    <string name="cover.crop.hint">Σύρετε για μετακίνηση· τσιμπήστε ή σύρετε μια γωνία για αλλαγή μεγέθους.</string>
+    <string name="cover.crop.title">Περικοπή εξωφύλλου</string>
+    <string name="cover.search.download_failed">Δεν ήταν δυνατή η λήψη αυτού του εξωφύλλου. Δοκιμάστε ένα άλλο.</string>
+    <string name="cover.search.hint">Αναζήτηση εξωφύλλου</string>
+    <string name="cover.search.no_results.message">Δοκιμάστε λιγότερες λέξεις ή παραλείψτε τον συγγραφέα.</string>
+    <string name="cover.search.no_results.title">Δεν βρέθηκαν εξώφυλλα</string>
     <string name="cover.title">Εξώφυλλο</string>
     <plurals name="duration.seconds">
         <item quantity="one">%d δευτερόλεπτο</item>

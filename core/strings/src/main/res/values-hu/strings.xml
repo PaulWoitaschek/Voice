@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Borító a fájlrendszerből</string>
     <string name="book.edit.cover.internet">Borító az internetről</string>
     <string name="book.edit.name.label">Cím</string>
-    <string name="book.edit.title">Könyv szerkesztése</string>
+    <string name="book.edit.rename">Átnevezés</string>
     <string name="bookmark.action.add_note">Jegyzet hozzáadása</string>
     <string name="bookmark.add_note_hint">Jegyzet hozzáadása</string>
     <string name="bookmark.added.snackbar">Könyvjelző hozzáadva</string>
@@ -58,6 +58,12 @@
     <string name="common.error.generic.message">Valami balul sült el 😢</string>
     <string name="common.error.generic.retry">Újra</string>
     <string name="cover.content_description.selectable">Megjeleníti a választható borítót</string>
+    <string name="cover.crop.hint">Húzza a mozgatáshoz; csippentsen vagy húzzon egy sarkot az átméretezéshez.</string>
+    <string name="cover.crop.title">Borító körbevágása</string>
+    <string name="cover.search.download_failed">Nem sikerült letölteni ezt a borítót. Próbáljon egy másikat.</string>
+    <string name="cover.search.hint">Borító keresése</string>
+    <string name="cover.search.no_results.message">Próbáljon kevesebb szót, vagy hagyja ki a szerzőt.</string>
+    <string name="cover.search.no_results.title">Nem található borító</string>
     <string name="cover.search.query.with_author">%1$s by %2$s borítója</string>
     <string name="cover.search.query.without_author">%s borítója</string>
     <string name="cover.title">Borító</string>

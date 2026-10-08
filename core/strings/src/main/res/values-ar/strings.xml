@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">الغلاف من ملفات نظام</string>
     <string name="book.edit.cover.internet">الغلاف من الإنترنت</string>
     <string name="book.edit.name.label">الاسم</string>
-    <string name="book.edit.title">حرر كتاب</string>
+    <string name="book.edit.rename">إعادة التسمية</string>
     <string name="bookmark.action.add_note">أضف ملاحظة</string>
     <string name="bookmark.add_note_hint">أضف ملاحظة</string>
     <string name="bookmark.added.snackbar">أضيفت علامة مرجعية</string>
@@ -58,6 +58,12 @@
     <string name="common.error.generic.message">حدث خطأ ما 😢</string>
     <string name="common.error.generic.retry">أعد المحاولة</string>
     <string name="cover.content_description.selectable">أظهر الغطاء للاختياره</string>
+    <string name="cover.crop.hint">اسحب للتحريك، أو اقرص أو اسحب زاوية لتغيير الحجم.</string>
+    <string name="cover.crop.title">اقتصاص الغلاف</string>
+    <string name="cover.search.download_failed">تعذّر تنزيل هذا الغلاف. جرّب غلافًا آخر.</string>
+    <string name="cover.search.hint">ابحث عن غلاف</string>
+    <string name="cover.search.no_results.message">جرّب كلمات أقل، أو احذف اسم المؤلف.</string>
+    <string name="cover.search.no_results.title">لم يتم العثور على أغلفة</string>
     <string name="cover.search.query.with_author">%1$s بواسطة غلاف الكتاب الصوتي %2$s</string>
     <string name="cover.search.query.without_author">غلاف الكتاب الصوتي %s</string>
     <string name="cover.title">الغلاف</string>

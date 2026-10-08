@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Portada desde o sistema de ficheiros</string>
     <string name="book.edit.cover.internet">Portada desde internet</string>
     <string name="book.edit.name.label">Nome</string>
-    <string name="book.edit.title">Editar libro</string>
+    <string name="book.edit.rename">Renomear</string>
     <string name="bookmark.action.add_note">Engadir nota</string>
     <string name="bookmark.add_note_hint">Engade unha nota</string>
     <string name="bookmark.added.snackbar">Engadiuse a marca</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Algo fallou 😢</string>
     <string name="common.error.generic.retry">Reintentar</string>
     <string name="cover.content_description.selectable">Mostra a portada a elixir</string>
+    <string name="cover.crop.hint">Arrastra para mover; belisca ou tira dunha esquina para cambiar o tamaño.</string>
+    <string name="cover.crop.title">Recortar a portada</string>
+    <string name="cover.search.download_failed">Non se puido descargar esta portada. Proba con outra.</string>
+    <string name="cover.search.hint">Busca unha portada</string>
+    <string name="cover.search.no_results.message">Proba con menos palabras ou quita o autor.</string>
+    <string name="cover.search.no_results.title">Non se atoparon portadas</string>
     <string name="cover.search.query.with_author">Portada do audiolibro %1$s por %2$s</string>
     <string name="cover.search.query.without_author">portada do audiolibro %s</string>
     <string name="cover.title">Portada</string>

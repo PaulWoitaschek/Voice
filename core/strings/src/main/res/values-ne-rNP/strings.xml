@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">आन्तरिक भण्डारणबाट कभर लिनुहोस्</string>
     <string name="book.edit.cover.internet">इन्टरनेटबाट कभर लिनुहोस्</string>
     <string name="book.edit.name.label">नाम</string>
-    <string name="book.edit.title">पुस्तक सम्पादन गर्नुहोस्</string>
+    <string name="book.edit.rename">नाम बदल्नुहोस्</string>
     <string name="bookmark.action.add_note">टिप्पणी थप्नुहोस्</string>
     <string name="bookmark.add_note_hint">टिप्पणी थप्नुहोस्</string>
     <string name="bookmark.added.snackbar">पुस्तकचिनो राखियो</string>
@@ -58,6 +58,12 @@
     <string name="common.error.generic.message">केही गडबड भयो 😢</string>
     <string name="common.error.generic.retry">पुन: प्रयास गर्नुहोस्</string>
     <string name="cover.content_description.selectable">छनोट गर्न कभर देखाउँछ</string>
+    <string name="cover.crop.hint">सार्न तान्नुहोस्; आकार बदल्न पिन्च गर्नुहोस् वा कुनै कुना तान्नुहोस्।</string>
+    <string name="cover.crop.title">कभर काट्नुहोस्</string>
+    <string name="cover.search.download_failed">यो कभर डाउनलोड गर्न सकिएन। अर्को प्रयास गर्नुहोस्।</string>
+    <string name="cover.search.hint">कभर खोज्नुहोस्</string>
+    <string name="cover.search.no_results.message">थोरै शब्दहरू प्रयास गर्नुहोस्, वा लेखकको नाम हटाउनुहोस्।</string>
+    <string name="cover.search.no_results.title">कुनै कभर भेटिएन</string>
     <string name="cover.search.query.with_author">%1$s / %2$s अडियोबूक कभर</string>
     <string name="cover.search.query.without_author">%s अडियोबूक कभर</string>
     <string name="cover.title">कभर</string>

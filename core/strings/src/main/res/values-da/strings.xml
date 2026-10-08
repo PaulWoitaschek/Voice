@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Cover fra filsystemet</string>
     <string name="book.edit.cover.internet">Cover fra internettet</string>
     <string name="book.edit.name.label">Navn</string>
-    <string name="book.edit.title">Rediger bog</string>
+    <string name="book.edit.rename">Omdøb</string>
     <string name="bookmark.action.add_note">Tilføj note</string>
     <string name="bookmark.add_note_hint">Tilføj en note</string>
     <string name="bookmark.added.snackbar">Bogmærke tilføjet</string>
@@ -58,6 +58,12 @@
     <string name="common.error.generic.message">Noget gik galt😢</string>
     <string name="common.error.generic.retry">Prøv igen</string>
     <string name="cover.content_description.selectable">Viser cover der kan vælges</string>
+    <string name="cover.crop.hint">Træk for at flytte; knib eller træk i et hjørne for at ændre størrelsen.</string>
+    <string name="cover.crop.title">Beskær coveret</string>
+    <string name="cover.search.download_failed">Kunne ikke downloade dette cover. Prøv et andet.</string>
+    <string name="cover.search.hint">Søg efter et cover</string>
+    <string name="cover.search.no_results.message">Prøv med færre ord, eller udelad forfatteren.</string>
+    <string name="cover.search.no_results.title">Ingen covers fundet</string>
     <string name="cover.search.query.with_author">%1$s af %2$s lydbogscover</string>
     <string name="cover.search.query.without_author">%s lydbogscover</string>
     <string name="cover.title">Cover</string>

@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Portada del sistema de fitxers</string>
     <string name="book.edit.cover.internet">Portada d\'Internet</string>
     <string name="book.edit.name.label">Nom</string>
-    <string name="book.edit.title">Edita el llibre</string>
+    <string name="book.edit.rename">Canvia el nom</string>
     <string name="bookmark.action.add_note">Afegeix una nota</string>
     <string name="bookmark.add_note_hint">Afegiu una nota</string>
     <string name="bookmark.added.snackbar">S\'ha afegit el punt de llibre</string>
@@ -58,6 +58,12 @@
     <string name="common.error.generic.message">Alguna cosa ha anat malament 😢</string>
     <string name="common.error.generic.retry">Torna-ho a provar</string>
     <string name="cover.content_description.selectable">Mostra la portada a escollir</string>
+    <string name="cover.crop.hint">Arrossegueu per moure; pessigueu o estireu una cantonada per canviar la mida.</string>
+    <string name="cover.crop.title">Retalla la portada</string>
+    <string name="cover.search.download_failed">No s\'ha pogut baixar aquesta portada. Proveu-ne una altra.</string>
+    <string name="cover.search.hint">Cerqueu una portada</string>
+    <string name="cover.search.no_results.message">Proveu amb menys paraules o traieu l\'autor.</string>
+    <string name="cover.search.no_results.title">No s\'ha trobat cap portada</string>
     <string name="cover.search.query.with_author">Portada de l\'audiollibre %1$s per %2$s</string>
     <string name="cover.search.query.without_author">Portada de l\'audiollibre %s</string>
     <string name="cover.title">Portada</string>

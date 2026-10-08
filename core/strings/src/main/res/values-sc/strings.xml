@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Cobertedda dae su sistema de archìvios</string>
     <string name="book.edit.cover.internet">Cobertedda dae ìnternet</string>
     <string name="book.edit.name.label">Nùmene</string>
-    <string name="book.edit.title">Modìfica su libru</string>
+    <string name="book.edit.rename">Torra a numenare</string>
     <string name="bookmark.action.add_note">Agiunghe una nota</string>
     <string name="bookmark.add_note_hint">Agiunghe una nota</string>
     <string name="bookmark.added.snackbar">Sinnalibru annantu</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">B\'at àpidu carchi problema 😢</string>
     <string name="common.error.generic.retry">Torra a proare</string>
     <string name="cover.content_description.selectable">Mustra sa cobertedda de isseberare</string>
+    <string name="cover.crop.hint">Traga pro mòvere; pìtziga o traga un\'àngulu pro cambiare sa mannària.</string>
+    <string name="cover.crop.title">Retàllia sa cobertedda</string>
+    <string name="cover.search.download_failed">Non est istadu possìbile iscarrigare custa cobertedda. Prova cun un\'àtera.</string>
+    <string name="cover.search.hint">Chirca una cobertedda</string>
+    <string name="cover.search.no_results.message">Prova cun prus pagu faeddos, o boga s\'autore.</string>
+    <string name="cover.search.no_results.title">Peruna cobertedda agatada</string>
     <string name="cover.search.query.with_author">Cobertedda de s\'audiolibru %1$s de %2$s</string>
     <string name="cover.search.query.without_author">cobertedda de audiolibru %s</string>
     <string name="cover.title">Cobertedda</string>

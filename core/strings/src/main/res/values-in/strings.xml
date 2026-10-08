@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Sampul dari file sistem</string>
     <string name="book.edit.cover.internet">Sampul dari Internet</string>
     <string name="book.edit.name.label">Judul Buku</string>
-    <string name="book.edit.title">Edit buku</string>
+    <string name="book.edit.rename">Ganti nama</string>
     <string name="bookmark.action.add_note">Tambah catatan</string>
     <string name="bookmark.add_note_hint">Tambahkan catatan</string>
     <string name="bookmark.added.snackbar">Markah ditambahkan</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Terjadi kesalahan 😢</string>
     <string name="common.error.generic.retry">Coba Lagi</string>
     <string name="cover.content_description.selectable">Tampilkan sampul untuk dipilih</string>
+    <string name="cover.crop.hint">Seret untuk memindahkan; cubit atau tarik sudut untuk mengubah ukuran.</string>
+    <string name="cover.crop.title">Pangkas sampul</string>
+    <string name="cover.search.download_failed">Tidak dapat mengunduh sampul ini. Coba sampul lain.</string>
+    <string name="cover.search.hint">Cari sampul</string>
+    <string name="cover.search.no_results.message">Coba gunakan lebih sedikit kata, atau hapus nama penulis.</string>
+    <string name="cover.search.no_results.title">Sampul tidak ditemukan</string>
     <string name="cover.search.query.with_author">%1$s oleh %2$s sampul buku audio</string>
     <string name="cover.search.query.without_author">%s sampul buku audio</string>
     <string name="cover.title">Cover</string>

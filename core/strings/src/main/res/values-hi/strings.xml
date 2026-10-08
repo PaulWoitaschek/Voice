@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">फाइल सिस्टम से कवर</string>
     <string name="book.edit.cover.internet">इंटरनेट से कवर</string>
     <string name="book.edit.name.label">नाम</string>
-    <string name="book.edit.title">पुस्तक संपादन</string>
+    <string name="book.edit.rename">नाम बदलें</string>
     <string name="bookmark.action.add_note">नोट जोड़ें</string>
     <string name="bookmark.add_note_hint">नोट जोड़ें</string>
     <string name="bookmark.added.snackbar">बुकमार्क जोड़ा गया</string>
@@ -58,6 +58,12 @@
     <string name="common.error.generic.message">कुछ गलत हो गया 😢</string>
     <string name="common.error.generic.retry">पुन: प्रयास करें</string>
     <string name="cover.content_description.selectable">चुनने के लिए कवर दिखाएँ</string>
+    <string name="cover.crop.hint">खिसकाने के लिए खींचें; आकार बदलने के लिए पिंच करें या किसी कोने को खींचें।</string>
+    <string name="cover.crop.title">कवर काटें</string>
+    <string name="cover.search.download_failed">यह कवर डाउनलोड नहीं हो सका। कोई दूसरा आज़माएँ।</string>
+    <string name="cover.search.hint">कवर खोजें</string>
+    <string name="cover.search.no_results.message">कम शब्द आज़माएँ, या लेखक का नाम हटा दें।</string>
+    <string name="cover.search.no_results.title">कोई कवर नहीं मिला</string>
     <string name="cover.search.query.with_author">%1$s द्वारा %2$s ऑडियोबुक कवर</string>
     <string name="cover.search.query.without_author">%s ऑडियोबुक कवर</string>
     <string name="cover.title">कवर</string>

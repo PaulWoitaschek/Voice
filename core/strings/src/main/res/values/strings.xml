@@ -20,8 +20,8 @@
     <string name="book.edit.cover.internet">Cover from the Internet</string>
     <!-- Label for the editable book-name field and bottom-sheet item. -->
     <string name="book.edit.name.label">Name</string>
-    <!-- Title for the dialog that edits a book title. -->
-    <string name="book.edit.title">Edit book</string>
+    <!-- Book menu item and title of the sheet that renames a book. -->
+    <string name="book.edit.rename">Rename</string>
     <string name="bookmark.action.add_note">Add note</string>
     <string name="bookmark.add_note_hint">Add a note</string>
     <!-- Snackbar message shown after creating a bookmark. -->
@@ -87,6 +87,18 @@
     <string name="common.error.generic.retry">Retry</string>
     <!-- Content description for a cover preview that can be selected. -->
     <string name="cover.content_description.selectable">Shows cover to choose</string>
+    <!-- Hint below the title of the dialog that crops a new cover. -->
+    <string name="cover.crop.hint">Drag to move. Pinch or pull a corner to resize.</string>
+    <!-- Title of the dialog that crops a new cover to a square. -->
+    <string name="cover.crop.title">Crop the cover</string>
+    <!-- Snackbar shown when the cover picked from the internet search can't be downloaded. -->
+    <string name="cover.search.download_failed">Couldn\'t download this cover. Try another one.</string>
+    <!-- Placeholder of the cover search field, also shown while the search is empty. -->
+    <string name="cover.search.hint">Search for a cover</string>
+    <!-- Suggestion shown when the cover search finds nothing. -->
+    <string name="cover.search.no_results.message">Try fewer words, or leave out the author.</string>
+    <!-- Title shown when the cover search finds nothing. -->
+    <string name="cover.search.no_results.title">No covers found</string>
     <!-- Search query template for cover lookup when title and author are known. -->
     <string name="cover.search.query.with_author">%1$s by %2$s audiobook cover</string>
     <!-- Search query template for cover lookup when only the book title is known. -->

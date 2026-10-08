@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Copertura ab le systema de files</string>
     <string name="book.edit.cover.internet">Copertura ab le Internet</string>
     <string name="book.edit.name.label">Nomine</string>
-    <string name="book.edit.title">Modificar le libro</string>
+    <string name="book.edit.rename">Renominar</string>
     <string name="bookmark.action.add_note">Adder nota</string>
     <string name="bookmark.add_note_hint">Adde un nota</string>
     <string name="bookmark.added.snackbar">Marcapagina addite</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Habeva qualcosa improprie 😢</string>
     <string name="common.error.generic.retry">Retentar</string>
     <string name="cover.content_description.selectable">Monstra le copertura seligite</string>
+    <string name="cover.crop.hint">Trahe pro mover; pincia o trahe un angulo pro cambiar le dimension.</string>
+    <string name="cover.crop.title">Retalliar le copertura</string>
+    <string name="cover.search.download_failed">Impossibile discargar iste copertura. Prova un altere.</string>
+    <string name="cover.search.hint">Cerca un copertura</string>
+    <string name="cover.search.no_results.message">Prova minus parolas, o omitte le autor.</string>
+    <string name="cover.search.no_results.title">Nulle copertura trovate</string>
     <string name="cover.search.query.with_author">Copertura del audiolibro %1$s per %2$s</string>
     <string name="cover.search.query.without_author">Copertura del audiolibro %s</string>
     <string name="cover.title">Copertura</string>

@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Корица од датотечен систем</string>
     <string name="book.edit.cover.internet">Корица од Интернет</string>
     <string name="book.edit.name.label">Име</string>
-    <string name="book.edit.title">Ажурирај книга</string>
+    <string name="book.edit.rename">Преименувај</string>
     <string name="bookmark.action.add_note">Додај белешка</string>
     <string name="bookmark.add_note_hint">Додајте белешка</string>
     <string name="bookmark.added.snackbar">Обележано</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Настана грешка 😢</string>
     <string name="common.error.generic.retry">Пробај повторно</string>
     <string name="cover.content_description.selectable">Прикажува избор од корици</string>
+    <string name="cover.crop.hint">Повлечете за поместување; штипнете или повлечете агол за промена на големината.</string>
+    <string name="cover.crop.title">Исечи ја корицата</string>
+    <string name="cover.search.download_failed">Оваа корица не може да се преземе. Обидете се со друга.</string>
+    <string name="cover.search.hint">Пребарајте корица</string>
+    <string name="cover.search.no_results.message">Обидете се со помалку зборови или изоставете го авторот.</string>
+    <string name="cover.search.no_results.title">Не се пронајдени корици</string>
     <string name="cover.search.query.with_author">%1$s од %2$s корица на книга</string>
     <string name="cover.search.query.without_author">%s корица на аудио книга</string>
     <string name="cover.title">Корица</string>

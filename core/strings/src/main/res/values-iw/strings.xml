@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">עטיפות מקובץ קיים</string>
     <string name="book.edit.cover.internet">עטיפות מהאינטרנט</string>
     <string name="book.edit.name.label">שם</string>
-    <string name="book.edit.title">ערוך ספר</string>
+    <string name="book.edit.rename">שינוי שם</string>
     <string name="bookmark.action.add_note">הוסף הערה</string>
     <string name="bookmark.add_note_hint">הוספת הערה</string>
     <string name="bookmark.added.snackbar">סימנייה נוספה</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">משהו השתבש 😢</string>
     <string name="common.error.generic.retry">נסה שוב</string>
     <string name="cover.content_description.selectable">להציג עטיפות לבחירה</string>
+    <string name="cover.crop.hint">גררו כדי להזיז; צבטו או גררו פינה כדי לשנות את הגודל.</string>
+    <string name="cover.crop.title">חיתוך העטיפה</string>
+    <string name="cover.search.download_failed">לא ניתן להוריד את העטיפה הזו. נסו עטיפה אחרת.</string>
+    <string name="cover.search.hint">חיפוש עטיפה</string>
+    <string name="cover.search.no_results.message">נסו פחות מילים, או השמיטו את שם המחבר.</string>
+    <string name="cover.search.no_results.title">לא נמצאו עטיפות</string>
     <string name="cover.search.query.with_author">%1$s מאת %2$s עטיפת קולספר</string>
     <string name="cover.search.query.without_author">%s עטיפת הקולספר</string>
     <string name="cover.title">עטיפה</string>

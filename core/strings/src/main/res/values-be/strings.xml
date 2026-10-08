@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Вокладка з памяці прылады</string>
     <string name="book.edit.cover.internet">Вокладка з Інтэрнета</string>
     <string name="book.edit.name.label">Назва</string>
-    <string name="book.edit.title">Рэдагаваць кнігу</string>
+    <string name="book.edit.rename">Перайменаваць</string>
     <string name="bookmark.action.add_note">Дадаць нататку</string>
     <string name="bookmark.add_note_hint">Дадаць нататку</string>
     <string name="bookmark.added.snackbar">Закладка дададзена</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Нешта пайшло не так 😢</string>
     <string name="common.error.generic.retry">Паспрабаваць зноў</string>
     <string name="cover.content_description.selectable">Паказаць вокладкі для выбару</string>
+    <string name="cover.crop.hint">Перацягніце, каб перамясціць; звядзіце пальцы або пацягніце за вугал, каб змяніць памер.</string>
+    <string name="cover.crop.title">Абрэзаць вокладку</string>
+    <string name="cover.search.download_failed">Не ўдалося спампаваць гэту вокладку. Паспрабуйце іншую.</string>
+    <string name="cover.search.hint">Пошук вокладкі</string>
+    <string name="cover.search.no_results.message">Паспрабуйце менш слоў або прыбярыце аўтара.</string>
+    <string name="cover.search.no_results.title">Вокладак не знойдзена</string>
     <string name="cover.search.query.with_author">Вокладка аўдыякнігі %1$s аўтара %2$s</string>
     <string name="cover.search.query.without_author">Вокладка аўдыякнігі %s</string>
     <string name="cover.title">Вокладка</string>

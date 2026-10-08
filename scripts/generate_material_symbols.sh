@@ -65,10 +65,12 @@ generate_icon call Call
 generate_icon check Check
 generate_icon chevron_right ChevronRight
 generate_icon close Close
+generate_icon cloud_off CloudOff
 generate_icon coffee Coffee
 generate_icon collections_bookmark CollectionsBookmark
 generate_icon construction Construction
 generate_icon content_cut ContentCut
+generate_icon crop Crop
 generate_icon delete Delete
 generate_icon devices Devices
 generate_icon directions_car DirectionsCar
@@ -88,6 +90,7 @@ generate_icon history History
 generate_icon hive Hive
 generate_icon hourglass_empty HourglassEmpty
 generate_icon image Image
+generate_icon image_search ImageSearch
 generate_icon keyboard_arrow_down KeyboardArrowDown
 generate_icon laptop_mac Laptop
 generate_icon library_books LibraryBooks

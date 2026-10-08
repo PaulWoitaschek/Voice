@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Copertă din sistemul de fișiere</string>
     <string name="book.edit.cover.internet">Copertă de pe internet</string>
     <string name="book.edit.name.label">Nume</string>
-    <string name="book.edit.title">Modificare carte</string>
+    <string name="book.edit.rename">Redenumește</string>
     <string name="bookmark.action.add_note">Adaugă notă</string>
     <string name="bookmark.add_note_hint">Adaugă o notă</string>
     <string name="bookmark.added.snackbar">Semn de carte adăugat</string>
@@ -58,6 +58,12 @@
     <string name="common.error.generic.message">S-a produs o eroare 😢</string>
     <string name="common.error.generic.retry">Reîncearcă</string>
     <string name="cover.content_description.selectable">Afișează alegere copertă</string>
+    <string name="cover.crop.hint">Trage pentru a muta; ciupește sau trage de un colț pentru a redimensiona.</string>
+    <string name="cover.crop.title">Decupează coperta</string>
+    <string name="cover.search.download_failed">Coperta nu a putut fi descărcată. Încearcă alta.</string>
+    <string name="cover.search.hint">Caută o copertă</string>
+    <string name="cover.search.no_results.message">Încearcă mai puține cuvinte sau scoate autorul.</string>
+    <string name="cover.search.no_results.title">Nu s-au găsit coperte</string>
     <string name="cover.search.query.with_author">Coperta cărții %1$s de %2$s</string>
     <string name="cover.search.query.without_author">Coperta cărții %s</string>
     <string name="cover.title">Copertă</string>

@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Dekblad vanaf leêr stelsel</string>
     <string name="book.edit.cover.internet">Dekblad van internet af</string>
     <string name="book.edit.name.label">Naam</string>
-    <string name="book.edit.title">Wysig boek</string>
+    <string name="book.edit.rename">Hernoem</string>
     <string name="bookmark.action.add_note">Voeg nota by</string>
     <string name="bookmark.add_note_hint">Voeg ’n nota by</string>
     <string name="bookmark.added.snackbar">Boekmerk bygevoeg</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Iets het skeef geloop 😢</string>
     <string name="common.error.generic.retry">Probeer weer</string>
     <string name="cover.content_description.selectable">Wys voorblad om te kies</string>
+    <string name="cover.crop.hint">Sleep om te skuif; knyp of trek aan \'n hoek om die grootte te verander.</string>
+    <string name="cover.crop.title">Sny die dekblad by</string>
+    <string name="cover.search.download_failed">Kon nie hierdie dekblad aflaai nie. Probeer \'n ander een.</string>
+    <string name="cover.search.hint">Soek \'n dekblad</string>
+    <string name="cover.search.no_results.message">Probeer minder woorde, of laat die outeur weg.</string>
+    <string name="cover.search.no_results.title">Geen dekblaaie gevind nie</string>
     <string name="cover.search.query.with_author">%1$s deur %2$s luisterboekomslag</string>
     <string name="cover.search.query.without_author">%s luisterboekomslag</string>
     <string name="cover.title">Voorblad</string>

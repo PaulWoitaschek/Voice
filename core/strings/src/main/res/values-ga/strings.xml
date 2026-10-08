@@ -10,7 +10,7 @@
     <string name="book.edit.cover.file">Clúdach ón gcóras comhad</string>
     <string name="book.edit.cover.internet">Clúdach ón Idirlíon</string>
     <string name="book.edit.name.label">Ainm</string>
-    <string name="book.edit.title">Athraigh an closleabhar</string>
+    <string name="book.edit.rename">Athainmnigh</string>
     <string name="bookmark.action.add_note">Cuir nóta leis</string>
     <string name="bookmark.add_note_hint">Cuir nóta leis</string>
     <string name="bookmark.added.snackbar">Ga leabhair curtha</string>
@@ -59,6 +59,12 @@
     <string name="common.error.generic.message">Chuaigh rud éigin mícheart 😢</string>
     <string name="common.error.generic.retry">Bain triail eile as</string>
     <string name="cover.content_description.selectable">Taispeáin clúdach a roghnú</string>
+    <string name="cover.crop.hint">Tarraing chun bogadh; teannaigh nó tarraing cúinne chun an méid a athrú.</string>
+    <string name="cover.crop.title">Bearr an clúdach</string>
+    <string name="cover.search.download_failed">Níorbh fhéidir an clúdach seo a íoslódáil. Bain triail as ceann eile.</string>
+    <string name="cover.search.hint">Cuardaigh clúdach</string>
+    <string name="cover.search.no_results.message">Bain triail as níos lú focal, nó fág an t-údar ar lár.</string>
+    <string name="cover.search.no_results.title">Níor aimsíodh aon chlúdach</string>
     <string name="cover.search.query.with_author">%1$s le %2$s clúdach fuaime</string>
     <string name="cover.search.query.without_author">%s clúdach fuaime</string>
     <string name="cover.title">Clúdach</string>
