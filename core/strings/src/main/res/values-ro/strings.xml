@@ -410,7 +410,7 @@
     <string name="widget.shelf.empty">Cărțile începute apar aici</string>
     <string name="widget.shelf.label">Raft</string>
     <string name="widget.shelf.play">Redă %1$s</string>
-    <string name="widget.shelf.title">Continuă să asculți</string>
+    <string name="widget.shelf.title">Continuă ascultarea</string>
     <string name="widget.sleep_timer.cancel">Anulează oprirea temporizată</string>
     <string name="widget.sleep_timer.cancel_hint">Atinge pentru a anula</string>
     <string name="widget.sleep_timer.description">Pornește sau anulează oprirea temporizată din pat</string>

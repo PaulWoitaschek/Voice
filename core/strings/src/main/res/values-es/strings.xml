@@ -399,7 +399,7 @@
     <string name="widget.empty.action">Añadir carpeta</string>
     <string name="widget.empty.message">Elige la carpeta con tus audiolibros</string>
     <string name="widget.empty.title">Aún no hay libros</string>
-    <string name="widget.finished.start_over">Empezar de nuevo</string>
+    <string name="widget.finished.start_over">Repetir</string>
     <string name="widget.finished.title">¡Fin!</string>
     <string name="widget.no_book.action">Abrir biblioteca</string>
     <string name="widget.no_book.message">Elige qué escuchar</string>

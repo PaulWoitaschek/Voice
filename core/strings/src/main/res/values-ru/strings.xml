@@ -414,7 +414,7 @@
     <string name="widget.empty.title">Пока нет книг</string>
     <string name="widget.finished.start_over">Начать заново</string>
     <string name="widget.finished.title">Конец!</string>
-    <string name="widget.no_book.action">Открыть библиотеку</string>
+    <string name="widget.no_book.action">В библиотеку</string>
     <string name="widget.no_book.message">Выберите, что послушать</string>
     <string name="widget.no_book.title">Выберите книгу</string>
     <string name="widget.now_playing.description">Слушайте, ставьте на паузу и следите за прогрессом</string>

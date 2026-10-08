@@ -414,7 +414,7 @@
     <string name="widget.empty.title">Zatiaľ žiadne knihy</string>
     <string name="widget.finished.start_over">Začať odznova</string>
     <string name="widget.finished.title">Koniec!</string>
-    <string name="widget.no_book.action">Otvoriť knižnicu</string>
+    <string name="widget.no_book.action">Do knižnice</string>
     <string name="widget.no_book.message">Vyberte, čo chcete počúvať</string>
     <string name="widget.no_book.title">Vyberte knihu</string>
     <string name="widget.now_playing.description">Prehrávajte, pozastavujte a sledujte svoj postup</string>
@@ -425,7 +425,7 @@
     <string name="widget.shelf.play">Prehrať %1$s</string>
     <string name="widget.shelf.title">Pokračovať v počúvaní</string>
     <string name="widget.sleep_timer.cancel">Zrušiť časovač spánku</string>
-    <string name="widget.sleep_timer.cancel_hint">Ťuknutím zrušíte</string>
+    <string name="widget.sleep_timer.cancel_hint">Klepnutím zrušíte</string>
     <string name="widget.sleep_timer.description">Spustite alebo zrušte časovač spánku priamo z postele</string>
     <string name="widget.sleep_timer.label">Časovač spánku</string>
     <string name="widget.sleep_timer.start">Spustiť časovač spánku</string>

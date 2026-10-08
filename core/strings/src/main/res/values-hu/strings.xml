@@ -388,7 +388,7 @@
     <string name="widget.empty.title">Még nincsenek könyvek</string>
     <string name="widget.finished.start_over">Újrakezdés</string>
     <string name="widget.finished.title">Vége!</string>
-    <string name="widget.no_book.action">Könyvtár megnyitása</string>
+    <string name="widget.no_book.action">Könyvtár</string>
     <string name="widget.no_book.message">Válassza ki, mit hallgatna</string>
     <string name="widget.no_book.title">Válasszon egy könyvet</string>
     <string name="widget.now_playing.description">Lejátszás, szüneteltetés és az előrehaladás egy pillantással</string>

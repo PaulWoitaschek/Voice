@@ -412,9 +412,9 @@
     <string name="widget.empty.action">Dodaj folder</string>
     <string name="widget.empty.message">Wybierz folder ze swoimi audiobookami</string>
     <string name="widget.empty.title">Nie ma jeszcze książek</string>
-    <string name="widget.finished.start_over">Zacznij od nowa</string>
+    <string name="widget.finished.start_over">Od początku</string>
     <string name="widget.finished.title">Koniec!</string>
-    <string name="widget.no_book.action">Otwórz bibliotekę</string>
+    <string name="widget.no_book.action">Do biblioteki</string>
     <string name="widget.no_book.message">Wybierz, czego chcesz posłuchać</string>
     <string name="widget.no_book.title">Wybierz książkę</string>
     <string name="widget.now_playing.description">Odtwarzaj, wstrzymuj i sprawdzaj, ile już za tobą</string>

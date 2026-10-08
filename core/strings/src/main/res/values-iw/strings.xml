@@ -409,7 +409,7 @@
     <string name="widget.shelf.description">חזרה לספרים שאתם מאזינים להם</string>
     <string name="widget.shelf.empty">ספרים שתתחילו יופיעו כאן</string>
     <string name="widget.shelf.label">מדף ספרים</string>
-    <string name="widget.shelf.play">הפעל את %1$s</string>
+    <string name="widget.shelf.play">הפעלת %1$s</string>
     <string name="widget.shelf.title">המשך האזנה</string>
     <string name="widget.sleep_timer.cancel">ביטול טיימר-השינה</string>
     <string name="widget.sleep_timer.cancel_hint">הקישו לביטול</string>

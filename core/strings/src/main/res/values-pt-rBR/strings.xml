@@ -399,7 +399,7 @@
     <string name="widget.empty.action">Adicionar pasta</string>
     <string name="widget.empty.message">Escolha a pasta com seus audiolivros</string>
     <string name="widget.empty.title">Nenhum livro ainda</string>
-    <string name="widget.finished.start_over">Começar de novo</string>
+    <string name="widget.finished.start_over">Recomeçar</string>
     <string name="widget.finished.title">Fim!</string>
     <string name="widget.no_book.action">Abrir biblioteca</string>
     <string name="widget.no_book.message">Escolha o que ouvir</string>

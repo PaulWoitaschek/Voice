@@ -386,7 +386,7 @@
     <string name="widget.empty.action">Map toevoegen</string>
     <string name="widget.empty.message">Kies de map met je luisterboeken</string>
     <string name="widget.empty.title">Nog geen boeken</string>
-    <string name="widget.finished.start_over">Opnieuw beginnen</string>
+    <string name="widget.finished.start_over">Opnieuw</string>
     <string name="widget.finished.title">Het einde!</string>
     <string name="widget.no_book.action">Bibliotheek openen</string>
     <string name="widget.no_book.message">Kies waar je naar wilt luisteren</string>

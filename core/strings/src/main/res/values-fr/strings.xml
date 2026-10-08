@@ -401,7 +401,7 @@
     <string name="widget.empty.title">Aucun livre pour l\'instant</string>
     <string name="widget.finished.start_over">Recommencer</string>
     <string name="widget.finished.title">Fin !</string>
-    <string name="widget.no_book.action">Ouvrir la bibliothèque</string>
+    <string name="widget.no_book.action">Bibliothèque</string>
     <string name="widget.no_book.message">Choisissez quoi écouter</string>
     <string name="widget.no_book.title">Choisissez un livre</string>
     <string name="widget.now_playing.description">Lecture, pause et progression en un coup d\'œil</string>

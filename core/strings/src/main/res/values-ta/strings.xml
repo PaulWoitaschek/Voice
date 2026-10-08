@@ -387,7 +387,7 @@
     <string name="widget.empty.message">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும்</string>
     <string name="widget.empty.title">இன்னும் புத்தகங்கள் இல்லை</string>
     <string name="widget.finished.start_over">மீண்டும் தொடங்கு</string>
-    <string name="widget.finished.title">முடிந்தது!</string>
+    <string name="widget.finished.title">முற்றும்!</string>
     <string name="widget.no_book.action">நூலகத்தைத் திற</string>
     <string name="widget.no_book.message">எதைக் கேட்பது எனத் தேர்ந்தெடுக்கவும்</string>
     <string name="widget.no_book.title">ஒரு புத்தகத்தைத் தேர்ந்தெடுக்கவும்</string>

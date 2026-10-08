@@ -383,7 +383,7 @@
     <string name="time.relative.yesterday">Gestern</string>
     <string name="widget.chapter">Kap. %1$d · %2$s</string>
     <string name="widget.chapter_counter">Kap. %1$d von %2$d</string>
-    <string name="widget.empty.action">Ordner hinzufügen</string>
+    <string name="widget.empty.action">Ordner wählen</string>
     <string name="widget.empty.message">Wähle den Ordner mit Deinen Hörbüchern</string>
     <string name="widget.empty.title">Noch keine Bücher</string>
     <string name="widget.finished.start_over">Von vorne</string>
