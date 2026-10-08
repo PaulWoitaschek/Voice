@@ -5,6 +5,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionCommand
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import voice.core.logging.api.Logger
 import voice.core.playback.misc.Decibel
 
 @Serializable
@@ -34,7 +35,12 @@ internal sealed interface CustomCommand {
         return null
       }
       val json = args.getString(CUSTOM_COMMAND_EXTRA) ?: return null
-      return Json.decodeFromString(serializer(), json)
+      return try {
+        Json.decodeFromString(serializer(), json)
+      } catch (e: IllegalArgumentException) {
+        Logger.w(e, "Ignoring malformed custom command")
+        null
+      }
     }
   }
 }
