@@ -36,6 +36,9 @@ system or an ad. This applies to new English strings as well as translations.
 - When the meaning of an English string changes, rewrite every translation. A casing or punctuation fix in English
   needs no translation change. A removed string is removed from every locale.
 - Follow [locales.md](locales.md) for each locale's form of address, quotation marks, and plural quantities.
+- Don't assume the listener's gender. Prefer wordings without gendered forms: address the listener directly, and
+  name people with neutral words (alle, Person) or rephrase. Only where no natural neutral wording exists, use an
+  inclusive form, such as the gender colon in German (Nutzer:innen).
 - Within a locale, consistency beats a nicer word: reuse the terms its file already uses (bookmark, chapter, sleep
   timer, library, skip silence, narrator). Where the file contradicts `locales.md`, follow `locales.md`.
 - Keep labels about as short as the English. Buttons, tabs, chips, and stat labels have little room; find a shorter
