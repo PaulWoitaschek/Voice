@@ -49,7 +49,14 @@ class NowPlayingWidget : GlanceAppWidget() {
   override val sizeMode: SizeMode = SizeMode.Exact
 
   override val previewSizeMode = SizeMode.Responsive(
-    setOf(DpSize(100.dp, 100.dp), DpSize(180.dp, 90.dp), DpSize(300.dp, 90.dp), DpSize(180.dp, 180.dp), DpSize(300.dp, 180.dp)),
+    setOf(
+      DpSize(100.dp, 100.dp),
+      DpSize(180.dp, 90.dp),
+      DpSize(220.dp, 60.dp),
+      DpSize(300.dp, 90.dp),
+      DpSize(180.dp, 180.dp),
+      DpSize(300.dp, 180.dp),
+    ),
   )
 
   override suspend fun provideGlance(
