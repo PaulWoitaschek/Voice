@@ -402,10 +402,5 @@
     <string name="widget.shelf.label">Raamaturiiul</string>
     <string name="widget.shelf.play">Esita %1$s</string>
     <string name="widget.shelf.title">Jätka kuulamist</string>
-    <string name="widget.sleep_timer.cancel">Tühista unetaimer</string>
-    <string name="widget.sleep_timer.cancel_hint">Tühistamiseks puuduta</string>
-    <string name="widget.sleep_timer.description">Käivita või tühista unetaimer otse voodist</string>
-    <string name="widget.sleep_timer.label">Unetaimer</string>
-    <string name="widget.sleep_timer.start">Käivita unetaimer</string>
     <string name="widget.sleep_timer.stops_at">Peatub kell %1$s</string>
 </resources>

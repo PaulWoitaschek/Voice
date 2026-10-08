@@ -23,8 +23,6 @@ class WidgetActions(
 
   internal fun startOver(): Action = broadcast(WidgetButtonReceiver.Action.StartOver)
 
-  internal fun toggleSleepTimer(): Action = broadcast(WidgetButtonReceiver.Action.ToggleSleepTimer)
-
   internal fun playBook(id: BookId): Action = actionSendBroadcast(WidgetButtonReceiver.playBookIntent(context, id))
 
   internal fun openPlayer(): Action = actionStartActivity(mainActivityIntentProvider.currentBookIntent())

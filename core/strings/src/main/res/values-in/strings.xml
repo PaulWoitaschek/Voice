@@ -389,10 +389,5 @@
     <string name="widget.shelf.label">Rak buku</string>
     <string name="widget.shelf.play">Putar %1$s</string>
     <string name="widget.shelf.title">Lanjutkan mendengarkan</string>
-    <string name="widget.sleep_timer.cancel">Batalkan pengatur waktu tidur</string>
-    <string name="widget.sleep_timer.cancel_hint">Ketuk untuk membatalkan</string>
-    <string name="widget.sleep_timer.description">Mulai atau batalkan pengatur waktu tidur dari tempat tidur</string>
-    <string name="widget.sleep_timer.label">Pengatur waktu tidur</string>
-    <string name="widget.sleep_timer.start">Mulai pengatur waktu tidur</string>
     <string name="widget.sleep_timer.stops_at">Berhenti pukul %1$s</string>
 </resources>

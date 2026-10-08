@@ -30,7 +30,7 @@ Välj mappen med dina ljudböcker. Voice visar böckerna den hittar, lägger til
 • Sök efter titel och författare
 • List- och rutnätsvy
 • Omslag från filen, telefonen eller en sökning på nätet
-• Widgetar för startskärmen: ”Spelas nu”, ”Bokhylla” och ”Insomningstimer”
+• Widgetar för startskärmen: ”Spelas nu” och ”Bokhylla”
 • Medieavisering och Android Auto
 • Ljust och mörkt tema, Dynamisk färg och färgscheman som gör Voice till ditt eget
 • Finns på 25 språk

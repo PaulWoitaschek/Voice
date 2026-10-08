@@ -671,16 +671,6 @@
     <string name="widget.shelf.play">Play %1$s</string>
     <!-- Title above the covers on the Shelf widget. -->
     <string name="widget.shelf.title">Continue listening</string>
-    <!-- Content description of the Sleep timer widget while the timer runs. -->
-    <string name="widget.sleep_timer.cancel">Cancel the sleep timer</string>
-    <!-- Shown on the Sleep timer widget while the timer runs. -->
-    <string name="widget.sleep_timer.cancel_hint">Tap to cancel</string>
-    <!-- Description of the Sleep timer widget in the system widget picker. -->
-    <string name="widget.sleep_timer.description">Start or cancel the sleep timer from bed</string>
-    <!-- Name of the Sleep timer widget in the system widget picker and its title. -->
-    <string name="widget.sleep_timer.label">Sleep timer</string>
-    <!-- Content description of the Sleep timer widget while the timer is off. -->
-    <string name="widget.sleep_timer.start">Start the sleep timer</string>
     <!-- Shown on the Now playing widget while the sleep timer runs, with the clock time playback stops, like "Stops at 23:10". -->
     <string name="widget.sleep_timer.stops_at">Stops at %1$s</string>
 </resources>

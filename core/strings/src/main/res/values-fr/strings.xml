@@ -415,10 +415,5 @@
     <string name="widget.shelf.label">Étagère</string>
     <string name="widget.shelf.play">Lire %1$s</string>
     <string name="widget.shelf.title">Reprendre l\'écoute</string>
-    <string name="widget.sleep_timer.cancel">Annuler la minuterie de mise en veille</string>
-    <string name="widget.sleep_timer.cancel_hint">Appuyez pour annuler</string>
-    <string name="widget.sleep_timer.description">Lancez ou annulez la minuterie de mise en veille depuis votre lit</string>
-    <string name="widget.sleep_timer.label">Minuterie de mise en veille</string>
-    <string name="widget.sleep_timer.start">Lancer la minuterie de mise en veille</string>
     <string name="widget.sleep_timer.stops_at">S\'arrête à %1$s</string>
 </resources>

@@ -402,10 +402,5 @@
     <string name="widget.shelf.label">Boekenplank</string>
     <string name="widget.shelf.play">Speel %1$s af</string>
     <string name="widget.shelf.title">Verder luisteren</string>
-    <string name="widget.sleep_timer.cancel">Slaaptimer annuleren</string>
-    <string name="widget.sleep_timer.cancel_hint">Tik om te annuleren</string>
-    <string name="widget.sleep_timer.description">Start of annuleer de slaaptimer vanuit bed</string>
-    <string name="widget.sleep_timer.label">Slaaptimer</string>
-    <string name="widget.sleep_timer.start">Slaaptimer starten</string>
     <string name="widget.sleep_timer.stops_at">Stopt om %1$s</string>
 </resources>

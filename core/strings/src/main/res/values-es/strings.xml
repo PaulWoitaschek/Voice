@@ -415,10 +415,5 @@
     <string name="widget.shelf.label">Estantería</string>
     <string name="widget.shelf.play">Reproducir %1$s</string>
     <string name="widget.shelf.title">Seguir escuchando</string>
-    <string name="widget.sleep_timer.cancel">Cancelar el temporizador de apagado</string>
-    <string name="widget.sleep_timer.cancel_hint">Toca para cancelar</string>
-    <string name="widget.sleep_timer.description">Inicia o cancela el temporizador de apagado desde la cama</string>
-    <string name="widget.sleep_timer.label">Temporizador de apagado</string>
-    <string name="widget.sleep_timer.start">Iniciar el temporizador de apagado</string>
     <string name="widget.sleep_timer.stops_at">Se apaga a las %1$s</string>
 </resources>

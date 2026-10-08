@@ -53,7 +53,6 @@ class TriggerWidgetOnChange(
   private fun changes(kind: WidgetKind): Flow<Any> = when (kind) {
     WidgetKind.NowPlaying -> widgetData.nowPlaying
     WidgetKind.Shelf -> widgetData.shelf
-    WidgetKind.SleepTimer -> widgetData.sleepTimerModel
   }
 
   private suspend fun update(kind: WidgetKind) {

@@ -30,7 +30,7 @@ Alege directorul cu cărțile tale audio. Voice îți arată cărțile găsite, 
 • Căutare după titlu și autor
 • Afișare ca listă sau grilă
 • Coperte din fișier, din telefon sau dintr-o căutare online
-• Widgeturi pentru ecranul de pornire: „Se redă acum”, „Raft” și „Oprire temporizată”
+• Widgeturi pentru ecranul de pornire: „Se redă acum” și „Raft”
 • Notificare media și Android Auto
 • Temă luminoasă și întunecată, Culori dinamice și scheme de culori, ca să faci Voice al tău
 • Disponibil în 25 de limbi

@@ -35,7 +35,3 @@ class ShelfWidgetReceiver : WidgetReceiver() {
 class SmallShelfWidgetReceiver : WidgetReceiver() {
   override val glanceAppWidget = ShelfWidget()
 }
-
-class SleepTimerWidgetReceiver : WidgetReceiver() {
-  override val glanceAppWidget = SleepTimerWidget()
-}

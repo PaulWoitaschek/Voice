@@ -389,10 +389,5 @@
     <string name="widget.shelf.label">书架</string>
     <string name="widget.shelf.play">播放《%1$s》</string>
     <string name="widget.shelf.title">继续收听</string>
-    <string name="widget.sleep_timer.cancel">取消睡眠定时器</string>
-    <string name="widget.sleep_timer.cancel_hint">点按即可取消</string>
-    <string name="widget.sleep_timer.description">躺在床上就能开启或取消睡眠定时器</string>
-    <string name="widget.sleep_timer.label">睡眠定时器</string>
-    <string name="widget.sleep_timer.start">开启睡眠定时器</string>
     <string name="widget.sleep_timer.stops_at">将于 %1$s 停止</string>
 </resources>

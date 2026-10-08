@@ -402,10 +402,5 @@
     <string name="widget.shelf.label">Bücherregal</string>
     <string name="widget.shelf.play">%1$s abspielen</string>
     <string name="widget.shelf.title">Weiterhören</string>
-    <string name="widget.sleep_timer.cancel">Einschlaf-Timer abbrechen</string>
-    <string name="widget.sleep_timer.cancel_hint">Tippen zum Abbrechen</string>
-    <string name="widget.sleep_timer.description">Starte oder stoppe den Einschlaf-Timer direkt vom Bett aus</string>
-    <string name="widget.sleep_timer.label">Einschlaf-Timer</string>
-    <string name="widget.sleep_timer.start">Einschlaf-Timer starten</string>
     <string name="widget.sleep_timer.stops_at">Stoppt um %1$s</string>
 </resources>

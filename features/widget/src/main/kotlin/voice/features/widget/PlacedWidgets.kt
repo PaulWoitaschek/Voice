@@ -23,13 +23,11 @@ import voice.core.logging.api.Logger
 internal enum class WidgetKind(val receivers: List<Class<out GlanceAppWidgetReceiver>>) {
   NowPlaying(listOf(BaseWidgetProvider::class.java, SmallNowPlayingWidgetReceiver::class.java)),
   Shelf(listOf(ShelfWidgetReceiver::class.java, SmallShelfWidgetReceiver::class.java)),
-  SleepTimer(listOf(SleepTimerWidgetReceiver::class.java)),
   ;
 
   fun widget(): GlanceAppWidget = when (this) {
     NowPlaying -> NowPlayingWidget()
     Shelf -> ShelfWidget()
-    SleepTimer -> SleepTimerWidget()
   }
 }
 

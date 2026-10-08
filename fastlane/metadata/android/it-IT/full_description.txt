@@ -30,7 +30,7 @@ Scegli la cartella con i tuoi audiolibri. Voice ti mostra i libri che trova, li 
 • Ricerca per titolo e autore
 • Visualizzazione a elenco e a griglia
 • Copertine dal file, dal telefono o da una ricerca online
-• Widget per la schermata Home: «In riproduzione», «Scaffale» e «Timer sospensione»
+• Widget per la schermata Home: «In riproduzione» e «Scaffale»
 • Notifica multimediale e Android Auto
 • Tema chiaro e scuro, Colore dinamico e schemi colori per rendere Voice tuo
 • Disponibile in 25 lingue
