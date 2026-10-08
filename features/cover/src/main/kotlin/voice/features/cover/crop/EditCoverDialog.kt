@@ -42,7 +42,9 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.scanner.CoverSaver
@@ -142,7 +144,10 @@ fun EditCoverDialog(
                 )
                 .drawable?.toBitmap()
               if (bitmap != null) {
-                rootGraphAs<EditCoverComponent>().coverSaver.save(bookId, bitmap)
+                // leaving the dialog mid-save would leave the book pointing at a deleted cover
+                withContext(NonCancellable) {
+                  rootGraphAs<EditCoverComponent>().coverSaver.save(bookId, bitmap)
+                }
               }
               onDismiss()
             }

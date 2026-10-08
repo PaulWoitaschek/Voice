@@ -25,7 +25,6 @@ import voice.features.bookOverview.editTitle.RenameBookSheet
 
 /**
  * The menu a long press on a book opens, and the sheets its items lead to. The library and the search share it.
- * All of them take the colors of the book's cover.
  *
  * Select the book on the graph's bottom sheet view model before showing the menu.
  */
@@ -84,7 +83,11 @@ internal fun BookActions(
         enabledValues = setOf(Hidden, Expanded),
       )
       var pendingStatusChange by remember { mutableStateOf<Job?>(null) }
+      // the first choice wins, so taps while the sheet slides away can't add a second action
+      var closing by remember { mutableStateOf(false) }
       fun hideThen(item: BottomSheetItem) {
+        if (closing) return
+        closing = true
         scope.launch {
           sheetState.hide()
           bottomSheetViewModel.onItemClick(item)
@@ -94,24 +97,32 @@ internal fun BookActions(
       ModalBottomSheet(
         modifier = modifier,
         sheetState = sheetState,
-        onDismissRequest = onBottomSheetDismiss,
+        onDismissRequest = {
+          pendingStatusChange?.cancel()
+          onBottomSheetDismiss()
+        },
       ) {
         BookActionsContent(
           book = book,
           category = state.category,
           items = state.items,
           onItemClick = { item ->
-            if (item == BottomSheetItem.FileCover) {
-              getContentLauncher.launch("image/*")
+            if (!closing) {
+              if (item == BottomSheetItem.FileCover) {
+                getContentLauncher.launch("image/*")
+              }
+              hideThen(item)
             }
-            hideThen(item)
           },
           onStatusChange = { item ->
             pendingStatusChange?.cancel()
-            pendingStatusChange = scope.launch {
-              // a moment to see the new status take shape before the sheet goes
-              delay(450)
-              hideThen(item)
+            // the book's own status isn't an item, so picking it again only cancels the change
+            if (item in state.items) {
+              pendingStatusChange = scope.launch {
+                // a moment to see the new status take shape before the sheet goes
+                delay(450)
+                hideThen(item)
+              }
             }
           },
         )

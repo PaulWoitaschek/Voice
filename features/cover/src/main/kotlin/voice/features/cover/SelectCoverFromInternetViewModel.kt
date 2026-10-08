@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.net.toUri
@@ -50,7 +51,6 @@ class SelectCoverFromInternetViewModel(
 
   @Composable
   internal fun viewState(events: Flow<Events>): ViewState {
-    // the field follows every keystroke, the search only once typing pauses
     var searchQuery: String? by remember { mutableStateOf(null) }
     LaunchedEffect(Unit) {
       if (!queryInitialized) {
@@ -74,6 +74,8 @@ class SelectCoverFromInternetViewModel(
         },
       ).flow
     }.collectAsLazyPagingItems()
+    // the events are collected for the whole screen, while each query gets new items
+    val currentItems by rememberUpdatedState(items)
 
     var downloading: SearchResponse.ImageResult? by remember { mutableStateOf(null) }
     var downloadFailed by remember { mutableStateOf(false) }
@@ -81,7 +83,7 @@ class SelectCoverFromInternetViewModel(
     LaunchedEffect(events) {
       events.collect { event ->
         when (event) {
-          is Events.Retry -> items.retry()
+          is Events.Retry -> currentItems.retry()
           is Events.CoverClick -> {
             if (downloading == null) {
               downloading = event.cover
@@ -100,7 +102,12 @@ class SelectCoverFromInternetViewModel(
             }
           }
           is Events.Search -> {
-            searchQuery = query.text.toString()
+            val text = query.text.toString()
+            if (text == searchQuery) {
+              currentItems.refresh()
+            } else {
+              searchQuery = text
+            }
           }
           is Events.DownloadErrorShown -> {
             downloadFailed = false
@@ -109,21 +116,25 @@ class SelectCoverFromInternetViewModel(
       }
     }
 
-    val currentSearchQuery = searchQuery ?: return ViewState.Loading
+    val currentSearchQuery = searchQuery
     val loadState = items.loadState
-    return when {
-      currentSearchQuery.isBlank() -> ViewState.Idle
-      loadState.refresh is LoadState.Error -> ViewState.Error
-      items.itemCount == 0 && loadState.append.endOfPaginationReached -> ViewState.Empty
-      items.itemCount == 0 -> ViewState.Loading
-      else -> ViewState.Content(
+    val results = when {
+      currentSearchQuery == null -> Results.Loading
+      currentSearchQuery.isBlank() -> Results.Idle
+      loadState.refresh is LoadState.Error -> Results.Error
+      items.itemCount == 0 && loadState.append.endOfPaginationReached -> Results.Empty
+      items.itemCount == 0 -> Results.Loading
+      else -> Results.Content(
         items = items,
         loadingMore = loadState.append is LoadState.Loading,
         loadingMoreFailed = loadState.append is LoadState.Error,
-        downloading = downloading,
-        downloadFailed = downloadFailed,
       )
     }
+    return ViewState(
+      results = results,
+      downloading = downloading,
+      downloadFailed = downloadFailed,
+    )
   }
 
   private suspend fun initialQuery(): String {
@@ -140,18 +151,22 @@ class SelectCoverFromInternetViewModel(
     navigator.goBack()
   }
 
-  internal sealed interface ViewState {
-    data object Idle : ViewState
-    data object Loading : ViewState
-    data object Error : ViewState
-    data object Empty : ViewState
+  internal data class ViewState(
+    val results: Results,
+    val downloading: SearchResponse.ImageResult?,
+    val downloadFailed: Boolean,
+  )
+
+  internal sealed interface Results {
+    data object Idle : Results
+    data object Loading : Results
+    data object Error : Results
+    data object Empty : Results
     data class Content(
       val items: LazyPagingItems<SearchResponse.ImageResult>,
       val loadingMore: Boolean,
       val loadingMoreFailed: Boolean,
-      val downloading: SearchResponse.ImageResult?,
-      val downloadFailed: Boolean,
-    ) : ViewState
+    ) : Results
   }
 
   internal sealed interface Events {

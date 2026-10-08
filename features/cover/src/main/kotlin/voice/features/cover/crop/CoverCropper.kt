@@ -63,10 +63,7 @@ import kotlin.math.max
 import kotlin.math.min
 import voice.core.strings.R as StringsR
 
-/**
- * Shows the image with a square frame on top that can be dragged, pinched or pulled at its corners.
- * [onCropChange] gets the frame relative to the image, from 0 to 1 on both axes.
- */
+/** [onCropChange] gets the frame relative to the image, from 0 to 1 on both axes. */
 @Composable
 internal fun CoverCropper(
   cover: Uri,
@@ -277,7 +274,6 @@ private fun Rect.zoomed(
   return Rect(center = center, radius = side / 2F).moved(Offset.Zero, area)
 }
 
-/** Pulls [corner] to [position] while the opposite corner stays where it is. */
 private fun Rect.resized(
   corner: Corner,
   position: Offset,

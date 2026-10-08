@@ -111,10 +111,7 @@ internal fun BookActionsContent(
       Spacer(Modifier.height(24.dp))
       StatusPicker(
         current = category,
-        onSelect = { selected ->
-          val item = selected.markAsItem()
-          if (item in items) onStatusChange(item)
-        },
+        onSelect = { selected -> onStatusChange(selected.markAsItem()) },
         modifier = Modifier.entrance(entrance, 1),
       )
     }

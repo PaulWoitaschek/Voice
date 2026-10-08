@@ -18,7 +18,7 @@
     <string name="book.edit.cover.file">Cover from the file system</string>
     <!-- Bottom-sheet item for choosing a cover from an internet search. -->
     <string name="book.edit.cover.internet">Cover from the Internet</string>
-    <!-- Label for the editable book-name field and bottom-sheet item. -->
+    <!-- Label for the editable book-name field. -->
     <string name="book.edit.name.label">Name</string>
     <!-- Book menu item and title of the sheet that renames a book. -->
     <string name="book.edit.rename">Rename</string>

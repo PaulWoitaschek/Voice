@@ -42,8 +42,10 @@ import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -78,19 +80,24 @@ internal fun DeleteBookSheet(
     enabledValues = setOf(Hidden, Expanded),
   )
   val scope = rememberCoroutineScope()
+  // the first choice wins, so taps while the sheet slides away can't change or undo it
+  var closing by remember { mutableStateOf(false) }
   val hideThen: (() -> Unit) -> Unit = { action ->
-    scope.launch {
-      try {
-        sheetState.hide()
-      } finally {
-        action()
+    if (!closing) {
+      closing = true
+      scope.launch {
+        try {
+          sheetState.hide()
+        } finally {
+          action()
+        }
       }
     }
   }
   val armed = viewState.deleteCheckBoxChecked
   val colors = MaterialTheme.colorScheme
   ModalBottomSheet(
-    onDismissRequest = onDismiss,
+    onDismissRequest = { if (!closing) onDismiss() },
     sheetState = sheetState,
   ) {
     Column(
@@ -134,8 +141,6 @@ internal fun DeleteBookSheet(
         style = MaterialTheme.typography.bodySmall,
         color = colors.onSurfaceVariant,
         textAlign = TextAlign.Center,
-        maxLines = 3,
-        overflow = TextOverflow.Ellipsis,
       )
       Spacer(Modifier.height(20.dp))
       val confirmContainer by animateColorAsState(
@@ -147,7 +152,7 @@ internal fun DeleteBookSheet(
           .fillMaxWidth()
           .clip(RoundedCornerShape(20.dp))
           .background(confirmContainer)
-          .toggleable(value = armed, role = Role.Checkbox, onValueChange = onDeleteCheckBoxCheck)
+          .toggleable(value = armed, enabled = !closing, role = Role.Checkbox, onValueChange = onDeleteCheckBoxCheck)
           .heightIn(min = 56.dp)
           .padding(start = 4.dp, end = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -202,7 +207,6 @@ internal fun DeleteBookSheet(
   }
 }
 
-/** The cover with a trash badge. Once deleting is confirmed, the cover leans away and the badge bristles and shakes. */
 @Composable
 private fun DeleteHero(
   cover: String?,

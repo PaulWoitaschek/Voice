@@ -49,6 +49,7 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.ui.VoiceTheme
 import voice.features.cover.SelectCoverFromInternetViewModel.Events
+import voice.features.cover.SelectCoverFromInternetViewModel.Results
 import voice.features.cover.SelectCoverFromInternetViewModel.ViewState
 import voice.features.cover.api.SearchResponse
 import voice.navigation.Destination
@@ -117,7 +118,7 @@ private fun SelectCoverFromInternet(
     }
   }
   val snackbarHostState = remember { SnackbarHostState() }
-  val downloadFailed = viewState is ViewState.Content && viewState.downloadFailed
+  val downloadFailed = viewState.downloadFailed
   val downloadFailedMessage = stringResource(StringsR.string.cover_search_download_failed)
   val currentOnDownloadErrorDismiss by rememberUpdatedState(onDownloadErrorDismiss)
   LaunchedEffect(downloadFailed) {
@@ -149,7 +150,8 @@ private fun SelectCoverFromInternet(
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
       ) {
         CoverContents(
-          viewState = viewState,
+          results = viewState.results,
+          downloading = viewState.downloading,
           contentPadding = coverContentPadding(),
           onCoverClick = { cover ->
             keyboard?.hide()
@@ -184,7 +186,7 @@ private fun coverContentPadding(): PaddingValues {
 private fun ErrorPreview() {
   VoiceTheme {
     SelectCoverFromInternet(
-      viewState = ViewState.Error,
+      viewState = ViewState(results = Results.Error, downloading = null, downloadFailed = false),
       query = TextFieldState("Dune by Frank Herbert audiobook cover"),
       onCloseClick = {},
       onCoverClick = {},
@@ -200,7 +202,7 @@ private fun ErrorPreview() {
 private fun EmptyPreview() {
   VoiceTheme {
     SelectCoverFromInternet(
-      viewState = ViewState.Empty,
+      viewState = ViewState(results = Results.Empty, downloading = null, downloadFailed = false),
       query = TextFieldState("Dune by Frank Herbert audiobook cover"),
       onCloseClick = {},
       onCoverClick = {},
@@ -230,10 +232,12 @@ private fun ListPreview() {
       )
     }.collectAsLazyPagingItems()
     SelectCoverFromInternet(
-      viewState = ViewState.Content(
-        items = items,
-        loadingMore = true,
-        loadingMoreFailed = false,
+      viewState = ViewState(
+        results = Results.Content(
+          items = items,
+          loadingMore = true,
+          loadingMoreFailed = false,
+        ),
         downloading = null,
         downloadFailed = false,
       ),

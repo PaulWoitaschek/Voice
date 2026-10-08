@@ -62,33 +62,35 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import coil.compose.AsyncImage
 import voice.core.ui.icons.VoiceIcons
-import voice.features.cover.SelectCoverFromInternetViewModel.ViewState
+import voice.features.cover.SelectCoverFromInternetViewModel.Results
 import voice.features.cover.api.SearchResponse
 import voice.core.strings.R as StringsR
 
 @Composable
 internal fun CoverContents(
-  viewState: ViewState,
+  results: Results,
+  downloading: SearchResponse.ImageResult?,
   contentPadding: PaddingValues,
   onCoverClick: (SearchResponse.ImageResult) -> Unit,
   onRetry: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   AnimatedContent(
-    targetState = viewState,
+    targetState = results,
     modifier = modifier,
     contentKey = { it::class },
     transitionSpec = { fadeIn() togetherWith fadeOut() },
     label = "coverContent",
   ) { state ->
     when (state) {
-      is ViewState.Content -> CoverGrid(
-        viewState = state,
+      is Results.Content -> CoverGrid(
+        results = state,
+        downloading = downloading,
         contentPadding = contentPadding,
         onCoverClick = onCoverClick,
         onRetry = onRetry,
       )
-      is ViewState.Loading -> Box(
+      is Results.Loading -> Box(
         modifier = Modifier
           .fillMaxSize()
           .padding(contentPadding),
@@ -96,7 +98,7 @@ internal fun CoverContents(
       ) {
         LoadingIndicator(Modifier.size(64.dp))
       }
-      is ViewState.Idle -> Message(
+      is Results.Idle -> Message(
         contentPadding = contentPadding,
         icon = VoiceIcons.ImageSearch,
         shape = MaterialShapes.Clover4Leaf,
@@ -104,7 +106,7 @@ internal fun CoverContents(
         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         title = stringResource(StringsR.string.cover_search_hint),
       )
-      is ViewState.Empty -> Message(
+      is Results.Empty -> Message(
         contentPadding = contentPadding,
         icon = VoiceIcons.SearchOff,
         shape = MaterialShapes.Flower,
@@ -113,7 +115,7 @@ internal fun CoverContents(
         title = stringResource(StringsR.string.cover_search_no_results_title),
         message = stringResource(StringsR.string.cover_search_no_results_message),
       )
-      is ViewState.Error -> Message(
+      is Results.Error -> Message(
         contentPadding = contentPadding,
         icon = VoiceIcons.CloudOff,
         shape = MaterialShapes.SoftBurst,
@@ -129,12 +131,13 @@ internal fun CoverContents(
 
 @Composable
 private fun CoverGrid(
-  viewState: ViewState.Content,
+  results: Results.Content,
+  downloading: SearchResponse.ImageResult?,
   contentPadding: PaddingValues,
   onCoverClick: (SearchResponse.ImageResult) -> Unit,
   onRetry: () -> Unit,
 ) {
-  val items = viewState.items
+  val items = results.items
   LazyVerticalStaggeredGrid(
     columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
     modifier = Modifier.fillMaxSize(),
@@ -145,16 +148,16 @@ private fun CoverGrid(
     items(count = items.itemCount) { index ->
       val item = items[index]
       if (item != null) {
-        val downloading = viewState.downloading == item
+        val isDownloading = downloading == item
         CoverTile(
           item = item,
-          downloading = downloading,
-          dimmed = viewState.downloading != null && !downloading,
+          downloading = isDownloading,
+          dimmed = downloading != null && !isDownloading,
           onClick = { onCoverClick(item) },
         )
       }
     }
-    if (viewState.loadingMore || viewState.loadingMoreFailed) {
+    if (results.loadingMore || results.loadingMoreFailed) {
       item(span = StaggeredGridItemSpan.FullLine) {
         Box(
           modifier = Modifier
@@ -162,7 +165,7 @@ private fun CoverGrid(
             .padding(vertical = 16.dp),
           contentAlignment = Alignment.Center,
         ) {
-          if (viewState.loadingMoreFailed) {
+          if (results.loadingMoreFailed) {
             RetryButton(onRetry)
           } else {
             LoadingIndicator()
@@ -218,7 +221,7 @@ private fun CoverTile(
   ) {
     AsyncImage(
       model = item.thumbnail,
-      contentDescription = null,
+      contentDescription = stringResource(StringsR.string.cover_title),
       contentScale = ContentScale.Crop,
       modifier = Modifier.matchParentSize(),
     )
@@ -250,7 +253,6 @@ private fun CoverTile(
   }
 }
 
-/** A shape that springs in and settles, with what there is to say about the search below it. */
 @Composable
 private fun Message(
   contentPadding: PaddingValues,

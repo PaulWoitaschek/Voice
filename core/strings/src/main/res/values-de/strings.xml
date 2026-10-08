@@ -59,7 +59,7 @@
     <string name="common.error.generic.message">Etwas ist schiefgelaufen 😢</string>
     <string name="common.error.generic.retry">Erneut versuchen</string>
     <string name="cover.content_description.selectable">Zeigt Cover zur Auswahl an</string>
-    <string name="cover.crop.hint">Zum Verschieben ziehen. Zum Ändern der Größe zoomen oder an einer Ecke ziehen.</string>
+    <string name="cover.crop.hint">Zum Verschieben ziehen. Zum Ändern der Größe mit zwei Fingern zoomen oder an einer Ecke ziehen.</string>
     <string name="cover.crop.title">Cover zuschneiden</string>
     <string name="cover.search.download_failed">Dieses Cover konnte nicht heruntergeladen werden. Probiere ein anderes.</string>
     <string name="cover.search.hint">Nach einem Cover suchen</string>

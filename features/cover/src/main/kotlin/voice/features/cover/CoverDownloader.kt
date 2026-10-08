@@ -35,18 +35,17 @@ class CoverDownloader(
       Logger.w(e, "Failed to download cover from $url")
       return null
     }
-    if (!response.isSuccessful) {
-      Logger.w("Failed to download cover from $url: ${response.code}")
-      response.close()
-      return null
-    }
-    return withContext(Dispatchers.IO) {
-      try {
-        response.body.source().use { source ->
+    return response.use {
+      if (!response.isSuccessful) {
+        Logger.w("Failed to download cover from $url: ${response.code}")
+        return null
+      }
+      withContext(Dispatchers.IO) {
+        try {
           // select a random name so on updating this, the old image is not cached
           val file = File(tempFolder, Uuid.random().toString())
           file.sink().use { sink ->
-            source.readAll(sink)
+            response.body.source().readAll(sink)
           }
           // some image urls lead to a web page instead
           if (file.isImage()) {
@@ -56,10 +55,10 @@ class CoverDownloader(
             file.delete()
             null
           }
+        } catch (e: IOException) {
+          Logger.w(e, "Failed to save cover from $url")
+          null
         }
-      } catch (e: IOException) {
-        Logger.w(e, "Failed to save cover from $url")
-        null
       }
     }
   }

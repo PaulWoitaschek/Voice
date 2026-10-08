@@ -35,7 +35,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,30 +71,31 @@ internal fun RenameBookSheet(
     enabledValues = setOf(Hidden, Expanded),
   )
   val scope = rememberCoroutineScope()
+  // the first choice wins, so taps while the sheet slides away can't change or undo it
+  var closing by remember { mutableStateOf(false) }
   val hideThen: (() -> Unit) -> Unit = { action ->
-    scope.launch {
-      try {
-        sheetState.hide()
-      } finally {
-        action()
+    if (!closing) {
+      closing = true
+      scope.launch {
+        try {
+          sheetState.hide()
+        } finally {
+          action()
+        }
       }
     }
   }
   ModalBottomSheet(
-    onDismissRequest = onDismiss,
+    onDismissRequest = { if (!closing) onDismiss() },
     sheetState = sheetState,
   ) {
-    // the whole name starts selected, so typing replaces it and a tap places the cursor
+    // the whole name starts selected, so typing replaces it
     var value by remember {
       mutableStateOf(TextFieldValue(viewState.title, selection = TextRange(0, viewState.title.length)))
     }
     val focusRequester = remember { FocusRequester() }
-    var focused by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit) {
-      if (!focused) {
-        focusRequester.requestFocus()
-        focused = true
-      }
+      focusRequester.requestFocus()
     }
     Column(
       modifier = Modifier
@@ -144,6 +144,7 @@ internal fun RenameBookSheet(
           .focusRequester(focusRequester),
         label = { Text(stringResource(StringsR.string.book_edit_name_label)) },
         singleLine = true,
+        readOnly = closing,
         shape = RoundedCornerShape(16.dp),
         keyboardOptions = KeyboardOptions(
           capitalization = KeyboardCapitalization.Sentences,

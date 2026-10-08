@@ -62,7 +62,7 @@
     <string name="cover.crop.hint">நகர்த்த இழுக்கவும்; அளவை மாற்ற பிஞ்ச் செய்யவும் அல்லது ஒரு மூலையை இழுக்கவும்.</string>
     <string name="cover.crop.title">அட்டைப்படத்தை செதுக்கு</string>
     <string name="cover.search.download_failed">இந்த அட்டைப்படத்தைப் பதிவிறக்க முடியவில்லை. வேறொன்றை முயலவும்.</string>
-    <string name="cover.search.hint">அட்டைப்படத்தைத் தேடு</string>
+    <string name="cover.search.hint">அட்டைப்படத்தைத் தேடுங்கள்</string>
     <string name="cover.search.no_results.message">குறைவான சொற்களை முயலவும், அல்லது ஆசிரியர் பெயரை நீக்கவும்.</string>
     <string name="cover.search.no_results.title">அட்டைப்படங்கள் எதுவும் கிடைக்கவில்லை</string>
     <string name="cover.search.query.with_author">%1$s ஆல் %2$s ஆடியோபுக் கவர்</string>
