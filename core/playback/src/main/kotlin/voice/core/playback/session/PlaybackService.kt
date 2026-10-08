@@ -7,7 +7,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
 import voice.core.common.rootGraphAs
-import voice.core.logging.api.Logger
 import voice.core.playback.di.PlaybackGraph
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.playstate.PositionUpdater
@@ -30,16 +29,12 @@ class PlaybackService : MediaLibraryService() {
   @Inject
   lateinit var listeningSessionRecorder: ListeningSessionRecorder
 
-  @Inject
-  lateinit var voiceNotificationProvider: VoiceMediaNotificationProvider
-
   override fun onCreate() {
     super.onCreate()
     rootGraphAs<PlaybackGraph.Provider>()
       .playbackGraphFactory
       .create(this)
       .inject(this)
-    setMediaNotificationProvider(voiceNotificationProvider)
   }
 
   private fun release() {
@@ -54,29 +49,9 @@ class PlaybackService : MediaLibraryService() {
   }
 
   override fun onDestroy() {
-    super.onDestroy()
     release()
+    super.onDestroy()
   }
 
-  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {
-    return session.takeUnless { session ->
-      session.invokeIsReleased
-    }.also {
-      if (it == null) {
-        Logger.w("onGetSession returns null because the session is already released")
-      }
-    }
-  }
+  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession = session
 }
-
-private val MediaSession.invokeIsReleased: Boolean
-  get() = try {
-    // temporarily checked to debug
-    // https://github.com/androidx/media/issues/422
-    MediaSession::class.java.getDeclaredMethod("isReleased")
-      .apply { isAccessible = true }
-      .invoke(this) as Boolean
-  } catch (e: Exception) {
-    Logger.w(e, "Couldn't check if it's released")
-    false
-  }

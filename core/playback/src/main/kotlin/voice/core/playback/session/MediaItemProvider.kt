@@ -42,6 +42,8 @@ class MediaItemProvider(
     mediaType = MediaType.AudioBookRoot,
   )
 
+  // Blocking on purpose: legacy browsers get the library root on the main thread and wait for it there, so a
+  // coroutine that resumes on the main thread would never finish.
   fun recent(): MediaItem? = MediaItem(
     title = application.getString(StringsR.string.media_session_library_recent),
     browsable = true,
