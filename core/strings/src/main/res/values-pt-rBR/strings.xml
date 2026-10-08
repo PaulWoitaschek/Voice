@@ -329,7 +329,7 @@
     <string name="settings.listening.title">Audição</string>
     <string name="settings.playback.auto_rewind.off">Desligado</string>
     <string name="settings.playback.auto_rewind.summary">Volta um pouco ao retomar, para você não perder o fio da meada</string>
-    <string name="settings.playback.auto_rewind.title">Rebobin automaticamente</string>
+    <string name="settings.playback.auto_rewind.title">Retrocesso automático</string>
     <string name="settings.playback.seek_time.summary">Quanto voltar e avançar pulam</string>
     <string name="settings.playback.seek_time.title">Quantidade de Salto</string>
     <string name="settings.subtitle">Deixe o Voice do seu jeito</string>
