@@ -1,1 +1,1 @@
-Klarer Hörbuch-Player für eigene Dateien, mit Sleep Timer und Lesezeichen.
+Ruhiger Hörbuch-Player für Deine eigenen Dateien. Kein Konto, keine Werbung.

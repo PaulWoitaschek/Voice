@@ -1,11 +1,13 @@
 featureGraphic:
-  headline: "Hörbücher ohne Ballast"
-  tagline: "Ein schlanker Player für deine eigenen Hörbücher"
+  headline: "Ein ruhiger Ort für Deine Hörbücher"
+  tagline: "Kein Konto. Keine Werbung. Nur Deine Geschichten."
 
 screenshots:
-  - caption: "Alle deine Hörbücher an einem Ort"
-  - caption: "Höre genau dort weiter, wo du aufgehört hast"
-  - caption: "Einschlafen ohne abruptes Ende"
-  - caption: "Speichere deine Lieblingsmomente"
-  - caption: "Deine Dateien, automatisch organisiert"
-  - caption: "Kein Konto. Keine Werbung. Kein Ballast."
+  - caption: "Deine Geschichten warten auf Dich"
+  - caption: "Jedes Buch bringt seine Farben mit"
+  - caption: "Eindösen, ohne die Stelle zu verlieren"
+  - caption: "Speichere Deine Lieblingsmomente"
+  - caption: "Stelle verloren? Spring einfach zurück"
+  - caption: "Dein Buch direkt auf dem Startbildschirm"
+  - caption: "Mach Voice zu Deinem"
+  - caption: "Ordner wählen. Voice macht den Rest."

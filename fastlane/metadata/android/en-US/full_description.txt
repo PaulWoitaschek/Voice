@@ -1,34 +1,52 @@
-Voice is a clean audiobook player for people who bring their own books.
+Voice is a calm audiobook player for people who love stories and bring their own books.
 
-Add your audiobook folder once, and Voice turns your local audio files into a simple library. It remembers your position for every book, keeps playback controls close, and stays out of the way.
+Pick the folder with your audiobooks. Voice shows you the books it finds, adds them to your library, and remembers your place in every one. Then it gets out of the way, so you can just listen.
 
-<b>Made for audiobooks</b>
+<b>A player that matches your book</b>
 
-• Continue exactly where you stopped
-• Sleep timer with gentle fade-out
-• Stop at the end of the current chapter
-• Shake to extend the timer
-• Playback speed control
-• Volume boost for quiet recordings
-• Skip silence
-• Auto-rewind after longer pauses
-• Bookmarks with timestamps and custom names
+• The player takes its colors from the cover of the book you're listening to
+• Voice remembers your place in every book
+• Playback speed, skip silence, and volume boost for quiet recordings
+• Jumped too far? One tap takes you back
+• Auto rewind after a pause, so you don't lose the thread
+
+<b>Fall asleep to a story</b>
+
+• Sleep timer with a gentle fade-out, or stop at the end of the chapter
+• Shake your phone right after the timer ends to restart it
+• A calm night look while the timer runs
+
+<b>Never lose your place</b>
+
+• Save a moment with a long press, and add a name or a note later
+• Mark bookmarks as favorites, quotes, notes, or places to revisit
+• Your listening history shows every play, pause, and jump, so you can always find your way back
+• If your car, headphones, or watch started a book, Voice offers to take you back
+
+<b>Your library, your way</b>
+
+• Continue listening right from the top of your library
+• Books sorted into current, not started, and completed
 • Search by title and author
-• Current, completed, and not started filters
 • List and grid views
-• Cover art from embedded images, local files, or online search
-• Home screen widget, media notification, and Android Auto support
+• Covers from the file, your phone, or an online search
+• Home screen widgets: Now playing, Shelf, and Sleep timer
+• Media notification and Android Auto
+• Light and dark theme, Dynamic color, and color schemes to make Voice yours
+• Available in 25 languages
 
 <b>Bring your own files</b>
 
-Voice works with DRM-free audiobook files such as M4B, MP3, M4A, OGG, OGA, and OPUS. Keep your books in folders the way you like; Voice recognizes them and organizes your library.
+Voice plays DRM-free audiobooks such as M4B, MP3, M4A, OGG, OGA, and OPUS. Keep your books in folders the way you like. A folder can hold a single book or your whole library, and Voice organizes it for you.
 
-<b>No clutter</b>
+<b>Just you and your stories</b>
 
-• No account required
+• No account
 • No ads
-• No forced cloud sync
-• All features are available without paid upgrades
+• Nothing behind a paywall
+• Your books stay on your device
+
+If you enjoy Voice, you can support it from the settings. It's a thank-you and unlocks nothing.
 
 Voice is open source under the GNU GPLv3 license.
 

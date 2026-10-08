@@ -1,1 +1,1 @@
-Jednoduchý přehrávač audioknih pro vlastní soubory s časovačem a záložkami.
+Klidný přehrávač audioknih pro vaše vlastní soubory. Bez účtu, bez reklam.

@@ -1,20 +1,54 @@
-Êtes-vous à la recherche d'un lecteur de livres audio simple, minimaliste, et fonctionnel ?
-Un lecteur qui vous permet de vous concentrer sur ce que vous souhaitez réellement faire : écouter des livres audio ?
-Ajoutez simplement votre dossier principal de livres audio, et chaque sous-dossier sera considérée comme un livre distinct. Votre bibliothèque reste ainsi simple et propre.
+Voice est un lecteur de livres audio paisible, pour les amoureux des histoires qui ont leurs propres livres.
 
-Ce qu'il peut faire:
+Choisissez le dossier de vos livres audio. Voice vous montre les livres trouvés, les ajoute à votre bibliothèque et retient où vous en êtes dans chacun d'eux. Puis il se fait discret, pour que vous n'ayez plus qu'à écouter.
 
-- Se souvenir de la dernière position de lecture
-- Choisir la vitesse de lecture
-- Material design esthétique
-- Thème jour et nuit, apaisant pour la vue
-- Marque-pages
-- Android Auto
-- Minuteur de mise en veille. Inutile d'éteindre le lecteur au milieu de la nuit.
+<b>Un lecteur assorti à votre livre</b>
 
-Voice est gratuit et open source. Cela signifie que chacun peut voir ce qu'il fait. Il ne requiert que des permissions minimales.
+• Le lecteur prend les couleurs de la couverture du livre que vous écoutez
+• Voice retient où vous en êtes dans chaque livre
+• Vitesse de lecture, saut des silences et augmentation du volume pour les enregistrements trop faibles
+• Un saut de trop ? Un simple appui vous ramène en arrière
+• Rembobinage automatique après une pause, pour ne pas perdre le fil
 
-Si vous avez des suggestions ou avez trouvé un bug, signalez-le à l'adresse :
+<b>Endormez-vous en écoutant une histoire</b>
+
+• Minuterie de mise en veille avec un fondu tout en douceur, ou arrêt à la fin du chapitre
+• Secouez votre téléphone juste après la fin de la minuterie pour la relancer
+• Un affichage de nuit apaisant pendant que la minuterie tourne
+
+<b>Retrouvez toujours où vous en étiez</b>
+
+• Enregistrez un moment d'un appui long, et ajoutez un nom ou une note plus tard
+• Classez vos marque-pages en favoris, citations, notes ou passages à réécouter
+• Votre historique d'écoute affiche chaque lecture, pause et saut, pour que vous retrouviez toujours votre chemin
+• Si votre voiture, votre casque ou votre montre a lancé un livre, Voice vous propose de revenir au bon endroit
+
+<b>Votre bibliothèque sur mesure</b>
+
+• Reprenez l'écoute directement en haut de votre bibliothèque
+• Livres répartis entre « En cours », « Pas encore commencé » et « Terminé »
+• Recherche par titre et par auteur
+• Affichage en liste ou en grille
+• Couvertures issues du fichier, de votre téléphone ou d'une recherche en ligne
+• Widgets pour l'écran d'accueil : « En cours de lecture », « Étagère » et « Minuterie de mise en veille »
+• Notification multimédia et Android Auto
+• Thème clair et sombre, Couleur dynamique et jeux de couleurs pour faire de Voice le vôtre
+• Disponible en 25 langues
+
+<b>Apportez vos propres fichiers</b>
+
+Voice lit les livres audio sans DRM, par exemple aux formats M4B, MP3, M4A, OGG, OGA et OPUS. Rangez vos livres dans des dossiers comme bon vous semble. Un dossier peut contenir un seul livre ou toute votre bibliothèque, et Voice s'occupe de l'organiser.
+
+<b>Juste vous et vos histoires</b>
+
+• Aucun compte
+• Aucune publicité
+• Aucune fonction payante
+• Vos livres restent sur votre appareil
+
+Si vous aimez Voice, vous pouvez le soutenir depuis les paramètres. C'est un simple merci, qui ne débloque rien.
+
+Voice est open source, sous licence GNU GPLv3.
+
+Commentaires et signalements de bugs :
 https://github.com/PaulWoitaschek/Voice/issues
-
-La licence open source est la Gnu GPLv3
