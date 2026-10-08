@@ -68,7 +68,7 @@
         <item quantity="other">%d דקות</item>
     </plurals>
     <plurals name="duration.seconds">
-        <item quantity="one">שנייה</item>
+        <item quantity="one">%d שנייה</item>
         <item quantity="two">%d שניות</item>
         <item quantity="other">%d שניות</item>
     </plurals>
