@@ -43,7 +43,9 @@ class ShelfWidget : GlanceAppWidget() {
 
   override val sizeMode: SizeMode = SizeMode.Exact
 
-  override val previewSizeMode = SizeMode.Responsive(setOf(DpSize(180.dp, 180.dp), DpSize(300.dp, 180.dp)))
+  override val previewSizeMode = SizeMode.Responsive(
+    setOf(DpSize(130.dp, 130.dp), DpSize(180.dp, 180.dp), DpSize(300.dp, 180.dp)),
+  )
 
   override suspend fun provideGlance(
     context: Context,

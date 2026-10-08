@@ -16,6 +16,18 @@
     </receiver>
 
     <receiver
+      android:name="voice.features.widget.SmallNowPlayingWidgetReceiver"
+      android:exported="true"
+      android:label="@string/widget.now_playing.label">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+      <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/widget_now_playing_small_info" />
+    </receiver>
+
+    <receiver
       android:name="voice.features.widget.ShelfWidgetReceiver"
       android:exported="true"
       android:label="@string/widget.shelf.label">
@@ -25,6 +37,18 @@
       <meta-data
         android:name="android.appwidget.provider"
         android:resource="@xml/widget_shelf_info" />
+    </receiver>
+
+    <receiver
+      android:name="voice.features.widget.SmallShelfWidgetReceiver"
+      android:exported="true"
+      android:label="@string/widget.shelf.label">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+      <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/widget_shelf_small_info" />
     </receiver>
 
     <receiver
