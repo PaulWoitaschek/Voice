@@ -5,7 +5,7 @@ hide:
 
 # Voice
 
-A minimal, user-focused audiobook player for Android.
+A clean, user-focused audiobook player for Android.
 
 Voice turns your own audiobook files into a calm listening library with resume positions, bookmarks, sleep timer, playback speed, silence
 skipping, and Android Auto support.
@@ -31,11 +31,11 @@ also [sponsor on GitHub](https://github.com/sponsors/PaulWoitaschek).</small>
 
 <div class="grid cards" markdown>
 
-- :material-feather:{ .lg .middle } **Minimal by design**
+- :material-feather:{ .lg .middle } **Clean by design**
 
   ---
 
-  Only the controls you need while listening, with no clutter and no upsells.
+  Each screen shows what you need while listening, and the rest is one tap away. No clutter and no upsells.
 
 - :material-shield-check:{ .lg .middle } **Open source & private**
 

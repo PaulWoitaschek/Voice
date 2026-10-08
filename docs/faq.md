@@ -18,8 +18,11 @@ If a file that should be supported is not displayed, it is most likely either co
 
 ### Why isn’t feature xyz available in the app?
 
-I adhere to a core design principle of minimalism. As such, the app will only include settings and UI components that are absolutely
-essential.
+I add features when they make listening better for many listeners. Each one has to be maintained for years, and every new setting makes
+the app a bit harder to use. So I prefer good defaults over options and keep each screen focused on listening.
+
+If you're missing something, [open a feature request](https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas) and describe
+what you'd like to do.
 
 ### How can I join the beta?
 
