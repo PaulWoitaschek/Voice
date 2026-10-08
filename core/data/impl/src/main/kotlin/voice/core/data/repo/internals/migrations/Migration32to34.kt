@@ -38,7 +38,7 @@ public class Migration32to34 : Migration(32, 34) {
 
   @SuppressLint("Recycle")
   override fun migrate(db: SupportSQLiteDatabase) {
-    val cursor = db.query("SELECT * FROM BOOKMARK_TABLE_NAME")
+    val cursor = db.query("SELECT * FROM $BOOKMARK_TABLE_NAME")
     val entries = cursor.mapRows {
       val path = getString(BM_PATH)
       val title = getString(BM_TITLE)
