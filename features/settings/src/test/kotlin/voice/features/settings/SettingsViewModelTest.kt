@@ -5,8 +5,6 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.mockk.Runs
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -32,16 +30,13 @@ import voice.core.data.ThemeMode
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.DocumentFileWithUri
 import voice.core.data.folders.FolderType
-import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.featureflag.MemoryFeatureFlag
-import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import java.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -61,15 +56,6 @@ class SettingsViewModelTest {
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val analyticsConsentStore = MemoryDataStore(false)
   private val developerMenuUnlockedStore = MemoryDataStore(false)
-  private val listeningHistoryEnabledStore = MemoryDataStore(true)
-  private val listeningHistoryRepo = mockk<ListeningHistoryRepo> {
-    coEvery { clear() } just Runs
-  }
-  private val listeningHistoryRecorder = ListeningHistoryRecorder(
-    repo = listeningHistoryRepo,
-    clock = Clock.systemUTC(),
-    scope = scope,
-  )
   private val navigator = mockk<Navigator> {
     every { goTo(any()) } just Runs
   }
@@ -105,8 +91,6 @@ class SettingsViewModelTest {
     developerMenuUnlockedStore = developerMenuUnlockedStore,
     dynamicColorAvailability = dynamicColorAvailability,
     audiobookFolders = audiobookFolders,
-    listeningHistoryEnabledStore = listeningHistoryEnabledStore,
-    listeningHistoryRecorder = listeningHistoryRecorder,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
 
@@ -251,21 +235,6 @@ class SettingsViewModelTest {
   }
 
   @Test
-  fun `listening history can be turned off and on`() = scope.runTest {
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.filterNotNull().test {
-      assertEquals(expected = true, actual = awaitItem().listeningHistoryEnabled)
-
-      viewModel.toggleListeningHistory()
-      assertEquals(expected = false, actual = awaitItem().listeningHistoryEnabled)
-
-      viewModel.toggleListeningHistory()
-      assertEquals(expected = true, actual = awaitItem().listeningHistoryEnabled)
-    }
-  }
-
-  @Test
   fun `view state lists the audiobook folder names alphabetically`() = scope.runTest {
     every { audiobookFolders.all() } returns flowOf(
       mapOf(
@@ -280,15 +249,6 @@ class SettingsViewModelTest {
       runCurrent()
       assertEquals(expected = listOf("Audiobooks", "crime", "Sci-Fi"), actual = expectMostRecentItem().folderNames)
     }
-  }
-
-  @Test
-  fun `clearing the listening history tells so`() = scope.runTest {
-    viewModel.viewEffects.test {
-      viewModel.clearListeningHistory()
-      assertEquals(expected = SettingsViewEffect.ListeningHistoryCleared, actual = awaitItem())
-    }
-    coVerify(exactly = 1) { listeningHistoryRepo.clear() }
   }
 
   @Test

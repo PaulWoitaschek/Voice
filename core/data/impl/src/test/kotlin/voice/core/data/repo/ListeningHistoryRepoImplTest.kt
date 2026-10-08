@@ -11,7 +11,6 @@ import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.internals.AppDb
-import voice.core.data.repo.internals.MemoryDataStore
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -24,12 +23,10 @@ class ListeningHistoryRepoImplTest {
   private val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
     .allowMainThreadQueries()
     .build()
-  private val enabledStore = MemoryDataStore(true)
   private val now = Instant.parse("2026-10-07T10:00:00Z")
   private val repo = ListeningHistoryRepoImpl(
     dao = db.listeningEventDao(),
     appDb = db,
-    enabledStore = enabledStore,
   )
   private val bookId = BookId("book")
 
@@ -65,14 +62,6 @@ class ListeningHistoryRepoImplTest {
     repo.add(event(ListeningEvent.Type.Play, now, bookId = BookId("other")))
 
     assertEquals(expected = listOf(ListeningEvent.Type.Pause, ListeningEvent.Type.Play), actual = types())
-  }
-
-  @Test
-  fun `nothing is recorded while history is off`() = runTest {
-    enabledStore.updateData { false }
-    repo.add(event(ListeningEvent.Type.Play, now))
-
-    assertEquals(expected = emptyList(), actual = types())
   }
 
   @Test
@@ -140,14 +129,5 @@ class ListeningHistoryRepoImplTest {
       expected = listOf(ListeningEvent.Type.Play),
       actual = repo.events(newBook).first().map { it.type },
     )
-  }
-
-  @Test
-  fun `clearing removes everything`() = runTest {
-    repo.add(event(ListeningEvent.Type.Play, now))
-
-    repo.clear()
-
-    assertEquals(expected = emptyList(), actual = types())
   }
 }

@@ -158,9 +158,6 @@
     <string name="history.filter.settings">Réglages</string>
     <string name="history.filter.sleep">Sommeil</string>
     <string name="history.location.chapter">Chap. %1$d · %2$s</string>
-    <string name="history.off.action">Activer</string>
-    <string name="history.off.message">Activez-le pour annuler les lectures, pauses et sauts involontaires. Il reste sur cet appareil.</string>
-    <string name="history.off.title">L\'historique d\'écoute est désactivé</string>
     <string name="history.pinned">Enregistré comme marque-page</string>
     <string name="history.restored">Marque-page restauré</string>
     <string name="history.source.app">Dans l\'application</string>
@@ -322,13 +319,6 @@
     <string name="settings.auto_sleep_timer.summary">Démarrer automatiquement le minuteur de veille lorsque la lecture commence entre %1$s et %2$s</string>
     <string name="settings.auto_sleep_timer.title">Minuteur de veille automatique</string>
     <string name="settings.library.folders.summary">Gérer les dossiers analysés pour les livres audio</string>
-    <string name="settings.listening_history.clear">Effacer l\'historique d\'écoute</string>
-    <string name="settings.listening_history.clear.confirm">Effacer</string>
-    <string name="settings.listening_history.clear.message">Les lectures, pauses et sauts enregistrés pour tous les livres seront supprimés. Les marque-pages sont conservés.</string>
-    <string name="settings.listening_history.clear.title">Effacer l\'historique d\'écoute ?</string>
-    <string name="settings.listening_history.cleared">Historique d\'écoute effacé</string>
-    <string name="settings.listening_history.summary">Conserve les lectures, pauses et sauts sur cet appareil pour pouvoir annuler les fausses manipulations</string>
-    <string name="settings.listening_history.title">Historique d\'écoute</string>
     <string name="settings.library.layout.grid">Grille</string>
     <string name="settings.library.layout.list">Liste</string>
     <string name="settings.library.title">Bibliothèque</string>

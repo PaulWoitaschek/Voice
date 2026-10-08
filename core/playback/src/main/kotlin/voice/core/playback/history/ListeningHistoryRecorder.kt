@@ -9,15 +9,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.ListeningHistoryRepo
 import java.time.Clock
 import java.time.Instant
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.absoluteValue
 import kotlin.time.Duration.Companion.seconds
 
@@ -50,11 +47,6 @@ class ListeningHistoryRecorder(
 
   private val pendingSettings = mutableMapOf<Pair<BookId, ListeningEvent.Type>, Job>()
 
-  private val writes = Mutex()
-
-  // bumped when the history is cleared, so that nothing recorded before is written after it
-  private val generation = AtomicInteger()
-
   fun record(
     type: ListeningEvent.Type,
     source: ListeningEvent.Source,
@@ -76,7 +68,6 @@ class ListeningHistoryRecorder(
       sourcePackage = sourcePackage,
     )
     updateLastJump(event, position, to)
-    val generation = generation.get()
     if (type in debouncedTypes) {
       // dragging a slider changes the value many times, only the last one matters
       val key = position.bookId to type
@@ -84,32 +75,10 @@ class ListeningHistoryRecorder(
       pendingSettings[key] = scope.launch {
         delay(SETTINGS_DEBOUNCE)
         pendingSettings.remove(key)
-        write(event, generation)
+        repo.add(event)
       }
     } else {
       scope.launch {
-        write(event, generation)
-      }
-    }
-  }
-
-  /**
-   * Clears the history, including what was recorded but is not written yet.
-   */
-  suspend fun clear() {
-    writes.withLock {
-      generation.incrementAndGet()
-      lastJump.value = null
-      repo.clear()
-    }
-  }
-
-  private suspend fun write(
-    event: ListeningEvent,
-    generation: Int,
-  ) {
-    writes.withLock {
-      if (generation == this.generation.get()) {
         repo.add(event)
       }
     }

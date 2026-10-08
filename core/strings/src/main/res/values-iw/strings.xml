@@ -158,9 +158,6 @@
     <string name="history.filter.settings">הגדרות</string>
     <string name="history.filter.sleep">שינה</string>
     <string name="history.location.chapter">פרק %1$d · %2$s</string>
-    <string name="history.off.action">הפעל</string>
-    <string name="history.off.message">הפעל כדי לבטל הפעלות, השהיות וקפיצות שקרו בטעות. הנתונים נשמרים רק במכשיר הזה.</string>
-    <string name="history.off.title">היסטוריית ההאזנה כבויה</string>
     <string name="history.pinned">נשמר כסימנייה</string>
     <string name="history.restored">הסימנייה שוחזרה</string>
     <string name="history.source.app">באפליקציה</string>
@@ -322,13 +319,6 @@
     <string name="settings.auto_sleep_timer.summary">תפעיל את שעון השינה ­האוטומטי כשההפעלה מגיעה ל- %1$s ו- %2$s</string>
     <string name="settings.auto_sleep_timer.title">שעון עצר אוטומטי לשינה</string>
     <string name="settings.library.folders.summary">ניהול תיקיות שנסרקות עבור ספרי שמע</string>
-    <string name="settings.listening_history.clear">ניקוי היסטוריית ההאזנה</string>
-    <string name="settings.listening_history.clear.confirm">נקה</string>
-    <string name="settings.listening_history.clear.message">פעולה זו תסיר את ההפעלות, ההשהיות והקפיצות שתועדו בכל הספרים. הסימניות יישארו.</string>
-    <string name="settings.listening_history.clear.title">לנקות את היסטוריית ההאזנה?</string>
-    <string name="settings.listening_history.cleared">היסטוריית ההאזנה נוקתה</string>
-    <string name="settings.listening_history.summary">שומרת הפעלות, השהיות וקפיצות במכשיר הזה, כדי שאפשר יהיה לבטל טעויות</string>
-    <string name="settings.listening_history.title">היסטוריית האזנה</string>
     <string name="settings.library.layout.grid">רשת</string>
     <string name="settings.library.layout.list">רשימה</string>
     <string name="settings.library.title">ספרייה</string>

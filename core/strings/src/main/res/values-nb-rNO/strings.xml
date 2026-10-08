@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Innstillinger</string>
     <string name="history.filter.sleep">Søvn</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
-    <string name="history.off.action">Slå på</string>
-    <string name="history.off.message">Slå den på for å angre utilsiktede avspillinger, pauser og hopp. Den blir værende på denne enheten.</string>
-    <string name="history.off.title">Lyttehistorikk er av</string>
     <string name="history.pinned">Lagret som bokmerke</string>
     <string name="history.restored">Bokmerke gjenopprettet</string>
     <string name="history.source.app">I appen</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Start en søvn-timer automatisk når avspillingen begynner mellom %1$s og %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatisk søvn-timer</string>
     <string name="settings.library.folders.summary">Håndter mapper som er skannet for lydbøker</string>
-    <string name="settings.listening_history.clear">Tøm lyttehistorikk</string>
-    <string name="settings.listening_history.clear.confirm">Tøm</string>
-    <string name="settings.listening_history.clear.message">Dette fjerner de registrerte avspillingene, pausene og hoppene for alle bøker. Bokmerkene blir værende.</string>
-    <string name="settings.listening_history.clear.title">Tømme lyttehistorikken?</string>
-    <string name="settings.listening_history.cleared">Lyttehistorikk tømt</string>
-    <string name="settings.listening_history.summary">Lagrer avspillinger, pauser og hopp på denne enheten, så du kan angre uhell</string>
-    <string name="settings.listening_history.title">Lyttehistorikk</string>
     <string name="settings.library.layout.grid">Rutenett</string>
     <string name="settings.library.layout.list">Liste</string>
     <string name="settings.library.title">Bibliotek</string>

@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Inställningar</string>
     <string name="history.filter.sleep">Sömn</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
-    <string name="history.off.action">Slå på</string>
-    <string name="history.off.message">Slå på den för att ångra oavsiktliga uppspelningar, pauser och hopp. Den sparas bara på den här enheten.</string>
-    <string name="history.off.title">Lyssningshistoriken är avstängd</string>
     <string name="history.pinned">Sparat som bokmärke</string>
     <string name="history.restored">Bokmärket har återställts</string>
     <string name="history.source.app">I appen</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Starta en insomningstimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatisk insomningstimer</string>
     <string name="settings.library.folders.summary">Hantera mappar som genomsöks efter ljudböcker</string>
-    <string name="settings.listening_history.clear">Rensa lyssningshistorik</string>
-    <string name="settings.listening_history.clear.confirm">Rensa</string>
-    <string name="settings.listening_history.clear.message">Detta tar bort sparade uppspelningar, pauser och hopp för alla böcker. Bokmärkena finns kvar.</string>
-    <string name="settings.listening_history.clear.title">Rensa lyssningshistoriken?</string>
-    <string name="settings.listening_history.cleared">Lyssningshistoriken har rensats</string>
-    <string name="settings.listening_history.summary">Sparar uppspelningar, pauser och hopp på den här enheten så att du kan ångra misstag</string>
-    <string name="settings.listening_history.title">Lyssningshistorik</string>
     <string name="settings.library.layout.grid">Rutnät</string>
     <string name="settings.library.layout.list">Lista</string>
     <string name="settings.library.title">Bibliotek</string>

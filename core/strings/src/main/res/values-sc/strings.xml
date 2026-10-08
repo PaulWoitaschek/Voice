@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Cunfiguratziones</string>
     <string name="history.filter.sleep">Sonnu</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.off.action">Ativa</string>
-    <string name="history.off.message">Ativa·dda pro annullare riprodutziones, pàusas e brincos chene bòlere. Abarrat in custu dispositivu.</string>
-    <string name="history.off.title">Sa cronologia de ascurtu est disativada</string>
     <string name="history.pinned">Sarvadu comente sinnalibru</string>
     <string name="history.restored">Sinnalibru ripristinadu</string>
     <string name="history.source.app">In s\'aplicatzione</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Allughe unu temporizadore de suspensione cando sa riprodutzione incumintzat intre %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizadore de suspensione automàticu</string>
     <string name="settings.library.folders.summary">Manìgia is cartellas iscansionadas pro audiolìberos</string>
-    <string name="settings.listening_history.clear">Isbòida sa cronologia de ascurtu</string>
-    <string name="settings.listening_history.clear.confirm">Isbòida</string>
-    <string name="settings.listening_history.clear.message">Custu bogat sas riprodutziones, pàusas e brincos registrados de totu sos libros. Sos sinnalibros abarrant.</string>
-    <string name="settings.listening_history.clear.title">Boles isbòidare sa cronologia de ascurtu?</string>
-    <string name="settings.listening_history.cleared">Cronologia de ascurtu isbòidada</string>
-    <string name="settings.listening_history.summary">Mantenet riprodutziones, pàusas e brincos in custu dispositivu, gasi podes annullare sos errores</string>
-    <string name="settings.listening_history.title">Cronologia de ascurtu</string>
     <string name="settings.library.layout.grid">Grìllia</string>
     <string name="settings.library.layout.list">Lista</string>
     <string name="settings.library.title">Biblioteca</string>

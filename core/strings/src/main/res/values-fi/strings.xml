@@ -150,9 +150,6 @@
     <string name="history.filter.settings">Asetukset</string>
     <string name="history.filter.sleep">Uni</string>
     <string name="history.location.chapter">Luku %1$d · %2$s</string>
-    <string name="history.off.action">Ota käyttöön</string>
-    <string name="history.off.message">Ota se käyttöön, niin voit kumota vahingossa tapahtuneet toistot, tauot ja siirtymät. Tiedot pysyvät tällä laitteella.</string>
-    <string name="history.off.title">Kuunteluhistoria on pois päältä</string>
     <string name="history.pinned">Tallennettu kirjanmerkiksi</string>
     <string name="history.restored">Kirjanmerkki palautettu</string>
     <string name="history.source.app">Sovelluksessa</string>
@@ -309,13 +306,6 @@
     <string name="settings.auto_sleep_timer.summary">Aloita uniajastin automaattisesti, kun toisto alkaa välillä %1$s ja %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automaattinen uniajastin</string>
     <string name="settings.library.folders.summary">Hallitse kansioita, joista etsitään äänikirjoja</string>
-    <string name="settings.listening_history.clear">Tyhjennä kuunteluhistoria</string>
-    <string name="settings.listening_history.clear.confirm">Tyhjennä</string>
-    <string name="settings.listening_history.clear.message">Tämä poistaa kaikkien kirjojen tallennetut toistot, tauot ja siirtymät. Kirjanmerkit säilyvät.</string>
-    <string name="settings.listening_history.clear.title">Tyhjennetäänkö kuunteluhistoria?</string>
-    <string name="settings.listening_history.cleared">Kuunteluhistoria tyhjennetty</string>
-    <string name="settings.listening_history.summary">Säilyttää toistot, tauot ja siirtymät tällä laitteella, jotta voit kumota vahingot</string>
-    <string name="settings.listening_history.title">Kuunteluhistoria</string>
     <string name="settings.library.layout.grid">Ruudukko</string>
     <string name="settings.library.layout.list">Luettelo</string>
     <string name="settings.library.title">Kirjasto</string>

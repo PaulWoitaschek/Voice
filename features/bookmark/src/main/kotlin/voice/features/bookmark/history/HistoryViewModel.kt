@@ -33,7 +33,6 @@ import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.DismissedHistorySuggestionsStore
-import voice.core.data.store.ListeningHistoryEnabledStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
 import voice.core.playback.PlayerController
@@ -54,8 +53,6 @@ class HistoryViewModel(
   private val bookRepository: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
   private val listeningHistoryRepo: ListeningHistoryRepo,
-  @ListeningHistoryEnabledStore
-  private val enabledStore: DataStore<Boolean>,
   @DismissedHistorySuggestionsStore
   private val dismissedSuggestionsStore: DataStore<List<Long>>,
   private val playStateManager: PlayStateManager,
@@ -120,16 +117,14 @@ class HistoryViewModel(
         combine(
           listeningHistoryRepo.events(bookId),
           bookmarkRepo.bookmarksFlow(content),
-          enabledStore.data,
           playing,
           selection,
-        ) { events, bookmarks, enabled, isPlaying, selected ->
+        ) { events, bookmarks, isPlaying, selected ->
           withContext(dispatcherProvider.io) {
             historyTimeline(
               events = events,
               index = index,
               bookmarks = bookmarks,
-              enabled = enabled,
               playing = isPlaying,
               selectedFilter = selected.filter,
               selectedSource = selected.source,
@@ -169,12 +164,6 @@ class HistoryViewModel(
 
   internal fun onSuggestionKeep(suggestion: HistorySuggestion) {
     dismiss(suggestion)
-  }
-
-  internal fun onTurnOnClick() {
-    scope.launch {
-      enabledStore.updateData { true }
-    }
   }
 
   private fun dismiss(suggestion: HistorySuggestion) {

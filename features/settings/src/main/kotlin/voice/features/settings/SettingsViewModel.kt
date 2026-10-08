@@ -26,7 +26,6 @@ import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DeveloperMenuUnlockedStore
 import voice.core.data.store.GridModeStore
-import voice.core.data.store.ListeningHistoryEnabledStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.data.store.ThemeColorSchemeStore
@@ -34,7 +33,6 @@ import voice.core.data.store.ThemeModeStore
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
-import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
@@ -66,9 +64,6 @@ class SettingsViewModel(
   private val developerMenuUnlockedStore: DataStore<Boolean>,
   private val dynamicColorAvailability: DynamicColorAvailability,
   private val audiobookFolders: AudiobookFolders,
-  @ListeningHistoryEnabledStore
-  private val listeningHistoryEnabledStore: DataStore<Boolean>,
-  private val listeningHistoryRecorder: ListeningHistoryRecorder,
   private val dispatcherProvider: DispatcherProvider,
 ) : SettingsListener {
 
@@ -90,7 +85,6 @@ class SettingsViewModel(
     val gridMode = remember { gridModeStore.data }.collectAsState(initial = null).value
     val autoSleepTimer = remember { sleepTimerPreferenceStore.data }.collectAsState(initial = null).value
     val analyticsEnabled = remember { analyticsConsentStore.data }.collectAsState(initial = null).value
-    val listeningHistoryEnabled = remember { listeningHistoryEnabledStore.data }.collectAsState(initial = null).value
     // reading the folders and their names asks other processes, so that's kept off the main thread
     val folderNames = remember { folderNames() }.collectAsState(initial = null, context = dispatcherProvider.io).value
     val showDeveloperMenu = remember { developerMenuUnlockedStore.data }.collectAsState(initial = null).value
@@ -105,7 +99,6 @@ class SettingsViewModel(
       gridMode == null ||
       autoSleepTimer == null ||
       analyticsEnabled == null ||
-      listeningHistoryEnabled == null ||
       folderNames == null ||
       showDeveloperMenu == null
     ) {
@@ -133,7 +126,6 @@ class SettingsViewModel(
       showDeveloperMenu = showDeveloperMenu,
       showSupportDevelopment = appInfoProvider.supportDevelopmentIncluded,
       folderNames = folderNames,
-      listeningHistoryEnabled = listeningHistoryEnabled,
     )
   }
 
@@ -248,19 +240,6 @@ class SettingsViewModel(
   override fun toggleAnalytics() {
     mainScope.launch {
       analyticsConsentStore.updateData { !it }
-    }
-  }
-
-  override fun toggleListeningHistory() {
-    mainScope.launch {
-      listeningHistoryEnabledStore.updateData { !it }
-    }
-  }
-
-  override fun clearListeningHistory() {
-    mainScope.launch {
-      listeningHistoryRecorder.clear()
-      viewEffects.emit(SettingsViewEffect.ListeningHistoryCleared)
     }
   }
 

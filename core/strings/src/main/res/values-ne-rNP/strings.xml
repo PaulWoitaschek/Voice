@@ -145,9 +145,6 @@
     <string name="history.filter.settings">सेटिङहरू</string>
     <string name="history.filter.sleep">निद्रा</string>
     <string name="history.location.chapter">अध्याय %1$d · %2$s</string>
-    <string name="history.off.action">सक्रिय गर्नुहोस्</string>
-    <string name="history.off.message">गल्तीले भएका प्ले, पज र जम्पहरू पूर्ववत् गर्न यसलाई सक्रिय गर्नुहोस्। यो यही यन्त्रमा मात्र रहन्छ।</string>
-    <string name="history.off.title">सुनाइ इतिहास बन्द छ</string>
     <string name="history.pinned">पुस्तकचिनोको रूपमा सुरक्षित गरियो</string>
     <string name="history.restored">पुस्तकचिनो पुनर्स्थापना गरियो</string>
     <string name="history.source.app">एपमा</string>
@@ -264,13 +261,6 @@
     <string name="settings.appearance.color_scheme.lavender">ल्याभेन्डर</string>
     <string name="settings.appearance.color_scheme.sunset">सूर्यास्त</string>
     <string name="settings.appearance.title">रूप</string>
-    <string name="settings.listening_history.clear">सुनाइ इतिहास खाली गर्नुहोस्</string>
-    <string name="settings.listening_history.clear.confirm">खाली गर्नुहोस्</string>
-    <string name="settings.listening_history.clear.message">यसले सबै पुस्तकहरूका रेकर्ड गरिएका प्ले, पज र जम्पहरू हटाउँछ। पुस्तकचिनोहरू रहन्छन्।</string>
-    <string name="settings.listening_history.clear.title">सुनाइ इतिहास खाली गर्ने?</string>
-    <string name="settings.listening_history.cleared">सुनाइ इतिहास खाली गरियो</string>
-    <string name="settings.listening_history.summary">प्ले, पज र जम्पहरू यस यन्त्रमा राख्छ, ताकि तपाईं गल्तीहरू पूर्ववत् गर्न सक्नुहुन्छ</string>
-    <string name="settings.listening_history.title">सुनाइ इतिहास</string>
     <string name="settings.library.layout.grid">ग्रिड</string>
     <string name="settings.library.layout.list">सूची</string>
     <string name="settings.library.title">पुस्तकालय</string>

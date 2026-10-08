@@ -156,7 +156,6 @@ private fun demoEntry(
 internal fun kioskModeHistoryViewState(): HistoryViewState {
   val backToStart = HistoryAction.JumpBack(demoChapter, 0, at(12, "14:48"))
   return HistoryViewState(
-    enabled = true,
     suggestion = HistorySuggestion.StartedBy(
       key = 7,
       back = backToStart,

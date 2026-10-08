@@ -37,7 +37,6 @@ class HistoryTimelineTest {
   private fun timeline(
     vararg events: ListeningEvent,
     playing: Boolean = false,
-    enabled: Boolean = true,
     bookmarks: List<Bookmark> = emptyList(),
     filter: HistoryFilter? = null,
     source: Source? = null,
@@ -46,7 +45,6 @@ class HistoryTimelineTest {
     events = events.toList(),
     index = index,
     bookmarks = bookmarks,
-    enabled = enabled,
     playing = playing,
     selectedFilter = filter,
     selectedSource = source,
@@ -57,7 +55,6 @@ class HistoryTimelineTest {
   private fun state(
     vararg events: ListeningEvent,
     playing: Boolean = false,
-    enabled: Boolean = true,
     bookmarks: List<Bookmark> = emptyList(),
     filter: HistoryFilter? = null,
     source: Source? = null,
@@ -66,7 +63,6 @@ class HistoryTimelineTest {
   ): HistoryViewState = timeline(
     events = events,
     playing = playing,
-    enabled = enabled,
     bookmarks = bookmarks,
     filter = filter,
     source = source,
@@ -209,19 +205,6 @@ class HistoryTimelineTest {
     assertEquals(expected = LocalTime.of(9, 20), actual = session.end)
     assertEquals(expected = 20.minutes, actual = session.listened)
     assertEquals(expected = 0.1F, actual = session.barEnd)
-  }
-
-  @Test
-  fun `while the history is off nothing is ongoing`() {
-    val state = state(
-      testEvent(Type.Play, today(9, 30), signal, 5.minutes, source = Source.Car),
-      playing = true,
-      enabled = false,
-    )
-    val session = state.sessions.single()
-    assertEquals(expected = LocalTime.of(9, 30), actual = session.end)
-    assertEquals(expected = Duration.ZERO, actual = session.listened)
-    assertNull(state.suggestion)
   }
 
   @Test

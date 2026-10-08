@@ -90,8 +90,7 @@ private val AUTO_REWIND_PRESETS = listOf(0, 2, 5, 10, 20)
 
 /**
  * How far skipping jumps and how far resuming rewinds. Both are set right here, with a few presets
- * and fine tuning, and each comes with a little illustration of what it does. Below them, the
- * listening history can be turned off and cleared.
+ * and fine tuning, and each comes with a little illustration of what it does.
  */
 @Composable
 internal fun ListeningSection(
@@ -101,9 +100,6 @@ internal fun ListeningSection(
   onSeekTimeStep: (Int) -> Unit,
   onAutoRewindChange: (Int) -> Unit,
   onAutoRewindStep: (Int) -> Unit,
-  listeningHistoryEnabled: Boolean,
-  onListeningHistoryToggle: () -> Unit,
-  onClearListeningHistory: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   SettingsIsland(
@@ -131,12 +127,6 @@ internal fun ListeningSection(
       onSecondsChange = onAutoRewindChange,
       onStep = onAutoRewindStep,
       illustration = { RewindIllustration(autoRewindInSeconds, maxSeconds = AUTO_REWIND_RANGE.last) },
-    )
-    Spacer(Modifier.height(20.dp))
-    ListeningHistoryRows(
-      enabled = listeningHistoryEnabled,
-      onToggle = onListeningHistoryToggle,
-      onClear = onClearListeningHistory,
     )
   }
 }

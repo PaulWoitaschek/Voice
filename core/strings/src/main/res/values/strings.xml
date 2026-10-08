@@ -208,9 +208,6 @@
     <string name="history.filter.settings">Settings</string>
     <string name="history.filter.sleep">Sleep</string>
     <string name="history.location.chapter">Ch. %1$d · %2$s</string>
-    <string name="history.off.action">Turn on</string>
-    <string name="history.off.message">Turn it on to undo accidental plays, pauses and jumps. It stays on this device.</string>
-    <string name="history.off.title">Listening history is off</string>
     <string name="history.pinned">Saved as bookmark</string>
     <string name="history.restored">Bookmark restored</string>
     <string name="history.source.app">In the app</string>
@@ -484,13 +481,6 @@
     <string name="settings.auto_sleep_timer.title">Automatic Sleep Timer</string>
     <!-- Summary text for the audiobook folders settings row. Also the subtitle of the audiobook folders screen. -->
     <string name="settings.library.folders.summary">Manage folders scanned for audiobooks</string>
-    <string name="settings.listening_history.clear">Clear listening history</string>
-    <string name="settings.listening_history.clear.confirm">Clear</string>
-    <string name="settings.listening_history.clear.message">This removes the recorded plays, pauses and jumps of all books. Bookmarks stay.</string>
-    <string name="settings.listening_history.clear.title">Clear listening history?</string>
-    <string name="settings.listening_history.cleared">Listening history cleared</string>
-    <string name="settings.listening_history.summary">Keeps plays, pauses and jumps on this device, so you can undo accidents</string>
-    <string name="settings.listening_history.title">Listening history</string>
     <!-- Label of the preview tile that shows the library as a grid of covers. -->
     <string name="settings.library.layout.grid">Grid</string>
     <!-- Label of the preview tile that shows the library as a list. -->
