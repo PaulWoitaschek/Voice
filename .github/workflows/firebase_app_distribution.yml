@@ -71,6 +71,8 @@ jobs:
 
       - name: Upload to Firebase App Distribution
         env:
+          # renovate: datasource=npm depName=firebase-tools
+          FIREBASE_TOOLS_VERSION: 15.32.1
           TESTER_GROUPS: ${{ inputs.groups }}
           RELEASE_NOTES: ${{ inputs.release_notes }}
         run: |
@@ -86,6 +88,6 @@ jobs:
             args+=(--groups "$TESTER_GROUPS")
           fi
 
-          npx --yes firebase-tools@15.32.1 appdistribution:distribute \
+          npx --yes "firebase-tools@$FIREBASE_TOOLS_VERSION" appdistribution:distribute \
             app/build/outputs/apk/play/release/app-play-release.apk \
             "${args[@]}"
