@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.Audiobookshelf
@@ -36,6 +37,9 @@ class AudiobookshelfLoginViewModel(
   private var login: PendingLogin? = null
   private var knownUsername = ""
 
+  // the request of the step on screen. Going back cancels it, so its answer can't take over another step.
+  private var request: Job? = null
+
   internal var state: AudiobookshelfLoginViewState by mutableStateOf(AudiobookshelfLoginViewState.Address())
     private set
 
@@ -59,7 +63,7 @@ class AudiobookshelfLoginViewModel(
     val current = state as? AudiobookshelfLoginViewState.Address ?: return
     if (current.busy || current.address.isBlank()) return
     state = current.copy(busy = true, error = null)
-    scope.launch {
+    request = scope.launch {
       when (val result = audiobookshelf.findServer(current.address)) {
         is FindServerResult.Found -> {
           server = result.server
@@ -92,13 +96,16 @@ class AudiobookshelfLoginViewModel(
     val server = server ?: return
     if (current.busy || current.username.isBlank()) return
     state = current.copy(busy = true, error = null)
-    scope.launch {
+    request = scope.launch {
       when (val result = audiobookshelf.login(server, current.username, current.password)) {
         is LoginResult.Success -> {
           login = result.login
           if (renew) {
-            audiobookshelf.renewLogin(result.login)
-            navigator.goBack()
+            if (audiobookshelf.renewLogin(result.login)) {
+              navigator.goBack()
+            } else {
+              state = current.copy(error = CredentialsError.OtherAccount)
+            }
           } else {
             showLibraries(result.login, current.serverName)
           }
@@ -119,6 +126,7 @@ class AudiobookshelfLoginViewModel(
     state = AudiobookshelfLoginViewState.Libraries(
       serverName = serverName,
       loading = false,
+      failed = preview == null,
       libraries = preview?.libraries.orEmpty().map { library ->
         LibraryViewState(
           id = library.id,
@@ -129,6 +137,14 @@ class AudiobookshelfLoginViewModel(
       },
       covers = preview?.covers.orEmpty(),
     )
+  }
+
+  internal fun onRetryLibraries() {
+    val current = state as? AudiobookshelfLoginViewState.Libraries ?: return
+    val login = login ?: return
+    request = scope.launch {
+      showLibraries(login, current.serverName)
+    }
   }
 
   internal fun onLibraryToggle(id: String) {
@@ -155,6 +171,7 @@ class AudiobookshelfLoginViewModel(
   }
 
   internal fun onBack() {
+    request?.cancel()
     state = when (val current = state) {
       is AudiobookshelfLoginViewState.Address -> {
         navigator.goBack()

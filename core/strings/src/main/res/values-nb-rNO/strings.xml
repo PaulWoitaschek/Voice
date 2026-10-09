@@ -22,6 +22,7 @@
     <string name="audiobookshelf.login.error.failed">Påloggingen fungerte ikke. Prøv igjen.</string>
     <string name="audiobookshelf.login.error.not_found">Voice når ingen Audiobookshelf-server der. Er du på riktig nettverk?</string>
     <string name="audiobookshelf.login.error.not_set_up">Denne serveren er ikke satt opp ennå. Fullfør oppsettet i nettappen først.</string>
+    <string name="audiobookshelf.login.error.other_account">Det er en annen konto. Logg av først for å bytte konto.</string>
     <string name="audiobookshelf.login.error.too_old">Voice krever Audiobookshelf 2.26 eller nyere. Denne serveren kjører %s.</string>
     <string name="audiobookshelf.login.error.unreachable">Serveren sluttet å svare. Prøv igjen om litt.</string>
     <string name="audiobookshelf.login.libraries.action">Legg til i biblioteket</string>

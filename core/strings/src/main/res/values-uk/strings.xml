@@ -24,6 +24,7 @@
     <string name="audiobookshelf.login.error.failed">Не вдалося увійти. Спробуйте ще раз.</string>
     <string name="audiobookshelf.login.error.not_found">Voice не знаходить за цією адресою сервер Audiobookshelf. Ви підключені до потрібної мережі?</string>
     <string name="audiobookshelf.login.error.not_set_up">Цей сервер ще не налаштовано. Спершу завершіть налаштування в його вебзастосунку.</string>
+    <string name="audiobookshelf.login.error.other_account">Це інший обліковий запис. Щоб змінити обліковий запис, спершу вийдіть.</string>
     <string name="audiobookshelf.login.error.too_old">Для Voice потрібен Audiobookshelf 2.26 або новіший. На цьому сервері встановлено версію %s.</string>
     <string name="audiobookshelf.login.error.unreachable">Сервер перестав відповідати. Спробуйте ще раз трохи згодом.</string>
     <string name="audiobookshelf.login.libraries.action">Додати до бібліотеки</string>

@@ -22,6 +22,7 @@ import voice.core.audiobookshelf.api.AudiobookshelfApi
 import voice.core.audiobookshelf.api.LoginRequest
 import voice.core.audiobookshelf.download.AudiobookshelfDownloads
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
+import voice.core.audiobookshelf.login.isLocalHost
 import voice.core.audiobookshelf.login.serverUrlCandidates
 import voice.core.audiobookshelf.sync.AudiobookshelfSync
 import voice.core.audiobookshelf.sync.ProgressSync
@@ -140,9 +141,12 @@ public class Audiobookshelf internal constructor(
     // a host that can't be reached won't answer on another path either, which saves waiting for every timeout
     val unreachableOrigins = mutableSetOf<String>()
     for (url in serverUrlCandidates(address)) {
-      val origin = url.toHttpUrlOrNull()?.let { "${it.scheme}://${it.host}:${it.port}" } ?: continue
+      val httpUrl = url.toHttpUrlOrNull() ?: continue
+      val origin = "${httpUrl.scheme}://${httpUrl.host}:${httpUrl.port}"
       if (origin in unreachableOrigins) continue
-      val status = try {
+      // a server out on the internet with a certificate problem doesn't get the password without encryption
+      if (certificateNotTrusted && !httpUrl.isHttps && !isLocalHost(httpUrl.host)) continue
+      val response = try {
         http.api(url).status()
       } catch (e: SSLException) {
         Logger.d("$url: $e")
@@ -160,13 +164,17 @@ public class Audiobookshelf internal constructor(
         Logger.d("$url: $e")
         continue
       }
+      val status = response.body()?.takeIf { response.isSuccessful } ?: continue
       if (status.app != "audiobookshelf") continue
       if (!status.isInit) return@withContext FindServerResult.NotSetUp
       val version = status.serverVersion.orEmpty()
       if (!version.isAtLeast(MINIMUM_SERVER_VERSION)) return@withContext FindServerResult.TooOld(version)
+      // a server that redirects, like from http to https, lives where the redirect ends
+      val finalUrl = response.raw().request.url.toString()
+      val serverUrl = if (finalUrl.endsWith("/status")) finalUrl.removeSuffix("status") else url
       return@withContext FindServerResult.Found(
         AudiobookshelfServer(
-          url = url,
+          url = serverUrl,
           version = version,
           passwordLogin = "local" in status.authMethods,
         ),
@@ -316,13 +324,17 @@ public class Audiobookshelf internal constructor(
   }
 
   /**
-   * Signs in again after the server declined the stored login.
+   * Signs in again after the server declined the stored login. Returns false for another account, which would take
+   * over the books, downloads and positions of this one.
    */
-  public suspend fun renewLogin(login: PendingLogin) {
-    accountStore.updateData { current ->
-      login.account.copy(libraryIds = current?.libraryIds.orEmpty())
+  public suspend fun renewLogin(login: PendingLogin): Boolean {
+    val current = accountStore.data.first()
+    if (current != null && current.userId != login.account.userId) return false
+    accountStore.updateData { stored ->
+      login.account.copy(libraryIds = stored?.libraryIds.orEmpty())
     }
     sync.sync(force = true)
+    return true
   }
 
   public suspend fun setLibraries(libraryIds: List<String>) {
@@ -336,12 +348,19 @@ public class Audiobookshelf internal constructor(
   public suspend fun signOut() {
     val account = accountStore.data.first() ?: return
     analytics.event("audiobookshelf_signed_out")
-    // a sync that is still running would bring the books back
+    // without the account no sync starts anymore, and the one that may still run would bring the books back
+    accountStore.updateData { null }
     sync.cancel()
     if (currentBookStore.data.first()?.isRemote == true) {
       playerController.pause()
       currentBookStore.updateData { null }
     }
+    downloads.removeAll()
+    val remoteBooks = contentRepo.all().filter { it.id.isRemote }
+    remoteBooks.forEach { contentRepo.put(it.copy(isActive = false)) }
+    progressSync.forget(remoteBooks.map { it.id }.toSet())
+    sync.onSignedOut()
+    // last, as a server that can't be reached takes a while to answer
     try {
       http.api(account.serverUrl).logout(account.refreshToken).let { response ->
         if (!response.isSuccessful) Logger.d("Logging out failed with ${response.code()}")
@@ -349,12 +368,6 @@ public class Audiobookshelf internal constructor(
     } catch (e: IOException) {
       Logger.d("Could not log out: $e")
     }
-    accountStore.updateData { null }
-    downloads.removeAll()
-    val remoteBooks = contentRepo.all().filter { it.id.isRemote }
-    remoteBooks.forEach { contentRepo.put(it.copy(isActive = false)) }
-    progressSync.forget(remoteBooks.map { it.id }.toSet())
-    sync.onSignedOut()
   }
 }
 

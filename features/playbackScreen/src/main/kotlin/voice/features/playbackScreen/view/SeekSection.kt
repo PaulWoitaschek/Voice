@@ -156,7 +156,9 @@ internal fun SeekSection(
             }
           },
       ) {
-        if (unavailable && jumpBack == null) {
+        // a jump that expired while the player was closed shows no pill, so it doesn't hide this one
+        val jumpBackVisibleFor = rememberJumpBackVisibleFor()
+        if (unavailable && (jumpBack == null || jumpBack.elapsed >= jumpBackVisibleFor)) {
           OfflinePill(Modifier.padding(horizontal = 4.dp))
         } else {
           JumpBackPill(

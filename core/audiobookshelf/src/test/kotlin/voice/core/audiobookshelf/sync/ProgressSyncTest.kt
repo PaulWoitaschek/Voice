@@ -86,8 +86,22 @@ class ProgressSyncTest {
     assertEquals("/api/me/progress/item", request.url.encodedPath)
     val body = Json.parseToJsonElement(request.body!!.utf8()).jsonObject
     assertEquals(30.0, body.getValue("currentTime").jsonPrimitive.double)
-    assertEquals(false, body.getValue("isFinished").jsonPrimitive.boolean)
+    assertNull(body["isFinished"])
     assertEquals(30_000, syncedProgress.data.first()[bookId.value]!!.positionMs)
+  }
+
+  @Test
+  fun `listening to a finished book again doesn't send it back to its start`() = runTest {
+    // told that a finished book isn't finished, the server starts it over. Without the flag it keeps the time.
+    val repo = MemoryBookRepository(book(positionMs = 30_000))
+    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(120_000, finished = true, serverLastUpdate = 10)) }
+    server.enqueue(MockResponse(code = 200))
+
+    progressSync(repo).syncAll(account, listOf(serverProgress(currentTime = 120.0, lastUpdate = 10, isFinished = true)))
+
+    val body = Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
+    assertEquals(30.0, body.getValue("currentTime").jsonPrimitive.double)
+    assertNull(body["isFinished"])
   }
 
   @Test

@@ -54,15 +54,11 @@ import kotlin.time.Duration.Companion.seconds
 
 private val JUMP_BACK_VISIBLE = 10.seconds
 
+/** How long the pill stays, longer for people who need more time to react. */
 @Composable
-internal fun JumpBackPill(
-  jumpBack: JumpBackViewState?,
-  onClick: (id: Long) -> Unit,
-  onExpire: (id: Long) -> Unit,
-  modifier: Modifier = Modifier,
-) {
+internal fun rememberJumpBackVisibleFor(): Duration {
   val accessibilityManager = LocalAccessibilityManager.current
-  val visibleFor = remember(accessibilityManager) {
+  return remember(accessibilityManager) {
     val millis = JUMP_BACK_VISIBLE.inWholeMilliseconds
     (
       accessibilityManager?.calculateRecommendedTimeoutMillis(
@@ -73,6 +69,16 @@ internal fun JumpBackPill(
       ) ?: millis
       ).milliseconds
   }
+}
+
+@Composable
+internal fun JumpBackPill(
+  jumpBack: JumpBackViewState?,
+  onClick: (id: Long) -> Unit,
+  onExpire: (id: Long) -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  val visibleFor = rememberJumpBackVisibleFor()
   AnimatedContent(
     targetState = jumpBack?.takeIf { it.elapsed < visibleFor },
     contentKey = { it?.id },

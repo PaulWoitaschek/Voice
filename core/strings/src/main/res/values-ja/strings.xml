@@ -21,6 +21,7 @@
     <string name="audiobookshelf.login.error.failed">ログインできませんでした。もう一度お試しください。</string>
     <string name="audiobookshelf.login.error.not_found">そのアドレスの Audiobookshelf サーバーに Voice から接続できません。正しいネットワークに接続していますか？</string>
     <string name="audiobookshelf.login.error.not_set_up">このサーバーはまだセットアップされていません。先にウェブアプリでセットアップを完了してください。</string>
+    <string name="audiobookshelf.login.error.other_account">別のアカウントです。アカウントを切り替えるには、先にログアウトしてください。</string>
     <string name="audiobookshelf.login.error.too_old">Voice には Audiobookshelf 2.26 以降が必要です。このサーバーのバージョンは %s です。</string>
     <string name="audiobookshelf.login.error.unreachable">サーバーから応答がなくなりました。しばらくしてからもう一度お試しください。</string>
     <string name="audiobookshelf.login.libraries.action">ライブラリに追加</string>

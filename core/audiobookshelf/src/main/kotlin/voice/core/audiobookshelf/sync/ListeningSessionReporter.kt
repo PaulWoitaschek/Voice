@@ -34,6 +34,8 @@ import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
+import voice.core.playback.PlayerController
+import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import java.io.IOException
 import kotlin.time.Duration.Companion.milliseconds
@@ -63,6 +65,7 @@ internal class ListeningSessionReporter(
   private val playStateManager: PlayStateManager,
   private val progressSync: ProgressSync,
   private val appInfoProvider: AppInfoProvider,
+  private val playerController: PlayerController,
 ) {
 
   private data class Session(
@@ -114,7 +117,9 @@ internal class ListeningSessionReporter(
     listenedMs: Long,
   ) = mutex.withLock {
     val account = accountStore.data.first()?.takeUnless { it.needsLogin } ?: return@withLock
-    val book = bookRepository.get(bookId) ?: return@withLock
+    val stored = bookRepository.get(bookId) ?: return@withLock
+    // with the experimental persistence, the stored position lags behind while the book plays
+    val book = playerController.livePlaybackState(bookId)?.let(stored::overlay) ?: stored
     val itemId = bookId.itemId ?: return@withLock
     val api = http.authenticatedApi(account.serverUrl)
     val request = SessionSyncRequest(
@@ -144,20 +149,13 @@ internal class ListeningSessionReporter(
     progressSync.push(account, bookId)
   }
 
+  // the last report already sent the position, and by now another device may have moved on
   private suspend fun close() = mutex.withLock {
     val closing = session ?: return@withLock
     session = null
     val account = accountStore.data.first() ?: return@withLock
-    val book = bookRepository.get(closing.bookId) ?: return@withLock
     try {
-      val response = http.authenticatedApi(account.serverUrl).closeSession(
-        closing.id,
-        SessionSyncRequest(
-          currentTime = book.position / 1000.0,
-          timeListened = 0.0,
-          duration = book.duration / 1000.0,
-        ),
-      )
+      val response = http.authenticatedApi(account.serverUrl).closeSession(closing.id)
       if (!response.isSuccessful) Logger.d("Could not close the listening session: ${response.code()}")
     } catch (e: IOException) {
       Logger.d("Could not close the listening session: $e")

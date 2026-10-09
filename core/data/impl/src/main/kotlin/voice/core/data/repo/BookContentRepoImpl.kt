@@ -15,6 +15,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.isRemote
 import voice.core.data.repo.internals.dao.BookContentDao
 
 @SingleIn(AppScope::class)
@@ -58,13 +59,21 @@ public class BookContentRepoImpl(private val dao: BookContentDao) : BookContentR
   override suspend fun setAllInactiveExcept(ids: List<BookId>) {
     fillCache()
 
-    cache
-      .updateAndGet { contents ->
-        contents!!.map { content ->
-          content.copy(isActive = content.id in ids)
+    val active = ids.toSet()
+    val changed = mutableListOf<BookContent>()
+    cache.update { contents ->
+      changed.clear()
+      contents!!.map { content ->
+        val isActive = if (content.id.isRemote) content.isActive else content.id in active
+        if (isActive == content.isActive) {
+          content
+        } else {
+          content.copy(isActive = isActive).also(changed::add)
         }
-      }!!
-      .forEach { dao.insert(it) }
+      }
+    }
+    // only the changed books, so a position written meanwhile isn't overwritten with an older one
+    changed.forEach { dao.insert(it) }
   }
 
   override suspend fun put(content: BookContent) {

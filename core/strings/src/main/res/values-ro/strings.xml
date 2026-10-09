@@ -23,6 +23,7 @@
     <string name="audiobookshelf.login.error.failed">Conectarea nu a reușit. Încearcă din nou.</string>
     <string name="audiobookshelf.login.error.not_found">Voice nu găsește niciun server Audiobookshelf la adresa asta. Ești în rețeaua potrivită?</string>
     <string name="audiobookshelf.login.error.not_set_up">Acest server nu este configurat încă. Termină mai întâi configurarea în aplicația web a serverului.</string>
+    <string name="audiobookshelf.login.error.other_account">Acesta este alt cont. Ca să schimbi contul, deconectează-te mai întâi.</string>
     <string name="audiobookshelf.login.error.too_old">Voice are nevoie de Audiobookshelf 2.26 sau mai nou. Acest server rulează versiunea %s.</string>
     <string name="audiobookshelf.login.error.unreachable">Serverul nu mai răspunde. Încearcă din nou peste puțin timp.</string>
     <string name="audiobookshelf.login.libraries.action">Adaugă în biblioteca mea</string>

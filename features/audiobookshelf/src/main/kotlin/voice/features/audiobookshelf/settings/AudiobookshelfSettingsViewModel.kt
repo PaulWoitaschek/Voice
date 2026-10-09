@@ -140,9 +140,10 @@ class AudiobookshelfSettingsViewModel(
     if (signedOut) return
     signedOut = true
     confirmSignOut = false
+    navigator.goBack()
+    // the screen is gone by then, the sign out finishes anyway
     scope.launch {
       audiobookshelf.signOut()
-      navigator.goBack()
     }
   }
 

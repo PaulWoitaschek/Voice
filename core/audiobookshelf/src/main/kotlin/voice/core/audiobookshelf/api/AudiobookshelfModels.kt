@@ -128,7 +128,11 @@ internal data class ProgressUpdate(
   val currentTime: Double,
   val duration: Double,
   val progress: Double,
-  val isFinished: Boolean,
+  /**
+   * Only ever true: told that a finished book isn't finished, the server starts it over. Without the flag it takes
+   * the time and un-finishes the book by itself.
+   */
+  val isFinished: Boolean? = null,
 )
 
 @Serializable

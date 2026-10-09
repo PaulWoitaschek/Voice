@@ -46,9 +46,7 @@ internal class MediaScanner(
     }
 
     val bookIds = files.map { BookId(it.uri) }
-    // books on a server aren't on the device, their sync decides whether they are active
-    val activeRemoteBookIds = contentRepo.all().filter { it.isActive && it.id.isRemote }.map { it.id }
-    contentRepo.setAllInactiveExcept(bookIds + activeRemoteBookIds)
+    contentRepo.setAllInactiveExcept(bookIds)
 
     val probeFile = folders.values.flatten().findProbeFile()
     if (probeFile != null) {

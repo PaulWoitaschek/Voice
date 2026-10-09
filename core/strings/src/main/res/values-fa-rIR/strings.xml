@@ -22,6 +22,7 @@
     <string name="audiobookshelf.login.error.failed">ورود انجام نشد. دوباره امتحان کنید.</string>
     <string name="audiobookshelf.login.error.not_found">Voice نمی‌تواند در این نشانی سرور Audiobookshelf را پیدا کند. به شبکهٔ درست وصل هستید؟</string>
     <string name="audiobookshelf.login.error.not_set_up">این سرور هنوز راه‌اندازی نشده است. اول راه‌اندازی را در نسخهٔ وب آن تمام کنید.</string>
+    <string name="audiobookshelf.login.error.other_account">این حساب دیگری است. برای تغییر حساب، اول از حساب خارج شوید.</string>
     <string name="audiobookshelf.login.error.too_old">Voice به Audiobookshelf نسخهٔ 2.26 یا جدیدتر نیاز دارد. نسخهٔ این سرور %s است.</string>
     <string name="audiobookshelf.login.error.unreachable">سرور دیگر پاسخ نمی‌دهد. چند لحظهٔ دیگر دوباره امتحان کنید.</string>
     <string name="audiobookshelf.login.libraries.action">افزودن به کتابخانهٔ من</string>

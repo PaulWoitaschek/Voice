@@ -7,6 +7,7 @@ import voice.core.data.ChapterId
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertNull
 
 class BookDownloadStateTest {
@@ -85,6 +86,16 @@ class BookDownloadStateTest {
     )
 
     assertEquals(BookDownloadState.Failed, bookDownloadState(listOf(first, second), files, waitingFor = null))
+  }
+
+  @Test
+  fun `a failed file only fails the book once the other files are done`() {
+    val files = mapOf(
+      first.id.value to file(Download.STATE_FAILED, bytes = 10),
+      second.id.value to file(Download.STATE_DOWNLOADING, bytes = 100),
+    )
+
+    assertIs<BookDownloadState.Downloading>(bookDownloadState(listOf(first, second), files, waitingFor = null))
   }
 
   @Test

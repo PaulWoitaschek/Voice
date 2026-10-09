@@ -31,6 +31,7 @@ import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.AccountStore
 import voice.core.audiobookshelf.download.AudiobookshelfDownloads
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
+import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
@@ -107,6 +108,8 @@ public class AudiobookshelfSync internal constructor(
    * Syncs the library with the server, unless a sync is already running. Without [force], a sync that finished
    * less than a minute ago is enough.
    */
+  // the network callback calls this from another thread
+  @Synchronized
   public fun sync(force: Boolean = false) {
     if (syncJob?.isActive == true) {
       // the running sync may have read the account before it changed
@@ -146,10 +149,13 @@ public class AudiobookshelfSync internal constructor(
 
   private suspend fun syncNow(account: Account) {
     try {
-      val user = http.authenticatedApi(account.serverUrl).me()
+      val api = http.authenticatedApi(account.serverUrl)
+      @Suppress("RETURN_VALUE_NOT_USED")
+      api.me()
       reachability.value = ServerReachability.Reachable
-      librarySync.sync(account)
-      downloads.reconcile()
+      syncLibrary(account)
+      // the library sync can take a while, the progress fetched after it is as fresh as it gets
+      val user = api.me()
       val books = bookRepository.all()
       progressSync.syncAll(account, user.mediaProgress)
       bookmarkSync.sync(account, user.bookmarks, books)
@@ -164,8 +170,11 @@ public class AudiobookshelfSync internal constructor(
     }
   }
 
+  // a book that moved since Voice started, like after a seek. What moved before goes through the sync, which first
+  // checks whether another device listened since.
   private fun pushLocalChanges() {
     scope.launch {
+      var previous: Map<BookId, Long>? = null
       bookRepository.flow()
         .map { books ->
           books.filter { it.id.isRemote }.associate { it.id to it.position }
@@ -174,12 +183,30 @@ public class AudiobookshelfSync internal constructor(
         // while playing the position changes all the time and the listening session sends it
         .debounce(3.seconds)
         .collect { positions ->
+          val before = previous
+          previous = positions
+          if (before == null) return@collect
           if (playStateManager.playState == PlayStateManager.PlayState.Playing) return@collect
           val account = accountStore.data.first()?.takeUnless { it.needsLogin } ?: return@collect
-          positions.keys.forEach { bookId ->
-            if (!progressSync.push(account, bookId)) return@collect
-          }
+          positions
+            .filter { (bookId, position) -> bookId in before && before[bookId] != position }
+            .keys
+            .forEach { bookId ->
+              if (!progressSync.push(account, bookId)) return@collect
+            }
         }
+    }
+  }
+
+  private suspend fun syncLibrary(account: Account) {
+    try {
+      librarySync.sync(account)
+      downloads.reconcile()
+    } catch (e: HttpException) {
+      // the progress and the bookmarks still go both ways
+      Logger.w(e, "Could not sync the library")
+    } catch (e: SerializationException) {
+      Logger.w(e, "The server answered in an unexpected way")
     }
   }
 

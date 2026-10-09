@@ -22,6 +22,7 @@
     <string name="audiobookshelf.login.error.failed">உள்நுழைய முடியவில்லை. மீண்டும் முயலவும்.</string>
     <string name="audiobookshelf.login.error.not_found">அந்த முகவரியில் Audiobookshelf சர்வரை Voice-ஆல் அணுக முடியவில்லை. சரியான நெட்வொர்க்கில் இருக்கிறீர்களா?</string>
     <string name="audiobookshelf.login.error.not_set_up">இந்த சர்வர் இன்னும் அமைக்கப்படவில்லை. முதலில் அதன் வலைப் பயன்பாட்டில் அமைப்பை முடிக்கவும்.</string>
+    <string name="audiobookshelf.login.error.other_account">இது வேறொரு கணக்கு. கணக்கை மாற்ற, முதலில் வெளியேறுங்கள்.</string>
     <string name="audiobookshelf.login.error.too_old">Voice-க்கு Audiobookshelf 2.26 அல்லது அதற்குப் புதிய பதிப்பு தேவை. இந்த சர்வரில் %s இயங்குகிறது.</string>
     <string name="audiobookshelf.login.error.unreachable">சர்வர் பதிலளிப்பதை நிறுத்திவிட்டது. சிறிது நேரத்தில் மீண்டும் முயலவும்.</string>
     <string name="audiobookshelf.login.libraries.action">எனது நூலகத்தில் சேர்</string>

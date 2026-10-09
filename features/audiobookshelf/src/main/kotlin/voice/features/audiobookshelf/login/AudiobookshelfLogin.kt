@@ -104,6 +104,7 @@ private fun AudiobookshelfLogin(
     onLogin = viewModel::onLogin,
     onLibraryToggle = viewModel::onLibraryToggle,
     onConnect = viewModel::onConnect,
+    onRetryLibraries = viewModel::onRetryLibraries,
   )
 }
 
@@ -119,6 +120,7 @@ private fun AudiobookshelfLogin(
   onLogin: () -> Unit,
   onLibraryToggle: (String) -> Unit,
   onConnect: () -> Unit,
+  onRetryLibraries: () -> Unit,
 ) {
   val step = when (origin) {
     Origin.Default -> null
@@ -172,6 +174,7 @@ private fun AudiobookshelfLogin(
       onBack = onBack,
       title = when {
         state.loading -> stringResource(StringsR.string.audiobookshelf_login_libraries_loading)
+        state.failed -> stringResource(StringsR.string.audiobookshelf_login_error_unreachable)
         state.libraries.isEmpty() -> stringResource(StringsR.string.audiobookshelf_login_libraries_none)
         else -> pluralStringResource(StringsR.plurals.audiobookshelf_login_libraries_title, state.bookCount, state.bookCount)
       },
@@ -185,12 +188,21 @@ private fun AudiobookshelfLogin(
       },
       details = { LibrariesDetails(state, onLibraryToggle) },
       actions = {
-        BusyButton(
-          text = stringResource(StringsR.string.audiobookshelf_login_libraries_action),
-          busy = state.loading || state.busy,
-          enabled = state.canConnect,
-          onClick = onConnect,
-        )
+        if (state.failed) {
+          BusyButton(
+            text = stringResource(StringsR.string.audiobookshelf_settings_try_again),
+            busy = false,
+            enabled = true,
+            onClick = onRetryLibraries,
+          )
+        } else {
+          BusyButton(
+            text = stringResource(StringsR.string.audiobookshelf_login_libraries_action),
+            busy = state.loading || state.busy,
+            enabled = state.canConnect,
+            onClick = onConnect,
+          )
+        }
       },
     )
   }
@@ -310,6 +322,7 @@ private fun ColumnScope.CredentialsDetails(
               CredentialsError.WrongCredentials -> StringsR.string.audiobookshelf_login_error_credentials
               CredentialsError.Unreachable -> StringsR.string.audiobookshelf_login_error_unreachable
               CredentialsError.Failed -> StringsR.string.audiobookshelf_login_error_failed
+              CredentialsError.OtherAccount -> StringsR.string.audiobookshelf_login_error_other_account
             },
           ),
         )
@@ -403,6 +416,7 @@ private fun AddressPreview() {
       onLogin = {},
       onLibraryToggle = {},
       onConnect = {},
+      onRetryLibraries = {},
     )
   }
 }
@@ -429,6 +443,7 @@ private fun LibrariesPreview() {
       onLogin = {},
       onLibraryToggle = {},
       onConnect = {},
+      onRetryLibraries = {},
     )
   }
 }

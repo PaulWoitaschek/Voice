@@ -69,17 +69,19 @@ private fun AbsTrack.name(): String {
 internal fun AbsLibraryItem.toBookContent(
   chapters: List<Chapter>,
   existing: BookContent?,
+  previousChapters: List<Chapter> = emptyList(),
 ): BookContent {
   val chapterIds = chapters.map { it.id }
   val metadata = media.metadata
   val series = metadata.series?.firstOrNull()
   val position = existing?.let { content ->
     if (content.currentChapter in chapterIds) {
-      content.currentChapter to content.positionInChapter
+      BookPosition(content.currentChapter, content.positionInChapter)
     } else {
-      null
+      // the server replaced the files, the place in the book stays
+      previousChapters.positionInBook(content.currentChapter, content.positionInChapter)?.let(chapters::positionAt)
     }
-  } ?: (chapterIds.first() to 0L)
+  } ?: BookPosition(chapterIds.first(), 0L)
   return BookContent(
     id = AudiobookshelfIds.bookId(id),
     playbackSpeed = existing?.playbackSpeed ?: 1F,
@@ -90,8 +92,8 @@ internal fun AbsLibraryItem.toBookContent(
     name = metadata.title?.takeIf { it.isNotBlank() } ?: chapters.first().name ?: id,
     addedAt = existing?.addedAt ?: Instant.ofEpochMilli(addedAt),
     chapters = chapterIds,
-    currentChapter = position.first,
-    positionInChapter = position.second.coerceIn(0, chapters.first { it.id == position.first }.duration),
+    currentChapter = position.chapterId,
+    positionInChapter = position.positionInChapter.coerceIn(0, chapters.first { it.id == position.chapterId }.duration),
     cover = existing?.cover,
     gain = existing?.gain ?: 0F,
     genre = metadata.genres.joinToString(", ").takeIf { it.isNotBlank() },
@@ -109,15 +111,28 @@ internal data class BookPosition(
 /**
  * Where [positionMs], counted from the start of the book, lies within its chapters.
  */
-internal fun Book.positionAt(positionMs: Long): BookPosition {
-  var remaining = positionMs.coerceIn(0, duration)
-  chapters.forEachIndexed { index, chapter ->
-    if (remaining < chapter.duration || index == chapters.lastIndex) {
+internal fun Book.positionAt(positionMs: Long): BookPosition = chapters.positionAt(positionMs)
+
+internal fun List<Chapter>.positionAt(positionMs: Long): BookPosition {
+  var remaining = positionMs.coerceIn(0, sumOf { it.duration })
+  forEachIndexed { index, chapter ->
+    if (remaining < chapter.duration || index == lastIndex) {
       return BookPosition(chapter.id, remaining.coerceAtMost(chapter.duration))
     }
     remaining -= chapter.duration
   }
   error("A book always has chapters")
+}
+
+/**
+ * How far into the book [positionInChapter] of [chapterId] is, or null when the chapter isn't one of these.
+ */
+internal fun List<Chapter>.positionInBook(
+  chapterId: ChapterId,
+  positionInChapter: Long,
+): Long? {
+  if (none { it.id == chapterId }) return null
+  return takeWhile { it.id != chapterId }.sumOf { it.duration } + positionInChapter
 }
 
 /**

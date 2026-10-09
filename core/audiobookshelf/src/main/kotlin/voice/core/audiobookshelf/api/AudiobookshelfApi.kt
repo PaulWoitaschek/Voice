@@ -1,5 +1,6 @@
 package voice.core.audiobookshelf.api
 
+import kotlinx.serialization.json.JsonObject
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -15,7 +16,7 @@ import retrofit2.http.Query
 internal interface AudiobookshelfApi {
 
   @GET("status")
-  suspend fun status(): StatusResponse
+  suspend fun status(): Response<StatusResponse>
 
   @Headers("x-return-tokens: true")
   @POST("login")
@@ -80,9 +81,10 @@ internal interface AudiobookshelfApi {
     @Body request: SessionSyncRequest,
   ): Response<Unit>
 
+  /** An empty [request] only closes the session. With a position, the server would also take it as the progress. */
   @POST("api/session/{id}/close")
   suspend fun closeSession(
     @Path("id") sessionId: String,
-    @Body request: SessionSyncRequest,
+    @Body request: JsonObject = JsonObject(emptyMap()),
   ): Response<Unit>
 }

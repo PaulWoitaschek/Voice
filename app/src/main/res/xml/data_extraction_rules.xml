@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   The login to an Audiobookshelf server stays out of the cloud backup. Moving to a new phone takes it along.
+  The index of the downloaded server books stays out of both, as their audio isn't backed up or moved and a restored
+  index would claim they are downloaded.
 -->
 <data-extraction-rules>
   <cloud-backup>
     <exclude domain="file" path="audiobookshelf/account.json" />
+    <exclude domain="database" path="exoplayer_internal.db" />
+    <exclude domain="database" path="exoplayer_internal.db-journal" />
+    <exclude domain="database" path="exoplayer_internal.db-wal" />
+    <exclude domain="database" path="exoplayer_internal.db-shm" />
   </cloud-backup>
+  <device-transfer>
+    <exclude domain="database" path="exoplayer_internal.db" />
+    <exclude domain="database" path="exoplayer_internal.db-journal" />
+    <exclude domain="database" path="exoplayer_internal.db-wal" />
+    <exclude domain="database" path="exoplayer_internal.db-shm" />
+  </device-transfer>
 </data-extraction-rules>

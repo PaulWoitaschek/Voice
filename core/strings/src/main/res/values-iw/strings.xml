@@ -23,6 +23,7 @@
     <string name="audiobookshelf.login.error.failed">הכניסה לא הצליחה. נסו שוב.</string>
     <string name="audiobookshelf.login.error.not_found">לא נמצא שרת Audiobookshelf בכתובת הזו. האם אתם מחוברים לרשת הנכונה?</string>
     <string name="audiobookshelf.login.error.not_set_up">השרת הזה עדיין לא הוגדר. השלימו קודם את ההגדרה בממשק האינטרנט שלו.</string>
+    <string name="audiobookshelf.login.error.other_account">זה חשבון אחר. כדי להחליף חשבון, צריך לצאת קודם.</string>
     <string name="audiobookshelf.login.error.too_old">ל-Voice נדרש Audiobookshelf בגרסה 2.26 ומעלה. בשרת הזה פועלת גרסה %s.</string>
     <string name="audiobookshelf.login.error.unreachable">השרת הפסיק להגיב. נסו שוב בעוד רגע.</string>
     <string name="audiobookshelf.login.libraries.action">הוספה לספרייה שלי</string>

@@ -161,7 +161,7 @@ internal class ProgressSync(
       currentTime = book.position / 1000.0,
       duration = durationSeconds,
       progress = if (finished) 1.0 else (book.position.toDouble() / book.duration).coerceIn(0.0, 1.0),
-      isFinished = finished,
+      isFinished = if (finished) true else null,
     )
     return try {
       val response = http.authenticatedApi(account.serverUrl).updateProgress(itemId, update)

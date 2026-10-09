@@ -63,7 +63,8 @@ internal fun BookCover(
       contentScale = ContentScale.Crop,
       contentDescription = null,
     )
-    if (finished) {
+    // one badge per cover, what a download or the connection says matters more than being finished
+    if (finished && download == null && !unavailable) {
       Box(
         modifier = Modifier
           .align(Alignment.BottomEnd)

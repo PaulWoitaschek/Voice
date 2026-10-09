@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import voice.core.audiobookshelf.account.Preferences
@@ -78,8 +79,13 @@ public class AudiobookshelfDownloads internal constructor(
       addListener(
         object : DownloadManager.Listener {
           override fun onInitialized(downloadManager: DownloadManager) {
-            refresh()
-            initialized.value = true
+            scope.launch {
+              val stored = withContext(Dispatchers.IO) { storedDownloads(downloadManager) }
+              // what changed while the index was read is newer
+              files.update { stored + it }
+              initialized.value = true
+              keepTickingWhileDownloading()
+            }
           }
 
           override fun onDownloadChanged(
@@ -88,14 +94,15 @@ public class AudiobookshelfDownloads internal constructor(
             finalException: Exception?,
           ) {
             if (finalException != null) Logger.w(finalException, "Could not download ${download.request.id}")
-            refresh()
+            files.update { it + (download.request.id to download.snapshot()) }
+            keepTickingWhileDownloading()
           }
 
           override fun onDownloadRemoved(
             downloadManager: DownloadManager,
             download: Download,
           ) {
-            refresh()
+            files.update { it - download.request.id }
           }
 
           override fun onRequirementsStateChanged(
@@ -135,7 +142,6 @@ public class AudiobookshelfDownloads internal constructor(
       val manager = downloadManager
       manager.requirements = requirements(preferencesStore.data.first().downloadOverMobileData)
       notMetRequirements.value = manager.notMetRequirements
-      refresh()
     }
     notifyResults()
   }
@@ -221,14 +227,16 @@ public class AudiobookshelfDownloads internal constructor(
     val books = bookRepository.all().filter { it.id.isRemote }
     val current = books.flatMap { book -> book.chapters.map { it.id.value } }.toSet()
     val present = files.value
+    // by its book, as the server can replace all files of a book at once
+    val downloadedBooks = present.values
+      .filter { it.state != Download.STATE_REMOVING }
+      .mapNotNull { it.bookId }
+      .toSet()
     withContext(Dispatchers.Main) {
       (present.keys - current).forEach { downloadManager.removeDownload(it) }
     }
     val added = books
-      .filter { book ->
-        val bookFiles = book.chapters.map { present[it.id.value] }
-        bookFiles.any { it != null } && bookFiles.any { it == null }
-      }
+      .filter { book -> book.id in downloadedBooks && book.chapters.any { present[it.id.value] == null } }
       .map { addMissingFiles(it.id) }
     if (added.any { it } && appVisible) startService()
   }
@@ -321,19 +329,12 @@ public class AudiobookshelfDownloads internal constructor(
     }
   }
 
-  private fun refresh() {
-    val manager = downloadManager
-    val all = buildMap {
-      manager.downloadIndex.getDownloads().use { cursor ->
-        while (cursor.moveToNext()) {
-          put(cursor.download.request.id, cursor.download.snapshot())
-        }
+  private fun storedDownloads(manager: DownloadManager): Map<String, FileDownload> = buildMap {
+    manager.downloadIndex.getDownloads().use { cursor ->
+      while (cursor.moveToNext()) {
+        put(cursor.download.request.id, cursor.download.snapshot())
       }
-      // the index only updates on state changes, the current downloads also know their progress
-      manager.currentDownloads.forEach { put(it.request.id, it.snapshot()) }
     }
-    files.value = all
-    keepTickingWhileDownloading()
   }
 
   private fun keepTickingWhileDownloading() {
@@ -358,10 +359,6 @@ private fun Download.snapshot(): FileDownload = FileDownload(
   state = state,
   bytesDownloaded = bytesDownloaded,
 )
-
-private fun Int.isActive(): Boolean {
-  return this == Download.STATE_QUEUED || this == Download.STATE_DOWNLOADING || this == Download.STATE_RESTARTING
-}
 
 private fun requirements(overMobileData: Boolean): Requirements {
   return Requirements(if (overMobileData) Requirements.NETWORK else Requirements.NETWORK_UNMETERED)

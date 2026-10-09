@@ -24,6 +24,7 @@
     <string name="audiobookshelf.login.error.failed">Logowanie się nie udało. Spróbuj ponownie.</string>
     <string name="audiobookshelf.login.error.not_found">Voice nie znajduje pod tym adresem serwera Audiobookshelf. Czy jesteś w odpowiedniej sieci?</string>
     <string name="audiobookshelf.login.error.not_set_up">Ten serwer nie jest jeszcze skonfigurowany. Najpierw dokończ konfigurację w jego aplikacji webowej.</string>
+    <string name="audiobookshelf.login.error.other_account">To inne konto. Aby zmienić konto, najpierw się wyloguj.</string>
     <string name="audiobookshelf.login.error.too_old">Voice wymaga Audiobookshelf w wersji 2.26 lub nowszej. Ten serwer ma wersję %s.</string>
     <string name="audiobookshelf.login.error.unreachable">Serwer przestał odpowiadać. Spróbuj ponownie za chwilę.</string>
     <string name="audiobookshelf.login.libraries.action">Dodaj do biblioteki</string>

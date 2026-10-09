@@ -28,6 +28,10 @@ public enum class WaitingFor {
   Connection,
 }
 
+internal fun Int.isActive(): Boolean {
+  return this == Download.STATE_QUEUED || this == Download.STATE_DOWNLOADING || this == Download.STATE_RESTARTING
+}
+
 /** A download of one audio file of a book, as Voice last saw it. */
 internal data class FileDownload(
   val bookId: BookId?,
@@ -51,7 +55,9 @@ internal fun bookDownloadState(
   if (tracked.all { it.second?.state == Download.STATE_COMPLETED }) {
     return BookDownloadState.Downloaded(bytes = tracked.sumOf { it.second!!.bytesDownloaded })
   }
-  if (tracked.any { it.second?.state == Download.STATE_FAILED }) return BookDownloadState.Failed
+  // the other files go on after one failed, the book only failed once they are done
+  val active = tracked.any { (_, file) -> file != null && file.state.isActive() }
+  if (!active && tracked.any { it.second?.state == Download.STATE_FAILED }) return BookDownloadState.Failed
 
   val downloadedBytes = tracked.sumOf { it.second?.bytesDownloaded ?: 0L }
   val sizesKnown = chapters.all { it.fileSize > 0 }

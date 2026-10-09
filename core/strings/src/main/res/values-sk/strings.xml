@@ -24,6 +24,7 @@
     <string name="audiobookshelf.login.error.failed">Prihlásenie sa nepodarilo. Skúste to znova.</string>
     <string name="audiobookshelf.login.error.not_found">Voice na tejto adrese nenachádza server Audiobookshelf. Ste v správnej sieti?</string>
     <string name="audiobookshelf.login.error.not_set_up">Tento server ešte nie je nastavený. Najprv dokončite nastavenie v jeho webovej aplikácii.</string>
+    <string name="audiobookshelf.login.error.other_account">To je iný účet. Ak chcete účet zmeniť, najprv sa odhláste.</string>
     <string name="audiobookshelf.login.error.too_old">Voice potrebuje Audiobookshelf 2.26 alebo novší. Na tomto serveri beží verzia %s.</string>
     <string name="audiobookshelf.login.error.unreachable">Server prestal odpovedať. Skúste to o chvíľu znova.</string>
     <string name="audiobookshelf.login.libraries.action">Pridať do knižnice</string>

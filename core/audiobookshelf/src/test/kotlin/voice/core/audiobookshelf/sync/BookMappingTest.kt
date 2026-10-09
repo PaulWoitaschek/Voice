@@ -121,6 +121,24 @@ class BookMappingTest {
   }
 
   @Test
+  fun `files replaced on the server keep the place in the book`() {
+    val before = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")))
+    val previousChapters = before.chapters()
+    val existing = before.toBookContent(previousChapters, existing = null).copy(
+      currentChapter = previousChapters[1].id,
+      positionInChapter = 10_000,
+    )
+    // merged into one file, like the tools of the server do
+    val after = item(tracks = listOf(track(1, 0.0, 120.0, "book.m4b", ino = "merged")))
+    val chapters = after.chapters()
+
+    val updated = after.toBookContent(chapters, existing, previousChapters)
+
+    assertEquals(chapters.single().id, updated.currentChapter)
+    assertEquals(70_000, updated.positionInChapter)
+  }
+
+  @Test
   fun `a position in the book points into the right file`() {
     val item = item(tracks = listOf(track(1, 0.0, 54.0, "a.mp3"), track(2, 54.0, 51.0, "b.mp3")))
     val chapters = item.chapters()

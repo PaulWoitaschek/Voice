@@ -22,6 +22,7 @@
     <string name="audiobookshelf.login.error.failed">Oturum açılamadı. Tekrar deneyin.</string>
     <string name="audiobookshelf.login.error.not_found">Voice bu adreste bir Audiobookshelf sunucusuna ulaşamıyor. Doğru ağda mısınız?</string>
     <string name="audiobookshelf.login.error.not_set_up">Bu sunucunun kurulumu henüz tamamlanmamış. Önce web uygulamasında kurulumu bitirin.</string>
+    <string name="audiobookshelf.login.error.other_account">Bu başka bir hesap. Hesap değiştirmek için önce oturumu kapatın.</string>
     <string name="audiobookshelf.login.error.too_old">Voice için Audiobookshelf 2.26 veya daha yenisi gerekiyor. Bu sunucuda %s sürümü çalışıyor.</string>
     <string name="audiobookshelf.login.error.unreachable">Sunucu yanıt vermeyi bıraktı. Birazdan tekrar deneyin.</string>
     <string name="audiobookshelf.login.libraries.action">Kitaplığıma ekle</string>

@@ -23,6 +23,7 @@
     <string name="audiobookshelf.login.error.failed">La connexion a échoué. Réessayez.</string>
     <string name="audiobookshelf.login.error.not_found">Voice ne trouve aucun serveur Audiobookshelf à cette adresse. Êtes-vous sur le bon réseau ?</string>
     <string name="audiobookshelf.login.error.not_set_up">Ce serveur n\'est pas encore configuré. Terminez d\'abord la configuration dans son application web.</string>
+    <string name="audiobookshelf.login.error.other_account">C\'est un autre compte. Pour changer de compte, déconnectez-vous d\'abord.</string>
     <string name="audiobookshelf.login.error.too_old">Voice nécessite Audiobookshelf 2.26 ou une version ultérieure. Ce serveur utilise la version %s.</string>
     <string name="audiobookshelf.login.error.unreachable">Le serveur ne répond plus. Réessayez dans un instant.</string>
     <string name="audiobookshelf.login.libraries.action">Ajouter à ma bibliothèque</string>

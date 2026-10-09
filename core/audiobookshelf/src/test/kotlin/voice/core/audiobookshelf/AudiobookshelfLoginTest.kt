@@ -1,15 +1,18 @@
 package voice.core.audiobookshelf
 
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
+import okhttp3.Headers
 import org.junit.After
 import org.junit.Before
 import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 
 class AudiobookshelfLoginTest {
@@ -64,8 +67,44 @@ class AudiobookshelfLoginTest {
     assertEquals(FindServerResult.TooOld("2.20.0"), audiobookshelf().findServer(server.url("/").toString()))
   }
 
-  private fun audiobookshelf(): Audiobookshelf {
-    val accountStore = MemoryDataStore<Account?>(null)
+  @Test
+  fun `a server that redirects is stored where the redirect ends`() = runTest {
+    server.enqueue(MockResponse(code = 308, headers = Headers.headersOf("Location", "/audiobookshelf/status")))
+    server.enqueue(
+      MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}"""),
+    )
+
+    val found = assertIs<FindServerResult.Found>(audiobookshelf().findServer(server.url("/").toString()))
+
+    assertEquals(server.url("/audiobookshelf/").toString(), found.server.url)
+  }
+
+  @Test
+  fun `signing in again with another account keeps the one that is there`() = runTest {
+    server.enqueue(
+      MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}"""),
+    )
+    server.enqueue(MockResponse(code = 200, body = """{"user":{"id":"2","username":"kim","accessToken":"a","refreshToken":"r"}}"""))
+    val stored = Account(
+      serverUrl = server.url("/").toString(),
+      userId = "1",
+      username = "paul",
+      accessToken = "old",
+      refreshToken = "old",
+      libraryIds = listOf("library"),
+      serverVersion = "2.37.1",
+    )
+    val accountStore = MemoryDataStore<Account?>(stored)
+    val audiobookshelf = audiobookshelf(accountStore)
+
+    val found = assertIs<FindServerResult.Found>(audiobookshelf.findServer(server.url("/").toString()))
+    val login = assertIs<LoginResult.Success>(audiobookshelf.login(found.server, "kim", "voice"))
+
+    assertFalse(audiobookshelf.renewLogin(login.login))
+    assertEquals(stored, accountStore.data.first())
+  }
+
+  private fun audiobookshelf(accountStore: MemoryDataStore<Account?> = MemoryDataStore(null)): Audiobookshelf {
     return Audiobookshelf(
       accountStore = accountStore,
       http = AudiobookshelfHttp(accountStore, TestAppInfo),

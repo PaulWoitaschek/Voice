@@ -25,6 +25,8 @@ internal sealed interface AudiobookshelfLoginViewState {
     val libraries: List<LibraryViewState> = emptyList(),
     val covers: List<File> = emptyList(),
     val busy: Boolean = false,
+    /** The server didn't answer with its libraries. */
+    val failed: Boolean = false,
   ) : AudiobookshelfLoginViewState {
     val bookCount: Int get() = libraries.filter { it.selected }.sumOf { it.bookCount }
     val canConnect: Boolean get() = !loading && !busy && libraries.any { it.selected }
@@ -49,4 +51,7 @@ internal enum class CredentialsError {
   WrongCredentials,
   Unreachable,
   Failed,
+
+  /** Signing in again only renews the login, another account needs a sign out first. */
+  OtherAccount,
 }

@@ -21,6 +21,7 @@
     <string name="audiobookshelf.login.error.failed">Gagal masuk. Coba lagi.</string>
     <string name="audiobookshelf.login.error.not_found">Voice tidak dapat menjangkau server Audiobookshelf di alamat itu. Apakah Anda terhubung ke jaringan yang tepat?</string>
     <string name="audiobookshelf.login.error.not_set_up">Server ini belum disiapkan. Selesaikan penyiapannya di aplikasi web server terlebih dahulu.</string>
+    <string name="audiobookshelf.login.error.other_account">Itu akun lain. Untuk berganti akun, keluar dulu.</string>
     <string name="audiobookshelf.login.error.too_old">Voice memerlukan Audiobookshelf 2.26 atau yang lebih baru. Server ini menjalankan %s.</string>
     <string name="audiobookshelf.login.error.unreachable">Server berhenti merespons. Coba lagi dalam beberapa saat.</string>
     <string name="audiobookshelf.login.libraries.action">Tambahkan ke pustaka saya</string>

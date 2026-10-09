@@ -98,13 +98,15 @@ internal class BookmarkSync(
               serverTitle
             }
             serverTitle == syncedTitle -> {
-              val request = BookmarkRequest(time = book.secondOf(bookmark).toDouble(), title = title)
+              // the server finds the bookmark by its exact time, which other apps store with a fraction
+              val request = BookmarkRequest(time = serverBookmark.time, title = title)
               if (!api.updateBookmark(itemId, request).isSuccessful) return@forEach
               title
             }
             // both renamed it, and this device is where the listener is right now
             else -> {
-              val request = BookmarkRequest(time = book.secondOf(bookmark).toDouble(), title = title)
+              // the server finds the bookmark by its exact time, which other apps store with a fraction
+              val request = BookmarkRequest(time = serverBookmark.time, title = title)
               if (!api.updateBookmark(itemId, request).isSuccessful) return@forEach
               title
             }

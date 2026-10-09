@@ -5,6 +5,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.Request
+import retrofit2.HttpException
 import voice.core.audiobookshelf.AudiobookshelfIds
 import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.api.AbsLibraryItem
@@ -14,8 +15,10 @@ import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.audiobookshelf.itemId
 import voice.core.data.Book
 import voice.core.data.BookContent
+import voice.core.data.Chapter
 import voice.core.data.isRemote
 import voice.core.data.repo.BookContentRepo
+import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ChapterRepo
 import voice.core.logging.api.Logger
 import java.io.File
@@ -33,15 +36,19 @@ internal class LibrarySync(
   private val http: AudiobookshelfHttp,
   private val contentRepo: BookContentRepo,
   private val chapterRepo: ChapterRepo,
+  private val bookmarkRepo: BookmarkRepo,
   private val context: Context,
 ) {
 
   suspend fun sync(account: Account) {
     val api = http.authenticatedApi(account.serverUrl)
-    val items = account.libraryIds
+    val books = account.libraryIds
       .flatMap { libraryId -> allItems(api, libraryId) }
-      .filter { it.mediaType == "book" && !it.isMissing && !it.isInvalid && it.media.numTracks > 0 }
+      .filter { it.mediaType == "book" }
       .distinctBy { it.id }
+    val items = books.filter { !it.isMissing && !it.isInvalid && it.media.numTracks > 0 }
+    // the server flags items whose files it can't reach right now, their books stay as they are, downloads included
+    val flagged = books.filter { it.isMissing || it.isInvalid }.map { AudiobookshelfIds.bookId(it.id) }.toSet()
 
     val stored = contentRepo.all()
       .filter { it.id.isRemote }
@@ -60,7 +67,7 @@ internal class LibrarySync(
         .filter { !it.media.tracks.isNullOrEmpty() }
         .forEach { item ->
           try {
-            store(item, stored[AudiobookshelfIds.bookId(item.id)])
+            store(item)
           } catch (e: IllegalStateException) {
             Logger.w(e, "Skipping ${item.id}")
           } catch (e: IllegalArgumentException) {
@@ -73,6 +80,7 @@ internal class LibrarySync(
     contentRepo.all()
       .filter { it.id.isRemote }
       .forEach { content ->
+        if (content.id in flagged) return@forEach
         val active = content.id in onServer
         if (content.isActive != active) {
           contentRepo.put(content.copy(isActive = active))
@@ -89,7 +97,16 @@ internal class LibrarySync(
     val items = mutableListOf<AbsLibraryItem>()
     var page = 0
     while (true) {
-      val response = api.libraryItems(libraryId = libraryId, limit = PAGE_SIZE, page = page)
+      val response = try {
+        api.libraryItems(libraryId = libraryId, limit = PAGE_SIZE, page = page)
+      } catch (e: HttpException) {
+        // a library that was deleted or that the user can't see anymore has no books for Voice
+        if (e.code() == 404 || e.code() == 403) {
+          Logger.w(e, "The library $libraryId is gone")
+          return emptyList()
+        }
+        throw e
+      }
       items += response.results
       if (response.results.size < PAGE_SIZE || items.size >= response.total) break
       page++
@@ -97,14 +114,14 @@ internal class LibrarySync(
     return items
   }
 
-  private suspend fun store(
-    item: AbsLibraryItem,
-    existing: BookContent?,
-  ) {
+  private suspend fun store(item: AbsLibraryItem) {
     val chapters = item.chapters()
     if (chapters.isEmpty()) return
+    // read right before writing, so a pause or a seek during the requests isn't undone
+    val existing = contentRepo.get(AudiobookshelfIds.bookId(item.id))
+    val previousChapters = existing?.chapters?.mapNotNull { chapterRepo.get(it) }.orEmpty()
     chapters.forEach { chapterRepo.put(it) }
-    val content = item.toBookContent(chapters, existing)
+    val content = item.toBookContent(chapters, existing, previousChapters)
     // an update of the item can bring a new cover, so the next pass downloads it again
     val cover = existing?.cover?.takeIf { it.name == coverFileName(item) }
     if (cover == null) existing?.cover?.delete()
@@ -113,6 +130,23 @@ internal class LibrarySync(
     @Suppress("RETURN_VALUE_NOT_USED")
     Book(updated, chapters)
     contentRepo.put(updated)
+    if (existing != null) moveBookmarks(existing, previousChapters, chapters)
+  }
+
+  // bookmarks point into a file, and the server can replace the files of a book while the places in it stay
+  private suspend fun moveBookmarks(
+    existing: BookContent,
+    previousChapters: List<Chapter>,
+    chapters: List<Chapter>,
+  ) {
+    val chapterIds = chapters.map { it.id }.toSet()
+    bookmarkRepo.bookmarks(existing)
+      .filter { it.chapterId !in chapterIds }
+      .forEach { bookmark ->
+        val positionInBook = previousChapters.positionInBook(bookmark.chapterId, bookmark.time) ?: return@forEach
+        val position = chapters.positionAt(positionInBook)
+        bookmarkRepo.addBookmark(bookmark.copy(chapterId = position.chapterId, time = position.positionInChapter))
+      }
   }
 
   private suspend fun downloadMissingCovers(

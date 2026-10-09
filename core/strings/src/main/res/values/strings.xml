@@ -43,6 +43,8 @@
     <string name="audiobookshelf.login.error.not_found">Voice can\'t reach an Audiobookshelf server there. Are you on the right network?</string>
     <!-- Error under the server address when the server was installed, but its first setup in the web app isn't done. -->
     <string name="audiobookshelf.login.error.not_set_up">This server isn\'t set up yet. Finish the setup in its web app first.</string>
+    <!-- Shown under the password when signing in again, after the server declined the stored login, with another account than before. Switching accounts takes a sign out first. -->
+    <string name="audiobookshelf.login.error.other_account">That\'s another account. To switch accounts, sign out first.</string>
     <!-- Error under the server address when the server is too old. %s is the version the server runs, like 2.20.0. -->
     <string name="audiobookshelf.login.error.too_old">Voice needs Audiobookshelf 2.26 or newer. This server runs %s.</string>
     <!-- Error under the password field when the server stopped answering while signing in. -->

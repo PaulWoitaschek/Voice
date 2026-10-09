@@ -21,6 +21,7 @@
     <string name="audiobookshelf.login.error.failed">登录失败，请重试。</string>
     <string name="audiobookshelf.login.error.not_found">Voice 无法在该地址连接到 Audiobookshelf 服务器。您连接的网络正确吗？</string>
     <string name="audiobookshelf.login.error.not_set_up">此服务器尚未完成设置。请先在其网页版中完成设置。</string>
+    <string name="audiobookshelf.login.error.other_account">这是另一个账号。如需切换账号，请先退出登录。</string>
     <string name="audiobookshelf.login.error.too_old">Voice 需要 Audiobookshelf 2.26 或更高版本。此服务器的版本是 %s。</string>
     <string name="audiobookshelf.login.error.unreachable">服务器停止响应了。请稍后再试。</string>
     <string name="audiobookshelf.login.libraries.action">添加到我的书库</string>
