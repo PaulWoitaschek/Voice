@@ -140,7 +140,7 @@ class PlayerController(
 
   fun previous() = executeAfterPrepare { controller ->
     val currentIndex = controller.currentMediaItemIndex
-    val index = if (controller.currentPosition > THRESHOLD_FOR_BACK_SEEK_MS) {
+    val index = if (controller.currentPosition > controller.maxSeekToPreviousPosition) {
       currentIndex
     } else {
       controller.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentIndex
@@ -383,8 +383,6 @@ class PlayerController(
     }
   }
 }
-
-private const val THRESHOLD_FOR_BACK_SEEK_MS = 2000
 
 /**
  * Skipping back restarts the current chapter when it already played for a while, or when there is no chapter

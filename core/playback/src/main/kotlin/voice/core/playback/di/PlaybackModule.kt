@@ -77,6 +77,7 @@ object PlaybackModule {
       .setAudioAttributes(audioAttributes, true)
       .setHandleAudioBecomingNoisy(true)
       .setWakeMode(C.WAKE_MODE_LOCAL)
+      .setMaxSeekToPreviousPositionMs(2_000)
       .build()
       .also { player ->
         if (media3AudioOffloadFeatureFlag.get()) {

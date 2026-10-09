@@ -5,6 +5,19 @@
   "labels": [
     "dependencies"
   ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Versions annotated with a renovate comment in scripts and workflows",
+      "managerFilePatterns": [
+        "/^scripts/.+\\.sh$/",
+        "/^\\.github/workflows/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+\\w+\\s*[=:]\\s*\"?(?<currentValue>[^\"\\s]+)\"?"
+      ]
+    }
+  ],
   "packageRules": [
     {
       "matchDatasources": [

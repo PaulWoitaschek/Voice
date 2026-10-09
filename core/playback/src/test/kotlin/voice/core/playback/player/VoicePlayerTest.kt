@@ -78,6 +78,7 @@ class VoicePlayerTest {
   private val autoRewindAmountStore = MemoryDataStore(2)
 
   private val internalPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
+    .setMaxSeekToPreviousPositionMs(2_000)
     .setMediaSourceFactory(
       mockk {
         every { createMediaSource(any()) } answers {
@@ -237,8 +238,9 @@ class VoicePlayerTest {
     player.forceSeekToNext()
     player.shouldHavePosition(3, 0)
 
+    player.seekTo(3, 5_000)
     player.forceSeekToNext()
-    player.shouldHavePosition(3, 0)
+    player.shouldHavePosition(3, 5_000)
   }
 
   @Test

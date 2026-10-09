@@ -144,7 +144,7 @@ class ChapterMarkPlayer(
   }
 
   override fun getState(): State {
-    val state = super.getState().withoutFileCommands()
+    val state = super.getState().withPresentedCommands()
     val book = book ?: return state
     val playlist = playlist ?: return state
     // The wrapped playlist is set asynchronously, so ignore states that do not match it yet.
@@ -161,7 +161,6 @@ class ChapterMarkPlayer(
     val builder = state.buildUpon()
       .setPlaylist(playlistWithCurrentItem(itemIndex, state))
       .setCurrentMediaItemIndex(itemIndex)
-      .setAvailableCommands(availableCommands(state.availableCommands, itemIndex))
       .setContentPositionMs { mark.rebase(positionInFileSupplier.get()) }
       .setContentBufferedPositionMs { mark.rebase(bufferedSupplier.get()) }
 
@@ -185,14 +184,23 @@ class ChapterMarkPlayer(
   /**
    * Repeat and shuffle would be applied to the files of the wrapped player, so they would act on
    * whole files instead of on the chapters we present.
+   *
+   * Next and previous stay available in the first and the last chapter, because [VoicePlayer] turns them into skips,
+   * and headsets and cars only send them while they are available.
    */
-  private fun State.withoutFileCommands(): State {
-    return buildUpon()
-      .setAvailableCommands(
-        availableCommands.buildUpon()
-          .removeAll(COMMAND_SET_REPEAT_MODE, COMMAND_SET_SHUFFLE_MODE)
-          .build(),
+  private fun State.withPresentedCommands(): State {
+    val commands = availableCommands.buildUpon()
+      .removeAll(COMMAND_SET_REPEAT_MODE, COMMAND_SET_SHUFFLE_MODE)
+    if (!timeline.isEmpty) {
+      commands.addAll(
+        COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM,
+        COMMAND_SEEK_TO_PREVIOUS,
+        COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
+        COMMAND_SEEK_TO_NEXT,
       )
+    }
+    return buildUpon()
+      .setAvailableCommands(commands.build())
       .build()
   }
 
@@ -228,20 +236,6 @@ class ChapterMarkPlayer(
     }
   }
 
-  private fun availableCommands(
-    commands: Player.Commands,
-    itemIndex: Int,
-  ): Player.Commands {
-    val hasPrevious = itemIndex > 0
-    val hasNext = itemIndex < markItems.lastIndex
-    return commands.buildUpon()
-      .addIf(COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM, hasPrevious)
-      .addIf(COMMAND_SEEK_TO_PREVIOUS, hasPrevious)
-      .addIf(COMMAND_SEEK_TO_NEXT_MEDIA_ITEM, hasNext)
-      .addIf(COMMAND_SEEK_TO_NEXT, hasNext)
-      .build()
-  }
-
   override fun handleSeek(
     mediaItemIndex: Int,
     positionMs: Long,
@@ -251,7 +245,9 @@ class ChapterMarkPlayer(
     if (playlist == null || markItems.isEmpty()) {
       return super.handleSeek(mediaItemIndex, positionMs, seekCommand)
     }
-    val itemIndex = mediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentMediaItemIndex
+    // a seek without a target, like next in the last chapter, does nothing
+    if (mediaItemIndex == C.INDEX_UNSET) return Futures.immediateVoidFuture()
+    val itemIndex = mediaItemIndex
     val item = playlist.items.getOrNull(itemIndex)
     if (item == null) {
       Logger.w("handleSeek to unknown itemIndex=$itemIndex")

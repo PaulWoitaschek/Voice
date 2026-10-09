@@ -152,17 +152,29 @@ class ChapterMarkPlayerTest {
   }
 
   @Test
-  fun `advertises seeking between the marks of a single file`() {
+  fun `keeps next and previous available in the first and the last chapter`() {
     setBook(listOf(singleFileWithThreeMarks()))
 
-    assertTrue(player.isCommandAvailable(Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM))
-    assertFalse(player.isCommandAvailable(Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM))
+    assertTrue(nextAndPrevious.all(player::isCommandAvailable))
 
     player.seekTo(2, 0)
     TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
 
-    assertFalse(player.isCommandAvailable(Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM))
-    assertTrue(player.isCommandAvailable(Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM))
+    assertTrue(nextAndPrevious.all(player::isCommandAvailable))
+  }
+
+  @Test
+  fun `next in the last chapter keeps the position`() {
+    setBook(listOf(singleFileWithThreeMarks()))
+    player.seekTo(2, 2_000)
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    player.seekToNext()
+    player.seekToNextMediaItem()
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 2, actual = player.currentMediaItemIndex)
+    assertEquals(expected = 2_000, actual = player.currentPosition)
   }
 
   @Test
@@ -255,6 +267,13 @@ class ChapterMarkPlayerTest {
     player.prepare()
     TestPlayerRunHelper.runUntilPlaybackState(exoPlayer, Player.STATE_READY)
   }
+
+  private val nextAndPrevious = listOf(
+    Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM,
+    Player.COMMAND_SEEK_TO_PREVIOUS,
+    Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
+    Player.COMMAND_SEEK_TO_NEXT,
+  )
 
   private fun singleFileWithThreeMarks(): Chapter {
     return chapter(
