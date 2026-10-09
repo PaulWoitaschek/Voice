@@ -1,5 +1,6 @@
 package voice.core.playback.session
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.datastore.core.DataStore
@@ -46,6 +47,7 @@ class LibrarySessionCallback(
   private val currentBookStoreId: DataStore<BookId?>,
   private val bookRepository: BookRepository,
   private val commandSourceResolver: CommandSourceResolver,
+  private val context: Context,
 ) : MediaLibrarySession.Callback {
 
   override fun onMediaButtonEvent(
@@ -187,6 +189,10 @@ class LibrarySessionCallback(
     }
 
     val connectionResult = super.onConnect(session, controller)
+    // The service is exported, but the custom commands are only meant for the app's own PlayerController.
+    if (controller.packageName != context.packageName) {
+      return connectionResult
+    }
     val sessionCommands = connectionResult.availableSessionCommands
       .buildUpon()
       .add(SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY))

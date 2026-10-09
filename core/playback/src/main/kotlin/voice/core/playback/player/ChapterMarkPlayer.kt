@@ -30,7 +30,7 @@ import voice.core.playback.session.chapterMarkPlaylist
 @Inject
 @SingleIn(PlaybackScope::class)
 class ChapterMarkPlayer(
-  private val player: Player,
+  private val player: ExoPlayer,
   private val mediaItemProvider: MediaItemProvider,
 ) : ForwardingSimpleBasePlayer(player) {
 
@@ -116,7 +116,7 @@ class ChapterMarkPlayer(
   }
 
   fun setSkipSilenceEnabled(enabled: Boolean) {
-    (player as? ExoPlayer)?.skipSilenceEnabled = enabled
+    player.skipSilenceEnabled = enabled
   }
 
   /**
@@ -127,10 +127,9 @@ class ChapterMarkPlayer(
    * exactly on its position.
    */
   private fun registerBoundaryMessages(playlist: ChapterMarkPlaylist) {
-    val exoPlayer = player as? ExoPlayer ?: return
     playlist.items.forEachIndexed { index, item ->
       if (item.mark.startMs <= 0) return@forEachIndexed
-      val message = exoPlayer.createMessage { _, _ -> invalidateState() }
+      val message = player.createMessage { _, _ -> invalidateState() }
         .setPosition(playlist.fileIndexOf(index), item.mark.startMs)
         .setDeleteAfterDelivery(false)
         .setLooper(player.applicationLooper)

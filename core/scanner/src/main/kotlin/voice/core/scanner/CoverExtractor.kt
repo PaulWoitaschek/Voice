@@ -73,8 +73,7 @@ internal class CoverExtractor(
     return try {
       MetadataRetriever.Builder(context, MediaItem.fromUri(uri))
         .build()
-        .retrieveTrackGroups()
-        .await()
+        .use { it.retrieveTrackGroups().await() }
     } catch (e: Exception) {
       if (e is CancellationException) currentCoroutineContext().ensureActive()
       Logger.w(e, "Error retrieving metadata")

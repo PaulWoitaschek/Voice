@@ -62,7 +62,7 @@ object PlaybackModule {
     automaticPauseRecorder: AutomaticPauseRecorder,
     listeningSessionRecorder: ListeningSessionRecorder,
     @Media3AudioOffloadFeatureFlagQualifier media3AudioOffloadFeatureFlag: FeatureFlag<Boolean>,
-  ): Player {
+  ): ExoPlayer {
     val audioAttributes = AudioAttributes.Builder()
       .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
       .setUsage(C.USAGE_MEDIA)

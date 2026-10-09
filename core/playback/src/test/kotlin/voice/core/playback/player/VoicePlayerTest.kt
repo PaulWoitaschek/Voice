@@ -1,5 +1,8 @@
 package voice.core.playback.player
 
+import android.content.Context
+import android.content.Intent
+import android.media.AudioManager
 import android.os.Looper
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -362,6 +365,22 @@ class VoicePlayerTest {
   }
 
   @Test
+  fun `end of chapter sleep timer keeps a finished book at its end`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 10_000, name = null))))
+    autoRewindAmountStore.updateData { 5 }
+
+    player.seekTo(0, 9_000)
+    player.prepare()
+    awaitReady()
+    sleepTimer.enable(SleepTimerMode.EndOfChapter)
+
+    TestPlayerRunHelper.play(internalPlayer).untilPlayWhenReadyIs(false)
+    shadowOf(Looper.getMainLooper()).idle()
+
+    player.shouldHavePosition(0, player.duration)
+  }
+
+  @Test
   fun `end of chapter sleep timer records once where it paused`() = scope.runTest {
     val chapter = chapter(
       ChapterMark(startMs = 0, endMs = 1_000, name = null),
@@ -429,9 +448,47 @@ class VoicePlayerTest {
     awaitReady()
     player.shouldHavePosition(1, 3_000)
 
+    player.play()
     player.pause()
 
     player.shouldHavePosition(1, 0)
+  }
+
+  @Test
+  fun `pausing while already paused does not rewind again`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
+    autoRewindAmountStore.updateData { 5 }
+
+    player.seekTo(0, 15_000)
+    player.prepare()
+    awaitReady()
+
+    player.play()
+    player.pause()
+    player.shouldHavePosition(0, 10_000)
+
+    player.pause()
+    player.shouldHavePosition(0, 10_000)
+  }
+
+  @Test
+  fun `unplugging headphones rewinds`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
+    autoRewindAmountStore.updateData { 5 }
+    internalPlayer.setHandleAudioBecomingNoisy(true)
+
+    player.seekTo(0, 8_000)
+    player.prepare()
+    awaitReady()
+    player.play()
+    TestPlayerRunHelper.advance(internalPlayer).untilPendingCommandsAreFullyHandled()
+
+    ApplicationProvider.getApplicationContext<Context>().sendBroadcast(Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
+    TestPlayerRunHelper.advance(internalPlayer).untilPlayWhenReadyIs(false)
+    shadowOf(Looper.getMainLooper()).idle()
+    val pausedAt = player.currentPosition
+
+    player.shouldHavePosition(0, pausedAt - 5_000)
   }
 
   private fun TestScope.setMediaItems(
