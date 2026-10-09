@@ -62,6 +62,9 @@
     <string name="book.edit.cover.internet">இணையத்திலிருந்து மூடி</string>
     <string name="book.edit.name.label">பெயர்</string>
     <string name="book.edit.rename">மறுபெயரிடு</string>
+    <string name="book.source.device">இந்தச் சாதனத்தில்</string>
+    <string name="book.source.server_downloaded">%s · பதிவிறக்கப்பட்டது</string>
+    <string name="book.source.server_waiting_for_wifi">%s · வைஃபைக்காகக் காத்திருக்கிறது</string>
     <string name="bookmark.action.add_note">குறிப்பைச் சேர்</string>
     <string name="bookmark.add_note_hint">ஒரு குறிப்பைச் சேர்க்கவும்</string>
     <string name="bookmark.added.snackbar">புக்மார்க்கு சேர்க்கப்பட்டது</string>
@@ -216,6 +219,7 @@
     <string name="history.source.headset">ஹெட்செட் பொத்தான்</string>
     <string name="history.source.notification">அறிவிப்பு</string>
     <string name="history.source.other_app">மற்றொரு பயன்பாடு</string>
+    <string name="history.source.other_device">மற்றொரு சாதனம்</string>
     <string name="history.source.sleep_timer">ஸ்லீப் டைமர்</string>
     <string name="history.source.unknown">தெரியவில்லை</string>
     <string name="history.source.unplugged">ஆடியோ துண்டிக்கப்பட்டது</string>

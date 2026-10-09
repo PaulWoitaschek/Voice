@@ -66,6 +66,9 @@
     <string name="book.edit.cover.internet">Okładka z internetu</string>
     <string name="book.edit.name.label">Nazwa</string>
     <string name="book.edit.rename">Zmień nazwę</string>
+    <string name="book.source.device">Na tym urządzeniu</string>
+    <string name="book.source.server_downloaded">%s · pobrano</string>
+    <string name="book.source.server_waiting_for_wifi">%s · czeka na Wi-Fi</string>
     <string name="bookmark.action.add_note">Dodaj notatkę</string>
     <string name="bookmark.add_note_hint">Dodaj notatkę</string>
     <string name="bookmark.added.snackbar">Zakładka dodana</string>
@@ -236,6 +239,7 @@
     <string name="history.source.headset">Przycisk słuchawek</string>
     <string name="history.source.notification">Powiadomienie</string>
     <string name="history.source.other_app">Inna aplikacja</string>
+    <string name="history.source.other_device">Inne urządzenie</string>
     <string name="history.source.sleep_timer">Wyłącznik czasowy</string>
     <string name="history.source.unknown">Nieznane</string>
     <string name="history.source.unplugged">Odłączono audio</string>

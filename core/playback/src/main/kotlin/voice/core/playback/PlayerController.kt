@@ -90,6 +90,7 @@ class PlayerController(
     time: Long,
     id: ChapterId,
     type: ListeningEvent.Type = ListeningEvent.Type.Seek,
+    source: ListeningEvent.Source = ListeningEvent.Source.App,
   ) = executeAfterPrepare { controller ->
     val bookId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
@@ -98,7 +99,7 @@ class PlayerController(
       positionInChapterMs = time,
     )
     if (playbackItem != null) {
-      controller.record(type, to = PlaybackPosition(bookId, id, time))
+      controller.record(type, source, to = PlaybackPosition(bookId, id, time))
       controller.seekTo(playbackItem.index, playbackItem.positionInMediaItem(time))
     }
   }

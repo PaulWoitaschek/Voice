@@ -60,6 +60,9 @@
     <string name="book.edit.cover.internet">从互联网寻找封面图片</string>
     <string name="book.edit.name.label">名称</string>
     <string name="book.edit.rename">重命名</string>
+    <string name="book.source.device">在本设备上</string>
+    <string name="book.source.server_downloaded">%s · 已下载</string>
+    <string name="book.source.server_waiting_for_wifi">%s · 等待 Wi-Fi</string>
     <string name="bookmark.action.add_note">添加笔记</string>
     <string name="bookmark.add_note_hint">添加笔记</string>
     <string name="bookmark.added.snackbar">已添加书签</string>
@@ -206,6 +209,7 @@
     <string name="history.source.headset">耳机按键</string>
     <string name="history.source.notification">通知</string>
     <string name="history.source.other_app">其他应用</string>
+    <string name="history.source.other_device">其他设备</string>
     <string name="history.source.sleep_timer">睡眠定时器</string>
     <string name="history.source.unknown">未知</string>
     <string name="history.source.unplugged">音频设备已断开</string>

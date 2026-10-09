@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerializationException
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 import retrofit2.HttpException
@@ -155,7 +156,7 @@ public class Audiobookshelf internal constructor(
       } catch (e: HttpException) {
         Logger.d("$url: $e")
         continue
-      } catch (e: kotlinx.serialization.SerializationException) {
+      } catch (e: SerializationException) {
         Logger.d("$url: $e")
         continue
       }
@@ -222,6 +223,10 @@ public class Audiobookshelf internal constructor(
     } catch (e: IOException) {
       Logger.d("Could not log in: $e")
       LoginResult.Unreachable
+    } catch (e: SerializationException) {
+      // something in front of the server, like a proxy with its own login page, answered instead
+      Logger.w(e, "Could not log in")
+      LoginResult.Failed
     }
   }
 
@@ -263,6 +268,9 @@ public class Audiobookshelf internal constructor(
       Logger.d("Could not load the libraries: $e")
       null
     } catch (e: HttpException) {
+      Logger.w(e, "Could not load the libraries")
+      null
+    } catch (e: SerializationException) {
       Logger.w(e, "Could not load the libraries")
       null
     }
@@ -328,6 +336,8 @@ public class Audiobookshelf internal constructor(
   public suspend fun signOut() {
     val account = accountStore.data.first() ?: return
     analytics.event("audiobookshelf_signed_out")
+    // a sync that is still running would bring the books back
+    sync.cancel()
     if (currentBookStore.data.first()?.isRemote == true) {
       playerController.pause()
       currentBookStore.updateData { null }

@@ -66,6 +66,9 @@
     <string name="book.edit.cover.internet">Обложка из интернета</string>
     <string name="book.edit.name.label">Название</string>
     <string name="book.edit.rename">Переименовать</string>
+    <string name="book.source.device">На этом устройстве</string>
+    <string name="book.source.server_downloaded">%s · скачано</string>
+    <string name="book.source.server_waiting_for_wifi">%s · ждёт Wi-Fi</string>
     <string name="bookmark.action.add_note">Добавить заметку</string>
     <string name="bookmark.add_note_hint">Добавьте заметку</string>
     <string name="bookmark.added.snackbar">Закладка добавлена</string>
@@ -236,6 +239,7 @@
     <string name="history.source.headset">Кнопка гарнитуры</string>
     <string name="history.source.notification">Уведомление</string>
     <string name="history.source.other_app">Другое приложение</string>
+    <string name="history.source.other_device">Другое устройство</string>
     <string name="history.source.sleep_timer">Таймер сна</string>
     <string name="history.source.unknown">Неизвестно</string>
     <string name="history.source.unplugged">Аудиоустройство отключено</string>

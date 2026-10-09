@@ -60,6 +60,9 @@
     <string name="book.edit.cover.internet">Sampul dari Internet</string>
     <string name="book.edit.name.label">Judul Buku</string>
     <string name="book.edit.rename">Ganti nama</string>
+    <string name="book.source.device">Di perangkat ini</string>
+    <string name="book.source.server_downloaded">%s · sudah diunduh</string>
+    <string name="book.source.server_waiting_for_wifi">%s · menunggu Wi-Fi</string>
     <string name="bookmark.action.add_note">Tambah catatan</string>
     <string name="bookmark.add_note_hint">Tambahkan catatan</string>
     <string name="bookmark.added.snackbar">Markah ditambahkan</string>
@@ -206,6 +209,7 @@
     <string name="history.source.headset">Tombol headset</string>
     <string name="history.source.notification">Notifikasi</string>
     <string name="history.source.other_app">Aplikasi lain</string>
+    <string name="history.source.other_device">Perangkat lain</string>
     <string name="history.source.sleep_timer">Pengatur waktu tidur</string>
     <string name="history.source.unknown">Tidak diketahui</string>
     <string name="history.source.unplugged">Audio terputus</string>

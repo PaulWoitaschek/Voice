@@ -62,6 +62,9 @@
     <string name="book.edit.cover.internet">Omslag fra Internett</string>
     <string name="book.edit.name.label">Navn</string>
     <string name="book.edit.rename">Gi nytt navn</string>
+    <string name="book.source.device">På denne enheten</string>
+    <string name="book.source.server_downloaded">%s · lastet ned</string>
+    <string name="book.source.server_waiting_for_wifi">%s · venter på Wi-Fi</string>
     <string name="bookmark.action.add_note">Legg til notat</string>
     <string name="bookmark.add_note_hint">Legg til et notat</string>
     <string name="bookmark.added.snackbar">Bokmerke lagt til</string>
@@ -216,6 +219,7 @@
     <string name="history.source.headset">Hodetelefonknapp</string>
     <string name="history.source.notification">Varsel</string>
     <string name="history.source.other_app">En annen app</string>
+    <string name="history.source.other_device">En annen enhet</string>
     <string name="history.source.sleep_timer">Innsovningstidsur</string>
     <string name="history.source.unknown">Ukjent</string>
     <string name="history.source.unplugged">Lyd frakoblet</string>

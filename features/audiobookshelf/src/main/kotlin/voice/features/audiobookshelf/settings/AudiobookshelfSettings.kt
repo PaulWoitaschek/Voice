@@ -180,7 +180,9 @@ private fun AudiobookshelfSettings(
         verticalArrangement = Arrangement.spacedBy(16.dp),
       ) {
         ServerIsland(viewState, onSignInAgain = onSignInAgain, onSyncNow = onSyncNow)
-        LibrariesIsland(viewState, onLibraryToggle)
+        if (!viewState.librariesUnavailable) {
+          LibrariesIsland(viewState, onLibraryToggle)
+        }
         DownloadsIsland(viewState, onDownloadOverMobileDataChange, onRemoveDownloads)
         OutlinedButton(
           onClick = onSignOut,

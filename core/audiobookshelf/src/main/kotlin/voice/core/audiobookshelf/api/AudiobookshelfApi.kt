@@ -65,7 +65,7 @@ internal interface AudiobookshelfApi {
   @DELETE("api/me/item/{itemId}/bookmark/{time}")
   suspend fun deleteBookmark(
     @Path("itemId") itemId: String,
-    @Path("time") time: Long,
+    @Path("time") time: String,
   ): Response<Unit>
 
   @POST("api/items/{itemId}/play")

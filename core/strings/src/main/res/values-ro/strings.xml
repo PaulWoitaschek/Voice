@@ -64,6 +64,9 @@
     <string name="book.edit.cover.internet">Copertă de pe internet</string>
     <string name="book.edit.name.label">Nume</string>
     <string name="book.edit.rename">Redenumește</string>
+    <string name="book.source.device">Pe acest dispozitiv</string>
+    <string name="book.source.server_downloaded">%s · descărcată</string>
+    <string name="book.source.server_waiting_for_wifi">%s · așteaptă o rețea Wi-Fi</string>
     <string name="bookmark.action.add_note">Adaugă notă</string>
     <string name="bookmark.add_note_hint">Adaugă o notă</string>
     <string name="bookmark.added.snackbar">Semn de carte adăugat</string>
@@ -226,6 +229,7 @@
     <string name="history.source.headset">Buton căști</string>
     <string name="history.source.notification">Notificare</string>
     <string name="history.source.other_app">Altă aplicație</string>
+    <string name="history.source.other_device">Alt dispozitiv</string>
     <string name="history.source.sleep_timer">Oprire temporizată</string>
     <string name="history.source.unknown">Necunoscut</string>
     <string name="history.source.unplugged">Audio deconectat</string>

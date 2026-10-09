@@ -16,6 +16,7 @@ import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.audiobookshelf.itemId
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.ListeningEvent
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
@@ -90,7 +91,15 @@ internal class ProgressSync(
     val book = bookRepository.get(bookId) ?: return@withLock
     val synced = syncedProgressStore.data.first()[bookId.value]
     val localChanged = book.movedAwayFrom(synced)
-    val serverChanged = server != null && server.lastUpdate > (synced?.serverLastUpdate ?: -1)
+    val serverProgress = server?.let(book::progressOnServer)
+    // what Voice sent itself comes back with a newer time, which isn't a change of another device
+    val serverChanged = server != null &&
+      serverProgress != null &&
+      server.lastUpdate > (synced?.serverLastUpdate ?: -1) &&
+      (synced == null || serverProgress.differsFrom(synced))
+    if (server != null && synced != null && !serverChanged && server.lastUpdate > synced.serverLastUpdate) {
+      remember(bookId, synced.copy(serverLastUpdate = server.lastUpdate))
+    }
 
     when {
       serverChanged && !localChanged -> applyServer(book, server)
@@ -113,17 +122,7 @@ internal class ProgressSync(
     book: Book,
     server: AbsMediaProgress,
   ) {
-    val serverPosition = (server.currentTime * 1000).toLong().coerceIn(0, book.duration)
-    val serverProgress = SyncedProgress(
-      // a book finished elsewhere ends up at its end here, unless it is already in its last seconds
-      positionMs = if (server.isFinished && book.duration - serverPosition >= FINISHED_REMAINING_MS) {
-        book.duration
-      } else {
-        serverPosition
-      },
-      finished = server.isFinished,
-      serverLastUpdate = server.lastUpdate,
-    )
+    val serverProgress = book.progressOnServer(server)
     if (isPlaying(book.id)) {
       // what plays here is newer than anything on the server
       return
@@ -133,7 +132,11 @@ internal class ProgressSync(
       Logger.d("Taking over the position ${serverProgress.positionMs} of ${book.content.name} from the server")
       val live = playerController.livePlaybackState(book.id)
       if (live != null) {
-        playerController.setPosition(position.positionInChapter, position.chapterId)
+        playerController.setPosition(
+          time = position.positionInChapter,
+          id = position.chapterId,
+          source = ListeningEvent.Source.OtherDevice,
+        )
       }
       bookRepository.updateBook(book.id) {
         it.copy(
@@ -199,10 +202,30 @@ private fun Book.syncedProgress(serverLastUpdate: Long) = SyncedProgress(
   serverLastUpdate = serverLastUpdate,
 )
 
+private fun Book.progressOnServer(server: AbsMediaProgress): SyncedProgress {
+  val serverPosition = (server.currentTime * 1000).toLong().coerceIn(0, duration)
+  return SyncedProgress(
+    // a book finished elsewhere ends up at its end here, unless it is already in its last seconds
+    positionMs = if (server.isFinished && duration - serverPosition >= FINISHED_REMAINING_MS) {
+      duration
+    } else {
+      serverPosition
+    },
+    finished = server.isFinished,
+    serverLastUpdate = server.lastUpdate,
+  )
+}
+
 /**
  * Small differences come from rounding the position to the seconds the server stores.
  */
 private fun Book.movedAwayFrom(progress: SyncedProgress?): Boolean {
   if (progress == null) return position > 0
-  return isFinished != progress.finished || abs(position - progress.positionMs) > 1_500
+  return isFinished != progress.finished || abs(position - progress.positionMs) > POSITION_TOLERANCE_MS
 }
+
+private fun SyncedProgress.differsFrom(other: SyncedProgress): Boolean {
+  return finished != other.finished || abs(positionMs - other.positionMs) > POSITION_TOLERANCE_MS
+}
+
+private const val POSITION_TOLERANCE_MS = 1_500

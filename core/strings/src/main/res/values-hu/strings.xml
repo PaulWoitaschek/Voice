@@ -62,6 +62,9 @@
     <string name="book.edit.cover.internet">Borító az internetről</string>
     <string name="book.edit.name.label">Cím</string>
     <string name="book.edit.rename">Átnevezés</string>
+    <string name="book.source.device">Ezen az eszközön</string>
+    <string name="book.source.server_downloaded">%s · letöltve</string>
+    <string name="book.source.server_waiting_for_wifi">%s · Wi-Fi-re vár</string>
     <string name="bookmark.action.add_note">Jegyzet hozzáadása</string>
     <string name="bookmark.add_note_hint">Jegyzet hozzáadása</string>
     <string name="bookmark.added.snackbar">Könyvjelző hozzáadva</string>
@@ -216,6 +219,7 @@
     <string name="history.source.headset">Fejhallgató gombja</string>
     <string name="history.source.notification">Értesítés</string>
     <string name="history.source.other_app">Másik alkalmazás</string>
+    <string name="history.source.other_device">Másik eszköz</string>
     <string name="history.source.sleep_timer">Alvásidőzítő</string>
     <string name="history.source.unknown">Ismeretlen</string>
     <string name="history.source.unplugged">Hangkapcsolat megszakadt</string>

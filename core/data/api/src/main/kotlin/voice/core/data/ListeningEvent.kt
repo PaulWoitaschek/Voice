@@ -69,6 +69,9 @@ public data class ListeningEvent(
     Unplugged,
     SleepTimer,
     Unknown,
+
+    /** The position came from another device, through the server. */
+    OtherDevice,
   }
 }
 

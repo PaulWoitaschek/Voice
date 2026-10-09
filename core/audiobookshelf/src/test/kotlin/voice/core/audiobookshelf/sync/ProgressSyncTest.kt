@@ -130,6 +130,20 @@ class ProgressSyncTest {
   }
 
   @Test
+  fun `what Voice sent itself doesn't count as a change on the server`() = runTest {
+    // marked as finished here, without playing, after the earlier position went up
+    val repo = MemoryBookRepository(book(positionMs = 120_000, lastPlayedAt = 1))
+    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(30_000, finished = false, serverLastUpdate = 10)) }
+    server.enqueue(MockResponse(code = 200))
+
+    progressSync(repo).syncAll(account, listOf(serverProgress(currentTime = 30.0, lastUpdate = 20)))
+
+    assertEquals(120_000, repo.get(bookId)!!.position)
+    val body = Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
+    assertEquals(true, body.getValue("isFinished").jsonPrimitive.boolean)
+  }
+
+  @Test
   fun `a position that couldn't be sent goes up with the next sync`() = runTest {
     val repo = MemoryBookRepository(book(positionMs = 30_000))
     val sync = progressSync(repo)

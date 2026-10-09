@@ -66,6 +66,9 @@
     <string name="book.edit.cover.internet">Obal z internetu</string>
     <string name="book.edit.name.label">Název</string>
     <string name="book.edit.rename">Přejmenovat</string>
+    <string name="book.source.device">Na tomto zařízení</string>
+    <string name="book.source.server_downloaded">%s · staženo</string>
+    <string name="book.source.server_waiting_for_wifi">%s · čeká na Wi-Fi</string>
     <string name="bookmark.action.add_note">Přidat poznámku</string>
     <string name="bookmark.add_note_hint">Přidat poznámku</string>
     <string name="bookmark.added.snackbar">Záložka přidána</string>
@@ -236,6 +239,7 @@
     <string name="history.source.headset">Tlačítko sluchátek</string>
     <string name="history.source.notification">Oznámení</string>
     <string name="history.source.other_app">Jiná aplikace</string>
+    <string name="history.source.other_device">Jiné zařízení</string>
     <string name="history.source.sleep_timer">Časovač spánku</string>
     <string name="history.source.unknown">Neznámý</string>
     <string name="history.source.unplugged">Zvuk odpojen</string>

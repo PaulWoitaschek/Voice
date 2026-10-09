@@ -62,6 +62,9 @@
     <string name="book.edit.cover.internet">Kaanepilt internetist</string>
     <string name="book.edit.name.label">Nimi</string>
     <string name="book.edit.rename">Nimeta ümber</string>
+    <string name="book.source.device">Selles seadmes</string>
+    <string name="book.source.server_downloaded">%s · alla laaditud</string>
+    <string name="book.source.server_waiting_for_wifi">%s · ootab WiFi-ühendust</string>
     <string name="bookmark.action.add_note">Lisa märkus</string>
     <string name="bookmark.add_note_hint">Lisa märkus</string>
     <string name="bookmark.added.snackbar">Järjehoidja on lisatud</string>
@@ -216,6 +219,7 @@
     <string name="history.source.headset">Peakomplekti nupp</string>
     <string name="history.source.notification">Teavitus</string>
     <string name="history.source.other_app">Teine rakendus</string>
+    <string name="history.source.other_device">Teine seade</string>
     <string name="history.source.sleep_timer">Unetaimer</string>
     <string name="history.source.unknown">Teadmata</string>
     <string name="history.source.unplugged">Heliseade lahutatud</string>

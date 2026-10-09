@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
@@ -28,6 +29,7 @@ import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
 import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.AccountStore
+import voice.core.audiobookshelf.download.AudiobookshelfDownloads
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.isRemote
 import voice.core.data.repo.BookContentRepo
@@ -62,6 +64,7 @@ public class AudiobookshelfSync internal constructor(
   private val librarySync: LibrarySync,
   private val progressSync: ProgressSync,
   private val bookmarkSync: BookmarkSync,
+  private val downloads: AudiobookshelfDownloads,
   private val listeningSessionReporter: ListeningSessionReporter,
   private val bookRepository: BookRepository,
   private val contentRepo: BookContentRepo,
@@ -79,6 +82,10 @@ public class AudiobookshelfSync internal constructor(
   private var syncJob: Job? = null
   private var started = false
   private var lastSyncAt: Long? = null
+
+  @Volatile
+  private var resyncRequested = false
+  private var validatedNetwork: Network? = null
 
   public val syncing: StateFlow<Boolean>
     field = MutableStateFlow(false)
@@ -101,20 +108,32 @@ public class AudiobookshelfSync internal constructor(
    * less than a minute ago is enough.
    */
   public fun sync(force: Boolean = false) {
-    if (syncJob?.isActive == true) return
+    if (syncJob?.isActive == true) {
+      // the running sync may have read the account before it changed
+      if (force) resyncRequested = true
+      return
+    }
     val last = lastSyncAt
     if (!force && last != null && SystemClock.elapsedRealtime() - last < MIN_SYNC_INTERVAL.inWholeMilliseconds) return
     syncJob = scope.launch {
       mutex.withLock {
-        val account = accountStore.data.first()?.takeUnless { it.needsLogin } ?: return@withLock
         syncing.value = true
         try {
-          syncNow(account)
+          do {
+            resyncRequested = false
+            val account = accountStore.data.first()?.takeUnless { it.needsLogin } ?: break
+            syncNow(account)
+          } while (resyncRequested)
         } finally {
           syncing.value = false
         }
       }
     }
+  }
+
+  internal suspend fun cancel() {
+    resyncRequested = false
+    syncJob?.cancelAndJoin()
   }
 
   // the books of a server stay hidden while signed out, for example after a restore from a backup without the login
@@ -130,6 +149,7 @@ public class AudiobookshelfSync internal constructor(
       val user = http.authenticatedApi(account.serverUrl).me()
       reachability.value = ServerReachability.Reachable
       librarySync.sync(account)
+      downloads.reconcile()
       val books = bookRepository.all()
       progressSync.syncAll(account, user.mediaProgress)
       bookmarkSync.sync(account, user.bookmarks, books)
@@ -167,18 +187,22 @@ public class AudiobookshelfSync internal constructor(
     val connectivityManager = context.getSystemService<ConnectivityManager>() ?: return
     connectivityManager.registerDefaultNetworkCallback(
       object : ConnectivityManager.NetworkCallback() {
+        // capabilities change all the time, only a network that just got online is worth a sync
         override fun onCapabilitiesChanged(
           network: Network,
           networkCapabilities: NetworkCapabilities,
         ) {
-          if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
-            reachability.value != ServerReachability.Reachable
-          ) {
+          val validated = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+          if (validated && network != validatedNetwork) {
+            validatedNetwork = network
             sync(force = true)
+          } else if (!validated && network == validatedNetwork) {
+            validatedNetwork = null
           }
         }
 
         override fun onLost(network: Network) {
+          if (network == validatedNetwork) validatedNetwork = null
           reachability.value = ServerReachability.Unreachable
         }
       },

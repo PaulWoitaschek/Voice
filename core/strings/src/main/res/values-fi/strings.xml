@@ -62,6 +62,9 @@
     <string name="book.edit.cover.internet">Kansi internetistä</string>
     <string name="book.edit.name.label">Nimi</string>
     <string name="book.edit.rename">Nimeä uudelleen</string>
+    <string name="book.source.device">Tällä laitteella</string>
+    <string name="book.source.server_downloaded">%s · ladattu</string>
+    <string name="book.source.server_waiting_for_wifi">%s · odottaa Wi-Fi-yhteyttä</string>
     <string name="bookmark.action.add_note">Lisää muistiinpano</string>
     <string name="bookmark.add_note_hint">Lisää muistiinpano</string>
     <string name="bookmark.added.snackbar">Kirjanmerkki lisätty</string>
@@ -216,6 +219,7 @@
     <string name="history.source.headset">Kuulokkeiden painike</string>
     <string name="history.source.notification">Ilmoitus</string>
     <string name="history.source.other_app">Toinen sovellus</string>
+    <string name="history.source.other_device">Toinen laite</string>
     <string name="history.source.sleep_timer">Uniajastin</string>
     <string name="history.source.unknown">Tuntematon</string>
     <string name="history.source.unplugged">Ääniyhteys katkesi</string>

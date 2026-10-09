@@ -62,6 +62,9 @@
     <string name="book.edit.cover.internet">İnternetten kitap kapağı</string>
     <string name="book.edit.name.label">Ad</string>
     <string name="book.edit.rename">Yeniden adlandır</string>
+    <string name="book.source.device">Bu cihazda</string>
+    <string name="book.source.server_downloaded">%s · indirildi</string>
+    <string name="book.source.server_waiting_for_wifi">%s · Wi-Fi bekleniyor</string>
     <string name="bookmark.action.add_note">Not ekle</string>
     <string name="bookmark.add_note_hint">Not ekleyin</string>
     <string name="bookmark.added.snackbar">Yer imi eklendi</string>
@@ -216,6 +219,7 @@
     <string name="history.source.headset">Kulaklık düğmesi</string>
     <string name="history.source.notification">Bildirim</string>
     <string name="history.source.other_app">Başka bir uygulama</string>
+    <string name="history.source.other_device">Başka bir cihaz</string>
     <string name="history.source.sleep_timer">Uyku zamanlayıcısı</string>
     <string name="history.source.unknown">Bilinmiyor</string>
     <string name="history.source.unplugged">Ses bağlantısı kesildi</string>

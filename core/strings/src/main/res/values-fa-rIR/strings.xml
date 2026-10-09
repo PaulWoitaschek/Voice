@@ -62,6 +62,9 @@
     <string name="book.edit.cover.internet">دریافت کاور از طریق اینترنت</string>
     <string name="book.edit.name.label">نام</string>
     <string name="book.edit.rename">تغییر نام</string>
+    <string name="book.source.device">در این دستگاه</string>
+    <string name="book.source.server_downloaded">%s · دانلودشده</string>
+    <string name="book.source.server_waiting_for_wifi">%s · در انتظار Wi-Fi</string>
     <string name="bookmark.action.add_note">افزودن یادداشت</string>
     <string name="bookmark.add_note_hint">یادداشتی اضافه کنید</string>
     <string name="bookmark.added.snackbar">نشانه‌گذاری انجام شد</string>
@@ -216,6 +219,7 @@
     <string name="history.source.headset">دکمهٔ هدست</string>
     <string name="history.source.notification">اعلان</string>
     <string name="history.source.other_app">برنامهٔ دیگر</string>
+    <string name="history.source.other_device">دستگاه دیگر</string>
     <string name="history.source.sleep_timer">تایمر خواب</string>
     <string name="history.source.unknown">نامشخص</string>
     <string name="history.source.unplugged">اتصال صدا قطع شد</string>

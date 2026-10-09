@@ -64,6 +64,9 @@
     <string name="book.edit.cover.internet">עטיפות מהאינטרנט</string>
     <string name="book.edit.name.label">שם</string>
     <string name="book.edit.rename">שינוי שם</string>
+    <string name="book.source.device">במכשיר הזה</string>
+    <string name="book.source.server_downloaded">%s · ההורדה הושלמה</string>
+    <string name="book.source.server_waiting_for_wifi">%s · בהמתנה ל-Wi-Fi</string>
     <string name="bookmark.action.add_note">הוספת הערה</string>
     <string name="bookmark.add_note_hint">הוספת הערה</string>
     <string name="bookmark.added.snackbar">סימנייה נוספה</string>
@@ -226,6 +229,7 @@
     <string name="history.source.headset">כפתור באוזניות</string>
     <string name="history.source.notification">התראה</string>
     <string name="history.source.other_app">אפליקציה אחרת</string>
+    <string name="history.source.other_device">מכשיר אחר</string>
     <string name="history.source.sleep_timer">טיימר-שינה</string>
     <string name="history.source.unknown">לא ידוע</string>
     <string name="history.source.unplugged">השמע נותק</string>

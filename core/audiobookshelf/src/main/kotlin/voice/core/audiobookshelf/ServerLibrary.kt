@@ -28,10 +28,8 @@ interface ServerLibrary {
   /** Server books that can't play right now: not downloaded while the server can't be reached. */
   val unavailableBooks: Flow<Set<BookId>>
 
-  /** How far the downloads that are running have come, from 0 to 1. */
-  val downloadProgress: Flow<Map<BookId, Float>>
-
-  val downloadedBooks: Flow<Set<BookId>>
+  /** The server books that are downloaded, or on their way. */
+  val downloadStates: Flow<Map<BookId, BookDownloadState>>
 
   suspend fun isConnected(): Boolean
 
@@ -64,17 +62,7 @@ class AudiobookshelfServerLibrary internal constructor(
       .toSet()
   }.distinctUntilChanged()
 
-  override val downloadProgress: Flow<Map<BookId, Float>> = downloads.states()
-    .map { states ->
-      states.mapNotNull { (bookId, state) ->
-        (state as? BookDownloadState.Downloading)?.let { bookId to it.progress }
-      }.toMap()
-    }
-    .distinctUntilChanged()
-
-  override val downloadedBooks: Flow<Set<BookId>> = downloads.states()
-    .map { states -> states.filterValues { it == BookDownloadState.Downloaded }.keys }
-    .distinctUntilChanged()
+  override val downloadStates: Flow<Map<BookId, BookDownloadState>> = downloads.states()
 
   override suspend fun isConnected(): Boolean = audiobookshelf.isConnected()
 

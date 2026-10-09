@@ -25,8 +25,14 @@ internal sealed interface BookSource {
 
   data class Server(
     val name: String,
-    val downloaded: Boolean,
+    val download: Download,
   ) : BookSource
+
+  enum class Download {
+    None,
+    WaitingForWifi,
+    Done,
+  }
 }
 
 enum class BottomSheetItem(

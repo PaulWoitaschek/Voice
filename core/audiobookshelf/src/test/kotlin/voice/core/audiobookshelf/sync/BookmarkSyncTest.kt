@@ -125,6 +125,31 @@ class BookmarkSyncTest {
   }
 
   @Test
+  fun `when both sides renamed a bookmark, the title of this device wins`() = runTest {
+    synced.updateData { mapOf("item@30" to "Old") }
+    val repo = MemoryBookmarkRepo(bookmark(chapter = 0, timeMs = 30_000, title = "Here"))
+    server.enqueue(MockResponse(code = 200))
+
+    bookmarkSync(repo).sync(account, listOf(AbsBookmark("item", "There", 30.0)))
+
+    val request = server.takeRequest(1, TimeUnit.SECONDS)!!
+    assertEquals("PATCH", request.method)
+    assertEquals("Here", Json.parseToJsonElement(request.body!!.utf8()).jsonObject.getValue("title").jsonPrimitive.content)
+    assertEquals("Here", repo.bookmarks.value.single().title)
+    assertEquals(mapOf("item@30" to "Here"), synced.data.first())
+  }
+
+  @Test
+  fun `a bookmark another app set at a fraction of a second is deleted at its exact time`() = runTest {
+    synced.updateData { mapOf("item@30" to "Old") }
+    server.enqueue(MockResponse(code = 200))
+
+    bookmarkSync(MemoryBookmarkRepo()).sync(account, listOf(AbsBookmark("item", "Old", 30.6)))
+
+    assertEquals("/api/me/item/item/bookmark/30.6", server.takeRequest(1, TimeUnit.SECONDS)!!.url.encodedPath)
+  }
+
+  @Test
   fun `bookmarks of the sleep timer stay on the device`() = runTest {
     val repo = MemoryBookmarkRepo(bookmark(chapter = 0, timeMs = 10_000, title = null, setBySleepTimer = true))
 

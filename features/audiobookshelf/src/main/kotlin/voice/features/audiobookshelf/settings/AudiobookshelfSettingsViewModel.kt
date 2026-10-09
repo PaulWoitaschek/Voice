@@ -31,6 +31,7 @@ class AudiobookshelfSettingsViewModel(
 
   private val scope = MainScope(dispatcherProvider)
   private var libraries by mutableStateOf<List<LibraryViewState>?>(null)
+  private var librariesUnavailable by mutableStateOf(false)
   private var confirmSignOut by mutableStateOf(false)
   private var signedOut = false
 
@@ -41,8 +42,9 @@ class AudiobookshelfSettingsViewModel(
     val syncing by sync.syncing.collectAsState()
     val usedBytes by remember { downloads.usedBytes }.collectAsState(initial = 0L)
     val downloadOverMobileData by remember { downloads.downloadOverMobileData }.collectAsState(initial = false)
-    LaunchedEffect(Unit) {
-      loadLibraries()
+    // the libraries come in once the server answers
+    LaunchedEffect(reachability) {
+      if (libraries == null) loadLibraries()
     }
     val current = connection ?: return null
     return AudiobookshelfSettingsViewState(
@@ -55,6 +57,7 @@ class AudiobookshelfSettingsViewModel(
         else -> ServerStatus.Connected
       },
       libraries = libraries?.map { it.copy(selected = it.id in current.libraryIds) },
+      librariesUnavailable = librariesUnavailable,
       usedBytes = usedBytes,
       downloadOverMobileData = downloadOverMobileData,
       confirmSignOut = confirmSignOut,
@@ -62,7 +65,9 @@ class AudiobookshelfSettingsViewModel(
   }
 
   private suspend fun loadLibraries() {
-    val preview = audiobookshelf.libraries() ?: return
+    val preview = audiobookshelf.libraries()
+    librariesUnavailable = preview == null
+    if (preview == null) return
     libraries = preview.libraries.map { library ->
       LibraryViewState(id = library.id, name = library.name, bookCount = library.bookCount, selected = false)
     }
@@ -97,7 +102,7 @@ class AudiobookshelfSettingsViewModel(
   }
 
   internal fun onSyncNow() {
-    sync.sync()
+    sync.sync(force = true)
   }
 
   internal fun onSignOut() {
@@ -128,6 +133,8 @@ internal data class AudiobookshelfSettingsViewState(
   val username: String,
   val status: ServerStatus,
   val libraries: List<LibraryViewState>?,
+  /** The server didn't answer, so its libraries can't be picked right now. */
+  val librariesUnavailable: Boolean = false,
   val usedBytes: Long,
   val downloadOverMobileData: Boolean,
   val confirmSignOut: Boolean,

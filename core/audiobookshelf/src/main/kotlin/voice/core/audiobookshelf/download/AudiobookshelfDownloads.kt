@@ -17,6 +17,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -126,10 +127,23 @@ public class AudiobookshelfDownloads internal constructor(
   public fun state(bookId: BookId): Flow<BookDownloadState> = states().map { it[bookId] ?: BookDownloadState.NotDownloaded }
     .distinctUntilChanged()
 
-  public fun states(): Flow<Map<BookId, BookDownloadState>> = downloads.map { downloads ->
-    downloads.values
-      .groupBy { BookId(it.request.data.decodeToString()) }
-      .mapValues { (_, files) -> files.state(requirementsMet.value) }
+  /**
+   * The download state of the server books, judged by the files they have now. A book that got new files on the
+   * server isn't downloaded anymore until those are.
+   */
+  public fun states(): Flow<Map<BookId, BookDownloadState>> = combine(
+    downloads,
+    requirementsMet,
+    bookRepository.flow(),
+  ) { downloads, requirementsMet, books ->
+    books
+      .filter { it.id.isRemote }
+      .mapNotNull { book ->
+        val files = book.chapters.mapNotNull { downloads[it.id.value] }
+        if (files.isEmpty()) return@mapNotNull null
+        book.id to files.state(requirementsMet, expectedFiles = book.chapters.size)
+      }
+      .toMap()
   }.distinctUntilChanged()
 
   public val usedBytes: Flow<Long> = downloads.map { downloads ->
@@ -149,8 +163,9 @@ public class AudiobookshelfDownloads internal constructor(
   public suspend fun download(bookId: BookId) {
     if (!bookId.isRemote) return
     val book = bookRepository.get(bookId) ?: return
+    val present = downloads.value
     withContext(Dispatchers.Main) {
-      book.chapters.forEach { chapter ->
+      book.chapters.filter { present[it.id.value]?.state != Download.STATE_COMPLETED }.forEach { chapter ->
         val request = DownloadRequest.Builder(chapter.id.value, chapter.id.value.toUri())
           .setData(bookId.value.encodeToByteArray())
           .build()
@@ -168,6 +183,28 @@ public class AudiobookshelfDownloads internal constructor(
         DownloadService.sendRemoveDownload(context, AudiobookshelfDownloadService::class.java, id, false)
       }
     }
+  }
+
+  /**
+   * Removes the downloads of files that are no longer part of a book on the server, and downloads the new files
+   * of books that were downloaded.
+   */
+  internal suspend fun reconcile() {
+    val books = bookRepository.all().filter { it.id.isRemote }
+    val current = books.flatMap { book -> book.chapters.map { it.id.value } }.toSet()
+    val present = downloads.value
+    val orphans = present.keys - current
+    withContext(Dispatchers.Main) {
+      orphans.forEach { id ->
+        DownloadService.sendRemoveDownload(context, AudiobookshelfDownloadService::class.java, id, false)
+      }
+    }
+    books
+      .filter { book ->
+        val files = book.chapters.map { present[it.id.value] }
+        files.any { it != null } && files.any { it == null }
+      }
+      .forEach { download(it.id) }
   }
 
   public suspend fun removeAll() {
@@ -209,8 +246,11 @@ private fun requirements(overMobileData: Boolean): Requirements {
   return Requirements(if (overMobileData) Requirements.NETWORK else Requirements.NETWORK_UNMETERED)
 }
 
-private fun List<Download>.state(requirementsMet: Boolean): BookDownloadState {
-  if (all { it.state == Download.STATE_COMPLETED }) return BookDownloadState.Downloaded
+private fun List<Download>.state(
+  requirementsMet: Boolean,
+  expectedFiles: Int,
+): BookDownloadState {
+  if (size == expectedFiles && all { it.state == Download.STATE_COMPLETED }) return BookDownloadState.Downloaded
   if (any { it.state == Download.STATE_FAILED }) return BookDownloadState.Failed
   val totalBytes = sumOf { download ->
     when {

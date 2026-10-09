@@ -231,10 +231,10 @@ private fun BookHeader(
 private fun SourceLine(source: BookSource) {
   val (icon, text) = when (source) {
     BookSource.Device -> VoiceIcons.Smartphone to stringResource(StringsR.string.book_source_device)
-    is BookSource.Server -> VoiceIcons.Dns to if (source.downloaded) {
-      stringResource(StringsR.string.book_source_server_downloaded, source.name)
-    } else {
-      source.name
+    is BookSource.Server -> VoiceIcons.Dns to when (source.download) {
+      BookSource.Download.None -> source.name
+      BookSource.Download.WaitingForWifi -> stringResource(StringsR.string.book_source_server_waiting_for_wifi, source.name)
+      BookSource.Download.Done -> stringResource(StringsR.string.book_source_server_downloaded, source.name)
     }
   }
   Row(verticalAlignment = Alignment.CenterVertically) {

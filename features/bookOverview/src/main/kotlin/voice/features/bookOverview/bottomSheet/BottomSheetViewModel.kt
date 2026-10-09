@@ -9,6 +9,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
@@ -56,7 +57,12 @@ class BottomSheetViewModel(
   private suspend fun source(bookId: BookId): BookSource? {
     val serverName = serverLibrary.serverName.first() ?: return null
     return if (bookId.isRemote) {
-      BookSource.Server(name = serverName, downloaded = bookId in serverLibrary.downloadedBooks.first())
+      val download = when (val state = serverLibrary.downloadStates.first()[bookId]) {
+        BookDownloadState.Downloaded -> BookSource.Download.Done
+        is BookDownloadState.Downloading -> if (state.waitingForWifi) BookSource.Download.WaitingForWifi else BookSource.Download.None
+        BookDownloadState.Failed, BookDownloadState.NotDownloaded, null -> BookSource.Download.None
+      }
+      BookSource.Server(name = serverName, download = download)
     } else {
       BookSource.Device
     }

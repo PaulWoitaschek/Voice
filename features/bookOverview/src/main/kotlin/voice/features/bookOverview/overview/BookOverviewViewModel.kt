@@ -19,6 +19,7 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -102,7 +103,7 @@ class BookOverviewViewModel(
     val scannerActive = scanning || syncing
     val unavailableBooks = remember { serverLibrary.unavailableBooks }
       .collectAsState(initial = emptySet()).value
-    val downloadProgress = remember { serverLibrary.downloadProgress }
+    val downloadStates = remember { serverLibrary.downloadStates }
       .collectAsState(initial = emptyMap()).value
     val folderPickerMovedDialogShown = remember { folderPickerMovedDialogShownStore.data }
       .collectAsState(initial = null).value
@@ -149,7 +150,7 @@ class BookOverviewViewModel(
                 currentBookId = currentBookId,
                 livePlaybackState = { livePlaybackState.value },
                 unavailable = book.id in unavailableBooks,
-                downloadProgress = downloadProgress[book.id],
+                downloadProgress = (downloadStates[book.id] as? BookDownloadState.Downloading)?.progress,
               )
             }
         }

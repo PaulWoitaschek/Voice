@@ -62,6 +62,9 @@
     <string name="book.edit.cover.internet">Omslag ophalen van internet</string>
     <string name="book.edit.name.label">Naam</string>
     <string name="book.edit.rename">Naam wijzigen</string>
+    <string name="book.source.device">Op dit apparaat</string>
+    <string name="book.source.server_downloaded">%s · gedownload</string>
+    <string name="book.source.server_waiting_for_wifi">%s · wacht op wifi</string>
     <string name="bookmark.action.add_note">Notitie toevoegen</string>
     <string name="bookmark.add_note_hint">Voeg een notitie toe</string>
     <string name="bookmark.added.snackbar">De bladwijzer is toegevoegd</string>
@@ -216,6 +219,7 @@
     <string name="history.source.headset">Headsetknop</string>
     <string name="history.source.notification">Melding</string>
     <string name="history.source.other_app">Andere app</string>
+    <string name="history.source.other_device">Ander apparaat</string>
     <string name="history.source.sleep_timer">Slaaptimer</string>
     <string name="history.source.unknown">Onbekend</string>
     <string name="history.source.unplugged">Audio losgekoppeld</string>

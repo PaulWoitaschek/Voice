@@ -77,7 +77,7 @@ internal class BookmarkSync(
     onServer.forEach { (key, bookmark) ->
       if (key in local) return@forEach
       if (key in synced) {
-        if (api.deleteBookmark(itemId, bookmark.time.toLong()).isSuccessfulOrGone()) synced -= key
+        if (api.deleteBookmark(itemId, bookmark.time.asPathSegment()).isSuccessfulOrGone()) synced -= key
       } else {
         bookmarkRepo.addBookmark(book.bookmarkAt(bookmark))
         synced[key] = bookmark.title.orEmpty()
@@ -102,8 +102,12 @@ internal class BookmarkSync(
               if (!api.updateBookmark(itemId, request).isSuccessful) return@forEach
               title
             }
-            // both changed it, the server keeps its title and this device keeps its own
-            else -> title
+            // both renamed it, and this device is where the listener is right now
+            else -> {
+              val request = BookmarkRequest(time = book.secondOf(bookmark).toDouble(), title = title)
+              if (!api.updateBookmark(itemId, request).isSuccessful) return@forEach
+              title
+            }
           }
         }
         syncedTitle != null -> {
@@ -125,6 +129,9 @@ internal class BookmarkSync(
 }
 
 private fun Response<Unit>.isSuccessfulOrGone(): Boolean = isSuccessful || code() == 404
+
+// the server finds a bookmark by its exact time, which other apps store with a fraction
+private fun Double.asPathSegment(): String = if (this % 1.0 == 0.0) toLong().toString() else toString()
 
 private fun Book.secondOf(bookmark: Bookmark): Long {
   val chapterStart = chapters.takeWhile { it.id != bookmark.chapterId }.sumOf { it.duration }

@@ -62,6 +62,9 @@
     <string name="book.edit.cover.internet">Omslag från internet</string>
     <string name="book.edit.name.label">Namn</string>
     <string name="book.edit.rename">Byt namn</string>
+    <string name="book.source.device">På den här enheten</string>
+    <string name="book.source.server_downloaded">%s · nedladdad</string>
+    <string name="book.source.server_waiting_for_wifi">%s · väntar på wifi</string>
     <string name="bookmark.action.add_note">Lägg till anteckning</string>
     <string name="bookmark.add_note_hint">Lägg till en anteckning</string>
     <string name="bookmark.added.snackbar">Bokmärke tillagt</string>
@@ -216,6 +219,7 @@
     <string name="history.source.headset">Headsetknapp</string>
     <string name="history.source.notification">Avisering</string>
     <string name="history.source.other_app">En annan app</string>
+    <string name="history.source.other_device">En annan enhet</string>
     <string name="history.source.sleep_timer">Insomningstimer</string>
     <string name="history.source.unknown">Okänd</string>
     <string name="history.source.unplugged">Ljudet kopplades från</string>
