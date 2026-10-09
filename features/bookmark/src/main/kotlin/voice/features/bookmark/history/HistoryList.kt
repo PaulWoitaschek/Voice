@@ -673,6 +673,7 @@ private fun sourceLabel(source: Source): String = stringResource(
     Source.Unplugged -> R.string.history_source_unplugged
     Source.SleepTimer -> R.string.history_source_sleep_timer
     Source.Unknown -> R.string.history_source_unknown
+    Source.OtherDevice -> R.string.history_source_other_device
   },
 )
 
@@ -689,6 +690,7 @@ private fun Source.icon(): ImageVector = when (this) {
   Source.Unplugged -> VoiceIcons.Headphones
   Source.SleepTimer -> VoiceIcons.Bedtime
   Source.Unknown -> VoiceIcons.Help
+  Source.OtherDevice -> VoiceIcons.Devices
 }
 
 private fun HistoryEntry.icon(): ImageVector {

@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
@@ -89,6 +90,7 @@ class PlayerController(
     time: Long,
     id: ChapterId,
     type: ListeningEvent.Type = ListeningEvent.Type.Seek,
+    source: ListeningEvent.Source = ListeningEvent.Source.App,
   ) = executeAfterPrepare { controller ->
     val bookId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
@@ -97,7 +99,7 @@ class PlayerController(
       positionInChapterMs = time,
     )
     if (playbackItem != null) {
-      controller.record(type, to = PlaybackPosition(bookId, id, time))
+      controller.record(type, source, to = PlaybackPosition(bookId, id, time))
       controller.seekTo(playbackItem.index, playbackItem.positionInMediaItem(time))
     }
   }
@@ -112,6 +114,12 @@ class PlayerController(
         }
         controller.pause()
       }
+    }
+  }
+
+  fun pause() {
+    scope.launch {
+      awaitConnect()?.pause()
     }
   }
 
@@ -287,9 +295,10 @@ class PlayerController(
     it.volume = volume
   }
 
-  suspend fun livePlaybackState(bookId: BookId? = null): LivePlaybackState? {
-    val controller = awaitConnect() ?: return null
-    return controller.livePlaybackStateSnapshot(bookId)
+  // the controller only answers on the main thread
+  suspend fun livePlaybackState(bookId: BookId? = null): LivePlaybackState? = withContext(Dispatchers.Main.immediate) {
+    val controller = awaitConnect() ?: return@withContext null
+    controller.livePlaybackStateSnapshot(bookId)
   }
 
   fun livePlaybackStateFlow(bookId: BookId? = null): Flow<LivePlaybackState?> = callbackFlow {

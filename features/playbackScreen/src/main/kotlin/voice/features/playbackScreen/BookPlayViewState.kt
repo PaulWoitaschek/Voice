@@ -29,6 +29,8 @@ data class BookPlayViewState(
   val bookmarkPins: List<BookBarPin>,
   val poppedPin: Int?,
   val jumpBack: JumpBackViewState?,
+  /** A server book that isn't downloaded while the server can't be reached. */
+  val unavailable: Boolean = false,
 ) {
 
   /**

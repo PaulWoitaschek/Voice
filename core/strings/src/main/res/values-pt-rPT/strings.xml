@@ -1,5 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">A transferir %d livro</item>
+        <item quantity="many">A transferir %d livros</item>
+        <item quantity="other">A transferir %d livros</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Pronto para ouvir sem ligação</string>
+    <string name="audiobookshelf.download.notification.retry">Tentar novamente</string>
+    <string name="audiobookshelf.download.notification.stop">Parar</string>
+    <string name="audiobookshelf.download.notification.title">A transferir…</string>
+    <string name="audiobookshelf.downloads.channel">Transferências</string>
+    <string name="audiobookshelf.login.address.action">Continuar</string>
+    <string name="audiobookshelf.login.address.label">Endereço do servidor</string>
+    <string name="audiobookshelf.login.address.subtitle">Ouça os livros do seu próprio servidor. O Voice sincroniza o seu progresso com os seus outros dispositivos.</string>
+    <string name="audiobookshelf.login.address.title">Ligar ao Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">Iniciar sessão</string>
+    <string name="audiobookshelf.login.credentials.no_password">Este servidor só permite o início de sessão único (SSO), que o Voice ainda não suporta. Peça a quem o gere para ativar o início de sessão com palavra-passe.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">Utilize a sua conta em %s.</string>
+    <string name="audiobookshelf.login.credentials.title">Iniciar sessão</string>
+    <string name="audiobookshelf.login.error.certificate">O seu telemóvel não confia no certificado deste servidor.</string>
+    <string name="audiobookshelf.login.error.credentials">O nome de utilizador ou a palavra-passe não estão corretos.</string>
+    <string name="audiobookshelf.login.error.failed">Não foi possível iniciar sessão. Tente novamente.</string>
+    <string name="audiobookshelf.login.error.not_found">O Voice não encontra nenhum servidor Audiobookshelf nesse endereço. Está na rede certa?</string>
+    <string name="audiobookshelf.login.error.not_set_up">Este servidor ainda não está configurado. Conclua primeiro a configuração na respetiva aplicação web.</string>
+    <string name="audiobookshelf.login.error.other_account">Esta é outra conta. Para mudar de conta, termine primeiro a sessão.</string>
+    <string name="audiobookshelf.login.error.too_old">O Voice precisa do Audiobookshelf 2.26 ou mais recente. Este servidor tem a versão %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">O servidor deixou de responder. Tente novamente daqui a pouco.</string>
+    <string name="audiobookshelf.login.libraries.action">Adicionar à minha biblioteca</string>
+    <string name="audiobookshelf.login.libraries.loading">A procurar livros…</string>
+    <string name="audiobookshelf.login.libraries.none">Não há bibliotecas de audiolivros aqui</string>
+    <string name="audiobookshelf.login.libraries.subtitle">Passam a fazer parte da sua biblioteca. Ouça-os já ou transfira-os para ouvir sem ligação.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">%d audiolivro encontrado</item>
+        <item quantity="many">%d audiolivros encontrados</item>
+        <item quantity="other">%d audiolivros encontrados</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d livro</item>
+        <item quantity="many">%1$s · %2$d livros</item>
+        <item quantity="other">%1$s · %2$d livros</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Palavra-passe</string>
+    <string name="audiobookshelf.login.password.hide">Ocultar palavra-passe</string>
+    <string name="audiobookshelf.login.password.show">Mostrar palavra-passe</string>
+    <string name="audiobookshelf.login.username">Nome de utilizador</string>
+    <string name="audiobookshelf.settings.downloads">Transferências</string>
+    <string name="audiobookshelf.settings.downloads.none">Ainda sem livros transferidos</string>
+    <string name="audiobookshelf.settings.downloads.remove">Remover tudo</string>
+    <string name="audiobookshelf.settings.downloads.used">%s neste dispositivo</string>
+    <string name="audiobookshelf.settings.libraries">Bibliotecas</string>
+    <string name="audiobookshelf.settings.mobile_data">Transferir com dados móveis</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Caso contrário, as transferências esperam pelo Wi-Fi</string>
+    <string name="audiobookshelf.settings.sign_in_again">Iniciar sessão</string>
+    <string name="audiobookshelf.settings.sign_out">Terminar sessão</string>
+    <string name="audiobookshelf.settings.signed_in_as">Sessão iniciada como %s</string>
+    <string name="audiobookshelf.settings.try_again">Tentar novamente</string>
+    <string name="audiobookshelf.sign_out.message">Os livros do servidor e as respetivas transferências são removidos deste dispositivo. O seu progresso fica guardado em segurança no servidor.</string>
+    <string name="audiobookshelf.sign_out.title">Terminar sessão em %s?</string>
+    <string name="audiobookshelf.status.connected">Ligação ativa, o seu progresso está sincronizado</string>
+    <string name="audiobookshelf.status.needs_login">O servidor pede que inicie sessão novamente</string>
+    <string name="audiobookshelf.status.offline">Não é possível contactar o servidor neste momento. Pode continuar a ouvir os livros transferidos.</string>
+    <string name="audiobookshelf.status.syncing">A sincronizar…</string>
     <string name="book.category.action.mark_completed">Marcar como Concluído</string>
     <string name="book.category.action.mark_current">Marca com Actual</string>
     <string name="book.category.action.mark_not_started">Marca como não iniciado</string>
@@ -7,10 +68,20 @@
     <string name="book.delete.dialog.confirm_files">Deletar os meus ficheiros</string>
     <string name="book.delete.dialog.message">Isso deletará os ficheiros no seu aparelho.</string>
     <string name="book.delete.dialog.title">Deletar livro</string>
+    <string name="book.download.action">Transferir</string>
+    <string name="book.download.failed">A transferência não foi concluída</string>
+    <string name="book.download.progress">%1$s de %2$s</string>
+    <string name="book.download.remove">Remover transferência</string>
+    <string name="book.download.retry">Transferir novamente</string>
+    <string name="book.download.stop">Parar transferência</string>
+    <string name="book.download.waiting_for_connection">A aguardar ligação</string>
+    <string name="book.download.waiting_for_wifi">A aguardar Wi-Fi</string>
     <string name="book.edit.cover.file">Capa do sistema de arquivo</string>
     <string name="book.edit.cover.internet">Capa da internet</string>
     <string name="book.edit.name.label">Título</string>
     <string name="book.edit.rename">Mudar o nome</string>
+    <string name="book.source.device">Neste dispositivo</string>
+    <string name="book.source.server_downloaded">%s · transferido</string>
     <string name="bookmark.action.add_note">Adicionar nota</string>
     <string name="bookmark.add_note_hint">Adicionar uma nota</string>
     <string name="bookmark.added.snackbar">Marcador adicionado</string>
@@ -78,6 +149,7 @@
         <item quantity="many">%d segundos</item>
         <item quantity="other">%d segundos</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Ligar ao Audiobookshelf</string>
     <string name="folder.add.action.file">Adicionar um único ficheiro</string>
     <string name="folder.add.action.folder">Escolher uma pasta</string>
     <string name="folder.add.subtitle">Escolha a pasta com os seus audiolivros. Pode conter um único livro ou toda a sua biblioteca.</string>
@@ -173,6 +245,7 @@
     <string name="history.source.headset">Botão dos auscultadores</string>
     <string name="history.source.notification">Notificação</string>
     <string name="history.source.other_app">Outra aplicação</string>
+    <string name="history.source.other_device">Outro dispositivo</string>
     <string name="history.source.sleep_timer">Desligamento automático</string>
     <string name="history.source.unknown">Desconhecido</string>
     <string name="history.source.unplugged">Áudio desligado</string>
@@ -187,6 +260,8 @@
     <string name="history.suggestion.started_by.headset">Um botão dos auscultadores iniciou o livro às %1$s</string>
     <string name="history.suggestion.started_by.other_app">Outra aplicação iniciou o livro às %1$s</string>
     <string name="history.suggestion.started_by.watch">O seu relógio iniciou o livro às %1$s</string>
+    <string name="library.book.downloading">A transferir</string>
+    <string name="library.book.offline">Indisponível sem ligação</string>
     <string name="library.category.completed.title">Concluído</string>
     <string name="library.category.current.title">Actual</string>
     <string name="library.category.not_started.title">Não iniciado ainda</string>
@@ -323,6 +398,7 @@
     <string name="settings.auto_sleep_timer.start.label">Definir horário de início</string>
     <string name="settings.auto_sleep_timer.summary">Iniciar um temporizador de sono automaticamente quando a reprodução começa entre %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador de sono automático</string>
+    <string name="settings.library.audiobookshelf.summary">Ouça os livros do seu próprio servidor</string>
     <string name="settings.library.folders.summary">Gerir pastas analisadas para audiolivros</string>
     <string name="settings.library.layout.grid">Grelha</string>
     <string name="settings.library.layout.list">Lista</string>

@@ -1,5 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Laddar ned %d bok</item>
+        <item quantity="other">Laddar ned %d böcker</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Redo att lyssna offline</string>
+    <string name="audiobookshelf.download.notification.retry">Försök igen</string>
+    <string name="audiobookshelf.download.notification.stop">Avbryt</string>
+    <string name="audiobookshelf.download.notification.title">Laddar ned…</string>
+    <string name="audiobookshelf.downloads.channel">Nedladdningar</string>
+    <string name="audiobookshelf.login.address.action">Fortsätt</string>
+    <string name="audiobookshelf.login.address.label">Serveradress</string>
+    <string name="audiobookshelf.login.address.subtitle">Lyssna på böckerna från din egen server. Voice håller reda på var du är, på alla dina enheter.</string>
+    <string name="audiobookshelf.login.address.title">Anslut Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">Logga in</string>
+    <string name="audiobookshelf.login.credentials.no_password">Den här servern tillåter bara enkel inloggning (SSO), och det klarar Voice inte än. Be den som driver servern att aktivera inloggning med lösenord.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">Använd ditt konto på %s.</string>
+    <string name="audiobookshelf.login.credentials.title">Logga in</string>
+    <string name="audiobookshelf.login.error.certificate">Din telefon litar inte på serverns certifikat.</string>
+    <string name="audiobookshelf.login.error.credentials">Användarnamnet eller lösenordet är fel.</string>
+    <string name="audiobookshelf.login.error.failed">Inloggningen fungerade inte. Försök igen.</string>
+    <string name="audiobookshelf.login.error.not_found">Voice når ingen Audiobookshelf-server där. Är du på rätt nätverk?</string>
+    <string name="audiobookshelf.login.error.not_set_up">Den här servern är inte färdigkonfigurerad än. Slutför konfigurationen i webbappen först.</string>
+    <string name="audiobookshelf.login.error.other_account">Det är ett annat konto. Logga ut först för att byta konto.</string>
+    <string name="audiobookshelf.login.error.too_old">Voice kräver Audiobookshelf 2.26 eller senare. Den här servern kör %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">Servern slutade svara. Försök igen om en stund.</string>
+    <string name="audiobookshelf.login.libraries.action">Lägg till i biblioteket</string>
+    <string name="audiobookshelf.login.libraries.loading">Letar efter böcker…</string>
+    <string name="audiobookshelf.login.libraries.none">Inga ljudboksbibliotek här</string>
+    <string name="audiobookshelf.login.libraries.subtitle">De hamnar i ditt bibliotek. Spela dem direkt, eller ladda ned dem för att lyssna offline.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">Vi hittade %d ljudbok</item>
+        <item quantity="other">Vi hittade %d ljudböcker</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d bok</item>
+        <item quantity="other">%1$s · %2$d böcker</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Lösenord</string>
+    <string name="audiobookshelf.login.password.hide">Dölj lösenord</string>
+    <string name="audiobookshelf.login.password.show">Visa lösenord</string>
+    <string name="audiobookshelf.login.username">Användarnamn</string>
+    <string name="audiobookshelf.settings.downloads">Nedladdningar</string>
+    <string name="audiobookshelf.settings.downloads.none">Inga böcker nedladdade än</string>
+    <string name="audiobookshelf.settings.downloads.remove">Ta bort alla</string>
+    <string name="audiobookshelf.settings.downloads.used">%s på den här enheten</string>
+    <string name="audiobookshelf.settings.libraries">Bibliotek</string>
+    <string name="audiobookshelf.settings.mobile_data">Ladda ned via mobildata</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Annars väntar nedladdningar på wifi</string>
+    <string name="audiobookshelf.settings.sign_in_again">Logga in</string>
+    <string name="audiobookshelf.settings.sign_out">Logga ut</string>
+    <string name="audiobookshelf.settings.signed_in_as">Inloggad som %s</string>
+    <string name="audiobookshelf.settings.try_again">Försök igen</string>
+    <string name="audiobookshelf.sign_out.message">Böckerna och deras nedladdningar försvinner från den här enheten. Dina framsteg ligger kvar tryggt på servern.</string>
+    <string name="audiobookshelf.sign_out.title">Logga ut från %s?</string>
+    <string name="audiobookshelf.status.connected">Ansluten, dina framsteg är synkade</string>
+    <string name="audiobookshelf.status.needs_login">Servern vill att du loggar in igen</string>
+    <string name="audiobookshelf.status.offline">Servern går inte att nå just nu. Nedladdade böcker kan fortfarande spelas.</string>
+    <string name="audiobookshelf.status.syncing">Synkroniserar…</string>
     <string name="book.category.action.mark_completed">Markera som färdiglyssnad</string>
     <string name="book.category.action.mark_current">Markera som pågående</string>
     <string name="book.category.action.mark_not_started">Markera som inte påbörjad</string>
@@ -7,10 +65,20 @@
     <string name="book.delete.dialog.confirm_files">Ta bort mina filer</string>
     <string name="book.delete.dialog.message">Detta kommer att radera filerna på din enhet.</string>
     <string name="book.delete.dialog.title">Ta bort bok</string>
+    <string name="book.download.action">Ladda ned</string>
+    <string name="book.download.failed">Nedladdningen blev inte klar</string>
+    <string name="book.download.progress">%1$s av %2$s</string>
+    <string name="book.download.remove">Ta bort nedladdning</string>
+    <string name="book.download.retry">Ladda ned igen</string>
+    <string name="book.download.stop">Avbryt nedladdning</string>
+    <string name="book.download.waiting_for_connection">Väntar på anslutning</string>
+    <string name="book.download.waiting_for_wifi">Väntar på wifi</string>
     <string name="book.edit.cover.file">Omslag från filsystemet</string>
     <string name="book.edit.cover.internet">Omslag från internet</string>
     <string name="book.edit.name.label">Namn</string>
     <string name="book.edit.rename">Byt namn</string>
+    <string name="book.source.device">På den här enheten</string>
+    <string name="book.source.server_downloaded">%s · nedladdad</string>
     <string name="bookmark.action.add_note">Lägg till anteckning</string>
     <string name="bookmark.add_note_hint">Lägg till en anteckning</string>
     <string name="bookmark.added.snackbar">Bokmärke tillagt</string>
@@ -76,6 +144,7 @@
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekunder</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Anslut Audiobookshelf</string>
     <string name="folder.add.action.file">Lägg till en enskild fil i stället</string>
     <string name="folder.add.action.folder">Välj en mapp</string>
     <string name="folder.add.subtitle">Välj mappen med dina ljudböcker. Den kan innehålla en enda bok eller hela ditt bibliotek.</string>
@@ -165,6 +234,7 @@
     <string name="history.source.headset">Headsetknapp</string>
     <string name="history.source.notification">Avisering</string>
     <string name="history.source.other_app">En annan app</string>
+    <string name="history.source.other_device">En annan enhet</string>
     <string name="history.source.sleep_timer">Insomningstimer</string>
     <string name="history.source.unknown">Okänd</string>
     <string name="history.source.unplugged">Ljudet kopplades från</string>
@@ -179,6 +249,8 @@
     <string name="history.suggestion.started_by.headset">En headsetknapp startade boken kl. %1$s</string>
     <string name="history.suggestion.started_by.other_app">En annan app startade boken kl. %1$s</string>
     <string name="history.suggestion.started_by.watch">Din klocka startade boken kl. %1$s</string>
+    <string name="library.book.downloading">Laddar ned</string>
+    <string name="library.book.offline">Inte tillgänglig offline</string>
     <string name="library.category.completed.title">Färdiglyssnade</string>
     <string name="library.category.current.title">Pågående</string>
     <string name="library.category.not_started.title">Inte påbörjade</string>
@@ -310,6 +382,7 @@
     <string name="settings.auto_sleep_timer.start.label">Ange starttid</string>
     <string name="settings.auto_sleep_timer.summary">Starta en insomningstimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatisk insomningstimer</string>
+    <string name="settings.library.audiobookshelf.summary">Strömma böckerna från din egen server</string>
     <string name="settings.library.folders.summary">Hantera mappar som genomsöks efter ljudböcker</string>
     <string name="settings.library.layout.grid">Rutnät</string>
     <string name="settings.library.layout.list">Lista</string>

@@ -20,6 +20,16 @@ public data class BookId(val value: String) {
   }
 }
 
+/**
+ * The scheme of books that live on an Audiobookshelf server instead of the device.
+ */
+public const val AUDIOBOOKSHELF_SCHEME: String = "abs"
+
+/**
+ * Whether the book is streamed from a server rather than found on the device by the scanner.
+ */
+public val BookId.isRemote: Boolean get() = value.startsWith("$AUDIOBOOKSHELF_SCHEME:")
+
 public object BookIdSerializer : KSerializer<BookId> {
 
   override val descriptor: SerialDescriptor

@@ -1,5 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Завантажується %d книга</item>
+        <item quantity="few">Завантажуються %d книги</item>
+        <item quantity="many">Завантажуються %d книг</item>
+        <item quantity="other">Завантажується %d книги</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Можна слухати офлайн</string>
+    <string name="audiobookshelf.download.notification.retry">Повторити</string>
+    <string name="audiobookshelf.download.notification.stop">Зупинити</string>
+    <string name="audiobookshelf.download.notification.title">Завантаження…</string>
+    <string name="audiobookshelf.downloads.channel">Завантаження</string>
+    <string name="audiobookshelf.login.address.action">Продовжити</string>
+    <string name="audiobookshelf.login.address.label">Адреса сервера</string>
+    <string name="audiobookshelf.login.address.subtitle">Слухайте книги зі свого сервера. Voice синхронізує місце, де ви зупинилися, з іншими вашими пристроями.</string>
+    <string name="audiobookshelf.login.address.title">Підключити Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">Увійти</string>
+    <string name="audiobookshelf.login.credentials.no_password">Цей сервер дозволяє лише єдиний вхід (SSO), який Voice поки не підтримує. Попросіть того, хто керує сервером, увімкнути вхід за паролем.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">Використайте свій обліковий запис на %s.</string>
+    <string name="audiobookshelf.login.credentials.title">Вхід</string>
+    <string name="audiobookshelf.login.error.certificate">Ваш телефон не довіряє сертифікату цього сервера.</string>
+    <string name="audiobookshelf.login.error.credentials">Неправильне ім’я користувача або пароль.</string>
+    <string name="audiobookshelf.login.error.failed">Не вдалося увійти. Спробуйте ще раз.</string>
+    <string name="audiobookshelf.login.error.not_found">Voice не знаходить за цією адресою сервер Audiobookshelf. Ви підключені до потрібної мережі?</string>
+    <string name="audiobookshelf.login.error.not_set_up">Цей сервер ще не налаштовано. Спершу завершіть налаштування в його вебзастосунку.</string>
+    <string name="audiobookshelf.login.error.other_account">Це інший обліковий запис. Щоб змінити обліковий запис, спершу вийдіть.</string>
+    <string name="audiobookshelf.login.error.too_old">Для Voice потрібен Audiobookshelf 2.26 або новіший. На цьому сервері встановлено версію %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">Сервер перестав відповідати. Спробуйте ще раз трохи згодом.</string>
+    <string name="audiobookshelf.login.libraries.action">Додати до бібліотеки</string>
+    <string name="audiobookshelf.login.libraries.loading">Шукаємо книги…</string>
+    <string name="audiobookshelf.login.libraries.none">Тут немає бібліотек аудіокниг</string>
+    <string name="audiobookshelf.login.libraries.subtitle">Вони з’являться у вашій бібліотеці. Слухайте одразу або завантажте, щоб слухати без інтернету.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">Ми знайшли %d аудіокнигу</item>
+        <item quantity="few">Ми знайшли %d аудіокниги</item>
+        <item quantity="many">Ми знайшли %d аудіокниг</item>
+        <item quantity="other">Ми знайшли %d аудіокниг</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d книга</item>
+        <item quantity="few">%1$s · %2$d книги</item>
+        <item quantity="many">%1$s · %2$d книг</item>
+        <item quantity="other">%1$s · %2$d книг</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Пароль</string>
+    <string name="audiobookshelf.login.password.hide">Сховати пароль</string>
+    <string name="audiobookshelf.login.password.show">Показати пароль</string>
+    <string name="audiobookshelf.login.username">Ім’я користувача</string>
+    <string name="audiobookshelf.settings.downloads">Завантаження</string>
+    <string name="audiobookshelf.settings.downloads.none">Завантажених книг ще немає</string>
+    <string name="audiobookshelf.settings.downloads.remove">Видалити все</string>
+    <string name="audiobookshelf.settings.downloads.used">%s на цьому пристрої</string>
+    <string name="audiobookshelf.settings.libraries">Бібліотеки</string>
+    <string name="audiobookshelf.settings.mobile_data">Завантажувати через мобільні дані</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Інакше завантаження чекає на Wi-Fi</string>
+    <string name="audiobookshelf.settings.sign_in_again">Увійти</string>
+    <string name="audiobookshelf.settings.sign_out">Вийти</string>
+    <string name="audiobookshelf.settings.signed_in_as">Ви ввійшли як %s</string>
+    <string name="audiobookshelf.settings.try_again">Повторити</string>
+    <string name="audiobookshelf.sign_out.message">Книги з цього сервера та їхні завантаження зникнуть із пристрою. Ваш прогрес надійно збережеться на сервері.</string>
+    <string name="audiobookshelf.sign_out.title">Вийти з %s?</string>
+    <string name="audiobookshelf.status.connected">Підключено, прогрес синхронізовано</string>
+    <string name="audiobookshelf.status.needs_login">Сервер просить увійти знову</string>
+    <string name="audiobookshelf.status.offline">Сервер зараз недоступний. Завантажені книги можна слухати й далі.</string>
+    <string name="audiobookshelf.status.syncing">Синхронізація…</string>
     <string name="book.category.action.mark_completed">Позначити як завершене</string>
     <string name="book.category.action.mark_current">Позначити як поточне</string>
     <string name="book.category.action.mark_not_started">Позначити як ще не почате</string>
@@ -7,10 +71,20 @@
     <string name="book.delete.dialog.confirm_files">Видалити мої файли</string>
     <string name="book.delete.dialog.message">Файли на вашому пристрої буде видалено.</string>
     <string name="book.delete.dialog.title">Видалити книгу</string>
+    <string name="book.download.action">Завантажити</string>
+    <string name="book.download.failed">Завантаження не завершилося</string>
+    <string name="book.download.progress">%1$s з %2$s</string>
+    <string name="book.download.remove">Видалити завантаження</string>
+    <string name="book.download.retry">Завантажити знову</string>
+    <string name="book.download.stop">Зупинити завантаження</string>
+    <string name="book.download.waiting_for_connection">Очікування підключення</string>
+    <string name="book.download.waiting_for_wifi">Очікування Wi-Fi</string>
     <string name="book.edit.cover.file">Обкладинка з файлу</string>
     <string name="book.edit.cover.internet">Обкладинка з Інтернету</string>
     <string name="book.edit.name.label">Назва</string>
     <string name="book.edit.rename">Перейменувати</string>
+    <string name="book.source.device">На цьому пристрої</string>
+    <string name="book.source.server_downloaded">%s · завантажено</string>
     <string name="bookmark.action.add_note">Додати нотатку</string>
     <string name="bookmark.add_note_hint">Додайте нотатку</string>
     <string name="bookmark.added.snackbar">Закладку додано</string>
@@ -80,6 +154,7 @@
         <item quantity="many">%d секунд</item>
         <item quantity="other">%d секунд</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Підключити Audiobookshelf</string>
     <string name="folder.add.action.file">Натомість додати один файл</string>
     <string name="folder.add.action.folder">Вибрати папку</string>
     <string name="folder.add.subtitle">Виберіть папку з аудіокнигами. У ній може бути одна книга або вся ваша бібліотека.</string>
@@ -181,6 +256,7 @@
     <string name="history.source.headset">Кнопка гарнітури</string>
     <string name="history.source.notification">Сповіщення</string>
     <string name="history.source.other_app">Інший додаток</string>
+    <string name="history.source.other_device">Інший пристрій</string>
     <string name="history.source.sleep_timer">Таймер сну</string>
     <string name="history.source.unknown">Невідомо</string>
     <string name="history.source.unplugged">Аудіопристрій від’єднано</string>
@@ -195,6 +271,8 @@
     <string name="history.suggestion.started_by.headset">Кнопка гарнітури запустила книгу о %1$s</string>
     <string name="history.suggestion.started_by.other_app">Інший додаток запустив книгу о %1$s</string>
     <string name="history.suggestion.started_by.watch">Ваш годинник запустив книгу о %1$s</string>
+    <string name="library.book.downloading">Завантажується</string>
+    <string name="library.book.offline">Недоступно офлайн</string>
     <string name="library.category.completed.title">Завершені</string>
     <string name="library.category.current.title">Поточні</string>
     <string name="library.category.not_started.title">Ще не початі</string>
@@ -336,6 +414,7 @@
     <string name="settings.auto_sleep_timer.start.label">Час початку</string>
     <string name="settings.auto_sleep_timer.summary">Автоматично запустити таймер сну, коли програш починається між %1$s та %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматичний таймер сну</string>
+    <string name="settings.library.audiobookshelf.summary">Слухайте книги просто зі свого сервера</string>
     <string name="settings.library.folders.summary">Налаштування папок, які скануються для пошуку аудіокних</string>
     <string name="settings.library.layout.grid">Сітка</string>
     <string name="settings.library.layout.list">Список</string>

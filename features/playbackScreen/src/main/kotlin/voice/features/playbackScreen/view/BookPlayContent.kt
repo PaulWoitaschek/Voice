@@ -132,6 +132,7 @@ internal fun BookPlayContent(
         clock = clock,
         onSeek = onSeek,
         jumpBack = viewState.jumpBack,
+        unavailable = viewState.unavailable,
         onJumpBack = onJumpBack,
         onJumpBackExpire = onJumpBackExpire,
         modifier = Modifier

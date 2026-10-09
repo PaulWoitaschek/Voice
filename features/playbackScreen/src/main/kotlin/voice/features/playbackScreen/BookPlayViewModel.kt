@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.Book
@@ -85,6 +86,7 @@ class BookPlayViewModel(
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   private val historyRecorder: ListeningHistoryRecorder,
   private val clock: Clock,
+  private val serverLibrary: ServerLibrary,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -154,6 +156,7 @@ class BookPlayViewModel(
       ?.sortedBy { book.positionOf(it) }
       ?: return null
     val lastJump = remember { historyRecorder.lastJump }.collectAsState().value
+    val unavailableBooks = remember { serverLibrary.unavailableBooks }.collectAsState(initial = emptySet()).value
     return BookPlayViewState(
       sleepTimerState = sleepTime.toViewState(),
       playing = isPlaying,
@@ -182,6 +185,7 @@ class BookPlayViewModel(
       },
       poppedPin = addedBookmark.value?.let { added -> bookmarks.indexOfFirst { it.id == added } }?.takeIf { it >= 0 },
       jumpBack = lastJump?.let { jumpBackViewState(book, it, chapterNumber) },
+      unavailable = book.id in unavailableBooks,
     )
   }
 

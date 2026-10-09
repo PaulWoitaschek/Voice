@@ -18,12 +18,14 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
+import voice.features.bookOverview.FakeServerLibrary
 import voice.features.bookOverview.book
 import voice.features.bookOverview.chapter
 import voice.features.bookOverview.overview.BookOverviewCategory
@@ -33,7 +35,9 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BottomSheetViewModelTest {
@@ -42,10 +46,13 @@ class BottomSheetViewModelTest {
 
   private val book = book(chapters = listOf(chapter(duration = 10_000), chapter(duration = 10_000)), time = 0)
   private val storedBook = MutableStateFlow<Book?>(book)
+  private val serverBook = book.let { it.copy(content = it.content.copy(id = BookId("abs://item/1"))) }
+  private val serverLibrary = FakeServerLibrary(serverName = MutableStateFlow("audiobooks.example.com"))
   private val livePlaybackState = MutableStateFlow<LivePlaybackState?>(null)
 
   private val repo = mockk<BookRepository> {
     every { flow(book.id) } returns storedBook
+    every { flow(serverBook.id) } returns MutableStateFlow(serverBook)
   }
   private val playerController = mockk<PlayerController> {
     every { livePlaybackStateFlow(book.id) } returns livePlaybackState
@@ -144,6 +151,59 @@ class BottomSheetViewModelTest {
   }
 
   @Test
+  fun `a server book offers the download that fits its state while the sheet is open`() = runTest(dispatcher) {
+    viewModel(bookId = serverBook.id).test {
+      assertEquals(listOf(BottomSheetItem.Title, BottomSheetItem.Download), awaitLoaded().items)
+
+      val downloading = BookDownloadState.Downloading(progress = 0.5F, downloadedBytes = 5, totalBytes = 10, waitingFor = null)
+      serverLibrary.downloadStates.value = mapOf(serverBook.id to downloading)
+      val state = awaitItem()!!
+      assertEquals(listOf(BottomSheetItem.Title, BottomSheetItem.StopDownload), state.items)
+      assertEquals(downloading, state.download)
+
+      serverLibrary.downloadStates.value = mapOf(serverBook.id to BookDownloadState.Failed)
+      assertEquals(
+        listOf(BottomSheetItem.Title, BottomSheetItem.RetryDownload, BottomSheetItem.RemoveDownload),
+        awaitItem()!!.items,
+      )
+    }
+  }
+
+  @Test
+  fun `a book on the device shows where it comes from once a server is connected`() = runTest(dispatcher) {
+    viewModel().test {
+      val state = awaitLoaded()
+      assertEquals(BookSource.Device, state.source)
+      assertNull(state.download)
+    }
+  }
+
+  @Test
+  fun `stopping a download removes it`() = runTest(dispatcher) {
+    val viewModel = bottomSheetViewModel(bookId = serverBook.id)
+
+    viewModel.onItemClick(BottomSheetItem.Download)
+    viewModel.onItemClick(BottomSheetItem.StopDownload)
+
+    assertEquals(listOf(serverBook.id), serverLibrary.downloads)
+    assertEquals(listOf(serverBook.id), serverLibrary.removedDownloads)
+  }
+
+  @Test
+  fun `voice asks for notifications at the first download only`() = runTest(dispatcher) {
+    viewModel(bookId = serverBook.id).test {
+      assertTrue(awaitLoaded().askForNotifications)
+    }
+
+    bottomSheetViewModel(bookId = serverBook.id).onAskedForNotifications()
+    runCurrent()
+
+    viewModel(bookId = serverBook.id).test {
+      assertFalse(awaitLoaded().askForNotifications)
+    }
+  }
+
+  @Test
   fun `closing removes the menu of the book`() = runTest(dispatcher) {
     bottomSheetViewModel().onClose()
 
@@ -153,17 +213,22 @@ class BottomSheetViewModelTest {
   private fun bottomSheetViewModel(
     itemViewModels: Set<BottomSheetItemViewModel> = setOf(itemViewModel),
     experimentalPlaybackPersistence: Boolean = false,
+    bookId: BookId = book.id,
   ) = BottomSheetViewModel(
-    bookId = book.id,
+    bookId = bookId,
     viewModels = itemViewModels,
     repo = repo,
+    serverLibrary = serverLibrary,
     navigator = navigator,
     playerController = playerController,
     experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),
   )
 
-  private fun TestScope.viewModel(experimentalPlaybackPersistence: Boolean = false): StateFlow<EditBookBottomSheetState?> {
-    val viewModel = bottomSheetViewModel(experimentalPlaybackPersistence = experimentalPlaybackPersistence)
+  private fun TestScope.viewModel(
+    experimentalPlaybackPersistence: Boolean = false,
+    bookId: BookId = book.id,
+  ): StateFlow<EditBookBottomSheetState?> {
+    val viewModel = bottomSheetViewModel(experimentalPlaybackPersistence = experimentalPlaybackPersistence, bookId = bookId)
     return backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.state()
     }

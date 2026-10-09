@@ -112,6 +112,16 @@ object FeatureFlagBindingContainer {
   }
 
   @Provides
+  @SingleIn(AppScope::class)
+  @AudiobookshelfFeatureFlagQualifier
+  fun audiobookshelfFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
+    return factory.boolean(
+      key = "audiobookshelf",
+      description = "Lets listeners connect an Audiobookshelf server. A server that is connected stays, also when this is off.",
+    )
+  }
+
+  @Provides
   @ElementsIntoSet
   fun featureFlags(
     @ReviewEnabledFeatureFlagQualifier reviewEnabled: FeatureFlag<Boolean>,
@@ -122,6 +132,7 @@ object FeatureFlagBindingContainer {
     @KioskModeFeatureFlagQualifier kioskMode: FeatureFlag<Boolean>,
     @SupportDevelopmentFeatureFlagQualifier supportDevelopment: FeatureFlag<Boolean>,
     @SupporterNoteFeatureFlagQualifier supporterNote: FeatureFlag<String>,
+    @AudiobookshelfFeatureFlagQualifier audiobookshelf: FeatureFlag<Boolean>,
   ): Set<FeatureFlag<*>> = setOf(
     reviewEnabled,
     reviewPromptForce,
@@ -131,6 +142,7 @@ object FeatureFlagBindingContainer {
     kioskMode,
     supportDevelopment,
     supporterNote,
+    audiobookshelf,
   )
 }
 
@@ -160,3 +172,6 @@ annotation class SupportDevelopmentFeatureFlagQualifier
 
 @Qualifier
 annotation class SupporterNoteFeatureFlagQualifier
+
+@Qualifier
+annotation class AudiobookshelfFeatureFlagQualifier

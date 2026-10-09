@@ -3,8 +3,10 @@ package voice.core.playback.di
 import android.content.Context
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionParameters
+import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
@@ -19,6 +21,7 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import voice.core.data.AUDIOBOOKSHELF_SCHEME
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.Media3AudioOffloadFeatureFlagQualifier
 import voice.core.playback.history.AutomaticPauseRecorder
@@ -42,8 +45,12 @@ object PlaybackModule {
 
   @Provides
   @SingleIn(PlaybackScope::class)
-  fun mediaSourceFactory(context: Context): MediaSource.Factory {
-    val dataSourceFactory = DefaultDataSource.Factory(context)
+  fun mediaSourceFactory(
+    context: Context,
+    @RemoteMediaDataSource remoteDataSourceFactory: DataSource.Factory,
+  ): MediaSource.Factory {
+    // schemes the default data source doesn't know, like the ids of server books, go to the remote one
+    val dataSourceFactory = DefaultDataSource.Factory(context, remoteDataSourceFactory)
     val extractorsFactory = DefaultExtractorsFactory()
       .setConstantBitrateSeekingEnabled(true)
     return DefaultMediaSourceFactory(dataSourceFactory, extractorsFactory)
@@ -95,6 +102,18 @@ object PlaybackModule {
         player.onAudioSessionIdChanged {
           volumeGain.audioSessionId = it
         }
+        player.addListener(
+          object : Player.Listener {
+            // a server book streams, and over Wi-Fi that needs the Wi-Fi to stay awake while the screen is off
+            override fun onMediaItemTransition(
+              mediaItem: MediaItem?,
+              reason: Int,
+            ) {
+              val streams = mediaItem?.localConfiguration?.uri?.scheme == AUDIOBOOKSHELF_SCHEME
+              player.setWakeMode(if (streams) C.WAKE_MODE_NETWORK else C.WAKE_MODE_LOCAL)
+            }
+          },
+        )
       }
   }
 

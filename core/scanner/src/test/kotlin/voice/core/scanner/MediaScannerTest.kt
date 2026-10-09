@@ -10,6 +10,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
+import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.folders.FolderType
@@ -177,6 +178,37 @@ class MediaScannerTest {
       BookContentView(book1, chapters = book1Chapters),
       BookContentView(book2, chapters = book2Chapters),
     )
+  }
+
+  @Test
+  fun `books on a server stay active when the scan doesn't find them`() = test {
+    val audiobookFolder = folder("audiobooks")
+    audioFile(File(audiobookFolder, "book"), "1.mp3")
+    val serverChapter = ChapterId("abs://item/remote/track/1/ino")
+    val serverBook = BookContent(
+      id = BookId("abs://item/remote"),
+      playbackSpeed = 1F,
+      skipSilence = false,
+      isActive = true,
+      lastPlayedAt = Instant.EPOCH,
+      author = null,
+      name = "On the server",
+      addedAt = Instant.EPOCH,
+      chapters = listOf(serverChapter),
+      currentChapter = serverChapter,
+      positionInChapter = 0,
+      cover = null,
+      gain = 0F,
+      genre = null,
+      narrator = null,
+      series = null,
+      part = null,
+    )
+    bookContentRepo.put(serverBook)
+
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = true, actual = bookContentRepo.get(serverBook.id)!!.isActive)
   }
 
   @Test

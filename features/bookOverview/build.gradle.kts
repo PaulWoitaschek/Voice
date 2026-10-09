@@ -14,7 +14,9 @@ dependencies {
   implementation(projects.core.data.api)
   implementation(projects.core.scanner)
   implementation(projects.core.featureflag)
+  implementation(projects.core.audiobookshelf)
 
+  implementation(libs.androidxCore)
   implementation(libs.lifecycle)
   implementation(libs.documentFile)
   implementation(libs.navigation3.ui)

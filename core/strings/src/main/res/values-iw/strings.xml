@@ -1,5 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">%d ספר בהורדה</item>
+        <item quantity="two">%d ספרים בהורדה</item>
+        <item quantity="other">%d ספרים בהורדה</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">מוכן להאזנה בלי חיבור</string>
+    <string name="audiobookshelf.download.notification.retry">ניסיון חוזר</string>
+    <string name="audiobookshelf.download.notification.stop">עצירה</string>
+    <string name="audiobookshelf.download.notification.title">מתבצעת הורדה…</string>
+    <string name="audiobookshelf.downloads.channel">הורדות</string>
+    <string name="audiobookshelf.login.address.action">המשך</string>
+    <string name="audiobookshelf.login.address.label">כתובת השרת</string>
+    <string name="audiobookshelf.login.address.subtitle">האזינו לספרים שבשרת שלכם. עם Voice, המקום שלכם בספר מסונכרן בין כל המכשירים.</string>
+    <string name="audiobookshelf.login.address.title">חיבור ל-Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">כניסה</string>
+    <string name="audiobookshelf.login.credentials.no_password">השרת הזה מאפשר רק כניסה יחידה (SSO), שעדיין אין לה תמיכה ב-Voice. בקשו ממנהלי השרת להפעיל כניסה עם סיסמה.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">היכנסו עם החשבון שלכם ב-%s.</string>
+    <string name="audiobookshelf.login.credentials.title">כניסה</string>
+    <string name="audiobookshelf.login.error.certificate">הטלפון שלכם לא סומך על אישור האבטחה של השרת הזה.</string>
+    <string name="audiobookshelf.login.error.credentials">שם המשתמש או הסיסמה שגויים.</string>
+    <string name="audiobookshelf.login.error.failed">הכניסה לא הצליחה. נסו שוב.</string>
+    <string name="audiobookshelf.login.error.not_found">לא נמצא שרת Audiobookshelf בכתובת הזו. האם אתם מחוברים לרשת הנכונה?</string>
+    <string name="audiobookshelf.login.error.not_set_up">השרת הזה עדיין לא הוגדר. השלימו קודם את ההגדרה בממשק האינטרנט שלו.</string>
+    <string name="audiobookshelf.login.error.other_account">זה חשבון אחר. כדי להחליף חשבון, צריך לצאת קודם.</string>
+    <string name="audiobookshelf.login.error.too_old">ל-Voice נדרש Audiobookshelf בגרסה 2.26 ומעלה. בשרת הזה פועלת גרסה %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">השרת הפסיק להגיב. נסו שוב בעוד רגע.</string>
+    <string name="audiobookshelf.login.libraries.action">הוספה לספרייה שלי</string>
+    <string name="audiobookshelf.login.libraries.loading">מחפשים ספרים…</string>
+    <string name="audiobookshelf.login.libraries.none">אין כאן ספריות של קולספרים</string>
+    <string name="audiobookshelf.login.libraries.subtitle">הם יתווספו לספרייה שלכם. אפשר להאזין להם מיד, או להוריד אותם להאזנה בלי חיבור.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">נמצא %d קולספר</item>
+        <item quantity="two">נמצאו %d קולספרים</item>
+        <item quantity="other">נמצאו %d קולספרים</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d ספר</item>
+        <item quantity="two">%1$s · %2$d ספרים</item>
+        <item quantity="other">%1$s · %2$d ספרים</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">סיסמה</string>
+    <string name="audiobookshelf.login.password.hide">הסתרת הסיסמה</string>
+    <string name="audiobookshelf.login.password.show">הצגת הסיסמה</string>
+    <string name="audiobookshelf.login.username">שם משתמש</string>
+    <string name="audiobookshelf.settings.downloads">הורדות</string>
+    <string name="audiobookshelf.settings.downloads.none">עדיין לא הורדו ספרים</string>
+    <string name="audiobookshelf.settings.downloads.remove">הסרת הכול</string>
+    <string name="audiobookshelf.settings.downloads.used">%s במכשיר הזה</string>
+    <string name="audiobookshelf.settings.libraries">ספריות</string>
+    <string name="audiobookshelf.settings.mobile_data">הורדה בחבילת גלישה</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">אחרת ההורדות ימתינו ל-Wi-Fi</string>
+    <string name="audiobookshelf.settings.sign_in_again">כניסה</string>
+    <string name="audiobookshelf.settings.sign_out">יציאה</string>
+    <string name="audiobookshelf.settings.signed_in_as">מחוברים בתור %s</string>
+    <string name="audiobookshelf.settings.try_again">ניסיון חוזר</string>
+    <string name="audiobookshelf.sign_out.message">הספרים שלו וההורדות שלהם יוסרו מהמכשיר הזה. ההתקדמות שלכם נשמרת בבטחה בשרת.</string>
+    <string name="audiobookshelf.sign_out.title">לצאת מ-%s?</string>
+    <string name="audiobookshelf.status.connected">מחובר, ההתקדמות שלכם מסונכרנת</string>
+    <string name="audiobookshelf.status.needs_login">השרת מבקש שתיכנסו שוב</string>
+    <string name="audiobookshelf.status.offline">אין כרגע חיבור לשרת. ספרים שהורדו ממשיכים להתנגן.</string>
+    <string name="audiobookshelf.status.syncing">סנכרון…</string>
     <string name="book.category.action.mark_completed">סימון כהושלם</string>
     <string name="book.category.action.mark_current">סימון כנוכחי</string>
     <string name="book.category.action.mark_not_started">סימון כ\"לא שמעתי עדיין\"</string>
@@ -7,10 +68,20 @@
     <string name="book.delete.dialog.confirm_files">מחיקת הקבצים שלי</string>
     <string name="book.delete.dialog.message">פעולה זו תמחק את הקבצים במכשיר שלכם.</string>
     <string name="book.delete.dialog.title">מחיקת ספר</string>
+    <string name="book.download.action">הורדה</string>
+    <string name="book.download.failed">ההורדה לא הושלמה</string>
+    <string name="book.download.progress">%1$s מתוך %2$s</string>
+    <string name="book.download.remove">הסרת ההורדה</string>
+    <string name="book.download.retry">הורדה חוזרת</string>
+    <string name="book.download.stop">עצירת ההורדה</string>
+    <string name="book.download.waiting_for_connection">בהמתנה לחיבור</string>
+    <string name="book.download.waiting_for_wifi">בהמתנה ל-Wi-Fi</string>
     <string name="book.edit.cover.file">עטיפות מקובץ קיים</string>
     <string name="book.edit.cover.internet">עטיפות מהאינטרנט</string>
     <string name="book.edit.name.label">שם</string>
     <string name="book.edit.rename">שינוי שם</string>
+    <string name="book.source.device">במכשיר הזה</string>
+    <string name="book.source.server_downloaded">%s · ההורדה הושלמה</string>
     <string name="bookmark.action.add_note">הוספת הערה</string>
     <string name="bookmark.add_note_hint">הוספת הערה</string>
     <string name="bookmark.added.snackbar">סימנייה נוספה</string>
@@ -78,6 +149,7 @@
         <item quantity="two">%d שניות</item>
         <item quantity="other">%d שניות</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">חיבור ל-Audiobookshelf</string>
     <string name="folder.add.action.file">הוספת קובץ בודד במקום זאת</string>
     <string name="folder.add.action.folder">בחירת תיקייה</string>
     <string name="folder.add.subtitle">בחרו את התיקייה עם הקולספרים שלכם. היא יכולה להכיל ספר אחד או את כל הספרייה שלכם.</string>
@@ -173,6 +245,7 @@
     <string name="history.source.headset">כפתור באוזניות</string>
     <string name="history.source.notification">התראה</string>
     <string name="history.source.other_app">אפליקציה אחרת</string>
+    <string name="history.source.other_device">מכשיר אחר</string>
     <string name="history.source.sleep_timer">טיימר-שינה</string>
     <string name="history.source.unknown">לא ידוע</string>
     <string name="history.source.unplugged">השמע נותק</string>
@@ -187,6 +260,8 @@
     <string name="history.suggestion.started_by.headset">כפתור באוזניות הפעיל את הספר ב-%1$s</string>
     <string name="history.suggestion.started_by.other_app">אפליקציה אחרת הפעילה את הספר ב-%1$s</string>
     <string name="history.suggestion.started_by.watch">השעון שלכם הפעיל את הספר ב-%1$s</string>
+    <string name="library.book.downloading">בהורדה</string>
+    <string name="library.book.offline">לא זמין אופליין</string>
     <string name="library.category.completed.title">הושלמו</string>
     <string name="library.category.current.title">נוכחי</string>
     <string name="library.category.not_started.title">לא שמעתי עדיין</string>
@@ -323,6 +398,7 @@
     <string name="settings.auto_sleep_timer.start.label">בחירת זמן התחלה</string>
     <string name="settings.auto_sleep_timer.summary">הפעלה אוטומטית של טיימר-השינה כשההשמעה מתחילה בין %1$s ל-%2$s</string>
     <string name="settings.auto_sleep_timer.title">טיימר-שינה אוטומטי</string>
+    <string name="settings.library.audiobookshelf.summary">הזרמת הספרים מהשרת שלכם</string>
     <string name="settings.library.folders.summary">ניהול תיקיות שנסרקות עבור ספרי שמע</string>
     <string name="settings.library.layout.grid">רשת</string>
     <string name="settings.library.layout.list">רשימה</string>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The login to an Audiobookshelf server stays out of the backup. So does the index of the downloaded server books,
+  as their audio isn't backed up and a restored index would claim they are downloaded.
+-->
+<full-backup-content>
+  <exclude domain="file" path="audiobookshelf/account.json" />
+  <exclude domain="database" path="exoplayer_internal.db" />
+  <exclude domain="database" path="exoplayer_internal.db-journal" />
+  <exclude domain="database" path="exoplayer_internal.db-wal" />
+  <exclude domain="database" path="exoplayer_internal.db-shm" />
+</full-backup-content>

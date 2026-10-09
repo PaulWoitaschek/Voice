@@ -1,5 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">در حال دانلود %d کتاب</item>
+        <item quantity="other">در حال دانلود %d کتاب</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">آمادهٔ گوش دادن آفلاین</string>
+    <string name="audiobookshelf.download.notification.retry">تلاش مجدد</string>
+    <string name="audiobookshelf.download.notification.stop">توقف</string>
+    <string name="audiobookshelf.download.notification.title">در حال دانلود…</string>
+    <string name="audiobookshelf.downloads.channel">دانلودها</string>
+    <string name="audiobookshelf.login.address.action">ادامه</string>
+    <string name="audiobookshelf.login.address.label">نشانی سرور</string>
+    <string name="audiobookshelf.login.address.subtitle">به کتاب‌های سرور خودتان گوش دهید. Voice جای شما را با دستگاه‌های دیگرتان هماهنگ نگه می‌دارد.</string>
+    <string name="audiobookshelf.login.address.title">اتصال به Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">ورود</string>
+    <string name="audiobookshelf.login.credentials.no_password">این سرور فقط ورود یکپارچه (SSO) را می‌پذیرد که Voice هنوز از آن پشتیبانی نمی‌کند. از مدیر سرور بخواهید ورود با رمز عبور را فعال کند.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">با حساب خود در %s وارد شوید.</string>
+    <string name="audiobookshelf.login.credentials.title">ورود</string>
+    <string name="audiobookshelf.login.error.certificate">گوشی شما به گواهی این سرور اعتماد ندارد.</string>
+    <string name="audiobookshelf.login.error.credentials">نام کاربری یا رمز عبور درست نیست.</string>
+    <string name="audiobookshelf.login.error.failed">ورود انجام نشد. دوباره امتحان کنید.</string>
+    <string name="audiobookshelf.login.error.not_found">Voice نمی‌تواند در این نشانی سرور Audiobookshelf را پیدا کند. به شبکهٔ درست وصل هستید؟</string>
+    <string name="audiobookshelf.login.error.not_set_up">این سرور هنوز راه‌اندازی نشده است. اول راه‌اندازی را در نسخهٔ وب آن تمام کنید.</string>
+    <string name="audiobookshelf.login.error.other_account">این حساب دیگری است. برای تغییر حساب، اول از حساب خارج شوید.</string>
+    <string name="audiobookshelf.login.error.too_old">Voice به Audiobookshelf نسخهٔ 2.26 یا جدیدتر نیاز دارد. نسخهٔ این سرور %s است.</string>
+    <string name="audiobookshelf.login.error.unreachable">سرور دیگر پاسخ نمی‌دهد. چند لحظهٔ دیگر دوباره امتحان کنید.</string>
+    <string name="audiobookshelf.login.libraries.action">افزودن به کتابخانهٔ من</string>
+    <string name="audiobookshelf.login.libraries.loading">در حال جستجوی کتاب‌ها…</string>
+    <string name="audiobookshelf.login.libraries.none">اینجا هیچ کتابخانهٔ کتاب صوتی نیست</string>
+    <string name="audiobookshelf.login.libraries.subtitle">این کتاب‌ها به کتابخانهٔ شما اضافه می‌شوند. همین حالا پخششان کنید یا دانلودشان کنید تا آفلاین گوش دهید.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">%d کتاب صوتی پیدا شد</item>
+        <item quantity="other">%d کتاب صوتی پیدا شد</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d کتاب</item>
+        <item quantity="other">%1$s · %2$d کتاب</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">رمز عبور</string>
+    <string name="audiobookshelf.login.password.hide">پنهان کردن رمز عبور</string>
+    <string name="audiobookshelf.login.password.show">نمایش رمز عبور</string>
+    <string name="audiobookshelf.login.username">نام کاربری</string>
+    <string name="audiobookshelf.settings.downloads">دانلودها</string>
+    <string name="audiobookshelf.settings.downloads.none">هنوز هیچ کتابی دانلود نشده</string>
+    <string name="audiobookshelf.settings.downloads.remove">حذف همه</string>
+    <string name="audiobookshelf.settings.downloads.used">%s در این دستگاه</string>
+    <string name="audiobookshelf.settings.libraries">کتابخانه‌ها</string>
+    <string name="audiobookshelf.settings.mobile_data">دانلود با دادهٔ تلفن همراه</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">در غیر این صورت، دانلودها منتظر Wi-Fi می‌مانند</string>
+    <string name="audiobookshelf.settings.sign_in_again">ورود</string>
+    <string name="audiobookshelf.settings.sign_out">خروج از حساب</string>
+    <string name="audiobookshelf.settings.signed_in_as">واردشده به‌عنوان %s</string>
+    <string name="audiobookshelf.settings.try_again">تلاش مجدد</string>
+    <string name="audiobookshelf.sign_out.message">کتاب‌های این سرور و دانلودهایشان از این دستگاه حذف می‌شوند. پیشرفت شما روی سرور محفوظ می‌ماند.</string>
+    <string name="audiobookshelf.sign_out.title">از %s خارج می‌شوید؟</string>
+    <string name="audiobookshelf.status.connected">متصل، پیشرفت شما همگام است</string>
+    <string name="audiobookshelf.status.needs_login">سرور می‌خواهد دوباره وارد شوید</string>
+    <string name="audiobookshelf.status.offline">فعلاً دسترسی به سرور ممکن نیست. کتاب‌های دانلودشده همچنان پخش می‌شوند.</string>
+    <string name="audiobookshelf.status.syncing">در حال همگام‌سازی…</string>
     <string name="book.category.action.mark_completed">علامت زدن به عنوان تکمیل شده</string>
     <string name="book.category.action.mark_current">علامت زدن به عنوان جاری</string>
     <string name="book.category.action.mark_not_started">علامت زدن به عنوان شروع نشده</string>
@@ -7,10 +65,20 @@
     <string name="book.delete.dialog.confirm_files">فایلهای من را پاک کن</string>
     <string name="book.delete.dialog.message">با این کار فایل های موجود در دستگاه شما حذف می شود.</string>
     <string name="book.delete.dialog.title">پاک کردن کتاب</string>
+    <string name="book.download.action">دانلود</string>
+    <string name="book.download.failed">دانلود کامل نشد</string>
+    <string name="book.download.progress">%1$s از %2$s</string>
+    <string name="book.download.remove">حذف دانلود</string>
+    <string name="book.download.retry">دانلود دوباره</string>
+    <string name="book.download.stop">توقف دانلود</string>
+    <string name="book.download.waiting_for_connection">در انتظار اتصال</string>
+    <string name="book.download.waiting_for_wifi">در انتظار Wi-Fi</string>
     <string name="book.edit.cover.file">دریافت کاور از داخل سیستم</string>
     <string name="book.edit.cover.internet">دریافت کاور از طریق اینترنت</string>
     <string name="book.edit.name.label">نام</string>
     <string name="book.edit.rename">تغییر نام</string>
+    <string name="book.source.device">در این دستگاه</string>
+    <string name="book.source.server_downloaded">%s · دانلودشده</string>
     <string name="bookmark.action.add_note">افزودن یادداشت</string>
     <string name="bookmark.add_note_hint">یادداشتی اضافه کنید</string>
     <string name="bookmark.added.snackbar">نشانه‌گذاری انجام شد</string>
@@ -76,6 +144,7 @@
         <item quantity="one">%d ثانیه</item>
         <item quantity="other">%d ثانیه ها</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">اتصال به Audiobookshelf</string>
     <string name="folder.add.action.file">افزودن یک فایل به‌جای پوشه</string>
     <string name="folder.add.action.folder">انتخاب پوشه</string>
     <string name="folder.add.subtitle">پوشه‌ی کتاب‌های صوتی خود را انتخاب کنید. این پوشه می‌تواند یک کتاب یا کل کتابخانه‌ی شما باشد.</string>
@@ -165,6 +234,7 @@
     <string name="history.source.headset">دکمهٔ هدست</string>
     <string name="history.source.notification">اعلان</string>
     <string name="history.source.other_app">برنامهٔ دیگر</string>
+    <string name="history.source.other_device">دستگاه دیگر</string>
     <string name="history.source.sleep_timer">تایمر خواب</string>
     <string name="history.source.unknown">نامشخص</string>
     <string name="history.source.unplugged">اتصال صدا قطع شد</string>
@@ -179,6 +249,8 @@
     <string name="history.suggestion.started_by.headset">دکمهٔ هدست کتاب را در ساعت %1$s پخش کرد</string>
     <string name="history.suggestion.started_by.other_app">برنامهٔ دیگری کتاب را در ساعت %1$s پخش کرد</string>
     <string name="history.suggestion.started_by.watch">ساعت هوشمند شما کتاب را در %1$s پخش کرد</string>
+    <string name="library.book.downloading">در حال دانلود</string>
+    <string name="library.book.offline">آفلاین در دسترس نیست</string>
     <string name="library.category.completed.title">تمام شده</string>
     <string name="library.category.current.title">جاری</string>
     <string name="library.category.not_started.title">هنوز شروع نشده</string>
@@ -310,6 +382,7 @@
     <string name="settings.auto_sleep_timer.start.label">زمان شروع</string>
     <string name="settings.auto_sleep_timer.summary">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>
     <string name="settings.auto_sleep_timer.title">زمان خواب خودکار</string>
+    <string name="settings.library.audiobookshelf.summary">کتاب‌های سرور خودتان را آنلاین پخش کنید</string>
     <string name="settings.library.folders.summary">مدیریت پوشه‌هایی که برای کتاب‌های صوتی اسکن می‌شوند</string>
     <string name="settings.library.layout.grid">شبکه</string>
     <string name="settings.library.layout.list">فهرست</string>

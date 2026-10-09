@@ -14,6 +14,7 @@ dependencies {
   implementation(projects.core.remoteconfig.api)
   implementation(projects.core.data.api)
   implementation(projects.core.documentfile)
+  implementation(projects.core.audiobookshelf)
 
   implementation(libs.androidxCore)
 

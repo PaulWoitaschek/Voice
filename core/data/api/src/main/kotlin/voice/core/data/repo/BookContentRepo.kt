@@ -12,6 +12,7 @@ public interface BookContentRepo {
 
   public suspend fun get(id: BookId): BookContent?
 
+  /** Sets the books on the device that aren't in [ids] inactive. The sync of a server decides about its books. */
   public suspend fun setAllInactiveExcept(ids: List<BookId>)
 
   public suspend fun put(content: BookContent)

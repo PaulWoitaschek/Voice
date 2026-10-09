@@ -47,6 +47,8 @@ internal fun GridBook(
       bookId = book.id,
       cover = book.cover,
       finished = finished,
+      unavailable = book.unavailable,
+      download = book.download,
       modifier = Modifier
         .fillMaxWidth()
         .aspectRatio(1F),

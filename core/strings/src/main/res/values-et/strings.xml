@@ -1,5 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Laaditakse alla %d raamat</item>
+        <item quantity="other">Laaditakse alla %d raamatut</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Valmis võrguühenduseta kuulamiseks</string>
+    <string name="audiobookshelf.download.notification.retry">Proovi uuesti</string>
+    <string name="audiobookshelf.download.notification.stop">Katkesta</string>
+    <string name="audiobookshelf.download.notification.title">Allalaadimine…</string>
+    <string name="audiobookshelf.downloads.channel">Allalaadimised</string>
+    <string name="audiobookshelf.login.address.action">Jätka</string>
+    <string name="audiobookshelf.login.address.label">Serveri aadress</string>
+    <string name="audiobookshelf.login.address.subtitle">Kuula raamatuid oma serverist. Voice hoiab sinu järje kõigis seadmetes sünkroonis.</string>
+    <string name="audiobookshelf.login.address.title">Ühenda Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">Logi sisse</string>
+    <string name="audiobookshelf.login.credentials.no_password">See server lubab ainult ühekordset sisselogimist (SSO), mida Voice veel ei oska. Palu serveri haldajal parooliga sisselogimine sisse lülitada.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">Kasuta oma kontot serveris %s.</string>
+    <string name="audiobookshelf.login.credentials.title">Logi sisse</string>
+    <string name="audiobookshelf.login.error.certificate">Sinu telefon ei usalda selle serveri sertifikaati.</string>
+    <string name="audiobookshelf.login.error.credentials">Kasutajanimi või parool on vale.</string>
+    <string name="audiobookshelf.login.error.failed">Sisselogimine ei õnnestunud. Proovi uuesti.</string>
+    <string name="audiobookshelf.login.error.not_found">Voice ei saa sellel aadressil ühendust ühegi Audiobookshelfi serveriga. Kas oled õiges võrgus?</string>
+    <string name="audiobookshelf.login.error.not_set_up">See server pole veel seadistatud. Vii seadistamine kõigepealt selle veebirakenduses lõpuni.</string>
+    <string name="audiobookshelf.login.error.other_account">See on teine konto. Konto vahetamiseks logi esmalt välja.</string>
+    <string name="audiobookshelf.login.error.too_old">Voice vajab Audiobookshelfi versiooni 2.26 või uuemat. Selles serveris on versioon %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">Server lakkas vastamast. Proovi hetke pärast uuesti.</string>
+    <string name="audiobookshelf.login.libraries.action">Lisa raamatukokku</string>
+    <string name="audiobookshelf.login.libraries.loading">Otsime raamatuid…</string>
+    <string name="audiobookshelf.login.libraries.none">Siin pole heliraamatute raamatukogusid</string>
+    <string name="audiobookshelf.login.libraries.subtitle">Need lisanduvad sinu raamatukokku. Kuula neid kohe või laadi alla, et kuulata võrguühenduseta.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">Leidsime %d heliraamatu</item>
+        <item quantity="other">Leidsime %d heliraamatut</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d raamat</item>
+        <item quantity="other">%1$s · %2$d raamatut</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Parool</string>
+    <string name="audiobookshelf.login.password.hide">Peida parool</string>
+    <string name="audiobookshelf.login.password.show">Näita parooli</string>
+    <string name="audiobookshelf.login.username">Kasutajanimi</string>
+    <string name="audiobookshelf.settings.downloads">Allalaadimised</string>
+    <string name="audiobookshelf.settings.downloads.none">Ühtegi raamatut pole veel alla laaditud</string>
+    <string name="audiobookshelf.settings.downloads.remove">Eemalda kõik</string>
+    <string name="audiobookshelf.settings.downloads.used">%s selles seadmes</string>
+    <string name="audiobookshelf.settings.libraries">Raamatukogud</string>
+    <string name="audiobookshelf.settings.mobile_data">Laadi alla mobiilse andmeside kaudu</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Muidu ootavad allalaadimised WiFi-ühendust</string>
+    <string name="audiobookshelf.settings.sign_in_again">Logi sisse</string>
+    <string name="audiobookshelf.settings.sign_out">Logi välja</string>
+    <string name="audiobookshelf.settings.signed_in_as">Sisse logitud kasutajana %s</string>
+    <string name="audiobookshelf.settings.try_again">Proovi uuesti</string>
+    <string name="audiobookshelf.sign_out.message">Serveri raamatud ja nende allalaadimised kaovad sellest seadmest. Sinu edenemine jääb serverisse turvaliselt alles.</string>
+    <string name="audiobookshelf.sign_out.title">Kas logida välja serverist %s?</string>
+    <string name="audiobookshelf.status.connected">Ühendatud, sinu edenemine on sünkroonis</string>
+    <string name="audiobookshelf.status.needs_login">Server soovib, et logiksid uuesti sisse</string>
+    <string name="audiobookshelf.status.offline">Server pole praegu kättesaadav. Allalaaditud raamatuid saad ikka kuulata.</string>
+    <string name="audiobookshelf.status.syncing">Sünkroonimine…</string>
     <string name="book.category.action.mark_completed">Märgi kuulatuks</string>
     <string name="book.category.action.mark_current">Märgi kuulamisel olevaks</string>
     <string name="book.category.action.mark_not_started">Märgi ootel olevaks</string>
@@ -7,10 +65,20 @@
     <string name="book.delete.dialog.confirm_files">Kustuta minu failid</string>
     <string name="book.delete.dialog.message">Järgnevaga kustutad need failid oma nutiseadmest.</string>
     <string name="book.delete.dialog.title">Kustuta heliraamat</string>
+    <string name="book.download.action">Laadi alla</string>
+    <string name="book.download.failed">Allalaadimine ei õnnestunud</string>
+    <string name="book.download.progress">%1$s / %2$s</string>
+    <string name="book.download.remove">Eemalda allalaadimine</string>
+    <string name="book.download.retry">Laadi uuesti alla</string>
+    <string name="book.download.stop">Katkesta allalaadimine</string>
+    <string name="book.download.waiting_for_connection">Ootab võrguühendust</string>
+    <string name="book.download.waiting_for_wifi">Ootab WiFi-ühendust</string>
     <string name="book.edit.cover.file">Kaanepilt nutiseadme failisüsteemist</string>
     <string name="book.edit.cover.internet">Kaanepilt internetist</string>
     <string name="book.edit.name.label">Nimi</string>
     <string name="book.edit.rename">Nimeta ümber</string>
+    <string name="book.source.device">Selles seadmes</string>
+    <string name="book.source.server_downloaded">%s · alla laaditud</string>
     <string name="bookmark.action.add_note">Lisa märkus</string>
     <string name="bookmark.add_note_hint">Lisa märkus</string>
     <string name="bookmark.added.snackbar">Järjehoidja on lisatud</string>
@@ -76,6 +144,7 @@
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekundit</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Ühenda Audiobookshelf</string>
     <string name="folder.add.action.file">Lisa hoopis üksik fail</string>
     <string name="folder.add.action.folder">Vali kaust</string>
     <string name="folder.add.subtitle">Vali kaust, kus on sinu heliraamatud. Selles võib olla üks raamat või kogu sinu raamatukogu.</string>
@@ -165,6 +234,7 @@
     <string name="history.source.headset">Peakomplekti nupp</string>
     <string name="history.source.notification">Teavitus</string>
     <string name="history.source.other_app">Teine rakendus</string>
+    <string name="history.source.other_device">Teine seade</string>
     <string name="history.source.sleep_timer">Unetaimer</string>
     <string name="history.source.unknown">Teadmata</string>
     <string name="history.source.unplugged">Heliseade lahutatud</string>
@@ -179,6 +249,8 @@
     <string name="history.suggestion.started_by.headset">Peakomplekti nupp käivitas raamatu kell %1$s</string>
     <string name="history.suggestion.started_by.other_app">Teine rakendus käivitas raamatu kell %1$s</string>
     <string name="history.suggestion.started_by.watch">Sinu nutikell käivitas raamatu kell %1$s</string>
+    <string name="library.book.downloading">Laaditakse alla</string>
+    <string name="library.book.offline">Pole võrguühenduseta saadaval</string>
     <string name="library.category.completed.title">Kuulatud</string>
     <string name="library.category.current.title">Praegune</string>
     <string name="library.category.not_started.title">Kuulamise ootel</string>
@@ -310,6 +382,7 @@
     <string name="settings.auto_sleep_timer.start.label">Määra algusaeg</string>
     <string name="settings.auto_sleep_timer.summary">Käivita unetaimer automaatselt, kui taasesitus on %1$s ja %2$s vahel</string>
     <string name="settings.auto_sleep_timer.title">Automaatne unetaimer</string>
+    <string name="settings.library.audiobookshelf.summary">Voogedasta raamatuid oma serverist</string>
     <string name="settings.library.folders.summary">Halda kaustu, kust otsitakse heliraamatuid</string>
     <string name="settings.library.layout.grid">Ruudustik</string>
     <string name="settings.library.layout.list">Loend</string>

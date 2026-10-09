@@ -9,6 +9,7 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.data.BookId
+import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
 import voice.core.scanner.MediaScanTrigger
@@ -33,6 +34,8 @@ class DeleteBookViewModel(
   internal val state: State<DeleteBookViewState?> get() = _state
 
   override suspend fun items(bookId: BookId): List<BottomSheetItem> {
+    // Voice never deletes files on a server
+    if (bookId.isRemote) return emptyList()
     return listOf(BottomSheetItem.DeleteBook)
   }
 

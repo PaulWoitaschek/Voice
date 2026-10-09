@@ -18,8 +18,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,6 +55,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
@@ -59,6 +64,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import voice.core.ui.formatTime
+import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState
 import kotlin.math.PI
 import kotlin.math.abs
@@ -67,6 +73,7 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import voice.core.strings.R as StringsR
 
 private val HorizontalInset = 12.dp
 
@@ -86,6 +93,7 @@ internal fun SeekSection(
   onJumpBack: (id: Long) -> Unit,
   onJumpBackExpire: (id: Long) -> Unit,
   modifier: Modifier = Modifier,
+  unavailable: Boolean = false,
 ) {
   var dragFraction by remember { mutableStateOf<Float?>(null) }
   var pendingFraction by remember { mutableStateOf<Float?>(null) }
@@ -148,12 +156,18 @@ internal fun SeekSection(
             }
           },
       ) {
-        JumpBackPill(
-          jumpBack = jumpBack,
-          onClick = onJumpBack,
-          onExpire = onJumpBackExpire,
-          modifier = Modifier.padding(horizontal = 4.dp),
-        )
+        // a jump that expired while the player was closed shows no pill, so it doesn't hide this one
+        val jumpBackVisibleFor = rememberJumpBackVisibleFor()
+        if (unavailable && (jumpBack == null || jumpBack.elapsed >= jumpBackVisibleFor)) {
+          OfflinePill(Modifier.padding(horizontal = 4.dp))
+        } else {
+          JumpBackPill(
+            jumpBack = jumpBack,
+            onClick = onJumpBack,
+            onExpire = onJumpBackExpire,
+            modifier = Modifier.padding(horizontal = 4.dp),
+          )
+        }
       }
       RollingText(
         modifier = Modifier
@@ -353,4 +367,32 @@ private fun DrawScope.drawWavyTrack(
     size = Size(thumbWidth, thumbHeight),
     cornerRadius = CornerRadius(thumbWidth / 2),
   )
+}
+
+/**
+ * Takes the place of the jump back pill while the book can't stream.
+ */
+@Composable
+private fun OfflinePill(modifier: Modifier = Modifier) {
+  Row(
+    modifier = modifier
+      .clip(CircleShape)
+      .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+      .padding(horizontal = 12.dp, vertical = 6.dp),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Icon(
+      imageVector = VoiceIcons.CloudOff,
+      contentDescription = null,
+      tint = MaterialTheme.colorScheme.onSurfaceVariant,
+      modifier = Modifier.size(16.dp),
+    )
+    Spacer(Modifier.width(6.dp))
+    Text(
+      text = stringResource(StringsR.string.library_book_offline),
+      style = MaterialTheme.typography.labelMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+      maxLines = 1,
+    )
+  }
 }

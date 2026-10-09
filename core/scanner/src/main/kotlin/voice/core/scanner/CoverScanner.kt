@@ -6,6 +6,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.core.data.Book
+import voice.core.data.isRemote
 import voice.core.data.toUri
 import voice.core.logging.api.Logger
 import java.io.IOException
@@ -18,7 +19,8 @@ internal class CoverScanner(
 ) {
 
   suspend fun scan(books: List<Book>) {
-    books.forEach { findCoverForBook(it) }
+    // server books bring their covers along
+    books.filterNot { it.id.isRemote }.forEach { findCoverForBook(it) }
   }
 
   private suspend fun findCoverForBook(book: Book) {
