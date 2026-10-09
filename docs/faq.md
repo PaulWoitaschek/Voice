@@ -24,13 +24,6 @@ the app a bit harder to use. So I prefer good defaults over options and keep eac
 If you're missing something, [open a feature request](https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas) and describe
 what you'd like to do.
 
-### How can I join the beta?
-
-To participate in the public beta, you can either:
-
-- [Join via the Web](https://play.google.com/store/apps/details?id=de.ph1b.audiobook)
-- [Join through Google Play](https://play.google.com/apps/testing/de.ph1b.audiobook)
-
 ### Which Voice version should I use on older Android?
 
 !!! tip
