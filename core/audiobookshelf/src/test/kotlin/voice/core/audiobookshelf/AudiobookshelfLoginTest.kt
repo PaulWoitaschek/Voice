@@ -1,5 +1,6 @@
 package voice.core.audiobookshelf
 
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -9,6 +10,7 @@ import okhttp3.Headers
 import org.junit.After
 import org.junit.Before
 import voice.core.audiobookshelf.account.Account
+import voice.core.audiobookshelf.download.AudiobookshelfDownloads
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -104,13 +106,46 @@ class AudiobookshelfLoginTest {
     assertEquals(stored, accountStore.data.first())
   }
 
-  private fun audiobookshelf(accountStore: MemoryDataStore<Account?> = MemoryDataStore(null)): Audiobookshelf {
+  @Test
+  fun `connecting another account signs out the one that is there`() = runTest {
+    server.enqueue(
+      MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}"""),
+    )
+    server.enqueue(MockResponse(code = 200, body = """{"user":{"id":"2","username":"kim","accessToken":"a","refreshToken":"r"}}"""))
+    // the logout of the previous account
+    server.enqueue(MockResponse(code = 200))
+    val accountStore = MemoryDataStore<Account?>(
+      Account(
+        serverUrl = server.url("/").toString(),
+        userId = "1",
+        username = "paul",
+        accessToken = "old",
+        refreshToken = "old",
+        libraryIds = listOf("library"),
+        serverVersion = "2.37.1",
+      ),
+    )
+    val downloads = mockk<AudiobookshelfDownloads>(relaxed = true)
+    val audiobookshelf = audiobookshelf(accountStore, downloads)
+
+    val found = assertIs<FindServerResult.Found>(audiobookshelf.findServer(server.url("/").toString()))
+    val login = assertIs<LoginResult.Success>(audiobookshelf.login(found.server, "kim", "voice"))
+    audiobookshelf.connect(login.login, listOf("library"))
+
+    coVerify { downloads.removeAll() }
+    assertEquals("2", accountStore.data.first()?.userId)
+  }
+
+  private fun audiobookshelf(
+    accountStore: MemoryDataStore<Account?> = MemoryDataStore(null),
+    downloads: AudiobookshelfDownloads = mockk(relaxed = true),
+  ): Audiobookshelf {
     return Audiobookshelf(
       accountStore = accountStore,
       http = AudiobookshelfHttp(accountStore, TestAppInfo),
       sync = mockk(relaxed = true),
       progressSync = mockk(relaxed = true),
-      downloads = mockk(relaxed = true),
+      downloads = downloads,
       contentRepo = mockk(relaxed = true),
       currentBookStore = MemoryDataStore(null),
       playerController = mockk(relaxed = true),

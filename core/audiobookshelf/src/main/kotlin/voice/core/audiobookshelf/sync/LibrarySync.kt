@@ -2,7 +2,9 @@ package voice.core.audiobookshelf.sync
 
 import android.content.Context
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import retrofit2.HttpException
@@ -68,6 +70,8 @@ internal class LibrarySync(
         .forEach { item ->
           try {
             store(item)
+          } catch (e: CancellationException) {
+            throw e
           } catch (e: IllegalStateException) {
             Logger.w(e, "Skipping ${item.id}")
           } catch (e: IllegalArgumentException) {
@@ -129,8 +133,11 @@ internal class LibrarySync(
     // the init block checks that the chapters and the position fit together
     @Suppress("RETURN_VALUE_NOT_USED")
     Book(updated, chapters)
-    contentRepo.put(updated)
-    if (existing != null) moveBookmarks(existing, previousChapters, chapters)
+    // the book points at the new files right away, its bookmarks have to follow
+    withContext(NonCancellable) {
+      contentRepo.put(updated)
+      if (existing != null) moveBookmarks(existing, previousChapters, chapters)
+    }
   }
 
   // bookmarks point into a file, and the server can replace the files of a book while the places in it stay

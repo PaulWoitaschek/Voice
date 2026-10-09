@@ -34,7 +34,9 @@ import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import java.io.File
 import java.io.IOException
+import java.security.cert.CertificateException
 import javax.net.ssl.SSLException
+import javax.net.ssl.SSLPeerUnverifiedException
 
 /**
  * The oldest server with the login that hands out refresh tokens.
@@ -150,7 +152,8 @@ public class Audiobookshelf internal constructor(
         http.api(url).status()
       } catch (e: SSLException) {
         Logger.d("$url: $e")
-        certificateNotTrusted = true
+        // https against a port that only speaks http fails too, that is no certificate problem
+        if (e.isCertificateProblem()) certificateNotTrusted = true
         unreachableOrigins += origin
         continue
       } catch (e: IOException) {
@@ -170,8 +173,12 @@ public class Audiobookshelf internal constructor(
       val version = status.serverVersion.orEmpty()
       if (!version.isAtLeast(MINIMUM_SERVER_VERSION)) return@withContext FindServerResult.TooOld(version)
       // a server that redirects, like from http to https, lives where the redirect ends
-      val finalUrl = response.raw().request.url.toString()
-      val serverUrl = if (finalUrl.endsWith("/status")) finalUrl.removeSuffix("status") else url
+      val finalUrl = response.raw().request.url
+      if (httpUrl.isHttps && !finalUrl.isHttps && !isLocalHost(finalUrl.host)) {
+        Logger.w("$url redirects to $finalUrl, which would send the password without encryption")
+        continue
+      }
+      val serverUrl = finalUrl.toString().let { if (it.endsWith("/status")) it.removeSuffix("status") else url }
       return@withContext FindServerResult.Found(
         AudiobookshelfServer(
           url = serverUrl,
@@ -312,13 +319,16 @@ public class Audiobookshelf internal constructor(
   }
 
   /**
-   * Stores the login, which brings the books of [libraryIds] into the library.
+   * Stores the login, which brings the books of [libraryIds] into the library. Another account that is connected is
+   * signed out first, as it would hand its books, downloads and positions to this one.
    */
   public suspend fun connect(
     login: PendingLogin,
     libraryIds: List<String>,
   ) {
     analytics.event("audiobookshelf_connected", mapOf("libraries" to libraryIds.size.toString()))
+    val current = accountStore.data.first()
+    if (current != null && current.userId != login.account.userId) signOut()
     accountStore.updateData { login.account.copy(libraryIds = libraryIds) }
     sync.sync(force = true)
   }
@@ -377,6 +387,10 @@ private fun Account.toConnection() = AudiobookshelfConnection(
   libraryIds = libraryIds,
   needsLogin = needsLogin,
 )
+
+private fun SSLException.isCertificateProblem(): Boolean {
+  return this is SSLPeerUnverifiedException || generateSequence<Throwable>(cause) { it.cause }.any { it is CertificateException }
+}
 
 internal fun String.isAtLeast(minimum: List<Int>): Boolean {
   val parts = removePrefix("v").split('.', '-').mapNotNull { it.toIntOrNull() }

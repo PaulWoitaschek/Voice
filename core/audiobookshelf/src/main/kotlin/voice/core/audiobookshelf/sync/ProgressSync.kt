@@ -161,7 +161,12 @@ internal class ProgressSync(
       currentTime = book.position / 1000.0,
       duration = durationSeconds,
       progress = if (finished) 1.0 else (book.position.toDouble() / book.duration).coerceIn(0.0, 1.0),
-      isFinished = if (finished) true else null,
+      isFinished = when {
+        finished -> true
+        // told that a finished book isn't, the server starts it over, which is right for a book at its start
+        book.position < BOOK_START_MS -> false
+        else -> null
+      },
     )
     return try {
       val response = http.authenticatedApi(account.serverUrl).updateProgress(itemId, update)
@@ -229,3 +234,5 @@ private fun SyncedProgress.differsFrom(other: SyncedProgress): Boolean {
 }
 
 private const val POSITION_TOLERANCE_MS = 1_500
+
+private const val BOOK_START_MS = 1_000

@@ -105,6 +105,19 @@ class ProgressSyncTest {
   }
 
   @Test
+  fun `a finished book marked as not started starts over on the server too`() = runTest {
+    // the server keeps a finished book finished when only its time is sent and the time didn't change
+    val repo = MemoryBookRepository(book(positionMs = 0))
+    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(120_000, finished = true, serverLastUpdate = 10)) }
+    server.enqueue(MockResponse(code = 200))
+
+    progressSync(repo).syncAll(account, listOf(serverProgress(currentTime = 0.0, lastUpdate = 10, isFinished = true)))
+
+    val body = Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
+    assertEquals(false, body.getValue("isFinished").jsonPrimitive.boolean)
+  }
+
+  @Test
   fun `a book in its last seconds stays there when the server marked it finished`() = runTest {
     // the server counts the last ten seconds as finished and resets a finished book when it's told otherwise
     val repo = MemoryBookRepository(book(positionMs = 112_000))

@@ -35,6 +35,7 @@ import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.playstate.PlayStateManager
 import java.io.IOException
@@ -70,6 +71,8 @@ public class AudiobookshelfSync internal constructor(
   private val bookRepository: BookRepository,
   private val contentRepo: BookContentRepo,
   private val playStateManager: PlayStateManager,
+  @CurrentBookStore
+  private val currentBookStore: DataStore<BookId?>,
   private val context: Context,
 ) {
 
@@ -184,16 +187,26 @@ public class AudiobookshelfSync internal constructor(
         .debounce(3.seconds)
         .collect { positions ->
           val before = previous
-          previous = positions
-          if (before == null) return@collect
-          if (playStateManager.playState == PlayStateManager.PlayState.Playing) return@collect
-          val account = accountStore.data.first()?.takeUnless { it.needsLogin } ?: return@collect
-          positions
-            .filter { (bookId, position) -> bookId in before && before[bookId] != position }
-            .keys
-            .forEach { bookId ->
-              if (!progressSync.push(account, bookId)) return@collect
+          if (before == null) {
+            previous = positions
+            return@collect
+          }
+          // the listening session sends the book that plays
+          val playing = currentBookStore.data.first()
+            ?.takeIf { playStateManager.playState == PlayStateManager.PlayState.Playing }
+          val moved = positions.keys.filter { it in before && before[it] != positions[it] && it != playing }
+          val pushed = mutableSetOf<BookId>()
+          val account = accountStore.data.first()?.takeUnless { it.needsLogin }
+          if (account != null) {
+            for (bookId in moved) {
+              if (!progressSync.push(account, bookId)) break
+              pushed += bookId
             }
+          }
+          // what couldn't go up stays moved, so it goes up with the next change
+          previous = positions.mapValues { (bookId, position) ->
+            if (bookId in moved && bookId !in pushed) before.getValue(bookId) else position
+          }
         }
     }
   }

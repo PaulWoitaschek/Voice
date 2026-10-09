@@ -19,7 +19,8 @@ public class ChapterRepoImpl(private val dao: ChapterDao) : ChapterRepo {
   override suspend fun get(id: ChapterId): Chapter? {
     // this does not use getOrPut because a `null` value should also be cached
     if (!cache.containsKey(id)) {
-      cache[id] = dao.chapter(id)
+      // a put while this was read is newer
+      cache.putIfAbsent(id, dao.chapter(id))
     }
     return cache[id]
   }
@@ -30,7 +31,7 @@ public class ChapterRepoImpl(private val dao: ChapterDao) : ChapterRepo {
       .runForMaxSqlVariableNumber {
         dao.chapters(it)
       }
-      .forEach { cache[it.id] = it }
+      .forEach { cache.putIfAbsent(it.id, it) }
   }
 
   override suspend fun put(chapter: Chapter) {

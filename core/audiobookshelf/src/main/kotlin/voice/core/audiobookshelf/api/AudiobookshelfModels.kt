@@ -129,8 +129,8 @@ internal data class ProgressUpdate(
   val duration: Double,
   val progress: Double,
   /**
-   * Only ever true: told that a finished book isn't finished, the server starts it over. Without the flag it takes
-   * the time and un-finishes the book by itself.
+   * Told that a finished book isn't finished, the server starts it over. Without the flag it takes the time and
+   * un-finishes the book by itself, as long as the time changed.
    */
   val isFinished: Boolean? = null,
 )
