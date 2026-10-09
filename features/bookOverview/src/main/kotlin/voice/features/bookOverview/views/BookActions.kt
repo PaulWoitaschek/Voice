@@ -104,6 +104,7 @@ internal fun BookActions(
       ) {
         BookActionsContent(
           book = book,
+          source = state.source,
           category = state.category,
           items = state.items,
           onItemClick = { item ->

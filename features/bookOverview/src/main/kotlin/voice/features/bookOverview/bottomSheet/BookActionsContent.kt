@@ -93,6 +93,7 @@ private val StatusOrder = listOf(BookOverviewCategory.NOT_STARTED, BookOverviewC
 @Composable
 internal fun BookActionsContent(
   book: BookOverviewItemViewState,
+  source: BookSource?,
   category: BookOverviewCategory?,
   items: List<BottomSheetItem>,
   onItemClick: (BottomSheetItem) -> Unit,
@@ -109,6 +110,7 @@ internal fun BookActionsContent(
   ) {
     BookHeader(
       book = book,
+      source = source,
       modifier = Modifier
         .entrance(entrance, 0)
         .padding(horizontal = 8.dp),
@@ -153,6 +155,7 @@ internal fun BookActionsContent(
 @Composable
 private fun BookHeader(
   book: BookOverviewItemViewState,
+  source: BookSource?,
   modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
@@ -188,6 +191,10 @@ private fun BookHeader(
           overflow = TextOverflow.Ellipsis,
         )
       }
+      if (source != null) {
+        Spacer(Modifier.height(4.dp))
+        SourceLine(source)
+      }
       Spacer(Modifier.height(10.dp))
       LinearWavyProgressIndicator(
         progress = { book.progress },
@@ -217,6 +224,34 @@ private fun BookHeader(
         )
       }
     }
+  }
+}
+
+@Composable
+private fun SourceLine(source: BookSource) {
+  val (icon, text) = when (source) {
+    BookSource.Device -> VoiceIcons.Smartphone to stringResource(StringsR.string.book_source_device)
+    is BookSource.Server -> VoiceIcons.Dns to if (source.downloaded) {
+      stringResource(StringsR.string.book_source_server_downloaded, source.name)
+    } else {
+      source.name
+    }
+  }
+  Row(verticalAlignment = Alignment.CenterVertically) {
+    Icon(
+      imageVector = icon,
+      contentDescription = null,
+      tint = MaterialTheme.colorScheme.onSurfaceVariant,
+      modifier = Modifier.size(16.dp),
+    )
+    Spacer(Modifier.width(6.dp))
+    Text(
+      text = text,
+      style = MaterialTheme.typography.labelMedium,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+      maxLines = 1,
+      overflow = TextOverflow.Ellipsis,
+    )
   }
 }
 

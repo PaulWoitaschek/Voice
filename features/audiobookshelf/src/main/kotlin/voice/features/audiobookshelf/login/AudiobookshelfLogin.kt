@@ -31,11 +31,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -257,7 +259,8 @@ private fun ColumnScope.CredentialsDetails(
   OutlinedTextField(
     modifier = Modifier
       .fillMaxWidth()
-      .focusRequester(usernameFocus),
+      .focusRequester(usernameFocus)
+      .semantics { contentType = ContentType.Username },
     value = state.username,
     onValueChange = onUsernameChange,
     enabled = !state.busy,
@@ -275,7 +278,8 @@ private fun ColumnScope.CredentialsDetails(
   OutlinedTextField(
     modifier = Modifier
       .fillMaxWidth()
-      .focusRequester(passwordFocus),
+      .focusRequester(passwordFocus)
+      .semantics { contentType = ContentType.Password },
     value = state.password,
     onValueChange = onPasswordChange,
     enabled = !state.busy,

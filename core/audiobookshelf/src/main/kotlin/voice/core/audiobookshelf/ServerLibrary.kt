@@ -31,6 +31,8 @@ interface ServerLibrary {
   /** How far the downloads that are running have come, from 0 to 1. */
   val downloadProgress: Flow<Map<BookId, Float>>
 
+  val downloadedBooks: Flow<Set<BookId>>
+
   suspend fun isConnected(): Boolean
 
   /** Syncs with the server, unless a sync is already running or there is no server. */
@@ -68,6 +70,10 @@ class AudiobookshelfServerLibrary internal constructor(
         (state as? BookDownloadState.Downloading)?.let { bookId to it.progress }
       }.toMap()
     }
+    .distinctUntilChanged()
+
+  override val downloadedBooks: Flow<Set<BookId>> = downloads.states()
+    .map { states -> states.filterValues { it == BookDownloadState.Downloaded }.keys }
     .distinctUntilChanged()
 
   override suspend fun isConnected(): Boolean = audiobookshelf.isConnected()

@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalLayoutApi::class)
 
 package voice.core.ui
 
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -23,10 +24,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -40,6 +44,7 @@ import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -105,6 +110,8 @@ fun OnboardingScaffold(
       modifier = Modifier.fillMaxSize(),
     )
     Scaffold(
+      // text fields stay above the keyboard
+      contentWindowInsets = ScaffoldDefaults.contentWindowInsets.union(WindowInsets.ime),
       containerColor = Color.Transparent,
       contentColor = MaterialTheme.colorScheme.onSurface,
       topBar = { OnboardingTopBar(step = step, onBack = onBack) },
@@ -329,6 +336,8 @@ private fun PortraitLayout(
   text: @Composable () -> Unit,
 ) {
   val layoutDirection = LocalLayoutDirection.current
+  // with the keyboard open the hero gives up all its space, so the field and its action stay in view
+  val minHeroHeight = if (WindowInsets.isImeVisible) 0.dp else MIN_HERO_HEIGHT
   val scrollState = rememberScrollState()
   val scrollable = scrollState.maxValue > 0
   BoxWithConstraints(Modifier.fillMaxSize()) {
@@ -349,7 +358,7 @@ private fun PortraitLayout(
       val textPlaceables = textMeasurables.map { it.measure(Constraints.fixedWidth(width)) }
       val textHeight = textPlaceables.sumOf { it.height }
       val heroHeight = (viewportHeight - top - bottom - textHeight)
-        .coerceAtLeast(MIN_HERO_HEIGHT.roundToPx())
+        .coerceAtLeast(minHeroHeight.roundToPx())
       val heroPlaceables = heroMeasurables.map { it.measure(Constraints.fixed(width, heroHeight)) }
       layout(width, top + heroHeight + textHeight + bottom) {
         heroPlaceables.forEach { it.place(0, top) }

@@ -107,11 +107,15 @@ internal fun LibrarySection(
         )
       },
       summary = {
-        Text(
-          text = audiobookshelfServer ?: stringResource(StringsR.string.settings_library_audiobookshelf_summary),
-          maxLines = 1,
-          overflow = TextOverflow.Ellipsis,
-        )
+        if (audiobookshelfServer != null) {
+          Text(
+            text = audiobookshelfServer,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+          )
+        } else {
+          Text(stringResource(StringsR.string.settings_library_audiobookshelf_summary))
+        }
       },
     )
     Spacer(Modifier.height(12.dp))

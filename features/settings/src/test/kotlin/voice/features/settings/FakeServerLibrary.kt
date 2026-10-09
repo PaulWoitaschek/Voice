@@ -9,6 +9,7 @@ internal class FakeServerLibrary(
   override val serverName: MutableStateFlow<String?> = MutableStateFlow(null),
   override val unavailableBooks: MutableStateFlow<Set<BookId>> = MutableStateFlow(emptySet()),
   override val downloadProgress: MutableStateFlow<Map<BookId, Float>> = MutableStateFlow(emptyMap()),
+  override val downloadedBooks: MutableStateFlow<Set<BookId>> = MutableStateFlow(emptySet()),
 ) : ServerLibrary {
 
   override val syncing: Flow<Boolean> = MutableStateFlow(false)

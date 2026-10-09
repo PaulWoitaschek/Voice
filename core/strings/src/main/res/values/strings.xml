@@ -122,6 +122,10 @@
     <string name="book.edit.name.label">Name</string>
     <!-- Book menu item and title of the sheet that renames a book. -->
     <string name="book.edit.rename">Rename</string>
+    <!-- Shown under the title in the book actions sheet for a book whose files are on the phone, once a server is connected too. -->
+    <string name="book.source.device">On this device</string>
+    <!-- Shown under the title in the book actions sheet for a downloaded server book. %s is the address of the server, like audiobooks.example.com. -->
+    <string name="book.source.server_downloaded">%s · downloaded</string>
     <string name="bookmark.action.add_note">Add note</string>
     <string name="bookmark.add_note_hint">Add a note</string>
     <!-- Snackbar message shown after creating a bookmark. -->

@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
+import voice.features.bookOverview.FakeServerLibrary
 import voice.features.bookOverview.book
 import voice.features.bookOverview.overview.BookOverviewCategory
 import kotlin.test.AfterTest
@@ -58,7 +59,7 @@ class BottomSheetViewModelTest {
 
   @Test
   fun `selecting a book shows it with its category and items`() = runTest(dispatcher) {
-    val viewModel = BottomSheetViewModel(setOf(itemViewModel), repo)
+    val viewModel = BottomSheetViewModel(setOf(itemViewModel), repo, FakeServerLibrary())
 
     viewModel.bookSelected(fastBook.id)
     advanceUntilIdle()
@@ -71,7 +72,7 @@ class BottomSheetViewModelTest {
 
   @Test
   fun `selecting another book hides the previous one right away`() = runTest(dispatcher) {
-    val viewModel = BottomSheetViewModel(setOf(itemViewModel), repo)
+    val viewModel = BottomSheetViewModel(setOf(itemViewModel), repo, FakeServerLibrary())
     viewModel.bookSelected(fastBook.id)
     advanceUntilIdle()
 
@@ -82,7 +83,7 @@ class BottomSheetViewModelTest {
 
   @Test
   fun `a slow load of the previous book does not replace the selected one`() = runTest(dispatcher) {
-    val viewModel = BottomSheetViewModel(setOf(itemViewModel), repo)
+    val viewModel = BottomSheetViewModel(setOf(itemViewModel), repo, FakeServerLibrary())
 
     viewModel.bookSelected(slowBook.id)
     viewModel.bookSelected(fastBook.id)

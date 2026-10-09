@@ -11,11 +11,22 @@ internal data class EditBookBottomSheetState(
   val book: BookOverviewItemViewState?,
   val category: BookOverviewCategory?,
   val items: List<BottomSheetItem>,
+  /** Where the book comes from, set once books can come from a server as well. */
+  val source: BookSource? = null,
 ) {
 
   companion object {
     val Empty = EditBookBottomSheetState(book = null, category = null, items = emptyList())
   }
+}
+
+internal sealed interface BookSource {
+  data object Device : BookSource
+
+  data class Server(
+    val name: String,
+    val downloaded: Boolean,
+  ) : BookSource
 }
 
 enum class BottomSheetItem(
