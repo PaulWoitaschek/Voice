@@ -67,6 +67,7 @@ import voice.core.strings.R as StringsR
 internal fun LibrarySection(
   folderNames: List<String>,
   audiobookshelfServer: String?,
+  showAudiobookshelf: Boolean,
   useGrid: Boolean,
   onFoldersClick: () -> Unit,
   onAudiobookshelfClick: () -> Unit,
@@ -95,29 +96,9 @@ internal fun LibrarySection(
       },
       summary = { FolderNames(folderNames) },
     )
-    IslandRow(
-      title = stringResource(StringsR.string.audiobookshelf_title),
-      onClick = onAudiobookshelfClick,
-      leading = {
-        ShapedIcon(
-          icon = VoiceIcons.Dns,
-          shape = MaterialShapes.Cookie9Sided,
-          containerColor = MaterialTheme.colorScheme.tertiary,
-          contentColor = MaterialTheme.colorScheme.onTertiary,
-        )
-      },
-      summary = {
-        if (audiobookshelfServer != null) {
-          Text(
-            text = audiobookshelfServer,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-          )
-        } else {
-          Text(stringResource(StringsR.string.settings_library_audiobookshelf_summary))
-        }
-      },
-    )
+    if (showAudiobookshelf) {
+      AudiobookshelfRow(audiobookshelfServer, onAudiobookshelfClick)
+    }
     Spacer(Modifier.height(12.dp))
     Row(
       modifier = Modifier
@@ -368,4 +349,34 @@ private fun DrawScope.drawMiniList(
       cornerRadius = CornerRadius(lineHeight / 2),
     )
   }
+}
+
+@Composable
+private fun AudiobookshelfRow(
+  server: String?,
+  onClick: () -> Unit,
+) {
+  IslandRow(
+    title = stringResource(StringsR.string.audiobookshelf_title),
+    onClick = onClick,
+    leading = {
+      ShapedIcon(
+        icon = VoiceIcons.Dns,
+        shape = MaterialShapes.Cookie9Sided,
+        containerColor = MaterialTheme.colorScheme.tertiary,
+        contentColor = MaterialTheme.colorScheme.onTertiary,
+      )
+    },
+    summary = {
+      if (server != null) {
+        Text(
+          text = server,
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+        )
+      } else {
+        Text(stringResource(StringsR.string.settings_library_audiobookshelf_summary))
+      }
+    },
+  )
 }

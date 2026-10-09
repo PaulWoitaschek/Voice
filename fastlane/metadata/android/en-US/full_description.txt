@@ -1,6 +1,6 @@
 Voice is a calm audiobook player for people who love stories and bring their own books.
 
-Pick the folder with your audiobooks, or connect your Audiobookshelf server. Voice shows you the books it finds, adds them to your library, and remembers your place in every one. Then it gets out of the way, so you can just listen.
+Pick the folder with your audiobooks. Voice shows you the books it finds, adds them to your library, and remembers your place in every one. Then it gets out of the way, so you can just listen.
 
 <b>A player that matches your book</b>
 
@@ -39,18 +39,12 @@ Pick the folder with your audiobooks, or connect your Audiobookshelf server. Voi
 
 Voice plays DRM-free audiobooks such as M4B, MP3, M4A, OGG, OGA, and OPUS. Keep your books in folders the way you like. A folder can hold a single book or your whole library, and Voice organizes it for you.
 
-<b>Your Audiobookshelf server</b>
-
-• Stream the books on your own Audiobookshelf server, or download them to listen offline
-• Your place and your bookmarks stay in step with the web app and your other devices
-• Works at home over http, over a VPN, or behind a reverse proxy
-
 <b>Just you and your stories</b>
 
 • No account
 • No ads
 • Nothing behind a paywall
-• Your books stay with you: on your device, or on your own server
+• Your books stay on your device
 
 If you enjoy Voice, you can support it from the settings. It's a thank-you and unlocks nothing.
 

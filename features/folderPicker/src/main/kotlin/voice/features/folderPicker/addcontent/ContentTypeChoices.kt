@@ -23,7 +23,7 @@ import voice.core.strings.R as StringsR
 @Composable
 internal fun ColumnScope.ContentTypeChoices(
   onAdd: (FileTypeSelection, Uri) -> Unit,
-  onConnectAudiobookshelf: () -> Unit,
+  onConnectAudiobookshelf: (() -> Unit)?,
 ) {
   val openDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
     if (uri != null) {
@@ -45,11 +45,13 @@ internal fun ColumnScope.ContentTypeChoices(
       }
     },
   )
-  OnboardingButton(
-    text = stringResource(StringsR.string.folder_add_action_audiobookshelf),
-    onClick = onConnectAudiobookshelf,
-    primary = false,
-  )
+  if (onConnectAudiobookshelf != null) {
+    OnboardingButton(
+      text = stringResource(StringsR.string.folder_add_action_audiobookshelf),
+      onClick = onConnectAudiobookshelf,
+      primary = false,
+    )
+  }
   TextButton(
     modifier = Modifier.fillMaxWidth(),
     onClick = {

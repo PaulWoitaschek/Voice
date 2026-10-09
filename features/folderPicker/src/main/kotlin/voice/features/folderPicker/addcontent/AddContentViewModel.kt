@@ -6,6 +6,8 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
+import voice.core.featureflag.AudiobookshelfFeatureFlagQualifier
+import voice.core.featureflag.FeatureFlag
 import voice.features.folderPicker.folderPicker.FileTypeSelection
 import voice.navigation.Destination
 import voice.navigation.Destination.OnboardingCompletion
@@ -17,6 +19,8 @@ import voice.navigation.Origin
 class AddContentViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
+  @AudiobookshelfFeatureFlagQualifier
+  private val audiobookshelfFeatureFlag: FeatureFlag<Boolean>,
   @Assisted
   private val origin: Origin,
 ) {
@@ -47,6 +51,8 @@ class AddContentViewModel(
       }
     }
   }
+
+  internal val canConnectAudiobookshelf: Boolean get() = audiobookshelfFeatureFlag.get()
 
   internal fun connectAudiobookshelf() {
     navigator.goTo(Destination.AudiobookshelfLogin(origin))

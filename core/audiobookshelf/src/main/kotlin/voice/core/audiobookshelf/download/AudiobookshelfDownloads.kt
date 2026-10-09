@@ -136,8 +136,8 @@ public class AudiobookshelfDownloads internal constructor(
       .toMap()
   }.stateIn(scope, SharingStarted.Eagerly, emptyMap())
 
+  // the notification channel comes with the first download, as long as there is none it stays out of the settings
   internal fun start() {
-    notifications.createChannel()
     scope.launch {
       val manager = downloadManager
       manager.requirements = requirements(preferencesStore.data.first().downloadOverMobileData)

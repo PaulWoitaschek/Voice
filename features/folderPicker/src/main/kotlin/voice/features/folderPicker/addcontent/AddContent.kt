@@ -46,7 +46,7 @@ fun AddContent(origin: Origin) {
     onAdd = { folderType, uri ->
       viewModel.add(uri, folderType)
     },
-    onConnectAudiobookshelf = viewModel::connectAudiobookshelf,
+    onConnectAudiobookshelf = if (viewModel.canConnectAudiobookshelf) viewModel::connectAudiobookshelf else null,
   )
 }
 

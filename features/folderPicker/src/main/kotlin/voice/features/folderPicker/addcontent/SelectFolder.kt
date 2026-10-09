@@ -17,7 +17,8 @@ import voice.core.strings.R as StringsR
 internal fun SelectFolder(
   onBack: () -> Unit,
   onAdd: (FileTypeSelection, Uri) -> Unit,
-  onConnectAudiobookshelf: () -> Unit,
+  /** Null while connecting a server isn't available. */
+  onConnectAudiobookshelf: (() -> Unit)?,
   origin: Origin,
   modifier: Modifier = Modifier,
 ) {

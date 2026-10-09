@@ -75,6 +75,8 @@ class SettingsViewModelTest {
   }
   private val kioskModeFeatureFlag = MemoryFeatureFlag(false)
   private val supportDevelopmentFeatureFlag = MemoryFeatureFlag(true)
+  private val audiobookshelfFeatureFlag = MemoryFeatureFlag(false)
+  private val serverLibrary = FakeServerLibrary()
   private val supporterStatusStore = MemoryDataStore(SupporterStatus())
   private val dynamicColorAvailability = mockk<DynamicColorAvailability> {
     every { isSupported() } returns true
@@ -102,7 +104,8 @@ class SettingsViewModelTest {
     supporterStatusStore = supporterStatusStore,
     clock = Clock.fixed(JavaInstant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
-    serverLibrary = FakeServerLibrary(),
+    serverLibrary = serverLibrary,
+    audiobookshelfFeatureFlag = audiobookshelfFeatureFlag,
   )
 
   @Test
@@ -242,6 +245,37 @@ class SettingsViewModelTest {
       viewModel.viewState()
     }.filterNotNull().test {
       assertEquals(expected = false, actual = awaitItem().showSupportDevelopment)
+    }
+  }
+
+  @Test
+  fun `connecting a server is hidden while the feature is off`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.filterNotNull().test {
+      assertEquals(expected = false, actual = awaitItem().showAudiobookshelf)
+    }
+  }
+
+  @Test
+  fun `connecting a server shows once the feature is on`() = scope.runTest {
+    audiobookshelfFeatureFlag.value = true
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.filterNotNull().test {
+      assertEquals(expected = true, actual = awaitItem().showAudiobookshelf)
+    }
+  }
+
+  @Test
+  fun `a connected server stays in the settings while the feature is off`() = scope.runTest {
+    serverLibrary.serverName.value = "audiobooks.example.com"
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.filterNotNull().test {
+      assertEquals(expected = true, actual = awaitItem().showAudiobookshelf)
     }
   }
 

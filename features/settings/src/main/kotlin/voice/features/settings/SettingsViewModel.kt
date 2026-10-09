@@ -34,6 +34,7 @@ import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
 import voice.core.data.supporter.SupporterStatus
 import voice.core.documentfile.nameWithoutExtension
+import voice.core.featureflag.AudiobookshelfFeatureFlagQualifier
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
 import voice.core.featureflag.SupportDevelopmentFeatureFlagQualifier
@@ -79,6 +80,8 @@ class SettingsViewModel(
   private val clock: Clock,
   private val dispatcherProvider: DispatcherProvider,
   private val serverLibrary: ServerLibrary,
+  @AudiobookshelfFeatureFlagQualifier
+  private val audiobookshelfFeatureFlag: FeatureFlag<Boolean>,
 ) : SettingsListener {
 
   private val mainScope = MainScope(dispatcherProvider)
@@ -107,6 +110,8 @@ class SettingsViewModel(
     val audiobookshelfServer = remember {
       serverLibrary.serverName.map(::AudiobookshelfServerName)
     }.collectAsState(initial = null).value
+    val audiobookshelfEnabled = remember { audiobookshelfFeatureFlag.flow.map { it.value } }
+      .collectAsState(initial = null).value
     val dynamicColorAvailable = remember {
       dynamicColorAvailability.isSupported()
     }
@@ -122,7 +127,8 @@ class SettingsViewModel(
       showDeveloperMenu == null ||
       showSupportDevelopment == null ||
       supporterStatus == null ||
-      audiobookshelfServer == null
+      audiobookshelfServer == null ||
+      audiobookshelfEnabled == null
     ) {
       return null
     }
@@ -153,6 +159,8 @@ class SettingsViewModel(
       },
       folderNames = folderNames,
       audiobookshelfServer = audiobookshelfServer.name,
+      // a connected server stays reachable, so it can be signed out of
+      showAudiobookshelf = audiobookshelfEnabled || audiobookshelfServer.name != null,
     )
   }
 
