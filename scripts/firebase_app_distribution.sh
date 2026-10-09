@@ -46,6 +46,12 @@ version_name=$(sed -n 's/^version_name=//p' "$version_output")
 version_code=$(sed -n 's/^version_code=//p' "$version_output")
 
 commit=$(git rev-parse --short=7 HEAD)
+# testers see which branch a build comes from, a detached HEAD has none
+branch=$(git branch --show-current)
+release_notes="$commit: $(git log -1 --format=%s)"
+if [[ -n "$branch" ]]; then
+  release_notes="$branch · $release_notes"
+fi
 
 ./gradlew :app:assemblePlayRelease \
   -Pvoice.versionName="$version_name-$commit" \
@@ -54,5 +60,5 @@ commit=$(git rev-parse --short=7 HEAD)
 npx --yes "firebase-tools@$firebase_tools_version" appdistribution:distribute \
   app/build/outputs/apk/play/release/app-play-release.apk \
   --app "$app_id" \
-  --release-notes "$commit: $(git log -1 --format=%s)" \
+  --release-notes "$release_notes" \
   --groups "$groups"

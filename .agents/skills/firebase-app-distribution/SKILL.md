@@ -6,7 +6,7 @@ description: Uploading a Play release build of Voice to Firebase App Distributio
 # Firebase App Distribution
 
 Run `./scripts/firebase_app_distribution.sh`. It builds the Play release APK of the latest commit and uploads it with
-`<short hash>: <commit subject>` as release notes.
+`<branch> · <short hash>: <commit subject>` as release notes.
 
 - Testers in `beta-testers` are notified by default. Pass `--groups <aliases>` (comma-separated) to notify other
   groups instead, but only when the user names them.
