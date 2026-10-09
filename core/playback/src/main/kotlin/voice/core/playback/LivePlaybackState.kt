@@ -1,6 +1,7 @@
 package voice.core.playback
 
 import androidx.media3.common.C
+import androidx.media3.common.util.Util
 import androidx.media3.session.MediaController
 import voice.core.data.Book
 import voice.core.data.BookId
@@ -31,7 +32,7 @@ internal fun MediaController.livePlaybackStateSnapshot(bookId: BookId? = null): 
     bookId = mediaItemBookId,
     chapterId = chapterId,
     positionMs = positionInChapter,
-    isPlaying = isPlaying,
+    isPlaying = !Util.shouldShowPlayButton(this),
     playbackSpeed = playbackParameters.speed,
   )
 }

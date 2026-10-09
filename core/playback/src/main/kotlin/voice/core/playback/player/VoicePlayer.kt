@@ -346,12 +346,6 @@ class VoicePlayer(
     }
   }
 
-  override fun getPlaybackState(): Int = when (val state = super.getPlaybackState()) {
-    // redirect buffering to ready to prevent visual artifacts on seeking
-    STATE_BUFFERING -> STATE_READY
-    else -> state
-  }
-
   override fun setMediaItem(
     mediaItem: MediaItem,
     startPositionMs: Long,
