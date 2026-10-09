@@ -7,7 +7,6 @@ import dev.zacsweers.metro.ElementsIntoSet
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.Qualifier
 import dev.zacsweers.metro.SingleIn
-import voice.core.common.AppInfoProvider
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -83,20 +82,6 @@ object FeatureFlagBindingContainer {
     return factory.boolean(
       key = "kiosk_mode",
       description = "Shows demo content on the overview, playback, and bookmark screens.",
-    )
-  }
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @SupportDevelopmentFeatureFlagQualifier
-  fun supportDevelopmentFeatureFlag(
-    factory: FeatureFlagFactory,
-    appInfoProvider: AppInfoProvider,
-  ): FeatureFlag<Boolean> {
-    return factory.boolean(
-      key = "support_development",
-      description = "Shows the support card in the settings. Play builds turn it on remotely once the supporter products are live.",
-      defaultValue = appInfoProvider.supportDevelopmentIncluded,
     )
   }
 

@@ -57,7 +57,6 @@ class ReviewPromptControllerTest {
     appInfoProvider = object : AppInfoProvider {
       override val versionName = "1.2.3"
       override val analyticsIncluded = false
-      override val supportDevelopmentIncluded = false
       override val installTime = Instant.parse("2026-06-01T00:00:00Z").toKotlinInstant()
     },
     clock = Clock.fixed(now, ZoneOffset.UTC),

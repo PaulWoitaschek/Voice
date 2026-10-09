@@ -70,7 +70,6 @@ interface MigrationTestGraph {
     get() = object : AppInfoProvider {
       override val versionName: String get() = "1.2.3"
       override val analyticsIncluded: Boolean get() = false
-      override val supportDevelopmentIncluded: Boolean get() = false
       override val installTime: Instant get() = Instant.parse("2026-06-01T00:00:00Z")
     }
 
