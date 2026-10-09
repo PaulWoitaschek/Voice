@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Se descarcă %d carte</item>
+        <item quantity="few">Se descarcă %d cărți</item>
+        <item quantity="other">Se descarcă %d de cărți</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Gata de ascultat offline</string>
+    <string name="audiobookshelf.download.notification.retry">Reîncearcă</string>
+    <string name="audiobookshelf.download.notification.stop">Oprește</string>
+    <string name="audiobookshelf.download.notification.title">Se descarcă…</string>
     <string name="audiobookshelf.downloads.channel">Descărcări</string>
     <string name="audiobookshelf.login.address.action">Continuă</string>
     <string name="audiobookshelf.login.address.label">Adresa serverului</string>
@@ -59,14 +68,19 @@
     <string name="book.delete.dialog.message">Astfel vei șterge de pe dispozitiv și fișierele corespunzătoare cărții.</string>
     <string name="book.delete.dialog.title">Șterge cartea</string>
     <string name="book.download.action">Descarcă</string>
+    <string name="book.download.failed">Descărcarea nu s-a finalizat</string>
+    <string name="book.download.progress">%1$s din %2$s</string>
     <string name="book.download.remove">Elimină descărcarea</string>
+    <string name="book.download.retry">Descarcă din nou</string>
+    <string name="book.download.stop">Oprește descărcarea</string>
+    <string name="book.download.waiting_for_connection">Se așteaptă o conexiune</string>
+    <string name="book.download.waiting_for_wifi">Se așteaptă o rețea Wi-Fi</string>
     <string name="book.edit.cover.file">Copertă din sistemul de fișiere</string>
     <string name="book.edit.cover.internet">Copertă de pe internet</string>
     <string name="book.edit.name.label">Nume</string>
     <string name="book.edit.rename">Redenumește</string>
     <string name="book.source.device">Pe acest dispozitiv</string>
     <string name="book.source.server_downloaded">%s · descărcată</string>
-    <string name="book.source.server_waiting_for_wifi">%s · așteaptă o rețea Wi-Fi</string>
     <string name="bookmark.action.add_note">Adaugă notă</string>
     <string name="bookmark.add_note_hint">Adaugă o notă</string>
     <string name="bookmark.added.snackbar">Semn de carte adăugat</string>
@@ -244,6 +258,7 @@
     <string name="history.suggestion.started_by.headset">Un buton de la căști a pornit cartea la ora %1$s</string>
     <string name="history.suggestion.started_by.other_app">O altă aplicație a pornit cartea la ora %1$s</string>
     <string name="history.suggestion.started_by.watch">Ceasul tău a pornit cartea la ora %1$s</string>
+    <string name="library.book.downloading">Se descarcă</string>
     <string name="library.book.offline">Indisponibilă offline</string>
     <string name="library.category.completed.title">Cărți citite</string>
     <string name="library.category.current.title">Cărți în lectură</string>

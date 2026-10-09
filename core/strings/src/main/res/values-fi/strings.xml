@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Ladataan %d kirja</item>
+        <item quantity="other">Ladataan %d kirjaa</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Valmis kuunneltavaksi ilman verkkoyhteyttä</string>
+    <string name="audiobookshelf.download.notification.retry">Yritä uudelleen</string>
+    <string name="audiobookshelf.download.notification.stop">Peruuta</string>
+    <string name="audiobookshelf.download.notification.title">Ladataan…</string>
     <string name="audiobookshelf.downloads.channel">Lataukset</string>
     <string name="audiobookshelf.login.address.action">Jatka</string>
     <string name="audiobookshelf.login.address.label">Palvelimen osoite</string>
@@ -57,14 +65,19 @@
     <string name="book.delete.dialog.message">Tämä poistaa tiedostot laitteeltasi.</string>
     <string name="book.delete.dialog.title">Poista kirja</string>
     <string name="book.download.action">Lataa</string>
+    <string name="book.download.failed">Lataus ei onnistunut</string>
+    <string name="book.download.progress">%1$s / %2$s</string>
     <string name="book.download.remove">Poista lataus</string>
+    <string name="book.download.retry">Lataa uudelleen</string>
+    <string name="book.download.stop">Peruuta lataus</string>
+    <string name="book.download.waiting_for_connection">Odotetaan verkkoyhteyttä</string>
+    <string name="book.download.waiting_for_wifi">Odotetaan Wi-Fi-yhteyttä</string>
     <string name="book.edit.cover.file">Kansi tiedostojärjestelmästä</string>
     <string name="book.edit.cover.internet">Kansi internetistä</string>
     <string name="book.edit.name.label">Nimi</string>
     <string name="book.edit.rename">Nimeä uudelleen</string>
     <string name="book.source.device">Tällä laitteella</string>
     <string name="book.source.server_downloaded">%s · ladattu</string>
-    <string name="book.source.server_waiting_for_wifi">%s · odottaa Wi-Fi-yhteyttä</string>
     <string name="bookmark.action.add_note">Lisää muistiinpano</string>
     <string name="bookmark.add_note_hint">Lisää muistiinpano</string>
     <string name="bookmark.added.snackbar">Kirjanmerkki lisätty</string>
@@ -234,6 +247,7 @@
     <string name="history.suggestion.started_by.headset">Kuulokkeiden painike käynnisti kirjan klo %1$s</string>
     <string name="history.suggestion.started_by.other_app">Toinen sovellus käynnisti kirjan klo %1$s</string>
     <string name="history.suggestion.started_by.watch">Kellosi käynnisti kirjan klo %1$s</string>
+    <string name="library.book.downloading">Ladataan</string>
     <string name="library.book.offline">Ei saatavilla offline-tilassa</string>
     <string name="library.category.completed.title">Valmiina</string>
     <string name="library.category.current.title">Nykyinen</string>

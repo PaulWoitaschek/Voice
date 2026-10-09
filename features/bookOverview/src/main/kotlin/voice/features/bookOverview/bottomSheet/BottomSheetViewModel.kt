@@ -6,7 +6,10 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.audiobookshelf.download.BookDownloadState
@@ -41,39 +44,64 @@ class BottomSheetViewModel(
     loadJob?.cancel()
     loadJob = scope.launch {
       val book = repo.get(bookId)
-      val items = viewModels.flatMap { it.items(bookId) }
-        .toSet()
-        .sorted()
-      state.value = EditBookBottomSheetState(
+      val items = viewModels.flatMap { it.items(bookId) }.toSet()
+      val loaded = EditBookBottomSheetState(
         book = book?.toItemViewState(),
         category = book?.category,
-        items = items,
-        source = source(bookId),
+        items = items.sorted(),
       )
-    }
-  }
-
-  // with books only on the device there is nothing to tell apart
-  private suspend fun source(bookId: BookId): BookSource? {
-    val serverName = serverLibrary.serverName.first() ?: return null
-    return if (bookId.isRemote) {
-      val download = when (val state = serverLibrary.downloadStates.first()[bookId]) {
-        BookDownloadState.Downloaded -> BookSource.Download.Done
-        is BookDownloadState.Downloading -> if (state.waitingForWifi) BookSource.Download.WaitingForWifi else BookSource.Download.None
-        BookDownloadState.Failed, BookDownloadState.NotDownloaded, null -> BookSource.Download.None
+      if (!bookId.isRemote) {
+        // with books only on the device there is nothing to tell apart
+        val serverConnected = serverLibrary.serverName.first() != null
+        state.value = loaded.copy(source = if (serverConnected) BookSource.Device else null)
+        return@launch
       }
-      BookSource.Server(name = serverName, download = download)
-    } else {
-      BookSource.Device
+      val askForNotifications = serverLibrary.shouldAskForNotifications()
+      val bookSize = book?.chapters?.takeIf { chapters -> chapters.all { it.fileSize > 0 } }?.sumOf { it.fileSize } ?: 0L
+      // the download goes on while the sheet is open
+      combine(
+        serverLibrary.serverName,
+        serverLibrary.downloadStates.map { it[bookId] ?: BookDownloadState.NotDownloaded }.distinctUntilChanged(),
+      ) { serverName, download ->
+        loaded.copy(
+          items = (items + download.items()).sorted(),
+          bookSize = bookSize,
+          source = serverName?.let {
+            BookSource.Server(
+              name = it,
+              download = if (download is BookDownloadState.Downloaded) BookSource.Download.Done else BookSource.Download.None,
+            )
+          },
+          download = download,
+          askForNotifications = askForNotifications,
+        )
+      }.collect { state.value = it }
     }
   }
 
   internal fun onItemClick(item: BottomSheetItem) {
     val bookId = bookId ?: return
     scope.launch {
-      viewModels.forEach {
-        it.onItemClick(bookId, item)
+      when (item) {
+        BottomSheetItem.Download, BottomSheetItem.RetryDownload -> serverLibrary.download(bookId)
+        BottomSheetItem.StopDownload, BottomSheetItem.RemoveDownload -> serverLibrary.removeDownload(bookId)
+        else -> viewModels.forEach {
+          it.onItemClick(bookId, item)
+        }
       }
     }
   }
+
+  internal fun onAskedForNotifications() {
+    scope.launch {
+      serverLibrary.onAskedForNotifications()
+    }
+  }
+}
+
+private fun BookDownloadState.items(): List<BottomSheetItem> = when (this) {
+  BookDownloadState.NotDownloaded -> listOf(BottomSheetItem.Download)
+  is BookDownloadState.Downloading -> listOf(BottomSheetItem.StopDownload)
+  BookDownloadState.Failed -> listOf(BottomSheetItem.RetryDownload, BottomSheetItem.RemoveDownload)
+  is BookDownloadState.Downloaded -> listOf(BottomSheetItem.RemoveDownload)
 }

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">%d புத்தகம் பதிவிறக்கப்படுகிறது</item>
+        <item quantity="other">%d புத்தகங்கள் பதிவிறக்கப்படுகின்றன</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">ஆஃப்லைனில் கேட்கத் தயார்</string>
+    <string name="audiobookshelf.download.notification.retry">மீண்டும் முயற்சிக்கவும்</string>
+    <string name="audiobookshelf.download.notification.stop">நிறுத்து</string>
+    <string name="audiobookshelf.download.notification.title">பதிவிறக்குகிறது…</string>
     <string name="audiobookshelf.downloads.channel">பதிவிறக்கங்கள்</string>
     <string name="audiobookshelf.login.address.action">தொடர்க</string>
     <string name="audiobookshelf.login.address.label">சர்வர் முகவரி</string>
@@ -57,14 +65,19 @@
     <string name="book.delete.dialog.message">இது உங்கள் சாதனத்தில் உள்ள கோப்புகளை நீக்கும்.</string>
     <string name="book.delete.dialog.title">புத்தகத்தை நீக்கு</string>
     <string name="book.download.action">பதிவிறக்கு</string>
+    <string name="book.download.failed">பதிவிறக்கம் முடியவில்லை</string>
+    <string name="book.download.progress">%2$s இல் %1$s</string>
     <string name="book.download.remove">பதிவிறக்கத்தை அகற்று</string>
+    <string name="book.download.retry">மீண்டும் பதிவிறக்கு</string>
+    <string name="book.download.stop">பதிவிறக்கத்தை நிறுத்து</string>
+    <string name="book.download.waiting_for_connection">இணைப்புக்காகக் காத்திருக்கிறது</string>
+    <string name="book.download.waiting_for_wifi">வைஃபைக்காகக் காத்திருக்கிறது</string>
     <string name="book.edit.cover.file">கோப்பு முறைமையிலிருந்து மூடி</string>
     <string name="book.edit.cover.internet">இணையத்திலிருந்து மூடி</string>
     <string name="book.edit.name.label">பெயர்</string>
     <string name="book.edit.rename">மறுபெயரிடு</string>
     <string name="book.source.device">இந்தச் சாதனத்தில்</string>
     <string name="book.source.server_downloaded">%s · பதிவிறக்கப்பட்டது</string>
-    <string name="book.source.server_waiting_for_wifi">%s · வைஃபைக்காகக் காத்திருக்கிறது</string>
     <string name="bookmark.action.add_note">குறிப்பைச் சேர்</string>
     <string name="bookmark.add_note_hint">ஒரு குறிப்பைச் சேர்க்கவும்</string>
     <string name="bookmark.added.snackbar">புக்மார்க்கு சேர்க்கப்பட்டது</string>
@@ -234,6 +247,7 @@
     <string name="history.suggestion.started_by.headset">ஒரு ஹெட்செட் பொத்தான் %1$s மணிக்குப் புத்தகத்தைத் தொடங்கியது</string>
     <string name="history.suggestion.started_by.other_app">மற்றொரு பயன்பாடு %1$s மணிக்குப் புத்தகத்தைத் தொடங்கியது</string>
     <string name="history.suggestion.started_by.watch">உங்கள் கைக்கடிகாரம் %1$s மணிக்குப் புத்தகத்தைத் தொடங்கியது</string>
+    <string name="library.book.downloading">பதிவிறக்குகிறது</string>
     <string name="library.book.offline">ஆஃப்லைனில் கிடைக்காது</string>
     <string name="library.category.completed.title">முடிந்தது</string>
     <string name="library.category.current.title">மின்னோட்ட்ம், ஓட்டம்</string>

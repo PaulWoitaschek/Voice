@@ -19,7 +19,6 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerLibrary
-import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -150,7 +149,7 @@ class BookOverviewViewModel(
                 currentBookId = currentBookId,
                 livePlaybackState = { livePlaybackState.value },
                 unavailable = book.id in unavailableBooks,
-                downloadProgress = (downloadStates[book.id] as? BookDownloadState.Downloading)?.progress,
+                download = downloadStates[book.id].badge(),
               )
             }
         }
@@ -250,20 +249,20 @@ private fun Book.itemViewState(
   currentBookId: BookId?,
   livePlaybackState: () -> LivePlaybackState?,
   unavailable: Boolean,
-  downloadProgress: Float?,
+  download: DownloadBadge?,
 ): State<BookOverviewItemViewState> {
   if (id != currentBookId) {
-    return rememberUpdatedState(toItemViewState(unavailable, downloadProgress))
+    return rememberUpdatedState(toItemViewState(unavailable, download))
   }
   val currentPlaybackState by rememberUpdatedState(livePlaybackState)
-  return remember(this, currentBookId, unavailable, downloadProgress) {
+  return remember(this, currentBookId, unavailable, download) {
     derivedStateOf {
       val livePlayback = currentPlaybackState()
       if (livePlayback != null) {
         overlay(livePlayback)
       } else {
         this
-      }.toItemViewState(unavailable, downloadProgress)
+      }.toItemViewState(unavailable, download)
     }
   }
 }

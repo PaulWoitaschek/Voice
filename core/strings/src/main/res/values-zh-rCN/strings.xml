@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="other">正在下载 %d 本书</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">可以离线收听了</string>
+    <string name="audiobookshelf.download.notification.retry">重试</string>
+    <string name="audiobookshelf.download.notification.stop">停止</string>
+    <string name="audiobookshelf.download.notification.title">正在下载…</string>
     <string name="audiobookshelf.downloads.channel">下载</string>
     <string name="audiobookshelf.login.address.action">继续</string>
     <string name="audiobookshelf.login.address.label">服务器地址</string>
@@ -55,14 +62,19 @@
     <string name="book.delete.dialog.message">这样做将从您的设备上删除文件。</string>
     <string name="book.delete.dialog.title">删除有声书</string>
     <string name="book.download.action">下载</string>
+    <string name="book.download.failed">下载未完成</string>
+    <string name="book.download.progress">%1$s / %2$s</string>
     <string name="book.download.remove">移除下载</string>
+    <string name="book.download.retry">重新下载</string>
+    <string name="book.download.stop">停止下载</string>
+    <string name="book.download.waiting_for_connection">正在等待网络连接</string>
+    <string name="book.download.waiting_for_wifi">正在等待 Wi-Fi</string>
     <string name="book.edit.cover.file">从本机寻找封面图片</string>
     <string name="book.edit.cover.internet">从互联网寻找封面图片</string>
     <string name="book.edit.name.label">名称</string>
     <string name="book.edit.rename">重命名</string>
     <string name="book.source.device">在本设备上</string>
     <string name="book.source.server_downloaded">%s · 已下载</string>
-    <string name="book.source.server_waiting_for_wifi">%s · 等待 Wi-Fi</string>
     <string name="bookmark.action.add_note">添加笔记</string>
     <string name="bookmark.add_note_hint">添加笔记</string>
     <string name="bookmark.added.snackbar">已添加书签</string>
@@ -224,6 +236,7 @@
     <string name="history.suggestion.started_by.headset">耳机按键在 %1$s 开始播放本书</string>
     <string name="history.suggestion.started_by.other_app">其他应用在 %1$s 开始播放本书</string>
     <string name="history.suggestion.started_by.watch">您的手表在 %1$s 开始播放本书</string>
+    <string name="library.book.downloading">正在下载</string>
     <string name="library.book.offline">离线不可用</string>
     <string name="library.category.completed.title">已结束播放</string>
     <string name="library.category.current.title">正在播放中</string>

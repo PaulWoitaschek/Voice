@@ -16,6 +16,7 @@ dependencies {
   implementation(projects.core.featureflag)
   implementation(projects.core.audiobookshelf)
 
+  implementation(libs.androidxCore)
   implementation(libs.lifecycle)
   implementation(libs.documentFile)
   implementation(libs.navigation3.ui)

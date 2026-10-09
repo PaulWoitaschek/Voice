@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">%d könyv letöltése</item>
+        <item quantity="other">%d könyv letöltése</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Készen áll az offline hallgatásra</string>
+    <string name="audiobookshelf.download.notification.retry">Újra</string>
+    <string name="audiobookshelf.download.notification.stop">Leállítás</string>
+    <string name="audiobookshelf.download.notification.title">Letöltés…</string>
     <string name="audiobookshelf.downloads.channel">Letöltések</string>
     <string name="audiobookshelf.login.address.action">Tovább</string>
     <string name="audiobookshelf.login.address.label">Szervercím</string>
@@ -57,14 +65,19 @@
     <string name="book.delete.dialog.message">Ezzel törli az eszközről a könyv hangfájljait is.</string>
     <string name="book.delete.dialog.title">Könyv törlése</string>
     <string name="book.download.action">Letöltés</string>
+    <string name="book.download.failed">A letöltés nem fejeződött be</string>
+    <string name="book.download.progress">%1$s / %2$s</string>
     <string name="book.download.remove">Letöltés törlése</string>
+    <string name="book.download.retry">Újbóli letöltés</string>
+    <string name="book.download.stop">Letöltés leállítása</string>
+    <string name="book.download.waiting_for_connection">Várakozás internetkapcsolatra</string>
+    <string name="book.download.waiting_for_wifi">Várakozás Wi-Fi-re</string>
     <string name="book.edit.cover.file">Borító a fájlrendszerből</string>
     <string name="book.edit.cover.internet">Borító az internetről</string>
     <string name="book.edit.name.label">Cím</string>
     <string name="book.edit.rename">Átnevezés</string>
     <string name="book.source.device">Ezen az eszközön</string>
     <string name="book.source.server_downloaded">%s · letöltve</string>
-    <string name="book.source.server_waiting_for_wifi">%s · Wi-Fi-re vár</string>
     <string name="bookmark.action.add_note">Jegyzet hozzáadása</string>
     <string name="bookmark.add_note_hint">Jegyzet hozzáadása</string>
     <string name="bookmark.added.snackbar">Könyvjelző hozzáadva</string>
@@ -234,6 +247,7 @@
     <string name="history.suggestion.started_by.headset">A fejhallgató gombja indította el a könyvet ekkor: %1$s</string>
     <string name="history.suggestion.started_by.other_app">Egy másik alkalmazás indította el a könyvet ekkor: %1$s</string>
     <string name="history.suggestion.started_by.watch">Az órája indította el a könyvet ekkor: %1$s</string>
+    <string name="library.book.downloading">Letöltés folyamatban</string>
     <string name="library.book.offline">Offline nem érhető el</string>
     <string name="library.category.completed.title">Befejezett</string>
     <string name="library.category.current.title">Jelenlegi</string>

@@ -1,6 +1,8 @@
 package voice.features.bookOverview.overview
 
 import androidx.compose.runtime.Immutable
+import voice.core.audiobookshelf.download.BookDownloadState
+import voice.core.audiobookshelf.download.WaitingFor
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.logging.api.Logger
@@ -16,13 +18,29 @@ data class BookOverviewItemViewState(
   val remainingTime: String,
   /** A server book that isn't downloaded while the server can't be reached. */
   val unavailable: Boolean = false,
-  /** How far the download of a server book has come, while it downloads. */
-  val downloadProgress: Float? = null,
+  /** What the cover of a server book tells about its download, while it isn't done. */
+  val download: DownloadBadge? = null,
 )
+
+@Immutable
+sealed interface DownloadBadge {
+  data class Running(
+    val progress: Float,
+    val waitingFor: WaitingFor?,
+  ) : DownloadBadge
+
+  data object Failed : DownloadBadge
+}
+
+internal fun BookDownloadState?.badge(): DownloadBadge? = when (this) {
+  is BookDownloadState.Downloading -> DownloadBadge.Running(progress, waitingFor)
+  BookDownloadState.Failed -> DownloadBadge.Failed
+  is BookDownloadState.Downloaded, BookDownloadState.NotDownloaded, null -> null
+}
 
 internal fun Book.toItemViewState(
   unavailable: Boolean = false,
-  downloadProgress: Float? = null,
+  download: DownloadBadge? = null,
 ) = BookOverviewItemViewState(
   name = content.name,
   author = content.author,
@@ -31,7 +49,7 @@ internal fun Book.toItemViewState(
   progress = progress(),
   remainingTime = formatTime(duration - position),
   unavailable = unavailable,
-  downloadProgress = downloadProgress,
+  download = download,
 )
 
 private fun Book.progress(): Float {

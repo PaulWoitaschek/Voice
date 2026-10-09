@@ -12,10 +12,12 @@ import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.Audiobookshelf
 import voice.core.audiobookshelf.AudiobookshelfConnection
 import voice.core.audiobookshelf.download.AudiobookshelfDownloads
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.audiobookshelf.sync.AudiobookshelfSync
 import voice.core.audiobookshelf.sync.ServerReachability
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
+import voice.core.data.BookId
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import voice.navigation.Origin
@@ -41,6 +43,7 @@ class AudiobookshelfSettingsViewModel(
     val reachability by sync.reachability.collectAsState()
     val syncing by sync.syncing.collectAsState()
     val usedBytes by remember { downloads.usedBytes }.collectAsState(initial = 0L)
+    val books by remember { downloads.books }.collectAsState(initial = emptyList())
     val downloadOverMobileData by remember { downloads.downloadOverMobileData }.collectAsState(initial = false)
     // the libraries come in once the server answers
     LaunchedEffect(reachability) {
@@ -59,6 +62,14 @@ class AudiobookshelfSettingsViewModel(
       libraries = libraries?.map { it.copy(selected = it.id in current.libraryIds) },
       librariesUnavailable = librariesUnavailable,
       usedBytes = usedBytes,
+      downloads = books.map { download ->
+        DownloadViewState(
+          bookId = download.book.id,
+          name = download.book.content.name,
+          cover = download.book.content.coverUrl,
+          state = download.state,
+        )
+      },
       downloadOverMobileData = downloadOverMobileData,
       confirmSignOut = confirmSignOut,
     )
@@ -88,6 +99,18 @@ class AudiobookshelfSettingsViewModel(
   internal fun onDownloadOverMobileDataChange(enabled: Boolean) {
     scope.launch {
       downloads.setDownloadOverMobileData(enabled)
+    }
+  }
+
+  internal fun onRemoveDownload(bookId: BookId) {
+    scope.launch {
+      downloads.remove(bookId)
+    }
+  }
+
+  internal fun onRetryDownload(bookId: BookId) {
+    scope.launch {
+      downloads.download(bookId)
     }
   }
 
@@ -136,11 +159,20 @@ internal data class AudiobookshelfSettingsViewState(
   /** The server didn't answer, so its libraries can't be picked right now. */
   val librariesUnavailable: Boolean = false,
   val usedBytes: Long,
+  /** The books that are downloaded, or on their way. */
+  val downloads: List<DownloadViewState> = emptyList(),
   val downloadOverMobileData: Boolean,
   val confirmSignOut: Boolean,
 ) {
   val selectedLibraryIds: List<String> get() = libraries.orEmpty().filter { it.selected }.map { it.id }
 }
+
+internal data class DownloadViewState(
+  val bookId: BookId,
+  val name: String,
+  val cover: String?,
+  val state: BookDownloadState,
+)
 
 internal data class LibraryViewState(
   val id: String,

@@ -40,6 +40,8 @@ internal data class Preferences(
   val downloadOverMobileData: Boolean = false,
   /** Tells the server which listening sessions came from this device. */
   val deviceId: String? = null,
+  /** Voice asks for notifications once, at the first download. */
+  val askedForNotifications: Boolean = false,
 )
 
 /**

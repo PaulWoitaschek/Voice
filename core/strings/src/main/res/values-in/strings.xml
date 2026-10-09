@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="other">Mengunduh %d buku</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Siap didengarkan secara offline</string>
+    <string name="audiobookshelf.download.notification.retry">Coba lagi</string>
+    <string name="audiobookshelf.download.notification.stop">Hentikan</string>
+    <string name="audiobookshelf.download.notification.title">Mengunduh…</string>
     <string name="audiobookshelf.downloads.channel">Unduhan</string>
     <string name="audiobookshelf.login.address.action">Lanjutkan</string>
     <string name="audiobookshelf.login.address.label">Alamat server</string>
@@ -55,14 +62,19 @@
     <string name="book.delete.dialog.message">Ini akan menghapus berkas di perangkat Anda.</string>
     <string name="book.delete.dialog.title">Hapus Buku</string>
     <string name="book.download.action">Unduh</string>
+    <string name="book.download.failed">Unduhan tidak selesai</string>
+    <string name="book.download.progress">%1$s dari %2$s</string>
     <string name="book.download.remove">Hapus unduhan</string>
+    <string name="book.download.retry">Unduh lagi</string>
+    <string name="book.download.stop">Hentikan unduhan</string>
+    <string name="book.download.waiting_for_connection">Menunggu koneksi</string>
+    <string name="book.download.waiting_for_wifi">Menunggu Wi-Fi</string>
     <string name="book.edit.cover.file">Sampul dari file sistem</string>
     <string name="book.edit.cover.internet">Sampul dari Internet</string>
     <string name="book.edit.name.label">Judul Buku</string>
     <string name="book.edit.rename">Ganti nama</string>
     <string name="book.source.device">Di perangkat ini</string>
     <string name="book.source.server_downloaded">%s · sudah diunduh</string>
-    <string name="book.source.server_waiting_for_wifi">%s · menunggu Wi-Fi</string>
     <string name="bookmark.action.add_note">Tambah catatan</string>
     <string name="bookmark.add_note_hint">Tambahkan catatan</string>
     <string name="bookmark.added.snackbar">Markah ditambahkan</string>
@@ -224,6 +236,7 @@
     <string name="history.suggestion.started_by.headset">Tombol headset memulai buku ini pada %1$s</string>
     <string name="history.suggestion.started_by.other_app">Aplikasi lain memulai buku ini pada %1$s</string>
     <string name="history.suggestion.started_by.watch">Jam tangan Anda memulai buku ini pada %1$s</string>
+    <string name="library.book.downloading">Mengunduh</string>
     <string name="library.book.offline">Tidak tersedia offline</string>
     <string name="library.category.completed.title">Selesai</string>
     <string name="library.category.current.title">Saat ini</string>

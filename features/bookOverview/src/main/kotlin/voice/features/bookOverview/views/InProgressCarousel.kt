@@ -66,7 +66,7 @@ internal fun InProgressCarousel(
         cover = book.cover,
         shape = shape,
         unavailable = book.unavailable,
-        downloadProgress = book.downloadProgress,
+        download = book.download,
         modifier = Modifier.fillMaxSize(),
       )
       Column(

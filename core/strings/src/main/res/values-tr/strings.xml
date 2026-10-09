@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">%d kitap indiriliyor</item>
+        <item quantity="other">%d kitap indiriliyor</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Çevrimdışı dinlemeye hazır</string>
+    <string name="audiobookshelf.download.notification.retry">Tekrar dene</string>
+    <string name="audiobookshelf.download.notification.stop">Durdur</string>
+    <string name="audiobookshelf.download.notification.title">İndiriliyor…</string>
     <string name="audiobookshelf.downloads.channel">İndirilenler</string>
     <string name="audiobookshelf.login.address.action">Devam</string>
     <string name="audiobookshelf.login.address.label">Sunucu adresi</string>
@@ -57,14 +65,19 @@
     <string name="book.delete.dialog.message">Bu, aygıtınızdaki dosyaları silecektir.</string>
     <string name="book.delete.dialog.title">Kitabı Sil</string>
     <string name="book.download.action">İndir</string>
+    <string name="book.download.failed">İndirme tamamlanamadı</string>
+    <string name="book.download.progress">%1$s / %2$s</string>
     <string name="book.download.remove">İndirmeyi kaldır</string>
+    <string name="book.download.retry">Tekrar indir</string>
+    <string name="book.download.stop">İndirmeyi durdur</string>
+    <string name="book.download.waiting_for_connection">Bağlantı bekleniyor</string>
+    <string name="book.download.waiting_for_wifi">Wi-Fi bekleniyor</string>
     <string name="book.edit.cover.file">Dosyalardan kapak</string>
     <string name="book.edit.cover.internet">İnternetten kitap kapağı</string>
     <string name="book.edit.name.label">Ad</string>
     <string name="book.edit.rename">Yeniden adlandır</string>
     <string name="book.source.device">Bu cihazda</string>
     <string name="book.source.server_downloaded">%s · indirildi</string>
-    <string name="book.source.server_waiting_for_wifi">%s · Wi-Fi bekleniyor</string>
     <string name="bookmark.action.add_note">Not ekle</string>
     <string name="bookmark.add_note_hint">Not ekleyin</string>
     <string name="bookmark.added.snackbar">Yer imi eklendi</string>
@@ -234,6 +247,7 @@
     <string name="history.suggestion.started_by.headset">Bir kulaklık düğmesi kitabı başlattı (saat %1$s)</string>
     <string name="history.suggestion.started_by.other_app">Başka bir uygulama kitabı başlattı (saat %1$s)</string>
     <string name="history.suggestion.started_by.watch">Akıllı saatiniz kitabı başlattı (saat %1$s)</string>
+    <string name="library.book.downloading">İndiriliyor</string>
     <string name="library.book.offline">Çevrimdışı kullanılamaz</string>
     <string name="library.category.completed.title">Tamamlandı</string>
     <string name="library.category.current.title">Geçerli</string>

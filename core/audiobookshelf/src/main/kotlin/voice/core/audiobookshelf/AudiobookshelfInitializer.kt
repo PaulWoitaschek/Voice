@@ -26,11 +26,14 @@ class AudiobookshelfInitializer(
         private var startedActivities = 0
 
         override fun onActivityStarted(activity: Activity) {
-          if (startedActivities++ == 0) sync.sync()
+          if (startedActivities++ == 0) {
+            sync.sync()
+            downloads.onAppVisible()
+          }
         }
 
         override fun onActivityStopped(activity: Activity) {
-          startedActivities--
+          if (--startedActivities == 0) downloads.onAppHidden()
         }
 
         override fun onActivityCreated(

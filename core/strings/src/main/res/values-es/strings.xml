@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Descargando %d libro</item>
+        <item quantity="many">Descargando %d libros</item>
+        <item quantity="other">Descargando %d libros</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Listo para escuchar sin conexión</string>
+    <string name="audiobookshelf.download.notification.retry">Reintentar</string>
+    <string name="audiobookshelf.download.notification.stop">Detener</string>
+    <string name="audiobookshelf.download.notification.title">Descargando…</string>
     <string name="audiobookshelf.downloads.channel">Descargas</string>
     <string name="audiobookshelf.login.address.action">Continuar</string>
     <string name="audiobookshelf.login.address.label">Dirección del servidor</string>
@@ -59,14 +68,19 @@
     <string name="book.delete.dialog.message">Esto eliminará los archivos de tu dispositivo.</string>
     <string name="book.delete.dialog.title">Eliminar libro</string>
     <string name="book.download.action">Descargar</string>
+    <string name="book.download.failed">La descarga no se completó</string>
+    <string name="book.download.progress">%1$s de %2$s</string>
     <string name="book.download.remove">Eliminar descarga</string>
+    <string name="book.download.retry">Volver a descargar</string>
+    <string name="book.download.stop">Detener descarga</string>
+    <string name="book.download.waiting_for_connection">Esperando conexión</string>
+    <string name="book.download.waiting_for_wifi">Esperando conexión Wi-Fi</string>
     <string name="book.edit.cover.file">Portada desde el sistema de archivos</string>
     <string name="book.edit.cover.internet">Portada desde Internet</string>
     <string name="book.edit.name.label">Nombre</string>
     <string name="book.edit.rename">Cambiar nombre</string>
     <string name="book.source.device">En este dispositivo</string>
     <string name="book.source.server_downloaded">%s · descargado</string>
-    <string name="book.source.server_waiting_for_wifi">%s · esperando al Wi-Fi</string>
     <string name="bookmark.action.add_note">Añadir nota</string>
     <string name="bookmark.add_note_hint">Añade una nota</string>
     <string name="bookmark.added.snackbar">Marcador añadido</string>
@@ -244,6 +258,7 @@
     <string name="history.suggestion.started_by.headset">Un botón de los auriculares inició el libro a las %1$s</string>
     <string name="history.suggestion.started_by.other_app">Otra aplicación inició el libro a las %1$s</string>
     <string name="history.suggestion.started_by.watch">Tu reloj inició el libro a las %1$s</string>
+    <string name="library.book.downloading">Descargando</string>
     <string name="library.book.offline">No disponible sin conexión</string>
     <string name="library.category.completed.title">Completado</string>
     <string name="library.category.current.title">Actual</string>

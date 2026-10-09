@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Laster ned %d bok</item>
+        <item quantity="other">Laster ned %d bøker</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Klar til å lytte uten nett</string>
+    <string name="audiobookshelf.download.notification.retry">Prøv igjen</string>
+    <string name="audiobookshelf.download.notification.stop">Avbryt</string>
+    <string name="audiobookshelf.download.notification.title">Laster ned…</string>
     <string name="audiobookshelf.downloads.channel">Nedlastinger</string>
     <string name="audiobookshelf.login.address.action">Fortsett</string>
     <string name="audiobookshelf.login.address.label">Serveradresse</string>
@@ -57,14 +65,19 @@
     <string name="book.delete.dialog.message">Dette sletter filene på enheten din.</string>
     <string name="book.delete.dialog.title">Slett bok</string>
     <string name="book.download.action">Last ned</string>
+    <string name="book.download.failed">Nedlastingen ble ikke fullført</string>
+    <string name="book.download.progress">%1$s av %2$s</string>
     <string name="book.download.remove">Fjern nedlasting</string>
+    <string name="book.download.retry">Last ned på nytt</string>
+    <string name="book.download.stop">Avbryt nedlasting</string>
+    <string name="book.download.waiting_for_connection">Venter på tilkobling</string>
+    <string name="book.download.waiting_for_wifi">Venter på Wi-Fi</string>
     <string name="book.edit.cover.file">Omslag fra filsystemet</string>
     <string name="book.edit.cover.internet">Omslag fra Internett</string>
     <string name="book.edit.name.label">Navn</string>
     <string name="book.edit.rename">Gi nytt navn</string>
     <string name="book.source.device">På denne enheten</string>
     <string name="book.source.server_downloaded">%s · lastet ned</string>
-    <string name="book.source.server_waiting_for_wifi">%s · venter på Wi-Fi</string>
     <string name="bookmark.action.add_note">Legg til notat</string>
     <string name="bookmark.add_note_hint">Legg til et notat</string>
     <string name="bookmark.added.snackbar">Bokmerke lagt til</string>
@@ -234,6 +247,7 @@
     <string name="history.suggestion.started_by.headset">En hodetelefonknapp startet boken kl. %1$s</string>
     <string name="history.suggestion.started_by.other_app">En annen app startet boken kl. %1$s</string>
     <string name="history.suggestion.started_by.watch">Klokken din startet boken kl. %1$s</string>
+    <string name="library.book.downloading">Laster ned</string>
     <string name="library.book.offline">Ikke tilgjengelig uten nett</string>
     <string name="library.category.completed.title">Fullført</string>
     <string name="library.category.current.title">Nåværende</string>

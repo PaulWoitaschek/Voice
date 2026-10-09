@@ -1,5 +1,9 @@
 package voice.features.bookOverview.views
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.ModalBottomSheet
@@ -13,6 +17,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,6 +55,13 @@ internal fun BookActions(
       }
     },
   )
+
+  // the download shows its progress in a notification, which needs the permission since Android 13
+  val notificationPermissionLauncher = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.RequestPermission(),
+    onResult = {},
+  )
+  val context = LocalContext.current
 
   val deleteBookViewState = deleteBookViewModel.state.value
   if (deleteBookViewState != null) {
@@ -105,12 +118,18 @@ internal fun BookActions(
         BookActionsContent(
           book = book,
           source = state.source,
+          download = state.download,
+          bookSize = state.bookSize,
           category = state.category,
           items = state.items,
           onItemClick = { item ->
             if (!closing) {
               if (item == BottomSheetItem.FileCover) {
                 getContentLauncher.launch("image/*")
+              }
+              if (item == BottomSheetItem.Download && state.askForNotifications && !context.canPostNotifications()) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                bottomSheetViewModel.onAskedForNotifications()
               }
               hideThen(item)
             }
@@ -130,4 +149,9 @@ internal fun BookActions(
       }
     }
   }
+}
+
+private fun Context.canPostNotifications(): Boolean {
+  return Build.VERSION.SDK_INT < 33 ||
+    ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
 }

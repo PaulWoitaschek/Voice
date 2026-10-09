@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Stahuje se %d kniha</item>
+        <item quantity="few">Stahují se %d knihy</item>
+        <item quantity="many">Stahuje se %d knih</item>
+        <item quantity="other">Stahuje se %d knih</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Připraveno k poslechu offline</string>
+    <string name="audiobookshelf.download.notification.retry">Zkusit znovu</string>
+    <string name="audiobookshelf.download.notification.stop">Zastavit</string>
+    <string name="audiobookshelf.download.notification.title">Stahování…</string>
     <string name="audiobookshelf.downloads.channel">Stahování</string>
     <string name="audiobookshelf.login.address.action">Pokračovat</string>
     <string name="audiobookshelf.login.address.label">Adresa serveru</string>
@@ -61,14 +71,19 @@
     <string name="book.delete.dialog.message">Toto odstraní soubory z vašeho zařízení.</string>
     <string name="book.delete.dialog.title">Odstranit knihu</string>
     <string name="book.download.action">Stáhnout</string>
+    <string name="book.download.failed">Stahování se nepodařilo dokončit</string>
+    <string name="book.download.progress">%1$s z %2$s</string>
     <string name="book.download.remove">Odstranit stažené</string>
+    <string name="book.download.retry">Stáhnout znovu</string>
+    <string name="book.download.stop">Zastavit stahování</string>
+    <string name="book.download.waiting_for_connection">Čeká se na připojení</string>
+    <string name="book.download.waiting_for_wifi">Čeká se na Wi-Fi</string>
     <string name="book.edit.cover.file">Obal ze souborového systému</string>
     <string name="book.edit.cover.internet">Obal z internetu</string>
     <string name="book.edit.name.label">Název</string>
     <string name="book.edit.rename">Přejmenovat</string>
     <string name="book.source.device">Na tomto zařízení</string>
     <string name="book.source.server_downloaded">%s · staženo</string>
-    <string name="book.source.server_waiting_for_wifi">%s · čeká na Wi-Fi</string>
     <string name="bookmark.action.add_note">Přidat poznámku</string>
     <string name="bookmark.add_note_hint">Přidat poznámku</string>
     <string name="bookmark.added.snackbar">Záložka přidána</string>
@@ -254,6 +269,7 @@
     <string name="history.suggestion.started_by.headset">Tlačítko sluchátek spustilo knihu v %1$s</string>
     <string name="history.suggestion.started_by.other_app">Jiná aplikace spustila knihu v %1$s</string>
     <string name="history.suggestion.started_by.watch">Vaše hodinky spustily knihu v %1$s</string>
+    <string name="library.book.downloading">Stahuje se</string>
     <string name="library.book.offline">Není k dispozici offline</string>
     <string name="library.category.completed.title">Dokončeno</string>
     <string name="library.category.current.title">Aktuální</string>

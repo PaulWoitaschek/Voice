@@ -19,8 +19,9 @@ Voice needs Audiobookshelf 2.26 or newer.
 ## Listening
 
 - **Streaming**: Tap a book and it plays from the server.
-- **Downloads**: Long press a book and tap **Download**. Downloads wait for Wi-Fi unless you turn on **Download over mobile data** in the
-  Audiobookshelf settings. Remove a download the same way. Voice never deletes anything on your server.
+- **Downloads**: Long press a book and tap **Download**. A notification shows the progress, and **Stop** in it or in the book's menu stops
+  the download. Downloads wait for Wi-Fi unless you turn on **Download over mobile data** in the Audiobookshelf settings, which also list
+  your downloads with their size. Remove a download the same way. Voice never deletes anything on your server.
 - **Offline**: When Voice can't reach your server, books that aren't downloaded show a crossed out cloud. Downloaded books play as usual.
 
 Speed, skip silence, volume boost, the sleep timer, bookmarks, Android Auto and the widgets work the same as for the books on your

@@ -1,51 +1,56 @@
 package voice.core.audiobookshelf.download
 
 import android.app.Notification
+import androidx.core.app.NotificationManagerCompat
 import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadManager
-import androidx.media3.exoplayer.offline.DownloadNotificationHelper
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.media3.exoplayer.scheduler.Scheduler
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import voice.core.common.rootGraphAs
-import voice.core.playback.R as PlaybackR
 import voice.core.strings.R as StringsR
-
-private const val NOTIFICATION_ID = 4242
-private const val CHANNEL_ID = "audiobookshelfDownloads"
 
 class AudiobookshelfDownloadService :
   DownloadService(
-    NOTIFICATION_ID,
-    DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
-    CHANNEL_ID,
+    DOWNLOAD_NOTIFICATION_ID,
+    1000,
+    DOWNLOAD_CHANNEL_ID,
     StringsR.string.audiobookshelf_downloads_channel,
     0,
   ) {
 
-  private val notificationHelper by lazy { DownloadNotificationHelper(this, CHANNEL_ID) }
+  private val downloads by lazy { rootGraphAs<AudiobookshelfDownloadGraph>().audiobookshelfDownloads }
+  private val scope = MainScope()
 
-  override fun getDownloadManager(): DownloadManager {
-    return rootGraphAs<AudiobookshelfDownloadGraph>().audiobookshelfDownloads.downloadManager
+  override fun onCreate() {
+    super.onCreate()
+    scope.launch {
+      downloads.foregroundNotificationChanges.collect {
+        // once the downloads are done the service stops, an update then would leave the notification behind
+        if (downloads.hasActiveDownloads()) invalidateForegroundNotification()
+      }
+    }
   }
 
-  // downloads go on when Voice starts the next time
+  override fun onDestroy() {
+    scope.cancel()
+    super.onDestroy()
+    NotificationManagerCompat.from(this).cancel(DOWNLOAD_NOTIFICATION_ID)
+  }
+
+  override fun getDownloadManager(): DownloadManager = downloads.downloadManager
+
+  // since Android 12 a scheduler can't start the service from the background anyway
   override fun getScheduler(): Scheduler? = null
 
   override fun getForegroundNotification(
     downloads: List<Download>,
     notMetRequirements: Int,
-  ): Notification {
-    return notificationHelper.buildProgressNotification(
-      this,
-      PlaybackR.drawable.ic_notification,
-      null,
-      null,
-      downloads,
-      notMetRequirements,
-    )
-  }
+  ): Notification = this.downloads.foregroundNotification(downloads)
 }
 
 @ContributesTo(AppScope::class)

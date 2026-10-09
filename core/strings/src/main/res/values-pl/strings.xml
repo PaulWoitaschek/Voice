@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="pl">
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Pobieranie %d książki</item>
+        <item quantity="few">Pobieranie %d książek</item>
+        <item quantity="many">Pobieranie %d książek</item>
+        <item quantity="other">Pobieranie %d książek</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Gotowe do słuchania offline</string>
+    <string name="audiobookshelf.download.notification.retry">Ponów</string>
+    <string name="audiobookshelf.download.notification.stop">Zatrzymaj</string>
+    <string name="audiobookshelf.download.notification.title">Pobieranie…</string>
     <string name="audiobookshelf.downloads.channel">Pobieranie</string>
     <string name="audiobookshelf.login.address.action">Dalej</string>
     <string name="audiobookshelf.login.address.label">Adres serwera</string>
@@ -61,14 +71,19 @@
     <string name="book.delete.dialog.message">Ta akcja usunie pliki z twojego urządzenia.</string>
     <string name="book.delete.dialog.title">Usuń książkę</string>
     <string name="book.download.action">Pobierz</string>
+    <string name="book.download.failed">Nie udało się dokończyć pobierania</string>
+    <string name="book.download.progress">%1$s z %2$s</string>
     <string name="book.download.remove">Usuń pobrane</string>
+    <string name="book.download.retry">Pobierz ponownie</string>
+    <string name="book.download.stop">Zatrzymaj pobieranie</string>
+    <string name="book.download.waiting_for_connection">Oczekiwanie na połączenie</string>
+    <string name="book.download.waiting_for_wifi">Oczekiwanie na Wi-Fi</string>
     <string name="book.edit.cover.file">Okładka z pamięci wewnętrznej</string>
     <string name="book.edit.cover.internet">Okładka z internetu</string>
     <string name="book.edit.name.label">Nazwa</string>
     <string name="book.edit.rename">Zmień nazwę</string>
     <string name="book.source.device">Na tym urządzeniu</string>
     <string name="book.source.server_downloaded">%s · pobrano</string>
-    <string name="book.source.server_waiting_for_wifi">%s · czeka na Wi-Fi</string>
     <string name="bookmark.action.add_note">Dodaj notatkę</string>
     <string name="bookmark.add_note_hint">Dodaj notatkę</string>
     <string name="bookmark.added.snackbar">Zakładka dodana</string>
@@ -254,6 +269,7 @@
     <string name="history.suggestion.started_by.headset">Przycisk słuchawek włączył książkę o godz. %1$s</string>
     <string name="history.suggestion.started_by.other_app">Inna aplikacja włączyła książkę o godz. %1$s</string>
     <string name="history.suggestion.started_by.watch">Twój zegarek włączył książkę o godz. %1$s</string>
+    <string name="library.book.downloading">Pobieranie</string>
     <string name="library.book.offline">Niedostępne offline</string>
     <string name="library.category.completed.title">Ukończone</string>
     <string name="library.category.current.title">Aktualne</string>

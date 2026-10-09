@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">در حال دانلود %d کتاب</item>
+        <item quantity="other">در حال دانلود %d کتاب</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">آمادهٔ گوش دادن آفلاین</string>
+    <string name="audiobookshelf.download.notification.retry">تلاش مجدد</string>
+    <string name="audiobookshelf.download.notification.stop">توقف</string>
+    <string name="audiobookshelf.download.notification.title">در حال دانلود…</string>
     <string name="audiobookshelf.downloads.channel">دانلودها</string>
     <string name="audiobookshelf.login.address.action">ادامه</string>
     <string name="audiobookshelf.login.address.label">نشانی سرور</string>
@@ -57,14 +65,19 @@
     <string name="book.delete.dialog.message">با این کار فایل های موجود در دستگاه شما حذف می شود.</string>
     <string name="book.delete.dialog.title">پاک کردن کتاب</string>
     <string name="book.download.action">دانلود</string>
+    <string name="book.download.failed">دانلود کامل نشد</string>
+    <string name="book.download.progress">%1$s از %2$s</string>
     <string name="book.download.remove">حذف دانلود</string>
+    <string name="book.download.retry">دانلود دوباره</string>
+    <string name="book.download.stop">توقف دانلود</string>
+    <string name="book.download.waiting_for_connection">در انتظار اتصال</string>
+    <string name="book.download.waiting_for_wifi">در انتظار Wi-Fi</string>
     <string name="book.edit.cover.file">دریافت کاور از داخل سیستم</string>
     <string name="book.edit.cover.internet">دریافت کاور از طریق اینترنت</string>
     <string name="book.edit.name.label">نام</string>
     <string name="book.edit.rename">تغییر نام</string>
     <string name="book.source.device">در این دستگاه</string>
     <string name="book.source.server_downloaded">%s · دانلودشده</string>
-    <string name="book.source.server_waiting_for_wifi">%s · در انتظار Wi-Fi</string>
     <string name="bookmark.action.add_note">افزودن یادداشت</string>
     <string name="bookmark.add_note_hint">یادداشتی اضافه کنید</string>
     <string name="bookmark.added.snackbar">نشانه‌گذاری انجام شد</string>
@@ -234,6 +247,7 @@
     <string name="history.suggestion.started_by.headset">دکمهٔ هدست کتاب را در ساعت %1$s پخش کرد</string>
     <string name="history.suggestion.started_by.other_app">برنامهٔ دیگری کتاب را در ساعت %1$s پخش کرد</string>
     <string name="history.suggestion.started_by.watch">ساعت هوشمند شما کتاب را در %1$s پخش کرد</string>
+    <string name="library.book.downloading">در حال دانلود</string>
     <string name="library.book.offline">آفلاین در دسترس نیست</string>
     <string name="library.category.completed.title">تمام شده</string>
     <string name="library.category.current.title">جاری</string>

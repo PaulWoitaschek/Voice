@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Завантажується %d книга</item>
+        <item quantity="few">Завантажуються %d книги</item>
+        <item quantity="many">Завантажуються %d книг</item>
+        <item quantity="other">Завантажується %d книги</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Можна слухати офлайн</string>
+    <string name="audiobookshelf.download.notification.retry">Повторити</string>
+    <string name="audiobookshelf.download.notification.stop">Зупинити</string>
+    <string name="audiobookshelf.download.notification.title">Завантаження…</string>
     <string name="audiobookshelf.downloads.channel">Завантаження</string>
     <string name="audiobookshelf.login.address.action">Продовжити</string>
     <string name="audiobookshelf.login.address.label">Адреса сервера</string>
@@ -61,14 +71,19 @@
     <string name="book.delete.dialog.message">Файли на вашому пристрої буде видалено.</string>
     <string name="book.delete.dialog.title">Видалити книгу</string>
     <string name="book.download.action">Завантажити</string>
+    <string name="book.download.failed">Завантаження не завершилося</string>
+    <string name="book.download.progress">%1$s з %2$s</string>
     <string name="book.download.remove">Видалити завантаження</string>
+    <string name="book.download.retry">Завантажити знову</string>
+    <string name="book.download.stop">Зупинити завантаження</string>
+    <string name="book.download.waiting_for_connection">Очікування підключення</string>
+    <string name="book.download.waiting_for_wifi">Очікування Wi-Fi</string>
     <string name="book.edit.cover.file">Обкладинка з файлу</string>
     <string name="book.edit.cover.internet">Обкладинка з Інтернету</string>
     <string name="book.edit.name.label">Назва</string>
     <string name="book.edit.rename">Перейменувати</string>
     <string name="book.source.device">На цьому пристрої</string>
     <string name="book.source.server_downloaded">%s · завантажено</string>
-    <string name="book.source.server_waiting_for_wifi">%s · чекає на Wi-Fi</string>
     <string name="bookmark.action.add_note">Додати нотатку</string>
     <string name="bookmark.add_note_hint">Додайте нотатку</string>
     <string name="bookmark.added.snackbar">Закладку додано</string>
@@ -254,6 +269,7 @@
     <string name="history.suggestion.started_by.headset">Кнопка гарнітури запустила книгу о %1$s</string>
     <string name="history.suggestion.started_by.other_app">Інший додаток запустив книгу о %1$s</string>
     <string name="history.suggestion.started_by.watch">Ваш годинник запустив книгу о %1$s</string>
+    <string name="library.book.downloading">Завантажується</string>
     <string name="library.book.offline">Недоступно офлайн</string>
     <string name="library.category.completed.title">Завершені</string>
     <string name="library.category.current.title">Поточні</string>

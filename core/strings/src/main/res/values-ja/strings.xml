@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="other">%d 冊をダウンロード中</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">オフラインで聴けるようになりました</string>
+    <string name="audiobookshelf.download.notification.retry">再試行</string>
+    <string name="audiobookshelf.download.notification.stop">停止</string>
+    <string name="audiobookshelf.download.notification.title">ダウンロード中…</string>
     <string name="audiobookshelf.downloads.channel">ダウンロード</string>
     <string name="audiobookshelf.login.address.action">続行</string>
     <string name="audiobookshelf.login.address.label">サーバーのアドレス</string>
@@ -55,14 +62,19 @@
     <string name="book.delete.dialog.message">これにより、デバイス上のファイルが削除されます。</string>
     <string name="book.delete.dialog.title">ブックの削除</string>
     <string name="book.download.action">ダウンロード</string>
+    <string name="book.download.failed">ダウンロードが完了しませんでした</string>
+    <string name="book.download.progress">%2$s 中 %1$s</string>
     <string name="book.download.remove">ダウンロードを削除</string>
+    <string name="book.download.retry">もう一度ダウンロード</string>
+    <string name="book.download.stop">ダウンロードを停止</string>
+    <string name="book.download.waiting_for_connection">接続を待っています</string>
+    <string name="book.download.waiting_for_wifi">Wi-Fi を待っています</string>
     <string name="book.edit.cover.file">ファイルシステムからのカバー</string>
     <string name="book.edit.cover.internet">インターネットからのカバー</string>
     <string name="book.edit.name.label">名前</string>
     <string name="book.edit.rename">名前を変更</string>
     <string name="book.source.device">この端末</string>
     <string name="book.source.server_downloaded">%s · ダウンロード済み</string>
-    <string name="book.source.server_waiting_for_wifi">%s · Wi-Fi 接続待ち</string>
     <string name="bookmark.action.add_note">メモを追加</string>
     <string name="bookmark.add_note_hint">メモを追加</string>
     <string name="bookmark.added.snackbar">ブックマークを追加しました</string>
@@ -224,6 +236,7 @@
     <string name="history.suggestion.started_by.headset">%1$s にヘッドセットのボタンで再生が始まりました</string>
     <string name="history.suggestion.started_by.other_app">%1$s に他のアプリが再生を開始しました</string>
     <string name="history.suggestion.started_by.watch">%1$s にスマートウォッチが再生を開始しました</string>
+    <string name="library.book.downloading">ダウンロード中</string>
     <string name="library.book.offline">オフラインでは利用不可</string>
     <string name="library.category.completed.title">完了</string>
     <string name="library.category.current.title">現在</string>

@@ -35,6 +35,17 @@ interface ServerLibrary {
 
   /** Syncs with the server, unless a sync is already running or there is no server. */
   fun sync()
+
+  /** Downloads a server book, so it plays without a connection. */
+  suspend fun download(bookId: BookId)
+
+  /** Stops the download of a server book, or removes it. The book streams again. */
+  suspend fun removeDownload(bookId: BookId)
+
+  /** Whether to ask for notifications before a download, so its progress shows. Voice asks once. */
+  suspend fun shouldAskForNotifications(): Boolean
+
+  suspend fun onAskedForNotifications()
 }
 
 @ContributesBinding(AppScope::class)
@@ -57,7 +68,7 @@ class AudiobookshelfServerLibrary internal constructor(
   ) { reachability, downloadStates, books ->
     if (reachability != ServerReachability.Unreachable) return@combine emptySet()
     books
-      .filter { it.id.isRemote && downloadStates[it.id] != BookDownloadState.Downloaded }
+      .filter { it.id.isRemote && downloadStates[it.id] !is BookDownloadState.Downloaded }
       .map { it.id }
       .toSet()
   }.distinctUntilChanged()
@@ -68,5 +79,19 @@ class AudiobookshelfServerLibrary internal constructor(
 
   override fun sync() {
     audiobookshelfSync.sync()
+  }
+
+  override suspend fun download(bookId: BookId) {
+    downloads.download(bookId)
+  }
+
+  override suspend fun removeDownload(bookId: BookId) {
+    downloads.remove(bookId)
+  }
+
+  override suspend fun shouldAskForNotifications(): Boolean = downloads.shouldAskForNotifications()
+
+  override suspend fun onAskedForNotifications() {
+    downloads.onAskedForNotifications()
   }
 }

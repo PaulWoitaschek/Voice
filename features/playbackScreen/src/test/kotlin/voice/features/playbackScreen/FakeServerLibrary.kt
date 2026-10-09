@@ -22,4 +22,12 @@ internal class FakeServerLibrary(
   override fun sync() {
     syncs++
   }
+
+  override suspend fun download(bookId: BookId) {}
+
+  override suspend fun removeDownload(bookId: BookId) {}
+
+  override suspend fun shouldAskForNotifications(): Boolean = false
+
+  override suspend fun onAskedForNotifications() {}
 }

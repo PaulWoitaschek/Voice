@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Laddar ned %d bok</item>
+        <item quantity="other">Laddar ned %d böcker</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Redo att lyssna offline</string>
+    <string name="audiobookshelf.download.notification.retry">Försök igen</string>
+    <string name="audiobookshelf.download.notification.stop">Avbryt</string>
+    <string name="audiobookshelf.download.notification.title">Laddar ned…</string>
     <string name="audiobookshelf.downloads.channel">Nedladdningar</string>
     <string name="audiobookshelf.login.address.action">Fortsätt</string>
     <string name="audiobookshelf.login.address.label">Serveradress</string>
@@ -57,14 +65,19 @@
     <string name="book.delete.dialog.message">Detta kommer att radera filerna på din enhet.</string>
     <string name="book.delete.dialog.title">Ta bort bok</string>
     <string name="book.download.action">Ladda ned</string>
+    <string name="book.download.failed">Nedladdningen blev inte klar</string>
+    <string name="book.download.progress">%1$s av %2$s</string>
     <string name="book.download.remove">Ta bort nedladdning</string>
+    <string name="book.download.retry">Ladda ned igen</string>
+    <string name="book.download.stop">Avbryt nedladdning</string>
+    <string name="book.download.waiting_for_connection">Väntar på anslutning</string>
+    <string name="book.download.waiting_for_wifi">Väntar på wifi</string>
     <string name="book.edit.cover.file">Omslag från filsystemet</string>
     <string name="book.edit.cover.internet">Omslag från internet</string>
     <string name="book.edit.name.label">Namn</string>
     <string name="book.edit.rename">Byt namn</string>
     <string name="book.source.device">På den här enheten</string>
     <string name="book.source.server_downloaded">%s · nedladdad</string>
-    <string name="book.source.server_waiting_for_wifi">%s · väntar på wifi</string>
     <string name="bookmark.action.add_note">Lägg till anteckning</string>
     <string name="bookmark.add_note_hint">Lägg till en anteckning</string>
     <string name="bookmark.added.snackbar">Bokmärke tillagt</string>
@@ -234,6 +247,7 @@
     <string name="history.suggestion.started_by.headset">En headsetknapp startade boken kl. %1$s</string>
     <string name="history.suggestion.started_by.other_app">En annan app startade boken kl. %1$s</string>
     <string name="history.suggestion.started_by.watch">Din klocka startade boken kl. %1$s</string>
+    <string name="library.book.downloading">Laddar ned</string>
     <string name="library.book.offline">Inte tillgänglig offline</string>
     <string name="library.category.completed.title">Färdiglyssnade</string>
     <string name="library.category.current.title">Pågående</string>

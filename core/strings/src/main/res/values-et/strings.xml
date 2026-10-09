@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Laaditakse alla %d raamat</item>
+        <item quantity="other">Laaditakse alla %d raamatut</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Valmis võrguühenduseta kuulamiseks</string>
+    <string name="audiobookshelf.download.notification.retry">Proovi uuesti</string>
+    <string name="audiobookshelf.download.notification.stop">Katkesta</string>
+    <string name="audiobookshelf.download.notification.title">Allalaadimine…</string>
     <string name="audiobookshelf.downloads.channel">Allalaadimised</string>
     <string name="audiobookshelf.login.address.action">Jätka</string>
     <string name="audiobookshelf.login.address.label">Serveri aadress</string>
@@ -57,14 +65,19 @@
     <string name="book.delete.dialog.message">Järgnevaga kustutad need failid oma nutiseadmest.</string>
     <string name="book.delete.dialog.title">Kustuta heliraamat</string>
     <string name="book.download.action">Laadi alla</string>
+    <string name="book.download.failed">Allalaadimine ei õnnestunud</string>
+    <string name="book.download.progress">%1$s / %2$s</string>
     <string name="book.download.remove">Eemalda allalaadimine</string>
+    <string name="book.download.retry">Laadi uuesti alla</string>
+    <string name="book.download.stop">Katkesta allalaadimine</string>
+    <string name="book.download.waiting_for_connection">Ootab võrguühendust</string>
+    <string name="book.download.waiting_for_wifi">Ootab WiFi-ühendust</string>
     <string name="book.edit.cover.file">Kaanepilt nutiseadme failisüsteemist</string>
     <string name="book.edit.cover.internet">Kaanepilt internetist</string>
     <string name="book.edit.name.label">Nimi</string>
     <string name="book.edit.rename">Nimeta ümber</string>
     <string name="book.source.device">Selles seadmes</string>
     <string name="book.source.server_downloaded">%s · alla laaditud</string>
-    <string name="book.source.server_waiting_for_wifi">%s · ootab WiFi-ühendust</string>
     <string name="bookmark.action.add_note">Lisa märkus</string>
     <string name="bookmark.add_note_hint">Lisa märkus</string>
     <string name="bookmark.added.snackbar">Järjehoidja on lisatud</string>
@@ -234,6 +247,7 @@
     <string name="history.suggestion.started_by.headset">Peakomplekti nupp käivitas raamatu kell %1$s</string>
     <string name="history.suggestion.started_by.other_app">Teine rakendus käivitas raamatu kell %1$s</string>
     <string name="history.suggestion.started_by.watch">Sinu nutikell käivitas raamatu kell %1$s</string>
+    <string name="library.book.downloading">Laaditakse alla</string>
     <string name="library.book.offline">Pole võrguühenduseta saadaval</string>
     <string name="library.category.completed.title">Kuulatud</string>
     <string name="library.category.current.title">Praegune</string>

@@ -81,6 +81,7 @@ generate_icon done Done
 generate_icon download Download
 generate_icon download_done DownloadDone
 generate_icon emoji_food_beverage EmojiFoodBeverage
+generate_icon error Error
 generate_icon expand_more ExpandMore
 generate_icon fast_forward FastForward
 generate_icon fast_rewind FastRewind
@@ -114,6 +115,7 @@ generate_icon play_arrow PlayArrow
 generate_icon push_pin PushPin
 generate_icon remove Remove
 generate_icon replay Replay
+generate_icon schedule Schedule
 generate_icon search Search
 generate_icon search_off SearchOff
 generate_icon settings Settings

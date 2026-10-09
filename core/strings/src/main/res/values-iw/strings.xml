@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">%d ספר בהורדה</item>
+        <item quantity="two">%d ספרים בהורדה</item>
+        <item quantity="other">%d ספרים בהורדה</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">מוכן להאזנה בלי חיבור</string>
+    <string name="audiobookshelf.download.notification.retry">ניסיון חוזר</string>
+    <string name="audiobookshelf.download.notification.stop">עצירה</string>
+    <string name="audiobookshelf.download.notification.title">מתבצעת הורדה…</string>
     <string name="audiobookshelf.downloads.channel">הורדות</string>
     <string name="audiobookshelf.login.address.action">המשך</string>
     <string name="audiobookshelf.login.address.label">כתובת השרת</string>
@@ -59,14 +68,19 @@
     <string name="book.delete.dialog.message">פעולה זו תמחק את הקבצים במכשיר שלכם.</string>
     <string name="book.delete.dialog.title">מחיקת ספר</string>
     <string name="book.download.action">הורדה</string>
+    <string name="book.download.failed">ההורדה לא הושלמה</string>
+    <string name="book.download.progress">%1$s מתוך %2$s</string>
     <string name="book.download.remove">הסרת ההורדה</string>
+    <string name="book.download.retry">הורדה חוזרת</string>
+    <string name="book.download.stop">עצירת ההורדה</string>
+    <string name="book.download.waiting_for_connection">בהמתנה לחיבור</string>
+    <string name="book.download.waiting_for_wifi">בהמתנה ל-Wi-Fi</string>
     <string name="book.edit.cover.file">עטיפות מקובץ קיים</string>
     <string name="book.edit.cover.internet">עטיפות מהאינטרנט</string>
     <string name="book.edit.name.label">שם</string>
     <string name="book.edit.rename">שינוי שם</string>
     <string name="book.source.device">במכשיר הזה</string>
     <string name="book.source.server_downloaded">%s · ההורדה הושלמה</string>
-    <string name="book.source.server_waiting_for_wifi">%s · בהמתנה ל-Wi-Fi</string>
     <string name="bookmark.action.add_note">הוספת הערה</string>
     <string name="bookmark.add_note_hint">הוספת הערה</string>
     <string name="bookmark.added.snackbar">סימנייה נוספה</string>
@@ -244,6 +258,7 @@
     <string name="history.suggestion.started_by.headset">כפתור באוזניות הפעיל את הספר ב-%1$s</string>
     <string name="history.suggestion.started_by.other_app">אפליקציה אחרת הפעילה את הספר ב-%1$s</string>
     <string name="history.suggestion.started_by.watch">השעון שלכם הפעיל את הספר ב-%1$s</string>
+    <string name="library.book.downloading">בהורדה</string>
     <string name="library.book.offline">לא זמין אופליין</string>
     <string name="library.category.completed.title">הושלמו</string>
     <string name="library.category.current.title">נוכחי</string>

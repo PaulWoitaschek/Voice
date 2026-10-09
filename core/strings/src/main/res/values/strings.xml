@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
+    <!-- Title of the download notification while several server books download. The notification of a single book shows its title instead. -->
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">Downloading %d book</item>
+        <item quantity="other">Downloading %d books</item>
+    </plurals>
+    <!-- Notification text once a server book finished downloading while Voice was in the background. The title is the name of the book. -->
+    <string name="audiobookshelf.download.notification.done">Ready to listen offline</string>
+    <!-- Notification button that starts a failed download again. -->
+    <string name="audiobookshelf.download.notification.retry">Try again</string>
+    <!-- Notification button that stops the running downloads and removes what they downloaded so far. -->
+    <string name="audiobookshelf.download.notification.stop">Stop</string>
+    <!-- Title of the download notification for the moment before Voice knows which book downloads. -->
+    <string name="audiobookshelf.download.notification.title">Downloading…</string>
     <!-- Name of the notification channel for books that download from an Audiobookshelf server. -->
     <string name="audiobookshelf.downloads.channel">Downloads</string>
     <!-- Primary action on the address step of connecting an Audiobookshelf server. Looks for the server at the typed address. -->
@@ -112,8 +125,20 @@
     <string name="book.delete.dialog.title">Delete Book</string>
     <!-- Bottom-sheet action that downloads a book from the Audiobookshelf server, so it plays without a connection. -->
     <string name="book.download.action">Download</string>
+    <!-- Shown when the download of a server book stopped with an error: in the book actions sheet, in the downloads in the settings and in a notification. -->
+    <string name="book.download.failed">The download didn\'t finish</string>
+    <!-- How far the download of a server book got. %1$s is the size downloaded so far, %2$s the size of the whole book, like "120 MB of 300 MB". -->
+    <string name="book.download.progress">%1$s of %2$s</string>
     <!-- Bottom-sheet action that removes the download of a server book. The book stays in the library and streams again. -->
     <string name="book.download.remove">Remove download</string>
+    <!-- Action that starts a failed download of a server book again. -->
+    <string name="book.download.retry">Download again</string>
+    <!-- Action that stops the running download of a server book. What it downloaded so far is removed. -->
+    <string name="book.download.stop">Stop download</string>
+    <!-- Shown while the download of a server book waits, because the phone has no internet connection. -->
+    <string name="book.download.waiting_for_connection">Waiting for a connection</string>
+    <!-- Shown while the download of a server book waits, because downloading over mobile data is off. -->
+    <string name="book.download.waiting_for_wifi">Waiting for Wi-Fi</string>
     <!-- Bottom-sheet item for choosing a cover from local files. -->
     <string name="book.edit.cover.file">Cover from the file system</string>
     <!-- Bottom-sheet item for choosing a cover from an internet search. -->
@@ -126,8 +151,6 @@
     <string name="book.source.device">On this device</string>
     <!-- Shown under the title in the book actions sheet for a downloaded server book. %s is the address of the server, like audiobooks.example.com. -->
     <string name="book.source.server_downloaded">%s · downloaded</string>
-    <!-- Shown under the title in the book actions sheet while a server book waits to download, because downloads over mobile data are off. %s is the address of the server. -->
-    <string name="book.source.server_waiting_for_wifi">%s · waiting for Wi-Fi</string>
     <string name="bookmark.action.add_note">Add note</string>
     <string name="bookmark.add_note_hint">Add a note</string>
     <!-- Snackbar message shown after creating a bookmark. -->
@@ -351,6 +374,8 @@
     <string name="history.suggestion.started_by.headset">A headset button started the book at %1$s</string>
     <string name="history.suggestion.started_by.other_app">Another app started the book at %1$s</string>
     <string name="history.suggestion.started_by.watch">Your watch started the book at %1$s</string>
+    <!-- Read out by screen readers for the progress ring on the cover of a server book that downloads. -->
+    <string name="library.book.downloading">Downloading</string>
     <!-- Shown for a server book that isn't downloaded while the server can't be reached: on the icon on its cover, and as a small label in the player. Keep it short. -->
     <string name="library.book.offline">Not available offline</string>
     <!-- Library category header for completed books. -->

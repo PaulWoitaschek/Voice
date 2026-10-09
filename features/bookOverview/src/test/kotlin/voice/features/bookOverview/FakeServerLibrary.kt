@@ -22,4 +22,23 @@ internal class FakeServerLibrary(
   override fun sync() {
     syncs++
   }
+
+  val downloads = mutableListOf<BookId>()
+  val removedDownloads = mutableListOf<BookId>()
+  var askedForNotifications = false
+    private set
+
+  override suspend fun download(bookId: BookId) {
+    downloads += bookId
+  }
+
+  override suspend fun removeDownload(bookId: BookId) {
+    removedDownloads += bookId
+  }
+
+  override suspend fun shouldAskForNotifications(): Boolean = !askedForNotifications
+
+  override suspend fun onAskedForNotifications() {
+    askedForNotifications = true
+  }
 }

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="audiobookshelf.download.notification.books">
+        <item quantity="one">%d boek wordt gedownload</item>
+        <item quantity="other">%d boeken worden gedownload</item>
+    </plurals>
+    <string name="audiobookshelf.download.notification.done">Klaar om offline te luisteren</string>
+    <string name="audiobookshelf.download.notification.retry">Opnieuw proberen</string>
+    <string name="audiobookshelf.download.notification.stop">Annuleren</string>
+    <string name="audiobookshelf.download.notification.title">Downloaden…</string>
     <string name="audiobookshelf.downloads.channel">Downloads</string>
     <string name="audiobookshelf.login.address.action">Doorgaan</string>
     <string name="audiobookshelf.login.address.label">Serveradres</string>
@@ -57,14 +65,19 @@
     <string name="book.delete.dialog.message">Hierdoor worden alle bestanden op je apparaat verwijderd.</string>
     <string name="book.delete.dialog.title">Boek verwijderen</string>
     <string name="book.download.action">Downloaden</string>
+    <string name="book.download.failed">De download is niet gelukt</string>
+    <string name="book.download.progress">%1$s van %2$s</string>
     <string name="book.download.remove">Download verwijderen</string>
+    <string name="book.download.retry">Opnieuw downloaden</string>
+    <string name="book.download.stop">Download annuleren</string>
+    <string name="book.download.waiting_for_connection">Wachten op verbinding</string>
+    <string name="book.download.waiting_for_wifi">Wachten op wifi</string>
     <string name="book.edit.cover.file">Omslag kiezen van bestandssysteem</string>
     <string name="book.edit.cover.internet">Omslag ophalen van internet</string>
     <string name="book.edit.name.label">Naam</string>
     <string name="book.edit.rename">Naam wijzigen</string>
     <string name="book.source.device">Op dit apparaat</string>
     <string name="book.source.server_downloaded">%s · gedownload</string>
-    <string name="book.source.server_waiting_for_wifi">%s · wacht op wifi</string>
     <string name="bookmark.action.add_note">Notitie toevoegen</string>
     <string name="bookmark.add_note_hint">Voeg een notitie toe</string>
     <string name="bookmark.added.snackbar">De bladwijzer is toegevoegd</string>
@@ -234,6 +247,7 @@
     <string name="history.suggestion.started_by.headset">Een headsetknop startte het boek om %1$s</string>
     <string name="history.suggestion.started_by.other_app">Een andere app startte het boek om %1$s</string>
     <string name="history.suggestion.started_by.watch">Je horloge startte het boek om %1$s</string>
+    <string name="library.book.downloading">Wordt gedownload</string>
     <string name="library.book.offline">Niet offline beschikbaar</string>
     <string name="library.category.completed.title">Voltooid</string>
     <string name="library.category.current.title">Huidig</string>

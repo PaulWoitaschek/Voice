@@ -3,6 +3,7 @@
 package voice.features.audiobookshelf.settings
 
 import android.text.format.Formatter
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFlexibleTopAppBar
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
@@ -55,11 +57,16 @@ import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -71,22 +78,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
+import coil.compose.AsyncImage
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.download.BookDownloadState
+import voice.core.audiobookshelf.download.WaitingFor
 import voice.core.common.rootGraphAs
+import voice.core.data.BookId
 import voice.core.ui.AuroraBackground
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.plus
 import voice.core.ui.rememberAnimationClock
+import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.segmentedShape
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
+import java.text.NumberFormat
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 
 @ContributesTo(AppScope::class)
 interface AudiobookshelfSettingsGraph {
@@ -115,6 +130,8 @@ private fun AudiobookshelfSettings() {
     onBack = viewModel::onBack,
     onLibraryToggle = { id -> viewState?.let { viewModel.onLibraryToggle(id, it.selectedLibraryIds) } },
     onDownloadOverMobileDataChange = viewModel::onDownloadOverMobileDataChange,
+    onRemoveDownload = viewModel::onRemoveDownload,
+    onRetryDownload = viewModel::onRetryDownload,
     onRemoveDownloads = viewModel::onRemoveDownloads,
     onSignInAgain = viewModel::onSignInAgain,
     onSyncNow = viewModel::onSyncNow,
@@ -130,6 +147,8 @@ private fun AudiobookshelfSettings(
   onBack: () -> Unit,
   onLibraryToggle: (String) -> Unit,
   onDownloadOverMobileDataChange: (Boolean) -> Unit,
+  onRemoveDownload: (BookId) -> Unit,
+  onRetryDownload: (BookId) -> Unit,
   onRemoveDownloads: () -> Unit,
   onSignInAgain: () -> Unit,
   onSyncNow: () -> Unit,
@@ -183,7 +202,13 @@ private fun AudiobookshelfSettings(
         if (!viewState.librariesUnavailable) {
           LibrariesIsland(viewState, onLibraryToggle)
         }
-        DownloadsIsland(viewState, onDownloadOverMobileDataChange, onRemoveDownloads)
+        DownloadsIsland(
+          viewState = viewState,
+          onDownloadOverMobileDataChange = onDownloadOverMobileDataChange,
+          onRemoveDownload = onRemoveDownload,
+          onRetryDownload = onRetryDownload,
+          onRemoveDownloads = onRemoveDownloads,
+        )
         OutlinedButton(
           onClick = onSignOut,
           shapes = ButtonDefaults.shapes(),
@@ -355,6 +380,8 @@ private fun LibrariesIsland(
 private fun DownloadsIsland(
   viewState: AudiobookshelfSettingsViewState,
   onDownloadOverMobileDataChange: (Boolean) -> Unit,
+  onRemoveDownload: (BookId) -> Unit,
+  onRetryDownload: (BookId) -> Unit,
   onRemoveDownloads: () -> Unit,
 ) {
   val context = LocalContext.current
@@ -377,6 +404,19 @@ private fun DownloadsIsland(
       if (viewState.usedBytes > 0) {
         TextButton(onClick = onRemoveDownloads) {
           Text(stringResource(StringsR.string.audiobookshelf_settings_downloads_remove))
+        }
+      }
+    }
+    if (viewState.downloads.isNotEmpty()) {
+      Spacer(Modifier.height(12.dp))
+      Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        viewState.downloads.forEachIndexed { index, download ->
+          DownloadRow(
+            download = download,
+            shape = segmentedShape(index, viewState.downloads.size),
+            onRemove = { onRemoveDownload(download.bookId) },
+            onRetry = { onRetryDownload(download.bookId) },
+          )
         }
       }
     }
@@ -407,6 +447,92 @@ private fun DownloadsIsland(
       }
       Spacer(Modifier.width(12.dp))
       Switch(checked = viewState.downloadOverMobileData, onCheckedChange = null)
+    }
+  }
+}
+
+@Composable
+private fun DownloadRow(
+  download: DownloadViewState,
+  shape: Shape,
+  onRemove: () -> Unit,
+  onRetry: () -> Unit,
+) {
+  val colors = MaterialTheme.colorScheme
+  val context = LocalContext.current
+  val state = download.state
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .background(colors.surfaceContainerHigh, shape)
+      .heightIn(min = 72.dp)
+      .padding(start = 12.dp, top = 8.dp, bottom = 8.dp, end = 4.dp),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    AsyncImage(
+      modifier = Modifier
+        .size(48.dp)
+        .clip(RoundedCornerShape(percent = 12)),
+      model = rememberCoverThumbnailRequest(download.cover),
+      placeholder = ColorPainter(colors.surfaceContainerHighest),
+      error = painterResource(UiR.drawable.album_art),
+      contentScale = ContentScale.Crop,
+      contentDescription = null,
+    )
+    Spacer(Modifier.width(16.dp))
+    Column(Modifier.weight(1F)) {
+      Text(
+        text = download.name,
+        style = MaterialTheme.typography.bodyLarge,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+      )
+      Text(
+        text = when (state) {
+          is BookDownloadState.Downloading -> when (state.waitingFor) {
+            WaitingFor.Wifi -> stringResource(StringsR.string.book_download_waiting_for_wifi)
+            WaitingFor.Connection -> stringResource(StringsR.string.book_download_waiting_for_connection)
+            null -> if (state.totalBytes > 0) {
+              stringResource(
+                StringsR.string.book_download_progress,
+                Formatter.formatShortFileSize(context, state.downloadedBytes),
+                Formatter.formatShortFileSize(context, state.totalBytes),
+              )
+            } else {
+              NumberFormat.getPercentInstance().format(state.progress)
+            }
+          }
+          is BookDownloadState.Downloaded -> Formatter.formatShortFileSize(context, state.bytes)
+          BookDownloadState.Failed -> stringResource(StringsR.string.book_download_failed)
+          BookDownloadState.NotDownloaded -> ""
+        },
+        style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
+        color = if (state == BookDownloadState.Failed) colors.error else colors.onSurfaceVariant,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+      )
+      if (state is BookDownloadState.Downloading) {
+        val progress by animateFloatAsState(state.progress, label = "downloadProgress")
+        Spacer(Modifier.height(6.dp))
+        LinearProgressIndicator(
+          progress = { progress },
+          modifier = Modifier.fillMaxWidth(),
+          color = if (state.waitingFor != null) colors.onSurfaceVariant else colors.primary,
+        )
+      }
+    }
+    Spacer(Modifier.width(4.dp))
+    if (state == BookDownloadState.Failed) {
+      IconButton(onClick = onRetry) {
+        Icon(VoiceIcons.Replay, contentDescription = stringResource(StringsR.string.book_download_retry))
+      }
+    }
+    IconButton(onClick = onRemove) {
+      if (state is BookDownloadState.Downloading) {
+        Icon(VoiceIcons.Close, contentDescription = stringResource(StringsR.string.book_download_stop))
+      } else {
+        Icon(VoiceIcons.Delete, contentDescription = stringResource(StringsR.string.book_download_remove))
+      }
     }
   }
 }
@@ -514,12 +640,33 @@ private fun AudiobookshelfSettingsPreview() {
           LibraryViewState(id = "2", name = "Kids", bookCount = 24, selected = false),
         ),
         usedBytes = 1_234_567_890,
+        downloads = listOf(
+          DownloadViewState(
+            bookId = BookId("abs://item/1"),
+            name = "The Hobbit",
+            cover = null,
+            state = BookDownloadState.Downloading(
+              progress = 0.4F,
+              downloadedBytes = 120_000_000,
+              totalBytes = 300_000_000,
+              waitingFor = null,
+            ),
+          ),
+          DownloadViewState(
+            bookId = BookId("abs://item/2"),
+            name = "Dune",
+            cover = null,
+            state = BookDownloadState.Downloaded(bytes = 812_000_000),
+          ),
+        ),
         downloadOverMobileData = false,
         confirmSignOut = false,
       ),
       onBack = {},
       onLibraryToggle = {},
       onDownloadOverMobileDataChange = {},
+      onRemoveDownload = {},
+      onRetryDownload = {},
       onRemoveDownloads = {},
       onSignInAgain = {},
       onSyncNow = {},
