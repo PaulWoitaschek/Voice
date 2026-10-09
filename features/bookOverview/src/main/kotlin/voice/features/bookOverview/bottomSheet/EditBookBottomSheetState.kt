@@ -8,15 +8,10 @@ import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.core.strings.R as StringsR
 
 internal data class EditBookBottomSheetState(
-  val book: BookOverviewItemViewState?,
-  val category: BookOverviewCategory?,
+  val book: BookOverviewItemViewState,
+  val category: BookOverviewCategory,
   val items: List<BottomSheetItem>,
-) {
-
-  companion object {
-    val Empty = EditBookBottomSheetState(book = null, category = null, items = emptyList())
-  }
-}
+)
 
 enum class BottomSheetItem(
   @StringRes val titleRes: Int,
@@ -29,4 +24,10 @@ enum class BottomSheetItem(
   BookCategoryMarkAsNotStarted(StringsR.string.book_category_action_mark_not_started, VoiceIcons.HourglassEmpty),
   BookCategoryMarkAsCurrent(StringsR.string.book_category_action_mark_current, VoiceIcons.NotStarted),
   BookCategoryMarkAsCompleted(StringsR.string.book_category_action_mark_completed, VoiceIcons.Done),
+}
+
+internal fun BookOverviewCategory.markAsItem(): BottomSheetItem = when (this) {
+  BookOverviewCategory.NOT_STARTED -> BottomSheetItem.BookCategoryMarkAsNotStarted
+  BookOverviewCategory.CURRENT -> BottomSheetItem.BookCategoryMarkAsCurrent
+  BookOverviewCategory.FINISHED -> BottomSheetItem.BookCategoryMarkAsCompleted
 }

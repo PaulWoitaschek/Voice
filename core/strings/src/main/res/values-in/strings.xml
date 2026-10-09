@@ -51,6 +51,7 @@
     <string name="common.action.delete">Hapus</string>
     <string name="common.action.done">Selesai</string>
     <string name="common.action.edit">Edit</string>
+    <string name="common.action.more">Opsi lainnya</string>
     <string name="common.action.undo">Urungkan</string>
     <string name="common.action.save">Simpan</string>
     <string name="common.dialog.cancel">Batalkan</string>

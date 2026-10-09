@@ -51,6 +51,7 @@
     <string name="common.action.delete">پاک کردن</string>
     <string name="common.action.done">تمام</string>
     <string name="common.action.edit">ویرایش</string>
+    <string name="common.action.more">گزینه‌های بیشتر</string>
     <string name="common.action.undo">واگرد</string>
     <string name="common.action.save">ذخیره</string>
     <string name="common.dialog.cancel">لغو</string>

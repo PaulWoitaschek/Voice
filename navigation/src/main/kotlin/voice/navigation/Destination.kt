@@ -25,6 +25,11 @@ sealed interface Destination {
   }
 
   @Serializable
+  data class BookActions(val bookId: BookId) : Compose {
+    override val trackingName: String get() = "BookActions"
+  }
+
+  @Serializable
   data class CoverFromInternet(val bookId: BookId) : Compose {
     override val trackingName: String get() = "CoverFromInternet"
   }

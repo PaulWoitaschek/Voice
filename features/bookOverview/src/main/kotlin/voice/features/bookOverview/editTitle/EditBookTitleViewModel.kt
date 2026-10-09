@@ -10,10 +10,10 @@ import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.BottomSheetItemViewModel
-import voice.features.bookOverview.di.BookOverviewScope
+import voice.features.bookOverview.di.BookActionsScope
 
-@SingleIn(BookOverviewScope::class)
-@ContributesIntoSet(BookOverviewScope::class)
+@SingleIn(BookActionsScope::class)
+@ContributesIntoSet(BookActionsScope::class)
 class EditBookTitleViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
 
   private val scope = MainScope()

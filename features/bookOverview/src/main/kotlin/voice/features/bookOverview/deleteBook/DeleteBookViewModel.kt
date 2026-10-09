@@ -14,14 +14,17 @@ import voice.core.logging.api.Logger
 import voice.core.scanner.MediaScanTrigger
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.BottomSheetItemViewModel
-import voice.features.bookOverview.di.BookOverviewScope
+import voice.features.bookOverview.di.BookActionsScope
+import voice.navigation.Destination
+import voice.navigation.Navigator
 
-@SingleIn(BookOverviewScope::class)
-@ContributesIntoSet(BookOverviewScope::class)
+@SingleIn(BookActionsScope::class)
+@ContributesIntoSet(BookActionsScope::class)
 class DeleteBookViewModel(
   private val application: Application,
   private val mediaScanTrigger: MediaScanTrigger,
   private val repo: BookRepository,
+  private val navigator: Navigator,
 ) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
@@ -74,7 +77,10 @@ class DeleteBookViewModel(
         val uri = state.id.toUri()
         val documentFile = DocumentFile.fromSingleUri(application, uri)
         scope.launch {
-          documentFile?.delete()
+          if (documentFile?.delete() == true) {
+            // the player of a deleted book would be left without a book
+            navigator.remove(Destination.Playback(state.id))
+          }
           mediaScanTrigger.scan(restartIfScanning = true)
         }
       }

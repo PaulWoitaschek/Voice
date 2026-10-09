@@ -60,7 +60,6 @@ import voice.core.data.BookId
 import voice.core.search.BookSearchField
 import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.di.BookOverviewGraph
-import voice.features.bookOverview.views.BookActions
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
@@ -88,7 +87,6 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
   rememberSaveable(saver = viewModel.saver) { viewModel }
   val viewState = viewModel.state()
 
-  var showBottomSheet by remember { mutableStateOf(false) }
   BookSearch(
     viewState = viewState,
     query = viewModel.query,
@@ -106,21 +104,13 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
 
       override fun onFilterClick(field: BookSearchField?) = viewModel.onFilterClick(field)
       override fun onBookClick(id: BookId) = viewModel.onBookClick(id)
-      override fun onBookLongClick(id: BookId) {
-        bookGraph.bottomSheetViewModel.bookSelected(id)
-        showBottomSheet = true
-      }
+      override fun onBookLongClick(id: BookId) = viewModel.onBookLongClick(id)
 
       override fun onPlayClick(id: BookId) = viewModel.onPlayClick(id)
       override fun onFoldersClick() = viewModel.onFoldersClick()
       override fun onSearchEverythingClick() = viewModel.onSearchEverythingClick()
     },
     modifier = modifier,
-  )
-  BookActions(
-    bookGraph = bookGraph,
-    showBottomSheet = showBottomSheet,
-    onBottomSheetDismiss = { showBottomSheet = false },
   )
 }
 

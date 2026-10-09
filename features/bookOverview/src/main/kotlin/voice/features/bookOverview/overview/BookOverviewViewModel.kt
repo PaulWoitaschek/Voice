@@ -204,6 +204,10 @@ class BookOverviewViewModel(
     navigator.goTo(Destination.Playback(id))
   }
 
+  fun onBookLongClick(id: BookId) {
+    navigator.goTo(Destination.BookActions(id))
+  }
+
   fun onBookFolderClick() {
     dialog = BookOverviewViewState.Dialog.FolderPickerMovedToSettings
   }

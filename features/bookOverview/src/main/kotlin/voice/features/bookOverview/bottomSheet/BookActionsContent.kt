@@ -87,10 +87,10 @@ private val StatusOrder = listOf(BookOverviewCategory.NOT_STARTED, BookOverviewC
 @Composable
 internal fun BookActionsContent(
   book: BookOverviewItemViewState,
-  category: BookOverviewCategory?,
+  category: BookOverviewCategory,
   items: List<BottomSheetItem>,
   onItemClick: (BottomSheetItem) -> Unit,
-  onStatusChange: (BottomSheetItem) -> Unit,
+  onStatusChange: (BookOverviewCategory) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val entrance = rememberEntranceState()
@@ -107,14 +107,12 @@ internal fun BookActionsContent(
         .entrance(entrance, 0)
         .padding(horizontal = 8.dp),
     )
-    if (category != null) {
-      Spacer(Modifier.height(24.dp))
-      StatusPicker(
-        current = category,
-        onSelect = { selected -> onStatusChange(selected.markAsItem()) },
-        modifier = Modifier.entrance(entrance, 1),
-      )
-    }
+    Spacer(Modifier.height(24.dp))
+    StatusPicker(
+      current = category,
+      onSelect = onStatusChange,
+      modifier = Modifier.entrance(entrance, 1),
+    )
     val edits = EditItems.filter { it in items }
     if (edits.isNotEmpty()) {
       Spacer(Modifier.height(20.dp))
@@ -248,12 +246,6 @@ private fun BookOverviewCategory.style(): StatusStyle {
       onBlob = colors.onTertiary,
     )
   }
-}
-
-private fun BookOverviewCategory.markAsItem(): BottomSheetItem = when (this) {
-  BookOverviewCategory.NOT_STARTED -> BottomSheetItem.BookCategoryMarkAsNotStarted
-  BookOverviewCategory.CURRENT -> BottomSheetItem.BookCategoryMarkAsCurrent
-  BookOverviewCategory.FINISHED -> BottomSheetItem.BookCategoryMarkAsCompleted
 }
 
 @Composable

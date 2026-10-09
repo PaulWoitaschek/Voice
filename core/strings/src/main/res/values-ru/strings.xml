@@ -51,6 +51,7 @@
     <string name="common.action.delete">Удалить</string>
     <string name="common.action.done">Готово</string>
     <string name="common.action.edit">Редактировать</string>
+    <string name="common.action.more">Другие параметры</string>
     <string name="common.action.undo">Отменить</string>
     <string name="common.action.save">Сохранить</string>
     <string name="common.dialog.cancel">Отмена</string>
