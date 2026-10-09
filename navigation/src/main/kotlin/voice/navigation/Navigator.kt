@@ -29,6 +29,16 @@ class Navigator {
     }
   }
 
+  /**
+   * Removes the destination wherever it is in the back stack, unlike [goBack] which pops the top. An overlay can
+   * close itself this way after it opened another screen on top of it.
+   */
+  fun remove(destination: Destination.Compose) {
+    scope.launch {
+      _navigationCommands.emit(NavigationCommand.Remove(destination))
+    }
+  }
+
   fun setRoot(destination: Destination.Compose) {
     scope.launch {
       _navigationCommands.emit(NavigationCommand.SetRoot(destination))

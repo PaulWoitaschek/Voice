@@ -51,6 +51,7 @@
     <string name="common.action.delete">Șterge</string>
     <string name="common.action.done">Gata</string>
     <string name="common.action.edit">Modificare</string>
+    <string name="common.action.more">Mai multe opțiuni</string>
     <string name="common.action.undo">Anulează</string>
     <string name="common.action.save">Salvează</string>
     <string name="common.dialog.cancel">Anulare</string>

@@ -3,10 +3,6 @@ package voice.features.bookOverview.di
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.GraphExtension
-import voice.features.bookOverview.bottomSheet.BottomSheetViewModel
-import voice.features.bookOverview.deleteBook.DeleteBookViewModel
-import voice.features.bookOverview.editTitle.EditBookTitleViewModel
-import voice.features.bookOverview.fileCover.FileCoverViewModel
 import voice.features.bookOverview.overview.BookOverviewViewModel
 import voice.features.bookOverview.search.BookSearchViewModel
 
@@ -15,10 +11,6 @@ abstract class BookOverviewScope private constructor()
 @GraphExtension(scope = BookOverviewScope::class)
 interface BookOverviewGraph {
   val bookOverviewViewModel: BookOverviewViewModel
-  val editBookTitleViewModel: EditBookTitleViewModel
-  val bottomSheetViewModel: BottomSheetViewModel
-  val deleteBookViewModel: DeleteBookViewModel
-  val fileCoverViewModel: FileCoverViewModel
   val bookSearchViewModel: BookSearchViewModel
 
   @GraphExtension.Factory

@@ -51,6 +51,7 @@
     <string name="common.action.delete">删除</string>
     <string name="common.action.done">完成</string>
     <string name="common.action.edit">编辑</string>
+    <string name="common.action.more">更多选项</string>
     <string name="common.action.undo">撤销</string>
     <string name="common.action.save">保存</string>
     <string name="common.dialog.cancel">取消</string>

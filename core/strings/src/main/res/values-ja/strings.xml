@@ -51,6 +51,7 @@
     <string name="common.action.delete">削除</string>
     <string name="common.action.done">完了</string>
     <string name="common.action.edit">編集</string>
+    <string name="common.action.more">その他のオプション</string>
     <string name="common.action.undo">元に戻す</string>
     <string name="common.action.save">保存</string>
     <string name="common.dialog.cancel">キャンセル</string>

@@ -51,6 +51,7 @@
     <string name="common.action.delete">Törlés</string>
     <string name="common.action.done">Kész</string>
     <string name="common.action.edit">Szerkesztés</string>
+    <string name="common.action.more">További lehetőségek</string>
     <string name="common.action.undo">Visszavonás</string>
     <string name="common.action.save">Mentés</string>
     <string name="common.dialog.cancel">Mégse</string>

@@ -51,6 +51,7 @@
     <string name="common.action.delete">הסרה</string>
     <string name="common.action.done">סיום</string>
     <string name="common.action.edit">עריכה</string>
+    <string name="common.action.more">אפשרויות נוספות</string>
     <string name="common.action.undo">ביטול</string>
     <string name="common.action.save">שמירה</string>
     <string name="common.dialog.cancel">ביטול</string>

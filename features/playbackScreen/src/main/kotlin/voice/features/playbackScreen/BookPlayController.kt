@@ -83,6 +83,7 @@ fun BookPlayScreen(bookId: BookId) {
       onVolumeBoostClick = viewModel::onVolumeGainIconClick,
       onSpeedChangeClick = viewModel::onPlaybackSpeedIconClick,
       onCloseClick = viewModel::onCloseClick,
+      onBookActionsClick = viewModel::onBookActionsClick,
       onSkipToNext = viewModel::next,
       onSkipToPrevious = viewModel::previous,
       onCurrentChapterClick = viewModel::onCurrentChapterClick,

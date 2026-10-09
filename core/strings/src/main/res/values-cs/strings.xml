@@ -51,6 +51,7 @@
     <string name="common.action.delete">Odstranit</string>
     <string name="common.action.done">Hotovo</string>
     <string name="common.action.edit">Upravit</string>
+    <string name="common.action.more">Další možnosti</string>
     <string name="common.action.undo">Vrátit zpět</string>
     <string name="common.action.save">Uložit</string>
     <string name="common.dialog.cancel">Ukončit</string>
