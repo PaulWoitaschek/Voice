@@ -9,8 +9,8 @@ import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.core.strings.R as StringsR
 
 internal data class EditBookBottomSheetState(
-  val book: BookOverviewItemViewState?,
-  val category: BookOverviewCategory?,
+  val book: BookOverviewItemViewState,
+  val category: BookOverviewCategory,
   val items: List<BottomSheetItem>,
   /** Where the book comes from, set once books can come from a server as well. */
   val source: BookSource? = null,
@@ -20,12 +20,7 @@ internal data class EditBookBottomSheetState(
   val bookSize: Long = 0,
   /** Whether a download asks for notifications first, so its progress shows. */
   val askForNotifications: Boolean = false,
-) {
-
-  companion object {
-    val Empty = EditBookBottomSheetState(book = null, category = null, items = emptyList())
-  }
-}
+)
 
 internal sealed interface BookSource {
   data object Device : BookSource
@@ -56,4 +51,10 @@ enum class BottomSheetItem(
   BookCategoryMarkAsNotStarted(StringsR.string.book_category_action_mark_not_started, VoiceIcons.HourglassEmpty),
   BookCategoryMarkAsCurrent(StringsR.string.book_category_action_mark_current, VoiceIcons.NotStarted),
   BookCategoryMarkAsCompleted(StringsR.string.book_category_action_mark_completed, VoiceIcons.Done),
+}
+
+internal fun BookOverviewCategory.markAsItem(): BottomSheetItem = when (this) {
+  BookOverviewCategory.NOT_STARTED -> BottomSheetItem.BookCategoryMarkAsNotStarted
+  BookOverviewCategory.CURRENT -> BottomSheetItem.BookCategoryMarkAsCurrent
+  BookOverviewCategory.FINISHED -> BottomSheetItem.BookCategoryMarkAsCompleted
 }

@@ -31,6 +31,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import voice.app.navigation.BottomSheetSceneStrategy
 import voice.app.navigation.NavEntryResolver
+import voice.app.navigation.OverlaySceneStrategy
 import voice.app.navigation.StartDestinationProvider
 import voice.core.analytics.api.Analytics
 import voice.core.common.rootGraphAs
@@ -115,6 +116,7 @@ class MainActivity : AppCompatActivity() {
       ) {
         val bottomSheetStrategy = remember { BottomSheetSceneStrategy<Destination.Compose>() }
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
+        val overlayStrategy = remember { OverlaySceneStrategy<Destination.Compose>() }
         val density = LocalDensity.current
 
         SharedTransitionLayout {
@@ -125,7 +127,7 @@ class MainActivity : AppCompatActivity() {
           ) {
             NavDisplay(
               backStack = backStack,
-              sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy),
+              sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy, overlayStrategy),
               sharedTransitionScope = this,
               transitionSpec = {
                 if (isSharedElementTransition(initialState.destination(), targetState.destination())) {
@@ -166,7 +168,10 @@ class MainActivity : AppCompatActivity() {
               is NavigationCommand.GoTo -> {
                 when (val destination = command.destination) {
                   is Destination.Compose -> {
-                    backStack += destination
+                    // a double tap would otherwise open the same screen twice
+                    if (backStack.lastOrNull() != destination) {
+                      backStack += destination
+                    }
                   }
                   is Destination.Activity -> {
                     startActivity(destination.intent)
@@ -186,6 +191,12 @@ class MainActivity : AppCompatActivity() {
               NavigationCommand.GoBack -> {
                 if (backStack.size > 1) {
                   backStack.removeLastOrNull()
+                }
+              }
+              is NavigationCommand.Remove -> {
+                val index = backStack.lastIndexOf(command.destination)
+                if (index != -1 && backStack.size > 1) {
+                  backStack.removeAt(index)
                 }
               }
               is NavigationCommand.SetRoot -> {

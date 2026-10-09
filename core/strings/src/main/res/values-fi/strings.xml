@@ -118,6 +118,7 @@
     <string name="common.action.delete">Poista</string>
     <string name="common.action.done">Valmis</string>
     <string name="common.action.edit">Muokkaa</string>
+    <string name="common.action.more">Lisää vaihtoehtoja</string>
     <string name="common.action.undo">Kumoa</string>
     <string name="common.action.save">Tallenna</string>
     <string name="common.dialog.cancel">Peruuta</string>

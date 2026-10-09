@@ -118,6 +118,7 @@
     <string name="common.action.delete">நீக்கு</string>
     <string name="common.action.done">முடிந்தது</string>
     <string name="common.action.edit">தொகு</string>
+    <string name="common.action.more">மேலும் விருப்பங்கள்</string>
     <string name="common.action.undo">செயல்தவிர்</string>
     <string name="common.action.save">சேமி</string>
     <string name="common.dialog.cancel">ரத்துசெய்</string>

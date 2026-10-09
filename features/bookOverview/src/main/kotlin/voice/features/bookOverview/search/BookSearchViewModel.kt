@@ -282,6 +282,10 @@ class BookSearchViewModel(
     navigator.goTo(Destination.Playback(id))
   }
 
+  fun onBookLongClick(id: BookId) {
+    navigator.goTo(Destination.BookActions(id))
+  }
+
   fun onPlayClick(id: BookId) {
     saveRecentSearch(query.text.toString())
     scope.launch {

@@ -118,6 +118,7 @@
     <string name="common.action.delete">Verwijderen</string>
     <string name="common.action.done">Klaar</string>
     <string name="common.action.edit">Bewerken</string>
+    <string name="common.action.more">Meer opties</string>
     <string name="common.action.undo">Ongedaan maken</string>
     <string name="common.action.save">Opslaan</string>
     <string name="common.dialog.cancel">Annuleren</string>

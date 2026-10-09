@@ -118,6 +118,7 @@
     <string name="common.action.delete">Ta bort</string>
     <string name="common.action.done">Klar</string>
     <string name="common.action.edit">Redigera</string>
+    <string name="common.action.more">Fler alternativ</string>
     <string name="common.action.undo">Ångra</string>
     <string name="common.action.save">Spara</string>
     <string name="common.dialog.cancel">Avbryt</string>

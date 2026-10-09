@@ -200,6 +200,8 @@
     <string name="common.action.done">Done</string>
     <!-- Generic edit action in popup menus. -->
     <string name="common.action.edit">Edit</string>
+    <!-- Content description of the button in the player that opens the menu of the book, with actions like rename and change the cover. -->
+    <string name="common.action.more">More options</string>
     <string name="common.action.undo">Undo</string>
     <!-- Generic remove action in menus. -->
     <!-- Generic action for saving changes. -->

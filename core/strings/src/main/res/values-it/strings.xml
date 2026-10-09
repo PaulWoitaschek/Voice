@@ -121,6 +121,7 @@
     <string name="common.action.delete">Elimina</string>
     <string name="common.action.done">Fine</string>
     <string name="common.action.edit">Modifica</string>
+    <string name="common.action.more">Altre opzioni</string>
     <string name="common.action.undo">Annulla</string>
     <string name="common.action.save">Salva</string>
     <string name="common.dialog.cancel">Annulla</string>

@@ -84,26 +84,17 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
   }
   val viewState = bookOverviewViewModel.state()
 
-  var showBottomSheet by remember { mutableStateOf(false) }
   BookOverview(
     viewState = viewState,
     onSettingsClick = bookOverviewViewModel::onSettingsClick,
     onBookClick = bookOverviewViewModel::onBookClick,
-    onBookLongClick = { bookId ->
-      bookGraph.bottomSheetViewModel.bookSelected(bookId)
-      showBottomSheet = true
-    },
+    onBookLongClick = bookOverviewViewModel::onBookLongClick,
     onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
     onFolderPickerMovedDialogDismiss = bookOverviewViewModel::onFolderPickerMovedDialogDismiss,
     onPlayButtonClick = bookOverviewViewModel::playPause,
     onSearchClick = bookOverviewViewModel::onSearchClick,
     onPermissionBugCardClick = bookOverviewViewModel::onPermissionBugCardClick,
     modifier = modifier,
-  )
-  BookActions(
-    bookGraph = bookGraph,
-    showBottomSheet = showBottomSheet,
-    onBottomSheetDismiss = { showBottomSheet = false },
   )
 }
 
