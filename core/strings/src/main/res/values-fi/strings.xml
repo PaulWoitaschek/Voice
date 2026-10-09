@@ -1,5 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="audiobookshelf.downloads.channel">Lataukset</string>
+    <string name="audiobookshelf.login.address.action">Jatka</string>
+    <string name="audiobookshelf.login.address.label">Palvelimen osoite</string>
+    <string name="audiobookshelf.login.address.subtitle">Kuuntele kirjoja omalta palvelimeltasi. Voice pitää kuuntelukohtasi samana kaikilla laitteillasi.</string>
+    <string name="audiobookshelf.login.address.title">Yhdistä Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">Kirjaudu sisään</string>
+    <string name="audiobookshelf.login.credentials.no_password">Tämä palvelin sallii vain kertakirjautumisen, jota Voice ei vielä osaa. Pyydä palvelimen ylläpitäjää ottamaan käyttöön kirjautuminen salasanalla.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">Käytä tiliäsi palvelimella %s.</string>
+    <string name="audiobookshelf.login.credentials.title">Kirjaudu sisään</string>
+    <string name="audiobookshelf.login.error.certificate">Puhelimesi ei luota tämän palvelimen varmenteeseen.</string>
+    <string name="audiobookshelf.login.error.credentials">Käyttäjänimi tai salasana on väärin.</string>
+    <string name="audiobookshelf.login.error.failed">Kirjautuminen ei onnistunut. Yritä uudelleen.</string>
+    <string name="audiobookshelf.login.error.not_found">Voice ei tavoita Audiobookshelf-palvelinta tästä osoitteesta. Oletko oikeassa verkossa?</string>
+    <string name="audiobookshelf.login.error.not_set_up">Tätä palvelinta ei ole vielä määritetty. Tee käyttöönotto ensin loppuun sen verkkosovelluksessa.</string>
+    <string name="audiobookshelf.login.error.too_old">Voice tarvitsee Audiobookshelfin version 2.26 tai uudemman. Tämän palvelimen versio on %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">Palvelin lakkasi vastaamasta. Yritä hetken päästä uudelleen.</string>
+    <string name="audiobookshelf.login.libraries.action">Lisää kirjastoon</string>
+    <string name="audiobookshelf.login.libraries.loading">Etsitään kirjoja…</string>
+    <string name="audiobookshelf.login.libraries.none">Täällä ei ole äänikirjakirjastoja</string>
+    <string name="audiobookshelf.login.libraries.subtitle">Ne lisätään kirjastoosi. Toista ne heti tai lataa ne kuunneltavaksi ilman verkkoyhteyttä.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">Löysimme %d äänikirjan</item>
+        <item quantity="other">Löysimme %d äänikirjaa</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d kirja</item>
+        <item quantity="other">%1$s · %2$d kirjaa</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Salasana</string>
+    <string name="audiobookshelf.login.password.hide">Piilota salasana</string>
+    <string name="audiobookshelf.login.password.show">Näytä salasana</string>
+    <string name="audiobookshelf.login.username">Käyttäjänimi</string>
+    <string name="audiobookshelf.settings.downloads">Lataukset</string>
+    <string name="audiobookshelf.settings.downloads.none">Ei vielä ladattuja kirjoja</string>
+    <string name="audiobookshelf.settings.downloads.remove">Poista kaikki</string>
+    <string name="audiobookshelf.settings.downloads.used">%s tällä laitteella</string>
+    <string name="audiobookshelf.settings.libraries">Kirjastot</string>
+    <string name="audiobookshelf.settings.mobile_data">Lataa mobiilidatalla</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Muuten lataukset odottavat Wi-Fi-yhteyttä</string>
+    <string name="audiobookshelf.settings.sign_in_again">Kirjaudu sisään</string>
+    <string name="audiobookshelf.settings.sign_out">Kirjaudu ulos</string>
+    <string name="audiobookshelf.settings.signed_in_as">Kirjautunut käyttäjänä %s</string>
+    <string name="audiobookshelf.settings.try_again">Yritä uudelleen</string>
+    <string name="audiobookshelf.sign_out.message">Palvelimen kirjat ja niiden lataukset poistuvat tältä laitteelta. Edistymisesi pysyy turvassa palvelimella.</string>
+    <string name="audiobookshelf.sign_out.title">Kirjaudutaanko ulos palvelimelta %s?</string>
+    <string name="audiobookshelf.status.connected">Yhdistetty, edistymisesi on synkronoitu</string>
+    <string name="audiobookshelf.status.needs_login">Palvelin pyytää sinua kirjautumaan uudelleen</string>
+    <string name="audiobookshelf.status.offline">Palvelimeen ei saada nyt yhteyttä. Ladattuja kirjoja voit silti kuunnella.</string>
+    <string name="audiobookshelf.status.syncing">Synkronoidaan…</string>
     <string name="book.category.action.mark_completed">Merkitse valmiiksi</string>
     <string name="book.category.action.mark_current">Merkitse nykyiseksi</string>
     <string name="book.category.action.mark_not_started">Merkitse ei vielä aloitetuksi</string>
@@ -7,6 +56,8 @@
     <string name="book.delete.dialog.confirm_files">Poista tiedostoni</string>
     <string name="book.delete.dialog.message">Tämä poistaa tiedostot laitteeltasi.</string>
     <string name="book.delete.dialog.title">Poista kirja</string>
+    <string name="book.download.action">Lataa</string>
+    <string name="book.download.remove">Poista lataus</string>
     <string name="book.edit.cover.file">Kansi tiedostojärjestelmästä</string>
     <string name="book.edit.cover.internet">Kansi internetistä</string>
     <string name="book.edit.name.label">Nimi</string>
@@ -75,6 +126,7 @@
         <item quantity="one">%d sekunti</item>
         <item quantity="other">%d sekuntia</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Yhdistä Audiobookshelf</string>
     <string name="folder.add.action.file">Lisää sen sijaan yksittäinen tiedosto</string>
     <string name="folder.add.action.folder">Valitse kansio</string>
     <string name="folder.add.subtitle">Valitse kansio, jossa äänikirjasi ovat. Siinä voi olla yksi kirja tai koko kirjastosi.</string>
@@ -178,6 +230,7 @@
     <string name="history.suggestion.started_by.headset">Kuulokkeiden painike käynnisti kirjan klo %1$s</string>
     <string name="history.suggestion.started_by.other_app">Toinen sovellus käynnisti kirjan klo %1$s</string>
     <string name="history.suggestion.started_by.watch">Kellosi käynnisti kirjan klo %1$s</string>
+    <string name="library.book.offline">Ei saatavilla offline-tilassa</string>
     <string name="library.category.completed.title">Valmiina</string>
     <string name="library.category.current.title">Nykyinen</string>
     <string name="library.category.not_started.title">Ei vielä aloitettu</string>
@@ -309,6 +362,7 @@
     <string name="settings.auto_sleep_timer.start.label">Aloitusaika</string>
     <string name="settings.auto_sleep_timer.summary">Aloita uniajastin automaattisesti, kun toisto alkaa välillä %1$s ja %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automaattinen uniajastin</string>
+    <string name="settings.library.audiobookshelf.summary">Suoratoista kirjoja omalta palvelimeltasi</string>
     <string name="settings.library.folders.summary">Hallitse kansioita, joista etsitään äänikirjoja</string>
     <string name="settings.library.layout.grid">Ruudukko</string>
     <string name="settings.library.layout.list">Luettelo</string>

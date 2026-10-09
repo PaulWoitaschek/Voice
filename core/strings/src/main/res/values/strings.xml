@@ -1,5 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
+    <!-- Name of the notification channel for books that download from an Audiobookshelf server. -->
+    <string name="audiobookshelf.downloads.channel">Downloads</string>
+    <!-- Primary action on the address step of connecting an Audiobookshelf server. Looks for the server at the typed address. -->
+    <string name="audiobookshelf.login.address.action">Continue</string>
+    <!-- Label of the text field for the address of the Audiobookshelf server, like a domain or an IP address. -->
+    <string name="audiobookshelf.login.address.label">Server address</string>
+    <!-- Example address shown in the empty server address field. -->
+    <string name="audiobookshelf.login.address.placeholder" translatable="false">audiobooks.example.com</string>
+    <!-- Explains on the first step of connecting what an Audiobookshelf server brings: its books, and the listening position kept the same on all devices. -->
+    <string name="audiobookshelf.login.address.subtitle">Listen to the books on your own server. Voice keeps your place in step with your other devices.</string>
+    <!-- Title of the first step of connecting an Audiobookshelf server, a self-hosted audiobook server. Audiobookshelf is a product name. -->
+    <string name="audiobookshelf.login.address.title">Connect Audiobookshelf</string>
+    <!-- Primary action on the sign in step, signs in with the username and password. -->
+    <string name="audiobookshelf.login.credentials.action">Sign in</string>
+    <!-- Shown instead of the username and password when the server only allows signing in through single sign-on (OpenID). -->
+    <string name="audiobookshelf.login.credentials.no_password">This server only allows single sign-on, which Voice can\'t do yet. Ask whoever runs it to turn on signing in with a password.</string>
+    <!-- Subtitle of the sign in step. %s is the address of the server, like audiobooks.example.com. -->
+    <string name="audiobookshelf.login.credentials.subtitle">Use your account on %s.</string>
+    <!-- Title of the step where the listener signs in to the Audiobookshelf server. -->
+    <string name="audiobookshelf.login.credentials.title">Sign in</string>
+    <!-- Error under the server address when the connection failed because the phone doesn't trust the server's TLS certificate, for example a self-signed one. -->
+    <string name="audiobookshelf.login.error.certificate">Your phone doesn\'t trust this server\'s certificate.</string>
+    <!-- Error under the password field when the username or the password is wrong. -->
+    <string name="audiobookshelf.login.error.credentials">That username or password isn\'t right.</string>
+    <!-- Error under the password field when signing in failed for an unknown reason. -->
+    <string name="audiobookshelf.login.error.failed">Signing in didn\'t work. Try again.</string>
+    <!-- Error under the server address when nothing at that address answered like an Audiobookshelf server. Many servers are only reachable at home or over a VPN. -->
+    <string name="audiobookshelf.login.error.not_found">Voice can\'t reach an Audiobookshelf server there. Are you on the right network?</string>
+    <!-- Error under the server address when the server was installed, but its first setup in the web app isn't done. -->
+    <string name="audiobookshelf.login.error.not_set_up">This server isn\'t set up yet. Finish the setup in its web app first.</string>
+    <!-- Error under the server address when the server is too old. %s is the version the server runs, like 2.20.0. -->
+    <string name="audiobookshelf.login.error.too_old">Voice needs Audiobookshelf 2.26 or newer. This server runs %s.</string>
+    <!-- Error under the password field when the server stopped answering while signing in. -->
+    <string name="audiobookshelf.login.error.unreachable">The server stopped answering. Try again in a moment.</string>
+    <!-- Primary action on the last step of connecting, adds the books of the chosen libraries to Voice's library. -->
+    <string name="audiobookshelf.login.libraries.action">Add to my library</string>
+    <!-- Title while Voice loads the libraries of the server after signing in. -->
+    <string name="audiobookshelf.login.libraries.loading">Looking for books…</string>
+    <!-- Title when the server has no audiobook libraries, only podcast ones or none at all. -->
+    <string name="audiobookshelf.login.libraries.none">No audiobook libraries here</string>
+    <!-- Subtitle of the last step of connecting: the books of the server show up in the library and can be streamed or downloaded. -->
+    <string name="audiobookshelf.login.libraries.subtitle">They join your library. Play them right away, or download them to listen offline.</string>
+    <!-- Title of the last step of connecting, with the number of audiobooks in the chosen libraries. -->
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">%d audiobook found</item>
+        <item quantity="other">%d audiobooks found</item>
+    </plurals>
+    <!-- Chip to choose a library of the server. %1$s is the name of the library, %2$d the number of books in it. -->
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d book</item>
+        <item quantity="other">%1$s · %2$d books</item>
+    </plurals>
+    <!-- Label of the password field when signing in to the server. -->
+    <string name="audiobookshelf.login.password">Password</string>
+    <!-- Content description of the button that hides the typed password again. -->
+    <string name="audiobookshelf.login.password.hide">Hide password</string>
+    <!-- Content description of the button that shows the typed password. -->
+    <string name="audiobookshelf.login.password.show">Show password</string>
+    <!-- Label of the username field when signing in to the server. -->
+    <string name="audiobookshelf.login.username">Username</string>
+    <!-- Title of the downloads section in the Audiobookshelf settings. -->
+    <string name="audiobookshelf.settings.downloads">Downloads</string>
+    <!-- Shown in the downloads section when no server book is downloaded. -->
+    <string name="audiobookshelf.settings.downloads.none">No books downloaded yet</string>
+    <!-- Action that removes all downloaded server books from the device. They stay on the server. -->
+    <string name="audiobookshelf.settings.downloads.remove">Remove all</string>
+    <!-- How much storage the downloaded server books take. %s is a size like 1.2 GB. -->
+    <string name="audiobookshelf.settings.downloads.used">%s on this device</string>
+    <!-- Title of the section where the listener picks which libraries of the server show up in Voice. -->
+    <string name="audiobookshelf.settings.libraries">Libraries</string>
+    <!-- Switch that lets books download over mobile data, not only over Wi-Fi. -->
+    <string name="audiobookshelf.settings.mobile_data">Download over mobile data</string>
+    <!-- Explains the mobile data switch when it is off. -->
+    <string name="audiobookshelf.settings.mobile_data.summary">Otherwise downloads wait for Wi-Fi</string>
+    <!-- Button next to the status when the server declined the stored login and the listener has to sign in again. -->
+    <string name="audiobookshelf.settings.sign_in_again">Sign in</string>
+    <!-- Action that signs out of the Audiobookshelf server and removes its books from Voice. -->
+    <string name="audiobookshelf.settings.sign_out">Sign out</string>
+    <!-- Shown under the server address. %s is the username. -->
+    <string name="audiobookshelf.settings.signed_in_as">Signed in as %s</string>
+    <!-- Button next to the offline status that tries to reach the server again. -->
+    <string name="audiobookshelf.settings.try_again">Try again</string>
+    <!-- Message of the sheet that confirms signing out: the books of the server and their downloads are removed from the device, the listening progress stays on the server. -->
+    <string name="audiobookshelf.sign_out.message">Its books and their downloads leave this device. Your progress stays safe on the server.</string>
+    <!-- Title of the sheet that confirms signing out. %s is the address of the server. -->
+    <string name="audiobookshelf.sign_out.title">Sign out of %s?</string>
+    <!-- Status of the server connection when everything works. -->
+    <string name="audiobookshelf.status.connected">Connected, your progress is in sync</string>
+    <!-- Status of the server connection when the server declined the stored login. -->
+    <string name="audiobookshelf.status.needs_login">The server wants you to sign in again</string>
+    <!-- Status of the server connection when it can't be reached, for example without internet or outside the home network. -->
+    <string name="audiobookshelf.status.offline">Can\'t reach the server right now. Downloaded books still play.</string>
+    <!-- Status of the server connection while Voice syncs books and progress with it. -->
+    <string name="audiobookshelf.status.syncing">Syncing…</string>
+    <!-- Name of the self-hosted audiobook server. Product name, not translated. -->
+    <string name="audiobookshelf.title" translatable="false">Audiobookshelf</string>
     <!-- Bottom-sheet action for moving a book to the completed category. -->
     <string name="book.category.action.mark_completed">Mark as Completed</string>
     <!-- Bottom-sheet action for moving a book to the current category. -->
@@ -14,6 +110,10 @@
     <string name="book.delete.dialog.message">This will delete the files on your device.</string>
     <!-- Title for the delete-book confirmation dialog. -->
     <string name="book.delete.dialog.title">Delete Book</string>
+    <!-- Bottom-sheet action that downloads a book from the Audiobookshelf server, so it plays without a connection. -->
+    <string name="book.download.action">Download</string>
+    <!-- Bottom-sheet action that removes the download of a server book. The book stays in the library and streams again. -->
+    <string name="book.download.remove">Remove download</string>
     <!-- Bottom-sheet item for choosing a cover from local files. -->
     <string name="book.edit.cover.file">Cover from the file system</string>
     <!-- Bottom-sheet item for choosing a cover from an internet search. -->
@@ -113,6 +213,8 @@
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
+    <!-- Action on the add audiobooks screen that connects an Audiobookshelf server instead of picking a folder. Audiobookshelf is a product name. -->
+    <string name="folder.add.action.audiobookshelf">Connect Audiobookshelf</string>
     <!-- Text button on the add content screen for adding one audio file instead of a folder. -->
     <string name="folder.add.action.file">Add a single file instead</string>
     <!-- Main button on the add content screen that opens the system folder picker. Also shown when a picked folder has no audio files. -->
@@ -241,6 +343,8 @@
     <string name="history.suggestion.started_by.headset">A headset button started the book at %1$s</string>
     <string name="history.suggestion.started_by.other_app">Another app started the book at %1$s</string>
     <string name="history.suggestion.started_by.watch">Your watch started the book at %1$s</string>
+    <!-- Shown for a server book that isn't downloaded while the server can't be reached: on the icon on its cover, and as a small label in the player. Keep it short. -->
+    <string name="library.book.offline">Not available offline</string>
     <!-- Library category header for completed books. -->
     <string name="library.category.completed.title">Completed</string>
     <!-- Library category header for books currently being listened to. -->
@@ -487,6 +591,8 @@
     <string name="settings.auto_sleep_timer.summary">Start a sleep timer automatically when playback begins between %1$s and %2$s</string>
     <!-- Settings title for automatically starting a sleep timer. -->
     <string name="settings.auto_sleep_timer.title">Automatic Sleep Timer</string>
+    <!-- Summary of the Audiobookshelf row in the library settings when no server is connected. -->
+    <string name="settings.library.audiobookshelf.summary">Stream the books on your own server</string>
     <!-- Summary text for the audiobook folders settings row. Also the subtitle of the audiobook folders screen. -->
     <string name="settings.library.folders.summary">Manage folders scanned for audiobooks</string>
     <!-- Label of the preview tile that shows the library as a grid of covers. -->

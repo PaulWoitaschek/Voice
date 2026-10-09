@@ -58,6 +58,8 @@ internal fun ListBookRow(
         bookId = book.id,
         cover = book.cover,
         finished = finished,
+        unavailable = book.unavailable,
+        downloadProgress = book.downloadProgress,
         modifier = Modifier.size(64.dp),
       )
       Spacer(Modifier.width(16.dp))

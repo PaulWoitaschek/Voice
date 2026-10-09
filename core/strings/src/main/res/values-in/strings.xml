@@ -1,5 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="audiobookshelf.downloads.channel">Unduhan</string>
+    <string name="audiobookshelf.login.address.action">Lanjutkan</string>
+    <string name="audiobookshelf.login.address.label">Alamat server</string>
+    <string name="audiobookshelf.login.address.subtitle">Dengarkan buku di server Anda sendiri. Voice menyelaraskan posisi Anda dengan perangkat Anda yang lain.</string>
+    <string name="audiobookshelf.login.address.title">Hubungkan Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">Masuk</string>
+    <string name="audiobookshelf.login.credentials.no_password">Server ini hanya mengizinkan single sign-on, yang belum didukung Voice. Minta pengelola server untuk mengaktifkan masuk dengan kata sandi.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">Gunakan akun Anda di %s.</string>
+    <string name="audiobookshelf.login.credentials.title">Masuk</string>
+    <string name="audiobookshelf.login.error.certificate">Ponsel Anda tidak memercayai sertifikat server ini.</string>
+    <string name="audiobookshelf.login.error.credentials">Nama pengguna atau kata sandi salah.</string>
+    <string name="audiobookshelf.login.error.failed">Gagal masuk. Coba lagi.</string>
+    <string name="audiobookshelf.login.error.not_found">Voice tidak dapat menjangkau server Audiobookshelf di alamat itu. Apakah Anda terhubung ke jaringan yang tepat?</string>
+    <string name="audiobookshelf.login.error.not_set_up">Server ini belum disiapkan. Selesaikan penyiapannya di aplikasi web server terlebih dahulu.</string>
+    <string name="audiobookshelf.login.error.too_old">Voice memerlukan Audiobookshelf 2.26 atau yang lebih baru. Server ini menjalankan %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">Server berhenti merespons. Coba lagi dalam beberapa saat.</string>
+    <string name="audiobookshelf.login.libraries.action">Tambahkan ke pustaka saya</string>
+    <string name="audiobookshelf.login.libraries.loading">Mencari buku…</string>
+    <string name="audiobookshelf.login.libraries.none">Tidak ada pustaka buku audio di sini</string>
+    <string name="audiobookshelf.login.libraries.subtitle">Buku-buku ini masuk ke pustaka Anda. Putar langsung, atau unduh untuk didengarkan secara offline.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="other">%d buku audio ditemukan</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="other">%1$s · %2$d buku</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Kata sandi</string>
+    <string name="audiobookshelf.login.password.hide">Sembunyikan kata sandi</string>
+    <string name="audiobookshelf.login.password.show">Tampilkan kata sandi</string>
+    <string name="audiobookshelf.login.username">Nama pengguna</string>
+    <string name="audiobookshelf.settings.downloads">Unduhan</string>
+    <string name="audiobookshelf.settings.downloads.none">Belum ada buku yang diunduh</string>
+    <string name="audiobookshelf.settings.downloads.remove">Hapus semua</string>
+    <string name="audiobookshelf.settings.downloads.used">%s di perangkat ini</string>
+    <string name="audiobookshelf.settings.libraries">Pustaka</string>
+    <string name="audiobookshelf.settings.mobile_data">Unduh dengan data seluler</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Jika tidak, unduhan akan menunggu Wi-Fi</string>
+    <string name="audiobookshelf.settings.sign_in_again">Masuk</string>
+    <string name="audiobookshelf.settings.sign_out">Keluar</string>
+    <string name="audiobookshelf.settings.signed_in_as">Masuk sebagai %s</string>
+    <string name="audiobookshelf.settings.try_again">Coba lagi</string>
+    <string name="audiobookshelf.sign_out.message">Buku-bukunya beserta unduhannya akan dihapus dari perangkat ini. Progres Anda tetap aman di server.</string>
+    <string name="audiobookshelf.sign_out.title">Keluar dari %s?</string>
+    <string name="audiobookshelf.status.connected">Terhubung, progres Anda tersinkron</string>
+    <string name="audiobookshelf.status.needs_login">Server meminta Anda masuk lagi</string>
+    <string name="audiobookshelf.status.offline">Server tidak dapat dijangkau saat ini. Buku yang sudah diunduh tetap bisa diputar.</string>
+    <string name="audiobookshelf.status.syncing">Menyinkronkan…</string>
     <string name="book.category.action.mark_completed">Tandai Selesai</string>
     <string name="book.category.action.mark_current">Tandai Sedang Dibaca</string>
     <string name="book.category.action.mark_not_started">Tandai Belum Dibaca</string>
@@ -7,6 +54,8 @@
     <string name="book.delete.dialog.confirm_files">Hapus berkas saya</string>
     <string name="book.delete.dialog.message">Ini akan menghapus berkas di perangkat Anda.</string>
     <string name="book.delete.dialog.title">Hapus Buku</string>
+    <string name="book.download.action">Unduh</string>
+    <string name="book.download.remove">Hapus unduhan</string>
     <string name="book.edit.cover.file">Sampul dari file sistem</string>
     <string name="book.edit.cover.internet">Sampul dari Internet</string>
     <string name="book.edit.name.label">Judul Buku</string>
@@ -73,6 +122,7 @@
     <plurals name="duration.seconds">
         <item quantity="other">%d detik</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Hubungkan Audiobookshelf</string>
     <string name="folder.add.action.file">Tambahkan satu berkas saja</string>
     <string name="folder.add.action.folder">Pilih folder</string>
     <string name="folder.add.subtitle">Pilih folder berisi buku audio Anda. Folder ini bisa berisi satu buku atau seluruh perpustakaan Anda.</string>
@@ -170,6 +220,7 @@
     <string name="history.suggestion.started_by.headset">Tombol headset memulai buku ini pada %1$s</string>
     <string name="history.suggestion.started_by.other_app">Aplikasi lain memulai buku ini pada %1$s</string>
     <string name="history.suggestion.started_by.watch">Jam tangan Anda memulai buku ini pada %1$s</string>
+    <string name="library.book.offline">Tidak tersedia offline</string>
     <string name="library.category.completed.title">Selesai</string>
     <string name="library.category.current.title">Saat ini</string>
     <string name="library.category.not_started.title">Belum dimulai</string>
@@ -296,6 +347,7 @@
     <string name="settings.auto_sleep_timer.start.label">Atur waktu mulai</string>
     <string name="settings.auto_sleep_timer.summary">Mulai pengatur waktu tidur secara otomatis saat pemutaran dimulai antara %1$s dan %2$s</string>
     <string name="settings.auto_sleep_timer.title">Pengatur Waktu Tidur Otomatis</string>
+    <string name="settings.library.audiobookshelf.summary">Streaming buku dari server Anda sendiri</string>
     <string name="settings.library.folders.summary">Kelola folder yang dipindai untuk buku audio</string>
     <string name="settings.library.layout.grid">Kisi</string>
     <string name="settings.library.layout.list">Daftar</string>

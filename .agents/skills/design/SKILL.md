@@ -24,7 +24,8 @@ decisions a listener has to make small. The feature set doesn't have to be.
 - One primary action per screen or sheet. Secondary actions are quieter. Destructive ones use the error colors and
   need a deliberate step, like ticking "Delete my files" first.
 - Never interrupt listening. Prompts such as rating or support wait for a calm moment, ask once, and accept no.
-- No account, no ads, nothing behind a paywall, and the data stays on the device.
+- No account, no ads, nothing behind a paywall, and the data stays with the listener: on the device, or on their own
+  server, like Audiobookshelf. Voice never runs a server of its own.
 
 ## Material 3 Expressive
 

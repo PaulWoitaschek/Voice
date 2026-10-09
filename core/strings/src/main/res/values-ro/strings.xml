@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="audiobookshelf.downloads.channel">Descărcări</string>
+    <string name="audiobookshelf.login.address.action">Continuă</string>
+    <string name="audiobookshelf.login.address.label">Adresa serverului</string>
+    <string name="audiobookshelf.login.address.subtitle">Ascultă cărțile de pe propriul tău server. Voice ține minte unde ai rămas, pe toate dispozitivele tale.</string>
+    <string name="audiobookshelf.login.address.title">Conectează Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">Conectează-te</string>
+    <string name="audiobookshelf.login.credentials.no_password">Acest server permite doar autentificarea unică (SSO), pe care Voice nu o acceptă încă. Roagă persoana care îl administrează să activeze conectarea cu parolă.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">Folosește contul tău de pe %s.</string>
+    <string name="audiobookshelf.login.credentials.title">Conectare</string>
+    <string name="audiobookshelf.login.error.certificate">Telefonul tău nu are încredere în certificatul acestui server.</string>
+    <string name="audiobookshelf.login.error.credentials">Numele de utilizator sau parola nu sunt corecte.</string>
+    <string name="audiobookshelf.login.error.failed">Conectarea nu a reușit. Încearcă din nou.</string>
+    <string name="audiobookshelf.login.error.not_found">Voice nu găsește niciun server Audiobookshelf la adresa asta. Ești în rețeaua potrivită?</string>
+    <string name="audiobookshelf.login.error.not_set_up">Acest server nu este configurat încă. Termină mai întâi configurarea în aplicația web a serverului.</string>
+    <string name="audiobookshelf.login.error.too_old">Voice are nevoie de Audiobookshelf 2.26 sau mai nou. Acest server rulează versiunea %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">Serverul nu mai răspunde. Încearcă din nou peste puțin timp.</string>
+    <string name="audiobookshelf.login.libraries.action">Adaugă în biblioteca mea</string>
+    <string name="audiobookshelf.login.libraries.loading">Se caută cărți…</string>
+    <string name="audiobookshelf.login.libraries.none">Nicio bibliotecă de cărți audio aici</string>
+    <string name="audiobookshelf.login.libraries.subtitle">Se adaugă în biblioteca ta. Ascultă-le imediat sau descarcă-le ca să le asculți offline.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">Am găsit %d carte audio</item>
+        <item quantity="few">Am găsit %d cărți audio</item>
+        <item quantity="other">Am găsit %d de cărți audio</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d carte</item>
+        <item quantity="few">%1$s · %2$d cărți</item>
+        <item quantity="other">%1$s · %2$d de cărți</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Parolă</string>
+    <string name="audiobookshelf.login.password.hide">Ascunde parola</string>
+    <string name="audiobookshelf.login.password.show">Afișează parola</string>
+    <string name="audiobookshelf.login.username">Nume de utilizator</string>
+    <string name="audiobookshelf.settings.downloads">Descărcări</string>
+    <string name="audiobookshelf.settings.downloads.none">Nicio carte descărcată încă</string>
+    <string name="audiobookshelf.settings.downloads.remove">Elimină tot</string>
+    <string name="audiobookshelf.settings.downloads.used">%s pe acest dispozitiv</string>
+    <string name="audiobookshelf.settings.libraries">Biblioteci</string>
+    <string name="audiobookshelf.settings.mobile_data">Descarcă folosind date mobile</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Altfel, descărcările așteaptă o rețea Wi-Fi</string>
+    <string name="audiobookshelf.settings.sign_in_again">Conectează-te</string>
+    <string name="audiobookshelf.settings.sign_out">Deconectează-te</string>
+    <string name="audiobookshelf.settings.signed_in_as">Te-ai conectat ca %s</string>
+    <string name="audiobookshelf.settings.try_again">Reîncearcă</string>
+    <string name="audiobookshelf.sign_out.message">Cărțile de pe server și descărcările lor vor fi șterse de pe acest dispozitiv. Progresul tău rămâne în siguranță pe server.</string>
+    <string name="audiobookshelf.sign_out.title">Te deconectezi de la %s?</string>
+    <string name="audiobookshelf.status.connected">Conexiune activă, progresul tău e sincronizat</string>
+    <string name="audiobookshelf.status.needs_login">Serverul îți cere să te conectezi din nou</string>
+    <string name="audiobookshelf.status.offline">Serverul nu poate fi contactat acum. Poți asculta în continuare cărțile descărcate.</string>
+    <string name="audiobookshelf.status.syncing">Se sincronizează…</string>
     <string name="book.category.action.mark_completed">Marchează ca terminată</string>
     <string name="book.category.action.mark_current">Marchează ca fiind curentă</string>
     <string name="book.category.action.mark_not_started">Marchează ca neîncepută încă</string>
@@ -7,6 +58,8 @@
     <string name="book.delete.dialog.confirm_files">Șterge fișierele mele</string>
     <string name="book.delete.dialog.message">Astfel vei șterge de pe dispozitiv și fișierele corespunzătoare cărții.</string>
     <string name="book.delete.dialog.title">Șterge cartea</string>
+    <string name="book.download.action">Descarcă</string>
+    <string name="book.download.remove">Elimină descărcarea</string>
     <string name="book.edit.cover.file">Copertă din sistemul de fișiere</string>
     <string name="book.edit.cover.internet">Copertă de pe internet</string>
     <string name="book.edit.name.label">Nume</string>
@@ -77,6 +130,7 @@
         <item quantity="few">%d secunde</item>
         <item quantity="other">%d secunde</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Conectează Audiobookshelf</string>
     <string name="folder.add.action.file">Adaugă doar un fișier</string>
     <string name="folder.add.action.folder">Alege un director</string>
     <string name="folder.add.subtitle">Alege directorul cu cărțile tale audio. Poate conține o singură carte sau întreaga ta bibliotecă.</string>
@@ -186,6 +240,7 @@
     <string name="history.suggestion.started_by.headset">Un buton de la căști a pornit cartea la ora %1$s</string>
     <string name="history.suggestion.started_by.other_app">O altă aplicație a pornit cartea la ora %1$s</string>
     <string name="history.suggestion.started_by.watch">Ceasul tău a pornit cartea la ora %1$s</string>
+    <string name="library.book.offline">Indisponibilă offline</string>
     <string name="library.category.completed.title">Cărți citite</string>
     <string name="library.category.current.title">Cărți în lectură</string>
     <string name="library.category.not_started.title">Cărți neascultate încă</string>
@@ -322,6 +377,7 @@
     <string name="settings.auto_sleep_timer.start.label">Setează ora de început</string>
     <string name="settings.auto_sleep_timer.summary">Pornește automat oprirea temporizată când redarea începe între %1$s și %2$s</string>
     <string name="settings.auto_sleep_timer.title">Oprire temporizată automată</string>
+    <string name="settings.library.audiobookshelf.summary">Ascultă cărțile de pe serverul tău</string>
     <string name="settings.library.folders.summary">Gestionează directoarele scanate pentru cărți audio</string>
     <string name="settings.library.layout.grid">Grilă</string>
     <string name="settings.library.layout.list">Listă</string>

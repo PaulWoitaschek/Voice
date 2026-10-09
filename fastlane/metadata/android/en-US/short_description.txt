@@ -1,1 +1,1 @@
-A calm audiobook player for your own files. No account, no ads.
+A calm audiobook player for your files and Audiobookshelf. No account, no ads.

@@ -28,6 +28,7 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.ui.GridCount
+import voice.features.bookOverview.FakeServerLibrary
 import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.navigation.Destination
@@ -73,6 +74,7 @@ class BookOverviewViewModelTest {
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
       kioskModeFeatureFlag = MemoryFeatureFlag(false),
       dispatcherProvider = dispatcherProvider,
+      serverLibrary = FakeServerLibrary(),
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -132,6 +134,7 @@ class BookOverviewViewModelTest {
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
       kioskModeFeatureFlag = MemoryFeatureFlag(true),
       dispatcherProvider = dispatcherProvider,
+      serverLibrary = FakeServerLibrary(),
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -325,6 +328,7 @@ class BookOverviewViewModelTest {
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
       kioskModeFeatureFlag = MemoryFeatureFlag(false),
       dispatcherProvider = dispatcherProvider,
+      serverLibrary = FakeServerLibrary(),
     )
   }
 

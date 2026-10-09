@@ -5,6 +5,7 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionParameters
+import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
@@ -42,8 +43,12 @@ object PlaybackModule {
 
   @Provides
   @SingleIn(PlaybackScope::class)
-  fun mediaSourceFactory(context: Context): MediaSource.Factory {
-    val dataSourceFactory = DefaultDataSource.Factory(context)
+  fun mediaSourceFactory(
+    context: Context,
+    @RemoteMediaDataSource remoteDataSourceFactory: DataSource.Factory,
+  ): MediaSource.Factory {
+    // schemes the default data source doesn't know, like the ids of server books, go to the remote one
+    val dataSourceFactory = DefaultDataSource.Factory(context, remoteDataSourceFactory)
     val extractorsFactory = DefaultExtractorsFactory()
       .setConstantBitrateSeekingEnabled(true)
     return DefaultMediaSourceFactory(dataSourceFactory, extractorsFactory)

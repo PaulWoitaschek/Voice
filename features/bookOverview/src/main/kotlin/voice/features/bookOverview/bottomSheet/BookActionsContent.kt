@@ -79,7 +79,13 @@ import java.text.NumberFormat
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 
-private val EditItems = listOf(BottomSheetItem.Title, BottomSheetItem.InternetCover, BottomSheetItem.FileCover)
+private val EditItems = listOf(
+  BottomSheetItem.Download,
+  BottomSheetItem.RemoveDownload,
+  BottomSheetItem.Title,
+  BottomSheetItem.InternetCover,
+  BottomSheetItem.FileCover,
+)
 
 /** The order a book moves through, so the picker reads like a timeline. */
 private val StatusOrder = listOf(BookOverviewCategory.NOT_STARTED, BookOverviewCategory.CURRENT, BookOverviewCategory.FINISHED)
@@ -398,6 +404,8 @@ private fun BottomSheetItem.style(): ActionStyle {
     BottomSheetItem.InternetCover -> ActionStyle(MaterialShapes.Clover4Leaf, colors.tertiaryContainer, colors.onTertiaryContainer)
     BottomSheetItem.FileCover -> ActionStyle(MaterialShapes.Cookie4Sided, colors.primaryContainer, colors.onPrimaryContainer)
     BottomSheetItem.DeleteBook -> ActionStyle(MaterialShapes.Cookie9Sided, colors.errorContainer, colors.onErrorContainer)
+    BottomSheetItem.Download -> ActionStyle(MaterialShapes.Sunny, colors.primaryContainer, colors.onPrimaryContainer)
+    BottomSheetItem.RemoveDownload -> ActionStyle(MaterialShapes.Sunny, colors.surfaceContainerHighest, colors.onSurfaceVariant)
     BottomSheetItem.BookCategoryMarkAsNotStarted,
     BottomSheetItem.BookCategoryMarkAsCurrent,
     BottomSheetItem.BookCategoryMarkAsCompleted,

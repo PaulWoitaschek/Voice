@@ -8,22 +8,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import voice.core.data.BookId
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.sharedCoverElementModifier
+import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 
 /** Percentage based so covers keep their look while shared element transitions resize them. */
@@ -36,13 +40,16 @@ internal fun BookCover(
   modifier: Modifier = Modifier,
   shape: Shape = CoverShape,
   finished: Boolean = false,
+  unavailable: Boolean = false,
+  downloadProgress: Float? = null,
 ) {
   Box(modifier = modifier) {
     AsyncImage(
       modifier = Modifier
         .fillMaxSize()
         .sharedCoverElementModifier(bookId)
-        .clip(shape),
+        .clip(shape)
+        .alpha(if (unavailable) 0.4F else 1F),
       model = rememberCoverThumbnailRequest(cover),
       // a soft fill the cover fades in on, instead of the dark default art flashing up
       placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
@@ -66,6 +73,46 @@ internal fun BookCover(
           imageVector = VoiceIcons.Check,
           contentDescription = null,
           tint = MaterialTheme.colorScheme.onPrimary,
+        )
+      }
+    }
+    if (downloadProgress != null) {
+      Box(
+        modifier = Modifier
+          .align(Alignment.BottomEnd)
+          .offset(x = 4.dp, y = 4.dp)
+          .size(24.dp)
+          .background(MaterialTheme.colorScheme.surface, CircleShape),
+        contentAlignment = Alignment.Center,
+      ) {
+        CircularProgressIndicator(
+          progress = { downloadProgress },
+          modifier = Modifier.size(20.dp),
+          strokeWidth = 2.dp,
+        )
+        Icon(
+          modifier = Modifier.size(12.dp),
+          imageVector = VoiceIcons.Download,
+          contentDescription = null,
+          tint = MaterialTheme.colorScheme.primary,
+        )
+      }
+    } else if (unavailable) {
+      Box(
+        modifier = Modifier
+          .align(Alignment.BottomEnd)
+          .offset(x = 4.dp, y = 4.dp)
+          .size(24.dp)
+          .background(MaterialTheme.colorScheme.surface, CircleShape)
+          .padding(2.dp)
+          .background(MaterialTheme.colorScheme.surfaceContainerHighest, CircleShape),
+        contentAlignment = Alignment.Center,
+      ) {
+        Icon(
+          modifier = Modifier.size(14.dp),
+          imageVector = VoiceIcons.CloudOff,
+          contentDescription = stringResource(StringsR.string.library_book_offline),
+          tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
       }
     }

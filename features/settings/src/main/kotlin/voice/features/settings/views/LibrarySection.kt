@@ -66,8 +66,10 @@ import voice.core.strings.R as StringsR
 @Composable
 internal fun LibrarySection(
   folderNames: List<String>,
+  audiobookshelfServer: String?,
   useGrid: Boolean,
   onFoldersClick: () -> Unit,
+  onAudiobookshelfClick: () -> Unit,
   onUseGridChange: (Boolean) -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -92,6 +94,25 @@ internal fun LibrarySection(
         )
       },
       summary = { FolderNames(folderNames) },
+    )
+    IslandRow(
+      title = stringResource(StringsR.string.audiobookshelf_title),
+      onClick = onAudiobookshelfClick,
+      leading = {
+        ShapedIcon(
+          icon = VoiceIcons.Dns,
+          shape = MaterialShapes.Cookie9Sided,
+          containerColor = MaterialTheme.colorScheme.tertiary,
+          contentColor = MaterialTheme.colorScheme.onTertiary,
+        )
+      },
+      summary = {
+        Text(
+          text = audiobookshelfServer ?: stringResource(StringsR.string.settings_library_audiobookshelf_summary),
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis,
+        )
+      },
     )
     Spacer(Modifier.height(12.dp))
     Row(

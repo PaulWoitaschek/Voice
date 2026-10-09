@@ -1,5 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="audiobookshelf.downloads.channel">Letöltések</string>
+    <string name="audiobookshelf.login.address.action">Tovább</string>
+    <string name="audiobookshelf.login.address.label">Szervercím</string>
+    <string name="audiobookshelf.login.address.subtitle">Hallgassa a saját szerverén tárolt könyveit. A Voice gondoskodik róla, hogy a többi eszközén is ott folytathassa, ahol abbahagyta.</string>
+    <string name="audiobookshelf.login.address.title">Audiobookshelf csatlakoztatása</string>
+    <string name="audiobookshelf.login.credentials.action">Bejelentkezés</string>
+    <string name="audiobookshelf.login.credentials.no_password">Ez a szerver csak egyszeri bejelentkezést (SSO) enged, amire a Voice még nem képes. Kérje meg a szerver üzemeltetőjét, hogy kapcsolja be a jelszavas bejelentkezést.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">Használja a fiókját ezen a szerveren: %s.</string>
+    <string name="audiobookshelf.login.credentials.title">Bejelentkezés</string>
+    <string name="audiobookshelf.login.error.certificate">A telefonja nem bízik meg ennek a szervernek a tanúsítványában.</string>
+    <string name="audiobookshelf.login.error.credentials">A felhasználónév vagy a jelszó nem stimmel.</string>
+    <string name="audiobookshelf.login.error.failed">A bejelentkezés nem sikerült. Próbálja újra.</string>
+    <string name="audiobookshelf.login.error.not_found">A Voice nem talál Audiobookshelf-szervert ezen a címen. A megfelelő hálózaton van?</string>
+    <string name="audiobookshelf.login.error.not_set_up">Ez a szerver még nincs beállítva. Előbb fejezze be a beállítást a webes felületén.</string>
+    <string name="audiobookshelf.login.error.too_old">A Voice-hoz Audiobookshelf 2.26 vagy újabb szükséges. Ezen a szerveren ez a verzió fut: %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">A szerver nem válaszol. Próbálja újra kicsit később.</string>
+    <string name="audiobookshelf.login.libraries.action">Hozzáadás a könyvtárhoz</string>
+    <string name="audiobookshelf.login.libraries.loading">Könyvek keresése…</string>
+    <string name="audiobookshelf.login.libraries.none">Nincs itt hangoskönyves könyvtár</string>
+    <string name="audiobookshelf.login.libraries.subtitle">Bekerülnek a könyvtárába. Azonnal lejátszhatja őket, vagy letöltheti offline hallgatáshoz.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">%d hangoskönyvet találtunk</item>
+        <item quantity="other">%d hangoskönyvet találtunk</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d könyv</item>
+        <item quantity="other">%1$s · %2$d könyv</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Jelszó</string>
+    <string name="audiobookshelf.login.password.hide">Jelszó elrejtése</string>
+    <string name="audiobookshelf.login.password.show">Jelszó megjelenítése</string>
+    <string name="audiobookshelf.login.username">Felhasználónév</string>
+    <string name="audiobookshelf.settings.downloads">Letöltések</string>
+    <string name="audiobookshelf.settings.downloads.none">Még nincsenek letöltött könyvek</string>
+    <string name="audiobookshelf.settings.downloads.remove">Összes törlése</string>
+    <string name="audiobookshelf.settings.downloads.used">%s ezen az eszközön</string>
+    <string name="audiobookshelf.settings.libraries">Könyvtárak</string>
+    <string name="audiobookshelf.settings.mobile_data">Letöltés mobiladattal</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Egyébként a letöltések Wi-Fi-re várnak</string>
+    <string name="audiobookshelf.settings.sign_in_again">Bejelentkezés</string>
+    <string name="audiobookshelf.settings.sign_out">Kijelentkezés</string>
+    <string name="audiobookshelf.settings.signed_in_as">Bejelentkezve: %s</string>
+    <string name="audiobookshelf.settings.try_again">Újra</string>
+    <string name="audiobookshelf.sign_out.message">A szerver könyvei és letöltéseik eltűnnek erről az eszközről. Az előrehaladása biztonságban marad a szerveren.</string>
+    <string name="audiobookshelf.sign_out.title">Kijelentkezik innen: %s?</string>
+    <string name="audiobookshelf.status.connected">Csatlakozva, az előrehaladása szinkronban van</string>
+    <string name="audiobookshelf.status.needs_login">A szerver újbóli bejelentkezést kér</string>
+    <string name="audiobookshelf.status.offline">A szerver most nem érhető el. A letöltött könyvek továbbra is lejátszhatók.</string>
+    <string name="audiobookshelf.status.syncing">Szinkronizálás…</string>
     <string name="book.category.action.mark_completed">Jelölés meghallgatottnak</string>
     <string name="book.category.action.mark_current">Megjelölés aktuálisként</string>
     <string name="book.category.action.mark_not_started">Megjelölés még el nem kezdettként</string>
@@ -7,6 +56,8 @@
     <string name="book.delete.dialog.confirm_files">Fájlok törlése</string>
     <string name="book.delete.dialog.message">Ezzel törli az eszközről a könyv hangfájljait is.</string>
     <string name="book.delete.dialog.title">Könyv törlése</string>
+    <string name="book.download.action">Letöltés</string>
+    <string name="book.download.remove">Letöltés törlése</string>
     <string name="book.edit.cover.file">Borító a fájlrendszerből</string>
     <string name="book.edit.cover.internet">Borító az internetről</string>
     <string name="book.edit.name.label">Cím</string>
@@ -75,6 +126,7 @@
         <item quantity="one">%d másodperc</item>
         <item quantity="other">%d másodperc</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Audiobookshelf csatlakoztatása</string>
     <string name="folder.add.action.file">Inkább egyetlen fájl hozzáadása</string>
     <string name="folder.add.action.folder">Mappa kiválasztása</string>
     <string name="folder.add.subtitle">Válassza ki a hangoskönyveit tartalmazó mappát. Tartalmazhat egyetlen könyvet vagy a teljes könyvtárát.</string>
@@ -178,6 +230,7 @@
     <string name="history.suggestion.started_by.headset">A fejhallgató gombja indította el a könyvet ekkor: %1$s</string>
     <string name="history.suggestion.started_by.other_app">Egy másik alkalmazás indította el a könyvet ekkor: %1$s</string>
     <string name="history.suggestion.started_by.watch">Az órája indította el a könyvet ekkor: %1$s</string>
+    <string name="library.book.offline">Offline nem érhető el</string>
     <string name="library.category.completed.title">Befejezett</string>
     <string name="library.category.current.title">Jelenlegi</string>
     <string name="library.category.not_started.title">Még nem elkezdett</string>
@@ -309,6 +362,7 @@
     <string name="settings.auto_sleep_timer.start.label">Kezdési idő beállítása</string>
     <string name="settings.auto_sleep_timer.summary">Automatikusan elindítja az alvásidőzítőt, ha a lejátszás %1$s és %2$s között kezdődik</string>
     <string name="settings.auto_sleep_timer.title">Automatikus alvásidőzítő</string>
+    <string name="settings.library.audiobookshelf.summary">Könyvek streamelése a saját szerveréről</string>
     <string name="settings.library.folders.summary">A hangoskönyvek keresésére használt mappák kezelése</string>
     <string name="settings.library.layout.grid">Rács</string>
     <string name="settings.library.layout.list">Lista</string>

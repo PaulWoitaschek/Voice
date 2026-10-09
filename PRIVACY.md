@@ -31,6 +31,14 @@ For a better experience, while using the Application, the Service Provider may r
 identifiable information. The information that the Service Provider request will be retained by them and used as described in this privacy
 policy.
 
+**Audiobookshelf Servers**
+
+You can connect the Application to an Audiobookshelf server that you or someone you trust runs. The Application then sends your username
+and password to that server to sign in, and exchanges your listening progress, bookmarks and listening sessions (including your device
+model and the app version) with it. It also streams and downloads audiobooks from it. This data goes only to the server you entered. The
+Service Provider runs no server for this and never receives this data. Signing out removes the books of the server and their downloads from
+your device.
+
 **Third Party Access**
 
 Only aggregated, anonymized data is periodically transmitted to external services to aid the Service Provider in improving the Application
@@ -84,7 +92,7 @@ This Privacy Policy may be updated from time to time for any reason. The Service
 Policy by updating this page with the new Privacy Policy. You are advised to consult this Privacy Policy regularly for any changes, as
 continued use is deemed approval of all changes.
 
-This privacy policy is effective as of 2025-04-15
+This privacy policy is effective as of 2026-10-08
 
 **Your Consent**
 

@@ -1,5 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="audiobookshelf.downloads.channel">ダウンロード</string>
+    <string name="audiobookshelf.login.address.action">続行</string>
+    <string name="audiobookshelf.login.address.label">サーバーのアドレス</string>
+    <string name="audiobookshelf.login.address.subtitle">自分のサーバーにある本を聴けます。再生位置は Voice がほかのデバイスとそろえておきます。</string>
+    <string name="audiobookshelf.login.address.title">Audiobookshelf に接続</string>
+    <string name="audiobookshelf.login.credentials.action">ログイン</string>
+    <string name="audiobookshelf.login.credentials.no_password">このサーバーはシングルサインオンにのみ対応していますが、Voice はまだ対応していません。サーバーの管理者に、パスワードでのログインを有効にするよう依頼してください。</string>
+    <string name="audiobookshelf.login.credentials.subtitle">%s のアカウントでログインしてください。</string>
+    <string name="audiobookshelf.login.credentials.title">ログイン</string>
+    <string name="audiobookshelf.login.error.certificate">お使いのスマートフォンはこのサーバーの証明書を信頼していません。</string>
+    <string name="audiobookshelf.login.error.credentials">ユーザー名またはパスワードが正しくありません。</string>
+    <string name="audiobookshelf.login.error.failed">ログインできませんでした。もう一度お試しください。</string>
+    <string name="audiobookshelf.login.error.not_found">そのアドレスの Audiobookshelf サーバーに Voice から接続できません。正しいネットワークに接続していますか？</string>
+    <string name="audiobookshelf.login.error.not_set_up">このサーバーはまだセットアップされていません。先にウェブアプリでセットアップを完了してください。</string>
+    <string name="audiobookshelf.login.error.too_old">Voice には Audiobookshelf 2.26 以降が必要です。このサーバーのバージョンは %s です。</string>
+    <string name="audiobookshelf.login.error.unreachable">サーバーから応答がなくなりました。しばらくしてからもう一度お試しください。</string>
+    <string name="audiobookshelf.login.libraries.action">ライブラリに追加</string>
+    <string name="audiobookshelf.login.libraries.loading">本を探しています…</string>
+    <string name="audiobookshelf.login.libraries.none">オーディオブックのライブラリがありません</string>
+    <string name="audiobookshelf.login.libraries.subtitle">ライブラリに追加されます。すぐに再生することも、ダウンロードしてオフラインで聴くこともできます。</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="other">%d 冊のオーディオブックが見つかりました</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="other">%1$s · %2$d 冊</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">パスワード</string>
+    <string name="audiobookshelf.login.password.hide">パスワードを非表示</string>
+    <string name="audiobookshelf.login.password.show">パスワードを表示</string>
+    <string name="audiobookshelf.login.username">ユーザー名</string>
+    <string name="audiobookshelf.settings.downloads">ダウンロード</string>
+    <string name="audiobookshelf.settings.downloads.none">ダウンロードした本はまだありません</string>
+    <string name="audiobookshelf.settings.downloads.remove">すべて削除</string>
+    <string name="audiobookshelf.settings.downloads.used">この端末で %s 使用中</string>
+    <string name="audiobookshelf.settings.libraries">ライブラリ</string>
+    <string name="audiobookshelf.settings.mobile_data">モバイルデータでダウンロード</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">オフのときは Wi-Fi に接続するまでダウンロードを待ちます</string>
+    <string name="audiobookshelf.settings.sign_in_again">ログイン</string>
+    <string name="audiobookshelf.settings.sign_out">ログアウト</string>
+    <string name="audiobookshelf.settings.signed_in_as">%s としてログイン中</string>
+    <string name="audiobookshelf.settings.try_again">再試行</string>
+    <string name="audiobookshelf.sign_out.message">このサーバーの本とダウンロードは、この端末から削除されます。進み具合はサーバーに安全に保存されています。</string>
+    <string name="audiobookshelf.sign_out.title">%s からログアウトしますか？</string>
+    <string name="audiobookshelf.status.connected">接続済み、進み具合は同期されています</string>
+    <string name="audiobookshelf.status.needs_login">サーバーにもう一度ログインしてください</string>
+    <string name="audiobookshelf.status.offline">現在サーバーに接続できません。ダウンロード済みの本は引き続き再生できます。</string>
+    <string name="audiobookshelf.status.syncing">同期中…</string>
     <string name="book.category.action.mark_completed">完了としてマーク</string>
     <string name="book.category.action.mark_current">現在としてマーク</string>
     <string name="book.category.action.mark_not_started">未再生としてマーク</string>
@@ -7,6 +54,8 @@
     <string name="book.delete.dialog.confirm_files">ファイルを削除</string>
     <string name="book.delete.dialog.message">これにより、デバイス上のファイルが削除されます。</string>
     <string name="book.delete.dialog.title">ブックの削除</string>
+    <string name="book.download.action">ダウンロード</string>
+    <string name="book.download.remove">ダウンロードを削除</string>
     <string name="book.edit.cover.file">ファイルシステムからのカバー</string>
     <string name="book.edit.cover.internet">インターネットからのカバー</string>
     <string name="book.edit.name.label">名前</string>
@@ -73,6 +122,7 @@
     <plurals name="duration.seconds">
         <item quantity="other">%d 秒</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Audiobookshelf に接続</string>
     <string name="folder.add.action.file">代わりに単一ファイルを追加</string>
     <string name="folder.add.action.folder">フォルダーを選択</string>
     <string name="folder.add.subtitle">オーディオブックが入ったフォルダーを選んでください。1冊のブックでも、ライブラリ全体でも大丈夫です。</string>
@@ -170,6 +220,7 @@
     <string name="history.suggestion.started_by.headset">%1$s にヘッドセットのボタンで再生が始まりました</string>
     <string name="history.suggestion.started_by.other_app">%1$s に他のアプリが再生を開始しました</string>
     <string name="history.suggestion.started_by.watch">%1$s にスマートウォッチが再生を開始しました</string>
+    <string name="library.book.offline">オフラインでは利用不可</string>
     <string name="library.category.completed.title">完了</string>
     <string name="library.category.current.title">現在</string>
     <string name="library.category.not_started.title">未再生</string>
@@ -296,6 +347,7 @@
     <string name="settings.auto_sleep_timer.start.label">開始時刻を設定</string>
     <string name="settings.auto_sleep_timer.summary">%1$s から %2$s の間に再生が始まった場合、自動的にスリープタイマーを開始します</string>
     <string name="settings.auto_sleep_timer.title">自動スリープタイマー</string>
+    <string name="settings.library.audiobookshelf.summary">自分のサーバーの本をストリーミング再生</string>
     <string name="settings.library.folders.summary">オーディオブックをスキャンするフォルダーを管理</string>
     <string name="settings.library.layout.grid">グリッド</string>
     <string name="settings.library.layout.list">リスト</string>

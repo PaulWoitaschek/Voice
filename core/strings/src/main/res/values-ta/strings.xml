@@ -1,5 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="audiobookshelf.downloads.channel">பதிவிறக்கங்கள்</string>
+    <string name="audiobookshelf.login.address.action">தொடர்க</string>
+    <string name="audiobookshelf.login.address.label">சர்வர் முகவரி</string>
+    <string name="audiobookshelf.login.address.subtitle">உங்கள் சொந்த சர்வரில் உள்ள புத்தகங்களைக் கேளுங்கள். நீங்கள் கேட்ட இடத்தை உங்கள் மற்ற சாதனங்களுடன் Voice ஒத்திசைவில் வைத்திருக்கும்.</string>
+    <string name="audiobookshelf.login.address.title">Audiobookshelf-ஐ இணைக்கவும்</string>
+    <string name="audiobookshelf.login.credentials.action">உள்நுழை</string>
+    <string name="audiobookshelf.login.credentials.no_password">இந்த சர்வர் ஒற்றை உள்நுழைவை (SSO) மட்டுமே அனுமதிக்கிறது, அதை Voice இன்னும் ஆதரிக்கவில்லை. கடவுச்சொல் மூலம் உள்நுழைவதை இயக்குமாறு சர்வரை நிர்வகிப்பவரிடம் கேளுங்கள்.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">%s இல் உள்ள உங்கள் கணக்கைப் பயன்படுத்தவும்.</string>
+    <string name="audiobookshelf.login.credentials.title">உள்நுழை</string>
+    <string name="audiobookshelf.login.error.certificate">உங்கள் போன் இந்த சர்வரின் சான்றிதழை நம்பவில்லை.</string>
+    <string name="audiobookshelf.login.error.credentials">பயனர்பெயர் அல்லது கடவுச்சொல் தவறு.</string>
+    <string name="audiobookshelf.login.error.failed">உள்நுழைய முடியவில்லை. மீண்டும் முயலவும்.</string>
+    <string name="audiobookshelf.login.error.not_found">அந்த முகவரியில் Audiobookshelf சர்வரை Voice-ஆல் அணுக முடியவில்லை. சரியான நெட்வொர்க்கில் இருக்கிறீர்களா?</string>
+    <string name="audiobookshelf.login.error.not_set_up">இந்த சர்வர் இன்னும் அமைக்கப்படவில்லை. முதலில் அதன் வலைப் பயன்பாட்டில் அமைப்பை முடிக்கவும்.</string>
+    <string name="audiobookshelf.login.error.too_old">Voice-க்கு Audiobookshelf 2.26 அல்லது அதற்குப் புதிய பதிப்பு தேவை. இந்த சர்வரில் %s இயங்குகிறது.</string>
+    <string name="audiobookshelf.login.error.unreachable">சர்வர் பதிலளிப்பதை நிறுத்திவிட்டது. சிறிது நேரத்தில் மீண்டும் முயலவும்.</string>
+    <string name="audiobookshelf.login.libraries.action">எனது நூலகத்தில் சேர்</string>
+    <string name="audiobookshelf.login.libraries.loading">புத்தகங்களைத் தேடுகிறது…</string>
+    <string name="audiobookshelf.login.libraries.none">இங்கே ஆடியோபுக் நூலகங்கள் இல்லை</string>
+    <string name="audiobookshelf.login.libraries.subtitle">இவை உங்கள் நூலகத்தில் சேரும். உடனே இயக்கலாம், அல்லது ஆஃப்லைனில் கேட்கப் பதிவிறக்கலாம்.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">%d ஆடியோபுக் கண்டறியப்பட்டது</item>
+        <item quantity="other">%d ஆடியோபுக்குகள் கண்டறியப்பட்டன</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d புத்தகம்</item>
+        <item quantity="other">%1$s · %2$d புத்தகங்கள்</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">கடவுச்சொல்</string>
+    <string name="audiobookshelf.login.password.hide">கடவுச்சொல்லை மறை</string>
+    <string name="audiobookshelf.login.password.show">கடவுச்சொல்லைக் காட்டு</string>
+    <string name="audiobookshelf.login.username">பயனர்பெயர்</string>
+    <string name="audiobookshelf.settings.downloads">பதிவிறக்கங்கள்</string>
+    <string name="audiobookshelf.settings.downloads.none">இன்னும் எந்தப் புத்தகமும் பதிவிறக்கப்படவில்லை</string>
+    <string name="audiobookshelf.settings.downloads.remove">அனைத்தையும் அகற்று</string>
+    <string name="audiobookshelf.settings.downloads.used">இந்தச் சாதனத்தில் %s</string>
+    <string name="audiobookshelf.settings.libraries">நூலகங்கள்</string>
+    <string name="audiobookshelf.settings.mobile_data">மொபைல் டேட்டாவில் பதிவிறக்கு</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">இல்லையெனில் பதிவிறக்கங்கள் வைஃபைக்காகக் காத்திருக்கும்</string>
+    <string name="audiobookshelf.settings.sign_in_again">உள்நுழை</string>
+    <string name="audiobookshelf.settings.sign_out">வெளியேறு</string>
+    <string name="audiobookshelf.settings.signed_in_as">%s ஆக உள்நுழைந்துள்ளீர்கள்</string>
+    <string name="audiobookshelf.settings.try_again">மீண்டும் முயற்சிக்கவும்</string>
+    <string name="audiobookshelf.sign_out.message">அதன் புத்தகங்களும் அவற்றின் பதிவிறக்கங்களும் இந்தச் சாதனத்திலிருந்து அகற்றப்படும். உங்கள் முன்னேற்றம் சர்வரில் பாதுகாப்பாக இருக்கும்.</string>
+    <string name="audiobookshelf.sign_out.title">%s இலிருந்து வெளியேறவா?</string>
+    <string name="audiobookshelf.status.connected">இணைக்கப்பட்டது, உங்கள் முன்னேற்றம் ஒத்திசைவில் உள்ளது</string>
+    <string name="audiobookshelf.status.needs_login">நீங்கள் மீண்டும் உள்நுழைய வேண்டும் என சர்வர் கேட்கிறது</string>
+    <string name="audiobookshelf.status.offline">இப்போது சர்வரை அணுக முடியவில்லை. பதிவிறக்கிய புத்தகங்கள் தொடர்ந்து இயங்கும்.</string>
+    <string name="audiobookshelf.status.syncing">ஒத்திசைக்கிறது…</string>
     <string name="book.category.action.mark_completed">முடிக்கப்பட்டபடி குறி</string>
     <string name="book.category.action.mark_current">மின்னோட்டமாக குறிக்கவும்</string>
     <string name="book.category.action.mark_not_started">மார்க் இன்னும் தொடங்கவில்லை</string>
@@ -7,6 +56,8 @@
     <string name="book.delete.dialog.confirm_files">எனது கோப்புகளை நீக்கவும்</string>
     <string name="book.delete.dialog.message">இது உங்கள் சாதனத்தில் உள்ள கோப்புகளை நீக்கும்.</string>
     <string name="book.delete.dialog.title">புத்தகத்தை நீக்கு</string>
+    <string name="book.download.action">பதிவிறக்கு</string>
+    <string name="book.download.remove">பதிவிறக்கத்தை அகற்று</string>
     <string name="book.edit.cover.file">கோப்பு முறைமையிலிருந்து மூடி</string>
     <string name="book.edit.cover.internet">இணையத்திலிருந்து மூடி</string>
     <string name="book.edit.name.label">பெயர்</string>
@@ -75,6 +126,7 @@
         <item quantity="one">%d இரண்டாவது</item>
         <item quantity="other">%d விநாடிகள்</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Audiobookshelf-ஐ இணைக்கவும்</string>
     <string name="folder.add.action.file">பதிலாக ஒரு கோப்பை மட்டும் சேர்க்கவும்</string>
     <string name="folder.add.action.folder">கோப்புறையைத் தேர்ந்தெடுக்கவும்</string>
     <string name="folder.add.subtitle">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும். அதில் ஒரு புத்தகமோ உங்கள் முழு நூலகமோ இருக்கலாம்.</string>
@@ -178,6 +230,7 @@
     <string name="history.suggestion.started_by.headset">ஒரு ஹெட்செட் பொத்தான் %1$s மணிக்குப் புத்தகத்தைத் தொடங்கியது</string>
     <string name="history.suggestion.started_by.other_app">மற்றொரு பயன்பாடு %1$s மணிக்குப் புத்தகத்தைத் தொடங்கியது</string>
     <string name="history.suggestion.started_by.watch">உங்கள் கைக்கடிகாரம் %1$s மணிக்குப் புத்தகத்தைத் தொடங்கியது</string>
+    <string name="library.book.offline">ஆஃப்லைனில் கிடைக்காது</string>
     <string name="library.category.completed.title">முடிந்தது</string>
     <string name="library.category.current.title">மின்னோட்ட்ம், ஓட்டம்</string>
     <string name="library.category.not_started.title">இன்னும் தொடங்கப்படவில்லை</string>
@@ -309,6 +362,7 @@
     <string name="settings.auto_sleep_timer.start.label">தொடக்க நேரத்தை அமை</string>
     <string name="settings.auto_sleep_timer.summary">பிளேபேக் %1$s மற்றும் %2$s க்கு இடையில் தொடங்கும்போது தானாக ஒரு தூக்க நேரத்தைத் தொடங்குங்கள்</string>
     <string name="settings.auto_sleep_timer.title">தானியங்கி தூக்க நேரங்காட்டி</string>
+    <string name="settings.library.audiobookshelf.summary">உங்கள் சொந்த சர்வரில் உள்ள புத்தகங்களை ஸ்ட்ரீம் செய்யுங்கள்</string>
     <string name="settings.library.folders.summary">ஒலிபுத்தகங்களுக்காக வருடல் செய்யப்பட்ட கோப்புறைகளை நிர்வகி</string>
     <string name="settings.library.layout.grid">கட்டம்</string>
     <string name="settings.library.layout.list">பட்டியல்</string>

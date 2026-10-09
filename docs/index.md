@@ -8,7 +8,8 @@ hide:
 A clean, user-focused audiobook player for Android.
 
 Voice turns your own audiobook files into a calm listening library with resume positions, bookmarks, sleep timer, playback speed, silence
-skipping, and Android Auto support.
+skipping, and Android Auto support. It also plays the books on your [Audiobookshelf](audiobookshelf.md) server, with your progress in
+step on every device.
 
 [:simple-googleplay: &nbsp;Google Play](https://play.google.com/store/apps/details?id=de.ph1b.audiobook){ .md-button }
 [:simple-fdroid: &nbsp;F-Droid](https://f-droid.org/packages/de.ph1b.audiobook){ .md-button }
@@ -41,7 +42,8 @@ also [sponsor on GitHub](https://github.com/sponsors/PaulWoitaschek).</small>
 
   ---
 
-  Fully open source under the GPL. No account, no ads, no forced cloud sync.
+  Fully open source under the GPL. No account, no ads, no forced cloud sync. Your data stays with you: on your device, or on your
+  own server.
 
 - :material-bookmark-music:{ .lg .middle } **Built for audiobooks**
 
@@ -59,5 +61,5 @@ also [sponsor on GitHub](https://github.com/sponsors/PaulWoitaschek).</small>
 
 ## Learn more
 
-Read [About Voice](about.md) for the philosophy behind the app, [Organizing Audiobooks](organizing.md) for setting up your library, or
-the [FAQ](faq.md) for common questions. Want to contribute? See [Development](development.md) and [Architecture](architecture.md).
+Read [About Voice](about.md) for the philosophy behind the app, [Organizing Audiobooks](organizing.md) for setting up your library,
+[Audiobookshelf](audiobookshelf.md) for listening from your own server, or the [FAQ](faq.md) for common questions. Want to contribute? See [Development](development.md) and [Architecture](architecture.md).

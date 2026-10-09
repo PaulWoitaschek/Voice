@@ -43,6 +43,7 @@ datastore = "androidx.datastore:datastore-core:1.2.1"
 turbine = "app.cash.turbine:turbine:1.2.1"
 molecule = "app.cash.molecule:molecule-runtime:2.2.0"
 okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.5.0"
+okhttp-mockwebserver = "com.squareup.okhttp3:mockwebserver3:5.5.0"
 billing = "com.android.billingclient:billing-ktx:9.1.0"
 clikt = "com.github.ajalt.clikt:clikt:5.1.0"
 jebml = "org.jitsi:jebml:2.4.4-6-gb310849"
@@ -73,6 +74,7 @@ androidX-test-orchestrator = "androidx.test:orchestrator:1.6.1"
 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
+media3-datasource-okhttp = { module = "androidx.media3:media3-datasource-okhttp", version.ref = "media3" }
 media3-inspector = { module = "androidx.media3:media3-inspector", version.ref = "media3" }
 media3-testUtils-core = { module = "androidx.media3:media3-test-utils", version.ref = "media3" }
 media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-robolectric", version.ref = "media3" }

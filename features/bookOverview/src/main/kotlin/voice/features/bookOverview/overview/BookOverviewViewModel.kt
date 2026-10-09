@@ -18,6 +18,7 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -69,6 +70,7 @@ class BookOverviewViewModel(
   @KioskModeFeatureFlagQualifier
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   dispatcherProvider: DispatcherProvider,
+  private val serverLibrary: ServerLibrary,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -76,6 +78,7 @@ class BookOverviewViewModel(
 
   fun attach() {
     mediaScanner.scan()
+    serverLibrary.sync()
   }
 
   @Composable
@@ -93,8 +96,14 @@ class BookOverviewViewModel(
       .collectAsState(initial = null).value
     val currentBook = remember { currentBookStoreDataStore.data.map(::CurrentBook) }
       .collectAsState(initial = null).value
-    val scannerActive = remember { mediaScanner.scannerActive }
+    val scanning = remember { mediaScanner.scannerActive }
       .collectAsState(initial = false).value
+    val syncing = remember { serverLibrary.syncing }.collectAsState(initial = false).value
+    val scannerActive = scanning || syncing
+    val unavailableBooks = remember { serverLibrary.unavailableBooks }
+      .collectAsState(initial = emptySet()).value
+    val downloadProgress = remember { serverLibrary.downloadProgress }
+      .collectAsState(initial = emptyMap()).value
     val folderPickerMovedDialogShown = remember { folderPickerMovedDialogShownStore.data }
       .collectAsState(initial = null).value
     val gridMode = remember { gridModeStore.data }
@@ -139,6 +148,8 @@ class BookOverviewViewModel(
               book.id to book.itemViewState(
                 currentBookId = currentBookId,
                 livePlaybackState = { livePlaybackState.value },
+                unavailable = book.id in unavailableBooks,
+                downloadProgress = downloadProgress[book.id],
               )
             }
         }
@@ -237,19 +248,21 @@ private val FolderPickerMigrationInstallTimeCutoff = Instant.parse("2026-06-17T0
 private fun Book.itemViewState(
   currentBookId: BookId?,
   livePlaybackState: () -> LivePlaybackState?,
+  unavailable: Boolean,
+  downloadProgress: Float?,
 ): State<BookOverviewItemViewState> {
   if (id != currentBookId) {
-    return rememberUpdatedState(toItemViewState())
+    return rememberUpdatedState(toItemViewState(unavailable, downloadProgress))
   }
   val currentPlaybackState by rememberUpdatedState(livePlaybackState)
-  return remember(this, currentBookId) {
+  return remember(this, currentBookId, unavailable, downloadProgress) {
     derivedStateOf {
       val livePlayback = currentPlaybackState()
       if (livePlayback != null) {
         overlay(livePlayback)
       } else {
         this
-      }.toItemViewState()
+      }.toItemViewState(unavailable, downloadProgress)
     }
   }
 }

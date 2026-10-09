@@ -48,6 +48,10 @@ class AddContentViewModel(
     }
   }
 
+  internal fun connectAudiobookshelf() {
+    navigator.goTo(Destination.AudiobookshelfLogin(origin))
+  }
+
   internal fun back() {
     navigator.goBack()
   }

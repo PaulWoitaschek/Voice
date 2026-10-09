@@ -1,5 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="audiobookshelf.downloads.channel">下载</string>
+    <string name="audiobookshelf.login.address.action">继续</string>
+    <string name="audiobookshelf.login.address.label">服务器地址</string>
+    <string name="audiobookshelf.login.address.subtitle">收听您自己服务器上的书。Voice 会在您的各台设备间同步收听位置。</string>
+    <string name="audiobookshelf.login.address.title">连接 Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">登录</string>
+    <string name="audiobookshelf.login.credentials.no_password">此服务器仅允许单点登录，而 Voice 暂不支持这种方式。请联系服务器管理员开启密码登录。</string>
+    <string name="audiobookshelf.login.credentials.subtitle">请使用您在 %s 上的账号。</string>
+    <string name="audiobookshelf.login.credentials.title">登录</string>
+    <string name="audiobookshelf.login.error.certificate">您的手机不信任此服务器的证书。</string>
+    <string name="audiobookshelf.login.error.credentials">用户名或密码不正确。</string>
+    <string name="audiobookshelf.login.error.failed">登录失败，请重试。</string>
+    <string name="audiobookshelf.login.error.not_found">Voice 无法在该地址连接到 Audiobookshelf 服务器。您连接的网络正确吗？</string>
+    <string name="audiobookshelf.login.error.not_set_up">此服务器尚未完成设置。请先在其网页版中完成设置。</string>
+    <string name="audiobookshelf.login.error.too_old">Voice 需要 Audiobookshelf 2.26 或更高版本。此服务器的版本是 %s。</string>
+    <string name="audiobookshelf.login.error.unreachable">服务器停止响应了。请稍后再试。</string>
+    <string name="audiobookshelf.login.libraries.action">添加到我的书库</string>
+    <string name="audiobookshelf.login.libraries.loading">正在查找书籍…</string>
+    <string name="audiobookshelf.login.libraries.none">这里没有有声书库</string>
+    <string name="audiobookshelf.login.libraries.subtitle">这些书会加入您的书库。可以直接播放，也可以下载后离线收听。</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="other">找到了 %d 本有声书</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="other">%1$s · %2$d 本书</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">密码</string>
+    <string name="audiobookshelf.login.password.hide">隐藏密码</string>
+    <string name="audiobookshelf.login.password.show">显示密码</string>
+    <string name="audiobookshelf.login.username">用户名</string>
+    <string name="audiobookshelf.settings.downloads">下载</string>
+    <string name="audiobookshelf.settings.downloads.none">还没有下载任何书</string>
+    <string name="audiobookshelf.settings.downloads.remove">全部移除</string>
+    <string name="audiobookshelf.settings.downloads.used">本设备上占用 %s</string>
+    <string name="audiobookshelf.settings.libraries">书库</string>
+    <string name="audiobookshelf.settings.mobile_data">使用移动数据下载</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">否则将等到连接 Wi-Fi 后再下载</string>
+    <string name="audiobookshelf.settings.sign_in_again">登录</string>
+    <string name="audiobookshelf.settings.sign_out">退出登录</string>
+    <string name="audiobookshelf.settings.signed_in_as">已登录为 %s</string>
+    <string name="audiobookshelf.settings.try_again">重试</string>
+    <string name="audiobookshelf.sign_out.message">其中的书及其下载内容将从此设备移除。您的收听进度会安全保存在服务器上。</string>
+    <string name="audiobookshelf.sign_out.title">要从 %s 退出登录吗？</string>
+    <string name="audiobookshelf.status.connected">已连接，进度已同步</string>
+    <string name="audiobookshelf.status.needs_login">服务器需要您重新登录</string>
+    <string name="audiobookshelf.status.offline">暂时无法连接服务器。已下载的书仍可播放。</string>
+    <string name="audiobookshelf.status.syncing">正在同步…</string>
     <string name="book.category.action.mark_completed">标记为已结束播放</string>
     <string name="book.category.action.mark_current">标记为正在播放</string>
     <string name="book.category.action.mark_not_started">标记为尚未开始播放</string>
@@ -7,6 +54,8 @@
     <string name="book.delete.dialog.confirm_files">删除我的文件</string>
     <string name="book.delete.dialog.message">这样做将从您的设备上删除文件。</string>
     <string name="book.delete.dialog.title">删除有声书</string>
+    <string name="book.download.action">下载</string>
+    <string name="book.download.remove">移除下载</string>
     <string name="book.edit.cover.file">从本机寻找封面图片</string>
     <string name="book.edit.cover.internet">从互联网寻找封面图片</string>
     <string name="book.edit.name.label">名称</string>
@@ -73,6 +122,7 @@
     <plurals name="duration.seconds">
         <item quantity="other">%d 秒</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">连接 Audiobookshelf</string>
     <string name="folder.add.action.file">改为添加单个文件</string>
     <string name="folder.add.action.folder">选择文件夹</string>
     <string name="folder.add.subtitle">选择存放有声书的文件夹。里面可以只有一本书，也可以是您的整个书库。</string>
@@ -170,6 +220,7 @@
     <string name="history.suggestion.started_by.headset">耳机按键在 %1$s 开始播放本书</string>
     <string name="history.suggestion.started_by.other_app">其他应用在 %1$s 开始播放本书</string>
     <string name="history.suggestion.started_by.watch">您的手表在 %1$s 开始播放本书</string>
+    <string name="library.book.offline">离线不可用</string>
     <string name="library.category.completed.title">已结束播放</string>
     <string name="library.category.current.title">正在播放中</string>
     <string name="library.category.not_started.title">尚未开始播放</string>
@@ -296,6 +347,7 @@
     <string name="settings.auto_sleep_timer.start.label">设置开始时间</string>
     <string name="settings.auto_sleep_timer.summary">在 %1$s 到 %2$s 之间开始播放时，自动启动睡眠定时器</string>
     <string name="settings.auto_sleep_timer.title">自动睡眠定时器</string>
+    <string name="settings.library.audiobookshelf.summary">在线收听您自己服务器上的书</string>
     <string name="settings.library.folders.summary">管理用于扫描有声书的文件夹</string>
     <string name="settings.library.layout.grid">网格</string>
     <string name="settings.library.layout.list">列表</string>

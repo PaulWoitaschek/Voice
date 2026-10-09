@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Audiobookshelf servers run at home: on plain http in the local network or over a VPN, or with certificates the
+  listener installed on the device. Voice can't know these servers in advance, so it trusts what the listener set up.
+-->
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+  <base-config
+    cleartextTrafficPermitted="true"
+    tools:ignore="InsecureBaseConfiguration">
+    <trust-anchors>
+      <certificates src="system" />
+      <certificates
+        src="user"
+        tools:ignore="AcceptsUserCertificates" />
+    </trust-anchors>
+  </base-config>
+</network-security-config>

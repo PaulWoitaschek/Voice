@@ -16,8 +16,9 @@ Voice turns your own audiobook files into a calm, focused listening library. It 
 ## Why Voice?
 
 - **Made for your files:** Add a folder once and Voice organizes your local M4B, MP3, M4A, OGG, OGA, and OPUS audiobooks.
+- **Works with Audiobookshelf:** Connect your own [Audiobookshelf](https://voice.woitaschek.de/audiobookshelf/) server to stream or download its books, with your progress and bookmarks in step on every device.
 - **Built for listening:** Resume positions, bookmarks, sleep timer fade-out, volume boost, speed control, and Android Auto support are part of the core experience.
-- **Private and uncluttered:** No account, no ads, no forced cloud sync. Your library stays on your device.
+- **Private and uncluttered:** No account, no ads, no forced cloud sync. Your library stays with you: on your device, or on your own server.
 
 ## Download
 

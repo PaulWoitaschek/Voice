@@ -17,11 +17,14 @@ import voice.features.folderPicker.folderPicker.FileTypeSelection
 import voice.core.strings.R as StringsR
 
 /**
- * Picking a folder is the way to go: it can hold one book or a whole library. A single file is
- * the exception, so it's a quieter text button.
+ * Picking a folder is the way to go: it can hold one book or a whole library. A server is the
+ * other way to bring books, and a single file is the exception, so they are quieter.
  */
 @Composable
-internal fun ColumnScope.ContentTypeChoices(onAdd: (FileTypeSelection, Uri) -> Unit) {
+internal fun ColumnScope.ContentTypeChoices(
+  onAdd: (FileTypeSelection, Uri) -> Unit,
+  onConnectAudiobookshelf: () -> Unit,
+) {
   val openDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
     if (uri != null) {
       onAdd(FileTypeSelection.File, uri)
@@ -41,6 +44,11 @@ internal fun ColumnScope.ContentTypeChoices(onAdd: (FileTypeSelection, Uri) -> U
         Logger.w(e, "Could not add folder")
       }
     },
+  )
+  OnboardingButton(
+    text = stringResource(StringsR.string.folder_add_action_audiobookshelf),
+    onClick = onConnectAudiobookshelf,
+    primary = false,
   )
   TextButton(
     modifier = Modifier.fillMaxWidth(),

@@ -22,6 +22,8 @@ data class SettingsViewState(
   val supporterBadge: SupporterBadge?,
   val supporterSince: YearMonth?,
   val folderNames: List<String>,
+  /** The connected Audiobookshelf server, or null without one. */
+  val audiobookshelfServer: String?,
 ) {
 
   companion object {
@@ -42,6 +44,7 @@ data class SettingsViewState(
         supporterBadge = null,
         supporterSince = null,
         folderNames = listOf("Audiobooks", "Sci-Fi", "Non-Fiction"),
+        audiobookshelfServer = "audiobooks.example.com",
       )
     }
   }

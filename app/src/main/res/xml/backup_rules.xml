@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The login to an Audiobookshelf server stays out of the backup. -->
+<full-backup-content>
+  <exclude domain="file" path="audiobookshelf/account.json" />
+</full-backup-content>

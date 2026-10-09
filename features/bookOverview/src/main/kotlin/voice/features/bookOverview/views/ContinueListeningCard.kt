@@ -72,6 +72,8 @@ internal fun ContinueListeningCard(
             BookCover(
               bookId = book.id,
               cover = book.cover,
+              unavailable = book.unavailable,
+              downloadProgress = book.downloadProgress,
               modifier = Modifier.size(112.dp),
             )
             Spacer(Modifier.width(16.dp))

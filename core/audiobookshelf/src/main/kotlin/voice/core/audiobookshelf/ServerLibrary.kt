@@ -1,0 +1,78 @@
+package voice.core.audiobookshelf
+
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import voice.core.audiobookshelf.download.AudiobookshelfDownloads
+import voice.core.audiobookshelf.download.BookDownloadState
+import voice.core.audiobookshelf.sync.AudiobookshelfSync
+import voice.core.audiobookshelf.sync.ServerReachability
+import voice.core.data.BookId
+import voice.core.data.isRemote
+import voice.core.data.repo.BookRepository
+
+/**
+ * What the screens around the library need to know about the books on the server.
+ */
+interface ServerLibrary {
+
+  /** The connected server as people know it, or null without one. */
+  val serverName: Flow<String?>
+
+  val syncing: Flow<Boolean>
+
+  /** Server books that can't play right now: not downloaded while the server can't be reached. */
+  val unavailableBooks: Flow<Set<BookId>>
+
+  /** How far the downloads that are running have come, from 0 to 1. */
+  val downloadProgress: Flow<Map<BookId, Float>>
+
+  suspend fun isConnected(): Boolean
+
+  /** Syncs with the server, unless a sync is already running or there is no server. */
+  fun sync()
+}
+
+@ContributesBinding(AppScope::class)
+@Inject
+class AudiobookshelfServerLibrary internal constructor(
+  private val audiobookshelf: Audiobookshelf,
+  private val audiobookshelfSync: AudiobookshelfSync,
+  private val downloads: AudiobookshelfDownloads,
+  bookRepository: BookRepository,
+) : ServerLibrary {
+
+  override val serverName: Flow<String?> = audiobookshelf.connection.map { it?.serverName }.distinctUntilChanged()
+
+  override val syncing: Flow<Boolean> = audiobookshelfSync.syncing
+
+  override val unavailableBooks: Flow<Set<BookId>> = combine(
+    audiobookshelfSync.reachability,
+    downloads.states(),
+    bookRepository.flow(),
+  ) { reachability, downloadStates, books ->
+    if (reachability != ServerReachability.Unreachable) return@combine emptySet()
+    books
+      .filter { it.id.isRemote && downloadStates[it.id] != BookDownloadState.Downloaded }
+      .map { it.id }
+      .toSet()
+  }.distinctUntilChanged()
+
+  override val downloadProgress: Flow<Map<BookId, Float>> = downloads.states()
+    .map { states ->
+      states.mapNotNull { (bookId, state) ->
+        (state as? BookDownloadState.Downloading)?.let { bookId to it.progress }
+      }.toMap()
+    }
+    .distinctUntilChanged()
+
+  override suspend fun isConnected(): Boolean = audiobookshelf.isConnected()
+
+  override fun sync() {
+    audiobookshelfSync.sync()
+  }
+}

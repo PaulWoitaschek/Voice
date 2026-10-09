@@ -1,6 +1,6 @@
 Voice ist ein ruhiger Hörbuch-Player für alle, die Geschichten lieben und ihre eigenen Bücher mitbringen.
 
-Wähle den Ordner mit Deinen Hörbüchern. Voice zeigt Dir die gefundenen Bücher, fügt sie Deiner Bibliothek hinzu und merkt sich in jedem Buch Deine Stelle. Danach hält sich Voice im Hintergrund, damit Du einfach zuhören kannst.
+Wähle den Ordner mit Deinen Hörbüchern oder verbinde Deinen Audiobookshelf-Server. Voice zeigt Dir die gefundenen Bücher, fügt sie Deiner Bibliothek hinzu und merkt sich in jedem Buch Deine Stelle. Danach hält sich Voice im Hintergrund, damit Du einfach zuhören kannst.
 
 <b>Ein Player, der zu Deinem Buch passt</b>
 
@@ -39,12 +39,18 @@ Wähle den Ordner mit Deinen Hörbüchern. Voice zeigt Dir die gefundenen Büche
 
 Voice spielt DRM-freie Hörbücher wie M4B, MP3, M4A, OGG, OGA und OPUS. Leg Deine Bücher in Ordnern ab, wie es Dir gefällt. Ein Ordner kann ein einzelnes Buch oder Deine ganze Bibliothek enthalten, und Voice ordnet alles für Dich.
 
+<b>Dein Audiobookshelf-Server</b>
+
+• Hör die Bücher auf Deinem eigenen Audiobookshelf-Server direkt im Stream oder lade sie für unterwegs herunter
+• Deine Stelle und Deine Lesezeichen bleiben mit der Web-App und Deinen anderen Geräten im Einklang
+• Funktioniert zu Hause über http, über ein VPN oder hinter einem Reverse Proxy
+
 <b>Nur Du und Deine Geschichten</b>
 
 • Kein Konto
 • Keine Werbung
 • Nichts hinter einer Bezahlschranke
-• Deine Bücher bleiben auf Deinem Gerät
+• Deine Bücher bleiben bei Dir: auf Deinem Gerät oder auf Deinem eigenen Server
 
 Wenn Dir Voice gefällt, kannst Du es in den Einstellungen unterstützen. Das ist ein Dankeschön und schaltet nichts frei.
 

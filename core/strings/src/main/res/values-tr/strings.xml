@@ -1,5 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="audiobookshelf.downloads.channel">İndirilenler</string>
+    <string name="audiobookshelf.login.address.action">Devam</string>
+    <string name="audiobookshelf.login.address.label">Sunucu adresi</string>
+    <string name="audiobookshelf.login.address.subtitle">Kendi sunucunuzdaki kitapları dinleyin. Voice, kaldığınız yeri diğer cihazlarınızla eşitler.</string>
+    <string name="audiobookshelf.login.address.title">Audiobookshelf\'e bağlan</string>
+    <string name="audiobookshelf.login.credentials.action">Oturum aç</string>
+    <string name="audiobookshelf.login.credentials.no_password">Bu sunucu yalnızca çoklu oturum açmaya (SSO) izin veriyor ve Voice bunu henüz desteklemiyor. Sunucuyu yöneten kişiden şifreyle oturum açmayı etkinleştirmesini isteyin.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">%s üzerindeki hesabınızı kullanın.</string>
+    <string name="audiobookshelf.login.credentials.title">Oturum aç</string>
+    <string name="audiobookshelf.login.error.certificate">Telefonunuz bu sunucunun sertifikasına güvenmiyor.</string>
+    <string name="audiobookshelf.login.error.credentials">Kullanıcı adı veya şifre yanlış.</string>
+    <string name="audiobookshelf.login.error.failed">Oturum açılamadı. Tekrar deneyin.</string>
+    <string name="audiobookshelf.login.error.not_found">Voice bu adreste bir Audiobookshelf sunucusuna ulaşamıyor. Doğru ağda mısınız?</string>
+    <string name="audiobookshelf.login.error.not_set_up">Bu sunucunun kurulumu henüz tamamlanmamış. Önce web uygulamasında kurulumu bitirin.</string>
+    <string name="audiobookshelf.login.error.too_old">Voice için Audiobookshelf 2.26 veya daha yenisi gerekiyor. Bu sunucuda %s sürümü çalışıyor.</string>
+    <string name="audiobookshelf.login.error.unreachable">Sunucu yanıt vermeyi bıraktı. Birazdan tekrar deneyin.</string>
+    <string name="audiobookshelf.login.libraries.action">Kitaplığıma ekle</string>
+    <string name="audiobookshelf.login.libraries.loading">Kitaplar aranıyor…</string>
+    <string name="audiobookshelf.login.libraries.none">Burada sesli kitap kitaplığı yok</string>
+    <string name="audiobookshelf.login.libraries.subtitle">Bu kitaplar kitaplığınıza eklenir. Hemen dinleyin ya da çevrimdışı dinlemek için indirin.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">%d sesli kitap bulundu</item>
+        <item quantity="other">%d sesli kitap bulundu</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d kitap</item>
+        <item quantity="other">%1$s · %2$d kitap</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Şifre</string>
+    <string name="audiobookshelf.login.password.hide">Şifreyi gizle</string>
+    <string name="audiobookshelf.login.password.show">Şifreyi göster</string>
+    <string name="audiobookshelf.login.username">Kullanıcı adı</string>
+    <string name="audiobookshelf.settings.downloads">İndirilenler</string>
+    <string name="audiobookshelf.settings.downloads.none">Henüz indirilen kitap yok</string>
+    <string name="audiobookshelf.settings.downloads.remove">Tümünü kaldır</string>
+    <string name="audiobookshelf.settings.downloads.used">Bu cihazda %s</string>
+    <string name="audiobookshelf.settings.libraries">Kitaplıklar</string>
+    <string name="audiobookshelf.settings.mobile_data">Mobil veriyle indir</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Aksi hâlde indirmeler Wi-Fi bağlantısını bekler</string>
+    <string name="audiobookshelf.settings.sign_in_again">Oturum aç</string>
+    <string name="audiobookshelf.settings.sign_out">Oturumu kapat</string>
+    <string name="audiobookshelf.settings.signed_in_as">%s olarak oturum açıldı</string>
+    <string name="audiobookshelf.settings.try_again">Tekrar dene</string>
+    <string name="audiobookshelf.sign_out.message">Bu sunucunun kitapları ve indirilenleri bu cihazdan kaldırılır. İlerlemeniz sunucuda güvende kalır.</string>
+    <string name="audiobookshelf.sign_out.title">%s oturumu kapatılsın mı?</string>
+    <string name="audiobookshelf.status.connected">Bağlı, ilerlemeniz eşitlendi</string>
+    <string name="audiobookshelf.status.needs_login">Sunucu yeniden oturum açmanızı istiyor</string>
+    <string name="audiobookshelf.status.offline">Sunucuya şu anda ulaşılamıyor. İndirilen kitaplar yine de oynatılabilir.</string>
+    <string name="audiobookshelf.status.syncing">Eşitleniyor…</string>
     <string name="book.category.action.mark_completed">Tamamlandı olarak işaretle</string>
     <string name="book.category.action.mark_current">Geçerli olan olarak işaretle</string>
     <string name="book.category.action.mark_not_started">Henüz başlamadı olarak işaretle</string>
@@ -7,6 +56,8 @@
     <string name="book.delete.dialog.confirm_files">Dosyalarımı sil</string>
     <string name="book.delete.dialog.message">Bu, aygıtınızdaki dosyaları silecektir.</string>
     <string name="book.delete.dialog.title">Kitabı Sil</string>
+    <string name="book.download.action">İndir</string>
+    <string name="book.download.remove">İndirmeyi kaldır</string>
     <string name="book.edit.cover.file">Dosyalardan kapak</string>
     <string name="book.edit.cover.internet">İnternetten kitap kapağı</string>
     <string name="book.edit.name.label">Ad</string>
@@ -75,6 +126,7 @@
         <item quantity="one">%d saniye</item>
         <item quantity="other">%d saniye</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Audiobookshelf\'e bağlan</string>
     <string name="folder.add.action.file">Bunun yerine tek bir dosya ekle</string>
     <string name="folder.add.action.folder">Klasör seç</string>
     <string name="folder.add.subtitle">Sesli kitaplarının bulunduğu klasörü seç. Bu klasörde tek bir kitap da olabilir, tüm kütüphanen de.</string>
@@ -178,6 +230,7 @@
     <string name="history.suggestion.started_by.headset">Bir kulaklık düğmesi kitabı başlattı (saat %1$s)</string>
     <string name="history.suggestion.started_by.other_app">Başka bir uygulama kitabı başlattı (saat %1$s)</string>
     <string name="history.suggestion.started_by.watch">Akıllı saatiniz kitabı başlattı (saat %1$s)</string>
+    <string name="library.book.offline">Çevrimdışı kullanılamaz</string>
     <string name="library.category.completed.title">Tamamlandı</string>
     <string name="library.category.current.title">Geçerli</string>
     <string name="library.category.not_started.title">Henüz başlamadı</string>
@@ -309,6 +362,7 @@
     <string name="settings.auto_sleep_timer.start.label">Başlama zamanı</string>
     <string name="settings.auto_sleep_timer.summary">Eğer oynatıcı saat %1$s ile %2$s arasında başlatılırsa otomatik olarak bir uyku zamanlayıcısı başlat</string>
     <string name="settings.auto_sleep_timer.title">Otomatik Uyku Zamanlayıcısı</string>
+    <string name="settings.library.audiobookshelf.summary">Kendi sunucunuzdaki kitapları akışla dinleyin</string>
     <string name="settings.library.folders.summary">Sesli kitaplar için taranan dizinleri yönetin</string>
     <string name="settings.library.layout.grid">Izgara</string>
     <string name="settings.library.layout.list">Liste</string>

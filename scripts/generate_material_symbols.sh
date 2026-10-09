@@ -65,6 +65,8 @@ generate_icon call Call
 generate_icon check Check
 generate_icon chevron_right ChevronRight
 generate_icon close Close
+generate_icon cloud Cloud
+generate_icon cloud_done CloudDone
 generate_icon cloud_off CloudOff
 generate_icon coffee Coffee
 generate_icon collections_bookmark CollectionsBookmark
@@ -74,8 +76,10 @@ generate_icon crop Crop
 generate_icon delete Delete
 generate_icon devices Devices
 generate_icon directions_car DirectionsCar
+generate_icon dns Dns
 generate_icon done Done
 generate_icon download Download
+generate_icon download_done DownloadDone
 generate_icon emoji_food_beverage EmojiFoodBeverage
 generate_icon expand_more ExpandMore
 generate_icon fast_forward FastForward
@@ -97,9 +101,11 @@ generate_icon library_books LibraryBooks
 generate_icon light_mode LightMode
 generate_icon lightbulb Lightbulb
 generate_icon lock_open LockOpen
+generate_icon logout Logout
 generate_icon mail Mail
 generate_icon mic Mic
 generate_icon more_vert MoreVert
+generate_icon network_cell NetworkCell
 generate_icon not_started NotStarted
 generate_icon notifications Notifications
 generate_icon pause Pause
@@ -118,12 +124,15 @@ generate_icon sort Sort
 generate_icon speed Speed
 generate_icon star Star
 generate_icon swap_horiz SwapHoriz
+generate_icon sync Sync
 generate_icon timer Timer
 generate_icon title Title
 generate_icon touch_app TouchApp
 generate_icon undo Undo
 generate_icon vibration Vibration
 generate_icon view_list ViewList
+generate_icon visibility Visibility
+generate_icon visibility_off VisibilityOff
 generate_icon volume_up VolumeUp
 generate_icon volunteer_activism VolunteerActivism
 generate_icon watch Watch

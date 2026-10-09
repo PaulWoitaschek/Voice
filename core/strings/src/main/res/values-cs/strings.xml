@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="audiobookshelf.downloads.channel">Stahování</string>
+    <string name="audiobookshelf.login.address.action">Pokračovat</string>
+    <string name="audiobookshelf.login.address.label">Adresa serveru</string>
+    <string name="audiobookshelf.login.address.subtitle">Poslouchejte knihy z vlastního serveru. Voice sladí místo, kde jste skončili, s vašimi dalšími zařízeními.</string>
+    <string name="audiobookshelf.login.address.title">Připojit Audiobookshelf</string>
+    <string name="audiobookshelf.login.credentials.action">Přihlásit se</string>
+    <string name="audiobookshelf.login.credentials.no_password">Tento server povoluje jen jednotné přihlášení (SSO), které Voice zatím neumí. Požádejte toho, kdo server spravuje, o zapnutí přihlašování heslem.</string>
+    <string name="audiobookshelf.login.credentials.subtitle">Použijte svůj účet na %s.</string>
+    <string name="audiobookshelf.login.credentials.title">Přihlášení</string>
+    <string name="audiobookshelf.login.error.certificate">Váš telefon nedůvěřuje certifikátu tohoto serveru.</string>
+    <string name="audiobookshelf.login.error.credentials">Uživatelské jméno nebo heslo není správné.</string>
+    <string name="audiobookshelf.login.error.failed">Přihlášení se nepovedlo. Zkuste to znovu.</string>
+    <string name="audiobookshelf.login.error.not_found">Voice na této adrese nemůže najít server Audiobookshelf. Jste ve správné síti?</string>
+    <string name="audiobookshelf.login.error.not_set_up">Tento server ještě není nastavený. Nejdřív dokončete nastavení v jeho webové aplikaci.</string>
+    <string name="audiobookshelf.login.error.too_old">Voice potřebuje Audiobookshelf 2.26 nebo novější. Na tomto serveru běží verze %s.</string>
+    <string name="audiobookshelf.login.error.unreachable">Server přestal odpovídat. Zkuste to za chvíli znovu.</string>
+    <string name="audiobookshelf.login.libraries.action">Přidat do knihovny</string>
+    <string name="audiobookshelf.login.libraries.loading">Hledáme knihy…</string>
+    <string name="audiobookshelf.login.libraries.none">Nejsou tu žádné knihovny s audioknihami</string>
+    <string name="audiobookshelf.login.libraries.subtitle">Přidají se do vaší knihovny. Pusťte si je hned, nebo si je stáhněte a poslouchejte offline.</string>
+    <plurals name="audiobookshelf.login.libraries.title">
+        <item quantity="one">Našli jsme %d audioknihu</item>
+        <item quantity="few">Našli jsme %d audioknihy</item>
+        <item quantity="many">Našli jsme %d audioknih</item>
+        <item quantity="other">Našli jsme %d audioknih</item>
+    </plurals>
+    <plurals name="audiobookshelf.login.library_chip">
+        <item quantity="one">%1$s · %2$d kniha</item>
+        <item quantity="few">%1$s · %2$d knihy</item>
+        <item quantity="many">%1$s · %2$d knih</item>
+        <item quantity="other">%1$s · %2$d knih</item>
+    </plurals>
+    <string name="audiobookshelf.login.password">Heslo</string>
+    <string name="audiobookshelf.login.password.hide">Skrýt heslo</string>
+    <string name="audiobookshelf.login.password.show">Zobrazit heslo</string>
+    <string name="audiobookshelf.login.username">Uživatelské jméno</string>
+    <string name="audiobookshelf.settings.downloads">Stahování</string>
+    <string name="audiobookshelf.settings.downloads.none">Zatím žádné stažené knihy</string>
+    <string name="audiobookshelf.settings.downloads.remove">Odstranit vše</string>
+    <string name="audiobookshelf.settings.downloads.used">%s na tomto zařízení</string>
+    <string name="audiobookshelf.settings.libraries">Knihovny</string>
+    <string name="audiobookshelf.settings.mobile_data">Stahovat přes mobilní data</string>
+    <string name="audiobookshelf.settings.mobile_data.summary">Jinak stahování počká na Wi-Fi</string>
+    <string name="audiobookshelf.settings.sign_in_again">Přihlásit se</string>
+    <string name="audiobookshelf.settings.sign_out">Odhlásit se</string>
+    <string name="audiobookshelf.settings.signed_in_as">Přihlášeno jako %s</string>
+    <string name="audiobookshelf.settings.try_again">Zkusit znovu</string>
+    <string name="audiobookshelf.sign_out.message">Knihy ze serveru a jejich stažené soubory zmizí z tohoto zařízení. Váš postup zůstane v bezpečí na serveru.</string>
+    <string name="audiobookshelf.sign_out.title">Odhlásit se z %s?</string>
+    <string name="audiobookshelf.status.connected">Připojeno, váš postup je synchronizovaný</string>
+    <string name="audiobookshelf.status.needs_login">Server vyžaduje nové přihlášení</string>
+    <string name="audiobookshelf.status.offline">Server teď není dostupný. Stažené knihy můžete poslouchat dál.</string>
+    <string name="audiobookshelf.status.syncing">Synchronizace…</string>
     <string name="book.category.action.mark_completed">Označit jako dokončené</string>
     <string name="book.category.action.mark_current">Označit knihu jako aktuální</string>
     <string name="book.category.action.mark_not_started">Označit jako dosud nezahájené</string>
@@ -7,6 +60,8 @@
     <string name="book.delete.dialog.confirm_files">Odstranit mé soubory</string>
     <string name="book.delete.dialog.message">Toto odstraní soubory z vašeho zařízení.</string>
     <string name="book.delete.dialog.title">Odstranit knihu</string>
+    <string name="book.download.action">Stáhnout</string>
+    <string name="book.download.remove">Odstranit stažené</string>
     <string name="book.edit.cover.file">Obal ze souborového systému</string>
     <string name="book.edit.cover.internet">Obal z internetu</string>
     <string name="book.edit.name.label">Název</string>
@@ -79,6 +134,7 @@
         <item quantity="many">%d sekund</item>
         <item quantity="other">%d sekund</item>
     </plurals>
+    <string name="folder.add.action.audiobookshelf">Připojit Audiobookshelf</string>
     <string name="folder.add.action.file">Přidat místo toho jeden soubor</string>
     <string name="folder.add.action.folder">Vybrat složku</string>
     <string name="folder.add.subtitle">Vyberte složku se svými audioknihami. Může obsahovat jednu knihu nebo celou vaši knihovnu.</string>
@@ -194,6 +250,7 @@
     <string name="history.suggestion.started_by.headset">Tlačítko sluchátek spustilo knihu v %1$s</string>
     <string name="history.suggestion.started_by.other_app">Jiná aplikace spustila knihu v %1$s</string>
     <string name="history.suggestion.started_by.watch">Vaše hodinky spustily knihu v %1$s</string>
+    <string name="library.book.offline">Není k dispozici offline</string>
     <string name="library.category.completed.title">Dokončeno</string>
     <string name="library.category.current.title">Aktuální</string>
     <string name="library.category.not_started.title">Doposud nespuštěno</string>
@@ -335,6 +392,7 @@
     <string name="settings.auto_sleep_timer.start.label">Nastavit čas startu</string>
     <string name="settings.auto_sleep_timer.summary">Automatické spuštění časovače spánku při zahájení přehrávání mezi %1$s a %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatický časovač spánku</string>
+    <string name="settings.library.audiobookshelf.summary">Streamujte knihy z vlastního serveru</string>
     <string name="settings.library.folders.summary">Spravovat složky pro prohledávání audioknih</string>
     <string name="settings.library.layout.grid">Mřížka</string>
     <string name="settings.library.layout.list">Seznam</string>

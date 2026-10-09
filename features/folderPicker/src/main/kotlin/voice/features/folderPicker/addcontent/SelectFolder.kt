@@ -17,6 +17,7 @@ import voice.core.strings.R as StringsR
 internal fun SelectFolder(
   onBack: () -> Unit,
   onAdd: (FileTypeSelection, Uri) -> Unit,
+  onConnectAudiobookshelf: () -> Unit,
   origin: Origin,
   modifier: Modifier = Modifier,
 ) {
@@ -39,7 +40,7 @@ internal fun SelectFolder(
       FolderHero(clock = clock, modifier = Modifier.fillMaxSize())
     },
     actions = {
-      ContentTypeChoices(onAdd = onAdd)
+      ContentTypeChoices(onAdd = onAdd, onConnectAudiobookshelf = onConnectAudiobookshelf)
     },
   )
 }
@@ -51,6 +52,7 @@ private fun SelectFolderPreview() {
     SelectFolder(
       onBack = {},
       onAdd = { _, _ -> },
+      onConnectAudiobookshelf = {},
       origin = Origin.Onboarding,
     )
   }

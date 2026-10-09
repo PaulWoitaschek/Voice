@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.FeedbackLinks
@@ -40,6 +41,7 @@ import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import voice.navigation.Origin
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalTime
@@ -76,6 +78,7 @@ class SettingsViewModel(
   private val supporterStatusStore: DataStore<SupporterStatus>,
   private val clock: Clock,
   private val dispatcherProvider: DispatcherProvider,
+  private val serverLibrary: ServerLibrary,
 ) : SettingsListener {
 
   private val mainScope = MainScope(dispatcherProvider)
@@ -101,6 +104,9 @@ class SettingsViewModel(
     val showDeveloperMenu = remember { developerMenuUnlockedStore.data }.collectAsState(initial = null).value
     val showSupportDevelopment = remember { supportDevelopmentFeatureFlag.flow.map { it.value } }.collectAsState(initial = null).value
     val supporterStatus = remember { supporterStatusStore.data }.collectAsState(initial = null).value
+    val audiobookshelfServer = remember {
+      serverLibrary.serverName.map(::AudiobookshelfServerName)
+    }.collectAsState(initial = null).value
     val dynamicColorAvailable = remember {
       dynamicColorAvailability.isSupported()
     }
@@ -115,7 +121,8 @@ class SettingsViewModel(
       folderNames == null ||
       showDeveloperMenu == null ||
       showSupportDevelopment == null ||
-      supporterStatus == null
+      supporterStatus == null ||
+      audiobookshelfServer == null
     ) {
       return null
     }
@@ -145,8 +152,12 @@ class SettingsViewModel(
         YearMonth.from(Instant.ofEpochMilli(it).atZone(clock.zone))
       },
       folderNames = folderNames,
+      audiobookshelfServer = audiobookshelfServer.name,
     )
   }
+
+  /** Tells a server that is still loading apart from no server at all. */
+  private data class AudiobookshelfServerName(val name: String?)
 
   private fun folderNames(): Flow<List<String>> {
     if (kioskModeFeatureFlag.get()) {
@@ -230,6 +241,18 @@ class SettingsViewModel(
 
   override fun openFolderPicker() {
     navigator.goTo(Destination.FolderPicker)
+  }
+
+  override fun openAudiobookshelf() {
+    mainScope.launch {
+      navigator.goTo(
+        if (serverLibrary.isConnected()) {
+          Destination.AudiobookshelfSettings
+        } else {
+          Destination.AudiobookshelfLogin(Origin.Default)
+        },
+      )
+    }
   }
 
   override fun setAutoSleepTimer(checked: Boolean) {

@@ -102,6 +102,7 @@ class SettingsViewModelTest {
     supporterStatusStore = supporterStatusStore,
     clock = Clock.fixed(JavaInstant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
+    serverLibrary = FakeServerLibrary(),
   )
 
   @Test

@@ -6,6 +6,7 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.app.MainActivity
+import voice.core.audiobookshelf.Audiobookshelf
 import voice.core.data.BookId
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.store.CurrentBookStore
@@ -21,6 +22,7 @@ class StartDestinationProvider(
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
   private val playerController: PlayerController,
+  private val audiobookshelf: Audiobookshelf,
 ) {
 
   operator fun invoke(intent: Intent): List<Destination.Compose> {
@@ -51,6 +53,7 @@ class StartDestinationProvider(
     return when {
       onboardingCompletedStore.data.first() -> false
       audiobookFolders.hasAnyFolders() -> false
+      audiobookshelf.isConnected() -> false
       else -> true
     }
   }

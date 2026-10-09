@@ -5,6 +5,7 @@ import voice.core.data.BookId
 import voice.core.data.audioFileCount
 import voice.core.data.folders.FolderType
 import voice.core.data.isAudioFile
+import voice.core.data.isRemote
 import voice.core.data.repo.BookContentRepo
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.walk
@@ -45,7 +46,9 @@ internal class MediaScanner(
     }
 
     val bookIds = files.map { BookId(it.uri) }
-    contentRepo.setAllInactiveExcept(bookIds)
+    // books on a server aren't on the device, their sync decides whether they are active
+    val activeRemoteBookIds = contentRepo.all().filter { it.isActive && it.id.isRemote }.map { it.id }
+    contentRepo.setAllInactiveExcept(bookIds + activeRemoteBookIds)
 
     val probeFile = folders.values.flatten().findProbeFile()
     if (probeFile != null) {
@@ -55,7 +58,7 @@ internal class MediaScanner(
       }
     }
 
-    val previousBooks = PreviousBooks(contentRepo.all(), scanned = bookIds.toSet())
+    val previousBooks = PreviousBooks(contentRepo.all().filterNot { it.id.isRemote }, scanned = bookIds.toSet())
     files
       .sortedBy { it.audioFileCount() }
       .forEach { file ->
