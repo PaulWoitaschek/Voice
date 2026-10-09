@@ -72,7 +72,7 @@ jobs:
       - name: Upload to Firebase App Distribution
         env:
           # renovate: datasource=npm depName=firebase-tools
-          FIREBASE_TOOLS_VERSION: 15.32.1
+          FIREBASE_TOOLS_VERSION: 15.33.0
           TESTER_GROUPS: ${{ inputs.groups }}
           RELEASE_NOTES: ${{ inputs.release_notes }}
         run: |

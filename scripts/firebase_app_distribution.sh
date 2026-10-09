@@ -4,7 +4,7 @@ set -euo pipefail
 
 app_id="1:789552645904:android:804ab75bd5031ced"
 # renovate: datasource=npm depName=firebase-tools
-firebase_tools_version="15.32.1"
+firebase_tools_version="15.33.0"
 groups="beta-testers"
 
 while [[ $# -gt 0 ]]; do
