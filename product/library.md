@@ -52,8 +52,8 @@ audiobook series" ([#1748])
 
 ### "Help me find a book fast"
 
-- ✅ **Search** ([#1537], 2022) through titles, authors, narrators, series and genres, with recent searches
-  ([#3817]). *(next release)*
+- ✅ **Search** ([#1537], 2022). In the next release it also finds narrators, series and genres, and remembers recent
+  searches ([#3817]).
 - ✅ **Grid or list.**
 
 ### "Let me fix how a book looks"
@@ -62,7 +62,8 @@ audiobook series" ([#1748])
 often cropping out stuff, like author or title." ([#2856])
 
 - ✅ **Rename a book.**
-- ✅ **Change the cover** with one from the files or the internet, and crop it ([#3828]). *(next release)*
+- ✅ **Change the cover** with one from the files or the internet. Cropping and a new cover search come in the next
+  release ([#3828]).
 - 💡 **Edit the author and other details** ([#1407]).
 - 💡 **Covers that aren't square** ([#2856]).
 - 💡 **Save the cover into the book's folder** ([#2303]).
@@ -72,8 +73,8 @@ often cropping out stuff, like author or title." ([#2856])
 "Can we have an option to remove a book file/folder from the app interface without having to delete it from the
 device?" ([#3397])
 
-- ✅ **Deleting shows which files will go**, and asks you to tick "Delete my files" first ([#3828]). This came after
-  [#1500], "Deleted all my audiobooks". *(next release)*
+- ✅ **Deleting shows which files will go**, and asks you to tick "Delete my files" first. This came after [#1500],
+  "Deleted all my audiobooks".
 - 💡 **Hide a book without deleting its files** ([#3397]).
 
 ### "Show me how much I've listened"

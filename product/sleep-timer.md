@@ -74,7 +74,8 @@ From a widget ([#1473]), Tasker ([#3410]) or the lock screen ([#2983]).
 ## Open questions
 
 1. End of chapter has no fade-out, no shake to restart and no bookmark. Is that on purpose?
-2. The exact time in the sheet also sets how long the automatic timer runs, and Settings doesn't show that. Is that okay?
+2. The exact time in the sheet also sets how long the automatic timer runs, and Settings doesn't show that. Is that
+   okay?
 3. One tap on the moon cancels a running timer. Should it open the sheet instead, with "Turn off" as one option?
 4. Why were the notification button and the widget dropped?
 

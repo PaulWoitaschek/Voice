@@ -31,8 +31,8 @@ donations, a thanks is enough!" ([#874])
 
 ### "Something's wrong and I need help"
 
-- ✅ **Help and feedback in Settings**: the FAQ, getting help, reporting a problem, suggesting an idea, and email. The
-  same choices appear in the rating prompt.
+- ✅ **Help and feedback in Settings**: the FAQ, getting help, reporting a problem and suggesting an idea. In the
+  next release, the rating prompt offers the same choices, plus email.
 
 Assumptions:
 
@@ -71,6 +71,7 @@ Assumptions:
 2. Crash reporting was removed in 2024 ([#2439]) and added back in 2025. Why?
 3. Is email enough as a way to get help without a GitHub account?
 4. What decides whether support in the app and the new rating prompt get turned on for everyone?
+5. The [design principles] say prompts "ask once", but the rating prompt can ask up to 3 times. Which one is right?
 
 [design principles]: ../.agents/skills/design/SKILL.md
 [#526]: https://github.com/PaulWoitaschek/Voice/issues/526

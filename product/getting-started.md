@@ -66,7 +66,7 @@ the app right now" ([#781]). Garbled Cyrillic tags are another version of this (
 Chapters inside m4b files ([#3062]) and very large files ([#3672]).
 
 - ✅ **Chapter reading was rewritten** ([#2865], 2025).
-- ✅ **Large m4b files can be added** ([#3799]), but playing them still fails ([#3672]). *(next release)*
+- ✅ **Large m4b files can be added** ([#3799]). *(next release)* Playing them still fails ([#3672]).
 
 "Media parsing is ugly" ([#3044]). The bar is high: during one regression, "I'm pinning this issue and will stop the
 rollout until this is fixed." ([#2840])

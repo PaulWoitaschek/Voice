@@ -82,8 +82,9 @@ but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
 "I would like to be able to play instrumental music on Spotify simultaneously while listening to an Audio Book"
 ([#2259])
 
-- ✅ **Voice pauses for calls and gets quieter for short sounds**: "This is intended behavior. The player should lower
-  volume when the audiofocus gets lost temporary" ([#107])
+- ✅ **Voice pauses for calls and for short sounds like navigation prompts**, then carries on. In 2015 it got quieter
+  instead: "The player should lower volume when the audiofocus gets lost temporary" ([#107]). Pausing came after a
+  listener asked for it.
 - 💡 **Keep playing under other audio** ([#2259]).
 
 ## Open questions

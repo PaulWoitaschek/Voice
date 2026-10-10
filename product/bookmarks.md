@@ -56,7 +56,7 @@ biggest request here is [#2549], with 14 upvotes.
 This happens on a new phone ([#1668]) or after moving files ([#2636]). See
 [Servers, sync and backup](servers-and-sync.md) and [Getting started](getting-started.md).
 
-- ✅ **Bookmarks sync with Audiobookshelf**, except the ones the sleep timer sets.
+- ✅ **Bookmarks sync with Audiobookshelf**, except the ones the sleep timer sets. *(next release)*
 
 ## Open questions
 

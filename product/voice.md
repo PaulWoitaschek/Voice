@@ -57,7 +57,7 @@ These are the open ideas with the most upvotes on a single thread. Duplicates ad
 | 11 | Edit a book's details ([#1407]) | [Library](library.md) |
 | 10 | Speed in Android Auto ([#1878]) | [Outside the app](outside-the-app.md) |
 
-Server support ([#2385], 17 upvotes) is also still open, but the Audiobookshelf preview answers it.
+Server support ([#2385], 17 upvotes) is also still open. The Audiobookshelf preview in the next release answers it.
 
 ## Principles
 
@@ -71,8 +71,8 @@ These limit every solution in every area.
 - **The data stays with the listener.** No account, no ads, nothing behind a paywall, and no Voice server
   ([design principles]).
 - **Never interrupt listening.** Prompts wait for a calm moment, ask once, and accept no ([design principles]).
-- **Reliable before new.** A feature that fails quietly is worse than none. End of chapter was reverted until it had
-  tests ([Sleep timer](sleep-timer.md)).
+- **Reliable before new.** "Our goal is to create an app that is both reliable and a joy to use."
+  ([About](../docs/about.md)) End of chapter was reverted until it had tests ([Sleep timer](sleep-timer.md)).
 - **Product before code.** "Before we jump into the technical solutions we need a solid product concept." ([#3044])
 
 ## What Voice isn't
