@@ -1,0 +1,39 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping shape Voice! Please search the [existing ideas](https://github.com/PaulWoitaschek/Voice/discussions/categories/ideas) first and upvote one if it matches yours.
+
+        Voice stays small on purpose, so every idea is judged by the problem it solves. Start with the problem, not the feature:
+
+        - ✅ "When I fall asleep while listening, I lose my place and have to search for it the next day."
+        - ❌ "Add a button that does X."
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem do you run into?
+      description: Describe the situation. What were you trying to do, and what got in your way?
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: What do you do today instead?
+      description: How do you work around it right now? "Nothing, I live with it" is a fine answer.
+    validations:
+      required: true
+  - type: dropdown
+    id: impact
+    attributes:
+      label: How much does this affect you?
+      options:
+        - It keeps me from using Voice for some of my books
+        - It gets in my way regularly
+        - It would be nice to have
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Do you have a solution in mind?
+      description: Optional. If you already have an idea how Voice could solve it, describe it here.
