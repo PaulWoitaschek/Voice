@@ -51,7 +51,7 @@ Each file says how far along it is:
 | [Getting started](getting-started.md) | First run, adding folders, how books are found | Outline |
 | [Library](library.md) | Finding and managing your books | Outline |
 | [Player](player.md) | Listening to a book: controls, chapters, speed, position | Outline |
-| [Sleep timer](sleep-timer.md) | Falling asleep to a book | Draft |
+| [Sleep timer](sleep-timer.md) | Falling asleep to a book | Outline |
 | [Bookmarks and history](bookmarks.md) | Saving moments and finding your way back | Outline |
 | [Outside the app](outside-the-app.md) | Notification, headphones, car, widgets | Outline |
 | [Servers, sync and backup](servers-and-sync.md) | Your own server, cloud storage, more devices, a new phone | Outline |
