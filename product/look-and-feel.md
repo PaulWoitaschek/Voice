@@ -51,9 +51,12 @@ Assumptions:
 ### "I can't read it or reach it"
 
 There's little evidence here. "my sight is quite restricted" ([#766]) "with talkback on, there is no way this popup can
-be closed" ([#1898])
+be closed" ([#1898]) In split screen next to a navigation app: "Ideally the play controls should ALWAYS be on screen"
+([#3637])
 
 - ✅ **Bigger skip buttons**, and **layouts that work with large fonts and right-to-left languages**.
+- ✅ **The play controls stay on screen in any window size**, down to a short split screen pane. The cover gives way
+  first, then the other controls, one at a time.
 
 ### "Voice in my language, translated well"
 
@@ -83,5 +86,6 @@ Assumptions:
 [#1444]: https://github.com/PaulWoitaschek/Voice/issues/1444
 [#1898]: https://github.com/PaulWoitaschek/Voice/discussions/1898
 [#2627]: https://github.com/PaulWoitaschek/Voice/discussions/2627
+[#3637]: https://github.com/PaulWoitaschek/Voice/issues/3637
 [#3811]: https://github.com/PaulWoitaschek/Voice/pull/3811
 [#3827]: https://github.com/PaulWoitaschek/Voice/pull/3827

@@ -1,6 +1,6 @@
 package voice.features.playbackScreen.view
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.ui.AuroraBackground
@@ -30,7 +31,6 @@ import kotlin.time.Duration.Companion.seconds
 internal fun BookPlayView(
   viewState: BookPlayViewState,
   bookId: BookId,
-  useLandscapeLayout: Boolean,
   onPlayClick: () -> Unit,
   onRewindClick: () -> Unit,
   onFastForwardClick: () -> Unit,
@@ -51,7 +51,9 @@ internal fun BookPlayView(
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   val clock = rememberAnimationClock(running = viewState.playing)
-  Box(Modifier.fillMaxSize()) {
+  BoxWithConstraints(Modifier.fillMaxSize()) {
+    // a short split screen pane is wider than tall, but too narrow for two columns
+    val sideBySide = maxWidth > maxHeight && maxWidth >= 600.dp
     AuroraBackground(
       clock = { clock.value },
       showStars = viewState.sleepTimerState is BookPlayViewState.SleepTimerViewState.Enabled,
@@ -64,7 +66,7 @@ internal fun BookPlayView(
         SnackbarHost(hostState = snackbarHostState)
       },
       topBar = {
-        if (!useLandscapeLayout) {
+        if (!sideBySide) {
           PlaybackTopBar(
             showChapters = viewState.showPreviousNextButtons,
             onCloseClick = onCloseClick,
@@ -79,7 +81,7 @@ internal fun BookPlayView(
           viewState = viewState,
           bookId = bookId,
           clock = { clock.value },
-          useLandscapeLayout = useLandscapeLayout,
+          sideBySide = sideBySide,
           onPlayClick = onPlayClick,
           onRewindClick = onRewindClick,
           onFastForwardClick = onFastForwardClick,
@@ -131,7 +133,6 @@ private fun BookPlayPreview(
         onCurrentChapterClick = {},
         onJumpBack = {},
         onJumpBackExpire = {},
-        useLandscapeLayout = false,
       )
     }
   }
