@@ -144,13 +144,18 @@ class WidgetModelsTest {
   }
 
   @Test
-  fun `the strip drops the skip buttons before the title gets too narrow to read`() {
+  fun `the strip gives up fast forward and then rewind before the title gets too narrow to read`() {
     // a 4x1 widget on a Pixel 9 with 4 columns
-    assertTrue(stripSizes(DpSize(374.dp, 96.dp)).withSkip)
+    val wide = stripSizes(DpSize(374.dp, 96.dp))
+    assertTrue(wide.rewind && wide.fastForward)
 
     // and with 5 columns
     val narrow = stripSizes(DpSize(296.dp, 96.dp))
-    assertFalse(narrow.withSkip)
-    assertTrue(narrow.textWidth >= 120.dp)
+    assertTrue(narrow.rewind)
+    assertFalse(narrow.fastForward)
+    assertTrue(narrow.textWidth >= 72.dp)
+
+    val narrowest = stripSizes(DpSize(250.dp, 96.dp))
+    assertFalse(narrowest.rewind || narrowest.fastForward)
   }
 }
