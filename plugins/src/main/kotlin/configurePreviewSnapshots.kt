@@ -6,7 +6,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Provider
-import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.testing.Test
@@ -14,13 +14,11 @@ import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import org.gradle.process.CommandLineArgumentProvider
+import org.gradle.work.DisableCachingByDefault
 
 private const val SNAPSHOT_TEST = "voice.core.snapshot.PreviewSnapshots"
+private const val SNAPSHOT_TEST_CLASS = "voice/core/snapshot/PreviewSnapshots.class"
 
-/**
- * Registers `snapshot`, which renders every `@Preview` of the module to `build/snapshots`.
- * It runs on demand only: the regular unit test tasks skip it.
- */
 internal fun Project.configurePreviewSnapshots() {
   val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   dependencies.add("testImplementation", project(":core:snapshot"))
@@ -39,11 +37,10 @@ internal fun Project.configurePreviewSnapshots() {
     }
   }
 
+  // excluded from scanning rather than filtered, so a `--tests` pattern that matches nothing still fails
   tasks.withType<Test>().configureEach {
     if (name != "snapshot") {
-      filter.excludeTestsMatching(SNAPSHOT_TEST)
-      // modules without tests would fail on the exclude
-      filter.isFailOnNoMatchingTests = false
+      exclude(SNAPSHOT_TEST_CLASS)
     }
   }
   val snapshotDir = layout.buildDirectory.dir("snapshots")
@@ -55,8 +52,12 @@ internal fun Project.configurePreviewSnapshots() {
     testClassesDirs = unitTest.testClassesDirs
     classpath = unitTest.classpath
     javaLauncher.set(unitTest.javaLauncher)
+    // the Android resources reach Robolectric through a properties file with paths, so they need declaring
+    inputs.files(unitTest.inputs.files)
+      .withPropertyName("unitTestInputs")
+      .withPathSensitivity(PathSensitivity.RELATIVE)
     useJUnit()
-    filter.includeTestsMatching(SNAPSHOT_TEST)
+    include(SNAPSHOT_TEST_CLASS)
     systemProperty("java.awt.headless", "true")
     jvmArgumentProviders += SnapshotDir(snapshotDir)
     // previews that were removed shouldn't leave their images behind
@@ -64,7 +65,7 @@ internal fun Project.configurePreviewSnapshots() {
   }
 }
 
-@CacheableTask
+@DisableCachingByDefault(because = "Writing one small file is faster than the cache")
 abstract class GeneratePreviewSnapshotTest : DefaultTask() {
 
   @get:OutputDirectory

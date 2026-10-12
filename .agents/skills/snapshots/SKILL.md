@@ -29,7 +29,7 @@ Add a preview to the module, or annotate an existing one. The annotation decides
 | `fontScale = 2F` | text at 2× |
 | `uiMode = Configuration.UI_MODE_NIGHT_YES` | dark |
 | `locale = "iw"` (also `ar`, `fa`, `ur`) | right to left |
-| `showBackground`, `backgroundColor` | that background, otherwise transparent |
+| `showBackground`, `backgroundColor` | that background, otherwise white, or black at night |
 | `@PreviewParameter` | one image per value |
 
 Several `@Preview` annotations on one function give one image each, and so do multipreviews like `@PreviewLightDark` and
@@ -60,6 +60,8 @@ instead, with a view state.
 - The clock is advanced by 1 second, so entrance animations have finished and a long title hasn't started its marquee.
   Endless animations, like the seek bar's wave, show a single frame.
 - The existing previews pass no cover, so covers show their placeholder.
+- Only the preview's own window is captured. Dialogs, bottom sheets, popups and menus open in windows of their own and
+  are missing. Preview their content instead.
 - There are no system bars or window insets. For those, run the app on an emulator.
 
 ## How it works
