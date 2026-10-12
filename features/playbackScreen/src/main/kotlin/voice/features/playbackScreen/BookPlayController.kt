@@ -19,7 +19,6 @@ import voice.core.data.BookId
 import voice.core.ui.CoverTheme
 import voice.core.ui.HoldSplashScreenWhile
 import voice.features.playbackScreen.view.BookPlayView
-import voice.features.sleepTimer.SleepTimerDialog
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
