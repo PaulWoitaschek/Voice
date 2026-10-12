@@ -99,15 +99,19 @@ internal fun BookPlayContent(
       )
     }
   }
+  val title: @Composable () -> Unit = {
+    TitleBlock(
+      title = viewState.title,
+      author = viewState.author,
+      modifier = Modifier
+        .fillMaxWidth()
+        .entrance(entrance, 0),
+    )
+  }
   val control: @Composable (Control) -> Unit = { control ->
     when (control) {
-      Control.Title -> TitleBlock(
-        title = viewState.title,
-        author = viewState.author,
-        modifier = Modifier
-          .fillMaxWidth()
-          .entrance(entrance, 0),
-      )
+      // side by side, these go under the cover, so phones in landscape fit the controls
+      Control.Title -> if (!sideBySide) title()
       Control.BookProgress -> if (!sideBySide) bookProgress()
       Control.Chapter -> if (viewState.showPreviousNextButtons) {
         MediaControlsDirection {
@@ -200,6 +204,8 @@ internal fun BookPlayContent(
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         )
+        title()
+        Spacer(Modifier.height(12.dp))
         bookProgress()
       }
       Spacer(Modifier.width(32.dp))

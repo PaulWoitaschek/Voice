@@ -52,8 +52,8 @@ internal fun BookPlayView(
 ) {
   val clock = rememberAnimationClock(running = viewState.playing)
   BoxWithConstraints(Modifier.fillMaxSize()) {
-    // a short split screen pane is wider than tall, but too narrow for two columns
-    val sideBySide = maxWidth > maxHeight && maxWidth >= 600.dp
+    // split screen panes are often wider than tall, but too narrow or too short for a cover next to the controls
+    val sideBySide = maxWidth > maxHeight && maxWidth >= 600.dp && maxHeight >= 360.dp
     AuroraBackground(
       clock = { clock.value },
       showStars = viewState.sleepTimerState is BookPlayViewState.SleepTimerViewState.Enabled,
