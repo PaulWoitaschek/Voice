@@ -1,38 +1,33 @@
 package voice.core.playback
 
+import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
-import voice.core.data.BookContent
+import kotlinx.coroutines.flow.first
 import voice.core.data.BookId
-import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.LastPlaybackSpeedStore
 import java.time.Instant
 
 /**
- * A book that was never played starts at the speed of the book played last, so listeners don't have to set their
+ * A book that was never played starts at the speed the listener last played at, so they don't have to set their
  * speed again for every book.
  */
 @Inject
 class NewBookSpeed(
-  private val contentRepo: BookContentRepo,
+  @LastPlaybackSpeedStore
+  private val lastPlaybackSpeedStore: DataStore<Float>,
   private val bookRepository: BookRepository,
 ) {
 
   suspend fun applyTo(bookId: BookId) {
-    // includes inactive books, so a finished book whose files were deleted still counts
-    val lastPlayed = contentRepo.all()
-      .filter { it.id != bookId && it.wasPlayed }
-      .maxByOrNull { it.lastPlayedAt }
-      ?: return
+    val speed = lastPlaybackSpeedStore.data.first()
     bookRepository.updateBook(bookId) { content ->
       // a speed picked for this book before it was played stays
-      if (!content.wasPlayed && content.playbackSpeed == 1F) {
-        content.copy(playbackSpeed = lastPlayed.playbackSpeed)
+      if (content.lastPlayedAt == Instant.EPOCH && content.playbackSpeed == 1F) {
+        content.copy(playbackSpeed = speed)
       } else {
         content
       }
     }
   }
 }
-
-private val BookContent.wasPlayed: Boolean
-  get() = lastPlayedAt > Instant.EPOCH

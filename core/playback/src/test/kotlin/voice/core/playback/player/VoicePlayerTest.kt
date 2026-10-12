@@ -19,6 +19,7 @@ import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -77,6 +78,7 @@ class VoicePlayerTest {
 
   private val seekTimeStore = MemoryDataStore(2)
   private val autoRewindAmountStore = MemoryDataStore(2)
+  private val lastPlaybackSpeedStore = MemoryDataStore(1F)
 
   private val internalPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
     .setMaxSeekToPreviousPositionMs(2_000)
@@ -122,6 +124,7 @@ class VoicePlayerTest {
     },
     seekTimeStore = seekTimeStore,
     autoRewindAmountStore = autoRewindAmountStore,
+    lastPlaybackSpeedStore = lastPlaybackSpeedStore,
     scope = scope,
     volumeGain = mockk(relaxed = true),
     sleepTimer = sleepTimer,
@@ -337,6 +340,33 @@ class VoicePlayerTest {
   }
 
   @Test
+  fun `playing remembers the speed for new books`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))), playbackSpeed = 1.75F)
+
+    player.play()
+    runCurrent()
+
+    assertEquals(expected = 1.75F, actual = lastPlaybackSpeedStore.data.first())
+  }
+
+  @Test
+  fun `changing the speed remembers it for new books`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
+
+    player.setPlaybackSpeed(1.25F)
+    runCurrent()
+
+    assertEquals(expected = 1.25F, actual = lastPlaybackSpeedStore.data.first())
+  }
+
+  @Test
+  fun `loading a book does not change the speed for new books`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))), playbackSpeed = 1.75F)
+
+    assertEquals(expected = 1F, actual = lastPlaybackSpeedStore.data.first())
+  }
+
+  @Test
   fun `end of chapter sleep timer pauses at start of next chapter mark`() = scope.runTest {
     setMediaItems(
       listOf(
@@ -509,11 +539,13 @@ class VoicePlayerTest {
     chapters: List<Chapter>,
     currentChapter: Chapter = chapters.first(),
     positionInChapter: Long = 0,
+    playbackSpeed: Float = 1F,
   ) {
     currentBook = book(chapters, bookId).update {
       it.copy(
         currentChapter = currentChapter.id,
         positionInChapter = positionInChapter,
+        playbackSpeed = playbackSpeed,
       )
     }
     player.setMediaItem(mediaItemProvider.mediaItem(currentBook))

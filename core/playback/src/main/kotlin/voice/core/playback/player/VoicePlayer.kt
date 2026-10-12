@@ -17,6 +17,7 @@ import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.logging.api.Logger
 import voice.core.playback.NewBookSpeed
@@ -49,6 +50,8 @@ class VoicePlayer(
   private val seekTimeStore: DataStore<Int>,
   @AutoRewindAmountStore
   private val autoRewindAmountStore: DataStore<Int>,
+  @LastPlaybackSpeedStore
+  private val lastPlaybackSpeedStore: DataStore<Float>,
   private val scope: CoroutineScope,
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,
@@ -283,6 +286,7 @@ class VoicePlayer(
 
     if (playWhenReady) {
       updateLastPlayedAt()
+      rememberSpeed(playbackParameters.speed)
     }
     super.setPlayWhenReady(playWhenReady)
   }
@@ -396,6 +400,16 @@ class VoicePlayer(
     super.setPlaybackSpeed(speed)
     scope.launch {
       updateBook { it.copy(playbackSpeed = speed) }
+    }
+    rememberSpeed(speed)
+  }
+
+  /**
+   * New books start at this speed, see [NewBookSpeed].
+   */
+  private fun rememberSpeed(speed: Float) {
+    scope.launch {
+      lastPlaybackSpeedStore.updateData { speed }
     }
   }
 

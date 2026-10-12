@@ -41,8 +41,8 @@ single book to 1.25x by hand" ([#3867])
 - ❌ **A default speed setting**, in 2020: "I also think that the vast majority people just plays at 1.0 speed so I
   don't want another setting." And: "It's mostly not about the maintenance cost. I'ts about providing good defaults and
   having a simple ui." ([#860])
-- ✅ **A new book starts at the speed of the book you played last** ([#1790]). This needs no setting, and it follows the
-  listener when their speed changes. A speed picked for a book before its first play stays.
+- ✅ **A new book starts at the speed you last listened at** ([#1790]). This needs no setting, and it follows the listener
+  when their speed changes. A speed picked for a book before its first play stays.
 
 ### "How much is left, really, at my speed?"
 

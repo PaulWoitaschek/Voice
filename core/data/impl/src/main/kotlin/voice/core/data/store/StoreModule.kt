@@ -250,6 +250,17 @@ public object StoreModule {
       fileName = "supporterStatus",
     )
   }
+
+  @Provides
+  @SingleIn(AppScope::class)
+  @LastPlaybackSpeedStore
+  private fun lastPlaybackSpeed(factory: VoiceDataStoreFactory): DataStore<Float> {
+    return factory.create(
+      serializer = Float.serializer(),
+      defaultValue = 1F,
+      fileName = "lastPlaybackSpeed",
+    )
+  }
 }
 
 private class LegacyDarkThemeMigration(
