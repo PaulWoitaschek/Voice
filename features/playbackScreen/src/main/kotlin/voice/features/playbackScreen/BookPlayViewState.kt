@@ -3,7 +3,6 @@ package voice.features.playbackScreen
 import androidx.compose.runtime.Immutable
 import voice.core.playback.misc.Decibel
 import voice.core.ui.BookBarPin
-import voice.features.sleepTimer.SleepTimerViewState
 import kotlin.time.Duration
 
 @Immutable

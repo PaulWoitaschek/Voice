@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
-package voice.features.sleepTimer
+package voice.features.playbackScreen
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
@@ -76,7 +76,7 @@ import voice.core.strings.R as StringsR
 private val PRESETS = listOf(5, 15, 30, 60)
 
 @Composable
-fun SleepTimerDialog(
+internal fun SleepTimerDialog(
   viewState: SleepTimerViewState,
   onDismiss: () -> Unit,
   onIncrementSleepTime: () -> Unit,

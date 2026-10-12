@@ -54,7 +54,6 @@ import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.BookBarPin
 import voice.core.ui.formatTime
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
-import voice.features.sleepTimer.SleepTimerViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import java.time.Clock

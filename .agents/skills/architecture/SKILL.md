@@ -17,8 +17,8 @@ Background and diagram: `docs/architecture.md`. Module inventory: `settings.grad
 
 ## Dependency rules
 
-- Features depend on `:core:*` and `:navigation`, never on other features. Existing exceptions: a feature's own `:api`
-  module (e.g. `:features:support:api`) and the legacy `:features:playbackScreen` → `:features:sleepTimer`. Don't add more.
+- Features depend on `:core:*` and `:navigation`, never on other features. The only exception is a feature's own `:api`
+  module (e.g. `:features:support:api`).
 - Core never depends on features.
 - A contract with several implementations is split into `:api` plus implementation modules (`noop`, `firebase`, `play`,
   `free`, `impl`). Consumers depend on `:api` only; `:app` picks the implementation, often per flavor
