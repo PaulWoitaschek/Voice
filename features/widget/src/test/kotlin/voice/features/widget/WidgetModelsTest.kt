@@ -142,4 +142,15 @@ class WidgetModelsTest {
     assertEquals(NowPlayingLayout.Hero, nowPlayingLayout(DpSize(320.dp, 180.dp)))
     assertEquals(NowPlayingLayout.HeroTall, nowPlayingLayout(DpSize(320.dp, 300.dp)))
   }
+
+  @Test
+  fun `the strip drops the skip buttons before the title gets too narrow to read`() {
+    // a 4x1 widget on a Pixel 9 with 4 columns
+    assertTrue(stripSizes(DpSize(374.dp, 96.dp)).withSkip)
+
+    // and with 5 columns
+    val narrow = stripSizes(DpSize(296.dp, 96.dp))
+    assertFalse(narrow.withSkip)
+    assertTrue(narrow.textWidth >= 120.dp)
+  }
 }

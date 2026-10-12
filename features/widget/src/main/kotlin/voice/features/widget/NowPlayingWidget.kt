@@ -201,11 +201,7 @@ private fun StripLayout(
   actions: WidgetActions,
 ) {
   val size = LocalSize.current
-  val coverSize = (size.height - 16.dp).coerceIn(36.dp, 72.dp)
-  val withSkip = size.width >= 290.dp
-  val buttonSize = (size.height - 24.dp).coerceIn(36.dp, 52.dp)
-  val controlsWidth = if (withSkip) buttonSize + (buttonSize * 0.8F) * 2 + 8.dp else buttonSize
-  val textWidth = size.width - 16.dp - coverSize - 12.dp - 8.dp - controlsWidth - 12.dp
+  val (coverSize, buttonSize, withSkip, textWidth) = stripSizes(size)
   Row(
     modifier = GlanceModifier
       .fillMaxSize()
@@ -229,6 +225,28 @@ private fun StripLayout(
     Controls(book, buttonSize, withSkip, images, actions, gap = 4.dp)
     Spacer(GlanceModifier.width(4.dp))
   }
+}
+
+internal data class StripSizes(
+  val cover: Dp,
+  val button: Dp,
+  val withSkip: Boolean,
+  val textWidth: Dp,
+)
+
+internal fun stripSizes(size: DpSize): StripSizes {
+  val cover = (size.height - 16.dp).coerceIn(36.dp, 72.dp)
+  val button = (size.height - 24.dp).coerceIn(36.dp, 52.dp)
+  val skip = (button * 0.8F) * 2 + 8.dp
+  val textWidth = size.width - 16.dp - cover - 12.dp - 8.dp - button - 12.dp
+  // the title is what tells books apart, so the skip buttons give up their room first
+  val withSkip = textWidth - skip >= 80.dp
+  return StripSizes(
+    cover = cover,
+    button = button,
+    withSkip = withSkip,
+    textWidth = if (withSkip) textWidth - skip else textWidth,
+  )
 }
 
 @Composable
