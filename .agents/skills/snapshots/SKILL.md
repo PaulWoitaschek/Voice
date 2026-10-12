@@ -62,7 +62,7 @@ instead, with a view state.
 - The existing previews pass no cover, so covers show their placeholder.
 - Only the preview's own window is captured. Dialogs, bottom sheets, popups and menus open in windows of their own and
   are missing. Preview their content instead.
-- There are no system bars or window insets. For those, run the app on an emulator.
+- There are no system bars or window insets. For those, run the app on an emulator (see the emulator skill).
 
 ## How it works
 

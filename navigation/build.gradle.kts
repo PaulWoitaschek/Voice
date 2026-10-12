@@ -9,6 +9,7 @@ dependencies {
   api(projects.core.data.api)
   implementation(libs.compose.material3)
   testImplementation(kotlin("reflect"))
+  testImplementation(libs.serialization.json)
 }
 
 kotlin{
