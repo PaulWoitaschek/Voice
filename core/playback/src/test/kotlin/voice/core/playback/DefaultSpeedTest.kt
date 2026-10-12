@@ -35,4 +35,11 @@ class DefaultSpeedTest {
 
     assertEquals(expected = 1.25F, actual = result.content.playbackSpeed)
   }
+
+  @Test
+  fun `a book with a speed of its own but no last play keeps its speed`() {
+    val legacy = book.update { it.copy(playbackSpeed = 1.25F) }
+
+    assertEquals(expected = 1.25F, actual = legacy.withDefaultSpeed { 1.75F }.content.playbackSpeed)
+  }
 }

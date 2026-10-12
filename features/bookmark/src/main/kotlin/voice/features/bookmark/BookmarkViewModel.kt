@@ -25,6 +25,7 @@ import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
@@ -32,6 +33,7 @@ import voice.core.playback.CurrentBookResolver
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
+import voice.core.playback.withDefaultSpeed
 import voice.core.sleeptimer.SleepTimer
 import voice.navigation.Navigator
 import java.time.Clock
@@ -54,6 +56,8 @@ class BookmarkViewModel(
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
   @ExperimentalPlaybackPersistenceQualifier
   private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
+  @LastPlaybackSpeedStore
+  private val lastPlaybackSpeedStore: DataStore<Float>,
   @Assisted
   private val bookId: BookId,
   @Assisted
@@ -85,8 +89,11 @@ class BookmarkViewModel(
 
     // saved, so that the editor does not open again once the screen comes back after process death
     var openedEditorFromNavigation by rememberSaveable { mutableStateOf(false) }
+    val defaultSpeed = remember { lastPlaybackSpeedStore.data }.collectAsState(initial = null).value
     val persistedBook = remember(bookId) { bookRepository.flow(bookId) }
-      .collectAsState(initial = null).value ?: return null
+      .collectAsState(initial = null).value
+      ?.withDefaultSpeed { defaultSpeed ?: return null }
+      ?: return null
     // with the experimental playback persistence, the stored position lags behind while playing
     val experimentalPlaybackPersistence = remember { experimentalPlaybackPersistenceFeatureFlag.get() }
     val livePlaybackState = if (experimentalPlaybackPersistence) {

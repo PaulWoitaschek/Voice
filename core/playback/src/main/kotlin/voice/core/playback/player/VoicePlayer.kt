@@ -28,6 +28,7 @@ import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
+import voice.core.playback.session.bookId
 import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.toMediaIdOrNull
@@ -309,13 +310,13 @@ class VoicePlayer(
   }
 
   private fun updateLastPlayedAt() {
+    // the book that plays, which can differ from the current book until the app loads that one
+    val bookId = player.currentMediaItem?.mediaId?.toMediaIdOrNull()?.bookId ?: return
     scope.launch {
-      currentBookStoreId.data.first()?.let { bookId ->
-        repo.updateBook(bookId) {
-          val lastPlayedAt = Instant.now()
-          Logger.v("Update ${it.name}: lastPlayedAt to $lastPlayedAt")
-          it.copy(lastPlayedAt = lastPlayedAt)
-        }
+      repo.updateBook(bookId) {
+        val lastPlayedAt = Instant.now()
+        Logger.v("Update ${it.name}: lastPlayedAt to $lastPlayedAt")
+        it.copy(lastPlayedAt = lastPlayedAt)
       }
     }
   }
@@ -366,13 +367,16 @@ class VoicePlayer(
     if (mediaId != null) {
       if (mediaId is MediaId.Book) {
         val book = runBlocking {
-          repo.get(mediaId.id)?.withDefaultSpeed { lastPlaybackSpeedStore.data.first() }
+          repo.get(mediaId.id)
         }
         if (book != null) {
-          player.setPlaybackSpeed(book.content.playbackSpeed)
-          // loading the book marks it as played, so from here on this is its own speed
-          scope.launch {
-            repo.updateBook(book.id) { it.copy(playbackSpeed = book.content.playbackSpeed) }
+          val speed = book.withDefaultSpeed { runBlocking { lastPlaybackSpeedStore.data.first() } }.content.playbackSpeed
+          player.setPlaybackSpeed(speed)
+          if (speed != book.content.playbackSpeed) {
+            // loading the book marks it as played, so from here on this is its own speed
+            scope.launch {
+              repo.updateBook(book.id) { it.copy(playbackSpeed = speed) }
+            }
           }
           setSkipSilenceEnabled(book.content.skipSilence)
           volumeGain.gain = Decibel(book.content.gain)

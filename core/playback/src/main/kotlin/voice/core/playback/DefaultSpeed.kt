@@ -9,7 +9,8 @@ import java.time.Instant
  * book.
  */
 inline fun Book.withDefaultSpeed(speed: () -> Float): Book {
-  return if (content.lastPlayedAt == Instant.EPOCH) {
+  // books from before lastPlayedAt existed have none but can have a speed of their own
+  return if (content.lastPlayedAt == Instant.EPOCH && content.playbackSpeed == 1F) {
     update { it.copy(playbackSpeed = speed()) }
   } else {
     this

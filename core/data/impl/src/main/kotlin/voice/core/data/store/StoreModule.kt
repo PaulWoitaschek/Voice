@@ -20,6 +20,7 @@ import voice.core.data.GridMode
 import voice.core.data.ReviewPromptState
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.data.repo.BookContentRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.supporter.SupporterStatus
 import voice.core.featureflag.FeatureFlagOverride
@@ -254,11 +255,16 @@ public object StoreModule {
   @Provides
   @SingleIn(AppScope::class)
   @LastPlaybackSpeedStore
-  private fun lastPlaybackSpeed(factory: VoiceDataStoreFactory): DataStore<Float> {
+  private fun lastPlaybackSpeed(
+    factory: VoiceDataStoreFactory,
+    contentRepo: BookContentRepo,
+  ): DataStore<Float> {
+    val fileName = "lastPlaybackSpeed"
     return factory.create(
       serializer = Float.serializer(),
       defaultValue = 1F,
-      fileName = "lastPlaybackSpeed",
+      fileName = fileName,
+      migrations = listOf(LastPlaybackSpeedMigration(factory.file(fileName), contentRepo)),
     )
   }
 }

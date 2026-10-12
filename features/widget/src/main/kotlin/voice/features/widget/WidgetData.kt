@@ -178,5 +178,6 @@ class WidgetData(
 // the position is saved several times a second while playing, but the widgets only show minutes
 private fun BookContent.withoutPlaybackNoise(): BookContent = copy(
   positionInChapter = positionInChapter / 60_000,
-  lastPlayedAt = Instant.EPOCH,
+  // whether the book was played stays, because a book that never was shows the last speed
+  lastPlayedAt = if (lastPlayedAt == Instant.EPOCH) Instant.EPOCH else Instant.MAX,
 )

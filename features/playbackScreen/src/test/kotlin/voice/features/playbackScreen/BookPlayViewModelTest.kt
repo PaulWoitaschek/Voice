@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.common.DispatcherProvider
@@ -336,6 +337,16 @@ class BookPlayViewModelTest {
       assertEquals(expected = null, actual = awaitItem())
       assertEquals(expected = 1.5F, actual = awaitItem()!!.playbackSpeed)
     }
+  }
+
+  @Test
+  fun `the speed sheet opens at the last speed for a book that was never played`() = scope.runTest {
+    val viewModel = viewModel(lastPlaybackSpeed = 1.5F)
+
+    viewModel.onPlaybackSpeedIconClick()
+    runCurrent()
+
+    assertEquals(expected = BookPlayDialogViewState.SpeedDialog(1.5F), actual = viewModel.dialogState.value)
   }
 
   @Test

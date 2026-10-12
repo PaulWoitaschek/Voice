@@ -18,7 +18,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
@@ -54,6 +53,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
@@ -106,6 +106,7 @@ class VoicePlayerTest {
   private val scope = TestScope()
   private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk(), mockk())
   private val bookId = BookId(Uuid.random().toString())
+  private val currentBookStore = MemoryDataStore<BookId?>(bookId)
   private lateinit var currentBook: Book
   private val sleepTimer = FakeSleepTimer()
   private val historyRepo = RecordingRepo()
@@ -118,9 +119,7 @@ class VoicePlayerTest {
         currentBook = currentBook.update(secondArg<(BookContent) -> BookContent>())
       }
     },
-    currentBookStoreId = mockk {
-      every { data } returns flowOf(bookId)
-    },
+    currentBookStoreId = currentBookStore,
     seekTimeStore = seekTimeStore,
     autoRewindAmountStore = autoRewindAmountStore,
     lastPlaybackSpeedStore = lastPlaybackSpeedStore,
@@ -348,6 +347,17 @@ class VoicePlayerTest {
 
     assertEquals(expected = 1.25F, actual = internalPlayer.playbackParameters.speed)
     assertEquals(expected = 1.25F, actual = currentBook.content.playbackSpeed)
+  }
+
+  @Test
+  fun `playing marks the book that plays as played, not the current one`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
+    currentBookStore.updateData { BookId("a book that was only opened") }
+
+    player.play()
+    runCurrent()
+
+    assertNotEquals(illegal = Instant.EPOCH, actual = currentBook.content.lastPlayedAt)
   }
 
   @Test
