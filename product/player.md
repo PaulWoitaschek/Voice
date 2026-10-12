@@ -15,13 +15,12 @@ or more with few chapters.
 
 ### "It forgets my position, jumps, or just stops"
 
-This is about trust. There are 23 threads with low votes but long discussions. "When ever I pause it it goes to a
+This is about trust. "When ever I pause it it goes to a
 position before or after where I actually paused." ([#917]) "right now it seems to stop playing the audio randomly"
 ([#1061])
 
-- ✅ **Asking to lift battery limits**, at most 3 times ([#1839], 2023), and keeping the phone awake while playing
-  ([#1924]).
-- ✅ **Auto rewind only when playback really pauses** ([#3853]). *(next release)*
+- ✅ **Asking to lift battery limits**, at most 3 times, and keeping the phone awake while playing.
+- ✅ **Auto rewind only when playback really pauses.**
 - Some causes are outside Voice. Broken files: "the files are MP3s with an invalid bitrate of 20 kb/s, which throws off
   the duration and the position" ([#3422]). Phone makers: "Huawei is known for crazy battery optimizations" ([#1061]).
 
@@ -34,7 +33,7 @@ position before or after where I actually paused." ([#917]) "right now it seems 
 
 ### "I have to set the speed again for every book"
 
-The most upvoted open player request: [#1790] (20 upvotes, about 54 across 8 threads). "so you don't have to set every
+"so you don't have to set every
 single book to 1.25x by hand" ([#3867])
 
 - ✅ **Speed is saved per book**, from 0.5× to 3.5×.
@@ -47,11 +46,10 @@ single book to 1.25x by hand" ([#3867])
 
 ### "How much is left, really, at my speed?"
 
-16 threads with 133 upvotes; the top one is [#1422]. "It currently doesn't properly reflect how much time is actually
+"It currently doesn't properly reflect how much time is actually
 left in the chapter / book." ([#1292])
 
-- ✅ **How much of the book you've heard, and the time left at your speed**, in the player ([#3792]).
-  *(next release)*
+- ✅ **How much of the book you've heard, and the time left at your speed**, in the player.
 - 💡 **All times adjusted to the speed** ([#3226]), and **tap to switch between elapsed and remaining** ([#1311]).
 
 ### "The seek bar is useless on a 20-hour book, and one slip loses my place"
@@ -61,8 +59,8 @@ either the track selection drop-down (or the next/prev buttons) or a random loca
 
 - ✅ **Skip buttons** with an adjustable amount: 20 seconds by default, from 3 to 60.
 - ✅ **Chapters**: a list, plus next and previous.
-- ✅ **The jump-back pill** after a big seek or a chapter change ([#3805]). This is the design principle "Prefer good
-  behavior to a setting" in practice. *(next release)*
+- ✅ **The jump-back pill** after a big seek or a chapter change. This is the design principle "Prefer good behavior to
+  a setting" in practice.
 - 💡 **Jump to a typed time** ([#1901]). This existed before version 6.
 - 💡 **Different amounts for back and forward** ([#1670]), and **locking the controls** ([#2195]).
 
@@ -74,7 +72,7 @@ but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
 
 - ✅ **Skip silence and volume boost** (up to 9 dB), both saved per book.
 - ❌ **Tuning skip silence**: "I'd like to keep the media3 defaults for now." ([#3741])
-- 💡 **An equalizer** ([#2292], [#1353]), **mono** ([#1539]), **even loudness** ([#1372]), and **a stronger boost**
+- 💡 **An equalizer** ([#2292]), **mono** ([#1539]), **even loudness** ([#1372]), and **a stronger boost**
   ([#1712]).
 
 ### "Other apps' sounds break my book"
@@ -89,7 +87,7 @@ but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
 
 ## Open questions
 
-1. Default speed: a setting, or a smart default that needs no setting? It's the most upvoted open player request.
+1. Default speed: a setting, or a smart default that needs no setting?
 2. Should Voice rewind after a call or a navigation prompt ([#1368])?
 3. When a file is broken ([#3422]), can Voice tell the listener instead of drifting quietly?
 
@@ -100,18 +98,14 @@ but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
 [#1061]: https://github.com/PaulWoitaschek/Voice/issues/1061
 [#1292]: https://github.com/PaulWoitaschek/Voice/discussions/1292
 [#1311]: https://github.com/PaulWoitaschek/Voice/discussions/1311
-[#1353]: https://github.com/PaulWoitaschek/Voice/discussions/1353
 [#1368]: https://github.com/PaulWoitaschek/Voice/discussions/1368
 [#1372]: https://github.com/PaulWoitaschek/Voice/discussions/1372
-[#1422]: https://github.com/PaulWoitaschek/Voice/discussions/1422
 [#1539]: https://github.com/PaulWoitaschek/Voice/discussions/1539
 [#1670]: https://github.com/PaulWoitaschek/Voice/discussions/1670
 [#1712]: https://github.com/PaulWoitaschek/Voice/discussions/1712
 [#1790]: https://github.com/PaulWoitaschek/Voice/discussions/1790
 [#1802]: https://github.com/PaulWoitaschek/Voice/discussions/1802
-[#1839]: https://github.com/PaulWoitaschek/Voice/pull/1839
 [#1901]: https://github.com/PaulWoitaschek/Voice/discussions/1901
-[#1924]: https://github.com/PaulWoitaschek/Voice/pull/1924
 [#2195]: https://github.com/PaulWoitaschek/Voice/discussions/2195
 [#2259]: https://github.com/PaulWoitaschek/Voice/discussions/2259
 [#2292]: https://github.com/PaulWoitaschek/Voice/discussions/2292
@@ -120,7 +114,5 @@ but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
 [#3422]: https://github.com/PaulWoitaschek/Voice/issues/3422
 [#3709]: https://github.com/PaulWoitaschek/Voice/discussions/3709
 [#3741]: https://github.com/PaulWoitaschek/Voice/pull/3741
-[#3792]: https://github.com/PaulWoitaschek/Voice/pull/3792
-[#3805]: https://github.com/PaulWoitaschek/Voice/pull/3805
 [#3853]: https://github.com/PaulWoitaschek/Voice/pull/3853
 [#3867]: https://github.com/PaulWoitaschek/Voice/discussions/3867

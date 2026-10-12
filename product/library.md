@@ -16,22 +16,21 @@ Libraries range from one book to hundreds, and search "currently works well for 
 
 ### "Let me get back to my book"
 
-- ✅ **"Continue listening"** at the top, with a greeting ([#3792]). Nobody asked for these by name. *(next release)*
-- ✅ **Shelves for Current, Not started and Completed**, and marking a book as one of them ([#1059], 2022). The older
+- ✅ **"Continue listening"** at the top, with a greeting. Nobody asked for these by name.
+- ✅ **Shelves for Current, Not started and Completed**, and marking a book as one of them. The older
   shelves confused people: "the startup screen with "new" and "more" is confusig to them (and me)." ([#906])
 
 ### "How far along am I?"
 
-[#1422] (37 upvotes): "Since this has been a request for 5 years, I'm not holding out much hope"
+"Since this has been a request for 5 years, I'm not holding out much hope" ([#1422])
 
-- ✅ **Progress on each book** in the library ([#3170], 2025). For the player, see [Player](player.md).
+- ✅ **Progress on each book** in the library. For the player, see [Player](player.md).
 - ❌ **Turned down in 2020**: "I try to follow a minimal design principle and therefore don't want another element in
   the UI." ([#834]) This was later reversed.
-- Bug: finished books show 99% ([#3788]).
 
 ### "Let me sort my shelf"
 
-The biggest library topic: 15 threads with about 59 upvotes around [#1543]. "I have many books from the same author and
+This is the biggest library topic. "I have many books from the same author and
 it is difficult to hear them in the correct order." ([#1543]) "This is the main reason why I mostly still use Smart
 Audiobook Player." ([#3235])
 
@@ -42,18 +41,17 @@ Audiobook Player." ([#3235])
 
 ### "Group my series and authors"
 
-[#2343] and [#1748], about 47 upvotes together. "Could be a life-changing feature for those who like to collect
+"Could be a life-changing feature for those who like to collect
 audiobook series" ([#1748])
 
 - ✅ **Folders are authors**, when adding books (see [Getting started](getting-started.md)).
-- ✅ **Search can browse by series, author, narrator and genre** ([#3817]). *(next release)*
-- 💡 **Series and collections** ([#1748], [#2343]): "in the long term we should rather allow for a way to really
+- ✅ **Search can browse by series, author, narrator and genre.**
+- 💡 **Series and collections**: "in the long term we should rather allow for a way to really
   support this kind of series." ([#1643])
 
 ### "Help me find a book fast"
 
-- ✅ **Search** ([#1537], 2022). In the next release it also finds narrators, series and genres, and remembers recent
-  searches ([#3817]).
+- ✅ **Search**, which also finds narrators, series and genres, and remembers recent searches.
 - ✅ **Grid or list.**
 
 ### "Let me fix how a book looks"
@@ -62,8 +60,7 @@ audiobook series" ([#1748])
 often cropping out stuff, like author or title." ([#2856])
 
 - ✅ **Rename a book.**
-- ✅ **Change the cover** with one from the files or the internet. Cropping and a new cover search come in the next
-  release ([#3828]).
+- ✅ **Change the cover** with one from the files or the internet, and crop it.
 - 💡 **Edit the author and other details** ([#1407]).
 - 💡 **Covers that aren't square** ([#2856]).
 - 💡 **Save the cover into the book's folder** ([#2303]).
@@ -79,10 +76,10 @@ device?" ([#3397])
 
 ### "Show me how much I've listened"
 
-[#2826], about 23 upvotes across 7 threads. "It would be cool to see how many hours has been spent listening" ([#2826])
+"It would be cool to see how many hours has been spent listening" ([#2826])
 
-- ✅ **Listening is now recorded**, "as groundwork for a yearly listening recap". The rating prompt shows hours, finished
-  books and authors ([#3820]). *(next release, behind a flag)*
+- ✅ **Listening is recorded**, "as groundwork for a yearly listening recap" ([#3820]). The rating prompt shows hours,
+  finished books and authors.
 - ❌ **Turned down in 2015**: "I want to keep it simple so I am against an additional menu." ([#296])
 - 💡 **Listening stats or a yearly recap** ([#2826]).
 
@@ -97,24 +94,16 @@ device?" ([#3397])
 [#765]: https://github.com/PaulWoitaschek/Voice/pull/765
 [#834]: https://github.com/PaulWoitaschek/Voice/issues/834
 [#906]: https://github.com/PaulWoitaschek/Voice/issues/906
-[#1059]: https://github.com/PaulWoitaschek/Voice/pull/1059
 [#1161]: https://github.com/PaulWoitaschek/Voice/discussions/1161
 [#1407]: https://github.com/PaulWoitaschek/Voice/discussions/1407
 [#1422]: https://github.com/PaulWoitaschek/Voice/discussions/1422
 [#1500]: https://github.com/PaulWoitaschek/Voice/issues/1500
-[#1537]: https://github.com/PaulWoitaschek/Voice/pull/1537
 [#1543]: https://github.com/PaulWoitaschek/Voice/discussions/1543
 [#1643]: https://github.com/PaulWoitaschek/Voice/issues/1643
 [#1748]: https://github.com/PaulWoitaschek/Voice/discussions/1748
 [#2303]: https://github.com/PaulWoitaschek/Voice/discussions/2303
-[#2343]: https://github.com/PaulWoitaschek/Voice/discussions/2343
 [#2826]: https://github.com/PaulWoitaschek/Voice/discussions/2826
 [#2856]: https://github.com/PaulWoitaschek/Voice/discussions/2856
-[#3170]: https://github.com/PaulWoitaschek/Voice/pull/3170
 [#3235]: https://github.com/PaulWoitaschek/Voice/discussions/3235
 [#3397]: https://github.com/PaulWoitaschek/Voice/discussions/3397
-[#3788]: https://github.com/PaulWoitaschek/Voice/issues/3788
-[#3792]: https://github.com/PaulWoitaschek/Voice/pull/3792
-[#3817]: https://github.com/PaulWoitaschek/Voice/pull/3817
 [#3820]: https://github.com/PaulWoitaschek/Voice/pull/3820
-[#3828]: https://github.com/PaulWoitaschek/Voice/pull/3828

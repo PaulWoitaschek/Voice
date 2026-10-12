@@ -18,15 +18,22 @@ Opportunities can have smaller opportunities under them. Solutions always hang u
 
 ## Markers
 
-- ✅ **Shipped**: in the app today. *(next release)* means it's merged but not released yet. The latest release is
-  26.6.1, from June 2026.
+- ✅ **Implemented**: merged into main. Releases aren't tracked here.
 - ❌ **Not doing**: decided against, with the reason.
 - 💡 **Idea**: an open request or candidate. Not decided.
 - **Guess**: no written source. Confirm or correct it.
 
-Opportunity headings are in the listener's voice. They sum up many threads, so they aren't quotes. Links like
-[#464](https://github.com/PaulWoitaschek/Voice/issues/464) go to GitHub issues, pull requests and
-discussions. Quotes are verbatim.
+Opportunity headings are in the listener's voice. They sum up many threads, so they aren't quotes. Quotes are verbatim.
+
+## Keeping it current without upkeep
+
+A spec only changes when the product or a decision changes, so it leaves out what goes stale on its own:
+
+- No releases, versions, feature flags or rollout states.
+- No counts of votes, comments or threads.
+- No bugs. They live in issues.
+- At most one link per point: the discussion that matters most, or the source of a quote. No lists of related threads
+  or duplicates.
 
 Each file says how far along it is:
 

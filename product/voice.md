@@ -40,25 +40,6 @@ flowchart LR
 | It should feel calm and personal, and work for me | Dark mode, pure black, color, accessibility, languages | [Look and feel](look-and-feel.md) |
 | I need help, or I want to give back | Supporting Voice, getting help, privacy, which build to install | [Feedback and support](feedback-and-support.md) |
 
-## Most wanted, still open
-
-These are the open ideas with the most upvotes on a single thread. Duplicates add more. Sorting, for example, has only
-8 upvotes on [#1543] but about 59 across 15 threads.
-
-| Upvotes | Idea | Spec |
-|---|---|---|
-| 28 | Back up progress and bookmarks ([#1668]) | [Servers, sync and backup](servers-and-sync.md) |
-| 25 | A pure black theme ([#1284]) | [Look and feel](look-and-feel.md) |
-| 20 | A default playback speed ([#1790]) | [Player](player.md) |
-| 16 | Series ([#1748]) | [Library](library.md) |
-| 14 | Export bookmarks ([#2549]) | [Bookmarks and history](bookmarks.md) |
-| 13 | Cloud storage ([#1294]) | [Servers, sync and backup](servers-and-sync.md) |
-| 12 | Turn off seeking on the lock screen ([#3229]) | [Outside the app](outside-the-app.md) |
-| 11 | Edit a book's details ([#1407]) | [Library](library.md) |
-| 10 | Speed in Android Auto ([#1878]) | [Outside the app](outside-the-app.md) |
-
-Server support ([#2385], 17 upvotes) is also still open. The Audiobookshelf preview in the next release answers it.
-
 ## Principles
 
 These limit every solution in every area.
@@ -95,8 +76,8 @@ These limit every solution in every area.
 ## Open questions for the whole app
 
 1. **What does "many listeners" mean in numbers?** There's no threshold. Analytics is the only measure mentioned.
-2. **A book identity that survives moves.** One root problem behind renaming ([#2636]), backup ([#1668]) and syncing
-   without a server ([#1315]). See [Servers, sync and backup](servers-and-sync.md).
+2. **A book identity that survives moves.** One root problem behind renaming, backup and syncing without a server. See
+   [Servers, sync and backup](servers-and-sync.md).
 3. **Reading along**: in or out?
 
 [design principles]: ../.agents/skills/design/SKILL.md
@@ -106,23 +87,10 @@ These limit every solution in every area.
 [#860]: https://github.com/PaulWoitaschek/Voice/issues/860
 [#970]: https://github.com/PaulWoitaschek/Voice/issues/970
 [#1034]: https://github.com/PaulWoitaschek/Voice/issues/1034
-[#1284]: https://github.com/PaulWoitaschek/Voice/discussions/1284
-[#1294]: https://github.com/PaulWoitaschek/Voice/discussions/1294
 [#1296]: https://github.com/PaulWoitaschek/Voice/discussions/1296
-[#1315]: https://github.com/PaulWoitaschek/Voice/discussions/1315
 [#1330]: https://github.com/PaulWoitaschek/Voice/discussions/1330
-[#1407]: https://github.com/PaulWoitaschek/Voice/discussions/1407
-[#1543]: https://github.com/PaulWoitaschek/Voice/discussions/1543
 [#1635]: https://github.com/PaulWoitaschek/Voice/discussions/1635
-[#1668]: https://github.com/PaulWoitaschek/Voice/discussions/1668
 [#1671]: https://github.com/PaulWoitaschek/Voice/discussions/1671
-[#1748]: https://github.com/PaulWoitaschek/Voice/discussions/1748
-[#1790]: https://github.com/PaulWoitaschek/Voice/discussions/1790
-[#1878]: https://github.com/PaulWoitaschek/Voice/discussions/1878
-[#2385]: https://github.com/PaulWoitaschek/Voice/discussions/2385
-[#2549]: https://github.com/PaulWoitaschek/Voice/discussions/2549
-[#2636]: https://github.com/PaulWoitaschek/Voice/issues/2636
 [#3044]: https://github.com/PaulWoitaschek/Voice/issues/3044
 [#3212]: https://github.com/PaulWoitaschek/Voice/pull/3212
-[#3229]: https://github.com/PaulWoitaschek/Voice/discussions/3229
 [#3863]: https://github.com/PaulWoitaschek/Voice/discussions/3863
