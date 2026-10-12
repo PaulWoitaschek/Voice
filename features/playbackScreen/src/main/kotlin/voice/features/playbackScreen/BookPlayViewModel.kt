@@ -38,6 +38,7 @@ import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
 import voice.core.logging.api.Logger
 import voice.core.playback.CurrentBookResolver
+import voice.core.playback.NewBookSpeed
 import voice.core.playback.PlayerController
 import voice.core.playback.history.Jump
 import voice.core.playback.history.ListeningHistoryRecorder
@@ -87,6 +88,7 @@ class BookPlayViewModel(
   private val historyRecorder: ListeningHistoryRecorder,
   private val clock: Clock,
   private val serverLibrary: ServerLibrary,
+  private val newBookSpeed: NewBookSpeed,
   @Assisted
   private val bookId: BookId,
 ) {
@@ -105,6 +107,8 @@ class BookPlayViewModel(
     scope.launch {
       player.pauseIfCurrentBookDifferentFrom(bookId)
       currentBookStoreId.updateData { bookId }
+      // before the first play, so the player shows the speed the book will play at
+      newBookSpeed.applyTo(bookId)
     }
   }
 

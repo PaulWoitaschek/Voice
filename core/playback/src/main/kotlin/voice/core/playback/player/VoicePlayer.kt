@@ -19,6 +19,7 @@ import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.logging.api.Logger
+import voice.core.playback.NewBookSpeed
 import voice.core.playback.history.CommandSource
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
@@ -54,6 +55,7 @@ class VoicePlayer(
   private val analytics: Analytics,
   private val historyRecorder: ListeningHistoryRecorder,
   private val commandSourceResolver: CommandSourceResolver,
+  private val newBookSpeed: NewBookSpeed,
 ) : ForwardingPlayer(player) {
 
   private val endOfChapterSleepTimerListener = object : Player.Listener {
@@ -361,6 +363,7 @@ class VoicePlayer(
     if (mediaId != null) {
       if (mediaId is MediaId.Book) {
         val book = runBlocking {
+          newBookSpeed.applyTo(mediaId.id)
           repo.get(mediaId.id)
         }
         if (book != null) {

@@ -126,6 +126,7 @@ class BookPlayViewModelTest {
     historyRecorder = historyRecorder,
     clock = clock,
     serverLibrary = FakeServerLibrary(),
+    newBookSpeed = mockk(relaxed = true),
   )
 
   @Test
@@ -497,6 +498,7 @@ class BookPlayViewModelTest {
       historyRecorder = historyRecorder,
       clock = clock,
       serverLibrary = FakeServerLibrary(),
+      newBookSpeed = mockk(relaxed = true),
     )
   }
 }

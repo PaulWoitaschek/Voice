@@ -36,6 +36,7 @@ import voice.core.data.MarkData
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
+import voice.core.playback.NewBookSpeed
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
@@ -109,6 +110,7 @@ class VoicePlayerTest {
   private val sleepTimer = FakeSleepTimer()
   private val historyRepo = RecordingRepo()
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
+  private val newBookSpeed = mockk<NewBookSpeed>(relaxed = true)
   private val player = VoicePlayer(
     player = chapterMarkPlayer,
     repo = mockk {
@@ -130,6 +132,7 @@ class VoicePlayerTest {
       scope = scope,
     ),
     commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
+    newBookSpeed = newBookSpeed,
   )
 
   @Test
@@ -320,6 +323,17 @@ class VoicePlayerTest {
     awaitReady()
 
     player.shouldHavePosition(1, 3_000)
+  }
+
+  @Test
+  fun `setBook plays a new book at the speed it was given`() = scope.runTest {
+    coEvery { newBookSpeed.applyTo(bookId) } answers {
+      currentBook = currentBook.update { it.copy(playbackSpeed = 1.5F) }
+    }
+
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
+
+    assertEquals(expected = 1.5F, actual = internalPlayer.playbackParameters.speed)
   }
 
   @Test
