@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-public suspend inline fun <T> RoomDatabase.transaction(crossinline action: suspend () -> T): T {
+internal suspend inline fun <T> RoomDatabase.transaction(crossinline action: suspend () -> T): T {
   contract {
     callsInPlace(action, InvocationKind.EXACTLY_ONCE)
   }

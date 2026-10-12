@@ -3,14 +3,14 @@ package voice.core.search
 import dev.zacsweers.metro.Inject
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
+import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
-import voice.core.data.repo.internals.dao.BookContentDao
 import voice.core.logging.api.Logger
 import java.util.concurrent.TimeUnit
 
 @Inject
 class BookSearch(
-  private val dao: BookContentDao,
+  private val contentRepo: BookContentRepo,
   private val repo: BookRepository,
 ) {
 
@@ -26,7 +26,7 @@ class BookSearch(
     val matchQuery = SearchText(query, removeDiacritics = false).words
       .joinToString(separator = " ") { "${it.text}*" }
     Logger.d("search with MATCH: $matchQuery")
-    val candidates = dao.search(matchQuery).toSet()
+    val candidates = contentRepo.search(matchQuery).toSet()
     if (candidates.isEmpty()) return emptyList()
 
     return repo.all()

@@ -24,7 +24,7 @@ import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
-import voice.core.data.repo.internals.dao.RecentBookSearchDao
+import voice.core.data.repo.RecentBookSearchRepo
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
@@ -52,8 +52,8 @@ class BookSearchViewModelTest {
   private val kingkiller = book(name = "The Name of the Wind", author = "Patrick Rothfuss", series = "Kingkiller")
 
   private val recentSearches = MutableStateFlow(listOf("hail mary", "rothfuss"))
-  private val recentBookSearchDao = mockk<RecentBookSearchDao> {
-    every { recentBookSearches() } returns recentSearches
+  private val recentBookSearchRepo = mockk<RecentBookSearchRepo> {
+    every { flow() } returns recentSearches
     coEvery { add(any()) } just Runs
     coEvery { delete(any()) } just Runs
     coEvery { clear() } just Runs
@@ -258,7 +258,7 @@ class BookSearchViewModelTest {
       assertEquals(expected = "Stephen King", actual = viewModel.query.text.toString())
       assertEquals(expected = shining.id, actual = state.topResult.id)
       assertEquals(expected = emptyList(), actual = state.otherResults)
-      coVerify { recentBookSearchDao.add("Stephen King") }
+      coVerify { recentBookSearchRepo.add("Stephen King") }
     }
   }
 
@@ -269,7 +269,7 @@ class BookSearchViewModelTest {
 
     viewModel.onBookClick(shining.id)
 
-    coVerify { recentBookSearchDao.add("king") }
+    coVerify { recentBookSearchRepo.add("king") }
     verify { navigator.goTo(Destination.Playback(shining.id)) }
   }
 
@@ -306,8 +306,8 @@ class BookSearchViewModelTest {
     viewModel.onClearRecentSearches()
 
     coVerify {
-      recentBookSearchDao.delete("rothfuss")
-      recentBookSearchDao.clear()
+      recentBookSearchRepo.delete("rothfuss")
+      recentBookSearchRepo.clear()
     }
   }
 
@@ -317,7 +317,7 @@ class BookSearchViewModelTest {
         every { flow() } returns MutableStateFlow(listOf(shining, carrie, kingkiller))
       },
       search = search,
-      recentBookSearchDao = recentBookSearchDao,
+      recentBookSearchRepo = recentBookSearchRepo,
       navigator = navigator,
       playerController = playerController,
       playStateManager = PlayStateManager(),

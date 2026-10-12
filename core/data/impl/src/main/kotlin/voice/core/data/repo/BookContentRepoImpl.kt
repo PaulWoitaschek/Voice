@@ -86,4 +86,6 @@ public class BookContentRepoImpl(private val dao: BookContentDao) : BookContentR
       newContents
     }
   }
+
+  override suspend fun search(query: String): List<BookId> = dao.search(query)
 }
