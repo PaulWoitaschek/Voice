@@ -43,7 +43,6 @@ import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.BookBarPin
-import voice.features.sleepTimer.SleepTimerViewState
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId

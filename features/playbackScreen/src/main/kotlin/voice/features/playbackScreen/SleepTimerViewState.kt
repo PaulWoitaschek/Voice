@@ -1,3 +1,3 @@
-package voice.features.sleepTimer
+package voice.features.playbackScreen
 
 data class SleepTimerViewState(val customSleepTime: Int)
