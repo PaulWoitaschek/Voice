@@ -304,7 +304,7 @@ def prepare(args, only_if_missing=False):
     process = launch(port, ["-no-window", "-no-snapshot-load", "-wipe-data"], STATE_DIR / "prepare.log")
     try:
       # builds while the emulator boots
-      run(["kotlin", "scripts/populate_test_files.main.kts", "--skip-adb"], cwd=root)
+      run([sys.executable, "scripts/populate_test_files.py", "--skip-adb"], cwd=root)
       run([str(root / "gradlew"), ":app:assembleFreeDebug", "-q"], cwd=root)
       if not wait_for_boot(serial, process):
         sys.exit(f"The base AVD didn't boot. Log: {STATE_DIR / 'prepare.log'}")

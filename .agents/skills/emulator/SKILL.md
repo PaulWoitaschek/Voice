@@ -26,7 +26,7 @@ It prints `ANDROID_SERIAL=emulator-55xx`. Start every Bash command that uses adb
 whatever device is attached or fails.
 
 - It boots in a few seconds as a read-only clone of the `voice-agent` AVD: the debug app past onboarding, and the six
-  books from `scripts/populate_test_files.main.kts`, one of them in progress. They cover MP3 folders and single files,
+  books from `scripts/populate_test_files.py`, one of them in progress. They cover MP3 folders and single files,
   an M4B with embedded chapters, and Opus with a `cover.jpg` next to it. Changes don't survive a restart, so break
   what you like. `stop`, then `start` gives you a clean device.
 - `start` again returns the emulator you already have. It belongs to your git worktree; `--name` picks another owner.
