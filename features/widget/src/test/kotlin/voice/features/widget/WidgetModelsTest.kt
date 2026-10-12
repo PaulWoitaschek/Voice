@@ -142,4 +142,30 @@ class WidgetModelsTest {
     assertEquals(NowPlayingLayout.Hero, nowPlayingLayout(DpSize(320.dp, 180.dp)))
     assertEquals(NowPlayingLayout.HeroTall, nowPlayingLayout(DpSize(320.dp, 300.dp)))
   }
+
+  @Test
+  fun `as the strip gets narrower, it keeps play, then the cover, then the title, then rewind, then fast forward`() {
+    // a 4x1 widget on a Pixel 9 with 4 columns
+    val wide = stripSizes(DpSize(374.dp, 96.dp))!!
+    assertTrue(wide.title)
+    assertEquals(2, wide.skips)
+
+    // and with 5 columns
+    val narrow = stripSizes(DpSize(296.dp, 96.dp))!!
+    assertTrue(narrow.title)
+    assertEquals(1, narrow.skips)
+    assertTrue(narrow.middleWidth >= 80.dp)
+
+    // a 3x1 widget with 5 columns
+    val narrower = stripSizes(DpSize(220.dp, 96.dp))!!
+    assertFalse(narrower.title)
+    assertEquals(0, narrower.skips)
+
+    assertNull(stripSizes(DpSize(150.dp, 96.dp)))
+  }
+
+  @Test
+  fun `a larger font keeps more room for the title`() {
+    assertEquals(1, stripSizes(DpSize(374.dp, 96.dp), fontScale = 2F)!!.skips)
+  }
 }

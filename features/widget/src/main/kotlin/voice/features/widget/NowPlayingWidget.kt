@@ -54,6 +54,7 @@ class NowPlayingWidget : GlanceAppWidget() {
       DpSize(180.dp, 90.dp),
       DpSize(220.dp, 60.dp),
       DpSize(300.dp, 90.dp),
+      DpSize(360.dp, 90.dp),
       DpSize(180.dp, 180.dp),
       DpSize(300.dp, 180.dp),
     ),
@@ -111,7 +112,8 @@ internal fun NowPlayingContent(
 ) {
   val night = state is NowPlayingState.Current && state.book.sleepTimerEnd != null && !state.book.finished
   WidgetColors(theme = state.theme, night = night) {
-    val layout = nowPlayingLayout(LocalSize.current)
+    val size = LocalSize.current
+    val layout = nowPlayingLayout(size)
     when (state) {
       is NowPlayingState.Empty -> NowPlayingEmpty(state.libraryEmpty, layout, images, actions)
       is NowPlayingState.Current -> if (state.book.finished) {
@@ -119,8 +121,16 @@ internal fun NowPlayingContent(
       } else {
         when (layout) {
           NowPlayingLayout.Cover -> CoverLayout(state.book, state.cover, images, actions)
-          NowPlayingLayout.Bar -> BarLayout(state.book, images, actions)
-          NowPlayingLayout.Strip -> StripLayout(state.book, state.cover, images, actions)
+          NowPlayingLayout.Bar,
+          NowPlayingLayout.Strip,
+          -> {
+            val sizes = stripSizes(size, LocalContext.current.resources.configuration.fontScale)
+            if (sizes == null) {
+              CoverLayout(state.book, state.cover, images, actions)
+            } else {
+              StripLayout(state.book, state.cover, sizes, images, actions)
+            }
+          }
           NowPlayingLayout.Art -> ArtLayout(state.book, state.cover, images, actions)
           NowPlayingLayout.Hero -> HeroLayout(state.book, state.cover, images, actions, tall = false)
           NowPlayingLayout.HeroTall -> HeroLayout(state.book, state.cover, images, actions, tall = true)
@@ -163,73 +173,105 @@ private fun CoverLayout(
 }
 
 @Composable
-private fun BarLayout(
-  book: NowPlayingBook,
-  images: WidgetImages,
-  actions: WidgetActions,
-) {
-  val size = LocalSize.current
-  Row(
-    modifier = GlanceModifier
-      .fillMaxSize()
-      .appWidgetBackground()
-      .widgetSurface(GlanceTheme.colors.widgetBackground, pill = true)
-      .clickable(actions.openPlayer())
-      .padding(8.dp),
-    verticalAlignment = Alignment.CenterVertically,
-  ) {
-    PlayButton(
-      playing = book.playing,
-      size = (size.height - 16.dp).coerceIn(36.dp, 64.dp),
-      images = images,
-      onClick = actions.playPause(),
-    )
-    Spacer(GlanceModifier.width(10.dp))
-    Column(modifier = GlanceModifier.defaultWeight()) {
-      TitleText(text = book.title, fontSize = 15.sp)
-      Subtitle(book, compact = true)
-    }
-    Spacer(GlanceModifier.width(8.dp))
-  }
-}
-
-@Composable
 private fun StripLayout(
   book: NowPlayingBook,
   cover: WidgetCover,
+  sizes: StripSizes,
   images: WidgetImages,
   actions: WidgetActions,
 ) {
   val size = LocalSize.current
-  val coverSize = (size.height - 16.dp).coerceIn(36.dp, 72.dp)
-  val withSkip = size.width >= 290.dp
-  val buttonSize = (size.height - 24.dp).coerceIn(36.dp, 52.dp)
-  val controlsWidth = if (withSkip) buttonSize + (buttonSize * 0.8F) * 2 + 8.dp else buttonSize
-  val textWidth = size.width - 16.dp - coverSize - 12.dp - 8.dp - controlsWidth - 12.dp
   Row(
     modifier = GlanceModifier
       .fillMaxSize()
       .appWidgetBackground()
       .widgetSurface(GlanceTheme.colors.widgetBackground, pill = true)
       .clickable(actions.openPlayer())
-      .padding(8.dp),
+      .padding(STRIP_PADDING),
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    ShapedCover(cover = cover, shape = WidgetShape.Cookie9, size = coverSize, images = images)
-    Spacer(GlanceModifier.width(12.dp))
+    ShapedCover(
+      cover = cover,
+      shape = WidgetShape.Cookie9,
+      size = sizes.cover,
+      images = images,
+      modifier = if (sizes.title) GlanceModifier else GlanceModifier.semantics { contentDescription = book.title },
+    )
+    Spacer(GlanceModifier.width(STRIP_COVER_GAP))
     Column(modifier = GlanceModifier.defaultWeight()) {
-      TitleText(text = book.title, fontSize = 15.sp)
-      Subtitle(book, compact = false)
-      if (size.height >= 72.dp && textWidth >= 40.dp) {
-        Spacer(GlanceModifier.height(4.dp))
-        ProgressWave(progress = book.progress, wavy = book.playing, width = textWidth, images = images)
+      if (sizes.title) {
+        TitleText(text = book.title, fontSize = 15.sp)
+        Subtitle(book, compact = false)
+      }
+      if (size.height >= 72.dp && sizes.middleWidth >= 40.dp) {
+        if (sizes.title) {
+          Spacer(GlanceModifier.height(4.dp))
+        }
+        ProgressWave(progress = book.progress, wavy = book.playing, width = sizes.middleWidth, images = images)
       }
     }
-    Spacer(GlanceModifier.width(8.dp))
-    Controls(book, buttonSize, withSkip, images, actions, gap = 4.dp)
-    Spacer(GlanceModifier.width(4.dp))
+    Spacer(GlanceModifier.width(STRIP_CONTROLS_START_GAP))
+    Controls(book, buttonSize = sizes.button, skips = sizes.skips, images = images, actions = actions, gap = STRIP_CONTROLS_GAP)
+    Spacer(GlanceModifier.width(STRIP_END_GAP))
   }
 }
+
+internal data class StripSizes(
+  val cover: Dp,
+  val button: Dp,
+  val title: Boolean,
+  val skips: Int,
+  val middleWidth: Dp,
+)
+
+/** Null if even the cover and the play button don't fit next to each other. */
+internal fun stripSizes(
+  size: DpSize,
+  fontScale: Float = 1F,
+): StripSizes? {
+  val cover = (size.height - STRIP_PADDING * 2).coerceIn(36.dp, 72.dp)
+  val button = (size.height - 24.dp).coerceIn(36.dp, 52.dp)
+  val middle = size.width - STRIP_PADDING * 2 - cover - STRIP_COVER_GAP - STRIP_CONTROLS_START_GAP - button - STRIP_END_GAP
+  if (middle < 0.dp) return null
+  val minTitle = STRIP_MIN_TITLE_WIDTH * fontScale
+  // the cover stays before the title: sighted listeners recognize their book faster by it, and it needs less room
+  val title = middle >= minTitle
+  val skips = if (title) skipButtons(room = middle - minTitle, button, STRIP_CONTROLS_GAP) else 0
+  return StripSizes(
+    cover = cover,
+    button = button,
+    title = title,
+    skips = skips,
+    middleWidth = middle - skipButtonWidth(button, STRIP_CONTROLS_GAP) * skips,
+  )
+}
+
+/** Rewind comes before fast forward, as listeners jump back far more often than they skip ahead. */
+private fun skipButtons(
+  room: Dp,
+  button: Dp,
+  gap: Dp,
+): Int {
+  val skip = skipButtonWidth(button, gap)
+  return when {
+    room >= skip * 2 -> 2
+    room >= skip -> 1
+    else -> 0
+  }
+}
+
+private fun skipButtonWidth(
+  button: Dp,
+  gap: Dp,
+): Dp = button * SKIP_BUTTON_SCALE + gap
+
+private val STRIP_PADDING = 8.dp
+private val STRIP_COVER_GAP = 12.dp
+private val STRIP_CONTROLS_START_GAP = 8.dp
+private val STRIP_CONTROLS_GAP = 4.dp
+private val STRIP_END_GAP = 4.dp
+private val STRIP_MIN_TITLE_WIDTH = 80.dp
+private const val SKIP_BUTTON_SCALE = 0.8F
 
 @Composable
 private fun ArtLayout(
@@ -327,7 +369,7 @@ private fun HeroLayout(
         HeroProgress(book, contentWidth, images, showMeta = true)
         Spacer(GlanceModifier.height(10.dp))
         Row(modifier = GlanceModifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-          Controls(book, buttonSize = 64.dp, withSkip = true, images = images, actions = actions, gap = 16.dp)
+          Controls(book, buttonSize = 64.dp, skips = 2, images = images, actions = actions, gap = 16.dp)
         }
       }
     } else {
@@ -344,7 +386,8 @@ private fun HeroLayout(
           HeroProgress(book, columnWidth, images, showMeta = showMeta)
           Spacer(GlanceModifier.height(6.dp))
           Row(modifier = GlanceModifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Controls(book, buttonSize, withSkip = columnWidth >= buttonSize * 2.6F + 20.dp, images, actions, gap = 10.dp)
+            val skips = skipButtons(room = columnWidth - buttonSize, buttonSize, gap = 10.dp)
+            Controls(book, buttonSize, skips, images, actions, gap = 10.dp)
           }
         }
       }
@@ -398,20 +441,20 @@ private fun HeroProgress(
 private fun Controls(
   book: NowPlayingBook,
   buttonSize: Dp,
-  withSkip: Boolean,
+  skips: Int,
   images: WidgetImages,
   actions: WidgetActions,
   gap: Dp,
 ) {
   Row(verticalAlignment = Alignment.CenterVertically) {
-    if (withSkip) {
-      SkipButton(forward = false, size = buttonSize * 0.8F, images = images, onClick = actions.rewind())
+    if (skips >= 1) {
+      SkipButton(forward = false, size = buttonSize * SKIP_BUTTON_SCALE, images = images, onClick = actions.rewind())
       Spacer(GlanceModifier.width(gap))
     }
     PlayButton(playing = book.playing, size = buttonSize, images = images, onClick = actions.playPause())
-    if (withSkip) {
+    if (skips == 2) {
       Spacer(GlanceModifier.width(gap))
-      SkipButton(forward = true, size = buttonSize * 0.8F, images = images, onClick = actions.fastForward())
+      SkipButton(forward = true, size = buttonSize * SKIP_BUTTON_SCALE, images = images, onClick = actions.fastForward())
     }
   }
 }
