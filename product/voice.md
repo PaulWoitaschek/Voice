@@ -40,6 +40,8 @@ flowchart LR
 | It should feel calm and personal, and work for me | Dark mode, pure black, color, accessibility, languages | [Look and feel](look-and-feel.md) |
 | I need help, or I want to give back | Supporting Voice, getting help, privacy, which build to install | [Feedback and support](feedback-and-support.md) |
 
+What listeners still struggle with is marked ⭕ in each spec.
+
 ## Principles
 
 These limit every solution in every area.

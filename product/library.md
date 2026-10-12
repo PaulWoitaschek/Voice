@@ -37,7 +37,8 @@ Audiobook Player." ([#3235])
 - ❌ **Sort options** were added in 2018 ([#765]) and removed the next day. No reason was written down.
 - The maintainer suggested search instead: "What about searching for the author instead? Does that already cover your
   use case?" ([#1543])
-- 💡 **Sort by name, date added, author, series, length, or by hand** ([#1543]).
+- ⭕ **Books can't be put in the order a listener wants**, like an author's books in the order they were written
+  ([#1543]).
 
 ### "Group my series and authors"
 
@@ -46,8 +47,8 @@ audiobook series" ([#1748])
 
 - ✅ **Folders are authors**, when adding books (see [Getting started](getting-started.md)).
 - ✅ **Search can browse by series, author, narrator and genre.**
-- 💡 **Series and collections**: "in the long term we should rather allow for a way to really
-  support this kind of series." ([#1643])
+- ⭕ **The books of a series aren't grouped or ordered as one.** The maintainer: "in the long term we should rather
+  allow for a way to really support this kind of series." ([#1643])
 
 ### "Help me find a book fast"
 
@@ -61,9 +62,9 @@ often cropping out stuff, like author or title." ([#2856])
 
 - ✅ **Rename a book.**
 - ✅ **Change the cover** with one from the files or the internet, and crop it.
-- 💡 **Edit the author and other details** ([#1407]).
-- 💡 **Covers that aren't square** ([#2856]).
-- 💡 **Save the cover into the book's folder** ([#2303]).
+- ⭕ **A wrong author or other detail can only be fixed in the files' tags** ([#1407]).
+- ⭕ **Covers that aren't square get cropped**, often cutting off the author or title ([#2856]).
+- ⭕ **A cover picked in Voice isn't saved with the book's files** ([#2303]).
 
 ### "Let me remove a book safely"
 
@@ -72,7 +73,7 @@ device?" ([#3397])
 
 - ✅ **Deleting shows which files will go**, and asks you to tick "Delete my files" first. This came after [#1500],
   "Deleted all my audiobooks".
-- 💡 **Hide a book without deleting its files** ([#3397]).
+- ⭕ **A book can't leave the library without its files being deleted** ([#3397]).
 
 ### "Show me how much I've listened"
 
@@ -81,7 +82,7 @@ device?" ([#3397])
 - ✅ **Listening is recorded**, "as groundwork for a yearly listening recap" ([#3820]). The rating prompt shows hours,
   finished books and authors.
 - ❌ **Turned down in 2015**: "I want to keep it simple so I am against an additional menu." ([#296])
-- 💡 **Listening stats or a yearly recap** ([#2826]).
+- ⭕ **Listeners can't look up how much they've listened** ([#2826]).
 
 ## Open questions
 

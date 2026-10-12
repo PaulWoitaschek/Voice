@@ -9,10 +9,11 @@ Start with [voice.md](voice.md), the tree for the whole app.
 
 Each spec is an [opportunity solution tree](https://www.producttalk.org/opportunity-solution-trees/):
 
-1. **Outcome**: what changes for listeners when this area works well. One sentence.
+1. **Outcome**: the vision for this area, meaning what changes for listeners when it works well. One sentence.
 2. **Opportunities**: listener needs and pain points, in their own words, with evidence.
-3. **Solutions**: ways to meet each opportunity, whether shipped, turned down or still an idea.
-4. **Assumptions**: what has to be true for a solution to work, and how we'd find out.
+3. **Solutions**: what's implemented for each opportunity, and what was turned down.
+4. **Open problems**: what listeners still struggle with that nothing solves yet.
+5. **Assumptions**: what has to be true for a solution to work, and how we'd find out.
 
 Opportunities can have smaller opportunities under them. Solutions always hang under an opportunity, never on their own.
 
@@ -20,7 +21,8 @@ Opportunities can have smaller opportunities under them. Solutions always hang u
 
 - ✅ **Implemented**: merged into main. Releases aren't tracked here.
 - ❌ **Not doing**: decided against, with the reason.
-- 💡 **Idea**: an open request or candidate. Not decided.
+- ⭕ **Open**: a problem nothing solves yet, written as the problem and not as a solution. A problem leaves room for
+  the best answer, which can be a better default or nothing at all. An idea from a listener can follow it as a hint.
 - **Guess**: no written source. Confirm or correct it.
 
 Opportunity headings are in the listener's voice. They sum up many threads, so they aren't quotes. Quotes are verbatim.
@@ -44,12 +46,12 @@ Each file says how far along it is:
 ## Using it before coding
 
 1. **Start from an opportunity, not a solution.** When a request is a solution ("add a button for X"), find the
-   opportunity it serves and file it there. If there isn't one, that's the first question.
+   problem behind it and add it as ⭕ under its opportunity. If there isn't one, that's the first question.
 2. **List at least three solutions.** Include "a better default, no setting" and "do nothing".
 3. **Write down the assumptions** each solution depends on. Check the riskiest one cheaply: analytics events, a tester
    build, a feature flag, or a question in a discussion.
-4. **Update the spec in the pull request that ships it.** Mark the solution ✅, and add the ones that lost under ❌ with
-   the reason.
+4. **Update the spec in the pull request that ships it.** Mark the solution ✅, add the ones that lost under ❌ with
+   the reason, and remove or narrow the ⭕ it solves.
 
 ## Areas
 
@@ -88,7 +90,7 @@ Each file says how far along it is:
 
 - ✅ <Shipped solution>: <how it helps>
 - ❌ <Solution we turned down>: <the reason, quoted and linked>
-- 💡 <Idea>: <link>
+- ⭕ <What listeners still struggle with>: <a link to the main discussion, if there is one>
 
 Assumptions:
 

@@ -23,7 +23,7 @@ audiobook was still playing" ([#2175])
 - ✅ **End of chapter.** It was turned down in 2016 ("The sleep menu is full enough", [#464]), then reverted once
   because of bugs. It shipped only with tests: "I don't want to merge this PR without a test-suite covering it."
   ([#2668])
-- 💡 **More than one chapter**, for books with very short chapters ([#1421]).
+- ⭕ **With very short chapters, end of chapter stops too soon** ([#1421]).
 
 ### "I forget to set it"
 
@@ -50,7 +50,7 @@ audiobook was still playing" ([#2175])
 - ✅ **The automatic timer starts again** when you press play inside its time window.
 - ❌ **Restarting the timer on every play, at any time of day**: "I think this request is too specific that everyone
   should have it." ([#535])
-- 💡 **More time from a headphone button** ([#2233]).
+- ⭕ **Once the shake window has passed, more time means setting the timer again** ([#2233]).
 
 Assumptions:
 
@@ -62,7 +62,7 @@ Assumptions:
 
 - ✅ **A "Dozed off" bookmark where the timer starts**, with its own look.
 - ✅ **"Dozed off · timer ended" in the listening history**, with a way to jump back there.
-- 💡 **Making the bookmark optional** ([#3288]).
+- ⭕ **Every timer adds a bookmark, and not every listener wants one** ([#3288]).
 
 ### "I want to set it without opening the app"
 
@@ -70,6 +70,7 @@ From a widget, Tasker or the lock screen.
 
 - ❌ **A button in the notification**: removed in 2025 ([#2738]). No reason was written down.
 - ❌ **A sleep timer widget**: dropped before it shipped ([#3839]). No reason was written down.
+- ⭕ **Setting the timer still means opening the app.**
 
 ## Open questions
 

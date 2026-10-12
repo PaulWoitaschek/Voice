@@ -22,7 +22,7 @@ The phone is in a pocket or a car holder, the screen is off, and their hands are
   rewind/forward 20 seconds." ([#2797])
 - ❌ **Voice search for chapters**: "Else when voice detection is flaky you might lose the latest position in your
   audiobook." ([#231])
-- 💡 **Speed control in the car** ([#1878]): "I can only focus on 1.2x speed or so when there is traffic"
+- ⭕ **The speed can't be changed from the car** ([#1878]): "I can only focus on 1.2x speed or so when there is traffic"
 
 The F-Droid build has no Android Auto. See [Feedback and support](feedback-and-support.md).
 
@@ -42,7 +42,7 @@ with a lot of frustration" ([#3229])
 
 - ✅ **The notification's seek bar only covers the current chapter.**
 - ✅ **The listening history** can take you back (see [Bookmarks and history](bookmarks.md)).
-- 💡 **Turn off seeking from the notification** ([#3229]).
+- ⭕ **The slider can still move the position by accident**, within the chapter.
 
 ### "The notification should stay while I pause, and go when I'm done"
 
@@ -75,13 +75,13 @@ with a lot of frustration" ([#3229])
 Casting has been requested since 2014. "Add the cast option so I can play on Android TV and Smart speakers"
 ([#1778])
 
-- 💡 **Casting** ([#76]). No reason for leaving it out is on record. One concern: the Google cast library
-  "effectively makes this project proprietary software." ([#76])
+- ⭕ **Books can't play on a speaker or TV.** No reason for leaving out casting is on record. One concern: the Google
+  cast library "effectively makes this project proprietary software." ([#76])
 
 ### "Let me use it from my watch, or by voice"
 
-- 💡 **A Wear OS app** ([#1749]). Today a watch works as a remote: "it works great as a controller of audiobook
-  playback on my phone" ([#1749])
+- ⭕ **A watch can't play a book without the phone.** Today it works as a remote: "it works great as a controller of
+  audiobook playback on my phone" ([#1749])
 - ❌ **Better Assistant support** isn't possible: "This is a limitation of the Android Assistant. There are only a few
   players who are in direct contact with Google that are whitelisted within the Assistant." ([#1071])
 

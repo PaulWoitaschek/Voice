@@ -26,7 +26,7 @@ confused when adding files the first time I used the app, and just messed around
   the layout later and keep your progress.
 - ❌ **More modes or templates**: "I am very hesitant on adding another way of adding folders because it is already
   quite complex for users to understand the current folder modes right now." ([#3044])
-- 💡 **Author, series and book as three levels** ([#3044]).
+- ⭕ **Folders sorted by author, then series, then book fit none of the layouts** ([#3044]).
 
 Assumptions:
 
@@ -58,7 +58,7 @@ the app right now" ([#781]). Garbled Cyrillic tags are another version of this.
 - ✅ **Books with many files use the folder name.**
 - ✅ **Genre, narrator and series are read from the tags.**
 - ✅ **Renaming a book** (see [Library](library.md)).
-- 💡 **Use file and folder names instead of tags** ([#3502]).
+- ⭕ **When the tags are wrong, each book has to be renamed by hand** ([#3502]).
 
 ### "My chapters are missing, or my big book doesn't show up"
 
@@ -76,7 +76,7 @@ rollout until this is fixed." ([#2840])
 The cause: "Voice uses the path to identify books from each other." ([#2678])
 
 - ✅ **Changing a folder's layout keeps your progress.**
-- 💡 **Recognize a book after it moved or was renamed** ([#2636]).
+- ⭕ **Moving or renaming a folder still loses progress and bookmarks** ([#2636]).
 
 Backup and sync without a server have the same root problem. See [Servers, sync and backup](servers-and-sync.md).
 

@@ -21,7 +21,7 @@ the bookmark after you hear something!" ([#3368])
 - ✅ **Long-press the bookmark button** to save right away.
 - ✅ **Save first, add details after**: a kind (favorite, quote, note, revisit), a note, and moving the mark 15 seconds
   earlier or later.
-- 💡 **Save from headphones, the notification or the lock screen** ([#1289]).
+- ⭕ **Saving a moment still means taking out the phone and opening Voice** ([#1289]).
 
 ### "Help me find the right one"
 
@@ -48,7 +48,7 @@ After an accidental tap, a seek, or opening a bookmark. "can't go back to the po
 
 - ❌ **Turned down in 2016**: "An import / export functionality would require too much work with little benefit for
   most of the users." ([#367])
-- 💡 **Export bookmarks as text** ([#2549]).
+- ⭕ **Bookmarks and their notes can't leave the app** ([#2549]).
 
 ### "Don't lose my bookmarks"
 

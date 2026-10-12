@@ -25,8 +25,8 @@ audiobook-focused app" ([#1715])
 
 - ✅ **Audiobookshelf.** You can stream, or download for offline use (over Wi-Fi by
   default), and your progress and bookmarks stay in step ([docs](../docs/audiobookshelf.md)).
-- 💡 **Jellyfin, Plex and plain web folders** ([#2385]).
-- 💡 **Single sign-on (OpenID)**: "Only password login, no OpenID." ([#3866])
+- ⭕ **Books on Jellyfin, Plex or a plain web folder can't be played** ([#2385]).
+- ⭕ **Servers that only allow single sign-on can't be connected**: "Only password login, no OpenID." ([#3866])
 
 Assumptions:
 
@@ -43,7 +43,7 @@ I can play them offline." ([#1294])
 - ✅ **Folders from any app that works with Android's folder picker.** This is slow and has gaps. The
   advice: "Syncing the folder to your phone and adding that works much better." ([#2803])
 - ❌ **Network shares (SMB)**: "This is too specific to add a custom solution for this." ([#450])
-- 💡 **Cloud storage that only downloads the books you're listening to** ([#1294]).
+- ⭕ **A library in the cloud has to be copied to the phone in full**, or it plays slowly and with gaps.
 
 ### "I listen on two devices and lose my place"
 
@@ -53,8 +53,9 @@ Open since 2015: "so I can switch from phone to tablet and have the app simply k
   device.
 - ❌ **Voice's own sync**, in 2015: "Sry, want to keep it simple." ([#65]) The hard part: "How do we identify the books
   as the same?" ([#295])
-- 💡 **A progress file next to the book**, for tools like Syncthing to copy ([#3707]): "would it be possible to have an
-  optional, local-only sync?"
+- ⭕ **Without a server, progress doesn't follow the listener to a second device**: "would it be possible to have an
+  optional, local-only sync?" ([#3707]) One answer: a progress file next to the book, for tools like Syncthing to
+  copy.
 
 ### "New phone, and my progress and bookmarks are gone"
 
@@ -66,7 +67,7 @@ time!" "I personally would rather start fresh than backup to Google." ([#1668])
   for most of the users." ([#367])
 - ❌ **Backing up the database** ([#2302]): "Backing up the pure SQL database is very error prone, especially around
   database scheme updates."
-- 💡 **Backup and restore without Google** ([#1668]).
+- ⭕ **Without Google's backup, a new phone means starting over.**
 
 ### "I renamed or moved a folder and lost everything"
 

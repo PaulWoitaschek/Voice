@@ -28,8 +28,9 @@ position before or after where I actually paused." ([#917]) "right now it seems 
 
 - ✅ **Auto rewind**: when you resume, Voice goes back a little (2 seconds by default, adjustable). "Wanted to keep it
   simple, so there is a setting with a default jump of 0s and a maximum jump of 20s" ([#87], 2015)
-- 💡 **Rewind after a call or a navigation prompt** ([#1368]): "sometimes it pauses in the middle of a word, making it
-  easy to miss what was said once audio continues". In 2026: "I left that alone." ([#3853])
+- ⭕ **After a call or a navigation prompt, the book carries on without rewinding**: "sometimes it pauses in the middle
+  of a word, making it easy to miss what was said once audio continues" ([#1368]). In 2026: "I left that alone."
+  ([#3853])
 
 ### "I have to set the speed again for every book"
 
@@ -40,9 +41,8 @@ single book to 1.25x by hand" ([#3867])
 - ❌ **A default speed setting**, in 2020: "I also think that the vast majority people just plays at 1.0 speed so I
   don't want another setting." And: "It's mostly not about the maintenance cost. I'ts about providing good defaults and
   having a simple ui." ([#860])
-- 💡 **A default speed** ([#1790]).
-- 💡 **New books start at the speed of your last book.** Nobody asked for exactly this. It's an option that needs no
-  setting.
+- ⭕ **Every new book starts at 1×, so listeners set their speed again and again** ([#1790]). One answer that needs no
+  setting: new books start at the speed of the last one.
 
 ### "How much is left, really, at my speed?"
 
@@ -50,7 +50,7 @@ single book to 1.25x by hand" ([#3867])
 left in the chapter / book." ([#1292])
 
 - ✅ **How much of the book you've heard, and the time left at your speed**, in the player.
-- 💡 **All times adjusted to the speed** ([#3226]), and **tap to switch between elapsed and remaining** ([#1311]).
+- ⭕ **Not every time follows the speed**, so times in different places disagree ([#3226]).
 
 ### "The seek bar is useless on a 20-hour book, and one slip loses my place"
 
@@ -61,8 +61,10 @@ either the track selection drop-down (or the next/prev buttons) or a random loca
 - ✅ **Chapters**: a list, plus next and previous.
 - ✅ **The jump-back pill** after a big seek or a chapter change. This is the design principle "Prefer good behavior to
   a setting" in practice.
-- 💡 **Jump to a typed time** ([#1901]). This existed before version 6.
-- 💡 **Different amounts for back and forward** ([#1670]), and **locking the controls** ([#2195]).
+- ⭕ **Getting to an exact time in a long book takes many skips or a fiddly drag** ([#1901]). Before version 6, Voice
+  could jump to a typed time.
+- ⭕ **One skip amount doesn't suit both directions** ([#1670]).
+- ⭕ **A stray touch on the player can still skip or seek** ([#2195]).
 
 ### "This book is too quiet, too shrill, or full of pauses"
 
@@ -72,8 +74,8 @@ but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
 
 - ✅ **Skip silence and volume boost** (up to 9 dB), both saved per book.
 - ❌ **Tuning skip silence**: "I'd like to keep the media3 defaults for now." ([#3741])
-- 💡 **An equalizer** ([#2292]), **mono** ([#1539]), **even loudness** ([#1372]), and **a stronger boost**
-  ([#1712]).
+- ⭕ **Some books still sound wrong**: shrill, too quiet even with the boost, uneven in loudness, or meant for two ears
+  when the listener has one earbud in ([#2292]).
 
 ### "Other apps' sounds break my book"
 
@@ -83,7 +85,7 @@ but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
 - ✅ **Voice pauses for calls and for short sounds like navigation prompts**, then carries on. In 2015 it got quieter
   instead: "The player should lower volume when the audiofocus gets lost temporary" ([#107]). Pausing came after a
   listener asked for it.
-- 💡 **Keep playing under other audio** ([#2259]).
+- ⭕ **Listeners who want music under their book can't have both** ([#2259]).
 
 ## Open questions
 
@@ -97,10 +99,7 @@ but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
 [#917]: https://github.com/PaulWoitaschek/Voice/issues/917
 [#1061]: https://github.com/PaulWoitaschek/Voice/issues/1061
 [#1292]: https://github.com/PaulWoitaschek/Voice/discussions/1292
-[#1311]: https://github.com/PaulWoitaschek/Voice/discussions/1311
 [#1368]: https://github.com/PaulWoitaschek/Voice/discussions/1368
-[#1372]: https://github.com/PaulWoitaschek/Voice/discussions/1372
-[#1539]: https://github.com/PaulWoitaschek/Voice/discussions/1539
 [#1670]: https://github.com/PaulWoitaschek/Voice/discussions/1670
 [#1712]: https://github.com/PaulWoitaschek/Voice/discussions/1712
 [#1790]: https://github.com/PaulWoitaschek/Voice/discussions/1790
