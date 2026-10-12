@@ -1,7 +1,12 @@
 name: Release
 
 on:
-  workflow_dispatch: { }
+  workflow_dispatch:
+    inputs:
+      submit_to_stores:
+        description: Submit to the stores
+        type: boolean
+        default: false
 
 concurrency:
   group: release
@@ -43,6 +48,7 @@ jobs:
         run: ./scripts/ci_signing_setup.sh
 
       - name: Setup Play Access
+        if: inputs.submit_to_stores
         env:
           PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
         run: ./scripts/ci_setup_play_access.sh
@@ -80,9 +86,11 @@ jobs:
           cp app/build/outputs/apk/free/release/app-free-release.apk artifacts/app-free-release.apk
 
       - name: Upload to INTERNAL
+        if: inputs.submit_to_stores
         run: fastlane android upload_internal aab_path:artifacts/app-play-release.aab
 
       - name: Promote INTERNAL -> PRODUCTION (0.1%)
+        if: inputs.submit_to_stores
         run: fastlane android promote version_code:${{ steps.tag.outputs.version_code }}
 
       - name: Create GitHub Release
