@@ -23,6 +23,8 @@ Background and diagram: `docs/architecture.md`. Module inventory: `settings.grad
 - A contract with several implementations is split into `:api` plus implementation modules (`noop`, `firebase`, `play`,
   `free`, `impl`). Consumers depend on `:api` only; `:app` picks the implementation, often per flavor
   (`playImplementation` / `freeImplementation`).
+- The build fails when a module breaks these rules: `plugins/src/main/kotlin/checkModuleDependencies.kt`. It treats every
+  nested module other than `:api` (e.g. `:core:data:impl`) as an implementation. Tests may depend on implementations.
 - Reference modules via type-safe accessors (`implementation(projects.core.data.api)`) and libraries via
   `gradle/libs.versions.toml` aliases. No hardcoded versions.
 
