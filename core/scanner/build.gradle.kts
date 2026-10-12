@@ -9,6 +9,7 @@ kotlin {
 
 dependencies {
   implementation(projects.core.data.api)
+  implementation(projects.core.documentfile)
   implementation(projects.core.initializer)
 
   implementation(libs.slf4j.noop)
