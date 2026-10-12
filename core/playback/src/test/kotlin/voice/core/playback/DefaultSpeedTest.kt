@@ -24,13 +24,15 @@ class DefaultSpeedTest {
 
   @Test
   fun `a book that was never played starts at the default speed`() {
-    assertEquals(expected = 1.75F, actual = book.withDefaultSpeed(1.75F).content.playbackSpeed)
+    assertEquals(expected = 1.75F, actual = book.withDefaultSpeed { 1.75F }.content.playbackSpeed)
   }
 
   @Test
-  fun `a book that was played keeps its own speed`() {
+  fun `a book that was played keeps its own speed without reading the default`() {
     val played = book.update { it.copy(playbackSpeed = 1.25F, lastPlayedAt = Instant.ofEpochSecond(1)) }
 
-    assertEquals(expected = 1.25F, actual = played.withDefaultSpeed(1.75F).content.playbackSpeed)
+    val result = played.withDefaultSpeed { error("the default speed is only read for a book that was never played") }
+
+    assertEquals(expected = 1.25F, actual = result.content.playbackSpeed)
   }
 }

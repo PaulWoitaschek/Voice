@@ -83,7 +83,7 @@ class WidgetData(
             currentBookResolver.value.book(id) ?: book
           } else {
             book
-          }?.withDefaultSpeed(defaultSpeed)
+          }?.withDefaultSpeed { defaultSpeed }
         }
       }
     }

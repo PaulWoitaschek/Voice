@@ -366,7 +366,7 @@ class VoicePlayer(
     if (mediaId != null) {
       if (mediaId is MediaId.Book) {
         val book = runBlocking {
-          repo.get(mediaId.id)?.withDefaultSpeed(lastPlaybackSpeedStore.data.first())
+          repo.get(mediaId.id)?.withDefaultSpeed { lastPlaybackSpeedStore.data.first() }
         }
         if (book != null) {
           player.setPlaybackSpeed(book.content.playbackSpeed)

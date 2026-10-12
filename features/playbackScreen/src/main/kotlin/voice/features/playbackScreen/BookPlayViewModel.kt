@@ -117,10 +117,12 @@ class BookPlayViewModel(
     val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeViewState()
 
-    val defaultSpeed = remember { lastPlaybackSpeedStore.data }.collectAsState(initial = null).value ?: return null
+    val defaultSpeed = remember { lastPlaybackSpeedStore.data }.collectAsState(initial = null).value
     val persistedBook = remember(bookId) {
       bookRepository.flow(bookId).filterNotNull()
-    }.collectAsState(initial = null).value?.withDefaultSpeed(defaultSpeed) ?: return null
+    }.collectAsState(initial = null).value
+      ?.withDefaultSpeed { defaultSpeed ?: return null }
+      ?: return null
 
     val experimentalPlaybackPersistence = experimentalPlaybackPersistenceFeatureFlag.get()
     val livePlaybackState = if (experimentalPlaybackPersistence) {
@@ -390,7 +392,7 @@ class BookPlayViewModel(
   fun onPlaybackSpeedIconClick() {
     scope.launch {
       val playbackSpeed = currentBook()
-        ?.withDefaultSpeed(lastPlaybackSpeedStore.data.first())
+        ?.withDefaultSpeed { lastPlaybackSpeedStore.data.first() }
         ?.content?.playbackSpeed
         ?: return@launch
       dialogState.value = BookPlayDialogViewState.SpeedDialog(playbackSpeed)
