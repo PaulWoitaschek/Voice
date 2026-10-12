@@ -55,7 +55,7 @@ internal fun BookPlayContent(
   viewState: BookPlayViewState,
   bookId: BookId,
   clock: () -> Float,
-  useLandscapeLayout: Boolean,
+  sideBySide: Boolean,
   onPlayClick: () -> Unit,
   onRewindClick: () -> Unit,
   onFastForwardClick: () -> Unit,
@@ -99,7 +99,7 @@ internal fun BookPlayContent(
       )
     }
   }
-  val controls: @Composable (playButtonSize: Dp, compact: Boolean) -> Unit = { playButtonSize, compact ->
+  val title: @Composable () -> Unit = {
     TitleBlock(
       title = viewState.title,
       author = viewState.author,
@@ -107,76 +107,81 @@ internal fun BookPlayContent(
         .fillMaxWidth()
         .entrance(entrance, 0),
     )
-    if (!compact) {
-      Spacer(Modifier.height(12.dp))
-      bookProgress()
-    }
-    MediaControlsDirection {
-      if (viewState.showPreviousNextButtons) {
-        Spacer(Modifier.height(if (compact) 12.dp else 16.dp))
-        ChapterSwitcher(
-          chapterName = viewState.chapterName,
-          chapterNumber = viewState.chapterNumber,
-          chapterCount = viewState.chapterCount,
-          onSkipToPrevious = onSkipToPrevious,
-          onSkipToNext = onSkipToNext,
-          onChapterClick = onCurrentChapterClick,
-          modifier = Modifier.entrance(entrance, 2),
+  }
+  val control: @Composable (Control) -> Unit = { control ->
+    when (control) {
+      // side by side, these go under the cover, so phones in landscape fit the controls
+      Control.Title -> if (!sideBySide) title()
+      Control.BookProgress -> if (!sideBySide) bookProgress()
+      Control.Chapter -> if (viewState.showPreviousNextButtons) {
+        MediaControlsDirection {
+          ChapterSwitcher(
+            chapterName = viewState.chapterName,
+            chapterNumber = viewState.chapterNumber,
+            chapterCount = viewState.chapterCount,
+            onSkipToPrevious = onSkipToPrevious,
+            onSkipToNext = onSkipToNext,
+            onChapterClick = onCurrentChapterClick,
+            modifier = Modifier.entrance(entrance, 2),
+          )
+        }
+      }
+      Control.Seek -> MediaControlsDirection {
+        SeekSection(
+          playedTime = viewState.playedTime,
+          duration = viewState.duration,
+          playing = viewState.playing,
+          clock = clock,
+          onSeek = onSeek,
+          jumpBack = viewState.jumpBack,
+          unavailable = viewState.unavailable,
+          onJumpBack = onJumpBack,
+          onJumpBackExpire = onJumpBackExpire,
+          modifier = Modifier
+            .fillMaxWidth()
+            .entrance(entrance, 3),
         )
       }
-      Spacer(Modifier.height(12.dp))
-      SeekSection(
-        playedTime = viewState.playedTime,
-        duration = viewState.duration,
-        playing = viewState.playing,
-        clock = clock,
-        onSeek = onSeek,
-        jumpBack = viewState.jumpBack,
-        unavailable = viewState.unavailable,
-        onJumpBack = onJumpBack,
-        onJumpBackExpire = onJumpBackExpire,
+      // ControlsLayout picks the height, and the play button fills it
+      Control.Transport -> BoxWithConstraints {
+        MediaControlsDirection {
+          TransportControls(
+            bookId = bookId,
+            playing = viewState.playing,
+            skipSeconds = viewState.skipSeconds,
+            onRewindClick = onRewindClick,
+            onPlayClick = onPlayClick,
+            onFastForwardClick = onFastForwardClick,
+            playButtonSize = maxHeight,
+            modifier = Modifier.fillMaxWidth(),
+          )
+        }
+      }
+      Control.Toolbar -> ActionToolbar(
+        sleepTimerState = viewState.sleepTimerState,
+        playbackSpeed = viewState.playbackSpeed,
+        skipSilence = viewState.skipSilence,
+        volumeBoostActive = viewState.volumeBoostActive,
+        onSleepTimerClick = onSleepTimerClick,
+        onSpeedClick = onSpeedChangeClick,
+        onBookmarkClick = onBookmarkClick,
+        onBookmarkLongClick = onBookmarkLongClick,
+        onSkipSilenceClick = onSkipSilenceClick,
+        onVolumeBoostClick = onVolumeBoostClick,
+        // with labels the toolbar may get wider than the padded column on narrow phones
         modifier = Modifier
-          .fillMaxWidth()
-          .entrance(entrance, 3),
-      )
-      Spacer(Modifier.height(8.dp))
-      TransportControls(
-        bookId = bookId,
-        playing = viewState.playing,
-        skipSeconds = viewState.skipSeconds,
-        onRewindClick = onRewindClick,
-        onPlayClick = onPlayClick,
-        onFastForwardClick = onFastForwardClick,
-        playButtonSize = playButtonSize,
-        modifier = Modifier.fillMaxWidth(),
+          .wrapContentWidth(unbounded = true)
+          .entrance(entrance, 4),
       )
     }
-    Spacer(Modifier.height(if (compact) 12.dp else 20.dp))
-    ActionToolbar(
-      sleepTimerState = viewState.sleepTimerState,
-      playbackSpeed = viewState.playbackSpeed,
-      skipSilence = viewState.skipSilence,
-      volumeBoostActive = viewState.volumeBoostActive,
-      onSleepTimerClick = onSleepTimerClick,
-      onSpeedClick = onSpeedChangeClick,
-      onBookmarkClick = onBookmarkClick,
-      onBookmarkLongClick = onBookmarkLongClick,
-      onSkipSilenceClick = onSkipSilenceClick,
-      onVolumeBoostClick = onVolumeBoostClick,
-      // with labels the toolbar may get wider than the padded column on narrow phones
-      modifier = Modifier
-        .wrapContentWidth(unbounded = true)
-        .entrance(entrance, 4),
-    )
   }
 
-  if (useLandscapeLayout) {
+  if (sideBySide) {
     Row(
       modifier = Modifier
         .fillMaxSize()
         .padding(contentPadding)
         .padding(horizontal = 24.dp),
-      verticalAlignment = Alignment.CenterVertically,
     ) {
       Column(
         modifier = Modifier
@@ -187,6 +192,10 @@ internal fun BookPlayContent(
         Row(Modifier.fillMaxWidth()) {
           CloseButton(onClick = onCloseClick)
           Spacer(Modifier.weight(1F))
+          // the chapter switcher is the first to go when the window gets short
+          if (viewState.showPreviousNextButtons) {
+            ChaptersButton(onClick = onCurrentChapterClick)
+          }
           BookActionsButton(onClick = onBookActionsClick)
         }
         cover(
@@ -195,29 +204,21 @@ internal fun BookPlayContent(
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         )
+        title()
+        Spacer(Modifier.height(12.dp))
         bookProgress()
       }
       Spacer(Modifier.width(32.dp))
-      BoxWithConstraints(
+      ControlsLayout(
+        cover = null,
+        control = control,
         modifier = Modifier
           .weight(1.3F)
           .fillMaxHeight(),
-      ) {
-        Column(
-          modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .heightIn(min = maxHeight)
-            .padding(vertical = 8.dp),
-          verticalArrangement = Arrangement.Center,
-          horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-          controls(80.dp, true)
-        }
-      }
+      )
     }
   } else {
-    PortraitLayout(
-      contentPadding = contentPadding,
+    ControlsLayout(
       cover = {
         cover(
           Modifier
@@ -225,91 +226,121 @@ internal fun BookPlayContent(
             .padding(vertical = 8.dp),
         )
       },
-      controls = {
-        Column(
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 16.dp),
-          horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-          controls(104.dp, false)
-        }
-      },
+      control = control,
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(contentPadding)
+        .padding(horizontal = 24.dp),
     )
   }
 }
 
+/** The controls in the order they are stacked. */
+private enum class Control(
+  val gapAbove: Dp,
+  val compactGapAbove: Dp,
+) {
+  Title(0.dp, 0.dp),
+  BookProgress(12.dp, 12.dp),
+  Chapter(16.dp, 12.dp),
+  Seek(12.dp, 12.dp),
+  Transport(8.dp, 8.dp),
+  Toolbar(20.dp, 12.dp),
+}
+
+/** When the height runs out, the controls give way from the end of this list. */
+private val CONTROL_PRIORITY = listOf(
+  Control.Transport,
+  Control.Title,
+  Control.Seek,
+  Control.Toolbar,
+  Control.Chapter,
+  Control.BookProgress,
+)
+
 /**
- * The cover takes the height the controls leave. On short screens or with large fonts it keeps a
- * minimum size and the content scrolls instead, so the controls never get cut off.
- * The scrolling spans the whole screen, so the content padding doesn't clip the cover's glow.
+ * Stacks the controls. When the height runs out, whole controls are left out in [CONTROL_PRIORITY]
+ * order, so transport stays on screen and nothing that's shown is cut off or scrolled away.
+ *
+ * With a [cover], the controls sit at the bottom and the cover takes the height above them. When
+ * that's less than [MIN_COVER_HEIGHT], the controls turn compact first, and if that's not enough,
+ * the cover gives way before any of the controls. Without a cover, the controls are compact and
+ * centered.
  */
 @Composable
-private fun PortraitLayout(
-  contentPadding: PaddingValues,
-  cover: @Composable () -> Unit,
-  controls: @Composable () -> Unit,
+private fun ControlsLayout(
+  cover: (@Composable () -> Unit)?,
+  control: @Composable (Control) -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-  val layoutDirection = LocalLayoutDirection.current
-  val scrollState = rememberScrollState()
-  val scrollable = scrollState.maxValue > 0
-  BoxWithConstraints(Modifier.fillMaxSize()) {
-    val viewportHeight = constraints.maxHeight
-    Layout(
-      contents = listOf(cover, controls),
-      modifier = Modifier
-        .then(if (scrollable) Modifier.fadeOutUnderTopBar(scrollState, contentPadding.calculateTopPadding()) else Modifier)
-        // without anything to scroll, dragging shouldn't stretch the screen
-        .verticalScroll(scrollState, enabled = scrollable)
-        .padding(
-          start = contentPadding.calculateStartPadding(layoutDirection) + 24.dp,
-          end = contentPadding.calculateEndPadding(layoutDirection) + 24.dp,
-        ),
-    ) { (coverMeasurables, controlsMeasurables), constraints ->
-      val top = contentPadding.calculateTopPadding().roundToPx()
-      val bottom = contentPadding.calculateBottomPadding().roundToPx()
-      val width = constraints.maxWidth
-      val controlsPlaceables = controlsMeasurables.map { it.measure(Constraints.fixedWidth(width)) }
-      val controlsHeight = controlsPlaceables.sumOf { it.height }
-      val coverHeight = (viewportHeight - top - bottom - controlsHeight)
-        .coerceAtLeast(MIN_PORTRAIT_COVER_HEIGHT.roundToPx())
-      val coverPlaceables = coverMeasurables.map { it.measure(Constraints.fixed(width, coverHeight)) }
-      layout(width, top + coverHeight + controlsHeight + bottom) {
-        coverPlaceables.forEach { it.place(0, top) }
-        var y = top + coverHeight
-        controlsPlaceables.forEach {
-          it.place(0, y)
-          y += it.height
-        }
+  Layout(
+    contents = listOf(cover ?: {}) + Control.entries.map { entry -> @Composable { control(entry) } },
+    modifier = modifier,
+  ) { slots, constraints ->
+    val width = constraints.maxWidth
+    val height = constraints.maxHeight
+    val coverMeasurable = slots.first().firstOrNull()
+    val measurables = Control.entries.zip(slots.drop(1))
+      .mapNotNull { (control, measurables) -> measurables.firstOrNull()?.let { control to it } }
+      .toMap()
+    // transport is measured once its size is decided
+    val placeables = measurables
+      .filterKeys { it != Control.Transport }
+      .mapValues { it.value.measure(Constraints.fixedWidth(width)) }
+
+    fun playButtonSize(compact: Boolean): Int = (if (compact) COMPACT_PLAY_BUTTON else REGULAR_PLAY_BUTTON).roundToPx()
+    fun verticalPadding(compact: Boolean): Int = (if (compact) 8.dp else 16.dp).roundToPx()
+    fun gapAbove(
+      control: Control,
+      compact: Boolean,
+    ): Int = (if (compact) control.compactGapAbove else control.gapAbove).roundToPx()
+    fun heightOf(
+      controls: List<Control>,
+      compact: Boolean,
+    ): Int = 2 * verticalPadding(compact) + controls.sumOf { control ->
+      val controlHeight = placeables[control]?.height ?: playButtonSize(compact)
+      controlHeight + if (control == controls.first()) 0 else gapAbove(control, compact)
+    }
+
+    val all = measurables.keys.sorted()
+    val minCover = MIN_COVER_HEIGHT.roundToPx()
+    val compact = coverMeasurable == null || heightOf(all, compact = false) + minCover > height
+    val showCover = coverMeasurable != null && heightOf(all, compact) + minCover <= height
+    var shown = all
+    if (!showCover) {
+      shown = emptyList()
+      for (control in CONTROL_PRIORITY.filter { it in measurables }) {
+        val more = (shown + control).sorted()
+        // transport stays, even when it doesn't fit
+        if (shown.isNotEmpty() && heightOf(more, compact) > height) break
+        shown = more
+      }
+    }
+    val controlsHeight = heightOf(shown, compact)
+    val coverPlaceable = if (showCover) {
+      coverMeasurable.measure(Constraints.fixed(width, height - controlsHeight))
+    } else {
+      null
+    }
+    val playButtonSize = playButtonSize(compact)
+    val transportPlaceable = measurables.getValue(Control.Transport)
+      .measure(Constraints.fixed(width, playButtonSize))
+    layout(width, height) {
+      coverPlaceable?.place(0, 0)
+      var y = verticalPadding(compact) + if (coverPlaceable != null) height - controlsHeight else (height - controlsHeight) / 2
+      shown.forEach { control ->
+        if (control != shown.first()) y += gapAbove(control, compact)
+        val placeable = placeables[control] ?: transportPlaceable
+        placeable.place(0, y)
+        y += placeable.height
       }
     }
   }
 }
 
-/** Fades out content scrolled under the transparent top bar, so it doesn't clash with its buttons. */
-private fun Modifier.fadeOutUnderTopBar(
-  scrollState: ScrollState,
-  topBarBottom: Dp,
-): Modifier = this
-  .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
-  .drawWithContent {
-    drawContent()
-    val fade = 24.dp.toPx()
-    // gradually, so the cover's glow doesn't get cut off with the first scrolled pixel
-    val hidden = (scrollState.value / fade).coerceIn(0F, 1F)
-    drawRect(
-      brush = Brush.verticalGradient(
-        0F to Color.Black.copy(alpha = 1F - hidden),
-        1F to Color.Black,
-        // fully hidden behind the top bar's buttons, which end 8dp above the bar's bottom
-        startY = topBarBottom.toPx() - 8.dp.toPx(),
-        endY = topBarBottom.toPx() - 8.dp.toPx() + fade,
-      ),
-      blendMode = BlendMode.DstIn,
-    )
-  }
-
-private val MIN_PORTRAIT_COVER_HEIGHT = 180.dp
+private val REGULAR_PLAY_BUTTON = 104.dp
+private val COMPACT_PLAY_BUTTON = 80.dp
+private val MIN_COVER_HEIGHT = 120.dp
 
 @Composable
 private fun TitleBlock(

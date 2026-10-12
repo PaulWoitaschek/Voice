@@ -44,14 +44,23 @@ internal fun PlaybackTopBar(
     CloseButton(onClick = onCloseClick)
     Spacer(Modifier.weight(1F))
     if (showChapters) {
-      TopBarButton(
-        icon = VoiceIcons.ViewList,
-        contentDescription = stringResource(R.string.playback_chapters_title),
-        onClick = onChaptersClick,
-      )
+      ChaptersButton(onClick = onChaptersClick)
     }
     BookActionsButton(onClick = onBookActionsClick)
   }
+}
+
+@Composable
+internal fun ChaptersButton(
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  TopBarButton(
+    icon = VoiceIcons.ViewList,
+    contentDescription = stringResource(R.string.playback_chapters_title),
+    onClick = onClick,
+    modifier = modifier,
+  )
 }
 
 @Composable

@@ -1,6 +1,5 @@
 package voice.features.playbackScreen
 
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -8,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.retain.retain
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
@@ -89,7 +87,6 @@ fun BookPlayScreen(bookId: BookId) {
       onCurrentChapterClick = viewModel::onCurrentChapterClick,
       onJumpBack = viewModel::onJumpBackClick,
       onJumpBackExpire = viewModel::onJumpBackExpire,
-      useLandscapeLayout = LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE,
       snackbarHostState = snackbarHostState,
     )
     when (dialogState) {
