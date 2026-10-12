@@ -12,10 +12,8 @@ import androidx.media3.test.utils.TestExoPlayerBuilder
 import androidx.media3.test.utils.robolectric.TestPlayerRunHelper
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,6 +26,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
 import voice.core.data.Book
+import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
@@ -37,7 +36,6 @@ import voice.core.data.MarkData
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
-import voice.core.playback.NewBookSpeed
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
@@ -112,12 +110,13 @@ class VoicePlayerTest {
   private val sleepTimer = FakeSleepTimer()
   private val historyRepo = RecordingRepo()
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
-  private val newBookSpeed = mockk<NewBookSpeed>(relaxed = true)
   private val player = VoicePlayer(
     player = chapterMarkPlayer,
     repo = mockk {
       coEvery { get(bookId) } answers { currentBook }
-      coEvery { updateBook(any(), any()) } just Runs
+      coEvery { updateBook(bookId, any()) } answers {
+        currentBook = currentBook.update(secondArg<(BookContent) -> BookContent>())
+      }
     },
     currentBookStoreId = mockk {
       every { data } returns flowOf(bookId)
@@ -135,7 +134,6 @@ class VoicePlayerTest {
       scope = scope,
     ),
     commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
-    newBookSpeed = newBookSpeed,
   )
 
   @Test
@@ -329,19 +327,36 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `setBook plays a new book at the speed it was given`() = scope.runTest {
-    coEvery { newBookSpeed.applyTo(bookId) } answers {
-      currentBook = currentBook.update { it.copy(playbackSpeed = 1.5F) }
-    }
+  fun `setBook starts a book that was never played at the last speed and keeps it`() = scope.runTest {
+    lastPlaybackSpeedStore.updateData { 1.5F }
 
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
 
     assertEquals(expected = 1.5F, actual = internalPlayer.playbackParameters.speed)
+    assertEquals(expected = 1.5F, actual = currentBook.content.playbackSpeed)
+  }
+
+  @Test
+  fun `setBook starts a played book at its own speed`() = scope.runTest {
+    lastPlaybackSpeedStore.updateData { 1.5F }
+
+    setMediaItems(
+      listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))),
+      playbackSpeed = 1.25F,
+      lastPlayedAt = Instant.ofEpochSecond(1),
+    )
+
+    assertEquals(expected = 1.25F, actual = internalPlayer.playbackParameters.speed)
+    assertEquals(expected = 1.25F, actual = currentBook.content.playbackSpeed)
   }
 
   @Test
   fun `playing remembers the speed for new books`() = scope.runTest {
-    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))), playbackSpeed = 1.75F)
+    setMediaItems(
+      listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))),
+      playbackSpeed = 1.75F,
+      lastPlayedAt = Instant.ofEpochSecond(1),
+    )
 
     player.play()
     runCurrent()
@@ -361,7 +376,11 @@ class VoicePlayerTest {
 
   @Test
   fun `loading a book does not change the speed for new books`() = scope.runTest {
-    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))), playbackSpeed = 1.75F)
+    setMediaItems(
+      listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))),
+      playbackSpeed = 1.75F,
+      lastPlayedAt = Instant.ofEpochSecond(1),
+    )
 
     assertEquals(expected = 1F, actual = lastPlaybackSpeedStore.data.first())
   }
@@ -540,12 +559,14 @@ class VoicePlayerTest {
     currentChapter: Chapter = chapters.first(),
     positionInChapter: Long = 0,
     playbackSpeed: Float = 1F,
+    lastPlayedAt: Instant = Instant.EPOCH,
   ) {
     currentBook = book(chapters, bookId).update {
       it.copy(
         currentChapter = currentChapter.id,
         positionInChapter = positionInChapter,
         playbackSpeed = playbackSpeed,
+        lastPlayedAt = lastPlayedAt,
       )
     }
     player.setMediaItem(mediaItemProvider.mediaItem(currentBook))

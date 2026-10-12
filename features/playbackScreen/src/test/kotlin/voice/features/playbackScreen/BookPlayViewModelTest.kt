@@ -126,7 +126,7 @@ class BookPlayViewModelTest {
     historyRecorder = historyRecorder,
     clock = clock,
     serverLibrary = FakeServerLibrary(),
-    newBookSpeed = mockk(relaxed = true),
+    lastPlaybackSpeedStore = MemoryDataStore(1F),
   )
 
   @Test
@@ -327,6 +327,30 @@ class BookPlayViewModelTest {
   }
 
   @Test
+  fun `viewState shows the last speed for a book that was never played`() = scope.runTest {
+    val viewModel = viewModel(lastPlaybackSpeed = 1.5F)
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = null, actual = awaitItem())
+      assertEquals(expected = 1.5F, actual = awaitItem()!!.playbackSpeed)
+    }
+  }
+
+  @Test
+  fun `viewState shows the own speed of a played book`() = scope.runTest {
+    val viewModel = viewModel(book = book(lastPlayedAtMillis = 1), lastPlaybackSpeed = 1.5F)
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.test {
+      assertEquals(expected = null, actual = awaitItem())
+      assertEquals(expected = 1F, actual = awaitItem()!!.playbackSpeed)
+    }
+  }
+
+  @Test
   fun `viewState exposes progress through the whole book`() = scope.runTest {
     val viewModel = viewModel()
 
@@ -466,6 +490,7 @@ class BookPlayViewModelTest {
     kioskMode: Boolean = false,
     livePlaybackFlow: MutableStateFlow<LivePlaybackState?> = MutableStateFlow(null),
     playStateFlow: MutableStateFlow<PlayStateManager.PlayState> = MutableStateFlow(PlayStateManager.PlayState.Paused),
+    lastPlaybackSpeed: Float = 1F,
   ): BookPlayViewModel {
     return BookPlayViewModel(
       bookRepository = mockk {
@@ -498,7 +523,7 @@ class BookPlayViewModelTest {
       historyRecorder = historyRecorder,
       clock = clock,
       serverLibrary = FakeServerLibrary(),
-      newBookSpeed = mockk(relaxed = true),
+      lastPlaybackSpeedStore = MemoryDataStore(lastPlaybackSpeed),
     )
   }
 }

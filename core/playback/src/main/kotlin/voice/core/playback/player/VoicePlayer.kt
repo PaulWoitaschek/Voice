@@ -20,7 +20,6 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.logging.api.Logger
-import voice.core.playback.NewBookSpeed
 import voice.core.playback.history.CommandSource
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
@@ -32,6 +31,7 @@ import voice.core.playback.session.MediaId
 import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.toMediaIdOrNull
+import voice.core.playback.withDefaultSpeed
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerState
 import java.time.Instant
@@ -58,7 +58,6 @@ class VoicePlayer(
   private val analytics: Analytics,
   private val historyRecorder: ListeningHistoryRecorder,
   private val commandSourceResolver: CommandSourceResolver,
-  private val newBookSpeed: NewBookSpeed,
 ) : ForwardingPlayer(player) {
 
   private val endOfChapterSleepTimerListener = object : Player.Listener {
@@ -367,11 +366,14 @@ class VoicePlayer(
     if (mediaId != null) {
       if (mediaId is MediaId.Book) {
         val book = runBlocking {
-          newBookSpeed.applyTo(mediaId.id)
-          repo.get(mediaId.id)
+          repo.get(mediaId.id)?.withDefaultSpeed(lastPlaybackSpeedStore.data.first())
         }
         if (book != null) {
           player.setPlaybackSpeed(book.content.playbackSpeed)
+          // loading the book marks it as played, so from here on this is its own speed
+          scope.launch {
+            repo.updateBook(book.id) { it.copy(playbackSpeed = book.content.playbackSpeed) }
+          }
           setSkipSilenceEnabled(book.content.skipSilence)
           volumeGain.gain = Decibel(book.content.gain)
           val currentPlaybackItem = book.playbackItemForPosition(
@@ -405,7 +407,7 @@ class VoicePlayer(
   }
 
   /**
-   * New books start at this speed, see [NewBookSpeed].
+   * Books that were never played start at this speed, see [withDefaultSpeed].
    */
   private fun rememberSpeed(speed: Float) {
     scope.launch {
