@@ -26,8 +26,8 @@ The rule: "I don't want voice to be really customizable. I want to provide good 
 
 "I mostly listen to audiobooks at bedtime and an AMOLED theme would be really helpful." ([#1284])
 
-- 💡 **A pure black theme** ([#1284]). In 2018: "I'm all in for creating an AMOLED theme and using it as the night theme
-  on AMOLED devices." ([#795])
+- ⭕ **Dark mode isn't black enough for bed.** In 2018: "I'm all in for creating an AMOLED theme and using it as the
+  night theme on AMOLED devices." ([#795])
 
 ### "More color, and colors that match my book"
 

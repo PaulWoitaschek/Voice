@@ -54,7 +54,8 @@ Assumptions:
 - ✅ **A page comparing the download sources.**
 - The F-Droid build can't offer Android Auto. F-Droid also updates on its own schedule: "It's not me who's updating it,
   it's them." ([#526])
-- 💡 **Reproducible builds** ([#2862]), and **a separate free APK on GitHub** ([#2300]).
+- ✅ **GitHub releases carry the free build** ([#2300]).
+- ⭕ **Listeners can't check that an APK was built from the published source** ([#2862]).
 
 ### How the maintainer hears from listeners
 
