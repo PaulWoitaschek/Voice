@@ -15,15 +15,14 @@ The phone is in a pocket or a car holder, the screen is off, and their hands are
 
 ### "Let me listen in the car"
 
-[#231] has 64 comments. "it won't remember the current book" ([#1765])
+"it won't remember the current book" ([#1765])
 
-- ✅ **Android Auto**: recent books, sorted by when you last played them, and the current book ready when you connect
-  ([#1940], [#1941], 2023).
-- ✅ **Clear skip icons** for rewind and fast forward ([#3272], 2025), after "This is confusing as they actually
+- ✅ **Android Auto**: recent books, sorted by when you last played them, and the current book ready when you connect.
+- ✅ **Clear skip icons** for rewind and fast forward, after "This is confusing as they actually
   rewind/forward 20 seconds." ([#2797])
 - ❌ **Voice search for chapters**: "Else when voice detection is flaky you might lose the latest position in your
   audiobook." ([#231])
-- 💡 **Speed control in the car** ([#1878], 10 upvotes): "I can only focus on 1.2x speed or so when there is traffic"
+- ⭕ **The speed can't be changed from the car** ([#1878]): "I can only focus on 1.2x speed or so when there is traffic"
 
 The F-Droid build has no Android Auto. See [Feedback and support](feedback-and-support.md).
 
@@ -38,12 +37,12 @@ The F-Droid build has no Android Auto. See [Feedback and support](feedback-and-s
 
 ### "The lock screen slider loses my place"
 
-[#3229], with 12 upvotes: "it gets randomly activated either in my pocket or when I touch the screen accidentally, and
-I lose the current position with a lot of frustration"
+"it gets randomly activated either in my pocket or when I touch the screen accidentally, and I lose the current position
+with a lot of frustration" ([#3229])
 
-- ✅ **The notification's seek bar only covers the current chapter** ([#3634]). *(next release)*
-- ✅ **The listening history** can take you back (see [Bookmarks and history](bookmarks.md)). *(next release)*
-- 💡 **Turn off seeking from the notification** ([#3229]).
+- ✅ **The notification's seek bar only covers the current chapter.**
+- ✅ **The listening history** can take you back (see [Bookmarks and history](bookmarks.md)).
+- ⭕ **The slider can still move the position by accident**, within the chapter.
 
 ### "The notification should stay while I pause, and go when I'm done"
 
@@ -58,14 +57,14 @@ I lose the current position with a lot of frustration"
 "now i use that daily [multiple times a day actually]" ([#3410], about Tasker)
 
 - ✅ **A "Play current" shortcut** (2018).
-- ✅ **Commands that Tasker can send** ([#2075], 2023). The first answer was no, then: "I need to revise my post and I
+- ✅ **Commands that Tasker can send.** The first answer was no, then: "I need to revise my post and I
   think this is actually something we can easily bring back!" ([#1913])
 
 ### "Show me my book on the home screen, and let me play it from there"
 
-- ✅ **Now playing and Shelf widgets** in any size, down to 1×1 ([#3829]). *(next release)*
+- ✅ **Now playing and Shelf widgets** in any size, down to 1×1.
 - ✅ **A small widget keeps what matters most.** As space runs out, it keeps play, then the cover, then the title, then
-  rewind, then fast forward. *(next release)*
+  rewind, then fast forward.
   - The cover comes before the title because sighted listeners recognize their book faster by its cover. A cover also
     needs less room than a readable title, so a small widget stays usable.
   - Rewind comes before fast forward because listeners jump back, after missing a sentence or dozing off, far more often
@@ -73,16 +72,16 @@ I lose the current position with a lot of frustration"
 
 ### "Play it on my speaker or TV"
 
-Casting has been requested since 2014 ([#76]). "Add the cast option so I can play on Android TV and Smart speakers"
+Casting has been requested since 2014. "Add the cast option so I can play on Android TV and Smart speakers"
 ([#1778])
 
-- 💡 **Casting** ([#76], [#1778]). No reason for leaving it out is on record. One concern: the Google cast library
-  "effectively makes this project proprietary software." ([#76])
+- ⭕ **Books can't play on a speaker or TV.** No reason for leaving out casting is on record. One concern: the Google
+  cast library "effectively makes this project proprietary software." ([#76])
 
 ### "Let me use it from my watch, or by voice"
 
-- 💡 **A Wear OS app** ([#1749]). Today a watch works as a remote: "it works great as a controller of audiobook
-  playback on my phone" ([#1749])
+- ⭕ **A watch can't play a book without the phone.** Today it works as a remote: "it works great as a controller of
+  audiobook playback on my phone" ([#1749])
 - ❌ **Better Assistant support** isn't possible: "This is a limitation of the Android Assistant. There are only a few
   players who are in direct contact with Google that are whitelisted within the Assistant." ([#1071])
 
@@ -90,7 +89,7 @@ Casting has been requested since 2014 ([#76]). "Add the cast option so I can pla
 
 1. Casting: is it still wanted, and what's the real blocker, the proprietary library or the effort?
 2. The lock screen slider: is limiting it to the current chapter enough, or should it be possible to turn it off?
-3. Speed in the car ([#1878]): does it fit, given the "seek first" choice for Android Auto?
+3. Speed in the car: does it fit, given the "seek first" choice for Android Auto?
 
 [#76]: https://github.com/PaulWoitaschek/Voice/issues/76
 [#231]: https://github.com/PaulWoitaschek/Voice/issues/231
@@ -105,13 +104,7 @@ Casting has been requested since 2014 ([#76]). "Add the cast option so I can pla
 [#1878]: https://github.com/PaulWoitaschek/Voice/discussions/1878
 [#1883]: https://github.com/PaulWoitaschek/Voice/discussions/1883
 [#1913]: https://github.com/PaulWoitaschek/Voice/issues/1913
-[#1940]: https://github.com/PaulWoitaschek/Voice/pull/1940
-[#1941]: https://github.com/PaulWoitaschek/Voice/pull/1941
-[#2075]: https://github.com/PaulWoitaschek/Voice/pull/2075
 [#2797]: https://github.com/PaulWoitaschek/Voice/issues/2797
 [#3229]: https://github.com/PaulWoitaschek/Voice/discussions/3229
-[#3272]: https://github.com/PaulWoitaschek/Voice/pull/3272
 [#3410]: https://github.com/PaulWoitaschek/Voice/discussions/3410
-[#3634]: https://github.com/PaulWoitaschek/Voice/pull/3634
-[#3829]: https://github.com/PaulWoitaschek/Voice/pull/3829
 [#3846]: https://github.com/PaulWoitaschek/Voice/issues/3846
