@@ -63,12 +63,6 @@ jobs:
           mkdir -p artifacts
           cp app/build/outputs/bundle/playRelease/app-play-release.aab artifacts/app-play-release.aab
 
-      - name: Upload to INTERNAL
-        run: fastlane android upload_internal aab_path:artifacts/app-play-release.aab
-
-      - name: Promote INTERNAL -> PRODUCTION (0.1%)
-        run: fastlane android promote version_code:${{ steps.tag.outputs.version_code }}
-
       - name: Build GitHub APKs
         env:
           GITHUB_SIGNING_STORE_PASSWORD: ${{ secrets.GH_SIGNING_STORE_PASSWORD }}
@@ -85,6 +79,12 @@ jobs:
           mkdir -p artifacts
           cp app/build/outputs/apk/free/release/app-free-release.apk artifacts/app-free-release.apk
 
+      - name: Upload to INTERNAL
+        run: fastlane android upload_internal aab_path:artifacts/app-play-release.aab
+
+      - name: Promote INTERNAL -> PRODUCTION (0.1%)
+        run: fastlane android promote version_code:${{ steps.tag.outputs.version_code }}
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -94,3 +94,11 @@ jobs:
             --draft \
             --generate-notes \
             --target "$GITHUB_SHA"
+
+      # Once Play has the version code it can't be released again, so keep the builds to finish by hand.
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: release-${{ steps.tag.outputs.tag }}
+          path: artifacts/
+          if-no-files-found: ignore
