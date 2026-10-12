@@ -11,7 +11,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.playstate.PlayStateManager
-import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.impl.MemoryDataStore
 import java.time.Clock
 import java.time.Instant
@@ -20,27 +19,14 @@ import java.time.ZoneId
 import kotlin.test.Test
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 class AutoEnableSleepTimerMinimalTest {
   private val testDispatcher = StandardTestDispatcher()
   private val testScope = TestScope(testDispatcher)
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val playStateManager = PlayStateManager()
-  private val sleepTimer = mockk<SleepTimer> {
-    val stateFlow = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
-    every {
-      state
-    } returns stateFlow
-    every {
-      enable(any())
-    } answers {
-      stateFlow.value = when (val mode = firstArg<SleepTimerMode>()) {
-        is TimedWithDuration -> SleepTimerState.Enabled.WithDuration(mode.duration)
-        SleepTimerMode.TimedWithDefault -> SleepTimerState.Enabled.WithDuration(5.seconds)
-        SleepTimerMode.EndOfChapter -> SleepTimerState.Enabled.WithEndOfChapter
-      }
-    }
+  private val sleepTimer = mockk<SleepTimer>(relaxUnitFun = true) {
+    every { state } returns MutableStateFlow(SleepTimerState.Disabled)
   }
 
   private fun prefs(

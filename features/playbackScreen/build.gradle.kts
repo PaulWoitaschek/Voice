@@ -19,7 +19,5 @@ dependencies {
   implementation(libs.androidxCore)
   implementation(libs.navigation3.ui)
 
-  testImplementation(libs.molecule)
-  testImplementation(libs.turbine)
   testImplementation(libs.compose.ui.testJunit)
 }

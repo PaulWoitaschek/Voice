@@ -28,6 +28,4 @@ dependencies {
   implementation(libs.materialKolor)
   implementation(libs.coil)
   implementation(libs.androidxCore)
-
-  testImplementation(libs.bundles.testing.jvm)
 }

@@ -14,26 +14,19 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import voice.core.common.DispatcherProvider
-import voice.core.data.Book
-import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ListeningEvent
-import voice.core.data.repo.BookmarkRepo
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
-import voice.core.sleeptimer.SleepTimer
-import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.formatTime
 import voice.navigation.Navigator
@@ -77,7 +70,9 @@ class BookmarkViewModelTest {
     },
     playStateManager = playStateManager,
     playerController = playerController,
-    sleepTimer = DisabledSleepTimer,
+    sleepTimer = mockk {
+      every { state } returns MutableStateFlow(SleepTimerState.Disabled)
+    },
     navigator = navigator,
     clock = clock,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
@@ -364,45 +359,4 @@ class BookmarkViewModelTest {
       assertNull(editor.chapterName)
     }
   }
-}
-
-private object DisabledSleepTimer : SleepTimer {
-  override val state = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
-  override fun enable(mode: SleepTimerMode) {}
-  override fun disable() {}
-}
-
-private class FakeBookmarkRepo(private val clock: Clock) : BookmarkRepo {
-
-  val bookmarks = MutableStateFlow<List<Bookmark>>(emptyList())
-
-  override suspend fun deleteBookmark(id: Bookmark.Id) {
-    bookmarks.update { bookmarks -> bookmarks.filterNot { it.id == id } }
-  }
-
-  override suspend fun addBookmark(bookmark: Bookmark) {
-    bookmarks.update { bookmarks -> bookmarks.filterNot { it.id == bookmark.id } + bookmark }
-  }
-
-  override suspend fun addBookmarkAtBookPosition(
-    book: Book,
-    title: String?,
-    setBySleepTimer: Boolean,
-  ): Bookmark {
-    val bookmark = Bookmark(
-      bookId = book.id,
-      chapterId = book.content.currentChapter,
-      title = title,
-      time = book.content.positionInChapter,
-      addedAt = clock.instant(),
-      setBySleepTimer = setBySleepTimer,
-      id = Bookmark.Id.random(),
-    )
-    addBookmark(bookmark)
-    return bookmark
-  }
-
-  override suspend fun bookmarks(book: BookContent): List<Bookmark> = bookmarks.value
-
-  override fun bookmarksFlow(book: BookContent): Flow<List<Bookmark>> = bookmarks
 }

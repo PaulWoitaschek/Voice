@@ -1,19 +1,20 @@
 package voice.features.review
 
 import io.mockk.coEvery
+import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import voice.core.analytics.api.Analytics
-import voice.core.common.AppInfoProvider
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
-import voice.core.data.ListeningSession
 import voice.core.data.ReviewPromptState
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.FinishedBook
@@ -38,8 +39,10 @@ class ReviewPromptControllerTest {
   private val playStateManager = PlayStateManager()
   private val enabled = MemoryFeatureFlag(true)
   private val force = MemoryFeatureFlag(false)
-  private val analytics = RecordingAnalytics()
-  private val statsRepo = FakeListeningStatsRepo()
+  private val analytics = mockk<Analytics>(relaxUnitFun = true)
+  private val statsRepo = mockk<ListeningStatsRepo> {
+    coEvery { summary(any(), any()) } returns ListeningSummary(listened = 0.hours, listeningDays = 0, finishedBooks = emptyList())
+  }
   private var books = emptyList<Book>()
   private val bookRepository = mockk<BookRepository> {
     coEvery { all() } answers { books }
@@ -54,11 +57,8 @@ class ReviewPromptControllerTest {
     listeningStatsRepo = statsRepo,
     bookRepository = bookRepository,
     playStateManager = playStateManager,
-    appInfoProvider = object : AppInfoProvider {
-      override val versionName = "1.2.3"
-      override val analyticsIncluded = false
-      override val supportDevelopmentIncluded = false
-      override val installTime = Instant.parse("2026-06-01T00:00:00Z").toKotlinInstant()
+    appInfoProvider = mockk {
+      every { installTime } returns Instant.parse("2026-06-01T00:00:00Z").toKotlinInstant()
     },
     clock = Clock.fixed(now, ZoneOffset.UTC),
     analytics = analytics,
@@ -68,7 +68,8 @@ class ReviewPromptControllerTest {
   )
 
   private fun listenedEnough(finishedBooks: List<FinishedBook> = emptyList()) {
-    statsRepo.summary = ListeningSummary(listened = 6.hours, listeningDays = 4, finishedBooks = finishedBooks)
+    coEvery { statsRepo.summary(any(), any()) } returns
+      ListeningSummary(listened = 6.hours, listeningDays = 4, finishedBooks = finishedBooks)
   }
 
   @Test
@@ -87,16 +88,15 @@ class ReviewPromptControllerTest {
       actual = prompt,
     )
     assertEquals(expected = 1, actual = store.data.first().asks)
-    assertEquals(
-      expected = listOf("review_prompt_shown" to mapOf("trigger" to "book_finished", "ask" to "1")),
-      actual = analytics.events,
-    )
+    verify { analytics.event("review_prompt_shown", mapOf("trigger" to "book_finished", "ask" to "1")) }
+    confirmVerified(analytics)
   }
 
   @Test
   fun `the counted listening shows when it's more than the library knows`() = runTest {
     books = listOf(hyperion)
-    statsRepo.summary = ListeningSummary(listened = 26.hours, listeningDays = 9, finishedBooks = emptyList())
+    coEvery { statsRepo.summary(any(), any()) } returns
+      ListeningSummary(listened = 26.hours, listeningDays = 9, finishedBooks = emptyList())
 
     val prompt = controller().prompt()
 
@@ -108,10 +108,8 @@ class ReviewPromptControllerTest {
       ),
       actual = prompt,
     )
-    assertEquals(
-      expected = listOf("review_prompt_shown" to mapOf("trigger" to "milestone_25", "ask" to "1")),
-      actual = analytics.events,
-    )
+    verify { analytics.event("review_prompt_shown", mapOf("trigger" to "milestone_25", "ask" to "1")) }
+    confirmVerified(analytics)
   }
 
   @Test
@@ -166,13 +164,14 @@ class ReviewPromptControllerTest {
     runCurrent()
 
     assertEquals(expected = true, actual = store.data.first().done)
-    assertEquals(expected = "review_prompt_answer" to mapOf("answer" to "rate"), actual = analytics.events.last())
+    verify { analytics.event("review_prompt_answer", mapOf("answer" to "rate")) }
   }
 
   @Test
   fun `the flag forces the prompt once, without counting it`() = runTest {
     books = listOf(hyperion)
-    statsRepo.summary = ListeningSummary(listened = 1.minutes, listeningDays = 1, finishedBooks = emptyList())
+    coEvery { statsRepo.summary(any(), any()) } returns
+      ListeningSummary(listened = 1.minutes, listeningDays = 1, finishedBooks = emptyList())
     force.value = true
     val controller = controller()
 
@@ -183,7 +182,7 @@ class ReviewPromptControllerTest {
 
     assertNull(controller.prompt())
     assertEquals(expected = ReviewPromptState(), actual = store.data.first())
-    assertEquals(expected = emptyList(), actual = analytics.events)
+    verify(exactly = 0) { analytics.event(any(), any()) }
   }
 
   private fun book(
@@ -224,35 +223,4 @@ class ReviewPromptControllerTest {
       chapters = listOf(chapter),
     )
   }
-}
-
-private class RecordingAnalytics : Analytics {
-
-  val events = mutableListOf<Pair<String, Map<String, String>>>()
-
-  override fun screenView(screenName: String) {}
-
-  override fun event(
-    name: String,
-    params: Map<String, String>,
-  ) {
-    events += name to params
-  }
-}
-
-private class FakeListeningStatsRepo : ListeningStatsRepo {
-
-  var summary = ListeningSummary(listened = 0.hours, listeningDays = 0, finishedBooks = emptyList())
-
-  override suspend fun save(session: ListeningSession): Long = error("Not used")
-
-  override suspend fun summary(
-    from: Instant,
-    to: Instant,
-  ): ListeningSummary = summary
-
-  override suspend fun moveToBook(
-    from: List<BookId>,
-    to: BookId,
-  ) = error("Not used")
 }

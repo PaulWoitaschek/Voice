@@ -5,12 +5,11 @@ import android.os.Looper
 import android.provider.DocumentsContract
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
-import voice.core.analytics.api.Analytics
-import voice.core.documentfile.CachedDocumentFileFactory
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -24,20 +23,9 @@ class AudiobookFoldersImplTest {
     singleFileAudiobookFoldersStore = stores.getValue(FolderType.SingleFile),
     authorAudiobookFoldersStore = stores.getValue(FolderType.Author),
     context = ApplicationProvider.getApplicationContext(),
-    cachedDocumentFileFactory = object : CachedDocumentFileFactory {
-      override fun create(uri: Uri) = error("not needed")
-    },
-    analytics = object : Analytics {
-      override fun screenView(screenName: String) {}
-
-      override fun event(
-        name: String,
-        params: Map<String, String>,
-      ) {}
-    },
-    persistedUriPermissions = object : PersistedUriPermissions {
-      override fun persistedUris(): Set<Uri> = emptySet()
-    },
+    cachedDocumentFileFactory = mockk(),
+    analytics = mockk(relaxUnitFun = true),
+    persistedUriPermissions = mockk(),
   )
 
   @Test

@@ -19,11 +19,4 @@ dependencies {
   implementation(libs.coroutines.guava)
 
   testImplementation(projects.core.data.impl)
-  testImplementation(libs.junit)
-  testImplementation(libs.androidX.test.runner)
-  testImplementation(libs.androidX.test.core)
-  testImplementation(libs.androidX.test.junit)
-  testImplementation(libs.mockk)
-  testImplementation(libs.coroutines.test)
-  testImplementation(libs.robolectric)
 }

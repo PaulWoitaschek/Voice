@@ -1,24 +1,16 @@
 package voice.core.playback.stats
 
-import android.os.Looper
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.common.SimpleBasePlayer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import org.junit.runner.RunWith
-import org.robolectric.Shadows.shadowOf
 import voice.core.data.BookId
-import voice.core.data.ChapterId
 import voice.core.data.ListeningSession
-import voice.core.data.repo.ListeningStatsRepo
-import voice.core.data.repo.ListeningSummary
-import voice.core.playback.session.MediaId
+import voice.core.playback.FakePlayer
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
@@ -200,7 +192,7 @@ class ListeningSessionRecorderTest {
 
   @Test
   fun `the player's playback is recorded until the book ends`() = scope.runTest {
-    val player = FakePlayer()
+    val player = FakePlayer(dune)
     recorder.attachTo(player)
 
     player.update { it.setPlayWhenReady(false, Player.PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST) }
@@ -229,60 +221,5 @@ class ListeningSessionRecorderTest {
     override fun getZone(): ZoneId = zone
 
     override fun withZone(zone: ZoneId): Clock = SchedulerClock(scheduler, start, zone)
-  }
-
-  private class MemoryListeningStatsRepo : ListeningStatsRepo {
-
-    val all = mutableListOf<ListeningSession>()
-
-    override suspend fun save(session: ListeningSession): Long {
-      val id = if (session.id == 0L) all.size + 1L else session.id
-      val index = all.indexOfFirst { it.id == id }
-      if (index == -1) all += session.copy(id = id) else all[index] = session.copy(id = id)
-      return id
-    }
-
-    override suspend fun summary(
-      from: Instant,
-      to: Instant,
-    ): ListeningSummary = error("Not used")
-
-    override suspend fun moveToBook(
-      from: List<BookId>,
-      to: BookId,
-    ) = error("Not used")
-  }
-
-  private class FakePlayer : SimpleBasePlayer(Looper.getMainLooper()) {
-
-    private var state = State.Builder()
-      .setAvailableCommands(Player.Commands.Builder().addAllCommands().build())
-      .setPlaylist(
-        listOf(
-          MediaItemData.Builder("chapter")
-            .setMediaItem(
-              MediaItem.Builder()
-                .setMediaId(Json.encodeToString(MediaId.serializer(), MediaId.Chapter(BookId("dune"), ChapterId("chapter"))))
-                .build(),
-            )
-            .build(),
-        ),
-      )
-      .setPlaybackState(Player.STATE_READY)
-      .setPlayWhenReady(true, Player.PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST)
-      .build()
-
-    init {
-      // the first read takes the state, so that the updates are seen as changes
-      val _ = playbackState
-    }
-
-    fun update(change: (State.Builder) -> State.Builder) {
-      state = change(state.buildUpon()).build()
-      invalidateState()
-      shadowOf(Looper.getMainLooper()).idle()
-    }
-
-    override fun getState(): State = state
   }
 }

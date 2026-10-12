@@ -11,6 +11,7 @@ import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraph
+import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -32,7 +33,6 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.time.Instant
 
 @Suppress("SUSPICIOUS_UNUSED_MULTIBINDING")
 @SingleIn(AppScope::class)
@@ -67,12 +67,7 @@ interface MigrationTestGraph {
 
   @Provides
   val appInfoProvider: AppInfoProvider
-    get() = object : AppInfoProvider {
-      override val versionName: String get() = "1.2.3"
-      override val analyticsIncluded: Boolean get() = false
-      override val supportDevelopmentIncluded: Boolean get() = false
-      override val installTime: Instant get() = Instant.parse("2026-06-01T00:00:00Z")
-    }
+    get() = mockk()
 
   val sharedPreferences: SharedPreferences
 }

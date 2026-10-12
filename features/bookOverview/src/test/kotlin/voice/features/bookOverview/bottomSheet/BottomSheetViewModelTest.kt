@@ -4,6 +4,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -12,12 +14,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.data.Book
 import voice.core.data.BookId
@@ -25,7 +29,6 @@ import voice.core.data.repo.BookRepository
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
-import voice.features.bookOverview.FakeServerLibrary
 import voice.features.bookOverview.book
 import voice.features.bookOverview.chapter
 import voice.features.bookOverview.overview.BookOverviewCategory
@@ -47,7 +50,12 @@ class BottomSheetViewModelTest {
   private val book = book(chapters = listOf(chapter(duration = 10_000), chapter(duration = 10_000)), time = 0)
   private val storedBook = MutableStateFlow<Book?>(book)
   private val serverBook = book.let { it.copy(content = it.content.copy(id = BookId("abs://item/1"))) }
-  private val serverLibrary = FakeServerLibrary(serverName = MutableStateFlow("audiobooks.example.com"))
+  private val downloadStates = MutableStateFlow<Map<BookId, BookDownloadState>>(emptyMap())
+  private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
+    every { serverName } returns flowOf("audiobooks.example.com")
+    every { downloadStates } returns this@BottomSheetViewModelTest.downloadStates
+    coEvery { shouldAskForNotifications() } returns true
+  }
   private val livePlaybackState = MutableStateFlow<LivePlaybackState?>(null)
 
   private val repo = mockk<BookRepository> {
@@ -59,14 +67,8 @@ class BottomSheetViewModelTest {
   }
   private val navigator = mockk<Navigator>(relaxUnitFun = true)
 
-  private val itemViewModel = object : BottomSheetItemViewModel {
-    override suspend fun items(bookId: BookId): List<BottomSheetItem> = listOf(BottomSheetItem.Title)
-
-    override suspend fun onItemClick(
-      bookId: BookId,
-      item: BottomSheetItem,
-    ) {
-    }
+  private val itemViewModel = mockk<BottomSheetItemViewModel>(relaxUnitFun = true) {
+    coEvery { items(any()) } returns listOf(BottomSheetItem.Title)
   }
 
   @BeforeTest
@@ -133,15 +135,11 @@ class BottomSheetViewModelTest {
   @Test
   fun `an item click returns once the item is handled`() = runTest(dispatcher) {
     var handledItem: BottomSheetItem? = null
-    val slowItemViewModel = object : BottomSheetItemViewModel {
-      override suspend fun items(bookId: BookId): List<BottomSheetItem> = listOf(BottomSheetItem.Title)
-
-      override suspend fun onItemClick(
-        bookId: BookId,
-        item: BottomSheetItem,
-      ) {
+    val slowItemViewModel = mockk<BottomSheetItemViewModel> {
+      coEvery { items(any()) } returns listOf(BottomSheetItem.Title)
+      coEvery { onItemClick(any(), any()) } coAnswers {
         delay(1_000)
-        handledItem = item
+        handledItem = secondArg()
       }
     }
 
@@ -156,12 +154,12 @@ class BottomSheetViewModelTest {
       assertEquals(listOf(BottomSheetItem.Title, BottomSheetItem.Download), awaitLoaded().items)
 
       val downloading = BookDownloadState.Downloading(progress = 0.5F, downloadedBytes = 5, totalBytes = 10, waitingFor = null)
-      serverLibrary.downloadStates.value = mapOf(serverBook.id to downloading)
+      downloadStates.value = mapOf(serverBook.id to downloading)
       val state = awaitItem()!!
       assertEquals(listOf(BottomSheetItem.Title, BottomSheetItem.StopDownload), state.items)
       assertEquals(downloading, state.download)
 
-      serverLibrary.downloadStates.value = mapOf(serverBook.id to BookDownloadState.Failed)
+      downloadStates.value = mapOf(serverBook.id to BookDownloadState.Failed)
       assertEquals(
         listOf(BottomSheetItem.Title, BottomSheetItem.RetryDownload, BottomSheetItem.RemoveDownload),
         awaitItem()!!.items,
@@ -185,22 +183,34 @@ class BottomSheetViewModelTest {
     viewModel.onItemClick(BottomSheetItem.Download)
     viewModel.onItemClick(BottomSheetItem.StopDownload)
 
-    assertEquals(listOf(serverBook.id), serverLibrary.downloads)
-    assertEquals(listOf(serverBook.id), serverLibrary.removedDownloads)
+    coVerify(exactly = 1) {
+      serverLibrary.download(serverBook.id)
+      serverLibrary.removeDownload(serverBook.id)
+    }
   }
 
   @Test
-  fun `voice asks for notifications at the first download only`() = runTest(dispatcher) {
+  fun `voice asks for notifications when the server library wants it`() = runTest(dispatcher) {
     viewModel(bookId = serverBook.id).test {
       assertTrue(awaitLoaded().askForNotifications)
     }
+  }
 
-    bottomSheetViewModel(bookId = serverBook.id).onAskedForNotifications()
-    runCurrent()
+  @Test
+  fun `voice does not ask for notifications again once the server library has them`() = runTest(dispatcher) {
+    coEvery { serverLibrary.shouldAskForNotifications() } returns false
 
     viewModel(bookId = serverBook.id).test {
       assertFalse(awaitLoaded().askForNotifications)
     }
+  }
+
+  @Test
+  fun `asking for notifications is passed on to the server library`() = runTest(dispatcher) {
+    bottomSheetViewModel(bookId = serverBook.id).onAskedForNotifications()
+    runCurrent()
+
+    coVerify { serverLibrary.onAskedForNotifications() }
   }
 
   @Test

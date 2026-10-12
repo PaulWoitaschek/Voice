@@ -26,7 +26,6 @@ dependencies {
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.session)
 
-  testImplementation(libs.bundles.testing.jvm)
   testImplementation(libs.media3.testUtils.core)
   testImplementation(libs.media3.testUtils.robolectric)
 }

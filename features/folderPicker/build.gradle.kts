@@ -19,6 +19,4 @@ dependencies {
   implementation(libs.coil)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)
-
-  testImplementation(libs.molecule)
 }

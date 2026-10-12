@@ -1,6 +1,5 @@
 package voice.features.settings
 
-import androidx.datastore.core.DataStore
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
@@ -10,17 +9,16 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.GridMode
@@ -76,7 +74,10 @@ class SettingsViewModelTest {
   private val kioskModeFeatureFlag = MemoryFeatureFlag(false)
   private val supportDevelopmentFeatureFlag = MemoryFeatureFlag(true)
   private val audiobookshelfFeatureFlag = MemoryFeatureFlag(false)
-  private val serverLibrary = FakeServerLibrary()
+  private val serverName = MutableStateFlow<String?>(null)
+  private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
+    every { serverName } returns this@SettingsViewModelTest.serverName
+  }
   private val supporterStatusStore = MemoryDataStore(SupporterStatus())
   private val dynamicColorAvailability = mockk<DynamicColorAvailability> {
     every { isSupported() } returns true
@@ -270,7 +271,7 @@ class SettingsViewModelTest {
 
   @Test
   fun `a connected server stays in the settings while the feature is off`() = scope.runTest {
-    serverLibrary.serverName.value = "audiobooks.example.com"
+    serverName.value = "audiobooks.example.com"
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
@@ -445,14 +446,3 @@ private fun folder(name: String) = DocumentFileWithUri(
   },
   uri = mockk(),
 )
-
-private class MemoryDataStore<T>(initial: T) : DataStore<T> {
-
-  private val value = MutableStateFlow(initial)
-
-  override val data: Flow<T> get() = value
-
-  override suspend fun updateData(transform: suspend (t: T) -> T): T {
-    return value.updateAndGet { transform(it) }
-  }
-}

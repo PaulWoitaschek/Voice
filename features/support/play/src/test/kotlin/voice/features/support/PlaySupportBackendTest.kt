@@ -3,10 +3,13 @@ package voice.features.support
 import android.app.Activity
 import app.cash.turbine.test
 import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
@@ -29,7 +32,17 @@ class PlaySupportBackendTest {
 
   private val scope = TestScope()
   private val now = Instant.parse("2026-10-07T10:00:00Z")
-  private val billing = FakeBilling()
+  private val updates = MutableSharedFlow<PurchaseUpdate>()
+  private val billing = mockk<Billing> {
+    every { packageName } returns "de.ph1b.audiobook"
+    every { purchaseUpdates } returns updates
+    coEvery { products() } returns SupportProducts.subscriptions.keys.map { BillingProduct(it, "€2") } +
+      SupportProducts.tips.map { BillingProduct(it, "€1") }
+    coEvery { purchases() } returns emptyList()
+    coEvery { acknowledge(any()) } returns true
+    coEvery { consume(any()) } returns true
+    every { launch(any(), any(), any()) } returns true
+  }
   private val supporterStatusStore = MemoryDataStore(SupporterStatus())
   private val navigator = mockk<Navigator> {
     every { goTo(any()) } just Runs
@@ -55,7 +68,7 @@ class PlaySupportBackendTest {
 
   @Test
   fun `refresh without google play is unavailable`() = scope.runTest {
-    billing.products = null
+    coEvery { billing.products() } returns null
     val backend = backend()
 
     backend.refresh()
@@ -67,7 +80,7 @@ class PlaySupportBackendTest {
   @Test
   fun `a running subscription is acknowledged and grows the badge`() = scope.runTest {
     val purchaseTime = now.atZone(ZoneOffset.UTC).minusMonths(4).toInstant()
-    billing.purchases = listOf(purchase("supporter_honey_tea_yearly", purchaseTime, acknowledged = false))
+    coEvery { billing.purchases() } returns listOf(purchase("supporter_honey_tea_yearly", purchaseTime, acknowledged = false))
     val backend = backend()
 
     backend.refresh()
@@ -78,7 +91,8 @@ class PlaySupportBackendTest {
       expected = ActiveSubscription(SupporterTier.HoneyTea, SupportPeriod.Yearly),
       actual = state.activeSubscription,
     )
-    assertEquals(expected = listOf("token_supporter_honey_tea_yearly"), actual = billing.acknowledged)
+    coVerify(exactly = 1) { val _ = billing.acknowledge(any()) }
+    coVerify { val _ = billing.acknowledge("token_supporter_honey_tea_yearly") }
     val status = supporterStatusStore.data.first()
     assertEquals(expected = 4, actual = status.subscribedMonths)
     assertEquals(expected = purchaseTime.toEpochMilli(), actual = status.supporterSince)
@@ -107,11 +121,12 @@ class PlaySupportBackendTest {
     runCurrent()
 
     backend.events.test {
-      billing.updates.emit(PurchaseUpdate.Purchases(listOf(purchase("tip_small", now))))
+      updates.emit(PurchaseUpdate.Purchases(listOf(purchase("tip_small", now))))
 
       assertEquals(expected = SupportEvent.ThankYou, actual = awaitItem())
     }
-    assertEquals(expected = listOf("token_tip_small"), actual = billing.consumed)
+    coVerify(exactly = 1) { val _ = billing.consume(any()) }
+    coVerify { val _ = billing.consume("token_tip_small") }
     val status = supporterStatusStore.data.first()
     assertTrue(status.tipped)
     assertEquals(expected = SupporterBadge.TipJar, actual = status.badge)
@@ -119,8 +134,8 @@ class PlaySupportBackendTest {
 
   @Test
   fun `a tip is credited even when the consume result gets lost`() = scope.runTest {
-    billing.consumeSucceeds = false
-    billing.purchases = listOf(purchase("tip_small", now))
+    coEvery { billing.consume(any()) } returns false
+    coEvery { billing.purchases() } returns listOf(purchase("tip_small", now))
     val backend = backend()
 
     backend.refresh()
@@ -134,16 +149,16 @@ class PlaySupportBackendTest {
     val backend = backend()
     backend.refresh()
     runCurrent()
-    billing.purchases = null
+    coEvery { billing.purchases() } returns null
     val bought = purchase("supporter_tea_monthly", now)
 
-    billing.updates.emit(PurchaseUpdate.Purchases(listOf(bought)))
+    updates.emit(PurchaseUpdate.Purchases(listOf(bought)))
     runCurrent()
     backend.subscribe(activity, SupporterTier.GoldenMic, SupportPeriod.Yearly)
 
     val state = assertIs<SupportBackendState.Play>(backend.state.value)
     assertEquals(expected = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly), actual = state.activeSubscription)
-    assertEquals(expected = listOf<Pair<String, BillingPurchase?>>("supporter_golden_mic_yearly" to bought), actual = billing.launches)
+    verify(exactly = 1) { val _ = billing.launch(activity, "supporter_golden_mic_yearly", bought) }
     assertEquals(expected = SupporterBadge.FirstCup, actual = supporterStatusStore.data.first().badge)
   }
 
@@ -153,13 +168,13 @@ class PlaySupportBackendTest {
     runCurrent()
 
     backend.events.test {
-      billing.updates.emit(
+      updates.emit(
         PurchaseUpdate.Purchases(listOf(purchase("tip_small", now, state = BillingPurchase.State.Pending))),
       )
 
       assertEquals(expected = SupportEvent.Pending, actual = awaitItem())
     }
-    assertEquals(expected = emptyList<String>(), actual = billing.consumed)
+    coVerify(exactly = 0) { val _ = billing.consume(any()) }
   }
 
   @Test
@@ -168,7 +183,7 @@ class PlaySupportBackendTest {
     runCurrent()
 
     backend.events.test {
-      billing.updates.emit(PurchaseUpdate.Failed)
+      updates.emit(PurchaseUpdate.Failed)
 
       assertEquals(expected = SupportEvent.Failed, actual = awaitItem())
     }
@@ -177,19 +192,19 @@ class PlaySupportBackendTest {
   @Test
   fun `switching tiers replaces the running subscription`() = scope.runTest {
     val running = purchase("supporter_tea_monthly", now)
-    billing.purchases = listOf(running)
+    coEvery { billing.purchases() } returns listOf(running)
     val backend = backend()
     backend.refresh()
     runCurrent()
 
     backend.subscribe(activity, SupporterTier.GoldenMic, SupportPeriod.Yearly)
 
-    assertEquals(expected = listOf<Pair<String, BillingPurchase?>>("supporter_golden_mic_yearly" to running), actual = billing.launches)
+    verify(exactly = 1) { val _ = billing.launch(activity, "supporter_golden_mic_yearly", running) }
   }
 
   @Test
   fun `a purchase screen that doesn't open is announced`() = scope.runTest {
-    billing.launchSucceeds = false
+    every { billing.launch(any(), any(), any()) } returns false
     val backend = backend()
 
     backend.events.test {
@@ -201,7 +216,7 @@ class PlaySupportBackendTest {
 
   @Test
   fun `managing opens the running subscription in google play`() = scope.runTest {
-    billing.purchases = listOf(purchase("supporter_tea_monthly", now))
+    coEvery { billing.purchases() } returns listOf(purchase("supporter_tea_monthly", now))
     val backend = backend()
     backend.refresh()
     runCurrent()
@@ -222,7 +237,7 @@ class PlaySupportBackendTest {
       billing = billing,
       supporterStatusStore = supporterStatusStore,
       navigator = navigator,
-      analytics = mockk<Analytics>(relaxed = true),
+      analytics = mockk<Analytics>(relaxUnitFun = true),
       clock = Clock.fixed(now, ZoneOffset.UTC),
       scope = backgroundScope,
     )

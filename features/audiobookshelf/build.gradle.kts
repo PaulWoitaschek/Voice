@@ -15,6 +15,4 @@ dependencies {
   implementation(libs.androidxCore)
   implementation(libs.coil)
   implementation(libs.navigation3.ui)
-
-  testImplementation(libs.molecule)
 }

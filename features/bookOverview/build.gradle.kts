@@ -20,7 +20,4 @@ dependencies {
   implementation(libs.lifecycle)
   implementation(libs.documentFile)
   implementation(libs.navigation3.ui)
-
-  testImplementation(libs.bundles.testing.jvm)
-  testImplementation(libs.molecule)
 }

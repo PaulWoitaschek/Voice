@@ -1,12 +1,8 @@
 package voice.core.playback.session.search
 
 import android.provider.MediaStore
-import androidx.datastore.core.DataStore
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.test.runTest
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -14,6 +10,7 @@ import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookRepository
+import voice.core.playback.MemoryDataStore
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -137,15 +134,4 @@ private fun chapter(): Chapter {
     markData = emptyList(),
     fileSize = 0,
   )
-}
-
-private class MemoryDataStore<T>(initial: T) : DataStore<T> {
-
-  private val value = MutableStateFlow(initial)
-
-  override val data: Flow<T> get() = value
-
-  override suspend fun updateData(transform: suspend (t: T) -> T): T {
-    return value.updateAndGet { transform(it) }
-  }
 }

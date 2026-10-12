@@ -3,6 +3,9 @@ package voice.core.scanner
 import android.provider.DocumentsContract
 import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
@@ -10,8 +13,9 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ChapterId
-import voice.core.data.ListeningEvent
-import voice.core.data.ListeningSession
+import voice.core.data.repo.BookmarkRepo
+import voice.core.data.repo.ListeningHistoryRepo
+import voice.core.data.repo.ListeningStatsRepo
 import java.io.File
 import java.time.Instant
 import kotlin.test.Test
@@ -20,9 +24,11 @@ import kotlin.test.assertEquals
 @RunWith(AndroidJUnit4::class)
 class ProgressCarryOverTest {
 
-  private val bookmarkRepo = MemoryBookmarkRepo()
-  private val listeningHistoryRepo = MemoryListeningHistoryRepo()
-  private val listeningStatsRepo = MemoryListeningStatsRepo()
+  private val bookmarkRepo = mockk<BookmarkRepo>(relaxUnitFun = true) {
+    coEvery { bookmarks(any()) } returns emptyList()
+  }
+  private val listeningHistoryRepo = mockk<ListeningHistoryRepo>(relaxUnitFun = true)
+  private val listeningStatsRepo = mockk<ListeningStatsRepo>(relaxUnitFun = true)
   private val currentBookStore = MemoryDataStore<BookId?>(null)
   private val carryOver = ProgressCarryOver(bookmarkRepo, listeningHistoryRepo, listeningStatsRepo, currentBookStore)
 
@@ -60,7 +66,7 @@ class ProgressCarryOverTest {
       setBySleepTimer = false,
       id = Bookmark.Id.random(),
     )
-    bookmarkRepo.addBookmark(bookmark)
+    coEvery { bookmarkRepo.bookmarks(old) } returns listOf(bookmark)
     currentBookStore.updateData { old.id }
 
     val newChapters = listOf("1.mp3", "2.mp3").map {
@@ -83,7 +89,8 @@ class ProgressCarryOverTest {
       ),
       actual = carried,
     )
-    assertEquals(expected = listOf(bookmark.copy(bookId = new.id, chapterId = newChapters[1])), actual = bookmarkRepo.all)
+    coVerify(exactly = 1) { bookmarkRepo.addBookmark(any()) }
+    coVerify { bookmarkRepo.addBookmark(bookmark.copy(bookId = new.id, chapterId = newChapters[1])) }
     assertEquals(expected = new.id, actual = currentBookStore.data.first())
   }
 
@@ -96,8 +103,6 @@ class ProgressCarryOverTest {
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = oldChapters,
     )
-    val chapterChange = historyEvent(old.id, chapterId = oldChapters[0], toChapterId = oldChapters[1])
-    listeningHistoryRepo.add(chapterChange)
 
     val newChapters = listOf("1.mp3", "2.mp3").map {
       ChapterId(documentUri(tree = "primary:Audiobooks/Book", document = "primary:Audiobooks/Book/$it"))
@@ -109,10 +114,13 @@ class ProgressCarryOverTest {
 
     val _ = carryOver.carryOver(new, PreviousBooks(listOf(old), scanned = setOf(new.id)))
 
-    assertEquals(
-      expected = listOf(chapterChange.copy(bookId = new.id, chapterId = newChapters[0], toChapterId = newChapters[1])),
-      actual = listeningHistoryRepo.all,
-    )
+    coVerify {
+      listeningHistoryRepo.moveToBook(
+        from = listOf(old.id),
+        to = new.id,
+        chapters = oldChapters.zip(newChapters).toMap(),
+      )
+    }
   }
 
   @Test
@@ -124,16 +132,6 @@ class ProgressCarryOverTest {
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = oldChapters,
     )
-    val session = ListeningSession(
-      bookId = old.id,
-      startedAtMillis = 0,
-      endedAtMillis = 60_000,
-      listenedMillis = 60_000,
-      audioMillis = 60_000,
-      utcOffsetSeconds = 0,
-      reachedEnd = false,
-    )
-    val sessionId = listeningStatsRepo.save(session)
 
     val newChapters = listOf("1.mp3", "2.mp3").map {
       ChapterId(documentUri(tree = "primary:Audiobooks/Book", document = "primary:Audiobooks/Book/$it"))
@@ -145,7 +143,7 @@ class ProgressCarryOverTest {
 
     val _ = carryOver.carryOver(new, PreviousBooks(listOf(old), scanned = setOf(new.id)))
 
-    assertEquals(expected = listOf(session.copy(bookId = new.id, id = sessionId)), actual = listeningStatsRepo.all)
+    coVerify { listeningStatsRepo.moveToBook(from = listOf(old.id), to = new.id) }
   }
 
   @Test
@@ -157,10 +155,6 @@ class ProgressCarryOverTest {
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks")),
       chapters = chapters,
     )
-    val inBook = historyEvent(old.id, chapterId = chapters[0])
-    val inOther = historyEvent(old.id, chapterId = chapters[1])
-    listeningHistoryRepo.add(inBook)
-    listeningHistoryRepo.add(inOther)
     val new = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = chapters.take(1),
@@ -168,7 +162,9 @@ class ProgressCarryOverTest {
 
     val _ = carryOver.carryOver(new, PreviousBooks(listOf(old), scanned = setOf(new.id)))
 
-    assertEquals(expected = listOf(inBook.copy(bookId = new.id), inOther), actual = listeningHistoryRepo.all)
+    coVerify {
+      listeningHistoryRepo.moveToBook(from = listOf(old.id), to = new.id, chapters = mapOf(chapters[0] to chapters[0]))
+    }
   }
 
   @Test
@@ -242,21 +238,6 @@ class ProgressCarryOverTest {
   ) = DocumentsContract.buildDocumentUriUsingTree(
     DocumentsContract.buildTreeDocumentUri("com.android.externalstorage.documents", tree),
     document,
-  )
-
-  private fun historyEvent(
-    bookId: BookId,
-    chapterId: ChapterId,
-    toChapterId: ChapterId? = null,
-  ) = ListeningEvent(
-    bookId = bookId,
-    type = if (toChapterId == null) ListeningEvent.Type.Play else ListeningEvent.Type.ChapterChange,
-    source = ListeningEvent.Source.App,
-    atMillis = 0,
-    chapterId = chapterId,
-    time = 0,
-    toChapterId = toChapterId,
-    toTime = toChapterId?.let { 0 },
   )
 
   private fun bookContent(

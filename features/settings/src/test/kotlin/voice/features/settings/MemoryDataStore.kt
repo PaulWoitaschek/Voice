@@ -1,4 +1,4 @@
-package voice.core.data.repo.internals
+package voice.features.settings
 
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.Flow
