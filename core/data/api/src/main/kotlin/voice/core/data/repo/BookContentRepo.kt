@@ -16,6 +16,11 @@ public interface BookContentRepo {
   public suspend fun setAllInactiveExcept(ids: List<BookId>)
 
   public suspend fun put(content: BookContent)
+
+  /**
+   * The ids of the active books that match [query], in the full text search `MATCH` syntax.
+   */
+  public suspend fun search(query: String): List<BookId>
 }
 
 public suspend inline fun BookContentRepo.getOrPut(

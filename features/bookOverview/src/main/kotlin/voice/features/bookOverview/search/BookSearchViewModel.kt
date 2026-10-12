@@ -32,7 +32,7 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.KioskModeDemoData
 import voice.core.data.repo.BookRepository
-import voice.core.data.repo.internals.dao.RecentBookSearchDao
+import voice.core.data.repo.RecentBookSearchRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
@@ -58,7 +58,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class BookSearchViewModel(
   private val repo: BookRepository,
   private val search: BookSearch,
-  private val recentBookSearchDao: RecentBookSearchDao,
+  private val recentBookSearchRepo: RecentBookSearchRepo,
   private val navigator: Navigator,
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
@@ -97,7 +97,7 @@ class BookSearchViewModel(
     val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeState()
 
-    val recentSearches = remember { recentBookSearchDao.recentBookSearches() }
+    val recentSearches = remember { recentBookSearchRepo.flow() }
       .collectAsState(initial = emptyList()).value
     val currentBookId = remember { currentBookStore.data }
       .collectAsState(initial = null).value
@@ -267,13 +267,13 @@ class BookSearchViewModel(
 
   fun onRemoveRecentSearch(recentSearch: String) {
     scope.launch {
-      recentBookSearchDao.delete(recentSearch)
+      recentBookSearchRepo.delete(recentSearch)
     }
   }
 
   fun onClearRecentSearches() {
     scope.launch {
-      recentBookSearchDao.clear()
+      recentBookSearchRepo.clear()
     }
   }
 
@@ -311,7 +311,7 @@ class BookSearchViewModel(
     val trimmed = query.trim()
     if (trimmed.isNotEmpty()) {
       scope.launch {
-        recentBookSearchDao.add(trimmed)
+        recentBookSearchRepo.add(trimmed)
       }
     }
   }

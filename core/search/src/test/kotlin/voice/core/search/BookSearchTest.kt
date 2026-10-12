@@ -230,12 +230,13 @@ class BookSearchTest {
   ) {
     val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
       .build()
+    val contentRepo = BookContentRepoImpl(db.bookContentDao())
     val repo = BookRepositoryImpl(
       chapterRepo = ChapterRepoImpl(db.chapterDao()),
-      contentRepo = BookContentRepoImpl(db.bookContentDao()),
+      contentRepo = contentRepo,
     )
     val search = BookSearch(
-      dao = db.bookContentDao(),
+      contentRepo = contentRepo,
       repo = repo,
     )
 
