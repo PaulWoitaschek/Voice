@@ -23,5 +23,4 @@ dependencies {
   testImplementation(libs.molecule)
   testImplementation(libs.turbine)
   testImplementation(libs.compose.ui.testJunit)
-  debugImplementation(libs.compose.ui.testManifest)
 }

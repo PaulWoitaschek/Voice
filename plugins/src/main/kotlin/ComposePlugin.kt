@@ -21,6 +21,9 @@ class ComposePlugin : Plugin<Project> {
       target.extensions.configure<LibraryExtension> {
         configureCompose(this, target)
       }
+      if (target.path != ":core:snapshot") {
+        target.configurePreviewSnapshots()
+      }
     }
   }
 
