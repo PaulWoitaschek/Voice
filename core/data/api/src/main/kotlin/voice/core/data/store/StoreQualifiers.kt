@@ -58,3 +58,9 @@ public annotation class CoverSeedColorsStore
 
 @Qualifier
 public annotation class SupporterStatusStore
+
+/**
+ * The speed the listener last played at or picked, which a book that was never played starts at.
+ */
+@Qualifier
+public annotation class LastPlaybackSpeedStore

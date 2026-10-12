@@ -26,9 +26,11 @@ import voice.core.data.ThemeColorScheme
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.playstate.PlayStateManager
+import voice.core.playback.withDefaultSpeed
 import voice.core.sleeptimer.SleepTimer
 import voice.core.ui.CoverSeedColors
 import java.time.Instant
@@ -46,6 +48,8 @@ class WidgetData(
   private val currentBookResolver: Lazy<CurrentBookResolver>,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
+  @LastPlaybackSpeedStore
+  private val lastPlaybackSpeedStore: DataStore<Float>,
   private val playStateManager: PlayStateManager,
   private val sleepTimer: SleepTimer,
   @ThemeColorSchemeStore
@@ -72,13 +76,14 @@ class WidgetData(
           bookRepository.flow(id).distinctUntilChangedBy { it?.content?.withoutPlaybackNoise() },
           playing,
           refreshWhilePlaying(),
-        ) { book, playing, _ ->
+          lastPlaybackSpeedStore.data,
+        ) { book, playing, _, defaultSpeed ->
           if (book != null && playing) {
             // with live playback persistence, the database doesn't follow the position while playing
             currentBookResolver.value.book(id) ?: book
           } else {
             book
-          }
+          }?.withDefaultSpeed { defaultSpeed }
         }
       }
     }
@@ -173,5 +178,6 @@ class WidgetData(
 // the position is saved several times a second while playing, but the widgets only show minutes
 private fun BookContent.withoutPlaybackNoise(): BookContent = copy(
   positionInChapter = positionInChapter / 60_000,
-  lastPlayedAt = Instant.EPOCH,
+  // whether the book was played stays, because a book that never was shows the last speed
+  lastPlayedAt = if (lastPlayedAt == Instant.EPOCH) Instant.EPOCH else Instant.MAX,
 )

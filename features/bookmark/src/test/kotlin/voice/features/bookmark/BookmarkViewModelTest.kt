@@ -28,6 +28,7 @@ import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimerState
+import voice.core.ui.formatTime
 import voice.navigation.Navigator
 import java.time.Clock
 import kotlin.test.Test
@@ -57,6 +58,7 @@ class BookmarkViewModelTest {
   private fun viewModel(
     editBookmarkId: String? = null,
     experimentalPlaybackPersistence: Boolean = false,
+    lastPlaybackSpeed: Float = 1F,
   ) = BookmarkViewModel(
     currentBookStore = MemoryDataStore<BookId?>(null),
     bookRepository = mockk {
@@ -76,6 +78,7 @@ class BookmarkViewModelTest {
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
     kioskModeFeatureFlag = MemoryFeatureFlag(false),
     experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),
+    lastPlaybackSpeedStore = MemoryDataStore(lastPlaybackSpeed),
     bookId = book.id,
     editBookmarkId = editBookmarkId,
   )
@@ -232,6 +235,15 @@ class BookmarkViewModelTest {
         playerController.setPosition(any(), any(), any())
         navigator.goBack()
       }
+    }
+  }
+
+  @Test
+  fun `the time left of a book that was never played is at the last speed`() {
+    viewModel(lastPlaybackSpeed = 2F).test {
+      // 5 of 20 minutes are left
+      val state = awaitState { it.bookBar != null }
+      assertEquals(expected = formatTime(2.5.minutes.inWholeMilliseconds), actual = state.bookBar!!.remaining)
     }
   }
 
