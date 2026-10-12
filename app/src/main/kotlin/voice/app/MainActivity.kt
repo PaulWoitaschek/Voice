@@ -254,6 +254,7 @@ class MainActivity : AppCompatActivity() {
     private const val SPLASH_SCREEN_TIMEOUT_MS = 2000L
 
     const val NI_GO_TO_BOOK = "niGotoBook"
+    const val DEBUG_BACK_STACK = "debugBackStack"
 
     fun goToBookIntent(context: Context) = Intent(context, MainActivity::class.java).apply {
       putExtra(NI_GO_TO_BOOK, true)

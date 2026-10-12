@@ -7,25 +7,22 @@ import com.github.ajalt.clikt.core.main
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 
 class PopulateTestFiles : CliktCommand() {
 
   private val skipAdb by option("--skip-adb").flag(default = false)
-  private val regenerate by option("--regenerate").flag(default = false)
 
   private val testFilesRoot = File("build/testfiles/")
-  private val tempBooksRoot = File(testFilesRoot, "_generated_books")
-  private val baseAudio = File("core/scanner/src/test/resources/auphonic_chapters_demo.mp3")
+  private val workDir = File("build/testfiles-work/")
+  private val samplesRoot = File("core/scanner/src/test/resources")
   private val demoArtworksRoot = File("artwork/demo-data")
 
-  private val folderBooks = listOf(
+  private val books = listOf(
     BookSpec(
-      id = "dream_in_a_boat",
       title = "Dream in a Boat",
       author = "Amelia Winters",
       artwork = "horizon.webp",
+      format = Format.Mp3,
       chapters = listOf(
         ChapterSpec("Gliding into Dawn", loopCount = 4),
         ChapterSpec("Harbor Whispers", loopCount = 5),
@@ -33,10 +30,10 @@ class PopulateTestFiles : CliktCommand() {
       ),
     ),
     BookSpec(
-      id = "el_guitarrero",
       title = "El Guitarrero",
       author = "Lucia Marquez",
       artwork = "bookshop.webp",
+      format = Format.Mp3,
       chapters = listOf(
         ChapterSpec("Strings Awake", loopCount = 4),
         ChapterSpec("Courtyard Echoes", loopCount = 5),
@@ -44,10 +41,10 @@ class PopulateTestFiles : CliktCommand() {
       ),
     ),
     BookSpec(
-      id = "fabulous_geysha",
       title = "The Fabulous Geysha",
       author = "Lucia Marquez",
       artwork = "echoes.webp",
+      format = Format.M4b,
       chapters = listOf(
         ChapterSpec("Lantern Lights", loopCount = 4),
         ChapterSpec("Winding Garden", loopCount = 4),
@@ -55,55 +52,60 @@ class PopulateTestFiles : CliktCommand() {
       ),
     ),
     BookSpec(
-      id = "boy_and_the_cave",
       title = "The Boy and the Cave",
       author = "June Porter",
       artwork = "horizon.webp",
+      format = Format.Opus,
       chapters = listOf(
         ChapterSpec("Footsteps Below", loopCount = 3),
         ChapterSpec("Hidden Paintings", loopCount = 4),
         ChapterSpec("Echoes of Fire", loopCount = 5),
       ),
     ),
-  )
-
-  private val singleBooks = listOf(
     BookSpec(
-      id = "treeman_single",
       title = "Treeman",
       author = "Amelia Winters",
       artwork = "bookshop.webp",
+      format = Format.Mp3,
       chapters = listOf(
         ChapterSpec("Treeman", loopCount = 8),
       ),
     ),
     BookSpec(
-      id = "snakey_single",
       title = "Snakey",
       author = "Harlan Pike",
       artwork = "echoes.webp",
+      format = Format.Mp3,
       chapters = listOf(
         ChapterSpec("Snakey", loopCount = 7),
       ),
     ),
   )
 
-  override fun help(context: Context): String = "Populates realistic audiobook test files"
+  override fun help(context: Context): String = "Populates realistic audiobook test files: MP3 folders, an M4B with chapters, and Opus"
 
   override fun run() {
     validateEnvironment()
-    prepareFolders()
+    testFilesRoot.deleteRecursively()
+    workDir.deleteRecursively()
+    workDir.mkdirs()
 
-    println("Preparing multi-chapter audiobooks")
-    val generatedFolderBooks = generateSourceBooks(folderBooks)
-    println("Preparing single-file audiobooks")
-    val generatedSingleBooks = generateSourceBooks(singleBooks)
+    // Chapters loop these with stream copy instead of re-encoding, which keeps the generation instant.
+    val samples = mapOf(
+      Format.Mp3 to encodeMp3Sample(),
+      Format.M4b to File(samplesRoot, "auphonic_chapters_demo.m4a"),
+      Format.Opus to File(samplesRoot, "auphonic_chapters_demo.opus"),
+    )
+    println("Generating ${books.size} audiobooks")
+    val generatedBooks = books.map { book ->
+      println("- ${book.title} by ${book.author} (${book.format})")
+      GeneratedBook(book, generate(book, samples.getValue(book.format)))
+    }
 
-    copyIntoAudiobooksStructure(generatedFolderBooks, generatedSingleBooks)
-    copyIntoSingleAudiobookStructure(generatedFolderBooks)
-    copyIntoAuthorStructure(generatedFolderBooks, generatedSingleBooks)
-
-    cleanupTempFolder()
+    copyIntoAudiobooksStructure(generatedBooks)
+    copyIntoSingleAudiobookStructure(generatedBooks.first())
+    copyIntoAuthorStructure(generatedBooks)
+    workDir.deleteRecursively()
 
     if (!skipAdb) {
       pushToAdb()
@@ -113,152 +115,141 @@ class PopulateTestFiles : CliktCommand() {
   }
 
   private fun validateEnvironment() {
-    require(baseAudio.exists()) { "Base audio not found: ${baseAudio.absolutePath}" }
     require(demoArtworksRoot.exists()) { "Demo artworks folder not found: ${demoArtworksRoot.absolutePath}" }
-    (folderBooks + singleBooks).forEach { book ->
+    books.forEach { book ->
       require(book.coverFile().exists()) {
         "Missing demo artwork for ${book.title}: ${book.coverFile().absolutePath}"
       }
     }
   }
 
-  private fun prepareFolders() {
-    if (regenerate) {
-      println("Cleaning output folder: ${testFilesRoot.absolutePath}")
-      testFilesRoot.deleteRecursively()
-    }
-    testFilesRoot.mkdirs()
-    tempBooksRoot.deleteRecursively()
-    tempBooksRoot.mkdirs()
+  private fun encodeMp3Sample(): File {
+    val sample = File(workDir, "sample.mp3")
+    ffmpeg(
+      "-i", File(samplesRoot, "auphonic_chapters_demo.mp3").absolutePath,
+      "-map", "0:a",
+      "-ac", "1",
+      "-c:a", "libmp3lame",
+      "-b:a", "64k",
+      sample.absolutePath,
+    )
+    return sample
   }
 
-  private fun cleanupTempFolder() {
-    tempBooksRoot.deleteRecursively()
-  }
-
-  private fun generateSourceBooks(bookSpecs: List<BookSpec>): List<GeneratedBook> {
-    println("Generating audiobook chapters with embedded covers (${bookSpecs.size} books)")
-    return bookSpecs.map { spec ->
-      if (!needsGeneration(spec)) {
-        println("- Reusing existing output for ${spec.title} by ${spec.author}")
-        return@map GeneratedBook(spec = spec, chapterFiles = emptyList())
-      }
-
-      val outputDir = File(tempBooksRoot, spec.directoryName()).apply { mkdirs() }
-      println("- Building ${spec.title} by ${spec.author}")
-      val chapters = spec.chapters.mapIndexed { index, chapter ->
-        val outputFile = File(outputDir, "%02d - %s.mp3".format(index + 1, chapter.title))
-        println("  • Chapter ${index + 1}/${spec.chapters.size}: ${chapter.title}")
-        createChapterFile(spec, chapter, index + 1, outputFile)
+  private fun generate(
+    book: BookSpec,
+    sample: File,
+  ): List<File> {
+    val outputDir = File(workDir, book.title).apply { mkdirs() }
+    return when (book.format) {
+      Format.Mp3 -> book.chapters.mapIndexed { index, chapter ->
+        val outputFile = File(outputDir, book.chapterFileName(index))
+        ffmpeg(
+          "-stream_loop", chapter.loopCount.toString(),
+          "-i", sample.absolutePath,
+          "-i", book.coverFile().absolutePath,
+          "-map", "0:a",
+          "-map", "1:0",
+          "-c:a", "copy",
+          "-c:v", "mjpeg",
+          "-disposition:v", "attached_pic",
+          "-id3v2_version", "3",
+          "-metadata:s:v", "title=Cover",
+          "-metadata:s:v", "comment=Cover (front)",
+          "-map_metadata", "-1",
+          *book.metadata(chapter.title, trackNumber = index + 1),
+          outputFile.absolutePath,
+        )
         outputFile
       }
-      GeneratedBook(spec = spec, chapterFiles = chapters)
-    }
-  }
-
-  private fun createChapterFile(
-    book: BookSpec,
-    chapter: ChapterSpec,
-    trackNumber: Int,
-    outputFile: File,
-  ) {
-    val coverFile = book.coverFile()
-    val metadata = listOf(
-      "-metadata", "title=${chapter.title}",
-      "-metadata", "album=${book.title}",
-      "-metadata", "album_artist=${book.author}",
-      "-metadata", "artist=${book.author}",
-      "-metadata", "track=$trackNumber/${book.chapters.size}",
-      "-metadata", "genre=Audiobook",
-      "-metadata", "comment=Generated for Voice test library",
-      "-metadata", "date=2024",
-      "-metadata:s:v", "title=Cover",
-      "-metadata:s:v", "comment=Cover (front)",
-    )
-
-    val command = mutableListOf(
-      "ffmpeg",
-      "-hide_banner",
-      "-loglevel", "error",
-      "-y",
-      "-stream_loop", chapter.loopCount.toString(),
-      "-i", baseAudio.absolutePath,
-      "-i", coverFile.absolutePath,
-      "-map", "0:a",
-      "-map", "1:0",
-      "-c:v", "mjpeg",
-      "-c:a", "libmp3lame",
-      "-b:a", "160k",
-      "-id3v2_version", "3",
-      "-disposition:v", "attached_pic",
-    )
-    command.addAll(metadata)
-    command.add(outputFile.absolutePath)
-
-    runCommand(command)
-  }
-
-  private fun copyIntoAudiobooksStructure(
-    generatedFolderBooks: List<GeneratedBook>,
-    generatedSingleBooks: List<GeneratedBook>,
-  ) {
-    val audiobooksDir = File(testFilesRoot, "Audiobooks").apply { mkdirs() }
-    println("Copying books into /Audiobooks structure")
-    generatedFolderBooks.forEach { generatedBook ->
-      val destinationDir = File(audiobooksDir, generatedBook.spec.directoryName()).apply { mkdirs() }
-      generatedBook.copyChaptersTo(destinationDir)
-    }
-
-    println("Adding standalone audiobooks into /Audiobooks root")
-    generatedSingleBooks.forEach { generatedBook ->
-      generatedBook.chapterFiles.singleOrNull()?.let { chapter ->
-        val targetFile = File(audiobooksDir, "${generatedBook.spec.title}.mp3")
-        copyFile(chapter, targetFile)
+      Format.Opus -> {
+        val chapterFiles = book.chapters.mapIndexed { index, chapter ->
+          val outputFile = File(outputDir, book.chapterFileName(index))
+          ffmpeg(
+            "-stream_loop", chapter.loopCount.toString(),
+            "-i", sample.absolutePath,
+            "-map", "0:a",
+            "-map_chapters", "-1",
+            "-map_metadata", "-1",
+            "-c:a", "copy",
+            *book.metadata(chapter.title, trackNumber = index + 1),
+            outputFile.absolutePath,
+          )
+          outputFile
+        }
+        // tests covers that are found next to the files
+        val cover = File(outputDir, "cover.jpg")
+        ffmpeg("-i", book.coverFile().absolutePath, cover.absolutePath)
+        chapterFiles + cover
       }
-    }
-  }
-
-  private fun copyIntoSingleAudiobookStructure(
-    generatedFolderBooks: List<GeneratedBook>,
-  ) {
-    val singleDir = File(testFilesRoot, "SingleAudiobook").apply { mkdirs() }
-    println("Copying reference book into /SingleAudiobook structure")
-    val referenceBook = generatedFolderBooks.firstOrNull() ?: return
-    referenceBook.copyChaptersTo(singleDir)
-  }
-
-  private fun copyIntoAuthorStructure(
-    generatedFolderBooks: List<GeneratedBook>,
-    generatedSingleBooks: List<GeneratedBook>,
-  ) {
-    val authorsDir = File(testFilesRoot, "Authors").apply { mkdirs() }
-    println("Copying books into /Authors structure")
-    (generatedFolderBooks + generatedSingleBooks)
-      .groupBy { it.spec.author }
-      .forEach { (author, authorBooks) ->
-        val authorDir = File(authorsDir, author).apply { mkdirs() }
-        authorBooks.forEach { generatedBook ->
-          if (generatedBook.isSingleFile()) {
-            val targetFile = File(authorDir, "${generatedBook.spec.title}.mp3")
-            copyFile(generatedBook.chapterFiles.single(), targetFile)
-          } else {
-            val destination = File(authorDir, generatedBook.spec.directoryName()).apply { mkdirs() }
-            generatedBook.copyChaptersTo(destination)
+      Format.M4b -> {
+        val sampleMs = (audioDurationSeconds(sample) * 1000).toLong()
+        var startMs = 0L
+        val chapterMetadata = buildString {
+          appendLine(";FFMETADATA1")
+          book.chapters.forEach { chapter ->
+            val endMs = startMs + (chapter.loopCount + 1) * sampleMs
+            appendLine("[CHAPTER]")
+            appendLine("TIMEBASE=1/1000")
+            appendLine("START=$startMs")
+            appendLine("END=$endMs")
+            appendLine("title=${chapter.title.escapeFfmetadata()}")
+            startMs = endMs
           }
         }
+        val chaptersFile = File(workDir, "${book.title}.chapters.txt").apply { writeText(chapterMetadata) }
+        val outputFile = File(outputDir, "${book.title}.${book.format.extension}")
+        ffmpeg(
+          "-stream_loop", (book.chapters.sumOf { it.loopCount + 1 } - 1).toString(),
+          "-i", sample.absolutePath,
+          "-i", book.coverFile().absolutePath,
+          "-i", chaptersFile.absolutePath,
+          "-map", "0:a",
+          "-map", "1:0",
+          // the chapter titles come along with the metadata of the chapters file
+          "-map_metadata", "2",
+          "-map_chapters", "2",
+          "-c:a", "copy",
+          "-c:v", "mjpeg",
+          "-disposition:v", "attached_pic",
+          *book.metadata(book.title, trackNumber = null),
+          outputFile.absolutePath,
+        )
+        listOf(outputFile)
       }
-  }
-
-  private fun GeneratedBook.copyChaptersTo(destinationDir: File) {
-    if (chapterFiles.isEmpty()) return
-    destinationDir.mkdirs()
-    chapterFiles.forEach { sourceFile ->
-      val targetFile = File(destinationDir, sourceFile.name)
-      copyFile(sourceFile, targetFile)
     }
   }
 
-  private fun GeneratedBook.isSingleFile(): Boolean = chapterFiles.size == 1
+  private fun copyIntoAudiobooksStructure(generatedBooks: List<GeneratedBook>) {
+    println("Copying books into /Audiobooks structure")
+    val audiobooksDir = File(testFilesRoot, "Audiobooks")
+    generatedBooks.forEach { it.copyInto(audiobooksDir) }
+  }
+
+  private fun copyIntoSingleAudiobookStructure(referenceBook: GeneratedBook) {
+    println("Copying ${referenceBook.spec.title} into /SingleAudiobook structure")
+    val singleDir = File(testFilesRoot, "SingleAudiobook")
+    referenceBook.files.forEach { it.copyTo(File(singleDir, it.name)) }
+  }
+
+  private fun copyIntoAuthorStructure(generatedBooks: List<GeneratedBook>) {
+    println("Copying books into /Authors structure")
+    generatedBooks
+      .groupBy { it.spec.author }
+      .forEach { (author, authorBooks) ->
+        val authorDir = File(testFilesRoot, "Authors/$author")
+        authorBooks.forEach { it.copyInto(authorDir) }
+      }
+  }
+
+  private fun GeneratedBook.copyInto(parent: File) {
+    val single = files.singleOrNull()
+    if (single != null) {
+      single.copyTo(File(parent, "${spec.title}.${single.extension}"))
+    } else {
+      files.forEach { it.copyTo(File(parent, "${spec.title}/${it.name}")) }
+    }
+  }
 
   private fun pushToAdb() {
     println("Pushing generated audiobooks to adb")
@@ -266,38 +257,19 @@ class PopulateTestFiles : CliktCommand() {
     runCommand(listOf("adb", "push", testFilesRoot.absolutePath, "/sdcard/testfiles"))
   }
 
-  private fun copyFile(source: File, target: File) {
-    if (!regenerate && target.exists()) return
-    target.parentFile?.mkdirs()
-    Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING)
+  private fun audioDurationSeconds(file: File): Double {
+    val process = ProcessBuilder(
+      "ffprobe", "-v", "error", "-select_streams", "a:0", "-show_entries", "stream=duration", "-of", "csv=p=0", file.absolutePath,
+    ).start()
+    val output = process.inputStream.bufferedReader().readText().trim()
+    check(process.waitFor() == 0) { "ffprobe failed for $file" }
+    return output.toDouble()
   }
 
-  private fun needsGeneration(spec: BookSpec): Boolean {
-    if (regenerate) return true
-    return expectedOutputs(spec).any { !it.exists() }
-  }
+  private fun String.escapeFfmetadata(): String = replace(Regex("[=;#\\\\\n]")) { "\\" + it.value }
 
-  private fun expectedOutputs(spec: BookSpec): List<File> {
-    val authorDir = File(testFilesRoot, "Authors/${spec.author}")
-    return if (spec.chapters.size == 1) {
-      listOf(
-        File(testFilesRoot, "Audiobooks/${spec.title}.mp3"),
-        File(authorDir, "${spec.title}.mp3"),
-      )
-    } else {
-      val chapterFiles = spec.chapters.mapIndexed { index, chapter ->
-        "%02d - %s.mp3".format(index + 1, chapter.title)
-      }
-      buildList {
-        chapterFiles.forEach { fileName ->
-          add(File(testFilesRoot, "Audiobooks/${spec.directoryName()}/$fileName"))
-          add(File(authorDir, "${spec.directoryName()}/$fileName"))
-          if (spec == folderBooks.first()) {
-            add(File(testFilesRoot, "SingleAudiobook/$fileName"))
-          }
-        }
-      }
-    }
+  private fun ffmpeg(vararg arguments: String) {
+    runCommand(listOf("ffmpeg", "-hide_banner", "-loglevel", "error", "-y") + arguments)
   }
 
   private fun runCommand(command: List<String>) {
@@ -309,15 +281,44 @@ class PopulateTestFiles : CliktCommand() {
     check(exitCode == 0) { "Command failed: ${command.joinToString(" ")}" }
   }
 
+  private enum class Format(val extension: String) {
+    Mp3("mp3"),
+    M4b("m4b"),
+    Opus("opus"),
+  }
+
   private data class BookSpec(
-    val id: String,
     val title: String,
     val author: String,
     val artwork: String,
+    val format: Format,
     val chapters: List<ChapterSpec>,
   ) {
-    fun directoryName(): String = title
     fun coverFile(): File = File("artwork/demo-data/$artwork")
+
+    fun chapterFileName(index: Int): String {
+      return if (chapters.size == 1) {
+        "$title.${format.extension}"
+      } else {
+        "%02d - %s.%s".format(index + 1, chapters[index].title, format.extension)
+      }
+    }
+
+    fun metadata(
+      title: String,
+      trackNumber: Int?,
+    ): Array<String> {
+      return listOfNotNull(
+        "-metadata" to "title=$title",
+        "-metadata" to "album=${this.title}",
+        "-metadata" to "album_artist=$author",
+        "-metadata" to "artist=$author",
+        trackNumber?.let { "-metadata" to "track=$it/${chapters.size}" },
+        "-metadata" to "genre=Audiobook",
+        "-metadata" to "comment=Generated for Voice test library",
+        "-metadata" to "date=2024",
+      ).flatMap { listOf(it.first, it.second) }.toTypedArray()
+    }
   }
 
   private data class ChapterSpec(
@@ -327,7 +328,7 @@ class PopulateTestFiles : CliktCommand() {
 
   private data class GeneratedBook(
     val spec: BookSpec,
-    val chapterFiles: List<File>,
+    val files: List<File>,
   )
 }
 

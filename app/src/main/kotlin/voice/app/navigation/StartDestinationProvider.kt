@@ -5,6 +5,8 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
+import voice.app.BuildConfig
 import voice.app.MainActivity
 import voice.core.audiobookshelf.Audiobookshelf
 import voice.core.data.BookId
@@ -23,9 +25,12 @@ class StartDestinationProvider(
   private val currentBookStore: DataStore<BookId?>,
   private val playerController: PlayerController,
   private val audiobookshelf: Audiobookshelf,
+  private val json: Json,
 ) {
 
   operator fun invoke(intent: Intent): List<Destination.Compose> {
+    debugBackStack(intent)?.let { return it }
+
     val showOnboarding = runBlocking { showOnboarding() }
     if (showOnboarding) {
       return listOf(Destination.OnboardingWelcome)
@@ -47,6 +52,13 @@ class StartDestinationProvider(
       }
     }
     return listOf(Destination.BookOverview)
+  }
+
+  // Lets debug builds start on any screen, see the emulator skill. Release builds ignore it, since the activity is exported.
+  private fun debugBackStack(intent: Intent): List<Destination.Compose>? {
+    if (!BuildConfig.DEBUG) return null
+    val backStack = intent.getStringExtra(MainActivity.DEBUG_BACK_STACK) ?: return null
+    return json.decodeFromString<List<Destination.Compose>>(backStack).ifEmpty { null }
   }
 
   private suspend fun showOnboarding(): Boolean {

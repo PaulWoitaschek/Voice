@@ -52,6 +52,17 @@ To unlock it:
 2. Tap the app version entry 13 times.
 3. Open the newly visible developer menu from `Settings`.
 
+## Opening a Screen Directly
+
+Debug builds can start on any back stack of `Destination.Compose`s, passed as JSON in the `debugBackStack` extra.
+The emulator skill's script builds it for you:
+
+```sh
+ANDROID_SERIAL=<serial from adb devices> .agents/skills/emulator/scripts/ui.py open BookOverview Settings DeveloperSettings
+```
+
+Agents use this through the emulator skill in `.agents/skills/emulator`, which also gives every agent its own emulator.
+
 ## Ktlint
 
 Voice uses **Ktlint** to enforce consistent code formatting.

@@ -95,5 +95,6 @@ translate-strings skill.
 
 ## Checking a design
 
-On an emulator, check light and dark, a non-default palette, Dynamic color, large fonts (1.5× and 2×), animations off,
-RTL, and a short landscape screen. For cover-colored screens, try a very bright cover and a very dark one.
+On an emulator (see the emulator skill), check light and dark, a non-default palette, Dynamic color, large fonts (1.5×
+and 2×), animations off, RTL, and a short landscape screen. For cover-colored screens, try a very bright cover and a
+very dark one.
