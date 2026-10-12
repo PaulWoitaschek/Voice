@@ -81,6 +81,7 @@ media3-testUtils-robolectric = { module = "androidx.media3:media3-test-utils-rob
 
 glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
 glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glance" }
+workManager = "androidx.work:work-runtime:2.12.0"
 
 lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 lifecycle-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }

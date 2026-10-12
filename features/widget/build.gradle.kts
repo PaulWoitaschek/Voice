@@ -22,6 +22,9 @@ dependencies {
 
   implementation(libs.glance.appwidget)
   implementation(libs.glance.material3)
+  // Glance pulls in WorkManager 2.7.1, whose keep rules let R8 strip the InputMerger constructor,
+  // so widget sessions never start in release builds
+  implementation(libs.workManager)
   implementation(libs.materialKolor)
   implementation(libs.coil)
   implementation(libs.androidxCore)
