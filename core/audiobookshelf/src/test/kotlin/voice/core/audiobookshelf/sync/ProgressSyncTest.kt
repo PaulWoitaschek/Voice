@@ -1,6 +1,7 @@
 package voice.core.audiobookshelf.sync
 
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -15,7 +16,6 @@ import org.junit.After
 import org.junit.Before
 import voice.core.audiobookshelf.MemoryBookRepository
 import voice.core.audiobookshelf.MemoryDataStore
-import voice.core.audiobookshelf.TestAppInfo
 import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.SyncedProgress
 import voice.core.audiobookshelf.api.AbsMediaProgress
@@ -197,7 +197,7 @@ class ProgressSyncTest {
   private fun progressSync(repo: MemoryBookRepository): ProgressSync {
     val accountStore = MemoryDataStore<Account?>(account)
     return ProgressSync(
-      http = AudiobookshelfHttp(accountStore, TestAppInfo),
+      http = AudiobookshelfHttp(accountStore, mockk { every { versionName } returns "1.0.0" }),
       bookRepository = repo,
       syncedProgressStore = syncedProgress,
       currentBookStore = MemoryDataStore<BookId?>(null),

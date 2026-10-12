@@ -10,9 +10,11 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
@@ -28,7 +30,6 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.ui.GridCount
-import voice.features.bookOverview.FakeServerLibrary
 import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.navigation.Destination
@@ -40,6 +41,11 @@ import kotlin.time.Instant
 class BookOverviewViewModelTest {
 
   private val testDispatcher = UnconfinedTestDispatcher()
+  private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
+    every { syncing } returns flowOf(false)
+    every { unavailableBooks } returns flowOf(emptySet())
+    every { downloadStates } returns flowOf(emptyMap())
+  }
   private val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
 
   @Test
@@ -74,7 +80,7 @@ class BookOverviewViewModelTest {
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
       kioskModeFeatureFlag = MemoryFeatureFlag(false),
       dispatcherProvider = dispatcherProvider,
-      serverLibrary = FakeServerLibrary(),
+      serverLibrary = serverLibrary,
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -134,7 +140,7 @@ class BookOverviewViewModelTest {
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
       kioskModeFeatureFlag = MemoryFeatureFlag(true),
       dispatcherProvider = dispatcherProvider,
-      serverLibrary = FakeServerLibrary(),
+      serverLibrary = serverLibrary,
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -328,7 +334,7 @@ class BookOverviewViewModelTest {
       experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
       kioskModeFeatureFlag = MemoryFeatureFlag(false),
       dispatcherProvider = dispatcherProvider,
-      serverLibrary = FakeServerLibrary(),
+      serverLibrary = serverLibrary,
     )
   }
 

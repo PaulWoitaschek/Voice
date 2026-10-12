@@ -17,7 +17,4 @@ dependencies {
   implementation(projects.core.audiobookshelf)
 
   implementation(libs.androidxCore)
-
-  testImplementation(libs.molecule)
-  testImplementation(libs.turbine)
 }

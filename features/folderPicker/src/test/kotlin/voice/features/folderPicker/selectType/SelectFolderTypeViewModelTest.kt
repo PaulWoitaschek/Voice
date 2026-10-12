@@ -7,6 +7,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
+import io.mockk.MockKMatcherScope
+import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CompletableDeferred
@@ -18,6 +20,7 @@ import org.junit.runner.RunWith
 import voice.core.common.DispatcherProvider
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
+import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.FileBasedDocumentFactory
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.scanner.BookPreview
@@ -40,12 +43,9 @@ class SelectFolderTypeViewModelTest {
 
   private val audiobookFolders = mockk<AudiobookFolders>(relaxed = true)
   private val navigator = mockk<Navigator>(relaxed = true)
-  private val previewed = mutableListOf<String>()
-  private var preview: suspend (name: String) -> BookPreview? = { name -> tagged(name) }
-  private val bookPreviewer = BookPreviewer { file ->
-    val name = file.nameWithoutExtension()
-    previewed += name
-    preview(name)
+  private val previewed = mutableListOf<CachedDocumentFile>()
+  private val bookPreviewer = mockk<BookPreviewer> {
+    coEvery { preview(capture(previewed)) } answers { tagged(firstArg()) }
   }
 
   @Test
@@ -102,9 +102,9 @@ class SelectFolderTypeViewModelTest {
   @Test
   fun `the book being analyzed is marked`() = runTest {
     val analyzed = CompletableDeferred<Unit>()
-    preview = { name ->
+    coEvery { bookPreviewer.preview(any()) } coAnswers {
       analyzed.await()
-      tagged(name)
+      tagged(firstArg())
     }
     val viewModel = viewModel(library())
 
@@ -118,7 +118,7 @@ class SelectFolderTypeViewModelTest {
 
   @Test
   fun `books without playable files are left out like in the library`() = runTest {
-    preview = { name -> if (name == "FirstBook") null else tagged(name) }
+    coEvery { bookPreviewer.preview(named("FirstBook")) } returns null
     val viewModel = viewModel(library())
 
     viewStates(viewModel) {
@@ -133,7 +133,7 @@ class SelectFolderTypeViewModelTest {
 
   @Test
   fun `a book that can't be analyzed keeps what its files tell`() = runTest {
-    preview = { name -> if (name == "FirstBook") throw IOException("Can't read $name") else tagged(name) }
+    coEvery { bookPreviewer.preview(named("FirstBook")) } throws IOException("Can't read FirstBook")
     val viewModel = viewModel(library())
 
     viewStates(viewModel) {
@@ -150,7 +150,7 @@ class SelectFolderTypeViewModelTest {
 
   @Test
   fun `the analyzed author replaces the one from the folder`() = runTest {
-    preview = { name -> tagged(name).copy(author = null) }
+    coEvery { bookPreviewer.preview(any()) } answers { tagged(firstArg()).copy(author = null) }
     val folder = temporaryFolder.newFolder("authors")
     with(temporaryFolder) {
       newFolder("authors", "Dan Simmons", "Hyperion")
@@ -190,7 +190,10 @@ class SelectFolderTypeViewModelTest {
       }
     }
 
-    assertEquals(expected = listOf("FirstBook", "SecondBook", "audiobooks"), actual = previewed.sorted())
+    assertEquals(
+      expected = listOf("FirstBook", "SecondBook", "audiobooks"),
+      actual = previewed.map { it.nameWithoutExtension() }.sorted(),
+    )
   }
 
   @Test
@@ -304,7 +307,13 @@ class SelectFolderTypeViewModelTest {
     return books.map { it.copy(analyzing = false) }.sortedBy { it.name }
   }
 
-  private fun tagged(name: String) = BookPreview(name = "Tagged $name", author = "Author", duration = 2.hours)
+  private fun tagged(file: CachedDocumentFile) = BookPreview(
+    name = "Tagged ${file.nameWithoutExtension()}",
+    author = "Author",
+    duration = 2.hours,
+  )
+
+  private fun MockKMatcherScope.named(name: String) = match<CachedDocumentFile> { it.nameWithoutExtension() == name }
 
   private fun book(
     name: String,

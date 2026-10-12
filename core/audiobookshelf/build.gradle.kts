@@ -25,6 +25,5 @@ dependencies {
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.datasource.okhttp)
 
-  testImplementation(libs.bundles.testing.jvm)
   testImplementation(libs.okhttp.mockwebserver)
 }

@@ -15,6 +15,4 @@ dependencies {
   implementation(projects.core.initializer)
   implementation(projects.core.logging.api)
   implementation(projects.navigation)
-
-  testImplementation(libs.turbine)
 }

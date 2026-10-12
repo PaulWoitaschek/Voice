@@ -6,17 +6,20 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.Bookmark
 import voice.core.data.ChapterId
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookContentRepoImpl
 import voice.core.data.repo.BookRepositoryImpl
+import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ChapterRepoImpl
 import voice.core.data.repo.internals.AppDb
 import voice.core.data.toUri
@@ -334,13 +337,23 @@ class MediaScannerTest {
     val oldId = BookId(book.toUri())
     play(oldId, chapter, position = 100, playedAt = Instant.parse("2026-01-01T10:00:00Z"))
     currentBookStore.updateData { oldId }
-    val bookmark = bookmarkRepo.addBookmarkAtBookPosition(bookRepo.get(oldId)!!, title = null, setBySleepTimer = false)
+    val bookmark = Bookmark(
+      bookId = oldId,
+      chapterId = ChapterId(chapter.toUri()),
+      title = null,
+      time = 100,
+      addedAt = Instant.EPOCH,
+      setBySleepTimer = false,
+      id = Bookmark.Id.random(),
+    )
+    coEvery { bookmarkRepo.bookmarks(match { it.id == oldId }) } returns listOf(bookmark)
 
     scan(FolderType.SingleFile, chapter)
 
     val newId = BookId(chapter.toUri())
     assertEquals(expected = newId, actual = currentBookStore.data.first())
-    assertEquals(expected = listOf(bookmark.copy(bookId = newId)), actual = bookmarkRepo.all)
+    coVerify(exactly = 1) { bookmarkRepo.addBookmark(any()) }
+    coVerify { bookmarkRepo.addBookmark(bookmark.copy(bookId = newId)) }
   }
 
   @Test
@@ -377,7 +390,9 @@ class MediaScannerTest {
     private val chapterRepo = ChapterRepoImpl(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
     var analyzeCalls = 0
-    val bookmarkRepo = MemoryBookmarkRepo()
+    val bookmarkRepo = mockk<BookmarkRepo>(relaxUnitFun = true) {
+      coEvery { bookmarks(any()) } returns emptyList()
+    }
     val currentBookStore = MemoryDataStore<BookId?>(null)
     private val scannedRepo = ScannedBooksRecordingRepo(bookContentRepo)
     val scannedBooks: List<BookId> get() = scannedRepo.scannedBooks
@@ -395,8 +410,8 @@ class MediaScannerTest {
       deviceHasPermissionBug = mockk(),
       progressCarryOver = ProgressCarryOver(
         bookmarkRepo = bookmarkRepo,
-        listeningHistoryRepo = MemoryListeningHistoryRepo(),
-        listeningStatsRepo = MemoryListeningStatsRepo(),
+        listeningHistoryRepo = mockk(relaxUnitFun = true),
+        listeningStatsRepo = mockk(relaxUnitFun = true),
         currentBookStore = currentBookStore,
       ),
     )

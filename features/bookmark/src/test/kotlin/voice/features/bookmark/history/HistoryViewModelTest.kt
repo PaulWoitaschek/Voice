@@ -4,30 +4,27 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
+import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import voice.core.common.DispatcherProvider
-import voice.core.data.Book
-import voice.core.data.BookContent
 import voice.core.data.BookId
-import voice.core.data.Bookmark
-import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.data.repo.BookRepository
-import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
+import voice.features.bookmark.FakeBookmarkRepo
 import voice.features.bookmark.MemoryDataStore
 import voice.features.bookmark.testBook
 import voice.features.bookmark.testBookmark
@@ -49,13 +46,20 @@ class HistoryViewModelTest {
   private val scope = TestScope()
   private val arrival = testChapter()
   private val signal = testChapter()
-  private val bookRepository = FakeBookRepository(
+  private val book = MutableStateFlow(
     testBook(listOf(arrival, signal), currentChapter = signal.id, positionInChapter = 5.minutes),
   )
-  private val bookId = bookRepository.book.value.id
+  private val bookId = book.value.id
+  private val bookRepository = mockk<BookRepository> {
+    every { flow(bookId) } returns book
+    coEvery { get(bookId) } answers { book.value }
+  }
   private val clock = Clock.fixed(today(10), testZone)
-  private val bookmarkRepo = FakeBookmarkRepo()
-  private val historyRepo = FakeListeningHistoryRepo()
+  private val bookmarkRepo = FakeBookmarkRepo(clock)
+  private val historyEvents = mutableListOf<ListeningEvent>()
+  private val historyRepo = mockk<ListeningHistoryRepo> {
+    every { events(bookId) } answers { flowOf(historyEvents.sortedByDescending { it.atMillis }) }
+  }
   private val currentBookStore = MemoryDataStore<BookId?>(null)
   private val dismissedSuggestionsStore = MemoryDataStore(emptyList<Long>())
   private val playStateManager = PlayStateManager()
@@ -104,7 +108,7 @@ class HistoryViewModelTest {
 
   @Test
   fun `pinning saves the spot once, even when tapped twice`() {
-    historyRepo.seed(testEvent(Type.Pause, today(9), signal, 2.minutes))
+    historyEvents += testEvent(Type.Pause, today(9), signal, 2.minutes)
     test { viewModel ->
       val pin = assertIs<HistoryAction.Pin>(awaitState().entries().single().action)
       viewModel.viewEffects.test {
@@ -124,7 +128,7 @@ class HistoryViewModelTest {
   @Test
   fun `restoring brings the deleted bookmark back as it was`() {
     val bookmark = testBookmark(signal, 4.minutes, addedAt = yesterday(20), title = "Mira's message")
-    historyRepo.seed(testEvent(Type.BookmarkDeleted, today(9), signal, 4.minutes, value = bookmark.title, bookmark = bookmark))
+    historyEvents += testEvent(Type.BookmarkDeleted, today(9), signal, 4.minutes, value = bookmark.title, bookmark = bookmark)
     test { viewModel ->
       val restore = assertIs<HistoryAction.Restore>(awaitState().entries().single().action)
       viewModel.viewEffects.test {
@@ -138,8 +142,8 @@ class HistoryViewModelTest {
 
   @Test
   fun `changing back makes the book current and sets the player`() {
-    historyRepo.seed(testEvent(Type.SpeedChanged, today(9), signal, 0.minutes, value = "1.0"))
-    historyRepo.seed(testEvent(Type.SpeedChanged, today(9, 5), signal, 0.minutes, value = "1.8"))
+    historyEvents += testEvent(Type.SpeedChanged, today(9), signal, 0.minutes, value = "1.0")
+    historyEvents += testEvent(Type.SpeedChanged, today(9, 5), signal, 0.minutes, value = "1.8")
     test { viewModel ->
       val changeBack = assertIs<HistoryAction.ChangeBack>(awaitState().entries().first().action)
       viewModel.viewEffects.test {
@@ -154,7 +158,7 @@ class HistoryViewModelTest {
   @Test
   fun `jumping back goes there, keeps playing and closes the screen`() {
     playStateManager.playState = PlayStateManager.PlayState.Playing
-    historyRepo.seed(testEvent(Type.Seek, today(9, 55), signal, 1.minutes, to = signal to 8.minutes))
+    historyEvents += testEvent(Type.Seek, today(9, 55), signal, 1.minutes, to = signal to 8.minutes)
     test { viewModel ->
       val jumpBack = assertIs<HistoryAction.JumpBack>(awaitState().entries().single().action)
       viewModel.onActionClick(jumpBack)
@@ -170,7 +174,7 @@ class HistoryViewModelTest {
 
   @Test
   fun `a double tap on jump back closes the screen once`() {
-    historyRepo.seed(testEvent(Type.Seek, today(9, 55), signal, 1.minutes, to = signal to 8.minutes))
+    historyEvents += testEvent(Type.Seek, today(9, 55), signal, 1.minutes, to = signal to 8.minutes)
     test { viewModel ->
       val jumpBack = assertIs<HistoryAction.JumpBack>(awaitState().entries().single().action)
       viewModel.onActionClick(jumpBack)
@@ -200,7 +204,7 @@ class HistoryViewModelTest {
   @Test
   fun `a kept suggestion stays hidden when the screen opens again`() {
     playStateManager.playState = PlayStateManager.PlayState.Playing
-    historyRepo.seed(testEvent(Type.Play, today(9, 30), signal, 5.minutes, source = Source.Car))
+    historyEvents += testEvent(Type.Play, today(9, 30), signal, 5.minutes, source = Source.Car)
     scope.runTest {
       states { viewModel ->
         val suggestion = assertIs<HistorySuggestion.StartedBy>(awaitState().suggestion)
@@ -216,7 +220,7 @@ class HistoryViewModelTest {
 
   @Test
   fun `going back from a suggestion jumps there and hides it`() {
-    historyRepo.seed(testEvent(Type.ChapterChange, today(9, 55), signal, 5.minutes, to = arrival to 0.minutes))
+    historyEvents += testEvent(Type.ChapterChange, today(9, 55), signal, 5.minutes, to = arrival to 0.minutes)
     test { viewModel ->
       val suggestion = assertIs<HistorySuggestion.Jumped>(awaitState().suggestion)
       viewModel.onSuggestionBack(suggestion)
@@ -231,77 +235,11 @@ class HistoryViewModelTest {
   @Test
   fun `the ongoing session follows the position`() {
     playStateManager.playState = PlayStateManager.PlayState.Playing
-    historyRepo.seed(testEvent(Type.Play, today(9, 30), arrival, 0.minutes))
+    historyEvents += testEvent(Type.Play, today(9, 30), arrival, 0.minutes)
     test {
       assertEquals(expected = 0.75F, actual = awaitState { it.sessions.single().barEnd > 0F }.sessions.single().barEnd)
-      bookRepository.book.update { book -> book.update { it.copy(positionInChapter = 9.minutes.inWholeMilliseconds) } }
+      book.update { it.update { content -> content.copy(positionInChapter = 9.minutes.inWholeMilliseconds) } }
       awaitState { it.sessions.single().barEnd == 0.95F }
     }
   }
-}
-
-private class FakeBookRepository(initial: Book) : BookRepository {
-
-  val book = MutableStateFlow(initial)
-
-  override fun flow(): Flow<List<Book>> = book.map { listOf(it) }
-
-  override suspend fun all(): List<Book> = listOf(book.value)
-
-  override fun flow(id: BookId): Flow<Book?> = book.map { book -> book.takeIf { it.id == id } }
-
-  override suspend fun get(id: BookId): Book? = book.value.takeIf { it.id == id }
-
-  override suspend fun updateBook(
-    id: BookId,
-    update: (BookContent) -> BookContent,
-  ) {
-    book.update { book -> if (book.id == id) book.update(update) else book }
-  }
-}
-
-private class FakeBookmarkRepo : BookmarkRepo {
-
-  val bookmarks = MutableStateFlow<List<Bookmark>>(emptyList())
-
-  override suspend fun deleteBookmark(id: Bookmark.Id) {
-    bookmarks.update { bookmarks -> bookmarks.filterNot { it.id == id } }
-  }
-
-  override suspend fun addBookmark(bookmark: Bookmark) {
-    bookmarks.update { bookmarks -> bookmarks.filterNot { it.id == bookmark.id } + bookmark }
-  }
-
-  override suspend fun addBookmarkAtBookPosition(
-    book: Book,
-    title: String?,
-    setBySleepTimer: Boolean,
-  ): Bookmark = error("Not used by the history")
-
-  override suspend fun bookmarks(book: BookContent): List<Bookmark> = bookmarks.value
-
-  override fun bookmarksFlow(book: BookContent): Flow<List<Bookmark>> = bookmarks
-}
-
-private class FakeListeningHistoryRepo : ListeningHistoryRepo {
-
-  private val events = MutableStateFlow<List<ListeningEvent>>(emptyList())
-
-  override fun events(bookId: BookId): Flow<List<ListeningEvent>> = events.map { events ->
-    events.filter { it.bookId == bookId }.sortedByDescending { it.atMillis }
-  }
-
-  override suspend fun add(event: ListeningEvent) {
-    seed(event)
-  }
-
-  fun seed(vararg events: ListeningEvent) {
-    this.events.update { it + events }
-  }
-
-  override suspend fun moveToBook(
-    from: List<BookId>,
-    to: BookId,
-    chapters: Map<ChapterId, ChapterId>,
-  ) = error("not needed")
 }

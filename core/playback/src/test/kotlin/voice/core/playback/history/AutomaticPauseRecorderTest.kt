@@ -1,21 +1,21 @@
 package voice.core.playback.history
 
-import android.os.Looper
-import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.common.SimpleBasePlayer
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.just
+import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import org.junit.runner.RunWith
-import org.robolectric.Shadows.shadowOf
 import voice.core.data.BookId
-import voice.core.data.ChapterId
+import voice.core.data.ListeningEvent
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
-import voice.core.playback.session.MediaId
+import voice.core.data.repo.ListeningHistoryRepo
+import voice.core.playback.FakePlayer
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -26,8 +26,11 @@ import kotlin.test.assertEquals
 class AutomaticPauseRecorderTest {
 
   private val scope = TestScope()
-  private val repo = RecordingRepo()
-  private val player = FakePlayer()
+  private val events = mutableListOf<ListeningEvent>()
+  private val repo = mockk<ListeningHistoryRepo> {
+    coEvery { add(capture(events)) } just Runs
+  }
+  private val player = FakePlayer(BookId("book"), contentPositionMs = 5_000)
 
   init {
     AutomaticPauseRecorder(
@@ -41,7 +44,7 @@ class AutomaticPauseRecorderTest {
 
   private suspend fun TestScope.recorded(): List<Pair<Type, Source>> {
     advanceUntilIdle()
-    return repo.events.map { it.type to it.source }
+    return events.map { it.type to it.source }
   }
 
   @Test
@@ -89,39 +92,5 @@ class AutomaticPauseRecorderTest {
       expected = listOf(Type.Pause to Source.AudioFocus, Type.Pause to Source.Unplugged),
       actual = recorded(),
     )
-  }
-
-  private class FakePlayer : SimpleBasePlayer(Looper.getMainLooper()) {
-
-    private var state = State.Builder()
-      .setAvailableCommands(Player.Commands.Builder().addAllCommands().build())
-      .setPlaylist(
-        listOf(
-          MediaItemData.Builder("chapter")
-            .setMediaItem(
-              MediaItem.Builder()
-                .setMediaId(Json.encodeToString(MediaId.serializer(), MediaId.Chapter(BookId("book"), ChapterId("chapter"))))
-                .build(),
-            )
-            .build(),
-        ),
-      )
-      .setContentPositionMs(5_000)
-      .setPlaybackState(Player.STATE_READY)
-      .setPlayWhenReady(true, Player.PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST)
-      .build()
-
-    init {
-      // the first read takes the state, so that the updates are seen as changes
-      val _ = playbackState
-    }
-
-    fun update(change: (State.Builder) -> State.Builder) {
-      state = change(state.buildUpon()).build()
-      invalidateState()
-      shadowOf(Looper.getMainLooper()).idle()
-    }
-
-    override fun getState(): State = state
   }
 }

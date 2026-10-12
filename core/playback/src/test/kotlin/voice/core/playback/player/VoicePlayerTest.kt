@@ -17,8 +17,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -33,13 +31,13 @@ import voice.core.data.ChapterId
 import voice.core.data.ChapterMark
 import voice.core.data.ListeningEvent
 import voice.core.data.MarkData
+import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.logging.api.LogWriter
 import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
-import voice.core.playback.history.RecordingRepo
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
@@ -107,7 +105,10 @@ class VoicePlayerTest {
   private val bookId = BookId(Uuid.random().toString())
   private lateinit var currentBook: Book
   private val sleepTimer = FakeSleepTimer()
-  private val historyRepo = RecordingRepo()
+  private val historyEvents = mutableListOf<ListeningEvent>()
+  private val historyRepo = mockk<ListeningHistoryRepo> {
+    coEvery { add(capture(historyEvents)) } just Runs
+  }
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
   private val player = VoicePlayer(
     player = chapterMarkPlayer,
@@ -398,11 +399,11 @@ class VoicePlayerTest {
 
     assertEquals(
       expected = listOf(ListeningEvent.Type.SleepTimerEnded to ListeningEvent.Source.SleepTimer),
-      actual = historyRepo.events.map { it.type to it.source },
+      actual = historyEvents.map { it.type to it.source },
     )
     assertEquals(
       expected = PlaybackPosition(bookId, chapter.id, 1_000),
-      actual = historyRepo.events.single().let { PlaybackPosition(it.bookId, it.chapterId, it.time) },
+      actual = historyEvents.single().let { PlaybackPosition(it.bookId, it.chapterId, it.time) },
     )
   }
 
@@ -560,24 +561,5 @@ class VoicePlayerTest {
     assertEquals(expected = currentMediaItemIndex, actual = this.currentMediaItemIndex)
     assertEquals(expected = currentPosition, actual = this.currentPosition)
     return this
-  }
-
-  private class FakeSleepTimer : SleepTimer {
-    override val state: StateFlow<SleepTimerState>
-      get() = stateFlow
-
-    private val stateFlow = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
-
-    override fun enable(mode: SleepTimerMode) {
-      stateFlow.value = when (mode) {
-        is SleepTimerMode.TimedWithDuration -> SleepTimerState.Enabled.WithDuration(mode.duration)
-        SleepTimerMode.TimedWithDefault -> error("TimedWithDefault is not used in these tests")
-        SleepTimerMode.EndOfChapter -> SleepTimerState.Enabled.WithEndOfChapter
-      }
-    }
-
-    override fun disable() {
-      stateFlow.value = SleepTimerState.Disabled
-    }
   }
 }

@@ -17,6 +17,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -90,6 +91,9 @@ class BookPlayViewModelTest {
   private val currentBookResolver = mockk<CurrentBookResolver> {
     coEvery { book(book.id) } returns book
   }
+  private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
+    every { unavailableBooks } returns flowOf(emptySet())
+  }
   private val viewModel = BookPlayViewModel(
     bookRepository = mockk {
       coEvery { get(book.id) } returns book
@@ -125,7 +129,7 @@ class BookPlayViewModelTest {
     kioskModeFeatureFlag = MemoryFeatureFlag(false),
     historyRecorder = historyRecorder,
     clock = clock,
-    serverLibrary = FakeServerLibrary(),
+    serverLibrary = serverLibrary,
   )
 
   @Test
@@ -496,7 +500,7 @@ class BookPlayViewModelTest {
       kioskModeFeatureFlag = MemoryFeatureFlag(kioskMode),
       historyRecorder = historyRecorder,
       clock = clock,
-      serverLibrary = FakeServerLibrary(),
+      serverLibrary = serverLibrary,
     )
   }
 }

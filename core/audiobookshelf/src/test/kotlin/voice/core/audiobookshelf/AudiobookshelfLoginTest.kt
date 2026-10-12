@@ -1,6 +1,7 @@
 package voice.core.audiobookshelf
 
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -142,7 +143,7 @@ class AudiobookshelfLoginTest {
   ): Audiobookshelf {
     return Audiobookshelf(
       accountStore = accountStore,
-      http = AudiobookshelfHttp(accountStore, TestAppInfo),
+      http = AudiobookshelfHttp(accountStore, mockk { every { versionName } returns "1.0.0" }),
       sync = mockk(relaxed = true),
       progressSync = mockk(relaxed = true),
       downloads = downloads,

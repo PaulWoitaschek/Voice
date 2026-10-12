@@ -7,6 +7,4 @@ dependencies {
   api(projects.features.support.api)
 
   implementation(projects.navigation)
-
-  testImplementation(libs.turbine)
 }
