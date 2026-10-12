@@ -60,7 +60,16 @@ I lose the current position with a lot of frustration"
 - ✅ **A "Play current" shortcut** (2018).
 - ✅ **Commands that Tasker can send** ([#2075], 2023). The first answer was no, then: "I need to revise my post and I
   think this is actually something we can easily bring back!" ([#1913])
-- ✅ **Now playing and Shelf widgets**, down to 1×1 ([#3829], [#3832]). *(next release)*
+
+### "Show me my book on the home screen, and let me play it from there"
+
+- ✅ **Now playing and Shelf widgets** in any size, down to 1×1 ([#3829]). *(next release)*
+- ✅ **A small widget keeps what matters most.** As space runs out, it keeps play, then the cover, then the title, then
+  rewind, then fast forward. *(next release)*
+  - The cover comes before the title because sighted listeners recognize their book faster by its cover. A cover also
+    needs less room than a readable title, so a small widget stays usable.
+  - Rewind comes before fast forward because listeners jump back, after missing a sentence or dozing off, far more often
+    than they skip ahead.
 
 ### "Play it on my speaker or TV"
 
@@ -105,5 +114,4 @@ Casting has been requested since 2014 ([#76]). "Add the cast option so I can pla
 [#3410]: https://github.com/PaulWoitaschek/Voice/discussions/3410
 [#3634]: https://github.com/PaulWoitaschek/Voice/pull/3634
 [#3829]: https://github.com/PaulWoitaschek/Voice/pull/3829
-[#3832]: https://github.com/PaulWoitaschek/Voice/pull/3832
 [#3846]: https://github.com/PaulWoitaschek/Voice/issues/3846
