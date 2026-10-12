@@ -41,8 +41,8 @@ single book to 1.25x by hand" ([#3867])
 - ❌ **A default speed setting**, in 2020: "I also think that the vast majority people just plays at 1.0 speed so I
   don't want another setting." And: "It's mostly not about the maintenance cost. I'ts about providing good defaults and
   having a simple ui." ([#860])
-- ⭕ **Every new book starts at 1×, so listeners set their speed again and again** ([#1790]). One answer that needs no
-  setting: new books start at the speed of the last one.
+- ✅ **A new book starts at the speed you last listened at** ([#1790]). This needs no setting, and it follows the listener
+  when their speed changes. A speed picked for a book before its first play stays.
 
 ### "How much is left, really, at my speed?"
 
@@ -89,9 +89,8 @@ but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
 
 ## Open questions
 
-1. Default speed: a setting, or a smart default that needs no setting?
-2. Should Voice rewind after a call or a navigation prompt ([#1368])?
-3. When a file is broken ([#3422]), can Voice tell the listener instead of drifting quietly?
+1. Should Voice rewind after a call or a navigation prompt ([#1368])?
+2. When a file is broken ([#3422]), can Voice tell the listener instead of drifting quietly?
 
 [#87]: https://github.com/PaulWoitaschek/Voice/issues/87
 [#107]: https://github.com/PaulWoitaschek/Voice/issues/107
