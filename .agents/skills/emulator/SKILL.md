@@ -8,6 +8,10 @@ description: Running and driving Voice on an Android emulator to see a change in
 Every agent gets its own emulator. You may start, use, change, and stop it at any time without asking. Never touch
 another device: not the user's phone, not their own emulators, not another agent's emulator.
 
+To see how a composable looks at a size, font scale, dark, or right to left, the snapshots skill is faster. Use the
+emulator for what previews can't show: real data and playback, flows across screens, sheets and dialogs, system bars,
+and Dynamic color.
+
 The scripts live in `.agents/skills/emulator/scripts/`: `emulator.py` for the emulator's lifecycle and `ui.py` for the
 screen. Run them from the repository root. They need only Python 3.9+.
 
