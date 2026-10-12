@@ -30,11 +30,9 @@ internal class VoiceDataStoreFactory(
         serializer = serializer,
       ),
     ) {
-      file(fileName)
+      File(context.applicationContext.filesDir, "datastore/$fileName")
     }
   }
-
-  fun file(fileName: String): File = File(context.applicationContext.filesDir, "datastore/$fileName")
 
   fun int(
     fileName: String,
