@@ -21,13 +21,9 @@ the bookmark after you hear something!" ([#3368])
 - ✅ **Long-press the bookmark button** to save right away.
 - ✅ **Save first, add details after**: a kind (favorite, quote, note, revisit), a note, and moving the mark 15 seconds
   earlier or later.
-- 🔜 **A bookmark is a moment and an optional note.** Saving no longer asks for a kind. Each kind needs its own shape,
-  color, icon and filter, and picking one is a decision in the middle of listening. Replaces the kinds.
+- ❌ **Dropping the kinds**: a heart or a quote shows at a glance why a moment was saved, and picking one is optional,
+  after saving.
 - ⭕ **Saving a moment still means taking out the phone and opening Voice** ([#1289]).
-
-Assumptions:
-
-- **Listeners say why a moment matters in the note, not with a kind**: Guess. Ask in a discussion.
 
 ### "Help me find the right one"
 
@@ -42,6 +38,8 @@ Assumptions:
 - 🔜 **Pins only on the bookmarks screen.** On the player, the book bar shows chapters and progress. Bookmarks are a
   detail one step away, not something you need while listening.
 - ❌ **A separate notes feature**: "Isn't that what bookmarks already are?" ([#2123])
+
+![Sketch: the player without pins, and the bookmarks screen with the pins and kinds](sketches/bookmarks.png)
 
 ### "Take me back to where I was"
 
@@ -65,6 +63,8 @@ After an accidental tap, a seek, or opening a bookmark. "can't go back to the po
   guessing.
 - ❌ **The 2016 answer** was "Then create a bookmark before you click on another bookmark" ([#454]). The history replaces
   it, because the old design meant "accidental taps or seeks couldn't be undone" ([#3805]).
+
+![Sketch: the history as stretches of listening, with a jump and a night](sketches/history.png)
 
 Assumptions:
 
@@ -90,7 +90,7 @@ This happens on a new phone or after moving files. See [Servers, sync and backup
 1. Export: ten years after "too much work", does the principle that "the data stays with the listener" change the
    answer? A text export is much smaller than a full backup.
 2. A book's history follows it to a new id after a rescan. Does that fix losing bookmarks after a move ([#2636])?
-3. What happens to what listeners already saved: the "Dozed off" bookmarks, and the kind of each bookmark?
+3. What happens to the "Dozed off" bookmarks listeners already have?
 
 [#367]: https://github.com/PaulWoitaschek/Voice/issues/367
 [#454]: https://github.com/PaulWoitaschek/Voice/issues/454

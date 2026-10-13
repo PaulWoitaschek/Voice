@@ -72,6 +72,8 @@ Assumptions:
 - ❌ **Keeping only the newest "Dozed off" bookmark**: it still mixes what Voice did with what the listener saved.
 - ❌ **Doing nothing**: one more bookmark every night, and they pile up on the player's progress bar.
 
+![Sketch: last night as a stretch in the history, from awake to where the timer stopped](sketches/history.png)
+
 ### "I want to set it without opening the app"
 
 From a widget, Tasker or the lock screen.
