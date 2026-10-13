@@ -88,7 +88,6 @@
     <string name="bookmark.chapter_with_name">第 %1$d 章 · %2$s</string>
     <string name="bookmark.created.just_now">刚才</string>
     <string name="bookmark.deleted">已删除书签</string>
-    <string name="bookmark.dozed_off">睡着了</string>
     <string name="bookmark.edit.title">编辑书签</string>
     <string name="bookmark.empty.message">收听时长按书签按钮，即可保存当前时刻。</string>
     <string name="bookmark.empty.title">还没有书签</string>

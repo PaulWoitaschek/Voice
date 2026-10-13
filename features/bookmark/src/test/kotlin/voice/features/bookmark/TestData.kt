@@ -76,14 +76,12 @@ internal fun testBookmark(
   addedAt: Instant = today(9),
   title: String? = null,
   kind: Bookmark.Kind = Bookmark.Kind.Note,
-  setBySleepTimer: Boolean = false,
 ): Bookmark = Bookmark(
   bookId = BookId("echoes"),
   chapterId = chapter.id,
   title = title,
   time = time.inWholeMilliseconds,
   addedAt = addedAt,
-  setBySleepTimer = setBySleepTimer,
   id = Bookmark.Id(Uuid.random()),
   kind = kind,
 )
@@ -111,7 +109,6 @@ internal fun testEvent(
   value = value,
   bookmarkId = bookmark?.id,
   bookmarkKind = bookmark?.kind,
-  bookmarkSetBySleepTimer = bookmark?.setBySleepTimer,
   bookmarkAddedAtMillis = bookmark?.addedAt?.toEpochMilli(),
   id = nextEventId++,
 )

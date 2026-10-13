@@ -13,7 +13,6 @@ public data class Bookmark(
   val title: String?,
   val time: Long,
   val addedAt: Instant,
-  val setBySleepTimer: Boolean,
   @PrimaryKey
   val id: Id,
   @ColumnInfo(defaultValue = "Note")

@@ -99,7 +99,6 @@ internal sealed interface HistoryDetail {
 
   data class BookmarkInfo(
     val kind: Bookmark.Kind,
-    val setBySleepTimer: Boolean,
     val note: String?,
   ) : HistoryDetail
 }

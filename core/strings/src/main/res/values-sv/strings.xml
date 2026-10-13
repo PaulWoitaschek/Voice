@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">Kapitel %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Just nu</string>
     <string name="bookmark.deleted">Bokmärket har tagits bort</string>
-    <string name="bookmark.dozed_off">Slumrade till</string>
     <string name="bookmark.edit.title">Redigera bokmärke</string>
     <string name="bookmark.empty.message">Håll in bokmärkesknappen medan du lyssnar för att spara ett ögonblick.</string>
     <string name="bookmark.empty.title">Inga bokmärken än</string>

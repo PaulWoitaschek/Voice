@@ -160,10 +160,9 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
       chapterSegments = List(12) { 1F / 12 },
       skipSeconds = 20,
       bookmarkPins = listOf(
-        BookBarPin(position = 0.12F, kind = Bookmark.Kind.Favorite, setBySleepTimer = false),
-        BookBarPin(position = 0.38F, kind = Bookmark.Kind.Quote, setBySleepTimer = false),
-        BookBarPin(position = 0.39F, kind = Bookmark.Kind.Note, setBySleepTimer = true),
-        BookBarPin(position = 0.8F, kind = Bookmark.Kind.Revisit, setBySleepTimer = false),
+        BookBarPin(position = 0.12F, kind = Bookmark.Kind.Favorite),
+        BookBarPin(position = 0.38F, kind = Bookmark.Kind.Quote),
+        BookBarPin(position = 0.8F, kind = Bookmark.Kind.Revisit),
       ),
       poppedPin = null,
       jumpBack = BookPlayViewState.JumpBackViewState(

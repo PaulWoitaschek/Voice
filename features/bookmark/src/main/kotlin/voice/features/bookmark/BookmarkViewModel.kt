@@ -71,7 +71,7 @@ class BookmarkViewModel(
   internal val viewEffects: Flow<BookmarkViewEffect> = viewEffectChannel.receiveAsFlow()
 
   private var sort by mutableStateOf(BookmarkSort.Story)
-  private var selectedCategory by mutableStateOf<BookmarkCategory?>(null)
+  private var selectedCategory by mutableStateOf<Bookmark.Kind?>(null)
   private var draft by mutableStateOf<Draft?>(null)
   private var saving = false
 
@@ -119,8 +119,8 @@ class BookmarkViewModel(
     val playState by remember { playStateManager.playStateFlow }.collectAsState()
     val sleepTimerState by remember { sleepTimer.state }.collectAsState()
     val index = remember(book) { BookIndex(book) }
-    val category = selectedCategory?.takeIf { selected -> bookmarks.any { it.category == selected } }
-    val visible = if (category == null) bookmarks else bookmarks.filter { it.category == category }
+    val category = selectedCategory?.takeIf { selected -> bookmarks.any { it.kind == selected } }
+    val visible = if (category == null) bookmarks else bookmarks.filter { it.kind == category }
     val now = clock.instant()
     return BookmarkViewState(
       bookTitle = book.content.name,
@@ -149,8 +149,6 @@ class BookmarkViewModel(
       isNew = draft.isNew,
       note = draft.note,
       kind = draft.kind,
-      setBySleepTimer = draft.setBySleepTimer,
-      wasSetBySleepTimer = draft.bookmark.setBySleepTimer,
       chapterNumber = location.chapterNumber,
       chapterName = location.chapterName,
       showChapter = index.chapterCount > 1,
@@ -165,7 +163,7 @@ class BookmarkViewModel(
     this.sort = sort
   }
 
-  internal fun onCategoryClick(category: BookmarkCategory?) {
+  internal fun onCategoryClick(category: Bookmark.Kind?) {
     selectedCategory = if (selectedCategory == category) null else category
   }
 
@@ -200,7 +198,6 @@ class BookmarkViewModel(
         val bookmark = bookmarkRepo.addBookmarkAtBookPosition(
           book = book,
           title = null,
-          setBySleepTimer = false,
         )
         // a filter for another kind would hide the new bookmark
         selectedCategory = null
@@ -216,12 +213,7 @@ class BookmarkViewModel(
   }
 
   internal fun onKindChange(kind: Bookmark.Kind) {
-    draft = draft?.copy(kind = kind, setBySleepTimer = false)
-  }
-
-  /** Keeps a sleep timer bookmark a "Dozed off" one. */
-  internal fun onSleepKindClick() {
-    draft = draft?.let { it.copy(kind = it.bookmark.kind, setBySleepTimer = it.bookmark.setBySleepTimer) }
+    draft = draft?.copy(kind = kind)
   }
 
   internal fun onMoveEarlier() {
@@ -246,7 +238,6 @@ class BookmarkViewModel(
     val updated = draft.bookmark.copy(
       title = draft.note.trim().takeIf { it.isNotEmpty() },
       kind = draft.kind,
-      setBySleepTimer = draft.setBySleepTimer,
       time = draft.time,
     )
     if (updated != draft.bookmark) {
@@ -304,7 +295,6 @@ class BookmarkViewModel(
       isNew = isNew,
       note = bookmark.title.orEmpty(),
       kind = bookmark.kind,
-      setBySleepTimer = bookmark.setBySleepTimer,
       time = bookmark.time,
     )
   }
@@ -314,7 +304,6 @@ class BookmarkViewModel(
     val isNew: Boolean,
     val note: String,
     val kind: Bookmark.Kind,
-    val setBySleepTimer: Boolean,
     val time: Long,
   )
 

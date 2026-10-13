@@ -398,11 +398,11 @@ class HistoryTimelineTest {
     )
 
     assertEquals(
-      expected = HistoryDetail.BookmarkInfo(kind = Bookmark.Kind.Quote, setBySleepTimer = false, note = "Mira's message"),
+      expected = HistoryDetail.BookmarkInfo(kind = Bookmark.Kind.Quote, note = "Mira's message"),
       actual = state(added, bookmarks = listOf(bookmark)).entries().single().detail,
     )
     assertEquals(
-      expected = HistoryDetail.BookmarkInfo(kind = Bookmark.Kind.Note, setBySleepTimer = false, note = null),
+      expected = HistoryDetail.BookmarkInfo(kind = Bookmark.Kind.Note, note = null),
       actual = state(added).entries().single().detail,
     )
   }

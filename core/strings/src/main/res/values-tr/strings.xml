@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">Bölüm %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Şimdi</string>
     <string name="bookmark.deleted">Yer imi silindi</string>
-    <string name="bookmark.dozed_off">Uyuyakaldınız</string>
     <string name="bookmark.edit.title">Yer imini düzenle</string>
     <string name="bookmark.empty.message">Bir anı kaydetmek için dinlerken yer imi düğmesine basılı tutun.</string>
     <string name="bookmark.empty.title">Henüz yer imi yok</string>

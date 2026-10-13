@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">Luku %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Juuri äskettäin</string>
     <string name="bookmark.deleted">Kirjanmerkki poistettu</string>
-    <string name="bookmark.dozed_off">Nukahdit</string>
     <string name="bookmark.edit.title">Muokkaa kirjanmerkkiä</string>
     <string name="bookmark.empty.message">Tallenna hetki pitämällä kirjanmerkkipainiketta painettuna kuuntelun aikana.</string>
     <string name="bookmark.empty.title">Ei vielä kirjanmerkkejä</string>

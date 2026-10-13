@@ -94,7 +94,6 @@
     <string name="bookmark.chapter_with_name">Capitolul %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Acum</string>
     <string name="bookmark.deleted">Semn de carte șters</string>
-    <string name="bookmark.dozed_off">Ai ațipit</string>
     <string name="bookmark.edit.title">Modificare semn de carte</string>
     <string name="bookmark.empty.message">Ține apăsat butonul de semn de carte în timp ce asculți pentru a salva un moment.</string>
     <string name="bookmark.empty.title">Încă nu ai semne de carte</string>

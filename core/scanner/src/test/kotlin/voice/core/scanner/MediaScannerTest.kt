@@ -343,7 +343,6 @@ class MediaScannerTest {
       title = null,
       time = 100,
       addedAt = Instant.EPOCH,
-      setBySleepTimer = false,
       id = Bookmark.Id.random(),
     )
     coEvery { bookmarkRepo.bookmarks(match { it.id == oldId }) } returns listOf(bookmark)

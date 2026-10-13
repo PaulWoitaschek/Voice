@@ -451,13 +451,9 @@ private fun TimelineContext.detail(row: Row): HistoryDetail? {
       // the event is a snapshot, a bookmark that still exists may have been edited since
       val bookmark = event.bookmarkId?.let { bookmarksById[it] }
       if (bookmark != null) {
-        HistoryDetail.BookmarkInfo(kind = bookmark.kind, setBySleepTimer = bookmark.setBySleepTimer, note = bookmark.title)
+        HistoryDetail.BookmarkInfo(kind = bookmark.kind, note = bookmark.title)
       } else {
-        HistoryDetail.BookmarkInfo(
-          kind = event.bookmarkKind ?: Bookmark.Kind.Note,
-          setBySleepTimer = event.bookmarkSetBySleepTimer ?: false,
-          note = event.value,
-        )
+        HistoryDetail.BookmarkInfo(kind = event.bookmarkKind ?: Bookmark.Kind.Note, note = event.value)
       }
     }
     else -> null
@@ -516,7 +512,6 @@ private fun TimelineContext.restore(event: ListeningEvent): HistoryAction.Restor
       title = event.value,
       time = event.time,
       addedAt = event.bookmarkAddedAtMillis?.let(Instant::ofEpochMilli) ?: event.at,
-      setBySleepTimer = event.bookmarkSetBySleepTimer ?: false,
       id = id,
       kind = event.bookmarkKind ?: Bookmark.Kind.Note,
     ),

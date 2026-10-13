@@ -186,7 +186,6 @@ class BookPlayViewModel(
         BookBarPin(
           position = if (book.duration > 0) book.positionOf(bookmark).toFloat() / book.duration else 0F,
           kind = bookmark.kind,
-          setBySleepTimer = bookmark.setBySleepTimer,
         )
       },
       poppedPin = addedBookmark.value?.let { added -> bookmarks.indexOfFirst { it.id == added } }?.takeIf { it >= 0 },
@@ -237,10 +236,9 @@ class BookPlayViewModel(
       chapterSegments = List(24) { 1F / 24 },
       skipSeconds = DEFAULT_SKIP_SECONDS,
       bookmarkPins = listOf(
-        BookBarPin(position = 0.15F, kind = Bookmark.Kind.Favorite, setBySleepTimer = false),
-        BookBarPin(position = 0.46F, kind = Bookmark.Kind.Quote, setBySleepTimer = false),
-        BookBarPin(position = 0.58F, kind = Bookmark.Kind.Note, setBySleepTimer = true),
-        BookBarPin(position = 0.71F, kind = Bookmark.Kind.Revisit, setBySleepTimer = false),
+        BookBarPin(position = 0.15F, kind = Bookmark.Kind.Favorite),
+        BookBarPin(position = 0.46F, kind = Bookmark.Kind.Quote),
+        BookBarPin(position = 0.71F, kind = Bookmark.Kind.Revisit),
       ),
       poppedPin = null,
       jumpBack = null,
@@ -274,14 +272,6 @@ class BookPlayViewModel(
 
   fun onAcceptSleepTime(time: Int) {
     updateSleepTimeViewState {
-      val book = currentBook() ?: return@updateSleepTimeViewState null
-      scope.launch {
-        bookmarkRepository.addBookmarkAtBookPosition(
-          book = book,
-          setBySleepTimer = true,
-          title = null,
-        )
-      }
       sleepTimer.enable(TimedWithDuration(time.minutes))
       null
     }
@@ -423,7 +413,6 @@ class BookPlayViewModel(
       val bookmark = bookmarkRepository.addBookmarkAtBookPosition(
         book = book,
         title = null,
-        setBySleepTimer = false,
       )
       viewEffectChannel.trySend(BookPlayViewEffect.BookmarkAdded(bookmark.id))
       // the pin pops once, and not again when the screen is recreated

@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">Peatükk %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Just nüüd</string>
     <string name="bookmark.deleted">Järjehoidja on kustutatud</string>
-    <string name="bookmark.dozed_off">Jäid magama</string>
     <string name="bookmark.edit.title">Muuda järjehoidjat</string>
     <string name="bookmark.empty.message">Hetke salvestamiseks vajuta kuulamise ajal pikalt järjehoidja nuppu.</string>
     <string name="bookmark.empty.title">Järjehoidjaid veel pole</string>

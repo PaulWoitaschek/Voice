@@ -16,7 +16,7 @@ their phone, or touch it at all. Above everything else, the timer has to stop ([
 | [The timer stops while I'm still awake](#the-timer-stops-while-im-still-awake) | ✅ Solved |
 | [After the shake window, more time means setting the timer again](#after-the-shake-window-more-time-means-setting-the-timer-again) | ⭕ Open |
 | [I don't know where I fell asleep](#i-dont-know-where-i-fell-asleep) | ✅ Solved |
-| [The sleep timer fills up my bookmarks](#the-sleep-timer-fills-up-my-bookmarks) | 🔜 Planned |
+| [The sleep timer fills up my bookmarks](#the-sleep-timer-fills-up-my-bookmarks) | ✅ Solved |
 | [Setting the timer means opening the app](#setting-the-timer-means-opening-the-app) | ⭕ Open |
 
 ## The book keeps playing after I fall asleep
@@ -89,21 +89,18 @@ Once the 30 seconds have passed, the only way to more time is the moon button.
 
 The next morning, listeners don't know how far back to go.
 
-**Solution:**
-
-- A "Dozed off" bookmark where the automatic timer starts, with its own look.
-- "Dozed off · timer ended" in the listening history, with a way to jump back there.
+**Solution:** "Dozed off · timer ended" in the listening history, with a way to jump back there.
 
 ## The sleep timer fills up my bookmarks
 
-🔜 **Planned** · [#3288]
+✅ **Solved** · [#3288]
 
-Every night, the automatic timer adds a "Dozed off" bookmark, at a spot where the listener was still awake. They pile
-up between the bookmarks the listener saved and on the player's progress bar.
+A timer that adds a "Dozed off" bookmark every night, at a spot where the listener was still awake, piles them up
+between the bookmarks the listener saved and on the player's progress bar.
 
-**Solution:** No bookmarks from the sleep timer. The night shows up in the history as one stretch of listening. It
-starts where the listener was surely still awake and ends where the timer stopped (see
-[Bookmarks and history](bookmarks.md)). This replaces the "Dozed off" bookmark.
+**Solution:** The sleep timer sets no bookmarks. The night is in the listening history instead (see
+[Bookmarks and history](bookmarks.md)). The "Dozed off" bookmarks from before moved there too. One the listener wrote a
+note on stays, as a plain bookmark.
 
 **Turned down:**
 
@@ -111,8 +108,6 @@ starts where the listener was surely still awake and ends where the timer stoppe
   beats a setting.
 - Keeping only the newest "Dozed off" bookmark: it still mixes what Voice did with what the listener saved.
 - Doing nothing: one more bookmark every night.
-
-![Sketch: last night as a stretch in the history, from awake to where the timer stopped](sketches/history.png)
 
 ## Setting the timer means opening the app
 

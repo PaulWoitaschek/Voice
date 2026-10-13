@@ -94,7 +94,6 @@
     <string name="bookmark.chapter_with_name">פרק %1$d · %2$s</string>
     <string name="bookmark.created.just_now">ממש עכשיו</string>
     <string name="bookmark.deleted">הסימנייה נמחקה</string>
-    <string name="bookmark.dozed_off">נרדמתי</string>
     <string name="bookmark.edit.title">עריכת סימנייה</string>
     <string name="bookmark.empty.message">לחיצה ארוכה על כפתור הסימנייה בזמן ההאזנה תשמור את הרגע.</string>
     <string name="bookmark.empty.title">אין סימניות עדיין</string>

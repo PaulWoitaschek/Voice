@@ -46,7 +46,6 @@ class AutoEnableSleepTimerMinimalTest {
     playStateManager = playStateManager,
     sleepTimer = sleepTimer,
     clock = Clock.fixed(Instant.parse("2020-01-01T23:00:00Z"), ZoneId.of("UTC")),
-    createBookmarkAtCurrentPosition = mockk(relaxed = true),
     scope = testScope.backgroundScope,
   )
 

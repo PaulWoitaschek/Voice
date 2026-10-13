@@ -185,7 +185,6 @@ fun BookmarkScreen(
         editor = editor,
         onNoteChange = viewModel::onNoteChange,
         onKindChange = viewModel::onKindChange,
-        onSleepKindClick = viewModel::onSleepKindClick,
         onMoveEarlier = viewModel::onMoveEarlier,
         onMoveLater = viewModel::onMoveLater,
         onUndo = viewModel::onEditorUndo,

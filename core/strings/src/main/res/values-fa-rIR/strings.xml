@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">فصل %1$d · %2$s</string>
     <string name="bookmark.created.just_now">همین الان</string>
     <string name="bookmark.deleted">نشانه حذف شد</string>
-    <string name="bookmark.dozed_off">خوابم برد</string>
     <string name="bookmark.edit.title">ویرایش نشانه</string>
     <string name="bookmark.empty.message">هنگام گوش دادن، دکمهٔ نشانه را نگه دارید تا این لحظه ذخیره شود.</string>
     <string name="bookmark.empty.title">هنوز نشانه‌ای ندارید</string>

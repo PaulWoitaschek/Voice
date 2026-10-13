@@ -463,7 +463,7 @@ private fun EntryBadge(entry: HistoryEntry) {
   val colors = MaterialTheme.colorScheme
   val detail = entry.detail
   if (detail is HistoryDetail.BookmarkInfo) {
-    BookmarkBadge(kind = detail.kind, setBySleepTimer = detail.setBySleepTimer, size = 36.dp)
+    BookmarkBadge(kind = detail.kind, size = 36.dp)
     return
   }
   val sleepy = entry.type == Type.SleepTimerEnded

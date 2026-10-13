@@ -34,11 +34,9 @@ private fun demoRow(
   time: String,
   percent: Int,
   savedAt: DayLabel,
-  setBySleepTimer: Boolean = false,
 ) = BookmarkRowViewState(
   id = demoId(index),
   kind = kind,
-  setBySleepTimer = setBySleepTimer,
   note = note,
   chapterNumber = chapterNumber,
   chapterName = chapterName,
@@ -64,7 +62,6 @@ internal fun kioskModeBookmarkViewState(): BookmarkViewState {
     )
   val theory = demoRow(2, Bookmark.Kind.Quote, "Mira's theory", 8, "Mira", "24:31", 46, DayLabel.Weekday(DayOfWeek.THURSDAY))
   val message = demoRow(3, Bookmark.Kind.Revisit, "The hidden message", 11, "Interference", "21:48", 65, DayLabel.Yesterday)
-  val dozedOff = demoRow(4, Bookmark.Kind.Note, null, 12, "The Signal", "14:48", 70, DayLabel.LastNight, setBySleepTimer = true)
   val later =
     demoRow(
       5,
@@ -90,21 +87,19 @@ internal fun kioskModeBookmarkViewState(): BookmarkViewState {
       percent = 72,
       remaining = demoBook.remaining,
       pins = listOf(
-        BookBarPin(0.15F, Bookmark.Kind.Favorite, setBySleepTimer = false),
-        BookBarPin(0.46F, Bookmark.Kind.Quote, setBySleepTimer = false),
-        BookBarPin(0.65F, Bookmark.Kind.Revisit, setBySleepTimer = false),
-        BookBarPin(0.70F, Bookmark.Kind.Note, setBySleepTimer = true),
-        BookBarPin(0.83F, Bookmark.Kind.Note, setBySleepTimer = false),
+        BookBarPin(0.15F, Bookmark.Kind.Favorite),
+        BookBarPin(0.46F, Bookmark.Kind.Quote),
+        BookBarPin(0.65F, Bookmark.Kind.Revisit),
+        BookBarPin(0.83F, Bookmark.Kind.Note),
       ),
-      pinKeys = listOf(firstSignal, theory, message, dozedOff, later).map { it.id.value.toString() },
+      pinKeys = listOf(firstSignal, theory, message, later).map { it.id.value.toString() },
     ),
     sort = BookmarkSort.Story,
     categories = listOf(
-      CategoryCount(BookmarkCategory.Favorite, 1),
-      CategoryCount(BookmarkCategory.Quote, 1),
-      CategoryCount(BookmarkCategory.Revisit, 1),
-      CategoryCount(BookmarkCategory.Note, 1),
-      CategoryCount(BookmarkCategory.Sleep, 1),
+      CategoryCount(Bookmark.Kind.Note, 1),
+      CategoryCount(Bookmark.Kind.Favorite, 1),
+      CategoryCount(Bookmark.Kind.Quote, 1),
+      CategoryCount(Bookmark.Kind.Revisit, 1),
     ),
     selectedCategory = null,
     items = listOf(
@@ -115,12 +110,11 @@ internal fun kioskModeBookmarkViewState(): BookmarkViewState {
       BookmarkListItem.ChapterHeader(11, "Interference"),
       single(message),
       BookmarkListItem.ChapterHeader(12, "The Signal"),
-      BookmarkListItem.Row(dozedOff, GroupPosition(0, 2)),
-      BookmarkListItem.YouAreHere(time = "34:18", percent = 72, group = GroupPosition(1, 2)),
+      BookmarkListItem.YouAreHere(time = "34:18", percent = 72, group = GroupPosition(0, 1)),
       BookmarkListItem.ChapterHeader(14, "Static"),
       single(later),
     ),
-    totalCount = 5,
+    totalCount = 4,
     editor = null,
   )
 }

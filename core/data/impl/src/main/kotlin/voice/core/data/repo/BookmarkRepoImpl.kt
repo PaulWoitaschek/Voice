@@ -41,7 +41,6 @@ internal constructor(
           value = bookmark.title,
           bookmarkId = bookmark.id,
           bookmarkKind = bookmark.kind,
-          bookmarkSetBySleepTimer = bookmark.setBySleepTimer,
           bookmarkAddedAtMillis = bookmark.addedAt.toEpochMilli(),
         ),
       )
@@ -55,7 +54,6 @@ internal constructor(
   override suspend fun addBookmarkAtBookPosition(
     book: Book,
     title: String?,
-    setBySleepTimer: Boolean,
   ): Bookmark {
     return withContext(Dispatchers.IO) {
       val bookMark = Bookmark(
@@ -63,28 +61,24 @@ internal constructor(
         time = book.content.positionInChapter,
         id = Bookmark.Id.random(),
         addedAt = clock.instant(),
-        setBySleepTimer = setBySleepTimer,
         chapterId = book.content.currentChapter,
         bookId = book.id,
       )
       addBookmark(bookMark)
       Logger.v("Added bookmark=$bookMark")
-      if (!setBySleepTimer) {
-        listeningHistoryRepo.add(
-          ListeningEvent(
-            bookId = book.id,
-            type = ListeningEvent.Type.BookmarkAdded,
-            source = ListeningEvent.Source.App,
-            atMillis = bookMark.addedAt.toEpochMilli(),
-            chapterId = bookMark.chapterId,
-            time = bookMark.time,
-            bookmarkId = bookMark.id,
-            bookmarkKind = bookMark.kind,
-            bookmarkSetBySleepTimer = bookMark.setBySleepTimer,
-            bookmarkAddedAtMillis = bookMark.addedAt.toEpochMilli(),
-          ),
-        )
-      }
+      listeningHistoryRepo.add(
+        ListeningEvent(
+          bookId = book.id,
+          type = ListeningEvent.Type.BookmarkAdded,
+          source = ListeningEvent.Source.App,
+          atMillis = bookMark.addedAt.toEpochMilli(),
+          chapterId = bookMark.chapterId,
+          time = bookMark.time,
+          bookmarkId = bookMark.id,
+          bookmarkKind = bookMark.kind,
+          bookmarkAddedAtMillis = bookMark.addedAt.toEpochMilli(),
+        ),
+      )
       bookMark
     }
   }

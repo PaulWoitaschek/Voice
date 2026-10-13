@@ -108,11 +108,10 @@ class BookPlayViewModelTest {
     currentBookStoreId = currentBookStoreId,
     navigator = mockk(),
     bookmarkRepository = mockk {
-      coEvery { addBookmarkAtBookPosition(book, any(), any()) } returns Bookmark(
+      coEvery { addBookmarkAtBookPosition(book, any()) } returns Bookmark(
         bookId = book.id,
         chapterId = book.currentChapter.id,
         addedAt = Instant.now(),
-        setBySleepTimer = true,
         id = Bookmark.Id(Uuid.random()),
         time = 0L,
         title = null,
@@ -400,7 +399,7 @@ class BookPlayViewModelTest {
   @Test
   fun `viewState pins bookmarks on the book bar in story order`() = scope.runTest {
     val second = bookmark(chapterId = book.chapters[1].id, time = 1.minutes.inWholeMilliseconds, kind = Bookmark.Kind.Favorite)
-    val first = bookmark(chapterId = book.chapters[0].id, time = 2.5.minutes.inWholeMilliseconds, setBySleepTimer = true)
+    val first = bookmark(chapterId = book.chapters[0].id, time = 2.5.minutes.inWholeMilliseconds)
     val viewModel = viewModel(bookmarks = listOf(second, first))
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -412,8 +411,8 @@ class BookPlayViewModelTest {
       }
       assertEquals(
         expected = listOf(
-          BookBarPin(position = 0.25F, kind = Bookmark.Kind.Note, setBySleepTimer = true),
-          BookBarPin(position = 0.6F, kind = Bookmark.Kind.Favorite, setBySleepTimer = false),
+          BookBarPin(position = 0.25F, kind = Bookmark.Kind.Note),
+          BookBarPin(position = 0.6F, kind = Bookmark.Kind.Favorite),
         ),
         actual = state.bookmarkPins,
       )
@@ -546,7 +545,6 @@ private fun bookmark(
   chapterId: ChapterId,
   time: Long,
   kind: Bookmark.Kind = Bookmark.Kind.Note,
-  setBySleepTimer: Boolean = false,
 ): Bookmark {
   return Bookmark(
     bookId = BookId("book"),
@@ -554,7 +552,6 @@ private fun bookmark(
     title = null,
     time = time,
     addedAt = Instant.EPOCH,
-    setBySleepTimer = setBySleepTimer,
     id = Bookmark.Id.random(),
     kind = kind,
   )
