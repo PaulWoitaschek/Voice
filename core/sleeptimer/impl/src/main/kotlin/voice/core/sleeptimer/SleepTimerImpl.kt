@@ -53,29 +53,14 @@ class SleepTimerImpl internal constructor(
 
     job = scope.launch {
       when (mode) {
-        is SleepTimerMode.TimedWithDuration -> {
-          recordEnabled(ListeningEvent.Source.App, mode.duration.inWholeMinutes.toString())
-          startCountdown(mode.duration)
-        }
+        is SleepTimerMode.TimedWithDuration -> startCountdown(mode.duration)
         SleepTimerMode.TimedWithDefault -> {
-          val pref = sleepTimerPreferenceStore.data.first()
           // the default duration is only used when the sleep timer turns on by itself
-          recordEnabled(ListeningEvent.Source.SleepTimer, pref.duration.inWholeMinutes.toString())
-          startCountdown(pref.duration)
+          startCountdown(sleepTimerPreferenceStore.data.first().duration)
         }
-        SleepTimerMode.EndOfChapter -> {
-          recordEnabled(ListeningEvent.Source.App, value = null)
-          state.value = SleepTimerState.Enabled.WithEndOfChapter
-        }
+        SleepTimerMode.EndOfChapter -> state.value = SleepTimerState.Enabled.WithEndOfChapter
       }
     }
-  }
-
-  private fun recordEnabled(
-    source: ListeningEvent.Source,
-    value: String?,
-  ) {
-    playerController.record(ListeningEvent.Type.SleepTimerSet, source, value)
   }
 
   override fun disable() {
@@ -115,11 +100,7 @@ class SleepTimerImpl internal constructor(
     playerController.setVolume(1F)
     if (shakeDetected) {
       Logger.i("Shake detected, resetting timer")
-      playerController.record(
-        ListeningEvent.Type.SleepTimerExtended,
-        ListeningEvent.Source.SleepTimer,
-        duration.inWholeMinutes.toString(),
-      )
+      playerController.record(ListeningEvent.Type.SleepTimerExtended, ListeningEvent.Source.SleepTimer)
       playerController.play(source = null)
       startCountdown(duration)
     }

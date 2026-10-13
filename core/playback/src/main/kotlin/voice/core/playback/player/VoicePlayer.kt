@@ -146,7 +146,7 @@ class VoicePlayer(
     val position = player.playbackPosition()
     scope.launch {
       val skipAmount = seekTimeStore.data.first().seconds
-      recordExternalCommand(source, ListeningEvent.Type.SkipBack, position, value = skipAmount.inWholeSeconds.toString())
+      recordExternalCommand(source, ListeningEvent.Type.SkipBack, position)
       seekBackBy(skipAmount)
     }
   }
@@ -193,7 +193,7 @@ class VoicePlayer(
     val position = player.playbackPosition()
     scope.launch {
       val skipAmount = seekTimeStore.data.first().seconds
-      recordExternalCommand(source, ListeningEvent.Type.SkipForward, position, value = skipAmount.inWholeSeconds.toString())
+      recordExternalCommand(source, ListeningEvent.Type.SkipForward, position)
 
       val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
         ?.milliseconds
@@ -256,7 +256,6 @@ class VoicePlayer(
     type: ListeningEvent.Type,
     position: PlaybackPosition?,
     to: PlaybackPosition? = null,
-    value: String? = null,
   ) {
     if (source == null || position == null) return
     historyRecorder.record(
@@ -264,8 +263,6 @@ class VoicePlayer(
       source = source.source,
       position = position,
       to = to,
-      value = value,
-      sourcePackage = source.packageName,
     )
   }
 
@@ -397,12 +394,6 @@ class VoicePlayer(
   }
 
   override fun setPlaybackSpeed(speed: Float) {
-    recordExternalCommand(
-      source = commandSourceResolver.current(),
-      type = ListeningEvent.Type.SpeedChanged,
-      position = player.playbackPosition(),
-      value = speed.toString(),
-    )
     super.setPlaybackSpeed(speed)
     scope.launch {
       updateBook { it.copy(playbackSpeed = speed) }

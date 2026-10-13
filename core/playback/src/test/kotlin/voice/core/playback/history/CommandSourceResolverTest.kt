@@ -57,7 +57,7 @@ class CommandSourceResolverTest {
     ShadowSystemClock.advanceBy(Duration.ofSeconds(2))
 
     assertEquals(
-      expected = CommandSource(ListeningEvent.Source.OtherApp, SYSTEM_PACKAGE),
+      expected = CommandSource(ListeningEvent.Source.OtherApp),
       actual = resolver.sourceFor(session, legacyController(SYSTEM_PACKAGE)),
     )
     assertEquals(
@@ -71,11 +71,11 @@ class CommandSourceResolverTest {
     resolver.onMediaButtonEvent(legacyController(SYSTEM_PACKAGE))
 
     assertEquals(
-      expected = CommandSource(ListeningEvent.Source.OtherApp, OTHER_PACKAGE),
+      expected = CommandSource(ListeningEvent.Source.OtherApp),
       actual = resolver.sourceFor(session, legacyController(OTHER_PACKAGE)),
     )
     assertEquals(
-      expected = CommandSource(ListeningEvent.Source.OtherApp, SYSTEM_PACKAGE),
+      expected = CommandSource(ListeningEvent.Source.OtherApp),
       actual = resolver.sourceFor(session, legacyController(SYSTEM_PACKAGE, uid = OTHER_UID)),
     )
   }

@@ -7,8 +7,8 @@ import voice.core.data.ListeningEvent
 import voice.core.playback.di.PlaybackScope
 
 /**
- * Records the pauses the player does on its own, when another app takes the audio focus
- * or when headphones are unplugged, and when it goes on after a call.
+ * Records the pauses the player does on its own, when another app takes the audio focus, when
+ * headphones are unplugged or when the book ends, and when it goes on after a call.
  */
 @SingleIn(PlaybackScope::class)
 @Inject
@@ -35,6 +35,13 @@ class AutomaticPauseRecorder(private val recorder: ListeningHistoryRecorder) {
             else -> return
           }
           record(player, ListeningEvent.Type.Pause, source)
+        }
+
+        override fun onPlaybackStateChanged(playbackState: Int) {
+          // the book ends without a pause, but the history needs one to know where listening stopped
+          if (playbackState == Player.STATE_ENDED && player.playWhenReady) {
+            record(player, ListeningEvent.Type.Pause, ListeningEvent.Source.Unknown)
+          }
         }
 
         override fun onPlaybackSuppressionReasonChanged(playbackSuppressionReason: Int) {

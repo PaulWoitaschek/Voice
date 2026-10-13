@@ -122,7 +122,7 @@ class BookmarkListItemsTest {
   fun `the book bar pins every bookmark in book order`() {
     val book = testBook(chapters, currentChapter = signal.id, positionInChapter = 5.minutes)
     val bookmarks = listOf(
-      testBookmark(static, 3.minutes, setBySleepTimer = true),
+      testBookmark(static, 3.minutes),
       testBookmark(arrival, 30.seconds, kind = Bookmark.Kind.Quote),
     )
     val bar = bookBar(BookIndex(book), bookmarks, playbackSpeed = 2F)!!
@@ -130,6 +130,5 @@ class BookmarkListItemsTest {
     assertEquals(expected = 0.5F, actual = bar.progress)
     assertEquals(expected = formatTime(7.5.minutes.inWholeMilliseconds), actual = bar.remaining)
     assertEquals(expected = listOf(Bookmark.Kind.Quote, Bookmark.Kind.Note), actual = bar.pins.map { it.kind })
-    assertEquals(expected = listOf(false, true), actual = bar.pins.map { it.setBySleepTimer })
   }
 }

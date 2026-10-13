@@ -16,7 +16,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
-class Migration61Test {
+class Migration65to66Test {
 
   @Rule
   @JvmField
@@ -28,13 +28,13 @@ class Migration61Test {
   @Test
   fun `books with more chapters than fit into one book are removed`() {
     val dbName = "testDb"
-    helper.createDatabase(dbName, 61).use { db ->
+    helper.createDatabase(dbName, 65).use { db ->
       db.insert("content2", SQLiteDatabase.CONFLICT_FAIL, book(id = "small", chapterId = "chapter"))
       db.insert("content2", SQLiteDatabase.CONFLICT_FAIL, book(id = "atTheLimit", chapterId = "a".repeat(MAX_CHAPTER_IDS_BYTES - 4)))
       db.insert("content2", SQLiteDatabase.CONFLICT_FAIL, book(id = "tooBig", chapterId = "a".repeat(MAX_CHAPTER_IDS_BYTES - 3)))
     }
 
-    val migrated = helper.runMigrationsAndValidate(dbName, 62, true, *allMigrations())
+    val migrated = helper.runMigrationsAndValidate(dbName, 66, true, *allMigrations())
 
     val ids = migrated.query("SELECT id FROM content2").mapRows { getString("id") }
     assertEquals(expected = listOf("atTheLimit", "small"), actual = ids.sorted())

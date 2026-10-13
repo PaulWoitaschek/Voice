@@ -63,7 +63,6 @@ class ProgressCarryOverTest {
       title = "Twist",
       time = 7,
       addedAt = Instant.EPOCH,
-      setBySleepTimer = false,
       id = Bookmark.Id.random(),
     )
     coEvery { bookmarkRepo.bookmarks(old) } returns listOf(bookmark)

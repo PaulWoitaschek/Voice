@@ -14,7 +14,6 @@ public interface BookmarkRepo {
   public suspend fun addBookmarkAtBookPosition(
     book: Book,
     title: String?,
-    setBySleepTimer: Boolean,
   ): Bookmark
 
   public suspend fun bookmarks(book: BookContent): List<Bookmark>

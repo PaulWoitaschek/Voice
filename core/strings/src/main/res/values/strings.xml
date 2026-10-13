@@ -167,7 +167,6 @@
     <!-- Relative timestamp for a bookmark created moments ago. -->
     <string name="bookmark.created.just_now">Just now</string>
     <string name="bookmark.deleted">Bookmark deleted</string>
-    <string name="bookmark.dozed_off">Dozed off</string>
     <!-- Label for a bookmark-name text field. -->
     <!-- Title for the dialog that edits a bookmark. -->
     <string name="bookmark.edit.title">Edit bookmark</string>
@@ -316,45 +315,17 @@
         <item quantity="one">%d audio file</item>
         <item quantity="other">%d audio files</item>
     </plurals>
-    <string name="history.action.change_back">Change back</string>
     <string name="history.action.go_there">Go there</string>
-    <string name="history.action.pin">Save as bookmark</string>
-    <string name="history.action.restore">Restore</string>
-    <string name="history.changed_back">Changed back</string>
-    <string name="history.empty.filtered">Nothing matches this filter.</string>
     <string name="history.empty.message">Plays, pauses and jumps show up here, so you can always find your way back.</string>
     <string name="history.empty.title">Nothing here yet</string>
-    <string name="history.event.bookmark_added">Saved a bookmark</string>
-    <string name="history.event.bookmark_added.note">Saved “%1$s”</string>
-    <string name="history.event.bookmark_deleted">Deleted a bookmark</string>
-    <string name="history.event.bookmark_deleted.note">Deleted “%1$s”</string>
     <string name="history.event.bookmark_jump">Went to a bookmark</string>
     <string name="history.event.chapter_change">Changed chapter</string>
     <string name="history.event.dozed_off">Dozed off · timer ended</string>
     <string name="history.event.jump_back">Jumped back</string>
-    <string name="history.event.last_touch">Last touch</string>
     <string name="history.event.moved">Moved</string>
-    <string name="history.event.paused">Paused</string>
-    <string name="history.event.paused_for">Paused %1$s</string>
     <string name="history.event.played">Played</string>
-    <string name="history.event.skip_silence.off">Skip silence off</string>
-    <string name="history.event.skip_silence.on">Skip silence on</string>
-    <string name="history.event.skipped_back">Skipped back</string>
-    <string name="history.event.skipped_forward">Skipped forward</string>
-    <string name="history.event.sleep_timer_extended">Sleep timer restarted by shaking</string>
     <string name="history.event.sleep_timer_set">Sleep timer</string>
-    <string name="history.event.speed">Speed %1$s</string>
-    <string name="history.event.volume_boost">Volume boost %1$s</string>
-    <string name="history.filter.all">All</string>
-    <string name="history.filter.any_source">Any source</string>
-    <string name="history.filter.bookmarks">Bookmarks</string>
-    <string name="history.filter.jumps">Jumps</string>
-    <string name="history.filter.play_pause">Play &amp; pause</string>
-    <string name="history.filter.settings">Settings</string>
-    <string name="history.filter.sleep">Sleep</string>
     <string name="history.location.chapter">Ch. %1$d · %2$s</string>
-    <string name="history.pinned">Saved as bookmark</string>
-    <string name="history.restored">Bookmark restored</string>
     <string name="history.source.app">In the app</string>
     <string name="history.source.audio_focus">Interrupted</string>
     <string name="history.source.bluetooth">Bluetooth device</string>
@@ -369,15 +340,6 @@
     <string name="history.source.unplugged">Audio disconnected</string>
     <string name="history.source.watch">Watch</string>
     <string name="history.source.widget">Widget</string>
-    <string name="history.suggestion.jumped.message">Playback jumped at %1$s.</string>
-    <string name="history.suggestion.jumped.title">Lost your place?</string>
-    <string name="history.suggestion.keep">Keep</string>
-    <string name="history.suggestion.played">%1$s played since. Not you?</string>
-    <string name="history.suggestion.started_by.bluetooth">A Bluetooth device started the book at %1$s</string>
-    <string name="history.suggestion.started_by.car">Your car started the book at %1$s</string>
-    <string name="history.suggestion.started_by.headset">A headset button started the book at %1$s</string>
-    <string name="history.suggestion.started_by.other_app">Another app started the book at %1$s</string>
-    <string name="history.suggestion.started_by.watch">Your watch started the book at %1$s</string>
     <!-- Read out by screen readers for the progress ring on the cover of a server book that downloads. -->
     <string name="library.book.downloading">Downloading</string>
     <!-- Shown for a server book that isn't downloaded while the server can't be reached: on the icon on its cover, and as a small label in the player. Keep it short. -->

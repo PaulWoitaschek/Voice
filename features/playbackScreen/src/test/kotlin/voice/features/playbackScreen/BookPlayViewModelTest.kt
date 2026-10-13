@@ -5,6 +5,7 @@ import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -29,6 +30,7 @@ import voice.core.data.ChapterId
 import voice.core.data.KioskModeDemoData
 import voice.core.data.ListeningEvent
 import voice.core.data.MarkData
+import voice.core.data.repo.BookmarkRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.CurrentBookResolver
@@ -42,7 +44,6 @@ import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
 import voice.core.sleeptimer.SleepTimerState
-import voice.core.ui.BookBarPin
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
@@ -94,6 +95,16 @@ class BookPlayViewModelTest {
   private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
     every { unavailableBooks } returns flowOf(emptySet())
   }
+  private val bookmarkRepository = mockk<BookmarkRepo> {
+    coEvery { addBookmarkAtBookPosition(book, any()) } returns Bookmark(
+      bookId = book.id,
+      chapterId = book.currentChapter.id,
+      addedAt = Instant.now(),
+      id = Bookmark.Id(Uuid.random()),
+      time = 0L,
+      title = null,
+    )
+  }
   private val viewModel = BookPlayViewModel(
     bookRepository = mockk {
       coEvery { get(book.id) } returns book
@@ -107,18 +118,7 @@ class BookPlayViewModelTest {
     playStateManager = playStateManager,
     currentBookStoreId = currentBookStoreId,
     navigator = mockk(),
-    bookmarkRepository = mockk {
-      coEvery { addBookmarkAtBookPosition(book, any(), any()) } returns Bookmark(
-        bookId = book.id,
-        chapterId = book.currentChapter.id,
-        addedAt = Instant.now(),
-        setBySleepTimer = true,
-        id = Bookmark.Id(Uuid.random()),
-        time = 0L,
-        title = null,
-      )
-      every { bookmarksFlow(any()) } returns flowOf(emptyList())
-    },
+    bookmarkRepository = bookmarkRepository,
     volumeGainFormatter = mockk(),
     batteryOptimization = mockk(),
     sleepTimerPreferenceStore = sleepTimerDataStore,
@@ -175,6 +175,7 @@ class BookPlayViewModelTest {
     verify(exactly = 1) {
       sleepTimer.enable(TimedWithDuration(10.minutes))
     }
+    coVerify(exactly = 0) { val _ = bookmarkRepository.addBookmarkAtBookPosition(any(), any()) }
   }
 
   @Test
@@ -398,29 +399,6 @@ class BookPlayViewModelTest {
   }
 
   @Test
-  fun `viewState pins bookmarks on the book bar in story order`() = scope.runTest {
-    val second = bookmark(chapterId = book.chapters[1].id, time = 1.minutes.inWholeMilliseconds, kind = Bookmark.Kind.Favorite)
-    val first = bookmark(chapterId = book.chapters[0].id, time = 2.5.minutes.inWholeMilliseconds, setBySleepTimer = true)
-    val viewModel = viewModel(bookmarks = listOf(second, first))
-
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.test {
-      var state = awaitItem()
-      while (state?.bookmarkPins.isNullOrEmpty()) {
-        state = awaitItem()
-      }
-      assertEquals(
-        expected = listOf(
-          BookBarPin(position = 0.25F, kind = Bookmark.Kind.Note, setBySleepTimer = true),
-          BookBarPin(position = 0.6F, kind = Bookmark.Kind.Favorite, setBySleepTimer = false),
-        ),
-        actual = state.bookmarkPins,
-      )
-    }
-  }
-
-  @Test
   fun `a big jump offers the way back`() = scope.runTest {
     val player = mockk<PlayerController> {
       every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
@@ -499,7 +477,6 @@ class BookPlayViewModelTest {
   private fun viewModel(
     book: Book = this.book,
     player: PlayerController? = null,
-    bookmarks: List<Bookmark> = emptyList(),
     experimentalPlaybackPersistence: Boolean = false,
     kioskMode: Boolean = false,
     livePlaybackFlow: MutableStateFlow<LivePlaybackState?> = MutableStateFlow(null),
@@ -523,9 +500,7 @@ class BookPlayViewModelTest {
       },
       currentBookStoreId = MemoryDataStore(null),
       navigator = mockk(),
-      bookmarkRepository = mockk {
-        every { bookmarksFlow(any()) } returns flowOf(bookmarks)
-      },
+      bookmarkRepository = mockk(),
       volumeGainFormatter = mockk(),
       batteryOptimization = mockk(),
       sleepTimerPreferenceStore = sleepTimerDataStore,
@@ -540,24 +515,6 @@ class BookPlayViewModelTest {
       lastPlaybackSpeedStore = MemoryDataStore(lastPlaybackSpeed),
     )
   }
-}
-
-private fun bookmark(
-  chapterId: ChapterId,
-  time: Long,
-  kind: Bookmark.Kind = Bookmark.Kind.Note,
-  setBySleepTimer: Boolean = false,
-): Bookmark {
-  return Bookmark(
-    bookId = BookId("book"),
-    chapterId = chapterId,
-    title = null,
-    time = time,
-    addedAt = Instant.EPOCH,
-    setBySleepTimer = setBySleepTimer,
-    id = Bookmark.Id.random(),
-    kind = kind,
-  )
 }
 
 private class TestClock : Clock() {

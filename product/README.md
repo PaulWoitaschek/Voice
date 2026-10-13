@@ -26,7 +26,7 @@ A problem that's only partly solved is two problems: the part that's solved and 
 - **Sources are links, not quotes.** Each problem links the one issue, discussion or pull request that matters most,
   and a turned-down solution links where its reason was given. Say in your own words what the source says.
 - **Guess** marks something with no written source. Confirm or correct it.
-- **Sketches** of a planned solution go in [sketches/](sketches), drawn with the sketching skill.
+- **Sketches** of a planned solution go in `product/sketches/`, drawn with the sketching skill.
 
 ## Keeping it current without upkeep
 

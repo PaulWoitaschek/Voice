@@ -32,7 +32,6 @@ import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.SeekTimeStore
 import voice.core.logging.api.Logger
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
@@ -58,8 +57,6 @@ class PlayerController(
   private val bookRepository: BookRepository,
   private val mediaItemProvider: MediaItemProvider,
   private val historyRecorder: ListeningHistoryRecorder,
-  @SeekTimeStore
-  private val seekTimeStore: DataStore<Int>,
 ) {
 
   private var _controller: Deferred<MediaController> = newControllerAsync()
@@ -124,17 +121,16 @@ class PlayerController(
   }
 
   fun skipSilence(skip: Boolean) = executeAfterPrepare { controller ->
-    controller.record(ListeningEvent.Type.SkipSilenceChanged, value = skip.toString())
     controller.sendCustomCommand(CustomCommand.SetSkipSilence(skip))
   }
 
   fun fastForward(source: ListeningEvent.Source = ListeningEvent.Source.App) = executeAfterPrepare { controller ->
-    controller.record(ListeningEvent.Type.SkipForward, source, value = seekTimeStore.data.first().toString())
+    controller.record(ListeningEvent.Type.SkipForward, source)
     controller.seekForward()
   }
 
   fun rewind(source: ListeningEvent.Source = ListeningEvent.Source.App) = executeAfterPrepare { controller ->
-    controller.record(ListeningEvent.Type.SkipBack, source, value = seekTimeStore.data.first().toString())
+    controller.record(ListeningEvent.Type.SkipBack, source)
     controller.seekBack()
   }
 
@@ -191,10 +187,9 @@ class PlayerController(
   fun record(
     type: ListeningEvent.Type,
     source: ListeningEvent.Source,
-    value: String? = null,
   ) {
     scope.launch {
-      awaitConnect()?.record(type, source, value = value)
+      awaitConnect()?.record(type, source)
     }
   }
 
@@ -202,7 +197,6 @@ class PlayerController(
     type: ListeningEvent.Type,
     source: ListeningEvent.Source = ListeningEvent.Source.App,
     to: PlaybackPosition? = null,
-    value: String? = null,
   ) {
     val position = playbackPosition() ?: storedPosition() ?: return
     historyRecorder.record(
@@ -210,7 +204,6 @@ class PlayerController(
       source = source,
       position = position,
       to = to,
-      value = value,
     )
   }
 
@@ -281,12 +274,10 @@ class PlayerController(
   }
 
   fun setSpeed(speed: Float) = executeAfterPrepare { controller ->
-    controller.record(ListeningEvent.Type.SpeedChanged, value = speed.toString())
     controller.setPlaybackSpeed(speed)
   }
 
   fun setGain(gain: Decibel) = executeAfterPrepare { controller ->
-    controller.record(ListeningEvent.Type.VolumeBoostChanged, value = gain.value.toString())
     controller.sendCustomCommand(CustomCommand.SetGain(gain))
   }
 

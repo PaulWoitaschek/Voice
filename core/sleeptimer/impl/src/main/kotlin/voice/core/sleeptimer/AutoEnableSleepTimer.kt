@@ -23,7 +23,6 @@ class AutoEnableSleepTimer(
   private val playStateManager: PlayStateManager,
   private val sleepTimer: SleepTimer,
   private val clock: Clock,
-  private val createBookmarkAtCurrentPosition: CreateBookmarkAtCurrentPosition,
   private val scope: CoroutineScope,
 ) : AppInitializer {
 
@@ -38,14 +37,9 @@ class AutoEnableSleepTimer(
           )
         ) {
           sleepTimer.enable(SleepTimerMode.TimedWithDefault)
-          createBookmark()
         }
       }
       .launchIn(scope)
-  }
-
-  private suspend fun createBookmark() {
-    createBookmarkAtCurrentPosition.create()
   }
 
   private fun shouldEnableSleepTimer(

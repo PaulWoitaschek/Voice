@@ -73,7 +73,7 @@ internal fun BookmarkList(
   viewState: BookmarkViewState,
   listState: LazyListState,
   contentPadding: PaddingValues,
-  onCategoryClick: (BookmarkCategory?) -> Unit,
+  onCategoryClick: (Bookmark.Kind?) -> Unit,
   onClick: (Bookmark.Id) -> Unit,
   onLongClick: (Bookmark.Id) -> Unit,
   onDelete: (Bookmark.Id) -> Unit,
@@ -162,7 +162,6 @@ private fun BookBarHeader(
       progress = bookBar.progress,
       pins = bookBar.pins,
       showPositionMarker = true,
-      pinSize = 14.dp,
       onPinClick = onPinClick,
     )
     Spacer(Modifier.height(6.dp))
@@ -186,8 +185,8 @@ private fun BookBarHeader(
 private fun CategoryChips(
   categories: List<CategoryCount>,
   total: Int,
-  selected: BookmarkCategory?,
-  onClick: (BookmarkCategory?) -> Unit,
+  selected: Bookmark.Kind?,
+  onClick: (Bookmark.Kind?) -> Unit,
 ) {
   val locale = LocalConfiguration.current.locales[0]
   val countFormat = remember(locale) { NumberFormat.getIntegerInstance(locale) }
@@ -202,15 +201,12 @@ private fun CategoryChips(
         label = { ChipLabel(stringResource(R.string.bookmark_category_all), countFormat.format(total.toLong())) },
       )
     }
-    items(categories, key = { it.category }) { (category, count) ->
+    items(categories, key = { it.kind }) { (kind, count) ->
       FilterChip(
-        selected = selected == category,
-        onClick = { onClick(category) },
-        label = { ChipLabel(categoryLabel(category), countFormat.format(count.toLong())) },
-        leadingIcon = {
-          val (kind, sleep) = category.badge()
-          BookmarkBadge(kind = kind, setBySleepTimer = sleep, size = 18.dp)
-        },
+        selected = selected == kind,
+        onClick = { onClick(kind) },
+        label = { ChipLabel(categoryLabel(kind), countFormat.format(count.toLong())) },
+        leadingIcon = { BookmarkBadge(kind = kind, size = 18.dp) },
       )
     }
   }
@@ -227,39 +223,23 @@ private fun ChipLabel(
   }
 }
 
-internal fun BookmarkCategory.badge(): Pair<Bookmark.Kind, Boolean> = when (this) {
-  BookmarkCategory.Note -> Bookmark.Kind.Note to false
-  BookmarkCategory.Favorite -> Bookmark.Kind.Favorite to false
-  BookmarkCategory.Quote -> Bookmark.Kind.Quote to false
-  BookmarkCategory.Revisit -> Bookmark.Kind.Revisit to false
-  BookmarkCategory.Sleep -> Bookmark.Kind.Note to true
-}
-
 @Composable
-private fun categoryLabel(category: BookmarkCategory): String = stringResource(
-  when (category) {
-    BookmarkCategory.Note -> R.string.bookmark_category_notes
-    BookmarkCategory.Favorite -> R.string.bookmark_category_favorites
-    BookmarkCategory.Quote -> R.string.bookmark_category_quotes
-    BookmarkCategory.Revisit -> R.string.bookmark_category_revisit
-    BookmarkCategory.Sleep -> R.string.bookmark_dozed_off
+private fun categoryLabel(kind: Bookmark.Kind): String = stringResource(
+  when (kind) {
+    Bookmark.Kind.Note -> R.string.bookmark_category_notes
+    Bookmark.Kind.Favorite -> R.string.bookmark_category_favorites
+    Bookmark.Kind.Quote -> R.string.bookmark_category_quotes
+    Bookmark.Kind.Revisit -> R.string.bookmark_category_revisit
   },
 )
 
 @Composable
-internal fun kindLabel(
-  kind: Bookmark.Kind,
-  setBySleepTimer: Boolean,
-): String = stringResource(
-  if (setBySleepTimer) {
-    R.string.bookmark_dozed_off
-  } else {
-    when (kind) {
-      Bookmark.Kind.Note -> R.string.bookmark_kind_note
-      Bookmark.Kind.Favorite -> R.string.bookmark_kind_favorite
-      Bookmark.Kind.Quote -> R.string.bookmark_kind_quote
-      Bookmark.Kind.Revisit -> R.string.bookmark_kind_revisit
-    }
+internal fun kindLabel(kind: Bookmark.Kind): String = stringResource(
+  when (kind) {
+    Bookmark.Kind.Note -> R.string.bookmark_kind_note
+    Bookmark.Kind.Favorite -> R.string.bookmark_kind_favorite
+    Bookmark.Kind.Quote -> R.string.bookmark_kind_quote
+    Bookmark.Kind.Revisit -> R.string.bookmark_kind_revisit
   },
 )
 
@@ -307,23 +287,15 @@ private fun BookmarkRow(
   val chapterPrefix = if (row.showChapter) "$chapter · " else ""
   val headline: String
   val meta: String
-  val addNoteHint = row.note == null && !row.setBySleepTimer
-  when {
-    row.note != null -> {
-      headline = row.note
-      meta = "$chapterPrefix${row.time} · $percent"
-    }
-    row.setBySleepTimer -> {
-      headline = stringResource(R.string.bookmark_dozed_off)
-      meta = "$chapterPrefix${row.time} · $percent"
-    }
-    else -> {
-      headline = "$chapterPrefix${row.time}"
-      meta = percent
-    }
+  if (row.note != null) {
+    headline = row.note
+    meta = "$chapterPrefix${row.time} · $percent"
+  } else {
+    headline = "$chapterPrefix${row.time}"
+    meta = percent
   }
   val savedAt = dayLabelText(row.savedAt)
-  val kind = kindLabel(row.kind, row.setBySleepTimer)
+  val kind = kindLabel(row.kind)
   val hint = stringResource(R.string.bookmark_add_note_hint)
   val editLabel = stringResource(R.string.common_action_edit)
   val deleteLabel = stringResource(R.string.common_action_delete)
@@ -375,7 +347,7 @@ private fun BookmarkRow(
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
       ) {
-        BookmarkBadge(kind = row.kind, setBySleepTimer = row.setBySleepTimer, size = 44.dp)
+        BookmarkBadge(kind = row.kind, size = 44.dp)
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1F)) {
           Text(
@@ -394,7 +366,7 @@ private fun BookmarkRow(
               overflow = TextOverflow.Ellipsis,
               modifier = Modifier.weight(1F, fill = false),
             )
-            if (addNoteHint) {
+            if (row.note == null) {
               Text(
                 text = " · $hint",
                 style = MaterialTheme.typography.bodyMedium,
@@ -513,13 +485,14 @@ private fun EmptyHero(modifier: Modifier = Modifier) {
         .graphicsLayer { rotationZ = wiggle.value }
         .clip(MaterialShapes.Cookie12Sided.toShape())
         .background(colors.tertiaryContainer)
+        // before the click, so screen readers don't offer a button without a label
+        .clearAndSetSemantics {}
         .combinedClickable(onClick = {
           scope.launch {
             wiggle.snapTo(18F)
             wiggle.animateTo(0F, spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow))
           }
-        })
-        .clearAndSetSemantics {},
+        }),
       contentAlignment = Alignment.Center,
     ) {
       Icon(
