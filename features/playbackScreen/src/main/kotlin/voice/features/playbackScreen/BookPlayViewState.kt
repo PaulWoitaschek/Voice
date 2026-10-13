@@ -2,7 +2,6 @@ package voice.features.playbackScreen
 
 import androidx.compose.runtime.Immutable
 import voice.core.playback.misc.Decibel
-import voice.core.ui.BookBarPin
 import kotlin.time.Duration
 
 @Immutable
@@ -25,8 +24,6 @@ data class BookPlayViewState(
   val bookDuration: Duration,
   val chapterSegments: List<Float>,
   val skipSeconds: Int,
-  val bookmarkPins: List<BookBarPin>,
-  val poppedPin: Int?,
   val jumpBack: JumpBackViewState?,
   /** A server book that isn't downloaded while the server can't be reached. */
   val unavailable: Boolean = false,

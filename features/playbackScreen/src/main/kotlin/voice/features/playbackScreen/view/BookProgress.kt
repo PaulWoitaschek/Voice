@@ -57,8 +57,6 @@ internal fun BookProgress(
       segments = segments,
       currentSegment = currentSegment,
       progress = progress,
-      pins = viewState.bookmarkPins,
-      popPin = viewState.poppedPin,
     )
     Spacer(Modifier.height(6.dp))
     Row(verticalAlignment = Alignment.CenterVertically) {

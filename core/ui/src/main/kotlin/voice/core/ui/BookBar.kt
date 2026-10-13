@@ -2,9 +2,6 @@
 
 package voice.core.ui
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -31,7 +26,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.withSaveLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
@@ -54,20 +48,17 @@ data class BookBarPin(
  * The whole book as one segment per chapter, with the current chapter's segment standing out.
  * Bookmarks sit above it as little shapes in their kind's color. Pins that would overlap are
  * stacked in rows.
- *
- * @param popPin index of a pin that pops in, e.g. right after it was saved.
  */
 @Composable
 fun BookBar(
   segments: List<Float>,
   currentSegment: Int,
   progress: Float,
-  pins: List<BookBarPin>,
   modifier: Modifier = Modifier,
+  pins: List<BookBarPin> = emptyList(),
   barHeight: Dp = 12.dp,
-  pinSize: Dp = 10.dp,
+  pinSize: Dp = 14.dp,
   showPositionMarker: Boolean = false,
-  popPin: Int? = null,
   onPinClick: ((index: Int) -> Unit)? = null,
 ) {
   val colors = MaterialTheme.colorScheme
@@ -77,13 +68,6 @@ fun BookBar(
     quote = pinStyle(Bookmark.Kind.Quote),
     revisit = pinStyle(Bookmark.Kind.Revisit),
   )
-  val pop = remember { Animatable(1F) }
-  LaunchedEffect(popPin) {
-    if (popPin != null) {
-      pop.snapTo(0F)
-      pop.animateTo(1F, spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow))
-    }
-  }
   val currentOnPinClick = rememberUpdatedState(onPinClick)
   val tapModifier = if (onPinClick != null && pins.isNotEmpty()) {
     Modifier.pointerInput(pins, segments) {
@@ -150,15 +134,9 @@ fun BookBar(
           // a layer of their own, so the gap cut around each pin only clears the pins below it
           drawContext.canvas.withSaveLayer(Rect(-pinPx, -pinPx, size.width + pinPx, barTop), Paint()) {
             pins.forEachIndexed { index, pin ->
-              val scale = if (index == popPin) pop.value else 1F
               val left = pinXs[index] - pinPx / 2
               val top = barTop - PIN_GAP.toPx() - pinPx - lifts[index] * (pinPx + PIN_SPACING.toPx())
-              withTransform(
-                {
-                  translate(left = left, top = top)
-                  scale(scale, scale, pivot = Offset(pinPx / 2, pinPx))
-                },
-              ) {
+              translate(left = left, top = top) {
                 drawOutline(outlines[index], color = Color.Black, style = cutout, blendMode = BlendMode.Clear)
                 drawOutline(outlines[index], color = pinStyles.of(pin).color)
               }

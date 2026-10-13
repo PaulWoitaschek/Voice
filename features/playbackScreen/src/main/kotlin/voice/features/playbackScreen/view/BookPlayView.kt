@@ -15,9 +15,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
-import voice.core.data.Bookmark
 import voice.core.ui.AuroraBackground
-import voice.core.ui.BookBarPin
 import voice.core.ui.CoverTheme
 import voice.core.ui.VoiceTheme
 import voice.core.ui.rememberAnimationClock
@@ -159,12 +157,6 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
       bookDuration = 9.hours + 30.minutes,
       chapterSegments = List(12) { 1F / 12 },
       skipSeconds = 20,
-      bookmarkPins = listOf(
-        BookBarPin(position = 0.12F, kind = Bookmark.Kind.Favorite),
-        BookBarPin(position = 0.38F, kind = Bookmark.Kind.Quote),
-        BookBarPin(position = 0.8F, kind = Bookmark.Kind.Revisit),
-      ),
-      poppedPin = null,
       jumpBack = BookPlayViewState.JumpBackViewState(
         id = 1,
         time = "34:18",
@@ -188,7 +180,6 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
         chapterCount = 1,
         chapterNumber = 1,
         chapterSegments = listOf(1F),
-        bookmarkPins = emptyList(),
         jumpBack = null,
       ),
     )
