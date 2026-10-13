@@ -486,13 +486,14 @@ private fun EmptyHero(modifier: Modifier = Modifier) {
         .graphicsLayer { rotationZ = wiggle.value }
         .clip(MaterialShapes.Cookie12Sided.toShape())
         .background(colors.tertiaryContainer)
+        // before the click, so screen readers don't offer a button without a label
+        .clearAndSetSemantics {}
         .combinedClickable(onClick = {
           scope.launch {
             wiggle.snapTo(18F)
             wiggle.animateTo(0F, spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow))
           }
-        })
-        .clearAndSetSemantics {},
+        }),
       contentAlignment = Alignment.Center,
     ) {
       Icon(

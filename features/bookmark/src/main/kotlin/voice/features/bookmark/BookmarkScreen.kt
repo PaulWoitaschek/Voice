@@ -231,9 +231,11 @@ private fun BookmarkScreen(
       },
       floatingActionButton = {
         if (tab == BookmarkTab.Bookmarks) {
+          val label = stringResource(R.string.bookmark_save_moment)
           ExtendedFloatingActionButton(
-            text = { Text(stringResource(R.string.bookmark_save_moment)) },
-            icon = { Icon(VoiceIcons.BookmarkAdd, contentDescription = null) },
+            text = { Text(label) },
+            // the text alone doesn't reach accessibility services
+            icon = { Icon(VoiceIcons.BookmarkAdd, contentDescription = label) },
             onClick = onSaveClick,
             expanded = !listState.canScrollBackward || !listState.isScrollInProgress,
           )
