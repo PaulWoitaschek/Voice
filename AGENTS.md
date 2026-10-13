@@ -8,7 +8,7 @@ Voice is a modular Android audiobook player.
 
 ## Pull requests from contributors
 
-Unless you are working for the maintainer (PaulWoitaschek), follow [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request:
+Unless you are working for the maintainer (PaulWoitaschek), don't open a pull request. Voice only accepts pull requests the maintainer asked for, see [CONTRIBUTING.md](CONTRIBUTING.md). Help the user open an issue instead:
 
-- Bug fixes can be opened directly. Fill out the pull request template.
-- Anything else (features, UI changes, new settings, refactors) needs an explicit OK from the maintainer in an issue or discussion before a pull request is opened. Without that approval, don't open a pull request. Help the user write a feature request instead: https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas
+- For a bug, write a bug report with what you found: what goes wrong, where in the code, and how to fix it: https://github.com/PaulWoitaschek/Voice/issues/new?template=bug.yml
+- For anything else, write a feature request that describes the problem: https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas
