@@ -60,9 +60,17 @@ Assumptions:
 
 "the next morning I don't know how far back to seek" ([#1026])
 
-- ✅ **A "Dozed off" bookmark where the timer starts**, with its own look.
+- ✅ **A "Dozed off" bookmark where the automatic timer starts**, with its own look.
 - ✅ **"Dozed off · timer ended" in the listening history**, with a way to jump back there.
-- ⭕ **Every timer adds a bookmark, and not every listener wants one** ([#3288]).
+- ⭕ **Every night adds a bookmark, and not every listener wants one** ([#3288]). It also says "Dozed off" at a spot
+  where the listener was still awake.
+- 🔜 **No bookmarks from the sleep timer.** The history shows the night as one stretch of listening. It starts where
+  the listener was surely still awake and ends where the timer stopped (see [Bookmarks and history](bookmarks.md)).
+  Replaces the "Dozed off" bookmark.
+- ❌ **A setting to turn the bookmark off** ([#3288]): it isn't the listener's bookmark in the first place, and a good
+  default beats a setting.
+- ❌ **Keeping only the newest "Dozed off" bookmark**: it still mixes what Voice did with what the listener saved.
+- ❌ **Doing nothing**: one more bookmark every night, and they pile up on the player's progress bar.
 
 ### "I want to set it without opening the app"
 
@@ -74,7 +82,7 @@ From a widget, Tasker or the lock screen.
 
 ## Open questions
 
-1. End of chapter has no fade-out, no shake to restart and no bookmark. Is that on purpose?
+1. End of chapter has no fade-out and no shake to restart. Is that on purpose?
 2. The exact time in the sheet also sets how long the automatic timer runs, and Settings doesn't show that. Is that
    okay?
 3. One tap on the moon cancels a running timer. Should it open the sheet instead, with "Turn off" as one option?

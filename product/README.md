@@ -21,6 +21,8 @@ Opportunities can have smaller opportunities under them. Solutions always hang u
 
 - ✅ **Implemented**: merged into main. Releases aren't tracked here.
 - ❌ **Not doing**: decided against, with the reason.
+- 🔜 **Decided**: chosen but not built yet. It says what it replaces. The pull request that builds it turns it into ✅,
+  and what it replaces into ❌ with the reason.
 - ⭕ **Open**: a problem nothing solves yet, written as the problem and not as a solution. A problem leaves room for
   the best answer, which can be a better default or nothing at all. An idea from a listener can follow it as a hint.
 - **Guess**: no written source. Confirm or correct it.
@@ -50,8 +52,8 @@ Each file says how far along it is:
 2. **List at least three solutions.** Include "a better default, no setting" and "do nothing".
 3. **Write down the assumptions** each solution depends on. Check the riskiest one cheaply: analytics events, a tester
    build, a feature flag, or a question in a discussion.
-4. **Update the spec in the pull request that ships it.** Mark the solution ✅, add the ones that lost under ❌ with
-   the reason, and remove or narrow the ⭕ it solves.
+4. **Update the spec in the pull request that ships it.** Mark the solution ✅ (it may have been 🔜), add the ones
+   that lost under ❌ with the reason, and remove or narrow the ⭕ it solves.
 
 ## Areas
 
