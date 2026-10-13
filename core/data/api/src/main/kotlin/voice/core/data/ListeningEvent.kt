@@ -75,8 +75,8 @@ private val minimumJump = 30.seconds
 
 /**
  * Seeks of more than 30 seconds, chapter changes and bookmark jumps can be accidents, so the player
- * offers to undo them and the history starts a new stretch. The rewind and fast forward buttons
- * move only a few seconds on purpose, so they don't count.
+ * offers to undo them and the history shows them. The rewind and fast forward buttons move only a
+ * few seconds on purpose, so they don't count.
  */
 public fun ListeningEvent.isUndoableJump(): Boolean {
   return when (type) {
@@ -84,9 +84,17 @@ public fun ListeningEvent.isUndoableJump(): Boolean {
     ListeningEvent.Type.BookmarkJump,
     -> true
     ListeningEvent.Type.Seek -> {
+      val toChapterId = toChapterId
       val toTime = toTime
-      toChapterId != chapterId || toTime == null || (toTime - time).absoluteValue >= minimumJump.inWholeMilliseconds
+      toChapterId == null || toTime == null || isBigJump(chapterId, time, toChapterId, toTime)
     }
     else -> false
   }
 }
+
+public fun isBigJump(
+  fromChapterId: ChapterId,
+  fromTime: Long,
+  toChapterId: ChapterId,
+  toTime: Long,
+): Boolean = toChapterId != fromChapterId || (toTime - fromTime).absoluteValue >= minimumJump.inWholeMilliseconds

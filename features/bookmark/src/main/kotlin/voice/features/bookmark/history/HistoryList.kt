@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.strings.R
+import voice.core.ui.JumpBackButton
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 import voice.features.bookmark.dayLabelText
@@ -54,7 +55,7 @@ import voice.features.bookmark.timeText
 internal fun HistoryList(
   viewState: HistoryViewState,
   contentPadding: PaddingValues,
-  onStretchClick: (HistorySpot) -> Unit,
+  onGoTo: (HistorySpot) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   LazyColumn(
@@ -84,13 +85,30 @@ internal fun HistoryList(
             .semantics { heading() },
         )
       }
-      itemsIndexed(day.stretches, key = { _, stretch -> "stretch-${stretch.key}" }) { index, stretch ->
-        StretchRow(
-          stretch = stretch,
-          shape = segmentedShape(index, day.stretches.size),
-          onClick = onStretchClick,
-          modifier = Modifier.animateItem(),
-        )
+      itemsIndexed(
+        items = day.rows,
+        key = { _, row ->
+          when (row) {
+            is HistoryStretch -> "stretch-${row.key}"
+            is HistoryJump -> "jump-${row.key}"
+          }
+        },
+      ) { index, row ->
+        val shape = segmentedShape(index, day.rows.size)
+        when (row) {
+          is HistoryStretch -> StretchRow(
+            stretch = row,
+            shape = shape,
+            onClick = onGoTo,
+            modifier = Modifier.animateItem(),
+          )
+          is HistoryJump -> JumpRow(
+            jump = row,
+            shape = shape,
+            onJumpBackClick = onGoTo,
+            modifier = Modifier.animateItem(),
+          )
+        }
       }
     }
   }
@@ -122,7 +140,7 @@ private fun StretchRow(
       Spacer(Modifier.width(16.dp))
       Column(Modifier.weight(1F)) {
         Text(
-          text = stretchWhere(stretch),
+          text = whereText(stretch.from, stretch.to),
           style = MaterialTheme.typography.bodyLarge.copy(fontFeatureSettings = "tnum"),
           color = colors.onSurface,
           maxLines = 2,
@@ -135,12 +153,64 @@ private fun StretchRow(
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
+        val cause = causeText(stretch.cause)
+        if (cause != null) {
+          Text(
+            text = cause,
+            style = MaterialTheme.typography.bodyMedium,
+            color = colors.onSurfaceVariant,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
+private fun JumpRow(
+  jump: HistoryJump,
+  shape: Shape,
+  onJumpBackClick: (HistorySpot) -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  val colors = MaterialTheme.colorScheme
+  Surface(
+    shape = shape,
+    color = colors.surfaceContainer,
+    modifier = modifier.fillMaxWidth(),
+  ) {
+    Row(
+      modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      Badge(
+        icon = jump.type.jumpIcon(),
+        container = colors.secondaryContainer,
+        content = colors.onSecondaryContainer,
+      )
+      Spacer(Modifier.width(16.dp))
+      Column(Modifier.weight(1F)) {
         Text(
-          text = causeText(stretch.cause),
-          style = MaterialTheme.typography.bodyMedium,
-          color = colors.onSurfaceVariant,
-          maxLines = 1,
+          text = whereText(jump.from, jump.to),
+          style = MaterialTheme.typography.bodyLarge.copy(fontFeatureSettings = "tnum"),
+          color = colors.onSurface,
+          maxLines = 2,
           overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+          text = "${timeText(jump.at)} · ${jumpText(jump.type, jump.source)}",
+          style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
+          color = colors.onSurfaceVariant,
+          maxLines = 2,
+          overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(Modifier.height(8.dp))
+        JumpBackButton(
+          chapterNumber = jump.from.chapterNumber,
+          time = jump.from.time,
+          onClick = { onJumpBackClick(jump.back) },
         )
       }
     }
@@ -155,6 +225,15 @@ private fun StretchBadge(cause: StretchCause) {
     is StretchCause.Jumped -> colors.secondaryContainer to colors.onSecondaryContainer
     is StretchCause.Played -> colors.primaryContainer to colors.onPrimaryContainer
   }
+  Badge(icon = cause.icon(), container = container, content = content)
+}
+
+@Composable
+private fun Badge(
+  icon: ImageVector,
+  container: Color,
+  content: Color,
+) {
   Box(
     modifier = Modifier
       .size(40.dp)
@@ -162,7 +241,7 @@ private fun StretchBadge(cause: StretchCause) {
     contentAlignment = Alignment.Center,
   ) {
     Icon(
-      imageVector = cause.icon(),
+      imageVector = icon,
       contentDescription = null,
       tint = content,
       modifier = Modifier.size(20.dp),
@@ -171,12 +250,15 @@ private fun StretchBadge(cause: StretchCause) {
 }
 
 @Composable
-private fun stretchWhere(stretch: HistoryStretch): String {
-  val from = locationText(stretch.from)
-  val to = stretch.to ?: return from
-  val toText = if (to.chapterNumber == stretch.from.chapterNumber) to.time else locationText(to)
+private fun whereText(
+  from: HistoryLocation,
+  to: HistoryLocation?,
+): String {
+  val fromText = locationText(from)
+  if (to == null) return fromText
+  val toText = if (to.chapterNumber == from.chapterNumber) to.time else locationText(to)
   val arrow = if (LocalLayoutDirection.current == LayoutDirection.Rtl) "←" else "→"
-  return "$from $arrow $toText"
+  return "$fromText $arrow $toText"
 }
 
 @Composable
@@ -191,27 +273,33 @@ private fun stretchWhen(stretch: HistoryStretch): String {
 }
 
 @Composable
-private fun causeText(cause: StretchCause): String = when (cause) {
+private fun causeText(cause: StretchCause): String? = when (cause) {
   is StretchCause.Played -> if (cause.source == Source.AudioFocus) {
     // playback going on after a call isn't interrupted, it's what follows the interruption
     stringResource(R.string.history_event_played)
   } else {
     withSource(stringResource(R.string.history_event_played), cause.source)
   }
-  is StretchCause.Jumped -> withSource(
-    stringResource(
-      when (cause.type) {
-        Type.ChapterChange -> R.string.history_event_chapter_change
-        Type.BookmarkJump -> R.string.history_event_bookmark_jump
-        Type.JumpBack -> R.string.history_event_jump_back
-        else -> R.string.history_event_moved
-      },
-    ),
-    cause.source,
-  )
+  is StretchCause.Jumped -> if (cause.hasRow) null else jumpText(cause.type, cause.source)
   StretchCause.SleepTimerEnded -> stringResource(R.string.history_event_dozed_off)
   StretchCause.SleepTimerStarted -> stringResource(R.string.history_event_sleep_timer_set)
 }
+
+@Composable
+private fun jumpText(
+  type: Type,
+  source: Source,
+): String = withSource(
+  stringResource(
+    when (type) {
+      Type.ChapterChange -> R.string.history_event_chapter_change
+      Type.BookmarkJump -> R.string.history_event_bookmark_jump
+      Type.JumpBack -> R.string.history_event_jump_back
+      else -> R.string.history_event_moved
+    },
+  ),
+  source,
+)
 
 @Composable
 private fun withSource(
@@ -250,13 +338,15 @@ private fun sourceLabel(source: Source): String = stringResource(
 
 private fun StretchCause.icon(): ImageVector = when (this) {
   StretchCause.SleepTimerEnded, StretchCause.SleepTimerStarted -> VoiceIcons.Bedtime
-  is StretchCause.Jumped -> when (type) {
-    Type.ChapterChange -> VoiceIcons.SkipNext
-    Type.BookmarkJump -> VoiceIcons.Bookmark
-    Type.JumpBack -> VoiceIcons.Undo
-    else -> VoiceIcons.SwapHoriz
-  }
+  is StretchCause.Jumped -> type.jumpIcon()
   is StretchCause.Played -> if (source == Source.AudioFocus) VoiceIcons.PlayArrow else source.icon()
+}
+
+private fun Type.jumpIcon(): ImageVector = when (this) {
+  Type.ChapterChange -> VoiceIcons.SkipNext
+  Type.BookmarkJump -> VoiceIcons.Bookmark
+  Type.JumpBack -> VoiceIcons.Undo
+  else -> VoiceIcons.SwapHoriz
 }
 
 private fun Source.icon(): ImageVector = when (this) {
