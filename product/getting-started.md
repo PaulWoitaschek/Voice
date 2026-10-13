@@ -2,91 +2,128 @@
 
 **Status:** Outline.
 
-## Outcome
-
 A new listener with a folder of audiobook files is listening within a few minutes, with books that look right, and
 without having to understand folders.
 
-## Who and when
+**When:** The first minutes after installing, and every time new books are added. Most listeners aren't technical. They
+add audiobook files without a plan and just want to play them, and for many, folders are a strange idea ([#3044]).
 
-The first minutes after installing, and every time new books are added. Most listeners aren't technical: "the majority
-of our users are people who just randomly throw in audiobook files and they just want to play it." "For a lot of users
-the concept of folders is strange even." ([#3044])
+| Problem | Status |
+|---|---|
+| [My books come out wrong when I add a folder](#my-books-come-out-wrong-when-i-add-a-folder) | ✅ Solved |
+| [My author, series and book folders fit no layout](#my-author-series-and-book-folders-fit-no-layout) | ⭕ Open |
+| [Voice can't see my files](#voice-cant-see-my-files) | ✅ Solved |
+| [My new books don't show up](#my-new-books-dont-show-up) | ✅ Solved |
+| [My books have the wrong names](#my-books-have-the-wrong-names) | ✅ Solved |
+| [Fixing wrong tags means renaming every book by hand](#fixing-wrong-tags-means-renaming-every-book-by-hand) | ⭕ Open |
+| [My chapters are missing, or my big book doesn't show up](#my-chapters-are-missing-or-my-big-book-doesnt-show-up) | ✅ Solved |
+| [Moving or renaming a folder loses my progress and bookmarks](#moving-or-renaming-a-folder-loses-my-progress-and-bookmarks) | ⭕ Open |
+| [After installing, I don't know where to start](#after-installing-i-dont-know-where-to-start) | ✅ Solved |
 
-## Opportunities
+## My books come out wrong when I add a folder
 
-### "I don't know which option to pick, and my books come out wrong"
+✅ **Solved** · [#1365]
 
-They end up with one giant book, or one book split into its CDs. This is the biggest topic in this area: "I was
-confused when adding files the first time I used the app, and just messed around with folder layout until it worked."
-([#1365])
+Listeners don't know which option to pick. They end up with one giant book, or one book split into its CDs. This is the
+biggest topic in this area. One listener was confused the first time and moved folders around until it worked.
 
-- ✅ **Three ways to find books** (every folder is a book, one book, folders are authors), plus adding a single file.
-- ✅ **Voice guesses the layout** ("Looks like yours") and shows the books it found before adding them. You can change
-  the layout later and keep your progress.
-- ❌ **More modes or templates**: "I am very hesitant on adding another way of adding folders because it is already
-  quite complex for users to understand the current folder modes right now." ([#3044])
-- ⭕ **Folders sorted by author, then series, then book fit none of the layouts** ([#3044]).
+**Solution:**
 
-Assumptions:
+- Three ways to find books: every folder is a book, one book, or folders are authors. Plus adding a single file.
+- Voice guesses the layout ("Looks like yours") and shows the books it found before adding them. You can change the
+  layout later and keep your progress.
 
-- **The guess is right for most libraries.** This is untested. Analytics were added partly for this: "I have the
-  feeling that our onboarding and the folder modes are highly confusing to users." ([#3212])
+**Assumption:** The guess is right for most libraries. This is untested. Analytics were added partly to find out,
+because the maintainer suspected that the onboarding and the folder layouts confuse listeners ([#3212]).
 
-### "Voice can't see my files"
+## My author, series and book folders fit no layout
 
-The folder button does nothing, or the folder looks empty: "nothing happens, no dialogue" ([#2847]).
+⭕ **Open** · [#3044]
 
-- ✅ **Android's own folder picker**, since 2022.
-- ✅ **A "Permission required" card** for a system bug on some devices.
-- Most remaining cases are outside Voice: the system Files app is turned off, Family Link blocks it, or another file
-  manager gets in the way.
+Listeners who sort their folders by author, then series, then book find that none of the layouts fits.
 
-### "My new books don't show up"
+**Turned down:**
 
-"the initial scan works fine, it just never rescans and I can't find any way to manual rescan." ([#892])
+- More layouts or templates: the layouts Voice has are already hard for listeners to understand ([#3044]).
 
-- ✅ **Automatic scanning**, with its progress shown in the search field.
-- ✅ **Files that change size are read again.**
-- ❌ **A rescan button**: "A manual file scan does not fit in how the player works." ([#555])
+## Voice can't see my files
 
-### "The names are wrong"
+✅ **Solved** · [#2847]
 
-"its categorizing them all as Dune Saga because thats the Album tag." ([#433]) "It is absolutely the biggest flaw with
-the app right now" ([#781]). Garbled Cyrillic tags are another version of this.
+The folder button does nothing, or the folder looks empty. Most of the cases left are outside Voice: the system Files
+app is turned off, Family Link blocks it, or another file manager gets in the way.
 
-- ✅ **Books with many files use the folder name.**
-- ✅ **Genre, narrator and series are read from the tags.**
-- ✅ **Renaming a book** (see [Library](library.md)).
-- ⭕ **When the tags are wrong, each book has to be renamed by hand** ([#3502]).
+**Solution:**
 
-### "My chapters are missing, or my big book doesn't show up"
+- Android's own folder picker, since 2022.
+- A "Permission required" card for a system bug on some devices.
 
-Chapters inside m4b files, and very large files.
+## My new books don't show up
 
-- ✅ **Chapter reading was rewritten.**
-- ✅ **Large m4b files can be added.**
+✅ **Solved** · [#892]
 
-"Media parsing is ugly" ([#3044]). The bar is high: during one regression, "I'm pinning this issue and will stop the
-rollout until this is fixed." ([#2840])
+The first scan works, but books added after it never appear, and there's no way to scan again.
 
-### "I moved or renamed a folder and lost my progress and bookmarks"
+**Solution:**
 
-"If I move the directory the audio file is in, these bookmarks are lost!" ([#2636])
-The cause: "Voice uses the path to identify books from each other." ([#2678])
+- Voice scans automatically and shows its progress in the search field.
+- Files that change size are read again.
 
-- ✅ **Changing a folder's layout keeps your progress.**
-- ⭕ **Moving or renaming a folder still loses progress and bookmarks** ([#2636]).
+**Turned down:**
 
-Backup and sync without a server have the same root problem. See [Servers, sync and backup](servers-and-sync.md).
+- A rescan button: a manual scan doesn't fit how the player works ([#555]).
 
-### Onboarding
+## My books have the wrong names
 
-Listeners rarely ask for this. The push came from the maintainer: "Right now the user is thrown into cold water and I
-assume that mostly users with a technical background understand how to add folders." ([#1365], 2018)
+✅ **Solved** · [#433]
 
-- ✅ **A short onboarding** that asks about analytics, with analytics off unless you agree.
-- ✅ **"Connect Audiobookshelf"** as an option instead of picking a folder.
+One listener's books were all named "Dune Saga", because that was their album tag. Another called wrong names the
+biggest flaw of the app ([#781]). Garbled Cyrillic tags are another version of this.
+
+**Solution:**
+
+- Books with many files use the folder name.
+- Genre, narrator and series are read from the tags.
+- Renaming a book (see [Library](library.md)).
+
+## Fixing wrong tags means renaming every book by hand
+
+⭕ **Open** · [#3502]
+
+When the tags are wrong, each book has to be renamed by hand.
+
+## My chapters are missing, or my big book doesn't show up
+
+✅ **Solved**
+
+Chapters inside m4b files go missing, and very large files don't show up. Reading media files is messy ([#3044]). The
+bar is high: during one regression, the maintainer pinned the issue and stopped the rollout until it was fixed
+([#2840]).
+
+**Solution:**
+
+- Chapters inside m4b files show up, since chapter reading was rewritten.
+- Large m4b files can be added.
+
+## Moving or renaming a folder loses my progress and bookmarks
+
+⭕ **Open** · [#2636]
+
+Voice tells books apart by their path ([#2678]). Changing a folder's layout keeps the progress, but moving or renaming
+the folder loses it, and the bookmarks too. Backup and sync without a server have the same root problem. See
+[Servers, sync and backup](servers-and-sync.md).
+
+## After installing, I don't know where to start
+
+✅ **Solved** · [#1365]
+
+Listeners rarely ask for this. The push came from the maintainer in 2018: new listeners were thrown in at the deep end,
+and probably only the technical ones understood how to add folders.
+
+**Solution:**
+
+- A short onboarding that asks about analytics. Analytics are off unless you agree.
+- "Connect Audiobookshelf" as an option instead of picking a folder.
 
 ## Open questions
 
@@ -95,8 +132,8 @@ assume that mostly users with a technical background understand how to add folde
    without a server.
 3. Tags or file names: a setting, or a smarter default?
 
-[#555]: https://github.com/PaulWoitaschek/Voice/issues/555
 [#433]: https://github.com/PaulWoitaschek/Voice/issues/433
+[#555]: https://github.com/PaulWoitaschek/Voice/issues/555
 [#781]: https://github.com/PaulWoitaschek/Voice/issues/781
 [#892]: https://github.com/PaulWoitaschek/Voice/issues/892
 [#1365]: https://github.com/PaulWoitaschek/Voice/discussions/1365

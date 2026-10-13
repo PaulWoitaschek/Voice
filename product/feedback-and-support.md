@@ -2,68 +2,96 @@
 
 **Status:** Outline.
 
-## Outcome
+Listeners who need help get it, listeners who want to give back can, and Voice stays maintained, without any of it
+getting in the way of listening.
 
-Listeners who need help get it, listeners who want to give back can, and Voice stays maintained. None of it gets in the
-way of listening.
+**When:** A listener who is stuck. A happy listener, right after finishing a book. A listener who cares about privacy.
+And the maintainer, who needs to know what listeners want.
 
-## Who and when
+| Problem | Status |
+|---|---|
+| [There's no way to give something back](#theres-no-way-to-give-something-back) | ✅ Solved |
+| [I'm stuck and don't know where to get help](#im-stuck-and-dont-know-where-to-get-help) | ✅ Solved |
+| [I don't want an audiobook app talking to the internet](#i-dont-want-an-audiobook-app-talking-to-the-internet) | ✅ Solved |
+| [I don't know which version to install](#i-dont-know-which-version-to-install) | ✅ Solved |
+| [I can't check that an APK was built from the published source](#i-cant-check-that-an-apk-was-built-from-the-published-source) | ⭕ Open |
+| [The maintainer doesn't know what listeners want](#the-maintainer-doesnt-know-what-listeners-want) | ✅ Solved |
 
-- A listener who is stuck.
-- A happy listener, right after finishing a book.
-- A listener who cares about privacy.
-- The maintainer, who needs to know what listeners want.
+## There's no way to give something back
 
-## Opportunities
+✅ **Solved** · [#874]
 
-### "I love it and want to give something back"
+Happy listeners want to pay for Voice, or thank it in some other way.
 
-"As this is the best audio-book player, would be happy to pay for it" ([#874]). The answer in 2020: "I don't need
-donations, a thanks is enough!" ([#874])
+**Solution:**
 
-- ✅ **GitHub Sponsors** and **Ko-fi** in the free build.
-- ✅ **Support inside the Play build**: monthly tiers, one-time tips and badges. "It's a thank-you: it unlocks nothing."
-  ([#3821])
-- ✅ **A rating prompt after a win**: a finished book or a listening milestone. It only appears after 3 days, 5 hours
-  of listening and 3 listening days, at most 3 times, and "It's never shown during playback". "Everyone gets the same
-  three, so there's no gating" ([#3820]).
-- ❌ **Anything behind a paywall** ([design principles]).
+- GitHub Sponsors and Ko-fi in the free build.
+- Support inside the Play build: monthly tiers, one-time tips and badges. It's a thank-you and unlocks nothing
+  ([#3821]).
+- A rating prompt after a win: a finished book or a listening milestone. It only appears after 3 days, 5 hours of
+  listening and 3 listening days, at most 3 times, and never during playback. Everyone gets the same three choices, so
+  there's no gating ([#3820]).
 
-### "Something's wrong and I need help"
+**Turned down:**
 
-- ✅ **Help and feedback in Settings**: the FAQ, getting help, reporting a problem and suggesting an idea. The rating
-  prompt offers the same choices, plus email.
+- No way to pay, because a thanks is enough ([#874]). That was in 2020, and was reversed later.
+- Anything behind a paywall: the [design principles] rule it out.
 
-Assumptions:
+## I'm stuck and don't know where to get help
 
-- **Listeners can use GitHub.** Evidence against: the links can ask you to log in ([#1711]).
+✅ **Solved**
 
-### "Why does an audiobook app talk to the internet?"
+A listener with a problem or a question needs somewhere to turn.
 
-"if only I could go without cover images and not have an app talking to the internet" ([#1232])
+**Solution:** Help and feedback in Settings: the FAQ, getting help, reporting a problem and suggesting an idea. The
+rating prompt offers the same choices, plus email.
 
-- ✅ **A free build without Google libraries**, on F-Droid: "If you don't like that use the fdroid version." ([#944])
-- ✅ **Analytics only with consent**, asked during onboarding and changeable in Settings. The reason: "I need user data
-  to make decisions." "If for example one is a super edge case, I want to think about removing it to
-  reduce complexity." ([#3212])
+**Assumption:** Listeners can use GitHub. Evidence against: the links can ask you to log in ([#1711]).
 
-### "Which version should I install?"
+## I don't want an audiobook app talking to the internet
 
-"it's just better to rely on apk from GitHub than installing app from Play store" ([#2610])
+✅ **Solved** · [#1232]
 
-- ✅ **A page comparing the download sources.**
-- The F-Droid build can't offer Android Auto. F-Droid also updates on its own schedule: "It's not me who's updating it,
-  it's them." ([#526])
-- ✅ **GitHub releases carry the free build** ([#2300]).
-- ⭕ **Listeners can't check that an APK was built from the published source** ([#2862]).
+Listeners who care about privacy would rather do without cover images than have the app go online.
 
-### How the maintainer hears from listeners
+**Solution:**
 
-- **Upvotes on ideas**: "Please upvotes ideas that you like. This helps with prioritizing and determining, how many
-  users would benefit from a feature." ([#1330])
-- **Opt-in analytics** ([#3212]).
-- **Not a beta channel**: "Voice does not have that many users and Beta releases don't work because there is just too
-  little data." ([#959])
+- A free build without Google libraries, on F-Droid, for listeners who don't want them ([#944]).
+- Analytics only with consent, asked during onboarding and changeable in Settings.
+
+## I don't know which version to install
+
+✅ **Solved** · [#2610]
+
+Voice comes from several sources, and they differ. Some listeners trust an APK from GitHub more than the Play Store.
+The F-Droid build can't offer Android Auto, and F-Droid, not the maintainer, decides when it updates ([#526]).
+
+**Solution:**
+
+- A page comparing the [download sources](../docs/download-sources.md).
+- GitHub releases carry the free build ([#2300]).
+
+## I can't check that an APK was built from the published source
+
+⭕ **Open** · [#2862]
+
+Listeners who install an APK have no way to check that it matches the source code that's published.
+
+## The maintainer doesn't know what listeners want
+
+✅ **Solved** · [#1330]
+
+To decide what to build, the maintainer needs to know what listeners want and how many would benefit.
+
+**Solution:**
+
+- Upvotes on ideas. They help prioritize, and show how many listeners would benefit from a feature ([#1330]).
+- Opt-in analytics. Decisions need data: a feature that turns out to be a rare edge case is a candidate for
+  removal, to reduce complexity ([#3212]).
+
+**Turned down:**
+
+- A beta channel: Voice doesn't have enough users for beta releases to give enough data ([#959]).
 
 ## Open questions
 

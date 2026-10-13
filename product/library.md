@@ -2,87 +2,142 @@
 
 **Status:** Outline.
 
-## Outcome
-
 Listeners find the book they want in seconds, and can see at a glance how far along they are in each one.
 
-## Who and when
+**When:** Most visits are probably to continue the current book (**Guess**). Others are to pick the next one, or to
+tidy up. Libraries range from one book to hundreds, and search works well when the library is small ([#571]).
 
-Most visits are probably to continue the current book (**Guess**). Others are to pick the next one, or to tidy up.
-Libraries range from one book to hundreds, and search "currently works well for those who have a small library"
-([#571]).
+| Problem | Status |
+|---|---|
+| [I have to look for the book I'm listening to](#i-have-to-look-for-the-book-im-listening-to) | ✅ Solved |
+| [I can't see how far along I am in each book](#i-cant-see-how-far-along-i-am-in-each-book) | ✅ Solved |
+| [I can't put my books in the order I want](#i-cant-put-my-books-in-the-order-i-want) | ⭕ Open |
+| [I can't browse my books by author or series](#i-cant-browse-my-books-by-author-or-series) | ✅ Solved |
+| [The books of a series aren't grouped or in order](#the-books-of-a-series-arent-grouped-or-in-order) | ⭕ Open |
+| [Finding a book takes too long](#finding-a-book-takes-too-long) | ✅ Solved |
+| [A book's name or cover is wrong](#a-books-name-or-cover-is-wrong) | ✅ Solved |
+| [Fixing the author means editing the files](#fixing-the-author-means-editing-the-files) | ⭕ Open |
+| [Covers that aren't square get cropped](#covers-that-arent-square-get-cropped) | ⭕ Open |
+| [The cover I pick stays in Voice](#the-cover-i-pick-stays-in-voice) | ⭕ Open |
+| [Deleting a book can delete more than I meant](#deleting-a-book-can-delete-more-than-i-meant) | ✅ Solved |
+| [Removing a book from the library deletes its files](#removing-a-book-from-the-library-deletes-its-files) | ⭕ Open |
+| [I can't see how much I've listened](#i-cant-see-how-much-ive-listened) | ⭕ Open |
 
-## Opportunities
+## I have to look for the book I'm listening to
 
-### "Let me get back to my book"
+✅ **Solved** · [#906]
 
-- ✅ **"Continue listening"** at the top, with a greeting. Nobody asked for these by name.
-- ✅ **Shelves for Current, Not started and Completed**, and marking a book as one of them. The older
-  shelves confused people: "the startup screen with "new" and "more" is confusig to them (and me)." ([#906])
+The older start screen split the books into "new" and "more", and that confused listeners.
 
-### "How far along am I?"
+**Solution:**
 
-"Since this has been a request for 5 years, I'm not holding out much hope" ([#1422])
+- "Continue listening" at the top, with a greeting. Nobody asked for these by name.
+- Shelves for Current, Not started and Completed, and marking a book as one of them.
 
-- ✅ **Progress on each book** in the library. For the player, see [Player](player.md).
-- ❌ **Turned down in 2020**: "I try to follow a minimal design principle and therefore don't want another element in
-  the UI." ([#834]) This was later reversed.
+## I can't see how far along I am in each book
 
-### "Let me sort my shelf"
+✅ **Solved** · [#1422]
 
-This is the biggest library topic. "I have many books from the same author and
-it is difficult to hear them in the correct order." ([#1543]) "This is the main reason why I mostly still use Smart
-Audiobook Player." ([#3235])
+Listeners want to see how far along they are in each book, right in the library. It had been requested for 5 years.
 
-- ❌ **Sort options** were added in 2018 ([#765]) and removed the next day. No reason was written down.
-- The maintainer suggested search instead: "What about searching for the author instead? Does that already cover your
-  use case?" ([#1543])
-- ⭕ **Books can't be put in the order a listener wants**, like an author's books in the order they were written
-  ([#1543]).
+**Solution:** Progress on each book in the library. For the player, see [Player](player.md).
 
-### "Group my series and authors"
+**Turned down:**
 
-"Could be a life-changing feature for those who like to collect
-audiobook series" ([#1748])
+- No progress in the library, to keep the design minimal without another element in the UI ([#834]). That was in
+  2020, and it was reversed later.
 
-- ✅ **Folders are authors**, when adding books (see [Getting started](getting-started.md)).
-- ✅ **Search can browse by series, author, narrator and genre.**
-- ⭕ **The books of a series aren't grouped or ordered as one.** The maintainer: "in the long term we should rather
-  allow for a way to really support this kind of series." ([#1643])
+## I can't put my books in the order I want
 
-### "Help me find a book fast"
+⭕ **Open** · [#1543]
 
-- ✅ **Search**, which also finds narrators, series and genres, and remembers recent searches.
-- ✅ **Grid or list.**
+Listeners with many books by the same author have a hard time listening to them in the right order, like the order
+they were written in. This is the biggest library topic. For one listener, it's the main reason to mostly use Smart
+Audiobook Player instead ([#3235]). The maintainer suggested searching for the author instead.
 
-### "Let me fix how a book looks"
+**Turned down:**
 
-"Currently I need to change the author in the audiofile itself" ([#1161]). "Voice forces them to fit into a square,
-often cropping out stuff, like author or title." ([#2856])
+- Sort options: added in 2018 ([#765]) and removed the next day. No reason was written down.
 
-- ✅ **Rename a book.**
-- ✅ **Change the cover** with one from the files or the internet, and crop it.
-- ⭕ **A wrong author or other detail can only be fixed in the files' tags** ([#1407]).
-- ⭕ **Covers that aren't square get cropped**, often cutting off the author or title ([#2856]).
-- ⭕ **A cover picked in Voice isn't saved with the book's files** ([#2303]).
+## I can't browse my books by author or series
 
-### "Let me remove a book safely"
+✅ **Solved**
 
-"Can we have an option to remove a book file/folder from the app interface without having to delete it from the
-device?" ([#3397])
+Listeners want to see the books of one author or one series together.
 
-- ✅ **Deleting shows which files will go**, and asks you to tick "Delete my files" first. This came after [#1500],
-  "Deleted all my audiobooks".
-- ⭕ **A book can't leave the library without its files being deleted** ([#3397]).
+**Solution:**
 
-### "Show me how much I've listened"
+- Folders are authors, a layout for adding books (see [Getting started](getting-started.md)).
+- Search can browse by series, author, narrator and genre.
 
-"It would be cool to see how many hours has been spent listening" ([#2826])
+## The books of a series aren't grouped or in order
 
-- ✅ **Listening is recorded**, "as groundwork for a yearly listening recap" ([#3820]). The rating prompt shows hours,
-  finished books and authors.
-- ❌ **Turned down in 2015**: "I want to keep it simple so I am against an additional menu." ([#296])
-- ⭕ **Listeners can't look up how much they've listened** ([#2826]).
+⭕ **Open** · [#1643]
+
+The library doesn't treat a series as one thing. One listener called this a life-changing feature for those who
+collect series ([#1748]). The maintainer wants real support for series in the long term.
+
+## Finding a book takes too long
+
+✅ **Solved**
+
+**Solution:**
+
+- Search, which also finds narrators, series and genres, and remembers recent searches.
+- Grid or list.
+
+## A book's name or cover is wrong
+
+✅ **Solved**
+
+**Solution:**
+
+- Rename a book.
+- Change the cover with one from the files or the internet, and crop it.
+
+## Fixing the author means editing the files
+
+⭕ **Open** · [#1407]
+
+A wrong author or other detail can only be fixed in the files' tags, outside Voice ([#1161]).
+
+## Covers that aren't square get cropped
+
+⭕ **Open** · [#2856]
+
+Voice fits every cover into a square, often cutting off the author or title.
+
+## The cover I pick stays in Voice
+
+⭕ **Open** · [#2303]
+
+A cover picked in Voice isn't saved with the book's files.
+
+## Deleting a book can delete more than I meant
+
+✅ **Solved** · [#1500]
+
+Deleting one book once deleted a listener's whole audiobook folder.
+
+**Solution:** Deleting shows which files will go, and asks you to tick "Delete my files" first.
+
+## Removing a book from the library deletes its files
+
+⭕ **Open** · [#3397]
+
+Listeners want to take a book out of Voice and keep its files on the device.
+
+## I can't see how much I've listened
+
+⭕ **Open** · [#2826]
+
+Listeners would like to see how many hours they've spent listening. Voice records listening, as groundwork for a yearly
+listening recap ([#3820]). The rating prompt shows hours, finished books and authors, but there's no place to look it
+up.
+
+**Turned down:**
+
+- A statistics menu: in 2015, to keep Voice simple without another menu ([#296]).
 
 ## Open questions
 

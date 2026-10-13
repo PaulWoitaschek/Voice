@@ -2,85 +2,128 @@
 
 **Status:** Outline.
 
-## Outcome
-
 Listeners fall asleep to a book, and the next night they pick up where they left off without searching for their place.
 
-## Who and when
+**When:** In bed with the lights off, drowsy, often with headphones and next to a partner. They don't want to unlock
+their phone, or touch it at all. Above everything else, the timer has to stop ([#2175]).
 
-In bed with the lights off, drowsy, often with headphones and next to a partner. They don't want to unlock their phone,
-or touch it at all. Above everything else, the timer has to stop: "woke up several minutes to hours later and my
-audiobook was still playing" ([#2175])
+| Problem | Status |
+|---|---|
+| [The book keeps playing after I fall asleep](#the-book-keeps-playing-after-i-fall-asleep) | ✅ Solved |
+| [With short chapters, end of chapter stops too soon](#with-short-chapters-end-of-chapter-stops-too-soon) | ⭕ Open |
+| [I forget to set the timer](#i-forget-to-set-the-timer) | ✅ Solved |
+| [The stop wakes me up](#the-stop-wakes-me-up) | ✅ Solved |
+| [The timer stops while I'm still awake](#the-timer-stops-while-im-still-awake) | ✅ Solved |
+| [After the shake window, more time means setting the timer again](#after-the-shake-window-more-time-means-setting-the-timer-again) | ⭕ Open |
+| [I don't know where I fell asleep](#i-dont-know-where-i-fell-asleep) | ✅ Solved |
+| [The sleep timer fills up my bookmarks](#the-sleep-timer-fills-up-my-bookmarks) | 🔜 Planned |
+| [Setting the timer means opening the app](#setting-the-timer-means-opening-the-app) | ⭕ Open |
 
-## Opportunities
+## The book keeps playing after I fall asleep
 
-### "It keeps playing after I fall asleep"
+✅ **Solved** · [#2788]
 
-"wake up at 3am with an audiobook still blaring, with no hope of figuring out where I was up to" ([#2788])
+Listeners wake up in the middle of the night with the book still playing, and no idea where they were.
 
-- ✅ **A timer from the moon button**: 5, 15, 30 or 60 minutes, or an exact time in 1-minute steps. It counts listening
-  time, so pausing doesn't use it up.
-- ✅ **End of chapter.** It was turned down in 2016 ("The sleep menu is full enough", [#464]), then reverted once
-  because of bugs. It shipped only with tests: "I don't want to merge this PR without a test-suite covering it."
-  ([#2668])
-- ⭕ **With very short chapters, end of chapter stops too soon** ([#1421]).
+**Solution:**
 
-### "I forget to set it"
+- A timer from the moon button: 5, 15, 30 or 60 minutes, or an exact time in 1-minute steps. It counts listening time,
+  so pausing doesn't use it up.
+- End of chapter. It was turned down once because the sleep menu was full enough ([#464]), and then shipped only with
+  tests ([#2668]).
 
-"I'm constantly forgetting to start the timer and waking up to a finished book." ([#988])
+## With short chapters, end of chapter stops too soon
 
-- ✅ **Automatic sleep timer**: starts a timer when playback begins between two times, 22:00 to 06:00
-  by default.
-- ❌ **Turned down before that**: "I think it is not too complicated to just press play and then sleep. That way we can
-  get rid of one setting." ([#414]) This was reversed in 2025.
+⭕ **Open** · [#1421]
 
-### "The stop wakes me up"
+When chapters are only a few minutes long, end of chapter stops before the listener is asleep.
 
-"I always wake up when the sound is cut" ([#393])
+## I forget to set the timer
 
-- ✅ **The last 10 seconds fade out, then Voice rewinds by the fade**: "Always fading is good. And best, rewind the time
-  when the playback stops by the fade amount." ([#393])
+✅ **Solved** · [#988]
 
-### "I'm still awake when it stops"
+Listeners forget to start the timer and wake up to a finished book.
 
-"I don't want to turn around in bed, wake up my better half, unlock my phone, open the app, press play, click timer…"
-([#742])
+**Solution:** The automatic sleep timer starts a timer when playback begins between two times, 22:00 to 06:00 by
+default.
 
-- ✅ **Shake within 30 seconds of the end** to restart with the same timer. It's always on, with no setting ([#981]).
-- ✅ **The automatic timer starts again** when you press play inside its time window.
-- ❌ **Restarting the timer on every play, at any time of day**: "I think this request is too specific that everyone
-  should have it." ([#535])
-- ⭕ **Once the shake window has passed, more time means setting the timer again** ([#2233]).
+**Turned down:**
 
-Assumptions:
+- No automatic timer, to save a setting, because pressing play and then the moon is easy enough ([#414]). This was
+  reversed later.
 
-- **Listeners can shake in bed.** Evidence against: "Lying in bed, hands under the covers, I can't do it…" ([#3278])
+## The stop wakes me up
 
-### "I don't know where I fell asleep"
+✅ **Solved** · [#393]
 
-"the next morning I don't know how far back to seek" ([#1026])
+When the sound cuts off, some listeners wake up.
 
-- ✅ **A "Dozed off" bookmark where the automatic timer starts**, with its own look.
-- ✅ **"Dozed off · timer ended" in the listening history**, with a way to jump back there.
-- ⭕ **Every night adds a bookmark, and not every listener wants one** ([#3288]). It also says "Dozed off" at a spot
-  where the listener was still awake.
-- 🔜 **No bookmarks from the sleep timer.** The history shows the night as one stretch of listening. It starts where
-  the listener was surely still awake and ends where the timer stopped (see [Bookmarks and history](bookmarks.md)).
-  Replaces the "Dozed off" bookmark.
-- ❌ **A setting to turn the bookmark off** ([#3288]): it isn't the listener's bookmark in the first place, and a good
-  default beats a setting.
-- ❌ **Keeping only the newest "Dozed off" bookmark**: it still mixes what Voice did with what the listener saved.
-- ❌ **Doing nothing**: one more bookmark every night, and they pile up on the player's progress bar.
+**Solution:** The last 10 seconds fade out, then Voice rewinds by the length of the fade.
+
+## The timer stops while I'm still awake
+
+✅ **Solved** · [#742]
+
+Getting more time shouldn't mean turning around in bed, waking a partner, unlocking the phone and opening the app.
+
+**Solution:**
+
+- Shake within 30 seconds of the end to restart with the same timer. It's always on, with no setting ([#981]).
+- The automatic timer starts again when you press play inside its time window.
+
+**Turned down:**
+
+- Restarting the timer on every play, at any time of day: too specific to give everyone ([#535]).
+
+**Assumption:** Listeners can shake in bed. Evidence against: some lie with their hands under the covers ([#3278]).
+
+## After the shake window, more time means setting the timer again
+
+⭕ **Open** · [#2233]
+
+Once the 30 seconds have passed, the only way to more time is the moon button.
+
+## I don't know where I fell asleep
+
+✅ **Solved** · [#1026]
+
+The next morning, listeners don't know how far back to go.
+
+**Solution:**
+
+- A "Dozed off" bookmark where the automatic timer starts, with its own look.
+- "Dozed off · timer ended" in the listening history, with a way to jump back there.
+
+## The sleep timer fills up my bookmarks
+
+🔜 **Planned** · [#3288]
+
+Every night, the automatic timer adds a "Dozed off" bookmark, at a spot where the listener was still awake. They pile
+up between the bookmarks the listener saved and on the player's progress bar.
+
+**Solution:** No bookmarks from the sleep timer. The night shows up in the history as one stretch of listening. It
+starts where the listener was surely still awake and ends where the timer stopped (see
+[Bookmarks and history](bookmarks.md)). This replaces the "Dozed off" bookmark.
+
+**Turned down:**
+
+- A setting to turn the bookmark off ([#3288]): it isn't the listener's bookmark in the first place, and a good default
+  beats a setting.
+- Keeping only the newest "Dozed off" bookmark: it still mixes what Voice did with what the listener saved.
+- Doing nothing: one more bookmark every night.
 
 ![Sketch: last night as a stretch in the history, from awake to where the timer stopped](sketches/history.png)
 
-### "I want to set it without opening the app"
+## Setting the timer means opening the app
 
-From a widget, Tasker or the lock screen.
+⭕ **Open**
 
-- ❌ **A button in the notification**: removed in 2025 ([#2738]). No reason was written down.
-- ❌ **A sleep timer widget**: dropped before it shipped ([#3839]). No reason was written down.
-- ⭕ **Setting the timer still means opening the app.**
+Listeners want to set it from a widget, Tasker or the lock screen.
+
+**Turned down:**
+
+- A button in the notification: removed ([#2738]). No reason was written down.
+- A sleep timer widget: dropped before it shipped ([#3839]). No reason was written down.
 
 ## Open questions
 
