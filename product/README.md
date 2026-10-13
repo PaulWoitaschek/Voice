@@ -3,29 +3,30 @@
 What Voice does for listeners, and why. There's one spec per product area. How Voice is built lives in the code and in
 [architecture](../docs/architecture.md).
 
-Start with [voice.md](voice.md), the tree for the whole app.
+Start with [voice.md](voice.md), the overview for the whole app.
 
 ## The shape
 
-Each spec is an [opportunity solution tree](https://www.producttalk.org/opportunity-solution-trees/):
+A spec is a list of the problems listeners have in its area. Each problem has exactly one status and says what Voice
+does about it. A table at the top shows where every problem stands.
 
-1. **Outcome**: the vision for this area, meaning what changes for listeners when it works well. One sentence.
-2. **Opportunities**: listener needs and pain points, in their own words, with evidence.
-3. **Solutions**: what's implemented for each opportunity, and what was turned down.
-4. **Open problems**: what listeners still struggle with that nothing solves yet.
-5. **Assumptions**: what has to be true for a solution to work, and how we'd find out.
+| Status | Meaning |
+|---|---|
+| ✅ Solved | Voice solves it on main. Releases aren't tracked here. |
+| 🔜 Planned | A solution is decided but not built yet. |
+| ⭕ Open | Nothing solves it yet. |
+| ❌ Won't solve | Decided against solving it, with the reason. |
 
-Opportunities can have smaller opportunities under them. Solutions always hang under an opportunity, never on their own.
+A problem that's only partly solved is two problems: the part that's solved and the part that's still open.
 
-## Markers
-
-- ✅ **Implemented**: merged into main. Releases aren't tracked here.
-- ❌ **Not doing**: decided against, with the reason.
-- ⭕ **Open**: a problem nothing solves yet, written as the problem and not as a solution. A problem leaves room for
-  the best answer, which can be a better default or nothing at all. An idea from a listener can follow it as a hint.
-- **Guess**: no written source. Confirm or correct it.
-
-Opportunity headings are in the listener's voice. They sum up many threads, so they aren't quotes. Quotes are verbatim.
+- **Problems are in plain words, from the listener's side**: what goes wrong, not what's missing. "Saving a moment
+  means taking out the phone", not "A bookmark widget". That leaves room for the best answer, which can be a better
+  default or nothing at all.
+- **Solutions** say what Voice does. Under **Turned down**, the alternatives that lost, each with its reason.
+- **Sources are links, not quotes.** Each problem links the one issue, discussion or pull request that matters most,
+  and a turned-down solution links where its reason was given. Say in your own words what the source says.
+- **Guess** marks something with no written source. Confirm or correct it.
+- **Sketches** of a planned solution go in [sketches/](sketches), drawn with the sketching skill.
 
 ## Keeping it current without upkeep
 
@@ -34,8 +35,6 @@ A spec only changes when the product or a decision changes, so it leaves out wha
 - No releases, versions, feature flags or rollout states.
 - No counts of votes, comments or threads.
 - No bugs. They live in issues.
-- At most one link per point: the discussion that matters most, or the source of a quote. No lists of related threads
-  or duplicates.
 
 Each file says how far along it is:
 
@@ -45,13 +44,13 @@ Each file says how far along it is:
 
 ## Using it before coding
 
-1. **Start from an opportunity, not a solution.** When a request is a solution ("add a button for X"), find the
-   problem behind it and add it as ⭕ under its opportunity. If there isn't one, that's the first question.
-2. **List at least three solutions.** Include "a better default, no setting" and "do nothing".
-3. **Write down the assumptions** each solution depends on. Check the riskiest one cheaply: analytics events, a tester
-   build, a feature flag, or a question in a discussion.
-4. **Update the spec in the pull request that ships it.** Mark the solution ✅, add the ones that lost under ❌ with
-   the reason, and remove or narrow the ⭕ it solves.
+1. **Start from a problem, not a solution.** When a request is a solution ("add a button for X"), find the problem
+   behind it. If it's not in the spec yet, add it as ⭕.
+2. **Weigh at least three solutions.** Include "a better default, no setting" and "do nothing".
+3. **Write down the assumption** the chosen solution depends on. Check it cheaply: analytics events, a tester build, a
+   feature flag, or a question in a discussion.
+4. **Decide in the spec.** The problem becomes 🔜 with the chosen solution, and the others go under Turned down.
+5. **Update the spec in the pull request that ships it.** 🔜 becomes ✅.
 
 ## Areas
 
@@ -74,29 +73,35 @@ Each file says how far along it is:
 
 **Status:** Outline
 
-## Outcome
+<One sentence: what changes for listeners when this area works well.>
 
-<One sentence: what changes for listeners when this works well.>
+**When:** <The listeners, and the moment they're in.>
 
-## Who and when
+| Problem | Status |
+|---|---|
+| [<Problem>](#<problem-as-github-anchor>) | ✅ Solved |
 
-<The listeners, and the moment they're in.>
+## <Problem>
 
-## Opportunities
+✅ **Solved** · [#123]
 
-### "<The problem, in the listener's words>"
+<What goes wrong, for whom and when. One to three sentences.>
 
-<Why it matters, with a quote and a link.>
+**Solution:** <What Voice does. A list when there's more than one part.>
 
-- ✅ <Shipped solution>: <how it helps>
-- ❌ <Solution we turned down>: <the reason, quoted and linked>
-- ⭕ <What listeners still struggle with>: <a link to the main discussion, if there is one>
+**Turned down:**
 
-Assumptions:
+- <Another solution>: <the reason> ([#456]).
 
-- <What has to be true>: <evidence, or how to check>
+**Assumption:** <What has to be true for the solution to work>: <evidence, or how to check>.
 
 ## Open questions
 
-## How it got here (optional)
+1. <A decision that still has to be made.>
+
+[#123]: https://github.com/PaulWoitaschek/Voice/issues/123
+[#456]: https://github.com/PaulWoitaschek/Voice/discussions/456
 ```
+
+Leave out the parts a problem doesn't need. An open problem has no Solution, and a problem Voice won't solve says why
+under **Why not**.

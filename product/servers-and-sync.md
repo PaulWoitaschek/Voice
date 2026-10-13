@@ -2,76 +2,117 @@
 
 **Status:** Outline.
 
-## Outcome
-
 Listeners have their books, progress and bookmarks wherever they need them: on any of their devices, and safe when they
-change phones. There's no Voice account and no Voice server.
+change phones.
 
-## Who and when
+**When:** Listeners with a home server (Audiobookshelf, Jellyfin, Plex), or with their books in cloud storage (Drive,
+Dropbox, Nextcloud). Listeners with more than one device, or who change or reset their phone. Every solution has the
+same limit: there's still no Voice account and no Voice server, and Voice only talks to the listener's own server
+([#3863]).
 
-- Listeners with a home server (Audiobookshelf, Jellyfin, Plex).
-- Listeners whose books live in cloud storage (Drive, Dropbox, Nextcloud).
-- Listeners with more than one device, or who change or reset their phone.
+| Problem | Status |
+|---|---|
+| [There's no good audiobook app for my server](#theres-no-good-audiobook-app-for-my-server) | ✅ Solved |
+| [Books on Jellyfin, Plex or a web folder can't be played](#books-on-jellyfin-plex-or-a-web-folder-cant-be-played) | ⭕ Open |
+| [A server without password login can't be connected](#a-server-without-password-login-cant-be-connected) | ⭕ Open |
+| [My books in cloud storage can't be added](#my-books-in-cloud-storage-cant-be-added) | ✅ Solved |
+| [A cloud library has to be copied to the phone](#a-cloud-library-has-to-be-copied-to-the-phone) | ⭕ Open |
+| [I lose my place when I switch devices](#i-lose-my-place-when-i-switch-devices) | ✅ Solved |
+| [Without a server, my place doesn't follow me to another device](#without-a-server-my-place-doesnt-follow-me-to-another-device) | ⭕ Open |
+| [A new phone means losing my progress and bookmarks](#a-new-phone-means-losing-my-progress-and-bookmarks) | ✅ Solved |
+| [Without Google's backup, a new phone means starting over](#without-googles-backup-a-new-phone-means-starting-over) | ⭕ Open |
 
-The limit on every solution: "Still no Voice account and no Voice server: Voice only talks to your own server."
-([#3863])
+Losing everything after renaming or moving a folder is in [Getting started](getting-started.md). The cause is that
+Voice tells books apart by their path ([#2678]).
 
-## Opportunities
+## There's no good audiobook app for my server
 
-### "My books are on my own server, and I want an audiobook app, not a media player"
+✅ **Solved** · [#2385]
 
-"there are no native good apps for ABS, and this app is awesome" ([#2385]). About Jellyfin: "it is not like using an
-audiobook-focused app" ([#1715])
+Listeners keep their books on their own server and want an audiobook app for them, not a media player. Audiobookshelf
+had no good native app.
 
-- ✅ **Audiobookshelf.** You can stream, or download for offline use (over Wi-Fi by
-  default), and your progress and bookmarks stay in step ([docs](../docs/audiobookshelf.md)).
-- ⭕ **Books on Jellyfin, Plex or a plain web folder can't be played** ([#2385]).
-- ⭕ **Servers that only allow single sign-on can't be connected**: "Only password login, no OpenID." ([#3866])
+**Solution:** Audiobookshelf. You can stream, or download for offline use (over Wi-Fi by default), and your progress
+and bookmarks stay in step ([docs](../docs/audiobookshelf.md)).
 
-Assumptions:
+**Assumption:** Audiobookshelf covers most people who run a server. Guess: the reason it was picked first was never
+written down.
 
-- **Audiobookshelf covers most people who run a server.** **Guess:** the reason it was picked first was never written
-  down.
-- **Seeing a book twice is acceptable** when it's both on the device and on the server ([#3866]).
+**Assumption:** Seeing a book twice is acceptable when it's both on the device and on the server ([#3866]).
 
-### "My books are in Drive, Dropbox or Nextcloud"
+## Books on Jellyfin, Plex or a web folder can't be played
 
-Open since 2015: "All my Audiobooks are in my Google Drive folder, so this app was completely unusable for me"
-([#1294]). "I wanted a way to keep my whole collection in the cloud then "cache" the couple I'm actively listening to so
-I can play them offline." ([#1294])
+⭕ **Open** · [#2385]
 
-- ✅ **Folders from any app that works with Android's folder picker.** This is slow and has gaps. The
-  advice: "Syncing the folder to your phone and adding that works much better." ([#2803])
-- ❌ **Network shares (SMB)**: "This is too specific to add a custom solution for this." ([#450])
-- ⭕ **A library in the cloud has to be copied to the phone in full**, or it plays slowly and with gaps.
+Voice only connects to Audiobookshelf. Jellyfin plays audiobooks, but it doesn't feel like an app made for them
+([#1715]).
 
-### "I listen on two devices and lose my place"
+## A server without password login can't be connected
 
-Open since 2015: "so I can switch from phone to tablet and have the app simply know where I was" ([#1315])
+⭕ **Open** · [#3866]
 
-- ✅ **For Audiobookshelf books**: the newest position wins, and the jump-back pill takes you to where you were on this
-  device.
-- ❌ **Voice's own sync**, in 2015: "Sry, want to keep it simple." ([#65]) The hard part: "How do we identify the books
-  as the same?" ([#295])
-- ⭕ **Without a server, progress doesn't follow the listener to a second device**: "would it be possible to have an
-  optional, local-only sync?" ([#3707]) One answer: a progress file next to the book, for tools like Syncthing to
-  copy.
+Voice only logs in with a password, not with OpenID. Servers that only allow single sign-on can't be connected.
 
-### "New phone, and my progress and bookmarks are gone"
+## My books in cloud storage can't be added
 
-"I keep switching or resetting my phone all the
-time!" "I personally would rather start fresh than backup to Google." ([#1668])
+✅ **Solved** · [#1294]
 
-- ✅ **Android's own backup**, since 2022.
-- ❌ **Import and export**, in 2016: "An import / export functionality would require too much work with little benefit
-  for most of the users." ([#367])
-- ❌ **Backing up the database** ([#2302]): "Backing up the pure SQL database is very error prone, especially around
-  database scheme updates."
-- ⭕ **Without Google's backup, a new phone means starting over.**
+Listeners keep their books in Drive, Dropbox or Nextcloud, and asked for a way to play them since 2015. Without one,
+Voice is no use to them.
 
-### "I renamed or moved a folder and lost everything"
+**Solution:** Folders from any app that works with Android's folder picker. This is slow and has gaps, so the advice is
+to sync the folder to the phone and add that instead ([#2803]).
 
-See [Getting started](getting-started.md). "Voice uses the path to identify books from each other." ([#2678])
+**Turned down:**
+
+- Network shares (SMB): too specific to build a custom solution for ([#450]).
+
+## A cloud library has to be copied to the phone
+
+⭕ **Open** · [#1294]
+
+Playing straight from the cloud is slow and has gaps, so the whole library has to be on the phone. Listeners want to
+keep their collection in the cloud and keep only the couple of books they're listening to on the phone for offline use.
+
+## I lose my place when I switch devices
+
+✅ **Solved** · [#1315]
+
+Listeners switch from phone to tablet and want Voice to know where they were. They have asked for this since 2015.
+
+**Solution:** For Audiobookshelf books, the newest position wins, and the jump-back pill takes you to where you were on
+this device.
+
+## Without a server, my place doesn't follow me to another device
+
+⭕ **Open** · [#3707]
+
+Listeners without a server asked for an optional sync that stays local. One answer: a progress file next to the book,
+for tools like Syncthing to copy.
+
+**Turned down:**
+
+- Voice's own sync: in 2015, to keep Voice simple ([#65]). The hard part is telling that two copies are the same book
+  ([#295]).
+
+## A new phone means losing my progress and bookmarks
+
+✅ **Solved**
+
+After changing or resetting their phone, listeners find their progress and bookmarks gone.
+
+**Solution:** Android's own backup, since 2022.
+
+## Without Google's backup, a new phone means starting over
+
+⭕ **Open** · [#1668]
+
+Some listeners switch or reset their phone often, and would rather start fresh than back up to Google.
+
+**Turned down:**
+
+- Import and export: too much work for what most listeners get out of it ([#367]). That was in 2016.
+- Backing up the database: a raw copy of the database breaks easily, especially when its schema changes ([#2302]).
 
 ## Open questions
 

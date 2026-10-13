@@ -2,88 +2,150 @@
 
 **Status:** Outline.
 
-## Outcome
-
 Listeners control their book from wherever they are (headphones, the lock screen, the car, the home screen) without
 opening Voice, and without losing their place.
 
-## Who and when
+**When:** The phone is in a pocket or a car holder, the screen is off, and their hands are busy.
 
-The phone is in a pocket or a car holder, the screen is off, and their hands are busy.
+| Problem | Status |
+|---|---|
+| [The car doesn't remember my book](#the-car-doesnt-remember-my-book) | ✅ Solved |
+| [The car's skip buttons look like track buttons](#the-cars-skip-buttons-look-like-track-buttons) | ✅ Solved |
+| [I can't jump to a chapter by voice](#i-cant-jump-to-a-chapter-by-voice) | ❌ Won't solve |
+| [I can't change the speed in the car](#i-cant-change-the-speed-in-the-car) | ⭕ Open |
+| [Headphone and car buttons don't do what I expect](#headphone-and-car-buttons-dont-do-what-i-expect) | ✅ Solved |
+| [The lock screen slider loses my place](#the-lock-screen-slider-loses-my-place) | ✅ Solved |
+| [The slider still moves my position within the chapter](#the-slider-still-moves-my-position-within-the-chapter) | ⭕ Open |
+| [The notification goes too soon or stays too long](#the-notification-goes-too-soon-or-stays-too-long) | ✅ Solved |
+| [Starting my book from the home screen or an automation means opening Voice](#starting-my-book-from-the-home-screen-or-an-automation-means-opening-voice) | ✅ Solved |
+| [My book isn't on my home screen](#my-book-isnt-on-my-home-screen) | ✅ Solved |
+| [I can't play my book on a speaker or TV](#i-cant-play-my-book-on-a-speaker-or-tv) | ⭕ Open |
+| [I can't listen on my watch without my phone](#i-cant-listen-on-my-watch-without-my-phone) | ⭕ Open |
+| [The Assistant works poorly with Voice](#the-assistant-works-poorly-with-voice) | ❌ Won't solve |
 
-## Opportunities
+## The car doesn't remember my book
 
-### "Let me listen in the car"
+✅ **Solved** · [#1765]
 
-"it won't remember the current book" ([#1765])
+In the car, listeners want to go on with the book they were listening to. The F-Droid build has no Android Auto. See
+[Feedback and support](feedback-and-support.md).
 
-- ✅ **Android Auto**: recent books, sorted by when you last played them, and the current book ready when you connect.
-- ✅ **Clear skip icons** for rewind and fast forward, after "This is confusing as they actually
-  rewind/forward 20 seconds." ([#2797])
-- ❌ **Voice search for chapters**: "Else when voice detection is flaky you might lose the latest position in your
-  audiobook." ([#231])
-- ⭕ **The speed can't be changed from the car** ([#1878]): "I can only focus on 1.2x speed or so when there is traffic"
+**Solution:** Android Auto shows recent books, sorted by when you last played them, and has the current book ready when
+you connect.
 
-The F-Droid build has no Android Auto. See [Feedback and support](feedback-and-support.md).
+## The car's skip buttons look like track buttons
 
-### "My headphone and car buttons should do what I expect"
+✅ **Solved** · [#2797]
 
-"Voice doesn't go to the next / previous track, but moves fast forward/backward several seconds." ([#1883])
+In Android Auto, standard track buttons for rewind and fast forward make listeners think they go to the previous or
+next track, but they jump 20 seconds.
 
-- ✅ **Next and previous skip by the skip amount**: "Decided to keep skipping for next and previous from outside
-  (headsets, cars, watches, the Assistant)." ([#3846]) The reason, from 2017: "I find the importance of the seek
-  functionality way greater than the importance of the chapter skip functionality." ([#231])
-- ❌ **Choosing what each press does**: "I find this to be too specific to put it an action." ([#456])
+**Solution:** Clear skip icons for rewind and fast forward.
 
-### "The lock screen slider loses my place"
+## I can't jump to a chapter by voice
 
-"it gets randomly activated either in my pocket or when I touch the screen accidentally, and I lose the current position
-with a lot of frustration" ([#3229])
+❌ **Won't solve** · [#231]
 
-- ✅ **The notification's seek bar only covers the current chapter.**
-- ✅ **The listening history** can take you back (see [Bookmarks and history](bookmarks.md)).
-- ⭕ **The slider can still move the position by accident**, within the chapter.
+In the car, listeners want to start a chapter by asking for it.
 
-### "The notification should stay while I pause, and go when I'm done"
+**Why not:** When voice detection is flaky, a misheard request could lose the listener's latest position in the book.
 
-"keep the notification until dismissed" ([#868])
+## I can't change the speed in the car
 
-- ✅ **A paused notification can be swiped away**: "This is because I want the user to be able to swipe-dismiss the
-  notification in paused state." ([#868])
-- The two sides pull apart: some want playback to start when Bluetooth connects ([#1369]), others don't ([#915]).
+⭕ **Open** · [#1878]
 
-### "Let me control it from my home screen or an automation"
+In traffic, some listeners can only follow at a lower speed, around 1.2×, and the car has no way to change it.
 
-"now i use that daily [multiple times a day actually]" ([#3410], about Tasker)
+## Headphone and car buttons don't do what I expect
 
-- ✅ **A "Play current" shortcut** (2018).
-- ✅ **Commands that Tasker can send.** The first answer was no, then: "I need to revise my post and I
-  think this is actually something we can easily bring back!" ([#1913])
+✅ **Solved** · [#3846]
 
-### "Show me my book on the home screen, and let me play it from there"
+Some listeners expect next and previous on their headphones or in the car to go to the next or previous track, and Voice
+skips a few seconds instead ([#1883]).
 
-- ✅ **Now playing and Shelf widgets** in any size, down to 1×1.
-- ✅ **A small widget keeps what matters most.** As space runs out, it keeps play, then the cover, then the title, then
+**Solution:** Next and previous skip by the skip amount from everywhere outside the app: headsets, cars, watches and
+the Assistant.
+
+**Turned down:**
+
+- Next and previous change the chapter: seeking matters far more than skipping chapters ([#231]). That was in 2017.
+- Choosing what each press does: too specific to build in ([#456]).
+
+## The lock screen slider loses my place
+
+✅ **Solved** · [#3229]
+
+The slider on the lock screen moves in a pocket or after an accidental touch, and the listener's position is gone.
+
+**Solution:**
+
+- The notification's seek bar only covers the current chapter.
+- The listening history can take you back (see [Bookmarks and history](bookmarks.md)).
+
+## The slider still moves my position within the chapter
+
+⭕ **Open**
+
+A stray touch on the slider still moves the position, just not past the current chapter.
+
+## The notification goes too soon or stays too long
+
+✅ **Solved** · [#868]
+
+Listeners want the notification to stay while they pause, and to go when they're done. The two sides pull apart: some
+listeners want playback to start when Bluetooth connects ([#1369]), and others don't ([#915]).
+
+**Solution:** A paused notification stays, and the listener can swipe it away.
+
+## Starting my book from the home screen or an automation means opening Voice
+
+✅ **Solved** · [#1913]
+
+Listeners want to control their book from the home screen, or from automations like Tasker. Some use Tasker commands
+several times a day ([#3410]).
+
+**Solution:**
+
+- A "Play current" shortcut.
+- Commands that Tasker can send. The first answer was no, and then they turned out to be easy to bring back.
+
+## My book isn't on my home screen
+
+✅ **Solved**
+
+Listeners want to see their book on the home screen, and play it from there.
+
+**Solution:**
+
+- Now playing and Shelf widgets in any size, down to 1×1.
+- A small widget keeps what matters most. As space runs out, it keeps play, then the cover, then the title, then
   rewind, then fast forward.
   - The cover comes before the title because sighted listeners recognize their book faster by its cover. A cover also
     needs less room than a readable title, so a small widget stays usable.
   - Rewind comes before fast forward because listeners jump back, after missing a sentence or dozing off, far more often
     than they skip ahead.
 
-### "Play it on my speaker or TV"
+## I can't play my book on a speaker or TV
 
-Casting has been requested since 2014. "Add the cast option so I can play on Android TV and Smart speakers"
-([#1778])
+⭕ **Open** · [#76]
 
-- ⭕ **Books can't play on a speaker or TV.** No reason for leaving out casting is on record. One concern: the Google
-  cast library "effectively makes this project proprietary software." ([#76])
+Listeners have asked for casting since 2014, to play their books on Android TV and smart speakers ([#1778]). No reason
+for leaving it out is on record. One concern: Google's cast library would effectively make Voice proprietary software.
 
-### "Let me use it from my watch, or by voice"
+## I can't listen on my watch without my phone
 
-- ⭕ **A watch can't play a book without the phone.** Today it works as a remote: "it works great as a controller of
-  audiobook playback on my phone" ([#1749])
-- ❌ **Better Assistant support** isn't possible: "This is a limitation of the Android Assistant. There are only a few
-  players who are in direct contact with Google that are whitelisted within the Assistant." ([#1071])
+⭕ **Open** · [#1749]
+
+A watch can't play a book on its own. Today it works well as a remote for playback on the phone.
+
+## The Assistant works poorly with Voice
+
+❌ **Won't solve** · [#1071]
+
+Listeners want to control their book by voice through the Assistant, for example to start and pause it while driving.
+
+**Why not:** It isn't possible. It's a limit of the Assistant: only a few players that work directly with Google are on
+its allowlist.
 
 ## Open questions
 
