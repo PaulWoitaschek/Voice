@@ -20,7 +20,7 @@ public suspend inline fun ChapterRepo.getOrPut(
   val chapter = get(id)
   if (chapter != null && chapter.fileLastModified == lastModified && chapter.fileSize == fileSize) {
     if (chapter.fileName == fileName) return chapter
-    // chapters stored before their file name was get it without analyzing the file again
+    // a renamed file can keep its document, so only the name is updated instead of analyzing the file again
     return chapter.copy(fileName = fileName).also { put(it) }
   }
   return defaultValue()?.also { put(it) }

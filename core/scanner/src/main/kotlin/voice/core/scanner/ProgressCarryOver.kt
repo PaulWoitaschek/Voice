@@ -14,7 +14,6 @@ import voice.core.data.repo.ChapterRepo
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.store.CurrentBookStore
-import java.time.Instant
 
 /**
  * Hands progress over when audio files show up under a new book id. This happens when a folder's mode changes
@@ -99,15 +98,16 @@ internal class ProgressCarryOver(
 }
 
 /**
- * The books a scan no longer finds, indexed by the documents and the files of their chapters.
+ * The books of the [library] a scan no longer finds, indexed by the documents and the files of their chapters.
  */
 internal class PreviousBooks(
-  books: List<BookContent>,
+  library: List<BookContent>,
   scanned: Set<BookId>,
   private val chapterRepo: ChapterRepo,
 ) {
 
-  private val books = books.filter { it.id !in scanned }
+  private val books = library.filter { it.id !in scanned }
+  private val inLibrary = library.filter { it.isActive }.map { it.id }.toSet()
 
   private val byDocument: Map<String, List<BookContent>> = this.books
     .flatMap { book -> book.chapters.map { it.documentKey() to book } }
@@ -123,8 +123,8 @@ internal class PreviousBooks(
     chapters: List<Chapter>,
   ): Predecessors? {
     return sharingDocuments(content.chapters)
-      // a book that was played isn't a moved one, even when a removed copy had the same files
-      ?: if (content.lastPlayedAt == Instant.EPOCH) sharingFiles(chapters) else null
+      // a book that was in the library already is a copy, not the one that moved
+      ?: if (content.id in inLibrary) null else sharingFiles(chapters)
   }
 
   private fun sharingDocuments(chapters: List<ChapterId>): Predecessors? {

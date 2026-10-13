@@ -11,7 +11,11 @@ internal data class FileFingerprint(
   val size: Long,
 )
 
-internal fun Chapter.fingerprint(): FileFingerprint? = fileName?.let { FileFingerprint(name = it, size = fileSize) }
+internal fun Chapter.fingerprint(): FileFingerprint? {
+  // some providers don't report sizes, and a name like 01.mp3 alone says nothing
+  if (fileSize <= 0) return null
+  return fileName?.let { FileFingerprint(name = it, size = fileSize) }
+}
 
 /**
  * The chapters by their file. Files that can't be told apart are left out.

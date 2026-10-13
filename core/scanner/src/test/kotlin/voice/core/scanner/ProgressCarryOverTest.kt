@@ -256,7 +256,6 @@ class ProgressCarryOverTest {
       title = "Twist",
       time = 7,
       addedAt = Instant.EPOCH,
-      setBySleepTimer = false,
       id = Bookmark.Id.random(),
     )
     coEvery { bookmarkRepo.bookmarks(old) } returns listOf(bookmark)
@@ -288,7 +287,7 @@ class ProgressCarryOverTest {
   }
 
   @Test
-  fun `a played book doesn't take over the progress of a removed copy`() = runTest {
+  fun `a book that was in the library already doesn't take over a removed copy`() = runTest {
     val old = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = listOf(file("primary:Audiobooks/Book/1.mp3")),
@@ -296,9 +295,9 @@ class ProgressCarryOverTest {
     val copy = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Copy")),
       chapters = listOf(file("primary:Audiobooks/Copy/1.mp3")),
-    ).copy(positionInChapter = 7, lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    )
 
-    val carried = carryOver(copy, previous = listOf(old))
+    val carried = carryOver(copy, previous = listOf(old), inLibrary = true)
 
     assertEquals(expected = copy, actual = carried)
   }
@@ -341,7 +340,6 @@ class ProgressCarryOverTest {
       title = null,
       time = 7,
       addedAt = Instant.EPOCH,
-      setBySleepTimer = false,
       id = Bookmark.Id.random(),
     )
     coEvery { bookmarkRepo.bookmarks(old) } returns listOf(bookmark)
@@ -360,11 +358,16 @@ class ProgressCarryOverTest {
   private suspend fun carryOver(
     content: BookContent,
     previous: List<BookContent>,
+    inLibrary: Boolean = false,
   ): BookContent {
     return progressCarryOver.carryOver(
       content = content,
       chapters = content.chapters.map { chapters[it] ?: chapter(it, fileName = null, size = 0) },
-      previousBooks = PreviousBooks(previous, scanned = setOf(content.id), chapterRepo = chapterRepo),
+      previousBooks = PreviousBooks(
+        library = if (inLibrary) previous + content else previous,
+        scanned = setOf(content.id),
+        chapterRepo = chapterRepo,
+      ),
     )
   }
 

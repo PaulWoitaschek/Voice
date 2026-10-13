@@ -403,7 +403,6 @@ class MediaScannerTest {
       title = null,
       time = 50,
       addedAt = Instant.EPOCH,
-      setBySleepTimer = false,
       id = Bookmark.Id.random(),
     )
     coEvery { bookmarkRepo.bookmarks(match { it.id == oldId }) } returns listOf(bookmark)
@@ -419,6 +418,43 @@ class MediaScannerTest {
     assertEquals(expected = 100, actual = content.positionInChapter)
     assertEquals(expected = newId, actual = currentBookStore.data.first())
     coVerify { bookmarkRepo.addBookmark(bookmark.copy(bookId = newId, chapterId = renamedChapter2)) }
+  }
+
+  @Test
+  fun `a book renamed back takes the progress from its other name along`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter1 = audioFile(book, "1.mp3")
+    audioFile(book, "2.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    play(BookId(book.toUri()), chapter1, position = 100, playedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    val renamed = File(audiobookFolder, "book (2020)")
+    check(book.renameTo(renamed))
+    scan(FolderType.Root, audiobookFolder)
+    play(BookId(renamed.toUri()), File(renamed, "2.mp3"), position = 300, playedAt = Instant.parse("2026-01-02T10:00:00Z"))
+
+    check(renamed.renameTo(book))
+    scan(FolderType.Root, audiobookFolder)
+
+    val content = bookContentRepo.get(BookId(book.toUri()))!!
+    assertEquals(expected = ChapterId(File(book, "2.mp3").toUri()), actual = content.currentChapter)
+    assertEquals(expected = 300, actual = content.positionInChapter)
+  }
+
+  @Test
+  fun `a copy in the library keeps its own progress while the other copy is missing`() = test {
+    val card = folder("card")
+    val original = File(card, "book")
+    val originalChapter = audioFile(original, "1.mp3")
+    val internal = folder("internal")
+    val copy = File(internal, "book")
+    audioFile(copy, "1.mp3")
+    scan(FolderType.Root, card, internal)
+    play(BookId(original.toUri()), originalChapter, position = 100, playedAt = Instant.parse("2026-01-01T10:00:00Z"))
+
+    scan(FolderType.Root, internal)
+
+    assertEquals(expected = Instant.EPOCH, actual = bookContentRepo.get(BookId(copy.toUri()))!!.lastPlayedAt)
   }
 
   @Test
@@ -513,6 +549,7 @@ class MediaScannerTest {
         .also {
           it.parentFile?.mkdirs()
           check(it.createNewFile())
+          it.writeText(name)
         }
         .also {
           coEvery { mediaAnalyzer.analyze(any()) } coAnswers {

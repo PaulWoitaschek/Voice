@@ -49,6 +49,12 @@ internal class MediaScanner(
     }
 
     val bookIds = files.map { BookId(it.uri) }
+    // before the books found again become active, so they can be told apart from the books still in the library
+    val previousBooks = PreviousBooks(
+      library = contentRepo.all().filterNot { it.id.isRemote },
+      scanned = bookIds.toSet(),
+      chapterRepo = chapterRepo,
+    )
     contentRepo.setAllInactiveExcept(bookIds)
 
     val probeFile = folders.values.flatten().findProbeFile()
@@ -59,11 +65,6 @@ internal class MediaScanner(
       }
     }
 
-    val previousBooks = PreviousBooks(
-      books = contentRepo.all().filterNot { it.id.isRemote },
-      scanned = bookIds.toSet(),
-      chapterRepo = chapterRepo,
-    )
     files
       .sortedBy { it.audioFileCount() }
       .forEach { file ->
