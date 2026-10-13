@@ -5,15 +5,13 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.common)
-  implementation(projects.navigation)
+  api(projects.core.common)
+  api(projects.navigation)
   implementation(projects.core.strings)
-  implementation(projects.core.featureflag)
-  implementation(projects.core.ui)
-  implementation(projects.core.remoteconfig.api)
-  implementation(projects.core.data.api)
+  api(projects.core.featureflag)
+  api(projects.core.ui)
+  api(projects.core.remoteconfig.api)
+  api(projects.core.data.api)
   implementation(projects.core.documentfile)
-  implementation(projects.core.audiobookshelf)
-
-  implementation(libs.androidxCore)
+  api(projects.core.audiobookshelf)
 }

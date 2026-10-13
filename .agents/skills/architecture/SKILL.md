@@ -25,6 +25,12 @@ Background and diagram: `docs/architecture.md`. Module inventory: `settings.grad
   (`playImplementation` / `freeImplementation`).
 - The build fails when a module breaks these rules: `plugins/src/main/kotlin/checkModuleDependencies.kt`. It treats every
   nested module other than `:api` (e.g. `:core:data:impl`) as an implementation. Tests may depend on implementations.
+- `./gradlew buildHealth` (Dependency Analysis plugin) fails on unused dependencies, used dependencies that only
+  arrive transitively, and `api` / `implementation` mismatches: a dependency whose types appear in a module's public
+  API is `api`. Apply its advice with `./gradlew fixDependencies` and review the result. Libraries whose modules only
+  declare the entry artifact (Compose, Media3, Room, ...) and libraries that come with a module's API (DataStore with
+  `:core:data:api`, Navigation3 with `:navigation`) are bundles in the root `build.gradle.kts`. What the convention
+  plugins add to every module is excluded.
 - Reference modules via type-safe accessors (`implementation(projects.core.data.api)`) and libraries via
   `gradle/libs.versions.toml` aliases. No hardcoded versions.
 

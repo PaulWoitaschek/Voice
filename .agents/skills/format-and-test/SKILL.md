@@ -20,8 +20,8 @@ Start narrow, then broaden:
 - All unit tests: `./gradlew voiceUnitTest`. Run this when touching shared behavior, cross-module contracts, or broad
   refactors.
 
-CI runs `./gradlew voiceUnitTest lintKotlin :app:assembleFreeDebug`. If you can't run something, say why and give the
-command.
+CI runs `./gradlew voiceUnitTest lintKotlin buildHealth :app:assembleFreeDebug`. If you can't run something, say why
+and give the command.
 
 ## Writing tests
 

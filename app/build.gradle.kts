@@ -20,7 +20,6 @@ if (playGoogleServicesJson.asFile.canRead()) {
 }
 
 android {
-
   namespace = "voice.app"
 
   dependenciesInfo {
@@ -179,16 +178,17 @@ dependencies {
   implementation(projects.features.widget)
   implementation(projects.core.audiobookshelf)
   implementation(projects.features.audiobookshelf)
+  implementation(projects.features.support.api)
 
   implementation(libs.appCompat)
   implementation(libs.lifecycle.compose)
   implementation(libs.datastore)
+  implementation(libs.room.runtime)
+  implementation(libs.okhttp)
 
   implementation(libs.navigation3.ui)
 
   implementation(libs.serialization.json)
-
-  implementation(libs.coil)
 
   add("playImplementation", libs.firebase.crashlytics)
   add("playImplementation", libs.firebase.analytics)
@@ -208,8 +208,6 @@ dependencies {
 
   debugImplementation(projects.core.logging.debug)
 
-  implementation(libs.androidxCore)
-
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.session)
 
@@ -223,10 +221,24 @@ dependencies {
   androidTestImplementation(libs.androidX.test.junit)
   androidTestImplementation(libs.media3.testUtils.core)
   androidTestImplementation(libs.kotlin.testJunit)
-  androidTestImplementation(libs.androidX.test.services)
   androidTestImplementation(libs.compose.ui.testJunit)
   androidTestImplementation(libs.coroutines.test)
+  androidTestRuntimeOnly(libs.androidX.test.services)
   androidTestUtil(libs.androidX.test.orchestrator)
+}
+
+dependencyAnalysis {
+  issues {
+    onUsedTransitiveDependencies {
+      // The test graphs reach the implementations that the flavors and build types already declare.
+      exclude(
+        projects.core.analytics.noop,
+        projects.core.logging.debug,
+        projects.core.remoteconfig.noop,
+        projects.features.support.free,
+      )
+    }
+  }
 }
 
 // Git worktrees sign with the main checkout's keys, so the release key isn't copied into every worktree.

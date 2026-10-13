@@ -5,12 +5,12 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.common)
+  api(projects.core.common)
   implementation(projects.core.strings)
   implementation(projects.core.ui)
-  implementation(projects.core.playback)
-  implementation(projects.core.sleeptimer.api)
-  implementation(projects.navigation)
-  implementation(projects.core.data.api)
-  implementation(projects.core.featureflag)
+  api(projects.core.playback)
+  api(projects.core.sleeptimer.api)
+  api(projects.navigation)
+  api(projects.core.data.api)
+  api(projects.core.featureflag)
 }

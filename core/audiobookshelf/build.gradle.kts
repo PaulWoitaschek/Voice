@@ -11,19 +11,20 @@ android {
 }
 
 dependencies {
-  implementation(projects.core.analytics.api)
+  api(projects.core.analytics.api)
   implementation(projects.core.common)
-  implementation(projects.core.data.api)
-  implementation(projects.core.initializer)
-  implementation(projects.core.playback)
+  api(projects.core.data.api)
+  api(projects.core.initializer)
+  api(projects.core.playback)
   implementation(projects.core.strings)
 
   implementation(libs.androidxCore)
-  implementation(libs.bundles.retrofit)
+  implementation(libs.retrofit.core)
+  implementation(libs.retrofit.serialization)
   implementation(libs.okhttp)
   implementation(libs.serialization.json)
   implementation(libs.media3.exoplayer)
-  implementation(libs.media3.datasource.okhttp)
+  api(libs.media3.datasource.okhttp)
 
   testImplementation(libs.okhttp.mockwebserver)
 }

@@ -15,9 +15,11 @@ agp = "9.4.1"
 ktlint-core = "1.8.0"
 ktlint-gradlePlugin = "0.14.0"
 retrofit = "3.0.0"
+okhttp = "5.5.0"
 metro = "1.4.5"
 navigation3 = "1.2.0"
 androidx-lifecycle = "2.11.0"
+dependencyAnalysis = "3.19.2"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -34,6 +36,8 @@ composablePreviewScanner = "io.github.sergio-sastre.ComposablePreviewScanner:and
 coil = "io.coil-kt:coil-compose:2.7.0"
 appCompat = "androidx.appcompat:appcompat:1.8.0"
 androidxCore = "androidx.core:core-ktx:1.19.1"
+androidxAnnotation = "androidx.annotation:annotation:1.10.0"
+androidxInterpolator = "androidx.interpolator:interpolator:1.0.0"
 kotlin-pluginForGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-powerAssert = { module = "org.jetbrains.kotlin:kotlin-power-assert", version.ref = "kotlin" }
 kotlin-powerAssert-runtime = { module = "org.jetbrains.kotlin:kotlin-power-assert-runtime", version.ref = "kotlin" }
@@ -43,8 +47,9 @@ documentFile = "androidx.documentfile:documentfile:1.1.0"
 datastore = "androidx.datastore:datastore-core:1.2.1"
 turbine = "app.cash.turbine:turbine:1.2.1"
 molecule = "app.cash.molecule:molecule-runtime:2.2.0"
-okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.5.0"
-okhttp-mockwebserver = "com.squareup.okhttp3:mockwebserver3:5.5.0"
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-coroutines = { module = "com.squareup.okhttp3:okhttp-coroutines", version.ref = "okhttp" }
+okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver3", version.ref = "okhttp" }
 billing = "com.android.billingclient:billing-ktx:9.1.0"
 clikt = "com.github.ajalt.clikt:clikt:5.1.0"
 jebml = "org.jitsi:jebml:2.4.4-6-gb310849"
@@ -52,6 +57,7 @@ slf4j-noop = "org.slf4j:slf4j-nop:2.0.20"
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
+coroutines-playServices = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
@@ -108,6 +114,7 @@ metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" 
 
 ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
 ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
+dependencyAnalysis-gradlePlugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ktlint-compose = "io.nlopez.compose.rules:ktlint:0.6.8"
 
 [bundles]
@@ -135,17 +142,12 @@ testing-jvm = [
   "junit"
 ]
 
-retrofit = [
-  "retrofit-core",
-  "retrofit-scalars",
-  "retrofit-serialization"
-]
-
 [plugins]
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.8" }
+dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 googleServices = { id = "com.google.gms.google-services", version = "4.5.0" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

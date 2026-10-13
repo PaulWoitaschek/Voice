@@ -6,16 +6,14 @@ plugins {
 
 dependencies {
   implementation(projects.core.ui)
-  implementation(projects.core.common)
+  api(projects.core.common)
   implementation(projects.core.strings)
-  implementation(projects.core.data.api)
-  implementation(projects.core.documentfile)
-  implementation(projects.core.scanner)
-  implementation(projects.navigation)
-  implementation(projects.core.featureflag)
-  implementation(projects.core.audiobookshelf)
+  api(projects.core.data.api)
+  api(projects.core.documentfile)
+  api(projects.core.scanner)
+  api(projects.navigation)
+  api(projects.core.featureflag)
+  api(projects.core.audiobookshelf)
 
-  implementation(libs.coil)
-  implementation(libs.androidxCore)
-  implementation(libs.documentFile)
+  api(libs.documentFile)
 }

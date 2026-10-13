@@ -13,17 +13,16 @@ android {
 dependencies {
   implementation(projects.core.common)
   implementation(projects.core.strings)
-  implementation(projects.core.featureflag)
-  implementation(projects.core.sleeptimer.api)
-  implementation(projects.core.data.api)
-  implementation(projects.core.analytics.api)
+  api(projects.core.featureflag)
+  api(projects.core.sleeptimer.api)
+  api(projects.core.data.api)
+  api(projects.core.analytics.api)
 
   implementation(libs.androidxCore)
-  implementation(libs.coil)
   implementation(libs.coroutines.guava)
-  implementation(libs.serialization.json)
+  api(libs.serialization.json)
 
-  implementation(libs.media3.exoplayer)
+  api(libs.media3.exoplayer)
   implementation(libs.media3.session)
 
   testImplementation(libs.media3.testUtils.core)

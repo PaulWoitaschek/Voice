@@ -4,6 +4,6 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.initializer)
-  implementation(projects.core.common)
+  api(projects.core.initializer)
+  api(projects.core.common)
 }

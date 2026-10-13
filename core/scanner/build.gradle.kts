@@ -8,11 +8,11 @@ kotlin {
 }
 
 dependencies {
-  implementation(projects.core.data.api)
-  implementation(projects.core.documentfile)
-  implementation(projects.core.initializer)
+  api(projects.core.data.api)
+  api(projects.core.documentfile)
+  api(projects.core.initializer)
 
-  implementation(libs.slf4j.noop)
+  runtimeOnly(libs.slf4j.noop)
   implementation(libs.jebml)
   implementation(libs.androidxCore)
   implementation(libs.documentFile)
@@ -20,4 +20,5 @@ dependencies {
   implementation(libs.coroutines.guava)
 
   testImplementation(projects.core.data.impl)
+  testImplementation(libs.room.runtime)
 }

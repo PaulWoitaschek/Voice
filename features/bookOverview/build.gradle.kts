@@ -5,19 +5,17 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.navigation)
-  implementation(projects.core.common)
-  implementation(projects.core.search)
-  implementation(projects.core.ui)
+  api(projects.navigation)
+  api(projects.core.common)
+  api(projects.core.search)
+  api(projects.core.ui)
   implementation(projects.core.strings)
-  implementation(projects.core.playback)
-  implementation(projects.core.data.api)
-  implementation(projects.core.scanner)
-  implementation(projects.core.featureflag)
-  implementation(projects.core.audiobookshelf)
+  api(projects.core.playback)
+  api(projects.core.data.api)
+  api(projects.core.scanner)
+  api(projects.core.featureflag)
+  api(projects.core.audiobookshelf)
 
-  implementation(libs.androidxCore)
-  implementation(libs.lifecycle)
   implementation(libs.documentFile)
   implementation(libs.navigation3.ui)
 }

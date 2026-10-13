@@ -6,12 +6,11 @@ plugins {
 dependencies {
   api(projects.features.support.api)
 
-  implementation(libs.billing)
-  implementation(libs.datastore)
+  api(libs.billing)
+  api(libs.datastore)
 
-  implementation(projects.core.analytics.api)
-  implementation(projects.core.data.api)
-  implementation(projects.core.initializer)
-  implementation(projects.core.logging.api)
-  implementation(projects.navigation)
+  api(projects.core.analytics.api)
+  api(projects.core.data.api)
+  api(projects.core.initializer)
+  api(projects.navigation)
 }

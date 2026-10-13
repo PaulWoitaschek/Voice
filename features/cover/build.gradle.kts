@@ -7,21 +7,23 @@ plugins {
 
 dependencies {
   implementation(projects.core.common)
-  implementation(projects.core.data.api)
-  implementation(projects.navigation)
-  implementation(projects.core.scanner)
+  api(projects.core.data.api)
+  api(projects.navigation)
+  api(projects.core.scanner)
   implementation(projects.core.strings)
   implementation(projects.core.ui)
-  implementation(projects.core.featureflag)
+  api(projects.core.featureflag)
 
-  implementation(libs.bundles.retrofit)
-  implementation(libs.okhttp)
+  api(libs.retrofit.core)
+  implementation(libs.retrofit.scalars)
+  implementation(libs.retrofit.serialization)
+  api(libs.okhttp)
+  implementation(libs.okhttp.coroutines)
   implementation(libs.paging.compose)
   implementation(libs.paging.runtime)
   implementation(libs.navigation3.ui)
 
-  implementation(libs.serialization.json)
+  api(libs.serialization.json)
   testImplementation(projects.core.data.impl)
   testImplementation(projects.core.remoteconfig.noop)
-  testImplementation(projects.core.analytics.noop)
 }

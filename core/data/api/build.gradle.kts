@@ -9,12 +9,11 @@ kotlin {
 }
 
 dependencies {
-  api(projects.core.common)
+  implementation(projects.core.common)
   api(projects.core.documentfile)
-  implementation(libs.metro.runtime)
-  implementation(libs.appCompat)
+  api(libs.metro.runtime)
   implementation(libs.androidxCore)
-  implementation(libs.serialization.json)
+  api(libs.serialization.json)
 
   // https://issuetracker.google.com/issues/209688774
   api(libs.compose.runtime)

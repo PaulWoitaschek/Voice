@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.remoteconfig.api)
+  api(projects.core.remoteconfig.api)
   implementation(libs.firebase.remoteconfig)
+  implementation(libs.coroutines.playServices)
 }

@@ -6,5 +6,5 @@ plugins {
 dependencies {
   api(projects.features.support.api)
 
-  implementation(projects.navigation)
+  api(projects.navigation)
 }

@@ -4,6 +4,6 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.initializer)
+  api(projects.core.initializer)
   implementation(libs.firebase.crashlytics)
 }

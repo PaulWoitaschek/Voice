@@ -15,7 +15,6 @@ kotlin {
 }
 
 android {
-
   defaultConfig {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -29,15 +28,14 @@ android {
 
 dependencies {
   api(projects.core.data.api)
-  api(projects.core.common)
+  implementation(projects.core.common)
   api(projects.core.documentfile)
-  implementation(projects.core.featureflag)
+  api(projects.core.featureflag)
 
-  implementation(libs.datastore)
+  api(libs.datastore)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)
-  implementation(libs.coroutines.core)
-  implementation(projects.core.analytics.api)
+  api(projects.core.analytics.api)
 
   api(libs.room.runtime)
   ksp(libs.room.compiler)

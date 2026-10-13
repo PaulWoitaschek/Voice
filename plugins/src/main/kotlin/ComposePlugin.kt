@@ -29,9 +29,13 @@ class ComposePlugin : Plugin<Project> {
 
   private fun configureCompose(extension: CommonExtension, target: Project) {
     val libs = target.extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
-    target.dependencies.add("implementation", libs.findBundle("compose").get())
+    val compose = libs.findBundle("compose").get()
+    val molecule = libs.findLibrary("molecule").get()
+    target.dependencies.add("implementation", compose)
     target.dependencies.add("debugImplementation", libs.findLibrary("compose-ui-tooling-core").get())
-    target.dependencies.add("testImplementation", libs.findLibrary("molecule").get())
+    target.dependencies.add("testImplementation", molecule)
+    target.excludeFromDependencyAnalysis(compose)
+    target.excludeFromDependencyAnalysis(molecule)
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
     target.extensions.configure<ComposeCompilerGradlePluginExtension> {
       if (target.providers.gradleProperty("voice.composeCompilerReports").orNull?.toBooleanStrictOrNull() == true) {

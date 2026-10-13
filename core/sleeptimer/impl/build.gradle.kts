@@ -4,14 +4,13 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.sleeptimer.api)
-  implementation(projects.core.data.api)
-  implementation(projects.core.common)
-  implementation(projects.core.playback)
-  implementation(projects.core.initializer)
-  implementation(projects.core.logging.api)
+  api(projects.core.sleeptimer.api)
+  api(projects.core.data.api)
+  api(projects.core.common)
+  api(projects.core.playback)
+  api(projects.core.initializer)
   implementation(projects.core.analytics.api)
 
   implementation(libs.androidxCore)
-  implementation(libs.appCompat)
+  implementation(libs.androidxInterpolator)
 }

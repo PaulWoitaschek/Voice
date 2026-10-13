@@ -4,5 +4,5 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.remoteconfig.api)
+  api(projects.core.remoteconfig.api)
 }

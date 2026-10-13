@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-  implementation(libs.serialization.json)
+  api(libs.serialization.json)
   implementation(libs.androidxCore)
 }

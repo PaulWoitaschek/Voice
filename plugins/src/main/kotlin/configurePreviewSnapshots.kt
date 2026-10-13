@@ -23,7 +23,7 @@ internal fun Project.configurePreviewSnapshots() {
   val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   dependencies.add("testImplementation", project(":core:snapshot"))
   // the test activity the previews are rendered in
-  dependencies.add("debugImplementation", libs.findLibrary("compose-ui-testManifest").get())
+  dependencies.add("debugRuntimeOnly", libs.findLibrary("compose-ui-testManifest").get())
 
   val generate = tasks.register<GeneratePreviewSnapshotTest>("generatePreviewSnapshotTest") {
     outputDir.set(layout.buildDirectory.dir("generated/previewSnapshotTest"))

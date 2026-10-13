@@ -5,19 +5,15 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.navigation)
-  implementation(projects.core.common)
+  api(projects.navigation)
+  api(projects.core.common)
   implementation(projects.core.strings)
-  implementation(projects.core.playback)
-  implementation(projects.core.audiobookshelf)
-  implementation(projects.core.data.api)
-  implementation(projects.core.featureflag)
-  implementation(projects.core.ui)
-  implementation(projects.core.sleeptimer.api)
-
-  implementation(libs.coil)
-  implementation(libs.androidxCore)
-  implementation(libs.navigation3.ui)
+  api(projects.core.playback)
+  api(projects.core.audiobookshelf)
+  api(projects.core.data.api)
+  api(projects.core.featureflag)
+  api(projects.core.ui)
+  api(projects.core.sleeptimer.api)
 
   testImplementation(libs.compose.ui.testJunit)
 }

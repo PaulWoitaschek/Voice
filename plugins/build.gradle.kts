@@ -8,6 +8,7 @@ dependencies {
   implementation(libs.kotlin.powerAssert)
   implementation(libs.compose.compiler.gradle.plugin)
   implementation(libs.ktlint.gradlePlugin)
+  implementation(libs.dependencyAnalysis.gradlePlugin)
 }
 
 gradlePlugin {

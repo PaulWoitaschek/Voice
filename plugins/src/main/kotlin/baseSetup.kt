@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.powerassert.gradle.PowerAssertGradleExtension
 fun Project.baseSetup() {
   val project = this
   val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+  pluginManager.apply(DEPENDENCY_ANALYSIS_PLUGIN)
   configurePowerAssert(libs)
 
   val jvmBytecodeVersion = libs.findVersion("jvm-bytecode").get().requiredVersion.toInt()
@@ -75,16 +76,23 @@ fun Project.baseSetup() {
     }
     lint.lintConfig = project.layout.settingsDirectory.file("lint.xml").asFile
   }
+  val coroutinesCore = libs.findLibrary("coroutines.core").get()
+  val androidxAnnotation = libs.findLibrary("androidxAnnotation").get()
+  val testing = libs.findBundle("testing-jvm").get()
   dependencies.run {
     add("implementation", platform(libs.findLibrary("compose-bom").get()))
     add("implementation", platform(libs.findLibrary("firebase-bom").get()))
-    add("implementation", libs.findLibrary("coroutines.core").get())
-    add("implementation", libs.findLibrary("coroutines.android").get())
+    add("implementation", coroutinesCore)
+    add("implementation", androidxAnnotation)
+    add("runtimeOnly", libs.findLibrary("coroutines.android").get())
     if (project.path != ":core:logging:api") {
       add("implementation", project(":core:logging:api"))
     }
-    add("testImplementation", libs.findBundle("testing-jvm").get())
+    add("testImplementation", testing)
   }
+  excludeFromDependencyAnalysis(coroutinesCore, androidxAnnotation)
+  excludeFromDependencyAnalysis(testing)
+  excludeFromDependencyAnalysis { exclude(":core:logging:api") }
 }
 
 @Suppress("OPT_IN_USAGE")
@@ -113,8 +121,10 @@ private fun Project.configurePowerAssert(libs: VersionCatalog) {
       }
     }
 
+  val powerAssertRuntime = libs.findLibrary("kotlin.powerAssert.runtime").get()
   dependencies.run {
-    add("testImplementation", libs.findLibrary("kotlin.powerAssert.runtime").get())
-    add("androidTestImplementation", libs.findLibrary("kotlin.powerAssert.runtime").get())
+    add("testImplementation", powerAssertRuntime)
+    add("androidTestImplementation", powerAssertRuntime)
   }
+  excludeFromDependencyAnalysis(powerAssertRuntime)
 }

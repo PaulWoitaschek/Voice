@@ -12,10 +12,8 @@ dependencies {
   api(libs.datastore)
   implementation(libs.appCompat)
   api(projects.core.data.api)
-  implementation(projects.core.initializer)
+  api(projects.core.initializer)
   implementation(projects.core.strings)
-  implementation(libs.lifecycle.compose)
   implementation(libs.materialKolor)
-  implementation(libs.coil)
   implementation(libs.navigation3.ui)
 }

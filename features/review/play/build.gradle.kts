@@ -5,13 +5,11 @@ plugins {
 }
 
 dependencies {
-  implementation(libs.coil)
-
-  implementation(projects.core.analytics.api)
-  implementation(projects.core.common)
-  implementation(projects.core.data.api)
-  implementation(projects.core.playback)
-  implementation(projects.core.featureflag)
+  api(projects.core.analytics.api)
+  api(projects.core.common)
+  api(projects.core.data.api)
+  api(projects.core.playback)
+  api(projects.core.featureflag)
   implementation(projects.core.strings)
   implementation(projects.core.ui)
 }

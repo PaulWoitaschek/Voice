@@ -8,7 +8,7 @@ dependencies {
   api(libs.navigation3.runtime)
   api(projects.core.data.api)
   implementation(projects.core.common)
-  implementation(libs.compose.material3)
+  api(libs.compose.material3)
   testImplementation(kotlin("reflect"))
   testImplementation(libs.serialization.json)
 }

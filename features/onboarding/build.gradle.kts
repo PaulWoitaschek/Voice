@@ -5,12 +5,9 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.navigation)
-  implementation(projects.core.common)
-  implementation(projects.core.data.api)
+  api(projects.navigation)
+  api(projects.core.common)
+  api(projects.core.data.api)
   implementation(projects.core.strings)
   implementation(projects.core.ui)
-
-  implementation(libs.coil)
-  implementation(libs.androidxCore)
 }
