@@ -1,6 +1,5 @@
 package voice.core.data.repo
 
-import androidx.room.RoomDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +10,7 @@ import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.Bookmark
 import voice.core.data.ListeningEvent
+import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.transaction
 import voice.core.data.runForMaxSqlVariableNumber
@@ -21,7 +21,7 @@ import java.time.Clock
 public class BookmarkRepoImpl
 internal constructor(
   private val dao: BookmarkDao,
-  private val appDb: RoomDatabase,
+  private val appDb: AppDb,
   private val listeningHistoryRepo: ListeningHistoryRepo,
   private val clock: Clock,
 ) : BookmarkRepo {
