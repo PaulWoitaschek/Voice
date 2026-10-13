@@ -14,9 +14,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,17 +51,21 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -152,8 +154,15 @@ internal fun SleepTimerDialog(
             icon = VoiceIcons.Remove,
             contentDescription = stringResource(id = StringsR.string.sleep_timer_dialog_action_decrement),
           )
+          val customSleepTime = minutes(minutes = viewState.customSleepTime)
           AnimatedContent(
-            modifier = Modifier.weight(1F),
+            // while rolling, both the old and the new value are shown, but only the new one is announced
+            modifier = Modifier
+              .weight(1F)
+              .clearAndSetSemantics {
+                contentDescription = customSleepTime
+                liveRegion = LiveRegionMode.Polite
+              },
             targetState = viewState.customSleepTime,
             transitionSpec = {
               val up = targetState > initialState
@@ -283,40 +292,39 @@ private fun ContinuousPressIcon(
   contentDescription: String,
   modifier: Modifier = Modifier,
 ) {
-  var isPressed by remember { mutableStateOf(false) }
-
-  LaunchedEffect(isPressed, onEmit) {
+  val interactionSource = remember { MutableInteractionSource() }
+  val isPressed by interactionSource.collectIsPressedAsState()
+  val currentOnEmit by rememberUpdatedState(onEmit)
+  val longPressTimeout = LocalViewConfiguration.current.longPressTimeoutMillis.milliseconds
+  // repeats while pressed rather than after a long click: TalkBack long-clicks without a press, so nothing ended it
+  var repeating by remember { mutableStateOf(false) }
+  LaunchedEffect(isPressed) {
     if (isPressed) {
-      delay(500.milliseconds)
-      while (isPressed) {
-        onEmit()
+      delay(longPressTimeout)
+      repeating = true
+      while (true) {
+        currentOnEmit()
         delay(100.milliseconds)
       }
+    } else {
+      repeating = false
     }
   }
-  val interactionSource = remember { MutableInteractionSource() }
   Icon(
     imageVector = icon,
     contentDescription = contentDescription,
     modifier = modifier
       .size(48.dp)
-      .combinedClickable(
+      .clickable(
         interactionSource = interactionSource,
         indication = ripple(bounded = false),
-        onClick = onEmit,
-        onLongClick = { isPressed = true },
+        role = Role.Button,
+        onClick = {
+          if (!repeating) onEmit()
+        },
       )
       .padding(12.dp),
   )
-  LaunchedEffect(interactionSource) {
-    interactionSource.interactions.collect { interaction ->
-      if (interaction is PressInteraction.Release ||
-        interaction is PressInteraction.Cancel
-      ) {
-        isPressed = false
-      }
-    }
-  }
 }
 
 @Composable
