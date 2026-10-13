@@ -87,5 +87,13 @@ public class BookContentRepoImpl(private val dao: BookContentDao) : BookContentR
     }
   }
 
-  override suspend fun search(query: String): List<BookId> = dao.search(query)
+  override suspend fun search(wordPrefixes: List<String>): List<BookId> {
+    // quoted, so a prefix like "or" or "(" isn't read as query syntax
+    val query = wordPrefixes
+      .map { it.replace("\"", "") }
+      .filter { prefix -> prefix.any(Char::isLetterOrDigit) }
+      .joinToString(separator = " ") { "\"$it*\"" }
+    if (query.isEmpty()) return emptyList()
+    return dao.search(query)
+  }
 }
