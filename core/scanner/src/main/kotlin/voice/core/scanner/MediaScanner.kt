@@ -81,7 +81,7 @@ internal class MediaScanner(
     if (chapters.isEmpty()) return
     val chapterIds = chapters.map { it.id }
     if (!chapterIds.fitIntoOneBook()) {
-      Logger.w("Skipping $file, its ${chapters.size} chapters are too many for one book")
+      Logger.e("Skipping $file, its ${chapters.size} chapters are too many for one book")
       return
     }
 
