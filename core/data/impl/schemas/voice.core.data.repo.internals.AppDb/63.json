@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 63,
-    "identityHash": "7d02dd8085f319781ddc1c51bd039356",
+    "identityHash": "1b5edf29bd27b0d6375ffe2b422a50ce",
     "entities": [
       {
         "tableName": "chapters2",
@@ -308,7 +308,7 @@
       },
       {
         "tableName": "listening_event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `type` TEXT NOT NULL, `source` TEXT NOT NULL, `atMillis` INTEGER NOT NULL, `chapterId` TEXT NOT NULL, `time` INTEGER NOT NULL, `toChapterId` TEXT, `toTime` INTEGER, `value` TEXT, `sourcePackage` TEXT, `bookmarkId` TEXT, `bookmarkKind` TEXT, `bookmarkSetBySleepTimer` INTEGER, `bookmarkAddedAtMillis` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `type` TEXT NOT NULL, `source` TEXT NOT NULL, `atMillis` INTEGER NOT NULL, `chapterId` TEXT NOT NULL, `time` INTEGER NOT NULL, `toChapterId` TEXT, `toTime` INTEGER, `value` TEXT, `sourcePackage` TEXT, `bookmarkId` TEXT, `bookmarkKind` TEXT, `bookmarkAddedAtMillis` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "bookId",
@@ -375,11 +375,6 @@
             "fieldPath": "bookmarkKind",
             "columnName": "bookmarkKind",
             "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "bookmarkSetBySleepTimer",
-            "columnName": "bookmarkSetBySleepTimer",
-            "affinity": "INTEGER"
           },
           {
             "fieldPath": "bookmarkAddedAtMillis",
@@ -495,7 +490,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7d02dd8085f319781ddc1c51bd039356')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1b5edf29bd27b0d6375ffe2b422a50ce')"
     ]
   }
 }

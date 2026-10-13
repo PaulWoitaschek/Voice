@@ -5,6 +5,7 @@ import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -29,6 +30,7 @@ import voice.core.data.ChapterId
 import voice.core.data.KioskModeDemoData
 import voice.core.data.ListeningEvent
 import voice.core.data.MarkData
+import voice.core.data.repo.BookmarkRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.CurrentBookResolver
@@ -94,6 +96,17 @@ class BookPlayViewModelTest {
   private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
     every { unavailableBooks } returns flowOf(emptySet())
   }
+  private val bookmarkRepository = mockk<BookmarkRepo> {
+    coEvery { addBookmarkAtBookPosition(book, any()) } returns Bookmark(
+      bookId = book.id,
+      chapterId = book.currentChapter.id,
+      addedAt = Instant.now(),
+      id = Bookmark.Id(Uuid.random()),
+      time = 0L,
+      title = null,
+    )
+    every { bookmarksFlow(any()) } returns flowOf(emptyList())
+  }
   private val viewModel = BookPlayViewModel(
     bookRepository = mockk {
       coEvery { get(book.id) } returns book
@@ -107,17 +120,7 @@ class BookPlayViewModelTest {
     playStateManager = playStateManager,
     currentBookStoreId = currentBookStoreId,
     navigator = mockk(),
-    bookmarkRepository = mockk {
-      coEvery { addBookmarkAtBookPosition(book, any()) } returns Bookmark(
-        bookId = book.id,
-        chapterId = book.currentChapter.id,
-        addedAt = Instant.now(),
-        id = Bookmark.Id(Uuid.random()),
-        time = 0L,
-        title = null,
-      )
-      every { bookmarksFlow(any()) } returns flowOf(emptyList())
-    },
+    bookmarkRepository = bookmarkRepository,
     volumeGainFormatter = mockk(),
     batteryOptimization = mockk(),
     sleepTimerPreferenceStore = sleepTimerDataStore,
@@ -174,6 +177,7 @@ class BookPlayViewModelTest {
     verify(exactly = 1) {
       sleepTimer.enable(TimedWithDuration(10.minutes))
     }
+    coVerify(exactly = 0) { val _ = bookmarkRepository.addBookmarkAtBookPosition(any(), any()) }
   }
 
   @Test

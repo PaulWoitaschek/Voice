@@ -31,7 +31,6 @@ public data class ListeningEvent(
   val sourcePackage: String? = null,
   val bookmarkId: Bookmark.Id? = null,
   val bookmarkKind: Bookmark.Kind? = null,
-  val bookmarkSetBySleepTimer: Boolean? = null,
   val bookmarkAddedAtMillis: Long? = null,
   @PrimaryKey(autoGenerate = true)
   val id: Long = 0,
@@ -49,6 +48,11 @@ public data class ListeningEvent(
     SpeedChanged,
     SkipSilenceChanged,
     VolumeBoostChanged,
+
+    /**
+     * Not recorded anymore. Only the nights from back when the sleep timer set a bookmark where it
+     * started have it.
+     */
     SleepTimerSet,
     SleepTimerEnded,
     SleepTimerExtended,

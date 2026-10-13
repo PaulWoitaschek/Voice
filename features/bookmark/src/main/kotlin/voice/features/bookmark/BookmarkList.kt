@@ -288,7 +288,6 @@ private fun BookmarkRow(
   val chapterPrefix = if (row.showChapter) "$chapter · " else ""
   val headline: String
   val meta: String
-  val addNoteHint = row.note == null
   if (row.note != null) {
     headline = row.note
     meta = "$chapterPrefix${row.time} · $percent"
@@ -368,7 +367,7 @@ private fun BookmarkRow(
               overflow = TextOverflow.Ellipsis,
               modifier = Modifier.weight(1F, fill = false),
             )
-            if (addNoteHint) {
+            if (row.note == null) {
               Text(
                 text = " · $hint",
                 style = MaterialTheme.typography.bodyMedium,

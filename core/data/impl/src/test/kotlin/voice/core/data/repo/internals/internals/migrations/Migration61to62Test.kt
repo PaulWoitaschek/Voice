@@ -33,7 +33,7 @@ class Migration61to62Test {
   @Test
   fun `a sleep timer bookmark moves into the history`() {
     val migrated = migrate {
-      insertBookmark(id = "a", title = null, setBySleepTimer = true, addedAt = night, time = 4_000)
+      insertBookmark(id = "a", title = null, setBySleepTimer = true, time = 4_000)
     }
 
     assertEquals(expected = emptyList(), actual = migrated.bookmarkIds())
@@ -49,14 +49,14 @@ class Migration61to62Test {
       insertBookmark(id = "a", title = "Mira's theory", setBySleepTimer = true)
     }
 
-    assertEquals(expected = listOf("a" to 0L), actual = migrated.bookmarkIds())
+    assertEquals(expected = listOf("a"), actual = migrated.bookmarkIds())
     assertEquals(expected = emptyList(), actual = migrated.events())
   }
 
   @Test
   fun `a night the history already has isn't added twice`() {
     val migrated = migrate {
-      insertBookmark(id = "a", title = null, setBySleepTimer = true, addedAt = night)
+      insertBookmark(id = "a", title = null, setBySleepTimer = true)
       insertSleepTimerEvent(atMillis = night.toEpochMilli() + 1_000)
     }
 
@@ -65,12 +65,32 @@ class Migration61to62Test {
   }
 
   @Test
+  fun `a sleep timer bookmark from an unknown time is gone without a night`() {
+    val migrated = migrate {
+      insertBookmark(id = "a", title = null, setBySleepTimer = true, addedAt = "yesterday")
+    }
+
+    assertEquals(expected = emptyList(), actual = migrated.bookmarkIds())
+    assertEquals(expected = emptyList(), actual = migrated.events())
+  }
+
+  @Test
+  fun `a deleted sleep timer bookmark can't be restored as a bookmark`() {
+    val migrated = migrate {
+      insertDeletedBookmarkEvent(setBySleepTimer = true)
+      insertDeletedBookmarkEvent(setBySleepTimer = false)
+    }
+
+    assertEquals(expected = listOf("BookmarkDeleted"), actual = migrated.events().map { it.type })
+  }
+
+  @Test
   fun `other bookmarks stay as they are`() {
     val migrated = migrate {
       insertBookmark(id = "a", title = null, setBySleepTimer = false)
     }
 
-    assertEquals(expected = listOf("a" to 0L), actual = migrated.bookmarkIds())
+    assertEquals(expected = listOf("a"), actual = migrated.bookmarkIds())
     assertEquals(expected = emptyList(), actual = migrated.events())
   }
 
@@ -83,7 +103,7 @@ class Migration61to62Test {
     id: String,
     title: String?,
     setBySleepTimer: Boolean,
-    addedAt: Instant = night,
+    addedAt: String = night.toString(),
     time: Long = 1_000,
   ) {
     insert(
@@ -94,7 +114,7 @@ class Migration61to62Test {
         put("chapterId", "chapter")
         put("title", title)
         put("time", time)
-        put("addedAt", addedAt.toString())
+        put("addedAt", addedAt)
         put("setBySleepTimer", setBySleepTimer)
         put("id", id)
       },
@@ -116,8 +136,23 @@ class Migration61to62Test {
     )
   }
 
-  private fun SupportSQLiteDatabase.bookmarkIds() = query("SELECT id, setBySleepTimer FROM bookmark2")
-    .mapRows { getString("id") to getLong("setBySleepTimer") }
+  private fun SupportSQLiteDatabase.insertDeletedBookmarkEvent(setBySleepTimer: Boolean) {
+    insert(
+      "listening_event",
+      SQLiteDatabase.CONFLICT_FAIL,
+      ContentValues().apply {
+        put("bookId", "book")
+        put("type", "BookmarkDeleted")
+        put("source", "App")
+        put("atMillis", night.toEpochMilli())
+        put("chapterId", "chapter")
+        put("time", 1_000L)
+        put("bookmarkSetBySleepTimer", setBySleepTimer)
+      },
+    )
+  }
+
+  private fun SupportSQLiteDatabase.bookmarkIds() = query("SELECT id FROM bookmark2").mapRows { getString("id") }
 
   private fun SupportSQLiteDatabase.events() = query("SELECT * FROM listening_event")
     .mapRows {

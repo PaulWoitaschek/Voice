@@ -14,8 +14,6 @@ import voice.core.data.repo.internals.mapRows
 import java.time.Instant
 import kotlin.time.Duration.Companion.minutes
 
-// The sleep timer no longer sets bookmarks. The nights it marked move into the listening history, unless the listener
-// wrote a note on them.
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),
@@ -34,35 +32,30 @@ public class Migration61 : IncrementalMigration(61) {
       )
     }
     bookmarks.forEach { bookmark ->
+      // a note means the listener cared about the spot, so that one stays a bookmark
+      if (!bookmark.title.isNullOrBlank()) return@forEach
       val addedAt = bookmark.addedAt
-      if (bookmark.title.isNullOrBlank() && addedAt != null) {
-        if (!db.hasSleepTimerEventNear(bookmark.bookId, addedAt)) {
-          db.insert(
-            "listening_event",
-            SQLiteDatabase.CONFLICT_FAIL,
-            ContentValues().apply {
-              put("bookId", bookmark.bookId)
-              put("type", "SleepTimerSet")
-              put("source", "SleepTimer")
-              put("atMillis", addedAt.toEpochMilli())
-              put("chapterId", bookmark.chapterId)
-              put("time", bookmark.time)
-            },
-          )
-        }
-        db.delete("bookmark2", "id = ?", arrayOf(bookmark.id))
-      } else {
-        db.update(
-          "bookmark2",
+      if (addedAt != null && !db.hasSleepTimerEventNear(bookmark.bookId, addedAt)) {
+        db.insert(
+          "listening_event",
           SQLiteDatabase.CONFLICT_FAIL,
-          ContentValues().apply { put("setBySleepTimer", false) },
-          "id = ?",
-          arrayOf(bookmark.id),
+          ContentValues().apply {
+            put("bookId", bookmark.bookId)
+            put("type", "SleepTimerSet")
+            put("source", "SleepTimer")
+            put("atMillis", addedAt.toEpochMilli())
+            put("chapterId", bookmark.chapterId)
+            put("time", bookmark.time)
+          },
         )
       }
+      db.delete("bookmark2", "id = ?", arrayOf(bookmark.id))
     }
+    // restoring one of these would bring it back as a bookmark the listener saved
+    db.delete("listening_event", "type = 'BookmarkDeleted' AND bookmarkSetBySleepTimer = 1", null)
   }
 
+  /** Since the history exists, it recorded the nights itself, a moment apart from their bookmarks. */
   private fun SupportSQLiteDatabase.hasSleepTimerEventNear(
     bookId: String,
     at: Instant,
