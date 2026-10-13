@@ -194,6 +194,7 @@
         <item quantity="two">מצאנו %d ספרים</item>
         <item quantity="other">מצאנו %d ספרים</item>
     </plurals>
+    <string name="folder.review.too_many_files">יותר מדי קבצים</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d קובץ שמע</item>
         <item quantity="two">%d קבצי שמע</item>

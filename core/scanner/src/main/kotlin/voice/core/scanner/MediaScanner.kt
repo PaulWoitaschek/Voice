@@ -3,6 +3,7 @@ package voice.core.scanner
 import dev.zacsweers.metro.Inject
 import voice.core.data.BookId
 import voice.core.data.audioFileCount
+import voice.core.data.audioFilesFitIntoOneBook
 import voice.core.data.folders.FolderType
 import voice.core.data.isAudioFile
 import voice.core.data.isRemote
@@ -75,6 +76,10 @@ internal class MediaScanner(
     file: CachedDocumentFile,
     previousBooks: PreviousBooks,
   ) {
+    if (!file.audioFilesFitIntoOneBook()) {
+      Logger.w("Skipping $file, it has too many files for one book")
+      return
+    }
     val parseResult = chapterParser.parse(file)
     val chapters = parseResult.chapters
     if (chapters.isEmpty()) return

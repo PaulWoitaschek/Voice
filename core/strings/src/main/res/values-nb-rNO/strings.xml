@@ -184,6 +184,7 @@
         <item quantity="one">Vi fant %d bok</item>
         <item quantity="other">Vi fant %d bøker</item>
     </plurals>
+    <string name="folder.review.too_many_files">For mange filer</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d lydfil</item>
         <item quantity="other">%d lydfiler</item>

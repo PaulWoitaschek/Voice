@@ -9,10 +9,15 @@ import org.junit.runner.RunWith
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ChapterId
+import voice.core.data.MAX_CHAPTER_IDS_BYTES
+import voice.core.data.fitIntoOneBook
 import voice.core.data.repo.internals.AppDb
+import voice.core.data.repo.internals.Converters
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class BookContentRepoImplTest {
@@ -31,6 +36,7 @@ class BookContentRepoImplTest {
     name: String,
     author: String?,
     isActive: Boolean = true,
+    chapters: List<ChapterId> = listOf(ChapterId("chapter")),
   ) = BookContent(
     id = BookId(name),
     playbackSpeed = 1F,
@@ -40,8 +46,8 @@ class BookContentRepoImplTest {
     author = author,
     name = name,
     addedAt = Instant.EPOCH,
-    chapters = listOf(ChapterId("chapter")),
-    currentChapter = ChapterId("chapter"),
+    chapters = chapters,
+    currentChapter = chapters.first(),
     positionInChapter = 0,
     cover = null,
     gain = 0F,
@@ -74,5 +80,22 @@ class BookContentRepoImplTest {
     assertEquals(emptyList(), repo.search(listOf("king", "OR", "carrie")))
     assertEquals(emptyList(), repo.search(listOf("\"", "*", "-")))
     assertEquals(emptyList(), repo.search(emptyList()))
+  }
+
+  @Test
+  fun `a book with as many chapters as fit into one book can be read back`() = runTest {
+    val folder = "content://com.android.externalstorage.documents/tree/primary%3AAudiobooks" +
+      "/document/primary%3AAudiobooks%2FA%20very%20long%20book"
+    val chapterId = { index: Int -> ChapterId("$folder%2FChapter%20${index.toString().padStart(5, '0')}.mp3") }
+    val idBytes = chapterId(0).value.length + 3
+    val chapters = List((MAX_CHAPTER_IDS_BYTES - 1) / idBytes, chapterId)
+    assertTrue(chapters.fitIntoOneBook())
+    assertFalse((chapters + chapterId(chapters.size)).fitIntoOneBook())
+    assertTrue(Converters().fromChapterList(chapters).length > MAX_CHAPTER_IDS_BYTES - idBytes)
+
+    val book = content(name = "A very long book", author = null, chapters = chapters)
+    repo.put(book)
+
+    assertEquals(listOf(book), BookContentRepoImpl(db.bookContentDao()).all())
   }
 }

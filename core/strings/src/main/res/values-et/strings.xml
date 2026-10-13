@@ -184,6 +184,7 @@
         <item quantity="one">Leidsime %d raamatu</item>
         <item quantity="other">Leidsime %d raamatut</item>
     </plurals>
+    <string name="folder.review.too_many_files">Liiga palju faile</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d helifail</item>
         <item quantity="other">%d helifaili</item>

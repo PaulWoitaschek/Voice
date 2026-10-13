@@ -194,6 +194,7 @@
         <item quantity="few">Am găsit %d cărți</item>
         <item quantity="other">Am găsit %d de cărți</item>
     </plurals>
+    <string name="folder.review.too_many_files">Prea multe fișiere</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d fișier audio</item>
         <item quantity="few">%d fișiere audio</item>

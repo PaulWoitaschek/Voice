@@ -204,6 +204,7 @@
         <item quantity="many">Znaleźliśmy %d książek</item>
         <item quantity="other">Znaleźliśmy %d książek</item>
     </plurals>
+    <string name="folder.review.too_many_files">Za dużo plików</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d plik audio</item>
         <item quantity="few">%d pliki audio</item>

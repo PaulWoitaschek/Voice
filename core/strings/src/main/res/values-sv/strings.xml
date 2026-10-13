@@ -184,6 +184,7 @@
         <item quantity="one">Vi hittade %d bok</item>
         <item quantity="other">Vi hittade %d böcker</item>
     </plurals>
+    <string name="folder.review.too_many_files">För många filer</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d ljudfil</item>
         <item quantity="other">%d ljudfiler</item>

@@ -311,6 +311,8 @@
         <item quantity="one">We found %d book</item>
         <item quantity="other">We found %d books</item>
     </plurals>
+    <!-- Hint on a book that has too many audio files to be added as one book. Tapping it shows the options for how books are found. -->
+    <string name="folder.review.too_many_files">Too many files</string>
     <!-- Pluralized file count shown in folder structure previews. -->
     <plurals name="folder.type.file_count">
         <item quantity="one">%d audio file</item>
