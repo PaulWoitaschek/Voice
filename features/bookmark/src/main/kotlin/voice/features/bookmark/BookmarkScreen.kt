@@ -154,7 +154,7 @@ fun BookmarkScreen(
           HistoryList(
             viewState = historyViewState,
             contentPadding = contentPadding,
-            onStretchClick = historyViewModel::onStretchClick,
+            onGoTo = historyViewModel::onGoTo,
           )
         }
       },

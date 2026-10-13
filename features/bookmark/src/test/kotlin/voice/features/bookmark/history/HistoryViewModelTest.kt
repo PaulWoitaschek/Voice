@@ -17,6 +17,7 @@ import kotlinx.coroutines.test.runTest
 import voice.core.common.DispatcherProvider
 import voice.core.data.BookId
 import voice.core.data.ListeningEvent
+import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ListeningHistoryRepo
@@ -91,7 +92,7 @@ class HistoryViewModelTest {
     }
   }
 
-  private fun HistoryViewState.single(): HistoryStretch = days.single().stretches.single()
+  private fun HistoryViewState.single(): HistoryStretch = days.single().rows.filterIsInstance<HistoryStretch>().single()
 
   private fun listenedUntilPause() {
     historyEvents += testEvent(Type.Play, today(9), arrival, 1.minutes)
@@ -103,7 +104,7 @@ class HistoryViewModelTest {
     playStateManager.playState = PlayStateManager.PlayState.Playing
     listenedUntilPause()
     test { viewModel ->
-      viewModel.onStretchClick(awaitState().single().goTo!!)
+      viewModel.onGoTo(awaitState().single().goTo!!)
       scope.testScheduler.advanceUntilIdle()
       assertEquals(expected = bookId, actual = currentBookStore.data.first())
       verify {
@@ -118,7 +119,7 @@ class HistoryViewModelTest {
   fun `going there while paused doesn't start playback`() {
     listenedUntilPause()
     test { viewModel ->
-      viewModel.onStretchClick(awaitState().single().goTo!!)
+      viewModel.onGoTo(awaitState().single().goTo!!)
       scope.testScheduler.advanceUntilIdle()
       verify { playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek) }
       verify(exactly = 0) { playerController.play() }
@@ -130,11 +131,25 @@ class HistoryViewModelTest {
     listenedUntilPause()
     test { viewModel ->
       val spot = awaitState().single().goTo!!
-      viewModel.onStretchClick(spot)
-      viewModel.onStretchClick(spot)
+      viewModel.onGoTo(spot)
+      viewModel.onGoTo(spot)
       scope.testScheduler.advanceUntilIdle()
       verify(exactly = 1) {
         playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek)
+        navigator.goBack()
+      }
+    }
+  }
+
+  @Test
+  fun `going back from a jump goes to where it left`() {
+    historyEvents += testEvent(Type.ChapterChange, today(9), arrival, 4.minutes, source = Source.Headset, to = signal to 0.minutes)
+    test { viewModel ->
+      val jump = awaitState().days.single().rows.filterIsInstance<HistoryJump>().single()
+      viewModel.onGoTo(jump.back)
+      scope.testScheduler.advanceUntilIdle()
+      verify {
+        playerController.setPosition(4.minutes.inWholeMilliseconds, arrival.id, Type.Seek)
         navigator.goBack()
       }
     }

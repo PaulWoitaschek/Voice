@@ -7,6 +7,7 @@ import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.ui.BookBarPin
 import voice.features.bookmark.history.HistoryDay
+import voice.features.bookmark.history.HistoryJump
 import voice.features.bookmark.history.HistoryLocation
 import voice.features.bookmark.history.HistorySpot
 import voice.features.bookmark.history.HistoryStretch
@@ -146,7 +147,7 @@ internal fun kioskModeHistoryViewState(): HistoryViewState = HistoryViewState(
   days = listOf(
     HistoryDay(
       label = DayLabel.ThisMorning,
-      stretches = listOf(
+      rows = listOf(
         demoStretch(
           key = 4,
           start = LocalTime.of(7, 52),
@@ -160,7 +161,7 @@ internal fun kioskModeHistoryViewState(): HistoryViewState = HistoryViewState(
     ),
     HistoryDay(
       label = DayLabel.LastNight,
-      stretches = listOf(
+      rows = listOf(
         demoStretch(
           key = 3,
           start = LocalTime.of(22, 10),
@@ -174,7 +175,7 @@ internal fun kioskModeHistoryViewState(): HistoryViewState = HistoryViewState(
     ),
     HistoryDay(
       label = DayLabel.Yesterday,
-      stretches = listOf(
+      rows = listOf(
         demoStretch(
           key = 2,
           start = LocalTime.of(18, 20),
@@ -182,7 +183,16 @@ internal fun kioskModeHistoryViewState(): HistoryViewState = HistoryViewState(
           listened = 4.minutes,
           from = at(15, "2:00"),
           to = at(15, "6:10"),
-          cause = StretchCause.Jumped(Type.Seek, Source.Notification),
+          cause = StretchCause.Jumped(Type.Seek, Source.Notification, hasRow = true),
+        ),
+        HistoryJump(
+          key = 2,
+          at = LocalTime.of(18, 20),
+          from = at(10, "21:18"),
+          to = at(15, "2:00"),
+          type = Type.Seek,
+          source = Source.Notification,
+          back = HistorySpot(demoChapter, 0),
         ),
         demoStretch(
           key = 1,

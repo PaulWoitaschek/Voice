@@ -4,6 +4,7 @@ import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
+import voice.core.data.isBigJump
 import voice.core.data.isUndoableJump
 import voice.features.bookmark.BookIndex
 import voice.features.bookmark.sessionLabel
@@ -48,12 +49,19 @@ internal data class HistoryStretches(
     current: HistorySpot?,
   ): HistoryViewState {
     if (ongoing == null) return HistoryViewState(days)
-    // the playing stretch is the newest one, so it's the first of the first day
-    val today = days.first()
-    val playing = today.stretches.first()
-    val to = current?.let { index.historyLocation(it.chapterId, it.time) } ?: playing.to
-    val updated = playing.copy(end = now.localTime(zone), listened = ongoing.listened(now.toEpochMilli()), to = to)
-    return HistoryViewState(listOf(today.copy(stretches = listOf(updated) + today.stretches.drop(1))) + days.drop(1))
+    return HistoryViewState(
+      days.map { day ->
+        val position = day.rows.indexOfFirst { it is HistoryStretch && it.key == ongoing.key }
+        if (position == -1) return@map day
+        val playing = day.rows[position] as HistoryStretch
+        val updated = playing.copy(
+          end = now.localTime(zone),
+          listened = ongoing.listened(now.toEpochMilli()),
+          to = current?.let { index.historyLocation(it.chapterId, it.time) } ?: playing.to,
+        )
+        day.copy(rows = day.rows.toMutableList().apply { set(position, updated) })
+      },
+    )
   }
 }
 
@@ -73,7 +81,7 @@ internal fun historyStretches(
   now: Instant,
   zone: ZoneId,
 ): HistoryStretches {
-  val raw = splitStretches(events.sortedWith(compareBy({ it.atMillis }, { it.id })))
+  val (raw, rawJumps) = splitHistory(events.sortedWith(compareBy({ it.atMillis }, { it.id })))
   val ongoing = raw.lastOrNull()?.takeIf { playing && it.openSince != null }
   raw.filter { it !== ongoing }.forEach { it.closeLostPause() }
   val stretches = raw
@@ -81,16 +89,26 @@ internal fun historyStretches(
       it === ongoing || it.endUnknown || it.cause == StretchCause.SleepTimerStarted ||
         it.closedMillis >= MIN_STRETCH.inWholeMilliseconds
     }
-    .mapNotNull { stretch -> stretch.toStretch(index, zone, isOngoing = stretch === ongoing)?.let { stretch.startMillis to it } }
-    .reversed()
+  val jumps = rawJumps
+    .filterNot { it.isUndone() }
+    .mapNotNull { jump -> jump.toJump(index, zone)?.let { jump to it } }
+  val jumpsWithRows = jumps.mapTo(mutableSetOf()) { it.first }
+  val stretchRows = stretches.mapNotNull { stretch ->
+    stretch.toStretch(index, zone, isOngoing = stretch === ongoing, jumpsWithRows)?.let { stretch.startMillis to it }
+  }
+  val jumpRows = jumps.map { (jump, row) -> jump.atMillis to row }
+  // a jump while playing starts a stretch at the same moment, and that stretch came after it
+  val rows = (stretchRows + jumpRows).sortedWith(
+    compareByDescending<Pair<Long, HistoryRow>> { it.first }.thenBy { it.second is HistoryJump },
+  )
   val days = mutableListOf<HistoryDay>()
-  stretches.forEach { (startMillis, stretch) ->
-    val label = sessionLabel(Instant.ofEpochMilli(startMillis), now, zone)
+  rows.forEach { (atMillis, row) ->
+    val label = sessionLabel(Instant.ofEpochMilli(atMillis), now, zone)
     val last = days.lastOrNull()
     if (last != null && last.label == label) {
-      days[days.lastIndex] = last.copy(stretches = last.stretches + stretch)
+      days[days.lastIndex] = last.copy(rows = last.rows + row)
     } else {
-      days += HistoryDay(label, listOf(stretch))
+      days += HistoryDay(label, listOf(row))
     }
   }
   return HistoryStretches(
@@ -107,6 +125,7 @@ private class RawStretch(
   val startMillis: Long,
   val from: HistorySpot,
   val cause: StretchCause,
+  val startedBy: RawJump? = null,
 ) {
   var endMillis: Long = startMillis
   var to: HistorySpot? = from
@@ -142,29 +161,77 @@ private class RawStretch(
   }
 }
 
+/** A big jump while building them, or several without listening in between. */
+private class RawJump(
+  first: ListeningEvent,
+  listenedMillis: Long,
+) {
+  val key: Long = first.id
+  val atMillis: Long = first.atMillis
+  val from: HistorySpot = first.spot()
+  val type: Type = first.type
+  val source: Source = first.source
+  var to: HistorySpot? = first.target()
+  private var lastMillis = first.atMillis
+  private var merged = false
+  private var listenedAt = listenedMillis
+
+  /** Whether [event] goes on searching, or undoes this jump, before the listener heard much where it landed. */
+  fun continuesWith(
+    event: ListeningEvent,
+    listenedMillis: Long,
+  ): Boolean {
+    return listenedMillis - listenedAt < MIN_STRETCH.inWholeMilliseconds &&
+      event.atMillis - lastMillis < STRETCH_GAP.inWholeMilliseconds
+  }
+
+  fun add(
+    event: ListeningEvent,
+    listenedMillis: Long,
+  ) {
+    to = event.target()
+    merged = true
+    lastMillis = event.atMillis
+    listenedAt = listenedMillis
+  }
+
+  /** Jumps that ended up back where they left, like one undone with the pill right away. */
+  fun isUndone(): Boolean {
+    val to = to ?: return false
+    return merged && !isBigJump(from.chapterId, from.time, to.chapterId, to.time)
+  }
+}
+
 /**
- * Splits the events, oldest first, into stretches of listening. A pause of [STRETCH_GAP] or more
- * starts a new one, and so does a big jump while playing, so the place before an accidental jump
- * is where the stretch before it ends.
+ * Splits the events, oldest first, into stretches of listening and the big jumps between them. A
+ * pause of [STRETCH_GAP] or more starts a new stretch, and so does a big jump while playing, so the
+ * place before an accidental jump is where the stretch before it ends.
  */
-private fun splitStretches(events: List<ListeningEvent>): List<RawStretch> {
+private fun splitHistory(events: List<ListeningEvent>): Pair<List<RawStretch>, List<RawJump>> {
   val stretches = mutableListOf<RawStretch>()
+  val jumps = mutableListOf<RawJump>()
   var current: RawStretch? = null
   // a big jump while paused starts the next stretch, once playback goes on
   var pendingJump: ListeningEvent? = null
+  // how long playback ran, to tell whether the listener heard anything between two jumps
+  var listenedMillis = 0L
+  var previousMillis = 0L
 
   fun open(
     event: ListeningEvent,
     from: HistorySpot,
     cause: StretchCause,
+    startedBy: RawJump? = null,
   ) {
-    val stretch = RawStretch(key = event.id, startMillis = event.atMillis, from = from, cause = cause)
+    val stretch = RawStretch(key = event.id, startMillis = event.atMillis, from = from, cause = cause, startedBy = startedBy)
     stretch.openSince = event.atMillis
     stretches += stretch
     current = stretch
   }
 
   events.forEach { event ->
+    if (current?.openSince != null) listenedMillis += event.atMillis - previousMillis
+    previousMillis = event.atMillis
     val stretch = current
     when {
       event.type in playTypes -> {
@@ -184,7 +251,11 @@ private fun splitStretches(events: List<ListeningEvent>): List<RawStretch> {
         }
         if (current == null) {
           val jump = pendingJump?.takeIf { event.atMillis - it.atMillis < STRETCH_GAP.inWholeMilliseconds }
-          open(event, event.spot(), if (jump != null) StretchCause.Jumped(jump.type, jump.source) else StretchCause.Played(event.source))
+          if (jump != null) {
+            open(event, event.spot(), StretchCause.Jumped(jump.type, jump.source, hasRow = false), startedBy = jumps.last())
+          } else {
+            open(event, event.spot(), StretchCause.Played(event.source))
+          }
           pendingJump = null
         }
       }
@@ -198,9 +269,15 @@ private fun splitStretches(events: List<ListeningEvent>): List<RawStretch> {
         }
       }
       event.isUndoableJump() || event.type == Type.JumpBack -> {
+        val last = jumps.lastOrNull()
+        val jump = if (last != null && last.continuesWith(event, listenedMillis)) {
+          last.also { it.add(event, listenedMillis) }
+        } else {
+          RawJump(event, listenedMillis).also { jumps += it }
+        }
         if (stretch != null && stretch.openSince != null) {
           stretch.stop(event.atMillis, event.spot())
-          open(event, event.landedAt(), StretchCause.Jumped(event.type, event.source))
+          open(event, event.landedAt(), StretchCause.Jumped(event.type, event.source, hasRow = false), startedBy = jump)
         } else {
           current = null
           pendingJump = event
@@ -219,13 +296,14 @@ private fun splitStretches(events: List<ListeningEvent>): List<RawStretch> {
       it.lastSpot = event.landedAt()
     }
   }
-  return stretches
+  return stretches to jumps
 }
 
 private fun RawStretch.toStretch(
   index: BookIndex,
   zone: ZoneId,
   isOngoing: Boolean,
+  jumpsWithRows: Set<RawJump>,
 ): HistoryStretch? {
   val from = index.historyLocation(from.chapterId, from.time) ?: return null
   val to = to?.let { index.historyLocation(it.chapterId, it.time) }
@@ -239,17 +317,37 @@ private fun RawStretch.toStretch(
     listened = if (unknownEnd) null else closedMillis.milliseconds,
     from = from,
     to = to.takeUnless { unknownEnd },
-    cause = if (endedBySleepTimer) StretchCause.SleepTimerEnded else cause,
+    cause = when {
+      endedBySleepTimer -> StretchCause.SleepTimerEnded
+      // several jumps can be one row, and the stretch shows the same one
+      startedBy != null && startedBy in jumpsWithRows -> StretchCause.Jumped(startedBy.type, startedBy.source, hasRow = true)
+      else -> cause
+    },
     goTo = target?.takeIf { !isOngoing && index.locate(it.chapterId, it.time) != null },
+  )
+}
+
+private fun RawJump.toJump(
+  index: BookIndex,
+  zone: ZoneId,
+): HistoryJump? {
+  val from = index.historyLocation(from.chapterId, from.time) ?: return null
+  return HistoryJump(
+    key = key,
+    at = Instant.ofEpochMilli(atMillis).localTime(zone),
+    from = from,
+    to = to?.let { index.historyLocation(it.chapterId, it.time) },
+    type = type,
+    source = source,
+    back = this.from,
   )
 }
 
 private fun ListeningEvent.spot(): HistorySpot = HistorySpot(chapterId, time)
 
-private fun ListeningEvent.landedAt(): HistorySpot {
-  val toChapterId = toChapterId
-  return if (toChapterId != null) HistorySpot(toChapterId, toTime ?: 0L) else spot()
-}
+private fun ListeningEvent.target(): HistorySpot? = toChapterId?.let { HistorySpot(it, toTime ?: 0L) }
+
+private fun ListeningEvent.landedAt(): HistorySpot = target() ?: spot()
 
 internal fun BookIndex.historyLocation(
   chapterId: ChapterId,

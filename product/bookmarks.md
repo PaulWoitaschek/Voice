@@ -82,8 +82,8 @@ After an accidental tap, a seek or opening a bookmark, listeners can't get back 
 **Solution:**
 
 - The jump-back pill, right after a big seek or a chapter change (see [Player](player.md)).
-- The listening history: where and when you listened, and a tap goes back there (see below). It's always on, because a
-  switch and a clear button were more than it needs ([#3824]).
+- The listening history: where and when you listened, and every big jump with a way back (see below). It's always on,
+  because a switch and a clear button were more than it needs ([#3824]).
 
 **Turned down:**
 
@@ -97,10 +97,15 @@ A history where every play, pause, skip, setting change and bookmark is a row of
 has to be read like a log to find the one place that matters.
 
 **Solution:** The history lists stretches of listening: from where to where in the book, and when. A pause of 15
-minutes or more, or a big jump, starts a new one, so the place before an accidental jump is where the stretch before it
-ends. A small line says what started it, like headphones, the car or a jump on the lock screen, or that the sleep timer
-ended it. Tapping a row goes to where it ended, and for a night, to where the listener was last awake. Settings and
-bookmarks aren't in the history, and deleting a bookmark already has undo in the list.
+minutes or more, or a big jump, starts a new one. A small line says what started it, like headphones or the car, or
+that the sleep timer ended it. Tapping a row goes to where it ended, and for a night, to where the listener was last
+awake. Settings and bookmarks aren't in the history, and deleting a bookmark already has undo in the list.
+
+Every big jump has a row of its own between the stretches, right away, also while paused: from where to where, what did
+it, like the headset button, the car, the lock screen or another device, and "Back to …" like the pill on the player.
+That's for a jump noticed after the pill is gone, and for jumps made away from the player. Jumps without 10 seconds of
+listening in between are one row, from where the first one left, so searching for a scene doesn't fill the list. A jump
+undone right away leaves no row.
 
 **Turned down:**
 
@@ -108,7 +113,9 @@ bookmarks aren't in the history, and deleting a bookmark already has undo in the
 - "Lost your place?" suggestions: the pill offers the way back right away, and later the list shows it without
   guessing.
 
-**Assumption:** Where each stretch ends is enough to find a lost place, without seeing every skip and pause. Guess.
+**Assumption:** Where each stretch ends is enough to find a lost place, without seeing every skip and pause. Wrong for
+jumps: a seek with nothing heard before it, or right after pressing play, left no stretch, and the history stayed empty.
+Jumps got their own rows.
 
 ## My notes can't leave the app
 

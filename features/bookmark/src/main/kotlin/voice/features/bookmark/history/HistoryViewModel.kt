@@ -105,7 +105,7 @@ class HistoryViewModel(
       }
   }
 
-  internal fun onStretchClick(spot: HistorySpot) {
+  internal fun onGoTo(spot: HistorySpot) {
     if (leaving) return
     leaving = true
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
