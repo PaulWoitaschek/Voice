@@ -43,8 +43,3 @@ body:
       description: What device do you use (i.e. Pixel 6)
     validations:
       required: true
-  - type: textarea
-    id: cause
-    attributes:
-      label: Do you know the cause?
-      description: Optional. If you looked into the code, describe what goes wrong, where, and how you would fix it. A patch or a link to a branch in your fork is welcome too.

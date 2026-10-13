@@ -25,10 +25,7 @@ I build Voice myself, with AI tools. Writing code has become cheap. Reviewing an
 A pull request rarely saves me time: reviewing someone else's change and fitting it into the architecture usually takes longer than building it myself.
 And every feature that gets merged has to be maintained for years.
 
-This is nothing personal, and your help is still welcome. It's just that the most useful help is now in the issue, not in the code:
-
-- **Found the cause of a bug?** Put it into the bug report: what goes wrong, where in the code, and how you'd fix it. A patch or a link to a branch in your fork is welcome there too.
-- **Have an idea?** Open a feature request and describe the problem it solves.
+This is nothing personal, and your help is still welcome. It's just that [bug reports and feature requests](#bug-reports-and-feature-requests) help me more than code.
 
 Sometimes I'll ask someone to help with the code, for example when a fix needs a device or expertise I don't have.
 If that's you, read [Development](https://voice.woitaschek.de/development/) and [Architecture](https://voice.woitaschek.de/architecture/) first.
