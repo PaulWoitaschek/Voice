@@ -89,7 +89,8 @@ Once the 30 seconds have passed, the only way to more time is the moon button.
 
 The next morning, listeners don't know how far back to go.
 
-**Solution:** "Dozed off · timer ended" in the listening history, with a way to jump back there.
+**Solution:** The night is a stretch in the listening history, marked "Dozed off · timer ended". It starts where the
+listener was surely still awake, and tapping it goes there.
 
 ## The sleep timer fills up my bookmarks
 

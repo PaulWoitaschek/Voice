@@ -4,15 +4,15 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.Instant
+import kotlin.math.absoluteValue
+import kotlin.time.Duration.Companion.seconds
 
 /**
- * Something that happened while listening to a book, stored so that accidental
- * plays, pauses and jumps can be found and undone.
+ * Something that happened while listening to a book. The history turns these into stretches of
+ * listening, so that a lost place can be found again.
  *
  * [chapterId] and [time] are where playback was when the event happened. For
  * jumps, [toChapterId] and [toTime] are where playback went.
- *
- * Bookmark events also store the bookmark, so that a deleted one can be restored as it was.
  */
 @Entity(
   tableName = "listening_event",
@@ -27,11 +27,6 @@ public data class ListeningEvent(
   val time: Long,
   val toChapterId: ChapterId? = null,
   val toTime: Long? = null,
-  val value: String? = null,
-  val sourcePackage: String? = null,
-  val bookmarkId: Bookmark.Id? = null,
-  val bookmarkKind: Bookmark.Kind? = null,
-  val bookmarkAddedAtMillis: Long? = null,
   @PrimaryKey(autoGenerate = true)
   val id: Long = 0,
 ) {
@@ -45,9 +40,6 @@ public data class ListeningEvent(
     ChapterChange,
     BookmarkJump,
     JumpBack,
-    SpeedChanged,
-    SkipSilenceChanged,
-    VolumeBoostChanged,
 
     /**
      * Not recorded anymore. Only the nights from back when the sleep timer set a bookmark where it
@@ -56,8 +48,6 @@ public data class ListeningEvent(
     SleepTimerSet,
     SleepTimerEnded,
     SleepTimerExtended,
-    BookmarkAdded,
-    BookmarkDeleted,
   }
 
   public enum class Source {
@@ -80,3 +70,23 @@ public data class ListeningEvent(
 }
 
 public val ListeningEvent.at: Instant get() = Instant.ofEpochMilli(atMillis)
+
+private val minimumJump = 30.seconds
+
+/**
+ * Seeks of more than 30 seconds, chapter changes and bookmark jumps can be accidents, so the player
+ * offers to undo them and the history starts a new stretch. The rewind and fast forward buttons
+ * move only a few seconds on purpose, so they don't count.
+ */
+public fun ListeningEvent.isUndoableJump(): Boolean {
+  return when (type) {
+    ListeningEvent.Type.ChapterChange,
+    ListeningEvent.Type.BookmarkJump,
+    -> true
+    ListeningEvent.Type.Seek -> {
+      val toTime = toTime
+      toChapterId != chapterId || toTime == null || (toTime - time).absoluteValue >= minimumJump.inWholeMilliseconds
+    }
+    else -> false
+  }
+}

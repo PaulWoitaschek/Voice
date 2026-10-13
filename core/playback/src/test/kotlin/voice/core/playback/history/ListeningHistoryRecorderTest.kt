@@ -61,7 +61,7 @@ class ListeningHistoryRecorderTest {
   @Test
   fun `skipping does not replace the jump to undo`() = scope.runTest {
     seek(at(0), at(60_000))
-    recorder.record(ListeningEvent.Type.SkipForward, ListeningEvent.Source.Headset, at(60_000), at(90_000), value = "30")
+    recorder.record(ListeningEvent.Type.SkipForward, ListeningEvent.Source.Headset, at(60_000), at(90_000))
 
     assertEquals(expected = at(0), actual = recorder.lastJump.value?.from)
   }
@@ -76,31 +76,6 @@ class ListeningHistoryRecorderTest {
     assertEquals(
       expected = listOf(ListeningEvent.Type.Seek, ListeningEvent.Type.JumpBack),
       actual = events.map { it.type },
-    )
-  }
-
-  @Test
-  fun `dragging the speed slider records only where it stopped`() = scope.runTest {
-    listOf("1.1", "1.2", "1.3").forEach { speed ->
-      recorder.record(ListeningEvent.Type.SpeedChanged, ListeningEvent.Source.App, at(0), value = speed)
-      advanceTimeBy(0.5.seconds)
-    }
-    assertEquals(expected = emptyList(), actual = events)
-
-    advanceUntilIdle()
-    assertEquals(expected = listOf("1.3"), actual = events.map { it.value })
-  }
-
-  @Test
-  fun `speed changes of different books are each recorded`() = scope.runTest {
-    val otherBook = PlaybackPosition(BookId("other"), chapter, 0)
-    recorder.record(ListeningEvent.Type.SpeedChanged, ListeningEvent.Source.App, at(0), value = "1.2")
-    recorder.record(ListeningEvent.Type.SpeedChanged, ListeningEvent.Source.App, otherBook, value = "1.5")
-
-    advanceUntilIdle()
-    assertEquals(
-      expected = listOf(BookId("book") to "1.2", BookId("other") to "1.5"),
-      actual = events.map { it.bookId to it.value },
     )
   }
 }

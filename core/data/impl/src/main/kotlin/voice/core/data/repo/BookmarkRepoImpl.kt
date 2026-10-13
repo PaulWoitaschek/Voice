@@ -9,7 +9,6 @@ import kotlinx.coroutines.withContext
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.Bookmark
-import voice.core.data.ListeningEvent
 import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.transaction
@@ -22,29 +21,11 @@ public class BookmarkRepoImpl
 internal constructor(
   private val dao: BookmarkDao,
   private val appDb: AppDb,
-  private val listeningHistoryRepo: ListeningHistoryRepo,
   private val clock: Clock,
 ) : BookmarkRepo {
 
   override suspend fun deleteBookmark(id: Bookmark.Id) {
-    val bookmark = dao.bookmark(id)
     dao.deleteBookmark(id)
-    if (bookmark != null) {
-      listeningHistoryRepo.add(
-        ListeningEvent(
-          bookId = bookmark.bookId,
-          type = ListeningEvent.Type.BookmarkDeleted,
-          source = ListeningEvent.Source.App,
-          atMillis = clock.millis(),
-          chapterId = bookmark.chapterId,
-          time = bookmark.time,
-          value = bookmark.title,
-          bookmarkId = bookmark.id,
-          bookmarkKind = bookmark.kind,
-          bookmarkAddedAtMillis = bookmark.addedAt.toEpochMilli(),
-        ),
-      )
-    }
   }
 
   override suspend fun addBookmark(bookmark: Bookmark) {
@@ -66,19 +47,6 @@ internal constructor(
       )
       addBookmark(bookMark)
       Logger.v("Added bookmark=$bookMark")
-      listeningHistoryRepo.add(
-        ListeningEvent(
-          bookId = book.id,
-          type = ListeningEvent.Type.BookmarkAdded,
-          source = ListeningEvent.Source.App,
-          atMillis = bookMark.addedAt.toEpochMilli(),
-          chapterId = bookMark.chapterId,
-          time = bookMark.time,
-          bookmarkId = bookMark.id,
-          bookmarkKind = bookMark.kind,
-          bookmarkAddedAtMillis = bookMark.addedAt.toEpochMilli(),
-        ),
-      )
       bookMark
     }
   }
