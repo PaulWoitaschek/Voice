@@ -92,5 +92,5 @@ internal sealed interface BookPlayDialogViewState {
   }
 
   @JvmInline
-  value class SleepTimer(val viewState: SleepTimerViewState) : BookPlayDialogViewState
+  value class SleepTimer(val customSleepTime: Int) : BookPlayDialogViewState
 }

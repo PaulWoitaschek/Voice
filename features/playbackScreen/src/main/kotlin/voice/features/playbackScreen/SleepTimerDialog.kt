@@ -79,7 +79,7 @@ private val PRESETS = listOf(5, 15, 30, 60)
 
 @Composable
 internal fun SleepTimerDialog(
-  viewState: SleepTimerViewState,
+  customSleepTime: Int,
   onDismiss: () -> Unit,
   onIncrementSleepTime: () -> Unit,
   onDecrementSleepTime: () -> Unit,
@@ -154,16 +154,16 @@ internal fun SleepTimerDialog(
             icon = VoiceIcons.Remove,
             contentDescription = stringResource(id = StringsR.string.sleep_timer_dialog_action_decrement),
           )
-          val customSleepTime = minutes(minutes = viewState.customSleepTime)
+          val customSleepTimeText = minutes(minutes = customSleepTime)
           AnimatedContent(
             // while rolling, both the old and the new value are shown, but only the new one is announced
             modifier = Modifier
               .weight(1F)
               .clearAndSetSemantics {
-                contentDescription = customSleepTime
+                contentDescription = customSleepTimeText
                 liveRegion = LiveRegionMode.Polite
               },
-            targetState = viewState.customSleepTime,
+            targetState = customSleepTime,
             transitionSpec = {
               val up = targetState > initialState
               val enter = slideInVertically { height -> if (up) height else -height } + fadeIn()
@@ -186,13 +186,13 @@ internal fun SleepTimerDialog(
             contentDescription = stringResource(id = StringsR.string.sleep_timer_dialog_action_increment),
           )
           FilledIconButton(
-            onClick = { onAcceptSleepTime(viewState.customSleepTime) },
+            onClick = { onAcceptSleepTime(customSleepTime) },
             shapes = IconButtonDefaults.shapes(),
             modifier = Modifier.size(IconButtonDefaults.mediumContainerSize()),
           ) {
             Icon(
               imageVector = VoiceIcons.Check,
-              contentDescription = minutes(minutes = viewState.customSleepTime),
+              contentDescription = minutes(minutes = customSleepTime),
             )
           }
         }

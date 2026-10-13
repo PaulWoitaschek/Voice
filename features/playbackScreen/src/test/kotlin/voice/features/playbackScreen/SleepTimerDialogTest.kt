@@ -32,7 +32,7 @@ class SleepTimerDialogTest {
     compose.setContent {
       VoiceTheme {
         SleepTimerDialog(
-          viewState = SleepTimerViewState(customSleepTime = 15),
+          customSleepTime = 15,
           onDismiss = {},
           onIncrementSleepTime = { increments++ },
           onDecrementSleepTime = {},

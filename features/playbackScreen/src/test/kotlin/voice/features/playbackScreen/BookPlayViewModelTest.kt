@@ -8,6 +8,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,7 +61,7 @@ class BookPlayViewModelTest {
   private val scope = TestScope()
   private val clock = TestClock()
   private val historyRecorder = ListeningHistoryRecorder(repo = mockk(relaxed = true), clock = clock, scope = scope)
-  private val sleepTimerDataStore = MemoryDataStore(SleepTimerPreference.Default.copy(duration = 5.minutes))
+  private val sleepTimerDataStore = spyk(MemoryDataStore(SleepTimerPreference.Default.copy(duration = 5.minutes)))
   private val book = book()
   private val sleepTimer = mockk<SleepTimer> {
     val stateFlow = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
@@ -136,7 +137,7 @@ class BookPlayViewModelTest {
   @Test
   fun sleepTimerValueChanging() = scope.runTest {
     fun assertDialogSleepTime(expected: Int) {
-      assertEquals(expected = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(expected)), actual = viewModel.dialogState.value)
+      assertEquals(expected = BookPlayDialogViewState.SleepTimer(expected), actual = viewModel.dialogState.value)
     }
 
     viewModel.toggleSleepTimer()
@@ -164,6 +165,26 @@ class BookPlayViewModelTest {
 
     incrementAndAssert(2)
     incrementAndAssert(3)
+  }
+
+  @Test
+  fun `accepting while the changed time is still being saved keeps the sheet closed`() = scope.runTest {
+    viewModel.toggleSleepTimer()
+    runCurrent()
+    coEvery { sleepTimerDataStore.updateData(any()) } coAnswers {
+      yield()
+      callOriginal()
+    }
+
+    viewModel.incrementSleepTime()
+    viewModel.onAcceptSleepTime(6)
+    runCurrent()
+
+    assertNull(viewModel.dialogState.value)
+    assertEquals(expected = 6.minutes, actual = sleepTimerDataStore.data.first().duration)
+    verify(exactly = 1) {
+      sleepTimer.enable(TimedWithDuration(6.minutes))
+    }
   }
 
   @Test

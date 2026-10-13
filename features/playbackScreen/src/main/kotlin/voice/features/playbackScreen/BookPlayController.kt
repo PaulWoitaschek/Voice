@@ -114,7 +114,7 @@ fun BookPlayScreen(bookId: BookId) {
       }
       is BookPlayDialogViewState.SleepTimer -> {
         SleepTimerDialog(
-          viewState = dialogState.viewState,
+          customSleepTime = dialogState.customSleepTime,
           onDismiss = viewModel::dismissDialog,
           onIncrementSleepTime = viewModel::incrementSleepTime,
           onDecrementSleepTime = viewModel::decrementSleepTime,
