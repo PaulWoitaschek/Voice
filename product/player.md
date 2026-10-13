@@ -2,90 +2,178 @@
 
 **Status:** Outline.
 
-## Outcome
-
 Listeners press play and follow the story at their own pace, and Voice never loses their place.
 
-## Who and when
+**When:** At home, on the way to work, or doing chores, often with their eyes somewhere else. Books are long, sometimes
+20 hours or more with few chapters.
 
-At home, on the way to work, or doing chores, often with their eyes somewhere else. Books are long, sometimes 20 hours
-or more with few chapters.
+| Problem | Status |
+|---|---|
+| [Playback stops on its own](#playback-stops-on-its-own) | ✅ Solved |
+| [My position jumps when I pause](#my-position-jumps-when-i-pause) | ✅ Solved |
+| [I lose the thread when I come back](#i-lose-the-thread-when-i-come-back) | ✅ Solved |
+| [After a call or a navigation prompt, I miss what was said](#after-a-call-or-a-navigation-prompt-i-miss-what-was-said) | ⭕ Open |
+| [I have to set the speed again for every book](#i-have-to-set-the-speed-again-for-every-book) | ✅ Solved |
+| [I can't tell how much is left at my speed](#i-cant-tell-how-much-is-left-at-my-speed) | ✅ Solved |
+| [Times in different places disagree](#times-in-different-places-disagree) | ⭕ Open |
+| [The seek bar is too coarse for a long book](#the-seek-bar-is-too-coarse-for-a-long-book) | ✅ Solved |
+| [One slip loses my place](#one-slip-loses-my-place) | ✅ Solved |
+| [A stray touch still skips or seeks](#a-stray-touch-still-skips-or-seeks) | ⭕ Open |
+| [Getting to an exact time takes many skips](#getting-to-an-exact-time-takes-many-skips) | ⭕ Open |
+| [One skip amount doesn't suit both directions](#one-skip-amount-doesnt-suit-both-directions) | ⭕ Open |
+| [A book is too quiet or full of pauses](#a-book-is-too-quiet-or-full-of-pauses) | ✅ Solved |
+| [Skip silence feels rushed and clips words](#skip-silence-feels-rushed-and-clips-words) | ⭕ Open |
+| [Some books still sound wrong](#some-books-still-sound-wrong) | ⭕ Open |
+| [Calls and navigation prompts talk over my book](#calls-and-navigation-prompts-talk-over-my-book) | ✅ Solved |
+| [I can't play music under my book](#i-cant-play-music-under-my-book) | ⭕ Open |
 
-## Opportunities
+## Playback stops on its own
 
-### "It forgets my position, jumps, or just stops"
+✅ **Solved** · [#1061]
 
-This is about trust. "When ever I pause it it goes to a
-position before or after where I actually paused." ([#917]) "right now it seems to stop playing the audio randomly"
-([#1061])
+Playback stops at random, and listeners stop trusting Voice. Some causes are outside Voice. Phone makers like Huawei
+are known for aggressive battery optimizations.
 
-- ✅ **Asking to lift battery limits**, at most 3 times, and keeping the phone awake while playing.
-- ✅ **Auto rewind only when playback really pauses.**
-- Some causes are outside Voice. Broken files: "the files are MP3s with an invalid bitrate of 20 kb/s, which throws off
-  the duration and the position" ([#3422]). Phone makers: "Huawei is known for crazy battery optimizations" ([#1061]).
+**Solution:** Voice asks to lift battery limits, at most 3 times, and keeps the phone awake while playing.
 
-### "I lose the thread when I come back"
+## My position jumps when I pause
 
-- ✅ **Auto rewind**: when you resume, Voice goes back a little (2 seconds by default, adjustable). "Wanted to keep it
-  simple, so there is a setting with a default jump of 0s and a maximum jump of 20s" ([#87], 2015)
-- ⭕ **After a call or a navigation prompt, the book carries on without rewinding**: "sometimes it pauses in the middle
-  of a word, making it easy to miss what was said once audio continues" ([#1368]). In 2026: "I left that alone."
-  ([#3853])
+✅ **Solved** · [#917]
 
-### "I have to set the speed again for every book"
+After a pause, the book goes on from before or after the spot where the listener paused. Some causes are outside Voice:
+MP3s with an invalid bitrate of 20 kb/s throw off the duration and the position ([#3422]).
 
-"so you don't have to set every
-single book to 1.25x by hand" ([#3867])
+**Solution:** Auto rewind only runs when playback really pauses.
 
-- ✅ **Speed is saved per book**, from 0.5× to 3.5×.
-- ❌ **A default speed setting**, in 2020: "I also think that the vast majority people just plays at 1.0 speed so I
-  don't want another setting." And: "It's mostly not about the maintenance cost. I'ts about providing good defaults and
-  having a simple ui." ([#860])
-- ✅ **A new book starts at the speed you last listened at** ([#1790]). This needs no setting, and it follows the listener
+## I lose the thread when I come back
+
+✅ **Solved** · [#87]
+
+When listeners resume after a break, they've lost the thread of the story.
+
+**Solution:** Auto rewind. When you resume, Voice goes back a little, 2 seconds by default and adjustable. It started
+in 2015 as a setting, to keep it simple, with a default of 0 seconds and a maximum of 20.
+
+## After a call or a navigation prompt, I miss what was said
+
+⭕ **Open** · [#1368]
+
+After a call or a navigation prompt, the book carries on without rewinding. It may have paused in the middle of a
+word, so it's easy to miss what was said. When auto rewind was reworked in 2026, this was left alone ([#3853]).
+
+## I have to set the speed again for every book
+
+✅ **Solved** · [#3867]
+
+Listeners who listen faster have to set every book to their speed, like 1.25×, by hand.
+
+**Solution:**
+
+- Speed is saved per book, from 0.5× to 3.5×.
+- A new book starts at the speed you last listened at ([#1790]). This needs no setting, and it follows the listener
   when their speed changes. A speed picked for a book before its first play stays.
 
-### "How much is left, really, at my speed?"
+**Turned down:**
 
-"It currently doesn't properly reflect how much time is actually
-left in the chapter / book." ([#1292])
+- A default speed setting: most listeners play at 1.0×, so it wasn't worth another setting. The point was good
+  defaults and a simple UI, not the cost of maintaining it ([#860]). That was in 2020.
 
-- ✅ **How much of the book you've heard, and the time left at your speed**, in the player.
-- ⭕ **Not every time follows the speed**, so times in different places disagree ([#3226]).
+## I can't tell how much is left at my speed
 
-### "The seek bar is useless on a 20-hour book, and one slip loses my place"
+✅ **Solved** · [#1292]
 
-"Using the seek bar with fidelity is quite difficult on a 22 hour long book, with no chapters." ([#2452]) "I often hit
-either the track selection drop-down (or the next/prev buttons) or a random location on the progress bar" ([#2195])
+Times that ignore the speed don't show how much of the chapter or the book is really left.
 
-- ✅ **Skip buttons** with an adjustable amount: 20 seconds by default, from 3 to 60.
-- ✅ **Chapters**: a list, plus next and previous.
-- ✅ **The jump-back pill** after a big seek or a chapter change. This is the design principle "Prefer good behavior to
-  a setting" in practice.
-- ⭕ **Getting to an exact time in a long book takes many skips or a fiddly drag** ([#1901]). Before version 6, Voice
-  could jump to a typed time.
-- ⭕ **One skip amount doesn't suit both directions** ([#1670]).
-- ⭕ **A stray touch on the player can still skip or seek** ([#2195]).
+**Solution:** The player shows how much of the book you've heard, and the time left at your speed.
 
-### "This book is too quiet, too shrill, or full of pauses"
+## Times in different places disagree
 
-"Skipping silence is great but it feels like speedrunning something" ([#1802]). "sometimes cuts off the first or last
-letters of phrases along with the silence" ([#3709]). "Now volume boost is written to be up to 9 db. It is noticeable,
-but no much." ([#1712]) "sometimes audio books are a bit shrill" ([#2292])
+⭕ **Open** · [#3226]
 
-- ✅ **Skip silence and volume boost** (up to 9 dB), both saved per book.
-- ❌ **Tuning skip silence**: "I'd like to keep the media3 defaults for now." ([#3741])
-- ⭕ **Some books still sound wrong**: shrill, too quiet even with the boost, uneven in loudness, or meant for two ears
-  when the listener has one earbud in ([#2292]).
+Not every time in Voice follows the speed, so the times in different places don't match.
 
-### "Other apps' sounds break my book"
+## The seek bar is too coarse for a long book
 
-"I would like to be able to play instrumental music on Spotify simultaneously while listening to an Audio Book"
-([#2259])
+✅ **Solved** · [#2452]
 
-- ✅ **Voice pauses for calls and for short sounds like navigation prompts**, then carries on. In 2015 it got quieter
-  instead: "The player should lower volume when the audiofocus gets lost temporary" ([#107]). Pausing came after a
-  listener asked for it.
-- ⭕ **Listeners who want music under their book can't have both** ([#2259]).
+On a 22-hour book with no chapters, the seek bar is hard to use with any precision.
+
+**Solution:**
+
+- Skip buttons with an adjustable amount: 20 seconds by default, from 3 to 60.
+- Chapters: a list, plus next and previous.
+
+## One slip loses my place
+
+✅ **Solved** · [#2195]
+
+Listeners hit the track drop-down, next or previous, or a random spot on the progress bar by accident, and their place
+is gone.
+
+**Solution:** The jump-back pill after a big seek or a chapter change. This is the design principle "Prefer good
+behavior to a setting" in practice.
+
+## A stray touch still skips or seeks
+
+⭕ **Open** · [#2195]
+
+The pill takes the listener back afterwards, but a stray touch on the player can still skip or seek.
+
+## Getting to an exact time takes many skips
+
+⭕ **Open** · [#1901]
+
+In a long book, getting to an exact time takes many skips or a fiddly drag. Before version 6, Voice could jump to a
+typed time.
+
+## One skip amount doesn't suit both directions
+
+⭕ **Open** · [#1670]
+
+Rewind and fast forward use the same skip amount, and one amount doesn't suit both.
+
+## A book is too quiet or full of pauses
+
+✅ **Solved**
+
+Some books are recorded too quietly, or are full of pauses.
+
+**Solution:** Skip silence and volume boost, up to 9 dB. Both are saved per book.
+
+## Skip silence feels rushed and clips words
+
+⭕ **Open** · [#3709]
+
+Skipping silence can feel like rushing through the book ([#1802]). It sometimes cuts off the first or last letters of
+a phrase along with the silence.
+
+**Turned down:**
+
+- Tuning skip silence: it would change skip silence for everyone who uses it, so Voice keeps the media3 defaults for
+  now ([#3741]).
+
+## Some books still sound wrong
+
+⭕ **Open** · [#2292]
+
+Some books are shrill, too quiet even with the boost ([#1712]), uneven in loudness, or meant for two ears when the
+listener has one earbud in.
+
+## Calls and navigation prompts talk over my book
+
+✅ **Solved** · [#107]
+
+A call or a navigation prompt from another app plays over the book.
+
+**Solution:** Voice pauses for calls and for short sounds like navigation prompts, then carries on. In 2015 it got
+quieter instead. Pausing came after a listener asked for it.
+
+## I can't play music under my book
+
+⭕ **Open** · [#2259]
+
+Some listeners want music from another app, like instrumentals on Spotify, playing under their book. They can't have
+both.
 
 ## Open questions
 

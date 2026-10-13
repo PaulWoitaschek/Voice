@@ -66,7 +66,6 @@ import voice.core.ui.CoverTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.features.bookmark.history.HistoryList
-import voice.features.bookmark.history.HistoryViewEffect
 import voice.features.bookmark.history.HistoryViewModel
 import voice.features.bookmark.history.HistoryViewState
 import voice.navigation.Destination
@@ -130,21 +129,6 @@ fun BookmarkScreen(
       }
     }
   }
-  val pinnedMessage = stringResource(R.string.history_pinned)
-  val restoredMessage = stringResource(R.string.history_restored)
-  val changedBackMessage = stringResource(R.string.history_changed_back)
-  LaunchedEffect(historyViewModel) {
-    historyViewModel.viewEffects.collect { effect ->
-      snackbarHostState.showSnackbar(
-        when (effect) {
-          HistoryViewEffect.Pinned -> pinnedMessage
-          HistoryViewEffect.Restored -> restoredMessage
-          HistoryViewEffect.ChangedBack -> changedBackMessage
-        },
-      )
-    }
-  }
-
   if (viewState == null) return
   CoverTheme(cover = viewState.cover) {
     BookmarkScreen(
@@ -170,11 +154,7 @@ fun BookmarkScreen(
           HistoryList(
             viewState = historyViewState,
             contentPadding = contentPadding,
-            onFilterClick = historyViewModel::onFilterClick,
-            onSourceChange = historyViewModel::onSourceChange,
-            onActionClick = historyViewModel::onActionClick,
-            onSuggestionBack = historyViewModel::onSuggestionBack,
-            onSuggestionKeep = historyViewModel::onSuggestionKeep,
+            onGoTo = historyViewModel::onGoTo,
           )
         }
       },
@@ -185,7 +165,6 @@ fun BookmarkScreen(
         editor = editor,
         onNoteChange = viewModel::onNoteChange,
         onKindChange = viewModel::onKindChange,
-        onSleepKindClick = viewModel::onSleepKindClick,
         onMoveEarlier = viewModel::onMoveEarlier,
         onMoveLater = viewModel::onMoveLater,
         onUndo = viewModel::onEditorUndo,
@@ -232,9 +211,11 @@ private fun BookmarkScreen(
       },
       floatingActionButton = {
         if (tab == BookmarkTab.Bookmarks) {
+          val label = stringResource(R.string.bookmark_save_moment)
           ExtendedFloatingActionButton(
-            text = { Text(stringResource(R.string.bookmark_save_moment)) },
-            icon = { Icon(VoiceIcons.BookmarkAdd, contentDescription = null) },
+            text = { Text(label) },
+            // the text alone doesn't reach accessibility services
+            icon = { Icon(VoiceIcons.BookmarkAdd, contentDescription = label) },
             onClick = onSaveClick,
             expanded = !listState.canScrollBackward || !listState.isScrollInProgress,
           )

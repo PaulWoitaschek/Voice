@@ -10,6 +10,7 @@ class LibraryPlugin : Plugin<Project> {
       apply("com.android.library")
       withPlugin("com.android.library") {
         target.baseSetup()
+        checkModuleDependencies(target)
         target.tasks.withType(Test::class.java).configureEach {
           // We want all modules to be configured for tests, for the
           // voiceUnitTest to work

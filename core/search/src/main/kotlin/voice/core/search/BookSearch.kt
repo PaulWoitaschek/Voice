@@ -23,10 +23,9 @@ class BookSearch(
     if (terms.isEmpty()) return emptyList()
 
     // the full text search removes the diacritics itself, and decomposing would break scripts like Hangul
-    val matchQuery = SearchText(query, removeDiacritics = false).words
-      .joinToString(separator = " ") { "${it.text}*" }
-    Logger.d("search with MATCH: $matchQuery")
-    val candidates = contentRepo.search(matchQuery).toSet()
+    val prefixes = SearchText(query, removeDiacritics = false).words.map { it.text }
+    Logger.d("search for word prefixes $prefixes")
+    val candidates = contentRepo.search(prefixes).toSet()
     if (candidates.isEmpty()) return emptyList()
 
     return repo.all()

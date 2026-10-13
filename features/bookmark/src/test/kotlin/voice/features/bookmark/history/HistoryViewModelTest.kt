@@ -24,20 +24,17 @@ import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
-import voice.features.bookmark.FakeBookmarkRepo
 import voice.features.bookmark.MemoryDataStore
+import voice.features.bookmark.chapterTime
 import voice.features.bookmark.testBook
-import voice.features.bookmark.testBookmark
 import voice.features.bookmark.testChapter
 import voice.features.bookmark.testEvent
 import voice.features.bookmark.testZone
 import voice.features.bookmark.today
-import voice.features.bookmark.yesterday
 import voice.navigation.Navigator
 import java.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.minutes
 
@@ -55,13 +52,11 @@ class HistoryViewModelTest {
     coEvery { get(bookId) } answers { book.value }
   }
   private val clock = Clock.fixed(today(10), testZone)
-  private val bookmarkRepo = FakeBookmarkRepo(clock)
   private val historyEvents = mutableListOf<ListeningEvent>()
   private val historyRepo = mockk<ListeningHistoryRepo> {
     every { events(bookId) } answers { flowOf(historyEvents.sortedByDescending { it.atMillis }) }
   }
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val dismissedSuggestionsStore = MemoryDataStore(emptyList<Long>())
   private val playStateManager = PlayStateManager()
   private val playerController = mockk<PlayerController>(relaxed = true)
   private val navigator = mockk<Navigator>(relaxed = true)
@@ -69,9 +64,7 @@ class HistoryViewModelTest {
   private fun viewModel() = HistoryViewModel(
     currentBookStore = currentBookStore,
     bookRepository = bookRepository,
-    bookmarkRepo = bookmarkRepo,
     listeningHistoryRepo = historyRepo,
-    dismissedSuggestionsStore = dismissedSuggestionsStore,
     playStateManager = playStateManager,
     playerController = playerController,
     navigator = navigator,
@@ -82,11 +75,6 @@ class HistoryViewModelTest {
   )
 
   private fun test(validate: suspend ReceiveTurbine<HistoryViewState?>.(HistoryViewModel) -> Unit) = scope.runTest {
-    states(validate)
-  }
-
-  /** The states of a new view model, as if the screen opened. */
-  private suspend fun TestScope.states(validate: suspend ReceiveTurbine<HistoryViewState?>.(HistoryViewModel) -> Unit) {
     val viewModel = viewModel()
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
@@ -104,68 +92,23 @@ class HistoryViewModelTest {
     }
   }
 
-  private fun HistoryViewState.entries(): List<HistoryEntry> = sessions.flatMap { it.entries }
+  private fun HistoryViewState.single(): HistoryStretch = days.single().rows.filterIsInstance<HistoryStretch>().single()
 
-  @Test
-  fun `pinning saves the spot once, even when tapped twice`() {
-    historyEvents += testEvent(Type.Pause, today(9), signal, 2.minutes)
-    test { viewModel ->
-      val pin = assertIs<HistoryAction.Pin>(awaitState().entries().single().action)
-      viewModel.viewEffects.test {
-        viewModel.onActionClick(pin)
-        viewModel.onActionClick(pin)
-        assertEquals(expected = HistoryViewEffect.Pinned, actual = awaitItem())
-        scope.testScheduler.advanceUntilIdle()
-        expectNoEvents()
-      }
-      awaitState { it.entries().single().action == null }
-      val bookmark = bookmarkRepo.bookmarks.value.single()
-      assertEquals(expected = signal.id, actual = bookmark.chapterId)
-      assertEquals(expected = 2.minutes.inWholeMilliseconds, actual = bookmark.time)
-    }
+  private fun listenedUntilPause() {
+    historyEvents += testEvent(Type.Play, today(9), arrival, 1.minutes)
+    historyEvents += testEvent(Type.Pause, today(9, 20), signal, 2.minutes)
   }
 
   @Test
-  fun `restoring brings the deleted bookmark back as it was`() {
-    val bookmark = testBookmark(signal, 4.minutes, addedAt = yesterday(20), title = "Mira's message")
-    historyEvents += testEvent(Type.BookmarkDeleted, today(9), signal, 4.minutes, value = bookmark.title, bookmark = bookmark)
-    test { viewModel ->
-      val restore = assertIs<HistoryAction.Restore>(awaitState().entries().single().action)
-      viewModel.viewEffects.test {
-        viewModel.onActionClick(restore)
-        assertEquals(expected = HistoryViewEffect.Restored, actual = awaitItem())
-      }
-      awaitState { it.entries().single().action == null }
-      assertEquals(expected = listOf(bookmark), actual = bookmarkRepo.bookmarks.value)
-    }
-  }
-
-  @Test
-  fun `changing back makes the book current and sets the player`() {
-    historyEvents += testEvent(Type.SpeedChanged, today(9), signal, 0.minutes, value = "1.0")
-    historyEvents += testEvent(Type.SpeedChanged, today(9, 5), signal, 0.minutes, value = "1.8")
-    test { viewModel ->
-      val changeBack = assertIs<HistoryAction.ChangeBack>(awaitState().entries().first().action)
-      viewModel.viewEffects.test {
-        viewModel.onActionClick(changeBack)
-        assertEquals(expected = HistoryViewEffect.ChangedBack, actual = awaitItem())
-      }
-      assertEquals(expected = bookId, actual = currentBookStore.data.first())
-      verify { playerController.setSpeed(1F) }
-    }
-  }
-
-  @Test
-  fun `jumping back goes there, keeps playing and closes the screen`() {
+  fun `tapping a stretch goes where it ended, keeps playing and closes the screen`() {
     playStateManager.playState = PlayStateManager.PlayState.Playing
-    historyEvents += testEvent(Type.Seek, today(9, 55), signal, 1.minutes, to = signal to 8.minutes)
+    listenedUntilPause()
     test { viewModel ->
-      val jumpBack = assertIs<HistoryAction.JumpBack>(awaitState().entries().single().action)
-      viewModel.onActionClick(jumpBack)
+      viewModel.onGoTo(awaitState().single().goTo!!)
       scope.testScheduler.advanceUntilIdle()
       assertEquals(expected = bookId, actual = currentBookStore.data.first())
       verify {
-        playerController.setPosition(1.minutes.inWholeMilliseconds, signal.id, Type.JumpBack)
+        playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek)
         playerController.play()
         navigator.goBack()
       }
@@ -173,73 +116,66 @@ class HistoryViewModelTest {
   }
 
   @Test
-  fun `a double tap on jump back closes the screen once`() {
-    historyEvents += testEvent(Type.Seek, today(9, 55), signal, 1.minutes, to = signal to 8.minutes)
+  fun `going there while paused doesn't start playback`() {
+    listenedUntilPause()
     test { viewModel ->
-      val jumpBack = assertIs<HistoryAction.JumpBack>(awaitState().entries().single().action)
-      viewModel.onActionClick(jumpBack)
-      viewModel.onActionClick(jumpBack)
+      viewModel.onGoTo(awaitState().single().goTo!!)
       scope.testScheduler.advanceUntilIdle()
-      verify(exactly = 1) {
-        playerController.setPosition(1.minutes.inWholeMilliseconds, signal.id, Type.JumpBack)
-        navigator.goBack()
-      }
-    }
-  }
-
-  @Test
-  fun `going to the last touch records a seek and closes the screen`() {
-    test { viewModel ->
-      awaitState()
-      viewModel.onActionClick(HistoryAction.GoThere(arrival.id, 3.minutes.inWholeMilliseconds))
-      scope.testScheduler.advanceUntilIdle()
-      verify {
-        playerController.setPosition(3.minutes.inWholeMilliseconds, arrival.id, Type.Seek)
-        navigator.goBack()
-      }
+      verify { playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek) }
       verify(exactly = 0) { playerController.play() }
     }
   }
 
   @Test
-  fun `a kept suggestion stays hidden when the screen opens again`() {
-    playStateManager.playState = PlayStateManager.PlayState.Playing
-    historyEvents += testEvent(Type.Play, today(9, 30), signal, 5.minutes, source = Source.Car)
-    scope.runTest {
-      states { viewModel ->
-        val suggestion = assertIs<HistorySuggestion.StartedBy>(awaitState().suggestion)
-        viewModel.onSuggestionKeep(suggestion)
-        awaitState { it.suggestion == null }
-        assertEquals(expected = listOf(suggestion.key), actual = dismissedSuggestionsStore.data.first())
-      }
-      states {
-        assertNull(awaitState().suggestion)
-      }
-    }
-  }
-
-  @Test
-  fun `going back from a suggestion jumps there and hides it`() {
-    historyEvents += testEvent(Type.ChapterChange, today(9, 55), signal, 5.minutes, to = arrival to 0.minutes)
+  fun `a double tap goes there once`() {
+    listenedUntilPause()
     test { viewModel ->
-      val suggestion = assertIs<HistorySuggestion.Jumped>(awaitState().suggestion)
-      viewModel.onSuggestionBack(suggestion)
-      awaitState { it.suggestion == null }
-      verify {
-        playerController.setPosition(5.minutes.inWholeMilliseconds, signal.id, Type.JumpBack)
+      val spot = awaitState().single().goTo!!
+      viewModel.onGoTo(spot)
+      viewModel.onGoTo(spot)
+      scope.testScheduler.advanceUntilIdle()
+      verify(exactly = 1) {
+        playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek)
         navigator.goBack()
       }
     }
   }
 
   @Test
-  fun `the ongoing session follows the position`() {
+  fun `going back from a jump goes to where it left`() {
+    historyEvents += testEvent(Type.ChapterChange, today(9), arrival, 4.minutes, source = Source.Headset, to = signal to 0.minutes)
+    test { viewModel ->
+      val jump = awaitState().days.single().rows.filterIsInstance<HistoryJump>().single()
+      viewModel.onGoTo(jump.back)
+      scope.testScheduler.advanceUntilIdle()
+      verify {
+        playerController.setPosition(4.minutes.inWholeMilliseconds, arrival.id, Type.Seek)
+        navigator.goBack()
+      }
+    }
+  }
+
+  @Test
+  fun `another book playing doesn't make this book's last stretch play on`() {
     playStateManager.playState = PlayStateManager.PlayState.Playing
     historyEvents += testEvent(Type.Play, today(9, 30), arrival, 0.minutes)
     test {
-      assertEquals(expected = 0.75F, actual = awaitState { it.sessions.single().barEnd > 0F }.sessions.single().barEnd)
+      currentBookStore.updateData { BookId("other") }
+      val stretch = awaitState().single()
+      assertNull(stretch.end)
+      assertEquals(expected = HistorySpot(arrival.id, 0L), actual = stretch.goTo)
+    }
+  }
+
+  @Test
+  fun `the playing stretch follows the position`() {
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+    historyEvents += testEvent(Type.Play, today(9, 30), arrival, 0.minutes)
+    test {
+      currentBookStore.updateData { bookId }
+      awaitState { it.single().to == HistoryLocation(2, chapterTime(5.minutes)) }
       book.update { it.update { content -> content.copy(positionInChapter = 9.minutes.inWholeMilliseconds) } }
-      awaitState { it.sessions.single().barEnd == 0.95F }
+      awaitState { it.single().to == HistoryLocation(2, chapterTime(9.minutes)) }
     }
   }
 }

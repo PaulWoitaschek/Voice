@@ -3,8 +3,8 @@ package voice.core.playback
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
+import voice.core.data.isUndoableJump
 import voice.core.playback.history.PlaybackPosition
-import voice.core.playback.history.isUndoableJump
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

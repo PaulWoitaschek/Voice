@@ -18,9 +18,9 @@ public interface BookContentRepo {
   public suspend fun put(content: BookContent)
 
   /**
-   * The ids of the active books that match [query], in the full text search `MATCH` syntax.
+   * The ids of the active books that have a word starting with each of the [wordPrefixes].
    */
-  public suspend fun search(query: String): List<BookId>
+  public suspend fun search(wordPrefixes: List<String>): List<BookId>
 }
 
 public suspend inline fun BookContentRepo.getOrPut(

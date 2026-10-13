@@ -80,6 +80,18 @@ class ListeningHistoryRepoImplTest {
   }
 
   @Test
+  fun `nights from sleep timer bookmarks stay past the limit`() = runTest {
+    repo.add(event(ListeningEvent.Type.SleepTimerSet, ago(2000.minutes)))
+    repeat(ListeningHistoryRepoImpl.MAX_EVENTS_PER_BOOK + 1) { index ->
+      repo.add(event(ListeningEvent.Type.Pause, ago((999 - index).minutes)))
+    }
+
+    val types = types()
+    assertEquals(expected = ListeningHistoryRepoImpl.MAX_EVENTS_PER_BOOK + 1, actual = types.size)
+    assertEquals(expected = ListeningEvent.Type.SleepTimerSet, actual = types.last())
+  }
+
+  @Test
   fun `a moved book takes the history of its chapters along`() = runTest {
     val oldChapters = List(3) { ChapterId("old/$it") }
     val newChapters = List(2) { ChapterId("new/$it") }

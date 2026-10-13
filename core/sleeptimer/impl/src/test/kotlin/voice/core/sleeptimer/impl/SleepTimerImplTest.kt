@@ -54,7 +54,7 @@ class SleepTimerImplTest {
     every { pauseWithRewind(any()) } answers {
       playStateManager.playState = PlayStateManager.PlayState.Paused
     }
-    every { record(any(), any(), any()) } just Runs
+    every { record(any(), any()) } just Runs
     every {
       play(any())
     } answers {

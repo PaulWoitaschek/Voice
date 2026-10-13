@@ -2,7 +2,6 @@ package voice.core.data.repo.internals
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
@@ -48,7 +47,4 @@ public object PersistenceModule {
       .addMigrations(*migrations.toTypedArray())
       .build()
   }
-
-  @Provides
-  private fun bindRoomDatabase(appDb: AppDb): RoomDatabase = appDb
 }

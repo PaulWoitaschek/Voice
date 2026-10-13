@@ -2,74 +2,106 @@
 
 **Status:** Outline.
 
-## Outcome
-
 Voice feels calm and personal, day and night, and works for everyone in their own language.
 
-## Who and when
+**When:** Everyone, but especially at night in bed, and for listeners with large fonts or a screen reader.
 
-Everyone, but especially at night in bed, and for listeners with large fonts or a screen reader.
+The rule: Voice isn't meant to be very customizable. It offers good defaults and doesn't distract the listener
+([#795]). The details are in the [design principles].
 
-The rule: "I don't want voice to be really customizable. I want to provide good defaults and don't distract the user."
-([#795]) The details are in the [design principles].
+| Problem | Status |
+|---|---|
+| [I can't pick dark or light for Voice alone](#i-cant-pick-dark-or-light-for-voice-alone) | ✅ Solved |
+| [Dark mode isn't black enough for bed](#dark-mode-isnt-black-enough-for-bed) | ⭕ Open |
+| [The colors don't match my phone, my taste or my book](#the-colors-dont-match-my-phone-my-taste-or-my-book) | ✅ Solved |
+| [Voice doesn't feel modern and calm](#voice-doesnt-feel-modern-and-calm) | ✅ Solved |
+| [I can't read or use Voice with poor sight](#i-cant-read-or-use-voice-with-poor-sight) | ✅ Solved |
+| [In split screen, the play controls go off screen](#in-split-screen-the-play-controls-go-off-screen) | ✅ Solved |
+| [The translation reads awkwardly](#the-translation-reads-awkwardly) | ✅ Solved |
+| [Voice isn't in my language](#voice-isnt-in-my-language) | ❌ Won't solve |
 
-## Opportunities
+## I can't pick dark or light for Voice alone
 
-### "Let me pick dark or light myself"
+✅ **Solved** · [#1012]
 
-"I like to have the system in light mode but certain apps in dark mode." ([#1012])
+Some listeners keep their phone light and want certain apps dark.
 
-- ✅ **Light, dark or follow the system.**
-- ❌ **Turned down in 2022**: "Voice will follow the system dark / light theme." ([#1012]) This was reversed in 2026.
+**Solution:** Light, dark or follow the system.
 
-### "Pure black for bedtime"
+**Turned down:**
 
-"I mostly listen to audiobooks at bedtime and an AMOLED theme would be really helpful." ([#1284])
+- Always following the system's theme, decided in 2022 ([#1012]). This was reversed in 2026.
 
-- ⭕ **Dark mode isn't black enough for bed.** In 2018: "I'm all in for creating an AMOLED theme and using it as the
-  night theme on AMOLED devices." ([#795])
+## Dark mode isn't black enough for bed
 
-### "More color, and colors that match my book"
+⭕ **Open** · [#1284]
 
-"change the color of the program's theme (including the background) depending on the cover" ([#2627])
+Listeners who listen at bedtime want a pure black theme for their AMOLED screens. In 2018, the maintainer was all for
+an AMOLED theme, used as the night theme on AMOLED devices ([#795]).
 
-- ✅ **Dynamic color** from the wallpaper (2022).
-- ✅ **Six color schemes** to choose from.
-- ✅ **The player and book screens take their colors from the cover.** App-wide screens like settings don't, on purpose
+## The colors don't match my phone, my taste or my book
+
+✅ **Solved** · [#2627]
+
+Listeners want more color. Some want the whole app, background included, to take its colors from the book's cover.
+
+**Solution:**
+
+- Dynamic color from the wallpaper, since 2022.
+- Six color schemes to choose from.
+- The player and book screens take their colors from the cover. App-wide screens like settings don't, on purpose
   ([design principles]).
 
-### "It should feel modern and calm"
+## Voice doesn't feel modern and calm
 
-The 2022 redesign got pushback: "The color schemes both for light and dark theme were more beautiful before." ([#1444])
+✅ **Solved** · [#1444]
 
-- ✅ **The Material 3 Expressive redesign.**
+The 2022 redesign got pushback: some listeners found the old light and dark color schemes more beautiful.
 
-Assumptions:
+**Solution:** The Material 3 Expressive redesign.
 
-- **Listeners will like the redesign.** Ratings and feedback will tell.
+**Assumption:** Listeners will like the redesign. Ratings and feedback will tell.
 
-### "I can't read it or reach it"
+## I can't read or use Voice with poor sight
 
-There's little evidence here. "my sight is quite restricted" ([#766]) "with talkback on, there is no way this popup can
-be closed" ([#1898]) In split screen next to a navigation app: "Ideally the play controls should ALWAYS be on screen"
-([#3637])
+✅ **Solved** · [#766]
 
-- ✅ **Bigger skip buttons**, and **layouts that work with large fonts and right-to-left languages**.
-- ✅ **The play controls stay on screen in any window size**, down to a short split screen pane. The cover gives way
-  first, then the other controls, one at a time.
+There's little evidence here. One listener's sight is quite restricted. With TalkBack on, another couldn't close a
+popup ([#1898]).
 
-### "Voice in my language, translated well"
+**Solution:** Bigger skip buttons, and layouts that work with large fonts and right-to-left languages.
 
-"an awkward auto-translated mess of Swedish" ([#943], 2020)
+## In split screen, the play controls go off screen
 
-- ✅ **Translations with one shared tone**, for the languages Voice ships.
-- ❌ **13 languages dropped**: "Their speakers mostly use another language on their phones, or the translations were
-  incomplete." ([#3827]) Volunteer translation on Weblate also ended ([#3811]). No reason for that was written down.
+✅ **Solved** · [#3637]
 
-Assumptions:
+Next to a navigation app in split screen, listeners want the play controls on screen all the time.
 
-- **AI translations are good enough.** In 2020 the answer to [#943] was "It's not auto translated, it's translated by
-  real humans." How is quality checked now?
+**Solution:** The play controls stay on screen in any window size, down to a short split screen pane. The cover gives
+way first, then the other controls, one at a time.
+
+## The translation reads awkwardly
+
+✅ **Solved** · [#943]
+
+In 2020, a listener found the Swedish translation awkward and thought a machine had made it.
+
+**Solution:** Translations with one shared tone, for the languages Voice ships.
+
+**Turned down:**
+
+- Volunteer translation on Weblate: ended ([#3811]). No reason was written down.
+
+**Assumption:** AI translations are good enough. In 2020, the answer to [#943] was that real people translated Voice,
+not a machine. How is quality checked now?
+
+## Voice isn't in my language
+
+❌ **Won't solve** · [#3827]
+
+Voice dropped 13 languages.
+
+**Why not:** Their speakers mostly use another language on their phones, or the translations were incomplete.
 
 ## Open questions
 

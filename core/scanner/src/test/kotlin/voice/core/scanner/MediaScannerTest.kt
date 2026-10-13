@@ -15,6 +15,7 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ChapterId
+import voice.core.data.MAX_CHAPTER_IDS_BYTES
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookContentRepoImpl
@@ -234,6 +235,18 @@ class MediaScannerTest {
   }
 
   @Test
+  fun `a book with more files than fit into one book is skipped`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "Book")
+    val chapter = audioFile(parent = book, "1.mp3")
+    filesThatDontFitIntoOneBook(File(audiobookFolder, "Huge"))
+
+    scan(FolderType.Root, audiobookFolder)
+
+    assertBookContents(BookContentView(book, chapters = listOf(chapter)))
+  }
+
+  @Test
   fun newBookReusesFirstChapterMetadata() = test {
     val folder = folder("book")
     audioFile(parent = folder, "1.mp3")
@@ -343,7 +356,6 @@ class MediaScannerTest {
       title = null,
       time = 100,
       addedAt = Instant.EPOCH,
-      setBySleepTimer = false,
       id = Bookmark.Id.random(),
     )
     coEvery { bookmarkRepo.bookmarks(match { it.id == oldId }) } returns listOf(bookmark)
@@ -538,6 +550,18 @@ class MediaScannerTest {
       )
     }
 
+    // long names, so fewer files are needed
+    fun filesThatDontFitIntoOneBook(parent: File) {
+      val folder = File(parent, "a".repeat(200)).also { it.mkdirs() }
+      var bytes = 0
+      var index = 0
+      while (bytes <= MAX_CHAPTER_IDS_BYTES) {
+        val file = File(folder, "${index++}".padStart(200, '0') + ".mp3")
+        check(file.createNewFile())
+        bytes += ChapterId(file.toUri()).value.length + 3
+      }
+    }
+
     fun folder(name: String): File {
       return File(root, name)
         .also { it.mkdirs() }
@@ -562,7 +586,7 @@ class MediaScannerTest {
     }
 
     override fun close() {
-      root.delete()
+      root.deleteRecursively()
     }
   }
 

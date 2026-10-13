@@ -1,31 +1,21 @@
 package voice.features.bookmark.history
 
 import androidx.compose.runtime.Immutable
-import voice.core.data.Bookmark
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.features.bookmark.DayLabel
 import java.time.LocalTime
 import kotlin.time.Duration
 
+/** The stretches of listening and the jumps between them, newest first, under the part of the day they happened in. */
 @Immutable
-internal data class HistoryViewState(
-  val suggestion: HistorySuggestion?,
-  val filters: List<HistoryFilter>,
-  val selectedFilter: HistoryFilter?,
-  val sources: List<ListeningEvent.Source>,
-  val selectedSource: ListeningEvent.Source?,
-  val sessions: List<HistorySession>,
-  val hasEvents: Boolean,
-)
+internal data class HistoryViewState(val days: List<HistoryDay>)
 
-internal enum class HistoryFilter {
-  Jumps,
-  PlayPause,
-  Sleep,
-  Bookmarks,
-  Settings,
-}
+@Immutable
+internal data class HistoryDay(
+  val label: DayLabel,
+  val rows: List<HistoryRow>,
+)
 
 /**
  * Where something happened. [chapterNumber] is null when the book has a single chapter.
@@ -36,122 +26,69 @@ internal data class HistoryLocation(
   val time: String,
 )
 
-/**
- * Listening without a pause of 15 minutes or more.
- *
- * @param barStart where in the book the session started, from 0 to 1.
- * @param barEnd where in the book the session ended, from 0 to 1.
- */
 @Immutable
-internal data class HistorySession(
-  val key: Long,
-  val label: DayLabel,
-  val start: LocalTime,
-  val end: LocalTime,
-  val listened: Duration,
-  val barStart: Float,
-  val barEnd: Float,
-  val entries: List<HistoryEntry>,
-)
+internal sealed interface HistoryRow {
+  val key: Long
+}
 
 /**
- * One row of the history. Repeats close to each other are merged into one entry, [count] says
- * how many.
+ * Listening from [from] to [to]. A pause of 15 minutes or more, or a big jump, starts the next one.
+ *
+ * [end], [listened] and [to] are null for a night that only a sleep timer bookmark remembered, from
+ * before the history.
  */
 @Immutable
-internal data class HistoryEntry(
-  val key: Long,
+internal data class HistoryStretch(
+  override val key: Long,
+  val start: LocalTime,
+  val end: LocalTime?,
+  val listened: Duration?,
+  val from: HistoryLocation,
+  val to: HistoryLocation?,
+  val cause: StretchCause,
+  /** Null while it's still playing, or when the spot is gone after a rescan. */
+  val goTo: HistorySpot?,
+) : HistoryRow
+
+/**
+ * A big jump, or several without listening in between, so an accidental one can be undone long
+ * after the pill on the player is gone. [back] is where it left.
+ *
+ * [to] is null when the spot is gone after a rescan.
+ */
+@Immutable
+internal data class HistoryJump(
+  override val key: Long,
   val at: LocalTime,
+  val from: HistoryLocation,
+  val to: HistoryLocation?,
   val type: ListeningEvent.Type,
   val source: ListeningEvent.Source,
-  val count: Int,
-  val where: HistoryLocation?,
-  val to: HistoryLocation?,
-  val detail: HistoryDetail?,
-  val lastTouch: Boolean,
-  val action: HistoryAction?,
-)
-
-/** What changed, beyond the type and where. */
-@Immutable
-internal sealed interface HistoryDetail {
-
-  /** A pause that playback resumed from, after [duration]. */
-  data class PausedFor(val duration: Duration) : HistoryDetail
-
-  /** Skips, in total seconds. */
-  data class Skipped(val seconds: Int) : HistoryDetail
-
-  data class Speed(
-    val from: Float?,
-    val to: Float,
-  ) : HistoryDetail
-
-  data class VolumeBoost(
-    val from: Float?,
-    val to: Float,
-  ) : HistoryDetail
-
-  data class SkipSilence(val enabled: Boolean) : HistoryDetail
-
-  /** [minutes] is null for the end of the chapter. */
-  data class SleepTimer(val minutes: Int?) : HistoryDetail
-
-  data class BookmarkInfo(
-    val kind: Bookmark.Kind,
-    val setBySleepTimer: Boolean,
-    val note: String?,
-  ) : HistoryDetail
-}
+  val back: HistorySpot,
+) : HistoryRow
 
 @Immutable
-internal sealed interface HistoryAction {
+internal sealed interface StretchCause {
 
-  /** Undoes a jump, or an accidental play, by going back to where playback was. */
-  data class JumpBack(
-    val chapterId: ChapterId,
-    val time: Long,
-    val location: HistoryLocation,
-  ) : HistoryAction
+  data class Played(val source: ListeningEvent.Source) : StretchCause
 
-  /** Goes to the last spot touched before falling asleep. */
-  data class GoThere(
-    val chapterId: ChapterId,
-    val time: Long,
-  ) : HistoryAction
-
-  data class Pin(
-    val chapterId: ChapterId,
-    val time: Long,
-  ) : HistoryAction
-
-  data class Restore(val bookmark: Bookmark) : HistoryAction
-
-  data class ChangeBack(
-    val type: ListeningEvent.Type,
-    val value: String,
-  ) : HistoryAction
-}
-
-/**
- * Something in the history that looks like an accident, offered on top with a way back.
- */
-@Immutable
-internal sealed interface HistorySuggestion {
-  val key: Long
-  val back: HistoryAction.JumpBack
-
-  data class StartedBy(
-    override val key: Long,
-    override val back: HistoryAction.JumpBack,
-    val source: ListeningEvent.Source,
-    val at: LocalTime,
-    val played: Duration,
-  ) : HistorySuggestion
-
+  /**
+   * A big jump, the chapter list or a bookmark started it. [hasRow] when the jump has a row of its
+   * own, which already says so.
+   */
   data class Jumped(
-    override val key: Long,
-    override val back: HistoryAction.JumpBack,
-    val at: LocalTime,
-  ) : HistorySuggestion
+    val type: ListeningEvent.Type,
+    val source: ListeningEvent.Source,
+    val hasRow: Boolean,
+  ) : StretchCause
+
+  data object SleepTimerEnded : StretchCause
+
+  data object SleepTimerStarted : StretchCause
 }
+
+@Immutable
+internal data class HistorySpot(
+  val chapterId: ChapterId,
+  val time: Long,
+)

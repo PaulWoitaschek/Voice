@@ -35,7 +35,7 @@ next time it syncs: when it starts, when you open the library, and when it gets 
 
 When both sides moved, the newer position wins. What you listened to offline is sent once Voice reaches your server again.
 
-Bookmarks sync in both directions. The bookmarks the sleep timer sets stay on your device.
+Bookmarks sync in both directions.
 
 Your listening shows up in the listening sessions and stats of Audiobookshelf.
 

@@ -36,14 +36,18 @@ When a contract has several implementations, it is split into an `:api` module p
 
 ## Dependency Flow
 
-* Features depend **only on `:core` and infrastructure abstractions**.
+* Features depend **only on `:core` and `:navigation`**, never on other features.
 * `:core` modules depend on each other as needed, but never on features.
-* Infrastructure modules (`:app`, `:navigation`) wire everything together at runtime.
+* Only `:app` depends on implementation modules. Everything else depends on the `:api` module, tests may use
+  implementations.
+* `:app` wires everything together at runtime.
+
+The build fails when a module breaks these rules, see `plugins/src/main/kotlin/checkModuleDependencies.kt`.
 
 This ensures **unidirectional dependency flow**:
 
 ```
-Infrastructure → Core → Features
+:app → Features → :navigation → Core
 ```
 
 ## Diagram
@@ -65,8 +69,10 @@ flowchart LR
 
   app --> navigation
   app --> features
+  app --> core
   features --> core
   features --> navigation
+  navigation --> core
 ````
 
 ## Tech Decisions

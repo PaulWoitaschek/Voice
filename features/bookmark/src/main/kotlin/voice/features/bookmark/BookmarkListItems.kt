@@ -91,21 +91,20 @@ internal fun Bookmark.toRow(
   return BookmarkRowViewState(
     id = id,
     kind = kind,
-    setBySleepTimer = setBySleepTimer,
     note = title?.trim()?.takeIf { it.isNotEmpty() },
     chapterNumber = location.chapterNumber,
     chapterName = location.chapterName,
     time = location.time,
     percent = location.percent,
-    savedAt = savedAtLabel(addedAt, now, zone, setBySleepTimer),
+    savedAt = savedAtLabel(addedAt, now, zone),
     showChapter = showChapter,
   )
 }
 
 internal fun categoryCounts(bookmarks: List<Bookmark>): List<CategoryCount> {
-  val counts = bookmarks.groupingBy { it.category }.eachCount()
-  return BookmarkCategory.entries.mapNotNull { category ->
-    counts[category]?.let { CategoryCount(category, it) }
+  val counts = bookmarks.groupingBy { it.kind }.eachCount()
+  return Bookmark.Kind.entries.mapNotNull { kind ->
+    counts[kind]?.let { CategoryCount(kind, it) }
   }
 }
 
@@ -126,7 +125,7 @@ internal fun bookBar(
     percent = current.percent,
     remaining = formatTime(remaining.coerceAtLeast(0L)),
     pins = pinned.map { (bookmark, location) ->
-      BookBarPin(position = location.progress, kind = bookmark.kind, setBySleepTimer = bookmark.setBySleepTimer)
+      BookBarPin(position = location.progress, kind = bookmark.kind)
     },
     pinKeys = pinned.map { (bookmark, _) -> bookmark.id.value.toString() },
   )

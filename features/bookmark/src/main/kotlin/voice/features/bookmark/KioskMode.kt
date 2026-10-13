@@ -6,17 +6,17 @@ import voice.core.data.KioskModeDemoData
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.ui.BookBarPin
-import voice.features.bookmark.history.HistoryAction
-import voice.features.bookmark.history.HistoryDetail
-import voice.features.bookmark.history.HistoryEntry
-import voice.features.bookmark.history.HistoryFilter
+import voice.features.bookmark.history.HistoryDay
+import voice.features.bookmark.history.HistoryJump
 import voice.features.bookmark.history.HistoryLocation
-import voice.features.bookmark.history.HistorySession
-import voice.features.bookmark.history.HistorySuggestion
+import voice.features.bookmark.history.HistorySpot
+import voice.features.bookmark.history.HistoryStretch
 import voice.features.bookmark.history.HistoryViewState
+import voice.features.bookmark.history.StretchCause
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
 
@@ -34,11 +34,9 @@ private fun demoRow(
   time: String,
   percent: Int,
   savedAt: DayLabel,
-  setBySleepTimer: Boolean = false,
 ) = BookmarkRowViewState(
   id = demoId(index),
   kind = kind,
-  setBySleepTimer = setBySleepTimer,
   note = note,
   chapterNumber = chapterNumber,
   chapterName = chapterName,
@@ -64,7 +62,6 @@ internal fun kioskModeBookmarkViewState(): BookmarkViewState {
     )
   val theory = demoRow(2, Bookmark.Kind.Quote, "Mira's theory", 8, "Mira", "24:31", 46, DayLabel.Weekday(DayOfWeek.THURSDAY))
   val message = demoRow(3, Bookmark.Kind.Revisit, "The hidden message", 11, "Interference", "21:48", 65, DayLabel.Yesterday)
-  val dozedOff = demoRow(4, Bookmark.Kind.Note, null, 12, "The Signal", "14:48", 70, DayLabel.LastNight, setBySleepTimer = true)
   val later =
     demoRow(
       5,
@@ -90,21 +87,19 @@ internal fun kioskModeBookmarkViewState(): BookmarkViewState {
       percent = 72,
       remaining = demoBook.remaining,
       pins = listOf(
-        BookBarPin(0.15F, Bookmark.Kind.Favorite, setBySleepTimer = false),
-        BookBarPin(0.46F, Bookmark.Kind.Quote, setBySleepTimer = false),
-        BookBarPin(0.65F, Bookmark.Kind.Revisit, setBySleepTimer = false),
-        BookBarPin(0.70F, Bookmark.Kind.Note, setBySleepTimer = true),
-        BookBarPin(0.83F, Bookmark.Kind.Note, setBySleepTimer = false),
+        BookBarPin(0.15F, Bookmark.Kind.Favorite),
+        BookBarPin(0.46F, Bookmark.Kind.Quote),
+        BookBarPin(0.65F, Bookmark.Kind.Revisit),
+        BookBarPin(0.83F, Bookmark.Kind.Note),
       ),
-      pinKeys = listOf(firstSignal, theory, message, dozedOff, later).map { it.id.value.toString() },
+      pinKeys = listOf(firstSignal, theory, message, later).map { it.id.value.toString() },
     ),
     sort = BookmarkSort.Story,
     categories = listOf(
-      CategoryCount(BookmarkCategory.Favorite, 1),
-      CategoryCount(BookmarkCategory.Quote, 1),
-      CategoryCount(BookmarkCategory.Revisit, 1),
-      CategoryCount(BookmarkCategory.Note, 1),
-      CategoryCount(BookmarkCategory.Sleep, 1),
+      CategoryCount(Bookmark.Kind.Note, 1),
+      CategoryCount(Bookmark.Kind.Favorite, 1),
+      CategoryCount(Bookmark.Kind.Quote, 1),
+      CategoryCount(Bookmark.Kind.Revisit, 1),
     ),
     selectedCategory = null,
     items = listOf(
@@ -115,12 +110,11 @@ internal fun kioskModeBookmarkViewState(): BookmarkViewState {
       BookmarkListItem.ChapterHeader(11, "Interference"),
       single(message),
       BookmarkListItem.ChapterHeader(12, "The Signal"),
-      BookmarkListItem.Row(dozedOff, GroupPosition(0, 2)),
-      BookmarkListItem.YouAreHere(time = "34:18", percent = 72, group = GroupPosition(1, 2)),
+      BookmarkListItem.YouAreHere(time = "34:18", percent = 72, group = GroupPosition(0, 1)),
       BookmarkListItem.ChapterHeader(14, "Static"),
       single(later),
     ),
-    totalCount = 5,
+    totalCount = 4,
     editor = null,
   )
 }
@@ -130,99 +124,86 @@ private fun at(
   time: String,
 ) = HistoryLocation(chapterNumber, time)
 
-private fun demoEntry(
+private fun demoStretch(
   key: Long,
-  at: LocalTime,
-  type: Type,
-  source: Source,
-  where: HistoryLocation,
-  count: Int = 1,
-  detail: HistoryDetail? = null,
-  lastTouch: Boolean = false,
-  action: HistoryAction? = HistoryAction.Pin(demoChapter, 0),
-) = HistoryEntry(
+  start: LocalTime,
+  end: LocalTime,
+  listened: Duration,
+  from: HistoryLocation,
+  to: HistoryLocation,
+  cause: StretchCause,
+) = HistoryStretch(
   key = key,
-  at = at,
-  type = type,
-  source = source,
-  count = count,
-  where = where,
-  to = null,
-  detail = detail,
-  lastTouch = lastTouch,
-  action = action,
+  start = start,
+  end = end,
+  listened = listened,
+  from = from,
+  to = to,
+  cause = cause,
+  goTo = HistorySpot(demoChapter, 0),
 )
 
-internal fun kioskModeHistoryViewState(): HistoryViewState {
-  val backToStart = HistoryAction.JumpBack(demoChapter, 0, at(12, "14:48"))
-  return HistoryViewState(
-    suggestion = HistorySuggestion.StartedBy(
-      key = 7,
-      back = backToStart,
-      source = Source.Car,
-      at = LocalTime.of(7, 52),
-      played = 19.minutes,
-    ),
-    filters = listOf(HistoryFilter.Jumps, HistoryFilter.PlayPause, HistoryFilter.Sleep),
-    selectedFilter = null,
-    sources = listOf(Source.App, Source.Headset, Source.Car, Source.AudioFocus, Source.SleepTimer),
-    selectedSource = null,
-    sessions = listOf(
-      HistorySession(
-        key = 7,
-        label = DayLabel.ThisMorning,
-        start = LocalTime.of(7, 52),
-        end = LocalTime.of(8, 11),
-        listened = 19.minutes,
-        barStart = 0.70F,
-        barEnd = 0.72F,
-        entries = listOf(
-          demoEntry(8, LocalTime.of(8, 11), Type.Pause, Source.Car, at(12, "34:18")),
-          demoEntry(7, LocalTime.of(7, 52), Type.Play, Source.Car, at(12, "14:48"), action = backToStart),
-        ),
-      ),
-      HistorySession(
-        key = 1,
-        label = DayLabel.LastNight,
-        start = LocalTime.of(22, 10),
-        end = LocalTime.of(23, 42),
-        listened = 89.minutes,
-        barStart = 0.63F,
-        barEnd = 0.70F,
-        entries = listOf(
-          demoEntry(6, LocalTime.of(23, 42), Type.SleepTimerEnded, Source.SleepTimer, at(12, "14:48")),
-          demoEntry(
-            key = 5,
-            at = LocalTime.of(23, 12),
-            type = Type.SleepTimerSet,
-            source = Source.App,
-            where = at(11, "31:48"),
-            detail = HistoryDetail.SleepTimer(30),
-            lastTouch = true,
-            action = HistoryAction.GoThere(demoChapter, 0),
-          ),
-          demoEntry(
-            key = 3,
-            at = LocalTime.of(22, 51),
-            type = Type.SkipForward,
-            source = Source.App,
-            where = at(11, "9:18"),
-            count = 3,
-            detail = HistoryDetail.Skipped(90),
-            action = HistoryAction.JumpBack(demoChapter, 0, at(11, "9:18")),
-          ),
-          demoEntry(
-            key = 2,
-            at = LocalTime.of(22, 48),
-            type = Type.Pause,
-            source = Source.AudioFocus,
-            where = at(11, "9:18"),
-            detail = HistoryDetail.PausedFor(3.minutes),
-          ),
-          demoEntry(1, LocalTime.of(22, 10), Type.Play, Source.Headset, at(10, "21:18")),
+internal fun kioskModeHistoryViewState(): HistoryViewState = HistoryViewState(
+  days = listOf(
+    HistoryDay(
+      label = DayLabel.ThisMorning,
+      rows = listOf(
+        demoStretch(
+          key = 4,
+          start = LocalTime.of(7, 52),
+          end = LocalTime.of(8, 11),
+          listened = 19.minutes,
+          from = at(12, "14:48"),
+          to = at(12, "34:18"),
+          cause = StretchCause.Played(Source.Car),
         ),
       ),
     ),
-    hasEvents = true,
-  )
-}
+    HistoryDay(
+      label = DayLabel.LastNight,
+      rows = listOf(
+        demoStretch(
+          key = 3,
+          start = LocalTime.of(22, 10),
+          end = LocalTime.of(23, 42),
+          listened = 89.minutes,
+          from = at(10, "21:18"),
+          to = at(12, "14:48"),
+          cause = StretchCause.SleepTimerEnded,
+        ),
+      ),
+    ),
+    HistoryDay(
+      label = DayLabel.Yesterday,
+      rows = listOf(
+        demoStretch(
+          key = 2,
+          start = LocalTime.of(18, 20),
+          end = LocalTime.of(18, 24),
+          listened = 4.minutes,
+          from = at(15, "2:00"),
+          to = at(15, "6:10"),
+          cause = StretchCause.Jumped(Type.Seek, Source.Notification, hasRow = true),
+        ),
+        HistoryJump(
+          key = 2,
+          at = LocalTime.of(18, 20),
+          from = at(10, "21:18"),
+          to = at(15, "2:00"),
+          type = Type.Seek,
+          source = Source.Notification,
+          back = HistorySpot(demoChapter, 0),
+        ),
+        demoStretch(
+          key = 1,
+          start = LocalTime.of(17, 40),
+          end = LocalTime.of(18, 20),
+          listened = 40.minutes,
+          from = at(9, "5:00"),
+          to = at(10, "21:18"),
+          cause = StretchCause.Played(Source.Headset),
+        ),
+      ),
+    ),
+  ),
+)

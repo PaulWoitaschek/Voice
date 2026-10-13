@@ -164,15 +164,6 @@ class BookmarkSyncTest {
     assertEquals("/api/me/item/item/bookmark/30.6", server.takeRequest(1, TimeUnit.SECONDS)!!.url.encodedPath)
   }
 
-  @Test
-  fun `bookmarks of the sleep timer stay on the device`() = runTest {
-    hasBookmarks(bookmark(chapter = 0, timeMs = 10_000, title = null, setBySleepTimer = true))
-
-    bookmarkSync().sync(account, serverBookmarks = emptyList())
-
-    assertEquals(0, server.requestCount)
-  }
-
   private fun hasBookmarks(vararg bookmarks: Bookmark) {
     coEvery { bookmarkRepo.bookmarks(book.content) } returns bookmarks.toList()
   }
@@ -193,14 +184,12 @@ class BookmarkSyncTest {
     chapter: Int,
     timeMs: Long,
     title: String?,
-    setBySleepTimer: Boolean = false,
   ) = Bookmark(
     bookId = book.id,
     chapterId = chapters[chapter].id,
     title = title,
     time = timeMs,
     addedAt = Instant.EPOCH,
-    setBySleepTimer = setBySleepTimer,
     id = Bookmark.Id.random(),
   )
 }

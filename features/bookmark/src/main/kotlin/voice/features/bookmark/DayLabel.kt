@@ -30,21 +30,16 @@ private val nightEnd = LocalTime.of(5, 0)
 private val eveningStart = LocalTime.of(18, 0)
 private val afternoonStart = LocalTime.of(12, 0)
 
-/** Only sleep timer bookmarks talk about the night, as those are about falling asleep. */
 internal fun savedAtLabel(
   at: Instant,
   now: Instant,
   zone: ZoneId,
-  setBySleepTimer: Boolean,
 ): DayLabel {
   if (at.isAfter(now) || java.time.Duration.between(at, now).toMillis() < 1.minutes.inWholeMilliseconds) {
     return DayLabel.JustNow
   }
   val dateTime = at.atZone(zone)
   val today = now.atZone(zone).toLocalDate()
-  if (setBySleepTimer && isLastNight(dateTime.toLocalDate(), dateTime.toLocalTime(), today)) {
-    return DayLabel.LastNight
-  }
   if (dateTime.toLocalDate() == today) {
     return DayLabel.Today(dateTime.toLocalTime().withSecond(0).withNano(0))
   }

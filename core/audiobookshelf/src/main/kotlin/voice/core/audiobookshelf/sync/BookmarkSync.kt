@@ -27,7 +27,7 @@ import java.time.Instant
 
 /**
  * Brings bookmarks over in both directions. The server only knows a time and a title, so a bookmark is
- * identified by its book and the second it points to. Bookmarks the sleep timer sets stay on this device.
+ * identified by its book and the second it points to.
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -70,7 +70,6 @@ internal class BookmarkSync(
     synced: MutableMap<String, String>,
   ) {
     val local = bookmarkRepo.bookmarks(book.content)
-      .filter { !it.setBySleepTimer }
       .associateBy { key(itemId, book.secondOf(it)) }
     val onServer = server.associateBy { key(itemId, it.time.toLong()) }
 
@@ -148,7 +147,6 @@ private fun Book.bookmarkAt(bookmark: AbsBookmark): Bookmark {
     title = bookmark.title?.takeIf { it.isNotBlank() },
     time = position.positionInChapter,
     addedAt = if (bookmark.createdAt > 0) Instant.ofEpochMilli(bookmark.createdAt) else Instant.now(),
-    setBySleepTimer = false,
     id = Bookmark.Id.random(),
   )
 }
