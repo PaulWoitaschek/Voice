@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -29,11 +30,15 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.withSaveLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.dp
 import voice.core.data.Bookmark
 import kotlin.math.abs
+import kotlin.math.hypot
+import kotlin.math.roundToInt
 
 private const val MAX_SEGMENTS = 120
 
@@ -68,17 +73,14 @@ fun BookBar(
     quote = pinStyle(Bookmark.Kind.Quote),
     revisit = pinStyle(Bookmark.Kind.Revisit),
   )
+  val placements = remember(pins, segments, pinSize, LocalDensity.current) { PinPlacements(pins, segments, pinSize) }
   val currentOnPinClick = rememberUpdatedState(onPinClick)
   val tapModifier = if (onPinClick != null && pins.isNotEmpty()) {
-    Modifier.pointerInput(pins, segments) {
+    Modifier.pointerInput(placements) {
       detectTapGestures { offset ->
-        val width = size.width.toFloat()
-        val pinXs = pins.map { bookBarX(it.position, segments, width, SEGMENT_GAP.toPx(), MIN_SEGMENT_WIDTH.toPx()) }
-        val nearest = pins.indices.minByOrNull { abs(pinXs[it] - offset.x) }
-          ?: return@detectTapGestures
-        if (abs(pinXs[nearest] - offset.x) <= 20.dp.toPx()) {
-          currentOnPinClick.value?.invoke(nearest)
-        }
+        val placement = placements.at(this, size.width.toFloat())
+        val pin = placement.pinAt(offset.x, offset.y, pinSize = pinSize.toPx(), reach = 20.dp.toPx())
+        if (pin != null) currentOnPinClick.value?.invoke(pin)
       }
     }
   } else {
@@ -88,17 +90,15 @@ fun BookBar(
     modifier = modifier
       .fillMaxWidth()
       .layout { measurable, constraints ->
-        val pinXs = pinCenters(pins, segments, constraints.maxWidth.toFloat(), pinSize)
-        val lifts = pinLifts(pinXs, pinWidth = (pinSize + PIN_SPACING).toPx())
-        val height = (pinAreaHeight(lifts, pinSize) + barHeight).roundToPx()
+        val width = if (constraints.hasBoundedWidth) constraints.maxWidth else constraints.minWidth
+        val height = constraints.constrainHeight((placements.at(this, width.toFloat()).barTop + barHeight.toPx()).roundToInt())
         val placeable = measurable.measure(constraints.copy(minHeight = height, maxHeight = height))
         layout(placeable.width, placeable.height) { placeable.place(0, 0) }
       }
       .then(tapModifier)
       .drawWithCache {
-        val pinXs = pinCenters(pins, segments, size.width, pinSize)
-        val lifts = pinLifts(pinXs, pinWidth = (pinSize + PIN_SPACING).toPx())
-        val barTop = pinAreaHeight(lifts, pinSize).toPx()
+        val placement = placements.at(this, size.width)
+        val barTop = placement.barTop
         val barHeightPx = barHeight.toPx()
         val pinPx = pinSize.toPx()
         val gap = SEGMENT_GAP.toPx()
@@ -107,6 +107,7 @@ fun BookBar(
           pinStyles.of(pin).shape.createOutline(Size(pinPx, pinPx), layoutDirection, this)
         }
         val cutout = Stroke(width = PIN_CUTOUT.toPx() * 2)
+        val layerPaint = Paint()
         onDrawBehind {
           translate(top = barTop) {
             drawBookBar(
@@ -131,14 +132,14 @@ fun BookBar(
             drawCircle(color = colors.surface, radius = markerRadius + 2.dp.toPx(), center = center)
             drawCircle(color = colors.primary, radius = markerRadius, center = center)
           }
-          // a layer of their own, so the gap cut around each pin only clears the pins below it
-          drawContext.canvas.withSaveLayer(Rect(-pinPx, -pinPx, size.width + pinPx, barTop), Paint()) {
-            pins.forEachIndexed { index, pin ->
-              val left = pinXs[index] - pinPx / 2
-              val top = barTop - PIN_GAP.toPx() - pinPx - lifts[index] * (pinPx + PIN_SPACING.toPx())
-              translate(left = left, top = top) {
-                drawOutline(outlines[index], color = Color.Black, style = cutout, blendMode = BlendMode.Clear)
-                drawOutline(outlines[index], color = pinStyles.of(pin).color)
+          if (pins.isNotEmpty()) {
+            // a layer of their own, so the gap cut around each pin only clears the pins below it
+            drawContext.canvas.withSaveLayer(Rect(-pinPx, -pinPx, size.width + pinPx, barTop), layerPaint) {
+              pins.forEachIndexed { index, pin ->
+                translate(left = placement.centers[index] - pinPx / 2, top = placement.tops[index]) {
+                  drawOutline(outlines[index], color = Color.Black, style = cutout, blendMode = BlendMode.Clear)
+                  drawOutline(outlines[index], color = pinStyles.of(pin).color)
+                }
               }
             }
           }
@@ -147,16 +148,66 @@ fun BookBar(
   )
 }
 
-private fun Density.pinCenters(
+/**
+ * Where the pins sit on a bar of some width: the [centers] and [tops] of each pin, and where the
+ * bar starts below them.
+ */
+internal class PinPlacement(
+  val centers: List<Float>,
+  val tops: List<Float>,
+  val barTop: Float,
+) {
+
+  /** The pin a tap at [x], [y] means, if one is within [reach] to the side. */
+  fun pinAt(
+    x: Float,
+    y: Float,
+    pinSize: Float,
+    reach: Float,
+  ): Int? = centers.indices
+    .filter { abs(centers[it] - x) <= reach }
+    .minByOrNull { hypot(centers[it] - x, tops[it] + pinSize / 2 - y) }
+}
+
+internal fun Density.placePins(
   pins: List<BookBarPin>,
   segments: List<Float>,
   width: Float,
   pinSize: Dp,
-): List<Float> {
-  val half = pinSize.toPx() / 2
-  return pins.map { pin ->
+): PinPlacement {
+  val pinPx = pinSize.toPx()
+  val half = pinPx / 2
+  val centers = pins.map { pin ->
     bookBarX(pin.position, segments, width, SEGMENT_GAP.toPx(), MIN_SEGMENT_WIDTH.toPx())
       .coerceIn(half, (width - half).coerceAtLeast(half))
+  }
+  val lifts = pinLifts(centers, pinWidth = (pinSize + PIN_SPACING).toPx())
+  val barTop = pinAreaHeight(lifts, pinSize).toPx()
+  return PinPlacement(
+    centers = centers,
+    tops = lifts.map { barTop - PIN_GAP.toPx() - pinPx - it * (pinPx + PIN_SPACING.toPx()) },
+    barTop = barTop,
+  )
+}
+
+/** Layout, drawing and taps all need the pins' places, so they're worked out once per width. */
+private class PinPlacements(
+  private val pins: List<BookBarPin>,
+  private val segments: List<Float>,
+  private val pinSize: Dp,
+) {
+  private var width = Float.NaN
+  private var placement: PinPlacement? = null
+
+  fun at(
+    density: Density,
+    width: Float,
+  ): PinPlacement {
+    placement?.let { if (width == this.width) return it }
+    return density.placePins(pins, segments, width, pinSize).also {
+      this.width = width
+      placement = it
+    }
   }
 }
 
