@@ -16,7 +16,7 @@ Bookmarks are what the listener saved. Everything Voice records by itself goes i
 | [I can't find the bookmark I'm looking for](#i-cant-find-the-bookmark-im-looking-for) | ✅ Solved |
 | [My bookmarks get lost among automatic ones](#my-bookmarks-get-lost-among-automatic-ones) | ✅ Solved |
 | [A tap or a seek loses my place](#a-tap-or-a-seek-loses-my-place) | ✅ Solved |
-| [Finding a lost place in the history means reading a log](#finding-a-lost-place-in-the-history-means-reading-a-log) | 🔜 Planned |
+| [Finding a lost place in the history means reading a log](#finding-a-lost-place-in-the-history-means-reading-a-log) | ✅ Solved |
 | [My notes can't leave the app](#my-notes-cant-leave-the-app) | ⭕ Open |
 | [Bookmarks of server books are only on this phone](#bookmarks-of-server-books-are-only-on-this-phone) | ✅ Solved |
 
@@ -82,9 +82,8 @@ After an accidental tap, a seek or opening a bookmark, listeners can't get back 
 **Solution:**
 
 - The jump-back pill, right after a big seek or a chapter change (see [Player](player.md)).
-- The listening history: a timeline of plays, pauses, jumps and sleep, showing what caused each one, like the app,
-  headphones or the car. You can jump back from any entry. It's always on, because a switch and a clear button were
-  more than it needs ([#3824]).
+- The listening history: where and when you listened, and a tap goes back there (see below). It's always on, because a
+  switch and a clear button were more than it needs ([#3824]).
 
 **Turned down:**
 
@@ -92,15 +91,16 @@ After an accidental tap, a seek or opening a bookmark, listeners can't get back 
 
 ## Finding a lost place in the history means reading a log
 
-🔜 **Planned**
+✅ **Solved**
 
-Every play, pause, skip, setting change and bookmark is a row of its own, with filters by type and by source,
-"Lost your place?" suggestions, and undo for settings and deleted bookmarks.
+A history where every play, pause, skip, setting change and bookmark is a row of its own, with filters and suggestions,
+has to be read like a log to find the one place that matters.
 
-**Solution:** The history lists stretches of listening: when, and from where to where in the book. A big jump starts a
-new one, so the place before an accidental jump is where the stretch before it ends. A stretch the sleep timer ended
-says so. What started or stopped it, like headphones or the car, is a small line, not a filter. Tapping a row goes
-there. Settings and bookmarks aren't in the history anymore, and deleting a bookmark already has undo in the list.
+**Solution:** The history lists stretches of listening: from where to where in the book, and when. A pause of 15
+minutes or more, or a big jump, starts a new one, so the place before an accidental jump is where the stretch before it
+ends. A small line says what started it, like headphones, the car or a jump on the lock screen, or that the sleep timer
+ended it. Tapping a row goes to where it ended, and for a night, to where the listener was last awake. Settings and
+bookmarks aren't in the history, and deleting a bookmark already has undo in the list.
 
 **Turned down:**
 
@@ -109,8 +109,6 @@ there. Settings and bookmarks aren't in the history anymore, and deleting a book
   guessing.
 
 **Assumption:** Where each stretch ends is enough to find a lost place, without seeing every skip and pause. Guess.
-
-![Sketch: the history as stretches of listening, with a jump and a night](sketches/history.png)
 
 ## My notes can't leave the app
 

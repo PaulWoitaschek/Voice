@@ -95,8 +95,6 @@ internal fun testEvent(
   time: Duration,
   source: ListeningEvent.Source = ListeningEvent.Source.App,
   to: Pair<Chapter, Duration>? = null,
-  value: String? = null,
-  bookmark: Bookmark? = null,
 ): ListeningEvent = ListeningEvent(
   bookId = BookId("echoes"),
   type = type,
@@ -106,10 +104,6 @@ internal fun testEvent(
   time = time.inWholeMilliseconds,
   toChapterId = to?.first?.id,
   toTime = to?.second?.inWholeMilliseconds,
-  value = value,
-  bookmarkId = bookmark?.id,
-  bookmarkKind = bookmark?.kind,
-  bookmarkAddedAtMillis = bookmark?.addedAt?.toEpochMilli(),
   id = nextEventId++,
 )
 

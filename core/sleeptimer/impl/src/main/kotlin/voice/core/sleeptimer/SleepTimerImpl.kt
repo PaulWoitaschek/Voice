@@ -100,11 +100,7 @@ class SleepTimerImpl internal constructor(
     playerController.setVolume(1F)
     if (shakeDetected) {
       Logger.i("Shake detected, resetting timer")
-      playerController.record(
-        ListeningEvent.Type.SleepTimerExtended,
-        ListeningEvent.Source.SleepTimer,
-        duration.inWholeMinutes.toString(),
-      )
+      playerController.record(ListeningEvent.Type.SleepTimerExtended, ListeningEvent.Source.SleepTimer)
       playerController.play(source = null)
       startCountdown(duration)
     }
