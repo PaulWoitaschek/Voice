@@ -88,7 +88,6 @@
     <string name="bookmark.chapter_with_name">Bab %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Baru saja</string>
     <string name="bookmark.deleted">Markah dihapus</string>
-    <string name="bookmark.dozed_off">Tertidur</string>
     <string name="bookmark.edit.title">Edit markah</string>
     <string name="bookmark.empty.message">Tekan lama tombol markah saat mendengarkan untuk menyimpan momen.</string>
     <string name="bookmark.empty.title">Belum ada markah</string>

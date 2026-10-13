@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">Hoofdstuk %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Zojuist</string>
     <string name="bookmark.deleted">Bladwijzer verwijderd</string>
-    <string name="bookmark.dozed_off">Ingedut</string>
     <string name="bookmark.edit.title">Bladwijzer bewerken</string>
     <string name="bookmark.empty.message">Houd tijdens het luisteren de bladwijzerknop ingedrukt om een moment te bewaren.</string>
     <string name="bookmark.empty.title">Nog geen bladwijzers</string>

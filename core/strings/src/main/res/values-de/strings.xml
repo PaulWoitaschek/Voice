@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">Kapitel %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Gerade eben</string>
     <string name="bookmark.deleted">Lesezeichen gelöscht</string>
-    <string name="bookmark.dozed_off">Eingeschlafen</string>
     <string name="bookmark.edit.title">Lesezeichen bearbeiten</string>
     <string name="bookmark.empty.message">Tippe beim Hören lange auf den Lesezeichen-Button, um einen Moment zu speichern.</string>
     <string name="bookmark.empty.title">Noch keine Lesezeichen</string>

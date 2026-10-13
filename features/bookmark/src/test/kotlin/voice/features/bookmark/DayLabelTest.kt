@@ -12,10 +12,7 @@ class DayLabelTest {
 
   private val now = today(10)
 
-  private fun saved(
-    at: Instant,
-    setBySleepTimer: Boolean = false,
-  ) = savedAtLabel(at, now, testZone, setBySleepTimer)
+  private fun saved(at: Instant) = savedAtLabel(at, now, testZone)
 
   @Test
   fun `under a minute ago is just now`() {
@@ -28,14 +25,7 @@ class DayLabelTest {
   }
 
   @Test
-  fun `a sleep timer bookmark from the night is last night`() {
-    val yesterdayLate = ZonedDateTime.of(2026, 10, 6, 23, 42, 0, 0, testZone).toInstant()
-    assertEquals(expected = DayLabel.LastNight, actual = saved(yesterdayLate, setBySleepTimer = true))
-    assertEquals(expected = DayLabel.LastNight, actual = saved(today(1, 30), setBySleepTimer = true))
-  }
-
-  @Test
-  fun `other bookmarks from the night are yesterday`() {
+  fun `bookmarks from the night are yesterday`() {
     val yesterdayLate = ZonedDateTime.of(2026, 10, 6, 23, 42, 0, 0, testZone).toInstant()
     assertEquals(expected = DayLabel.Yesterday, actual = saved(yesterdayLate))
   }

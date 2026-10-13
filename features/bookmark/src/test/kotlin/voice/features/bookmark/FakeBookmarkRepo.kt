@@ -24,7 +24,6 @@ internal class FakeBookmarkRepo(private val clock: Clock) : BookmarkRepo {
   override suspend fun addBookmarkAtBookPosition(
     book: Book,
     title: String?,
-    setBySleepTimer: Boolean,
   ): Bookmark {
     val bookmark = Bookmark(
       bookId = book.id,
@@ -32,7 +31,6 @@ internal class FakeBookmarkRepo(private val clock: Clock) : BookmarkRepo {
       title = title,
       time = book.content.positionInChapter,
       addedAt = clock.instant(),
-      setBySleepTimer = setBySleepTimer,
       id = Bookmark.Id.random(),
     )
     addBookmark(bookmark)

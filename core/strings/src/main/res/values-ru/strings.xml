@@ -97,7 +97,6 @@
     <string name="bookmark.chapter_with_name">Глава %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Только что</string>
     <string name="bookmark.deleted">Закладка удалена</string>
-    <string name="bookmark.dozed_off">Задремали</string>
     <string name="bookmark.edit.title">Редактировать закладку</string>
     <string name="bookmark.empty.message">Чтобы сохранить момент, удерживайте кнопку закладки во время прослушивания.</string>
     <string name="bookmark.empty.title">Закладок пока нет</string>

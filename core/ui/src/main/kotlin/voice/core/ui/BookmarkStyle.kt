@@ -36,20 +36,8 @@ data class BookmarkStyle(
 )
 
 @Composable
-fun bookmarkStyle(
-  kind: Bookmark.Kind,
-  setBySleepTimer: Boolean,
-): BookmarkStyle {
+fun bookmarkStyle(kind: Bookmark.Kind): BookmarkStyle {
   val colors = MaterialTheme.colorScheme
-  if (setBySleepTimer) {
-    return BookmarkStyle(
-      polygon = MaterialShapes.Circle,
-      container = colors.surfaceContainerHighest,
-      content = colors.onSurfaceVariant,
-      pin = colors.outline,
-      icon = VoiceIcons.Bedtime,
-    )
-  }
   return when (kind) {
     Bookmark.Kind.Note -> BookmarkStyle(
       polygon = MaterialShapes.Clover4Leaf,
@@ -85,11 +73,10 @@ fun bookmarkStyle(
 @Composable
 fun BookmarkBadge(
   kind: Bookmark.Kind,
-  setBySleepTimer: Boolean,
   modifier: Modifier = Modifier,
   size: Dp = 40.dp,
 ) {
-  val style = bookmarkStyle(kind, setBySleepTimer)
+  val style = bookmarkStyle(kind)
   Box(
     modifier = modifier
       .size(size)

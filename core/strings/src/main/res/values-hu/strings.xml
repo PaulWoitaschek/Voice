@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">%1$d. fejezet · %2$s</string>
     <string name="bookmark.created.just_now">Éppen most</string>
     <string name="bookmark.deleted">Könyvjelző törölve</string>
-    <string name="bookmark.dozed_off">Elaludt</string>
     <string name="bookmark.edit.title">Könyvjelző szerkesztése</string>
     <string name="bookmark.empty.message">Hallgatás közben tartsa lenyomva a könyvjelző gombot egy pillanat mentéséhez.</string>
     <string name="bookmark.empty.title">Még nincsenek könyvjelzők</string>

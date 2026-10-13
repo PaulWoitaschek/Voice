@@ -94,7 +94,6 @@
     <string name="bookmark.chapter_with_name">Capítulo %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Nesse exato momento</string>
     <string name="bookmark.deleted">Marcador eliminado</string>
-    <string name="bookmark.dozed_off">Adormeceu</string>
     <string name="bookmark.edit.title">Editar marcador</string>
     <string name="bookmark.empty.message">Mantenha premido o botão de marcador enquanto ouve para guardar um momento.</string>
     <string name="bookmark.empty.title">Ainda sem marcadores</string>

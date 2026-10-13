@@ -188,7 +188,6 @@ class HistoryViewModel(
               title = null,
               time = action.time,
               addedAt = clock.instant(),
-              setBySleepTimer = false,
               id = Bookmark.Id.random(),
             ),
           )

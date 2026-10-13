@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">Kapittel %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Akkurat nå</string>
     <string name="bookmark.deleted">Bokmerke slettet</string>
-    <string name="bookmark.dozed_off">Sovnet</string>
     <string name="bookmark.edit.title">Rediger bokmerke</string>
     <string name="bookmark.empty.message">Trykk lenge på bokmerkeknappen mens du lytter for å lagre et øyeblikk.</string>
     <string name="bookmark.empty.title">Ingen bokmerker ennå</string>

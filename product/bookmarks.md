@@ -63,13 +63,13 @@ pins show where each bookmark is in the book, and swiping deletes with undo.
 
 🔜 **Planned**
 
-The automatic sleep timer adds a bookmark every night. They push the listener's own bookmarks apart in the list, and on
-the player's progress bar they pile up into a cluster nobody can read.
+A sleep timer that adds a bookmark every night pushes the listener's own bookmarks apart in the list, and on the
+player's progress bar they pile up into a cluster nobody can read.
 
 **Solution:**
 
-- Bookmarks are only what the listener saved. The sleep timer stops adding them, and the night shows up in the history
-  instead (see [Sleep timer](sleep-timer.md)).
+- Bookmarks are only what the listener saved. The sleep timer doesn't add any, and the night is in the history instead
+  (see [Sleep timer](sleep-timer.md)).
 - Pins only on the bookmarks screen. On the player, the book bar shows chapters and progress. Bookmarks are a detail one
   step away, not something you need while listening.
 
@@ -128,14 +128,13 @@ Listeners who study a book want their bookmarks and notes as text, outside Voice
 
 ✅ **Solved**
 
-**Solution:** Bookmarks sync with Audiobookshelf, except the ones the sleep timer sets.
+**Solution:** Bookmarks sync with Audiobookshelf.
 
 ## Open questions
 
 1. Export: ten years after "too much work", does the principle that "the data stays with the listener" change the
    answer? A text export is much smaller than a full backup.
 2. A book's history follows it to a new id after a rescan. Does that fix losing bookmarks after a move ([#2636])?
-3. What happens to the "Dozed off" bookmarks listeners already have?
 
 [#367]: https://github.com/PaulWoitaschek/Voice/issues/367
 [#454]: https://github.com/PaulWoitaschek/Voice/issues/454

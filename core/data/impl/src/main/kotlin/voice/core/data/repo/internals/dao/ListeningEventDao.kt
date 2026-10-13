@@ -17,10 +17,15 @@ public interface ListeningEventDao {
   @Query("SELECT * FROM listening_event WHERE bookId = :bookId ORDER BY atMillis DESC, id DESC")
   public fun events(bookId: BookId): Flow<List<ListeningEvent>>
 
+  /**
+   * The nights from the sleep timer's bookmarks are older than anything recorded and no more come,
+   * so they don't count and stay.
+   */
   @Query(
     """
-    DELETE FROM listening_event WHERE bookId = :bookId AND id NOT IN (
-      SELECT id FROM listening_event WHERE bookId = :bookId ORDER BY atMillis DESC, id DESC LIMIT :count
+    DELETE FROM listening_event WHERE bookId = :bookId AND type != 'SleepTimerSet' AND id NOT IN (
+      SELECT id FROM listening_event WHERE bookId = :bookId AND type != 'SleepTimerSet'
+      ORDER BY atMillis DESC, id DESC LIMIT :count
     )
     """,
   )

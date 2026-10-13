@@ -197,8 +197,8 @@ class BookmarkViewModelTest {
     val viewModel = viewModel()
     viewModel.test {
       awaitState { it.totalCount == 1 }
-      viewModel.onCategoryClick(BookmarkCategory.Favorite)
-      awaitState { it.selectedCategory == BookmarkCategory.Favorite }
+      viewModel.onCategoryClick(Bookmark.Kind.Favorite)
+      awaitState { it.selectedCategory == Bookmark.Kind.Favorite }
       viewModel.onSaveClick()
       val state = awaitState { it.editor != null && it.totalCount == 2 }
       assertNull(state.selectedCategory)
@@ -323,26 +323,6 @@ class BookmarkViewModelTest {
         viewState()
       }
     }
-
-  @Test
-  fun `a sleep timer bookmark can be made dozed off again`() {
-    val bookmark = testBookmark(signal, 2.minutes, setBySleepTimer = true)
-    bookmarkRepo.bookmarks.value = listOf(bookmark)
-    val viewModel = viewModel()
-    viewModel.test {
-      awaitState { it.totalCount == 1 }
-      viewModel.onBookmarkLongClick(bookmark.id)
-      awaitState { it.editor?.setBySleepTimer == true }
-      viewModel.onKindChange(Bookmark.Kind.Favorite)
-      val favorite = awaitState { it.editor?.setBySleepTimer == false }.editor!!
-      assertTrue(favorite.wasSetBySleepTimer)
-      viewModel.onSleepKindClick()
-      awaitState { it.editor?.setBySleepTimer == true }
-      viewModel.onEditorDone()
-      awaitState { it.editor == null }
-      assertEquals(expected = listOf(bookmark), actual = bookmarkRepo.bookmarks.value)
-    }
-  }
 
   @Test
   fun `nudging stops at the start of the chapter`() {

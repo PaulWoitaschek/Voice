@@ -42,7 +42,6 @@ private const val MAX_SEGMENTS = 120
 data class BookBarPin(
   val position: Float,
   val kind: Bookmark.Kind,
-  val setBySleepTimer: Boolean,
 )
 
 /**
@@ -67,11 +66,10 @@ fun BookBar(
 ) {
   val colors = MaterialTheme.colorScheme
   val pinStyles = PinStyles(
-    note = pinStyle(Bookmark.Kind.Note, false),
-    favorite = pinStyle(Bookmark.Kind.Favorite, false),
-    quote = pinStyle(Bookmark.Kind.Quote, false),
-    revisit = pinStyle(Bookmark.Kind.Revisit, false),
-    sleep = pinStyle(Bookmark.Kind.Note, true),
+    note = pinStyle(Bookmark.Kind.Note),
+    favorite = pinStyle(Bookmark.Kind.Favorite),
+    quote = pinStyle(Bookmark.Kind.Quote),
+    revisit = pinStyle(Bookmark.Kind.Revisit),
   )
   val pop = remember { Animatable(1F) }
   LaunchedEffect(popPin) {
@@ -223,11 +221,8 @@ private class PinStyle(
 )
 
 @Composable
-private fun pinStyle(
-  kind: Bookmark.Kind,
-  setBySleepTimer: Boolean,
-): PinStyle {
-  val style = bookmarkStyle(kind, setBySleepTimer)
+private fun pinStyle(kind: Bookmark.Kind): PinStyle {
+  val style = bookmarkStyle(kind)
   return PinStyle(shape = style.polygon.toShape(), color = style.pin)
 }
 
@@ -236,17 +231,12 @@ private class PinStyles(
   val favorite: PinStyle,
   val quote: PinStyle,
   val revisit: PinStyle,
-  val sleep: PinStyle,
 ) {
-  fun of(pin: BookBarPin): PinStyle = if (pin.setBySleepTimer) {
-    sleep
-  } else {
-    when (pin.kind) {
-      Bookmark.Kind.Note -> note
-      Bookmark.Kind.Favorite -> favorite
-      Bookmark.Kind.Quote -> quote
-      Bookmark.Kind.Revisit -> revisit
-    }
+  fun of(pin: BookBarPin): PinStyle = when (pin.kind) {
+    Bookmark.Kind.Note -> note
+    Bookmark.Kind.Favorite -> favorite
+    Bookmark.Kind.Quote -> quote
+    Bookmark.Kind.Revisit -> revisit
   }
 }
 

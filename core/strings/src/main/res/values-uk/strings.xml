@@ -97,7 +97,6 @@
     <string name="bookmark.chapter_with_name">Розділ %1$d · %2$s</string>
     <string name="bookmark.created.just_now">Щойно</string>
     <string name="bookmark.deleted">Закладку видалено</string>
-    <string name="bookmark.dozed_off">Задрімали</string>
     <string name="bookmark.edit.title">Редагувати закладку</string>
     <string name="bookmark.empty.message">Щоб зберегти момент, утримуйте кнопку закладки під час прослуховування.</string>
     <string name="bookmark.empty.title">Закладок ще немає</string>

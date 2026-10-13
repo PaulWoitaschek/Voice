@@ -77,7 +77,6 @@ internal fun BookmarkEditorSheet(
   editor: BookmarkEditorViewState,
   onNoteChange: (String) -> Unit,
   onKindChange: (Bookmark.Kind) -> Unit,
-  onSleepKindClick: () -> Unit,
   onMoveEarlier: () -> Unit,
   onMoveLater: () -> Unit,
   onUndo: () -> Unit,
@@ -125,7 +124,6 @@ internal fun BookmarkEditorSheet(
       KindPicker(
         editor = editor,
         onKindChange = onKindChange,
-        onSleepKindClick = onSleepKindClick,
       )
       Spacer(Modifier.height(24.dp))
       Row(verticalAlignment = Alignment.CenterVertically) {
@@ -178,7 +176,7 @@ private fun EditorHeader(editor: BookmarkEditorViewState) {
         Icon(VoiceIcons.Check, contentDescription = null, tint = colors.onPrimary)
       }
     } else {
-      BookmarkBadge(kind = editor.kind, setBySleepTimer = editor.setBySleepTimer, size = 56.dp)
+      BookmarkBadge(kind = editor.kind, size = 56.dp)
     }
     Spacer(Modifier.width(16.dp))
     Column {
@@ -238,29 +236,18 @@ private fun Nudge(
 private fun KindPicker(
   editor: BookmarkEditorViewState,
   onKindChange: (Bookmark.Kind) -> Unit,
-  onSleepKindClick: () -> Unit,
 ) {
-  // the tiles share the width: five of them don't fit side by side at full size on a phone
+  // the tiles share the width: they don't all fit side by side at full size on a small phone
   Row(
     modifier = Modifier
       .fillMaxWidth()
       .selectableGroup(),
     horizontalArrangement = Arrangement.SpaceEvenly,
   ) {
-    if (editor.wasSetBySleepTimer) {
-      KindTile(
-        kind = Bookmark.Kind.Note,
-        setBySleepTimer = true,
-        selected = editor.setBySleepTimer,
-        onClick = onSleepKindClick,
-        modifier = Modifier.weight(1F),
-      )
-    }
     Bookmark.Kind.entries.forEach { kind ->
       KindTile(
         kind = kind,
-        setBySleepTimer = false,
-        selected = !editor.setBySleepTimer && editor.kind == kind,
+        selected = editor.kind == kind,
         onClick = { onKindChange(kind) },
         modifier = Modifier.weight(1F),
       )
@@ -271,13 +258,12 @@ private fun KindPicker(
 @Composable
 private fun KindTile(
   kind: Bookmark.Kind,
-  setBySleepTimer: Boolean,
   selected: Boolean,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
-  val style = bookmarkStyle(kind, setBySleepTimer)
+  val style = bookmarkStyle(kind)
   val morph = remember(style.polygon) { Morph(MaterialShapes.Circle, style.polygon) }
   val progress by animateFloatAsState(
     targetValue = if (selected) 1F else 0F,
@@ -325,7 +311,7 @@ private fun KindTile(
     }
     Spacer(Modifier.height(4.dp))
     Text(
-      text = kindLabel(kind, setBySleepTimer),
+      text = kindLabel(kind),
       style = MaterialTheme.typography.labelMedium.copy(hyphens = Hyphens.Auto),
       color = if (selected) colors.onSurface else colors.onSurfaceVariant,
       textAlign = TextAlign.Center,

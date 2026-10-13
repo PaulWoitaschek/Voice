@@ -91,7 +91,6 @@
     <string name="bookmark.chapter_with_name">அத்தியாயம் %1$d · %2$s</string>
     <string name="bookmark.created.just_now">இப்போது</string>
     <string name="bookmark.deleted">புக்மார்க் நீக்கப்பட்டது</string>
-    <string name="bookmark.dozed_off">தூங்கிவிட்டீர்கள்</string>
     <string name="bookmark.edit.title">புக்மார்க்கைத் திருத்து</string>
     <string name="bookmark.empty.message">கேட்கும்போது ஒரு தருணத்தைச் சேமிக்க, புக்மார்க் பொத்தானை நீண்ட நேரம் அழுத்தவும்.</string>
     <string name="bookmark.empty.title">இன்னும் புக்மார்க்குகள் இல்லை</string>

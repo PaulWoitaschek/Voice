@@ -463,7 +463,7 @@ private fun EntryBadge(entry: HistoryEntry) {
   val colors = MaterialTheme.colorScheme
   val detail = entry.detail
   if (detail is HistoryDetail.BookmarkInfo) {
-    BookmarkBadge(kind = detail.kind, setBySleepTimer = detail.setBySleepTimer, size = 36.dp)
+    BookmarkBadge(kind = detail.kind, size = 36.dp)
     return
   }
   val sleepy = entry.type == Type.SleepTimerEnded
@@ -558,12 +558,13 @@ private fun entryTitle(entry: HistoryEntry): String {
     )
     Type.SleepTimerSet -> {
       val minutes = (detail as? HistoryDetail.SleepTimer)?.minutes
-      val duration = if (minutes != null) {
-        durationText(minutes.minutes)
-      } else {
-        stringResource(R.string.sleep_timer_end_of_chapter)
+      val label = stringResource(R.string.history_event_sleep_timer_set)
+      when {
+        minutes != null -> "$label · ${durationText(minutes.minutes)}"
+        // a night that came from a sleep timer bookmark doesn't know how long its timer was
+        entry.source == Source.SleepTimer -> label
+        else -> "$label · ${stringResource(R.string.sleep_timer_end_of_chapter)}"
       }
-      "${stringResource(R.string.history_event_sleep_timer_set)} · $duration"
     }
     Type.SleepTimerEnded -> stringResource(R.string.history_event_dozed_off)
     Type.SleepTimerExtended -> stringResource(R.string.history_event_sleep_timer_extended)
