@@ -38,7 +38,9 @@ The [documentation website](https://voice.woitaschek.de) covers features, the ph
 
 ## Contributing
 
-Bug reports, feature requests, and bug fixes are very welcome. Anything other than a bug fix needs the maintainer's approval before you open a pull request, so please read the [Contributing guide](https://voice.woitaschek.de/contributing/) first. For code, start with [Development](https://voice.woitaschek.de/development/) and [Architecture](https://voice.woitaschek.de/architecture/).
+Bug reports and feature requests are very welcome, see the [Contributing guide](https://voice.woitaschek.de/contributing/). Pull requests only on request.
+
+To find your way around the code, start with [Development](https://voice.woitaschek.de/development/) and [Architecture](https://voice.woitaschek.de/architecture/).
 
 ## Support Voice
 
