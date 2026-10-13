@@ -143,8 +143,6 @@ class BookPlayViewTest {
     bookDuration = 9.hours + 30.minutes,
     chapterSegments = List(12) { 1F / 12 },
     skipSeconds = 20,
-    bookmarkPins = emptyList(),
-    poppedPin = null,
     jumpBack = null,
   )
 }

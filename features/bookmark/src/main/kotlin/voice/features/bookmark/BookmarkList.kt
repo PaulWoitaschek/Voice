@@ -162,7 +162,6 @@ private fun BookBarHeader(
       progress = bookBar.progress,
       pins = bookBar.pins,
       showPositionMarker = true,
-      pinSize = 14.dp,
       onPinClick = onPinClick,
     )
     Spacer(Modifier.height(6.dp))

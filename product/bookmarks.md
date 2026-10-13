@@ -14,7 +14,7 @@ Bookmarks are what the listener saved. Everything Voice records by itself goes i
 | [Saving a moment means stopping](#saving-a-moment-means-stopping) | ✅ Solved |
 | [Saving a moment means taking out the phone](#saving-a-moment-means-taking-out-the-phone) | ⭕ Open |
 | [I can't find the bookmark I'm looking for](#i-cant-find-the-bookmark-im-looking-for) | ✅ Solved |
-| [My bookmarks get lost among automatic ones](#my-bookmarks-get-lost-among-automatic-ones) | 🔜 Planned |
+| [My bookmarks get lost among automatic ones](#my-bookmarks-get-lost-among-automatic-ones) | ✅ Solved |
 | [A tap or a seek loses my place](#a-tap-or-a-seek-loses-my-place) | ✅ Solved |
 | [Finding a lost place in the history means reading a log](#finding-a-lost-place-in-the-history-means-reading-a-log) | 🔜 Planned |
 | [My notes can't leave the app](#my-notes-cant-leave-the-app) | ⭕ Open |
@@ -61,7 +61,7 @@ pins show where each bookmark is in the book, and swiping deletes with undo.
 
 ## My bookmarks get lost among automatic ones
 
-🔜 **Planned**
+✅ **Solved**
 
 A sleep timer that adds a bookmark every night pushes the listener's own bookmarks apart in the list, and on the
 player's progress bar they pile up into a cluster nobody can read.
@@ -71,9 +71,7 @@ player's progress bar they pile up into a cluster nobody can read.
 - Bookmarks are only what the listener saved. The sleep timer doesn't add any, and the night is in the history instead
   (see [Sleep timer](sleep-timer.md)).
 - Pins only on the bookmarks screen. On the player, the book bar shows chapters and progress. Bookmarks are a detail one
-  step away, not something you need while listening.
-
-![Sketch: the player without pins, and the bookmarks screen with the pins and kinds](sketches/bookmarks.png)
+  step away, not something you need while listening. Pins close to each other stack in rows.
 
 ## A tap or a seek loses my place
 
