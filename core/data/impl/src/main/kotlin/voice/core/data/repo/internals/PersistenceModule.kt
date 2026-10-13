@@ -45,6 +45,7 @@ public object PersistenceModule {
     migrations: Set<@JvmSuppressWildcards Migration>,
   ): AppDb {
     return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
+      .openHelperFactory(LargeCursorWindowOpenHelperFactory())
       .addMigrations(*migrations.toTypedArray())
       .build()
   }
