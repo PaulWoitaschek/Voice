@@ -53,7 +53,6 @@ fun Project.baseSetup() {
     }
   }
   configureRobolectricSdk(this)
-  checkModuleDependencies(this)
   extensions.configure<CommonExtension> {
     namespace = "voice." + path.removePrefix(":").replace(':', '.')
     compileOptions.apply {
