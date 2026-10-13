@@ -369,6 +369,8 @@
     <string name="settings.playback.auto_rewind.off">Desactivado</string>
     <string name="settings.playback.auto_rewind.summary">Retrocede un poco al reanudar para que no pierdas el hilo</string>
     <string name="settings.playback.auto_rewind.title">Retroceso automático</string>
+    <string name="settings.playback.lock_screen_slider.summary">Recorre el capítulo desde la pantalla de bloqueo y la notificación. Desactívala para que un toque sin querer no te haga perder por dónde ibas.</string>
+    <string name="settings.playback.lock_screen_slider.title">Barra en la pantalla de bloqueo</string>
     <string name="settings.playback.seek_time.summary">Cuánto saltan el retroceso y el avance rápido</string>
     <string name="settings.playback.seek_time.title">Segundos de avance/retroceso</string>
     <string name="settings.subtitle">Haz Voice a tu medida</string>

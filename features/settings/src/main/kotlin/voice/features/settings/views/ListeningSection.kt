@@ -76,6 +76,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import voice.core.ui.ShapedIcon
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.features.settings.AUTO_REWIND_RANGE
@@ -96,6 +97,8 @@ internal fun ListeningSection(
   onSeekTimeStep: (Int) -> Unit,
   onAutoRewindChange: (Int) -> Unit,
   onAutoRewindStep: (Int) -> Unit,
+  lockScreenSlider: Boolean,
+  onLockScreenSliderToggle: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   SettingsIsland(
@@ -123,6 +126,21 @@ internal fun ListeningSection(
       onSecondsChange = onAutoRewindChange,
       onStep = onAutoRewindStep,
       illustration = { RewindIllustration(autoRewindInSeconds, maxSeconds = AUTO_REWIND_RANGE.last) },
+    )
+    Spacer(Modifier.height(20.dp))
+    IslandSwitchRow(
+      title = stringResource(StringsR.string.settings_playback_lock_screen_slider_title),
+      checked = lockScreenSlider,
+      onCheckedChange = { onLockScreenSliderToggle() },
+      leading = {
+        ShapedIcon(
+          icon = VoiceIcons.TouchApp,
+          shape = MaterialShapes.Cookie4Sided,
+          containerColor = MaterialTheme.colorScheme.secondary,
+          contentColor = MaterialTheme.colorScheme.onSecondary,
+        )
+      },
+      summary = { Text(stringResource(StringsR.string.settings_playback_lock_screen_slider_summary)) },
     )
   }
 }

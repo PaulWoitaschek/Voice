@@ -353,6 +353,8 @@
     <string name="settings.playback.auto_rewind.off">முடக்கு</string>
     <string name="settings.playback.auto_rewind.summary">மீண்டும் தொடங்கும்போது சற்று பின்னோக்கிச் செல்லும், அதனால் நீங்கள் கதையின் இழையை இழக்க மாட்டீர்கள்</string>
     <string name="settings.playback.auto_rewind.title">ஆட்டோ ரிவைண்ட்</string>
+    <string name="settings.playback.lock_screen_slider.summary">பூட்டுத் திரையிலும் அறிவிப்பிலும் அத்தியாயத்தில் முன்னும் பின்னும் செல்லலாம். தவறுதலாகத் தொட்டாலும் நீங்கள் கேட்ட இடம் மாறாமல் இருக்க இதை முடக்கவும்.</string>
+    <string name="settings.playback.lock_screen_slider.title">பூட்டுத் திரை ஸ்லைடர்</string>
     <string name="settings.playback.seek_time.summary">பின்னோக்கியும் முன்னோக்கியும் எவ்வளவு தாவும்</string>
     <string name="settings.playback.seek_time.title">தொகையைத் தவிர்க்கவும்</string>
     <string name="settings.subtitle">Voice-ஐ உங்களுடையதாக்குங்கள்</string>

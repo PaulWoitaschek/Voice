@@ -15,7 +15,7 @@ opening Voice, and without losing their place.
 | [I can't change the speed in the car](#i-cant-change-the-speed-in-the-car) | ⭕ Open |
 | [Headphone and car buttons don't do what I expect](#headphone-and-car-buttons-dont-do-what-i-expect) | ✅ Solved |
 | [The lock screen slider loses my place](#the-lock-screen-slider-loses-my-place) | ✅ Solved |
-| [The slider still moves my position within the chapter](#the-slider-still-moves-my-position-within-the-chapter) | ⭕ Open |
+| [The slider still moves my position within the chapter](#the-slider-still-moves-my-position-within-the-chapter) | ✅ Solved |
 | [The notification goes too soon or stays too long](#the-notification-goes-too-soon-or-stays-too-long) | ✅ Solved |
 | [Starting my book from the home screen or an automation means opening Voice](#starting-my-book-from-the-home-screen-or-an-automation-means-opening-voice) | ✅ Solved |
 | [My book isn't on my home screen](#my-book-isnt-on-my-home-screen) | ✅ Solved |
@@ -84,9 +84,15 @@ The slider on the lock screen moves in a pocket or after an accidental touch, an
 
 ## The slider still moves my position within the chapter
 
-⭕ **Open**
+✅ **Solved** · [#3229]
 
-A stray touch on the slider still moves the position, just not past the current chapter.
+A stray touch on the slider still moves the position, just not past the current chapter. A chapter can be an hour long,
+and a file without chapter marks is a single chapter. Some listeners never want to seek from the lock screen.
+
+**Solution:** A "Lock screen slider" switch in the Listening settings, on by default. Off, the slider still shows the
+progress but has no handle and ignores touches. It's a setting because listeners want opposite things: some scrub the
+chapter from the lock screen ([#3289]), others never do. Bluetooth and Android Auto read the same session as the lock
+screen, so their sliders follow the switch too.
 
 ## The notification goes too soon or stays too long
 
@@ -150,8 +156,7 @@ its allowlist.
 ## Open questions
 
 1. Casting: is it still wanted, and what's the real blocker, the proprietary library or the effort?
-2. The lock screen slider: is limiting it to the current chapter enough, or should it be possible to turn it off?
-3. Speed in the car: does it fit, given the "seek first" choice for Android Auto?
+2. Speed in the car: does it fit, given the "seek first" choice for Android Auto?
 
 [#76]: https://github.com/PaulWoitaschek/Voice/issues/76
 [#231]: https://github.com/PaulWoitaschek/Voice/issues/231
@@ -168,5 +173,6 @@ its allowlist.
 [#1913]: https://github.com/PaulWoitaschek/Voice/issues/1913
 [#2797]: https://github.com/PaulWoitaschek/Voice/issues/2797
 [#3229]: https://github.com/PaulWoitaschek/Voice/discussions/3229
+[#3289]: https://github.com/PaulWoitaschek/Voice/discussions/3289
 [#3410]: https://github.com/PaulWoitaschek/Voice/discussions/3410
 [#3846]: https://github.com/PaulWoitaschek/Voice/issues/3846

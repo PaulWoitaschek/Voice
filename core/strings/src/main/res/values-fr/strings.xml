@@ -369,6 +369,8 @@
     <string name="settings.playback.auto_rewind.off">Désactivé</string>
     <string name="settings.playback.auto_rewind.summary">Revient un peu en arrière à la reprise pour que vous ne perdiez pas le fil</string>
     <string name="settings.playback.auto_rewind.title">Rembobinage automatique</string>
+    <string name="settings.playback.lock_screen_slider.summary">Parcourez le chapitre depuis l\'écran de verrouillage et la notification. Désactivez-le pour qu\'un effleurement accidentel ne vous éloigne pas de là où vous en étiez.</string>
+    <string name="settings.playback.lock_screen_slider.title">Curseur sur l\'écran de verrouillage</string>
     <string name="settings.playback.seek_time.summary">De combien le retour et l\'avance rapide sautent</string>
     <string name="settings.playback.seek_time.title">Sauter de</string>
     <string name="settings.subtitle">Faites de Voice le vôtre</string>

@@ -608,6 +608,10 @@
     <string name="settings.playback.auto_rewind.summary">Jumps back a little when you resume, so you don\'t lose the thread</string>
     <!-- Title for the setting that rewinds automatically when playback resumes. -->
     <string name="settings.playback.auto_rewind.title">Auto rewind</string>
+    <!-- Explains the lock screen slider setting. When it's off, the progress slider in the media notification and on the lock screen only shows progress, and touching it does nothing. -->
+    <string name="settings.playback.lock_screen_slider.summary">Drag through the chapter from the lock screen and notification. Turn it off so a stray touch can\'t lose your place.</string>
+    <!-- Title for the setting that lets the listener drag the progress slider in the media notification and on the lock screen. -->
+    <string name="settings.playback.lock_screen_slider.title">Lock screen slider</string>
     <!-- Explains the skip amount setting. -->
     <string name="settings.playback.seek_time.summary">How far rewind and fast forward jump</string>
     <!-- Title for the setting that controls skip-forward and rewind duration. -->

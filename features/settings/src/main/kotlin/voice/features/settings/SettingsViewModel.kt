@@ -27,6 +27,7 @@ import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DeveloperMenuUnlockedStore
 import voice.core.data.store.GridModeStore
+import voice.core.data.store.LockScreenSliderStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.data.store.SupporterStatusStore
@@ -58,6 +59,8 @@ class SettingsViewModel(
   private val autoRewindAmountStore: DataStore<Int>,
   @SeekTimeStore
   private val seekTimeStore: DataStore<Int>,
+  @LockScreenSliderStore
+  private val lockScreenSliderStore: DataStore<Boolean>,
   private val navigator: Navigator,
   private val appInfoProvider: AppInfoProvider,
   @GridModeStore
@@ -99,6 +102,7 @@ class SettingsViewModel(
     val themeColorScheme = remember { themeColorSchemeStore.data }.collectAsState(initial = null).value
     val autoRewindAmount = remember { autoRewindAmountStore.data }.collectAsState(initial = null).value
     val seekTime = remember { seekTimeStore.data }.collectAsState(initial = null).value
+    val lockScreenSlider = remember { lockScreenSliderStore.data }.collectAsState(initial = null).value
     val gridMode = remember { gridModeStore.data }.collectAsState(initial = null).value
     val autoSleepTimer = remember { sleepTimerPreferenceStore.data }.collectAsState(initial = null).value
     val analyticsEnabled = remember { analyticsConsentStore.data }.collectAsState(initial = null).value
@@ -120,6 +124,7 @@ class SettingsViewModel(
       themeColorScheme == null ||
       autoRewindAmount == null ||
       seekTime == null ||
+      lockScreenSlider == null ||
       gridMode == null ||
       autoSleepTimer == null ||
       analyticsEnabled == null ||
@@ -138,6 +143,7 @@ class SettingsViewModel(
       dynamicColorAvailable = dynamicColorAvailable,
       seekTimeInSeconds = seekTime,
       autoRewindInSeconds = autoRewindAmount,
+      lockScreenSlider = lockScreenSlider,
       appVersion = appInfoProvider.versionName,
       useGrid = when (gridMode) {
         GridMode.LIST -> false
@@ -224,6 +230,12 @@ class SettingsViewModel(
   override fun autoRewindAmountStepped(step: Int) {
     mainScope.launch {
       autoRewindAmountStore.updateData { (it + step).coerceIn(AUTO_REWIND_RANGE) }
+    }
+  }
+
+  override fun toggleLockScreenSlider() {
+    mainScope.launch {
+      lockScreenSliderStore.updateData { !it }
     }
   }
 

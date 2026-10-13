@@ -369,6 +369,8 @@
     <string name="settings.playback.auto_rewind.off">Desligado</string>
     <string name="settings.playback.auto_rewind.summary">Volta um pouco ao retomar, para você não perder o fio da meada</string>
     <string name="settings.playback.auto_rewind.title">Retrocesso automático</string>
+    <string name="settings.playback.lock_screen_slider.summary">Avance ou volte no capítulo pela tela de bloqueio e pela notificação. Desative para que um toque sem querer não faça você perder onde parou.</string>
+    <string name="settings.playback.lock_screen_slider.title">Barra na tela de bloqueio</string>
     <string name="settings.playback.seek_time.summary">Quanto voltar e avançar pulam</string>
     <string name="settings.playback.seek_time.title">Quantidade de Salto</string>
     <string name="settings.subtitle">Deixe o Voice do seu jeito</string>

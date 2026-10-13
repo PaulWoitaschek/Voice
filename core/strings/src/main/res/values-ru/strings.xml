@@ -385,6 +385,8 @@
     <string name="settings.playback.auto_rewind.off">Выкл.</string>
     <string name="settings.playback.auto_rewind.summary">При возобновлении немного отматывает назад, чтобы вы не потеряли нить</string>
     <string name="settings.playback.auto_rewind.title">Автоперемотка назад</string>
+    <string name="settings.playback.lock_screen_slider.summary">Перематывайте главу с экрана блокировки и из уведомления. Отключите, чтобы случайное касание не уводило вас с места, где вы остановились.</string>
+    <string name="settings.playback.lock_screen_slider.title">Ползунок на экране блокировки</string>
     <string name="settings.playback.seek_time.summary">Насколько далеко перематывают кнопки назад и вперёд</string>
     <string name="settings.playback.seek_time.title">Интервал перемотки</string>
     <string name="settings.subtitle">Сделайте Voice своим</string>

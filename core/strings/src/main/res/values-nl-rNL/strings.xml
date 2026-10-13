@@ -353,6 +353,8 @@
     <string name="settings.playback.auto_rewind.off">Uit</string>
     <string name="settings.playback.auto_rewind.summary">Springt een stukje terug als je verdergaat, zodat je de draad niet kwijtraakt</string>
     <string name="settings.playback.auto_rewind.title">Automatisch terugspoelen</string>
+    <string name="settings.playback.lock_screen_slider.summary">Spoel door het hoofdstuk vanaf het vergrendelscherm en de melding. Zet hem uit, zodat je door een onbedoelde aanraking niet je plek kwijtraakt.</string>
+    <string name="settings.playback.lock_screen_slider.title">Schuifbalk op het vergrendelscherm</string>
     <string name="settings.playback.seek_time.summary">Hoe ver terugspoelen en vooruitspoelen springen</string>
     <string name="settings.playback.seek_time.title">Aantal overslaan</string>
     <string name="settings.subtitle">Maak Voice helemaal van jou</string>

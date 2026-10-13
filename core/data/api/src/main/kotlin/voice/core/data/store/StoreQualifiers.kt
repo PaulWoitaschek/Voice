@@ -58,3 +58,6 @@ public annotation class SupporterStatusStore
  */
 @Qualifier
 public annotation class LastPlaybackSpeedStore
+
+@Qualifier
+public annotation class LockScreenSliderStore

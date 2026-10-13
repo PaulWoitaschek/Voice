@@ -369,6 +369,8 @@
     <string name="settings.playback.auto_rewind.off">Disattivato</string>
     <string name="settings.playback.auto_rewind.summary">Torna un po\' indietro quando riprendi, così non perdi il filo</string>
     <string name="settings.playback.auto_rewind.title">Riavvolgimento automatico</string>
+    <string name="settings.playback.lock_screen_slider.summary">Scorri il capitolo dalla schermata di blocco e dalla notifica. Disattivalo perché un tocco accidentale non ti faccia perdere il segno.</string>
+    <string name="settings.playback.lock_screen_slider.title">Cursore nella schermata di blocco</string>
     <string name="settings.playback.seek_time.summary">Di quanto saltano il riavvolgimento e l\'avanzamento veloce</string>
     <string name="settings.playback.seek_time.title">Salta tempo</string>
     <string name="settings.subtitle">Rendi Voice tuo</string>

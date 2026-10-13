@@ -353,6 +353,8 @@
     <string name="settings.playback.auto_rewind.off">Av</string>
     <string name="settings.playback.auto_rewind.summary">Hopper litt tilbake når du fortsetter, så du ikke mister tråden</string>
     <string name="settings.playback.auto_rewind.title">Auto-tilbakespoling</string>
+    <string name="settings.playback.lock_screen_slider.summary">Spol gjennom kapittelet fra låseskjermen og varselet. Slå den av, så en tilfeldig berøring ikke får deg til å miste plassen din.</string>
+    <string name="settings.playback.lock_screen_slider.title">Spolelinje på låseskjermen</string>
     <string name="settings.playback.seek_time.summary">Hvor langt tilbake- og fremoverspoling hopper</string>
     <string name="settings.playback.seek_time.title">Hoppintervall</string>
     <string name="settings.subtitle">Gjør Voice til din egen</string>
