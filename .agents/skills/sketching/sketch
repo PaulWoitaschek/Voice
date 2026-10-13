@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Renders each <name>.sketch.js to <name>.png next to it.
+set -euo pipefail
+tool="$(cd "$(dirname "$0")/tool" && pwd)"
+if [ ! -d "$tool/node_modules" ] || [ "$tool/package.json" -nt "$tool/node_modules/.package-lock.json" ]; then
+  npm install --prefix "$tool" --no-audit --no-fund --silent >&2
+fi
+exec node "$tool/render.mjs" "$@"
