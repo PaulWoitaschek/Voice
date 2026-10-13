@@ -174,7 +174,6 @@
     <plurals name="folder.review.title">
         <item quantity="other">%d 冊のブックが見つかりました</item>
     </plurals>
-    <string name="folder.review.too_many_files">ファイルが多すぎます</string>
     <plurals name="folder.type.file_count">
         <item quantity="other">%d 音声ファイル</item>
     </plurals>

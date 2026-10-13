@@ -174,7 +174,6 @@
     <plurals name="folder.review.title">
         <item quantity="other">找到了 %d 本书</item>
     </plurals>
-    <string name="folder.review.too_many_files">文件过多</string>
     <plurals name="folder.type.file_count">
         <item quantity="other">%d 个声音文件</item>
     </plurals>

@@ -1,7 +1,6 @@
 package voice.features.folderPicker.selectType
 
 import voice.core.data.audioFileCount
-import voice.core.data.audioFilesFitIntoOneBook
 import voice.core.data.isAudioFile
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.nameWithoutExtension
@@ -64,7 +63,6 @@ private fun CachedDocumentFile.toFolderBook(author: String?): FolderBook {
       partCount = parts.size,
       // a single sub folder is often just bonus material
       possibleBookCount = books.size.takeIf { it > 1 } ?: 0,
-      tooManyFiles = !audioFilesFitIntoOneBook(),
     ),
   )
 }

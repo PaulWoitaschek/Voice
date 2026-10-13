@@ -111,7 +111,7 @@ class SelectFolderTypeViewModel(
       analyze(selectedBooks)
     }
     // the books are analyzed from the top, so this is the one in the works
-    val analyzing = selectedBooks.firstOrNull { it.needsAnalysis() }?.file?.uri
+    val analyzing = selectedBooks.firstOrNull { !it.isAnalyzed() }?.file?.uri
     return SelectFolderTypeViewState(
       folderName = folderName,
       loading = loadedStructure == null,
@@ -132,7 +132,7 @@ class SelectFolderTypeViewModel(
   // one book after the other, so the books on top fill in first
   private suspend fun analyze(books: List<FolderBook>) {
     books.forEach { book ->
-      if (!book.needsAnalysis()) return@forEach
+      if (book.isAnalyzed()) return@forEach
       val uri = book.file.uri
       try {
         previews[uri] = withContext(dispatcherProvider.io) {
@@ -147,9 +147,7 @@ class SelectFolderTypeViewModel(
     }
   }
 
-  private fun FolderBook.needsAnalysis(): Boolean {
-    return !book.tooManyFiles && file.uri !in previews && file.uri !in failedPreviews
-  }
+  private fun FolderBook.isAnalyzed(): Boolean = file.uri in previews || file.uri in failedPreviews
 
   // books without playable files are left out, the scan skips them as well
   private fun List<FolderBook>.withPreviews(analyzing: Uri?): List<SelectFolderTypeViewState.Book> {

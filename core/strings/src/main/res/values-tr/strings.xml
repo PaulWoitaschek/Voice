@@ -184,7 +184,6 @@
         <item quantity="one">%d kitap bulduk</item>
         <item quantity="other">%d kitap bulduk</item>
     </plurals>
-    <string name="folder.review.too_many_files">Çok fazla dosya</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d ses dosyası</item>
         <item quantity="other">%d ses dosyası</item>

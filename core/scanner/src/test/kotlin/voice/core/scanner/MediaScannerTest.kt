@@ -244,7 +244,6 @@ class MediaScannerTest {
     scan(FolderType.Root, audiobookFolder)
 
     assertBookContents(BookContentView(book, chapters = listOf(chapter)))
-    assertEquals(expected = 1, actual = analyzeCalls)
   }
 
   @Test

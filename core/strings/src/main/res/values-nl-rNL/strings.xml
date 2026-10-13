@@ -184,7 +184,6 @@
         <item quantity="one">We hebben %d boek gevonden</item>
         <item quantity="other">We hebben %d boeken gevonden</item>
     </plurals>
-    <string name="folder.review.too_many_files">Te veel bestanden</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d audiobestand</item>
         <item quantity="other">%d audiobestanden</item>

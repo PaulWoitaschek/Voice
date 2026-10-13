@@ -3,7 +3,7 @@ package voice.core.scanner
 import dev.zacsweers.metro.Inject
 import voice.core.data.BookId
 import voice.core.data.audioFileCount
-import voice.core.data.audioFilesFitIntoOneBook
+import voice.core.data.fitIntoOneBook
 import voice.core.data.folders.FolderType
 import voice.core.data.isAudioFile
 import voice.core.data.isRemote
@@ -76,17 +76,17 @@ internal class MediaScanner(
     file: CachedDocumentFile,
     previousBooks: PreviousBooks,
   ) {
-    if (!file.audioFilesFitIntoOneBook()) {
-      Logger.w("Skipping $file, it has too many files for one book")
-      return
-    }
     val parseResult = chapterParser.parse(file)
     val chapters = parseResult.chapters
     if (chapters.isEmpty()) return
+    val chapterIds = chapters.map { it.id }
+    if (!chapterIds.fitIntoOneBook()) {
+      Logger.w("Skipping $file, its ${chapters.size} chapters are too many for one book")
+      return
+    }
 
     val content = bookParser.parseAndStore(chapters, file, parseResult.firstChapterMetadata)
 
-    val chapterIds = chapters.map { it.id }
     val currentChapterGone = content.currentChapter !in chapterIds
     val currentChapter = if (currentChapterGone) chapterIds.first() else content.currentChapter
     val positionInChapter = if (currentChapterGone) 0 else content.positionInChapter

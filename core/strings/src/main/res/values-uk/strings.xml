@@ -204,7 +204,6 @@
         <item quantity="many">Ми знайшли %d книг</item>
         <item quantity="other">Ми знайшли %d книг</item>
     </plurals>
-    <string name="folder.review.too_many_files">Забагато файлів</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d аудіофайл</item>
         <item quantity="few">%d аудіофайли</item>

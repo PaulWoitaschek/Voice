@@ -18,8 +18,6 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.common.DispatcherProvider
-import voice.core.data.ChapterId
-import voice.core.data.MAX_CHAPTER_IDS_BYTES
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.documentfile.CachedDocumentFile
@@ -131,23 +129,6 @@ class SelectFolderTypeViewModelTest {
         actual = viewState.options.single { it.mode == FolderMode.Audiobooks }.books.map { it.name },
       )
     }
-  }
-
-  @Test
-  fun `a book with more files than fit into one book is marked and not analyzed`() = runTest {
-    val folder = library()
-    filesThatDontFitIntoOneBook(File(folder, "Huge"))
-    val viewModel = viewModel(folder)
-
-    viewStates(viewModel) {
-      val viewState = awaitAnalyzed()
-      assertEquals(expected = FolderMode.Audiobooks, actual = viewState.selectedMode)
-      assertEquals(expected = listOf("Huge"), actual = viewState.books.filter { it.tooManyFiles }.map { it.name })
-    }
-    assertEquals(
-      expected = listOf("FirstBook", "SecondBook"),
-      actual = previewed.map { it.nameWithoutExtension() }.sorted(),
-    )
   }
 
   @Test
@@ -273,18 +254,6 @@ class SelectFolderTypeViewModelTest {
       newFile("audiobooks/SecondBook/2.mp3")
     }
     return folder
-  }
-
-  // long names, so fewer files are needed
-  private fun filesThatDontFitIntoOneBook(parent: File) {
-    val folder = File(parent, "a".repeat(200)).also { it.mkdirs() }
-    var bytes = 0
-    var index = 0
-    while (bytes <= MAX_CHAPTER_IDS_BYTES) {
-      val file = File(folder, "${index++}".padStart(200, '0') + ".mp3")
-      check(file.createNewFile())
-      bytes += ChapterId(file.toUri()).value.length + 3
-    }
   }
 
   private fun TestScope.viewModel(

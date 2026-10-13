@@ -204,7 +204,6 @@
         <item quantity="many">Našli jsme %d knih</item>
         <item quantity="other">Našli jsme %d knih</item>
     </plurals>
-    <string name="folder.review.too_many_files">Příliš mnoho souborů</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d zvukový soubor</item>
         <item quantity="few">%d zvukové soubory</item>

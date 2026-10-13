@@ -184,7 +184,6 @@
         <item quantity="one">%d könyvet találtunk</item>
         <item quantity="other">%d könyvet találtunk</item>
     </plurals>
-    <string name="folder.review.too_many_files">Túl sok fájl</string>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d hangfájl</item>
         <item quantity="other">%d hangfájl</item>

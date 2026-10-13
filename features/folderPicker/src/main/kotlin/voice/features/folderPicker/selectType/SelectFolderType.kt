@@ -29,7 +29,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
@@ -71,7 +70,6 @@ import voice.core.ui.OnboardingButton
 import voice.core.ui.OnboardingStep
 import voice.core.ui.OnboardingTopBar
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -292,19 +290,15 @@ private fun BookRow(
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
-        if (book.tooManyFiles) {
-          Spacer(Modifier.height(8.dp))
-          TooManyFilesHint()
-        }
       }
-      if (!book.tooManyFiles && book.possibleBookCount > 0) {
+      if (book.possibleBookCount > 0) {
         Spacer(Modifier.size(12.dp))
         PossibleBooksHint(book.possibleBookCount)
       }
     }
   }
   val color = MaterialTheme.colorScheme.surfaceContainerHigh
-  if (book.tooManyFiles || book.possibleBookCount > 0) {
+  if (book.possibleBookCount > 0) {
     Surface(onClick = onClick, modifier = modifier, shape = shape, color = color, content = content)
   } else {
     Surface(modifier = modifier, shape = shape, color = color, content = content)
@@ -387,27 +381,6 @@ private fun PossibleBooksHint(count: Int) {
 }
 
 @Composable
-private fun TooManyFilesHint() {
-  Surface(
-    shape = CircleShape,
-    color = MaterialTheme.colorScheme.errorContainer,
-    contentColor = MaterialTheme.colorScheme.onErrorContainer,
-  ) {
-    Row(
-      modifier = Modifier.padding(start = 8.dp, end = 12.dp, top = 4.dp, bottom = 4.dp),
-      verticalAlignment = Alignment.CenterVertically,
-    ) {
-      Icon(imageVector = VoiceIcons.Error, contentDescription = null, modifier = Modifier.size(16.dp))
-      Spacer(Modifier.size(4.dp))
-      Text(
-        text = stringResource(StringsR.string.folder_review_too_many_files),
-        style = MaterialTheme.typography.labelLarge,
-      )
-    }
-  }
-}
-
-@Composable
 private fun ReviewActions(
   viewState: SelectFolderTypeViewState,
   onAddClick: () -> Unit,
@@ -430,23 +403,17 @@ private fun ReviewActions(
         .fillMaxWidth(),
       verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-      val addableCount = viewState.books.count { !it.tooManyFiles }
       if (!viewState.loading && viewState.books.isEmpty()) {
         OnboardingButton(
           text = stringResource(StringsR.string.folder_add_action_folder),
           onClick = onChooseAnotherFolder,
-        )
-      } else if (!viewState.loading && addableCount == 0) {
-        OnboardingButton(
-          text = stringResource(StringsR.string.folder_review_action_change),
-          onClick = onChangeClick,
         )
       } else {
         OnboardingButton(
           text = if (viewState.editing) {
             stringResource(StringsR.string.common_action_save)
           } else {
-            pluralStringResource(StringsR.plurals.folder_review_action_add, addableCount, addableCount)
+            pluralStringResource(StringsR.plurals.folder_review_action_add, viewState.books.size, viewState.books.size)
           },
           onClick = onAddClick,
           enabled = !viewState.loading,
@@ -496,38 +463,6 @@ private fun SelectFolderTypePreview() {
         options = FolderMode.entries.map { SelectFolderTypeViewState.Option(it, books) },
         editing = false,
         onboarding = true,
-      ),
-      onModeSelect = {},
-      onAddClick = {},
-      onBackClick = {},
-    )
-  }
-}
-
-@Preview
-@Composable
-private fun SelectFolderTypeTooManyFilesPreview() {
-  val books = listOf(
-    SelectFolderTypeViewState.Book(
-      name = "Podcasts",
-      author = null,
-      fileCount = 12408,
-      partCount = 0,
-      possibleBookCount = 0,
-      tooManyFiles = true,
-    ),
-  )
-  VoiceTheme {
-    SelectFolderType(
-      viewState = SelectFolderTypeViewState(
-        folderName = "Podcasts",
-        loading = false,
-        selectedMode = FolderMode.SingleBook,
-        guessedMode = FolderMode.SingleBook,
-        books = books,
-        options = FolderMode.entries.map { SelectFolderTypeViewState.Option(it, books) },
-        editing = false,
-        onboarding = false,
       ),
       onModeSelect = {},
       onAddClick = {},
