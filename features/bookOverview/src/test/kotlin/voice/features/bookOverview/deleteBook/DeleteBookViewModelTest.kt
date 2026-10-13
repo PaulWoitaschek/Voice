@@ -10,24 +10,21 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.asContextElement
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
+import voice.core.common.DispatcherProvider
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.features.bookOverview.book
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -47,17 +44,12 @@ class DeleteBookViewModelTest {
       coEvery { get(book.id) } returns book
     },
     navigator = navigator,
+    dispatcherProvider = DispatcherProvider(
+      main = dispatcher,
+      io = dispatcher + onIoDispatcher.asContextElement(true),
+      mainImmediate = dispatcher,
+    ),
   )
-
-  @BeforeTest
-  fun setUp() {
-    Dispatchers.setMain(dispatcher)
-  }
-
-  @AfterTest
-  fun tearDown() {
-    Dispatchers.resetMain()
-  }
 
   @Test
   fun `deleting a book closes its player`() = runTest(dispatcher) {
@@ -82,7 +74,7 @@ class DeleteBookViewModelTest {
     advanceUntilIdle()
   }
 
-  /** Answers every call, which is how a documents provider confirms a deletion. */
+  /** Answers calls made on the IO dispatcher, which is how a documents provider confirms a deletion. */
   class DocumentsProvider : ContentProvider() {
     override fun onCreate(): Boolean = true
 
@@ -90,7 +82,11 @@ class DeleteBookViewModelTest {
       method: String,
       arg: String?,
       extras: Bundle?,
-    ): Bundle = Bundle()
+    ): Bundle {
+      // a provider can take seconds to delete a folder, which blocks the main thread into an ANR
+      check(onIoDispatcher.get() == true)
+      return Bundle()
+    }
 
     override fun query(
       uri: Uri,
@@ -123,3 +119,5 @@ class DeleteBookViewModelTest {
 }
 
 private const val AUTHORITY = "voice.test.documents"
+
+private val onIoDispatcher = ThreadLocal.withInitial { false }
