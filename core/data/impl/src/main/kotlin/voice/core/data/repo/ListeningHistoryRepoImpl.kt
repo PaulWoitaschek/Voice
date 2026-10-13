@@ -1,12 +1,12 @@
 package voice.core.data.repo
 
-import androidx.room.RoomDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import kotlinx.coroutines.flow.Flow
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
+import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.dao.ListeningEventDao
 import voice.core.data.repo.internals.transaction
 
@@ -14,7 +14,7 @@ import voice.core.data.repo.internals.transaction
 public class ListeningHistoryRepoImpl
 internal constructor(
   private val dao: ListeningEventDao,
-  private val appDb: RoomDatabase,
+  private val appDb: AppDb,
 ) : ListeningHistoryRepo {
 
   override fun events(bookId: BookId): Flow<List<ListeningEvent>> = dao.events(bookId)
