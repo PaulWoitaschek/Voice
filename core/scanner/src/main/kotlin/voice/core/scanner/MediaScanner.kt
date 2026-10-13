@@ -7,6 +7,7 @@ import voice.core.data.folders.FolderType
 import voice.core.data.isAudioFile
 import voice.core.data.isRemote
 import voice.core.data.repo.BookContentRepo
+import voice.core.data.repo.ChapterRepo
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.walk
 import voice.core.logging.api.Logger
@@ -18,6 +19,7 @@ internal class MediaScanner(
   private val bookParser: BookParser,
   private val deviceHasPermissionBug: DeviceHasStoragePermissionBug,
   private val progressCarryOver: ProgressCarryOver,
+  private val chapterRepo: ChapterRepo,
 ) {
 
   suspend fun scan(folders: Map<FolderType, List<CachedDocumentFile>>) {
@@ -56,7 +58,11 @@ internal class MediaScanner(
       }
     }
 
-    val previousBooks = PreviousBooks(contentRepo.all().filterNot { it.id.isRemote }, scanned = bookIds.toSet())
+    val previousBooks = PreviousBooks(
+      books = contentRepo.all().filterNot { it.id.isRemote },
+      scanned = bookIds.toSet(),
+      chapterRepo = chapterRepo,
+    )
     files
       .sortedBy { it.audioFileCount() }
       .forEach { file ->
@@ -92,6 +98,7 @@ internal class MediaScanner(
         positionInChapter = positionInChapter,
         isActive = true,
       ),
+      chapters = chapters,
       previousBooks = previousBooks,
     )
     if (content != updated) {

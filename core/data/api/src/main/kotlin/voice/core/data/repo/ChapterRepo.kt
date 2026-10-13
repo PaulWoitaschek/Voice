@@ -14,11 +14,14 @@ public suspend inline fun ChapterRepo.getOrPut(
   id: ChapterId,
   lastModified: Instant,
   fileSize: Long,
+  fileName: String?,
   defaultValue: () -> Chapter?,
 ): Chapter? {
   val chapter = get(id)
   if (chapter != null && chapter.fileLastModified == lastModified && chapter.fileSize == fileSize) {
-    return chapter
+    if (chapter.fileName == fileName) return chapter
+    // chapters stored before their file name was get it without analyzing the file again
+    return chapter.copy(fileName = fileName).also { put(it) }
   }
   return defaultValue()?.also { put(it) }
 }

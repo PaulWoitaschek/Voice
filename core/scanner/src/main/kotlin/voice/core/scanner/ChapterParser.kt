@@ -31,6 +31,7 @@ internal class ChapterParser(
           id = id,
           lastModified = Instant.ofEpochMilli(file.lastModified),
           fileSize = file.length,
+          fileName = file.name,
         ) {
           val metaData = mediaAnalyzer.analyze(file) ?: return@getOrPut null
           analyzedMetadata[id] = metaData
@@ -41,6 +42,7 @@ internal class ChapterParser(
             name = metaData.title ?: metaData.fileName,
             markData = metaData.chapters,
             fileSize = file.length,
+            fileName = file.name,
           )
         }
         if (chapter != null) {

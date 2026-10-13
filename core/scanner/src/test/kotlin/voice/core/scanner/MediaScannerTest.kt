@@ -375,6 +375,55 @@ class MediaScannerTest {
     assertEquals(expected = 300, actual = content.positionInChapter)
   }
 
+  @Test
+  fun `a book keeps its progress and bookmarks when its folder is renamed`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    audioFile(book, "1.mp3")
+    val chapter2 = audioFile(book, "2.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    val oldId = BookId(book.toUri())
+    play(oldId, chapter2, position = 100, playedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    currentBookStore.updateData { oldId }
+    val bookmark = Bookmark(
+      bookId = oldId,
+      chapterId = ChapterId(chapter2.toUri()),
+      title = null,
+      time = 50,
+      addedAt = Instant.EPOCH,
+      setBySleepTimer = false,
+      id = Bookmark.Id.random(),
+    )
+    coEvery { bookmarkRepo.bookmarks(match { it.id == oldId }) } returns listOf(bookmark)
+
+    val renamed = File(audiobookFolder, "book (2020)")
+    check(book.renameTo(renamed))
+    scan(FolderType.Root, audiobookFolder)
+
+    val newId = BookId(renamed.toUri())
+    val renamedChapter2 = ChapterId(File(renamed, "2.mp3").toUri())
+    val content = bookContentRepo.get(newId)!!
+    assertEquals(expected = renamedChapter2, actual = content.currentChapter)
+    assertEquals(expected = 100, actual = content.positionInChapter)
+    assertEquals(expected = newId, actual = currentBookStore.data.first())
+    coVerify { bookmarkRepo.addBookmark(bookmark.copy(bookId = newId, chapterId = renamedChapter2)) }
+  }
+
+  @Test
+  fun `a chapter stored without its file name gets it without analyzing the file again`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val chapter = audioFile(File(audiobookFolder, "book"), "1.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    val id = ChapterId(chapter.toUri())
+    chapterRepo.put(chapterRepo.get(id)!!.copy(fileName = null))
+    val analyzeCallsAfterScan = analyzeCalls
+
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = "1.mp3", actual = chapterRepo.get(id)!!.fileName)
+    assertEquals(expected = analyzeCallsAfterScan, actual = analyzeCalls)
+  }
+
   private fun test(test: suspend TestEnvironment.() -> Unit) {
     runTest {
       TestEnvironment().use { test(it) }
@@ -387,7 +436,7 @@ class MediaScannerTest {
       .allowMainThreadQueries()
       .build()
     val bookContentRepo = BookContentRepoImpl(db.bookContentDao())
-    private val chapterRepo = ChapterRepoImpl(db.chapterDao())
+    val chapterRepo = ChapterRepoImpl(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
     var analyzeCalls = 0
     val bookmarkRepo = mockk<BookmarkRepo>(relaxUnitFun = true) {
@@ -414,6 +463,7 @@ class MediaScannerTest {
         listeningStatsRepo = mockk(relaxUnitFun = true),
         currentBookStore = currentBookStore,
       ),
+      chapterRepo = chapterRepo,
     )
 
     val bookRepo = BookRepositoryImpl(chapterRepo, bookContentRepo)
