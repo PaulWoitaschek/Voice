@@ -7,12 +7,13 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,7 +32,10 @@ import voice.features.bookmark.BookIndex
 import voice.features.bookmark.kioskModeHistoryViewState
 import voice.navigation.Navigator
 import java.time.Clock
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
+@OptIn(FlowPreview::class)
 @AssistedInject
 class HistoryViewModel(
   @CurrentBookStore
@@ -76,9 +80,12 @@ class HistoryViewModel(
    * chapters, so it's built off the main thread only when something it shows changes.
    */
   private fun stretches(): Flow<HistoryStretches> {
-    val playing = playStateManager.playStateFlow
-      .map { it == PlayStateManager.PlayState.Playing }
+    val playing = combine(playStateManager.playStateFlow, currentBookStore.data) { state, current ->
+      state == PlayStateManager.PlayState.Playing && current == bookId
+    }
       .distinctUntilChanged()
+      // the pause is written a moment after playback stops, until then the stretch would look cut off
+      .debounce { if (it) Duration.ZERO else PAUSE_SETTLE }
     return bookRepository.flow(bookId)
       .filterNotNull()
       .distinctUntilChanged { old, new -> old.chapters == new.chapters }
@@ -111,6 +118,10 @@ class HistoryViewModel(
       }
       navigator.goBack()
     }
+  }
+
+  private companion object {
+    val PAUSE_SETTLE = 1.seconds
   }
 
   @AssistedFactory

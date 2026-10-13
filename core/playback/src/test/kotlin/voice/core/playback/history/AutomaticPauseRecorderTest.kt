@@ -93,4 +93,19 @@ class AutomaticPauseRecorderTest {
       actual = recorded(),
     )
   }
+
+  @Test
+  fun `the end of the book pauses`() = scope.runTest {
+    player.update { it.setPlaybackState(Player.STATE_ENDED) }
+
+    assertEquals(expected = listOf(Type.Pause to Source.Unknown), actual = recorded())
+  }
+
+  @Test
+  fun `the end of the book after a pause pauses once`() = scope.runTest {
+    player.update { it.setPlayWhenReady(false, Player.PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST) }
+    player.update { it.setPlaybackState(Player.STATE_ENDED) }
+
+    assertEquals(expected = emptyList(), actual = recorded())
+  }
 }

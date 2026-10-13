@@ -8,10 +8,7 @@ import dev.zacsweers.metro.SingleIn
 import voice.core.data.ListeningEvent
 import voice.core.playback.di.PlaybackScope
 
-data class CommandSource(
-  val source: ListeningEvent.Source,
-  val packageName: String? = null,
-)
+data class CommandSource(val source: ListeningEvent.Source)
 
 /**
  * Tells where a command that reaches the session's player came from.
@@ -84,7 +81,7 @@ class CommandSourceResolver(private val context: Context) {
       packageName == SYSTEM_UI_PACKAGE -> CommandSource(ListeningEvent.Source.Notification)
       packageName == MediaSession.ControllerInfo.LEGACY_CONTROLLER_PACKAGE_NAME -> CommandSource(ListeningEvent.Source.Unknown)
       packageName == context.packageName -> null
-      else -> CommandSource(ListeningEvent.Source.OtherApp, packageName)
+      else -> CommandSource(ListeningEvent.Source.OtherApp)
     }
   }
 

@@ -99,8 +99,8 @@ has to be read like a log to find the one place that matters.
 **Solution:** The history lists stretches of listening: from where to where in the book, and when. A pause of 15
 minutes or more, or a big jump, starts a new one, so the place before an accidental jump is where the stretch before it
 ends. A small line says what started it, like headphones, the car or a jump on the lock screen, or that the sleep timer
-ended it. Tapping a row goes to where it ended, and for a night, to where it started. Settings and bookmarks aren't in
-the history, and deleting a bookmark already has undo in the list.
+ended it. Tapping a row goes to where it ended, and for a night, to where the listener was last awake. Settings and
+bookmarks aren't in the history, and deleting a bookmark already has undo in the list.
 
 **Turned down:**
 

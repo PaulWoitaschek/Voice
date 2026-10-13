@@ -33,11 +33,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
@@ -71,7 +73,7 @@ internal fun HistoryList(
       }
     }
     viewState.days.forEach { day ->
-      item(key = "day-${day.stretches.first().key}") {
+      item(key = "day-${day.label}") {
         Text(
           text = dayLabelText(day.label),
           style = MaterialTheme.typography.titleSmallEmphasized,
@@ -173,7 +175,8 @@ private fun stretchWhere(stretch: HistoryStretch): String {
   val from = locationText(stretch.from)
   val to = stretch.to ?: return from
   val toText = if (to.chapterNumber == stretch.from.chapterNumber) to.time else locationText(to)
-  return "$from → $toText"
+  val arrow = if (LocalLayoutDirection.current == LayoutDirection.Rtl) "←" else "→"
+  return "$from $arrow $toText"
 }
 
 @Composable
@@ -189,7 +192,12 @@ private fun stretchWhen(stretch: HistoryStretch): String {
 
 @Composable
 private fun causeText(cause: StretchCause): String = when (cause) {
-  is StretchCause.Played -> withSource(stringResource(R.string.history_event_played), cause.source)
+  is StretchCause.Played -> if (cause.source == Source.AudioFocus) {
+    // playback going on after a call isn't interrupted, it's what follows the interruption
+    stringResource(R.string.history_event_played)
+  } else {
+    withSource(stringResource(R.string.history_event_played), cause.source)
+  }
   is StretchCause.Jumped -> withSource(
     stringResource(
       when (cause.type) {
@@ -248,7 +256,7 @@ private fun StretchCause.icon(): ImageVector = when (this) {
     Type.JumpBack -> VoiceIcons.Undo
     else -> VoiceIcons.SwapHoriz
   }
-  is StretchCause.Played -> source.icon()
+  is StretchCause.Played -> if (source == Source.AudioFocus) VoiceIcons.PlayArrow else source.icon()
 }
 
 private fun Source.icon(): ImageVector = when (this) {

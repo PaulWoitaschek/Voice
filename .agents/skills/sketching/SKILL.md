@@ -15,14 +15,14 @@ purpose, so the discussion stays on the idea and not on pixels.
 2. Render it from the repository root:
 
    ```sh
-   .agents/skills/sketching/sketch product/sketches/history.sketch.js
+   .agents/skills/sketching/sketch product/sketches/<name>.sketch.js
    ```
 
-   This writes `history.png` next to the scene, cropped to what you drew. It takes several files at once. The first
+   This writes `<name>.png` next to the scene, cropped to what you drew. It takes several files at once. The first
    run installs the tools with npm. It needs Node and Chrome. With no Chrome, set `CHROME_PATH` to a Chromium binary.
 3. Read the PNG. Fix overlaps, arrows that cross text, and notes that run into the phone, then render again.
 4. Commit the scene with the PNG so the next person can change it, and embed the image:
-   `![Sketch: the history as stretches of listening](sketches/history.png)`.
+   `![Sketch: what it shows](sketches/<name>.png)`.
 
 ## The scene
 

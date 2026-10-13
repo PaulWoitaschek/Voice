@@ -34,6 +34,7 @@ import voice.navigation.Navigator
 import java.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.minutes
 
 class HistoryViewModelTest {
@@ -140,10 +141,23 @@ class HistoryViewModelTest {
   }
 
   @Test
+  fun `another book playing doesn't make this book's last stretch play on`() {
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+    historyEvents += testEvent(Type.Play, today(9, 30), arrival, 0.minutes)
+    test {
+      currentBookStore.updateData { BookId("other") }
+      val stretch = awaitState().single()
+      assertNull(stretch.end)
+      assertEquals(expected = HistorySpot(arrival.id, 0L), actual = stretch.goTo)
+    }
+  }
+
+  @Test
   fun `the playing stretch follows the position`() {
     playStateManager.playState = PlayStateManager.PlayState.Playing
     historyEvents += testEvent(Type.Play, today(9, 30), arrival, 0.minutes)
     test {
+      currentBookStore.updateData { bookId }
       awaitState { it.single().to == HistoryLocation(2, chapterTime(5.minutes)) }
       book.update { it.update { content -> content.copy(positionInChapter = 9.minutes.inWholeMilliseconds) } }
       awaitState { it.single().to == HistoryLocation(2, chapterTime(9.minutes)) }

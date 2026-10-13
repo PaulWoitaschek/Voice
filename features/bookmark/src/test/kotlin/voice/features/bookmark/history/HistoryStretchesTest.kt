@@ -141,6 +141,42 @@ class HistoryStretchesTest {
   }
 
   @Test
+  fun `a night goes to where the listener last played`() {
+    val stretch = stretches(
+      testEvent(Type.Play, yesterday(21), arrival, 0.minutes),
+      testEvent(Type.Pause, yesterday(22), arrival, 9.minutes),
+      testEvent(Type.Play, yesterday(22, 5), signal, 2.minutes),
+      testEvent(Type.SleepTimerEnded, yesterday(22, 35), signal, 8.minutes, source = Source.SleepTimer),
+    ).single()
+
+    assertEquals(expected = HistorySpot(signal.id, 2.minutes.inWholeMilliseconds), actual = stretch.goTo)
+  }
+
+  @Test
+  fun `the end of chapter timer stopping at the end of the book still marks the night`() {
+    val stretch = stretches(
+      testEvent(Type.Play, yesterday(22, 40), arrival, 2.minutes),
+      testEvent(Type.Pause, yesterday(23, 10), signal, 9.minutes, source = Source.Unknown),
+      testEvent(Type.SleepTimerEnded, yesterday(23, 10), signal, 9.minutes, source = Source.SleepTimer),
+    ).single()
+
+    assertEquals(expected = StretchCause.SleepTimerEnded, actual = stretch.cause)
+  }
+
+  @Test
+  fun `a stretch that lost its pause with nothing after the play keeps its start`() {
+    val stretch = stretches(
+      testEvent(Type.Play, today(8), arrival, 3.minutes),
+    ).single()
+
+    assertEquals(expected = inArrival(3.minutes), actual = stretch.from)
+    assertNull(stretch.to)
+    assertNull(stretch.end)
+    assertNull(stretch.listened)
+    assertEquals(expected = HistorySpot(arrival.id, 3.minutes.inWholeMilliseconds), actual = stretch.goTo)
+  }
+
+  @Test
   fun `a night that only a sleep timer bookmark remembered has a start`() {
     val stretch = stretches(
       testEvent(Type.SleepTimerSet, yesterday(22, 40), arrival, 2.minutes, source = Source.SleepTimer),

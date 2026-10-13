@@ -6,8 +6,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.binding
 
-// The history shows stretches of listening, and no longer records settings and bookmarks. Their types are gone, so
-// their rows would fail to load.
+// the types of these rows are gone, so they would fail to load
 @ContributesIntoSet(
   scope = AppScope::class,
   binding = binding<Migration>(),

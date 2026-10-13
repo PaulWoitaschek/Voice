@@ -21,6 +21,9 @@ private val STRETCH_GAP = 15.minutes
 /** Shorter stretches, like the moments between skipping through chapters, aren't worth a row. */
 private val MIN_STRETCH = 10.seconds
 
+/** Stops this close to each other are the same stop, recorded twice. */
+private const val SAME_STOP = 5_000L
+
 private val playTypes = setOf(Type.Play, Type.SleepTimerExtended)
 private val stopTypes = setOf(Type.Pause, Type.SleepTimerEnded)
 
@@ -45,20 +48,12 @@ internal data class HistoryStretches(
     current: HistorySpot?,
   ): HistoryViewState {
     if (ongoing == null) return HistoryViewState(days)
-    val to = current?.let { index.historyLocation(it.chapterId, it.time) }
-    return HistoryViewState(
-      days.map { day ->
-        day.copy(
-          stretches = day.stretches.map { stretch ->
-            if (stretch.key != ongoing.key) {
-              stretch
-            } else {
-              stretch.copy(end = now.localTime(zone), listened = ongoing.listened(now.toEpochMilli()), to = to ?: stretch.to)
-            }
-          },
-        )
-      },
-    )
+    // the playing stretch is the newest one, so it's the first of the first day
+    val today = days.first()
+    val playing = today.stretches.first()
+    val to = current?.let { index.historyLocation(it.chapterId, it.time) } ?: playing.to
+    val updated = playing.copy(end = now.localTime(zone), listened = ongoing.listened(now.toEpochMilli()), to = to)
+    return HistoryViewState(listOf(today.copy(stretches = listOf(updated) + today.stretches.drop(1))) + days.drop(1))
   }
 }
 
@@ -82,7 +77,10 @@ internal fun historyStretches(
   val ongoing = raw.lastOrNull()?.takeIf { playing && it.openSince != null }
   raw.filter { it !== ongoing }.forEach { it.closeLostPause() }
   val stretches = raw
-    .filter { it === ongoing || it.cause == StretchCause.SleepTimerStarted || it.closedMillis >= MIN_STRETCH.inWholeMilliseconds }
+    .filter {
+      it === ongoing || it.endUnknown || it.cause == StretchCause.SleepTimerStarted ||
+        it.closedMillis >= MIN_STRETCH.inWholeMilliseconds
+    }
     .mapNotNull { stretch -> stretch.toStretch(index, zone, isOngoing = stretch === ongoing)?.let { stretch.startMillis to it } }
     .reversed()
   val days = mutableListOf<HistoryDay>()
@@ -120,6 +118,12 @@ private class RawStretch(
   var lastEventMillis: Long = startMillis
   var lastSpot: HistorySpot = from
 
+  /** Where the listener last did something, so where they were surely still awake. */
+  var lastTouch: HistorySpot = from
+
+  /** Playback was lost without a pause and nothing came after it, so where and when it ended is unknown. */
+  var endUnknown: Boolean = false
+
   fun stop(
     atMillis: Long,
     spot: HistorySpot,
@@ -130,9 +134,11 @@ private class RawStretch(
     to = spot
   }
 
-  /** Playback that never got a pause, because the book ended or the app was killed, ends with its last event. */
+  /** Playback that never got a pause, because the app was killed, ends with its last event, if there was one. */
   fun closeLostPause() {
-    if (openSince != null) stop(lastEventMillis, lastSpot)
+    val since = openSince ?: return
+    endUnknown = lastEventMillis == since
+    stop(lastEventMillis, lastSpot)
   }
 }
 
@@ -173,6 +179,7 @@ private fun splitStretches(events: List<ListeningEvent>): List<RawStretch> {
             if (since != null) stretch.closedMillis += stretch.lastEventMillis - since
             stretch.openSince = event.atMillis
             stretch.endedBySleepTimer = false
+            stretch.lastTouch = event.spot()
           }
         }
         if (current == null) {
@@ -185,6 +192,9 @@ private fun splitStretches(events: List<ListeningEvent>): List<RawStretch> {
         if (stretch != null && stretch.openSince != null) {
           stretch.stop(event.atMillis, event.spot())
           stretch.endedBySleepTimer = event.type == Type.SleepTimerEnded
+        } else if (stretch != null && event.type == Type.SleepTimerEnded && event.atMillis - stretch.endMillis <= SAME_STOP) {
+          // the end of the book and the end of chapter timer can stop playback at the same moment
+          stretch.endedBySleepTimer = true
         }
       }
       event.isUndoableJump() || event.type == Type.JumpBack -> {
@@ -219,16 +229,16 @@ private fun RawStretch.toStretch(
 ): HistoryStretch? {
   val from = index.historyLocation(from.chapterId, from.time) ?: return null
   val to = to?.let { index.historyLocation(it.chapterId, it.time) }
-  val night = cause == StretchCause.SleepTimerStarted
-  // after falling asleep, playback is at the end already, the start is where the listener was still awake
-  val target = if (endedBySleepTimer || night) this.from else this.to
+  val unknownEnd = endUnknown || cause == StretchCause.SleepTimerStarted
+  // after falling asleep, playback is at the end already, so this goes to where the listener was still awake
+  val target = if (endedBySleepTimer || unknownEnd) lastTouch else this.to
   return HistoryStretch(
     key = key,
     start = Instant.ofEpochMilli(startMillis).localTime(zone),
-    end = if (night) null else Instant.ofEpochMilli(endMillis).localTime(zone),
-    listened = if (night) null else closedMillis.milliseconds,
+    end = if (unknownEnd) null else Instant.ofEpochMilli(endMillis).localTime(zone),
+    listened = if (unknownEnd) null else closedMillis.milliseconds,
     from = from,
-    to = to,
+    to = to.takeUnless { unknownEnd },
     cause = if (endedBySleepTimer) StretchCause.SleepTimerEnded else cause,
     goTo = target?.takeIf { !isOngoing && index.locate(it.chapterId, it.time) != null },
   )
