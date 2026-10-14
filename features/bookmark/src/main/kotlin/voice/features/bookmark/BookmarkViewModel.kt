@@ -84,7 +84,6 @@ class BookmarkViewModel(
   // a jump or close leaves the screen, so a second tap must not go back once more
   private var leaving = false
 
-  // the latest values, for the actions that need them
   private var book: Book? = null
   private var bookmarks: List<Bookmark> = emptyList()
 
@@ -267,7 +266,6 @@ class BookmarkViewModel(
     }
   }
 
-  /** Undoes saving a new bookmark. */
   internal fun onEditorUndo() {
     val draft = draft ?: return
     this.draft = null

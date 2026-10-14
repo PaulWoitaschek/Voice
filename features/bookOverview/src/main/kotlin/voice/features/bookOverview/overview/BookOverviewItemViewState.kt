@@ -18,7 +18,6 @@ data class BookOverviewItemViewState(
   val remainingTime: String,
   /** A server book that isn't downloaded while the server can't be reached. */
   val unavailable: Boolean = false,
-  /** What the cover of a server book tells about its download, while it isn't done. */
   val download: DownloadBadge? = null,
 )
 

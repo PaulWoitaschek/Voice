@@ -24,9 +24,7 @@ public data class BookContent(
   val gain: Float,
   @Embedded
   val metadata: BookMetadata,
-  /** The name the listener gave the book, over the one from its files. */
   val customName: String?,
-  /** The cover the listener picked, over the one from its files. */
   val customCover: File?,
 ) {
 
@@ -45,30 +43,19 @@ public data class BookContent(
     }
   }
 
-  /**
-   * The book with the name the listener gave it. Giving it the name from its files again lets it follow its files.
-   */
   public fun withCustomName(name: String?): BookContent {
+    // the name from the files isn't kept, so the book follows them when they change
     return copy(customName = name?.takeIf { it != metadata.name })
   }
 
-  /**
-   * The book with what its files say now. A name the listener gave it stays, unless the files say the same now.
-   */
   public fun withMetadata(metadata: BookMetadata): BookContent {
     return copy(metadata = metadata).withCustomName(customName)
   }
 }
 
-/**
- * What the files of a book, or the server it's on, say about it. Kept apart from what the listener changed, so a scan
- * can read it again when the files change.
- */
 public data class BookMetadata(
-  /** What Voice makes of the tags, or the name of the folder or file without them. */
   val name: String,
   val author: String?,
-  /** The tags of the first file. `null` for books on a server. */
   val album: String?,
   val title: String?,
   val genre: String?,
@@ -76,10 +63,7 @@ public data class BookMetadata(
   val series: String?,
   val part: String?,
   val cover: File?,
-  /**
-   * When the first file was last modified as this was read from it. `null` for books on a server and for books
-   * stored before this was kept, which a scan reads again.
-   */
+  // null for books on a server, and for books from before it was stored, which the scan reads again
   @ColumnInfo(name = "metadataFileLastModified")
   val fileLastModified: Instant?,
 )

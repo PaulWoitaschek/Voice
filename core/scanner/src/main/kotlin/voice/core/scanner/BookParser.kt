@@ -7,7 +7,6 @@ import voice.core.data.BookId
 import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.repo.BookContentRepo
-import voice.core.data.repo.getOrPut
 import voice.core.data.toUri
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
@@ -21,10 +20,6 @@ internal class BookParser(
   private val fileFactory: CachedDocumentFileFactory,
 ) {
 
-  /**
-   * The book the [chapters] make up, with what its files say now. A new book is stored right away, and so is a book
-   * whose files say something else now.
-   */
   suspend fun parseAndStore(
     chapters: List<Chapter>,
     file: CachedDocumentFile,
@@ -39,7 +34,6 @@ internal class BookParser(
     if (upToDate) return stored
     val analyzed = firstChapterMetadata ?: analyze(firstChapter)
     val metadata = metadata(chapters, file, analyzed)
-      // a cover is only looked for when the book has none
       .copy(cover = stored.metadata.cover)
     val beforeNamesKeptApart = stored.metadata.fileLastModified == null
     val withNames = if (beforeNamesKeptApart) stored.withoutEarlierName(analyzed, file) else stored
@@ -48,8 +42,8 @@ internal class BookParser(
     }
   }
 
-  // Earlier versions named a book in a folder after the title of its first file, or the file's name without one, so
-  // such a name isn't one the listener gave. A name like the folder's stays, as listeners rename books to it.
+  // Before #3455, a book in a folder was named after its first file. Listeners rename books to the folder's name, so
+  // that one stays.
   private fun BookContent.withoutEarlierName(
     analyzed: Metadata?,
     file: CachedDocumentFile,
@@ -59,10 +53,6 @@ internal class BookParser(
     return copy(customName = customName?.takeUnless { it in earlierNames })
   }
 
-  /**
-   * The book the [chapters] make up, without storing it. Unless the [firstChapterMetadata] is passed,
-   * the first chapter is analyzed for it.
-   */
   suspend fun parse(
     chapters: List<Chapter>,
     file: CachedDocumentFile,

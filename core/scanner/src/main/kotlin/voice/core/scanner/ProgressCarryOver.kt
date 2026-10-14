@@ -14,13 +14,8 @@ import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.store.CurrentBookStore
 
-/**
- * Hands progress over when audio files show up under a new book id. This happens when a folder's mode changes
- * (a single book becomes several books, or the other way round), when a folder is added again through another
- * folder, or when a book is renamed or moved. Chapters are matched by their document, which stays the same across
- * folders, and otherwise by their files when all of them moved. When it's the same book, it also hands over what the
- * listener changed about it, while what the files say comes from the files.
- */
+// Audio files show up under a new book id when a folder's mode changes, when a folder is added again through another
+// folder, or when a book is renamed or moved. Documents stay the same across folders, files across moves.
 @Inject
 internal class ProgressCarryOver(
   private val bookmarkRepo: BookmarkRepo,
@@ -70,7 +65,6 @@ internal class ProgressCarryOver(
     ).withCustomName(sameBook.customName)
   }
 
-  // the book the user is on is gone, so they go on with the book that now holds its current chapter
   private suspend fun moveCurrentBook(
     playedHere: List<BookContent>,
     bookId: BookId,
@@ -100,9 +94,6 @@ internal class ProgressCarryOver(
   }
 }
 
-/**
- * The books of the [library] a scan no longer finds, indexed by the documents and the files of their chapters.
- */
 internal class PreviousBooks(
   library: List<BookContent>,
   scanned: Set<BookId>,
@@ -174,15 +165,12 @@ internal class PreviousBooks(
 internal class Predecessors(
   val books: List<BookContent>,
   val chapters: Map<ChapterId, ChapterId>,
-  /** The book that is found under a new id now. It hands over what the listener changed about it. */
   val sameBook: BookContent?,
 )
 
 private fun ChapterId.documentKey(): String = value.toUri().documentKey()
 
-/**
- * Identifies a document independent of the folder it was opened through.
- */
+// the same document opened through another folder has another uri
 internal fun Uri.documentKey(): String {
   if (scheme != "content") return toString()
   return try {

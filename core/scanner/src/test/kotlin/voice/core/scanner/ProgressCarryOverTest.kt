@@ -423,9 +423,6 @@ class ProgressCarryOverTest {
     )
   }
 
-  /**
-   * A chapter in the folder `primary:Audiobooks` that is stored with the [size] of its file.
-   */
   private fun file(
     document: String,
     size: Long = 10,

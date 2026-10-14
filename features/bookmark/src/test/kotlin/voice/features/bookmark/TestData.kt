@@ -19,13 +19,11 @@ import kotlin.uuid.Uuid
 
 internal val testZone: ZoneId = ZoneId.of("Europe/Berlin")
 
-/** Wednesday, 7 October 2026 at the given time in [testZone]. */
 internal fun today(
   hour: Int,
   minute: Int = 0,
 ): Instant = ZonedDateTime.of(2026, 10, 7, hour, minute, 0, 0, testZone).toInstant()
 
-/** Tuesday, 6 October 2026 at the given time in [testZone]. */
 internal fun yesterday(
   hour: Int,
   minute: Int = 0,

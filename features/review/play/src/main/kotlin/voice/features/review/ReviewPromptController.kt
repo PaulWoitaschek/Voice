@@ -24,9 +24,6 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaInstant
 
-/**
- * Finds out whether now is a good moment for the rating prompt and keeps track of what the listener answered.
- */
 @SingleIn(AppScope::class)
 @Inject
 class ReviewPromptController(
@@ -52,10 +49,7 @@ class ReviewPromptController(
 
   internal val versionName: String get() = appInfoProvider.versionName
 
-  /**
-   * The prompt to show now, if any. Showing it counts as an ask right away, so it never comes back
-   * too soon, even when the app gets closed while it's open.
-   */
+  // showing it counts as an ask right away, so it never comes back too soon, even when the app gets closed while open
   internal suspend fun prompt(): ReviewPrompt? {
     showing?.let { return it }
     return newPrompt()?.also { showing = it }

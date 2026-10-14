@@ -7,8 +7,7 @@ import voice.core.data.AUDIOBOOKSHELF_SCHEME
 internal class Migration66 : AutoMigrationSpec {
 
   override fun onPostMigrate(db: SupportSQLiteDatabase) {
-    // A name the listener gave can't be told apart from one from the files yet. Both count as the listener's, and the
-    // next scan reads the files again and drops the names it finds in them.
+    // a rename can't be told apart from a name from the files, so the next scan drops the ones its files give
     db.execSQL(
       "UPDATE content2 SET customName = name WHERE id NOT LIKE ?",
       arrayOf("$AUDIOBOOKSHELF_SCHEME:%"),

@@ -29,10 +29,6 @@ import java.io.IOException
 private const val PAGE_SIZE = 200
 private const val DETAILS_CHUNK_SIZE = 50
 
-/**
- * Mirrors the books of the chosen libraries into Voice's library. Only items that changed since the last sync are
- * fetched with their tracks and chapters, so a sync of an unchanged library costs a few small requests.
- */
 @Inject
 internal class LibrarySync(
   private val http: AudiobookshelfHttp,

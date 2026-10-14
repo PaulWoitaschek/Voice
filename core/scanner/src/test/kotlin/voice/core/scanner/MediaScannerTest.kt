@@ -540,7 +540,6 @@ class MediaScannerTest {
     val renamed = File(audiobookFolder, "renamed")
     audioFile(renamed, "1.mp3")
     scan(FolderType.Root, audiobookFolder)
-    // the way the migration leaves them
     fun BookContent.migrated(name: String) = copy(
       customName = name,
       metadata = metadata.copy(name = name, fileLastModified = null),
@@ -556,7 +555,6 @@ class MediaScannerTest {
     val renamedContent = bookContentRepo.get(BookId(renamed.toUri()))!!
     assertEquals(expected = "Mine", actual = renamedContent.name)
     assertEquals(expected = "Book Name", actual = renamedContent.metadata.name)
-    // once for each book
     assertEquals(expected = analyzeCallsBefore + 2, actual = analyzeCalls)
   }
 
@@ -568,7 +566,6 @@ class MediaScannerTest {
     val byFolder = File(audiobookFolder, "byFolder")
     listOf(byTitle, byFileName, byFolder).forEach { audioFile(it, "1.mp3") }
     scan(FolderType.Root, audiobookFolder)
-    // the title of the first file, its name, and a name the listener might have given it
     mapOf(byTitle to "Title", byFileName to "Chapter", byFolder to "byFolder").forEach { (book, name) ->
       val content = bookContentRepo.get(BookId(book.toUri()))!!
       bookContentRepo.put(
