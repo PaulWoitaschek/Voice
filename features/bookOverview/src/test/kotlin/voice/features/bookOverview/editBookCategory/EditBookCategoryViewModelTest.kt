@@ -18,8 +18,10 @@ import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.chapter
+import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlin.time.Duration
 
 class EditBookCategoryViewModelTest {
@@ -40,7 +42,7 @@ class EditBookCategoryViewModelTest {
 
   private val currentBookStore = MemoryDataStore<BookId?>(book.id)
 
-  private val viewModel = EditBookCategoryViewModel(repo, playerController, currentBookStore)
+  private val viewModel = EditBookCategoryViewModel(repo, playerController, currentBookStore, MemoryDataStore(1.5F))
 
   @Test
   fun `marking a book as completed moves it to the end`() = runTest {
@@ -51,6 +53,19 @@ class EditBookCategoryViewModelTest {
     val updated = update.captured(book.content)
     assertEquals(lastChapter.id, updated.currentChapter)
     assertEquals(7_000, updated.positionInChapter)
+  }
+
+  @Test
+  fun `a marked book counts as played now and keeps the speed it would have started at`() = runTest {
+    val before = Instant.now()
+
+    viewModel.onItemClick(book.id, BottomSheetItem.BookCategoryMarkAsCurrent)
+
+    val update = slot<(BookContent) -> BookContent>()
+    coVerify { repo.updateBook(book.id, capture(update)) }
+    val updated = update.captured(book.content)
+    assertTrue(updated.lastPlayedAt >= before)
+    assertEquals(1.5F, updated.playbackSpeed)
   }
 
   @Test

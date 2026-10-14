@@ -362,6 +362,8 @@
     <string name="settings.auto_sleep_timer.summary">Avvia automaticamente un timer di spegnimento automatico quando la riproduzione inizia tra %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Timer di spegnimento automatico</string>
     <string name="settings.library.audiobookshelf.summary">Ascolta i libri del tuo server</string>
+    <string name="settings.library.folder_sync.summary">Salva il punto in cui sei in una cartella nascosta .voice accanto ai tuoi libri. Sincronizza le tue cartelle con un altro dispositivo, ad esempio con Syncthing, e riprendi da dove avevi lasciato.</string>
+    <string name="settings.library.folder_sync.title">Continua su altri dispositivi</string>
     <string name="settings.library.folders.summary">Gestisci cartelle audiolibri</string>
     <string name="settings.library.layout.grid">Griglia</string>
     <string name="settings.library.layout.list">Elenco</string>

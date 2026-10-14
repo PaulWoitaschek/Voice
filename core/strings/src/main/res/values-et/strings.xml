@@ -346,6 +346,8 @@
     <string name="settings.auto_sleep_timer.summary">Käivita unetaimer automaatselt, kui taasesitus on %1$s ja %2$s vahel</string>
     <string name="settings.auto_sleep_timer.title">Automaatne unetaimer</string>
     <string name="settings.library.audiobookshelf.summary">Voogedasta raamatuid oma serverist</string>
+    <string name="settings.library.folder_sync.summary">Salvestab sinu järje peidetud kausta .voice, mis on raamatute kõrval. Sünkrooni oma kaustad teise seadmega, näiteks Syncthingi abil, ja jätka sealt, kus pooleli jäid.</string>
+    <string name="settings.library.folder_sync.title">Jätka teistes seadmetes</string>
     <string name="settings.library.folders.summary">Halda kaustu, kust otsitakse heliraamatuid</string>
     <string name="settings.library.layout.grid">Ruudustik</string>
     <string name="settings.library.layout.list">Loend</string>

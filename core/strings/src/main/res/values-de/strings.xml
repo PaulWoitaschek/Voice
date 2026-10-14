@@ -346,6 +346,8 @@
     <string name="settings.auto_sleep_timer.summary">Den Einschlaf-Timer automatisch starten, wenn die Wiedergabe zwischen %1$s und %2$s Uhr beginnt</string>
     <string name="settings.auto_sleep_timer.title">Automatischer Einschlaf-Timer</string>
     <string name="settings.library.audiobookshelf.summary">Bücher von Deinem eigenen Server streamen</string>
+    <string name="settings.library.folder_sync.summary">Speichert Deine Stelle in einem versteckten .voice-Ordner neben Deinen Büchern. Synchronisiere Deine Ordner mit einem anderen Gerät, zum Beispiel mit Syncthing, und höre dort weiter, wo Du aufgehört hast.</string>
+    <string name="settings.library.folder_sync.title">Auf anderen Geräten weiterhören</string>
     <string name="settings.library.folders.summary">Ordner verwalten, die nach Hörbüchern durchsucht werden sollen</string>
     <string name="settings.library.layout.grid">Raster</string>
     <string name="settings.library.layout.list">Liste</string>

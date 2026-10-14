@@ -346,6 +346,8 @@
     <string name="settings.auto_sleep_timer.summary">Automatikusan elindítja az alvásidőzítőt, ha a lejátszás %1$s és %2$s között kezdődik</string>
     <string name="settings.auto_sleep_timer.title">Automatikus alvásidőzítő</string>
     <string name="settings.library.audiobookshelf.summary">Könyvek streamelése a saját szerveréről</string>
+    <string name="settings.library.folder_sync.summary">Egy rejtett .voice mappában, a könyvei mellett jegyzi fel, hol tart. Szinkronizálja a mappáit egy másik eszközzel, például a Syncthing segítségével, és folytassa ott, ahol abbahagyta.</string>
+    <string name="settings.library.folder_sync.title">Folytatás más eszközökön</string>
     <string name="settings.library.folders.summary">A hangoskönyvek keresésére használt mappák kezelése</string>
     <string name="settings.library.layout.grid">Rács</string>
     <string name="settings.library.layout.list">Lista</string>

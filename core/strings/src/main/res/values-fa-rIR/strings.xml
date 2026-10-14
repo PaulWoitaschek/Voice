@@ -346,6 +346,8 @@
     <string name="settings.auto_sleep_timer.summary">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>
     <string name="settings.auto_sleep_timer.title">زمان خواب خودکار</string>
     <string name="settings.library.audiobookshelf.summary">کتاب‌های سرور خودتان را آنلاین پخش کنید</string>
+    <string name="settings.library.folder_sync.summary">جای شما را در پوشه‌ی پنهان \u200E.voice کنار کتاب‌هایتان نگه می‌دارد. پوشه‌هایتان را با دستگاه دیگری همگام کنید، مثلاً با Syncthing، و از همان جایی که بودید ادامه دهید.</string>
+    <string name="settings.library.folder_sync.title">ادامه در دستگاه‌های دیگر</string>
     <string name="settings.library.folders.summary">مدیریت پوشه‌هایی که برای کتاب‌های صوتی اسکن می‌شوند</string>
     <string name="settings.library.layout.grid">شبکه</string>
     <string name="settings.library.layout.list">فهرست</string>

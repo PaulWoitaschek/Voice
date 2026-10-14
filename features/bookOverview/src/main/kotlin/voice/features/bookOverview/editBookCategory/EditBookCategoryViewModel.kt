@@ -7,12 +7,15 @@ import kotlinx.coroutines.flow.first
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.playback.PlayerController
+import voice.core.playback.withDefaultSpeed
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.features.bookOverview.di.BookActionsScope
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.category
+import java.time.Instant
 import kotlin.time.Duration
 
 @SingleIn(BookActionsScope::class)
@@ -22,6 +25,8 @@ class EditBookCategoryViewModel(
   private val playerController: PlayerController,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
+  @LastPlaybackSpeedStore
+  private val lastPlaybackSpeedStore: DataStore<Float>,
 ) : BottomSheetItemViewModel {
 
   // the menu shows every status in its status picker, so there are no items to list
@@ -47,10 +52,14 @@ class EditBookCategoryViewModel(
       else -> return
     }
 
+    val speed = book.withDefaultSpeed { lastPlaybackSpeedStore.data.first() }.content.playbackSpeed
     repo.updateBook(book.id) {
       it.copy(
         currentChapter = currentChapter,
         positionInChapter = positionInChapter,
+        // newer than the place other devices wrote, so their place doesn't undo this
+        lastPlayedAt = Instant.now(),
+        playbackSpeed = speed,
       )
     }
     // The player keeps the position of the book it has loaded and would write it back. It seeks in its current book,

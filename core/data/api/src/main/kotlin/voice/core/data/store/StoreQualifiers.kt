@@ -68,3 +68,9 @@ public annotation class LastPlaybackSpeedStore
 
 @Qualifier
 public annotation class LockScreenSliderStore
+
+/**
+ * Whether places are shared with other devices through a file in each library folder.
+ */
+@Qualifier
+public annotation class FolderSyncStore

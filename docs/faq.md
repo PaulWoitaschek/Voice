@@ -50,3 +50,21 @@ Once the sleep timer elapses, Voice pauses playback (after a brief fade-out). To
 !!! warning
 
     On some devices (e.g. Samsung S20fe) shake-to-resume may not work reliably.
+
+### How do I continue a book on another device?
+
+Voice keeps your place in a hidden `.voice` folder inside each audiobook folder you added. Sync these folders between
+your devices with a tool of your own, like [Syncthing](https://syncthing.net), and when you open Voice on the other
+device, it picks up where you left off.
+
+- Add the same folder on every device, and the same way, for example as "Every folder is a book" on both. Where the
+  folder is on each device doesn't matter.
+- The folder has to be on the device. Folders from cloud apps like Google Drive don't sync.
+- The audio files of a book have to be the same on every device.
+- Books you added as a single file don't sync. Add the folder they're in instead.
+- Only your place in the book syncs. Bookmarks and the playback speed stay on each device.
+- Your sync tool has to copy hidden folders.
+- A book that is playing stays where it is.
+
+If you share a folder with your family and don't want each other's place, turn off **Continue on other devices** in the
+library settings, or let your sync tool ignore `.voice`.

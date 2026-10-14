@@ -378,6 +378,8 @@
     <string name="settings.auto_sleep_timer.summary">Запускать таймер сна автоматически когда воспроизведение начинается между %1$s и %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматический таймер сна</string>
     <string name="settings.library.audiobookshelf.summary">Слушайте книги прямо со своего сервера</string>
+    <string name="settings.library.folder_sync.summary">Сохраняет место, где вы остановились, в скрытой папке .voice рядом с вашими книгами. Синхронизируйте папки с другим устройством, например через Syncthing, и продолжайте слушать с того же места.</string>
+    <string name="settings.library.folder_sync.title">Продолжение на других устройствах</string>
     <string name="settings.library.folders.summary">Управление папками, отсканированными на наличие аудиокниг</string>
     <string name="settings.library.layout.grid">Сетка</string>
     <string name="settings.library.layout.list">Список</string>

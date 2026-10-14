@@ -26,6 +26,7 @@ import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.AnalyticsConsentStore
 import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.DeveloperMenuUnlockedStore
+import voice.core.data.store.FolderSyncStore
 import voice.core.data.store.GridModeStore
 import voice.core.data.store.LockScreenSliderStore
 import voice.core.data.store.SeekTimeStore
@@ -61,6 +62,8 @@ class SettingsViewModel(
   private val seekTimeStore: DataStore<Int>,
   @LockScreenSliderStore
   private val lockScreenSliderStore: DataStore<Boolean>,
+  @FolderSyncStore
+  private val folderSyncStore: DataStore<Boolean>,
   private val navigator: Navigator,
   private val appInfoProvider: AppInfoProvider,
   @GridModeStore
@@ -103,6 +106,7 @@ class SettingsViewModel(
     val autoRewindAmount = remember { autoRewindAmountStore.data }.collectAsState(initial = null).value
     val seekTime = remember { seekTimeStore.data }.collectAsState(initial = null).value
     val lockScreenSlider = remember { lockScreenSliderStore.data }.collectAsState(initial = null).value
+    val folderSync = remember { folderSyncStore.data }.collectAsState(initial = null).value
     val gridMode = remember { gridModeStore.data }.collectAsState(initial = null).value
     val autoSleepTimer = remember { sleepTimerPreferenceStore.data }.collectAsState(initial = null).value
     val analyticsEnabled = remember { analyticsConsentStore.data }.collectAsState(initial = null).value
@@ -125,6 +129,7 @@ class SettingsViewModel(
       autoRewindAmount == null ||
       seekTime == null ||
       lockScreenSlider == null ||
+      folderSync == null ||
       gridMode == null ||
       autoSleepTimer == null ||
       analyticsEnabled == null ||
@@ -144,6 +149,7 @@ class SettingsViewModel(
       seekTimeInSeconds = seekTime,
       autoRewindInSeconds = autoRewindAmount,
       lockScreenSlider = lockScreenSlider,
+      folderSync = folderSync,
       appVersion = appInfoProvider.versionName,
       useGrid = when (gridMode) {
         GridMode.LIST -> false
@@ -236,6 +242,12 @@ class SettingsViewModel(
   override fun toggleLockScreenSlider() {
     mainScope.launch {
       lockScreenSliderStore.updateData { !it }
+    }
+  }
+
+  override fun toggleFolderSync() {
+    mainScope.launch {
+      folderSyncStore.updateData { !it }
     }
   }
 

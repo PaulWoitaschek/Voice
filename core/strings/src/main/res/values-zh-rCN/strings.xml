@@ -330,6 +330,8 @@
     <string name="settings.auto_sleep_timer.summary">在 %1$s 到 %2$s 之间开始播放时，自动启动睡眠定时器</string>
     <string name="settings.auto_sleep_timer.title">自动睡眠定时器</string>
     <string name="settings.library.audiobookshelf.summary">在线收听您自己服务器上的书</string>
+    <string name="settings.library.folder_sync.summary">将您的收听位置保存在有声书旁的隐藏文件夹 .voice 中。用 Syncthing 等工具将文件夹同步到另一台设备，即可从上次停下的地方接着听。</string>
+    <string name="settings.library.folder_sync.title">在其他设备上继续收听</string>
     <string name="settings.library.folders.summary">管理用于扫描有声书的文件夹</string>
     <string name="settings.library.layout.grid">网格</string>
     <string name="settings.library.layout.list">列表</string>

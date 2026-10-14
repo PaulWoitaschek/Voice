@@ -64,7 +64,7 @@ public data class ListeningEvent(
     SleepTimer,
     Unknown,
 
-    /** The position came from another device, through the server. */
+    /** The position came from another device, through the server or a synced library folder. */
     OtherDevice,
   }
 }

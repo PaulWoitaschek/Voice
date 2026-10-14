@@ -378,6 +378,8 @@
     <string name="settings.auto_sleep_timer.summary">Автоматично запустити таймер сну, коли програш починається між %1$s та %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматичний таймер сну</string>
     <string name="settings.library.audiobookshelf.summary">Слухайте книги просто зі свого сервера</string>
+    <string name="settings.library.folder_sync.summary">Зберігає місце, де ви зупинилися, у прихованій папці .voice поруч із вашими книгами. Синхронізуйте папки з іншим пристроєм, наприклад через Syncthing, і продовжуйте слухати з того ж місця.</string>
+    <string name="settings.library.folder_sync.title">Продовження на інших пристроях</string>
     <string name="settings.library.folders.summary">Налаштування папок, які скануються для пошуку аудіокних</string>
     <string name="settings.library.layout.grid">Сітка</string>
     <string name="settings.library.layout.list">Список</string>

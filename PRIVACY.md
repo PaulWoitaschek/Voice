@@ -39,6 +39,14 @@ model and the app version) with it. It also streams and downloads audiobooks fro
 Service Provider runs no server for this and never receives this data. Signing out removes the books of the server and their downloads from
 your device.
 
+**Synced Library Folders**
+
+The Application writes your listening position for each book into a hidden `.voice` folder inside the audiobook folders
+you added, so that Voice on your other devices can pick it up when you sync these folders yourself, for example with
+Syncthing. The file holds a random device id, the position and when you last listened, and the books are identified by
+a fingerprint of their file names and sizes. The Service Provider never receives this data. You can turn this off in
+the library settings.
+
 **Third Party Access**
 
 Only aggregated, anonymized data is periodically transmitted to external services to aid the Service Provider in improving the Application
@@ -92,7 +100,7 @@ This Privacy Policy may be updated from time to time for any reason. The Service
 Policy by updating this page with the new Privacy Policy. You are advised to consult this Privacy Policy regularly for any changes, as
 continued use is deemed approval of all changes.
 
-This privacy policy is effective as of 2026-10-08
+This privacy policy is effective as of 2026-10-14
 
 **Your Consent**
 

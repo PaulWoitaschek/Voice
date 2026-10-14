@@ -330,6 +330,8 @@
     <string name="settings.auto_sleep_timer.summary">Mulai pengatur waktu tidur secara otomatis saat pemutaran dimulai antara %1$s dan %2$s</string>
     <string name="settings.auto_sleep_timer.title">Pengatur Waktu Tidur Otomatis</string>
     <string name="settings.library.audiobookshelf.summary">Streaming buku dari server Anda sendiri</string>
+    <string name="settings.library.folder_sync.summary">Menyimpan posisi Anda di folder tersembunyi .voice di samping buku-buku Anda. Sinkronkan folder ke perangkat lain, misalnya dengan Syncthing, lalu lanjutkan dari posisi terakhir Anda.</string>
+    <string name="settings.library.folder_sync.title">Lanjutkan di perangkat lain</string>
     <string name="settings.library.folders.summary">Kelola folder yang dipindai untuk buku audio</string>
     <string name="settings.library.layout.grid">Kisi</string>
     <string name="settings.library.layout.list">Daftar</string>

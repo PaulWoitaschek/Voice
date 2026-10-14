@@ -362,6 +362,8 @@
     <string name="settings.auto_sleep_timer.summary">Ativa o modo soneca automaticamente quando a reprodução estiver entre %1$s e %2$s</string>
     <string name="settings.auto_sleep_timer.title">Modo Soneca</string>
     <string name="settings.library.audiobookshelf.summary">Ouça os livros do seu próprio servidor</string>
+    <string name="settings.library.folder_sync.summary">Salva seu progresso em uma pasta oculta .voice ao lado dos seus livros. Sincronize suas pastas com outro dispositivo, usando o Syncthing, por exemplo, e continue de onde parou.</string>
+    <string name="settings.library.folder_sync.title">Continuar em outros dispositivos</string>
     <string name="settings.library.folders.summary">Gerenciar pastas verificadas para audiolivros</string>
     <string name="settings.library.layout.grid">Grade</string>
     <string name="settings.library.layout.list">Lista</string>

@@ -208,6 +208,13 @@ public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
+  @FolderSyncStore
+  private fun folderSync(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("folderSync", defaultValue = true)
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
   @DeveloperMenuUnlockedStore
   private fun developerMenuUnlocked(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("developerMenuUnlocked", defaultValue = false)
