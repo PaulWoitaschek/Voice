@@ -31,7 +31,6 @@ import java.time.YearMonth
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -63,7 +62,11 @@ class SupportViewModelTest {
     SubscriptionOffer(SupporterTier.HoneyTea, SupportPeriod.Yearly, "€30"),
     SubscriptionOffer(SupporterTier.GoldenMic, SupportPeriod.Yearly, "€60"),
   )
-  private val tips = listOf(TipOffer("tip_small", "€1"))
+  private val tips = listOf(
+    TipOffer(SupporterTier.GoldenMic, "€10"),
+    TipOffer(SupporterTier.Tea, "€2"),
+    TipOffer(SupporterTier.HoneyTea, "€5"),
+  )
 
   @Test
   fun `ko-fi stays ko-fi`() = scope.runTest {
@@ -78,28 +81,27 @@ class SupportViewModelTest {
     backend.mutableState.value = SupportBackendState.Play(offers, tips, activeSubscription = null)
 
     val content = assertIs<Content.Play>(viewState().content)
-    val subscription = assertNotNull(content.subscription)
 
-    assertEquals(expected = SupportPeriod.Monthly, actual = subscription.period)
+    assertEquals(expected = SupportFrequency.entries, actual = content.frequencies)
+    assertEquals(expected = SupportFrequency.Monthly, actual = content.frequency)
     assertEquals(
       expected = listOf(SupporterTier.Tea, SupporterTier.HoneyTea, SupporterTier.GoldenMic),
-      actual = subscription.tiers.map { it.tier },
+      actual = content.tiers.map { it.tier },
     )
-    assertEquals(expected = SupporterTier.HoneyTea, actual = subscription.selectedTier)
-    assertEquals(expected = Action.Subscribe("€3", SupportPeriod.Monthly), actual = subscription.action)
-    assertFalse(content.showTips)
+    assertEquals(expected = SupporterTier.HoneyTea, actual = content.selectedTier)
+    assertEquals(expected = Action.Subscribe("€3", SupportPeriod.Monthly), actual = content.action)
   }
 
   @Test
   fun `picking yearly shows the yearly prices`() = scope.runTest {
     backend.mutableState.value = SupportBackendState.Play(offers, tips, activeSubscription = null)
 
-    viewModel.selectPeriod(SupportPeriod.Yearly)
+    viewModel.selectFrequency(SupportFrequency.Yearly)
     viewModel.selectTier(SupporterTier.GoldenMic)
-    val subscription = assertNotNull(assertIs<Content.Play>(viewState().content).subscription)
+    val content = assertIs<Content.Play>(viewState().content)
 
-    assertEquals(expected = listOf("€10", "€30", "€60"), actual = subscription.tiers.map { it.formattedPrice })
-    assertEquals(expected = Action.Subscribe("€60", SupportPeriod.Yearly), actual = subscription.action)
+    assertEquals(expected = listOf("€10", "€30", "€60"), actual = content.tiers.map { it.formattedPrice })
+    assertEquals(expected = Action.Subscribe("€60", SupportPeriod.Yearly), actual = content.action)
 
     viewModel.confirm(activity)
 
@@ -114,13 +116,12 @@ class SupportViewModelTest {
       activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Yearly),
     )
 
-    val subscription = assertNotNull(assertIs<Content.Play>(viewState().content).subscription)
+    val content = assertIs<Content.Play>(viewState().content)
 
-    assertEquals(expected = SupportPeriod.Yearly, actual = subscription.period)
-    assertEquals(expected = SupporterTier.Tea, actual = subscription.selectedTier)
-    assertEquals(expected = Action.Manage, actual = subscription.action)
-    assertEquals(expected = listOf(true, false, false), actual = subscription.tiers.map { it.active })
-    assertTrue(subscription.subscribed)
+    assertEquals(expected = SupportFrequency.Yearly, actual = content.frequency)
+    assertEquals(expected = SupporterTier.Tea, actual = content.selectedTier)
+    assertEquals(expected = Action.Manage, actual = content.action)
+    assertEquals(expected = listOf(true, false, false), actual = content.tiers.map { it.active })
 
     viewModel.confirm(activity)
 
@@ -137,9 +138,9 @@ class SupportViewModelTest {
     )
 
     viewModel.selectTier(SupporterTier.HoneyTea)
-    val subscription = assertNotNull(assertIs<Content.Play>(viewState().content).subscription)
+    val content = assertIs<Content.Play>(viewState().content)
 
-    assertEquals(expected = Action.Switch("€30", SupportPeriod.Yearly), actual = subscription.action)
+    assertEquals(expected = Action.Switch("€30", SupportPeriod.Yearly), actual = content.action)
 
     viewModel.confirm(activity)
 
@@ -154,11 +155,11 @@ class SupportViewModelTest {
       activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly),
     )
 
-    viewModel.selectPeriod(SupportPeriod.Yearly)
-    val subscription = assertNotNull(assertIs<Content.Play>(viewState().content).subscription)
+    viewModel.selectFrequency(SupportFrequency.Yearly)
+    val content = assertIs<Content.Play>(viewState().content)
 
-    assertEquals(expected = SupporterTier.Tea, actual = subscription.selectedTier)
-    assertEquals(expected = Action.Switch("€10", SupportPeriod.Yearly), actual = subscription.action)
+    assertEquals(expected = SupporterTier.Tea, actual = content.selectedTier)
+    assertEquals(expected = Action.Switch("€10", SupportPeriod.Yearly), actual = content.action)
 
     viewModel.confirm(activity)
 
@@ -166,14 +167,64 @@ class SupportViewModelTest {
   }
 
   @Test
-  fun `only tips show the tip jar`() = scope.runTest {
+  fun `once shows the tips as tiers`() = scope.runTest {
+    backend.mutableState.value = SupportBackendState.Play(offers, tips, activeSubscription = null)
+
+    viewModel.selectFrequency(SupportFrequency.Once)
+    val content = assertIs<Content.Play>(viewState().content)
+
+    assertEquals(expected = listOf("€2", "€5", "€10"), actual = content.tiers.map { it.formattedPrice })
+    assertEquals(expected = SupporterTier.HoneyTea, actual = content.selectedTier)
+    assertEquals(expected = Action.Tip("€5"), actual = content.action)
+
+    viewModel.confirm(activity)
+
+    assertEquals(expected = listOf(SupporterTier.HoneyTea), actual = backend.tips)
+    assertEquals(expected = emptyList<Pair<SupporterTier, SupportPeriod>>(), actual = backend.subscribes)
+  }
+
+  @Test
+  fun `a tip keeps the running subscription as it is`() = scope.runTest {
+    backend.mutableState.value = SupportBackendState.Play(
+      subscriptions = offers,
+      tips = tips,
+      activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly),
+    )
+
+    viewModel.selectFrequency(SupportFrequency.Once)
+    val content = assertIs<Content.Play>(viewState().content)
+
+    assertEquals(expected = SupporterTier.Tea, actual = content.selectedTier)
+    assertEquals(expected = Action.Tip("€2"), actual = content.action)
+    assertEquals(expected = listOf(false, false, false), actual = content.tiers.map { it.active })
+
+    viewModel.confirm(activity)
+
+    assertEquals(expected = listOf(SupporterTier.Tea), actual = backend.tips)
+    assertEquals(expected = emptyList<Pair<SupporterTier, SupportPeriod>>(), actual = backend.subscribes)
+    assertEquals(expected = 0, actual = backend.manageCount)
+  }
+
+  @Test
+  fun `only tips leave once as the only choice`() = scope.runTest {
     backend.mutableState.value = SupportBackendState.Play(emptyList(), tips, activeSubscription = null)
 
     val content = assertIs<Content.Play>(viewState().content)
 
-    assertNull(content.subscription)
-    assertEquals(expected = tips, actual = content.tips)
-    assertTrue(content.showTips)
+    assertEquals(expected = listOf(SupportFrequency.Once), actual = content.frequencies)
+    assertEquals(expected = SupportFrequency.Once, actual = content.frequency)
+    assertEquals(expected = Action.Tip("€5"), actual = content.action)
+  }
+
+  @Test
+  fun `no tips leave out once`() = scope.runTest {
+    backend.mutableState.value = SupportBackendState.Play(offers, emptyList(), activeSubscription = null)
+
+    viewModel.selectFrequency(SupportFrequency.Once)
+    val content = assertIs<Content.Play>(viewState().content)
+
+    assertEquals(expected = listOf(SupportFrequency.Monthly, SupportFrequency.Yearly), actual = content.frequencies)
+    assertEquals(expected = SupportFrequency.Monthly, actual = content.frequency)
   }
 
   @Test
@@ -271,6 +322,7 @@ private class FakeSupportBackend : SupportBackend {
   var refreshCount = 0
   var manageCount = 0
   val subscribes = mutableListOf<Pair<SupporterTier, SupportPeriod>>()
+  val tips = mutableListOf<SupporterTier>()
 
   override val state: MutableStateFlow<SupportBackendState> = mutableState
   override val events: Flow<SupportEvent> = eventFlow
@@ -291,8 +343,10 @@ private class FakeSupportBackend : SupportBackend {
 
   override fun tip(
     activity: Activity,
-    tip: TipOffer,
-  ) {}
+    tier: SupporterTier,
+  ) {
+    tips += tier
+  }
 
   override fun manageSubscription() {
     manageCount++

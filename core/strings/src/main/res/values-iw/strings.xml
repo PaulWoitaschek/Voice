@@ -383,7 +383,6 @@
     <string name="support.action.manage_subscription">ניהול המינוי</string>
     <string name="support.action.subscribe">תמיכה ב-%1$s</string>
     <string name="support.action.switch">מעבר ל-%1$s</string>
-    <string name="support.action.tip_once">מעדיפים טיפ חד-פעמי?</string>
     <string name="support.badge.earned">הושג</string>
     <string name="support.badge.first_cup">הכוס הראשונה</string>
     <string name="support.badge.not_earned">עוד לא הושג</string>
@@ -397,6 +396,7 @@
     <string name="support.description.maintenance_subtitle">תרומות עוזרות לממן תחזוקה ופיתוח שוטפים.</string>
     <string name="support.description.play">תמיכה חודשית היא מה שמאפשר לי לתכנן את הגרסה הבאה, ולא רק את התיקון הבא.</string>
     <string name="support.fine_print">זו תודה בלבד: לא פותחת שום תכונה. אפשר לבטל בכל עת ב-Google Play.</string>
+    <string name="support.fine_print.tip">זו תודה בלבד: לא פותחת שום תכונה. ללא מינוי.</string>
     <string name="support.helps.title">התמיכה עוזרת ב</string>
     <string name="support.helps.maintenance">תיקוני באגים ותחזוקה</string>
     <string name="support.helps.features">תכונות חדשות</string>
@@ -407,8 +407,10 @@
     <string name="support.message.pending">התה שלכם בחליטה. התג יופיע ברגע ש-Google תאשר את התשלום.</string>
     <string name="support.period.monthly">חודשי</string>
     <string name="support.period.yearly">שנתי</string>
+    <string name="support.period.once">חד-פעמי</string>
     <string name="support.price.monthly">%1$s לחודש</string>
     <string name="support.price.yearly">%1$s לשנה</string>
+    <string name="support.price.once">%1$s פעם אחת</string>
     <string name="support.supporter.since">בין התומכים מאז %1$s</string>
     <string name="support.supporter.title">אתם בין התומכים</string>
     <string name="support.thank_you.action">חזרה להאזנה</string>
@@ -421,7 +423,6 @@
     <string name="support.tier.honey_tea.title">תה עם דבש</string>
     <string name="support.tier.tea.summary">שומר על האורות דולקים</string>
     <string name="support.tier.tea.title">כוס תה</string>
-    <string name="support.tips.title">טיפ חד-פעמי</string>
     <string name="support.unavailable.message">אין כרגע גישה לחיוב של Google Play במכשיר הזה.</string>
     <string name="support.unavailable.title">אי אפשר לתמוך כרגע</string>
     <string name="shortcut.play_current.short_label">המשך האזנה</string>

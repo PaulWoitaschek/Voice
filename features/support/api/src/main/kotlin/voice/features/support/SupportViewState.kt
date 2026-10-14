@@ -20,20 +20,14 @@ data class SupportViewState(
     data object Unavailable : Content
 
     data class Play(
-      val subscription: Subscription?,
-      val tips: List<TipOffer>,
-      val showTips: Boolean,
+      val frequencies: List<SupportFrequency>,
+      val frequency: SupportFrequency,
+      val tiers: List<Tier>,
+      val selectedTier: SupporterTier,
+      val action: Action,
       val note: String?,
     ) : Content
   }
-
-  data class Subscription(
-    val period: SupportPeriod,
-    val tiers: List<Tier>,
-    val selectedTier: SupporterTier,
-    val action: Action,
-    val subscribed: Boolean,
-  )
 
   data class Tier(
     val tier: SupporterTier,
@@ -51,6 +45,8 @@ data class SupportViewState(
       val formattedPrice: String,
       val period: SupportPeriod,
     ) : Action
+
+    data class Tip(val formattedPrice: String) : Action
 
     data object Manage : Action
   }
@@ -70,24 +66,22 @@ data class SupportViewState(
     )
 
     fun previewPlayContent() = Content.Play(
-      subscription = Subscription(
-        period = SupportPeriod.Monthly,
-        tiers = listOf(
-          Tier(SupporterTier.Tea, "€0.99", active = false),
-          Tier(SupporterTier.HoneyTea, "€2.99", active = true),
-          Tier(SupporterTier.GoldenMic, "€5.99", active = false),
-        ),
-        selectedTier = SupporterTier.GoldenMic,
-        action = Action.Switch("€5.99", SupportPeriod.Monthly),
-        subscribed = true,
+      frequencies = SupportFrequency.entries,
+      frequency = SupportFrequency.Monthly,
+      tiers = listOf(
+        Tier(SupporterTier.Tea, "€0.99", active = false),
+        Tier(SupporterTier.HoneyTea, "€2.99", active = true),
+        Tier(SupporterTier.GoldenMic, "€5.99", active = false),
       ),
-      tips = listOf(
-        TipOffer("tip_small", "€2.99"),
-        TipOffer("tip_medium", "€4.99"),
-        TipOffer("tip_large", "€9.99"),
-      ),
-      showTips = false,
+      selectedTier = SupporterTier.GoldenMic,
+      action = Action.Switch("€5.99", SupportPeriod.Monthly),
       note = "This month your tea paid for Android 17 testing and the new sleep timer.",
     )
   }
+}
+
+enum class SupportFrequency(val period: SupportPeriod?) {
+  Monthly(SupportPeriod.Monthly),
+  Yearly(SupportPeriod.Yearly),
+  Once(period = null),
 }

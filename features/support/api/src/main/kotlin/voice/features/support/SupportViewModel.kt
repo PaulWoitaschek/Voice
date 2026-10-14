@@ -33,9 +33,8 @@ class SupportViewModel(
   private val clock: Clock,
 ) : SupportListener {
 
-  private var period by mutableStateOf<SupportPeriod?>(null)
-  private var tier by mutableStateOf<SupporterTier?>(null)
-  private var showTips by mutableStateOf(false)
+  private var chosenFrequency by mutableStateOf<SupportFrequency?>(null)
+  private var chosenTier by mutableStateOf<SupporterTier?>(null)
   private var thankYou by mutableStateOf(false)
   private var message by mutableStateOf<SupportViewState.Message?>(null)
 
@@ -65,7 +64,7 @@ class SupportViewModel(
         SupportBackendState.KoFi -> Content.KoFi
         SupportBackendState.Loading -> Content.Loading
         SupportBackendState.Unavailable -> Content.Unavailable
-        is SupportBackendState.Play -> playContent(state, note.takeIf { it.isNotBlank() })
+        is SupportBackendState.Play -> playContent(state, note.takeIf { it.isNotBlank() }) ?: Content.Unavailable
       },
       badge = status.badge,
       supporterSince = status.supporterSince?.let {
@@ -79,47 +78,52 @@ class SupportViewModel(
   private fun playContent(
     state: SupportBackendState.Play,
     note: String?,
-  ): Content {
-    val subscription = selection(state)?.let { selection ->
-      SupportViewState.Subscription(
-        period = selection.period,
-        tiers = selection.tiers.map { offer ->
-          SupportViewState.Tier(
-            tier = offer.tier,
-            formattedPrice = offer.formattedPrice,
-            active = state.activeSubscription == ActiveSubscription(offer.tier, offer.period),
-          )
-        },
-        selectedTier = selection.offer.tier,
-        action = selection.action,
-        subscribed = state.activeSubscription != null,
-      )
-    }
-    if (subscription == null && state.tips.isEmpty()) {
-      return Content.Unavailable
+  ): Content.Play? {
+    val active = state.activeSubscription
+    val tiersByFrequency = SupportFrequency.entries
+      .associateWith { state.tiers(it) }
+      .filterValues { it.isNotEmpty() }
+    val frequencies = tiersByFrequency.keys.toList()
+    val frequency = chosenFrequency?.takeIf { it in tiersByFrequency }
+      ?: frequencies.firstOrNull { active != null && it.period == active.period }
+      ?: frequencies.firstOrNull()
+      ?: return null
+    val tiers = tiersByFrequency.getValue(frequency)
+    val wanted = chosenTier ?: active?.tier ?: SupporterTier.HoneyTea
+    val selected = tiers.firstOrNull { it.tier == wanted } ?: tiers.first()
+    val period = frequency.period
+    val action = when {
+      period == null -> Action.Tip(selected.formattedPrice)
+      selected.active -> Action.Manage
+      active == null -> Action.Subscribe(selected.formattedPrice, period)
+      else -> Action.Switch(selected.formattedPrice, period)
     }
     return Content.Play(
-      subscription = subscription,
-      tips = state.tips,
-      showTips = showTips || subscription == null,
+      frequencies = frequencies,
+      frequency = frequency,
+      tiers = tiers,
+      selectedTier = selected.tier,
+      action = action,
       note = note,
     )
   }
 
-  private fun selection(state: SupportBackendState.Play): Selection? {
-    val active = state.activeSubscription
-    val period = period ?: active?.period ?: SupportPeriod.Monthly
-    val tiers = state.subscriptions
-      .filter { it.period == period }
-      .sortedBy { it.tier.ordinal }
-    val wanted = tier ?: active?.tier ?: SupporterTier.HoneyTea
-    val offer = tiers.firstOrNull { it.tier == wanted } ?: tiers.firstOrNull() ?: return null
-    val action = when (active) {
-      ActiveSubscription(offer.tier, period) -> Action.Manage
-      null -> Action.Subscribe(offer.formattedPrice, period)
-      else -> Action.Switch(offer.formattedPrice, period)
+  private fun SupportBackendState.Play.tiers(frequency: SupportFrequency): List<SupportViewState.Tier> {
+    val period = frequency.period
+    val prices = if (period == null) {
+      tips.map { it.tier to it.formattedPrice }
+    } else {
+      subscriptions.filter { it.period == period }.map { it.tier to it.formattedPrice }
     }
-    return Selection(period, tiers, offer, action)
+    return prices
+      .sortedBy { (tier, _) -> tier.ordinal }
+      .map { (tier, formattedPrice) ->
+        SupportViewState.Tier(
+          tier = tier,
+          formattedPrice = formattedPrice,
+          active = period != null && activeSubscription == ActiveSubscription(tier, period),
+        )
+      }
   }
 
   override fun close() {
@@ -130,34 +134,25 @@ class SupportViewModel(
     backend.openKoFi()
   }
 
-  override fun selectPeriod(period: SupportPeriod) {
-    this.period = period
+  override fun selectFrequency(frequency: SupportFrequency) {
+    chosenFrequency = frequency
   }
 
   override fun selectTier(tier: SupporterTier) {
-    this.tier = tier
+    chosenTier = tier
   }
 
   override fun confirm(activity: Activity) {
     val state = backend.state.value as? SupportBackendState.Play ?: return
-    val selection = selection(state) ?: return
+    val content = playContent(state, note = null) ?: return
     message = null
-    when (selection.action) {
+    val tier = content.selectedTier
+    when (val action = content.action) {
       Action.Manage -> backend.manageSubscription()
-      is Action.Subscribe, is Action.Switch -> backend.subscribe(activity, selection.offer.tier, selection.period)
+      is Action.Subscribe -> backend.subscribe(activity, tier, action.period)
+      is Action.Switch -> backend.subscribe(activity, tier, action.period)
+      is Action.Tip -> backend.tip(activity, tier)
     }
-  }
-
-  override fun toggleTips() {
-    showTips = !showTips
-  }
-
-  override fun tip(
-    activity: Activity,
-    tip: TipOffer,
-  ) {
-    message = null
-    backend.tip(activity, tip)
   }
 
   override fun manageSubscription() {
@@ -168,11 +163,4 @@ class SupportViewModel(
     message = null
     backend.refresh()
   }
-
-  private data class Selection(
-    val period: SupportPeriod,
-    val tiers: List<SubscriptionOffer>,
-    val offer: SubscriptionOffer,
-    val action: Action,
-  )
 }

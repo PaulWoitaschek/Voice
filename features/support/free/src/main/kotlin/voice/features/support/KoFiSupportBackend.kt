@@ -31,7 +31,7 @@ class KoFiSupportBackend(private val navigator: Navigator) : SupportBackend {
 
   override fun tip(
     activity: Activity,
-    tip: TipOffer,
+    tier: SupporterTier,
   ) {}
 
   override fun manageSubscription() {}

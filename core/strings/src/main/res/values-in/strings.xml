@@ -351,7 +351,6 @@
     <string name="support.action.manage_subscription">Kelola langganan</string>
     <string name="support.action.subscribe">Dukung dengan %1$s</string>
     <string name="support.action.switch">Beralih ke %1$s</string>
-    <string name="support.action.tip_once">Lebih suka tip sekali saja?</string>
     <string name="support.badge.earned">Diraih</string>
     <string name="support.badge.first_cup">Cangkir pertama</string>
     <string name="support.badge.not_earned">Belum diraih</string>
@@ -365,6 +364,7 @@
     <string name="support.description.maintenance_subtitle">Donasi membantu membiayai perawatan dan pengembangan berkelanjutan.</string>
     <string name="support.description.play">Dukungan bulanan memungkinkan saya merencanakan rilis berikutnya, bukan sekadar perbaikan berikutnya.</string>
     <string name="support.fine_print">Ini ucapan terima kasih: tidak membuka fitur apa pun. Batalkan kapan saja di Google Play.</string>
+    <string name="support.fine_print.tip">Ini ucapan terima kasih: tidak membuka fitur apa pun. Tanpa langganan.</string>
     <string name="support.helps.title">Dukungan membantu untuk</string>
     <string name="support.helps.maintenance">Perbaikan bug dan perawatan</string>
     <string name="support.helps.features">Fitur baru</string>
@@ -375,8 +375,10 @@
     <string name="support.message.pending">Teh Anda sedang diseduh. Lencana Anda muncul setelah Google mengonfirmasi pembayaran.</string>
     <string name="support.period.monthly">Bulanan</string>
     <string name="support.period.yearly">Tahunan</string>
+    <string name="support.period.once">Sekali</string>
     <string name="support.price.monthly">%1$s per bulan</string>
     <string name="support.price.yearly">%1$s per tahun</string>
+    <string name="support.price.once">%1$s sekali</string>
     <string name="support.supporter.since">Pendukung sejak %1$s</string>
     <string name="support.supporter.title">Anda seorang pendukung</string>
     <string name="support.thank_you.action">Kembali mendengarkan</string>
@@ -389,7 +391,6 @@
     <string name="support.tier.honey_tea.title">Teh madu</string>
     <string name="support.tier.tea.summary">Menjaga dapur tetap mengepul</string>
     <string name="support.tier.tea.title">Secangkir teh</string>
-    <string name="support.tips.title">Tip sekali</string>
     <string name="support.unavailable.message">Layanan tagihan Google Play tidak dapat dihubungi di perangkat ini sekarang.</string>
     <string name="support.unavailable.title">Dukungan tidak tersedia</string>
     <string name="shortcut.play_current.short_label">Putar saat ini</string>

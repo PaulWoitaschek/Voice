@@ -399,7 +399,6 @@
     <string name="support.action.manage_subscription">Spravovat předplatné</string>
     <string name="support.action.subscribe">Podpořit za %1$s</string>
     <string name="support.action.switch">Přejít na %1$s</string>
-    <string name="support.action.tip_once">Raději jednorázové spropitné?</string>
     <string name="support.badge.earned">Získaný</string>
     <string name="support.badge.first_cup">První šálek</string>
     <string name="support.badge.not_earned">Zatím nezískaný</string>
@@ -413,6 +412,7 @@
     <string name="support.description.maintenance_subtitle">Dary pomáhají financovat průběžnou údržbu a vývoj.</string>
     <string name="support.description.play">Měsíční podpora mi umožňuje plánovat další verzi, nejen další opravu.</string>
     <string name="support.fine_print">Je to poděkování: nic neodemyká. Zrušit můžete kdykoli v Google Play.</string>
+    <string name="support.fine_print.tip">Je to poděkování: nic neodemyká. Žádné předplatné.</string>
     <string name="support.helps.title">Podpora pomáhá s</string>
     <string name="support.helps.maintenance">Opravami chyb a údržbou</string>
     <string name="support.helps.features">Novými funkcemi</string>
@@ -423,8 +423,10 @@
     <string name="support.message.pending">Váš čaj se louhuje. Odznak se objeví, jakmile Google platbu potvrdí.</string>
     <string name="support.period.monthly">Měsíčně</string>
     <string name="support.period.yearly">Ročně</string>
+    <string name="support.period.once">Jednorázově</string>
     <string name="support.price.monthly">%1$s měsíčně</string>
     <string name="support.price.yearly">%1$s ročně</string>
+    <string name="support.price.once">%1$s jednorázově</string>
     <string name="support.supporter.since">Podporujete od: %1$s</string>
     <string name="support.supporter.title">Patříte mezi podporovatele</string>
     <string name="support.thank_you.action">Zpět k poslechu</string>
@@ -437,7 +439,6 @@
     <string name="support.tier.honey_tea.title">Čaj s medem</string>
     <string name="support.tier.tea.summary">Platí účty</string>
     <string name="support.tier.tea.title">Šálek čaje</string>
-    <string name="support.tips.title">Jednorázové spropitné</string>
     <string name="support.unavailable.message">Platby přes Google Play teď na tomto zařízení nejsou dostupné.</string>
     <string name="support.unavailable.title">Podpora není dostupná</string>
     <string name="shortcut.play_current.short_label">Přehrát aktuální</string>

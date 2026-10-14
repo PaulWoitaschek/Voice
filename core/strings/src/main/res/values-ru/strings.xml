@@ -399,7 +399,6 @@
     <string name="support.action.manage_subscription">Управлять подпиской</string>
     <string name="support.action.subscribe">Поддержать за %1$s</string>
     <string name="support.action.switch">Перейти на %1$s</string>
-    <string name="support.action.tip_once">Лучше разовые чаевые?</string>
     <string name="support.badge.earned">Получен</string>
     <string name="support.badge.first_cup">Первая чашка</string>
     <string name="support.badge.not_earned">Ещё не получен</string>
@@ -413,6 +412,7 @@
     <string name="support.description.maintenance_subtitle">Пожертвования помогают финансировать постоянную поддержку и разработку.</string>
     <string name="support.description.play">Ежемесячная поддержка позволяет мне планировать следующую версию, а не только следующее исправление.</string>
     <string name="support.fine_print">Это благодарность: ничего не открывает. Отменить можно в любой момент в Google Play.</string>
+    <string name="support.fine_print.tip">Это благодарность: ничего не открывает. Без подписки.</string>
     <string name="support.helps.title">Поддержка помогает с</string>
     <string name="support.helps.maintenance">Исправлениями ошибок и поддержкой</string>
     <string name="support.helps.features">Новыми функциями</string>
@@ -423,8 +423,10 @@
     <string name="support.message.pending">Ваш чай заваривается. Значок появится, когда Google подтвердит платёж.</string>
     <string name="support.period.monthly">Ежемесячно</string>
     <string name="support.period.yearly">Ежегодно</string>
+    <string name="support.period.once">Разово</string>
     <string name="support.price.monthly">%1$s в месяц</string>
     <string name="support.price.yearly">%1$s в год</string>
+    <string name="support.price.once">%1$s разово</string>
     <string name="support.supporter.since">Начало поддержки: %1$s</string>
     <string name="support.supporter.title">Вы поддерживаете Voice</string>
     <string name="support.thank_you.action">Вернуться к прослушиванию</string>
@@ -437,7 +439,6 @@
     <string name="support.tier.honey_tea.title">Чай с мёдом</string>
     <string name="support.tier.tea.summary">Чтобы свет не погас</string>
     <string name="support.tier.tea.title">Чашка чая</string>
-    <string name="support.tips.title">Разовые чаевые</string>
     <string name="support.unavailable.message">Сейчас на этом устройстве нет доступа к оплате через Google Play.</string>
     <string name="support.unavailable.title">Поддержка недоступна</string>
     <string name="shortcut.play_current.short_label">Воспроизвести текущую</string>

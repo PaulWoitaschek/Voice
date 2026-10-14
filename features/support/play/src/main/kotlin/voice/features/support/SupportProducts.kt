@@ -7,7 +7,7 @@ internal object SupportProducts {
     .flatMap { tier -> SupportPeriod.entries.map { period -> ActiveSubscription(tier, period) } }
     .associateBy(::subscriptionId)
 
-  val tips: List<String> = listOf("tip_small", "tip_medium", "tip_large")
+  val tips: Map<String, SupporterTier> = SupporterTier.entries.associateBy(::tipId)
 
   fun subscriptionId(subscription: ActiveSubscription): String {
     return subscriptionId(subscription.tier, subscription.period)
@@ -27,5 +27,13 @@ internal object SupportProducts {
       SupportPeriod.Yearly -> "yearly"
     }
     return "supporter_${tierId}_$periodId"
+  }
+
+  fun tipId(tier: SupporterTier): String {
+    return when (tier) {
+      SupporterTier.Tea -> "tip_small"
+      SupporterTier.HoneyTea -> "tip_medium"
+      SupporterTier.GoldenMic -> "tip_large"
+    }
   }
 }

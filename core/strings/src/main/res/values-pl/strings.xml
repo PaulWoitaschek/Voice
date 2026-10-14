@@ -399,7 +399,6 @@
     <string name="support.action.manage_subscription">Zarządzaj subskrypcją</string>
     <string name="support.action.subscribe">Wesprzyj za %1$s</string>
     <string name="support.action.switch">Przejdź na %1$s</string>
-    <string name="support.action.tip_once">Wolisz jednorazowy napiwek?</string>
     <string name="support.badge.earned">Zdobyta</string>
     <string name="support.badge.first_cup">Pierwsza filiżanka</string>
     <string name="support.badge.not_earned">Jeszcze niezdobyta</string>
@@ -413,6 +412,7 @@
     <string name="support.description.maintenance_subtitle">Darowizny pomagają finansować bieżące utrzymanie i rozwój.</string>
     <string name="support.description.play">Comiesięczne wsparcie pozwala mi planować kolejne wydanie, a nie tylko kolejną poprawkę.</string>
     <string name="support.fine_print">To podziękowanie: nic nie odblokowuje. Anuluj w każdej chwili w Google Play.</string>
+    <string name="support.fine_print.tip">To podziękowanie: nic nie odblokowuje. Bez subskrypcji.</string>
     <string name="support.helps.title">Wsparcie pomaga w</string>
     <string name="support.helps.maintenance">Naprawach błędów i utrzymaniu</string>
     <string name="support.helps.features">Nowych funkcjach</string>
@@ -423,8 +423,10 @@
     <string name="support.message.pending">Twoja herbata się parzy. Odznaka pojawi się, gdy Google potwierdzi płatność.</string>
     <string name="support.period.monthly">Miesięcznie</string>
     <string name="support.period.yearly">Rocznie</string>
+    <string name="support.period.once">Jednorazowo</string>
     <string name="support.price.monthly">%1$s miesięcznie</string>
     <string name="support.price.yearly">%1$s rocznie</string>
+    <string name="support.price.once">%1$s jednorazowo</string>
     <string name="support.supporter.since">Wspierasz od: %1$s</string>
     <string name="support.supporter.title">Jesteś wśród wspierających</string>
     <string name="support.thank_you.action">Wróć do słuchania</string>
@@ -437,7 +439,6 @@
     <string name="support.tier.honey_tea.title">Herbata z miodem</string>
     <string name="support.tier.tea.summary">Opłaca rachunki</string>
     <string name="support.tier.tea.title">Filiżanka herbaty</string>
-    <string name="support.tips.title">Jednorazowy napiwek</string>
     <string name="support.unavailable.message">Nie można teraz połączyć się z płatnościami Google Play na tym urządzeniu.</string>
     <string name="support.unavailable.title">Wsparcie jest niedostępne</string>
     <string name="shortcut.play_current.short_label">Odtwórz aktualne</string>

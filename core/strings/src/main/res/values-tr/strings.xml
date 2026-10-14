@@ -367,7 +367,6 @@
     <string name="support.action.manage_subscription">Aboneliği yönet</string>
     <string name="support.action.subscribe">%1$s ile destekle</string>
     <string name="support.action.switch">%1$s planına geç</string>
-    <string name="support.action.tip_once">Tek seferlik bahşiş mi?</string>
     <string name="support.badge.earned">Kazanıldı</string>
     <string name="support.badge.first_cup">İlk çay</string>
     <string name="support.badge.not_earned">Henüz kazanılmadı</string>
@@ -381,6 +380,7 @@
     <string name="support.description.maintenance_subtitle">Bağışlar sürekli bakım ve geliştirmeyi finanse etmeye yardımcı olur.</string>
     <string name="support.description.play">Aylık destek, sadece bir sonraki düzeltmeyi değil, bir sonraki sürümü planlamamı sağlıyor.</string>
     <string name="support.fine_print">Bu bir teşekkür: hiçbir şeyin kilidini açmaz. Google Play\'den istediğin zaman iptal et.</string>
+    <string name="support.fine_print.tip">Bu bir teşekkür: hiçbir şeyin kilidini açmaz. Abonelik yok.</string>
     <string name="support.helps.title">Destek şunlara yardımcı olur</string>
     <string name="support.helps.maintenance">Hata düzeltmeleri ve bakım</string>
     <string name="support.helps.features">Yeni özellikler</string>
@@ -391,8 +391,10 @@
     <string name="support.message.pending">Çayın demleniyor. Google ödemeyi onayladığında rozetin görünecek.</string>
     <string name="support.period.monthly">Aylık</string>
     <string name="support.period.yearly">Yıllık</string>
+    <string name="support.period.once">Tek seferlik</string>
     <string name="support.price.monthly">Ayda %1$s</string>
     <string name="support.price.yearly">Yılda %1$s</string>
+    <string name="support.price.once">Tek seferlik %1$s</string>
     <string name="support.supporter.since">%1$s tarihinden beri destekçi</string>
     <string name="support.supporter.title">Sen bir destekçisin</string>
     <string name="support.thank_you.action">Dinlemeye dön</string>
@@ -405,7 +407,6 @@
     <string name="support.tier.honey_tea.title">Ballı çay</string>
     <string name="support.tier.tea.summary">Ocağı tüttürür</string>
     <string name="support.tier.tea.title">Bir bardak çay</string>
-    <string name="support.tips.title">Tek seferlik bahşiş</string>
     <string name="support.unavailable.message">Google Play faturalandırmasına şu anda bu cihazdan ulaşılamıyor.</string>
     <string name="support.unavailable.title">Destek olmak şu an mümkün değil</string>
     <string name="shortcut.play_current.short_label">Geçerli oynatma</string>

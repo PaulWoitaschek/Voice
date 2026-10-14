@@ -367,7 +367,6 @@
     <string name="support.action.manage_subscription">Előfizetés kezelése</string>
     <string name="support.action.subscribe">Támogatás: %1$s</string>
     <string name="support.action.switch">Váltás erre: %1$s</string>
-    <string name="support.action.tip_once">Inkább egyszeri borravaló?</string>
     <string name="support.badge.earned">Megszerezve</string>
     <string name="support.badge.first_cup">Első csésze</string>
     <string name="support.badge.not_earned">Még nincs megszerezve</string>
@@ -381,6 +380,7 @@
     <string name="support.description.maintenance_subtitle">Az adományok a folyamatos karbantartást és fejlesztést segítik.</string>
     <string name="support.description.play">A havi támogatás teszi lehetővé, hogy ne csak a következő javítást, hanem a következő kiadást is megtervezhessem.</string>
     <string name="support.fine_print">Ez egy köszönet: nem old fel semmit. Bármikor lemondható a Google Playen.</string>
+    <string name="support.fine_print.tip">Ez egy köszönet: nem old fel semmit. Nincs előfizetés.</string>
     <string name="support.helps.title">Amiben a támogatás segít</string>
     <string name="support.helps.maintenance">Hibajavítások és karbantartás</string>
     <string name="support.helps.features">Új funkciók</string>
@@ -391,8 +391,10 @@
     <string name="support.message.pending">Már fő a teája. A jelvénye megjelenik, amint a Google megerősíti a fizetést.</string>
     <string name="support.period.monthly">Havi</string>
     <string name="support.period.yearly">Éves</string>
+    <string name="support.period.once">Egyszeri</string>
     <string name="support.price.monthly">%1$s havonta</string>
     <string name="support.price.yearly">%1$s évente</string>
+    <string name="support.price.once">%1$s egyszer</string>
     <string name="support.supporter.since">Támogató %1$s óta</string>
     <string name="support.supporter.title">Ön már támogató</string>
     <string name="support.thank_you.action">Vissza a hallgatáshoz</string>
@@ -405,7 +407,6 @@
     <string name="support.tier.honey_tea.title">Mézes tea</string>
     <string name="support.tier.tea.summary">Fedezi a rezsit</string>
     <string name="support.tier.tea.title">Egy csésze tea</string>
-    <string name="support.tips.title">Egyszeri borravaló</string>
     <string name="support.unavailable.message">A Google Play számlázás jelenleg nem érhető el ezen az eszközön.</string>
     <string name="support.unavailable.title">A támogatás nem érhető el</string>
     <string name="shortcut.play_current.short_label">Jelenlegi lejátszása</string>

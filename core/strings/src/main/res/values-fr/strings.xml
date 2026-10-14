@@ -383,7 +383,6 @@
     <string name="support.action.manage_subscription">Gérer l\'abonnement</string>
     <string name="support.action.subscribe">Soutenir pour %1$s</string>
     <string name="support.action.switch">Passer à %1$s</string>
-    <string name="support.action.tip_once">Plutôt un pourboire unique ?</string>
     <string name="support.badge.earned">Obtenu</string>
     <string name="support.badge.first_cup">Première tasse</string>
     <string name="support.badge.not_earned">Pas encore obtenu</string>
@@ -397,6 +396,7 @@
     <string name="support.description.maintenance_subtitle">Les dons aident à financer la maintenance et le développement continus.</string>
     <string name="support.description.play">Un soutien mensuel me permet de préparer la prochaine version, pas seulement le prochain correctif.</string>
     <string name="support.fine_print">C\'est un merci : ça ne débloque rien. Résiliable à tout moment sur Google Play.</string>
+    <string name="support.fine_print.tip">C\'est un merci : ça ne débloque rien. Sans abonnement.</string>
     <string name="support.helps.title">Votre soutien aide pour</string>
     <string name="support.helps.maintenance">Corrections de bugs et maintenance</string>
     <string name="support.helps.features">Nouvelles fonctionnalités</string>
@@ -407,8 +407,10 @@
     <string name="support.message.pending">Votre thé infuse. Votre badge apparaîtra dès que Google aura confirmé le paiement.</string>
     <string name="support.period.monthly">Mensuel</string>
     <string name="support.period.yearly">Annuel</string>
+    <string name="support.period.once">Une fois</string>
     <string name="support.price.monthly">%1$s par mois</string>
     <string name="support.price.yearly">%1$s par an</string>
+    <string name="support.price.once">%1$s une fois</string>
     <string name="support.supporter.since">Soutien depuis %1$s</string>
     <string name="support.supporter.title">Vous soutenez Voice</string>
     <string name="support.thank_you.action">Retour à l\'écoute</string>
@@ -421,7 +423,6 @@
     <string name="support.tier.honey_tea.title">Thé au miel</string>
     <string name="support.tier.tea.summary">Fait tourner la boutique</string>
     <string name="support.tier.tea.title">Tasse de thé</string>
-    <string name="support.tips.title">Pourboire unique</string>
     <string name="support.unavailable.message">La facturation Google Play est inaccessible sur cet appareil pour le moment.</string>
     <string name="support.unavailable.title">Le soutien n\'est pas disponible</string>
     <string name="shortcut.play_current.short_label">Lire l\'actuel</string>

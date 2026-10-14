@@ -367,7 +367,6 @@
     <string name="support.action.manage_subscription">Hallinnoi tilausta</string>
     <string name="support.action.subscribe">Tue hintaan %1$s</string>
     <string name="support.action.switch">Vaihda hintaan %1$s</string>
-    <string name="support.action.tip_once">Mieluummin kertatippi?</string>
     <string name="support.badge.earned">Ansaittu</string>
     <string name="support.badge.first_cup">Ensimmäinen kuppi</string>
     <string name="support.badge.not_earned">Ei vielä ansaittu</string>
@@ -381,6 +380,7 @@
     <string name="support.description.maintenance_subtitle">Lahjoitukset auttavat rahoittamaan jatkuvaa ylläpitoa ja kehitystä.</string>
     <string name="support.description.play">Kuukausituki antaa minun suunnitella seuraavaa versiota, ei vain seuraavaa korjausta.</string>
     <string name="support.fine_print">Tämä on kiitos: se ei avaa mitään. Peru milloin vain Google Playssa.</string>
+    <string name="support.fine_print.tip">Tämä on kiitos: se ei avaa mitään. Ei tilausta.</string>
     <string name="support.helps.title">Tuki auttaa</string>
     <string name="support.helps.maintenance">Virhekorjaukset ja ylläpito</string>
     <string name="support.helps.features">Uudet ominaisuudet</string>
@@ -391,8 +391,10 @@
     <string name="support.message.pending">Teesi hautuu. Merkki ilmestyy, kun Google vahvistaa maksun.</string>
     <string name="support.period.monthly">Kuukausittain</string>
     <string name="support.period.yearly">Vuosittain</string>
+    <string name="support.period.once">Kerran</string>
     <string name="support.price.monthly">%1$s kuussa</string>
     <string name="support.price.yearly">%1$s vuodessa</string>
+    <string name="support.price.once">%1$s kertamaksuna</string>
     <string name="support.supporter.since">Tukijana alkaen: %1$s</string>
     <string name="support.supporter.title">Olet tukija</string>
     <string name="support.thank_you.action">Takaisin kuuntelemaan</string>
@@ -405,7 +407,6 @@
     <string name="support.tier.honey_tea.title">Hunajatee</string>
     <string name="support.tier.tea.summary">Pitää valot päällä</string>
     <string name="support.tier.tea.title">Kuppi teetä</string>
-    <string name="support.tips.title">Kertatippi</string>
     <string name="support.unavailable.message">Google Play -laskutukseen ei juuri nyt saada yhteyttä tällä laitteella.</string>
     <string name="support.unavailable.title">Tukeminen ei ole käytettävissä</string>
     <string name="shortcut.play_current.short_label">Toista nykyinen</string>

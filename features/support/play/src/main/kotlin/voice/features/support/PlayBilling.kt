@@ -64,7 +64,7 @@ class PlayBilling(context: Context) : Billing {
   override suspend fun products(): List<BillingProduct>? {
     if (!connect()) return null
     val subscriptions = queryProductDetails(ProductType.SUBS, SupportProducts.subscriptions.keys) ?: return null
-    val tips = queryProductDetails(ProductType.INAPP, SupportProducts.tips) ?: return null
+    val tips = queryProductDetails(ProductType.INAPP, SupportProducts.tips.keys) ?: return null
     return (subscriptions + tips).mapNotNull { details ->
       productDetails[details.productId] = details
       val price = details.baseSubscriptionOffer()?.pricingPhases?.pricingPhaseList?.lastOrNull()?.formattedPrice

@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.ui.CheckBadge
 import voice.core.ui.MorphShape
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberThemeColorScheme

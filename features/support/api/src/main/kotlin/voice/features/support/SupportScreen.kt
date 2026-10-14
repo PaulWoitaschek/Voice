@@ -2,6 +2,7 @@
 
 package voice.features.support
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -41,10 +42,33 @@ import voice.core.strings.R as StringsR
 
 @Composable
 @Preview
+@Preview(name = "dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 private fun SupportPlayPreview() {
   VoiceTheme {
     Support(
       viewState = SupportViewState.preview(),
+      listener = SupportListener.noop(),
+    )
+  }
+}
+
+@Composable
+@Preview
+private fun SupportOncePreview() {
+  VoiceTheme {
+    Support(
+      viewState = SupportViewState.preview(
+        content = SupportViewState.previewPlayContent().copy(
+          frequency = SupportFrequency.Once,
+          tiers = listOf(
+            SupportViewState.Tier(SupporterTier.Tea, "€2.99", active = false),
+            SupportViewState.Tier(SupporterTier.HoneyTea, "€4.99", active = false),
+            SupportViewState.Tier(SupporterTier.GoldenMic, "€9.99", active = false),
+          ),
+          selectedTier = SupporterTier.HoneyTea,
+          action = SupportViewState.Action.Tip("€4.99"),
+        ),
+      ),
       listener = SupportListener.noop(),
     )
   }

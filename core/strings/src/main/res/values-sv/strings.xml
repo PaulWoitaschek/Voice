@@ -367,7 +367,6 @@
     <string name="support.action.manage_subscription">Hantera prenumeration</string>
     <string name="support.action.subscribe">Stötta med %1$s</string>
     <string name="support.action.switch">Byt till %1$s</string>
-    <string name="support.action.tip_once">Hellre ge dricks en gång?</string>
     <string name="support.badge.earned">Uppnått</string>
     <string name="support.badge.first_cup">Första koppen</string>
     <string name="support.badge.not_earned">Inte uppnått än</string>
@@ -381,6 +380,7 @@
     <string name="support.description.maintenance_subtitle">Donationer bidrar till löpande underhåll och utveckling.</string>
     <string name="support.description.play">Månatligt stöd gör att jag kan planera nästa version, inte bara nästa buggfix.</string>
     <string name="support.fine_print">Ett tack: låser inte upp något. Säg upp när som helst i Google Play.</string>
+    <string name="support.fine_print.tip">Ett tack: låser inte upp något. Ingen prenumeration.</string>
     <string name="support.helps.title">Ditt stöd bidrar till</string>
     <string name="support.helps.maintenance">Felrättningar och underhåll</string>
     <string name="support.helps.features">Nya funktioner</string>
@@ -391,8 +391,10 @@
     <string name="support.message.pending">Ditt te står och drar. Märket dyker upp när Google har bekräftat betalningen.</string>
     <string name="support.period.monthly">Månadsvis</string>
     <string name="support.period.yearly">Årsvis</string>
+    <string name="support.period.once">En gång</string>
     <string name="support.price.monthly">%1$s per månad</string>
     <string name="support.price.yearly">%1$s per år</string>
+    <string name="support.price.once">%1$s en gång</string>
     <string name="support.supporter.since">Supporter sedan %1$s</string>
     <string name="support.supporter.title">Du är supporter</string>
     <string name="support.thank_you.action">Fortsätt lyssna</string>
@@ -405,7 +407,6 @@
     <string name="support.tier.honey_tea.title">Te med honung</string>
     <string name="support.tier.tea.summary">Håller lamporna tända</string>
     <string name="support.tier.tea.title">Kopp te</string>
-    <string name="support.tips.title">Engångsdricks</string>
     <string name="support.unavailable.message">Google Play-fakturering går inte att nå på den här enheten just nu.</string>
     <string name="support.unavailable.title">Det går inte att stötta just nu</string>
     <string name="shortcut.play_current.short_label">Fortsätt lyssna</string>

@@ -367,7 +367,6 @@
     <string name="support.action.manage_subscription">Administrer abonnement</string>
     <string name="support.action.subscribe">Støtt med %1$s</string>
     <string name="support.action.switch">Bytt til %1$s</string>
-    <string name="support.action.tip_once">Heller gi tips én gang?</string>
     <string name="support.badge.earned">Oppnådd</string>
     <string name="support.badge.first_cup">Første kopp</string>
     <string name="support.badge.not_earned">Ikke oppnådd ennå</string>
@@ -381,6 +380,7 @@
     <string name="support.description.maintenance_subtitle">Donasjoner bidrar til å finansiere løpende vedlikehold og utvikling.</string>
     <string name="support.description.play">Månedlig støtte lar meg planlegge neste versjon, ikke bare neste feilretting.</string>
     <string name="support.fine_print">Et takk: låser ikke opp noe. Si opp når som helst i Google Play.</string>
+    <string name="support.fine_print.tip">Et takk: låser ikke opp noe. Uten abonnement.</string>
     <string name="support.helps.title">Støtte hjelper med</string>
     <string name="support.helps.maintenance">Feilrettinger og vedlikehold</string>
     <string name="support.helps.features">Nye funksjoner</string>
@@ -391,8 +391,10 @@
     <string name="support.message.pending">Teen står og trekker. Merket ditt dukker opp når Google bekrefter betalingen.</string>
     <string name="support.period.monthly">Månedlig</string>
     <string name="support.period.yearly">Årlig</string>
+    <string name="support.period.once">Én gang</string>
     <string name="support.price.monthly">%1$s per måned</string>
     <string name="support.price.yearly">%1$s per år</string>
+    <string name="support.price.once">%1$s én gang</string>
     <string name="support.supporter.since">Støttespiller siden %1$s</string>
     <string name="support.supporter.title">Du er en støttespiller</string>
     <string name="support.thank_you.action">Fortsett å lytte</string>
@@ -405,7 +407,6 @@
     <string name="support.tier.honey_tea.title">Te med honning</string>
     <string name="support.tier.tea.summary">Holder lyset på</string>
     <string name="support.tier.tea.title">Kopp te</string>
-    <string name="support.tips.title">Engangstips</string>
     <string name="support.unavailable.message">Google Play-fakturering kan ikke nås på denne enheten akkurat nå.</string>
     <string name="support.unavailable.title">Støtte er ikke tilgjengelig</string>
     <string name="shortcut.play_current.short_label">Spill nåværende</string>

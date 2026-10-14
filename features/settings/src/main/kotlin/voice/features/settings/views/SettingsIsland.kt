@@ -221,31 +221,3 @@ internal fun Chevron(modifier: Modifier = Modifier) {
     contentDescription = null,
   )
 }
-
-@Composable
-internal fun CheckBadge(
-  visible: Boolean,
-  modifier: Modifier = Modifier,
-  containerColor: Color = MaterialTheme.colorScheme.primary,
-) {
-  AnimatedVisibility(
-    modifier = modifier,
-    visible = visible,
-    enter = scaleIn(spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium)) + fadeIn(),
-    exit = scaleOut() + fadeOut(),
-  ) {
-    Box(
-      modifier = Modifier
-        .size(24.dp)
-        .background(containerColor, CircleShape),
-      contentAlignment = Alignment.Center,
-    ) {
-      Icon(
-        imageVector = VoiceIcons.Check,
-        contentDescription = null,
-        tint = contentColorFor(containerColor),
-        modifier = Modifier.size(16.dp),
-      )
-    }
-  }
-}
