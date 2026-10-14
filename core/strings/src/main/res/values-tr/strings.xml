@@ -187,7 +187,8 @@
         <item quantity="one">%d ses dosyası</item>
         <item quantity="other">%d ses dosyası</item>
     </plurals>
-    <string name="history.action.go_there">Oraya git</string>
+    <string name="history.action.continue_from">%1$s konumundan devam et</string>
+    <string name="history.action.continue_from.chapter">Böl. %1$d · %2$s konumundan devam et</string>
     <string name="history.empty.message">Oynatma, duraklatma ve atlamalar burada görünür, böylece kaldığınız yeri her zaman bulabilirsiniz.</string>
     <string name="history.empty.title">Henüz burada bir şey yok</string>
     <string name="history.event.bookmark_jump">Yer imine gidildi</string>

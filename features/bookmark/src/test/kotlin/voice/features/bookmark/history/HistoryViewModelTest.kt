@@ -104,7 +104,7 @@ class HistoryViewModelTest {
     playStateManager.playState = PlayStateManager.PlayState.Playing
     listenedUntilPause()
     test { viewModel ->
-      viewModel.onGoTo(awaitState().single().goTo!!)
+      viewModel.onGoTo(awaitState().single().goTo!!.spot)
       scope.testScheduler.advanceUntilIdle()
       assertEquals(expected = bookId, actual = currentBookStore.data.first())
       verify {
@@ -119,7 +119,7 @@ class HistoryViewModelTest {
   fun `going there while paused doesn't start playback`() {
     listenedUntilPause()
     test { viewModel ->
-      viewModel.onGoTo(awaitState().single().goTo!!)
+      viewModel.onGoTo(awaitState().single().goTo!!.spot)
       scope.testScheduler.advanceUntilIdle()
       verify { playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek) }
       verify(exactly = 0) { playerController.play() }
@@ -130,7 +130,7 @@ class HistoryViewModelTest {
   fun `a double tap goes there once`() {
     listenedUntilPause()
     test { viewModel ->
-      val spot = awaitState().single().goTo!!
+      val spot = awaitState().single().goTo!!.spot
       viewModel.onGoTo(spot)
       viewModel.onGoTo(spot)
       scope.testScheduler.advanceUntilIdle()
@@ -146,7 +146,7 @@ class HistoryViewModelTest {
     historyEvents += testEvent(Type.ChapterChange, today(9), arrival, 4.minutes, source = Source.Headset, to = signal to 0.minutes)
     test { viewModel ->
       val jump = awaitState().days.single().rows.filterIsInstance<HistoryJump>().single()
-      viewModel.onGoTo(jump.back)
+      viewModel.onGoTo(jump.back.spot)
       scope.testScheduler.advanceUntilIdle()
       verify {
         playerController.setPosition(4.minutes.inWholeMilliseconds, arrival.id, Type.Seek)
@@ -163,7 +163,7 @@ class HistoryViewModelTest {
       currentBookStore.updateData { BookId("other") }
       val stretch = awaitState().single()
       assertNull(stretch.end)
-      assertEquals(expected = HistorySpot(arrival.id, 0L), actual = stretch.goTo)
+      assertEquals(expected = HistorySpot(arrival.id, 0L), actual = stretch.goTo?.spot)
     }
   }
 

@@ -198,7 +198,8 @@
         <item quantity="few">%d fișiere audio</item>
         <item quantity="other">%d fișiere audio</item>
     </plurals>
-    <string name="history.action.go_there">Mergi acolo</string>
+    <string name="history.action.continue_from">Continuă de la %1$s</string>
+    <string name="history.action.continue_from.chapter">Continuă de la cap. %1$d · %2$s</string>
     <string name="history.empty.message">Redările, pauzele și salturile apar aici, ca să găsești mereu drumul înapoi.</string>
     <string name="history.empty.title">Încă nimic aici</string>
     <string name="history.event.bookmark_jump">Salt la un semn de carte</string>

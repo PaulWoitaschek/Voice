@@ -310,6 +310,7 @@ private fun RawStretch.toStretch(
   val unknownEnd = endUnknown || cause == StretchCause.SleepTimerStarted
   // after falling asleep, playback is at the end already, so this goes to where the listener was still awake
   val target = if (endedBySleepTimer || unknownEnd) lastTouch else this.to
+  val targetLocation = target?.let { index.historyLocation(it.chapterId, it.time) }
   return HistoryStretch(
     key = key,
     start = Instant.ofEpochMilli(startMillis).localTime(zone),
@@ -323,7 +324,7 @@ private fun RawStretch.toStretch(
       startedBy != null && startedBy in jumpsWithRows -> StretchCause.Jumped(startedBy.type, startedBy.source, hasRow = true)
       else -> cause
     },
-    goTo = target?.takeIf { !isOngoing && index.locate(it.chapterId, it.time) != null },
+    goTo = if (target == null || targetLocation == null || isOngoing) null else HistoryTarget(target, targetLocation),
   )
 }
 
@@ -339,7 +340,7 @@ private fun RawJump.toJump(
     to = to?.let { index.historyLocation(it.chapterId, it.time) },
     type = type,
     source = source,
-    back = this.from,
+    back = HistoryTarget(this.from, from),
   )
 }
 

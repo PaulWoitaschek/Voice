@@ -47,7 +47,7 @@ internal data class HistoryStretch(
   val to: HistoryLocation?,
   val cause: StretchCause,
   /** Null while it's still playing, or when the spot is gone after a rescan. */
-  val goTo: HistorySpot?,
+  val goTo: HistoryTarget?,
 ) : HistoryRow
 
 /**
@@ -64,7 +64,7 @@ internal data class HistoryJump(
   val to: HistoryLocation?,
   val type: ListeningEvent.Type,
   val source: ListeningEvent.Source,
-  val back: HistorySpot,
+  val back: HistoryTarget,
 ) : HistoryRow
 
 @Immutable
@@ -86,6 +86,13 @@ internal sealed interface StretchCause {
 
   data object SleepTimerStarted : StretchCause
 }
+
+/** Where a row's button goes, and how that place reads. */
+@Immutable
+internal data class HistoryTarget(
+  val spot: HistorySpot,
+  val location: HistoryLocation,
+)
 
 @Immutable
 internal data class HistorySpot(

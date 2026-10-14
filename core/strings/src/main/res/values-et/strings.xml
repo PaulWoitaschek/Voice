@@ -187,7 +187,8 @@
         <item quantity="one">%d helifail</item>
         <item quantity="other">%d helifaili</item>
     </plurals>
-    <string name="history.action.go_there">Mine sinna</string>
+    <string name="history.action.continue_from">Jätka: %1$s</string>
+    <string name="history.action.continue_from.chapter">Jätka: ptk %1$d · %2$s</string>
     <string name="history.empty.message">Esitused, pausid ja hüpped on siin näha, nii et leiad alati tee tagasi.</string>
     <string name="history.empty.title">Siin pole veel midagi</string>
     <string name="history.event.bookmark_jump">Hüpe järjehoidjale</string>

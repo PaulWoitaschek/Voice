@@ -187,7 +187,8 @@
         <item quantity="one">%d lydfil</item>
         <item quantity="other">%d lydfiler</item>
     </plurals>
-    <string name="history.action.go_there">Gå dit</string>
+    <string name="history.action.continue_from">Fortsett fra %1$s</string>
+    <string name="history.action.continue_from.chapter">Fortsett fra kap. %1$d · %2$s</string>
     <string name="history.empty.message">Avspillinger, pauser og hopp vises her, så du alltid finner tilbake.</string>
     <string name="history.empty.title">Ingenting her ennå</string>
     <string name="history.event.bookmark_jump">Gikk til et bokmerke</string>

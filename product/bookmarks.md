@@ -98,14 +98,18 @@ has to be read like a log to find the one place that matters.
 
 **Solution:** The history lists stretches of listening: from where to where in the book, and when. A pause of 15
 minutes or more, or a big jump, starts a new one. A small line says what started it, like headphones or the car, or
-that the sleep timer ended it. Tapping a row goes to where it ended, and for a night, to where the listener was last
-awake. Settings and bookmarks aren't in the history, and deleting a bookmark already has undo in the list.
+that the sleep timer ended it. "Continue from …" goes to where it ended, and for a night, to where the listener was
+last awake. Settings and bookmarks aren't in the history, and deleting a bookmark already has undo in the list.
 
-Every big jump has a row of its own between the stretches, right away, also while paused: from where to where, what did
-it, like the headset button, the car, the lock screen or another device, and "Back to …" like the pill on the player.
-That's for a jump noticed after the pill is gone, and for jumps made away from the player. Jumps without 10 seconds of
-listening in between are one row, from where the first one left, so searching for a scene doesn't fill the list. A jump
-undone right away leaves no row.
+Every big jump has a slimmer row of its own between the stretches, right away, also while paused: from where to where,
+what did it, like the headset button, the car, the lock screen or another device, and "Back to …" like the pill on the
+player. That's for a jump noticed after the pill is gone, and for jumps made away from the player. Jumps without 10
+seconds of listening in between are one row, from where the first one left, so searching for a scene doesn't fill the
+list. A jump undone right away leaves no row.
+
+Each row does one thing, and its button says where it goes. The rows themselves used to be buttons without showing it:
+a tap moved the position and left the screen, so browsing could lose a place, and a night went somewhere other than the
+end it showed.
 
 **Turned down:**
 
