@@ -198,7 +198,8 @@
         <item quantity="two">%d קבצי שמע</item>
         <item quantity="other">%d קבצי שמע</item>
     </plurals>
-    <string name="history.action.go_there">מעבר לשם</string>
+    <string name="history.action.continue_from">המשך מ-%1$s</string>
+    <string name="history.action.continue_from.chapter">המשך מפרק %1$d · %2$s</string>
     <string name="history.empty.message">הפעלות, השהיות וקפיצות מופיעות כאן, כך שתמיד אפשר למצוא את הדרך חזרה.</string>
     <string name="history.empty.title">אין כאן עדיין כלום</string>
     <string name="history.event.bookmark_jump">מעבר לסימנייה</string>

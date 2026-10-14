@@ -198,7 +198,8 @@
         <item quantity="many">%d fichiers audio</item>
         <item quantity="other">%d fichiers audio</item>
     </plurals>
-    <string name="history.action.go_there">Y aller</string>
+    <string name="history.action.continue_from">Reprendre à %1$s</string>
+    <string name="history.action.continue_from.chapter">Reprendre au chap. %1$d · %2$s</string>
     <string name="history.empty.message">Les lectures, pauses et sauts s\'affichent ici, pour que vous retrouviez toujours où vous en étiez.</string>
     <string name="history.empty.title">Rien pour l\'instant</string>
     <string name="history.event.bookmark_jump">Saut vers un marque-page</string>

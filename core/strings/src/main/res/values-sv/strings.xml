@@ -187,7 +187,8 @@
         <item quantity="one">%d ljudfil</item>
         <item quantity="other">%d ljudfiler</item>
     </plurals>
-    <string name="history.action.go_there">Gå dit</string>
+    <string name="history.action.continue_from">Fortsätt från %1$s</string>
+    <string name="history.action.continue_from.chapter">Fortsätt från kap. %1$d · %2$s</string>
     <string name="history.empty.message">Uppspelningar, pauser och hopp visas här, så att du alltid hittar tillbaka.</string>
     <string name="history.empty.title">Inget här än</string>
     <string name="history.event.bookmark_jump">Gick till ett bokmärke</string>
