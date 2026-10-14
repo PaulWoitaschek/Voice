@@ -1,19 +1,27 @@
-package voice.core.scanner
+package voice.core.data
 
 import android.provider.DocumentsContract
 import androidx.core.net.toUri
-import voice.core.data.Chapter
-import voice.core.data.ChapterId
+import java.security.MessageDigest
 
 /**
- * What stays the same when an audio file is moved or its folder is renamed.
+ * What stays the same when an audio file is moved or its folder is renamed, or is copied to another device.
  */
-internal data class FileFingerprint(
+public data class FileFingerprint(
   val name: String,
   val size: Long,
 )
 
-internal fun List<Chapter>.fingerprints(): List<FileFingerprint>? = map { it.fingerprint() ?: return null }
+public fun List<Chapter>.fingerprints(): List<FileFingerprint>? = map { it.fingerprint() ?: return null }
+
+public fun List<Chapter>.syncKey(): String? {
+  val fingerprints = fingerprints()?.takeIf { it.isNotEmpty() } ?: return null
+  // a file name can't contain a slash
+  val text = fingerprints.joinToString(separator = "") { "${it.name}/${it.size}\n" }
+  return MessageDigest.getInstance("SHA-256")
+    .digest(text.toByteArray())
+    .joinToString(separator = "") { "%02x".format(it) }
+}
 
 private fun Chapter.fingerprint(): FileFingerprint? {
   // some providers don't report sizes, and a name like 01.mp3 alone says nothing

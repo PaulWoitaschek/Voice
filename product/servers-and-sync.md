@@ -18,12 +18,13 @@ same limit: there's still no Voice account and no Voice server, and Voice only t
 | [My books in cloud storage can't be added](#my-books-in-cloud-storage-cant-be-added) | ✅ Solved |
 | [A cloud library has to be copied to the phone](#a-cloud-library-has-to-be-copied-to-the-phone) | ⭕ Open |
 | [I lose my place when I switch devices](#i-lose-my-place-when-i-switch-devices) | ✅ Solved |
-| [Without a server, my place doesn't follow me to another device](#without-a-server-my-place-doesnt-follow-me-to-another-device) | ⭕ Open |
+| [Without a server, my place doesn't follow me to another device](#without-a-server-my-place-doesnt-follow-me-to-another-device) | ✅ Solved |
+| [Without a server, my bookmarks don't follow me to another device](#without-a-server-my-bookmarks-dont-follow-me-to-another-device) | ⭕ Open |
 | [A new phone means losing my progress and bookmarks](#a-new-phone-means-losing-my-progress-and-bookmarks) | ✅ Solved |
 | [Without Google's backup, a new phone means starting over](#without-googles-backup-a-new-phone-means-starting-over) | ⭕ Open |
 
-Losing everything after renaming or moving a folder is in [Getting started](getting-started.md). The cause is that
-Voice tells books apart by their path ([#2678]).
+Keeping the progress after renaming or moving a folder is in [Getting started](getting-started.md). Voice recognizes a
+book by its files there, and on other devices too.
 
 ## There's no good audiobook app for my server
 
@@ -85,15 +86,40 @@ this device.
 
 ## Without a server, my place doesn't follow me to another device
 
-⭕ **Open** · [#3707]
+✅ **Solved** · [#3707]
 
-Listeners without a server asked for an optional sync that stays local. One answer: a progress file next to the book,
-for tools like Syncthing to copy.
+Listeners without a server asked for an optional sync that stays local.
+
+**Solution:** Each device keeps its places in its own file in a hidden `.voice` folder inside each library folder.
+Listeners sync their library folders with a tool of their own, like Syncthing. When Voice comes to the foreground or
+finds new books, it takes over a newer place from another device's file, and the jump-back pill takes you to where you
+were on this device. A book is recognized by the names and sizes of its files, so the folder can be anywhere on each
+device. This works for folders on the device that are added the same way on every device, not for single files or
+folders from other apps. There's no switch: listeners who don't want a folder's places shared let their sync tool
+ignore `.voice` ([FAQ](../docs/faq.md)).
+
+**Assumption:** Sync tools copy hidden folders. Guess: Syncthing does by default, the others weren't checked.
+
+**Assumption:** Few listeners share one library folder with someone else. They'd get each other's place unless their
+sync tool ignores `.voice`. Guess.
+
+**Assumption:** Listeners don't mind the hidden `.voice` folder in their library folders, as there's no way to turn it
+off. Guess.
 
 **Turned down:**
 
 - Voice's own sync: in 2015, to keep Voice simple ([#65]). The hard part is telling that two copies are the same book
   ([#295]).
+- One file that every device writes: two devices writing it at once would leave conflict copies behind. Each device
+  only writes its own file.
+- A file next to each book: it would add a file to every book folder.
+- A switch in the settings: sync tools can already leave `.voice` out.
+
+## Without a server, my bookmarks don't follow me to another device
+
+⭕ **Open** · [#3707]
+
+The synced folder only carries the place in a book. Bookmarks and the playback speed stay on the device.
 
 ## A new phone means losing my progress and bookmarks
 
@@ -116,10 +142,9 @@ Some listeners switch or reset their phone often, and would rather start fresh t
 
 ## Open questions
 
-1. **A book identity that survives moves, new phones and second devices.** Using the path blocks renaming, backup and
-   syncing without a server. Is it worth solving once, for all three?
+1. **A new phone without Google's backup.** The synced `.voice` files also bring the places to a new phone with the
+   same folders. Is that enough, or do listeners need their bookmarks there too?
 2. Why Audiobookshelf first, and will it stay the only server?
-3. A progress file next to the book fits "no Voice server". Is it acceptable?
 
 [#65]: https://github.com/PaulWoitaschek/Voice/issues/65
 [#295]: https://github.com/PaulWoitaschek/Voice/issues/295

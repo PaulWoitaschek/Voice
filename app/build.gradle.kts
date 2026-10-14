@@ -178,6 +178,7 @@ dependencies {
   implementation(projects.features.bookmark)
   implementation(projects.features.widget)
   implementation(projects.core.audiobookshelf)
+  implementation(projects.core.foldersync)
   implementation(projects.features.audiobookshelf)
 
   implementation(libs.appCompat)

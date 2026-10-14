@@ -8,6 +8,8 @@ import dev.zacsweers.metro.Inject
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ChapterId
+import voice.core.data.FileFingerprint
+import voice.core.data.fingerprints
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ChapterRepo
 import voice.core.data.repo.ListeningHistoryRepo

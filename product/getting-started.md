@@ -17,7 +17,7 @@ add audiobook files without a plan and just want to play them, and for many, fol
 | [My books have the wrong names](#my-books-have-the-wrong-names) | ✅ Solved |
 | [Fixing wrong tags means renaming every book by hand](#fixing-wrong-tags-means-renaming-every-book-by-hand) | ⭕ Open |
 | [My chapters are missing, or my big book doesn't show up](#my-chapters-are-missing-or-my-big-book-doesnt-show-up) | ✅ Solved |
-| [Moving or renaming a folder loses my progress and bookmarks](#moving-or-renaming-a-folder-loses-my-progress-and-bookmarks) | ⭕ Open |
+| [Moving or renaming a folder loses my progress and bookmarks](#moving-or-renaming-a-folder-loses-my-progress-and-bookmarks) | ✅ Solved |
 | [After installing, I don't know where to start](#after-installing-i-dont-know-where-to-start) | ✅ Solved |
 
 ## My books come out wrong when I add a folder
@@ -107,11 +107,14 @@ bar is high: during one regression, the maintainer pinned the issue and stopped 
 
 ## Moving or renaming a folder loses my progress and bookmarks
 
-⭕ **Open** · [#2636]
+✅ **Solved** · [#2636]
 
-Voice tells books apart by their path ([#2678]). Changing a folder's layout keeps the progress, but moving or renaming
-the folder loses it, and the bookmarks too. Backup and sync without a server have the same root problem. See
-[Servers, sync and backup](servers-and-sync.md).
+Voice told books apart by their path ([#2678]). Changing a folder's layout kept the progress, but moving or renaming the
+folder lost it, and the bookmarks too.
+
+**Solution:** A book that shows up under a new path with the same files keeps its progress, bookmarks and history
+([#3911]). Files are recognized by their name and size, in folders on the device. The same recognition takes the place
+to other devices, see [Servers, sync and backup](servers-and-sync.md).
 
 ## After installing, I don't know where to start
 
@@ -128,9 +131,7 @@ and probably only the technical ones understood how to add folders.
 ## Open questions
 
 1. How many listeners use each layout, and how often do they change the guess? Analytics can tell.
-2. Should Voice recognize a book after it moves? The same problem blocks renaming files, backup and syncing
-   without a server.
-3. Tags or file names: a setting, or a smarter default?
+2. Tags or file names: a setting, or a smarter default?
 
 [#433]: https://github.com/PaulWoitaschek/Voice/issues/433
 [#555]: https://github.com/PaulWoitaschek/Voice/issues/555
@@ -144,3 +145,4 @@ and probably only the technical ones understood how to add folders.
 [#3044]: https://github.com/PaulWoitaschek/Voice/issues/3044
 [#3212]: https://github.com/PaulWoitaschek/Voice/pull/3212
 [#3502]: https://github.com/PaulWoitaschek/Voice/discussions/3502
+[#3911]: https://github.com/PaulWoitaschek/Voice/pull/3911
