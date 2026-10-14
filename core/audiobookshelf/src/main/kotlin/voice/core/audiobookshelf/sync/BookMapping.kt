@@ -6,6 +6,7 @@ import voice.core.audiobookshelf.api.AbsLibraryItem
 import voice.core.audiobookshelf.api.AbsTrack
 import voice.core.data.Book
 import voice.core.data.BookContent
+import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
@@ -88,18 +89,23 @@ internal fun AbsLibraryItem.toBookContent(
     skipSilence = existing?.skipSilence ?: false,
     isActive = true,
     lastPlayedAt = existing?.lastPlayedAt ?: Instant.EPOCH,
-    author = metadata.authorName?.takeIf { it.isNotBlank() },
-    name = metadata.title?.takeIf { it.isNotBlank() } ?: chapters.first().name ?: id,
     addedAt = existing?.addedAt ?: Instant.ofEpochMilli(addedAt),
     chapters = chapterIds,
     currentChapter = position.chapterId,
     positionInChapter = position.positionInChapter.coerceIn(0, chapters.first { it.id == position.chapterId }.duration),
-    cover = existing?.cover,
     gain = existing?.gain ?: 0F,
-    genre = metadata.genres.joinToString(", ").takeIf { it.isNotBlank() },
-    narrator = metadata.narratorName?.takeIf { it.isNotBlank() },
-    series = series?.name?.takeIf { it.isNotBlank() } ?: metadata.seriesName?.takeIf { it.isNotBlank() },
-    part = series?.sequence?.takeIf { it.isNotBlank() },
+    metadata = BookMetadata(
+      name = metadata.title?.takeIf { it.isNotBlank() } ?: chapters.first().name ?: id,
+      author = metadata.authorName?.takeIf { it.isNotBlank() },
+      genre = metadata.genres.joinToString(", ").takeIf { it.isNotBlank() },
+      narrator = metadata.narratorName?.takeIf { it.isNotBlank() },
+      series = series?.name?.takeIf { it.isNotBlank() } ?: metadata.seriesName?.takeIf { it.isNotBlank() },
+      part = series?.sequence?.takeIf { it.isNotBlank() },
+      cover = existing?.metadata?.cover,
+      fileLastModified = null,
+    ),
+    customName = existing?.customName,
+    customCover = existing?.customCover,
   )
 }
 

@@ -30,12 +30,12 @@ enum class BookSearchField {
   fun text(content: BookContent): String? {
     val text = when (this) {
       Title -> content.name
-      Author -> content.author
-      Series -> content.series?.let { series ->
-        listOfNotNull(series, content.part?.takeIf { it.isNotBlank() }).joinToString(" ")
+      Author -> content.metadata.author
+      Series -> content.metadata.series?.let { series ->
+        listOfNotNull(series, content.metadata.part?.takeIf { it.isNotBlank() }).joinToString(" ")
       }
-      Narrator -> content.narrator
-      Genre -> content.genre
+      Narrator -> content.metadata.narrator
+      Genre -> content.metadata.genre
     }
     return text?.takeIf { it.isNotBlank() }
   }

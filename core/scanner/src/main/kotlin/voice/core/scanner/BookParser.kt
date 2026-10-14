@@ -4,6 +4,7 @@ import dev.zacsweers.metro.Inject
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.getOrPut
@@ -20,13 +21,27 @@ internal class BookParser(
   private val fileFactory: CachedDocumentFileFactory,
 ) {
 
+  /**
+   * The book the [chapters] make up, with what its files say now. A new book is stored right away, and so is a book
+   * whose files say something else now.
+   */
   suspend fun parseAndStore(
     chapters: List<Chapter>,
     file: CachedDocumentFile,
     firstChapterMetadata: Metadata?,
   ): BookContent {
-    return contentRepo.getOrPut(BookId(file.uri)) {
-      parse(chapters, file, firstChapterMetadata)
+    val stored = contentRepo.get(BookId(file.uri))
+      ?: return parse(chapters, file, firstChapterMetadata).also { contentRepo.put(it) }
+    val firstChapter = chapters.first()
+    val upToDate = firstChapterMetadata == null &&
+      stored.chapters.first() == firstChapter.id &&
+      stored.metadata.fileLastModified == firstChapter.fileLastModified
+    if (upToDate) return stored
+    val metadata = metadata(chapters, file, firstChapterMetadata ?: analyze(firstChapter))
+      // a cover is only looked for when the book has none
+      .copy(cover = stored.metadata.cover)
+    return stored.withMetadata(metadata).also {
+      if (it != stored) contentRepo.put(it)
     }
   }
 
@@ -39,9 +54,7 @@ internal class BookParser(
     file: CachedDocumentFile,
     firstChapterMetadata: Metadata?,
   ): BookContent {
-    val analyzed = firstChapterMetadata
-      ?: mediaAnalyzer.analyze(fileFactory.create(chapters.first().id.toUri()))
-    return parse(chapters, BookId(file.uri), analyzed, file)
+    return parse(chapters, BookId(file.uri), firstChapterMetadata ?: analyze(chapters.first()), file)
   }
 
   fun parse(
@@ -54,25 +67,42 @@ internal class BookParser(
       id = id,
       isActive = true,
       addedAt = Instant.now(),
-      author = analyzed?.artist,
       lastPlayedAt = Instant.EPOCH,
-      name = analyzed?.album
-        ?: analyzed?.title?.takeIf { file.isFile }
-        ?: file.bookName(),
       playbackSpeed = 1F,
       skipSilence = false,
       chapters = chapters.map { it.id },
       positionInChapter = 0L,
       currentChapter = chapters.first().id,
-      cover = null,
       gain = 0F,
+      metadata = metadata(chapters, file, analyzed),
+      customName = null,
+      customCover = null,
+    ).also {
+      validateIntegrity(it, chapters)
+    }
+  }
+
+  private suspend fun analyze(chapter: Chapter): Metadata? {
+    return mediaAnalyzer.analyze(fileFactory.create(chapter.id.toUri()))
+  }
+
+  private fun metadata(
+    chapters: List<Chapter>,
+    file: CachedDocumentFile,
+    analyzed: Metadata?,
+  ): BookMetadata {
+    return BookMetadata(
+      name = analyzed?.album
+        ?: analyzed?.title?.takeIf { file.isFile }
+        ?: file.bookName(),
+      author = analyzed?.artist,
       genre = analyzed?.genre,
       narrator = analyzed?.narrator,
       series = analyzed?.series,
       part = analyzed?.part,
-    ).also {
-      validateIntegrity(it, chapters)
-    }
+      cover = null,
+      fileLastModified = chapters.first().fileLastModified,
+    )
   }
 
   private fun CachedDocumentFile.bookName(): String {

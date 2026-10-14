@@ -57,7 +57,10 @@ internal constructor(
       }
     }
 
-    setBookCover(newCover, bookId)
+    repo.get(bookId)?.content?.customCover?.deleteOnIo()
+    repo.updateBook(bookId) {
+      it.copy(customCover = newCover)
+    }
   }
 
   internal suspend fun newBookCoverFile(): File {
@@ -68,19 +71,19 @@ internal constructor(
     return File(coversFolder, "${Uuid.random()}.png")
   }
 
-  internal suspend fun setBookCover(
+  internal suspend fun setCoverFromFiles(
     cover: File,
     bookId: BookId,
   ) {
-    val oldCover = repo.get(bookId)?.content?.cover
-    if (oldCover != null) {
-      withContext(Dispatchers.IO) {
-        oldCover.delete()
-      }
-    }
-
+    repo.get(bookId)?.content?.metadata?.cover?.deleteOnIo()
     repo.updateBook(bookId) {
-      it.copy(cover = cover)
+      it.copy(metadata = it.metadata.copy(cover = cover))
+    }
+  }
+
+  private suspend fun File.deleteOnIo() {
+    withContext(Dispatchers.IO) {
+      delete()
     }
   }
 }

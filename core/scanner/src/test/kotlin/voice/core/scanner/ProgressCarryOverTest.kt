@@ -11,6 +11,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
@@ -57,8 +58,8 @@ class ProgressCarryOverTest {
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = oldChapters,
     ).copy(
-      name = "Renamed",
-      cover = File("cover.webp"),
+      customName = "Renamed",
+      customCover = File("cover.webp"),
       currentChapter = oldChapters[1],
       positionInChapter = 42,
       lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
@@ -86,8 +87,8 @@ class ProgressCarryOverTest {
 
     assertEquals(
       expected = new.copy(
-        name = "Renamed",
-        cover = File("cover.webp"),
+        customName = "Renamed",
+        customCover = File("cover.webp"),
         currentChapter = newChapters[1],
         positionInChapter = 42,
         lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
@@ -180,7 +181,7 @@ class ProgressCarryOverTest {
     val old = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks")),
       chapters = chapters,
-    ).copy(name = "Everything", lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    ).copy(customName = "Everything", lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
     val new = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = chapters.take(1),
@@ -244,8 +245,8 @@ class ProgressCarryOverTest {
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = oldChapters,
     ).copy(
-      name = "Renamed",
-      cover = File("cover.webp"),
+      customName = "Renamed",
+      customCover = File("cover.webp"),
       currentChapter = oldChapters[1],
       positionInChapter = 42,
       lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
@@ -271,8 +272,8 @@ class ProgressCarryOverTest {
 
     assertEquals(
       expected = new.copy(
-        name = "Renamed",
-        cover = File("cover.webp"),
+        customName = "Renamed",
+        customCover = File("cover.webp"),
         currentChapter = newChapters[1],
         positionInChapter = 42,
         lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
@@ -284,6 +285,71 @@ class ProgressCarryOverTest {
       listeningHistoryRepo.moveToBook(from = listOf(old.id), to = new.id, chapters = oldChapters.zip(newChapters).toMap())
     }
     assertEquals(expected = new.id, actual = currentBookStore.data.first())
+  }
+
+  @Test
+  fun `a moved book that was never played keeps what the listener changed and takes its names from its files`() = runTest {
+    val old = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
+      chapters = listOf(file("primary:Audiobooks/Book/1.mp3")),
+    ).copy(
+      addedAt = Instant.parse("2025-01-01T10:00:00Z"),
+      customName = "Renamed",
+      customCover = File("picked.webp"),
+    )
+    val oldWithCoverFromFiles = old.copy(metadata = old.metadata.copy(cover = File("found.webp")))
+    val new = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book (2020)")),
+      chapters = listOf(file("primary:Audiobooks/Book (2020)/1.mp3")),
+    ).copy(metadata = old.metadata.copy(name = "Book (2020)"))
+
+    val carried = carryOver(new, previous = listOf(oldWithCoverFromFiles))
+
+    assertEquals(
+      expected = new.copy(
+        addedAt = old.addedAt,
+        customName = "Renamed",
+        customCover = File("picked.webp"),
+        metadata = new.metadata.copy(cover = File("found.webp")),
+      ),
+      actual = carried,
+    )
+  }
+
+  @Test
+  fun `a moved book follows the name from its files when the listener didn't give it one`() = runTest {
+    val old = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
+      chapters = listOf(file("primary:Audiobooks/Book/1.mp3")),
+    ).copy(lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    val new = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book (2020)")),
+      chapters = listOf(file("primary:Audiobooks/Book (2020)/1.mp3")),
+    ).copy(metadata = old.metadata.copy(name = "Book (2020)"))
+
+    val carried = carryOver(new, previous = listOf(old))
+
+    assertEquals(expected = "Book (2020)", actual = carried.name)
+  }
+
+  @Test
+  fun `a book that was in the library already keeps what the listener changed about it`() = runTest {
+    val chapters = listOf("1.mp3", "2.mp3")
+    val old = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
+      chapters = chapters.map { ChapterId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book/$it")) },
+    ).copy(customName = "Theirs", lastPlayedAt = Instant.parse("2026-01-02T10:00:00Z"))
+    val new = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks/Book", document = "primary:Audiobooks/Book")),
+      chapters = chapters.map {
+        ChapterId(documentUri(tree = "primary:Audiobooks/Book", document = "primary:Audiobooks/Book/$it"))
+      },
+    ).copy(customName = "Mine", lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+
+    val carried = carryOver(new, previous = listOf(old), inLibrary = true)
+
+    assertEquals(expected = "Mine", actual = carried.name)
+    assertEquals(expected = old.lastPlayedAt, actual = carried.lastPlayedAt)
   }
 
   @Test
@@ -393,17 +459,22 @@ class ProgressCarryOverTest {
     skipSilence = false,
     isActive = true,
     lastPlayedAt = Instant.EPOCH,
-    author = null,
-    name = "Book",
     addedAt = Instant.parse("2026-02-01T10:00:00Z"),
     chapters = chapters,
     currentChapter = chapters.first(),
     positionInChapter = 0,
-    cover = null,
     gain = 0F,
-    genre = null,
-    narrator = null,
-    series = null,
-    part = null,
+    metadata = BookMetadata(
+      name = "Book",
+      author = null,
+      genre = null,
+      narrator = null,
+      series = null,
+      part = null,
+      cover = null,
+      fileLastModified = null,
+    ),
+    customName = null,
+    customCover = null,
   )
 }

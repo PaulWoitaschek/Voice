@@ -24,6 +24,7 @@ import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
@@ -543,23 +544,28 @@ private fun book(
   )
   return Book(
     content = BookContent(
-      author = Uuid.random().toString(),
-      name = name,
       positionInChapter = 2.5.minutes.inWholeMilliseconds,
       playbackSpeed = 1F,
       addedAt = Instant.ofEpochMilli(addedAtMillis),
       chapters = chapters.map { it.id },
-      cover = null,
       currentChapter = chapters[1].id,
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
       id = BookId(Uuid.random().toString()),
       gain = 0F,
-      genre = null,
-      narrator = null,
-      series = null,
-      part = null,
+      metadata = BookMetadata(
+        name = name,
+        author = Uuid.random().toString(),
+        genre = null,
+        narrator = null,
+        series = null,
+        part = null,
+        cover = null,
+        fileLastModified = null,
+      ),
+      customName = null,
+      customCover = null,
     ),
     chapters = chapters,
   )

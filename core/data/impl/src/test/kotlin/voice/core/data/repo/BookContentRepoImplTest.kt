@@ -8,6 +8,7 @@ import org.junit.After
 import org.junit.runner.RunWith
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.ChapterId
 import voice.core.data.MAX_CHAPTER_IDS_BYTES
 import voice.core.data.fitIntoOneBook
@@ -43,18 +44,23 @@ class BookContentRepoImplTest {
     skipSilence = false,
     isActive = isActive,
     lastPlayedAt = Instant.EPOCH,
-    author = author,
-    name = name,
     addedAt = Instant.EPOCH,
     chapters = chapters,
     currentChapter = chapters.first(),
     positionInChapter = 0,
-    cover = null,
     gain = 0F,
-    genre = null,
-    narrator = null,
-    series = null,
-    part = null,
+    metadata = BookMetadata(
+      name = name,
+      author = author,
+      genre = null,
+      narrator = null,
+      series = null,
+      part = null,
+      cover = null,
+      fileLastModified = null,
+    ),
+    customName = null,
+    customCover = null,
   )
 
   @Test
@@ -69,6 +75,15 @@ class BookContentRepoImplTest {
     assertEquals(listOf(wind.id), repo.search(listOf("pat", "wi")))
     assertEquals(emptyList(), repo.search(listOf("roth", "king")))
     assertEquals(listOf(wind.id, shining.id), repo.search(listOf("the")).sortedBy { it.value })
+  }
+
+  @Test
+  fun `search finds a book by the name the listener gave it and the name from its files`() = runTest {
+    val book = content(name = "Track 01", author = null).withCustomName("Dune")
+    repo.put(book)
+
+    assertEquals(listOf(book.id), repo.search(listOf("dune")))
+    assertEquals(listOf(book.id), repo.search(listOf("track")))
   }
 
   @Test

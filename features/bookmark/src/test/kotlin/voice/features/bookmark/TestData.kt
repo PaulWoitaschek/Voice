@@ -3,6 +3,7 @@ package voice.features.bookmark
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
@@ -49,23 +50,28 @@ internal fun testBook(
   positionInChapter: Duration = Duration.ZERO,
 ): Book = Book(
   content = BookContent(
-    author = "Daniel Hartwell",
-    name = "Echoes of Tomorrow",
     positionInChapter = positionInChapter.inWholeMilliseconds,
     playbackSpeed = 1F,
     addedAt = Instant.EPOCH,
     chapters = chapters.map { it.id },
-    cover = null,
     currentChapter = currentChapter,
     isActive = true,
     lastPlayedAt = Instant.EPOCH,
     skipSilence = false,
     id = BookId("echoes"),
     gain = 0F,
-    genre = null,
-    narrator = null,
-    series = null,
-    part = null,
+    metadata = BookMetadata(
+      name = "Echoes of Tomorrow",
+      author = "Daniel Hartwell",
+      genre = null,
+      narrator = null,
+      series = null,
+      part = null,
+      cover = null,
+      fileLastModified = null,
+    ),
+    customName = null,
+    customCover = null,
   ),
   chapters = chapters,
 )

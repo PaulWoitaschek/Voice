@@ -10,6 +10,7 @@ import voice.core.audiobookshelf.api.AbsSeries
 import voice.core.audiobookshelf.api.AbsTrack
 import voice.core.data.Book
 import voice.core.data.ChapterMark
+import java.io.File
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -91,11 +92,11 @@ class BookMappingTest {
     val content = item.toBookContent(item.chapters(), existing = null)
 
     assertEquals("Title", content.name)
-    assertEquals("Author", content.author)
-    assertEquals(null, content.narrator)
-    assertEquals("Series", content.series)
-    assertEquals("2", content.part)
-    assertEquals("Fantasy, Adventure", content.genre)
+    assertEquals("Author", content.metadata.author)
+    assertEquals(null, content.metadata.narrator)
+    assertEquals("Series", content.metadata.series)
+    assertEquals("2", content.metadata.part)
+    assertEquals("Fantasy, Adventure", content.metadata.genre)
     assertEquals(Instant.ofEpochMilli(1_000), content.addedAt)
   }
 
@@ -118,6 +119,23 @@ class BookMappingTest {
     assertEquals(4_000, updated.positionInChapter)
     assertEquals(1.5F, updated.playbackSpeed)
     assertEquals(Instant.ofEpochMilli(5_000), updated.lastPlayedAt)
+  }
+
+  @Test
+  fun `an update keeps the name and cover the listener gave the book`() {
+    val item = item(tracks = listOf(track(1, 0.0, 10.0, "a.mp3")))
+    val chapters = item.chapters()
+    val cover = File("picked.png")
+    val existing = item.toBookContent(chapters, existing = null)
+      .withCustomName("Mine")
+      .copy(customCover = cover)
+
+    val updated = item.copy(media = item.media.copy(metadata = AbsBookMetadata(title = "Renamed")))
+      .toBookContent(chapters, existing)
+
+    assertEquals("Mine", updated.name)
+    assertEquals("Renamed", updated.metadata.name)
+    assertEquals(cover, updated.cover)
   }
 
   @Test
