@@ -25,6 +25,7 @@ import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.HistoryTabOpenStore
 import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
@@ -58,6 +59,8 @@ class BookmarkViewModel(
   private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
   @LastPlaybackSpeedStore
   private val lastPlaybackSpeedStore: DataStore<Float>,
+  @HistoryTabOpenStore
+  private val historyTabOpenStore: DataStore<Boolean>,
   @Assisted
   private val bookId: BookId,
   @Assisted
@@ -73,6 +76,9 @@ class BookmarkViewModel(
   private var sort by mutableStateOf(BookmarkSort.Story)
   private var selectedCategory by mutableStateOf<Bookmark.Kind?>(null)
   private var draft by mutableStateOf<Draft?>(null)
+
+  // only once the listener picks a tab here, so that until then it follows the stored one
+  private var pickedTab by mutableStateOf<BookmarkTab?>(null)
   private var saving = false
 
   // a jump or close leaves the screen, so a second tap must not go back once more
@@ -85,11 +91,12 @@ class BookmarkViewModel(
   @Composable
   internal fun viewState(): BookmarkViewState? {
     val kioskMode = remember { kioskModeFeatureFlag.get() }
-    if (kioskMode) return kioskModeBookmarkViewState()
+    if (kioskMode) return kioskModeBookmarkViewState(tab = pickedTab ?: BookmarkTab.Bookmarks)
 
     // saved, so that the editor does not open again once the screen comes back after process death
     var openedEditorFromNavigation by rememberSaveable { mutableStateOf(false) }
     val defaultSpeed = remember { lastPlaybackSpeedStore.data }.collectAsState(initial = null).value
+    val historyTabOpen = remember { historyTabOpenStore.data }.collectAsState(initial = null).value ?: return null
     val persistedBook = remember(bookId) { bookRepository.flow(bookId) }
       .collectAsState(initial = null).value
       ?.withDefaultSpeed { defaultSpeed ?: return null }
@@ -135,6 +142,12 @@ class BookmarkViewModel(
       items = bookmarkListItems(index, visible, sort, now, clock.zone),
       totalCount = bookmarks.size,
       editor = draft?.let { editorViewState(index, it) },
+      tab = pickedTab ?: when {
+        // the bookmark to edit is in the list of bookmarks
+        editBookmarkId != null -> BookmarkTab.Bookmarks
+        historyTabOpen -> BookmarkTab.History
+        else -> BookmarkTab.Bookmarks
+      },
     )
   }
 
@@ -157,6 +170,13 @@ class BookmarkViewModel(
       canMoveEarlier = draft.time > 0,
       canMoveLater = draft.time < chapterDuration,
     )
+  }
+
+  internal fun onTabChange(tab: BookmarkTab) {
+    pickedTab = tab
+    scope.launch {
+      historyTabOpenStore.updateData { tab == BookmarkTab.History }
+    }
   }
 
   internal fun onSortChange(sort: BookmarkSort) {

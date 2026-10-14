@@ -91,11 +91,6 @@ object BookmarkProvider {
   }
 }
 
-internal enum class BookmarkTab {
-  Bookmarks,
-  History,
-}
-
 @Composable
 fun BookmarkScreen(
   bookId: BookId,
@@ -138,6 +133,7 @@ fun BookmarkScreen(
       onClose = viewModel::onCloseClick,
       onSortChange = viewModel::onSortChange,
       onSaveClick = viewModel::onSaveClick,
+      onTabChange = viewModel::onTabChange,
       bookmarkList = { listState, contentPadding ->
         BookmarkList(
           viewState = viewState,
@@ -183,10 +179,11 @@ private fun BookmarkScreen(
   onClose: () -> Unit,
   onSortChange: (BookmarkSort) -> Unit,
   onSaveClick: () -> Unit,
+  onTabChange: (BookmarkTab) -> Unit,
   bookmarkList: @Composable (LazyListState, PaddingValues) -> Unit,
   historyList: @Composable (PaddingValues) -> Unit,
 ) {
-  var tab by rememberSaveable { mutableStateOf(BookmarkTab.Bookmarks) }
+  val tab = viewState.tab
   val listState = rememberLazyListState()
   OpenWhereYouAre(viewState, listState)
   val clock = rememberAnimationClock(running = viewState.playing)
@@ -234,7 +231,7 @@ private fun BookmarkScreen(
         Tabs(
           tab = tab,
           bookmarkCount = viewState.totalCount,
-          onTabChange = { tab = it },
+          onTabChange = onTabChange,
         )
         val listPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding())
         when (tab) {

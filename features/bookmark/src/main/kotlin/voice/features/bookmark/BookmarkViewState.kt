@@ -18,7 +18,13 @@ internal data class BookmarkViewState(
   val items: List<BookmarkListItem>,
   val totalCount: Int,
   val editor: BookmarkEditorViewState?,
+  val tab: BookmarkTab,
 )
+
+internal enum class BookmarkTab {
+  Bookmarks,
+  History,
+}
 
 @Immutable
 internal data class BookBarViewState(
