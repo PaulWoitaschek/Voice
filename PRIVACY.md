@@ -43,9 +43,9 @@ your device.
 
 The Application writes your listening position for each book into a hidden `.voice` folder inside the audiobook folders
 you added, so that Voice on your other devices can pick it up when you sync these folders yourself, for example with
-Syncthing. Each device writes its own file, named after a random device id. It holds the position and when you last
-listened, and the books are identified by a fingerprint of their file names and sizes. The Service Provider never
-receives this data. To keep your position on one device, let your sync tool ignore the `.voice` folder.
+Syncthing. The folder holds the position and when you last listened, and the books are identified by a fingerprint of
+their file names and sizes. The Service Provider never receives this data. To keep your position on one device, let
+your sync tool ignore the `.voice` folder.
 
 **Third Party Access**
 
