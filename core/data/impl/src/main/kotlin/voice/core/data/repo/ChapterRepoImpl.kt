@@ -25,6 +25,11 @@ public class ChapterRepoImpl(private val dao: ChapterDao) : ChapterRepo {
     return cache[id]
   }
 
+  override suspend fun get(ids: List<ChapterId>): List<Chapter> {
+    warmup(ids)
+    return ids.mapNotNull { cache[it] }
+  }
+
   internal suspend fun warmup(ids: List<ChapterId>) {
     val missing = ids.filter { it !in cache }
     missing

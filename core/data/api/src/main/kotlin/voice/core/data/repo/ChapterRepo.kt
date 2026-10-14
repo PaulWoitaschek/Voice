@@ -7,6 +7,8 @@ import java.time.Instant
 public interface ChapterRepo {
   public suspend fun get(id: ChapterId): Chapter?
 
+  public suspend fun get(ids: List<ChapterId>): List<Chapter>
+
   public suspend fun put(chapter: Chapter)
 }
 

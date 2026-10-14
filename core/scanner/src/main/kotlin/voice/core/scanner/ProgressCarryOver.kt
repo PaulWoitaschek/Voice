@@ -9,14 +9,16 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookmarkRepo
+import voice.core.data.repo.ChapterRepo
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.store.CurrentBookStore
 
 /**
  * Hands progress over when audio files show up under a new book id. This happens when a folder's mode changes
- * (a single book becomes several books, or the other way round) or when a folder is added again through another
- * folder. Chapters are matched by their document, which stays the same across folders.
+ * (a single book becomes several books, or the other way round), when a folder is added again through another
+ * folder, or when a book is renamed or moved. Chapters are matched by their document, which stays the same across
+ * folders, and otherwise by their files when all of them moved.
  */
 @Inject
 internal class ProgressCarryOver(
@@ -31,14 +33,14 @@ internal class ProgressCarryOver(
     content: BookContent,
     previousBooks: PreviousBooks,
   ): BookContent {
-    val chapterByKey = content.chapters.associateBy { it.documentKey() }
-    val previous = previousBooks.sharingChapters(chapterByKey.keys)
-    if (previous.isEmpty()) return content
+    val predecessors = previousBooks.of(content) ?: return content
+    val previous = predecessors.books
+    val moved = predecessors.chapters
 
-    moveBookmarks(previous, content.id, chapterByKey)
-    moveListeningHistory(previous, content.id, chapterByKey)
+    moveBookmarks(previous, content.id, moved)
+    listeningHistoryRepo.moveToBook(from = previous.map { it.id }, to = content.id, chapters = moved)
 
-    val playedHere = previous.filter { it.currentChapter.documentKey() in chapterByKey }
+    val playedHere = previous.filter { it.currentChapter in moved }
     moveCurrentBook(playedHere, content.id)
     // sessions don't know their chapters, so they go along with where the listener was
     listeningStatsRepo.moveToBook(from = playedHere.map { it.id }, to = content.id)
@@ -49,9 +51,9 @@ internal class ProgressCarryOver(
       ?: return content
 
     // only the same book keeps what the user set up for it, a split up book gets the names from its files
-    val sameBook = source.id.toUri().documentKey() == content.id.toUri().documentKey()
+    val sameBook = predecessors.moved || source.id.toUri().documentKey() == content.id.toUri().documentKey()
     return content.copy(
-      currentChapter = chapterByKey.getValue(source.currentChapter.documentKey()),
+      currentChapter = moved.getValue(source.currentChapter),
       positionInChapter = source.positionInChapter,
       lastPlayedAt = source.lastPlayedAt,
       playbackSpeed = source.playbackSpeed,
@@ -78,57 +80,87 @@ internal class ProgressCarryOver(
   private suspend fun moveBookmarks(
     previous: List<BookContent>,
     bookId: BookId,
-    chapterByKey: Map<String, ChapterId>,
+    chapters: Map<ChapterId, ChapterId>,
   ) {
     previous
       .flatMap { bookmarkRepo.bookmarks(it) }
       .distinctBy { it.id }
       .forEach { bookmark ->
-        val chapter = chapterByKey[bookmark.chapterId.documentKey()] ?: return@forEach
+        val chapter = chapters[bookmark.chapterId] ?: return@forEach
         val moved = bookmark.copy(bookId = bookId, chapterId = chapter)
         if (moved != bookmark) {
           bookmarkRepo.addBookmark(moved)
         }
       }
   }
-
-  private suspend fun moveListeningHistory(
-    previous: List<BookContent>,
-    bookId: BookId,
-    chapterByKey: Map<String, ChapterId>,
-  ) {
-    val chapters = previous
-      .flatMap { it.chapters }
-      .distinct()
-      .mapNotNull { chapter -> chapterByKey[chapter.documentKey()]?.let { chapter to it } }
-      .toMap()
-    listeningHistoryRepo.moveToBook(
-      from = previous.map { it.id },
-      to = bookId,
-      chapters = chapters,
-    )
-  }
 }
 
 /**
- * The books a scan no longer finds, indexed by the documents of their chapters.
+ * The books of the [library] a scan no longer finds, indexed by the documents and the files of their chapters.
  */
 internal class PreviousBooks(
-  books: List<BookContent>,
+  library: List<BookContent>,
   scanned: Set<BookId>,
+  private val chapterRepo: ChapterRepo,
 ) {
 
-  private val byChapterKey: Map<String, List<BookContent>> = books
-    .filter { it.id !in scanned }
+  private val books = library.filter { it.id !in scanned }
+  private val inLibrary = library.filter { it.isActive }.map { it.id }.toSet()
+
+  private val byDocument: Map<String, List<BookContent>> = this.books
     .flatMap { book -> book.chapters.map { it.documentKey() to book } }
     .groupBy(keySelector = { it.first }, valueTransform = { it.second })
 
-  fun sharingChapters(chapterKeys: Collection<String>): List<BookContent> {
-    return chapterKeys
-      .flatMap { byChapterKey[it].orEmpty() }
+  private var byFiles: Map<List<FileFingerprint>, BookContent>? = null
+
+  suspend fun of(content: BookContent): Predecessors? {
+    return sharingDocuments(content.chapters)
+      // a book that was in the library already is a copy, not the one that moved
+      ?: if (content.id in inLibrary) null else withSameFiles(content.chapters)
+  }
+
+  private fun sharingDocuments(chapters: List<ChapterId>): Predecessors? {
+    val chapterByKey = chapters.associateBy { it.documentKey() }
+    val books = chapterByKey.keys
+      .flatMap { byDocument[it].orEmpty() }
       .distinctBy { it.id }
+    if (books.isEmpty()) return null
+    val moved = books
+      .flatMap { it.chapters }
+      .mapNotNull { chapter -> chapterByKey[chapter.documentKey()]?.let { chapter to it } }
+      .toMap()
+    return Predecessors(books = books, chapters = moved, moved = false)
+  }
+
+  private suspend fun withSameFiles(chapters: List<ChapterId>): Predecessors? {
+    val stored = chapterRepo.get(chapters)
+    if (stored.size != chapters.size) return null
+    val files = stored.fingerprints() ?: return null
+    val book = byFiles()[files] ?: return null
+    return Predecessors(books = listOf(book), chapters = book.chapters.zip(chapters).toMap(), moved = true)
+  }
+
+  private suspend fun byFiles(): Map<List<FileFingerprint>, BookContent> {
+    byFiles?.let { return it }
+    val chapters = chapterRepo.get(books.flatMap { it.chapters }).associateBy { it.id }
+    return books
+      // of copies with the same files, the one played last wins
+      .sortedBy { it.lastPlayedAt }
+      .mapNotNull { book ->
+        val files = book.chapters.map { chapters[it] ?: return@mapNotNull null }.fingerprints()
+        files?.let { it to book }
+      }
+      .toMap()
+      .also { byFiles = it }
   }
 }
+
+internal class Predecessors(
+  val books: List<BookContent>,
+  val chapters: Map<ChapterId, ChapterId>,
+  /** Whether they were found by their files, which makes them the same book in another place. */
+  val moved: Boolean,
+)
 
 private fun ChapterId.documentKey(): String = value.toUri().documentKey()
 

@@ -12,8 +12,10 @@ import org.junit.runner.RunWith
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.Bookmark
+import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookmarkRepo
+import voice.core.data.repo.ChapterRepo
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.repo.ListeningStatsRepo
 import java.io.File
@@ -30,7 +32,11 @@ class ProgressCarryOverTest {
   private val listeningHistoryRepo = mockk<ListeningHistoryRepo>(relaxUnitFun = true)
   private val listeningStatsRepo = mockk<ListeningStatsRepo>(relaxUnitFun = true)
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val carryOver = ProgressCarryOver(bookmarkRepo, listeningHistoryRepo, listeningStatsRepo, currentBookStore)
+  private val progressCarryOver = ProgressCarryOver(bookmarkRepo, listeningHistoryRepo, listeningStatsRepo, currentBookStore)
+  private val chapters = mutableMapOf<ChapterId, Chapter>()
+  private val chapterRepo = mockk<ChapterRepo> {
+    coEvery { get(ids = any()) } answers { firstArg<List<ChapterId>>().mapNotNull { chapters[it] } }
+  }
 
   @Test
   fun `a document has the same key in every folder it is opened through`() {
@@ -76,7 +82,7 @@ class ProgressCarryOverTest {
       chapters = newChapters,
     )
 
-    val carried = carryOver.carryOver(new, PreviousBooks(listOf(old), scanned = setOf(new.id)))
+    val carried = carryOver(new, previous = listOf(old))
 
     assertEquals(
       expected = new.copy(
@@ -111,7 +117,7 @@ class ProgressCarryOverTest {
       chapters = newChapters,
     )
 
-    val _ = carryOver.carryOver(new, PreviousBooks(listOf(old), scanned = setOf(new.id)))
+    val _ = carryOver(new, previous = listOf(old))
 
     coVerify {
       listeningHistoryRepo.moveToBook(
@@ -140,7 +146,7 @@ class ProgressCarryOverTest {
       chapters = newChapters,
     )
 
-    val _ = carryOver.carryOver(new, PreviousBooks(listOf(old), scanned = setOf(new.id)))
+    val _ = carryOver(new, previous = listOf(old))
 
     coVerify { listeningStatsRepo.moveToBook(from = listOf(old.id), to = new.id) }
   }
@@ -159,7 +165,7 @@ class ProgressCarryOverTest {
       chapters = chapters.take(1),
     )
 
-    val _ = carryOver.carryOver(new, PreviousBooks(listOf(old), scanned = setOf(new.id)))
+    val _ = carryOver(new, previous = listOf(old))
 
     coVerify {
       listeningHistoryRepo.moveToBook(from = listOf(old.id), to = new.id, chapters = mapOf(chapters[0] to chapters[0]))
@@ -180,7 +186,7 @@ class ProgressCarryOverTest {
       chapters = chapters.take(1),
     )
 
-    val carried = carryOver.carryOver(new, PreviousBooks(listOf(old), scanned = setOf(new.id)))
+    val carried = carryOver(new, previous = listOf(old))
 
     assertEquals(expected = new.copy(lastPlayedAt = old.lastPlayedAt), actual = carried)
   }
@@ -204,7 +210,7 @@ class ProgressCarryOverTest {
       chapters = chapters,
     )
 
-    val carried = carryOver.carryOver(merged, PreviousBooks(listOf(dune, hyperion), scanned = setOf(merged.id)))
+    val carried = carryOver(merged, previous = listOf(dune, hyperion))
 
     assertEquals(expected = chapters[1], actual = carried.currentChapter)
     assertEquals(expected = merged.id, actual = currentBookStore.data.first())
@@ -225,10 +231,149 @@ class ProgressCarryOverTest {
       chapters = listOf(chapter),
     ).copy(lastPlayedAt = lastPlayedAt)
 
-    val carried = carryOver.carryOver(dune, PreviousBooks(listOf(merged), scanned = setOf(dune.id)))
+    val carried = carryOver(dune, previous = listOf(merged))
 
     assertEquals(expected = dune, actual = carried)
     assertEquals(expected = dune.id, actual = currentBookStore.data.first())
+  }
+
+  @Test
+  fun `a book whose folder was renamed keeps its progress, name and bookmarks`() = runTest {
+    val oldChapters = listOf("1.mp3", "2.mp3").map { file("primary:Audiobooks/Book/$it") }
+    val old = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
+      chapters = oldChapters,
+    ).copy(
+      name = "Renamed",
+      cover = File("cover.webp"),
+      currentChapter = oldChapters[1],
+      positionInChapter = 42,
+      lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
+    )
+    val bookmark = Bookmark(
+      bookId = old.id,
+      chapterId = oldChapters[1],
+      title = "Twist",
+      time = 7,
+      addedAt = Instant.EPOCH,
+      id = Bookmark.Id.random(),
+    )
+    coEvery { bookmarkRepo.bookmarks(old) } returns listOf(bookmark)
+    currentBookStore.updateData { old.id }
+
+    val newChapters = listOf("1.mp3", "2.mp3").map { file("primary:Audiobooks/Book (2020)/$it") }
+    val new = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book (2020)")),
+      chapters = newChapters,
+    )
+
+    val carried = carryOver(new, previous = listOf(old))
+
+    assertEquals(
+      expected = new.copy(
+        name = "Renamed",
+        cover = File("cover.webp"),
+        currentChapter = newChapters[1],
+        positionInChapter = 42,
+        lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
+      ),
+      actual = carried,
+    )
+    coVerify { bookmarkRepo.addBookmark(bookmark.copy(bookId = new.id, chapterId = newChapters[1])) }
+    coVerify {
+      listeningHistoryRepo.moveToBook(from = listOf(old.id), to = new.id, chapters = oldChapters.zip(newChapters).toMap())
+    }
+    assertEquals(expected = new.id, actual = currentBookStore.data.first())
+  }
+
+  @Test
+  fun `a book that was in the library already doesn't take over a removed copy`() = runTest {
+    val old = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
+      chapters = listOf(file("primary:Audiobooks/Book/1.mp3")),
+    ).copy(positionInChapter = 42, lastPlayedAt = Instant.parse("2026-01-02T10:00:00Z"))
+    val copy = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Copy")),
+      chapters = listOf(file("primary:Audiobooks/Copy/1.mp3")),
+    )
+
+    val carried = carryOver(copy, previous = listOf(old), inLibrary = true)
+
+    assertEquals(expected = copy, actual = carried)
+  }
+
+  @Test
+  fun `a book that only shares an intro with a removed book starts over`() = runTest {
+    val oldIntro = file("primary:Audiobooks/Part 1/intro.mp3")
+    val old = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Part 1")),
+      chapters = listOf(oldIntro, file("primary:Audiobooks/Part 1/1.mp3", size = 20)),
+    ).copy(currentChapter = oldIntro, positionInChapter = 42, lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    val new = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Part 2")),
+      chapters = listOf(file("primary:Audiobooks/Part 2/intro.mp3"), file("primary:Audiobooks/Part 2/1.mp3", size = 30)),
+    )
+
+    val carried = carryOver(new, previous = listOf(old))
+
+    assertEquals(expected = new, actual = carried)
+    coVerify(exactly = 0) { listeningHistoryRepo.moveToBook(any(), any(), any()) }
+  }
+
+  @Test
+  fun `files with the same name keep their place in a moved book`() = runTest {
+    fun chapters(folder: String) = listOf(
+      file("primary:Audiobooks/$folder/CD1/01.mp3"),
+      file("primary:Audiobooks/$folder/CD2/01.mp3"),
+    )
+    val oldChapters = chapters("Book")
+    val old = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
+      chapters = oldChapters,
+    ).copy(currentChapter = oldChapters[1], positionInChapter = 42, lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    val newChapters = chapters("Moved")
+    val new = bookContent(
+      id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Moved")),
+      chapters = newChapters,
+    )
+
+    val carried = carryOver(new, previous = listOf(old))
+
+    assertEquals(expected = newChapters[1], actual = carried.currentChapter)
+  }
+
+  private suspend fun carryOver(
+    content: BookContent,
+    previous: List<BookContent>,
+    inLibrary: Boolean = false,
+  ): BookContent {
+    return progressCarryOver.carryOver(
+      content = content,
+      previousBooks = PreviousBooks(
+        library = if (inLibrary) previous + content else previous,
+        scanned = setOf(content.id),
+        chapterRepo = chapterRepo,
+      ),
+    )
+  }
+
+  /**
+   * A chapter in the folder `primary:Audiobooks` that is stored with the [size] of its file.
+   */
+  private fun file(
+    document: String,
+    size: Long = 10,
+  ): ChapterId {
+    val id = ChapterId(documentUri(tree = "primary:Audiobooks", document = document))
+    chapters[id] = Chapter(
+      id = id,
+      name = null,
+      duration = 1000,
+      fileLastModified = Instant.EPOCH,
+      fileSize = size,
+      markData = emptyList(),
+    )
+    return id
   }
 
   private fun documentUri(
