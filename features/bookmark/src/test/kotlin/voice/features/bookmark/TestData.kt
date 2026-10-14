@@ -63,6 +63,8 @@ internal fun testBook(
     metadata = BookMetadata(
       name = "Echoes of Tomorrow",
       author = "Daniel Hartwell",
+      album = null,
+      title = null,
       genre = null,
       narrator = null,
       series = null,

@@ -65,8 +65,12 @@ public data class BookContent(
  * can read it again when the files change.
  */
 public data class BookMetadata(
+  /** What Voice makes of the tags, or the name of the folder or file without them. */
   val name: String,
   val author: String?,
+  /** The tags of the first file. `null` for books on a server. */
+  val album: String?,
+  val title: String?,
   val genre: String?,
   val narrator: String?,
   val series: String?,

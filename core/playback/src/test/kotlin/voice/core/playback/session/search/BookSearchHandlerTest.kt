@@ -119,6 +119,8 @@ fun book(
       metadata = BookMetadata(
         name = Uuid.random().toString(),
         author = Uuid.random().toString(),
+        album = null,
+        title = null,
         genre = null,
         narrator = null,
         series = null,

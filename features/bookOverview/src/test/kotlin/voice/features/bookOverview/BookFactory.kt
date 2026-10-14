@@ -34,6 +34,8 @@ fun book(
       metadata = BookMetadata(
         name = name,
         author = author,
+        album = null,
+        title = null,
         genre = genre,
         narrator = narrator,
         series = series,

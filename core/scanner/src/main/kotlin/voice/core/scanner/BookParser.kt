@@ -37,12 +37,26 @@ internal class BookParser(
       stored.chapters.first() == firstChapter.id &&
       stored.metadata.fileLastModified == firstChapter.fileLastModified
     if (upToDate) return stored
-    val metadata = metadata(chapters, file, firstChapterMetadata ?: analyze(firstChapter))
+    val analyzed = firstChapterMetadata ?: analyze(firstChapter)
+    val metadata = metadata(chapters, file, analyzed)
       // a cover is only looked for when the book has none
       .copy(cover = stored.metadata.cover)
-    return stored.withMetadata(metadata).also {
+    val beforeNamesKeptApart = stored.metadata.fileLastModified == null
+    val withNames = if (beforeNamesKeptApart) stored.withoutEarlierName(analyzed, file) else stored
+    return withNames.withMetadata(metadata).also {
       if (it != stored) contentRepo.put(it)
     }
+  }
+
+  // Earlier versions named a book in a folder after the title of its first file, or the file's name without one, so
+  // such a name isn't one the listener gave. A name like the folder's stays, as listeners rename books to it.
+  private fun BookContent.withoutEarlierName(
+    analyzed: Metadata?,
+    file: CachedDocumentFile,
+  ): BookContent {
+    if (file.isFile) return this
+    val earlierNames = setOfNotNull(analyzed?.title, analyzed?.fileName)
+    return copy(customName = customName?.takeUnless { it in earlierNames })
   }
 
   /**
@@ -93,9 +107,11 @@ internal class BookParser(
   ): BookMetadata {
     return BookMetadata(
       name = analyzed?.album
-        ?: analyzed?.title?.takeIf { file.isFile }
+        ?: (analyzed?.title ?: analyzed?.fileName)?.takeIf { file.isFile }
         ?: file.bookName(),
       author = analyzed?.artist,
+      album = analyzed?.album,
+      title = analyzed?.title,
       genre = analyzed?.genre,
       narrator = analyzed?.narrator,
       series = analyzed?.series,

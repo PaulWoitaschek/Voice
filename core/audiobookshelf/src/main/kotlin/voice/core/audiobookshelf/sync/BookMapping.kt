@@ -97,6 +97,8 @@ internal fun AbsLibraryItem.toBookContent(
     metadata = BookMetadata(
       name = metadata.title?.takeIf { it.isNotBlank() } ?: chapters.first().name ?: id,
       author = metadata.authorName?.takeIf { it.isNotBlank() },
+      album = null,
+      title = null,
       genre = metadata.genres.joinToString(", ").takeIf { it.isNotBlank() },
       narrator = metadata.narratorName?.takeIf { it.isNotBlank() },
       series = series?.name?.takeIf { it.isNotBlank() } ?: metadata.seriesName?.takeIf { it.isNotBlank() },

@@ -204,6 +204,8 @@ class MediaScannerTest {
       metadata = BookMetadata(
         name = "On the server",
         author = null,
+        album = null,
+        title = null,
         genre = null,
         narrator = null,
         series = null,
@@ -478,6 +480,8 @@ class MediaScannerTest {
 
     val content = bookContentRepo.get(BookId(book.toUri()))!!
     assertEquals(expected = "New Name", actual = content.name)
+    assertEquals(expected = "New Name", actual = content.metadata.album)
+    assertEquals(expected = "Title", actual = content.metadata.title)
     assertEquals(expected = "New Author", actual = content.metadata.author)
   }
 
@@ -554,6 +558,29 @@ class MediaScannerTest {
     assertEquals(expected = "Book Name", actual = renamedContent.metadata.name)
     // once for each book
     assertEquals(expected = analyzeCallsBefore + 2, actual = analyzeCalls)
+  }
+
+  @Test
+  fun `a book in a folder stored before its names were kept apart drops the name of its first file`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val byTitle = File(audiobookFolder, "byTitle")
+    val byFileName = File(audiobookFolder, "byFileName")
+    val byFolder = File(audiobookFolder, "byFolder")
+    listOf(byTitle, byFileName, byFolder).forEach { audioFile(it, "1.mp3") }
+    scan(FolderType.Root, audiobookFolder)
+    // the title of the first file, its name, and a name the listener might have given it
+    mapOf(byTitle to "Title", byFileName to "Chapter", byFolder to "byFolder").forEach { (book, name) ->
+      val content = bookContentRepo.get(BookId(book.toUri()))!!
+      bookContentRepo.put(
+        content.copy(customName = name, metadata = content.metadata.copy(name = name, fileLastModified = null)),
+      )
+    }
+
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = "Book Name", actual = bookContentRepo.get(BookId(byTitle.toUri()))!!.name)
+    assertEquals(expected = "Book Name", actual = bookContentRepo.get(BookId(byFileName.toUri()))!!.name)
+    assertEquals(expected = "byFolder", actual = bookContentRepo.get(BookId(byFolder.toUri()))!!.name)
   }
 
   @Test

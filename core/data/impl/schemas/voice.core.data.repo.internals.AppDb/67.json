@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 67,
-    "identityHash": "f08abe26b6cd0df3bdf7d5fb4203ca71",
+    "identityHash": "4d56ad74f20fa513a9fe579580932b78",
     "entities": [
       {
         "tableName": "chapters2",
@@ -54,7 +54,7 @@
       },
       {
         "tableName": "content2",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `playbackSpeed` REAL NOT NULL, `skipSilence` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `lastPlayedAt` TEXT NOT NULL, `addedAt` TEXT NOT NULL, `chapters` TEXT NOT NULL, `currentChapter` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `gain` REAL NOT NULL DEFAULT 0, `customName` TEXT, `customCover` TEXT, `name` TEXT NOT NULL, `author` TEXT, `genre` TEXT, `narrator` TEXT, `series` TEXT, `part` TEXT, `cover` TEXT, `metadataFileLastModified` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `playbackSpeed` REAL NOT NULL, `skipSilence` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `lastPlayedAt` TEXT NOT NULL, `addedAt` TEXT NOT NULL, `chapters` TEXT NOT NULL, `currentChapter` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `gain` REAL NOT NULL DEFAULT 0, `customName` TEXT, `customCover` TEXT, `name` TEXT NOT NULL, `author` TEXT, `album` TEXT, `title` TEXT, `genre` TEXT, `narrator` TEXT, `series` TEXT, `part` TEXT, `cover` TEXT, `metadataFileLastModified` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -136,6 +136,16 @@
           {
             "fieldPath": "metadata.author",
             "columnName": "author",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "metadata.album",
+            "columnName": "album",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "metadata.title",
+            "columnName": "title",
             "affinity": "TEXT"
           },
           {
@@ -485,7 +495,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f08abe26b6cd0df3bdf7d5fb4203ca71')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4d56ad74f20fa513a9fe579580932b78')"
     ]
   }
 }

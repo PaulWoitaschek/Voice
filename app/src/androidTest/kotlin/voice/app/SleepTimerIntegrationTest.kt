@@ -129,6 +129,8 @@ class SleepTimerIntegrationTest {
       metadata = BookMetadata(
         name = "Test Audio Book",
         author = "Test Author",
+        album = null,
+        title = null,
         genre = null,
         narrator = null,
         series = null,

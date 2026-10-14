@@ -216,6 +216,8 @@ class ReviewPromptControllerTest {
         metadata = BookMetadata(
           name = name,
           author = author,
+          album = null,
+          title = null,
           genre = null,
           narrator = null,
           series = null,

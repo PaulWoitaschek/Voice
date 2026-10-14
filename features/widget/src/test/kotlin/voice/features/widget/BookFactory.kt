@@ -33,6 +33,8 @@ fun book(
       metadata = BookMetadata(
         name = "Moby-Dick",
         author = null,
+        album = null,
+        title = null,
         genre = null,
         narrator = null,
         series = null,
