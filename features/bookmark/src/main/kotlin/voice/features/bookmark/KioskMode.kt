@@ -49,7 +49,7 @@ private fun demoRow(
 
 private fun single(row: BookmarkRowViewState) = BookmarkListItem.Row(row, GroupPosition(0, 1))
 
-internal fun kioskModeBookmarkViewState(): BookmarkViewState {
+internal fun kioskModeBookmarkViewState(tab: BookmarkTab): BookmarkViewState {
   val firstSignal =
     demoRow(
       1,
@@ -117,6 +117,7 @@ internal fun kioskModeBookmarkViewState(): BookmarkViewState {
     ),
     totalCount = 4,
     editor = null,
+    tab = tab,
   )
 }
 

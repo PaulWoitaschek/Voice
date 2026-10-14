@@ -107,6 +107,9 @@ player. That's for a jump noticed after the pill is gone, and for jumps made awa
 seconds of listening in between are one row, from where the first one left, so searching for a scene doesn't fill the
 list. A jump undone right away leaves no row.
 
+The screen behind the bookmark button opens on the history at first, and from then on on the tab the listener had open
+last. Someone who comes for their bookmarks gets them after picking that tab once.
+
 Each row does one thing, and its button says where it goes. The rows themselves used to be buttons without showing it:
 a tap moved the position and left the screen, so browsing could lose a place, and a night went somewhere other than the
 end it showed.
