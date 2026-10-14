@@ -7,18 +7,11 @@ interface SupportListener {
 
   fun openKoFi()
 
-  fun selectPeriod(period: SupportPeriod)
+  fun selectFrequency(frequency: SupportFrequency)
 
   fun selectTier(tier: SupporterTier)
 
   fun confirm(activity: Activity)
-
-  fun toggleTips()
-
-  fun tip(
-    activity: Activity,
-    tip: TipOffer,
-  )
 
   fun manageSubscription()
 
@@ -28,15 +21,9 @@ interface SupportListener {
     fun noop() = object : SupportListener {
       override fun close() {}
       override fun openKoFi() {}
-      override fun selectPeriod(period: SupportPeriod) {}
+      override fun selectFrequency(frequency: SupportFrequency) {}
       override fun selectTier(tier: SupporterTier) {}
       override fun confirm(activity: Activity) {}
-      override fun toggleTips() {}
-      override fun tip(
-        activity: Activity,
-        tip: TipOffer,
-      ) {}
-
       override fun manageSubscription() {}
       override fun retry() {}
     }

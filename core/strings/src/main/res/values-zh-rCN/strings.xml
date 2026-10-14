@@ -354,7 +354,6 @@
     <string name="support.action.manage_subscription">管理订阅</string>
     <string name="support.action.subscribe">以 %1$s 支持</string>
     <string name="support.action.switch">切换为 %1$s</string>
-    <string name="support.action.tip_once">只想打赏一次？</string>
     <string name="support.badge.earned">已获得</string>
     <string name="support.badge.first_cup">第一杯</string>
     <string name="support.badge.not_earned">尚未获得</string>
@@ -368,6 +367,7 @@
     <string name="support.description.maintenance_subtitle">捐助用于持续的维护和开发。</string>
     <string name="support.description.play">每月的支持让我能规划下一个版本，而不只是下一次修复。</string>
     <string name="support.fine_print">仅为感谢：不解锁任何功能。可随时在 Google Play 中取消。</string>
+    <string name="support.fine_print.tip">仅为感谢：不解锁任何功能。不会自动续费。</string>
     <string name="support.helps.title">您的支持将用于</string>
     <string name="support.helps.maintenance">修复错误和日常维护</string>
     <string name="support.helps.features">新功能</string>
@@ -378,8 +378,10 @@
     <string name="support.message.pending">您的茶正在冲泡。Google 确认付款后，徽章就会出现。</string>
     <string name="support.period.monthly">按月</string>
     <string name="support.period.yearly">按年</string>
+    <string name="support.period.once">单次</string>
     <string name="support.price.monthly">每月 %1$s</string>
     <string name="support.price.yearly">每年 %1$s</string>
+    <string name="support.price.once">单次 %1$s</string>
     <string name="support.supporter.since">自 %1$s 起成为支持者</string>
     <string name="support.supporter.title">您是支持者</string>
     <string name="support.thank_you.action">返回收听</string>
@@ -392,7 +394,6 @@
     <string name="support.tier.honey_tea.title">蜂蜜茶</string>
     <string name="support.tier.tea.summary">维持日常运转</string>
     <string name="support.tier.tea.title">一杯茶</string>
-    <string name="support.tips.title">单次打赏</string>
     <string name="support.unavailable.message">此设备目前无法连接 Google Play 结算服务。</string>
     <string name="support.unavailable.title">支持功能暂不可用</string>
     <string name="shortcut.play_current.short_label">播放当前有声书</string>

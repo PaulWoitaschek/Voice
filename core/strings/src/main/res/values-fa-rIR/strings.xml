@@ -370,7 +370,6 @@
     <string name="support.action.manage_subscription">مدیریت اشتراک</string>
     <string name="support.action.subscribe">حمایت با %1$s</string>
     <string name="support.action.switch">تغییر به %1$s</string>
-    <string name="support.action.tip_once">ترجیح می‌دهید یک‌بار انعام بدهید؟</string>
     <string name="support.badge.earned">کسب‌شده</string>
     <string name="support.badge.first_cup">اولین استکان</string>
     <string name="support.badge.not_earned">هنوز کسب نشده</string>
@@ -384,6 +383,7 @@
     <string name="support.description.maintenance_subtitle">کمک‌های مالی به تأمین هزینه نگهداری و توسعه مداوم کمک می‌کنند.</string>
     <string name="support.description.play">حمایت ماهانه به من امکان می‌دهد نسخه‌ی بعدی را برنامه‌ریزی کنم، نه فقط رفع اشکال بعدی را.</string>
     <string name="support.fine_print">این یک تشکر است: هیچ قابلیتی را باز نمی‌کند. هر زمان خواستید در Google Play لغو کنید.</string>
+    <string name="support.fine_print.tip">این یک تشکر است: هیچ قابلیتی را باز نمی‌کند. بدون اشتراک.</string>
     <string name="support.helps.title">حمایت کمک می‌کند به</string>
     <string name="support.helps.maintenance">رفع اشکال‌ها و نگهداری</string>
     <string name="support.helps.features">ویژگی‌های جدید</string>
@@ -394,8 +394,10 @@
     <string name="support.message.pending">چای‌تان در حال دم کشیدن است. نشان شما پس از تأیید پرداخت توسط Google نمایش داده می‌شود.</string>
     <string name="support.period.monthly">ماهانه</string>
     <string name="support.period.yearly">سالانه</string>
+    <string name="support.period.once">یک‌باره</string>
     <string name="support.price.monthly">%1$s در ماه</string>
     <string name="support.price.yearly">%1$s در سال</string>
+    <string name="support.price.once">%1$s یک‌باره</string>
     <string name="support.supporter.since">حامی از %1$s</string>
     <string name="support.supporter.title">شما از حامیان هستید</string>
     <string name="support.thank_you.action">بازگشت به شنیدن</string>
@@ -408,7 +410,6 @@
     <string name="support.tier.honey_tea.title">چای با عسل</string>
     <string name="support.tier.tea.summary">چراغ را روشن نگه می‌دارد</string>
     <string name="support.tier.tea.title">یک استکان چای</string>
-    <string name="support.tips.title">انعام یک‌باره</string>
     <string name="support.unavailable.message">پرداخت Google Play در حال حاضر در این دستگاه در دسترس نیست.</string>
     <string name="support.unavailable.title">حمایت در دسترس نیست</string>
     <string name="shortcut.play_current.short_label">پخش فایل جاری</string>

@@ -33,7 +33,7 @@ data class SubscriptionOffer(
 )
 
 data class TipOffer(
-  val productId: String,
+  val tier: SupporterTier,
   val formattedPrice: String,
 )
 

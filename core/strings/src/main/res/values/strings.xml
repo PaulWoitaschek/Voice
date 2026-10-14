@@ -640,12 +640,10 @@
     <string name="settings.support.title">Help and feedback</string>
     <!-- Support screen button that opens the Google Play subscription settings. -->
     <string name="support.action.manage_subscription">Manage subscription</string>
-    <!-- Support screen button that starts a supporter subscription. %1$s is the price with its period, for example "€2.99 a month". -->
+    <!-- Support screen button that starts a supporter subscription or a one-time tip. %1$s is the price with its period, for example "€2.99 a month" or "€4.99 once". -->
     <string name="support.action.subscribe">Support for %1$s</string>
     <!-- Support screen button that changes a running subscription to another tier or period. %1$s is the new price with its period, for example "€29.99 a year". -->
     <string name="support.action.switch">Switch to %1$s</string>
-    <!-- Support screen button that reveals one-time tips for people who don't want a subscription. -->
-    <string name="support.action.tip_once">Rather tip once?</string>
     <!-- Spoken by the screen reader for a supporter badge the user has earned. -->
     <string name="support.badge.earned">Earned</string>
     <!-- Name of the supporter badge earned when subscribing. Playful: the narrator's first cup of tea. -->
@@ -672,6 +670,8 @@
     <string name="support.description.play">Monthly support is what lets me plan the next release, not just the next fix.</string>
     <!-- Small print below the subscribe button. Makes clear that paying gives no features. -->
     <string name="support.fine_print">It\'s a thank-you: it unlocks nothing. Cancel anytime in Google Play.</string>
+    <!-- Small print below the support button for a one-time tip. Makes clear that paying gives no features and starts no subscription. -->
+    <string name="support.fine_print.tip">It\'s a thank-you: it unlocks nothing. No subscription.</string>
     <!-- Support screen heading above the list of what donations enable. -->
     <string name="support.helps.title">Support helps with</string>
     <!-- Support screen list item: bug fixes and ongoing maintenance. -->
@@ -694,10 +694,14 @@
     <string name="support.period.monthly">Monthly</string>
     <!-- Toggle on the support screen for paying once a year. -->
     <string name="support.period.yearly">Yearly</string>
+    <!-- Toggle on the support screen for paying a single time, without a subscription. -->
+    <string name="support.period.once">Once</string>
     <!-- Price of a monthly subscription. %1$s is the price, for example "€2.99". -->
     <string name="support.price.monthly">%1$s a month</string>
     <!-- Price of a yearly subscription. %1$s is the price, for example "€29.99". -->
     <string name="support.price.yearly">%1$s a year</string>
+    <!-- Price of a one-time tip. %1$s is the price, for example "€4.99". Shown in the support button, for example "Support for €4.99 once". -->
+    <string name="support.price.once">%1$s once</string>
     <!-- Since when someone supports Voice. %1$s is a month and year, for example "March 2026". -->
     <string name="support.supporter.since">Supporter since %1$s</string>
     <!-- Title on the support screen for someone who already supported Voice. -->
@@ -722,8 +726,6 @@
     <string name="support.tier.tea.summary">Keeps the lights on</string>
     <!-- Name of the cheapest supporter tier. Playful: a cup of tea for the narrator. -->
     <string name="support.tier.tea.title">Cup of tea</string>
-    <!-- Heading above the one-time tip buttons. -->
-    <string name="support.tips.title">Tip once</string>
     <!-- Shown on the support screen when Google Play billing can't be reached. -->
     <string name="support.unavailable.message">Google Play billing can\'t be reached on this device right now.</string>
     <!-- Title on the support screen when Google Play billing can't be reached. -->

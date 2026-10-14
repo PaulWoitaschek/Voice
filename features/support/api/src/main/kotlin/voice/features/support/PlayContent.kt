@@ -3,22 +3,23 @@
 package voice.features.support
 
 import androidx.activity.compose.LocalActivity
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonGroupDefaults
@@ -32,21 +33,27 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.ToggleButtonDefaults
-import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.graphics.shapes.RoundedPolygon
 import voice.core.data.supporter.SupporterBadge
+import voice.core.ui.CheckBadge
+import voice.core.ui.ShapedIcon
 import voice.core.ui.SupporterBadgeIcon
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.label
@@ -66,53 +73,45 @@ internal fun PlayContent(
     modifier = Modifier.fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(16.dp),
   ) {
-    val subscription = content.subscription
-    if (subscription != null) {
-      PeriodToggle(
-        period = subscription.period,
-        onPeriodSelect = listener::selectPeriod,
-      )
-      Tiers(
-        tiers = subscription.tiers,
-        period = subscription.period,
-        selectedTier = subscription.selectedTier,
-        onTierSelect = listener::selectTier,
+    if (content.frequencies.size > 1) {
+      FrequencyToggle(
+        frequencies = content.frequencies,
+        frequency = content.frequency,
+        onFrequencySelect = listener::selectFrequency,
       )
     }
+    Tiers(
+      tiers = content.tiers,
+      frequency = content.frequency,
+      selectedTier = content.selectedTier,
+      onTierSelect = listener::selectTier,
+    )
     if (message != null) {
       MessageCard(message)
     }
-    if (subscription != null) {
-      Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-      ) {
-        ActionButton(
-          action = subscription.action,
-          onClick = { activity?.let(listener::confirm) },
-        )
-        Text(
-          text = stringResource(StringsR.string.support_fine_print),
-          style = MaterialTheme.typography.bodySmall,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-          textAlign = TextAlign.Center,
-        )
-        if (subscription.subscribed && subscription.action != Action.Manage) {
-          TextButton(onClick = listener::manageSubscription) {
-            Text(stringResource(StringsR.string.support_action_manage_subscription))
-          }
+    Column(
+      modifier = Modifier.fillMaxWidth(),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+      ActionButton(
+        action = content.action,
+        frequency = content.frequency,
+        onClick = { activity?.let(listener::confirm) },
+      )
+      Text(
+        text = stringResource(
+          if (content.action is Action.Tip) StringsR.string.support_fine_print_tip else StringsR.string.support_fine_print,
+        ),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
+      )
+      if (content.action is Action.Switch) {
+        TextButton(onClick = listener::manageSubscription) {
+          Text(stringResource(StringsR.string.support_action_manage_subscription))
         }
       }
-    }
-    if (content.tips.isNotEmpty()) {
-      Tips(
-        tips = content.tips,
-        expanded = content.showTips,
-        showToggle = subscription != null,
-        onToggle = listener::toggleTips,
-        onTip = { tip -> activity?.let { listener.tip(it, tip) } },
-      )
     }
     BadgeGrowth(badge)
     if (content.note != null) {
@@ -122,9 +121,10 @@ internal fun PlayContent(
 }
 
 @Composable
-private fun PeriodToggle(
-  period: SupportPeriod,
-  onPeriodSelect: (SupportPeriod) -> Unit,
+private fun FrequencyToggle(
+  frequencies: List<SupportFrequency>,
+  frequency: SupportFrequency,
+  onFrequencySelect: (SupportFrequency) -> Unit,
 ) {
   Row(
     modifier = Modifier
@@ -132,17 +132,17 @@ private fun PeriodToggle(
       .selectableGroup(),
     horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
   ) {
-    SupportPeriod.entries.forEachIndexed { index, entry ->
+    frequencies.forEachIndexed { index, entry ->
       ToggleButton(
-        checked = period == entry,
-        onCheckedChange = { onPeriodSelect(entry) },
+        checked = frequency == entry,
+        onCheckedChange = { onFrequencySelect(entry) },
         modifier = Modifier
           .weight(1F)
           .semantics { role = Role.RadioButton },
-        shapes = if (index == 0) {
-          ButtonGroupDefaults.connectedLeadingButtonShapes()
-        } else {
-          ButtonGroupDefaults.connectedTrailingButtonShapes()
+        shapes = when (index) {
+          0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+          frequencies.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+          else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
         },
         colors = ToggleButtonDefaults.colors(
           containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
@@ -150,14 +150,22 @@ private fun PeriodToggle(
           checkedContainerColor = MaterialTheme.colorScheme.secondary,
           checkedContentColor = MaterialTheme.colorScheme.onSecondary,
         ),
+        contentPadding = PaddingValues(horizontal = 8.dp),
       ) {
+        val labelStyle = MaterialTheme.typography.labelLarge
         Text(
-          stringResource(
+          text = stringResource(
             when (entry) {
-              SupportPeriod.Monthly -> StringsR.string.support_period_monthly
-              SupportPeriod.Yearly -> StringsR.string.support_period_yearly
+              SupportFrequency.Monthly -> StringsR.string.support_period_monthly
+              SupportFrequency.Yearly -> StringsR.string.support_period_yearly
+              SupportFrequency.Once -> StringsR.string.support_period_once
             },
           ),
+          style = labelStyle,
+          maxLines = 1,
+          softWrap = false,
+          overflow = TextOverflow.Ellipsis,
+          autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = labelStyle.fontSize),
         )
       }
     }
@@ -167,7 +175,7 @@ private fun PeriodToggle(
 @Composable
 private fun Tiers(
   tiers: List<SupportViewState.Tier>,
-  period: SupportPeriod,
+  frequency: SupportFrequency,
   selectedTier: SupporterTier,
   onTierSelect: (SupporterTier) -> Unit,
 ) {
@@ -180,7 +188,7 @@ private fun Tiers(
     tiers.forEach { tier ->
       TierCard(
         tier = tier,
-        period = period,
+        frequency = frequency,
         selected = tier.tier == selectedTier,
         onClick = { onTierSelect(tier.tier) },
       )
@@ -191,12 +199,22 @@ private fun Tiers(
 @Composable
 private fun TierCard(
   tier: SupportViewState.Tier,
-  period: SupportPeriod,
+  frequency: SupportFrequency,
   selected: Boolean,
   onClick: () -> Unit,
 ) {
   val colors = MaterialTheme.colorScheme
-  val style = tier.tier.style()
+  val containerColor by animateColorAsState(
+    targetValue = if (selected) colors.primaryContainer else colors.surfaceContainerHigh,
+    label = "tierContainer",
+  )
+  val contentColor by animateColorAsState(
+    targetValue = if (selected) colors.onPrimaryContainer else colors.onSurface,
+    label = "tierContent",
+  )
+  // with large fonts, a price beside the text leaves the title too little room
+  val stacked = LocalDensity.current.fontScale >= 1.5F
+  val priceDescription = pricePer(tier.formattedPrice, frequency)
   Surface(
     selected = selected,
     onClick = onClick,
@@ -204,28 +222,20 @@ private fun TierCard(
       .fillMaxWidth()
       .semantics { role = Role.RadioButton },
     shape = RoundedCornerShape(24.dp),
-    color = if (selected) colors.secondaryContainer else colors.surfaceContainerHigh,
-    contentColor = if (selected) colors.onSecondaryContainer else colors.onSurface,
-    border = if (selected) BorderStroke(2.dp, colors.secondary) else null,
+    color = containerColor,
+    contentColor = contentColor,
+    border = if (selected) BorderStroke(2.dp, colors.primary) else null,
   ) {
     Row(
       modifier = Modifier.padding(16.dp),
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-      Box(
-        modifier = Modifier
-          .size(48.dp)
-          .background(style.container, style.shape.toShape()),
-        contentAlignment = Alignment.Center,
-      ) {
-        Icon(
-          modifier = Modifier.size(24.dp),
-          imageVector = style.icon,
-          contentDescription = null,
-          tint = style.content,
-        )
-      }
+      TierIcon(
+        style = tier.tier.style(),
+        selected = selected,
+        ringColor = containerColor,
+      )
       Column(Modifier.weight(1F)) {
         Text(
           text = tier.tier.title(),
@@ -241,6 +251,13 @@ private fun TierCard(
           ),
           style = MaterialTheme.typography.bodyMedium,
         )
+        if (stacked) {
+          TierPrice(
+            modifier = Modifier.padding(top = 4.dp),
+            formattedPrice = tier.formattedPrice,
+            description = priceDescription,
+          )
+        }
         if (tier.active) {
           Text(
             modifier = Modifier
@@ -253,30 +270,73 @@ private fun TierCard(
           )
         }
       }
-      Text(
-        modifier = Modifier.widthIn(max = 120.dp),
-        text = pricePerPeriod(tier.formattedPrice, period),
-        style = MaterialTheme.typography.labelLarge,
-        textAlign = TextAlign.End,
-      )
+      if (!stacked) {
+        TierPrice(
+          modifier = Modifier.widthIn(max = 120.dp),
+          formattedPrice = tier.formattedPrice,
+          description = priceDescription,
+        )
+      }
     }
+  }
+}
+
+@Composable
+private fun TierPrice(
+  formattedPrice: String,
+  description: String,
+  modifier: Modifier = Modifier,
+) {
+  Text(
+    modifier = modifier.semantics { contentDescription = description },
+    text = formattedPrice,
+    style = MaterialTheme.typography.titleMedium,
+    textAlign = TextAlign.End,
+  )
+}
+
+@Composable
+private fun TierIcon(
+  style: TierStyle,
+  selected: Boolean,
+  ringColor: Color,
+) {
+  Box {
+    ShapedIcon(
+      icon = style.icon,
+      shape = style.shape,
+      containerColor = style.container,
+      contentColor = style.content,
+    )
+    CheckBadge(
+      visible = selected,
+      outlineColor = ringColor,
+      modifier = Modifier
+        .align(Alignment.BottomEnd)
+        .offset(x = 6.dp, y = 6.dp),
+    )
   }
 }
 
 @Composable
 private fun ActionButton(
   action: Action,
+  frequency: SupportFrequency,
   onClick: () -> Unit,
 ) {
   val size = ButtonDefaults.MediumContainerHeight
   val text = when (action) {
     is Action.Subscribe -> stringResource(
       StringsR.string.support_action_subscribe,
-      pricePerPeriod(action.formattedPrice, action.period),
+      pricePer(action.formattedPrice, frequency),
     )
     is Action.Switch -> stringResource(
       StringsR.string.support_action_switch,
-      pricePerPeriod(action.formattedPrice, action.period),
+      pricePer(action.formattedPrice, frequency),
+    )
+    is Action.Tip -> stringResource(
+      StringsR.string.support_action_subscribe,
+      pricePer(action.formattedPrice, frequency),
     )
     Action.Manage -> stringResource(StringsR.string.support_action_manage_subscription)
   }
@@ -343,59 +403,6 @@ private fun MessageCard(message: Message) {
         ),
         style = MaterialTheme.typography.bodyMedium,
       )
-    }
-  }
-}
-
-@Composable
-private fun Tips(
-  tips: List<TipOffer>,
-  expanded: Boolean,
-  showToggle: Boolean,
-  onToggle: () -> Unit,
-  onTip: (TipOffer) -> Unit,
-) {
-  Column(
-    modifier = Modifier.fillMaxWidth(),
-    horizontalAlignment = Alignment.CenterHorizontally,
-  ) {
-    if (showToggle) {
-      TextButton(onClick = onToggle) {
-        Text(stringResource(StringsR.string.support_action_tip_once))
-      }
-    }
-    AnimatedVisibility(visible = expanded) {
-      Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-      ) {
-        Text(
-          text = stringResource(StringsR.string.support_tips_title),
-          style = MaterialTheme.typography.labelLarge,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        FlowRow(
-          modifier = Modifier.fillMaxWidth(),
-          horizontalArrangement = Arrangement.spacedBy(8.dp),
-          verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-          tips.forEach { tip ->
-            FilledTonalButton(
-              modifier = Modifier.weight(1F),
-              onClick = { onTip(tip) },
-              contentPadding = ButtonDefaults.SmallContentPadding,
-            ) {
-              Icon(
-                modifier = Modifier.size(18.dp),
-                imageVector = VoiceIcons.VolunteerActivism,
-                contentDescription = null,
-              )
-              Spacer(Modifier.size(6.dp))
-              Text(tip.formattedPrice, softWrap = false)
-            }
-          }
-        }
-      }
     }
   }
 }
@@ -476,14 +483,15 @@ private fun Note(note: String) {
 }
 
 @Composable
-private fun pricePerPeriod(
+private fun pricePer(
   formattedPrice: String,
-  period: SupportPeriod,
+  frequency: SupportFrequency,
 ): String {
   return stringResource(
-    when (period) {
-      SupportPeriod.Monthly -> StringsR.string.support_price_monthly
-      SupportPeriod.Yearly -> StringsR.string.support_price_yearly
+    when (frequency) {
+      SupportFrequency.Monthly -> StringsR.string.support_price_monthly
+      SupportFrequency.Yearly -> StringsR.string.support_price_yearly
+      SupportFrequency.Once -> StringsR.string.support_price_once
     },
     formattedPrice,
   )
@@ -520,8 +528,8 @@ private fun SupporterTier.style(): TierStyle {
     SupporterTier.HoneyTea -> TierStyle(
       shape = MaterialShapes.Cookie6Sided,
       icon = VoiceIcons.Hive,
-      container = colors.primaryContainer,
-      content = colors.onPrimaryContainer,
+      container = colors.primary,
+      content = colors.onPrimary,
     )
     SupporterTier.GoldenMic -> TierStyle(
       shape = MaterialShapes.Sunny,

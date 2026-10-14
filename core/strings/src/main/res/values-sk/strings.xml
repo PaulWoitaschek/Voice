@@ -402,7 +402,6 @@
     <string name="support.action.manage_subscription">Spravovať predplatné</string>
     <string name="support.action.subscribe">Podporiť za %1$s</string>
     <string name="support.action.switch">Prejsť na %1$s</string>
-    <string name="support.action.tip_once">Radšej jednorazové sprepitné?</string>
     <string name="support.badge.earned">Získaný</string>
     <string name="support.badge.first_cup">Prvá šálka</string>
     <string name="support.badge.not_earned">Zatiaľ nezískaný</string>
@@ -416,6 +415,7 @@
     <string name="support.description.maintenance_subtitle">Dary pomáhajú financovať priebežnú údržbu a vývoj.</string>
     <string name="support.description.play">Mesačná podpora mi umožňuje plánovať ďalšiu verziu, nielen ďalšiu opravu.</string>
     <string name="support.fine_print">Je to poďakovanie: nič neodomyká. Zrušiť môžete kedykoľvek v Google Play.</string>
+    <string name="support.fine_print.tip">Je to poďakovanie: nič neodomyká. Žiadne predplatné.</string>
     <string name="support.helps.title">Podpora pomáha s</string>
     <string name="support.helps.maintenance">Opravami chýb a údržbou</string>
     <string name="support.helps.features">Novými funkciami</string>
@@ -426,8 +426,10 @@
     <string name="support.message.pending">Váš čaj sa lúhuje. Odznak sa zobrazí, keď Google potvrdí platbu.</string>
     <string name="support.period.monthly">Mesačne</string>
     <string name="support.period.yearly">Ročne</string>
+    <string name="support.period.once">Jednorazovo</string>
     <string name="support.price.monthly">%1$s mesačne</string>
     <string name="support.price.yearly">%1$s ročne</string>
+    <string name="support.price.once">%1$s jednorazovo</string>
     <string name="support.supporter.since">Podporujete od: %1$s</string>
     <string name="support.supporter.title">Patríte medzi podporovateľov</string>
     <string name="support.thank_you.action">Späť k počúvaniu</string>
@@ -440,7 +442,6 @@
     <string name="support.tier.honey_tea.title">Čaj s medom</string>
     <string name="support.tier.tea.summary">Platí účty</string>
     <string name="support.tier.tea.title">Šálka čaju</string>
-    <string name="support.tips.title">Jednorazové sprepitné</string>
     <string name="support.unavailable.message">Platby cez Google Play sú teraz na tomto zariadení nedostupné.</string>
     <string name="support.unavailable.title">Podpora nie je dostupná</string>
     <string name="shortcut.play_current.short_label">Prehrať aktuálnu</string>

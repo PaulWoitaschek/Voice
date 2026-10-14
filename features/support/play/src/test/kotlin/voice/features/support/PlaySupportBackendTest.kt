@@ -37,7 +37,7 @@ class PlaySupportBackendTest {
     every { packageName } returns "de.ph1b.audiobook"
     every { purchaseUpdates } returns updates
     coEvery { products() } returns SupportProducts.subscriptions.keys.map { BillingProduct(it, "€2") } +
-      SupportProducts.tips.map { BillingProduct(it, "€1") }
+      SupportProducts.tips.keys.map { BillingProduct(it, "€1") }
     coEvery { purchases() } returns emptyList()
     coEvery { acknowledge(any()) } returns true
     coEvery { consume(any()) } returns true
@@ -62,7 +62,7 @@ class PlaySupportBackendTest {
       expected = SubscriptionOffer(SupporterTier.HoneyTea, SupportPeriod.Yearly, "€2"),
       actual = state.subscriptions.single { it.tier == SupporterTier.HoneyTea && it.period == SupportPeriod.Yearly },
     )
-    assertEquals(expected = listOf("tip_small", "tip_medium", "tip_large"), actual = state.tips.map { it.productId })
+    assertEquals(expected = SupporterTier.entries.toSet(), actual = state.tips.map { it.tier }.toSet())
     assertNull(state.activeSubscription)
   }
 
@@ -203,12 +203,21 @@ class PlaySupportBackendTest {
   }
 
   @Test
+  fun `a tip buys the tip of its tier`() = scope.runTest {
+    val backend = backend()
+
+    backend.tip(activity, SupporterTier.HoneyTea)
+
+    verify(exactly = 1) { val _ = billing.launch(activity, "tip_medium", null) }
+  }
+
+  @Test
   fun `a purchase screen that doesn't open is announced`() = scope.runTest {
     every { billing.launch(any(), any(), any()) } returns false
     val backend = backend()
 
     backend.events.test {
-      backend.tip(activity, TipOffer("tip_large", "€5"))
+      backend.tip(activity, SupporterTier.GoldenMic)
 
       assertEquals(expected = SupportEvent.Failed, actual = awaitItem())
     }

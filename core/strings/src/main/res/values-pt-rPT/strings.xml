@@ -386,7 +386,6 @@
     <string name="support.action.manage_subscription">Gerir subscrição</string>
     <string name="support.action.subscribe">Apoiar com %1$s</string>
     <string name="support.action.switch">Mudar para %1$s</string>
-    <string name="support.action.tip_once">Prefere uma gorjeta única?</string>
     <string name="support.badge.earned">Conquistado</string>
     <string name="support.badge.first_cup">Primeira chávena</string>
     <string name="support.badge.not_earned">Ainda não conquistado</string>
@@ -400,6 +399,7 @@
     <string name="support.description.maintenance_subtitle">As doações ajudam a financiar a manutenção e o desenvolvimento contínuos.</string>
     <string name="support.description.play">O apoio mensal é o que me permite planear a próxima versão, e não apenas a próxima correção.</string>
     <string name="support.fine_print">É um agradecimento: não desbloqueia nada. Cancele quando quiser no Google Play.</string>
+    <string name="support.fine_print.tip">É um agradecimento: não desbloqueia nada. Sem subscrição.</string>
     <string name="support.helps.title">O apoio ajuda em</string>
     <string name="support.helps.maintenance">Correções de erros e manutenção</string>
     <string name="support.helps.features">Novas funcionalidades</string>
@@ -410,8 +410,10 @@
     <string name="support.message.pending">O seu chá está a ser preparado. O emblema aparece assim que a Google confirmar o pagamento.</string>
     <string name="support.period.monthly">Mensal</string>
     <string name="support.period.yearly">Anual</string>
+    <string name="support.period.once">Uma vez</string>
     <string name="support.price.monthly">%1$s por mês</string>
     <string name="support.price.yearly">%1$s por ano</string>
+    <string name="support.price.once">%1$s uma vez</string>
     <string name="support.supporter.since">Apoiante desde %1$s</string>
     <string name="support.supporter.title">É apoiante do Voice</string>
     <string name="support.thank_you.action">Voltar a ouvir</string>
@@ -424,7 +426,6 @@
     <string name="support.tier.honey_tea.title">Chá com mel</string>
     <string name="support.tier.tea.summary">Ajuda a pagar as contas</string>
     <string name="support.tier.tea.title">Chávena de chá</string>
-    <string name="support.tips.title">Gorjeta única</string>
     <string name="support.unavailable.message">Não é possível aceder aos pagamentos do Google Play neste dispositivo de momento.</string>
     <string name="support.unavailable.title">O apoio não está disponível</string>
     <string name="shortcut.play_current.short_label">Reproduzir atual</string>

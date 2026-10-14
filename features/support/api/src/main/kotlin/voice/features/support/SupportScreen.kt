@@ -2,6 +2,7 @@
 
 package voice.features.support
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -13,10 +14,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.retain
@@ -40,35 +43,56 @@ import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
 
 @Composable
-@Preview
+@Preview(heightDp = 1150)
+@Preview(name = "dark", heightDp = 1150, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "large font", heightDp = 2000, fontScale = 2F)
 private fun SupportPlayPreview() {
-  VoiceTheme {
-    Support(
-      viewState = SupportViewState.preview(),
-      listener = SupportListener.noop(),
-    )
-  }
+  SupportPreview(SupportViewState.preview())
+}
+
+@Composable
+@Preview(heightDp = 1150)
+@Preview(name = "dark", heightDp = 1150, uiMode = Configuration.UI_MODE_NIGHT_YES)
+private fun SupportOncePreview() {
+  SupportPreview(
+    SupportViewState.preview(
+      content = SupportViewState.previewPlayContent().copy(
+        frequency = SupportFrequency.Once,
+        tiers = listOf(
+          SupportViewState.Tier(SupporterTier.Tea, "€2.99", active = false),
+          SupportViewState.Tier(SupporterTier.HoneyTea, "€4.99", active = false),
+          SupportViewState.Tier(SupporterTier.GoldenMic, "€9.99", active = false),
+        ),
+        selectedTier = SupporterTier.HoneyTea,
+        action = SupportViewState.Action.Tip("€4.99"),
+      ),
+    ),
+  )
 }
 
 @Composable
 @Preview
 private fun SupportKoFiPreview() {
-  VoiceTheme {
-    Support(
-      viewState = SupportViewState.preview(content = SupportViewState.Content.KoFi).copy(badge = null, supporterSince = null),
-      listener = SupportListener.noop(),
-    )
-  }
+  SupportPreview(
+    SupportViewState.preview(content = SupportViewState.Content.KoFi).copy(badge = null, supporterSince = null),
+  )
 }
 
 @Composable
 @Preview
 private fun SupportThankYouPreview() {
+  SupportPreview(SupportViewState.preview().copy(thankYou = true))
+}
+
+@Composable
+private fun SupportPreview(viewState: SupportViewState) {
   VoiceTheme {
-    Support(
-      viewState = SupportViewState.preview().copy(thankYou = true),
-      listener = SupportListener.noop(),
-    )
+    Surface(color = BottomSheetDefaults.ContainerColor) {
+      Support(
+        viewState = viewState,
+        listener = SupportListener.noop(),
+      )
+    }
   }
 }
 

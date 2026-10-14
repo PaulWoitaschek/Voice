@@ -74,10 +74,11 @@ class PlaySupportBackend(
 
   override fun tip(
     activity: Activity,
-    tip: TipOffer,
+    tier: SupporterTier,
   ) {
-    analytics.event("support_tip", mapOf("product" to tip.productId))
-    launch(activity, tip.productId, replace = null)
+    val productId = SupportProducts.tipId(tier)
+    analytics.event("support_tip", mapOf("product" to productId))
+    launch(activity, productId, replace = null)
   }
 
   private fun launch(
@@ -154,9 +155,9 @@ class PlaySupportBackend(
           val offer = SupportProducts.subscriptions[product.productId] ?: return@mapNotNull null
           SubscriptionOffer(tier = offer.tier, period = offer.period, formattedPrice = product.formattedPrice)
         },
-        tips = SupportProducts.tips.mapNotNull { productId ->
-          val product = products.find { it.productId == productId } ?: return@mapNotNull null
-          TipOffer(productId = productId, formattedPrice = product.formattedPrice)
+        tips = products.mapNotNull { product ->
+          val tier = SupportProducts.tips[product.productId] ?: return@mapNotNull null
+          TipOffer(tier = tier, formattedPrice = product.formattedPrice)
         },
         activeSubscription = activeSubscription(),
       )

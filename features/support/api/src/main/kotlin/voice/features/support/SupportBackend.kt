@@ -21,7 +21,7 @@ interface SupportBackend {
 
   fun tip(
     activity: Activity,
-    tip: TipOffer,
+    tier: SupporterTier,
   )
 
   fun manageSubscription()
