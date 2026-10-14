@@ -338,6 +338,8 @@
     <string name="settings.playback.auto_rewind.off">关闭</string>
     <string name="settings.playback.auto_rewind.summary">继续播放时稍微往回倒一点，免得您接不上情节</string>
     <string name="settings.playback.auto_rewind.title">自动回退</string>
+    <string name="settings.playback.lock_screen_slider.summary">可在锁屏和通知中拖动进度条，在本章内跳转。关闭后，误触也不会让您找不到听到哪儿了。</string>
+    <string name="settings.playback.lock_screen_slider.title">锁屏进度条</string>
     <string name="settings.playback.seek_time.summary">快退和快进跳转的时长</string>
     <string name="settings.playback.seek_time.title">跳过时间</string>
     <string name="settings.subtitle">打造专属于您的 Voice</string>

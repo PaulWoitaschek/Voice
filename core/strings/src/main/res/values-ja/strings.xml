@@ -338,6 +338,8 @@
     <string name="settings.playback.auto_rewind.off">オフ</string>
     <string name="settings.playback.auto_rewind.summary">再開時に少し巻き戻すので、話の流れを見失いません</string>
     <string name="settings.playback.auto_rewind.title">自動巻き戻し</string>
+    <string name="settings.playback.lock_screen_slider.summary">ロック画面や通知から、チャプター内を移動できます。オフにすると、うっかり触れても再生位置がずれません。</string>
+    <string name="settings.playback.lock_screen_slider.title">ロック画面のシークバー</string>
     <string name="settings.playback.seek_time.summary">巻き戻しと早送りでスキップする長さ</string>
     <string name="settings.playback.seek_time.title">スキップ量</string>
     <string name="settings.subtitle">Voice を自分好みに</string>

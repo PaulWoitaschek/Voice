@@ -65,3 +65,6 @@ public annotation class HistoryTabOpenStore
  */
 @Qualifier
 public annotation class LastPlaybackSpeedStore
+
+@Qualifier
+public annotation class LockScreenSliderStore

@@ -354,6 +354,8 @@
     <string name="settings.playback.auto_rewind.off">Pois</string>
     <string name="settings.playback.auto_rewind.summary">Kelaa jatkettaessa hieman taaksepäin, jotta et putoa kärryiltä</string>
     <string name="settings.playback.auto_rewind.title">Automaattinen takaisinkelaus</string>
+    <string name="settings.playback.lock_screen_slider.summary">Kelaa lukua lukitusnäytöltä ja ilmoituksesta. Poista se käytöstä, jotta vahingossa osunut kosketus ei siirrä sinua pois kohdastasi.</string>
+    <string name="settings.playback.lock_screen_slider.title">Lukitusnäytön liukusäädin</string>
     <string name="settings.playback.seek_time.summary">Kuinka pitkälle taakse- ja eteenpäinkelaus hyppäävät</string>
     <string name="settings.playback.seek_time.title">Siirtymän pituus</string>
     <string name="settings.subtitle">Tee Voicesta omasi</string>

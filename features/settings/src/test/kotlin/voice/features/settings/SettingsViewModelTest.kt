@@ -42,9 +42,11 @@ import java.time.YearMonth
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import java.time.Instant as JavaInstant
@@ -56,6 +58,7 @@ class SettingsViewModelTest {
   private val themeColorSchemeStore = MemoryDataStore(ThemeColorScheme.VoiceBlue)
   private val autoRewindAmountStore = MemoryDataStore(10)
   private val seekTimeStore = MemoryDataStore(30)
+  private val lockScreenSliderStore = MemoryDataStore(true)
   private val gridModeStore = MemoryDataStore(GridMode.GRID)
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val analyticsConsentStore = MemoryDataStore(false)
@@ -91,6 +94,7 @@ class SettingsViewModelTest {
     themeColorSchemeStore = themeColorSchemeStore,
     autoRewindAmountStore = autoRewindAmountStore,
     seekTimeStore = seekTimeStore,
+    lockScreenSliderStore = lockScreenSliderStore,
     navigator = navigator,
     appInfoProvider = appInfoProvider,
     gridModeStore = gridModeStore,
@@ -436,6 +440,22 @@ class SettingsViewModelTest {
     viewModel.autoRewindAmountChanged(25)
     runCurrent()
     assertEquals(expected = 20, actual = autoRewindAmountStore.data.first())
+  }
+
+  @Test
+  fun `the lock screen slider can be turned off and on again`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.filterNotNull().test {
+      assertTrue(awaitItem().lockScreenSlider)
+
+      viewModel.toggleLockScreenSlider()
+      assertFalse(awaitItem().lockScreenSlider)
+      assertFalse(lockScreenSliderStore.data.first())
+
+      viewModel.toggleLockScreenSlider()
+      assertTrue(awaitItem().lockScreenSlider)
+    }
   }
 }
 

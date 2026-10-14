@@ -354,6 +354,8 @@
     <string name="settings.playback.auto_rewind.off">خاموش</string>
     <string name="settings.playback.auto_rewind.summary">هنگام ادامه کمی به عقب برمی‌گردد تا رشته‌ی داستان از دستتان نرود</string>
     <string name="settings.playback.auto_rewind.title">عقب بردن خودکار</string>
+    <string name="settings.playback.lock_screen_slider.summary">از صفحه قفل و اعلان، در فصل جلو و عقب بروید. خاموشش کنید تا یک لمس ناخواسته جایی را که بودید از دستتان نگیرد.</string>
+    <string name="settings.playback.lock_screen_slider.title">نوار پیشرفت در صفحه قفل</string>
     <string name="settings.playback.seek_time.summary">میزان پرش عقب و جلو بردن سریع</string>
     <string name="settings.playback.seek_time.title">میزان پرش</string>
     <string name="settings.subtitle">Voice را مال خودتان کنید</string>

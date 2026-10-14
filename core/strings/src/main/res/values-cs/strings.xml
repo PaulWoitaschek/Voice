@@ -386,6 +386,8 @@
     <string name="settings.playback.auto_rewind.off">Vypnuto</string>
     <string name="settings.playback.auto_rewind.summary">Při obnovení přehrávání se kousek vrátí, abyste neztratili nit</string>
     <string name="settings.playback.auto_rewind.title">Automaticky přetočit</string>
+    <string name="settings.playback.lock_screen_slider.summary">Posouvejte se v kapitole ze zamykací obrazovky a oznámení. Vypněte ho, aby náhodný dotyk nepřesunul přehrávání jinam.</string>
+    <string name="settings.playback.lock_screen_slider.title">Posuvník na zamykací obrazovce</string>
     <string name="settings.playback.seek_time.summary">Jak daleko skáče přetočení zpět a vpřed</string>
     <string name="settings.playback.seek_time.title">Přeskočit o</string>
     <string name="settings.subtitle">Udělejte si Voice po svém</string>

@@ -338,6 +338,8 @@
     <string name="settings.playback.auto_rewind.off">Mati</string>
     <string name="settings.playback.auto_rewind.summary">Mundur sedikit saat Anda melanjutkan, agar Anda tidak kehilangan alur</string>
     <string name="settings.playback.auto_rewind.title">Mundur otomatis</string>
+    <string name="settings.playback.lock_screen_slider.summary">Geser maju-mundur dalam bab dari layar kunci dan notifikasi. Matikan agar sentuhan tak sengaja tidak membuat Anda kehilangan posisi terakhir.</string>
+    <string name="settings.playback.lock_screen_slider.title">Penggeser di layar kunci</string>
     <string name="settings.playback.seek_time.summary">Seberapa jauh mundur dan maju cepat melompat</string>
     <string name="settings.playback.seek_time.title">Lewati jumlah</string>
     <string name="settings.subtitle">Jadikan Voice milik Anda</string>

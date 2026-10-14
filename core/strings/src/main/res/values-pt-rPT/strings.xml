@@ -370,6 +370,8 @@
     <string name="settings.playback.auto_rewind.off">Desligado</string>
     <string name="settings.playback.auto_rewind.summary">Recua um pouco ao retomar, para não perder o fio à meada</string>
     <string name="settings.playback.auto_rewind.title">Retrocesso automático</string>
+    <string name="settings.playback.lock_screen_slider.summary">Avance ou recue no capítulo a partir do ecrã de bloqueio e da notificação. Desative para não perder o ponto onde ia com um toque acidental.</string>
+    <string name="settings.playback.lock_screen_slider.title">Barra no ecrã de bloqueio</string>
     <string name="settings.playback.seek_time.summary">Quanto recuar e avançar saltam</string>
     <string name="settings.playback.seek_time.title">Quantidade de Salto</string>
     <string name="settings.subtitle">Torne o Voice seu</string>

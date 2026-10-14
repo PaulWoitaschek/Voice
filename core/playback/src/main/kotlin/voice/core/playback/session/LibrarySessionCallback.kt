@@ -15,6 +15,7 @@ import androidx.media3.session.MediaSession.ConnectionResult
 import androidx.media3.session.MediaSession.ControllerInfo
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import androidx.media3.session.SessionCommand
+import androidx.media3.session.SessionCommands
 import androidx.media3.session.SessionError
 import androidx.media3.session.SessionResult
 import com.google.common.collect.ImmutableList
@@ -22,6 +23,8 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
@@ -30,6 +33,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.data.store.LockScreenSliderStore
 import voice.core.logging.api.Logger
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.player.VoicePlayer
@@ -48,7 +52,11 @@ class LibrarySessionCallback(
   private val bookRepository: BookRepository,
   private val commandSourceResolver: CommandSourceResolver,
   private val context: Context,
+  @LockScreenSliderStore
+  private val lockScreenSliderStore: DataStore<Boolean>,
 ) : MediaLibrarySession.Callback {
+
+  private var notificationCommandsJob: Job? = null
 
   override fun onMediaButtonEvent(
     session: MediaSession,
@@ -193,14 +201,51 @@ class LibrarySessionCallback(
     if (controller.packageName != context.packageName) {
       return connectionResult
     }
-    val sessionCommands = connectionResult.availableSessionCommands
+    return ConnectionResult.accept(
+      withCustomCommand(connectionResult.availableSessionCommands),
+      connectionResult.availablePlayerCommands,
+    )
+  }
+
+  private fun withCustomCommand(sessionCommands: SessionCommands): SessionCommands {
+    return sessionCommands
       .buildUpon()
       .add(SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY))
       .build()
-    return ConnectionResult.accept(
-      sessionCommands,
-      connectionResult.availablePlayerCommands,
-    )
+  }
+
+  override fun onPostConnect(
+    session: MediaSession,
+    controller: ControllerInfo,
+  ) {
+    if (!session.isMediaNotificationController(controller)) return
+    // The notification controller's commands become the platform session's actions, which the lock screen reads.
+    val connectionResult = super.onConnect(session, controller)
+    val sessionCommands = withCustomCommand(connectionResult.availableSessionCommands)
+    notificationCommandsJob?.cancel()
+    notificationCommandsJob = scope.launch {
+      lockScreenSliderStore.data.distinctUntilChanged().collect { lockScreenSlider ->
+        val playerCommands = if (lockScreenSlider) {
+          connectionResult.availablePlayerCommands
+        } else {
+          connectionResult.availablePlayerCommands
+            .buildUpon()
+            .remove(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM)
+            .build()
+        }
+        session.setAvailableCommands(controller, sessionCommands, playerCommands)
+      }
+    }
+  }
+
+  override fun onDisconnected(
+    session: MediaSession,
+    controller: ControllerInfo,
+  ) {
+    if (session.isMediaNotificationController(controller)) {
+      notificationCommandsJob?.cancel()
+      notificationCommandsJob = null
+    }
   }
 
   private suspend fun prepareCurrentBook() {

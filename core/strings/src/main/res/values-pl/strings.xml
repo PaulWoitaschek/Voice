@@ -386,6 +386,8 @@
     <string name="settings.playback.auto_rewind.off">Wyłączone</string>
     <string name="settings.playback.auto_rewind.summary">Po wznowieniu cofa się trochę, żeby nie zgubić wątku</string>
     <string name="settings.playback.auto_rewind.title">Automatyczne cofnięcie</string>
+    <string name="settings.playback.lock_screen_slider.summary">Przewijaj rozdział z ekranu blokady i powiadomienia. Wyłącz go, żeby przypadkowy dotyk nie przesunął odtwarzania w inne miejsce.</string>
+    <string name="settings.playback.lock_screen_slider.title">Suwak na ekranie blokady</string>
     <string name="settings.playback.seek_time.summary">O ile przewijają przyciski do tyłu i do przodu</string>
     <string name="settings.playback.seek_time.title">Przewiń o</string>
     <string name="settings.subtitle">Voice na twoją modłę</string>
