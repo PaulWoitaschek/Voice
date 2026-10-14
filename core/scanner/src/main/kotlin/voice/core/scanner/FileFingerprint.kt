@@ -17,9 +17,6 @@ internal fun Chapter.fingerprint(): FileFingerprint? {
   return fileName?.let { FileFingerprint(name = it, size = fileSize) }
 }
 
-/**
- * The chapters by their file. Files that can't be told apart are left out.
- */
 internal fun List<Chapter>.byFingerprint(): Map<FileFingerprint, ChapterId> {
   return groupBy { it.fingerprint() }
     .mapNotNull { (fingerprint, chapters) ->

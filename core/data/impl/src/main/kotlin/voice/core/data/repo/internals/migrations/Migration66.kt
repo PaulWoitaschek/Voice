@@ -14,20 +14,25 @@ import voice.core.data.repo.internals.mapRows
 internal class Migration66 : AutoMigrationSpec {
 
   override fun onPostMigrate(db: SupportSQLiteDatabase) {
-    db.query("SELECT id FROM chapters2")
+    val update = db.compileStatement("UPDATE chapters2 SET fileName = ? WHERE id = ?")
+    db.query("SELECT id FROM chapters2 WHERE id LIKE 'file:%' OR id LIKE 'content://$EXTERNAL_STORAGE/%'")
       .mapRows { getString("id") }
       .forEach { id ->
         val fileName = fileNameInPath(id) ?: return@forEach
-        db.execSQL("UPDATE chapters2 SET fileName = ? WHERE id = ?", arrayOf(fileName, id))
+        update.bindString(1, fileName)
+        update.bindString(2, id)
+        update.executeUpdateDelete()
       }
   }
 }
+
+private const val EXTERNAL_STORAGE = "com.android.externalstorage.documents"
 
 private fun fileNameInPath(chapterId: String): String? {
   val uri = chapterId.toUri()
   return when {
     uri.scheme == "file" -> uri.lastPathSegment
-    uri.authority == "com.android.externalstorage.documents" -> try {
+    uri.authority == EXTERNAL_STORAGE -> try {
       DocumentsContract.getDocumentId(uri).substringAfter(':').substringAfterLast('/')
     } catch (_: IllegalArgumentException) {
       null

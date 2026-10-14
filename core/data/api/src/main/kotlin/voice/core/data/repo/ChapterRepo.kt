@@ -7,6 +7,8 @@ import java.time.Instant
 public interface ChapterRepo {
   public suspend fun get(id: ChapterId): Chapter?
 
+  public suspend fun get(ids: List<ChapterId>): List<Chapter>
+
   public suspend fun put(chapter: Chapter)
 }
 
@@ -19,7 +21,7 @@ public suspend inline fun ChapterRepo.getOrPut(
 ): Chapter? {
   val chapter = get(id)
   if (chapter != null && chapter.fileLastModified == lastModified && chapter.fileSize == fileSize) {
-    if (chapter.fileName == fileName) return chapter
+    if (fileName == null || chapter.fileName == fileName) return chapter
     // a renamed file can keep its document, so only the name is updated instead of analyzing the file again
     return chapter.copy(fileName = fileName).also { put(it) }
   }

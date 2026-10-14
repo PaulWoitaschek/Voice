@@ -115,9 +115,6 @@ internal class PreviousBooks(
 
   private var byFile: Map<FileFingerprint, List<Pair<BookContent, ChapterId>>>? = null
 
-  /**
-   * The books the [content] with its [chapters] takes over from.
-   */
   suspend fun of(
     content: BookContent,
     chapters: List<Chapter>,
@@ -141,10 +138,10 @@ internal class PreviousBooks(
   }
 
   private suspend fun sharingFiles(chapters: List<Chapter>): Predecessors? {
-    val byFile = byFile()
+    val previousFiles = byFile()
     val movedByBook = chapters.byFingerprint()
       .flatMap { (fingerprint, chapter) ->
-        byFile[fingerprint].orEmpty().map { (book, previous) -> book to (previous to chapter) }
+        previousFiles[fingerprint].orEmpty().map { (book, previous) -> book to (previous to chapter) }
       }
       .groupBy(keySelector = { it.first }, valueTransform = { it.second })
       // a shared file, like an intro, doesn't make it the same book
@@ -158,10 +155,12 @@ internal class PreviousBooks(
   }
 
   private suspend fun byFile(): Map<FileFingerprint, List<Pair<BookContent, ChapterId>>> {
-    return byFile ?: books
+    byFile?.let { return it }
+    val chapters = chapterRepo.get(books.flatMap { it.chapters }).associateBy { it.id }
+    return books
       .flatMap { book ->
         book.chapters
-          .mapNotNull { chapterRepo.get(it) }
+          .mapNotNull { chapters[it] }
           .byFingerprint()
           .map { (fingerprint, chapter) -> fingerprint to (book to chapter) }
       }
@@ -170,9 +169,6 @@ internal class PreviousBooks(
   }
 }
 
-/**
- * The books a book takes over from, and where each of their chapters is in it.
- */
 internal class Predecessors(
   val books: List<BookContent>,
   val chapters: Map<ChapterId, ChapterId>,

@@ -35,7 +35,7 @@ class ProgressCarryOverTest {
   private val progressCarryOver = ProgressCarryOver(bookmarkRepo, listeningHistoryRepo, listeningStatsRepo, currentBookStore)
   private val chapters = mutableMapOf<ChapterId, Chapter>()
   private val chapterRepo = mockk<ChapterRepo> {
-    coEvery { get(id = any()) } answers { chapters[firstArg<ChapterId>()] }
+    coEvery { get(ids = any()) } answers { firstArg<List<ChapterId>>().mapNotNull { chapters[it] } }
   }
 
   @Test
