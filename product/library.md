@@ -99,7 +99,8 @@ collect series ([#1748]). The maintainer wants real support for series in the lo
 
 ⭕ **Open** · [#1407]
 
-A wrong author or other detail can only be fixed in the files' tags, outside Voice ([#1161]).
+A wrong author or other detail can only be fixed in the files' tags, outside Voice ([#1161]). Voice reads the tags
+again when the files change, and a name or cover given in Voice stays.
 
 ## Covers that aren't square get cropped
 

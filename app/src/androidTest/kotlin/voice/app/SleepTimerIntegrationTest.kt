@@ -11,6 +11,7 @@ import kotlinx.coroutines.test.runTest
 import voice.core.common.rootGraphAs
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
@@ -60,7 +61,6 @@ class SleepTimerIntegrationTest {
 
     val bookId = prepareTestBook()
 
-    // speed up the tests by using shorter fade out and sleep times
     fadeOutStore.updateData { 1.seconds }
 
     playerController.play()
@@ -80,7 +80,6 @@ class SleepTimerIntegrationTest {
 
     val bookId = prepareTestBook()
 
-    // speed up the tests by using shorter fade out and sleep times
     fadeOutStore.updateData { 1.seconds }
 
     playerController.play()
@@ -91,7 +90,6 @@ class SleepTimerIntegrationTest {
     playStateManager.playStateFlow.first { it == PlayStateManager.PlayState.Paused }
     sleepTimer.state.first { it == SleepTimerState.Disabled }
 
-    // suspend until the position is updated to the end of the chapter
     bookContentRepo.flow(bookId)
       .first { it!!.positionInChapter == 1000L }
   }
@@ -120,18 +118,25 @@ class SleepTimerIntegrationTest {
       skipSilence = false,
       isActive = true,
       lastPlayedAt = Instant.now(),
-      author = "Test Author",
-      name = "Test Audio Book",
       addedAt = Instant.now(),
       chapters = listOf(chapterId),
       currentChapter = chapterId,
       positionInChapter = 0L,
-      cover = null,
       gain = 0f,
-      genre = null,
-      narrator = null,
-      series = null,
-      part = null,
+      metadata = BookMetadata(
+        name = "Test Audio Book",
+        author = "Test Author",
+        album = null,
+        title = null,
+        genre = null,
+        narrator = null,
+        series = null,
+        part = null,
+        cover = null,
+        fileLastModified = null,
+      ),
+      customName = null,
+      customCover = null,
     )
 
     bookContentRepo.put(bookContent)

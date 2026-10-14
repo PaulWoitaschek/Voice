@@ -3,6 +3,7 @@ package voice.features.widget
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
@@ -19,23 +20,30 @@ fun book(
 ): Book {
   return Book(
     content = BookContent(
-      author = null,
-      name = "Moby-Dick",
       positionInChapter = positionInChapter,
       playbackSpeed = speed,
       addedAt = Instant.EPOCH,
       chapters = chapters.map { it.id },
-      cover = null,
       currentChapter = currentChapter,
       isActive = true,
       lastPlayedAt = lastPlayedAt,
       skipSilence = false,
       id = id,
       gain = 0F,
-      genre = null,
-      narrator = null,
-      series = null,
-      part = null,
+      metadata = BookMetadata(
+        name = "Moby-Dick",
+        author = null,
+        album = null,
+        title = null,
+        genre = null,
+        narrator = null,
+        series = null,
+        part = null,
+        cover = null,
+        fileLastModified = null,
+      ),
+      customName = null,
+      customCover = null,
     ),
     chapters = chapters,
   )

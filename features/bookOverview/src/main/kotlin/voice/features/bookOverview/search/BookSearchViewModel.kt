@@ -333,10 +333,10 @@ class LastBookSearchResults {
 
 private fun BrowseCategory.value(content: BookContent): String? {
   val value = when (this) {
-    BrowseCategory.Authors -> content.author
-    BrowseCategory.Series -> content.series
-    BrowseCategory.Narrators -> content.narrator
-    BrowseCategory.Genres -> content.genre
+    BrowseCategory.Authors -> content.metadata.author
+    BrowseCategory.Series -> content.metadata.series
+    BrowseCategory.Narrators -> content.metadata.narrator
+    BrowseCategory.Genres -> content.metadata.genre
   }
   return value?.trim()?.takeIf { it.isNotEmpty() }
 }

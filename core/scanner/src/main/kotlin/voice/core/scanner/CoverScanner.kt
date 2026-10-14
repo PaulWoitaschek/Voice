@@ -67,7 +67,7 @@ internal class CoverScanner(
           false
         }
         if (worked) {
-          coverSaver.setBookCover(coverFile, book.id)
+          coverSaver.setCoverFromFiles(coverFile, book.id)
           return@withContext true
         }
       }
@@ -85,7 +85,7 @@ internal class CoverScanner(
           outputFile = coverFile,
         )
         if (success && coverFile.exists() && coverFile.length() > 0) {
-          coverSaver.setBookCover(coverFile, bookId = book.id)
+          coverSaver.setCoverFromFiles(coverFile, bookId = book.id)
           return
         }
       }

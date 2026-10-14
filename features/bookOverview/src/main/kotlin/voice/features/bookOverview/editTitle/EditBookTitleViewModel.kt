@@ -55,7 +55,7 @@ class EditBookTitleViewModel(private val repo: BookRepository) : BottomSheetItem
       check(state.confirmButtonEnabled)
       scope.launch {
         repo.updateBook(state.bookId) {
-          it.copy(name = state.title.trim())
+          it.withCustomName(state.title.trim())
         }
       }
     }

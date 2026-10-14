@@ -45,7 +45,7 @@ internal data class Metadata(
         duration = duration.inWholeMilliseconds,
         artist = artist,
         album = album,
-        title = title ?: fileName,
+        title = title,
         fileName = fileName,
         chapters = chapters,
         genre = genre,

@@ -38,6 +38,7 @@ public interface BookContentDao {
 )
 public data class BookSearchFts(
   val name: String,
+  val customName: String?,
   val author: String?,
   val genre: String?,
   val narrator: String?,

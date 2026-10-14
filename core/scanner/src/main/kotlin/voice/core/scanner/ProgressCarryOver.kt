@@ -14,12 +14,8 @@ import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.store.CurrentBookStore
 
-/**
- * Hands progress over when audio files show up under a new book id. This happens when a folder's mode changes
- * (a single book becomes several books, or the other way round), when a folder is added again through another
- * folder, or when a book is renamed or moved. Chapters are matched by their document, which stays the same across
- * folders, and otherwise by their files when all of them moved.
- */
+// Audio files show up under a new book id when a folder's mode changes, when a folder is added again through another
+// folder, or when a book is renamed or moved. Documents stay the same across folders, files across moves.
 @Inject
 internal class ProgressCarryOver(
   private val bookmarkRepo: BookmarkRepo,
@@ -45,27 +41,30 @@ internal class ProgressCarryOver(
     // sessions don't know their chapters, so they go along with where the listener was
     listeningStatsRepo.moveToBook(from = playedHere.map { it.id }, to = content.id)
 
+    val withEdits = predecessors.sameBook?.let { content.withEditsOf(it) } ?: content
     val source = playedHere
       .maxByOrNull { it.lastPlayedAt }
       ?.takeIf { it.lastPlayedAt > content.lastPlayedAt }
-      ?: return content
-
-    // only the same book keeps what the user set up for it, a split up book gets the names from its files
-    val sameBook = predecessors.moved || source.id.toUri().documentKey() == content.id.toUri().documentKey()
-    return content.copy(
+      ?: return withEdits
+    return withEdits.copy(
       currentChapter = moved.getValue(source.currentChapter),
       positionInChapter = source.positionInChapter,
       lastPlayedAt = source.lastPlayedAt,
       playbackSpeed = source.playbackSpeed,
       skipSilence = source.skipSilence,
       gain = source.gain,
-      name = if (sameBook) source.name else content.name,
-      cover = if (sameBook) source.cover ?: content.cover else content.cover,
-      addedAt = if (sameBook) source.addedAt else content.addedAt,
     )
   }
 
-  // the book the user is on is gone, so they go on with the book that now holds its current chapter
+  private fun BookContent.withEditsOf(sameBook: BookContent): BookContent {
+    return copy(
+      addedAt = sameBook.addedAt,
+      customCover = sameBook.customCover,
+      // the files are the same, so their cover is as well
+      metadata = metadata.copy(cover = metadata.cover ?: sameBook.metadata.cover),
+    ).withCustomName(sameBook.customName)
+  }
+
   private suspend fun moveCurrentBook(
     playedHere: List<BookContent>,
     bookId: BookId,
@@ -95,9 +94,6 @@ internal class ProgressCarryOver(
   }
 }
 
-/**
- * The books of the [library] a scan no longer finds, indexed by the documents and the files of their chapters.
- */
 internal class PreviousBooks(
   library: List<BookContent>,
   scanned: Set<BookId>,
@@ -114,13 +110,17 @@ internal class PreviousBooks(
   private var byFiles: Map<List<FileFingerprint>, BookContent>? = null
 
   suspend fun of(content: BookContent): Predecessors? {
-    return sharingDocuments(content.chapters)
+    val isNew = content.id !in inLibrary
+    return sharingDocuments(content, isNew)
       // a book that was in the library already is a copy, not the one that moved
-      ?: if (content.id in inLibrary) null else withSameFiles(content.chapters)
+      ?: if (isNew) withSameFiles(content.chapters) else null
   }
 
-  private fun sharingDocuments(chapters: List<ChapterId>): Predecessors? {
-    val chapterByKey = chapters.associateBy { it.documentKey() }
+  private fun sharingDocuments(
+    content: BookContent,
+    isNew: Boolean,
+  ): Predecessors? {
+    val chapterByKey = content.chapters.associateBy { it.documentKey() }
     val books = chapterByKey.keys
       .flatMap { byDocument[it].orEmpty() }
       .distinctBy { it.id }
@@ -129,7 +129,14 @@ internal class PreviousBooks(
       .flatMap { it.chapters }
       .mapNotNull { chapter -> chapterByKey[chapter.documentKey()]?.let { chapter to it } }
       .toMap()
-    return Predecessors(books = books, chapters = moved, moved = false)
+    // a split up book gets its names from its files, and a book that was in the library already keeps its own
+    val bookKey = content.id.toUri().documentKey()
+    val sameBook = if (isNew) {
+      books.filter { it.id.toUri().documentKey() == bookKey }.maxByOrNull { it.lastPlayedAt }
+    } else {
+      null
+    }
+    return Predecessors(books = books, chapters = moved, sameBook = sameBook)
   }
 
   private suspend fun withSameFiles(chapters: List<ChapterId>): Predecessors? {
@@ -137,7 +144,7 @@ internal class PreviousBooks(
     if (stored.size != chapters.size) return null
     val files = stored.fingerprints() ?: return null
     val book = byFiles()[files] ?: return null
-    return Predecessors(books = listOf(book), chapters = book.chapters.zip(chapters).toMap(), moved = true)
+    return Predecessors(books = listOf(book), chapters = book.chapters.zip(chapters).toMap(), sameBook = book)
   }
 
   private suspend fun byFiles(): Map<List<FileFingerprint>, BookContent> {
@@ -158,15 +165,12 @@ internal class PreviousBooks(
 internal class Predecessors(
   val books: List<BookContent>,
   val chapters: Map<ChapterId, ChapterId>,
-  /** Whether they were found by their files, which makes them the same book in another place. */
-  val moved: Boolean,
+  val sameBook: BookContent?,
 )
 
 private fun ChapterId.documentKey(): String = value.toUri().documentKey()
 
-/**
- * Identifies a document independent of the folder it was opened through.
- */
+// the same document opened through another folder has another uri
 internal fun Uri.documentKey(): String {
   if (scheme != "content") return toString()
   return try {

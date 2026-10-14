@@ -13,6 +13,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.Bookmark
 import voice.core.data.ChapterId
 import voice.core.data.MAX_CHAPTER_IDS_BYTES
@@ -90,7 +91,7 @@ class MediaScannerTest {
     audioFile(book, "2.mp3")
     scan(FolderType.Root, audiobookFolder)
     val content = bookContentRepo.get(BookId(book.toUri()))!!
-    bookContentRepo.put(content.copy(name = "Renamed", author = null))
+    bookContentRepo.put(content.copy(customName = "Renamed", metadata = content.metadata.copy(author = null)))
     val analyzeCallsAfterScan = analyzeCalls
 
     val preview = previewer.preview(FileBasedDocumentFile(book))
@@ -195,18 +196,25 @@ class MediaScannerTest {
       skipSilence = false,
       isActive = true,
       lastPlayedAt = Instant.EPOCH,
-      author = null,
-      name = "On the server",
       addedAt = Instant.EPOCH,
       chapters = listOf(serverChapter),
       currentChapter = serverChapter,
       positionInChapter = 0,
-      cover = null,
       gain = 0F,
-      genre = null,
-      narrator = null,
-      series = null,
-      part = null,
+      metadata = BookMetadata(
+        name = "On the server",
+        author = null,
+        album = null,
+        title = null,
+        genre = null,
+        narrator = null,
+        series = null,
+        part = null,
+        cover = null,
+        fileLastModified = null,
+      ),
+      customName = null,
+      customCover = null,
     )
     bookContentRepo.put(serverBook)
 
@@ -457,6 +465,136 @@ class MediaScannerTest {
     assertEquals(expected = Instant.EPOCH, actual = bookContentRepo.get(BookId(copy.toUri()))!!.lastPlayedAt)
   }
 
+  @Test
+  fun `a book takes what its files say when they change`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter1 = audioFile(book, "1.mp3")
+    audioFile(book, "2.mp3")
+    scan(FolderType.Root, audiobookFolder)
+
+    album = "New Name"
+    artist = "New Author"
+    changed(chapter1)
+    scan(FolderType.Root, audiobookFolder)
+
+    val content = bookContentRepo.get(BookId(book.toUri()))!!
+    assertEquals(expected = "New Name", actual = content.name)
+    assertEquals(expected = "New Name", actual = content.metadata.album)
+    assertEquals(expected = "Title", actual = content.metadata.title)
+    assertEquals(expected = "New Author", actual = content.metadata.author)
+  }
+
+  @Test
+  fun `a book keeps the name the listener gave it when its files change`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter1 = audioFile(book, "1.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    val id = BookId(book.toUri())
+    bookContentRepo.put(bookContentRepo.get(id)!!.withCustomName("Mine"))
+
+    album = "New Name"
+    artist = "New Author"
+    changed(chapter1)
+    scan(FolderType.Root, audiobookFolder)
+
+    val content = bookContentRepo.get(id)!!
+    assertEquals(expected = "Mine", actual = content.name)
+    assertEquals(expected = "New Name", actual = content.metadata.name)
+    assertEquals(expected = "New Author", actual = content.metadata.author)
+  }
+
+  @Test
+  fun `a book takes its names from the file that comes first now`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter1 = audioFile(book, "1.mp3")
+    audioFile(book, "2.mp3")
+    scan(FolderType.Root, audiobookFolder)
+
+    album = "New Name"
+    check(chapter1.delete())
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = "New Name", actual = bookContentRepo.get(BookId(book.toUri()))!!.name)
+  }
+
+  @Test
+  fun `a book whose files didn't change isn't analyzed again`() = test {
+    val audiobookFolder = folder("audiobooks")
+    audioFile(File(audiobookFolder, "book"), "1.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    val analyzeCallsAfterScan = analyzeCalls
+
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = analyzeCallsAfterScan, actual = analyzeCalls)
+  }
+
+  @Test
+  fun `a book stored before its names were kept apart keeps only a name the listener gave it`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val named = File(audiobookFolder, "named")
+    audioFile(named, "1.mp3")
+    val renamed = File(audiobookFolder, "renamed")
+    audioFile(renamed, "1.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    fun BookContent.migrated(name: String) = copy(
+      customName = name,
+      metadata = metadata.copy(name = name, fileLastModified = null),
+    )
+    bookContentRepo.put(bookContentRepo.get(BookId(named.toUri()))!!.migrated("Book Name"))
+    bookContentRepo.put(bookContentRepo.get(BookId(renamed.toUri()))!!.migrated("Mine"))
+    val analyzeCallsBefore = analyzeCalls
+
+    scan(FolderType.Root, audiobookFolder)
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = null, actual = bookContentRepo.get(BookId(named.toUri()))!!.customName)
+    val renamedContent = bookContentRepo.get(BookId(renamed.toUri()))!!
+    assertEquals(expected = "Mine", actual = renamedContent.name)
+    assertEquals(expected = "Book Name", actual = renamedContent.metadata.name)
+    assertEquals(expected = analyzeCallsBefore + 2, actual = analyzeCalls)
+  }
+
+  @Test
+  fun `a book in a folder stored before its names were kept apart drops the name of its first file`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val byTitle = File(audiobookFolder, "byTitle")
+    val byFileName = File(audiobookFolder, "byFileName")
+    val byFolder = File(audiobookFolder, "byFolder")
+    listOf(byTitle, byFileName, byFolder).forEach { audioFile(it, "1.mp3") }
+    scan(FolderType.Root, audiobookFolder)
+    mapOf(byTitle to "Title", byFileName to "Chapter", byFolder to "byFolder").forEach { (book, name) ->
+      val content = bookContentRepo.get(BookId(book.toUri()))!!
+      bookContentRepo.put(
+        content.copy(customName = name, metadata = content.metadata.copy(name = name, fileLastModified = null)),
+      )
+    }
+
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = "Book Name", actual = bookContentRepo.get(BookId(byTitle.toUri()))!!.name)
+    assertEquals(expected = "Book Name", actual = bookContentRepo.get(BookId(byFileName.toUri()))!!.name)
+    assertEquals(expected = "byFolder", actual = bookContentRepo.get(BookId(byFolder.toUri()))!!.name)
+  }
+
+  @Test
+  fun `a book that was never played keeps the name the listener gave it when its folder is renamed`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    audioFile(book, "1.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    bookContentRepo.put(bookContentRepo.get(BookId(book.toUri()))!!.withCustomName("Mine"))
+
+    val renamed = File(audiobookFolder, "book (2020)")
+    check(book.renameTo(renamed))
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = "Mine", actual = bookContentRepo.get(BookId(renamed.toUri()))!!.name)
+  }
+
   private fun test(test: suspend TestEnvironment.() -> Unit) {
     runTest {
       TestEnvironment().use { test(it) }
@@ -472,6 +610,8 @@ class MediaScannerTest {
     private val chapterRepo = ChapterRepoImpl(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
     var analyzeCalls = 0
+    var album = "Book Name"
+    var artist = "Author"
     val bookmarkRepo = mockk<BookmarkRepo>(relaxUnitFun = true) {
       coEvery { bookmarks(any()) } returns emptyList()
     }
@@ -541,8 +681,8 @@ class MediaScannerTest {
             analyzeCalls++
             Metadata(
               duration = 1000L,
-              artist = "Author",
-              album = "Book Name",
+              artist = artist,
+              album = album,
               fileName = "Chapter",
               chapters = emptyList(),
               title = "Title",
@@ -570,6 +710,10 @@ class MediaScannerTest {
           playbackSpeed = 1.5F,
         ),
       )
+    }
+
+    fun changed(file: File) {
+      check(file.setLastModified(file.lastModified() + 60_000))
     }
 
     // long names, so fewer files are needed

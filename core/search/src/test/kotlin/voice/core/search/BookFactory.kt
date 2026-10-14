@@ -3,6 +3,7 @@ package voice.core.search
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import java.time.Instant
@@ -22,23 +23,30 @@ fun book(
 ): Book {
   return Book(
     content = BookContent(
-      author = author,
-      name = name,
       positionInChapter = time,
       playbackSpeed = 1F,
       addedAt = Instant.EPOCH,
       chapters = chapters.map { it.id },
-      cover = null,
       currentChapter = currentChapter,
       isActive = true,
       lastPlayedAt = lastPlayedAt,
       skipSilence = false,
       id = BookId(Uuid.random().toString()),
       gain = 0F,
-      genre = genre,
-      narrator = narrator,
-      series = series,
-      part = part,
+      metadata = BookMetadata(
+        name = name,
+        author = author,
+        album = null,
+        title = null,
+        genre = genre,
+        narrator = narrator,
+        series = series,
+        part = part,
+        cover = null,
+        fileLastModified = null,
+      ),
+      customName = null,
+      customCover = null,
     ),
     chapters = chapters,
   )

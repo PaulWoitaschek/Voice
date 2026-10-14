@@ -5,13 +5,8 @@ import voice.core.data.BookContent
 
 data class BookSearchResult(
   val book: Book,
-  /**
-   * The fields that matched the query. The ranges point into the field's [BookSearchField.text].
-   */
+  // the ranges point into the field's text, which for a series includes its part
   val matches: Map<BookSearchField, List<IntRange>>,
-  /**
-   * The fields that match every word of the query on their own, e.g. the author for "stephen king".
-   */
   val fieldsMatchingAllWords: Set<BookSearchField>,
   val score: Int,
 )
@@ -24,18 +19,15 @@ enum class BookSearchField {
   Genre,
   ;
 
-  /**
-   * The text of this field the search looks at. A series includes its part, for example "Harry Potter 1".
-   */
   fun text(content: BookContent): String? {
     val text = when (this) {
       Title -> content.name
-      Author -> content.author
-      Series -> content.series?.let { series ->
-        listOfNotNull(series, content.part?.takeIf { it.isNotBlank() }).joinToString(" ")
+      Author -> content.metadata.author
+      Series -> content.metadata.series?.let { series ->
+        listOfNotNull(series, content.metadata.part?.takeIf { it.isNotBlank() }).joinToString(" ")
       }
-      Narrator -> content.narrator
-      Genre -> content.genre
+      Narrator -> content.metadata.narrator
+      Genre -> content.metadata.genre
     }
     return text?.takeIf { it.isNotBlank() }
   }

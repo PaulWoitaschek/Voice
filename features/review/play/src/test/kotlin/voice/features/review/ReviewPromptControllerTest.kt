@@ -13,6 +13,7 @@ import voice.core.analytics.api.Analytics
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.ReviewPromptState
@@ -207,18 +208,25 @@ class ReviewPromptControllerTest {
         skipSilence = false,
         isActive = true,
         lastPlayedAt = Instant.EPOCH,
-        author = author,
-        name = name,
         addedAt = Instant.EPOCH,
         chapters = listOf(chapter.id),
         currentChapter = chapter.id,
         positionInChapter = listenedMinutes.minutes.inWholeMilliseconds,
-        cover = null,
         gain = 0F,
-        genre = null,
-        narrator = null,
-        series = null,
-        part = null,
+        metadata = BookMetadata(
+          name = name,
+          author = author,
+          album = null,
+          title = null,
+          genre = null,
+          narrator = null,
+          series = null,
+          part = null,
+          cover = null,
+          fileLastModified = null,
+        ),
+        customName = null,
+        customCover = null,
       ),
       chapters = listOf(chapter),
     )

@@ -14,10 +14,6 @@ class BookSearch(
   private val repo: BookRepository,
 ) {
 
-  /**
-   * Searches the active books for all words of the [query], each matching the start of a word in any field.
-   * The best matches come first.
-   */
   suspend fun search(query: String): List<BookSearchResult> {
     val terms = SearchText(query).words.map { it.text }.distinct()
     if (terms.isEmpty()) return emptyList()
@@ -74,7 +70,7 @@ class BookSearch(
     val resultComparator: Comparator<BookSearchResult> = compareByDescending<BookSearchResult> { it.score }
       .thenByDescending { it.book.isInProgress() }
       .thenByDescending { it.book.content.lastPlayedAt }
-      .thenBy(NaturalOrderComparator.stringComparator) { it.book.content.part.orEmpty() }
+      .thenBy(NaturalOrderComparator.stringComparator) { it.book.content.metadata.part.orEmpty() }
       .thenBy(NaturalOrderComparator.stringComparator) { it.book.content.name }
   }
 }
@@ -92,9 +88,7 @@ private fun Book.isInProgress(): Boolean {
   return position > 0 && position < duration - TimeUnit.SECONDS.toMillis(5)
 }
 
-/**
- * Joins overlapping ranges, and ranges only apart by spaces, so "stephen king" is highlighted as one.
- */
+// ranges only apart by spaces are joined too, so "stephen king" is highlighted as one
 private fun List<IntRange>.merged(text: String): List<IntRange> {
   val result = mutableListOf<IntRange>()
   sortedBy { it.first }.forEach { range ->

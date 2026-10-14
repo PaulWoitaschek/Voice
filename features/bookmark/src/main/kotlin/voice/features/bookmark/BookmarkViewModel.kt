@@ -84,7 +84,6 @@ class BookmarkViewModel(
   // a jump or close leaves the screen, so a second tap must not go back once more
   private var leaving = false
 
-  // the latest values, for the actions that need them
   private var book: Book? = null
   private var bookmarks: List<Bookmark> = emptyList()
 
@@ -131,7 +130,7 @@ class BookmarkViewModel(
     val now = clock.instant()
     return BookmarkViewState(
       bookTitle = book.content.name,
-      bookAuthor = book.content.author,
+      bookAuthor = book.content.metadata.author,
       cover = book.content.coverUrl,
       playing = livePlaybackState?.isPlaying ?: (playState == PlayStateManager.PlayState.Playing),
       sleepTimerActive = sleepTimerState.enabled,
@@ -267,7 +266,6 @@ class BookmarkViewModel(
     }
   }
 
-  /** Undoes saving a new bookmark. */
   internal fun onEditorUndo() {
     val draft = draft ?: return
     this.draft = null

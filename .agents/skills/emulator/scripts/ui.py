@@ -273,7 +273,10 @@ def command_books(args):
     if not database.exists():
       sys.exit("No database yet. Is the debug app installed and was it started once?")
     connection = sqlite3.connect(database)
-    rows = connection.execute("SELECT id, name, author, isActive FROM content2 ORDER BY lastPlayedAt DESC").fetchall()
+    columns = {column[1] for column in connection.execute("PRAGMA table_info(content2)")}
+    # databases from before the listener's name was stored apart have no customName
+    name = "coalesce(customName, name)" if "customName" in columns else "name"
+    rows = connection.execute(f"SELECT id, {name}, author, isActive FROM content2 ORDER BY lastPlayedAt DESC").fetchall()
     connection.close()
   for book_id, name, author, active in rows:
     if active or args.all:

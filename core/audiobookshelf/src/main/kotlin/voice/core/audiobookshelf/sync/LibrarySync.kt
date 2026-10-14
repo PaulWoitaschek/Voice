@@ -29,10 +29,6 @@ import java.io.IOException
 private const val PAGE_SIZE = 200
 private const val DETAILS_CHUNK_SIZE = 50
 
-/**
- * Mirrors the books of the chosen libraries into Voice's library. Only items that changed since the last sync are
- * fetched with their tracks and chapters, so a sync of an unchanged library costs a few small requests.
- */
 @Inject
 internal class LibrarySync(
   private val http: AudiobookshelfHttp,
@@ -127,9 +123,9 @@ internal class LibrarySync(
     chapters.forEach { chapterRepo.put(it) }
     val content = item.toBookContent(chapters, existing, previousChapters)
     // an update of the item can bring a new cover, so the next pass downloads it again
-    val cover = existing?.cover?.takeIf { it.name == coverFileName(item) }
-    if (cover == null) existing?.cover?.delete()
-    val updated = content.copy(cover = cover)
+    val cover = existing?.metadata?.cover?.takeIf { it.name == coverFileName(item) }
+    if (cover == null) existing?.metadata?.cover?.delete()
+    val updated = content.copy(metadata = content.metadata.copy(cover = cover))
     // the init block checks that the chapters and the position fit together
     @Suppress("RETURN_VALUE_NOT_USED")
     Book(updated, chapters)
@@ -162,13 +158,13 @@ internal class LibrarySync(
   ) {
     val itemsById = items.associateBy { it.id }
     contentRepo.all()
-      .filter { it.id.isRemote && it.isActive && (it.cover == null || !it.cover!!.exists()) }
+      .filter { it.id.isRemote && it.isActive && it.metadata.cover?.exists() != true }
       .forEach { content ->
         val item = content.id.itemId?.let(itemsById::get) ?: return@forEach
         if (item.media.coverPath == null) return@forEach
         val file = downloadCover(account, item) ?: return@forEach
         val current = contentRepo.get(content.id) ?: return@forEach
-        contentRepo.put(current.copy(cover = file))
+        contentRepo.put(current.copy(metadata = current.metadata.copy(cover = file)))
       }
   }
 
