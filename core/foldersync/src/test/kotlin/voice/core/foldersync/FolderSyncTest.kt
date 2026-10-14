@@ -26,6 +26,7 @@ import voice.core.playback.playstate.PlayStateManager
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 
 @RunWith(AndroidJUnit4::class)
@@ -35,7 +36,6 @@ class FolderSyncTest {
   private val playerController = mockk<PlayerController>(relaxUnitFun = true)
   private val playStateManager = PlayStateManager()
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val enabledStore = MemoryDataStore(true)
   private val syncFolder = mockk<SyncFolder>(relaxUnitFun = true)
   private val audiobookFolders = mockk<AudiobookFolders> {
     every { all() } returns flowOf(
@@ -117,18 +117,35 @@ class FolderSyncTest {
   }
 
   @Test
-  fun `nothing is read or written when the sync is off`() = scope.runTest {
-    enabledStore.updateData { false }
-    val book = book(lastPlayedAt = 2000)
+  fun `a failed read doesn't stop the reads that follow`() = scope.runTest {
+    val book = book(lastPlayedAt = 1000)
+    currentBookStore.updateData { book.id }
+    every { syncFolder.read(folder(), any()) } returns listOf(
+      SyncFile(mapOf(book.chapters.syncKey()!! to SyncedPosition(file = 1, position = 3000, updatedAt = 2000))),
+    )
+    var failed = false
+    coEvery { playerController.livePlaybackState(book.id) } answers {
+      if (!failed) {
+        failed = true
+        error("The player is gone")
+      }
+      mockk()
+    }
     val folderSync = folderSync(MemoryBookRepository(book))
 
     folderSync.start()
-    folderSync.requestRead()
     testScheduler.advanceTimeBy(4.seconds)
-    folderSync.read()
+    folderSync.requestRead()
+    testScheduler.advanceTimeBy(1.seconds)
 
-    verify(exactly = 0) { syncFolder.write(any(), any(), any()) }
-    verify(exactly = 0) { val _ = syncFolder.read(any(), any()) }
+    assertTrue(failed)
+    verify {
+      playerController.setPosition(
+        time = 3000,
+        id = book.chapters[1].id,
+        source = ListeningEvent.Source.OtherDevice,
+      )
+    }
   }
 
   private fun TestScope.folderSync(repo: MemoryBookRepository): FolderSync {
@@ -142,7 +159,6 @@ class FolderSyncTest {
       playStateManager = playStateManager,
       currentBookStore = currentBookStore,
       lastPlaybackSpeedStore = MemoryDataStore(1.75F),
-      enabledStore = enabledStore,
       dispatcherProvider = DispatcherProvider(main = dispatcher, io = dispatcher, mainImmediate = dispatcher),
     )
   }

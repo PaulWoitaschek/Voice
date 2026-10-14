@@ -346,8 +346,6 @@
     <string name="settings.auto_sleep_timer.summary">Starta en insomningstimer automatiskt när uppspelningen börjar mellan %1$s och %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatisk insomningstimer</string>
     <string name="settings.library.audiobookshelf.summary">Strömma böckerna från din egen server</string>
-    <string name="settings.library.folder_sync.summary">Sparar hur långt du har lyssnat i en dold .voice-mapp bredvid dina böcker. Synka dina mappar till en annan enhet, till exempel med Syncthing, och fortsätt där du slutade.</string>
-    <string name="settings.library.folder_sync.title">Fortsätt på andra enheter</string>
     <string name="settings.library.folders.summary">Hantera mappar som genomsöks efter ljudböcker</string>
     <string name="settings.library.layout.grid">Rutnät</string>
     <string name="settings.library.layout.list">Lista</string>

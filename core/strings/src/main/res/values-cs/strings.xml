@@ -378,8 +378,6 @@
     <string name="settings.auto_sleep_timer.summary">Automatické spuštění časovače spánku při zahájení přehrávání mezi %1$s a %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatický časovač spánku</string>
     <string name="settings.library.audiobookshelf.summary">Streamujte knihy z vlastního serveru</string>
-    <string name="settings.library.folder_sync.summary">Ukládá místo, kde právě posloucháte, do skryté složky .voice vedle vašich knih. Synchronizujte složky s dalším zařízením, třeba přes Syncthing, a pokračujte tam, kde jste skončili.</string>
-    <string name="settings.library.folder_sync.title">Pokračovat na jiných zařízeních</string>
     <string name="settings.library.folders.summary">Spravovat složky pro prohledávání audioknih</string>
     <string name="settings.library.layout.grid">Mřížka</string>
     <string name="settings.library.layout.list">Seznam</string>

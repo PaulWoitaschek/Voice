@@ -66,5 +66,5 @@ device, it picks up where you left off.
 - Your sync tool has to copy hidden folders.
 - A book that is playing stays where it is.
 
-If you share a folder with your family and don't want each other's place, turn off **Continue on other devices** in the
-library settings, or let your sync tool ignore `.voice`.
+If you share a folder with your family and don't want each other's place, let your sync tool ignore `.voice`. In
+Syncthing, add `.voice` to the folder's ignore patterns.

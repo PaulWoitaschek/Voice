@@ -59,7 +59,6 @@ class SettingsViewModelTest {
   private val autoRewindAmountStore = MemoryDataStore(10)
   private val seekTimeStore = MemoryDataStore(30)
   private val lockScreenSliderStore = MemoryDataStore(true)
-  private val folderSyncStore = MemoryDataStore(true)
   private val gridModeStore = MemoryDataStore(GridMode.GRID)
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val analyticsConsentStore = MemoryDataStore(false)
@@ -96,7 +95,6 @@ class SettingsViewModelTest {
     autoRewindAmountStore = autoRewindAmountStore,
     seekTimeStore = seekTimeStore,
     lockScreenSliderStore = lockScreenSliderStore,
-    folderSyncStore = folderSyncStore,
     navigator = navigator,
     appInfoProvider = appInfoProvider,
     gridModeStore = gridModeStore,
@@ -457,22 +455,6 @@ class SettingsViewModelTest {
 
       viewModel.toggleLockScreenSlider()
       assertTrue(awaitItem().lockScreenSlider)
-    }
-  }
-
-  @Test
-  fun `syncing through the folders can be turned off and on again`() = scope.runTest {
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.filterNotNull().test {
-      assertTrue(awaitItem().folderSync)
-
-      viewModel.toggleFolderSync()
-      assertFalse(awaitItem().folderSync)
-      assertFalse(folderSyncStore.data.first())
-
-      viewModel.toggleFolderSync()
-      assertTrue(awaitItem().folderSync)
     }
   }
 }

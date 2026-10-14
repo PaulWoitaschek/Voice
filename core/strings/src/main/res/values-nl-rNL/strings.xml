@@ -346,8 +346,6 @@
     <string name="settings.auto_sleep_timer.summary">Start automatisch een slaaptimer wanneer het afspelen begint tussen %1$s en %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatische Slaaptimer</string>
     <string name="settings.library.audiobookshelf.summary">Stream de boeken op je eigen server</string>
-    <string name="settings.library.folder_sync.summary">Bewaart je plek in een verborgen .voice-map naast je boeken. Synchroniseer je mappen met een ander apparaat, bijvoorbeeld via Syncthing, en luister verder waar je gebleven was.</string>
-    <string name="settings.library.folder_sync.title">Verder op andere apparaten</string>
     <string name="settings.library.folders.summary">Beheer mappen die op luisterboeken worden gescand</string>
     <string name="settings.library.layout.grid">Raster</string>
     <string name="settings.library.layout.list">Lijst</string>

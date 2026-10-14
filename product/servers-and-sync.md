@@ -95,12 +95,16 @@ Listeners sync their library folders with a tool of their own, like Syncthing. W
 finds new books, it takes over a newer place from another device's file, and the jump-back pill takes you to where you
 were on this device. A book is recognized by the names and sizes of its files, so the folder can be anywhere on each
 device. This works for folders on the device that are added the same way on every device, not for single files or
-folders from other apps. It's on by default, with a switch in the library settings ([FAQ](../docs/faq.md)).
+folders from other apps. There's no switch: listeners who don't want a folder's places shared let their sync tool
+ignore `.voice` ([FAQ](../docs/faq.md)).
 
 **Assumption:** Sync tools copy hidden folders. Guess: Syncthing does by default, the others weren't checked.
 
-**Assumption:** Few listeners share one library folder with someone else. They'd get each other's place unless they
-turn the switch off. Guess.
+**Assumption:** Few listeners share one library folder with someone else. They'd get each other's place unless their
+sync tool ignores `.voice`. Guess.
+
+**Assumption:** Listeners don't mind the hidden `.voice` folder in their library folders, as there's no way to turn it
+off. Guess.
 
 **Turned down:**
 
@@ -109,6 +113,7 @@ turn the switch off. Guess.
 - One file that every device writes: two devices writing it at once would leave conflict copies behind. Each device
   only writes its own file.
 - A file next to each book: it would add a file to every book folder.
+- A switch in the settings: sync tools can already leave `.voice` out.
 
 ## Without a server, my bookmarks don't follow me to another device
 

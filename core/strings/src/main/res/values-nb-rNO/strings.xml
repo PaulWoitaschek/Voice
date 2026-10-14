@@ -346,8 +346,6 @@
     <string name="settings.auto_sleep_timer.summary">Start en søvn-timer automatisk når avspillingen begynner mellom %1$s og %2$s</string>
     <string name="settings.auto_sleep_timer.title">Automatisk søvn-timer</string>
     <string name="settings.library.audiobookshelf.summary">Strøm bøkene fra din egen server</string>
-    <string name="settings.library.folder_sync.summary">Lagrer lytteposisjonen din i en skjult .voice-mappe ved siden av bøkene dine. Synkroniser mappene dine til en annen enhet, for eksempel med Syncthing, og fortsett der du slapp.</string>
-    <string name="settings.library.folder_sync.title">Fortsett på andre enheter</string>
     <string name="settings.library.folders.summary">Håndter mapper som er skannet for lydbøker</string>
     <string name="settings.library.layout.grid">Rutenett</string>
     <string name="settings.library.layout.list">Liste</string>

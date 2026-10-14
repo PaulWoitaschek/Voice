@@ -362,8 +362,6 @@
     <string name="settings.auto_sleep_timer.summary">Démarrer automatiquement le minuteur de veille lorsque la lecture commence entre %1$s et %2$s</string>
     <string name="settings.auto_sleep_timer.title">Minuteur de veille automatique</string>
     <string name="settings.library.audiobookshelf.summary">Écoutez les livres de votre propre serveur</string>
-    <string name="settings.library.folder_sync.summary">Enregistre votre progression dans un dossier .voice caché, à côté de vos livres. Synchronisez vos dossiers avec un autre appareil, par exemple avec Syncthing, et reprenez là où vous en étiez.</string>
-    <string name="settings.library.folder_sync.title">Continuer sur d\'autres appareils</string>
     <string name="settings.library.folders.summary">Gérer les dossiers analysés pour les livres audio</string>
     <string name="settings.library.layout.grid">Grille</string>
     <string name="settings.library.layout.list">Liste</string>

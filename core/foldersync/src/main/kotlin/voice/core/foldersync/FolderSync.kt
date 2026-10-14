@@ -6,6 +6,7 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -28,7 +29,6 @@ import voice.core.data.folders.DocumentFileWithUri
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.FolderSyncStore
 import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
@@ -56,14 +56,12 @@ public class FolderSync internal constructor(
   private val currentBookStore: DataStore<BookId?>,
   @LastPlaybackSpeedStore
   private val lastPlaybackSpeedStore: DataStore<Float>,
-  @FolderSyncStore
-  private val enabledStore: DataStore<Boolean>,
   dispatcherProvider: DispatcherProvider,
 ) {
 
   private val scope = CoroutineScope(
     SupervisorJob() + dispatcherProvider.io + CoroutineExceptionHandler { _, throwable ->
-      Logger.w(throwable, "Syncing through the library folders failed")
+      Logger.e(throwable, "Syncing through the library folders failed")
     },
   )
   private val readRequests = Channel<Unit>(Channel.CONFLATED)
@@ -86,10 +84,9 @@ public class FolderSync internal constructor(
   private suspend fun writeChanges() {
     val written = mutableMapOf<Uri, SyncFile>()
     // while playing, the position changes every few hundred ms, so this writes once playback stops
-    combine(enabledStore.data, audiobookFolders.all(), bookRepository.flow(), ::Triple)
+    combine(audiobookFolders.all(), bookRepository.flow(), ::Pair)
       .debounce(3.seconds)
-      .collect { (enabled, folders, books) ->
-        if (!enabled) return@collect
+      .collect { (folders, books) ->
         folders.uris().forEach { folder ->
           val file = books.keyedIn(folder).toSyncFile()
           // a folder without a book that was played here gets no .voice folder
@@ -110,11 +107,19 @@ public class FolderSync internal constructor(
       .map {}
     merge(readRequests.receiveAsFlow(), booksChanged)
       .conflate()
-      .collect { read() }
+      .collect {
+        // a read that fails would otherwise end all reads until the app restarts
+        try {
+          read()
+        } catch (e: CancellationException) {
+          throw e
+        } catch (e: Exception) {
+          Logger.e(e, "Reading the places from the library folders failed")
+        }
+      }
   }
 
   internal suspend fun read() {
-    if (!enabledStore.data.first()) return
     val books = bookRepository.all()
     val keyedByFolder = audiobookFolders.all().first().uris()
       .associateWith { books.keyedIn(it) }

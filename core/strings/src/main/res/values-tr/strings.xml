@@ -346,8 +346,6 @@
     <string name="settings.auto_sleep_timer.summary">Eğer oynatıcı saat %1$s ile %2$s arasında başlatılırsa otomatik olarak bir uyku zamanlayıcısı başlat</string>
     <string name="settings.auto_sleep_timer.title">Otomatik Uyku Zamanlayıcısı</string>
     <string name="settings.library.audiobookshelf.summary">Kendi sunucunuzdaki kitapları akışla dinleyin</string>
-    <string name="settings.library.folder_sync.summary">Konumunuzu kitaplarınızın yanındaki gizli .voice klasöründe saklar. Klasörlerinizi örneğin Syncthing ile başka bir cihaza eşitleyin ve kaldığınız yerden devam edin.</string>
-    <string name="settings.library.folder_sync.title">Diğer cihazlarda devam et</string>
     <string name="settings.library.folders.summary">Sesli kitaplar için taranan dizinleri yönetin</string>
     <string name="settings.library.layout.grid">Izgara</string>
     <string name="settings.library.layout.list">Liste</string>

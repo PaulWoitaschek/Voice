@@ -362,8 +362,6 @@
     <string name="settings.auto_sleep_timer.summary">Activa automáticamente el temporizador al iniciar la reproducción entre las %1$s y %2$s</string>
     <string name="settings.auto_sleep_timer.title">Temporizador automático</string>
     <string name="settings.library.audiobookshelf.summary">Escucha los libros de tu propio servidor</string>
-    <string name="settings.library.folder_sync.summary">Guarda por dónde vas en una carpeta oculta .voice junto a tus libros. Sincroniza tus carpetas con otro dispositivo, por ejemplo con Syncthing, y retoma donde lo dejaste.</string>
-    <string name="settings.library.folder_sync.title">Continuar en otros dispositivos</string>
     <string name="settings.library.folders.summary">Administrar directorios escaneados en busca de audiolibros</string>
     <string name="settings.library.layout.grid">Cuadrícula</string>
     <string name="settings.library.layout.list">Lista</string>

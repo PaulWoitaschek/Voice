@@ -73,8 +73,6 @@ internal fun LibrarySection(
   onFoldersClick: () -> Unit,
   onAudiobookshelfClick: () -> Unit,
   onUseGridChange: (Boolean) -> Unit,
-  folderSync: Boolean,
-  onFolderSyncToggle: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
@@ -102,20 +100,6 @@ internal fun LibrarySection(
     if (showAudiobookshelf) {
       AudiobookshelfRow(audiobookshelfServer, onAudiobookshelfClick)
     }
-    IslandSwitchRow(
-      title = stringResource(StringsR.string.settings_library_folder_sync_title),
-      checked = folderSync,
-      onCheckedChange = { onFolderSyncToggle() },
-      leading = {
-        ShapedIcon(
-          icon = VoiceIcons.Devices,
-          shape = MaterialShapes.Cookie7Sided,
-          containerColor = MaterialTheme.colorScheme.tertiary,
-          contentColor = MaterialTheme.colorScheme.onTertiary,
-        )
-      },
-      summary = { Text(stringResource(StringsR.string.settings_library_folder_sync_summary)) },
-    )
     Spacer(Modifier.height(12.dp))
     Row(
       modifier = Modifier

@@ -362,8 +362,6 @@
     <string name="settings.auto_sleep_timer.summary">Pornește automat oprirea temporizată când redarea începe între %1$s și %2$s</string>
     <string name="settings.auto_sleep_timer.title">Oprire temporizată automată</string>
     <string name="settings.library.audiobookshelf.summary">Ascultă cărțile de pe serverul tău</string>
-    <string name="settings.library.folder_sync.summary">Salvează progresul într-un director ascuns .voice, lângă cărțile tale. Sincronizează-ți directoarele cu alt dispozitiv, de exemplu cu Syncthing, și continuă de unde ai rămas.</string>
-    <string name="settings.library.folder_sync.title">Continuă pe alte dispozitive</string>
     <string name="settings.library.folders.summary">Gestionează directoarele scanate pentru cărți audio</string>
     <string name="settings.library.layout.grid">Grilă</string>
     <string name="settings.library.layout.list">Listă</string>

@@ -156,8 +156,6 @@ private fun LazyListScope.sections(
       onFoldersClick = listener::openFolderPicker,
       onAudiobookshelfClick = listener::openAudiobookshelf,
       onUseGridChange = listener::setUseGrid,
-      folderSync = viewState.folderSync,
-      onFolderSyncToggle = listener::toggleFolderSync,
     )
   }
   if (viewState.showSupportDevelopment) {

@@ -595,10 +595,6 @@
     <string name="settings.auto_sleep_timer.title">Automatic Sleep Timer</string>
     <!-- Summary of the Audiobookshelf row in the library settings when no server is connected. -->
     <string name="settings.library.audiobookshelf.summary">Stream the books on your own server</string>
-    <!-- Explains the switch that shares the listening position with the listener's other devices. Voice writes the position into a hidden folder named .voice inside each library folder. The listener syncs the library folders between devices with a tool of their own, such as Syncthing, and Voice on the other device picks up the position from there. Keep ".voice" and "Syncthing" as they are. -->
-    <string name="settings.library.folder_sync.summary">Keeps your place in a hidden .voice folder next to your books. Sync your folders to another device, with Syncthing for example, and pick up where you left off.</string>
-    <!-- Title of the switch that shares the listening position with the listener's other devices through their synced library folders. -->
-    <string name="settings.library.folder_sync.title">Continue on other devices</string>
     <!-- Summary text for the audiobook folders settings row. Also the subtitle of the audiobook folders screen. -->
     <string name="settings.library.folders.summary">Manage folders scanned for audiobooks</string>
     <!-- Label of the preview tile that shows the library as a grid of covers. -->
