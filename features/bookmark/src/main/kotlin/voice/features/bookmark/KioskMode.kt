@@ -11,6 +11,7 @@ import voice.features.bookmark.history.HistoryJump
 import voice.features.bookmark.history.HistoryLocation
 import voice.features.bookmark.history.HistorySpot
 import voice.features.bookmark.history.HistoryStretch
+import voice.features.bookmark.history.HistoryTarget
 import voice.features.bookmark.history.HistoryViewState
 import voice.features.bookmark.history.StretchCause
 import java.time.DayOfWeek
@@ -48,7 +49,7 @@ private fun demoRow(
 
 private fun single(row: BookmarkRowViewState) = BookmarkListItem.Row(row, GroupPosition(0, 1))
 
-internal fun kioskModeBookmarkViewState(): BookmarkViewState {
+internal fun kioskModeBookmarkViewState(tab: BookmarkTab): BookmarkViewState {
   val firstSignal =
     demoRow(
       1,
@@ -116,6 +117,7 @@ internal fun kioskModeBookmarkViewState(): BookmarkViewState {
     ),
     totalCount = 4,
     editor = null,
+    tab = tab,
   )
 }
 
@@ -140,7 +142,8 @@ private fun demoStretch(
   from = from,
   to = to,
   cause = cause,
-  goTo = HistorySpot(demoChapter, 0),
+  // after a night, the history goes to where the listener was still awake
+  goTo = HistoryTarget(HistorySpot(demoChapter, 0), if (cause == StretchCause.SleepTimerEnded) from else to),
 )
 
 internal fun kioskModeHistoryViewState(): HistoryViewState = HistoryViewState(
@@ -192,7 +195,7 @@ internal fun kioskModeHistoryViewState(): HistoryViewState = HistoryViewState(
           to = at(15, "2:00"),
           type = Type.Seek,
           source = Source.Notification,
-          back = HistorySpot(demoChapter, 0),
+          back = HistoryTarget(HistorySpot(demoChapter, 0), at(10, "21:18")),
         ),
         demoStretch(
           key = 1,

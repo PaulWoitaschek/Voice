@@ -209,7 +209,8 @@
         <item quantity="many">%d plików audio</item>
         <item quantity="other">%d plików audio</item>
     </plurals>
-    <string name="history.action.go_there">Przejdź tam</string>
+    <string name="history.action.continue_from">Kontynuuj od %1$s</string>
+    <string name="history.action.continue_from.chapter">Kontynuuj od rozdz. %1$d · %2$s</string>
     <string name="history.empty.message">Odtworzenia, pauzy i skoki są tu widoczne, więc zawsze odnajdziesz drogę powrotną.</string>
     <string name="history.empty.title">Na razie nic tu nie ma</string>
     <string name="history.event.bookmark_jump">Przejście do zakładki</string>

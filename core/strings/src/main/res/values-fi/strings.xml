@@ -187,7 +187,8 @@
         <item quantity="one">%d äänitiedosto</item>
         <item quantity="other">%d äänitiedostoa</item>
     </plurals>
-    <string name="history.action.go_there">Siirry sinne</string>
+    <string name="history.action.continue_from">Jatka kohdasta %1$s</string>
+    <string name="history.action.continue_from.chapter">Jatka: luku %1$d · %2$s</string>
     <string name="history.empty.message">Toistot, tauot ja siirtymät näkyvät täällä, joten löydät aina takaisin.</string>
     <string name="history.empty.title">Täällä ei ole vielä mitään</string>
     <string name="history.event.bookmark_jump">Siirryttiin kirjanmerkkiin</string>

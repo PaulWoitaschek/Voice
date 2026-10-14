@@ -187,7 +187,8 @@
         <item quantity="one">%d Audiodatei</item>
         <item quantity="other">%d Audiodateien</item>
     </plurals>
-    <string name="history.action.go_there">Dorthin springen</string>
+    <string name="history.action.continue_from">Weiter ab %1$s</string>
+    <string name="history.action.continue_from.chapter">Weiter ab Kap. %1$d · %2$s</string>
     <string name="history.empty.message">Wiedergaben, Pausen und Sprünge erscheinen hier, damit Du immer zurückfindest.</string>
     <string name="history.empty.title">Noch nichts da</string>
     <string name="history.event.bookmark_jump">Zu Lesezeichen gesprungen</string>

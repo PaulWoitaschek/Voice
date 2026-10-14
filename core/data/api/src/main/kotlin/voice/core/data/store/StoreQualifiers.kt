@@ -54,6 +54,13 @@ public annotation class CoverSeedColorsStore
 public annotation class SupporterStatusStore
 
 /**
+ * Whether the bookmarks screen had the history open last, so it opens on that tab again. It starts
+ * on the history.
+ */
+@Qualifier
+public annotation class HistoryTabOpenStore
+
+/**
  * The speed the listener last played at or picked, which a book that was never played starts at.
  */
 @Qualifier

@@ -176,7 +176,8 @@
     <plurals name="folder.type.file_count">
         <item quantity="other">%d 个声音文件</item>
     </plurals>
-    <string name="history.action.go_there">前往</string>
+    <string name="history.action.continue_from">从 %1$s 继续</string>
+    <string name="history.action.continue_from.chapter">从第 %1$d 章 · %2$s 继续</string>
     <string name="history.empty.message">播放、暂停和跳转记录会在这里保留，方便您随时找回原来的位置。</string>
     <string name="history.empty.title">这里还没有内容</string>
     <string name="history.event.bookmark_jump">跳转到书签</string>

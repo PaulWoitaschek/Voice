@@ -209,7 +209,8 @@
         <item quantity="many">%d аудиофайлов</item>
         <item quantity="other">%d аудиофайлов</item>
     </plurals>
-    <string name="history.action.go_there">Перейти</string>
+    <string name="history.action.continue_from">Продолжить с %1$s</string>
+    <string name="history.action.continue_from.chapter">Продолжить с гл. %1$d · %2$s</string>
     <string name="history.empty.message">Воспроизведения, паузы и переходы хранятся здесь, чтобы вы всегда могли найти, где остановились.</string>
     <string name="history.empty.title">Здесь пока пусто</string>
     <string name="history.event.bookmark_jump">Переход к закладке</string>

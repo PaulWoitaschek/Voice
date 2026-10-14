@@ -176,7 +176,8 @@
     <plurals name="folder.type.file_count">
         <item quantity="other">%d file audio</item>
     </plurals>
-    <string name="history.action.go_there">Ke sana</string>
+    <string name="history.action.continue_from">Lanjutkan dari %1$s</string>
+    <string name="history.action.continue_from.chapter">Lanjutkan dari Bab %1$d · %2$s</string>
     <string name="history.empty.message">Pemutaran, jeda, dan lompatan muncul di sini, jadi Anda selalu bisa kembali ke posisi semula.</string>
     <string name="history.empty.title">Belum ada apa-apa</string>
     <string name="history.event.bookmark_jump">Pindah ke markah</string>

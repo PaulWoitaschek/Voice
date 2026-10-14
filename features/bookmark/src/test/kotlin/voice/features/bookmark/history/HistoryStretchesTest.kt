@@ -60,7 +60,7 @@ class HistoryStretchesTest {
     assertEquals(expected = inArrival(2.minutes), actual = stretch.from)
     assertEquals(expected = inSignal(3.minutes), actual = stretch.to)
     assertEquals(expected = StretchCause.Played(Source.Headset), actual = stretch.cause)
-    assertEquals(expected = HistorySpot(signal.id, 3.minutes.inWholeMilliseconds), actual = stretch.goTo)
+    assertEquals(expected = HistorySpot(signal.id, 3.minutes.inWholeMilliseconds), actual = stretch.goTo?.spot)
   }
 
   @Test
@@ -99,7 +99,7 @@ class HistoryStretchesTest {
 
     val (afterJump, beforeJump) = stretches
     assertEquals(expected = inArrival(5.minutes), actual = beforeJump.to)
-    assertEquals(expected = HistorySpot(arrival.id, 5.minutes.inWholeMilliseconds), actual = beforeJump.goTo)
+    assertEquals(expected = HistorySpot(arrival.id, 5.minutes.inWholeMilliseconds), actual = beforeJump.goTo?.spot)
     assertEquals(expected = inSignal(1.minutes), actual = afterJump.from)
     assertEquals(expected = StretchCause.Jumped(Type.Seek, Source.Notification, hasRow = true), actual = afterJump.cause)
   }
@@ -141,7 +141,8 @@ class HistoryStretchesTest {
     ).single()
 
     assertEquals(expected = StretchCause.SleepTimerEnded, actual = stretch.cause)
-    assertEquals(expected = HistorySpot(arrival.id, 2.minutes.inWholeMilliseconds), actual = stretch.goTo)
+    assertEquals(expected = HistorySpot(arrival.id, 2.minutes.inWholeMilliseconds), actual = stretch.goTo?.spot)
+    assertEquals(expected = inArrival(2.minutes), actual = stretch.goTo?.location)
   }
 
   @Test
@@ -153,7 +154,7 @@ class HistoryStretchesTest {
       testEvent(Type.SleepTimerEnded, yesterday(22, 35), signal, 8.minutes, source = Source.SleepTimer),
     ).single()
 
-    assertEquals(expected = HistorySpot(signal.id, 2.minutes.inWholeMilliseconds), actual = stretch.goTo)
+    assertEquals(expected = HistorySpot(signal.id, 2.minutes.inWholeMilliseconds), actual = stretch.goTo?.spot)
   }
 
   @Test
@@ -177,7 +178,7 @@ class HistoryStretchesTest {
     assertNull(stretch.to)
     assertNull(stretch.end)
     assertNull(stretch.listened)
-    assertEquals(expected = HistorySpot(arrival.id, 3.minutes.inWholeMilliseconds), actual = stretch.goTo)
+    assertEquals(expected = HistorySpot(arrival.id, 3.minutes.inWholeMilliseconds), actual = stretch.goTo?.spot)
   }
 
   @Test
@@ -190,7 +191,7 @@ class HistoryStretchesTest {
     assertEquals(expected = inArrival(2.minutes), actual = stretch.from)
     assertNull(stretch.to)
     assertNull(stretch.end)
-    assertEquals(expected = HistorySpot(arrival.id, 2.minutes.inWholeMilliseconds), actual = stretch.goTo)
+    assertEquals(expected = HistorySpot(arrival.id, 2.minutes.inWholeMilliseconds), actual = stretch.goTo?.spot)
   }
 
   @Test
@@ -290,7 +291,7 @@ class HistoryStretchesTest {
         to = inArrival(5.minutes),
         type = Type.Seek,
         source = Source.App,
-        back = HistorySpot(arrival.id, 0L),
+        back = HistoryTarget(HistorySpot(arrival.id, 0L), inArrival(0.minutes)),
       ),
       actual = jump,
     )
@@ -309,7 +310,7 @@ class HistoryStretchesTest {
     assertEquals(expected = inArrival(5.minutes), actual = (before as HistoryStretch).to)
     jump as HistoryJump
     assertEquals(expected = Type.ChapterChange to Source.Headset, actual = jump.type to jump.source)
-    assertEquals(expected = HistorySpot(arrival.id, 5.minutes.inWholeMilliseconds), actual = jump.back)
+    assertEquals(expected = HistorySpot(arrival.id, 5.minutes.inWholeMilliseconds), actual = jump.back.spot)
   }
 
   @Test
@@ -321,7 +322,7 @@ class HistoryStretchesTest {
     )
 
     assertEquals(expected = emptyList(), actual = state.all())
-    assertEquals(expected = HistorySpot(arrival.id, (2.minutes + 4.seconds).inWholeMilliseconds), actual = state.jumps().single().back)
+    assertEquals(expected = HistorySpot(arrival.id, (2.minutes + 4.seconds).inWholeMilliseconds), actual = state.jumps().single().back.spot)
   }
 
   @Test
@@ -418,6 +419,6 @@ class HistoryStretchesTest {
     ).jumps().single()
 
     assertNull(jump.to)
-    assertEquals(expected = HistorySpot(arrival.id, 3.minutes.inWholeMilliseconds), actual = jump.back)
+    assertEquals(expected = HistorySpot(arrival.id, 3.minutes.inWholeMilliseconds), actual = jump.back.spot)
   }
 }

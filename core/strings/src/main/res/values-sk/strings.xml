@@ -209,7 +209,8 @@
         <item quantity="many">%d zvukových súborov</item>
         <item quantity="other">%d zvukových súborov</item>
     </plurals>
-    <string name="history.action.go_there">Prejsť tam</string>
+    <string name="history.action.continue_from">Pokračovať od %1$s</string>
+    <string name="history.action.continue_from.chapter">Pokračovať od kap. %1$d · %2$s</string>
     <string name="history.empty.message">Prehrávania, pozastavenia a skoky sa tu zobrazujú, takže vždy nájdete cestu späť.</string>
     <string name="history.empty.title">Zatiaľ tu nič nie je</string>
     <string name="history.event.bookmark_jump">Prechod na záložku</string>

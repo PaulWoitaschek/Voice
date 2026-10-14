@@ -187,7 +187,8 @@
         <item quantity="one">%d فایل صوتی</item>
         <item quantity="other">%d فایل های صوتی</item>
     </plurals>
-    <string name="history.action.go_there">رفتن به آنجا</string>
+    <string name="history.action.continue_from">ادامه از %1$s</string>
+    <string name="history.action.continue_from.chapter">ادامه از فصل %1$d · %2$s</string>
     <string name="history.empty.message">پخش‌ها، توقف‌ها و پرش‌ها اینجا نمایش داده می‌شوند تا همیشه بتوانید راه برگشت را پیدا کنید.</string>
     <string name="history.empty.title">هنوز چیزی اینجا نیست</string>
     <string name="history.event.bookmark_jump">رفتن به نشانه</string>

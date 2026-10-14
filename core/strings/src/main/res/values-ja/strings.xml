@@ -176,7 +176,8 @@
     <plurals name="folder.type.file_count">
         <item quantity="other">%d 音声ファイル</item>
     </plurals>
-    <string name="history.action.go_there">そこへ移動</string>
+    <string name="history.action.continue_from">%1$s から続ける</string>
+    <string name="history.action.continue_from.chapter">第%1$d章 · %2$s から続ける</string>
     <string name="history.empty.message">再生・一時停止・ジャンプの記録がここに表示されるので、いつでも元の位置に戻れます。</string>
     <string name="history.empty.title">まだ何もありません</string>
     <string name="history.event.bookmark_jump">ブックマークへ移動</string>

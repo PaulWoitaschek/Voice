@@ -3,7 +3,6 @@
 package voice.features.bookmark.history
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,11 +25,11 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.strings.R
-import voice.core.ui.JumpBackButton
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 import voice.features.bookmark.dayLabelText
@@ -99,13 +98,13 @@ internal fun HistoryList(
           is HistoryStretch -> StretchRow(
             stretch = row,
             shape = shape,
-            onClick = onGoTo,
+            onGoTo = onGoTo,
             modifier = Modifier.animateItem(),
           )
           is HistoryJump -> JumpRow(
             jump = row,
             shape = shape,
-            onJumpBackClick = onGoTo,
+            onGoTo = onGoTo,
             modifier = Modifier.animateItem(),
           )
         }
@@ -118,19 +117,14 @@ internal fun HistoryList(
 private fun StretchRow(
   stretch: HistoryStretch,
   shape: Shape,
-  onClick: (HistorySpot) -> Unit,
+  onGoTo: (HistorySpot) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
-  val goTo = stretch.goTo
-  val goThere = stringResource(R.string.history_action_go_there)
   Surface(
     shape = shape,
     color = colors.surfaceContainerHigh,
-    modifier = modifier
-      .fillMaxWidth()
-      .clip(shape)
-      .then(if (goTo != null) Modifier.clickable(onClickLabel = goThere) { onClick(goTo) } else Modifier),
+    modifier = modifier.fillMaxWidth(),
   ) {
     Row(
       modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
@@ -163,16 +157,25 @@ private fun StretchRow(
             overflow = TextOverflow.Ellipsis,
           )
         }
+        val goTo = stretch.goTo
+        if (goTo != null) {
+          RowAction(
+            text = goToText(goTo.location),
+            icon = null,
+            onClick = { onGoTo(goTo.spot) },
+          )
+        }
       }
     }
   }
 }
 
+/** Slimmer and quieter than a stretch, since it only connects two of them. */
 @Composable
 private fun JumpRow(
   jump: HistoryJump,
   shape: Shape,
-  onJumpBackClick: (HistorySpot) -> Unit,
+  onGoTo: (HistorySpot) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
@@ -182,19 +185,22 @@ private fun JumpRow(
     modifier = modifier.fillMaxWidth(),
   ) {
     Row(
-      modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
+      modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
-      Badge(
-        icon = jump.type.jumpIcon(),
-        container = colors.secondaryContainer,
-        content = colors.onSecondaryContainer,
-      )
+      Box(contentAlignment = Alignment.Center, modifier = Modifier.width(40.dp)) {
+        Icon(
+          imageVector = jump.type.jumpIcon(),
+          contentDescription = null,
+          tint = colors.onSurfaceVariant,
+          modifier = Modifier.size(20.dp),
+        )
+      }
       Spacer(Modifier.width(16.dp))
       Column(Modifier.weight(1F)) {
         Text(
           text = whereText(jump.from, jump.to),
-          style = MaterialTheme.typography.bodyLarge.copy(fontFeatureSettings = "tnum"),
+          style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
           color = colors.onSurface,
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
@@ -206,14 +212,63 @@ private fun JumpRow(
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
-        Spacer(Modifier.height(8.dp))
-        JumpBackButton(
-          chapterNumber = jump.from.chapterNumber,
-          time = jump.from.time,
-          onClick = { onJumpBackClick(jump.back) },
+        RowAction(
+          text = backText(jump.back.location),
+          icon = VoiceIcons.Undo,
+          onClick = { onGoTo(jump.back.spot) },
         )
       }
     }
+  }
+}
+
+/** The one thing a row does, named with where it goes, so a tap never moves the position by surprise. */
+@Composable
+private fun RowAction(
+  text: String,
+  icon: ImageVector?,
+  onClick: () -> Unit,
+) {
+  TextButton(
+    onClick = onClick,
+    contentPadding = PaddingValues(horizontal = 12.dp),
+    // lines the label up with the text above, while the ripple keeps its padding
+    modifier = Modifier.offset(x = (-12).dp),
+  ) {
+    if (icon != null) {
+      Icon(
+        imageVector = icon,
+        contentDescription = null,
+        modifier = Modifier.size(18.dp),
+      )
+      Spacer(Modifier.width(8.dp))
+    }
+    Text(
+      text = text,
+      style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
+      maxLines = 2,
+      overflow = TextOverflow.Ellipsis,
+    )
+  }
+}
+
+@Composable
+private fun goToText(location: HistoryLocation): String {
+  val chapterNumber = location.chapterNumber
+  return if (chapterNumber != null) {
+    stringResource(R.string.history_action_continue_from_chapter, chapterNumber, location.time)
+  } else {
+    stringResource(R.string.history_action_continue_from, location.time)
+  }
+}
+
+@Composable
+private fun backText(location: HistoryLocation): String {
+  val chapterNumber = location.chapterNumber
+  return if (chapterNumber != null) {
+    stringResource(R.string.playback_jump_back_chapter, chapterNumber, location.time)
+  } else {
+    stringResource(R.string.playback_jump_back, location.time)
   }
 }
 
@@ -225,15 +280,6 @@ private fun StretchBadge(cause: StretchCause) {
     is StretchCause.Jumped -> colors.secondaryContainer to colors.onSecondaryContainer
     is StretchCause.Played -> colors.primaryContainer to colors.onPrimaryContainer
   }
-  Badge(icon = cause.icon(), container = container, content = content)
-}
-
-@Composable
-private fun Badge(
-  icon: ImageVector,
-  container: Color,
-  content: Color,
-) {
   Box(
     modifier = Modifier
       .size(40.dp)
@@ -241,7 +287,7 @@ private fun Badge(
     contentAlignment = Alignment.Center,
   ) {
     Icon(
-      imageVector = icon,
+      imageVector = cause.icon(),
       contentDescription = null,
       tint = content,
       modifier = Modifier.size(20.dp),

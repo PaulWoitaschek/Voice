@@ -248,6 +248,13 @@ public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
+  @HistoryTabOpenStore
+  private fun historyTabOpen(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("historyTabOpen", defaultValue = true)
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
   @LastPlaybackSpeedStore
   private fun lastPlaybackSpeed(factory: VoiceDataStoreFactory): DataStore<Float> {
     return factory.create(

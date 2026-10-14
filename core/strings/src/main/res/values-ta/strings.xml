@@ -187,7 +187,8 @@
         <item quantity="one">%d ஆடியோ கோப்பு</item>
         <item quantity="other">%d ஆடியோ கோப்புகள்</item>
     </plurals>
-    <string name="history.action.go_there">அங்கே செல்</string>
+    <string name="history.action.continue_from">%1$s-இலிருந்து தொடர்</string>
+    <string name="history.action.continue_from.chapter">அத். %1$d · %2$s-இலிருந்து தொடர்</string>
     <string name="history.empty.message">இயக்கங்கள், இடைநிறுத்தங்கள், தாவல்கள் இங்கே காட்டப்படும், எனவே விட்ட இடத்திற்கு நீங்கள் எப்போதும் திரும்பலாம்.</string>
     <string name="history.empty.title">இங்கே இன்னும் எதுவும் இல்லை</string>
     <string name="history.event.bookmark_jump">புக்மார்க்கிற்குச் சென்றது</string>

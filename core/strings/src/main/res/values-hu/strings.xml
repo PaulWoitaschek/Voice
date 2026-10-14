@@ -187,7 +187,8 @@
         <item quantity="one">%d hangfájl</item>
         <item quantity="other">%d hangfájl</item>
     </plurals>
-    <string name="history.action.go_there">Ugrás oda</string>
+    <string name="history.action.continue_from">Folytatás innen: %1$s</string>
+    <string name="history.action.continue_from.chapter">Folytatás innen: %1$d. fej. · %2$s</string>
     <string name="history.empty.message">A lejátszások, szünetek és ugrások itt láthatók, így mindig visszatalál.</string>
     <string name="history.empty.title">Még nincs itt semmi</string>
     <string name="history.event.bookmark_jump">Ugrás könyvjelzőhöz</string>

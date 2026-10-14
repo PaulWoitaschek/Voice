@@ -187,7 +187,8 @@
         <item quantity="one">%d audiobestand</item>
         <item quantity="other">%d audiobestanden</item>
     </plurals>
-    <string name="history.action.go_there">Ga erheen</string>
+    <string name="history.action.continue_from">Verder vanaf %1$s</string>
+    <string name="history.action.continue_from.chapter">Verder vanaf hfst. %1$d · %2$s</string>
     <string name="history.empty.message">Afspelen, pauzes en sprongen worden hier getoond, zodat je altijd je weg terugvindt.</string>
     <string name="history.empty.title">Nog niets te zien</string>
     <string name="history.event.bookmark_jump">Naar bladwijzer gegaan</string>

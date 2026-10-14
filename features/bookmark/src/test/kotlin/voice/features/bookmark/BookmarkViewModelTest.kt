@@ -15,6 +15,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
@@ -59,6 +60,7 @@ class BookmarkViewModelTest {
     editBookmarkId: String? = null,
     experimentalPlaybackPersistence: Boolean = false,
     lastPlaybackSpeed: Float = 1F,
+    historyTabOpenStore: MemoryDataStore<Boolean> = MemoryDataStore(true),
   ) = BookmarkViewModel(
     currentBookStore = MemoryDataStore<BookId?>(null),
     bookRepository = mockk {
@@ -79,6 +81,7 @@ class BookmarkViewModelTest {
     kioskModeFeatureFlag = MemoryFeatureFlag(false),
     experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),
     lastPlaybackSpeedStore = MemoryDataStore(lastPlaybackSpeed),
+    historyTabOpenStore = historyTabOpenStore,
     bookId = book.id,
     editBookmarkId = editBookmarkId,
   )
@@ -99,6 +102,42 @@ class BookmarkViewModelTest {
     while (true) {
       val state = awaitItem()
       if (state != null && predicate(state)) return state
+    }
+  }
+
+  @Test
+  fun `the screen opens on the history at first`() {
+    viewModel().test {
+      assertEquals(expected = BookmarkTab.History, actual = awaitState().tab)
+    }
+  }
+
+  @Test
+  fun `picking a tab keeps it for next time`() {
+    val store = MemoryDataStore(true)
+    val viewModel = viewModel(historyTabOpenStore = store)
+    viewModel.test {
+      awaitState()
+      viewModel.onTabChange(BookmarkTab.Bookmarks)
+      awaitState { it.tab == BookmarkTab.Bookmarks }
+      scope.testScheduler.advanceUntilIdle()
+      assertEquals(expected = false, actual = store.data.first())
+    }
+  }
+
+  @Test
+  fun `the screen opens on the bookmarks when they were open last`() {
+    viewModel(historyTabOpenStore = MemoryDataStore(false)).test {
+      assertEquals(expected = BookmarkTab.Bookmarks, actual = awaitState().tab)
+    }
+  }
+
+  @Test
+  fun `a bookmark to edit opens on the bookmarks`() {
+    val bookmark = testBookmark(arrival, 1.minutes)
+    bookmarkRepo.bookmarks.value = listOf(bookmark)
+    viewModel(editBookmarkId = bookmark.id.value.toString()).test {
+      assertEquals(expected = BookmarkTab.Bookmarks, actual = awaitState().tab)
     }
   }
 
