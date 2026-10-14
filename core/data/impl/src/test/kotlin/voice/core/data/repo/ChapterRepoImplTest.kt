@@ -25,36 +25,20 @@ class ChapterRepoImplTest {
     db.close()
   }
 
-  private fun chapter(
-    id: String,
-    fileName: String?,
-  ) = Chapter(
+  private fun chapter(id: String) = Chapter(
     id = ChapterId(id),
     name = id,
     duration = 1000,
     fileLastModified = Instant.EPOCH,
     fileSize = 10,
     markData = emptyList(),
-    fileName = fileName,
   )
-
-  @Test
-  fun `a file whose provider reports no name keeps the name it had`() = runTest {
-    val repo = ChapterRepoImpl(db.chapterDao())
-    val stored = chapter("1", fileName = "1.mp3")
-    repo.put(stored)
-
-    val chapter = repo.getOrPut(stored.id, Instant.EPOCH, fileSize = 10, fileName = null) { error("analyzed again") }
-
-    assertEquals(expected = stored, actual = chapter)
-    assertEquals(expected = stored, actual = ChapterRepoImpl(db.chapterDao()).get(stored.id))
-  }
 
   @Test
   fun `chapters are read in the order they are asked for`() = runTest {
     val repo = ChapterRepoImpl(db.chapterDao())
-    val first = chapter("1", fileName = "1.mp3")
-    val second = chapter("2", fileName = "2.mp3")
+    val first = chapter("1")
+    val second = chapter("2")
     db.chapterDao().insert(first)
     db.chapterDao().insert(second)
 

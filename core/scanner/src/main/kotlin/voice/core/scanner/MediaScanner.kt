@@ -104,7 +104,6 @@ internal class MediaScanner(
         positionInChapter = positionInChapter,
         isActive = true,
       ),
-      chapters = chapters,
       previousBooks = previousBooks,
     )
     if (content != updated) {

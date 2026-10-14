@@ -24,7 +24,6 @@ public data class Chapter(
   @ColumnInfo(defaultValue = "0")
   val fileSize: Long,
   val markData: List<MarkData>,
-  val fileName: String? = null,
 ) : Comparable<Chapter> {
 
   @Ignore

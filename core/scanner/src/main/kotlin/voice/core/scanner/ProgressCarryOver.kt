@@ -7,7 +7,6 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import voice.core.data.BookContent
 import voice.core.data.BookId
-import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ChapterRepo
@@ -19,7 +18,7 @@ import voice.core.data.store.CurrentBookStore
  * Hands progress over when audio files show up under a new book id. This happens when a folder's mode changes
  * (a single book becomes several books, or the other way round), when a folder is added again through another
  * folder, or when a book is renamed or moved. Chapters are matched by their document, which stays the same across
- * folders, and otherwise by their file.
+ * folders, and otherwise by their files when all of them moved.
  */
 @Inject
 internal class ProgressCarryOver(
@@ -32,10 +31,9 @@ internal class ProgressCarryOver(
 
   suspend fun carryOver(
     content: BookContent,
-    chapters: List<Chapter>,
     previousBooks: PreviousBooks,
   ): BookContent {
-    val predecessors = previousBooks.of(content, chapters) ?: return content
+    val predecessors = previousBooks.of(content) ?: return content
     val previous = predecessors.books
     val moved = predecessors.chapters
 
@@ -113,15 +111,12 @@ internal class PreviousBooks(
     .flatMap { book -> book.chapters.map { it.documentKey() to book } }
     .groupBy(keySelector = { it.first }, valueTransform = { it.second })
 
-  private var byFile: Map<FileFingerprint, List<Pair<BookContent, ChapterId>>>? = null
+  private var byFiles: Map<List<FileFingerprint>, BookContent>? = null
 
-  suspend fun of(
-    content: BookContent,
-    chapters: List<Chapter>,
-  ): Predecessors? {
+  suspend fun of(content: BookContent): Predecessors? {
     return sharingDocuments(content.chapters)
       // a book that was in the library already is a copy, not the one that moved
-      ?: if (content.id in inLibrary) null else sharingFiles(chapters)
+      ?: if (content.id in inLibrary) null else withSameFiles(content.chapters)
   }
 
   private fun sharingDocuments(chapters: List<ChapterId>): Predecessors? {
@@ -137,35 +132,26 @@ internal class PreviousBooks(
     return Predecessors(books = books, chapters = moved, moved = false)
   }
 
-  private suspend fun sharingFiles(chapters: List<Chapter>): Predecessors? {
-    val previousFiles = byFile()
-    val movedByBook = chapters.byFingerprint()
-      .flatMap { (fingerprint, chapter) ->
-        previousFiles[fingerprint].orEmpty().map { (book, previous) -> book to (previous to chapter) }
-      }
-      .groupBy(keySelector = { it.first }, valueTransform = { it.second })
-      // a shared file, like an intro, doesn't make it the same book
-      .filter { (book, moved) -> moved.size * 2 > book.chapters.size && moved.size * 2 > chapters.size }
-    if (movedByBook.isEmpty()) return null
-    return Predecessors(
-      books = movedByBook.keys.toList(),
-      chapters = movedByBook.values.flatten().toMap(),
-      moved = true,
-    )
+  private suspend fun withSameFiles(chapters: List<ChapterId>): Predecessors? {
+    val stored = chapterRepo.get(chapters)
+    if (stored.size != chapters.size) return null
+    val files = stored.fingerprints() ?: return null
+    val book = byFiles()[files] ?: return null
+    return Predecessors(books = listOf(book), chapters = book.chapters.zip(chapters).toMap(), moved = true)
   }
 
-  private suspend fun byFile(): Map<FileFingerprint, List<Pair<BookContent, ChapterId>>> {
-    byFile?.let { return it }
+  private suspend fun byFiles(): Map<List<FileFingerprint>, BookContent> {
+    byFiles?.let { return it }
     val chapters = chapterRepo.get(books.flatMap { it.chapters }).associateBy { it.id }
     return books
-      .flatMap { book ->
-        book.chapters
-          .mapNotNull { chapters[it] }
-          .byFingerprint()
-          .map { (fingerprint, chapter) -> fingerprint to (book to chapter) }
+      // of copies with the same files, the one played last wins
+      .sortedBy { it.lastPlayedAt }
+      .mapNotNull { book ->
+        val files = book.chapters.map { chapters[it] ?: return@mapNotNull null }.fingerprints()
+        files?.let { it to book }
       }
-      .groupBy(keySelector = { it.first }, valueTransform = { it.second })
-      .also { byFile = it }
+      .toMap()
+      .also { byFiles = it }
   }
 }
 

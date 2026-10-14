@@ -457,21 +457,6 @@ class MediaScannerTest {
     assertEquals(expected = Instant.EPOCH, actual = bookContentRepo.get(BookId(copy.toUri()))!!.lastPlayedAt)
   }
 
-  @Test
-  fun `a chapter stored without its file name gets it without analyzing the file again`() = test {
-    val audiobookFolder = folder("audiobooks")
-    val chapter = audioFile(File(audiobookFolder, "book"), "1.mp3")
-    scan(FolderType.Root, audiobookFolder)
-    val id = ChapterId(chapter.toUri())
-    chapterRepo.put(chapterRepo.get(id)!!.copy(fileName = null))
-    val analyzeCallsAfterScan = analyzeCalls
-
-    scan(FolderType.Root, audiobookFolder)
-
-    assertEquals(expected = "1.mp3", actual = chapterRepo.get(id)!!.fileName)
-    assertEquals(expected = analyzeCallsAfterScan, actual = analyzeCalls)
-  }
-
   private fun test(test: suspend TestEnvironment.() -> Unit) {
     runTest {
       TestEnvironment().use { test(it) }
@@ -484,7 +469,7 @@ class MediaScannerTest {
       .allowMainThreadQueries()
       .build()
     val bookContentRepo = BookContentRepoImpl(db.bookContentDao())
-    val chapterRepo = ChapterRepoImpl(db.chapterDao())
+    private val chapterRepo = ChapterRepoImpl(db.chapterDao())
     private val mediaAnalyzer = mockk<MediaAnalyzer>()
     var analyzeCalls = 0
     val bookmarkRepo = mockk<BookmarkRepo>(relaxUnitFun = true) {
