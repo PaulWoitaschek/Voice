@@ -64,18 +64,16 @@ Take before and after on the same screen, with the same book and settings, such 
 The before comes from `main`. The app in a fresh emulator only stands in for it if the screen hasn't changed since
 that build.
 
-`gh` can't attach images, so they go on a branch of their own, `<branch>-screenshots`: one commit without a parent
-that holds only the images. Link them by that commit, so they never change, and keep the branch after the merge,
-because the images live there.
+Upload them with `--attach` on `gh pr create` or `gh pr edit`. Don't push them to a branch. `gh` replaces a Markdown
+reference like `![Before](./before.png)` in the body with the uploaded image. It leaves `<img src>` alone and appends
+the image instead.
 
 ```sh
-tree=$(printf '100644 blob %s\tbefore.png\n100644 blob %s\tafter.png\n' \
-  "$(git hash-object -w <before.png>)" "$(git hash-object -w <after.png>)" | git mktree)
-commit=$(git commit-tree "$tree" -m "Screenshots for <title>")
-git push origin "${commit}:refs/heads/<branch>-screenshots"
+gh pr create --title "…" --body-file body.md --attach ./before.png --attach ./after.png
 ```
 
-In the table: `<img src="https://raw.githubusercontent.com/PaulWoitaschek/Voice/<commit>/before.png" width="400">`.
+Phone screenshots are too wide to sit side by side at full size. Once they're uploaded, turn each one into
+`<img src="https://github.com/user-attachments/assets/…" width="400">` with `gh pr edit --body-file`.
 
 ## Example
 
