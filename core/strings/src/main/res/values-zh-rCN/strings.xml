@@ -60,7 +60,7 @@
     <string name="book.category.action.mark_not_started">标记为尚未开始播放</string>
     <string name="book.delete.bottom_sheet.title">删除有声书</string>
     <string name="book.delete.dialog.confirm_files">删除我的文件</string>
-    <string name="book.delete.dialog.message">这样做将从您的设备上删除文件。</string>
+    <string name="book.delete.dialog.message">文件将从您的设备中永久删除，且无法恢复。</string>
     <string name="book.delete.dialog.title">删除有声书</string>
     <string name="book.download.action">下载</string>
     <string name="book.download.failed">下载未完成</string>

@@ -66,7 +66,7 @@
     <string name="book.category.action.mark_not_started">סימון כ\"לא שמעתי עדיין\"</string>
     <string name="book.delete.bottom_sheet.title">מחיקת ספר</string>
     <string name="book.delete.dialog.confirm_files">מחיקת הקבצים שלי</string>
-    <string name="book.delete.dialog.message">פעולה זו תמחק את הקבצים במכשיר שלכם.</string>
+    <string name="book.delete.dialog.message">הקבצים יימחקו לצמיתות מהמכשיר שלכם. לא ניתן יהיה לשחזר אותם.</string>
     <string name="book.delete.dialog.title">מחיקת ספר</string>
     <string name="book.download.action">הורדה</string>
     <string name="book.download.failed">ההורדה לא הושלמה</string>

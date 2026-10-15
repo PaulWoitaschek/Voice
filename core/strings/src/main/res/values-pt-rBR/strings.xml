@@ -66,7 +66,7 @@
     <string name="book.category.action.mark_not_started">Marca como não iniciado</string>
     <string name="book.delete.bottom_sheet.title">Deletar livro</string>
     <string name="book.delete.dialog.confirm_files">Deletar meus arquivos</string>
-    <string name="book.delete.dialog.message">Isso vai apagar os arquivos do seu dispositivo.</string>
+    <string name="book.delete.dialog.message">Os arquivos serão apagados do seu dispositivo para sempre. Você não poderá recuperá-los.</string>
     <string name="book.delete.dialog.title">Deletar livro</string>
     <string name="book.download.action">Baixar</string>
     <string name="book.download.failed">O download não foi concluído</string>

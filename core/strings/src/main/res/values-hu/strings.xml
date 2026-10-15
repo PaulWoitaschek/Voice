@@ -63,7 +63,7 @@
     <string name="book.category.action.mark_not_started">Megjelölés még el nem kezdettként</string>
     <string name="book.delete.bottom_sheet.title">Könyv törlése</string>
     <string name="book.delete.dialog.confirm_files">Fájlok törlése</string>
-    <string name="book.delete.dialog.message">Ezzel törli az eszközről a könyv hangfájljait is.</string>
+    <string name="book.delete.dialog.message">A fájlok véglegesen törlődnek az eszközről. Nem lehet visszaállítani őket.</string>
     <string name="book.delete.dialog.title">Könyv törlése</string>
     <string name="book.download.action">Letöltés</string>
     <string name="book.download.failed">A letöltés nem fejeződött be</string>

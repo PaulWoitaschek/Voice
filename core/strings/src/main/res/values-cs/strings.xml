@@ -69,7 +69,7 @@
     <string name="book.category.action.mark_not_started">Označit jako dosud nezahájené</string>
     <string name="book.delete.bottom_sheet.title">Odstranit knihu</string>
     <string name="book.delete.dialog.confirm_files">Odstranit mé soubory</string>
-    <string name="book.delete.dialog.message">Toto odstraní soubory z vašeho zařízení.</string>
+    <string name="book.delete.dialog.message">Soubory budou z vašeho zařízení trvale odstraněny. Už je nebude možné obnovit.</string>
     <string name="book.delete.dialog.title">Odstranit knihu</string>
     <string name="book.download.action">Stáhnout</string>
     <string name="book.download.failed">Stahování se nepodařilo dokončit</string>

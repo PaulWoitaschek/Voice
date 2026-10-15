@@ -63,7 +63,7 @@
     <string name="book.category.action.mark_not_started">மார்க் இன்னும் தொடங்கவில்லை</string>
     <string name="book.delete.bottom_sheet.title">புத்தகத்தை நீக்கு</string>
     <string name="book.delete.dialog.confirm_files">எனது கோப்புகளை நீக்கவும்</string>
-    <string name="book.delete.dialog.message">இது உங்கள் சாதனத்தில் உள்ள கோப்புகளை நீக்கும்.</string>
+    <string name="book.delete.dialog.message">கோப்புகள் உங்கள் சாதனத்திலிருந்து நிரந்தரமாக நீக்கப்படும். அவற்றை மீட்டெடுக்க முடியாது.</string>
     <string name="book.delete.dialog.title">புத்தகத்தை நீக்கு</string>
     <string name="book.download.action">பதிவிறக்கு</string>
     <string name="book.download.failed">பதிவிறக்கம் முடியவில்லை</string>

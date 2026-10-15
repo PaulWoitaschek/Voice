@@ -53,6 +53,7 @@ class DeleteBookViewModel(
       id = bookId,
       name = book?.content?.name,
       cover = book?.content?.coverUrl,
+      fileCount = book?.chapters?.size,
       deleteCheckBoxChecked = false,
       fileToDelete = bookId.toUri().pathSegments
         .let { segments ->
@@ -98,6 +99,7 @@ data class DeleteBookViewState(
   val id: BookId,
   val name: String?,
   val cover: String?,
+  val fileCount: Int?,
   val deleteCheckBoxChecked: Boolean,
   val fileToDelete: String,
 ) {

@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
@@ -132,17 +133,26 @@ internal fun DeleteBookSheet(
         color = colors.onSurfaceVariant,
         textAlign = TextAlign.Center,
       )
-      Spacer(Modifier.height(12.dp))
-      Text(
+      Spacer(Modifier.height(16.dp))
+      Column(
         modifier = Modifier
-          .background(colors.surfaceContainerHigh, RoundedCornerShape(12.dp))
-          .padding(horizontal = 12.dp, vertical = 8.dp),
-        text = viewState.fileToDelete,
-        style = MaterialTheme.typography.bodySmall,
-        color = colors.onSurfaceVariant,
-        textAlign = TextAlign.Center,
-      )
-      Spacer(Modifier.height(20.dp))
+          .fillMaxWidth()
+          .background(colors.surfaceContainerHigh, RoundedCornerShape(20.dp))
+          .padding(horizontal = 16.dp, vertical = 12.dp),
+      ) {
+        Text(
+          text = viewState.fileToDelete,
+          style = MaterialTheme.typography.bodyMedium,
+        )
+        if (viewState.fileCount != null) {
+          Text(
+            text = pluralStringResource(StringsR.plurals.folder_type_file_count, viewState.fileCount, viewState.fileCount),
+            style = MaterialTheme.typography.bodySmall,
+            color = colors.onSurfaceVariant,
+          )
+        }
+      }
+      Spacer(Modifier.height(12.dp))
       val confirmContainer by animateColorAsState(
         targetValue = if (armed) colors.errorContainer else colors.surfaceContainerHigh,
         label = "confirmContainer",

@@ -121,8 +121,8 @@
     <string name="book.delete.bottom_sheet.title">Delete Book</string>
     <!-- Checkbox label confirming that book files should be deleted. -->
     <string name="book.delete.dialog.confirm_files">Delete my files</string>
-    <!-- Warning message in the delete-book confirmation dialog. -->
-    <string name="book.delete.dialog.message">This will delete the files on your device.</string>
+    <!-- Warning in the delete-book sheet. Voice deletes the files right away, there is no trash to restore them from. -->
+    <string name="book.delete.dialog.message">This deletes the files from your device for good. You can\'t get them back.</string>
     <!-- Title for the delete-book confirmation dialog. -->
     <string name="book.delete.dialog.title">Delete Book</string>
     <!-- Bottom-sheet action that downloads a book from the Audiobookshelf server, so it plays without a connection. -->
@@ -310,7 +310,7 @@
         <item quantity="one">We found %d book</item>
         <item quantity="other">We found %d books</item>
     </plurals>
-    <!-- Pluralized file count shown in folder structure previews. -->
+    <!-- Pluralized count of audio files, shown in folder structure previews and in the delete-book sheet. -->
     <plurals name="folder.type.file_count">
         <item quantity="one">%d audio file</item>
         <item quantity="other">%d audio files</item>
