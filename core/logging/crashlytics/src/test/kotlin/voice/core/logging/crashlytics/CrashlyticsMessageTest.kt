@@ -28,7 +28,7 @@ class CrashlyticsMessageTest {
   }
 
   @Test
-  fun `an exception without a message shows its type`() {
+  fun `a non-fatal logs only its type`() {
     assertEquals(
       expected = "java.lang.IllegalStateException",
       actual = crashlyticsMessage(message = null, IllegalStateException("Skipping a book with 30000 chapters")),

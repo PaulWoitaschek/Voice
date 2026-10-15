@@ -114,7 +114,7 @@ class PositionUpdater(
           lastPlayedAt = Instant.now(),
         )
       } else {
-        Logger.w("Media item not in the current book")
+        Logger.v("Media item not in the current book")
         content
       }
     }

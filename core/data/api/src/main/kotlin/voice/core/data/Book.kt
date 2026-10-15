@@ -9,7 +9,7 @@ public data class Book(
 
   init {
     check(chapters.size == content.chapters.size) {
-      "The book has ${chapters.size} chapters, but its content ${content.chapters.size}"
+      "The book has ${chapters.size} chapters, but the content lists ${content.chapters.size}"
     }
     check(chapters.map { it.id } == content.chapters) {
       "The chapters are in a different order than in the content"
