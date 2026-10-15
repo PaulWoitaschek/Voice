@@ -1,109 +1,91 @@
-**Privacy Policy**
+# Privacy Policy
 
-This privacy policy applies to the Voice app (hereby referred to as "Application") for mobile devices that was created by Paul Woitaschek (
-hereby referred to as "Service Provider") as an Open Source service. This service is intended for use "AS IS".
+Voice is an audiobook player made by Paul Woitaschek. Your audiobooks, your progress, your bookmarks and your listening
+history stay on your device and in your own folders. This page lists every case where Voice sends something off your
+device, who gets it and why.
 
-**Information Collection and Use**
+## Which build you have
 
-The Application collects information when you download and use it. This information may include information such as
+Voice comes in two builds, and they differ in what they send:
 
-* Your device's Internet Protocol address (e.g. IP address)
-* The pages of the Application that you visit, the time and date of your visit, the time spent on those pages
-* The time spent on the Application
-* The operating system you use on your mobile device
+- The **Google Play** build includes Firebase from Google, for crash reports, remote settings and, only if you agree,
+  usage analytics.
+- The **F-Droid, GitHub and IzzyDroid** builds contain no Google libraries. They send nothing to Google or to me.
 
-The Application does not gather precise information about the location of your mobile device.
+The parts under "In every build" apply to both.
 
-The Application collects your device's location, which helps the Service Provider determine your approximate geographical location and make
-use of in below ways:
+## Google Play build
 
-* Geolocation Services: The Service Provider utilizes location data to provide features such as personalized content, relevant
-  recommendations, and location-based services.
-* Analytics and Improvements: Aggregated and anonymized location data helps the Service Provider to analyze user behavior, identify trends,
-  and improve the overall performance and functionality of the Application.
-* Third-Party Services: Periodically, the Service Provider may transmit anonymized location data to external services. These services assist
-  them in enhancing the Application and optimizing their offerings.
+### Crash reports
 
-The Service Provider may use the information you provided to contact you from time to time to provide you with important information,
-required notices and marketing promotions.
+When Voice crashes or runs into an error, it sends a report to Firebase Crashlytics, so I can fix it. A report contains
+what went wrong, your device model, your Android and app version, a random ID for this installation, and the last lines
+of Voice's log. Those lines can include the names of books and files, and the address of an Audiobookshelf server.
 
-For a better experience, while using the Application, the Service Provider may require you to provide us with certain personally
-identifiable information. The information that the Service Provider request will be retained by them and used as described in this privacy
-policy.
+Crash reports are always on in the Google Play build. Crashlytics deletes them after 90 days.
 
-**Audiobookshelf Servers**
+### Usage analytics, only if you agree
 
-You can connect the Application to an Audiobookshelf server that you or someone you trust runs. The Application then sends your username
-and password to that server to sign in, and exchanges your listening progress, bookmarks and listening sessions (including your device
-model and the app version) with it. It also streams and downloads audiobooks from it. This data goes only to the server you entered. The
-Service Provider runs no server for this and never receives this data. Signing out removes the books of the server and their downloads from
-your device.
+When you set up Voice, it asks if it may collect anonymous usage data. Analytics stays off until you agree, and you can
+turn it off anytime in the settings.
 
-**Third Party Access**
+With analytics on, Voice sends Google Analytics for Firebase which screens you open and which features you use, like
+play and pause, the sleep timer or adding a folder. It never sends the names of your books or files. Google adds your
+device model, your Android and app version, your language and an approximate location, like your country, taken from
+your IP address. Google keeps this data for at most 14 months.
 
-Only aggregated, anonymized data is periodically transmitted to external services to aid the Service Provider in improving the Application
-and their service. The Service Provider may share your information with third parties in the ways that are described in this privacy
-statement.
+### Remote settings
 
-Please note that the Application utilizes third-party services that have their own Privacy Policy about handling data. Below are the links
-to the Privacy Policy of the third-party service providers used by the Application:
+When Voice starts, it asks Firebase Remote Config for settings, like whether a new feature is turned on. The request
+includes a random ID for this installation and the app version.
 
-* [Google Play Services](https://www.google.com/policies/privacy/)
-* [Google Analytics for Firebase](https://firebase.google.com/support/privacy)
-* [Firebase Crashlytics](https://firebase.google.com/support/privacy/)
+### Support and ratings
 
-The Service Provider may disclose User Provided and Automatically Collected Information:
+Supporting Voice runs through Google Play's billing, and the rating prompt opens Google Play's review dialog. Google
+handles both under its own privacy policy.
 
-* as required by law, such as to comply with a subpoena, or similar legal process;
-* when they believe in good faith that disclosure is necessary to protect their rights, protect your safety or the safety of others,
-  investigate fraud, or respond to a government request;
-* with their trusted services providers who work on their behalf, do not have an independent use of the information we disclose to them, and
-  have agreed to adhere to the rules set forth in this privacy statement.
+## In every build
 
-**Opt-Out Rights**
+### Cover search
 
-You can stop all collection of information by the Application easily by uninstalling it. You may use the standard uninstall processes as may
-be available as part of your mobile device or via the mobile application marketplace or network.
+When you search for a cover online, Voice sends your search, which starts as the book's name, to DuckDuckGo. The
+previews come from DuckDuckGo, and the cover you pick is downloaded from the website it's on.
 
-**Data Retention Policy**
+### Audiobookshelf
 
-The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. If you'd
-like them to delete User Provided Data that you have provided via the Application, please contact them at woitaschek@gmail.com and they will
-respond in a reasonable time.
+You can connect Voice to an Audiobookshelf server that you or someone you trust runs. Voice then sends your username
+and password to that server to sign in, and exchanges your listening progress, bookmarks and listening sessions,
+including your device model and the app version, with it. It also streams and downloads audiobooks from it. This data
+goes only to the server you entered. I run no server for this and never receive this data. Signing out removes the
+books of the server and their downloads from your device.
 
-**Children**
+### Backups
 
-The Service Provider does not use the Application to knowingly solicit data from or market to children under the age of 13.
+If backups are on on your phone, Android backs up Voice's data, like your library, progress and bookmarks, to your
+backup account, on most phones your Google account. The login to an Audiobookshelf server isn't backed up.
 
-The Application does not address anyone under the age of 13. The Service Provider does not knowingly collect personally identifiable
-information from children under 13 years of age. In the case the Service Provider discover that a child under 13 has provided personal
-information, the Service Provider will immediately delete this from their servers. If you are a parent or guardian and you are aware that
-your child has provided us with personal information, please contact the Service Provider (woitaschek@gmail.com) so that they will be able
-to take the necessary actions.
+### Links
 
-**Security**
+Help, feedback, the FAQ and Ko-fi open in your browser. The sites they open have their own privacy policies.
 
-The Service Provider is concerned about safeguarding the confidentiality of your information. The Service Provider provides physical,
-electronic, and procedural safeguards to protect information the Service Provider processes and maintains.
+## Who sees the data
 
-**Changes**
+Only I see the crash reports and analytics, in the Firebase console. I use them to fix bugs and to decide what to work
+on next. I don't sell data, show ads or use data for marketing. Google stores the data for me and may process it
+outside the EU. See [Firebase's privacy information](https://firebase.google.com/support/privacy).
 
-This Privacy Policy may be updated from time to time for any reason. The Service Provider will notify you of any changes to the Privacy
-Policy by updating this page with the new Privacy Policy. You are advised to consult this Privacy Policy regularly for any changes, as
-continued use is deemed approval of all changes.
+Analytics runs on your consent (Art. 6(1)(a) GDPR). Crash reports and remote settings rely on my legitimate interest in
+keeping Voice working (Art. 6(1)(f) GDPR).
 
-This privacy policy is effective as of 2026-10-15
+## Your rights
 
-**Your Consent**
+You can turn analytics off anytime, and uninstalling Voice stops everything. You can ask me what data I have about you,
+and have it corrected or deleted. You can also object to its use and complain to a data protection authority.
 
-By using the Application, you are consenting to the processing of your information as set forth in this Privacy Policy now and as amended by
-us.
+## Contact
 
-**Contact Us**
+Paul Woitaschek, [woitaschek@gmail.com](mailto:woitaschek@gmail.com)
 
-If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service
-Provider via email at woitaschek@gmail.com.
+When Voice starts sending something new, this page changes with that release.
 
-* * *
-
-This privacy policy page was generated by [App Privacy Policy Generator](https://app-privacy-policy-generator.nisrulz.com/)
+Last updated: 2026-10-15
