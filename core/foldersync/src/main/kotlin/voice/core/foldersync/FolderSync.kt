@@ -44,7 +44,7 @@ import kotlin.time.Duration.Companion.seconds
 @Inject
 public class FolderSync internal constructor(
   private val context: Context,
-  private val syncFolder: SyncFolder,
+  private val syncFiles: SyncFiles,
   private val audiobookFolders: AudiobookFolders,
   private val bookRepository: BookRepository,
   private val playerController: PlayerController,
@@ -88,7 +88,7 @@ public class FolderSync internal constructor(
           val file = books.keyedIn(folder).toSyncFile()
           // a folder without a book that was played here gets no .voice folder
           if (file.books.isEmpty() || written[folder] == file) return@forEach
-          inFolder(folder) { syncFolder.write(folder, ownFileName, file) }
+          inFolder(folder) { syncFiles.write(folder, ownFileName, file) }
             ?.let { written[folder] = file }
         }
       }
@@ -110,7 +110,7 @@ public class FolderSync internal constructor(
       .associateWith { books.keyedIn(it) }
       .filterValues { it.isNotEmpty() }
     val remote = keyedByFolder.keys
-      .flatMap { folder -> inFolder(folder) { syncFolder.read(folder, exceptName = ownFileName) }.orEmpty() }
+      .flatMap { folder -> inFolder(folder) { syncFiles.read(folder, exceptName = ownFileName) }.orEmpty() }
       .newest()
     keyedByFolder.values.flatten().forEach { (key, book) ->
       remote[key]?.let { takeOver(book.id, it) }

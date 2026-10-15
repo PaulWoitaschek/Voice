@@ -35,7 +35,7 @@ class FolderSyncTest {
   private val playerController = mockk<PlayerController>(relaxUnitFun = true)
   private val playStateManager = PlayStateManager()
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val syncFolder = mockk<SyncFolder>(relaxUnitFun = true) {
+  private val syncFiles = mockk<SyncFiles>(relaxUnitFun = true) {
     every { read(any(), any()) } returns emptyList()
   }
   private val audiobookFolders = mockk<AudiobookFolders> {
@@ -48,7 +48,7 @@ class FolderSyncTest {
   fun `a newer place from another device is taken over`() = scope.runTest {
     val book = book(currentFile = 0, position = 5000, lastPlayedAt = 1000, playbackSpeed = 1.25F)
     val repo = MemoryBookRepository(book)
-    every { syncFolder.read(folder(), any()) } returns listOf(
+    every { syncFiles.read(folder(), any()) } returns listOf(
       SyncFile(mapOf(book.chapters.syncKey()!! to SyncedPosition(file = 1, position = 3000, updatedAt = 2000))),
     )
 
@@ -106,7 +106,7 @@ class FolderSyncTest {
   fun `the place played here is written into the folder`() = scope.runTest {
     val book = book(currentFile = 1, position = 3000, lastPlayedAt = 2000)
     val written = slot<SyncFile>()
-    every { syncFolder.write(folder(), any(), capture(written)) } returns Unit
+    every { syncFiles.write(folder(), any(), capture(written)) } returns Unit
 
     folderSync(MemoryBookRepository(book)).start()
     testScheduler.advanceTimeBy(4.seconds)
@@ -121,7 +121,7 @@ class FolderSyncTest {
   fun `a read request takes over a newer place`() = scope.runTest {
     val book = book(lastPlayedAt = 1000)
     val repo = MemoryBookRepository(book)
-    every { syncFolder.read(folder(), any()) } returns listOf(
+    every { syncFiles.read(folder(), any()) } returns listOf(
       SyncFile(mapOf(book.chapters.syncKey()!! to SyncedPosition(file = 1, position = 3000, updatedAt = 2000))),
     )
 
@@ -135,7 +135,7 @@ class FolderSyncTest {
     val dispatcher = StandardTestDispatcher(testScheduler)
     return FolderSync(
       context = ApplicationProvider.getApplicationContext(),
-      syncFolder = syncFolder,
+      syncFiles = syncFiles,
       audiobookFolders = audiobookFolders,
       bookRepository = repo,
       playerController = playerController,

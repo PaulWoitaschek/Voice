@@ -8,10 +8,11 @@ import dev.zacsweers.metro.Inject
 import java.io.IOException
 
 /**
- * The `.voice` folder inside a library folder. Its name starts with a dot, so the scanner skips it.
+ * The sync files of every device, in a `.voice` folder inside a library folder. The folder's name starts with a dot,
+ * so the scanner skips it.
  */
 @Inject
-internal class SyncFolder(private val context: Context) {
+internal class SyncFiles(private val context: Context) {
 
   fun read(
     folder: Uri,
