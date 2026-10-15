@@ -1,6 +1,6 @@
 ---
 name: pull-request
-description: Writing pull request titles and descriptions for Voice. Use when opening a pull request, or when editing the title or description of one.
+description: Writing pull requests for Voice, from the branch name to the title, description and screenshots. Use when opening a pull request, or when editing the title or description of one.
 ---
 
 # Writing a pull request
@@ -8,6 +8,12 @@ description: Writing pull request titles and descriptions for Voice. Use when op
 The reviewer reads the diff. The description says what the diff can't: why the change exists, what changes for
 listeners, and what the reviewer should look at or decide. Keep the prose under 150 words. A big change can go up to
 250. If it's longer than that, cut it down.
+
+## Branch
+
+Branch off the latest `main` and name the branch after the change, in short kebab case: `lock-screen-slider`, or
+`fix-delete-book-anr` for a bug fix. Unless your environment hands you a branch, don't use a `claude/` prefix or the
+generated name of a worktree.
 
 ## Title
 
@@ -33,8 +39,8 @@ the effect: "Keep unit tests on the pinned Robolectric SDK after a clean build".
 - <Something that wasn't tested, like "Not tried on Android Auto".>
 ```
 
-- **Screenshots:** one before and after table. Add a dark mode or large font screenshot only when the change is about
-  that.
+- **Screenshots:** one before and after table, see [Screenshots](#screenshots). Add a dark mode or large font
+  screenshot only when the change is about that.
 - **Verified:** only what a reviewer can't see in the diff. Leave out unit tests, which are in the diff, and the CI
   commands, which CI runs. If you only ran tests, drop the section.
 - **Limitations:** add a short "Not changed" list only for gaps a reviewer would otherwise assume are covered. Keep it
@@ -51,6 +57,25 @@ the effect: "Keep unit tests on the pinned Robolectric SDK after a clean build".
 
 When you push more commits, rewrite the description so it describes the pull request as it is now. Don't add a log
 of what changed since the last version.
+
+## Screenshots
+
+Take before and after on the same screen, with the same book and settings, such as on the emulator (emulator skill).
+The before comes from `main`. The app in a fresh emulator only stands in for it if the screen hasn't changed since
+that build.
+
+`gh` can't attach images, so they go on a branch of their own, `<branch>-screenshots`: one commit without a parent
+that holds only the images. Link them by that commit, so they never change, and keep the branch after the merge,
+because the images live there.
+
+```sh
+tree=$(printf '100644 blob %s\tbefore.png\n100644 blob %s\tafter.png\n' \
+  "$(git hash-object -w <before.png>)" "$(git hash-object -w <after.png>)" | git mktree)
+commit=$(git commit-tree "$tree" -m "Screenshots for <title>")
+git push origin "${commit}:refs/heads/<branch>-screenshots"
+```
+
+In the table: `<img src="https://raw.githubusercontent.com/PaulWoitaschek/Voice/<commit>/before.png" width="400">`.
 
 ## Example
 
