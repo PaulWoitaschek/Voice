@@ -69,7 +69,7 @@
     <string name="book.category.action.mark_not_started">Позначити як ще не почате</string>
     <string name="book.delete.bottom_sheet.title">Видалити книгу</string>
     <string name="book.delete.dialog.confirm_files">Видалити мої файли</string>
-    <string name="book.delete.dialog.message">Файли на вашому пристрої буде видалено.</string>
+    <string name="book.delete.dialog.message">Файли буде назавжди видалено з вашого пристрою. Відновити їх не вдасться.</string>
     <string name="book.delete.dialog.title">Видалити книгу</string>
     <string name="book.download.action">Завантажити</string>
     <string name="book.download.failed">Завантаження не завершилося</string>

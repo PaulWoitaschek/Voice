@@ -69,7 +69,7 @@
     <string name="book.category.action.mark_not_started">Oznacz jako nierozpoczęta</string>
     <string name="book.delete.bottom_sheet.title">Usuń książkę</string>
     <string name="book.delete.dialog.confirm_files">Usuń moje pliki</string>
-    <string name="book.delete.dialog.message">Ta akcja usunie pliki z twojego urządzenia.</string>
+    <string name="book.delete.dialog.message">Pliki zostaną trwale usunięte z twojego urządzenia. Nie da się ich odzyskać.</string>
     <string name="book.delete.dialog.title">Usuń książkę</string>
     <string name="book.download.action">Pobierz</string>
     <string name="book.download.failed">Nie udało się dokończyć pobierania</string>

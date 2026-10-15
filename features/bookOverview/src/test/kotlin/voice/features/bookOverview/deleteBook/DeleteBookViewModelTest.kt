@@ -23,16 +23,18 @@ import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.features.bookOverview.book
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
+import voice.features.bookOverview.chapter
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class DeleteBookViewModelTest {
 
   private val dispatcher = StandardTestDispatcher()
-  private val book = book().let {
+  private val book = book(chapters = listOf(chapter(), chapter(), chapter())).let {
     it.copy(content = it.content.copy(id = BookId("content://$AUTHORITY/document/book")))
   }
   private val navigator = mockk<Navigator>(relaxUnitFun = true)
@@ -50,6 +52,13 @@ class DeleteBookViewModelTest {
       mainImmediate = dispatcher,
     ),
   )
+
+  @Test
+  fun `the sheet shows how many files get deleted`() = runTest(dispatcher) {
+    viewModel.onItemClick(book.id, BottomSheetItem.DeleteBook)
+
+    assertEquals(expected = 3, actual = viewModel.state.value?.fileCount)
+  }
 
   @Test
   fun `deleting a book closes its player`() = runTest(dispatcher) {

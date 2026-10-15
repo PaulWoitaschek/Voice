@@ -63,7 +63,7 @@
     <string name="book.category.action.mark_not_started">Märgi ootel olevaks</string>
     <string name="book.delete.bottom_sheet.title">Kustuta heliraamat</string>
     <string name="book.delete.dialog.confirm_files">Kustuta minu failid</string>
-    <string name="book.delete.dialog.message">Järgnevaga kustutad need failid oma nutiseadmest.</string>
+    <string name="book.delete.dialog.message">Failid kustutatakse su seadmest jäädavalt. Neid ei saa enam taastada.</string>
     <string name="book.delete.dialog.title">Kustuta heliraamat</string>
     <string name="book.download.action">Laadi alla</string>
     <string name="book.download.failed">Allalaadimine ei õnnestunud</string>

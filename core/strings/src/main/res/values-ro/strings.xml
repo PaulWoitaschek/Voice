@@ -66,7 +66,7 @@
     <string name="book.category.action.mark_not_started">Marchează ca neîncepută încă</string>
     <string name="book.delete.bottom_sheet.title">Șterge cartea</string>
     <string name="book.delete.dialog.confirm_files">Șterge fișierele mele</string>
-    <string name="book.delete.dialog.message">Astfel vei șterge de pe dispozitiv și fișierele corespunzătoare cărții.</string>
+    <string name="book.delete.dialog.message">Fișierele vor fi șterse definitiv de pe dispozitivul tău. Nu le vei mai putea recupera.</string>
     <string name="book.delete.dialog.title">Șterge cartea</string>
     <string name="book.download.action">Descarcă</string>
     <string name="book.download.failed">Descărcarea nu s-a finalizat</string>

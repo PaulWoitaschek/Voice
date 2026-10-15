@@ -60,7 +60,7 @@
     <string name="book.category.action.mark_not_started">Tandai Belum Dibaca</string>
     <string name="book.delete.bottom_sheet.title">Hapus Buku</string>
     <string name="book.delete.dialog.confirm_files">Hapus berkas saya</string>
-    <string name="book.delete.dialog.message">Ini akan menghapus berkas di perangkat Anda.</string>
+    <string name="book.delete.dialog.message">Berkas akan dihapus secara permanen dari perangkat Anda. Berkas tersebut tidak dapat dipulihkan.</string>
     <string name="book.delete.dialog.title">Hapus Buku</string>
     <string name="book.download.action">Unduh</string>
     <string name="book.download.failed">Unduhan tidak selesai</string>
