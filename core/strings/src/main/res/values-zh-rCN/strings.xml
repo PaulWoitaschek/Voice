@@ -319,6 +319,8 @@
     <string name="settings.appearance.color_scheme.forest">森林</string>
     <string name="settings.appearance.color_scheme.lagoon">泻湖</string>
     <string name="settings.appearance.color_scheme.lavender">薰衣草</string>
+    <string name="settings.appearance.pure_black.summary">在深色主题下为 OLED 屏幕节省电量。</string>
+    <string name="settings.appearance.pure_black.title">纯黑</string>
     <string name="settings.appearance.theme.dark">深色</string>
     <string name="settings.appearance.theme.follow_system">跟随系统</string>
     <string name="settings.appearance.theme.light">浅色</string>

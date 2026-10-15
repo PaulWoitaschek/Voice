@@ -336,6 +336,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Dinamik renk</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Duvar kağıdınızdan ve sistem temasından renkleri kullanır.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice mavisi</string>
+    <string name="settings.appearance.pure_black.summary">Koyu temada OLED ekranlarda pil tasarrufu sağlar.</string>
+    <string name="settings.appearance.pure_black.title">Saf siyah</string>
     <string name="settings.appearance.theme.dark">Koyu</string>
     <string name="settings.appearance.theme.follow_system">Sistemi takip et</string>
     <string name="settings.appearance.theme.light">Açık</string>

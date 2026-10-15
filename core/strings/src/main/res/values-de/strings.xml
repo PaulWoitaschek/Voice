@@ -336,8 +336,10 @@
     <string name="settings.appearance.color_scheme.dynamic">Dynamische Farben</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Verwendet Farben aus Deinem Hintergrundbild und Systemdesign.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice-Blau</string>
+    <string name="settings.appearance.pure_black.summary">Spart Akku bei OLED-Displays im dunklen Design.</string>
+    <string name="settings.appearance.pure_black.title">Reines Schwarz</string>
     <string name="settings.appearance.theme.dark">Dunkel</string>
-    <string name="settings.appearance.theme.follow_system">Systemeinstellung</string>
+    <string name="settings.appearance.theme.follow_system">Wie System</string>
     <string name="settings.appearance.theme.light">Hell</string>
     <string name="settings.appearance.theme.title">Design</string>
     <string name="settings.appearance.title">Erscheinungsbild</string>

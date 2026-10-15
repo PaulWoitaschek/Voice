@@ -71,6 +71,7 @@ generate_icon cloud_off CloudOff
 generate_icon coffee Coffee
 generate_icon collections_bookmark CollectionsBookmark
 generate_icon construction Construction
+generate_icon contrast Contrast
 generate_icon content_cut ContentCut
 generate_icon crop Crop
 generate_icon delete Delete

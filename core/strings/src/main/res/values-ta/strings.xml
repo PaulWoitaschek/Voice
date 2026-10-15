@@ -336,6 +336,8 @@
     <string name="settings.appearance.color_scheme.dynamic">மாறும் வண்ணம்</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">உங்கள் வால்பேப்பர் மற்றும் அமைப்பு தீமிலிருந்து வண்ணங்களைப் பயன்படுத்துகிறது.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice நீலம்</string>
+    <string name="settings.appearance.pure_black.summary">இருண்ட தீமில் OLED திரைகளில் பேட்டரியைச் சேமிக்கிறது.</string>
+    <string name="settings.appearance.pure_black.title">முழு கருப்பு</string>
     <string name="settings.appearance.theme.dark">இருண்ட</string>
     <string name="settings.appearance.theme.follow_system">அமைப்பைப் பின்பற்று</string>
     <string name="settings.appearance.theme.light">வெளிர்</string>

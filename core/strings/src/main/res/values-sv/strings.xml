@@ -336,6 +336,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Dynamisk färg</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Använder färger från bakgrundsbilden och systemets tema.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice-blå</string>
+    <string name="settings.appearance.pure_black.summary">Sparar batteri på OLED-skärmar i mörkt tema.</string>
+    <string name="settings.appearance.pure_black.title">Helsvart</string>
     <string name="settings.appearance.theme.dark">Mörkt</string>
     <string name="settings.appearance.theme.follow_system">Följ systemet</string>
     <string name="settings.appearance.theme.light">Ljust</string>

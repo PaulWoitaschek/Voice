@@ -368,6 +368,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Dynamická farba</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Používa farby z tapety a systémovej témy.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Modrá Voice</string>
+    <string name="settings.appearance.pure_black.summary">Šetrí batériu na OLED displejoch v tmavej téme.</string>
+    <string name="settings.appearance.pure_black.title">Čisto čierna</string>
     <string name="settings.appearance.theme.dark">Tmavé</string>
     <string name="settings.appearance.theme.follow_system">Podľa systému</string>
     <string name="settings.appearance.theme.light">Svetlé</string>

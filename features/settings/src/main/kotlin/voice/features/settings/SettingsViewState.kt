@@ -9,6 +9,7 @@ import java.time.YearMonth
 data class SettingsViewState(
   val themeMode: ThemeMode,
   val themeColorScheme: ThemeColorScheme,
+  val pureBlack: Boolean,
   val dynamicColorAvailable: Boolean,
   val seekTimeInSeconds: Int,
   val autoRewindInSeconds: Int,
@@ -33,6 +34,7 @@ data class SettingsViewState(
       return SettingsViewState(
         themeMode = ThemeMode.FollowSystem,
         themeColorScheme = ThemeColorScheme.VoiceBlue,
+        pureBlack = false,
         dynamicColorAvailable = true,
         seekTimeInSeconds = 20,
         autoRewindInSeconds = 2,

@@ -26,6 +26,10 @@ public annotation class ThemeModeStore
 @Qualifier
 public annotation class ThemeColorSchemeStore
 
+/** Whether the dark theme paints its background black instead of a dark tone. */
+@Qualifier
+public annotation class PureBlackStore
+
 @Qualifier
 public annotation class FadeOutStore
 

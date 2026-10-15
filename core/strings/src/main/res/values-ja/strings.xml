@@ -320,6 +320,8 @@
     <string name="settings.appearance.color_scheme.dynamic">ダイナミックカラー</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">壁紙とシステムテーマの色を使用します。</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice ブルー</string>
+    <string name="settings.appearance.pure_black.summary">ダークテーマで OLED 画面のバッテリーを節約します。</string>
+    <string name="settings.appearance.pure_black.title">ピュアブラック</string>
     <string name="settings.appearance.theme.dark">ダーク</string>
     <string name="settings.appearance.theme.follow_system">システムに合わせる</string>
     <string name="settings.appearance.theme.light">ライト</string>
