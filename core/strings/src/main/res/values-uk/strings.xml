@@ -368,6 +368,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Динамічний колір</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Використовує кольори з ваших шпалер і системної теми.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Синій Voice</string>
+    <string name="settings.appearance.pure_black.summary">Заощаджує заряд батареї на OLED-екранах у темній темі.</string>
+    <string name="settings.appearance.pure_black.title">Повністю чорний</string>
     <string name="settings.appearance.theme.dark">Темна</string>
     <string name="settings.appearance.theme.follow_system">Як у системі</string>
     <string name="settings.appearance.theme.light">Світла</string>

@@ -37,6 +37,7 @@ import voice.core.analytics.api.Analytics
 import voice.core.common.rootGraphAs
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
+import voice.core.data.store.PureBlackStore
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
 import voice.core.logging.api.Logger
@@ -79,6 +80,10 @@ class MainActivity : AppCompatActivity() {
   private lateinit var themeColorSchemeStore: DataStore<ThemeColorScheme>
 
   @Inject
+  @PureBlackStore
+  private lateinit var pureBlackStore: DataStore<Boolean>
+
+  @Inject
   private lateinit var coverSeedColors: CoverSeedColors
 
   private val splashScreenHolds = SplashScreenHolds()
@@ -104,6 +109,8 @@ class MainActivity : AppCompatActivity() {
         ?: return@setContent
       val themeColorScheme = themeColorSchemeStore.data.collectAsState(initial = null).value
         ?: return@setContent
+      val pureBlack = pureBlackStore.data.collectAsState(initial = null).value
+        ?: return@setContent
       val coverSeedColorsRestored = produceState(initialValue = false) {
         coverSeedColors.restore()
         value = true
@@ -113,6 +120,7 @@ class MainActivity : AppCompatActivity() {
       VoiceTheme(
         themeMode = themeMode,
         themeColorScheme = themeColorScheme,
+        pureBlack = pureBlack,
       ) {
         val bottomSheetStrategy = remember { BottomSheetSceneStrategy<Destination.Compose>() }
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }

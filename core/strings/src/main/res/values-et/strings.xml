@@ -336,6 +336,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Dünaamiline värv</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Kasutab sinu taustapildi ja süsteemiteema värve.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice\'i sinine</string>
+    <string name="settings.appearance.pure_black.summary">Säästab tumedas kujunduses OLED-ekraanidel akut.</string>
+    <string name="settings.appearance.pure_black.title">Puhas must</string>
     <string name="settings.appearance.theme.dark">Tume</string>
     <string name="settings.appearance.theme.follow_system">Järgi süsteemi</string>
     <string name="settings.appearance.theme.light">Hele</string>

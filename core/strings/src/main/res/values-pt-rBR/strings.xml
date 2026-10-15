@@ -352,6 +352,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Cor dinâmica</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Usa as cores do seu papel de parede e do tema do sistema.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Azul Voice</string>
+    <string name="settings.appearance.pure_black.summary">Economiza bateria em telas OLED no tema escuro.</string>
+    <string name="settings.appearance.pure_black.title">Preto puro</string>
     <string name="settings.appearance.theme.dark">Escuro</string>
     <string name="settings.appearance.theme.follow_system">Seguir sistema</string>
     <string name="settings.appearance.theme.light">Claro</string>

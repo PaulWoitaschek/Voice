@@ -368,6 +368,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Kolor dynamiczny</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Używa kolorów z tapety i motywu systemowego.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Niebieski Voice</string>
+    <string name="settings.appearance.pure_black.summary">Oszczędza baterię na ekranach OLED w ciemnym motywie.</string>
+    <string name="settings.appearance.pure_black.title">Czysta czerń</string>
     <string name="settings.appearance.theme.dark">Ciemny</string>
     <string name="settings.appearance.theme.follow_system">Zgodnie z systemem</string>
     <string name="settings.appearance.theme.light">Jasny</string>

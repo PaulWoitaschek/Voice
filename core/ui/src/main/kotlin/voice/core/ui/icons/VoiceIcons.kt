@@ -1417,6 +1417,59 @@ object VoiceIcons {
       .build()
 
   /*
+   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/contrast.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+   * Generated: 2026-10-15T05:59:52Z
+   */
+  val Contrast: ImageVector =
+    ImageVector.Builder(
+      name = "Contrast",
+      defaultWidth = 24.dp,
+      defaultHeight = 24.dp,
+      viewportWidth = 24f,
+      viewportHeight = 24f,
+    )
+      .apply {
+        path(
+          fill = SolidColor(Color.Black),
+          fillAlpha = 1f,
+          stroke = null,
+          strokeAlpha = 1f,
+          strokeLineWidth = 1f,
+          strokeLineCap = StrokeCap.Butt,
+          strokeLineJoin = StrokeJoin.Bevel,
+          strokeLineMiter = 1f,
+          pathFillType = PathFillType.NonZero,
+        ) {
+          moveTo(8.1f, 21.21f)
+          quadTo(6.28f, 20.43f, 4.93f, 19.08f)
+          quadTo(3.58f, 17.73f, 2.79f, 15.9f)
+          reflectiveQuadTo(2f, 12f)
+          quadTo(2f, 9.92f, 2.79f, 8.1f)
+          quadTo(3.58f, 6.27f, 4.93f, 4.93f)
+          quadTo(6.28f, 3.57f, 8.1f, 2.79f)
+          quadTo(9.93f, 2f, 12f, 2f)
+          reflectiveQuadToRelative(3.9f, 0.79f)
+          reflectiveQuadToRelative(3.17f, 2.14f)
+          quadToRelative(1.35f, 1.35f, 2.14f, 3.17f)
+          quadTo(22f, 9.92f, 22f, 12f)
+          reflectiveQuadToRelative(-0.79f, 3.9f)
+          reflectiveQuadToRelative(-2.14f, 3.17f)
+          quadToRelative(-1.35f, 1.35f, -3.17f, 2.14f)
+          reflectiveQuadTo(12f, 22f)
+          quadTo(9.93f, 22f, 8.1f, 21.21f)
+          close()
+          moveTo(13f, 19.93f)
+          quadToRelative(2.98f, -0.38f, 4.99f, -2.61f)
+          reflectiveQuadTo(20f, 12f)
+          quadTo(20f, 8.92f, 17.99f, 6.69f)
+          reflectiveQuadTo(13f, 4.07f)
+          verticalLineTo(19.93f)
+          close()
+        }
+      }
+      .build()
+
+  /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/content_cut.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T05:36:18Z
    */

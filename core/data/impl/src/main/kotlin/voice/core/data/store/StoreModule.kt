@@ -70,6 +70,13 @@ public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
+  @PureBlackStore
+  private fun pureBlack(factory: VoiceDataStoreFactory): DataStore<Boolean> {
+    return factory.boolean("pureBlack", defaultValue = false)
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
   @AutoRewindAmountStore
   private fun autoRewindAmount(
     factory: VoiceDataStoreFactory,

@@ -24,7 +24,8 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 /**
- * Soft blobs of the theme's container colors drifting around as the [clock] ticks.
+ * Soft blobs of the theme's container colors drifting around as the [clock] ticks. A pure black
+ * theme stays black, so the blobs fade out there.
  * With [showStars], a field of twinkling sparkles fades in (the player shows them while a sleep
  * timer runs).
  */
@@ -39,6 +40,10 @@ fun AuroraBackground(
     targetValue = if (showStars) 1F else 0F,
     animationSpec = tween(durationMillis = 1500),
     label = "starAlpha",
+  )
+  val blobAlpha by animateFloatAsState(
+    targetValue = if (colorScheme.isPureBlack) 0F else 1F,
+    label = "blobAlpha",
   )
   val stars = remember { generateStars() }
   // Dark containers can still be quite bright (yellows especially), so keep the blobs subtle there
@@ -57,21 +62,26 @@ fun AuroraBackground(
         val h = size.height
         val radius = max(w, h) * 0.7F
         drawRect(colorScheme.surface)
-        drawBlob(
-          brush = primaryBlob,
-          center = Offset(w * (0.25F + 0.2F * sin(t * 0.21F)), h * (0.18F + 0.1F * cos(t * 0.17F))),
-          radius = radius * (1F + 0.08F * sin(t * 0.5F)),
-        )
-        drawBlob(
-          brush = tertiaryBlob,
-          center = Offset(w * (0.85F + 0.15F * cos(t * 0.19F + 1F)), h * (0.5F + 0.12F * sin(t * 0.23F))),
-          radius = radius * 0.85F,
-        )
-        drawBlob(
-          brush = secondaryBlob,
-          center = Offset(w * (0.2F + 0.25F * sin(t * 0.13F + 2F)), h * (0.95F + 0.06F * cos(t * 0.29F))),
-          radius = radius * (1F + 0.1F * cos(t * 0.4F)),
-        )
+        if (blobAlpha > 0F) {
+          drawBlob(
+            brush = primaryBlob,
+            center = Offset(w * (0.25F + 0.2F * sin(t * 0.21F)), h * (0.18F + 0.1F * cos(t * 0.17F))),
+            radius = radius * (1F + 0.08F * sin(t * 0.5F)),
+            alpha = blobAlpha,
+          )
+          drawBlob(
+            brush = tertiaryBlob,
+            center = Offset(w * (0.85F + 0.15F * cos(t * 0.19F + 1F)), h * (0.5F + 0.12F * sin(t * 0.23F))),
+            radius = radius * 0.85F,
+            alpha = blobAlpha,
+          )
+          drawBlob(
+            brush = secondaryBlob,
+            center = Offset(w * (0.2F + 0.25F * sin(t * 0.13F + 2F)), h * (0.95F + 0.06F * cos(t * 0.29F))),
+            radius = radius * (1F + 0.1F * cos(t * 0.4F)),
+            alpha = blobAlpha,
+          )
+        }
         if (starAlpha > 0F) {
           stars.forEach { star ->
             val twinkle = 0.25F + 0.75F * (0.5F + 0.5F * sin(t * star.speed + star.phase))
@@ -103,6 +113,7 @@ private fun DrawScope.drawBlob(
   brush: Brush,
   center: Offset,
   radius: Float,
+  alpha: Float,
 ) {
   withTransform(
     {
@@ -110,7 +121,7 @@ private fun DrawScope.drawBlob(
       scale(scaleX = radius, scaleY = radius, pivot = Offset.Zero)
     },
   ) {
-    drawCircle(brush = brush, radius = 1F, center = Offset.Zero)
+    drawCircle(brush = brush, radius = 1F, center = Offset.Zero, alpha = alpha)
   }
 }
 

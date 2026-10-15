@@ -21,7 +21,7 @@ import com.materialkolor.ktx.animateColorScheme
 /**
  * Seeds are cached (see [CoverSeedColors]), so a cover that was analyzed before themes the screen
  * from its very first frame. Until a seed is known the surrounding theme is used unchanged, and the
- * switch animates.
+ * switch animates. Light, dark and pure black follow the surrounding theme.
  */
 @Composable
 fun CoverTheme(
@@ -32,7 +32,10 @@ fun CoverTheme(
   val baseScheme = MaterialTheme.colorScheme
   val targetScheme = if (seed != null) {
     val dark = baseScheme.surface.luminance() < 0.5F
-    remember(seed, dark) { coverColorScheme(seed, dark) }
+    val pureBlack = baseScheme.isPureBlack
+    remember(seed, dark, pureBlack) {
+      coverColorScheme(seed, dark).let { if (pureBlack) it.withPureBlack() else it }
+    }
   } else {
     baseScheme
   }

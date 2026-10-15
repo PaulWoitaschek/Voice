@@ -368,6 +368,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Динамический цвет</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Использует цвета ваших обоев и системной темы.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Синий Voice</string>
+    <string name="settings.appearance.pure_black.summary">Экономит заряд батареи на OLED-экранах в тёмной теме.</string>
+    <string name="settings.appearance.pure_black.title">Полностью чёрный</string>
     <string name="settings.appearance.theme.dark">Тёмная</string>
     <string name="settings.appearance.theme.follow_system">Как в системе</string>
     <string name="settings.appearance.theme.light">Светлая</string>

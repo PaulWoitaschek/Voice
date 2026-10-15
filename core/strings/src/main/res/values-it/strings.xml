@@ -352,6 +352,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Colore dinamico</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Usa i colori dello sfondo e del tema di sistema.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Blu Voice</string>
+    <string name="settings.appearance.pure_black.summary">Risparmia batteria sugli schermi OLED con il tema scuro.</string>
+    <string name="settings.appearance.pure_black.title">Nero puro</string>
     <string name="settings.appearance.theme.dark">Scuro</string>
     <string name="settings.appearance.theme.follow_system">Segui il sistema</string>
     <string name="settings.appearance.theme.light">Chiaro</string>

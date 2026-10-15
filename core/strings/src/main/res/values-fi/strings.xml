@@ -336,6 +336,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Dynaaminen väri</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Käyttää taustakuvan ja järjestelmän teeman värejä.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice-sininen</string>
+    <string name="settings.appearance.pure_black.summary">Säästää akkua OLED-näytöillä tummassa teemassa.</string>
+    <string name="settings.appearance.pure_black.title">Puhdas musta</string>
     <string name="settings.appearance.theme.dark">Tumma</string>
     <string name="settings.appearance.theme.follow_system">Seuraa järjestelmää</string>
     <string name="settings.appearance.theme.light">Vaalea</string>

@@ -336,6 +336,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Dynamisk farge</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Bruker farger fra bakgrunnen og systemdrakten din.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice-blå</string>
+    <string name="settings.appearance.pure_black.summary">Sparer batteri på OLED-skjermer i mørk drakt.</string>
+    <string name="settings.appearance.pure_black.title">Helsvart</string>
     <string name="settings.appearance.theme.dark">Mørk</string>
     <string name="settings.appearance.theme.follow_system">Følg systemet</string>
     <string name="settings.appearance.theme.light">Lys</string>

@@ -336,6 +336,8 @@
     <string name="settings.appearance.color_scheme.dynamic">Dynamische kleur</string>
     <string name="settings.appearance.color_scheme.dynamic.summary">Gebruikt kleuren van je achtergrond en systeemthema.</string>
     <string name="settings.appearance.color_scheme.voice_blue">Voice-blauw</string>
+    <string name="settings.appearance.pure_black.summary">Bespaart batterij op OLED-schermen in het donkere thema.</string>
+    <string name="settings.appearance.pure_black.title">Puur zwart</string>
     <string name="settings.appearance.theme.dark">Donker</string>
     <string name="settings.appearance.theme.follow_system">Systeem volgen</string>
     <string name="settings.appearance.theme.light">Licht</string>

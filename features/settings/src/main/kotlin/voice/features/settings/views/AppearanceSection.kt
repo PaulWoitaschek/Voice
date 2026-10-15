@@ -70,6 +70,7 @@ import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
 import voice.core.ui.CheckBadge
 import voice.core.ui.MorphShape
+import voice.core.ui.ShapedIcon
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberThemeColorScheme
 import androidx.graphics.shapes.toPath as toAndroidPath
@@ -79,9 +80,11 @@ import voice.core.strings.R as StringsR
 internal fun AppearanceSection(
   themeMode: ThemeMode,
   themeColorScheme: ThemeColorScheme,
+  pureBlack: Boolean,
   dynamicColorAvailable: Boolean,
   onThemeModeSelect: (ThemeMode) -> Unit,
   onThemeColorSchemeSelect: (ThemeColorScheme) -> Unit,
+  onPureBlackToggle: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   // a stored dynamic scheme falls back to Voice blue where it's not supported, so that's what shows as selected
@@ -108,10 +111,29 @@ internal fun AppearanceSection(
             modifier = Modifier.weight(1F),
             themeMode = mode,
             themeColorScheme = selectedColorScheme,
+            pureBlack = pureBlack,
             selected = mode == themeMode,
             onClick = { onThemeModeSelect(mode) },
           )
         }
+      }
+      // it only changes the dark theme
+      AnimatedVisibility(visible = themeMode != ThemeMode.Light) {
+        IslandSwitchRow(
+          modifier = Modifier.padding(top = 12.dp),
+          title = stringResource(StringsR.string.settings_appearance_pure_black_title),
+          checked = pureBlack,
+          onCheckedChange = { onPureBlackToggle() },
+          leading = {
+            ShapedIcon(
+              icon = VoiceIcons.Contrast,
+              shape = MaterialShapes.Cookie12Sided,
+              containerColor = MaterialTheme.colorScheme.primary,
+              contentColor = MaterialTheme.colorScheme.onPrimary,
+            )
+          },
+          summary = { Text(stringResource(StringsR.string.settings_appearance_pure_black_summary)) },
+        )
       }
       Spacer(Modifier.height(24.dp))
       SectionLabel(stringResource(StringsR.string.settings_appearance_color_scheme_title))
@@ -150,12 +172,13 @@ private fun SectionLabel(text: String) {
 private fun ThemeModeTile(
   themeMode: ThemeMode,
   themeColorScheme: ThemeColorScheme,
+  pureBlack: Boolean,
   selected: Boolean,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val light = rememberThemeColorScheme(themeColorScheme, dark = false)
-  val dark = rememberThemeColorScheme(themeColorScheme, dark = true)
+  val dark = rememberThemeColorScheme(themeColorScheme, dark = true, pureBlack = pureBlack)
   val playPath = remember { MaterialShapes.Cookie9Sided.toAndroidPath().asComposePath() }
   val playIconPath = remember { playIconPath() }
   val splitPath = remember { Path() }
