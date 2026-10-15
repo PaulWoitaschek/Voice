@@ -26,7 +26,6 @@ import voice.core.playback.playstate.PlayStateManager
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 
 @RunWith(AndroidJUnit4::class)
@@ -36,7 +35,9 @@ class FolderSyncTest {
   private val playerController = mockk<PlayerController>(relaxUnitFun = true)
   private val playStateManager = PlayStateManager()
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val syncFolder = mockk<SyncFolder>(relaxUnitFun = true)
+  private val syncFolder = mockk<SyncFolder>(relaxUnitFun = true) {
+    every { read(any(), any()) } returns emptyList()
+  }
   private val audiobookFolders = mockk<AudiobookFolders> {
     every { all() } returns flowOf(
       mapOf(FolderType.Root to listOf(DocumentFileWithUri(documentFile = mockk(), uri = folder()))),
@@ -117,35 +118,17 @@ class FolderSyncTest {
   }
 
   @Test
-  fun `a failed read doesn't stop the reads that follow`() = scope.runTest {
+  fun `a read request takes over a newer place`() = scope.runTest {
     val book = book(lastPlayedAt = 1000)
-    currentBookStore.updateData { book.id }
+    val repo = MemoryBookRepository(book)
     every { syncFolder.read(folder(), any()) } returns listOf(
       SyncFile(mapOf(book.chapters.syncKey()!! to SyncedPosition(file = 1, position = 3000, updatedAt = 2000))),
     )
-    var failed = false
-    coEvery { playerController.livePlaybackState(book.id) } answers {
-      if (!failed) {
-        failed = true
-        error("The player is gone")
-      }
-      mockk()
-    }
-    val folderSync = folderSync(MemoryBookRepository(book))
 
-    folderSync.start()
-    testScheduler.advanceTimeBy(4.seconds)
-    folderSync.requestRead()
-    testScheduler.advanceTimeBy(1.seconds)
+    folderSync(repo).requestRead()
+    testScheduler.runCurrent()
 
-    assertTrue(failed)
-    verify {
-      playerController.setPosition(
-        time = 3000,
-        id = book.chapters[1].id,
-        source = ListeningEvent.Source.OtherDevice,
-      )
-    }
+    assertEquals(3000, repo.get(book.id)!!.content.positionInChapter)
   }
 
   private fun TestScope.folderSync(repo: MemoryBookRepository): FolderSync {

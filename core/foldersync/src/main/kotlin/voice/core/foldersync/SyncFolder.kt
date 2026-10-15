@@ -5,6 +5,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
 import dev.zacsweers.metro.Inject
+import java.io.IOException
 
 /**
  * The `.voice` folder inside a library folder. Its name starts with a dot, so the scanner skips it.
@@ -35,8 +36,8 @@ internal class SyncFolder(private val context: Context) {
   ) {
     val voiceFolder = childUri(folder, DocumentsContract.getTreeDocumentId(folder), FOLDER_NAME, Document.MIME_TYPE_DIR)
     val uri = childUri(folder, DocumentsContract.getDocumentId(voiceFolder), name, "application/json")
-    checkNotNull(context.contentResolver.openOutputStream(uri, "wt")) { "Can't write to $uri" }
-      .use { it.write(file.encode().toByteArray()) }
+    val stream = context.contentResolver.openOutputStream(uri, "wt") ?: throw IOException("Can't write to $uri")
+    stream.use { it.write(file.encode().toByteArray()) }
   }
 
   private fun childUri(
@@ -50,9 +51,8 @@ internal class SyncFolder(private val context: Context) {
       return DocumentsContract.buildDocumentUriUsingTree(folder, existing.id)
     }
     val parent = DocumentsContract.buildDocumentUriUsingTree(folder, parentId)
-    return checkNotNull(DocumentsContract.createDocument(context.contentResolver, parent, mimeType, name)) {
-      "Can't create $name in $parent"
-    }
+    return DocumentsContract.createDocument(context.contentResolver, parent, mimeType, name)
+      ?: throw IOException("Can't create $name in $parent")
   }
 
   private fun children(
