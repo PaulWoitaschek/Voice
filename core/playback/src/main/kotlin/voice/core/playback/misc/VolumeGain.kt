@@ -16,10 +16,8 @@ class VolumeGainSetter {
     gain: Decibel,
     audioSession: Int,
   ) {
-    Logger.v("set gain=$gain, session=$audioSession")
     if (gain == Decibel.Zero) {
       reset()
-      Logger.v("Decibel=Zero. Detach the effect.")
       return
     }
 
@@ -29,7 +27,6 @@ class VolumeGainSetter {
   }
 
   fun reset() {
-    Logger.v("reset")
     currentConfiguration?.loudnessEnhancer?.release()
     currentConfiguration = null
   }
@@ -44,9 +41,6 @@ class VolumeGainSetter {
     if (enhancer != null) {
       enhancer.setGain(gain)
       currentConfiguration = CurrentConfiguration(enhancer, gain, audioSession)
-      Logger.v("new configuration applied")
-    } else {
-      Logger.v("Could not apply new configuration.")
     }
   }
 
@@ -60,10 +54,8 @@ class VolumeGainSetter {
         configuration.loudnessEnhancer.setGain(gain)
         currentConfiguration = configuration.copy(gain = gain)
       }
-      Logger.v("configuration updated")
       return true
     } else {
-      Logger.v("configuration not updated.")
       return false
     }
   }
@@ -73,7 +65,7 @@ class VolumeGainSetter {
       setTargetGain(gain.milliBel)
     } catch (e: RuntimeException) {
       // throws random crashes. We catch and report them
-      Logger.d(e)
+      Logger.w(e, "Could not set the loudness gain")
     }
   }
 
@@ -84,7 +76,7 @@ class VolumeGainSetter {
       }
     } catch (e: RuntimeException) {
       // the enhancer actually throws these oO
-      Logger.d(e)
+      Logger.w(e, "Could not create the LoudnessEnhancer")
       return null
     }
   }
@@ -104,7 +96,6 @@ class VolumeGain(private val volumeGainSetter: VolumeGainSetter) {
   var audioSessionId: Int? by Delegates.observable(null) { _, _, _ -> updateLoudnessEnhancer() }
 
   private fun updateLoudnessEnhancer() {
-    Logger.v("updateLoudnessEnhancer(audioSessionId=$audioSessionId, gain=$gain")
     val audioSessionId = audioSessionId
     if (audioSessionId != null) {
       volumeGainSetter.set(gain, audioSessionId)

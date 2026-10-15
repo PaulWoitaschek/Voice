@@ -21,7 +21,6 @@ internal class StcoVisitor : AtomVisitor {
     } else {
       buffer.skipBytes(3) // flags
       val numberOfEntries = buffer.readUnsignedIntToInt()
-      Logger.v("Number of entries in stco: $numberOfEntries")
       val chunkOffsets = (0 until numberOfEntries).map { buffer.readUnsignedInt() }
       parseOutput.chunkOffsets.add(chunkOffsets)
     }

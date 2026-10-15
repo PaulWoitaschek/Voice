@@ -18,7 +18,7 @@ class BookSearchHandler(
 ) {
 
   suspend fun handle(search: VoiceSearch): Book? {
-    Logger.i("handle $search")
+    Logger.d("Voice search (focus=${search.mediaFocus})")
     return when (search.mediaFocus) {
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> searchByArtist(search)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
@@ -56,13 +56,11 @@ class BookSearchHandler(
       if (foundMatch != null) return foundMatch
     }
 
-    Logger.i("continuing from search without query")
     val currentId = currentBookStore.data.first()
     return findBook { it.content.id == currentId }
   }
 
   private suspend fun searchByArtist(search: VoiceSearch): Book? {
-    Logger.i("searchByArtist")
     if (search.artist != null) {
       val foundMatch = findBook {
         it.content.metadata.author?.contains(search.artist, ignoreCase = true) == true

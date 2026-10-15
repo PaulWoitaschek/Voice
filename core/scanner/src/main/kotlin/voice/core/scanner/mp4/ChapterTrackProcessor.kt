@@ -80,7 +80,7 @@ internal class ChapterTrackProcessor {
         durationEntryIndex = chunkDuration.durationEntryIndex
         samplesConsumedInDurationEntry = chunkDuration.samplesConsumedInDurationEntry
         if (!chunkDuration.hasEnoughDurations) {
-          Logger.w("Not enough sample durations for chunk ${chunkIndex + 1}")
+          Logger.v("Not enough sample durations for chunk ${chunkIndex + 1}")
         }
 
         MarkData(

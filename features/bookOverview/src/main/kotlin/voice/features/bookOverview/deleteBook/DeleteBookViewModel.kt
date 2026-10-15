@@ -59,7 +59,7 @@ class DeleteBookViewModel(
         .let { segments ->
           val result = segments.lastOrNull()?.removePrefix("primary:")
           if (result.isNullOrEmpty()) {
-            Logger.w("Could not determine path for $segments")
+            Logger.w("Could not determine the file name to show (${segments.size} segments)")
             segments.joinToString(separator = "\"")
           } else {
             result

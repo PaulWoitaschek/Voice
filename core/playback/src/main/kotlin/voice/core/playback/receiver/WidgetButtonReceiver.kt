@@ -39,9 +39,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
     context: Context,
     intent: Intent?,
   ) {
-    val action = Action.parse(intent)
-    Logger.d("onReceive ${intent?.action}. Parsed to $action")
-    action ?: return
+    val action = Action.parse(intent) ?: return
 
     rootGraphAs<Graph>().inject(this)
 
@@ -83,7 +81,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
         currentBookStore.updateData { id }
         player.play(ListeningEvent.Source.Widget)
       }
-      else -> Logger.w("Can't play $id, it's not in the library")
+      else -> Logger.d("Can't play a book that's not in the library")
     }
   }
 

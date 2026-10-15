@@ -21,7 +21,6 @@ import voice.core.data.isRemote
 import voice.core.data.markForPosition
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
-import voice.core.logging.api.Logger
 import java.io.IOException
 import java.time.Instant
 
@@ -55,8 +54,7 @@ internal class BookmarkSync(
         val itemId = book.id.itemId ?: return@forEach
         syncBook(api, book, itemId, serverByItem[itemId].orEmpty(), synced)
       }
-    } catch (e: IOException) {
-      Logger.d("Could not sync the bookmarks: $e")
+    } catch (_: IOException) {
     } finally {
       syncedBookmarksStore.updateData { synced.toMap() }
     }

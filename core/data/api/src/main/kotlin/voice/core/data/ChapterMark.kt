@@ -22,7 +22,7 @@ public data class ChapterMark(
 
   init {
     require(startMs < endMs) {
-      "Start must be less than end in $this"
+      "Start $startMs must be less than end $endMs"
     }
   }
 

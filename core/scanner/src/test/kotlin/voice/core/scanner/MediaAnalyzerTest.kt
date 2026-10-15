@@ -3,14 +3,11 @@ package voice.core.scanner
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.runBlocking
-import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.data.MarkData
 import voice.core.documentfile.FileBasedDocumentFile
-import voice.core.logging.api.LogWriter
-import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
 import voice.core.scanner.mp4.ChapterTrackProcessor
 import voice.core.scanner.mp4.Mp4BoxParser
@@ -190,33 +187,6 @@ internal class MediaAnalyzerTest {
       ),
       actual = metadata.chapters,
     )
-  }
-
-  companion object {
-
-    @BeforeClass
-    @JvmStatic
-    fun setup() {
-      Logger.install(
-        object : LogWriter {
-          override fun log(
-            severity: Logger.Severity,
-            message: String,
-            throwable: Throwable?,
-          ) {
-            println(
-              buildString {
-                append("${severity.name}: ")
-                append(message)
-                if (throwable != null) {
-                  append(", $throwable")
-                }
-              },
-            )
-          }
-        },
-      )
-    }
   }
 }
 

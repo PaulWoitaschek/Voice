@@ -59,11 +59,11 @@ internal class CoverScanner(
           }
           true
         } catch (e: IOException) {
-          Logger.w(e, "Error while copying the cover from ${child.uri}")
+          Logger.w(e, "Can't copy a cover image")
           false
         } catch (e: IllegalStateException) {
           // On some Samsung Devices, openInputStream throws this exception, though it should not.
-          Logger.w(e, "Error while copying the cover from ${child.uri}")
+          Logger.w(e, "Can't copy a cover image")
           false
         }
         if (worked) {

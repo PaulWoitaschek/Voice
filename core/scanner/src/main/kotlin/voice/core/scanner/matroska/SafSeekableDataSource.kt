@@ -25,13 +25,13 @@ internal class SafSeekableDataSource(
   init {
     try {
       parcelFileDescriptor = contentResolver.openFileDescriptor(uri, "r")
-        ?: throw IOException("Cannot open URI as seekable source: $uri")
+        ?: throw IOException("Cannot open URI as seekable source")
       val fileDescriptor = parcelFileDescriptor.fileDescriptor
       fileInputStream = FileInputStream(fileDescriptor)
       fileChannel = fileInputStream.channel
       length = fileChannel.size()
     } catch (e: Exception) {
-      throw MatroskaParseException("Cannot open URI as seekable source: $uri", e)
+      throw MatroskaParseException("Cannot open URI as seekable source", e)
     }
   }
 

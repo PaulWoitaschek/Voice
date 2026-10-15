@@ -37,7 +37,7 @@ internal class SyncFiles(private val context: Context) {
   ) {
     val voiceFolder = childUri(folder, DocumentsContract.getTreeDocumentId(folder), FOLDER_NAME, Document.MIME_TYPE_DIR)
     val uri = childUri(folder, DocumentsContract.getDocumentId(voiceFolder), name, "application/json")
-    val stream = context.contentResolver.openOutputStream(uri, "wt") ?: throw IOException("Can't write to $uri")
+    val stream = context.contentResolver.openOutputStream(uri, "wt") ?: throw IOException("Can't write a sync file")
     stream.use { it.write(file.encode().toByteArray()) }
   }
 
@@ -53,7 +53,7 @@ internal class SyncFiles(private val context: Context) {
     }
     val parent = DocumentsContract.buildDocumentUriUsingTree(folder, parentId)
     return DocumentsContract.createDocument(context.contentResolver, parent, mimeType, name)
-      ?: throw IOException("Can't create $name in $parent")
+      ?: throw IOException("Can't create a $mimeType document")
   }
 
   private fun children(

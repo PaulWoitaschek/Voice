@@ -88,7 +88,7 @@ public class FolderSync internal constructor(
           val file = books.keyedIn(folder).toSyncFile()
           // a folder without a book that was played here gets no .voice folder
           if (file.books.isEmpty() || written[folder] == file) return@forEach
-          inFolder(folder) { syncFiles.write(folder, ownFileName, file) }
+          inFolder { syncFiles.write(folder, ownFileName, file) }
             ?.let { written[folder] = file }
         }
       }
@@ -110,7 +110,7 @@ public class FolderSync internal constructor(
       .associateWith { books.keyedIn(it) }
       .filterValues { it.isNotEmpty() }
     val remote = keyedByFolder.keys
-      .flatMap { folder -> inFolder(folder) { syncFiles.read(folder, exceptName = ownFileName) }.orEmpty() }
+      .flatMap { folder -> inFolder { syncFiles.read(folder, exceptName = ownFileName) }.orEmpty() }
       .newest()
     keyedByFolder.values.flatten().forEach { (key, book) ->
       remote[key]?.let { takeOver(book.id, it) }
@@ -128,7 +128,7 @@ public class FolderSync internal constructor(
       // what plays here is newer than anything another device wrote
       return
     }
-    Logger.d("Taking over the position of ${book.content.name} from another device")
+    Logger.d("Taking over a position from another device (current=$isCurrent)")
     if (isCurrent && playerController.livePlaybackState(bookId) != null) {
       playerController.setPosition(
         time = position.positionInChapter,
@@ -148,21 +148,18 @@ public class FolderSync internal constructor(
     }
   }
 
-  private inline fun <T> inFolder(
-    folder: Uri,
-    action: () -> T,
-  ): T? = try {
+  private inline fun <T> inFolder(action: () -> T): T? = try {
     action()
   } catch (e: IOException) {
-    Logger.w(e, "Could not sync through $folder")
+    Logger.w(e, "Could not sync through a folder")
     null
   } catch (e: SecurityException) {
     // the listener took away the access to the folder
-    Logger.w(e, "Could not sync through $folder")
+    Logger.w(e, "Could not sync through a folder")
     null
   } catch (e: IllegalArgumentException) {
     // how the storage provider reports a file or storage that went away since the last query
-    Logger.w(e, "Could not sync through $folder")
+    Logger.w(e, "Could not sync through a folder")
     null
   }
 

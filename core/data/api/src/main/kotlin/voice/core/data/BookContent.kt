@@ -39,7 +39,7 @@ public data class BookContent(
 
   init {
     require(currentChapter in chapters && positionInChapter >= 0) {
-      "invalid data in $this"
+      "Invalid data: chapter $currentChapterIndex of ${chapters.size}, position $positionInChapter"
     }
   }
 

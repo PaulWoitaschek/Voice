@@ -141,7 +141,7 @@ class SelectFolderTypeViewModel(
       } catch (e: CancellationException) {
         throw e
       } catch (e: Exception) {
-        Logger.w(e, "Could not analyze ${book.file}")
+        Logger.w(e, "Could not preview a book")
         failedPreviews += uri
       }
     }

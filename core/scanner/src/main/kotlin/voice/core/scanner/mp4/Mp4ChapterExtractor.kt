@@ -43,8 +43,7 @@ internal class Mp4ChapterExtractor(
     } finally {
       try {
         dataSource.close()
-      } catch (e: IOException) {
-        Logger.w(e, "Error closing data source")
+      } catch (_: IOException) {
       }
     }
   }

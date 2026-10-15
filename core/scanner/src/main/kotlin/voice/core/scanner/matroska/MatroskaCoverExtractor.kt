@@ -22,7 +22,6 @@ internal class MatroskaCoverExtractor(private val context: Context) {
     val mimeType: String?,
     val description: String?,
     val data: ByteArray,
-    val priority: Int,
   )
 
   fun extract(
@@ -44,7 +43,6 @@ internal class MatroskaCoverExtractor(private val context: Context) {
 
         segment.forEachChild(dataSource, reader) { child ->
           if (child.isType(MatroskaDocTypes.Attachments)) {
-            Logger.d("Found Attachments segment")
             child.forEachChild(dataSource, reader) { attachmentChild ->
               if (attachmentChild.isType(MatroskaDocTypes.AttachedFile)) {
                 val attachment = processAttachment(dataSource, reader, attachmentChild)
@@ -59,16 +57,14 @@ internal class MatroskaCoverExtractor(private val context: Context) {
         val bestCover = findBestCover(attachments)
         if (bestCover != null) {
           outputFile.writeBytes(bestCover.data)
-          Logger.d("Extracted cover: ${bestCover.filename} (priority: ${bestCover.priority})")
           return true
         }
 
-        Logger.d("No cover art found in Matroska attachments")
         false
       }
     } catch (e: RuntimeException) {
       // jebml throws undeclared exceptions, so we need to wrap them
-      Logger.w(e, "Error extracting cover from Matroska file: $input")
+      Logger.w(e, "Can't extract the Matroska cover")
       return false
     }
   }
@@ -87,27 +83,22 @@ internal class MatroskaCoverExtractor(private val context: Context) {
       when {
         child.isType(MatroskaDocTypes.FileName.type) -> {
           filename = child.readString(dataSource)
-          Logger.d("Found filename: $filename")
         }
         child.isType(MatroskaDocTypes.FileMimeType.type) -> {
           mimeType = child.readString(dataSource)
-          Logger.d("Found mimetype: $mimeType")
         }
         child.isType(MatroskaDocTypes.FileDescription.type) -> {
           description = child.readString(dataSource)
-          Logger.d("Found description: $description")
         }
         child.isType(MatroskaDocTypes.FileData) -> {
           child.readData(dataSource)
           data = child.dataArray
-          Logger.d("Found file data: ${data?.size} bytes")
         }
       }
     }
 
     return if (data != null && isImageMimeType(mimeType)) {
-      val priority = calculatePriority(filename = filename, description = description)
-      AttachmentInfo(filename = filename, mimeType = mimeType, description = description, data = data, priority = priority)
+      AttachmentInfo(filename = filename, mimeType = mimeType, description = description, data = data)
     } else {
       null
     }

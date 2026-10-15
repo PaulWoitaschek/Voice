@@ -45,7 +45,7 @@ class FirebaseRemoteConfigImpl : RemoteConfig {
     try {
       firebaseRemoteConfig.fetchAndActivate().await()
     } catch (e: Exception) {
-      Logger.w(e)
+      Logger.w(e, "Can't refresh the remote config")
     }
   }
 }

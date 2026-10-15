@@ -119,7 +119,7 @@ internal class BookParser(
         .removePrefix("/storage/emulated/")
         .removePrefix("/storage/")
         .also {
-          Logger.w("Could not parse fileName from $this. Fallback to $it")
+          Logger.w("Document has no display name, using its URI as the book name")
         }
     } else {
       if (isFile) {

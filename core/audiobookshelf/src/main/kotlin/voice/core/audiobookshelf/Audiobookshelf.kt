@@ -151,20 +151,16 @@ public class Audiobookshelf internal constructor(
       val response = try {
         http.api(url).status()
       } catch (e: SSLException) {
-        Logger.d("$url: $e")
         // https against a port that only speaks http fails too, that is no certificate problem
         if (e.isCertificateProblem()) certificateNotTrusted = true
         unreachableOrigins += origin
         continue
-      } catch (e: IOException) {
-        Logger.d("$url: $e")
+      } catch (_: IOException) {
         unreachableOrigins += origin
         continue
-      } catch (e: HttpException) {
-        Logger.d("$url: $e")
+      } catch (_: HttpException) {
         continue
-      } catch (e: SerializationException) {
-        Logger.d("$url: $e")
+      } catch (_: SerializationException) {
         continue
       }
       val status = response.body()?.takeIf { response.isSuccessful } ?: continue
@@ -175,7 +171,7 @@ public class Audiobookshelf internal constructor(
       // a server that redirects, like from http to https, lives where the redirect ends
       val finalUrl = response.raw().request.url
       if (httpUrl.isHttps && !finalUrl.isHttps && !isLocalHost(finalUrl.host)) {
-        Logger.w("$url redirects to $finalUrl, which would send the password without encryption")
+        Logger.d("A server candidate redirects from https to http, skipping it")
         continue
       }
       val serverUrl = finalUrl.toString().let { if (it.endsWith("/status")) it.removeSuffix("status") else url }
@@ -235,8 +231,7 @@ public class Audiobookshelf internal constructor(
       )
     } catch (e: HttpException) {
       if (e.code() == 401) LoginResult.WrongCredentials else LoginResult.Failed
-    } catch (e: IOException) {
-      Logger.d("Could not log in: $e")
+    } catch (_: IOException) {
       LoginResult.Unreachable
     } catch (e: SerializationException) {
       // something in front of the server, like a proxy with its own login page, answered instead
@@ -279,11 +274,10 @@ public class Audiobookshelf internal constructor(
         },
         covers = covers,
       )
-    } catch (e: IOException) {
-      Logger.d("Could not load the libraries: $e")
+    } catch (_: IOException) {
       null
     } catch (e: HttpException) {
-      Logger.w(e, "Could not load the libraries")
+      Logger.w(e, "Could not load the libraries: HTTP ${e.code()}")
       null
     } catch (e: SerializationException) {
       Logger.w(e, "Could not load the libraries")
@@ -312,8 +306,7 @@ public class Audiobookshelf internal constructor(
         file.outputStream().use { output -> response.body.byteStream().copyTo(output) }
         file
       }
-    } catch (e: IOException) {
-      Logger.d("Could not load a cover: $e")
+    } catch (_: IOException) {
       null
     }
   }
@@ -372,11 +365,9 @@ public class Audiobookshelf internal constructor(
     sync.onSignedOut()
     // last, as a server that can't be reached takes a while to answer
     try {
-      http.api(account.serverUrl).logout(account.refreshToken).let { response ->
-        if (!response.isSuccessful) Logger.d("Logging out failed with ${response.code()}")
-      }
-    } catch (e: IOException) {
-      Logger.d("Could not log out: $e")
+      @Suppress("RETURN_VALUE_NOT_USED")
+      http.api(account.serverUrl).logout(account.refreshToken)
+    } catch (_: IOException) {
     }
   }
 }

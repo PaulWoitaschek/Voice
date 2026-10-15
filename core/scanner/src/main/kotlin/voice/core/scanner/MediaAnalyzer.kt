@@ -37,8 +37,9 @@ internal class MediaAnalyzer(
     val builder = Metadata.Builder(file.nameWithoutExtension())
     val (duration, trackGroups) = retrieveDurationAndTrackGroups(file.uri)
       ?: return null
+    val extension = (file.name ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
     if (duration <= Duration.ZERO) {
-      Logger.w("Duration is zero or negative for file: ${file.uri}")
+      Logger.w("Duration is zero or negative for a .$extension file")
       return null
     }
 
@@ -54,7 +55,6 @@ internal class MediaAnalyzer(
                 is ChapterFrame -> visitChapter(entry, builder)
                 is VorbisComment -> visitVorbis(entry, builder)
                 is MdtaMetadataEntry -> visitMdta(entry, builder)
-                else -> Logger.d("Unknown metadata entry: $entry")
               }
             }
           }
@@ -63,7 +63,6 @@ internal class MediaAnalyzer(
     }
 
     val fileType = FileTypes.inferFileTypeFromUri(file.uri)
-    val extension = (file.name ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
     if (fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b") {
       parseMp4Chapters(file, builder)
     }
@@ -144,7 +143,6 @@ internal class MediaAnalyzer(
           }
         }
       }
-      else -> Logger.d("Unknown comment name: ${entry.key}, value: $value")
     }
   }
 
@@ -176,10 +174,10 @@ internal class MediaAnalyzer(
         "MVIN" -> builder.part = if (builder.part.isNullOrBlank()) value else builder.part
         "TXXX:PART" -> builder.part = value
         "TXXX:NARRATOR" -> builder.narrator = if (builder.narrator.isNullOrBlank()) value else builder.narrator
-        else -> Logger.v("Unknown TXXX frame description:  ${entry.description}, value: $value")
+        else -> Logger.v("Unknown TXXX frame description: ${entry.description}")
       }
       "TRCK", "TYER", "TSSE" -> {}
-      else -> Logger.v("Unknown frame ID: ${entry.id}, value: $value")
+      else -> Logger.v("Unknown frame ID: ${entry.id}")
     }
   }
 

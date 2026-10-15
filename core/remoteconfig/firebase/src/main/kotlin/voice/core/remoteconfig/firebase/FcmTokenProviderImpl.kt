@@ -15,7 +15,7 @@ class FcmTokenProviderImpl : FmcTokenProvider {
       FirebaseInstallations.getInstance().getToken(true)
         .await()
     } catch (e: Exception) {
-      Logger.w(e)
+      Logger.w(e, "Can't get the installation token")
       return null
     }
     return tokenResult.token

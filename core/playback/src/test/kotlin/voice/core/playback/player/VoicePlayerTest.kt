@@ -33,8 +33,6 @@ import voice.core.data.ChapterMark
 import voice.core.data.ListeningEvent
 import voice.core.data.MarkData
 import voice.core.data.repo.ListeningHistoryRepo
-import voice.core.logging.api.LogWriter
-import voice.core.logging.api.Logger
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
@@ -58,21 +56,6 @@ import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
 class VoicePlayerTest {
-
-  init {
-    Logger.install(
-      object : LogWriter {
-        override fun log(
-          severity: Logger.Severity,
-          message: String,
-          throwable: Throwable?,
-        ) {
-          println("$severity: $message")
-          throwable?.printStackTrace()
-        }
-      },
-    )
-  }
 
   private val seekTimeStore = MemoryDataStore(2)
   private val autoRewindAmountStore = MemoryDataStore(2)

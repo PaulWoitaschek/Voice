@@ -93,7 +93,7 @@ public class AudiobookshelfDownloads internal constructor(
             download: Download,
             finalException: Exception?,
           ) {
-            if (finalException != null) Logger.w(finalException, "Could not download ${download.request.id}")
+            if (finalException != null) Logger.w(finalException, "A download failed")
             files.update { it + (download.request.id to download.snapshot()) }
             keepTickingWhileDownloading()
           }
