@@ -63,7 +63,7 @@
     <string name="book.category.action.mark_not_started">Markeren als nog niet aan begonnen</string>
     <string name="book.delete.bottom_sheet.title">Boek verwijderen</string>
     <string name="book.delete.dialog.confirm_files">Mijn bestanden verwijderen</string>
-    <string name="book.delete.dialog.message">Hierdoor worden alle bestanden op je apparaat verwijderd.</string>
+    <string name="book.delete.dialog.message">De bestanden worden voorgoed van je apparaat verwijderd. Je kunt ze niet terugkrijgen.</string>
     <string name="book.delete.dialog.title">Boek verwijderen</string>
     <string name="book.download.action">Downloaden</string>
     <string name="book.download.failed">De download is niet gelukt</string>

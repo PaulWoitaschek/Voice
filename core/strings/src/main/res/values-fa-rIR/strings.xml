@@ -63,7 +63,7 @@
     <string name="book.category.action.mark_not_started">علامت زدن به عنوان شروع نشده</string>
     <string name="book.delete.bottom_sheet.title">پاک کردن کتاب</string>
     <string name="book.delete.dialog.confirm_files">فایلهای من را پاک کن</string>
-    <string name="book.delete.dialog.message">با این کار فایل های موجود در دستگاه شما حذف می شود.</string>
+    <string name="book.delete.dialog.message">فایل‌ها برای همیشه از دستگاه شما حذف می‌شوند. دیگر نمی‌توانید آن‌ها را برگردانید.</string>
     <string name="book.delete.dialog.title">پاک کردن کتاب</string>
     <string name="book.download.action">دانلود</string>
     <string name="book.download.failed">دانلود کامل نشد</string>

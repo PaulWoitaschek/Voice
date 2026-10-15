@@ -69,7 +69,7 @@
     <string name="book.category.action.mark_not_started">Пометить как непрослушанную</string>
     <string name="book.delete.bottom_sheet.title">Удалить книгу</string>
     <string name="book.delete.dialog.confirm_files">Удалить файлы</string>
-    <string name="book.delete.dialog.message">Это действие удалит файлы книги с устройства.</string>
+    <string name="book.delete.dialog.message">Файлы будут навсегда удалены с вашего устройства. Восстановить их не получится.</string>
     <string name="book.delete.dialog.title">Удалить книгу</string>
     <string name="book.download.action">Скачать</string>
     <string name="book.download.failed">Скачивание не завершилось</string>

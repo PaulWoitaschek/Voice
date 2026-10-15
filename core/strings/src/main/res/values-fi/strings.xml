@@ -63,7 +63,7 @@
     <string name="book.category.action.mark_not_started">Merkitse ei vielä aloitetuksi</string>
     <string name="book.delete.bottom_sheet.title">Poista kirja</string>
     <string name="book.delete.dialog.confirm_files">Poista tiedostoni</string>
-    <string name="book.delete.dialog.message">Tämä poistaa tiedostot laitteeltasi.</string>
+    <string name="book.delete.dialog.message">Tiedostot poistetaan laitteeltasi pysyvästi. Et voi palauttaa niitä.</string>
     <string name="book.delete.dialog.title">Poista kirja</string>
     <string name="book.download.action">Lataa</string>
     <string name="book.download.failed">Lataus ei onnistunut</string>

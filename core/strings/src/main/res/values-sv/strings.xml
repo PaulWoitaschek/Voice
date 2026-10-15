@@ -63,7 +63,7 @@
     <string name="book.category.action.mark_not_started">Markera som inte påbörjad</string>
     <string name="book.delete.bottom_sheet.title">Ta bort bok</string>
     <string name="book.delete.dialog.confirm_files">Ta bort mina filer</string>
-    <string name="book.delete.dialog.message">Detta kommer att radera filerna på din enhet.</string>
+    <string name="book.delete.dialog.message">Filerna tas bort permanent från din enhet. Du kan inte få tillbaka dem.</string>
     <string name="book.delete.dialog.title">Ta bort bok</string>
     <string name="book.download.action">Ladda ned</string>
     <string name="book.download.failed">Nedladdningen blev inte klar</string>

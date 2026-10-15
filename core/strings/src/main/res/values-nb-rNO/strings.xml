@@ -63,7 +63,7 @@
     <string name="book.category.action.mark_not_started">Marker som ikke startet enda</string>
     <string name="book.delete.bottom_sheet.title">Slett bok</string>
     <string name="book.delete.dialog.confirm_files">Slett filene mine</string>
-    <string name="book.delete.dialog.message">Dette sletter filene på enheten din.</string>
+    <string name="book.delete.dialog.message">Filene slettes permanent fra enheten din. Du kan ikke få dem tilbake.</string>
     <string name="book.delete.dialog.title">Slett bok</string>
     <string name="book.download.action">Last ned</string>
     <string name="book.download.failed">Nedlastingen ble ikke fullført</string>

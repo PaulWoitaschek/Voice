@@ -60,7 +60,7 @@
     <string name="book.category.action.mark_not_started">未再生としてマーク</string>
     <string name="book.delete.bottom_sheet.title">ブックを削除</string>
     <string name="book.delete.dialog.confirm_files">ファイルを削除</string>
-    <string name="book.delete.dialog.message">これにより、デバイス上のファイルが削除されます。</string>
+    <string name="book.delete.dialog.message">ファイルはデバイスから完全に削除されます。元に戻すことはできません。</string>
     <string name="book.delete.dialog.title">ブックの削除</string>
     <string name="book.download.action">ダウンロード</string>
     <string name="book.download.failed">ダウンロードが完了しませんでした</string>

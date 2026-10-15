@@ -64,10 +64,10 @@
     <string name="book.category.action.mark_completed">Marcar como Concluído</string>
     <string name="book.category.action.mark_current">Marca com Actual</string>
     <string name="book.category.action.mark_not_started">Marca como não iniciado</string>
-    <string name="book.delete.bottom_sheet.title">Deletar livro</string>
-    <string name="book.delete.dialog.confirm_files">Deletar os meus ficheiros</string>
-    <string name="book.delete.dialog.message">Isso deletará os ficheiros no seu aparelho.</string>
-    <string name="book.delete.dialog.title">Deletar livro</string>
+    <string name="book.delete.bottom_sheet.title">Apagar livro</string>
+    <string name="book.delete.dialog.confirm_files">Apagar os meus ficheiros</string>
+    <string name="book.delete.dialog.message">Os ficheiros serão apagados definitivamente do dispositivo. Não será possível recuperá-los.</string>
+    <string name="book.delete.dialog.title">Apagar livro</string>
     <string name="book.download.action">Transferir</string>
     <string name="book.download.failed">A transferência não foi concluída</string>
     <string name="book.download.progress">%1$s de %2$s</string>

@@ -58,6 +58,7 @@ Listeners who care about privacy would rather do without cover images than have 
 
 - A free build without Google libraries, on F-Droid, for listeners who don't want them ([#944]).
 - Analytics only with consent, asked during onboarding and changeable in Settings.
+- A [privacy policy](../PRIVACY.md) that lists everything Voice sends, for each build.
 
 ## I don't know which version to install
 
@@ -95,11 +96,9 @@ To decide what to build, the maintainer needs to know what listeners want and ho
 
 ## Open questions
 
-1. Does [PRIVACY.md](../PRIVACY.md) describe what Voice actually does? It reads like a generic template: it mentions
-   location data and marketing, which doesn't match opt-in, anonymous analytics.
-2. Crash reporting was removed in 2024 ([#2439]) and added back in 2025. Why?
-3. Is email enough as a way to get help without a GitHub account?
-4. The [design principles] say prompts "ask once", but the rating prompt can ask up to 3 times. Which one is right?
+1. Crash reporting was removed in 2024 ([#2439]) and added back in 2025. Why?
+2. Is email enough as a way to get help without a GitHub account?
+3. The [design principles] say prompts "ask once", but the rating prompt can ask up to 3 times. Which one is right?
 
 [design principles]: ../.agents/skills/design/SKILL.md
 [#526]: https://github.com/PaulWoitaschek/Voice/issues/526

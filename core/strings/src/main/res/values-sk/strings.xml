@@ -69,7 +69,7 @@
     <string name="book.category.action.mark_not_started">Označiť ako ešte nepočúvané</string>
     <string name="book.delete.bottom_sheet.title">Zmazať knihu</string>
     <string name="book.delete.dialog.confirm_files">Vymazať moje súbory</string>
-    <string name="book.delete.dialog.message">Týmto odstránite súbory zo zariadenia.</string>
+    <string name="book.delete.dialog.message">Súbory sa natrvalo odstránia z vášho zariadenia. Už ich nebude možné obnoviť.</string>
     <string name="book.delete.dialog.title">Vymazať knihu</string>
     <string name="book.download.action">Stiahnuť</string>
     <string name="book.download.failed">Sťahovanie sa nepodarilo dokončiť</string>
