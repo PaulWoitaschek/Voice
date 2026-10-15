@@ -26,7 +26,6 @@ private fun Cursor.parseRows(
     val documentUri = DocumentsContract.buildDocumentUriUsingTree(uri, documentId)
     val contents = FileContents.readFrom(this)
     if (contents.name?.startsWith(".") == true) {
-      Logger.v("Ignoring hidden file $contents")
       continue
     }
     files += RealCachedDocumentFile(context, documentUri, contents)
@@ -48,7 +47,7 @@ private fun Context.query(uri: Uri): Cursor? {
       null,
     )
   } catch (e: Exception) {
-    Logger.w(e, "Can't parse contents for $uri")
+    Logger.w(e, "Can't list the contents of a folder")
     null
   }
 }

@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity() {
                     try {
                       startActivity(Intent(Intent.ACTION_VIEW, destination.url.toUri()))
                     } catch (exception: ActivityNotFoundException) {
-                      Logger.w(exception)
+                      Logger.w(exception, "No app to open a website")
                     }
                   }
                 }

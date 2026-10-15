@@ -79,7 +79,7 @@ public class BookRepositoryImpl(
       chapters = chapters.map { chapterId ->
         val chapter = chapterRepo.get(chapterId)
         if (chapter == null) {
-          Logger.w("Missing chapter with id=$chapterId for $this")
+          Logger.w("A book misses one of its ${chapters.size} chapters")
           return null
         }
         chapter

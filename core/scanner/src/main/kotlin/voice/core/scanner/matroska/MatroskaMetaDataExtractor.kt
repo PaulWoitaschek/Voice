@@ -72,7 +72,7 @@ internal class MatroskaMetaDataExtractor(
     )
   } catch (e: RuntimeException) {
     // jebml throws undeclared exceptions, so we need wrap them :/
-    throw MatroskaParseException("Failed to read Matroska metadata: ${e.message}", e)
+    throw MatroskaParseException("Failed to read Matroska metadata", e)
   }
 
   private fun readChapters(element: Element): List<MatroskaChapter> {

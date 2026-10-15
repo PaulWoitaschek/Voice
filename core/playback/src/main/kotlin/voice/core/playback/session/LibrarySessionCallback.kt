@@ -72,7 +72,6 @@ class LibrarySessionCallback(
     controller: ControllerInfo,
     mediaItems: MutableList<MediaItem>,
   ): ListenableFuture<List<MediaItem>> {
-    Logger.d("onAddMediaItems")
     return scope.future {
       mediaItems.map { item ->
         mediaItemProvider.item(item.mediaId) ?: item
@@ -124,7 +123,7 @@ class LibrarySessionCallback(
     } else {
       mediaItemProvider.root()
     }
-    Logger.d("onGetLibraryRoot(isRecent=${params?.isRecent == true}). Returning ${mediaItem.mediaId}")
+    Logger.d("onGetLibraryRoot(isRecent=${params?.isRecent == true})")
     return Futures.immediateFuture(LibraryResult.ofItem(mediaItem, params))
   }
 
@@ -133,7 +132,6 @@ class LibrarySessionCallback(
     browser: ControllerInfo,
     mediaId: String,
   ): ListenableFuture<LibraryResult<MediaItem>> = scope.future {
-    Logger.d("onGetItem(mediaId=$mediaId)")
     val item = mediaItemProvider.item(mediaId)
     if (item != null) {
       LibraryResult.ofItem(item, null)
@@ -150,7 +148,6 @@ class LibrarySessionCallback(
     pageSize: Int,
     params: LibraryParams?,
   ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.future {
-    Logger.d("onGetChildren for $parentId")
     val children = mediaItemProvider.children(parentId)
     if (children != null) {
       LibraryResult.ofItemList(children, params)
@@ -184,12 +181,18 @@ class LibrarySessionCallback(
     session: MediaSession,
     controller: ControllerInfo,
   ): ConnectionResult {
-    Logger.d("onConnect to ${controller.packageName}")
+    if (controller.packageName != context.packageName) {
+      val controllerKind = when {
+        session.isAutoCompanionController(controller) -> "Android Auto"
+        session.isAutomotiveController(controller) -> "Android Automotive"
+        else -> "another app"
+      }
+      Logger.d("onConnect from $controllerKind")
+    }
 
     if (player.playbackState == Player.STATE_IDLE &&
       controller.packageName == "com.google.android.projection.gearhead"
     ) {
-      Logger.d("onConnect to ${controller.packageName} and player is idle.")
       Logger.d("Preparing current book so it shows up as recently played")
       scope.launch {
         prepareCurrentBook()

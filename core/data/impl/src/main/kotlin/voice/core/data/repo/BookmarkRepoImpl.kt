@@ -13,7 +13,6 @@ import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.transaction
 import voice.core.data.runForMaxSqlVariableNumber
-import voice.core.logging.api.Logger
 import java.time.Clock
 
 @ContributesBinding(AppScope::class)
@@ -46,7 +45,6 @@ internal constructor(
         bookId = book.id,
       )
       addBookmark(bookMark)
-      Logger.v("Added bookmark=$bookMark")
       bookMark
     }
   }

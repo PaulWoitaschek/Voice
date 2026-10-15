@@ -90,7 +90,7 @@ class PlayBilling(context: Context) : Billing {
       .build()
     val result = client.queryProductDetails(params)
     if (result.billingResult.responseCode != BillingResponseCode.OK) {
-      Logger.w("Querying $type products failed: ${result.billingResult.debugMessage}")
+      Logger.w("Querying $type products failed with ${result.billingResult.responseCode}: ${result.billingResult.debugMessage}")
       return null
     }
     return result.productDetailsList.orEmpty()
@@ -101,7 +101,7 @@ class PlayBilling(context: Context) : Billing {
     return listOf(ProductType.SUBS, ProductType.INAPP).flatMap { type ->
       val result = client.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(type).build())
       if (result.billingResult.responseCode != BillingResponseCode.OK) {
-        Logger.w("Querying $type purchases failed: ${result.billingResult.debugMessage}")
+        Logger.w("Querying $type purchases failed with ${result.billingResult.responseCode}: ${result.billingResult.debugMessage}")
         return null
       }
       result.purchasesList.mapNotNull { it.toBillingPurchase() }
@@ -156,7 +156,7 @@ class PlayBilling(context: Context) : Billing {
       .build()
     val result = client.launchBillingFlow(activity, flowParams)
     if (!result.isOk()) {
-      Logger.w("Launching the purchase of $productId failed: ${result.debugMessage}")
+      Logger.w("Launching the purchase of $productId failed with ${result.responseCode}: ${result.debugMessage}")
     }
     return result.isOk()
   }
@@ -169,7 +169,7 @@ class PlayBilling(context: Context) : Billing {
         object : BillingClientStateListener {
           override fun onBillingSetupFinished(result: BillingResult) {
             if (!result.isOk()) {
-              Logger.w("Billing setup failed: ${result.debugMessage}")
+              Logger.w("Billing setup failed with ${result.responseCode}: ${result.debugMessage}")
             }
             if (continuation.isActive) continuation.resume(result.isOk())
           }

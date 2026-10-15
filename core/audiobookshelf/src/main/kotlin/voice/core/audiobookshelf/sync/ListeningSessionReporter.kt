@@ -138,10 +138,9 @@ internal class ListeningSessionReporter(
       // the server forgets sessions when it restarts
       if (response.code() == 404) session = null
       Logger.w("Could not sync the listening session: ${response.code()}")
-    } catch (e: IOException) {
-      Logger.d("Could not sync the listening session: $e")
+    } catch (_: IOException) {
     } catch (e: HttpException) {
-      Logger.w(e, "Could not start a listening session")
+      Logger.w(e, "Could not start a listening session: HTTP ${e.code()}")
     } catch (e: SerializationException) {
       Logger.w(e, "Could not start a listening session")
     }
@@ -155,10 +154,9 @@ internal class ListeningSessionReporter(
     session = null
     val account = accountStore.data.first() ?: return@withLock
     try {
-      val response = http.authenticatedApi(account.serverUrl).closeSession(closing.id)
-      if (!response.isSuccessful) Logger.d("Could not close the listening session: ${response.code()}")
-    } catch (e: IOException) {
-      Logger.d("Could not close the listening session: $e")
+      @Suppress("RETURN_VALUE_NOT_USED")
+      http.authenticatedApi(account.serverUrl).closeSession(closing.id)
+    } catch (_: IOException) {
     }
   }
 

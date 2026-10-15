@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.datasource.DataSource
@@ -24,6 +25,7 @@ import kotlinx.coroutines.SupervisorJob
 import voice.core.data.AUDIOBOOKSHELF_SCHEME
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.Media3AudioOffloadFeatureFlagQualifier
+import voice.core.logging.api.Logger
 import voice.core.playback.history.AutomaticPauseRecorder
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.misc.VolumeGain
@@ -111,6 +113,10 @@ object PlaybackModule {
             ) {
               val streams = mediaItem?.localConfiguration?.uri?.scheme == AUDIOBOOKSHELF_SCHEME
               player.setWakeMode(if (streams) C.WAKE_MODE_NETWORK else C.WAKE_MODE_LOCAL)
+            }
+
+            override fun onPlayerError(error: PlaybackException) {
+              Logger.w(error, "Playback failed: ${error.errorCodeName}")
             }
           },
         )

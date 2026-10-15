@@ -22,7 +22,6 @@ internal class SttsVisitor : AtomVisitor {
     } else {
       buffer.skipBytes(3) // flags
       val numberOfEntriesInSttsTable = buffer.readUnsignedIntToInt()
-      Logger.v("Number of entries in stts: $numberOfEntriesInSttsTable")
       val durations = (0 until numberOfEntriesInSttsTable).map {
         SttsEntry(
           sampleCount = buffer.readUnsignedInt(),

@@ -12,7 +12,6 @@ import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.mapRows
 import voice.core.data.repo.internals.transaction
-import voice.core.logging.api.Logger
 
 private const val BOOKMARK_TABLE_NAME = "tableBookmarks"
 private const val BM_PATH = "bookmarkPath"
@@ -45,12 +44,10 @@ public class Migration32to34 : Migration(32, 34) {
       val time = getLong(BM_TIME)
       Holder(path, title, time)
     }
-    Logger.i("Restored bookmarks=$entries")
 
     db.execSQL("DROP TABLE $BOOKMARK_TABLE_NAME")
 
     db.execSQL(CREATE_TABLE_BOOKMARKS)
-    Logger.i("Created $CREATE_TABLE_BOOKMARKS")
 
     db.transaction {
       entries.forEach {
@@ -60,7 +57,6 @@ public class Migration32to34 : Migration(32, 34) {
           put(TIME, it.time)
         }
         db.insert(TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, cv)
-        Logger.i("Inserted $cv to $TABLE_NAME")
       }
     }
   }

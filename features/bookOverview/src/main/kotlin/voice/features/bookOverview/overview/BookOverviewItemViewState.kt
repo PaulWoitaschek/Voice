@@ -56,7 +56,7 @@ private fun Book.progress(): Float {
   val totalDuration = duration
   val progress = globalPosition.toFloat() / totalDuration.toFloat()
   if (progress < 0F) {
-    Logger.w("Couldn't determine progress for book=$this")
+    Logger.w("Negative progress: position=$globalPosition, duration=$totalDuration")
   }
   return progress.coerceIn(0F, 1F)
 }

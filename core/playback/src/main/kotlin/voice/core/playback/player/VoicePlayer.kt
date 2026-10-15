@@ -80,7 +80,6 @@ class VoicePlayer(
 
     private fun pauseAndDisableSleepTimerIfEndOfChapter() {
       if (sleepTimer.state.value !is SleepTimerState.Enabled.WithEndOfChapter) return
-      Logger.v("Pausing due to EndOfChapter")
       sleepTimer.disable()
       player.pause()
       player.playbackPosition()?.let { position ->
@@ -311,9 +310,7 @@ class VoicePlayer(
     val bookId = player.currentMediaItem?.mediaId?.toMediaIdOrNull()?.bookId ?: return
     scope.launch {
       repo.updateBook(bookId) {
-        val lastPlayedAt = Instant.now()
-        Logger.v("Update ${it.name}: lastPlayedAt to $lastPlayedAt")
-        it.copy(lastPlayedAt = lastPlayedAt)
+        it.copy(lastPlayedAt = Instant.now())
       }
     }
   }
@@ -359,7 +356,6 @@ class VoicePlayer(
   }
 
   private fun setBook(mediaItem: MediaItem) {
-    Logger.v("setBook(${mediaItem.mediaId})")
     val mediaId = mediaItem.mediaId.toMediaIdOrNull()
     if (mediaId != null) {
       if (mediaId is MediaId.Book) {
@@ -388,7 +384,7 @@ class VoicePlayer(
           )
         }
       } else {
-        Logger.w("Unexpected mediaId=$mediaId")
+        Logger.w("Unexpected media id type ${mediaId::class.simpleName}")
       }
     }
   }

@@ -24,7 +24,6 @@ internal class MdhdVisitor : AtomVisitor {
       val modificationTimeSize = if (version == 0) 4 else 8
       buffer.skipBytes(flagsSize + creationTimeSize + modificationTimeSize)
       val timescale = buffer.readUnsignedInt()
-      Logger.v("Timescale: $timescale")
       parseOutput.timeScales += timescale
     }
   }

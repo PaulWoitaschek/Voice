@@ -32,12 +32,12 @@ class CoverDownloader(
     val response = try {
       client.newCall(request).executeAsync()
     } catch (e: IOException) {
-      Logger.w(e, "Failed to download cover from $url")
+      Logger.w(e, "Cover download failed")
       return null
     }
     return response.use {
       if (!response.isSuccessful) {
-        Logger.w("Failed to download cover from $url: ${response.code}")
+        Logger.w("Cover download failed with HTTP ${response.code}")
         return null
       }
       withContext(Dispatchers.IO) {
@@ -51,12 +51,12 @@ class CoverDownloader(
           if (file.isImage()) {
             file
           } else {
-            Logger.w("Cover from $url is no image")
+            Logger.w("Downloaded cover is no image (${response.body.contentType()})")
             file.delete()
             null
           }
         } catch (e: IOException) {
-          Logger.w(e, "Failed to save cover from $url")
+          Logger.w(e, "Can't save the downloaded cover")
           null
         }
       }

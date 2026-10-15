@@ -90,7 +90,7 @@ private fun Context.open(intent: Intent) {
   try {
     startActivity(intent)
   } catch (e: ActivityNotFoundException) {
-    Logger.w(e, "Nothing can open $intent")
+    Logger.w(e, "Nothing can open ${intent.action}")
   }
 }
 

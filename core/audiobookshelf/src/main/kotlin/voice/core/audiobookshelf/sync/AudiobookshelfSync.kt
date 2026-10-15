@@ -164,10 +164,10 @@ public class AudiobookshelfSync internal constructor(
       bookmarkSync.sync(account, user.bookmarks, books)
       lastSyncAt = SystemClock.elapsedRealtime()
     } catch (e: IOException) {
-      Logger.d("Could not sync with the server: $e")
+      Logger.d("Could not reach the server: ${e::class.simpleName}")
       reachability.value = ServerReachability.Unreachable
     } catch (e: HttpException) {
-      Logger.w(e, "Could not sync with the server")
+      Logger.w(e, "Could not sync with the server: HTTP ${e.code()}")
     } catch (e: SerializationException) {
       Logger.w(e, "The server answered in an unexpected way")
     }
@@ -217,9 +217,9 @@ public class AudiobookshelfSync internal constructor(
       downloads.reconcile()
     } catch (e: HttpException) {
       // the progress and the bookmarks still go both ways
-      Logger.w(e, "Could not sync the library")
+      Logger.w(e, "Could not sync the library: HTTP ${e.code()}")
     } catch (e: SerializationException) {
-      Logger.w(e, "The server answered in an unexpected way")
+      Logger.w(e, "The server answered the library sync in an unexpected way")
     }
   }
 

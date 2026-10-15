@@ -5,7 +5,6 @@ import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
-import voice.core.logging.api.Logger
 import java.util.concurrent.TimeUnit
 
 @Inject
@@ -20,7 +19,6 @@ class BookSearch(
 
     // the full text search removes the diacritics itself, and decomposing would break scripts like Hangul
     val prefixes = SearchText(query, removeDiacritics = false).words.map { it.text }
-    Logger.d("search for word prefixes $prefixes")
     val candidates = contentRepo.search(prefixes).toSet()
     if (candidates.isEmpty()) return emptyList()
 

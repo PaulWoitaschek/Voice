@@ -60,7 +60,7 @@ internal class MediaScanner(
     val probeFile = folders.values.flatten().findProbeFile()
     if (probeFile != null) {
       if (deviceHasPermissionBug.checkForBugAndSet(probeFile)) {
-        Logger.w("Device has permission bug, aborting scan! Probed $probeFile")
+        Logger.w("Device has permission bug, aborting scan!")
         return
       }
     }
@@ -88,7 +88,7 @@ internal class MediaScanner(
     if (chapters.isEmpty()) return
     val chapterIds = chapters.map { it.id }
     if (!chapterIds.fitIntoOneBook()) {
-      Logger.e("Skipping $file, its ${chapters.size} chapters are too many for one book")
+      Logger.nonFatal(IllegalStateException("Skipping a book with ${chapters.size} chapters, too many for one book"))
       return
     }
 

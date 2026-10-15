@@ -107,7 +107,6 @@ class SleepTimerImpl internal constructor(
   }
 
   private suspend fun detectShakeWithTimeout(): Boolean {
-    Logger.d("Waiting $SHAKE_TO_RESET_TIME for shake...")
     return withTimeoutOrNull(SHAKE_TO_RESET_TIME) {
       shakeDetector.detect()
       true
@@ -125,9 +124,7 @@ class SleepTimerImpl internal constructor(
 
   private suspend fun suspendUntilPlaying() {
     if (playStateManager.playState != Playing) {
-      Logger.i("Not playing. Waiting for playback to continue.")
       playStateManager.playStateFlow.first { it == Playing }
-      Logger.i("Playback resumed.")
     }
   }
 

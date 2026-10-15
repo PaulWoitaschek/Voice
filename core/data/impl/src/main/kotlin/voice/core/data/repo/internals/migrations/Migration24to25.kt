@@ -13,7 +13,6 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import voice.core.data.repo.internals.moveToNextLoop
-import voice.core.logging.api.Logger
 import java.io.File
 import java.io.IOException
 import java.util.InvalidPropertiesFormatException
@@ -218,7 +217,6 @@ public class Migration24to25 : IncrementalMigration(24) {
         book.put("time", currentTime)
         book.put("playbackSpeed", speed.toDouble())
 
-        Logger.d("upgrade24 restored book=$book")
         val cv = ContentValues()
         cv.put("BOOK_JSON", book.toString())
         val newBookId = db.insert(newBookTable, SQLiteDatabase.CONFLICT_FAIL, cv)

@@ -108,14 +108,13 @@ class PositionUpdater(
     val positionInChapter = mediaId.positionInChapter(currentPosition) ?: return
     bookRepo.updateBook(bookId) { content ->
       if (chapterId in content.chapters) {
-        Logger.d("$positionInChapter is the new position!")
         content.copy(
           currentChapter = chapterId,
           positionInChapter = positionInChapter,
           lastPlayedAt = Instant.now(),
         )
       } else {
-        Logger.w("$mediaId not in $content")
+        Logger.v("Media item not in the current book")
         content
       }
     }

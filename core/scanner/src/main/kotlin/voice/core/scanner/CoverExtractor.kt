@@ -45,21 +45,16 @@ internal class CoverExtractor(
           repeat(metadata.length()) { metadataIndex ->
             when (val entry = metadata.get(metadataIndex)) {
               is ApicFrame -> {
-                Logger.w("Found image frame in ${trackGroup.type}")
                 outputFile.outputStream().use { output ->
                   output.write(entry.pictureData)
                 }
                 return true
               }
               is PictureFrame -> {
-                Logger.w("Found image frame in ${trackGroup.type}")
                 outputFile.outputStream().use { output ->
                   output.write(entry.pictureData)
                 }
                 return true
-              }
-              else -> {
-                Logger.v("Unknown metadata entry: $entry")
               }
             }
           }
@@ -76,7 +71,7 @@ internal class CoverExtractor(
         .use { it.retrieveTrackGroups().await() }
     } catch (e: Exception) {
       if (e is CancellationException) currentCoroutineContext().ensureActive()
-      Logger.w(e, "Error retrieving metadata")
+      Logger.w(e, "Can't read the embedded cover")
       null
     }
   }

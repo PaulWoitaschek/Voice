@@ -4,7 +4,6 @@ import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.container.Mp4Box
 import androidx.media3.extractor.ExtractorInput
 import dev.zacsweers.metro.Inject
-import voice.core.logging.api.Logger
 import voice.core.scanner.mp4.visitor.ChapVisitor
 import voice.core.scanner.mp4.visitor.ChplVisitor
 import voice.core.scanner.mp4.visitor.MdhdVisitor
@@ -76,13 +75,11 @@ internal class Mp4BoxParser(
       val payloadSize = (atomSize - headerSize).toInt()
       val payloadEnd = input.position + payloadSize
       val currentPath = path + atomType
-      Logger.d("Current path: $currentPath, atomType: $atomType")
 
       val visitor = visitorByPath[currentPath]
 
       when {
         visitor != null -> {
-          Logger.v("Found ${visitor.path.last()}!")
           scratch.reset(payloadSize)
           if (!input.readFully(scratch.data, 0, payloadSize, true)) {
             return

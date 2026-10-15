@@ -129,7 +129,7 @@ internal class ProgressSync(
     }
     if (book.movedAwayFrom(serverProgress)) {
       val position = book.positionAt(serverProgress.positionMs)
-      Logger.d("Taking over the position ${serverProgress.positionMs} of ${book.content.name} from the server")
+      Logger.d("Taking over the position ${serverProgress.positionMs} from the server")
       val live = playerController.livePlaybackState(book.id)
       if (live != null) {
         playerController.setPosition(
@@ -174,11 +174,10 @@ internal class ProgressSync(
         remember(book.id, book.syncedProgress(serverLastUpdate))
         true
       } else {
-        Logger.w("Could not send the progress of ${book.content.name}: ${response.code()}")
+        Logger.w("Could not send the progress: HTTP ${response.code()}")
         false
       }
-    } catch (e: IOException) {
-      Logger.d("Could not send the progress of ${book.content.name}: $e")
+    } catch (_: IOException) {
       false
     }
   }

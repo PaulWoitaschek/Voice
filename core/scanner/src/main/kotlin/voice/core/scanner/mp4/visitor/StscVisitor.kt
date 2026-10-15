@@ -22,7 +22,6 @@ internal class StscVisitor : AtomVisitor {
     } else {
       buffer.skipBytes(3) // flags
       val numberOfEntries = buffer.readUnsignedIntToInt()
-      Logger.v("Number of entries in stsc: $numberOfEntries")
       val stscEntriesForTrack = (0 until numberOfEntries).map {
         val firstChunk = buffer.readUnsignedInt()
         val samplesPerChunk = buffer.readUnsignedIntToInt()

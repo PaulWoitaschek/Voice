@@ -1,8 +1,5 @@
 package voice.core.logging.api
 
-import java.io.PrintWriter
-import java.io.StringWriter
-
 object Logger {
 
   fun v(message: String) {
@@ -11,10 +8,6 @@ object Logger {
 
   fun d(message: String) {
     log(severity = Severity.Debug, message = message, throwable = null)
-  }
-
-  fun d(throwable: Throwable) {
-    log(severity = Severity.Debug, message = null, throwable = throwable)
   }
 
   fun i(message: String) {
@@ -32,15 +25,8 @@ object Logger {
     log(severity = Severity.Warn, message = message, throwable = throwable)
   }
 
-  fun e(message: String) {
-    log(severity = Severity.Error, message = message, throwable = null)
-  }
-
-  fun e(
-    throwable: Throwable,
-    message: String,
-  ) {
-    log(severity = Severity.Error, message = message, throwable = throwable)
+  fun nonFatal(throwable: Throwable) {
+    log(severity = Severity.Error, message = null, throwable = throwable)
   }
 
   private var writers: Set<LogWriter> = emptySet()
@@ -49,39 +35,15 @@ object Logger {
     writers = writers + writer
   }
 
-  /**
-   * This logic is borrowed from Timber: https://github.com/JakeWharton/timber
-   */
   private fun log(
     severity: Severity,
     message: String?,
     throwable: Throwable?,
   ) {
-    var messageResult = message
-    if (messageResult.isNullOrEmpty()) {
-      if (throwable == null) {
-        return
-      }
-      messageResult = getStackTraceString(throwable)
-    } else {
-      if (throwable != null) {
-        messageResult += "\n" + getStackTraceString(throwable)
-      }
-    }
-
+    if (message.isNullOrEmpty() && throwable == null) return
     writers.forEach {
-      it.log(severity, messageResult, throwable)
+      it.log(severity, message, throwable)
     }
-  }
-
-  private fun getStackTraceString(t: Throwable): String {
-    // Don't replace this with Log.getStackTraceString() - it hides
-    // UnknownHostException, which is not what we want.
-    val sw = StringWriter(256)
-    val pw = PrintWriter(sw, false)
-    t.printStackTrace(pw)
-    pw.flush()
-    return sw.toString()
   }
 
   enum class Severity {
@@ -97,7 +59,7 @@ interface LogWriter {
 
   fun log(
     severity: Logger.Severity,
-    message: String,
+    message: String?,
     throwable: Throwable?,
   )
 }

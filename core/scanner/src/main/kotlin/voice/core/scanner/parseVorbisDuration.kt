@@ -1,6 +1,5 @@
 package voice.core.scanner
 
-import voice.core.logging.api.Logger
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -19,11 +18,9 @@ internal fun parseVorbisDuration(value: String): Duration? {
     if (hour != null && minute != null && seconds != null) {
       hour + minute + seconds
     } else {
-      Logger.w("Invalid vorbis chapter format: $value")
       null
     }
   } else {
-    Logger.w("Invalid vorbis chapter format: $value")
     null
   }
 }

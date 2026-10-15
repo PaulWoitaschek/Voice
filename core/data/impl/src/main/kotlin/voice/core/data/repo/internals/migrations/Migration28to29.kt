@@ -8,7 +8,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.binding
 import org.json.JSONObject
-import voice.core.logging.api.Logger
 import java.io.File
 
 @ContributesIntoSet(
@@ -35,7 +34,6 @@ public class Migration28to29 : IncrementalMigration(28) {
             chapter.put("name", chapterName)
           }
           val cv = ContentValues()
-          Logger.d("so saving book=$book")
           cv.put("BOOK_JSON", book.toString())
           db.update(
             "TABLE_BOOK",

@@ -19,10 +19,7 @@ public class DeviceHasStoragePermissionBug(private val context: Context) {
 
   internal suspend fun checkForBugAndSet(probeFile: CachedDocumentFile): Boolean {
     return deviceHasPermissionBug(probeFile)
-      .also {
-        Logger.d("update hasBug to $it")
-        hasBug.emit(it)
-      }
+      .also { hasBug.emit(it) }
   }
 
   private suspend fun deviceHasPermissionBug(probeFile: CachedDocumentFile): Boolean {

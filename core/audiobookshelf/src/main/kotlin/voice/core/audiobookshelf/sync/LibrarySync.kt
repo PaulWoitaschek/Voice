@@ -69,9 +69,9 @@ internal class LibrarySync(
           } catch (e: CancellationException) {
             throw e
           } catch (e: IllegalStateException) {
-            Logger.w(e, "Skipping ${item.id}")
+            Logger.w(e, "Skipping a server book")
           } catch (e: IllegalArgumentException) {
-            Logger.w(e, "Skipping ${item.id}")
+            Logger.w(e, "Skipping a server book")
           }
         }
     }
@@ -102,7 +102,7 @@ internal class LibrarySync(
       } catch (e: HttpException) {
         // a library that was deleted or that the user can't see anymore has no books for Voice
         if (e.code() == 404 || e.code() == 403) {
-          Logger.w(e, "The library $libraryId is gone")
+          Logger.d("A selected library is gone: HTTP ${e.code()}")
           return emptyList()
         }
         throw e
@@ -187,8 +187,7 @@ internal class LibrarySync(
             return@withContext file
           }
         }
-      } catch (e: IOException) {
-        Logger.w(e, "Could not download the cover of ${item.id}")
+      } catch (_: IOException) {
         return@withContext null
       }
     }

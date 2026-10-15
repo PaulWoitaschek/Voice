@@ -30,11 +30,7 @@ class DurationInconsistenciesUpdater(private val chapterRepo: ChapterRepo) : Pla
       scope.launch {
         val chapter = chapterRepo.get(mediaId.chapterId)
         if (chapter != null && chapter.duration != playerDuration) {
-          Logger.d(
-            """For chapter=${chapter.id}, we had ${chapter.duration},
-            |but the player reported $playerDuration. Updating the chapter now
-            """.trimMargin(),
-          )
+          Logger.d("Correcting a chapter duration from ${chapter.duration} to $playerDuration ms")
           chapterRepo.put(chapter.copy(duration = playerDuration))
         }
       }

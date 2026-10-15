@@ -9,10 +9,10 @@ public data class Book(
 
   init {
     check(chapters.size == content.chapters.size) {
-      "Different chapter count in $this"
+      "The book has ${chapters.size} chapters, but the content lists ${content.chapters.size}"
     }
     check(chapters.map { it.id } == content.chapters) {
-      "Different chapter order in $this"
+      "The chapters are in a different order than in the content"
     }
   }
 

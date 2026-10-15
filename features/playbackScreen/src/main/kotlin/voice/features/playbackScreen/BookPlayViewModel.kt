@@ -36,7 +36,6 @@ import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
-import voice.core.logging.api.Logger
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.PlayerController
 import voice.core.playback.history.Jump
@@ -223,7 +222,6 @@ class BookPlayViewModel(
   }
 
   fun dismissDialog() {
-    Logger.d("dismissDialog")
     dialogState.value = null
   }
 
@@ -425,7 +423,6 @@ class BookPlayViewModel(
 
   fun toggleSleepTimer() {
     scope.launch {
-      Logger.d("toggleSleepTimer while active=${sleepTimer.state.value}")
       if (sleepTimer.state.value.enabled) {
         sleepTimer.disable()
         dialogState.value = null

@@ -13,11 +13,8 @@ import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
-import org.junit.BeforeClass
 import voice.core.common.DispatcherProvider
 import voice.core.data.sleeptimer.SleepTimerPreference
-import voice.core.logging.api.LogWriter
-import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.ShakeDetector
@@ -158,32 +155,5 @@ class SleepTimerImplTest {
 
     coVerify(exactly = 2) { playerController.pauseWithRewind(any()) }
     assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
-  }
-
-  companion object {
-
-    @BeforeClass
-    @JvmStatic
-    fun setup() {
-      Logger.install(
-        object : LogWriter {
-          override fun log(
-            severity: Logger.Severity,
-            message: String,
-            throwable: Throwable?,
-          ) {
-            println(
-              buildString {
-                append("${severity.name}: ")
-                append(message)
-                if (throwable != null) {
-                  append(", $throwable")
-                }
-              },
-            )
-          }
-        },
-      )
-    }
   }
 }

@@ -64,7 +64,7 @@ data class BookPlayViewState(
 
   init {
     require(duration > Duration.ZERO) {
-      "Duration must be positive in $this"
+      "Duration must be positive, was $duration"
     }
   }
 }

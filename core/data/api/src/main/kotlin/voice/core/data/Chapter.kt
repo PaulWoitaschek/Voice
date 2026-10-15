@@ -73,7 +73,7 @@ private fun Chapter.parseMarkData(): List<ChapterMark> {
     }
     result
   } catch (e: Exception) {
-    throw IllegalStateException("Could not parse marks from $this", e)
+    throw IllegalStateException("Could not parse ${markData.size} marks of a chapter with duration $duration", e)
   }
 }
 

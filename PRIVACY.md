@@ -20,7 +20,8 @@ The parts under "In every build" apply to both.
 
 When Voice crashes or runs into an error, it sends a report to Firebase Crashlytics, so I can fix it. A report contains
 what went wrong, your device model, your Android and app version, a random ID for this installation, and the last lines
-of Voice's log. Those lines can include the names of books and files, and the address of an Audiobookshelf server.
+of Voice's log, like when a scan started or playback paused. Voice keeps the names of your books and files out of
+its log, but an error from Android itself can name the file it happened with.
 
 Crash reports are always on in the Google Play build. Crashlytics deletes them after 90 days.
 

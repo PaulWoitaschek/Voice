@@ -85,7 +85,7 @@ internal constructor(
         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
       )
     } catch (_: SecurityException) {
-      Logger.w("Could not release uri permission for $uri")
+      Logger.w("Could not take the uri permission for a $type folder")
     }
     scope.launch {
       dataStore(type).updateData { it + uri }
@@ -110,7 +110,7 @@ internal constructor(
         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
       )
     } catch (_: SecurityException) {
-      Logger.w("Could not release uri permission for $uri")
+      Logger.v("Could not release the uri permission for a $folderType folder")
     }
     scope.launch {
       dataStore(folderType).updateData { folders ->

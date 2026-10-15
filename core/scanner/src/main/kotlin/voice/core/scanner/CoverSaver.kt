@@ -47,13 +47,13 @@ internal constructor(
               @Suppress("DEPRECATION")
               Bitmap.CompressFormat.WEBP
             }
-            else -> error("Unhandled image extension for $newCover")
+            else -> error("Unhandled image extension ${newCover.extension}")
           }
           bitmapToSave.compress(compressFormat, 70, it)
           it.flush()
         }
       } catch (e: IOException) {
-        Logger.w(e, "Error at saving image with destination=$newCover")
+        Logger.w(e, "Error at saving a cover image")
       }
     }
 
