@@ -1,19 +1,4 @@
 changelog:
-  categories:
-    - title: 🚀 New
-      labels:
-        - feature
-    - title: 🐞 Fixed
-      labels:
-        - bug
-    - title: 🧱 Other Changes
-      labels:
-        - "*"
-      exclude:
-        labels:
-          - dependencies
-          - bug
-          - feature
-    - title: ⚙️ Dependencies
-      labels:
-        - dependencies
+  exclude:
+    labels:
+      - dependencies

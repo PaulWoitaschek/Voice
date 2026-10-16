@@ -101,6 +101,7 @@ jobs:
             artifacts/*.apk \
             --draft \
             --generate-notes \
+            --notes-file .github/release_notes_template.md \
             --target "$GITHUB_SHA"
 
       # Once Play has the version code it can't be released again, so keep the builds to finish by hand.
