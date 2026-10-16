@@ -90,6 +90,8 @@ public class FolderSync internal constructor(
   }
 
   private suspend fun syncFolder(folder: Uri) {
+    // without a file of its own, the files of the other devices would undo the renames and deletions made here
+    if (!syncFiles.canWrite(folder)) return
     val books = bookRepository.all().keyedIn(folder)
     if (books.isEmpty()) return
     val bookmarks = bookmarkRepo.flow().first().groupBy { it.chapterId }
