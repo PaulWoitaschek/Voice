@@ -94,6 +94,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onPlayButtonClick = bookOverviewViewModel::playPause,
     onSearchClick = bookOverviewViewModel::onSearchClick,
     onPermissionBugCardClick = bookOverviewViewModel::onPermissionBugCardClick,
+    onFolderAccessCardClick = bookOverviewViewModel::onFolderAccessCardClick,
     modifier = modifier,
   )
 }
@@ -109,6 +110,7 @@ internal fun BookOverview(
   onPlayButtonClick: () -> Unit,
   onSearchClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
+  onFolderAccessCardClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val scrollBehavior = SearchBarDefaults.enterAlwaysSearchBarScrollBehavior()
@@ -151,6 +153,7 @@ internal fun BookOverview(
       onBookLongClick = onBookLongClick,
       onPlayClick = onPlayButtonClick,
       onPermissionBugCardClick = onPermissionBugCardClick,
+      onFolderAccessCardClick = onFolderAccessCardClick,
       modifier = Modifier
         .padding(contentPadding)
         .consumeWindowInsets(contentPadding),
@@ -227,6 +230,7 @@ fun BookOverviewPreview(
       onPlayButtonClick = {},
       onSearchClick = {},
       onPermissionBugCardClick = {},
+      onFolderAccessCardClick = {},
     )
   }
 }
@@ -271,6 +275,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       showSearchIcon = true,
       isLoading = true,
       showStoragePermissionBugCard = false,
+      showFolderAccessCard = false,
       showFolderPickerIcon = true,
       dialog = null,
     ),

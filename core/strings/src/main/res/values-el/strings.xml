@@ -222,6 +222,11 @@
     <string name="library.folders.title">Φάκελοι ηχητικών βιβλίων</string>
     <string name="library.folders.moved.dialog.title">Οι φάκελοι ηχητικών βιβλίων μετακινήθηκαν</string>
     <string name="library.folders.moved.dialog.message">Μπορείτε πλέον να διαχειρίζεστε τους φακέλους ηχητικών βιβλίων στις Ρυθμίσεις.</string>
+    <string name="library.folders.no_access">Χωρίς πρόσβαση</string>
+    <string name="library.folders.no_access.action">Παραχώρηση πρόσβασης</string>
+    <string name="library.folders.no_access.card.title">Επιτρέψτε ξανά την πρόσβαση στους φακέλους σας</string>
+    <string name="library.folders.no_access.card.message">Το Voice δεν μπορεί πλέον να ανοίξει ορισμένους από τους φακέλους με τα ηχητικά σας βιβλία, για παράδειγμα μετά τη μετάβαση σε νέα συσκευή. Μόλις τα αρχεία βρεθούν σε αυτή τη συσκευή, επιτρέψτε ξανά την πρόσβαση και τα βιβλία σας θα επιστρέψουν μαζί με την πρόοδο και τους σελιδοδείκτες τους.</string>
+    <string name="library.folders.no_access.card.action">Εμφάνιση φακέλων</string>
     <string name="library.greeting.afternoon">Καλό απόγευμα</string>
     <string name="library.greeting.evening">Καλησπέρα</string>
     <string name="library.greeting.morning">Καλημέρα</string>

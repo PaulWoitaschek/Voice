@@ -222,6 +222,11 @@
     <string name="library.folders.title">Lydbogsmapper</string>
     <string name="library.folders.moved.dialog.title">Lydbogsmapper er flyttet</string>
     <string name="library.folders.moved.dialog.message">Du kan nu administrere lydbogsmapper under Indstillinger.</string>
+    <string name="library.folders.no_access">Ingen adgang</string>
+    <string name="library.folders.no_access.action">Tillad adgang</string>
+    <string name="library.folders.no_access.card.title">Tillad adgang til dine mapper igen</string>
+    <string name="library.folders.no_access.card.message">Voice kan ikke længere åbne nogle af dine lydbogsmapper, for eksempel efter at du har skiftet til en ny enhed. Når filerne er på denne enhed, kan du tillade adgang igen, så er dine bøger tilbage med deres fremskridt og bogmærker.</string>
+    <string name="library.folders.no_access.card.action">Vis mapper</string>
     <string name="library.greeting.afternoon">God eftermiddag</string>
     <string name="library.greeting.evening">God aften</string>
     <string name="library.greeting.morning">God morgen</string>

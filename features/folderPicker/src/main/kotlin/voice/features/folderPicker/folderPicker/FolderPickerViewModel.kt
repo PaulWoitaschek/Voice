@@ -1,5 +1,6 @@
 package voice.features.folderPicker.folderPicker
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -8,13 +9,15 @@ import androidx.core.net.toUri
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withContext
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
+import voice.core.documentfile.nameFromPath
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.featureflag.FeatureFlag
 import voice.core.featureflag.KioskModeFeatureFlagQualifier
+import voice.core.scanner.MediaScanTrigger
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import voice.navigation.Origin
@@ -23,6 +26,7 @@ import voice.navigation.Origin
 class FolderPickerViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
+  private val mediaScanTrigger: MediaScanTrigger,
   @KioskModeFeatureFlagQualifier
   private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
 ) {
@@ -48,9 +52,9 @@ class FolderPickerViewModel(
   }
 
   private fun items(): Flow<List<FolderPickerViewState.Item>> {
-    return audiobookFolders.all().map { folders ->
+    return combine(audiobookFolders.all(), audiobookFolders.withoutAccess()) { folders, foldersWithoutAccess ->
       withContext(Dispatchers.IO) {
-        folders.flatMap { (folderType, folders) ->
+        val withAccess = folders.flatMap { (folderType, folders) ->
           folders.map { (documentFile, uri) ->
             FolderPickerViewState.Item(
               name = documentFile.nameWithoutExtension(),
@@ -58,7 +62,21 @@ class FolderPickerViewModel(
               folderType = folderType,
             )
           }
-        }.sortedDescending()
+        }
+        // right after access is allowed again, the two flows can disagree for a moment
+        val uris = withAccess.map { it.id }.toSet()
+        val withoutAccess = foldersWithoutAccess.flatMap { (folderType, uris) ->
+          uris.map { uri ->
+            FolderPickerViewState.Item(
+              // the folder can't be asked for its name without access
+              name = uri.nameFromPath(),
+              id = uri,
+              folderType = folderType,
+              hasAccess = false,
+            )
+          }
+        }.filter { it.id !in uris }
+        (withAccess + withoutAccess).sortedWith(compareBy<FolderPickerViewState.Item> { it.hasAccess }.then(reverseOrder()))
       }
     }
   }
@@ -87,6 +105,26 @@ class FolderPickerViewModel(
 
   fun removeFolder(item: FolderPickerViewState.Item) {
     audiobookFolders.remove(item.id, item.folderType)
+  }
+
+  internal fun onAccessAllowed(
+    uri: Uri,
+    folderType: FolderType,
+    pickedUri: Uri,
+  ) {
+    if (pickedUri == uri) {
+      audiobookFolders.add(uri, folderType)
+      mediaScanTrigger.scan(restartIfScanning = true)
+      return
+    }
+    audiobookFolders.remove(uri, folderType)
+    if (folderType == FolderType.SingleFile) {
+      audiobookFolders.add(pickedUri, folderType)
+      mediaScanTrigger.scan(restartIfScanning = true)
+    } else {
+      // another folder can hold its books differently, so its type is chosen again
+      navigator.goTo(Destination.SelectFolderType(uri = pickedUri, origin = Origin.Default))
+    }
   }
 
   private companion object {

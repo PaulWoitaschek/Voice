@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -43,6 +45,7 @@ internal fun FolderRow(
   item: FolderPickerViewState.Item,
   shape: Shape,
   onClick: (() -> Unit)?,
+  onAllowAccessClick: (() -> Unit)?,
   onDeleteClick: (() -> Unit)?,
   modifier: Modifier = Modifier,
 ) {
@@ -85,7 +88,19 @@ internal fun FolderRow(
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
-        FolderTypeChip(folderType = item.folderType, style = style, changeable = onClick != null)
+        if (item.hasAccess) {
+          FolderTypeChip(folderType = item.folderType, style = style, changeable = onClick != null)
+        } else {
+          NoAccess()
+          if (onAllowAccessClick != null) {
+            FilledTonalButton(
+              onClick = onAllowAccessClick,
+              shapes = ButtonDefaults.shapes(),
+            ) {
+              Text(stringResource(StringsR.string.library_folders_no_access_action))
+            }
+          }
+        }
       }
       if (onDeleteClick != null) {
         Spacer(Modifier.width(4.dp))
@@ -101,6 +116,26 @@ internal fun FolderRow(
         }
       }
     }
+  }
+}
+
+@Composable
+private fun NoAccess() {
+  Row(
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(6.dp),
+  ) {
+    Icon(
+      modifier = Modifier.size(18.dp),
+      imageVector = VoiceIcons.Error,
+      contentDescription = null,
+      tint = MaterialTheme.colorScheme.error,
+    )
+    Text(
+      text = stringResource(StringsR.string.library_folders_no_access),
+      style = MaterialTheme.typography.labelLarge,
+      color = MaterialTheme.colorScheme.error,
+    )
   }
 }
 

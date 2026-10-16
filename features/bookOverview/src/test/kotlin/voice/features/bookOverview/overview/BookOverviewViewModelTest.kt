@@ -1,5 +1,6 @@
 package voice.features.bookOverview.overview
 
+import android.net.Uri
 import androidx.datastore.core.DataStore
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
@@ -21,6 +22,8 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.GridMode
 import voice.core.data.KioskModeDemoData
+import voice.core.data.folders.AudiobookFolders
+import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.LivePlaybackState
@@ -47,6 +50,9 @@ class BookOverviewViewModelTest {
     every { downloadStates } returns flowOf(emptyMap())
   }
   private val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
+  private val audiobookFolders = mockk<AudiobookFolders> {
+    every { withoutAccess() } returns flowOf(emptyMap())
+  }
 
   @Test
   fun `state updates the current book item from live playback`() = runTest {
@@ -81,6 +87,7 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = MemoryFeatureFlag(false),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
+      audiobookFolders = audiobookFolders,
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -141,6 +148,7 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = MemoryFeatureFlag(true),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
+      audiobookFolders = audiobookFolders,
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -155,6 +163,7 @@ class BookOverviewViewModelTest {
       )
       assertEquals(expected = "Echoes of Tomorrow", actual = state.currentBook(KioskModeDemoData.currentlyPlaying.id).name)
       assertEquals(expected = KioskModeDemoData.currentlyPlaying.id, actual = state.currentBookId)
+      assertEquals(expected = false, actual = state.showFolderAccessCard)
     }
   }
 
@@ -286,6 +295,33 @@ class BookOverviewViewModelTest {
   }
 
   @Test
+  fun `folders without access show the card instead of the hint to add a folder`() = runTest {
+    every { audiobookFolders.withoutAccess() } returns flowOf(mapOf(FolderType.Root to listOf(mockk<Uri>())))
+    val viewModel = viewModel()
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      val state = awaitItem()
+      assertEquals(expected = true, actual = state.showFolderAccessCard)
+      assertEquals(expected = false, actual = state.showAddBookHint)
+    }
+  }
+
+  @Test
+  fun `the folder access card opens the folders`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel = viewModel(navigator = navigator)
+
+    viewModel.onFolderAccessCardClick()
+
+    verify {
+      navigator.goTo(Destination.FolderPicker)
+    }
+  }
+
+  @Test
   fun `search click opens the search`() = runTest {
     val navigator = mockk<Navigator>(relaxed = true)
     val viewModel = viewModel(navigator = navigator)
@@ -335,6 +371,7 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = MemoryFeatureFlag(false),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
+      audiobookFolders = audiobookFolders,
     )
   }
 

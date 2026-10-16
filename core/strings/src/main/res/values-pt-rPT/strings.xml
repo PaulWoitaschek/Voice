@@ -233,6 +233,11 @@
     <string name="library.folders.title">Pastas de audiolivros</string>
     <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
     <string name="library.folders.moved.dialog.message">Agora pode gerir as pastas de audiolivros nas Definições.</string>
+    <string name="library.folders.no_access">Sem acesso</string>
+    <string name="library.folders.no_access.action">Permitir acesso</string>
+    <string name="library.folders.no_access.card.title">Volte a permitir o acesso às suas pastas</string>
+    <string name="library.folders.no_access.card.message">O Voice já não consegue abrir algumas das suas pastas de audiolivros, por exemplo, depois de mudar de dispositivo. Quando os ficheiros estiverem neste dispositivo, volte a permitir o acesso e os seus livros voltam com o progresso e os marcadores.</string>
+    <string name="library.folders.no_access.card.action">Mostrar pastas</string>
     <string name="library.greeting.afternoon">Boa tarde</string>
     <string name="library.greeting.evening">Boa noite</string>
     <string name="library.greeting.morning">Bom dia</string>

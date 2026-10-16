@@ -222,6 +222,11 @@
     <string name="library.folders.title">Ljudboksmappar</string>
     <string name="library.folders.moved.dialog.title">Ljudboksmapparna har flyttats</string>
     <string name="library.folders.moved.dialog.message">Du kan nu hantera ljudboksmappar under Inställningar.</string>
+    <string name="library.folders.no_access">Ingen åtkomst</string>
+    <string name="library.folders.no_access.action">Tillåt åtkomst</string>
+    <string name="library.folders.no_access.card.title">Tillåt åtkomst till dina mappar igen</string>
+    <string name="library.folders.no_access.card.message">Voice kan inte längre öppna vissa av dina ljudboksmappar, till exempel efter att du har bytt till en ny enhet. När filerna finns på den här enheten kan du tillåta åtkomst igen, så är dina böcker tillbaka med sina framsteg och bokmärken.</string>
+    <string name="library.folders.no_access.card.action">Visa mappar</string>
     <string name="library.greeting.afternoon">God eftermiddag</string>
     <string name="library.greeting.evening">God kväll</string>
     <string name="library.greeting.morning">God morgon</string>

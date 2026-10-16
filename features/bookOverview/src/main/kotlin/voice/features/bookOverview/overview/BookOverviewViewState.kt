@@ -14,6 +14,7 @@ data class BookOverviewViewState(
   val showSearchIcon: Boolean,
   val isLoading: Boolean,
   val showStoragePermissionBugCard: Boolean,
+  val showFolderAccessCard: Boolean,
   val showFolderPickerIcon: Boolean,
   val dialog: Dialog?,
 ) {
@@ -28,6 +29,7 @@ data class BookOverviewViewState(
       showSearchIcon = false,
       isLoading = true,
       showStoragePermissionBugCard = false,
+      showFolderAccessCard = false,
       showFolderPickerIcon = true,
       dialog = null,
     )

@@ -233,6 +233,11 @@
     <string name="library.folders.title">Dossiers de livres audio</string>
     <string name="library.folders.moved.dialog.title">Dossiers de livres audio déplacés</string>
     <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Paramètres.</string>
+    <string name="library.folders.no_access">Aucun accès</string>
+    <string name="library.folders.no_access.action">Autoriser l\'accès</string>
+    <string name="library.folders.no_access.card.title">Autorisez à nouveau l\'accès à vos dossiers</string>
+    <string name="library.folders.no_access.card.message">Voice ne peut plus ouvrir certains de vos dossiers de livres audio, par exemple après un changement d\'appareil. Une fois les fichiers sur cet appareil, autorisez à nouveau l\'accès et vous retrouverez vos livres avec leur progression et leurs marque-pages.</string>
+    <string name="library.folders.no_access.card.action">Afficher les dossiers</string>
     <string name="library.greeting.afternoon">Bon après-midi</string>
     <string name="library.greeting.evening">Bonsoir</string>
     <string name="library.greeting.morning">Bonjour</string>

@@ -51,6 +51,7 @@ internal fun Library(
   onBookLongClick: (BookId) -> Unit,
   onPlayClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
+  onFolderAccessCardClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var entered by rememberSaveable { mutableStateOf(false) }
@@ -88,6 +89,12 @@ internal fun Library(
       val index = entranceIndex()
       item(span = { GridItemSpan(maxLineSpan) }) {
         PermissionBugCard(onPermissionBugCardClick, Modifier.entrance(entrance, index))
+      }
+    }
+    if (viewState.showFolderAccessCard) {
+      val index = entranceIndex()
+      item(span = { GridItemSpan(maxLineSpan) }) {
+        FolderAccessCard(onFolderAccessCardClick, Modifier.entrance(entrance, index))
       }
     }
     val greetingIndex = entranceIndex()

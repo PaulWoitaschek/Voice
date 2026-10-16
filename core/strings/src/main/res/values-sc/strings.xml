@@ -222,6 +222,11 @@
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
     <string name="library.folders.moved.dialog.title">Cartellas de audiolibros tramudadas</string>
     <string name="library.folders.moved.dialog.message">Como podes manigiare sas cartellas de audiolibros in sas Impostatziones.</string>
+    <string name="library.folders.no_access">Chene atzessu</string>
+    <string name="library.folders.no_access.action">Permite s\'atzessu</string>
+    <string name="library.folders.no_access.card.title">Torra a permìtere s\'atzessu a sas cartellas tuas</string>
+    <string name="library.folders.no_access.card.message">Voice no podet prus abèrrere unas cantas cartellas de audiolibros tuas, pro esèmpiu a pustis de àere cambiadu dispositivu. Cando sos documentos sunt in custu dispositivu, torra a permìtere s\'atzessu e sos libros tuos ant a torrare cun su progressu e sos sinnalibros issoro.</string>
+    <string name="library.folders.no_access.card.action">Mustra sas cartellas</string>
     <string name="library.greeting.afternoon">Bona die</string>
     <string name="library.greeting.evening">Bona sera</string>
     <string name="library.greeting.morning">Bona die</string>
