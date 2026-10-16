@@ -5,6 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -14,6 +15,8 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.documentfile.CachedDocumentFile
+import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.documentfile.FileBasedDocumentFactory
 import voice.core.documentfile.FileBasedDocumentFile
 import java.io.File
@@ -34,12 +37,7 @@ class CoverScannerTest {
   private val coverExtractor = mockk<CoverExtractor> {
     coEvery { extractCover(any(), any()) } returns false
   }
-  private val scanner = CoverScanner(
-    context = ApplicationProvider.getApplicationContext(),
-    coverSaver = coverSaver,
-    coverExtractor = coverExtractor,
-    documentFileFactory = FileBasedDocumentFactory,
-  )
+  private val scanner = scanner(FileBasedDocumentFactory)
 
   @Test
   fun `an image in the book folder becomes the cover`() = runTest {
@@ -64,6 +62,28 @@ class CoverScannerTest {
 
     coVerify(exactly = 0) { coverSaver.setCoverFromFiles(any(), any()) }
   }
+
+  @Test
+  fun `an image named cover is preferred over other images`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    val listedCoverLast = mockk<CachedDocumentFile> {
+      every { children } returns listOf("back.jpg", "Folder.jpg", "Cover.png").map { name ->
+        FileBasedDocumentFile(File(folder, name).apply { writeText(nameWithoutExtension) })
+      }
+    }
+
+    scanner(mockk { every { create(any()) } returns listedCoverLast }).scan(listOf(book(folder)))
+
+    assertEquals(expected = "Cover", actual = savedCover.readText())
+  }
+
+  private fun scanner(documentFileFactory: CachedDocumentFileFactory) = CoverScanner(
+    context = ApplicationProvider.getApplicationContext(),
+    coverSaver = coverSaver,
+    coverExtractor = coverExtractor,
+    documentFileFactory = documentFileFactory,
+  )
 
   private fun book(folder: File): Book {
     val chapters = folder.listFiles()!!
