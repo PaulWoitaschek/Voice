@@ -414,8 +414,7 @@
     <string name="support.badges.title">Ваш значок растёт с каждым месяцем поддержки</string>
     <string name="support.action.donate_kofi">Пожертвовать на Ko-fi</string>
     <string name="support.description.maintenance">Voice бесплатен, имеет открытый исходный код и поддерживается одним разработчиком.</string>
-    <string name="support.description.maintenance_subtitle">Пожертвования помогают финансировать постоянную поддержку и разработку.</string>
-    <string name="support.description.play">Ежемесячная поддержка позволяет мне планировать следующую версию, а не только следующее исправление.</string>
+    <string name="support.description.monthly">Ежемесячная поддержка позволяет мне планировать следующую версию, а не только следующее исправление.</string>
     <string name="support.fine_print">Это благодарность: ничего не открывает. Отменить можно в любой момент в Google Play.</string>
     <string name="support.fine_print.tip">Это благодарность: ничего не открывает. Без подписки.</string>
     <string name="support.helps.title">Поддержка помогает с</string>
@@ -423,7 +422,7 @@
     <string name="support.helps.features">Новыми функциями</string>
     <string name="support.helps.open_source">Сохранением Voice без рекламы</string>
     <string name="support.hero.title">Пусть Voice не умолкает</string>
-    <string name="support.kofi.hint">Ko-fi откроется в браузере. Любая сумма поможет.</string>
+    <string name="support.kofi.hint">Ko-fi откроется в браузере. Ежемесячно или разово, без регистрации.</string>
     <string name="support.message.failed">Не получилось. Попробуйте ещё раз чуть позже.</string>
     <string name="support.message.pending">Ваш чай заваривается. Значок появится, когда Google подтвердит платёж.</string>
     <string name="support.period.monthly">Ежемесячно</string>

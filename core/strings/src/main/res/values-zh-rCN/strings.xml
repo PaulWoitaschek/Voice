@@ -366,8 +366,7 @@
     <string name="support.badges.title">每多支持一个月，徽章就会成长</string>
     <string name="support.action.donate_kofi">通过 Ko-fi 捐助</string>
     <string name="support.description.maintenance">Voice 免费、开源，由一位开发者维护。</string>
-    <string name="support.description.maintenance_subtitle">捐助用于持续的维护和开发。</string>
-    <string name="support.description.play">每月的支持让我能规划下一个版本，而不只是下一次修复。</string>
+    <string name="support.description.monthly">每月的支持让我能规划下一个版本，而不只是下一次修复。</string>
     <string name="support.fine_print">仅为感谢：不解锁任何功能。可随时在 Google Play 中取消。</string>
     <string name="support.fine_print.tip">仅为感谢：不解锁任何功能。不会自动续费。</string>
     <string name="support.helps.title">您的支持将用于</string>
@@ -375,7 +374,7 @@
     <string name="support.helps.features">新功能</string>
     <string name="support.helps.open_source">让 Voice 保持无广告</string>
     <string name="support.hero.title">让 Voice 继续发声</string>
-    <string name="support.kofi.hint">Ko-fi 会在浏览器中打开。任何金额都有帮助。</string>
+    <string name="support.kofi.hint">Ko-fi 会在浏览器中打开。按月或单次均可，无需注册账号。</string>
     <string name="support.message.failed">操作未成功。请稍后再试。</string>
     <string name="support.message.pending">您的茶正在冲泡。Google 确认付款后，徽章就会出现。</string>
     <string name="support.period.monthly">按月</string>

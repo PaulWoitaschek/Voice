@@ -366,8 +366,7 @@
     <string name="support.badges.title">応援を続けると、バッジが毎月成長します</string>
     <string name="support.action.donate_kofi">Ko-fiで寄付</string>
     <string name="support.description.maintenance">Voiceは無料のオープンソースで、1人の開発者が保守しています。</string>
-    <string name="support.description.maintenance_subtitle">寄付は継続的な保守と開発の資金になります。</string>
-    <string name="support.description.play">毎月の支援があるからこそ、次の修正だけでなく次のリリースを計画できます。</string>
+    <string name="support.description.monthly">毎月の支援があるからこそ、次の修正だけでなく次のリリースを計画できます。</string>
     <string name="support.fine_print">感謝の気持ちのみ：機能は解放されません。Google Play でいつでも解約できます。</string>
     <string name="support.fine_print.tip">感謝の気持ちのみ：機能は解放されません。定期購入ではありません。</string>
     <string name="support.helps.title">支援でできること</string>
@@ -375,7 +374,7 @@
     <string name="support.helps.features">新機能</string>
     <string name="support.helps.open_source">Voiceを広告なしに保つ</string>
     <string name="support.hero.title">Voice の声を絶やさずに</string>
-    <string name="support.kofi.hint">Ko-fi はブラウザで開きます。どんな金額でも助かります。</string>
+    <string name="support.kofi.hint">Ko-fi はブラウザで開きます。毎月でも1回だけでも、アカウントは不要です。</string>
     <string name="support.message.failed">うまくいきませんでした。しばらくしてからもう一度お試しください。</string>
     <string name="support.message.pending">お茶を淹れています。Google が支払いを確認すると、バッジが表示されます。</string>
     <string name="support.period.monthly">月額</string>

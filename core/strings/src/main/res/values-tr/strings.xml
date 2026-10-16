@@ -382,8 +382,7 @@
     <string name="support.badges.title">Rozetin, destek olduğun her ay büyür</string>
     <string name="support.action.donate_kofi">Ko-fi üzerinden bağış yap</string>
     <string name="support.description.maintenance">Voice ücretsiz, açık kaynaklıdır ve tek bir geliştirici tarafından sürdürülür.</string>
-    <string name="support.description.maintenance_subtitle">Bağışlar sürekli bakım ve geliştirmeyi finanse etmeye yardımcı olur.</string>
-    <string name="support.description.play">Aylık destek, sadece bir sonraki düzeltmeyi değil, bir sonraki sürümü planlamamı sağlıyor.</string>
+    <string name="support.description.monthly">Aylık destek, sadece bir sonraki düzeltmeyi değil, bir sonraki sürümü planlamamı sağlıyor.</string>
     <string name="support.fine_print">Bu bir teşekkür: hiçbir şeyin kilidini açmaz. Google Play\'den istediğin zaman iptal et.</string>
     <string name="support.fine_print.tip">Bu bir teşekkür: hiçbir şeyin kilidini açmaz. Abonelik yok.</string>
     <string name="support.helps.title">Destek şunlara yardımcı olur</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">Yeni özellikler</string>
     <string name="support.helps.open_source">Voice\'u reklamsız tutmak</string>
     <string name="support.hero.title">Voice konuşmaya devam etsin</string>
-    <string name="support.kofi.hint">Ko-fi tarayıcında açılır. Her miktar yardımcı olur.</string>
+    <string name="support.kofi.hint">Ko-fi tarayıcınızda açılır. Aylık ya da tek seferlik, hesap gerekmez.</string>
     <string name="support.message.failed">Bu sefer olmadı. Birazdan tekrar dene.</string>
     <string name="support.message.pending">Çayın demleniyor. Google ödemeyi onayladığında rozetin görünecek.</string>
     <string name="support.period.monthly">Aylık</string>
