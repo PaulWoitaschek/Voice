@@ -8,11 +8,13 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -50,6 +52,8 @@ internal constructor(
     .combine(grantsChanged) { stored, _ ->
       StoredFolders(stored = stored, withAccess = persistedUriPermissions.persistedUris())
     }
+    // reading the access asks the system, which the library would otherwise do on the main thread at start
+    .flowOn(Dispatchers.IO)
 
   public override fun all(): Flow<Map<FolderType, List<DocumentFileWithUri>>> {
     return storedFolders.map { folders ->

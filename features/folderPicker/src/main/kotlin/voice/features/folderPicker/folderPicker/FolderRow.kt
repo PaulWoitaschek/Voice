@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -93,11 +94,14 @@ internal fun FolderRow(
         } else {
           NoAccess()
           if (onAllowAccessClick != null) {
+            val action = stringResource(StringsR.string.library_folders_no_access_action)
             FilledTonalButton(
               onClick = onAllowAccessClick,
               shapes = ButtonDefaults.shapes(),
+              // after a restore, every row has one, so say which folder it's for
+              modifier = Modifier.semantics { contentDescription = "$action, ${item.name}" },
             ) {
-              Text(stringResource(StringsR.string.library_folders_no_access_action))
+              Text(action)
             }
           }
         }
