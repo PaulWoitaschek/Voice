@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -33,7 +32,6 @@ fun VoiceTheme(
   themeMode: ThemeMode = ThemeMode.FollowSystem,
   themeColorScheme: ThemeColorScheme = ThemeColorScheme.VoiceBlue,
   pureBlack: Boolean = false,
-  typographyMode: TypographyMode = TypographyMode.Roboto,
   content: @Composable () -> Unit,
 ) {
   val darkTheme = when (themeMode) {
@@ -43,10 +41,9 @@ fun VoiceTheme(
   }
   MaterialExpressiveTheme(
     colorScheme = animateColorScheme(rememberThemeColorScheme(themeColorScheme, darkTheme, pureBlack)),
-    typography = remember(typographyMode) { voiceTypography(typographyMode) },
-  ) {
-    CompositionLocalProvider(LocalTypographyMode provides typographyMode, content = content)
-  }
+    typography = VoiceTypography,
+    content = content,
+  )
 }
 
 /**
