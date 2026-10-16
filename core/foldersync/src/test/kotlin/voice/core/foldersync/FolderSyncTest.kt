@@ -3,9 +3,10 @@ package voice.core.foldersync
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
+import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -20,6 +21,7 @@ import voice.core.data.ListeningEvent
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.DocumentFileWithUri
 import voice.core.data.folders.FolderType
+import voice.core.data.repo.BookmarkRepo
 import voice.core.data.syncKey
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
@@ -214,6 +216,40 @@ class FolderSyncTest {
     assertEquals(missing, written.single().books["missing"])
   }
 
+  @Test
+  fun `a bookmark from another device goes into the copy played last, and is not sent back`() = scope.runTest {
+    val older = book(path = "Book", lastPlayedAt = 1000)
+    val newer = book(path = "Copy of Book", lastPlayedAt = 2000)
+    val bookmark = newer.bookmark(file = 1, time = 1000, addedAt = 100)
+    val bookmarkRepo = spyk(MemoryBookmarkRepo())
+    otherDevice(newer, SyncedBook(bookmarks = mapOf(bookmark.id.value to bookmark.synced(changedAt = 1500))))
+    val folderSync = folderSync(MemoryBookRepository(older, newer), bookmarkRepo)
+
+    folderSync.sync()
+    ownFile(folderSync, written.single())
+    folderSync.sync()
+
+    assertEquals(listOf(bookmark), bookmarkRepo.bookmarks.value)
+    coVerify(exactly = 1) { bookmarkRepo.addBookmark(any()) }
+    assertEquals(bookmark.synced(changedAt = 1500), written.single().books[newer.key()]!!.bookmarks[bookmark.id.value])
+  }
+
+  @Test
+  fun `a bookmark deleted on another device is deleted here`() = scope.runTest {
+    val book = book()
+    val bookmark = book.bookmark(addedAt = 100)
+    val bookmarkRepo = MemoryBookmarkRepo(bookmark)
+    otherDevice(book, SyncedBook(deletedBookmarks = mapOf(bookmark.id.value to 2000)))
+
+    folderSync(MemoryBookRepository(book), bookmarkRepo).sync()
+
+    assertEquals(emptyList(), bookmarkRepo.bookmarks.value)
+    assertEquals(
+      expected = SyncFile(mapOf(book.key() to SyncedBook(deletedBookmarks = mapOf(bookmark.id.value to 2000)))),
+      actual = written.single(),
+    )
+  }
+
   private fun otherDevice(
     book: Book,
     synced: SyncedBook,
@@ -231,13 +267,17 @@ class FolderSyncTest {
 
   private fun Book.key(): String = chapters.syncKey()!!
 
-  private fun TestScope.folderSync(repo: MemoryBookRepository): FolderSync {
+  private fun TestScope.folderSync(
+    repo: MemoryBookRepository,
+    bookmarkRepo: BookmarkRepo = MemoryBookmarkRepo(),
+  ): FolderSync {
     val dispatcher = StandardTestDispatcher(testScheduler)
     return FolderSync(
       context = ApplicationProvider.getApplicationContext(),
       syncFiles = syncFiles,
       audiobookFolders = audiobookFolders,
       bookRepository = repo,
+      bookmarkRepo = bookmarkRepo,
       playerController = playerController,
       playStateManager = playStateManager,
       currentBookStore = currentBookStore,

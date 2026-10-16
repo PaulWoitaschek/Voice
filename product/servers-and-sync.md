@@ -19,7 +19,7 @@ same limit: there's still no Voice account and no Voice server, and Voice only t
 | [A cloud library has to be copied to the phone](#a-cloud-library-has-to-be-copied-to-the-phone) | ⭕ Open |
 | [I lose my place when I switch devices](#i-lose-my-place-when-i-switch-devices) | ✅ Solved |
 | [Without a server, my place doesn't follow me to another device](#without-a-server-my-place-doesnt-follow-me-to-another-device) | ✅ Solved |
-| [Without a server, my bookmarks don't follow me to another device](#without-a-server-my-bookmarks-dont-follow-me-to-another-device) | ⭕ Open |
+| [Without a server, my bookmarks don't follow me to another device](#without-a-server-my-bookmarks-dont-follow-me-to-another-device) | ✅ Solved |
 | [A new phone means losing my progress and bookmarks](#a-new-phone-means-losing-my-progress-and-bookmarks) | ✅ Solved |
 | [Without Google's backup, a new phone means starting over](#without-googles-backup-a-new-phone-means-starting-over) | ⭕ Open |
 
@@ -100,8 +100,8 @@ want a folder's places shared let their sync tool ignore `.voice` ([FAQ](../docs
 
 **Assumption:** Sync tools copy hidden folders. Guess: Syncthing does by default, the others weren't checked.
 
-**Assumption:** Few listeners share one library folder with someone else. They'd get each other's place unless their
-sync tool ignores `.voice`. Guess.
+**Assumption:** Few listeners share one library folder with someone else. They'd get each other's places, names and
+bookmarks unless their sync tool ignores `.voice`. Guess.
 
 **Assumption:** Listeners don't mind the hidden `.voice` folder in their library folders, as there's no way to turn it
 off. Guess.
@@ -119,9 +119,12 @@ off. Guess.
 
 ## Without a server, my bookmarks don't follow me to another device
 
-⭕ **Open** · [#3707]
+✅ **Solved** · [#3707]
 
-The synced folder carries the place, speed and name of a book, but not its bookmarks.
+Listeners who sync their place through their library folders want their bookmarks on every device too.
+
+**Solution:** The same `.voice` files carry the bookmarks of each book. A deleted bookmark stays deleted, and when two
+devices changed the same bookmark, the later change wins.
 
 ## A new phone means losing my progress and bookmarks
 
@@ -144,8 +147,9 @@ Some listeners switch or reset their phone often, and would rather start fresh t
 
 ## Open questions
 
-1. **A new phone without Google's backup.** The synced `.voice` files also bring the places to a new phone with the
-   same folders. Is that enough, or do listeners need their bookmarks there too?
+1. **A new phone without Google's backup.** The synced `.voice` files also bring the places, names and bookmarks to a
+   new phone with the same folders. Is that enough, or do listeners miss what isn't in them, like their listening
+   history and settings?
 2. Why Audiobookshelf first, and will it stay the only server?
 
 [#65]: https://github.com/PaulWoitaschek/Voice/issues/65

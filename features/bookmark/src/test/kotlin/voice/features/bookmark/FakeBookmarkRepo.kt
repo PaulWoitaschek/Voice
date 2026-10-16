@@ -40,4 +40,6 @@ internal class FakeBookmarkRepo(private val clock: Clock) : BookmarkRepo {
   override suspend fun bookmarks(book: BookContent): List<Bookmark> = bookmarks.value
 
   override fun bookmarksFlow(book: BookContent): Flow<List<Bookmark>> = bookmarks
+
+  override fun flow(): Flow<List<Bookmark>> = bookmarks
 }

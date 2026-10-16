@@ -19,4 +19,6 @@ public interface BookmarkRepo {
   public suspend fun bookmarks(book: BookContent): List<Bookmark>
 
   public fun bookmarksFlow(book: BookContent): Flow<List<Bookmark>>
+
+  public fun flow(): Flow<List<Bookmark>>
 }
