@@ -63,6 +63,11 @@ internal constructor(
       .map { bookmarks(book) }
   }
 
+  override fun flow(): Flow<List<Bookmark>> {
+    return appDb.invalidationTracker.createFlow(BOOKMARK_TABLE)
+      .map { dao.all() }
+  }
+
   private companion object {
     const val BOOKMARK_TABLE = "bookmark2"
   }

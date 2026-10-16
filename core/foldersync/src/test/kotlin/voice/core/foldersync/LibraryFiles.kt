@@ -6,9 +6,11 @@ import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.BookMetadata
+import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import java.time.Instant
+import kotlin.uuid.Uuid
 
 private const val AUTHORITY = "com.android.externalstorage.documents"
 
@@ -73,3 +75,30 @@ internal fun place(
   speed: Float = 1F,
   playedAt: Long = 2000,
 ): SyncedPlace = SyncedPlace(file = file, position = position, speed = speed, playedAt = playedAt)
+
+internal fun Book.bookmark(
+  file: Int = 1,
+  time: Long = 1000,
+  title: String? = "Note",
+  addedAt: Long = 100,
+  id: Uuid = Uuid.parse("00000000-0000-0000-0000-000000000001"),
+): Bookmark = Bookmark(
+  bookId = this.id,
+  chapterId = chapters[file].id,
+  title = title,
+  time = time,
+  addedAt = Instant.ofEpochMilli(addedAt),
+  id = Bookmark.Id(id),
+)
+
+internal fun Bookmark.synced(
+  file: Int = 1,
+  changedAt: Long = addedAt.toEpochMilli(),
+): SyncedBookmark = SyncedBookmark(
+  file = file,
+  time = time,
+  title = title,
+  kind = kind,
+  addedAt = addedAt.toEpochMilli(),
+  changedAt = changedAt,
+)

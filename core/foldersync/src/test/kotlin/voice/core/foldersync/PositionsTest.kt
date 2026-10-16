@@ -5,10 +5,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.runner.RunWith
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.Bookmark
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
 class PositionsTest {
@@ -75,5 +77,16 @@ class PositionsTest {
     assertEquals(file, parseSyncFile(file.encode()))
     assertNull(parseSyncFile("""{"books":{"a":{"place":{"file":1"""))
     assertNull(parseSyncFile("garbage"))
+  }
+
+  @Test
+  fun `a bookmark kind this version doesn't know is read as a note`() {
+    val id = "00000000-0000-0000-0000-000000000001"
+    val text = """{"books":{"a":{"bookmarks":{"$id":{"file":1,"time":2,"kind":"Later","addedAt":3,"changedAt":4}}}}}"""
+
+    assertEquals(
+      expected = SyncedBookmark(file = 1, time = 2, kind = Bookmark.Kind.Note, addedAt = 3, changedAt = 4),
+      actual = parseSyncFile(text)?.books?.get("a")?.bookmarks?.get(Uuid.parse(id)),
+    )
   }
 }
