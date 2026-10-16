@@ -10,12 +10,12 @@ purpose, so the discussion stays on the idea and not on pixels.
 
 ## Draw one
 
-1. Write a scene file named `<name>.sketch.js`, next to the Markdown that will show it. Product specs keep theirs in
-   `product/sketches/`. Start from [examples/player.sketch.js](examples/player.sketch.js) or an existing sketch.
+1. Write a scene file named `<name>.sketch.js`, next to the Markdown that will show it. Sketches for the product
+   spec go in `docs/sketches/`. Start from [examples/player.sketch.js](examples/player.sketch.js) or an existing sketch.
 2. Render it from the repository root:
 
    ```sh
-   .agents/skills/sketching/sketch product/sketches/<name>.sketch.js
+   .agents/skills/sketching/sketch docs/sketches/<name>.sketch.js
    ```
 
    This writes `<name>.png` next to the scene, cropped to what you drew. It takes several files at once. The first
