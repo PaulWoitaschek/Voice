@@ -13,8 +13,9 @@ on:
         required: false
         type: string
 
+# Draft releases are only listed with write access, and the version has to count them.
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   distribute:
@@ -30,6 +31,8 @@ jobs:
       # Tester builds carry the version code of the upcoming release.
       - name: Determine version
         id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: ./scripts/determine_release_tag.main.kts
 
       - uses: ./.github/actions/build_setup

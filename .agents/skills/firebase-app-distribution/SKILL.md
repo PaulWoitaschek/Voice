@@ -18,6 +18,7 @@ Run `./scripts/firebase_app_distribution.sh`. It builds the Play release APK of 
 - Authentication or permission errors: the user must run `npx firebase-tools@<version> login` themselves, since it's
   interactive. Take the version from `firebase_tools_version` in the script. A set `GOOGLE_APPLICATION_CREDENTIALS`
   takes precedence over that login.
+- `gh` errors: the version counts the draft releases, which needs `gh`. The user must run `gh auth login` themselves.
 - Missing `signing/signing.properties` or `app/src/play/google-services.json`: these are secrets that aren't in the
   repository. Ask the user for them. Don't work around them, since an unsigned or differently signed build won't
   install over the Play Store version.

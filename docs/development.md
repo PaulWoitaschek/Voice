@@ -113,7 +113,15 @@ The `release` environment requires these secrets:
 | `GH_SIGNING_KEY_PASSWORD`                   | GitHub/free release key password.                               |
 | `FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT` | Firebase App Distribution service account JSON, base64 encoded. |
 
-F-Droid builds are handled by their team and usually appear a few days after a stable (non-RC) release.
+### Releasing to F-Droid, IzzyDroid and GitHub
+
+The draft gets its git tag only when it's published. F-Droid builds every tag that matches `^[\d.]+-\d+$`, usually a few
+days later, and IzzyDroid picks up the APK from the published release. Neither has a staged rollout, so publish the
+draft only once the Play rollout has reached 100%.
+
+A version that turns out broken on Play is never published. Keep its draft until the next release is published: the
+next version is counted from the tags and the drafts, so deleting it earlier hands its version code out again, which
+Play rejects.
 
 ### Tester Builds
 
@@ -179,7 +187,7 @@ The Android `versionCode` is calculated from the version name with:
 
 Example: `25.9.1` → `(25+28)=53`, `MM=09`, `RELEASE=001` → `5309001`.
 
-This code is embedded in the git tag by `release.main.kts` and used by CI and Fastlane.
+This code is embedded in the git tag by `determine_release_tag.main.kts` and used by CI and Fastlane.
 
 ## Pages Deployment
 
