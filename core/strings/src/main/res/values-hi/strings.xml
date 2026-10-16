@@ -62,8 +62,8 @@
     <string name="book.category.action.mark_current">वर्तमान चिह्नित करें</string>
     <string name="book.category.action.mark_not_started">अभी प्रारंभ नहीं चिह्नित करें</string>
     <string name="book.delete.bottom_sheet.title">पुस्तक हटाएँ</string>
-    <string name="book.delete.dialog.confirm_files">मेरी फाइलें हटाएं</string>
-    <string name="book.delete.dialog.message">इससे फाइलें आपके डिवाइस से हमेशा के लिए हट जाएँगी। उन्हें वापस नहीं लाया जा सकता।</string>
+    <string name="book.delete.dialog.confirm_files">मेरी फ़ाइलें हटाएँ</string>
+    <string name="book.delete.dialog.message">इससे फ़ाइलें आपके डिवाइस से हमेशा के लिए हट जाएँगी। उन्हें वापस नहीं लाया जा सकता।</string>
     <string name="book.delete.dialog.title">पुस्तक हटाएँ</string>
     <string name="book.download.action">डाउनलोड करें</string>
     <string name="book.download.failed">डाउनलोड पूरा नहीं हुआ</string>
@@ -73,7 +73,7 @@
     <string name="book.download.stop">डाउनलोड रोकें</string>
     <string name="book.download.waiting_for_connection">कनेक्शन का इंतज़ार है</string>
     <string name="book.download.waiting_for_wifi">वाई-फ़ाई का इंतज़ार है</string>
-    <string name="book.edit.cover.file">फाइल सिस्टम से कवर</string>
+    <string name="book.edit.cover.file">फ़ाइल सिस्टम से कवर</string>
     <string name="book.edit.cover.internet">इंटरनेट से कवर</string>
     <string name="book.edit.name.label">नाम</string>
     <string name="book.edit.rename">नाम बदलें</string>
@@ -144,35 +144,35 @@
         <item quantity="other">%d सेकंड</item>
     </plurals>
     <string name="folder.add.action.audiobookshelf">Audiobookshelf कनेक्ट करें</string>
-    <string name="folder.add.action.file">इसके बजाय एक फाइल जोड़ें</string>
-    <string name="folder.add.action.folder">फोल्डर चुनें</string>
-    <string name="folder.add.subtitle">अपनी ऑडियोबुक वाला फोल्डर चुनें। इसमें एक पुस्तक या आपकी पूरी लाइब्रेरी हो सकती है।</string>
+    <string name="folder.add.action.file">इसके बजाय एक फ़ाइल जोड़ें</string>
+    <string name="folder.add.action.folder">फ़ोल्डर चुनें</string>
+    <string name="folder.add.subtitle">अपनी ऑडियोबुक वाला फ़ोल्डर चुनें। इसमें एक पुस्तक या आपकी पूरी लाइब्रेरी हो सकती है।</string>
     <string name="folder.add.title.default">अपनी ऑडियोबुक जोड़ें</string>
     <string name="folder.add.title.onboarding">अपनी पहली ऑडियोबुक जोड़ें</string>
-    <string name="folder.mode.author.label">फोल्डर लेखक हैं</string>
-    <string name="folder.mode.author.option">%s के फोल्डर लेखक हैं</string>
+    <string name="folder.mode.author.label">फ़ोल्डर लेखक हैं</string>
+    <string name="folder.mode.author.option">%s के फ़ोल्डर लेखक हैं</string>
     <plurals name="folder.mode.book_count">
         <item quantity="one">%d पुस्तक</item>
         <item quantity="other">%d पुस्तकें</item>
     </plurals>
-    <string name="folder.mode.file.label">एकल फाइल</string>
+    <string name="folder.mode.file.label">एकल फ़ाइल</string>
     <string name="folder.mode.guess">आपके जैसा लगता है</string>
-    <string name="folder.mode.root.label">हर फोल्डर एक पुस्तक है</string>
-    <string name="folder.mode.root.option">%s का हर फोल्डर या फाइल एक पुस्तक है</string>
+    <string name="folder.mode.root.label">हर फ़ोल्डर एक पुस्तक है</string>
+    <string name="folder.mode.root.option">%s का हर फ़ोल्डर या फ़ाइल एक पुस्तक है</string>
     <string name="folder.mode.sheet.title">%s कैसे व्यवस्थित है?</string>
     <string name="folder.mode.single.label">एक पुस्तक</string>
     <string name="folder.mode.single.option">%s एक पुस्तक है</string>
-    <string name="folder.mode.single.summary">इसकी फाइलें अध्याय बन जाती हैं, CD 1 और CD 2 जैसे फोल्डरों में भी।</string>
+    <string name="folder.mode.single.summary">इसकी फ़ाइलें अध्याय बन जाती हैं, CD 1 और CD 2 जैसे फ़ोल्डरों में भी।</string>
     <plurals name="folder.review.action.add">
         <item quantity="one">%d पुस्तक जोड़ें</item>
         <item quantity="other">%d पुस्तकें जोड़ें</item>
     </plurals>
     <string name="folder.review.action.change">पुस्तकें ढूँढने का तरीका बदलें</string>
-    <string name="folder.review.empty.subtitle">वह फोल्डर चुनें जिसमें आपकी ऑडियोबुक हैं।</string>
-    <string name="folder.review.empty.title">%s में कोई ऑडियो फाइल नहीं</string>
+    <string name="folder.review.empty.subtitle">वह फ़ोल्डर चुनें जिसमें आपकी ऑडियोबुक हैं।</string>
+    <string name="folder.review.empty.title">%s में कोई ऑडियो फ़ाइल नहीं</string>
     <plurals name="folder.review.folder_count">
-        <item quantity="one">%d फोल्डर</item>
-        <item quantity="other">%d फोल्डर</item>
+        <item quantity="one">%d फ़ोल्डर</item>
+        <item quantity="other">%d फ़ोल्डर</item>
     </plurals>
     <string name="folder.review.loading">%s में ढूँढ रहे हैं…</string>
     <plurals name="folder.review.possible_books">
@@ -184,8 +184,8 @@
         <item quantity="other">हमें %d पुस्तकें मिलीं</item>
     </plurals>
     <plurals name="folder.type.file_count">
-        <item quantity="one">%d ऑडियो फाइल</item>
-        <item quantity="other">%d ऑडियो फाइलें</item>
+        <item quantity="one">%d ऑडियो फ़ाइल</item>
+        <item quantity="other">%d ऑडियो फ़ाइलें</item>
     </plurals>
     <string name="history.action.continue_from">%1$s से आगे सुनें</string>
     <string name="history.action.continue_from.chapter">अध्याय %1$d · %2$s से आगे सुनें</string>
@@ -218,10 +218,10 @@
     <string name="library.category.current.title">वर्तमान</string>
     <string name="library.category.not_started.title">अभी प्रारंभ नहीं</string>
     <string name="library.continue_listening">सुनना जारी रखें</string>
-    <string name="library.empty.add_first_book">चलिए आपका ऑडियोबुक फोल्डर जोड़ते हैं ताकि आप सुनना शुरू कर सकें!</string>
-    <string name="library.folders.title">ऑडियोबुक फोल्डर</string>
-    <string name="library.folders.moved.dialog.title">ऑडियोबुक फोल्डर की जगह बदल गई</string>
-    <string name="library.folders.moved.dialog.message">ऑडियोबुक फोल्डर अब सेटिंग्स में मैनेज होते हैं।</string>
+    <string name="library.empty.add_first_book">चलिए आपका ऑडियोबुक फ़ोल्डर जोड़ते हैं ताकि आप सुनना शुरू कर सकें!</string>
+    <string name="library.folders.title">ऑडियोबुक फ़ोल्डर</string>
+    <string name="library.folders.moved.dialog.title">ऑडियोबुक फ़ोल्डर की जगह बदल गई</string>
+    <string name="library.folders.moved.dialog.message">ऑडियोबुक फ़ोल्डर अब सेटिंग्स में मैनेज होते हैं।</string>
     <string name="library.greeting.afternoon">शुभ दोपहर</string>
     <string name="library.greeting.evening">शुभ संध्या</string>
     <string name="library.greeting.morning">सुप्रभात</string>
@@ -254,7 +254,7 @@
     <string name="library.search.match.genre">शैली · %s</string>
     <string name="library.search.match.narrator">वाचक: %s</string>
     <string name="library.search.match.series">सीरीज़ · %s</string>
-    <string name="library.search.no_results.folders_hint">सूची में नहीं है? हो सकता है इसका फोल्डर अभी तक Voice में नहीं जोड़ा गया हो।</string>
+    <string name="library.search.no_results.folders_hint">सूची में नहीं है? हो सकता है इसका फ़ोल्डर अभी तक Voice में नहीं जोड़ा गया हो।</string>
     <string name="library.search.no_results.message">खोज शीर्षक, लेखक, वाचक, सीरीज़ और शैलियों में की जाती है।</string>
     <string name="library.search.no_results.search_everything">सब में खोजें</string>
     <string name="library.search.no_results.title">“%s” से कोई पुस्तक मेल नहीं खाती</string>
@@ -262,7 +262,7 @@
     <string name="library.search.recent.remove">%s हटाएँ</string>
     <string name="library.search.recent.title">हालिया</string>
     <string name="library.storage_permission_bug.action">अनुमति प्रदान करें</string>
-    <string name="library.storage_permission_bug.message">कुछ उपकरणों के लिए, एक सिस्टम ऐप में बाहरी स्टोरेज तक पहुंचने के लिए आवश्यक अनुमति नहीं है। Voice के लिए आपकी ऑडियोबुक पढ़ने के लिए यह पहुंच आवश्यक है।</string>
+    <string name="library.storage_permission_bug.message">कुछ डिवाइस पर, एक सिस्टम ऐप के पास बाहरी स्टोरेज तक पहुँचने की ज़रूरी अनुमति नहीं होती। Voice को आपकी ऑडियोबुक पढ़ने के लिए यह पहुँच चाहिए।</string>
     <string name="library.storage_permission_bug.title">अनुमति आवश्यक है</string>
     <string name="media_session.library.recent">हालिया</string>
     <string name="media_session.library.root">सभी ऑडियोबुक</string>
@@ -275,7 +275,7 @@
     <string name="onboarding.completion.action.start_listening">सुनना शुरू करें</string>
     <string name="onboarding.completion.subtitle">आपकी पहली ऑडियोबुक चलने के लिए तैयार है। Voice के साथ अपनी यात्रा का आनंद लें!</string>
     <string name="onboarding.completion.title">आप पूरी तरह तैयार हैं!</string>
-    <string name="onboarding.explanation.subtitle.folder">अपनी ऑडियोबुक वाला फोल्डर चुनें। Voice जोड़ने से पहले आपको मिली हुई पुस्तकें दिखाती है।</string>
+    <string name="onboarding.explanation.subtitle.folder">अपनी ऑडियोबुक वाला फ़ोल्डर चुनें। Voice जोड़ने से पहले आपको मिली हुई पुस्तकें दिखाती है।</string>
     <string name="onboarding.explanation.title">आपकी लाइब्रेरी, आपका तरीका</string>
     <string name="onboarding.welcome.action.start">चलिए शुरू करें</string>
     <string name="onboarding.welcome.subtitle">आपका व्यक्तिगत पॉकेट ऑडियोबुक प्लेयर। आइए आपको सेट अप करने में मदद करें।</string>
@@ -310,7 +310,7 @@
     <string name="review.prompt.feedback.bug.title">बग की रिपोर्ट करें</string>
     <string name="review.prompt.feedback.email.title">ईमेल लिखें</string>
     <string name="review.prompt.feedback.idea.subtitle">GitHub पर चर्चा शुरू करता है</string>
-    <string name="review.prompt.feedback.idea.title">विचार सुझाएं</string>
+    <string name="review.prompt.feedback.idea.title">विचार सुझाएँ</string>
     <string name="review.prompt.feedback.title">आपके मन में क्या है?</string>
     <string name="review.prompt.finished.title">पुस्तक पूरी हुई!</string>
     <string name="review.prompt.message">Voice के साथ सुनने के लिए धन्यवाद! अगर आपको यह पसंद है, तो Google Play पर रेटिंग देने से दूसरे श्रोताओं को इसे ढूंढने में मदद मिलती है।</string>
@@ -366,7 +366,7 @@
     <string name="settings.support.report_issue.title">समस्या की रिपोर्ट करें</string>
     <string name="settings.support.support_voice.summary">Voice को मुफ़्त और विज्ञापन-मुक्त रखता है</string>
     <string name="settings.support.support_voice.title">विकास का समर्थन करें</string>
-    <string name="settings.support.suggest_idea.title">विचार सुझाएं</string>
+    <string name="settings.support.suggest_idea.title">विचार सुझाएँ</string>
     <string name="settings.support.supporter.title">Voice का समर्थन करने के लिए धन्यवाद</string>
     <string name="settings.support.title">सहायता और फ़ीडबैक</string>
     <string name="support.action.manage_subscription">सदस्यता मैनेज करें</string>
@@ -429,8 +429,8 @@
     <string name="time.relative.yesterday">कल</string>
     <string name="widget.chapter">अध्याय %1$d · %2$s</string>
     <string name="widget.chapter_counter">अध्याय %1$d/%2$d</string>
-    <string name="widget.empty.action">फोल्डर जोड़ें</string>
-    <string name="widget.empty.message">अपनी ऑडियोबुक वाला फोल्डर चुनें</string>
+    <string name="widget.empty.action">फ़ोल्डर जोड़ें</string>
+    <string name="widget.empty.message">अपनी ऑडियोबुक वाला फ़ोल्डर चुनें</string>
     <string name="widget.empty.title">अभी तक कोई पुस्तक नहीं</string>
     <string name="widget.finished.start_over">शुरू से सुनें</string>
     <string name="widget.finished.title">समाप्त!</string>

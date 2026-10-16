@@ -5,7 +5,7 @@
         <item quantity="other">Λήψη %d βιβλίων</item>
     </plurals>
     <string name="audiobookshelf.download.notification.done">Έτοιμο για ακρόαση εκτός σύνδεσης</string>
-    <string name="audiobookshelf.download.notification.retry">Ξαναδοκιμάστε</string>
+    <string name="audiobookshelf.download.notification.retry">Επανάληψη</string>
     <string name="audiobookshelf.download.notification.stop">Διακοπή</string>
     <string name="audiobookshelf.download.notification.title">Λήψη…</string>
     <string name="audiobookshelf.downloads.channel">Λήψεις</string>
@@ -51,7 +51,7 @@
     <string name="audiobookshelf.settings.sign_in_again">Σύνδεση</string>
     <string name="audiobookshelf.settings.sign_out">Αποσύνδεση</string>
     <string name="audiobookshelf.settings.signed_in_as">Συνδεθήκατε ως %s</string>
-    <string name="audiobookshelf.settings.try_again">Ξαναδοκιμάστε</string>
+    <string name="audiobookshelf.settings.try_again">Επανάληψη</string>
     <string name="audiobookshelf.sign_out.message">Τα βιβλία του και οι λήψεις τους αφαιρούνται από αυτή τη συσκευή. Η πρόοδός σας μένει ασφαλής στον διακομιστή.</string>
     <string name="audiobookshelf.sign_out.title">Αποσύνδεση από %s;</string>
     <string name="audiobookshelf.status.connected">Συνδέθηκε, η πρόοδός σας είναι συγχρονισμένη</string>
@@ -125,7 +125,7 @@
     <string name="common.dialog.confirm">Ορισμός</string>
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Κάτι πήγε στραβά 😢</string>
-    <string name="common.error.generic.retry">Ξαναδοκιμάστε</string>
+    <string name="common.error.generic.retry">Επανάληψη</string>
     <string name="cover.crop.hint">Σύρετε για μετακίνηση. Αλλάξτε το μέγεθος με δύο δάχτυλα ή από μια γωνία.</string>
     <string name="cover.crop.title">Περικοπή εξωφύλλου</string>
     <string name="cover.search.download_failed">Δεν ήταν δυνατή η λήψη αυτού του εξωφύλλου. Δοκιμάστε κάποιο άλλο.</string>
@@ -355,7 +355,7 @@
     <string name="settings.listening.title">Ακρόαση</string>
     <string name="settings.playback.auto_rewind.off">Ανενεργό</string>
     <string name="settings.playback.auto_rewind.summary">Γυρίζει λίγο πίσω όταν συνεχίζετε, για να μη χάνετε τον ειρμό</string>
-    <string name="settings.playback.auto_rewind.title">Αυτόματη αναζήτηση προς τα πίσω</string>
+    <string name="settings.playback.auto_rewind.title">Αυτόματο γύρισμα πίσω</string>
     <string name="settings.playback.lock_screen_slider.summary">Σύρετε μέσα στο κεφάλαιο από την οθόνη κλειδώματος και την ειδοποίηση. Απενεργοποιήστε το για να μη χάνετε το σημείο σας από ένα τυχαίο άγγιγμα.</string>
     <string name="settings.playback.lock_screen_slider.title">Ρυθμιστικό οθόνης κλειδώματος</string>
     <string name="settings.playback.seek_time.summary">Πόσο μακριά πηγαίνουν η επαναφορά και η γρήγορη προώθηση</string>
