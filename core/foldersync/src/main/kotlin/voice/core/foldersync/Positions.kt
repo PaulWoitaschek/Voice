@@ -31,26 +31,6 @@ private fun Uri.tree(): Pair<String?, String>? = if (DocumentsContract.isTreeUri
   null
 }
 
-internal fun List<KeyedBook>.toSyncFile(): SyncFile {
-  val books = filter { it.book.content.lastPlayedAt != Instant.EPOCH }
-    .groupBy { it.key }
-    .mapValues { (_, copies) ->
-      val content = copies.maxBy { it.book.content.lastPlayedAt }.book.content
-      SyncedPosition(
-        file = content.currentChapterIndex,
-        position = content.positionInChapter,
-        updatedAt = content.lastPlayedAt.toEpochMilli(),
-      )
-    }
-  return SyncFile(books)
-}
-
-internal fun List<SyncFile>.newest(): Map<String, SyncedPosition> {
-  return flatMap { it.books.entries }
-    .groupBy(keySelector = { it.key }, valueTransform = { it.value })
-    .mapValues { (_, positions) -> positions.maxBy { it.updatedAt } }
-}
-
 internal data class TakenOverPosition(
   val chapterId: ChapterId,
   val positionInChapter: Long,
@@ -60,8 +40,8 @@ internal data class TakenOverPosition(
 /**
  * Where [remote] moves this book to, or null if it was played here since or is at the same place.
  */
-internal fun Book.positionFrom(remote: SyncedPosition): TakenOverPosition? {
-  if (remote.updatedAt <= content.lastPlayedAt.toEpochMilli()) return null
+internal fun Book.positionFrom(remote: SyncedPlace): TakenOverPosition? {
+  if (remote.playedAt <= content.lastPlayedAt.toEpochMilli()) return null
   val chapter = chapters.getOrNull(remote.file) ?: return null
   val position = remote.position.coerceIn(0, chapter.duration)
   // taking over a place seeks, which makes it newer here, so a small difference would go back and forth
@@ -70,7 +50,7 @@ internal fun Book.positionFrom(remote: SyncedPosition): TakenOverPosition? {
   return TakenOverPosition(
     chapterId = chapter.id,
     positionInChapter = position,
-    playedAt = Instant.ofEpochMilli(remote.updatedAt),
+    playedAt = Instant.ofEpochMilli(remote.playedAt),
   )
 }
 

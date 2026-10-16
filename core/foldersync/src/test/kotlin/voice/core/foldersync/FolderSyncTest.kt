@@ -23,9 +23,13 @@ import voice.core.data.folders.FolderType
 import voice.core.data.syncKey
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
+import java.io.IOException
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.seconds
 
 @RunWith(AndroidJUnit4::class)
@@ -35,8 +39,10 @@ class FolderSyncTest {
   private val playerController = mockk<PlayerController>(relaxUnitFun = true)
   private val playStateManager = PlayStateManager()
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val syncFiles = mockk<SyncFiles>(relaxUnitFun = true) {
-    every { read(any(), any()) } returns emptyList()
+  private val written = mutableListOf<SyncFile>()
+  private val syncFiles = mockk<SyncFiles> {
+    every { read(any()) } returns emptyMap()
+    every { write(folder(), any(), capture(written)) } returns Unit
   }
   private val audiobookFolders = mockk<AudiobookFolders> {
     every { all() } returns flowOf(
@@ -45,30 +51,40 @@ class FolderSyncTest {
   }
 
   @Test
-  fun `a newer place from another device is taken over`() = scope.runTest {
+  fun `a newer place from another device is taken over with its speed`() = scope.runTest {
     val book = book(currentFile = 0, position = 5000, lastPlayedAt = 1000, playbackSpeed = 1.25F)
     val repo = MemoryBookRepository(book)
-    every { syncFiles.read(folder(), any()) } returns listOf(
-      SyncFile(mapOf(book.chapters.syncKey()!! to SyncedPosition(file = 1, position = 3000, updatedAt = 2000))),
-    )
+    otherDevice(book, SyncedBook(place = place(file = 1, position = 3000, speed = 1.5F, playedAt = 2000)))
 
-    folderSync(repo).read()
+    folderSync(repo).sync()
 
     val content = repo.get(book.id)!!.content
     assertEquals(book.chapters[1].id, content.currentChapter)
     assertEquals(3000, content.positionInChapter)
     assertEquals(Instant.ofEpochMilli(2000), content.lastPlayedAt)
-    assertEquals(1.25F, content.playbackSpeed)
+    assertEquals(1.5F, content.playbackSpeed)
     verify(exactly = 0) { playerController.setPosition(any(), any(), any(), any()) }
   }
 
   @Test
-  fun `the loaded book jumps to the new place`() = scope.runTest {
+  fun `a speed the player can't play is not taken over`() = scope.runTest {
+    val book = book(currentFile = 0, position = 5000, lastPlayedAt = 1000, playbackSpeed = 1.25F)
+    val repo = MemoryBookRepository(book)
+
+    folderSync(repo).takeOver(book.id, place(file = 1, position = 3000, speed = 0F, playedAt = 2000))
+
+    val content = repo.get(book.id)!!.content
+    assertEquals(3000, content.positionInChapter)
+    assertEquals(1.25F, content.playbackSpeed)
+  }
+
+  @Test
+  fun `the loaded book jumps to the new place and speed`() = scope.runTest {
     val book = book(lastPlayedAt = 1000)
     currentBookStore.updateData { book.id }
     coEvery { playerController.livePlaybackState(book.id) } returns mockk()
 
-    folderSync(MemoryBookRepository(book)).takeOver(book.id, SyncedPosition(file = 1, position = 3000, updatedAt = 2000))
+    folderSync(MemoryBookRepository(book)).takeOver(book.id, place(file = 1, position = 3000, speed = 1.5F))
 
     verify {
       playerController.setPosition(
@@ -76,6 +92,7 @@ class FolderSyncTest {
         id = book.chapters[1].id,
         source = ListeningEvent.Source.OtherDevice,
       )
+      playerController.setSpeed(1.5F)
     }
   }
 
@@ -86,50 +103,133 @@ class FolderSyncTest {
     currentBookStore.updateData { book.id }
     playStateManager.playState = PlayStateManager.PlayState.Playing
 
-    folderSync(repo).takeOver(book.id, SyncedPosition(file = 1, position = 3000, updatedAt = 2000))
+    folderSync(repo).takeOver(book.id, place(playedAt = 2000))
 
     assertEquals(book, repo.get(book.id))
     verify(exactly = 0) { playerController.setPosition(any(), any(), any(), any()) }
   }
 
   @Test
-  fun `a book never played here starts at the last speed`() = scope.runTest {
-    val book = book()
-    val repo = MemoryBookRepository(book)
-
-    folderSync(repo).takeOver(book.id, SyncedPosition(file = 1, position = 3000, updatedAt = 2000))
-
-    assertEquals(1.75F, repo.get(book.id)!!.content.playbackSpeed)
-  }
-
-  @Test
   fun `the place played here is written into the folder`() = scope.runTest {
     val book = book(currentFile = 1, position = 3000, lastPlayedAt = 2000)
-    val written = slot<SyncFile>()
-    every { syncFiles.write(folder(), any(), capture(written)) } returns Unit
 
     folderSync(MemoryBookRepository(book)).start()
     testScheduler.advanceTimeBy(4.seconds)
 
     assertEquals(
-      expected = SyncFile(mapOf(book.chapters.syncKey()!! to SyncedPosition(file = 1, position = 3000, updatedAt = 2000))),
-      actual = written.captured,
+      expected = listOf(SyncFile(mapOf(book.key() to SyncedBook(place = place(file = 1, position = 3000, playedAt = 2000))))),
+      actual = written,
     )
   }
 
   @Test
-  fun `a read request takes over a newer place`() = scope.runTest {
+  fun `a sync request takes over a newer place`() = scope.runTest {
     val book = book(lastPlayedAt = 1000)
     val repo = MemoryBookRepository(book)
-    every { syncFiles.read(folder(), any()) } returns listOf(
-      SyncFile(mapOf(book.chapters.syncKey()!! to SyncedPosition(file = 1, position = 3000, updatedAt = 2000))),
-    )
+    otherDevice(book, SyncedBook(place = place(position = 3000, playedAt = 2000)))
 
-    folderSync(repo).requestRead()
+    folderSync(repo).requestSync()
     testScheduler.runCurrent()
 
     assertEquals(3000, repo.get(book.id)!!.content.positionInChapter)
   }
+
+  @Test
+  fun `a name from another device is taken, and not sent back`() = scope.runTest {
+    val book = book()
+    val repo = MemoryBookRepository(book)
+    val name = SyncedText("Other", changedAt = 1000)
+    otherDevice(book, SyncedBook(name = name))
+    val folderSync = folderSync(repo)
+
+    folderSync.sync()
+    ownFile(folderSync, written.single())
+    folderSync.sync()
+
+    assertEquals("Other", repo.get(book.id)!!.content.customName)
+    assertEquals(listOf(SyncFile(mapOf(book.key() to SyncedBook(name = name)))), written)
+  }
+
+  @Test
+  fun `a name from another device that is the files' name here is not sent back`() = scope.runTest {
+    val book = book(path = "Book")
+    val repo = MemoryBookRepository(book)
+    otherDevice(book, SyncedBook(name = SyncedText("Book", changedAt = 1000)))
+    val folderSync = folderSync(repo)
+
+    folderSync.sync()
+    ownFile(folderSync, written.single())
+    folderSync.sync()
+
+    assertNull(repo.get(book.id)!!.content.customName)
+    assertEquals(1, written.size)
+  }
+
+  @Test
+  fun `a name given here wins over an older one from another device`() = scope.runTest {
+    val book = book(customName = "Mine")
+    val repo = MemoryBookRepository(book)
+    val folderSync = folderSync(repo)
+    every { syncFiles.read(folder()) } returns mapOf(
+      folderSync.ownFileName to SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Earlier", changedAt = 1000)))),
+      "sync-other.json" to SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Other", changedAt = 2000)))),
+    )
+
+    folderSync.sync()
+
+    assertEquals("Mine", repo.get(book.id)!!.content.customName)
+    assertEquals(SyncedText("Mine", changedAt = NOW), written.single().books[book.key()]!!.name)
+  }
+
+  @Test
+  fun `nothing is written when nothing changed`() = scope.runTest {
+    val book = book(lastPlayedAt = 2000)
+    val folderSync = folderSync(MemoryBookRepository(book))
+    ownFile(folderSync, SyncFile(mapOf(book.key() to SyncedBook(place = place(file = 0, position = 0, playedAt = 2000)))))
+
+    folderSync.sync()
+
+    assertEquals(emptyList(), written)
+  }
+
+  @Test
+  fun `a folder that can't be read is left alone`() = scope.runTest {
+    val book = book(lastPlayedAt = 2000)
+    every { syncFiles.read(folder()) } throws IOException()
+
+    folderSync(MemoryBookRepository(book)).sync()
+
+    assertEquals(emptyList(), written)
+  }
+
+  @Test
+  fun `a book that is missing keeps its entry`() = scope.runTest {
+    val book = book(lastPlayedAt = 2000)
+    val folderSync = folderSync(MemoryBookRepository(book))
+    val missing = SyncedBook(name = SyncedText("Missing", changedAt = 1000))
+    ownFile(folderSync, SyncFile(mapOf("missing" to missing)))
+
+    folderSync.sync()
+
+    assertEquals(missing, written.single().books["missing"])
+  }
+
+  private fun otherDevice(
+    book: Book,
+    synced: SyncedBook,
+  ) {
+    every { syncFiles.read(folder()) } returns mapOf("sync-other.json" to SyncFile(mapOf(book.key() to synced)))
+  }
+
+  private fun ownFile(
+    folderSync: FolderSync,
+    file: SyncFile,
+  ) {
+    val files = syncFiles.read(folder())
+    every { syncFiles.read(folder()) } returns files + (folderSync.ownFileName to file)
+  }
+
+  private fun Book.key(): String = chapters.syncKey()!!
 
   private fun TestScope.folderSync(repo: MemoryBookRepository): FolderSync {
     val dispatcher = StandardTestDispatcher(testScheduler)
@@ -141,8 +241,10 @@ class FolderSyncTest {
       playerController = playerController,
       playStateManager = playStateManager,
       currentBookStore = currentBookStore,
-      lastPlaybackSpeedStore = MemoryDataStore(1.75F),
+      clock = Clock.fixed(Instant.ofEpochMilli(NOW), ZoneOffset.UTC),
       dispatcherProvider = DispatcherProvider(main = dispatcher, io = dispatcher, mainImmediate = dispatcher),
     )
   }
 }
+
+private const val NOW = 5000L

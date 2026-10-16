@@ -90,13 +90,13 @@ this device.
 
 Listeners without a server asked for an optional sync that stays local.
 
-**Solution:** Each device keeps its places in its own file in a hidden `.voice` folder inside each library folder.
-Listeners sync their library folders with a tool of their own, like Syncthing. When Voice comes to the foreground or
-finds new books, it takes over a newer place from another device's file, and the jump-back pill takes you to where you
-were on this device. A book is recognized by the names and sizes of its files, so the folder can be anywhere on each
-device. This works for folders on the device that are added the same way on every device, not for single files or
-folders from other apps. There's no switch: listeners who don't want a folder's places shared let their sync tool
-ignore `.voice` ([FAQ](../docs/faq.md)).
+**Solution:** Each device keeps its places, with the speed and the names listeners gave their books, in its own file
+in a hidden `.voice` folder inside each library folder. Listeners sync their library folders with a tool of their own,
+like Syncthing. When Voice comes to the foreground or the library changes, it takes over what changed later on another
+device, and the jump-back pill takes you to where you were on this device. A book is recognized by the names and
+sizes of its files, so the folder can be anywhere on each device. This works for folders on the device that are added
+the same way on every device, not for single files or folders from other apps. There's no switch: listeners who don't
+want a folder's places shared let their sync tool ignore `.voice` ([FAQ](../docs/faq.md)).
 
 **Assumption:** Sync tools copy hidden folders. Guess: Syncthing does by default, the others weren't checked.
 
@@ -114,12 +114,14 @@ off. Guess.
   only writes its own file.
 - A file next to each book: it would add a file to every book folder.
 - A switch in the settings: sync tools can already leave `.voice` out.
+- Storing when a name changed in the database: comparing with what the device last wrote into its own file tells the
+  same, without a migration.
 
 ## Without a server, my bookmarks don't follow me to another device
 
 ⭕ **Open** · [#3707]
 
-The synced folder only carries the place in a book. Bookmarks and the playback speed stay on the device.
+The synced folder carries the place, speed and name of a book, but not its bookmarks.
 
 ## A new phone means losing my progress and bookmarks
 

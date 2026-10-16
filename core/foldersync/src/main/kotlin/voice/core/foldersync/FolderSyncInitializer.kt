@@ -20,7 +20,7 @@ public class FolderSyncInitializer(private val folderSync: FolderSync) : AppInit
         private var startedActivities = 0
 
         override fun onActivityStarted(activity: Activity) {
-          if (startedActivities++ == 0) folderSync.requestRead()
+          if (startedActivities++ == 0) folderSync.requestSync()
         }
 
         override fun onActivityStopped(activity: Activity) {

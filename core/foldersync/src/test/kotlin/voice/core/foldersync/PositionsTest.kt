@@ -5,7 +5,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.runner.RunWith
 import voice.core.data.Book
 import voice.core.data.BookId
-import voice.core.data.syncKey
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,39 +27,12 @@ class PositionsTest {
   }
 
   @Test
-  fun `the newest copy of a book is written, and a book never played isn't`() {
-    val older = book(path = "Book", currentFile = 0, position = 5, lastPlayedAt = 1000)
-    val newer = book(path = "Copy of Book", currentFile = 1, position = 7, lastPlayedAt = 2000)
-    val neverPlayed = book(path = "Other", fileSizes = listOf(30))
-
-    val file = listOf(older, newer, neverPlayed).keyedIn(folder()).toSyncFile()
-
-    assertEquals(
-      expected = SyncFile(mapOf(older.chapters.syncKey()!! to SyncedPosition(file = 1, position = 7, updatedAt = 2000))),
-      actual = file,
-    )
-  }
-
-  @Test
-  fun `the newest position from all devices wins`() {
-    val files = listOf(
-      SyncFile(mapOf("a" to SyncedPosition(0, 1, updatedAt = 10), "b" to SyncedPosition(0, 2, updatedAt = 30))),
-      SyncFile(mapOf("a" to SyncedPosition(0, 3, updatedAt = 20), "b" to SyncedPosition(0, 4, updatedAt = 5))),
-    )
-
-    assertEquals(
-      expected = mapOf("a" to SyncedPosition(0, 3, updatedAt = 20), "b" to SyncedPosition(0, 2, updatedAt = 30)),
-      actual = files.newest(),
-    )
-  }
-
-  @Test
   fun `a newer position is taken over`() {
     val book = book(currentFile = 0, position = 5000, lastPlayedAt = 1000)
 
     assertEquals(
       expected = TakenOverPosition(book.chapters[1].id, positionInChapter = 3000, playedAt = Instant.ofEpochMilli(2000)),
-      actual = book.positionFrom(SyncedPosition(file = 1, position = 3000, updatedAt = 2000)),
+      actual = book.positionFrom(place(file = 1, position = 3000, playedAt = 2000)),
     )
   }
 
@@ -68,8 +40,8 @@ class PositionsTest {
   fun `a position that isn't newer stays`() {
     val book = book(currentFile = 0, position = 5000, lastPlayedAt = 1000)
 
-    assertNull(book.positionFrom(SyncedPosition(file = 1, position = 3000, updatedAt = 1000)))
-    assertNull(book.positionFrom(SyncedPosition(file = 1, position = 3000, updatedAt = 999)))
+    assertNull(book.positionFrom(place(file = 1, position = 3000, playedAt = 1000)))
+    assertNull(book.positionFrom(place(file = 1, position = 3000, playedAt = 999)))
   }
 
   @Test
@@ -77,30 +49,31 @@ class PositionsTest {
     // taking over a place seeks, which stores a newer time at that place, and the other device must not take it back
     val book = book(currentFile = 1, position = 5000, lastPlayedAt = 1000)
 
-    assertNull(book.positionFrom(SyncedPosition(file = 1, position = 6000, updatedAt = 2000)))
+    assertNull(book.positionFrom(place(file = 1, position = 6000, playedAt = 2000)))
   }
 
   @Test
   fun `a position past the end of its file stops at the end`() {
     val book = book(lastPlayedAt = 1000)
 
-    assertEquals(60_000, book.positionFrom(SyncedPosition(file = 1, position = 90_000, updatedAt = 2000))?.positionInChapter)
+    assertEquals(60_000, book.positionFrom(place(file = 1, position = 90_000, playedAt = 2000))?.positionInChapter)
   }
 
   @Test
   fun `a file the book doesn't have is ignored`() {
     val book = book(lastPlayedAt = 1000)
 
-    assertNull(book.positionFrom(SyncedPosition(file = 2, position = 0, updatedAt = 2000)))
+    assertNull(book.positionFrom(place(file = 2, position = 0, playedAt = 2000)))
   }
 
   @Test
   fun `a file with unknown fields can be read, a broken one is skipped`() {
-    val text = """{"books":{"a":{"file":1,"position":2,"updatedAt":3,"speed":1.5}},"bookmarks":{}}"""
+    val text = """{"books":{"a":{"place":{"file":1,"position":2,"speed":1.5,"playedAt":3},"author":{}}},"other":{}}"""
+    val file = SyncFile(mapOf("a" to SyncedBook(place = SyncedPlace(file = 1, position = 2, speed = 1.5F, playedAt = 3))))
 
-    assertEquals(SyncFile(mapOf("a" to SyncedPosition(1, 2, 3))), parseSyncFile(text))
-    assertEquals(SyncFile(mapOf("a" to SyncedPosition(1, 2, 3))), parseSyncFile(SyncFile(mapOf("a" to SyncedPosition(1, 2, 3))).encode()))
-    assertNull(parseSyncFile("""{"books":{"a":{"file":1"""))
+    assertEquals(file, parseSyncFile(text))
+    assertEquals(file, parseSyncFile(file.encode()))
+    assertNull(parseSyncFile("""{"books":{"a":{"place":{"file":1"""))
     assertNull(parseSyncFile("garbage"))
   }
 }
