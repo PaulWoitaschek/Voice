@@ -33,10 +33,7 @@ internal fun List<Book>.toSyncedBook(
   )
 }
 
-/**
- * Without a name that is the files' name here. It isn't a rename, but a device whose files name the book differently,
- * like after another folder, would take it as one.
- */
+// not a rename, but a device whose folder has another name would take it as one
 internal fun SyncedBook.withoutFilesName(copies: List<Book>): SyncedBook {
   return if (name?.value == copies.played().metadata.name) copy(name = null) else this
 }
