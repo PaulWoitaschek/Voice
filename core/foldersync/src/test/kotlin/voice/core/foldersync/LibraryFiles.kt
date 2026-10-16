@@ -22,6 +22,7 @@ fun book(
   position: Long = 0,
   lastPlayedAt: Long = 0,
   playbackSpeed: Float = 1F,
+  customName: String? = null,
 ): Book {
   val bookUri = DocumentsContract.buildDocumentUriUsingTree(folder(tree), "$tree/$path")
   val chapters = fileSizes.mapIndexed { index, size ->
@@ -59,9 +60,16 @@ fun book(
         cover = null,
         fileLastModified = null,
       ),
-      customName = null,
+      customName = customName,
       customCover = null,
     ),
     chapters = chapters,
   )
 }
+
+internal fun place(
+  file: Int = 1,
+  position: Long = 3000,
+  speed: Float = 1F,
+  playedAt: Long = 2000,
+): SyncedPlace = SyncedPlace(file = file, position = position, speed = speed, playedAt = playedAt)

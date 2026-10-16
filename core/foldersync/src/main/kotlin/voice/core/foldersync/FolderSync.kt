@@ -11,13 +11,12 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.common.DispatcherProvider
+import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.ListeningEvent
 import voice.core.data.folders.AudiobookFolders
@@ -25,20 +24,19 @@ import voice.core.data.folders.DocumentFileWithUri
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
-import voice.core.playback.withDefaultSpeed
 import java.io.File
 import java.io.IOException
+import java.time.Clock
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Takes the listener's place to their other devices without a server. Each device writes its places into a file in
- * the library folders, which the listener syncs with a tool of their own, and takes over newer places from the files
- * of the other devices.
+ * Takes the listener's place, speed and names to their other devices without a server. Each device writes what it knows
+ * into a file in the library folders, which the listener syncs with a tool of their own, and takes over what changed
+ * later in the files of the other devices.
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -51,75 +49,88 @@ public class FolderSync internal constructor(
   private val playStateManager: PlayStateManager,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
-  @LastPlaybackSpeedStore
-  private val lastPlaybackSpeedStore: DataStore<Float>,
+  private val clock: Clock,
   dispatcherProvider: DispatcherProvider,
 ) {
 
   private val scope = CoroutineScope(SupervisorJob() + dispatcherProvider.io)
 
-  // two reads at once could both move the same book and add the jump to its history twice
-  private val readLock = Mutex()
+  // two syncs at once could both move the same book and add the jump to its history twice
+  private val lock = Mutex()
   private var started = false
 
-  private val ownFileName by lazy { "sync-${deviceId()}.json" }
+  internal val ownFileName by lazy { "sync-${deviceId()}.json" }
 
   internal fun start() {
     if (started) return
     started = true
-    scope.launch { writeChanges() }
-    scope.launch { readWhenBooksChange() }
+    scope.launch { syncChanges() }
   }
 
-  internal fun requestRead() {
-    scope.launch {
-      readLock.withLock { read() }
+  internal fun requestSync() {
+    scope.launch { sync() }
+  }
+
+  @OptIn(FlowPreview::class)
+  private suspend fun syncChanges() {
+    // while playing, the position changes every few hundred ms, so this syncs once playback stops
+    combine(audiobookFolders.all(), bookRepository.flow()) { _, _ -> }
+      .debounce(3.seconds)
+      .collect { sync() }
+  }
+
+  internal suspend fun sync() {
+    lock.withLock {
+      audiobookFolders.all().first().uris().forEach { syncFolder(it) }
     }
   }
 
-  @OptIn(FlowPreview::class)
-  private suspend fun writeChanges() {
-    val written = mutableMapOf<Uri, SyncFile>()
-    // while playing, the position changes every few hundred ms, so this writes once playback stops
-    combine(audiobookFolders.all(), bookRepository.flow(), ::Pair)
-      .debounce(3.seconds)
-      .collect { (folders, books) ->
-        folders.uris().forEach { folder ->
-          val file = books.keyedIn(folder).toSyncFile()
-          // a folder without a book that was played here gets no .voice folder
-          if (file.books.isEmpty() || written[folder] == file) return@forEach
-          inFolder { syncFiles.write(folder, ownFileName, file) }
-            ?.let { written[folder] = file }
-        }
+  private suspend fun syncFolder(folder: Uri) {
+    val books = bookRepository.all().keyedIn(folder)
+    if (books.isEmpty()) return
+    // writing without its own file would lose the times in it, so the folder waits for the next sync
+    val files = inFolder { syncFiles.read(folder) } ?: return
+    val ownFile = files[ownFileName]
+    val own = ownFile?.books.orEmpty()
+    val others = (files - ownFileName).values
+    val now = clock.millis()
+    val synced = books.groupBy(keySelector = { it.key }, valueTransform = { it.book })
+      .mapValues { (key, copies) ->
+        val mine = copies.toSyncedBook(own[key], ownFileExists = ownFile != null, now = now)
+        val newest = others.mapNotNull { it.books[key] }.fold(mine, SyncedBook::with)
+        // before writing, so if Voice stops in between, the next sync doesn't take this for a change made here
+        takeOver(copies, mine, newest)
+        newest
       }
+      .filterValues { it != SyncedBook() }
+    // books that are missing for now, like on an SD card that's out, keep their entry
+    val file = SyncFile(own + synced)
+    // a folder without a book that was played or renamed gets no .voice folder
+    if (file.books.isNotEmpty() && file != ownFile) {
+      val _ = inFolder { syncFiles.write(folder, ownFileName, file) }
+    }
   }
 
-  @OptIn(FlowPreview::class)
-  private suspend fun readWhenBooksChange() {
-    // a book started on another device may only show up here with a scan
-    bookRepository.flow()
-      .map { books -> books.map { it.id }.toSet() }
-      .distinctUntilChanged()
-      .debounce(2.seconds)
-      .collect { requestRead() }
-  }
-
-  internal suspend fun read() {
-    val books = bookRepository.all()
-    val keyedByFolder = audiobookFolders.all().first().uris()
-      .associateWith { books.keyedIn(it) }
-      .filterValues { it.isNotEmpty() }
-    val remote = keyedByFolder.keys
-      .flatMap { folder -> inFolder { syncFiles.read(folder, exceptName = ownFileName) }.orEmpty() }
-      .newest()
-    keyedByFolder.values.flatten().forEach { (key, book) ->
-      remote[key]?.let { takeOver(book.id, it) }
+  private suspend fun takeOver(
+    copies: List<Book>,
+    mine: SyncedBook,
+    newest: SyncedBook,
+  ) {
+    val place = newest.place
+    if (place != null && place != mine.place) {
+      copies.forEach { takeOver(it.id, place) }
+    }
+    val name = newest.name
+    if (name != null && name != mine.name) {
+      copies.forEach { copy ->
+        bookRepository.updateBook(copy.id) { it.withCustomName(name.value) }
+      }
     }
   }
 
   internal suspend fun takeOver(
     bookId: BookId,
-    remote: SyncedPosition,
+    remote: SyncedPlace,
   ) {
     val book = bookRepository.get(bookId) ?: return
     val position = book.positionFrom(remote) ?: return
@@ -135,15 +146,14 @@ public class FolderSync internal constructor(
         id = position.chapterId,
         source = ListeningEvent.Source.OtherDevice,
       )
+      playerController.setSpeed(remote.speed)
     }
-    // the book now counts as played, so it would no longer start at the speed the listener last picked
-    val speed = book.withDefaultSpeed { lastPlaybackSpeedStore.data.first() }.content.playbackSpeed
     bookRepository.updateBook(bookId) {
       it.copy(
         currentChapter = position.chapterId,
         positionInChapter = position.positionInChapter,
         lastPlayedAt = position.playedAt,
-        playbackSpeed = speed,
+        playbackSpeed = remote.speed,
       )
     }
   }

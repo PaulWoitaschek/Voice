@@ -14,20 +14,22 @@ import java.io.IOException
 @Inject
 internal class SyncFiles(private val context: Context) {
 
-  fun read(
-    folder: Uri,
-    exceptName: String,
-  ): List<SyncFile> {
+  /**
+   * Every device's file, by its name.
+   */
+  fun read(folder: Uri): Map<String, SyncFile> {
     val voiceFolder = children(folder, DocumentsContract.getTreeDocumentId(folder))
-      .find { it.name == FOLDER_NAME } ?: return emptyList()
+      .find { it.name == FOLDER_NAME } ?: return emptyMap()
     return children(folder, voiceFolder.id)
-      .filter { it.name.startsWith("sync-") && it.name.endsWith(".json") && it.name != exceptName }
+      .filter { it.name.startsWith("sync-") && it.name.endsWith(".json") }
       .mapNotNull { child ->
         val uri = DocumentsContract.buildDocumentUriUsingTree(folder, child.id)
         context.contentResolver.openInputStream(uri)
           ?.use { it.readBytes().decodeToString() }
           ?.let(::parseSyncFile)
+          ?.let { child.name to it }
       }
+      .toMap()
   }
 
   fun write(
