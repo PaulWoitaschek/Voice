@@ -97,6 +97,20 @@ class CoverSaverTest {
   }
 
   @Test
+  fun `a png cover could be one the listener picked, so it stays backed up`() = runTest {
+    val png = File(context.filesDir, "bookCovers/picked.png").apply {
+      parentFile!!.mkdirs()
+      outputStream().use { Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888).compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+    val book = content("book", cover = png)
+
+    coverSaver.moveExtractedCovers()
+
+    assertTrue(png.exists())
+    assertEquals(expected = png, actual = contents.getValue(book.id).metadata.cover)
+  }
+
+  @Test
   fun `a missing extracted cover is left for the scan to find again`() = runTest {
     val missing = File(context.filesDir, "bookCovers/missing.png")
     val book = content("book", cover = missing)

@@ -36,7 +36,7 @@ class CoverScannerTest {
   private val image by lazy { File(testFolder.root, "image") }
   private val savedImages = mutableListOf<String>()
   private val coverSaver = mockk<CoverSaver>(relaxUnitFun = true) {
-    coEvery { newTemporaryFile() } answers { image }
+    every { newTemporaryFile() } answers { image }
     coEvery { saveExtractedCover(any(), any()) } answers {
       savedImages += firstArg<File>().readText()
       true

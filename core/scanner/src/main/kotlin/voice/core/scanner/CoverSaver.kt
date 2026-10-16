@@ -2,7 +2,7 @@ package voice.core.scanner
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.os.Build
 import androidx.core.graphics.scale
 import dev.zacsweers.metro.Inject
@@ -14,6 +14,7 @@ import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
 import java.io.File
 import java.io.IOException
+import java.nio.ByteBuffer
 import kotlin.math.max
 import kotlin.uuid.Uuid
 
@@ -23,6 +24,8 @@ private const val CUSTOM_COVERS = "bookCovers"
 private const val EXTRACTED_COVERS = "extractedCovers"
 
 private const val MAX_COVER_SIZE = 1200
+
+private val PNG_SIGNATURE = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
 
 @Inject
 public class CoverSaver
@@ -46,9 +49,7 @@ internal constructor(
     }
   }
 
-  internal suspend fun newTemporaryFile(): File = withContext(Dispatchers.IO) {
-    File.createTempFile("cover", null, context.cacheDir)
-  }
+  internal fun newTemporaryFile(): File = File(context.cacheDir, "cover-${Uuid.random()}")
 
   internal suspend fun saveExtractedCover(
     image: File,
@@ -73,6 +74,8 @@ internal constructor(
       .distinct()
       .forEach { old ->
         val moved = withContext(Dispatchers.IO) {
+          // until the listener's cover got a field of its own, it was stored here too, always as PNG
+          if (old.isPng()) return@withContext null
           File(coversFolder(EXTRACTED_COVERS), old.name)
             .also { old.renameTo(it) }
             .takeIf { it.exists() }
@@ -86,15 +89,30 @@ internal constructor(
       }
   }
 
+  // ImageDecoder turns a photo upright as its EXIF data says, which BitmapFactory doesn't
   private fun decode(image: File): Bitmap? {
-    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-    BitmapFactory.decodeFile(image.path, bounds)
-    // decoding a large embedded image at full size could run out of memory
-    var sampleSize = 1
-    while (max(bounds.outWidth, bounds.outHeight) / (sampleSize * 2) >= MAX_COVER_SIZE) {
-      sampleSize *= 2
+    return try {
+      ImageDecoder.decodeBitmap(ImageDecoder.createSource(ByteBuffer.wrap(image.readBytes()))) { decoder, info, _ ->
+        decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+        // decoding a large embedded image at full size could run out of memory
+        var sampleSize = 1
+        while (max(info.size.width, info.size.height) / (sampleSize * 2) >= MAX_COVER_SIZE) {
+          sampleSize *= 2
+        }
+        decoder.setTargetSampleSize(sampleSize)
+      }
+    } catch (_: IOException) {
+      null
     }
-    return BitmapFactory.decodeFile(image.path, BitmapFactory.Options().apply { inSampleSize = sampleSize })
+  }
+
+  private fun File.isPng(): Boolean {
+    val header = ByteArray(PNG_SIGNATURE.size)
+    return try {
+      inputStream().use { it.read(header) } == header.size && header.contentEquals(PNG_SIGNATURE)
+    } catch (_: IOException) {
+      false
+    }
   }
 
   private fun Bitmap.saveAsWebp(folder: String): File? {
