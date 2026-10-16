@@ -23,6 +23,7 @@ import java.io.File
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @RunWith(AndroidJUnit4::class)
 class CoverScannerTest {
@@ -30,9 +31,14 @@ class CoverScannerTest {
   @get:Rule
   val testFolder = TemporaryFolder()
 
-  private val savedCover by lazy { File(testFolder.root, "saved.png") }
+  private val image by lazy { File(testFolder.root, "image") }
+  private val savedImages = mutableListOf<String>()
   private val coverSaver = mockk<CoverSaver>(relaxUnitFun = true) {
-    coEvery { newBookCoverFile() } answers { savedCover }
+    every { newTemporaryFile() } answers { image }
+    coEvery { saveExtractedCover(any(), any()) } answers {
+      savedImages += firstArg<File>().readText()
+      true
+    }
   }
   private val coverExtractor = mockk<CoverExtractor> {
     coEvery { extractCover(any(), any()) } returns false
@@ -46,10 +52,11 @@ class CoverScannerTest {
     File(folder, "Cover.JPG").writeText("cover")
     val book = book(folder)
 
-    scanner.scan(listOf(book))
+    scan(book)
 
-    coVerify { coverSaver.setCoverFromFiles(savedCover, book.id) }
-    assertEquals(expected = "cover", actual = savedCover.readText())
+    coVerify { val _ = coverSaver.saveExtractedCover(image, book.id) }
+    assertEquals(expected = listOf("cover"), actual = savedImages)
+    assertFalse(image.exists())
   }
 
   @Test
@@ -58,9 +65,9 @@ class CoverScannerTest {
     File(folder, "1.mp3").writeText("audio")
     File(folder, "notes.txt").writeText("notes")
 
-    scanner.scan(listOf(book(folder)))
+    scan(book(folder))
 
-    coVerify(exactly = 0) { coverSaver.setCoverFromFiles(any(), any()) }
+    coVerify(exactly = 0) { val _ = coverSaver.saveExtractedCover(any(), any()) }
   }
 
   @Test
@@ -73,9 +80,72 @@ class CoverScannerTest {
       }
     }
 
-    scanner(mockk { every { create(any()) } returns listedCoverLast }).scan(listOf(book(folder)))
+    scan(book(folder), scanner(mockk { every { create(any()) } returns listedCoverLast }))
 
-    assertEquals(expected = "Cover", actual = savedCover.readText())
+    assertEquals(expected = listOf("Cover"), actual = savedImages)
+  }
+
+  @Test
+  fun `an image that can't be decoded makes way for the next one`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    File(folder, "Cover.jpg").writeText("broken")
+    File(folder, "back.jpg").writeText("back")
+    coEvery { coverSaver.saveExtractedCover(any(), any()) } answers {
+      savedImages += firstArg<File>().readText()
+      savedImages.size > 1
+    }
+
+    scan(book(folder))
+
+    assertEquals(expected = listOf("broken", "back"), actual = savedImages)
+  }
+
+  @Test
+  fun `a picked cover that is gone makes way for the one in the files`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    File(folder, "cover.jpg").writeText("cover")
+    val missing = File(testFolder.root, "picked.png")
+    val book = book(folder).let { Book(it.content.copy(customCover = missing), it.chapters) }
+
+    scan(book)
+
+    coVerify { coverSaver.forgetCustomCover(book.id, missing) }
+    assertEquals(expected = listOf("cover"), actual = savedImages)
+  }
+
+  @Test
+  fun `only the first file is asked for an embedded cover`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    val first = File(folder, "1.mp3").apply { writeText("audio") }
+    File(folder, "2.mp3").writeText("audio")
+
+    scan(book(folder))
+
+    coVerify(exactly = 1) { val _ = coverExtractor.extractCover(any(), any()) }
+    coVerify { val _ = coverExtractor.extractCover(first.toUri(), image) }
+  }
+
+  @Test
+  fun `an embedded cover becomes the cover`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    coEvery { coverExtractor.extractCover(any(), any()) } answers {
+      secondArg<File>().writeText("embedded")
+      true
+    }
+
+    scan(book(folder))
+
+    assertEquals(expected = listOf("embedded"), actual = savedImages)
+  }
+
+  private suspend fun scan(
+    book: Book,
+    scanner: CoverScanner = this.scanner,
+  ) {
+    scanner.scan(listOf(book))
   }
 
   private fun scanner(documentFileFactory: CachedDocumentFileFactory) = CoverScanner(
@@ -88,6 +158,7 @@ class CoverScannerTest {
   private fun book(folder: File): Book {
     val chapters = folder.listFiles()!!
       .filter { it.extension == "mp3" }
+      .sortedBy { it.name }
       .map { chapter(it) }
     val content = BookParser(contentRepo = mockk(), mediaAnalyzer = mockk(), fileFactory = mockk())
       .parse(chapters, BookId(folder.toUri()), analyzed = null, file = FileBasedDocumentFile(folder))
