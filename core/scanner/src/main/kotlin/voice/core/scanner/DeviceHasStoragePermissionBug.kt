@@ -1,7 +1,9 @@
 package voice.core.scanner
 
 import android.content.Context
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
@@ -11,6 +13,7 @@ import kotlinx.coroutines.withContext
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.logging.api.Logger
 
+@SingleIn(AppScope::class)
 @Inject
 public class DeviceHasStoragePermissionBug(private val context: Context) {
 
