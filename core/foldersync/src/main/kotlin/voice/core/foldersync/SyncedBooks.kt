@@ -17,7 +17,7 @@ internal fun List<Book>.toSyncedBook(
   ownFileExists: Boolean,
   now: Long,
 ): SyncedBook {
-  val content = maxBy { it.content.lastPlayedAt }.content
+  val content = played()
   // the bookmarks of every copy, so playing another copy doesn't look like deleting them
   val localBookmarks = flatMap { copy ->
     copy.chapters.flatMapIndexed { file, chapter ->
@@ -32,6 +32,16 @@ internal fun List<Book>.toSyncedBook(
     deletedBookmarks = own?.deletedBookmarks.orEmpty() - localBookmarks.keys + deletedNow,
   )
 }
+
+/**
+ * Without a name that is the files' name here. It isn't a rename, but a device whose files name the book differently,
+ * like after another folder, would take it as one.
+ */
+internal fun SyncedBook.withoutFilesName(copies: List<Book>): SyncedBook {
+  return if (name?.value == copies.played().metadata.name) copy(name = null) else this
+}
+
+private fun List<Book>.played(): BookContent = maxBy { it.content.lastPlayedAt }.content
 
 private fun BookContent.place(): SyncedPlace? {
   if (lastPlayedAt == Instant.EPOCH) return null
