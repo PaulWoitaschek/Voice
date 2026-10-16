@@ -33,7 +33,7 @@ Elige la carpeta con tus audiolibros. Voice te muestra los libros que encuentra,
 • Widgets para la pantalla de inicio: «Reproduciendo ahora» y «Estantería»
 • Notificación multimedia y Android Auto
 • Tema claro y oscuro, Color dinámico y esquemas de colores para hacer Voice a tu medida
-• Disponible en 25 idiomas
+• Disponible en 32 idiomas
 
 <b>Trae tus propios archivos</b>
 

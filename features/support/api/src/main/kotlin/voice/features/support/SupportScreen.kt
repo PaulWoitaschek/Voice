@@ -123,13 +123,6 @@ private fun Support(
         SupportHero(
           badge = viewState.badge,
           supporterSince = viewState.supporterSince,
-          description = stringResource(
-            if (viewState.content == SupportViewState.Content.KoFi) {
-              StringsR.string.support_description_maintenance_subtitle
-            } else {
-              StringsR.string.support_description_play
-            },
-          ),
         )
         when (val content = viewState.content) {
           SupportViewState.Content.KoFi -> KoFiContent(onKoFiClick = listener::openKoFi)

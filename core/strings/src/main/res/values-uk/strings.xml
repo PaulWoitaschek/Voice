@@ -414,8 +414,7 @@
     <string name="support.badges.title">Ваш значок росте з кожним місяцем підтримки</string>
     <string name="support.action.donate_kofi">Задонатити на Ko-fi</string>
     <string name="support.description.maintenance">Voice безкоштовний, з відкритим кодом і підтримується одним розробником.</string>
-    <string name="support.description.maintenance_subtitle">Донати допомагають фінансувати постійну підтримку та розробку.</string>
-    <string name="support.description.play">Щомісячна підтримка дає мені змогу планувати наступну версію, а не лише наступне виправлення.</string>
+    <string name="support.description.monthly">Щомісячна підтримка дає мені змогу планувати наступну версію, а не лише наступне виправлення.</string>
     <string name="support.fine_print">Це подяка: нічого не відкриває. Скасувати можна будь-коли в Google Play.</string>
     <string name="support.fine_print.tip">Це подяка: нічого не відкриває. Без підписки.</string>
     <string name="support.helps.title">Підтримка допомагає з</string>
@@ -423,7 +422,7 @@
     <string name="support.helps.features">Новими функціями</string>
     <string name="support.helps.open_source">Збереженням Voice без реклами</string>
     <string name="support.hero.title">Нехай Voice не замовкає</string>
-    <string name="support.kofi.hint">Ko-fi відкриється в браузері. Будь-яка сума допоможе.</string>
+    <string name="support.kofi.hint">Ko-fi відкриється в браузері. Щомісяця або разово, без реєстрації.</string>
     <string name="support.message.failed">Не вийшло. Спробуйте ще раз трохи згодом.</string>
     <string name="support.message.pending">Ваш чай заварюється. Значок з\'явиться, щойно Google підтвердить платіж.</string>
     <string name="support.period.monthly">Щомісяця</string>

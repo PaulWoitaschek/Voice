@@ -382,8 +382,7 @@
     <string name="support.badges.title">Merkkisi kasvaa jokaisen tukikuukauden myötä</string>
     <string name="support.action.donate_kofi">Lahjoita Ko-fissa</string>
     <string name="support.description.maintenance">Voice on ilmainen avoimen lähdekoodin sovellus, jota ylläpitää yksi kehittäjä.</string>
-    <string name="support.description.maintenance_subtitle">Lahjoitukset auttavat rahoittamaan jatkuvaa ylläpitoa ja kehitystä.</string>
-    <string name="support.description.play">Kuukausituki antaa minun suunnitella seuraavaa versiota, ei vain seuraavaa korjausta.</string>
+    <string name="support.description.monthly">Kuukausituki antaa minun suunnitella seuraavaa versiota, ei vain seuraavaa korjausta.</string>
     <string name="support.fine_print">Tämä on kiitos: se ei avaa mitään. Peru milloin vain Google Playssa.</string>
     <string name="support.fine_print.tip">Tämä on kiitos: se ei avaa mitään. Ei tilausta.</string>
     <string name="support.helps.title">Tuki auttaa</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">Uudet ominaisuudet</string>
     <string name="support.helps.open_source">Pidetään Voice mainoksettomana</string>
     <string name="support.hero.title">Pidä Voice äänessä</string>
-    <string name="support.kofi.hint">Ko-fi avautuu selaimessa. Pienikin summa auttaa.</string>
+    <string name="support.kofi.hint">Ko-fi avautuu selaimessa. Kuukausittain tai kerran, ilman tiliä.</string>
     <string name="support.message.failed">Se ei onnistunut. Yritä hetken päästä uudelleen.</string>
     <string name="support.message.pending">Teesi hautuu. Merkki ilmestyy, kun Google vahvistaa maksun.</string>
     <string name="support.period.monthly">Kuukausittain</string>

@@ -28,7 +28,6 @@ import voice.core.strings.R as StringsR
 internal fun SupportHero(
   badge: SupporterBadge?,
   supporterSince: YearMonth?,
-  description: String,
   modifier: Modifier = Modifier,
 ) {
   Column(
@@ -76,7 +75,7 @@ internal fun SupportHero(
       textAlign = TextAlign.Center,
     )
     Text(
-      text = description,
+      text = stringResource(StringsR.string.support_description_monthly),
       style = MaterialTheme.typography.bodyMedium,
       color = MaterialTheme.colorScheme.onSurfaceVariant,
       textAlign = TextAlign.Center,
