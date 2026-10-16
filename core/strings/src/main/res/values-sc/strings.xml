@@ -382,8 +382,7 @@
     <string name="support.badges.title">Sa medàllia tua creschet cun onni mese de suportu</string>
     <string name="support.action.donate_kofi">Dona in Ko-fi</string>
     <string name="support.description.maintenance">Voice est gratis, a còdighe abertu e mantenidu dae un\'isvilupadore ebbia.</string>
-    <string name="support.description.maintenance_subtitle">Sas donatziones agiudant a finantziare su mantenimentu e s\'isvilupu.</string>
-    <string name="support.description.play">Cun su suportu de onni mese potzo preparare sa versione imbeniente, no isceti sa curretzione imbeniente.</string>
+    <string name="support.description.monthly">Cun su suportu de onni mese potzo preparare sa versione imbeniente, no isceti sa curretzione imbeniente.</string>
     <string name="support.fine_print">Est unu gràtzias: no isblocat nudda. Annulla cando boles in Google Play.</string>
     <string name="support.fine_print.tip">Est unu gràtzias: no isblocat nudda. Nissunu abbonamentu.</string>
     <string name="support.helps.title">Su suportu agiudat cun</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">Funtziones noas</string>
     <string name="support.helps.open_source">Mantènnere Voice chene publitzidade</string>
     <string name="support.hero.title">Dona boghe a Voice</string>
-    <string name="support.kofi.hint">Ko-fi s\'aberit in su navigadore tuo. Cale si siat cantidade agiudat.</string>
+    <string name="support.kofi.hint">Ko-fi s\'aberit in su navigadore tuo. Onni mese o una borta, chene contu.</string>
     <string name="support.message.failed">No at funtzionadu. Torra a proare intre unu momentu.</string>
     <string name="support.message.pending">Su tè tuo est in infusione. Sa medàllia arribat cando Google cunfirmat su pagamentu.</string>
     <string name="support.period.monthly">Mensile</string>

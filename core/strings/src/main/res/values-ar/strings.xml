@@ -446,8 +446,7 @@
     <string name="support.badges.title">تكبر شارتك مع كل شهر من دعمك</string>
     <string name="support.action.donate_kofi">التبرع عبر Ko-fi</string>
     <string name="support.description.maintenance">تطبيق Voice مجاني ومفتوح المصدر، ويعتني به مطوّر واحد.</string>
-    <string name="support.description.maintenance_subtitle">تساعد التبرعات في تمويل الصيانة والتطوير المستمرين.</string>
-    <string name="support.description.play">الدعم الشهري هو ما يتيح لي التخطيط للإصدار القادم، لا للإصلاح القادم فحسب.</string>
+    <string name="support.description.monthly">الدعم الشهري هو ما يتيح لي التخطيط للإصدار القادم، لا للإصلاح القادم فحسب.</string>
     <string name="support.fine_print">إنها مجرد شكر: لا تفتح أي ميزة. يمكنك الإلغاء في أي وقت من Google Play.</string>
     <string name="support.fine_print.tip">إنها مجرد شكر: لا تفتح أي ميزة. بلا اشتراك.</string>
     <string name="support.helps.title">يساعد الدعم في</string>
@@ -455,7 +454,7 @@
     <string name="support.helps.features">ميزات جديدة</string>
     <string name="support.helps.open_source">إبقاء Voice خاليًا من الإعلانات</string>
     <string name="support.hero.title">ليبقى Voice يتحدّث</string>
-    <string name="support.kofi.hint">يُفتح Ko-fi في متصفحك. أي مبلغ يساعد.</string>
+    <string name="support.kofi.hint">يُفتح Ko-fi في متصفحك. شهريًا أو مرة واحدة، دون حساب.</string>
     <string name="support.message.failed">لم ينجح ذلك. يمكنك المحاولة مجددًا بعد قليل.</string>
     <string name="support.message.pending">شايك على النار. ستظهر شارتك بمجرد أن تؤكد Google الدفع.</string>
     <string name="support.period.monthly">شهري</string>

@@ -398,8 +398,7 @@
     <string name="support.badges.title">La vostra insígnia creix amb cada mes de suport</string>
     <string name="support.action.donate_kofi">Fes un donatiu a Ko-fi</string>
     <string name="support.description.maintenance">Voice és gratuït, de codi obert i el manté un sol desenvolupador.</string>
-    <string name="support.description.maintenance_subtitle">Els donatius ajuden a finançar el manteniment i el desenvolupament continus.</string>
-    <string name="support.description.play">El suport mensual és el que em permet planificar la propera versió, no només la propera correcció.</string>
+    <string name="support.description.monthly">El suport mensual és el que em permet planificar la propera versió, no només la propera correcció.</string>
     <string name="support.fine_print">És un agraïment: no desbloqueja res. Cancel·leu-ho quan vulgueu a Google Play.</string>
     <string name="support.fine_print.tip">És un agraïment: no desbloqueja res. Sense subscripció.</string>
     <string name="support.helps.title">El vostre suport fa possible</string>
@@ -407,7 +406,7 @@
     <string name="support.helps.features">Funcions noves</string>
     <string name="support.helps.open_source">Mantenir Voice sense anuncis</string>
     <string name="support.hero.title">Que Voice no perdi la veu</string>
-    <string name="support.kofi.hint">Ko-fi s\'obre al navegador. Qualsevol import ajuda.</string>
+    <string name="support.kofi.hint">Ko-fi s\'obre al navegador. Mensualment o un sol cop, sense crear cap compte.</string>
     <string name="support.message.failed">No ha funcionat. Torneu-ho a provar d\'aquí a un moment.</string>
     <string name="support.message.pending">El vostre te està reposant. La insígnia apareixerà quan Google confirmi el pagament.</string>
     <string name="support.period.monthly">Mensual</string>

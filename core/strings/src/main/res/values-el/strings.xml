@@ -382,8 +382,7 @@
     <string name="support.badges.title">Το σήμα σας μεγαλώνει με κάθε μήνα υποστήριξης</string>
     <string name="support.action.donate_kofi">Δωρεά μέσω Ko-fi</string>
     <string name="support.description.maintenance">Το Voice είναι δωρεάν, ανοιχτού κώδικα και το συντηρεί ένας μόνο προγραμματιστής.</string>
-    <string name="support.description.maintenance_subtitle">Οι δωρεές βοηθούν να χρηματοδοτείται η συνεχής συντήρηση και ανάπτυξη.</string>
-    <string name="support.description.play">Η μηνιαία υποστήριξη μού επιτρέπει να σχεδιάζω την επόμενη έκδοση, όχι μόνο την επόμενη διόρθωση.</string>
+    <string name="support.description.monthly">Η μηνιαία υποστήριξη μού επιτρέπει να σχεδιάζω την επόμενη έκδοση, όχι μόνο την επόμενη διόρθωση.</string>
     <string name="support.fine_print">Είναι ένα ευχαριστώ: δεν ξεκλειδώνει τίποτα. Ακυρώστε όποτε θέλετε στο Google Play.</string>
     <string name="support.fine_print.tip">Είναι ένα ευχαριστώ: δεν ξεκλειδώνει τίποτα. Χωρίς συνδρομή.</string>
     <string name="support.helps.title">Η υποστήριξη βοηθά σε</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">Νέες λειτουργίες</string>
     <string name="support.helps.open_source">Ένα Voice χωρίς διαφημίσεις</string>
     <string name="support.hero.title">Δώστε φωνή στο Voice</string>
-    <string name="support.kofi.hint">Το Ko-fi ανοίγει στο πρόγραμμα περιήγησης. Κάθε ποσό βοηθά.</string>
+    <string name="support.kofi.hint">Το Ko-fi ανοίγει στο πρόγραμμα περιήγησης. Μηνιαία ή εφάπαξ, χωρίς λογαριασμό.</string>
     <string name="support.message.failed">Κάτι δεν πήγε καλά. Δοκιμάστε ξανά σε λίγο.</string>
     <string name="support.message.pending">Το τσάι σας ετοιμάζεται. Το σήμα σας θα εμφανιστεί μόλις η Google επιβεβαιώσει την πληρωμή.</string>
     <string name="support.period.monthly">Μηνιαία</string>

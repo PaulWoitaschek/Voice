@@ -382,8 +382,7 @@
     <string name="support.badges.title">Dit mærke vokser for hver måned, du støtter</string>
     <string name="support.action.donate_kofi">Donér på Ko-fi</string>
     <string name="support.description.maintenance">Voice er gratis, har åben kildekode og vedligeholdes af én udvikler.</string>
-    <string name="support.description.maintenance_subtitle">Donationer hjælper med at betale for løbende vedligeholdelse og udvikling.</string>
-    <string name="support.description.play">Månedlig støtte gør, at jeg kan planlægge næste version, ikke kun næste fejlrettelse.</string>
+    <string name="support.description.monthly">Månedlig støtte gør, at jeg kan planlægge næste version, ikke kun næste fejlrettelse.</string>
     <string name="support.fine_print">Det er en tak og låser ikke op for noget. Opsig når som helst i Google Play.</string>
     <string name="support.fine_print.tip">Det er en tak og låser ikke op for noget. Intet abonnement.</string>
     <string name="support.helps.title">Støtte hjælper med</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">Nye funktioner</string>
     <string name="support.helps.open_source">At holde Voice reklamefri</string>
     <string name="support.hero.title">Lad Voice tale videre</string>
-    <string name="support.kofi.hint">Ko-fi åbnes i din browser. Alle beløb hjælper.</string>
+    <string name="support.kofi.hint">Ko-fi åbnes i din browser. Månedligt eller én gang, uden konto.</string>
     <string name="support.message.failed">Det virkede ikke. Prøv igen om lidt.</string>
     <string name="support.message.pending">Din te trækker stadig. Dit mærke vises, når Google bekræfter betalingen.</string>
     <string name="support.period.monthly">Månedlig</string>

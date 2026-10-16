@@ -382,8 +382,7 @@
     <string name="support.badges.title">हर महीने के समर्थन के साथ आपका बैज बढ़ता है</string>
     <string name="support.action.donate_kofi">Ko-fi पर दान करें</string>
     <string name="support.description.maintenance">Voice मुफ़्त और ओपन सोर्स है, और इसे एक ही डेवलपर संभालता है।</string>
-    <string name="support.description.maintenance_subtitle">दान से रखरखाव और आगे के विकास में मदद मिलती है।</string>
-    <string name="support.description.play">मासिक समर्थन से ही मैं सिर्फ़ अगले फ़िक्स की नहीं, अगली रिलीज़ की योजना बना पाता हूँ।</string>
+    <string name="support.description.monthly">मासिक समर्थन से ही मैं सिर्फ़ अगले फ़िक्स की नहीं, अगली रिलीज़ की योजना बना पाता हूँ।</string>
     <string name="support.fine_print">यह एक धन्यवाद है: इससे कुछ भी अनलॉक नहीं होता। Google Play में कभी भी रद्द करें।</string>
     <string name="support.fine_print.tip">यह एक धन्यवाद है: इससे कुछ भी अनलॉक नहीं होता। कोई सदस्यता नहीं।</string>
     <string name="support.helps.title">समर्थन से इनमें मदद मिलती है</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">नई सुविधाएँ</string>
     <string name="support.helps.open_source">Voice को विज्ञापन-मुक्त रखना</string>
     <string name="support.hero.title">Voice की आवाज़ बनाए रखें</string>
-    <string name="support.kofi.hint">Ko-fi आपके ब्राउज़र में खुलता है। कोई भी राशि मदद करती है।</string>
+    <string name="support.kofi.hint">Ko-fi आपके ब्राउज़र में खुलता है। हर महीने या एक बार, बिना खाते के।</string>
     <string name="support.message.failed">यह नहीं हो पाया। थोड़ी देर बाद फिर से कोशिश करें।</string>
     <string name="support.message.pending">आपकी चाय बन रही है। Google के भुगतान की पुष्टि करते ही आपका बैज दिखेगा।</string>
     <string name="support.period.monthly">मासिक</string>
