@@ -18,8 +18,9 @@ Not sure which one to choose? See the [download source comparison](download-sour
 
 [:simple-kofi:{ .heart-pulse } &nbsp;Support on Ko-fi](https://ko-fi.com/paul_voice){ .md-button .md-button--sponsor }
 
-<small>Voice is free and built in spare time. Ko-fi supports one-time or monthly contributions with no sign-up. You can
-also [sponsor on GitHub](https://github.com/sponsors/PaulWoitaschek).</small>
+<small>Voice has no ads and no investors. It's made by one developer and kept going by its listeners. Monthly support
+is what lets me plan the next release. Ko-fi needs no account. You can also
+[sponsor on GitHub](https://github.com/sponsors/PaulWoitaschek).</small>
 
 <div class="voice-screenshots">
   <img src="screenshots/1_en-US.png" alt="Voice library view" />
