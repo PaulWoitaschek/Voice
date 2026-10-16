@@ -8,7 +8,7 @@ basics stay simple ([#1034]).
 ## Principles
 
 - **Clean, not minimal.** A feature has to make listening better for many listeners, because each one is maintained for
-  years ([FAQ](../docs/faq.md)).
+  years ([FAQ](faq.md)).
 - **Good defaults before settings.** Every setting makes Voice a bit harder to use ([#860]).
 - **The data stays with the listener.** No account, no ads, nothing behind a paywall, and no Voice server.
 - **Never interrupt listening.** Prompts wait for a calm moment, ask once, and accept no.
@@ -235,11 +235,11 @@ no Voice account and no Voice server.
 **Solved**
 
 - **There's no good audiobook app for my server.** Audiobookshelf: stream or download books, with progress and
-  bookmarks kept in step ([docs](../docs/audiobookshelf.md)).
+  bookmarks kept in step ([docs](audiobookshelf.md)).
 - **My books in cloud storage can't be added.** Folders from apps that work with Android's folder picker. Syncing the
   folder to the phone works better.
 - **I lose my place when I switch devices.** With Audiobookshelf, or by syncing the library folders with a tool like
-  Syncthing. Voice keeps places, speed, names and bookmarks in a hidden `.voice` folder there ([FAQ](../docs/faq.md)).
+  Syncthing. Voice keeps places, speed, names and bookmarks in a hidden `.voice` folder there ([FAQ](faq.md)).
 - **A new phone means losing my progress.** Android's backup, or the synced library folders. After a restore, the
   library asks to allow access to the folders again.
 
@@ -264,7 +264,7 @@ no Voice account and no Voice server.
 ## Look and feel
 
 Voice feels calm day and night and works in the listener's language. Good defaults come before options, see the
-[design principles](../.agents/skills/design/SKILL.md).
+[design principles](https://github.com/PaulWoitaschek/Voice/blob/main/.agents/skills/design/SKILL.md).
 
 **Solved**
 
@@ -291,8 +291,9 @@ Listeners who are stuck get help, and listeners who want to give back can, witho
 - **I'm stuck and don't know where to get help.** Settings has the FAQ, getting help, reporting a problem and suggesting
   an idea.
 - **I don't want an audiobook app talking to the internet.** The free build has no Google libraries. The Play build
-  sends crash reports, and analytics only with consent. The [privacy policy](../PRIVACY.md) lists what each build sends.
-- **I don't know which version to install.** A page compares the [download sources](../docs/download-sources.md).
+  sends crash reports, and analytics only with consent. The [privacy policy](privacy-policy.md) lists what each build
+  sends.
+- **I don't know which version to install.** A page compares the [download sources](download-sources.md).
 
 **Open**
 
