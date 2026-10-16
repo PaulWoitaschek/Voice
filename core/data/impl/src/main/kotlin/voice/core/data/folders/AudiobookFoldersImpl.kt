@@ -79,14 +79,7 @@ internal constructor(
     type: FolderType,
   ) {
     analytics.event("add_folder", mapOf("type" to type.name))
-    try {
-      context.contentResolver.takePersistableUriPermission(
-        uri,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
-      )
-    } catch (_: SecurityException) {
-      Logger.w("Could not take the uri permission for a $type folder")
-    }
+    takePermission(uri, type)
     scope.launch {
       dataStore(type).updateData { it + uri }
       // a folder has one type, so adding it again with another type moves it. It's added first so a scan in
@@ -96,6 +89,25 @@ internal constructor(
         .forEach { otherType ->
           dataStore(otherType).updateData { it - uri }
         }
+    }
+  }
+
+  // one at a time, as taking both takes nothing when the picker only granted reading
+  private fun takePermission(
+    uri: Uri,
+    type: FolderType,
+  ) {
+    val resolver = context.contentResolver
+    try {
+      resolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    } catch (_: SecurityException) {
+      Logger.w("Could not take the uri permission for a $type folder")
+      return
+    }
+    try {
+      resolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+    } catch (_: SecurityException) {
+      Logger.w("Could only take the read permission for a $type folder")
     }
   }
 

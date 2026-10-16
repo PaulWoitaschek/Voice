@@ -32,6 +32,10 @@ internal class SyncFiles(private val context: Context) {
       .toMap()
   }
 
+  fun canWrite(folder: Uri): Boolean = context.contentResolver.persistedUriPermissions.any {
+    it.uri == folder && it.isWritePermission
+  }
+
   fun write(
     folder: Uri,
     name: String,

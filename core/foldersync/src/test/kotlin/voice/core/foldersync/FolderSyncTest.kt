@@ -43,6 +43,7 @@ class FolderSyncTest {
   private val currentBookStore = MemoryDataStore<BookId?>(null)
   private val written = mutableListOf<SyncFile>()
   private val syncFiles = mockk<SyncFiles> {
+    every { canWrite(any()) } returns true
     every { read(any()) } returns emptyMap()
     every { write(folder(), any(), capture(written)) } returns Unit
   }
@@ -219,6 +220,19 @@ class FolderSyncTest {
 
     folderSync(MemoryBookRepository(book)).sync()
 
+    assertEquals(emptyList(), written)
+  }
+
+  @Test
+  fun `a folder Voice can only read is left alone`() = scope.runTest {
+    val book = book(lastPlayedAt = 1000)
+    val repo = MemoryBookRepository(book)
+    otherDevice(book, SyncedBook(place = place(position = 3000, playedAt = 2000)))
+    every { syncFiles.canWrite(folder()) } returns false
+
+    folderSync(repo).sync()
+
+    assertEquals(book, repo.get(book.id))
     assertEquals(emptyList(), written)
   }
 
