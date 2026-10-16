@@ -67,15 +67,15 @@ class CoverScannerTest {
   fun `an image named cover is preferred over other images`() = runTest {
     val folder = testFolder.newFolder("Book")
     File(folder, "1.mp3").writeText("audio")
-    val back = File(folder, "back.jpg").apply { writeText("back") }
-    val cover = File(folder, "Cover.png").apply { writeText("cover") }
-    val listedBackFirst = mockk<CachedDocumentFile> {
-      every { children } returns listOf(FileBasedDocumentFile(back), FileBasedDocumentFile(cover))
+    val listedCoverLast = mockk<CachedDocumentFile> {
+      every { children } returns listOf("back.jpg", "Folder.jpg", "Cover.png").map { name ->
+        FileBasedDocumentFile(File(folder, name).apply { writeText(nameWithoutExtension) })
+      }
     }
 
-    scanner(mockk { every { create(any()) } returns listedBackFirst }).scan(listOf(book(folder)))
+    scanner(mockk { every { create(any()) } returns listedCoverLast }).scan(listOf(book(folder)))
 
-    assertEquals(expected = "cover", actual = savedCover.readText())
+    assertEquals(expected = "Cover", actual = savedCover.readText())
   }
 
   private fun scanner(documentFileFactory: CachedDocumentFileFactory) = CoverScanner(

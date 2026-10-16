@@ -14,7 +14,9 @@ import voice.core.logging.api.Logger
 import java.io.IOException
 
 private val imageExtensions = setOf("jpg", "jpeg", "png", "webp")
-private val coverNames = setOf("cover", "folder", "front")
+
+// Windows Media Player saves a small Folder.jpg next to the files
+private val coverNames = listOf("cover", "front", "folder")
 
 @Inject
 internal class CoverScanner(
@@ -46,7 +48,7 @@ internal class CoverScanner(
   private suspend fun findAndSaveCoverFromDisc(book: Book): Boolean = withContext(Dispatchers.IO) {
     documentFileFactory.create(book.id.toUri()).children
       .filter { it.isImage() }
-      .sortedByDescending { it.nameWithoutExtension().lowercase() in coverNames }
+      .sortedBy { it.coverRank() }
       .forEach { child ->
         val coverFile = coverSaver.newBookCoverFile()
         val worked = try {
@@ -71,6 +73,11 @@ internal class CoverScanner(
       }
 
     false
+  }
+
+  private fun CachedDocumentFile.coverRank(): Int {
+    val rank = coverNames.indexOf(nameWithoutExtension().lowercase())
+    return if (rank == -1) coverNames.size else rank
   }
 
   private fun CachedDocumentFile.isImage(): Boolean {
