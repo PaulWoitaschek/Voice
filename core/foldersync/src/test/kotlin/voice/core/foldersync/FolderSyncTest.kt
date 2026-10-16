@@ -153,18 +153,36 @@ class FolderSyncTest {
   }
 
   @Test
-  fun `a name from another device that is the files' name here is not sent back`() = scope.runTest {
+  fun `a name from another device that is the files' name here is not written`() = scope.runTest {
     val book = book(path = "Book")
     val repo = MemoryBookRepository(book)
     otherDevice(book, SyncedBook(name = SyncedText("Book", changedAt = 1000)))
-    val folderSync = folderSync(repo)
 
-    folderSync.sync()
-    ownFile(folderSync, written.single())
-    folderSync.sync()
+    folderSync(repo).sync()
 
     assertNull(repo.get(book.id)!!.content.customName)
-    assertEquals(1, written.size)
+    assertEquals(emptyList(), written)
+  }
+
+  @Test
+  fun `a custom name that is the files' name is not written`() = scope.runTest {
+    // the update that kept names apart from the files copied every name into the custom one until the next scan
+    val book = book(path = "Book", customName = "Book", currentFile = 1, position = 3000, lastPlayedAt = 2000)
+
+    folderSync(MemoryBookRepository(book)).sync()
+
+    assertEquals(listOf(SyncFile(mapOf(book.key() to SyncedBook(place = place())))), written)
+  }
+
+  @Test
+  fun `a name written before that is the files' name goes away`() = scope.runTest {
+    val book = book(path = "Book")
+    val folderSync = folderSync(MemoryBookRepository(book))
+    ownFile(folderSync, SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Book", changedAt = 0)))))
+
+    folderSync.sync()
+
+    assertEquals(listOf(SyncFile(emptyMap())), written)
   }
 
   @Test
