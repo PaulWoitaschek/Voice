@@ -132,7 +132,10 @@ devices changed the same bookmark, the later change wins.
 
 After changing or resetting their phone, listeners find their progress and bookmarks gone.
 
-**Solution:** Android's own backup, since 2022.
+**Solution:** Android's own backup, since 2022. Android doesn't back up the access to the library folders, so after a
+restore the library shows a card until the listener allows access again. The folders screen marks each of these
+folders, and the system picker opens where the folder was. Picking the same folder brings its books back as they
+were. Picking another one keeps the progress too, as Voice recognizes the books by their files.
 
 ## Without Google's backup, a new phone means starting over
 
@@ -144,13 +147,15 @@ Some listeners switch or reset their phone often, and would rather start fresh t
 
 - Import and export: too much work for what most listeners get out of it ([#367]). That was in 2016.
 - Backing up the database: a raw copy of the database breaks easily, especially when its schema changes ([#2302]).
+- Putting settings and the listening history into the `.voice` files: they hold what belongs to a book. The places,
+  names and bookmarks in them already come along when the library folders move to the new phone.
+
+**Assumption:** Listeners without Google's backup miss their places and bookmarks, not their settings and listening
+history. Guess.
 
 ## Open questions
 
-1. **A new phone without Google's backup.** The synced `.voice` files also bring the places, names and bookmarks to a
-   new phone with the same folders. Is that enough, or do listeners miss what isn't in them, like their listening
-   history and settings?
-2. Why Audiobookshelf first, and will it stay the only server?
+1. Why Audiobookshelf first, and will it stay the only server?
 
 [#65]: https://github.com/PaulWoitaschek/Voice/issues/65
 [#295]: https://github.com/PaulWoitaschek/Voice/issues/295

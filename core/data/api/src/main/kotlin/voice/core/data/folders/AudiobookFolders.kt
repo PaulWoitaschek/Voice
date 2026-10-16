@@ -7,6 +7,8 @@ import voice.core.documentfile.CachedDocumentFile
 public interface AudiobookFolders {
   public fun all(): Flow<Map<FolderType, List<DocumentFileWithUri>>>
 
+  public fun withoutAccess(): Flow<Map<FolderType, List<Uri>>>
+
   public fun add(
     uri: Uri,
     type: FolderType,

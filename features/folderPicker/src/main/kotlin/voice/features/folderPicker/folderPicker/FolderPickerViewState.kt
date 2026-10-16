@@ -13,6 +13,7 @@ data class FolderPickerViewState(
     val name: String,
     val id: Uri,
     val folderType: FolderType,
+    val hasAccess: Boolean = true,
   ) : Comparable<Item> {
     override fun compareTo(other: Item): Int {
       return compareValuesBy(this, other, { it.folderType }, { it.name })

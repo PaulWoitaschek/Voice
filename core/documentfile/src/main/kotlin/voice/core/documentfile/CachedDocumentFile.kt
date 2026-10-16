@@ -15,11 +15,7 @@ interface CachedDocumentFile {
 fun CachedDocumentFile.nameWithoutExtension(): String {
   val name = name
   return if (name == null) {
-    uri.pathSegments.lastOrNull()
-      ?.dropWhile { it != ':' }
-      ?.removePrefix(":")
-      ?.takeUnless { it.isBlank() }
-      ?: uri.toString()
+    uri.nameFromPath()
   } else {
     if (isFile) {
       name.substringBeforeLast(".")
@@ -29,4 +25,12 @@ fun CachedDocumentFile.nameWithoutExtension(): String {
       name
     }
   }
+}
+
+fun Uri.nameFromPath(): String {
+  return pathSegments.lastOrNull()
+    ?.dropWhile { it != ':' }
+    ?.removePrefix(":")
+    ?.takeUnless { it.isBlank() }
+    ?: toString()
 }

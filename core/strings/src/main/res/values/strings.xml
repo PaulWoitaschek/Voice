@@ -363,6 +363,16 @@
     <string name="library.folders.moved.dialog.title">Audiobook folders moved</string>
     <!-- Body for the one-time dialog shown from the old audiobook folders shortcut. -->
     <string name="library.folders.moved.dialog.message">You can now manage audiobook folders in Settings.</string>
+    <!-- Label on a row of the audiobook folders screen for a folder or file Voice can no longer open, for example after a restore from a backup on a new phone. -->
+    <string name="library.folders.no_access">No access</string>
+    <!-- Button on a folder row without access. Opens the system picker so Voice may open the folder or file again. -->
+    <string name="library.folders.no_access.action">Allow access</string>
+    <!-- Title of the card on the library screen shown while Voice can no longer open some audiobook folders, for example after a restore from a backup on a new phone. -->
+    <string name="library.folders.no_access.card.title">Allow access to your folders again</string>
+    <!-- Message of the card on the library screen about audiobook folders without access. The books, their progress and bookmarks are still saved and come back once access is allowed again. -->
+    <string name="library.folders.no_access.card.message">Voice can\'t open some of your audiobook folders anymore, for example after moving to a new device. Once the files are on this device, allow access again and your books are back with their progress and bookmarks.</string>
+    <!-- Button on the library card about audiobook folders without access. Opens the audiobook folders screen. -->
+    <string name="library.folders.no_access.card.action">Show folders</string>
     <!-- Library screen greeting shown in the afternoon. -->
     <string name="library.greeting.afternoon">Good afternoon</string>
     <!-- Library screen greeting shown in the evening. -->

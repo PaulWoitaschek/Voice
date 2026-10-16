@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -27,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -43,6 +46,7 @@ internal fun FolderRow(
   item: FolderPickerViewState.Item,
   shape: Shape,
   onClick: (() -> Unit)?,
+  onAllowAccessClick: (() -> Unit)?,
   onDeleteClick: (() -> Unit)?,
   modifier: Modifier = Modifier,
 ) {
@@ -85,7 +89,22 @@ internal fun FolderRow(
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
-        FolderTypeChip(folderType = item.folderType, style = style, changeable = onClick != null)
+        if (item.hasAccess) {
+          FolderTypeChip(folderType = item.folderType, style = style, changeable = onClick != null)
+        } else {
+          NoAccess()
+          if (onAllowAccessClick != null) {
+            val action = stringResource(StringsR.string.library_folders_no_access_action)
+            FilledTonalButton(
+              onClick = onAllowAccessClick,
+              shapes = ButtonDefaults.shapes(),
+              // after a restore, every row has one, so say which folder it's for
+              modifier = Modifier.semantics { contentDescription = "$action, ${item.name}" },
+            ) {
+              Text(action)
+            }
+          }
+        }
       }
       if (onDeleteClick != null) {
         Spacer(Modifier.width(4.dp))
@@ -101,6 +120,26 @@ internal fun FolderRow(
         }
       }
     }
+  }
+}
+
+@Composable
+private fun NoAccess() {
+  Row(
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(6.dp),
+  ) {
+    Icon(
+      modifier = Modifier.size(18.dp),
+      imageVector = VoiceIcons.Error,
+      contentDescription = null,
+      tint = MaterialTheme.colorScheme.error,
+    )
+    Text(
+      text = stringResource(StringsR.string.library_folders_no_access),
+      style = MaterialTheme.typography.labelLarge,
+      color = MaterialTheme.colorScheme.error,
+    )
   }
 }
 

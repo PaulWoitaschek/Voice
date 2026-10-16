@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
@@ -91,6 +92,7 @@ fun FolderOverview() {
       .folderPickerViewModel
   }
   val viewState = viewModel.viewState()
+  val allowAccess = rememberAllowAccess(viewModel::onAccessAllowed)
   FolderOverviewView(
     viewState = viewState,
     onAddClick = {
@@ -100,6 +102,7 @@ fun FolderOverview() {
       viewModel.removeFolder(it)
     },
     onFolderClick = viewModel::changeType,
+    onAllowAccessClick = allowAccess,
     onCloseClick = viewModel::onCloseClick,
   )
 }
@@ -110,6 +113,7 @@ private fun FolderOverviewView(
   onAddClick: () -> Unit,
   onDeleteClick: (FolderPickerViewState.Item) -> Unit,
   onFolderClick: (FolderPickerViewState.Item) -> Unit,
+  onAllowAccessClick: (FolderPickerViewState.Item) -> Unit,
   onCloseClick: () -> Unit,
 ) {
   val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -158,6 +162,7 @@ private fun FolderOverviewView(
             entrance = entrance,
             clock = { clock.value },
             onFolderClick = onFolderClick,
+            onAllowAccessClick = onAllowAccessClick,
             onDeleteClick = onDeleteClick,
           )
         }
@@ -171,6 +176,7 @@ private fun LazyListScope.folders(
   entrance: EntranceState,
   clock: () -> Float,
   onFolderClick: (FolderPickerViewState.Item) -> Unit,
+  onAllowAccessClick: (FolderPickerViewState.Item) -> Unit,
   onDeleteClick: (FolderPickerViewState.Item) -> Unit,
 ) {
   val itemModifier = Modifier
@@ -190,12 +196,17 @@ private fun LazyListScope.folders(
     key = { _, item -> "${item.folderType}/${item.id}" },
   ) { index, item ->
     // a single file is always one book, a folder can change how its books are found
-    val canChangeType = viewState.showActions && item.folderType != FolderType.SingleFile
+    val canChangeType = viewState.showActions && item.hasAccess && item.folderType != FolderType.SingleFile
     FolderRow(
       item = item,
       shape = segmentedShape(index, viewState.items.size),
       onClick = if (canChangeType) {
         { onFolderClick(item) }
+      } else {
+        null
+      },
+      onAllowAccessClick = if (viewState.showActions && !item.hasAccess) {
+        { onAllowAccessClick(item) }
       } else {
         null
       },
@@ -274,6 +285,12 @@ private fun FolderOverviewPreview() {
       viewState = FolderPickerViewState(
         items = listOf(
           FolderPickerViewState.Item(
+            name = "Audiobooks/Fantasy",
+            id = "content://preview/fantasy".toUri(),
+            folderType = FolderType.SingleFolder,
+            hasAccess = false,
+          ),
+          FolderPickerViewState.Item(
             name = "My Audiobooks",
             id = Uri.EMPTY,
             folderType = FolderType.Root,
@@ -298,6 +315,7 @@ private fun FolderOverviewPreview() {
       onAddClick = {},
       onDeleteClick = {},
       onFolderClick = {},
+      onAllowAccessClick = {},
       onCloseClick = {},
     )
   }
@@ -312,6 +330,7 @@ private fun FolderOverviewEmptyPreview() {
       onAddClick = {},
       onDeleteClick = {},
       onFolderClick = {},
+      onAllowAccessClick = {},
       onCloseClick = {},
     )
   }

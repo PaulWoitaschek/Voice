@@ -233,6 +233,11 @@
     <string name="library.folders.title">Cartelle audiolibri</string>
     <string name="library.folders.moved.dialog.title">Cartelle degli audiolibri spostate</string>
     <string name="library.folders.moved.dialog.message">Ora puoi gestire le cartelle degli audiolibri nelle Impostazioni.</string>
+    <string name="library.folders.no_access">Nessun accesso</string>
+    <string name="library.folders.no_access.action">Consenti l\'accesso</string>
+    <string name="library.folders.no_access.card.title">Consenti di nuovo l\'accesso alle tue cartelle</string>
+    <string name="library.folders.no_access.card.message">Voice non riesce più ad aprire alcune delle tue cartelle degli audiolibri, ad esempio dopo il passaggio a un nuovo dispositivo. Quando i file saranno su questo dispositivo, consenti di nuovo l\'accesso e ritroverai i tuoi libri con i progressi e i segnalibri.</string>
+    <string name="library.folders.no_access.card.action">Mostra cartelle</string>
     <string name="library.greeting.afternoon">Buon pomeriggio</string>
     <string name="library.greeting.evening">Buonasera</string>
     <string name="library.greeting.morning">Buongiorno</string>

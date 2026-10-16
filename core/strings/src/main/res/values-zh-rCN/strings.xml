@@ -211,6 +211,11 @@
     <string name="library.folders.title">有声书文件夹</string>
     <string name="library.folders.moved.dialog.title">有声书文件夹已移动</string>
     <string name="library.folders.moved.dialog.message">您现在可以在“设置”中管理有声书文件夹。</string>
+    <string name="library.folders.no_access">无法访问</string>
+    <string name="library.folders.no_access.action">允许访问</string>
+    <string name="library.folders.no_access.card.title">请重新允许访问您的文件夹</string>
+    <string name="library.folders.no_access.card.message">Voice 无法再打开您的部分有声书文件夹，比如换用新设备之后。文件放到本设备后，请重新允许访问，您的书就会带着收听进度和书签回来。</string>
+    <string name="library.folders.no_access.card.action">查看文件夹</string>
     <string name="library.greeting.afternoon">下午好</string>
     <string name="library.greeting.evening">晚上好</string>
     <string name="library.greeting.morning">早上好</string>
