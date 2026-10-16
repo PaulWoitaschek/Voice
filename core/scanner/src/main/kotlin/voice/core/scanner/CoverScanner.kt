@@ -28,13 +28,17 @@ internal class CoverScanner(
 ) {
 
   suspend fun scan(books: List<Book>) {
+    books.forEach { book ->
+      // gone after a restore if picked in 26.10.2 or earlier, and it would hide the cover found again
+      val customCover = book.content.customCover
+      if (customCover != null && !customCover.exists()) coverSaver.forgetCustomCover(book.id, customCover)
+    }
     // server books bring their covers along
     books.filterNot { it.id.isRemote }.forEach { findCoverForBook(it) }
   }
 
   private suspend fun findCoverForBook(book: Book) {
-    val coverFile = book.content.cover
-    if (coverFile != null && coverFile.exists()) {
+    if (book.content.customCover?.exists() == true || book.content.metadata.cover?.exists() == true) {
       return
     }
 

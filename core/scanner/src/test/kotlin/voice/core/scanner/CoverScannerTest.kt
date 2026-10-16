@@ -102,6 +102,20 @@ class CoverScannerTest {
   }
 
   @Test
+  fun `a picked cover that is gone makes way for the one in the files`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    File(folder, "cover.jpg").writeText("cover")
+    val missing = File(testFolder.root, "picked.png")
+    val book = book(folder).let { Book(it.content.copy(customCover = missing), it.chapters) }
+
+    scan(book)
+
+    coVerify { coverSaver.forgetCustomCover(book.id, missing) }
+    assertEquals(expected = listOf("cover"), actual = savedImages)
+  }
+
+  @Test
   fun `only the first file is asked for an embedded cover`() = runTest {
     val folder = testFolder.newFolder("Book")
     val first = File(folder, "1.mp3").apply { writeText("audio") }

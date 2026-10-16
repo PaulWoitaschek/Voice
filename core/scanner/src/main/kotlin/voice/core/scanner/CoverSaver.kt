@@ -17,10 +17,11 @@ import java.nio.ByteBuffer
 import kotlin.math.max
 import kotlin.uuid.Uuid
 
-private const val CUSTOM_COVERS = "bookCovers"
+// kept out of the cloud backup, as the scan finds these covers again. Covers listeners picked in 26.10.2 or earlier
+// are in here too, as they had no folder of their own.
+private const val EXTRACTED_COVERS = "bookCovers"
 
-// kept out of the cloud backup, as the scan finds these covers again
-private const val EXTRACTED_COVERS = "extractedCovers"
+private const val CUSTOM_COVERS = "customCovers"
 
 private const val MAX_COVER_SIZE = 1200
 
@@ -42,6 +43,15 @@ internal constructor(
     repo.get(bookId)?.content?.customCover?.deleteOnIo()
     repo.updateBook(bookId) {
       it.copy(customCover = newCover)
+    }
+  }
+
+  internal suspend fun forgetCustomCover(
+    bookId: BookId,
+    cover: File,
+  ) {
+    repo.updateBook(bookId) {
+      if (it.customCover == cover) it.copy(customCover = null) else it
     }
   }
 

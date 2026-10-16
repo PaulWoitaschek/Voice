@@ -45,7 +45,7 @@ class CoverSaverTest {
     coverSaver.save(content.id, Bitmap.createBitmap(2000, 2000, Bitmap.Config.ARGB_8888))
 
     val cover = contents.getValue(content.id).customCover!!
-    assertEquals(expected = File(context.filesDir, "bookCovers"), actual = cover.parentFile)
+    assertEquals(expected = File(context.filesDir, "customCovers"), actual = cover.parentFile)
     assertWebp(cover, width = 1200, height = 1200)
   }
 
@@ -57,7 +57,7 @@ class CoverSaverTest {
 
     assertTrue(saved)
     val cover = contents.getValue(content.id).metadata.cover!!
-    assertEquals(expected = File(context.filesDir, "extractedCovers"), actual = cover.parentFile)
+    assertEquals(expected = File(context.filesDir, "bookCovers"), actual = cover.parentFile)
     assertWebp(cover, width = 1200, height = 800)
   }
 
