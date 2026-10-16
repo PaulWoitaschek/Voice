@@ -73,7 +73,7 @@ internal class CoverScanner(
   private fun CachedDocumentFile.isImage(): Boolean {
     if (!isFile) return false
     val name = name ?: return false
-    return name.substringAfterLast(".").lowercase() in imageExtensions
+    return name.substringAfterLast(".", missingDelimiterValue = "").lowercase() in imageExtensions
   }
 
   private suspend fun scanForEmbeddedCover(book: Book) {
