@@ -122,6 +122,17 @@ object FeatureFlagBindingContainer {
   }
 
   @Provides
+  @SingleIn(AppScope::class)
+  @TypographyFeatureFlagQualifier
+  fun typographyFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<String> {
+    return factory.string(
+      key = "typography",
+      description = "Where text is in Literata: roboto (nowhere), headings (display, headline, titleLarge), titles (all titles) or full.",
+      defaultValue = "roboto",
+    )
+  }
+
+  @Provides
   @ElementsIntoSet
   fun featureFlags(
     @ReviewEnabledFeatureFlagQualifier reviewEnabled: FeatureFlag<Boolean>,
@@ -133,6 +144,7 @@ object FeatureFlagBindingContainer {
     @SupportDevelopmentFeatureFlagQualifier supportDevelopment: FeatureFlag<Boolean>,
     @SupporterNoteFeatureFlagQualifier supporterNote: FeatureFlag<String>,
     @AudiobookshelfFeatureFlagQualifier audiobookshelf: FeatureFlag<Boolean>,
+    @TypographyFeatureFlagQualifier typography: FeatureFlag<String>,
   ): Set<FeatureFlag<*>> = setOf(
     reviewEnabled,
     reviewPromptForce,
@@ -143,6 +155,7 @@ object FeatureFlagBindingContainer {
     supportDevelopment,
     supporterNote,
     audiobookshelf,
+    typography,
   )
 }
 
@@ -175,3 +188,6 @@ annotation class SupporterNoteFeatureFlagQualifier
 
 @Qualifier
 annotation class AudiobookshelfFeatureFlagQualifier
+
+@Qualifier
+annotation class TypographyFeatureFlagQualifier

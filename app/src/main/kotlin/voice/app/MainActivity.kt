@@ -40,12 +40,15 @@ import voice.core.data.ThemeMode
 import voice.core.data.store.PureBlackStore
 import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
+import voice.core.featureflag.FeatureFlag
+import voice.core.featureflag.TypographyFeatureFlagQualifier
 import voice.core.logging.api.Logger
 import voice.core.ui.CoverSeedColors
 import voice.core.ui.LocalCoverSeedColors
 import voice.core.ui.LocalSharedTransitionScope
 import voice.core.ui.LocalSplashScreenHolds
 import voice.core.ui.SplashScreenHolds
+import voice.core.ui.TypographyMode
 import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
 import voice.navigation.Destination
@@ -86,6 +89,10 @@ class MainActivity : AppCompatActivity() {
   @Inject
   private lateinit var coverSeedColors: CoverSeedColors
 
+  @Inject
+  @TypographyFeatureFlagQualifier
+  private lateinit var typographyFeatureFlag: FeatureFlag<String>
+
   private val splashScreenHolds = SplashScreenHolds()
   private var contentComposed = false
 
@@ -116,11 +123,15 @@ class MainActivity : AppCompatActivity() {
         value = true
       }.value
       if (!coverSeedColorsRestored) return@setContent
+      val typography = remember { typographyFeatureFlag.flow }.collectAsState(initial = null).value
+        ?: return@setContent
       SideEffect { contentComposed = true }
       VoiceTheme(
         themeMode = themeMode,
         themeColorScheme = themeColorScheme,
         pureBlack = pureBlack,
+        typographyMode = TypographyMode.entries.find { it.name.equals(typography.value, ignoreCase = true) }
+          ?: TypographyMode.Roboto,
       ) {
         val bottomSheetStrategy = remember { BottomSheetSceneStrategy<Destination.Compose>() }
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }

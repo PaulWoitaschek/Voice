@@ -32,6 +32,7 @@ fun VoiceTheme(
   themeMode: ThemeMode = ThemeMode.FollowSystem,
   themeColorScheme: ThemeColorScheme = ThemeColorScheme.VoiceBlue,
   pureBlack: Boolean = false,
+  typographyMode: TypographyMode = TypographyMode.Roboto,
   content: @Composable () -> Unit,
 ) {
   val darkTheme = when (themeMode) {
@@ -41,6 +42,7 @@ fun VoiceTheme(
   }
   MaterialExpressiveTheme(
     colorScheme = animateColorScheme(rememberThemeColorScheme(themeColorScheme, darkTheme, pureBlack)),
+    typography = remember(typographyMode) { voiceTypography(typographyMode) },
     content = content,
   )
 }
