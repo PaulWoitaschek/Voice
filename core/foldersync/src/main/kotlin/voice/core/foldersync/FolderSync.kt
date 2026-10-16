@@ -98,7 +98,7 @@ public class FolderSync internal constructor(
       .mapValues { (key, copies) ->
         val mine = copies.toSyncedBook(own[key], ownFileExists = ownFile != null, now = now)
         val newest = others.mapNotNull { it.books[key] }.fold(mine, SyncedBook::with)
-        // before writing, so if Voice stops in between, the next sync doesn't take this for a change made here
+        // before writing, so if Voice stops in between, the next sync sends back what it took, not what it replaced
         takeOver(copies, mine, newest)
         newest
       }
@@ -140,20 +140,22 @@ public class FolderSync internal constructor(
       return
     }
     Logger.d("Taking over a position from another device (current=$isCurrent)")
+    // the player fails on a speed of 0 or less, and would again every time it loads the book
+    val speed = remote.speed.takeIf { it > 0 } ?: book.content.playbackSpeed
     if (isCurrent && playerController.livePlaybackState(bookId) != null) {
       playerController.setPosition(
         time = position.positionInChapter,
         id = position.chapterId,
         source = ListeningEvent.Source.OtherDevice,
       )
-      playerController.setSpeed(remote.speed)
+      playerController.setSpeed(speed)
     }
     bookRepository.updateBook(bookId) {
       it.copy(
         currentChapter = position.chapterId,
         positionInChapter = position.positionInChapter,
         lastPlayedAt = position.playedAt,
-        playbackSpeed = remote.speed,
+        playbackSpeed = speed,
       )
     }
   }

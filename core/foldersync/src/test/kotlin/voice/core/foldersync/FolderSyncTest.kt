@@ -67,6 +67,18 @@ class FolderSyncTest {
   }
 
   @Test
+  fun `a speed the player can't play is not taken over`() = scope.runTest {
+    val book = book(currentFile = 0, position = 5000, lastPlayedAt = 1000, playbackSpeed = 1.25F)
+    val repo = MemoryBookRepository(book)
+
+    folderSync(repo).takeOver(book.id, place(file = 1, position = 3000, speed = 0F, playedAt = 2000))
+
+    val content = repo.get(book.id)!!.content
+    assertEquals(3000, content.positionInChapter)
+    assertEquals(1.25F, content.playbackSpeed)
+  }
+
+  @Test
   fun `the loaded book jumps to the new place and speed`() = scope.runTest {
     val book = book(lastPlayedAt = 1000)
     currentBookStore.updateData { book.id }
