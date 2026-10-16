@@ -39,7 +39,9 @@ fun runCommand(vararg args: String): String {
 }
 
 fun existingVersions(): List<Version> {
-  return runCommand("git", "tag").lines()
+  // A draft gets its tag only when it's published, but its version code may already be on Play.
+  val releaseTags = runCommand("gh", "release", "list", "--json", "tagName", "--jq", ".[].tagName").lines()
+  return (runCommand("git", "tag").lines() + releaseTags)
     .mapNotNull(Version::parse)
 }
 
