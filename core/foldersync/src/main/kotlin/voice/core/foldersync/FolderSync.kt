@@ -29,6 +29,7 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
+import voice.core.scanner.MediaScanTrigger
 import java.io.File
 import java.io.IOException
 import java.time.Clock
@@ -51,6 +52,7 @@ public class FolderSync internal constructor(
   private val bookmarkRepo: BookmarkRepo,
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
+  private val mediaScanTrigger: MediaScanTrigger,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
   private val clock: Clock,
@@ -78,7 +80,13 @@ public class FolderSync internal constructor(
   @OptIn(FlowPreview::class)
   private suspend fun syncChanges() {
     // while playing, the position changes every few hundred ms, so this syncs once playback stops
-    combine(audiobookFolders.all(), bookRepository.flow(), bookmarkRepo.flow()) { _, _, _ -> }
+    combine(
+      audiobookFolders.all(),
+      bookRepository.flow(),
+      bookmarkRepo.flow(),
+      // so a book becomes the current one once the scan is done
+      mediaScanTrigger.scannerActive,
+    ) { _, _, _, _ -> }
       .debounce(3.seconds)
       .collect { sync() }
   }
@@ -86,7 +94,19 @@ public class FolderSync internal constructor(
   internal suspend fun sync() {
     lock.withLock {
       audiobookFolders.all().first().uris().forEach { syncFolder(it) }
+      // mid-scan, the book played last may not be in the library yet
+      if (!mediaScanTrigger.scannerActive.first()) continueBookPlayedLast()
     }
+  }
+
+  // the current book isn't synced, so a new phone, or one whose Voice data was cleared, would have nothing to continue
+  private suspend fun continueBookPlayedLast() {
+    if (currentBookStore.data.first() != null) return
+    val book = bookRepository.all()
+      .filter { it.content.lastPlayedAt != Instant.EPOCH }
+      .maxByOrNull { it.content.lastPlayedAt }
+      ?: return
+    currentBookStore.updateData { it ?: book.id }
   }
 
   private suspend fun syncFolder(folder: Uri) {
