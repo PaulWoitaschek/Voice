@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
 import voice.core.strings.R
+import voice.core.ui.bookText
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 
 /**
@@ -83,7 +84,7 @@ internal fun InProgressCarousel(
       ) {
         Text(
           text = book.name,
-          style = MaterialTheme.typography.titleMediumEmphasized,
+          style = MaterialTheme.typography.titleMediumEmphasized.bookText(),
           color = Color.White,
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,

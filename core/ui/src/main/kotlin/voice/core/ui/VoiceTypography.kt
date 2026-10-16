@@ -1,60 +1,73 @@
+@file:Suppress("ktlint:compose:compositionlocal-allowlist")
+
 package voice.core.ui
 
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 
-// Each mode sets more of the type scale in Literata than the one before.
 enum class TypographyMode {
   Roboto,
   Headings,
+  Content,
   Titles,
   Full,
 }
 
+internal val LocalTypographyMode = staticCompositionLocalOf { TypographyMode.Roboto }
+
+// For the words that come from the book, like its title, author, chapters and bookmarks.
+@Composable
+@ReadOnlyComposable
+fun TextStyle.bookText(): TextStyle = if (LocalTypographyMode.current == TypographyMode.Content) inLiterata() else this
+
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 internal fun voiceTypography(mode: TypographyMode): Typography = Typography().run {
-  fun TextStyle.inLiterataFrom(from: TypographyMode): TextStyle = if (mode >= from) inLiterata() else this
-  val headings = TypographyMode.Headings
-  val titles = TypographyMode.Titles
-  val full = TypographyMode.Full
+  val headings = mode != TypographyMode.Roboto
+  val titles = mode == TypographyMode.Titles || mode == TypographyMode.Full
+  val full = mode == TypographyMode.Full
   copy(
-    displayLarge = displayLarge.inLiterataFrom(headings),
-    displayMedium = displayMedium.inLiterataFrom(headings),
-    displaySmall = displaySmall.inLiterataFrom(headings),
-    headlineLarge = headlineLarge.inLiterataFrom(headings),
-    headlineMedium = headlineMedium.inLiterataFrom(headings),
-    headlineSmall = headlineSmall.inLiterataFrom(headings),
-    titleLarge = titleLarge.inLiterataFrom(headings),
-    titleMedium = titleMedium.inLiterataFrom(titles),
-    titleSmall = titleSmall.inLiterataFrom(titles),
-    bodyLarge = bodyLarge.inLiterataFrom(full),
-    bodyMedium = bodyMedium.inLiterataFrom(full),
-    bodySmall = bodySmall.inLiterataFrom(full),
-    labelLarge = labelLarge.inLiterataFrom(full),
-    labelMedium = labelMedium.inLiterataFrom(full),
-    labelSmall = labelSmall.inLiterataFrom(full),
-    displayLargeEmphasized = displayLargeEmphasized.inLiterataFrom(headings),
-    displayMediumEmphasized = displayMediumEmphasized.inLiterataFrom(headings),
-    displaySmallEmphasized = displaySmallEmphasized.inLiterataFrom(headings),
-    headlineLargeEmphasized = headlineLargeEmphasized.inLiterataFrom(headings),
-    headlineMediumEmphasized = headlineMediumEmphasized.inLiterataFrom(headings),
-    headlineSmallEmphasized = headlineSmallEmphasized.inLiterataFrom(headings),
-    titleLargeEmphasized = titleLargeEmphasized.inLiterataFrom(headings),
-    titleMediumEmphasized = titleMediumEmphasized.inLiterataFrom(titles),
-    titleSmallEmphasized = titleSmallEmphasized.inLiterataFrom(titles),
-    bodyLargeEmphasized = bodyLargeEmphasized.inLiterataFrom(full),
-    bodyMediumEmphasized = bodyMediumEmphasized.inLiterataFrom(full),
-    bodySmallEmphasized = bodySmallEmphasized.inLiterataFrom(full),
-    labelLargeEmphasized = labelLargeEmphasized.inLiterataFrom(full),
-    labelMediumEmphasized = labelMediumEmphasized.inLiterataFrom(full),
-    labelSmallEmphasized = labelSmallEmphasized.inLiterataFrom(full),
+    displayLarge = displayLarge.inLiterataIf(headings),
+    displayMedium = displayMedium.inLiterataIf(headings),
+    displaySmall = displaySmall.inLiterataIf(headings),
+    headlineLarge = headlineLarge.inLiterataIf(headings),
+    headlineMedium = headlineMedium.inLiterataIf(headings),
+    headlineSmall = headlineSmall.inLiterataIf(headings),
+    titleLarge = titleLarge.inLiterataIf(headings),
+    titleMedium = titleMedium.inLiterataIf(titles),
+    titleSmall = titleSmall.inLiterataIf(titles),
+    bodyLarge = bodyLarge.inLiterataIf(full),
+    bodyMedium = bodyMedium.inLiterataIf(full),
+    bodySmall = bodySmall.inLiterataIf(full),
+    labelLarge = labelLarge.inLiterataIf(full),
+    labelMedium = labelMedium.inLiterataIf(full),
+    labelSmall = labelSmall.inLiterataIf(full),
+    displayLargeEmphasized = displayLargeEmphasized.inLiterataIf(headings),
+    displayMediumEmphasized = displayMediumEmphasized.inLiterataIf(headings),
+    displaySmallEmphasized = displaySmallEmphasized.inLiterataIf(headings),
+    headlineLargeEmphasized = headlineLargeEmphasized.inLiterataIf(headings),
+    headlineMediumEmphasized = headlineMediumEmphasized.inLiterataIf(headings),
+    headlineSmallEmphasized = headlineSmallEmphasized.inLiterataIf(headings),
+    titleLargeEmphasized = titleLargeEmphasized.inLiterataIf(headings),
+    titleMediumEmphasized = titleMediumEmphasized.inLiterataIf(titles),
+    titleSmallEmphasized = titleSmallEmphasized.inLiterataIf(titles),
+    bodyLargeEmphasized = bodyLargeEmphasized.inLiterataIf(full),
+    bodyMediumEmphasized = bodyMediumEmphasized.inLiterataIf(full),
+    bodySmallEmphasized = bodySmallEmphasized.inLiterataIf(full),
+    labelLargeEmphasized = labelLargeEmphasized.inLiterataIf(full),
+    labelMediumEmphasized = labelMediumEmphasized.inLiterataIf(full),
+    labelSmallEmphasized = labelSmallEmphasized.inLiterataIf(full),
   )
 }
+
+private fun TextStyle.inLiterataIf(condition: Boolean): TextStyle = if (condition) inLiterata() else this
 
 private fun TextStyle.inLiterata(): TextStyle = copy(
   fontFamily = FontFamily(

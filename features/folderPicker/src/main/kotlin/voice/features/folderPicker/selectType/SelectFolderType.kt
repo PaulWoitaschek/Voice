@@ -70,6 +70,7 @@ import voice.core.ui.OnboardingButton
 import voice.core.ui.OnboardingStep
 import voice.core.ui.OnboardingTopBar
 import voice.core.ui.VoiceTheme
+import voice.core.ui.bookText
 import voice.core.ui.rememberAnimationClock
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -279,7 +280,7 @@ private fun BookRow(
       Column(Modifier.weight(1F)) {
         Text(
           text = book.name,
-          style = MaterialTheme.typography.titleMedium,
+          style = MaterialTheme.typography.titleMedium.bookText(),
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )

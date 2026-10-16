@@ -47,6 +47,7 @@ import voice.core.data.BookId
 import voice.core.search.BookSearchField
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
+import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.playButtonSharedElementModifier
 import voice.core.ui.segmentedShape
@@ -176,14 +177,14 @@ private fun TopResult(
       Column(Modifier.weight(1F)) {
         Text(
           text = result.title.annotated(SpanStyle(background = colors.primary, color = colors.onPrimary)),
-          style = MaterialTheme.typography.titleLargeEmphasized,
+          style = MaterialTheme.typography.titleLargeEmphasized.bookText(),
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
         if (result.author != null) {
           Text(
             text = result.author.annotated(SpanStyle(background = colors.primary, color = colors.onPrimary)),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.bookText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
           )
@@ -256,14 +257,14 @@ private fun SearchResultRow(
         val highlight = SpanStyle(background = colors.primaryContainer, color = colors.onPrimaryContainer)
         Text(
           text = result.title.annotated(highlight),
-          style = MaterialTheme.typography.titleMediumEmphasized,
+          style = MaterialTheme.typography.titleMediumEmphasized.bookText(),
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
         if (result.author != null) {
           Text(
             text = result.author.annotated(highlight),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.bookText(),
             color = colors.onSurfaceVariant,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

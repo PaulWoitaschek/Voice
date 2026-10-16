@@ -92,6 +92,7 @@ import voice.core.data.BookId
 import voice.core.ui.AuroraBackground
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
+import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.plus
 import voice.core.ui.rememberAnimationClock
@@ -483,7 +484,7 @@ private fun DownloadRow(
     Column(Modifier.weight(1F)) {
       Text(
         text = download.name,
-        style = MaterialTheme.typography.bodyLarge,
+        style = MaterialTheme.typography.bodyLarge.bookText(),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
       )

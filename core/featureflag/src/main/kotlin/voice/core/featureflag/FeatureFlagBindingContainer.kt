@@ -127,7 +127,7 @@ object FeatureFlagBindingContainer {
   fun typographyFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<String> {
     return factory.string(
       key = "typography",
-      description = "Where text is in Literata: roboto (nowhere), headings (display, headline, titleLarge), titles (all titles) or full.",
+      description = "Where text is in Literata: roboto, headings, content (headings, book titles, authors, chapters), titles or full.",
       defaultValue = "roboto",
     )
   }

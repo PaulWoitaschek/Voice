@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
+import voice.core.ui.bookText
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import kotlin.math.roundToInt
 
@@ -56,14 +57,14 @@ internal fun GridBook(
     Spacer(Modifier.height(8.dp))
     Text(
       text = book.name,
-      style = MaterialTheme.typography.titleSmallEmphasized,
+      style = MaterialTheme.typography.titleSmallEmphasized.bookText(),
       maxLines = 2,
       overflow = TextOverflow.Ellipsis,
     )
     if (book.author != null) {
       Text(
         text = book.author,
-        style = MaterialTheme.typography.labelMedium,
+        style = MaterialTheme.typography.labelMedium.bookText(),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,

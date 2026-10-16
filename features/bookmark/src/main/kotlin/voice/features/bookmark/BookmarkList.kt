@@ -64,6 +64,7 @@ import voice.core.strings.R
 import voice.core.ui.BookBar
 import voice.core.ui.BookmarkBadge
 import voice.core.ui.NowPlayingBars
+import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 import java.text.NumberFormat
@@ -260,7 +261,7 @@ private fun ChapterHeader(
 ) {
   Text(
     text = chapterLabel(header.number, header.name),
-    style = MaterialTheme.typography.titleSmallEmphasized,
+    style = MaterialTheme.typography.titleSmallEmphasized.bookText(),
     color = MaterialTheme.colorScheme.primary,
     maxLines = 1,
     overflow = TextOverflow.Ellipsis,
@@ -352,7 +353,7 @@ private fun BookmarkRow(
         Column(Modifier.weight(1F)) {
           Text(
             text = headline,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleMedium.bookText(),
             color = if (row.note == null) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,

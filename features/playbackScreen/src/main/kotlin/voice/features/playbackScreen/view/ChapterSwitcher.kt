@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
+import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 
 @Composable
@@ -94,7 +95,7 @@ internal fun ChapterSwitcher(
               Text(
                 modifier = Modifier.basicMarquee(),
                 text = label.name,
-                style = MaterialTheme.typography.titleMediumEmphasized,
+                style = MaterialTheme.typography.titleMediumEmphasized.bookText(),
                 maxLines = 1,
               )
             }

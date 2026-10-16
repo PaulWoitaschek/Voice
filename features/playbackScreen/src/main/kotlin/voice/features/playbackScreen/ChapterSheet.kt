@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import voice.core.ui.NowPlayingBars
+import voice.core.ui.bookText
 import voice.core.ui.segmentedShape
 import voice.core.strings.R as StringsR
 
@@ -146,7 +147,7 @@ private fun ChapterItem(
       Text(
         modifier = Modifier.weight(1F),
         text = chapter.name,
-        style = if (chapter.active) MaterialTheme.typography.titleMediumEmphasized else MaterialTheme.typography.bodyLarge,
+        style = (if (chapter.active) MaterialTheme.typography.titleMediumEmphasized else MaterialTheme.typography.bodyLarge).bookText(),
         color = if (played) colors.onSurfaceVariant else Color.Unspecified,
         maxLines = 2,
       )

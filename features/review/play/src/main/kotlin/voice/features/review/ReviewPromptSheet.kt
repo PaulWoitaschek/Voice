@@ -91,6 +91,7 @@ import voice.core.ui.EntranceState
 import voice.core.ui.MorphShape
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
+import voice.core.ui.bookText
 import voice.core.ui.drawConfetti
 import voice.core.ui.entrance
 import voice.core.ui.icons.VoiceIcons
@@ -374,7 +375,7 @@ private fun AskStep(
       if (headline is ReviewPrompt.Headline.BookFinished) {
         Text(
           text = headline.name,
-          style = MaterialTheme.typography.titleMedium,
+          style = MaterialTheme.typography.titleMedium.bookText(),
           color = MaterialTheme.colorScheme.primary,
           textAlign = TextAlign.Center,
           maxLines = 2,

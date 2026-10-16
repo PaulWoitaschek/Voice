@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.ui.VoiceTheme
+import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 import voice.core.strings.R as StringsR
@@ -255,7 +256,7 @@ private fun BrowseRow(
       Column(Modifier.weight(1F)) {
         Text(
           text = entry.name,
-          style = MaterialTheme.typography.titleMedium,
+          style = MaterialTheme.typography.titleMedium.bookText(),
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,
         )
