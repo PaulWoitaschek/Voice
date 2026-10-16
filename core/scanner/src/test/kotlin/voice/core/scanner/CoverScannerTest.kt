@@ -5,7 +5,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -16,7 +15,6 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
-import voice.core.data.repo.BookRepository
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.documentfile.FileBasedDocumentFactory
@@ -42,7 +40,6 @@ class CoverScannerTest {
       true
     }
   }
-  private val bookRepository = mockk<BookRepository>()
   private val coverExtractor = mockk<CoverExtractor> {
     coEvery { extractCover(any(), any()) } returns false
   }
@@ -105,24 +102,36 @@ class CoverScannerTest {
   }
 
   @Test
-  fun `covers are moved before missing ones are looked for`() = runTest {
+  fun `only the first file is asked for an embedded cover`() = runTest {
     val folder = testFolder.newFolder("Book")
-    File(folder, "1.mp3").writeText("audio")
+    val first = File(folder, "1.mp3").apply { writeText("audio") }
+    File(folder, "2.mp3").writeText("audio")
 
     scan(book(folder))
 
-    coVerifyOrder {
-      coverSaver.moveExtractedCovers()
-      val _ = bookRepository.all()
+    coVerify(exactly = 1) { val _ = coverExtractor.extractCover(any(), any()) }
+    coVerify { val _ = coverExtractor.extractCover(first.toUri(), image) }
+  }
+
+  @Test
+  fun `an embedded cover becomes the cover`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    coEvery { coverExtractor.extractCover(any(), any()) } answers {
+      secondArg<File>().writeText("embedded")
+      true
     }
+
+    scan(book(folder))
+
+    assertEquals(expected = listOf("embedded"), actual = savedImages)
   }
 
   private suspend fun scan(
     book: Book,
     scanner: CoverScanner = this.scanner,
   ) {
-    coEvery { bookRepository.all() } returns listOf(book)
-    scanner.scan()
+    scanner.scan(listOf(book))
   }
 
   private fun scanner(documentFileFactory: CachedDocumentFileFactory) = CoverScanner(
@@ -130,12 +139,12 @@ class CoverScannerTest {
     coverSaver = coverSaver,
     coverExtractor = coverExtractor,
     documentFileFactory = documentFileFactory,
-    bookRepository = bookRepository,
   )
 
   private fun book(folder: File): Book {
     val chapters = folder.listFiles()!!
       .filter { it.extension == "mp3" }
+      .sortedBy { it.name }
       .map { chapter(it) }
     val content = BookParser(contentRepo = mockk(), mediaAnalyzer = mockk(), fileFactory = mockk())
       .parse(chapters, BookId(folder.toUri()), analyzed = null, file = FileBasedDocumentFile(folder))

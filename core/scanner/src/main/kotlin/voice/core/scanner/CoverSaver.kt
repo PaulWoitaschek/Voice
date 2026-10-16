@@ -9,7 +9,6 @@ import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.core.data.BookId
-import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
 import java.io.File
@@ -25,13 +24,10 @@ private const val EXTRACTED_COVERS = "extractedCovers"
 
 private const val MAX_COVER_SIZE = 1200
 
-private val PNG_SIGNATURE = byteArrayOf(0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A)
-
 @Inject
 public class CoverSaver
 internal constructor(
   private val repo: BookRepository,
-  private val contentRepo: BookContentRepo,
   private val context: Context,
 ) {
 
@@ -66,29 +62,6 @@ internal constructor(
     return true
   }
 
-  // extracted covers used to be stored next to the custom ones, which are backed up
-  internal suspend fun moveExtractedCovers() {
-    val contents = contentRepo.all()
-    contents.mapNotNull { it.metadata.cover }
-      .filter { it.parentFile?.name == CUSTOM_COVERS }
-      .distinct()
-      .forEach { old ->
-        val moved = withContext(Dispatchers.IO) {
-          // until the listener's cover got a field of its own, it was stored here too, always as PNG
-          if (old.isPng()) return@withContext null
-          File(coversFolder(EXTRACTED_COVERS), old.name)
-            .also { old.renameTo(it) }
-            .takeIf { it.exists() }
-        } ?: return@forEach
-        // a book that moved shares the file with its old entry
-        contents.filter { it.metadata.cover == old }.forEach { content ->
-          repo.updateBook(content.id) {
-            if (it.metadata.cover == old) it.copy(metadata = it.metadata.copy(cover = moved)) else it
-          }
-        }
-      }
-  }
-
   // ImageDecoder turns a photo upright as its EXIF data says, which BitmapFactory doesn't
   private fun decode(image: File): Bitmap? {
     return try {
@@ -103,15 +76,6 @@ internal constructor(
       }
     } catch (_: IOException) {
       null
-    }
-  }
-
-  private fun File.isPng(): Boolean {
-    val header = ByteArray(PNG_SIGNATURE.size)
-    return try {
-      inputStream().use { it.read(header) } == header.size && header.contentEquals(PNG_SIGNATURE)
-    } catch (_: IOException) {
-      false
     }
   }
 

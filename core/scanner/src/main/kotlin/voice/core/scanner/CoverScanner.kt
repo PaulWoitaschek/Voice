@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.core.data.Book
 import voice.core.data.isRemote
-import voice.core.data.repo.BookRepository
 import voice.core.data.toUri
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
@@ -26,13 +25,11 @@ internal class CoverScanner(
   private val coverSaver: CoverSaver,
   private val coverExtractor: CoverExtractor,
   private val documentFileFactory: CachedDocumentFileFactory,
-  private val bookRepository: BookRepository,
 ) {
 
-  suspend fun scan() {
-    coverSaver.moveExtractedCovers()
+  suspend fun scan(books: List<Book>) {
     // server books bring their covers along
-    bookRepository.all().filterNot { it.id.isRemote }.forEach { findCoverForBook(it) }
+    books.filterNot { it.id.isRemote }.forEach { findCoverForBook(it) }
   }
 
   private suspend fun findCoverForBook(book: Book) {
@@ -97,15 +94,12 @@ internal class CoverScanner(
     book: Book,
     image: File,
   ) {
-    book.chapters
-      .take(5).forEach { chapter ->
-        val success = coverExtractor.extractCover(
-          input = chapter.id.toUri(),
-          outputFile = image,
-        )
-        if (success && image.length() > 0 && coverSaver.saveExtractedCover(image, bookId = book.id)) {
-          return
-        }
-      }
+    val success = coverExtractor.extractCover(
+      input = book.chapters.first().id.toUri(),
+      outputFile = image,
+    )
+    if (success && image.length() > 0) {
+      val _ = coverSaver.saveExtractedCover(image, bookId = book.id)
+    }
   }
 }

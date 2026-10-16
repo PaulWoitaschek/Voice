@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
@@ -15,7 +14,6 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.BookMetadata
 import voice.core.data.ChapterId
-import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import java.io.File
 import java.time.Instant
@@ -38,10 +36,7 @@ class CoverSaverTest {
       contents[id] = secondArg<(BookContent) -> BookContent>()(contents.getValue(id))
     }
   }
-  private val contentRepo = mockk<BookContentRepo> {
-    coEvery { all() } answers { contents.values.toList() }
-  }
-  private val coverSaver = CoverSaver(repo = repo, contentRepo = contentRepo, context = context)
+  private val coverSaver = CoverSaver(repo = repo, context = context)
 
   @Test
   fun `a custom cover is saved as a webp of at most 1200 px`() = runTest {
@@ -77,50 +72,6 @@ class CoverSaverTest {
     assertNull(contents.getValue(content.id).metadata.cover)
   }
 
-  @Test
-  fun `extracted covers move out of the custom covers, for every book that uses them`() = runTest {
-    val oldFolder = File(context.filesDir, "bookCovers").apply { mkdirs() }
-    val extracted = File(oldFolder, "extracted.png").apply { writeText("extracted") }
-    val custom = File(oldFolder, "custom.webp").apply { writeText("custom") }
-    val book = content("book", cover = extracted, customCover = custom)
-    val movedBook = content("movedBook", cover = extracted)
-
-    coverSaver.moveExtractedCovers()
-
-    val moved = File(context.filesDir, "extractedCovers/extracted.png")
-    assertEquals(expected = "extracted", actual = moved.readText())
-    assertFalse(extracted.exists())
-    assertEquals(expected = moved, actual = contents.getValue(book.id).metadata.cover)
-    assertEquals(expected = moved, actual = contents.getValue(movedBook.id).metadata.cover)
-    assertEquals(expected = custom, actual = contents.getValue(book.id).customCover)
-    assertTrue(custom.exists())
-  }
-
-  @Test
-  fun `a png cover could be one the listener picked, so it stays backed up`() = runTest {
-    val png = File(context.filesDir, "bookCovers/picked.png").apply {
-      parentFile!!.mkdirs()
-      outputStream().use { Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888).compress(Bitmap.CompressFormat.PNG, 100, it) }
-    }
-    val book = content("book", cover = png)
-
-    coverSaver.moveExtractedCovers()
-
-    assertTrue(png.exists())
-    assertEquals(expected = png, actual = contents.getValue(book.id).metadata.cover)
-  }
-
-  @Test
-  fun `a missing extracted cover is left for the scan to find again`() = runTest {
-    val missing = File(context.filesDir, "bookCovers/missing.png")
-    val book = content("book", cover = missing)
-
-    coverSaver.moveExtractedCovers()
-
-    assertEquals(expected = missing, actual = contents.getValue(book.id).metadata.cover)
-    coVerify(exactly = 0) { repo.updateBook(any(), any()) }
-  }
-
   private fun jpeg(
     width: Int,
     height: Int,
@@ -144,11 +95,7 @@ class CoverSaverTest {
     assertEquals(expected = width to height, actual = bounds.outWidth to bounds.outHeight)
   }
 
-  private fun content(
-    name: String,
-    cover: File? = null,
-    customCover: File? = null,
-  ): BookContent {
+  private fun content(name: String): BookContent {
     val chapter = ChapterId("$name.mp3")
     return BookContent(
       id = BookId(name),
@@ -170,11 +117,11 @@ class CoverSaverTest {
         narrator = null,
         series = null,
         part = null,
-        cover = cover,
+        cover = null,
         fileLastModified = null,
       ),
       customName = null,
-      customCover = customCover,
+      customCover = null,
     ).also { contents[it.id] = it }
   }
 }
