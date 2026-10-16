@@ -414,8 +414,7 @@
     <string name="support.badges.title">Váš odznak roste s každým měsícem podpory</string>
     <string name="support.action.donate_kofi">Přispět na Ko-fi</string>
     <string name="support.description.maintenance">Aplikace Voice je zdarma, má otevřený zdrojový kód a udržuje ji jeden vývojář.</string>
-    <string name="support.description.maintenance_subtitle">Dary pomáhají financovat průběžnou údržbu a vývoj.</string>
-    <string name="support.description.play">Měsíční podpora mi umožňuje plánovat další verzi, nejen další opravu.</string>
+    <string name="support.description.monthly">Měsíční podpora mi umožňuje plánovat další verzi, nejen další opravu.</string>
     <string name="support.fine_print">Je to poděkování: nic neodemyká. Zrušit můžete kdykoli v Google Play.</string>
     <string name="support.fine_print.tip">Je to poděkování: nic neodemyká. Žádné předplatné.</string>
     <string name="support.helps.title">Podpora pomáhá s</string>
@@ -423,7 +422,7 @@
     <string name="support.helps.features">Novými funkcemi</string>
     <string name="support.helps.open_source">Udržením aplikace Voice bez reklam</string>
     <string name="support.hero.title">Ať Voice nezmlkne</string>
-    <string name="support.kofi.hint">Ko-fi se otevře v prohlížeči. Pomůže jakákoli částka.</string>
+    <string name="support.kofi.hint">Ko-fi se otevře v prohlížeči. Měsíčně nebo jednorázově, bez účtu.</string>
     <string name="support.message.failed">Nepovedlo se. Zkuste to za chvíli znovu.</string>
     <string name="support.message.pending">Váš čaj se louhuje. Odznak se objeví, jakmile Google platbu potvrdí.</string>
     <string name="support.period.monthly">Měsíčně</string>

@@ -398,8 +398,7 @@
     <string name="support.badges.title">Votre badge grandit à chaque mois de soutien</string>
     <string name="support.action.donate_kofi">Faire un don sur Ko-fi</string>
     <string name="support.description.maintenance">Voice est gratuit, open source et maintenu par un seul développeur.</string>
-    <string name="support.description.maintenance_subtitle">Les dons aident à financer la maintenance et le développement continus.</string>
-    <string name="support.description.play">Un soutien mensuel me permet de préparer la prochaine version, pas seulement le prochain correctif.</string>
+    <string name="support.description.monthly">Un soutien mensuel me permet de préparer la prochaine version, pas seulement le prochain correctif.</string>
     <string name="support.fine_print">C\'est un merci : ça ne débloque rien. Résiliable à tout moment sur Google Play.</string>
     <string name="support.fine_print.tip">C\'est un merci : ça ne débloque rien. Sans abonnement.</string>
     <string name="support.helps.title">Votre soutien aide pour</string>
@@ -407,7 +406,7 @@
     <string name="support.helps.features">Nouvelles fonctionnalités</string>
     <string name="support.helps.open_source">Garder Voice sans publicité</string>
     <string name="support.hero.title">Pour que Voice ne se taise pas</string>
-    <string name="support.kofi.hint">Ko-fi s\'ouvre dans votre navigateur. Toute somme compte.</string>
+    <string name="support.kofi.hint">Ko-fi s\'ouvre dans votre navigateur. Chaque mois ou une seule fois, sans créer de compte.</string>
     <string name="support.message.failed">Ça n\'a pas marché. Réessayez dans un instant.</string>
     <string name="support.message.pending">Votre thé infuse. Votre badge apparaîtra dès que Google aura confirmé le paiement.</string>
     <string name="support.period.monthly">Mensuel</string>

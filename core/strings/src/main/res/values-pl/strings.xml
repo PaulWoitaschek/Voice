@@ -414,8 +414,7 @@
     <string name="support.badges.title">Twoja odznaka rośnie z każdym miesiącem wsparcia</string>
     <string name="support.action.donate_kofi">Przekaż darowiznę na Ko-fi</string>
     <string name="support.description.maintenance">Voice jest darmowy, open source i utrzymywany przez jednego programistę.</string>
-    <string name="support.description.maintenance_subtitle">Darowizny pomagają finansować bieżące utrzymanie i rozwój.</string>
-    <string name="support.description.play">Comiesięczne wsparcie pozwala mi planować kolejne wydanie, a nie tylko kolejną poprawkę.</string>
+    <string name="support.description.monthly">Comiesięczne wsparcie pozwala mi planować kolejne wydanie, a nie tylko kolejną poprawkę.</string>
     <string name="support.fine_print">To podziękowanie: nic nie odblokowuje. Anuluj w każdej chwili w Google Play.</string>
     <string name="support.fine_print.tip">To podziękowanie: nic nie odblokowuje. Bez subskrypcji.</string>
     <string name="support.helps.title">Wsparcie pomaga w</string>
@@ -423,7 +422,7 @@
     <string name="support.helps.features">Nowych funkcjach</string>
     <string name="support.helps.open_source">Utrzymaniu Voice bez reklam</string>
     <string name="support.hero.title">Niech Voice nie milknie</string>
-    <string name="support.kofi.hint">Ko-fi otworzy się w przeglądarce. Każda kwota pomaga.</string>
+    <string name="support.kofi.hint">Ko-fi otworzy się w przeglądarce. Co miesiąc lub jednorazowo, bez zakładania konta.</string>
     <string name="support.message.failed">Nie udało się. Spróbuj ponownie za chwilę.</string>
     <string name="support.message.pending">Twoja herbata się parzy. Odznaka pojawi się, gdy Google potwierdzi płatność.</string>
     <string name="support.period.monthly">Miesięcznie</string>

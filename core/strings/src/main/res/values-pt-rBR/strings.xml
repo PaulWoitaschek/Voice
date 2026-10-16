@@ -398,8 +398,7 @@
     <string name="support.badges.title">Seu emblema cresce a cada mês de apoio</string>
     <string name="support.action.donate_kofi">Doar no Ko-fi</string>
     <string name="support.description.maintenance">O Voice é gratuito, de código aberto e mantido por um único desenvolvedor.</string>
-    <string name="support.description.maintenance_subtitle">As doações ajudam a financiar a manutenção e o desenvolvimento contínuos.</string>
-    <string name="support.description.play">O apoio mensal é o que me permite planejar a próxima versão, não só a próxima correção.</string>
+    <string name="support.description.monthly">O apoio mensal é o que me permite planejar a próxima versão, não só a próxima correção.</string>
     <string name="support.fine_print">É um agradecimento: não desbloqueia nada. Cancele quando quiser no Google Play.</string>
     <string name="support.fine_print.tip">É um agradecimento: não desbloqueia nada. Sem assinatura.</string>
     <string name="support.helps.title">O apoio ajuda em</string>
@@ -407,7 +406,7 @@
     <string name="support.helps.features">Novos recursos</string>
     <string name="support.helps.open_source">Manter o Voice sem anúncios</string>
     <string name="support.hero.title">Mantenha o Voice falando</string>
-    <string name="support.kofi.hint">O Ko-fi abre no seu navegador. Qualquer valor ajuda.</string>
+    <string name="support.kofi.hint">O Ko-fi abre no seu navegador. Todo mês ou uma vez só, sem precisar de conta.</string>
     <string name="support.message.failed">Não deu certo. Tente novamente em instantes.</string>
     <string name="support.message.pending">Seu chá está sendo preparado. O emblema aparece assim que o Google confirmar o pagamento.</string>
     <string name="support.period.monthly">Mensal</string>

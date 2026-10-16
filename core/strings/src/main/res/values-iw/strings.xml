@@ -398,8 +398,7 @@
     <string name="support.badges.title">התג שלכם גדל בכל חודש של תמיכה</string>
     <string name="support.action.donate_kofi">לתרום ב-Ko-fi</string>
     <string name="support.description.maintenance">Voice חינמית, בקוד פתוח, ומתוחזקת בידי מפתח אחד.</string>
-    <string name="support.description.maintenance_subtitle">תרומות עוזרות לממן תחזוקה ופיתוח שוטפים.</string>
-    <string name="support.description.play">תמיכה חודשית היא מה שמאפשר לי לתכנן את הגרסה הבאה, ולא רק את התיקון הבא.</string>
+    <string name="support.description.monthly">תמיכה חודשית היא מה שמאפשר לי לתכנן את הגרסה הבאה, ולא רק את התיקון הבא.</string>
     <string name="support.fine_print">זו תודה בלבד: לא פותחת שום תכונה. אפשר לבטל בכל עת ב-Google Play.</string>
     <string name="support.fine_print.tip">זו תודה בלבד: לא פותחת שום תכונה. ללא מינוי.</string>
     <string name="support.helps.title">התמיכה עוזרת ב</string>
@@ -407,7 +406,7 @@
     <string name="support.helps.features">תכונות חדשות</string>
     <string name="support.helps.open_source">שמירה על Voice ללא פרסומות</string>
     <string name="support.hero.title">תנו ל-Voice להמשיך לדבר</string>
-    <string name="support.kofi.hint">Ko-fi נפתח בדפדפן. כל סכום עוזר.</string>
+    <string name="support.kofi.hint">Ko-fi נפתח בדפדפן. חודשי או חד-פעמי, ללא צורך בחשבון.</string>
     <string name="support.message.failed">זה לא הצליח. נסו שוב בעוד רגע.</string>
     <string name="support.message.pending">התה שלכם בחליטה. התג יופיע ברגע ש-Google תאשר את התשלום.</string>
     <string name="support.period.monthly">חודשי</string>
