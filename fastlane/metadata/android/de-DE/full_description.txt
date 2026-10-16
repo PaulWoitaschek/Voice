@@ -33,7 +33,7 @@ Wähle den Ordner mit Deinen Hörbüchern. Voice zeigt Dir die gefundenen Büche
 • Widgets für den Startbildschirm: „Läuft gerade“ und „Bücherregal“
 • Medienbenachrichtigung und Android Auto
 • Helles und dunkles Design, Dynamische Farben und Farbschemas, mit denen Du Voice zu Deinem machst
-• In 25 Sprachen verfügbar
+• In 32 Sprachen verfügbar
 
 <b>Bring Deine eigenen Dateien mit</b>
 
