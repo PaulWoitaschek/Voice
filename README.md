@@ -44,7 +44,7 @@ To find your way around the code, start with [Development](https://voice.woitasc
 
 ## Support Voice
 
-Voice is free and built in spare time. If it has been useful to you, consider chipping in. One-time or monthly, no sign-up required:
+Voice has no ads, no investors and no company behind it. It's made by one developer and kept going by its listeners. Monthly support is what lets me plan the next release, not just the next fix. Ko-fi needs no account:
 
 <a href="https://ko-fi.com/paul_voice">
   <img alt="Support on Ko-fi"
@@ -52,7 +52,7 @@ Voice is free and built in spare time. If it has been useful to you, consider ch
        src="https://storage.ko-fi.com/cdn/brandasset/v2/support_me_on_kofi_dark.png" />
 </a>
 
-You can also [sponsor on GitHub](https://github.com/sponsors/PaulWoitaschek) if you prefer.
+Or [sponsor monthly on GitHub](https://github.com/sponsors/PaulWoitaschek). A one-time tip helps too.
 
 ## License
 

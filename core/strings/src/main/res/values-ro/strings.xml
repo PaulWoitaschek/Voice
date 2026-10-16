@@ -398,8 +398,7 @@
     <string name="support.badges.title">Insigna ta crește cu fiecare lună de susținere</string>
     <string name="support.action.donate_kofi">Donează pe Ko-fi</string>
     <string name="support.description.maintenance">Voice este gratuit, open source și întreținut de un singur dezvoltator.</string>
-    <string name="support.description.maintenance_subtitle">Donațiile finanțează întreținerea și dezvoltarea continuă.</string>
-    <string name="support.description.play">Susținerea lunară îmi permite să planific următoarea versiune, nu doar următoarea remediere.</string>
+    <string name="support.description.monthly">Susținerea lunară îmi permite să planific următoarea versiune, nu doar următoarea remediere.</string>
     <string name="support.fine_print">E un mulțumesc: nu deblochează nimic. Anulezi oricând din Google Play.</string>
     <string name="support.fine_print.tip">E un mulțumesc: nu deblochează nimic. Fără abonament.</string>
     <string name="support.helps.title">Sprijinul tău ajută la</string>
@@ -407,7 +406,7 @@
     <string name="support.helps.features">Funcții noi</string>
     <string name="support.helps.open_source">Păstrarea Voice fără reclame</string>
     <string name="support.hero.title">Dă-i glas lui Voice</string>
-    <string name="support.kofi.hint">Ko-fi se deschide în browser. Orice sumă ajută.</string>
+    <string name="support.kofi.hint">Ko-fi se deschide în browser. Lunar sau o singură dată, fără cont.</string>
     <string name="support.message.failed">Nu a mers. Încearcă din nou peste puțin timp.</string>
     <string name="support.message.pending">Ceaiul tău se infuzează. Insigna apare după ce Google confirmă plata.</string>
     <string name="support.period.monthly">Lunar</string>

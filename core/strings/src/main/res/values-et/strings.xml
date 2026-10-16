@@ -382,8 +382,7 @@
     <string name="support.badges.title">Sinu märk kasvab iga toetatud kuuga</string>
     <string name="support.action.donate_kofi">Anneta Ko-fis</string>
     <string name="support.description.maintenance">Voice on tasuta, avatud lähtekoodiga ja seda hooldab üks arendaja.</string>
-    <string name="support.description.maintenance_subtitle">Annetused aitavad rahastada pidevat hooldust ja arendust.</string>
-    <string name="support.description.play">Igakuine toetus laseb mul planeerida järgmist versiooni, mitte ainult järgmist parandust.</string>
+    <string name="support.description.monthly">Igakuine toetus laseb mul planeerida järgmist versiooni, mitte ainult järgmist parandust.</string>
     <string name="support.fine_print">See on tänuavaldus: ei ava midagi. Tühista igal ajal Google Plays.</string>
     <string name="support.fine_print.tip">See on tänuavaldus: ei ava midagi. Ilma tellimuseta.</string>
     <string name="support.helps.title">Toetus aitab</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">Uute funktsioonidega</string>
     <string name="support.helps.open_source">Hoida Voice reklaamivabana</string>
     <string name="support.hero.title">Las Voice räägib edasi</string>
-    <string name="support.kofi.hint">Ko-fi avaneb sinu brauseris. Iga summa aitab.</string>
+    <string name="support.kofi.hint">Ko-fi avaneb sinu brauseris. Igakuiselt või ühekordselt, kontot pole vaja.</string>
     <string name="support.message.failed">See ei õnnestunud. Proovi hetke pärast uuesti.</string>
     <string name="support.message.pending">Sinu tee alles tõmbab. Märk ilmub, kui Google makse kinnitab.</string>
     <string name="support.period.monthly">Igakuine</string>
