@@ -137,6 +137,9 @@ restore the library shows a card until the listener allows access again. The fol
 folders, and the system picker opens where the folder was. Picking the same folder brings its books back as they
 were. Picking another one keeps the progress too, as Voice recognizes the books by their files.
 
+Android skips the cloud backup of an app with more than 25 MB, so covers from the files or a server stay out of it.
+Voice gets them from there again after a restore.
+
 ## Without Google's backup, a new phone means starting over
 
 ⭕ **Open** · [#1668]

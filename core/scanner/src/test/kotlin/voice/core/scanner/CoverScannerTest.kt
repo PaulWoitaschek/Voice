@@ -5,6 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -15,6 +16,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.repo.BookRepository
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.documentfile.FileBasedDocumentFactory
@@ -23,6 +25,7 @@ import java.io.File
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @RunWith(AndroidJUnit4::class)
 class CoverScannerTest {
@@ -30,10 +33,16 @@ class CoverScannerTest {
   @get:Rule
   val testFolder = TemporaryFolder()
 
-  private val savedCover by lazy { File(testFolder.root, "saved.png") }
+  private val image by lazy { File(testFolder.root, "image") }
+  private val savedImages = mutableListOf<String>()
   private val coverSaver = mockk<CoverSaver>(relaxUnitFun = true) {
-    coEvery { newBookCoverFile() } answers { savedCover }
+    coEvery { newTemporaryFile() } answers { image }
+    coEvery { saveExtractedCover(any(), any()) } answers {
+      savedImages += firstArg<File>().readText()
+      true
+    }
   }
+  private val bookRepository = mockk<BookRepository>()
   private val coverExtractor = mockk<CoverExtractor> {
     coEvery { extractCover(any(), any()) } returns false
   }
@@ -46,10 +55,11 @@ class CoverScannerTest {
     File(folder, "Cover.JPG").writeText("cover")
     val book = book(folder)
 
-    scanner.scan(listOf(book))
+    scan(book)
 
-    coVerify { coverSaver.setCoverFromFiles(savedCover, book.id) }
-    assertEquals(expected = "cover", actual = savedCover.readText())
+    coVerify { val _ = coverSaver.saveExtractedCover(image, book.id) }
+    assertEquals(expected = listOf("cover"), actual = savedImages)
+    assertFalse(image.exists())
   }
 
   @Test
@@ -58,9 +68,9 @@ class CoverScannerTest {
     File(folder, "1.mp3").writeText("audio")
     File(folder, "notes.txt").writeText("notes")
 
-    scanner.scan(listOf(book(folder)))
+    scan(book(folder))
 
-    coVerify(exactly = 0) { coverSaver.setCoverFromFiles(any(), any()) }
+    coVerify(exactly = 0) { val _ = coverSaver.saveExtractedCover(any(), any()) }
   }
 
   @Test
@@ -73,9 +83,46 @@ class CoverScannerTest {
       }
     }
 
-    scanner(mockk { every { create(any()) } returns listedCoverLast }).scan(listOf(book(folder)))
+    scan(book(folder), scanner(mockk { every { create(any()) } returns listedCoverLast }))
 
-    assertEquals(expected = "Cover", actual = savedCover.readText())
+    assertEquals(expected = listOf("Cover"), actual = savedImages)
+  }
+
+  @Test
+  fun `an image that can't be decoded makes way for the next one`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    File(folder, "Cover.jpg").writeText("broken")
+    File(folder, "back.jpg").writeText("back")
+    coEvery { coverSaver.saveExtractedCover(any(), any()) } answers {
+      savedImages += firstArg<File>().readText()
+      savedImages.size > 1
+    }
+
+    scan(book(folder))
+
+    assertEquals(expected = listOf("broken", "back"), actual = savedImages)
+  }
+
+  @Test
+  fun `covers are moved before missing ones are looked for`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+
+    scan(book(folder))
+
+    coVerifyOrder {
+      coverSaver.moveExtractedCovers()
+      val _ = bookRepository.all()
+    }
+  }
+
+  private suspend fun scan(
+    book: Book,
+    scanner: CoverScanner = this.scanner,
+  ) {
+    coEvery { bookRepository.all() } returns listOf(book)
+    scanner.scan()
   }
 
   private fun scanner(documentFileFactory: CachedDocumentFileFactory) = CoverScanner(
@@ -83,6 +130,7 @@ class CoverScannerTest {
     coverSaver = coverSaver,
     coverExtractor = coverExtractor,
     documentFileFactory = documentFileFactory,
+    bookRepository = bookRepository,
   )
 
   private fun book(folder: File): Book {

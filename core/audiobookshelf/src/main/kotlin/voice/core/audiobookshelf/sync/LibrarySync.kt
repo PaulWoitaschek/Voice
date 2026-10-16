@@ -172,7 +172,7 @@ internal class LibrarySync(
     account: Account,
     item: AbsLibraryItem,
   ): File? = withContext(Dispatchers.IO) {
-    val folder = File(context.filesDir, "bookCovers").apply { mkdirs() }
+    val folder = File(context.filesDir, "extractedCovers").apply { mkdirs() }
     val file = File(folder, coverFileName(item))
     val urls = listOf(
       "${account.serverUrl}api/items/${item.id}/cover?width=800&format=jpeg",

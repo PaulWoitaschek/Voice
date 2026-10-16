@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
-import voice.core.data.repo.BookRepository
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.logging.api.Logger
@@ -26,7 +25,6 @@ internal constructor(
   private val audiobookFolders: AudiobookFolders,
   private val scanner: MediaScanner,
   private val coverScanner: CoverScanner,
-  private val bookRepo: BookRepository,
   private val documentFileFactory: CachedDocumentFileFactory,
 ) {
 
@@ -60,8 +58,7 @@ internal constructor(
       }
       scannerActive.value = false
 
-      val books = bookRepo.all()
-      coverScanner.scan(books)
+      coverScanner.scan()
     }
   }
 }
