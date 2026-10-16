@@ -1,21 +1,25 @@
 package voice.core.scanner
 
 import android.content.Context
-import androidx.documentfile.provider.DocumentFile
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.core.data.Book
 import voice.core.data.isRemote
 import voice.core.data.toUri
+import voice.core.documentfile.CachedDocumentFile
+import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.logging.api.Logger
 import java.io.IOException
+
+private val imageExtensions = setOf("jpg", "jpeg", "png", "webp")
 
 @Inject
 internal class CoverScanner(
   private val context: Context,
   private val coverSaver: CoverSaver,
   private val coverExtractor: CoverExtractor,
+  private val documentFileFactory: CachedDocumentFileFactory,
 ) {
 
   suspend fun scan(books: List<Book>) {
@@ -38,18 +42,8 @@ internal class CoverScanner(
   }
 
   private suspend fun findAndSaveCoverFromDisc(book: Book): Boolean = withContext(Dispatchers.IO) {
-    val documentFile = try {
-      DocumentFile.fromTreeUri(context, book.id.toUri())
-    } catch (_: IllegalArgumentException) {
-      null
-    } ?: return@withContext false
-
-    if (!documentFile.isDirectory) {
-      return@withContext false
-    }
-
-    documentFile.listFiles().forEach { child ->
-      if (child.isFile && child.canRead() && child.type?.startsWith("image/") == true) {
+    documentFileFactory.create(book.id.toUri()).children.forEach { child ->
+      if (child.isImage()) {
         val coverFile = coverSaver.newBookCoverFile()
         val worked = try {
           context.contentResolver.openInputStream(child.uri)?.use { input ->
@@ -74,6 +68,12 @@ internal class CoverScanner(
     }
 
     false
+  }
+
+  private fun CachedDocumentFile.isImage(): Boolean {
+    if (!isFile) return false
+    val name = name ?: return false
+    return name.substringAfterLast(".", missingDelimiterValue = "").lowercase() in imageExtensions
   }
 
   private suspend fun scanForEmbeddedCover(book: Book) {
