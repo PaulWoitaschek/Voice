@@ -12,13 +12,13 @@ The rule: Voice isn't meant to be very customizable. It offers good defaults and
 | Problem | Status |
 |---|---|
 | [I can't pick dark or light for Voice alone](#i-cant-pick-dark-or-light-for-voice-alone) | ✅ Solved |
-| [Dark mode isn't black enough for bed](#dark-mode-isnt-black-enough-for-bed) | ⭕ Open |
+| [Dark mode isn't black enough for bed](#dark-mode-isnt-black-enough-for-bed) | ✅ Solved |
 | [The colors don't match my phone, my taste or my book](#the-colors-dont-match-my-phone-my-taste-or-my-book) | ✅ Solved |
 | [Voice doesn't feel modern and calm](#voice-doesnt-feel-modern-and-calm) | ✅ Solved |
 | [I can't read or use Voice with poor sight](#i-cant-read-or-use-voice-with-poor-sight) | ✅ Solved |
 | [In split screen, the play controls go off screen](#in-split-screen-the-play-controls-go-off-screen) | ✅ Solved |
 | [The translation reads awkwardly](#the-translation-reads-awkwardly) | ✅ Solved |
-| [Voice isn't in my language](#voice-isnt-in-my-language) | ❌ Won't solve |
+| [Voice isn't in my language](#voice-isnt-in-my-language) | ✅ Solved |
 
 ## I can't pick dark or light for Voice alone
 
@@ -34,10 +34,13 @@ Some listeners keep their phone light and want certain apps dark.
 
 ## Dark mode isn't black enough for bed
 
-⭕ **Open** · [#1284]
+✅ **Solved** · [#1284]
 
 Listeners who listen at bedtime want a pure black theme for their AMOLED screens. In 2018, the maintainer was all for
 an AMOLED theme, used as the night theme on AMOLED devices ([#795]).
+
+**Solution:** A pure black switch, off by default, turns the dark theme's background black, also when following the
+system. Cards, sheets and bars keep their tones so they still stand out.
 
 ## The colors don't match my phone, my taste or my book
 
@@ -97,17 +100,24 @@ not a machine. How is quality checked now?
 
 ## Voice isn't in my language
 
-❌ **Won't solve** · [#3827]
+✅ **Solved** · [#3931]
 
-Voice dropped 13 languages.
+Voice dropped 13 languages ([#3827]), and a listener who used it in Sardinian asked for it back.
 
-**Why not:** Their speakers mostly use another language on their phones, or the translations were incomplete.
+**Solution:** Since agents translate every string, another language costs little. Voice ships the languages people
+run their phones in, and adds a language when a listener asks for it.
+
+**Turned down:**
+
+- Only the languages whose speakers mostly use them on their phones ([#3827]): it left out listeners who picked their
+  language on purpose.
+- Weblate for the languages AI translates less well ([#3931]): a second place where translations change would
+  conflict with translating in each pull request.
 
 ## Open questions
 
-1. Pure black: an option, or the automatic night look, for example while the sleep timer runs?
-2. Accessibility: has anyone tested Voice with TalkBack? Can every popup be closed with it ([#1898])?
-3. Which languages to support, and how to check that the translations are good?
+1. Accessibility: has anyone tested Voice with TalkBack? Can every popup be closed with it ([#1898])?
+2. How to check that the translations are good?
 
 [design principles]: ../.agents/skills/design/SKILL.md
 [#766]: https://github.com/PaulWoitaschek/Voice/issues/766
@@ -121,3 +131,4 @@ Voice dropped 13 languages.
 [#3637]: https://github.com/PaulWoitaschek/Voice/issues/3637
 [#3811]: https://github.com/PaulWoitaschek/Voice/pull/3811
 [#3827]: https://github.com/PaulWoitaschek/Voice/pull/3827
+[#3931]: https://github.com/PaulWoitaschek/Voice/discussions/3931
