@@ -1,6 +1,6 @@
 ---
 name: design
-description: Voice's product and design principles. Covers which features belong in the app, Material 3 Expressive, color, shape, motion, delight, and accessibility. Use when designing, building, or reviewing UI (screens, sheets, components, widgets, empty states, motion), or when deciding whether and how to add a feature or setting.
+description: Voice's product and design principles. Covers which features belong in the app, Material 3 Expressive, color, type, shape, motion, delight, and accessibility. Use when designing, building, or reviewing UI (screens, sheets, components, widgets, empty states, motion), or when deciding whether and how to add a feature or setting.
 ---
 
 # Designing for Voice
@@ -49,6 +49,18 @@ Lean expressive: bold shapes, rich color, springy motion.
 - Sleep-related UI uses `NightTheme`. Color changes blend over and never jump.
 - Check dark mode on its own. With the 2025 spec, `tertiaryContainer` is a light tone there, so settings uses a deeper
   tint instead.
+
+## Type
+
+The book's words are set in Literata, a serif made for reading, and Voice's own words in Roboto. You can tell at a
+glance what belongs to the story and what belongs to the app.
+
+- Literata: headings, which use the display, headline and `titleLarge` styles, and everything that comes from the
+  book wherever it appears: title, author, series, chapters and bookmark notes. For the book's words, add
+  `.bookText()` to the style, e.g. `MaterialTheme.typography.bodyMedium.bookText()`.
+- Roboto: everything else, like labels, times, progress, buttons, chips, settings rows and text fields.
+- Literata runs wider and taller than Roboto, so long titles wrap sooner. Check them at 2× font size.
+- The Glance widgets keep the system font, because Glance can't use bundled fonts.
 
 ## Shape and icons
 

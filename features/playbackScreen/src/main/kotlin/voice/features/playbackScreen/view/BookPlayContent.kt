@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
+import voice.core.ui.bookText
 import voice.core.ui.entrance
 import voice.core.ui.rememberEntranceState
 import voice.features.playbackScreen.BookPlayViewState
@@ -352,14 +353,14 @@ private fun TitleBlock(
     Text(
       modifier = Modifier.basicMarquee(),
       text = title,
-      style = MaterialTheme.typography.headlineSmallEmphasized,
+      style = MaterialTheme.typography.headlineSmallEmphasized.bookText(),
       maxLines = 1,
     )
     if (author != null) {
       Text(
         modifier = Modifier.basicMarquee(),
         text = author,
-        style = MaterialTheme.typography.titleMedium,
+        style = MaterialTheme.typography.titleMedium.bookText(),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         maxLines = 1,
       )

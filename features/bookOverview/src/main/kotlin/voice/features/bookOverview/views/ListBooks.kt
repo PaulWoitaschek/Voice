@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
 import voice.core.strings.R
+import voice.core.ui.bookText
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 
 @Composable
@@ -66,14 +67,14 @@ internal fun ListBookRow(
       Column(Modifier.weight(1F)) {
         Text(
           text = book.name,
-          style = MaterialTheme.typography.titleMediumEmphasized,
+          style = MaterialTheme.typography.titleMediumEmphasized.bookText(),
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
         if (book.author != null) {
           Text(
             text = book.author,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.bookText(),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

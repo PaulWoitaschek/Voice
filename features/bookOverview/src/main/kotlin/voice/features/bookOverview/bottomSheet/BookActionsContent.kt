@@ -70,6 +70,7 @@ import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.audiobookshelf.download.WaitingFor
 import voice.core.ui.MorphShape
 import voice.core.ui.ShapedIcon
+import voice.core.ui.bookText
 import voice.core.ui.drawConfetti
 import voice.core.ui.entrance
 import voice.core.ui.icons.VoiceIcons
@@ -187,14 +188,14 @@ private fun BookHeader(
     Column(Modifier.weight(1F)) {
       Text(
         text = book.name,
-        style = MaterialTheme.typography.titleLargeEmphasized,
+        style = MaterialTheme.typography.titleLargeEmphasized.bookText(),
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
       )
       if (book.author != null) {
         Text(
           text = book.author,
-          style = MaterialTheme.typography.bodyMedium,
+          style = MaterialTheme.typography.bodyMedium.bookText(),
           color = colors.onSurfaceVariant,
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,

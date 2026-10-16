@@ -63,6 +63,7 @@ import voice.core.data.BookId
 import voice.core.strings.R
 import voice.core.ui.AuroraBackground
 import voice.core.ui.CoverTheme
+import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.features.bookmark.history.HistoryList
@@ -280,14 +281,14 @@ private fun BookmarkTopBar(
       Column {
         Text(
           text = title,
-          style = MaterialTheme.typography.titleMediumEmphasized,
+          style = MaterialTheme.typography.titleMediumEmphasized.bookText(),
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,
         )
         if (author != null) {
           Text(
             text = author,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall.bookText(),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

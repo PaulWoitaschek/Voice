@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import voice.core.strings.R
 import voice.core.ui.CoverTheme
 import voice.core.ui.PlayButton
+import voice.core.ui.bookText
 import voice.core.ui.playButtonSharedElementModifier
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import java.text.NumberFormat
@@ -86,14 +87,14 @@ internal fun ContinueListeningCard(
               Spacer(Modifier.height(4.dp))
               Text(
                 text = book.name,
-                style = MaterialTheme.typography.headlineSmallEmphasized,
+                style = MaterialTheme.typography.headlineSmallEmphasized.bookText(),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
               )
               if (book.author != null) {
                 Text(
                   text = book.author,
-                  style = MaterialTheme.typography.bodyLarge,
+                  style = MaterialTheme.typography.bodyLarge.bookText(),
                   color = colors.onSurfaceVariant,
                   maxLines = 1,
                   overflow = TextOverflow.Ellipsis,

@@ -63,6 +63,7 @@ import androidx.graphics.shapes.Morph
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import voice.core.ui.MorphShape
+import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.features.bookOverview.views.CoverShape
@@ -120,7 +121,7 @@ internal fun DeleteBookSheet(
         Spacer(Modifier.height(4.dp))
         Text(
           text = viewState.name,
-          style = MaterialTheme.typography.titleMedium,
+          style = MaterialTheme.typography.titleMedium.bookText(),
           textAlign = TextAlign.Center,
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,

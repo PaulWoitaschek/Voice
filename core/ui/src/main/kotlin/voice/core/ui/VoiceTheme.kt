@@ -41,6 +41,7 @@ fun VoiceTheme(
   }
   MaterialExpressiveTheme(
     colorScheme = animateColorScheme(rememberThemeColorScheme(themeColorScheme, darkTheme, pureBlack)),
+    typography = VoiceTypography,
     content = content,
   )
 }
