@@ -382,8 +382,7 @@
     <string name="support.badges.title">نشان شما با هر ماه حمایت بزرگ‌تر می‌شود</string>
     <string name="support.action.donate_kofi">کمک مالی در Ko-fi</string>
     <string name="support.description.maintenance">Voice رایگان، متن‌باز، و توسط یک توسعه‌دهنده نگهداری می‌شود.</string>
-    <string name="support.description.maintenance_subtitle">کمک‌های مالی به تأمین هزینه نگهداری و توسعه مداوم کمک می‌کنند.</string>
-    <string name="support.description.play">حمایت ماهانه به من امکان می‌دهد نسخه‌ی بعدی را برنامه‌ریزی کنم، نه فقط رفع اشکال بعدی را.</string>
+    <string name="support.description.monthly">حمایت ماهانه به من امکان می‌دهد نسخه‌ی بعدی را برنامه‌ریزی کنم، نه فقط رفع اشکال بعدی را.</string>
     <string name="support.fine_print">این یک تشکر است: هیچ قابلیتی را باز نمی‌کند. هر زمان خواستید در Google Play لغو کنید.</string>
     <string name="support.fine_print.tip">این یک تشکر است: هیچ قابلیتی را باز نمی‌کند. بدون اشتراک.</string>
     <string name="support.helps.title">حمایت کمک می‌کند به</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">ویژگی‌های جدید</string>
     <string name="support.helps.open_source">بدون تبلیغ نگه داشتن Voice</string>
     <string name="support.hero.title">صدای Voice را زنده نگه دارید</string>
-    <string name="support.kofi.hint">Ko-fi در مرورگرتان باز می‌شود. هر مبلغی کمک می‌کند.</string>
+    <string name="support.kofi.hint">Ko-fi در مرورگرتان باز می‌شود. ماهانه یا یک‌باره، بدون نیاز به حساب کاربری.</string>
     <string name="support.message.failed">انجام نشد. چند لحظه‌ی دیگر دوباره امتحان کنید.</string>
     <string name="support.message.pending">چای‌تان در حال دم کشیدن است. نشان شما پس از تأیید پرداخت توسط Google نمایش داده می‌شود.</string>
     <string name="support.period.monthly">ماهانه</string>

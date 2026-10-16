@@ -382,8 +382,7 @@
     <string name="support.badges.title">Dein Abzeichen wächst jeden Monat, den Du unterstützt</string>
     <string name="support.action.donate_kofi">Auf Ko-fi spenden</string>
     <string name="support.description.maintenance">Voice ist kostenlos, quelloffen und wird von einem Entwickler betreut.</string>
-    <string name="support.description.maintenance_subtitle">Spenden helfen, laufende Wartung und Entwicklung zu finanzieren.</string>
-    <string name="support.description.play">Mit monatlicher Unterstützung kann ich die nächste Version planen, nicht nur den nächsten Bugfix.</string>
+    <string name="support.description.monthly">Mit monatlicher Unterstützung kann ich die nächste Version planen, nicht nur den nächsten Bugfix.</string>
     <string name="support.fine_print">Ein Dankeschön: schaltet nichts frei. Jederzeit in Google Play kündbar.</string>
     <string name="support.fine_print.tip">Ein Dankeschön: schaltet nichts frei. Kein Abo.</string>
     <string name="support.helps.title">Unterstützung hilft bei</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">Neuen Funktionen</string>
     <string name="support.helps.open_source">Voice werbefrei halten</string>
     <string name="support.hero.title">Damit Voice nicht verstummt</string>
-    <string name="support.kofi.hint">Ko-fi öffnet sich in Deinem Browser. Jeder Betrag hilft.</string>
+    <string name="support.kofi.hint">Ko-fi öffnet sich in Deinem Browser. Monatlich oder einmalig, ohne Konto.</string>
     <string name="support.message.failed">Das hat nicht geklappt. Versuche es gleich noch einmal.</string>
     <string name="support.message.pending">Dein Tee zieht noch. Dein Abzeichen erscheint, sobald Google die Zahlung bestätigt.</string>
     <string name="support.period.monthly">Monatlich</string>

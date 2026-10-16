@@ -382,8 +382,7 @@
     <string name="support.badges.title">Je badge groeit elke maand dat je steunt</string>
     <string name="support.action.donate_kofi">Doneren op Ko-fi</string>
     <string name="support.description.maintenance">Voice is gratis, open source en wordt onderhouden door één ontwikkelaar.</string>
-    <string name="support.description.maintenance_subtitle">Donaties helpen doorlopend onderhoud en ontwikkeling te financieren.</string>
-    <string name="support.description.play">Met maandelijkse steun kan ik de volgende versie plannen, niet alleen de volgende bugfix.</string>
+    <string name="support.description.monthly">Met maandelijkse steun kan ik de volgende versie plannen, niet alleen de volgende bugfix.</string>
     <string name="support.fine_print">Een bedankje: ontgrendelt niets. Altijd opzegbaar in Google Play.</string>
     <string name="support.fine_print.tip">Een bedankje: ontgrendelt niets. Geen abonnement.</string>
     <string name="support.helps.title">Steun helpt met</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">Nieuwe functies</string>
     <string name="support.helps.open_source">Voice advertentievrij houden</string>
     <string name="support.hero.title">Houd Voice aan het woord</string>
-    <string name="support.kofi.hint">Ko-fi opent in je browser. Elk bedrag helpt.</string>
+    <string name="support.kofi.hint">Ko-fi opent in je browser. Maandelijks of eenmalig, zonder account.</string>
     <string name="support.message.failed">Dat lukte niet. Probeer het zo nog eens.</string>
     <string name="support.message.pending">Je thee staat te trekken. Je badge verschijnt zodra Google de betaling bevestigt.</string>
     <string name="support.period.monthly">Maandelijks</string>

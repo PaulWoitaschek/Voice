@@ -668,10 +668,8 @@
     <string name="support.action.donate_kofi">Donate on Ko-fi</string>
     <!-- Support screen text explaining why support is useful. -->
     <string name="support.description.maintenance">Voice is free, open source, and maintained by one developer.</string>
-    <!-- Support screen text under the main description. -->
-    <string name="support.description.maintenance_subtitle">Donations help fund ongoing maintenance and development.</string>
-    <!-- Support screen text on Google Play, explaining why a subscription helps more than a one-time tip. Written by the developer in first person. -->
-    <string name="support.description.play">Monthly support is what lets me plan the next release, not just the next fix.</string>
+    <!-- Support screen text under the main description, explaining why monthly support helps more than a one-time tip. Written by the developer in first person. -->
+    <string name="support.description.monthly">Monthly support is what lets me plan the next release, not just the next fix.</string>
     <!-- Small print below the subscribe button. Makes clear that paying gives no features. -->
     <string name="support.fine_print">It\'s a thank-you: it unlocks nothing. Cancel anytime in Google Play.</string>
     <!-- Small print below the support button for a one-time tip. Makes clear that paying gives no features and starts no subscription. -->
@@ -686,8 +684,8 @@
     <string name="support.helps.open_source">Keeping Voice ad-free</string>
     <!-- Title on top of the support screen. Playful: the app is called Voice, and support keeps it going. -->
     <string name="support.hero.title">Keep Voice talking</string>
-    <!-- Hint below the Ko-fi donation button. -->
-    <string name="support.kofi.hint">Ko-fi opens in your browser. Any amount helps.</string>
+    <!-- Hint below the Ko-fi donation button. Ko-fi offers monthly support first and a one-time tip, both without an account. -->
+    <string name="support.kofi.hint">Ko-fi opens in your browser. Monthly or once, no account needed.</string>
     <!-- Shown on the support screen when starting a payment failed. -->
     <string name="support.message.failed">That didn\'t work. Try again in a moment.</string>
     <!-- Shown on the support screen while a payment is still being processed, for example a cash payment. Playful: "brewing" refers to the tea tiers. -->

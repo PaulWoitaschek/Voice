@@ -382,8 +382,7 @@
     <string name="support.badges.title">நீங்கள் ஆதரிக்கும் ஒவ்வொரு மாதமும் உங்கள் பதக்கம் வளரும்</string>
     <string name="support.action.donate_kofi">Ko-fi-யில் நன்கொடை அளிக்கவும்</string>
     <string name="support.description.maintenance">Voice இலவசம், திறந்த மூலமாகும், மேலும் ஒரே ஒரு உருவாக்குநரால் பராமரிக்கப்படுகிறது.</string>
-    <string name="support.description.maintenance_subtitle">நன்கொடைகள் தொடர்ச்சியான பராமரிப்பு மற்றும் மேம்பாட்டிற்கு நிதியளிக்க உதவுகின்றன.</string>
-    <string name="support.description.play">மாதாந்திர ஆதரவுதான் அடுத்த திருத்தத்தை மட்டுமல்ல, அடுத்த வெளியீட்டையும் திட்டமிட எனக்கு உதவுகிறது.</string>
+    <string name="support.description.monthly">மாதாந்திர ஆதரவுதான் அடுத்த திருத்தத்தை மட்டுமல்ல, அடுத்த வெளியீட்டையும் திட்டமிட எனக்கு உதவுகிறது.</string>
     <string name="support.fine_print">இது ஒரு நன்றி மட்டுமே: எதையும் திறக்காது. Google Play-இல் எப்போது வேண்டுமானாலும் ரத்துசெய்யலாம்.</string>
     <string name="support.fine_print.tip">இது ஒரு நன்றி மட்டுமே: எதையும் திறக்காது. சந்தா இல்லை.</string>
     <string name="support.helps.title">ஆதரவு உதவுவது</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">புதிய அம்சங்கள்</string>
     <string name="support.helps.open_source">Voice-ஐ விளம்பரமின்றி வைத்திருப்பது</string>
     <string name="support.hero.title">Voice தொடர்ந்து பேசட்டும்</string>
-    <string name="support.kofi.hint">Ko-fi உங்கள் உலாவியில் திறக்கும். எந்தத் தொகையும் உதவும்.</string>
+    <string name="support.kofi.hint">Ko-fi உங்கள் உலாவியில் திறக்கும். மாதந்தோறும் அல்லது ஒருமுறை, கணக்கு தேவையில்லை.</string>
     <string name="support.message.failed">அது வேலை செய்யவில்லை. சிறிது நேரத்தில் மீண்டும் முயலவும்.</string>
     <string name="support.message.pending">உங்கள் தேநீர் தயாராகிறது. Google கட்டணத்தை உறுதிசெய்ததும் உங்கள் பதக்கம் தோன்றும்.</string>
     <string name="support.period.monthly">மாதம்</string>

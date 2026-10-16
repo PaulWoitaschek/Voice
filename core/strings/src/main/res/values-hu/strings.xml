@@ -382,8 +382,7 @@
     <string name="support.badges.title">A jelvénye minden hónappal nő, amíg támogat</string>
     <string name="support.action.donate_kofi">Adományozás a Ko-fi oldalán</string>
     <string name="support.description.maintenance">A Voice ingyenes, nyílt forráskódú, és egyetlen fejlesztő tartja karban.</string>
-    <string name="support.description.maintenance_subtitle">Az adományok a folyamatos karbantartást és fejlesztést segítik.</string>
-    <string name="support.description.play">A havi támogatás teszi lehetővé, hogy ne csak a következő javítást, hanem a következő kiadást is megtervezhessem.</string>
+    <string name="support.description.monthly">A havi támogatás teszi lehetővé, hogy ne csak a következő javítást, hanem a következő kiadást is megtervezhessem.</string>
     <string name="support.fine_print">Ez egy köszönet: nem old fel semmit. Bármikor lemondható a Google Playen.</string>
     <string name="support.fine_print.tip">Ez egy köszönet: nem old fel semmit. Nincs előfizetés.</string>
     <string name="support.helps.title">Amiben a támogatás segít</string>
@@ -391,7 +390,7 @@
     <string name="support.helps.features">Új funkciók</string>
     <string name="support.helps.open_source">Hogy a Voice reklámmentes maradjon</string>
     <string name="support.hero.title">Hadd szóljon tovább a Voice</string>
-    <string name="support.kofi.hint">A Ko-fi a böngészőben nyílik meg. Bármekkora összeg segít.</string>
+    <string name="support.kofi.hint">A Ko-fi a böngészőben nyílik meg. Havonta vagy egyszer, fiók nélkül.</string>
     <string name="support.message.failed">Ez nem sikerült. Próbálja újra kicsit később.</string>
     <string name="support.message.pending">Már fő a teája. A jelvénye megjelenik, amint a Google megerősíti a fizetést.</string>
     <string name="support.period.monthly">Havi</string>
