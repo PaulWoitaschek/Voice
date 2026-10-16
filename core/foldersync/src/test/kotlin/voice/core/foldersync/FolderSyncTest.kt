@@ -8,6 +8,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -25,6 +27,7 @@ import voice.core.data.repo.BookmarkRepo
 import voice.core.data.syncKey
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
+import voice.core.scanner.MediaScanTrigger
 import java.io.IOException
 import java.time.Clock
 import java.time.Instant
@@ -41,6 +44,10 @@ class FolderSyncTest {
   private val playerController = mockk<PlayerController>(relaxUnitFun = true)
   private val playStateManager = PlayStateManager()
   private val currentBookStore = MemoryDataStore<BookId?>(null)
+  private val scannerActive = MutableStateFlow(false)
+  private val mediaScanTrigger = mockk<MediaScanTrigger> {
+    every { scannerActive } returns this@FolderSyncTest.scannerActive
+  }
   private val written = mutableListOf<SyncFile>()
   private val syncFiles = mockk<SyncFiles> {
     every { canWrite(any()) } returns true
@@ -135,6 +142,54 @@ class FolderSyncTest {
     testScheduler.runCurrent()
 
     assertEquals(3000, repo.get(book.id)!!.content.positionInChapter)
+  }
+
+  @Test
+  fun `without a current book, the book played last on another device becomes the current one`() = scope.runTest {
+    val older = book(path = "Older", fileSizes = listOf(10, 20))
+    val newer = book(path = "Newer", fileSizes = listOf(30, 40))
+    every { syncFiles.read(folder()) } returns mapOf(
+      "sync-other.json" to SyncFile(
+        mapOf(
+          older.key() to SyncedBook(place = place(playedAt = 1000)),
+          newer.key() to SyncedBook(place = place(playedAt = 2000)),
+        ),
+      ),
+    )
+
+    folderSync(MemoryBookRepository(older, newer)).sync()
+
+    assertEquals(newer.id, currentBookStore.data.first())
+  }
+
+  @Test
+  fun `the current book stays when another book was played on another device`() = scope.runTest {
+    val current = book(path = "Current", fileSizes = listOf(10, 20), lastPlayedAt = 1000)
+    val other = book(path = "Other", fileSizes = listOf(30, 40))
+    currentBookStore.updateData { current.id }
+    otherDevice(other, SyncedBook(place = place(playedAt = 2000)))
+
+    folderSync(MemoryBookRepository(current, other)).sync()
+
+    assertEquals(current.id, currentBookStore.data.first())
+  }
+
+  @Test
+  fun `no book becomes the current one while the library is scanned`() = scope.runTest {
+    val book = book()
+    otherDevice(book, SyncedBook(place = place(playedAt = 2000)))
+    scannerActive.value = true
+
+    folderSync(MemoryBookRepository(book)).sync()
+
+    assertNull(currentBookStore.data.first())
+  }
+
+  @Test
+  fun `no book becomes the current one when none was played`() = scope.runTest {
+    folderSync(MemoryBookRepository(book())).sync()
+
+    assertNull(currentBookStore.data.first())
   }
 
   @Test
@@ -312,6 +367,7 @@ class FolderSyncTest {
       bookmarkRepo = bookmarkRepo,
       playerController = playerController,
       playStateManager = playStateManager,
+      mediaScanTrigger = mediaScanTrigger,
       currentBookStore = currentBookStore,
       clock = Clock.fixed(Instant.ofEpochMilli(NOW), ZoneOffset.UTC),
       dispatcherProvider = DispatcherProvider(main = dispatcher, io = dispatcher, mainImmediate = dispatcher),
