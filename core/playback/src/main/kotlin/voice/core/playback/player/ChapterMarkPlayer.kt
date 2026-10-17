@@ -40,6 +40,8 @@ class ChapterMarkPlayer(
   private var reportedItemIndex: Int? = null
   private val boundaryMessages = mutableListOf<PlayerMessage>()
 
+  var onChapterEnding: () -> Unit = {}
+
   init {
     player.addListener(
       object : Player.Listener {
@@ -128,14 +130,26 @@ class ChapterMarkPlayer(
    */
   private fun registerBoundaryMessages(playlist: ChapterMarkPlaylist) {
     playlist.items.forEachIndexed { index, item ->
-      if (item.mark.startMs <= 0) return@forEachIndexed
-      val message = player.createMessage { _, _ -> invalidateState() }
-        .setPosition(playlist.fileIndexOf(index), item.mark.startMs)
-        .setDeleteAfterDelivery(false)
-        .setLooper(player.applicationLooper)
-      boundaryMessages += message
-      message.send()
+      if (item.mark.startMs > 0) {
+        sendMessage(playlist, index, item.mark.startMs) { invalidateState() }
+      }
+      val endingMs = (item.mark.endMs - CHAPTER_ENDING_MS).coerceAtLeast(item.mark.startMs)
+      sendMessage(playlist, index, endingMs) { onChapterEnding() }
     }
+  }
+
+  private fun sendMessage(
+    playlist: ChapterMarkPlaylist,
+    itemIndex: Int,
+    positionInFileMs: Long,
+    action: () -> Unit,
+  ) {
+    val message = player.createMessage { _, _ -> action() }
+      .setPosition(playlist.fileIndexOf(itemIndex), positionInFileMs)
+      .setDeleteAfterDelivery(false)
+      .setLooper(player.applicationLooper)
+    boundaryMessages += message
+    message.send()
   }
 
   private fun clearBoundaryMessages() {
@@ -317,3 +331,6 @@ class ChapterMarkPlayer(
     return super.handleRelease()
   }
 }
+
+// More than the audio ExoPlayer processes ahead of what plays, even at the highest speed.
+private const val CHAPTER_ENDING_MS = 5_000L
