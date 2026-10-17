@@ -71,7 +71,8 @@ Authors get their own screen instead, and are for search, sorting and editing.
 - The cover stack, the name of the series, its author and how many books are finished.
 - One button continues the book in progress, or starts the first book that isn't finished.
 - Books in the order of their parts. Books without a part come after them, by title, with 2 before 10.
-- More options: rename the series for all its books, hide the series.
+- More options: rename the series for all its books, hide the series. Renaming suggests the series in the library, and
+  picking one joins the two.
 - Opens from a stack, from a book's series in the player and the book actions, and from Browse in search, which today
   only fills in the search field.
 
@@ -81,7 +82,11 @@ Authors get their own screen instead, and are for search, sorting and editing.
 
 - The author's name, how many series and books they have, and how many are finished.
 - Their series first, as stacks, then their other books, each by title.
-- More options: rename the author for all their books, which joins two spellings of one name.
+- Names that only differ in case, spaces or punctuation are one author, like "jk Rowling" and "J. K. Rowling". The
+  screen uses the spelling most of their books have. Nothing is written, so this works for Audiobookshelf books too.
+  Series names match the same way.
+- More options: rename the author for all their books. Renaming suggests the authors in the library, and picking one
+  joins the two, like ten books of "Rowling, J. K." and ten of "J. K. Rowling".
 - Opens from a book's author in the player, the book actions and the series, and from Browse in search.
 
 ## 4. Sorting and filtering
@@ -101,7 +106,8 @@ Authors get their own screen instead, and are for search, sorting and editing.
 
 ![Sketch: hide from library in the book actions](sketches/book-actions-hide.png)
 
-- Hide from library in the book actions, and for a series on the series screen. A snackbar offers to undo it.
+- Hide from library in the book actions, for a series on the series screen, and for selected books. A snackbar offers
+  to undo it.
 - Hidden books leave the library, Continue listening, the Shelf widget and Android Auto. Search still finds them,
   marked as hidden.
 - Hidden books in the sort sheet shows them again, and the book actions unhide them.
@@ -120,6 +126,15 @@ Authors get their own screen instead, and are for search, sorting and editing.
 - Books from Audiobookshelf are edited on the server, like their title and cover today. The server has better tools
   for it and keeps every device in step.
 - Voice reads series and part from M4B files too, so fewer books need editing.
+
+### Several books at once
+
+![Sketch: selecting books to change them together](sketches/library-select.png)
+
+- Select in the book actions starts selecting, because a long press already opens them. A tap adds more books.
+- Series, Author and Hide change all selected books. Parts follow the titles, with 2 before 10.
+- This is for books with nothing in common in their tags, like 40 episodes of a radio play without a series tag. One
+  wrong name on many books is a single rename on the author or series screen.
 
 ## 7. The next book in a series
 
@@ -146,6 +161,7 @@ Authors get their own screen instead, and are for search, sorting and editing.
 - Two series with the same name from different authors become one.
 - A book in several series only shows in the first one, like today.
 - An author tag with several names gets one author screen for all of them, not one per name.
+- Names in another order, like "Rowling, J. K.", aren't matched on their own. One rename joins them.
 
 ## Order of work
 
@@ -158,6 +174,7 @@ Each step helps on its own.
 5. The author screen.
 6. Hiding books.
 7. The sort sheet.
+8. Selecting several books.
 
 ## Open questions
 

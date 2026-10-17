@@ -11,12 +11,12 @@ image(x + 24, y + 290, 64, 64, 12);
 text(x + 104, y + 316, 'Echoes of Tomorrow', { size: 17 });
 text(x + 104, y + 338, 'Daniel Hartwell · The Signal Saga 2', { size: 12, fill: GREY });
 
-const items = ['Edit', 'Cover', 'Mark as Completed', 'Hide from library', 'Delete Book'];
+const items = ['Edit', 'Cover', 'Mark as Completed', 'Hide from library', 'Select', 'Delete Book'];
 const boxes = items.map((item, i) => {
   const iy = y + 390 + i * 58;
   const hide = i === 3;
   if (hide) roundRect(x + 12, iy, 336, 50, 25, HATCH);
-  circle(x + 42, iy + 25, 22, { stroke: i === 4 ? INK : GREY });
+  circle(x + 42, iy + 25, 22, { stroke: i === 5 ? INK : GREY });
   return text(x + 68, iy + 31, item, { size: 15, weight: hide ? 700 : 400 });
 });
 
@@ -26,5 +26,8 @@ arrow([[x + 396, y + 380], [x + 200, y + 380], [boxes[0].x + boxes[0].width + 8,
 note(20, y + 520, ['Out of sight, not', 'deleted. Progress,', 'bookmarks and files', 'stay.']);
 arrow([[200, y + 586], [250, y + 600], [x - 4, boxes[3].y + 8]]);
 
-note(x + 400, y + 640, ['Still the only way', 'to delete files.']);
-arrow([[x + 396, y + 656], [x + 300, y + 650], [boxes[4].x + boxes[4].width + 8, boxes[4].y + 8]]);
+note(x + 400, y + 616, ['Change several', 'books at once.']);
+arrow([[x + 396, y + 634], [x + 300, y + 640], [boxes[4].x + boxes[4].width + 8, boxes[4].y + 8]]);
+
+note(x + 400, y + 706, ['Still the only way', 'to delete files.']);
+arrow([[x + 396, y + 722], [x + 300, y + 712], [boxes[5].x + boxes[5].width + 8, boxes[5].y + 8]]);
