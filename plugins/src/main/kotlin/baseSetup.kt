@@ -1,9 +1,5 @@
-import com.android.build.api.dsl.AndroidTest
 import com.android.build.api.dsl.ApplicationDefaultConfig
 import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.dsl.TestFixtures
-import com.android.build.api.variant.AndroidComponentsExtension
-import com.android.build.api.variant.UnitTest
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
@@ -15,6 +11,7 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.powerassert.gradle.PowerAssertCompilationFilter
 import org.jetbrains.kotlin.powerassert.gradle.PowerAssertGradleExtension
 
 fun Project.baseSetup() {
@@ -97,20 +94,12 @@ private fun Project.configurePowerAssert(libs: VersionCatalog) {
       "kotlin.test.assertEquals",
       "kotlin.test.assertNull",
     )
+    compilationFilter.set(
+      PowerAssertCompilationFilter {
+        it.name.endsWith("UnitTest") || it.name.endsWith("AndroidTest")
+      },
+    )
   }
-  extensions.getByType(AndroidComponentsExtension::class.java)
-    .onVariants(extensions.getByType(AndroidComponentsExtension::class.java).selector().all()) { variant ->
-      val testSourceSets = variant.nestedComponents.filter {
-        it is UnitTest || it is AndroidTest || it is TestFixtures
-      }.map {
-        it.name
-      }
-      extensions.configure<PowerAssertGradleExtension> {
-        includedSourceSets.addAll(
-          testSourceSets,
-        )
-      }
-    }
 
   dependencies.run {
     add("testImplementation", libs.findLibrary("kotlin.powerAssert.runtime").get())
