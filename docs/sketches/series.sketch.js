@@ -40,7 +40,7 @@ const rows = books.map(([part, title, sub, progress], i) => {
   return { n, ry };
 });
 
-note(x + 400, y + 30, ['Rename the series', 'or fix the order.']);
+note(x + 400, y + 30, ['Rename or hide', 'the series.']);
 arrow([[x + 396, y + 44], [x + 370, y + 30], [more.x + 10, more.y - 14]]);
 
 note(x + 400, y + 250, ['Picks up the next', 'book in the series,', 'no searching.']);

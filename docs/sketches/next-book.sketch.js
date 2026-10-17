@@ -38,43 +38,53 @@ note(20, y + 600, ['It never starts on', 'its own, so a book', 'that ends at nig
 const q = phone(780, 80, 'Library');
 const lx = q.x;
 
-roundRect(lx + 16, y + 40, 274, 48, 24);
+roundRect(lx + 16, y + 40, 250, 48, 24);
 icon.search(lx + 42, y + 64);
 text(lx + 64, y + 69, 'Search your library', { size: 14, fill: GREY });
-circle(lx + 324, y + 64, 22);
-circle(lx + 324, y + 64, 8);
+circle(lx + 290, y + 64, 40);
+roundRect(lx + 281, y + 57, 18, 14, 3);
+circle(lx + 330, y + 64, 40);
+circle(lx + 330, y + 64, 10);
 
-const hero = { x: lx + 16, y: y + 108, w: 328, h: 112 };
-roundRect(hero.x, hero.y, hero.w, hero.h, 28);
-image(lx + 32, y + 124, 80, 80, 12);
-text(lx + 128, y + 146, 'Up next', { size: 12, fill: GREY });
-text(lx + 128, y + 168, 'Interference', { size: 15, weight: 700 });
-text(lx + 128, y + 188, 'The Signal Saga 3', { size: 12, fill: GREY });
-circle(lx + 306, y + 164, 48, HATCH);
-icon.play(lx + 308, y + 164, 9);
+text(lx + 20, y + 134, 'Good evening', { size: 28 });
+text(lx + 20, y + 160, '2 books in progress', { size: 14, fill: GREY });
 
-text(lx + 20, y + 262, 'Current', { size: 18 });
-roundRect(lx + 32, y + 278, 140, 108, 18, { stroke: LIGHT, ...WHITE });
-roundRect(lx + 26, y + 284, 140, 108, 18, { stroke: GREY, ...WHITE });
-roundRect(lx + 20, y + 290, 140, 108, 18, WHITE);
-image(lx + 20, y + 290, 140, 108, 18);
-text(lx + 20, y + 418, 'Stars over Ashford', { size: 14, weight: 700 });
-text(lx + 20, y + 436, '1 of 2 finished', { size: 12, fill: GREY });
-image(lx + 188, y + 278, 152, 120, 18);
-text(lx + 188, y + 418, 'Beyond the Horizon', { size: 14, weight: 700 });
-text(lx + 188, y + 436, '7:26:05 left', { size: 12, fill: GREY });
+const hero = { x: lx + 16, y: y + 180, w: 328, h: 176 };
+roundRect(hero.x, hero.y, hero.w, hero.h, 32);
+image(lx + 36, y + 200, 88, 88, 14);
+text(lx + 140, y + 214, 'Up next', { size: 12, weight: 700 });
+text(lx + 140, y + 240, 'Interference', { size: 18 });
+text(lx + 140, y + 262, 'Daniel Hartwell', { size: 13, fill: GREY });
+text(lx + 140, y + 282, 'The Signal Saga 3', { size: 13, fill: GREY });
+line(lx + 36, y + 314, lx + 268, y + 314, { stroke: LIGHT, strokeWidth: 4 });
+text(lx + 36, y + 338, '0% of book', { size: 12, weight: 700 });
+text(lx + 268, y + 338, '11:02:18 left', { size: 12, anchor: 'end' });
+circle(lx + 308, y + 320, 56, HATCH);
+icon.play(lx + 310, y + 320, 10);
 
-text(lx + 20, y + 488, 'Not started yet', { size: 18 });
+const current = text(lx + 20, y + 400, 'Current', { size: 20 });
+roundRect(current.x + current.width + 10, y + 383, 26, 22, 11, { stroke: GREY });
+text(current.x + current.width + 23, y + 399, '2', { size: 12, weight: 700, anchor: 'middle' });
 [
-  ['Maple Street Mysteries', 'Lena Morgan · 5 books'],
-  ['The Quiet Orbit', 'Mara Quill · 9:12:40'],
-  ['The Lantern Keepers', 'Mara Quill · 6 books'],
-].forEach(([title, subtitle], i) => {
-  const ry = y + 512 + i * 72;
-  image(lx + 20, ry, 52, 52, 12);
-  text(lx + 92, ry + 24, title, { size: 15 });
-  text(lx + 92, ry + 44, subtitle, { size: 12, fill: GREY });
+  ['Stars over Ashford', 'Daniel Hartwell', 0.5, '1 of 2 finished', true],
+  ['Beyond the Horizon', 'Alexander Reeves', 0.3, '7:26:05 left', false],
+].forEach(([title, author, progress, caption, stacked], i) => {
+  const ry = y + 414 + i * 86;
+  roundRect(lx + 16, ry, 328, 84, 18);
+  if (stacked) {
+    roundRect(lx + 31, ry + 10, 59, 59, 12, { stroke: LIGHT, ...WHITE });
+    roundRect(lx + 28, ry + 13, 59, 59, 12, { stroke: GREY, ...WHITE });
+    roundRect(lx + 26, ry + 15, 59, 59, 12, WHITE);
+    image(lx + 26, ry + 15, 59, 59, 12);
+  } else {
+    image(lx + 26, ry + 10, 64, 64, 12);
+  }
+  text(lx + 106, ry + 30, title, { size: 15 });
+  text(lx + 106, ry + 48, author, { size: 12, fill: GREY });
+  line(lx + 106, ry + 66, lx + 106 + 118 * progress, ry + 66, { strokeWidth: 4 });
+  line(lx + 110 + 118 * progress, ry + 66, lx + 224, ry + 66, { stroke: LIGHT, strokeWidth: 4 });
+  text(lx + 332, ry + 70, caption, { size: 11, fill: GREY, anchor: 'end' });
 });
 
 note(lx + 400, y + 220, ['Continue listening', 'offers it too.']);
-arrow([[lx + 392, y + 236], [lx + 374, y + 214], [hero.x + hero.w + 8, hero.y + 84]]);
+arrow([[lx + 392, y + 250], [lx + 376, y + 262], [hero.x + hero.w + 8, hero.y + 92]]);
