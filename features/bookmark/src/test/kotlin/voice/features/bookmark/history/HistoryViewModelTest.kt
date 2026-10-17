@@ -11,7 +11,6 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import voice.core.common.DispatcherProvider
@@ -35,7 +34,6 @@ import voice.navigation.Navigator
 import java.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.minutes
 
 class HistoryViewModelTest {
@@ -92,19 +90,21 @@ class HistoryViewModelTest {
     }
   }
 
-  private fun HistoryViewState.single(): HistoryStretch = days.single().rows.filterIsInstance<HistoryStretch>().single()
+  private fun HistoryViewState.events(): List<HistoryEvent> = days.flatMap { it.rows }.filterIsInstance<HistoryEvent>()
 
   private fun listenedUntilPause() {
     historyEvents += testEvent(Type.Play, today(9), arrival, 1.minutes)
     historyEvents += testEvent(Type.Pause, today(9, 20), signal, 2.minutes)
   }
 
+  private suspend fun ReceiveTurbine<HistoryViewState?>.pausedAt(): HistorySpot = awaitState().events().last().place.spot
+
   @Test
-  fun `tapping a stretch goes where it ended, keeps playing and closes the screen`() {
+  fun `tapping a place goes there, keeps playing and closes the screen`() {
     playStateManager.playState = PlayStateManager.PlayState.Playing
     listenedUntilPause()
     test { viewModel ->
-      viewModel.onGoTo(awaitState().single().goTo!!.spot)
+      viewModel.onGoTo(pausedAt())
       scope.testScheduler.advanceUntilIdle()
       assertEquals(expected = bookId, actual = currentBookStore.data.first())
       verify {
@@ -119,7 +119,7 @@ class HistoryViewModelTest {
   fun `going there while paused doesn't start playback`() {
     listenedUntilPause()
     test { viewModel ->
-      viewModel.onGoTo(awaitState().single().goTo!!.spot)
+      viewModel.onGoTo(pausedAt())
       scope.testScheduler.advanceUntilIdle()
       verify { playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek) }
       verify(exactly = 0) { playerController.play() }
@@ -130,7 +130,7 @@ class HistoryViewModelTest {
   fun `a double tap goes there once`() {
     listenedUntilPause()
     test { viewModel ->
-      val spot = awaitState().single().goTo!!.spot
+      val spot = pausedAt()
       viewModel.onGoTo(spot)
       viewModel.onGoTo(spot)
       scope.testScheduler.advanceUntilIdle()
@@ -145,8 +145,9 @@ class HistoryViewModelTest {
   fun `going back from a jump goes to where it left`() {
     historyEvents += testEvent(Type.ChapterChange, today(9), arrival, 4.minutes, source = Source.Headset, to = signal to 0.minutes)
     test { viewModel ->
-      val jump = awaitState().days.single().rows.filterIsInstance<HistoryJump>().single()
-      viewModel.onGoTo(jump.back.spot)
+      val jump = awaitState().events().single()
+      assertEquals(expected = HistorySpot(signal.id, 0), actual = jump.to?.spot)
+      viewModel.onGoTo(jump.place.spot)
       scope.testScheduler.advanceUntilIdle()
       verify {
         playerController.setPosition(4.minutes.inWholeMilliseconds, arrival.id, Type.Seek)
@@ -156,26 +157,12 @@ class HistoryViewModelTest {
   }
 
   @Test
-  fun `another book playing doesn't make this book's last stretch play on`() {
-    playStateManager.playState = PlayStateManager.PlayState.Playing
-    historyEvents += testEvent(Type.Play, today(9, 30), arrival, 0.minutes)
+  fun `a rescan that changes the chapters rebuilds the history`() {
+    listenedUntilPause()
     test {
-      currentBookStore.updateData { BookId("other") }
-      val stretch = awaitState().single()
-      assertNull(stretch.end)
-      assertEquals(expected = HistorySpot(arrival.id, 0L), actual = stretch.goTo?.spot)
-    }
-  }
-
-  @Test
-  fun `the playing stretch follows the position`() {
-    playStateManager.playState = PlayStateManager.PlayState.Playing
-    historyEvents += testEvent(Type.Play, today(9, 30), arrival, 0.minutes)
-    test {
-      currentBookStore.updateData { bookId }
-      awaitState { it.single().to == HistoryLocation(2, chapterTime(5.minutes)) }
-      book.update { it.update { content -> content.copy(positionInChapter = 9.minutes.inWholeMilliseconds) } }
-      awaitState { it.single().to == HistoryLocation(2, chapterTime(9.minutes)) }
+      awaitState { it.events().size == 2 }
+      book.value = testBook(listOf(signal))
+      awaitState { state -> state.events().map { it.place.location } == listOf(HistoryLocation(null, chapterTime(2.minutes))) }
     }
   }
 }

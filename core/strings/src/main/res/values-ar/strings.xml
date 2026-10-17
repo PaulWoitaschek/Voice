@@ -231,17 +231,34 @@
         <item quantity="many">%d ملفًا صوتيًا</item>
         <item quantity="other">%d ملف صوتي</item>
     </plurals>
-    <string name="history.action.continue_from">المتابعة من %1$s</string>
-    <string name="history.action.continue_from.chapter">المتابعة من الفصل %1$d · %2$s</string>
     <string name="history.empty.message">يظهر هنا التشغيل والإيقاف المؤقت والقفزات، ليبقى طريق العودة واضحًا دائمًا.</string>
     <string name="history.empty.title">لا شيء هنا بعد</string>
     <string name="history.event.bookmark_jump">انتقال إلى علامة مرجعية</string>
     <string name="history.event.chapter_change">تغيير الفصل</string>
-    <string name="history.event.dozed_off">غفوة · انتهى المؤقت</string>
+    <string name="history.event.interrupted">مقاطعة لمدة %s</string>
     <string name="history.event.jump_back">عودة إلى الموضع السابق</string>
     <string name="history.event.moved">تغيير الموضع</string>
+    <string name="history.event.paused">إيقاف مؤقت</string>
     <string name="history.event.played">تشغيل</string>
-    <string name="history.event.sleep_timer_set">مؤقت النوم</string>
+    <plurals name="history.event.rewound">
+        <item quantity="zero">إرجاع %d مرة</item>
+        <item quantity="one">إرجاع %d مرة</item>
+        <item quantity="two">إرجاع %d مرتين</item>
+        <item quantity="few">إرجاع %d مرات</item>
+        <item quantity="many">إرجاع %d مرة</item>
+        <item quantity="other">إرجاع %d مرة</item>
+    </plurals>
+    <string name="history.event.shook">هزّ الهاتف لمتابعة الاستماع</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="zero">تقديم %d مرة</item>
+        <item quantity="one">تقديم %d مرة</item>
+        <item quantity="two">تقديم %d مرتين</item>
+        <item quantity="few">تقديم %d مرات</item>
+        <item quantity="many">تقديم %d مرة</item>
+        <item quantity="other">تقديم %d مرة</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">انتهاء مؤقت النوم</string>
+    <string name="history.event.sleep_timer_on">تفعيل مؤقت النوم</string>
     <string name="history.location.chapter">فصل %1$d · %2$s</string>
     <string name="history.source.app">من التطبيق</string>
     <string name="history.source.audio_focus">مقاطعة</string>

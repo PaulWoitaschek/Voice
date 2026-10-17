@@ -209,17 +209,30 @@
         <item quantity="many">%d zvukových souborů</item>
         <item quantity="other">%d zvukových souborů</item>
     </plurals>
-    <string name="history.action.continue_from">Pokračovat od %1$s</string>
-    <string name="history.action.continue_from.chapter">Pokračovat od kap. %1$d · %2$s</string>
     <string name="history.empty.message">Přehrávání, pozastavení a skoky se tu zobrazují, takže vždy najdete cestu zpět.</string>
     <string name="history.empty.title">Zatím tu nic není</string>
     <string name="history.event.bookmark_jump">Přechod na záložku</string>
     <string name="history.event.chapter_change">Změna kapitoly</string>
-    <string name="history.event.dozed_off">Usnuli jste · časovač skončil</string>
+    <string name="history.event.interrupted">Přerušeno na %s</string>
     <string name="history.event.jump_back">Návrat zpět</string>
     <string name="history.event.moved">Posun</string>
+    <string name="history.event.paused">Pozastaveno</string>
     <string name="history.event.played">Spuštěno</string>
-    <string name="history.event.sleep_timer_set">Časovač spánku</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Přetočeno zpět %d×</item>
+        <item quantity="few">Přetočeno zpět %d×</item>
+        <item quantity="many">Přetočeno zpět %d×</item>
+        <item quantity="other">Přetočeno zpět %d×</item>
+    </plurals>
+    <string name="history.event.shook">Prodlouženo zatřesením</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Přetočeno vpřed %d×</item>
+        <item quantity="few">Přetočeno vpřed %d×</item>
+        <item quantity="many">Přetočeno vpřed %d×</item>
+        <item quantity="other">Přetočeno vpřed %d×</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Časovač spánku vypršel</string>
+    <string name="history.event.sleep_timer_on">Časovač spánku zapnut</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
     <string name="history.source.app">V aplikaci</string>
     <string name="history.source.audio_focus">Přerušeno</string>

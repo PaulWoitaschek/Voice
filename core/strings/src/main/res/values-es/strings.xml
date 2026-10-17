@@ -198,17 +198,28 @@
         <item quantity="many">%d archivos de audio</item>
         <item quantity="other">%d archivos de audio</item>
     </plurals>
-    <string name="history.action.continue_from">Seguir desde %1$s</string>
-    <string name="history.action.continue_from.chapter">Seguir desde cap. %1$d · %2$s</string>
     <string name="history.empty.message">Las reproducciones, pausas y saltos aparecen aquí para que siempre puedas volver.</string>
     <string name="history.empty.title">Aún no hay nada</string>
     <string name="history.event.bookmark_jump">Salto a un marcador</string>
     <string name="history.event.chapter_change">Cambio de capítulo</string>
-    <string name="history.event.dozed_off">Te dormiste · el temporizador terminó</string>
+    <string name="history.event.interrupted">Interrupción de %s</string>
     <string name="history.event.jump_back">Vuelta atrás</string>
     <string name="history.event.moved">Desplazamiento</string>
+    <string name="history.event.paused">Pausa</string>
     <string name="history.event.played">Reproducción</string>
-    <string name="history.event.sleep_timer_set">Temporizador de apagado</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">%d salto atrás</item>
+        <item quantity="many">%d saltos atrás</item>
+        <item quantity="other">%d saltos atrás</item>
+    </plurals>
+    <string name="history.event.shook">Agitaste para seguir escuchando</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">%d salto adelante</item>
+        <item quantity="many">%d saltos adelante</item>
+        <item quantity="other">%d saltos adelante</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Temporizador de apagado terminado</string>
+    <string name="history.event.sleep_timer_on">Temporizador de apagado activado</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
     <string name="history.source.app">En la aplicación</string>
     <string name="history.source.audio_focus">Interrumpido</string>

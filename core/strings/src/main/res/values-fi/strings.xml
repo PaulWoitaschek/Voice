@@ -187,17 +187,26 @@
         <item quantity="one">%d äänitiedosto</item>
         <item quantity="other">%d äänitiedostoa</item>
     </plurals>
-    <string name="history.action.continue_from">Jatka kohdasta %1$s</string>
-    <string name="history.action.continue_from.chapter">Jatka: luku %1$d · %2$s</string>
     <string name="history.empty.message">Toistot, tauot ja siirtymät näkyvät täällä, joten löydät aina takaisin.</string>
     <string name="history.empty.title">Täällä ei ole vielä mitään</string>
     <string name="history.event.bookmark_jump">Siirryttiin kirjanmerkkiin</string>
     <string name="history.event.chapter_change">Luku vaihtui</string>
-    <string name="history.event.dozed_off">Nukahdit · ajastin päättyi</string>
+    <string name="history.event.interrupted">Keskeytetty %s ajaksi</string>
     <string name="history.event.jump_back">Palattiin aiempaan kohtaan</string>
     <string name="history.event.moved">Kohtaa siirretty</string>
+    <string name="history.event.paused">Tauko</string>
     <string name="history.event.played">Toisto</string>
-    <string name="history.event.sleep_timer_set">Uniajastin</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Kelattiin taaksepäin %d kerran</item>
+        <item quantity="other">Kelattiin taaksepäin %d kertaa</item>
+    </plurals>
+    <string name="history.event.shook">Jatkettiin ravistamalla</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Kelattiin eteenpäin %d kerran</item>
+        <item quantity="other">Kelattiin eteenpäin %d kertaa</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Uniajastin päättyi</string>
+    <string name="history.event.sleep_timer_on">Uniajastin asetettu</string>
     <string name="history.location.chapter">Luku %1$d · %2$s</string>
     <string name="history.source.app">Sovelluksessa</string>
     <string name="history.source.audio_focus">Keskeytetty</string>

@@ -198,17 +198,28 @@
         <item quantity="two">%d קבצי שמע</item>
         <item quantity="other">%d קבצי שמע</item>
     </plurals>
-    <string name="history.action.continue_from">המשך מ-%1$s</string>
-    <string name="history.action.continue_from.chapter">המשך מפרק %1$d · %2$s</string>
     <string name="history.empty.message">הפעלות, השהיות וקפיצות מופיעות כאן, כך שתמיד אפשר למצוא את הדרך חזרה.</string>
     <string name="history.empty.title">אין כאן עדיין כלום</string>
     <string name="history.event.bookmark_jump">מעבר לסימנייה</string>
     <string name="history.event.chapter_change">החלפת פרק</string>
-    <string name="history.event.dozed_off">נרדמתי · הטיימר הסתיים</string>
+    <string name="history.event.interrupted">הפרעה למשך %s</string>
     <string name="history.event.jump_back">חזרה למקום הקודם</string>
     <string name="history.event.moved">הזזה</string>
+    <string name="history.event.paused">השהיה</string>
     <string name="history.event.played">הפעלה</string>
-    <string name="history.event.sleep_timer_set">טיימר-שינה</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">הרצה אחורה %d פעם</item>
+        <item quantity="two">הרצה אחורה %d פעמים</item>
+        <item quantity="other">הרצה אחורה %d פעמים</item>
+    </plurals>
+    <string name="history.event.shook">ניעור הטלפון להמשך האזנה</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">הרצה קדימה %d פעם</item>
+        <item quantity="two">הרצה קדימה %d פעמים</item>
+        <item quantity="other">הרצה קדימה %d פעמים</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">סיום טיימר-השינה</string>
+    <string name="history.event.sleep_timer_on">הפעלת טיימר-השינה</string>
     <string name="history.location.chapter">פרק %1$d · %2$s</string>
     <string name="history.source.app">באפליקציה</string>
     <string name="history.source.audio_focus">הפרעה</string>

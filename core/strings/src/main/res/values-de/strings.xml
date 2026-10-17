@@ -187,17 +187,26 @@
         <item quantity="one">%d Audiodatei</item>
         <item quantity="other">%d Audiodateien</item>
     </plurals>
-    <string name="history.action.continue_from">Weiter ab %1$s</string>
-    <string name="history.action.continue_from.chapter">Weiter ab Kap. %1$d · %2$s</string>
     <string name="history.empty.message">Wiedergaben, Pausen und Sprünge erscheinen hier, damit Du immer zurückfindest.</string>
     <string name="history.empty.title">Noch nichts da</string>
     <string name="history.event.bookmark_jump">Zu Lesezeichen gesprungen</string>
     <string name="history.event.chapter_change">Kapitel gewechselt</string>
-    <string name="history.event.dozed_off">Eingeschlafen · Timer abgelaufen</string>
+    <string name="history.event.interrupted">%s unterbrochen</string>
     <string name="history.event.jump_back">Zurückgesprungen</string>
     <string name="history.event.moved">Gespult</string>
+    <string name="history.event.paused">Pausiert</string>
     <string name="history.event.played">Gestartet</string>
-    <string name="history.event.sleep_timer_set">Einschlaf-Timer</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">%d-mal zurückgespult</item>
+        <item quantity="other">%d-mal zurückgespult</item>
+    </plurals>
+    <string name="history.event.shook">Geschüttelt, um weiterzuhören</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">%d-mal vorgespult</item>
+        <item quantity="other">%d-mal vorgespult</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Einschlaf-Timer abgelaufen</string>
+    <string name="history.event.sleep_timer_on">Einschlaf-Timer gestellt</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
     <string name="history.source.app">In der App</string>
     <string name="history.source.audio_focus">Unterbrochen</string>

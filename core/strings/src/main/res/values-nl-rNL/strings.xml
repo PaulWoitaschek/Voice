@@ -187,17 +187,26 @@
         <item quantity="one">%d audiobestand</item>
         <item quantity="other">%d audiobestanden</item>
     </plurals>
-    <string name="history.action.continue_from">Verder vanaf %1$s</string>
-    <string name="history.action.continue_from.chapter">Verder vanaf hfst. %1$d · %2$s</string>
     <string name="history.empty.message">Afspelen, pauzes en sprongen worden hier getoond, zodat je altijd je weg terugvindt.</string>
     <string name="history.empty.title">Nog niets te zien</string>
     <string name="history.event.bookmark_jump">Naar bladwijzer gegaan</string>
     <string name="history.event.chapter_change">Ander hoofdstuk</string>
-    <string name="history.event.dozed_off">Ingedut · timer afgelopen</string>
+    <string name="history.event.interrupted">%s onderbroken</string>
     <string name="history.event.jump_back">Teruggesprongen</string>
     <string name="history.event.moved">Verschoven</string>
+    <string name="history.event.paused">Gepauzeerd</string>
     <string name="history.event.played">Afgespeeld</string>
-    <string name="history.event.sleep_timer_set">Slaaptimer</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">%d keer teruggespoeld</item>
+        <item quantity="other">%d keer teruggespoeld</item>
+    </plurals>
+    <string name="history.event.shook">Geschud om verder te luisteren</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">%d keer vooruitgespoeld</item>
+        <item quantity="other">%d keer vooruitgespoeld</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Slaaptimer afgelopen</string>
+    <string name="history.event.sleep_timer_on">Slaaptimer ingesteld</string>
     <string name="history.location.chapter">Hfst. %1$d · %2$s</string>
     <string name="history.source.app">In de app</string>
     <string name="history.source.audio_focus">Onderbroken</string>

@@ -187,17 +187,26 @@
         <item quantity="one">%d αρχείο ήχου</item>
         <item quantity="other">%d αρχεία ήχου</item>
     </plurals>
-    <string name="history.action.continue_from">Συνέχεια από %1$s</string>
-    <string name="history.action.continue_from.chapter">Συνέχεια από κεφ. %1$d · %2$s</string>
     <string name="history.empty.message">Οι αναπαραγωγές, οι παύσεις και τα άλματα εμφανίζονται εδώ, ώστε να βρίσκετε πάντα τον δρόμο της επιστροφής.</string>
     <string name="history.empty.title">Τίποτα εδώ ακόμη</string>
     <string name="history.event.bookmark_jump">Μετάβαση σε σελιδοδείκτη</string>
     <string name="history.event.chapter_change">Αλλαγή κεφαλαίου</string>
-    <string name="history.event.dozed_off">Αποκοιμηθήκατε · ο χρονοδιακόπτης έληξε</string>
+    <string name="history.event.interrupted">Διακοπή για %s</string>
     <string name="history.event.jump_back">Επιστροφή στην προηγούμενη θέση</string>
     <string name="history.event.moved">Αλλαγή θέσης</string>
+    <string name="history.event.paused">Παύση</string>
     <string name="history.event.played">Αναπαραγωγή</string>
-    <string name="history.event.sleep_timer_set">Χρονοδιακόπτης ύπνου</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Γύρισμα πίσω %d φορά</item>
+        <item quantity="other">Γύρισμα πίσω %d φορές</item>
+    </plurals>
+    <string name="history.event.shook">Παράταση με ανακίνηση</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Προώθηση %d φορά</item>
+        <item quantity="other">Προώθηση %d φορές</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Λήξη χρονοδιακόπτη ύπνου</string>
+    <string name="history.event.sleep_timer_on">Ενεργοποίηση χρονοδιακόπτη ύπνου</string>
     <string name="history.location.chapter">Κεφ. %1$d · %2$s</string>
     <string name="history.source.app">Στην εφαρμογή</string>
     <string name="history.source.audio_focus">Διακοπή</string>

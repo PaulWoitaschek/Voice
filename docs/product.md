@@ -145,8 +145,8 @@ Listeners fall asleep to a book and find their place the next night.
 - **I forget to set the timer.** The automatic sleep timer starts one when playback begins at night.
 - **The stop wakes me up.** The last 10 seconds fade out, and Voice rewinds a little.
 - **The timer stops while I'm still awake.** Shaking the phone within 30 seconds of the stop starts the timer again.
-- **I don't know where I fell asleep.** The night shows in the listening history, with a way back to where the listener
-  was last awake.
+- **I don't know where I fell asleep.** The night shows in the listening history, with what the listener last did before
+  the timer stopped.
 
 **Open**
 
@@ -175,8 +175,8 @@ listener saved. Everything Voice records on its own goes into the history.
 - **Saving a moment means stopping.** A long-press on the bookmark button saves right away. A kind or a note can follow.
 - **I can't find the bookmark I'm looking for.** Bookmarks are in story order with chapter headers, or newest first,
   and can be filtered by kind.
-- **A tap or a seek loses my place.** The listening history shows what was listened to and every big jump, each with a
-  way back. It's always on.
+- **A tap or a seek loses my place.** The listening history shows what happened, in order: plays, pauses, the sleep
+  timer and every big jump. Every place in it is a way back. It's always on.
 
 **Open**
 

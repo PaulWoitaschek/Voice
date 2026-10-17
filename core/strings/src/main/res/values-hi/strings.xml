@@ -187,17 +187,26 @@
         <item quantity="one">%d ऑडियो फ़ाइल</item>
         <item quantity="other">%d ऑडियो फ़ाइलें</item>
     </plurals>
-    <string name="history.action.continue_from">%1$s से आगे सुनें</string>
-    <string name="history.action.continue_from.chapter">अध्याय %1$d · %2$s से आगे सुनें</string>
     <string name="history.empty.message">चलाने, रोकने और जंप का रिकॉर्ड यहाँ दिखता है, ताकि आप हमेशा अपनी जगह पर वापस पहुँच सकें।</string>
     <string name="history.empty.title">अभी यहाँ कुछ नहीं है</string>
     <string name="history.event.bookmark_jump">बुकमार्क पर जंप</string>
     <string name="history.event.chapter_change">अध्याय बदला</string>
-    <string name="history.event.dozed_off">नींद आ गई · टाइमर खत्म</string>
+    <string name="history.event.interrupted">%s की रुकावट</string>
     <string name="history.event.jump_back">पिछली जगह पर वापसी</string>
     <string name="history.event.moved">स्थिति बदली</string>
+    <string name="history.event.paused">रोका गया</string>
     <string name="history.event.played">चलाया गया</string>
-    <string name="history.event.sleep_timer_set">स्लीप-टाइमर</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">%d बार रिवाइंड किया</item>
+        <item quantity="other">%d बार रिवाइंड किया</item>
+    </plurals>
+    <string name="history.event.shook">सुनना जारी रखने के लिए फ़ोन हिलाया</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">%d बार आगे बढ़ाया</item>
+        <item quantity="other">%d बार आगे बढ़ाया</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">स्लीप-टाइमर खत्म हुआ</string>
+    <string name="history.event.sleep_timer_on">स्लीप-टाइमर चालू हुआ</string>
     <string name="history.location.chapter">अध्याय %1$d · %2$s</string>
     <string name="history.source.app">ऐप में</string>
     <string name="history.source.audio_focus">रुकावट</string>

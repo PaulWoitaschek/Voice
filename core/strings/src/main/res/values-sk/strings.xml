@@ -209,17 +209,30 @@
         <item quantity="many">%d zvukových súborov</item>
         <item quantity="other">%d zvukových súborov</item>
     </plurals>
-    <string name="history.action.continue_from">Pokračovať od %1$s</string>
-    <string name="history.action.continue_from.chapter">Pokračovať od kap. %1$d · %2$s</string>
     <string name="history.empty.message">Prehrávania, pozastavenia a skoky sa tu zobrazujú, takže vždy nájdete cestu späť.</string>
     <string name="history.empty.title">Zatiaľ tu nič nie je</string>
     <string name="history.event.bookmark_jump">Prechod na záložku</string>
     <string name="history.event.chapter_change">Zmena kapitoly</string>
-    <string name="history.event.dozed_off">Zaspali ste · časovač skončil</string>
+    <string name="history.event.interrupted">Prerušené na %s</string>
     <string name="history.event.jump_back">Návrat späť</string>
     <string name="history.event.moved">Posun pozície</string>
+    <string name="history.event.paused">Pozastavené</string>
     <string name="history.event.played">Spustené</string>
-    <string name="history.event.sleep_timer_set">Časovač spánku</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Pretočené dozadu %d×</item>
+        <item quantity="few">Pretočené dozadu %d×</item>
+        <item quantity="many">Pretočené dozadu %d×</item>
+        <item quantity="other">Pretočené dozadu %d×</item>
+    </plurals>
+    <string name="history.event.shook">Predĺžené zatrasením</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Pretočené dopredu %d×</item>
+        <item quantity="few">Pretočené dopredu %d×</item>
+        <item quantity="many">Pretočené dopredu %d×</item>
+        <item quantity="other">Pretočené dopredu %d×</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Časovač spánku vypršal</string>
+    <string name="history.event.sleep_timer_on">Časovač spánku zapnutý</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
     <string name="history.source.app">V aplikácii</string>
     <string name="history.source.audio_focus">Prerušené</string>

@@ -7,7 +7,7 @@ import voice.features.bookmark.DayLabel
 import java.time.LocalTime
 import kotlin.time.Duration
 
-/** The stretches of listening and the jumps between them, newest first, under the part of the day they happened in. */
+/** What happened while listening, under the part of the day it happened in. The newest part comes first, and inside one the oldest row. */
 @Immutable
 internal data class HistoryViewState(val days: List<HistoryDay>)
 
@@ -17,79 +17,49 @@ internal data class HistoryDay(
   val rows: List<HistoryRow>,
 )
 
-/**
- * Where something happened. [chapterNumber] is null when the book has a single chapter.
- */
-@Immutable
-internal data class HistoryLocation(
-  val chapterNumber: Int?,
-  val time: String,
-)
-
 @Immutable
 internal sealed interface HistoryRow {
   val key: Long
+  val at: LocalTime
+
+  /** Whether the book played from the row before until this one. */
+  val playingBefore: Boolean
 }
 
-/**
- * Listening from [from] to [to]. A pause of 15 minutes or more, or a big jump, starts the next one.
- *
- * [end], [listened] and [to] are null for a night that only a sleep timer bookmark remembered, from
- * before the history.
- */
+/** Something that happened at [place]. A jump also has [to], unless that spot is gone after a rescan. */
 @Immutable
-internal data class HistoryStretch(
+internal data class HistoryEvent(
   override val key: Long,
-  val start: LocalTime,
-  val end: LocalTime?,
-  val listened: Duration?,
-  val from: HistoryLocation,
-  val to: HistoryLocation?,
-  val cause: StretchCause,
-  /** Null while it's still playing, or when the spot is gone after a rescan. */
-  val goTo: HistoryTarget?,
-) : HistoryRow
-
-/**
- * A big jump, or several without listening in between, so an accidental one can be undone long
- * after the pill on the player is gone. [back] is where it left.
- *
- * [to] is null when the spot is gone after a rescan.
- */
-@Immutable
-internal data class HistoryJump(
-  override val key: Long,
-  val at: LocalTime,
-  val from: HistoryLocation,
-  val to: HistoryLocation?,
+  override val at: LocalTime,
+  override val playingBefore: Boolean,
   val type: ListeningEvent.Type,
   val source: ListeningEvent.Source,
-  val back: HistoryTarget,
+  val place: HistoryPlace,
+  val to: HistoryPlace? = null,
 ) : HistoryRow
 
+/** Taps on rewind or fast forward and small seeks in a row, all in the same direction. */
 @Immutable
-internal sealed interface StretchCause {
+internal data class HistorySkips(
+  override val key: Long,
+  override val at: LocalTime,
+  override val playingBefore: Boolean,
+  val count: Int,
+  val back: Boolean,
+) : HistoryRow
 
-  data class Played(val source: ListeningEvent.Source) : StretchCause
-
-  /**
-   * A big jump, the chapter list or a bookmark started it. [hasRow] when the jump has a row of its
-   * own, which already says so.
-   */
-  data class Jumped(
-    val type: ListeningEvent.Type,
-    val source: ListeningEvent.Source,
-    val hasRow: Boolean,
-  ) : StretchCause
-
-  data object SleepTimerEnded : StretchCause
-
-  data object SleepTimerStarted : StretchCause
-}
-
-/** Where a row's button goes, and how that place reads. */
+/** A call or a navigation prompt that held playback back until it was over. */
 @Immutable
-internal data class HistoryTarget(
+internal data class HistoryInterruption(
+  override val key: Long,
+  override val at: LocalTime,
+  override val playingBefore: Boolean,
+  val duration: Duration,
+) : HistoryRow
+
+/** A place in the book a row can go to, and how it reads. */
+@Immutable
+internal data class HistoryPlace(
   val spot: HistorySpot,
   val location: HistoryLocation,
 )
@@ -98,4 +68,13 @@ internal data class HistoryTarget(
 internal data class HistorySpot(
   val chapterId: ChapterId,
   val time: Long,
+)
+
+/**
+ * Where something happened. [chapterNumber] is null when the book has a single chapter.
+ */
+@Immutable
+internal data class HistoryLocation(
+  val chapterNumber: Int?,
+  val time: String,
 )

@@ -198,17 +198,28 @@
         <item quantity="many">%d fichiers audio</item>
         <item quantity="other">%d fichiers audio</item>
     </plurals>
-    <string name="history.action.continue_from">Reprendre à %1$s</string>
-    <string name="history.action.continue_from.chapter">Reprendre au chap. %1$d · %2$s</string>
     <string name="history.empty.message">Les lectures, pauses et sauts s\'affichent ici, pour que vous retrouviez toujours où vous en étiez.</string>
     <string name="history.empty.title">Rien pour l\'instant</string>
     <string name="history.event.bookmark_jump">Saut vers un marque-page</string>
     <string name="history.event.chapter_change">Changement de chapitre</string>
-    <string name="history.event.dozed_off">Endormi · minuterie terminée</string>
+    <string name="history.event.interrupted">Interruption de %s</string>
     <string name="history.event.jump_back">Retour à la position précédente</string>
     <string name="history.event.moved">Position déplacée</string>
+    <string name="history.event.paused">Pause</string>
     <string name="history.event.played">Lecture</string>
-    <string name="history.event.sleep_timer_set">Minuterie de mise en veille</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">%d saut en arrière</item>
+        <item quantity="many">%d sauts en arrière</item>
+        <item quantity="other">%d sauts en arrière</item>
+    </plurals>
+    <string name="history.event.shook">Écoute prolongée d\'une secousse</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">%d saut en avant</item>
+        <item quantity="many">%d sauts en avant</item>
+        <item quantity="other">%d sauts en avant</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Minuterie de mise en veille terminée</string>
+    <string name="history.event.sleep_timer_on">Minuterie de mise en veille activée</string>
     <string name="history.location.chapter">Chap. %1$d · %2$s</string>
     <string name="history.source.app">Dans l\'application</string>
     <string name="history.source.audio_focus">Interruption</string>

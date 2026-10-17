@@ -198,17 +198,28 @@
         <item quantity="many">%d fitxers d\'àudio</item>
         <item quantity="other">%d fitxers d\'àudio</item>
     </plurals>
-    <string name="history.action.continue_from">Continua des de %1$s</string>
-    <string name="history.action.continue_from.chapter">Continua des del cap. %1$d · %2$s</string>
     <string name="history.empty.message">Les reproduccions, pauses i salts apareixen aquí, perquè sempre pugueu tornar on éreu.</string>
     <string name="history.empty.title">Encara no hi ha res</string>
     <string name="history.event.bookmark_jump">Salt a un punt de llibre</string>
     <string name="history.event.chapter_change">Canvi de capítol</string>
-    <string name="history.event.dozed_off">Us heu adormit · ha acabat el temporitzador</string>
+    <string name="history.event.interrupted">Interrupció de %s</string>
     <string name="history.event.jump_back">Tornada enrere</string>
     <string name="history.event.moved">Desplaçament</string>
+    <string name="history.event.paused">Pausa</string>
     <string name="history.event.played">Reproducció</string>
-    <string name="history.event.sleep_timer_set">Temporitzador de repòs</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">%d salt enrere</item>
+        <item quantity="many">%d salts enrere</item>
+        <item quantity="other">%d salts enrere</item>
+    </plurals>
+    <string name="history.event.shook">Sacsejada per seguir escoltant</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">%d salt endavant</item>
+        <item quantity="many">%d salts endavant</item>
+        <item quantity="other">%d salts endavant</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Temporitzador de repòs acabat</string>
+    <string name="history.event.sleep_timer_on">Temporitzador de repòs activat</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
     <string name="history.source.app">A l\'aplicació</string>
     <string name="history.source.audio_focus">Interromput</string>

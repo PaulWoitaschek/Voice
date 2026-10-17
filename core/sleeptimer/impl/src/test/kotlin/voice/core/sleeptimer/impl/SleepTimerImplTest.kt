@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.common.DispatcherProvider
+import voice.core.data.ListeningEvent
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
@@ -98,6 +99,17 @@ class SleepTimerImplTest {
 
     advanceTimeBy(1)
     assertEquals(expected = SleepTimerState.Enabled.WithEndOfChapter, actual = sleepTimer.state.value)
+  }
+
+  @Test
+  fun `turning the timer on goes into the history`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.EndOfChapter)
+    sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+
+    verify {
+      playerController.record(ListeningEvent.Type.SleepTimerStarted, ListeningEvent.Source.App)
+      playerController.record(ListeningEvent.Type.SleepTimerStarted, ListeningEvent.Source.SleepTimer)
+    }
   }
 
   @Test

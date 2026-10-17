@@ -7,17 +7,16 @@ import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.ui.BookBarPin
 import voice.features.bookmark.history.HistoryDay
-import voice.features.bookmark.history.HistoryJump
+import voice.features.bookmark.history.HistoryEvent
+import voice.features.bookmark.history.HistoryInterruption
 import voice.features.bookmark.history.HistoryLocation
+import voice.features.bookmark.history.HistoryPlace
+import voice.features.bookmark.history.HistorySkips
 import voice.features.bookmark.history.HistorySpot
-import voice.features.bookmark.history.HistoryStretch
-import voice.features.bookmark.history.HistoryTarget
 import voice.features.bookmark.history.HistoryViewState
-import voice.features.bookmark.history.StretchCause
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
 
@@ -121,91 +120,49 @@ internal fun kioskModeBookmarkViewState(tab: BookmarkTab): BookmarkViewState {
   )
 }
 
-private fun at(
+private fun place(
   chapterNumber: Int,
   time: String,
-) = HistoryLocation(chapterNumber, time)
+) = HistoryPlace(HistorySpot(demoChapter, 0), HistoryLocation(chapterNumber, time))
 
-private fun demoStretch(
+private fun event(
   key: Long,
-  start: LocalTime,
-  end: LocalTime,
-  listened: Duration,
-  from: HistoryLocation,
-  to: HistoryLocation,
-  cause: StretchCause,
-) = HistoryStretch(
-  key = key,
-  start = start,
-  end = end,
-  listened = listened,
-  from = from,
-  to = to,
-  cause = cause,
-  // after a night, the history goes to where the listener was still awake
-  goTo = HistoryTarget(HistorySpot(demoChapter, 0), if (cause == StretchCause.SleepTimerEnded) from else to),
-)
+  at: LocalTime,
+  playingBefore: Boolean,
+  type: Type,
+  place: HistoryPlace,
+  source: Source = Source.App,
+  to: HistoryPlace? = null,
+) = HistoryEvent(key = key, at = at, playingBefore = playingBefore, type = type, source = source, place = place, to = to)
 
 internal fun kioskModeHistoryViewState(): HistoryViewState = HistoryViewState(
   days = listOf(
     HistoryDay(
       label = DayLabel.ThisMorning,
       rows = listOf(
-        demoStretch(
-          key = 4,
-          start = LocalTime.of(7, 52),
-          end = LocalTime.of(8, 11),
-          listened = 19.minutes,
-          from = at(12, "14:48"),
-          to = at(12, "34:18"),
-          cause = StretchCause.Played(Source.Car),
-        ),
+        event(12, LocalTime.of(7, 52), playingBefore = false, Type.Play, place(12, "14:40"), Source.Car),
+        HistoryInterruption(key = 13, at = LocalTime.of(8, 1), playingBefore = true, duration = 3.minutes),
+        event(14, LocalTime.of(8, 15), playingBefore = true, Type.Pause, place(12, "34:18"), Source.Car),
       ),
     ),
     HistoryDay(
       label = DayLabel.LastNight,
       rows = listOf(
-        demoStretch(
-          key = 3,
-          start = LocalTime.of(22, 10),
-          end = LocalTime.of(23, 42),
-          listened = 89.minutes,
-          from = at(10, "21:18"),
-          to = at(12, "14:48"),
-          cause = StretchCause.SleepTimerEnded,
-        ),
+        event(7, LocalTime.of(22, 10), playingBefore = false, Type.Play, place(11, "2:10")),
+        event(8, LocalTime.of(22, 10), playingBefore = true, Type.SleepTimerStarted, place(11, "2:10")),
+        event(9, LocalTime.of(22, 40), playingBefore = true, Type.SleepTimerEnded, place(11, "32:10"), Source.SleepTimer),
+        event(10, LocalTime.of(22, 40), playingBefore = false, Type.SleepTimerExtended, place(11, "31:58"), Source.SleepTimer),
+        event(11, LocalTime.of(23, 10), playingBefore = true, Type.SleepTimerEnded, place(12, "14:48"), Source.SleepTimer),
       ),
     ),
     HistoryDay(
       label = DayLabel.Yesterday,
       rows = listOf(
-        demoStretch(
-          key = 2,
-          start = LocalTime.of(18, 20),
-          end = LocalTime.of(18, 24),
-          listened = 4.minutes,
-          from = at(15, "2:00"),
-          to = at(15, "6:10"),
-          cause = StretchCause.Jumped(Type.Seek, Source.Notification, hasRow = true),
-        ),
-        HistoryJump(
-          key = 2,
-          at = LocalTime.of(18, 20),
-          from = at(10, "21:18"),
-          to = at(15, "2:00"),
-          type = Type.Seek,
-          source = Source.Notification,
-          back = HistoryTarget(HistorySpot(demoChapter, 0), at(10, "21:18")),
-        ),
-        demoStretch(
-          key = 1,
-          start = LocalTime.of(17, 40),
-          end = LocalTime.of(18, 20),
-          listened = 40.minutes,
-          from = at(9, "5:00"),
-          to = at(10, "21:18"),
-          cause = StretchCause.Played(Source.Headset),
-        ),
+        event(1, LocalTime.of(17, 40), playingBefore = false, Type.Play, place(9, "5:00"), Source.Headset),
+        HistorySkips(key = 2, at = LocalTime.of(18, 2), playingBefore = true, count = 2, back = true),
+        event(4, LocalTime.of(18, 20), playingBefore = true, Type.Seek, place(10, "21:18"), Source.Notification, to = place(15, "2:00")),
+        event(5, LocalTime.of(18, 21), playingBefore = true, Type.JumpBack, place(15, "2:40"), to = place(10, "21:18")),
+        event(6, LocalTime.of(18, 45), playingBefore = true, Type.Pause, place(11, "2:10"), Source.Headset),
       ),
     ),
   ),

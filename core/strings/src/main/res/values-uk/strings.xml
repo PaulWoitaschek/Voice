@@ -209,17 +209,30 @@
         <item quantity="many">%d аудіофайлів</item>
         <item quantity="other">%d аудіофайлів</item>
     </plurals>
-    <string name="history.action.continue_from">Продовжити з %1$s</string>
-    <string name="history.action.continue_from.chapter">Продовжити з розд. %1$d · %2$s</string>
     <string name="history.empty.message">Відтворення, паузи й переходи зберігаються тут, тож ви завжди знайдете, де зупинилися.</string>
     <string name="history.empty.title">Тут поки порожньо</string>
     <string name="history.event.bookmark_jump">Перехід до закладки</string>
     <string name="history.event.chapter_change">Зміна розділу</string>
-    <string name="history.event.dozed_off">Задрімали · таймер завершився</string>
+    <string name="history.event.interrupted">Перервано на %s</string>
     <string name="history.event.jump_back">Повернення на попереднє місце</string>
     <string name="history.event.moved">Зміщення позиції</string>
+    <string name="history.event.paused">Призупинено</string>
     <string name="history.event.played">Відтворення</string>
-    <string name="history.event.sleep_timer_set">Таймер сну</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Перемотано назад %d раз</item>
+        <item quantity="few">Перемотано назад %d рази</item>
+        <item quantity="many">Перемотано назад %d разів</item>
+        <item quantity="other">Перемотано назад %d раза</item>
+    </plurals>
+    <string name="history.event.shook">Подовжено струшуванням</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Перемотано вперед %d раз</item>
+        <item quantity="few">Перемотано вперед %d рази</item>
+        <item quantity="many">Перемотано вперед %d разів</item>
+        <item quantity="other">Перемотано вперед %d раза</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Таймер сну спрацював</string>
+    <string name="history.event.sleep_timer_on">Таймер сну увімкнено</string>
     <string name="history.location.chapter">Розд. %1$d · %2$s</string>
     <string name="history.source.app">У додатку</string>
     <string name="history.source.audio_focus">Перервано</string>
