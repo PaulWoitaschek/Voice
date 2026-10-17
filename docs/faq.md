@@ -2,18 +2,13 @@
 
 Yes, Voice fully supports Android Auto!
 
-Android Auto only shows apps installed from the
-[Google Play Store](https://play.google.com/store/apps/details?id=de.ph1b.audiobook). If you installed Voice from F-Droid,
-GitHub or IzzyDroid, allow apps from other sources in Android Auto:
+Android Auto only shows apps installed from a trusted source such as
+[Google Play](https://play.google.com/store/apps/details?id=de.ph1b.audiobook). If you installed Voice from F-Droid, GitHub
+or IzzyDroid, follow [Google's steps to allow unknown sources](https://developer.android.com/training/cars/testing#unknown-sources)
+in Android Auto. If Voice still doesn't show up, add it under **Customize launcher** in the Android Auto settings.
 
-1. Open the Android Auto settings. On most phones, search for "Android Auto" in the system settings.
-2. Tap **Version** at the bottom 10 times and allow development settings.
-3. Open the three-dot menu, tap **Developer settings** and turn on **Unknown sources**.
-4. If Voice still doesn't show up, add it under **Customize launcher** in the Android Auto settings.
-
-Google describes the developer settings in
-its [Android Auto developer docs](https://developer.android.com/training/cars/testing#developer-mode). Google Play is the
-only officially supported source for Android Auto. See the [download source comparison](download-sources.md) for details.
+Google Play is the only officially supported source for Android Auto. See the [download source comparison](download-sources.md)
+for details.
 
 ### Why doesn't Voice support the xyz Media Format?
 
