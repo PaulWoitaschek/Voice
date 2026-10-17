@@ -70,6 +70,7 @@ Listeners find the book they want in seconds and see how far along they are in e
 
 - **I have to look for the book I'm listening to.** Continue listening sits at the top, then Current, Not started and
   Completed.
+- **Many books in progress take long to scroll through.** Current is a list or grid, like the other sections.
 - **I can't see how far along I am.** Every book shows its progress.
 - **Finding a book takes too long.** Search finds titles, authors, narrators, series and genres, and can browse by each.
 - **A book's name or cover is wrong.** Rename a book, or pick a cover from a file or the internet.

@@ -69,8 +69,7 @@ internal fun Library(
   val columns = if (grid) gridColumnCount() else 1
   val heroId = viewState.currentBookId
   val hero = heroId?.let { id -> viewState.books.values.firstNotNullOfOrNull { it[id] } }
-  val inProgress = viewState.books[BookOverviewCategory.CURRENT].orEmpty()
-  val inProgressOthers = inProgress.filterKeys { it != heroId }.values.map { it.value }
+  val inProgressCount = viewState.books[BookOverviewCategory.CURRENT].orEmpty().size
 
   LazyVerticalGrid(
     modifier = modifier,
@@ -100,7 +99,7 @@ internal fun Library(
     val greetingIndex = entranceIndex()
     item(key = "greeting", span = { GridItemSpan(maxLineSpan) }, contentType = "greeting") {
       LibraryGreeting(
-        inProgressCount = inProgress.size,
+        inProgressCount = inProgressCount,
         modifier = Modifier
           .entrance(entrance, greetingIndex)
           .padding(top = 16.dp, bottom = 20.dp, start = 4.dp),
@@ -119,28 +118,7 @@ internal fun Library(
         )
       }
     }
-    if (inProgressOthers.isNotEmpty()) {
-      val headerIndex = entranceIndex()
-      item(key = BookOverviewCategory.CURRENT, span = { GridItemSpan(maxLineSpan) }, contentType = "header") {
-        Header(
-          category = BookOverviewCategory.CURRENT,
-          count = inProgressOthers.size,
-          modifier = Modifier
-            .entrance(entrance, headerIndex)
-            .padding(top = 32.dp, bottom = 12.dp, start = 4.dp),
-        )
-      }
-      val carouselIndex = entranceIndex()
-      item(key = "carousel", span = { GridItemSpan(maxLineSpan) }, contentType = "carousel") {
-        InProgressCarousel(
-          books = inProgressOthers,
-          onBookClick = onBookClick,
-          onBookLongClick = onBookLongClick,
-          modifier = Modifier.entrance(entrance, carouselIndex),
-        )
-      }
-    }
-    listOf(BookOverviewCategory.NOT_STARTED, BookOverviewCategory.FINISHED).forEach { category ->
+    BookOverviewCategory.entries.forEach { category ->
       val books = viewState.books[category].orEmpty().filterKeys { it != heroId }.toList()
       if (books.isEmpty()) return@forEach
       val finished = category == BookOverviewCategory.FINISHED

@@ -54,6 +54,16 @@ internal fun GridBook(
         .fillMaxWidth()
         .aspectRatio(1F),
     )
+    // right under the cover, so the bars in a row line up however long the titles are
+    if (!finished && book.progress > 0F) {
+      Spacer(Modifier.height(8.dp))
+      LinearProgressIndicator(
+        progress = { book.progress },
+        modifier = Modifier.fillMaxWidth(),
+        gapSize = 0.dp,
+        drawStopIndicator = {},
+      )
+    }
     Spacer(Modifier.height(8.dp))
     Text(
       text = book.name,
@@ -68,13 +78,6 @@ internal fun GridBook(
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
-      )
-    }
-    if (!finished && book.progress > 0F) {
-      Spacer(Modifier.height(6.dp))
-      LinearProgressIndicator(
-        progress = { book.progress },
-        modifier = Modifier.fillMaxWidth(),
       )
     }
   }
