@@ -197,8 +197,8 @@ Listeners control their book from headphones, the lock screen, the car and the h
 
 **Solved**
 
-- **The car doesn't remember my book.** Android Auto has the current book ready when it connects. The F-Droid build
-  has no Android Auto.
+- **The car doesn't remember my book.** Android Auto has the current book ready when it connects. Builds from outside
+  Google Play only show up once the listener allows unknown sources in Android Auto.
 - **The car's skip buttons look like track buttons.** Rewind and fast forward have skip icons.
 - **Headphone and car buttons lose my place.** Next and previous skip by the skip amount everywhere outside the app.
 - **The lock screen slider loses my place.** It only covers the current chapter, and a setting turns it off.
