@@ -249,9 +249,7 @@
     <string name="library.folders.moved.dialog.message">Složky audioknih teď můžete spravovat v Nastavení.</string>
     <string name="library.folders.no_access">Bez přístupu</string>
     <string name="library.folders.no_access.action">Povolit přístup</string>
-    <string name="library.folders.no_access.card.title">Znovu povolte přístup ke svým složkám</string>
-    <string name="library.folders.no_access.card.message">Voice už nemůže otevřít některé vaše složky s audioknihami, například po přechodu na nové zařízení. Jakmile budou soubory na tomto zařízení, znovu povolte přístup a vaše knihy se vrátí i s postupem a záložkami.</string>
-    <string name="library.folders.no_access.card.action">Zobrazit složky</string>
+    <string name="library.folders.no_access.badge">Znovu povolte přístup ke svým složkám</string>
     <string name="library.greeting.afternoon">Dobré odpoledne</string>
     <string name="library.greeting.evening">Dobrý večer</string>
     <string name="library.greeting.morning">Dobré ráno</string>

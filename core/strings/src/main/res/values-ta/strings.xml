@@ -227,9 +227,7 @@
     <string name="library.folders.moved.dialog.message">இப்போது ஒலிப்புத்தகக் கோப்புறைகளை அமைப்புகளில் நிர்வகிக்கலாம்.</string>
     <string name="library.folders.no_access">அணுகல் இல்லை</string>
     <string name="library.folders.no_access.action">அணுகலை அனுமதி</string>
-    <string name="library.folders.no_access.card.title">உங்கள் கோப்புறைகளுக்கான அணுகலை மீண்டும் அனுமதிக்கவும்</string>
-    <string name="library.folders.no_access.card.message">உங்கள் ஆடியோபுக் கோப்புறைகளில் சிலவற்றை Voice-ஆல் இனி திறக்க முடியவில்லை. உதாரணமாக, புதிய சாதனத்திற்கு மாறிய பிறகு இப்படி நடக்கலாம். கோப்புகள் இந்தச் சாதனத்தில் வந்ததும் அணுகலை மீண்டும் அனுமதிக்கவும், உங்கள் புத்தகங்கள் அவற்றின் முன்னேற்றத்துடனும் புக்மார்க்குகளுடனும் திரும்பி வரும்.</string>
-    <string name="library.folders.no_access.card.action">கோப்புறைகளைக் காட்டு</string>
+    <string name="library.folders.no_access.badge">உங்கள் கோப்புறைகளுக்கான அணுகலை மீண்டும் அனுமதிக்கவும்</string>
     <string name="library.greeting.afternoon">மதிய வணக்கம்</string>
     <string name="library.greeting.evening">மாலை வணக்கம்</string>
     <string name="library.greeting.morning">காலை வணக்கம்</string>

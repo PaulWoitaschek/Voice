@@ -227,9 +227,7 @@
     <string name="library.folders.moved.dialog.message">A hangoskönyv mappákat mostantól a Beállításokban kezelheti.</string>
     <string name="library.folders.no_access">Nincs hozzáférés</string>
     <string name="library.folders.no_access.action">Hozzáférés engedélyezése</string>
-    <string name="library.folders.no_access.card.title">Engedélyezze újra a hozzáférést a mappáihoz</string>
-    <string name="library.folders.no_access.card.message">A Voice már nem tudja megnyitni néhány hangoskönyv mappáját, például új eszközre váltás után. Ha a fájlok már ezen az eszközön vannak, engedélyezze újra a hozzáférést, és a könyvei az előrehaladásukkal és a könyvjelzőikkel együtt visszakerülnek.</string>
-    <string name="library.folders.no_access.card.action">Mappák megjelenítése</string>
+    <string name="library.folders.no_access.badge">Engedélyezze újra a hozzáférést a mappáihoz</string>
     <string name="library.greeting.afternoon">Szép délutánt</string>
     <string name="library.greeting.evening">Jó estét</string>
     <string name="library.greeting.morning">Jó reggelt</string>

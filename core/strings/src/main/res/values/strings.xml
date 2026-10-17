@@ -373,12 +373,8 @@
     <string name="library.folders.no_access">No access</string>
     <!-- Button on a folder row without access. Opens the system picker so Voice may open the folder or file again. -->
     <string name="library.folders.no_access.action">Allow access</string>
-    <!-- Title of the card on the library screen shown while Voice can no longer open some audiobook folders, for example after a restore from a backup on a new phone. Also read out by screen readers for the exclamation mark badge on the settings button and on the audiobook folders row in settings. -->
-    <string name="library.folders.no_access.card.title">Allow access to your folders again</string>
-    <!-- Message of the card on the library screen about audiobook folders without access. The books, their progress and bookmarks are still saved and come back once access is allowed again. -->
-    <string name="library.folders.no_access.card.message">Voice can\'t open some of your audiobook folders anymore, for example after moving to a new device. Once the files are on this device, allow access again and your books are back with their progress and bookmarks.</string>
-    <!-- Button on the library card about audiobook folders without access. Opens the audiobook folders screen. -->
-    <string name="library.folders.no_access.card.action">Show folders</string>
+    <!-- Read out by screen readers for the exclamation mark badge on the settings button of the library screen and on the audiobook folders row in settings. Shown while Voice can no longer open some audiobook folders, for example after a restore from a backup on a new phone. -->
+    <string name="library.folders.no_access.badge">Allow access to your folders again</string>
     <!-- Library screen greeting shown in the afternoon. -->
     <string name="library.greeting.afternoon">Good afternoon</string>
     <!-- Library screen greeting shown in the evening. -->

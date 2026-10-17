@@ -238,9 +238,7 @@
     <string name="library.folders.moved.dialog.message">Ahora puedes gestionar las carpetas de audiolibros en Ajustes.</string>
     <string name="library.folders.no_access">Sin acceso</string>
     <string name="library.folders.no_access.action">Permitir acceso</string>
-    <string name="library.folders.no_access.card.title">Vuelve a permitir el acceso a tus carpetas</string>
-    <string name="library.folders.no_access.card.message">Voice ya no puede abrir algunas de tus carpetas de audiolibros, por ejemplo, después de cambiar de dispositivo. Cuando los archivos estén en este dispositivo, vuelve a permitir el acceso y recuperarás tus libros con su progreso y sus marcadores.</string>
-    <string name="library.folders.no_access.card.action">Mostrar carpetas</string>
+    <string name="library.folders.no_access.badge">Vuelve a permitir el acceso a tus carpetas</string>
     <string name="library.greeting.afternoon">Buenas tardes</string>
     <string name="library.greeting.evening">Buenas noches</string>
     <string name="library.greeting.morning">Buenos días</string>

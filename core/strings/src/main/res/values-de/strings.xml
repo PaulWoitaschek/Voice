@@ -227,9 +227,7 @@
     <string name="library.folders.moved.dialog.message">Du kannst Hörbuch-Ordner jetzt in den Einstellungen verwalten.</string>
     <string name="library.folders.no_access">Kein Zugriff</string>
     <string name="library.folders.no_access.action">Zugriff erlauben</string>
-    <string name="library.folders.no_access.card.title">Zugriff auf Deine Ordner wieder erlauben</string>
-    <string name="library.folders.no_access.card.message">Voice kann einige Deiner Hörbuch-Ordner nicht mehr öffnen, zum Beispiel nach dem Wechsel auf ein neues Gerät. Sobald die Dateien auf diesem Gerät sind, erlaube den Zugriff erneut, dann sind Deine Bücher mit Fortschritt und Lesezeichen wieder da.</string>
-    <string name="library.folders.no_access.card.action">Ordner anzeigen</string>
+    <string name="library.folders.no_access.badge">Zugriff auf Deine Ordner wieder erlauben</string>
     <string name="library.greeting.afternoon">Guten Tag</string>
     <string name="library.greeting.evening">Guten Abend</string>
     <string name="library.greeting.morning">Guten Morgen</string>

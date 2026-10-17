@@ -238,9 +238,7 @@
     <string name="library.folders.moved.dialog.message">כעת ניתן לנהל תיקיות ספרי שמע בהגדרות.</string>
     <string name="library.folders.no_access">אין גישה</string>
     <string name="library.folders.no_access.action">מתן גישה</string>
-    <string name="library.folders.no_access.card.title">אפשרו שוב גישה לתיקיות שלכם</string>
-    <string name="library.folders.no_access.card.message">ל-Voice כבר אין גישה לחלק מתיקיות הקולספרים שלכם, למשל אחרי מעבר למכשיר חדש. כשהקבצים יהיו במכשיר הזה, אפשרו שוב גישה, והספרים שלכם יחזרו עם ההתקדמות והסימניות שלהם.</string>
-    <string name="library.folders.no_access.card.action">הצגת התיקיות</string>
+    <string name="library.folders.no_access.badge">אפשרו שוב גישה לתיקיות שלכם</string>
     <string name="library.greeting.afternoon">צהריים טובים</string>
     <string name="library.greeting.evening">ערב טוב</string>
     <string name="library.greeting.morning">בוקר טוב</string>

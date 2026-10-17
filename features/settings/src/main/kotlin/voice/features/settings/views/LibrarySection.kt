@@ -96,7 +96,7 @@ internal fun LibrarySection(
         BadgedBox(
           badge = {
             if (foldersWithoutAccess) {
-              AttentionBadge(stringResource(StringsR.string.library_folders_no_access_card_title))
+              AttentionBadge(stringResource(StringsR.string.library_folders_no_access_badge))
             }
           },
         ) {

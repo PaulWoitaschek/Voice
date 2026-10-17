@@ -227,9 +227,7 @@
     <string name="library.folders.moved.dialog.message">Voit nyt hallita äänikirjakansioita asetuksissa.</string>
     <string name="library.folders.no_access">Ei pääsyä</string>
     <string name="library.folders.no_access.action">Salli pääsy</string>
-    <string name="library.folders.no_access.card.title">Salli taas pääsy kansioihisi</string>
-    <string name="library.folders.no_access.card.message">Voice ei enää pysty avaamaan joitakin äänikirjakansioistasi, esimerkiksi kun olet siirtynyt uuteen laitteeseen. Kun tiedostot ovat tällä laitteella, salli pääsy uudelleen, niin kirjasi palaavat edistymisineen ja kirjanmerkkeineen.</string>
-    <string name="library.folders.no_access.card.action">Näytä kansiot</string>
+    <string name="library.folders.no_access.badge">Salli taas pääsy kansioihisi</string>
     <string name="library.greeting.afternoon">Hyvää iltapäivää</string>
     <string name="library.greeting.evening">Hyvää iltaa</string>
     <string name="library.greeting.morning">Hyvää huomenta</string>

@@ -227,9 +227,7 @@
     <string name="library.folders.moved.dialog.message">اکنون می‌توانید پوشه‌های کتاب صوتی را در تنظیمات مدیریت کنید.</string>
     <string name="library.folders.no_access">بدون دسترسی</string>
     <string name="library.folders.no_access.action">اجازه دسترسی</string>
-    <string name="library.folders.no_access.card.title">دوباره اجازه دسترسی به پوشه‌هایتان را بدهید</string>
-    <string name="library.folders.no_access.card.message">برخی از پوشه‌های کتاب صوتی شما دیگر در Voice باز نمی‌شوند، مثلاً پس از تعویض دستگاه. وقتی فایل‌ها روی این دستگاه باشند، دوباره اجازه دسترسی بدهید تا کتاب‌هایتان با پیشرفت و نشانه‌هایشان برگردند.</string>
-    <string name="library.folders.no_access.card.action">نمایش پوشه‌ها</string>
+    <string name="library.folders.no_access.badge">دوباره اجازه دسترسی به پوشه‌هایتان را بدهید</string>
     <string name="library.greeting.afternoon">عصر بخیر</string>
     <string name="library.greeting.evening">شب بخیر</string>
     <string name="library.greeting.morning">صبح بخیر</string>

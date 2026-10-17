@@ -121,7 +121,7 @@ internal fun BookOverview(
       LibraryTopBar(
         showSearch = viewState.showSearchIcon,
         showFolderPickerIcon = viewState.showFolderPickerIcon,
-        showFolderAccessBadge = viewState.showFolderAccessCard,
+        showFolderAccessBadge = viewState.showFolderAccessBadge,
         isLoading = viewState.isLoading,
         scrollBehavior = scrollBehavior,
         onSearchClick = onSearchClick,
@@ -275,18 +275,14 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       showSearchIcon = true,
       isLoading = true,
       showStoragePermissionBugCard = false,
-      showFolderAccessCard = false,
+      showFolderAccessBadge = false,
       showFolderPickerIcon = true,
       dialog = null,
     ),
     BookOverviewViewState.Loading.copy(
       isLoading = false,
       showEmptyLibrary = true,
-      showFolderPickerIcon = false,
-    ),
-    BookOverviewViewState.Loading.copy(
-      isLoading = false,
-      showFolderAccessCard = true,
+      showFolderAccessBadge = true,
       showFolderPickerIcon = false,
     ),
   )

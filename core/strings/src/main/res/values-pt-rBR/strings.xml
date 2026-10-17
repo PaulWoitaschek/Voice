@@ -238,9 +238,7 @@
     <string name="library.folders.moved.dialog.message">Agora você pode gerenciar as pastas de audiolivros nas Configurações.</string>
     <string name="library.folders.no_access">Sem acesso</string>
     <string name="library.folders.no_access.action">Permitir acesso</string>
-    <string name="library.folders.no_access.card.title">Permita o acesso às suas pastas de novo</string>
-    <string name="library.folders.no_access.card.message">O Voice não consegue mais abrir algumas das suas pastas de audiolivros, por exemplo, depois de trocar de dispositivo. Quando os arquivos estiverem neste dispositivo, permita o acesso de novo e seus livros voltam com o progresso e os marcadores.</string>
-    <string name="library.folders.no_access.card.action">Mostrar pastas</string>
+    <string name="library.folders.no_access.badge">Permita o acesso às suas pastas de novo</string>
     <string name="library.greeting.afternoon">Boa tarde</string>
     <string name="library.greeting.evening">Boa noite</string>
     <string name="library.greeting.morning">Bom dia</string>

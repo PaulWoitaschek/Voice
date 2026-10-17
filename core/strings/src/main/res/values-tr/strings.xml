@@ -227,9 +227,7 @@
     <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Ayarlar\'da yönetebilirsiniz.</string>
     <string name="library.folders.no_access">Erişim yok</string>
     <string name="library.folders.no_access.action">Erişime izin ver</string>
-    <string name="library.folders.no_access.card.title">Klasörlerinize yeniden erişim izni verin</string>
-    <string name="library.folders.no_access.card.message">Voice, sesli kitap klasörlerinizden bazılarını artık açamıyor. Bu, örneğin yeni bir cihaza geçtikten sonra olabilir. Dosyalar bu cihazda olduğunda erişime yeniden izin verin. Kitaplarınız ilerlemeleri ve yer imleriyle birlikte geri döner.</string>
-    <string name="library.folders.no_access.card.action">Klasörleri göster</string>
+    <string name="library.folders.no_access.badge">Klasörlerinize yeniden erişim izni verin</string>
     <string name="library.greeting.afternoon">Tünaydın</string>
     <string name="library.greeting.evening">İyi akşamlar</string>
     <string name="library.greeting.morning">Günaydın</string>

@@ -87,25 +87,7 @@ internal fun Library(
     if (viewState.showStoragePermissionBugCard) {
       val index = entranceIndex()
       item(span = { GridItemSpan(maxLineSpan) }) {
-        LibraryCard(
-          title = stringResource(R.string.library_storage_permission_bug_title),
-          message = stringResource(R.string.library_storage_permission_bug_message),
-          action = stringResource(R.string.library_storage_permission_bug_action),
-          onClick = onPermissionBugCardClick,
-          modifier = Modifier.entrance(entrance, index),
-        )
-      }
-    }
-    if (viewState.showFolderAccessCard) {
-      val index = entranceIndex()
-      item(span = { GridItemSpan(maxLineSpan) }) {
-        LibraryCard(
-          title = stringResource(R.string.library_folders_no_access_card_title),
-          message = stringResource(R.string.library_folders_no_access_card_message),
-          action = stringResource(R.string.library_folders_no_access_card_action),
-          onClick = onShowFoldersClick,
-          modifier = Modifier.entrance(entrance, index),
-        )
+        PermissionBugCard(onPermissionBugCardClick, Modifier.entrance(entrance, index))
       }
     }
     val greetingIndex = entranceIndex()
@@ -120,13 +102,7 @@ internal fun Library(
     if (viewState.showEmptyLibrary) {
       val index = entranceIndex()
       item(span = { GridItemSpan(maxLineSpan) }) {
-        LibraryCard(
-          title = stringResource(R.string.library_empty_title),
-          message = stringResource(R.string.library_empty_message),
-          action = stringResource(R.string.library_empty_action),
-          onClick = onShowFoldersClick,
-          modifier = Modifier.entrance(entrance, index),
-        )
+        EmptyLibrary(onShowFoldersClick, Modifier.entrance(entrance, index))
       }
     }
     if (hero != null) {

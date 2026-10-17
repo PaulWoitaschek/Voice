@@ -170,15 +170,11 @@ class BookOverviewViewModel(
       } else {
         BookOverviewViewState.PlayButtonState.Paused
       }.takeIf { currentBookId != null },
-      showEmptyLibrary = if (hasStoragePermissionBug || hasFoldersWithoutAccess) {
-        false
-      } else {
-        noBooks
-      },
+      showEmptyLibrary = !hasStoragePermissionBug && noBooks,
       showSearchIcon = books.isNotEmpty(),
       isLoading = scannerActive,
       showStoragePermissionBugCard = hasStoragePermissionBug,
-      showFolderAccessCard = hasFoldersWithoutAccess,
+      showFolderAccessBadge = hasFoldersWithoutAccess,
       showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get() &&
         !folderPickerMovedDialogShown &&
         appInfoProvider.installTime < FolderPickerMigrationInstallTimeCutoff,
@@ -209,7 +205,7 @@ class BookOverviewViewModel(
       showSearchIcon = true,
       isLoading = false,
       showStoragePermissionBugCard = false,
-      showFolderAccessCard = false,
+      showFolderAccessBadge = false,
       showFolderPickerIcon = false,
       dialog = null,
     )

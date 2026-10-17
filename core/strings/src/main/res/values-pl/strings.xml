@@ -249,9 +249,7 @@
     <string name="library.folders.moved.dialog.message">Folderami audiobooków możesz teraz zarządzać w Ustawieniach.</string>
     <string name="library.folders.no_access">Brak dostępu</string>
     <string name="library.folders.no_access.action">Zezwól na dostęp</string>
-    <string name="library.folders.no_access.card.title">Ponownie zezwól na dostęp do swoich folderów</string>
-    <string name="library.folders.no_access.card.message">Voice nie może już otworzyć niektórych twoich folderów z audiobookami, na przykład po przejściu na nowe urządzenie. Gdy pliki znajdą się na tym urządzeniu, ponownie zezwól na dostęp, a twoje książki wrócą razem z postępami i zakładkami.</string>
-    <string name="library.folders.no_access.card.action">Pokaż foldery</string>
+    <string name="library.folders.no_access.badge">Ponownie zezwól na dostęp do swoich folderów</string>
     <string name="library.greeting.afternoon">Dzień dobry</string>
     <string name="library.greeting.evening">Dobry wieczór</string>
     <string name="library.greeting.morning">Dzień dobry</string>

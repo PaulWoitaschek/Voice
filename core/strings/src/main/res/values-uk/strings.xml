@@ -249,9 +249,7 @@
     <string name="library.folders.moved.dialog.message">Тепер папками аудіокниг можна керувати в налаштуваннях.</string>
     <string name="library.folders.no_access">Немає доступу</string>
     <string name="library.folders.no_access.action">Дозволити доступ</string>
-    <string name="library.folders.no_access.card.title">Знову дозвольте доступ до своїх папок</string>
-    <string name="library.folders.no_access.card.message">Voice більше не може відкрити деякі ваші папки з аудіокнигами, наприклад, після переходу на новий пристрій. Коли файли опиняться на цьому пристрої, знову дозвольте доступ, і ваші книги повернуться разом із прогресом і закладками.</string>
-    <string name="library.folders.no_access.card.action">Показати папки</string>
+    <string name="library.folders.no_access.badge">Знову дозвольте доступ до своїх папок</string>
     <string name="library.greeting.afternoon">Добрий день</string>
     <string name="library.greeting.evening">Добрий вечір</string>
     <string name="library.greeting.morning">Доброго ранку</string>

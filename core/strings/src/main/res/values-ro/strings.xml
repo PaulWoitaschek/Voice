@@ -238,9 +238,7 @@
     <string name="library.folders.moved.dialog.message">Acum poți gestiona directoarele cu cărți audio din Setări.</string>
     <string name="library.folders.no_access">Fără acces</string>
     <string name="library.folders.no_access.action">Permite accesul</string>
-    <string name="library.folders.no_access.card.title">Permite din nou accesul la directoarele tale</string>
-    <string name="library.folders.no_access.card.message">Voice nu mai poate deschide unele dintre directoarele tale cu cărți audio, de exemplu după ce ai trecut pe un dispozitiv nou. Când fișierele sunt pe acest dispozitiv, permite din nou accesul, iar cărțile tale revin cu progresul și semnele de carte.</string>
-    <string name="library.folders.no_access.card.action">Afișează directoarele</string>
+    <string name="library.folders.no_access.badge">Permite din nou accesul la directoarele tale</string>
     <string name="library.greeting.afternoon">Bună ziua</string>
     <string name="library.greeting.evening">Bună seara</string>
     <string name="library.greeting.morning">Bună dimineața</string>

@@ -18,7 +18,7 @@ internal fun SettingsIcon(
     BadgedBox(
       badge = {
         if (showFolderAccessBadge) {
-          AttentionBadge(stringResource(StringsR.string.library_folders_no_access_card_title))
+          AttentionBadge(stringResource(StringsR.string.library_folders_no_access_badge))
         }
       },
     ) {

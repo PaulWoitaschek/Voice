@@ -164,7 +164,7 @@ class BookOverviewViewModelTest {
       )
       assertEquals(expected = "Echoes of Tomorrow", actual = state.currentBook(KioskModeDemoData.currentlyPlaying.id).name)
       assertEquals(expected = KioskModeDemoData.currentlyPlaying.id, actual = state.currentBookId)
-      assertEquals(expected = false, actual = state.showFolderAccessCard)
+      assertEquals(expected = false, actual = state.showFolderAccessBadge)
     }
   }
 
@@ -323,7 +323,7 @@ class BookOverviewViewModelTest {
   }
 
   @Test
-  fun `folders without access show the card instead of the empty library`() = runTest {
+  fun `folders without access show the badge`() = runTest {
     every { audiobookFolders.withoutAccess() } returns flowOf(mapOf(FolderType.Root to listOf(mockk<Uri>())))
     val viewModel = viewModel()
 
@@ -331,9 +331,7 @@ class BookOverviewViewModelTest {
       viewModel.state()
     }.test {
       assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      val state = awaitItem()
-      assertEquals(expected = true, actual = state.showFolderAccessCard)
-      assertEquals(expected = false, actual = state.showEmptyLibrary)
+      assertEquals(expected = true, actual = awaitItem().showFolderAccessBadge)
     }
   }
 

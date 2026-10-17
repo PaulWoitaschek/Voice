@@ -227,9 +227,7 @@
     <string name="library.folders.moved.dialog.message">ऑडियोबुक फ़ोल्डर अब सेटिंग्स में मैनेज होते हैं।</string>
     <string name="library.folders.no_access">ऐक्सेस नहीं है</string>
     <string name="library.folders.no_access.action">अनुमति दें</string>
-    <string name="library.folders.no_access.card.title">अपने फ़ोल्डर का ऐक्सेस फिर से दें</string>
-    <string name="library.folders.no_access.card.message">आपके कुछ ऑडियोबुक फ़ोल्डर अब Voice में नहीं खुल रहे हैं। उदाहरण के लिए, नए डिवाइस पर जाने के बाद ऐसा हो सकता है। फ़ाइलें इस डिवाइस पर आ जाएँ, तो फिर से ऐक्सेस की अनुमति दें। आपकी पुस्तकें अपनी प्रगति और बुकमार्क के साथ लौट आएँगी।</string>
-    <string name="library.folders.no_access.card.action">फ़ोल्डर दिखाएँ</string>
+    <string name="library.folders.no_access.badge">अपने फ़ोल्डर का ऐक्सेस फिर से दें</string>
     <string name="library.greeting.afternoon">शुभ दोपहर</string>
     <string name="library.greeting.evening">शुभ संध्या</string>
     <string name="library.greeting.morning">सुप्रभात</string>

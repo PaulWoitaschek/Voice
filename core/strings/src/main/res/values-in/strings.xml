@@ -216,9 +216,7 @@
     <string name="library.folders.moved.dialog.message">Sekarang Anda dapat mengelola folder buku audio di Setelan.</string>
     <string name="library.folders.no_access">Tidak ada akses</string>
     <string name="library.folders.no_access.action">Izinkan akses</string>
-    <string name="library.folders.no_access.card.title">Izinkan akses ke folder Anda lagi</string>
-    <string name="library.folders.no_access.card.message">Voice tidak bisa lagi membuka beberapa folder buku audio Anda, misalnya setelah pindah ke perangkat baru. Setelah berkasnya ada di perangkat ini, izinkan akses lagi dan buku Anda akan kembali lengkap dengan progres dan markahnya.</string>
-    <string name="library.folders.no_access.card.action">Tampilkan folder</string>
+    <string name="library.folders.no_access.badge">Izinkan akses ke folder Anda lagi</string>
     <string name="library.greeting.afternoon">Selamat siang</string>
     <string name="library.greeting.evening">Selamat malam</string>
     <string name="library.greeting.morning">Selamat pagi</string>
