@@ -75,14 +75,18 @@ Listeners find the book they want in seconds and see how far along they are in e
 - **A book's name or cover is wrong.** Rename a book, or pick a cover from a file or the internet.
 - **Deleting a book can delete more than I meant.** Voice shows which files go and that they can't be brought back.
 
+**Planned**, see the [library spec](library.md)
+
+- **The books of a series aren't grouped or in order.** A series becomes one stack, its books are in order, and Voice
+  offers the next one when a book ends. [#1748]
+- **I can't put my books in the order I want.** Sort by last listened, title, author or recently added. [#1543]
+- **Fixing the author means editing the files.** Edit the title, author, series and part in Voice. [#1407]
+- **Removing a book from the library deletes its files.** Hide a book or a series and keep its files. [#3397]
+
 **Open**
 
-- **I can't put my books in the order I want.** [#1543]
-- **The books of a series aren't grouped or in order.** [#1748]
-- **Fixing the author means editing the files.** [#1407]
 - **Covers that aren't square get cropped.** [#2856]
 - **A cover I pick isn't saved with the book's files.** [#2303]
-- **Removing a book from the library deletes its files.** [#3397]
 - **I can't see how much I've listened.** [#2826]
 
 [#1407]: https://github.com/PaulWoitaschek/Voice/discussions/1407
