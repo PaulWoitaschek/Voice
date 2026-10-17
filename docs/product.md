@@ -49,9 +49,13 @@ A new listener adds a folder of audiobooks and is listening within minutes, with
 - **Moving or renaming a folder loses my progress.** Voice recognizes a book by its files, so progress and bookmarks
   stay.
 
+**Planned**, see the [library spec](library.md)
+
+- **My author, series and book folders fit no layout.** With "Folders are authors", the folder is the author and a
+  folder of books in it is a series. [#3162]
+
 **Open**
 
-- **My author, series and book folders fit no layout.** [#3162]
 - **Wrong tags mean renaming every book by hand.** [#3502]
 
 **Won't solve**
@@ -83,6 +87,8 @@ Listeners find the book they want in seconds and see how far along they are in e
 - **I can't put my books in the order I want.** Sort by last listened, title, author or recently added. [#1543]
 - **Fixing the author means editing the files.** Edit the title, author, series and part in Voice. [#1407]
 - **Removing a book from the library deletes its files.** Hide a book or a series and keep its files. [#3397]
+- **The episodes of a radio play all have the album's name.** Each episode keeps its own title, the album becomes the
+  series, and search finds an episode by its number. [#3132]
 
 **Open**
 
@@ -94,6 +100,7 @@ Listeners find the book they want in seconds and see how far along they are in e
 [#1543]: https://github.com/PaulWoitaschek/Voice/discussions/1543
 [#1748]: https://github.com/PaulWoitaschek/Voice/discussions/1748
 [#2303]: https://github.com/PaulWoitaschek/Voice/discussions/2303
+[#3132]: https://github.com/PaulWoitaschek/Voice/issues/3132
 [#2826]: https://github.com/PaulWoitaschek/Voice/discussions/2826
 [#2856]: https://github.com/PaulWoitaschek/Voice/discussions/2856
 [#3397]: https://github.com/PaulWoitaschek/Voice/discussions/3397

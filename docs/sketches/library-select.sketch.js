@@ -3,6 +3,7 @@ const { x, y } = p;
 
 icon.close(x + 34, y + 50);
 text(x + 62, y + 56, '4 selected', { size: 18, weight: 700 });
+const selectAll = text(x + 340, y + 56, 'Select all', { size: 14, weight: 700, anchor: 'end' });
 
 const header = text(x + 20, y + 120, 'Not started yet', { size: 20 });
 roundRect(header.x + header.width + 10, y + 103, 34, 22, 11, { stroke: GREY });
@@ -35,8 +36,11 @@ roundRect(x + 30, y + 676, 300, 56, 28, { ...HATCH, fill: '#d0d0d0', hachureGap:
 note(20, y + 90, ['Select in the book', 'actions, then tap more.']);
 arrow([[236, y + 80], [270, y + 62], [x + 16, y + 54]]);
 
-note(20, y + 300, ['Parts follow', 'the titles.']);
-arrow([[140, y + 330], [220, y + 360], [x + 10, rows[2] + 40]]);
+note(20, y + 300, ['In the order of', 'their file names,', '2 before 10.']);
+arrow([[200, y + 350], [240, y + 370], [x + 10, rows[2] + 40]]);
+
+note(x + 400, y + 30, ['Everything shown,', 'like all results', 'of a search.']);
+arrow([[x + 396, y + 50], [x + 370, y + 40], [selectAll.x + selectAll.width + 8, selectAll.y + 6]]);
 
 note(x + 400, y + 560, ['Put them in one series,', 'set the author or hide', 'them, all at once.']);
 arrow([[x + 396, y + 640], [x + 372, y + 680], [x + 340, y + 700]]);
