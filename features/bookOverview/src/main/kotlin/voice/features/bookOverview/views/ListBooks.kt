@@ -89,6 +89,8 @@ internal fun ListBookRow(
                 modifier = Modifier
                   .weight(1F)
                   .padding(end = 12.dp),
+                gapSize = 0.dp,
+                drawStopIndicator = {},
               )
             }
             Text(
