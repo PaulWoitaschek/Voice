@@ -260,7 +260,6 @@
     <string name="history.event.sleep_timer_ended">انتهاء مؤقت النوم</string>
     <string name="history.event.sleep_timer_on">تفعيل مؤقت النوم</string>
     <string name="history.location.chapter">فصل %1$d · %2$s</string>
-    <string name="history.source.app">من التطبيق</string>
     <string name="history.source.audio_focus">مقاطعة</string>
     <string name="history.source.bluetooth">جهاز بلوتوث</string>
     <string name="history.source.car">السيارة</string>
@@ -268,8 +267,6 @@
     <string name="history.source.notification">الإشعار</string>
     <string name="history.source.other_app">تطبيق آخر</string>
     <string name="history.source.other_device">جهاز آخر</string>
-    <string name="history.source.sleep_timer">مؤقت النوم</string>
-    <string name="history.source.unknown">غير معروف</string>
     <string name="history.source.unplugged">انفصال الصوت</string>
     <string name="history.source.watch">الساعة</string>
     <string name="history.source.widget">الأداة المصغّرة</string>

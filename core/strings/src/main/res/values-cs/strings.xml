@@ -234,7 +234,6 @@
     <string name="history.event.sleep_timer_ended">Časovač spánku vypršel</string>
     <string name="history.event.sleep_timer_on">Časovač spánku zapnut</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
-    <string name="history.source.app">V aplikaci</string>
     <string name="history.source.audio_focus">Přerušeno</string>
     <string name="history.source.bluetooth">Zařízení Bluetooth</string>
     <string name="history.source.car">Auto</string>
@@ -242,8 +241,6 @@
     <string name="history.source.notification">Oznámení</string>
     <string name="history.source.other_app">Jiná aplikace</string>
     <string name="history.source.other_device">Jiné zařízení</string>
-    <string name="history.source.sleep_timer">Časovač spánku</string>
-    <string name="history.source.unknown">Neznámý</string>
     <string name="history.source.unplugged">Zvuk odpojen</string>
     <string name="history.source.watch">Hodinky</string>
     <string name="history.source.widget">Widget</string>

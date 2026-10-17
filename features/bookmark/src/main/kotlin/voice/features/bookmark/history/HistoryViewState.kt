@@ -17,7 +17,6 @@ internal data class HistoryDay(
   val sessions: List<HistorySession>,
 )
 
-/** Listening without a long pause. */
 @Immutable
 internal data class HistorySession(val rows: List<HistoryRow>) {
   val key: Long get() = rows.last().key
@@ -44,7 +43,6 @@ internal data class HistoryEvent(
   val to: HistoryPlace? = null,
 ) : HistoryRow
 
-/** Taps on rewind or fast forward and small seeks in a row, all in the same direction. */
 @Immutable
 internal data class HistorySkips(
   override val key: Long,
@@ -54,7 +52,6 @@ internal data class HistorySkips(
   val back: Boolean,
 ) : HistoryRow
 
-/** A call or a navigation prompt that held playback back until it was over. */
 @Immutable
 internal data class HistoryInterruption(
   override val key: Long,

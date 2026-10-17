@@ -221,7 +221,6 @@
     <string name="history.event.sleep_timer_ended">Minuterie de mise en veille terminée</string>
     <string name="history.event.sleep_timer_on">Minuterie de mise en veille activée</string>
     <string name="history.location.chapter">Chap. %1$d · %2$s</string>
-    <string name="history.source.app">Dans l\'application</string>
     <string name="history.source.audio_focus">Interruption</string>
     <string name="history.source.bluetooth">Appareil Bluetooth</string>
     <string name="history.source.car">Voiture</string>
@@ -229,8 +228,6 @@
     <string name="history.source.notification">Notification</string>
     <string name="history.source.other_app">Autre application</string>
     <string name="history.source.other_device">Autre appareil</string>
-    <string name="history.source.sleep_timer">Minuterie de mise en veille</string>
-    <string name="history.source.unknown">Inconnu</string>
     <string name="history.source.unplugged">Audio déconnecté</string>
     <string name="history.source.watch">Montre</string>
     <string name="history.source.widget">Widget</string>

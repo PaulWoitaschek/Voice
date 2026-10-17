@@ -221,7 +221,6 @@
     <string name="history.event.sleep_timer_ended">Timer sospensione scaduto</string>
     <string name="history.event.sleep_timer_on">Timer sospensione attivato</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.source.app">Nell\'app</string>
     <string name="history.source.audio_focus">Interruzione</string>
     <string name="history.source.bluetooth">Dispositivo Bluetooth</string>
     <string name="history.source.car">Auto</string>
@@ -229,8 +228,6 @@
     <string name="history.source.notification">Notifica</string>
     <string name="history.source.other_app">Un\'altra app</string>
     <string name="history.source.other_device">Un altro dispositivo</string>
-    <string name="history.source.sleep_timer">Timer sospensione</string>
-    <string name="history.source.unknown">Sconosciuto</string>
     <string name="history.source.unplugged">Audio scollegato</string>
     <string name="history.source.watch">Orologio</string>
     <string name="history.source.widget">Widget</string>

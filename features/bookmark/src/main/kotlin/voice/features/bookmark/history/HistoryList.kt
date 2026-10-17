@@ -45,8 +45,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -141,6 +143,7 @@ private fun Session(
         TimelineRow(
           row = row,
           time = times[index],
+          timeStyle = timeStyle,
           timeWidth = timeWidth,
           above = if (newer == null) Line.None else line(newer.playingBefore),
           below = if (index == rows.lastIndex) Line.None else line(row.playingBefore),
@@ -159,6 +162,7 @@ private fun line(playing: Boolean) = if (playing) Line.Playing else Line.Paused
 private fun TimelineRow(
   row: HistoryRow,
   time: String,
+  timeStyle: TextStyle,
   timeWidth: Dp,
   above: Line,
   below: Line,
@@ -189,7 +193,7 @@ private fun TimelineRow(
     ) {
       Text(
         text = time,
-        style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
+        style = timeStyle,
         color = colors.onSurfaceVariant,
       )
     }
@@ -227,7 +231,6 @@ private fun TimelineRow(
   }
 }
 
-/** Draws the line through the row, solid where the book played and dotted where it was paused. */
 private fun Modifier.timeline(
   x: Dp,
   nodeSize: Dp,
@@ -289,7 +292,6 @@ private fun EventNode(type: Type) {
   }
 }
 
-/** Every place is a way back to it. For a jump, both ends are. */
 @Composable
 private fun Places(
   event: HistoryEvent,
@@ -311,6 +313,7 @@ private fun Places(
           text = if (LocalLayoutDirection.current == LayoutDirection.Rtl) "←" else "→",
           style = MaterialTheme.typography.bodyMedium,
           color = MaterialTheme.colorScheme.onSurfaceVariant,
+          modifier = Modifier.clearAndSetSemantics {},
         )
         PlaceButton(to, onGoTo)
       }
@@ -363,13 +366,9 @@ private fun eventText(event: HistoryEvent): String {
       Type.Seek, Type.SkipBack, Type.SkipForward -> R.string.history_event_moved
     },
   )
-  val showSource = when (event.source) {
-    Source.App, Source.Unknown, Source.SleepTimer -> false
-    // playing on after a call isn't an interruption, it's the end of one
-    Source.AudioFocus -> event.type != Type.Play
-    else -> true
-  }
-  return if (showSource) "$text · ${sourceLabel(event.source)}" else text
+  // playing on after a call isn't an interruption, it's the end of one
+  val source = if (event.source == Source.AudioFocus && event.type == Type.Play) null else sourceLabel(event.source)
+  return if (source != null) "$text · $source" else text
 }
 
 @Composable
@@ -383,9 +382,9 @@ private fun locationText(location: HistoryLocation): String {
 }
 
 @Composable
-private fun sourceLabel(source: Source): String = stringResource(
+private fun sourceLabel(source: Source): String? = stringResource(
   when (source) {
-    Source.App -> R.string.history_source_app
+    Source.App, Source.Unknown, Source.SleepTimer -> return null
     Source.Widget -> R.string.history_source_widget
     Source.Notification -> R.string.history_source_notification
     Source.Headset -> R.string.history_source_headset
@@ -395,8 +394,6 @@ private fun sourceLabel(source: Source): String = stringResource(
     Source.OtherApp -> R.string.history_source_other_app
     Source.AudioFocus -> R.string.history_source_audio_focus
     Source.Unplugged -> R.string.history_source_unplugged
-    Source.SleepTimer -> R.string.history_source_sleep_timer
-    Source.Unknown -> R.string.history_source_unknown
     Source.OtherDevice -> R.string.history_source_other_device
   },
 )

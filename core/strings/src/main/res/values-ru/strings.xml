@@ -234,7 +234,6 @@
     <string name="history.event.sleep_timer_ended">Таймер сна сработал</string>
     <string name="history.event.sleep_timer_on">Таймер сна включён</string>
     <string name="history.location.chapter">Гл. %1$d · %2$s</string>
-    <string name="history.source.app">В приложении</string>
     <string name="history.source.audio_focus">Прервано</string>
     <string name="history.source.bluetooth">Bluetooth-устройство</string>
     <string name="history.source.car">Автомобиль</string>
@@ -242,8 +241,6 @@
     <string name="history.source.notification">Уведомление</string>
     <string name="history.source.other_app">Другое приложение</string>
     <string name="history.source.other_device">Другое устройство</string>
-    <string name="history.source.sleep_timer">Таймер сна</string>
-    <string name="history.source.unknown">Неизвестно</string>
     <string name="history.source.unplugged">Аудиоустройство отключено</string>
     <string name="history.source.watch">Часы</string>
     <string name="history.source.widget">Виджет</string>

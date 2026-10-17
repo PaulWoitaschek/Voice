@@ -195,7 +195,6 @@
     <string name="history.event.sleep_timer_ended">Pengatur waktu tidur berakhir</string>
     <string name="history.event.sleep_timer_on">Pengatur waktu tidur diaktifkan</string>
     <string name="history.location.chapter">Bab %1$d · %2$s</string>
-    <string name="history.source.app">Di aplikasi</string>
     <string name="history.source.audio_focus">Terinterupsi</string>
     <string name="history.source.bluetooth">Perangkat Bluetooth</string>
     <string name="history.source.car">Mobil</string>
@@ -203,8 +202,6 @@
     <string name="history.source.notification">Notifikasi</string>
     <string name="history.source.other_app">Aplikasi lain</string>
     <string name="history.source.other_device">Perangkat lain</string>
-    <string name="history.source.sleep_timer">Pengatur waktu tidur</string>
-    <string name="history.source.unknown">Tidak diketahui</string>
     <string name="history.source.unplugged">Audio terputus</string>
     <string name="history.source.watch">Jam tangan</string>
     <string name="history.source.widget">Widget</string>

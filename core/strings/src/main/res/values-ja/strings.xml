@@ -195,7 +195,6 @@
     <string name="history.event.sleep_timer_ended">スリープタイマー終了</string>
     <string name="history.event.sleep_timer_on">スリープタイマー開始</string>
     <string name="history.location.chapter">第%1$d章 · %2$s</string>
-    <string name="history.source.app">アプリ内</string>
     <string name="history.source.audio_focus">割り込み</string>
     <string name="history.source.bluetooth">Bluetooth デバイス</string>
     <string name="history.source.car">車</string>
@@ -203,8 +202,6 @@
     <string name="history.source.notification">通知</string>
     <string name="history.source.other_app">他のアプリ</string>
     <string name="history.source.other_device">他のデバイス</string>
-    <string name="history.source.sleep_timer">スリープタイマー</string>
-    <string name="history.source.unknown">不明</string>
     <string name="history.source.unplugged">オーディオ切断</string>
     <string name="history.source.watch">スマートウォッチ</string>
     <string name="history.source.widget">ウィジェット</string>

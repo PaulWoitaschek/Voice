@@ -221,7 +221,6 @@
     <string name="history.event.sleep_timer_ended">Temporitzador de repòs acabat</string>
     <string name="history.event.sleep_timer_on">Temporitzador de repòs activat</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.source.app">A l\'aplicació</string>
     <string name="history.source.audio_focus">Interromput</string>
     <string name="history.source.bluetooth">Dispositiu Bluetooth</string>
     <string name="history.source.car">Cotxe</string>
@@ -229,8 +228,6 @@
     <string name="history.source.notification">Notificació</string>
     <string name="history.source.other_app">Una altra aplicació</string>
     <string name="history.source.other_device">Un altre dispositiu</string>
-    <string name="history.source.sleep_timer">Temporitzador de repòs</string>
-    <string name="history.source.unknown">Desconegut</string>
     <string name="history.source.unplugged">Àudio desconnectat</string>
     <string name="history.source.watch">Rellotge</string>
     <string name="history.source.widget">Giny</string>

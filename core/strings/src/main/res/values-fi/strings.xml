@@ -208,7 +208,6 @@
     <string name="history.event.sleep_timer_ended">Uniajastin päättyi</string>
     <string name="history.event.sleep_timer_on">Uniajastin asetettu</string>
     <string name="history.location.chapter">Luku %1$d · %2$s</string>
-    <string name="history.source.app">Sovelluksessa</string>
     <string name="history.source.audio_focus">Keskeytetty</string>
     <string name="history.source.bluetooth">Bluetooth-laite</string>
     <string name="history.source.car">Auto</string>
@@ -216,8 +215,6 @@
     <string name="history.source.notification">Ilmoitus</string>
     <string name="history.source.other_app">Toinen sovellus</string>
     <string name="history.source.other_device">Toinen laite</string>
-    <string name="history.source.sleep_timer">Uniajastin</string>
-    <string name="history.source.unknown">Tuntematon</string>
     <string name="history.source.unplugged">Ääniyhteys katkesi</string>
     <string name="history.source.watch">Kello</string>
     <string name="history.source.widget">Widget</string>

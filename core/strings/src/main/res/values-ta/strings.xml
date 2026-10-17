@@ -208,7 +208,6 @@
     <string name="history.event.sleep_timer_ended">ஸ்லீப் டைமர் முடிந்தது</string>
     <string name="history.event.sleep_timer_on">ஸ்லீப் டைமர் தொடங்கியது</string>
     <string name="history.location.chapter">அத். %1$d · %2$s</string>
-    <string name="history.source.app">பயன்பாட்டில்</string>
     <string name="history.source.audio_focus">குறுக்கிடப்பட்டது</string>
     <string name="history.source.bluetooth">புளூடூத் சாதனம்</string>
     <string name="history.source.car">கார்</string>
@@ -216,8 +215,6 @@
     <string name="history.source.notification">அறிவிப்பு</string>
     <string name="history.source.other_app">மற்றொரு பயன்பாடு</string>
     <string name="history.source.other_device">மற்றொரு சாதனம்</string>
-    <string name="history.source.sleep_timer">ஸ்லீப் டைமர்</string>
-    <string name="history.source.unknown">தெரியவில்லை</string>
     <string name="history.source.unplugged">ஆடியோ துண்டிக்கப்பட்டது</string>
     <string name="history.source.watch">கைக்கடிகாரம்</string>
     <string name="history.source.widget">விட்ஜெட்</string>

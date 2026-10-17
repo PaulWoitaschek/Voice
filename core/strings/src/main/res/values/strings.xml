@@ -343,7 +343,6 @@
     <!-- A row in the listening history: the sleep timer was turned on. -->
     <string name="history.event.sleep_timer_on">Sleep timer on</string>
     <string name="history.location.chapter">Ch. %1$d · %2$s</string>
-    <string name="history.source.app">In the app</string>
     <string name="history.source.audio_focus">Interrupted</string>
     <string name="history.source.bluetooth">Bluetooth device</string>
     <string name="history.source.car">Car</string>
@@ -352,8 +351,6 @@
     <string name="history.source.other_app">Another app</string>
     <!-- Where a history event came from: the listening position was taken over from another device, through the Audiobookshelf server or a synced library folder. -->
     <string name="history.source.other_device">Another device</string>
-    <string name="history.source.sleep_timer">Sleep timer</string>
-    <string name="history.source.unknown">Unknown</string>
     <string name="history.source.unplugged">Audio disconnected</string>
     <string name="history.source.watch">Watch</string>
     <string name="history.source.widget">Widget</string>

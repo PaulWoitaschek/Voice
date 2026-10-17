@@ -208,7 +208,6 @@
     <string name="history.event.sleep_timer_ended">پایان تایمر خواب</string>
     <string name="history.event.sleep_timer_on">شروع تایمر خواب</string>
     <string name="history.location.chapter">فصل %1$d · %2$s</string>
-    <string name="history.source.app">درون برنامه</string>
     <string name="history.source.audio_focus">وقفه</string>
     <string name="history.source.bluetooth">دستگاه بلوتوث</string>
     <string name="history.source.car">خودرو</string>
@@ -216,8 +215,6 @@
     <string name="history.source.notification">اعلان</string>
     <string name="history.source.other_app">برنامهٔ دیگر</string>
     <string name="history.source.other_device">دستگاه دیگر</string>
-    <string name="history.source.sleep_timer">تایمر خواب</string>
-    <string name="history.source.unknown">نامشخص</string>
     <string name="history.source.unplugged">اتصال صدا قطع شد</string>
     <string name="history.source.watch">ساعت هوشمند</string>
     <string name="history.source.widget">ویجت</string>

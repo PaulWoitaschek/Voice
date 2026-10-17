@@ -221,7 +221,6 @@
     <string name="history.event.sleep_timer_ended">סיום טיימר-השינה</string>
     <string name="history.event.sleep_timer_on">הפעלת טיימר-השינה</string>
     <string name="history.location.chapter">פרק %1$d · %2$s</string>
-    <string name="history.source.app">באפליקציה</string>
     <string name="history.source.audio_focus">הפרעה</string>
     <string name="history.source.bluetooth">מכשיר Bluetooth</string>
     <string name="history.source.car">רכב</string>
@@ -229,8 +228,6 @@
     <string name="history.source.notification">התראה</string>
     <string name="history.source.other_app">אפליקציה אחרת</string>
     <string name="history.source.other_device">מכשיר אחר</string>
-    <string name="history.source.sleep_timer">טיימר-שינה</string>
-    <string name="history.source.unknown">לא ידוע</string>
     <string name="history.source.unplugged">השמע נותק</string>
     <string name="history.source.watch">שעון</string>
     <string name="history.source.widget">ווידג׳ט</string>
