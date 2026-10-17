@@ -241,6 +241,9 @@
     <string name="library.category.not_started.title">Непрослушанные</string>
     <string name="library.continue_listening">Продолжить прослушивание</string>
     <string name="library.empty.add_first_book">Давайте выберем папку с аудиокнигами!</string>
+    <string name="library.empty.title">Аудиокниги не найдены</string>
+    <string name="library.empty.message">Voice не находит аудиокниг в ваших папках. Проверьте, на месте ли файлы, или добавьте папку.</string>
+    <string name="library.empty.action">Показать папки</string>
     <string name="library.folders.title">Папки с аудиокнигами</string>
     <string name="library.folders.moved.dialog.title">Папки аудиокниг перенесены</string>
     <string name="library.folders.moved.dialog.message">Теперь папками аудиокниг можно управлять в настройках.</string>

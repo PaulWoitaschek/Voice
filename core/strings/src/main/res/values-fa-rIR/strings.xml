@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">هنوز شروع نشده</string>
     <string name="library.continue_listening">ادامهٔ گوش دادن</string>
     <string name="library.empty.add_first_book">پوشه کتاب صوتی خود را اضافه کنید تا بتوانید شروع به گوش دادن کنید!</string>
+    <string name="library.empty.title">هیچ کتاب صوتی‌ای پیدا نشد</string>
+    <string name="library.empty.message">در پوشه‌های شما، Voice هیچ کتاب صوتی‌ای پیدا نمی‌کند. مطمئن شوید فایل‌ها هنوز سر جایشان هستند، یا یک پوشه اضافه کنید.</string>
+    <string name="library.empty.action">نمایش پوشه‌ها</string>
     <string name="library.folders.title">پوشه‌های کتاب صوتی</string>
     <string name="library.folders.moved.dialog.title">پوشه‌های کتاب صوتی منتقل شدند</string>
     <string name="library.folders.moved.dialog.message">اکنون می‌توانید پوشه‌های کتاب صوتی را در تنظیمات مدیریت کنید.</string>

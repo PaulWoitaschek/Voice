@@ -112,6 +112,7 @@ class SettingsViewModel(
     val analyticsEnabled = remember { analyticsConsentStore.data }.collectAsState(initial = null).value
     // reading the folders and their names asks other processes, so that's kept off the main thread
     val folderNames = remember { folderNames() }.collectAsState(initial = null, context = dispatcherProvider.io).value
+    val foldersWithoutAccess = remember { foldersWithoutAccess() }.collectAsState(initial = null, context = dispatcherProvider.io).value
     val showDeveloperMenu = remember { developerMenuUnlockedStore.data }.collectAsState(initial = null).value
     val showSupportDevelopment = remember { supportDevelopmentFeatureFlag.flow.map { it.value } }.collectAsState(initial = null).value
     val supporterStatus = remember { supporterStatusStore.data }.collectAsState(initial = null).value
@@ -134,6 +135,7 @@ class SettingsViewModel(
       autoSleepTimer == null ||
       analyticsEnabled == null ||
       folderNames == null ||
+      foldersWithoutAccess == null ||
       showDeveloperMenu == null ||
       showSupportDevelopment == null ||
       supporterStatus == null ||
@@ -170,6 +172,7 @@ class SettingsViewModel(
         YearMonth.from(Instant.ofEpochMilli(it).atZone(clock.zone))
       },
       folderNames = folderNames,
+      foldersWithoutAccess = foldersWithoutAccess,
       audiobookshelfServer = audiobookshelfServer.name,
       // a connected server stays reachable, so it can be signed out of
       showAudiobookshelf = audiobookshelfEnabled || audiobookshelfServer.name != null,
@@ -188,6 +191,13 @@ class SettingsViewModel(
         .map { it.documentFile.nameWithoutExtension() }
         .sortedWith(String.CASE_INSENSITIVE_ORDER)
     }
+  }
+
+  private fun foldersWithoutAccess(): Flow<Boolean> {
+    if (kioskModeFeatureFlag.get()) {
+      return flowOf(false)
+    }
+    return audiobookFolders.withoutAccess().map { folders -> folders.values.any { it.isNotEmpty() } }
   }
 
   override fun close() {

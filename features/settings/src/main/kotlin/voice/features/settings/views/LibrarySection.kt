@@ -30,6 +30,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LocalContentColor
@@ -58,15 +59,19 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import voice.core.ui.AttentionBadge
 import voice.core.ui.CheckBadge
 import voice.core.ui.ShapedIcon
+import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
 @Composable
 internal fun LibrarySection(
   folderNames: List<String>,
+  foldersWithoutAccess: Boolean,
   audiobookshelfServer: String?,
   showAudiobookshelf: Boolean,
   useGrid: Boolean,
@@ -88,12 +93,20 @@ internal fun LibrarySection(
       title = stringResource(StringsR.string.library_folders_title),
       onClick = onFoldersClick,
       leading = {
-        ShapedIcon(
-          icon = VoiceIcons.Folder,
-          shape = MaterialShapes.Cookie6Sided,
-          containerColor = MaterialTheme.colorScheme.tertiary,
-          contentColor = MaterialTheme.colorScheme.onTertiary,
-        )
+        BadgedBox(
+          badge = {
+            if (foldersWithoutAccess) {
+              AttentionBadge(stringResource(StringsR.string.library_folders_no_access_card_title))
+            }
+          },
+        ) {
+          ShapedIcon(
+            icon = VoiceIcons.Folder,
+            shape = MaterialShapes.Cookie6Sided,
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            contentColor = MaterialTheme.colorScheme.onTertiary,
+          )
+        }
       },
       summary = { FolderNames(folderNames) },
     )
@@ -380,4 +393,21 @@ private fun AudiobookshelfRow(
       }
     },
   )
+}
+
+@Preview
+@Composable
+private fun LibrarySectionFoldersWithoutAccessPreview() {
+  VoiceTheme {
+    LibrarySection(
+      folderNames = listOf("Audiobooks"),
+      foldersWithoutAccess = true,
+      audiobookshelfServer = null,
+      showAudiobookshelf = false,
+      useGrid = false,
+      onFoldersClick = {},
+      onAudiobookshelfClick = {},
+      onUseGridChange = {},
+    )
+  }
 }

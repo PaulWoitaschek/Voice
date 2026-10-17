@@ -21,7 +21,10 @@ import voice.core.strings.R as StringsR
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-internal fun FolderAccessCard(
+internal fun LibraryCard(
+  title: String,
+  message: String,
+  action: String,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -31,15 +34,12 @@ internal fun FolderAccessCard(
       .fillMaxWidth(),
   ) {
     Column(Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
-      Text(
-        text = stringResource(StringsR.string.library_folders_no_access_card_title),
-        style = MaterialTheme.typography.titleLarge,
-      )
+      Text(text = title, style = MaterialTheme.typography.titleLarge)
       Spacer(Modifier.size(4.dp))
-      Text(text = stringResource(StringsR.string.library_folders_no_access_card_message))
+      Text(text = message)
       Spacer(Modifier.size(16.dp))
       Button(onClick = onClick, shapes = ButtonDefaults.shapes()) {
-        Text(text = stringResource(StringsR.string.library_folders_no_access_card_action))
+        Text(text = action)
       }
     }
   }
@@ -47,8 +47,13 @@ internal fun FolderAccessCard(
 
 @Composable
 @Preview
-private fun FolderAccessCardPreview() {
+private fun LibraryCardPreview() {
   VoiceTheme {
-    FolderAccessCard(onClick = {})
+    LibraryCard(
+      title = stringResource(StringsR.string.library_empty_title),
+      message = stringResource(StringsR.string.library_empty_message),
+      action = stringResource(StringsR.string.library_empty_action),
+      onClick = {},
+    )
   }
 }

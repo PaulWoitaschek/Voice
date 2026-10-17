@@ -24,6 +24,7 @@ data class SettingsViewState(
   val supporterBadge: SupporterBadge?,
   val supporterSince: YearMonth?,
   val folderNames: List<String>,
+  val foldersWithoutAccess: Boolean,
   /** The connected Audiobookshelf server, or null without one. */
   val audiobookshelfServer: String?,
   val showAudiobookshelf: Boolean,
@@ -49,6 +50,7 @@ data class SettingsViewState(
         supporterBadge = null,
         supporterSince = null,
         folderNames = listOf("Audiobooks", "Sci-Fi", "Non-Fiction"),
+        foldersWithoutAccess = false,
         audiobookshelfServer = "audiobooks.example.com",
         showAudiobookshelf = true,
       )

@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">Непочнати</string>
     <string name="library.continue_listening">Продолжи со слушање</string>
     <string name="library.empty.add_first_book">Ајде да ги додадеме вашите аудио книги за да почнете со слушање!</string>
+    <string name="library.empty.title">Не се пронајдени аудио книги</string>
+    <string name="library.empty.message">Voice не може да најде аудио книги во вашите фолдери. Проверете дали датотеките сè уште се таму или додајте фолдер.</string>
+    <string name="library.empty.action">Прикажи фолдери</string>
     <string name="library.folders.title">Фолдери со аудио книги</string>
     <string name="library.folders.moved.dialog.title">Фолдерите со аудио книги се преместени</string>
     <string name="library.folders.moved.dialog.message">Сега можете да управувате со фолдерите со аудио книги во Поставки.</string>

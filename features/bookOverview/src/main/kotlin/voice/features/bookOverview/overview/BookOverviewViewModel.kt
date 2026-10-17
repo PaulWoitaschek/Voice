@@ -170,7 +170,7 @@ class BookOverviewViewModel(
       } else {
         BookOverviewViewState.PlayButtonState.Paused
       }.takeIf { currentBookId != null },
-      showAddBookHint = if (hasStoragePermissionBug || hasFoldersWithoutAccess) {
+      showEmptyLibrary = if (hasStoragePermissionBug || hasFoldersWithoutAccess) {
         false
       } else {
         noBooks
@@ -205,7 +205,7 @@ class BookOverviewViewModel(
       ),
       currentBookId = KioskModeDemoData.currentlyPlaying.id,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
-      showAddBookHint = false,
+      showEmptyLibrary = false,
       showSearchIcon = true,
       isLoading = false,
       showStoragePermissionBugCard = false,
@@ -246,7 +246,7 @@ class BookOverviewViewModel(
     playerController.playPause()
   }
 
-  fun onFolderAccessCardClick() {
+  fun onShowFoldersClick() {
     navigator.goTo(Destination.FolderPicker)
   }
 

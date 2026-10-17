@@ -230,6 +230,9 @@
     <string name="library.category.not_started.title">Não iniciado ainda</string>
     <string name="library.continue_listening">Continuar a ouvir</string>
     <string name="library.empty.add_first_book">Vamos adicionar uma pasta de Audiolivros para começar a ouvir!</string>
+    <string name="library.empty.title">Nenhum audiolivro encontrado</string>
+    <string name="library.empty.message">O Voice não encontra nenhum audiolivro nas suas pastas. Verifique se os ficheiros ainda lá estão ou adicione uma pasta.</string>
+    <string name="library.empty.action">Mostrar pastas</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
     <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
     <string name="library.folders.moved.dialog.message">Agora pode gerir as pastas de audiolivros nas Definições.</string>

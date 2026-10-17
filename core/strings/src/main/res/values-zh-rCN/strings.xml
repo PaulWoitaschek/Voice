@@ -208,6 +208,9 @@
     <string name="library.category.not_started.title">尚未开始播放</string>
     <string name="library.continue_listening">继续收听</string>
     <string name="library.empty.add_first_book">首先添加有声书文件夹，然后就可以开始听书啦！</string>
+    <string name="library.empty.title">未找到有声书</string>
+    <string name="library.empty.message">Voice 在您的文件夹中找不到任何有声书。请检查文件是否还在原处，或添加文件夹。</string>
+    <string name="library.empty.action">查看文件夹</string>
     <string name="library.folders.title">有声书文件夹</string>
     <string name="library.folders.moved.dialog.title">有声书文件夹已移动</string>
     <string name="library.folders.moved.dialog.message">您现在可以在“设置”中管理有声书文件夹。</string>

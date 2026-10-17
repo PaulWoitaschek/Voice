@@ -230,6 +230,9 @@
     <string name="library.category.not_started.title">לא שמעתי עדיין</string>
     <string name="library.continue_listening">המשך האזנה</string>
     <string name="library.empty.add_first_book">בואו נוסיף את תיקיית הקולספר שלכם כדי שתוכלו להתחיל להאזין!</string>
+    <string name="library.empty.title">לא נמצאו קולספרים</string>
+    <string name="library.empty.message">בתיקיות שלכם לא נמצאו קולספרים. בדקו שהקבצים עדיין במקומם, או הוסיפו תיקייה.</string>
+    <string name="library.empty.action">הצגת התיקיות</string>
     <string name="library.folders.title">תיקיית קולספר</string>
     <string name="library.folders.moved.dialog.title">תיקיות ספרי השמע הועברו</string>
     <string name="library.folders.moved.dialog.message">כעת ניתן לנהל תיקיות ספרי שמע בהגדרות.</string>

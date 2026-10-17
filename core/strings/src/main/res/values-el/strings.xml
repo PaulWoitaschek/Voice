@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">Μη διαβασμένα</string>
     <string name="library.continue_listening">Συνέχεια ακρόασης</string>
     <string name="library.empty.add_first_book">Ας προσθέσουμε το φάκελο των ηχητικών βιβλίων για να αρχίσετε την ακρόαση!</string>
+    <string name="library.empty.title">Δεν βρέθηκαν ηχητικά βιβλία</string>
+    <string name="library.empty.message">Το Voice δεν βρίσκει ηχητικά βιβλία στους φακέλους σας. Ελέγξτε αν τα αρχεία βρίσκονται ακόμα εκεί ή προσθέστε έναν φάκελο.</string>
+    <string name="library.empty.action">Εμφάνιση φακέλων</string>
     <string name="library.folders.title">Φάκελοι ηχητικών βιβλίων</string>
     <string name="library.folders.moved.dialog.title">Οι φάκελοι ηχητικών βιβλίων μετακινήθηκαν</string>
     <string name="library.folders.moved.dialog.message">Μπορείτε πλέον να διαχειρίζεστε τους φακέλους ηχητικών βιβλίων στις Ρυθμίσεις.</string>

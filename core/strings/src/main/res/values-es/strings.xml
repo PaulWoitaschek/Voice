@@ -230,6 +230,9 @@
     <string name="library.category.not_started.title">Aún no comenzado</string>
     <string name="library.continue_listening">Seguir escuchando</string>
     <string name="library.empty.add_first_book">¡Agreguemos tu carpeta de audiolibros para que puedas empezar a escuchar!</string>
+    <string name="library.empty.title">No se han encontrado audiolibros</string>
+    <string name="library.empty.message">Voice no encuentra ningún audiolibro en tus carpetas. Comprueba que los archivos siguen ahí o añade una carpeta.</string>
+    <string name="library.empty.action">Mostrar carpetas</string>
     <string name="library.folders.title">Directorios de audiolibros</string>
     <string name="library.folders.moved.dialog.title">Carpetas de audiolibros trasladadas</string>
     <string name="library.folders.moved.dialog.message">Ahora puedes gestionar las carpetas de audiolibros en Ajustes.</string>

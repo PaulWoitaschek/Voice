@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">Kuulamise ootel</string>
     <string name="library.continue_listening">Jätka kuulamist</string>
     <string name="library.empty.add_first_book">Lisame nüüd üheskoos heliraamatute kausta ja sa saad alustada kuulamisega!</string>
+    <string name="library.empty.title">Heliraamatuid ei leitud</string>
+    <string name="library.empty.message">Voice ei leia sinu kaustadest ühtegi heliraamatut. Kontrolli, kas failid on veel alles, või lisa kaust.</string>
+    <string name="library.empty.action">Näita kaustu</string>
     <string name="library.folders.title">Heliraamatute kaustad</string>
     <string name="library.folders.moved.dialog.title">Audioraamatute kaustad teisaldati</string>
     <string name="library.folders.moved.dialog.message">Nüüd saad audioraamatute kaustu hallata seadetes.</string>

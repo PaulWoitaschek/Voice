@@ -230,6 +230,9 @@
     <string name="library.category.not_started.title">Cărți neascultate încă</string>
     <string name="library.continue_listening">Continuă ascultarea</string>
     <string name="library.empty.add_first_book">Adaugă directorul cu cărțile tale și poți să începi!</string>
+    <string name="library.empty.title">Nu s-au găsit cărți audio</string>
+    <string name="library.empty.message">Voice nu găsește nicio carte audio în directoarele tale. Verifică dacă fișierele mai sunt acolo sau adaugă un director.</string>
+    <string name="library.empty.action">Afișează directoarele</string>
     <string name="library.folders.title">Directoare cărți</string>
     <string name="library.folders.moved.dialog.title">Directoarele cu cărți audio s-au mutat</string>
     <string name="library.folders.moved.dialog.message">Acum poți gestiona directoarele cu cărți audio din Setări.</string>

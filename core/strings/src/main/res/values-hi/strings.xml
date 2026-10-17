@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">अभी प्रारंभ नहीं</string>
     <string name="library.continue_listening">सुनना जारी रखें</string>
     <string name="library.empty.add_first_book">चलिए आपका ऑडियोबुक फ़ोल्डर जोड़ते हैं ताकि आप सुनना शुरू कर सकें!</string>
+    <string name="library.empty.title">कोई ऑडियोबुक नहीं मिली</string>
+    <string name="library.empty.message">Voice को आपके फ़ोल्डरों में कोई ऑडियोबुक नहीं मिल रही है। देख लें कि फ़ाइलें अभी भी वहीं हैं, या कोई फ़ोल्डर जोड़ें।</string>
+    <string name="library.empty.action">फ़ोल्डर दिखाएँ</string>
     <string name="library.folders.title">ऑडियोबुक फ़ोल्डर</string>
     <string name="library.folders.moved.dialog.title">ऑडियोबुक फ़ोल्डर की जगह बदल गई</string>
     <string name="library.folders.moved.dialog.message">ऑडियोबुक फ़ोल्डर अब सेटिंग्स में मैनेज होते हैं।</string>

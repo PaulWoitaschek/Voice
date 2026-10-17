@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -295,7 +296,34 @@ class BookOverviewViewModelTest {
   }
 
   @Test
-  fun `folders without access show the card instead of the hint to add a folder`() = runTest {
+  fun `a library without books shows that no books were found`() = runTest {
+    val viewModel = viewModel()
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = true, actual = awaitItem().showEmptyLibrary)
+    }
+  }
+
+  @Test
+  fun `an empty library shows that no books were found only once scanning is done`() = runTest {
+    val scanning = MutableStateFlow(true)
+    val viewModel = viewModel(scanning = scanning)
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      testScheduler.runCurrent()
+      assertEquals(expected = false, actual = expectMostRecentItem().showEmptyLibrary)
+      scanning.value = false
+      assertEquals(expected = true, actual = awaitItem().showEmptyLibrary)
+    }
+  }
+
+  @Test
+  fun `folders without access show the card instead of the empty library`() = runTest {
     every { audiobookFolders.withoutAccess() } returns flowOf(mapOf(FolderType.Root to listOf(mockk<Uri>())))
     val viewModel = viewModel()
 
@@ -305,16 +333,16 @@ class BookOverviewViewModelTest {
       assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
       val state = awaitItem()
       assertEquals(expected = true, actual = state.showFolderAccessCard)
-      assertEquals(expected = false, actual = state.showAddBookHint)
+      assertEquals(expected = false, actual = state.showEmptyLibrary)
     }
   }
 
   @Test
-  fun `the folder access card opens the folders`() = runTest {
+  fun `show folders opens the folders`() = runTest {
     val navigator = mockk<Navigator>(relaxed = true)
     val viewModel = viewModel(navigator = navigator)
 
-    viewModel.onFolderAccessCardClick()
+    viewModel.onShowFoldersClick()
 
     verify {
       navigator.goTo(Destination.FolderPicker)
@@ -344,13 +372,14 @@ class BookOverviewViewModelTest {
     appInfoProvider: AppInfoProvider = appInfoProvider(),
     books: List<Book> = emptyList(),
     currentBookId: BookId? = null,
+    scanning: Flow<Boolean> = MutableStateFlow(false),
   ): BookOverviewViewModel {
     return BookOverviewViewModel(
       repo = mockk<BookRepository> {
         every { flow() } returns MutableStateFlow(books)
       },
       mediaScanner = mockk<MediaScanTrigger> {
-        every { scannerActive } returns MutableStateFlow(false)
+        every { scannerActive } returns scanning
         every { scan(any()) } just Runs
       },
       playStateManager = PlayStateManager(),

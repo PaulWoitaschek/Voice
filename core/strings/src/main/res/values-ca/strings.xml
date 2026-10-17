@@ -230,6 +230,9 @@
     <string name="library.category.not_started.title">Encara no s\'ha iniciat</string>
     <string name="library.continue_listening">Continua escoltant</string>
     <string name="library.empty.add_first_book">Afegiu la carpeta dels vostres audiollibres per començar a escoltar!</string>
+    <string name="library.empty.title">No s\'ha trobat cap audiollibre</string>
+    <string name="library.empty.message">Voice no troba cap audiollibre a les vostres carpetes. Comproveu que els fitxers encara hi siguin o afegiu una carpeta.</string>
+    <string name="library.empty.action">Mostra les carpetes</string>
     <string name="library.folders.title">Carpetes d\'audiollibres</string>
     <string name="library.folders.moved.dialog.title">Les carpetes d\'audiollibres han canviat de lloc</string>
     <string name="library.folders.moved.dialog.message">Ara podeu gestionar les carpetes d\'audiollibres a Configuració.</string>

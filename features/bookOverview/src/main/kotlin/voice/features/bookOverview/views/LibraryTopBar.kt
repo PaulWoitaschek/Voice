@@ -51,7 +51,7 @@ import voice.core.strings.R as StringsR
 internal fun LibraryTopBar(
   showSearch: Boolean,
   showFolderPickerIcon: Boolean,
-  showAddBookHint: Boolean,
+  showFolderAccessBadge: Boolean,
   isLoading: Boolean,
   scrollBehavior: SearchBarScrollBehavior?,
   onSearchClick: () -> Unit,
@@ -80,9 +80,9 @@ internal fun LibraryTopBar(
       },
       actions = {
         if (showFolderPickerIcon) {
-          BookFolderIcon(withHint = showAddBookHint, onClick = onBookFolderClick)
+          BookFolderIcon(onClick = onBookFolderClick)
         }
-        SettingsIcon(onSettingsClick)
+        SettingsIcon(showFolderAccessBadge = showFolderAccessBadge, onSettingsClick = onSettingsClick)
       },
       // the pill draws its own container, so it can grow into the search field
       colors = SearchBarDefaults.appBarWithSearchColors(
@@ -152,7 +152,7 @@ private fun LibraryTopBarPreview() {
     LibraryTopBar(
       showSearch = true,
       showFolderPickerIcon = true,
-      showAddBookHint = false,
+      showFolderAccessBadge = true,
       isLoading = false,
       scrollBehavior = null,
       onSearchClick = {},

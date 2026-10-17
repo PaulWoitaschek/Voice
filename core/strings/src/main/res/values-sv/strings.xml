@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">Inte påbörjade</string>
     <string name="library.continue_listening">Fortsätt lyssna</string>
     <string name="library.empty.add_first_book">Lägg till din ljudboksmapp för att börja lyssna!</string>
+    <string name="library.empty.title">Inga ljudböcker hittades</string>
+    <string name="library.empty.message">Voice hittar inga ljudböcker i dina mappar. Kontrollera att filerna finns kvar, eller lägg till en mapp.</string>
+    <string name="library.empty.action">Visa mappar</string>
     <string name="library.folders.title">Ljudboksmappar</string>
     <string name="library.folders.moved.dialog.title">Ljudboksmapparna har flyttats</string>
     <string name="library.folders.moved.dialog.message">Du kan nu hantera ljudboksmappar under Inställningar.</string>

@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">Endnu ikke startet</string>
     <string name="library.continue_listening">Lyt videre</string>
     <string name="library.empty.add_first_book">Lad os tilføje din lydbogsmappe, så du kan begynde at lytte!</string>
+    <string name="library.empty.title">Ingen lydbøger fundet</string>
+    <string name="library.empty.message">Voice kan ikke finde nogen lydbøger i dine mapper. Tjek, at filerne stadig er der, eller tilføj en mappe.</string>
+    <string name="library.empty.action">Vis mapper</string>
     <string name="library.folders.title">Lydbogsmapper</string>
     <string name="library.folders.moved.dialog.title">Lydbogsmapper er flyttet</string>
     <string name="library.folders.moved.dialog.message">Du kan nu administrere lydbogsmapper under Indstillinger.</string>

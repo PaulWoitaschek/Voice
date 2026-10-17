@@ -51,7 +51,7 @@ internal fun Library(
   onBookLongClick: (BookId) -> Unit,
   onPlayClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
-  onFolderAccessCardClick: () -> Unit,
+  onShowFoldersClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var entered by rememberSaveable { mutableStateOf(false) }
@@ -87,13 +87,25 @@ internal fun Library(
     if (viewState.showStoragePermissionBugCard) {
       val index = entranceIndex()
       item(span = { GridItemSpan(maxLineSpan) }) {
-        PermissionBugCard(onPermissionBugCardClick, Modifier.entrance(entrance, index))
+        LibraryCard(
+          title = stringResource(R.string.library_storage_permission_bug_title),
+          message = stringResource(R.string.library_storage_permission_bug_message),
+          action = stringResource(R.string.library_storage_permission_bug_action),
+          onClick = onPermissionBugCardClick,
+          modifier = Modifier.entrance(entrance, index),
+        )
       }
     }
     if (viewState.showFolderAccessCard) {
       val index = entranceIndex()
       item(span = { GridItemSpan(maxLineSpan) }) {
-        FolderAccessCard(onFolderAccessCardClick, Modifier.entrance(entrance, index))
+        LibraryCard(
+          title = stringResource(R.string.library_folders_no_access_card_title),
+          message = stringResource(R.string.library_folders_no_access_card_message),
+          action = stringResource(R.string.library_folders_no_access_card_action),
+          onClick = onShowFoldersClick,
+          modifier = Modifier.entrance(entrance, index),
+        )
       }
     }
     val greetingIndex = entranceIndex()
@@ -104,6 +116,18 @@ internal fun Library(
           .entrance(entrance, greetingIndex)
           .padding(top = 16.dp, bottom = 20.dp, start = 4.dp),
       )
+    }
+    if (viewState.showEmptyLibrary) {
+      val index = entranceIndex()
+      item(span = { GridItemSpan(maxLineSpan) }) {
+        LibraryCard(
+          title = stringResource(R.string.library_empty_title),
+          message = stringResource(R.string.library_empty_message),
+          action = stringResource(R.string.library_empty_action),
+          onClick = onShowFoldersClick,
+          modifier = Modifier.entrance(entrance, index),
+        )
+      }
     }
     if (hero != null) {
       val index = entranceIndex()

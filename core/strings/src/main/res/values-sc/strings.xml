@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">Galu no incumintzadu</string>
     <string name="library.continue_listening">Sighi a ascurtare</string>
     <string name="library.empty.add_first_book">Agiunghimus sa cartella de audiolibros tua in manera chi potzas incumintzare a ascurtare!</string>
+    <string name="library.empty.title">Nissunu audiolibru agatadu</string>
+    <string name="library.empty.message">Voice non agatat perunu audiolibru in sas cartellas tuas. Controlla si sos documentos bi sunt galu o agiunghe una cartella.</string>
+    <string name="library.empty.action">Mustra sas cartellas</string>
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
     <string name="library.folders.moved.dialog.title">Cartellas de audiolibros tramudadas</string>
     <string name="library.folders.moved.dialog.message">Como podes manigiare sas cartellas de audiolibros in sas Impostatziones.</string>

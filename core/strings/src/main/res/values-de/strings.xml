@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">Neu</string>
     <string name="library.continue_listening">Weiterhören</string>
     <string name="library.empty.add_first_book">Füge Deinen Hörbuchordner hinzu, damit Du mit dem Hören beginnen kannst!</string>
+    <string name="library.empty.title">Keine Hörbücher gefunden</string>
+    <string name="library.empty.message">Voice findet in Deinen Ordnern keine Hörbücher. Prüfe, ob die Dateien noch da sind, oder füge einen Ordner hinzu.</string>
+    <string name="library.empty.action">Ordner anzeigen</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
     <string name="library.folders.moved.dialog.title">Hörbuch-Ordner verschoben</string>
     <string name="library.folders.moved.dialog.message">Du kannst Hörbuch-Ordner jetzt in den Einstellungen verwalten.</string>

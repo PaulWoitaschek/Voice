@@ -230,6 +230,9 @@
     <string name="library.category.not_started.title">Pas encore commencé</string>
     <string name="library.continue_listening">Reprendre l\'écoute</string>
     <string name="library.empty.add_first_book">Ajoutons un dossier de livres audio pour commencer à les écouter !</string>
+    <string name="library.empty.title">Aucun livre audio trouvé</string>
+    <string name="library.empty.message">Voice ne trouve aucun livre audio dans vos dossiers. Vérifiez que les fichiers sont toujours là ou ajoutez un dossier.</string>
+    <string name="library.empty.action">Afficher les dossiers</string>
     <string name="library.folders.title">Dossiers de livres audio</string>
     <string name="library.folders.moved.dialog.title">Dossiers de livres audio déplacés</string>
     <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Paramètres.</string>

@@ -94,7 +94,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onPlayButtonClick = bookOverviewViewModel::playPause,
     onSearchClick = bookOverviewViewModel::onSearchClick,
     onPermissionBugCardClick = bookOverviewViewModel::onPermissionBugCardClick,
-    onFolderAccessCardClick = bookOverviewViewModel::onFolderAccessCardClick,
+    onShowFoldersClick = bookOverviewViewModel::onShowFoldersClick,
     modifier = modifier,
   )
 }
@@ -110,7 +110,7 @@ internal fun BookOverview(
   onPlayButtonClick: () -> Unit,
   onSearchClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
-  onFolderAccessCardClick: () -> Unit,
+  onShowFoldersClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val scrollBehavior = SearchBarDefaults.enterAlwaysSearchBarScrollBehavior()
@@ -121,7 +121,7 @@ internal fun BookOverview(
       LibraryTopBar(
         showSearch = viewState.showSearchIcon,
         showFolderPickerIcon = viewState.showFolderPickerIcon,
-        showAddBookHint = viewState.showAddBookHint,
+        showFolderAccessBadge = viewState.showFolderAccessCard,
         isLoading = viewState.isLoading,
         scrollBehavior = scrollBehavior,
         onSearchClick = onSearchClick,
@@ -153,7 +153,7 @@ internal fun BookOverview(
       onBookLongClick = onBookLongClick,
       onPlayClick = onPlayButtonClick,
       onPermissionBugCardClick = onPermissionBugCardClick,
-      onFolderAccessCardClick = onFolderAccessCardClick,
+      onShowFoldersClick = onShowFoldersClick,
       modifier = Modifier
         .padding(contentPadding)
         .consumeWindowInsets(contentPadding),
@@ -230,7 +230,7 @@ fun BookOverviewPreview(
       onPlayButtonClick = {},
       onSearchClick = {},
       onPermissionBugCardClick = {},
-      onFolderAccessCardClick = {},
+      onShowFoldersClick = {},
     )
   }
 }
@@ -271,13 +271,23 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       ),
       layoutMode = BookOverviewLayoutMode.List,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
-      showAddBookHint = false,
+      showEmptyLibrary = false,
       showSearchIcon = true,
       isLoading = true,
       showStoragePermissionBugCard = false,
       showFolderAccessCard = false,
       showFolderPickerIcon = true,
       dialog = null,
+    ),
+    BookOverviewViewState.Loading.copy(
+      isLoading = false,
+      showEmptyLibrary = true,
+      showFolderPickerIcon = false,
+    ),
+    BookOverviewViewState.Loading.copy(
+      isLoading = false,
+      showFolderAccessCard = true,
+      showFolderPickerIcon = false,
     ),
   )
 }

@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">Ei vielä aloitettu</string>
     <string name="library.continue_listening">Jatka kuuntelua</string>
     <string name="library.empty.add_first_book">Lisätään äänikirjakansiosi jotta voit aloittaa kuuntelemisen!</string>
+    <string name="library.empty.title">Äänikirjoja ei löytynyt</string>
+    <string name="library.empty.message">Voice ei löydä kansioistasi yhtään äänikirjaa. Tarkista, että tiedostot ovat yhä paikoillaan, tai lisää kansio.</string>
+    <string name="library.empty.action">Näytä kansiot</string>
     <string name="library.folders.title">Äänikirjakansiot</string>
     <string name="library.folders.moved.dialog.title">Äänikirjakansiot siirretty</string>
     <string name="library.folders.moved.dialog.message">Voit nyt hallita äänikirjakansioita asetuksissa.</string>

@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">இன்னும் தொடங்கப்படவில்லை</string>
     <string name="library.continue_listening">தொடர்ந்து கேளுங்கள்</string>
     <string name="library.empty.add_first_book">உங்கள் ஆடியோபுக் கோப்புறையைச் சேர்ப்போம், எனவே நீங்கள் கேட்கத் தொடங்கலாம்!</string>
+    <string name="library.empty.title">ஆடியோபுக்குகள் எதுவும் கிடைக்கவில்லை</string>
+    <string name="library.empty.message">உங்கள் கோப்புறைகளில் Voice-ஆல் எந்த ஆடியோபுக்கையும் கண்டறிய முடியவில்லை. கோப்புகள் இன்னும் அங்கே உள்ளனவா எனச் சரிபார்க்கவும், அல்லது ஒரு கோப்புறையைச் சேர்க்கவும்.</string>
+    <string name="library.empty.action">கோப்புறைகளைக் காட்டு</string>
     <string name="library.folders.title">ஆடியோபுக் கோப்புறைகள்</string>
     <string name="library.folders.moved.dialog.title">ஒலிப்புத்தகக் கோப்புறைகள் நகர்த்தப்பட்டன</string>
     <string name="library.folders.moved.dialog.message">இப்போது ஒலிப்புத்தகக் கோப்புறைகளை அமைப்புகளில் நிர்வகிக்கலாம்.</string>

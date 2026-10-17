@@ -219,6 +219,9 @@
     <string name="library.category.not_started.title">Henüz başlamadı</string>
     <string name="library.continue_listening">Dinlemeye devam et</string>
     <string name="library.empty.add_first_book">Dinlemeye başlayabilmeniz için sesli kitap dizininizi ekleyelim!</string>
+    <string name="library.empty.title">Sesli kitap bulunamadı</string>
+    <string name="library.empty.message">Voice, klasörlerinizde hiç sesli kitap bulamıyor. Dosyaların hâlâ yerinde olup olmadığını kontrol edin veya bir klasör ekleyin.</string>
+    <string name="library.empty.action">Klasörleri göster</string>
     <string name="library.folders.title">Sesli kitap dizinleri</string>
     <string name="library.folders.moved.dialog.title">Sesli kitap klasörleri taşındı</string>
     <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Ayarlar\'da yönetebilirsiniz.</string>
