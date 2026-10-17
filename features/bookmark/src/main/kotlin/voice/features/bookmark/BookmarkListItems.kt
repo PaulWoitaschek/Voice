@@ -7,8 +7,8 @@ import java.time.Instant
 import java.time.ZoneId
 
 /**
- * The bookmarks of a book, either in story order, grouped by chapter around a "You are here" row,
- * or flat with the most recently saved first.
+ * The bookmarks of a book, either flat with the most recently saved first, or in story order,
+ * grouped by chapter around a "You are here" row.
  */
 internal fun bookmarkListItems(
   index: BookIndex,

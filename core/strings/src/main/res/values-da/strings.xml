@@ -187,19 +187,27 @@
         <item quantity="one">%d lydfil</item>
         <item quantity="other">%d lydfiler</item>
     </plurals>
-    <string name="history.action.continue_from">Fortsæt fra %1$s</string>
-    <string name="history.action.continue_from.chapter">Fortsæt fra kap. %1$d · %2$s</string>
     <string name="history.empty.message">Afspilninger, pauser og spring vises her, så du altid kan finde tilbage.</string>
     <string name="history.empty.title">Intet her endnu</string>
     <string name="history.event.bookmark_jump">Gik til et bogmærke</string>
     <string name="history.event.chapter_change">Skiftede kapitel</string>
-    <string name="history.event.dozed_off">Faldt i søvn · timeren udløb</string>
+    <string name="history.event.interrupted">Afbrudt i %s</string>
     <string name="history.event.jump_back">Sprang tilbage</string>
     <string name="history.event.moved">Spolede</string>
+    <string name="history.event.paused">Satte på pause</string>
     <string name="history.event.played">Afspillede</string>
-    <string name="history.event.sleep_timer_set">Sleep-timer</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Spolede tilbage %d gang</item>
+        <item quantity="other">Spolede tilbage %d gange</item>
+    </plurals>
+    <string name="history.event.shook">Rystede for at lytte videre</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Spolede frem %d gang</item>
+        <item quantity="other">Spolede frem %d gange</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Sleep-timeren udløb</string>
+    <string name="history.event.sleep_timer_on">Startede sleep-timeren</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
-    <string name="history.source.app">I appen</string>
     <string name="history.source.audio_focus">Afbrudt</string>
     <string name="history.source.bluetooth">Bluetooth-enhed</string>
     <string name="history.source.car">Bil</string>
@@ -207,8 +215,6 @@
     <string name="history.source.notification">Notifikation</string>
     <string name="history.source.other_app">En anden app</string>
     <string name="history.source.other_device">En anden enhed</string>
-    <string name="history.source.sleep_timer">Sleep-timer</string>
-    <string name="history.source.unknown">Ukendt</string>
     <string name="history.source.unplugged">Lydenhed frakoblet</string>
     <string name="history.source.watch">Ur</string>
     <string name="history.source.widget">Widget</string>

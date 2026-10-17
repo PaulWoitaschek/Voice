@@ -50,6 +50,10 @@ class SleepTimerImpl internal constructor(
   override fun enable(mode: SleepTimerMode) {
     tracker.enabled(mode)
     disable() // cancel any active job first
+    playerController.record(
+      ListeningEvent.Type.SleepTimerStarted,
+      if (mode == SleepTimerMode.TimedWithDefault) ListeningEvent.Source.SleepTimer else ListeningEvent.Source.App,
+    )
 
     job = scope.launch {
       when (mode) {

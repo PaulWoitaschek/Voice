@@ -187,19 +187,27 @@
         <item quantity="one">%d documentu àudio</item>
         <item quantity="other">%d documentos àudio</item>
     </plurals>
-    <string name="history.action.continue_from">Sighi dae %1$s</string>
-    <string name="history.action.continue_from.chapter">Sighi dae cap. %1$d · %2$s</string>
     <string name="history.empty.message">Riprodutziones, pàusas e brincos aparint inoghe, gasi podes semper torrare a agatare in ue fias.</string>
     <string name="history.empty.title">Galu nudda inoghe</string>
     <string name="history.event.bookmark_jump">Brincu a unu sinnalibru</string>
     <string name="history.event.chapter_change">Capìtulu cambiadu</string>
-    <string name="history.event.dozed_off">Su sonnu at bintu · temporizadore acabbadu</string>
+    <string name="history.event.interrupted">Interrumpidu pro %s</string>
     <string name="history.event.jump_back">Brincu in segus</string>
     <string name="history.event.moved">Positzione cambiada</string>
+    <string name="history.event.paused">Pàusa</string>
     <string name="history.event.played">Riprodutzione aviada</string>
-    <string name="history.event.sleep_timer_set">Temporizadore de suspensione</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Torradu in segus %d borta</item>
+        <item quantity="other">Torradu in segus %d bortas</item>
+    </plurals>
+    <string name="history.event.shook">Telèfonu iscutu pro sighire a ascurtare</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Brincadu in antis %d borta</item>
+        <item quantity="other">Brincadu in antis %d bortas</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Temporizadore de suspensione acabbadu</string>
+    <string name="history.event.sleep_timer_on">Temporizadore de suspensione ativadu</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.source.app">In s\'aplicatzione</string>
     <string name="history.source.audio_focus">Interrumpidu</string>
     <string name="history.source.bluetooth">Dispositivu Bluetooth</string>
     <string name="history.source.car">Màchina</string>
@@ -207,8 +215,6 @@
     <string name="history.source.notification">Notìfica</string>
     <string name="history.source.other_app">Àtera aplicatzione</string>
     <string name="history.source.other_device">Àteru dispositivu</string>
-    <string name="history.source.sleep_timer">Temporizadore de suspensione</string>
-    <string name="history.source.unknown">Disconnotu</string>
     <string name="history.source.unplugged">Àudio disconnètidu</string>
     <string name="history.source.watch">Rellògiu</string>
     <string name="history.source.widget">Widget</string>

@@ -209,19 +209,31 @@
         <item quantity="many">%d аудиофайлов</item>
         <item quantity="other">%d аудиофайлов</item>
     </plurals>
-    <string name="history.action.continue_from">Продолжить с %1$s</string>
-    <string name="history.action.continue_from.chapter">Продолжить с гл. %1$d · %2$s</string>
     <string name="history.empty.message">Воспроизведения, паузы и переходы хранятся здесь, чтобы вы всегда могли найти, где остановились.</string>
     <string name="history.empty.title">Здесь пока пусто</string>
     <string name="history.event.bookmark_jump">Переход к закладке</string>
     <string name="history.event.chapter_change">Смена главы</string>
-    <string name="history.event.dozed_off">Задремали · таймер истёк</string>
+    <string name="history.event.interrupted">Прервано на %s</string>
     <string name="history.event.jump_back">Возврат на прежнее место</string>
     <string name="history.event.moved">Сдвиг позиции</string>
+    <string name="history.event.paused">Пауза</string>
     <string name="history.event.played">Воспроизведение</string>
-    <string name="history.event.sleep_timer_set">Таймер сна</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Перемотано назад %d раз</item>
+        <item quantity="few">Перемотано назад %d раза</item>
+        <item quantity="many">Перемотано назад %d раз</item>
+        <item quantity="other">Перемотано назад %d раза</item>
+    </plurals>
+    <string name="history.event.shook">Продлено встряхиванием</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Перемотано вперёд %d раз</item>
+        <item quantity="few">Перемотано вперёд %d раза</item>
+        <item quantity="many">Перемотано вперёд %d раз</item>
+        <item quantity="other">Перемотано вперёд %d раза</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Таймер сна сработал</string>
+    <string name="history.event.sleep_timer_on">Таймер сна включён</string>
     <string name="history.location.chapter">Гл. %1$d · %2$s</string>
-    <string name="history.source.app">В приложении</string>
     <string name="history.source.audio_focus">Прервано</string>
     <string name="history.source.bluetooth">Bluetooth-устройство</string>
     <string name="history.source.car">Автомобиль</string>
@@ -229,8 +241,6 @@
     <string name="history.source.notification">Уведомление</string>
     <string name="history.source.other_app">Другое приложение</string>
     <string name="history.source.other_device">Другое устройство</string>
-    <string name="history.source.sleep_timer">Таймер сна</string>
-    <string name="history.source.unknown">Неизвестно</string>
     <string name="history.source.unplugged">Аудиоустройство отключено</string>
     <string name="history.source.watch">Часы</string>
     <string name="history.source.widget">Виджет</string>

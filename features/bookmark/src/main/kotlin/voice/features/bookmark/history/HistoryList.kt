@@ -2,53 +2,74 @@
 
 package voice.features.bookmark.history
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.strings.R
+import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
-import voice.core.ui.segmentedShape
 import voice.features.bookmark.dayLabelText
 import voice.features.bookmark.durationText
+import voice.features.bookmark.kioskModeHistoryViewState
 import voice.features.bookmark.timeText
+
+private val NodeSize = 32.dp
+private val DotSize = 8.dp
+private val LineColumnWidth = 32.dp
+private val Gap = 8.dp
+private val RowTop = 4.dp
 
 @Composable
 internal fun HistoryList(
@@ -65,7 +86,6 @@ internal fun HistoryList(
       top = contentPadding.calculateTopPadding() + 8.dp,
       bottom = contentPadding.calculateBottomPadding() + 24.dp,
     ),
-    verticalArrangement = Arrangement.spacedBy(2.dp),
   ) {
     if (viewState.days.isEmpty()) {
       item(key = "empty") {
@@ -84,274 +104,272 @@ internal fun HistoryList(
             .semantics { heading() },
         )
       }
-      itemsIndexed(
-        items = day.rows,
-        key = { _, row ->
-          when (row) {
-            is HistoryStretch -> "stretch-${row.key}"
-            is HistoryJump -> "jump-${row.key}"
-          }
-        },
-      ) { index, row ->
-        val shape = segmentedShape(index, day.rows.size)
-        when (row) {
-          is HistoryStretch -> StretchRow(
-            stretch = row,
-            shape = shape,
-            onGoTo = onGoTo,
-            modifier = Modifier.animateItem(),
-          )
-          is HistoryJump -> JumpRow(
-            jump = row,
-            shape = shape,
-            onGoTo = onGoTo,
-            modifier = Modifier.animateItem(),
-          )
-        }
+      items(day.sessions, key = { "session-${it.key}" }) { session ->
+        Session(
+          session = session,
+          onGoTo = onGoTo,
+          modifier = Modifier
+            .animateItem()
+            .padding(bottom = 8.dp),
+        )
       }
     }
   }
 }
 
 @Composable
-private fun StretchRow(
-  stretch: HistoryStretch,
-  shape: Shape,
+private fun Session(
+  session: HistorySession,
   onGoTo: (HistorySpot) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val colors = MaterialTheme.colorScheme
+  val rows = session.rows
+  val times = rows.map { timeText(it.at) }
+  val timeStyle = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum")
+  val measurer = rememberTextMeasurer()
+  val density = LocalDensity.current
+  // the line has to be straight, so every time takes the room of the widest one
+  val timeWidth = remember(times, timeStyle, density) {
+    with(density) { times.maxOf { measurer.measure(it, timeStyle).size.width }.toDp() }
+  }
   Surface(
-    shape = shape,
-    color = colors.surfaceContainerHigh,
+    shape = MaterialTheme.shapes.extraLarge,
+    color = MaterialTheme.colorScheme.surfaceContainerHigh,
     modifier = modifier.fillMaxWidth(),
   ) {
-    Row(
-      modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-      verticalAlignment = Alignment.CenterVertically,
-    ) {
-      StretchBadge(stretch.cause)
-      Spacer(Modifier.width(16.dp))
-      Column(Modifier.weight(1F)) {
-        Text(
-          text = whereText(stretch.from, stretch.to),
-          style = MaterialTheme.typography.bodyLarge.copy(fontFeatureSettings = "tnum"),
-          color = colors.onSurface,
-          maxLines = 2,
-          overflow = TextOverflow.Ellipsis,
+    Column(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
+      rows.forEachIndexed { index, row ->
+        val newer = rows.getOrNull(index - 1)
+        TimelineRow(
+          row = row,
+          time = times[index],
+          timeStyle = timeStyle,
+          timeWidth = timeWidth,
+          above = if (newer == null) Line.None else line(newer.playingBefore),
+          below = if (index == rows.lastIndex) Line.None else line(row.playingBefore),
+          onGoTo = onGoTo,
         )
-        Text(
-          text = stretchWhen(stretch),
-          style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
-          color = colors.onSurfaceVariant,
-          maxLines = 2,
-          overflow = TextOverflow.Ellipsis,
-        )
-        val cause = causeText(stretch.cause)
-        if (cause != null) {
-          Text(
-            text = cause,
-            style = MaterialTheme.typography.bodyMedium,
-            color = colors.onSurfaceVariant,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-          )
-        }
-        val goTo = stretch.goTo
-        if (goTo != null) {
-          RowAction(
-            text = goToText(goTo.location),
-            icon = null,
-            onClick = { onGoTo(goTo.spot) },
-          )
-        }
       }
     }
   }
 }
 
-/** Slimmer and quieter than a stretch, since it only connects two of them. */
+private enum class Line { None, Playing, Paused }
+
+private fun line(playing: Boolean) = if (playing) Line.Playing else Line.Paused
+
 @Composable
-private fun JumpRow(
-  jump: HistoryJump,
-  shape: Shape,
+private fun TimelineRow(
+  row: HistoryRow,
+  time: String,
+  timeStyle: TextStyle,
+  timeWidth: Dp,
+  above: Line,
+  below: Line,
   onGoTo: (HistorySpot) -> Unit,
-  modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
-  Surface(
-    shape = shape,
-    color = colors.surfaceContainer,
-    modifier = modifier.fillMaxWidth(),
-  ) {
-    Row(
-      modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-      verticalAlignment = Alignment.CenterVertically,
-    ) {
-      Box(contentAlignment = Alignment.Center, modifier = Modifier.width(40.dp)) {
-        Icon(
-          imageVector = jump.type.jumpIcon(),
-          contentDescription = null,
-          tint = colors.onSurfaceVariant,
-          modifier = Modifier.size(20.dp),
-        )
-      }
-      Spacer(Modifier.width(16.dp))
-      Column(Modifier.weight(1F)) {
-        Text(
-          text = whereText(jump.from, jump.to),
-          style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
-          color = colors.onSurface,
-          maxLines = 2,
-          overflow = TextOverflow.Ellipsis,
-        )
-        Text(
-          text = "${timeText(jump.at)} · ${jumpText(jump.type, jump.source)}",
-          style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
-          color = colors.onSurfaceVariant,
-          maxLines = 2,
-          overflow = TextOverflow.Ellipsis,
-        )
-        RowAction(
-          text = backText(jump.back.location),
-          icon = VoiceIcons.Undo,
-          onClick = { onGoTo(jump.back.spot) },
-        )
-      }
-    }
-  }
-}
-
-/** The one thing a row does, named with where it goes, so a tap never moves the position by surprise. */
-@Composable
-private fun RowAction(
-  text: String,
-  icon: ImageVector?,
-  onClick: () -> Unit,
-) {
-  TextButton(
-    onClick = onClick,
-    contentPadding = PaddingValues(horizontal = 12.dp),
-    // lines the label up with the text above, while the ripple keeps its padding
-    modifier = Modifier.offset(x = (-12).dp),
-  ) {
-    if (icon != null) {
-      Icon(
-        imageVector = icon,
-        contentDescription = null,
-        modifier = Modifier.size(18.dp),
+  val quiet = row !is HistoryEvent
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .timeline(
+        x = timeWidth + Gap + LineColumnWidth / 2,
+        nodeSize = if (quiet) DotSize else NodeSize,
+        above = above,
+        below = below,
+        playing = colors.primary,
+        paused = colors.outline,
       )
-      Spacer(Modifier.width(8.dp))
+      .padding(top = RowTop, bottom = if (quiet) RowTop else 0.dp)
+      .semantics(mergeDescendants = true) {},
+    horizontalArrangement = Arrangement.spacedBy(Gap),
+  ) {
+    Box(
+      modifier = Modifier
+        .width(timeWidth)
+        .heightIn(min = NodeSize),
+      contentAlignment = Alignment.CenterEnd,
+    ) {
+      Text(
+        text = time,
+        style = timeStyle,
+        color = colors.onSurfaceVariant,
+      )
     }
-    Text(
-      text = text,
-      style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
-      maxLines = 2,
-      overflow = TextOverflow.Ellipsis,
-    )
+    Box(
+      modifier = Modifier
+        .width(LineColumnWidth)
+        .height(NodeSize),
+      contentAlignment = Alignment.Center,
+    ) {
+      if (row is HistoryEvent) {
+        EventNode(row.type)
+      } else {
+        Box(
+          Modifier
+            .size(DotSize)
+            .background(colors.onSurfaceVariant, CircleShape),
+        )
+      }
+    }
+    Column(Modifier.weight(1F)) {
+      Box(
+        modifier = Modifier.heightIn(min = NodeSize),
+        contentAlignment = Alignment.CenterStart,
+      ) {
+        Text(
+          text = rowText(row),
+          style = if (quiet) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge,
+          color = if (quiet) colors.onSurfaceVariant else colors.onSurface,
+        )
+      }
+      if (row is HistoryEvent) {
+        Places(row, onGoTo)
+      }
+    }
   }
 }
 
-@Composable
-private fun goToText(location: HistoryLocation): String {
-  val chapterNumber = location.chapterNumber
-  return if (chapterNumber != null) {
-    stringResource(R.string.history_action_continue_from_chapter, chapterNumber, location.time)
-  } else {
-    stringResource(R.string.history_action_continue_from, location.time)
-  }
+private fun Modifier.timeline(
+  x: Dp,
+  nodeSize: Dp,
+  above: Line,
+  below: Line,
+  playing: Color,
+  paused: Color,
+): Modifier = drawBehind {
+  val lineX = if (layoutDirection == LayoutDirection.Rtl) size.width - x.toPx() else x.toPx()
+  val center = (RowTop + NodeSize / 2).toPx()
+  val radius = (nodeSize / 2).toPx()
+  segment(above, lineX, 0F, center - radius, playing, paused)
+  segment(below, lineX, center + radius, size.height, playing, paused)
+}
+
+private fun DrawScope.segment(
+  line: Line,
+  x: Float,
+  from: Float,
+  to: Float,
+  playing: Color,
+  paused: Color,
+) {
+  if (line == Line.None) return
+  val dotted = line == Line.Paused
+  drawLine(
+    color = if (dotted) paused else playing,
+    start = Offset(x, from),
+    end = Offset(x, to),
+    strokeWidth = 2.dp.toPx(),
+    cap = if (dotted) StrokeCap.Round else StrokeCap.Butt,
+    pathEffect = if (dotted) PathEffect.dashPathEffect(floatArrayOf(0.01F, 6.dp.toPx())) else null,
+  )
 }
 
 @Composable
-private fun backText(location: HistoryLocation): String {
-  val chapterNumber = location.chapterNumber
-  return if (chapterNumber != null) {
-    stringResource(R.string.playback_jump_back_chapter, chapterNumber, location.time)
-  } else {
-    stringResource(R.string.playback_jump_back, location.time)
-  }
-}
-
-@Composable
-private fun StretchBadge(cause: StretchCause) {
+private fun EventNode(type: Type) {
   val colors = MaterialTheme.colorScheme
-  val (container: Color, content: Color) = when (cause) {
-    StretchCause.SleepTimerEnded, StretchCause.SleepTimerStarted -> colors.surfaceContainerHighest to colors.onSurfaceVariant
-    is StretchCause.Jumped -> colors.secondaryContainer to colors.onSecondaryContainer
-    is StretchCause.Played -> colors.primaryContainer to colors.onPrimaryContainer
+  val (container, content) = when (type) {
+    Type.Play -> colors.primaryContainer to colors.onPrimaryContainer
+    Type.Pause -> colors.surfaceContainerHighest to colors.onSurfaceVariant
+    Type.SleepTimerSet, Type.SleepTimerStarted, Type.SleepTimerEnded, Type.SleepTimerExtended ->
+      colors.tertiaryContainer to colors.onTertiaryContainer
+    Type.Seek, Type.SkipBack, Type.SkipForward, Type.ChapterChange, Type.BookmarkJump, Type.JumpBack ->
+      colors.secondaryContainer to colors.onSecondaryContainer
   }
   Box(
     modifier = Modifier
-      .size(40.dp)
-      .background(color = container, shape = CircleShape),
+      .size(NodeSize)
+      .background(container, CircleShape),
     contentAlignment = Alignment.Center,
   ) {
     Icon(
-      imageVector = cause.icon(),
+      imageVector = type.icon(),
       contentDescription = null,
       tint = content,
-      modifier = Modifier.size(20.dp),
+      modifier = Modifier.size(18.dp),
     )
   }
 }
 
 @Composable
-private fun whereText(
-  from: HistoryLocation,
-  to: HistoryLocation?,
-): String {
-  val fromText = locationText(from)
-  if (to == null) return fromText
-  val toText = if (to.chapterNumber == from.chapterNumber) to.time else locationText(to)
-  val arrow = if (LocalLayoutDirection.current == LayoutDirection.Rtl) "←" else "→"
-  return "$fromText $arrow $toText"
-}
-
-@Composable
-private fun stretchWhen(stretch: HistoryStretch): String {
-  val end = stretch.end
-  val listened = stretch.listened
-  return if (end == null || listened == null) {
-    timeText(stretch.start)
-  } else {
-    "${timeText(stretch.start)} – ${timeText(end)} · ${durationText(listened)}"
+private fun Places(
+  event: HistoryEvent,
+  onGoTo: (HistorySpot) -> Unit,
+) {
+  FlowRow(
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    itemVerticalAlignment = Alignment.CenterVertically,
+  ) {
+    PlaceButton(event.place, onGoTo)
+    val to = event.to
+    if (to != null) {
+      // the arrow wraps with where the jump went, so a second line still reads as its end
+      Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+      ) {
+        Text(
+          text = if (LocalLayoutDirection.current == LayoutDirection.Rtl) "←" else "→",
+          style = MaterialTheme.typography.bodyMedium,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          modifier = Modifier.clearAndSetSemantics {},
+        )
+        PlaceButton(to, onGoTo)
+      }
+    }
   }
 }
 
 @Composable
-private fun causeText(cause: StretchCause): String? = when (cause) {
-  is StretchCause.Played -> if (cause.source == Source.AudioFocus) {
-    // playback going on after a call isn't interrupted, it's what follows the interruption
-    stringResource(R.string.history_event_played)
-  } else {
-    withSource(stringResource(R.string.history_event_played), cause.source)
+private fun PlaceButton(
+  place: HistoryPlace,
+  onGoTo: (HistorySpot) -> Unit,
+) {
+  val size = ButtonDefaults.ExtraSmallContainerHeight
+  FilledTonalButton(
+    onClick = { onGoTo(place.spot) },
+    contentPadding = ButtonDefaults.contentPaddingFor(size),
+    shapes = ButtonDefaults.shapesFor(size),
+    modifier = Modifier.heightIn(size),
+  ) {
+    Text(
+      text = locationText(place.location),
+      style = ButtonDefaults.textStyleFor(size).copy(fontFeatureSettings = "tnum"),
+    )
   }
-  is StretchCause.Jumped -> if (cause.hasRow) null else jumpText(cause.type, cause.source)
-  StretchCause.SleepTimerEnded -> stringResource(R.string.history_event_dozed_off)
-  StretchCause.SleepTimerStarted -> stringResource(R.string.history_event_sleep_timer_set)
 }
 
 @Composable
-private fun jumpText(
-  type: Type,
-  source: Source,
-): String = withSource(
-  stringResource(
-    when (type) {
+private fun rowText(row: HistoryRow): String = when (row) {
+  is HistoryEvent -> eventText(row)
+  is HistorySkips -> pluralStringResource(
+    if (row.back) R.plurals.history_event_rewound else R.plurals.history_event_skipped_ahead,
+    row.count,
+    row.count,
+  )
+  is HistoryInterruption -> stringResource(R.string.history_event_interrupted, durationText(row.duration))
+}
+
+@Composable
+private fun eventText(event: HistoryEvent): String {
+  val text = stringResource(
+    when (event.type) {
+      Type.Play -> R.string.history_event_played
+      Type.Pause -> R.string.history_event_paused
+      Type.SleepTimerSet, Type.SleepTimerStarted -> R.string.history_event_sleep_timer_on
+      Type.SleepTimerEnded -> R.string.history_event_sleep_timer_ended
+      Type.SleepTimerExtended -> R.string.history_event_shook
       Type.ChapterChange -> R.string.history_event_chapter_change
       Type.BookmarkJump -> R.string.history_event_bookmark_jump
       Type.JumpBack -> R.string.history_event_jump_back
-      else -> R.string.history_event_moved
+      Type.Seek, Type.SkipBack, Type.SkipForward -> R.string.history_event_moved
     },
-  ),
-  source,
-)
-
-@Composable
-private fun withSource(
-  text: String,
-  source: Source,
-): String = if (source == Source.App || source == Source.Unknown) text else "$text · ${sourceLabel(source)}"
+  )
+  // playing on after a call isn't an interruption, it's the end of one
+  val source = if (event.source == Source.AudioFocus && event.type == Type.Play) null else sourceLabel(event.source)
+  return if (source != null) "$text · $source" else text
+}
 
 @Composable
 private fun locationText(location: HistoryLocation): String {
@@ -364,9 +382,9 @@ private fun locationText(location: HistoryLocation): String {
 }
 
 @Composable
-private fun sourceLabel(source: Source): String = stringResource(
+private fun sourceLabel(source: Source): String? = stringResource(
   when (source) {
-    Source.App -> R.string.history_source_app
+    Source.App, Source.Unknown, Source.SleepTimer -> return null
     Source.Widget -> R.string.history_source_widget
     Source.Notification -> R.string.history_source_notification
     Source.Headset -> R.string.history_source_headset
@@ -376,38 +394,22 @@ private fun sourceLabel(source: Source): String = stringResource(
     Source.OtherApp -> R.string.history_source_other_app
     Source.AudioFocus -> R.string.history_source_audio_focus
     Source.Unplugged -> R.string.history_source_unplugged
-    Source.SleepTimer -> R.string.history_source_sleep_timer
-    Source.Unknown -> R.string.history_source_unknown
     Source.OtherDevice -> R.string.history_source_other_device
   },
 )
 
-private fun StretchCause.icon(): ImageVector = when (this) {
-  StretchCause.SleepTimerEnded, StretchCause.SleepTimerStarted -> VoiceIcons.Bedtime
-  is StretchCause.Jumped -> type.jumpIcon()
-  is StretchCause.Played -> if (source == Source.AudioFocus) VoiceIcons.PlayArrow else source.icon()
-}
-
-private fun Type.jumpIcon(): ImageVector = when (this) {
+private fun Type.icon(): ImageVector = when (this) {
+  Type.Play -> VoiceIcons.PlayArrow
+  Type.Pause -> VoiceIcons.Pause
+  Type.SleepTimerSet, Type.SleepTimerStarted -> VoiceIcons.Bedtime
+  Type.SleepTimerEnded -> VoiceIcons.BedtimeOff
+  Type.SleepTimerExtended -> VoiceIcons.Vibration
   Type.ChapterChange -> VoiceIcons.SkipNext
   Type.BookmarkJump -> VoiceIcons.Bookmark
   Type.JumpBack -> VoiceIcons.Undo
-  else -> VoiceIcons.SwapHoriz
-}
-
-private fun Source.icon(): ImageVector = when (this) {
-  Source.App, Source.Unknown -> VoiceIcons.PlayArrow
-  Source.Widget -> VoiceIcons.Widgets
-  Source.Notification -> VoiceIcons.Notifications
-  Source.Headset -> VoiceIcons.Headphones
-  Source.Bluetooth -> VoiceIcons.Devices
-  Source.Car -> VoiceIcons.DirectionsCar
-  Source.Watch -> VoiceIcons.Watch
-  Source.OtherApp -> VoiceIcons.Devices
-  Source.AudioFocus -> VoiceIcons.Call
-  Source.Unplugged -> VoiceIcons.Headphones
-  Source.SleepTimer -> VoiceIcons.Bedtime
-  Source.OtherDevice -> VoiceIcons.Devices
+  Type.SkipBack -> VoiceIcons.FastRewind
+  Type.SkipForward -> VoiceIcons.FastForward
+  Type.Seek -> VoiceIcons.SwapHoriz
 }
 
 @Composable
@@ -440,5 +442,18 @@ private fun HistoryEmpty(modifier: Modifier = Modifier) {
       color = colors.onSurfaceVariant,
       textAlign = TextAlign.Center,
     )
+  }
+}
+
+@Preview(heightDp = 1600)
+@Preview(heightDp = 1600, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "dark")
+@Preview(heightDp = 1600, locale = "ar", name = "rtl")
+@Preview(heightDp = 1800, fontScale = 2F, name = "font scale 2")
+@Composable
+private fun HistoryListPreview() {
+  VoiceTheme {
+    Surface {
+      HistoryList(viewState = kioskModeHistoryViewState(), contentPadding = PaddingValues(), onGoTo = {})
+    }
   }
 }

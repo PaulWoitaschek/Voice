@@ -187,19 +187,27 @@
         <item quantity="one">%d hangfájl</item>
         <item quantity="other">%d hangfájl</item>
     </plurals>
-    <string name="history.action.continue_from">Folytatás innen: %1$s</string>
-    <string name="history.action.continue_from.chapter">Folytatás innen: %1$d. fej. · %2$s</string>
     <string name="history.empty.message">A lejátszások, szünetek és ugrások itt láthatók, így mindig visszatalál.</string>
     <string name="history.empty.title">Még nincs itt semmi</string>
     <string name="history.event.bookmark_jump">Ugrás könyvjelzőhöz</string>
     <string name="history.event.chapter_change">Fejezetváltás</string>
-    <string name="history.event.dozed_off">Elaludt · az időzítő lejárt</string>
+    <string name="history.event.interrupted">Megszakítás: %s</string>
     <string name="history.event.jump_back">Visszaugrás</string>
     <string name="history.event.moved">Pozíció módosítva</string>
+    <string name="history.event.paused">Szünet</string>
     <string name="history.event.played">Lejátszás</string>
-    <string name="history.event.sleep_timer_set">Alvásidőzítő</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">%d visszatekerés</item>
+        <item quantity="other">%d visszatekerés</item>
+    </plurals>
+    <string name="history.event.shook">Megrázással meghosszabbítva</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">%d előretekerés</item>
+        <item quantity="other">%d előretekerés</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Alvásidőzítő lejárt</string>
+    <string name="history.event.sleep_timer_on">Alvásidőzítő bekapcsolva</string>
     <string name="history.location.chapter">%1$d. fej. · %2$s</string>
-    <string name="history.source.app">Az alkalmazásban</string>
     <string name="history.source.audio_focus">Megszakítva</string>
     <string name="history.source.bluetooth">Bluetooth-eszköz</string>
     <string name="history.source.car">Autó</string>
@@ -207,8 +215,6 @@
     <string name="history.source.notification">Értesítés</string>
     <string name="history.source.other_app">Másik alkalmazás</string>
     <string name="history.source.other_device">Másik eszköz</string>
-    <string name="history.source.sleep_timer">Alvásidőzítő</string>
-    <string name="history.source.unknown">Ismeretlen</string>
     <string name="history.source.unplugged">Hangkapcsolat megszakadt</string>
     <string name="history.source.watch">Óra</string>
     <string name="history.source.widget">Widget</string>

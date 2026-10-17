@@ -209,19 +209,31 @@
         <item quantity="many">%d plików audio</item>
         <item quantity="other">%d plików audio</item>
     </plurals>
-    <string name="history.action.continue_from">Kontynuuj od %1$s</string>
-    <string name="history.action.continue_from.chapter">Kontynuuj od rozdz. %1$d · %2$s</string>
     <string name="history.empty.message">Odtworzenia, pauzy i skoki są tu widoczne, więc zawsze odnajdziesz drogę powrotną.</string>
     <string name="history.empty.title">Na razie nic tu nie ma</string>
     <string name="history.event.bookmark_jump">Przejście do zakładki</string>
     <string name="history.event.chapter_change">Zmiana rozdziału</string>
-    <string name="history.event.dozed_off">Zaśnięcie · czas minął</string>
+    <string name="history.event.interrupted">Przerwa na %s</string>
     <string name="history.event.jump_back">Powrót do poprzedniego miejsca</string>
     <string name="history.event.moved">Przesunięcie</string>
+    <string name="history.event.paused">Pauza</string>
     <string name="history.event.played">Odtwarzanie</string>
-    <string name="history.event.sleep_timer_set">Wyłącznik czasowy</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Cofnięto %d raz</item>
+        <item quantity="few">Cofnięto %d razy</item>
+        <item quantity="many">Cofnięto %d razy</item>
+        <item quantity="other">Cofnięto %d razy</item>
+    </plurals>
+    <string name="history.event.shook">Potrząśnięto, by słuchać dalej</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Przewinięto do przodu %d raz</item>
+        <item quantity="few">Przewinięto do przodu %d razy</item>
+        <item quantity="many">Przewinięto do przodu %d razy</item>
+        <item quantity="other">Przewinięto do przodu %d razy</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Wyłącznik czasowy zadziałał</string>
+    <string name="history.event.sleep_timer_on">Wyłącznik czasowy włączony</string>
     <string name="history.location.chapter">Rozdz. %1$d · %2$s</string>
-    <string name="history.source.app">W aplikacji</string>
     <string name="history.source.audio_focus">Przerwane</string>
     <string name="history.source.bluetooth">Urządzenie Bluetooth</string>
     <string name="history.source.car">Samochód</string>
@@ -229,8 +241,6 @@
     <string name="history.source.notification">Powiadomienie</string>
     <string name="history.source.other_app">Inna aplikacja</string>
     <string name="history.source.other_device">Inne urządzenie</string>
-    <string name="history.source.sleep_timer">Wyłącznik czasowy</string>
-    <string name="history.source.unknown">Nieznane</string>
     <string name="history.source.unplugged">Odłączono audio</string>
     <string name="history.source.watch">Zegarek</string>
     <string name="history.source.widget">Widżet</string>

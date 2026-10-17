@@ -187,19 +187,27 @@
         <item quantity="one">%d аудио датотека</item>
         <item quantity="other">%d аудио датотеки</item>
     </plurals>
-    <string name="history.action.continue_from">Продолжи од %1$s</string>
-    <string name="history.action.continue_from.chapter">Продолжи од погл. %1$d · %2$s</string>
     <string name="history.empty.message">Пуштањата, паузите и скоковите се прикажуваат тука, за секогаш да можете да се вратите.</string>
     <string name="history.empty.title">Сè уште нема ништо</string>
     <string name="history.event.bookmark_jump">Скок до обележувач</string>
     <string name="history.event.chapter_change">Променето поглавје</string>
-    <string name="history.event.dozed_off">Задремавте · тајмерот истече</string>
+    <string name="history.event.interrupted">Прекин од %s</string>
     <string name="history.event.jump_back">Враќање на претходното место</string>
     <string name="history.event.moved">Поместено</string>
+    <string name="history.event.paused">Паузирано</string>
     <string name="history.event.played">Пуштено</string>
-    <string name="history.event.sleep_timer_set">Тајмер за спиење</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Вратено назад %d пат</item>
+        <item quantity="other">Вратено назад %d пати</item>
+    </plurals>
+    <string name="history.event.shook">Продолжено со протресување</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Премотано напред %d пат</item>
+        <item quantity="other">Премотано напред %d пати</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Тајмерот за спиење истече</string>
+    <string name="history.event.sleep_timer_on">Вклучен тајмер за спиење</string>
     <string name="history.location.chapter">Погл. %1$d · %2$s</string>
-    <string name="history.source.app">Во апликацијата</string>
     <string name="history.source.audio_focus">Прекинато</string>
     <string name="history.source.bluetooth">Bluetooth уред</string>
     <string name="history.source.car">Автомобил</string>
@@ -207,8 +215,6 @@
     <string name="history.source.notification">Известување</string>
     <string name="history.source.other_app">Друга апликација</string>
     <string name="history.source.other_device">Друг уред</string>
-    <string name="history.source.sleep_timer">Тајмер за спиење</string>
-    <string name="history.source.unknown">Непознато</string>
     <string name="history.source.unplugged">Аудио уредот е откачен</string>
     <string name="history.source.watch">Часовник</string>
     <string name="history.source.widget">Виџет</string>

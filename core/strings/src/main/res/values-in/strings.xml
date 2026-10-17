@@ -176,19 +176,25 @@
     <plurals name="folder.type.file_count">
         <item quantity="other">%d file audio</item>
     </plurals>
-    <string name="history.action.continue_from">Lanjutkan dari %1$s</string>
-    <string name="history.action.continue_from.chapter">Lanjutkan dari Bab %1$d · %2$s</string>
     <string name="history.empty.message">Pemutaran, jeda, dan lompatan muncul di sini, jadi Anda selalu bisa kembali ke posisi semula.</string>
     <string name="history.empty.title">Belum ada apa-apa</string>
     <string name="history.event.bookmark_jump">Pindah ke markah</string>
     <string name="history.event.chapter_change">Bab berganti</string>
-    <string name="history.event.dozed_off">Tertidur · pengatur waktu berakhir</string>
+    <string name="history.event.interrupted">Terinterupsi selama %s</string>
     <string name="history.event.jump_back">Kembali ke posisi sebelumnya</string>
     <string name="history.event.moved">Posisi digeser</string>
+    <string name="history.event.paused">Dijeda</string>
     <string name="history.event.played">Diputar</string>
-    <string name="history.event.sleep_timer_set">Pengatur waktu tidur</string>
+    <plurals name="history.event.rewound">
+        <item quantity="other">Dimundurkan %d kali</item>
+    </plurals>
+    <string name="history.event.shook">Ponsel digoyangkan untuk lanjut mendengarkan</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="other">Dimajukan %d kali</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Pengatur waktu tidur berakhir</string>
+    <string name="history.event.sleep_timer_on">Pengatur waktu tidur diaktifkan</string>
     <string name="history.location.chapter">Bab %1$d · %2$s</string>
-    <string name="history.source.app">Di aplikasi</string>
     <string name="history.source.audio_focus">Terinterupsi</string>
     <string name="history.source.bluetooth">Perangkat Bluetooth</string>
     <string name="history.source.car">Mobil</string>
@@ -196,8 +202,6 @@
     <string name="history.source.notification">Notifikasi</string>
     <string name="history.source.other_app">Aplikasi lain</string>
     <string name="history.source.other_device">Perangkat lain</string>
-    <string name="history.source.sleep_timer">Pengatur waktu tidur</string>
-    <string name="history.source.unknown">Tidak diketahui</string>
     <string name="history.source.unplugged">Audio terputus</string>
     <string name="history.source.watch">Jam tangan</string>
     <string name="history.source.widget">Widget</string>

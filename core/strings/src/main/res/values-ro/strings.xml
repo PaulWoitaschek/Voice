@@ -198,19 +198,29 @@
         <item quantity="few">%d fișiere audio</item>
         <item quantity="other">%d fișiere audio</item>
     </plurals>
-    <string name="history.action.continue_from">Continuă de la %1$s</string>
-    <string name="history.action.continue_from.chapter">Continuă de la cap. %1$d · %2$s</string>
     <string name="history.empty.message">Redările, pauzele și salturile apar aici, ca să găsești mereu drumul înapoi.</string>
     <string name="history.empty.title">Încă nimic aici</string>
     <string name="history.event.bookmark_jump">Salt la un semn de carte</string>
     <string name="history.event.chapter_change">Capitol schimbat</string>
-    <string name="history.event.dozed_off">Ai ațipit · timpul a expirat</string>
+    <string name="history.event.interrupted">Întrerupere de %s</string>
     <string name="history.event.jump_back">Revenire la poziția anterioară</string>
     <string name="history.event.moved">Poziție mutată</string>
+    <string name="history.event.paused">Pauză</string>
     <string name="history.event.played">Redare</string>
-    <string name="history.event.sleep_timer_set">Oprire temporizată</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">%d salt înapoi</item>
+        <item quantity="few">%d salturi înapoi</item>
+        <item quantity="other">%d de salturi înapoi</item>
+    </plurals>
+    <string name="history.event.shook">Ai scuturat telefonul ca să mai asculți</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">%d salt înainte</item>
+        <item quantity="few">%d salturi înainte</item>
+        <item quantity="other">%d de salturi înainte</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Temporizator expirat</string>
+    <string name="history.event.sleep_timer_on">Oprire temporizată activată</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.source.app">În aplicație</string>
     <string name="history.source.audio_focus">Întrerupt</string>
     <string name="history.source.bluetooth">Dispozitiv Bluetooth</string>
     <string name="history.source.car">Mașină</string>
@@ -218,8 +228,6 @@
     <string name="history.source.notification">Notificare</string>
     <string name="history.source.other_app">Altă aplicație</string>
     <string name="history.source.other_device">Alt dispozitiv</string>
-    <string name="history.source.sleep_timer">Oprire temporizată</string>
-    <string name="history.source.unknown">Necunoscut</string>
     <string name="history.source.unplugged">Audio deconectat</string>
     <string name="history.source.watch">Ceas</string>
     <string name="history.source.widget">Widget</string>

@@ -187,19 +187,27 @@
         <item quantity="one">%d ses dosyası</item>
         <item quantity="other">%d ses dosyası</item>
     </plurals>
-    <string name="history.action.continue_from">%1$s konumundan devam et</string>
-    <string name="history.action.continue_from.chapter">Böl. %1$d · %2$s konumundan devam et</string>
     <string name="history.empty.message">Oynatma, duraklatma ve atlamalar burada görünür, böylece kaldığınız yeri her zaman bulabilirsiniz.</string>
     <string name="history.empty.title">Henüz burada bir şey yok</string>
     <string name="history.event.bookmark_jump">Yer imine gidildi</string>
     <string name="history.event.chapter_change">Bölüm değiştirildi</string>
-    <string name="history.event.dozed_off">Uyuyakaldınız · zamanlayıcı bitti</string>
+    <string name="history.event.interrupted">%s boyunca kesintiye uğradı</string>
     <string name="history.event.jump_back">Önceki yere dönüldü</string>
     <string name="history.event.moved">Konum değiştirildi</string>
+    <string name="history.event.paused">Duraklatıldı</string>
     <string name="history.event.played">Oynatıldı</string>
-    <string name="history.event.sleep_timer_set">Uyku zamanlayıcısı</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">%d kez geri sarıldı</item>
+        <item quantity="other">%d kez geri sarıldı</item>
+    </plurals>
+    <string name="history.event.shook">Sallayarak dinlemeye devam edildi</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">%d kez ileri sarıldı</item>
+        <item quantity="other">%d kez ileri sarıldı</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Uyku zamanlayıcısı sona erdi</string>
+    <string name="history.event.sleep_timer_on">Uyku zamanlayıcısı açıldı</string>
     <string name="history.location.chapter">Böl. %1$d · %2$s</string>
-    <string name="history.source.app">Uygulamada</string>
     <string name="history.source.audio_focus">Kesintiye uğradı</string>
     <string name="history.source.bluetooth">Bluetooth aygıtı</string>
     <string name="history.source.car">Araç</string>
@@ -207,8 +215,6 @@
     <string name="history.source.notification">Bildirim</string>
     <string name="history.source.other_app">Başka bir uygulama</string>
     <string name="history.source.other_device">Başka bir cihaz</string>
-    <string name="history.source.sleep_timer">Uyku zamanlayıcısı</string>
-    <string name="history.source.unknown">Bilinmiyor</string>
     <string name="history.source.unplugged">Ses bağlantısı kesildi</string>
     <string name="history.source.watch">Akıllı saat</string>
     <string name="history.source.widget">Widget</string>

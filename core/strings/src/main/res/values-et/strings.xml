@@ -187,19 +187,27 @@
         <item quantity="one">%d helifail</item>
         <item quantity="other">%d helifaili</item>
     </plurals>
-    <string name="history.action.continue_from">Jätka: %1$s</string>
-    <string name="history.action.continue_from.chapter">Jätka: ptk %1$d · %2$s</string>
     <string name="history.empty.message">Esitused, pausid ja hüpped on siin näha, nii et leiad alati tee tagasi.</string>
     <string name="history.empty.title">Siin pole veel midagi</string>
     <string name="history.event.bookmark_jump">Hüpe järjehoidjale</string>
     <string name="history.event.chapter_change">Peatükk vahetatud</string>
-    <string name="history.event.dozed_off">Jäid magama · taimer lõppes</string>
+    <string name="history.event.interrupted">Katkestatud %s ajaks</string>
     <string name="history.event.jump_back">Tagasi hüpatud</string>
     <string name="history.event.moved">Liigutatud</string>
+    <string name="history.event.paused">Peatatud</string>
     <string name="history.event.played">Esitatud</string>
-    <string name="history.event.sleep_timer_set">Unetaimer</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Tagasi keritud %d kord</item>
+        <item quantity="other">Tagasi keritud %d korda</item>
+    </plurals>
+    <string name="history.event.shook">Raputatud, et edasi kuulata</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Edasi keritud %d kord</item>
+        <item quantity="other">Edasi keritud %d korda</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Unetaimer lõppes</string>
+    <string name="history.event.sleep_timer_on">Unetaimer käivitatud</string>
     <string name="history.location.chapter">Ptk %1$d · %2$s</string>
-    <string name="history.source.app">Rakenduses</string>
     <string name="history.source.audio_focus">Katkestatud</string>
     <string name="history.source.bluetooth">Bluetooth-seade</string>
     <string name="history.source.car">Auto</string>
@@ -207,8 +215,6 @@
     <string name="history.source.notification">Teavitus</string>
     <string name="history.source.other_app">Teine rakendus</string>
     <string name="history.source.other_device">Teine seade</string>
-    <string name="history.source.sleep_timer">Unetaimer</string>
-    <string name="history.source.unknown">Teadmata</string>
     <string name="history.source.unplugged">Heliseade lahutatud</string>
     <string name="history.source.watch">Nutikell</string>
     <string name="history.source.widget">Vidin</string>

@@ -198,19 +198,29 @@
         <item quantity="many">%d arquivos de áudio</item>
         <item quantity="other">%d arquivos de áudio</item>
     </plurals>
-    <string name="history.action.continue_from">Continuar em %1$s</string>
-    <string name="history.action.continue_from.chapter">Continuar no cap. %1$d · %2$s</string>
     <string name="history.empty.message">Reproduções, pausas e saltos aparecem aqui, para você sempre encontrar o caminho de volta.</string>
     <string name="history.empty.title">Nada aqui ainda</string>
     <string name="history.event.bookmark_jump">Foi para um marcador</string>
     <string name="history.event.chapter_change">Mudou de capítulo</string>
-    <string name="history.event.dozed_off">Cochilou · tempo esgotado</string>
+    <string name="history.event.interrupted">Interrompido por %s</string>
     <string name="history.event.jump_back">Voltou ao ponto anterior</string>
     <string name="history.event.moved">Posição alterada</string>
+    <string name="history.event.paused">Pausado</string>
     <string name="history.event.played">Reproduzido</string>
-    <string name="history.event.sleep_timer_set">Desligamento automático</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Retrocedeu %d vez</item>
+        <item quantity="many">Retrocedeu %d vezes</item>
+        <item quantity="other">Retrocedeu %d vezes</item>
+    </plurals>
+    <string name="history.event.shook">Agitou para continuar ouvindo</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Avançou %d vez</item>
+        <item quantity="many">Avançou %d vezes</item>
+        <item quantity="other">Avançou %d vezes</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Desligado automaticamente</string>
+    <string name="history.event.sleep_timer_on">Desligamento automático ativado</string>
     <string name="history.location.chapter">Cap. %1$d · %2$s</string>
-    <string name="history.source.app">No app</string>
     <string name="history.source.audio_focus">Interrompido</string>
     <string name="history.source.bluetooth">Dispositivo Bluetooth</string>
     <string name="history.source.car">Carro</string>
@@ -218,8 +228,6 @@
     <string name="history.source.notification">Notificação</string>
     <string name="history.source.other_app">Outro app</string>
     <string name="history.source.other_device">Outro dispositivo</string>
-    <string name="history.source.sleep_timer">Desligamento automático</string>
-    <string name="history.source.unknown">Desconhecido</string>
     <string name="history.source.unplugged">Áudio desconectado</string>
     <string name="history.source.watch">Relógio</string>
     <string name="history.source.widget">Widget</string>

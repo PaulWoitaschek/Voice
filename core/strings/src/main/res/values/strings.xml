@@ -315,21 +315,34 @@
         <item quantity="one">%d audio file</item>
         <item quantity="other">%d audio files</item>
     </plurals>
-    <!-- Button on a stretch of listening in the history. Goes to where it ended, or after a night, to where the listener was still awake. %1$s is a time like 12:23. -->
-    <string name="history.action.continue_from">Continue from %1$s</string>
-    <!-- Like history.action.continue_from, for a book with chapters. %1$d is the chapter number. -->
-    <string name="history.action.continue_from.chapter">Continue from Ch. %1$d · %2$s</string>
     <string name="history.empty.message">Plays, pauses and jumps show up here, so you can always find your way back.</string>
     <string name="history.empty.title">Nothing here yet</string>
     <string name="history.event.bookmark_jump">Went to a bookmark</string>
     <string name="history.event.chapter_change">Changed chapter</string>
-    <string name="history.event.dozed_off">Dozed off · timer ended</string>
+    <!-- A row in the listening history: a phone call or a navigation prompt paused the book until it was over. %s is how long, like "3 min". -->
+    <string name="history.event.interrupted">Interrupted for %s</string>
     <string name="history.event.jump_back">Jumped back</string>
     <string name="history.event.moved">Moved</string>
+    <!-- A row in the listening history: the book was paused. -->
+    <string name="history.event.paused">Paused</string>
     <string name="history.event.played">Played</string>
-    <string name="history.event.sleep_timer_set">Sleep timer</string>
+    <!-- A row in the listening history: taps on rewind in a row. -->
+    <plurals name="history.event.rewound">
+        <item quantity="one">Rewound %d time</item>
+        <item quantity="other">Rewound %d times</item>
+    </plurals>
+    <!-- A row in the listening history: right after the sleep timer stopped the book, the listener shook the phone so it played on. -->
+    <string name="history.event.shook">Shook to keep listening</string>
+    <!-- A row in the listening history: taps on fast forward in a row. -->
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Skipped ahead %d time</item>
+        <item quantity="other">Skipped ahead %d times</item>
+    </plurals>
+    <!-- A row in the listening history: the sleep timer ran out and stopped the book. -->
+    <string name="history.event.sleep_timer_ended">Sleep timer ended</string>
+    <!-- A row in the listening history: the sleep timer was turned on. -->
+    <string name="history.event.sleep_timer_on">Sleep timer on</string>
     <string name="history.location.chapter">Ch. %1$d · %2$s</string>
-    <string name="history.source.app">In the app</string>
     <string name="history.source.audio_focus">Interrupted</string>
     <string name="history.source.bluetooth">Bluetooth device</string>
     <string name="history.source.car">Car</string>
@@ -338,8 +351,6 @@
     <string name="history.source.other_app">Another app</string>
     <!-- Where a history event came from: the listening position was taken over from another device, through the Audiobookshelf server or a synced library folder. -->
     <string name="history.source.other_device">Another device</string>
-    <string name="history.source.sleep_timer">Sleep timer</string>
-    <string name="history.source.unknown">Unknown</string>
     <string name="history.source.unplugged">Audio disconnected</string>
     <string name="history.source.watch">Watch</string>
     <string name="history.source.widget">Widget</string>

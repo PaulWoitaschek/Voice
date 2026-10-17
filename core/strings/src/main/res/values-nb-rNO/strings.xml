@@ -187,19 +187,27 @@
         <item quantity="one">%d lydfil</item>
         <item quantity="other">%d lydfiler</item>
     </plurals>
-    <string name="history.action.continue_from">Fortsett fra %1$s</string>
-    <string name="history.action.continue_from.chapter">Fortsett fra kap. %1$d · %2$s</string>
     <string name="history.empty.message">Avspillinger, pauser og hopp vises her, så du alltid finner tilbake.</string>
     <string name="history.empty.title">Ingenting her ennå</string>
     <string name="history.event.bookmark_jump">Gikk til et bokmerke</string>
     <string name="history.event.chapter_change">Byttet kapittel</string>
-    <string name="history.event.dozed_off">Sovnet · tidsuret gikk ut</string>
+    <string name="history.event.interrupted">Avbrutt i %s</string>
     <string name="history.event.jump_back">Hoppet tilbake</string>
     <string name="history.event.moved">Flyttet</string>
+    <string name="history.event.paused">Satte på pause</string>
     <string name="history.event.played">Spilte av</string>
-    <string name="history.event.sleep_timer_set">Innsovningstidsur</string>
+    <plurals name="history.event.rewound">
+        <item quantity="one">Spolte tilbake %d gang</item>
+        <item quantity="other">Spolte tilbake %d ganger</item>
+    </plurals>
+    <string name="history.event.shook">Ristet for å lytte videre</string>
+    <plurals name="history.event.skipped_ahead">
+        <item quantity="one">Spolte framover %d gang</item>
+        <item quantity="other">Spolte framover %d ganger</item>
+    </plurals>
+    <string name="history.event.sleep_timer_ended">Innsovningstidsuret gikk ut</string>
+    <string name="history.event.sleep_timer_on">Startet innsovningstidsuret</string>
     <string name="history.location.chapter">Kap. %1$d · %2$s</string>
-    <string name="history.source.app">I appen</string>
     <string name="history.source.audio_focus">Avbrutt</string>
     <string name="history.source.bluetooth">Bluetooth-enhet</string>
     <string name="history.source.car">Bil</string>
@@ -207,8 +215,6 @@
     <string name="history.source.notification">Varsel</string>
     <string name="history.source.other_app">En annen app</string>
     <string name="history.source.other_device">En annen enhet</string>
-    <string name="history.source.sleep_timer">Innsovningstidsur</string>
-    <string name="history.source.unknown">Ukjent</string>
     <string name="history.source.unplugged">Lyd frakoblet</string>
     <string name="history.source.watch">Klokke</string>
     <string name="history.source.widget">Modul</string>
