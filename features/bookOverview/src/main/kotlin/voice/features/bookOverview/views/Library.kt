@@ -51,7 +51,7 @@ internal fun Library(
   onBookLongClick: (BookId) -> Unit,
   onPlayClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
-  onFolderAccessCardClick: () -> Unit,
+  onShowFoldersClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var entered by rememberSaveable { mutableStateOf(false) }
@@ -90,12 +90,6 @@ internal fun Library(
         PermissionBugCard(onPermissionBugCardClick, Modifier.entrance(entrance, index))
       }
     }
-    if (viewState.showFolderAccessCard) {
-      val index = entranceIndex()
-      item(span = { GridItemSpan(maxLineSpan) }) {
-        FolderAccessCard(onFolderAccessCardClick, Modifier.entrance(entrance, index))
-      }
-    }
     val greetingIndex = entranceIndex()
     item(key = "greeting", span = { GridItemSpan(maxLineSpan) }, contentType = "greeting") {
       LibraryGreeting(
@@ -104,6 +98,12 @@ internal fun Library(
           .entrance(entrance, greetingIndex)
           .padding(top = 16.dp, bottom = 20.dp, start = 4.dp),
       )
+    }
+    if (viewState.showEmptyLibrary) {
+      val index = entranceIndex()
+      item(span = { GridItemSpan(maxLineSpan) }) {
+        EmptyLibrary(onShowFoldersClick, Modifier.entrance(entrance, index))
+      }
     }
     if (hero != null) {
       val index = entranceIndex()

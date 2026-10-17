@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -73,6 +74,7 @@ class BookOverviewViewModel(
   dispatcherProvider: DispatcherProvider,
   private val serverLibrary: ServerLibrary,
   private val audiobookFolders: AudiobookFolders,
+  private val emptyLibraryTracker: EmptyLibraryTracker,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -124,7 +126,10 @@ class BookOverviewViewModel(
     // a deleted book can stay the current one
     val currentBookId = currentBook.id?.takeIf { id -> books.any { it.id == id } }
 
-    val noBooks = !scannerActive && books.isEmpty()
+    val showEmptyLibrary = !hasStoragePermissionBug && !scannerActive && books.isEmpty()
+    LaunchedEffect(showEmptyLibrary) {
+      if (showEmptyLibrary) emptyLibraryTracker.track()
+    }
 
     val layoutMode = when (gridMode) {
       GridMode.LIST -> BookOverviewLayoutMode.List
@@ -170,15 +175,11 @@ class BookOverviewViewModel(
       } else {
         BookOverviewViewState.PlayButtonState.Paused
       }.takeIf { currentBookId != null },
-      showAddBookHint = if (hasStoragePermissionBug || hasFoldersWithoutAccess) {
-        false
-      } else {
-        noBooks
-      },
+      showEmptyLibrary = showEmptyLibrary,
       showSearchIcon = books.isNotEmpty(),
       isLoading = scannerActive,
       showStoragePermissionBugCard = hasStoragePermissionBug,
-      showFolderAccessCard = hasFoldersWithoutAccess,
+      showFolderAccessBadge = hasFoldersWithoutAccess,
       showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get() &&
         !folderPickerMovedDialogShown &&
         appInfoProvider.installTime < FolderPickerMigrationInstallTimeCutoff,
@@ -205,11 +206,11 @@ class BookOverviewViewModel(
       ),
       currentBookId = KioskModeDemoData.currentlyPlaying.id,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
-      showAddBookHint = false,
+      showEmptyLibrary = false,
       showSearchIcon = true,
       isLoading = false,
       showStoragePermissionBugCard = false,
-      showFolderAccessCard = false,
+      showFolderAccessBadge = false,
       showFolderPickerIcon = false,
       dialog = null,
     )
@@ -246,7 +247,7 @@ class BookOverviewViewModel(
     playerController.playPause()
   }
 
-  fun onFolderAccessCardClick() {
+  fun onShowFoldersClick() {
     navigator.goTo(Destination.FolderPicker)
   }
 

@@ -1,5 +1,6 @@
 package voice.features.settings
 
+import android.net.Uri
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
@@ -88,6 +89,7 @@ class SettingsViewModelTest {
   }
   private val audiobookFolders = mockk<AudiobookFolders> {
     every { all() } returns flowOf(emptyMap())
+    every { withoutAccess() } returns flowOf(emptyMap())
   }
 
   private val viewModel = SettingsViewModel(
@@ -328,6 +330,18 @@ class SettingsViewModelTest {
     }.filterNotNull().test {
       runCurrent()
       assertEquals(expected = listOf("Audiobooks", "crime", "Sci-Fi"), actual = expectMostRecentItem().folderNames)
+    }
+  }
+
+  @Test
+  fun `view state tells about folders without access`() = scope.runTest {
+    every { audiobookFolders.withoutAccess() } returns flowOf(mapOf(FolderType.Root to listOf(mockk<Uri>())))
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.filterNotNull().test {
+      runCurrent()
+      assertEquals(expected = true, actual = expectMostRecentItem().foldersWithoutAccess)
     }
   }
 
