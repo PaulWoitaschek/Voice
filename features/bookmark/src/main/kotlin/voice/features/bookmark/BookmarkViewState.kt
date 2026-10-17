@@ -39,8 +39,8 @@ internal data class BookBarViewState(
 )
 
 internal enum class BookmarkSort {
-  Story,
   Recent,
+  Story,
 }
 
 internal data class CategoryCount(

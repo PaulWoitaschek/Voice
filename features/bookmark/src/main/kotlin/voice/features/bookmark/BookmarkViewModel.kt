@@ -73,7 +73,7 @@ class BookmarkViewModel(
   private val viewEffectChannel = Channel<BookmarkViewEffect>(Channel.UNLIMITED)
   internal val viewEffects: Flow<BookmarkViewEffect> = viewEffectChannel.receiveAsFlow()
 
-  private var sort by mutableStateOf(BookmarkSort.Story)
+  private var sort by mutableStateOf(BookmarkSort.Recent)
   private var selectedCategory by mutableStateOf<Bookmark.Kind?>(null)
   private var draft by mutableStateOf<Draft?>(null)
 

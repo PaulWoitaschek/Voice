@@ -90,14 +90,16 @@ class HistoryViewModelTest {
     }
   }
 
-  private fun HistoryViewState.events(): List<HistoryEvent> = days.flatMap { it.rows }.filterIsInstance<HistoryEvent>()
+  private fun HistoryViewState.events(): List<HistoryEvent> = days.flatMap { day ->
+    day.sessions.flatMap { it.rows }
+  }.filterIsInstance<HistoryEvent>()
 
   private fun listenedUntilPause() {
     historyEvents += testEvent(Type.Play, today(9), arrival, 1.minutes)
     historyEvents += testEvent(Type.Pause, today(9, 20), signal, 2.minutes)
   }
 
-  private suspend fun ReceiveTurbine<HistoryViewState?>.pausedAt(): HistorySpot = awaitState().events().last().place.spot
+  private suspend fun ReceiveTurbine<HistoryViewState?>.pausedAt(): HistorySpot = awaitState().events().first().place.spot
 
   @Test
   fun `tapping a place goes there, keeps playing and closes the screen`() {

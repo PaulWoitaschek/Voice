@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -91,52 +92,60 @@ internal fun HistoryList(
     }
     viewState.days.forEach { day ->
       item(key = "day-${day.label}") {
-        Day(day = day, onGoTo = onGoTo, modifier = Modifier.animateItem())
+        Text(
+          text = dayLabelText(day.label),
+          style = MaterialTheme.typography.titleSmallEmphasized,
+          color = MaterialTheme.colorScheme.primary,
+          modifier = Modifier
+            .animateItem()
+            .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 6.dp)
+            .semantics { heading() },
+        )
+      }
+      items(day.sessions, key = { "session-${it.key}" }) { session ->
+        Session(
+          session = session,
+          onGoTo = onGoTo,
+          modifier = Modifier
+            .animateItem()
+            .padding(bottom = 8.dp),
+        )
       }
     }
   }
 }
 
 @Composable
-private fun Day(
-  day: HistoryDay,
+private fun Session(
+  session: HistorySession,
   onGoTo: (HistorySpot) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Column(modifier) {
-    Text(
-      text = dayLabelText(day.label),
-      style = MaterialTheme.typography.titleSmallEmphasized,
-      color = MaterialTheme.colorScheme.primary,
-      modifier = Modifier
-        .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 6.dp)
-        .semantics { heading() },
-    )
-    val times = day.rows.map { timeText(it.at) }
-    val timeStyle = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum")
-    val measurer = rememberTextMeasurer()
-    val density = LocalDensity.current
-    // the line has to be straight, so every time takes the room of the widest one
-    val timeWidth = remember(times, timeStyle, density) {
-      with(density) { times.maxOf { measurer.measure(it, timeStyle).size.width }.toDp() }
-    }
-    Surface(
-      shape = MaterialTheme.shapes.extraLarge,
-      color = MaterialTheme.colorScheme.surfaceContainerHigh,
-      modifier = Modifier.fillMaxWidth(),
-    ) {
-      Column(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
-        day.rows.forEachIndexed { index, row ->
-          val next = day.rows.getOrNull(index + 1)
-          TimelineRow(
-            row = row,
-            time = times[index],
-            timeWidth = timeWidth,
-            above = if (index == 0) Line.None else line(row.playingBefore),
-            below = if (next == null) Line.None else line(next.playingBefore),
-            onGoTo = onGoTo,
-          )
-        }
+  val rows = session.rows
+  val times = rows.map { timeText(it.at) }
+  val timeStyle = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum")
+  val measurer = rememberTextMeasurer()
+  val density = LocalDensity.current
+  // the line has to be straight, so every time takes the room of the widest one
+  val timeWidth = remember(times, timeStyle, density) {
+    with(density) { times.maxOf { measurer.measure(it, timeStyle).size.width }.toDp() }
+  }
+  Surface(
+    shape = MaterialTheme.shapes.extraLarge,
+    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+    modifier = modifier.fillMaxWidth(),
+  ) {
+    Column(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
+      rows.forEachIndexed { index, row ->
+        val newer = rows.getOrNull(index - 1)
+        TimelineRow(
+          row = row,
+          time = times[index],
+          timeWidth = timeWidth,
+          above = if (newer == null) Line.None else line(newer.playingBefore),
+          below = if (index == rows.lastIndex) Line.None else line(row.playingBefore),
+          onGoTo = onGoTo,
+        )
       }
     }
   }
@@ -439,9 +448,9 @@ private fun HistoryEmpty(modifier: Modifier = Modifier) {
   }
 }
 
-@Preview(heightDp = 1400)
-@Preview(heightDp = 1400, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "dark")
-@Preview(heightDp = 1400, locale = "ar", name = "rtl")
+@Preview(heightDp = 1600)
+@Preview(heightDp = 1600, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "dark")
+@Preview(heightDp = 1600, locale = "ar", name = "rtl")
 @Preview(heightDp = 1800, fontScale = 2F, name = "font scale 2")
 @Composable
 private fun HistoryListPreview() {

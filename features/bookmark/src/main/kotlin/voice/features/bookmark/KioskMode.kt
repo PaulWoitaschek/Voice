@@ -11,6 +11,7 @@ import voice.features.bookmark.history.HistoryEvent
 import voice.features.bookmark.history.HistoryInterruption
 import voice.features.bookmark.history.HistoryLocation
 import voice.features.bookmark.history.HistoryPlace
+import voice.features.bookmark.history.HistorySession
 import voice.features.bookmark.history.HistorySkips
 import voice.features.bookmark.history.HistorySpot
 import voice.features.bookmark.history.HistoryViewState
@@ -139,30 +140,56 @@ internal fun kioskModeHistoryViewState(): HistoryViewState = HistoryViewState(
   days = listOf(
     HistoryDay(
       label = DayLabel.ThisMorning,
-      rows = listOf(
-        event(12, LocalTime.of(7, 52), playingBefore = false, Type.Play, place(12, "14:40"), Source.Car),
-        HistoryInterruption(key = 13, at = LocalTime.of(8, 1), playingBefore = true, duration = 3.minutes),
-        event(14, LocalTime.of(8, 15), playingBefore = true, Type.Pause, place(12, "34:18"), Source.Car),
+      sessions = listOf(
+        HistorySession(
+          rows = listOf(
+            event(14, LocalTime.of(8, 15), playingBefore = true, Type.Pause, place(12, "34:18"), Source.Car),
+            HistoryInterruption(key = 13, at = LocalTime.of(8, 1), playingBefore = true, duration = 3.minutes),
+            event(12, LocalTime.of(7, 52), playingBefore = false, Type.Play, place(12, "14:40"), Source.Car),
+          ),
+        ),
       ),
     ),
     HistoryDay(
       label = DayLabel.LastNight,
-      rows = listOf(
-        event(7, LocalTime.of(22, 10), playingBefore = false, Type.Play, place(11, "2:10")),
-        event(8, LocalTime.of(22, 10), playingBefore = true, Type.SleepTimerStarted, place(11, "2:10")),
-        event(9, LocalTime.of(22, 40), playingBefore = true, Type.SleepTimerEnded, place(11, "32:10"), Source.SleepTimer),
-        event(10, LocalTime.of(22, 40), playingBefore = false, Type.SleepTimerExtended, place(11, "31:58"), Source.SleepTimer),
-        event(11, LocalTime.of(23, 10), playingBefore = true, Type.SleepTimerEnded, place(12, "14:48"), Source.SleepTimer),
+      sessions = listOf(
+        HistorySession(
+          rows = listOf(
+            event(11, LocalTime.of(23, 10), playingBefore = true, Type.SleepTimerEnded, place(12, "14:48"), Source.SleepTimer),
+            event(10, LocalTime.of(22, 40), playingBefore = false, Type.SleepTimerExtended, place(11, "31:58"), Source.SleepTimer),
+            event(9, LocalTime.of(22, 40), playingBefore = true, Type.SleepTimerEnded, place(11, "32:10"), Source.SleepTimer),
+            event(8, LocalTime.of(22, 10), playingBefore = true, Type.SleepTimerStarted, place(11, "2:10")),
+            event(7, LocalTime.of(22, 10), playingBefore = false, Type.Play, place(11, "2:10")),
+          ),
+        ),
       ),
     ),
     HistoryDay(
       label = DayLabel.Yesterday,
-      rows = listOf(
-        event(1, LocalTime.of(17, 40), playingBefore = false, Type.Play, place(9, "5:00"), Source.Headset),
-        HistorySkips(key = 2, at = LocalTime.of(18, 2), playingBefore = true, count = 2, back = true),
-        event(4, LocalTime.of(18, 20), playingBefore = true, Type.Seek, place(10, "21:18"), Source.Notification, to = place(15, "2:00")),
-        event(5, LocalTime.of(18, 21), playingBefore = true, Type.JumpBack, place(15, "2:40"), to = place(10, "21:18")),
-        event(6, LocalTime.of(18, 45), playingBefore = true, Type.Pause, place(11, "2:10"), Source.Headset),
+      sessions = listOf(
+        HistorySession(
+          rows = listOf(
+            event(6, LocalTime.of(17, 45), playingBefore = true, Type.Pause, place(11, "2:10"), Source.Headset),
+            event(5, LocalTime.of(17, 21), playingBefore = true, Type.JumpBack, place(15, "2:40"), to = place(10, "21:18")),
+            event(
+              4,
+              LocalTime.of(17, 20),
+              playingBefore = true,
+              Type.Seek,
+              place(10, "21:18"),
+              Source.Notification,
+              to = place(15, "2:00"),
+            ),
+            HistorySkips(key = 2, at = LocalTime.of(17, 2), playingBefore = true, count = 2, back = true),
+            event(1, LocalTime.of(16, 40), playingBefore = false, Type.Play, place(9, "5:00"), Source.Headset),
+          ),
+        ),
+        HistorySession(
+          rows = listOf(
+            event(16, LocalTime.of(8, 30), playingBefore = true, Type.Pause, place(9, "5:00"), Source.Car),
+            event(15, LocalTime.of(8, 5), playingBefore = false, Type.Play, place(8, "31:12"), Source.Car),
+          ),
+        ),
       ),
     ),
   ),

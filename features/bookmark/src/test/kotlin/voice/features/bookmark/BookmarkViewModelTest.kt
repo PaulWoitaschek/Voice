@@ -289,6 +289,7 @@ class BookmarkViewModelTest {
   @Test
   fun `with the experimental playback persistence, the position is the player's`() {
     val viewModel = viewModel(experimentalPlaybackPersistence = true)
+    viewModel.onSortChange(BookmarkSort.Story)
     viewModel.test {
       // the stored position: 5 minutes into the second of two 10 minute chapters
       awaitState { it.bookBar?.percent == 75 }
@@ -303,6 +304,17 @@ class BookmarkViewModelTest {
       assertTrue(state.playing)
       val youAreHere = state.items.filterIsInstance<BookmarkListItem.YouAreHere>().single()
       assertEquals(expected = chapterTime(2.minutes), actual = youAreHere.time)
+    }
+  }
+
+  @Test
+  fun `bookmarks start with the newest`() {
+    val older = testBookmark(arrival, 2.minutes, addedAt = today(8))
+    val newer = testBookmark(arrival, 1.minutes, addedAt = today(9))
+    bookmarkRepo.bookmarks.value = listOf(older, newer)
+    viewModel().test {
+      val rows = awaitState { it.items.size == 2 }.items.filterIsInstance<BookmarkListItem.Row>()
+      assertEquals(expected = listOf(newer.id, older.id), actual = rows.map { it.bookmark.id })
     }
   }
 

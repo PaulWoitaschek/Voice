@@ -7,7 +7,6 @@ import voice.core.data.ListeningEvent.Type
 import voice.core.data.at
 import voice.core.data.isUndoableJump
 import voice.features.bookmark.BookIndex
-import voice.features.bookmark.DayLabel
 import voice.features.bookmark.sessionLabel
 import java.time.Instant
 import java.time.ZoneId
@@ -17,32 +16,32 @@ import kotlin.time.Duration.Companion.minutes
 /** Shorter interruptions, like navigation prompts, would crowd a drive. */
 private val MIN_INTERRUPTION = 1.minutes
 
+/** Shorter pauses, like making a coffee, show as a dotted line instead of a new card. */
+private val SESSION_GAP = 30.minutes
+
 internal fun historyViewState(
   events: List<ListeningEvent>,
   index: BookIndex,
   now: Instant,
   zone: ZoneId,
 ): HistoryViewState {
-  val days = mutableListOf<Pair<DayLabel, MutableList<ListeningEvent>>>()
-  events.sortedWith(compareBy({ it.atMillis }, { it.id })).forEach { event ->
-    val label = sessionLabel(event.at, now, zone)
-    val last = days.lastOrNull()
-    if (last != null && last.first == label) {
-      last.second += event
-    } else {
-      days += label to mutableListOf(event)
-    }
-  }
-  val timeline = Timeline(index, zone)
+  val sessions = Timeline(index, zone)
+    .sessions(events.sortedWith(compareBy({ it.atMillis }, { it.id })))
+    .filter { it.rows.isNotEmpty() }
+    .asReversed()
   return HistoryViewState(
-    days
-      .map { (label, dayEvents) -> HistoryDay(label, timeline.rows(dayEvents)) }
-      .filter { it.rows.isNotEmpty() }
-      .reversed(),
+    // each label covers one stretch of time, so grouping keeps the sessions in order
+    sessions
+      .groupBy { sessionLabel(it.start, now, zone) }
+      .map { (label, inDay) -> HistoryDay(label, inDay.map { HistorySession(it.rows.reversed()) }) },
   )
 }
 
-/** Goes through the days oldest first, because whether the book was playing carries over from one day to the next. */
+private class Session(
+  val start: Instant,
+  val rows: MutableList<HistoryRow> = mutableListOf(),
+)
+
 private class Timeline(
   private val index: BookIndex,
   private val zone: ZoneId,
@@ -50,11 +49,16 @@ private class Timeline(
 
   private var playing = false
 
-  fun rows(events: List<ListeningEvent>): List<HistoryRow> {
-    val rows = mutableListOf<HistoryRow>()
+  fun sessions(events: List<ListeningEvent>): List<Session> {
+    val sessions = mutableListOf<Session>()
     var position = 0
     while (position < events.size) {
       val event = events[position]
+      val previous = events.getOrNull(position - 1)
+      if (previous == null || (!playingBefore(event) && event.atMillis - previous.atMillis >= SESSION_GAP.inWholeMilliseconds)) {
+        sessions += Session(event.at)
+      }
+      val rows = sessions.last().rows
       val next = events.getOrNull(position + 1)
       val back = event.skipsBack()
       when {
@@ -75,8 +79,7 @@ private class Timeline(
           }
         }
         else -> {
-          // a play always comes after a pause, even when the pause got lost because the app was killed
-          val playingBefore = playing && event.type != Type.Play
+          val playingBefore = playingBefore(event)
           playing = when (event.type) {
             Type.Play, Type.SleepTimerExtended -> true
             Type.Pause, Type.SleepTimerEnded -> false
@@ -98,8 +101,11 @@ private class Timeline(
       }
       position++
     }
-    return rows
+    return sessions
   }
+
+  // a play always comes after a pause, even when the pause got lost because the app was killed
+  private fun playingBefore(event: ListeningEvent): Boolean = playing && event.type != Type.Play
 
   private fun place(
     chapterId: ChapterId,

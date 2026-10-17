@@ -7,22 +7,28 @@ import voice.features.bookmark.DayLabel
 import java.time.LocalTime
 import kotlin.time.Duration
 
-/** What happened while listening, under the part of the day it happened in. The newest part comes first, and inside one the oldest row. */
+/** What happened while listening, under the part of the day each listening session started in, newest first. */
 @Immutable
 internal data class HistoryViewState(val days: List<HistoryDay>)
 
 @Immutable
 internal data class HistoryDay(
   val label: DayLabel,
-  val rows: List<HistoryRow>,
+  val sessions: List<HistorySession>,
 )
+
+/** Listening without a long pause. */
+@Immutable
+internal data class HistorySession(val rows: List<HistoryRow>) {
+  val key: Long get() = rows.last().key
+}
 
 @Immutable
 internal sealed interface HistoryRow {
   val key: Long
   val at: LocalTime
 
-  /** Whether the book played from the row before until this one. */
+  /** Whether the book played from the row that happened before this one until this one. */
   val playingBefore: Boolean
 }
 

@@ -173,10 +173,10 @@ listener saved. Everything Voice records on its own goes into the history.
 **Solved**
 
 - **Saving a moment means stopping.** A long-press on the bookmark button saves right away. A kind or a note can follow.
-- **I can't find the bookmark I'm looking for.** Bookmarks are in story order with chapter headers, or newest first,
+- **I can't find the bookmark I'm looking for.** Bookmarks are newest first, or in story order with chapter headers,
   and can be filtered by kind.
-- **A tap or a seek loses my place.** The listening history shows what happened, in order: plays, pauses, the sleep
-  timer and every big jump. Every place in it is a way back. It's always on.
+- **A tap or a seek loses my place.** The listening history shows what happened, newest first: plays, pauses, the
+  sleep timer and every big jump. Every place in it is a way back. It's always on.
 
 **Open**
 

@@ -30,7 +30,7 @@ class HistoryTimelineTest {
     return historyViewState(events.reversed(), BookIndex(book), now = today(20), zone = testZone)
   }
 
-  private fun HistoryViewState.rows(): List<HistoryRow> = days.flatMap { it.rows }
+  private fun HistoryViewState.rows(): List<HistoryRow> = days.flatMap { day -> day.sessions.flatMap { it.rows } }
 
   private fun HistoryViewState.events(): List<HistoryEvent> = rows().filterIsInstance<HistoryEvent>()
 
@@ -41,7 +41,7 @@ class HistoryTimelineTest {
     HistoryPlace(HistorySpot(signal.id, time.inWholeMilliseconds), HistoryLocation(2, chapterTime(time)))
 
   @Test
-  fun `the newest part of the day comes first, and inside it the oldest row`() {
+  fun `the newest comes first`() {
     val state = timeline(
       testEvent(Type.Play, yesterday(9), arrival, 1.minutes),
       testEvent(Type.Pause, yesterday(9, 10), arrival, 2.minutes),
@@ -51,8 +51,8 @@ class HistoryTimelineTest {
 
     assertEquals(expected = listOf(DayLabel.ThisMorning, DayLabel.Yesterday), actual = state.days.map { it.label })
     assertEquals(
-      expected = listOf(Type.Play to LocalTime.of(9, 0), Type.Pause to LocalTime.of(9, 10)),
-      actual = state.days.first().rows.map { (it as HistoryEvent).type to it.at },
+      expected = listOf(Type.Pause to LocalTime.of(9, 10), Type.Play to LocalTime.of(9, 0)),
+      actual = state.days.first().sessions.single().rows.map { (it as HistoryEvent).type to it.at },
     )
   }
 
@@ -63,8 +63,8 @@ class HistoryTimelineTest {
 
     assertEquals(
       expected = listOf(
-        HistoryEvent(play.id, LocalTime.of(9, 0), playingBefore = false, Type.Play, Source.Headset, inArrival(1.minutes)),
         HistoryEvent(pause.id, LocalTime.of(9, 10), playingBefore = true, Type.Pause, Source.Car, inSignal(2.minutes)),
+        HistoryEvent(play.id, LocalTime.of(9, 0), playingBefore = false, Type.Play, Source.Headset, inArrival(1.minutes)),
       ),
       actual = timeline(play, pause).events(),
     )
@@ -80,28 +80,66 @@ class HistoryTimelineTest {
       testEvent(Type.Play, today(9, 30), arrival, 4.minutes),
     )
 
-    assertEquals(expected = listOf(false, true, true, false, false), actual = state.rows().map { it.playingBefore })
+    assertEquals(expected = listOf(false, false, true, true, false), actual = state.rows().map { it.playingBefore })
   }
 
   @Test
-  fun `a play after a lost pause starts a new line`() {
+  fun `a long pause starts a new card and a short one doesn't`() {
+    val state = timeline(
+      testEvent(Type.Play, today(9), arrival, 1.minutes),
+      testEvent(Type.Pause, today(9, 10), arrival, 2.minutes),
+      testEvent(Type.Play, today(9, 39), arrival, 2.minutes),
+      testEvent(Type.Pause, today(9, 50), arrival, 3.minutes),
+      testEvent(Type.Play, today(10, 20), arrival, 3.minutes),
+    )
+
+    val sessions = state.days.single().sessions
+    assertEquals(expected = listOf(1, 4), actual = sessions.map { it.rows.size })
+    assertEquals(expected = LocalTime.of(10, 20), actual = sessions.first().rows.single().at)
+  }
+
+  @Test
+  fun `listening without events stays one card`() {
+    val state = timeline(
+      testEvent(Type.Play, yesterday(22), arrival, 1.minutes),
+      testEvent(Type.SleepTimerEnded, yesterday(23, 30), signal, 5.minutes, source = Source.SleepTimer),
+    )
+
+    assertEquals(expected = 1, actual = state.days.single().sessions.size)
+  }
+
+  @Test
+  fun `a play after a lost pause starts a new card`() {
     val state = timeline(
       testEvent(Type.Play, today(9), arrival, 1.minutes),
       testEvent(Type.Play, today(10), arrival, 5.minutes),
     )
 
+    assertEquals(expected = 2, actual = state.days.single().sessions.size)
     assertEquals(expected = listOf(false, false), actual = state.rows().map { it.playingBefore })
   }
 
   @Test
-  fun `playing carries over into the next part of the day`() {
+  fun `a card stays under the part of the day it started in`() {
     val state = timeline(
       testEvent(Type.Play, today(11, 50), arrival, 1.minutes),
       testEvent(Type.Pause, today(12, 10), arrival, 5.minutes),
     )
 
-    assertEquals(expected = listOf(DayLabel.ThisAfternoon, DayLabel.ThisMorning), actual = state.days.map { it.label })
-    assertEquals(expected = true, actual = state.days.first().rows.single().playingBefore)
+    assertEquals(expected = listOf(DayLabel.ThisMorning), actual = state.days.map { it.label })
+    assertEquals(expected = listOf(true, false), actual = state.rows().map { it.playingBefore })
+  }
+
+  @Test
+  fun `a long call stays in the card`() {
+    val state = timeline(
+      testEvent(Type.Play, today(9), arrival, 1.minutes),
+      testEvent(Type.Pause, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
+      testEvent(Type.Play, today(9, 50), arrival, 2.minutes, source = Source.AudioFocus),
+    )
+
+    val rows = state.days.single().sessions.single().rows
+    assertEquals(expected = 40.minutes, actual = (rows.first() as HistoryInterruption).duration)
   }
 
   @Test
@@ -117,8 +155,8 @@ class HistoryTimelineTest {
     )
 
     val skips = state.rows().filterIsInstance<HistorySkips>()
-    assertEquals(expected = listOf(true to 3, false to 2, true to 1), actual = skips.map { it.back to it.count })
-    assertEquals(expected = listOf(LocalTime.of(9, 1), LocalTime.of(9, 4), LocalTime.of(9, 6)), actual = skips.map { it.at })
+    assertEquals(expected = listOf(true to 1, false to 2, true to 3), actual = skips.map { it.back to it.count })
+    assertEquals(expected = listOf(LocalTime.of(9, 6), LocalTime.of(9, 4), LocalTime.of(9, 1)), actual = skips.map { it.at })
     assertEquals(expected = true, actual = skips.all { it.playingBefore })
   }
 
@@ -141,7 +179,7 @@ class HistoryTimelineTest {
       testEvent(Type.JumpBack, today(9, 1), signal, 20.seconds, to = arrival to 4.minutes),
     )
 
-    assertEquals(expected = listOf(Type.ChapterChange, Type.JumpBack), actual = state.events().map { it.type })
+    assertEquals(expected = listOf(Type.JumpBack, Type.ChapterChange), actual = state.events().map { it.type })
   }
 
   @Test
@@ -158,7 +196,7 @@ class HistoryTimelineTest {
     val interruption = rows[1] as HistoryInterruption
     assertEquals(expected = 3.minutes, actual = interruption.duration)
     assertEquals(expected = LocalTime.of(9, 10), actual = interruption.at)
-    assertEquals(expected = listOf(false, true, true), actual = rows.map { it.playingBefore })
+    assertEquals(expected = listOf(true, true, false), actual = rows.map { it.playingBefore })
   }
 
   @Test
@@ -170,8 +208,8 @@ class HistoryTimelineTest {
       testEvent(Type.Pause, today(9, 20), arrival, 3.minutes),
     )
 
-    assertEquals(expected = listOf(Type.Play, Type.Pause), actual = state.events().map { it.type })
-    assertEquals(expected = true, actual = state.events().last().playingBefore)
+    assertEquals(expected = listOf(Type.Pause, Type.Play), actual = state.events().map { it.type })
+    assertEquals(expected = true, actual = state.events().first().playingBefore)
   }
 
   @Test
@@ -183,7 +221,7 @@ class HistoryTimelineTest {
     )
 
     assertEquals(
-      expected = listOf(Type.Play to Source.App, Type.Pause to Source.AudioFocus, Type.Play to Source.Headset),
+      expected = listOf(Type.Play to Source.Headset, Type.Pause to Source.AudioFocus, Type.Play to Source.App),
       actual = state.events().map { it.type to it.source },
     )
   }
@@ -203,15 +241,15 @@ class HistoryTimelineTest {
     assertEquals(expected = DayLabel.LastNight, actual = night.label)
     assertEquals(
       expected = listOf(
-        Type.Play to false,
-        Type.SleepTimerStarted to true,
         Type.SleepTimerEnded to true,
         Type.SleepTimerExtended to false,
         Type.SleepTimerEnded to true,
+        Type.SleepTimerStarted to true,
+        Type.Play to false,
       ),
-      actual = night.rows.map { (it as HistoryEvent).type to it.playingBefore },
+      actual = night.sessions.single().rows.map { (it as HistoryEvent).type to it.playingBefore },
     )
-    assertEquals(expected = Type.SleepTimerSet, actual = state.days.last().rows.map { (it as HistoryEvent).type }.single())
+    assertEquals(expected = Type.SleepTimerSet, actual = (state.days.last().sessions.single().rows.single() as HistoryEvent).type)
   }
 
   @Test
@@ -225,7 +263,7 @@ class HistoryTimelineTest {
 
     assertEquals(expected = listOf(DayLabel.ThisMorning), actual = state.days.map { it.label })
     assertEquals(expected = listOf(null, null), actual = state.events().map { it.to })
-    assertEquals(expected = listOf(Type.Play, Type.ChapterChange), actual = state.events().map { it.type })
+    assertEquals(expected = listOf(Type.ChapterChange, Type.Play), actual = state.events().map { it.type })
   }
 
   @Test
