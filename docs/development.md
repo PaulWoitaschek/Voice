@@ -123,6 +123,20 @@ A version that turns out broken on Play is never published. Keep its draft until
 next version is counted from the tags and the drafts, so deleting it earlier hands its version code out again, which
 Play rejects.
 
+#### Checking on F-Droid
+
+F-Droid takes a release in three steps:
+
+1. **Picked up:** the checkupdates bot adds the new tag to
+   [Voice's build recipe](https://gitlab.com/fdroid/fdroiddata/-/commits/master/metadata/de.ph1b.audiobook.yml) with
+   the commit `bot: Update Voice to <versionCode>`. It only takes the newest tag, so a release that already has a
+   successor when the bot runs is never built.
+2. **Built:** the [last build cycle](https://monitor.f-droid.org/builds/build) shows when it ran and lists the
+   successful and failed builds. The build log of a version, failed or not, is at
+   `https://monitor.f-droid.org/builds/log/de.ph1b.audiobook/<versionCode>`.
+3. **Published:** [Voice on F-Droid](https://f-droid.org/packages/de.ph1b.audiobook/) lists each version with the
+   day it was added.
+
 ### Tester Builds
 
 To send a build to testers, trigger the
