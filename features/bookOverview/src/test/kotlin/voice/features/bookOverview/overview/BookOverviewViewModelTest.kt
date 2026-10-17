@@ -6,6 +6,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.mockk.Runs
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -54,6 +55,7 @@ class BookOverviewViewModelTest {
   private val audiobookFolders = mockk<AudiobookFolders> {
     every { withoutAccess() } returns flowOf(emptyMap())
   }
+  private val emptyLibraryTracker = mockk<EmptyLibraryTracker>(relaxUnitFun = true)
 
   @Test
   fun `state updates the current book item from live playback`() = runTest {
@@ -89,6 +91,7 @@ class BookOverviewViewModelTest {
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
       audiobookFolders = audiobookFolders,
+      emptyLibraryTracker = emptyLibraryTracker,
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -150,6 +153,7 @@ class BookOverviewViewModelTest {
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
       audiobookFolders = audiobookFolders,
+      emptyLibraryTracker = emptyLibraryTracker,
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -323,6 +327,21 @@ class BookOverviewViewModelTest {
   }
 
   @Test
+  fun `an empty library is tracked`() = runTest {
+    val viewModel = viewModel()
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = true, actual = awaitItem().showEmptyLibrary)
+      testScheduler.runCurrent()
+    }
+
+    coVerify { emptyLibraryTracker.track() }
+  }
+
+  @Test
   fun `folders without access show the badge`() = runTest {
     every { audiobookFolders.withoutAccess() } returns flowOf(mapOf(FolderType.Root to listOf(mockk<Uri>())))
     val viewModel = viewModel()
@@ -399,6 +418,7 @@ class BookOverviewViewModelTest {
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
       audiobookFolders = audiobookFolders,
+      emptyLibraryTracker = emptyLibraryTracker,
     )
   }
 

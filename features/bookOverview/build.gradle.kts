@@ -7,6 +7,7 @@ plugins {
 dependencies {
   implementation(projects.navigation)
   implementation(projects.core.common)
+  implementation(projects.core.analytics.api)
   implementation(projects.core.search)
   implementation(projects.core.ui)
   implementation(projects.core.strings)
