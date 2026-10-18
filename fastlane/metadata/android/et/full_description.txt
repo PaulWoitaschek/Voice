@@ -21,7 +21,8 @@ Vali kaust, kus on sinu heliraamatud. Voice näitab sulle leitud raamatuid, lisa
 • Salvesta hetk pika vajutusega ning lisa nimi või märkus hiljem
 • Märgi järjehoidjad lemmikuteks, tsitaatideks, märkusteks või kohtadeks, mida uuesti kuulata
 • Kuulamisajalugu näitab iga esitust, pausi ja hüpet, nii et leiad alati tee tagasi
-• Kui raamatu käivitas sinu auto, kõrvaklapid või nutikell, pakub Voice sulle võimalust tagasi minna
+• Näed, millal sinu auto, kõrvaklapid või nutikell raamatu käivitas, ja ühe puudutusega saad tagasi sinna, kus olid
+• Sünkrooni oma heliraamatute kaustad, näiteks Syncthingiga, ja koht, kus sa pooleli oled, kiirus ning järjehoidjad tulevad kaasa ka sinu teistesse seadmetesse
 
 <b>Sinu raamatukogu, just nii nagu soovid</b>
 
@@ -32,7 +33,7 @@ Vali kaust, kus on sinu heliraamatud. Voice näitab sulle leitud raamatuid, lisa
 • Kaanepildid failist, telefonist või veebiotsingust
 • Avakuva vidinad: „Praegu mängib“ ja „Raamaturiiul“
 • Meediumimärguanne ja Android Auto
-• Hele ja tume kujundus, Dünaamiline värv ja värviskeemid, et teha Voice enda omaks
+• Hele, tume ja puhas must kujundus, Dünaamiline värv ja värviskeemid, et teha Voice enda omaks
 • Saadaval 32 keeles
 
 <b>Kasuta oma faile</b>

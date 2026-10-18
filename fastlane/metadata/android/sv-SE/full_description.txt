@@ -21,7 +21,8 @@ Välj mappen med dina ljudböcker. Voice visar böckerna den hittar, lägger til
 • Håll in för att spara ett ögonblick och lägg till ett namn eller en anteckning senare
 • Markera bokmärken som favoriter, citat, anteckningar eller ställen att lyssna på igen
 • Lyssningshistoriken visar varje uppspelning, paus och hopp, så att du alltid hittar tillbaka
-• Om bilen, hörlurarna eller klockan startade en bok erbjuder Voice att ta dig tillbaka
+• Se när bilen, hörlurarna eller klockan startade en bok och gå tillbaka dit du var med ett tryck
+• Synka dina ljudboksmappar, till exempel med Syncthing, så följer var du är, hastigheten och bokmärkena med till dina andra enheter
 
 <b>Ditt bibliotek, ditt sätt</b>
 
@@ -32,7 +33,7 @@ Välj mappen med dina ljudböcker. Voice visar böckerna den hittar, lägger til
 • Omslag från filen, telefonen eller en sökning på nätet
 • Widgetar för startskärmen: ”Spelas nu” och ”Bokhylla”
 • Medieavisering och Android Auto
-• Ljust och mörkt tema, Dynamisk färg och färgscheman som gör Voice till ditt eget
+• Ljust, mörkt och helsvart tema, Dynamisk färg och färgscheman som gör Voice till ditt eget
 • Finns på 32 språk
 
 <b>Ta med dina egna filer</b>

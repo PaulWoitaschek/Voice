@@ -21,7 +21,8 @@ Alege directorul cu cărțile tale audio. Voice îți arată cărțile găsite, 
 • Salvează un moment ținând apăsat și adaugă mai târziu un nume sau o notă
 • Marchează semnele de carte ca favorite, citate, note sau pasaje de reascultat
 • Istoricul de ascultare arată fiecare redare, pauză și salt, ca să găsești mereu drumul înapoi
-• Dacă mașina, căștile sau ceasul au pornit o carte, Voice îți propune să revii unde erai
+• Vezi când mașina, căștile sau ceasul au pornit o carte și revii cu o atingere unde erai
+• Sincronizează directoarele cu cărți audio, de exemplu cu Syncthing, iar locul unde ai rămas, viteza și semnele de carte te urmează pe celelalte dispozitive
 
 <b>Biblioteca ta, cum îți place</b>
 
@@ -32,7 +33,7 @@ Alege directorul cu cărțile tale audio. Voice îți arată cărțile găsite, 
 • Coperte din fișier, din telefon sau dintr-o căutare online
 • Widgeturi pentru ecranul de pornire: „Se redă acum” și „Raft”
 • Notificare media și Android Auto
-• Temă luminoasă și întunecată, Culori dinamice și scheme de culori, ca să faci Voice al tău
+• Temă luminoasă și întunecată, negru pur, Culori dinamice și scheme de culori, ca să faci Voice al tău
 • Disponibil în 32 de limbi
 
 <b>Adu-ți propriile fișiere</b>

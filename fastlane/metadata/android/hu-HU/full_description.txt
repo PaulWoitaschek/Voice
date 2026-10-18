@@ -21,7 +21,8 @@ Válassza ki a hangoskönyveit tartalmazó mappát. A Voice megmutatja a talált
 • Hosszú lenyomással elmenthet egy pillanatot, és később nevet vagy jegyzetet adhat hozzá
 • Jelölje meg a könyvjelzőket kedvencként, idézetként, jegyzetként vagy újrahallgatásra
 • A hallgatási előzmények minden lejátszást, szünetet és ugrást mutatnak, így mindig visszatalál
-• Ha az autója, a fejhallgatója vagy az órája indított el egy könyvet, a Voice felajánlja a visszatérést oda, ahol tartott
+• Látja, mikor indított el egy könyvet az autója, a fejhallgatója vagy az órája, és egy koppintással visszatérhet oda, ahol tartott
+• Szinkronizálja a hangoskönyv-mappáit, például a Syncthinggel, és a többi eszközén is ott folytathatja, ahol tartott, ugyanazzal a sebességgel és könyvjelzőkkel
 
 <b>Könyvtár az Ön ízlése szerint</b>
 
@@ -32,7 +33,7 @@ Válassza ki a hangoskönyveit tartalmazó mappát. A Voice megmutatja a talált
 • Borítók a fájlból, a telefonjáról vagy online keresésből
 • Kezdőképernyő-widgetek: Most szól és Könyvespolc
 • Lejátszásvezérlés az értesítésben és Android Auto
-• Világos és sötét téma, dinamikus színek és színsémák, hogy a Voice-t a sajátjává tehesse
+• Világos, sötét és tiszta fekete téma, dinamikus színek és színsémák, hogy a Voice-t a sajátjává tehesse
 • 32 nyelven érhető el
 
 <b>A saját fájljaival működik</b>

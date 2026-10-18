@@ -21,7 +21,8 @@ Wybierz folder ze swoimi audiobookami. Voice pokaże ci znalezione książki, do
 • Przytrzymaj przycisk zakładki, aby zapisać chwilę, a nazwę lub notatkę dodaj później
 • Oznaczaj zakładki jako ulubione, cytaty, notatki albo fragmenty do powtórki
 • Historia słuchania pokazuje każde odtworzenie, pauzę i skok, więc zawsze odnajdziesz drogę powrotną
-• Jeśli książkę włączył samochód, słuchawki albo zegarek, Voice zaproponuje powrót do poprzedniego miejsca
+• Widzisz, kiedy samochód, słuchawki albo zegarek włączyły książkę, i jednym dotknięciem wracasz do poprzedniego miejsca
+• Synchronizuj foldery z audiobookami, na przykład przez Syncthing, a miejsce, w którym jesteś, szybkość i zakładki przejdą z tobą na inne urządzenia
 
 <b>Biblioteka po twojemu</b>
 
@@ -32,7 +33,7 @@ Wybierz folder ze swoimi audiobookami. Voice pokaże ci znalezione książki, do
 • Okładki z pliku, z telefonu lub z wyszukiwania w internecie
 • Widżety na ekranie głównym: Teraz odtwarzane i Półka
 • Powiadomienie z odtwarzaczem i Android Auto
-• Jasny i ciemny motyw, kolor dynamiczny i schematy kolorów – Voice na twoją modłę
+• Jasny i ciemny motyw, czysta czerń, kolor dynamiczny i schematy kolorów – Voice na twoją modłę
 • Dostępny w 32 językach
 
 <b>Twoje własne pliki</b>

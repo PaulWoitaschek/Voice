@@ -21,7 +21,8 @@ Vyberte složku se svými audioknihami. Voice vám ukáže knihy, které v ní n
 • Uložte si okamžik dlouhým stisknutím a název nebo poznámku přidejte později
 • Označte záložky jako oblíbené, citáty, poznámky nebo místa, která si chcete poslechnout znovu
 • Historie poslechu ukazuje každé přehrání, pozastavení i skok, takže vždy najdete cestu zpět
-• Pokud knihu spustilo auto, sluchátka nebo hodinky, Voice vám nabídne návrat tam, kde jste byli
+• Uvidíte, kdy knihu spustilo auto, sluchátka nebo hodinky, a jedním klepnutím se vrátíte tam, kde jste byli
+• Synchronizujte složky s audioknihami, třeba pomocí Syncthingu, a místo, kde jste skončili, rychlost i záložky vás budou čekat i na dalších zařízeních
 
 <b>Knihovna podle vás</b>
 
@@ -32,7 +33,7 @@ Vyberte složku se svými audioknihami. Voice vám ukáže knihy, které v ní n
 • Obaly ze souboru, z telefonu nebo z vyhledávání na internetu
 • Widgety na plochu: Právě hraje a Knihovnička
 • Ovládání přehrávání v oznámení a Android Auto
-• Světlý a tmavý motiv, dynamická barva a barevná schémata, abyste si Voice udělali po svém
+• Světlý, tmavý a čistě černý motiv, dynamická barva a barevná schémata, abyste si Voice udělali po svém
 • K dispozici ve 32 jazycích
 
 <b>Vaše vlastní soubory</b>

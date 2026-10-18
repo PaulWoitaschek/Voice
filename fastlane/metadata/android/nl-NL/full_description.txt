@@ -21,7 +21,8 @@ Kies de map met je luisterboeken. Voice laat je de gevonden boeken zien, voegt z
 • Bewaar een moment door lang te drukken, en voeg later een naam of notitie toe
 • Markeer bladwijzers als favoriet, citaat, notitie of plek om terug te luisteren
 • Je luistergeschiedenis toont elke start, pauze en sprong, zodat je altijd je weg terugvindt
-• Startte je auto, koptelefoon of horloge een boek? Dan biedt Voice aan om je terug te brengen
+• Zie wanneer je auto, koptelefoon of horloge een boek startte, en ga met één tik terug naar waar je was
+• Synchroniseer je luisterboekmappen, bijvoorbeeld met Syncthing, en waar je gebleven bent, je snelheid en je bladwijzers gaan mee naar je andere apparaten
 
 <b>Jouw bibliotheek, jouw manier</b>
 
@@ -32,7 +33,7 @@ Kies de map met je luisterboeken. Voice laat je de gevonden boeken zien, voegt z
 • Omslagen uit het bestand, van je telefoon of via online zoeken
 • Widgets voor je startscherm: “Speelt nu” en “Boekenplank”
 • Mediamelding en Android Auto
-• Licht en donker thema, Dynamische kleur en kleurenschema's om Voice helemaal van jou te maken
+• Licht, donker en puur zwart thema, Dynamische kleur en kleurenschema's om Voice helemaal van jou te maken
 • Beschikbaar in 32 talen
 
 <b>Neem je eigen bestanden mee</b>
