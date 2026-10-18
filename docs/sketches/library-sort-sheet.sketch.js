@@ -38,7 +38,7 @@ chip(x + 24, y + 618, 120, 'Audiobooks', { selected: true });
 chip(x + 152, y + 618, 70, 'Kids');
 chip(x + 24, y + 658, 210, 'audiobooks.example.com', { selected: true });
 
-note(x + 400, y + 20, ['One place for the order', 'and what you see. The dot', 'says something is hidden.']);
+note(x + 400, y + 20, ['One place for the order', 'and what you see. The dot', 'says a filter is on.']);
 arrow([[x + 396, y + 44], [x + 320, y + 20], [sort.x + 4, sort.y - 22]]);
 
 note(x + 400, y + 330, ['Like today until you change', 'it. Series always keep', 'their own order.']);

@@ -36,9 +36,6 @@ roundRect(x + 30, y + 676, 300, 56, 28, { ...HATCH, fill: '#d0d0d0', hachureGap:
 note(20, y + 90, ['Select in the book', 'actions, then tap more.']);
 arrow([[236, y + 80], [270, y + 62], [x + 16, y + 54]]);
 
-note(20, y + 300, ['In the order of', 'their file names,', '2 before 10.']);
-arrow([[200, y + 350], [240, y + 370], [x + 10, rows[2] + 40]]);
-
 note(x + 400, y + 30, ['Everything shown,', 'like all results', 'of a search.']);
 arrow([[x + 396, y + 50], [x + 370, y + 40], [selectAll.x + selectAll.width + 8, selectAll.y + 6]]);
 

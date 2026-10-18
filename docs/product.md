@@ -53,10 +53,8 @@ A new listener adds a folder of audiobooks and is listening within minutes, with
 
 - **My author, series and book folders fit no layout.** With "Folders are authors", the folder is the author when the
   tags have none, and a folder of books in it is a series. [#3162]
-
-**Open**
-
-- **Wrong tags mean renaming every book by hand.** [#3502]
+- **Wrong tags mean renaming every book by hand.** Select many books and set their author or series at once, or rename
+  an author or a series for all its books. [#3502]
 
 **Won't solve**
 

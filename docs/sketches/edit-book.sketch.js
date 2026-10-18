@@ -23,7 +23,7 @@ const part = field(x + 256, y + 412, 80, 'Part', '2');
 
 roundRect(x + 24, y + 474, 220, 100, 12, { ...WHITE, strokeWidth: 1.4 });
 const suggestion = text(x + 40, y + 504, 'The Signal Saga', { size: 14, weight: 700 });
-text(x + 40, y + 522, '3 books', { size: 12, fill: GREY });
+text(x + 40, y + 522, '4 books', { size: 12, fill: GREY });
 text(x + 40, y + 554, 'New series “The Sig”', { size: 14, fill: GREY });
 
 const reset = text(x + 24, y + 640, 'Use the names from the files', { size: 14, weight: 700, fill: GREY });
