@@ -114,13 +114,15 @@ fixing many books at once has to take a few taps.
   last the album.
 - **Tags:** `MVNM` and `MVIN` in MP3 and M4B files, and the `SERIES` and `SERIES-PART` tags that Audiobookshelf reads
   too.
-- **Folders:** with "Folders are authors", the folder is the author. A folder of book folders in it is a series, so
-  `Author/Series/Book` works too. Folders named like "CD 1" or "Disc 2" stay part of their book. The long book such a
-  series folder makes today becomes its books, and its position and bookmarks move along, like when the layout
-  changes.
+- **Folders:** with "Folders are authors", the folder is the author, also when the artist tag says something else.
+  A folder of book folders in it is a series: `Rowling/Harry Potter/1 Philosopher's Stone` is book 1 of Harry Potter
+  by Rowling. Today the whole Harry Potter folder is one book of over 100 hours. That long book becomes its books, and
+  its position and bookmarks move along, like when the layout changes. Folders named like "CD 1" or "Disc 2" stay part
+  of their book.
 - **Album:** books of one file in the same folder that share an album are a series named after the album. Each is
-  named after its own title, or its file name without one. 160 episodes of "The Three Investigators" become one stack
-  of 160 episodes with their own names.
+  named after its own title, or its file name without one. 160 episodes with the album "Die drei ???" are 160 books
+  called "Die drei ???" today. They become one stack, with episodes like "Folge 63: Monster-Wolken" in it. When the
+  folder was added as one book, its files stay chapters and nothing changes.
 - **Authors:** the artist tag, or the album artist when there's none. "Unknown" and `<Unknown>` count as no author. A
   book without an author has no author screen and comes last when sorted by author.
 
@@ -230,16 +232,17 @@ fixing many books at once has to take a few taps.
 Each step helps on its own.
 
 1. Read series and part from M4B files and the `SERIES` tags.
-2. Series from albums, and authors and series from folders with "Folders are authors".
-3. The edit sheet with author, series and part.
-4. Series stacks in the library and the series screen.
-5. Offering the next book of a series.
-6. The author screen.
-7. Authors and series in search, Browse opening their screen, and numbers in search.
-8. Hiding books.
-9. The sort sheet.
-10. Selecting several books.
-11. Android Auto and the Assistant using the library search.
+2. Radio plays and other episodes: each file keeps its own title, and files that share an album become a series.
+3. "Folders are authors": the folder is the author, and a series folder becomes its books instead of one long book.
+4. The edit sheet with author, series and part.
+5. Series stacks in the library and the series screen.
+6. Offering the next book of a series.
+7. The author screen.
+8. Authors and series in search, Browse opening their screen, and numbers in search.
+9. Hiding books.
+10. The sort sheet.
+11. Selecting several books.
+12. Android Auto and the Assistant using the library search.
 
 ## Open questions
 
