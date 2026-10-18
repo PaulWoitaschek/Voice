@@ -21,7 +21,8 @@ Pick the folder with your audiobooks. Voice shows you the books it finds, adds t
 • Save a moment with a long press, and add a name or a note later
 • Mark bookmarks as favorites, quotes, notes, or places to revisit
 • Your listening history shows every play, pause, and jump, so you can always find your way back
-• If your car, headphones, or watch started a book, Voice offers to take you back
+• See when your car, headphones, or watch started a book, and go back to where you were with one tap
+• Sync your audiobook folders, for example with Syncthing, and your place, speed, and bookmarks follow you to your other devices
 
 <b>Your library, your way</b>
 
@@ -32,7 +33,7 @@ Pick the folder with your audiobooks. Voice shows you the books it finds, adds t
 • Covers from the file, your phone, or an online search
 • Home screen widgets: Now playing and Shelf
 • Media notification and Android Auto
-• Light and dark theme, Dynamic color, and color schemes to make Voice yours
+• Light, dark, and pure black themes, Dynamic color, and color schemes to make Voice yours
 • Available in 32 languages
 
 <b>Bring your own files</b>

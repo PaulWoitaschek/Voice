@@ -21,7 +21,8 @@ Wähle den Ordner mit Deinen Hörbüchern. Voice zeigt Dir die gefundenen Büche
 • Einen Moment mit langem Tippen speichern und später einen Namen oder eine Notiz ergänzen
 • Lesezeichen als Favorit, Zitat, Notiz oder „Nochmal hören“ markieren
 • Dein Hörverlauf zeigt jede Wiedergabe, jede Pause und jeden Sprung, damit Du immer zurückfindest
-• Hat Dein Auto, Dein Kopfhörer oder Deine Smartwatch ein Buch gestartet, bietet Voice Dir den Weg zurück an
+• Sieh, wann Dein Auto, Dein Kopfhörer oder Deine Smartwatch ein Buch gestartet hat, und spring mit einem Tippen dorthin zurück, wo Du warst
+• Synchronisiere Deine Hörbuchordner, etwa mit Syncthing, und Deine Stelle, Geschwindigkeit und Lesezeichen sind auf Deinen anderen Geräten dabei
 
 <b>Deine Bibliothek, Deine Wahl</b>
 
@@ -32,7 +33,7 @@ Wähle den Ordner mit Deinen Hörbüchern. Voice zeigt Dir die gefundenen Büche
 • Cover aus der Datei, von Deinem Handy oder aus der Online-Suche
 • Widgets für den Startbildschirm: „Läuft gerade“ und „Bücherregal“
 • Medienbenachrichtigung und Android Auto
-• Helles und dunkles Design, Dynamische Farben und Farbschemas, mit denen Du Voice zu Deinem machst
+• Helles und dunkles Design, reines Schwarz, Dynamische Farben und Farbschemas, mit denen Du Voice zu Deinem machst
 • In 32 Sprachen verfügbar
 
 <b>Bring Deine eigenen Dateien mit</b>

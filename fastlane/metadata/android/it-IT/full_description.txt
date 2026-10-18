@@ -21,7 +21,8 @@ Scegli la cartella con i tuoi audiolibri. Voice ti mostra i libri che trova, li 
 • Salva un momento tenendo premuto, poi aggiungi un nome o una nota quando vuoi
 • Classifica i segnalibri come preferiti, citazioni, note o da riascoltare
 • La cronologia d'ascolto mostra ogni riproduzione, pausa e salto, così puoi sempre ritrovare il punto in cui eri
-• Se la tua auto, le cuffie o l'orologio hanno avviato un libro, Voice ti propone di tornare dov'eri
+• Vedi quando la tua auto, le cuffie o l'orologio hanno avviato un libro e torna dov'eri con un tocco
+• Sincronizza le cartelle dei tuoi audiolibri, per esempio con Syncthing, e il punto in cui sei, la velocità e i segnalibri ti seguono sugli altri dispositivi
 
 <b>La tua libreria, a modo tuo</b>
 
@@ -32,7 +33,7 @@ Scegli la cartella con i tuoi audiolibri. Voice ti mostra i libri che trova, li 
 • Copertine dal file, dal telefono o da una ricerca online
 • Widget per la schermata Home: «In riproduzione» e «Scaffale»
 • Notifica multimediale e Android Auto
-• Tema chiaro e scuro, Colore dinamico e schemi colori per rendere Voice tuo
+• Tema chiaro, scuro e nero puro, Colore dinamico e schemi colori per rendere Voice tuo
 • Disponibile in 32 lingue
 
 <b>Usa i tuoi file</b>

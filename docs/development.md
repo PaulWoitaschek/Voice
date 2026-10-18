@@ -175,6 +175,10 @@ The generator uses:
 
 Only locales with `marketing.yml` get localized generated images. The script removes old generated screenshot folders before writing the current output, so deleted tablet screenshots do not remain in the repository.
 
+To take the raw screenshots again, run `./scripts/take_store_screenshots.py`. It needs `ffmpeg` and starts an agent
+emulator of its own (see the emulator skill), so your devices and library stay untouched. It adds a generated library
+with the books of the kiosk mode, and uses kiosk mode for the library, bookmarks, history, and feature graphic.
+
 The `artwork/package-lock.json` file is intentionally not checked in. CI and local generation use `npm install` from `artwork/package.json` to keep this small tool out of regular lockfile update churn.
 
 ## Versioning

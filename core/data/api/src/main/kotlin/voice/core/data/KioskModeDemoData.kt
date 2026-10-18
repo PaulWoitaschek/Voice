@@ -13,7 +13,7 @@ public object KioskModeDemoData {
     genre = "Science fiction",
     duration = "14:27:33",
     progress = 72,
-    chapter = "Chapter 12: The Signal",
+    chapter = "The Signal",
     currentPosition = "10:24:18",
     remaining = "4:03:15",
     bookmarks = listOf(
@@ -31,7 +31,7 @@ public object KioskModeDemoData {
     genre = "Cozy mystery",
     duration = "8:19:47",
     progress = 48,
-    chapter = "Chapter 8: After Closing",
+    chapter = "After Closing",
     currentPosition = "3:59:52",
     remaining = "4:19:55",
     bookmarks = listOf(
@@ -48,7 +48,7 @@ public object KioskModeDemoData {
     genre = "Adventure",
     duration = "11:05:22",
     progress = 33,
-    chapter = "Chapter 5: The Old Map",
+    chapter = "The Old Map",
     currentPosition = "3:39:17",
     remaining = "7:26:05",
     bookmarks = listOf(

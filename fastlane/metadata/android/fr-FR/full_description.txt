@@ -21,7 +21,8 @@ Choisissez le dossier de vos livres audio. Voice vous montre les livres trouvés
 • Enregistrez un moment d'un appui long, et ajoutez un nom ou une note plus tard
 • Classez vos marque-pages en favoris, citations, notes ou passages à réécouter
 • Votre historique d'écoute affiche chaque lecture, pause et saut, pour que vous retrouviez toujours votre chemin
-• Si votre voiture, votre casque ou votre montre a lancé un livre, Voice vous propose de revenir au bon endroit
+• Voyez quand votre voiture, votre casque ou votre montre a lancé un livre, et revenez où vous en étiez d'un simple appui
+• Synchronisez vos dossiers de livres audio, par exemple avec Syncthing, et retrouvez où vous en êtes, la vitesse et vos marque-pages sur vos autres appareils
 
 <b>Votre bibliothèque sur mesure</b>
 
@@ -32,7 +33,7 @@ Choisissez le dossier de vos livres audio. Voice vous montre les livres trouvés
 • Couvertures issues du fichier, de votre téléphone ou d'une recherche en ligne
 • Widgets pour l'écran d'accueil : « En cours de lecture » et « Étagère »
 • Notification multimédia et Android Auto
-• Thème clair et sombre, Couleur dynamique et jeux de couleurs pour faire de Voice le vôtre
+• Thème clair, sombre ou noir pur, Couleur dynamique et jeux de couleurs pour faire de Voice le vôtre
 • Disponible en 32 langues
 
 <b>Apportez vos propres fichiers</b>

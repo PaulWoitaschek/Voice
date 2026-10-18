@@ -21,7 +21,8 @@ Elige la carpeta con tus audiolibros. Voice te muestra los libros que encuentra,
 • Guarda un momento con una pulsación larga y ponle un nombre o una nota más tarde
 • Clasifica tus marcadores como favoritos, citas, notas o para repasar
 • Tu historial de escucha muestra cada reproducción, pausa y salto, para que siempre puedas volver
-• Si tu coche, tus auriculares o tu reloj inician un libro, Voice te ofrece volver a donde lo dejaste
+• Mira cuándo tu coche, tus auriculares o tu reloj iniciaron un libro y vuelve a donde estabas con un toque
+• Sincroniza tus carpetas de audiolibros, por ejemplo con Syncthing, y dónde te quedaste, la velocidad y los marcadores te acompañan en tus otros dispositivos
 
 <b>Tu biblioteca, a tu manera</b>
 
@@ -32,7 +33,7 @@ Elige la carpeta con tus audiolibros. Voice te muestra los libros que encuentra,
 • Portadas del propio archivo, de tu teléfono o de una búsqueda en internet
 • Widgets para la pantalla de inicio: «Reproduciendo ahora» y «Estantería»
 • Notificación multimedia y Android Auto
-• Tema claro y oscuro, Color dinámico y esquemas de colores para hacer Voice a tu medida
+• Tema claro, oscuro y negro puro, Color dinámico y esquemas de colores para hacer Voice a tu medida
 • Disponible en 32 idiomas
 
 <b>Trae tus propios archivos</b>
