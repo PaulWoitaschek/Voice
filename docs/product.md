@@ -51,8 +51,8 @@ A new listener adds a folder of audiobooks and is listening within minutes, with
 
 **Planned**, see the [library spec](library.md)
 
-- **My author, series and book folders fit no layout.** With "Folders are authors", the folder is the author and a
-  folder of books in it is a series. [#3162]
+- **My author, series and book folders fit no layout.** With "Folders are authors", the folder is the author when the
+  tags have none, and a folder of books in it is a series. [#3162]
 
 **Open**
 

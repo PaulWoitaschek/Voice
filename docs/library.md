@@ -110,21 +110,58 @@ fixing many books at once has to take a few taps.
 
 ## 4. Where series and authors come from
 
-- An edit in Voice comes first. Then the folders, with "Folders are authors". Then Audiobookshelf and the tags, and
-  last the album.
+- An edit in Voice comes first, then Audiobookshelf and the tags, then the folders, and last the album.
 - **Tags:** `MVNM` and `MVIN` in MP3 and M4B files, and the `SERIES` and `SERIES-PART` tags that Audiobookshelf reads
   too.
-- **Folders:** with "Folders are authors", the folder is the author, also when the artist tag says something else.
-  A folder of book folders in it is a series: `Rowling/Harry Potter/1 Philosopher's Stone` is book 1 of Harry Potter
-  by Rowling. Today the whole Harry Potter folder is one book of over 100 hours. That long book becomes its books, and
-  its position and bookmarks move along, like when the layout changes. Folders named like "CD 1" or "Disc 2" stay part
-  of their book.
+- **Authors:** the artist tag, or the album artist when there's none. "Unknown" and `<Unknown>` count as no author.
+  With "Folders are authors", the folder is the author of books whose tags have none. The tags come first, because
+  some listeners use this mode for folders like "Kids" or "Crime". A book without an author has no author screen and
+  comes last when sorted by author.
 - **Album:** books of one file in the same folder that share an album are a series named after the album. Each is
-  named after its own title, or its file name without one. 160 episodes with the album "Die drei ???" are 160 books
-  called "Die drei ???" today. They become one stack, with episodes like "Folge 63: Monster-Wolken" in it. When the
-  folder was added as one book, its files stay chapters and nothing changes.
-- **Authors:** the artist tag, or the album artist when there's none. "Unknown" and `<Unknown>` count as no author. A
-  book without an author has no author screen and comes last when sorted by author.
+  named after its own title. 160 episodes with the album "Die drei ???" are 160 books called "Die drei ???" today.
+  They become one stack, with episodes like "Folge 63: Monster-Wolken" in it.
+- Albums that only hold a placeholder, like "Unknown" or "Audiobook", don't count. A title that's only a number or like
+  "Track 01" isn't a better name, so that book keeps the album's name, and the series follows the file names. When
+  the folder was added as one book, its files stay chapters and nothing changes.
+
+### Series folders
+
+With "Folders are authors", every folder in an author's folder is one book today, with everything in it.
+`Rowling/Harry Potter/` is one book of over 100 hours, even when it holds seven book folders.
+
+Voice checks each of these folders, and the first rule that fits decides:
+
+1. It holds audio files itself: one book, like today.
+2. At most one folder in it holds audio: one book. Folders without audio, like "Scans", don't count.
+3. One of its folders starts with "CD", "Disc" or "Disk": one book.
+4. Its folders only differ by a number or a single letter, like "CD 1" and "CD 2", "01" and "02", or "Side A" and
+   "Side B": one book.
+5. Otherwise it's a series named after the folder. Each folder in it is a book with everything inside, in the order
+   of their names, with 2 before 10.
+
+When in doubt, it stays one book like today. A long book can still be listened to, but a book that was split by
+mistake can't be joined again. That's why "Part" isn't a disc word: "Part 1" is often a book of its own.
+
+| In `Author/X/` | Result |
+|---|---|
+| `The Swarm/01.mp3`, `02.mp3` | One book |
+| `The Swarm/CD 1/`, `CD 2/` | One book |
+| `The Swarm/CD1 - The Beginning/`, `CD2 - The Escape/` | One book |
+| `Harry Potter/1 Philosopher's Stone/`, `2 Chamber of Secrets/` | A series of two books |
+| `Harry Potter/1 Philosopher's Stone/CD 1/`, `CD 2/` | Book 1 holds both CDs |
+| `Harry Potter/Book 1/`, `Book 2/` | One long book, like today |
+| `Harry Potter/1.m4b`, `2.m4b` | One long book, like today |
+| `The Swarm/Part 1 - The Beginning/`, `Part 2 - The Escape/` | A series, by mistake |
+
+For books already in the library:
+
+- The scan after the update splits these books without asking, because the preview only shows when a folder is
+  added.
+- Bookmarks and the listening history move to the book their file is in, and the position to the book that was
+  playing, like when the layout changes today.
+- New: the books before the one that was playing are marked Completed, so a listener in book 4 doesn't find books 1
+  to 3 in Not started yet.
+- A name or cover set on the long book is lost, because the new books take their names from their files.
 
 ## 5. Sorting and filtering
 
@@ -223,8 +260,9 @@ fixing many books at once has to take a few taps.
 - An author tag with several names gets one author screen for all of them, not one per name.
 - Names in another order, like "Rowling, J. K.", aren't matched on their own. One rename joins them.
 - A narrator in the artist tag stays the author. Selecting their books and setting the author fixes it.
-- Folders only become series with "Folders are authors". A series folder with the book files right in it stays one
-  book, and disc folders not named like "CD 1" or "Disc 2" become books of their own.
+- Folders only become series with "Folders are authors". A series folder with the book files right in it, and book
+  folders that only differ by a number, stay one long book. Disc folders with names of their own that don't start
+  with CD, Disc or Disk become books.
 - Search doesn't look through chapter names or file names.
 
 ## Order of work
@@ -233,16 +271,18 @@ Each step helps on its own.
 
 1. Read series and part from M4B files and the `SERIES` tags.
 2. Radio plays and other episodes: each file keeps its own title, and files that share an album become a series.
-3. "Folders are authors": the folder is the author, and a series folder becomes its books instead of one long book.
+3. "Folders are authors": the folder is the author of books whose tags have none.
 4. The edit sheet with author, series and part.
 5. Series stacks in the library and the series screen.
 6. Offering the next book of a series.
-7. The author screen.
-8. Authors and series in search, Browse opening their screen, and numbers in search.
-9. Hiding books.
-10. The sort sheet.
-11. Selecting several books.
-12. Android Auto and the Assistant using the library search.
+7. Series folders with "Folders are authors". It changes which files make a book, so it comes once stacks show the
+   result.
+8. The author screen.
+9. Authors and series in search, Browse opening their screen, and numbers in search.
+10. Hiding books.
+11. The sort sheet.
+12. Selecting several books.
+13. Android Auto and the Assistant using the library search.
 
 ## Open questions
 
