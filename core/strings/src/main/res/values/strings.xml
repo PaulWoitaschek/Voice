@@ -251,6 +251,12 @@
     <string name="folder.add.action.file">Add a single file instead</string>
     <!-- Main button on the add content screen that opens the system folder picker. Also shown when a picked folder has no audio files. -->
     <string name="folder.add.action.folder">Choose a folder</string>
+    <!-- Tip on the add content screen after the system folder picker was closed without a folder. The second Audiobooks is the name of the folder on the phone, which is always in English, so keep it untranslated. -->
+    <string name="folder.add.help.computer">Audiobooks still on your computer? Copy them to your phone first, for example into the Audiobooks folder.</string>
+    <!-- Tip on the add content screen after the system folder picker was closed without a folder. Android 11 and newer don't allow picking the Download folder itself, only folders inside it. Download is the name of the folder on the phone, which is always in English, so keep it untranslated. -->
+    <string name="folder.add.help.download">Android doesn\'t let apps open the Download folder itself. Pick a folder inside it.</string>
+    <!-- Title of the tips on the add content screen, shown after the system folder picker was closed without a folder. -->
+    <string name="folder.add.help.title">Didn\'t find your audiobooks?</string>
     <!-- Subtitle on the add content screen. Explains that picking a folder works for one book as well as for a whole library. -->
     <string name="folder.add.subtitle">Pick the folder with your audiobooks. It can hold a single book or your whole library.</string>
     <!-- Title for the folder picker during normal app use. -->
@@ -470,10 +476,8 @@
     <string name="onboarding.analytics_consent.action.enable">Continue with analytics</string>
     <!-- Link label for opening the privacy policy from analytics consent. -->
     <string name="onboarding.analytics_consent.action.privacy_policy">Privacy Policy</string>
-    <!-- Description for analytics consent during onboarding. -->
-    <string name="onboarding.analytics_consent.description">Allow us to collect anonymous usage data to help improve the app. You can change this later in settings.</string>
-    <!-- Title for analytics consent during onboarding. -->
-    <string name="onboarding.analytics_consent.title">Help improve Voice</string>
+    <!-- One short line on the onboarding welcome screen, above the buttons to continue with or without analytics. Asks whether the listener shares anonymous usage data and says they can change it in settings. -->
+    <string name="onboarding.analytics_consent.description">Share anonymous usage data to help improve Voice? You can change this in settings.</string>
     <!-- Button label for leaving onboarding and starting playback. -->
     <string name="onboarding.completion.action.start_listening">Start Listening</string>
     <!-- Subtitle on the onboarding completion screen. -->
@@ -486,10 +490,10 @@
     <string name="onboarding.explanation.title">Your Library, Your Way</string>
     <!-- Button label for starting the onboarding from the welcome screen. -->
     <string name="onboarding.welcome.action.start">Let\'s go</string>
-    <!-- Subtitle on the onboarding welcome screen. -->
-    <string name="onboarding.welcome.subtitle">Your personal pocket audiobook player. Let\'s get you set up.</string>
-    <!-- Title on the onboarding welcome screen. -->
-    <string name="onboarding.welcome.title">Welcome to Voice!</string>
+    <!-- Subtitle on the onboarding welcome screen, the first thing a new listener reads. Says what Voice does for them: it plays the audiobook files on their phone, remembers where they stopped in every book, costs nothing, shows no ads and needs no account. -->
+    <string name="onboarding.welcome.subtitle">Voice plays the audiobooks on your phone and remembers your place in each one. Free, with no ads and no account.</string>
+    <!-- Title on the onboarding welcome screen, shown below the Voice app icon. Says that Voice is an app made just for listening to audiobooks. Title case in English; use the language's own capitalization. -->
+    <string name="onboarding.welcome.title">Made for Your Audiobooks</string>
     <!-- Label for the playback action that skips forward. -->
     <string name="playback.action.fast_forward">Fast forward</string>
     <!-- Content description for a playback button that pauses audio. -->
