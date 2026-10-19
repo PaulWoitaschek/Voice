@@ -24,14 +24,10 @@ public data class Chapter(
   @ColumnInfo(defaultValue = "0")
   val fileSize: Long,
   val markData: List<MarkData>,
-) : Comparable<Chapter> {
+) {
 
   @Ignore
   val chapterMarks: List<ChapterMark> = parseMarkData()
-
-  override fun compareTo(other: Chapter): Int {
-    return id.compareTo(other.id)
-  }
 }
 
 private fun Chapter.parseMarkData(): List<ChapterMark> {

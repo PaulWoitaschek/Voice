@@ -6,13 +6,13 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
+import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.isAudioFile
 import voice.core.data.repo.ChapterRepo
 import voice.core.data.repo.getOrPut
 import voice.core.documentfile.CachedDocumentFile
-import voice.core.documentfile.walk
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 
@@ -31,9 +31,7 @@ internal class ChapterParser(
     val analyzedMetadata = ConcurrentHashMap<ChapterId, Metadata>()
     val parallelAnalyses = Semaphore(4)
 
-    val chapters = documentFile.walk()
-      .filter { it.isAudioFile() }
-      .toList()
+    val chapters = documentFile.audioFilesInOrder()
       .map { file ->
         async {
           parallelAnalyses.withPermit {
@@ -59,10 +57,19 @@ internal class ChapterParser(
       }
       .awaitAll()
       .filterNotNull()
-      .sorted()
     ChapterParseResult(
       chapters = chapters,
       firstChapterMetadata = chapters.firstOrNull()?.let { analyzedMetadata[it.id] },
     )
   }
+}
+
+// Cloud providers like Nextcloud put ids into their uris instead of the file names, so the uris can't give the order.
+private fun CachedDocumentFile.audioFilesInOrder(): List<CachedDocumentFile> = when {
+  isDirectory ->
+    children
+      .sortedWith(compareBy<CachedDocumentFile> { it.isFile }.thenBy(NaturalOrderComparator.stringComparator) { it.name.orEmpty() })
+      .flatMap { it.audioFilesInOrder() }
+  isAudioFile() -> listOf(this)
+  else -> emptyList()
 }
