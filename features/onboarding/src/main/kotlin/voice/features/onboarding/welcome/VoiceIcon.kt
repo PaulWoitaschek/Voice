@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.min
-import kotlin.math.sin
 import kotlin.math.sqrt
 
 /** Tapping it is just for fun, so it's hidden from accessibility services. */
@@ -98,7 +97,7 @@ internal fun VoiceIcon(
   ) {
     val t = clock()
     val side = min(min(size.width, size.height) * 0.6F, 200.dp.toPx())
-    val unit = side / ICON_SIZE
+    val unit = side / VISIBLE_SIZE
     val topLeft = Offset(center.x - side / 2, center.y - side / 2)
     val cornerFraction = 0.25F
 
@@ -126,8 +125,8 @@ internal fun VoiceIcon(
           path = wave,
           topLeft = topLeft,
           unit = unit,
-          phase = BACK_PHASE + t * 7F,
-          amplitude = amplitude * (1F + 0.06F * sin(t * 1.3F)),
+          phase = BACK_PHASE + t * SPEED,
+          amplitude = amplitude,
           drop = BACK_DROP,
           color = colors.onPrimary,
           alpha = alpha,
@@ -136,8 +135,8 @@ internal fun VoiceIcon(
           path = wave,
           topLeft = topLeft,
           unit = unit,
-          phase = FRONT_PHASE + t * 10F,
-          amplitude = amplitude * (1F + 0.06F * sin(t * 1.7F + 1F)),
+          phase = FRONT_PHASE + t * SPEED,
+          amplitude = amplitude,
           drop = 0F,
           color = colors.onPrimary,
           alpha = alpha,
@@ -159,9 +158,9 @@ private fun DrawScope.drawWave(
 ) {
   path.rewind()
   for (i in 0..SAMPLES) {
-    val x = ICON_SIZE * i / SAMPLES
+    val x = VISIBLE_START + VISIBLE_SIZE * i / SAMPLES
     val y = CENTER + (waveY(x + phase) - CENTER) * amplitude + drop
-    val point = topLeft + Offset(x * unit, y * unit)
+    val point = topLeft + Offset((x - VISIBLE_START) * unit, (y - VISIBLE_START) * unit)
     if (i == 0) path.moveTo(point.x, point.y) else path.lineTo(point.x, point.y)
   }
   drawPath(path, color, alpha = alpha, style = Stroke(width = STROKE_WIDTH * unit, cap = StrokeCap.Round, join = StrokeJoin.Round))
@@ -181,8 +180,13 @@ private fun waveY(x: Float): Float {
 
 private const val ICON_SIZE = 108F
 private const val CENTER = ICON_SIZE / 2
-private const val SAMPLES = 216
-private const val STROKE_WIDTH = 2.6F
+
+// the part of the vector the Play Store icon shows
+private const val VISIBLE_SIZE = ICON_SIZE / 1.3F
+private const val VISIBLE_START = CENTER - VISIBLE_SIZE / 2
+private const val SAMPLES = 160
+private const val STROKE_WIDTH = 2F
+private const val SPEED = 8F
 private const val RADIUS = 11.9F
 private const val CHORD = 22.12F
 private const val SLOPE = 7.92F
