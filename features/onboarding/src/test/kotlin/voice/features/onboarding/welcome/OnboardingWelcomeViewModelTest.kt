@@ -8,9 +8,6 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import voice.core.analytics.api.Analytics
 import voice.core.common.DispatcherProvider
-import voice.core.featureflag.MemoryFeatureFlag
-import voice.core.featureflag.OnboardingExperiment
-import voice.core.featureflag.OnboardingVariant
 import voice.features.onboarding.MemoryDataStore
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -23,39 +20,32 @@ class OnboardingWelcomeViewModelTest {
   private val navigator = mockk<Navigator>(relaxUnitFun = true)
   private val analytics = mockk<Analytics>(relaxUnitFun = true)
   private val analyticsConsent = MemoryDataStore(false)
-  private val variant = MemoryFeatureFlag(OnboardingVariant.Control.key)
   private val viewModel = OnboardingWelcomeViewModel(
     navigator = navigator,
     analyticsConsentStore = analyticsConsent,
     appInfoProvider = mockk(),
-    onboardingExperiment = OnboardingExperiment(variant),
     analytics = analytics,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
   )
 
   @Test
-  fun `continuing with analytics stores the consent and starts the variant`() = scope.runTest {
-    variant.value = OnboardingVariant.Guided.key
-
+  fun `continuing with analytics stores the consent before starting`() = scope.runTest {
     viewModel.onContinueWithAnalytics()
     runCurrent()
 
     assertEquals(expected = true, actual = analyticsConsent.data.first())
     verify {
-      analytics.event("onboarding_start", mapOf("variant" to "guided"))
-      navigator.goTo(Destination.OnboardingGuide)
+      analytics.event("onboarding_start")
+      navigator.goTo(Destination.OnboardingExplanation)
     }
   }
 
   @Test
-  fun `continuing without analytics starts the control`() = scope.runTest {
+  fun `continuing without analytics stores no consent`() = scope.runTest {
     viewModel.onContinueWithoutAnalytics()
     runCurrent()
 
     assertEquals(expected = false, actual = analyticsConsent.data.first())
-    verify {
-      analytics.event("onboarding_start", mapOf("variant" to "control"))
-      navigator.goTo(Destination.OnboardingExplanation)
-    }
+    verify { navigator.goTo(Destination.OnboardingExplanation) }
   }
 }
