@@ -41,7 +41,9 @@ class OnboardingWelcomeViewModelTest {
   }
 
   @Test
-  fun `continuing without analytics stores no consent`() = scope.runTest {
+  fun `continuing without analytics withdraws an earlier consent`() = scope.runTest {
+    analyticsConsent.updateData { true }
+
     viewModel.onContinueWithoutAnalytics()
     runCurrent()
 
