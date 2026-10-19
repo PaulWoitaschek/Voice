@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-import com.android.build.api.dsl.ManagedVirtualDevice
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import java.util.Properties
 
@@ -33,8 +32,6 @@ android {
     applicationId = "de.ph1b.audiobook"
     versionName = providers.gradleProperty("voice.versionName").orNull ?: "1.0.0"
     versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: Int.MAX_VALUE
-
-    testInstrumentationRunner = "voice.app.VoiceJUnitRunner"
   }
 
   val distributionFlavor = "distribution"
@@ -92,21 +89,6 @@ android {
           "proguard.pro",
         ),
       )
-    }
-  }
-
-  testOptions {
-    unitTests {
-      isReturnDefaultValues = true
-      isIncludeAndroidResources = true
-    }
-    animationsDisabled = true
-    execution = "ANDROIDX_TEST_ORCHESTRATOR"
-    managedDevices {
-      allDevices.create("voiceDevice", ManagedVirtualDevice::class.java) {
-        device = "Pixel 9"
-        apiLevel = 33
-      }
     }
   }
 
@@ -215,19 +197,6 @@ dependencies {
   implementation(libs.media3.session)
 
   testImplementation(kotlin("reflect"))
-
-  debugImplementation(libs.compose.ui.testManifest)
-
-  androidTestImplementation(platform(libs.compose.bom))
-  androidTestImplementation(libs.androidX.test.runner)
-  androidTestImplementation(libs.androidX.test.rules)
-  androidTestImplementation(libs.androidX.test.junit)
-  androidTestImplementation(libs.media3.testUtils.core)
-  androidTestImplementation(libs.kotlin.testJunit)
-  androidTestImplementation(libs.androidX.test.services)
-  androidTestImplementation(libs.compose.ui.testJunit)
-  androidTestImplementation(libs.coroutines.test)
-  androidTestUtil(libs.androidX.test.orchestrator)
 }
 
 // Git worktrees sign with the main checkout's keys, so the release key isn't copied into every worktree.

@@ -66,7 +66,6 @@ fun Project.baseSetup() {
     compileSdk = libs.findVersion("sdk-compile").get().requiredVersion.toInt()
     testOptions.apply {
       unitTests.isReturnDefaultValues = true
-      animationsDisabled = true
       unitTests.isIncludeAndroidResources = true
     }
     lint.lintConfig = project.layout.settingsDirectory.file("lint.xml").asFile
@@ -96,13 +95,10 @@ private fun Project.configurePowerAssert(libs: VersionCatalog) {
     )
     compilationFilter.set(
       PowerAssertCompilationFilter {
-        it.name.endsWith("UnitTest") || it.name.endsWith("AndroidTest")
+        it.name.endsWith("UnitTest")
       },
     )
   }
 
-  dependencies.run {
-    add("testImplementation", libs.findLibrary("kotlin.powerAssert.runtime").get())
-    add("androidTestImplementation", libs.findLibrary("kotlin.powerAssert.runtime").get())
-  }
+  dependencies.add("testImplementation", libs.findLibrary("kotlin.powerAssert.runtime").get())
 }
