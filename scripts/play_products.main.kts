@@ -1,7 +1,7 @@
 #!/usr/bin/env kotlin
 @file:DependsOn("com.github.ajalt.clikt:clikt-jvm:5.1.0")
 @file:DependsOn("com.google.auth:google-auth-library-oauth2-http:1.54.0")
-@file:DependsOn("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.11.0")
+@file:DependsOn("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.12.0")
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.Context
