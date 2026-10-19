@@ -217,6 +217,95 @@ For books already in the library:
 - Asking Android Auto to play something uses the same search instead of its own. "Play The Signal Saga" plays the book
   that's next. Chapter names are no longer searched there.
 
+## 10. Voice finds the books
+
+The three layouts are hard to understand, and many libraries fit none of them ([#3162]): M4B files next to author
+folders, and series folders in some of those. Instead, Voice looks at each folder on its own, and the listener fixes
+what it gets wrong.
+
+**The plan is to replace all three layouts with this.** An A/B test with new listeners shows first whether it works as
+well as the layouts. Until then, no library that's already set up changes.
+
+![Sketch: what Voice finds in a mixed library](sketches/find-books-layouts.png)
+
+**Finding books**
+
+- Every folder gets the guess the preview makes for the picked folder today. A folder that looks like one book is one
+  book, with its files and disc folders as its chapters. Any other folder holds books: each file in it is a book, and
+  each folder in it gets the same look.
+- Like in the other layouts, tags never decide where a book begins or ends.
+- Tags and edits name the author and the series first. Otherwise a folder of books is their series when most of their
+  names have a number, like "1 Philosopher's Stone" or "Discworld 01", and their author when they don't. The folder
+  around a series is its author. The picked folder is never an author, because it's mostly called "Audiobooks".
+
+| In the picked folder | Result |
+|---|---|
+| `Hobbit.m4b`, `Woolf/Mrs Dalloway/`, `Woolf/To the Lighthouse/` | Three books, two of them by Woolf |
+| `Rowling/Harry Potter/1 Philosopher's Stone/`, `2 Chamber of Secrets/` | A series by Rowling with two books |
+| `The Swarm/CD 1/`, `CD 2/` | One book |
+| `Die drei ???/Folge 001.mp3` to `Folge 160.mp3` | One book with 160 chapters, until it's split |
+| `The Swarm/Part 1 - The Beginning/`, `Part 2 - The Escape/` | A series, until it's joined |
+
+**Fixing what it gets wrong**
+
+![Sketch: splitting and joining in the preview](sketches/find-books-preview.png)
+
+- The preview shows the books and series Voice found, with one button to add them. A tap on one asks how its folder
+  is organized, with two of today's options: it's one book, or every folder or file in it is a book. The preview is
+  there when adding a folder, and later in the folder settings.
+- A split or a join is saved for the folder and wins over the guess, also when files are added later.
+
+![Sketch: split in the book actions, join on the series](sketches/find-books-library.png)
+
+- A book with more than one folder or file in it can be split in its actions: "Split into 7 books". Its folder then
+  holds books, like any other folder of books.
+- A series that's one folder can be joined on its screen: "Join into one book".
+- Position, bookmarks and the listening history move along, like when the layout changes today. A name or cover set on
+  the books that are split or joined is lost.
+
+### Testing it with new listeners
+
+- In the Play build, Remote Config puts half of the listeners who start Voice for the first time in a test group. The
+  group is set before the first folder is added and kept, so a library never changes because Remote Config did.
+- The test group only gets this way of finding books, with no layouts to pick, because a split or a join can make
+  every result the layouts make. The other half gets the layouts like today.
+- Listeners who already have folders, and the F-Droid build, aren't part of the test.
+- With the listeners who agreed to analytics, it compares how many add a folder and start a book on the first day, and
+  how many still listen after one and after four weeks. Next to it: how often the test group splits and joins, against
+  how often the other group changes the layout.
+- When the test group does at least as well, the layouts are replaced. If not, its folders move to the layout the guess
+  picks, and progress stays, like with every change of the layout.
+
+### Replacing the layouts
+
+Once the test shows it works, it becomes the only way Voice finds books, also for the folders that are already added.
+They move over with a split or a join saved for them, so only books that look like several books change:
+
+| Today | Moves over as | Books that change |
+|---|---|---|
+| A single file | A single file | None |
+| One book | The folder joined | None |
+| Every folder is a book | The folder split | Folders that look like several books, like a folder of book folders or of M4B files |
+| Folders are authors | The folder and each folder in it split | The series folders above |
+
+Saving a join for those folders too would keep every book as it is. Then nothing changes for listeners, and only
+folders added later work the new way.
+
+What stays:
+
+- A book is a folder or a file. Book ids, progress, bookmarks, `.voice` and Audiobookshelf stay as they are.
+- Adding a single file, and picking the folder of one book.
+- The preview before adding, the disc names, and M4B files and files over 200 MB as books of their own.
+- Folders as authors and series, now at any depth and not only with "Folders are authors".
+
+What goes:
+
+- The sheet "How is X organized?" and its three options. The preview shows the books found, and split and join fix
+  them.
+- "Every folder is a book" and "Folders are authors" in the folder settings, and most of
+  [Organizing Audiobooks](organizing.md).
+- The hint "Looks like 7 books", which becomes Split.
+
 ## Won't solve
 
 - **Author groups in the library:** tags are too messy for it, and most authors have a single book. The author screen
@@ -225,6 +314,8 @@ For books already in the library:
 - **Putting books in any order by hand:** sorting and the order of a series cover what listeners describe.
 - **Sorting the whole library by file name** ([#3235]): books in a series already follow their file names, and editing
   fixes the rest.
+- **Splitting a book at a chapter, or joining books from different folders:** a book stays one folder or one file, so
+  its progress, bookmarks and sync keep working.
 
 ## Left out for now
 
@@ -236,8 +327,9 @@ For books already in the library:
   first one.
 - An author tag with several names gets one author screen for all of them. Names in another order, like
   "Rowling, J. K.", are joined by one rename.
-- Folders only become series with "Folders are authors".
+- Folders only become series with "Folders are authors", or with "Voice finds the books".
 - Search doesn't look through chapter names or file names.
+- Splits and joins stay on the device and don't sync through `.voice`.
 
 ## Order of work
 
@@ -258,8 +350,13 @@ Each step helps on its own.
 11. The sort sheet.
 12. Selecting several books.
 13. Android Auto using the library search.
+14. "Voice finds the books", as an A/B test with new listeners. It needs the series stacks from step 5 to show what it
+    found.
+15. If the test works, replacing the layouts for everyone.
 
 ## Open questions
 
 - Should books from Audiobookshelf be editable in Voice after all?
 - Are folders enough as shelves ([#1214]), or do listeners need shelves they make in Voice?
+- Should step 7 go, since replacing the layouts splits series folders anyway, and no library changes before the test?
+- When the layouts are replaced: should folders that look like several books be split, or keep their books with a join?
