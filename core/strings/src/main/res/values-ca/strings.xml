@@ -151,6 +151,9 @@
     <string name="folder.add.action.audiobookshelf">Connecta Audiobookshelf</string>
     <string name="folder.add.action.file">O afegeix un sol fitxer</string>
     <string name="folder.add.action.folder">Tria una carpeta</string>
+    <string name="folder.add.help.computer">Encara teniu audiollibres a l\'ordinador? Copieu-los primer al vostre telèfon, per exemple a la carpeta Audiobooks.</string>
+    <string name="folder.add.help.download">Android no deixa que les aplicacions obrin directament la carpeta Download. Trieu una carpeta del seu interior.</string>
+    <string name="folder.add.help.title">No heu trobat els vostres audiollibres?</string>
     <string name="folder.add.subtitle">Trieu la carpeta amb els vostres audiollibres. Pot contenir un sol llibre o tota la biblioteca.</string>
     <string name="folder.add.title.default">Afegeix audiollibres</string>
     <string name="folder.add.title.onboarding">Afegeix el primer audiollibre</string>
@@ -306,6 +309,8 @@
     <string name="onboarding.completion.title">Esteu a punt!</string>
     <string name="onboarding.explanation.subtitle.folder">Trieu la carpeta amb els vostres audiollibres. Voice us mostra els llibres que troba abans d\'afegir-los.</string>
     <string name="onboarding.explanation.title">La vostra biblioteca, a la vostra manera</string>
+    <string name="onboarding.guide.subtitle">Tot seguit, Android pregunta quina carpeta pot obrir Voice. Obriu la que té els vostres audiollibres, confirmeu-la a baix i, després, permeteu l\'accés.</string>
+    <string name="onboarding.guide.title">Android pregunta primer</string>
     <string name="onboarding.welcome.action.start">Som-hi</string>
     <string name="onboarding.welcome.subtitle">El vostre reproductor d\'audiollibres de butxaca. Comencem.</string>
     <string name="onboarding.welcome.title">Us donem la benvinguda a Voice!</string>

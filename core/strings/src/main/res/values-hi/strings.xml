@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">Audiobookshelf कनेक्ट करें</string>
     <string name="folder.add.action.file">इसके बजाय एक फ़ाइल जोड़ें</string>
     <string name="folder.add.action.folder">फ़ोल्डर चुनें</string>
+    <string name="folder.add.help.computer">ऑडियोबुक अब भी आपके कंप्यूटर पर हैं? पहले उन्हें अपने फ़ोन में कॉपी करें, जैसे Audiobooks फ़ोल्डर में।</string>
+    <string name="folder.add.help.download">Android ऐप्स को सीधे Download फ़ोल्डर खोलने नहीं देता। इसके अंदर का कोई फ़ोल्डर चुनें।</string>
+    <string name="folder.add.help.title">आपकी ऑडियोबुक नहीं मिलीं?</string>
     <string name="folder.add.subtitle">अपनी ऑडियोबुक वाला फ़ोल्डर चुनें। इसमें एक पुस्तक या आपकी पूरी लाइब्रेरी हो सकती है।</string>
     <string name="folder.add.title.default">अपनी ऑडियोबुक जोड़ें</string>
     <string name="folder.add.title.onboarding">अपनी पहली ऑडियोबुक जोड़ें</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">आप पूरी तरह तैयार हैं!</string>
     <string name="onboarding.explanation.subtitle.folder">अपनी ऑडियोबुक वाला फ़ोल्डर चुनें। Voice जोड़ने से पहले आपको मिली हुई पुस्तकें दिखाती है।</string>
     <string name="onboarding.explanation.title">आपकी लाइब्रेरी, आपका तरीका</string>
+    <string name="onboarding.guide.subtitle">इसके बाद, Android पूछेगा कि Voice कौन सा फ़ोल्डर खोल सकता है। अपनी ऑडियोबुक वाला फ़ोल्डर खोलें, नीचे उसकी पुष्टि करें, फिर पहुँच की अनुमति दें।</string>
+    <string name="onboarding.guide.title">पहले Android पूछता है</string>
     <string name="onboarding.welcome.action.start">चलिए शुरू करें</string>
     <string name="onboarding.welcome.subtitle">आपका व्यक्तिगत पॉकेट ऑडियोबुक प्लेयर। आइए आपको सेट अप करने में मदद करें।</string>
     <string name="onboarding.welcome.title">Voice में आपका स्वागत है!</string>

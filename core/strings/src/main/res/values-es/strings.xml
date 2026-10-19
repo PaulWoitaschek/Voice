@@ -151,6 +151,9 @@
     <string name="folder.add.action.audiobookshelf">Conectar Audiobookshelf</string>
     <string name="folder.add.action.file">Agregar un solo archivo en su lugar</string>
     <string name="folder.add.action.folder">Elegir una carpeta</string>
+    <string name="folder.add.help.computer">¿Todavía tienes audiolibros en tu computadora? Cópialos primero en tu teléfono, por ejemplo en la carpeta Audiobooks.</string>
+    <string name="folder.add.help.download">Android no permite que las aplicaciones abran la carpeta Download directamente. Elige una carpeta dentro de ella.</string>
+    <string name="folder.add.help.title">¿No encontraste tus audiolibros?</string>
     <string name="folder.add.subtitle">Elige la carpeta con tus audiolibros. Puede contener un solo libro o toda tu biblioteca.</string>
     <string name="folder.add.title.default">Añade tus audiolibros</string>
     <string name="folder.add.title.onboarding">Añade tu primer audiolibro</string>
@@ -306,6 +309,8 @@
     <string name="onboarding.completion.title">¡Todo listo!</string>
     <string name="onboarding.explanation.subtitle.folder">Elige la carpeta con tus audiolibros. Voice te muestra los libros que encuentra antes de añadirlos.</string>
     <string name="onboarding.explanation.title">Tu biblioteca, a tu manera</string>
+    <string name="onboarding.guide.subtitle">A continuación, Android te pregunta qué carpeta puede abrir Voice. Abre la que tiene tus audiolibros, confírmala abajo y luego permite el acceso.</string>
+    <string name="onboarding.guide.title">Android pregunta primero</string>
     <string name="onboarding.welcome.action.start">¡Vamos!</string>
     <string name="onboarding.welcome.subtitle">Tu reproductor personal de audiolibros de bolsillo. Vamos a configurarlo.</string>
     <string name="onboarding.welcome.title">¡Bienvenido a Voice!</string>

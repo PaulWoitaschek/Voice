@@ -1,11 +1,16 @@
 package voice.features.onboarding.welcome
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
 import voice.core.common.rootGraphAs
 import voice.core.ui.OnboardingButton
 import voice.core.ui.OnboardingScaffold
@@ -19,12 +24,21 @@ fun OnboardingWelcome(modifier: Modifier = Modifier) {
     rootGraphAs<OnboardingWelcomeProvider>()
       .onboardingWelcomeViewModel
   }
-  OnboardingWelcome(modifier = modifier, onNext = viewModel::next)
+  OnboardingWelcome(
+    modifier = modifier,
+    viewState = viewModel.viewState(),
+    onContinueWithAnalytics = viewModel::onContinueWithAnalytics,
+    onContinueWithoutAnalytics = viewModel::onContinueWithoutAnalytics,
+    onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick,
+  )
 }
 
 @Composable
 private fun OnboardingWelcome(
-  onNext: () -> Unit,
+  viewState: OnboardingWelcomeViewState,
+  onContinueWithAnalytics: () -> Unit,
+  onContinueWithoutAnalytics: () -> Unit,
+  onPrivacyPolicyClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   OnboardingScaffold(
@@ -36,22 +50,55 @@ private fun OnboardingWelcome(
     hero = { clock ->
       SoundBlob(clock = clock, modifier = Modifier.fillMaxSize())
     },
+    details = {
+      if (viewState.askForAnalytics) {
+        Spacer(Modifier.height(24.dp))
+        AnalyticsConsentCard(onPrivacyPolicyClick = onPrivacyPolicyClick)
+      }
+    },
     actions = {
-      OnboardingButton(
-        text = stringResource(StringsR.string.onboarding_welcome_action_start),
-        onClick = onNext,
-        trailingArrow = true,
-      )
+      if (viewState.askForAnalytics) {
+        OnboardingButton(
+          text = stringResource(StringsR.string.onboarding_analytics_consent_action_disable),
+          onClick = onContinueWithoutAnalytics,
+          primary = false,
+        )
+        OnboardingButton(
+          text = stringResource(StringsR.string.onboarding_analytics_consent_action_enable),
+          onClick = onContinueWithAnalytics,
+        )
+      } else {
+        OnboardingButton(
+          text = stringResource(StringsR.string.onboarding_welcome_action_start),
+          onClick = onContinueWithoutAnalytics,
+          trailingArrow = true,
+        )
+      }
     },
   )
 }
 
+private class OnboardingWelcomePreviewParameterProvider : PreviewParameterProvider<OnboardingWelcomeViewState> {
+
+  override val values: Sequence<OnboardingWelcomeViewState>
+    get() = sequenceOf(
+      OnboardingWelcomeViewState(askForAnalytics = true),
+      OnboardingWelcomeViewState(askForAnalytics = false),
+    )
+}
+
 @Composable
 @Preview
-private fun OnboardingWelcomePreview() {
+private fun OnboardingWelcomePreview(
+  @PreviewParameter(OnboardingWelcomePreviewParameterProvider::class)
+  viewState: OnboardingWelcomeViewState,
+) {
   VoiceTheme {
     OnboardingWelcome(
-      onNext = {},
+      viewState = viewState,
+      onContinueWithAnalytics = {},
+      onContinueWithoutAnalytics = {},
+      onPrivacyPolicyClick = {},
     )
   }
 }

@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">Anslut Audiobookshelf</string>
     <string name="folder.add.action.file">Lägg till en enskild fil i stället</string>
     <string name="folder.add.action.folder">Välj en mapp</string>
+    <string name="folder.add.help.computer">Har du fortfarande ljudböcker på datorn? Kopiera dem till telefonen först, till exempel till mappen Audiobooks.</string>
+    <string name="folder.add.help.download">Android tillåter inte att appar öppnar själva mappen Download. Välj en mapp inuti den.</string>
+    <string name="folder.add.help.title">Hittade du inte dina ljudböcker?</string>
     <string name="folder.add.subtitle">Välj mappen med dina ljudböcker. Den kan innehålla en enda bok eller hela ditt bibliotek.</string>
     <string name="folder.add.title.default">Lägg till dina ljudböcker</string>
     <string name="folder.add.title.onboarding">Lägg till din första ljudbok</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">Du är redo!</string>
     <string name="onboarding.explanation.subtitle.folder">Välj mappen med dina ljudböcker. Voice visar böckerna den hittar innan de läggs till.</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt sätt</string>
+    <string name="onboarding.guide.subtitle">Härnäst frågar Android vilken mapp Voice får öppna. Öppna den med dina ljudböcker, bekräfta den längst ner och tillåt sedan åtkomst.</string>
+    <string name="onboarding.guide.title">Android frågar först</string>
     <string name="onboarding.welcome.action.start">Nu kör vi</string>
     <string name="onboarding.welcome.subtitle">Din personliga ljudboksspelare i fickan. Nu sätter vi igång.</string>
     <string name="onboarding.welcome.title">Välkommen till Voice!</string>

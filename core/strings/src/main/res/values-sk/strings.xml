@@ -156,6 +156,9 @@
     <string name="folder.add.action.audiobookshelf">Pripojiť Audiobookshelf</string>
     <string name="folder.add.action.file">Radšej pridať jeden súbor</string>
     <string name="folder.add.action.folder">Vybrať priečinok</string>
+    <string name="folder.add.help.computer">Máte zvukové knihy ešte v počítači? Najprv ich skopírujte do telefónu, napríklad do priečinka Audiobooks.</string>
+    <string name="folder.add.help.download">Android nedovoľuje aplikáciám otvoriť priamo priečinok Download. Vyberte priečinok vo vnútri neho.</string>
+    <string name="folder.add.help.title">Nenašli ste svoje zvukové knihy?</string>
     <string name="folder.add.subtitle">Vyberte priečinok so zvukovými knihami. Môže obsahovať jednu knihu alebo celú vašu knižnicu.</string>
     <string name="folder.add.title.default">Pridajte si zvukové knihy</string>
     <string name="folder.add.title.onboarding">Pridajte si vašu prvú zvukovú knihu</string>
@@ -323,6 +326,8 @@
     <string name="onboarding.completion.title">Všetko je nastavené!</string>
     <string name="onboarding.explanation.subtitle.folder">Vyberte priečinok so zvukovými knihami. Voice vám pred pridaním ukáže knihy, ktoré v ňom nájde.</string>
     <string name="onboarding.explanation.title">Vaša knižnica, vaše podmienky</string>
+    <string name="onboarding.guide.subtitle">Ďalej sa Android opýta, ktorý priečinok môže Voice otvoriť. Otvorte ten so svojimi zvukovými knihami, potvrďte ho dole a potom povoľte prístup.</string>
+    <string name="onboarding.guide.title">Android sa pýta ako prvý</string>
     <string name="onboarding.welcome.action.start">Ideme na to</string>
     <string name="onboarding.welcome.subtitle">Váš osobný vreckový prehrávač zvukových kníh. Poďme hneď nastaviť všetko potrebné.</string>
     <string name="onboarding.welcome.title">Vitajte v aplikácii Voice!</string>

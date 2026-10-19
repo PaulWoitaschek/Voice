@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">اتصال به Audiobookshelf</string>
     <string name="folder.add.action.file">افزودن یک فایل به‌جای پوشه</string>
     <string name="folder.add.action.folder">انتخاب پوشه</string>
+    <string name="folder.add.help.computer">کتاب‌های صوتی هنوز روی کامپیوترتان هستند؟ ابتدا آن‌ها را به گوشی‌تان کپی کنید، مثلاً به پوشه‌ی Audiobooks.</string>
+    <string name="folder.add.help.download">در Android، برنامه‌ها نمی‌توانند خود پوشه‌ی Download را باز کنند. پوشه‌ای داخل آن انتخاب کنید.</string>
+    <string name="folder.add.help.title">کتاب‌های صوتی خود را پیدا نکردید؟</string>
     <string name="folder.add.subtitle">پوشه‌ی کتاب‌های صوتی خود را انتخاب کنید. این پوشه می‌تواند یک کتاب یا کل کتابخانه‌ی شما باشد.</string>
     <string name="folder.add.title.default">کتاب[های] صوتی خود را اضافه کنید</string>
     <string name="folder.add.title.onboarding">اولین کتاب صوتی خود را اضافه کنید</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">همه چیز آماده است!</string>
     <string name="onboarding.explanation.subtitle.folder">پوشه‌ی کتاب‌های صوتی خود را انتخاب کنید. Voice پیش از افزودن، کتاب‌هایی را که پیدا می‌کند به شما نشان می‌دهد.</string>
     <string name="onboarding.explanation.title">کتابخانه شما، به روش شما</string>
+    <string name="onboarding.guide.subtitle">در ادامه، Android می‌پرسد Voice کدام پوشه را باز کند. پوشه‌ای را که کتاب‌های صوتی‌تان در آن است باز کنید، پایین صفحه تأییدش کنید، سپس اجازه‌ی دسترسی بدهید.</string>
+    <string name="onboarding.guide.title">اول، Android می‌پرسد</string>
     <string name="onboarding.welcome.action.start">بزن بریم</string>
     <string name="onboarding.welcome.subtitle">پخش کننده کتاب صوتی جیبی شخصی شما. بیایید نرم افزار را راه اندازی کنیم.</string>
     <string name="onboarding.welcome.title">به برنامه Voice خوش آمدید!</string>

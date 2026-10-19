@@ -141,6 +141,9 @@
     <string name="folder.add.action.audiobookshelf">Hubungkan Audiobookshelf</string>
     <string name="folder.add.action.file">Tambahkan satu berkas saja</string>
     <string name="folder.add.action.folder">Pilih folder</string>
+    <string name="folder.add.help.computer">Buku audio masih ada di komputer Anda? Salin dulu ke ponsel Anda, misalnya ke folder Audiobooks.</string>
+    <string name="folder.add.help.download">Android tidak mengizinkan aplikasi membuka folder Download secara langsung. Pilih folder di dalamnya.</string>
+    <string name="folder.add.help.title">Buku audio Anda tidak ditemukan?</string>
     <string name="folder.add.subtitle">Pilih folder berisi buku audio Anda. Folder ini bisa berisi satu buku atau seluruh perpustakaan Anda.</string>
     <string name="folder.add.title.default">Tambahkan Buku Audio Anda</string>
     <string name="folder.add.title.onboarding">Tambahkan Buku Audio Pertama Anda</string>
@@ -272,6 +275,8 @@
     <string name="onboarding.completion.title">Semua Siap!</string>
     <string name="onboarding.explanation.subtitle.folder">Pilih folder berisi buku audio Anda. Voice menampilkan buku yang ditemukan sebelum menambahkannya.</string>
     <string name="onboarding.explanation.title">Perpustakaan Anda, Sesuai Keinginan Anda</string>
+    <string name="onboarding.guide.subtitle">Selanjutnya, Android akan menanyakan folder mana yang boleh dibuka Voice. Buka folder yang berisi buku audio Anda, konfirmasi di bagian bawah, lalu izinkan aksesnya.</string>
+    <string name="onboarding.guide.title">Android Bertanya Dulu</string>
     <string name="onboarding.welcome.action.start">Ayo mulai</string>
     <string name="onboarding.welcome.subtitle">Pemutar buku audio saku pribadi Anda. Mari kita siapkan semuanya.</string>
     <string name="onboarding.welcome.title">Selamat datang di Voice!</string>

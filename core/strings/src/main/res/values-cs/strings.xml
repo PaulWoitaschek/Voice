@@ -156,6 +156,9 @@
     <string name="folder.add.action.audiobookshelf">Připojit Audiobookshelf</string>
     <string name="folder.add.action.file">Přidat místo toho jeden soubor</string>
     <string name="folder.add.action.folder">Vybrat složku</string>
+    <string name="folder.add.help.computer">Audioknihy jsou stále v počítači? Nejprve je zkopírujte do telefonu, například do složky Audiobooks.</string>
+    <string name="folder.add.help.download">Android nedovolí aplikacím otevřít přímo složku Download. Vyberte složku uvnitř ní.</string>
+    <string name="folder.add.help.title">Nenašli jste své audioknihy?</string>
     <string name="folder.add.subtitle">Vyberte složku se svými audioknihami. Může obsahovat jednu knihu nebo celou vaši knihovnu.</string>
     <string name="folder.add.title.default">Přidejte své audoknihy</string>
     <string name="folder.add.title.onboarding">Přidejte svou první audioknihu</string>
@@ -323,6 +326,8 @@
     <string name="onboarding.completion.title">Vše je připraveno!</string>
     <string name="onboarding.explanation.subtitle.folder">Vyberte složku se svými audioknihami. Voice vám před přidáním ukáže knihy, které v ní najde.</string>
     <string name="onboarding.explanation.title">Vaše knihovna, váš způsob</string>
+    <string name="onboarding.guide.subtitle">Dále se Android zeptá, kterou složku může Voice otevřít. Otevřete tu se svými audioknihami, dole ji potvrďte a poté povolte přístup.</string>
+    <string name="onboarding.guide.title">Android se ptá jako první</string>
     <string name="onboarding.welcome.action.start">Jdeme na to</string>
     <string name="onboarding.welcome.subtitle">Váš osobní kapesní přehrávač audioknih. Pojďme ho nastavit.</string>
     <string name="onboarding.welcome.title">Vítejte ve Voice!</string>

@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">Ühenda Audiobookshelf</string>
     <string name="folder.add.action.file">Lisa hoopis üksik fail</string>
     <string name="folder.add.action.folder">Vali kaust</string>
+    <string name="folder.add.help.computer">Kas sinu heliraamatud on veel arvutis? Kopeeri need kõigepealt telefoni, näiteks kausta Audiobooks.</string>
+    <string name="folder.add.help.download">Android ei luba rakendustel avada kausta Download ennast. Vali kaust selle seest.</string>
+    <string name="folder.add.help.title">Ei leidnud oma heliraamatuid?</string>
     <string name="folder.add.subtitle">Vali kaust, kus on sinu heliraamatud. Selles võib olla üks raamat või kogu sinu raamatukogu.</string>
     <string name="folder.add.title.default">Lisa oma heliraamat(ud)</string>
     <string name="folder.add.title.onboarding">Lisa oma esimene heliraamat</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">Kõik on tehtud!</string>
     <string name="onboarding.explanation.subtitle.folder">Vali kaust, kus on sinu heliraamatud. Voice näitab sulle leitud raamatuid enne nende lisamist.</string>
     <string name="onboarding.explanation.title">Sinu raamatukogu, just nii nagu soovid</string>
+    <string name="onboarding.guide.subtitle">Järgmisena küsib Android, millist kausta Voice tohib avada. Ava heliraamatutega kaust, kinnita see all ja luba seejärel juurdepääs.</string>
+    <string name="onboarding.guide.title">Android küsib kõigepealt</string>
     <string name="onboarding.welcome.action.start">Läheme</string>
     <string name="onboarding.welcome.subtitle">Sinu isiklik heliraamatute esitaja (pleier) taskus. Võtame nüüd ette algseadistamise.</string>
     <string name="onboarding.welcome.title">Tere tulemast - see on Voice!</string>

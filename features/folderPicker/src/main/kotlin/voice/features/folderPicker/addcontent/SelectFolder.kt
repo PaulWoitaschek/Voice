@@ -1,11 +1,18 @@
 package voice.features.folderPicker.addcontent
 
 import android.net.Uri
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import voice.core.ui.OnboardingScaffold
 import voice.core.ui.OnboardingStep
 import voice.core.ui.VoiceTheme
@@ -19,9 +26,13 @@ internal fun SelectFolder(
   onAdd: (FileTypeSelection, Uri) -> Unit,
   /** Null while connecting a server isn't available. */
   onConnectAudiobookshelf: (() -> Unit)?,
+  onFolderPickerCancel: () -> Unit,
   origin: Origin,
+  // helps with Android's folder picker in the guided variant of the onboarding experiment
+  guided: Boolean,
   modifier: Modifier = Modifier,
 ) {
+  var pickerCancelled by rememberSaveable { mutableStateOf(false) }
   OnboardingScaffold(
     modifier = modifier,
     // outside of the onboarding there are no steps to count
@@ -40,8 +51,22 @@ internal fun SelectFolder(
     hero = { clock ->
       FolderHero(clock = clock, modifier = Modifier.fillMaxSize())
     },
+    details = {
+      if (guided && pickerCancelled) {
+        Spacer(Modifier.height(24.dp))
+        FolderHelpCard()
+      }
+    },
     actions = {
-      ContentTypeChoices(onAdd = onAdd, onConnectAudiobookshelf = onConnectAudiobookshelf)
+      ContentTypeChoices(
+        onAdd = onAdd,
+        onFolderPickerCancel = {
+          pickerCancelled = true
+          onFolderPickerCancel()
+        },
+        onConnectAudiobookshelf = onConnectAudiobookshelf,
+        openInAudiobooksFolder = guided,
+      )
     },
   )
 }
@@ -54,7 +79,9 @@ private fun SelectFolderPreview() {
       onBack = {},
       onAdd = { _, _ -> },
       onConnectAudiobookshelf = {},
+      onFolderPickerCancel = {},
       origin = Origin.Onboarding,
+      guided = false,
     )
   }
 }

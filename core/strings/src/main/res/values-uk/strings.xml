@@ -156,6 +156,9 @@
     <string name="folder.add.action.audiobookshelf">Підключити Audiobookshelf</string>
     <string name="folder.add.action.file">Натомість додати один файл</string>
     <string name="folder.add.action.folder">Вибрати папку</string>
+    <string name="folder.add.help.computer">Аудіокниги ще на комп\'ютері? Спершу скопіюйте їх на телефон, наприклад у папку Audiobooks.</string>
+    <string name="folder.add.help.download">Android не дозволяє додаткам відкривати саму папку Download. Виберіть папку всередині неї.</string>
+    <string name="folder.add.help.title">Не знайшли свої аудіокниги?</string>
     <string name="folder.add.subtitle">Виберіть папку з аудіокнигами. У ній може бути одна книга або вся ваша бібліотека.</string>
     <string name="folder.add.title.default">Додайте свої аудіокниги</string>
     <string name="folder.add.title.onboarding">Додайте свою першу аудіокнигу</string>
@@ -323,6 +326,8 @@
     <string name="onboarding.completion.title">Ви все зробили!</string>
     <string name="onboarding.explanation.subtitle.folder">Виберіть папку з аудіокнигами. Voice покаже знайдені книги, перш ніж їх додати.</string>
     <string name="onboarding.explanation.title">Ваша бібліотека, ваш спосіб</string>
+    <string name="onboarding.guide.subtitle">Далі Android запитає, яку папку може відкрити Voice. Відкрийте ту з вашими аудіокнигами, підтвердьте внизу, а потім дозвольте доступ.</string>
+    <string name="onboarding.guide.title">Android запитує першим</string>
     <string name="onboarding.welcome.action.start">Почнімо</string>
     <string name="onboarding.welcome.subtitle">Ваш особистий кишеньковий програвач аудіокниг. Налаштуймо його.</string>
     <string name="onboarding.welcome.title">Ласкаво просимо до Voice!</string>

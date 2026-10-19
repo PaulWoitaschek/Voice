@@ -151,6 +151,9 @@
     <string name="folder.add.action.audiobookshelf">חיבור ל-Audiobookshelf</string>
     <string name="folder.add.action.file">הוספת קובץ בודד במקום זאת</string>
     <string name="folder.add.action.folder">בחירת תיקייה</string>
+    <string name="folder.add.help.computer">הקולספרים עדיין במחשב? העתיקו אותם לטלפון קודם, למשל לתיקיית Audiobooks.</string>
+    <string name="folder.add.help.download">ב-Android, אפליקציות לא יכולות לפתוח את תיקיית Download עצמה. בחרו תיקייה שבתוכה.</string>
+    <string name="folder.add.help.title">לא נמצאו הקולספרים שלכם?</string>
     <string name="folder.add.subtitle">בחרו את התיקייה עם הקולספרים שלכם. היא יכולה להכיל ספר אחד או את כל הספרייה שלכם.</string>
     <string name="folder.add.title.default">הוספת הקולספרים שלכם</string>
     <string name="folder.add.title.onboarding">הוספת הקולספר הראשון שלכם</string>
@@ -306,6 +309,8 @@
     <string name="onboarding.completion.title">הכל מוכן!</string>
     <string name="onboarding.explanation.subtitle.folder">בחרו את התיקייה עם הקולספרים שלכם. Voice יציג לכם את הספרים שהוא מוצא לפני שהם יתווספו.</string>
     <string name="onboarding.explanation.title">הספרייה שלכם, בדרך שלכם</string>
+    <string name="onboarding.guide.subtitle">בשלב הבא, Android ישאל איזו תיקייה Voice יכול לפתוח. פתחו את התיקייה עם הקולספרים שלכם, אשרו אותה בתחתית המסך, ואז אפשרו גישה.</string>
+    <string name="onboarding.guide.title">קודם, Android שואל</string>
     <string name="onboarding.welcome.action.start">יוצאים לדרך</string>
     <string name="onboarding.welcome.subtitle">נגן הקולספרים האישי שלכם, תמיד בכיס. בואו נתאים את Voice אליכם.</string>
     <string name="onboarding.welcome.title">ברוכים הבאים ל-Voice!</string>

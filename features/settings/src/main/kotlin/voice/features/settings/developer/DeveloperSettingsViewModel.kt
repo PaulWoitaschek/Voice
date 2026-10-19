@@ -14,6 +14,7 @@ import voice.core.common.MainScope
 import voice.core.featureflag.FeatureFlag
 import voice.core.remoteconfig.api.FmcTokenProvider
 import voice.core.remoteconfig.api.RemoteConfig
+import voice.navigation.Destination
 import voice.navigation.Navigator
 
 @Inject
@@ -76,6 +77,10 @@ class DeveloperSettingsViewModel(
 
   fun close() {
     navigator.goBack()
+  }
+
+  fun showOnboarding() {
+    navigator.goTo(Destination.OnboardingWelcome)
   }
 
   fun setBooleanOverride(

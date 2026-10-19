@@ -151,6 +151,9 @@
     <string name="folder.add.action.audiobookshelf">Conectează Audiobookshelf</string>
     <string name="folder.add.action.file">Adaugă doar un fișier</string>
     <string name="folder.add.action.folder">Alege un director</string>
+    <string name="folder.add.help.computer">Mai ai cărți audio pe calculator? Copiază-le mai întâi pe telefon, de exemplu în directorul Audiobooks.</string>
+    <string name="folder.add.help.download">Android nu permite aplicațiilor să deschidă direct directorul Download. Alege un director din interiorul lui.</string>
+    <string name="folder.add.help.title">Nu ai găsit cărțile tale audio?</string>
     <string name="folder.add.subtitle">Alege directorul cu cărțile tale audio. Poate conține o singură carte sau întreaga ta bibliotecă.</string>
     <string name="folder.add.title.default">Adaugă cărțile tale</string>
     <string name="folder.add.title.onboarding">Adaugă prima ta carte</string>
@@ -306,6 +309,8 @@
     <string name="onboarding.completion.title">Ai parcurs cu succes acest ghid.</string>
     <string name="onboarding.explanation.subtitle.folder">Alege directorul cu cărțile tale audio. Voice îți arată cărțile găsite înainte de a le adăuga.</string>
     <string name="onboarding.explanation.title">O bibliotecă așa cum ți-o dorești tu</string>
+    <string name="onboarding.guide.subtitle">În continuare, Android te întreabă ce director poate deschide Voice. Deschide-l pe cel cu cărțile tale audio, confirmă-l jos, apoi permite accesul.</string>
+    <string name="onboarding.guide.title">Android întreabă primul</string>
     <string name="onboarding.welcome.action.start">Să începem</string>
     <string name="onboarding.welcome.subtitle">Player-ul tău personal de cărți audio - să parcurgem împreună un scurt ghid.</string>
     <string name="onboarding.welcome.title">Acesta este Voice.</string>
