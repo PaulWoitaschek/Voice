@@ -2,7 +2,6 @@ package voice.features.folderPicker.addcontent
 
 import android.content.ActivityNotFoundException
 import android.net.Uri
-import android.provider.DocumentsContract
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.ColumnScope
@@ -26,7 +25,6 @@ internal fun ColumnScope.ContentTypeChoices(
   onAdd: (FileTypeSelection, Uri) -> Unit,
   onFolderPickerCancel: () -> Unit,
   onConnectAudiobookshelf: (() -> Unit)?,
-  openInAudiobooksFolder: Boolean,
 ) {
   val openDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
     if (uri != null) {
@@ -44,14 +42,7 @@ internal fun ColumnScope.ContentTypeChoices(
     text = stringResource(StringsR.string.folder_add_action_folder),
     onClick = {
       try {
-        documentTreeLauncher.launch(
-          // Android's picker ignores this when the folder doesn't exist
-          if (openInAudiobooksFolder) {
-            DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Audiobooks")
-          } else {
-            null
-          },
-        )
+        documentTreeLauncher.launch(null)
       } catch (e: ActivityNotFoundException) {
         Logger.w(e, "Could not add folder")
       }

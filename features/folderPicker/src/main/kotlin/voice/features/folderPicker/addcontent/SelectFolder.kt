@@ -28,8 +28,6 @@ internal fun SelectFolder(
   onConnectAudiobookshelf: (() -> Unit)?,
   onFolderPickerCancel: () -> Unit,
   origin: Origin,
-  // helps with Android's folder picker in the guided variant of the onboarding experiment
-  guided: Boolean,
   modifier: Modifier = Modifier,
 ) {
   var pickerCancelled by rememberSaveable { mutableStateOf(false) }
@@ -52,7 +50,7 @@ internal fun SelectFolder(
       FolderHero(clock = clock, modifier = Modifier.fillMaxSize())
     },
     details = {
-      if (guided && pickerCancelled) {
+      if (pickerCancelled) {
         Spacer(Modifier.height(24.dp))
         FolderHelpCard()
       }
@@ -65,7 +63,6 @@ internal fun SelectFolder(
           onFolderPickerCancel()
         },
         onConnectAudiobookshelf = onConnectAudiobookshelf,
-        openInAudiobooksFolder = guided,
       )
     },
   )
@@ -81,7 +78,6 @@ private fun SelectFolderPreview() {
       onConnectAudiobookshelf = {},
       onFolderPickerCancel = {},
       origin = Origin.Onboarding,
-      guided = false,
     )
   }
 }

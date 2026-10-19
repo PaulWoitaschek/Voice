@@ -122,17 +122,6 @@ object FeatureFlagBindingContainer {
   }
 
   @Provides
-  @SingleIn(AppScope::class)
-  @OnboardingVariantFeatureFlagQualifier
-  fun onboardingVariantFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<String> {
-    return factory.string(
-      key = "onboarding_variant",
-      description = "Onboarding A/B test: control, or guided, which prepares for Android's folder picker and helps after cancelling it.",
-      defaultValue = OnboardingVariant.Control.key,
-    )
-  }
-
-  @Provides
   @ElementsIntoSet
   fun featureFlags(
     @ReviewEnabledFeatureFlagQualifier reviewEnabled: FeatureFlag<Boolean>,
@@ -144,7 +133,6 @@ object FeatureFlagBindingContainer {
     @SupportDevelopmentFeatureFlagQualifier supportDevelopment: FeatureFlag<Boolean>,
     @SupporterNoteFeatureFlagQualifier supporterNote: FeatureFlag<String>,
     @AudiobookshelfFeatureFlagQualifier audiobookshelf: FeatureFlag<Boolean>,
-    @OnboardingVariantFeatureFlagQualifier onboardingVariant: FeatureFlag<String>,
   ): Set<FeatureFlag<*>> = setOf(
     reviewEnabled,
     reviewPromptForce,
@@ -155,7 +143,6 @@ object FeatureFlagBindingContainer {
     supportDevelopment,
     supporterNote,
     audiobookshelf,
-    onboardingVariant,
   )
 }
 
@@ -188,6 +175,3 @@ annotation class SupporterNoteFeatureFlagQualifier
 
 @Qualifier
 annotation class AudiobookshelfFeatureFlagQualifier
-
-@Qualifier
-annotation class OnboardingVariantFeatureFlagQualifier

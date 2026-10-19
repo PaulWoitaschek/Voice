@@ -17,15 +17,7 @@ interface OnboardingExplanationProvider {
   @IntoSet
   fun onboardingExplanationNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.OnboardingExplanation> { key ->
     NavEntry(key) {
-      OnboardingExplanation(guided = false)
-    }
-  }
-
-  @Provides
-  @IntoSet
-  fun onboardingGuideNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.OnboardingGuide> { key ->
-    NavEntry(key) {
-      OnboardingExplanation(guided = true)
+      OnboardingExplanation()
     }
   }
 }
