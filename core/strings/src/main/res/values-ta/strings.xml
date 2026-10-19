@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">Audiobookshelf-ஐ இணைக்கவும்</string>
     <string name="folder.add.action.file">பதிலாக ஒரு கோப்பை மட்டும் சேர்க்கவும்</string>
     <string name="folder.add.action.folder">கோப்புறையைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="folder.add.help.computer">ஆடியோபுக்குகள் இன்னும் உங்கள் கணினியில் உள்ளனவா? முதலில் அவற்றை உங்கள் போனுக்கு நகலெடுக்கவும், எடுத்துக்காட்டாக Audiobooks கோப்புறையில்.</string>
+    <string name="folder.add.help.download">Download கோப்புறையை நேரடியாகத் திறக்க Android பயன்பாடுகளை அனுமதிக்காது. அதற்குள் உள்ள ஒரு கோப்புறையைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="folder.add.help.title">உங்கள் ஆடியோபுக்குகள் கிடைக்கவில்லையா?</string>
     <string name="folder.add.subtitle">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும். அதில் ஒரு புத்தகமோ உங்கள் முழு நூலகமோ இருக்கலாம்.</string>
     <string name="folder.add.title.default">உங்கள் ஆடியோபுக் (களை) சேர்க்கவும்</string>
     <string name="folder.add.title.onboarding">உங்கள் முதல் ஆடியோபுக்கைச் சேர்க்கவும்</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">நீங்கள் அனைவரும் அமைக்கப்பட்டிருக்கிறீர்கள்!</string>
     <string name="onboarding.explanation.subtitle.folder">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும். சேர்ப்பதற்கு முன், Voice கண்டறிந்த புத்தகங்களை உங்களுக்குக் காட்டும்.</string>
     <string name="onboarding.explanation.title">உங்கள் நூலகம், உங்கள் வழி</string>
+    <string name="onboarding.guide.subtitle">அடுத்து, Voice எந்தக் கோப்புறையைத் திறக்கலாம் என Android கேட்கும். உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் திறந்து, கீழே அதை உறுதிசெய்து, பின் அணுகலை அனுமதிக்கவும்.</string>
+    <string name="onboarding.guide.title">முதலில் Android கேட்கும்</string>
     <string name="onboarding.welcome.action.start">தொடங்குவோம்</string>
     <string name="onboarding.welcome.subtitle">உங்கள் தனிப்பட்ட பாக்கெட் ஆடியோபுக் பிளேயர். நீங்கள் அமைப்போம்.</string>
     <string name="onboarding.welcome.title">குரலுக்கு வருக!</string>

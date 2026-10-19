@@ -251,6 +251,12 @@
     <string name="folder.add.action.file">Add a single file instead</string>
     <!-- Main button on the add content screen that opens the system folder picker. Also shown when a picked folder has no audio files. -->
     <string name="folder.add.action.folder">Choose a folder</string>
+    <!-- Tip on the add content screen after the system folder picker was closed without a folder. The second Audiobooks is the name of the folder on the phone, which is always in English, so keep it untranslated. -->
+    <string name="folder.add.help.computer">Audiobooks still on your computer? Copy them to your phone first, for example into the Audiobooks folder.</string>
+    <!-- Tip on the add content screen after the system folder picker was closed without a folder. Android 11 and newer don't allow picking the Download folder itself, only folders inside it. Download is the name of the folder on the phone, which is always in English, so keep it untranslated. -->
+    <string name="folder.add.help.download">Android doesn\'t let apps open the Download folder itself. Pick a folder inside it.</string>
+    <!-- Title of the tips on the add content screen, shown after the system folder picker was closed without a folder. -->
+    <string name="folder.add.help.title">Didn\'t find your audiobooks?</string>
     <!-- Subtitle on the add content screen. Explains that picking a folder works for one book as well as for a whole library. -->
     <string name="folder.add.subtitle">Pick the folder with your audiobooks. It can hold a single book or your whole library.</string>
     <!-- Title for the folder picker during normal app use. -->
@@ -484,6 +490,10 @@
     <string name="onboarding.explanation.subtitle.folder">Pick the folder with your audiobooks. Voice shows you the books it finds before adding them.</string>
     <!-- Title on the onboarding explanation screen. -->
     <string name="onboarding.explanation.title">Your Library, Your Way</string>
+    <!-- Subtitle on the onboarding screen that prepares for the system folder picker, which opens next. Describes its three steps: opening the folder, confirming it with the button at the bottom, and allowing access in the dialog. -->
+    <string name="onboarding.guide.subtitle">Next, Android asks which folder Voice may open. Open the one with your audiobooks, confirm it at the bottom, then allow access.</string>
+    <!-- Title on the onboarding screen that prepares for the system folder picker. Android asks for permission before Voice can see any files. -->
+    <string name="onboarding.guide.title">Android Asks First</string>
     <!-- Button label for starting the onboarding from the welcome screen. -->
     <string name="onboarding.welcome.action.start">Let\'s go</string>
     <!-- Subtitle on the onboarding welcome screen. -->

@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">Audiobookshelf\'e bağlan</string>
     <string name="folder.add.action.file">Bunun yerine tek bir dosya ekle</string>
     <string name="folder.add.action.folder">Klasör seç</string>
+    <string name="folder.add.help.computer">Sesli kitaplarınız hâlâ bilgisayarınızda mı? Önce onları telefonunuza kopyalayın, örneğin Audiobooks klasörüne.</string>
+    <string name="folder.add.help.download">Android, uygulamaların Download klasörünü doğrudan açmasına izin vermez. İçindeki bir klasörü seçin.</string>
+    <string name="folder.add.help.title">Sesli kitaplarınızı bulamadınız mı?</string>
     <string name="folder.add.subtitle">Sesli kitaplarının bulunduğu klasörü seç. Bu klasörde tek bir kitap da olabilir, tüm kütüphanen de.</string>
     <string name="folder.add.title.default">Sesli kitabını (kitaplarını) ekle</string>
     <string name="folder.add.title.onboarding">İlk sesli kitabını ekle</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">Hazırsın!</string>
     <string name="onboarding.explanation.subtitle.folder">Sesli kitaplarının bulunduğu klasörü seç. Voice, eklemeden önce bulduğu kitapları sana gösterir.</string>
     <string name="onboarding.explanation.title">Senin kütüphanen, senin tarzın</string>
+    <string name="onboarding.guide.subtitle">Sırada, Android Voice\'un hangi klasörü açabileceğini soracak. Sesli kitaplarınızın olduğu klasörü açın, alttan onaylayın, ardından erişime izin verin.</string>
+    <string name="onboarding.guide.title">Android önce sorar</string>
     <string name="onboarding.welcome.action.start">Hadi başlayalım</string>
     <string name="onboarding.welcome.subtitle">Cebinizdeki kişisel sesli kitap oynatıcınız! Hadi başlayalım.</string>
     <string name="onboarding.welcome.title">Voice\'e hoş geldiniz!</string>

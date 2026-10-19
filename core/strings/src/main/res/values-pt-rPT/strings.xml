@@ -151,6 +151,9 @@
     <string name="folder.add.action.audiobookshelf">Ligar ao Audiobookshelf</string>
     <string name="folder.add.action.file">Adicionar um único ficheiro</string>
     <string name="folder.add.action.folder">Escolher uma pasta</string>
+    <string name="folder.add.help.computer">Ainda tem audiolivros no computador? Copie-os primeiro para o telemóvel, por exemplo para a pasta Audiobooks.</string>
+    <string name="folder.add.help.download">O Android não permite que as aplicações abram a pasta Download diretamente. Escolha uma pasta dentro dela.</string>
+    <string name="folder.add.help.title">Não encontrou os seus audiolivros?</string>
     <string name="folder.add.subtitle">Escolha a pasta com os seus audiolivros. Pode conter um único livro ou toda a sua biblioteca.</string>
     <string name="folder.add.title.default">Adicionar os seus Audiobook(s)</string>
     <string name="folder.add.title.onboarding">Adicione o Seu Primeiro Audiobook</string>
@@ -306,6 +309,8 @@
     <string name="onboarding.completion.title">Está tudo pronto!</string>
     <string name="onboarding.explanation.subtitle.folder">Escolha a pasta com os seus audiolivros. O Voice mostra-lhe os livros que encontrar antes de os adicionar.</string>
     <string name="onboarding.explanation.title">A sua Livraria, do Seu Jeito</string>
+    <string name="onboarding.guide.subtitle">De seguida, o Android pergunta qual a pasta que o Voice pode abrir. Abra a que tem os seus audiolivros, confirme-a em baixo e depois permita o acesso.</string>
+    <string name="onboarding.guide.title">O Android pergunta primeiro</string>
     <string name="onboarding.welcome.action.start">Vamos lá</string>
     <string name="onboarding.welcome.subtitle">O seu reprodutor de bolso pessoal de audiobook. Vamos preparar-nos para isso.</string>
     <string name="onboarding.welcome.title">Seja bem vindo ao Voice!</string>

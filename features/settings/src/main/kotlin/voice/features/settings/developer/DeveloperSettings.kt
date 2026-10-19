@@ -75,6 +75,21 @@ private fun DeveloperSettings(
         }
       }
 
+      item {
+        ListItem(
+          trailingContent = {
+            TextButton(
+              onClick = viewModel::showOnboarding,
+              content = {
+                Text("Show")
+              },
+            )
+          },
+        ) {
+          Text("Onboarding")
+        }
+      }
+
       val fcmToken = viewState.fcmToken
       if (fcmToken != null) {
         item {

@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">Σύνδεση με το Audiobookshelf</string>
     <string name="folder.add.action.file">Προσθήκη μεμονωμένου αρχείου</string>
     <string name="folder.add.action.folder">Επιλογή φακέλου</string>
+    <string name="folder.add.help.computer">Τα ηχητικά βιβλία είναι ακόμα στον υπολογιστή σας; Αντιγράψτε τα πρώτα στο τηλέφωνό σας, για παράδειγμα στον φάκελο Audiobooks.</string>
+    <string name="folder.add.help.download">Το Android δεν επιτρέπει στις εφαρμογές να ανοίγουν απευθείας τον φάκελο Download. Επιλέξτε έναν φάκελο μέσα σε αυτόν.</string>
+    <string name="folder.add.help.title">Δεν βρήκατε τα ηχητικά σας βιβλία;</string>
     <string name="folder.add.subtitle">Επιλέξτε τον φάκελο με τα ηχητικά σας βιβλία. Μπορεί να περιέχει ένα βιβλίο ή ολόκληρη τη βιβλιοθήκη σας.</string>
     <string name="folder.add.title.default">Προσθέστε τα ηχητικά σας βιβλία</string>
     <string name="folder.add.title.onboarding">Προσθέστε το πρώτο σας ηχητικό βιβλίο</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">Όλα έτοιμα!</string>
     <string name="onboarding.explanation.subtitle.folder">Επιλέξτε τον φάκελο με τα ηχητικά σας βιβλία. Το Voice σάς δείχνει τα βιβλία που βρίσκει πριν τα προσθέσει.</string>
     <string name="onboarding.explanation.title">Η βιβλιοθήκη σας, όπως τη θέλετε</string>
+    <string name="onboarding.guide.subtitle">Στη συνέχεια, το Android θα ρωτήσει ποιον φάκελο μπορεί να ανοίξει το Voice. Ανοίξτε αυτόν με τα ηχητικά σας βιβλία, επιβεβαιώστε τον στο κάτω μέρος και μετά επιτρέψτε την πρόσβαση.</string>
+    <string name="onboarding.guide.title">Πρώτα ρωτάει το Android</string>
     <string name="onboarding.welcome.action.start">Πάμε</string>
     <string name="onboarding.welcome.subtitle">Η προσωπική σας εφαρμογή για ηχητικά βιβλία, πάντα στην τσέπη σας. Ας ξεκινήσουμε.</string>
     <string name="onboarding.welcome.title">Καλώς ήρθατε στο Voice!</string>

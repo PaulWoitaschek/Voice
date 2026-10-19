@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">Yhdistä Audiobookshelf</string>
     <string name="folder.add.action.file">Lisää sen sijaan yksittäinen tiedosto</string>
     <string name="folder.add.action.folder">Valitse kansio</string>
+    <string name="folder.add.help.computer">Ovatko äänikirjasi vielä tietokoneella? Kopioi ne ensin puhelimeesi, esimerkiksi Audiobooks-kansioon.</string>
+    <string name="folder.add.help.download">Android ei salli sovellusten avata suoraan Download-kansiota. Valitse jokin sen sisällä oleva kansio.</string>
+    <string name="folder.add.help.title">Etkö löytänyt äänikirjojasi?</string>
     <string name="folder.add.subtitle">Valitse kansio, jossa äänikirjasi ovat. Siinä voi olla yksi kirja tai koko kirjastosi.</string>
     <string name="folder.add.title.default">Lisää äänikirjasi</string>
     <string name="folder.add.title.onboarding">Lisää ensimmäinen äänikirjasi</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">Olet valmiina!</string>
     <string name="onboarding.explanation.subtitle.folder">Valitse kansio, jossa äänikirjasi ovat. Voice näyttää löytämänsä kirjat ennen niiden lisäämistä.</string>
     <string name="onboarding.explanation.title">Sinun kirjastosi, sinun tavallasi</string>
+    <string name="onboarding.guide.subtitle">Seuraavaksi Android kysyy, minkä kansion Voice saa avata. Avaa äänikirjojesi kansio, vahvista se alareunassa ja salli sitten pääsy.</string>
+    <string name="onboarding.guide.title">Android kysyy ensin</string>
     <string name="onboarding.welcome.action.start">Aloitetaan</string>
     <string name="onboarding.welcome.subtitle">Henkilökohtainen taskuäänikirjasoittimesi. Laitetaanpas homma rullaamaan.</string>
     <string name="onboarding.welcome.title">Tervetuloa Voiceen!</string>

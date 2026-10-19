@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">Audiobookshelf koppelen</string>
     <string name="folder.add.action.file">Liever één los bestand toevoegen</string>
     <string name="folder.add.action.folder">Kies een map</string>
+    <string name="folder.add.help.computer">Staan je luisterboeken nog op de computer? Kopieer ze eerst naar je telefoon, bijvoorbeeld naar de map Audiobooks.</string>
+    <string name="folder.add.help.download">Android staat niet toe dat apps de map Download zelf openen. Kies een map binnenin.</string>
+    <string name="folder.add.help.title">Je luisterboeken niet gevonden?</string>
     <string name="folder.add.subtitle">Kies de map met je luisterboeken. Die kan één boek bevatten of je hele bibliotheek.</string>
     <string name="folder.add.title.default">Voeg Luisterboek(en) toe</string>
     <string name="folder.add.title.onboarding">Voeg je eerste luisterboek toe</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">Je bent helemaal klaar!</string>
     <string name="onboarding.explanation.subtitle.folder">Kies de map met je luisterboeken. Voice laat je de gevonden boeken zien voordat ze worden toegevoegd.</string>
     <string name="onboarding.explanation.title">Jouw bibliotheek, jouw manier</string>
+    <string name="onboarding.guide.subtitle">Hierna vraagt Android welke map Voice mag openen. Open de map met je luisterboeken, bevestig die onderaan en geef daarna toegang.</string>
+    <string name="onboarding.guide.title">Android vraagt eerst</string>
     <string name="onboarding.welcome.action.start">Aan de slag</string>
     <string name="onboarding.welcome.subtitle">Jouw persoonlijke luisterboekspeler. Laten we je installatie afmaken.</string>
     <string name="onboarding.welcome.title">Welkom bij Voice!</string>

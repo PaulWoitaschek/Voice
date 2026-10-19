@@ -146,6 +146,9 @@
     <string name="folder.add.action.audiobookshelf">Connete Audiobookshelf</string>
     <string name="folder.add.action.file">Agiunghe imbetzes unu documentu sìngulu</string>
     <string name="folder.add.action.folder">Issèbera una cartella</string>
+    <string name="folder.add.help.computer">Tenes galu audiolibros in su computer? Còpia·los in antis in su telèfonu tuo, pro esémpiu in sa cartella Audiobooks.</string>
+    <string name="folder.add.help.download">Android non permitit a sas aplicatziones de abèrrere deretu sa cartella Download. Issèbera una cartella aintro de issa.</string>
+    <string name="folder.add.help.title">No as agatadu sos audiolibros tuos?</string>
     <string name="folder.add.subtitle">Issèbera sa cartella cun sos audiolibros tuos. Podet cuntènnere unu libru sìngulu o totu sa biblioteca tua.</string>
     <string name="folder.add.title.default">Agiunghe sos audiolibros tuos</string>
     <string name="folder.add.title.onboarding">Agiunghe su primu audiolibru tuo</string>
@@ -289,6 +292,8 @@
     <string name="onboarding.completion.title">Totu prontu!</string>
     <string name="onboarding.explanation.subtitle.folder">Issèbera sa cartella cun sos audiolibros tuos. Voice ti mustrat sos libros chi agatat in antis de los agiùnghere.</string>
     <string name="onboarding.explanation.title">Sa biblioteca tua, sa manera tua</string>
+    <string name="onboarding.guide.subtitle">A pustis, Android ti preguntat cale cartella podet abèrrere Voice. Aberi sa chi tenet sos audiolibros tuos, cunfirma·la in bàsciu e pustis permite s\'atzessu.</string>
+    <string name="onboarding.guide.title">Android preguntat primu</string>
     <string name="onboarding.welcome.action.start">Andamus</string>
     <string name="onboarding.welcome.subtitle">Su leghidore de butzaca de audiolibros personale tuo. Preparamus·nos.</string>
     <string name="onboarding.welcome.title">Ti donamus su benebènnidu a Voice!</string>

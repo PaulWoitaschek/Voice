@@ -10,6 +10,8 @@ dependencies {
   implementation(projects.core.data.api)
   implementation(projects.core.strings)
   implementation(projects.core.ui)
+  implementation(projects.core.featureflag)
+  implementation(projects.core.analytics.api)
 
   implementation(libs.coil)
   implementation(libs.androidxCore)
