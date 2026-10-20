@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Παύση</string>
     <string name="playback.action.play">Αναπαραγωγή</string>
     <string name="playback.action.rewind">Επαναφορά</string>
-    <string name="playback.battery_optimization.action">Αλλαγή</string>
-    <string name="playback.battery_optimization.rationale">Λόγω των περιορισμών χρήσης μπαταρίας, ενδέχεται να υπάρξουν διακοπές στην αναπαραγωγή.</string>
+    <string name="playback.battery_optimization.action">Απενεργοποίηση</string>
+    <string name="playback.battery_optimization.rationale">Η βελτιστοποίηση μπαταρίας μπορεί να σταματήσει την αναπαραγωγή στο παρασκήνιο.</string>
     <string name="playback.book_progress.read">%1$s του βιβλίου</string>
     <string name="playback.book_progress.remaining">Απομένουν %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Απομένουν %1$s στο %2$s</string>

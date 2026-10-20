@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Szünet</string>
     <string name="playback.action.play">Lejátszás</string>
     <string name="playback.action.rewind">Visszatekerés</string>
-    <string name="playback.battery_optimization.action">Frissítés</string>
-    <string name="playback.battery_optimization.rationale">Lejátszási szakadozások történhetnek az ön energiabeállítasai miatt.</string>
+    <string name="playback.battery_optimization.action">Kikapcsolás</string>
+    <string name="playback.battery_optimization.rationale">Az akkumulátoroptimalizálás leállíthatja a háttérben futó lejátszást.</string>
     <string name="playback.book_progress.read">%1$s a könyvből</string>
     <string name="playback.book_progress.remaining">%1$s van hátra</string>
     <string name="playback.book_progress.remaining_at_speed">%1$s van hátra %2$s sebességgel</string>

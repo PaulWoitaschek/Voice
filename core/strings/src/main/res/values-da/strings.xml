@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Pause</string>
     <string name="playback.action.play">Afspil</string>
     <string name="playback.action.rewind">Spol tilbage</string>
-    <string name="playback.battery_optimization.action">Opdatér</string>
-    <string name="playback.battery_optimization.rationale">På grund af dine strømbegrænsninger kan der forekomme afbrydelser i afspilningen.</string>
+    <string name="playback.battery_optimization.action">Slå fra</string>
+    <string name="playback.battery_optimization.rationale">Batterioptimering kan stoppe afspilningen i baggrunden.</string>
     <string name="playback.book_progress.read">%1$s af bogen</string>
     <string name="playback.book_progress.remaining">%1$s tilbage</string>
     <string name="playback.book_progress.remaining_at_speed">%1$s tilbage ved %2$s</string>

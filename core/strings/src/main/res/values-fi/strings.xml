@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Tauko</string>
     <string name="playback.action.play">Toisto</string>
     <string name="playback.action.rewind">Takaisinkelaus</string>
-    <string name="playback.battery_optimization.action">Päivitä</string>
-    <string name="playback.battery_optimization.rationale">Virrankäyttörajoitusten vuoksi äänentoisto saattaa keskeytyä.</string>
+    <string name="playback.battery_optimization.action">Poista käytöstä</string>
+    <string name="playback.battery_optimization.rationale">Akun optimointi voi pysäyttää toiston taustalla.</string>
     <string name="playback.book_progress.read">%1$s kirjasta</string>
     <string name="playback.book_progress.remaining">%1$s jäljellä</string>
     <string name="playback.book_progress.remaining_at_speed">%1$s jäljellä nopeudella %2$s</string>

@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Pause</string>
     <string name="playback.action.play">Abspielen</string>
     <string name="playback.action.rewind">Zurückspulen</string>
-    <string name="playback.battery_optimization.action">Update</string>
-    <string name="playback.battery_optimization.rationale">Aufgrund Deiner Akkueinstellungen kann es zu Abspielunterbrechungen kommen.</string>
+    <string name="playback.battery_optimization.action">Ausschalten</string>
+    <string name="playback.battery_optimization.rationale">Die Akkuoptimierung kann die Wiedergabe im Hintergrund stoppen.</string>
     <string name="playback.book_progress.read">%1$s des Buchs</string>
     <string name="playback.book_progress.remaining">Noch %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Noch %1$s bei %2$s</string>

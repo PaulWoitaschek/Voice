@@ -317,8 +317,8 @@
     <string name="playback.action.pause">Pause</string>
     <string name="playback.action.play">Lecture</string>
     <string name="playback.action.rewind">Revenir en arrière</string>
-    <string name="playback.battery_optimization.action">Mise à jour</string>
-    <string name="playback.battery_optimization.rationale">À cause des restrictions d\'alimentation, des interruptions de lecture pourraient survenir.</string>
+    <string name="playback.battery_optimization.action">Désactiver</string>
+    <string name="playback.battery_optimization.rationale">L\'optimisation de la batterie peut interrompre la lecture en arrière-plan.</string>
     <string name="playback.book_progress.read">%1$s du livre</string>
     <string name="playback.book_progress.remaining">%1$s restant</string>
     <string name="playback.book_progress.remaining_at_speed">%1$s restant à %2$s</string>

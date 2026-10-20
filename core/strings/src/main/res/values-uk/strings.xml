@@ -334,8 +334,8 @@
     <string name="playback.action.pause">Призупинити</string>
     <string name="playback.action.play">Відтворити</string>
     <string name="playback.action.rewind">Перемотати назад</string>
-    <string name="playback.battery_optimization.action">Оновити</string>
-    <string name="playback.battery_optimization.rationale">Налаштування енергозбереження пристрою можуть призвести до переривань у відтворенні аудіокниг.</string>
+    <string name="playback.battery_optimization.action">Вимкнути</string>
+    <string name="playback.battery_optimization.rationale">Оптимізація батареї може зупинити відтворення у фоновому режимі.</string>
     <string name="playback.book_progress.read">%1$s книги</string>
     <string name="playback.book_progress.remaining">Залишилося %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Залишилося %1$s при %2$s</string>

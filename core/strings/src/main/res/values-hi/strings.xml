@@ -300,8 +300,8 @@
     <string name="playback.action.pause">रोकें</string>
     <string name="playback.action.play">चलाएँ</string>
     <string name="playback.action.rewind">रिवाइंड</string>
-    <string name="playback.battery_optimization.action">अपडेट</string>
-    <string name="playback.battery_optimization.rationale">आपके पावर प्रतिबंधों के कारण प्लेबैक में रुकावट आ सकती है।</string>
+    <string name="playback.battery_optimization.action">बंद करें</string>
+    <string name="playback.battery_optimization.rationale">बैटरी ऑप्टिमाइज़ेशन की वजह से बैकग्राउंड में प्लेबैक रुक सकता है।</string>
     <string name="playback.book_progress.read">पुस्तक का %1$s</string>
     <string name="playback.book_progress.remaining">%1$s बाकी</string>
     <string name="playback.book_progress.remaining_at_speed">%2$s पर %1$s बाकी</string>

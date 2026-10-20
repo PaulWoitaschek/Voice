@@ -317,8 +317,8 @@
     <string name="playback.action.pause">השהיה</string>
     <string name="playback.action.play">הפעלה</string>
     <string name="playback.action.rewind">הרצה אחורה</string>
-    <string name="playback.battery_optimization.action">עדכון</string>
-    <string name="playback.battery_optimization.rationale">עקב מגבלות חיסכון החשמל שלכם, ייתכנו הפרעות בהשמעה.</string>
+    <string name="playback.battery_optimization.action">כיבוי</string>
+    <string name="playback.battery_optimization.rationale">אופטימיזציה של הסוללה עלולה לעצור את ההשמעה ברקע.</string>
     <string name="playback.book_progress.read">%1$s מהספר</string>
     <string name="playback.book_progress.remaining">נותרו %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">נותרו %1$s במהירות %2$s</string>

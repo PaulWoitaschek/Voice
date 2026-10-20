@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Pauzeer</string>
     <string name="playback.action.play">Speel af</string>
     <string name="playback.action.rewind">Terugspoelen</string>
-    <string name="playback.battery_optimization.action">Update</string>
-    <string name="playback.battery_optimization.rationale">Wegens energiebeperkingen kan het afspelen zo nu en dan onderbroken worden.</string>
+    <string name="playback.battery_optimization.action">Uitzetten</string>
+    <string name="playback.battery_optimization.rationale">Batterijoptimalisatie kan het afspelen op de achtergrond stoppen.</string>
     <string name="playback.book_progress.read">%1$s van het boek</string>
     <string name="playback.book_progress.remaining">Nog %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Nog %1$s op %2$s</string>

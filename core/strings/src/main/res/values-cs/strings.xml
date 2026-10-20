@@ -334,8 +334,8 @@
     <string name="playback.action.pause">Pozastavit</string>
     <string name="playback.action.play">Přehrát</string>
     <string name="playback.action.rewind">Přetočit</string>
-    <string name="playback.battery_optimization.action">Aktualizovat</string>
-    <string name="playback.battery_optimization.rationale">Kvůli nastavení omezení spotřeby může docházet k přerušování přehrávání.</string>
+    <string name="playback.battery_optimization.action">Vypnout</string>
+    <string name="playback.battery_optimization.rationale">Optimalizace baterie může zastavit přehrávání na pozadí.</string>
     <string name="playback.book_progress.read">%1$s knihy</string>
     <string name="playback.book_progress.remaining">Zbývá %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Zbývá %1$s při %2$s</string>

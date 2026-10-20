@@ -283,8 +283,8 @@
     <string name="playback.action.pause">Berhenti</string>
     <string name="playback.action.play">Mulai</string>
     <string name="playback.action.rewind">Memundurkan</string>
-    <string name="playback.battery_optimization.action">Perbarui</string>
-    <string name="playback.battery_optimization.rationale">Karena pembatasan Daya Anda, gangguan pemutaran mungkin terjadi.</string>
+    <string name="playback.battery_optimization.action">Matikan</string>
+    <string name="playback.battery_optimization.rationale">Pengoptimalan baterai dapat menghentikan pemutaran di latar belakang.</string>
     <string name="playback.book_progress.read">%1$s dari buku</string>
     <string name="playback.book_progress.remaining">Sisa %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Sisa %1$s pada %2$s</string>

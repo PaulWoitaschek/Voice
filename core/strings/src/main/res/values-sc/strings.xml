@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Pàusa</string>
     <string name="playback.action.play">Reprodue</string>
     <string name="playback.action.rewind">Torra in segus</string>
-    <string name="playback.battery_optimization.action">Atualiza</string>
-    <string name="playback.battery_optimization.rationale">Pro neghe de sas limitatziones de alimentatzione tuas, bi diant pòdere èssere interrutziones in sa riprodutzione.</string>
+    <string name="playback.battery_optimization.action">Disativa</string>
+    <string name="playback.battery_optimization.rationale">S\'otimizatzione de sa bateria podet firmare sa riprodutzione in segundu pianu.</string>
     <string name="playback.book_progress.read">%1$s de su libru</string>
     <string name="playback.book_progress.remaining">Mancant %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Mancant %1$s a %2$s</string>
