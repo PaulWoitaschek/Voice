@@ -99,11 +99,19 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # Listeners read the changelog, so it leaves out who made each change and the link to its pull request.
+          {
+            cat .github/release_notes_template.md
+            gh api "repos/$GITHUB_REPOSITORY/releases/generate-notes" \
+              -f tag_name="${{ steps.tag.outputs.tag }}" \
+              -f target_commitish="$GITHUB_SHA" \
+              --jq .body \
+              | sed -E 's# by @[^ ]+ in https://github\.com/[^ ]+/pull/[0-9]+$##'
+          } > release_notes.md
           gh release create "${{ steps.tag.outputs.tag }}" \
             artifacts/*.apk \
             --draft \
-            --generate-notes \
-            --notes-file .github/release_notes_template.md \
+            --notes-file release_notes.md \
             --target "$GITHUB_SHA"
 
       # Once Play has the version code it can't be released again, so keep the builds to finish by hand.
