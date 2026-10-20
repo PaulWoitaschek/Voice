@@ -282,7 +282,7 @@
     <string name="playback.action.fast_forward">快进</string>
     <string name="playback.action.pause">暂停</string>
     <string name="playback.action.play">播放</string>
-    <string name="playback.action.rewind">回退</string>
+    <string name="playback.action.rewind">快退</string>
     <string name="playback.battery_optimization.action">关闭</string>
     <string name="playback.battery_optimization.rationale">电池优化可能会导致后台播放停止。</string>
     <string name="playback.book_progress.read">全书进度 %1$s</string>

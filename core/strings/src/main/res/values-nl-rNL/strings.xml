@@ -58,7 +58,7 @@
     <string name="audiobookshelf.status.needs_login">De server wil dat je opnieuw inlogt</string>
     <string name="audiobookshelf.status.offline">De server is nu niet bereikbaar. Gedownloade boeken kun je nog steeds afspelen.</string>
     <string name="audiobookshelf.status.syncing">Synchroniseren…</string>
-    <string name="book.category.action.mark_completed">Markeren als afgerond</string>
+    <string name="book.category.action.mark_completed">Markeren als voltooid</string>
     <string name="book.category.action.mark_current">Markeren als huidig boek</string>
     <string name="book.category.action.mark_not_started">Markeren als nog niet begonnen</string>
     <string name="book.delete.bottom_sheet.title">Boek verwijderen</string>
@@ -289,7 +289,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Privacybeleid</string>
     <string name="onboarding.analytics_consent.description">Anonieme gebruiksgegevens delen om Voice te helpen verbeteren? Je kunt dit wijzigen in de instellingen.</string>
     <string name="onboarding.completion.action.start_listening">Begin te luisteren</string>
-    <string name="onboarding.completion.subtitle">Je eerste luisterboek is klaar om af te spelen. Geniet van je ervaring met Voice!</string>
+    <string name="onboarding.completion.subtitle">Je eerste luisterboek is klaar om af te spelen. Veel luisterplezier met Voice!</string>
     <string name="onboarding.completion.title">Alles staat klaar!</string>
     <string name="onboarding.explanation.subtitle.folder">Kies de map met je luisterboeken. Voice laat je de gevonden boeken zien voordat ze worden toegevoegd.</string>
     <string name="onboarding.explanation.title">Jouw bibliotheek, jouw manier</string>

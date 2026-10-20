@@ -289,7 +289,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Datenschutzerklärung</string>
     <string name="onboarding.analytics_consent.description">Anonyme Nutzungsdaten freigeben, um Voice zu verbessern? Du kannst das in den Einstellungen ändern.</string>
     <string name="onboarding.completion.action.start_listening">Start</string>
-    <string name="onboarding.completion.subtitle">Dein erstes Hörbuch ist bereit zum Abspielen. Viel Spaß auf Deiner Reise mit Voice!</string>
+    <string name="onboarding.completion.subtitle">Dein erstes Hörbuch ist bereit zum Abspielen. Viel Spaß beim Hören mit Voice!</string>
     <string name="onboarding.completion.title">Alles bereit!</string>
     <string name="onboarding.explanation.subtitle.folder">Wähle den Ordner mit Deinen Hörbüchern. Voice zeigt Dir die gefundenen Bücher, bevor sie hinzugefügt werden.</string>
     <string name="onboarding.explanation.title">Deine Bibliothek, Deine Wahl</string>

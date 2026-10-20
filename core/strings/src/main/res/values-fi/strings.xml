@@ -289,7 +289,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Tietosuojakäytäntö</string>
     <string name="onboarding.analytics_consent.description">Haluatko jakaa anonyymejä käyttötietoja Voicen parantamiseksi? Voit muuttaa tätä asetuksissa.</string>
     <string name="onboarding.completion.action.start_listening">Aloita kuunteleminen</string>
-    <string name="onboarding.completion.subtitle">Ensimmäinen äänikirjasi on valmiina kuunneltavaksi. Nauti matkastasi Voicen kanssa!</string>
+    <string name="onboarding.completion.subtitle">Ensimmäinen äänikirjasi on valmiina kuunneltavaksi. Mukavia kuunteluhetkiä Voicen kanssa!</string>
     <string name="onboarding.completion.title">Kaikki valmista!</string>
     <string name="onboarding.explanation.subtitle.folder">Valitse kansio, jossa äänikirjasi ovat. Voice näyttää löytämänsä kirjat ennen niiden lisäämistä.</string>
     <string name="onboarding.explanation.title">Sinun kirjastosi, sinun tavallasi</string>

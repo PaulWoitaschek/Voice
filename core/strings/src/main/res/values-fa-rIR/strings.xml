@@ -281,7 +281,7 @@
     <string name="library.storage_permission_bug.action">اعطای مجوز</string>
     <string name="library.storage_permission_bug.message">در برخی دستگاه‌ها، یک برنامهٔ سیستمی مجوز لازم برای دسترسی به حافظهٔ خارجی را ندارد. Voice برای خواندن کتاب‌های صوتی شما به این دسترسی نیاز دارد.</string>
     <string name="library.storage_permission_bug.title">مجوز لازم است</string>
-    <string name="media_session.library.recent">اخیر</string>
+    <string name="media_session.library.recent">اخیراً پخش‌شده</string>
     <string name="media_session.library.root">همه کتاب های صوتی</string>
     <string name="onboarding.action.next">بعدی</string>
     <string name="onboarding.analytics_consent.action.disable">قبول نکردن تجزیه‌وتحلیل آماری</string>
@@ -299,7 +299,7 @@
     <string name="playback.action.fast_forward">جلو بردن سریع</string>
     <string name="playback.action.pause">توقف</string>
     <string name="playback.action.play">پخش</string>
-    <string name="playback.action.rewind">به عقب برگرداندن</string>
+    <string name="playback.action.rewind">عقب بردن</string>
     <string name="playback.battery_optimization.action">خاموش کردن</string>
     <string name="playback.battery_optimization.rationale">بهینه‌سازی مصرف باتری ممکن است پخش را در پس‌زمینه متوقف کند.</string>
     <string name="playback.book_progress.read">%1$s از کتاب</string>

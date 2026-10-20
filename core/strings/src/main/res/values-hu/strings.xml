@@ -58,7 +58,7 @@
     <string name="audiobookshelf.status.needs_login">A szerver újbóli bejelentkezést kér</string>
     <string name="audiobookshelf.status.offline">A szerver most nem érhető el. A letöltött könyvek továbbra is lejátszhatók.</string>
     <string name="audiobookshelf.status.syncing">Szinkronizálás…</string>
-    <string name="book.category.action.mark_completed">Jelölés meghallgatottnak</string>
+    <string name="book.category.action.mark_completed">Megjelölés befejezettként</string>
     <string name="book.category.action.mark_current">Megjelölés aktuálisként</string>
     <string name="book.category.action.mark_not_started">Megjelölés még el nem kezdettként</string>
     <string name="book.delete.bottom_sheet.title">Könyv törlése</string>

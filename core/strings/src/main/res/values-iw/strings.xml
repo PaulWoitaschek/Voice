@@ -296,7 +296,7 @@
     <string name="library.search.recent.remove">הסרת %s</string>
     <string name="library.search.recent.title">אחרונים</string>
     <string name="library.storage_permission_bug.action">הענקת הרשאה</string>
-    <string name="library.storage_permission_bug.message">במכשירים מסוימים, לאפליקציית מערכת חסרה ההרשאה הנדרשת לגישה לאחסון החיצוני. גישה זו חיונית כדי ש-Voice יוכל לקרוא את ספרי האודיו שלכם.</string>
+    <string name="library.storage_permission_bug.message">במכשירים מסוימים, לאפליקציית מערכת חסרה ההרשאה הנדרשת לגישה לאחסון החיצוני. גישה זו חיונית כדי ש-Voice יוכל לקרוא את הקולספרים שלכם.</string>
     <string name="library.storage_permission_bug.title">נדרשת הרשאה</string>
     <string name="media_session.library.recent">אחרונים</string>
     <string name="media_session.library.root">כל הקולספרים</string>
@@ -306,7 +306,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">מדיניות פרטיות</string>
     <string name="onboarding.analytics_consent.description">לשתף נתוני שימוש אנונימיים כדי לעזור לשפר את Voice? אפשר לשנות זאת בהגדרות.</string>
     <string name="onboarding.completion.action.start_listening">מתחילים להאזין</string>
-    <string name="onboarding.completion.subtitle">הקולספר הראשון שלכם מוכן להשמעה. תיהנו מהמסע עם Voice!</string>
+    <string name="onboarding.completion.subtitle">הקולספר הראשון שלכם מוכן להשמעה. האזנה נעימה עם Voice!</string>
     <string name="onboarding.completion.title">הכל מוכן!</string>
     <string name="onboarding.explanation.subtitle.folder">בחרו את התיקייה עם הקולספרים שלכם. Voice יציג לכם את הספרים שהוא מוצא לפני שהם יתווספו.</string>
     <string name="onboarding.explanation.title">הספרייה שלכם, בדרך שלכם</string>

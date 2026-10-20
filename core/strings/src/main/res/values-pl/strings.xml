@@ -64,7 +64,7 @@
     <string name="audiobookshelf.status.needs_login">Serwer prosi o ponowne zalogowanie</string>
     <string name="audiobookshelf.status.offline">Nie można teraz połączyć się z serwerem. Pobranych książek nadal możesz słuchać.</string>
     <string name="audiobookshelf.status.syncing">Synchronizacja…</string>
-    <string name="book.category.action.mark_completed">Oznacz jako Ukończona</string>
+    <string name="book.category.action.mark_completed">Oznacz jako ukończona</string>
     <string name="book.category.action.mark_current">Oznacz jako aktualna</string>
     <string name="book.category.action.mark_not_started">Oznacz jako nierozpoczęta</string>
     <string name="book.delete.bottom_sheet.title">Usuń książkę</string>
@@ -330,10 +330,10 @@
     <string name="onboarding.welcome.action.start">Zaczynamy</string>
     <string name="onboarding.welcome.subtitle">Voice odtwarza audiobooki z twojego telefonu i pamięta, gdzie jesteś w każdym z nich. Za darmo, bez reklam i bez konta.</string>
     <string name="onboarding.welcome.title">Z myślą o twoich audiobookach</string>
-    <string name="playback.action.fast_forward">Do przodu</string>
+    <string name="playback.action.fast_forward">Przewiń do przodu</string>
     <string name="playback.action.pause">Wstrzymaj</string>
     <string name="playback.action.play">Odtwarzaj</string>
-    <string name="playback.action.rewind">Przewiń</string>
+    <string name="playback.action.rewind">Przewiń do tyłu</string>
     <string name="playback.battery_optimization.action">Wyłącz</string>
     <string name="playback.battery_optimization.rationale">Optymalizacja baterii może zatrzymać odtwarzanie w tle.</string>
     <string name="playback.book_progress.read">%1$s książki</string>

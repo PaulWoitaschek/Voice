@@ -272,7 +272,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Kebijakan Privasi</string>
     <string name="onboarding.analytics_consent.description">Bersedia berbagi data penggunaan anonim untuk membantu meningkatkan Voice? Anda dapat mengubahnya di pengaturan.</string>
     <string name="onboarding.completion.action.start_listening">Mulai mendengarkan</string>
-    <string name="onboarding.completion.subtitle">Buku audio pertama Anda siap diputar. Nikmati perjalanan Anda bersama Voice!</string>
+    <string name="onboarding.completion.subtitle">Buku audio pertama Anda siap diputar. Selamat mendengarkan bersama Voice!</string>
     <string name="onboarding.completion.title">Semua siap!</string>
     <string name="onboarding.explanation.subtitle.folder">Pilih folder berisi buku audio Anda. Voice menampilkan buku yang ditemukan sebelum menambahkannya.</string>
     <string name="onboarding.explanation.title">Perpustakaan Anda, sesuai keinginan Anda</string>
@@ -282,7 +282,7 @@
     <string name="playback.action.fast_forward">Maju cepat</string>
     <string name="playback.action.pause">Jeda</string>
     <string name="playback.action.play">Putar</string>
-    <string name="playback.action.rewind">Memundurkan</string>
+    <string name="playback.action.rewind">Mundur</string>
     <string name="playback.battery_optimization.action">Matikan</string>
     <string name="playback.battery_optimization.rationale">Pengoptimalan baterai dapat menghentikan pemutaran di latar belakang.</string>
     <string name="playback.book_progress.read">%1$s dari buku</string>

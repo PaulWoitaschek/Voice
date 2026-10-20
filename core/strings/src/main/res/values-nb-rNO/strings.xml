@@ -289,7 +289,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Personvernpraksis</string>
     <string name="onboarding.analytics_consent.description">Vil du dele anonyme bruksdata for å bidra til å forbedre Voice? Du kan endre dette i innstillingene.</string>
     <string name="onboarding.completion.action.start_listening">Start lytting</string>
-    <string name="onboarding.completion.subtitle">Din første lydbok er klar til å spilles av. Nyt din reise med Voice!</string>
+    <string name="onboarding.completion.subtitle">Din første lydbok er klar til å spilles av. God lytting med Voice!</string>
     <string name="onboarding.completion.title">Alt er klart!</string>
     <string name="onboarding.explanation.subtitle.folder">Velg mappen med lydbøkene dine. Voice viser deg bøkene den finner før de legges til.</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt opplegg</string>
