@@ -65,7 +65,7 @@
     <string name="audiobookshelf.status.offline">Сервер сейчас недоступен. Скачанные книги по-прежнему можно слушать.</string>
     <string name="audiobookshelf.status.syncing">Синхронизация…</string>
     <string name="book.category.action.mark_completed">Пометить как прослушанную</string>
-    <string name="book.category.action.mark_current">Пометить как открытую</string>
+    <string name="book.category.action.mark_current">Пометить как «Слушаю»</string>
     <string name="book.category.action.mark_not_started">Пометить как непрослушанную</string>
     <string name="book.delete.bottom_sheet.title">Удалить книгу</string>
     <string name="book.delete.dialog.confirm_files">Удалить файлы</string>
@@ -323,10 +323,10 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Политика конфиденциальности</string>
     <string name="onboarding.analytics_consent.description">Отправлять анонимные данные об использовании, чтобы помочь улучшить Voice? Это можно изменить в настройках.</string>
     <string name="onboarding.completion.action.start_listening">Начать прослушивание</string>
-    <string name="onboarding.completion.subtitle">Ваша первая аудиокнига готова к воспроизведению. Наслаждайтесь своим путешествием с Voice!</string>
+    <string name="onboarding.completion.subtitle">Ваша первая аудиокнига готова к воспроизведению. Приятного прослушивания с Voice!</string>
     <string name="onboarding.completion.title">Все готово!</string>
     <string name="onboarding.explanation.subtitle.folder">Выберите папку с аудиокнигами. Voice покажет найденные книги, прежде чем добавить их.</string>
-    <string name="onboarding.explanation.title">Ваша библиотека, Ваш выбор</string>
+    <string name="onboarding.explanation.title">Ваша библиотека — ваши правила</string>
     <string name="onboarding.welcome.action.start">Поехали</string>
     <string name="onboarding.welcome.subtitle">Voice воспроизводит аудиокниги на вашем телефоне и помнит, где вы остановились в каждой из них. Бесплатно, без рекламы и регистрации.</string>
     <string name="onboarding.welcome.title">Создано для ваших аудиокниг</string>
@@ -397,10 +397,10 @@
     <string name="settings.appearance.title">Оформление</string>
     <string name="settings.auto_sleep_timer.end.label">Время конца</string>
     <string name="settings.auto_sleep_timer.start.label">Время начала</string>
-    <string name="settings.auto_sleep_timer.summary">Запускать таймер сна автоматически когда воспроизведение начинается между %1$s и %2$s</string>
+    <string name="settings.auto_sleep_timer.summary">Запускать таймер сна автоматически, когда воспроизведение начинается между %1$s и %2$s</string>
     <string name="settings.auto_sleep_timer.title">Автоматический таймер сна</string>
     <string name="settings.library.audiobookshelf.summary">Слушайте книги прямо со своего сервера</string>
-    <string name="settings.library.folders.summary">Управление папками, отсканированными на наличие аудиокниг</string>
+    <string name="settings.library.folders.summary">Управление папками, в которых Voice ищет аудиокниги</string>
     <string name="settings.library.layout.grid">Сетка</string>
     <string name="settings.library.layout.list">Список</string>
     <string name="settings.library.title">Библиотека</string>
@@ -413,7 +413,7 @@
     <string name="settings.playback.seek_time.summary">Насколько далеко перематывают кнопки назад и вперёд</string>
     <string name="settings.playback.seek_time.title">Интервал перемотки</string>
     <string name="settings.subtitle">Сделайте Voice своим</string>
-    <string name="settings.support.faq.title">Частые Вопросы (ЧаВо)</string>
+    <string name="settings.support.faq.title">Частые вопросы</string>
     <string name="settings.support.get_support.title">Поддержка</string>
     <string name="settings.support.report_issue.title">Сообщить о проблеме</string>
     <string name="settings.support.suggest_idea.title">Предложить идею</string>

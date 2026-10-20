@@ -58,9 +58,9 @@
     <string name="audiobookshelf.status.needs_login">Palvelin pyytää sinua kirjautumaan uudelleen</string>
     <string name="audiobookshelf.status.offline">Palvelimeen ei saada nyt yhteyttä. Ladattuja kirjoja voit silti kuunnella.</string>
     <string name="audiobookshelf.status.syncing">Synkronoidaan…</string>
-    <string name="book.category.action.mark_completed">Merkitse valmiiksi</string>
+    <string name="book.category.action.mark_completed">Merkitse kuunnelluksi</string>
     <string name="book.category.action.mark_current">Merkitse nykyiseksi</string>
-    <string name="book.category.action.mark_not_started">Merkitse ei vielä aloitetuksi</string>
+    <string name="book.category.action.mark_not_started">Merkitse aloittamattomaksi</string>
     <string name="book.delete.bottom_sheet.title">Poista kirja</string>
     <string name="book.delete.dialog.confirm_files">Poista tiedostoni</string>
     <string name="book.delete.dialog.message">Tiedostot poistetaan laitteeltasi pysyvästi. Et voi palauttaa niitä.</string>
@@ -89,7 +89,7 @@
     <string name="bookmark.category.revisit">Palaa tähän</string>
     <string name="bookmark.chapter">Luku %1$d</string>
     <string name="bookmark.chapter_with_name">Luku %1$d · %2$s</string>
-    <string name="bookmark.created.just_now">Juuri äskettäin</string>
+    <string name="bookmark.created.just_now">Juuri nyt</string>
     <string name="bookmark.deleted">Kirjanmerkki poistettu</string>
     <string name="bookmark.edit.title">Muokkaa kirjanmerkkiä</string>
     <string name="bookmark.empty.message">Tallenna hetki pitämällä kirjanmerkkipainiketta painettuna kuuntelun aikana.</string>
@@ -199,8 +199,8 @@
     <string name="history.event.interrupted">Keskeytetty %s ajaksi</string>
     <string name="history.event.jump_back">Palattiin aiempaan kohtaan</string>
     <string name="history.event.moved">Kohtaa siirretty</string>
-    <string name="history.event.paused">Tauko</string>
-    <string name="history.event.played">Toisto</string>
+    <string name="history.event.paused">Pysäytetty</string>
+    <string name="history.event.played">Kuuntelu aloitettu</string>
     <plurals name="history.event.rewound">
         <item quantity="one">Kelattiin taaksepäin %d kerran</item>
         <item quantity="other">Kelattiin taaksepäin %d kertaa</item>
@@ -225,7 +225,7 @@
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Ladataan</string>
     <string name="library.book.offline">Ei saatavilla offline-tilassa</string>
-    <string name="library.category.completed.title">Valmiina</string>
+    <string name="library.category.completed.title">Kuunneltu</string>
     <string name="library.category.current.title">Nykyinen</string>
     <string name="library.category.not_started.title">Ei vielä aloitettu</string>
     <string name="library.continue_listening">Jatka kuuntelua</string>
@@ -281,7 +281,7 @@
     <string name="library.storage_permission_bug.action">Anna käyttöoikeus</string>
     <string name="library.storage_permission_bug.message">Eräillä laitteilla joltakin järjestelmän sovellukselta puuttuu tarvittava käyttöoikeus ulkoiseen tallennustilaan. Tämä oikeus on välttämätön jotta Voice voi lukea äänikirjojasi.</string>
     <string name="library.storage_permission_bug.title">Käyttöoikeus tarvitaan</string>
-    <string name="media_session.library.recent">Viimeisin</string>
+    <string name="media_session.library.recent">Viimeksi kuunnellut</string>
     <string name="media_session.library.root">Kaikki äänikirjat</string>
     <string name="onboarding.action.next">Seuraava</string>
     <string name="onboarding.analytics_consent.action.disable">Jatka ilman analytiikkaa</string>
@@ -289,8 +289,8 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Tietosuojakäytäntö</string>
     <string name="onboarding.analytics_consent.description">Haluatko jakaa anonyymejä käyttötietoja Voicen parantamiseksi? Voit muuttaa tätä asetuksissa.</string>
     <string name="onboarding.completion.action.start_listening">Aloita kuunteleminen</string>
-    <string name="onboarding.completion.subtitle">Ensimmäinen äänikirjasi on valmiina kuunneltavaksi. Nauti matkastasi Voicen kanssa!</string>
-    <string name="onboarding.completion.title">Olet valmiina!</string>
+    <string name="onboarding.completion.subtitle">Ensimmäinen äänikirjasi on valmiina kuunneltavaksi. Mukavia kuunteluhetkiä Voicen kanssa!</string>
+    <string name="onboarding.completion.title">Kaikki valmista!</string>
     <string name="onboarding.explanation.subtitle.folder">Valitse kansio, jossa äänikirjasi ovat. Voice näyttää löytämänsä kirjat ennen niiden lisäämistä.</string>
     <string name="onboarding.explanation.title">Sinun kirjastosi, sinun tavallasi</string>
     <string name="onboarding.welcome.action.start">Aloitetaan</string>
@@ -361,7 +361,7 @@
     <string name="settings.appearance.title">Ulkoasu</string>
     <string name="settings.auto_sleep_timer.end.label">Päättymisaika</string>
     <string name="settings.auto_sleep_timer.start.label">Aloitusaika</string>
-    <string name="settings.auto_sleep_timer.summary">Aloita uniajastin automaattisesti, kun toisto alkaa välillä %1$s ja %2$s</string>
+    <string name="settings.auto_sleep_timer.summary">Käynnistä uniajastin automaattisesti, kun toisto alkaa %1$s ja %2$s välillä</string>
     <string name="settings.auto_sleep_timer.title">Automaattinen uniajastin</string>
     <string name="settings.library.audiobookshelf.summary">Suoratoista kirjoja omalta palvelimeltasi</string>
     <string name="settings.library.folders.summary">Hallitse kansioita, joista etsitään äänikirjoja</string>

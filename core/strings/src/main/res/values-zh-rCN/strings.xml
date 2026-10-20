@@ -55,9 +55,9 @@
     <string name="audiobookshelf.status.needs_login">服务器需要您重新登录</string>
     <string name="audiobookshelf.status.offline">暂时无法连接服务器。已下载的书仍可播放。</string>
     <string name="audiobookshelf.status.syncing">正在同步…</string>
-    <string name="book.category.action.mark_completed">标记为已结束播放</string>
-    <string name="book.category.action.mark_current">标记为正在播放</string>
-    <string name="book.category.action.mark_not_started">标记为尚未开始播放</string>
+    <string name="book.category.action.mark_completed">标记为已听完</string>
+    <string name="book.category.action.mark_current">标记为在听</string>
+    <string name="book.category.action.mark_not_started">标记为未开始</string>
     <string name="book.delete.bottom_sheet.title">删除有声书</string>
     <string name="book.delete.dialog.confirm_files">删除我的文件</string>
     <string name="book.delete.dialog.message">文件将从您的设备中永久删除，且无法恢复。</string>
@@ -119,7 +119,7 @@
     <string name="common.action.undo">撤销</string>
     <string name="common.action.save">保存</string>
     <string name="common.dialog.cancel">取消</string>
-    <string name="common.dialog.confirm">设置</string>
+    <string name="common.dialog.confirm">确定</string>
     <string name="common.dialog.ok">确定</string>
     <string name="common.error.generic.message">发生了错误😢</string>
     <string name="common.error.generic.retry">重试</string>
@@ -191,7 +191,7 @@
     <string name="history.event.paused">暂停播放</string>
     <string name="history.event.played">开始播放</string>
     <plurals name="history.event.rewound">
-        <item quantity="other">回退 %d 次</item>
+        <item quantity="other">快退 %d 次</item>
     </plurals>
     <string name="history.event.shook">摇一摇继续收听</string>
     <plurals name="history.event.skipped_ahead">
@@ -212,9 +212,9 @@
     <string name="history.source.widget">小部件</string>
     <string name="library.book.downloading">正在下载</string>
     <string name="library.book.offline">离线不可用</string>
-    <string name="library.category.completed.title">已结束播放</string>
-    <string name="library.category.current.title">正在播放中</string>
-    <string name="library.category.not_started.title">尚未开始播放</string>
+    <string name="library.category.completed.title">已听完</string>
+    <string name="library.category.current.title">在听</string>
+    <string name="library.category.not_started.title">未开始</string>
     <string name="library.continue_listening">继续收听</string>
     <string name="library.empty.add_first_book">首先添加有声书文件夹，然后就可以开始听书啦！</string>
     <string name="library.empty.title">未找到有声书</string>
@@ -272,7 +272,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">隐私政策</string>
     <string name="onboarding.analytics_consent.description">愿意分享匿名使用数据来帮助改进 Voice 吗？您可以在设置中更改。</string>
     <string name="onboarding.completion.action.start_listening">开始收听</string>
-    <string name="onboarding.completion.subtitle">您的第一本有声书已准备好播放。与 Voice 一起享受您的旅程！</string>
+    <string name="onboarding.completion.subtitle">您的第一本有声书已准备好播放。祝您用 Voice 听得愉快！</string>
     <string name="onboarding.completion.title">一切就绪！</string>
     <string name="onboarding.explanation.subtitle.folder">选择存放有声书的文件夹。Voice 会先向您展示找到的书籍，然后再添加。</string>
     <string name="onboarding.explanation.title">您的书库，您的风格</string>
@@ -282,7 +282,7 @@
     <string name="playback.action.fast_forward">快进</string>
     <string name="playback.action.pause">暂停</string>
     <string name="playback.action.play">播放</string>
-    <string name="playback.action.rewind">回退</string>
+    <string name="playback.action.rewind">快退</string>
     <string name="playback.battery_optimization.action">关闭</string>
     <string name="playback.battery_optimization.rationale">电池优化可能会导致后台播放停止。</string>
     <string name="playback.book_progress.read">全书进度 %1$s</string>

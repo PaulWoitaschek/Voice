@@ -56,7 +56,7 @@
     <string name="audiobookshelf.status.offline">現在サーバーに接続できません。ダウンロード済みの本は引き続き再生できます。</string>
     <string name="audiobookshelf.status.syncing">同期中…</string>
     <string name="book.category.action.mark_completed">完了としてマーク</string>
-    <string name="book.category.action.mark_current">現在としてマーク</string>
+    <string name="book.category.action.mark_current">聴きかけとしてマーク</string>
     <string name="book.category.action.mark_not_started">未再生としてマーク</string>
     <string name="book.delete.bottom_sheet.title">ブックを削除</string>
     <string name="book.delete.dialog.confirm_files">ファイルを削除</string>
@@ -179,7 +179,7 @@
         <item quantity="other">%d 冊のブックが見つかりました</item>
     </plurals>
     <plurals name="folder.type.file_count">
-        <item quantity="other">%d 音声ファイル</item>
+        <item quantity="other">%d 個の音声ファイル</item>
     </plurals>
     <string name="history.empty.message">再生・一時停止・ジャンプの記録がここに表示されるので、いつでも元の位置に戻れます。</string>
     <string name="history.empty.title">まだ何もありません</string>
@@ -213,7 +213,7 @@
     <string name="library.book.downloading">ダウンロード中</string>
     <string name="library.book.offline">オフラインでは利用不可</string>
     <string name="library.category.completed.title">完了</string>
-    <string name="library.category.current.title">現在</string>
+    <string name="library.category.current.title">聴きかけ</string>
     <string name="library.category.not_started.title">未再生</string>
     <string name="library.continue_listening">続きを聴く</string>
     <string name="library.empty.add_first_book">オーディオブックのフォルダーを追加して、聴き始めましょう！</string>
@@ -411,7 +411,7 @@
     <string name="support.tier.tea.title">一杯のお茶</string>
     <string name="support.unavailable.message">現在、この端末では Google Play の課金に接続できません。</string>
     <string name="support.unavailable.title">応援を利用できません</string>
-    <string name="shortcut.play_current.short_label">現在を再生</string>
+    <string name="shortcut.play_current.short_label">続きを聴く</string>
     <string name="sleep_timer.action.open">スリープタイマー</string>
     <string name="sleep_timer.dialog.action.decrement">短くする</string>
     <string name="sleep_timer.dialog.action.increment">長くする</string>

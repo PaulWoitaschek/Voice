@@ -138,8 +138,8 @@
     <string name="cover.search.hint">Hľadať obálku</string>
     <string name="cover.search.no_results.message">Skúste menej slov alebo vynechajte autora.</string>
     <string name="cover.search.no_results.title">Nenašli sa žiadne obálky</string>
-    <string name="cover.search.query.with_author">%1$s by %2$s audiobook cover</string>
-    <string name="cover.search.query.without_author">%s audiobook cover</string>
+    <string name="cover.search.query.with_author">Obálka zvukovej knihy %1$s od %2$s</string>
+    <string name="cover.search.query.without_author">Obálka zvukovej knihy %s</string>
     <string name="cover.title">Obálka</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minúta</item>
@@ -163,7 +163,7 @@
     <string name="folder.add.no_picker.title">Toto zariadenie nemá výber súborov</string>
     <string name="folder.add.subtitle">Vyberte priečinok so zvukovými knihami. Môže obsahovať jednu knihu alebo celú vašu knižnicu.</string>
     <string name="folder.add.title.default">Pridajte si zvukové knihy</string>
-    <string name="folder.add.title.onboarding">Pridajte si vašu prvú zvukovú knihu</string>
+    <string name="folder.add.title.onboarding">Pridajte si svoju prvú zvukovú knihu</string>
     <string name="folder.mode.author.label">Priečinky sú autori</string>
     <string name="folder.mode.author.option">Priečinky v %s sú autori</string>
     <plurals name="folder.mode.book_count">
@@ -259,7 +259,7 @@
     <string name="library.empty.title">Nenašli sa žiadne zvukové knihy</string>
     <string name="library.empty.message">Voice vo vašich priečinkoch nemôže nájsť žiadne zvukové knihy. Skontrolujte, či sú súbory stále na svojom mieste, alebo pridajte priečinok.</string>
     <string name="library.empty.action">Zobraziť priečinky</string>
-    <string name="library.folders.title">Priečinok so zvukovými knihami</string>
+    <string name="library.folders.title">Priečinky so zvukovými knihami</string>
     <string name="library.folders.moved.dialog.title">Priečinky audiokníh presunuté</string>
     <string name="library.folders.moved.dialog.message">Priečinky audiokníh teraz môžete spravovať v nastaveniach.</string>
     <string name="library.folders.no_access">Bez prístupu</string>
@@ -347,7 +347,7 @@
     <string name="playback.jump_back">Späť na %1$s</string>
     <string name="playback.jump_back.chapter">Späť na kap. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Preskočiť ticho</string>
-    <string name="playback.option.volume_boost">Zvýrazniť hlasitosť</string>
+    <string name="playback.option.volume_boost">Zosilnenie hlasitosti</string>
     <string name="playback.speed.decrease">Pomalšie</string>
     <string name="playback.speed.increase">Rýchlejšie</string>
     <string name="playback.speed.title">Rýchlosť prehrávania</string>
@@ -397,8 +397,8 @@
     <string name="settings.appearance.title">Vzhľad</string>
     <string name="settings.auto_sleep_timer.end.label">Nastaviť konečný čas</string>
     <string name="settings.auto_sleep_timer.start.label">Nastaviť počiatočný čas</string>
-    <string name="settings.auto_sleep_timer.summary">Automaticky aktivovať časovač zastavenia, ak sa prehrávanie spustí medzi %1$s a %2$s</string>
-    <string name="settings.auto_sleep_timer.title">Automatický časovač zastavenia</string>
+    <string name="settings.auto_sleep_timer.summary">Automaticky aktivovať časovač spánku, ak sa prehrávanie spustí medzi %1$s a %2$s</string>
+    <string name="settings.auto_sleep_timer.title">Automatický časovač spánku</string>
     <string name="settings.library.audiobookshelf.summary">Streamujte knihy z vlastného servera</string>
     <string name="settings.library.folders.summary">Spravovať priečinky určené na vyhľadávanie zvukových kníh</string>
     <string name="settings.library.layout.grid">Mriežka</string>
@@ -467,7 +467,7 @@
     <string name="support.unavailable.title">Podpora nie je dostupná</string>
     <string name="shortcut.play_current.short_label">Prehrať aktuálnu</string>
     <string name="sleep_timer.action.open">Časovač spánku</string>
-    <string name="sleep_timer.dialog.action.decrement">Kradšie</string>
+    <string name="sleep_timer.dialog.action.decrement">Kratšie</string>
     <string name="sleep_timer.dialog.action.increment">Dlhšie</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
     <string name="sleep_timer.dialog.shake_hint">Zatraste telefónom hneď po skončení časovača a znova ho spustíte.</string>

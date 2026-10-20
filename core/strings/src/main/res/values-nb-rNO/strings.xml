@@ -226,7 +226,7 @@
     <string name="library.book.downloading">Laster ned</string>
     <string name="library.book.offline">Ikke tilgjengelig uten nett</string>
     <string name="library.category.completed.title">Fullført</string>
-    <string name="library.category.current.title">Nåværende</string>
+    <string name="library.category.current.title">Pågående</string>
     <string name="library.category.not_started.title">Ikke startet enda</string>
     <string name="library.continue_listening">Fortsett å lytte</string>
     <string name="library.empty.add_first_book">Legg til lydbokmappen din så du kan begynne å lytte!</string>
@@ -289,8 +289,8 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Personvernpraksis</string>
     <string name="onboarding.analytics_consent.description">Vil du dele anonyme bruksdata for å bidra til å forbedre Voice? Du kan endre dette i innstillingene.</string>
     <string name="onboarding.completion.action.start_listening">Start lytting</string>
-    <string name="onboarding.completion.subtitle">Din første lydbok er klar til å spilles av. Nyt din reise med Voice!</string>
-    <string name="onboarding.completion.title">Du er ferdig!</string>
+    <string name="onboarding.completion.subtitle">Din første lydbok er klar til å spilles av. God lytting med Voice!</string>
+    <string name="onboarding.completion.title">Alt er klart!</string>
     <string name="onboarding.explanation.subtitle.folder">Velg mappen med lydbøkene dine. Voice viser deg bøkene den finner før de legges til.</string>
     <string name="onboarding.explanation.title">Ditt bibliotek, ditt opplegg</string>
     <string name="onboarding.welcome.action.start">Kom i gang</string>
@@ -298,7 +298,7 @@
     <string name="onboarding.welcome.title">Laget for lydbøkene dine</string>
     <string name="playback.action.fast_forward">Spol raskt framover</string>
     <string name="playback.action.pause">Pause</string>
-    <string name="playback.action.play">Spill</string>
+    <string name="playback.action.play">Spill av</string>
     <string name="playback.action.rewind">Spol tilbake</string>
     <string name="playback.battery_optimization.action">Slå av</string>
     <string name="playback.battery_optimization.rationale">Batterioptimalisering kan stoppe avspillingen i bakgrunnen.</string>
@@ -361,10 +361,10 @@
     <string name="settings.appearance.title">Utseende</string>
     <string name="settings.auto_sleep_timer.end.label">Sett sluttid</string>
     <string name="settings.auto_sleep_timer.start.label">Sett starttid</string>
-    <string name="settings.auto_sleep_timer.summary">Start en søvn-timer automatisk når avspillingen begynner mellom %1$s og %2$s</string>
-    <string name="settings.auto_sleep_timer.title">Automatisk søvn-timer</string>
+    <string name="settings.auto_sleep_timer.summary">Start innsovningstidsuret automatisk når avspillingen begynner mellom %1$s og %2$s</string>
+    <string name="settings.auto_sleep_timer.title">Automatisk innsovningstidsur</string>
     <string name="settings.library.audiobookshelf.summary">Strøm bøkene fra din egen server</string>
-    <string name="settings.library.folders.summary">Håndter mapper som er skannet for lydbøker</string>
+    <string name="settings.library.folders.summary">Administrer mappene Voice ser etter lydbøker i</string>
     <string name="settings.library.layout.grid">Rutenett</string>
     <string name="settings.library.layout.list">Liste</string>
     <string name="settings.library.title">Bibliotek</string>
@@ -429,7 +429,7 @@
     <string name="support.tier.tea.title">Kopp te</string>
     <string name="support.unavailable.message">Google Play-fakturering kan ikke nås på denne enheten akkurat nå.</string>
     <string name="support.unavailable.title">Støtte er ikke tilgjengelig</string>
-    <string name="shortcut.play_current.short_label">Spill nåværende</string>
+    <string name="shortcut.play_current.short_label">Spill av boken</string>
     <string name="sleep_timer.action.open">Innsovningstidsur</string>
     <string name="sleep_timer.dialog.action.decrement">Kortere</string>
     <string name="sleep_timer.dialog.action.increment">Lengre</string>

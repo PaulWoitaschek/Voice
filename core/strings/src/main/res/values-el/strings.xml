@@ -73,7 +73,7 @@
     <string name="book.download.stop">Διακοπή λήψης</string>
     <string name="book.download.waiting_for_connection">Αναμονή για σύνδεση</string>
     <string name="book.download.waiting_for_wifi">Αναμονή για Wi-Fi</string>
-    <string name="book.edit.cover.file">Εξώφυλλο από αρχεία του συστήματος</string>
+    <string name="book.edit.cover.file">Εξώφυλλο από τα αρχεία της συσκευής</string>
     <string name="book.edit.cover.internet">Εξώφυλλο από το Διαδίκτυο</string>
     <string name="book.edit.name.label">Όνομα</string>
     <string name="book.edit.rename">Μετονομασία</string>
@@ -378,7 +378,7 @@
     <string name="settings.playback.seek_time.title">Χρονική μετακίνηση</string>
     <string name="settings.subtitle">Κάντε το Voice δικό σας</string>
     <string name="settings.support.faq.title">Συχνές ερωτήσεις</string>
-    <string name="settings.support.get_support.title">Λήψη υποστήριξης</string>
+    <string name="settings.support.get_support.title">Βοήθεια</string>
     <string name="settings.support.report_issue.title">Αναφορά προβλήματος</string>
     <string name="settings.support.support_voice.summary">Κρατά το Voice δωρεάν και χωρίς διαφημίσεις</string>
     <string name="settings.support.support_voice.title">Υποστήριξη ανάπτυξης</string>
