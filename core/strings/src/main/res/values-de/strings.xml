@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Berechtigung erteilen</string>
     <string name="library.storage_permission_bug.message">Auf manchen Geräten fehlt einer System-App die nötige Berechtigung für den externen Speicher. Voice braucht diesen Zugriff, um Deine Hörbücher zu lesen.</string>
     <string name="library.storage_permission_bug.title">Berechtigung benötigt</string>
+    <string name="library.survey.dismiss">Nein danke</string>
+    <string name="library.survey.message">Ein paar kurze Fragen helfen bei der Entscheidung, was als Nächstes kommt.</string>
+    <string name="library.survey.open">Umfrage starten</string>
+    <string name="library.survey.title">Gestalte Voice mit</string>
     <string name="media_session.library.recent">Kürzlich</string>
     <string name="media_session.library.root">Alle Hörbücher</string>
     <string name="onboarding.action.next">Weiter</string>

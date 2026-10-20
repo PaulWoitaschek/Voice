@@ -17,6 +17,7 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerLibrary
@@ -44,6 +45,7 @@ import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.ui.GridCount
 import voice.features.bookOverview.di.BookOverviewScope
+import voice.features.bookOverview.survey.Survey
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import kotlin.time.Instant
@@ -75,6 +77,7 @@ class BookOverviewViewModel(
   private val serverLibrary: ServerLibrary,
   private val audiobookFolders: AudiobookFolders,
   private val emptyLibraryTracker: EmptyLibraryTracker,
+  private val survey: Survey,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -115,6 +118,7 @@ class BookOverviewViewModel(
     val hasFoldersWithoutAccess = remember {
       audiobookFolders.withoutAccess().map { folders -> folders.values.any { it.isNotEmpty() } }
     }.collectAsState(initial = null).value
+    val surveyUrl = remember { survey.url() }.collectAsState(initial = null).value
     if (books == null ||
       currentBook == null ||
       folderPickerMovedDialogShown == null ||
@@ -179,6 +183,8 @@ class BookOverviewViewModel(
       showSearchIcon = books.isNotEmpty(),
       isLoading = scannerActive,
       showStoragePermissionBugCard = hasStoragePermissionBug,
+      // adding books comes first
+      showSurveyCard = surveyUrl != null && !showEmptyLibrary,
       showFolderAccessBadge = hasFoldersWithoutAccess,
       showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get() &&
         !folderPickerMovedDialogShown &&
@@ -210,6 +216,7 @@ class BookOverviewViewModel(
       showSearchIcon = true,
       isLoading = false,
       showStoragePermissionBugCard = false,
+      showSurveyCard = false,
       showFolderAccessBadge = false,
       showFolderPickerIcon = false,
       dialog = null,
@@ -249,6 +256,20 @@ class BookOverviewViewModel(
 
   fun onShowFoldersClick() {
     navigator.goTo(Destination.FolderPicker)
+  }
+
+  fun onSurveyClick() {
+    scope.launch {
+      val url = survey.url().first() ?: return@launch
+      navigator.goTo(Destination.Website(survey.open(url)))
+    }
+  }
+
+  fun onSurveyDismiss() {
+    scope.launch {
+      val url = survey.url().first() ?: return@launch
+      survey.dismiss(url)
+    }
   }
 
   fun onPermissionBugCardClick() {

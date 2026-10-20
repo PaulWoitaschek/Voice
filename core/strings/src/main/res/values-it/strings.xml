@@ -298,6 +298,10 @@
     <string name="library.storage_permission_bug.action">Concedi l\'autorizzazione</string>
     <string name="library.storage_permission_bug.message">Per alcuni dispositivi, un\'app di sistema non dispone dell\'autorizzazione necessaria per accedere alla memoria esterna. Questo accesso è essenziale per consentire a Voice di leggere i tuoi audiolibri.</string>
     <string name="library.storage_permission_bug.title">Autorizzazione richiesta</string>
+    <string name="library.survey.dismiss">No, grazie</string>
+    <string name="library.survey.message">Poche domande veloci aiutano a decidere i prossimi passi.</string>
+    <string name="library.survey.open">Partecipa al sondaggio</string>
+    <string name="library.survey.title">Aiuta a dare forma a Voice</string>
     <string name="media_session.library.recent">Recenti</string>
     <string name="media_session.library.root">Tutti gli audiolibri</string>
     <string name="onboarding.action.next">Avanti</string>

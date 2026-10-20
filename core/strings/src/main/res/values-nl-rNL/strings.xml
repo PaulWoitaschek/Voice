@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Toegang geven</string>
     <string name="library.storage_permission_bug.message">Op sommige apparaten mist een systeemapp toegang tot de externe opslag. Voice heeft die toegang nodig om je luisterboeken te kunnen lezen.</string>
     <string name="library.storage_permission_bug.title">Toegang vereist</string>
+    <string name="library.survey.dismiss">Nee, bedankt</string>
+    <string name="library.survey.message">Een paar korte vragen helpen bepalen wat er hierna komt.</string>
+    <string name="library.survey.open">Enquête invullen</string>
+    <string name="library.survey.title">Denk mee over Voice</string>
     <string name="media_session.library.recent">Recent</string>
     <string name="media_session.library.root">Alle luisterboeken</string>
     <string name="onboarding.action.next">Volgende</string>

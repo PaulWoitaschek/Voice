@@ -468,6 +468,14 @@
     <string name="library.storage_permission_bug.message">For certain devices, a system app is missing the necessary permission to access the external storage. This access is essential for Voice to read your audiobooks.</string>
     <!-- Title for the card explaining a required storage permission workaround. -->
     <string name="library.storage_permission_bug.title">Permission required</string>
+    <!-- Button on the card in the library that invites to a short survey. Hides the card for good, the survey isn't offered again. -->
+    <string name="library.survey.dismiss">No thanks</string>
+    <!-- Message on the card in the library that invites to a short survey on a website. Fits any survey, so it doesn't name a topic. -->
+    <string name="library.survey.message">A few quick questions help decide what comes next.</string>
+    <!-- Button on the card in the library that invites to a short survey. Opens the survey in the browser. -->
+    <string name="library.survey.open">Take the survey</string>
+    <!-- Title of the card in the library that invites to a short survey about Voice. -->
+    <string name="library.survey.title">Help shape Voice</string>
     <!-- Media browser title for recently played audiobooks. -->
     <string name="media_session.library.recent">Recent</string>
     <!-- Media browser root title for all audiobooks. -->

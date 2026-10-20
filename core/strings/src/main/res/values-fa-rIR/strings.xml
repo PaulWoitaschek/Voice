@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">اعطای مجوز</string>
     <string name="library.storage_permission_bug.message">در برخی دستگاه‌ها، یک برنامهٔ سیستمی مجوز لازم برای دسترسی به حافظهٔ خارجی را ندارد. Voice برای خواندن کتاب‌های صوتی شما به این دسترسی نیاز دارد.</string>
     <string name="library.storage_permission_bug.title">مجوز لازم است</string>
+    <string name="library.survey.dismiss">نه، ممنون</string>
+    <string name="library.survey.message">چند سؤال کوتاه کمک می‌کند مشخص شود قدم بعدی چه باشد.</string>
+    <string name="library.survey.open">شرکت در نظرسنجی</string>
+    <string name="library.survey.title">به ساختن آیندهٔ Voice کمک کنید</string>
     <string name="media_session.library.recent">اخیراً پخش‌شده</string>
     <string name="media_session.library.root">همه کتاب های صوتی</string>
     <string name="onboarding.action.next">بعدی</string>

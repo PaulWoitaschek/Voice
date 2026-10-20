@@ -315,6 +315,10 @@
     <string name="library.storage_permission_bug.action">Предоставить разрешение</string>
     <string name="library.storage_permission_bug.message">На некоторых устройствах системное приложение не имеет необходимого разрешения для доступа к внешнему хранилищу. Этот доступ необходим для того, чтобы Voice мог читать ваши аудиокниги.</string>
     <string name="library.storage_permission_bug.title">Требуется разрешение</string>
+    <string name="library.survey.dismiss">Нет, спасибо</string>
+    <string name="library.survey.message">Несколько коротких вопросов помогут решить, что будет дальше.</string>
+    <string name="library.survey.open">Пройти опрос</string>
+    <string name="library.survey.title">Помогите развивать Voice</string>
     <string name="media_session.library.recent">Недавние</string>
     <string name="media_session.library.root">Все аудиокниги</string>
     <string name="onboarding.action.next">Далее</string>

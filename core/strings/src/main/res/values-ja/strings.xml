@@ -264,6 +264,10 @@
     <string name="library.storage_permission_bug.action">権限を付与</string>
     <string name="library.storage_permission_bug.message">一部のデバイスでは、システムアプリに外部ストレージへアクセスするために必要な権限がありません。このアクセスは、Voice がオーディオブックを読み取るために必要です。</string>
     <string name="library.storage_permission_bug.title">権限が必要です</string>
+    <string name="library.survey.dismiss">回答しない</string>
+    <string name="library.survey.message">簡単な質問にいくつかお答えいただくと、今後の方向性を決める参考になります。</string>
+    <string name="library.survey.open">アンケートに回答</string>
+    <string name="library.survey.title">Voice づくりにご協力ください</string>
     <string name="media_session.library.recent">最近</string>
     <string name="media_session.library.root">すべてのオーディオブック</string>
     <string name="onboarding.action.next">次へ</string>

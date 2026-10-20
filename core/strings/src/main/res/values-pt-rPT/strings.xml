@@ -298,6 +298,10 @@
     <string name="library.storage_permission_bug.action">Conceder permissão</string>
     <string name="library.storage_permission_bug.message">Em alguns dispositivos, uma aplicação do sistema não tem a permissão necessária para aceder ao armazenamento externo. Este acesso é essencial para o Voice ler os seus audiolivros.</string>
     <string name="library.storage_permission_bug.title">Permissão necessária</string>
+    <string name="library.survey.dismiss">Dispensar</string>
+    <string name="library.survey.message">Algumas perguntas rápidas ajudam a decidir os próximos passos.</string>
+    <string name="library.survey.open">Responder ao inquérito</string>
+    <string name="library.survey.title">Ajude a moldar o Voice</string>
     <string name="media_session.library.recent">Recentes</string>
     <string name="media_session.library.root">Todos os audiolivros</string>
     <string name="onboarding.action.next">Seguinte</string>

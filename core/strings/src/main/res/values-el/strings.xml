@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Παραχώρηση άδειας</string>
     <string name="library.storage_permission_bug.message">Σε ορισμένες συσκευές, σε μια εφαρμογή συστήματος λείπει η άδεια πρόσβασης στον εξωτερικό αποθηκευτικό χώρο. Το Voice τη χρειάζεται για να διαβάζει τα ηχητικά σας βιβλία.</string>
     <string name="library.storage_permission_bug.title">Απαιτείται άδεια</string>
+    <string name="library.survey.dismiss">Όχι, ευχαριστώ</string>
+    <string name="library.survey.message">Λίγες σύντομες ερωτήσεις βοηθούν να αποφασιστεί τι θα ακολουθήσει.</string>
+    <string name="library.survey.open">Συμμετοχή στην έρευνα</string>
+    <string name="library.survey.title">Βοηθήστε να διαμορφωθεί το Voice</string>
     <string name="media_session.library.recent">Πρόσφατα</string>
     <string name="media_session.library.root">Όλα τα ηχητικά βιβλία</string>
     <string name="onboarding.action.next">Επόμενο</string>

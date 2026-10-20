@@ -349,6 +349,10 @@
     <string name="library.storage_permission_bug.action">منح الإذن</string>
     <string name="library.storage_permission_bug.message">في بعض الأجهزة، يفتقد أحد تطبيقات النظام الإذن اللازم للوصول إلى وحدة التخزين الخارجية، وهذا الوصول ضروري ليتمكن Voice من قراءة كتبك الصوتية.</string>
     <string name="library.storage_permission_bug.title">الإذن مطلوب</string>
+    <string name="library.survey.dismiss">لا، شكرًا</string>
+    <string name="library.survey.message">بضعة أسئلة سريعة تساعد في تحديد الخطوة التالية.</string>
+    <string name="library.survey.open">المشاركة في الاستبيان</string>
+    <string name="library.survey.title">رأيك يصنع مستقبل Voice</string>
     <string name="media_session.library.recent">الحديثة</string>
     <string name="media_session.library.root">كل الكتب الصوتية</string>
     <string name="onboarding.action.next">التالي</string>

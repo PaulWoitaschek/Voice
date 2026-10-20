@@ -201,6 +201,17 @@ public object StoreModule {
 
   @Provides
   @SingleIn(AppScope::class)
+  @HandledSurveysStore
+  private fun handledSurveys(factory: VoiceDataStoreFactory): DataStore<Map<String, Long>> {
+    return factory.create(
+      serializer = MapSerializer(String.serializer(), Long.serializer()),
+      defaultValue = emptyMap(),
+      fileName = "handledSurveys",
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
   @AnalyticsConsentStore
   private fun analyticsConsent(factory: VoiceDataStoreFactory): DataStore<Boolean> {
     return factory.boolean("analyticsConsent", defaultValue = false)

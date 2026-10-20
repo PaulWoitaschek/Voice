@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">அனுமதி வழங்கு</string>
     <string name="library.storage_permission_bug.message">சில சாதனங்களுக்கு, ஒரு கணினி பயன்பாடு வெளிப்புற சேமிப்பிடத்தை அணுக தேவையான அனுமதியைக் காணவில்லை. உங்கள் ஆடியோபுக்குகளைப் படிக்க Voice-க்கு இந்த அணுகல் தேவை.</string>
     <string name="library.storage_permission_bug.title">அனுமதி தேவை</string>
+    <string name="library.survey.dismiss">வேண்டாம், நன்றி</string>
+    <string name="library.survey.message">சில சிறு கேள்விகள் அடுத்து என்ன வர வேண்டும் என்பதைத் தீர்மானிக்க உதவும்.</string>
+    <string name="library.survey.open">கருத்துக்கணிப்பில் பங்கேற்கவும்</string>
+    <string name="library.survey.title">Voice-ஐ வடிவமைக்க உதவுங்கள்</string>
     <string name="media_session.library.recent">அண்மையவை</string>
     <string name="media_session.library.root">அனைத்து ஆடியோபுக்குகள்</string>
     <string name="onboarding.action.next">அடுத்து</string>

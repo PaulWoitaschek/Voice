@@ -113,6 +113,17 @@ object FeatureFlagBindingContainer {
 
   @Provides
   @SingleIn(AppScope::class)
+  @SurveyUrlFeatureFlagQualifier
+  fun surveyUrlFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<String> {
+    return factory.string(
+      key = "survey_url",
+      description = "The URL of a survey the library invites to, ahead of the one built into the app. Empty leaves only the built-in one.",
+      defaultValue = "",
+    )
+  }
+
+  @Provides
+  @SingleIn(AppScope::class)
   @AudiobookshelfFeatureFlagQualifier
   fun audiobookshelfFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
     return factory.boolean(
@@ -132,6 +143,7 @@ object FeatureFlagBindingContainer {
     @KioskModeFeatureFlagQualifier kioskMode: FeatureFlag<Boolean>,
     @SupportDevelopmentFeatureFlagQualifier supportDevelopment: FeatureFlag<Boolean>,
     @SupporterNoteFeatureFlagQualifier supporterNote: FeatureFlag<String>,
+    @SurveyUrlFeatureFlagQualifier surveyUrl: FeatureFlag<String>,
     @AudiobookshelfFeatureFlagQualifier audiobookshelf: FeatureFlag<Boolean>,
   ): Set<FeatureFlag<*>> = setOf(
     reviewEnabled,
@@ -142,6 +154,7 @@ object FeatureFlagBindingContainer {
     kioskMode,
     supportDevelopment,
     supporterNote,
+    surveyUrl,
     audiobookshelf,
   )
 }
@@ -172,6 +185,9 @@ annotation class SupportDevelopmentFeatureFlagQualifier
 
 @Qualifier
 annotation class SupporterNoteFeatureFlagQualifier
+
+@Qualifier
+annotation class SurveyUrlFeatureFlagQualifier
 
 @Qualifier
 annotation class AudiobookshelfFeatureFlagQualifier
