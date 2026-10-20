@@ -110,7 +110,7 @@
     <string name="bookmark.sort.story">ترتیب داستان</string>
     <string name="bookmark.tab.bookmarks">نشانه‌ها</string>
     <string name="bookmark.tab.history">تاریخچه</string>
-    <string name="bookmark.title">نشان‌گذاری</string>
+    <string name="bookmark.title">نشانه‌ها</string>
     <string name="bookmark.you_are_here">شما اینجا هستید</string>
     <string name="common.action.add">اضافه کردن</string>
     <string name="common.action.back">بازگشت</string>
@@ -137,11 +137,11 @@
     <string name="cover.title">کاور</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d دقیقه</item>
-        <item quantity="other">%d دقیقه ها</item>
+        <item quantity="other">%d دقیقه</item>
     </plurals>
     <plurals name="duration.seconds">
         <item quantity="one">%d ثانیه</item>
-        <item quantity="other">%d ثانیه ها</item>
+        <item quantity="other">%d ثانیه</item>
     </plurals>
     <string name="folder.add.action.audiobookshelf">اتصال به Audiobookshelf</string>
     <string name="folder.add.action.file">افزودن یک فایل به‌جای پوشه</string>
@@ -152,7 +152,7 @@
     <string name="folder.add.no_picker.message">کتاب‌های صوتی شما در Voice از طریق انتخابگر فایل Android باز می‌شوند. بدون آن، Voice نمی‌تواند پوشه‌ها یا فایل‌هایتان را باز کند.</string>
     <string name="folder.add.no_picker.title">این دستگاه انتخابگر فایل ندارد</string>
     <string name="folder.add.subtitle">پوشه‌ی کتاب‌های صوتی خود را انتخاب کنید. این پوشه می‌تواند یک کتاب یا کل کتابخانه‌ی شما باشد.</string>
-    <string name="folder.add.title.default">کتاب[های] صوتی خود را اضافه کنید</string>
+    <string name="folder.add.title.default">کتاب‌های صوتی خود را اضافه کنید</string>
     <string name="folder.add.title.onboarding">اولین کتاب صوتی خود را اضافه کنید</string>
     <string name="folder.mode.author.label">پوشه‌ها نویسنده هستند</string>
     <string name="folder.mode.author.option">پوشه‌های داخل %s نویسنده هستند</string>
@@ -190,7 +190,7 @@
     </plurals>
     <plurals name="folder.type.file_count">
         <item quantity="one">%d فایل صوتی</item>
-        <item quantity="other">%d فایل های صوتی</item>
+        <item quantity="other">%d فایل صوتی</item>
     </plurals>
     <string name="history.empty.message">پخش‌ها، توقف‌ها و پرش‌ها اینجا نمایش داده می‌شوند تا همیشه بتوانید راه برگشت را پیدا کنید.</string>
     <string name="history.empty.title">هنوز چیزی اینجا نیست</string>
@@ -278,10 +278,10 @@
     <string name="library.search.recent.clear_all">پاک کردن همه</string>
     <string name="library.search.recent.remove">حذف %s</string>
     <string name="library.search.recent.title">جستجوهای اخیر</string>
-    <string name="library.storage_permission_bug.action">اعطا مجوز</string>
-    <string name="library.storage_permission_bug.message">در برخی از دستگاه‌ها، یک برنامه سیستم مجوز لازم برای دسترسی به کارت حافظه خارجی را ندارد. این دسترسی برای Voice برای خواندن کتاب‌های صوتی شما ضروری است.</string>
+    <string name="library.storage_permission_bug.action">اعطای مجوز</string>
+    <string name="library.storage_permission_bug.message">در برخی دستگاه‌ها، یک برنامهٔ سیستمی مجوز لازم برای دسترسی به حافظهٔ خارجی را ندارد. Voice برای خواندن کتاب‌های صوتی شما به این دسترسی نیاز دارد.</string>
     <string name="library.storage_permission_bug.title">مجوز لازم است</string>
-    <string name="media_session.library.recent">به تازگی</string>
+    <string name="media_session.library.recent">اخیر</string>
     <string name="media_session.library.root">همه کتاب های صوتی</string>
     <string name="onboarding.action.next">بعدی</string>
     <string name="onboarding.analytics_consent.action.disable">قبول نکردن تجزیه‌وتحلیل آماری</string>
@@ -289,14 +289,14 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">سیاست حفظ حریم خصوصی</string>
     <string name="onboarding.analytics_consent.description">اطلاعات استفاده را به‌صورت ناشناس به اشتراک می‌گذارید تا Voice بهتر شود؟ می‌توانید این را در تنظیمات تغییر دهید.</string>
     <string name="onboarding.completion.action.start_listening">شروع به گوش دادن</string>
-    <string name="onboarding.completion.subtitle">اولین کتاب صوتی شما آماده پخش است. از گشت و گذار خود با Voice لذت ببرید!</string>
+    <string name="onboarding.completion.subtitle">اولین کتاب صوتی شما آمادهٔ پخش است. از گوش دادن با Voice لذت ببرید!</string>
     <string name="onboarding.completion.title">همه چیز آماده است!</string>
     <string name="onboarding.explanation.subtitle.folder">پوشه‌ی کتاب‌های صوتی خود را انتخاب کنید. Voice پیش از افزودن، کتاب‌هایی را که پیدا می‌کند به شما نشان می‌دهد.</string>
-    <string name="onboarding.explanation.title">کتابخانه شما، به روش شما</string>
+    <string name="onboarding.explanation.title">کتابخانه‌ای به سلیقهٔ شما</string>
     <string name="onboarding.welcome.action.start">بزن بریم</string>
     <string name="onboarding.welcome.subtitle">با Voice به کتاب‌های صوتی روی گوشی‌تان گوش دهید و هر کتاب را از همان جایی که مانده بودید ادامه دهید. رایگان، بدون تبلیغات و بدون نیاز به حساب کاربری.</string>
     <string name="onboarding.welcome.title">مخصوص کتاب‌های صوتی شما</string>
-    <string name="playback.action.fast_forward">رو به جلو بردن سریع</string>
+    <string name="playback.action.fast_forward">جلو بردن سریع</string>
     <string name="playback.action.pause">توقف</string>
     <string name="playback.action.play">پخش</string>
     <string name="playback.action.rewind">به عقب برگرداندن</string>
@@ -316,7 +316,7 @@
     <string name="playback.option.volume_boost">افزایش ولوم صدا</string>
     <string name="playback.speed.decrease">آهسته‌تر</string>
     <string name="playback.speed.increase">سریع‌تر</string>
-    <string name="playback.speed.title">سرعت بازپخش</string>
+    <string name="playback.speed.title">سرعت پخش</string>
     <string name="playback.volume_boost.off">خاموش</string>
     <string name="review.prompt.action.feedback">اشتراک بازخورد</string>
     <string name="review.prompt.action.later">الان نه</string>
@@ -361,8 +361,8 @@
     <string name="settings.appearance.title">ظاهر</string>
     <string name="settings.auto_sleep_timer.end.label">زمان پایان</string>
     <string name="settings.auto_sleep_timer.start.label">زمان شروع</string>
-    <string name="settings.auto_sleep_timer.summary">آغاز خودکار زمان خواب هنگامی که زمان پخش از %1$s تا %2$s شروع شده باشد</string>
-    <string name="settings.auto_sleep_timer.title">زمان خواب خودکار</string>
+    <string name="settings.auto_sleep_timer.summary">اگر پخش بین %1$s تا %2$s شروع شود، تایمر خواب خودکار روشن می‌شود</string>
+    <string name="settings.auto_sleep_timer.title">تایمر خواب خودکار</string>
     <string name="settings.library.audiobookshelf.summary">کتاب‌های سرور خودتان را آنلاین پخش کنید</string>
     <string name="settings.library.folders.summary">مدیریت پوشه‌هایی که برای کتاب‌های صوتی اسکن می‌شوند</string>
     <string name="settings.library.layout.grid">شبکه</string>

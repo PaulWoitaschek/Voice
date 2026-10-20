@@ -66,7 +66,7 @@
     <string name="audiobookshelf.status.syncing">Synchronizace…</string>
     <string name="book.category.action.mark_completed">Označit jako dokončené</string>
     <string name="book.category.action.mark_current">Označit knihu jako aktuální</string>
-    <string name="book.category.action.mark_not_started">Označit jako dosud nezahájené</string>
+    <string name="book.category.action.mark_not_started">Označit jako nezačaté</string>
     <string name="book.delete.bottom_sheet.title">Odstranit knihu</string>
     <string name="book.delete.dialog.confirm_files">Odstranit mé soubory</string>
     <string name="book.delete.dialog.message">Soubory budou z vašeho zařízení trvale odstraněny. Už je nebude možné obnovit.</string>
@@ -127,7 +127,7 @@
     <string name="common.action.more">Další možnosti</string>
     <string name="common.action.undo">Vrátit zpět</string>
     <string name="common.action.save">Uložit</string>
-    <string name="common.dialog.cancel">Ukončit</string>
+    <string name="common.dialog.cancel">Zrušit</string>
     <string name="common.dialog.confirm">Nastavit</string>
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Něco se pokazilo 😢</string>
@@ -162,7 +162,7 @@
     <string name="folder.add.no_picker.message">Voice otevírá vaše audioknihy přes výběr souborů systému Android. Bez něj Voice nemůže otevřít vaše složky ani soubory.</string>
     <string name="folder.add.no_picker.title">Toto zařízení nemá výběr souborů</string>
     <string name="folder.add.subtitle">Vyberte složku se svými audioknihami. Může obsahovat jednu knihu nebo celou vaši knihovnu.</string>
-    <string name="folder.add.title.default">Přidejte své audoknihy</string>
+    <string name="folder.add.title.default">Přidejte své audioknihy</string>
     <string name="folder.add.title.onboarding">Přidejte svou první audioknihu</string>
     <string name="folder.mode.author.label">Složky jsou autoři</string>
     <string name="folder.mode.author.option">Složky ve složce %s jsou autoři</string>
@@ -253,7 +253,7 @@
     <string name="library.book.offline">Není k dispozici offline</string>
     <string name="library.category.completed.title">Dokončeno</string>
     <string name="library.category.current.title">Aktuální</string>
-    <string name="library.category.not_started.title">Doposud nespuštěno</string>
+    <string name="library.category.not_started.title">Nezačaté</string>
     <string name="library.continue_listening">Pokračovat v poslechu</string>
     <string name="library.empty.add_first_book">Pojďme přidat vaši složku s audioknihami ať můžete začít poslouchat!</string>
     <string name="library.empty.title">Nenašly se žádné audioknihy</string>
@@ -323,10 +323,10 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="onboarding.analytics_consent.description">Sdílet anonymní údaje o používání a pomoci tak vylepšit Voice? Můžete to změnit v nastavení.</string>
     <string name="onboarding.completion.action.start_listening">Začít poslouchat</string>
-    <string name="onboarding.completion.subtitle">Vaše první audiokniha je připravena k přehrání. Užijte si svou cestu s Voice!</string>
+    <string name="onboarding.completion.subtitle">Vaše první audiokniha je připravena k přehrání. Příjemný poslech s Voice!</string>
     <string name="onboarding.completion.title">Vše je připraveno!</string>
     <string name="onboarding.explanation.subtitle.folder">Vyberte složku se svými audioknihami. Voice vám před přidáním ukáže knihy, které v ní najde.</string>
-    <string name="onboarding.explanation.title">Vaše knihovna, váš způsob</string>
+    <string name="onboarding.explanation.title">Vaše knihovna podle vás</string>
     <string name="onboarding.welcome.action.start">Jdeme na to</string>
     <string name="onboarding.welcome.subtitle">Voice přehrává audioknihy ve vašem telefonu a u každé si pamatuje, kde jste skončili. Zdarma, bez reklam a bez účtu.</string>
     <string name="onboarding.welcome.title">Stvořeno pro vaše audioknihy</string>

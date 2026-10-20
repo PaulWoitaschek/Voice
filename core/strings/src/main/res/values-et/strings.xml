@@ -226,7 +226,7 @@
     <string name="library.book.downloading">Laaditakse alla</string>
     <string name="library.book.offline">Pole võrguühenduseta saadaval</string>
     <string name="library.category.completed.title">Kuulatud</string>
-    <string name="library.category.current.title">Praegune</string>
+    <string name="library.category.current.title">Kuulamisel</string>
     <string name="library.category.not_started.title">Kuulamise ootel</string>
     <string name="library.continue_listening">Jätka kuulamist</string>
     <string name="library.empty.add_first_book">Lisame nüüd üheskoos heliraamatute kausta ja sa saad alustada kuulamisega!</string>
@@ -281,12 +281,12 @@
     <string name="library.storage_permission_bug.action">Anna õigused</string>
     <string name="library.storage_permission_bug.message">Mõnedes seadmetes puudub ühel süsteemirakendusel vajalik õigus lugeda andmeid väliselt andmekandjalt. See ligipääs on vajalik, et Voice saaks lugeda sinu heliraamatute faile.</string>
     <string name="library.storage_permission_bug.title">Õigused on vajalikud</string>
-    <string name="media_session.library.recent">Viimatine</string>
+    <string name="media_session.library.recent">Viimati kuulatud</string>
     <string name="media_session.library.root">Kõik heliraamatud</string>
     <string name="onboarding.action.next">Edasi</string>
-    <string name="onboarding.analytics_consent.action.disable">Jätka nii, et analüütiline andmekogumine pole lubatud</string>
-    <string name="onboarding.analytics_consent.action.enable">Jätka nii, et analüütiline andmekogumine on lubatud</string>
-    <string name="onboarding.analytics_consent.action.privacy_policy">Andmekaitse - ja privaatsusreeglid</string>
+    <string name="onboarding.analytics_consent.action.disable">Jätka ilma analüütikata</string>
+    <string name="onboarding.analytics_consent.action.enable">Jätka analüütikaga</string>
+    <string name="onboarding.analytics_consent.action.privacy_policy">Privaatsuspoliitika</string>
     <string name="onboarding.analytics_consent.description">Kas jagad anonüümseid kasutusandmeid, et aidata Voice\'i paremaks teha? Saad seda seadetes muuta.</string>
     <string name="onboarding.completion.action.start_listening">Alusta kuulamist</string>
     <string name="onboarding.completion.subtitle">Sinu esimene heliraamat on kuulamiseks valmis. Naudi järgnevat teekonda Voice\'iga!</string>
@@ -326,7 +326,7 @@
     <string name="review.prompt.feedback.bug.title">Teata veast</string>
     <string name="review.prompt.feedback.email.title">Kirjuta e-kiri</string>
     <string name="review.prompt.feedback.idea.subtitle">Alustab GitHubis arutelu</string>
-    <string name="review.prompt.feedback.idea.title">Soovita uut ideed</string>
+    <string name="review.prompt.feedback.idea.title">Paku välja idee</string>
     <string name="review.prompt.feedback.title">Mis sul mõttes on?</string>
     <string name="review.prompt.finished.title">Raamat kuulatud!</string>
     <string name="review.prompt.message">Aitäh, et kuulad Voice\'iga! Kui see sulle meeldib, aitab hinnang Google Plays teistel kuulajatel selle üles leida.</string>
@@ -341,7 +341,7 @@
     <string name="review.prompt.thanks.title">Aitäh!</string>
     <string name="settings.about.app_version.title">Rakenduse versioon</string>
     <string name="settings.action.open">Seaded</string>
-    <string name="settings.analytics_consent.description">Parandamaks rakendust luba meil koguda anonüümseid andmeid tema kasutuse kohta</string>
+    <string name="settings.analytics_consent.description">Luba anonüümsete kasutusandmete kogumine, et aidata rakendust paremaks muuta</string>
     <string name="settings.analytics_consent.title">Analüütika</string>
     <string name="settings.appearance.color_scheme.berry">Mari</string>
     <string name="settings.appearance.color_scheme.forest">Mets</string>
@@ -359,9 +359,9 @@
     <string name="settings.appearance.theme.light">Hele</string>
     <string name="settings.appearance.theme.title">Kujundus</string>
     <string name="settings.appearance.title">Välimus</string>
-    <string name="settings.auto_sleep_timer.end.label">Seadista lõpuaeg</string>
+    <string name="settings.auto_sleep_timer.end.label">Määra lõpuaeg</string>
     <string name="settings.auto_sleep_timer.start.label">Määra algusaeg</string>
-    <string name="settings.auto_sleep_timer.summary">Käivita unetaimer automaatselt, kui taasesitus on %1$s ja %2$s vahel</string>
+    <string name="settings.auto_sleep_timer.summary">Käivita unetaimer automaatselt, kui taasesitus algab %1$s ja %2$s vahel</string>
     <string name="settings.auto_sleep_timer.title">Automaatne unetaimer</string>
     <string name="settings.library.audiobookshelf.summary">Voogedasta raamatuid oma serverist</string>
     <string name="settings.library.folders.summary">Halda kaustu, kust otsitakse heliraamatuid</string>
@@ -380,7 +380,7 @@
     <string name="settings.support.faq.title">KKK</string>
     <string name="settings.support.get_support.title">Küsi abi</string>
     <string name="settings.support.report_issue.title">Teata veast</string>
-    <string name="settings.support.suggest_idea.title">Soovita uut ideed</string>
+    <string name="settings.support.suggest_idea.title">Paku välja idee</string>
     <string name="settings.support.supporter.title">Aitäh, et toetad Voice\'i</string>
     <string name="settings.support.support_voice.summary">Hoiab Voice\'i tasuta ja reklaamivabana</string>
     <string name="settings.support.support_voice.title">Toeta arendust</string>
@@ -431,7 +431,7 @@
     <string name="support.unavailable.title">Toetamine pole saadaval</string>
     <string name="shortcut.play_current.short_label">Kuula praegust heliraamatut</string>
     <string name="sleep_timer.action.open">Unetaimer</string>
-    <string name="sleep_timer.dialog.action.decrement">Vähem</string>
+    <string name="sleep_timer.dialog.action.decrement">Lühem</string>
     <string name="sleep_timer.dialog.action.increment">Kauem</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
     <string name="sleep_timer.dialog.shake_hint">Raputa telefoni kohe pärast taimeri lõppu, et see uuesti käivitada.</string>

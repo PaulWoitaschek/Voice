@@ -62,7 +62,7 @@
     <string name="book.category.action.mark_current">Als „Aktuell“ markieren</string>
     <string name="book.category.action.mark_not_started">Als „Neu“ markieren</string>
     <string name="book.delete.bottom_sheet.title">Buch löschen</string>
-    <string name="book.delete.dialog.confirm_files">Lösche meine Dateien</string>
+    <string name="book.delete.dialog.confirm_files">Meine Dateien löschen</string>
     <string name="book.delete.dialog.message">Die Dateien werden endgültig von Deinem Gerät gelöscht. Du kannst sie nicht wiederherstellen.</string>
     <string name="book.delete.dialog.title">Buch löschen</string>
     <string name="book.download.action">Herunterladen</string>
@@ -279,7 +279,7 @@
     <string name="library.search.recent.remove">%s entfernen</string>
     <string name="library.search.recent.title">Zuletzt gesucht</string>
     <string name="library.storage_permission_bug.action">Berechtigung erteilen</string>
-    <string name="library.storage_permission_bug.message">Für bestimmte Geräte fehlt einer System-App die notwendige Berechtigung, auf den externen Speicher zuzugreifen. Dieser Zugriff ist jedoch für Voice essentiell, um Deine Hörbücher lesen zu können.</string>
+    <string name="library.storage_permission_bug.message">Auf manchen Geräten fehlt einer System-App die nötige Berechtigung für den externen Speicher. Voice braucht diesen Zugriff, um Deine Hörbücher zu lesen.</string>
     <string name="library.storage_permission_bug.title">Berechtigung benötigt</string>
     <string name="media_session.library.recent">Kürzlich</string>
     <string name="media_session.library.root">Alle Hörbücher</string>
@@ -290,7 +290,7 @@
     <string name="onboarding.analytics_consent.description">Anonyme Nutzungsdaten freigeben, um Voice zu verbessern? Du kannst das in den Einstellungen ändern.</string>
     <string name="onboarding.completion.action.start_listening">Start</string>
     <string name="onboarding.completion.subtitle">Dein erstes Hörbuch ist bereit zum Abspielen. Viel Spaß auf Deiner Reise mit Voice!</string>
-    <string name="onboarding.completion.title">Du bist fertig!</string>
+    <string name="onboarding.completion.title">Alles bereit!</string>
     <string name="onboarding.explanation.subtitle.folder">Wähle den Ordner mit Deinen Hörbüchern. Voice zeigt Dir die gefundenen Bücher, bevor sie hinzugefügt werden.</string>
     <string name="onboarding.explanation.title">Deine Bibliothek, Deine Wahl</string>
     <string name="onboarding.welcome.action.start">Los geht\'s</string>

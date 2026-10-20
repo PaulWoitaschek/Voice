@@ -59,8 +59,8 @@
     <string name="audiobookshelf.status.offline">अभी सर्वर से संपर्क नहीं हो पा रहा है। डाउनलोड की गई पुस्तकें फिर भी चलती हैं।</string>
     <string name="audiobookshelf.status.syncing">सिंक हो रहा है…</string>
     <string name="book.category.action.mark_completed">पूर्ण चिह्नित करें</string>
-    <string name="book.category.action.mark_current">वर्तमान चिह्नित करें</string>
-    <string name="book.category.action.mark_not_started">अभी प्रारंभ नहीं चिह्नित करें</string>
+    <string name="book.category.action.mark_current">जारी चिह्नित करें</string>
+    <string name="book.category.action.mark_not_started">शुरू नहीं हुई के रूप में चिह्नित करें</string>
     <string name="book.delete.bottom_sheet.title">पुस्तक हटाएँ</string>
     <string name="book.delete.dialog.confirm_files">मेरी फ़ाइलें हटाएँ</string>
     <string name="book.delete.dialog.message">इससे फ़ाइलें आपके डिवाइस से हमेशा के लिए हट जाएँगी। उन्हें वापस नहीं लाया जा सकता।</string>
@@ -114,7 +114,7 @@
     <string name="bookmark.you_are_here">आप यहाँ हैं</string>
     <string name="common.action.add">जोड़ें</string>
     <string name="common.action.back">वापस</string>
-    <string name="common.action.close">बंद</string>
+    <string name="common.action.close">बंद करें</string>
     <string name="common.action.delete">हटाएँ</string>
     <string name="common.action.done">हो गया</string>
     <string name="common.action.edit">संपादन</string>
@@ -226,7 +226,7 @@
     <string name="library.book.downloading">डाउनलोड हो रहा है</string>
     <string name="library.book.offline">ऑफ़लाइन उपलब्ध नहीं</string>
     <string name="library.category.completed.title">पूर्ण</string>
-    <string name="library.category.current.title">वर्तमान</string>
+    <string name="library.category.current.title">जारी</string>
     <string name="library.category.not_started.title">अभी प्रारंभ नहीं</string>
     <string name="library.continue_listening">सुनना जारी रखें</string>
     <string name="library.empty.add_first_book">चलिए आपका ऑडियोबुक फ़ोल्डर जोड़ते हैं ताकि आप सुनना शुरू कर सकें!</string>
@@ -289,14 +289,14 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">निजता नीति</string>
     <string name="onboarding.analytics_consent.description">Voice को बेहतर बनाने में मदद के लिए इस्तेमाल से जुड़ा गुमनाम डेटा शेयर करें? इसे सेटिंग्स में बदला जा सकता है।</string>
     <string name="onboarding.completion.action.start_listening">सुनना शुरू करें</string>
-    <string name="onboarding.completion.subtitle">आपकी पहली ऑडियोबुक चलने के लिए तैयार है। Voice के साथ अपनी यात्रा का आनंद लें!</string>
+    <string name="onboarding.completion.subtitle">आपकी पहली ऑडियोबुक सुनने के लिए तैयार है। Voice के साथ कहानियों का आनंद लें!</string>
     <string name="onboarding.completion.title">आप पूरी तरह तैयार हैं!</string>
     <string name="onboarding.explanation.subtitle.folder">अपनी ऑडियोबुक वाला फ़ोल्डर चुनें। Voice जोड़ने से पहले आपको मिली हुई पुस्तकें दिखाती है।</string>
     <string name="onboarding.explanation.title">आपकी लाइब्रेरी, आपका तरीका</string>
     <string name="onboarding.welcome.action.start">चलिए शुरू करें</string>
     <string name="onboarding.welcome.subtitle">Voice आपके फ़ोन पर मौजूद ऑडियोबुक चलाती है और हर पुस्तक में आपकी जगह याद रखती है। मुफ़्त, बिना विज्ञापन और बिना खाते के।</string>
     <string name="onboarding.welcome.title">खास आपकी ऑडियोबुक के लिए</string>
-    <string name="playback.action.fast_forward">आगे बढ़ें</string>
+    <string name="playback.action.fast_forward">फ़ास्ट फ़ॉरवर्ड</string>
     <string name="playback.action.pause">रोकें</string>
     <string name="playback.action.play">चलाएँ</string>
     <string name="playback.action.rewind">रिवाइंड</string>
@@ -429,7 +429,7 @@
     <string name="support.tier.tea.title">एक कप चाय</string>
     <string name="support.unavailable.message">इस डिवाइस पर अभी Google Play बिलिंग से संपर्क नहीं हो पा रहा है।</string>
     <string name="support.unavailable.title">समर्थन उपलब्ध नहीं है</string>
-    <string name="shortcut.play_current.short_label">वर्तमान चलाएँ</string>
+    <string name="shortcut.play_current.short_label">सुनना जारी रखें</string>
     <string name="sleep_timer.action.open">स्लीप-टाइमर</string>
     <string name="sleep_timer.dialog.action.decrement">समय घटाएँ</string>
     <string name="sleep_timer.dialog.action.increment">समय बढ़ाएँ</string>

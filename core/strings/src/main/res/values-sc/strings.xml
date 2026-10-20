@@ -59,7 +59,7 @@
     <string name="audiobookshelf.status.offline">Su serbidore immoe no rispondet. Podes ascurtare su matessi sos libros iscarrigados.</string>
     <string name="audiobookshelf.status.syncing">Sincronizende…</string>
     <string name="book.category.action.mark_completed">Marca comente acabbadu</string>
-    <string name="book.category.action.mark_current">Marca comente atuale</string>
+    <string name="book.category.action.mark_current">Marca comente in cursu</string>
     <string name="book.category.action.mark_not_started">Marca comente galu no incumintzadu</string>
     <string name="book.delete.bottom_sheet.title">Iscantzella su libru</string>
     <string name="book.delete.dialog.confirm_files">Iscantzella sos documentos meos</string>
@@ -81,7 +81,7 @@
     <string name="book.source.server_downloaded">%s · iscarrigadu</string>
     <string name="bookmark.action.add_note">Agiunghe una nota</string>
     <string name="bookmark.add_note_hint">Agiunghe una nota</string>
-    <string name="bookmark.added.snackbar">Sinnalibru annantu</string>
+    <string name="bookmark.added.snackbar">Sinnalibru agiuntu</string>
     <string name="bookmark.category.all">Totu</string>
     <string name="bookmark.category.favorites">Preferidos</string>
     <string name="bookmark.category.notes">Notas</string>
@@ -122,7 +122,7 @@
     <string name="common.action.undo">Annulla</string>
     <string name="common.action.save">Sarva</string>
     <string name="common.dialog.cancel">Annulla</string>
-    <string name="common.dialog.confirm">Cunfigura</string>
+    <string name="common.dialog.confirm">Cunfirma</string>
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">B\'at àpidu carchi problema 😢</string>
     <string name="common.error.generic.retry">Torra a proare</string>
@@ -226,7 +226,7 @@
     <string name="library.book.downloading">Iscarrighende</string>
     <string name="library.book.offline">No disponìbile chene connessione</string>
     <string name="library.category.completed.title">Acabbadu</string>
-    <string name="library.category.current.title">Atuale</string>
+    <string name="library.category.current.title">In cursu</string>
     <string name="library.category.not_started.title">Galu no incumintzadu</string>
     <string name="library.continue_listening">Sighi a ascurtare</string>
     <string name="library.empty.add_first_book">Agiunghimus sa cartella de audiolibros tua in manera chi potzas incumintzare a ascurtare!</string>
@@ -281,18 +281,18 @@
     <string name="library.storage_permission_bug.action">Dae su permissu</string>
     <string name="library.storage_permission_bug.message">Pro unos cantos dispositivos, un\'aplicatzione de sistema non tenet s\'autorizatzione netzessària pro atzèdere a sa memòria esterna. Bisòngiat a tènnere custu atzessu pro chi Voice potzat lèghere sos audiolibros tuos.</string>
     <string name="library.storage_permission_bug.title">Permissu netzessàriu</string>
-    <string name="media_session.library.recent">Reghente</string>
+    <string name="media_session.library.recent">Reghentes</string>
     <string name="media_session.library.root">Totu sos audiolibros</string>
-    <string name="onboarding.action.next">Imbeniente</string>
+    <string name="onboarding.action.next">Sighi</string>
     <string name="onboarding.analytics_consent.action.disable">Sighi chene analìtica</string>
     <string name="onboarding.analytics_consent.action.enable">Sighi cun analìtica</string>
     <string name="onboarding.analytics_consent.action.privacy_policy">Polìtica de riservadesa</string>
     <string name="onboarding.analytics_consent.description">Cheres cumpartzire datos anònimos de impreu pro agiudare a megiorare Voice? Lu podes cambiare in sas Impostatziones.</string>
     <string name="onboarding.completion.action.start_listening">Incumintza a ascurtare</string>
-    <string name="onboarding.completion.subtitle">Su primu audiolibru tuo est prontu pro sa riprodutzione. Gosa·ti su biàgiu tuo cun Voice!</string>
+    <string name="onboarding.completion.subtitle">Su primu audiolibru tuo est prontu. Bonu ascurtu cun Voice!</string>
     <string name="onboarding.completion.title">Totu prontu!</string>
     <string name="onboarding.explanation.subtitle.folder">Issèbera sa cartella cun sos audiolibros tuos. Voice ti mustrat sos libros chi agatat in antis de los agiùnghere.</string>
-    <string name="onboarding.explanation.title">Sa biblioteca tua, sa manera tua</string>
+    <string name="onboarding.explanation.title">Sa biblioteca tua, a manera tua</string>
     <string name="onboarding.welcome.action.start">Andamus</string>
     <string name="onboarding.welcome.subtitle">Voice ti faghet ascurtare sos audiolibros de su telèfonu tuo e tenet a mente in ue fias in cadaunu. De badas, chene publitzidade e chene contu.</string>
     <string name="onboarding.welcome.title">Fatu pro sos audiolibros tuos</string>
@@ -378,7 +378,7 @@
     <string name="settings.playback.seek_time.title">Tempus de brincare</string>
     <string name="settings.subtitle">Faghe Voice a misura tua</string>
     <string name="settings.support.faq.title">Preguntas frecuentes</string>
-    <string name="settings.support.get_support.title">Retzi agiudu</string>
+    <string name="settings.support.get_support.title">Pedi agiudu</string>
     <string name="settings.support.report_issue.title">Sinnala unu problema</string>
     <string name="settings.support.support_voice.summary">Mantenet Voice de badas e chene publitzidade</string>
     <string name="settings.support.support_voice.title">Suporta s\'isvilupu</string>
@@ -429,7 +429,7 @@
     <string name="support.tier.tea.title">Tatza de tè</string>
     <string name="support.unavailable.message">Immoe no si podet atzèdere a sos pagamentos de Google Play in custu dispositivu.</string>
     <string name="support.unavailable.title">Su suportu no est disponìbile</string>
-    <string name="shortcut.play_current.short_label">Reprodue s\'atuale</string>
+    <string name="shortcut.play_current.short_label">Sighi a ascurtare</string>
     <string name="sleep_timer.action.open">Temporizadore de suspensione</string>
     <string name="sleep_timer.dialog.action.decrement">Prus curtzu</string>
     <string name="sleep_timer.dialog.action.increment">Prus longu</string>

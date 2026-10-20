@@ -121,14 +121,14 @@
     <string name="common.action.add">Dodaj</string>
     <string name="common.action.back">Wstecz</string>
     <string name="common.action.close">Zamknij</string>
-    <string name="common.action.delete">Skasuj</string>
+    <string name="common.action.delete">Usuń</string>
     <string name="common.action.done">Gotowe</string>
     <string name="common.action.edit">Edytuj</string>
     <string name="common.action.more">Więcej opcji</string>
     <string name="common.action.undo">Cofnij</string>
     <string name="common.action.save">Zapisz</string>
     <string name="common.dialog.cancel">Anuluj</string>
-    <string name="common.dialog.confirm">Wybierz</string>
+    <string name="common.dialog.confirm">Ustaw</string>
     <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Coś poszło nie tak 😢</string>
     <string name="common.error.generic.retry">Ponów</string>
@@ -143,7 +143,7 @@
     <string name="cover.title">Okładka</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d minuta</item>
-        <item quantity="few">%d minut</item>
+        <item quantity="few">%d minuty</item>
         <item quantity="many">%d minut</item>
         <item quantity="other">%d minut</item>
     </plurals>
@@ -162,8 +162,8 @@
     <string name="folder.add.no_picker.message">Voice otwiera twoje audiobooki za pomocą selektora plików Androida. Bez niego Voice nie może otworzyć twoich folderów ani plików.</string>
     <string name="folder.add.no_picker.title">To urządzenie nie ma selektora plików</string>
     <string name="folder.add.subtitle">Wybierz folder ze swoimi audiobookami. Może zawierać jedną książkę albo całą twoją bibliotekę.</string>
-    <string name="folder.add.title.default">Dodaj swoje Audiobooki</string>
-    <string name="folder.add.title.onboarding">Dodaj Swój Pierwszy Audiobook</string>
+    <string name="folder.add.title.default">Dodaj swoje audiobooki</string>
+    <string name="folder.add.title.onboarding">Dodaj swój pierwszy audiobook</string>
     <string name="folder.mode.author.label">Foldery to autorzy</string>
     <string name="folder.mode.author.option">Foldery w %s to autorzy</string>
     <plurals name="folder.mode.book_count">
@@ -318,12 +318,12 @@
     <string name="media_session.library.recent">Ostatnie</string>
     <string name="media_session.library.root">Wszystkie audiobooki</string>
     <string name="onboarding.action.next">Dalej</string>
-    <string name="onboarding.analytics_consent.action.disable">Kontynuuj bez analizy</string>
-    <string name="onboarding.analytics_consent.action.enable">Kontynuuj z analizą</string>
+    <string name="onboarding.analytics_consent.action.disable">Kontynuuj bez analityki</string>
+    <string name="onboarding.analytics_consent.action.enable">Kontynuuj z analityką</string>
     <string name="onboarding.analytics_consent.action.privacy_policy">Polityka prywatności</string>
     <string name="onboarding.analytics_consent.description">Chcesz udostępniać anonimowe dane o użytkowaniu, by pomóc ulepszać Voice? Możesz to zmienić w ustawieniach.</string>
-    <string name="onboarding.completion.action.start_listening">Zacznij Słuchać</string>
-    <string name="onboarding.completion.subtitle">Twój pierwszy audiobook jest gotowy do odtworzenia. Ciesz się podróżą z aplikacją Voice!</string>
+    <string name="onboarding.completion.action.start_listening">Zacznij słuchać</string>
+    <string name="onboarding.completion.subtitle">Twój pierwszy audiobook jest gotowy do odtworzenia. Miłego słuchania z Voice!</string>
     <string name="onboarding.completion.title">Wszystko gotowe!</string>
     <string name="onboarding.explanation.subtitle.folder">Wybierz folder ze swoimi audiobookami. Voice pokaże ci znalezione książki, zanim je doda.</string>
     <string name="onboarding.explanation.title">Twoja biblioteka, twój wybór</string>
@@ -331,7 +331,7 @@
     <string name="onboarding.welcome.subtitle">Voice odtwarza audiobooki z twojego telefonu i pamięta, gdzie jesteś w każdym z nich. Za darmo, bez reklam i bez konta.</string>
     <string name="onboarding.welcome.title">Z myślą o twoich audiobookach</string>
     <string name="playback.action.fast_forward">Do przodu</string>
-    <string name="playback.action.pause">Zatrzymaj</string>
+    <string name="playback.action.pause">Wstrzymaj</string>
     <string name="playback.action.play">Odtwarzaj</string>
     <string name="playback.action.rewind">Przewiń</string>
     <string name="playback.battery_optimization.action">Wyłącz</string>
@@ -347,7 +347,7 @@
     <string name="playback.jump_back">Wróć do %1$s</string>
     <string name="playback.jump_back.chapter">Wróć do rozdz. %1$d · %2$s</string>
     <string name="playback.option.skip_silence">Pomiń ciszę</string>
-    <string name="playback.option.volume_boost">Zwiększ głośność</string>
+    <string name="playback.option.volume_boost">Wzmocnienie głośności</string>
     <string name="playback.speed.decrease">Wolniej</string>
     <string name="playback.speed.increase">Szybciej</string>
     <string name="playback.speed.title">Szybkość odtwarzania</string>
@@ -395,10 +395,10 @@
     <string name="settings.appearance.theme.light">Jasny</string>
     <string name="settings.appearance.theme.title">Motyw</string>
     <string name="settings.appearance.title">Wygląd</string>
-    <string name="settings.auto_sleep_timer.end.label">Zakończ</string>
-    <string name="settings.auto_sleep_timer.start.label">Rozpocznij</string>
+    <string name="settings.auto_sleep_timer.end.label">Ustaw godzinę zakończenia</string>
+    <string name="settings.auto_sleep_timer.start.label">Ustaw godzinę rozpoczęcia</string>
     <string name="settings.auto_sleep_timer.summary">Automatycznie uruchamia wyłącznik czasowy po rozpoczęciu odtwarzania pomiędzy %1$s a %2$s</string>
-    <string name="settings.auto_sleep_timer.title">Automatyczny Wyłącznik Czasowy</string>
+    <string name="settings.auto_sleep_timer.title">Automatyczny wyłącznik czasowy</string>
     <string name="settings.library.audiobookshelf.summary">Słuchaj książek prosto z własnego serwera</string>
     <string name="settings.library.folders.summary">Zarządzaj folderami skanowanymi w poszukiwaniu audiobooków</string>
     <string name="settings.library.layout.grid">Siatka</string>

@@ -89,7 +89,7 @@
     <string name="bookmark.category.revisit">За подоцна</string>
     <string name="bookmark.chapter">Поглавје %1$d</string>
     <string name="bookmark.chapter_with_name">Поглавје %1$d · %2$s</string>
-    <string name="bookmark.created.just_now">Сега</string>
+    <string name="bookmark.created.just_now">Штотуку</string>
     <string name="bookmark.deleted">Обележувачот е избришан</string>
     <string name="bookmark.edit.title">Уреди обележувач</string>
     <string name="bookmark.empty.message">Долго притиснете го копчето за обележување додека слушате за да зачувате момент.</string>
@@ -289,7 +289,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Политика за приватност</string>
     <string name="onboarding.analytics_consent.description">Сакате ли да споделувате анонимни податоци за користење за да се подобри Voice? Ова можете да го промените во поставките.</string>
     <string name="onboarding.completion.action.start_listening">Почни со слушање</string>
-    <string name="onboarding.completion.subtitle">Вашата прва аудио книга е спремна за слушање. Уживајте во патувањето со Voice!</string>
+    <string name="onboarding.completion.subtitle">Вашата прва аудио книга е спремна за пуштање. Пријатно слушање со Voice!</string>
     <string name="onboarding.completion.title">Спремни сте!</string>
     <string name="onboarding.explanation.subtitle.folder">Изберете го фолдерот со вашите аудио книги. Voice ќе ви ги прикаже пронајдените книги пред да ги додаде.</string>
     <string name="onboarding.explanation.title">Вашата библиотека, на ваш начин</string>
@@ -307,8 +307,8 @@
     <string name="playback.book_progress.remaining_at_speed">Уште %1$s при %2$s</string>
     <string name="playback.chapter.counter">Поглавје %1$d од %2$d</string>
     <string name="playback.chapter.current.content_description">Тековно поглавје</string>
-    <string name="playback.chapter.next">Наредно аудио</string>
-    <string name="playback.chapter.previous">Претходно аудио</string>
+    <string name="playback.chapter.next">Следно поглавје</string>
+    <string name="playback.chapter.previous">Претходно поглавје</string>
     <string name="playback.chapters.title">Поглавја</string>
     <string name="playback.jump_back">Назад на %1$s</string>
     <string name="playback.jump_back.chapter">Назад на погл. %1$d · %2$s</string>
@@ -316,7 +316,7 @@
     <string name="playback.option.volume_boost">Појачување на звук</string>
     <string name="playback.speed.decrease">Побавно</string>
     <string name="playback.speed.increase">Побрзо</string>
-    <string name="playback.speed.title">Брзина на читање</string>
+    <string name="playback.speed.title">Брзина на репродукција</string>
     <string name="playback.volume_boost.off">Исклучено</string>
     <string name="review.prompt.action.feedback">Сподели повратни информации</string>
     <string name="review.prompt.action.later">Не сега</string>

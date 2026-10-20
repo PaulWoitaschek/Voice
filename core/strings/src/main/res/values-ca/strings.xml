@@ -62,7 +62,7 @@
     <string name="audiobookshelf.status.offline">Ara no es pot accedir al servidor. Els llibres baixats encara es poden escoltar.</string>
     <string name="audiobookshelf.status.syncing">S\'està sincronitzant…</string>
     <string name="book.category.action.mark_completed">Marca com a completat</string>
-    <string name="book.category.action.mark_current">Marca com a actual</string>
+    <string name="book.category.action.mark_current">Marca com en curs</string>
     <string name="book.category.action.mark_not_started">Marca com a no començat encara</string>
     <string name="book.delete.bottom_sheet.title">Suprimeix el llibre</string>
     <string name="book.delete.dialog.confirm_files">Suprimeix els fitxers</string>
@@ -239,7 +239,7 @@
     <string name="library.book.downloading">S\'està baixant</string>
     <string name="library.book.offline">No disponible sense connexió</string>
     <string name="library.category.completed.title">Completat</string>
-    <string name="library.category.current.title">Actual</string>
+    <string name="library.category.current.title">En curs</string>
     <string name="library.category.not_started.title">Encara no s\'ha iniciat</string>
     <string name="library.continue_listening">Continua escoltant</string>
     <string name="library.empty.add_first_book">Afegiu la carpeta dels vostres audiollibres per començar a escoltar!</string>
@@ -298,7 +298,7 @@
     <string name="library.storage_permission_bug.action">Concedeix el permís</string>
     <string name="library.storage_permission_bug.message">Per a determinats dispositius, a una aplicació del sistema li falta el permís necessari per accedir a l\'emmagatzematge extern. Aquest accés és essencial perquè Voice llegeixi els audiollibres.</string>
     <string name="library.storage_permission_bug.title">Es requereix el permís</string>
-    <string name="media_session.library.recent">Recent</string>
+    <string name="media_session.library.recent">Recents</string>
     <string name="media_session.library.root">Tots els audiollibres</string>
     <string name="onboarding.action.next">Següent</string>
     <string name="onboarding.analytics_consent.action.disable">Continua sense estadístiques</string>
@@ -306,7 +306,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Política de privadesa</string>
     <string name="onboarding.analytics_consent.description">Voleu compartir dades d\'ús anònimes per ajudar a millorar Voice? Podeu canviar-ho a la configuració.</string>
     <string name="onboarding.completion.action.start_listening">Comença a escoltar</string>
-    <string name="onboarding.completion.subtitle">El vostre primer audiollibre està a punt per reproduir-se. Gaudiu del viatge amb Voice!</string>
+    <string name="onboarding.completion.subtitle">El vostre primer audiollibre està a punt per reproduir-se. Bona escolta amb Voice!</string>
     <string name="onboarding.completion.title">Esteu a punt!</string>
     <string name="onboarding.explanation.subtitle.folder">Trieu la carpeta amb els vostres audiollibres. Voice us mostra els llibres que troba abans d\'afegir-los.</string>
     <string name="onboarding.explanation.title">La vostra biblioteca, a la vostra manera</string>
@@ -447,7 +447,7 @@
     <string name="support.tier.tea.title">Tassa de te</string>
     <string name="support.unavailable.message">Ara mateix no es pot accedir a la facturació de Google Play en aquest dispositiu.</string>
     <string name="support.unavailable.title">El suport no està disponible</string>
-    <string name="shortcut.play_current.short_label">Reprodueix l\'actual</string>
+    <string name="shortcut.play_current.short_label">Continua</string>
     <string name="sleep_timer.action.open">Temporitzador de repòs</string>
     <string name="sleep_timer.dialog.action.decrement">Més curt</string>
     <string name="sleep_timer.dialog.action.increment">Més llarg</string>

@@ -127,7 +127,7 @@
     <string name="common.dialog.cancel">Annuler</string>
     <string name="common.dialog.confirm">Définir</string>
     <string name="common.dialog.ok">OK</string>
-    <string name="common.error.generic.message">Quelque chose s\'est mal passé 😢</string>
+    <string name="common.error.generic.message">Une erreur s\'est produite 😢</string>
     <string name="common.error.generic.retry">Réessayer</string>
     <string name="cover.crop.hint">Faites glisser pour déplacer ; pincez ou tirez un coin pour redimensionner.</string>
     <string name="cover.crop.title">Recadrer la couverture</string>
@@ -298,7 +298,7 @@
     <string name="library.storage_permission_bug.action">Accorder la permission</string>
     <string name="library.storage_permission_bug.message">Sur certains appareils, il manque les permissions nécessaires à une application système pour accéder au stockage externe. Cet accès est essentiel pour que Voice puisse lire les livres audio.</string>
     <string name="library.storage_permission_bug.title">Permission requise</string>
-    <string name="media_session.library.recent">Récent</string>
+    <string name="media_session.library.recent">Récents</string>
     <string name="media_session.library.root">Tous les livres audio</string>
     <string name="onboarding.action.next">Suivant</string>
     <string name="onboarding.analytics_consent.action.disable">Continuer sans les analyses</string>
@@ -306,8 +306,8 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">Politique de confidentialité</string>
     <string name="onboarding.analytics_consent.description">Voulez-vous partager des données d\'utilisation anonymes pour aider à améliorer Voice ? Vous pouvez changer d\'avis dans les paramètres.</string>
     <string name="onboarding.completion.action.start_listening">Commencer à écouter</string>
-    <string name="onboarding.completion.subtitle">Votre premier livre audio est prêt à être lu. Profitez de votre voyage avec Voice !</string>
-    <string name="onboarding.completion.title">Tout est en ordre !</string>
+    <string name="onboarding.completion.subtitle">Votre premier livre audio est prêt à être lu. Bonne écoute avec Voice !</string>
+    <string name="onboarding.completion.title">Tout est prêt !</string>
     <string name="onboarding.explanation.subtitle.folder">Choisissez le dossier de vos livres audio. Voice vous montre les livres trouvés avant de les ajouter.</string>
     <string name="onboarding.explanation.title">Votre bibliothèque sur mesure</string>
     <string name="onboarding.welcome.action.start">C\'est parti</string>
@@ -379,8 +379,8 @@
     <string name="settings.appearance.title">Apparence</string>
     <string name="settings.auto_sleep_timer.end.label">Heure de fin</string>
     <string name="settings.auto_sleep_timer.start.label">Heure de début</string>
-    <string name="settings.auto_sleep_timer.summary">Démarrer automatiquement le minuteur de veille lorsque la lecture commence entre %1$s et %2$s</string>
-    <string name="settings.auto_sleep_timer.title">Minuteur de veille automatique</string>
+    <string name="settings.auto_sleep_timer.summary">Démarrer automatiquement la minuterie de mise en veille lorsque la lecture commence entre %1$s et %2$s</string>
+    <string name="settings.auto_sleep_timer.title">Minuterie de mise en veille automatique</string>
     <string name="settings.library.audiobookshelf.summary">Écoutez les livres de votre propre serveur</string>
     <string name="settings.library.folders.summary">Gérer les dossiers analysés pour les livres audio</string>
     <string name="settings.library.layout.grid">Grille</string>
@@ -393,7 +393,7 @@
     <string name="settings.playback.lock_screen_slider.summary">Parcourez le chapitre depuis l\'écran de verrouillage et la notification. Désactivez-le pour qu\'un effleurement accidentel ne vous éloigne pas de là où vous en étiez.</string>
     <string name="settings.playback.lock_screen_slider.title">Curseur sur l\'écran de verrouillage</string>
     <string name="settings.playback.seek_time.summary">De combien le retour et l\'avance rapide sautent</string>
-    <string name="settings.playback.seek_time.title">Sauter de</string>
+    <string name="settings.playback.seek_time.title">Durée du saut</string>
     <string name="settings.subtitle">Faites de Voice le vôtre</string>
     <string name="settings.support.faq.title">FAQ</string>
     <string name="settings.support.get_support.title">Obtenir de l\'aide</string>
@@ -447,7 +447,7 @@
     <string name="support.tier.tea.title">Tasse de thé</string>
     <string name="support.unavailable.message">La facturation Google Play est inaccessible sur cet appareil pour le moment.</string>
     <string name="support.unavailable.title">Le soutien n\'est pas disponible</string>
-    <string name="shortcut.play_current.short_label">Lire l\'actuel</string>
+    <string name="shortcut.play_current.short_label">Reprendre</string>
     <string name="sleep_timer.action.open">Minuterie de mise en veille</string>
     <string name="sleep_timer.dialog.action.decrement">Moins long</string>
     <string name="sleep_timer.dialog.action.increment">Plus long</string>
