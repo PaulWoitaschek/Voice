@@ -600,6 +600,22 @@ class VoicePlayerTest {
   }
 
   @Test
+  fun `pausing a finished book keeps it at its end`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 10_000, name = null))))
+    autoRewindAmountStore.updateData { 5 }
+
+    player.seekTo(0, 9_000)
+    player.prepare()
+    awaitReady()
+    TestPlayerRunHelper.play(internalPlayer).untilState(Player.STATE_ENDED)
+
+    player.pause()
+    shadowOf(Looper.getMainLooper()).idle()
+
+    player.shouldHavePosition(0, player.duration)
+  }
+
+  @Test
   fun `unplugging headphones rewinds`() = scope.runTest {
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
     autoRewindAmountStore.updateData { 5 }
