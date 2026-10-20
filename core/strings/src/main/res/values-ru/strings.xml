@@ -334,8 +334,8 @@
     <string name="playback.action.pause">Пауза</string>
     <string name="playback.action.play">Воспроизведение</string>
     <string name="playback.action.rewind">Перемотать назад</string>
-    <string name="playback.battery_optimization.action">Обновить</string>
-    <string name="playback.battery_optimization.rationale">Чтение может прерываться из-за настроек управления расходом заряда батареи.</string>
+    <string name="playback.battery_optimization.action">Отключить</string>
+    <string name="playback.battery_optimization.rationale">Оптимизация батареи может остановить воспроизведение в фоновом режиме.</string>
     <string name="playback.book_progress.read">%1$s книги</string>
     <string name="playback.book_progress.remaining">Осталось %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Осталось %1$s при %2$s</string>

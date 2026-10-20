@@ -368,8 +368,8 @@
     <string name="playback.action.pause">إيقاف مؤقت</string>
     <string name="playback.action.play">تشغيل</string>
     <string name="playback.action.rewind">إرجاع</string>
-    <string name="playback.battery_optimization.action">تحديث</string>
-    <string name="playback.battery_optimization.rationale">نظراً لقيود الطاقة، فقد ينقطع التشغيل.</string>
+    <string name="playback.battery_optimization.action">إيقاف</string>
+    <string name="playback.battery_optimization.rationale">قد يوقف تحسين البطارية التشغيل في الخلفية.</string>
     <string name="playback.book_progress.read">%1$s من الكتاب</string>
     <string name="playback.book_progress.remaining">تبقّى %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">تبقّى %1$s بسرعة %2$s</string>

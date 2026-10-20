@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Peata esitus</string>
     <string name="playback.action.play">Esita</string>
     <string name="playback.action.rewind">Keri tagasi</string>
-    <string name="playback.battery_optimization.action">Uuenda</string>
-    <string name="playback.battery_optimization.rationale">Akukasutuse piirangute tõttu võib taasesituses tekkida katkestusi.</string>
+    <string name="playback.battery_optimization.action">Lülita välja</string>
+    <string name="playback.battery_optimization.rationale">Aku optimeerimine võib taasesituse taustal katkestada.</string>
     <string name="playback.book_progress.read">%1$s raamatust</string>
     <string name="playback.book_progress.remaining">%1$s jäänud</string>
     <string name="playback.book_progress.remaining_at_speed">%1$s jäänud kiirusel %2$s</string>

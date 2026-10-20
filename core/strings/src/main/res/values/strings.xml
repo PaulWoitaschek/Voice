@@ -506,10 +506,10 @@
     <string name="playback.action.play">Play</string>
     <!-- Label for the playback action that skips backward. -->
     <string name="playback.action.rewind">Rewind</string>
-    <!-- Action label for opening battery optimization settings. -->
-    <string name="playback.battery_optimization.action">Update</string>
-    <!-- Snackbar or prompt text explaining playback issues caused by power restrictions. -->
-    <string name="playback.battery_optimization.rationale">Due to your Power restrictions, playback interruptions might happen.</string>
+    <!-- Button of the snackbar on the player about battery optimization. Turns battery optimization off for Voice: it opens Android's dialog that asks whether Voice may always run in the background. Keep it short, it sits next to the snackbar text. -->
+    <string name="playback.battery_optimization.action">Turn off</string>
+    <!-- Snackbar on the player after pressing play, on phones where Android's battery optimization is on for Voice. It can stop playback while Voice is in the background, for example with the screen off. Use Android's word for battery optimization. -->
+    <string name="playback.battery_optimization.rationale">Battery optimization might stop playback in the background.</string>
     <!-- Global book progress on the playback screen. The placeholder is a localized percentage, e.g. "72%". -->
     <string name="playback.book_progress.read">%1$s of book</string>
     <!-- Remaining listening time for the whole book on the playback screen, adjusted for playback speed. The placeholder is a duration like "4:03:15". -->

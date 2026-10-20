@@ -317,8 +317,8 @@
     <string name="playback.action.pause">Pausa</string>
     <string name="playback.action.play">Reprodueix</string>
     <string name="playback.action.rewind">Rebobina</string>
-    <string name="playback.battery_optimization.action">Actualitza</string>
-    <string name="playback.battery_optimization.rationale">A causa de les restriccions d\'energia, és possible que es produeixin interrupcions en la reproducció.</string>
+    <string name="playback.battery_optimization.action">Desactiva</string>
+    <string name="playback.battery_optimization.rationale">L\'optimització de la bateria pot aturar la reproducció en segon pla.</string>
     <string name="playback.book_progress.read">%1$s del llibre</string>
     <string name="playback.book_progress.remaining">Queden %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Queden %1$s a %2$s</string>

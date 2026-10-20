@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Пауза</string>
     <string name="playback.action.play">Пушти</string>
     <string name="playback.action.rewind">Врати назад</string>
-    <string name="playback.battery_optimization.action">Ажурирај</string>
-    <string name="playback.battery_optimization.rationale">Може да настанат прекини во слушањето заради вашите рестрикции за управување со батеријата на уредот.</string>
+    <string name="playback.battery_optimization.action">Исклучи</string>
+    <string name="playback.battery_optimization.rationale">Оптимизацијата на батеријата може да го прекине слушањето во заднина.</string>
     <string name="playback.book_progress.read">%1$s од книгата</string>
     <string name="playback.book_progress.remaining">Уште %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Уште %1$s при %2$s</string>

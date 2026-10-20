@@ -334,8 +334,8 @@
     <string name="playback.action.pause">Zatrzymaj</string>
     <string name="playback.action.play">Odtwarzaj</string>
     <string name="playback.action.rewind">Przewiń</string>
-    <string name="playback.battery_optimization.action">Zaktualizuj</string>
-    <string name="playback.battery_optimization.rationale">Z powodu ustawień ograniczenia zużycia baterii może dojść do przerw w odtwarzaniu.</string>
+    <string name="playback.battery_optimization.action">Wyłącz</string>
+    <string name="playback.battery_optimization.rationale">Optymalizacja baterii może zatrzymać odtwarzanie w tle.</string>
     <string name="playback.book_progress.read">%1$s książki</string>
     <string name="playback.book_progress.remaining">Pozostało %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">Pozostało %1$s przy %2$s</string>

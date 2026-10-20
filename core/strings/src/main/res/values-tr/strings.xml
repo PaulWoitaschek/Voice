@@ -300,8 +300,8 @@
     <string name="playback.action.pause">Beklet</string>
     <string name="playback.action.play">Yürüt</string>
     <string name="playback.action.rewind">Geri sar</string>
-    <string name="playback.battery_optimization.action">Güncelle</string>
-    <string name="playback.battery_optimization.rationale">Güç kısıtlamalarınız nedeniyle oynatma kesintileri olabilir.</string>
+    <string name="playback.battery_optimization.action">Kapat</string>
+    <string name="playback.battery_optimization.rationale">Pil optimizasyonu arka planda oynatmayı durdurabilir.</string>
     <string name="playback.book_progress.read">Kitabın %1$s kadarı</string>
     <string name="playback.book_progress.remaining">%1$s kaldı</string>
     <string name="playback.book_progress.remaining_at_speed">%2$s hızda %1$s kaldı</string>

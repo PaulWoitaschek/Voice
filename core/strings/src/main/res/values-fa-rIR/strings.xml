@@ -300,8 +300,8 @@
     <string name="playback.action.pause">توقف</string>
     <string name="playback.action.play">پخش</string>
     <string name="playback.action.rewind">به عقب برگرداندن</string>
-    <string name="playback.battery_optimization.action">بروزرسانی</string>
-    <string name="playback.battery_optimization.rationale">به دلیل تنظیمات شما مربوط به محدودیت های استفاده از برق، ممکن است وقفه در پخش اتفاق بیفتد.</string>
+    <string name="playback.battery_optimization.action">خاموش کردن</string>
+    <string name="playback.battery_optimization.rationale">بهینه‌سازی مصرف باتری ممکن است پخش را در پس‌زمینه متوقف کند.</string>
     <string name="playback.book_progress.read">%1$s از کتاب</string>
     <string name="playback.book_progress.remaining">%1$s باقی‌مانده</string>
     <string name="playback.book_progress.remaining_at_speed">%1$s باقی‌مانده با سرعت %2$s</string>

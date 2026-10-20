@@ -283,8 +283,8 @@
     <string name="playback.action.pause">暂停</string>
     <string name="playback.action.play">播放</string>
     <string name="playback.action.rewind">回退</string>
-    <string name="playback.battery_optimization.action">更新</string>
-    <string name="playback.battery_optimization.rationale">由于您的电源限制，可能会发生播放中断。</string>
+    <string name="playback.battery_optimization.action">关闭</string>
+    <string name="playback.battery_optimization.rationale">电池优化可能会导致后台播放停止。</string>
     <string name="playback.book_progress.read">全书进度 %1$s</string>
     <string name="playback.book_progress.remaining">剩余 %1$s</string>
     <string name="playback.book_progress.remaining_at_speed">%2$s 速度下剩余 %1$s</string>
