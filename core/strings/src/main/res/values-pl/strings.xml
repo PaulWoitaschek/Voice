@@ -64,9 +64,9 @@
     <string name="audiobookshelf.status.needs_login">Serwer prosi o ponowne zalogowanie</string>
     <string name="audiobookshelf.status.offline">Nie można teraz połączyć się z serwerem. Pobranych książek nadal możesz słuchać.</string>
     <string name="audiobookshelf.status.syncing">Synchronizacja…</string>
-    <string name="book.category.action.mark_completed">Oznacz jako ukończona</string>
-    <string name="book.category.action.mark_current">Oznacz jako aktualna</string>
-    <string name="book.category.action.mark_not_started">Oznacz jako nierozpoczęta</string>
+    <string name="book.category.action.mark_completed">Oznacz jako ukończone</string>
+    <string name="book.category.action.mark_current">Oznacz jako aktualne</string>
+    <string name="book.category.action.mark_not_started">Oznacz jako nierozpoczęte</string>
     <string name="book.delete.bottom_sheet.title">Usuń książkę</string>
     <string name="book.delete.dialog.confirm_files">Usuń moje pliki</string>
     <string name="book.delete.dialog.message">Pliki zostaną trwale usunięte z twojego urządzenia. Nie da się ich odzyskać.</string>

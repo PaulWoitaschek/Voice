@@ -227,7 +227,7 @@
     <string name="library.book.offline">ऑफ़लाइन उपलब्ध नहीं</string>
     <string name="library.category.completed.title">पूर्ण</string>
     <string name="library.category.current.title">जारी</string>
-    <string name="library.category.not_started.title">अभी प्रारंभ नहीं</string>
+    <string name="library.category.not_started.title">अभी शुरू नहीं</string>
     <string name="library.continue_listening">सुनना जारी रखें</string>
     <string name="library.empty.add_first_book">चलिए आपका ऑडियोबुक फ़ोल्डर जोड़ते हैं ताकि आप सुनना शुरू कर सकें!</string>
     <string name="library.empty.title">कोई ऑडियोबुक नहीं मिली</string>

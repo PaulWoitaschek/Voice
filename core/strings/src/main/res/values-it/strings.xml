@@ -156,7 +156,7 @@
     <string name="folder.add.help.title">Non hai trovato i tuoi audiolibri?</string>
     <string name="folder.add.no_picker.message">Voice apre i tuoi audiolibri con il selettore di file di Android. Se manca, Voice non può aprire le tue cartelle né i tuoi file.</string>
     <string name="folder.add.no_picker.title">Questo dispositivo non ha un selettore di file</string>
-    <string name="folder.add.subtitle">Scegli la cartella con i tuoi audiolibri. Può contenere un solo libro o tutta la tua biblioteca.</string>
+    <string name="folder.add.subtitle">Scegli la cartella con i tuoi audiolibri. Può contenere un solo libro o tutta la tua libreria.</string>
     <string name="folder.add.title.default">Aggiungi i tuoi audiolibri</string>
     <string name="folder.add.title.onboarding">Aggiungi il tuo primo audiolibro</string>
     <string name="folder.mode.author.label">Le cartelle sono autori</string>
@@ -309,7 +309,7 @@
     <string name="onboarding.completion.subtitle">Il tuo primo audiolibro è pronto per essere riprodotto. Buon ascolto con Voice!</string>
     <string name="onboarding.completion.title">È tutto pronto!</string>
     <string name="onboarding.explanation.subtitle.folder">Scegli la cartella con i tuoi audiolibri. Voice ti mostra i libri trovati prima di aggiungerli.</string>
-    <string name="onboarding.explanation.title">La tua biblioteca, a modo tuo</string>
+    <string name="onboarding.explanation.title">La tua libreria, a modo tuo</string>
     <string name="onboarding.welcome.action.start">Iniziamo</string>
     <string name="onboarding.welcome.subtitle">Voice riproduce gli audiolibri sul tuo telefono e tiene il segno in ognuno. Gratis, senza pubblicità e senza account.</string>
     <string name="onboarding.welcome.title">Pensato per i tuoi audiolibri</string>
@@ -379,7 +379,7 @@
     <string name="settings.appearance.title">Aspetto</string>
     <string name="settings.auto_sleep_timer.end.label">Ora di fine</string>
     <string name="settings.auto_sleep_timer.start.label">Ora di inizio</string>
-    <string name="settings.auto_sleep_timer.summary">Avvia automaticamente il timer sospensione quando la riproduzione inizia tra %1$s e %2$s</string>
+    <string name="settings.auto_sleep_timer.summary">Avvia automaticamente il timer sospensione quando la riproduzione inizia tra le %1$s e le %2$s</string>
     <string name="settings.auto_sleep_timer.title">Timer sospensione automatico</string>
     <string name="settings.library.audiobookshelf.summary">Ascolta i libri del tuo server</string>
     <string name="settings.library.folders.summary">Gestisci cartelle audiolibri</string>

@@ -191,7 +191,7 @@
     <string name="history.event.paused">暂停播放</string>
     <string name="history.event.played">开始播放</string>
     <plurals name="history.event.rewound">
-        <item quantity="other">回退 %d 次</item>
+        <item quantity="other">快退 %d 次</item>
     </plurals>
     <string name="history.event.shook">摇一摇继续收听</string>
     <plurals name="history.event.skipped_ahead">

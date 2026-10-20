@@ -63,7 +63,7 @@
     <string name="audiobookshelf.status.syncing">S\'està sincronitzant…</string>
     <string name="book.category.action.mark_completed">Marca com a completat</string>
     <string name="book.category.action.mark_current">Marca com en curs</string>
-    <string name="book.category.action.mark_not_started">Marca com a no començat encara</string>
+    <string name="book.category.action.mark_not_started">Marca com a no començat</string>
     <string name="book.delete.bottom_sheet.title">Suprimeix el llibre</string>
     <string name="book.delete.dialog.confirm_files">Suprimeix els fitxers</string>
     <string name="book.delete.dialog.message">Els fitxers se suprimiran del dispositiu per sempre. No els podreu recuperar.</string>
@@ -240,7 +240,7 @@
     <string name="library.book.offline">No disponible sense connexió</string>
     <string name="library.category.completed.title">Completat</string>
     <string name="library.category.current.title">En curs</string>
-    <string name="library.category.not_started.title">Encara no s\'ha iniciat</string>
+    <string name="library.category.not_started.title">No començat</string>
     <string name="library.continue_listening">Continua escoltant</string>
     <string name="library.empty.add_first_book">Afegiu la carpeta dels vostres audiollibres per començar a escoltar!</string>
     <string name="library.empty.title">No s\'ha trobat cap audiollibre</string>

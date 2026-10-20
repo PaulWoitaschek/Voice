@@ -360,7 +360,7 @@
     <string name="settings.about.app_version.title">Versión de la aplicación</string>
     <string name="settings.action.open">Ajustes</string>
     <string name="settings.analytics_consent.description">Permite recopilar datos de uso anónimos para ayudar a mejorar la aplicación</string>
-    <string name="settings.analytics_consent.title">Analíticas</string>
+    <string name="settings.analytics_consent.title">Estadísticas de uso</string>
     <string name="settings.appearance.color_scheme.berry">Baya</string>
     <string name="settings.appearance.color_scheme.forest">Bosque</string>
     <string name="settings.appearance.color_scheme.lagoon">Laguna</string>

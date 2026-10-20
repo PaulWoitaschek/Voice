@@ -58,7 +58,7 @@
     <string name="audiobookshelf.status.needs_login">سرور می‌خواهد دوباره وارد شوید</string>
     <string name="audiobookshelf.status.offline">فعلاً دسترسی به سرور ممکن نیست. کتاب‌های دانلودشده همچنان پخش می‌شوند.</string>
     <string name="audiobookshelf.status.syncing">در حال همگام‌سازی…</string>
-    <string name="book.category.action.mark_completed">علامت زدن به عنوان تکمیل شده</string>
+    <string name="book.category.action.mark_completed">علامت زدن به عنوان تمام‌شده</string>
     <string name="book.category.action.mark_current">علامت زدن به عنوان جاری</string>
     <string name="book.category.action.mark_not_started">علامت زدن به عنوان شروع نشده</string>
     <string name="book.delete.bottom_sheet.title">پاک کردن کتاب</string>
@@ -225,7 +225,7 @@
     <string name="history.source.widget">ویجت</string>
     <string name="library.book.downloading">در حال دانلود</string>
     <string name="library.book.offline">آفلاین در دسترس نیست</string>
-    <string name="library.category.completed.title">تمام شده</string>
+    <string name="library.category.completed.title">تمام‌شده</string>
     <string name="library.category.current.title">جاری</string>
     <string name="library.category.not_started.title">هنوز شروع نشده</string>
     <string name="library.continue_listening">ادامهٔ گوش دادن</string>

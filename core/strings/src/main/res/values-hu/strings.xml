@@ -133,7 +133,7 @@
     <string name="cover.search.no_results.message">Próbáljon kevesebb szót, vagy hagyja ki a szerzőt.</string>
     <string name="cover.search.no_results.title">Nem található borító</string>
     <string name="cover.search.query.with_author">%2$s: %1$s hangoskönyv borító</string>
-    <string name="cover.search.query.without_author">%s borítója</string>
+    <string name="cover.search.query.without_author">%s hangoskönyv borító</string>
     <string name="cover.title">Borító</string>
     <plurals name="duration.minutes">
         <item quantity="one">%d perc</item>
@@ -226,7 +226,7 @@
     <string name="library.book.downloading">Letöltés folyamatban</string>
     <string name="library.book.offline">Offline nem érhető el</string>
     <string name="library.category.completed.title">Befejezett</string>
-    <string name="library.category.current.title">Jelenlegi</string>
+    <string name="library.category.current.title">Aktuális</string>
     <string name="library.category.not_started.title">Még nem elkezdett</string>
     <string name="library.continue_listening">Hallgatás folytatása</string>
     <string name="library.empty.add_first_book">Adja hozzá a hangoskönyveit tartalmazó mappát, hogy elkezdhesse a hallgatást!</string>

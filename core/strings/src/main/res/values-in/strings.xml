@@ -146,7 +146,7 @@
     <string name="folder.add.help.title">Buku audio Anda tidak ditemukan?</string>
     <string name="folder.add.no_picker.message">Voice membuka buku audio Anda melalui pemilih berkas Android. Tanpanya, Voice tidak dapat membuka folder atau berkas Anda.</string>
     <string name="folder.add.no_picker.title">Perangkat ini tidak memiliki pemilih berkas</string>
-    <string name="folder.add.subtitle">Pilih folder berisi buku audio Anda. Folder ini bisa berisi satu buku atau seluruh perpustakaan Anda.</string>
+    <string name="folder.add.subtitle">Pilih folder berisi buku audio Anda. Folder ini bisa berisi satu buku atau seluruh pustaka Anda.</string>
     <string name="folder.add.title.default">Tambahkan buku audio Anda</string>
     <string name="folder.add.title.onboarding">Tambahkan buku audio pertama Anda</string>
     <string name="folder.mode.author.label">Folder adalah penulis</string>
@@ -275,7 +275,7 @@
     <string name="onboarding.completion.subtitle">Buku audio pertama Anda siap diputar. Selamat mendengarkan bersama Voice!</string>
     <string name="onboarding.completion.title">Semua siap!</string>
     <string name="onboarding.explanation.subtitle.folder">Pilih folder berisi buku audio Anda. Voice menampilkan buku yang ditemukan sebelum menambahkannya.</string>
-    <string name="onboarding.explanation.title">Perpustakaan Anda, sesuai keinginan Anda</string>
+    <string name="onboarding.explanation.title">Pustaka Anda, sesuai keinginan Anda</string>
     <string name="onboarding.welcome.action.start">Ayo mulai</string>
     <string name="onboarding.welcome.subtitle">Voice memutar buku audio di ponsel Anda dan mengingat posisi terakhir Anda di setiap buku. Gratis, tanpa iklan, dan tanpa akun.</string>
     <string name="onboarding.welcome.title">Dibuat untuk buku audio Anda</string>

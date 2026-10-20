@@ -247,8 +247,8 @@
     <string name="library.empty.message">בתיקיות שלכם לא נמצאו קולספרים. בדקו שהקבצים עדיין במקומם, או הוסיפו תיקייה.</string>
     <string name="library.empty.action">הצגת התיקיות</string>
     <string name="library.folders.title">תיקיות קולספרים</string>
-    <string name="library.folders.moved.dialog.title">תיקיות ספרי השמע הועברו</string>
-    <string name="library.folders.moved.dialog.message">כעת ניתן לנהל תיקיות ספרי שמע בהגדרות.</string>
+    <string name="library.folders.moved.dialog.title">תיקיות הקולספרים הועברו</string>
+    <string name="library.folders.moved.dialog.message">כעת ניתן לנהל את תיקיות הקולספרים בהגדרות.</string>
     <string name="library.folders.no_access">אין גישה</string>
     <string name="library.folders.no_access.action">מתן גישה</string>
     <string name="library.folders.no_access.badge">אפשרו שוב גישה לתיקיות שלכם</string>
@@ -382,7 +382,7 @@
     <string name="settings.auto_sleep_timer.summary">הפעלה אוטומטית של טיימר-השינה כשההשמעה מתחילה בין %1$s ל-%2$s</string>
     <string name="settings.auto_sleep_timer.title">טיימר-שינה אוטומטי</string>
     <string name="settings.library.audiobookshelf.summary">הזרמת הספרים מהשרת שלכם</string>
-    <string name="settings.library.folders.summary">ניהול תיקיות שנסרקות עבור ספרי שמע</string>
+    <string name="settings.library.folders.summary">ניהול תיקיות שנסרקות עבור קולספרים</string>
     <string name="settings.library.layout.grid">רשת</string>
     <string name="settings.library.layout.list">רשימה</string>
     <string name="settings.library.title">ספרייה</string>

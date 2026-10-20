@@ -65,7 +65,7 @@
     <string name="audiobookshelf.status.offline">Server teď není dostupný. Stažené knihy můžete poslouchat dál.</string>
     <string name="audiobookshelf.status.syncing">Synchronizace…</string>
     <string name="book.category.action.mark_completed">Označit jako dokončené</string>
-    <string name="book.category.action.mark_current">Označit knihu jako aktuální</string>
+    <string name="book.category.action.mark_current">Označit jako aktuální</string>
     <string name="book.category.action.mark_not_started">Označit jako nezačaté</string>
     <string name="book.delete.bottom_sheet.title">Odstranit knihu</string>
     <string name="book.delete.dialog.confirm_files">Odstranit mé soubory</string>
@@ -251,7 +251,7 @@
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Stahuje se</string>
     <string name="library.book.offline">Není k dispozici offline</string>
-    <string name="library.category.completed.title">Dokončeno</string>
+    <string name="library.category.completed.title">Dokončené</string>
     <string name="library.category.current.title">Aktuální</string>
     <string name="library.category.not_started.title">Nezačaté</string>
     <string name="library.continue_listening">Pokračovat v poslechu</string>
