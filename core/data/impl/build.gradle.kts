@@ -16,10 +16,6 @@ kotlin {
 
 android {
 
-  defaultConfig {
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-  }
-
   sourceSets {
     named("test") {
       assets.directories += "schemas"

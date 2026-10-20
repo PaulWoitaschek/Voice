@@ -1,14 +1,12 @@
 package voice.app.di
 
 import android.app.Application
-import dev.zacsweers.metro.HasMemberInjections
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.createGraphFactory
 import voice.core.common.rootGraph
 import voice.core.initializer.AppInitializer
 
-@HasMemberInjections
-open class App : Application() {
+class App : Application() {
 
   @Inject
   lateinit var appInitializers: Set<AppInitializer>
@@ -16,7 +14,7 @@ open class App : Application() {
   override fun onCreate() {
     super.onCreate()
 
-    rootGraph = createGraph()
+    rootGraph = createGraphFactory<AppGraph.Factory>().create(this)
       .also { graph ->
         graph.inject(this)
       }
@@ -24,9 +22,5 @@ open class App : Application() {
     appInitializers.forEach {
       it.onAppStart(this)
     }
-  }
-
-  open fun createGraph(): AppGraph {
-    return createGraphFactory<ProductionAppGraph.Factory>().create(this)
   }
 }
