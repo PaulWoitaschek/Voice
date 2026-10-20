@@ -21,7 +21,4 @@ dependencies {
   implementation(libs.navigation3.ui)
 
   implementation(libs.serialization.json)
-  testImplementation(projects.core.data.impl)
-  testImplementation(projects.core.remoteconfig.noop)
-  testImplementation(projects.core.analytics.noop)
 }
