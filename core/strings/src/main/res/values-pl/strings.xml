@@ -159,6 +159,8 @@
     <string name="folder.add.help.computer">Masz jeszcze audiobooki na komputerze? Najpierw skopiuj je na telefon, na przykład do folderu Audiobooks.</string>
     <string name="folder.add.help.download">Android nie pozwala aplikacjom samodzielnie otwierać folderu Download. Wybierz folder znajdujący się w nim.</string>
     <string name="folder.add.help.title">Nie możesz znaleźć swoich audiobooków?</string>
+    <string name="folder.add.no_picker.message">Voice otwiera twoje audiobooki za pomocą selektora plików Androida. Bez niego Voice nie może otworzyć twoich folderów ani plików.</string>
+    <string name="folder.add.no_picker.title">To urządzenie nie ma selektora plików</string>
     <string name="folder.add.subtitle">Wybierz folder ze swoimi audiobookami. Może zawierać jedną książkę albo całą twoją bibliotekę.</string>
     <string name="folder.add.title.default">Dodaj swoje Audiobooki</string>
     <string name="folder.add.title.onboarding">Dodaj Swój Pierwszy Audiobook</string>

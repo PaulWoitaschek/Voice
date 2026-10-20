@@ -154,6 +154,8 @@
     <string name="folder.add.help.computer">הקולספרים עדיין במחשב? העתיקו אותם לטלפון קודם, למשל לתיקיית Audiobooks.</string>
     <string name="folder.add.help.download">ב-Android, אפליקציות לא יכולות לפתוח את תיקיית Download עצמה. בחרו תיקייה שבתוכה.</string>
     <string name="folder.add.help.title">לא נמצאו הקולספרים שלכם?</string>
+    <string name="folder.add.no_picker.message">הגישה של Voice לקולספרים שלכם עוברת דרך בוחר הקבצים של Android. בלעדיו, אי אפשר לפתוח ב-Voice תיקיות או קבצים.</string>
+    <string name="folder.add.no_picker.title">אין במכשיר הזה בוחר קבצים</string>
     <string name="folder.add.subtitle">בחרו את התיקייה עם הקולספרים שלכם. היא יכולה להכיל ספר אחד או את כל הספרייה שלכם.</string>
     <string name="folder.add.title.default">הוספת הקולספרים שלכם</string>
     <string name="folder.add.title.onboarding">הוספת הקולספר הראשון שלכם</string>

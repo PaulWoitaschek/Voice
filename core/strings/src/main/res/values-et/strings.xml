@@ -149,6 +149,8 @@
     <string name="folder.add.help.computer">Kas sinu heliraamatud on veel arvutis? Kopeeri need kõigepealt telefoni, näiteks kausta Audiobooks.</string>
     <string name="folder.add.help.download">Android ei luba rakendustel avada kausta Download ennast. Vali kaust selle seest.</string>
     <string name="folder.add.help.title">Ei leidnud oma heliraamatuid?</string>
+    <string name="folder.add.no_picker.message">Voice avab sinu heliraamatud Androidi failivalija kaudu. Ilma selleta ei saa Voice sinu kaustu ega faile avada.</string>
+    <string name="folder.add.no_picker.title">Selles seadmes pole failivalijat</string>
     <string name="folder.add.subtitle">Vali kaust, kus on sinu heliraamatud. Selles võib olla üks raamat või kogu sinu raamatukogu.</string>
     <string name="folder.add.title.default">Lisa oma heliraamat(ud)</string>
     <string name="folder.add.title.onboarding">Lisa oma esimene heliraamat</string>

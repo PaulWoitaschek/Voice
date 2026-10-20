@@ -159,6 +159,8 @@
     <string name="folder.add.help.computer">Máte zvukové knihy ešte v počítači? Najprv ich skopírujte do telefónu, napríklad do priečinka Audiobooks.</string>
     <string name="folder.add.help.download">Android nedovoľuje aplikáciám otvoriť priamo priečinok Download. Vyberte priečinok vo vnútri neho.</string>
     <string name="folder.add.help.title">Nenašli ste svoje zvukové knihy?</string>
+    <string name="folder.add.no_picker.message">Voice otvára vaše zvukové knihy cez výber súborov systému Android. Bez neho Voice nemôže otvoriť vaše priečinky ani súbory.</string>
+    <string name="folder.add.no_picker.title">Toto zariadenie nemá výber súborov</string>
     <string name="folder.add.subtitle">Vyberte priečinok so zvukovými knihami. Môže obsahovať jednu knihu alebo celú vašu knižnicu.</string>
     <string name="folder.add.title.default">Pridajte si zvukové knihy</string>
     <string name="folder.add.title.onboarding">Pridajte si vašu prvú zvukovú knihu</string>

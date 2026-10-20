@@ -149,6 +149,8 @@
     <string name="folder.add.help.computer">ऑडियोबुक अब भी आपके कंप्यूटर पर हैं? पहले उन्हें अपने फ़ोन में कॉपी करें, जैसे Audiobooks फ़ोल्डर में।</string>
     <string name="folder.add.help.download">Android ऐप्स को सीधे Download फ़ोल्डर खोलने नहीं देता। इसके अंदर का कोई फ़ोल्डर चुनें।</string>
     <string name="folder.add.help.title">आपकी ऑडियोबुक नहीं मिलीं?</string>
+    <string name="folder.add.no_picker.message">Voice आपकी ऑडियोबुक Android के फ़ाइल पिकर से खोलती है। इसके बिना Voice आपके फ़ोल्डर या फ़ाइलें नहीं खोल सकती।</string>
+    <string name="folder.add.no_picker.title">इस डिवाइस में फ़ाइल पिकर नहीं है</string>
     <string name="folder.add.subtitle">अपनी ऑडियोबुक वाला फ़ोल्डर चुनें। इसमें एक पुस्तक या आपकी पूरी लाइब्रेरी हो सकती है।</string>
     <string name="folder.add.title.default">अपनी ऑडियोबुक जोड़ें</string>
     <string name="folder.add.title.onboarding">अपनी पहली ऑडियोबुक जोड़ें</string>

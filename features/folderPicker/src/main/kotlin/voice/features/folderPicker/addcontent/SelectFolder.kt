@@ -30,7 +30,7 @@ internal fun SelectFolder(
   origin: Origin,
   modifier: Modifier = Modifier,
 ) {
-  var pickerCancelled by rememberSaveable { mutableStateOf(false) }
+  var help by rememberSaveable { mutableStateOf<FolderHelp?>(null) }
   OnboardingScaffold(
     modifier = modifier,
     // outside of the onboarding there are no steps to count
@@ -50,18 +50,19 @@ internal fun SelectFolder(
       FolderHero(clock = clock, modifier = Modifier.fillMaxSize())
     },
     details = {
-      if (pickerCancelled) {
+      help?.let {
         Spacer(Modifier.height(24.dp))
-        FolderHelpCard()
+        FolderHelpCard(it)
       }
     },
     actions = {
       ContentTypeChoices(
         onAdd = onAdd,
         onFolderPickerCancel = {
-          pickerCancelled = true
+          help = FolderHelp.PickerClosed
           onFolderPickerCancel()
         },
+        onNoPicker = { help = FolderHelp.NoPicker },
         onConnectAudiobookshelf = onConnectAudiobookshelf,
       )
     },

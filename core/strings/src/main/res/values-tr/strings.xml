@@ -149,6 +149,8 @@
     <string name="folder.add.help.computer">Sesli kitaplarınız hâlâ bilgisayarınızda mı? Önce onları telefonunuza kopyalayın, örneğin Audiobooks klasörüne.</string>
     <string name="folder.add.help.download">Android, uygulamaların Download klasörünü doğrudan açmasına izin vermez. İçindeki bir klasörü seçin.</string>
     <string name="folder.add.help.title">Sesli kitaplarınızı bulamadınız mı?</string>
+    <string name="folder.add.no_picker.message">Voice, sesli kitaplarınızı Android\'in dosya seçicisiyle açar. Dosya seçici olmadan klasörlerinizi veya dosyalarınızı açamaz.</string>
+    <string name="folder.add.no_picker.title">Bu cihazda dosya seçici yok</string>
     <string name="folder.add.subtitle">Sesli kitaplarının bulunduğu klasörü seç. Bu klasörde tek bir kitap da olabilir, tüm kütüphanen de.</string>
     <string name="folder.add.title.default">Sesli kitabını (kitaplarını) ekle</string>
     <string name="folder.add.title.onboarding">İlk sesli kitabını ekle</string>

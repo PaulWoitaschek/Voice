@@ -257,6 +257,10 @@
     <string name="folder.add.help.download">Android doesn\'t let apps open the Download folder itself. Pick a folder inside it.</string>
     <!-- Title of the tips on the add content screen, shown after the system folder picker was closed without a folder. -->
     <string name="folder.add.help.title">Didn\'t find your audiobooks?</string>
+    <!-- Text on the add content screen when the device has no system file picker, so tapping Choose a folder or Add a single file instead can't open anything. Happens on reduced Android builds like bike computers. Use the word Android uses for the system picker that opens files and folders. -->
+    <string name="folder.add.no_picker.message">Voice opens your audiobooks through Android\'s file picker. Without it, Voice can\'t open your folders or files.</string>
+    <!-- Title on the add content screen when the device has no system file picker, so tapping Choose a folder or Add a single file instead can't open anything. -->
+    <string name="folder.add.no_picker.title">This device has no file picker</string>
     <!-- Subtitle on the add content screen. Explains that picking a folder works for one book as well as for a whole library. -->
     <string name="folder.add.subtitle">Pick the folder with your audiobooks. It can hold a single book or your whole library.</string>
     <!-- Title for the folder picker during normal app use. -->

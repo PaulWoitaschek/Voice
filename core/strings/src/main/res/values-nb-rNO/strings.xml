@@ -149,6 +149,8 @@
     <string name="folder.add.help.computer">Har du fortsatt lydbøker på datamaskinen? Kopier dem til telefonen først, for eksempel til mappen Audiobooks.</string>
     <string name="folder.add.help.download">Android lar ikke apper åpne selve Download-mappen. Velg en mappe inni den.</string>
     <string name="folder.add.help.title">Fant du ikke lydbøkene dine?</string>
+    <string name="folder.add.no_picker.message">Voice åpner lydbøkene dine via Androids filvelger. Uten den kan Voice ikke åpne mappene eller filene dine.</string>
+    <string name="folder.add.no_picker.title">Denne enheten har ingen filvelger</string>
     <string name="folder.add.subtitle">Velg mappen med lydbøkene dine. Den kan inneholde én bok eller hele biblioteket ditt.</string>
     <string name="folder.add.title.default">Legg til dine lydbøker</string>
     <string name="folder.add.title.onboarding">Legg til din første lydbok</string>

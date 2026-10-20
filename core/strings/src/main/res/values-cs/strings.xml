@@ -159,6 +159,8 @@
     <string name="folder.add.help.computer">Audioknihy jsou stále v počítači? Nejprve je zkopírujte do telefonu, například do složky Audiobooks.</string>
     <string name="folder.add.help.download">Android nedovolí aplikacím otevřít přímo složku Download. Vyberte složku uvnitř ní.</string>
     <string name="folder.add.help.title">Nenašli jste své audioknihy?</string>
+    <string name="folder.add.no_picker.message">Voice otevírá vaše audioknihy přes výběr souborů systému Android. Bez něj Voice nemůže otevřít vaše složky ani soubory.</string>
+    <string name="folder.add.no_picker.title">Toto zařízení nemá výběr souborů</string>
     <string name="folder.add.subtitle">Vyberte složku se svými audioknihami. Může obsahovat jednu knihu nebo celou vaši knihovnu.</string>
     <string name="folder.add.title.default">Přidejte své audoknihy</string>
     <string name="folder.add.title.onboarding">Přidejte svou první audioknihu</string>

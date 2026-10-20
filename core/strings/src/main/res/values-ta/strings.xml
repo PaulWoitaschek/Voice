@@ -149,6 +149,8 @@
     <string name="folder.add.help.computer">ஆடியோபுக்குகள் இன்னும் உங்கள் கணினியில் உள்ளனவா? முதலில் அவற்றை உங்கள் போனுக்கு நகலெடுக்கவும், எடுத்துக்காட்டாக Audiobooks கோப்புறையில்.</string>
     <string name="folder.add.help.download">Download கோப்புறையை நேரடியாகத் திறக்க Android பயன்பாடுகளை அனுமதிக்காது. அதற்குள் உள்ள ஒரு கோப்புறையைத் தேர்ந்தெடுக்கவும்.</string>
     <string name="folder.add.help.title">உங்கள் ஆடியோபுக்குகள் கிடைக்கவில்லையா?</string>
+    <string name="folder.add.no_picker.message">Voice உங்கள் ஆடியோபுக்குகளை Android-இன் கோப்புத் தேர்வுக் கருவி மூலம் திறக்கிறது. அது இல்லாமல், உங்கள் கோப்புறைகளையோ கோப்புகளையோ Voice-ஆல் திறக்க முடியாது.</string>
+    <string name="folder.add.no_picker.title">இந்தச் சாதனத்தில் கோப்புத் தேர்வுக் கருவி இல்லை</string>
     <string name="folder.add.subtitle">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும். அதில் ஒரு புத்தகமோ உங்கள் முழு நூலகமோ இருக்கலாம்.</string>
     <string name="folder.add.title.default">உங்கள் ஆடியோபுக் (களை) சேர்க்கவும்</string>
     <string name="folder.add.title.onboarding">உங்கள் முதல் ஆடியோபுக்கைச் சேர்க்கவும்</string>
