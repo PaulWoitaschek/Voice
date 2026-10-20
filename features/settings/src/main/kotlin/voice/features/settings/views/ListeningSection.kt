@@ -492,7 +492,7 @@ private fun RewindIllustration(
             wave.moveTo(x, lineY)
             while (x < playheadX) {
               x = (x + 2F).coerceAtMost(playheadX)
-              wave.lineTo(x, lineY + amplitude * sin(x / wavelength * 2 * PI.toFloat() - phase))
+              wave.lineTo(x, lineY + amplitude * sin(x / wavelength * 2 * PI.toFloat() + phase))
             }
             drawPath(wave, color = colors.secondary, style = waveStroke)
             drawCircle(

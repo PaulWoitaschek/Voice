@@ -336,10 +336,10 @@ private fun DrawScope.drawWavyTrack(
   if (activeEnd > inset) {
     path.reset()
     var x = inset
-    path.moveTo(x, centerY + amplitude * sin(-phase))
+    path.moveTo(x, centerY + amplitude * sin(phase))
     while (x < activeEnd) {
       x = min(x + step, activeEnd)
-      val angle = (x - inset) / wavelength * 2F * PI.toFloat() - phase
+      val angle = (x - inset) / wavelength * 2F * PI.toFloat() + phase
       path.lineTo(x, centerY + amplitude * sin(angle))
     }
     drawPath(
