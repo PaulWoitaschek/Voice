@@ -277,7 +277,7 @@
     <string name="library.search.recent.remove">%s ஐ அகற்று</string>
     <string name="library.search.recent.title">அண்மையவை</string>
     <string name="library.storage_permission_bug.action">இசைவு வழங்கவும்</string>
-    <string name="library.storage_permission_bug.message">சில சாதனங்களுக்கு, ஒரு கணினி பயன்பாடு வெளிப்புற சேமிப்பிடத்தை அணுக தேவையான அனுமதியைக் காணவில்லை. குரல் உங்கள் ஆடியோபுக்குகளைப் படிக்க இந்த அணுகல் தேவை.</string>
+    <string name="library.storage_permission_bug.message">சில சாதனங்களுக்கு, ஒரு கணினி பயன்பாடு வெளிப்புற சேமிப்பிடத்தை அணுக தேவையான அனுமதியைக் காணவில்லை. உங்கள் ஆடியோபுக்குகளைப் படிக்க Voice-க்கு இந்த அணுகல் தேவை.</string>
     <string name="library.storage_permission_bug.title">இசைவு தேவை</string>
     <string name="media_session.library.recent">அண்மைக் கால</string>
     <string name="media_session.library.root">அனைத்து ஆடியோபுக்குகள்</string>
@@ -287,7 +287,7 @@
     <string name="onboarding.analytics_consent.action.privacy_policy">தனியுரிமைக் கொள்கை</string>
     <string name="onboarding.analytics_consent.description">Voice-ஐ மேம்படுத்த உதவ, அநாமதேய பயன்பாட்டுத் தரவைப் பகிர விரும்புகிறீர்களா? இதை நீங்கள் அமைப்புகளில் மாற்றலாம்.</string>
     <string name="onboarding.completion.action.start_listening">கேட்கத் தொடங்குங்கள்</string>
-    <string name="onboarding.completion.subtitle">உங்கள் முதல் ஆடியோபுக் விளையாட தயாராக உள்ளது. குரலுடன் உங்கள் பயணத்தை அனுபவிக்கவும்!</string>
+    <string name="onboarding.completion.subtitle">உங்கள் முதல் ஆடியோபுக் கேட்கத் தயாராக உள்ளது. Voice உடன் உங்கள் பயணத்தை அனுபவிக்கவும்!</string>
     <string name="onboarding.completion.title">நீங்கள் அனைவரும் அமைக்கப்பட்டிருக்கிறீர்கள்!</string>
     <string name="onboarding.explanation.subtitle.folder">உங்கள் ஆடியோபுக்குகள் உள்ள கோப்புறையைத் தேர்ந்தெடுக்கவும். சேர்ப்பதற்கு முன், Voice கண்டறிந்த புத்தகங்களை உங்களுக்குக் காட்டும்.</string>
     <string name="onboarding.explanation.title">உங்கள் நூலகம், உங்கள் வழி</string>
@@ -296,8 +296,8 @@
     <string name="onboarding.welcome.title">உங்கள் ஆடியோபுக்குகளுக்காக உருவானது</string>
     <string name="playback.action.fast_forward">வேகமாக முன்னோக்கி</string>
     <string name="playback.action.pause">இடைநிறுத்தம்</string>
-    <string name="playback.action.play">விளையாடுங்கள்</string>
-    <string name="playback.action.rewind">முன்னாடி</string>
+    <string name="playback.action.play">இயக்கு</string>
+    <string name="playback.action.rewind">பின்னோக்கி</string>
     <string name="playback.battery_optimization.action">புதுப்பிப்பு</string>
     <string name="playback.battery_optimization.rationale">உங்கள் ஆற்றல் கட்டுப்பாடுகள் காரணமாக, பின்னணி குறுக்கீடுகள் ஏற்படக்கூடும்.</string>
     <string name="playback.book_progress.read">புத்தகத்தின் %1$s</string>
