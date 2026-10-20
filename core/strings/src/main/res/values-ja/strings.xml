@@ -144,6 +144,8 @@
     <string name="folder.add.help.computer">オーディオブックがまだパソコンに入っていますか？ 先にスマートフォンの Audiobooks フォルダーなどにコピーしてください。</string>
     <string name="folder.add.help.download">Android では、アプリが Download フォルダー自体を開くことはできません。その中のフォルダーを選んでください。</string>
     <string name="folder.add.help.title">オーディオブックが見つかりませんか？</string>
+    <string name="folder.add.no_picker.message">Voice は Android のファイル選択ツールでオーディオブックを開きます。これがないと、Voice ではフォルダーやファイルを開けません。</string>
+    <string name="folder.add.no_picker.title">この端末にはファイル選択ツールがありません</string>
     <string name="folder.add.subtitle">オーディオブックが入ったフォルダーを選んでください。1冊のブックでも、ライブラリ全体でも大丈夫です。</string>
     <string name="folder.add.title.default">オーディオブックを追加</string>
     <string name="folder.add.title.onboarding">最初のオーディオブックを追加</string>

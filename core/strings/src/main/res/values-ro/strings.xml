@@ -154,6 +154,8 @@
     <string name="folder.add.help.computer">Mai ai cărți audio pe calculator? Copiază-le mai întâi pe telefon, de exemplu în directorul Audiobooks.</string>
     <string name="folder.add.help.download">Android nu permite aplicațiilor să deschidă direct directorul Download. Alege un director din interiorul lui.</string>
     <string name="folder.add.help.title">Nu ai găsit cărțile tale audio?</string>
+    <string name="folder.add.no_picker.message">Voice îți deschide cărțile audio prin selectorul de fișiere din Android. Fără el, Voice nu poate deschide nici directoarele, nici fișierele tale.</string>
+    <string name="folder.add.no_picker.title">Acest dispozitiv nu are selector de fișiere</string>
     <string name="folder.add.subtitle">Alege directorul cu cărțile tale audio. Poate conține o singură carte sau întreaga ta bibliotecă.</string>
     <string name="folder.add.title.default">Adaugă cărțile tale</string>
     <string name="folder.add.title.onboarding">Adaugă prima ta carte</string>

@@ -149,6 +149,8 @@
     <string name="folder.add.help.computer">Ovatko äänikirjasi vielä tietokoneella? Kopioi ne ensin puhelimeesi, esimerkiksi Audiobooks-kansioon.</string>
     <string name="folder.add.help.download">Android ei salli sovellusten avata suoraan Download-kansiota. Valitse jokin sen sisällä oleva kansio.</string>
     <string name="folder.add.help.title">Etkö löytänyt äänikirjojasi?</string>
+    <string name="folder.add.no_picker.message">Voice avaa äänikirjasi Androidin tiedostovalitsimen kautta. Ilman sitä Voice ei voi avata kansioitasi tai tiedostojasi.</string>
+    <string name="folder.add.no_picker.title">Tässä laitteessa ei ole tiedostovalitsinta</string>
     <string name="folder.add.subtitle">Valitse kansio, jossa äänikirjasi ovat. Siinä voi olla yksi kirja tai koko kirjastosi.</string>
     <string name="folder.add.title.default">Lisää äänikirjasi</string>
     <string name="folder.add.title.onboarding">Lisää ensimmäinen äänikirjasi</string>

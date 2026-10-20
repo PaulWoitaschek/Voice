@@ -149,6 +149,8 @@
     <string name="folder.add.help.computer">Вашите аудио книги сè уште се на компјутерот? Прво копирајте ги на телефонот, на пример во фолдерот Audiobooks.</string>
     <string name="folder.add.help.download">Android не дозволува апликациите сами да го отвораат фолдерот Download. Изберете фолдер во него.</string>
     <string name="folder.add.help.title">Не ги најдовте вашите аудио книги?</string>
+    <string name="folder.add.no_picker.message">Voice ги отвора вашите аудио книги преку избирачот на датотеки на Android. Без него, Voice не може да ги отвори вашите фолдери и датотеки.</string>
+    <string name="folder.add.no_picker.title">Овој уред нема избирач на датотеки</string>
     <string name="folder.add.subtitle">Изберете го фолдерот со вашите аудио книги. Може да содржи една книга или цела библиотека.</string>
     <string name="folder.add.title.default">Додајте ги вашите аудио книги</string>
     <string name="folder.add.title.onboarding">Додајте ја вашата прва аудио книга</string>

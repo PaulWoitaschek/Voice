@@ -154,6 +154,8 @@
     <string name="folder.add.help.computer">Vos livres audio sont encore sur votre ordinateur ? Copiez-les d\'abord sur votre téléphone, par exemple dans le dossier Audiobooks.</string>
     <string name="folder.add.help.download">Android ne permet pas aux applications d\'ouvrir directement le dossier Download. Choisissez un dossier à l\'intérieur.</string>
     <string name="folder.add.help.title">Vous n\'avez pas trouvé vos livres audio ?</string>
+    <string name="folder.add.no_picker.message">Voice ouvre vos livres audio avec le sélecteur de fichiers d\'Android. Sans lui, Voice ne peut ouvrir ni vos dossiers ni vos fichiers.</string>
+    <string name="folder.add.no_picker.title">Cet appareil n\'a pas de sélecteur de fichiers</string>
     <string name="folder.add.subtitle">Choisissez le dossier de vos livres audio. Il peut contenir un seul livre ou toute votre bibliothèque.</string>
     <string name="folder.add.title.default">Ajoutez vos livres audio</string>
     <string name="folder.add.title.onboarding">Ajoutez votre premier livre audio</string>

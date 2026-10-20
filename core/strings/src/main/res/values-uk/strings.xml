@@ -159,6 +159,8 @@
     <string name="folder.add.help.computer">Аудіокниги ще на комп\'ютері? Спершу скопіюйте їх на телефон, наприклад у папку Audiobooks.</string>
     <string name="folder.add.help.download">Android не дозволяє додаткам відкривати саму папку Download. Виберіть папку всередині неї.</string>
     <string name="folder.add.help.title">Не знайшли свої аудіокниги?</string>
+    <string name="folder.add.no_picker.message">Voice відкриває ваші аудіокниги через засіб вибору файлів Android. Без нього Voice не може відкрити ні папки, ні файли.</string>
+    <string name="folder.add.no_picker.title">На пристрої немає засобу вибору файлів</string>
     <string name="folder.add.subtitle">Виберіть папку з аудіокнигами. У ній може бути одна книга або вся ваша бібліотека.</string>
     <string name="folder.add.title.default">Додайте свої аудіокниги</string>
     <string name="folder.add.title.onboarding">Додайте свою першу аудіокнигу</string>

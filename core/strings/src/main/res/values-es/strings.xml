@@ -154,6 +154,8 @@
     <string name="folder.add.help.computer">¿Todavía tienes audiolibros en tu computadora? Cópialos primero en tu teléfono, por ejemplo en la carpeta Audiobooks.</string>
     <string name="folder.add.help.download">Android no permite que las aplicaciones abran la carpeta Download directamente. Elige una carpeta dentro de ella.</string>
     <string name="folder.add.help.title">¿No encontraste tus audiolibros?</string>
+    <string name="folder.add.no_picker.message">Voice abre tus audiolibros con el selector de archivos de Android. Sin él, Voice no puede abrir tus carpetas ni tus archivos.</string>
+    <string name="folder.add.no_picker.title">Este dispositivo no tiene selector de archivos</string>
     <string name="folder.add.subtitle">Elige la carpeta con tus audiolibros. Puede contener un solo libro o toda tu biblioteca.</string>
     <string name="folder.add.title.default">Añade tus audiolibros</string>
     <string name="folder.add.title.onboarding">Añade tu primer audiolibro</string>

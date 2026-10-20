@@ -144,6 +144,8 @@
     <string name="folder.add.help.computer">有声书还在电脑上？请先将它们复制到手机，例如复制到 Audiobooks 文件夹中。</string>
     <string name="folder.add.help.download">Android 不允许应用直接打开 Download 文件夹，请选择其中的一个文件夹。</string>
     <string name="folder.add.help.title">未找到您的有声书？</string>
+    <string name="folder.add.no_picker.message">Voice 通过 Android 的文件选择器打开您的有声书。没有它，Voice 就无法打开您的文件夹或文件。</string>
+    <string name="folder.add.no_picker.title">此设备没有文件选择器</string>
     <string name="folder.add.subtitle">选择存放有声书的文件夹。里面可以只有一本书，也可以是您的整个书库。</string>
     <string name="folder.add.title.default">添加您的有声书</string>
     <string name="folder.add.title.onboarding">添加您的第一本有声书</string>

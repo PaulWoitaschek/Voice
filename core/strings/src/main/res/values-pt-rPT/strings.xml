@@ -154,6 +154,8 @@
     <string name="folder.add.help.computer">Ainda tem audiolivros no computador? Copie-os primeiro para o telemóvel, por exemplo para a pasta Audiobooks.</string>
     <string name="folder.add.help.download">O Android não permite que as aplicações abram a pasta Download diretamente. Escolha uma pasta dentro dela.</string>
     <string name="folder.add.help.title">Não encontrou os seus audiolivros?</string>
+    <string name="folder.add.no_picker.message">O Voice abre os seus audiolivros através do seletor de ficheiros do Android. Sem ele, o Voice não consegue abrir as suas pastas nem os seus ficheiros.</string>
+    <string name="folder.add.no_picker.title">Este dispositivo não tem seletor de ficheiros</string>
     <string name="folder.add.subtitle">Escolha a pasta com os seus audiolivros. Pode conter um único livro ou toda a sua biblioteca.</string>
     <string name="folder.add.title.default">Adicionar os seus Audiobook(s)</string>
     <string name="folder.add.title.onboarding">Adicione o Seu Primeiro Audiobook</string>

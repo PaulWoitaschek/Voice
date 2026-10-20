@@ -3,6 +3,7 @@
 package voice.features.folderPicker.addcontent
 
 import android.os.Build
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,14 +21,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
 
+internal enum class FolderHelp {
+  PickerClosed,
+  NoPicker,
+}
+
 @Composable
-internal fun FolderHelpCard(modifier: Modifier = Modifier) {
+internal fun FolderHelpCard(
+  help: FolderHelp,
+  modifier: Modifier = Modifier,
+) {
   Surface(
     modifier = modifier.fillMaxWidth(),
     shape = RoundedCornerShape(28.dp),
@@ -43,34 +54,58 @@ internal fun FolderHelpCard(modifier: Modifier = Modifier) {
       )
       Spacer(Modifier.width(16.dp))
       Column(Modifier.weight(1F)) {
-        Text(
-          text = stringResource(StringsR.string.folder_add_help_title),
-          style = MaterialTheme.typography.titleMediumEmphasized,
-        )
-        // older versions of Android still let apps open the Download folder
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-          Spacer(Modifier.height(4.dp))
-          Text(
-            text = stringResource(StringsR.string.folder_add_help_download),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-          )
+        when (help) {
+          FolderHelp.PickerClosed -> {
+            HelpTitle(StringsR.string.folder_add_help_title)
+            // older versions of Android still let apps open the Download folder
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+              Spacer(Modifier.height(4.dp))
+              HelpText(StringsR.string.folder_add_help_download)
+            }
+            Spacer(Modifier.height(8.dp))
+            HelpText(StringsR.string.folder_add_help_computer)
+          }
+          FolderHelp.NoPicker -> {
+            HelpTitle(StringsR.string.folder_add_no_picker_title)
+            Spacer(Modifier.height(4.dp))
+            HelpText(StringsR.string.folder_add_no_picker_message)
+          }
         }
-        Spacer(Modifier.height(8.dp))
-        Text(
-          text = stringResource(StringsR.string.folder_add_help_computer),
-          style = MaterialTheme.typography.bodyMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
       }
     }
   }
 }
 
 @Composable
+private fun HelpTitle(@StringRes text: Int) {
+  Text(
+    text = stringResource(text),
+    style = MaterialTheme.typography.titleMediumEmphasized,
+  )
+}
+
+@Composable
+private fun HelpText(@StringRes text: Int) {
+  Text(
+    text = stringResource(text),
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
+  )
+}
+
+@Composable
 @Preview
-private fun FolderHelpCardPreview() {
+private fun FolderHelpCardPreview(
+  @PreviewParameter(FolderHelpPreviewParameterProvider::class)
+  help: FolderHelp,
+) {
   VoiceTheme {
-    FolderHelpCard()
+    FolderHelpCard(help)
   }
+}
+
+private class FolderHelpPreviewParameterProvider : PreviewParameterProvider<FolderHelp> {
+
+  override val values: Sequence<FolderHelp>
+    get() = FolderHelp.entries.asSequence()
 }
