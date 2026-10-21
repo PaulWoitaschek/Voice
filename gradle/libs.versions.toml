@@ -40,7 +40,7 @@ kotlin-powerAssert-runtime = { module = "org.jetbrains.kotlin:kotlin-power-asser
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 documentFile = "androidx.documentfile:documentfile:1.1.0"
-datastore = "androidx.datastore:datastore-core:1.2.1"
+datastore = "androidx.datastore:datastore-core:1.3.0"
 turbine = "app.cash.turbine:turbine:1.2.1"
 molecule = "app.cash.molecule:molecule-runtime:2.2.0"
 okhttp = "com.squareup.okhttp3:okhttp-coroutines:5.5.0"
