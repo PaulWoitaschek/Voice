@@ -69,7 +69,9 @@ class NowPlayingWidget : GlanceAppWidget() {
     val initial = states.first()
     provideContent {
       val state by states.collectAsState(initial)
-      NowPlayingContent(state, graph.widgetImages, graph.widgetActions)
+      ProvideNovaSize {
+        NowPlayingContent(state, graph.widgetImages, graph.widgetActions)
+      }
     }
   }
 

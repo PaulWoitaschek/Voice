@@ -56,7 +56,9 @@ class ShelfWidget : GlanceAppWidget() {
     val initial = states.first()
     provideContent {
       val state by states.collectAsState(initial)
-      ShelfContent(state, graph.widgetImages, graph.widgetActions)
+      ProvideNovaSize {
+        ShelfContent(state, graph.widgetImages, graph.widgetActions)
+      }
     }
   }
 
