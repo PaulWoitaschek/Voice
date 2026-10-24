@@ -8,7 +8,6 @@ import voice.core.analytics.api.Analytics
 import voice.core.common.AppInfoProvider
 import voice.core.data.store.HandledSurveysStore
 import voice.core.featureflag.FeatureFlag
-import voice.core.featureflag.SurveyUrlFeatureFlagQualifier
 import java.net.URLEncoder
 import java.time.Clock
 import java.time.LocalDate

@@ -24,11 +24,11 @@ import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.GridMode
-import voice.core.data.KioskModeDemoData
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.kioskmode.KioskModeDemoData
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay

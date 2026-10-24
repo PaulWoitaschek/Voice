@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.AudiobookshelfFeatureFlagQualifier
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.FeedbackLinks
 import voice.core.common.MainScope
 import voice.core.data.GridMode
-import voice.core.data.KioskModeDemoData
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
 import voice.core.data.folders.AudiobookFolders
@@ -36,10 +36,9 @@ import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.data.store.ThemeModeStore
 import voice.core.data.supporter.SupporterStatus
 import voice.core.documentfile.nameWithoutExtension
-import voice.core.featureflag.AudiobookshelfFeatureFlagQualifier
 import voice.core.featureflag.FeatureFlag
-import voice.core.featureflag.KioskModeFeatureFlagQualifier
-import voice.core.featureflag.SupportDevelopmentFeatureFlagQualifier
+import voice.core.kioskmode.KioskModeDemoData
+import voice.core.kioskmode.KioskModeFeatureFlagQualifier
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination

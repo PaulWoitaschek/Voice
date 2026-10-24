@@ -13,4 +13,5 @@ dependencies {
   implementation(projects.navigation)
   implementation(projects.core.data.api)
   implementation(projects.core.featureflag)
+  implementation(projects.core.kioskmode)
 }

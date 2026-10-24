@@ -23,7 +23,6 @@ import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.GridMode
-import voice.core.data.KioskModeDemoData
 import voice.core.data.ThemeColorScheme
 import voice.core.data.ThemeMode
 import voice.core.data.folders.AudiobookFolders
@@ -34,6 +33,7 @@ import voice.core.data.supporter.SupporterBadge
 import voice.core.data.supporter.SupporterStatus
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.kioskmode.KioskModeDemoData
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination

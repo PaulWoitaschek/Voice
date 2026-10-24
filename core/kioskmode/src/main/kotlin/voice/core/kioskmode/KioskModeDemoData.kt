@@ -1,12 +1,14 @@
-package voice.core.data
+package voice.core.kioskmode
 
-public object KioskModeDemoData {
-  public const val ECHOES_COVER_URL: String = "https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/artwork/demo-data/echoes.webp"
-  public const val BOOKSHOP_COVER_URL: String =
+import voice.core.data.BookId
+
+object KioskModeDemoData {
+  const val ECHOES_COVER_URL: String = "https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/artwork/demo-data/echoes.webp"
+  const val BOOKSHOP_COVER_URL: String =
     "https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/artwork/demo-data/bookshop.webp"
-  public const val COVER_URL: String = ECHOES_COVER_URL
+  const val COVER_URL: String = ECHOES_COVER_URL
 
-  public val echoesOfTomorrow: DemoAudiobook = DemoAudiobook(
+  val echoesOfTomorrow: DemoAudiobook = DemoAudiobook(
     id = BookId("echoes_of_tomorrow"),
     title = "Echoes of Tomorrow",
     author = "Daniel Hartwell",
@@ -24,7 +26,7 @@ public object KioskModeDemoData {
     coverUrl = ECHOES_COVER_URL,
   )
 
-  public val bookshopOnMapleStreet: DemoAudiobook = DemoAudiobook(
+  val bookshopOnMapleStreet: DemoAudiobook = DemoAudiobook(
     id = BookId("the_bookshop_on_maple_street"),
     title = "The Bookshop on Maple Street",
     author = "Lena Morgan",
@@ -41,7 +43,7 @@ public object KioskModeDemoData {
     ),
     coverUrl = BOOKSHOP_COVER_URL,
   )
-  public val beyondTheHorizon: DemoAudiobook = DemoAudiobook(
+  val beyondTheHorizon: DemoAudiobook = DemoAudiobook(
     id = BookId("beyond_the_horizon"),
     title = "Beyond the Horizon",
     author = "Alexander Reeves",
@@ -58,14 +60,14 @@ public object KioskModeDemoData {
     ),
     coverUrl = "https://raw.githubusercontent.com/PaulWoitaschek/Voice/main/artwork/demo-data/horizon.webp",
   )
-  public val demoAudiobooks: List<DemoAudiobook> = listOf(
+  val demoAudiobooks: List<DemoAudiobook> = listOf(
     echoesOfTomorrow,
     bookshopOnMapleStreet,
     beyondTheHorizon,
   )
 
-  public val currentlyPlaying: DemoAudiobook = echoesOfTomorrow
-  public val bookmarkScreen: DemoBookmarkScreen = DemoBookmarkScreen(
+  val currentlyPlaying: DemoAudiobook = echoesOfTomorrow
+  val bookmarkScreen: DemoBookmarkScreen = DemoBookmarkScreen(
     bookId = BookId("echoes_of_tomorrow"),
     title = "Bookmarks",
     items = listOf(
@@ -76,32 +78,32 @@ public object KioskModeDemoData {
     ),
   )
 
-  public val currentlyPlayingBook: DemoAudiobook = demoAudiobooks.single { it.id == currentlyPlaying.id }
+  val currentlyPlayingBook: DemoAudiobook = demoAudiobooks.single { it.id == currentlyPlaying.id }
 
-  public val folderNames: List<String> = listOf("Audiobooks", "Sci-Fi", "Non-Fiction")
+  val folderNames: List<String> = listOf("Audiobooks", "Sci-Fi", "Non-Fiction")
 }
 
-public data class DemoAudiobook(
-  public val id: BookId,
-  public val title: String,
-  public val author: String,
-  public val genre: String,
-  public val duration: String,
-  public val progress: Int,
-  public val chapter: String,
-  public val currentPosition: String,
-  public val remaining: String,
-  public val bookmarks: List<DemoBookmark>,
-  public val coverUrl: String,
+data class DemoAudiobook(
+  val id: BookId,
+  val title: String,
+  val author: String,
+  val genre: String,
+  val duration: String,
+  val progress: Int,
+  val chapter: String,
+  val currentPosition: String,
+  val remaining: String,
+  val bookmarks: List<DemoBookmark>,
+  val coverUrl: String,
 )
 
-public data class DemoBookmark(
-  public val title: String,
-  public val timestamp: String,
+data class DemoBookmark(
+  val title: String,
+  val timestamp: String,
 )
 
-public data class DemoBookmarkScreen(
-  public val bookId: BookId,
-  public val title: String,
-  public val items: List<DemoBookmark>,
+data class DemoBookmarkScreen(
+  val bookId: BookId,
+  val title: String,
+  val items: List<DemoBookmark>,
 )

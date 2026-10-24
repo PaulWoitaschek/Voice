@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.map
 import voice.core.data.store.SupporterStatusStore
 import voice.core.data.supporter.SupporterStatus
 import voice.core.featureflag.FeatureFlag
-import voice.core.featureflag.SupporterNoteFeatureFlagQualifier
 import voice.features.support.SupportViewState.Action
 import voice.features.support.SupportViewState.Content
 import voice.navigation.Navigator
