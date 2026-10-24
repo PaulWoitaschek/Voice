@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">தற்போதைய அத்தியாயம்</string>
     <string name="playback.chapter.next">அடுத்த அத்தியாயம்</string>
     <string name="playback.chapter.previous">முந்தைய அத்தியாயம்</string>
+    <string name="playback.chapter.unnamed">அத்தியாயம் %1$d</string>
     <string name="playback.chapters.title">அத்தியாயங்கள்</string>
     <string name="playback.jump_back">%1$s-க்குத் திரும்பு</string>
     <string name="playback.jump_back.chapter">அத். %1$d · %2$s-க்குத் திரும்பு</string>

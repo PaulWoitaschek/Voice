@@ -330,6 +330,7 @@
     <string name="playback.chapter.current.content_description">פרק נוכחי</string>
     <string name="playback.chapter.next">רצועה הבאה</string>
     <string name="playback.chapter.previous">רצועה קודמת</string>
+    <string name="playback.chapter.unnamed">פרק %1$d</string>
     <string name="playback.chapters.title">פרקים</string>
     <string name="playback.jump_back">חזרה ל-%1$s</string>
     <string name="playback.jump_back.chapter">חזרה לפרק %1$d · %2$s</string>

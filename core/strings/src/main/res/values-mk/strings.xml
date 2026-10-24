@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Тековно поглавје</string>
     <string name="playback.chapter.next">Следно поглавје</string>
     <string name="playback.chapter.previous">Претходно поглавје</string>
+    <string name="playback.chapter.unnamed">Поглавје %1$d</string>
     <string name="playback.chapters.title">Поглавја</string>
     <string name="playback.jump_back">Назад на %1$s</string>
     <string name="playback.jump_back.chapter">Назад на погл. %1$d · %2$s</string>

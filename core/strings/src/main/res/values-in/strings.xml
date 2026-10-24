@@ -296,6 +296,7 @@
     <string name="playback.chapter.current.content_description">Bab saat ini</string>
     <string name="playback.chapter.next">Trek selanjutnya</string>
     <string name="playback.chapter.previous">Trek sebelumnya</string>
+    <string name="playback.chapter.unnamed">Bab %1$d</string>
     <string name="playback.chapters.title">Bab</string>
     <string name="playback.jump_back">Kembali ke %1$s</string>
     <string name="playback.jump_back.chapter">Kembali ke Bab %1$d · %2$s</string>

@@ -347,6 +347,7 @@
     <string name="playback.chapter.current.content_description">Aktualny rozdział</string>
     <string name="playback.chapter.next">Następna ścieżka</string>
     <string name="playback.chapter.previous">Poprzednia ścieżka</string>
+    <string name="playback.chapter.unnamed">Rozdział %1$d</string>
     <string name="playback.chapters.title">Rozdziały</string>
     <string name="playback.jump_back">Wróć do %1$s</string>
     <string name="playback.jump_back.chapter">Wróć do rozdz. %1$d · %2$s</string>

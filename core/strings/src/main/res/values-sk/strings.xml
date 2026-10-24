@@ -347,6 +347,7 @@
     <string name="playback.chapter.current.content_description">Aktuálna kapitola</string>
     <string name="playback.chapter.next">Nasledujúca skladba</string>
     <string name="playback.chapter.previous">Predchádzajúca skladba</string>
+    <string name="playback.chapter.unnamed">Kapitola %1$d</string>
     <string name="playback.chapters.title">Kapitoly</string>
     <string name="playback.jump_back">Späť na %1$s</string>
     <string name="playback.jump_back.chapter">Späť na kap. %1$d · %2$s</string>

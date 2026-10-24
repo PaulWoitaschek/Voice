@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">فصل فعلی</string>
     <string name="playback.chapter.next">تراک بعدی</string>
     <string name="playback.chapter.previous">تراک قبلی</string>
+    <string name="playback.chapter.unnamed">فصل %1$d</string>
     <string name="playback.chapters.title">فصل‌ها</string>
     <string name="playback.jump_back">بازگشت به %1$s</string>
     <string name="playback.jump_back.chapter">بازگشت به فصل %1$d · %2$s</string>

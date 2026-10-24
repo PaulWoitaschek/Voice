@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Aktuellt kapitel</string>
     <string name="playback.chapter.next">Nästa spår</string>
     <string name="playback.chapter.previous">Föregående spår</string>
+    <string name="playback.chapter.unnamed">Kapitel %1$d</string>
     <string name="playback.chapters.title">Kapitel</string>
     <string name="playback.jump_back">Tillbaka till %1$s</string>
     <string name="playback.jump_back.chapter">Tillbaka till kap. %1$d · %2$s</string>

@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Şu anki bölüm</string>
     <string name="playback.chapter.next">Sonraki parça</string>
     <string name="playback.chapter.previous">Önceki parça</string>
+    <string name="playback.chapter.unnamed">Bölüm %1$d</string>
     <string name="playback.chapters.title">Bölümler</string>
     <string name="playback.jump_back">%1$s konumuna dön</string>
     <string name="playback.jump_back.chapter">Böl. %1$d · %2$s konumuna dön</string>

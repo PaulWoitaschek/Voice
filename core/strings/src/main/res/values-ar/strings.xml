@@ -381,6 +381,7 @@
     <string name="playback.chapter.current.content_description">الفصل الحالي</string>
     <string name="playback.chapter.next">المسار التالي</string>
     <string name="playback.chapter.previous">المسار السابق</string>
+    <string name="playback.chapter.unnamed">الفصل %1$d</string>
     <string name="playback.chapters.title">الفصول</string>
     <string name="playback.jump_back">العودة إلى %1$s</string>
     <string name="playback.jump_back.chapter">العودة إلى الفصل %1$d · %2$s</string>

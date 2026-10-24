@@ -347,6 +347,7 @@
     <string name="playback.chapter.current.content_description">Текущая глава</string>
     <string name="playback.chapter.next">Следующий файл</string>
     <string name="playback.chapter.previous">Предыдущий файл</string>
+    <string name="playback.chapter.unnamed">Глава %1$d</string>
     <string name="playback.chapters.title">Главы</string>
     <string name="playback.jump_back">Вернуться к %1$s</string>
     <string name="playback.jump_back.chapter">Вернуться к гл. %1$d · %2$s</string>
