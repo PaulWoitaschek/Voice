@@ -23,4 +23,13 @@ class AppInfoProviderImpl(private val application: Application) : AppInfoProvide
     }
     Instant.fromEpochMilliseconds(packageInfo.firstInstallTime)
   }
+  override val installer: String? by lazy {
+    val packageManager = application.packageManager
+    if (Build.VERSION.SDK_INT >= 30) {
+      packageManager.getInstallSourceInfo(application.packageName).installingPackageName
+    } else {
+      @Suppress("DEPRECATION")
+      packageManager.getInstallerPackageName(application.packageName)
+    }
+  }
 }
