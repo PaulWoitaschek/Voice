@@ -24,20 +24,10 @@ class FeatureFlagFactory(
   private val scope: CoroutineScope,
 ) {
 
-  private var overrides: Map<String, FeatureFlagOverride>? = null
-
-  init {
-    scope.launch {
-      overridesStore.data.collect {
-        overrides = it
-      }
-    }
-  }
-
-  private fun overrides(): Map<String, FeatureFlagOverride> {
-    return overrides ?: runBlocking {
-      overridesStore.data.first()
-    }
+  // Read before anything collects the store on the main thread. A first read started there holds
+  // DataStore's lock until main is free again, so get() blocking main would wait for it forever.
+  private var overrides: Map<String, FeatureFlagOverride> = runBlocking {
+    overridesStore.data.first()
   }
 
   fun boolean(
@@ -116,7 +106,7 @@ class FeatureFlagFactory(
       override val description: String get() = description
 
       override fun get(): T {
-        return overrides()[key]?.let(getOverrideValue) ?: readRemoteConfig()
+        return overrides[key]?.let(getOverrideValue) ?: readRemoteConfig()
       }
 
       override val type: KClass<T>
@@ -124,7 +114,7 @@ class FeatureFlagFactory(
 
       override fun overwrite(value: T) {
         scope.launch {
-          overridesStore.updateData {
+          overrides = overridesStore.updateData {
             it + (key to createOverride(value))
           }
         }
@@ -132,7 +122,7 @@ class FeatureFlagFactory(
 
       override fun clearOverwrite() {
         scope.launch {
-          overridesStore.updateData { overrides ->
+          overrides = overridesStore.updateData { overrides ->
             overrides.toMutableMap().also {
               it.remove(key)
             }
