@@ -26,14 +26,10 @@ changelog.
 
 ## Images
 
-Put the images in a table right under `## What's New`, at most four in a row, each with a short caption:
+A section can show its change with images, right under its heading, on one line:
 
 ```html
-<table>
-  <tr>
-    <td align="center" width="33%"><img src="…" alt="Caption"><br><sub>Caption</sub></td>
-  </tr>
-</table>
+<img src="…" alt="…" width="250"> <img src="…" alt="…" width="250">
 ```
 
 Take them from the pull requests when they show the change as it ships: the after image, on a phone, not outdated by
