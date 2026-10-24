@@ -9,4 +9,6 @@ Search the existing [issues](https://github.com/PaulWoitaschek/Voice/issues) and
 
 ## Pull requests
 
-Voice only accepts pull requests I asked for. I don't have the time to review outside code, and it's fairer to say so than to let pull requests go stale.
+Pull requests only on request. I don't have the time to review outside code, and it's fairer to say so than to let pull requests go stale.
+
+If I asked for one in an issue or discussion, link to my request in the pull request. I close the others without review.
