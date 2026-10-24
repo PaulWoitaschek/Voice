@@ -2,9 +2,9 @@ package voice.features.bookmark
 
 import voice.core.data.Bookmark
 import voice.core.data.ChapterId
-import voice.core.data.KioskModeDemoData
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
+import voice.core.kioskmode.KioskModeDemoData
 import voice.core.ui.BookBarPin
 import voice.features.bookmark.history.HistoryDay
 import voice.features.bookmark.history.HistoryEvent

@@ -16,7 +16,7 @@ import voice.core.data.folders.FolderType
 import voice.core.documentfile.nameFromPath
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.featureflag.FeatureFlag
-import voice.core.featureflag.KioskModeFeatureFlagQualifier
+import voice.core.kioskmode.KioskModeFeatureFlagQualifier
 import voice.core.scanner.MediaScanTrigger
 import voice.navigation.Destination
 import voice.navigation.Navigator

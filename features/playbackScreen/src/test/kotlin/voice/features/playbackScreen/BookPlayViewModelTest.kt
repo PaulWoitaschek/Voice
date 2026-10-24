@@ -28,12 +28,12 @@ import voice.core.data.BookMetadata
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
-import voice.core.data.KioskModeDemoData
 import voice.core.data.ListeningEvent
 import voice.core.data.MarkData
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.kioskmode.KioskModeDemoData
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController

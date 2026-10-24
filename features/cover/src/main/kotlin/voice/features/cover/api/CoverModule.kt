@@ -12,8 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
-import voice.core.featureflag.FeatureFlag
-import voice.core.featureflag.UserAgentFeatureFlagQualifier
+import voice.core.remoteconfig.api.RemoteConfig
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -21,17 +20,14 @@ object CoverModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  fun client(
-    @UserAgentFeatureFlagQualifier
-    userAgent: FeatureFlag<String>,
-  ): OkHttpClient = OkHttpClient.Builder()
+  fun client(remoteConfig: RemoteConfig): OkHttpClient = OkHttpClient.Builder()
     .addInterceptor { chain ->
       chain.proceed(
         chain.request()
           .newBuilder()
           .addHeader(
             name = "User-Agent",
-            value = userAgent.get(),
+            value = remoteConfig.string(key = "user_agent", defaultValue = "Mozilla/5.0"),
           )
           .build(),
       )

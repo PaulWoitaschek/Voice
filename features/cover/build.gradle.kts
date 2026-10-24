@@ -12,7 +12,7 @@ dependencies {
   implementation(projects.core.scanner)
   implementation(projects.core.strings)
   implementation(projects.core.ui)
-  implementation(projects.core.featureflag)
+  implementation(projects.core.remoteconfig.api)
 
   implementation(libs.bundles.retrofit)
   implementation(libs.okhttp)

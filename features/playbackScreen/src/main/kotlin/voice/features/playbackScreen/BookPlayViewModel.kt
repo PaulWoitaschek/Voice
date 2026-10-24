@@ -22,7 +22,6 @@ import voice.core.common.MainScope
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Bookmark
-import voice.core.data.KioskModeDemoData
 import voice.core.data.ListeningEvent
 import voice.core.data.durationMs
 import voice.core.data.markForPosition
@@ -33,10 +32,11 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
-import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
-import voice.core.featureflag.KioskModeFeatureFlagQualifier
+import voice.core.kioskmode.KioskModeDemoData
+import voice.core.kioskmode.KioskModeFeatureFlagQualifier
 import voice.core.playback.CurrentBookResolver
+import voice.core.playback.ExperimentalPlaybackPersistenceQualifier
 import voice.core.playback.PlayerController
 import voice.core.playback.history.Jump
 import voice.core.playback.history.ListeningHistoryRecorder

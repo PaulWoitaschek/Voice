@@ -27,10 +27,10 @@ import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.HistoryTabOpenStore
 import voice.core.data.store.LastPlaybackSpeedStore
-import voice.core.featureflag.ExperimentalPlaybackPersistenceQualifier
 import voice.core.featureflag.FeatureFlag
-import voice.core.featureflag.KioskModeFeatureFlagQualifier
+import voice.core.kioskmode.KioskModeFeatureFlagQualifier
 import voice.core.playback.CurrentBookResolver
+import voice.core.playback.ExperimentalPlaybackPersistenceQualifier
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager

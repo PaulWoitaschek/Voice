@@ -145,6 +145,7 @@ dependencies {
   implementation(projects.core.playback)
   implementation(projects.core.scanner)
   implementation(projects.core.featureflag)
+  implementation(projects.core.kioskmode)
   implementation(projects.core.initializer)
   implementation(projects.features.playbackScreen)
   implementation(projects.navigation)
