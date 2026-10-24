@@ -29,6 +29,8 @@ import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
+import voice.core.kioskmode.KioskModeFeatureFlag
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
@@ -39,6 +41,7 @@ import voice.core.ui.GridCount
 import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.features.bookOverview.survey.Survey
+import voice.features.bookOverview.survey.SurveyUrlFeatureFlag
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import java.time.Clock
@@ -89,9 +92,9 @@ class BookOverviewViewModelTest {
       deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
         every { hasBug } returns MutableStateFlow(false)
       },
-      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
-      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
-      kioskModeFeatureFlag = MemoryFeatureFlag(false),
+      folderPickerInSettingsFeatureFlag = FolderPickerInSettingsFeatureFlag(MemoryFeatureFlag(false)),
+      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
       audiobookFolders = audiobookFolders,
@@ -152,9 +155,9 @@ class BookOverviewViewModelTest {
       deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
         every { hasBug } returns MutableStateFlow(false)
       },
-      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
-      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
-      kioskModeFeatureFlag = MemoryFeatureFlag(true),
+      folderPickerInSettingsFeatureFlag = FolderPickerInSettingsFeatureFlag(MemoryFeatureFlag(false)),
+      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(true)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
       audiobookFolders = audiobookFolders,
@@ -487,9 +490,9 @@ class BookOverviewViewModelTest {
       deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
         every { hasBug } returns MutableStateFlow(false)
       },
-      folderPickerInSettingsFeatureFlag = folderPickerInSettingsFeatureFlag,
-      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
-      kioskModeFeatureFlag = MemoryFeatureFlag(false),
+      folderPickerInSettingsFeatureFlag = FolderPickerInSettingsFeatureFlag(folderPickerInSettingsFeatureFlag),
+      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
       audiobookFolders = audiobookFolders,
@@ -500,7 +503,7 @@ class BookOverviewViewModelTest {
 
   private fun survey(remoteUrl: String = ""): Survey {
     return Survey(
-      surveyUrlFeatureFlag = MemoryFeatureFlag(remoteUrl),
+      surveyUrlFeatureFlag = SurveyUrlFeatureFlag(MemoryFeatureFlag(remoteUrl)),
       handledSurveysStore = MemoryDataStore(emptyMap()),
       localSurvey = mockk {
         coEvery { url() } returns null

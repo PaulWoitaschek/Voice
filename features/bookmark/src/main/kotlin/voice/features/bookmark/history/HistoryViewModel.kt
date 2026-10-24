@@ -23,7 +23,7 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.FeatureFlag
-import voice.core.kioskmode.KioskModeFeatureFlagQualifier
+import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.features.bookmark.BookIndex
@@ -42,8 +42,7 @@ class HistoryViewModel(
   private val navigator: Navigator,
   private val clock: Clock,
   private val dispatcherProvider: DispatcherProvider,
-  @KioskModeFeatureFlagQualifier
-  private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
+  private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   @Assisted
   private val bookId: BookId,
 ) {

@@ -104,7 +104,7 @@ class SurveyTest {
     installer: String? = "com.android.vending",
   ): Survey {
     return Survey(
-      surveyUrlFeatureFlag = MemoryFeatureFlag(remoteUrl),
+      surveyUrlFeatureFlag = SurveyUrlFeatureFlag(MemoryFeatureFlag(remoteUrl)),
       handledSurveysStore = store,
       localSurvey = mockk {
         coEvery { url() } returns localUrl

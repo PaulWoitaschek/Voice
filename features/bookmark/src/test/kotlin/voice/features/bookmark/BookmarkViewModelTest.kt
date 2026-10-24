@@ -25,6 +25,8 @@ import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ListeningEvent
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.kioskmode.KioskModeFeatureFlag
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
@@ -78,8 +80,10 @@ class BookmarkViewModelTest {
     navigator = navigator,
     clock = clock,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
-    kioskModeFeatureFlag = MemoryFeatureFlag(false),
-    experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),
+    kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
+    experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
+      MemoryFeatureFlag(experimentalPlaybackPersistence),
+    ),
     lastPlaybackSpeedStore = MemoryDataStore(lastPlaybackSpeed),
     historyTabOpenStore = historyTabOpenStore,
     bookId = book.id,

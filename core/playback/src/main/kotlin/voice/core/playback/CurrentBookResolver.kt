@@ -18,8 +18,7 @@ class CurrentBookResolver(
   private val playerController: PlayerController,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
-  @ExperimentalPlaybackPersistenceQualifier
-  private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
+  private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
 ) {
 
   suspend fun currentBook(): Book? {

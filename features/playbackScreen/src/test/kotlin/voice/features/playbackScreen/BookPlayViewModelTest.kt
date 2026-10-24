@@ -34,7 +34,9 @@ import voice.core.data.repo.BookmarkRepo
 import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
+import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.CurrentBookResolver
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.history.ListeningHistoryRecorder
@@ -126,8 +128,8 @@ class BookPlayViewModelTest {
     seekTimeStore = MemoryDataStore(20),
     bookId = book.id,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
-    experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
-    kioskModeFeatureFlag = MemoryFeatureFlag(false),
+    experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
+    kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
     historyRecorder = historyRecorder,
     clock = clock,
     serverLibrary = serverLibrary,
@@ -508,8 +510,10 @@ class BookPlayViewModelTest {
       seekTimeStore = MemoryDataStore(20),
       bookId = book.id,
       dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
-      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),
-      kioskModeFeatureFlag = MemoryFeatureFlag(kioskMode),
+      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
+        MemoryFeatureFlag(experimentalPlaybackPersistence),
+      ),
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(kioskMode)),
       historyRecorder = historyRecorder,
       clock = clock,
       serverLibrary = serverLibrary,

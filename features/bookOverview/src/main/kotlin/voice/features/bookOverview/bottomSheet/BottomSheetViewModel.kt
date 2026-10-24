@@ -21,7 +21,7 @@ import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.featureflag.FeatureFlag
-import voice.core.playback.ExperimentalPlaybackPersistenceQualifier
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.features.bookOverview.di.BookActionsScope
@@ -39,8 +39,7 @@ class BottomSheetViewModel(
   private val serverLibrary: ServerLibrary,
   private val navigator: Navigator,
   private val playerController: PlayerController,
-  @ExperimentalPlaybackPersistenceQualifier
-  private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
+  private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
 ) {
 
   private val scope = MainScope()

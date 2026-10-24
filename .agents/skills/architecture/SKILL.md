@@ -41,9 +41,10 @@ Convention plugins (`voice.library`, `voice.app`, `voice.compose`, `voice.ktlint
 
 - Constructor injection with `@Inject`; bind implementations with `@ContributesBinding(AppScope::class)`.
 - Providers go in `@BindingContainer @ContributesTo(AppScope::class) object …`.
-- A feature flag lives in the module that reads it, with its own qualifier, and is contributed `@IntoSet` to
-  `Set<FeatureFlag<*>>` for the developer settings (e.g. `SurveyFeatureFlags`). A flag read by several features goes
-  in the core module they share. `:core:featureflag` holds no flags.
+- A feature flag is a class in the module that reads it, delegating to `FeatureFlagFactory` and contributed with
+  `@ContributesIntoSet` to `Set<FeatureFlag<*>>` for the developer settings (e.g. `SurveyUrlFeatureFlag`). Readers
+  inject the class; tests wrap a `MemoryFeatureFlag`. A flag read by several features goes in the core module they
+  share. `:core:featureflag` holds no flags.
 - The graph is assembled in `app/src/main/kotlin/voice/app/di`.
 
 ## Navigation

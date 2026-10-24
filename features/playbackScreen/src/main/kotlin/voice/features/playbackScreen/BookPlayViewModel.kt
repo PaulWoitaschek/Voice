@@ -34,9 +34,9 @@ import voice.core.data.store.SeekTimeStore
 import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
-import voice.core.kioskmode.KioskModeFeatureFlagQualifier
+import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.CurrentBookResolver
-import voice.core.playback.ExperimentalPlaybackPersistenceQualifier
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.history.Jump
 import voice.core.playback.history.ListeningHistoryRecorder
@@ -78,10 +78,8 @@ class BookPlayViewModel(
   private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
   @SeekTimeStore
   private val seekTimeStore: DataStore<Int>,
-  @ExperimentalPlaybackPersistenceQualifier
-  private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
-  @KioskModeFeatureFlagQualifier
-  private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
+  private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
+  private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   private val historyRecorder: ListeningHistoryRecorder,
   private val clock: Clock,
   private val serverLibrary: ServerLibrary,

@@ -19,6 +19,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import voice.core.audiobookshelf.AudiobookshelfFeatureFlag
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
@@ -34,6 +35,7 @@ import voice.core.data.supporter.SupporterStatus
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
+import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
@@ -105,16 +107,16 @@ class SettingsViewModelTest {
     sleepTimerPreferenceStore = sleepTimerPreferenceStore,
     analyticsConsentStore = analyticsConsentStore,
     gridCount = gridCount,
-    kioskModeFeatureFlag = kioskModeFeatureFlag,
+    kioskModeFeatureFlag = KioskModeFeatureFlag(kioskModeFeatureFlag),
     developerMenuUnlockedStore = developerMenuUnlockedStore,
     dynamicColorAvailability = dynamicColorAvailability,
     audiobookFolders = audiobookFolders,
-    supportDevelopmentFeatureFlag = supportDevelopmentFeatureFlag,
+    supportDevelopmentFeatureFlag = SupportDevelopmentFeatureFlag(supportDevelopmentFeatureFlag),
     supporterStatusStore = supporterStatusStore,
     clock = Clock.fixed(JavaInstant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
     serverLibrary = serverLibrary,
-    audiobookshelfFeatureFlag = audiobookshelfFeatureFlag,
+    audiobookshelfFeatureFlag = AudiobookshelfFeatureFlag(audiobookshelfFeatureFlag),
   )
 
   @Test

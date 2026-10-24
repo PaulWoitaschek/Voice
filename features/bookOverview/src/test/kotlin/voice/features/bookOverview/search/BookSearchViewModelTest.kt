@@ -26,6 +26,8 @@ import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.RecentBookSearchRepo
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.kioskmode.KioskModeFeatureFlag
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
@@ -322,8 +324,10 @@ class BookSearchViewModelTest {
       playerController = playerController,
       playStateManager = PlayStateManager(),
       currentBookStore = currentBookStore,
-      kioskModeFeatureFlag = MemoryFeatureFlag(false),
-      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
+      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
+        MemoryFeatureFlag(experimentalPlaybackPersistence),
+      ),
       lastResults = lastResults,
       dispatcherProvider = dispatcherProvider,
     )

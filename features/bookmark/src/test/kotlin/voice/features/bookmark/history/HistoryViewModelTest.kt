@@ -21,6 +21,7 @@ import voice.core.data.ListeningEvent.Type
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.features.bookmark.MemoryDataStore
@@ -68,7 +69,7 @@ class HistoryViewModelTest {
     navigator = navigator,
     clock = clock,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
-    kioskModeFeatureFlag = MemoryFeatureFlag(false),
+    kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
     bookId = bookId,
   )
 

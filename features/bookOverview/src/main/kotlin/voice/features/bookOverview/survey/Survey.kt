@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.combine
 import voice.core.analytics.api.Analytics
 import voice.core.common.AppInfoProvider
 import voice.core.data.store.HandledSurveysStore
-import voice.core.featureflag.FeatureFlag
 import java.net.URLEncoder
 import java.time.Clock
 import java.time.LocalDate
@@ -16,8 +15,7 @@ import kotlin.time.toJavaInstant
 
 @Inject
 class Survey(
-  @SurveyUrlFeatureFlagQualifier
-  private val surveyUrlFeatureFlag: FeatureFlag<String>,
+  private val surveyUrlFeatureFlag: SurveyUrlFeatureFlag,
   @HandledSurveysStore
   private val handledSurveysStore: DataStore<Map<String, Long>>,
   private val localSurvey: LocalSurvey,

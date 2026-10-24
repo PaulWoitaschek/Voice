@@ -16,7 +16,7 @@ import voice.core.data.folders.FolderType
 import voice.core.documentfile.nameFromPath
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.featureflag.FeatureFlag
-import voice.core.kioskmode.KioskModeFeatureFlagQualifier
+import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.scanner.MediaScanTrigger
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -27,8 +27,7 @@ class FolderPickerViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
   private val mediaScanTrigger: MediaScanTrigger,
-  @KioskModeFeatureFlagQualifier
-  private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
+  private val kioskModeFeatureFlag: KioskModeFeatureFlag,
 ) {
 
   @Composable
