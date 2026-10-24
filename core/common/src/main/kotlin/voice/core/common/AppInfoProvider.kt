@@ -7,8 +7,6 @@ interface AppInfoProvider {
 
   val flavor: String
 
-  val buildType: String
-
   val analyticsIncluded: Boolean
 
   val supportDevelopmentIncluded: Boolean

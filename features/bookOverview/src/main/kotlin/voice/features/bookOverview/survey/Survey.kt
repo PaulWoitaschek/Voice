@@ -12,6 +12,8 @@ import voice.core.featureflag.SurveyUrlFeatureFlagQualifier
 import java.net.URLEncoder
 import java.time.Clock
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import kotlin.time.toJavaInstant
 
 @Inject
 class Survey(
@@ -39,10 +41,11 @@ class Survey(
 
   suspend fun open(url: String): String {
     handled(url, action = "open")
+    // named like the hidden fields of the Tally forms, which fill them from the query
     val params = listOf(
-      "version" to appInfoProvider.versionName,
-      "flavor" to appInfoProvider.flavor,
-      "build_type" to appInfoProvider.buildType,
+      "app_version" to appInfoProvider.versionName,
+      "source" to appInfoProvider.flavor,
+      "days_installed" to ChronoUnit.DAYS.between(appInfoProvider.installTime.toJavaInstant(), clock.instant()).toString(),
     ).joinToString(separator = "&") { (key, value) ->
       "$key=${URLEncoder.encode(value, Charsets.UTF_8)}"
     }

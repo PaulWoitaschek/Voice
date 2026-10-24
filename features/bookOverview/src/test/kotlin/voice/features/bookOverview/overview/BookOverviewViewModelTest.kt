@@ -387,7 +387,7 @@ class BookOverviewViewModelTest {
   }
 
   @Test
-  fun `taking the survey opens it with the version and build and hides the card`() = runTest {
+  fun `taking the survey opens it with the app info and hides the card`() = runTest {
     val navigator = mockk<Navigator>(relaxed = true)
     val viewModel = viewModel(books = listOf(book()), navigator = navigator, survey = survey(remoteUrl = SURVEY_URL))
 
@@ -403,7 +403,7 @@ class BookOverviewViewModelTest {
       assertEquals(expected = false, actual = expectMostRecentItem().showSurveyCard)
     }
     verify {
-      navigator.goTo(Destination.Website("$SURVEY_URL?version=1.2.3&flavor=free&build_type=release"))
+      navigator.goTo(Destination.Website("$SURVEY_URL?app_version=1.2.3&source=free&days_installed=14"))
     }
   }
 
@@ -509,7 +509,7 @@ class BookOverviewViewModelTest {
       appInfoProvider = mockk {
         every { versionName } returns "1.2.3"
         every { flavor } returns "free"
-        every { buildType } returns "release"
+        every { installTime } returns Instant.parse("2026-10-06T10:00:00Z")
       },
       analytics = mockk(relaxUnitFun = true),
     )

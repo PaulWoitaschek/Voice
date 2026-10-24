@@ -17,6 +17,7 @@ import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.toKotlinInstant
 
 class SurveyTest {
 
@@ -60,11 +61,11 @@ class SurveyTest {
   }
 
   @Test
-  fun `opening a survey adds the version and build and marks it handled today`() = runTest {
+  fun `opening a survey adds the app version, source and days installed and marks it handled today`() = runTest {
     val store = MemoryDataStore<Map<String, Long>>(emptyMap())
     val survey = survey(remoteUrl = REMOTE, store = store)
 
-    assertEquals("$REMOTE?version=1.2.3&flavor=play&build_type=release", survey.open(REMOTE))
+    assertEquals("$REMOTE?app_version=1.2.3&source=play&days_installed=14", survey.open(REMOTE))
     assertEquals(mapOf(REMOTE to today), store.data.first())
     verify { analytics.event("survey_card", mapOf("action" to "open")) }
   }
@@ -73,7 +74,7 @@ class SurveyTest {
   fun `opening a survey with a query keeps it`() = runTest {
     val survey = survey(remoteUrl = "$REMOTE?lang=de")
 
-    assertEquals("$REMOTE?lang=de&version=1.2.3&flavor=play&build_type=release", survey.open("$REMOTE?lang=de"))
+    assertEquals("$REMOTE?lang=de&app_version=1.2.3&source=play&days_installed=14", survey.open("$REMOTE?lang=de"))
   }
 
   @Test
@@ -104,7 +105,7 @@ class SurveyTest {
       appInfoProvider = mockk<AppInfoProvider> {
         every { versionName } returns "1.2.3"
         every { flavor } returns "play"
-        every { buildType } returns "release"
+        every { installTime } returns Instant.parse("2026-10-06T10:00:00Z").toKotlinInstant()
       },
       analytics = analytics,
     )
