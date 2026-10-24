@@ -33,10 +33,8 @@ class ReviewPromptController(
   private val appInfoProvider: AppInfoProvider,
   private val clock: Clock,
   private val analytics: Analytics,
-  @ReviewEnabledFeatureFlagQualifier
-  private val enabled: FeatureFlag<Boolean>,
-  @ReviewPromptForceFeatureFlagQualifier
-  private val force: FeatureFlag<Boolean>,
+  private val enabled: ReviewEnabledFeatureFlag,
+  private val force: ReviewPromptForceFeatureFlag,
   private val scope: CoroutineScope,
 ) {
 

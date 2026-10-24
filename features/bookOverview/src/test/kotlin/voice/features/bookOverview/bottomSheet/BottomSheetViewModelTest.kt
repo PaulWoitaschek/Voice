@@ -27,6 +27,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.features.bookOverview.book
@@ -231,7 +232,9 @@ class BottomSheetViewModelTest {
     serverLibrary = serverLibrary,
     navigator = navigator,
     playerController = playerController,
-    experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(experimentalPlaybackPersistence),
+    experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
+      MemoryFeatureFlag(experimentalPlaybackPersistence),
+    ),
   )
 
   private fun TestScope.viewModel(

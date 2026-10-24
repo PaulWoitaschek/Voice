@@ -27,8 +27,7 @@ class SupportViewModel(
   private val navigator: Navigator,
   @SupporterStatusStore
   private val supporterStatusStore: DataStore<SupporterStatus>,
-  @SupporterNoteFeatureFlagQualifier
-  private val supporterNoteFeatureFlag: FeatureFlag<String>,
+  private val supporterNoteFeatureFlag: SupporterNoteFeatureFlag,
   private val clock: Clock,
 ) : SupportListener {
 

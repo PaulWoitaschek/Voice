@@ -63,8 +63,8 @@ class ReviewPromptControllerTest {
     },
     clock = Clock.fixed(now, ZoneOffset.UTC),
     analytics = analytics,
-    enabled = enabled,
-    force = force,
+    enabled = ReviewEnabledFeatureFlag(enabled),
+    force = ReviewPromptForceFeatureFlag(force),
     scope = this,
   )
 

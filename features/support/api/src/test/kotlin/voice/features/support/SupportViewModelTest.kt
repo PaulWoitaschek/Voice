@@ -50,7 +50,7 @@ class SupportViewModelTest {
     backend = backend,
     navigator = navigator,
     supporterStatusStore = supporterStatusStore,
-    supporterNoteFeatureFlag = supporterNoteFeatureFlag,
+    supporterNoteFeatureFlag = SupporterNoteFeatureFlag(supporterNoteFeatureFlag),
     clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
   )
 

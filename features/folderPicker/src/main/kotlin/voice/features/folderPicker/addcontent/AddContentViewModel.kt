@@ -6,7 +6,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.launch
 import voice.core.analytics.api.Analytics
-import voice.core.audiobookshelf.AudiobookshelfFeatureFlagQualifier
+import voice.core.audiobookshelf.AudiobookshelfFeatureFlag
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -24,8 +24,7 @@ import voice.navigation.Origin
 class AddContentViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
-  @AudiobookshelfFeatureFlagQualifier
-  private val audiobookshelfFeatureFlag: FeatureFlag<Boolean>,
+  private val audiobookshelfFeatureFlag: AudiobookshelfFeatureFlag,
   private val serverLibrary: ServerLibrary,
   private val analytics: Analytics,
   dispatcherProvider: DispatcherProvider,

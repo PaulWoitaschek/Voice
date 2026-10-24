@@ -44,7 +44,7 @@ class CurrentBookResolverTest {
       },
       playerController = mockk(),
       currentBookStore = currentBookStore,
-      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(false),
+      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
     )
 
     assertEquals(expected = book, actual = resolver.currentBook())
@@ -66,7 +66,7 @@ class CurrentBookResolverTest {
         )
       },
       currentBookStore = currentBookStore,
-      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
+      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
     )
 
     assertEquals(expected = book.chapters.last().id, actual = resolver.currentBook()?.content?.currentChapter)
@@ -83,7 +83,7 @@ class CurrentBookResolverTest {
         coEvery { livePlaybackState(book.id) } returns null
       },
       currentBookStore = currentBookStore,
-      experimentalPlaybackPersistenceFeatureFlag = MemoryFeatureFlag(true),
+      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
     )
 
     assertEquals(expected = book, actual = resolver.currentBook())

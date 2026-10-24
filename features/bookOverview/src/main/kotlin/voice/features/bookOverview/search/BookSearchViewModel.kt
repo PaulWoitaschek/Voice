@@ -35,8 +35,8 @@ import voice.core.data.repo.RecentBookSearchRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
-import voice.core.kioskmode.KioskModeFeatureFlagQualifier
-import voice.core.playback.ExperimentalPlaybackPersistenceQualifier
+import voice.core.kioskmode.KioskModeFeatureFlag
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
@@ -64,10 +64,8 @@ class BookSearchViewModel(
   private val playStateManager: PlayStateManager,
   @CurrentBookStore
   private val currentBookStore: DataStore<BookId?>,
-  @KioskModeFeatureFlagQualifier
-  private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
-  @ExperimentalPlaybackPersistenceQualifier
-  private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
+  private val kioskModeFeatureFlag: KioskModeFeatureFlag,
+  private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
   private val lastResults: LastBookSearchResults,
   dispatcherProvider: DispatcherProvider,
 ) {

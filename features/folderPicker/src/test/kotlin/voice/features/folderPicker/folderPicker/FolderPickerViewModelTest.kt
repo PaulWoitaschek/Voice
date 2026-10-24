@@ -19,6 +19,7 @@ import voice.core.data.folders.DocumentFileWithUri
 import voice.core.data.folders.FolderType
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.scanner.MediaScanTrigger
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -41,7 +42,7 @@ class FolderPickerViewModelTest {
     audiobookFolders = audiobookFolders,
     navigator = navigator,
     mediaScanTrigger = mediaScanTrigger,
-    kioskModeFeatureFlag = MemoryFeatureFlag(false),
+    kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
   )
 
   private val fantasy = tree("primary:Audiobooks/Fantasy")

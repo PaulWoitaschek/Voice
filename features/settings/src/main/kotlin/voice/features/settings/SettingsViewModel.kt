@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import voice.core.audiobookshelf.AudiobookshelfFeatureFlagQualifier
+import voice.core.audiobookshelf.AudiobookshelfFeatureFlag
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
@@ -38,7 +38,7 @@ import voice.core.data.supporter.SupporterStatus
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
-import voice.core.kioskmode.KioskModeFeatureFlagQualifier
+import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.navigation.Destination
@@ -72,21 +72,18 @@ class SettingsViewModel(
   @AnalyticsConsentStore
   private val analyticsConsentStore: DataStore<Boolean>,
   private val gridCount: GridCount,
-  @KioskModeFeatureFlagQualifier
-  private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
+  private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   @DeveloperMenuUnlockedStore
   private val developerMenuUnlockedStore: DataStore<Boolean>,
   private val dynamicColorAvailability: DynamicColorAvailability,
   private val audiobookFolders: AudiobookFolders,
-  @SupportDevelopmentFeatureFlagQualifier
-  private val supportDevelopmentFeatureFlag: FeatureFlag<Boolean>,
+  private val supportDevelopmentFeatureFlag: SupportDevelopmentFeatureFlag,
   @SupporterStatusStore
   private val supporterStatusStore: DataStore<SupporterStatus>,
   private val clock: Clock,
   private val dispatcherProvider: DispatcherProvider,
   private val serverLibrary: ServerLibrary,
-  @AudiobookshelfFeatureFlagQualifier
-  private val audiobookshelfFeatureFlag: FeatureFlag<Boolean>,
+  private val audiobookshelfFeatureFlag: AudiobookshelfFeatureFlag,
 ) : SettingsListener {
 
   private val mainScope = MainScope(dispatcherProvider)

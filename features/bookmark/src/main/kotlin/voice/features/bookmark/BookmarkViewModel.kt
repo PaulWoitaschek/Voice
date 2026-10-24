@@ -28,9 +28,9 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.data.store.HistoryTabOpenStore
 import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.featureflag.FeatureFlag
-import voice.core.kioskmode.KioskModeFeatureFlagQualifier
+import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.CurrentBookResolver
-import voice.core.playback.ExperimentalPlaybackPersistenceQualifier
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
@@ -53,10 +53,8 @@ class BookmarkViewModel(
   private val navigator: Navigator,
   private val clock: Clock,
   dispatcherProvider: DispatcherProvider,
-  @KioskModeFeatureFlagQualifier
-  private val kioskModeFeatureFlag: FeatureFlag<Boolean>,
-  @ExperimentalPlaybackPersistenceQualifier
-  private val experimentalPlaybackPersistenceFeatureFlag: FeatureFlag<Boolean>,
+  private val kioskModeFeatureFlag: KioskModeFeatureFlag,
+  private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
   @LastPlaybackSpeedStore
   private val lastPlaybackSpeedStore: DataStore<Float>,
   @HistoryTabOpenStore
