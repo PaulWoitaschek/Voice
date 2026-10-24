@@ -31,6 +31,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -51,16 +52,17 @@ internal fun SkipButton(
   modifier: Modifier = Modifier,
 ) {
   val scope = rememberCoroutineScope()
+  val motionEnabled = (scope.coroutineContext[MotionDurationScale]?.scaleFactor ?: 1F) > 0F
   val haptics = LocalHapticFeedback.current
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
   val widthRatio by animateFloatAsState(
-    targetValue = if (pressed) 1.3F else 1F,
+    targetValue = if (pressed && motionEnabled) 1.3F else 1F,
     animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
     label = "skipWidth",
   )
   val cornerPercent by animateFloatAsState(
-    targetValue = if (pressed) 25F else 50F,
+    targetValue = if (pressed && motionEnabled) 25F else 50F,
     animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
     label = "skipCorner",
   )
