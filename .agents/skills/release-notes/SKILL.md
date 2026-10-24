@@ -32,9 +32,9 @@ A section can show its change with images, right under its heading, on one line:
 <img src="…" alt="…" width="250"> <img src="…" alt="…" width="250">
 ```
 
-Take them from the pull requests when they show the change as it ships: the after image, on a phone, not outdated by
-a later pull request. For a very important change without a fitting image, take one yourself with the emulator skill.
-`gh release edit` can't upload images, so attach it to that change's pull request with
+Take them from the pull requests when they show the change as it ships: the after image, on a phone with real books, not
+outdated by a later pull request. For a very important change without a fitting image, take one yourself with the
+emulator skill. `gh release edit` can't upload images, so attach it to that change's pull request with
 `gh pr edit <number> --attach ./image.png` and use the uploaded URL from its body.
 
 ## Updating the draft
