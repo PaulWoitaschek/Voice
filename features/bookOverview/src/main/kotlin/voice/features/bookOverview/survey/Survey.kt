@@ -47,7 +47,7 @@ class Survey(
       "source" to appInfoProvider.flavor,
       "days_installed" to ChronoUnit.DAYS.between(appInfoProvider.installTime.toJavaInstant(), clock.instant()).toString(),
     ).joinToString(separator = "&") { (key, value) ->
-      "$key=${URLEncoder.encode(value, Charsets.UTF_8)}"
+      "$key=${URLEncoder.encode(value, "UTF-8")}"
     }
     val separator = if ('?' in url) '&' else '?'
     return "$url$separator$params"
