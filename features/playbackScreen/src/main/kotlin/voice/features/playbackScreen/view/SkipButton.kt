@@ -5,13 +5,14 @@ package voice.features.playbackScreen.view
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -35,11 +36,11 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import voice.core.strings.R
 import voice.core.ui.icons.VoiceIcons
+import kotlin.math.roundToInt
 
 /** Pressing stretches the button, nudging its neighbours aside. */
 @Composable
@@ -48,19 +49,18 @@ internal fun SkipButton(
   seconds: Int,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
-  height: Dp = 76.dp,
 ) {
   val scope = rememberCoroutineScope()
   val haptics = LocalHapticFeedback.current
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
-  val width by animateDpAsState(
-    targetValue = if (pressed) height * 1.3F else height,
+  val widthRatio by animateFloatAsState(
+    targetValue = if (pressed) 1.3F else 1F,
     animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
     label = "skipWidth",
   )
-  val corner by animateDpAsState(
-    targetValue = if (pressed) height / 4 else height / 2,
+  val cornerPercent by animateFloatAsState(
+    targetValue = if (pressed) 25F else 50F,
     animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
     label = "skipCorner",
   )
@@ -79,8 +79,10 @@ internal fun SkipButton(
           nudge.animateTo(0F, spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMediumLow))
         }
       },
-      modifier = Modifier.size(width = width, height = height),
-      shape = RoundedCornerShape(corner),
+      modifier = Modifier
+        .fillMaxHeight()
+        .aspectRatio(widthRatio, matchHeightConstraintsFirst = true),
+      shape = RoundedCornerShape(percent = cornerPercent.roundToInt()),
       color = MaterialTheme.colorScheme.secondaryContainer,
       contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
       interactionSource = interactionSource,
@@ -88,7 +90,8 @@ internal fun SkipButton(
       Box(contentAlignment = Alignment.Center) {
         Icon(
           modifier = Modifier
-            .size(height * 0.5F)
+            .fillMaxHeight(0.5F)
+            .aspectRatio(1F, matchHeightConstraintsFirst = true)
             .graphicsLayer {
               rotationZ = nudge.value * if (forward) 40F else -40F
               // the same circular arrows media3 uses in the notification, forward is the mirrored replay symbol

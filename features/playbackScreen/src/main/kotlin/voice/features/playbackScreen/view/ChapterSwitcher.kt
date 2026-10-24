@@ -9,7 +9,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -92,11 +91,9 @@ internal fun ChapterSwitcher(
               color = MaterialTheme.colorScheme.primary,
             )
             if (label.name != null) {
-              Text(
-                modifier = Modifier.basicMarquee(),
+              MarqueeText(
                 text = label.name,
                 style = MaterialTheme.typography.titleMediumEmphasized.bookText(),
-                maxLines = 1,
               )
             }
           }

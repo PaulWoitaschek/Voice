@@ -3,10 +3,8 @@
 package voice.features.playbackScreen.view
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -26,7 +24,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -143,20 +140,18 @@ internal fun BookPlayContent(
             .entrance(entrance, 3),
         )
       }
-      // ControlsLayout picks the height, and the play button fills it
-      Control.Transport -> BoxWithConstraints {
-        MediaControlsDirection {
-          TransportControls(
-            bookId = bookId,
-            playing = viewState.playing,
-            skipSeconds = viewState.skipSeconds,
-            onRewindClick = onRewindClick,
-            onPlayClick = onPlayClick,
-            onFastForwardClick = onFastForwardClick,
-            playButtonSize = maxHeight,
-            modifier = Modifier.fillMaxWidth(),
-          )
-        }
+      // ControlsLayout picks the height, and the play button fills it. Reading it with BoxWithConstraints instead
+      // would keep the shared play button from flying in when the player opens.
+      Control.Transport -> MediaControlsDirection {
+        TransportControls(
+          bookId = bookId,
+          playing = viewState.playing,
+          skipSeconds = viewState.skipSeconds,
+          onRewindClick = onRewindClick,
+          onPlayClick = onPlayClick,
+          onFastForwardClick = onFastForwardClick,
+          modifier = Modifier.fillMaxWidth(),
+        )
       }
       Control.Toolbar -> ActionToolbar(
         sleepTimerState = viewState.sleepTimerState,
@@ -182,7 +177,7 @@ internal fun BookPlayContent(
       modifier = Modifier
         .fillMaxSize()
         .padding(contentPadding)
-        .padding(horizontal = 24.dp),
+        .padding(horizontal = HORIZONTAL_PADDING),
     ) {
       Column(
         modifier = Modifier
@@ -231,7 +226,7 @@ internal fun BookPlayContent(
       modifier = Modifier
         .fillMaxSize()
         .padding(contentPadding)
-        .padding(horizontal = 24.dp),
+        .padding(horizontal = HORIZONTAL_PADDING),
     )
   }
 }
@@ -339,6 +334,7 @@ private fun ControlsLayout(
   }
 }
 
+private val HORIZONTAL_PADDING = 24.dp
 private val REGULAR_PLAY_BUTTON = 104.dp
 private val COMPACT_PLAY_BUTTON = 80.dp
 private val MIN_COVER_HEIGHT = 120.dp
@@ -350,19 +346,17 @@ private fun TitleBlock(
   modifier: Modifier = Modifier,
 ) {
   Column(modifier = modifier) {
-    Text(
-      modifier = Modifier.basicMarquee(),
+    MarqueeText(
       text = title,
       style = MaterialTheme.typography.headlineSmallEmphasized.bookText(),
-      maxLines = 1,
+      bleed = HORIZONTAL_PADDING,
     )
     if (author != null) {
-      Text(
-        modifier = Modifier.basicMarquee(),
+      MarqueeText(
         text = author,
         style = MaterialTheme.typography.titleMedium.bookText(),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
-        maxLines = 1,
+        bleed = HORIZONTAL_PADDING,
       )
     }
   }

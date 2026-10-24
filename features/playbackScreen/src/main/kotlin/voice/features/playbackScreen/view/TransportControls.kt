@@ -2,10 +2,11 @@ package voice.features.playbackScreen.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
 import voice.core.ui.PlayButton
@@ -20,7 +21,6 @@ internal fun TransportControls(
   onPlayClick: () -> Unit,
   onFastForwardClick: () -> Unit,
   modifier: Modifier = Modifier,
-  playButtonSize: Dp = 104.dp,
 ) {
   Row(
     modifier = modifier,
@@ -31,19 +31,21 @@ internal fun TransportControls(
       forward = false,
       seconds = skipSeconds,
       onClick = onRewindClick,
-      height = playButtonSize * 0.72F,
+      modifier = Modifier.fillMaxHeight(0.72F),
     )
     PlayButton(
       playing = playing,
       onClick = onPlayClick,
-      modifier = Modifier.playButtonSharedElementModifier(bookId),
-      size = playButtonSize,
+      modifier = Modifier
+        .playButtonSharedElementModifier(bookId)
+        .fillMaxHeight()
+        .aspectRatio(1F, matchHeightConstraintsFirst = true),
     )
     SkipButton(
       forward = true,
       seconds = skipSeconds,
       onClick = onFastForwardClick,
-      height = playButtonSize * 0.72F,
+      modifier = Modifier.fillMaxHeight(0.72F),
     )
   }
 }

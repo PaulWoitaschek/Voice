@@ -98,6 +98,8 @@ internal fun ActionToolbar(
       contentDescription = stringResource(R.string.sleep_timer_action_open),
       label = (sleepTimerState as? BookPlayViewState.SleepTimerViewState.Enabled.WithDuration)
         ?.let { formatTime(it.leftDuration.inWholeMilliseconds) },
+      // it counts down every second, rolling would keep it moving the whole time
+      rollLabel = false,
       onClick = onSleepTimerClick,
     )
     val speedChanged = playbackSpeed !in 0.99F..1.01F
@@ -186,6 +188,7 @@ private fun ToolbarAction(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
   label: String? = null,
+  rollLabel: Boolean = true,
   onLongClick: (() -> Unit)? = null,
   onLongClickLabel: String? = null,
   selectable: Boolean = true,
@@ -207,6 +210,7 @@ private fun ToolbarAction(
       icon = icon,
       contentDescription = contentDescription,
       label = label,
+      rollLabel = rollLabel,
       selectable = selectable,
       toggle = toggle,
       onClick = {
@@ -227,6 +231,7 @@ private fun ToolbarActionContent(
   icon: ImageVector,
   contentDescription: String,
   label: String?,
+  rollLabel: Boolean,
   selectable: Boolean,
   toggle: Boolean,
   onClick: () -> Unit,
@@ -290,11 +295,19 @@ private fun ToolbarActionContent(
     Icon(imageVector = icon, contentDescription = null, tint = content)
     if (label != null) {
       Spacer(Modifier.width(4.dp))
-      RollingText(
-        text = label,
-        style = MaterialTheme.typography.labelLargeEmphasized,
-        color = content,
-      )
+      if (rollLabel) {
+        RollingText(
+          text = label,
+          style = MaterialTheme.typography.labelLargeEmphasized,
+          color = content,
+        )
+      } else {
+        Text(
+          text = label,
+          style = MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
+          color = content,
+        )
+      }
     }
   }
 }

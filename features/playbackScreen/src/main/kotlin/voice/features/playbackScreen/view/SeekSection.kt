@@ -140,9 +140,9 @@ internal fun SeekSection(
         targetValue = if (dragging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
         label = "elapsedColor",
       )
-      RollingText(
+      Text(
         text = formatTime(shownTime.inWholeMilliseconds, duration.inWholeMilliseconds),
-        style = MaterialTheme.typography.labelLargeEmphasized,
+        style = MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
         color = elapsedColor,
       )
       // the pill is a bit taller than the labels, it may overlap the space around the row
@@ -169,7 +169,7 @@ internal fun SeekSection(
           )
         }
       }
-      RollingText(
+      Text(
         modifier = Modifier
           .clip(RoundedCornerShape(8.dp))
           .clickable { showRemaining = !showRemaining }
@@ -179,7 +179,7 @@ internal fun SeekSection(
         } else {
           formatTime(duration.inWholeMilliseconds, duration.inWholeMilliseconds)
         },
-        style = MaterialTheme.typography.labelLarge,
+        style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
       )
     }
@@ -271,7 +271,7 @@ private fun WavySeekBar(
                 path = wavePath,
                 fraction = currentFraction,
                 amplitudeFactor = amplitude,
-                phase = clock() * 2F * PI.toFloat() * 0.6F,
+                phase = clock() * 2F * PI.toFloat() * 0.2F,
                 thumbWidth = thumbWidth.toPx(),
                 thumbHeight = thumbHeight.toPx(),
                 activeColor = colors.primary,
@@ -328,8 +328,8 @@ private fun DrawScope.drawWavyTrack(
   val centerY = size.height / 2
   val end = size.width - inset
   val thumbX = inset + (end - inset) * fraction
-  val amplitude = 3.5.dp.toPx() * amplitudeFactor
-  val wavelength = 30.dp.toPx()
+  val amplitude = 1.75.dp.toPx() * amplitudeFactor
+  val wavelength = 44.dp.toPx()
   val step = 1.5.dp.toPx()
 
   val activeEnd = thumbX - thumbWidth / 2 - gap

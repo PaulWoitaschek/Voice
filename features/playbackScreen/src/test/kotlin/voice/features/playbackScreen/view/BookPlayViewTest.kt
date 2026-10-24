@@ -51,7 +51,7 @@ class BookPlayViewTest {
   fun `transport and every control that's shown stay inside the window`() {
     var window by mutableStateOf(DpSize(412.dp, 915.dp))
     var fontScale by mutableFloatStateOf(1F)
-    // the marquee on the title never goes idle
+    // the seek bar wave never goes idle while playing
     compose.mainClock.autoAdvance = false
     compose.setContent {
       CompositionLocalProvider(LocalDensity provides Density(LocalDensity.current.density, fontScale)) {
