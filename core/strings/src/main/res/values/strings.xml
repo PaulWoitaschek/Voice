@@ -532,6 +532,8 @@
     <string name="playback.chapter.next">Next track</string>
     <!-- Content description for moving to the previous chapter or track. -->
     <string name="playback.chapter.previous">Previous track</string>
+    <!-- Label in the chapters sheet for a chapter whose file has no name for it, e.g. "Chapter 3". -->
+    <string name="playback.chapter.unnamed">Chapter %1$d</string>
     <!-- Title of the sheet that lists all chapters of a book. -->
     <string name="playback.chapters.title">Chapters</string>
     <string name="playback.jump_back">Back to %1$s</string>

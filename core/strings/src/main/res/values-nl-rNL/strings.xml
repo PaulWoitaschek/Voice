@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Huidig hoofdstuk</string>
     <string name="playback.chapter.next">Volgend hoofdstuk</string>
     <string name="playback.chapter.previous">Vorig hoofdstuk</string>
+    <string name="playback.chapter.unnamed">Hoofdstuk %1$d</string>
     <string name="playback.chapters.title">Hoofdstukken</string>
     <string name="playback.jump_back">Terug naar %1$s</string>
     <string name="playback.jump_back.chapter">Terug naar hfst. %1$d · %2$s</string>

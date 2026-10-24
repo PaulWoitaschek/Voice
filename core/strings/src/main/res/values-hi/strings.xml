@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">वर्तमान अध्याय</string>
     <string name="playback.chapter.next">अगला ट्रैक</string>
     <string name="playback.chapter.previous">पिछला ट्रैक</string>
+    <string name="playback.chapter.unnamed">अध्याय %1$d</string>
     <string name="playback.chapters.title">अध्याय</string>
     <string name="playback.jump_back">%1$s पर वापस जाएँ</string>
     <string name="playback.jump_back.chapter">अध्याय %1$d · %2$s पर वापस जाएँ</string>

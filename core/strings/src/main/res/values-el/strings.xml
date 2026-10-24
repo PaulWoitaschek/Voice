@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Τρέχον κεφάλαιο</string>
     <string name="playback.chapter.next">Επόμενο κομμάτι</string>
     <string name="playback.chapter.previous">Προηγούμενο κομμάτι</string>
+    <string name="playback.chapter.unnamed">Κεφάλαιο %1$d</string>
     <string name="playback.chapters.title">Κεφάλαια</string>
     <string name="playback.jump_back">Πίσω στο %1$s</string>
     <string name="playback.jump_back.chapter">Πίσω στο κεφ. %1$d · %2$s</string>

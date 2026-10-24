@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Nykyinen luku</string>
     <string name="playback.chapter.next">Seuraava ääniraita</string>
     <string name="playback.chapter.previous">Edellinen ääniraita</string>
+    <string name="playback.chapter.unnamed">Luku %1$d</string>
     <string name="playback.chapters.title">Luvut</string>
     <string name="playback.jump_back">Takaisin kohtaan %1$s</string>
     <string name="playback.jump_back.chapter">Takaisin: luku %1$d · %2$s</string>

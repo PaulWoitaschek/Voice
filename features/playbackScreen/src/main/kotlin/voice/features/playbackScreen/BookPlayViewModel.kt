@@ -158,7 +158,7 @@ class BookPlayViewModel(
       title = book.content.name,
       author = book.content.metadata.author,
       showPreviousNextButtons = hasMoreThanOneChapter,
-      chapterName = currentMark.name.takeIf { hasMoreThanOneChapter },
+      chapterName = currentMark.name?.takeIf { hasMoreThanOneChapter && it.isNotBlank() },
       duration = currentMark.durationMs.milliseconds,
       playedTime = positionInCurrentMark.milliseconds,
       cover = book.content.coverUrl,
@@ -326,7 +326,7 @@ class BookPlayViewModel(
             val previousChapters = book.chapters.take(chapterIndex)
             BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
               number = previousChapters.sumOf { it.chapterMarks.count() } + markIndex + 1,
-              name = chapterMark.name ?: "",
+              name = chapterMark.name?.takeIf { it.isNotBlank() },
               active = chapterMark == book.currentMark && chapter == book.currentChapter,
               time = formatTime(previousChapters.sumOf { it.duration } + chapterMark.startMs),
             )

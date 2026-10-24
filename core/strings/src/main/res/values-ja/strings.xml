@@ -296,6 +296,7 @@
     <string name="playback.chapter.current.content_description">現在のチャプター</string>
     <string name="playback.chapter.next">次のトラック</string>
     <string name="playback.chapter.previous">前のトラック</string>
+    <string name="playback.chapter.unnamed">チャプター %1$d</string>
     <string name="playback.chapters.title">チャプター</string>
     <string name="playback.jump_back">%1$s に戻る</string>
     <string name="playback.jump_back.chapter">第%1$d章 · %2$s に戻る</string>
