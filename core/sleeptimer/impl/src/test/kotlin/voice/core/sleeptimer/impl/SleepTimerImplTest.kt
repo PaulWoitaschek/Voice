@@ -15,13 +15,15 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.common.DispatcherProvider
 import voice.core.data.ListeningEvent
-import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
+import voice.core.sleeptimer.FadeOutStore
 import voice.core.sleeptimer.ShakeDetector
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerImpl
 import voice.core.sleeptimer.SleepTimerMode
+import voice.core.sleeptimer.SleepTimerPreference
+import voice.core.sleeptimer.SleepTimerPreferenceStore
 import voice.core.sleeptimer.SleepTimerState
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -71,9 +73,9 @@ class SleepTimerImplTest {
     sleepTimer = SleepTimerImpl(
       playStateManager,
       shakeDetector,
-      sleepTimerPreferenceStore,
+      SleepTimerPreferenceStore(sleepTimerPreferenceStore),
       playerController,
-      fadeOutStore,
+      FadeOutStore(fadeOutStore),
       dispatcherProvider,
       tracker = mockk(relaxed = true),
     )

@@ -19,25 +19,35 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import voice.core.analytics.api.AnalyticsConsentStore
 import voice.core.audiobookshelf.AudiobookshelfFeatureFlag
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
-import voice.core.data.GridMode
-import voice.core.data.ThemeColorScheme
-import voice.core.data.ThemeMode
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.DocumentFileWithUri
 import voice.core.data.folders.FolderType
-import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.supporter.SupporterBadge
 import voice.core.data.supporter.SupporterStatus
+import voice.core.data.supporter.SupporterStatusStore
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
+import voice.core.playback.AutoRewindAmountStore
+import voice.core.playback.LockScreenSliderStore
+import voice.core.playback.SeekTimeStore
+import voice.core.sleeptimer.SleepTimerPreference
+import voice.core.sleeptimer.SleepTimerPreferenceStore
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
+import voice.core.ui.GridMode
+import voice.core.ui.GridModeStore
+import voice.core.ui.PureBlackStore
+import voice.core.ui.ThemeColorScheme
+import voice.core.ui.ThemeColorSchemeStore
+import voice.core.ui.ThemeMode
+import voice.core.ui.ThemeModeStore
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import java.time.Clock
@@ -95,24 +105,24 @@ class SettingsViewModelTest {
   }
 
   private val viewModel = SettingsViewModel(
-    themeModeStore = themeModeStore,
-    themeColorSchemeStore = themeColorSchemeStore,
-    pureBlackStore = pureBlackStore,
-    autoRewindAmountStore = autoRewindAmountStore,
-    seekTimeStore = seekTimeStore,
-    lockScreenSliderStore = lockScreenSliderStore,
+    themeModeStore = ThemeModeStore(themeModeStore),
+    themeColorSchemeStore = ThemeColorSchemeStore(themeColorSchemeStore),
+    pureBlackStore = PureBlackStore(pureBlackStore),
+    autoRewindAmountStore = AutoRewindAmountStore(autoRewindAmountStore),
+    seekTimeStore = SeekTimeStore(seekTimeStore),
+    lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
     navigator = navigator,
     appInfoProvider = appInfoProvider,
-    gridModeStore = gridModeStore,
-    sleepTimerPreferenceStore = sleepTimerPreferenceStore,
-    analyticsConsentStore = analyticsConsentStore,
+    gridModeStore = GridModeStore(gridModeStore),
+    sleepTimerPreferenceStore = SleepTimerPreferenceStore(sleepTimerPreferenceStore),
+    analyticsConsentStore = AnalyticsConsentStore(analyticsConsentStore),
     gridCount = gridCount,
     kioskModeFeatureFlag = KioskModeFeatureFlag(kioskModeFeatureFlag),
-    developerMenuUnlockedStore = developerMenuUnlockedStore,
+    developerMenuUnlockedStore = DeveloperMenuUnlockedStore(developerMenuUnlockedStore),
     dynamicColorAvailability = dynamicColorAvailability,
     audiobookFolders = audiobookFolders,
     supportDevelopmentFeatureFlag = SupportDevelopmentFeatureFlag(supportDevelopmentFeatureFlag),
-    supporterStatusStore = supporterStatusStore,
+    supporterStatusStore = SupporterStatusStore(supporterStatusStore),
     clock = Clock.fixed(JavaInstant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
     serverLibrary = serverLibrary,

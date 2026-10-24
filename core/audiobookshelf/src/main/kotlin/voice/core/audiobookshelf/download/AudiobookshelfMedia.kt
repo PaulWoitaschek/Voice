@@ -2,7 +2,6 @@ package voice.core.audiobookshelf.download
 
 import android.content.Context
 import androidx.core.net.toUri
-import androidx.datastore.core.DataStore
 import androidx.media3.database.StandaloneDatabaseProvider
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.ResolvingDataSource
@@ -36,8 +35,7 @@ import java.io.IOException
 internal class AudiobookshelfMedia(
   context: Context,
   http: AudiobookshelfHttp,
-  @AccountStore
-  private val accountStore: DataStore<Account?>,
+  private val accountStore: AccountStore,
 ) {
 
   val databaseProvider = StandaloneDatabaseProvider(context)

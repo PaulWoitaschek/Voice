@@ -1,6 +1,5 @@
 package voice.core.audiobookshelf.sync
 
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -34,8 +33,7 @@ internal class BookmarkSync(
   private val http: AudiobookshelfHttp,
   private val bookRepository: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
-  @SyncedBookmarksStore
-  private val syncedBookmarksStore: DataStore<Map<String, String>>,
+  private val syncedBookmarksStore: SyncedBookmarksStore,
 ) {
 
   private val mutex = Mutex()

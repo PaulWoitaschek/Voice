@@ -23,10 +23,10 @@ import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookId
-import voice.core.data.GridMode
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
@@ -38,8 +38,11 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.ui.GridCount
+import voice.core.ui.GridMode
+import voice.core.ui.GridModeStore
 import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
+import voice.features.bookOverview.survey.HandledSurveysStore
 import voice.features.bookOverview.survey.Survey
 import voice.features.bookOverview.survey.SurveyUrlFeatureFlag
 import voice.navigation.Destination
@@ -81,9 +84,9 @@ class BookOverviewViewModelTest {
       playerController = mockk<PlayerController> {
         every { livePlaybackStateFlow(currentBook.id) } returns livePlaybackFlow
       },
-      currentBookStoreDataStore = MemoryDataStore(currentBook.id),
-      folderPickerMovedDialogShownStore = MemoryDataStore(false),
-      gridModeStore = MemoryDataStore(GridMode.LIST),
+      currentBookStoreDataStore = CurrentBookStore(MemoryDataStore(currentBook.id)),
+      folderPickerMovedDialogShownStore = FolderPickerMovedDialogShownStore(MemoryDataStore(false)),
+      gridModeStore = GridModeStore(MemoryDataStore(GridMode.LIST)),
       gridCount = mockk<GridCount> {
         every { useGridAsDefault() } returns false
       },
@@ -144,9 +147,9 @@ class BookOverviewViewModelTest {
       },
       playStateManager = PlayStateManager(),
       playerController = mockk(),
-      currentBookStoreDataStore = MemoryDataStore(null),
-      folderPickerMovedDialogShownStore = MemoryDataStore(false),
-      gridModeStore = MemoryDataStore(GridMode.LIST),
+      currentBookStoreDataStore = CurrentBookStore(MemoryDataStore(null)),
+      folderPickerMovedDialogShownStore = FolderPickerMovedDialogShownStore(MemoryDataStore(false)),
+      gridModeStore = GridModeStore(MemoryDataStore(GridMode.LIST)),
       gridCount = mockk<GridCount> {
         every { useGridAsDefault() } returns false
       },
@@ -479,9 +482,9 @@ class BookOverviewViewModelTest {
       },
       playStateManager = PlayStateManager(),
       playerController = mockk(),
-      currentBookStoreDataStore = MemoryDataStore(currentBookId),
-      folderPickerMovedDialogShownStore = folderPickerMovedDialogShownStore,
-      gridModeStore = MemoryDataStore(GridMode.LIST),
+      currentBookStoreDataStore = CurrentBookStore(MemoryDataStore(currentBookId)),
+      folderPickerMovedDialogShownStore = FolderPickerMovedDialogShownStore(folderPickerMovedDialogShownStore),
+      gridModeStore = GridModeStore(MemoryDataStore(GridMode.LIST)),
       gridCount = mockk<GridCount> {
         every { useGridAsDefault() } returns false
       },
@@ -504,7 +507,7 @@ class BookOverviewViewModelTest {
   private fun survey(remoteUrl: String = ""): Survey {
     return Survey(
       surveyUrlFeatureFlag = SurveyUrlFeatureFlag(MemoryFeatureFlag(remoteUrl)),
-      handledSurveysStore = MemoryDataStore(emptyMap()),
+      handledSurveysStore = HandledSurveysStore(MemoryDataStore(emptyMap())),
       localSurvey = mockk {
         coEvery { url() } returns null
       },

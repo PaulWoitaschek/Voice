@@ -2,7 +2,6 @@ package voice.core.audiobookshelf.sync
 
 import android.os.Build
 import android.os.SystemClock
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -55,12 +54,9 @@ private val CLOSE_AFTER_PAUSE = 10.minutes
 @Inject
 internal class ListeningSessionReporter(
   private val http: AudiobookshelfHttp,
-  @AccountStore
-  private val accountStore: DataStore<Account?>,
-  @PreferencesStore
-  private val preferencesStore: DataStore<Preferences>,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val accountStore: AccountStore,
+  private val preferencesStore: PreferencesStore,
+  private val currentBookStore: CurrentBookStore,
   private val bookRepository: BookRepository,
   private val playStateManager: PlayStateManager,
   private val progressSync: ProgressSync,

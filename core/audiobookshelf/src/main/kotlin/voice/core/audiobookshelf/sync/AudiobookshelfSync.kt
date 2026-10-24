@@ -6,7 +6,6 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.os.SystemClock
 import androidx.core.content.getSystemService
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -60,8 +59,7 @@ public enum class ServerReachability {
 @SingleIn(AppScope::class)
 @Inject
 public class AudiobookshelfSync internal constructor(
-  @AccountStore
-  private val accountStore: DataStore<Account?>,
+  private val accountStore: AccountStore,
   private val http: AudiobookshelfHttp,
   private val librarySync: LibrarySync,
   private val progressSync: ProgressSync,
@@ -71,8 +69,7 @@ public class AudiobookshelfSync internal constructor(
   private val bookRepository: BookRepository,
   private val contentRepo: BookContentRepo,
   private val playStateManager: PlayStateManager,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val currentBookStore: CurrentBookStore,
   private val context: Context,
 ) {
 

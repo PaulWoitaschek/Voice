@@ -19,6 +19,7 @@ import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ChapterRepo
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.repo.ListeningStatsRepo
+import voice.core.data.store.CurrentBookStore
 import java.io.File
 import java.time.Instant
 import kotlin.test.Test
@@ -33,7 +34,8 @@ class ProgressCarryOverTest {
   private val listeningHistoryRepo = mockk<ListeningHistoryRepo>(relaxUnitFun = true)
   private val listeningStatsRepo = mockk<ListeningStatsRepo>(relaxUnitFun = true)
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val progressCarryOver = ProgressCarryOver(bookmarkRepo, listeningHistoryRepo, listeningStatsRepo, currentBookStore)
+  private val progressCarryOver =
+    ProgressCarryOver(bookmarkRepo, listeningHistoryRepo, listeningStatsRepo, CurrentBookStore(currentBookStore))
   private val chapters = mutableMapOf<ChapterId, Chapter>()
   private val chapterRepo = mockk<ChapterRepo> {
     coEvery { get(ids = any()) } answers { firstArg<List<ChapterId>>().mapNotNull { chapters[it] } }

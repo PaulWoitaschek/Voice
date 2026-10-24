@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import voice.core.analytics.api.Analytics
+import voice.core.analytics.api.AnalyticsConsentStore
 import voice.core.common.DispatcherProvider
 import voice.features.onboarding.MemoryDataStore
 import voice.navigation.Destination
@@ -22,7 +23,7 @@ class OnboardingWelcomeViewModelTest {
   private val analyticsConsent = MemoryDataStore(false)
   private val viewModel = OnboardingWelcomeViewModel(
     navigator = navigator,
-    analyticsConsentStore = analyticsConsent,
+    analyticsConsentStore = AnalyticsConsentStore(analyticsConsent),
     appInfoProvider = mockk(),
     analytics = analytics,
     dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),

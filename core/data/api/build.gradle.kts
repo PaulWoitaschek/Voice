@@ -2,6 +2,7 @@ plugins {
   id("voice.library")
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -11,7 +12,7 @@ kotlin {
 dependencies {
   api(projects.core.common)
   api(projects.core.documentfile)
-  implementation(libs.metro.runtime)
+  implementation(projects.core.datastore)
   implementation(libs.appCompat)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)

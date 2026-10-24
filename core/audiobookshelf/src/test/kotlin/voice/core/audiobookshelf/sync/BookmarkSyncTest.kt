@@ -18,6 +18,8 @@ import org.junit.Before
 import voice.core.audiobookshelf.MemoryBookRepository
 import voice.core.audiobookshelf.MemoryDataStore
 import voice.core.audiobookshelf.account.Account
+import voice.core.audiobookshelf.account.AccountStore
+import voice.core.audiobookshelf.account.SyncedBookmarksStore
 import voice.core.audiobookshelf.api.AbsBookmark
 import voice.core.audiobookshelf.api.AbsChapter
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
@@ -171,12 +173,12 @@ class BookmarkSyncTest {
   private fun bookmarkSync(): BookmarkSync {
     return BookmarkSync(
       http = AudiobookshelfHttp(
-        MemoryDataStore<Account?>(account),
+        AccountStore(MemoryDataStore<Account?>(account)),
         mockk { every { versionName } returns "1.0.0" },
       ),
       bookRepository = MemoryBookRepository(book),
       bookmarkRepo = bookmarkRepo,
-      syncedBookmarksStore = synced,
+      syncedBookmarksStore = SyncedBookmarksStore(synced),
     )
   }
 

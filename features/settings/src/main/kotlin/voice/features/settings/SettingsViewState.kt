@@ -1,8 +1,8 @@
 package voice.features.settings
 
-import voice.core.data.ThemeColorScheme
-import voice.core.data.ThemeMode
 import voice.core.data.supporter.SupporterBadge
+import voice.core.ui.ThemeColorScheme
+import voice.core.ui.ThemeMode
 import java.time.LocalTime
 import java.time.YearMonth
 

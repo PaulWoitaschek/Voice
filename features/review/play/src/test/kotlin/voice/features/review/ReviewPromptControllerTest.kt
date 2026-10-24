@@ -16,7 +16,6 @@ import voice.core.data.BookId
 import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
-import voice.core.data.ReviewPromptState
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.FinishedBook
 import voice.core.data.repo.ListeningStatsRepo
@@ -54,7 +53,7 @@ class ReviewPromptControllerTest {
   private val emma = book(id = "emma", name = "Emma", author = "frank herbert ", listenedMinutes = 0, durationMinutes = 600)
 
   private fun TestScope.controller() = ReviewPromptController(
-    store = store,
+    store = ReviewPromptStateStore(store),
     listeningStatsRepo = statsRepo,
     bookRepository = bookRepository,
     playStateManager = playStateManager,

@@ -2,7 +2,6 @@ package voice.core.foldersync
 
 import android.content.Context
 import android.net.Uri
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -53,8 +52,7 @@ public class FolderSync internal constructor(
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
   private val mediaScanTrigger: MediaScanTrigger,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val currentBookStore: CurrentBookStore,
   private val clock: Clock,
   dispatcherProvider: DispatcherProvider,
 ) {

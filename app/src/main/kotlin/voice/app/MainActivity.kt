@@ -22,7 +22,6 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.core.net.toUri
-import androidx.datastore.core.DataStore
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.scene.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
@@ -35,17 +34,17 @@ import voice.app.navigation.OverlaySceneStrategy
 import voice.app.navigation.StartDestinationProvider
 import voice.core.analytics.api.Analytics
 import voice.core.common.rootGraphAs
-import voice.core.data.ThemeColorScheme
-import voice.core.data.ThemeMode
-import voice.core.data.store.PureBlackStore
-import voice.core.data.store.ThemeColorSchemeStore
-import voice.core.data.store.ThemeModeStore
 import voice.core.logging.api.Logger
 import voice.core.ui.CoverSeedColors
 import voice.core.ui.LocalCoverSeedColors
 import voice.core.ui.LocalSharedTransitionScope
 import voice.core.ui.LocalSplashScreenHolds
+import voice.core.ui.PureBlackStore
 import voice.core.ui.SplashScreenHolds
+import voice.core.ui.ThemeColorScheme
+import voice.core.ui.ThemeColorSchemeStore
+import voice.core.ui.ThemeMode
+import voice.core.ui.ThemeModeStore
 import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
 import voice.navigation.Destination
@@ -72,16 +71,13 @@ class MainActivity : AppCompatActivity() {
   private lateinit var analytics: Analytics
 
   @Inject
-  @ThemeModeStore
-  private lateinit var themeModeStore: DataStore<ThemeMode>
+  private lateinit var themeModeStore: ThemeModeStore
 
   @Inject
-  @ThemeColorSchemeStore
-  private lateinit var themeColorSchemeStore: DataStore<ThemeColorScheme>
+  private lateinit var themeColorSchemeStore: ThemeColorSchemeStore
 
   @Inject
-  @PureBlackStore
-  private lateinit var pureBlackStore: DataStore<Boolean>
+  private lateinit var pureBlackStore: PureBlackStore
 
   @Inject
   private lateinit var coverSeedColors: CoverSeedColors

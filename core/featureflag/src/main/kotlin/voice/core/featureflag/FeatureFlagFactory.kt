@@ -1,6 +1,5 @@
 package voice.core.featureflag
 
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -11,7 +10,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import voice.core.data.store.FeatureFlagOverridesStore
 import voice.core.remoteconfig.api.RemoteConfig
 import kotlin.reflect.KClass
 
@@ -19,8 +17,7 @@ import kotlin.reflect.KClass
 @SingleIn(AppScope::class)
 class FeatureFlagFactory(
   private val remoteConfig: RemoteConfig,
-  @FeatureFlagOverridesStore
-  private val overridesStore: DataStore<Map<String, FeatureFlagOverride>>,
+  private val overridesStore: FeatureFlagOverridesStore,
   private val scope: CoroutineScope,
 ) {
 

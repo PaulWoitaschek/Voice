@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
-import androidx.datastore.core.DataStore
 import coil.imageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
@@ -27,7 +26,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import voice.core.data.store.CoverSeedColorsStore
 import voice.core.logging.api.Logger
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
@@ -46,8 +44,7 @@ val LocalCoverSeedColors = staticCompositionLocalOf<CoverSeedColors?> { null }
 @Inject
 class CoverSeedColors(
   private val application: Application,
-  @CoverSeedColorsStore
-  private val store: DataStore<Map<String, Int>>,
+  private val store: CoverSeedColorsStore,
   private val scope: CoroutineScope,
 ) {
 

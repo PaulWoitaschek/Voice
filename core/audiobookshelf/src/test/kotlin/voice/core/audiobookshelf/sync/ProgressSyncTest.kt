@@ -17,11 +17,14 @@ import org.junit.Before
 import voice.core.audiobookshelf.MemoryBookRepository
 import voice.core.audiobookshelf.MemoryDataStore
 import voice.core.audiobookshelf.account.Account
+import voice.core.audiobookshelf.account.AccountStore
 import voice.core.audiobookshelf.account.SyncedProgress
+import voice.core.audiobookshelf.account.SyncedProgressStore
 import voice.core.audiobookshelf.api.AbsMediaProgress
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.store.CurrentBookStore
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import java.time.Instant
@@ -197,10 +200,10 @@ class ProgressSyncTest {
   private fun progressSync(repo: MemoryBookRepository): ProgressSync {
     val accountStore = MemoryDataStore<Account?>(account)
     return ProgressSync(
-      http = AudiobookshelfHttp(accountStore, mockk { every { versionName } returns "1.0.0" }),
+      http = AudiobookshelfHttp(AccountStore(accountStore), mockk { every { versionName } returns "1.0.0" }),
       bookRepository = repo,
-      syncedProgressStore = syncedProgress,
-      currentBookStore = MemoryDataStore<BookId?>(null),
+      syncedProgressStore = SyncedProgressStore(syncedProgress),
+      currentBookStore = CurrentBookStore(MemoryDataStore<BookId?>(null)),
       playStateManager = PlayStateManager(),
       playerController = mockk {
         coEvery { livePlaybackState(any()) } returns null

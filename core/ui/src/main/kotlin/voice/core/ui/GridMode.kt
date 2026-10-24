@@ -1,9 +1,9 @@
-package voice.core.data
+package voice.core.ui
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-public enum class GridMode {
+enum class GridMode {
   LIST,
   GRID,
   FOLLOW_DEVICE,

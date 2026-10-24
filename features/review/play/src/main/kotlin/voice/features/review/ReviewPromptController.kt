@@ -1,6 +1,5 @@
 package voice.features.review
 
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -10,11 +9,9 @@ import kotlinx.coroutines.launch
 import voice.core.analytics.api.Analytics
 import voice.core.common.AppInfoProvider
 import voice.core.data.Book
-import voice.core.data.ReviewPromptState
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.repo.ListeningSummary
-import voice.core.data.store.ReviewPromptStateStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.playback.playstate.PlayStateManager
 import java.time.Clock
@@ -25,8 +22,7 @@ import kotlin.time.toJavaInstant
 @SingleIn(AppScope::class)
 @Inject
 class ReviewPromptController(
-  @ReviewPromptStateStore
-  private val store: DataStore<ReviewPromptState>,
+  private val store: ReviewPromptStateStore,
   private val listeningStatsRepo: ListeningStatsRepo,
   private val bookRepository: BookRepository,
   private val playStateManager: PlayStateManager,

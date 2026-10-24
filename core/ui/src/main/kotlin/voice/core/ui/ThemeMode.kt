@@ -1,10 +1,10 @@
-package voice.core.data
+package voice.core.ui
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public enum class ThemeMode {
+enum class ThemeMode {
   @SerialName("FollowSystem")
   FollowSystem,
 

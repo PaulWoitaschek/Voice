@@ -17,8 +17,6 @@ import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamicColorScheme
 import com.materialkolor.dynamiccolor.ColorSpec
 import com.materialkolor.ktx.animateColorScheme
-import voice.core.data.ThemeColorScheme
-import voice.core.data.ThemeMode
 
 val VoiceBlue = Color(0xFF003b7f)
 

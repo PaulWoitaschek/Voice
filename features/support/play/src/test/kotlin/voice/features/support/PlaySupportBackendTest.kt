@@ -17,6 +17,7 @@ import kotlinx.coroutines.test.runTest
 import voice.core.analytics.api.Analytics
 import voice.core.data.supporter.SupporterBadge
 import voice.core.data.supporter.SupporterStatus
+import voice.core.data.supporter.SupporterStatusStore
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import java.time.Clock
@@ -244,7 +245,7 @@ class PlaySupportBackendTest {
   private fun TestScope.backend(): PlaySupportBackend {
     return PlaySupportBackend(
       billing = billing,
-      supporterStatusStore = supporterStatusStore,
+      supporterStatusStore = SupporterStatusStore(supporterStatusStore),
       navigator = navigator,
       analytics = mockk<Analytics>(relaxUnitFun = true),
       clock = Clock.fixed(now, ZoneOffset.UTC),

@@ -45,6 +45,10 @@ Convention plugins (`voice.library`, `voice.app`, `voice.compose`, `voice.ktlint
   `@ContributesIntoSet` to `Set<FeatureFlag<*>>` for the developer settings (e.g. `SurveyUrlFeatureFlag`). Readers
   inject the class; tests wrap a `MemoryFeatureFlag`. A flag read by several features goes in the core module they
   share. `:core:featureflag` holds no flags.
+- A store works the same way: a `@SingleIn(AppScope::class)` class in the module that reads it, delegating to a
+  `DataStore` from `VoiceDataStoreFactory` (e.g. `SeekTimeStore`). Readers inject the class; tests wrap a
+  `MemoryDataStore`. Never change a store's file name, it's where listeners' data is saved. `:core:datastore` holds no
+  stores.
 - The graph is assembled in `app/src/main/kotlin/voice/app/di`.
 
 ## Navigation

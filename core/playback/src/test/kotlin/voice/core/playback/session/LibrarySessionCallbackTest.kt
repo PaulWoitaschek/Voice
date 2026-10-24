@@ -18,6 +18,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.runner.RunWith
 import voice.core.data.BookId
+import voice.core.data.store.CurrentBookStore
+import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.session.search.BookSearchParser
 import kotlin.test.Test
@@ -43,11 +45,11 @@ class LibrarySessionCallbackTest {
     player = mockk(relaxed = true),
     bookSearchParser = BookSearchParser(),
     bookSearchHandler = mockk(),
-    currentBookStoreId = MemoryDataStore<BookId?>(null),
+    currentBookStoreId = CurrentBookStore(MemoryDataStore<BookId?>(null)),
     bookRepository = mockk(),
     commandSourceResolver = mockk(relaxed = true),
     context = context,
-    lockScreenSliderStore = lockScreenSliderStore,
+    lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
   )
   private val customCommand = SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY)
 

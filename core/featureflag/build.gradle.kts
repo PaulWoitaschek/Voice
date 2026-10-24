@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.data.api)
+  implementation(projects.core.datastore)
   implementation(projects.core.remoteconfig.api)
   implementation(libs.datastore)
   implementation(libs.serialization.json)

@@ -20,6 +20,7 @@ import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ListeningHistoryRepo
+import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.PlayerController
@@ -61,7 +62,7 @@ class HistoryViewModelTest {
   private val navigator = mockk<Navigator>(relaxed = true)
 
   private fun viewModel() = HistoryViewModel(
-    currentBookStore = currentBookStore,
+    currentBookStore = CurrentBookStore(currentBookStore),
     bookRepository = bookRepository,
     listeningHistoryRepo = historyRepo,
     playStateManager = playStateManager,

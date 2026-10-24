@@ -1,4 +1,4 @@
-package voice.core.data.store
+package voice.core.datastore
 
 import androidx.datastore.core.Serializer
 import kotlinx.serialization.ExperimentalSerializationApi

@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -25,12 +24,11 @@ import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.HistoryTabOpenStore
-import voice.core.data.store.LastPlaybackSpeedStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
+import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
@@ -42,8 +40,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @AssistedInject
 class BookmarkViewModel(
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val currentBookStore: CurrentBookStore,
   private val bookRepository: BookRepository,
   private val bookmarkRepo: BookmarkRepo,
   private val currentBookResolver: CurrentBookResolver,
@@ -55,10 +52,8 @@ class BookmarkViewModel(
   dispatcherProvider: DispatcherProvider,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
-  @LastPlaybackSpeedStore
-  private val lastPlaybackSpeedStore: DataStore<Float>,
-  @HistoryTabOpenStore
-  private val historyTabOpenStore: DataStore<Boolean>,
+  private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
+  private val historyTabOpenStore: HistoryTabOpenStore,
   @Assisted
   private val bookId: BookId,
   @Assisted

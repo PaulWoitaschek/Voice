@@ -1,7 +1,6 @@
 package voice.core.playback.session.search
 
 import android.provider.MediaStore
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import voice.core.data.Book
@@ -13,8 +12,7 @@ import voice.core.logging.api.Logger
 @Inject
 class BookSearchHandler(
   private val repo: BookRepository,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val currentBookStore: CurrentBookStore,
 ) {
 
   suspend fun handle(search: VoiceSearch): Book? {

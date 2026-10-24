@@ -24,6 +24,7 @@ import voice.core.data.repo.BookRepositoryImpl
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ChapterRepoImpl
 import voice.core.data.repo.internals.AppDb
+import voice.core.data.store.CurrentBookStore
 import voice.core.data.toUri
 import voice.core.documentfile.FileBasedDocumentFactory
 import voice.core.documentfile.FileBasedDocumentFile
@@ -634,7 +635,7 @@ class MediaScannerTest {
         bookmarkRepo = bookmarkRepo,
         listeningHistoryRepo = mockk(relaxUnitFun = true),
         listeningStatsRepo = mockk(relaxUnitFun = true),
-        currentBookStore = currentBookStore,
+        currentBookStore = CurrentBookStore(currentBookStore),
       ),
       chapterRepo = chapterRepo,
     )

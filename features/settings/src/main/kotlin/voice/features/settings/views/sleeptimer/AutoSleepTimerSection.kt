@@ -43,10 +43,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.graphics.shapes.RoundedPolygon
-import voice.core.data.ThemeColorScheme
 import voice.core.ui.AuroraBackground
 import voice.core.ui.NightTheme
 import voice.core.ui.ShapedIcon
+import voice.core.ui.ThemeColorScheme
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock

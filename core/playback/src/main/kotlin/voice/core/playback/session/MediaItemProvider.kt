@@ -2,7 +2,6 @@ package voice.core.playback.session
 
 import android.app.Application
 import android.net.Uri
-import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
@@ -30,8 +29,7 @@ class MediaItemProvider(
   private val chapterRepo: ChapterRepo,
   private val contentRepo: BookContentRepo,
   private val imageFileProvider: ImageFileProvider,
-  @CurrentBookStore
-  private val currentBookStoreId: DataStore<BookId?>,
+  private val currentBookStoreId: CurrentBookStore,
 ) {
 
   fun root(): MediaItem = MediaItem(

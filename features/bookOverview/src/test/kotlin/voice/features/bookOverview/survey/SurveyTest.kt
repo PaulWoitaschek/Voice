@@ -105,7 +105,7 @@ class SurveyTest {
   ): Survey {
     return Survey(
       surveyUrlFeatureFlag = SurveyUrlFeatureFlag(MemoryFeatureFlag(remoteUrl)),
-      handledSurveysStore = store,
+      handledSurveysStore = HandledSurveysStore(store),
       localSurvey = mockk {
         coEvery { url() } returns localUrl
       },

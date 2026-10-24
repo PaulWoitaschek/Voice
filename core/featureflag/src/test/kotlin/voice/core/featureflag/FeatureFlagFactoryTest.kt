@@ -19,7 +19,7 @@ class FeatureFlagFactoryTest {
 
   private fun TestScope.styleFlag(remoteValue: String): FeatureFlag<Style> {
     every { remoteConfig.string("style", "Classic") } returns remoteValue
-    return FeatureFlagFactory(remoteConfig, overridesStore, backgroundScope)
+    return FeatureFlagFactory(remoteConfig, FeatureFlagOverridesStore(overridesStore), backgroundScope)
       .enum(key = "style", description = "", defaultValue = Style.Classic, entries = Style.entries)
   }
 

@@ -13,6 +13,10 @@ dependencies {
   implementation(projects.core.ui)
   implementation(projects.core.remoteconfig.api)
   implementation(projects.core.data.api)
+  implementation(projects.core.datastore)
+  implementation(projects.core.playback)
+  implementation(projects.core.sleeptimer.api)
+  implementation(projects.core.analytics.api)
   implementation(projects.core.documentfile)
   implementation(projects.core.audiobookshelf)
 

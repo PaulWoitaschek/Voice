@@ -11,6 +11,7 @@ import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
 import voice.core.playback.MemoryDataStore
 import java.time.Instant
 import kotlin.test.Test
@@ -31,7 +32,7 @@ class BookSearchHandlerTest {
   init {
     coEvery { repo.all() } coAnswers { listOf(anotherBook, bookToFind) }
 
-    searchHandler = BookSearchHandler(repo, currentBookId)
+    searchHandler = BookSearchHandler(repo, CurrentBookStore(currentBookId))
   }
 
   @Test

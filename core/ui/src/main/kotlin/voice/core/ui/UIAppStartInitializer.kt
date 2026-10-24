@@ -2,7 +2,6 @@ package voice.core.ui
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.datastore.core.DataStore
 import coil.Coil
 import coil.ImageLoader
 import dev.zacsweers.metro.AppScope
@@ -11,14 +10,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import voice.core.data.ThemeMode
-import voice.core.data.store.ThemeModeStore
 import voice.core.initializer.AppInitializer
 
 @ContributesIntoSet(AppScope::class)
 class UIAppStartInitializer(
-  @ThemeModeStore
-  private val themeModeStore: DataStore<ThemeMode>,
+  private val themeModeStore: ThemeModeStore,
   private val scope: CoroutineScope,
 ) : AppInitializer {
 
