@@ -50,13 +50,11 @@ class VoiceDataStoreFactory(
   fun boolean(
     fileName: String,
     defaultValue: Boolean,
-    migrations: List<DataMigration<Boolean>> = emptyList(),
   ): DataStore<Boolean> {
     return create(
       serializer = Boolean.serializer(),
       defaultValue = defaultValue,
       fileName = fileName,
-      migrations = migrations,
     )
   }
 }

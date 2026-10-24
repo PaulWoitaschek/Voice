@@ -12,7 +12,7 @@ kotlin {
 dependencies {
   api(projects.core.common)
   api(projects.core.documentfile)
-  implementation(projects.core.datastore)
+  api(projects.core.datastore)
   implementation(libs.appCompat)
   implementation(libs.androidxCore)
   implementation(libs.serialization.json)
@@ -21,8 +21,6 @@ dependencies {
   api(libs.compose.runtime)
 
   api(libs.room.runtime)
-
-  api(libs.datastore)
 
   testImplementation(libs.room.testing)
 }

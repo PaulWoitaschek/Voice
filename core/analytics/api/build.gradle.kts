@@ -4,5 +4,5 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.datastore)
+  api(projects.core.datastore)
 }

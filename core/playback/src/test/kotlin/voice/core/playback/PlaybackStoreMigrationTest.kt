@@ -44,6 +44,21 @@ class PlaybackStoreMigrationTest {
   }
 
   @Test
+  fun `each store migrates only its own key`() = runTest {
+    sharedPreferences.edit {
+      putInt("SEEK_TIME", 15)
+      putInt("AUTO_REWIND", 5)
+    }
+
+    assertEquals(expected = 15, actual = SeekTimeStore(factory, sharedPreferences).data.first())
+    assertEquals(expected = 5, actual = sharedPreferences.getInt("AUTO_REWIND", 0))
+
+    assertEquals(expected = 5, actual = AutoRewindAmountStore(factory, sharedPreferences).data.first())
+    assertEquals(expected = false, actual = sharedPreferences.contains("SEEK_TIME"))
+    assertEquals(expected = false, actual = sharedPreferences.contains("AUTO_REWIND"))
+  }
+
+  @Test
   fun `migration is skipped when unrelated key present`() = runTest {
     sharedPreferences.edit { putInt("OTHER_KEY", 50) }
 

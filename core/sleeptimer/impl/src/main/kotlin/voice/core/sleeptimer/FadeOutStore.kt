@@ -10,7 +10,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 @SingleIn(AppScope::class)
-class FadeOutStore(store: DataStore<Duration>) : DataStore<Duration> by store {
+internal class FadeOutStore(store: DataStore<Duration>) : DataStore<Duration> by store {
 
   @Inject
   constructor(factory: VoiceDataStoreFactory) : this(
