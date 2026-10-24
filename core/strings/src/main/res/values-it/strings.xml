@@ -330,6 +330,7 @@
     <string name="playback.chapter.current.content_description">Capitolo corrente</string>
     <string name="playback.chapter.next">Traccia successiva</string>
     <string name="playback.chapter.previous">Traccia precedente</string>
+    <string name="playback.chapter.unnamed">Capitolo %1$d</string>
     <string name="playback.chapters.title">Capitoli</string>
     <string name="playback.jump_back">Torna a %1$s</string>
     <string name="playback.jump_back.chapter">Torna al cap. %1$d · %2$s</string>

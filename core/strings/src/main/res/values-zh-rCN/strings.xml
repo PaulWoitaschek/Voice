@@ -296,6 +296,7 @@
     <string name="playback.chapter.current.content_description">当前章节</string>
     <string name="playback.chapter.next">下一节</string>
     <string name="playback.chapter.previous">上一节</string>
+    <string name="playback.chapter.unnamed">第 %1$d 章</string>
     <string name="playback.chapters.title">章节</string>
     <string name="playback.jump_back">返回 %1$s</string>
     <string name="playback.jump_back.chapter">返回第 %1$d 章 · %2$s</string>

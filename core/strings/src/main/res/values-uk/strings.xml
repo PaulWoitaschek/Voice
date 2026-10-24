@@ -347,6 +347,7 @@
     <string name="playback.chapter.current.content_description">Поточний розділ</string>
     <string name="playback.chapter.next">Наступний запис</string>
     <string name="playback.chapter.previous">Попередній запис</string>
+    <string name="playback.chapter.unnamed">Розділ %1$d</string>
     <string name="playback.chapters.title">Розділи</string>
     <string name="playback.jump_back">Повернутися до %1$s</string>
     <string name="playback.jump_back.chapter">Повернутися до розд. %1$d · %2$s</string>

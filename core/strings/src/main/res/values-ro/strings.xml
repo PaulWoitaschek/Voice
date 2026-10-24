@@ -330,6 +330,7 @@
     <string name="playback.chapter.current.content_description">Capitolul curent</string>
     <string name="playback.chapter.next">Pista următoare</string>
     <string name="playback.chapter.previous">Pista anterioară</string>
+    <string name="playback.chapter.unnamed">Capitolul %1$d</string>
     <string name="playback.chapters.title">Capitole</string>
     <string name="playback.jump_back">Înapoi la %1$s</string>
     <string name="playback.jump_back.chapter">Înapoi la cap. %1$d · %2$s</string>

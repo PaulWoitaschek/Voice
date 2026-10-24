@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Jelenlegi fejezet</string>
     <string name="playback.chapter.next">Következő hangfelvétel</string>
     <string name="playback.chapter.previous">Előző hangfelvétel</string>
+    <string name="playback.chapter.unnamed">%1$d. fejezet</string>
     <string name="playback.chapters.title">Fejezetek</string>
     <string name="playback.jump_back">Vissza ide: %1$s</string>
     <string name="playback.jump_back.chapter">Vissza ide: %1$d. fej. · %2$s</string>

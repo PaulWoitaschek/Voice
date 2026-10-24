@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Capìtulu atuale</string>
     <string name="playback.chapter.next">Rasta imbeniente</string>
     <string name="playback.chapter.previous">Rasta anteposta</string>
+    <string name="playback.chapter.unnamed">Capìtulu %1$d</string>
     <string name="playback.chapters.title">Capìtulos</string>
     <string name="playback.jump_back">Torra a %1$s</string>
     <string name="playback.jump_back.chapter">Torra a cap. %1$d · %2$s</string>

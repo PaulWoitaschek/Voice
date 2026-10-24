@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Aktuelt kapitel</string>
     <string name="playback.chapter.next">Næste nummer</string>
     <string name="playback.chapter.previous">Forrige nummer</string>
+    <string name="playback.chapter.unnamed">Kapitel %1$d</string>
     <string name="playback.chapters.title">Kapitler</string>
     <string name="playback.jump_back">Tilbage til %1$s</string>
     <string name="playback.jump_back.chapter">Tilbage til kap. %1$d · %2$s</string>

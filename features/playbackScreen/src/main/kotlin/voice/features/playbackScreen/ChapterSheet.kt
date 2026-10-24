@@ -144,10 +144,11 @@ private fun ChapterItem(
         }
       }
       Spacer(Modifier.width(16.dp))
+      val nameStyle = if (chapter.active) MaterialTheme.typography.titleMediumEmphasized else MaterialTheme.typography.bodyLarge
       Text(
         modifier = Modifier.weight(1F),
-        text = chapter.name,
-        style = (if (chapter.active) MaterialTheme.typography.titleMediumEmphasized else MaterialTheme.typography.bodyLarge).bookText(),
+        text = chapter.name ?: stringResource(StringsR.string.playback_chapter_unnamed, chapter.number),
+        style = if (chapter.name != null) nameStyle.bookText() else nameStyle,
         color = if (played) colors.onSurfaceVariant else Color.Unspecified,
         maxLines = 2,
       )
@@ -155,7 +156,7 @@ private fun ChapterItem(
       Text(
         text = chapter.time,
         style = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum"),
-        color = colors.onSurfaceVariant,
+        color = if (chapter.active) colors.onPrimaryContainer else colors.onSurfaceVariant,
       )
     }
   }

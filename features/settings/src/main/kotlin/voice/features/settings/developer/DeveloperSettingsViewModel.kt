@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
+import voice.core.featureflag.EnumFeatureFlag
 import voice.core.featureflag.FeatureFlag
 import voice.core.remoteconfig.api.FmcTokenProvider
 import voice.core.remoteconfig.api.RemoteConfig
@@ -48,14 +49,21 @@ class DeveloperSettingsViewModel(
       featureFlags = flags
         .sortedBy { it.first.key }
         .map { (featureFlag, value) ->
-          when (featureFlag.type) {
-            Boolean::class -> DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag(
+          when {
+            featureFlag is EnumFeatureFlag<*> -> DeveloperSettingsViewState.FeatureFlagViewState.EnumFlag(
+              key = featureFlag.key,
+              description = featureFlag.description,
+              value = (value.value as Enum<*>).name,
+              entries = featureFlag.entries.map { it.name },
+              isOverridden = value.isOverridden,
+            )
+            featureFlag.type == Boolean::class -> DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag(
               key = featureFlag.key,
               description = featureFlag.description,
               value = value.value as Boolean,
               isOverridden = value.isOverridden,
             )
-            String::class -> DeveloperSettingsViewState.FeatureFlagViewState.StringFlag(
+            featureFlag.type == String::class -> DeveloperSettingsViewState.FeatureFlagViewState.StringFlag(
               key = featureFlag.key,
               description = featureFlag.description,
               value = value.value as String,
@@ -103,6 +111,18 @@ class DeveloperSettingsViewModel(
       if (it.key == key) {
         @Suppress("UNCHECKED_CAST")
         (it as FeatureFlag<String>).overwrite(value)
+      }
+    }
+  }
+
+  fun setEnumOverride(
+    key: String,
+    value: String,
+  ) {
+    featureFlags.forEach {
+      if (it.key == key && it is EnumFeatureFlag<*>) {
+        @Suppress("UNCHECKED_CAST")
+        (it as FeatureFlag<Enum<*>>).overwrite(it.entries.first { entry -> entry.name == value })
       }
     }
   }

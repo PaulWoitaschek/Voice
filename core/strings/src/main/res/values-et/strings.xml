@@ -313,6 +313,7 @@
     <string name="playback.chapter.current.content_description">Praegune peatükk</string>
     <string name="playback.chapter.next">Järgmine lugu</string>
     <string name="playback.chapter.previous">Eelmine lugu</string>
+    <string name="playback.chapter.unnamed">Peatükk %1$d</string>
     <string name="playback.chapters.title">Peatükid</string>
     <string name="playback.jump_back">Tagasi: %1$s</string>
     <string name="playback.jump_back.chapter">Tagasi: ptk %1$d · %2$s</string>
