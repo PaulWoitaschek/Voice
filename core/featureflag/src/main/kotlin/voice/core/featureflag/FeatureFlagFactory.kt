@@ -48,6 +48,7 @@ class FeatureFlagFactory(
     return create(
       key = key,
       description = description,
+      type = Boolean::class,
       readRemoteConfig = {
         remoteConfig.boolean(key = key, defaultValue = defaultValue)
       },
@@ -66,6 +67,7 @@ class FeatureFlagFactory(
     return create(
       key = key,
       description = description,
+      type = String::class,
       readRemoteConfig = {
         remoteConfig.string(key = key, defaultValue = defaultValue)
       },
@@ -76,12 +78,37 @@ class FeatureFlagFactory(
     )
   }
 
-  private inline fun <reified T : Any> create(
+  fun <E : Enum<E>> enum(
     key: String,
     description: String,
-    noinline readRemoteConfig: () -> T,
-    noinline createOverride: (T) -> FeatureFlagOverride,
-    noinline getOverrideValue: (FeatureFlagOverride) -> T?,
+    defaultValue: E,
+    entries: List<E>,
+  ): FeatureFlag<E> {
+    fun entry(name: String): E? = entries.firstOrNull { it.name == name }
+    val flag = create(
+      key = key,
+      description = description,
+      type = defaultValue.declaringJavaClass.kotlin,
+      readRemoteConfig = {
+        entry(remoteConfig.string(key = key, defaultValue = defaultValue.name)) ?: defaultValue
+      },
+      createOverride = { FeatureFlagOverride.StringValue(it.name) },
+      getOverrideValue = { override ->
+        (override as? FeatureFlagOverride.StringValue)?.value?.let(::entry)
+      },
+    )
+    return object : EnumFeatureFlag<E>, FeatureFlag<E> by flag {
+      override val entries: List<E> = entries
+    }
+  }
+
+  private fun <T : Any> create(
+    key: String,
+    description: String,
+    type: KClass<T>,
+    readRemoteConfig: () -> T,
+    createOverride: (T) -> FeatureFlagOverride,
+    getOverrideValue: (FeatureFlagOverride) -> T?,
   ): FeatureFlag<T> {
     return object : FeatureFlag<T> {
 
@@ -93,7 +120,7 @@ class FeatureFlagFactory(
       }
 
       override val type: KClass<T>
-        get() = T::class
+        get() = type
 
       override fun overwrite(value: T) {
         scope.launch {
