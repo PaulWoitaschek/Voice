@@ -31,7 +31,7 @@ The four groups are the split for parallel subagents.
 | pt-rBR | Portuguese (Brazil)   | você                                         | “…”                  | one, many, other | Brazilian words: arquivo, celular. BCP 47 `pt-BR` |
 | pt-rPT | Portuguese (Portugal) | formal, without a pronoun: Agite o telemóvel | «…»                  | one, many, other | European words: ficheiro, telemóvel. BCP 47 `pt-PT`                                                                                                                            |
 | ro     | Romanian              | tu: Alege, ta                                | „…”                  | one, few, other  |                                                                                                                                                                               |
-| sc     | Sardinian             | tu: ses, podes, tuo                          | “…”                  | one, other       | Logudorese-leaning LSC: sos/sas, lu, dae, never Campidanese is, ddu. Prosthetic i: ischermu, isvilupu                                                                         |
+| sc     | Sardinian             | tu: ses, podes, tuo                          | “…”                  | one, other       | Logudorese-leaning LSC: sos/sas, lu, dae, never Campidanese is, ddu. Prosthetic i: ischermu, isvilupu. See [Sardinian](#sardinian)                                             |
 
 ## Group C: Slavic, Greek, Hungarian
 
@@ -59,3 +59,18 @@ The four groups are the split for parallel subagents.
 | ta     | Tamil                | நீங்கள்: உங்கள்                                                                          | “…”         | one, other      |                                                                                                                                                         |
 | tr     | Turkish              | siz in sentences (bulabilirsiniz, kitaplarınız), bare imperative on buttons (Ekle, Seç) | “…”         | one, other      | Suffixes on Voice take an apostrophe: `Voice\'u`                                                                                                          |
 | zh-rCN | Chinese (Simplified) | 您                                                                                      | “…”, 《…》 for book titles | other | Full-width ，。！？. A space between Chinese and Latin words or numbers: 使用 Voice 收听. BCP 47 `zh-CN`                                                    |
+
+## Sardinian
+
+Models know little Sardinian and fill the gaps with Italian words. A native speaker corrected these in #4014:
+
+- perunu, not nissunu. cada, not onni. como, not immoe. petzi, not isceti. in antis, not prima.
+- Sardinian words, not Italian ones: balangiare, not guadangiare. tzìchera, not tatza. mùtzina, not retàllia.
+  parastàgiu, not iscaffale. padente, not foresta. te, not tè.
+- Mark the accent on words stressed on the third-to-last syllable: càmbia, òrdina, iscùtina, cùfias.
+
+For a word you're unsure of, look up its Italian in Apertium's
+[Sardinian–Italian dictionary](https://raw.githubusercontent.com/apertium/apertium-srd-ita/master/apertium-srd-ita.srd-ita.dix):
+`grep '<r>tazza<s'` finds the Sardinian in `<l>`. Skip entries marked `r="LR"`, those forms aren't preferred. Spelling,
+accents, pronouns and adverbs follow the
+[official LSC rules](https://www.regione.sardegna.it/documenti/1_72_20060418160308.pdf).
