@@ -11,8 +11,10 @@ import okhttp3.Headers
 import org.junit.After
 import org.junit.Before
 import voice.core.audiobookshelf.account.Account
+import voice.core.audiobookshelf.account.AccountStore
 import voice.core.audiobookshelf.download.AudiobookshelfDownloads
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
+import voice.core.data.store.CurrentBookStore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -142,13 +144,13 @@ class AudiobookshelfLoginTest {
     downloads: AudiobookshelfDownloads = mockk(relaxed = true),
   ): Audiobookshelf {
     return Audiobookshelf(
-      accountStore = accountStore,
-      http = AudiobookshelfHttp(accountStore, mockk { every { versionName } returns "1.0.0" }),
+      accountStore = AccountStore(accountStore),
+      http = AudiobookshelfHttp(AccountStore(accountStore), mockk { every { versionName } returns "1.0.0" }),
       sync = mockk(relaxed = true),
       progressSync = mockk(relaxed = true),
       downloads = downloads,
       contentRepo = mockk(relaxed = true),
-      currentBookStore = MemoryDataStore(null),
+      currentBookStore = CurrentBookStore(MemoryDataStore(null)),
       playerController = mockk(relaxed = true),
       context = mockk(relaxed = true),
       analytics = mockk(relaxed = true),

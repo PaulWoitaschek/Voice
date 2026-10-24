@@ -66,11 +66,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
-import voice.core.data.ThemeColorScheme
-import voice.core.data.ThemeMode
 import voice.core.ui.CheckBadge
 import voice.core.ui.MorphShape
 import voice.core.ui.ShapedIcon
+import voice.core.ui.ThemeColorScheme
+import voice.core.ui.ThemeMode
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberThemeColorScheme
 import androidx.graphics.shapes.toPath as toAndroidPath

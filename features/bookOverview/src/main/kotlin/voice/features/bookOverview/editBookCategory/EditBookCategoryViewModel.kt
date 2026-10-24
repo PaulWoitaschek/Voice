@@ -1,13 +1,12 @@
 package voice.features.bookOverview.editBookCategory
 
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.first
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.LastPlaybackSpeedStore
+import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.PlayerController
 import voice.core.playback.withDefaultSpeed
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
@@ -23,10 +22,8 @@ import kotlin.time.Duration
 class EditBookCategoryViewModel(
   private val repo: BookRepository,
   private val playerController: PlayerController,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
-  @LastPlaybackSpeedStore
-  private val lastPlaybackSpeedStore: DataStore<Float>,
+  private val currentBookStore: CurrentBookStore,
+  private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
 ) : BottomSheetItemViewModel {
 
   // the menu shows every status in its status picker, so there are no items to list

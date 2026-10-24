@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.first
@@ -26,12 +25,9 @@ import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.Book
 import voice.core.data.BookId
-import voice.core.data.GridMode
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.FolderPickerMovedDialogShownStore
-import voice.core.data.store.GridModeStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
@@ -43,6 +39,8 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.DeviceHasStoragePermissionBug
 import voice.core.scanner.MediaScanTrigger
 import voice.core.ui.GridCount
+import voice.core.ui.GridMode
+import voice.core.ui.GridModeStore
 import voice.features.bookOverview.di.BookOverviewScope
 import voice.features.bookOverview.survey.Survey
 import voice.navigation.Destination
@@ -56,12 +54,9 @@ class BookOverviewViewModel(
   private val mediaScanner: MediaScanTrigger,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
-  @CurrentBookStore
-  private val currentBookStoreDataStore: DataStore<BookId?>,
-  @FolderPickerMovedDialogShownStore
-  private val folderPickerMovedDialogShownStore: DataStore<Boolean>,
-  @GridModeStore
-  private val gridModeStore: DataStore<GridMode>,
+  private val currentBookStoreDataStore: CurrentBookStore,
+  private val folderPickerMovedDialogShownStore: FolderPickerMovedDialogShownStore,
+  private val gridModeStore: GridModeStore,
   private val gridCount: GridCount,
   private val navigator: Navigator,
   private val appInfoProvider: AppInfoProvider,

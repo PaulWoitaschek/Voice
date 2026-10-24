@@ -11,7 +11,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -62,8 +61,7 @@ class BookSearchViewModel(
   private val navigator: Navigator,
   private val playerController: PlayerController,
   private val playStateManager: PlayStateManager,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val currentBookStore: CurrentBookStore,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
   private val lastResults: LastBookSearchResults,

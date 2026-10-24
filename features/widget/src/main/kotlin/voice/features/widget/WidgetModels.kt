@@ -3,8 +3,8 @@ package voice.features.widget
 import android.graphics.Bitmap
 import voice.core.data.Book
 import voice.core.data.BookId
-import voice.core.data.ThemeColorScheme
 import voice.core.sleeptimer.SleepTimerState
+import voice.core.ui.ThemeColorScheme
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.math.ceil

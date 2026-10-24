@@ -1,6 +1,5 @@
 package voice.core.audiobookshelf.http
 
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -33,8 +32,7 @@ import java.util.concurrent.TimeUnit
 @SingleIn(AppScope::class)
 @Inject
 internal class AudiobookshelfHttp(
-  @AccountStore
-  private val accountStore: DataStore<Account?>,
+  private val accountStore: AccountStore,
   appInfoProvider: AppInfoProvider,
 ) {
 

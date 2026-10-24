@@ -27,10 +27,10 @@ class AudiobookFoldersImplTest {
   private val uri = DocumentsContract.buildTreeDocumentUri("com.android.externalstorage.documents", "primary:Audiobooks")
 
   private fun folders(context: Context = ApplicationProvider.getApplicationContext()) = AudiobookFoldersImpl(
-    rootAudioBookFoldersStore = stores.getValue(FolderType.Root),
-    singleFolderAudiobookFoldersStore = stores.getValue(FolderType.SingleFolder),
-    singleFileAudiobookFoldersStore = stores.getValue(FolderType.SingleFile),
-    authorAudiobookFoldersStore = stores.getValue(FolderType.Author),
+    rootAudioBookFoldersStore = RootAudiobookFoldersStore(stores.getValue(FolderType.Root)),
+    singleFolderAudiobookFoldersStore = SingleFolderAudiobookFoldersStore(stores.getValue(FolderType.SingleFolder)),
+    singleFileAudiobookFoldersStore = SingleFileAudiobookFoldersStore(stores.getValue(FolderType.SingleFile)),
+    authorAudiobookFoldersStore = AuthorAudiobookFoldersStore(stores.getValue(FolderType.Author)),
     context = context,
     cachedDocumentFileFactory = mockk {
       every { create(any()) } returns mockk()

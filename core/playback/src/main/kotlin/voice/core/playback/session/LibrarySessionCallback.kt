@@ -3,7 +3,6 @@ package voice.core.playback.session
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -33,8 +32,8 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.LockScreenSliderStore
 import voice.core.logging.api.Logger
+import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.session.search.BookSearchHandler
@@ -47,13 +46,11 @@ class LibrarySessionCallback(
   private val player: VoicePlayer,
   private val bookSearchParser: BookSearchParser,
   private val bookSearchHandler: BookSearchHandler,
-  @CurrentBookStore
-  private val currentBookStoreId: DataStore<BookId?>,
+  private val currentBookStoreId: CurrentBookStore,
   private val bookRepository: BookRepository,
   private val commandSourceResolver: CommandSourceResolver,
   private val context: Context,
-  @LockScreenSliderStore
-  private val lockScreenSliderStore: DataStore<Boolean>,
+  private val lockScreenSliderStore: LockScreenSliderStore,
 ) : MediaLibrarySession.Callback {
 
   private var notificationCommandsJob: Job? = null

@@ -6,6 +6,7 @@ import kotlinx.coroutines.test.runTest
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.session.search.book
 import java.time.Instant
@@ -43,7 +44,7 @@ class CurrentBookResolverTest {
         coEvery { get(book.id) } returns book
       },
       playerController = mockk(),
-      currentBookStore = currentBookStore,
+      currentBookStore = CurrentBookStore(currentBookStore),
       experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
     )
 
@@ -65,7 +66,7 @@ class CurrentBookResolverTest {
           playbackSpeed = 1f,
         )
       },
-      currentBookStore = currentBookStore,
+      currentBookStore = CurrentBookStore(currentBookStore),
       experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
     )
 
@@ -82,7 +83,7 @@ class CurrentBookResolverTest {
       playerController = mockk {
         coEvery { livePlaybackState(book.id) } returns null
       },
-      currentBookStore = currentBookStore,
+      currentBookStore = CurrentBookStore(currentBookStore),
       experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
     )
 

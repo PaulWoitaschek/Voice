@@ -6,6 +6,7 @@ plugins {
 dependencies {
   implementation(projects.core.sleeptimer.api)
   implementation(projects.core.data.api)
+  implementation(projects.core.datastore)
   implementation(projects.core.common)
   implementation(projects.core.playback)
   implementation(projects.core.initializer)

@@ -9,7 +9,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
-import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.impl.MemoryDataStore
 import java.time.Clock
@@ -42,7 +41,7 @@ class AutoEnableSleepTimerMinimalTest {
   )
 
   private val sut = AutoEnableSleepTimer(
-    sleepTimerPreferenceStore = sleepTimerPreferenceStore,
+    sleepTimerPreferenceStore = SleepTimerPreferenceStore(sleepTimerPreferenceStore),
     playStateManager = playStateManager,
     sleepTimer = sleepTimer,
     clock = Clock.fixed(Instant.parse("2020-01-01T23:00:00Z"), ZoneId.of("UTC")),

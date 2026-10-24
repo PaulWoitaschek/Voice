@@ -1,21 +1,19 @@
 package voice.features.onboarding.welcome
 
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.launch
 import voice.core.analytics.api.Analytics
+import voice.core.analytics.api.AnalyticsConsentStore
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
-import voice.core.data.store.AnalyticsConsentStore
 import voice.navigation.Destination
 import voice.navigation.Navigator
 
 @Inject
 class OnboardingWelcomeViewModel(
   private val navigator: Navigator,
-  @AnalyticsConsentStore
-  private val analyticsConsentStore: DataStore<Boolean>,
+  private val analyticsConsentStore: AnalyticsConsentStore,
   private val appInfoProvider: AppInfoProvider,
   private val analytics: Analytics,
   dispatcherProvider: DispatcherProvider,

@@ -1,6 +1,5 @@
 package voice.core.playback.player
 
-import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
@@ -16,11 +15,11 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
-import voice.core.data.store.AutoRewindAmountStore
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.LastPlaybackSpeedStore
-import voice.core.data.store.SeekTimeStore
 import voice.core.logging.api.Logger
+import voice.core.playback.AutoRewindAmountStore
+import voice.core.playback.LastPlaybackSpeedStore
+import voice.core.playback.SeekTimeStore
 import voice.core.playback.di.PlaybackScope
 import voice.core.playback.history.CommandSource
 import voice.core.playback.history.CommandSourceResolver
@@ -48,14 +47,10 @@ import kotlin.time.Duration.Companion.seconds
 class VoicePlayer(
   private val player: ChapterMarkPlayer,
   private val repo: BookRepository,
-  @CurrentBookStore
-  private val currentBookStoreId: DataStore<BookId?>,
-  @SeekTimeStore
-  private val seekTimeStore: DataStore<Int>,
-  @AutoRewindAmountStore
-  private val autoRewindAmountStore: DataStore<Int>,
-  @LastPlaybackSpeedStore
-  private val lastPlaybackSpeedStore: DataStore<Float>,
+  private val currentBookStoreId: CurrentBookStore,
+  private val seekTimeStore: SeekTimeStore,
+  private val autoRewindAmountStore: AutoRewindAmountStore,
+  private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
   private val scope: CoroutineScope,
   private val volumeGain: VolumeGain,
   private val sleepTimer: SleepTimer,

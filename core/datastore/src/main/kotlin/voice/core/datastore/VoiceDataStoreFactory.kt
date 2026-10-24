@@ -1,4 +1,4 @@
-package voice.core.data.store
+package voice.core.datastore
 
 import android.app.Application
 import androidx.datastore.core.DataMigration
@@ -11,7 +11,7 @@ import kotlinx.serialization.json.Json
 import java.io.File
 
 @Inject
-internal class VoiceDataStoreFactory(
+class VoiceDataStoreFactory(
   private val json: Json,
   private val context: Application,
 ) {
@@ -50,13 +50,11 @@ internal class VoiceDataStoreFactory(
   fun boolean(
     fileName: String,
     defaultValue: Boolean,
-    migrations: List<DataMigration<Boolean>> = emptyList(),
   ): DataStore<Boolean> {
     return create(
       serializer = Boolean.serializer(),
       defaultValue = defaultValue,
       fileName = fileName,
-      migrations = migrations,
     )
   }
 }

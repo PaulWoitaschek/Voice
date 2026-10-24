@@ -24,6 +24,7 @@ import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.DocumentFileWithUri
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookmarkRepo
+import voice.core.data.store.CurrentBookStore
 import voice.core.data.syncKey
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
@@ -368,7 +369,7 @@ class FolderSyncTest {
       playerController = playerController,
       playStateManager = playStateManager,
       mediaScanTrigger = mediaScanTrigger,
-      currentBookStore = currentBookStore,
+      currentBookStore = CurrentBookStore(currentBookStore),
       clock = Clock.fixed(Instant.ofEpochMilli(NOW), ZoneOffset.UTC),
       dispatcherProvider = DispatcherProvider(main = dispatcher, io = dispatcher, mainImmediate = dispatcher),
     )

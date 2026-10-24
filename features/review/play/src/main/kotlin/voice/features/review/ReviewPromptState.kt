@@ -1,4 +1,4 @@
-package voice.core.data
+package voice.features.review
 
 import kotlinx.serialization.Serializable
 
@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
  * What happened with the prompt asking for a rating so far.
  */
 @Serializable
-public data class ReviewPromptState(
+data class ReviewPromptState(
   /**
    * How often the prompt was shown.
    */

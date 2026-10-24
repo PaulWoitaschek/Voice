@@ -2,7 +2,6 @@ package voice.core.playback
 
 import android.content.ComponentName
 import android.content.Context
-import androidx.datastore.core.DataStore
 import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.common.util.Util
@@ -52,8 +51,7 @@ import kotlin.time.Duration.Companion.milliseconds
 @Inject
 class PlayerController(
   private val context: Context,
-  @CurrentBookStore
-  private val currentBookStoreId: DataStore<BookId?>,
+  private val currentBookStoreId: CurrentBookStore,
   private val bookRepository: BookRepository,
   private val mediaItemProvider: MediaItemProvider,
   private val historyRecorder: ListeningHistoryRecorder,

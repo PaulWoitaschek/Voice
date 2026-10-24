@@ -33,7 +33,11 @@ import voice.core.data.ChapterMark
 import voice.core.data.ListeningEvent
 import voice.core.data.MarkData
 import voice.core.data.repo.ListeningHistoryRepo
+import voice.core.data.store.CurrentBookStore
+import voice.core.playback.AutoRewindAmountStore
+import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.MemoryDataStore
+import voice.core.playback.SeekTimeStore
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
@@ -106,10 +110,10 @@ class VoicePlayerTest {
         currentBook = currentBook.update(secondArg<(BookContent) -> BookContent>())
       }
     },
-    currentBookStoreId = currentBookStore,
-    seekTimeStore = seekTimeStore,
-    autoRewindAmountStore = autoRewindAmountStore,
-    lastPlaybackSpeedStore = lastPlaybackSpeedStore,
+    currentBookStoreId = CurrentBookStore(currentBookStore),
+    seekTimeStore = SeekTimeStore(seekTimeStore),
+    autoRewindAmountStore = AutoRewindAmountStore(autoRewindAmountStore),
+    lastPlaybackSpeedStore = LastPlaybackSpeedStore(lastPlaybackSpeedStore),
     scope = scope,
     volumeGain = mockk(relaxed = true),
     sleepTimer = sleepTimer,

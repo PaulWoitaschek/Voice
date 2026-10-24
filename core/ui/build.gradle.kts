@@ -2,6 +2,7 @@ plugins {
   id("voice.library")
   id("voice.compose")
   alias(libs.plugins.metro)
+  alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -9,9 +10,9 @@ android {
 }
 
 dependencies {
-  api(libs.datastore)
   implementation(libs.appCompat)
   api(projects.core.data.api)
+  api(projects.core.datastore)
   implementation(projects.core.initializer)
   implementation(projects.core.strings)
   implementation(libs.lifecycle.compose)

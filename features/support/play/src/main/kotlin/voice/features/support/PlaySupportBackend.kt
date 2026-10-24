@@ -1,7 +1,6 @@
 package voice.features.support
 
 import android.app.Activity
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
@@ -15,8 +14,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.analytics.api.Analytics
-import voice.core.data.store.SupporterStatusStore
 import voice.core.data.supporter.SupporterStatus
+import voice.core.data.supporter.SupporterStatusStore
 import voice.core.logging.api.Logger
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -27,8 +26,7 @@ import java.time.Instant
 @ContributesBinding(AppScope::class)
 class PlaySupportBackend(
   private val billing: Billing,
-  @SupporterStatusStore
-  private val supporterStatusStore: DataStore<SupporterStatus>,
+  private val supporterStatusStore: SupporterStatusStore,
   private val navigator: Navigator,
   private val analytics: Analytics,
   private val clock: Clock,

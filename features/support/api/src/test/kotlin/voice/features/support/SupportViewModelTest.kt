@@ -18,6 +18,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import voice.core.data.supporter.SupporterBadge
 import voice.core.data.supporter.SupporterStatus
+import voice.core.data.supporter.SupporterStatusStore
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.features.support.SupportViewState.Action
 import voice.features.support.SupportViewState.Content
@@ -49,7 +50,7 @@ class SupportViewModelTest {
   private val viewModel = SupportViewModel(
     backend = backend,
     navigator = navigator,
-    supporterStatusStore = supporterStatusStore,
+    supporterStatusStore = SupporterStatusStore(supporterStatusStore),
     supporterNoteFeatureFlag = SupporterNoteFeatureFlag(supporterNoteFeatureFlag),
     clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
   )

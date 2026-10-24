@@ -1,12 +1,10 @@
 package voice.features.bookOverview.survey
 
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import voice.core.analytics.api.Analytics
 import voice.core.common.AppInfoProvider
-import voice.core.data.store.HandledSurveysStore
 import java.net.URLEncoder
 import java.time.Clock
 import java.time.LocalDate
@@ -16,8 +14,7 @@ import kotlin.time.toJavaInstant
 @Inject
 class Survey(
   private val surveyUrlFeatureFlag: SurveyUrlFeatureFlag,
-  @HandledSurveysStore
-  private val handledSurveysStore: DataStore<Map<String, Long>>,
+  private val handledSurveysStore: HandledSurveysStore,
   private val localSurvey: LocalSurvey,
   private val clock: Clock,
   private val appInfoProvider: AppInfoProvider,

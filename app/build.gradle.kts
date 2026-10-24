@@ -142,6 +142,7 @@ dependencies {
   implementation(projects.core.common)
   implementation(projects.core.data.api)
   implementation(projects.core.data.impl)
+  implementation(projects.core.datastore)
   implementation(projects.core.playback)
   implementation(projects.core.scanner)
   implementation(projects.core.featureflag)

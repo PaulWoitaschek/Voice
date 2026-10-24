@@ -2,7 +2,6 @@ package voice.features.widget
 
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.toArgb
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -22,17 +21,17 @@ import kotlinx.coroutines.flow.shareIn
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
-import voice.core.data.ThemeColorScheme
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.LastPlaybackSpeedStore
-import voice.core.data.store.ThemeColorSchemeStore
 import voice.core.playback.CurrentBookResolver
+import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.withDefaultSpeed
 import voice.core.sleeptimer.SleepTimer
 import voice.core.ui.CoverSeedColors
+import voice.core.ui.ThemeColorScheme
+import voice.core.ui.ThemeColorSchemeStore
 import java.time.Instant
 import kotlin.time.Duration.Companion.minutes
 
@@ -46,14 +45,11 @@ class WidgetData(
   private val bookRepository: BookRepository,
   private val bookContentRepo: BookContentRepo,
   private val currentBookResolver: Lazy<CurrentBookResolver>,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
-  @LastPlaybackSpeedStore
-  private val lastPlaybackSpeedStore: DataStore<Float>,
+  private val currentBookStore: CurrentBookStore,
+  private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
   private val playStateManager: PlayStateManager,
   private val sleepTimer: SleepTimer,
-  @ThemeColorSchemeStore
-  private val themeColorSchemeStore: DataStore<ThemeColorScheme>,
+  private val themeColorSchemeStore: ThemeColorSchemeStore,
   private val coverSeedColors: CoverSeedColors,
   private val images: WidgetImages,
   scope: CoroutineScope,

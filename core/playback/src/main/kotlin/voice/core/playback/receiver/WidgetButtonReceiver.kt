@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
@@ -32,8 +31,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   lateinit var bookRepository: BookRepository
 
   @Inject
-  @CurrentBookStore
-  lateinit var currentBookStore: DataStore<BookId?>
+  lateinit var currentBookStore: CurrentBookStore
 
   override fun onReceive(
     context: Context,

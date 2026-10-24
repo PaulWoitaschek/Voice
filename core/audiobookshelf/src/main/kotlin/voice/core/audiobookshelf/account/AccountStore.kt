@@ -6,10 +6,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.Qualifier
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -55,64 +52,63 @@ internal data class SyncedProgress(
   val serverLastUpdate: Long,
 )
 
-@Qualifier
-internal annotation class AccountStore
+@SingleIn(AppScope::class)
+internal class AccountStore(store: DataStore<Account?>) : DataStore<Account?> by store {
 
-@Qualifier
-internal annotation class PreferencesStore
-
-@Qualifier
-internal annotation class SyncedProgressStore
-
-@Qualifier
-internal annotation class SyncedBookmarksStore
-
-@BindingContainer
-@ContributesTo(AppScope::class)
-object AudiobookshelfStoreModule {
-
-  @Provides
-  @SingleIn(AppScope::class)
-  @AccountStore
-  private fun account(context: Context): DataStore<Account?> = jsonStore(
-    context = context,
-    fileName = "account",
-    serializer = Account.serializer().nullable,
-    defaultValue = null,
+  @Inject
+  constructor(context: Context) : this(
+    jsonStore(
+      context = context,
+      fileName = "account",
+      serializer = Account.serializer().nullable,
+      defaultValue = null,
+    ),
   )
+}
 
-  @Provides
-  @SingleIn(AppScope::class)
-  @PreferencesStore
-  private fun preferences(context: Context): DataStore<Preferences> = jsonStore(
-    context = context,
-    fileName = "preferences",
-    serializer = Preferences.serializer(),
-    defaultValue = Preferences(),
+@SingleIn(AppScope::class)
+internal class PreferencesStore(store: DataStore<Preferences>) : DataStore<Preferences> by store {
+
+  @Inject
+  constructor(context: Context) : this(
+    jsonStore(
+      context = context,
+      fileName = "preferences",
+      serializer = Preferences.serializer(),
+      defaultValue = Preferences(),
+    ),
   )
+}
 
-  @Provides
-  @SingleIn(AppScope::class)
-  @SyncedProgressStore
-  private fun syncedProgress(context: Context): DataStore<Map<String, SyncedProgress>> = jsonStore(
-    context = context,
-    fileName = "syncedProgress",
-    serializer = MapSerializer(String.serializer(), SyncedProgress.serializer()),
-    defaultValue = emptyMap(),
+@SingleIn(AppScope::class)
+internal class SyncedProgressStore(store: DataStore<Map<String, SyncedProgress>>) : DataStore<Map<String, SyncedProgress>> by store {
+
+  @Inject
+  constructor(context: Context) : this(
+    jsonStore(
+      context = context,
+      fileName = "syncedProgress",
+      serializer = MapSerializer(String.serializer(), SyncedProgress.serializer()),
+      defaultValue = emptyMap(),
+    ),
   )
+}
 
-  /**
-   * The bookmarks both sides had at the last sync, with their titles. A bookmark that is missing on one side was
-   * deleted there when it is in here, and is new on the other side when it isn't.
-   */
-  @Provides
-  @SingleIn(AppScope::class)
-  @SyncedBookmarksStore
-  private fun syncedBookmarks(context: Context): DataStore<Map<String, String>> = jsonStore(
-    context = context,
-    fileName = "syncedBookmarks",
-    serializer = MapSerializer(String.serializer(), String.serializer()),
-    defaultValue = emptyMap(),
+/**
+ * The bookmarks both sides had at the last sync, with their titles. A bookmark that is missing on one side was
+ * deleted there when it is in here, and is new on the other side when it isn't.
+ */
+@SingleIn(AppScope::class)
+internal class SyncedBookmarksStore(store: DataStore<Map<String, String>>) : DataStore<Map<String, String>> by store {
+
+  @Inject
+  constructor(context: Context) : this(
+    jsonStore(
+      context = context,
+      fileName = "syncedBookmarks",
+      serializer = MapSerializer(String.serializer(), String.serializer()),
+      defaultValue = emptyMap(),
+    ),
   )
 }
 

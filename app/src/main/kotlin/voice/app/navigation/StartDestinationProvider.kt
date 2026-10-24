@@ -1,7 +1,6 @@
 package voice.app.navigation
 
 import android.content.Intent
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -12,17 +11,15 @@ import voice.core.audiobookshelf.Audiobookshelf
 import voice.core.data.BookId
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.OnboardingCompletedStore
 import voice.core.playback.PlayerController
+import voice.features.onboarding.OnboardingCompletedStore
 import voice.navigation.Destination
 
 @Inject
 class StartDestinationProvider(
-  @OnboardingCompletedStore
-  private val onboardingCompletedStore: DataStore<Boolean>,
+  private val onboardingCompletedStore: OnboardingCompletedStore,
   private val audiobookFolders: AudiobookFolders,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val currentBookStore: CurrentBookStore,
   private val playerController: PlayerController,
   private val audiobookshelf: Audiobookshelf,
   private val json: Json,

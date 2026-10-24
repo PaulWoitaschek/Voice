@@ -24,9 +24,11 @@ import voice.core.common.DispatcherProvider
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ListeningEvent
+import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
+import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
@@ -64,7 +66,7 @@ class BookmarkViewModelTest {
     lastPlaybackSpeed: Float = 1F,
     historyTabOpenStore: MemoryDataStore<Boolean> = MemoryDataStore(true),
   ) = BookmarkViewModel(
-    currentBookStore = MemoryDataStore<BookId?>(null),
+    currentBookStore = CurrentBookStore(MemoryDataStore<BookId?>(null)),
     bookRepository = mockk {
       every { flow(book.id) } returns flowOf(book)
     },
@@ -84,8 +86,8 @@ class BookmarkViewModelTest {
     experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
       MemoryFeatureFlag(experimentalPlaybackPersistence),
     ),
-    lastPlaybackSpeedStore = MemoryDataStore(lastPlaybackSpeed),
-    historyTabOpenStore = historyTabOpenStore,
+    lastPlaybackSpeedStore = LastPlaybackSpeedStore(MemoryDataStore(lastPlaybackSpeed)),
+    historyTabOpenStore = HistoryTabOpenStore(historyTabOpenStore),
     bookId = book.id,
     editBookmarkId = editBookmarkId,
   )

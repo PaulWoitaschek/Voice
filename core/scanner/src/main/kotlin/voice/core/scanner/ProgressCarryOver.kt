@@ -3,7 +3,6 @@ package voice.core.scanner
 import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.core.net.toUri
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Inject
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -23,8 +22,7 @@ internal class ProgressCarryOver(
   private val bookmarkRepo: BookmarkRepo,
   private val listeningHistoryRepo: ListeningHistoryRepo,
   private val listeningStatsRepo: ListeningStatsRepo,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val currentBookStore: CurrentBookStore,
 ) {
 
   suspend fun carryOver(

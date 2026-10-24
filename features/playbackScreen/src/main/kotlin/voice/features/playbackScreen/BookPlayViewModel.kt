@@ -6,7 +6,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -27,17 +26,15 @@ import voice.core.data.durationMs
 import voice.core.data.markForPosition
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
-import voice.core.data.sleeptimer.SleepTimerPreference
 import voice.core.data.store.CurrentBookStore
-import voice.core.data.store.LastPlaybackSpeedStore
-import voice.core.data.store.SeekTimeStore
-import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
+import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.PlayerController
+import voice.core.playback.SeekTimeStore
 import voice.core.playback.history.Jump
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.misc.Decibel
@@ -48,6 +45,8 @@ import voice.core.playback.withDefaultSpeed
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerMode.TimedWithDuration
+import voice.core.sleeptimer.SleepTimerPreference
+import voice.core.sleeptimer.SleepTimerPreferenceStore
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.formatTime
 import voice.features.playbackScreen.batteryOptimization.BatteryOptimization
@@ -67,24 +66,20 @@ class BookPlayViewModel(
   private val player: PlayerController,
   private val sleepTimer: SleepTimer,
   private val playStateManager: PlayStateManager,
-  @CurrentBookStore
-  private val currentBookStoreId: DataStore<BookId?>,
+  private val currentBookStoreId: CurrentBookStore,
   private val navigator: Navigator,
   private val bookmarkRepository: BookmarkRepo,
   private val volumeGainFormatter: VolumeGainFormatter,
   private val batteryOptimization: BatteryOptimization,
   dispatcherProvider: DispatcherProvider,
-  @SleepTimerPreferenceStore
-  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
-  @SeekTimeStore
-  private val seekTimeStore: DataStore<Int>,
+  private val sleepTimerPreferenceStore: SleepTimerPreferenceStore,
+  private val seekTimeStore: SeekTimeStore,
   private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   private val historyRecorder: ListeningHistoryRecorder,
   private val clock: Clock,
   private val serverLibrary: ServerLibrary,
-  @LastPlaybackSpeedStore
-  private val lastPlaybackSpeedStore: DataStore<Float>,
+  private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
   @Assisted
   private val bookId: BookId,
 ) {

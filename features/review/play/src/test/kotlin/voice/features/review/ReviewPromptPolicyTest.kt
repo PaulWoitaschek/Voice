@@ -1,7 +1,6 @@
 package voice.features.review
 
 import voice.core.data.BookId
-import voice.core.data.ReviewPromptState
 import voice.core.data.repo.FinishedBook
 import java.time.Instant
 import kotlin.test.Test

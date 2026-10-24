@@ -16,7 +16,7 @@ import androidx.glance.background
 import androidx.glance.color.ColorProviders
 import androidx.glance.color.DynamicThemeColorProviders
 import androidx.glance.unit.ColorProvider
-import voice.core.data.ThemeColorScheme
+import voice.core.ui.ThemeColorScheme
 import voice.core.ui.coverColorScheme
 import voice.core.ui.themeColorScheme
 import androidx.glance.material3.ColorProviders as Material3ColorProviders

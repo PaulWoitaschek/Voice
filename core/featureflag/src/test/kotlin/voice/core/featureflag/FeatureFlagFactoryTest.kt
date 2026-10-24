@@ -29,7 +29,7 @@ class FeatureFlagFactoryTest {
 
   private fun TestScope.styleFlag(remoteValue: String): FeatureFlag<Style> {
     every { remoteConfig.string("style", "Classic") } returns remoteValue
-    return FeatureFlagFactory(remoteConfig, overridesStore, backgroundScope)
+    return FeatureFlagFactory(remoteConfig, FeatureFlagOverridesStore(overridesStore), backgroundScope)
       .enum(key = "style", description = "", defaultValue = Style.Classic, entries = Style.entries)
   }
 
@@ -72,7 +72,7 @@ class FeatureFlagFactoryTest {
     val mainThread = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     runBlocking(mainThread) {
-      val flag = FeatureFlagFactory(remoteConfig, store, CoroutineScope(mainThread))
+      val flag = FeatureFlagFactory(remoteConfig, FeatureFlagOverridesStore(store), CoroutineScope(mainThread))
         .boolean(key = "flag", description = "")
       readStarted.await()
 

@@ -1,7 +1,6 @@
 package voice.core.audiobookshelf
 
 import android.content.Context
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -101,15 +100,13 @@ public data class LibrariesPreview(
 @SingleIn(AppScope::class)
 @Inject
 public class Audiobookshelf internal constructor(
-  @AccountStore
-  private val accountStore: DataStore<Account?>,
+  private val accountStore: AccountStore,
   private val http: AudiobookshelfHttp,
   private val sync: AudiobookshelfSync,
   private val progressSync: ProgressSync,
   private val downloads: AudiobookshelfDownloads,
   private val contentRepo: BookContentRepo,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val currentBookStore: CurrentBookStore,
   private val playerController: PlayerController,
   private val context: Context,
   private val analytics: Analytics,

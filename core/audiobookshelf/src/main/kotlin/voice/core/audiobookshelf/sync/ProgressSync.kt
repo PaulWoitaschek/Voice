@@ -1,6 +1,5 @@
 package voice.core.audiobookshelf.sync
 
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -37,10 +36,8 @@ import kotlin.math.abs
 internal class ProgressSync(
   private val http: AudiobookshelfHttp,
   private val bookRepository: BookRepository,
-  @SyncedProgressStore
-  private val syncedProgressStore: DataStore<Map<String, SyncedProgress>>,
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val syncedProgressStore: SyncedProgressStore,
+  private val currentBookStore: CurrentBookStore,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
 ) {

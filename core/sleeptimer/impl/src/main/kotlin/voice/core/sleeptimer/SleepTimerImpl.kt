@@ -1,6 +1,5 @@
 package voice.core.sleeptimer
 
-import androidx.datastore.core.DataStore
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -15,9 +14,6 @@ import kotlinx.coroutines.withTimeoutOrNull
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.ListeningEvent
-import voice.core.data.sleeptimer.SleepTimerPreference
-import voice.core.data.store.FadeOutStore
-import voice.core.data.store.SleepTimerPreferenceStore
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
@@ -32,11 +28,9 @@ import kotlin.time.Duration.Companion.seconds
 class SleepTimerImpl internal constructor(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
-  @SleepTimerPreferenceStore
-  private val sleepTimerPreferenceStore: DataStore<SleepTimerPreference>,
+  private val sleepTimerPreferenceStore: SleepTimerPreferenceStore,
   private val playerController: PlayerController,
-  @FadeOutStore
-  private val fadeOutStore: DataStore<Duration>,
+  private val fadeOutStore: FadeOutStore,
   dispatcherProvider: DispatcherProvider,
   private val tracker: SleepTimerTracker,
 ) : SleepTimer {

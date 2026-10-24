@@ -3,7 +3,6 @@ package voice.features.bookmark.history
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -33,8 +32,7 @@ import java.time.Clock
 
 @AssistedInject
 class HistoryViewModel(
-  @CurrentBookStore
-  private val currentBookStore: DataStore<BookId?>,
+  private val currentBookStore: CurrentBookStore,
   private val bookRepository: BookRepository,
   private val listeningHistoryRepo: ListeningHistoryRepo,
   private val playStateManager: PlayStateManager,

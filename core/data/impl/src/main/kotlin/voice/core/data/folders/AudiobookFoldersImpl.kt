@@ -27,14 +27,10 @@ import voice.core.logging.api.Logger
 @ContributesBinding(AppScope::class)
 public class AudiobookFoldersImpl
 internal constructor(
-  @RootAudiobookFoldersStore
-  private val rootAudioBookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
-  @SingleFolderAudiobookFoldersStore
-  private val singleFolderAudiobookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
-  @SingleFileAudiobookFoldersStore
-  private val singleFileAudiobookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
-  @AuthorAudiobookFoldersStore
-  private val authorAudiobookFoldersStore: DataStore<Set<@JvmSuppressWildcards Uri>>,
+  private val rootAudioBookFoldersStore: RootAudiobookFoldersStore,
+  private val singleFolderAudiobookFoldersStore: SingleFolderAudiobookFoldersStore,
+  private val singleFileAudiobookFoldersStore: SingleFileAudiobookFoldersStore,
+  private val authorAudiobookFoldersStore: AuthorAudiobookFoldersStore,
   private val context: Context,
   private val cachedDocumentFileFactory: CachedDocumentFileFactory,
   private val analytics: Analytics,

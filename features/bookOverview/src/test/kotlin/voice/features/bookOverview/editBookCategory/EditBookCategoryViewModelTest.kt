@@ -12,6 +12,8 @@ import kotlinx.coroutines.test.runTest
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
+import voice.core.data.store.CurrentBookStore
+import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.features.bookOverview.MemoryDataStore
@@ -42,7 +44,8 @@ class EditBookCategoryViewModelTest {
 
   private val currentBookStore = MemoryDataStore<BookId?>(book.id)
 
-  private val viewModel = EditBookCategoryViewModel(repo, playerController, currentBookStore, MemoryDataStore(1.5F))
+  private val viewModel =
+    EditBookCategoryViewModel(repo, playerController, CurrentBookStore(currentBookStore), LastPlaybackSpeedStore(MemoryDataStore(1.5F)))
 
   @Test
   fun `marking a book as completed moves it to the end`() = runTest {

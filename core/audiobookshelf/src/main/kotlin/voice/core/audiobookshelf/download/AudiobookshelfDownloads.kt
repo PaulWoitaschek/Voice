@@ -4,7 +4,6 @@ import android.app.Notification
 import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
-import androidx.datastore.core.DataStore
 import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadRequest
@@ -55,8 +54,7 @@ public class AudiobookshelfDownloads internal constructor(
   private val context: Context,
   private val media: AudiobookshelfMedia,
   private val bookRepository: BookRepository,
-  @PreferencesStore
-  private val preferencesStore: DataStore<Preferences>,
+  private val preferencesStore: PreferencesStore,
   private val notifications: DownloadNotifications,
 ) {
 
