@@ -118,12 +118,13 @@ class BookOverviewViewModel(
     val hasFoldersWithoutAccess = remember {
       audiobookFolders.withoutAccess().map { folders -> folders.values.any { it.isNotEmpty() } }
     }.collectAsState(initial = null).value
-    val surveyUrl = remember { survey.url() }.collectAsState(initial = null).value
+    val hasSurvey = remember { survey.url().map { it != null } }.collectAsState(initial = null).value
     if (books == null ||
       currentBook == null ||
       folderPickerMovedDialogShown == null ||
       gridMode == null ||
-      hasFoldersWithoutAccess == null
+      hasFoldersWithoutAccess == null ||
+      hasSurvey == null
     ) {
       return BookOverviewViewState.Loading
     }
@@ -184,7 +185,7 @@ class BookOverviewViewModel(
       isLoading = scannerActive,
       showStoragePermissionBugCard = hasStoragePermissionBug,
       // adding books comes first
-      showSurveyCard = surveyUrl != null && !showEmptyLibrary,
+      showSurveyCard = hasSurvey && !showEmptyLibrary,
       showFolderAccessBadge = hasFoldersWithoutAccess,
       showFolderPickerIcon = !folderPickerInSettingsFeatureFlag.get() &&
         !folderPickerMovedDialogShown &&

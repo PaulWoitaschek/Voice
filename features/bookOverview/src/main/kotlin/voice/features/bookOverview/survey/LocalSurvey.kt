@@ -3,8 +3,8 @@ package voice.features.bookOverview.survey
 import dev.zacsweers.metro.Inject
 
 /**
- * The survey built into the app, which also reaches builds without Remote Config. When it runs, like
- * the days or the versions, is written here by hand.
+ * The survey built into the app, which also reaches builds without Remote Config. Its URL and when it
+ * runs, such as the dates or app versions, are set here in code.
  */
 @Inject
 class LocalSurvey {
