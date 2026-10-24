@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Ge behörighet</string>
     <string name="library.storage_permission_bug.message">På vissa enheter saknar en systemapp den behörighet som krävs för att komma åt den externa lagringen. Den åtkomsten är nödvändig för att Voice ska kunna läsa dina ljudböcker.</string>
     <string name="library.storage_permission_bug.title">Behörighet krävs</string>
+    <string name="library.survey.dismiss">Nej tack</string>
+    <string name="library.survey.message">Några snabba frågor hjälper till att avgöra vad som kommer härnäst.</string>
+    <string name="library.survey.open">Svara på enkäten</string>
+    <string name="library.survey.title">Var med och forma Voice</string>
     <string name="media_session.library.recent">Senast spelade</string>
     <string name="media_session.library.root">Alla ljudböcker</string>
     <string name="onboarding.action.next">Nästa</string>

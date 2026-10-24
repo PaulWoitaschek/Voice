@@ -94,6 +94,8 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onPlayButtonClick = bookOverviewViewModel::playPause,
     onSearchClick = bookOverviewViewModel::onSearchClick,
     onPermissionBugCardClick = bookOverviewViewModel::onPermissionBugCardClick,
+    onSurveyClick = bookOverviewViewModel::onSurveyClick,
+    onSurveyDismiss = bookOverviewViewModel::onSurveyDismiss,
     onShowFoldersClick = bookOverviewViewModel::onShowFoldersClick,
     modifier = modifier,
   )
@@ -110,6 +112,8 @@ internal fun BookOverview(
   onPlayButtonClick: () -> Unit,
   onSearchClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
+  onSurveyClick: () -> Unit,
+  onSurveyDismiss: () -> Unit,
   onShowFoldersClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -153,6 +157,8 @@ internal fun BookOverview(
       onBookLongClick = onBookLongClick,
       onPlayClick = onPlayButtonClick,
       onPermissionBugCardClick = onPermissionBugCardClick,
+      onSurveyClick = onSurveyClick,
+      onSurveyDismiss = onSurveyDismiss,
       onShowFoldersClick = onShowFoldersClick,
       modifier = Modifier
         .padding(contentPadding)
@@ -230,6 +236,8 @@ fun BookOverviewPreview(
       onPlayButtonClick = {},
       onSearchClick = {},
       onPermissionBugCardClick = {},
+      onSurveyClick = {},
+      onSurveyDismiss = {},
       onShowFoldersClick = {},
     )
   }
@@ -248,37 +256,41 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
     )
   }
 
-  override val values = sequenceOf(
-    BookOverviewViewState(
-      currentBookId = null,
-      books = mapOf(
-        BookOverviewCategory.CURRENT to buildMap {
-          repeat(10) {
-            put(
-              BookId(Uuid.random().toString()),
-              mutableStateOf(book()),
-            )
-          }
-        },
-        BookOverviewCategory.FINISHED to buildMap {
-          repeat(2) {
-            put(
-              BookId(Uuid.random().toString()),
-              mutableStateOf(book()),
-            )
-          }
-        },
-      ),
-      layoutMode = BookOverviewLayoutMode.List,
-      playButtonState = BookOverviewViewState.PlayButtonState.Paused,
-      showEmptyLibrary = false,
-      showSearchIcon = true,
-      isLoading = true,
-      showStoragePermissionBugCard = false,
-      showFolderAccessBadge = false,
-      showFolderPickerIcon = true,
-      dialog = null,
+  private val library = BookOverviewViewState(
+    currentBookId = null,
+    books = mapOf(
+      BookOverviewCategory.CURRENT to buildMap {
+        repeat(10) {
+          put(
+            BookId(Uuid.random().toString()),
+            mutableStateOf(book()),
+          )
+        }
+      },
+      BookOverviewCategory.FINISHED to buildMap {
+        repeat(2) {
+          put(
+            BookId(Uuid.random().toString()),
+            mutableStateOf(book()),
+          )
+        }
+      },
     ),
+    layoutMode = BookOverviewLayoutMode.List,
+    playButtonState = BookOverviewViewState.PlayButtonState.Paused,
+    showEmptyLibrary = false,
+    showSearchIcon = true,
+    isLoading = true,
+    showStoragePermissionBugCard = false,
+    showSurveyCard = false,
+    showFolderAccessBadge = false,
+    showFolderPickerIcon = true,
+    dialog = null,
+  )
+
+  override val values = sequenceOf(
+    library,
+    library.copy(layoutMode = BookOverviewLayoutMode.Grid, showSurveyCard = true),
     BookOverviewViewState.Loading.copy(
       isLoading = false,
       showEmptyLibrary = true,

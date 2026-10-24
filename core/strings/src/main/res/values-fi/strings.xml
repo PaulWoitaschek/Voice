@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Anna käyttöoikeus</string>
     <string name="library.storage_permission_bug.message">Eräillä laitteilla joltakin järjestelmän sovellukselta puuttuu tarvittava käyttöoikeus ulkoiseen tallennustilaan. Tämä oikeus on välttämätön jotta Voice voi lukea äänikirjojasi.</string>
     <string name="library.storage_permission_bug.title">Käyttöoikeus tarvitaan</string>
+    <string name="library.survey.dismiss">Ei kiitos</string>
+    <string name="library.survey.message">Muutama nopea kysymys auttaa päättämään, mitä tehdään seuraavaksi.</string>
+    <string name="library.survey.open">Vastaa kyselyyn</string>
+    <string name="library.survey.title">Auta kehittämään Voicea</string>
     <string name="media_session.library.recent">Viimeksi kuunnellut</string>
     <string name="media_session.library.root">Kaikki äänikirjat</string>
     <string name="onboarding.action.next">Seuraava</string>

@@ -42,6 +42,12 @@ public annotation class ReviewPromptStateStore
 @Qualifier
 public annotation class FolderPickerMovedDialogShownStore
 
+/**
+ * Each survey URL the listener opened or dismissed, with the day it happened on as an epoch day.
+ */
+@Qualifier
+public annotation class HandledSurveysStore
+
 @Qualifier
 public annotation class AnalyticsConsentStore
 

@@ -315,6 +315,10 @@
     <string name="library.storage_permission_bug.action">Udělit oprávnění</string>
     <string name="library.storage_permission_bug.message">U některých zařízení chybí systémové aplikaci potřebná oprávnění pro přístup k externímu úložišti. Tento přístup je nezbytný, aby Voice mohl číst vaše audioknihy.</string>
     <string name="library.storage_permission_bug.title">Vyžadováno povolení</string>
+    <string name="library.survey.dismiss">Ne, díky</string>
+    <string name="library.survey.message">Pár rychlých otázek pomůže rozhodnout, co přijde na řadu.</string>
+    <string name="library.survey.open">Vyplnit dotazník</string>
+    <string name="library.survey.title">Pomozte utvářet Voice</string>
     <string name="media_session.library.recent">Nedávné</string>
     <string name="media_session.library.root">Všechny audioknihy</string>
     <string name="onboarding.action.next">Další</string>

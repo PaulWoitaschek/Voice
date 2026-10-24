@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">İzin ver</string>
     <string name="library.storage_permission_bug.message">Belirli cihazlarda, bir sistem uygulamasının harici depolamaya erişim için gerekli izni yoktur. Bu erişim, Voice\'un sesli kitaplarınızı okuyabilmesi için gereklidir.</string>
     <string name="library.storage_permission_bug.title">İzin gerekli</string>
+    <string name="library.survey.dismiss">Hayır, teşekkürler</string>
+    <string name="library.survey.message">Birkaç kısa soru, sırada ne olacağına karar vermeye yardımcı olur.</string>
+    <string name="library.survey.open">Ankete katıl</string>
+    <string name="library.survey.title">Voice\'u birlikte şekillendirelim</string>
     <string name="media_session.library.recent">Son açılanlar</string>
     <string name="media_session.library.root">Tüm sesli kitaplar</string>
     <string name="onboarding.action.next">Sonraki</string>

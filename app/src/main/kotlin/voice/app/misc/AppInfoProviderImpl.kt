@@ -11,6 +11,7 @@ import kotlin.time.Instant
 @Inject
 class AppInfoProviderImpl(private val application: Application) : AppInfoProvider {
   override val versionName: String = BuildConfig.VERSION_NAME
+  override val flavor: String = BuildConfig.FLAVOR
   override val analyticsIncluded: Boolean = BuildConfig.INCLUDE_ANALYTICS
   override val supportDevelopmentIncluded: Boolean = BuildConfig.SUPPORT_DEVELOPMENT_INCLUDED
   override val installTime: Instant by lazy {

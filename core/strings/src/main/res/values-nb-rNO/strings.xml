@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Innvilg tillatelse</string>
     <string name="library.storage_permission_bug.message">På enkelte enheter mangler en systemapp den nødvendige tillatelsen for å få tilgang til det eksterne lagringsmediet. Denne tilgangen er avgjørende for at Voice skal kunne lese lydbøkene dine.</string>
     <string name="library.storage_permission_bug.title">Tillatelse kreves</string>
+    <string name="library.survey.dismiss">Nei takk</string>
+    <string name="library.survey.message">Et par raske spørsmål hjelper med å bestemme hva som kommer videre.</string>
+    <string name="library.survey.open">Delta i undersøkelsen</string>
+    <string name="library.survey.title">Vær med på å forme Voice</string>
     <string name="media_session.library.recent">Nylig</string>
     <string name="media_session.library.root">Alle lydbøker</string>
     <string name="onboarding.action.next">Neste</string>

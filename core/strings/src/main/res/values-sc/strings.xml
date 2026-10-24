@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Dae su permissu</string>
     <string name="library.storage_permission_bug.message">Pro unos cantos dispositivos, un\'aplicatzione de sistema non tenet s\'autorizatzione netzessària pro atzèdere a sa memòria esterna. Bisòngiat a tènnere custu atzessu pro chi Voice potzat lèghere sos audiolibros tuos.</string>
     <string name="library.storage_permission_bug.title">Permissu netzessàriu</string>
+    <string name="library.survey.dismiss">Nono, gràtzias</string>
+    <string name="library.survey.message">Unas cantas preguntas lestras agiudant a detzìdere ite fàghere a pustis.</string>
+    <string name="library.survey.open">Faghe su sondàgiu</string>
+    <string name="library.survey.title">Agiuda a dare forma a Voice</string>
     <string name="media_session.library.recent">Reghentes</string>
     <string name="media_session.library.root">Totu sos audiolibros</string>
     <string name="onboarding.action.next">Sighi</string>

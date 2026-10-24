@@ -315,6 +315,10 @@
     <string name="library.storage_permission_bug.action">Przyznaj uprawnienie</string>
     <string name="library.storage_permission_bug.message">W przypadku niektórych urządzeń aplikacja systemowa nie ma uprawnień niezbędnych do uzyskania dostępu do pamięci zewnętrznej. Dostęp ten jest niezbędny, aby aplikacja Voice mogła odczytywać książki audio.</string>
     <string name="library.storage_permission_bug.title">Wymagany dostęp</string>
+    <string name="library.survey.dismiss">Nie, dziękuję</string>
+    <string name="library.survey.message">Kilka krótkich pytań pomoże zdecydować, co dalej.</string>
+    <string name="library.survey.open">Wypełnij ankietę</string>
+    <string name="library.survey.title">Pomóż kształtować Voice</string>
     <string name="media_session.library.recent">Ostatnie</string>
     <string name="media_session.library.root">Wszystkie audiobooki</string>
     <string name="onboarding.action.next">Dalej</string>

@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Anna õigused</string>
     <string name="library.storage_permission_bug.message">Mõnedes seadmetes puudub ühel süsteemirakendusel vajalik õigus lugeda andmeid väliselt andmekandjalt. See ligipääs on vajalik, et Voice saaks lugeda sinu heliraamatute faile.</string>
     <string name="library.storage_permission_bug.title">Õigused on vajalikud</string>
+    <string name="library.survey.dismiss">Ei, aitäh</string>
+    <string name="library.survey.message">Paar kiiret küsimust aitavad otsustada, mis järgmiseks tuleb.</string>
+    <string name="library.survey.open">Vasta küsitlusele</string>
+    <string name="library.survey.title">Aita Voice\'i kujundada</string>
     <string name="media_session.library.recent">Viimati kuulatud</string>
     <string name="media_session.library.root">Kõik heliraamatud</string>
     <string name="onboarding.action.next">Edasi</string>

@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Hozzáférés engedélyezése</string>
     <string name="library.storage_permission_bug.message">Egyes eszközökön egy rendszeralkalmazásnak nincs meg a külső tárhely eléréséhez szükséges engedélye. Erre szükség van ahhoz, hogy a Voice be tudja olvasni az Ön hangoskönyveit.</string>
     <string name="library.storage_permission_bug.title">Hozzáférés szükséges</string>
+    <string name="library.survey.dismiss">Nem, köszönöm</string>
+    <string name="library.survey.message">Néhány gyors kérdés segít eldönteni, mi jöjjön ezután.</string>
+    <string name="library.survey.open">Kérdőív kitöltése</string>
+    <string name="library.survey.title">Segítsen alakítani a Voice-t</string>
     <string name="media_session.library.recent">Legutóbbiak</string>
     <string name="media_session.library.root">Összes hangoskönyv</string>
     <string name="onboarding.action.next">Tovább</string>

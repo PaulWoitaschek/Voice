@@ -315,6 +315,10 @@
     <string name="library.storage_permission_bug.action">Udeliť oprávnenie</string>
     <string name="library.storage_permission_bug.message">Systémová aplikácia na niektorých zariadeniach nemá udelené potrebné povolenie pristupovať k externému úložisku. Tento prístup je nevyhnutný, aby mohla aplikácia Voice čítať vaše zvukové knihy.</string>
     <string name="library.storage_permission_bug.title">Vyžaduje sa povolenie</string>
+    <string name="library.survey.dismiss">Nie, ďakujem</string>
+    <string name="library.survey.message">Pár rýchlych otázok pomôže rozhodnúť, čo príde na rad.</string>
+    <string name="library.survey.open">Vyplniť dotazník</string>
+    <string name="library.survey.title">Pomôžte utvárať Voice</string>
     <string name="media_session.library.recent">Nedávne</string>
     <string name="media_session.library.root">Všetky zvukové knihy</string>
     <string name="onboarding.action.next">Ďalej</string>

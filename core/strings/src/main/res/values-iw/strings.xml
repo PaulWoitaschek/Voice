@@ -298,6 +298,10 @@
     <string name="library.storage_permission_bug.action">הענקת הרשאה</string>
     <string name="library.storage_permission_bug.message">במכשירים מסוימים, לאפליקציית מערכת חסרה ההרשאה הנדרשת לגישה לאחסון החיצוני. גישה זו חיונית כדי ש-Voice יוכל לקרוא את הקולספרים שלכם.</string>
     <string name="library.storage_permission_bug.title">נדרשת הרשאה</string>
+    <string name="library.survey.dismiss">לא, תודה</string>
+    <string name="library.survey.message">כמה שאלות קצרות יעזרו להחליט מה יבוא בהמשך.</string>
+    <string name="library.survey.open">מילוי הסקר</string>
+    <string name="library.survey.title">עזרו לעצב את Voice</string>
     <string name="media_session.library.recent">אחרונים</string>
     <string name="media_session.library.root">כל הקולספרים</string>
     <string name="onboarding.action.next">הבא</string>

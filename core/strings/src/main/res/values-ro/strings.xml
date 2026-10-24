@@ -298,6 +298,10 @@
     <string name="library.storage_permission_bug.action">Acordă permisiune</string>
     <string name="library.storage_permission_bug.message">Pe anumite dispozitive, o aplicație de sistem are nevoie de anumite permisiuni pentru a accesa stocarea externă. Aceste permisiuni sunt esențiale pentru ca Voice să poată citi cărțile tale audio.</string>
     <string name="library.storage_permission_bug.title">Permisiune necesară</string>
+    <string name="library.survey.dismiss">Nu, mulțumesc</string>
+    <string name="library.survey.message">Câteva întrebări rapide ne ajută să decidem ce urmează.</string>
+    <string name="library.survey.open">Completează sondajul</string>
+    <string name="library.survey.title">Ajută-ne să îmbunătățim Voice</string>
     <string name="media_session.library.recent">Recente</string>
     <string name="media_session.library.root">Toate cărțile audio</string>
     <string name="onboarding.action.next">Mai departe</string>

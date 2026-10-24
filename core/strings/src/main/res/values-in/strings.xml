@@ -264,6 +264,10 @@
     <string name="library.storage_permission_bug.action">Berikan izin</string>
     <string name="library.storage_permission_bug.message">Untuk perangkat tertentu, aplikasi sistem tidak memiliki izin yang diperlukan untuk mengakses penyimpanan eksternal. Akses ini penting agar Voice dapat membaca buku audio Anda.</string>
     <string name="library.storage_permission_bug.title">Izin diperlukan</string>
+    <string name="library.survey.dismiss">Tidak, terima kasih</string>
+    <string name="library.survey.message">Beberapa pertanyaan singkat membantu menentukan langkah selanjutnya.</string>
+    <string name="library.survey.open">Ikuti survei</string>
+    <string name="library.survey.title">Bantu kembangkan Voice</string>
     <string name="media_session.library.recent">Terbaru</string>
     <string name="media_session.library.root">Semua buku audio</string>
     <string name="onboarding.action.next">Berikutnya</string>

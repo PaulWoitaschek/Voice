@@ -298,6 +298,10 @@
     <string name="library.storage_permission_bug.action">Accorder la permission</string>
     <string name="library.storage_permission_bug.message">Sur certains appareils, il manque les permissions nécessaires à une application système pour accéder au stockage externe. Cet accès est essentiel pour que Voice puisse lire les livres audio.</string>
     <string name="library.storage_permission_bug.title">Permission requise</string>
+    <string name="library.survey.dismiss">Non merci</string>
+    <string name="library.survey.message">Quelques questions rapides aident à décider de la suite.</string>
+    <string name="library.survey.open">Répondre au sondage</string>
+    <string name="library.survey.title">Aidez à façonner Voice</string>
     <string name="media_session.library.recent">Récents</string>
     <string name="media_session.library.root">Tous les livres audio</string>
     <string name="onboarding.action.next">Suivant</string>

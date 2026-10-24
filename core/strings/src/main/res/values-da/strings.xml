@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Giv tilladelse</string>
     <string name="library.storage_permission_bug.message">På visse enheder mangler en system-app den nødvendige tilladelse til at få adgang til det eksterne lager. Denne adgang er afgørende for, at Voice kan læse dine lydbøger.</string>
     <string name="library.storage_permission_bug.title">Tilladelse påkrævet</string>
+    <string name="library.survey.dismiss">Nej tak</string>
+    <string name="library.survey.message">Et par hurtige spørgsmål hjælper med at bestemme, hvad der kommer som det næste.</string>
+    <string name="library.survey.open">Deltag i undersøgelsen</string>
+    <string name="library.survey.title">Vær med til at forme Voice</string>
     <string name="media_session.library.recent">Seneste</string>
     <string name="media_session.library.root">Alle lydbøger</string>
     <string name="onboarding.action.next">Næste</string>

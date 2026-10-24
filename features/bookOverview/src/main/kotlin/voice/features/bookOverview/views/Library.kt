@@ -51,6 +51,8 @@ internal fun Library(
   onBookLongClick: (BookId) -> Unit,
   onPlayClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
+  onSurveyClick: () -> Unit,
+  onSurveyDismiss: () -> Unit,
   onShowFoldersClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -115,6 +117,18 @@ internal fun Library(
           onLongClick = { onBookLongClick(hero.value.id) },
           onPlayClick = onPlayClick,
           modifier = Modifier.entrance(entrance, index),
+        )
+      }
+    }
+    if (viewState.showSurveyCard) {
+      val index = entranceIndex()
+      item(key = "survey", span = { GridItemSpan(maxLineSpan) }, contentType = "survey") {
+        SurveyCard(
+          onClick = onSurveyClick,
+          onDismiss = onSurveyDismiss,
+          modifier = Modifier
+            .entrance(entrance, index)
+            .padding(top = if (hero != null) 16.dp else 0.dp),
         )
       }
     }

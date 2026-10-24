@@ -6,6 +6,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.test
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
@@ -37,8 +38,11 @@ import voice.core.scanner.MediaScanTrigger
 import voice.core.ui.GridCount
 import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
+import voice.features.bookOverview.survey.Survey
 import voice.navigation.Destination
 import voice.navigation.Navigator
+import java.time.Clock
+import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Instant
@@ -92,6 +96,7 @@ class BookOverviewViewModelTest {
       serverLibrary = serverLibrary,
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
+      survey = survey(),
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -154,6 +159,7 @@ class BookOverviewViewModelTest {
       serverLibrary = serverLibrary,
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
+      survey = survey(),
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -355,6 +361,74 @@ class BookOverviewViewModelTest {
   }
 
   @Test
+  fun `a survey shows its card`() = runTest {
+    val viewModel = viewModel(books = listOf(book()), survey = survey(remoteUrl = SURVEY_URL))
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      testScheduler.runCurrent()
+      assertEquals(expected = true, actual = expectMostRecentItem().showSurveyCard)
+    }
+  }
+
+  @Test
+  fun `an empty library hides the survey card`() = runTest {
+    val viewModel = viewModel(survey = survey(remoteUrl = SURVEY_URL))
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      testScheduler.runCurrent()
+      val state = expectMostRecentItem()
+      assertEquals(expected = true, actual = state.showEmptyLibrary)
+      assertEquals(expected = false, actual = state.showSurveyCard)
+    }
+  }
+
+  @Test
+  fun `taking the survey opens it with the app info and hides the card`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel = viewModel(books = listOf(book()), navigator = navigator, survey = survey(remoteUrl = SURVEY_URL))
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      testScheduler.runCurrent()
+      assertEquals(expected = true, actual = expectMostRecentItem().showSurveyCard)
+
+      viewModel.onSurveyClick()
+      testScheduler.runCurrent()
+
+      assertEquals(expected = false, actual = expectMostRecentItem().showSurveyCard)
+    }
+    verify {
+      navigator.goTo(Destination.Website("$SURVEY_URL?app_version=1.2.3&source=free&days_installed=14"))
+    }
+  }
+
+  @Test
+  fun `dismissing the survey hides the card`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel = viewModel(books = listOf(book()), navigator = navigator, survey = survey(remoteUrl = SURVEY_URL))
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      testScheduler.runCurrent()
+      assertEquals(expected = true, actual = expectMostRecentItem().showSurveyCard)
+
+      viewModel.onSurveyDismiss()
+      testScheduler.runCurrent()
+
+      assertEquals(expected = false, actual = expectMostRecentItem().showSurveyCard)
+    }
+    verify(exactly = 0) {
+      navigator.goTo(any())
+    }
+  }
+
+  @Test
   fun `show folders opens the folders`() = runTest {
     val navigator = mockk<Navigator>(relaxed = true)
     val viewModel = viewModel(navigator = navigator)
@@ -390,6 +464,7 @@ class BookOverviewViewModelTest {
     books: List<Book> = emptyList(),
     currentBookId: BookId? = null,
     scanning: Flow<Boolean> = MutableStateFlow(false),
+    survey: Survey = survey(),
   ): BookOverviewViewModel {
     return BookOverviewViewModel(
       repo = mockk<BookRepository> {
@@ -419,6 +494,24 @@ class BookOverviewViewModelTest {
       serverLibrary = serverLibrary,
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
+      survey = survey,
+    )
+  }
+
+  private fun survey(remoteUrl: String = ""): Survey {
+    return Survey(
+      surveyUrlFeatureFlag = MemoryFeatureFlag(remoteUrl),
+      handledSurveysStore = MemoryDataStore(emptyMap()),
+      localSurvey = mockk {
+        coEvery { url() } returns null
+      },
+      clock = Clock.fixed(java.time.Instant.parse("2026-10-20T10:00:00Z"), ZoneOffset.UTC),
+      appInfoProvider = mockk {
+        every { versionName } returns "1.2.3"
+        every { flavor } returns "free"
+        every { installTime } returns Instant.parse("2026-10-06T10:00:00Z")
+      },
+      analytics = mockk(relaxUnitFun = true),
     )
   }
 
@@ -426,5 +519,9 @@ class BookOverviewViewModelTest {
     return mockk {
       every { this@mockk.installTime } returns installTime
     }
+  }
+
+  private companion object {
+    const val SURVEY_URL = "https://survey.example/s"
   }
 }

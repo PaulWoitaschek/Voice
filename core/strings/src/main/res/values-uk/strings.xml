@@ -315,6 +315,10 @@
     <string name="library.storage_permission_bug.action">Надати дозвіл</string>
     <string name="library.storage_permission_bug.message">На деяких пристроях системні програми не мають необхідного дозволу на доступ до зовнішнього накопичувача. Цей дозвіл необхідний для того, аби Voice мав змогу читати ваші аудіокниги.</string>
     <string name="library.storage_permission_bug.title">Потрібен дозвіл</string>
+    <string name="library.survey.dismiss">Ні, дякую</string>
+    <string name="library.survey.message">Кілька коротких запитань допоможуть вирішити, що буде далі.</string>
+    <string name="library.survey.open">Пройти опитування</string>
+    <string name="library.survey.title">Допоможіть розвивати Voice</string>
     <string name="media_session.library.recent">Нещодавні</string>
     <string name="media_session.library.root">Всі аудіокниги</string>
     <string name="onboarding.action.next">Далі</string>

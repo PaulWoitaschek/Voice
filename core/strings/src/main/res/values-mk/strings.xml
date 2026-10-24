@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">Дај дозвола</string>
     <string name="library.storage_permission_bug.message">Кај некои уреди, на една системска апликација ѝ недостасува потребната дозвола за пристап до надворешната меморија. Овој пристап му е потребен на Voice за да ги вчита вашите аудио книги.</string>
     <string name="library.storage_permission_bug.title">Потребна е дозвола</string>
+    <string name="library.survey.dismiss">Не, благодарам</string>
+    <string name="library.survey.message">Неколку кратки прашања помагаат да се одлучи што следува.</string>
+    <string name="library.survey.open">Пополни ја анкетата</string>
+    <string name="library.survey.title">Помогнете да се обликува Voice</string>
     <string name="media_session.library.recent">Скорешни</string>
     <string name="media_session.library.root">Сите аудио книги</string>
     <string name="onboarding.action.next">Следно</string>

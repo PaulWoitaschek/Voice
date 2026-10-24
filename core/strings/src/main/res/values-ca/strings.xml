@@ -298,6 +298,10 @@
     <string name="library.storage_permission_bug.action">Concedeix el permís</string>
     <string name="library.storage_permission_bug.message">Per a determinats dispositius, a una aplicació del sistema li falta el permís necessari per accedir a l\'emmagatzematge extern. Aquest accés és essencial perquè Voice llegeixi els audiollibres.</string>
     <string name="library.storage_permission_bug.title">Es requereix el permís</string>
+    <string name="library.survey.dismiss">No, gràcies</string>
+    <string name="library.survey.message">Unes quantes preguntes ràpides ajuden a decidir els pròxims passos.</string>
+    <string name="library.survey.open">Respon l\'enquesta</string>
+    <string name="library.survey.title">Ajudeu a donar forma a Voice</string>
     <string name="media_session.library.recent">Recents</string>
     <string name="media_session.library.root">Tots els audiollibres</string>
     <string name="onboarding.action.next">Següent</string>

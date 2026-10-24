@@ -281,6 +281,10 @@
     <string name="library.storage_permission_bug.action">अनुमति प्रदान करें</string>
     <string name="library.storage_permission_bug.message">कुछ डिवाइस पर, एक सिस्टम ऐप के पास बाहरी स्टोरेज तक पहुँचने की ज़रूरी अनुमति नहीं होती। Voice को आपकी ऑडियोबुक पढ़ने के लिए यह पहुँच चाहिए।</string>
     <string name="library.storage_permission_bug.title">अनुमति आवश्यक है</string>
+    <string name="library.survey.dismiss">नहीं, धन्यवाद</string>
+    <string name="library.survey.message">कुछ छोटे सवाल यह तय करने में मदद करते हैं कि आगे क्या आएगा।</string>
+    <string name="library.survey.open">सर्वे में हिस्सा लें</string>
+    <string name="library.survey.title">Voice को आकार देने में मदद करें</string>
     <string name="media_session.library.recent">हालिया</string>
     <string name="media_session.library.root">सभी ऑडियोबुक</string>
     <string name="onboarding.action.next">अगला</string>
