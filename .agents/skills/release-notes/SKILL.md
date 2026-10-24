@@ -19,11 +19,27 @@ The version without the version code, a dash and a short headline for the bigges
 
 One bullet per change a listener notices, in plain words, in one or two sentences. A feature big enough for several
 bullets gets its own `###` section with an emoji in the heading, most important first. Group the smaller changes under
-a shared heading, such as `### More ✨`. Fixes go last under `### Fixes 🐞`, each saying what
-was broken.
+a shared heading, such as `### More ✨`. Fixes go last under `### Fixes 🐞`, each saying what was broken.
 
 Leave out tests, CI, dependencies, refactors, changes to the Google Play support sheet, and GitHub's generated
 changelog.
+
+## Images
+
+Put the images in a table right under `## What's New`, at most four in a row, each with a short caption:
+
+```html
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="…" alt="Caption"><br><sub>Caption</sub></td>
+  </tr>
+</table>
+```
+
+Take them from the pull requests when they show the change as it ships: the after image, on a phone, not outdated by
+a later pull request. For a very important change without a fitting image, take one yourself with the emulator skill.
+`gh release edit` can't upload images, so attach it to that change's pull request with
+`gh pr edit <number> --attach ./image.png` and use the uploaded URL from its body.
 
 ## Updating the draft
 
