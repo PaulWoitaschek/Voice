@@ -19,7 +19,7 @@ The version without the version code, a dash and a short headline for the bigges
 
 One bullet per change a listener notices, in plain words, in one or two sentences. A feature big enough for several
 bullets gets its own `###` section with an emoji in the heading, most important first. Group the smaller changes under
-a shared heading, such as `### More ✨` or `### Translations 🌍`. Fixes go last under `### Fixes 🐞`, each saying what
+a shared heading, such as `### More ✨`. Fixes go last under `### Fixes 🐞`, each saying what
 was broken.
 
 Leave out tests, CI, dependencies, refactors, changes to the Google Play support sheet, and GitHub's generated
