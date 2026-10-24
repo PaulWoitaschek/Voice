@@ -22,5 +22,13 @@ data class DeveloperSettingsViewState(
       val value: String,
       override val isOverridden: Boolean,
     ) : FeatureFlagViewState
+
+    data class EnumFlag(
+      override val key: String,
+      override val description: String,
+      val value: String,
+      val entries: List<String>,
+      override val isOverridden: Boolean,
+    ) : FeatureFlagViewState
   }
 }

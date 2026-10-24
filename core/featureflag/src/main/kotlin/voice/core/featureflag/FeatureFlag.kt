@@ -21,3 +21,7 @@ interface FeatureFlag<T : Any> {
 
   fun clearOverwrite()
 }
+
+interface EnumFeatureFlag<E : Enum<E>> : FeatureFlag<E> {
+  val entries: List<E>
+}

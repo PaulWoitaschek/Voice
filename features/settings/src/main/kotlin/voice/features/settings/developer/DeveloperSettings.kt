@@ -136,6 +136,15 @@ private fun DeveloperSettings(
               setOverride = { viewModel.setStringOverride(viewState.key, it) },
             )
           }
+          is DeveloperSettingsViewState.FeatureFlagViewState.EnumFlag -> {
+            EnumFeatureFlagRow(
+              viewState = viewState,
+              clearOverride = {
+                viewModel.clearOverride(viewState.key)
+              },
+              setOverride = { viewModel.setEnumOverride(viewState.key, it) },
+            )
+          }
         }
       }
     }
