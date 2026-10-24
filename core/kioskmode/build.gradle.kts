@@ -4,6 +4,6 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.data.api)
+  api(projects.core.data.api)
   implementation(projects.core.featureflag)
 }

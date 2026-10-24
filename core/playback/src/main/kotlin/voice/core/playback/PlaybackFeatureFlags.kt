@@ -23,7 +23,7 @@ object PlaybackFeatureFlags {
   @Provides
   @SingleIn(AppScope::class)
   @ExperimentalPlaybackPersistenceQualifier
-  fun experimentalPlaybackPersistenceQualifier(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
+  fun experimentalPlaybackPersistenceFeatureFlag(factory: FeatureFlagFactory): FeatureFlag<Boolean> {
     return factory.boolean(
       key = "experimental_playback_persistence",
       description = "Uses the experimental playback persistence implementation.",
@@ -32,7 +32,9 @@ object PlaybackFeatureFlags {
 
   @Provides
   @IntoSet
-  fun experimentalPlaybackPersistenceIntoSet(@ExperimentalPlaybackPersistenceQualifier flag: FeatureFlag<Boolean>): FeatureFlag<*> = flag
+  fun experimentalPlaybackPersistenceFeatureFlagIntoSet(
+    @ExperimentalPlaybackPersistenceQualifier flag: FeatureFlag<Boolean>,
+  ): FeatureFlag<*> = flag
 
   @Provides
   @SingleIn(AppScope::class)
