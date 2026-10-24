@@ -68,8 +68,8 @@ backup account, on most phones your Google account. The login to an Audiobookshe
 ### Links
 
 Help, feedback, the FAQ, Ko-fi and surveys open in your browser. The sites they open have their own privacy policies.
-A survey's link includes your app version, which build you have and how many days ago you installed Voice, so answers
-can be told apart. Your answers go to the site that runs the survey.
+A survey's link includes your app version, the app that installed Voice, such as the Play Store or F-Droid, and how many
+days ago you installed Voice, so answers can be told apart. Your answers go to the site that runs the survey.
 
 ## Who sees the data
 

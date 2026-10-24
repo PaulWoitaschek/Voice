@@ -44,7 +44,7 @@ class Survey(
     // named like the hidden fields of the Tally forms, which fill them from the query
     val params = listOf(
       "app_version" to appInfoProvider.versionName,
-      "source" to appInfoProvider.flavor,
+      "source" to (appInfoProvider.installer ?: "unknown"),
       "days_installed" to ChronoUnit.DAYS.between(appInfoProvider.installTime.toJavaInstant(), clock.instant()).toString(),
     ).joinToString(separator = "&") { (key, value) ->
       "$key=${URLEncoder.encode(value, "UTF-8")}"
