@@ -345,6 +345,8 @@ What goes:
 ## Won't solve
 
 - **Writing tags into the files:** it could break files, and synced folders would change on every device.
+- **Fewer books in Current:** it shows every book in progress, also the dozens Audiobookshelf can bring. Mark as not
+  started yet and Hide clear it up.
 - **Putting books in any order by hand:** sorting and the order of a series cover what listeners describe.
 - **Sorting the whole library by file name** ([#3235]): books in a series already follow their file names, and editing
   fixes the rest.
@@ -365,6 +367,8 @@ What goes:
 - Authors sort by their name as it's written, so "Stephen King" comes under S, not K.
 - Folders only become series with "Folders are authors", or with "Voice finds the books".
 - Search doesn't look through chapter names or file names.
+- Books on the device count as added on the day they're scanned, so on a new phone or a second device, the whole
+  library is added that day.
 - In All books, a book in a stack isn't under its own title, like "The Way of Kings" in "The Stormlight Archive" under
   S. Search finds it.
 - Splits and joins stay on the device and don't sync through `.voice`.
@@ -400,8 +404,3 @@ Each step helps on its own.
 - Should step 7 go, since replacing the layouts splits series folders anyway, and no library changes before the test?
 - When the layouts are replaced: should folders that look like several books be split, or keep their books with a join?
 - Do listeners with thousands of books need a fast scroller with letters, when sorted by title or author?
-- Audiobookshelf brings the progress of every book ever started, so Current can hold dozens of books above All books.
-  Should Current show only the last few, with a button to show all?
-- Recently added uses the day a book was scanned, so on a new phone or a second device, the whole library is added
-  that day. Should books on the device take the date of their files instead?
-- Once the library sorts by author, should Browse in search drop Authors?
