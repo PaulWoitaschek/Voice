@@ -107,6 +107,7 @@ instead, with a view state.
 - The `voice.compose` convention plugin (`plugins/src/main/kotlin/configurePreviewSnapshots.kt`) generates a one-line
   subclass into each module's unit test sources, excludes it from the regular test tasks, and registers the three tasks.
   They run the same test, told apart by a system property.
-- The tasks pin the JVM's locale and time zone, so the images come out the same on every machine. A pixel counts as
-  different only when a color channel is off by more than 2.
+- The tasks pin the JVM's locale and time zone, so times and numbers are formatted the same on every machine. A pixel
+  counts as different only when a color channel is off by more than 6, as Linux and macOS render a few levels apart in
+  places.
 - They take no Gradle properties, so the configuration cache is reused across runs.

@@ -164,5 +164,6 @@ private fun writeComparison(
   file.outputStream().use { image.compress(Bitmap.CompressFormat.PNG, 100, it) }
 }
 
-private const val CHANNEL_TOLERANCE = 2
+// rendering on Linux and macOS differs by a few levels in places
+private const val CHANNEL_TOLERANCE = 6
 private const val GAP = 16
