@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
@@ -94,6 +95,7 @@ internal fun SeekSection(
   onJumpBackExpire: (id: Long) -> Unit,
   modifier: Modifier = Modifier,
   unavailable: Boolean = false,
+  bookPercent: String? = null,
 ) {
   var dragFraction by remember { mutableStateOf<Float?>(null) }
   var pendingFraction by remember { mutableStateOf<Float?>(null) }
@@ -130,58 +132,88 @@ internal fun SeekSection(
       },
       modifier = Modifier.fillMaxWidth(),
     )
-    Row(
+    val elapsedColor by animateColorAsState(
+      targetValue = if (dragging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+      label = "elapsedColor",
+    )
+    // a jump that expired while the player was closed shows no pill, so it doesn't hide this one
+    val jumpBackVisibleFor = rememberJumpBackVisibleFor()
+    val jumpBackShown = jumpBack != null && jumpBack.elapsed < jumpBackVisibleFor
+    Layout(
+      contents = listOf(
+        {
+          Text(
+            text = formatTime(shownTime.inWholeMilliseconds, duration.inWholeMilliseconds),
+            style = MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
+            color = elapsedColor,
+          )
+        },
+        {
+          if (unavailable && !jumpBackShown) {
+            OfflinePill(Modifier.padding(horizontal = 4.dp))
+          } else {
+            JumpBackPill(
+              jumpBack = jumpBack,
+              onClick = onJumpBack,
+              onExpire = onJumpBackExpire,
+              modifier = Modifier.padding(horizontal = 4.dp),
+            )
+          }
+        },
+        {
+          Text(
+            modifier = Modifier
+              .clip(RoundedCornerShape(8.dp))
+              .clickable { showRemaining = !showRemaining }
+              .padding(horizontal = 4.dp, vertical = 2.dp),
+            text = if (showRemaining) {
+              "−" + formatTime((duration - shownTime).inWholeMilliseconds, duration.inWholeMilliseconds)
+            } else {
+              formatTime(duration.inWholeMilliseconds, duration.inWholeMilliseconds)
+            },
+            style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        },
+        {
+          if (bookPercent != null) {
+            val percentAlpha by animateFloatAsState(
+              targetValue = if (jumpBackShown || unavailable) 0F else 1F,
+              label = "bookPercentAlpha",
+            )
+            Text(
+              text = bookPercent,
+              style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
+              modifier = Modifier.graphicsLayer { alpha = percentAlpha },
+            )
+          }
+        },
+      ),
       modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 4.dp),
-      verticalAlignment = Alignment.CenterVertically,
-    ) {
-      val elapsedColor by animateColorAsState(
-        targetValue = if (dragging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-        label = "elapsedColor",
-      )
-      Text(
-        text = formatTime(shownTime.inWholeMilliseconds, duration.inWholeMilliseconds),
-        style = MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
-        color = elapsedColor,
-      )
-      // the pill is a bit taller than the labels, it may overlap the space around the row
-      Box(
-        modifier = Modifier
-          .weight(1F)
-          .layout { measurable, constraints ->
-            val placeable = measurable.measure(constraints.copy(minHeight = 0, maxHeight = Constraints.Infinity))
-            layout(constraints.maxWidth, 0) {
-              placeable.place((constraints.maxWidth - placeable.width) / 2, -placeable.height / 2)
-            }
-          },
-      ) {
-        // a jump that expired while the player was closed shows no pill, so it doesn't hide this one
-        val jumpBackVisibleFor = rememberJumpBackVisibleFor()
-        if (unavailable && (jumpBack == null || jumpBack.elapsed >= jumpBackVisibleFor)) {
-          OfflinePill(Modifier.padding(horizontal = 4.dp))
-        } else {
-          JumpBackPill(
-            jumpBack = jumpBack,
-            onClick = onJumpBack,
-            onExpire = onJumpBackExpire,
-            modifier = Modifier.padding(horizontal = 4.dp),
-          )
+    ) { (elapsedSlot, pillSlot, remainingSlot, percentSlot), constraints ->
+      val width = constraints.maxWidth
+      val loose = constraints.copy(minWidth = 0, minHeight = 0)
+      val elapsed = elapsedSlot.single().measure(loose)
+      val remaining = remainingSlot.single().measure(loose)
+      val pill = pillSlot.firstOrNull()?.measure(Constraints(maxWidth = (width - elapsed.width - remaining.width).coerceAtLeast(0)))
+      val percent = percentSlot.firstOrNull()?.measure(loose)
+      val height = maxOf(elapsed.height, remaining.height)
+      val gap = 8.dp.roundToPx()
+      layout(width, height) {
+        fun Placeable.placeAt(x: Int) = place(x, (height - this.height) / 2)
+        elapsed.placeAt(0)
+        remaining.placeAt(width - remaining.width)
+        // the pill is a bit taller than the labels, it may overlap the space around the row
+        pill?.placeAt(elapsed.width)
+        // under the middle of the bar rather than between the times, unless that would run into them
+        if (percent != null) {
+          val x = (width - percent.width) / 2
+          if (x >= elapsed.width + gap && x + percent.width + gap <= width - remaining.width) percent.placeAt(x)
         }
       }
-      Text(
-        modifier = Modifier
-          .clip(RoundedCornerShape(8.dp))
-          .clickable { showRemaining = !showRemaining }
-          .padding(horizontal = 4.dp, vertical = 2.dp),
-        text = if (showRemaining) {
-          "−" + formatTime((duration - shownTime).inWholeMilliseconds, duration.inWholeMilliseconds)
-        } else {
-          formatTime(duration.inWholeMilliseconds, duration.inWholeMilliseconds)
-        },
-        style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-      )
     }
   }
 }
