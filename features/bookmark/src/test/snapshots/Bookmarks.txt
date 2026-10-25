@@ -1,0 +1,5 @@
+BookmarkListKt.BookmarkListPreview 16 16 308 668
+HistoryListKt.HistoryListPreview.H1600dp 340 16 308 1200
+HistoryListKt.HistoryListPreview.dark_H1600dp_NIGHT 664 16 308 1200
+HistoryListKt.HistoryListPreview.font_scale_2_H1800dp_FONT_2_0f 988 16 308 1350
+HistoryListKt.HistoryListPreview.rtl_H1600dp_ar 1312 16 308 1200

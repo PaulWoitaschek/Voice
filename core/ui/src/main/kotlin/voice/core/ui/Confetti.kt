@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.platform.LocalInspectionMode
 import kotlinx.coroutines.channels.Channel
 import kotlin.math.PI
 import kotlin.math.cos
@@ -32,7 +33,7 @@ import androidx.graphics.shapes.toPath as toAndroidPath
  * which then floats down like paper and fades out. Draw it with [drawConfetti].
  */
 @Stable
-class ConfettiState internal constructor() {
+class ConfettiState internal constructor(private val random: Random) {
 
   internal val paths = CONFETTI_SHAPES.map { it.toAndroidPath().asComposePath() }
   private val flying = mutableListOf<Particle>()
@@ -41,7 +42,6 @@ class ConfettiState internal constructor() {
   private val state = mutableStateOf<List<Particle>>(flying, neverEqualPolicy())
   internal val particles: List<Particle> by state
   private val bursts = Channel<Unit>(Channel.CONFLATED)
-  private val random = Random.Default
 
   fun burst() {
     bursts.trySend(Unit)
@@ -111,7 +111,9 @@ class ConfettiState internal constructor() {
 /** Confetti that flies while composed. Confetti is pure motion, so with animations turned off, there's none. */
 @Composable
 fun rememberConfettiState(): ConfettiState {
-  val state = remember { ConfettiState() }
+  // seeded in previews, so their screenshots don't change between runs
+  val inspectionMode = LocalInspectionMode.current
+  val state = remember { ConfettiState(if (inspectionMode) Random(0) else Random.Default) }
   LaunchedEffect(state) {
     if (coroutineContext[MotionDurationScale]?.scaleFactor == 0F) return@LaunchedEffect
     state.run()

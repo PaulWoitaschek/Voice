@@ -1,5 +1,6 @@
 package voice.features.onboarding.welcome
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -100,7 +101,7 @@ private class OnboardingWelcomePreviewParameterProvider : PreviewParameterProvid
 }
 
 @Composable
-@Preview
+@Preview(group = "OnboardingWelcome")
 private fun OnboardingWelcomePreview(
   @PreviewParameter(OnboardingWelcomePreviewParameterProvider::class)
   viewState: OnboardingWelcomeViewState,
@@ -113,4 +114,10 @@ private fun OnboardingWelcomePreview(
       onPrivacyPolicyClick = {},
     )
   }
+}
+
+@Composable
+@Preview(group = "OnboardingWelcome", name = "landscape dark", widthDp = 891, heightDp = 411, uiMode = Configuration.UI_MODE_NIGHT_YES)
+private fun OnboardingWelcomeLandscapePreview() {
+  OnboardingWelcomePreview(OnboardingWelcomeViewState(askForAnalytics = true))
 }

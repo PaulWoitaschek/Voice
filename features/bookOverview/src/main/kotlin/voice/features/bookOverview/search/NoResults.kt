@@ -111,7 +111,7 @@ internal fun NoResults(
   }
 }
 
-@Preview
+@Preview(group = "LibrarySearch")
 @Composable
 private fun NoResultsPreview() {
   VoiceTheme {

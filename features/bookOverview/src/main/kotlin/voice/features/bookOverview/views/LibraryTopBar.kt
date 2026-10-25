@@ -145,7 +145,7 @@ private fun LibrarySearchPill(
   }
 }
 
-@Preview
+@Preview(group = "BookOverview")
 @Composable
 private fun LibraryTopBarPreview() {
   VoiceTheme {
@@ -162,7 +162,7 @@ private fun LibraryTopBarPreview() {
   }
 }
 
-@Preview
+@Preview(group = "BookOverview")
 @Composable
 private fun LibrarySearchPillLoadingPreview() {
   VoiceTheme {

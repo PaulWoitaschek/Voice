@@ -70,7 +70,7 @@ internal fun SelectFolder(
 }
 
 @Composable
-@Preview
+@Preview(group = "AddContent")
 private fun SelectFolderPreview() {
   VoiceTheme {
     SelectFolder(

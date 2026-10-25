@@ -95,13 +95,13 @@ internal fun gridColumnCount(): Int {
 }
 
 @Composable
-@Preview(widthDp = 200)
+@Preview(group = "BookOverview", widthDp = 200)
 private fun GridBookPreviewWithProgress() {
   GridBook(BookOverviewPreviewParameterProvider().book().copy(progress = 0.66f), {}, {})
 }
 
 @Composable
-@Preview(widthDp = 200)
+@Preview(group = "BookOverview", widthDp = 200)
 private fun GridBookPreviewFinished() {
   GridBook(BookOverviewPreviewParameterProvider().book().copy(progress = 1f), {}, {}, finished = true)
 }

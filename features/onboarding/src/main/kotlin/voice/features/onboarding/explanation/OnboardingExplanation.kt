@@ -52,7 +52,7 @@ private fun OnboardingExplanation(
 }
 
 @Composable
-@Preview
+@Preview(group = "OnboardingExplanation")
 private fun OnboardingExplanationPreview() {
   VoiceTheme {
     OnboardingExplanation(

@@ -2,6 +2,7 @@ package voice.core.snapshot
 
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.captureToImage
@@ -36,8 +38,9 @@ import java.io.File
 import java.net.URI
 import java.nio.file.Path
 import java.util.Locale
+import kotlin.math.roundToInt
 
-/** Subclassed in every library module with Compose by the `voice.compose` plugin, run with `./gradlew :<module>:snapshot`. */
+/** Subclassed in every library module with Compose by the `voice.compose` plugin, run by its `snapshot`, `recordSnapshots` and `verifySnapshots` tasks. */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 abstract class PreviewSnapshotTest {
@@ -47,7 +50,10 @@ abstract class PreviewSnapshotTest {
 
   @Test
   fun snapshot() {
+    val mode = System.getProperty(MODE_PROPERTY)?.let { property -> Mode.entries.first { it.name.equals(property, ignoreCase = true) } }
+      ?: Mode.Render
     val outputDir = File(System.getProperty(OUTPUT_DIR_PROPERTY) ?: "build/snapshots").apply { mkdirs() }
+    val referenceDir = File(System.getProperty(REFERENCE_DIR_PROPERTY) ?: "src/test/snapshots")
     // Gradle runs the tests in the module's directory, and the module's classes come from its build directory
     val moduleBuildDir = File(System.getProperty("user.dir"), "build").toPath()
     val previews = AndroidComposablePreviewScanner()
@@ -55,31 +61,42 @@ abstract class PreviewSnapshotTest {
       .includePrivatePreviews()
       .getPreviews()
       .filter { classLocation(it.declaringClass)?.startsWith(moduleBuildDir) == true }
-    val ids = previews.map { AndroidPreviewScreenshotIdBuilder(it).encodeUnsafeCharacters().build() }
+    val ids = previews.map { AndroidPreviewScreenshotIdBuilder(it).ignoreIdFor("group").encodeUnsafeCharacters().build() }
     val shortNames = previews.zip(ids) { preview, id -> id.removePrefix(preview.declaringClass.substringBeforeLast('.') + ".") }
     val failures = mutableListOf<String>()
-    val snapshots = previews.indices.mapNotNull { index ->
+    val tiles = previews.indices.mapNotNull { index ->
       val preview = previews[index]
       val name = shortNames[index].takeIf { shortNames.count { it == shortNames[index] } == 1 } ?: ids[index]
+      val group = preview.previewInfo.group
+      if (mode != Mode.Render && group.isEmpty()) {
+        failures += "$name: no group, add the screen it belongs to as @Preview(group = …)"
+        return@mapNotNull null
+      }
       try {
-        File(outputDir, "$name.png").also { capture(preview, it) }
+        val bitmap = capture(preview)
+        if (mode == Mode.Render) {
+          File(outputDir, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        }
+        Tile(name, group, bitmap.forReference(preview.previewInfo))
       } catch (error: Throwable) {
         failures += "$name: ${generateSequence(error) { it.cause }.last()}"
         null
       }
     }
-    if (snapshots.isNotEmpty()) {
-      writeContactSheet(snapshots, File(outputDir, CONTACT_SHEET))
+    when (mode) {
+      Mode.Render -> if (tiles.isNotEmpty()) {
+        File(outputDir, CONTACT_SHEET).outputStream().use { sheetOf(tiles).image.compress(Bitmap.CompressFormat.PNG, 100, it) }
+      }
+      Mode.Record -> recordReferences(tiles, referenceDir)
+      Mode.Verify -> failures += verifyReferences(tiles, referenceDir, outputDir)
     }
     if (failures.isNotEmpty()) {
-      throw AssertionError("Previews that failed to render:\n" + failures.joinToString("\n"))
+      val hint = if (mode == Mode.Verify) "\nIf the change is intended, run this module's recordSnapshots task." else ""
+      throw AssertionError("Previews that failed:\n" + failures.joinToString("\n") + hint)
     }
   }
 
-  private fun capture(
-    preview: ComposablePreview<AndroidPreviewInfo>,
-    file: File,
-  ) {
+  private fun capture(preview: ComposablePreview<AndroidPreviewInfo>): Bitmap {
     val info = preview.previewInfo
     val rtl = info.locale.substringBefore('-') in RTL_LANGUAGES
     val night = info.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
@@ -91,7 +108,7 @@ abstract class PreviewSnapshotTest {
       Locale.setDefault(Locale.forLanguageTag(info.locale.replace("-r", "-")))
     }
     try {
-      ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
+      return ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
         // the marquee on long titles and the animation clocks never go idle
         compose.mainClock.autoAdvance = false
         scenario.onActivity { activity ->
@@ -100,8 +117,12 @@ abstract class PreviewSnapshotTest {
             if (night) android.R.color.background_dark else android.R.color.background_light,
           )
           activity.setContent {
-            // a library's test manifest doesn't declare RTL support, so the views would stay left to right
-            CompositionLocalProvider(LocalLayoutDirection provides if (rtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
+            CompositionLocalProvider(
+              // like Android Studio's previews
+              LocalInspectionMode provides true,
+              // a library's test manifest doesn't declare RTL support, so the views would stay left to right
+              LocalLayoutDirection provides if (rtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
+            ) {
               // like Android Studio: a size from the annotation is exact, otherwise the preview wraps its content
               Box(Modifier.wrapContentSize(Alignment.TopStart)) {
                 Box(
@@ -120,8 +141,7 @@ abstract class PreviewSnapshotTest {
         compose.waitForIdle()
         // past the entrance animations, before the marquee starts scrolling
         compose.mainClock.advanceTimeBy(1_000)
-        val bitmap = compose.onNodeWithTag(PREVIEW_TAG).captureToImage().asAndroidBitmap()
-        file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        compose.onNodeWithTag(PREVIEW_TAG).captureToImage().asAndroidBitmap()
       }
     } finally {
       Locale.setDefault(defaultLocale)
@@ -150,17 +170,48 @@ abstract class PreviewSnapshotTest {
     ).joinToString("-")
   }
 
+  // the stored images are scaled down to keep the repository small, larger windows the most
+  private fun Bitmap.forReference(info: AndroidPreviewInfo): Bitmap {
+    val pixelsPerDp = when {
+      info.widthDp >= TABLET_DP && info.heightDp >= TABLET_DP -> 0.375F
+      info.widthDp >= TABLET_DP && info.widthDp > info.heightDp -> 0.5F
+      else -> 0.75F
+    }
+    val width = (this.width * pixelsPerDp / RENDER_DENSITY).roundToInt()
+    val height = (this.height * pixelsPerDp / RENDER_DENSITY).roundToInt()
+    var scaled = this
+    // in halves, a single filtered step skips pixels when shrinking by more than half
+    while (scaled.width / 2 >= width) {
+      scaled = Bitmap.createScaledBitmap(scaled, scaled.width / 2, scaled.height / 2, true)
+    }
+    scaled = Bitmap.createScaledBitmap(scaled, width, height, true)
+    // transparent previews get the sheet's background, so they compare the way they're stored
+    return Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also {
+      Canvas(it).apply {
+        drawColor(SHEET_BACKGROUND)
+        drawBitmap(scaled, 0F, 0F, null)
+      }
+    }
+  }
+
   private fun backgroundColor(info: AndroidPreviewInfo): Color {
     return if (info.backgroundColor == 0L) Color.White else Color(info.backgroundColor.toInt())
   }
 }
 
+private enum class Mode { Render, Record, Verify }
+
+private const val MODE_PROPERTY = "voice.snapshot.mode"
 private const val OUTPUT_DIR_PROPERTY = "voice.snapshot.dir"
+private const val REFERENCE_DIR_PROPERTY = "voice.snapshot.references"
 private const val CONTACT_SHEET = "_contact-sheet.png"
 private const val PREVIEW_TAG = "preview"
 
 // the size of Android Studio's default preview device
 private const val DEFAULT_WIDTH_DP = 411
 private const val DEFAULT_HEIGHT_DP = 891
+
+private const val RENDER_DENSITY = 2F
+private const val TABLET_DP = 600
 
 private val RTL_LANGUAGES = setOf("ar", "fa", "he", "iw", "ur")

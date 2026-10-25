@@ -10,4 +10,5 @@ dependencies {
   api(libs.androidX.test.core)
   api(libs.androidX.test.junit)
   api(libs.junit)
+  implementation(libs.webpImageIo)
 }

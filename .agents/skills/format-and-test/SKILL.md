@@ -19,6 +19,8 @@ Start narrow, then broaden:
 - App module: `./gradlew :app:testFreeDebugUnitTest`
 - All unit tests: `./gradlew voiceUnitTest`. Run this when touching shared behavior, cross-module contracts, or broad
   refactors.
+- `voiceUnitTest` also compares every Compose preview with its stored screenshot. After an intended UI change, run
+  `./gradlew :<module>:recordSnapshots` and commit the changed images (see the snapshots skill).
 
 CI runs `./gradlew voiceUnitTest lintKotlin :app:assembleFreeDebug`. If you can't run something, say why and give the
 command.

@@ -445,10 +445,10 @@ private fun HistoryEmpty(modifier: Modifier = Modifier) {
   }
 }
 
-@Preview(heightDp = 1600)
-@Preview(heightDp = 1600, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "dark")
-@Preview(heightDp = 1600, locale = "ar", name = "rtl")
-@Preview(heightDp = 1800, fontScale = 2F, name = "font scale 2")
+@Preview(group = "Bookmarks", heightDp = 1600)
+@Preview(group = "Bookmarks", heightDp = 1600, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "dark")
+@Preview(group = "Bookmarks", heightDp = 1600, locale = "ar", name = "rtl")
+@Preview(group = "Bookmarks", heightDp = 1800, fontScale = 2F, name = "font scale 2")
 @Composable
 private fun HistoryListPreview() {
   VoiceTheme {

@@ -107,13 +107,13 @@ internal fun ListBookRow(
 }
 
 @Composable
-@Preview
+@Preview(group = "BookOverview")
 private fun ListBookRowPreviewWithProgress() {
   ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 0.6f), {}, {})
 }
 
 @Composable
-@Preview
+@Preview(group = "BookOverview")
 private fun ListBookRowPreviewFinished() {
   ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 1f), {}, {}, finished = true)
 }

@@ -1,0 +1,5 @@
+BookPlayViewKt.BookPlayPreview_0 16 16 308 668
+BookPlayViewKt.BookPlayPreview_1 340 16 308 668
+BookPlayViewKt.BookPlayPreview_2 664 16 308 668
+BookPlayViewKt.BookPlayWindowSizesPreview.landscape_dark_W891dp_H411dp_NIGHT 988 16 446 206
+BookPlayViewKt.BookPlayWindowSizesPreview.tablet_W1280dp_H800dp 1450 16 480 300

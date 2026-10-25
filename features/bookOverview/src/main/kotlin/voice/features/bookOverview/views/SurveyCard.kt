@@ -84,7 +84,7 @@ internal fun SurveyCard(
 }
 
 @Composable
-@Preview
+@Preview(group = "BookOverview")
 private fun SurveyCardPreview() {
   VoiceTheme {
     SurveyCard(onClick = {}, onDismiss = {})

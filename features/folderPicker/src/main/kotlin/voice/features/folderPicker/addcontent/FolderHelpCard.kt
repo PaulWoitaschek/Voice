@@ -94,7 +94,7 @@ private fun HelpText(@StringRes text: Int) {
 }
 
 @Composable
-@Preview
+@Preview(group = "AddContent")
 private fun FolderHelpCardPreview(
   @PreviewParameter(FolderHelpPreviewParameterProvider::class)
   help: FolderHelp,

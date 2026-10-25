@@ -721,7 +721,7 @@ private fun ReviewPromptPreview(
 }
 
 @Composable
-@Preview
+@Preview(group = "ReviewPrompt")
 private fun ReviewPromptBookFinishedPreview() {
   ReviewPromptPreview(
     prompt = ReviewPrompt(
@@ -734,7 +734,7 @@ private fun ReviewPromptBookFinishedPreview() {
 }
 
 @Composable
-@Preview
+@Preview(group = "ReviewPrompt")
 private fun ReviewPromptMilestonePreview() {
   ReviewPromptPreview(
     prompt = ReviewPrompt(headline = ReviewPrompt.Headline.Milestone, stats = previewStats, forced = false),
@@ -743,7 +743,7 @@ private fun ReviewPromptMilestonePreview() {
 }
 
 @Composable
-@Preview
+@Preview(group = "ReviewPrompt")
 private fun ReviewPromptFeedbackPreview() {
   ReviewPromptPreview(
     prompt = ReviewPrompt(headline = ReviewPrompt.Headline.Milestone, stats = previewStats, forced = false),
@@ -752,7 +752,7 @@ private fun ReviewPromptFeedbackPreview() {
 }
 
 @Composable
-@Preview
+@Preview(group = "ReviewPrompt")
 private fun ReviewPromptThanksPreview() {
   ReviewPromptPreview(
     prompt = ReviewPrompt(headline = ReviewPrompt.Headline.Milestone, stats = previewStats, forced = false),

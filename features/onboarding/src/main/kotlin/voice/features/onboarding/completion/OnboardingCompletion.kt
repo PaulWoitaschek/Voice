@@ -77,7 +77,7 @@ private fun OnboardingCompletion(
 }
 
 @Composable
-@Preview
+@Preview(group = "OnboardingCompletion")
 private fun OnboardingCompletionPreview() {
   VoiceTheme {
     OnboardingCompletion({}, {})

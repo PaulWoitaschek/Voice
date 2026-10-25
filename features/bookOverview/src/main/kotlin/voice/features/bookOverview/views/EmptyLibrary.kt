@@ -112,7 +112,7 @@ private fun EmptyLibraryHero() {
 }
 
 @Composable
-@Preview
+@Preview(group = "BookOverview")
 private fun EmptyLibraryPreview() {
   VoiceTheme {
     Surface {

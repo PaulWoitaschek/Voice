@@ -181,7 +181,7 @@ private fun coverContentPadding(): PaddingValues {
   )
 }
 
-@Preview
+@Preview(group = "CoverFromInternet")
 @Composable
 private fun ErrorPreview() {
   VoiceTheme {
@@ -197,7 +197,7 @@ private fun ErrorPreview() {
   }
 }
 
-@Preview
+@Preview(group = "CoverFromInternet")
 @Composable
 private fun EmptyPreview() {
   VoiceTheme {
@@ -213,7 +213,7 @@ private fun EmptyPreview() {
   }
 }
 
-@Preview
+@Preview(group = "CoverFromInternet")
 @Composable
 private fun ListPreview() {
   VoiceTheme {

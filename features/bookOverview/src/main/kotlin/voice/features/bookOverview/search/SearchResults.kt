@@ -364,7 +364,7 @@ private fun HighlightedText.annotated(style: SpanStyle): AnnotatedString {
   }
 }
 
-@Preview
+@Preview(group = "LibrarySearch")
 @Composable
 private fun SearchResultsPreview() {
   fun result(

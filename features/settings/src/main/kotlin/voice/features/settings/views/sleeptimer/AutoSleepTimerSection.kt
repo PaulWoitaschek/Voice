@@ -240,7 +240,7 @@ private fun ShakeHint() {
 }
 
 @Composable
-@Preview
+@Preview(group = "Settings")
 private fun AutoSleepTimerSectionPreview() {
   VoiceTheme {
     AutoSleepTimerSection(

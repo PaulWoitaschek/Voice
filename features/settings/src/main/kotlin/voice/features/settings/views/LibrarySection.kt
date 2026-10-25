@@ -395,7 +395,7 @@ private fun AudiobookshelfRow(
   )
 }
 
-@Preview
+@Preview(group = "Settings")
 @Composable
 private fun LibrarySectionFoldersWithoutAccessPreview() {
   VoiceTheme {

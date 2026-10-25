@@ -402,7 +402,7 @@ private fun BusyButton(
 }
 
 @Composable
-@Preview
+@Preview(group = "AudiobookshelfLogin")
 private fun AddressPreview() {
   VoiceTheme {
     AudiobookshelfLogin(
@@ -422,7 +422,7 @@ private fun AddressPreview() {
 }
 
 @Composable
-@Preview
+@Preview(group = "AudiobookshelfLogin")
 private fun LibrariesPreview() {
   VoiceTheme {
     AudiobookshelfLogin(

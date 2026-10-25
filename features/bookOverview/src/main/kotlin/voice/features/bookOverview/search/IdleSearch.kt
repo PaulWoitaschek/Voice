@@ -320,7 +320,7 @@ private fun initials(name: String): String {
     .ifEmpty { name.take(name.offsetByCodePoints(0, minOf(1, name.length))).uppercase() }
 }
 
-@Preview
+@Preview(group = "LibrarySearch")
 @Composable
 private fun IdleSearchPreview() {
   VoiceTheme {

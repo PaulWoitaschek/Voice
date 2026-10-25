@@ -1,0 +1,13 @@
+BookOverviewKt.BookOverviewPreview_0 16 16 308 668
+BookOverviewKt.BookOverviewPreview_1 340 16 308 668
+BookOverviewKt.BookOverviewPreview_2 664 16 308 668
+BookOverviewKt.BookOverviewTabletPreview.tablet_dark_W1280dp_H800dp_NIGHT 988 16 480 300
+EmptyLibraryKt.EmptyLibraryPreview 1484 16 308 308
+GridBooksKt.GridBookPreviewFinished.W200dp 2024 16 150 185
+GridBooksKt.GridBookPreviewWithProgress.W200dp 1808 16 150 194
+LibraryTopBarKt.LibrarySearchPillLoadingPreview 16 724 308 42
+LibraryTopBarKt.LibraryTopBarPreview 2240 16 308 48
+ListBooksKt.ListBookRowPreviewFinished 664 724 308 63
+ListBooksKt.ListBookRowPreviewWithProgress 340 724 308 65
+PermissionBugCardKt.PermissionBugCardPreview 988 724 308 210
+SurveyCardKt.SurveyCardPreview 1312 724 308 174

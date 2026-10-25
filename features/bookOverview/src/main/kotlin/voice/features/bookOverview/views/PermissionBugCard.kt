@@ -73,7 +73,7 @@ internal fun PermissionBugCard(
 }
 
 @Composable
-@Preview
+@Preview(group = "BookOverview")
 private fun PermissionBugCardPreview() {
   VoiceTheme {
     PermissionBugCard(onClick = {})

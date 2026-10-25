@@ -278,7 +278,7 @@ private fun FolderOverviewTopBar(
 }
 
 @Composable
-@Preview
+@Preview(group = "FolderPicker")
 private fun FolderOverviewPreview() {
   VoiceTheme {
     FolderOverviewView(
@@ -322,7 +322,7 @@ private fun FolderOverviewPreview() {
 }
 
 @Composable
-@Preview
+@Preview(group = "FolderPicker")
 private fun FolderOverviewEmptyPreview() {
   VoiceTheme {
     FolderOverviewView(

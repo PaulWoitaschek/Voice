@@ -628,7 +628,7 @@ private fun SignOutSheet(
 }
 
 @Composable
-@Preview
+@Preview(group = "AudiobookshelfSettings")
 private fun AudiobookshelfSettingsPreview() {
   VoiceTheme {
     AudiobookshelfSettings(

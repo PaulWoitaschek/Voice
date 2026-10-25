@@ -31,6 +31,7 @@ retrofit-scalars = { module = "com.squareup.retrofit2:converter-scalars", versio
 retrofit-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 robolectric = "org.robolectric:robolectric:4.17"
 composablePreviewScanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.9.3"
+webpImageIo = "com.github.usefulness:webp-imageio:0.11.0"
 coil = "io.coil-kt:coil-compose:2.7.0"
 appCompat = "androidx.appcompat:appcompat:1.8.0"
 androidxCore = "androidx.core:core-ktx:1.19.1"

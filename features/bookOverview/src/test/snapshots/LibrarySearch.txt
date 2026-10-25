@@ -1,0 +1,3 @@
+IdleSearchKt.IdleSearchPreview 16 16 308 416
+NoResultsKt.NoResultsPreview 340 16 308 668
+SearchResultsKt.SearchResultsPreview 664 16 308 429

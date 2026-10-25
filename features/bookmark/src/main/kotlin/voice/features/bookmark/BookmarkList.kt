@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -57,6 +58,7 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import voice.core.data.Bookmark
@@ -64,6 +66,7 @@ import voice.core.strings.R
 import voice.core.ui.BookBar
 import voice.core.ui.BookmarkBadge
 import voice.core.ui.NowPlayingBars
+import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
@@ -516,5 +519,23 @@ private fun EmptyHero(modifier: Modifier = Modifier) {
       color = colors.onSurfaceVariant,
       textAlign = TextAlign.Center,
     )
+  }
+}
+
+@Preview(group = "Bookmarks")
+@Composable
+private fun BookmarkListPreview() {
+  VoiceTheme {
+    Surface {
+      BookmarkList(
+        viewState = kioskModeBookmarkViewState(BookmarkTab.Bookmarks),
+        listState = rememberLazyListState(),
+        contentPadding = PaddingValues(),
+        onCategoryClick = {},
+        onClick = {},
+        onLongClick = {},
+        onDelete = {},
+      )
+    }
   }
 }

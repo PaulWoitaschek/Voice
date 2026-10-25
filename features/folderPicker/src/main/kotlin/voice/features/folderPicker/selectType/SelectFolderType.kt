@@ -431,7 +431,7 @@ private fun ReviewActions(
   }
 }
 
-@Preview
+@Preview(group = "SelectFolderType")
 @Composable
 private fun SelectFolderTypePreview() {
   val books = listOf(

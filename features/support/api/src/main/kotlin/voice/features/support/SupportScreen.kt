@@ -43,16 +43,16 @@ import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
 
 @Composable
-@Preview(heightDp = 1150)
-@Preview(name = "dark", heightDp = 1150, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(name = "large font", heightDp = 2000, fontScale = 2F)
+@Preview(group = "SupportVoice", heightDp = 1150)
+@Preview(group = "SupportVoice", name = "dark", heightDp = 1150, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(group = "SupportVoice", name = "large font", heightDp = 2000, fontScale = 2F)
 private fun SupportPlayPreview() {
   SupportPreview(SupportViewState.preview())
 }
 
 @Composable
-@Preview(heightDp = 1150)
-@Preview(name = "dark", heightDp = 1150, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(group = "SupportVoice", heightDp = 1150)
+@Preview(group = "SupportVoice", name = "dark", heightDp = 1150, uiMode = Configuration.UI_MODE_NIGHT_YES)
 private fun SupportOncePreview() {
   SupportPreview(
     SupportViewState.preview(
@@ -71,7 +71,7 @@ private fun SupportOncePreview() {
 }
 
 @Composable
-@Preview
+@Preview(group = "SupportVoice")
 private fun SupportKoFiPreview() {
   SupportPreview(
     SupportViewState.preview(content = SupportViewState.Content.KoFi).copy(badge = null, supporterSince = null),
@@ -79,7 +79,7 @@ private fun SupportKoFiPreview() {
 }
 
 @Composable
-@Preview
+@Preview(group = "SupportVoice")
 private fun SupportThankYouPreview() {
   SupportPreview(SupportViewState.preview().copy(thankYou = true))
 }
