@@ -61,11 +61,11 @@ class SurveyTest {
   }
 
   @Test
-  fun `opening a survey adds the app version, installer and days installed and marks it handled today`() = runTest {
+  fun `opening a survey adds the app version, flavor, installer and days installed and marks it handled today`() = runTest {
     val store = MemoryDataStore<Map<String, Long>>(emptyMap())
     val survey = survey(remoteUrl = REMOTE, store = store)
 
-    assertEquals("$REMOTE?app_version=1.2.3&source=com.android.vending&days_installed=14", survey.open(REMOTE))
+    assertEquals("$REMOTE?app_version=1.2.3&flavor=free&source=com.android.vending&days_installed=14", survey.open(REMOTE))
     assertEquals(mapOf(REMOTE to today), store.data.first())
     verify { analytics.event("survey_card", mapOf("action" to "open")) }
   }
@@ -74,14 +74,17 @@ class SurveyTest {
   fun `opening a survey with a query keeps it`() = runTest {
     val survey = survey(remoteUrl = "$REMOTE?lang=de")
 
-    assertEquals("$REMOTE?lang=de&app_version=1.2.3&source=com.android.vending&days_installed=14", survey.open("$REMOTE?lang=de"))
+    assertEquals(
+      "$REMOTE?lang=de&app_version=1.2.3&flavor=free&source=com.android.vending&days_installed=14",
+      survey.open("$REMOTE?lang=de"),
+    )
   }
 
   @Test
   fun `opening a survey without a known installer says so`() = runTest {
     val survey = survey(remoteUrl = REMOTE, installer = null)
 
-    assertEquals("$REMOTE?app_version=1.2.3&source=unknown&days_installed=14", survey.open(REMOTE))
+    assertEquals("$REMOTE?app_version=1.2.3&flavor=free&source=unknown&days_installed=14", survey.open(REMOTE))
   }
 
   @Test
@@ -112,6 +115,7 @@ class SurveyTest {
       clock = Clock.fixed(Instant.parse("2026-10-20T10:00:00Z"), ZoneOffset.UTC),
       appInfoProvider = mockk<AppInfoProvider> {
         every { versionName } returns "1.2.3"
+        every { flavor } returns "free"
         every { this@mockk.installer } returns installer
         every { installTime } returns Instant.parse("2026-10-06T10:00:00Z").toKotlinInstant()
       },
