@@ -3,7 +3,8 @@
 Listeners with hundreds of books find the next one in seconds, follow their series in order, and keep what they don't
 want to see right now out of the way.
 
-This is a proposal. Once something ships, it moves into the [product spec](product.md) and leaves this page.
+This is a proposal. Once something ships, it moves into the [product spec](product.md) and leaves this page. To try
+it, open the [clickable prototype](prototypes/library/index.html).
 
 ## Problems
 
