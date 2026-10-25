@@ -58,14 +58,39 @@ abstract class PreviewSnapshotTest {
     val ids = previews.map { AndroidPreviewScreenshotIdBuilder(it).encodeUnsafeCharacters().build() }
     val shortNames = previews.zip(ids) { preview, id -> id.removePrefix(preview.declaringClass.substringBeforeLast('.') + ".") }
     val failures = mutableListOf<String>()
-    val snapshots = previews.indices.mapNotNull { index ->
-      val preview = previews[index]
-      val name = shortNames[index].takeIf { shortNames.count { it == shortNames[index] } == 1 } ?: ids[index]
-      try {
-        File(outputDir, "$name.png").also { capture(preview, it) }
+    val snapshots = mutableListOf<File>()
+
+    @IgnorableReturnValue
+    fun render(
+      preview: ComposablePreview<AndroidPreviewInfo>,
+      info: AndroidPreviewInfo,
+      name: String,
+    ): Bitmap? {
+      return try {
+        capture(preview, info).also { bitmap ->
+          val file = File(outputDir, "$name.png")
+          file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+          snapshots += file
+        }
       } catch (error: Throwable) {
         failures += "$name: ${generateSequence(error) { it.cause }.last()}"
         null
+      }
+    }
+
+    previews.forEachIndexed { index, preview ->
+      val name = shortNames[index].takeIf { shortNames.count { it == shortNames[index] } == 1 } ?: ids[index]
+      val info = preview.previewInfo
+      val bitmap = render(preview, info, name) ?: return@forEachIndexed
+      if (info.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_UNDEFINED) {
+        render(preview, info.copy(uiMode = info.uiMode or Configuration.UI_MODE_NIGHT_YES), "${name}_dark")
+      }
+      // filling the whole window makes it a screen, and screens change their layout in other windows
+      val screen = info.widthDp <= 0 && info.heightDp <= 0 &&
+        bitmap.width == DEFAULT_WIDTH_DP * DENSITY && bitmap.height == DEFAULT_HEIGHT_DP * DENSITY
+      if (screen) {
+        render(preview, info.copy(widthDp = DEFAULT_HEIGHT_DP, heightDp = DEFAULT_WIDTH_DP), "${name}_landscape")
+        render(preview, info.copy(widthDp = TABLET_WIDTH_DP, heightDp = TABLET_HEIGHT_DP), "${name}_tablet")
       }
     }
     if (snapshots.isNotEmpty()) {
@@ -78,9 +103,8 @@ abstract class PreviewSnapshotTest {
 
   private fun capture(
     preview: ComposablePreview<AndroidPreviewInfo>,
-    file: File,
-  ) {
-    val info = preview.previewInfo
+    info: AndroidPreviewInfo,
+  ): Bitmap {
     val rtl = info.locale.substringBefore('-') in RTL_LANGUAGES
     val night = info.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
     RuntimeEnvironment.setQualifiers(qualifiers(info, rtl, night))
@@ -91,7 +115,7 @@ abstract class PreviewSnapshotTest {
       Locale.setDefault(Locale.forLanguageTag(info.locale.replace("-r", "-")))
     }
     try {
-      ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
+      return ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
         // the marquee on long titles and the animation clocks never go idle
         compose.mainClock.autoAdvance = false
         scenario.onActivity { activity ->
@@ -120,8 +144,7 @@ abstract class PreviewSnapshotTest {
         compose.waitForIdle()
         // past the entrance animations, before the marquee starts scrolling
         compose.mainClock.advanceTimeBy(1_000)
-        val bitmap = compose.onNodeWithTag(PREVIEW_TAG).captureToImage().asAndroidBitmap()
-        file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        compose.onNodeWithTag(PREVIEW_TAG).captureToImage().asAndroidBitmap()
       }
     } finally {
       Locale.setDefault(defaultLocale)
@@ -162,5 +185,10 @@ private const val PREVIEW_TAG = "preview"
 // the size of Android Studio's default preview device
 private const val DEFAULT_WIDTH_DP = 411
 private const val DEFAULT_HEIGHT_DP = 891
+private const val TABLET_WIDTH_DP = 1280
+private const val TABLET_HEIGHT_DP = 800
+
+// the xhdpi qualifier
+private const val DENSITY = 2
 
 private val RTL_LANGUAGES = setOf("ar", "fa", "he", "iw", "ur")

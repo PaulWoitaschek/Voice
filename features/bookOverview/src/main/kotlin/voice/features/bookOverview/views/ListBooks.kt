@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
 import voice.core.strings.R
+import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 
@@ -109,11 +110,19 @@ internal fun ListBookRow(
 @Composable
 @Preview
 private fun ListBookRowPreviewWithProgress() {
-  ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 0.6f), {}, {})
+  VoiceTheme {
+    Surface {
+      ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 0.6f), {}, {})
+    }
+  }
 }
 
 @Composable
 @Preview
 private fun ListBookRowPreviewFinished() {
-  ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 1f), {}, {}, finished = true)
+  VoiceTheme {
+    Surface {
+      ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 1f), {}, {}, finished = true)
+    }
+  }
 }

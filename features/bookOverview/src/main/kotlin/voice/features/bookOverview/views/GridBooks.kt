@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
+import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import kotlin.math.roundToInt
@@ -97,11 +99,19 @@ internal fun gridColumnCount(): Int {
 @Composable
 @Preview(widthDp = 200)
 private fun GridBookPreviewWithProgress() {
-  GridBook(BookOverviewPreviewParameterProvider().book().copy(progress = 0.66f), {}, {})
+  VoiceTheme {
+    Surface {
+      GridBook(BookOverviewPreviewParameterProvider().book().copy(progress = 0.66f), {}, {})
+    }
+  }
 }
 
 @Composable
 @Preview(widthDp = 200)
 private fun GridBookPreviewFinished() {
-  GridBook(BookOverviewPreviewParameterProvider().book().copy(progress = 1f), {}, {}, finished = true)
+  VoiceTheme {
+    Surface {
+      GridBook(BookOverviewPreviewParameterProvider().book().copy(progress = 1f), {}, {}, finished = true)
+    }
+  }
 }
