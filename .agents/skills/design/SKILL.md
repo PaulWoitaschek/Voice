@@ -101,11 +101,8 @@ glance what belongs to the story and what belongs to the app.
 
 ## Building blocks
 
-Check `:core:ui` before building something new. It has `ShapedIcon`, `MorphShape`, `segmentedShape`,
-`AuroraBackground`, `rememberAnimationClock`, `Modifier.entrance`, `ConfettiState`, `BeatingHeart`, `CoverTheme`,
-`NightTheme`, `PlayButton`, `BookBar`, `NowPlayingBars`, `bookmarkStyle`, `OnboardingScaffold`, and `CenteredContent`.
-Pieces that only one feature uses stay in that feature (see the architecture skill). For wording, follow the tone in the
-translate-strings skill.
+Check `:core:ui` before building something new. Pieces that only one feature uses stay in that feature (see the
+architecture skill). For wording, follow the tone in the translate-strings skill.
 
 ## Checking a design
 

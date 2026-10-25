@@ -9,10 +9,6 @@ import androidx.compose.ui.unit.max
 
 val MaxContentWidth = 640.dp
 
-/**
- * Follows the space it gets rather than the window, so it also works in a pane. Lists take the padding as content
- * padding, so they still scroll from anywhere across the screen.
- */
 @Composable
 fun CenteredContent(
   modifier: Modifier = Modifier,
