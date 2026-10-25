@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
+import voice.core.ui.MaxContentWidth
 import voice.core.ui.bookText
 import voice.core.ui.entrance
 import voice.core.ui.rememberEntranceState
@@ -178,6 +180,7 @@ internal fun BookPlayContent(
         .fillMaxSize()
         .padding(contentPadding)
         .padding(horizontal = HORIZONTAL_PADDING),
+      horizontalArrangement = Arrangement.Center,
     ) {
       Column(
         modifier = Modifier
@@ -209,7 +212,9 @@ internal fun BookPlayContent(
         cover = null,
         control = control,
         modifier = Modifier
-          .weight(1.3F)
+          .weight(1.3F, fill = false)
+          .widthIn(max = MaxContentWidth)
+          .fillMaxWidth()
           .fillMaxHeight(),
       )
     }
@@ -226,6 +231,8 @@ internal fun BookPlayContent(
       modifier = Modifier
         .fillMaxSize()
         .padding(contentPadding)
+        .wrapContentWidth()
+        .widthIn(max = MaxContentWidth)
         .padding(horizontal = HORIZONTAL_PADDING),
     )
   }
@@ -260,8 +267,8 @@ private val CONTROL_PRIORITY = listOf(
  *
  * With a [cover], the controls sit at the bottom and the cover takes the height above them. When
  * that's less than [MIN_COVER_HEIGHT], the controls turn compact first, and if that's not enough,
- * the cover gives way before any of the controls. Without a cover, the controls are compact and
- * centered.
+ * the cover gives way before any of the controls. Without a cover, the controls are centered, and
+ * compact only when they don't fit otherwise.
  */
 @Composable
 private fun ControlsLayout(
@@ -300,7 +307,7 @@ private fun ControlsLayout(
 
     val all = measurables.keys.sorted()
     val minCover = MIN_COVER_HEIGHT.roundToPx()
-    val compact = coverMeasurable == null || heightOf(all, compact = false) + minCover > height
+    val compact = heightOf(all, compact = false) + (if (coverMeasurable != null) minCover else 0) > height
     val showCover = coverMeasurable != null && heightOf(all, compact) + minCover <= height
     var shown = all
     if (!showCover) {

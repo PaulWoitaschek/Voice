@@ -50,6 +50,7 @@ import voice.core.common.rootGraphAs
 import voice.core.ui.AuroraBackground
 import voice.core.ui.ConfettiState
 import voice.core.ui.EntranceState
+import voice.core.ui.MaxContentWidth
 import voice.core.ui.VoiceTheme
 import voice.core.ui.entrance
 import voice.core.ui.icons.VoiceIcons
@@ -140,7 +141,7 @@ private fun LazyListScope.sections(
     item(key = key) {
       content(
         Modifier
-          .widthIn(max = 640.dp)
+          .widthIn(max = MaxContentWidth)
           .fillMaxWidth()
           .entrance(entrance, entranceIndex),
       )

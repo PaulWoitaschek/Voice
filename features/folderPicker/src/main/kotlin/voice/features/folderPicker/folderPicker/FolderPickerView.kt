@@ -55,6 +55,7 @@ import voice.core.common.rootGraphAs
 import voice.core.data.folders.FolderType
 import voice.core.ui.AuroraBackground
 import voice.core.ui.EntranceState
+import voice.core.ui.MaxContentWidth
 import voice.core.ui.VoiceTheme
 import voice.core.ui.entrance
 import voice.core.ui.icons.VoiceIcons
@@ -180,7 +181,7 @@ private fun LazyListScope.folders(
   onDeleteClick: (FolderPickerViewState.Item) -> Unit,
 ) {
   val itemModifier = Modifier
-    .widthIn(max = 640.dp)
+    .widthIn(max = MaxContentWidth)
     .fillMaxWidth()
   if (viewState.items.isEmpty()) {
     item(key = "empty") {

@@ -51,6 +51,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
@@ -62,6 +63,7 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.strings.R
 import voice.core.ui.AuroraBackground
+import voice.core.ui.CenteredContent
 import voice.core.ui.CoverTheme
 import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
@@ -222,22 +224,29 @@ private fun BookmarkScreen(
     ) { contentPadding ->
       // the list scrolls behind the navigation bar at the bottom, but not behind one at the side
       val layoutDirection = LocalLayoutDirection.current
-      Column(
-        Modifier.padding(
+      CenteredContent(
+        modifier = Modifier.padding(
           start = contentPadding.calculateStartPadding(layoutDirection),
           top = contentPadding.calculateTopPadding(),
           end = contentPadding.calculateEndPadding(layoutDirection),
         ),
-      ) {
-        Tabs(
-          tab = tab,
-          bookmarkCount = viewState.totalCount,
-          onTabChange = onTabChange,
-        )
-        val listPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding())
-        when (tab) {
-          BookmarkTab.Bookmarks -> bookmarkList(listState, listPadding)
-          BookmarkTab.History -> historyList(listPadding)
+      ) { horizontalPadding ->
+        Column {
+          Tabs(
+            tab = tab,
+            bookmarkCount = viewState.totalCount,
+            onTabChange = onTabChange,
+            horizontalPadding = horizontalPadding,
+          )
+          val listPadding = PaddingValues(
+            start = horizontalPadding,
+            end = horizontalPadding,
+            bottom = contentPadding.calculateBottomPadding(),
+          )
+          when (tab) {
+            BookmarkTab.Bookmarks -> bookmarkList(listState, listPadding)
+            BookmarkTab.History -> historyList(listPadding)
+          }
         }
       }
     }
@@ -347,13 +356,14 @@ private fun Tabs(
   tab: BookmarkTab,
   bookmarkCount: Int,
   onTabChange: (BookmarkTab) -> Unit,
+  horizontalPadding: Dp,
 ) {
   val locale = LocalConfiguration.current.locales[0]
   val countFormat = remember(locale) { NumberFormat.getIntegerInstance(locale) }
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = 16.dp, vertical = 8.dp),
+      .padding(horizontal = horizontalPadding, vertical = 8.dp),
     horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
   ) {
     TabButton(

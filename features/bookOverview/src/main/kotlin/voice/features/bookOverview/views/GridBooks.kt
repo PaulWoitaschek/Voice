@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LinearProgressIndicator
@@ -18,10 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import voice.core.data.BookId
 import voice.core.ui.VoiceTheme
@@ -85,15 +85,14 @@ internal fun GridBook(
   }
 }
 
-@Composable
-internal fun gridColumnCount(): Int {
-  val displayMetrics = LocalResources.current.displayMetrics
-  val widthPx = displayMetrics.widthPixels.toFloat()
-  val desiredPx = with(LocalDensity.current) {
-    150.dp.toPx()
+internal object BookGridCells : GridCells {
+  override fun Density.calculateCrossAxisCellSizes(
+    availableSize: Int,
+    spacing: Int,
+  ): List<Int> {
+    val columns = (availableSize / 137.dp.toPx()).roundToInt().coerceAtLeast(2)
+    return with(GridCells.Fixed(columns)) { calculateCrossAxisCellSizes(availableSize, spacing) }
   }
-  val columns = (widthPx / desiredPx).roundToInt()
-  return columns.coerceAtLeast(2)
 }
 
 @Composable
