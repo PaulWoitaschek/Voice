@@ -352,6 +352,8 @@
     <string name="settings.appearance.color_scheme.forest">Skog</string>
     <string name="settings.appearance.color_scheme.lagoon">Lagun</string>
     <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
+    <string name="settings.appearance.cover_colors.summary">Spelaren och widgetarna får färgerna från bokens omslag.</string>
+    <string name="settings.appearance.cover_colors.title">Omslagsfärger</string>
     <string name="settings.appearance.color_scheme.sunset">Solnedgång</string>
     <string name="settings.appearance.color_scheme.title">Färgschema</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamisk färg</string>

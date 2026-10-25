@@ -20,6 +20,11 @@ internal data class WidgetTheme(
   val themeColorScheme: ThemeColorScheme,
 )
 
+internal data class WidgetColorSettings(
+  val themeColorScheme: ThemeColorScheme,
+  val coverColors: Boolean,
+)
+
 /** The [key] identifies the cover, so its shaped versions can be cached. */
 internal data class WidgetCover(
   val key: String,
@@ -29,7 +34,7 @@ internal data class WidgetCover(
 internal data class NowPlayingModel(
   val book: NowPlayingBook?,
   val libraryEmpty: Boolean,
-  val themeColorScheme: ThemeColorScheme,
+  val colorSettings: WidgetColorSettings,
 )
 
 internal sealed interface NowPlayingState {
@@ -76,7 +81,7 @@ internal sealed interface SleepTimerEnd {
 
 internal data class ShelfModel(
   val books: List<ShelfBook>,
-  val themeColorScheme: ThemeColorScheme,
+  val colorSettings: WidgetColorSettings,
 )
 
 internal data class ShelfState(

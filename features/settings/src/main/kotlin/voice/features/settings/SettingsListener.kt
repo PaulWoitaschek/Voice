@@ -9,6 +9,7 @@ interface SettingsListener {
   fun setThemeMode(themeMode: ThemeMode)
   fun setThemeColorScheme(themeColorScheme: ThemeColorScheme)
   fun togglePureBlack()
+  fun toggleCoverColors()
   fun setUseGrid(useGrid: Boolean)
   fun seekAmountChanged(seconds: Int)
   fun seekAmountStepped(step: Int)
@@ -36,6 +37,7 @@ interface SettingsListener {
       override fun setThemeMode(themeMode: ThemeMode) {}
       override fun setThemeColorScheme(themeColorScheme: ThemeColorScheme) {}
       override fun togglePureBlack() {}
+      override fun toggleCoverColors() {}
       override fun setUseGrid(useGrid: Boolean) {}
       override fun seekAmountChanged(seconds: Int) {}
       override fun seekAmountStepped(step: Int) {}

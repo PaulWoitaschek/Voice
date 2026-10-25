@@ -357,6 +357,8 @@
     <string name="settings.appearance.color_scheme.sunset">सूर्यास्त</string>
     <string name="settings.appearance.color_scheme.berry">बेरी</string>
     <string name="settings.appearance.color_scheme.lavender">लैवेंडर</string>
+    <string name="settings.appearance.cover_colors.summary">प्लेयर और विजेट पुस्तक के कवर के रंग अपना लेते हैं।</string>
+    <string name="settings.appearance.cover_colors.title">कवर के रंग</string>
     <string name="settings.appearance.pure_black.summary">डार्क थीम में OLED स्क्रीन पर बैटरी बचाता है।</string>
     <string name="settings.appearance.pure_black.title">गहरा काला</string>
     <string name="settings.appearance.theme.dark">डार्क</string>

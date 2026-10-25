@@ -388,6 +388,8 @@
     <string name="settings.appearance.color_scheme.forest">Las</string>
     <string name="settings.appearance.color_scheme.lagoon">Laguna</string>
     <string name="settings.appearance.color_scheme.lavender">Lawenda</string>
+    <string name="settings.appearance.cover_colors.summary">Odtwarzacz i widżety przyjmują kolory okładki książki.</string>
+    <string name="settings.appearance.cover_colors.title">Kolory okładki</string>
     <string name="settings.appearance.color_scheme.sunset">Zachód słońca</string>
     <string name="settings.appearance.color_scheme.title">Schemat kolorów</string>
     <string name="settings.appearance.color_scheme.dynamic">Kolor dynamiczny</string>

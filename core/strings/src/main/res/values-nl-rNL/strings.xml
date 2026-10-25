@@ -352,6 +352,8 @@
     <string name="settings.appearance.color_scheme.forest">Bos</string>
     <string name="settings.appearance.color_scheme.lagoon">Lagune</string>
     <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
+    <string name="settings.appearance.cover_colors.summary">De speler en widgets nemen de kleuren van het boekomslag over.</string>
+    <string name="settings.appearance.cover_colors.title">Omslagkleuren</string>
     <string name="settings.appearance.color_scheme.sunset">Zonsondergang</string>
     <string name="settings.appearance.color_scheme.title">Kleurenschema</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamische kleur</string>

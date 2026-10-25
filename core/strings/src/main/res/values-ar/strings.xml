@@ -429,6 +429,8 @@
     <string name="settings.appearance.color_scheme.sunset">غروب</string>
     <string name="settings.appearance.color_scheme.berry">توت</string>
     <string name="settings.appearance.color_scheme.lavender">خزامى</string>
+    <string name="settings.appearance.cover_colors.summary">تأخذ شاشة التشغيل والأدوات المصغّرة ألوان غلاف الكتاب.</string>
+    <string name="settings.appearance.cover_colors.title">ألوان الغلاف</string>
     <string name="settings.appearance.pure_black.summary">يوفّر البطارية على شاشات OLED في الوضع الداكن.</string>
     <string name="settings.appearance.pure_black.title">أسود خالص</string>
     <string name="settings.appearance.theme.dark">داكن</string>

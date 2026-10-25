@@ -388,6 +388,8 @@
     <string name="settings.appearance.color_scheme.forest">Les</string>
     <string name="settings.appearance.color_scheme.lagoon">Laguna</string>
     <string name="settings.appearance.color_scheme.lavender">Levandule</string>
+    <string name="settings.appearance.cover_colors.summary">Přehrávač a widgety převezmou barvy z obalu knihy.</string>
+    <string name="settings.appearance.cover_colors.title">Barvy obalu</string>
     <string name="settings.appearance.color_scheme.sunset">Západ slunce</string>
     <string name="settings.appearance.color_scheme.title">Barevné schéma</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamická barva</string>

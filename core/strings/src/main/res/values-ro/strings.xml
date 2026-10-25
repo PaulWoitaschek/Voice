@@ -374,6 +374,8 @@
     <string name="settings.appearance.color_scheme.forest">Pădure</string>
     <string name="settings.appearance.color_scheme.lagoon">Lagună</string>
     <string name="settings.appearance.color_scheme.lavender">Lavandă</string>
+    <string name="settings.appearance.cover_colors.summary">Playerul și widgeturile preiau culorile copertei cărții.</string>
+    <string name="settings.appearance.cover_colors.title">Culorile copertei</string>
     <string name="settings.appearance.pure_black.summary">Economisește bateria pe ecranele OLED în tema întunecată.</string>
     <string name="settings.appearance.pure_black.title">Negru pur</string>
     <string name="settings.appearance.theme.dark">Întunecată</string>

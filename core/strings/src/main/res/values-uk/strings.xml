@@ -388,6 +388,8 @@
     <string name="settings.appearance.color_scheme.forest">Ліс</string>
     <string name="settings.appearance.color_scheme.lagoon">Лагуна</string>
     <string name="settings.appearance.color_scheme.lavender">Лаванда</string>
+    <string name="settings.appearance.cover_colors.summary">Плеєр і віджети набувають кольорів обкладинки книги.</string>
+    <string name="settings.appearance.cover_colors.title">Кольори обкладинки</string>
     <string name="settings.appearance.color_scheme.sunset">Захід сонця</string>
     <string name="settings.appearance.color_scheme.title">Колірна схема</string>
     <string name="settings.appearance.color_scheme.dynamic">Динамічний колір</string>

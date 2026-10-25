@@ -352,6 +352,8 @@
     <string name="settings.appearance.color_scheme.forest">Mets</string>
     <string name="settings.appearance.color_scheme.lagoon">Laguun</string>
     <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
+    <string name="settings.appearance.cover_colors.summary">Mängija ja vidinad võtavad üle raamatu kaanepildi värvid.</string>
+    <string name="settings.appearance.cover_colors.title">Kaanepildi värvid</string>
     <string name="settings.appearance.color_scheme.sunset">Päikeseloojang</string>
     <string name="settings.appearance.color_scheme.title">Värviskeem</string>
     <string name="settings.appearance.color_scheme.dynamic">Dünaamiline värv</string>

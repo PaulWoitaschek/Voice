@@ -352,6 +352,8 @@
     <string name="settings.appearance.color_scheme.forest">جنگل</string>
     <string name="settings.appearance.color_scheme.lagoon">تالاب</string>
     <string name="settings.appearance.color_scheme.lavender">اسطوخودوس</string>
+    <string name="settings.appearance.cover_colors.summary">پخش‌کننده و ویجت‌ها رنگ‌های کاور کتاب را به خود می‌گیرند.</string>
+    <string name="settings.appearance.cover_colors.title">رنگ‌های کاور</string>
     <string name="settings.appearance.color_scheme.sunset">غروب</string>
     <string name="settings.appearance.color_scheme.title">طرح رنگ</string>
     <string name="settings.appearance.color_scheme.dynamic">رنگ پویا</string>

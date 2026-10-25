@@ -352,6 +352,8 @@
     <string name="settings.appearance.color_scheme.forest">Metsä</string>
     <string name="settings.appearance.color_scheme.lagoon">Laguuni</string>
     <string name="settings.appearance.color_scheme.lavender">Laventeli</string>
+    <string name="settings.appearance.cover_colors.summary">Soitin ja widgetit saavat värinsä kirjan kannesta.</string>
+    <string name="settings.appearance.cover_colors.title">Kannen värit</string>
     <string name="settings.appearance.color_scheme.sunset">Auringonlasku</string>
     <string name="settings.appearance.color_scheme.title">Väriteema</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynaaminen väri</string>

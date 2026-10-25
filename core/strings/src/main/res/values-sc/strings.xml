@@ -357,6 +357,8 @@
     <string name="settings.appearance.color_scheme.sunset">Intrinada</string>
     <string name="settings.appearance.color_scheme.berry">Fràgula</string>
     <string name="settings.appearance.color_scheme.lavender">Archemissa</string>
+    <string name="settings.appearance.cover_colors.summary">S\'ischermu de riprodutzione e sos trastos leant sos colores de sa cobertedda de su libru.</string>
+    <string name="settings.appearance.cover_colors.title">Colores de sa cobertedda</string>
     <string name="settings.appearance.pure_black.summary">Consumit prus pagu bateria in sos ischermos OLED cun su tema iscuru.</string>
     <string name="settings.appearance.pure_black.title">Nieddu puru</string>
     <string name="settings.appearance.theme.dark">Iscuru</string>

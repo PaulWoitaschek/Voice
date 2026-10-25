@@ -338,6 +338,8 @@
     <string name="settings.appearance.color_scheme.forest">森林</string>
     <string name="settings.appearance.color_scheme.lagoon">泻湖</string>
     <string name="settings.appearance.color_scheme.lavender">薰衣草</string>
+    <string name="settings.appearance.cover_colors.summary">播放器和小部件会采用书籍封面的颜色。</string>
+    <string name="settings.appearance.cover_colors.title">封面配色</string>
     <string name="settings.appearance.pure_black.summary">在深色主题下为 OLED 屏幕节省电量。</string>
     <string name="settings.appearance.pure_black.title">纯黑</string>
     <string name="settings.appearance.theme.dark">深色</string>

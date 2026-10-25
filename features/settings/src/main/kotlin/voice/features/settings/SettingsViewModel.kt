@@ -30,6 +30,7 @@ import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.SeekTimeStore
 import voice.core.sleeptimer.SleepTimerPreference
 import voice.core.sleeptimer.SleepTimerPreferenceStore
+import voice.core.ui.CoverColorsStore
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.core.ui.GridMode
@@ -52,6 +53,7 @@ class SettingsViewModel(
   private val themeModeStore: ThemeModeStore,
   private val themeColorSchemeStore: ThemeColorSchemeStore,
   private val pureBlackStore: PureBlackStore,
+  private val coverColorsStore: CoverColorsStore,
   private val autoRewindAmountStore: AutoRewindAmountStore,
   private val seekTimeStore: SeekTimeStore,
   private val lockScreenSliderStore: LockScreenSliderStore,
@@ -87,6 +89,7 @@ class SettingsViewModel(
     val themeMode = remember { themeModeStore.data }.collectAsState(initial = null).value
     val themeColorScheme = remember { themeColorSchemeStore.data }.collectAsState(initial = null).value
     val pureBlack = remember { pureBlackStore.data }.collectAsState(initial = null).value
+    val coverColors = remember { coverColorsStore.data }.collectAsState(initial = null).value
     val autoRewindAmount = remember { autoRewindAmountStore.data }.collectAsState(initial = null).value
     val seekTime = remember { seekTimeStore.data }.collectAsState(initial = null).value
     val lockScreenSlider = remember { lockScreenSliderStore.data }.collectAsState(initial = null).value
@@ -111,6 +114,7 @@ class SettingsViewModel(
       themeMode == null ||
       themeColorScheme == null ||
       pureBlack == null ||
+      coverColors == null ||
       autoRewindAmount == null ||
       seekTime == null ||
       lockScreenSlider == null ||
@@ -131,6 +135,7 @@ class SettingsViewModel(
       themeMode = themeMode,
       themeColorScheme = themeColorScheme,
       pureBlack = pureBlack,
+      coverColors = coverColors,
       dynamicColorAvailable = dynamicColorAvailable,
       seekTimeInSeconds = seekTime,
       autoRewindInSeconds = autoRewindAmount,
@@ -202,6 +207,12 @@ class SettingsViewModel(
   override fun togglePureBlack() {
     mainScope.launch {
       pureBlackStore.updateData { !it }
+    }
+  }
+
+  override fun toggleCoverColors() {
+    mainScope.launch {
+      coverColorsStore.updateData { !it }
     }
   }
 

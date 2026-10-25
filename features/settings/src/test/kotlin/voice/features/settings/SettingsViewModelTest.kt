@@ -39,6 +39,7 @@ import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.SeekTimeStore
 import voice.core.sleeptimer.SleepTimerPreference
 import voice.core.sleeptimer.SleepTimerPreferenceStore
+import voice.core.ui.CoverColorsStore
 import voice.core.ui.DynamicColorAvailability
 import voice.core.ui.GridCount
 import voice.core.ui.GridMode
@@ -70,6 +71,7 @@ class SettingsViewModelTest {
   private val themeModeStore = MemoryDataStore(ThemeMode.FollowSystem)
   private val themeColorSchemeStore = MemoryDataStore(ThemeColorScheme.VoiceBlue)
   private val pureBlackStore = MemoryDataStore(false)
+  private val coverColorsStore = MemoryDataStore(true)
   private val autoRewindAmountStore = MemoryDataStore(10)
   private val seekTimeStore = MemoryDataStore(30)
   private val lockScreenSliderStore = MemoryDataStore(true)
@@ -108,6 +110,7 @@ class SettingsViewModelTest {
     themeModeStore = ThemeModeStore(themeModeStore),
     themeColorSchemeStore = ThemeColorSchemeStore(themeColorSchemeStore),
     pureBlackStore = PureBlackStore(pureBlackStore),
+    coverColorsStore = CoverColorsStore(coverColorsStore),
     autoRewindAmountStore = AutoRewindAmountStore(autoRewindAmountStore),
     seekTimeStore = SeekTimeStore(seekTimeStore),
     lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
@@ -499,6 +502,22 @@ class SettingsViewModelTest {
 
       viewModel.togglePureBlack()
       assertFalse(awaitItem().pureBlack)
+    }
+  }
+
+  @Test
+  fun `cover colors can be turned off and on again`() = scope.runTest {
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.viewState()
+    }.filterNotNull().test {
+      assertTrue(awaitItem().coverColors)
+
+      viewModel.toggleCoverColors()
+      assertFalse(awaitItem().coverColors)
+      assertFalse(coverColorsStore.data.first())
+
+      viewModel.toggleCoverColors()
+      assertTrue(awaitItem().coverColors)
     }
   }
 }
