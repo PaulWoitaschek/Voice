@@ -17,6 +17,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -24,6 +25,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
+import voice.core.analytics.api.Analytics
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -41,6 +43,9 @@ import voice.core.playback.SeekTimeStore
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
+import voice.core.playback.misc.Decibel
+import voice.core.playback.misc.VolumeGain
+import voice.core.playback.misc.VolumeGainSetter
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
@@ -101,6 +106,7 @@ class VoicePlayerTest {
   private val historyRepo = mockk<ListeningHistoryRepo> {
     coEvery { add(capture(historyEvents)) } just Runs
   }
+  private val analytics = mockk<Analytics>(relaxUnitFun = true)
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
   private val player = VoicePlayer(
     player = chapterMarkPlayer,
@@ -115,9 +121,9 @@ class VoicePlayerTest {
     autoRewindAmountStore = AutoRewindAmountStore(autoRewindAmountStore),
     lastPlaybackSpeedStore = LastPlaybackSpeedStore(lastPlaybackSpeedStore),
     scope = scope,
-    volumeGain = mockk(relaxed = true),
+    volumeGain = VolumeGain(VolumeGainSetter()),
     sleepTimer = sleepTimer,
-    analytics = mockk(relaxed = true),
+    analytics = analytics,
     historyRecorder = ListeningHistoryRecorder(
       repo = historyRepo,
       clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
@@ -387,6 +393,20 @@ class VoicePlayerTest {
   }
 
   @Test
+  fun `playing tells whether volume boost is on`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))), gain = 3F)
+
+    player.play()
+    player.setGain(Decibel.Zero)
+    player.play()
+
+    verifyOrder {
+      analytics.event("play", mapOf("volume_boost" to "on"))
+      analytics.event("play", mapOf("volume_boost" to "off"))
+    }
+  }
+
+  @Test
   fun `end of chapter sleep timer pauses at start of next chapter mark`() = scope.runTest {
     setMediaItems(
       listOf(
@@ -645,6 +665,7 @@ class VoicePlayerTest {
     positionInChapter: Long = 0,
     playbackSpeed: Float = 1F,
     lastPlayedAt: Instant = Instant.EPOCH,
+    gain: Float = 0F,
   ) {
     currentBook = book(chapters, bookId).update {
       it.copy(
@@ -652,6 +673,7 @@ class VoicePlayerTest {
         positionInChapter = positionInChapter,
         playbackSpeed = playbackSpeed,
         lastPlayedAt = lastPlayedAt,
+        gain = gain,
       )
     }
     player.setMediaItem(mediaItemProvider.mediaItem(currentBook))
