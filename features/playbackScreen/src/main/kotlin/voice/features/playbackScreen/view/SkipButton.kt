@@ -31,7 +31,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -40,6 +39,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import voice.core.strings.R
+import voice.core.ui.animationsEnabled
 import voice.core.ui.icons.VoiceIcons
 import kotlin.math.roundToInt
 
@@ -52,17 +52,17 @@ internal fun SkipButton(
   modifier: Modifier = Modifier,
 ) {
   val scope = rememberCoroutineScope()
-  val motionEnabled = (scope.coroutineContext[MotionDurationScale]?.scaleFactor ?: 1F) > 0F
+  val animate = animationsEnabled()
   val haptics = LocalHapticFeedback.current
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
   val widthRatio by animateFloatAsState(
-    targetValue = if (pressed && motionEnabled) 1.3F else 1F,
+    targetValue = if (pressed && animate) 1.3F else 1F,
     animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
     label = "skipWidth",
   )
   val cornerPercent by animateFloatAsState(
-    targetValue = if (pressed && motionEnabled) 25F else 50F,
+    targetValue = if (pressed && animate) 25F else 50F,
     animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
     label = "skipCorner",
   )
@@ -74,11 +74,13 @@ internal fun SkipButton(
       onClick = {
         haptics.performHapticFeedback(HapticFeedbackType.ContextClick)
         onClick()
-        bursts = bursts + nextBurstId++
-        scope.launch {
-          nudge.snapTo(0F)
-          nudge.animateTo(1F, tween(durationMillis = 90, easing = FastOutSlowInEasing))
-          nudge.animateTo(0F, spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMediumLow))
+        if (animate) {
+          bursts = bursts + nextBurstId++
+          scope.launch {
+            nudge.snapTo(0F)
+            nudge.animateTo(1F, tween(durationMillis = 90, easing = FastOutSlowInEasing))
+            nudge.animateTo(0F, spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMediumLow))
+          }
         }
       },
       modifier = Modifier
