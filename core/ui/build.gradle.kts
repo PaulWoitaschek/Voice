@@ -19,4 +19,6 @@ dependencies {
   implementation(libs.materialKolor)
   implementation(libs.coil)
   implementation(libs.navigation3.ui)
+
+  testImplementation(libs.compose.ui.testJunit)
 }

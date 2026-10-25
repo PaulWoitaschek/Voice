@@ -54,6 +54,7 @@ fun PlayButton(
   size: Dp = 104.dp,
 ) {
   val haptics = LocalHapticFeedback.current
+  val animate = animationsEnabled()
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
   val morph = remember { Morph(MaterialShapes.Cookie9Sided, MaterialShapes.Square) }
@@ -90,7 +91,7 @@ fun PlayButton(
         indication = ripple(color = contentColor),
         role = Role.Button,
       ) {
-        turns++
+        if (animate) turns++
         haptics.performHapticFeedback(if (playing) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn)
         onClick()
       },
