@@ -162,7 +162,7 @@ For books already in the library:
   book is in it once, also the ones in progress and the finished ones, and two or more books of a series are one
   stack. One order is easier to follow than one per section.
 - Title sorts books by their title and series by their name. Author sorts by author and stacks their books, see
-  below. Recently added puts the day above the books added on it, newest first.
+  below. Recently added puts the day or the month above the books added in it, newest first.
 - Inside a stack, the order of the series always holds.
 - **Show:** finished books, hidden books. Without finished books, Completed is gone, and finished books leave All
   books and the stacks.
@@ -184,11 +184,14 @@ For books already in the library:
 
 ### Sorted by recently added
 
-![Sketch: the books of each day, when the library is sorted by recently added](sketches/library-recently-added.png)
+![Sketch: the books of each day and month, when the library is sorted by recently added](sketches/library-recently-added.png)
 
-- The day stands above the books added on it, like Today, Yesterday or 12 October, newest day first.
-- The books of one day sort by title, because a folder added at once would otherwise be in the order of the scan.
-- A series is on the day of its newest book, and sorts by its name.
+- Books from the last 30 days are under the day they were added, like Today, Yesterday or 12 October. Older books
+  are under their month, like September or March 2025, so a library that grew over years doesn't become hundreds of
+  short sections. Newest first.
+- The books of one day or month sort by title, because a folder added at once would otherwise be in the order of the
+  scan.
+- A series goes where its newest book is, and sorts by its name.
 - Books added before Voice kept the date come last, under Earlier.
 
 ## 6. Hiding books

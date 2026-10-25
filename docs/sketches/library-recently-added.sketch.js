@@ -44,19 +44,19 @@ header(x + 20, y + 130, 'Current', 1);
 listRow(x, y + 144, { title: 'Echoes of Tomorrow', author: 'Daniel Hartwell', progress: 0.72, caption: '4:03:15 left' });
 
 header(x + 20, y + 270, 'All books', '1,204');
-const today = label(x + 24, y + 304, 'Today', { bold: true });
+label(x + 24, y + 304, 'Today', { bold: true });
 listRow(x, y + 316, { title: 'A Map of Small Hours', author: 'Ines Carver', caption: '8:41:12' });
 const salt = listRow(x, y + 402, { title: 'Salt and Silence', author: 'Nora Whitfield', caption: '11:20:05' });
 
-label(x + 24, y + 524, '12 October', { bold: true });
+label(x + 24, y + 524, 'September', { bold: true });
 const lantern = listRow(x, y + 536, { title: 'The Lantern Keepers', author: 'Mara Quill', caption: '6 books', series: true });
 listRow(x, y + 622, { title: 'Winter Harbor', author: 'Ruth Calloway', caption: '9:58:30' });
 
-note(20, y + 250, ['The day they', 'were added,', 'newest first.']);
+note(20, y + 250, ['The day for the', 'last 30 days,', 'then the month.']);
 arrow([[160, y + 330], [230, y + 310], [x + 18, y + 300]]);
 
 note(x + 400, y + 330, ['Books of one day by', 'title, so a folder added', 'at once is easy to scan.']);
 arrow([[x + 396, y + 400], [x + 372, y + 420], [x + 350, salt + 40]]);
 
-note(x + 400, y + 560, ['A series is on the', 'day of its newest book.']);
+note(x + 400, y + 560, ['A series goes where', 'its newest book is.']);
 arrow([[x + 396, y + 590], [x + 372, y + 586], [x + 350, lantern + 40]]);
