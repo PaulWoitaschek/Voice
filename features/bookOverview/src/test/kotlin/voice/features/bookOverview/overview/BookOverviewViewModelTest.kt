@@ -409,7 +409,7 @@ class BookOverviewViewModelTest {
       assertEquals(expected = false, actual = expectMostRecentItem().showSurveyCard)
     }
     verify {
-      navigator.goTo(Destination.Website("$SURVEY_URL?app_version=1.2.3&flavor=free&source=org.fdroid.fdroid&days_installed=14"))
+      navigator.goTo(Destination.Website("$SURVEY_URL?app_version=1.2.3&source=org.fdroid.fdroid&days_installed=14"))
     }
   }
 
@@ -514,7 +514,6 @@ class BookOverviewViewModelTest {
       clock = Clock.fixed(java.time.Instant.parse("2026-10-20T10:00:00Z"), ZoneOffset.UTC),
       appInfoProvider = mockk {
         every { versionName } returns "1.2.3"
-        every { flavor } returns "free"
         every { installer } returns "org.fdroid.fdroid"
         every { installTime } returns Instant.parse("2026-10-06T10:00:00Z")
       },
