@@ -21,6 +21,9 @@ One bullet per change a listener notices, in plain words, in one or two sentence
 bullets gets its own `###` section with an emoji in the heading, most important first. Group the smaller changes under
 a shared heading, such as `### More ✨`. Fixes go last under `### Fixes 🐞`, each saying what was broken.
 
+When someone outside the project wrote a change, or sent the corrections it applies, thank them by their GitHub handle
+at the end of its bullet: `Thanks to @steliyan for fixing it!`.
+
 Leave out tests, CI, dependencies, refactors, changes to the Google Play support sheet, and GitHub's generated
 changelog.
 
