@@ -26,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -45,6 +46,7 @@ import voice.core.ui.bookText
 import voice.core.ui.entrance
 import voice.core.ui.rememberEntranceState
 import voice.features.playbackScreen.BookPlayViewState
+import java.text.NumberFormat
 import kotlin.time.Duration
 
 @Composable
@@ -99,6 +101,7 @@ internal fun BookPlayContent(
   }
   // with a single chapter, the seek bar already spans the whole book
   val showBookProgress = viewState.chapterCount > 1
+  val percentFormat = remember { NumberFormat.getPercentInstance() }
   val title: @Composable () -> Unit = {
     TitleBlock(
       title = viewState.title,
@@ -135,6 +138,7 @@ internal fun BookPlayContent(
           onSeek = onSeek,
           jumpBack = viewState.jumpBack,
           unavailable = viewState.unavailable,
+          bookPercent = if (showBookProgress) null else percentFormat.format(viewState.bookProgress.toDouble()),
           onJumpBack = onJumpBack,
           onJumpBackExpire = onJumpBackExpire,
           modifier = Modifier
