@@ -12,6 +12,7 @@ This is a proposal. Once something ships, it moves into the [product spec](produ
 - **Fixing the author or the series means editing the files.** [#1407]
 - **I can't take a book out of my library without deleting its files.** [#3397]
 - **My library is one long list,** with thousands of books from Audiobookshelf, or the kids' books next to mine. [#1214]
+- **With thousands of books, I want to go through them by author,** like in Audiobookshelf. [#3946]
 - **The episodes of a radio play all look the same, and search can't find one by its number.** [#3132]
 - **My author folders don't make authors, and a series folder becomes one long book.** [#3162]
 
@@ -23,6 +24,7 @@ This is a proposal. Once something ships, it moves into the [product spec](produ
 [#3162]: https://github.com/PaulWoitaschek/Voice/discussions/3162
 [#3235]: https://github.com/PaulWoitaschek/Voice/discussions/3235
 [#3397]: https://github.com/PaulWoitaschek/Voice/discussions/3397
+[#3946]: https://github.com/PaulWoitaschek/Voice/discussions/3946
 
 ## What Voice knows today
 
@@ -40,8 +42,9 @@ This is a proposal. Once something ships, it moves into the [product spec](produ
 - Current and Completed are in the order they were last listened, Not started yet by title. There's no sorting,
   filtering or hiding.
 
-**So: group by series, not by author.** A series is short and ordered by its parts. Authors are messy, most of them
-have a single book, and a group per author makes the list longer, not shorter. Authors get their own screen instead.
+**So: group by series, and by author only when sorted by author.** A series is short and ordered by its parts. Authors
+are messy and most of them have a single book, so they only group when the listener asks for them. Libraries with
+thousands of books mostly come from Audiobookshelf, where the authors are clean and have many books each.
 
 **But most series aren't in the tags.** They're in the album or in the folders, so Voice reads them from there, and
 fixing many books at once has to take a few taps.
@@ -52,7 +55,7 @@ fixing many books at once has to take a few taps.
 - It stays quick with 5,000 books and a series of 200 episodes.
 - No book gets lost. Search always finds grouped and hidden books.
 - Edits never touch the files or the server.
-- Grouping series needs no setting.
+- Grouping needs no setting.
 
 ## 1. Series in the library
 
@@ -67,6 +70,7 @@ fixing many books at once has to take a few taps.
   series don't show in the library. Two books of one series in progress are both in Current.
 - A series with no book in progress is a stack: in Not started yet before its first book, in Current between two
   books, and in Completed after its last.
+- That's with Progress. The other orders show every series as one stack in All books, see Sorting and filtering.
 - A tap on a stack opens the series. A long press renames or hides it.
 
 ## 2. The series
@@ -90,7 +94,8 @@ fixing many books at once has to take a few taps.
   the spelling most of their books have. Series names match the same way.
 - More options rename the author for all their books. Picking a suggested name joins the two, like ten books of
   "Rowling, J. K." and ten of "J. K. Rowling".
-- Opens from a book's author in the player, the book actions and the series, and from search.
+- Opens from an author's stack in the library, a book's author in the player, the book actions and the series, and
+  from search.
 
 ## 4. Where series and authors come from
 
@@ -149,17 +154,42 @@ For books already in the library:
 
 ![Sketch: the sort and show sheet](sketches/library-sort-sheet.png)
 
-- **Sort by:** Last listened, Title, Author, Recently added. Last listened is the default and what the library does
-  today. The order applies to Not started yet and Completed, and Current stays in the order it was listened in.
-  Author sorts by author, then by the title or the series' name. Books added before Voice kept the date come last in
-  Recently added.
-- A stack sorts by its last listened book, the series' name, its author or its newest book. Inside a stack, the order
-  of the series always holds.
-- **Show:** finished books, hidden books.
+- **Sort by:** Progress, Title, Author, Recently added.
+- Current is always on top, in the order it was listened in, so the books in progress are one tap away in every order.
+- **Progress** is the default and the library of today: below Current come Not started yet by title and Completed
+  by last listened. A series there sorts by its name or by its last listened book.
+- **Title, Author and Recently added** show the whole library below Current, in one list called All books. Every
+  book is in it once, also the ones in progress and the finished ones, and two or more books of a series are one
+  stack. One order is easier to follow than one per section.
+- Title sorts books by their title and series by their name. Author sorts by author and stacks their books, see
+  below. Recently added puts the day above the books added on it, newest first.
+- Inside a stack, the order of the series always holds.
+- **Show:** finished books, hidden books. Without finished books, Completed is gone, and finished books leave All
+  books and the stacks.
 - **From:** one chip per audiobook folder and Audiobookshelf library, only with more than one.
 - A dot on the button says a filter is on: finished books are off, or a folder is. Hidden books don't count, because
   they're hidden on purpose.
 - Filtering by author, narrator or genre stays in search.
+
+### Sorted by author
+
+![Sketch: authors as stacks when the library is sorted by author](sketches/library-author-stacks.png)
+
+- Two or more series or books of an author are one stack in All books, with all their books: in progress, finished
+  and not started. An author with just one series or book shows it as it is.
+- The stack has the author's name, how many series and books are in it and how many are finished, and four of their
+  covers side by side, so it doesn't look like a series. The grid counts the books in a badge, like on a series.
+- A tap opens the author, a long press renames them.
+- Authors are in the order of their names, then the books with no author.
+
+### Sorted by recently added
+
+![Sketch: the books of each day, when the library is sorted by recently added](sketches/library-recently-added.png)
+
+- The day stands above the books added on it, like Today, Yesterday or 12 October, newest day first.
+- The books of one day sort by title, because a folder added at once would otherwise be in the order of the scan.
+- A series is on the day of its newest book, and sorts by its name.
+- Books added before Voice kept the date come last, under Earlier.
 
 ## 6. Hiding books
 
@@ -308,8 +338,6 @@ What goes:
 
 ## Won't solve
 
-- **Author groups in the library:** tags are too messy for it, and most authors have a single book. The author screen
-  shows an author's books in one place.
 - **Writing tags into the files:** it could break files, and synced folders would change on every device.
 - **Putting books in any order by hand:** sorting and the order of a series cover what listeners describe.
 - **Sorting the whole library by file name** ([#3235]): books in a series already follow their file names, and editing
@@ -325,8 +353,9 @@ What goes:
 - Until every device has the update, a split series folder and the long book it was don't sync their places.
 - Two series with the same name from different authors become one, and a book in several series only shows in the
   first one.
-- An author tag with several names gets one author screen for all of them. Names in another order, like
+- An author tag with several names gets one author screen and one stack for all of them. Names in another order, like
   "Rowling, J. K.", are joined by one rename.
+- Authors sort by their name as it's written, so "Stephen King" comes under S, not K.
 - Folders only become series with "Folders are authors", or with "Voice finds the books".
 - Search doesn't look through chapter names or file names.
 - Splits and joins stay on the device and don't sync through `.voice`.
@@ -347,12 +376,13 @@ Each step helps on its own.
 8. The author screen.
 9. Authors and series in search, Browse opening their screen, and numbers in search.
 10. Hiding books.
-11. The sort sheet.
-12. Selecting several books.
-13. Android Auto using the library search.
-14. "Voice finds the books", as an A/B test with new listeners. It needs the series stacks from step 5 to show what it
+11. The sort sheet, with All books for the orders other than Progress.
+12. Author stacks when sorted by author. They open the author screen from step 8.
+13. Selecting several books.
+14. Android Auto using the library search.
+15. "Voice finds the books", as an A/B test with new listeners. It needs the series stacks from step 5 to show what it
     found.
-15. If the test works, replacing the layouts for everyone.
+16. If the test works, replacing the layouts for everyone.
 
 ## Open questions
 
@@ -360,3 +390,4 @@ Each step helps on its own.
 - Are folders enough as shelves ([#1214]), or do listeners need shelves they make in Voice?
 - Should step 7 go, since replacing the layouts splits series folders anyway, and no library changes before the test?
 - When the layouts are replaced: should folders that look like several books be split, or keep their books with a join?
+- Do listeners with thousands of books need a fast scroller with letters, when sorted by title or author?

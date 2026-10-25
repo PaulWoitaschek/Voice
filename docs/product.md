@@ -82,7 +82,8 @@ Listeners find the book they want in seconds and see how far along they are in e
 
 - **The books of a series aren't grouped or in order.** A series becomes one stack, its books are in order, and Voice
   offers the next one when a book ends. [#1748]
-- **I can't put my books in the order I want.** Sort by last listened, title, author or recently added. [#1543]
+- **I can't put my books in the order I want.** Sort by progress, title, author or recently added. [#1543]
+- **With thousands of books, I can't go through them by author.** Sorted by author, each author is one stack. [#3946]
 - **Fixing the author means editing the files.** Edit the title, author, series and part in Voice. [#1407]
 - **Removing a book from the library deletes its files.** Hide a book or a series and keep its files. [#3397]
 - **The episodes of a radio play all have the album's name.** Each episode keeps its own title, the album becomes the
@@ -102,6 +103,7 @@ Listeners find the book they want in seconds and see how far along they are in e
 [#2826]: https://github.com/PaulWoitaschek/Voice/discussions/2826
 [#2856]: https://github.com/PaulWoitaschek/Voice/discussions/2856
 [#3397]: https://github.com/PaulWoitaschek/Voice/discussions/3397
+[#3946]: https://github.com/PaulWoitaschek/Voice/discussions/3946
 
 ## Player
 

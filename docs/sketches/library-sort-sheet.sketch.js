@@ -21,9 +21,9 @@ roundRect(x, y + 280, 360, 480, 30, { fill: '#fff', fillStyle: 'solid', strokeWi
 line(x + 160, y + 296, x + 200, y + 296, { stroke: GREY, strokeWidth: 4 });
 
 label(x + 24, y + 336, 'Sort by', { bold: true });
-chip(x + 24, y + 350, 120, 'Last listened', { selected: true });
-chip(x + 152, y + 350, 64, 'Title');
-chip(x + 224, y + 350, 76, 'Author');
+chip(x + 24, y + 350, 96, 'Progress', { selected: true });
+chip(x + 128, y + 350, 64, 'Title');
+chip(x + 200, y + 350, 76, 'Author');
 chip(x + 24, y + 388, 130, 'Recently added');
 
 label(x + 24, y + 450, 'Show', { bold: true });
@@ -41,8 +41,8 @@ chip(x + 24, y + 658, 210, 'audiobooks.example.com', { selected: true });
 note(x + 400, y + 20, ['One place for the order', 'and what you see. The dot', 'says a filter is on.']);
 arrow([[x + 396, y + 44], [x + 320, y + 20], [sort.x + 4, sort.y - 22]]);
 
-note(x + 400, y + 330, ['Like today until you change', 'it. Series always keep', 'their own order.']);
-arrow([[x + 396, y + 350], [x + 350, y + 340], [x + 306, y + 362]]);
+note(x + 400, y + 330, ['Like today until you change', 'it. The others show all', 'books in one list.']);
+arrow([[x + 396, y + 350], [x + 340, y + 340], [x + 282, y + 362]]);
 
 note(20, y + 464, ['Hidden books', 'come back here.']);
 arrow([[150, y + 494], [220, y + 534], [hidden.x - 8, hidden.y - 6]]);
