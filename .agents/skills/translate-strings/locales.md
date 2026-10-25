@@ -65,12 +65,17 @@ The four groups are the split for parallel subagents.
 Models know little Sardinian and fill the gaps with Italian words. A native speaker corrected these in #4014:
 
 - perunu, not nissunu. cada, not onni. como, not immoe. petzi, not isceti. in antis, not prima.
-- Sardinian words, not Italian ones: balangiare, not guadangiare. tzìchera, not tatza. mùtzina, not retàllia.
-  parastàgiu, not iscaffale. padente, not foresta. te, not tè.
-- Mark the accent on words stressed on the third-to-last syllable: càmbia, òrdina, iscùtina, cùfias.
+- Sardinian words, not Italian ones: balangiare, not guadangiare. mùtzina, not retàllia. parastàgiu, not iscaffale.
+  padente, not foresta. elaboradore, not computer. te, not tè.
+- tzicherone for a cup of tea, tzìchera for a coffee cup. iscutzinare for shaking the phone, iscùdere means to hit.
+- issu and issa only for people. For a thing, use cussu and cussa: “Chene cussu, Voice non podet…”.
+- Mark the accent on words stressed on the third-to-last syllable: càmbia, òrdina, iscùtina, cùfias, interrùmpidu.
 
 For a word you're unsure of, look up its Italian in Apertium's
 [Sardinian–Italian dictionary](https://raw.githubusercontent.com/apertium/apertium-srd-ita/master/apertium-srd-ita.srd-ita.dix):
-`grep '<r>tazza<s'` finds the Sardinian in `<l>`. Skip entries marked `r="LR"`, those forms aren't preferred. Spelling,
-accents, pronouns and adverbs follow the
+`grep '<r>tazza<s'` finds the Sardinian in `<l>`. Skip entries marked `r="LR"`, those forms aren't preferred. For a UI
+term, search the native speaker's
+[translation memory of open source apps](https://github.com/user-attachments/files/33915708/Sardu-memoria.intrea.tmx.zip):
+`grep -i -A6 '^ *Bookmark added *$'` prints the Sardinian below the English. It mixes in Campidanese and has mistakes,
+so it doesn't override this list. Spelling, accents, pronouns and adverbs follow the
 [official LSC rules](https://www.regione.sardegna.it/documenti/1_72_20060418160308.pdf).
