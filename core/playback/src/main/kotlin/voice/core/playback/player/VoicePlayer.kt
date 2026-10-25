@@ -286,7 +286,6 @@ class VoicePlayer(
 
   override fun setPlayWhenReady(playWhenReady: Boolean) {
     Logger.d("setPlayWhenReady=$playWhenReady")
-    analytics.event(if (playWhenReady) "play" else "pause")
     if (playWhenReady != getPlayWhenReady()) {
       recordExternalCommand(
         source = commandSourceResolver.current(),
@@ -296,8 +295,11 @@ class VoicePlayer(
     }
 
     if (playWhenReady) {
+      analytics.event("play", mapOf("volume_boost" to if (volumeGain.gain > Decibel.Zero) "on" else "off"))
       updateLastPlayedAt()
       rememberSpeed(playbackParameters.speed)
+    } else {
+      analytics.event("pause")
     }
     super.setPlayWhenReady(playWhenReady)
   }
