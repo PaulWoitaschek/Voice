@@ -2,6 +2,7 @@
 
 package voice.features.settings.views
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -68,6 +69,7 @@ import voice.core.strings.R as StringsR
 
 @Composable
 @Preview
+@Preview(name = "tablet dark", widthDp = 1280, heightDp = 800, uiMode = Configuration.UI_MODE_NIGHT_YES)
 private fun SettingsPreview() {
   VoiceTheme {
     Settings(

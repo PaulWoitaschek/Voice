@@ -1,5 +1,6 @@
 package voice.features.playbackScreen.view
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -134,6 +135,13 @@ private fun BookPlayPreview(
       )
     }
   }
+}
+
+@Composable
+@Preview(name = "landscape dark", widthDp = 891, heightDp = 411, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "tablet", widthDp = 1280, heightDp = 800)
+private fun BookPlayWindowSizesPreview() {
+  BookPlayPreview(BookPlayViewStatePreviewProvider().values.first())
 }
 
 private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPlayViewState> {

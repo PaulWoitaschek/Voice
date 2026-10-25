@@ -2,6 +2,7 @@
 
 package voice.features.bookOverview.views
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -243,6 +244,12 @@ fun BookOverviewPreview(
   }
 }
 
+@Preview(name = "tablet dark", widthDp = 1280, heightDp = 800, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun BookOverviewTabletPreview() {
+  BookOverviewPreview(BookOverviewPreviewParameterProvider().values.elementAt(1))
+}
+
 internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<BookOverviewViewState> {
 
   fun book(): BookOverviewItemViewState {
@@ -256,11 +263,14 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
     )
   }
 
+  private val currentBookId = BookId("current")
+
   private val library = BookOverviewViewState(
-    currentBookId = null,
+    currentBookId = currentBookId,
     books = mapOf(
       BookOverviewCategory.CURRENT to buildMap {
-        repeat(10) {
+        put(currentBookId, mutableStateOf(book().copy(id = currentBookId)))
+        repeat(9) {
           put(
             BookId(Uuid.random().toString()),
             mutableStateOf(book()),
