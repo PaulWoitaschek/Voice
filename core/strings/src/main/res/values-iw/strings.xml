@@ -370,6 +370,8 @@
     <string name="settings.appearance.color_scheme.forest">יער</string>
     <string name="settings.appearance.color_scheme.lagoon">לגונה</string>
     <string name="settings.appearance.color_scheme.lavender">לבנדר</string>
+    <string name="settings.appearance.cover_colors.summary">הנגן והווידג׳טים מקבלים את הצבעים של עטיפת הספר.</string>
+    <string name="settings.appearance.cover_colors.title">צבעי העטיפה</string>
     <string name="settings.appearance.color_scheme.sunset">שקיעה</string>
     <string name="settings.appearance.color_scheme.title">ערכת צבעים</string>
     <string name="settings.appearance.color_scheme.dynamic">צבע דינמי</string>

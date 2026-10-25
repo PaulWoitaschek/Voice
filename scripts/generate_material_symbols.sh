@@ -110,6 +110,7 @@ generate_icon more_vert MoreVert
 generate_icon network_cell NetworkCell
 generate_icon not_started NotStarted
 generate_icon notifications Notifications
+generate_icon palette Palette
 generate_icon pause Pause
 generate_icon person Person
 generate_icon play_arrow PlayArrow

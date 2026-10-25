@@ -357,6 +357,8 @@
     <string name="settings.appearance.color_scheme.sunset">Ηλιοβασίλεμα</string>
     <string name="settings.appearance.color_scheme.berry">Μούρο</string>
     <string name="settings.appearance.color_scheme.lavender">Λεβάντα</string>
+    <string name="settings.appearance.cover_colors.summary">Η οθόνη αναπαραγωγής και τα γραφικά στοιχεία παίρνουν τα χρώματα του εξωφύλλου.</string>
+    <string name="settings.appearance.cover_colors.title">Χρώματα εξωφύλλου</string>
     <string name="settings.appearance.pure_black.summary">Εξοικονομεί μπαταρία σε οθόνες OLED με το σκούρο θέμα.</string>
     <string name="settings.appearance.pure_black.title">Απόλυτο μαύρο</string>
     <string name="settings.appearance.theme.dark">Σκούρο</string>

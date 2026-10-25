@@ -334,6 +334,8 @@
     <string name="settings.appearance.color_scheme.forest">フォレスト</string>
     <string name="settings.appearance.color_scheme.lagoon">ラグーン</string>
     <string name="settings.appearance.color_scheme.lavender">ラベンダー</string>
+    <string name="settings.appearance.cover_colors.summary">プレーヤーとウィジェットが本のカバーの色になります。</string>
+    <string name="settings.appearance.cover_colors.title">カバーの色</string>
     <string name="settings.appearance.color_scheme.sunset">サンセット</string>
     <string name="settings.appearance.color_scheme.title">カラースキーム</string>
     <string name="settings.appearance.color_scheme.dynamic">ダイナミックカラー</string>

@@ -370,6 +370,8 @@
     <string name="settings.appearance.color_scheme.forest">Bosque</string>
     <string name="settings.appearance.color_scheme.lagoon">Laguna</string>
     <string name="settings.appearance.color_scheme.lavender">Lavanda</string>
+    <string name="settings.appearance.cover_colors.summary">El reproductor y los widgets toman los colores de la portada del libro.</string>
+    <string name="settings.appearance.cover_colors.title">Colores de la portada</string>
     <string name="settings.appearance.color_scheme.sunset">Atardecer</string>
     <string name="settings.appearance.color_scheme.title">Esquema de colores</string>
     <string name="settings.appearance.color_scheme.dynamic">Color dinámico</string>

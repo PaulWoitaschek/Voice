@@ -352,6 +352,8 @@
     <string name="settings.appearance.color_scheme.forest">Skog</string>
     <string name="settings.appearance.color_scheme.lagoon">Lagune</string>
     <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
+    <string name="settings.appearance.cover_colors.summary">Avspilleren og modulene får fargene fra bokomslaget.</string>
+    <string name="settings.appearance.cover_colors.title">Omslagsfarger</string>
     <string name="settings.appearance.color_scheme.sunset">Solnedgang</string>
     <string name="settings.appearance.color_scheme.title">Fargeoppsett</string>
     <string name="settings.appearance.color_scheme.dynamic">Dynamisk farge</string>

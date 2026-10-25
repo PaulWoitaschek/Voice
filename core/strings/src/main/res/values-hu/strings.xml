@@ -356,6 +356,8 @@
     <string name="settings.appearance.color_scheme.forest">Erdő</string>
     <string name="settings.appearance.color_scheme.lagoon">Lagúna</string>
     <string name="settings.appearance.color_scheme.lavender">Levendula</string>
+    <string name="settings.appearance.cover_colors.summary">A lejátszó és a widgetek átveszik a könyv borítójának színeit.</string>
+    <string name="settings.appearance.cover_colors.title">Borító színei</string>
     <string name="settings.appearance.pure_black.summary">Kíméli az akkumulátort OLED-kijelzőkön sötét témában.</string>
     <string name="settings.appearance.pure_black.title">Tiszta fekete</string>
     <string name="settings.appearance.theme.dark">Sötét</string>

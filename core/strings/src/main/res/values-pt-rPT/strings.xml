@@ -370,6 +370,8 @@
     <string name="settings.appearance.color_scheme.forest">Floresta</string>
     <string name="settings.appearance.color_scheme.lagoon">Lagoa</string>
     <string name="settings.appearance.color_scheme.lavender">Lavanda</string>
+    <string name="settings.appearance.cover_colors.summary">O leitor e os widgets assumem as cores da capa do livro.</string>
+    <string name="settings.appearance.cover_colors.title">Cores da capa</string>
     <string name="settings.appearance.color_scheme.sunset">Pôr do sol</string>
     <string name="settings.appearance.color_scheme.title">Esquema de cores</string>
     <string name="settings.appearance.color_scheme.dynamic">Cor dinâmica</string>

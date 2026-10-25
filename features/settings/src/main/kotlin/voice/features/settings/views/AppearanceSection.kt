@@ -81,10 +81,12 @@ internal fun AppearanceSection(
   themeMode: ThemeMode,
   themeColorScheme: ThemeColorScheme,
   pureBlack: Boolean,
+  coverColors: Boolean,
   dynamicColorAvailable: Boolean,
   onThemeModeSelect: (ThemeMode) -> Unit,
   onThemeColorSchemeSelect: (ThemeColorScheme) -> Unit,
   onPureBlackToggle: () -> Unit,
+  onCoverColorsToggle: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   // a stored dynamic scheme falls back to Voice blue where it's not supported, so that's what shows as selected
@@ -156,6 +158,21 @@ internal fun AppearanceSection(
       }
       Spacer(Modifier.height(16.dp))
       SelectedColorScheme(selectedColorScheme)
+      IslandSwitchRow(
+        modifier = Modifier.padding(top = 12.dp),
+        title = stringResource(StringsR.string.settings_appearance_cover_colors_title),
+        checked = coverColors,
+        onCheckedChange = { onCoverColorsToggle() },
+        leading = {
+          ShapedIcon(
+            icon = VoiceIcons.Palette,
+            shape = MaterialShapes.Flower,
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+          )
+        },
+        summary = { Text(stringResource(StringsR.string.settings_appearance_cover_colors_summary)) },
+      )
     }
   }
 }

@@ -357,6 +357,8 @@
     <string name="settings.appearance.color_scheme.sunset">Solnedgang</string>
     <string name="settings.appearance.color_scheme.berry">Bær</string>
     <string name="settings.appearance.color_scheme.lavender">Lavendel</string>
+    <string name="settings.appearance.cover_colors.summary">Afspilleren og widgets får farverne fra bogens cover.</string>
+    <string name="settings.appearance.cover_colors.title">Coverfarver</string>
     <string name="settings.appearance.pure_black.summary">Sparer batteri på OLED-skærme i mørkt tema.</string>
     <string name="settings.appearance.pure_black.title">Helt sort</string>
     <string name="settings.appearance.theme.dark">Mørkt</string>

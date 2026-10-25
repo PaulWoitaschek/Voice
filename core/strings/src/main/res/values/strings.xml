@@ -616,6 +616,10 @@
     <string name="settings.appearance.color_scheme.berry">Berry</string>
     <!-- Label for selecting a purple, lavender inspired app color scheme. -->
     <string name="settings.appearance.color_scheme.lavender">Lavender</string>
+    <!-- Description of the switch that lets the player, the book sheets, the bookmarks, the Continue listening card and the widgets take their colors from the book's cover instead of the color scheme. -->
+    <string name="settings.appearance.cover_colors.summary">The player and widgets take on the colors of the book\'s cover.</string>
+    <!-- Title of the switch that lets the player, the book sheets, the bookmarks, the Continue listening card and the widgets take their colors from the book's cover instead of the color scheme. -->
+    <string name="settings.appearance.cover_colors.title">Cover colors</string>
     <!-- Description of the switch that turns the background of the dark theme black instead of dark gray. -->
     <string name="settings.appearance.pure_black.summary">Saves battery on OLED screens in the dark theme.</string>
     <!-- Title of the switch that turns the background of the dark theme black instead of dark gray. -->

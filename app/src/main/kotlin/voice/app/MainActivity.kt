@@ -35,6 +35,7 @@ import voice.app.navigation.StartDestinationProvider
 import voice.core.analytics.api.Analytics
 import voice.core.common.rootGraphAs
 import voice.core.logging.api.Logger
+import voice.core.ui.CoverColorsStore
 import voice.core.ui.CoverSeedColors
 import voice.core.ui.LocalCoverSeedColors
 import voice.core.ui.LocalSharedTransitionScope
@@ -80,6 +81,9 @@ class MainActivity : AppCompatActivity() {
   private lateinit var pureBlackStore: PureBlackStore
 
   @Inject
+  private lateinit var coverColorsStore: CoverColorsStore
+
+  @Inject
   private lateinit var coverSeedColors: CoverSeedColors
 
   private val splashScreenHolds = SplashScreenHolds()
@@ -101,17 +105,24 @@ class MainActivity : AppCompatActivity() {
       LaunchedEffect(backStack.last()) {
         analytics.screenView(backStack.last().trackingName)
       }
+      // all read at once, as every frame waited for here keeps the splash screen up
       val themeMode = themeModeStore.data.collectAsState(initial = null).value
-        ?: return@setContent
       val themeColorScheme = themeColorSchemeStore.data.collectAsState(initial = null).value
-        ?: return@setContent
       val pureBlack = pureBlackStore.data.collectAsState(initial = null).value
-        ?: return@setContent
+      val coverColors = coverColorsStore.data.collectAsState(initial = null).value
       val coverSeedColorsRestored = produceState(initialValue = false) {
         coverSeedColors.restore()
         value = true
       }.value
-      if (!coverSeedColorsRestored) return@setContent
+      if (
+        themeMode == null ||
+        themeColorScheme == null ||
+        pureBlack == null ||
+        coverColors == null ||
+        !coverSeedColorsRestored
+      ) {
+        return@setContent
+      }
       SideEffect { contentComposed = true }
       VoiceTheme(
         themeMode = themeMode,
@@ -126,7 +137,7 @@ class MainActivity : AppCompatActivity() {
         SharedTransitionLayout {
           CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
-            LocalCoverSeedColors provides coverSeedColors,
+            LocalCoverSeedColors provides coverSeedColors.takeIf { coverColors },
             LocalSplashScreenHolds provides splashScreenHolds,
           ) {
             NavDisplay(

@@ -388,6 +388,8 @@
     <string name="settings.appearance.color_scheme.forest">Лес</string>
     <string name="settings.appearance.color_scheme.lagoon">Лагуна</string>
     <string name="settings.appearance.color_scheme.lavender">Лаванда</string>
+    <string name="settings.appearance.cover_colors.summary">Плеер и виджеты окрашиваются в цвета обложки книги.</string>
+    <string name="settings.appearance.cover_colors.title">Цвета обложки</string>
     <string name="settings.appearance.color_scheme.sunset">Закат</string>
     <string name="settings.appearance.color_scheme.title">Цветовая схема</string>
     <string name="settings.appearance.color_scheme.dynamic">Динамический цвет</string>

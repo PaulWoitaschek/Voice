@@ -357,6 +357,8 @@
     <string name="settings.appearance.color_scheme.sunset">Зајдисонце</string>
     <string name="settings.appearance.color_scheme.berry">Бобинка</string>
     <string name="settings.appearance.color_scheme.lavender">Лаванда</string>
+    <string name="settings.appearance.cover_colors.summary">Плеерот и виџетите ги добиваат боите од корицата на книгата.</string>
+    <string name="settings.appearance.cover_colors.title">Бои од корицата</string>
     <string name="settings.appearance.pure_black.summary">Штеди батерија на OLED екрани во темната тема.</string>
     <string name="settings.appearance.pure_black.title">Целосно црна</string>
     <string name="settings.appearance.theme.dark">Темна</string>

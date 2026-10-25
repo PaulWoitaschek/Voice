@@ -375,6 +375,8 @@
     <string name="settings.appearance.color_scheme.sunset">Posta de sol</string>
     <string name="settings.appearance.color_scheme.berry">Baia</string>
     <string name="settings.appearance.color_scheme.lavender">Lavanda</string>
+    <string name="settings.appearance.cover_colors.summary">El reproductor i els ginys prenen els colors de la portada del llibre.</string>
+    <string name="settings.appearance.cover_colors.title">Colors de la portada</string>
     <string name="settings.appearance.pure_black.summary">Estalvia bateria a les pantalles OLED amb el tema fosc.</string>
     <string name="settings.appearance.pure_black.title">Negre pur</string>
     <string name="settings.appearance.theme.dark">Fosc</string>

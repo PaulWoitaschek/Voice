@@ -370,6 +370,8 @@
     <string name="settings.appearance.color_scheme.forest">Forêt</string>
     <string name="settings.appearance.color_scheme.lagoon">Lagon</string>
     <string name="settings.appearance.color_scheme.lavender">Lavande</string>
+    <string name="settings.appearance.cover_colors.summary">Le lecteur et les widgets prennent les couleurs de la couverture du livre.</string>
+    <string name="settings.appearance.cover_colors.title">Couleurs de la couverture</string>
     <string name="settings.appearance.color_scheme.sunset">Coucher de soleil</string>
     <string name="settings.appearance.color_scheme.title">Jeu de couleurs</string>
     <string name="settings.appearance.color_scheme.dynamic">Couleur dynamique</string>

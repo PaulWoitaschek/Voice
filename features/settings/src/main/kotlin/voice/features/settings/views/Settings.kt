@@ -175,10 +175,12 @@ private fun LazyListScope.sections(
       themeMode = viewState.themeMode,
       themeColorScheme = viewState.themeColorScheme,
       pureBlack = viewState.pureBlack,
+      coverColors = viewState.coverColors,
       dynamicColorAvailable = viewState.dynamicColorAvailable,
       onThemeModeSelect = listener::setThemeMode,
       onThemeColorSchemeSelect = listener::setThemeColorScheme,
       onPureBlackToggle = listener::togglePureBlack,
+      onCoverColorsToggle = listener::toggleCoverColors,
     )
   }
   section("listening") { modifier ->

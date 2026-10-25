@@ -334,6 +334,8 @@
     <string name="settings.appearance.color_scheme.forest">Hutan</string>
     <string name="settings.appearance.color_scheme.lagoon">Laguna</string>
     <string name="settings.appearance.color_scheme.lavender">Lavender</string>
+    <string name="settings.appearance.cover_colors.summary">Pemutar dan widget mengikuti warna sampul buku.</string>
+    <string name="settings.appearance.cover_colors.title">Warna sampul</string>
     <string name="settings.appearance.color_scheme.sunset">Senja</string>
     <string name="settings.appearance.color_scheme.title">Skema warna</string>
     <string name="settings.appearance.color_scheme.dynamic">Warna dinamis</string>

@@ -30,7 +30,7 @@ import voice.core.logging.api.Logger
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
-/** Provided by the activity. Without it (e.g. in previews), covers don't re-theme anything. */
+/** Provided by the activity. Without it (e.g. in previews or with cover colors off), covers don't re-theme anything. */
 val LocalCoverSeedColors = staticCompositionLocalOf<CoverSeedColors?> { null }
 
 /**
