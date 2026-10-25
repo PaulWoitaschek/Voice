@@ -97,6 +97,8 @@ internal fun BookPlayContent(
       )
     }
   }
+  // with a single chapter, the seek bar already spans the whole book
+  val showBookProgress = viewState.chapterCount > 1
   val title: @Composable () -> Unit = {
     TitleBlock(
       title = viewState.title,
@@ -110,7 +112,7 @@ internal fun BookPlayContent(
     when (control) {
       // side by side, these go under the cover, so phones in landscape fit the controls
       Control.Title -> if (!sideBySide) title()
-      Control.BookProgress -> if (!sideBySide) bookProgress()
+      Control.BookProgress -> if (!sideBySide && showBookProgress) bookProgress()
       Control.Chapter -> if (viewState.showPreviousNextButtons) {
         MediaControlsDirection {
           ChapterSwitcher(
@@ -201,8 +203,10 @@ internal fun BookPlayContent(
             .padding(vertical = 8.dp),
         )
         title()
-        Spacer(Modifier.height(12.dp))
-        bookProgress()
+        if (showBookProgress) {
+          Spacer(Modifier.height(12.dp))
+          bookProgress()
+        }
       }
       Spacer(Modifier.width(32.dp))
       ControlsLayout(

@@ -177,6 +177,8 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
       initial.copy(
         chapterName = null,
         showPreviousNextButtons = false,
+        duration = initial.bookDuration,
+        playedTime = initial.bookPlayedTime,
         chapterCount = 1,
         chapterNumber = 1,
         chapterSegments = listOf(1F),
