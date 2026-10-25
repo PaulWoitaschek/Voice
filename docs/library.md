@@ -93,7 +93,8 @@ fixing many books at once has to take a few taps.
 - Names that only differ in case, spaces or punctuation are one author, like "jk Rowling" and "J. K. Rowling", shown in
   the spelling most of their books have. Series names match the same way.
 - More options rename the author for all their books. Picking a suggested name joins the two, like ten books of
-  "Rowling, J. K." and ten of "J. K. Rowling".
+  "Rowling, J. K." and ten of "J. K. Rowling". Renaming leaves out books from Audiobookshelf, like Author does for
+  selected books.
 - Opens from an author's stack in the library, a book's author in the player, the book actions and the series, and
   from search.
 
@@ -164,8 +165,8 @@ For books already in the library:
 - Title sorts books by their title and series by their name. Author sorts by author and stacks their books, see
   below. Recently added puts the day or the month above the books added in it, newest first.
 - Inside a stack, the order of the series always holds.
-- **Show:** finished books, hidden books. Without finished books, Completed is gone, and finished books leave All
-  books and the stacks.
+- **Show:** finished books, hidden books. Without finished books, Completed is gone, and books and stacks that are
+  all finished leave All books. A stack with a book still to listen keeps all its books, so its counts stay right.
 - **From:** one chip per audiobook folder and Audiobookshelf library, only with more than one.
 - A dot on the button says a filter is on: finished books are off, or a folder is. Hidden books don't count, because
   they're hidden on purpose.
@@ -179,8 +180,10 @@ For books already in the library:
   and not started. An author with just one series or book shows it as it is.
 - The stack has the author's name, how many series and books are in it and how many are finished, and four of their
   covers side by side, so it doesn't look like a series. The grid counts the books in a badge, like on a series.
-- A tap opens the author, a long press renames them.
-- Authors are in the order of their names, then the books with no author.
+- A series belongs to the author most of its books have, so a series with a co-author stays one stack.
+- A tap opens the author. A long press offers to hide all their books, and to rename the author when some of their
+  books are on the device.
+- Authors are in the order of their names. Books with no author come last, under No author.
 
 ### Sorted by recently added
 
@@ -198,7 +201,7 @@ For books already in the library:
 
 ![Sketch: hide from library in the book actions](sketches/book-actions-hide.png)
 
-- Hide from library in the book actions, on a series' stack or screen, and for selected books. A snackbar offers to
+- Hide from library in the book actions, on a series' or an author's stack or screen, and for selected books. A snackbar offers to
   undo it.
 - Hidden books leave the library, Continue listening, the Shelf widget and Android Auto. Search still finds them,
   marked as hidden. The sort sheet shows them again, and the book actions unhide them.
@@ -351,7 +354,8 @@ What goes:
 ## Left out for now
 
 - Playing the next book on its own. A book that ends while the listener falls asleep would run into the next one.
-- Android Auto still lists all books in one list, and neither it nor the widgets offer the next book of a series.
+- Android Auto still lists all books in one list. Neither it nor the widgets follow the sort or offer the next book
+  of a series.
 - Books from Audiobookshelf have no `.voice` folder, so they stay hidden only on the device they were hidden on.
 - Until every device has the update, a split series folder and the long book it was don't sync their places.
 - Two series with the same name from different authors become one, and a book in several series only shows in the
@@ -361,6 +365,8 @@ What goes:
 - Authors sort by their name as it's written, so "Stephen King" comes under S, not K.
 - Folders only become series with "Folders are authors", or with "Voice finds the books".
 - Search doesn't look through chapter names or file names.
+- In All books, a book in a stack isn't under its own title, like "The Way of Kings" in "The Stormlight Archive" under
+  S. Search finds it.
 - Splits and joins stay on the device and don't sync through `.voice`.
 
 ## Order of work
@@ -394,3 +400,8 @@ Each step helps on its own.
 - Should step 7 go, since replacing the layouts splits series folders anyway, and no library changes before the test?
 - When the layouts are replaced: should folders that look like several books be split, or keep their books with a join?
 - Do listeners with thousands of books need a fast scroller with letters, when sorted by title or author?
+- Audiobookshelf brings the progress of every book ever started, so Current can hold dozens of books above All books.
+  Should Current show only the last few, with a button to show all?
+- Recently added uses the day a book was scanned, so on a new phone or a second device, the whole library is added
+  that day. Should books on the device take the date of their files instead?
+- Once the library sorts by author, should Browse in search drop Authors?
