@@ -286,6 +286,8 @@ Voice feels calm day and night and works in the listener's language. Good defaul
   its colors from the cover.
 - **Large fonts or a small window break the layout.** Layouts follow large fonts and right-to-left languages, and the
   play controls stay on screen in a short split screen.
+- **On a tablet everything is stretched across the screen.** Lists stay in a readable column, the player keeps cover
+  and controls together in the middle, and the grid fills the width.
 - **Voice isn't in my language.** A language is added when a listener asks for it.
 
 **Open**

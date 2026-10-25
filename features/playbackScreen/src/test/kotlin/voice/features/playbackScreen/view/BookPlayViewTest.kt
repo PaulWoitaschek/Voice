@@ -95,6 +95,8 @@ class BookPlayViewTest {
         DpSize(640.dp, 360.dp),
         DpSize(700.dp, 240.dp),
         DpSize(1280.dp, 800.dp),
+        DpSize(800.dp, 1280.dp),
+        DpSize(1920.dp, 1200.dp),
       ).forEach { size ->
         window = size
         fontScale = scale

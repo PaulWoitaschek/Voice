@@ -38,6 +38,8 @@ Lean expressive: bold shapes, rich color, springy motion.
   Rename, delete, and book actions are examples.
 - Group related content in large rounded containers, like the 32dp islands in settings. For connected rows, use
   `segmentedShape`.
+- On a tablet, lists and text stay in a readable column (`CenteredContent`), and grids fill the width. Layouts follow
+  the space they get, not the window or a window size class, so they keep working in a pane.
 
 ## Color
 
@@ -99,15 +101,12 @@ glance what belongs to the story and what belongs to the app.
 
 ## Building blocks
 
-Check `:core:ui` before building something new. It has `ShapedIcon`, `MorphShape`, `segmentedShape`,
-`AuroraBackground`, `rememberAnimationClock`, `Modifier.entrance`, `ConfettiState`, `BeatingHeart`, `CoverTheme`,
-`NightTheme`, `PlayButton`, `BookBar`, `NowPlayingBars`, `bookmarkStyle`, and `OnboardingScaffold`. Pieces that only
-one feature uses stay in that feature (see the architecture skill). For wording, follow the tone in the
-translate-strings skill.
+Check `:core:ui` before building something new. Pieces that only one feature uses stay in that feature (see the
+architecture skill). For wording, follow the tone in the translate-strings skill.
 
 ## Checking a design
 
 Check light and dark, a non-default palette, Dynamic color, large fonts (1.5× and 2×), animations off, RTL, a short
-landscape screen, and a short split screen pane. For cover-colored screens, try a very bright cover and a very dark one.
-Previews rendered with the `snapshot` task (the snapshots skill) cover sizes, fonts, dark and RTL in seconds. The
-rest needs an emulator (the emulator skill).
+landscape screen, a short split screen pane, and a tablet in portrait and landscape. For cover-colored screens, try a
+very bright cover and a very dark one. Previews rendered with the `snapshot` task (the snapshots skill) cover sizes,
+fonts, dark and RTL in seconds. The rest needs an emulator (the emulator skill).

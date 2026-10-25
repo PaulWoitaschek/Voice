@@ -48,6 +48,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
@@ -58,6 +59,7 @@ import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.search.BookSearchField
+import voice.core.ui.CenteredContent
 import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.di.BookOverviewGraph
 import voice.navigation.Destination
@@ -178,52 +180,54 @@ internal fun BookSearch(
       }
     }
   }
-  Column(
-    modifier = modifier
-      .fillMaxSize()
-      .background(MaterialTheme.colorScheme.surface)
-      .statusBarsPadding(),
-  ) {
-    SearchField(
-      query = query,
-      onSearch = {
-        keyboard?.hide()
-        listener.onSearch()
-      },
-      onBackClick = listener::onBackClick,
-      modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
-    )
-    Surface(
+  CenteredContent(modifier = modifier) { horizontalPadding ->
+    Column(
       modifier = Modifier
         .fillMaxSize()
-        .nestedScroll(hideKeyboardOnScroll),
-      color = MaterialTheme.colorScheme.surfaceContainerLow,
-      shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        .background(MaterialTheme.colorScheme.surface)
+        .statusBarsPadding(),
     ) {
-      val contentPadding = searchContentPadding()
-      AnimatedContent(
-        targetState = viewState,
-        contentKey = { it::class },
-        transitionSpec = { fadeIn() togetherWith fadeOut() },
-        label = "searchContent",
-      ) { state ->
-        when (state) {
-          is BookSearchViewState.Idle -> IdleSearch(
-            viewState = state,
-            contentPadding = contentPadding,
-            listener = listener,
-          )
-          is BookSearchViewState.Results -> SearchResults(
-            viewState = state,
-            contentPadding = contentPadding,
-            listener = listener,
-          )
-          is BookSearchViewState.NoResults -> NoResults(
-            viewState = state,
-            contentPadding = contentPadding,
-            onFoldersClick = listener::onFoldersClick,
-            onSearchEverythingClick = listener::onSearchEverythingClick,
-          )
+      SearchField(
+        query = query,
+        onSearch = {
+          keyboard?.hide()
+          listener.onSearch()
+        },
+        onBackClick = listener::onBackClick,
+        modifier = Modifier.padding(start = horizontalPadding, end = horizontalPadding, top = 8.dp, bottom = 16.dp),
+      )
+      Surface(
+        modifier = Modifier
+          .fillMaxSize()
+          .nestedScroll(hideKeyboardOnScroll),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+      ) {
+        val contentPadding = searchContentPadding(horizontal = horizontalPadding - 4.dp)
+        AnimatedContent(
+          targetState = viewState,
+          contentKey = { it::class },
+          transitionSpec = { fadeIn() togetherWith fadeOut() },
+          label = "searchContent",
+        ) { state ->
+          when (state) {
+            is BookSearchViewState.Idle -> IdleSearch(
+              viewState = state,
+              contentPadding = contentPadding,
+              listener = listener,
+            )
+            is BookSearchViewState.Results -> SearchResults(
+              viewState = state,
+              contentPadding = contentPadding,
+              listener = listener,
+            )
+            is BookSearchViewState.NoResults -> NoResults(
+              viewState = state,
+              contentPadding = contentPadding,
+              onFoldersClick = listener::onFoldersClick,
+              onSearchEverythingClick = listener::onSearchEverythingClick,
+            )
+          }
         }
       }
     }
@@ -231,11 +235,11 @@ internal fun BookSearch(
 }
 
 @Composable
-private fun searchContentPadding(): PaddingValues {
+private fun searchContentPadding(horizontal: Dp): PaddingValues {
   val bottomInsets = WindowInsets.navigationBars.union(WindowInsets.ime).asPaddingValues()
   return PaddingValues(
-    start = 12.dp,
-    end = 12.dp,
+    start = horizontal,
+    end = horizontal,
     top = 16.dp,
     bottom = 16.dp + bottomInsets.calculateBottomPadding(),
   )

@@ -66,6 +66,7 @@ import voice.core.ui.BookmarkBadge
 import voice.core.ui.NowPlayingBars
 import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.plus
 import voice.core.ui.segmentedShape
 import java.text.NumberFormat
 
@@ -84,12 +85,7 @@ internal fun BookmarkList(
   LazyColumn(
     state = listState,
     modifier = modifier.fillMaxSize(),
-    contentPadding = PaddingValues(
-      start = 16.dp,
-      end = 16.dp,
-      top = contentPadding.calculateTopPadding(),
-      bottom = contentPadding.calculateBottomPadding() + 96.dp,
-    ),
+    contentPadding = contentPadding + PaddingValues(bottom = 96.dp),
     verticalArrangement = Arrangement.spacedBy(2.dp),
   ) {
     item(key = "book-bar") {

@@ -60,6 +60,7 @@ import voice.core.data.ListeningEvent.Type
 import voice.core.strings.R
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.plus
 import voice.features.bookmark.dayLabelText
 import voice.features.bookmark.durationText
 import voice.features.bookmark.kioskModeHistoryViewState
@@ -80,12 +81,7 @@ internal fun HistoryList(
 ) {
   LazyColumn(
     modifier = modifier.fillMaxSize(),
-    contentPadding = PaddingValues(
-      start = 16.dp,
-      end = 16.dp,
-      top = contentPadding.calculateTopPadding() + 8.dp,
-      bottom = contentPadding.calculateBottomPadding() + 24.dp,
-    ),
+    contentPadding = contentPadding + PaddingValues(top = 8.dp, bottom = 24.dp),
   ) {
     if (viewState.days.isEmpty()) {
       item(key = "empty") {
@@ -453,7 +449,7 @@ private fun HistoryEmpty(modifier: Modifier = Modifier) {
 private fun HistoryListPreview() {
   VoiceTheme {
     Surface {
-      HistoryList(viewState = kioskModeHistoryViewState(), contentPadding = PaddingValues(), onGoTo = {})
+      HistoryList(viewState = kioskModeHistoryViewState(), contentPadding = PaddingValues(horizontal = 16.dp), onGoTo = {})
     }
   }
 }
