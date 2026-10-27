@@ -11,6 +11,7 @@ import voice.core.data.FileFingerprint
 import voice.core.data.fingerprints
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ChapterRepo
+import voice.core.data.repo.CustomMetadataRepo
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.store.CurrentBookStore
@@ -23,6 +24,7 @@ internal class ProgressCarryOver(
   private val listeningHistoryRepo: ListeningHistoryRepo,
   private val listeningStatsRepo: ListeningStatsRepo,
   private val currentBookStore: CurrentBookStore,
+  private val customMetadataRepo: CustomMetadataRepo,
 ) {
 
   suspend fun carryOver(
@@ -41,7 +43,11 @@ internal class ProgressCarryOver(
     // sessions don't know their chapters, so they go along with where the listener was
     listeningStatsRepo.moveToBook(from = playedHere.map { it.id }, to = content.id)
 
-    val withEdits = predecessors.sameBook?.let { content.withEditsOf(it) } ?: content
+    val withEdits = predecessors.sameBook?.let { sameBook ->
+      val edits = customMetadataRepo.get(sameBook.id)
+      customMetadataRepo.put(edits.copy(bookId = content.id).followingFiles(content.metadata))
+      content.withEditsOf(sameBook)
+    } ?: content
     val source = playedHere
       .maxByOrNull { it.lastPlayedAt }
       ?.takeIf { it.lastPlayedAt > content.lastPlayedAt }
@@ -59,10 +65,9 @@ internal class ProgressCarryOver(
   private fun BookContent.withEditsOf(sameBook: BookContent): BookContent {
     return copy(
       addedAt = sameBook.addedAt,
-      customCover = sameBook.customCover,
       // the files are the same, so their cover is as well
       metadata = metadata.copy(cover = metadata.cover ?: sameBook.metadata.cover),
-    ).withCustomName(sameBook.customName).withCustomAuthor(sameBook.customAuthor)
+    )
   }
 
   private suspend fun moveCurrentBook(

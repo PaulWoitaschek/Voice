@@ -51,8 +51,8 @@ class DeleteBookViewModel(
 
     _state.value = DeleteBookViewState(
       id = bookId,
-      name = book?.content?.name,
-      cover = book?.content?.coverUrl,
+      name = book?.name,
+      cover = book?.coverUrl,
       fileCount = book?.chapters?.size,
       deleteCheckBoxChecked = false,
       fileToDelete = bookId.toUri().pathSegments

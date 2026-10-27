@@ -11,7 +11,7 @@ public enum class BookComparator(private val comparatorFunction: Comparator<Book
   ),
   ByName(
     Comparator { left, right ->
-      NaturalOrderComparator.stringComparator.compare(left.content.name, right.content.name)
+      NaturalOrderComparator.stringComparator.compare(left.name, right.name)
     },
   ),
 }

@@ -28,6 +28,7 @@ import voice.core.data.BookMetadata
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.CustomMetadata
 import voice.core.data.ListeningEvent
 import voice.core.data.MarkData
 import voice.core.data.repo.BookmarkRepo
@@ -550,6 +551,7 @@ private fun book(
     chapter(),
     chapter(),
   )
+  val id = BookId(Uuid.random().toString())
   return Book(
     content = BookContent(
       positionInChapter = 2.5.minutes.inWholeMilliseconds,
@@ -560,7 +562,7 @@ private fun book(
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
-      id = BookId(Uuid.random().toString()),
+      id = id,
       gain = 0F,
       metadata = BookMetadata(
         name = name,
@@ -574,11 +576,9 @@ private fun book(
         cover = null,
         fileLastModified = null,
       ),
-      customName = null,
-      customAuthor = null,
-      customCover = null,
     ),
     chapters = chapters,
+    custom = CustomMetadata(id),
   )
 }
 

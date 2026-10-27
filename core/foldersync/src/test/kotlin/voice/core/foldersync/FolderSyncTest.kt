@@ -205,7 +205,7 @@ class FolderSyncTest {
     ownFile(folderSync, written.single())
     folderSync.sync()
 
-    assertEquals("Other", repo.get(book.id)!!.content.customName)
+    assertEquals("Other", repo.get(book.id)!!.custom.name)
     assertEquals(listOf(SyncFile(mapOf(book.key() to SyncedBook(name = name)))), written)
   }
 
@@ -217,7 +217,7 @@ class FolderSyncTest {
 
     folderSync(repo).sync()
 
-    assertNull(repo.get(book.id)!!.content.customName)
+    assertNull(repo.get(book.id)!!.custom.name)
     assertEquals(emptyList(), written)
   }
 
@@ -254,7 +254,7 @@ class FolderSyncTest {
 
     folderSync.sync()
 
-    assertEquals("Mine", repo.get(book.id)!!.content.customName)
+    assertEquals("Mine", repo.get(book.id)!!.custom.name)
     assertEquals(SyncedText("Mine", changedAt = NOW), written.single().books[book.key()]!!.name)
   }
 
@@ -270,7 +270,7 @@ class FolderSyncTest {
     ownFile(folderSync, written.single())
     folderSync.sync()
 
-    assertEquals("Other", repo.get(book.id)!!.content.customAuthor)
+    assertEquals("Other", repo.get(book.id)!!.custom.author)
     assertEquals(listOf(SyncFile(mapOf(book.key() to SyncedBook(author = author)))), written)
   }
 

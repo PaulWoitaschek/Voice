@@ -7,12 +7,14 @@ import androidx.room.TypeConverters
 import voice.core.data.BookContent
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
+import voice.core.data.CustomMetadata
 import voice.core.data.ListeningEvent
 import voice.core.data.ListeningSession
 import voice.core.data.RecentBookSearch
 import voice.core.data.repo.internals.dao.BookContentDao
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.dao.ChapterDao
+import voice.core.data.repo.internals.dao.CustomMetadataDao
 import voice.core.data.repo.internals.dao.ListeningEventDao
 import voice.core.data.repo.internals.dao.ListeningSessionDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
@@ -31,6 +33,7 @@ import voice.core.data.repo.internals.migrations.Migration68
     RecentBookSearch::class,
     ListeningEvent::class,
     ListeningSession::class,
+    CustomMetadata::class,
   ],
   version = AppDb.VERSION,
   autoMigrations = [
@@ -57,6 +60,8 @@ public abstract class AppDb : RoomDatabase() {
   public abstract fun bookContentDao(): BookContentDao
   public abstract fun bookmarkDao(): BookmarkDao
 
+  public abstract fun customMetadataDao(): CustomMetadataDao
+
   public abstract fun recentBookSearchDao(): RecentBookSearchDao
 
   public abstract fun listeningEventDao(): ListeningEventDao
@@ -64,7 +69,7 @@ public abstract class AppDb : RoomDatabase() {
   public abstract fun listeningSessionDao(): ListeningSessionDao
 
   internal companion object {
-    const val VERSION = 69
+    const val VERSION = 70
     const val DATABASE_NAME = "autoBookDB"
   }
 }

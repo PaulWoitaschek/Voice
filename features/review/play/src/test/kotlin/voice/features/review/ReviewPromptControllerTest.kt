@@ -16,6 +16,7 @@ import voice.core.data.BookId
 import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.FinishedBook
 import voice.core.data.repo.ListeningStatsRepo
@@ -224,11 +225,9 @@ class ReviewPromptControllerTest {
           cover = null,
           fileLastModified = null,
         ),
-        customName = null,
-        customAuthor = null,
-        customCover = null,
       ),
       chapters = listOf(chapter),
+      custom = CustomMetadata(BookId(id)),
     )
   }
 }

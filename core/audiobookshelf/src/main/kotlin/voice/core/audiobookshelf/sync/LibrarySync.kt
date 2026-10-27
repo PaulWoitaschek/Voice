@@ -18,6 +18,7 @@ import voice.core.audiobookshelf.itemId
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.Chapter
+import voice.core.data.CustomMetadata
 import voice.core.data.isRemote
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookmarkRepo
@@ -128,7 +129,7 @@ internal class LibrarySync(
     val updated = content.copy(metadata = content.metadata.copy(cover = cover))
     // the init block checks that the chapters and the position fit together
     @Suppress("RETURN_VALUE_NOT_USED")
-    Book(updated, chapters)
+    Book(updated, chapters, CustomMetadata(updated.id))
     // the book points at the new files right away, its bookmarks have to follow
     withContext(NonCancellable) {
       contentRepo.put(updated)

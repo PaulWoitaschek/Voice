@@ -6,7 +6,9 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.BookMetadata
 import voice.core.data.Chapter
+import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookContentRepo
+import voice.core.data.repo.CustomMetadataRepo
 import voice.core.data.toUri
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
@@ -16,6 +18,7 @@ import java.time.Instant
 @Inject
 internal class BookParser(
   private val contentRepo: BookContentRepo,
+  private val customMetadataRepo: CustomMetadataRepo,
   private val mediaAnalyzer: MediaAnalyzer,
   private val fileFactory: CachedDocumentFileFactory,
 ) {
@@ -35,22 +38,26 @@ internal class BookParser(
     val analyzed = firstChapterMetadata ?: analyze(firstChapter)
     val metadata = metadata(chapters, file, analyzed)
       .copy(cover = stored.metadata.cover)
+    val custom = customMetadataRepo.get(stored.id)
     val beforeNamesKeptApart = stored.metadata.fileLastModified == null
-    val withNames = if (beforeNamesKeptApart) stored.withoutEarlierName(analyzed, file) else stored
-    return withNames.withMetadata(metadata).also {
-      if (it != stored) contentRepo.put(it)
-    }
+    val withNames = if (beforeNamesKeptApart) custom.withoutEarlierName(analyzed, file) else custom
+    val updatedCustom = withNames.followingFiles(metadata)
+    // before the content, as once the content is saved, the files count as read and this doesn't run again
+    if (updatedCustom != custom) customMetadataRepo.put(updatedCustom)
+    val updated = stored.copy(metadata = metadata)
+    if (updated != stored) contentRepo.put(updated)
+    return updated
   }
 
   // Before #3455, a book in a folder was named after its first file. Listeners rename books to the folder's name, so
   // that one stays.
-  private fun BookContent.withoutEarlierName(
+  private fun CustomMetadata.withoutEarlierName(
     analyzed: Metadata?,
     file: CachedDocumentFile,
-  ): BookContent {
+  ): CustomMetadata {
     if (file.isFile) return this
     val earlierNames = setOfNotNull(analyzed?.title, analyzed?.fileName)
-    return copy(customName = customName?.takeUnless { it in earlierNames })
+    return copy(name = name?.takeUnless { it in earlierNames })
   }
 
   suspend fun parse(
@@ -79,9 +86,6 @@ internal class BookParser(
       currentChapter = chapters.first().id,
       gain = 0F,
       metadata = metadata(chapters, file, analyzed),
-      customName = null,
-      customAuthor = null,
-      customCover = null,
     ).also {
       validateIntegrity(it, chapters)
     }
@@ -138,5 +142,5 @@ internal fun validateIntegrity(
 ) {
   // the init block performs integrity validation
   @Suppress("RETURN_VALUE_NOT_USED")
-  Book(content, chapters)
+  Book(content, chapters, CustomMetadata(content.id))
 }

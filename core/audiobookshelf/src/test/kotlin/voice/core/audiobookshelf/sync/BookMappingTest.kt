@@ -10,7 +10,7 @@ import voice.core.audiobookshelf.api.AbsSeries
 import voice.core.audiobookshelf.api.AbsTrack
 import voice.core.data.Book
 import voice.core.data.ChapterMark
-import java.io.File
+import voice.core.data.CustomMetadata
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -91,7 +91,7 @@ class BookMappingTest {
 
     val content = item.toBookContent(item.chapters(), existing = null)
 
-    assertEquals("Title", content.name)
+    assertEquals("Title", content.metadata.name)
     assertEquals("Author", content.metadata.author)
     assertEquals(null, content.metadata.narrator)
     assertEquals("Series", content.metadata.series)
@@ -114,28 +114,11 @@ class BookMappingTest {
     val updated = item.copy(media = item.media.copy(metadata = AbsBookMetadata(title = "Renamed")))
       .toBookContent(chapters, existing)
 
-    assertEquals("Renamed", updated.name)
+    assertEquals("Renamed", updated.metadata.name)
     assertEquals(chapters[1].id, updated.currentChapter)
     assertEquals(4_000, updated.positionInChapter)
     assertEquals(1.5F, updated.playbackSpeed)
     assertEquals(Instant.ofEpochMilli(5_000), updated.lastPlayedAt)
-  }
-
-  @Test
-  fun `an update keeps the name and cover the listener gave the book`() {
-    val item = item(tracks = listOf(track(1, 0.0, 10.0, "a.mp3")))
-    val chapters = item.chapters()
-    val cover = File("picked.png")
-    val existing = item.toBookContent(chapters, existing = null)
-      .withCustomName("Mine")
-      .copy(customCover = cover)
-
-    val updated = item.copy(media = item.media.copy(metadata = AbsBookMetadata(title = "Renamed")))
-      .toBookContent(chapters, existing)
-
-    assertEquals("Mine", updated.name)
-    assertEquals("Renamed", updated.metadata.name)
-    assertEquals(cover, updated.cover)
   }
 
   @Test
@@ -160,7 +143,8 @@ class BookMappingTest {
   fun `a position in the book points into the right file`() {
     val item = item(tracks = listOf(track(1, 0.0, 54.0, "a.mp3"), track(2, 54.0, 51.0, "b.mp3")))
     val chapters = item.chapters()
-    val book = Book(item.toBookContent(chapters, existing = null), chapters)
+    val content = item.toBookContent(chapters, existing = null)
+    val book = Book(content, chapters, CustomMetadata(content.id))
 
     assertEquals(BookPosition(chapters[1].id, 26_000), book.positionAt(80_000))
     assertEquals(BookPosition(chapters[0].id, 0), book.positionAt(-5))
@@ -173,9 +157,9 @@ class BookMappingTest {
     val chapters = item.chapters()
     val content = item.toBookContent(chapters, existing = null)
 
-    assertEquals(false, Book(content.copy(positionInChapter = 89_000), chapters).isFinished)
-    assertEquals(true, Book(content.copy(positionInChapter = 92_000), chapters).isFinished)
-    assertEquals(false, Book(content.copy(positionInChapter = 0), chapters).isFinished)
+    assertEquals(false, Book(content.copy(positionInChapter = 89_000), chapters, CustomMetadata(content.id)).isFinished)
+    assertEquals(true, Book(content.copy(positionInChapter = 92_000), chapters, CustomMetadata(content.id)).isFinished)
+    assertEquals(false, Book(content.copy(positionInChapter = 0), chapters, CustomMetadata(content.id)).isFinished)
   }
 }
 
