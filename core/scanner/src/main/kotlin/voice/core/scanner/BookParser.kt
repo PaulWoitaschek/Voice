@@ -39,25 +39,11 @@ internal class BookParser(
     val metadata = metadata(chapters, file, analyzed)
       .copy(cover = stored.metadata.cover)
     val custom = customMetadataRepo.get(stored.id)
-    val beforeNamesKeptApart = stored.metadata.fileLastModified == null
-    val withNames = if (beforeNamesKeptApart) custom.withoutEarlierName(analyzed, file) else custom
-    val updatedCustom = withNames.followingFiles(metadata)
-    // before the content, as once the content is saved, the files count as read and this doesn't run again
+    val updatedCustom = custom.followingFiles(metadata)
     if (updatedCustom != custom) customMetadataRepo.put(updatedCustom)
     val updated = stored.copy(metadata = metadata)
     if (updated != stored) contentRepo.put(updated)
     return updated
-  }
-
-  // Before #3455, a book in a folder was named after its first file. Listeners rename books to the folder's name, so
-  // that one stays.
-  private fun CustomMetadata.withoutEarlierName(
-    analyzed: Metadata?,
-    file: CachedDocumentFile,
-  ): CustomMetadata {
-    if (file.isFile) return this
-    val earlierNames = setOfNotNull(analyzed?.title, analyzed?.fileName)
-    return copy(name = name?.takeUnless { it in earlierNames })
   }
 
   suspend fun parse(

@@ -574,25 +574,6 @@ class MediaScannerTest {
   }
 
   @Test
-  fun `a book in a folder stored before its names were kept apart drops the name of its first file`() = test {
-    val audiobookFolder = folder("audiobooks")
-    val byTitle = File(audiobookFolder, "byTitle")
-    val byFileName = File(audiobookFolder, "byFileName")
-    val byFolder = File(audiobookFolder, "byFolder")
-    listOf(byTitle, byFileName, byFolder).forEach { audioFile(it, "1.mp3") }
-    scan(FolderType.Root, audiobookFolder)
-    mapOf(byTitle to "Title", byFileName to "Chapter", byFolder to "byFolder").forEach { (book, name) ->
-      migrated(book, name)
-    }
-
-    scan(FolderType.Root, audiobookFolder)
-
-    assertEquals(expected = "Book Name", actual = bookRepo.get(BookId(byTitle.toUri()))!!.name)
-    assertEquals(expected = "Book Name", actual = bookRepo.get(BookId(byFileName.toUri()))!!.name)
-    assertEquals(expected = "byFolder", actual = bookRepo.get(BookId(byFolder.toUri()))!!.name)
-  }
-
-  @Test
   fun `a book that was never played keeps the name the listener gave it when its folder is renamed`() = test {
     val audiobookFolder = folder("audiobooks")
     val book = File(audiobookFolder, "book")
