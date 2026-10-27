@@ -34,7 +34,7 @@ class SelectCoverFromInternetViewModelTest {
 
   private val book = mockk<Book> {
     every { content.name } returns "Dune"
-    every { content.metadata.author } returns null
+    every { content.author } returns null
   }
   private val bookRepository = mockk<BookRepository> {
     coEvery { get(bookId) } returns book

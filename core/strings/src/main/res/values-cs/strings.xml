@@ -79,10 +79,10 @@
     <string name="book.download.stop">Zastavit stahování</string>
     <string name="book.download.waiting_for_connection">Čeká se na připojení</string>
     <string name="book.download.waiting_for_wifi">Čeká se na Wi-Fi</string>
+    <string name="book.edit.author.label">Autor</string>
     <string name="book.edit.cover.file">Obal ze souborového systému</string>
     <string name="book.edit.cover.internet">Obal z internetu</string>
-    <string name="book.edit.name.label">Název</string>
-    <string name="book.edit.rename">Přejmenovat</string>
+    <string name="book.edit.title.label">Název</string>
     <string name="book.source.device">Na tomto zařízení</string>
     <string name="book.source.server_downloaded">%s · staženo</string>
     <string name="bookmark.action.add_note">Přidat poznámku</string>

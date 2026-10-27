@@ -85,10 +85,10 @@
     <string name="book.download.stop">إيقاف التنزيل</string>
     <string name="book.download.waiting_for_connection">في انتظار الاتصال</string>
     <string name="book.download.waiting_for_wifi">في انتظار شبكة Wi-Fi</string>
+    <string name="book.edit.author.label">المؤلف</string>
     <string name="book.edit.cover.file">الغلاف من ملفات الجهاز</string>
     <string name="book.edit.cover.internet">الغلاف من الإنترنت</string>
-    <string name="book.edit.name.label">الاسم</string>
-    <string name="book.edit.rename">إعادة التسمية</string>
+    <string name="book.edit.title.label">العنوان</string>
     <string name="book.source.device">على هذا الجهاز</string>
     <string name="book.source.server_downloaded">تم التنزيل من %s</string>
     <string name="bookmark.action.add_note">إضافة ملاحظة</string>

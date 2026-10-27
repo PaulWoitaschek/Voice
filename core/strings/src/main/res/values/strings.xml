@@ -141,14 +141,14 @@
     <string name="book.download.waiting_for_connection">Waiting for a connection</string>
     <!-- Shown while the download of a server book waits, because downloading over mobile data is off. -->
     <string name="book.download.waiting_for_wifi">Waiting for Wi-Fi</string>
+    <!-- Label for the field with the book's author, in the sheet that edits a book. -->
+    <string name="book.edit.author.label">Author</string>
     <!-- Bottom-sheet item for choosing a cover from local files. -->
     <string name="book.edit.cover.file">Cover from the file system</string>
     <!-- Bottom-sheet item for choosing a cover from an internet search. -->
     <string name="book.edit.cover.internet">Cover from the Internet</string>
-    <!-- Label for the editable book-name field. -->
-    <string name="book.edit.name.label">Name</string>
-    <!-- Book menu item and title of the sheet that renames a book. -->
-    <string name="book.edit.rename">Rename</string>
+    <!-- Label for the field with the book's title, in the sheet that edits a book. -->
+    <string name="book.edit.title.label">Title</string>
     <!-- Shown under the title in the book actions sheet for a book whose files are on the phone, once a server is connected too. -->
     <string name="book.source.device">On this device</string>
     <!-- Shown under the title in the book actions sheet for a downloaded server book. %s is the address of the server, like audiobooks.example.com. -->
@@ -199,9 +199,9 @@
     <!-- Generic delete action and content description. -->
     <string name="common.action.delete">Delete</string>
     <string name="common.action.done">Done</string>
-    <!-- Generic edit action in popup menus. -->
+    <!-- Generic edit action in popup menus. Also the book menu item and title of the sheet that edits a book's title and author. -->
     <string name="common.action.edit">Edit</string>
-    <!-- Content description of the button in the player that opens the menu of the book, with actions like rename and change the cover. -->
+    <!-- Content description of the button in the player that opens the menu of the book, with actions like edit and change the cover. -->
     <string name="common.action.more">More options</string>
     <string name="common.action.undo">Undo</string>
     <!-- Generic remove action in menus. -->

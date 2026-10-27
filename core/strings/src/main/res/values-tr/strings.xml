@@ -73,10 +73,10 @@
     <string name="book.download.stop">İndirmeyi durdur</string>
     <string name="book.download.waiting_for_connection">Bağlantı bekleniyor</string>
     <string name="book.download.waiting_for_wifi">Wi-Fi bekleniyor</string>
+    <string name="book.edit.author.label">Yazar</string>
     <string name="book.edit.cover.file">Dosyalardan kapak</string>
     <string name="book.edit.cover.internet">İnternetten kitap kapağı</string>
-    <string name="book.edit.name.label">Ad</string>
-    <string name="book.edit.rename">Yeniden adlandır</string>
+    <string name="book.edit.title.label">Başlık</string>
     <string name="book.source.device">Bu cihazda</string>
     <string name="book.source.server_downloaded">%s · indirildi</string>
     <string name="bookmark.action.add_note">Not ekle</string>

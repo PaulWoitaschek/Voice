@@ -62,7 +62,7 @@ internal class ProgressCarryOver(
       customCover = sameBook.customCover,
       // the files are the same, so their cover is as well
       metadata = metadata.copy(cover = metadata.cover ?: sameBook.metadata.cover),
-    ).withCustomName(sameBook.customName)
+    ).withCustomName(sameBook.customName).withCustomAuthor(sameBook.customAuthor)
   }
 
   private suspend fun moveCurrentBook(

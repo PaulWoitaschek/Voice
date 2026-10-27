@@ -213,6 +213,18 @@ class BookSearchTest {
     }
   }
 
+  @Test
+  fun `the author the listener gave a book is found instead of the one from its files`() {
+    val dune = book(name = "Dune", author = "Herbert").update { it.withCustomAuthor("Frank Herbert") }
+    test(dune) {
+      expectSearchResult("frank", dune)
+      assertEquals(
+        expected = mapOf(BookSearchField.Author to listOf(0..4)),
+        actual = search.search("frank").single().matches,
+      )
+    }
+  }
+
   private fun test(run: suspend TestBase.() -> Unit) = test(
     commendatore,
     watchtower,

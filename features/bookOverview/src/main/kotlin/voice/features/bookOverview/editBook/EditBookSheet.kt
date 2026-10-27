@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
-package voice.features.bookOverview.editTitle
+package voice.features.bookOverview.editBook
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -60,9 +62,10 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 
 @Composable
-internal fun RenameBookSheet(
-  viewState: EditBookTitleState,
+internal fun EditBookSheet(
+  viewState: EditBookState,
   onTitleChange: (String) -> Unit,
+  onAuthorChange: (String) -> Unit,
   onConfirm: () -> Unit,
   onDismiss: () -> Unit,
 ) {
@@ -89,9 +92,12 @@ internal fun RenameBookSheet(
     onDismissRequest = { if (!closing) onDismiss() },
     sheetState = sheetState,
   ) {
-    // the whole name starts selected, so typing replaces it
-    var value by remember {
+    // the whole title starts selected, so typing replaces it
+    var title by remember {
       mutableStateOf(TextFieldValue(viewState.title, selection = TextRange(0, viewState.title.length)))
+    }
+    var author by remember {
+      mutableStateOf(TextFieldValue(viewState.author, selection = TextRange(viewState.author.length)))
     }
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
@@ -100,6 +106,8 @@ internal fun RenameBookSheet(
     Column(
       modifier = Modifier
         .fillMaxWidth()
+        // in landscape, the keyboard leaves room for one field at a time
+        .verticalScroll(rememberScrollState())
         .navigationBarsPadding()
         .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
     ) {
@@ -116,7 +124,7 @@ internal fun RenameBookSheet(
             contentDescription = null,
           )
           ShapedIcon(
-            icon = VoiceIcons.Title,
+            icon = VoiceIcons.Edit,
             shape = MaterialShapes.Pentagon,
             containerColor = MaterialTheme.colorScheme.secondary,
             contentColor = MaterialTheme.colorScheme.onSecondary,
@@ -128,26 +136,43 @@ internal fun RenameBookSheet(
         }
         Spacer(Modifier.width(24.dp))
         Text(
-          text = stringResource(StringsR.string.book_edit_rename),
+          text = stringResource(StringsR.string.common_action_edit),
           style = MaterialTheme.typography.headlineSmallEmphasized,
         )
       }
       Spacer(Modifier.height(28.dp))
       OutlinedTextField(
-        value = value,
+        value = title,
         onValueChange = {
-          value = it
+          title = it
           onTitleChange(it.text)
         },
         modifier = Modifier
           .fillMaxWidth()
           .focusRequester(focusRequester),
-        label = { Text(stringResource(StringsR.string.book_edit_name_label)) },
+        label = { Text(stringResource(StringsR.string.book_edit_title_label)) },
         singleLine = true,
         readOnly = closing,
         shape = RoundedCornerShape(16.dp),
         keyboardOptions = KeyboardOptions(
           capitalization = KeyboardCapitalization.Sentences,
+          imeAction = ImeAction.Next,
+        ),
+      )
+      Spacer(Modifier.height(16.dp))
+      OutlinedTextField(
+        value = author,
+        onValueChange = {
+          author = it
+          onAuthorChange(it.text)
+        },
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(stringResource(StringsR.string.book_edit_author_label)) },
+        singleLine = true,
+        readOnly = closing,
+        shape = RoundedCornerShape(16.dp),
+        keyboardOptions = KeyboardOptions(
+          capitalization = KeyboardCapitalization.Words,
           imeAction = ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(

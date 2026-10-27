@@ -70,10 +70,10 @@
     <string name="book.download.stop">ダウンロードを停止</string>
     <string name="book.download.waiting_for_connection">接続を待っています</string>
     <string name="book.download.waiting_for_wifi">Wi-Fi を待っています</string>
+    <string name="book.edit.author.label">著者</string>
     <string name="book.edit.cover.file">ファイルシステムからのカバー</string>
     <string name="book.edit.cover.internet">インターネットからのカバー</string>
-    <string name="book.edit.name.label">名前</string>
-    <string name="book.edit.rename">名前を変更</string>
+    <string name="book.edit.title.label">タイトル</string>
     <string name="book.source.device">この端末</string>
     <string name="book.source.server_downloaded">%s · ダウンロード済み</string>
     <string name="bookmark.action.add_note">メモを追加</string>

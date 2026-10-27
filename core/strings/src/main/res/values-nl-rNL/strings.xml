@@ -73,10 +73,10 @@
     <string name="book.download.stop">Download annuleren</string>
     <string name="book.download.waiting_for_connection">Wachten op verbinding</string>
     <string name="book.download.waiting_for_wifi">Wachten op wifi</string>
+    <string name="book.edit.author.label">Auteur</string>
     <string name="book.edit.cover.file">Omslag kiezen van bestandssysteem</string>
     <string name="book.edit.cover.internet">Omslag ophalen van internet</string>
-    <string name="book.edit.name.label">Naam</string>
-    <string name="book.edit.rename">Naam wijzigen</string>
+    <string name="book.edit.title.label">Titel</string>
     <string name="book.source.device">Op dit apparaat</string>
     <string name="book.source.server_downloaded">%s · gedownload</string>
     <string name="bookmark.action.add_note">Notitie toevoegen</string>

@@ -25,6 +25,7 @@ public data class BookContent(
   @Embedded
   val metadata: BookMetadata,
   val customName: String?,
+  val customAuthor: String?,
   val customCover: File?,
 ) {
 
@@ -32,6 +33,8 @@ public data class BookContent(
   val currentChapterIndex: Int = chapters.indexOf(currentChapter)
 
   val name: String get() = customName ?: metadata.name
+
+  val author: String? get() = customAuthor ?: metadata.author
 
   val cover: File? get() = customCover ?: metadata.cover
 
@@ -48,8 +51,12 @@ public data class BookContent(
     return copy(customName = name?.takeIf { it != metadata.name })
   }
 
+  public fun withCustomAuthor(author: String?): BookContent {
+    return copy(customAuthor = author?.takeIf { it != metadata.author })
+  }
+
   public fun withMetadata(metadata: BookMetadata): BookContent {
-    return copy(metadata = metadata).withCustomName(customName)
+    return copy(metadata = metadata).withCustomName(customName).withCustomAuthor(customAuthor)
   }
 }
 

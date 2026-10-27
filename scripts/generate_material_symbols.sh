@@ -81,6 +81,7 @@ generate_icon dns Dns
 generate_icon done Done
 generate_icon download Download
 generate_icon download_done DownloadDone
+generate_icon edit Edit
 generate_icon emoji_food_beverage EmojiFoodBeverage
 generate_icon error Error
 generate_icon expand_more ExpandMore
@@ -130,7 +131,6 @@ generate_icon star Star
 generate_icon swap_horiz SwapHoriz
 generate_icon sync Sync
 generate_icon timer Timer
-generate_icon title Title
 generate_icon touch_app TouchApp
 generate_icon undo Undo
 generate_icon vibration Vibration

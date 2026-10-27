@@ -7,7 +7,7 @@ import dev.zacsweers.metro.Provides
 import voice.core.data.BookId
 import voice.features.bookOverview.bottomSheet.BottomSheetViewModel
 import voice.features.bookOverview.deleteBook.DeleteBookViewModel
-import voice.features.bookOverview.editTitle.EditBookTitleViewModel
+import voice.features.bookOverview.editBook.EditBookViewModel
 import voice.features.bookOverview.fileCover.FileCoverViewModel
 
 abstract class BookActionsScope private constructor()
@@ -15,7 +15,7 @@ abstract class BookActionsScope private constructor()
 @GraphExtension(scope = BookActionsScope::class)
 interface BookActionsGraph {
   val bottomSheetViewModel: BottomSheetViewModel
-  val editBookTitleViewModel: EditBookTitleViewModel
+  val editBookViewModel: EditBookViewModel
   val deleteBookViewModel: DeleteBookViewModel
   val fileCoverViewModel: FileCoverViewModel
 

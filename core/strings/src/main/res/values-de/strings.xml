@@ -73,10 +73,10 @@
     <string name="book.download.stop">Download abbrechen</string>
     <string name="book.download.waiting_for_connection">Wartet auf Verbindung</string>
     <string name="book.download.waiting_for_wifi">Wartet auf WLAN</string>
+    <string name="book.edit.author.label">Autor</string>
     <string name="book.edit.cover.file">Cover aus dem Dateisystem</string>
     <string name="book.edit.cover.internet">Cover aus dem Internet</string>
-    <string name="book.edit.name.label">Name</string>
-    <string name="book.edit.rename">Umbenennen</string>
+    <string name="book.edit.title.label">Titel</string>
     <string name="book.source.device">Auf diesem Gerät</string>
     <string name="book.source.server_downloaded">%s · heruntergeladen</string>
     <string name="bookmark.action.add_note">Notiz hinzufügen</string>

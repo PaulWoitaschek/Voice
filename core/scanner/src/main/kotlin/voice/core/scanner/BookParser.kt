@@ -80,6 +80,7 @@ internal class BookParser(
       gain = 0F,
       metadata = metadata(chapters, file, analyzed),
       customName = null,
+      customAuthor = null,
       customCover = null,
     ).also {
       validateIntegrity(it, chapters)

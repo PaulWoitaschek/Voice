@@ -297,6 +297,7 @@ class ProgressCarryOverTest {
     ).copy(
       addedAt = Instant.parse("2025-01-01T10:00:00Z"),
       customName = "Renamed",
+      customAuthor = "Edited",
       customCover = File("picked.webp"),
     )
     val oldWithCoverFromFiles = old.copy(metadata = old.metadata.copy(cover = File("found.webp")))
@@ -311,6 +312,7 @@ class ProgressCarryOverTest {
       expected = new.copy(
         addedAt = old.addedAt,
         customName = "Renamed",
+        customAuthor = "Edited",
         customCover = File("picked.webp"),
         metadata = new.metadata.copy(cover = File("found.webp")),
       ),
@@ -476,6 +478,7 @@ class ProgressCarryOverTest {
       fileLastModified = null,
     ),
     customName = null,
+    customAuthor = null,
     customCover = null,
   )
 }

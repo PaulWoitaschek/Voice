@@ -149,7 +149,7 @@ class BookPlayViewModel(
       sleepTimerState = sleepTime.toViewState(),
       playing = isPlaying,
       title = book.content.name,
-      author = book.content.metadata.author,
+      author = book.content.author,
       showPreviousNextButtons = hasMoreThanOneChapter,
       chapterName = currentMark.name?.takeIf { hasMoreThanOneChapter && it.isNotBlank() },
       duration = currentMark.durationMs.milliseconds,

@@ -1,4 +1,4 @@
-package voice.features.bookOverview.editTitle
+package voice.features.bookOverview.editBook
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -15,47 +15,56 @@ import voice.features.bookOverview.di.BookActionsScope
 
 @SingleIn(BookActionsScope::class)
 @ContributesIntoSet(BookActionsScope::class)
-class EditBookTitleViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
+class EditBookViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
 
-  private val _state = mutableStateOf<EditBookTitleState?>(null)
-  internal val state: State<EditBookTitleState?> get() = _state
+  private val _state = mutableStateOf<EditBookState?>(null)
+  internal val state: State<EditBookState?> get() = _state
 
   override suspend fun items(bookId: BookId): List<BottomSheetItem> {
     // server books take their names from the server
     if (bookId.isRemote) return emptyList()
-    return listOf(BottomSheetItem.Title)
+    return listOf(BottomSheetItem.Edit)
   }
 
   override suspend fun onItemClick(
     bookId: BookId,
     item: BottomSheetItem,
   ) {
-    if (item != BottomSheetItem.Title) return
+    if (item != BottomSheetItem.Edit) return
     val book = repo.get(bookId) ?: return
-    _state.value = EditBookTitleState(
+    _state.value = EditBookState(
       title = book.content.name,
+      author = book.content.author.orEmpty(),
       bookId = bookId,
       cover = book.content.coverUrl,
     )
   }
 
-  internal fun onDismissEditTitle() {
+  internal fun onDismiss() {
     _state.value = null
   }
 
-  internal fun onUpdateEditTitle(title: String) {
+  internal fun onTitleChange(title: String) {
     _state.value = _state.value?.copy(title = title)
   }
 
-  internal fun onConfirmEditTitle() {
+  internal fun onAuthorChange(author: String) {
+    _state.value = _state.value?.copy(author = author)
+  }
+
+  internal fun onConfirm() {
     val state = _state.value
     if (state != null) {
       check(state.confirmButtonEnabled)
       scope.launch {
-        repo.updateBook(state.bookId) {
-          it.withCustomName(state.title.trim())
+        // only what the listener changed, so the other name keeps following the files
+        repo.updateBook(state.bookId) { content ->
+          var edited = content
+          if (state.title != state.initialTitle) edited = edited.withCustomName(state.title.trim())
+          if (state.author != state.initialAuthor) edited = edited.withCustomAuthor(state.author.trim().ifEmpty { null })
+          edited
         }
       }
     }

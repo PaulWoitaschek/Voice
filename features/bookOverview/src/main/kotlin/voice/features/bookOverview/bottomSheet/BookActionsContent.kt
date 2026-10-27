@@ -90,7 +90,7 @@ private val EditItems = listOf(
   BottomSheetItem.StopDownload,
   BottomSheetItem.RetryDownload,
   BottomSheetItem.RemoveDownload,
-  BottomSheetItem.Title,
+  BottomSheetItem.Edit,
   BottomSheetItem.InternetCover,
   BottomSheetItem.FileCover,
 )
@@ -438,7 +438,7 @@ private class ActionStyle(
 private fun BottomSheetItem.style(): ActionStyle {
   val colors = MaterialTheme.colorScheme
   return when (this) {
-    BottomSheetItem.Title -> ActionStyle(MaterialShapes.Pentagon, colors.secondaryContainer, colors.onSecondaryContainer)
+    BottomSheetItem.Edit -> ActionStyle(MaterialShapes.Pentagon, colors.secondaryContainer, colors.onSecondaryContainer)
     BottomSheetItem.InternetCover -> ActionStyle(MaterialShapes.Clover4Leaf, colors.tertiaryContainer, colors.onTertiaryContainer)
     BottomSheetItem.FileCover -> ActionStyle(MaterialShapes.Cookie4Sided, colors.primaryContainer, colors.onPrimaryContainer)
     BottomSheetItem.DeleteBook -> ActionStyle(MaterialShapes.Cookie9Sided, colors.errorContainer, colors.onErrorContainer)

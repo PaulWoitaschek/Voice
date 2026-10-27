@@ -144,7 +144,7 @@ class ReviewPromptController(
     return ReviewPrompt.Stats(
       listenedHours = maxOf(inLibrary, summary.listened).inWholeHours.toInt().coerceAtLeast(1),
       finishedBooks = started.count { it.position >= it.duration - FINISHED_WITHIN.inWholeMilliseconds },
-      authors = started.mapNotNullTo(mutableSetOf()) { it.content.metadata.author?.trim()?.lowercase()?.ifEmpty { null } }.size,
+      authors = started.mapNotNullTo(mutableSetOf()) { it.content.author?.trim()?.lowercase()?.ifEmpty { null } }.size,
     )
   }
 

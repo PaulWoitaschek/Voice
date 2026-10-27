@@ -40,6 +40,7 @@ public data class BookSearchFts(
   val name: String,
   val customName: String?,
   val author: String?,
+  val customAuthor: String?,
   val genre: String?,
   val narrator: String?,
   val series: String?,

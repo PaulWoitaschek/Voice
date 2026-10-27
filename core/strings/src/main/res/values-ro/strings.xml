@@ -76,10 +76,10 @@
     <string name="book.download.stop">Oprește descărcarea</string>
     <string name="book.download.waiting_for_connection">Se așteaptă o conexiune</string>
     <string name="book.download.waiting_for_wifi">Se așteaptă o rețea Wi-Fi</string>
+    <string name="book.edit.author.label">Autor</string>
     <string name="book.edit.cover.file">Copertă din sistemul de fișiere</string>
     <string name="book.edit.cover.internet">Copertă de pe internet</string>
-    <string name="book.edit.name.label">Nume</string>
-    <string name="book.edit.rename">Redenumește</string>
+    <string name="book.edit.title.label">Titlu</string>
     <string name="book.source.device">Pe acest dispozitiv</string>
     <string name="book.source.server_downloaded">%s · descărcată</string>
     <string name="bookmark.action.add_note">Adaugă notă</string>

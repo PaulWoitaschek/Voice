@@ -156,7 +156,7 @@ class MediaItemProvider(
     isPlayable = true,
     sourceUri = chapter.id.toUri(),
     imageUri = content.cover?.toProvidedUri(),
-    artist = content.metadata.author,
+    artist = content.author,
     mediaType = MediaType.AudioBookChapter,
   )
 
@@ -172,7 +172,7 @@ class MediaItemProvider(
     isPlayable = true,
     sourceUri = playbackItem.chapter.id.toUri(),
     imageUri = content.cover?.toProvidedUri(),
-    artist = content.metadata.author,
+    artist = content.author,
     durationMs = playbackItem.mark.durationMs,
     mediaType = MediaType.AudioBookChapter,
   )
