@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 68,
-    "identityHash": "56e6d791b6131d6803e811f8bbc3bc81",
+    "identityHash": "ca5e91310afb2400a6b6c47fa9ca6cde",
     "entities": [
       {
         "tableName": "chapters2",
@@ -246,89 +246,6 @@
         }
       },
       {
-        "tableName": "bookSearchFts",
-        "createSql": "CREATE VIRTUAL TABLE IF NOT EXISTS `${TABLE_NAME}` USING FTS4(`name` TEXT NOT NULL, `customName` TEXT, `author` TEXT, `customAuthor` TEXT, `genre` TEXT, `narrator` TEXT, `series` TEXT, `part` TEXT, `id` TEXT NOT NULL, `isActive` INTEGER NOT NULL, tokenize=unicode61, content=`content2`, notindexed=`id`, notindexed=`isActive`)",
-        "fields": [
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "customName",
-            "columnName": "customName",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "author",
-            "columnName": "author",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "customAuthor",
-            "columnName": "customAuthor",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "genre",
-            "columnName": "genre",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "narrator",
-            "columnName": "narrator",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "series",
-            "columnName": "series",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "part",
-            "columnName": "part",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isActive",
-            "columnName": "isActive",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": false,
-          "columnNames": []
-        },
-        "ftsVersion": "FTS4",
-        "ftsOptions": {
-          "tokenizer": "unicode61",
-          "tokenizerArgs": [],
-          "contentTable": "content2",
-          "languageIdColumnName": "",
-          "matchInfo": "FTS4",
-          "notIndexedColumns": [
-            "id",
-            "isActive"
-          ],
-          "prefixSizes": [],
-          "preferredOrder": "ASC"
-        },
-        "contentSyncTriggers": [
-          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_bookSearchFts_BEFORE_UPDATE BEFORE UPDATE ON `content2` BEGIN DELETE FROM `bookSearchFts` WHERE `docid`=OLD.`rowid`; END",
-          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_bookSearchFts_BEFORE_DELETE BEFORE DELETE ON `content2` BEGIN DELETE FROM `bookSearchFts` WHERE `docid`=OLD.`rowid`; END",
-          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_bookSearchFts_AFTER_UPDATE AFTER UPDATE ON `content2` BEGIN INSERT INTO `bookSearchFts`(`docid`, `name`, `customName`, `author`, `customAuthor`, `genre`, `narrator`, `series`, `part`, `id`, `isActive`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`customName`, NEW.`author`, NEW.`customAuthor`, NEW.`genre`, NEW.`narrator`, NEW.`series`, NEW.`part`, NEW.`id`, NEW.`isActive`); END",
-          "CREATE TRIGGER IF NOT EXISTS room_fts_content_sync_bookSearchFts_AFTER_INSERT AFTER INSERT ON `content2` BEGIN INSERT INTO `bookSearchFts`(`docid`, `name`, `customName`, `author`, `customAuthor`, `genre`, `narrator`, `series`, `part`, `id`, `isActive`) VALUES (NEW.`rowid`, NEW.`name`, NEW.`customName`, NEW.`author`, NEW.`customAuthor`, NEW.`genre`, NEW.`narrator`, NEW.`series`, NEW.`part`, NEW.`id`, NEW.`isActive`); END"
-        ]
-      },
-      {
         "tableName": "recentBookSearch",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`searchTerm` TEXT NOT NULL, PRIMARY KEY(`searchTerm`))",
         "fields": [
@@ -505,7 +422,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '56e6d791b6131d6803e811f8bbc3bc81')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ca5e91310afb2400a6b6c47fa9ca6cde')"
     ]
   }
 }
