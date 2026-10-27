@@ -76,10 +76,10 @@
     <string name="book.download.stop">Atura la baixada</string>
     <string name="book.download.waiting_for_connection">En espera de connexió</string>
     <string name="book.download.waiting_for_wifi">En espera de Wi-Fi</string>
+    <string name="book.edit.author.label">Autor</string>
     <string name="book.edit.cover.file">Portada del sistema de fitxers</string>
     <string name="book.edit.cover.internet">Portada d\'Internet</string>
-    <string name="book.edit.name.label">Nom</string>
-    <string name="book.edit.rename">Canvia el nom</string>
+    <string name="book.edit.title.label">Títol</string>
     <string name="book.source.device">En aquest dispositiu</string>
     <string name="book.source.server_downloaded">%s · baixat</string>
     <string name="bookmark.action.add_note">Afegeix una nota</string>

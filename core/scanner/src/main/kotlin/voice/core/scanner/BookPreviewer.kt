@@ -34,12 +34,12 @@ internal constructor(
     val parseResult = chapterParser.parse(file)
     val chapters = parseResult.chapters
     if (chapters.isEmpty()) return null
-    // a book that is already in the library keeps the name the listener gave it
+    // a book that is already in the library keeps the names the listener gave it
     val content = contentRepo.get(BookId(file.uri))
       ?: bookParser.parse(chapters, file, parseResult.firstChapterMetadata)
     return BookPreview(
       name = content.name,
-      author = content.metadata.author,
+      author = content.author,
       duration = chapters.sumOf { it.duration }.milliseconds,
     )
   }

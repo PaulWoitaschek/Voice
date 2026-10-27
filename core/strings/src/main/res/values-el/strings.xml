@@ -73,10 +73,10 @@
     <string name="book.download.stop">Διακοπή λήψης</string>
     <string name="book.download.waiting_for_connection">Αναμονή για σύνδεση</string>
     <string name="book.download.waiting_for_wifi">Αναμονή για Wi-Fi</string>
+    <string name="book.edit.author.label">Συγγραφέας</string>
     <string name="book.edit.cover.file">Εξώφυλλο από τα αρχεία της συσκευής</string>
     <string name="book.edit.cover.internet">Εξώφυλλο από το Διαδίκτυο</string>
-    <string name="book.edit.name.label">Όνομα</string>
-    <string name="book.edit.rename">Μετονομασία</string>
+    <string name="book.edit.title.label">Τίτλος</string>
     <string name="book.source.device">Σε αυτή τη συσκευή</string>
     <string name="book.source.server_downloaded">%s · έγινε λήψη</string>
     <string name="bookmark.action.add_note">Προσθήκη σημείωσης</string>

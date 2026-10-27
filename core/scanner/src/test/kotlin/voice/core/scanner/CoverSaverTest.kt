@@ -121,6 +121,7 @@ class CoverSaverTest {
         fileLastModified = null,
       ),
       customName = null,
+      customAuthor = null,
       customCover = null,
     ).also { contents[it.id] = it }
   }

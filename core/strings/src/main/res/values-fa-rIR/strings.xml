@@ -73,10 +73,10 @@
     <string name="book.download.stop">توقف دانلود</string>
     <string name="book.download.waiting_for_connection">در انتظار اتصال</string>
     <string name="book.download.waiting_for_wifi">در انتظار Wi-Fi</string>
+    <string name="book.edit.author.label">نویسنده</string>
     <string name="book.edit.cover.file">دریافت کاور از داخل سیستم</string>
     <string name="book.edit.cover.internet">دریافت کاور از طریق اینترنت</string>
-    <string name="book.edit.name.label">نام</string>
-    <string name="book.edit.rename">تغییر نام</string>
+    <string name="book.edit.title.label">عنوان</string>
     <string name="book.source.device">در این دستگاه</string>
     <string name="book.source.server_downloaded">%s · دانلودشده</string>
     <string name="bookmark.action.add_note">افزودن یادداشت</string>

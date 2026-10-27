@@ -71,6 +71,7 @@ internal fun testBook(
       fileLastModified = null,
     ),
     customName = null,
+    customAuthor = null,
     customCover = null,
   ),
   chapters = chapters,

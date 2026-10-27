@@ -215,6 +215,7 @@ class MediaScannerTest {
         fileLastModified = null,
       ),
       customName = null,
+      customAuthor = null,
       customCover = null,
     )
     bookContentRepo.put(serverBook)
@@ -487,13 +488,13 @@ class MediaScannerTest {
   }
 
   @Test
-  fun `a book keeps the name the listener gave it when its files change`() = test {
+  fun `a book keeps the title and author the listener gave it when its files change`() = test {
     val audiobookFolder = folder("audiobooks")
     val book = File(audiobookFolder, "book")
     val chapter1 = audioFile(book, "1.mp3")
     scan(FolderType.Root, audiobookFolder)
     val id = BookId(book.toUri())
-    bookContentRepo.put(bookContentRepo.get(id)!!.withCustomName("Mine"))
+    bookContentRepo.put(bookContentRepo.get(id)!!.withCustomName("Mine").withCustomAuthor("My Author"))
 
     album = "New Name"
     artist = "New Author"
@@ -502,8 +503,25 @@ class MediaScannerTest {
 
     val content = bookContentRepo.get(id)!!
     assertEquals(expected = "Mine", actual = content.name)
+    assertEquals(expected = "My Author", actual = content.author)
     assertEquals(expected = "New Name", actual = content.metadata.name)
     assertEquals(expected = "New Author", actual = content.metadata.author)
+  }
+
+  @Test
+  fun `a book follows its files again once they say what the listener typed`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter1 = audioFile(book, "1.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    val id = BookId(book.toUri())
+    bookContentRepo.put(bookContentRepo.get(id)!!.withCustomAuthor("Fixed Author"))
+
+    artist = "Fixed Author"
+    changed(chapter1)
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = null, actual = bookContentRepo.get(id)!!.customAuthor)
   }
 
   @Test

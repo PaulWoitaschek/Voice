@@ -123,7 +123,7 @@ class BookmarkViewModel(
     val now = clock.instant()
     return BookmarkViewState(
       bookTitle = book.content.name,
-      bookAuthor = book.content.metadata.author,
+      bookAuthor = book.content.author,
       cover = book.content.coverUrl,
       playing = livePlaybackState?.isPlaying ?: (playState == PlayStateManager.PlayState.Playing),
       sleepTimerActive = sleepTimerState.enabled,

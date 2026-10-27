@@ -225,6 +225,7 @@ class ReviewPromptControllerTest {
           fileLastModified = null,
         ),
         customName = null,
+        customAuthor = null,
         customCover = null,
       ),
       chapters = listOf(chapter),

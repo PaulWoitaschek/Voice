@@ -38,7 +38,7 @@ import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.markAsItem
 import voice.features.bookOverview.deleteBook.DeleteBookSheet
 import voice.features.bookOverview.di.BookActionsGraph
-import voice.features.bookOverview.editTitle.RenameBookSheet
+import voice.features.bookOverview.editBook.EditBookSheet
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.OverlayNav
@@ -74,7 +74,7 @@ private fun BookActions(
   bookId: BookId,
   bookGraph: BookActionsGraph,
 ) {
-  val editBookTitleViewModel = bookGraph.editBookTitleViewModel
+  val editBookViewModel = bookGraph.editBookViewModel
   val bottomSheetViewModel = bookGraph.bottomSheetViewModel
   val deleteBookViewModel = bookGraph.deleteBookViewModel
   val fileCoverViewModel = bookGraph.fileCoverViewModel
@@ -85,7 +85,7 @@ private fun BookActions(
   fun closeIfDone() {
     if (!showMenu &&
       !pickingCover &&
-      editBookTitleViewModel.state.value == null &&
+      editBookViewModel.state.value == null &&
       deleteBookViewModel.state.value == null
     ) {
       bottomSheetViewModel.onClose()
@@ -131,18 +131,19 @@ private fun BookActions(
       )
     }
   }
-  val editBookTitleState = editBookTitleViewModel.state.value
-  if (editBookTitleState != null) {
-    CoverTheme(cover = editBookTitleState.cover) {
-      RenameBookSheet(
-        viewState = editBookTitleState,
-        onTitleChange = editBookTitleViewModel::onUpdateEditTitle,
+  val editBookState = editBookViewModel.state.value
+  if (editBookState != null) {
+    CoverTheme(cover = editBookState.cover) {
+      EditBookSheet(
+        viewState = editBookState,
+        onTitleChange = editBookViewModel::onTitleChange,
+        onAuthorChange = editBookViewModel::onAuthorChange,
         onConfirm = {
-          editBookTitleViewModel.onConfirmEditTitle()
+          editBookViewModel.onConfirm()
           closeIfDone()
         },
         onDismiss = {
-          editBookTitleViewModel.onDismissEditTitle()
+          editBookViewModel.onDismiss()
           closeIfDone()
         },
       )

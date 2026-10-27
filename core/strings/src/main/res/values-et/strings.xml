@@ -73,10 +73,10 @@
     <string name="book.download.stop">Katkesta allalaadimine</string>
     <string name="book.download.waiting_for_connection">Ootab võrguühendust</string>
     <string name="book.download.waiting_for_wifi">Ootab WiFi-ühendust</string>
+    <string name="book.edit.author.label">Autor</string>
     <string name="book.edit.cover.file">Kaanepilt nutiseadme failisüsteemist</string>
     <string name="book.edit.cover.internet">Kaanepilt internetist</string>
-    <string name="book.edit.name.label">Nimi</string>
-    <string name="book.edit.rename">Nimeta ümber</string>
+    <string name="book.edit.title.label">Pealkiri</string>
     <string name="book.source.device">Selles seadmes</string>
     <string name="book.source.server_downloaded">%s · alla laaditud</string>
     <string name="bookmark.action.add_note">Lisa märkus</string>

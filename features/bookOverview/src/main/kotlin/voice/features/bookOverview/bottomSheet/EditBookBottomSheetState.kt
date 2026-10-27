@@ -40,7 +40,7 @@ enum class BottomSheetItem(
   @StringRes val titleRes: Int,
   val icon: ImageVector,
 ) {
-  Title(StringsR.string.book_edit_rename, VoiceIcons.Title),
+  Edit(StringsR.string.common_action_edit, VoiceIcons.Edit),
   InternetCover(StringsR.string.book_edit_cover_internet, VoiceIcons.ImageSearch),
   FileCover(StringsR.string.book_edit_cover_file, VoiceIcons.Image),
   Download(StringsR.string.book_download_action, VoiceIcons.Download),

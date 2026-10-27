@@ -76,10 +76,10 @@
     <string name="book.download.stop">עצירת ההורדה</string>
     <string name="book.download.waiting_for_connection">בהמתנה לחיבור</string>
     <string name="book.download.waiting_for_wifi">בהמתנה ל-Wi-Fi</string>
+    <string name="book.edit.author.label">מחבר</string>
     <string name="book.edit.cover.file">עטיפות מקובץ קיים</string>
     <string name="book.edit.cover.internet">עטיפות מהאינטרנט</string>
-    <string name="book.edit.name.label">שם</string>
-    <string name="book.edit.rename">שינוי שם</string>
+    <string name="book.edit.title.label">כותר</string>
     <string name="book.source.device">במכשיר הזה</string>
     <string name="book.source.server_downloaded">%s · ההורדה הושלמה</string>
     <string name="bookmark.action.add_note">הוספת הערה</string>

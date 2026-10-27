@@ -70,10 +70,10 @@
     <string name="book.download.stop">Hentikan unduhan</string>
     <string name="book.download.waiting_for_connection">Menunggu koneksi</string>
     <string name="book.download.waiting_for_wifi">Menunggu Wi-Fi</string>
+    <string name="book.edit.author.label">Penulis</string>
     <string name="book.edit.cover.file">Sampul dari penyimpanan</string>
     <string name="book.edit.cover.internet">Sampul dari Internet</string>
-    <string name="book.edit.name.label">Judul buku</string>
-    <string name="book.edit.rename">Ganti nama</string>
+    <string name="book.edit.title.label">Judul</string>
     <string name="book.source.device">Di perangkat ini</string>
     <string name="book.source.server_downloaded">%s · sudah diunduh</string>
     <string name="bookmark.action.add_note">Tambah catatan</string>

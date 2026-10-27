@@ -42,7 +42,7 @@ internal fun Book.toItemViewState(
   download: DownloadBadge? = null,
 ) = BookOverviewItemViewState(
   name = content.name,
-  author = content.metadata.author,
+  author = content.author,
   cover = content.coverUrl,
   id = id,
   progress = progress(),

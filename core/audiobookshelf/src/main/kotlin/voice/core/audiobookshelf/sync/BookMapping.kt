@@ -96,6 +96,7 @@ internal fun AbsLibraryItem.toBookContent(
       fileLastModified = null,
     ),
     customName = existing?.customName,
+    customAuthor = existing?.customAuthor,
     customCover = existing?.customCover,
   )
 }

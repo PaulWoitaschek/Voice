@@ -73,10 +73,10 @@
     <string name="book.download.stop">Avbryt nedlasting</string>
     <string name="book.download.waiting_for_connection">Venter på tilkobling</string>
     <string name="book.download.waiting_for_wifi">Venter på Wi-Fi</string>
+    <string name="book.edit.author.label">Forfatter</string>
     <string name="book.edit.cover.file">Omslag fra filsystemet</string>
     <string name="book.edit.cover.internet">Omslag fra Internett</string>
-    <string name="book.edit.name.label">Navn</string>
-    <string name="book.edit.rename">Gi nytt navn</string>
+    <string name="book.edit.title.label">Tittel</string>
     <string name="book.source.device">På denne enheten</string>
     <string name="book.source.server_downloaded">%s · lastet ned</string>
     <string name="bookmark.action.add_note">Legg til notat</string>

@@ -2086,6 +2086,65 @@ object VoiceIcons {
       .build()
 
   /*
+   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/edit.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+   * Generated: 2026-10-26T21:27:50Z
+   */
+  val Edit: ImageVector =
+    ImageVector.Builder(
+      name = "Edit",
+      defaultWidth = 24.dp,
+      defaultHeight = 24.dp,
+      viewportWidth = 24f,
+      viewportHeight = 24f,
+    )
+      .apply {
+        path(
+          fill = SolidColor(Color.Black),
+          fillAlpha = 1f,
+          stroke = null,
+          strokeAlpha = 1f,
+          strokeLineWidth = 1f,
+          strokeLineCap = StrokeCap.Butt,
+          strokeLineJoin = StrokeJoin.Bevel,
+          strokeLineMiter = 1f,
+          pathFillType = PathFillType.NonZero,
+        ) {
+          moveTo(5f, 19f)
+          horizontalLineTo(6.43f)
+          lineTo(16.2f, 9.23f)
+          lineTo(14.78f, 7.8f)
+          lineTo(5f, 17.58f)
+          verticalLineTo(19f)
+          close()
+          moveTo(3f, 21f)
+          verticalLineTo(16.75f)
+          lineTo(16.2f, 3.57f)
+          quadTo(16.5f, 3.3f, 16.86f, 3.15f)
+          reflectiveQuadTo(17.63f, 3f)
+          quadToRelative(0.4f, 0f, 0.78f, 0.15f)
+          reflectiveQuadTo(19.05f, 3.6f)
+          lineTo(20.43f, 5f)
+          quadToRelative(0.3f, 0.27f, 0.44f, 0.65f)
+          reflectiveQuadTo(21f, 6.4f)
+          quadToRelative(0f, 0.4f, -0.14f, 0.76f)
+          reflectiveQuadTo(20.43f, 7.82f)
+          lineTo(7.25f, 21f)
+          horizontalLineTo(3f)
+          close()
+          moveTo(19f, 6.4f)
+          lineTo(17.6f, 5f)
+          lineTo(19f, 6.4f)
+          close()
+          moveTo(15.48f, 8.52f)
+          lineTo(14.78f, 7.8f)
+          lineTo(16.2f, 9.23f)
+          lineTo(15.48f, 8.52f)
+          close()
+        }
+      }
+      .build()
+
+  /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/emoji_food_beverage.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T19:36:09Z
    */
@@ -5299,44 +5358,6 @@ object VoiceIcons {
           reflectiveQuadToRelative(4.95f, -2.05f)
           close()
           moveTo(12f, 13f)
-          close()
-        }
-      }
-      .build()
-
-  /*
-   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/title.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
-   * Generated: 2026-06-20T11:13:08Z
-   */
-  val Title: ImageVector =
-    ImageVector.Builder(
-      name = "Title",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
-      .apply {
-        path(
-          fill = SolidColor(Color.Black),
-          fillAlpha = 1f,
-          stroke = null,
-          strokeAlpha = 1f,
-          strokeLineWidth = 1f,
-          strokeLineCap = StrokeCap.Butt,
-          strokeLineJoin = StrokeJoin.Bevel,
-          strokeLineMiter = 1f,
-          pathFillType = PathFillType.NonZero,
-        ) {
-          moveTo(10.5f, 20f)
-          verticalLineTo(7f)
-          horizontalLineTo(5f)
-          verticalLineTo(4f)
-          horizontalLineTo(19f)
-          verticalLineTo(7f)
-          horizontalLineTo(13.5f)
-          verticalLineTo(20f)
-          horizontalLineToRelative(-3f)
           close()
         }
       }

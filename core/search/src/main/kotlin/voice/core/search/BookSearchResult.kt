@@ -22,7 +22,7 @@ enum class BookSearchField {
   fun text(content: BookContent): String? {
     val text = when (this) {
       Title -> content.name
-      Author -> content.metadata.author
+      Author -> content.author
       Series -> content.metadata.series?.let { series ->
         listOfNotNull(series, content.metadata.part?.takeIf { it.isNotBlank() }).joinToString(" ")
       }

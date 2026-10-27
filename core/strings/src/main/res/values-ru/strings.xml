@@ -79,10 +79,10 @@
     <string name="book.download.stop">Остановить скачивание</string>
     <string name="book.download.waiting_for_connection">Ожидание подключения</string>
     <string name="book.download.waiting_for_wifi">Ожидание Wi-Fi</string>
+    <string name="book.edit.author.label">Автор</string>
     <string name="book.edit.cover.file">Обложка с устройства</string>
     <string name="book.edit.cover.internet">Обложка из интернета</string>
-    <string name="book.edit.name.label">Название</string>
-    <string name="book.edit.rename">Переименовать</string>
+    <string name="book.edit.title.label">Название</string>
     <string name="book.source.device">На этом устройстве</string>
     <string name="book.source.server_downloaded">%s · скачано</string>
     <string name="bookmark.action.add_note">Добавить заметку</string>

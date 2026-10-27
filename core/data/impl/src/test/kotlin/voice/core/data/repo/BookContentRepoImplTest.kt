@@ -62,6 +62,7 @@ class BookContentRepoImplTest {
       fileLastModified = null,
     ),
     customName = null,
+    customAuthor = null,
     customCover = null,
   )
 

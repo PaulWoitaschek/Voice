@@ -63,6 +63,7 @@ fun book(
         fileLastModified = null,
       ),
       customName = customName,
+      customAuthor = null,
       customCover = null,
     ),
     chapters = chapters,

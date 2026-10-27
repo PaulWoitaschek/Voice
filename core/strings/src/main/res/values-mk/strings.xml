@@ -73,10 +73,10 @@
     <string name="book.download.stop">Запри го преземањето</string>
     <string name="book.download.waiting_for_connection">Се чека врска</string>
     <string name="book.download.waiting_for_wifi">Се чека Wi-Fi</string>
+    <string name="book.edit.author.label">Автор</string>
     <string name="book.edit.cover.file">Корица од датотечен систем</string>
     <string name="book.edit.cover.internet">Корица од Интернет</string>
-    <string name="book.edit.name.label">Име</string>
-    <string name="book.edit.rename">Преименувај</string>
+    <string name="book.edit.title.label">Наслов</string>
     <string name="book.source.device">На овој уред</string>
     <string name="book.source.server_downloaded">%s · преземено</string>
     <string name="bookmark.action.add_note">Додај белешка</string>

@@ -73,10 +73,10 @@
     <string name="book.download.stop">डाउनलोड रोकें</string>
     <string name="book.download.waiting_for_connection">कनेक्शन का इंतज़ार है</string>
     <string name="book.download.waiting_for_wifi">वाई-फ़ाई का इंतज़ार है</string>
+    <string name="book.edit.author.label">लेखक</string>
     <string name="book.edit.cover.file">फ़ाइल सिस्टम से कवर</string>
     <string name="book.edit.cover.internet">इंटरनेट से कवर</string>
-    <string name="book.edit.name.label">नाम</string>
-    <string name="book.edit.rename">नाम बदलें</string>
+    <string name="book.edit.title.label">शीर्षक</string>
     <string name="book.source.device">इस डिवाइस पर</string>
     <string name="book.source.server_downloaded">%s · डाउनलोड की गई</string>
     <string name="bookmark.action.add_note">नोट जोड़ें</string>

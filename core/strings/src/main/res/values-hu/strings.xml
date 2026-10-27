@@ -73,10 +73,10 @@
     <string name="book.download.stop">Letöltés leállítása</string>
     <string name="book.download.waiting_for_connection">Várakozás internetkapcsolatra</string>
     <string name="book.download.waiting_for_wifi">Várakozás Wi-Fi-re</string>
+    <string name="book.edit.author.label">Szerző</string>
     <string name="book.edit.cover.file">Borító a fájlrendszerből</string>
     <string name="book.edit.cover.internet">Borító az internetről</string>
-    <string name="book.edit.name.label">Cím</string>
-    <string name="book.edit.rename">Átnevezés</string>
+    <string name="book.edit.title.label">Cím</string>
     <string name="book.source.device">Ezen az eszközön</string>
     <string name="book.source.server_downloaded">%s · letöltve</string>
     <string name="bookmark.action.add_note">Jegyzet hozzáadása</string>

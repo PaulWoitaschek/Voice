@@ -73,10 +73,10 @@
     <string name="book.download.stop">Firma s\'iscarrigamentu</string>
     <string name="book.download.waiting_for_connection">Isetende una connessione</string>
     <string name="book.download.waiting_for_wifi">Isetende su Wi-Fi</string>
+    <string name="book.edit.author.label">Autore</string>
     <string name="book.edit.cover.file">Cobertedda dae su sistema de archìvios</string>
     <string name="book.edit.cover.internet">Cobertedda dae ìnternet</string>
-    <string name="book.edit.name.label">Nùmene</string>
-    <string name="book.edit.rename">Càmbia su nùmene</string>
+    <string name="book.edit.title.label">Tìtulu</string>
     <string name="book.source.device">In custu dispositivu</string>
     <string name="book.source.server_downloaded">%s · iscarrigadu</string>
     <string name="bookmark.action.add_note">Agiunghe una nota</string>
