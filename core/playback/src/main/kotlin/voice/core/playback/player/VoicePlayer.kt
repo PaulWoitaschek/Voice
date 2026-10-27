@@ -161,45 +161,8 @@ class VoicePlayer(
     scope.launch {
       val skipAmount = seekTimeStore.data.first().seconds
       recordExternalCommand(source, ListeningEvent.Type.SkipBack, position)
-      seekBackBy(skipAmount)
+      player.seekBackBy(skipAmount, crossMediaItems = true)
     }
-  }
-
-  private suspend fun seekBackBy(skipAmount: Duration) {
-    seekBackBy(
-      skipAmount = skipAmount,
-      crossMediaItems = true,
-    )
-  }
-
-  private suspend fun seekBackBy(
-    skipAmount: Duration,
-    crossMediaItems: Boolean,
-  ) {
-    var currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
-      ?.milliseconds
-      ?.coerceAtLeast(ZERO)
-      ?: return
-    var remaining = skipAmount
-    var mediaItemIndex = player.currentMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: return
-
-    while (remaining > currentPosition) {
-      if (!crossMediaItems) {
-        player.seekTo(mediaItemIndex, 0)
-        return
-      }
-      remaining -= currentPosition
-      val previousMediaItemIndex = mediaItemIndex - 1
-      if (previousMediaItemIndex < 0) {
-        player.seekTo(0)
-        return
-      }
-      val previousMediaItem = player.getMediaItemAt(previousMediaItemIndex)
-      currentPosition = previousMediaItem.mediaMetadata.durationMs?.milliseconds ?: return
-      mediaItemIndex = previousMediaItemIndex
-    }
-
-    player.seekTo(mediaItemIndex, (currentPosition - remaining).inWholeMilliseconds)
   }
 
   override fun seekForward() {
@@ -310,8 +273,8 @@ class VoicePlayer(
     val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: ZERO
     if (currentPosition > ZERO) {
       scope.launch {
-        seekBackBy(
-          skipAmount = autoRewindAmountStore.data.first().seconds,
+        player.seekBackBy(
+          rewind = autoRewindAmountStore.data.first().seconds,
           crossMediaItems = false,
         )
       }
