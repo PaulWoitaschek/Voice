@@ -1,0 +1,70 @@
+---
+import type { ComponentProps } from 'astro/types'
+import Decor from './Decor.astro'
+
+type Props = {
+  id: string
+  tone: 'day' | 'amber' | 'night'
+  eyebrow: string
+  title: string
+  flip?: boolean
+  decor: ComponentProps<typeof Decor>
+}
+const { id, tone, eyebrow, title, flip = false, decor } = Astro.props
+---
+
+<section aria-labelledby={`${id}-title`} class:list={['feature', 'tone', { flip }]} data-tone={tone} id={id}>
+  <Decor {...decor} />
+  <div class="copy">
+    <p class="eyebrow">{eyebrow}</p>
+    <h2 id={`${id}-title`}>{title}</h2>
+    <slot />
+  </div>
+  <div class="phones">
+    <slot name="phones" />
+  </div>
+</section>
+
+<style>
+  .feature {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: clamp(32px, 5vw, 72px);
+    width: min(100% - 24px, 1240px);
+    margin: 24px auto;
+    padding: clamp(48px, 6vw, 88px) clamp(28px, 6vw, 88px);
+    border-radius: 48px;
+  }
+
+  .flip .copy {
+    order: 2;
+  }
+
+  .copy :global(p:not(.eyebrow)) {
+    margin-top: 20px;
+    font-size: clamp(1.1rem, 1rem + 0.3vw, 1.25rem);
+    color: var(--text-muted);
+  }
+
+  .copy :global(a) {
+    font-weight: 600;
+  }
+
+  .phones {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 860px) {
+    .feature {
+      grid-template-columns: 1fr;
+      margin-block: 16px;
+      border-radius: 36px;
+    }
+
+    .flip .copy {
+      order: 0;
+    }
+  }
+</style>

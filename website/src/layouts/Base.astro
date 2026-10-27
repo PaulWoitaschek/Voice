@@ -1,0 +1,176 @@
+---
+import '@fontsource-variable/literata/opsz.css'
+import '@fontsource-variable/roboto'
+import '../styles/global.css'
+import featureGraphic from '../../../fastlane/metadata/android/en-US/images/featureGraphic.png'
+import Icon from '../components/Icon.astro'
+
+type Props = { title?: string; description?: string }
+const {
+  title,
+  description = 'Voice is a calm audiobook player for Android that plays the audiobook files you already have. No account, no ads, open source.',
+} = Astro.props
+const fullTitle = title ? `${title} · Voice` : 'Voice · A calm home for your audiobooks'
+const canonical = new URL(Astro.url.pathname, Astro.site)
+const image = new URL(featureGraphic.src, Astro.site)
+const github = 'https://github.com/PaulWoitaschek/Voice'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>{fullTitle}</title>
+    <meta content={description} name="description" />
+    <link href={canonical} rel="canonical" />
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+    <meta content="#f6f7ff" media="(prefers-color-scheme: light)" name="theme-color" />
+    <meta content="#070d22" media="(prefers-color-scheme: dark)" name="theme-color" />
+    <meta content="website" property="og:type" />
+    <meta content={fullTitle} property="og:title" />
+    <meta content={description} property="og:description" />
+    <meta content={canonical} property="og:url" />
+    <meta content={image} property="og:image" />
+    <meta content="summary_large_image" name="twitter:card" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img alt="" height="40" src="/favicon.svg" width="40" />
+          <span>Voice</span>
+        </a>
+        <nav aria-label="Main">
+          <a class="nav-link" href="/faq/">FAQ</a>
+          <a class="button primary small" href="/#download">Download</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-brand">
+          <a class="brand" href="/">
+            <img alt="" height="40" src="/favicon.svg" width="40" />
+            <span>Voice</span>
+          </a>
+          <p class="muted">A calm audiobook player for Android.<br />Made by Paul Woitaschek and kept going by its listeners.</p>
+        </div>
+        <nav aria-label="Footer" class="footer-links">
+          <ul>
+            <li><a href="/faq/">FAQ</a></li>
+            <li><a href={`${github}/discussions/categories/q-a`}>Ask a question</a></li>
+            <li><a href={`${github}/issues/new?template=bug.yml`}>Report a bug</a></li>
+            <li><a href={`${github}/discussions/categories/ideas`}>Share an idea</a></li>
+          </ul>
+          <ul>
+            <li><a href="/#support"><Icon name="favorite" size={18} />Support Voice</a></li>
+            <li><a href={github}><Icon name="github" size={18} />Source code</a></li>
+            <li><a href={`${github}/blob/main/LICENSE.md`}>License: GPLv3</a></li>
+            <li><a href="/privacy-policy/">Privacy policy</a></li>
+            <li><a href="https://woitaschek.de/impressum/">Impressum</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 10;
+  }
+
+  .site-header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: var(--header-height);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-book);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    text-decoration: none;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-link {
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .nav-link:hover {
+    background: color-mix(in srgb, currentColor 8%, transparent);
+  }
+
+  .site-footer {
+    margin-top: 48px;
+    padding: 56px 0 64px;
+    border-top: 1px solid var(--card-line);
+    font-size: 1rem;
+  }
+
+  .site-footer .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .footer-brand {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+  }
+
+  .footer-links {
+    align-items: start;
+    gap: 64px;
+  }
+
+  .footer-links ul {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .footer-links a:hover {
+    color: var(--text);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 520px) {
+    .footer-links {
+      gap: 40px;
+    }
+  }
+</style>

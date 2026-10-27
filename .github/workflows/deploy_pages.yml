@@ -3,49 +3,42 @@ name: Build and Deploy Pages
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'docs/**'
-      - mkdocs.yml
-      - CONTRIBUTING.md
+    paths: &paths
+      - 'website/**'
       - PRIVACY.md
-      - LICENSE.md
-      - Pipfile
+      - 'artwork/public/**'
+      - artwork/src/templates/decor.ts
+      - fastlane/metadata/android/en-US/images/featureGraphic.png
+      - 'docs/prototypes/**'
+      - .github/workflows/deploy_pages.yml
+  pull_request:
+    paths: *paths
   workflow_dispatch:
-    inputs:
-      deploy:
-        description: 'Deploy to GitHub Pages'
-        type: boolean
-        default: true
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: withastro/action@v6
         with:
-          python-version: '3.x'
-      - run: pip install pipenv
-      - run: pipenv install
-      - run: pipenv run mkdocs build --strict
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: site/
+          path: website
 
   deploy:
-    if: github.event_name == 'push' || inputs.deploy != 'false'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build
-    environment: github-pages
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/deploy-pages@v5
         id: deployment

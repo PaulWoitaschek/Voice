@@ -1,1 +1,0 @@
-../PRIVACY.md

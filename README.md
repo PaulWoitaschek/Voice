@@ -1,7 +1,7 @@
 # Voice
 
 [![CI](https://github.com/PaulWoitaschek/Voice/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/PaulWoitaschek/Voice/actions/workflows/ci.yml)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://voice.woitaschek.de/license/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE.md)
 
 **A clean, user-focused audiobook player for Android, built to be reliable and a joy to use.**
 
@@ -34,13 +34,13 @@ Voice turns your own audiobook files into a calm, focused listening library. It 
 
 ## Learn more
 
-The [documentation website](https://voice.woitaschek.de) covers features, the philosophy behind the app, how to organize your library, and the FAQ.
+The [website](https://voice.woitaschek.de) shows what Voice can do, where to get it, and answers common questions in the [FAQ](https://voice.woitaschek.de/faq/).
 
 ## Contributing
 
-Bug reports and feature requests are very welcome, see the [Contributing guide](https://voice.woitaschek.de/contributing/). Pull requests only on request.
+Bug reports and feature requests are very welcome, see the [Contributing guide](CONTRIBUTING.md). Pull requests only on request.
 
-To find your way around the code, start with [Development](https://voice.woitaschek.de/development/) and [Architecture](https://voice.woitaschek.de/architecture/).
+To find your way around the code, start with [Development](docs/development.md) and [Architecture](docs/architecture.md).
 
 ## Support Voice
 
@@ -56,4 +56,4 @@ Or [sponsor monthly on GitHub](https://github.com/sponsors/PaulWoitaschek). A on
 
 ## License
 
-Voice is licensed under [GNU GPLv3](https://voice.woitaschek.de/license/). By contributing, you agree to license your code under the same terms.
+Voice is licensed under [GNU GPLv3](LICENSE.md). By contributing, you agree to license your code under the same terms.

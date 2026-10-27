@@ -1,0 +1,250 @@
+:root {
+  color-scheme: light dark;
+  --font: 'Roboto Variable', system-ui, sans-serif;
+  --font-book: 'Literata Variable', Georgia, serif;
+  --page: light-dark(#fbfbff, #070d22);
+  --text: light-dark(#0d2a5c, #eef2ff);
+  --text-muted: light-dark(#3e5280, #b9c6ea);
+  --card: light-dark(#ffffff, #0f1937);
+  --card-line: light-dark(#e3e8f8, #1c2950);
+  --primary: light-dark(#003b7f, #aac7ff);
+  --on-primary: light-dark(#ffffff, #002f66);
+  --tonal: light-dark(#d8e4ff, #1f3363);
+  --on-tonal: light-dark(#0d2a5c, #dfe7ff);
+  --lilac: light-dark(#e6defc, #2a2766);
+  --on-lilac: light-dark(#2c1d6b, #e6defc);
+  --header-height: 76px;
+}
+
+/* The tones follow the Play store art (artwork/src/styles/tokens.css), which follows the app's tonal palettes. */
+.tone {
+  --surface: light-dark(#f6f7ff, #0b1636);
+  --blob-1: light-dark(#c4d6ff, #1b3678);
+  --blob-2: light-dark(#e4dcff, #29276e);
+  --blob-3: light-dark(#cfeaff, #0f2d66);
+  --shape-1: light-dark(#d8e4ff, #172c66);
+  --shape-2: light-dark(#e6defc, #222a70);
+  --star: light-dark(#6d8de0, #c8d7ff);
+  --text: light-dark(#0d2a5c, #ffffff);
+  --text-muted: light-dark(#3e5280, #c6d3f5);
+  --frame: light-dark(#191b21, #05070d);
+  --frame-shadow: light-dark(rgba(24, 46, 110, 0.28), rgba(0, 0, 0, 0.5));
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 75% 45% at 10% 8%, var(--blob-1), transparent 70%),
+    radial-gradient(ellipse 70% 45% at 95% 40%, var(--blob-2), transparent 70%),
+    radial-gradient(ellipse 85% 45% at 25% 98%, var(--blob-3), transparent 70%),
+    var(--surface);
+}
+
+.tone[data-tone='amber'] {
+  --surface: light-dark(#fff7ec, #1c1307);
+  --blob-1: light-dark(#ffd59a, #4d320c);
+  --blob-2: light-dark(#ffe4c4, #3f260f);
+  --blob-3: light-dark(#ffd0b4, #472716);
+  --shape-1: light-dark(#ffe1b3, #3a260c);
+  --shape-2: light-dark(#ffd8c4, #3d2314);
+  --star: light-dark(#d38716, #ffc46b);
+  --text: light-dark(#4a2900, #fff1dc);
+  --text-muted: light-dark(#7a4f1c, #efcf9f);
+  --frame-shadow: light-dark(rgba(110, 64, 10, 0.26), rgba(0, 0, 0, 0.5));
+}
+
+.tone[data-tone='night'] {
+  color-scheme: dark;
+  --surface: #0b1636;
+  --blob-1: #1f3d8c;
+  --blob-2: #2f2b7c;
+  --blob-3: #10316f;
+  --shape-1: #172c66;
+  --shape-2: #222a70;
+  --star: #c8d7ff;
+  --text: #ffffff;
+  --text-muted: #c6d3f5;
+  --frame: #05070d;
+  --frame-shadow: rgba(0, 0, 0, 0.5);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-book);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+h1 {
+  font-size: clamp(2.75rem, 1.6rem + 4.6vw, 5rem);
+}
+
+h2 {
+  font-size: clamp(2.1rem, 1.5rem + 2.4vw, 3.4rem);
+}
+
+h3 {
+  font-size: 1.3rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.icon {
+  flex: none;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5vw, 48px);
+}
+
+.lead {
+  font-size: clamp(1.15rem, 1rem + 0.5vw, 1.35rem);
+  color: var(--text-muted);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 200ms ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: scale(0.97);
+}
+
+.button.primary {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 8px 24px light-dark(rgba(0, 59, 127, 0.25), rgba(0, 0, 0, 0.35));
+}
+
+.button.tonal {
+  background: var(--tonal);
+  color: var(--on-tonal);
+}
+
+.button.small {
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+
+  .button:hover,
+  .button:active {
+    transform: none;
+  }
+}
+
+.sparkle-list {
+  display: grid;
+  gap: 12px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sparkle-list li {
+  position: relative;
+  padding-left: 30px;
+}
+
+.sparkle-list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.4em;
+  width: 16px;
+  height: 16px;
+  background: var(--star);
+  clip-path: path('M8 0Q9.1 6.9 16 8Q9.1 9.1 8 16Q6.9 9.1 0 8Q6.9 6.9 8 0Z');
+}

@@ -2,7 +2,7 @@
 
 const root = document.getElementById('app');
 const notesEl = document.getElementById('notes');
-const SPEC = '../../library/';
+const SPEC = 'https://github.com/PaulWoitaschek/Voice/blob/main/docs/library.md';
 const DAY = 864e5;
 const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
 const byName = (a, b) => collator.compare(a, b);
