@@ -1,69 +1,111 @@
 package voice.core.search
 
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.withContext
+import voice.core.common.DispatcherProvider
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
-import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
 import java.util.concurrent.TimeUnit
 
 @Inject
 class BookSearch(
-  private val contentRepo: BookContentRepo,
   private val repo: BookRepository,
+  private val dispatcherProvider: DispatcherProvider,
 ) {
+
+  // splitting texts into words takes longer than matching them, and the search runs again on every keystroke and
+  // every position update of the playing book
+  private var wordsByText = emptyMap<String, List<SearchText.Word>>()
 
   suspend fun search(query: String): List<BookSearchResult> {
     val terms = SearchText(query).words.map { it.text }.distinct()
     if (terms.isEmpty()) return emptyList()
-
-    // the full text search removes the diacritics itself, and decomposing would break scripts like Hangul
-    val prefixes = SearchText(query, removeDiacritics = false).words.map { it.text }
-    val candidates = contentRepo.search(prefixes).toSet()
-    if (candidates.isEmpty()) return emptyList()
-
-    return repo.all()
-      .filter { it.id in candidates }
-      .map { book -> rank(book, terms) }
-      .sortedWith(resultComparator)
+    val allBooks = repo.all()
+    return withContext(dispatcherProvider.default) {
+      val previousWords = wordsByText
+      val words = HashMap<String, List<SearchText.Word>>()
+      val books = allBooks.map { book ->
+        SearchableBook(book) { text -> words.getOrPut(text) { previousWords[text] ?: SearchText(text).words } }
+      }
+      wordsByText = words
+      // typos only count when nothing matches as typed, so similar words don't pile up below the right books
+      books.mapNotNull { rank(it, terms, typos = false) }
+        .ifEmpty { books.mapNotNull { rank(it, terms, typos = true) } }
+        .sortedWith(resultComparator)
+    }
   }
 
   private fun rank(
-    book: Book,
+    book: SearchableBook,
     terms: List<String>,
-  ): BookSearchResult {
-    val texts = BookSearchField.entries.mapNotNull { field ->
-      field.text(book.content)?.let { field to it }
-    }.toMap()
-    val words = texts.mapValues { (_, text) -> SearchText(text).words }
+    typos: Boolean,
+  ): BookSearchResult? {
     val matches = mutableMapOf<BookSearchField, MutableList<IntRange>>()
     val matchedTerms = mutableMapOf<BookSearchField, MutableSet<String>>()
     var score = 0
-    terms.forEach { term ->
+    for (term in terms) {
       var bestTermScore = 0
-      words.forEach { (field, fieldWords) ->
+      book.words.forEach { (field, fieldWords) ->
         fieldWords.forEach { word ->
-          if (word.text.startsWith(term)) {
-            matches.getOrPut(field) { mutableListOf() } += word.originalRange(term.length)
+          val match = match(word.text, term, typos)
+          if (match != null) {
+            matches.getOrPut(field) { mutableListOf() } += word.originalRange(match.length)
             matchedTerms.getOrPut(field) { mutableSetOf() } += term
-            val quality = if (word.text.length == term.length) WHOLE_WORD else WORD_START
-            bestTermScore = maxOf(bestTermScore, quality + field.weight)
+            bestTermScore = maxOf(bestTermScore, match.quality + field.weight)
           }
         }
       }
+      if (bestTermScore == 0 && book.fileWords.none { match(it.text, term, typos) != null }) return null
       score += bestTermScore
     }
     return BookSearchResult(
-      book = book,
-      matches = matches.mapValues { (field, ranges) -> ranges.merged(texts.getValue(field)) },
+      book = book.book,
+      matches = matches.mapValues { (field, ranges) -> ranges.merged(book.texts.getValue(field)) },
       fieldsMatchingAllWords = matchedTerms.filterValues { it.size == terms.size }.keys,
       score = score,
     )
   }
 
+  private fun match(
+    word: String,
+    term: String,
+    typos: Boolean,
+  ): WordMatch? = when {
+    word.startsWith(term) -> WordMatch(term.length, if (word.length == term.length) WHOLE_WORD else WORD_START)
+    typos && term.length >= MIN_TYPO_LENGTH -> word.typoPrefixLength(term)?.let { WordMatch(it, TYPO) }
+    else -> null
+  }
+
+  private class SearchableBook(
+    val book: Book,
+    split: (String) -> List<SearchText.Word>,
+  ) {
+    val texts = BookSearchField.entries.mapNotNull { field ->
+      field.text(book.content)?.let { field to it }
+    }.toMap()
+    val words = texts.mapValues { (_, text) -> split(text) }
+
+    // a book the listener edited is still found by what its files say, which isn't shown, so it ranks below
+    // visible matches
+    val fileWords = listOfNotNull(
+      book.content.metadata.name.takeIf { book.content.customName != null },
+      book.content.metadata.author?.takeIf { book.content.customAuthor != null },
+    ).flatMap(split)
+  }
+
+  private class WordMatch(
+    val length: Int,
+    val quality: Int,
+  )
+
   private companion object {
     const val WHOLE_WORD = 20
     const val WORD_START = 10
+    const val TYPO = 5
+
+    // shorter words are one typo away from too many others
+    const val MIN_TYPO_LENGTH = 5
 
     val resultComparator: Comparator<BookSearchResult> = compareByDescending<BookSearchResult> { it.score }
       .thenByDescending { it.book.isInProgress() }

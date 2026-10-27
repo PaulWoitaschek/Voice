@@ -4,15 +4,10 @@ import java.text.Normalizer
 import java.util.Locale
 
 /**
- * A text split into lowercase words the way the full text search sees them: separated by anything that isn't a
- * letter, a digit or a mark. Each word remembers where it came from in the original text.
- *
- * With [removeDiacritics], "Café" and "cafe" become the same word.
+ * A text split into lowercase words without diacritics, so "Café" and "cafe" become the same word. Words are
+ * separated by anything that isn't a letter, a digit or a mark, and remember where they came from in the original.
  */
-internal class SearchText(
-  original: String,
-  removeDiacritics: Boolean = true,
-) {
+internal class SearchText(original: String) {
 
   class Word(
     val text: String,
@@ -47,11 +42,7 @@ internal class SearchText(
       val codePoint = original.codePointAt(index)
       val charCount = Character.charCount(codePoint)
       val lowercase = String(Character.toChars(codePoint)).lowercase(Locale.ROOT)
-      val normalized = if (removeDiacritics) {
-        Normalizer.normalize(lowercase, Normalizer.Form.NFD).filterNot { it in COMBINING_DIACRITICS }
-      } else {
-        lowercase
-      }
+      val normalized = Normalizer.normalize(lowercase, Normalizer.Form.NFD).filterNot { it in COMBINING_DIACRITICS }
       normalized.codePoints().forEach { normalizedCodePoint ->
         if (normalizedCodePoint.isWordCharacter()) {
           repeat(Character.charCount(normalizedCodePoint)) {
