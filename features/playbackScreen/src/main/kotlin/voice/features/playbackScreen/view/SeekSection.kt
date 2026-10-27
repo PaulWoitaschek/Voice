@@ -64,6 +64,7 @@ import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import voice.core.ui.ProgressWave
 import voice.core.ui.formatTime
 import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState
@@ -303,7 +304,7 @@ private fun WavySeekBar(
                 path = wavePath,
                 fraction = currentFraction,
                 amplitudeFactor = amplitude,
-                phase = clock() * 2F * PI.toFloat() * 0.2F,
+                phase = clock() * 2F * PI.toFloat() * ProgressWave.WavesPerSecond,
                 thumbWidth = thumbWidth.toPx(),
                 thumbHeight = thumbHeight.toPx(),
                 activeColor = colors.primary,
@@ -355,13 +356,13 @@ private fun DrawScope.drawWavyTrack(
   inactiveColor: Color,
 ) {
   val inset = HorizontalInset.toPx()
-  val strokeWidth = 5.dp.toPx()
+  val strokeWidth = ProgressWave.StrokeWidth.toPx()
   val gap = 5.dp.toPx()
   val centerY = size.height / 2
   val end = size.width - inset
   val thumbX = inset + (end - inset) * fraction
-  val amplitude = 1.75.dp.toPx() * amplitudeFactor
-  val wavelength = 44.dp.toPx()
+  val amplitude = ProgressWave.Amplitude.toPx() * amplitudeFactor
+  val wavelength = ProgressWave.Wavelength.toPx()
   val step = 1.5.dp.toPx()
 
   val activeEnd = thumbX - thumbWidth / 2 - gap

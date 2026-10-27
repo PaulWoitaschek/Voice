@@ -19,6 +19,7 @@ import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import voice.core.strings.R
 import voice.core.ui.CoverTheme
 import voice.core.ui.PlayButton
+import voice.core.ui.ProgressWave
 import voice.core.ui.bookText
 import voice.core.ui.playButtonSharedElementModifier
 import voice.features.bookOverview.overview.BookOverviewItemViewState
@@ -109,9 +111,10 @@ internal fun ContinueListeningCard(
           Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1F)) {
               val density = LocalDensity.current
-              val stroke = remember(density) { Stroke(width = with(density) { 5.dp.toPx() }, cap = StrokeCap.Round) }
-              // the player's seek bar wave: 1.75dp of the 2.5dp the stroke leaves in the 10dp container, and a fifth of a
-              // wave per second
+              val stroke = remember(density) { Stroke(width = with(density) { ProgressWave.StrokeWidth.toPx() }, cap = StrokeCap.Round) }
+              // Material takes the amplitude as a share of the room the stroke leaves in its container
+              val amplitude =
+                ProgressWave.Amplitude / ((WavyProgressIndicatorDefaults.LinearContainerHeight - ProgressWave.StrokeWidth) / 2)
               LinearWavyProgressIndicator(
                 progress = { book.progress },
                 modifier = Modifier.fillMaxWidth(),
@@ -119,9 +122,9 @@ internal fun ContinueListeningCard(
                 trackColor = colors.primary.copy(alpha = 0.2F),
                 stroke = stroke,
                 trackStroke = stroke,
-                amplitude = { if (playing) 0.7F else 0F },
-                wavelength = 44.dp,
-                waveSpeed = 8.8.dp,
+                amplitude = { if (playing) amplitude else 0F },
+                wavelength = ProgressWave.Wavelength,
+                waveSpeed = ProgressWave.Wavelength * ProgressWave.WavesPerSecond,
               )
               Spacer(Modifier.height(8.dp))
               // the time left gets its full width first, the percentage gives way on narrow cards
