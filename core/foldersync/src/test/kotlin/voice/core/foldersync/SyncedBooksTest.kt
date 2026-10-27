@@ -115,11 +115,28 @@ class SyncedBooksTest {
   }
 
   @Test
-  fun `what changed later wins, and on a tie this device's stays`() {
-    val mine = SyncedBook(place = place(playedAt = 2000), name = SyncedText("Mine", changedAt = 1000))
-    val other = SyncedBook(place = place(file = 0, playedAt = 1000), name = SyncedText("Other", changedAt = 3000))
+  fun `an author is changed now when it's changed here or put back to the files' one`() {
+    val own = SyncedBook(author = SyncedText("Old", changedAt = 1000))
 
-    assertEquals(SyncedBook(place = mine.place, name = other.name), mine.with(other))
+    assertEquals(SyncedText("New", changedAt = NOW), listOf(book(customAuthor = "New")).synced(own).author)
+    assertEquals(own.author, listOf(book(customAuthor = "Old")).synced(own).author)
+    assertEquals(SyncedText(value = null, changedAt = NOW), listOf(book(author = "Files")).synced(own).author)
+  }
+
+  @Test
+  fun `what changed later wins, and on a tie this device's stays`() {
+    val mine = SyncedBook(
+      place = place(playedAt = 2000),
+      name = SyncedText("Mine", changedAt = 1000),
+      author = SyncedText("Mine", changedAt = 3000),
+    )
+    val other = SyncedBook(
+      place = place(file = 0, playedAt = 1000),
+      name = SyncedText("Other", changedAt = 3000),
+      author = SyncedText("Other", changedAt = 1000),
+    )
+
+    assertEquals(SyncedBook(place = mine.place, name = other.name, author = mine.author), mine.with(other))
     assertEquals(mine, mine.with(mine.copy(name = SyncedText("Other", changedAt = 1000))))
   }
 
