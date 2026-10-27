@@ -36,6 +36,7 @@ import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
 import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
+import voice.core.playback.player.seekBackBy
 import voice.core.playback.session.CustomCommand
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.PlaybackService
@@ -238,37 +239,9 @@ class PlayerController(
     // Seeking first lets the auto rewind of the pause go back from there, instead of racing with it.
     controller.seekBackBy(
       rewind = rewind,
-      crossMediaItems = false,
+      crossMediaItems = true,
     )
     controller.pause()
-  }
-
-  private fun MediaController.seekBackBy(
-    rewind: Duration,
-    crossMediaItems: Boolean,
-  ) {
-    var currentPosition = currentPosition.takeUnless { it == C.TIME_UNSET }
-      ?.milliseconds
-      ?: return
-    var remaining = rewind
-    var mediaItemIndex = currentMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: return
-
-    while (remaining > currentPosition) {
-      if (!crossMediaItems) {
-        seekTo(mediaItemIndex, 0)
-        return
-      }
-      remaining -= currentPosition
-      val previousMediaItemIndex = mediaItemIndex - 1
-      if (previousMediaItemIndex < 0) {
-        seekTo(0)
-        return
-      }
-      currentPosition = getMediaItemAt(previousMediaItemIndex).mediaMetadata.durationMs?.milliseconds ?: return
-      mediaItemIndex = previousMediaItemIndex
-    }
-
-    seekTo(mediaItemIndex, (currentPosition - remaining).inWholeMilliseconds)
   }
 
   fun setSpeed(speed: Float) = executeAfterPrepare { controller ->
