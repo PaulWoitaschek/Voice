@@ -19,6 +19,7 @@ import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -26,13 +27,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
 import voice.core.ui.CoverTheme
 import voice.core.ui.PlayButton
+import voice.core.ui.ProgressWave
 import voice.core.ui.bookText
 import voice.core.ui.playButtonSharedElementModifier
 import voice.features.bookOverview.overview.BookOverviewItemViewState
@@ -105,12 +110,21 @@ internal fun ContinueListeningCard(
           Spacer(Modifier.height(16.dp))
           Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1F)) {
+              val density = LocalDensity.current
+              val stroke = remember(density) { Stroke(width = with(density) { ProgressWave.StrokeWidth.toPx() }, cap = StrokeCap.Round) }
+              // Material takes the amplitude as a share of the room the stroke leaves in its container
+              val amplitude =
+                ProgressWave.Amplitude / ((WavyProgressIndicatorDefaults.LinearContainerHeight - ProgressWave.StrokeWidth) / 2)
               LinearWavyProgressIndicator(
                 progress = { book.progress },
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.primary,
                 trackColor = colors.primary.copy(alpha = 0.2F),
-                amplitude = { if (playing) 1F else 0F },
+                stroke = stroke,
+                trackStroke = stroke,
+                amplitude = { if (playing) amplitude else 0F },
+                wavelength = ProgressWave.Wavelength,
+                waveSpeed = ProgressWave.Wavelength * ProgressWave.WavesPerSecond,
               )
               Spacer(Modifier.height(8.dp))
               // the time left gets its full width first, the percentage gives way on narrow cards
