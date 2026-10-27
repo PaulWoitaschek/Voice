@@ -34,6 +34,7 @@ Lean expressive: bold shapes, rich color, springy motion.
 - `VoiceTheme` wraps `MaterialExpressiveTheme`. Use the expressive components: `LargeFlexibleTopAppBar`,
   `AppBarWithSearch`, `ToggleButton` groups, `LoadingIndicator`, `LinearWavyProgressIndicator`,
   `HorizontalFloatingToolbar`, `FilterChip`. Titles use the `*Emphasized` type styles.
+- A book's progress that ripples while it plays uses `ProgressWave`, the wave of the player's seek bar.
 - Use sheets for new flows, not dialogs: a `ModalBottomSheet` with a header that shows what it's about (cover, title).
   Rename, delete, and book actions are examples.
 - Group related content in large rounded containers, like the 32dp islands in settings. For connected rows, use

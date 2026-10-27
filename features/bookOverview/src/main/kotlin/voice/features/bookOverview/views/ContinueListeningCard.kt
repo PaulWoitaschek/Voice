@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,12 +26,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
 import voice.core.ui.CoverTheme
 import voice.core.ui.PlayButton
+import voice.core.ui.ProgressWave
 import voice.core.ui.bookText
 import voice.core.ui.playButtonSharedElementModifier
 import voice.features.bookOverview.overview.BookOverviewItemViewState
@@ -105,32 +107,34 @@ internal fun ContinueListeningCard(
           Spacer(Modifier.height(16.dp))
           Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1F)) {
-              LinearWavyProgressIndicator(
-                progress = { book.progress },
-                modifier = Modifier.fillMaxWidth(),
-                color = colors.primary,
-                trackColor = colors.primary.copy(alpha = 0.2F),
-                amplitude = { if (playing) 1F else 0F },
-              )
-              Spacer(Modifier.height(8.dp))
-              // the time left gets its full width first, the percentage gives way on narrow cards
-              Row {
-                Text(
-                  modifier = Modifier.weight(1F),
-                  text = stringResource(R.string.playback_book_progress_read, percentFormat.format(book.progress.toDouble())),
-                  style = MaterialTheme.typography.labelLargeEmphasized,
-                  color = colors.primary,
-                  maxLines = 1,
-                  overflow = TextOverflow.Ellipsis,
+              // like in the player, the timeline runs left to right as on a tape, also in right to left layouts
+              CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                ProgressWave(
+                  progress = book.progress,
+                  playing = playing,
+                  modifier = Modifier.fillMaxWidth(),
+                  trackColor = colors.primary.copy(alpha = 0.2F),
                 )
-                Spacer(Modifier.width(8.dp))
-                Text(
-                  text = stringResource(R.string.playback_book_progress_remaining, book.remainingTime),
-                  style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
-                  maxLines = 1,
-                  softWrap = false,
-                  overflow = TextOverflow.Ellipsis,
-                )
+                Spacer(Modifier.height(8.dp))
+                // the time left gets its full width first, the percentage gives way on narrow cards
+                Row {
+                  Text(
+                    modifier = Modifier.weight(1F),
+                    text = stringResource(R.string.playback_book_progress_read, percentFormat.format(book.progress.toDouble())),
+                    style = MaterialTheme.typography.labelLargeEmphasized,
+                    color = colors.primary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                  )
+                  Spacer(Modifier.width(8.dp))
+                  Text(
+                    text = stringResource(R.string.playback_book_progress_remaining, book.remainingTime),
+                    style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                  )
+                }
               }
             }
             Spacer(Modifier.width(16.dp))
