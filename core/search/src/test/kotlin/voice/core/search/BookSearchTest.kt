@@ -5,6 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
+import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookContentRepoImpl
@@ -225,6 +226,64 @@ class BookSearchTest {
     }
   }
 
+  @Test
+  fun `a book the listener edited is still found by the name and author from its files`() {
+    val edited = book(name = "Track 01", author = "Dan Simmons").update {
+      it.withCustomName("Hyperion").withCustomAuthor("Simmons")
+    }
+    val tracker = book(name = "Tracker")
+    test(edited, tracker) {
+      expectSearchResult("hyperion", edited)
+      expectSearchResult("dan", edited)
+      expectSearchResult("track", tracker, edited)
+    }
+  }
+
+  @Test
+  fun `diacritics are ignored in greek too`() {
+    val greek = book(name = "Ελληνικά παραμύθια")
+    test(greek) {
+      expectSearchResult("ελληνικα", greek)
+    }
+  }
+
+  @Test
+  fun `hangul is found by its first syllables`() {
+    val korean = book(name = "해리 포터와 마법사의 돌")
+    test(korean) {
+      assertEquals(
+        expected = mapOf(BookSearchField.Title to listOf(0..1)),
+        actual = search.search("해리").single().matches,
+      )
+    }
+  }
+
+  @Test
+  fun `one typo per word is forgiven`() = test {
+    expectSearchResult("harry pottr", harryPotter1, harryPotter2)
+    expectSearchResult("ermrodung", commendatore)
+    expectSearchResult("murakamy", commendatore)
+    expectSearchResult("muraakami", commendatore)
+    expectSearchResult("rotfuss slow", kingkiller25)
+    expectSearchResult("murakmy")
+    expectSearchResult("fyr")
+    expectSearchResult("thex")
+    assertEquals(
+      expected = mapOf(BookSearchField.Title to listOf(0..11), BookSearchField.Series to listOf(0..11)),
+      actual = search.search("harry pottr").first().matches,
+    )
+  }
+
+  @Test
+  fun `typos only count when nothing matches as typed`() {
+    val king = book(name = "The Shining", author = "Stephen King")
+    val lohse = book(name = "Der Hals der Giraffe", author = "Stephan Lohse")
+    test(king, lohse) {
+      expectSearchResult("stephin", lohse, king)
+      expectSearchResult("stephen", king)
+    }
+  }
+
   private fun test(run: suspend TestBase.() -> Unit) = test(
     commendatore,
     watchtower,
@@ -247,13 +306,6 @@ class BookSearchTest {
       chapterRepo = ChapterRepoImpl(db.chapterDao()),
       contentRepo = contentRepo,
     )
-    val search = BookSearch(
-      contentRepo = contentRepo,
-      repo = repo,
-    )
-
-    val testBase = TestBase(search)
-
     suspend fun addBook(book: Book) {
       db.bookContentDao().insert(book.content)
       book.chapters.forEach {
@@ -262,6 +314,8 @@ class BookSearchTest {
     }
 
     runTest {
+      val search = BookSearch(repo, DispatcherProvider(coroutineContext, coroutineContext, coroutineContext, coroutineContext))
+      val testBase = TestBase(search)
       books.forEach { addBook(it) }
 
       // this ensures that inactive books are never accounted for

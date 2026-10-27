@@ -2,16 +2,12 @@ package voice.core.data.repo.internals.internals.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import androidx.room.Room
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.runner.RunWith
-import voice.core.data.BookId
 import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.allMigrations
 import voice.core.data.repo.internals.getString
@@ -50,27 +46,6 @@ class Migration66to67Test {
       ),
       actual = rows.sortedBy { it.first() },
     )
-  }
-
-  @Test
-  fun `books are found by their names after the migration`() = runTest {
-    helper.createDatabase(DB_NAME, 66).use {
-      it.insert(book(id = "content://book", name = "Dune"))
-    }
-    // opened like the app does, which sets up the search again after migrating
-    val db = Room.databaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java, DB_NAME)
-      .addMigrations(*allMigrations())
-      .allowMainThreadQueries()
-      .build()
-    db.openHelper.writableDatabase.insert(
-      book(id = "content://other", name = "Track 01").apply { put("customName", "Hyperion") },
-    )
-    val dao = db.bookContentDao()
-
-    assertEquals(expected = listOf(BookId("content://book")), actual = dao.search("dune*"))
-    assertEquals(expected = listOf(BookId("content://other")), actual = dao.search("hyperion*"))
-    assertEquals(expected = listOf(BookId("content://other")), actual = dao.search("track*"))
-    db.close()
   }
 
   private fun migrate(atVersion66: SupportSQLiteDatabase.() -> Unit): SupportSQLiteDatabase {

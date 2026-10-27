@@ -35,14 +35,12 @@ class BookContentRepoImplTest {
 
   private fun content(
     name: String,
-    author: String?,
-    isActive: Boolean = true,
     chapters: List<ChapterId> = listOf(ChapterId("chapter")),
   ) = BookContent(
     id = BookId(name),
     playbackSpeed = 1F,
     skipSilence = false,
-    isActive = isActive,
+    isActive = true,
     lastPlayedAt = Instant.EPOCH,
     addedAt = Instant.EPOCH,
     chapters = chapters,
@@ -51,7 +49,7 @@ class BookContentRepoImplTest {
     gain = 0F,
     metadata = BookMetadata(
       name = name,
-      author = author,
+      author = null,
       album = null,
       title = null,
       genre = null,
@@ -67,40 +65,6 @@ class BookContentRepoImplTest {
   )
 
   @Test
-  fun `search finds the active books with a word starting with each prefix`() = runTest {
-    val wind = content(name = "The Name of the Wind", author = "Patrick Rothfuss")
-    val shining = content(name = "The Shining", author = "Stephen King")
-    repo.put(wind)
-    repo.put(shining)
-    repo.put(content(name = "The Wise Man's Fear", author = "Patrick Rothfuss", isActive = false))
-
-    assertEquals(listOf(wind.id), repo.search(listOf("roth")))
-    assertEquals(listOf(wind.id), repo.search(listOf("pat", "wi")))
-    assertEquals(emptyList(), repo.search(listOf("roth", "king")))
-    assertEquals(listOf(wind.id, shining.id), repo.search(listOf("the")).sortedBy { it.value })
-  }
-
-  @Test
-  fun `search finds a book by the name the listener gave it and the name from its files`() = runTest {
-    val book = content(name = "Track 01", author = null).withCustomName("Dune")
-    repo.put(book)
-
-    assertEquals(listOf(book.id), repo.search(listOf("dune")))
-    assertEquals(listOf(book.id), repo.search(listOf("track")))
-  }
-
-  @Test
-  fun `search reads prefixes as text, not as query syntax`() = runTest {
-    val shining = content(name = "The Shining", author = "Stephen King")
-    repo.put(shining)
-
-    assertEquals(listOf(shining.id), repo.search(listOf("king\"", "(shin")))
-    assertEquals(emptyList(), repo.search(listOf("king", "OR", "carrie")))
-    assertEquals(emptyList(), repo.search(listOf("\"", "*", "-")))
-    assertEquals(emptyList(), repo.search(emptyList()))
-  }
-
-  @Test
   fun `a book with as many chapters as fit into one book can be read back`() = runTest {
     val folder = "content://com.android.externalstorage.documents/tree/primary%3AAudiobooks" +
       "/document/primary%3AAudiobooks%2FA%20very%20long%20book"
@@ -111,7 +75,7 @@ class BookContentRepoImplTest {
     assertFalse((chapters + chapterId(chapters.size)).fitIntoOneBook())
     assertTrue(Converters().fromChapterList(chapters).length > MAX_CHAPTER_IDS_BYTES - idBytes)
 
-    val book = content(name = "A very long book", author = null, chapters = chapters)
+    val book = content(name = "A very long book", chapters = chapters)
     repo.put(book)
 
     assertEquals(listOf(book), BookContentRepoImpl(db.bookContentDao()).all())

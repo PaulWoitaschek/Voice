@@ -9,6 +9,7 @@ data class DispatcherProvider(
   val main: CoroutineContext = Dispatchers.Main,
   val io: CoroutineContext = Dispatchers.IO,
   val mainImmediate: CoroutineContext = Dispatchers.Main.immediate,
+  val default: CoroutineContext = Dispatchers.Default,
 )
 
 @Suppress("FunctionName")

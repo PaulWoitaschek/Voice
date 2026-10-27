@@ -16,6 +16,4 @@ public interface BookContentRepo {
   public suspend fun setAllInactiveExcept(ids: List<BookId>)
 
   public suspend fun put(content: BookContent)
-
-  public suspend fun search(wordPrefixes: List<String>): List<BookId>
 }
