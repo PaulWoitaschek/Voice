@@ -423,7 +423,7 @@
     <string name="sleep_timer.dialog.action.decrement">缩短</string>
     <string name="sleep_timer.dialog.action.increment">延长</string>
     <string name="sleep_timer.dialog.minutes_short">分钟</string>
-    <string name="sleep_timer.dialog.shake_hint">定时器结束后立即摇一摇手机，即可重新开始计时。</string>
+    <string name="sleep_timer.dialog.shake_hint">声音渐弱时摇一摇手机，或在结束后立即继续播放，即可重新开始计时。</string>
     <string name="sleep_timer.dialog.title">睡眠定时器</string>
     <string name="sleep_timer.end_of_chapter">本章结束</string>
     <string name="time.relative.last_night">昨晚</string>

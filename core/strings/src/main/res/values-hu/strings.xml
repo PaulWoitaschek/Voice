@@ -441,7 +441,7 @@
     <string name="sleep_timer.dialog.action.decrement">Rövidebb</string>
     <string name="sleep_timer.dialog.action.increment">Hosszabb</string>
     <string name="sleep_timer.dialog.minutes_short">perc</string>
-    <string name="sleep_timer.dialog.shake_hint">Közvetlenül az időzítő lejárta után rázza meg a telefont az újraindításhoz.</string>
+    <string name="sleep_timer.dialog.shake_hint">Rázza meg a telefont, amíg a hang elhalkul, vagy közvetlenül utána folytassa a lejátszást az időzítő újraindításához.</string>
     <string name="sleep_timer.dialog.title">Alvásidőzítő</string>
     <string name="sleep_timer.end_of_chapter">Fejezet vége</string>
     <string name="time.relative.last_night">Tegnap este</string>

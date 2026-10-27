@@ -459,7 +459,7 @@
     <string name="sleep_timer.dialog.action.decrement">Mai scurtă</string>
     <string name="sleep_timer.dialog.action.increment">Mai lungă</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Scutură telefonul imediat după ce expiră temporizatorul pentru a-l reporni.</string>
+    <string name="sleep_timer.dialog.shake_hint">Scutură telefonul în timp ce sunetul se stinge sau reia redarea imediat după aceea pentru a reporni temporizatorul.</string>
     <string name="sleep_timer.dialog.title">Oprire temporizată</string>
     <string name="sleep_timer.end_of_chapter">Sfârșitul capitolului</string>
     <string name="time.relative.last_night">Aseară</string>

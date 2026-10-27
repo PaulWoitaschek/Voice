@@ -459,7 +459,7 @@
     <string name="sleep_timer.dialog.action.decrement">Più breve</string>
     <string name="sleep_timer.dialog.action.increment">Più a lungo</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Scuoti il telefono subito dopo la fine del timer per farlo ripartire.</string>
+    <string name="sleep_timer.dialog.shake_hint">Scuoti il telefono mentre il suono si affievolisce, o riprendi la riproduzione subito dopo, per far ripartire il timer.</string>
     <string name="sleep_timer.dialog.title">Timer sospensione</string>
     <string name="sleep_timer.end_of_chapter">Fine del capitolo</string>
     <string name="time.relative.last_night">Ieri sera</string>

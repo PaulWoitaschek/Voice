@@ -28,4 +28,23 @@ internal class SleepTimerTracker(private val analytics: Analytics) {
   fun disabled() {
     analytics.event("sleep_timer_disabled")
   }
+
+  fun restarted(trigger: RestartTrigger) {
+    analytics.event(
+      "sleep_timer_restarted",
+      mapOf(
+        "trigger" to when (trigger) {
+          RestartTrigger.ShakeWhileFading -> "shake_while_fading"
+          RestartTrigger.ShakeAfterPause -> "shake_after_pause"
+          RestartTrigger.Play -> "play"
+        },
+      ),
+    )
+  }
+}
+
+internal enum class RestartTrigger {
+  ShakeWhileFading,
+  ShakeAfterPause,
+  Play,
 }

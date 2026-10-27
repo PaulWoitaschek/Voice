@@ -441,7 +441,7 @@
     <string name="sleep_timer.dialog.action.decrement">Lühem</string>
     <string name="sleep_timer.dialog.action.increment">Pikem</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Raputa telefoni kohe pärast taimeri lõppu, et see uuesti käivitada.</string>
+    <string name="sleep_timer.dialog.shake_hint">Raputa telefoni, kui heli vaibub, või jätka esitamist kohe pärast seda, et taimer uuesti käivitada.</string>
     <string name="sleep_timer.dialog.title">Unetaimer</string>
     <string name="sleep_timer.end_of_chapter">Peatüki lõpp</string>
     <string name="time.relative.last_night">Möödunud öösel</string>

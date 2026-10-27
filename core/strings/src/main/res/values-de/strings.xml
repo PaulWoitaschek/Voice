@@ -441,7 +441,7 @@
     <string name="sleep_timer.dialog.action.decrement">Kürzer</string>
     <string name="sleep_timer.dialog.action.increment">Länger</string>
     <string name="sleep_timer.dialog.minutes_short">Min.</string>
-    <string name="sleep_timer.dialog.shake_hint">Schüttle Dein Handy direkt nach Ablauf des Timers, um ihn neu zu starten.</string>
+    <string name="sleep_timer.dialog.shake_hint">Schüttle Dein Handy, während der Ton leiser wird, oder setz die Wiedergabe gleich danach fort, um den Timer neu zu starten.</string>
     <string name="sleep_timer.dialog.title">Einschlaf-Timer</string>
     <string name="sleep_timer.end_of_chapter">Kapitelende</string>
     <string name="time.relative.last_night">Letzte Nacht</string>

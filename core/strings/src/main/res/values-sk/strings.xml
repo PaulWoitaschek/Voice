@@ -477,7 +477,7 @@
     <string name="sleep_timer.dialog.action.decrement">Kratšie</string>
     <string name="sleep_timer.dialog.action.increment">Dlhšie</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Zatraste telefónom hneď po skončení časovača a znova ho spustíte.</string>
+    <string name="sleep_timer.dialog.shake_hint">Zatraste telefónom, keď zvuk slabne, alebo hneď potom obnovte prehrávanie, a časovač sa znova spustí.</string>
     <string name="sleep_timer.dialog.title">Časovač spánku</string>
     <string name="sleep_timer.end_of_chapter">Koniec kapitoly</string>
     <string name="time.relative.last_night">Včera v noci</string>

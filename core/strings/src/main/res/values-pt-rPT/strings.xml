@@ -459,7 +459,7 @@
     <string name="sleep_timer.dialog.action.decrement">Mais curto</string>
     <string name="sleep_timer.dialog.action.increment">Mais longo</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Agite o telemóvel logo após o fim do temporizador para o reiniciar.</string>
+    <string name="sleep_timer.dialog.shake_hint">Agite o telemóvel enquanto o som diminui, ou retome a reprodução logo a seguir, para reiniciar o temporizador.</string>
     <string name="sleep_timer.dialog.title">Temporizador</string>
     <string name="sleep_timer.end_of_chapter">Fim do capítulo</string>
     <string name="time.relative.last_night">Ontem à noite</string>

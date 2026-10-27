@@ -441,7 +441,7 @@
     <string name="sleep_timer.dialog.action.decrement">நேரத்தைக் குறை</string>
     <string name="sleep_timer.dialog.action.increment">நேரத்தை அதிகரி</string>
     <string name="sleep_timer.dialog.minutes_short">நிமி</string>
-    <string name="sleep_timer.dialog.shake_hint">டைமர் முடிந்தவுடன் அதை மீண்டும் தொடங்க உங்கள் போனை குலுக்கவும்.</string>
+    <string name="sleep_timer.dialog.shake_hint">ஒலி மங்கும்போது உங்கள் போனை குலுக்கினால் அல்லது அதன் பிறகு உடனே மீண்டும் இயக்கினால், டைமர் மீண்டும் தொடங்கும்.</string>
     <string name="sleep_timer.dialog.title">ஸ்லீப் டைமர்</string>
     <string name="sleep_timer.end_of_chapter">அத்தியாயத்தின் முடிவு</string>
     <string name="time.relative.last_night">நேற்றிரவு</string>

@@ -441,7 +441,7 @@
     <string name="sleep_timer.dialog.action.decrement">Lyhennä</string>
     <string name="sleep_timer.dialog.action.increment">Pidennä</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Ravista puhelinta heti ajastimen päätyttyä, niin se käynnistyy uudelleen.</string>
+    <string name="sleep_timer.dialog.shake_hint">Ravista puhelinta äänen hiljentyessä tai jatka toistoa heti sen jälkeen, niin ajastin käynnistyy uudelleen.</string>
     <string name="sleep_timer.dialog.title">Uniajastin</string>
     <string name="sleep_timer.end_of_chapter">Luvun loppu</string>
     <string name="time.relative.last_night">Viime yönä</string>
