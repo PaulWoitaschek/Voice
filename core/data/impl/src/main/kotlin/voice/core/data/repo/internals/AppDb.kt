@@ -21,7 +21,6 @@ import voice.core.data.repo.internals.migrations.Migration62
 import voice.core.data.repo.internals.migrations.Migration64
 import voice.core.data.repo.internals.migrations.Migration66
 import voice.core.data.repo.internals.migrations.Migration67
-import voice.core.data.repo.internals.migrations.Migration68
 
 @Database(
   entities = [
@@ -47,7 +46,6 @@ import voice.core.data.repo.internals.migrations.Migration68
     AutoMigration(from = 64, to = 65, spec = Migration64::class),
     AutoMigration(from = 66, to = 67, spec = Migration66::class),
     AutoMigration(from = 67, to = 68, spec = Migration67::class),
-    AutoMigration(from = 68, to = 69, spec = Migration68::class),
   ],
 )
 @TypeConverters(Converters::class)
@@ -64,7 +62,7 @@ public abstract class AppDb : RoomDatabase() {
   public abstract fun listeningSessionDao(): ListeningSessionDao
 
   internal companion object {
-    const val VERSION = 69
+    const val VERSION = 68
     const val DATABASE_NAME = "autoBookDB"
   }
 }
