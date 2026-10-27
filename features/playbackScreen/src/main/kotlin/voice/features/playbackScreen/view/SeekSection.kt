@@ -39,8 +39,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -56,13 +64,14 @@ import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import voice.core.ui.animateWaveAmplitude
-import voice.core.ui.drawProgressWave
 import voice.core.ui.formatTime
 import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState
+import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.math.sin
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import voice.core.strings.R as StringsR
@@ -222,7 +231,11 @@ private fun WavySeekBar(
 ) {
   val colors = MaterialTheme.colorScheme
   val haptics = LocalHapticFeedback.current
-  val amplitude by animateWaveAmplitude(wavy)
+  val amplitude by animateFloatAsState(
+    targetValue = if (wavy) 1F else 0F,
+    animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
+    label = "waveAmplitude",
+  )
   val thumbWidth by animateDpAsState(
     targetValue = if (dragging) 3.dp else 5.dp,
     label = "thumbWidth",
@@ -286,16 +299,15 @@ private fun WavySeekBar(
           .drawWithCache {
             val wavePath = Path()
             onDrawBehind {
-              drawProgressWave(
+              drawWavyTrack(
                 path = wavePath,
                 fraction = currentFraction,
-                amplitude = amplitude,
-                seconds = clock(),
-                color = colors.primary,
-                trackColor = colors.secondaryContainer,
-                inset = HorizontalInset.toPx(),
+                amplitudeFactor = amplitude,
+                phase = clock() * 2F * PI.toFloat() * 0.2F,
                 thumbWidth = thumbWidth.toPx(),
                 thumbHeight = thumbHeight.toPx(),
+                activeColor = colors.primary,
+                inactiveColor = colors.secondaryContainer,
               )
             }
           },
@@ -330,6 +342,63 @@ private fun WavySeekBar(
       bubble.place(x, -bubble.height + 2.dp.roundToPx())
     }
   }
+}
+
+private fun DrawScope.drawWavyTrack(
+  path: Path,
+  fraction: Float,
+  amplitudeFactor: Float,
+  phase: Float,
+  thumbWidth: Float,
+  thumbHeight: Float,
+  activeColor: Color,
+  inactiveColor: Color,
+) {
+  val inset = HorizontalInset.toPx()
+  val strokeWidth = 5.dp.toPx()
+  val gap = 5.dp.toPx()
+  val centerY = size.height / 2
+  val end = size.width - inset
+  val thumbX = inset + (end - inset) * fraction
+  val amplitude = 1.75.dp.toPx() * amplitudeFactor
+  val wavelength = 44.dp.toPx()
+  val step = 1.5.dp.toPx()
+
+  val activeEnd = thumbX - thumbWidth / 2 - gap
+  if (activeEnd > inset) {
+    path.reset()
+    var x = inset
+    path.moveTo(x, centerY + amplitude * sin(phase))
+    while (x < activeEnd) {
+      x = min(x + step, activeEnd)
+      val angle = (x - inset) / wavelength * 2F * PI.toFloat() + phase
+      path.lineTo(x, centerY + amplitude * sin(angle))
+    }
+    drawPath(
+      path = path,
+      color = activeColor,
+      style = Stroke(width = strokeWidth, cap = StrokeCap.Round, join = StrokeJoin.Round),
+    )
+  }
+
+  val inactiveStart = thumbX + thumbWidth / 2 + gap
+  if (inactiveStart < end) {
+    drawLine(
+      color = inactiveColor,
+      start = Offset(inactiveStart, centerY),
+      end = Offset(end, centerY),
+      strokeWidth = strokeWidth,
+      cap = StrokeCap.Round,
+    )
+    drawCircle(color = activeColor, radius = 1.5.dp.toPx(), center = Offset(end, centerY))
+  }
+
+  drawRoundRect(
+    color = activeColor,
+    topLeft = Offset(thumbX - thumbWidth / 2, centerY - thumbHeight / 2),
+    size = Size(thumbWidth, thumbHeight),
+    cornerRadius = CornerRadius(thumbWidth / 2),
+  )
 }
 
 /**
