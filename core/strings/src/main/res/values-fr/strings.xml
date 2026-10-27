@@ -459,7 +459,7 @@
     <string name="sleep_timer.dialog.action.decrement">Moins long</string>
     <string name="sleep_timer.dialog.action.increment">Plus long</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Secouez votre téléphone juste après la fin de la minuterie pour la relancer.</string>
+    <string name="sleep_timer.dialog.shake_hint">Secouez votre téléphone pendant que le son s\'estompe, ou reprenez la lecture juste après, pour relancer la minuterie.</string>
     <string name="sleep_timer.dialog.title">Minuterie de mise en veille</string>
     <string name="sleep_timer.end_of_chapter">Fin du chapitre</string>
     <string name="time.relative.last_night">Hier soir</string>

@@ -441,7 +441,7 @@
     <string name="sleep_timer.dialog.action.decrement">Λιγότερο</string>
     <string name="sleep_timer.dialog.action.increment">Περισσότερο</string>
     <string name="sleep_timer.dialog.minutes_short">λεπ.</string>
-    <string name="sleep_timer.dialog.shake_hint">Κουνήστε το τηλέφωνό σας αμέσως μόλις λήξει ο χρονοδιακόπτης για να τον ξεκινήσετε ξανά.</string>
+    <string name="sleep_timer.dialog.shake_hint">Κουνήστε το τηλέφωνό σας όσο ο ήχος χαμηλώνει ή συνεχίστε την αναπαραγωγή αμέσως μετά για να ξεκινήσει ξανά ο χρονοδιακόπτης.</string>
     <string name="sleep_timer.dialog.title">Χρονοδιακόπτης ύπνου</string>
     <string name="sleep_timer.end_of_chapter">Τέλος κεφαλαίου</string>
     <string name="time.relative.last_night">Χθες βράδυ</string>

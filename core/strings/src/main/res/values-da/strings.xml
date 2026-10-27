@@ -441,7 +441,7 @@
     <string name="sleep_timer.dialog.action.decrement">Kortere</string>
     <string name="sleep_timer.dialog.action.increment">Længere</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Ryst telefonen lige efter, at timeren er udløbet, for at starte den igen.</string>
+    <string name="sleep_timer.dialog.shake_hint">Ryst telefonen, mens lyden toner ud, eller genoptag afspilningen lige efter for at starte timeren igen.</string>
     <string name="sleep_timer.dialog.title">Sleep-timer</string>
     <string name="sleep_timer.end_of_chapter">Kapitlets slutning</string>
     <string name="time.relative.last_night">I nat</string>

@@ -459,7 +459,7 @@
     <string name="sleep_timer.dialog.action.decrement">קצר יותר</string>
     <string name="sleep_timer.dialog.action.increment">ארוך יותר</string>
     <string name="sleep_timer.dialog.minutes_short">דק׳</string>
-    <string name="sleep_timer.dialog.shake_hint">נערו את הטלפון מיד אחרי שהטיימר מסתיים כדי להפעיל אותו מחדש.</string>
+    <string name="sleep_timer.dialog.shake_hint">נערו את הטלפון בזמן שהצליל דועך, או המשיכו את ההשמעה מיד אחר כך, כדי להפעיל את הטיימר מחדש.</string>
     <string name="sleep_timer.dialog.title">טיימר-שינה</string>
     <string name="sleep_timer.end_of_chapter">סוף פרק</string>
     <string name="time.relative.last_night">אתמול בלילה</string>

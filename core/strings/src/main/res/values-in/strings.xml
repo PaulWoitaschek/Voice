@@ -423,7 +423,7 @@
     <string name="sleep_timer.dialog.action.decrement">Lebih singkat</string>
     <string name="sleep_timer.dialog.action.increment">Lebih lama</string>
     <string name="sleep_timer.dialog.minutes_short">mnt</string>
-    <string name="sleep_timer.dialog.shake_hint">Goyangkan ponsel Anda segera setelah pengatur waktu berakhir untuk memulainya lagi.</string>
+    <string name="sleep_timer.dialog.shake_hint">Goyangkan ponsel Anda saat suara memudar, atau lanjutkan pemutaran segera setelahnya, untuk memulai ulang pengatur waktu.</string>
     <string name="sleep_timer.dialog.title">Pengatur waktu tidur</string>
     <string name="sleep_timer.end_of_chapter">Akhir bab</string>
     <string name="time.relative.last_night">Tadi malam</string>

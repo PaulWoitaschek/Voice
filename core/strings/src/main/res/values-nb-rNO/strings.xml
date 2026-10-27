@@ -441,7 +441,7 @@
     <string name="sleep_timer.dialog.action.decrement">Kortere</string>
     <string name="sleep_timer.dialog.action.increment">Lengre</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Rist telefonen rett etter at tidsuret er ferdig for å starte det på nytt.</string>
+    <string name="sleep_timer.dialog.shake_hint">Rist telefonen mens lyden tones ut, eller fortsett avspillingen rett etterpå, for å starte tidsuret på nytt.</string>
     <string name="sleep_timer.dialog.title">Innsovningstidsur</string>
     <string name="sleep_timer.end_of_chapter">Kapittelslutt</string>
     <string name="time.relative.last_night">I natt</string>

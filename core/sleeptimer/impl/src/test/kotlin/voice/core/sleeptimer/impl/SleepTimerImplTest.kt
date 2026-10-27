@@ -6,7 +6,8 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
@@ -18,6 +19,7 @@ import voice.core.data.ListeningEvent
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.FadeOutStore
+import voice.core.sleeptimer.RestartTrigger
 import voice.core.sleeptimer.ShakeDetector
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerImpl
@@ -25,19 +27,30 @@ import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerPreference
 import voice.core.sleeptimer.SleepTimerPreferenceStore
 import voice.core.sleeptimer.SleepTimerState
+import voice.core.sleeptimer.SleepTimerTracker
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 private class TestShakeDetector : ShakeDetector {
-  private val shakes = Channel<Unit>(capacity = Channel.UNLIMITED)
+  private val shakes = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+  var detecting = false
+    private set
+
   override suspend fun detect() {
-    shakes.receive()
+    detecting = true
+    try {
+      shakes.first()
+    } finally {
+      detecting = false
+    }
   }
 
   fun shake() {
-    shakes.trySend(Unit)
+    shakes.tryEmit(Unit)
   }
 }
 
@@ -63,6 +76,7 @@ class SleepTimerImplTest {
   }
 
   private val fadeOutStore = MemoryDataStore(2.seconds)
+  private val tracker = mockk<SleepTimerTracker>(relaxed = true)
   private val testDispatcher = StandardTestDispatcher()
   private val testScope = TestScope(testDispatcher)
 
@@ -77,7 +91,7 @@ class SleepTimerImplTest {
       playerController,
       FadeOutStore(fadeOutStore),
       dispatcherProvider,
-      tracker = mockk(relaxed = true),
+      tracker,
     )
   }
 
@@ -169,5 +183,87 @@ class SleepTimerImplTest {
 
     coVerify(exactly = 2) { playerController.pauseWithRewind(any()) }
     assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+    verify(exactly = 1) { tracker.restarted(RestartTrigger.ShakeAfterPause) }
+  }
+
+  @Test
+  fun `shaking during the fade-out restarts the timer without pausing`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(10.seconds))
+    advanceTimeBy(9.seconds)
+    runCurrent()
+    assertTrue(shakeDetector.detecting)
+
+    shakeDetector.shake()
+    advanceTimeBy(200.milliseconds)
+    runCurrent()
+
+    assertEquals(expected = SleepTimerState.Enabled.WithDuration(10.seconds), actual = sleepTimer.state.value)
+    assertEquals(expected = 1F, actual = setVolumeSlots.last())
+    verify(exactly = 0) { playerController.pauseWithRewind(any()) }
+    verify(exactly = 0) { playerController.play(any()) }
+    verify { playerController.record(ListeningEvent.Type.SleepTimerExtended, ListeningEvent.Source.SleepTimer) }
+    verify { tracker.restarted(RestartTrigger.ShakeWhileFading) }
+  }
+
+  @Test
+  fun `shaking before the fade-out does nothing`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(10.seconds))
+    advanceTimeBy(5.seconds)
+    runCurrent()
+    assertFalse(shakeDetector.detecting)
+
+    shakeDetector.shake()
+    advanceTimeBy(5.seconds + 100.milliseconds)
+    runCurrent()
+
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+    verify(exactly = 1) { playerController.pauseWithRewind(any()) }
+    verify(exactly = 0) { tracker.restarted(any()) }
+  }
+
+  @Test
+  fun `pressing play right after the timer ended restarts it`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(5.seconds))
+    advanceTimeBy(6.seconds)
+    runCurrent()
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+    runCurrent()
+
+    assertEquals(expected = SleepTimerState.Enabled.WithDuration(5.seconds), actual = sleepTimer.state.value)
+    verify(exactly = 0) { playerController.play(any()) }
+    verify { playerController.record(ListeningEvent.Type.SleepTimerStarted, ListeningEvent.Source.SleepTimer) }
+    verify { tracker.restarted(RestartTrigger.Play) }
+  }
+
+  @Test
+  fun `a pause that takes effect late is not mistaken for pressing play`() = testScope.runTest {
+    every { playerController.pauseWithRewind(any()) } just Runs
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(5.seconds))
+    advanceTimeBy(6.seconds)
+    runCurrent()
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+
+    playStateManager.playState = PlayStateManager.PlayState.Paused
+    runCurrent()
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+    runCurrent()
+    assertEquals(expected = SleepTimerState.Enabled.WithDuration(5.seconds), actual = sleepTimer.state.value)
+  }
+
+  @Test
+  fun `pressing play after the window keeps playing without a timer`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDuration(5.seconds))
+    advanceTimeBy(6.seconds + SleepTimerImpl.SHAKE_TO_RESET_TIME)
+    runCurrent()
+
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+    runCurrent()
+
+    assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+    verify(exactly = 0) { tracker.restarted(any()) }
   }
 }

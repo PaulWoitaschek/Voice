@@ -33,6 +33,22 @@ class ShakeWindowTest {
   }
 
   @Test
+  fun `a shake passing zero between swings is detected`() {
+    val accelerating = listOf(true, true, false, false, true, true, true, false, false, true)
+    accelerating.dropLast(1).forEachIndexed { index, value ->
+      assertFalse(window.add((index * 30).milliseconds, value))
+    }
+    assertTrue(window.add(270.milliseconds, accelerating.last()))
+  }
+
+  @Test
+  fun `no shake when only half of the samples are accelerating`() {
+    repeat(20) {
+      assertFalse(window.add((it * 30).milliseconds, accelerating = it % 2 == 0))
+    }
+  }
+
+  @Test
   fun `samples older than the maximum window are dropped`() {
     repeat(10) {
       assertFalse(window.add((it * 20).milliseconds, accelerating = false))

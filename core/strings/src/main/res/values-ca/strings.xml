@@ -459,7 +459,7 @@
     <string name="sleep_timer.dialog.action.decrement">Més curt</string>
     <string name="sleep_timer.dialog.action.increment">Més llarg</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Sacsegeu el telèfon just després que s\'acabi el temporitzador per tornar-lo a iniciar.</string>
+    <string name="sleep_timer.dialog.shake_hint">Sacsegeu el telèfon mentre el so s\'esvaeix, o reprengueu la reproducció just després, per tornar a iniciar el temporitzador.</string>
     <string name="sleep_timer.dialog.title">Temporitzador de repòs</string>
     <string name="sleep_timer.end_of_chapter">Final del capítol</string>
     <string name="time.relative.last_night">Ahir a la nit</string>

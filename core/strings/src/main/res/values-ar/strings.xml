@@ -513,7 +513,7 @@
     <string name="sleep_timer.dialog.action.decrement">أقصر</string>
     <string name="sleep_timer.dialog.action.increment">أطول</string>
     <string name="sleep_timer.dialog.minutes_short">دقيقة</string>
-    <string name="sleep_timer.dialog.shake_hint">يكفي هزّ هاتفك فور انتهاء المؤقت لإعادة تشغيله.</string>
+    <string name="sleep_timer.dialog.shake_hint">يكفي هزّ هاتفك أثناء خفوت الصوت، أو استئناف التشغيل فور انتهاء المؤقت، لإعادة بدء المؤقت.</string>
     <string name="sleep_timer.dialog.title">مؤقت النوم</string>
     <string name="sleep_timer.end_of_chapter">نهاية الفصل</string>
     <string name="time.relative.last_night">الليلة الماضية</string>

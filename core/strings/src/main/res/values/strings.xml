@@ -787,8 +787,8 @@
     <string name="sleep_timer.dialog.action.increment">Longer</string>
     <!-- Short unit label for minutes, shown below a sleep timer preset number like "15". -->
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <!-- Hint at the bottom of the sleep timer dialog: shaking the phone shortly after the timer ran out resumes playback and restarts the timer. -->
-    <string name="sleep_timer.dialog.shake_hint">Shake your phone right after the timer ends to restart it.</string>
+    <!-- Hint at the bottom of the sleep timer dialog. Before the timer runs out, the sound fades out over a few seconds. Shaking the phone then, or within 30 seconds after playback paused, restarts the timer. Pressing play (in the app, on headphones or in the notification) within those 30 seconds also restarts it. -->
+    <string name="sleep_timer.dialog.shake_hint">Shake your phone as the sound fades out, or press play right after, to restart the timer.</string>
     <!-- Title of the sleep timer dialog. -->
     <string name="sleep_timer.dialog.title">Sleep timer</string>
     <!-- Sleep timer option and playback status for stopping at the end of a chapter. -->

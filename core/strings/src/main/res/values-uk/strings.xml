@@ -477,7 +477,7 @@
     <string name="sleep_timer.dialog.action.decrement">Коротше</string>
     <string name="sleep_timer.dialog.action.increment">Довше</string>
     <string name="sleep_timer.dialog.minutes_short">хв</string>
-    <string name="sleep_timer.dialog.shake_hint">Струсніть телефон одразу після завершення таймера, щоб запустити його знову.</string>
+    <string name="sleep_timer.dialog.shake_hint">Струсніть телефон, поки звук затихає, або одразу після цього продовжте відтворення, щоб запустити таймер знову.</string>
     <string name="sleep_timer.dialog.title">Таймер сну</string>
     <string name="sleep_timer.end_of_chapter">Кінець розділу</string>
     <string name="time.relative.last_night">Минулої ночі</string>

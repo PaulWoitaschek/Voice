@@ -423,7 +423,7 @@
     <string name="sleep_timer.dialog.action.decrement">短くする</string>
     <string name="sleep_timer.dialog.action.increment">長くする</string>
     <string name="sleep_timer.dialog.minutes_short">分</string>
-    <string name="sleep_timer.dialog.shake_hint">タイマー終了直後にスマートフォンを振ると、タイマーを再開できます。</string>
+    <string name="sleep_timer.dialog.shake_hint">音が小さくなっている間にスマートフォンを振るか、終了直後に再生すると、タイマーがもう一度始まります。</string>
     <string name="sleep_timer.dialog.title">スリープタイマー</string>
     <string name="sleep_timer.end_of_chapter">チャプターの終わり</string>
     <string name="time.relative.last_night">昨夜</string>

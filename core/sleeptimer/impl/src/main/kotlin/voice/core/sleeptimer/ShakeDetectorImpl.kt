@@ -41,8 +41,8 @@ class ShakeDetectorImpl(private val context: Context) : ShakeDetector {
   }
 }
 
-// In m/s², including gravity
-private const val ACCELERATION_THRESHOLD = 13F
+// In m/s², including gravity. Lower values get too close to gravity alone on devices whose accelerometer is a bit off.
+private const val ACCELERATION_THRESHOLD = 12F
 
 private fun SensorEvent.isAccelerating(): Boolean {
   val (x, y, z) = values

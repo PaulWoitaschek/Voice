@@ -43,10 +43,13 @@ If you’re running an Android release that’s not supported by the latest Voic
 
 ### How do I resume playback after the sleep timer stops?
 
-Once the sleep timer elapses, Voice pauses playback (after a brief fade-out). To keep listening, you have two options:
+Before the sleep timer elapses, the sound fades out for a few seconds, then Voice pauses playback. To keep listening,
+you have two options:
 
-- **Shake to resume**: Shake your device within 30 seconds of pause to restart playback.
-- **Open to resume**: Open the App and simply press on play again
+- **Shake to keep listening**: Shake your device while the sound fades out, or within 30 seconds of the pause. The
+  sleep timer starts again.
+- **Press play**: Press play within 30 seconds of the pause, in the app, in the notification or on your headphones,
+  and the sleep timer starts again. If you press play later, Voice keeps playing without a sleep timer.
 
 !!! warning
 

@@ -477,7 +477,7 @@
     <string name="sleep_timer.dialog.action.decrement">Krócej</string>
     <string name="sleep_timer.dialog.action.increment">Dłużej</string>
     <string name="sleep_timer.dialog.minutes_short">min</string>
-    <string name="sleep_timer.dialog.shake_hint">Potrząśnij telefonem tuż po upływie czasu, aby ponownie uruchomić wyłącznik czasowy.</string>
+    <string name="sleep_timer.dialog.shake_hint">Potrząśnij telefonem, gdy dźwięk cichnie, albo zaraz potem wznów odtwarzanie, aby ponownie uruchomić wyłącznik czasowy.</string>
     <string name="sleep_timer.dialog.title">Wyłącznik czasowy</string>
     <string name="sleep_timer.end_of_chapter">Koniec rozdziału</string>
     <string name="time.relative.last_night">Zeszłej nocy</string>
