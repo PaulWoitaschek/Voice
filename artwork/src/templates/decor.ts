@@ -1,5 +1,5 @@
 // Approximations of the MaterialShapes the app uses for its stickers and the aurora's sparkles.
-type ShapeKind = 'cookie' | 'clover' | 'sunny' | 'flower' | 'burst'
+export type ShapeKind = 'cookie' | 'clover' | 'sunny' | 'flower' | 'burst'
 
 const SHAPES: Record<ShapeKind, { lobes: number; depth: number; sharpness: number }> = {
   cookie: { lobes: 9, depth: 0.12, sharpness: 0.6 },
@@ -25,9 +25,8 @@ export interface Star {
   opacity?: number
 }
 
-function shapePath(kind: ShapeKind, r: number): string {
+export function shapePath(kind: ShapeKind, r: number, steps = 720): string {
   const { lobes, depth, sharpness } = SHAPES[kind]
-  const steps = 720
   const points: string[] = []
   for (let i = 0; i < steps; i++) {
     const theta = (i / steps) * Math.PI * 2
@@ -38,7 +37,7 @@ function shapePath(kind: ShapeKind, r: number): string {
   return `M${points.join('L')}Z`
 }
 
-function starPath(r: number): string {
+export function starPath(r: number): string {
   const c = r * 0.14
   return `M0,${-r}Q${c},${-c} ${r},0Q${c},${c} 0,${r}Q${-c},${c} ${-r},0Q${-c},${-c} 0,${-r}Z`
 }

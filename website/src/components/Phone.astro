@@ -1,0 +1,45 @@
+---
+import type { ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
+
+type Props = { src: ImageMetadata; alt: string; class?: string; eager?: boolean }
+const { src, alt, class: className, eager = false } = Astro.props
+---
+
+<div class:list={['phone', className]}>
+  <div class="frame">
+    <Image
+      alt={alt}
+      fetchpriority={eager ? 'high' : 'auto'}
+      loading={eager ? 'eager' : 'lazy'}
+      sizes="300px"
+      src={src}
+      widths={[320, 640, 960]}
+    />
+  </div>
+</div>
+
+<style>
+  .phone {
+    container-type: inline-size;
+    width: 100%;
+  }
+
+  .frame {
+    padding: 3.2cqi;
+    border-radius: 14cqi;
+    background: var(--frame);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+      0 14px 30px var(--frame-shadow),
+      0 40px 90px var(--frame-shadow);
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1080 / 2424;
+    border-radius: 11cqi;
+  }
+</style>

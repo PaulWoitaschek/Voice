@@ -1,0 +1,44 @@
+---
+import type { ComponentProps } from 'astro/types'
+import { type ShapeKind, shapePath } from '../../../artwork/src/templates/decor.ts'
+import Icon from './Icon.astro'
+
+type Props = { shape: ShapeKind; icon: ComponentProps<typeof Icon>['name']; color?: 'blue' | 'lilac' }
+const { shape, icon, color = 'blue' } = Astro.props
+---
+
+<span aria-hidden="true" class:list={['sticker', color]}>
+  <svg viewBox="-28 -28 56 56"><path d={shapePath(shape, 28, 120)}></path></svg>
+  <Icon name={icon} size={26} />
+</span>
+
+<style>
+  .sticker {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    flex: none;
+  }
+
+  .sticker > :global(*) {
+    grid-area: 1 / 1;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .blue {
+    fill: var(--tonal);
+    color: var(--on-tonal);
+  }
+
+  .lilac {
+    fill: var(--lilac);
+    color: var(--on-lilac);
+  }
+</style>

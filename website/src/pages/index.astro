@@ -1,0 +1,643 @@
+---
+import heroPlayer from '../../../artwork/public/raw/feature/1.png'
+import library from '../../../artwork/public/raw/phone/1.png'
+import amberPlayer from '../../../artwork/public/raw/phone/2.png'
+import sleepTimer from '../../../artwork/public/raw/phone/3.png'
+import bookmarks from '../../../artwork/public/raw/phone/4.png'
+import history from '../../../artwork/public/raw/phone/5.png'
+import foundBooks from '../../../artwork/public/raw/phone/8.png'
+import Decor from '../components/Decor.astro'
+import Feature from '../components/Feature.astro'
+import Icon from '../components/Icon.astro'
+import Phone from '../components/Phone.astro'
+import Sticker from '../components/Sticker.astro'
+import Base from '../layouts/Base.astro'
+
+const play = 'https://play.google.com/store/apps/details?id=de.ph1b.audiobook'
+const fdroid = 'https://f-droid.org/packages/de.ph1b.audiobook/'
+const izzy = 'https://apt.izzysoft.de/fdroid/index/apk/de.ph1b.audiobook'
+const releases = 'https://github.com/PaulWoitaschek/Voice/releases/latest'
+---
+
+<Base>
+  <section class="hero tone" data-tone="day">
+    <Decor
+      shapes={[
+        { kind: 'cookie', x: 92, y: 20, r: 150, rotate: 10, color: 2 },
+        { kind: 'flower', x: 4, y: 92, r: 110, color: 1 },
+        { kind: 'sunny', x: 52, y: 104, r: 90, color: 2 },
+      ]}
+      stars={[
+        { x: 46, y: 16, r: 14 },
+        { x: 8, y: 34, r: 9 },
+        { x: 94, y: 62, r: 12 },
+        { x: 40, y: 84, r: 8 },
+      ]}
+    />
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1>A calm home for your audiobooks</h1>
+        <p class="lead">
+          Voice plays the DRM-free audiobook files you already have, right from your phone. No account, no ads, nothing
+          behind a paywall. Just you and your stories.
+        </p>
+        <div class="actions">
+          <a class="button primary" href={play}><Icon name="googleplay" size={20} />Get it on Google Play</a>
+          <a class="button tonal" href={fdroid}><Icon name="fdroid" size={22} />F-Droid</a>
+        </div>
+        <p class="fine">
+          <span>Free and open source</span>
+          <span aria-hidden="true">·</span>
+          <span>Android 9 or newer</span>
+          <span aria-hidden="true">·</span>
+          <a href="#download">More ways to install</a>
+        </p>
+      </div>
+      <div class="hero-phones">
+        <Phone alt="The library, with the book you're listening to at the top" class="back" eager src={library} />
+        <Phone alt="The player, showing the cover, the chapter and the controls" class="front" eager src={heroPlayer} />
+      </div>
+    </div>
+  </section>
+
+  <Feature
+    decor={{
+      shapes: [
+        { kind: 'flower', x: 96, y: 10, r: 120, color: 1 },
+        { kind: 'cookie', x: 2, y: 96, r: 100, rotate: 20, color: 2 },
+      ],
+      stars: [
+        { x: 50, y: 12, r: 12 },
+        { x: 90, y: 86, r: 10 },
+        { x: 6, y: 40, r: 8 },
+      ],
+    }}
+    eyebrow="The player"
+    id="player"
+    title="Every book brings its own colors"
+    tone="amber"
+  >
+    <p>
+      The player takes its colors from the cover of the book you're listening to. What you need while listening is right
+      there, and the rest is one tap away.
+    </p>
+    <ul class="sparkle-list">
+      <li>Voice remembers your place in every book</li>
+      <li>Jumped too far? One tap takes you back</li>
+      <li>Auto rewind after a pause, so you don't lose the thread</li>
+    </ul>
+    <div class="phones-one" slot="phones">
+      <Phone alt="The player in the warm colors of a sunset cover" src={amberPlayer} />
+    </div>
+  </Feature>
+
+  <Feature
+    decor={{
+      shapes: [
+        { kind: 'sunny', x: 4, y: 12, r: 110, color: 2 },
+        { kind: 'clover', x: 96, y: 92, r: 120, rotate: 15, color: 1 },
+      ],
+      stars: [
+        { x: 92, y: 14, r: 12 },
+        { x: 48, y: 90, r: 9 },
+        { x: 10, y: 70, r: 11 },
+      ],
+    }}
+    eyebrow="Bookmarks and history"
+    flip
+    id="bookmarks"
+    title="Save the moments you love"
+    tone="day"
+  >
+    <p>
+      Long press the bookmark button to save a moment. Add a name or a note later, and mark it as a favorite, a quote, or
+      a place to revisit.
+    </p>
+    <ul class="sparkle-list">
+      <li>Your listening history shows every play, pause, and jump</li>
+      <li>See when your car, headphones, or watch started a book</li>
+      <li>Lost your place? Go back with one tap</li>
+    </ul>
+    <div class="phones-two" slot="phones">
+      <Phone alt="Your listening history, with sleep timers and jumps" class="back" src={history} />
+      <Phone alt="Bookmarks of a book, with favorites, notes and quotes" class="front" src={bookmarks} />
+    </div>
+  </Feature>
+
+  <Feature
+    decor={{
+      shapes: [
+        { kind: 'burst', x: 94, y: 14, r: 120, color: 2 },
+        { kind: 'cookie', x: 6, y: 94, r: 110, color: 1 },
+      ],
+      stars: [
+        { x: 12, y: 14, r: 14 },
+        { x: 40, y: 8, r: 8 },
+        { x: 88, y: 48, r: 10 },
+        { x: 60, y: 92, r: 12 },
+        { x: 30, y: 72, r: 7 },
+      ],
+    }}
+    eyebrow="Sleep timer"
+    id="sleep"
+    title="Drift off without losing your place"
+    tone="night"
+  >
+    <p>Set a sleep timer and the story fades out gently. While it runs, Voice turns calm and dark.</p>
+    <ul class="sparkle-list">
+      <li>Stop after a while, or at the end of the chapter</li>
+      <li>A gentle fade-out instead of a sudden stop</li>
+      <li>Still awake? Shake your phone or press play right after it ends, and the timer starts again</li>
+    </ul>
+    <div class="phones-one" slot="phones">
+      <Phone alt="The player at night, with the sleep timer counting down" src={sleepTimer} />
+    </div>
+  </Feature>
+
+  <Feature
+    decor={{
+      shapes: [
+        { kind: 'clover', x: 94, y: 88, r: 120, color: 2 },
+        { kind: 'flower', x: 4, y: 8, r: 90, rotate: 12, color: 1 },
+      ],
+      stars: [
+        { x: 50, y: 10, r: 10 },
+        { x: 8, y: 60, r: 12 },
+        { x: 92, y: 20, r: 8 },
+      ],
+    }}
+    eyebrow="Your library"
+    flip
+    id="library"
+    title="Add a folder. Voice does the rest."
+    tone="day"
+  >
+    <p>
+      Pick the folder with your audiobooks. Voice shows you the books it found before adding them, picks up new ones on
+      its own, and keeps your place even when you move things around.
+    </p>
+    <ul class="sparkle-list">
+      <li>Plays M4B, MP3, M4A, FLAC, OGG, OPUS, and more, without DRM</li>
+      <li>A folder can hold a single book or your whole library</li>
+      <li>Covers from the file, your phone, or an online search</li>
+    </ul>
+    <p><a href="/faq/#folders">How Voice finds your books</a></p>
+    <div class="phones-one" slot="phones">
+      <Phone alt="Voice found three books in a folder and asks to add them" src={foundBooks} />
+    </div>
+  </Feature>
+
+  <section aria-labelledby="more-title" class="wrap more">
+    <h2 id="more-title">Everything a good audiobook player needs</h2>
+    <ul class="cards">
+      <li>
+        <Sticker icon="speed" shape="cookie" />
+        <h3>Speed and skip silence</h3>
+        <p>Listen faster or slower, skip the quiet gaps, and boost quiet recordings.</p>
+      </li>
+      <li>
+        <Sticker color="lilac" icon="formatListBulleted" shape="clover" />
+        <h3>Chapters</h3>
+        <p>See where you are in the book and jump to any chapter.</p>
+      </li>
+      <li>
+        <Sticker icon="widgets" shape="sunny" />
+        <h3>Widgets</h3>
+        <p>Now playing and Shelf keep your book one tap away on your home screen.</p>
+      </li>
+      <li>
+        <Sticker color="lilac" icon="directionsCar" shape="flower" />
+        <h3>Android Auto</h3>
+        <p>Your books in the car, with the controls you know.</p>
+      </li>
+      <li>
+        <Sticker icon="palette" shape="burst" />
+        <h3>Make Voice yours</h3>
+        <p>Light, dark, and pure black themes, Dynamic color, and color schemes.</p>
+      </li>
+      <li>
+        <Sticker color="lilac" icon="sync" shape="cookie" />
+        <h3>On all your devices</h3>
+        <p>
+          Sync your audiobook folders, for example with Syncthing, and your place follows you.{' '}
+          <a href="/faq/#how-do-i-continue-a-book-on-another-device">Here's how</a>
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="private-title" class="private">
+    <div class="wrap">
+      <h2 id="private-title">Just you and your stories</h2>
+      <p class="lead">
+        Your books, your progress, and your bookmarks stay on your phone and in your own folders. Voice is open source,
+        so anyone can check what it does.
+      </p>
+      <ul class="promises">
+        <li><Icon name="noAccounts" />No account</li>
+        <li><Icon name="block" />No ads</li>
+        <li><Icon name="lockOpen" />Nothing behind a paywall</li>
+        <li><Icon name="folderOpen" />Your books stay with you</li>
+        <li><Icon name="code" />Open source, GPLv3</li>
+      </ul>
+      <p><a href="/privacy-policy/">Read the privacy policy</a></p>
+    </div>
+  </section>
+
+  <section aria-labelledby="download-title" class="wrap download" id="download">
+    <h2 id="download-title">Get Voice</h2>
+    <p class="lead">It's free everywhere. Pick the store you like.</p>
+    <div class="play">
+      <div>
+        <span class="badge">Most listeners</span>
+        <h3>Google Play</h3>
+        <p>
+          Updates on its own, and Android Auto works right away. This build sends crash reports to Google, and usage data
+          only if you agree.
+        </p>
+      </div>
+      <a class="button primary" href={play}><Icon name="googleplay" size={20} />Get it on Google Play</a>
+    </div>
+    <ul class="stores">
+      <li>
+        <h3>F-Droid</h3>
+        <p>Built from the source code by F-Droid. No Google libraries, updates through the F-Droid app.</p>
+        <a class="button tonal" href={fdroid}><Icon name="fdroid" size={22} />Get it on F-Droid</a>
+      </li>
+      <li>
+        <h3>IzzyOnDroid</h3>
+        <p>The build from GitHub, with updates through your F-Droid app.</p>
+        <a class="button tonal" href={izzy}><Icon name="download" size={22} />Get it on IzzyOnDroid</a>
+      </li>
+      <li>
+        <h3>GitHub</h3>
+        <p>The APK of each release. No Google libraries, and updates are up to you.</p>
+        <a class="button tonal" href={releases}><Icon name="github" size={20} />Download the APK</a>
+      </li>
+    </ul>
+    <p class="store-notes muted">
+      Voice needs Android 9 or newer.{' '}
+      <a href="/faq/#which-voice-version-should-i-use-on-older-android">On an older phone?</a>{' '}
+      Outside Google Play, Android Auto needs <a href="/faq/#does-voice-support-android-auto">one extra step</a>.
+    </p>
+  </section>
+
+  <section aria-labelledby="support-title" class="wrap support" id="support">
+    <div class="support-card">
+      <Sticker color="lilac" icon="favorite" shape="flower" />
+      <h2 id="support-title">Made by one developer, kept going by listeners</h2>
+      <p class="lead">
+        Voice has no ads, no investors, and no company behind it. Monthly support is what lets me plan the next release, not
+        just the next fix.
+      </p>
+      <div class="actions">
+        <a class="button primary" href="https://ko-fi.com/paul_voice"><Icon name="kofi" size={22} />Support on Ko-fi</a>
+        <a class="button tonal" href="https://github.com/sponsors/PaulWoitaschek"><Icon name="githubsponsors" size={20} />Sponsor on GitHub</a>
+      </div>
+      <p class="muted">Ko-fi needs no account. It's a thank-you and unlocks nothing.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding: calc(var(--header-height) + clamp(24px, 5vw, 64px)) 0 clamp(56px, 8vw, 112px);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .hero-copy .lead {
+    max-width: 34em;
+    margin-top: 24px;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 36px;
+  }
+
+  .fine {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin-top: 20px;
+    font-size: 1rem;
+    color: var(--text-muted);
+  }
+
+  .fine a {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .hero-phones,
+  .phones-two {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    max-width: 480px;
+    margin-inline: auto;
+  }
+
+  .hero-phones > :global(*),
+  .phones-two > :global(*) {
+    grid-area: 1 / 1;
+  }
+
+  .hero-phones :global(.back),
+  .phones-two :global(.back) {
+    width: 50%;
+    translate: -42% 5%;
+    rotate: -7deg;
+  }
+
+  .hero-phones :global(.front),
+  .phones-two :global(.front) {
+    width: 62%;
+    translate: 24% 0;
+  }
+
+  /* Fading each phone on its own would let the back phone show through the front one. */
+  .hero-phones {
+    animation: fade-in 500ms ease-out both;
+  }
+
+  .hero-phones :global(.phone) {
+    animation: rise 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .hero-phones :global(.front) {
+    animation-delay: 120ms;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      transform: translateY(40px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-phones,
+    .hero-phones :global(.phone) {
+      animation: none;
+    }
+  }
+
+  .phones-one {
+    width: min(100%, 300px);
+    margin-inline: auto;
+  }
+
+  .phones-two {
+    max-width: 440px;
+  }
+
+  @media (max-width: 860px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-phones {
+      max-width: 380px;
+    }
+
+    .phones-one {
+      width: min(76%, 280px);
+    }
+
+    .phones-two {
+      max-width: 380px;
+    }
+  }
+
+  .more {
+    padding-block: clamp(64px, 8vw, 112px) 32px;
+  }
+
+  .more h2 {
+    max-width: 14em;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 16px;
+    margin: 48px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cards li {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    padding: 28px;
+    border: 1px solid var(--card-line);
+    border-radius: 32px;
+    background: var(--card);
+  }
+
+  .cards h3 {
+    margin-top: 8px;
+  }
+
+  .cards p {
+    color: var(--text-muted);
+  }
+
+  .cards a {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  @media (max-width: 600px) {
+    .cards li {
+      grid-template-columns: auto 1fr;
+      gap: 4px 16px;
+      padding: 20px;
+    }
+
+    .cards li > :global(.sticker) {
+      grid-row: span 2;
+    }
+
+    .cards h3 {
+      margin-top: 4px;
+    }
+  }
+
+  .private {
+    width: min(100% - 24px, 1240px);
+    margin: 64px auto;
+    padding-block: clamp(56px, 7vw, 96px);
+    border-radius: 48px;
+    /* Browsers without light-dark() keep the first one, so the white text stays readable. */
+    background: #003b7f;
+    background: light-dark(#003b7f, #0f2a5c);
+    color: #ffffff;
+  }
+
+  .private a:focus-visible {
+    outline-color: currentColor;
+  }
+
+  .private .lead {
+    max-width: 36em;
+    margin-top: 20px;
+    color: #d6e3ff;
+  }
+
+  .promises {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 36px 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .promises li {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px 12px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    font-weight: 600;
+  }
+
+  .private a {
+    font-weight: 600;
+  }
+
+  @media (max-width: 860px) {
+    .private {
+      margin-block: 48px;
+      border-radius: 36px;
+    }
+  }
+
+  .download {
+    padding-block: 48px;
+    scroll-margin-top: 24px;
+  }
+
+  .download .lead {
+    margin-top: 16px;
+  }
+
+  .play {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px 48px;
+    margin-top: 40px;
+    padding: clamp(20px, 4vw, 40px);
+    border-radius: 32px;
+    background: var(--tonal);
+    color: var(--on-tonal);
+  }
+
+  .play > div {
+    display: grid;
+    gap: 12px;
+    max-width: 36em;
+  }
+
+  .badge {
+    justify-self: start;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--primary);
+    color: var(--on-primary);
+    font-size: 0.85rem;
+    font-weight: 650;
+  }
+
+  .stores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Flex instead of grid, so a card left alone in the last row fills it. */
+  .stores li {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: clamp(20px, 6vw, 28px);
+    border: 1px solid var(--card-line);
+    border-radius: 32px;
+    background: var(--card);
+  }
+
+  .stores p {
+    flex: 1;
+    color: var(--text-muted);
+  }
+
+  .stores .button {
+    align-self: start;
+    margin-top: 8px;
+  }
+
+  .store-notes {
+    margin-top: 24px;
+    font-size: 1rem;
+  }
+
+  .store-notes a {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .support {
+    padding-block: 48px 24px;
+  }
+
+  .support-card {
+    display: grid;
+    justify-items: center;
+    gap: 20px;
+    padding: clamp(40px, 6vw, 72px) clamp(24px, 6vw, 72px);
+    border-radius: 48px;
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    text-align: center;
+  }
+
+  .support-card h2 {
+    max-width: 16em;
+  }
+
+  .support-card .lead {
+    max-width: 34em;
+  }
+
+  .support-card .actions {
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .support-card .muted {
+    font-size: 1rem;
+  }
+</style>

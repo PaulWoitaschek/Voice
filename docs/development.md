@@ -197,10 +197,23 @@ Example: `25.9.1` → `(25+28)=53`, `MM=09`, `RELEASE=001` → `5309001`.
 
 This code is embedded in the git tag by `determine_release_tag.main.kts` and used by CI and Fastlane.
 
-## Pages Deployment
+## Website
 
-To projects [Website](https://voice.woitaschek.de/) uses Github Pages and Mkdocs.
-To deploy a new website, use dispatch a workflow
-manually.
+The [website](https://voice.woitaschek.de/) is an Astro project in `website/`, for listeners only. Contributor docs
+like this one stay in `docs/` and are read on GitHub.
 
-[👉 Dispatch Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/deploy_pages.yml)
+```sh
+cd website
+npm install
+npm run dev
+```
+
+- The landing page is `website/src/pages/index.astro`. Its phones show the raw captures from `artwork/public/raw/`,
+  so new store screenshots show up on the website too. Each section picks its capture by number.
+- The FAQ and the Audiobookshelf guide are Markdown in `website/src/pages/`. The privacy policy page renders
+  `PRIVACY.md`.
+- Old URLs redirect in `website/astro.config.mjs`.
+- The clickable library prototype in `docs/prototypes/` is served under `/prototypes/`.
+
+The [Pages workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/deploy_pages.yml) builds the website on
+pull requests that touch it and deploys it when such a change lands on `main`.

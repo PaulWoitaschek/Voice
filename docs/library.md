@@ -4,7 +4,7 @@ Listeners with hundreds of books find the next one in seconds, follow their seri
 want to see right now out of the way.
 
 This is a proposal. Once something ships, it moves into the [product spec](product.md) and leaves this page. To try
-it, open the [clickable prototype](prototypes/library/index.html).
+it, open the [clickable prototype](https://voice.woitaschek.de/prototypes/library/index.html).
 
 ## Problems
 
@@ -340,7 +340,7 @@ What goes:
 - The sheet "How is X organized?" and its three options. The preview shows the books found, and split and join fix
   them.
 - "Every folder is a book" and "Folders are authors" in the folder settings, and most of
-  [Organizing Audiobooks](organizing.md).
+  [How does Voice find the books in my folder?](https://voice.woitaschek.de/faq/#folders).
 - The hint "Looks like 7 books", which becomes Split.
 
 ## Won't solve

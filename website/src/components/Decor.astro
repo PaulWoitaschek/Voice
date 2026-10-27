@@ -1,0 +1,87 @@
+---
+import { type Shape, type Star, shapePath, starPath } from '../../../artwork/src/templates/decor.ts'
+
+// Unlike in the store art, x and y are percent of the section, so the decor follows the section's size.
+type Props = { shapes?: Shape[]; stars?: Star[] }
+const { shapes = [], stars = [] } = Astro.props
+---
+
+<div aria-hidden="true" class="decor">
+  {
+    shapes.map((s) => (
+      <svg
+        class={`shape shape-${s.color ?? 1}`}
+        style={`left:${s.x}%;top:${s.y}%;width:${s.r * 2}px`}
+        viewBox={`${-s.r} ${-s.r} ${s.r * 2} ${s.r * 2}`}
+      >
+        <path d={shapePath(s.kind, s.r, 120)} transform={`rotate(${s.rotate ?? 0})`} />
+      </svg>
+    ))
+  }
+  {
+    stars.map((s, i) => (
+      <svg
+        class:list={['star', { edge: s.x <= 15 || s.x >= 85 }]}
+        style={`left:${s.x}%;top:${s.y}%;width:${s.r * 2}px;animation-delay:${-i * 1.7}s`}
+        viewBox={`${-s.r} ${-s.r} ${s.r * 2} ${s.r * 2}`}
+      >
+        <path d={starPath(s.r)} />
+      </svg>
+    ))
+  }
+</div>
+
+<style>
+  .decor {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  svg {
+    position: absolute;
+    translate: -50% -50%;
+    overflow: visible;
+  }
+
+  .shape-1 {
+    fill: var(--shape-1);
+  }
+
+  .shape-2 {
+    fill: var(--shape-2);
+  }
+
+  .star {
+    fill: var(--star);
+    opacity: 0.7;
+    animation: twinkle 6s ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.7;
+      scale: 1;
+    }
+
+    50% {
+      opacity: 0.35;
+      scale: 0.8;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star {
+      animation: none;
+    }
+  }
+
+  /* On narrow screens the text spans the whole width, so only stars at the edges stay clear of it. */
+  @media (max-width: 860px) {
+    .star:not(.edge) {
+      display: none;
+    }
+  }
+</style>

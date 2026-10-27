@@ -1,3 +1,9 @@
+---
+layout: ../layouts/Prose.astro
+title: Audiobookshelf
+description: Connect Voice to your Audiobookshelf server to stream, download and sync your audiobooks.
+---
+
 # Voice with Audiobookshelf
 
 [Audiobookshelf](https://www.audiobookshelf.org) is a self-hosted audiobook server. Connect Voice to it and the books of your server
@@ -49,17 +55,21 @@ Many servers are only reachable at home. Voice works with:
 - self-signed certificates, once you install your certificate authority in the Android settings under **Security » Encryption &
   credentials » Install a certificate**.
 
-## FAQ
+## Questions
 
-??? question "Can I sign in with single sign-on (OpenID)?"
-    Not yet. If your server only allows single sign-on, ask whoever runs it to also allow signing in with a password for your account.
+### Can I sign in with single sign-on (OpenID)?
 
-??? question "Does Voice support podcasts or ebooks from Audiobookshelf?"
-    No, Voice is an audiobook player. Podcast libraries don't show up.
+Not yet. If your server only allows single sign-on, ask whoever runs it to also allow signing in with a password for your account.
 
-??? question "What happens when I sign out?"
-    The books of your server and their downloads leave your device. Your progress and bookmarks stay on the server, and come back when you
-    sign in again.
+### Does Voice support podcasts or ebooks from Audiobookshelf?
 
-??? question "I already download my books into a folder that Voice scans."
-    Then those books show up twice. Remove that folder under **Settings » Library » Audiobook folders** to keep the server books only.
+No, Voice is an audiobook player. Podcast libraries don't show up.
+
+### What happens when I sign out?
+
+The books of your server and their downloads leave your device. Your progress and bookmarks stay on the server, and come back when you
+sign in again.
+
+### I already download my books into a folder that Voice scans.
+
+Then those books show up twice. Remove that folder under **Settings » Library » Audiobook folders** to keep the server books only.

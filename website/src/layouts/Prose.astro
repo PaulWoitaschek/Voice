@@ -1,0 +1,138 @@
+---
+import Decor from '../components/Decor.astro'
+import Base from './Base.astro'
+
+// Markdown pages pass their frontmatter, Astro pages pass title and description directly.
+type Props = {
+  title?: string
+  description?: string
+  frontmatter?: { title: string; description?: string }
+}
+const { frontmatter } = Astro.props
+const title = frontmatter?.title ?? Astro.props.title
+const description = frontmatter?.description ?? Astro.props.description
+---
+
+<Base description={description} title={title}>
+  <div aria-hidden="true" class="band tone" data-tone="day">
+    <Decor
+      shapes={[
+        { kind: 'cookie', x: 92, y: 30, r: 130, rotate: 10, color: 2 },
+        { kind: 'flower', x: 6, y: 90, r: 80, color: 1 },
+      ]}
+    />
+  </div>
+  <article class="wrap prose">
+    <slot />
+  </article>
+</Base>
+
+<style>
+  .band {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 440px;
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  }
+
+  .prose {
+    position: relative;
+    max-width: 800px;
+    padding-top: calc(var(--header-height) + clamp(32px, 6vw, 72px));
+    padding-bottom: 32px;
+  }
+
+  .prose :global(h1) {
+    margin-bottom: 40px;
+    font-size: clamp(2.25rem, 1.6rem + 3vw, 4rem);
+  }
+
+  .prose :global(h2) {
+    margin: 2.2em 0 0.6em;
+    font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.9rem);
+    line-height: 1.2;
+    scroll-margin-top: 24px;
+  }
+
+  .prose :global(h3) {
+    margin: 1.8em 0 0.5em;
+    scroll-margin-top: 24px;
+  }
+
+  .prose :global(:is(h1, h2, h3) + *) {
+    margin-top: 0;
+  }
+
+  .prose :global(:is(p, ul, ol, pre, table)) {
+    margin: 0 0 1em;
+  }
+
+  .prose :global(:is(ul, ol)) {
+    padding-left: 1.4em;
+  }
+
+  .prose :global(li + li) {
+    margin-top: 0.4em;
+  }
+
+  .prose :global(li::marker) {
+    color: var(--primary);
+  }
+
+  .prose :global(a) {
+    color: var(--primary);
+    font-weight: 550;
+  }
+
+  .prose :global(code) {
+    padding: 0.1em 0.4em;
+    border-radius: 8px;
+    background: var(--tonal);
+    color: var(--on-tonal);
+    font-size: 0.9em;
+    overflow-wrap: anywhere;
+  }
+
+  .prose :global(pre) {
+    overflow-x: auto;
+    padding: 20px 24px;
+    border-radius: 24px;
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .prose :global(pre code) {
+    padding: 0;
+    background: none;
+    color: var(--text);
+  }
+
+  .prose :global(table) {
+    display: block;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
+
+  .prose :global(:is(th, td)) {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--card-line);
+    text-align: left;
+  }
+
+  .prose :global(th) {
+    font-weight: 650;
+  }
+
+  .prose :global(strong) {
+    font-weight: 650;
+  }
+
+  .prose :global(hr) {
+    margin: 3em 0;
+    border: 0;
+    border-top: 1px solid var(--card-line);
+  }
+</style>
