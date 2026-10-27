@@ -25,6 +25,8 @@ fun book(
   lastPlayedAt: Long = 0,
   playbackSpeed: Float = 1F,
   customName: String? = null,
+  author: String? = null,
+  customAuthor: String? = null,
 ): Book {
   val bookUri = DocumentsContract.buildDocumentUriUsingTree(folder(tree), "$tree/$path")
   val chapters = fileSizes.mapIndexed { index, size ->
@@ -52,7 +54,7 @@ fun book(
       gain = 0F,
       metadata = BookMetadata(
         name = path,
-        author = null,
+        author = author,
         album = null,
         title = null,
         genre = null,
@@ -63,7 +65,7 @@ fun book(
         fileLastModified = null,
       ),
       customName = customName,
-      customAuthor = null,
+      customAuthor = customAuthor,
       customCover = null,
     ),
     chapters = chapters,

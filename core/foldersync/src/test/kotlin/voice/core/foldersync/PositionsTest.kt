@@ -70,7 +70,7 @@ class PositionsTest {
 
   @Test
   fun `a file with unknown fields can be read, a broken one is skipped`() {
-    val text = """{"books":{"a":{"place":{"file":1,"position":2,"speed":1.5,"playedAt":3},"author":{}}},"other":{}}"""
+    val text = """{"books":{"a":{"place":{"file":1,"position":2,"speed":1.5,"playedAt":3},"narrator":{}}},"other":{}}"""
     val file = SyncFile(mapOf("a" to SyncedBook(place = SyncedPlace(file = 1, position = 2, speed = 1.5F, playedAt = 3))))
 
     assertEquals(file, parseSyncFile(text))

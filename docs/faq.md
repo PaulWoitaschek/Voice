@@ -54,9 +54,10 @@ Once the sleep timer elapses, Voice pauses playback (after a brief fade-out). To
 
 ### How do I continue a book on another device?
 
-Voice keeps your place, your playback speed, your bookmarks and the names you gave your books in a hidden `.voice`
-folder inside each audiobook folder you added. Sync these folders between your devices with a tool of your own, like
-[Syncthing](https://syncthing.net), and when you open Voice on the other device, it picks up where you left off.
+Voice keeps your place, your playback speed, your bookmarks and the titles and authors you gave your books in a
+hidden `.voice` folder inside each audiobook folder you added. Sync these folders between your devices with a tool of
+your own, like [Syncthing](https://syncthing.net), and when you open Voice on the other device, it picks up where you
+left off.
 
 - Add the same folder on every device, and the same way, for example as "Every folder is a book" on both. Where the
   folder is on each device doesn't matter.

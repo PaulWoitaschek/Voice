@@ -125,11 +125,11 @@ public class FolderSync internal constructor(
         val newest = others.mapNotNull { it.books[key] }.fold(mine, SyncedBook::with)
         // before writing, so if Voice stops in between, the next sync sends back what it took, not what it replaced
         takeOver(copies, mine, newest)
-        newest.withoutFilesName(copies)
+        newest.withoutFilesNames(copies)
       }
     // books that are missing for now, like on an SD card that's out, keep their entry
     val file = SyncFile((own + synced).filterValues { it != SyncedBook() })
-    // a folder without a book that was played, renamed or bookmarked gets no .voice folder
+    // a folder without a book that was played, edited or bookmarked gets no .voice folder
     if (file != (ownFile ?: SyncFile(emptyMap()))) {
       val _ = inFolder { syncFiles.write(folder, ownFileName, file) }
     }
@@ -148,6 +148,12 @@ public class FolderSync internal constructor(
     if (name != null && name != mine.name) {
       copies.forEach { copy ->
         bookRepository.updateBook(copy.id) { it.withCustomName(name.value) }
+      }
+    }
+    val author = newest.author
+    if (author != null && author != mine.author) {
+      copies.forEach { copy ->
+        bookRepository.updateBook(copy.id) { it.withCustomAuthor(author.value) }
       }
     }
     (mine.bookmarks.keys - newest.bookmarks.keys).forEach { bookmarkRepo.deleteBookmark(Bookmark.Id(it)) }
