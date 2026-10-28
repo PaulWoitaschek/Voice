@@ -295,7 +295,7 @@
     },
     "zh-CN": {
       "benefits": ["每月都会成长的徽章", "支持一位独立开发者", "让 Voice 保持免费、无广告", "仅为感谢：不解锁任何功能"],
-      "tea": { "title": "一杯茶", "description": "给朗读者的一杯茶。让灯一直亮着。" },
+      "tea": { "title": "一杯茶", "description": "给朗读者的一杯茶。维持日常运转。" },
       "honey_tea": { "title": "蜂蜜茶", "description": "给朗读者的蜂蜜茶。支持那些长篇章节。" },
       "golden_mic": { "title": "金话筒", "description": "给朗读者的金话筒。为 Voice 起立鼓掌。" },
       "tip_small": { "title": "小额打赏", "description": "对 Voice 的一次性感谢。不解锁任何功能。" },
