@@ -11,7 +11,7 @@
     <string name="audiobookshelf.login.address.action">繼續</string>
     <string name="audiobookshelf.login.address.label">伺服器位址</string>
     <string name="audiobookshelf.login.address.subtitle">收聽你自己伺服器上的書。Voice 會和你的其他裝置同步收聽進度。</string>
-    <string name="audiobookshelf.login.address.title">連接 Audiobookshelf</string>
+    <string name="audiobookshelf.login.address.title">連結 Audiobookshelf</string>
     <string name="audiobookshelf.login.credentials.action">登入</string>
     <string name="audiobookshelf.login.credentials.no_password">這個伺服器只允許單一登入，Voice 目前還不支援。請伺服器管理員開啟密碼登入。</string>
     <string name="audiobookshelf.login.credentials.subtitle">使用你在 %s 上的帳號。</string>
@@ -26,7 +26,7 @@
     <string name="audiobookshelf.login.error.unreachable">伺服器沒有回應了，請稍後再試。</string>
     <string name="audiobookshelf.login.libraries.action">加入我的書庫</string>
     <string name="audiobookshelf.login.libraries.loading">正在尋找書籍…</string>
-    <string name="audiobookshelf.login.libraries.none">這裡沒有有聲書庫</string>
+    <string name="audiobookshelf.login.libraries.none">這裡沒有任何有聲書庫</string>
     <string name="audiobookshelf.login.libraries.subtitle">這些書會加入你的書庫。可以直接播放，也可以下載後離線收聽。</string>
     <plurals name="audiobookshelf.login.libraries.title">
         <item quantity="other">找到 %d 本有聲書</item>
@@ -49,7 +49,7 @@
     <string name="audiobookshelf.settings.sign_out">登出</string>
     <string name="audiobookshelf.settings.signed_in_as">已使用 %s 登入</string>
     <string name="audiobookshelf.settings.try_again">重試</string>
-    <string name="audiobookshelf.sign_out.message">它的書和已下載的內容會從這部裝置移除。你的收聽進度會安全保留在伺服器上。</string>
+    <string name="audiobookshelf.sign_out.message">伺服器上的書和已下載的內容都會從這部裝置移除。你的收聽進度會安全保留在伺服器上。</string>
     <string name="audiobookshelf.sign_out.title">要登出 %s 嗎？</string>
     <string name="audiobookshelf.status.connected">已連線，進度已同步</string>
     <string name="audiobookshelf.status.needs_login">伺服器需要你重新登入</string>
@@ -124,7 +124,7 @@
     <string name="common.error.generic.message">出了點問題 😢</string>
     <string name="common.error.generic.retry">重試</string>
     <string name="cover.crop.hint">拖曳即可移動，用雙指縮放或拖曳邊角即可調整大小。</string>
-    <string name="cover.crop.title">裁剪封面</string>
+    <string name="cover.crop.title">裁切封面</string>
     <string name="cover.search.download_failed">無法下載這張封面，請換一張試試。</string>
     <string name="cover.search.hint">搜尋封面</string>
     <string name="cover.search.no_results.message">試試少打幾個字，或拿掉作者名稱。</string>
@@ -138,7 +138,7 @@
     <plurals name="duration.seconds">
         <item quantity="other">%d 秒</item>
     </plurals>
-    <string name="folder.add.action.audiobookshelf">連接 Audiobookshelf</string>
+    <string name="folder.add.action.audiobookshelf">連結 Audiobookshelf</string>
     <string name="folder.add.action.file">改為新增單一檔案</string>
     <string name="folder.add.action.folder">選擇資料夾</string>
     <string name="folder.add.help.computer">有聲書還在電腦上？請先複製到手機，例如放進 Audiobooks 資料夾。</string>
@@ -149,8 +149,8 @@
     <string name="folder.add.subtitle">選擇存放有聲書的資料夾。裡面可以只有一本書，也可以是你的整個書庫。</string>
     <string name="folder.add.title.default">新增你的有聲書</string>
     <string name="folder.add.title.onboarding">新增你的第一本有聲書</string>
-    <string name="folder.mode.author.label">資料夾是作者</string>
-    <string name="folder.mode.author.option">%s 中的資料夾是作者</string>
+    <string name="folder.mode.author.label">資料夾代表作者</string>
+    <string name="folder.mode.author.option">%s 中的每個資料夾代表一位作者</string>
     <plurals name="folder.mode.book_count">
         <item quantity="other">%d 本書</item>
     </plurals>
@@ -207,7 +207,7 @@
     <string name="history.source.notification">通知</string>
     <string name="history.source.other_app">其他應用程式</string>
     <string name="history.source.other_device">其他裝置</string>
-    <string name="history.source.unplugged">音訊裝置已中斷連線</string>
+    <string name="history.source.unplugged">音訊裝置斷線</string>
     <string name="history.source.watch">手錶</string>
     <string name="history.source.widget">小工具</string>
     <string name="library.book.downloading">下載中</string>
@@ -319,7 +319,7 @@
     <string name="review.prompt.finished.title">聽完一本書了！</string>
     <string name="review.prompt.message">感謝你用 Voice 收聽！如果你喜歡它，在 Google Play 上給個評分，能幫助其他聽眾找到它。</string>
     <plurals name="review.prompt.milestone.title">
-        <item quantity="other">%d 小時的故事！</item>
+        <item quantity="other">聽了 %d 小時的故事！</item>
     </plurals>
     <string name="review.prompt.stat.authors">作者</string>
     <string name="review.prompt.stat.finished">聽完的書</string>
@@ -344,7 +344,7 @@
     <string name="settings.appearance.pure_black.summary">在深色主題中為 OLED 螢幕省電。</string>
     <string name="settings.appearance.pure_black.title">純黑</string>
     <string name="settings.appearance.theme.dark">深色</string>
-    <string name="settings.appearance.theme.follow_system">跟隨系統</string>
+    <string name="settings.appearance.theme.follow_system">系統預設</string>
     <string name="settings.appearance.theme.light">淺色</string>
     <string name="settings.appearance.theme.title">主題</string>
     <string name="settings.appearance.title">外觀</string>
@@ -361,7 +361,7 @@
     <string name="settings.playback.auto_rewind.off">關閉</string>
     <string name="settings.playback.auto_rewind.summary">繼續播放時稍微倒回一點，免得你跟不上劇情</string>
     <string name="settings.playback.auto_rewind.title">自動倒轉</string>
-    <string name="settings.playback.lock_screen_slider.summary">可在鎖定畫面和通知中拖曳進度列，在章節內跳轉。關閉這項功能，就不怕誤觸讓你找不到聽到哪裡。</string>
+    <string name="settings.playback.lock_screen_slider.summary">可在鎖定畫面和通知中拖曳進度列，在章節內跳轉。關閉後，就不怕誤觸讓進度跑掉。</string>
     <string name="settings.playback.lock_screen_slider.title">鎖定畫面進度列</string>
     <string name="settings.playback.seek_time.summary">倒轉和快轉一次跳多遠</string>
     <string name="settings.playback.seek_time.title">跳轉秒數</string>
@@ -375,8 +375,8 @@
     <string name="settings.support.supporter.title">感謝你支持 Voice</string>
     <string name="settings.support.title">說明與意見回饋</string>
     <string name="support.action.manage_subscription">管理訂閱</string>
-    <string name="support.action.subscribe">以 %1$s 支持</string>
-    <string name="support.action.switch">改為 %1$s</string>
+    <string name="support.action.subscribe">以%1$s 支持</string>
+    <string name="support.action.switch">改為%1$s</string>
     <string name="support.badge.earned">已獲得</string>
     <string name="support.badge.first_cup">第一杯</string>
     <string name="support.badge.not_earned">尚未獲得</string>
@@ -385,7 +385,7 @@
     <string name="support.badge.three_months">3 個月</string>
     <string name="support.badge.tip_jar">小費罐</string>
     <string name="support.badges.title">每多支持一個月，徽章就會長大一點</string>
-    <string name="support.action.donate_kofi">透過 Ko-fi 捐款</string>
+    <string name="support.action.donate_kofi">在 Ko-fi 上贊助</string>
     <string name="support.description.maintenance">Voice 免費、開放原始碼，由一位開發者維護。</string>
     <string name="support.description.monthly">每月的支持讓我能規劃下一個版本，而不只是下一次修正。</string>
     <string name="support.fine_print">這只是一份心意：不會解鎖任何功能。隨時可以在 Google Play 取消。</string>
@@ -409,12 +409,12 @@
     <string name="support.thank_you.action">回去收聽</string>
     <string name="support.thank_you.message">這杯茶真是暖到心裡。謝謝你讓 Voice 繼續走下去。</string>
     <string name="support.thank_you.title">謝謝你！</string>
-    <string name="support.tier.current">你目前的方案</string>
+    <string name="support.tier.current">目前方案</string>
     <string name="support.tier.golden_mic.summary">起立鼓掌</string>
     <string name="support.tier.golden_mic.title">金麥克風</string>
     <string name="support.tier.honey_tea.summary">為長長的章節加油</string>
     <string name="support.tier.honey_tea.title">蜂蜜茶</string>
-    <string name="support.tier.tea.summary">讓燈一直亮著</string>
+    <string name="support.tier.tea.summary">幫忙付電費</string>
     <string name="support.tier.tea.title">一杯茶</string>
     <string name="support.unavailable.message">這部裝置目前無法連上 Google Play 帳款服務。</string>
     <string name="support.unavailable.title">目前無法支持</string>
