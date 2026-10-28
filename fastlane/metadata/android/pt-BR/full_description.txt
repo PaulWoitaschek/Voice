@@ -34,7 +34,7 @@ Escolha a pasta com seus audiolivros. O Voice mostra os livros que encontra, adi
 • Widgets para a tela inicial: “Tocando agora” e “Estante”
 • Notificação de mídia e Android Auto
 • Temas claro, escuro e preto puro, Cor dinâmica e esquemas de cores para deixar o Voice do seu jeito
-• Disponível em 32 idiomas
+• Disponível em 33 idiomas
 
 <b>Use seus próprios arquivos</b>
 

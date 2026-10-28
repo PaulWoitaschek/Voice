@@ -34,7 +34,7 @@ Välj mappen med dina ljudböcker. Voice visar böckerna den hittar, lägger til
 • Widgetar för startskärmen: ”Spelas nu” och ”Bokhylla”
 • Medieavisering och Android Auto
 • Ljust, mörkt och helsvart tema, Dynamisk färg och färgscheman som gör Voice till ditt eget
-• Finns på 32 språk
+• Finns på 33 språk
 
 <b>Ta med dina egna filer</b>
 

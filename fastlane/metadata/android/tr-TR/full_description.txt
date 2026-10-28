@@ -34,7 +34,7 @@ Sesli kitaplarınızın bulunduğu klasörü seçin. Voice bulduğu kitapları s
 • Ana ekran widget'ları: “Şimdi çalıyor” ve “Kitap rafı”
 • Medya bildirimi ve Android Auto
 • Açık, koyu ve saf siyah temalar, dinamik renk ve renk şemalarıyla Voice'u kendinize göre ayarlayın
-• 32 dilde kullanılabilir
+• 33 dilde kullanılabilir
 
 <b>Kendi dosyalarınızı getirin</b>
 

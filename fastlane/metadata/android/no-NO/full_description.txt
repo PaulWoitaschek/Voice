@@ -34,7 +34,7 @@ Velg mappen med lydbøkene dine. Voice viser deg bøkene den finner, legger dem 
 • Moduler for startskjermen: «Spilles nå» og «Bokhylle»
 • Medievarsel og Android Auto
 • Lys, mørk og helsvart drakt, dynamisk farge og fargeoppsett som gjør Voice til din egen
-• Tilgjengelig på 32 språk
+• Tilgjengelig på 33 språk
 
 <b>Ta med dine egne filer</b>
 

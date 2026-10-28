@@ -34,7 +34,7 @@ Vyberte složku se svými audioknihami. Voice vám ukáže knihy, které v ní n
 • Widgety na plochu: Právě hraje a Knihovnička
 • Ovládání přehrávání v oznámení a Android Auto
 • Světlý, tmavý a čistě černý motiv, dynamická barva a barevná schémata, abyste si Voice udělali po svém
-• K dispozici ve 32 jazycích
+• K dispozici ve 33 jazycích
 
 <b>Vaše vlastní soubory</b>
 

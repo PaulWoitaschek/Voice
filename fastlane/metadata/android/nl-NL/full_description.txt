@@ -34,7 +34,7 @@ Kies de map met je luisterboeken. Voice laat je de gevonden boeken zien, voegt z
 • Widgets voor je startscherm: “Speelt nu” en “Boekenplank”
 • Mediamelding en Android Auto
 • Licht, donker en puur zwart thema, Dynamische kleur en kleurenschema's om Voice helemaal van jou te maken
-• Beschikbaar in 32 talen
+• Beschikbaar in 33 talen
 
 <b>Neem je eigen bestanden mee</b>
 

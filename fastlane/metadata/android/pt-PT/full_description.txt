@@ -34,7 +34,7 @@ Escolha a pasta com os seus audiolivros. O Voice mostra-lhe os livros que encont
 • Widgets para o ecrã principal: «A reproduzir» e «Estante»
 • Notificação multimédia e Android Auto
 • Temas claro, escuro e preto puro, Cor dinâmica e esquemas de cores para tornar o Voice seu
-• Disponível em 32 idiomas
+• Disponível em 33 idiomas
 
 <b>Use os seus próprios ficheiros</b>
 
