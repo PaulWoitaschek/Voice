@@ -33,8 +33,8 @@ class SelectCoverFromInternetViewModelTest {
   private val cover = SearchResponse.ImageResult(width = 600, height = 600, image = "image", thumbnail = "thumbnail")
 
   private val book = mockk<Book> {
-    every { content.name } returns "Dune"
-    every { content.author } returns null
+    every { name } returns "Dune"
+    every { author } returns null
   }
   private val bookRepository = mockk<BookRepository> {
     coEvery { get(bookId) } returns book

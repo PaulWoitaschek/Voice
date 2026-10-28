@@ -11,6 +11,7 @@ import voice.core.data.BookId
 import voice.core.data.repo.BookContentRepoImpl
 import voice.core.data.repo.BookRepositoryImpl
 import voice.core.data.repo.ChapterRepoImpl
+import voice.core.data.repo.CustomMetadataRepoImpl
 import voice.core.data.repo.internals.AppDb
 import java.time.Instant
 import kotlin.test.Test
@@ -216,7 +217,7 @@ class BookSearchTest {
 
   @Test
   fun `the author the listener gave a book is found instead of the one from its files`() {
-    val dune = book(name = "Dune", author = "Herbert").update { it.withCustomAuthor("Frank Herbert") }
+    val dune = book(name = "Dune", author = "Herbert").let { it.copy(custom = it.custom.copy(author = "Frank Herbert")) }
     test(dune) {
       expectSearchResult("frank", dune)
       assertEquals(
@@ -228,8 +229,8 @@ class BookSearchTest {
 
   @Test
   fun `a book the listener edited is still found by the name and author from its files`() {
-    val edited = book(name = "Track 01", author = "Dan Simmons").update {
-      it.withCustomName("Hyperion").withCustomAuthor("Simmons")
+    val edited = book(name = "Track 01", author = "Dan Simmons").let {
+      it.copy(custom = it.custom.copy(name = "Hyperion", author = "Simmons"))
     }
     val tracker = book(name = "Tracker")
     test(edited, tracker) {
@@ -302,12 +303,15 @@ class BookSearchTest {
     val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
       .build()
     val contentRepo = BookContentRepoImpl(db.bookContentDao())
+    val customMetadataRepo = CustomMetadataRepoImpl(db.customMetadataDao())
     val repo = BookRepositoryImpl(
       chapterRepo = ChapterRepoImpl(db.chapterDao()),
       contentRepo = contentRepo,
+      customMetadataRepo = customMetadataRepo,
     )
     suspend fun addBook(book: Book) {
       db.bookContentDao().insert(book.content)
+      customMetadataRepo.put(book.custom)
       book.chapters.forEach {
         db.chapterDao().insert(it)
       }
@@ -328,12 +332,8 @@ class BookSearchTest {
 }
 
 private fun Book.withNewIdAndInactive(): Book {
-  return update {
-    it.copy(
-      id = BookId(Uuid.random().toString()),
-      isActive = false,
-    )
-  }
+  val id = BookId(Uuid.random().toString())
+  return copy(content = content.copy(id = id, isActive = false), custom = custom.copy(bookId = id))
 }
 
 private class TestBase(val search: BookSearch) {

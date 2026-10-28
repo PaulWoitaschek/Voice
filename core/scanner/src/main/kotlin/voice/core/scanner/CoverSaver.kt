@@ -40,9 +40,9 @@ internal constructor(
       cover.saveAsWebp(CUSTOM_COVERS)
     } ?: return
 
-    repo.get(bookId)?.content?.customCover?.deleteOnIo()
-    repo.updateBook(bookId) {
-      it.copy(customCover = newCover)
+    repo.get(bookId)?.custom?.cover?.deleteOnIo()
+    repo.updateCustomMetadata(bookId) {
+      it.copy(cover = newCover)
     }
   }
 
@@ -50,8 +50,8 @@ internal constructor(
     bookId: BookId,
     cover: File,
   ) {
-    repo.updateBook(bookId) {
-      if (it.customCover == cover) it.copy(customCover = null) else it
+    repo.updateCustomMetadata(bookId) {
+      if (it.cover == cover) it.copy(cover = null) else it
     }
   }
 

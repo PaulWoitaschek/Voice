@@ -23,6 +23,7 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
+import voice.core.data.repo.CustomMetadataRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.LastPlaybackSpeedStore
@@ -44,6 +45,7 @@ import kotlin.time.Duration.Companion.minutes
 class WidgetData(
   private val bookRepository: BookRepository,
   private val bookContentRepo: BookContentRepo,
+  private val customMetadataRepo: CustomMetadataRepo,
   private val currentBookResolver: Lazy<CurrentBookResolver>,
   private val currentBookStore: CurrentBookStore,
   private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
@@ -76,7 +78,7 @@ class WidgetData(
         flowOf(null)
       } else {
         combine(
-          bookRepository.flow(id).distinctUntilChangedBy { it?.content?.withoutPlaybackNoise() },
+          bookRepository.flow(id).distinctUntilChangedBy { book -> book?.let { it.content.withoutPlaybackNoise() to it.custom } },
           playing,
           refreshWhilePlaying(),
           lastPlaybackSpeedStore.data,
@@ -161,12 +163,14 @@ class WidgetData(
 
   // building every book of the library for each position save would be wasted on the shelf. Books
   // that weren't saved keep their instance, so only the one that plays is compared field by field.
-  private fun library(): Flow<List<Book>> = bookContentRepo.flow()
-    .distinctUntilChanged { old, new ->
-      old.size == new.size &&
-        old.indices.all { old[it] === new[it] || old[it].withoutPlaybackNoise() == new[it].withoutPlaybackNoise() }
-    }
-    .map { bookRepository.all() }
+  private fun library(): Flow<List<Book>> = combine(
+    bookContentRepo.flow()
+      .distinctUntilChanged { old, new ->
+        old.size == new.size &&
+          old.indices.all { old[it] === new[it] || old[it].withoutPlaybackNoise() == new[it].withoutPlaybackNoise() }
+      },
+    customMetadataRepo.flow(),
+  ) { _, _ -> bookRepository.all() }
 
   private fun refreshWhilePlaying(): Flow<Int> = playing.flatMapLatest { playing ->
     flow {

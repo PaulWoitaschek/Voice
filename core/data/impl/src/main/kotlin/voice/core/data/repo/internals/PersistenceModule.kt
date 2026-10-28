@@ -11,6 +11,7 @@ import dev.zacsweers.metro.SingleIn
 import voice.core.data.repo.internals.dao.BookContentDao
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.dao.ChapterDao
+import voice.core.data.repo.internals.dao.CustomMetadataDao
 import voice.core.data.repo.internals.dao.ListeningEventDao
 import voice.core.data.repo.internals.dao.ListeningSessionDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
@@ -27,6 +28,9 @@ public object PersistenceModule {
 
   @Provides
   private fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
+
+  @Provides
+  private fun customMetadataDao(appDb: AppDb): CustomMetadataDao = appDb.customMetadataDao()
 
   @Provides
   private fun recentBookSearchDao(appDb: AppDb): RecentBookSearchDao = appDb.recentBookSearchDao()

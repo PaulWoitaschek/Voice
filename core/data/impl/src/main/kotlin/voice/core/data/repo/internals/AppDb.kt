@@ -7,12 +7,14 @@ import androidx.room.TypeConverters
 import voice.core.data.BookContent
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
+import voice.core.data.CustomMetadata
 import voice.core.data.ListeningEvent
 import voice.core.data.ListeningSession
 import voice.core.data.RecentBookSearch
 import voice.core.data.repo.internals.dao.BookContentDao
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.dao.ChapterDao
+import voice.core.data.repo.internals.dao.CustomMetadataDao
 import voice.core.data.repo.internals.dao.ListeningEventDao
 import voice.core.data.repo.internals.dao.ListeningSessionDao
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
@@ -20,7 +22,6 @@ import voice.core.data.repo.internals.migrations.Migration56
 import voice.core.data.repo.internals.migrations.Migration62
 import voice.core.data.repo.internals.migrations.Migration64
 import voice.core.data.repo.internals.migrations.Migration66
-import voice.core.data.repo.internals.migrations.Migration67
 
 @Database(
   entities = [
@@ -30,6 +31,7 @@ import voice.core.data.repo.internals.migrations.Migration67
     RecentBookSearch::class,
     ListeningEvent::class,
     ListeningSession::class,
+    CustomMetadata::class,
   ],
   version = AppDb.VERSION,
   autoMigrations = [
@@ -45,7 +47,6 @@ import voice.core.data.repo.internals.migrations.Migration67
     AutoMigration(from = 62, to = 63, spec = Migration62::class),
     AutoMigration(from = 64, to = 65, spec = Migration64::class),
     AutoMigration(from = 66, to = 67, spec = Migration66::class),
-    AutoMigration(from = 67, to = 68, spec = Migration67::class),
   ],
 )
 @TypeConverters(Converters::class)
@@ -54,6 +55,8 @@ public abstract class AppDb : RoomDatabase() {
   public abstract fun chapterDao(): ChapterDao
   public abstract fun bookContentDao(): BookContentDao
   public abstract fun bookmarkDao(): BookmarkDao
+
+  public abstract fun customMetadataDao(): CustomMetadataDao
 
   public abstract fun recentBookSearchDao(): RecentBookSearchDao
 

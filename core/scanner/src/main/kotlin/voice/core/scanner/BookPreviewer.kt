@@ -5,6 +5,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import voice.core.data.BookId
 import voice.core.data.repo.BookContentRepo
+import voice.core.data.repo.CustomMetadataRepo
 import voice.core.documentfile.CachedDocumentFile
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -26,6 +27,7 @@ public fun interface BookPreviewer {
 public class BookPreviewerImpl
 internal constructor(
   private val contentRepo: BookContentRepo,
+  private val customMetadataRepo: CustomMetadataRepo,
   private val chapterParser: ChapterParser,
   private val bookParser: BookParser,
 ) : BookPreviewer {
@@ -34,12 +36,13 @@ internal constructor(
     val parseResult = chapterParser.parse(file)
     val chapters = parseResult.chapters
     if (chapters.isEmpty()) return null
+    val id = BookId(file.uri)
+    val metadata = (contentRepo.get(id) ?: bookParser.parse(chapters, file, parseResult.firstChapterMetadata)).metadata
     // a book that is already in the library keeps the names the listener gave it
-    val content = contentRepo.get(BookId(file.uri))
-      ?: bookParser.parse(chapters, file, parseResult.firstChapterMetadata)
+    val custom = customMetadataRepo.get(id)
     return BookPreview(
-      name = content.name,
-      author = content.author,
+      name = custom.name ?: metadata.name,
+      author = custom.author ?: metadata.author,
       duration = chapters.sumOf { it.duration }.milliseconds,
     )
   }

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.update
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
 
 class MemoryBookRepository(vararg books: Book) : BookRepository {
@@ -27,6 +28,15 @@ class MemoryBookRepository(vararg books: Book) : BookRepository {
   ) {
     books.update { books ->
       books.map { if (it.id == id) it.update(update) else it }
+    }
+  }
+
+  override suspend fun updateCustomMetadata(
+    id: BookId,
+    update: (CustomMetadata) -> CustomMetadata,
+  ) {
+    books.update { books ->
+      books.map { if (it.id == id) it.copy(custom = update(it.custom).followingFiles(it.content.metadata)) else it }
     }
   }
 }

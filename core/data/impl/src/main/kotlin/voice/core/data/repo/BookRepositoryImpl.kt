@@ -4,12 +4,13 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.CustomMetadata
 import voice.core.logging.api.Logger
 
 @SingleIn(AppScope::class)
@@ -17,6 +18,7 @@ import voice.core.logging.api.Logger
 public class BookRepositoryImpl(
   private val chapterRepo: ChapterRepoImpl,
   private val contentRepo: BookContentRepo,
+  private val customMetadataRepo: CustomMetadataRepo,
 ) : BookRepository {
 
   private var warmedUp = false
@@ -35,28 +37,28 @@ public class BookRepositoryImpl(
   }
 
   override fun flow(): Flow<List<Book>> {
-    return contentRepo.flow()
-      .map { contents ->
-        contents.filter { it.isActive }
-          .mapNotNull { content ->
-            content.book()
-          }
-      }
+    return combine(contentRepo.flow(), customMetadataRepo.flow()) { contents, customs ->
+      contents.filter { it.isActive }
+        .mapNotNull { content ->
+          content.book(customs[content.id] ?: CustomMetadata(content.id))
+        }
+    }
   }
 
   override suspend fun all(): List<Book> {
     return contentRepo.all()
       .filter { it.isActive }
-      .mapNotNull { it.book() }
+      .mapNotNull { it.book(customMetadataRepo.get(it.id)) }
   }
 
   override fun flow(id: BookId): Flow<Book?> {
-    return contentRepo.flow(id)
-      .map { it?.book() }
+    return combine(contentRepo.flow(id), customMetadataRepo.flow(id)) { content, custom ->
+      content?.book(custom)
+    }
   }
 
   override suspend fun get(id: BookId): Book? {
-    return contentRepo.get(id)?.book()
+    return contentRepo.get(id)?.book(customMetadataRepo.get(id))
   }
 
   override suspend fun updateBook(
@@ -72,7 +74,21 @@ public class BookRepositoryImpl(
     }
   }
 
-  private suspend fun BookContent.book(): Book? {
+  override suspend fun updateCustomMetadata(
+    id: BookId,
+    update: (CustomMetadata) -> CustomMetadata,
+  ) {
+    mutex.withLock {
+      val content = contentRepo.get(id) ?: return
+      val custom = customMetadataRepo.get(id)
+      val updated = update(custom).followingFiles(content.metadata)
+      if (updated != custom) {
+        customMetadataRepo.put(updated)
+      }
+    }
+  }
+
+  private suspend fun BookContent.book(custom: CustomMetadata): Book? {
     warmUp()
     return Book(
       content = this,
@@ -84,6 +100,7 @@ public class BookRepositoryImpl(
         }
         chapter
       },
+      custom = custom,
     )
   }
 }

@@ -122,9 +122,9 @@ class BookmarkViewModel(
     val visible = if (category == null) bookmarks else bookmarks.filter { it.kind == category }
     val now = clock.instant()
     return BookmarkViewState(
-      bookTitle = book.content.name,
-      bookAuthor = book.content.author,
-      cover = book.content.coverUrl,
+      bookTitle = book.name,
+      bookAuthor = book.author,
+      cover = book.coverUrl,
       playing = livePlaybackState?.isPlaying ?: (playState == PlayStateManager.PlayState.Playing),
       sleepTimerActive = sleepTimerState.enabled,
       bookBar = bookBar(index, visible, book.content.playbackSpeed),

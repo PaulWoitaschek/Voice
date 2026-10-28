@@ -1,8 +1,11 @@
 package voice.core.data
 
+import java.io.File
+
 public data class Book(
   val content: BookContent,
   val chapters: List<Chapter>,
+  val custom: CustomMetadata,
 ) {
 
   val id: BookId = content.id
@@ -14,7 +17,18 @@ public data class Book(
     check(chapters.map { it.id } == content.chapters) {
       "The chapters are in a different order than in the content"
     }
+    check(custom.bookId == id) {
+      "The custom metadata belongs to another book"
+    }
   }
+
+  val name: String get() = custom.name ?: content.metadata.name
+
+  val author: String? get() = custom.author ?: content.metadata.author
+
+  val cover: File? get() = custom.cover ?: content.metadata.cover
+
+  val coverUrl: String? get() = cover?.toURI()?.toString()
 
   val currentChapter: Chapter = chapters[content.currentChapterIndex]
   val currentMark: ChapterMark = currentChapter.markForPosition(content.positionInChapter)

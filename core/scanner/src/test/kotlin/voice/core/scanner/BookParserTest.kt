@@ -23,6 +23,7 @@ class BookParserTest {
 
   private val parser = BookParser(
     contentRepo = mockk(),
+    customMetadataRepo = mockk(),
     mediaAnalyzer = mockk(),
     fileFactory = mockk(),
   )
@@ -42,7 +43,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFolder),
     )
 
-    assertEquals(expected = "My Audiobook", actual = content.name)
+    assertEquals(expected = "My Audiobook", actual = content.metadata.name)
   }
 
   @Test
@@ -57,7 +58,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFolder),
     )
 
-    assertEquals(expected = "Harry Potter 3", actual = content.name)
+    assertEquals(expected = "Harry Potter 3", actual = content.metadata.name)
   }
 
   @Test
@@ -72,7 +73,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFile),
     )
 
-    assertEquals(expected = "The Title", actual = content.name)
+    assertEquals(expected = "The Title", actual = content.metadata.name)
   }
 
   @Test
@@ -90,7 +91,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFolder),
     )
 
-    assertEquals(expected = "Album Name", actual = content.name)
+    assertEquals(expected = "Album Name", actual = content.metadata.name)
   }
 
   @Test
@@ -108,7 +109,7 @@ class BookParserTest {
       file = FileBasedDocumentFile(bookFolder),
     )
 
-    assertEquals(expected = "Fallback Folder", actual = content.name)
+    assertEquals(expected = "Fallback Folder", actual = content.metadata.name)
   }
 
   private fun chapter(file: File): Chapter = Chapter(

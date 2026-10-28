@@ -154,5 +154,5 @@ private fun Book.markNameAt(bookmark: Bookmark): String {
   val chapter = chapters.firstOrNull { it.id == bookmark.chapterId }
   return chapter?.markForPosition(bookmark.time)?.name?.takeIf { it.isNotBlank() }
     ?: chapter?.name?.takeIf { it.isNotBlank() }
-    ?: content.name
+    ?: name
 }

@@ -6,6 +6,7 @@ import voice.core.data.BookId
 import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.CustomMetadata
 import java.time.Instant
 import kotlin.uuid.Uuid
 
@@ -21,6 +22,7 @@ fun book(
   part: String? = null,
   lastPlayedAt: Instant = Instant.EPOCH,
 ): Book {
+  val id = BookId(Uuid.random().toString())
   return Book(
     content = BookContent(
       positionInChapter = time,
@@ -31,7 +33,7 @@ fun book(
       isActive = true,
       lastPlayedAt = lastPlayedAt,
       skipSilence = false,
-      id = BookId(Uuid.random().toString()),
+      id = id,
       gain = 0F,
       metadata = BookMetadata(
         name = name,
@@ -45,11 +47,9 @@ fun book(
         cover = null,
         fileLastModified = null,
       ),
-      customName = null,
-      customAuthor = null,
-      customCover = null,
     ),
     chapters = chapters,
+    custom = CustomMetadata(id),
   )
 }
 

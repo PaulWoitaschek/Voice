@@ -1,0 +1,55 @@
+Voice és un reproductor d'audiollibres tranquil per a qui estima les històries i té els seus propis llibres.
+
+Trieu la carpeta amb els vostres audiollibres. Voice us mostra els llibres que troba, els afegeix a la biblioteca i recorda per on aneu en cadascun. Després es fa a un costat perquè només us calgui escoltar.
+
+<b>Un reproductor que fa joc amb el vostre llibre</b>
+
+• El reproductor pren els colors de la portada del llibre que escolteu
+• Voice recorda per on aneu en cada llibre
+• Velocitat de reproducció, ometre el silenci i augment del volum per als enregistraments fluixos
+• Heu saltat massa lluny? Amb un sol toc torneu enrere
+• Rebobina automàticament després d'una pausa, perquè no perdeu el fil
+
+<b>Adormiu-vos amb una història</b>
+
+• Temporitzador de repòs amb un esvaïment suau del so, o fins al final del capítol
+• Sacsegeu el telèfon just després que acabi el temporitzador per tornar-lo a iniciar
+• Un aspecte nocturn i tranquil mentre el temporitzador està en marxa
+
+<b>No perdeu mai per on anàveu</b>
+
+• Deseu un moment mantenint premut el botó i afegiu-hi un nom o una nota més tard
+• Classifiqueu els punts de llibre com a preferits, cites, notes o llocs per tornar-hi
+• L'historial d'escolta mostra cada reproducció, pausa i salt, perquè sempre pugueu tornar on éreu
+• Vegeu quan el cotxe, els auriculars o el rellotge han posat en marxa un llibre i torneu on éreu amb un sol toc
+• Sincronitzeu les carpetes d'audiollibres, per exemple amb Syncthing, i la posició, la velocitat i els punts de llibre us acompanyaran als altres dispositius
+
+<b>La vostra biblioteca, a la vostra manera</b>
+
+• Continueu escoltant directament des de dalt de tot de la biblioteca
+• Llibres classificats en «En curs», «No començat» i «Completat»
+• Cerca per títol i autor
+• Vista de llista i de quadrícula
+• Portades del fitxer, del telèfon o d'una cerca a Internet
+• Ginys per a la pantalla d'inici: «Ara sona» i «Prestatge»
+• Notificació multimèdia i Android Auto
+• Temes clar, fosc i negre pur, Color dinàmic i esquemes de colors per deixar Voice al vostre gust
+• Disponible en 32 idiomes
+
+<b>Feu servir els vostres propis fitxers</b>
+
+Voice reprodueix audiollibres sense DRM, com ara M4B, MP3, M4A, OGG, OGA i OPUS. Guardeu els llibres en carpetes com més us agradi. Una carpeta pot contenir un sol llibre o tota la biblioteca, i Voice s'encarrega d'endreçar-la.
+
+<b>Les vostres històries, i res més</b>
+
+• Sense compte
+• Sense anuncis
+• Cap funció de pagament
+• Els llibres es queden al vostre dispositiu
+
+Si us agrada Voice, li podeu donar suport des de la configuració. És un agraïment i no desbloqueja res.
+
+Voice és de codi obert, amb la llicència GNU GPLv3.
+
+Comentaris i informes d'errors:
+https://github.com/PaulWoitaschek/Voice/issues

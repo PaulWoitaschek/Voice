@@ -65,8 +65,8 @@ class AudiobookshelfSettingsViewModel(
       downloads = books.map { download ->
         DownloadViewState(
           bookId = download.book.id,
-          name = download.book.content.name,
-          cover = download.book.content.coverUrl,
+          name = download.book.name,
+          cover = download.book.coverUrl,
           state = download.state,
         )
       },

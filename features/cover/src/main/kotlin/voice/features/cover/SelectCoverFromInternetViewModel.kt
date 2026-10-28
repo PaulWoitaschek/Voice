@@ -138,12 +138,12 @@ class SelectCoverFromInternetViewModel(
   }
 
   private suspend fun initialQuery(): String {
-    val content = bookRepository.get(bookId)?.content ?: return ""
-    val author = content.author
+    val book = bookRepository.get(bookId) ?: return ""
+    val author = book.author
     return if (author == null) {
-      context.getString(StringsR.string.cover_search_query_without_author, content.name)
+      context.getString(StringsR.string.cover_search_query_without_author, book.name)
     } else {
-      context.getString(StringsR.string.cover_search_query_with_author, content.name, author)
+      context.getString(StringsR.string.cover_search_query_with_author, book.name, author)
     }
   }
 

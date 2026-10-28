@@ -11,6 +11,7 @@ fun book(
   lastPlayedAtMillis: Long = 0,
   addedAtMillis: Long = 0,
 ): Book {
+  val id = BookId(Uuid.random().toString())
   return Book(
     content = BookContent(
       positionInChapter = time,
@@ -21,7 +22,7 @@ fun book(
       isActive = true,
       lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
       skipSilence = false,
-      id = BookId(Uuid.random().toString()),
+      id = id,
       gain = 0F,
       metadata = BookMetadata(
         name = name,
@@ -35,11 +36,9 @@ fun book(
         cover = null,
         fileLastModified = null,
       ),
-      customName = null,
-      customAuthor = null,
-      customCover = null,
     ),
     chapters = chapters,
+    custom = CustomMetadata(id),
   )
 }
 
