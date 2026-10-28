@@ -32,6 +32,24 @@
       "tip_medium": { "title": "Mittleres Trinkgeld", "description": "Ein einmaliges Dankeschön an Voice. Schaltet nichts frei." },
       "tip_large": { "title": "Großes Trinkgeld", "description": "Ein einmaliges Dankeschön an Voice. Schaltet nichts frei." }
     },
+    "ar": {
+      "benefits": ["شارة تكبر مع كل شهر", "يدعم مطوّرًا مستقلًا", "يُبقي Voice مجانيًا وخاليًا من الإعلانات", "مجرد شكر: لا يفتح أي ميزة"],
+      "tea": { "title": "كوب شاي", "description": "كوب شاي للراوي. يُبقي الأنوار مضاءة." },
+      "honey_tea": { "title": "شاي بالعسل", "description": "شاي بالعسل للراوي. يموّل الفصول الطويلة." },
+      "golden_mic": { "title": "ميكروفون ذهبي", "description": "ميكروفون ذهبي للراوي. تصفيق حار وقوفًا لتطبيق Voice." },
+      "tip_small": { "title": "إكرامية صغيرة", "description": "شكر لمرة واحدة لتطبيق Voice. لا يفتح أي ميزة." },
+      "tip_medium": { "title": "إكرامية متوسطة", "description": "شكر لمرة واحدة لتطبيق Voice. لا يفتح أي ميزة." },
+      "tip_large": { "title": "إكرامية كبيرة", "description": "شكر لمرة واحدة لتطبيق Voice. لا يفتح أي ميزة." }
+    },
+    "ca": {
+      "benefits": ["Una insígnia que creix cada mes", "Suport al desenvolupament independent", "Voice continua de franc i sense anuncis", "Un agraïment: no desbloqueja res"],
+      "tea": { "title": "Tassa de te", "description": "Una tassa de te per a qui narra. Paga la llum." },
+      "honey_tea": { "title": "Te amb mel", "description": "Te amb mel per a qui narra. Finança els capítols llargs." },
+      "golden_mic": { "title": "Micròfon d'or", "description": "Un micròfon d'or per a qui narra. Una ovació dempeus per a Voice." },
+      "tip_small": { "title": "Propina petita", "description": "Un agraïment puntual per a Voice. No desbloqueja cap funció." },
+      "tip_medium": { "title": "Propina mitjana", "description": "Un agraïment puntual per a Voice. No desbloqueja cap funció." },
+      "tip_large": { "title": "Propina gran", "description": "Un agraïment puntual per a Voice. No desbloqueja cap funció." }
+    },
     "cs-CZ": {
       "benefits": ["Odznak, který každý měsíc roste", "Podporuje nezávislého vývojáře", "Voice zůstane zdarma a bez reklam", "Poděkování: nic neodemyká"],
       "tea": { "title": "Šálek čaje", "description": "Šálek čaje pro vypravěče. Aby světla nezhasla." },
@@ -40,6 +58,24 @@
       "tip_small": { "title": "Malé spropitné", "description": "Jednorázové poděkování pro Voice. Neodemyká žádné funkce." },
       "tip_medium": { "title": "Střední spropitné", "description": "Jednorázové poděkování pro Voice. Neodemyká žádné funkce." },
       "tip_large": { "title": "Velké spropitné", "description": "Jednorázové poděkování pro Voice. Neodemyká žádné funkce." }
+    },
+    "da-DK": {
+      "benefits": ["Et mærke, der vokser for hver måned", "Støtter en uafhængig udvikler", "Holder Voice gratis og uden reklamer", "En tak: låser ikke op for noget"],
+      "tea": { "title": "Kop te", "description": "En kop te til oplæseren. Holder lyset tændt." },
+      "honey_tea": { "title": "Te med honning", "description": "Te med honning til oplæseren. Betaler for de lange kapitler." },
+      "golden_mic": { "title": "Guldmikrofon", "description": "En guldmikrofon til oplæseren. Stående ovationer for Voice." },
+      "tip_small": { "title": "Små drikkepenge", "description": "Et engangsbidrag som tak til Voice. Låser ikke op for noget." },
+      "tip_medium": { "title": "Mellemstore drikkepenge", "description": "Et engangsbidrag som tak til Voice. Låser ikke op for noget." },
+      "tip_large": { "title": "Store drikkepenge", "description": "Et engangsbidrag som tak til Voice. Låser ikke op for noget." }
+    },
+    "el-GR": {
+      "benefits": ["Ένα σήμα που μεγαλώνει κάθε μήνα", "Στηρίζει έναν ανεξάρτητο προγραμματιστή", "Κρατά το Voice δωρεάν, χωρίς διαφημίσεις", "Ένα ευχαριστώ: δεν ξεκλειδώνει τίποτα"],
+      "tea": { "title": "Φλιτζάνι τσάι", "description": "Ένα φλιτζάνι τσάι για τον αφηγητή. Κρατά τα φώτα αναμμένα." },
+      "honey_tea": { "title": "Τσάι με μέλι", "description": "Τσάι με μέλι για τον αφηγητή. Χρηματοδοτεί τα μεγάλα κεφάλαια." },
+      "golden_mic": { "title": "Χρυσό μικρόφωνο", "description": "Ένα χρυσό μικρόφωνο για τον αφηγητή. Χειροκρότημα όρθιοι για το Voice." },
+      "tip_small": { "title": "Μικρό φιλοδώρημα", "description": "Ένα εφάπαξ ευχαριστώ για το Voice. Δεν ξεκλειδώνει καμία λειτουργία." },
+      "tip_medium": { "title": "Μεσαίο φιλοδώρημα", "description": "Ένα εφάπαξ ευχαριστώ για το Voice. Δεν ξεκλειδώνει καμία λειτουργία." },
+      "tip_large": { "title": "Μεγάλο φιλοδώρημα", "description": "Ένα εφάπαξ ευχαριστώ για το Voice. Δεν ξεκλειδώνει καμία λειτουργία." }
     },
     "es-ES": {
       "benefits": ["Una insignia que crece cada mes", "Apoya a un desarrollador independiente", "Mantiene Voice gratis y sin anuncios", "Un agradecimiento: no desbloquea nada"],
@@ -59,6 +95,24 @@
       "tip_medium": { "title": "Keskmine jootraha", "description": "Ühekordne tänu Voice'ile. Ei ava ühtegi funktsiooni." },
       "tip_large": { "title": "Suur jootraha", "description": "Ühekordne tänu Voice'ile. Ei ava ühtegi funktsiooni." }
     },
+    "fa-IR": {
+      "benefits": ["نشان شما هر ماه بزرگ‌تر می‌شود", "حمایت از یک توسعه‌دهنده‌ی مستقل", "رایگان و بدون تبلیغات نگه داشتن Voice", "یک تشکر: هیچ قابلیتی را باز نمی‌کند"],
+      "tea": { "title": "یک استکان چای", "description": "یک استکان چای برای گوینده. چراغ را روشن نگه می‌دارد." },
+      "honey_tea": { "title": "چای با عسل", "description": "چای با عسل برای گوینده. پشتوانه‌ی فصل‌های طولانی." },
+      "golden_mic": { "title": "میکروفون طلایی", "description": "میکروفون طلایی برای گوینده. تشویق ایستاده برای Voice." },
+      "tip_small": { "title": "انعام کوچک", "description": "تشکری یک‌باره از Voice. هیچ قابلیتی را باز نمی‌کند." },
+      "tip_medium": { "title": "انعام متوسط", "description": "تشکری یک‌باره از Voice. هیچ قابلیتی را باز نمی‌کند." },
+      "tip_large": { "title": "انعام بزرگ", "description": "تشکری یک‌باره از Voice. هیچ قابلیتی را باز نمی‌کند." }
+    },
+    "fi-FI": {
+      "benefits": ["Merkki, joka kasvaa joka kuukausi", "Tukee itsenäistä kehittäjää", "Voice pysyy ilmaisena ja mainoksettomana", "Kiitos, joka ei avaa mitään"],
+      "tea": { "title": "Kuppi teetä", "description": "Kuppi teetä lukijalle. Pitää valot päällä." },
+      "honey_tea": { "title": "Hunajatee", "description": "Hunajateetä lukijalle. Riittää pitkiinkin lukuihin." },
+      "golden_mic": { "title": "Kultamikki", "description": "Kultamikki lukijalle. Seisovat aplodit Voicelle." },
+      "tip_small": { "title": "Pieni tippi", "description": "Kertaluonteinen kiitos Voicelle. Se ei avaa mitään." },
+      "tip_medium": { "title": "Keskikokoinen tippi", "description": "Kertaluonteinen kiitos Voicelle. Se ei avaa mitään." },
+      "tip_large": { "title": "Iso tippi", "description": "Kertaluonteinen kiitos Voicelle. Se ei avaa mitään." }
+    },
     "fr-FR": {
       "benefits": ["Un badge qui grandit chaque mois", "Soutient un développeur indépendant", "Garde Voice gratuit et sans pub", "Un merci : ne débloque rien"],
       "tea": { "title": "Tasse de thé", "description": "Une tasse de thé pour le narrateur. Garde la lumière allumée." },
@@ -68,6 +122,15 @@
       "tip_medium": { "title": "Pourboire moyen", "description": "Un merci ponctuel pour Voice. Ne débloque aucune fonction." },
       "tip_large": { "title": "Gros pourboire", "description": "Un merci ponctuel pour Voice. Ne débloque aucune fonction." }
     },
+    "hi-IN": {
+      "benefits": ["हर महीने बढ़ने वाला बैज", "एक स्वतंत्र डेवलपर को समर्थन", "Voice मुफ़्त और विज्ञापन-मुक्त रहती है", "बस एक धन्यवाद: कुछ भी अनलॉक नहीं होता"],
+      "tea": { "title": "एक कप चाय", "description": "वाचक के लिए एक कप चाय। चूल्हा जलाए रखता है।" },
+      "honey_tea": { "title": "शहद वाली चाय", "description": "वाचक के लिए शहद वाली चाय। लंबे अध्यायों का खर्च उठाता है।" },
+      "golden_mic": { "title": "सुनहरा माइक", "description": "वाचक के लिए सुनहरा माइक। Voice के लिए खड़े होकर तालियाँ।" },
+      "tip_small": { "title": "छोटी टिप", "description": "Voice के लिए एक बार का धन्यवाद। इससे कुछ भी अनलॉक नहीं होता।" },
+      "tip_medium": { "title": "मध्यम टिप", "description": "Voice के लिए एक बार का धन्यवाद। इससे कुछ भी अनलॉक नहीं होता।" },
+      "tip_large": { "title": "बड़ी टिप", "description": "Voice के लिए एक बार का धन्यवाद। इससे कुछ भी अनलॉक नहीं होता।" }
+    },
     "hu-HU": {
       "benefits": ["Havonta növekvő jelvény", "Egy független fejlesztőt támogat", "A Voice ingyenes és reklámmentes marad", "Köszönet: nem old fel semmit"],
       "tea": { "title": "Egy csésze tea", "description": "Egy csésze tea a felolvasónak. Hogy égve maradjon a lámpa." },
@@ -76,6 +139,15 @@
       "tip_small": { "title": "Kis borravaló", "description": "Egyszeri köszönet a Voice-nak. Nem old fel funkciókat." },
       "tip_medium": { "title": "Közepes borravaló", "description": "Egyszeri köszönet a Voice-nak. Nem old fel funkciókat." },
       "tip_large": { "title": "Nagy borravaló", "description": "Egyszeri köszönet a Voice-nak. Nem old fel funkciókat." }
+    },
+    "id": {
+      "benefits": ["Lencana yang tumbuh setiap bulan", "Mendukung pengembang independen", "Menjaga Voice gratis dan bebas iklan", "Ucapan terima kasih: tidak membuka fitur"],
+      "tea": { "title": "Secangkir teh", "description": "Secangkir teh untuk narator. Menjaga dapur tetap mengepul." },
+      "honey_tea": { "title": "Teh madu", "description": "Teh madu untuk narator. Mendanai bab-bab panjang." },
+      "golden_mic": { "title": "Mikrofon emas", "description": "Mikrofon emas untuk narator. Tepuk tangan meriah untuk Voice." },
+      "tip_small": { "title": "Tip kecil", "description": "Ucapan terima kasih satu kali untuk Voice. Tidak membuka fitur apa pun." },
+      "tip_medium": { "title": "Tip sedang", "description": "Ucapan terima kasih satu kali untuk Voice. Tidak membuka fitur apa pun." },
+      "tip_large": { "title": "Tip besar", "description": "Ucapan terima kasih satu kali untuk Voice. Tidak membuka fitur apa pun." }
     },
     "it-IT": {
       "benefits": ["Un badge che cresce ogni mese", "Sostiene uno sviluppatore indipendente", "Voice resta gratis e senza pubblicità", "Un grazie: non sblocca nulla"],
@@ -104,6 +176,15 @@
       "tip_medium": { "title": "ふつうのチップ", "description": "Voice への一度きりの感謝。機能は解放されません。" },
       "tip_large": { "title": "大きなチップ", "description": "Voice への一度きりの感謝。機能は解放されません。" }
     },
+    "mk-MK": {
+      "benefits": ["Значка што расте секој месец", "Поддржува независен развивач", "Го одржува Voice бесплатен и без реклами", "Благодарност: ништо не отклучува"],
+      "tea": { "title": "Шолја чај", "description": "Шолја чај за нараторот. Да не се изгаснат светлата." },
+      "honey_tea": { "title": "Чај со мед", "description": "Чај со мед за нараторот. Доволно за долгите поглавја." },
+      "golden_mic": { "title": "Златен микрофон", "description": "Златен микрофон за нараторот. Стоечки овации за Voice." },
+      "tip_small": { "title": "Мал бакшиш", "description": "Еднократна благодарност за Voice. Не отклучува никакви функции." },
+      "tip_medium": { "title": "Среден бакшиш", "description": "Еднократна благодарност за Voice. Не отклучува никакви функции." },
+      "tip_large": { "title": "Голем бакшиш", "description": "Еднократна благодарност за Voice. Не отклучува никакви функции." }
+    },
     "nl-NL": {
       "benefits": ["Een badge die elke maand groeit", "Steunt een onafhankelijke ontwikkelaar", "Houdt Voice gratis en zonder reclame", "Een bedankje: ontgrendelt niets"],
       "tea": { "title": "Kopje thee", "description": "Een kopje thee voor de verteller. Houdt het licht aan." },
@@ -113,6 +194,15 @@
       "tip_medium": { "title": "Middelgrote fooi", "description": "Een eenmalig bedankje voor Voice. Ontgrendelt geen functies." },
       "tip_large": { "title": "Grote fooi", "description": "Een eenmalig bedankje voor Voice. Ontgrendelt geen functies." }
     },
+    "no-NO": {
+      "benefits": ["Et merke som vokser for hver måned", "Støtter en uavhengig utvikler", "Holder Voice gratis og reklamefri", "En takk: låser ikke opp noe"],
+      "tea": { "title": "Kopp te", "description": "En kopp te til oppleseren. Holder lyset på." },
+      "honey_tea": { "title": "Te med honning", "description": "Te med honning til oppleseren. Betaler for de lange kapitlene." },
+      "golden_mic": { "title": "Gullmikrofon", "description": "En gullmikrofon til oppleseren. Stående applaus for Voice." },
+      "tip_small": { "title": "Lite tips", "description": "Et engangsbidrag som takk til Voice. Låser ikke opp noe." },
+      "tip_medium": { "title": "Middels tips", "description": "Et engangsbidrag som takk til Voice. Låser ikke opp noe." },
+      "tip_large": { "title": "Stort tips", "description": "Et engangsbidrag som takk til Voice. Låser ikke opp noe." }
+    },
     "pl-PL": {
       "benefits": ["Odznaka, która rośnie co miesiąc", "Wspiera niezależnego programistę", "Voice zostaje darmowy i bez reklam", "Podziękowanie: nic nie odblokowuje"],
       "tea": { "title": "Filiżanka herbaty", "description": "Filiżanka herbaty dla lektora. Żeby światło nie zgasło." },
@@ -121,6 +211,24 @@
       "tip_small": { "title": "Mały napiwek", "description": "Jednorazowe podziękowanie dla Voice. Nie odblokowuje funkcji." },
       "tip_medium": { "title": "Średni napiwek", "description": "Jednorazowe podziękowanie dla Voice. Nie odblokowuje funkcji." },
       "tip_large": { "title": "Duży napiwek", "description": "Jednorazowe podziękowanie dla Voice. Nie odblokowuje funkcji." }
+    },
+    "pt-BR": {
+      "benefits": ["Um emblema que cresce a cada mês", "Apoia um desenvolvedor independente", "Mantém o Voice gratuito e sem anúncios", "Um agradecimento: não desbloqueia nada"],
+      "tea": { "title": "Xícara de chá", "description": "Uma xícara de chá para quem narra. Ajuda a pagar as contas." },
+      "honey_tea": { "title": "Chá com mel", "description": "Chá com mel para quem narra. Banca os capítulos longos." },
+      "golden_mic": { "title": "Microfone de ouro", "description": "Um microfone de ouro para quem narra. Aplausos de pé para o Voice." },
+      "tip_small": { "title": "Gorjeta pequena", "description": "Um agradecimento único ao Voice. Não desbloqueia nenhum recurso." },
+      "tip_medium": { "title": "Gorjeta média", "description": "Um agradecimento único ao Voice. Não desbloqueia nenhum recurso." },
+      "tip_large": { "title": "Gorjeta grande", "description": "Um agradecimento único ao Voice. Não desbloqueia nenhum recurso." }
+    },
+    "pt-PT": {
+      "benefits": ["Um emblema que cresce a cada mês", "Apoia um programador independente", "Mantém o Voice gratuito e sem anúncios", "Um agradecimento: não desbloqueia nada"],
+      "tea": { "title": "Chávena de chá", "description": "Uma chávena de chá para quem narra. Ajuda a pagar as contas." },
+      "honey_tea": { "title": "Chá com mel", "description": "Chá com mel para quem narra. Financia os capítulos longos." },
+      "golden_mic": { "title": "Microfone de ouro", "description": "Um microfone de ouro para quem narra. Uma ovação de pé para o Voice." },
+      "tip_small": { "title": "Gorjeta pequena", "description": "Um agradecimento pontual ao Voice. Não desbloqueia nenhuma funcionalidade." },
+      "tip_medium": { "title": "Gorjeta média", "description": "Um agradecimento pontual ao Voice. Não desbloqueia nenhuma funcionalidade." },
+      "tip_large": { "title": "Gorjeta grande", "description": "Um agradecimento pontual ao Voice. Não desbloqueia nenhuma funcionalidade." }
     },
     "ro": {
       "benefits": ["O insignă care crește în fiecare lună", "Susține un dezvoltator independent", "Voice rămâne gratuit și fără reclame", "Un mulțumesc: nu deblochează nimic"],
@@ -140,6 +248,15 @@
       "tip_medium": { "title": "Средние чаевые", "description": "Разовая благодарность Voice. Не открывает никаких функций." },
       "tip_large": { "title": "Большие чаевые", "description": "Разовая благодарность Voice. Не открывает никаких функций." }
     },
+    "sk": {
+      "benefits": ["Odznak, ktorý každý mesiac rastie", "Podporuje nezávislého vývojára", "Udržiava Voice zadarmo a bez reklám", "Poďakovanie: nič neodomyká"],
+      "tea": { "title": "Šálka čaju", "description": "Šálka čaju pre interpreta. Platí účty." },
+      "honey_tea": { "title": "Čaj s medom", "description": "Čaj s medom pre interpreta. Financuje dlhé kapitoly." },
+      "golden_mic": { "title": "Zlatý mikrofón", "description": "Zlatý mikrofón pre interpreta. Potlesk postojačky pre Voice." },
+      "tip_small": { "title": "Malé sprepitné", "description": "Jednorazové poďakovanie pre Voice. Neodomyká žiadne funkcie." },
+      "tip_medium": { "title": "Stredné sprepitné", "description": "Jednorazové poďakovanie pre Voice. Neodomyká žiadne funkcie." },
+      "tip_large": { "title": "Veľké sprepitné", "description": "Jednorazové poďakovanie pre Voice. Neodomyká žiadne funkcie." }
+    },
     "sv-SE": {
       "benefits": ["Ett märke som växer varje månad", "Stöttar en oberoende utvecklare", "Håller Voice gratis och reklamfritt", "Ett tack: låser inte upp något"],
       "tea": { "title": "Kopp te", "description": "En kopp te till uppläsaren. Håller lamporna tända." },
@@ -148,6 +265,24 @@
       "tip_small": { "title": "Liten dricks", "description": "Ett engångstack till Voice. Låser inte upp några funktioner." },
       "tip_medium": { "title": "Mellanstor dricks", "description": "Ett engångstack till Voice. Låser inte upp några funktioner." },
       "tip_large": { "title": "Stor dricks", "description": "Ett engångstack till Voice. Låser inte upp några funktioner." }
+    },
+    "ta-IN": {
+      "benefits": ["ஒவ்வொரு மாதமும் வளரும் பதக்கம்", "ஒரு சுயாதீன உருவாக்குநரை ஆதரிக்கும்", "Voice-ஐ இலவசமாக, விளம்பரமின்றி வைக்கும்", "இது ஒரு நன்றி மட்டுமே: எதையும் திறக்காது"],
+      "tea": { "title": "ஒரு கோப்பை தேநீர்", "description": "வாசிப்பாளருக்கு ஒரு கோப்பை தேநீர். அடுப்பை எரிய வைக்கும்." },
+      "honey_tea": { "title": "தேன் தேநீர்", "description": "வாசிப்பாளருக்குத் தேன் தேநீர். நீண்ட அத்தியாயங்களுக்கு நிதியளிக்கும்." },
+      "golden_mic": { "title": "தங்க மைக்", "description": "வாசிப்பாளருக்குத் தங்க மைக். Voice-க்கு எழுந்து நின்று கைதட்டல்." },
+      "tip_small": { "title": "சிறிய அன்பளிப்பு", "description": "Voice-க்கு ஒருமுறை அளிக்கும் நன்றி. எந்த அம்சத்தையும் திறக்காது." },
+      "tip_medium": { "title": "நடுத்தர அன்பளிப்பு", "description": "Voice-க்கு ஒருமுறை அளிக்கும் நன்றி. எந்த அம்சத்தையும் திறக்காது." },
+      "tip_large": { "title": "பெரிய அன்பளிப்பு", "description": "Voice-க்கு ஒருமுறை அளிக்கும் நன்றி. எந்த அம்சத்தையும் திறக்காது." }
+    },
+    "tr-TR": {
+      "benefits": ["Her ay büyüyen bir rozet", "Bağımsız bir geliştiriciyi destekler", "Voice'u ücretsiz ve reklamsız tutar", "Teşekkür: hiçbir şeyin kilidini açmaz"],
+      "tea": { "title": "Bir bardak çay", "description": "Seslendirene bir bardak çay. Ocağı tüttürür." },
+      "honey_tea": { "title": "Ballı çay", "description": "Seslendirene ballı çay. Uzun bölümleri finanse eder." },
+      "golden_mic": { "title": "Altın mikrofon", "description": "Seslendirene altın mikrofon. Voice'a ayakta alkış." },
+      "tip_small": { "title": "Küçük bahşiş", "description": "Voice'a tek seferlik bir teşekkür. Hiçbir özelliğin kilidini açmaz." },
+      "tip_medium": { "title": "Orta bahşiş", "description": "Voice'a tek seferlik bir teşekkür. Hiçbir özelliğin kilidini açmaz." },
+      "tip_large": { "title": "Büyük bahşiş", "description": "Voice'a tek seferlik bir teşekkür. Hiçbir özelliğin kilidini açmaz." }
     },
     "uk": {
       "benefits": ["Значок, що росте щомісяця", "Підтримка незалежного розробника", "Безкоштовний Voice без реклами", "Подяка: нічого не відкриває"],
