@@ -7,6 +7,8 @@ ffmpeg \
   -metadata title="Your Album Title" \
   -metadata artist="Your Artist Name" \
   -metadata album="Your Album Name" \
+  -metadata SERIES="Your Series" \
+  -metadata SERIES-PART="3" \
   dummy_audio.mka
 
 mkvmerge \

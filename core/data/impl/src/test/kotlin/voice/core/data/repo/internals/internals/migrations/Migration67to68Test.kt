@@ -83,6 +83,24 @@ class Migration67to68Test {
     )
   }
 
+  @Test
+  fun `the next scan reads every book again`() {
+    helper.createDatabase(DB_NAME, 67).use {
+      it.insert(
+        book(id = "content://dune", name = "Dune", author = "Herbert").apply {
+          put("metadataFileLastModified", "2026-10-01T10:00:00Z")
+        },
+      )
+    }
+
+    val migrated = helper.runMigrationsAndValidate(DB_NAME, 68, true, *allMigrations())
+
+    assertEquals(
+      expected = listOf(null),
+      actual = migrated.query("SELECT metadataFileLastModified FROM content2").mapRows { getStringOrNull("metadataFileLastModified") },
+    )
+  }
+
   private fun SupportSQLiteDatabase.insert(values: ContentValues) {
     insert("content2", SQLiteDatabase.CONFLICT_FAIL, values)
   }

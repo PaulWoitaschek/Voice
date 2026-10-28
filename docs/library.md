@@ -31,8 +31,8 @@ it, open the [clickable prototype](https://voice.woitaschek.de/prototypes/librar
 
 - Every book has a title, author, narrator, genre, series and part. The library only shows the title and the author,
   and search only lists books.
-- Series and part rarely arrive. Voice reads them from Audiobookshelf and from MP3 tags written one particular way.
-  M4B, FLAC and OGG files lose them, and so do MP3 files from the usual taggers.
+- Series and part come from Audiobookshelf, and from the tags the usual taggers and Audiobookshelf write into MP3,
+  M4B, FLAC, OGG and MKA files.
 - A book of one file is named after its album. 160 episodes with the album "Die drei ???" all get that name, and their
   own titles are neither shown nor searched.
 - The author is the artist tag. It often holds the narrator, several names, `<Unknown>`, or one person spelled two
@@ -103,8 +103,9 @@ fixing many books at once has to take a few taps.
 
 An edit in Voice comes first, then Audiobookshelf and the tags, then the folders, and last the album.
 
-- **Tags:** `MVNM` and `MVIN`, and `SERIES` and `SERIES-PART` like Audiobookshelf reads them, in MP3, M4B, FLAC and
-  OGG files.
+- **Tags:** `SERIES` and `SERIES-PART`, then the show and its episode, then `MVNM` and `MVIN`, like Audiobookshelf reads
+  them. Without these, a grouping like "The Stormlight Archive #2" names the series. A grouping without a part is often
+  a genre, so it doesn't count.
 - **Authors:** the artist tag, or the album artist when there's none. "Unknown" and `<Unknown>` count as no author.
   With "Folders are authors", the folder is the author of books whose tags have none. The tags come first, because
   some listeners use this mode for folders like "Kids" or "Crime".
@@ -378,30 +379,28 @@ What goes:
 
 Each step helps on its own.
 
-1. Read series and part from M4B, FLAC and OGG files, from MP3 files as the usual taggers write them, and from the
-   `SERIES` tags.
-2. Radio plays and other episodes: each file keeps its own title, and files that share an album become a series.
-3. "Folders are authors": the folder is the author of books whose tags have none.
-4. The edit sheet with author, series and part.
-5. Series stacks in the library and the series screen.
-6. Offering the next book of a series.
-7. Series folders with "Folders are authors". It changes which files make a book, so it comes once stacks show the
+1. Radio plays and other episodes: each file keeps its own title, and files that share an album become a series.
+2. "Folders are authors": the folder is the author of books whose tags have none.
+3. The edit sheet with author, series and part.
+4. Series stacks in the library and the series screen.
+5. Offering the next book of a series.
+6. Series folders with "Folders are authors". It changes which files make a book, so it comes once stacks show the
    result.
-8. The author screen.
-9. Authors and series in search, Browse opening their screen, and numbers in search.
-10. Hiding books.
-11. The sort sheet, with All books for the orders other than Progress.
-12. Author stacks when sorted by author. They open the author screen from step 8.
-13. Selecting several books.
-14. Android Auto using the library search.
-15. "Voice finds the books", as an A/B test with new listeners. It needs the series stacks from step 5 to show what it
+7. The author screen.
+8. Authors and series in search, Browse opening their screen, and numbers in search.
+9. Hiding books.
+10. The sort sheet, with All books for the orders other than Progress.
+11. Author stacks when sorted by author. They open the author screen from step 7.
+12. Selecting several books.
+13. Android Auto using the library search.
+14. "Voice finds the books", as an A/B test with new listeners. It needs the series stacks from step 4 to show what it
     found.
-16. If the test works, replacing the layouts for everyone.
+15. If the test works, replacing the layouts for everyone.
 
 ## Open questions
 
 - Should books from Audiobookshelf be editable in Voice after all?
 - Are folders enough as shelves ([#1214]), or do listeners need shelves they make in Voice?
-- Should step 7 go, since replacing the layouts splits series folders anyway, and no library changes before the test?
+- Should step 6 go, since replacing the layouts splits series folders anyway, and no library changes before the test?
 - When the layouts are replaced: should folders that look like several books be split, or keep their books with a join?
 - Do listeners with thousands of books need a fast scroller with letters, when sorted by title or author?

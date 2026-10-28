@@ -40,6 +40,7 @@ internal class MatroskaMetaDataExtractor(
     var album: String? = null
     var artist: String? = null
     var title: String? = null
+    val tags = mutableMapOf<String, String>()
 
     segment.forEachChild { element ->
       when {
@@ -50,10 +51,11 @@ internal class MatroskaMetaDataExtractor(
           title = readTitle(element) ?: title
         }
         element isType MatroskaDocTypes.Tags -> {
-          val tags = readTags(element)
-          album = tags.album ?: album
-          artist = tags.artist ?: artist
-          title = tags.title ?: title
+          val read = readTags(element)
+          tags += read
+          album = read["ALBUM"] ?: album
+          artist = read["ARTIST"] ?: read["PERFORMER"] ?: artist
+          title = read["TITLE"] ?: title
         }
       }
     }
@@ -63,6 +65,7 @@ internal class MatroskaMetaDataExtractor(
       album = album,
       artist = artist,
       title = title,
+      tags = tags,
       chapters = chapters.mapIndexed { index, chapter ->
         MarkData(
           chapter.startTime / 1000000,
@@ -161,27 +164,21 @@ internal class MatroskaMetaDataExtractor(
     return null
   }
 
-  private fun readTags(element: Element): TagInfo {
-    var album: String? = null
-    var artist: String? = null
-    var title: String? = null
-
+  private fun readTags(element: Element): Map<String, String> {
+    val tags = mutableMapOf<String, String>()
     element.forEachChild { tag ->
       if (tag isType MatroskaDocTypes.Tag) {
         tag.forEachChild { simpleTag ->
           if (simpleTag isType MatroskaDocTypes.SimpleTag) {
             val (name, value) = readSimpleTag(simpleTag)
-            when (name?.uppercase()) {
-              "ALBUM" -> album = value
-              "ARTIST", "PERFORMER" -> artist = value
-              "TITLE" -> title = value
+            if (name != null && value != null) {
+              tags[name.uppercase()] = value
             }
           }
         }
       }
     }
-
-    return TagInfo(album = album, artist = artist, title = title)
+    return tags
   }
 
   private fun readSimpleTag(element: Element): Pair<String?, String?> {
@@ -203,12 +200,6 @@ internal class MatroskaMetaDataExtractor(
 
   override fun close() = dataSource.close()
 }
-
-private data class TagInfo(
-  val album: String? = null,
-  val artist: String? = null,
-  val title: String? = null,
-)
 
 internal class MatroskaParseException : RuntimeException {
   constructor(message: String) : super(message)

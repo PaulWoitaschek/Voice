@@ -103,6 +103,8 @@ internal class MediaAnalyzerTest {
     assertEquals(expected = "Your Album Title", actual = metadata.title)
     assertEquals(expected = "Your Artist Name", actual = metadata.artist)
     assertEquals(expected = "Your Album Name", actual = metadata.album)
+    assertEquals(expected = "Your Series", actual = metadata.series)
+    assertEquals(expected = "3", actual = metadata.part)
     assertEquals(
       expected = listOf(
         MarkData(startMs = 0L, name = "Intro"),
@@ -165,6 +167,22 @@ internal class MediaAnalyzerTest {
       },
       actual = metadata.chapters,
     )
+  }
+
+  @Test
+  fun `mp3 with movement frames`() {
+    val metadata = assertNotNull(parse("movement.mp3"))
+
+    assertEquals(expected = "Discworld", actual = metadata.series)
+    assertEquals(expected = "3", actual = metadata.part)
+  }
+
+  @Test
+  fun `m4b with the series in its grouping`() {
+    val metadata = assertNotNull(parse("grouping.m4b"))
+
+    assertEquals(expected = "The Stormlight Archive", actual = metadata.series)
+    assertEquals(expected = "1", actual = metadata.part)
   }
 
   @Test

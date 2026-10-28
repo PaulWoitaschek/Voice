@@ -35,7 +35,8 @@ internal class BookParser(
       stored.chapters.first() == firstChapter.id &&
       stored.metadata.fileLastModified == firstChapter.fileLastModified
     if (upToDate) return stored
-    val analyzed = firstChapterMetadata ?: analyze(firstChapter)
+    // a file that can't be read right now, like on an offline cloud, keeps what was read before
+    val analyzed = firstChapterMetadata ?: analyze(firstChapter) ?: return stored
     val metadata = metadata(chapters, file, analyzed)
       .copy(cover = stored.metadata.cover)
     val custom = customMetadataRepo.get(stored.id)
