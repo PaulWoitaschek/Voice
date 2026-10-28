@@ -406,8 +406,8 @@
     <string name="support.action.donate_kofi">Doner på Ko-fi</string>
     <string name="support.description.maintenance">Voice er gratis, åpen kildekode og vedlikeholdes av én utvikler.</string>
     <string name="support.description.monthly">Månedlig støtte lar meg planlegge neste versjon, ikke bare neste feilretting.</string>
-    <string name="support.fine_print">Et takk: låser ikke opp noe. Si opp når som helst i Google Play.</string>
-    <string name="support.fine_print.tip">Et takk: låser ikke opp noe. Uten abonnement.</string>
+    <string name="support.fine_print">En takk: låser ikke opp noe. Si opp når som helst i Google Play.</string>
+    <string name="support.fine_print.tip">En takk: låser ikke opp noe. Uten abonnement.</string>
     <string name="support.helps.title">Støtte hjelper med</string>
     <string name="support.helps.maintenance">Feilrettinger og vedlikehold</string>
     <string name="support.helps.features">Nye funksjoner</string>

@@ -1,6 +1,6 @@
 ---
 name: translate-strings
-description: Voice's tone of voice and translating its UI strings into all locales. Use when adding, changing, or removing strings in core/strings/src/main/res/values/strings.xml, when translating or backfilling a locale, or when reviewing translations.
+description: Voice's tone of voice and translating its UI strings and Play Store listing into all locales. Use when adding, changing, or removing strings in core/strings/src/main/res/values/strings.xml, when editing the store listing in fastlane/metadata/android, when translating or backfilling a locale, or when reviewing translations.
 ---
 
 # Translating strings
@@ -32,7 +32,7 @@ system or an ad. This applies to new English strings as well as translations.
   `scripts/check_locale_config.main.kts`, which requires `app/src/main/res/xml/locales_config.xml` to list exactly the
   locales at 100% coverage, so a single missing translation in a complete locale fails the build.
 - A backfill that brings a locale to 100% adds it to `locales_config.xml` with its BCP 47 tag (folder `in` is `id`,
-  `iw` is `he`, `pt-rBR` is `pt-BR`).
+  `iw` is `he`, `pt-rBR` is `pt-BR`), and adds a [store listing](#store-listing).
 - When the meaning of an English string changes, rewrite every translation. A casing or punctuation fix in English
   needs no translation change. A removed string is removed from every locale.
 - Follow [locales.md](locales.md) for each locale's form of address, quotation marks, and plural quantities.
@@ -59,6 +59,23 @@ system or an ad. This applies to new English strings as well as translations.
 - Use `…`, never `...`.
 - Insert each entry at its position in `values/strings.xml`, after the key that precedes it there. Locale files have
   no comments and no `tools:` attributes. Indent entries with 4 spaces and plural items with 8.
+
+## Store listing
+
+The Play Store listing is `title.txt`, `short_description.txt` and `full_description.txt` in
+`fastlane/metadata/android/<code>/`, translated from `en-US/`. Folders use Google Play's language codes (`cs-CZ`,
+`iw-IL`, `no-NO`). `scripts/check_locale_config.main.kts` requires a listing for every locale in `locales_config.xml`
+except Sardinian, which Google Play doesn't offer. A change to the English listing goes into every listing in the same
+PR.
+
+The listing is how listeners find Voice: Play search ranks the app on these texts, the title most (ASO).
+
+- The title keeps the locale's word for audiobooks, the term listeners search for, as a word of its own rather than
+  inside a compound: `lydbøger`, not `lydbogsafspiller`. Add the word for player only if both fit in 30 characters:
+  `Voice player de audiolivros`, but `Voice Audiollibres`, as the Catalan with `reproductor` is too long.
+- The short description names audiobooks too, within 80 characters.
+- Use the everyday words listeners type into the search, but never repeat or list keywords. Play penalizes keyword
+  stuffing, and the listing keeps Voice's tone like every other string.
 
 ## Workflow
 

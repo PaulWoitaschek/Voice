@@ -1,0 +1,55 @@
+Voice on rauhallinen äänikirjasoitin tarinoiden ystäville, joilla on kirjat omasta takaa.
+
+Valitse kansio, jossa äänikirjasi ovat. Voice näyttää löytämänsä kirjat, lisää ne kirjastoosi ja muistaa jokaisesta, mihin jäit. Sitten Voice väistyy taustalle, ja voit vain kuunnella.
+
+<b>Soitin, joka sopii kirjaasi</b>
+
+• Soitin saa värinsä kuuntelemasi kirjan kannesta
+• Voice muistaa jokaisesta kirjasta, mihin jäit
+• Toiston nopeus, hiljaisuuden ohitus ja äänenvoimakkuuden tehostus vaimeille äänitteille
+• Hyppäsitkö liian pitkälle? Yksi napautus vie sinut takaisin
+• Automaattinen takaisinkelaus tauon jälkeen, jotta et putoa kärryiltä
+
+<b>Nukahda tarinaa kuunnellen</b>
+
+• Uniajastin, joka hiljentää äänen pehmeästi, tai pysäytys luvun lopussa
+• Ravista puhelinta heti ajastimen päätyttyä, niin se käynnistyy uudelleen
+• Rauhallinen yönäkymä, kun ajastin on käynnissä
+
+<b>Tiedät aina, mihin jäit</b>
+
+• Tallenna hetki pitkällä painalluksella ja lisää nimi tai muistiinpano myöhemmin
+• Merkitse kirjanmerkit suosikeiksi, lainauksiksi, muistiinpanoiksi tai kohdiksi, joihin haluat palata
+• Kuunteluhistoria näyttää jokaisen toiston, tauon ja siirtymän, joten löydät aina takaisin
+• Katso, milloin auto, kuulokkeet tai kello käynnisti kirjan, ja palaa yhdellä napautuksella sinne, missä olit
+• Synkronoi äänikirjakansiosi esimerkiksi Syncthingillä, niin kuuntelukohta, nopeus ja kirjanmerkit kulkevat mukanasi muille laitteillesi
+
+<b>Sinun kirjastosi, sinun tavallasi</b>
+
+• Jatka kuuntelua suoraan kirjastosi yläosasta
+• Kirjat jaettuina nykyisiin, aloittamattomiin ja kuunneltuihin
+• Hae nimen ja tekijän mukaan
+• Luettelo- ja ruudukkonäkymä
+• Kannet tiedostosta, puhelimestasi tai verkkohausta
+• Aloitusnäytön widgetit: ”Nyt soi” ja ”Kirjahylly”
+• Mediailmoitus ja Android Auto
+• Vaalea ja tumma teema, puhdas musta, dynaaminen väri ja väriteemat, joilla teet Voicesta omasi
+• Saatavilla 32 kielellä
+
+<b>Omat tiedostot mukaan</b>
+
+Voice toistaa DRM-vapaita äänikirjoja esimerkiksi muodoissa M4B, MP3, M4A, OGG, OGA ja OPUS. Pidä kirjasi kansioissa juuri niin kuin haluat. Kansiossa voi olla yksi kirja tai koko kirjastosi, ja Voice pitää ne järjestyksessä puolestasi.
+
+<b>Vain sinä ja tarinasi</b>
+
+• Ei tiliä
+• Ei mainoksia
+• Ei maksumuureja
+• Kirjasi pysyvät laitteellasi
+
+Jos pidät Voicesta, voit tukea sitä asetuksissa. Tuki on kiitos, eikä se avaa mitään.
+
+Voice on avointa lähdekoodia GNU GPLv3 -lisenssillä.
+
+Palaute ja virheraportit:
+https://github.com/PaulWoitaschek/Voice/issues

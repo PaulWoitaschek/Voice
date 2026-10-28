@@ -1,0 +1,55 @@
+Voice je pokojný prehrávač audiokníh pre ľudí, ktorí milujú príbehy a majú vlastné knihy.
+
+Vyberte priečinok so zvukovými knihami. Voice vám ukáže knihy, ktoré v ňom nájde, pridá ich do vašej knižnice a pri každej si zapamätá, kde ste skončili. Potom sa stiahne do úzadia, aby ste mohli jednoducho počúvať.
+
+<b>Prehrávač, ktorý ladí s vašou knihou</b>
+
+• Prehrávač preberá farby z obálky knihy, ktorú práve počúvate
+• Voice si pri každej knihe pamätá, kde ste skončili
+• Rýchlosť prehrávania, preskakovanie ticha a zosilnenie hlasitosti pre tiché nahrávky
+• Preskočili ste príliš ďaleko? Jedným ťuknutím sa vrátite späť
+• Automatické pretočenie dozadu po pozastavení, aby ste nestratili niť
+
+<b>Zaspávajte pri príbehu</b>
+
+• Časovač spánku s jemným stíšením zvuku alebo so zastavením na konci kapitoly
+• Keď časovač skončí, hneď zatraste telefónom a spustí sa znova
+• Pokojný nočný vzhľad, kým časovač beží
+
+<b>Vždy viete, kde ste skončili</b>
+
+• Uložte si moment podržaním a názov alebo poznámku pridajte neskôr
+• Označte záložky ako obľúbené, citáty, poznámky alebo miesta na neskôr
+• História počúvania ukazuje každé prehratie, pozastavenie aj skok, takže vždy nájdete cestu späť
+• Uvidíte, kedy knihu spustilo auto, slúchadlá alebo hodinky, a jedným ťuknutím sa vrátite tam, kde ste boli
+• Synchronizujte priečinky so zvukovými knihami, napríklad cez Syncthing, a miesto, kde ste skončili, rýchlosť a záložky budete mať aj na ďalších zariadeniach
+
+<b>Vaša knižnica, vaše podmienky</b>
+
+• Pokračovať v počúvaní môžete priamo navrchu knižnice
+• Knihy rozdelené na rozpočúvané, ešte nepočúvané a vypočuté
+• Vyhľadávanie podľa názvu a autora
+• Zobrazenie v zozname alebo v mriežke
+• Obálky zo súboru, z telefónu alebo z vyhľadávania na internete
+• Miniaplikácie na plochu: „Práve hrá“ a „Polica na knihy“
+• Ovládanie prehrávania v upozornení a Android Auto
+• Svetlá, tmavá a čisto čierna téma, dynamická farba a farebné schémy, aby ste si Voice prispôsobili
+• K dispozícii v 32 jazykoch
+
+<b>Vaše vlastné súbory</b>
+
+Voice prehráva zvukové knihy bez DRM, napríklad vo formátoch M4B, MP3, M4A, OGG, OGA a OPUS. Knihy si ukladajte do priečinkov tak, ako vám to vyhovuje. Priečinok môže obsahovať jednu knihu alebo celú vašu knižnicu a Voice ho za vás usporiada.
+
+<b>Len vy a vaše príbehy</b>
+
+• Žiadny účet
+• Žiadne reklamy
+• Žiadne funkcie za poplatok
+• Vaše knihy zostávajú na vašom zariadení
+
+Ak vás Voice baví, môžete ho podporiť v nastaveniach. Je to poďakovanie a nič neodomyká.
+
+Voice je open source softvér pod licenciou GNU GPLv3.
+
+Spätná väzba a hlásenia chýb:
+https://github.com/PaulWoitaschek/Voice/issues

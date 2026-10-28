@@ -1,0 +1,55 @@
+Voice, hikâyeleri seven ve kendi kitaplarını dinlemek isteyenler için sakin bir sesli kitap oynatıcısıdır.
+
+Sesli kitaplarınızın bulunduğu klasörü seçin. Voice bulduğu kitapları size gösterir, kitaplığınıza ekler ve her birinde kaldığınız yeri hatırlar. Sonra kenara çekilir, size de yalnızca dinlemek kalır.
+
+<b>Kitabınıza uyan bir oynatıcı</b>
+
+• Oynatıcı, renklerini dinlediğiniz kitabın kapağından alır
+• Voice her kitapta kaldığınız yeri hatırlar
+• Oynatma hızı, sessizliği geçme ve kısık sesli kayıtlar için ses yükseltme
+• Çok mu uzağa atladınız? Tek dokunuşla geri dönün
+• Ara verdikten sonra otomatik geri sarma, böylece konuyu kaçırmazsınız
+
+<b>Bir hikâyeyle uykuya dalın</b>
+
+• Sesi yavaşça kısan uyku zamanlayıcısı ya da bölüm sonunda durdurma
+• Zamanlayıcı biter bitmez telefonunuzu sallayarak yeniden başlatın
+• Zamanlayıcı çalışırken sakin bir gece görünümü
+
+<b>Kaldığınız yeri hiç kaybetmeyin</b>
+
+• Basılı tutarak bir anı kaydedin, adını ya da notunu sonra ekleyin
+• Yer imlerini favori, alıntı, not ya da “Tekrar dinle” olarak işaretleyin
+• Dinleme geçmişiniz her oynatmayı, duraklatmayı ve atlamayı gösterir, böylece kaldığınız yeri her zaman bulursunuz
+• Aracınızın, kulaklığınızın ya da akıllı saatinizin bir kitabı ne zaman başlattığını görün ve tek dokunuşla önceki yerinize dönün
+• Sesli kitap klasörlerinizi örneğin Syncthing ile eşitleyin; kaldığınız yer, hızınız ve yer imleriniz diğer cihazlarınızda da sizinle olsun
+
+<b>Kitaplığınız, istediğiniz gibi</b>
+
+• Kitaplığınızın en üstünden dinlemeye devam edin
+• Kitaplar “Dinleniyor”, “Henüz başlanmadı” ve “Tamamlandı” olarak ayrılır
+• Başlığa ve yazara göre arama
+• Liste ve ızgara görünümü
+• Dosyadan, telefonunuzdan ya da çevrimiçi aramadan kapak
+• Ana ekran widget'ları: “Şimdi çalıyor” ve “Kitap rafı”
+• Medya bildirimi ve Android Auto
+• Açık, koyu ve saf siyah temalar, dinamik renk ve renk şemalarıyla Voice'u kendinize göre ayarlayın
+• 32 dilde kullanılabilir
+
+<b>Kendi dosyalarınızı getirin</b>
+
+Voice, DRM içermeyen M4B, MP3, M4A, OGG, OGA ve OPUS gibi sesli kitapları oynatır. Kitaplarınızı klasörlerde dilediğiniz gibi tutun. Bir klasörde tek bir kitap da olabilir, tüm kitaplığınız da; Voice gerisini sizin için düzenler.
+
+<b>Yalnızca siz ve hikâyeleriniz</b>
+
+• Hesap yok
+• Reklam yok
+• Ücretli özellik yok
+• Kitaplarınız cihazınızda kalır
+
+Voice'u beğendiyseniz ayarlardan destek olabilirsiniz. Bu bir teşekkürdür ve hiçbir şeyin kilidini açmaz.
+
+Voice, GNU GPLv3 lisansıyla açık kaynaklıdır.
+
+Geri bildirim ve hata raporları:
+https://github.com/PaulWoitaschek/Voice/issues

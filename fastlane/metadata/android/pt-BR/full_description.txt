@@ -1,0 +1,55 @@
+O Voice é um player de audiolivros tranquilo para quem ama histórias e tem os próprios livros.
+
+Escolha a pasta com seus audiolivros. O Voice mostra os livros que encontra, adiciona todos à sua biblioteca e lembra onde você parou em cada um. Depois, sai de cena para você simplesmente ouvir.
+
+<b>Um player que combina com o seu livro</b>
+
+• O player usa as cores da capa do livro que você está ouvindo
+• O Voice lembra onde você parou em cada livro
+• Velocidade de reprodução, pular silêncio e aumento de volume para gravações com som baixo
+• Pulou longe demais? Um toque traz você de volta
+• Retrocesso automático depois de uma pausa, para você não perder o fio da meada
+
+<b>Pegue no sono com uma história</b>
+
+• Desligamento automático com o som diminuindo aos poucos, ou no fim do capítulo
+• Agite o celular logo depois que o som parar para reiniciar o desligamento automático
+• Um visual noturno e tranquilo enquanto o desligamento automático está ativo
+
+<b>Nunca perca onde você parou</b>
+
+• Salve um momento tocando e segurando o botão, e adicione um nome ou uma nota depois
+• Classifique os marcadores como favoritos, citações, notas ou para ouvir de novo
+• Seu histórico de audição mostra cada reprodução, pausa e salto, para você sempre encontrar o caminho de volta
+• Veja quando o carro, os fones de ouvido ou o relógio iniciaram um livro e volte para onde estava com um toque
+• Sincronize suas pastas de audiolivros, por exemplo com o Syncthing, e sua posição, velocidade e marcadores acompanham você nos outros dispositivos
+
+<b>Sua biblioteca, do seu jeito</b>
+
+• Continue ouvindo direto do topo da sua biblioteca
+• Livros separados em “Em andamento”, “Ainda não iniciado” e “Concluído”
+• Pesquisa por título e autor
+• Visualização em lista e em grade
+• Capas do próprio arquivo, do celular ou de uma pesquisa na internet
+• Widgets para a tela inicial: “Tocando agora” e “Estante”
+• Notificação de mídia e Android Auto
+• Temas claro, escuro e preto puro, Cor dinâmica e esquemas de cores para deixar o Voice do seu jeito
+• Disponível em 32 idiomas
+
+<b>Use seus próprios arquivos</b>
+
+O Voice toca audiolivros sem DRM, como M4B, MP3, M4A, OGG, OGA e OPUS. Guarde seus livros em pastas do jeito que preferir. Uma pasta pode ter um único livro ou toda a sua biblioteca, e o Voice organiza tudo para você.
+
+<b>Só você e suas histórias</b>
+
+• Sem conta
+• Sem anúncios
+• Nenhum recurso pago
+• Seus livros ficam no seu dispositivo
+
+Se você gosta do Voice, pode apoiá-lo nas configurações. É um agradecimento e não desbloqueia nada.
+
+O Voice é de código aberto, sob a licença GNU GPLv3.
+
+Feedback e relatos de bugs:
+https://github.com/PaulWoitaschek/Voice/issues
