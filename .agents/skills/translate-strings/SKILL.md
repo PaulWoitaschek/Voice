@@ -64,9 +64,11 @@ system or an ad. This applies to new English strings as well as translations.
 
 The Play Store listing is `title.txt`, `short_description.txt` and `full_description.txt` in
 `fastlane/metadata/android/<code>/`, translated from `en-US/`. Folders use Google Play's language codes (`cs-CZ`,
-`iw-IL`, `no-NO`). `scripts/check_locale_config.main.kts` requires a listing for every locale in `locales_config.xml`
-except Sardinian, which Google Play doesn't offer. A change to the English listing goes into every listing in the same
-PR.
+`iw-IL`, `no-NO`). The supporter subscriptions and tips have their own texts under the same codes in
+`fastlane/play_products.json`, reusing the app's tier names and wording; `scripts/play_products.main.kts` checks their
+lengths and uploads them. `scripts/check_locale_config.main.kts` requires both for every locale in
+`locales_config.xml` except Sardinian, which Google Play doesn't offer. A change to the English texts goes into every
+language in the same PR.
 
 The listing is how listeners find Voice: Play search ranks the app on these texts, the title most (ASO).
 

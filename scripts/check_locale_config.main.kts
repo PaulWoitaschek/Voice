@@ -1,5 +1,8 @@
 #!/usr/bin/env kotlin
+@file:DependsOn("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.12.0")
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -138,6 +141,12 @@ val storeListings = storeListingDir.listFiles()
   .filter { it.isDirectory }
   .map { it.name }
   .sorted()
+val playProductsPath = "fastlane/play_products.json"
+val playProductListings = Json.parseToJsonElement(File(repoRoot, playProductsPath).readText())
+  .jsonObject
+  .getValue("listings")
+  .jsonObject
+  .keys
 val storeListingProblems = buildList {
   (actualLocales - localesWithoutStoreListing).sorted().forEach { locale ->
     if (storeListings.none { storeListingMatches(it, locale) }) {
@@ -155,16 +164,22 @@ val storeListingProblems = buildList {
         add("$listing/$fileName has $length characters, needs 1 to $limit")
       }
     }
+    if (listing !in playProductListings) {
+      add("$listing has no listings in $playProductsPath")
+    }
+  }
+  (playProductListings - storeListings.toSet()).sorted().forEach { language ->
+    add("$language in $playProductsPath has no store listing")
   }
 }
 
 if (storeListingProblems.isNotEmpty()) {
-  println("Store listings in $storeListingDir do not match the locale config:")
+  println("Play Store listings do not match the locale config:")
   storeListingProblems.forEach { println("- $it") }
-  throw IllegalStateException("Add a store listing for every locale in $localeConfigFile.")
+  throw IllegalStateException("Add a store listing and Play product listings for every locale in $localeConfigFile.")
 }
 
-println("Every locale has a store listing.")
+println("Every locale has a store listing and Play product listings.")
 println("Locale config matches localization coverage.")
 localizedCoverages.sortedByDescending { it.percentage }.forEach {
   val status = if (it.percentage >= minCoverage) "included" else "excluded"
