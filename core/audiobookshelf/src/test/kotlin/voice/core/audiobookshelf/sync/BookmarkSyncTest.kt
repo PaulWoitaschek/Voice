@@ -25,6 +25,7 @@ import voice.core.audiobookshelf.api.AbsChapter
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.Book
 import voice.core.data.Bookmark
+import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookmarkRepo
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -42,7 +43,7 @@ class BookmarkSyncTest {
     id = "item",
   )
   private val chapters = item.chapters()
-  private val book = Book(item.toBookContent(chapters, existing = null), chapters)
+  private val book = item.toBookContent(chapters, existing = null).let { Book(it, chapters, CustomMetadata(it.id)) }
   private val synced = MemoryDataStore<Map<String, String>>(emptyMap())
   private val bookmarkRepo = mockk<BookmarkRepo>(relaxUnitFun = true) {
     coEvery { bookmarks(any()) } returns emptyList()

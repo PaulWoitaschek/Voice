@@ -35,10 +35,10 @@ class EditBookViewModel(private val repo: BookRepository) : BottomSheetItemViewM
     if (item != BottomSheetItem.Edit) return
     val book = repo.get(bookId) ?: return
     _state.value = EditBookState(
-      title = book.content.name,
-      author = book.content.author.orEmpty(),
+      title = book.name,
+      author = book.author.orEmpty(),
       bookId = bookId,
-      cover = book.content.coverUrl,
+      cover = book.coverUrl,
     )
   }
 
@@ -60,10 +60,10 @@ class EditBookViewModel(private val repo: BookRepository) : BottomSheetItemViewM
       check(state.confirmButtonEnabled)
       scope.launch {
         // only what the listener changed, so the other name keeps following the files
-        repo.updateBook(state.bookId) { content ->
-          var edited = content
-          if (state.title != state.initialTitle) edited = edited.withCustomName(state.title.trim())
-          if (state.author != state.initialAuthor) edited = edited.withCustomAuthor(state.author.trim().ifEmpty { null })
+        repo.updateCustomMetadata(state.bookId) { custom ->
+          var edited = custom
+          if (state.title != state.initialTitle) edited = edited.copy(name = state.title.trim())
+          if (state.author != state.initialAuthor) edited = edited.copy(author = state.author.trim().ifEmpty { null })
           edited
         }
       }

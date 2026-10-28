@@ -82,15 +82,15 @@ class BookSearch(
     split: (String) -> List<SearchText.Word>,
   ) {
     val texts = BookSearchField.entries.mapNotNull { field ->
-      field.text(book.content)?.let { field to it }
+      field.text(book)?.let { field to it }
     }.toMap()
     val words = texts.mapValues { (_, text) -> split(text) }
 
     // a book the listener edited is still found by what its files say, which isn't shown, so it ranks below
     // visible matches
     val fileWords = listOfNotNull(
-      book.content.metadata.name.takeIf { book.content.customName != null },
-      book.content.metadata.author?.takeIf { book.content.customAuthor != null },
+      book.content.metadata.name.takeIf { book.custom.name != null },
+      book.content.metadata.author?.takeIf { book.custom.author != null },
     ).flatMap(split)
   }
 
@@ -111,7 +111,7 @@ class BookSearch(
       .thenByDescending { it.book.isInProgress() }
       .thenByDescending { it.book.content.lastPlayedAt }
       .thenBy(NaturalOrderComparator.stringComparator) { it.book.content.metadata.part.orEmpty() }
-      .thenBy(NaturalOrderComparator.stringComparator) { it.book.content.name }
+      .thenBy(NaturalOrderComparator.stringComparator) { it.book.name }
   }
 }
 

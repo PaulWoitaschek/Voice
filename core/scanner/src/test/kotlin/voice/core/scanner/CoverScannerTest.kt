@@ -15,6 +15,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.CustomMetadata
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.documentfile.FileBasedDocumentFactory
@@ -107,7 +108,7 @@ class CoverScannerTest {
     File(folder, "1.mp3").writeText("audio")
     File(folder, "cover.jpg").writeText("cover")
     val missing = File(testFolder.root, "picked.png")
-    val book = book(folder).let { Book(it.content.copy(customCover = missing), it.chapters) }
+    val book = book(folder).let { it.copy(custom = it.custom.copy(cover = missing)) }
 
     scan(book)
 
@@ -160,9 +161,9 @@ class CoverScannerTest {
       .filter { it.extension == "mp3" }
       .sortedBy { it.name }
       .map { chapter(it) }
-    val content = BookParser(contentRepo = mockk(), mediaAnalyzer = mockk(), fileFactory = mockk())
+    val content = BookParser(contentRepo = mockk(), customMetadataRepo = mockk(), mediaAnalyzer = mockk(), fileFactory = mockk())
       .parse(chapters, BookId(folder.toUri()), analyzed = null, file = FileBasedDocumentFile(folder))
-    return Book(content, chapters)
+    return Book(content, chapters, CustomMetadata(content.id))
   }
 
   private fun chapter(file: File): Chapter = Chapter(

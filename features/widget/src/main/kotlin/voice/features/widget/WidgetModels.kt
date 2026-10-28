@@ -120,8 +120,8 @@ internal fun nowPlayingBook(
   val speed = book.content.playbackSpeed
   val position = book.position / MINUTE_MS * MINUTE_MS
   return NowPlayingBook(
-    title = book.content.name,
-    cover = book.content.coverUrl,
+    title = book.name,
+    cover = book.coverUrl,
     chapterName = book.currentMark.name?.takeIf { chapterCount > 1 && it.isNotBlank() },
     chapterNumber = chapterNumber.coerceAtLeast(1),
     chapterCount = chapterCount,
@@ -170,8 +170,8 @@ internal fun shelfBooks(
     .map { book ->
       ShelfBook(
         id = book.id,
-        title = book.content.name,
-        cover = book.content.coverUrl,
+        title = book.name,
+        cover = book.coverUrl,
         progress = (progress(book.position, book.duration) * 100).roundToInt() / 100F,
         playing = playing && book.id == currentBookId,
       )

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 68,
-    "identityHash": "ca5e91310afb2400a6b6c47fa9ca6cde",
+    "identityHash": "0a110eee5fc983007560503e0f80e914",
     "entities": [
       {
         "tableName": "chapters2",
@@ -54,7 +54,7 @@
       },
       {
         "tableName": "content2",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `playbackSpeed` REAL NOT NULL, `skipSilence` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `lastPlayedAt` TEXT NOT NULL, `addedAt` TEXT NOT NULL, `chapters` TEXT NOT NULL, `currentChapter` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `gain` REAL NOT NULL DEFAULT 0, `customName` TEXT, `customAuthor` TEXT, `customCover` TEXT, `name` TEXT NOT NULL, `author` TEXT, `album` TEXT, `title` TEXT, `genre` TEXT, `narrator` TEXT, `series` TEXT, `part` TEXT, `cover` TEXT, `metadataFileLastModified` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `playbackSpeed` REAL NOT NULL, `skipSilence` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, `lastPlayedAt` TEXT NOT NULL, `addedAt` TEXT NOT NULL, `chapters` TEXT NOT NULL, `currentChapter` TEXT NOT NULL, `positionInChapter` INTEGER NOT NULL, `gain` REAL NOT NULL DEFAULT 0, `name` TEXT NOT NULL, `author` TEXT, `album` TEXT, `title` TEXT, `genre` TEXT, `narrator` TEXT, `series` TEXT, `part` TEXT, `cover` TEXT, `metadataFileLastModified` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -116,21 +116,6 @@
             "affinity": "REAL",
             "notNull": true,
             "defaultValue": "0"
-          },
-          {
-            "fieldPath": "customName",
-            "columnName": "customName",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "customAuthor",
-            "columnName": "customAuthor",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "customCover",
-            "columnName": "customCover",
-            "affinity": "TEXT"
           },
           {
             "fieldPath": "metadata.name",
@@ -418,11 +403,44 @@
             "createSql": "CREATE INDEX IF NOT EXISTS `index_listening_session_bookId` ON `${TABLE_NAME}` (`bookId`)"
           }
         ]
+      },
+      {
+        "tableName": "customMetadata",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `name` TEXT, `author` TEXT, `cover` TEXT, PRIMARY KEY(`bookId`))",
+        "fields": [
+          {
+            "fieldPath": "bookId",
+            "columnName": "bookId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "author",
+            "columnName": "author",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "cover",
+            "columnName": "cover",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "bookId"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ca5e91310afb2400a6b6c47fa9ca6cde')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0a110eee5fc983007560503e0f80e914')"
     ]
   }
 }

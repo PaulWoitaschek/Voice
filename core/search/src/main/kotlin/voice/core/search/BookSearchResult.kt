@@ -1,7 +1,6 @@
 package voice.core.search
 
 import voice.core.data.Book
-import voice.core.data.BookContent
 
 data class BookSearchResult(
   val book: Book,
@@ -19,15 +18,15 @@ enum class BookSearchField {
   Genre,
   ;
 
-  fun text(content: BookContent): String? {
+  fun text(book: Book): String? {
     val text = when (this) {
-      Title -> content.name
-      Author -> content.author
-      Series -> content.metadata.series?.let { series ->
-        listOfNotNull(series, content.metadata.part?.takeIf { it.isNotBlank() }).joinToString(" ")
+      Title -> book.name
+      Author -> book.author
+      Series -> book.content.metadata.series?.let { series ->
+        listOfNotNull(series, book.content.metadata.part?.takeIf { it.isNotBlank() }).joinToString(" ")
       }
-      Narrator -> content.metadata.narrator
-      Genre -> content.metadata.genre
+      Narrator -> book.content.metadata.narrator
+      Genre -> book.content.metadata.genre
     }
     return text?.takeIf { it.isNotBlank() }
   }

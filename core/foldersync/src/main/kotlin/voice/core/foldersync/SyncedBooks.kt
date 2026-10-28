@@ -17,7 +17,8 @@ internal fun List<Book>.toSyncedBook(
   ownFileExists: Boolean,
   now: Long,
 ): SyncedBook {
-  val content = played()
+  val played = played()
+  val files = played.content.metadata
   // the bookmarks of every copy, so playing another copy doesn't look like deleting them
   val localBookmarks = flatMap { copy ->
     copy.chapters.flatMapIndexed { file, chapter ->
@@ -26,9 +27,9 @@ internal fun List<Book>.toSyncedBook(
   }.toMap()
   val deletedNow = (own?.bookmarks.orEmpty().keys - localBookmarks.keys).associateWith { now }
   return SyncedBook(
-    place = content.place(),
-    name = syncedText(content.customName, content.metadata.name, own?.name, ownFileExists, now),
-    author = syncedText(content.customAuthor, content.metadata.author, own?.author, ownFileExists, now),
+    place = played.content.place(),
+    name = syncedText(played.custom.name, files.name, own?.name, ownFileExists, now),
+    author = syncedText(played.custom.author, files.author, own?.author, ownFileExists, now),
     bookmarks = localBookmarks,
     deletedBookmarks = own?.deletedBookmarks.orEmpty() - localBookmarks.keys + deletedNow,
   )
@@ -36,7 +37,7 @@ internal fun List<Book>.toSyncedBook(
 
 // not an edit, but a device whose folders have other names would take it as one
 internal fun SyncedBook.withoutFilesNames(copies: List<Book>): SyncedBook {
-  val files = copies.played().metadata
+  val files = copies.played().content.metadata
   return copy(
     name = name?.takeUnless { it.isFrom(files.name) },
     author = author?.takeUnless { it.isFrom(files.author) },
@@ -46,7 +47,7 @@ internal fun SyncedBook.withoutFilesNames(copies: List<Book>): SyncedBook {
 // a null value goes back to the files, which still has to reach the other devices
 private fun SyncedText.isFrom(files: String?): Boolean = value != null && value == files
 
-private fun List<Book>.played(): BookContent = maxBy { it.content.lastPlayedAt }.content
+private fun List<Book>.played(): Book = maxBy { it.content.lastPlayedAt }
 
 private fun BookContent.place(): SyncedPlace? {
   if (lastPlayedAt == Instant.EPOCH) return null

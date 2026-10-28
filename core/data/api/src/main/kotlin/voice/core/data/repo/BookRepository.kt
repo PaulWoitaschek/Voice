@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.CustomMetadata
 
 public interface BookRepository {
 
@@ -18,5 +19,10 @@ public interface BookRepository {
   public suspend fun updateBook(
     id: BookId,
     update: (BookContent) -> BookContent,
+  )
+
+  public suspend fun updateCustomMetadata(
+    id: BookId,
+    update: (CustomMetadata) -> CustomMetadata,
   )
 }

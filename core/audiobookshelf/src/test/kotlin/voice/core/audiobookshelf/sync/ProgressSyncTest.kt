@@ -24,6 +24,7 @@ import voice.core.audiobookshelf.api.AbsMediaProgress
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.CustomMetadata
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
@@ -216,7 +217,7 @@ class ProgressSyncTest {
     lastPlayedAt: Long = 0,
   ): Book {
     val content = item.toBookContent(chapters, existing = null).copy(lastPlayedAt = Instant.ofEpochMilli(lastPlayedAt))
-    return Book(content, chapters).let { book ->
+    return Book(content, chapters, CustomMetadata(content.id)).let { book ->
       val position = book.positionAt(positionMs)
       book.update { it.copy(currentChapter = position.chapterId, positionInChapter = position.positionInChapter) }
     }

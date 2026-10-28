@@ -50,7 +50,7 @@ class BottomSheetViewModelTest {
 
   private val book = book(chapters = listOf(chapter(duration = 10_000), chapter(duration = 10_000)), time = 0)
   private val storedBook = MutableStateFlow<Book?>(book)
-  private val serverBook = book.let { it.copy(content = it.content.copy(id = BookId("abs://item/1"))) }
+  private val serverBook = book(time = 0, id = BookId("abs://item/1"))
   private val downloadStates = MutableStateFlow<Map<BookId, BookDownloadState>>(emptyMap())
   private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
     every { serverName } returns flowOf("audiobooks.example.com")
@@ -86,7 +86,7 @@ class BottomSheetViewModelTest {
   fun `shows the book with its category and items`() = runTest(dispatcher) {
     viewModel().test {
       val state = awaitLoaded()
-      assertEquals(book.content.name, state.book.name)
+      assertEquals(book.name, state.book.name)
       assertEquals(BookOverviewCategory.NOT_STARTED, state.category)
       assertEquals(listOf(BottomSheetItem.Edit), state.items)
     }

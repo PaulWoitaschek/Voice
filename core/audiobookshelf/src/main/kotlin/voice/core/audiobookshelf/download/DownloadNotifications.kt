@@ -80,8 +80,8 @@ internal class DownloadNotifications(
     val single = downloads.singleOrNull()
     if (single != null) {
       builder
-        .setContentTitle(single.book.content.name)
-        .setLargeIcon(single.book.content.cover?.let(::cover))
+        .setContentTitle(single.book.name)
+        .setLargeIcon(single.book.cover?.let(::cover))
     } else {
       builder
         .setContentTitle(
@@ -97,7 +97,7 @@ internal class DownloadNotifications(
     val text = when {
       waitingFor != null -> waitingText(waitingFor)
       single != null -> progressText(single.state)
-      else -> downloads.joinToString { it.book.content.name }
+      else -> downloads.joinToString { it.book.name }
     }
     return builder
       .setContentText(text)
@@ -134,9 +134,9 @@ internal class DownloadNotifications(
       book.id,
       NotificationCompat.Builder(context, DOWNLOAD_CHANNEL_ID)
         .setSmallIcon(android.R.drawable.stat_sys_download_done)
-        .setContentTitle(book.content.name)
+        .setContentTitle(book.name)
         .setContentText(context.getString(StringsR.string.audiobookshelf_download_notification_done))
-        .setLargeIcon(book.content.cover?.let(::cover))
+        .setLargeIcon(book.cover?.let(::cover))
         .setCategory(NotificationCompat.CATEGORY_STATUS)
         .setContentIntent(openLibrary())
         .setAutoCancel(true)
@@ -150,9 +150,9 @@ internal class DownloadNotifications(
       book.id,
       NotificationCompat.Builder(context, DOWNLOAD_CHANNEL_ID)
         .setSmallIcon(android.R.drawable.stat_notify_error)
-        .setContentTitle(book.content.name)
+        .setContentTitle(book.name)
         .setContentText(context.getString(StringsR.string.book_download_failed))
-        .setLargeIcon(book.content.cover?.let(::cover))
+        .setLargeIcon(book.cover?.let(::cover))
         .setCategory(NotificationCompat.CATEGORY_ERROR)
         .setContentIntent(openLibrary())
         .setAutoCancel(true)

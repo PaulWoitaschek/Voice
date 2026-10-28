@@ -14,6 +14,7 @@ import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.BookMetadata
 import voice.core.data.ChapterId
+import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
 import java.io.File
 import java.time.Instant
@@ -29,11 +30,16 @@ class CoverSaverTest {
 
   private val context = ApplicationProvider.getApplicationContext<Context>()
   private val contents = mutableMapOf<BookId, BookContent>()
+  private val customs = mutableMapOf<BookId, CustomMetadata>()
   private val repo = mockk<BookRepository> {
     coEvery { this@mockk.get(any()) } returns null
     coEvery { updateBook(any(), any()) } answers {
       val id = firstArg<BookId>()
       contents[id] = secondArg<(BookContent) -> BookContent>()(contents.getValue(id))
+    }
+    coEvery { updateCustomMetadata(any(), any()) } answers {
+      val id = firstArg<BookId>()
+      customs[id] = secondArg<(CustomMetadata) -> CustomMetadata>()(customs[id] ?: CustomMetadata(id))
     }
   }
   private val coverSaver = CoverSaver(repo = repo, context = context)
@@ -44,7 +50,7 @@ class CoverSaverTest {
 
     coverSaver.save(content.id, Bitmap.createBitmap(2000, 2000, Bitmap.Config.ARGB_8888))
 
-    val cover = contents.getValue(content.id).customCover!!
+    val cover = customs.getValue(content.id).cover!!
     assertEquals(expected = File(context.filesDir, "customCovers"), actual = cover.parentFile)
     assertWebp(cover, width = 1200, height = 1200)
   }
@@ -120,9 +126,6 @@ class CoverSaverTest {
         cover = null,
         fileLastModified = null,
       ),
-      customName = null,
-      customAuthor = null,
-      customCover = null,
     ).also { contents[it.id] = it }
   }
 }

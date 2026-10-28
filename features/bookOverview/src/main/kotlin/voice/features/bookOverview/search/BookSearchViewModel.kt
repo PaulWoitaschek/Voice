@@ -27,7 +27,6 @@ import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
-import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.RecentBookSearchRepo
@@ -184,12 +183,12 @@ class BookSearchViewModel(
 
   private fun browse(books: List<Book>): BookSearchViewState.Browse? {
     val categories = BrowseCategory.entries.filter { category ->
-      books.any { category.value(it.content) != null }
+      books.any { category.value(it) != null }
     }
     if (categories.isEmpty()) return null
     val selected = selectedBrowseCategory?.takeIf { it in categories } ?: categories.first()
     val entries = books
-      .mapNotNull { book -> selected.value(book.content)?.let { it to book } }
+      .mapNotNull { book -> selected.value(book)?.let { it to book } }
       .groupBy({ (value, _) -> value.lowercase() }, { (value, book) -> value to book })
       .map { (_, values) ->
         val name = values.groupingBy { (value, _) -> value }.eachCount().maxBy { it.value }.key
@@ -327,12 +326,12 @@ class LastBookSearchResults {
   internal var value: QueryResults? = null
 }
 
-private fun BrowseCategory.value(content: BookContent): String? {
+private fun BrowseCategory.value(book: Book): String? {
   val value = when (this) {
-    BrowseCategory.Authors -> content.author
-    BrowseCategory.Series -> content.metadata.series
-    BrowseCategory.Narrators -> content.metadata.narrator
-    BrowseCategory.Genres -> content.metadata.genre
+    BrowseCategory.Authors -> book.author
+    BrowseCategory.Series -> book.content.metadata.series
+    BrowseCategory.Narrators -> book.content.metadata.narrator
+    BrowseCategory.Genres -> book.content.metadata.genre
   }
   return value?.trim()?.takeIf { it.isNotEmpty() }
 }
@@ -342,7 +341,6 @@ private val TagFields = listOf(BookSearchField.Series, BookSearchField.Narrator,
 private fun BookSearchResult.toViewState(livePlaybackState: LivePlaybackState?): SearchResultViewState {
   val book = livePlaybackState?.let(book::overlay) ?: book
   val item = book.toItemViewState()
-  val content = book.content
   return SearchResultViewState(
     id = book.id,
     title = HighlightedText(item.name, matches[BookSearchField.Title].orEmpty()),
@@ -353,7 +351,7 @@ private fun BookSearchResult.toViewState(livePlaybackState: LivePlaybackState?):
     remainingTime = item.remainingTime,
     matchTag = TagFields.firstNotNullOfOrNull { field ->
       val highlights = matches[field] ?: return@firstNotNullOfOrNull null
-      val text = field.text(content) ?: return@firstNotNullOfOrNull null
+      val text = field.text(book) ?: return@firstNotNullOfOrNull null
       MatchTag(field, HighlightedText(text, highlights))
     },
   )

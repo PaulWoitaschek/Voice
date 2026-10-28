@@ -166,7 +166,7 @@ public class AudiobookshelfDownloads internal constructor(
 
   /** The server books that are downloaded, or on their way, by name. */
   public val books: Flow<List<BookDownload>> = tracked.map { tracked ->
-    tracked.values.sortedBy { it.book.content.name.lowercase() }
+    tracked.values.sortedBy { it.book.name.lowercase() }
   }.distinctUntilChanged()
 
   public val usedBytes: Flow<Long> = files.map { files ->
@@ -266,7 +266,7 @@ public class AudiobookshelfDownloads internal constructor(
 
   /** Changes of what the notification shows while books download. */
   internal val foregroundNotificationChanges: Flow<Unit> = tracked
-    .map { tracked -> activeDownloads(tracked.keys).map { it.book.content.name to it.state } }
+    .map { tracked -> activeDownloads(tracked.keys).map { it.book.name to it.state } }
     .distinctUntilChanged()
     .map { }
 

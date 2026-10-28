@@ -124,7 +124,7 @@ class ReviewPromptController(
     val headline = when (trigger) {
       is ReviewTrigger.BookFinished -> {
         val book = books.first { it.id == trigger.bookId }
-        ReviewPrompt.Headline.BookFinished(name = book.content.name, cover = book.content.coverUrl)
+        ReviewPrompt.Headline.BookFinished(name = book.name, cover = book.coverUrl)
       }
       is ReviewTrigger.Milestone -> ReviewPrompt.Headline.Milestone
     }
@@ -144,7 +144,7 @@ class ReviewPromptController(
     return ReviewPrompt.Stats(
       listenedHours = maxOf(inLibrary, summary.listened).inWholeHours.toInt().coerceAtLeast(1),
       finishedBooks = started.count { it.position >= it.duration - FINISHED_WITHIN.inWholeMilliseconds },
-      authors = started.mapNotNullTo(mutableSetOf()) { it.content.author?.trim()?.lowercase()?.ifEmpty { null } }.size,
+      authors = started.mapNotNullTo(mutableSetOf()) { it.author?.trim()?.lowercase()?.ifEmpty { null } }.size,
     )
   }
 

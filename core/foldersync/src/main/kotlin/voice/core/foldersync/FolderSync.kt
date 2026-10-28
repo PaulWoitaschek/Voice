@@ -147,13 +147,13 @@ public class FolderSync internal constructor(
     val name = newest.name
     if (name != null && name != mine.name) {
       copies.forEach { copy ->
-        bookRepository.updateBook(copy.id) { it.withCustomName(name.value) }
+        bookRepository.updateCustomMetadata(copy.id) { it.copy(name = name.value) }
       }
     }
     val author = newest.author
     if (author != null && author != mine.author) {
       copies.forEach { copy ->
-        bookRepository.updateBook(copy.id) { it.withCustomAuthor(author.value) }
+        bookRepository.updateCustomMetadata(copy.id) { it.copy(author = author.value) }
       }
     }
     (mine.bookmarks.keys - newest.bookmarks.keys).forEach { bookmarkRepo.deleteBookmark(Bookmark.Id(it)) }

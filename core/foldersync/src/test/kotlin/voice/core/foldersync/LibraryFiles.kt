@@ -9,6 +9,7 @@ import voice.core.data.BookMetadata
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.CustomMetadata
 import java.time.Instant
 import kotlin.uuid.Uuid
 
@@ -40,9 +41,10 @@ fun book(
       markData = emptyList(),
     )
   }
+  val id = BookId(bookUri.toString())
   return Book(
     content = BookContent(
-      id = BookId(bookUri.toString()),
+      id = id,
       playbackSpeed = playbackSpeed,
       skipSilence = false,
       isActive = true,
@@ -64,11 +66,9 @@ fun book(
         cover = null,
         fileLastModified = null,
       ),
-      customName = customName,
-      customAuthor = customAuthor,
-      customCover = null,
     ),
     chapters = chapters,
+    custom = CustomMetadata(id, name = customName, author = customAuthor),
   )
 }
 

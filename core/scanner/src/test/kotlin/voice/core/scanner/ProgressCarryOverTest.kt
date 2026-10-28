@@ -15,8 +15,10 @@ import voice.core.data.BookMetadata
 import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ChapterRepo
+import voice.core.data.repo.CustomMetadataRepo
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.store.CurrentBookStore
@@ -24,6 +26,7 @@ import java.io.File
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class ProgressCarryOverTest {
@@ -34,8 +37,18 @@ class ProgressCarryOverTest {
   private val listeningHistoryRepo = mockk<ListeningHistoryRepo>(relaxUnitFun = true)
   private val listeningStatsRepo = mockk<ListeningStatsRepo>(relaxUnitFun = true)
   private val currentBookStore = MemoryDataStore<BookId?>(null)
-  private val progressCarryOver =
-    ProgressCarryOver(bookmarkRepo, listeningHistoryRepo, listeningStatsRepo, CurrentBookStore(currentBookStore))
+  private val customs = mutableMapOf<BookId, CustomMetadata>()
+  private val customMetadataRepo = mockk<CustomMetadataRepo> {
+    coEvery { get(any<BookId>()) } answers { customs[firstArg()] ?: CustomMetadata(firstArg()) }
+    coEvery { put(any()) } answers { customs[firstArg<CustomMetadata>().bookId] = firstArg() }
+  }
+  private val progressCarryOver = ProgressCarryOver(
+    bookmarkRepo,
+    listeningHistoryRepo,
+    listeningStatsRepo,
+    CurrentBookStore(currentBookStore),
+    customMetadataRepo,
+  )
   private val chapters = mutableMapOf<ChapterId, Chapter>()
   private val chapterRepo = mockk<ChapterRepo> {
     coEvery { get(ids = any()) } answers { firstArg<List<ChapterId>>().mapNotNull { chapters[it] } }
@@ -60,12 +73,11 @@ class ProgressCarryOverTest {
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = oldChapters,
     ).copy(
-      customName = "Renamed",
-      customCover = File("cover.webp"),
       currentChapter = oldChapters[1],
       positionInChapter = 42,
       lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
     )
+    customs[old.id] = CustomMetadata(old.id, name = "Renamed", cover = File("cover.webp"))
     val bookmark = Bookmark(
       bookId = old.id,
       chapterId = oldChapters[1],
@@ -89,14 +101,13 @@ class ProgressCarryOverTest {
 
     assertEquals(
       expected = new.copy(
-        customName = "Renamed",
-        customCover = File("cover.webp"),
         currentChapter = newChapters[1],
         positionInChapter = 42,
         lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
       ),
       actual = carried,
     )
+    assertEquals(expected = CustomMetadata(new.id, name = "Renamed", cover = File("cover.webp")), actual = customs[new.id])
     coVerify(exactly = 1) { bookmarkRepo.addBookmark(any()) }
     coVerify { bookmarkRepo.addBookmark(bookmark.copy(bookId = new.id, chapterId = newChapters[1])) }
     assertEquals(expected = new.id, actual = currentBookStore.data.first())
@@ -183,7 +194,8 @@ class ProgressCarryOverTest {
     val old = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks")),
       chapters = chapters,
-    ).copy(customName = "Everything", lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    ).copy(lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    customs[old.id] = CustomMetadata(old.id, name = "Everything")
     val new = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = chapters.take(1),
@@ -192,6 +204,7 @@ class ProgressCarryOverTest {
     val carried = carryOver(new, previous = listOf(old))
 
     assertEquals(expected = new.copy(lastPlayedAt = old.lastPlayedAt), actual = carried)
+    assertNull(customs[new.id])
   }
 
   @Test
@@ -247,12 +260,11 @@ class ProgressCarryOverTest {
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = oldChapters,
     ).copy(
-      customName = "Renamed",
-      customCover = File("cover.webp"),
       currentChapter = oldChapters[1],
       positionInChapter = 42,
       lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
     )
+    customs[old.id] = CustomMetadata(old.id, name = "Renamed", cover = File("cover.webp"))
     val bookmark = Bookmark(
       bookId = old.id,
       chapterId = oldChapters[1],
@@ -274,14 +286,13 @@ class ProgressCarryOverTest {
 
     assertEquals(
       expected = new.copy(
-        customName = "Renamed",
-        customCover = File("cover.webp"),
         currentChapter = newChapters[1],
         positionInChapter = 42,
         lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"),
       ),
       actual = carried,
     )
+    assertEquals(expected = CustomMetadata(new.id, name = "Renamed", cover = File("cover.webp")), actual = customs[new.id])
     coVerify { bookmarkRepo.addBookmark(bookmark.copy(bookId = new.id, chapterId = newChapters[1])) }
     coVerify {
       listeningHistoryRepo.moveToBook(from = listOf(old.id), to = new.id, chapters = oldChapters.zip(newChapters).toMap())
@@ -296,10 +307,8 @@ class ProgressCarryOverTest {
       chapters = listOf(file("primary:Audiobooks/Book/1.mp3")),
     ).copy(
       addedAt = Instant.parse("2025-01-01T10:00:00Z"),
-      customName = "Renamed",
-      customAuthor = "Edited",
-      customCover = File("picked.webp"),
     )
+    customs[old.id] = CustomMetadata(old.id, name = "Renamed", author = "Edited", cover = File("picked.webp"))
     val oldWithCoverFromFiles = old.copy(metadata = old.metadata.copy(cover = File("found.webp")))
     val new = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book (2020)")),
@@ -311,12 +320,13 @@ class ProgressCarryOverTest {
     assertEquals(
       expected = new.copy(
         addedAt = old.addedAt,
-        customName = "Renamed",
-        customAuthor = "Edited",
-        customCover = File("picked.webp"),
         metadata = new.metadata.copy(cover = File("found.webp")),
       ),
       actual = carried,
+    )
+    assertEquals(
+      expected = CustomMetadata(new.id, name = "Renamed", author = "Edited", cover = File("picked.webp")),
+      actual = customs[new.id],
     )
   }
 
@@ -331,9 +341,9 @@ class ProgressCarryOverTest {
       chapters = listOf(file("primary:Audiobooks/Book (2020)/1.mp3")),
     ).copy(metadata = old.metadata.copy(name = "Book (2020)"))
 
-    val carried = carryOver(new, previous = listOf(old))
+    val _ = carryOver(new, previous = listOf(old))
 
-    assertEquals(expected = "Book (2020)", actual = carried.name)
+    assertEquals(expected = CustomMetadata(new.id), actual = customs[new.id])
   }
 
   @Test
@@ -342,17 +352,19 @@ class ProgressCarryOverTest {
     val old = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book")),
       chapters = chapters.map { ChapterId(documentUri(tree = "primary:Audiobooks", document = "primary:Audiobooks/Book/$it")) },
-    ).copy(customName = "Theirs", lastPlayedAt = Instant.parse("2026-01-02T10:00:00Z"))
+    ).copy(lastPlayedAt = Instant.parse("2026-01-02T10:00:00Z"))
     val new = bookContent(
       id = BookId(documentUri(tree = "primary:Audiobooks/Book", document = "primary:Audiobooks/Book")),
       chapters = chapters.map {
         ChapterId(documentUri(tree = "primary:Audiobooks/Book", document = "primary:Audiobooks/Book/$it"))
       },
-    ).copy(customName = "Mine", lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    ).copy(lastPlayedAt = Instant.parse("2026-01-01T10:00:00Z"))
+    customs[old.id] = CustomMetadata(old.id, name = "Theirs")
+    customs[new.id] = CustomMetadata(new.id, name = "Mine")
 
     val carried = carryOver(new, previous = listOf(old), inLibrary = true)
 
-    assertEquals(expected = "Mine", actual = carried.name)
+    assertEquals(expected = "Mine", actual = customs.getValue(new.id).name)
     assertEquals(expected = old.lastPlayedAt, actual = carried.lastPlayedAt)
   }
 
@@ -477,8 +489,5 @@ class ProgressCarryOverTest {
       cover = null,
       fileLastModified = null,
     ),
-    customName = null,
-    customAuthor = null,
-    customCover = null,
   )
 }
