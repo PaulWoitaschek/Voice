@@ -34,7 +34,7 @@ Scegli la cartella con i tuoi audiolibri. Voice ti mostra i libri che trova, li 
 • Widget per la schermata Home: «In riproduzione» e «Scaffale»
 • Notifica multimediale e Android Auto
 • Tema chiaro, scuro e nero puro, Colore dinamico e schemi colori per rendere Voice tuo
-• Disponibile in 32 lingue
+• Disponibile in 33 lingue
 
 <b>Usa i tuoi file</b>
 

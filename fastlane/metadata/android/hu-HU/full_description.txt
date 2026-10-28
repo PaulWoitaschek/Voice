@@ -34,7 +34,7 @@ Válassza ki a hangoskönyveit tartalmazó mappát. A Voice megmutatja a talált
 • Kezdőképernyő-widgetek: Most szól és Könyvespolc
 • Lejátszásvezérlés az értesítésben és Android Auto
 • Világos, sötét és tiszta fekete téma, dinamikus színek és színsémák, hogy a Voice-t a sajátjává tehesse
-• 32 nyelven érhető el
+• 33 nyelven érhető el
 
 <b>A saját fájljaival működik</b>
 

@@ -34,7 +34,7 @@ Pick the folder with your audiobooks. Voice shows you the books it finds, adds t
 • Home screen widgets: Now playing and Shelf
 • Media notification and Android Auto
 • Light, dark, and pure black themes, Dynamic color, and color schemes to make Voice yours
-• Available in 32 languages
+• Available in 33 languages
 
 <b>Bring your own files</b>
 

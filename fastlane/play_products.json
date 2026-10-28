@@ -295,12 +295,21 @@
     },
     "zh-CN": {
       "benefits": ["每月都会成长的徽章", "支持一位独立开发者", "让 Voice 保持免费、无广告", "仅为感谢：不解锁任何功能"],
-      "tea": { "title": "一杯茶", "description": "给朗读者的一杯茶。让灯一直亮着。" },
+      "tea": { "title": "一杯茶", "description": "给朗读者的一杯茶。维持日常运转。" },
       "honey_tea": { "title": "蜂蜜茶", "description": "给朗读者的蜂蜜茶。支持那些长篇章节。" },
       "golden_mic": { "title": "金话筒", "description": "给朗读者的金话筒。为 Voice 起立鼓掌。" },
       "tip_small": { "title": "小额打赏", "description": "对 Voice 的一次性感谢。不解锁任何功能。" },
       "tip_medium": { "title": "中额打赏", "description": "对 Voice 的一次性感谢。不解锁任何功能。" },
       "tip_large": { "title": "大额打赏", "description": "对 Voice 的一次性感谢。不解锁任何功能。" }
+    },
+    "zh-TW": {
+      "benefits": ["每月都會長大的徽章", "支持一位獨立開發者", "讓 Voice 保持免費、沒有廣告", "只是一份心意：不會解鎖任何功能"],
+      "tea": { "title": "一杯茶", "description": "給朗讀者的一杯茶。幫忙付電費。" },
+      "honey_tea": { "title": "蜂蜜茶", "description": "給朗讀者的蜂蜜茶。為長長的章節加油。" },
+      "golden_mic": { "title": "金麥克風", "description": "給朗讀者的金麥克風。為 Voice 起立鼓掌。" },
+      "tip_small": { "title": "小額贊助", "description": "給 Voice 的一次性感謝。不會解鎖任何功能。" },
+      "tip_medium": { "title": "中額贊助", "description": "給 Voice 的一次性感謝。不會解鎖任何功能。" },
+      "tip_large": { "title": "大額贊助", "description": "給 Voice 的一次性感謝。不會解鎖任何功能。" }
     }
   }
 }

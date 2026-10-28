@@ -34,7 +34,7 @@ Trieu la carpeta amb els vostres audiollibres. Voice us mostra els llibres que t
 • Ginys per a la pantalla d'inici: «Ara sona» i «Prestatge»
 • Notificació multimèdia i Android Auto
 • Temes clar, fosc i negre pur, Color dinàmic i esquemes de colors per deixar Voice al vostre gust
-• Disponible en 32 idiomes
+• Disponible en 33 idiomes
 
 <b>Feu servir els vostres propis fitxers</b>
 

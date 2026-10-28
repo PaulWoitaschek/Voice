@@ -34,7 +34,7 @@ Vyberte priečinok so zvukovými knihami. Voice vám ukáže knihy, ktoré v ňo
 • Miniaplikácie na plochu: „Práve hrá“ a „Polica na knihy“
 • Ovládanie prehrávania v upozornení a Android Auto
 • Svetlá, tmavá a čisto čierna téma, dynamická farba a farebné schémy, aby ste si Voice prispôsobili
-• K dispozícii v 32 jazykoch
+• K dispozícii v 33 jazykoch
 
 <b>Vaše vlastné súbory</b>
 

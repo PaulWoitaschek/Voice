@@ -375,8 +375,8 @@
     <string name="settings.support.supporter.title">感谢您支持 Voice</string>
     <string name="settings.support.title">帮助与反馈</string>
     <string name="support.action.manage_subscription">管理订阅</string>
-    <string name="support.action.subscribe">以 %1$s 支持</string>
-    <string name="support.action.switch">切换为 %1$s</string>
+    <string name="support.action.subscribe">以%1$s 支持</string>
+    <string name="support.action.switch">切换为%1$s</string>
     <string name="support.badge.earned">已获得</string>
     <string name="support.badge.first_cup">第一杯</string>
     <string name="support.badge.not_earned">尚未获得</string>

@@ -34,7 +34,7 @@ Valitse kansio, jossa äänikirjasi ovat. Voice näyttää löytämänsä kirjat
 • Aloitusnäytön widgetit: ”Nyt soi” ja ”Kirjahylly”
 • Mediailmoitus ja Android Auto
 • Vaalea ja tumma teema, puhdas musta, dynaaminen väri ja väriteemat, joilla teet Voicesta omasi
-• Saatavilla 32 kielellä
+• Saatavilla 33 kielellä
 
 <b>Omat tiedostot mukaan</b>
 

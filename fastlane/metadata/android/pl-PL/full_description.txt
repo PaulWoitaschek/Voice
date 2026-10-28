@@ -34,7 +34,7 @@ Wybierz folder ze swoimi audiobookami. Voice pokaże ci znalezione książki, do
 • Widżety na ekranie głównym: Teraz odtwarzane i Półka
 • Powiadomienie z odtwarzaczem i Android Auto
 • Jasny i ciemny motyw, czysta czerń, kolor dynamiczny i schematy kolorów – Voice na twoją modłę
-• Dostępny w 32 językach
+• Dostępny w 33 językach
 
 <b>Twoje własne pliki</b>
 

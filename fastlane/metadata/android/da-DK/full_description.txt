@@ -34,7 +34,7 @@ Vælg mappen med dine lydbøger. Voice viser dig de bøger, den finder, tilføje
 • Widgets til startskærmen: »Afspilles nu« og »Boghylde«
 • Medienotifikation og Android Auto
 • Lyst, mørkt og helt sort tema, dynamiske farver og farveskemaer, der gør Voice til din egen
-• Findes på 32 sprog
+• Findes på 33 sprog
 
 <b>Tag dine egne filer med</b>
 

@@ -34,7 +34,7 @@ Pilih folder berisi buku audio Anda. Voice menampilkan buku yang ditemukan, mena
 • Widget layar utama: “Sedang diputar” dan “Rak buku”
 • Notifikasi media dan Android Auto
 • Tema terang, gelap, dan hitam pekat, warna dinamis, serta skema warna untuk menjadikan Voice milik Anda
-• Tersedia dalam 32 bahasa
+• Tersedia dalam 33 bahasa
 
 <b>Bawa berkas Anda sendiri</b>
 

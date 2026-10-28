@@ -34,7 +34,7 @@ Choisissez le dossier de vos livres audio. Voice vous montre les livres trouvés
 • Widgets pour l'écran d'accueil : « En cours de lecture » et « Étagère »
 • Notification multimédia et Android Auto
 • Thème clair, sombre ou noir pur, Couleur dynamique et jeux de couleurs pour faire de Voice le vôtre
-• Disponible en 32 langues
+• Disponible en 33 langues
 
 <b>Apportez vos propres fichiers</b>
 
