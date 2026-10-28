@@ -59,6 +59,7 @@ The four groups are the split for parallel subagents.
 | ta     | Tamil                | நீங்கள்: உங்கள்                                                                          | “…”         | one, other      |                                                                                                                                                         |
 | tr     | Turkish              | siz in sentences (bulabilirsiniz, kitaplarınız), bare imperative on buttons (Ekle, Seç) | “…”         | one, other      | Suffixes on Voice take an apostrophe: `Voice\'u`                                                                                                          |
 | zh-rCN | Chinese (Simplified) | 您                                                                                      | “…”, 《…》 for book titles | other | Full-width ，。！？. A space between Chinese and Latin words or numbers: 使用 Voice 收听. BCP 47 `zh-CN`                                                    |
+| zh-rTW | Chinese (Traditional, Taiwan) | 你, as Android in Taiwan; never 您 | 「…」, 《…》 for book titles | other | Taiwan words: 檔案, 資料夾, 設定, 伺服器, 新增, 快轉, 倒轉, 小工具. Full-width ，。！？. A space between Chinese and Latin words or numbers. BCP 47 `zh-TW` |
 
 ## Sardinian
 
