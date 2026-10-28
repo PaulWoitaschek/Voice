@@ -1,0 +1,55 @@
+Voice adalah pemutar buku audio yang tenang untuk Anda yang mencintai cerita dan punya koleksi buku sendiri.
+
+Pilih folder berisi buku audio Anda. Voice menampilkan buku yang ditemukan, menambahkannya ke pustaka Anda, dan mengingat posisi terakhir Anda di setiap buku. Setelah itu Voice menyingkir, dan Anda tinggal mendengarkan.
+
+<b>Pemutar yang menyesuaikan diri dengan buku Anda</b>
+
+• Warna pemutar mengikuti sampul buku yang sedang Anda dengarkan
+• Voice mengingat posisi Anda di setiap buku
+• Kecepatan pemutaran, lewati keheningan, dan peningkatan volume untuk rekaman yang pelan
+• Melompat terlalu jauh? Sekali ketuk untuk kembali
+• Mundur otomatis setelah jeda, agar Anda tidak kehilangan alur
+
+<b>Terlelap ditemani cerita</b>
+
+• Pengatur waktu tidur dengan suara yang memudar perlahan, atau berhenti di akhir bab
+• Goyangkan ponsel sesaat setelah pengatur waktu berakhir untuk memulainya lagi
+• Tampilan malam yang tenang selama pengatur waktu berjalan
+
+<b>Tak pernah kehilangan jejak</b>
+
+• Simpan momen dengan tekan lama, lalu tambahkan nama atau catatan nanti
+• Tandai markah sebagai favorit, kutipan, catatan, atau “Dengar lagi”
+• Riwayat mendengarkan menampilkan setiap pemutaran, jeda, dan lompatan, jadi Anda selalu bisa kembali ke posisi semula
+• Lihat kapan mobil, headphone, atau jam tangan Anda memulai buku, lalu kembali ke posisi sebelumnya dengan sekali ketuk
+• Sinkronkan folder buku audio Anda, misalnya dengan Syncthing, dan posisi, kecepatan, serta markah Anda ikut ke perangkat lain
+
+<b>Pustaka Anda, sesuai keinginan Anda</b>
+
+• Lanjutkan mendengarkan langsung dari bagian atas pustaka
+• Buku dikelompokkan menjadi “Sedang didengarkan”, “Belum dimulai”, dan “Selesai”
+• Cari berdasarkan judul dan penulis
+• Tampilan daftar dan kisi
+• Sampul dari berkas, ponsel Anda, atau pencarian online
+• Widget layar utama: “Sedang diputar” dan “Rak buku”
+• Notifikasi media dan Android Auto
+• Tema terang, gelap, dan hitam pekat, warna dinamis, serta skema warna untuk menjadikan Voice milik Anda
+• Tersedia dalam 32 bahasa
+
+<b>Bawa berkas Anda sendiri</b>
+
+Voice memutar buku audio bebas DRM seperti M4B, MP3, M4A, OGG, OGA, dan OPUS. Simpan buku Anda di folder sesuka hati. Satu folder bisa berisi satu buku atau seluruh pustaka Anda, dan Voice akan merapikannya untuk Anda.
+
+<b>Hanya Anda dan cerita Anda</b>
+
+• Tanpa akun
+• Tanpa iklan
+• Tanpa fitur berbayar
+• Buku Anda tetap di perangkat Anda
+
+Jika Anda menyukai Voice, Anda bisa mendukungnya dari setelan. Ini sekadar ucapan terima kasih dan tidak membuka fitur apa pun.
+
+Voice adalah aplikasi sumber terbuka dengan lisensi GNU GPLv3.
+
+Masukan dan laporan bug:
+https://github.com/PaulWoitaschek/Voice/issues

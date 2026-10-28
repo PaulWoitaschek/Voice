@@ -1,0 +1,55 @@
+Voice er en rolig lydbogsafspiller til dig, der elsker historier og har dine egne bøger.
+
+Vælg mappen med dine lydbøger. Voice viser dig de bøger, den finder, tilføjer dem til dit bibliotek og husker, hvor du er nået til i hver enkelt. Bagefter træder Voice i baggrunden, så du bare kan lytte.
+
+<b>En afspiller, der passer til din bog</b>
+
+• Afspilleren får sine farver fra coveret på den bog, du lytter til
+• Voice husker, hvor du er nået til i hver bog
+• Afspilningshastighed, spring stilhed over og lydstyrkeforøgelse til svage optagelser
+• Sprang du for langt? Med ét tryk er du tilbage
+• Automatisk tilbagespoling efter en pause, så du ikke mister tråden
+
+<b>Fald i søvn til en historie</b>
+
+• Sleep-timer med en blid udtoning, eller stop ved kapitlets slutning
+• Ryst telefonen, lige efter at timeren er udløbet, for at starte den igen
+• En rolig natvisning, mens timeren kører
+
+<b>Du ved altid, hvor du var</b>
+
+• Gem et øjeblik med et langt tryk, og tilføj et navn eller en note senere
+• Markér bogmærker som favorit, citat, note eller »Hør igen«
+• Din lyttehistorik viser alle afspilninger, pauser og spring, så du altid kan finde tilbage
+• Se, hvornår bilen, høretelefonerne eller uret startede en bog, og spring med ét tryk tilbage til, hvor du var
+• Synkroniser dine lydbogsmapper, for eksempel med Syncthing, så følger dine fremskridt, din hastighed og dine bogmærker med over på dine andre enheder
+
+<b>Dit bibliotek, din måde</b>
+
+• Lyt videre lige fra toppen af dit bibliotek
+• Bøgerne er sorteret i igangværende, endnu ikke startede og afsluttede
+• Søg efter titel og forfatter
+• Liste- og gittervisning
+• Covers fra filen, fra telefonen eller fra en søgning på nettet
+• Widgets til startskærmen: »Afspilles nu« og »Boghylde«
+• Medienotifikation og Android Auto
+• Lyst, mørkt og helt sort tema, dynamiske farver og farveskemaer, der gør Voice til din egen
+• Findes på 32 sprog
+
+<b>Tag dine egne filer med</b>
+
+Voice afspiller DRM-frie lydbøger som M4B, MP3, M4A, OGG, OGA og OPUS. Læg dine bøger i mapper, præcis som du vil. En mappe kan indeholde en enkelt bog eller hele dit bibliotek, og Voice holder orden på det for dig.
+
+<b>Bare dig og dine historier</b>
+
+• Ingen konto
+• Ingen reklamer
+• Ingen betalingsmur
+• Dine bøger bliver på din enhed
+
+Er du glad for Voice, kan du støtte appen i indstillingerne. Det er en tak og låser ikke op for noget.
+
+Voice har åben kildekode under GNU GPLv3-licensen.
+
+Feedback og fejlrapporter:
+https://github.com/PaulWoitaschek/Voice/issues

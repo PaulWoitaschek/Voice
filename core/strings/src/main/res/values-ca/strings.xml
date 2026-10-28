@@ -315,8 +315,8 @@
     <string name="onboarding.explanation.subtitle.folder">Trieu la carpeta amb els vostres audiollibres. Voice us mostra els llibres que troba abans d\'afegir-los.</string>
     <string name="onboarding.explanation.title">La vostra biblioteca, a la vostra manera</string>
     <string name="onboarding.welcome.action.start">Som-hi</string>
-    <string name="onboarding.welcome.subtitle">Voice reprodueix els audiollibres del vostre telèfon i recorda per on aneu en cadascun. Gratuït, sense anuncis i sense cap compte.</string>
-    <string name="onboarding.welcome.title">Pensat per als vostres audiollibres</string>
+    <string name="onboarding.welcome.subtitle">Voice reprodueix els audiollibres del vostre telèfon i recorda per on aneu en cadascun. De franc, sense anuncis i sense cap compte.</string>
+    <string name="onboarding.welcome.title">A la mida dels vostres audiollibres</string>
     <string name="playback.action.fast_forward">Avança ràpidament</string>
     <string name="playback.action.pause">Pausa</string>
     <string name="playback.action.play">Reprodueix</string>
@@ -351,7 +351,7 @@
     <string name="review.prompt.feedback.idea.title">Suggereix una idea</string>
     <string name="review.prompt.feedback.title">Què teniu al cap?</string>
     <string name="review.prompt.finished.title">Llibre acabat!</string>
-    <string name="review.prompt.message">Gràcies per escoltar amb Voice! Si us agrada, una valoració a Google Play ajuda altres oients a trobar-la.</string>
+    <string name="review.prompt.message">Gràcies per escoltar amb Voice! Si us agrada, una valoració a Google Play ajuda altres oients a descobrir Voice.</string>
     <plurals name="review.prompt.milestone.title">
         <item quantity="one">%d hora d\'històries!</item>
         <item quantity="many">%d hores d\'històries!</item>
@@ -405,7 +405,7 @@
     <string name="settings.support.faq.title">Preguntes freqüents</string>
     <string name="settings.support.get_support.title">Obtén ajuda</string>
     <string name="settings.support.report_issue.title">Informa d\'un problema</string>
-    <string name="settings.support.support_voice.summary">Manté Voice gratuït i sense anuncis</string>
+    <string name="settings.support.support_voice.summary">Que Voice continuï sent de franc i sense anuncis</string>
     <string name="settings.support.support_voice.title">Dona suport al desenvolupament</string>
     <string name="settings.support.suggest_idea.title">Suggereix una idea</string>
     <string name="settings.support.supporter.title">Gràcies per donar suport a Voice</string>
@@ -422,7 +422,7 @@
     <string name="support.badge.tip_jar">Pot de propines</string>
     <string name="support.badges.title">La vostra insígnia creix amb cada mes de suport</string>
     <string name="support.action.donate_kofi">Fes un donatiu a Ko-fi</string>
-    <string name="support.description.maintenance">Voice és gratuït, de codi obert i el manté un sol desenvolupador.</string>
+    <string name="support.description.maintenance">Voice és de franc i de codi obert, i en té cura una sola persona.</string>
     <string name="support.description.monthly">El suport mensual és el que em permet planificar la propera versió, no només la propera correcció.</string>
     <string name="support.fine_print">És un agraïment: no desbloqueja res. Cancel·leu-ho quan vulgueu a Google Play.</string>
     <string name="support.fine_print.tip">És un agraïment: no desbloqueja res. Sense subscripció.</string>

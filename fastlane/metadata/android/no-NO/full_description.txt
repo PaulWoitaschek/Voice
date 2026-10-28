@@ -1,0 +1,55 @@
+Voice er en rolig lydbokspiller for deg som elsker historier og har dine egne bøker.
+
+Velg mappen med lydbøkene dine. Voice viser deg bøkene den finner, legger dem til i biblioteket ditt og husker hvor du slapp i hver av dem. Deretter trekker Voice seg tilbake, så du bare kan lytte.
+
+<b>En avspiller som passer til boken din</b>
+
+• Avspilleren henter fargene fra omslaget på boken du lytter til
+• Voice husker hvor du slapp i hver bok
+• Avspillingshastighet, hopp over stillhet og lydstyrkeforsterkning for svake opptak
+• Hoppet du for langt? Ett trykk, så er du tilbake
+• Auto-tilbakespoling etter en pause, så du ikke mister tråden
+
+<b>Sovn inn til en historie</b>
+
+• Innsovningstidsur med myk uttoning, eller stopp ved kapittelslutt
+• Rist telefonen rett etter at tidsuret har gått ut, for å starte det på nytt
+• En rolig nattvisning mens tidsuret går
+
+<b>Mist aldri plassen din</b>
+
+• Trykk lenge for å lagre et øyeblikk, og legg til et navn eller et notat senere
+• Merk bokmerker som favoritt, sitat, notat eller «Lytt igjen»
+• Lyttehistorikken viser alle avspillinger, pauser og hopp, så du alltid finner tilbake
+• Se når bilen, hodetelefonene eller klokken startet en bok, og hopp tilbake dit du var med ett trykk
+• Synkroniser lydbokmappene dine, for eksempel med Syncthing, så følger lytteposisjonen, hastigheten og bokmerkene med til de andre enhetene dine
+
+<b>Ditt bibliotek, ditt opplegg</b>
+
+• Fortsett å lytte rett fra toppen av biblioteket
+• Bøker sortert i pågående, ikke startet og fullført
+• Søk etter tittel og forfatter
+• Liste- og rutenettvisning
+• Omslag fra filen, telefonen eller et nettsøk
+• Moduler for startskjermen: «Spilles nå» og «Bokhylle»
+• Medievarsel og Android Auto
+• Lys, mørk og helsvart drakt, dynamisk farge og fargeoppsett som gjør Voice til din egen
+• Tilgjengelig på 32 språk
+
+<b>Ta med dine egne filer</b>
+
+Voice spiller av DRM-frie lydbøker som M4B, MP3, M4A, OGG, OGA og OPUS. Legg bøkene dine i mapper akkurat slik du vil. En mappe kan inneholde én bok eller hele biblioteket ditt, og Voice holder orden på det for deg.
+
+<b>Bare deg og historiene dine</b>
+
+• Ingen konto
+• Ingen reklame
+• Ingen betalingsmur
+• Bøkene dine blir på enheten din
+
+Liker du Voice, kan du støtte appen i innstillingene. Det er ment som en takk og låser ikke opp noe.
+
+Voice er åpen kildekode under GNU GPLv3-lisensen.
+
+Tilbakemeldinger og feilrapporter:
+https://github.com/PaulWoitaschek/Voice/issues
