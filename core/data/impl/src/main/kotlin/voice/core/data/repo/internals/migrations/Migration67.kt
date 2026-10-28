@@ -39,8 +39,9 @@ public class Migration67 : IncrementalMigration(67) {
       `narrator` TEXT, `series` TEXT, `part` TEXT, `cover` TEXT, `metadataFileLastModified` TEXT, PRIMARY KEY(`id`))
       """.trimIndent(),
     )
+    // without the modification time, the next scan reads each book's first file again, so its series and part arrive
     val columns = "id, playbackSpeed, skipSilence, isActive, lastPlayedAt, addedAt, chapters, currentChapter, " +
-      "positionInChapter, gain, name, author, album, title, genre, narrator, series, part, cover, metadataFileLastModified"
+      "positionInChapter, gain, name, author, album, title, genre, narrator, series, part, cover"
     db.execSQL("INSERT INTO _new_content2 ($columns) SELECT $columns FROM content2")
     // takes the triggers that kept the search table up to date along
     db.execSQL("DROP TABLE content2")

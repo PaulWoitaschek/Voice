@@ -6,5 +6,6 @@ internal data class MatroskaMediaInfo(
   val album: String? = null,
   val artist: String? = null,
   val title: String? = null,
+  val tags: Map<String, String> = emptyMap(),
   val chapters: List<MarkData> = emptyList(),
 )

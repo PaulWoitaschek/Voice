@@ -5,18 +5,13 @@ import android.net.Uri
 import androidx.media3.common.C
 import androidx.media3.common.FileTypes
 import androidx.media3.common.MediaItem
-import androidx.media3.container.MdtaMetadataEntry
 import androidx.media3.exoplayer.source.TrackGroupArray
-import androidx.media3.extractor.metadata.id3.ChapterFrame
-import androidx.media3.extractor.metadata.id3.TextInformationFrame
-import androidx.media3.extractor.metadata.vorbis.VorbisComment
 import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
-import voice.core.data.MarkData
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.logging.api.Logger
@@ -50,12 +45,7 @@ internal class MediaAnalyzer(
           val format = trackGroup.getFormat(formatIndex)
           format.metadata?.let { metadata ->
             repeat(metadata.length()) { metadataIndex ->
-              when (val entry = metadata.get(metadataIndex)) {
-                is TextInformationFrame -> visitText(entry, builder)
-                is ChapterFrame -> visitChapter(entry, builder)
-                is VorbisComment -> visitVorbis(entry, builder)
-                is MdtaMetadataEntry -> visitMdta(entry, builder)
-              }
+              builder.read(metadata.get(metadataIndex))
             }
           }
         }
@@ -84,6 +74,7 @@ internal class MediaAnalyzer(
         builder.artist = builder.artist ?: mediaInfo.artist
         builder.album = builder.album ?: mediaInfo.album
         builder.title = builder.title ?: mediaInfo.title
+        mediaInfo.tags.forEach { (name, value) -> builder.tag(name, value) }
       }
     } catch (e: MatroskaParseException) {
       Logger.w(e, "Error parsing Matroska metadata")
@@ -96,89 +87,6 @@ internal class MediaAnalyzer(
   ) {
     val chapters = mp4ChapterExtractor.extractChapters(file.uri)
     builder.chapters += chapters
-  }
-
-  private fun visitMdta(
-    entry: MdtaMetadataEntry,
-    builder: Metadata.Builder,
-  ) {
-    when (entry.key) {
-      "com.apple.quicktime.title" -> {
-        builder.title = entry.value.toString(Charsets.UTF_8)
-      }
-      "com.apple.quicktime.artist" -> {
-        builder.artist = entry.value.toString(Charsets.UTF_8)
-      }
-      "com.apple.quicktime.album" -> {
-        builder.album = entry.value.toString(Charsets.UTF_8)
-      }
-    }
-  }
-
-  private fun visitVorbis(
-    entry: VorbisComment,
-    builder: Metadata.Builder,
-  ) {
-    val key = entry.key
-    val value = entry.value
-    when {
-      key == "ARTIST" -> builder.artist = value
-      key == "ALBUM" -> builder.album = value
-      key == "TITLE" -> builder.title = value
-      key.startsWith("CHAPTER") -> {
-        val withoutPrefix = key.removePrefix("CHAPTER")
-        val isName = withoutPrefix.endsWith("NAME")
-        if (isName) {
-          val index = withoutPrefix.removeSuffix("NAME").toIntOrNull()
-          if (index != null) {
-            builder.vorbisChapterNames[index] = value
-          }
-        } else {
-          val index = withoutPrefix.toIntOrNull()
-          if (index != null) {
-            val duration = parseVorbisDuration(value)
-            if (duration != null) {
-              builder.vorbisChapterStarts[index] = duration.inWholeMilliseconds
-            }
-          }
-        }
-      }
-    }
-  }
-
-  private fun visitChapter(
-    entry: ChapterFrame,
-    builder: Metadata.Builder,
-  ) {
-    repeat(entry.subFrameCount) { subFrameIndex ->
-      val subFrame = entry.getSubFrame(subFrameIndex)
-      if (subFrame is TextInformationFrame) {
-        builder.chapters.add(MarkData(startMs = entry.startTimeMs.toLong(), name = subFrame.values.first()))
-      }
-    }
-  }
-
-  private fun visitText(
-    entry: TextInformationFrame,
-    builder: Metadata.Builder,
-  ) {
-    val value = entry.values.first()
-    when (entry.id) {
-      "TIT2" -> builder.title = value
-      "TPE1" -> builder.artist = value
-      "TALB" -> builder.album = value
-      "TCON" -> builder.genre = value
-      "TCOM" -> builder.narrator = value
-      "TXXX" -> when (entry.description) {
-        "MVNM" -> builder.series = value
-        "MVIN" -> builder.part = if (builder.part.isNullOrBlank()) value else builder.part
-        "TXXX:PART" -> builder.part = value
-        "TXXX:NARRATOR" -> builder.narrator = if (builder.narrator.isNullOrBlank()) value else builder.narrator
-        else -> Logger.v("Unknown TXXX frame description: ${entry.description}")
-      }
-      "TRCK", "TYER", "TSSE" -> {}
-      else -> Logger.v("Unknown frame ID: ${entry.id}")
-    }
   }
 
   // Keep the retriever's default MediaSourceFactory: its extractor flags are tuned for metadata

@@ -574,6 +574,40 @@ class MediaScannerTest {
   }
 
   @Test
+  fun `a book stored before series were read gets them, also from a file without a modification time`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    check(audioFile(book, "1.mp3").setLastModified(0))
+    scan(FolderType.Root, audiobookFolder)
+    val content = bookContentRepo.get(BookId(book.toUri()))!!
+    bookContentRepo.put(
+      content.copy(metadata = content.metadata.copy(series = null, part = null, fileLastModified = null)),
+    )
+
+    scan(FolderType.Root, audiobookFolder)
+
+    val scanned = bookContentRepo.get(BookId(book.toUri()))!!
+    assertEquals(expected = "Series", actual = scanned.metadata.series)
+    assertEquals(expected = "Part", actual = scanned.metadata.part)
+  }
+
+  @Test
+  fun `a book whose first file can't be read right now keeps what was read before`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    audioFile(book, "1.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    val content = bookContentRepo.get(BookId(book.toUri()))!!
+    val stored = content.copy(metadata = content.metadata.copy(fileLastModified = null))
+    bookContentRepo.put(stored)
+    filesReadable = false
+
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = stored, actual = bookContentRepo.get(BookId(book.toUri())))
+  }
+
+  @Test
   fun `a book that was never played keeps the name the listener gave it when its folder is renamed`() = test {
     val audiobookFolder = folder("audiobooks")
     val book = File(audiobookFolder, "book")
@@ -606,6 +640,7 @@ class MediaScannerTest {
     var analyzeCalls = 0
     var album = "Book Name"
     var artist = "Author"
+    var filesReadable = true
     val bookmarkRepo = mockk<BookmarkRepo>(relaxUnitFun = true) {
       coEvery { bookmarks(any()) } returns emptyList()
     }
@@ -687,6 +722,7 @@ class MediaScannerTest {
         .also {
           coEvery { mediaAnalyzer.analyze(any()) } coAnswers {
             analyzeCalls++
+            if (!filesReadable) return@coAnswers null
             Metadata(
               duration = 1000L,
               artist = artist,
