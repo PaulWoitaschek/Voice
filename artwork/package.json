@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^24.0.0",
+    "@types/node": "^26.0.0",
     "js-yaml": "^5.0.0",
     "playwright": "^1.49.1",
     "sharp": "^0.35.0",
