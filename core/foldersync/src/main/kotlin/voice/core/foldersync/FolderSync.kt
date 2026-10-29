@@ -221,6 +221,10 @@ public class FolderSync internal constructor(
     // how the storage provider reports a file or storage that went away since the last query
     Logger.w(e, "Could not sync through a folder")
     null
+  } catch (e: IllegalStateException) {
+    // how the storage provider reports a file or folder it couldn't create, like on an SD card that's read-only
+    Logger.w(e, "Could not sync through a folder")
+    null
   }
 
   // not backed up, so a phone restored from a backup counts as another device
