@@ -221,6 +221,28 @@ private fun EditBookContent(
       keyboardActions = onDone,
     )
     if (viewState.showSeries) {
+      // grows with the text, so its label stays on one line at large font sizes
+      val partField = @Composable {
+        OutlinedTextField(
+          value = part,
+          onValueChange = {
+            part = it
+            onPartChange(it.text)
+          },
+          modifier = Modifier.width(96.dp * LocalDensity.current.fontScale),
+          label = { Text(stringResource(StringsR.string.book_edit_part_label)) },
+          singleLine = true,
+          readOnly = readOnly,
+          shape = RoundedCornerShape(16.dp),
+          keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal,
+            imeAction = ImeAction.Done,
+          ),
+          keyboardActions = onDone,
+        )
+      }
+      // at large font sizes, the part goes below the series, so the series stays wide enough to read
+      val partBelow = LocalDensity.current.fontScale >= 1.5F
       Spacer(Modifier.height(16.dp))
       Row {
         OutlinedTextField(
@@ -239,25 +261,14 @@ private fun EditBookContent(
             imeAction = ImeAction.Next,
           ),
         )
-        Spacer(Modifier.width(12.dp))
-        OutlinedTextField(
-          value = part,
-          onValueChange = {
-            part = it
-            onPartChange(it.text)
-          },
-          // grows with the text, so the label stays on one line at large font sizes
-          modifier = Modifier.width(96.dp * LocalDensity.current.fontScale),
-          label = { Text(stringResource(StringsR.string.book_edit_part_label)) },
-          singleLine = true,
-          readOnly = readOnly,
-          shape = RoundedCornerShape(16.dp),
-          keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal,
-            imeAction = ImeAction.Done,
-          ),
-          keyboardActions = onDone,
-        )
+        if (!partBelow) {
+          Spacer(Modifier.width(12.dp))
+          partField()
+        }
+      }
+      if (partBelow) {
+        Spacer(Modifier.height(16.dp))
+        partField()
       }
     }
     Spacer(Modifier.height(24.dp))
