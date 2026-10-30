@@ -16,12 +16,12 @@ To start the next step: "Read `docs/plans/series-editing.md` and build PR N."
 | PR | What | Status |
 |----|------|--------|
 | 1 | Edit series and part of books on the device | In review: [#4081](https://github.com/PaulWoitaschek/Voice/pull/4081), branch `edit-book-series` |
-| 2 | Suggest series the library already has | Open, after 1 |
-| 3 | Sync series and part through `.voice` | Open, after 1 |
-| 4 | Write the series of Audiobookshelf books to the server | Open, after 1 |
+| 2 | Suggest series the library already has | In review, branch `series-suggestions` |
+| 3 | Sync series and part through `.voice` | Open |
+| 4 | Write the series of Audiobookshelf books to the server | Open |
 
-2, 3 and 4 each branch off `main` once 1 is merged, not off each other. 3 touches only `:core:foldersync`. 2 and 4
-both change the edit sheet, so the later one rebases.
+The pull requests are stacked: each branches off the one before and targets its branch, so each diff shows one step.
+After a merge, the next one is retargeted to `main`.
 
 ## 1. Edit series and part of books on the device
 
@@ -42,6 +42,8 @@ All in `:features:bookOverview`.
 - `EditBookState` gets `allSeries: List<SeriesSuggestion(name, bookCount)>` and derives `suggestions`: at most 3
   series whose name contains the typed text and isn't equal to it, those starting with it first. Nothing shows before
   something is typed.
+- Done differently: the edited book itself isn't counted, so a typo in its own series isn't suggested back. The
+  preview shows the list on its own, since it only appears while the field has focus.
 - `EditBookSheet` shows them below the series field while it has focus, inline in the column in a rounded
   `surfaceContainerHigh` container, not as a popup, so it works with the keyboard inside the sheet. Each row is the
   name in `.bookText()` with "4 books" below. A tap takes the name and moves focus to Part.

@@ -2,6 +2,8 @@
 
 package voice.features.bookOverview.editBook
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,15 +46,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -60,8 +65,10 @@ import kotlinx.coroutines.launch
 import voice.core.data.BookId
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
+import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.segmentedShape
 import voice.features.bookOverview.views.CoverShape
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
@@ -221,23 +228,44 @@ private fun EditBookContent(
     )
     if (viewState.showSeries) {
       Spacer(Modifier.height(16.dp))
+      val partFocusRequester = remember { FocusRequester() }
+      var seriesFocused by remember { mutableStateOf(false) }
       Row {
-        OutlinedTextField(
-          value = series,
-          onValueChange = {
-            series = it
-            onSeriesChange(it.text)
-          },
-          modifier = Modifier.weight(1F),
-          label = { Text(stringResource(StringsR.string.book_edit_series_label)) },
-          singleLine = true,
-          readOnly = readOnly,
-          shape = RoundedCornerShape(16.dp),
-          keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.Words,
-            imeAction = ImeAction.Next,
-          ),
-        )
+        Column(
+          modifier = Modifier
+            .weight(1F)
+            .animateContentSize(),
+        ) {
+          OutlinedTextField(
+            value = series,
+            onValueChange = {
+              series = it
+              onSeriesChange(it.text)
+            },
+            modifier = Modifier
+              .fillMaxWidth()
+              .onFocusChanged { seriesFocused = it.isFocused },
+            label = { Text(stringResource(StringsR.string.book_edit_series_label)) },
+            singleLine = true,
+            readOnly = readOnly,
+            shape = RoundedCornerShape(16.dp),
+            keyboardOptions = KeyboardOptions(
+              capitalization = KeyboardCapitalization.Words,
+              imeAction = ImeAction.Next,
+            ),
+          )
+          if (seriesFocused && !readOnly && viewState.suggestions.isNotEmpty()) {
+            Spacer(Modifier.height(8.dp))
+            SeriesSuggestions(
+              suggestions = viewState.suggestions,
+              onClick = { name ->
+                series = TextFieldValue(name, selection = TextRange(name.length))
+                onSeriesChange(name)
+                partFocusRequester.requestFocus()
+              },
+            )
+          }
+        }
         Spacer(Modifier.width(12.dp))
         OutlinedTextField(
           value = part,
@@ -245,7 +273,9 @@ private fun EditBookContent(
             part = it
             onPartChange(it.text)
           },
-          modifier = Modifier.width(96.dp),
+          modifier = Modifier
+            .width(96.dp)
+            .focusRequester(partFocusRequester),
           label = { Text(stringResource(StringsR.string.book_edit_part_label)) },
           singleLine = true,
           readOnly = readOnly,
@@ -279,6 +309,41 @@ private fun EditBookContent(
 }
 
 @Composable
+private fun SeriesSuggestions(
+  suggestions: List<SeriesSuggestion>,
+  onClick: (String) -> Unit,
+) {
+  Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+    suggestions.forEachIndexed { index, suggestion ->
+      Surface(
+        onClick = { onClick(suggestion.name) },
+        modifier = Modifier.fillMaxWidth(),
+        shape = segmentedShape(index, suggestions.size),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+      ) {
+        Column(Modifier.padding(horizontal = 16.dp, vertical = 10.dp)) {
+          Text(
+            text = suggestion.name,
+            style = MaterialTheme.typography.bodyLarge.bookText(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+          )
+          Text(
+            text = pluralStringResource(
+              StringsR.plurals.library_search_browse_book_count,
+              suggestion.bookCount,
+              suggestion.bookCount,
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
 @Preview
 private fun EditBookPreview() {
   VoiceTheme {
@@ -300,6 +365,22 @@ private fun EditBookPreview() {
         onPartChange = {},
         onSave = {},
         onCancel = {},
+      )
+    }
+  }
+}
+
+@Composable
+@Preview(widthDp = 280)
+private fun SeriesSuggestionsPreview() {
+  VoiceTheme {
+    Surface {
+      SeriesSuggestions(
+        suggestions = listOf(
+          SeriesSuggestion("The Signal Saga", bookCount = 4),
+          SeriesSuggestion("Signals from the Deep Sky Survey Expedition", bookCount = 1),
+        ),
+        onClick = {},
       )
     }
   }

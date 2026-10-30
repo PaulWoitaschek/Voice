@@ -37,6 +37,7 @@ class EditBookViewModel(
   ) {
     if (item != BottomSheetItem.Edit) return
     val book = repo.get(bookId) ?: return
+    val showSeries = editSeriesFeatureFlag.get()
     _state.value = EditBookState(
       title = book.name,
       author = book.author.orEmpty(),
@@ -44,8 +45,23 @@ class EditBookViewModel(
       cover = book.coverUrl,
       series = book.series.orEmpty(),
       part = book.part.orEmpty(),
-      showSeries = editSeriesFeatureFlag.get(),
+      showSeries = showSeries,
+      allSeries = if (showSeries) seriesOfOtherBooks(bookId) else emptyList(),
     )
+  }
+
+  private suspend fun seriesOfOtherBooks(bookId: BookId): List<SeriesSuggestion> {
+    return repo.all()
+      .filter { it.id != bookId }
+      .mapNotNull { book -> book.series?.trim()?.takeIf { it.isNotEmpty() } }
+      .groupBy { it.lowercase() }
+      .map { (_, names) ->
+        SeriesSuggestion(
+          name = names.groupingBy { it }.eachCount().maxBy { it.value }.key,
+          bookCount = names.size,
+        )
+      }
+      .sortedBy { it.name.lowercase() }
   }
 
   internal fun onDismiss() {
