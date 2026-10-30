@@ -79,6 +79,10 @@
     <string name="book.edit.author.label">Autore</string>
     <string name="book.edit.cover.file">Copertina dal file system</string>
     <string name="book.edit.cover.internet">Copertina da Internet</string>
+    <string name="book.edit.part.label">Volume</string>
+    <string name="book.edit.series.label">Serie</string>
+    <string name="book.edit.server.failed">Impossibile salvare sul tuo server. Riprova.</string>
+    <string name="book.edit.server.not_allowed">Il tuo account sul server non può modificare i libri.</string>
     <string name="book.edit.title.label">Titolo</string>
     <string name="book.source.device">Su questo dispositivo</string>
     <string name="book.source.server_downloaded">%s · scaricato</string>

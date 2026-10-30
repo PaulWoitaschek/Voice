@@ -76,6 +76,10 @@
     <string name="book.edit.author.label">Tekijä</string>
     <string name="book.edit.cover.file">Kansi tiedostojärjestelmästä</string>
     <string name="book.edit.cover.internet">Kansi internetistä</string>
+    <string name="book.edit.part.label">Osa</string>
+    <string name="book.edit.series.label">Sarja</string>
+    <string name="book.edit.server.failed">Tallennus palvelimellesi epäonnistui. Yritä uudelleen.</string>
+    <string name="book.edit.server.not_allowed">Tililläsi ei ole palvelimella oikeutta muuttaa kirjoja.</string>
     <string name="book.edit.title.label">Nimi</string>
     <string name="book.source.device">Tällä laitteella</string>
     <string name="book.source.server_downloaded">%s · ladattu</string>

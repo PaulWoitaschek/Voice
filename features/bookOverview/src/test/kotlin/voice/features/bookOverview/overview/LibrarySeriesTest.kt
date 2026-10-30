@@ -86,6 +86,18 @@ class LibrarySeriesTest {
   }
 
   @Test
+  fun `a series and part given in Voice win over the files`() {
+    val tagged = notStarted(series = "Saga", part = "2")
+    val untagged = notStarted(series = "Other", part = "9").let { book ->
+      book.copy(custom = book.custom.copy(series = "Saga", part = "1"))
+    }
+
+    val series = listOf(tagged, untagged).series().single()
+
+    assertEquals(expected = listOf(untagged, tagged), actual = series.books)
+  }
+
+  @Test
   fun `the front is the book in progress played last`() {
     val first = inProgress(series = "Saga", part = "1", lastPlayedAt = Instant.ofEpochSecond(1))
     val second = inProgress(series = "Saga", part = "2", lastPlayedAt = Instant.ofEpochSecond(3))

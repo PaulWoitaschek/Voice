@@ -21,7 +21,8 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.ServerAccount
+import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.data.Book
 import voice.core.data.BookId
@@ -52,9 +53,11 @@ class BottomSheetViewModelTest {
   private val storedBook = MutableStateFlow<Book?>(book)
   private val serverBook = book(time = 0, id = BookId("abs://item/1"))
   private val downloadStates = MutableStateFlow<Map<BookId, BookDownloadState>>(emptyMap())
-  private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
+  private val serverAccount = mockk<ServerAccount> {
     every { serverName } returns flowOf("audiobooks.example.com")
-    every { downloadStates } returns this@BottomSheetViewModelTest.downloadStates
+  }
+  private val serverDownloads = mockk<ServerDownloads>(relaxUnitFun = true) {
+    every { states } returns downloadStates
     coEvery { shouldAskForNotifications() } returns true
   }
   private val livePlaybackState = MutableStateFlow<LivePlaybackState?>(null)
@@ -185,8 +188,8 @@ class BottomSheetViewModelTest {
     viewModel.onItemClick(BottomSheetItem.StopDownload)
 
     coVerify(exactly = 1) {
-      serverLibrary.download(serverBook.id)
-      serverLibrary.removeDownload(serverBook.id)
+      serverDownloads.download(serverBook.id)
+      serverDownloads.remove(serverBook.id)
     }
   }
 
@@ -199,7 +202,7 @@ class BottomSheetViewModelTest {
 
   @Test
   fun `voice does not ask for notifications again once the server library has them`() = runTest(dispatcher) {
-    coEvery { serverLibrary.shouldAskForNotifications() } returns false
+    coEvery { serverDownloads.shouldAskForNotifications() } returns false
 
     viewModel(bookId = serverBook.id).test {
       assertFalse(awaitLoaded().askForNotifications)
@@ -211,7 +214,7 @@ class BottomSheetViewModelTest {
     bottomSheetViewModel(bookId = serverBook.id).onAskedForNotifications()
     runCurrent()
 
-    coVerify { serverLibrary.onAskedForNotifications() }
+    coVerify { serverDownloads.onAskedForNotifications() }
   }
 
   @Test
@@ -229,7 +232,8 @@ class BottomSheetViewModelTest {
     bookId = bookId,
     viewModels = itemViewModels,
     repo = repo,
-    serverLibrary = serverLibrary,
+    serverAccount = serverAccount,
+    serverDownloads = serverDownloads,
     navigator = navigator,
     playerController = playerController,
     experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(

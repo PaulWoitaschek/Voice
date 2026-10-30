@@ -15,16 +15,16 @@ internal fun seriesKey(name: String): String? {
 }
 
 internal val Book.seriesName: String?
-  get() = content.metadata.series?.trim()?.takeIf { it.isNotEmpty() }
+  get() = series?.trim()?.takeIf { it.isNotEmpty() }
 
-internal val Book.part: String?
-  get() = content.metadata.part?.trim()?.takeIf { it.isNotEmpty() }
+internal val Book.seriesPart: String?
+  get() = part?.trim()?.takeIf { it.isNotEmpty() }
 
 internal val Book.seriesLine: String?
-  get() = seriesName?.let { name -> listOfNotNull(name, part).joinToString(" ") }
+  get() = seriesName?.let { name -> listOfNotNull(name, seriesPart).joinToString(" ") }
 
 // Voice doesn't store file names, so books without a part follow their names, which mostly come from their files
-internal val SeriesOrder: Comparator<Book> = compareBy<Book, String?>(nullsLast(NaturalOrderComparator.stringComparator)) { it.part }
+internal val SeriesOrder: Comparator<Book> = compareBy<Book, String?>(nullsLast(NaturalOrderComparator.stringComparator)) { it.seriesPart }
   .then(BookComparator.ByName)
   .thenBy { it.id.value }
 

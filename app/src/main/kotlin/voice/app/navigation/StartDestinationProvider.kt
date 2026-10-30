@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import voice.app.BuildConfig
 import voice.app.MainActivity
-import voice.core.audiobookshelf.Audiobookshelf
+import voice.core.audiobookshelf.ServerAccount
 import voice.core.data.BookId
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.store.CurrentBookStore
@@ -21,7 +21,7 @@ class StartDestinationProvider(
   private val audiobookFolders: AudiobookFolders,
   private val currentBookStore: CurrentBookStore,
   private val playerController: PlayerController,
-  private val audiobookshelf: Audiobookshelf,
+  private val serverAccount: ServerAccount,
   private val json: Json,
 ) {
 
@@ -62,7 +62,7 @@ class StartDestinationProvider(
     return when {
       onboardingCompletedStore.data.first() -> false
       audiobookFolders.hasAnyFolders() -> false
-      audiobookshelf.isConnected() -> false
+      serverAccount.isConnected() -> false
       else -> true
     }
   }

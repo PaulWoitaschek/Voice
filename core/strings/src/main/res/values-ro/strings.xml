@@ -79,6 +79,10 @@
     <string name="book.edit.author.label">Autor</string>
     <string name="book.edit.cover.file">Copertă din sistemul de fișiere</string>
     <string name="book.edit.cover.internet">Copertă de pe internet</string>
+    <string name="book.edit.part.label">Volum</string>
+    <string name="book.edit.series.label">Serie</string>
+    <string name="book.edit.server.failed">Nu s-a putut salva pe serverul tău. Încearcă din nou.</string>
+    <string name="book.edit.server.not_allowed">Contul tău de pe server nu poate modifica cărți.</string>
     <string name="book.edit.title.label">Titlu</string>
     <string name="book.source.device">Pe acest dispozitiv</string>
     <string name="book.source.server_downloaded">%s · descărcată</string>

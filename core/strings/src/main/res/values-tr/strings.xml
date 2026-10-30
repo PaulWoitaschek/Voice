@@ -76,6 +76,10 @@
     <string name="book.edit.author.label">Yazar</string>
     <string name="book.edit.cover.file">Dosyalardan kapak</string>
     <string name="book.edit.cover.internet">İnternetten kitap kapağı</string>
+    <string name="book.edit.part.label">Cilt</string>
+    <string name="book.edit.series.label">Seri</string>
+    <string name="book.edit.server.failed">Sunucunuza kaydedilemedi. Tekrar deneyin.</string>
+    <string name="book.edit.server.not_allowed">Sunucudaki hesabınız kitapları değiştiremez.</string>
     <string name="book.edit.title.label">Başlık</string>
     <string name="book.source.device">Bu cihazda</string>
     <string name="book.source.server_downloaded">%s · indirildi</string>

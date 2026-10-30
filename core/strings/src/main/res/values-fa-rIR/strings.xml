@@ -76,6 +76,10 @@
     <string name="book.edit.author.label">نویسنده</string>
     <string name="book.edit.cover.file">دریافت کاور از داخل سیستم</string>
     <string name="book.edit.cover.internet">دریافت کاور از طریق اینترنت</string>
+    <string name="book.edit.part.label">جلد</string>
+    <string name="book.edit.series.label">مجموعه</string>
+    <string name="book.edit.server.failed">ذخیره در سرورتان انجام نشد. دوباره امتحان کنید.</string>
+    <string name="book.edit.server.not_allowed">حساب شما در سرور اجازهٔ تغییر کتاب‌ها را ندارد.</string>
     <string name="book.edit.title.label">عنوان</string>
     <string name="book.source.device">در این دستگاه</string>
     <string name="book.source.server_downloaded">%s · دانلودشده</string>

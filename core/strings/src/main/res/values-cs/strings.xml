@@ -82,6 +82,10 @@
     <string name="book.edit.author.label">Autor</string>
     <string name="book.edit.cover.file">Obal ze souborového systému</string>
     <string name="book.edit.cover.internet">Obal z internetu</string>
+    <string name="book.edit.part.label">Díl</string>
+    <string name="book.edit.series.label">Série</string>
+    <string name="book.edit.server.failed">Uložení na váš server se nepodařilo. Zkuste to znovu.</string>
+    <string name="book.edit.server.not_allowed">Váš účet na serveru nemůže měnit knihy.</string>
     <string name="book.edit.title.label">Název</string>
     <string name="book.source.device">Na tomto zařízení</string>
     <string name="book.source.server_downloaded">%s · staženo</string>

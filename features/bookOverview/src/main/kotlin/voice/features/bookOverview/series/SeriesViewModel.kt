@@ -25,10 +25,10 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.CurrentBook
 import voice.features.bookOverview.overview.category
-import voice.features.bookOverview.overview.part
 import voice.features.bookOverview.overview.series
 import voice.features.bookOverview.overview.seriesKey
 import voice.features.bookOverview.overview.seriesName
+import voice.features.bookOverview.overview.seriesPart
 import voice.features.bookOverview.overview.toItemViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -73,7 +73,7 @@ class SeriesViewModel(
     val action = (playingBook ?: series.inProgress ?: series.firstUnfinished)?.let { book ->
       SeriesViewState.Action(
         bookId = book.id,
-        part = book.part,
+        part = book.seriesPart,
         continues = book.category == BookOverviewCategory.CURRENT,
         playing = book == playingBook,
       )
@@ -90,7 +90,7 @@ class SeriesViewModel(
         SeriesViewState.Book(
           // the header names the author already
           book = book.toItemViewState().let { if (it.author == series.author) it.copy(author = null) else it },
-          part = book.part,
+          part = book.seriesPart,
           finished = book.category == BookOverviewCategory.FINISHED,
           current = book.id == currentBookId,
           playing = book == playingBook,

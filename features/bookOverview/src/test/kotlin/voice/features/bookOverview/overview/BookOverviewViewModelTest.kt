@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
+import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
@@ -57,9 +58,11 @@ class BookOverviewViewModelTest {
 
   private val testDispatcher = UnconfinedTestDispatcher()
   private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
-    every { syncing } returns flowOf(false)
+    every { syncing } returns MutableStateFlow(false)
     every { unavailableBooks } returns flowOf(emptySet())
-    every { downloadStates } returns flowOf(emptyMap())
+  }
+  private val serverDownloads = mockk<ServerDownloads> {
+    every { states } returns flowOf(emptyMap())
   }
   private val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
   private val audiobookFolders = mockk<AudiobookFolders> {
@@ -100,6 +103,7 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
+      serverDownloads = serverDownloads,
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey(),
@@ -161,6 +165,7 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(true)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
+      serverDownloads = serverDownloads,
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey(),
@@ -532,6 +537,7 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
+      serverDownloads = serverDownloads,
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey,

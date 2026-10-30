@@ -147,6 +147,14 @@
     <string name="book.edit.cover.file">Cover from the file system</string>
     <!-- Bottom-sheet item for choosing a cover from an internet search. -->
     <string name="book.edit.cover.internet">Cover from the Internet</string>
+    <!-- Label for the field with the book's place in its series, like 2 or 3.5, next to the series field in the sheet that edits a book. -->
+    <string name="book.edit.part.label">Part</string>
+    <!-- Label for the field with the name of the series the book belongs to, in the sheet that edits a book. -->
+    <string name="book.edit.series.label">Series</string>
+    <!-- Error in the sheet that edits a book from an Audiobookshelf server, when saving the series on the server failed, for example without a connection. The listener's input stays, so they can tap Save again. -->
+    <string name="book.edit.server.failed">Couldn\'t save on your server. Try again.</string>
+    <!-- Error in the sheet that edits a book from an Audiobookshelf server, when the listener's account on the server isn't allowed to change books. Whoever runs the server can allow it. -->
+    <string name="book.edit.server.not_allowed">Your account on the server can\'t change books.</string>
     <!-- Label for the field with the book's title, in the sheet that edits a book. -->
     <string name="book.edit.title.label">Title</string>
     <!-- Shown under the title in the book actions sheet for a book whose files are on the phone, once a server is connected too. -->
@@ -411,7 +419,7 @@
     </plurals>
     <!-- Header above the browse section of the library search, which lists the library by authors, series, narrators or genres. -->
     <string name="library.search.browse.title">Browse</string>
-    <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. Also below a series in the library and on the screen of a series. -->
+    <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. Also below a series in the library, on the screen of a series and below each series suggested while editing a book. -->
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d book</item>
         <item quantity="other">%d books</item>

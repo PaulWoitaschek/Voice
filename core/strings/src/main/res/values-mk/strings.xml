@@ -76,6 +76,10 @@
     <string name="book.edit.author.label">Автор</string>
     <string name="book.edit.cover.file">Корица од датотечен систем</string>
     <string name="book.edit.cover.internet">Корица од Интернет</string>
+    <string name="book.edit.part.label">Дел</string>
+    <string name="book.edit.series.label">Серијал</string>
+    <string name="book.edit.server.failed">Не успеавме да зачуваме на вашиот сервер. Обидете се повторно.</string>
+    <string name="book.edit.server.not_allowed">Вашата сметка на серверот нема дозвола да менува книги.</string>
     <string name="book.edit.title.label">Наслов</string>
     <string name="book.source.device">На овој уред</string>
     <string name="book.source.server_downloaded">%s · преземено</string>

@@ -28,6 +28,10 @@ fun book(
   customName: String? = null,
   author: String? = null,
   customAuthor: String? = null,
+  series: String? = null,
+  customSeries: String? = null,
+  part: String? = null,
+  customPart: String? = null,
 ): Book {
   val bookUri = DocumentsContract.buildDocumentUriUsingTree(folder(tree), "$tree/$path")
   val chapters = fileSizes.mapIndexed { index, size ->
@@ -61,14 +65,14 @@ fun book(
         title = null,
         genre = null,
         narrator = null,
-        series = null,
-        part = null,
+        series = series,
+        part = part,
         cover = null,
         fileLastModified = null,
       ),
     ),
     chapters = chapters,
-    custom = CustomMetadata(id, name = customName, author = customAuthor),
+    custom = CustomMetadata(id, name = customName, author = customAuthor, series = customSeries, part = customPart),
   )
 }
 

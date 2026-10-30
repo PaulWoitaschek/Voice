@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.ServerAccount
+import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.data.Book
 import voice.core.data.BookId
@@ -36,7 +37,8 @@ class BottomSheetViewModel(
   private val bookId: BookId,
   private val viewModels: Set<@JvmSuppressWildcards BottomSheetItemViewModel>,
   private val repo: BookRepository,
-  private val serverLibrary: ServerLibrary,
+  private val serverAccount: ServerAccount,
+  private val serverDownloads: ServerDownloads,
   private val navigator: Navigator,
   private val playerController: PlayerController,
   private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
@@ -53,16 +55,16 @@ class BottomSheetViewModel(
         .toSet()
         .sorted()
     }.value
-    val server = remember { serverLibrary.serverName.map(::ServerName) }.collectAsState(initial = null).value
+    val server = remember { serverAccount.serverName.map(::ServerName) }.collectAsState(initial = null).value
     // the download goes on while the sheet is open
     val download = if (bookId.isRemote) {
-      remember { serverLibrary.downloadStates.map { it[bookId] ?: BookDownloadState.NotDownloaded }.distinctUntilChanged() }
+      remember { serverDownloads.states.map { it[bookId] ?: BookDownloadState.NotDownloaded }.distinctUntilChanged() }
         .collectAsState(initial = null).value ?: return null
     } else {
       null
     }
     val askForNotifications = produceState<Boolean?>(initialValue = null) {
-      value = bookId.isRemote && serverLibrary.shouldAskForNotifications()
+      value = bookId.isRemote && serverDownloads.shouldAskForNotifications()
     }.value
     if (book == null || items == null || server == null || askForNotifications == null) return null
     return EditBookBottomSheetState(
@@ -113,8 +115,8 @@ class BottomSheetViewModel(
   internal suspend fun onItemClick(item: BottomSheetItem) {
     scope.launch {
       when (item) {
-        BottomSheetItem.Download, BottomSheetItem.RetryDownload -> serverLibrary.download(bookId)
-        BottomSheetItem.StopDownload, BottomSheetItem.RemoveDownload -> serverLibrary.removeDownload(bookId)
+        BottomSheetItem.Download, BottomSheetItem.RetryDownload -> serverDownloads.download(bookId)
+        BottomSheetItem.StopDownload, BottomSheetItem.RemoveDownload -> serverDownloads.remove(bookId)
         else -> viewModels.forEach {
           it.onItemClick(bookId, item)
         }
@@ -124,7 +126,7 @@ class BottomSheetViewModel(
 
   internal fun onAskedForNotifications() {
     scope.launch {
-      serverLibrary.onAskedForNotifications()
+      serverDownloads.onAskedForNotifications()
     }
   }
 

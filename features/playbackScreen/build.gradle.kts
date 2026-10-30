@@ -9,7 +9,7 @@ dependencies {
   implementation(projects.core.common)
   implementation(projects.core.strings)
   implementation(projects.core.playback)
-  implementation(projects.core.audiobookshelf)
+  implementation(projects.core.audiobookshelf.api)
   implementation(projects.core.data.api)
   implementation(projects.core.datastore)
   implementation(projects.core.featureflag)

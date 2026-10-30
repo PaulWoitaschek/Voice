@@ -82,6 +82,10 @@
     <string name="book.edit.author.label">Autor</string>
     <string name="book.edit.cover.file">Okładka z pamięci wewnętrznej</string>
     <string name="book.edit.cover.internet">Okładka z internetu</string>
+    <string name="book.edit.part.label">Tom</string>
+    <string name="book.edit.series.label">Seria</string>
+    <string name="book.edit.server.failed">Nie udało się zapisać na serwerze. Spróbuj ponownie.</string>
+    <string name="book.edit.server.not_allowed">Twoje konto na serwerze nie może zmieniać książek.</string>
     <string name="book.edit.title.label">Tytuł</string>
     <string name="book.source.device">Na tym urządzeniu</string>
     <string name="book.source.server_downloaded">%s · pobrano</string>

@@ -88,6 +88,10 @@
     <string name="book.edit.author.label">المؤلف</string>
     <string name="book.edit.cover.file">الغلاف من ملفات الجهاز</string>
     <string name="book.edit.cover.internet">الغلاف من الإنترنت</string>
+    <string name="book.edit.part.label">الجزء</string>
+    <string name="book.edit.series.label">السلسلة</string>
+    <string name="book.edit.server.failed">تعذّر الحفظ على خادمك. يمكنك المحاولة مجددًا.</string>
+    <string name="book.edit.server.not_allowed">لا يملك حسابك على الخادم صلاحية تعديل الكتب.</string>
     <string name="book.edit.title.label">العنوان</string>
     <string name="book.source.device">على هذا الجهاز</string>
     <string name="book.source.server_downloaded">تم التنزيل من %s</string>

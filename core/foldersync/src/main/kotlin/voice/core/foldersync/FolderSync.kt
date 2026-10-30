@@ -18,6 +18,7 @@ import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Bookmark
+import voice.core.data.CustomMetadata
 import voice.core.data.ListeningEvent
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.DocumentFileWithUri
@@ -144,18 +145,10 @@ public class FolderSync internal constructor(
     if (place != null && place != mine.place) {
       copies.forEach { takeOver(it.id, place) }
     }
-    val name = newest.name
-    if (name != null && name != mine.name) {
-      copies.forEach { copy ->
-        bookRepository.updateCustomMetadata(copy.id) { it.copy(name = name.value) }
-      }
-    }
-    val author = newest.author
-    if (author != null && author != mine.author) {
-      copies.forEach { copy ->
-        bookRepository.updateCustomMetadata(copy.id) { it.copy(author = author.value) }
-      }
-    }
+    copies.takeOverText(mine.name, newest.name) { custom, name -> custom.copy(name = name) }
+    copies.takeOverText(mine.author, newest.author) { custom, author -> custom.copy(author = author) }
+    copies.takeOverText(mine.series, newest.series) { custom, series -> custom.copy(series = series) }
+    copies.takeOverText(mine.part, newest.part) { custom, part -> custom.copy(part = part) }
     (mine.bookmarks.keys - newest.bookmarks.keys).forEach { bookmarkRepo.deleteBookmark(Bookmark.Id(it)) }
     val book = copies.maxBy { it.content.lastPlayedAt }
     newest.bookmarks.forEach { (id, bookmark) ->
@@ -173,6 +166,18 @@ public class FolderSync internal constructor(
           kind = bookmark.kind,
         ),
       )
+    }
+  }
+
+  private suspend fun List<Book>.takeOverText(
+    mine: SyncedText?,
+    newest: SyncedText?,
+    update: (CustomMetadata, String?) -> CustomMetadata,
+  ) {
+    if (newest != null && newest != mine) {
+      forEach { copy ->
+        bookRepository.updateCustomMetadata(copy.id) { update(it, newest.value) }
+      }
     }
   }
 
@@ -219,6 +224,10 @@ public class FolderSync internal constructor(
     null
   } catch (e: IllegalArgumentException) {
     // how the storage provider reports a file or storage that went away since the last query
+    Logger.w(e, "Could not sync through a folder")
+    null
+  } catch (e: IllegalStateException) {
+    // how the storage provider reports a file or folder it couldn't create, like on an SD card that's read-only
     Logger.w(e, "Could not sync through a folder")
     null
   }
