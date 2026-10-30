@@ -34,6 +34,7 @@ class EditBookViewModelTest {
   private val update = slot<(CustomMetadata) -> CustomMetadata>()
   private val repo = mockk<BookRepository> {
     coEvery { get(book.id) } returns book
+    coEvery { all() } returns listOf(book)
     coEvery { updateCustomMetadata(book.id, capture(update)) } returns Unit
   }
   private val editSeriesFeatureFlag = MemoryFeatureFlag(true)
@@ -73,6 +74,82 @@ class EditBookViewModelTest {
     viewModel.onItemClick(book.id, BottomSheetItem.Edit)
 
     assertFalse(viewModel.state.value!!.showSeries)
+  }
+
+  @Test
+  fun `typing suggests the series of the other books, those starting with it first`() = runTest(dispatcher) {
+    coEvery { repo.all() } returns listOf(
+      book,
+      book(series = "The Expanse"),
+      book(series = "the expanse "),
+      book(series = "The Expanse"),
+      book(series = "Expeditionary Force"),
+      book(series = "Alien Explorers"),
+      book(series = "Discworld"),
+      book(series = null),
+    )
+    viewModel.onItemClick(book.id, BottomSheetItem.Edit)
+
+    viewModel.onSeriesChange("exp")
+
+    assertEquals(
+      expected = listOf(
+        SeriesSuggestion("Expeditionary Force", bookCount = 1),
+        SeriesSuggestion("Alien Explorers", bookCount = 1),
+        SeriesSuggestion("The Expanse", bookCount = 3),
+      ),
+      actual = viewModel.state.value?.suggestions,
+    )
+  }
+
+  @Test
+  fun `at most three series are suggested, in natural order`() = runTest(dispatcher) {
+    coEvery { repo.all() } returns listOf(
+      book,
+      book(series = "Saga 10"),
+      book(series = "Saga 2"),
+      book(series = "Saga 1"),
+      book(series = "Saga 3"),
+    )
+    viewModel.onItemClick(book.id, BottomSheetItem.Edit)
+
+    viewModel.onSeriesChange("saga")
+
+    assertEquals(
+      expected = listOf("Saga 1", "Saga 2", "Saga 3"),
+      actual = viewModel.state.value?.suggestions?.map { it.name },
+    )
+  }
+
+  @Test
+  fun `nothing is suggested before the listener changes the series`() = runTest(dispatcher) {
+    coEvery { repo.all() } returns listOf(book, book(series = "Dune Chronicles Extras"))
+
+    viewModel.onItemClick(book.id, BottomSheetItem.Edit)
+
+    assertEquals(expected = emptyList(), actual = viewModel.state.value?.suggestions)
+  }
+
+  @Test
+  fun `a series typed in full isn't suggested again`() = runTest(dispatcher) {
+    coEvery { repo.all() } returns listOf(book, book(series = "Foundation"), book(series = "Foundation Sequels"))
+    viewModel.onItemClick(book.id, BottomSheetItem.Edit)
+
+    viewModel.onSeriesChange("foundation ")
+
+    assertEquals(
+      expected = listOf(SeriesSuggestion("Foundation Sequels", bookCount = 1)),
+      actual = viewModel.state.value?.suggestions,
+    )
+  }
+
+  @Test
+  fun `the series of the edited book isn't suggested`() = runTest(dispatcher) {
+    viewModel.onItemClick(book.id, BottomSheetItem.Edit)
+
+    viewModel.onSeriesChange("Dune")
+
+    assertEquals(expected = emptyList(), actual = viewModel.state.value?.suggestions)
   }
 
   @Test
