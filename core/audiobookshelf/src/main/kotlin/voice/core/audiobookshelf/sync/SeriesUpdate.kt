@@ -26,19 +26,20 @@ internal class SeriesUpdate(
 
   suspend fun update(
     bookId: BookId,
-    series: String?,
-    part: String?,
+    series: String,
+    part: String,
   ): ServerEdit {
     val itemId = bookId.itemId ?: return ServerEdit.Failed
     val account = accountStore.data.first()?.takeUnless { it.needsLogin } ?: return ServerEdit.Failed
-    val name = series?.trim()?.takeIf { it.isNotEmpty() }
-    val edited = name?.let { AbsSeries(it, sequence = part?.trim()?.takeIf(String::isNotEmpty)) }
+    val name = series.trim().takeIf { it.isNotEmpty() }
+    val edited = name?.let { AbsSeries(it, sequence = part.trim().takeIf(String::isNotEmpty)) }
     return try {
       val api = http.authenticatedApi(account.serverUrl)
       // Voice shows only one series, and the server would drop the others if they were left out
       val current = api.items(BatchGetRequest(listOf(itemId))).libraryItems.singleOrNull()
         ?.media?.metadata?.series.orEmpty()
-      val replaced = current.shown(bookRepository.get(bookId)?.content?.metadata?.series)
+      // with none shown, a series the server got since the last sync isn't the listener's to replace
+      val replaced = bookRepository.get(bookId)?.content?.metadata?.series?.let(current::shown)
       val others = current.filter { it != replaced && !it.name.equals(name, ignoreCase = true) }
       val updated = listOfNotNull(edited) + others
       val response = api.updateMedia(itemId, MediaUpdate(MetadataUpdate(updated)))

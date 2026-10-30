@@ -125,7 +125,13 @@ internal fun EditBookSheet(
       onSeriesChange = onSeriesChange,
       onPartChange = onPartChange,
       // the sheet of a server book stays until the server took the edit
-      onSave = { if (viewState.remote) onConfirm() else hideThen(onConfirm) },
+      onSave = {
+        if (!viewState.remote) {
+          hideThen(onConfirm)
+        } else if (!closing) {
+          onConfirm()
+        }
+      },
       onCancel = { hideThen(onDismiss) },
     )
   }

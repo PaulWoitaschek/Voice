@@ -89,6 +89,39 @@ class SeriesUpdateTest {
   }
 
   @Test
+  fun `the series the book shows is replaced, also when the server spells it differently`() = runTest {
+    val series = listOf(AbsSeries("Space Operas", "4"), AbsSeries("The Expanse", "1"))
+    val book = book(series).update { it.copy(metadata = it.metadata.copy(series = "the expanse", part = "1")) }
+    enqueueItem(series)
+    server.enqueue(MockResponse(code = 200))
+
+    val result = seriesUpdate(MemoryBookRepository(book)).update(bookId, series = "the expanse", part = "2")
+
+    assertEquals(ServerEdit.Saved, result)
+    server.takeRequest(1, TimeUnit.SECONDS)
+    assertEquals(
+      """{"metadata":{"series":[{"name":"the expanse","sequence":"2"},{"name":"Space Operas","sequence":"4"}]}}""",
+      server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8(),
+    )
+  }
+
+  @Test
+  fun `a series the book doesn't show yet stays`() = runTest {
+    val repo = MemoryBookRepository(book(emptyList()))
+    enqueueItem(listOf(AbsSeries("Space Operas", "4")))
+    server.enqueue(MockResponse(code = 200))
+
+    val result = seriesUpdate(repo).update(bookId, series = "The Expanse", part = "1")
+
+    assertEquals(ServerEdit.Saved, result)
+    server.takeRequest(1, TimeUnit.SECONDS)
+    assertEquals(
+      """{"metadata":{"series":[{"name":"The Expanse","sequence":"1"},{"name":"Space Operas","sequence":"4"}]}}""",
+      server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8(),
+    )
+  }
+
+  @Test
   fun `an empty series takes the book out of the first one`() = runTest {
     val series = listOf(AbsSeries("The Expanse", "1"))
     val repo = MemoryBookRepository(book(series))
@@ -128,7 +161,7 @@ class SeriesUpdateTest {
     enqueueItem(series)
     server.enqueue(MockResponse(code = 403))
 
-    val result = seriesUpdate(repo).update(bookId, series = "Expanse", part = null)
+    val result = seriesUpdate(repo).update(bookId, series = "Expanse", part = "")
 
     assertEquals(ServerEdit.NotAllowed, result)
     assertEquals("The Expanse", repo.get(bookId)!!.series)
@@ -139,7 +172,7 @@ class SeriesUpdateTest {
     val repo = MemoryBookRepository(book(emptyList()))
     server.close()
 
-    assertEquals(ServerEdit.Failed, seriesUpdate(repo).update(bookId, series = "Expanse", part = null))
+    assertEquals(ServerEdit.Failed, seriesUpdate(repo).update(bookId, series = "Expanse", part = ""))
   }
 
   private fun enqueueItem(series: List<AbsSeries>) {

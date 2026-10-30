@@ -48,11 +48,11 @@ interface ServerLibrary {
 
   suspend fun onAskedForNotifications()
 
-  /** Puts a server book into another series on the server, or into none with a null [series]. */
+  /** Replaces the series Voice shows for a server book on the server. The other series it has there stay. */
   suspend fun updateSeries(
     bookId: BookId,
-    series: String?,
-    part: String?,
+    series: String,
+    part: String,
   ): ServerEdit
 }
 
@@ -112,7 +112,7 @@ class AudiobookshelfServerLibrary internal constructor(
 
   override suspend fun updateSeries(
     bookId: BookId,
-    series: String?,
-    part: String?,
+    series: String,
+    part: String,
   ): ServerEdit = seriesUpdate.update(bookId, series, part)
 }

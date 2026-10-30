@@ -85,11 +85,13 @@ class BookMappingTest {
 
     val shown = existing.copy(metadata = existing.metadata.copy(series = "The Expanse", part = "1"))
     val gone = existing.copy(metadata = existing.metadata.copy(series = "Expanse", part = "1"))
+    val otherCase = existing.copy(metadata = existing.metadata.copy(series = "the expanse", part = "1"))
 
     assertEquals("Space Operas", existing.metadata.series)
     assertEquals("1", item.toBookContent(item.chapters(), shown).metadata.part)
     assertEquals("The Expanse", item.toBookContent(item.chapters(), shown).metadata.series)
     assertEquals("Space Operas", item.toBookContent(item.chapters(), gone).metadata.series)
+    assertEquals("The Expanse", item.toBookContent(item.chapters(), otherCase).metadata.series)
   }
 
   @Test

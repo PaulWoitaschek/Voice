@@ -99,8 +99,11 @@ internal fun AbsLibraryItem.toBookContent(
   )
 }
 
-// the server puts a series it just got last, so the one a listener gave the book stays while the server has it
-internal fun List<AbsSeries>.shown(current: String?): AbsSeries? = firstOrNull { it.name == current } ?: firstOrNull()
+// the server puts a series it just got last, so the one a listener gave the book stays while the server has it.
+// The server matches series names ignoring case and keeps the spelling it had.
+internal fun List<AbsSeries>.shown(current: String?): AbsSeries? {
+  return firstOrNull { it.name.equals(current, ignoreCase = true) } ?: firstOrNull()
+}
 
 internal data class BookPosition(
   val chapterId: ChapterId,
