@@ -275,6 +275,24 @@ class FolderSyncTest {
   }
 
   @Test
+  fun `a series and part from another device are taken, and not sent back`() = scope.runTest {
+    val book = book(series = "Files", part = "1")
+    val repo = MemoryBookRepository(book)
+    val series = SyncedText("Other", changedAt = 1000)
+    val part = SyncedText("2", changedAt = 1000)
+    otherDevice(book, SyncedBook(series = series, part = part))
+    val folderSync = folderSync(repo)
+
+    folderSync.sync()
+    ownFile(folderSync, written.single())
+    folderSync.sync()
+
+    assertEquals("Other", repo.get(book.id)!!.custom.series)
+    assertEquals("2", repo.get(book.id)!!.custom.part)
+    assertEquals(listOf(SyncFile(mapOf(book.key() to SyncedBook(series = series, part = part)))), written)
+  }
+
+  @Test
   fun `putting the author back to the files' one is written, also when the files have none`() = scope.runTest {
     val book = book()
     val folderSync = folderSync(MemoryBookRepository(book))

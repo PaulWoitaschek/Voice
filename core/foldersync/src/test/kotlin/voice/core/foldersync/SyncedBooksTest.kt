@@ -124,19 +124,56 @@ class SyncedBooksTest {
   }
 
   @Test
+  fun `a series and part are changed now when they're changed here or put back to the files' ones`() {
+    val own = SyncedBook(series = SyncedText("Old", changedAt = 1000), part = SyncedText("1", changedAt = 1000))
+
+    val changed = listOf(book(customSeries = "New", customPart = "2")).synced(own)
+    val unchanged = listOf(book(customSeries = "Old", customPart = "1")).synced(own)
+    val putBack = listOf(book(series = "Files", part = "3")).synced(own)
+
+    assertEquals(SyncedText("New", changedAt = NOW), changed.series)
+    assertEquals(SyncedText("2", changedAt = NOW), changed.part)
+    assertEquals(own.series, unchanged.series)
+    assertEquals(own.part, unchanged.part)
+    assertEquals(SyncedText(value = null, changedAt = NOW), putBack.series)
+    assertEquals(SyncedText(value = null, changedAt = NOW), putBack.part)
+  }
+
+  @Test
+  fun `a series and part like in the files aren't written`() {
+    val files = book(series = "Files", part = "3")
+    val synced = SyncedBook(series = SyncedText("Files", changedAt = 1000), part = SyncedText("3", changedAt = 1000))
+
+    assertEquals(SyncedBook(), synced.withoutFilesNames(listOf(files)))
+  }
+
+  @Test
   fun `what changed later wins, and on a tie this device's stays`() {
     val mine = SyncedBook(
       place = place(playedAt = 2000),
       name = SyncedText("Mine", changedAt = 1000),
       author = SyncedText("Mine", changedAt = 3000),
+      series = SyncedText("Mine", changedAt = 1000),
+      part = SyncedText("1", changedAt = 3000),
     )
     val other = SyncedBook(
       place = place(file = 0, playedAt = 1000),
       name = SyncedText("Other", changedAt = 3000),
       author = SyncedText("Other", changedAt = 1000),
+      series = SyncedText("Other", changedAt = 3000),
+      part = SyncedText("2", changedAt = 1000),
     )
 
-    assertEquals(SyncedBook(place = mine.place, name = other.name, author = mine.author), mine.with(other))
+    assertEquals(
+      expected = SyncedBook(
+        place = mine.place,
+        name = other.name,
+        author = mine.author,
+        series = other.series,
+        part = mine.part,
+      ),
+      actual = mine.with(other),
+    )
     assertEquals(mine, mine.with(mine.copy(name = SyncedText("Other", changedAt = 1000))))
   }
 
