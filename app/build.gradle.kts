@@ -161,7 +161,8 @@ dependencies {
   implementation(projects.features.onboarding)
   implementation(projects.features.bookmark)
   implementation(projects.features.widget)
-  implementation(projects.core.audiobookshelf)
+  implementation(projects.core.audiobookshelf.api)
+  implementation(projects.core.audiobookshelf.impl)
   implementation(projects.core.foldersync)
   implementation(projects.features.audiobookshelf)
 
