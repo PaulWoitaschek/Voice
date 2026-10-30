@@ -68,6 +68,18 @@ class LibrarySeriesTest {
   }
 
   @Test
+  fun `the marks of other scripts keep series apart`() {
+    val series = listOf(
+      notStarted(series = "कमल"),
+      notStarted(series = "कमला"),
+      notStarted(series = "ハリー"),
+      notStarted(series = "バリー"),
+    ).series()
+
+    assertEquals(expected = 4, actual = series.size)
+  }
+
+  @Test
   fun `a series without letters or digits is no series`() {
     assertEquals(expected = emptyList(), actual = listOf(notStarted(series = "–"), notStarted(series = "–")).series())
   }

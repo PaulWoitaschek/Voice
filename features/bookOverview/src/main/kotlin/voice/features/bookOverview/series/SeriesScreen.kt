@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -60,6 +59,7 @@ import voice.core.ui.segmentedShape
 import voice.features.bookOverview.views.BookOverviewPreviewParameterProvider
 import voice.features.bookOverview.views.ListBookRow
 import voice.features.bookOverview.views.SeriesCover
+import voice.features.bookOverview.views.seriesCounts
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.core.strings.R as StringsR
@@ -192,20 +192,12 @@ private fun Header(viewState: SeriesViewState) {
       }
       Spacer(Modifier.height(4.dp))
       Text(
-        text = bookCounts(viewState),
+        text = seriesCounts(viewState.bookCount, viewState.finishedCount),
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
       )
     }
   }
-}
-
-@Composable
-private fun bookCounts(viewState: SeriesViewState): String {
-  val books = pluralStringResource(StringsR.plurals.library_search_browse_book_count, viewState.bookCount, viewState.bookCount)
-  if (viewState.finishedCount == 0) return books
-  val finished = pluralStringResource(StringsR.plurals.library_search_browse_finished, viewState.finishedCount, viewState.finishedCount)
-  return "$books · $finished"
 }
 
 @Composable

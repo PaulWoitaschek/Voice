@@ -45,7 +45,9 @@ fun Modifier.sharedCoverElementModifier(bookId: BookId): Modifier {
       override val SharedTransitionScope.SharedContentState.isEnabled: Boolean
         get() {
           val scenes = animatedContentScope.transition.parentTransition ?: return true
-          return sharesCovers(scenes.currentState as Scene<*>, scenes.targetState as Scene<*>)
+          val initial = scenes.currentState as? Scene<*> ?: return true
+          val target = scenes.targetState as? Scene<*> ?: return true
+          return sharesCovers(initial, target)
         }
     }
   }

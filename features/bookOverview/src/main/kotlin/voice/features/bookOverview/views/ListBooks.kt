@@ -74,7 +74,7 @@ internal fun ListBookRow(
       modifier = Modifier.padding(10.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
-      // like the current chapter, the current book shows the now playing bars instead of its number
+      // like the current chapter in the chapter list
       if (current) {
         Box(
           modifier = Modifier

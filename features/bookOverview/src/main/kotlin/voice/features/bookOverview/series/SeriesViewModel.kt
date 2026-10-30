@@ -12,6 +12,8 @@ import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.ServerDownloads
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.BookId
@@ -24,6 +26,7 @@ import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.CurrentBook
+import voice.features.bookOverview.overview.badge
 import voice.features.bookOverview.overview.category
 import voice.features.bookOverview.overview.series
 import voice.features.bookOverview.overview.seriesKey
@@ -41,6 +44,8 @@ class SeriesViewModel(
   private val currentBookStore: CurrentBookStore,
   private val playStateManager: PlayStateManager,
   private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
+  private val serverLibrary: ServerLibrary,
+  private val serverDownloads: ServerDownloads,
   dispatcherProvider: DispatcherProvider,
   @Assisted
   private val name: String,
@@ -55,10 +60,12 @@ class SeriesViewModel(
     // the button would say Continue for a moment before it says Pause
     val currentBookId = (remember { currentBookStore.data.map(::CurrentBook) }.collectAsState(initial = null).value ?: return null).id
     val playing = remember { playStateManager.playStateFlow }.collectAsState().value == PlayStateManager.PlayState.Playing
+    val unavailableBooks = remember { serverLibrary.unavailableBooks }.collectAsState(initial = emptySet()).value
+    val downloadStates = remember { serverDownloads.states }.collectAsState(initial = emptyMap()).value
     val livePlaybackState = livePlaybackState(currentBookId)
-    val series = remember(books, livePlaybackState) {
-      books
-        .filter { book -> book.seriesName?.let(::seriesKey) == key }
+    val seriesBooks = remember(books) { books.filter { book -> book.seriesName?.let(::seriesKey) == key } }
+    val series = remember(seriesBooks, livePlaybackState) {
+      seriesBooks
         .map { book -> livePlaybackState?.let(book::overlay) ?: book }
         .series()
         .singleOrNull()
@@ -89,7 +96,8 @@ class SeriesViewModel(
       books = series.books.map { book ->
         SeriesViewState.Book(
           // the header names the author already
-          book = book.toItemViewState().let { if (it.author == series.author) it.copy(author = null) else it },
+          book = book.toItemViewState(unavailable = book.id in unavailableBooks, download = downloadStates[book.id].badge())
+            .let { if (it.author == series.author) it.copy(author = null) else it },
           part = book.seriesPart,
           finished = book.category == BookOverviewCategory.FINISHED,
           current = book.id == currentBookId,

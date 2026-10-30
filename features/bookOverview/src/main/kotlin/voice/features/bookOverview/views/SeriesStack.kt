@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -119,7 +120,7 @@ internal fun ListSeriesRow(
             )
           }
           Text(
-            text = seriesCounts(series),
+            text = seriesCounts(series.bookCount, series.finishedCount),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
@@ -186,10 +187,7 @@ internal fun GridSeries(
   }
 }
 
-/**
- * The covers of the books, the one that's next in front. It flies as the series and not as its front book, which can
- * be on the Continue listening card at the same time.
- */
+// flies as the series and not as its front book, which can be on the Continue listening card at the same time
 @Composable
 internal fun SeriesCover(
   seriesKey: String,
@@ -207,18 +205,21 @@ internal fun SeriesCover(
       val behind = covers.size - 1
       covers.asReversed().forEachIndexed { index, cover ->
         val depth = if (behind == 0) 0F else (behind - index).toFloat() / behind
-        AsyncImage(
-          modifier = Modifier
-            .fillMaxSize(if (behind == 0) 1F else STACKED_COVER_SIZE)
-            .align(BiasAlignment(horizontalBias = -1F + 2F * depth, verticalBias = 1F - 2F * depth))
-            .clip(CoverShape)
-            .border(2.dp, gapColor, CoverShape),
-          model = rememberCoverThumbnailRequest(cover),
-          placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
-          error = painterResource(id = UiR.drawable.album_art),
-          contentScale = ContentScale.Crop,
-          contentDescription = null,
-        )
+        // a cover keeps its image when another book comes to the front
+        key(cover) {
+          AsyncImage(
+            modifier = Modifier
+              .fillMaxSize(if (behind == 0) 1F else STACKED_COVER_SIZE)
+              .align(BiasAlignment(horizontalBias = -1F + 2F * depth, verticalBias = 1F - 2F * depth))
+              .clip(CoverShape)
+              .border(2.dp, gapColor, CoverShape),
+            model = rememberCoverThumbnailRequest(cover),
+            placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
+            error = painterResource(id = UiR.drawable.album_art),
+            contentScale = ContentScale.Crop,
+            contentDescription = null,
+          )
+        }
       }
     }
     badge()
@@ -234,7 +235,7 @@ private fun SeriesBadge(
   modifier: Modifier = Modifier,
 ) {
   val finished = series.category == BookOverviewCategory.FINISHED
-  val description = pluralStringResource(StringsR.plurals.library_search_browse_book_count, series.bookCount, series.bookCount)
+  val description = seriesCounts(series.bookCount, series.finishedCount)
   Box(
     modifier = modifier
       .sizeIn(minWidth = 24.dp, minHeight = 24.dp)
@@ -268,14 +269,14 @@ private fun SeriesBadge(
 }
 
 @Composable
-internal fun seriesCounts(series: SeriesStackViewState): String {
-  val books = pluralStringResource(StringsR.plurals.library_search_browse_book_count, series.bookCount, series.bookCount)
-  return if (series.category == BookOverviewCategory.CURRENT && series.finishedCount > 0) {
-    val finished = pluralStringResource(StringsR.plurals.library_search_browse_finished, series.finishedCount, series.finishedCount)
-    "$books · $finished"
-  } else {
-    books
-  }
+internal fun seriesCounts(
+  bookCount: Int,
+  finishedCount: Int,
+): String {
+  val books = pluralStringResource(StringsR.plurals.library_search_browse_book_count, bookCount, bookCount)
+  if (finishedCount == 0) return books
+  val finished = pluralStringResource(StringsR.plurals.library_search_browse_finished, finishedCount, finishedCount)
+  return "$books · $finished"
 }
 
 private fun previewSeries(category: BookOverviewCategory) = SeriesStackViewState(

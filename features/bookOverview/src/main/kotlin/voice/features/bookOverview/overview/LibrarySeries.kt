@@ -6,13 +6,16 @@ import voice.core.data.BookComparator
 import java.text.Normalizer
 import java.time.Instant
 
-// "Harry Potter", "harry-potter" and "Härry Potter" are one series
 internal fun seriesKey(name: String): String? {
   return Normalizer.normalize(name, Normalizer.Form.NFKD)
-    .filter { it.isLetterOrDigit() }
+    // accents like the one of ä can go, but in scripts like Devanagari the marks are part of the letters
+    .filter { it.isLetterOrDigit() || (it.category in Marks && it !in Accents) }
     .lowercase()
     .takeIf { it.isNotEmpty() }
 }
+
+private val Marks = setOf(CharCategory.NON_SPACING_MARK, CharCategory.COMBINING_SPACING_MARK, CharCategory.ENCLOSING_MARK)
+private val Accents = '\u0300'..'\u036F'
 
 internal val Book.seriesName: String?
   get() = series?.trim()?.takeIf { it.isNotEmpty() }
@@ -82,7 +85,7 @@ internal sealed interface LibraryEntry {
   data class Stack(val series: Series) : LibraryEntry
 }
 
-/** Two or more books of a series are one stack, wherever their progress is. */
+// a started series stays one stack too, so none of its books disappears from the library
 internal fun libraryEntries(books: List<Book>): Map<BookOverviewCategory, List<LibraryEntry>> {
   val stacks = books.series().filter { it.books.size >= 2 }
   val stacked = stacks.flatMapTo(HashSet()) { series -> series.books.map { it.id } }
@@ -117,7 +120,6 @@ private fun BookOverviewCategory.entryComparator(): Comparator<LibraryEntry> = w
   BookOverviewCategory.NOT_STARTED -> compareBy(NaturalOrderComparator.stringComparator) { it.name }
 }
 
-// a tie goes to the spelling that comes first
 private fun List<String>.mostCommon(): String? {
   return groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
 }
