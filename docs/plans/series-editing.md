@@ -18,7 +18,7 @@ To start the next step: "Read `docs/plans/series-editing.md` and build PR N."
 | 1 | Edit series and part of books on the device | In review: [#4081](https://github.com/PaulWoitaschek/Voice/pull/4081), branch `edit-book-series` |
 | 2 | Suggest series the library already has | In review: [#4082](https://github.com/PaulWoitaschek/Voice/pull/4082), branch `series-suggestions` |
 | 3 | Sync series and part through `.voice` | In review: [#4083](https://github.com/PaulWoitaschek/Voice/pull/4083), branch `sync-series` |
-| 4 | Write the series of Audiobookshelf books to the server | In review, branch `audiobookshelf-series` |
+| 4 | Write the series of Audiobookshelf books to the server | In review: [#4084](https://github.com/PaulWoitaschek/Voice/pull/4084), branch `audiobookshelf-series` |
 
 The pull requests are stacked: each branches off the one before and targets its branch, so each diff shows one step.
 After a merge, the next one is retargeted to `main`.
