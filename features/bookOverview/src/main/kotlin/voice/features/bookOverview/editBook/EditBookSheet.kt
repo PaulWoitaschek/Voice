@@ -235,7 +235,8 @@ private fun EditBookContent(
         Column(
           modifier = Modifier
             .weight(1F)
-            .animateContentSize(),
+            .animateContentSize()
+            .onFocusChanged { seriesFocused = it.hasFocus },
         ) {
           OutlinedTextField(
             value = series,
@@ -243,9 +244,7 @@ private fun EditBookContent(
               series = it
               onSeriesChange(it.text)
             },
-            modifier = Modifier
-              .fillMaxWidth()
-              .onFocusChanged { seriesFocused = it.isFocused },
+            modifier = Modifier.fillMaxWidth(),
             label = { Text(stringResource(StringsR.string.book_edit_series_label)) },
             singleLine = true,
             readOnly = readOnly,
@@ -376,7 +375,7 @@ private fun EditBookPreview() {
 @Preview(widthDp = 280)
 private fun SeriesSuggestionsPreview() {
   VoiceTheme {
-    Surface {
+    Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       SeriesSuggestions(
         suggestions = listOf(
           SeriesSuggestion("The Signal Saga", bookCount = 4),
