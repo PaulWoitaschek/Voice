@@ -31,6 +31,8 @@ After a merge, the next one is retargeted to `main`.
 - `EditBookViewModel` and `EditBookSheet` show a Series field and a narrow Part field below the author when the flag
   is on, and save only what changed. An empty field goes back to the files, like the author.
 - Books from Audiobookshelf still have no Edit item.
+- Done differently: from 1.5× font size, Part goes below Series, and its width grows with the font, so its label
+  stays on one line in every language.
 
 ## 2. Suggest series the library already has
 
