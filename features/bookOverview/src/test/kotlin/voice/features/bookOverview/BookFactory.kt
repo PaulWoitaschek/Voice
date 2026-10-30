@@ -19,6 +19,7 @@ fun book(
   narrator: String? = null,
   genre: String? = null,
   series: String? = null,
+  part: String? = null,
   id: BookId = BookId(Uuid.random().toString()),
 ): Book {
   return Book(
@@ -41,7 +42,7 @@ fun book(
         genre = genre,
         narrator = narrator,
         series = series,
-        part = null,
+        part = part,
         cover = null,
         fileLastModified = null,
       ),

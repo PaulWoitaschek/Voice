@@ -45,6 +45,19 @@ class BookRepositoryImplTest {
   }
 
   @Test
+  fun `a series the files already have isn't kept, so only the part is an edit`() = runTest {
+    val content = content(name = "Dune", author = "Herbert", series = "Dune Chronicles", part = "1")
+    contentRepo.put(content)
+
+    repo.updateCustomMetadata(content.id) { it.copy(series = "Dune Chronicles", part = "2") }
+
+    assertEquals(
+      expected = CustomMetadata(content.id, part = "2"),
+      actual = customMetadataRepo.get(content.id),
+    )
+  }
+
+  @Test
   fun `a book that isn't in the library gets no edits`() = runTest {
     val id = BookId("dune")
 
@@ -56,6 +69,8 @@ class BookRepositoryImplTest {
   private fun content(
     name: String,
     author: String,
+    series: String? = null,
+    part: String? = null,
   ) = BookContent(
     id = BookId(name),
     playbackSpeed = 1F,
@@ -74,8 +89,8 @@ class BookRepositoryImplTest {
       title = null,
       genre = null,
       narrator = null,
-      series = null,
-      part = null,
+      series = series,
+      part = part,
       cover = null,
       fileLastModified = null,
     ),

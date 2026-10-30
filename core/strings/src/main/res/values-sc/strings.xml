@@ -76,6 +76,8 @@
     <string name="book.edit.author.label">Autore</string>
     <string name="book.edit.cover.file">Cobertedda dae su sistema de archìvios</string>
     <string name="book.edit.cover.internet">Cobertedda dae ìnternet</string>
+    <string name="book.edit.part.label">Parte</string>
+    <string name="book.edit.series.label">Sèrie</string>
     <string name="book.edit.title.label">Tìtulu</string>
     <string name="book.source.device">In custu dispositivu</string>
     <string name="book.source.server_downloaded">%s · iscarrigadu</string>

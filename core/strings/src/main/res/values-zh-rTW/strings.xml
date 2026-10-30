@@ -73,6 +73,8 @@
     <string name="book.edit.author.label">作者</string>
     <string name="book.edit.cover.file">從檔案選擇封面</string>
     <string name="book.edit.cover.internet">從網路尋找封面</string>
+    <string name="book.edit.part.label">集</string>
+    <string name="book.edit.series.label">系列</string>
     <string name="book.edit.title.label">書名</string>
     <string name="book.source.device">在這部裝置上</string>
     <string name="book.source.server_downloaded">%s · 已下載</string>

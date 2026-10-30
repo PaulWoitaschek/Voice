@@ -110,7 +110,7 @@ class BookSearch(
     val resultComparator: Comparator<BookSearchResult> = compareByDescending<BookSearchResult> { it.score }
       .thenByDescending { it.book.isInProgress() }
       .thenByDescending { it.book.content.lastPlayedAt }
-      .thenBy(NaturalOrderComparator.stringComparator) { it.book.content.metadata.part.orEmpty() }
+      .thenBy(NaturalOrderComparator.stringComparator) { it.book.part.orEmpty() }
       .thenBy(NaturalOrderComparator.stringComparator) { it.book.name }
   }
 }

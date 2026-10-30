@@ -22,8 +22,8 @@ enum class BookSearchField {
     val text = when (this) {
       Title -> book.name
       Author -> book.author
-      Series -> book.content.metadata.series?.let { series ->
-        listOfNotNull(series, book.content.metadata.part?.takeIf { it.isNotBlank() }).joinToString(" ")
+      Series -> book.series?.let { series ->
+        listOfNotNull(series, book.part?.takeIf { it.isNotBlank() }).joinToString(" ")
       }
       Narrator -> book.content.metadata.narrator
       Genre -> book.content.metadata.genre

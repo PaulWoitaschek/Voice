@@ -82,6 +82,8 @@
     <string name="book.edit.author.label">Автор</string>
     <string name="book.edit.cover.file">Обкладинка з файлу</string>
     <string name="book.edit.cover.internet">Обкладинка з Інтернету</string>
+    <string name="book.edit.part.label">Частина</string>
+    <string name="book.edit.series.label">Серія</string>
     <string name="book.edit.title.label">Назва</string>
     <string name="book.source.device">На цьому пристрої</string>
     <string name="book.source.server_downloaded">%s · завантажено</string>

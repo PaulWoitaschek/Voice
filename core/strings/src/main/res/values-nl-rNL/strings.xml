@@ -76,6 +76,8 @@
     <string name="book.edit.author.label">Auteur</string>
     <string name="book.edit.cover.file">Omslag kiezen van bestandssysteem</string>
     <string name="book.edit.cover.internet">Omslag ophalen van internet</string>
+    <string name="book.edit.part.label">Deel</string>
+    <string name="book.edit.series.label">Reeks</string>
     <string name="book.edit.title.label">Titel</string>
     <string name="book.source.device">Op dit apparaat</string>
     <string name="book.source.server_downloaded">%s · gedownload</string>

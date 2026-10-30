@@ -138,6 +138,8 @@ private fun BookActions(
         viewState = editBookState,
         onTitleChange = editBookViewModel::onTitleChange,
         onAuthorChange = editBookViewModel::onAuthorChange,
+        onSeriesChange = editBookViewModel::onSeriesChange,
+        onPartChange = editBookViewModel::onPartChange,
         onConfirm = {
           editBookViewModel.onConfirm()
           closeIfDone()

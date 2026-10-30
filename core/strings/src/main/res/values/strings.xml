@@ -147,6 +147,10 @@
     <string name="book.edit.cover.file">Cover from the file system</string>
     <!-- Bottom-sheet item for choosing a cover from an internet search. -->
     <string name="book.edit.cover.internet">Cover from the Internet</string>
+    <!-- Label for the field with the book's place in its series, like 2 or 3.5, next to the series field in the sheet that edits a book. -->
+    <string name="book.edit.part.label">Part</string>
+    <!-- Label for the field with the name of the series the book belongs to, in the sheet that edits a book. -->
+    <string name="book.edit.series.label">Series</string>
     <!-- Label for the field with the book's title, in the sheet that edits a book. -->
     <string name="book.edit.title.label">Title</string>
     <!-- Shown under the title in the book actions sheet for a book whose files are on the phone, once a server is connected too. -->

@@ -73,6 +73,8 @@
     <string name="book.edit.author.label">作者</string>
     <string name="book.edit.cover.file">从本机寻找封面图片</string>
     <string name="book.edit.cover.internet">从互联网寻找封面图片</string>
+    <string name="book.edit.part.label">卷</string>
+    <string name="book.edit.series.label">系列</string>
     <string name="book.edit.title.label">书名</string>
     <string name="book.source.device">在本设备上</string>
     <string name="book.source.server_downloaded">%s · 已下载</string>

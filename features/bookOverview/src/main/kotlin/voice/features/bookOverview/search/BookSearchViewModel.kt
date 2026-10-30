@@ -329,7 +329,7 @@ class LastBookSearchResults {
 private fun BrowseCategory.value(book: Book): String? {
   val value = when (this) {
     BrowseCategory.Authors -> book.author
-    BrowseCategory.Series -> book.content.metadata.series
+    BrowseCategory.Series -> book.series
     BrowseCategory.Narrators -> book.content.metadata.narrator
     BrowseCategory.Genres -> book.content.metadata.genre
   }
