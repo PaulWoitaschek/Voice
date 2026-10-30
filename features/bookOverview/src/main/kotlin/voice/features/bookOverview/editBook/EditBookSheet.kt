@@ -29,6 +29,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SheetValue.Expanded
 import androidx.compose.material3.SheetValue.Hidden
@@ -117,6 +118,12 @@ internal fun EditBookSheet(
   ModalBottomSheet(
     onDismissRequest = { if (!closing) onDismiss() },
     sheetState = sheetState,
+    // a save on the server can't be called back, so the sheet waits for its answer
+    sheetGesturesEnabled = !viewState.saving,
+    properties = ModalBottomSheetProperties(
+      shouldDismissOnBackPress = !viewState.saving,
+      shouldDismissOnClickOutside = !viewState.saving,
+    ),
   ) {
     EditBookContent(
       viewState = viewState,
@@ -335,7 +342,7 @@ private fun EditBookContent(
     Spacer(Modifier.height(24.dp))
     Row(verticalAlignment = Alignment.CenterVertically) {
       Spacer(Modifier.weight(1F))
-      TextButton(onClick = onCancel) {
+      TextButton(onClick = onCancel, enabled = !viewState.saving) {
         Text(stringResource(StringsR.string.common_dialog_cancel))
       }
       Spacer(Modifier.width(8.dp))
@@ -427,12 +434,11 @@ private fun EditServerBookPreview() {
         viewState = EditBookState(
           title = "Interference",
           author = "Sue Burke",
-          bookId = BookId("preview"),
+          bookId = BookId("abs://item/preview"),
           cover = null,
           series = "The Signal Saga",
           part = "2",
           showSeries = true,
-          remote = true,
           serverResult = ServerEdit.Failed,
         ),
         readOnly = false,

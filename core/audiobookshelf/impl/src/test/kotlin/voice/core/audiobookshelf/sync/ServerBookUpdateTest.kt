@@ -190,6 +190,34 @@ class ServerBookUpdateTest {
   }
 
   @Test
+  fun `a series the server dropped since the last sync doesn't take another one with it`() = runTest {
+    val repo = MemoryBookRepository(book(listOf(AbsSeries("The Expanse", "1"))))
+    enqueueItem(listOf(AbsSeries("Space Operas", "4")))
+    server.enqueue(MockResponse(code = 200))
+
+    val result = bookUpdate(repo).update(bookId, ServerBookEdit(series = "The Expanse", part = "2"))
+
+    assertEquals(ServerEdit.Saved, result)
+    server.takeRequest(1, TimeUnit.SECONDS)
+    assertEquals(
+      """{"metadata":{"series":[{"name":"The Expanse","sequence":"2"},{"name":"Space Operas","sequence":"4"}]}}""",
+      server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8(),
+    )
+  }
+
+  @Test
+  fun `a book the server doesn't return isn't changed`() = runTest {
+    val repo = MemoryBookRepository(book(listOf(AbsSeries("The Expanse", "1"))))
+    server.enqueue(MockResponse(code = 200, body = audiobookshelfJson.encodeToString(BatchGetResponse(emptyList()))))
+
+    val result = bookUpdate(repo).update(bookId, ServerBookEdit(series = "Expanse", part = "2"))
+
+    assertEquals(ServerEdit.Failed, result)
+    assertEquals(1, server.requestCount)
+    assertEquals("The Expanse", repo.get(bookId)!!.series)
+  }
+
+  @Test
   fun `an account that can't change books is told so, and the book stays`() = runTest {
     val series = listOf(AbsSeries("The Expanse", "1"))
     val repo = MemoryBookRepository(book(series))
