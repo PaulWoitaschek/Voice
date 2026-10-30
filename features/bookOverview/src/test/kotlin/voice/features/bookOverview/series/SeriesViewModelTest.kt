@@ -10,6 +10,7 @@ import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -18,7 +19,12 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.featureflag.MemoryFeatureFlag
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
+import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
+import voice.core.playback.overlay
+import voice.core.playback.playstate.PlayStateManager
 import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.features.bookOverview.overview.toItemViewState
@@ -36,6 +42,7 @@ class SeriesViewModelTest {
   private val playerController = mockk<PlayerController>(relaxed = true)
   private val currentBookStore = MemoryDataStore<BookId?>(null)
   private val books = MutableStateFlow<List<Book>>(emptyList())
+  private val playStateManager = PlayStateManager()
 
   @Test
   fun `the books are in order and the header names their author once`() = runTest {
@@ -52,8 +59,14 @@ class SeriesViewModelTest {
       assertEquals(expected = 1, actual = state.finishedCount)
       assertEquals(
         expected = listOf(
-          SeriesViewState.Book(book = first.toItemViewStateWithoutAuthor(), part = "1", finished = true),
-          SeriesViewState.Book(book = second.toItemViewStateWithoutAuthor(), part = "2", finished = false),
+          SeriesViewState.Book(book = first.toItemViewStateWithoutAuthor(), part = "1", finished = true, current = false, playing = false),
+          SeriesViewState.Book(
+            book = second.toItemViewStateWithoutAuthor(),
+            part = "2",
+            finished = false,
+            current = false,
+            playing = false,
+          ),
         ),
         actual = state.books,
       )
@@ -68,7 +81,7 @@ class SeriesViewModelTest {
 
     testState {
       assertEquals(
-        expected = SeriesViewState.Action(bookId = first.id, part = "1", continues = true),
+        expected = SeriesViewState.Action(bookId = first.id, part = "1", continues = true, playing = false),
         actual = awaitItem()!!.action,
       )
     }
@@ -82,7 +95,7 @@ class SeriesViewModelTest {
 
     testState {
       assertEquals(
-        expected = SeriesViewState.Action(bookId = second.id, part = null, continues = false),
+        expected = SeriesViewState.Action(bookId = second.id, part = null, continues = false, playing = false),
         actual = awaitItem()!!.action,
       )
     }
@@ -98,7 +111,55 @@ class SeriesViewModelTest {
   }
 
   @Test
-  fun `the button plays the book and opens the player`() = runTest {
+  fun `while a book of the series plays, the button pauses it and its row shows it`() = runTest {
+    val first = book(series = "Saga", part = "1", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(2))
+    val second = book(series = "Saga", part = "2", time = 0)
+    books.value = listOf(first, second)
+    currentBookStore.updateData { second.id }
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+
+    testState {
+      val state = awaitItem()!!
+      assertEquals(
+        expected = SeriesViewState.Action(bookId = second.id, part = "2", continues = false, playing = true),
+        actual = state.action,
+      )
+      assertEquals(expected = listOf(false to false, true to true), actual = state.books.map { it.current to it.playing })
+
+      playStateManager.playState = PlayStateManager.PlayState.Paused
+      val paused = awaitItem()!!
+      assertEquals(
+        expected = SeriesViewState.Action(bookId = first.id, part = "1", continues = true, playing = false),
+        actual = paused.action,
+      )
+      assertEquals(expected = listOf(false to false, true to false), actual = paused.books.map { it.current to it.playing })
+    }
+  }
+
+  @Test
+  fun `with the experimental persistence, the progress follows playback`() = runTest {
+    val book = book(series = "Saga", author = "Author", time = 0)
+    books.value = listOf(book, book(series = "Saga", author = "Author", time = 0))
+    currentBookStore.updateData { book.id }
+    val livePlaybackState = LivePlaybackState(
+      bookId = book.id,
+      chapterId = book.content.currentChapter,
+      positionMs = 5_000,
+      isPlaying = true,
+      playbackSpeed = 1F,
+    )
+    every { playerController.livePlaybackStateFlow(book.id) } returns flowOf(livePlaybackState)
+
+    testState(experimentalPlaybackPersistence = true) {
+      // the live position arrives after the stored one
+      awaitItem()
+      val row = awaitItem()!!.books.single { it.book.id == book.id }
+      assertEquals(expected = book.overlay(livePlaybackState).toItemViewStateWithoutAuthor(), actual = row.book)
+    }
+  }
+
+  @Test
+  fun `the button plays another book and stays on the series`() = runTest {
     val book = book(series = "Saga", time = 1_000)
     currentBookStore.updateData { BookId("other") }
 
@@ -108,22 +169,20 @@ class SeriesViewModelTest {
     verifyOrder {
       playerController.pauseIfCurrentBookDifferentFrom(book.id)
       playerController.play(any())
-      navigator.goTo(Destination.Playback(book.id))
     }
+    verify(exactly = 0) { navigator.goTo(any()) }
   }
 
   @Test
-  fun `the button keeps playing the current book`() = runTest {
+  fun `the button plays and pauses the current book`() = runTest {
     val book = book(series = "Saga", time = 1_000)
     currentBookStore.updateData { book.id }
 
     viewModel().onActionClick(book.id)
 
-    verify(exactly = 0) { playerController.pauseIfCurrentBookDifferentFrom(any()) }
-    verifyOrder {
-      playerController.play(any())
-      navigator.goTo(Destination.Playback(book.id))
-    }
+    verify(exactly = 1) { playerController.playPause() }
+    verify(exactly = 0) { playerController.play(any()) }
+    verify(exactly = 0) { navigator.goTo(any()) }
   }
 
   @Test
@@ -140,7 +199,7 @@ class SeriesViewModelTest {
 
   private fun Book.toItemViewStateWithoutAuthor() = toItemViewState().copy(author = null)
 
-  private fun viewModel(): SeriesViewModel {
+  private fun viewModel(experimentalPlaybackPersistence: Boolean = false): SeriesViewModel {
     return SeriesViewModel(
       repo = mockk<BookRepository> {
         every { flow() } returns books
@@ -148,13 +207,20 @@ class SeriesViewModelTest {
       navigator = navigator,
       playerController = playerController,
       currentBookStore = CurrentBookStore(currentBookStore),
+      playStateManager = playStateManager,
+      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
+        MemoryFeatureFlag(experimentalPlaybackPersistence),
+      ),
       dispatcherProvider = dispatcherProvider,
       name = "Saga",
     )
   }
 
-  private suspend fun TestScope.testState(validate: suspend ReceiveTurbine<SeriesViewState?>.() -> Unit) {
-    val viewModel = viewModel()
+  private suspend fun TestScope.testState(
+    experimentalPlaybackPersistence: Boolean = false,
+    validate: suspend ReceiveTurbine<SeriesViewState?>.() -> Unit,
+  ) {
+    val viewModel = viewModel(experimentalPlaybackPersistence)
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
       viewModel.viewState()
     }.test {

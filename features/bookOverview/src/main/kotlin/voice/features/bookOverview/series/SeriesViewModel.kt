@@ -10,14 +10,20 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesTo
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
+import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
+import voice.core.playback.overlay
+import voice.core.playback.playstate.PlayStateManager
 import voice.features.bookOverview.overview.BookOverviewCategory
+import voice.features.bookOverview.overview.CurrentBook
 import voice.features.bookOverview.overview.category
 import voice.features.bookOverview.overview.part
 import voice.features.bookOverview.overview.series
@@ -33,6 +39,8 @@ class SeriesViewModel(
   private val navigator: Navigator,
   private val playerController: PlayerController,
   private val currentBookStore: CurrentBookStore,
+  private val playStateManager: PlayStateManager,
+  private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
   dispatcherProvider: DispatcherProvider,
   @Assisted
   private val name: String,
@@ -44,8 +52,16 @@ class SeriesViewModel(
   @Composable
   internal fun viewState(): SeriesViewState? {
     val books = remember { repo.flow() }.collectAsState(initial = null).value ?: return null
-    val series = remember(books) {
-      books.filter { book -> book.seriesName?.let(::seriesKey) == key }.series().singleOrNull()
+    // the button would say Continue for a moment before it says Pause
+    val currentBookId = (remember { currentBookStore.data.map(::CurrentBook) }.collectAsState(initial = null).value ?: return null).id
+    val playing = remember { playStateManager.playStateFlow }.collectAsState().value == PlayStateManager.PlayState.Playing
+    val livePlaybackState = livePlaybackState(currentBookId)
+    val series = remember(books, livePlaybackState) {
+      books
+        .filter { book -> book.seriesName?.let(::seriesKey) == key }
+        .map { book -> livePlaybackState?.let(book::overlay) ?: book }
+        .series()
+        .singleOrNull()
     }
     LaunchedEffect(series == null) {
       if (series == null) {
@@ -53,8 +69,15 @@ class SeriesViewModel(
       }
     }
     if (series == null) return null
-    val action = series.inProgress?.let { SeriesViewState.Action(it.id, it.part, continues = true) }
-      ?: series.firstUnfinished?.let { SeriesViewState.Action(it.id, it.part, continues = false) }
+    val playingBook = series.books.find { it.id == currentBookId }?.takeIf { playing }
+    val action = (playingBook ?: series.inProgress ?: series.firstUnfinished)?.let { book ->
+      SeriesViewState.Action(
+        bookId = book.id,
+        part = book.part,
+        continues = book.category == BookOverviewCategory.CURRENT,
+        playing = book == playingBook,
+      )
+    }
     return SeriesViewState(
       name = series.name,
       author = series.author,
@@ -68,6 +91,8 @@ class SeriesViewModel(
           book = book.toItemViewState().let { if (it.author == series.author) it.copy(author = null) else it },
           part = book.part,
           finished = book.category == BookOverviewCategory.FINISHED,
+          current = book.id == currentBookId,
+          playing = book == playingBook,
         )
       },
     )
@@ -75,13 +100,23 @@ class SeriesViewModel(
 
   internal fun onActionClick(id: BookId) {
     scope.launch {
-      if (currentBookStore.data.first() != id) {
+      if (currentBookStore.data.first() == id) {
+        playerController.playPause()
+      } else {
         playerController.pauseIfCurrentBookDifferentFrom(id)
         currentBookStore.updateData { id }
+        playerController.play()
       }
-      playerController.play()
-      navigator.goTo(Destination.Playback(id))
     }
+  }
+
+  // with the experimental persistence, the stored position of the playing book lags behind
+  @Composable
+  private fun livePlaybackState(currentBookId: BookId?): LivePlaybackState? {
+    val experimentalPlaybackPersistence = remember { experimentalPlaybackPersistenceFeatureFlag.get() }
+    if (!experimentalPlaybackPersistence || currentBookId == null) return null
+    return remember(currentBookId) { playerController.livePlaybackStateFlow(currentBookId) }
+      .collectAsState(initial = null).value
   }
 
   internal fun onBookClick(id: BookId) {

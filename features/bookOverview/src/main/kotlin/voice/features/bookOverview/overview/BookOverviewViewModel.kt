@@ -319,4 +319,4 @@ private fun DemoAudiobook.toItemViewState() = BookOverviewItemViewState(
 )
 
 /** Distinguishes "no current book" from "not loaded yet". */
-private data class CurrentBook(val id: BookId?)
+internal data class CurrentBook(val id: BookId?)

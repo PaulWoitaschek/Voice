@@ -20,6 +20,7 @@ data class SeriesViewState(
     val bookId: BookId,
     val part: String?,
     val continues: Boolean,
+    val playing: Boolean,
   )
 
   @Immutable
@@ -27,5 +28,7 @@ data class SeriesViewState(
     val book: BookOverviewItemViewState,
     val part: String?,
     val finished: Boolean,
+    val current: Boolean,
+    val playing: Boolean,
   )
 }

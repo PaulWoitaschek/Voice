@@ -33,6 +33,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -148,6 +150,8 @@ private fun SeriesScreen(
             shape = segmentedShape(index, viewState.books.size),
             finished = book.finished,
             part = book.part,
+            current = book.current,
+            playing = book.playing,
             modifier = Modifier.padding(bottom = 2.dp),
           )
         }
@@ -209,21 +213,26 @@ private fun ActionButton(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
+  val haptics = LocalHapticFeedback.current
   val label = when {
+    action.playing -> stringResource(StringsR.string.playback_action_pause)
     action.continues && action.part != null -> stringResource(StringsR.string.series_continue_book, action.part)
     action.continues -> stringResource(StringsR.string.series_continue)
     action.part != null -> stringResource(StringsR.string.series_start_book, action.part)
     else -> stringResource(StringsR.string.series_start)
   }
   Button(
-    onClick = onClick,
+    onClick = {
+      haptics.performHapticFeedback(if (action.playing) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn)
+      onClick()
+    },
     modifier = modifier
       .fillMaxWidth()
       .heightIn(min = ButtonDefaults.MediumContainerHeight),
     contentPadding = ButtonDefaults.contentPaddingFor(ButtonDefaults.MediumContainerHeight),
   ) {
     Icon(
-      imageVector = VoiceIcons.PlayArrow,
+      imageVector = if (action.playing) VoiceIcons.Pause else VoiceIcons.PlayArrow,
       contentDescription = null,
       modifier = Modifier.size(ButtonDefaults.iconSizeFor(ButtonDefaults.MediumContainerHeight)),
     )
@@ -244,20 +253,36 @@ private fun SeriesScreenPreview() {
         covers = listOf(null, null, null),
         bookCount = 4,
         finishedCount = 1,
-        action = SeriesViewState.Action(BookId("2"), part = "2", continues = true),
+        action = SeriesViewState.Action(BookId("2"), part = "2", continues = true, playing = true),
         books = listOf(
           SeriesViewState.Book(
             book.copy(id = BookId("1"), name = "Static on the Line", author = null, progress = 1F),
             "1",
             finished = true,
+            current = false,
+            playing = false,
           ),
           SeriesViewState.Book(
             book.copy(id = BookId("2"), name = "Echoes of Tomorrow", author = null, progress = 0.72F),
             "2",
             finished = false,
+            current = true,
+            playing = true,
           ),
-          SeriesViewState.Book(book.copy(id = BookId("3"), name = "Interference", author = null, progress = 0F), "3", finished = false),
-          SeriesViewState.Book(book.copy(id = BookId("4"), name = "Mira's Theory", author = null, progress = 0F), "4", finished = false),
+          SeriesViewState.Book(
+            book.copy(id = BookId("3"), name = "Interference", author = null, progress = 0F),
+            "3",
+            finished = false,
+            current = false,
+            playing = false,
+          ),
+          SeriesViewState.Book(
+            book.copy(id = BookId("4"), name = "Mira's Theory", author = null, progress = 0F),
+            "4",
+            finished = false,
+            current = false,
+            playing = false,
+          ),
         ),
       ),
       onCloseClick = {},
