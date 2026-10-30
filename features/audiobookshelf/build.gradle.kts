@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.core.audiobookshelf)
+  implementation(projects.core.audiobookshelf.api)
   implementation(projects.core.common)
   implementation(projects.core.data.api)
   implementation(projects.core.strings)

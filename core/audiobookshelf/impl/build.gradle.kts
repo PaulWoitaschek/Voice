@@ -11,10 +11,10 @@ android {
 }
 
 dependencies {
+  implementation(projects.core.audiobookshelf.api)
   implementation(projects.core.analytics.api)
   implementation(projects.core.common)
   implementation(projects.core.data.api)
-  implementation(projects.core.featureflag)
   implementation(projects.core.initializer)
   implementation(projects.core.playback)
   implementation(projects.core.strings)

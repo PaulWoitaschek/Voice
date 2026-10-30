@@ -15,7 +15,7 @@ dependencies {
   implementation(projects.core.featureflag)
   implementation(projects.core.kioskmode)
   implementation(projects.core.analytics.api)
-  implementation(projects.core.audiobookshelf)
+  implementation(projects.core.audiobookshelf.api)
 
   implementation(libs.coil)
   implementation(libs.androidxCore)
