@@ -28,6 +28,10 @@ public data class Book(
 
   val cover: File? get() = custom.cover ?: content.metadata.cover
 
+  val series: String? get() = custom.series ?: content.metadata.series
+
+  val part: String? get() = custom.part ?: content.metadata.part
+
   val coverUrl: String? get() = cover?.toURI()?.toString()
 
   val currentChapter: Chapter = chapters[content.currentChapterIndex]

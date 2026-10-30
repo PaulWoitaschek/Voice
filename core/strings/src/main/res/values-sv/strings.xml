@@ -76,6 +76,8 @@
     <string name="book.edit.author.label">Författare</string>
     <string name="book.edit.cover.file">Omslag från filsystemet</string>
     <string name="book.edit.cover.internet">Omslag från internet</string>
+    <string name="book.edit.part.label">Del</string>
+    <string name="book.edit.series.label">Serie</string>
     <string name="book.edit.title.label">Titel</string>
     <string name="book.source.device">På den här enheten</string>
     <string name="book.source.server_downloaded">%s · nedladdad</string>

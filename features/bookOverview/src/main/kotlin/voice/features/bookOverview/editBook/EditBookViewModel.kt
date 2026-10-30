@@ -15,7 +15,10 @@ import voice.features.bookOverview.di.BookActionsScope
 
 @SingleIn(BookActionsScope::class)
 @ContributesIntoSet(BookActionsScope::class)
-class EditBookViewModel(private val repo: BookRepository) : BottomSheetItemViewModel {
+class EditBookViewModel(
+  private val repo: BookRepository,
+  private val editSeriesFeatureFlag: EditSeriesFeatureFlag,
+) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
 
@@ -39,6 +42,9 @@ class EditBookViewModel(private val repo: BookRepository) : BottomSheetItemViewM
       author = book.author.orEmpty(),
       bookId = bookId,
       cover = book.coverUrl,
+      series = book.series.orEmpty(),
+      part = book.part.orEmpty(),
+      showSeries = editSeriesFeatureFlag.get(),
     )
   }
 
@@ -54,6 +60,14 @@ class EditBookViewModel(private val repo: BookRepository) : BottomSheetItemViewM
     _state.value = _state.value?.copy(author = author)
   }
 
+  internal fun onSeriesChange(series: String) {
+    _state.value = _state.value?.copy(series = series)
+  }
+
+  internal fun onPartChange(part: String) {
+    _state.value = _state.value?.copy(part = part)
+  }
+
   internal fun onConfirm() {
     val state = _state.value
     if (state != null) {
@@ -64,6 +78,8 @@ class EditBookViewModel(private val repo: BookRepository) : BottomSheetItemViewM
           var edited = custom
           if (state.title != state.initialTitle) edited = edited.copy(name = state.title.trim())
           if (state.author != state.initialAuthor) edited = edited.copy(author = state.author.trim().ifEmpty { null })
+          if (state.series != state.initialSeries) edited = edited.copy(series = state.series.trim().ifEmpty { null })
+          if (state.part != state.initialPart) edited = edited.copy(part = state.part.trim().ifEmpty { null })
           edited
         }
       }

@@ -76,6 +76,8 @@
     <string name="book.edit.author.label">Szerző</string>
     <string name="book.edit.cover.file">Borító a fájlrendszerből</string>
     <string name="book.edit.cover.internet">Borító az internetről</string>
+    <string name="book.edit.part.label">Rész</string>
+    <string name="book.edit.series.label">Sorozat</string>
     <string name="book.edit.title.label">Cím</string>
     <string name="book.source.device">Ezen az eszközön</string>
     <string name="book.source.server_downloaded">%s · letöltve</string>

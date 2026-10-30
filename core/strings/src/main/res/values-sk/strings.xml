@@ -82,6 +82,8 @@
     <string name="book.edit.author.label">Autor</string>
     <string name="book.edit.cover.file">Obálka zo súboru</string>
     <string name="book.edit.cover.internet">Obálka z internetu</string>
+    <string name="book.edit.part.label">Diel</string>
+    <string name="book.edit.series.label">Séria</string>
     <string name="book.edit.title.label">Názov</string>
     <string name="book.source.device">Na tomto zariadení</string>
     <string name="book.source.server_downloaded">%s · stiahnuté</string>
