@@ -46,6 +46,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -245,7 +246,8 @@ private fun EditBookContent(
             part = it
             onPartChange(it.text)
           },
-          modifier = Modifier.width(96.dp),
+          // grows with the text, so the label stays on one line at large font sizes
+          modifier = Modifier.width(96.dp * LocalDensity.current.fontScale),
           label = { Text(stringResource(StringsR.string.book_edit_part_label)) },
           singleLine = true,
           readOnly = readOnly,
@@ -282,7 +284,7 @@ private fun EditBookContent(
 @Preview
 private fun EditBookPreview() {
   VoiceTheme {
-    Surface {
+    Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       EditBookContent(
         viewState = EditBookState(
           title = "Interference",
