@@ -9,6 +9,7 @@ import org.junit.After
 import org.junit.Before
 import voice.core.audiobookshelf.MemoryBookRepository
 import voice.core.audiobookshelf.MemoryDataStore
+import voice.core.audiobookshelf.ServerBookEdit
 import voice.core.audiobookshelf.ServerEdit
 import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.AccountStore
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SeriesUpdateTest {
+class ServerBookUpdateTest {
 
   private val server = MockWebServer()
   private lateinit var account: Account
@@ -56,7 +57,7 @@ class SeriesUpdateTest {
     enqueueItem(series)
     server.enqueue(MockResponse(code = 200))
 
-    val result = seriesUpdate(repo).update(bookId, series = " Expanse ", part = " 2 ")
+    val result = bookUpdate(repo).update(bookId, ServerBookEdit(series = " Expanse ", part = " 2 "))
 
     assertEquals(ServerEdit.Saved, result)
     assertEquals("/api/items/batch/get", server.takeRequest(1, TimeUnit.SECONDS)!!.url.encodedPath)
@@ -78,7 +79,7 @@ class SeriesUpdateTest {
     enqueueItem(series)
     server.enqueue(MockResponse(code = 200))
 
-    val result = seriesUpdate(MemoryBookRepository(book)).update(bookId, series = "Expanse", part = "1")
+    val result = bookUpdate(MemoryBookRepository(book)).update(bookId, ServerBookEdit(series = "Expanse", part = "1"))
 
     assertEquals(ServerEdit.Saved, result)
     server.takeRequest(1, TimeUnit.SECONDS)
@@ -95,7 +96,7 @@ class SeriesUpdateTest {
     enqueueItem(series)
     server.enqueue(MockResponse(code = 200))
 
-    val result = seriesUpdate(MemoryBookRepository(book)).update(bookId, series = "the expanse", part = "2")
+    val result = bookUpdate(MemoryBookRepository(book)).update(bookId, ServerBookEdit(series = "the expanse", part = "2"))
 
     assertEquals(ServerEdit.Saved, result)
     server.takeRequest(1, TimeUnit.SECONDS)
@@ -111,7 +112,7 @@ class SeriesUpdateTest {
     enqueueItem(listOf(AbsSeries("Space Operas", "4")))
     server.enqueue(MockResponse(code = 200))
 
-    val result = seriesUpdate(repo).update(bookId, series = "The Expanse", part = "1")
+    val result = bookUpdate(repo).update(bookId, ServerBookEdit(series = "The Expanse", part = "1"))
 
     assertEquals(ServerEdit.Saved, result)
     server.takeRequest(1, TimeUnit.SECONDS)
@@ -128,7 +129,7 @@ class SeriesUpdateTest {
     enqueueItem(series)
     server.enqueue(MockResponse(code = 200))
 
-    val result = seriesUpdate(repo).update(bookId, series = " ", part = "1")
+    val result = bookUpdate(repo).update(bookId, ServerBookEdit(series = " ", part = "1"))
 
     assertEquals(ServerEdit.Saved, result)
     server.takeRequest(1, TimeUnit.SECONDS)
@@ -143,7 +144,7 @@ class SeriesUpdateTest {
     enqueueItem(series)
     server.enqueue(MockResponse(code = 200))
 
-    val result = seriesUpdate(MemoryBookRepository(book(series))).update(bookId, series = "The Expanse", part = "3")
+    val result = bookUpdate(MemoryBookRepository(book(series))).update(bookId, ServerBookEdit(series = "The Expanse", part = "3"))
 
     assertEquals(ServerEdit.Saved, result)
 
@@ -155,13 +156,47 @@ class SeriesUpdateTest {
   }
 
   @Test
+  fun `title and author are saved without the series`() = runTest {
+    val series = listOf(AbsSeries("The Expanse", "1"))
+    val repo = MemoryBookRepository(book(series))
+    server.enqueue(MockResponse(code = 200))
+
+    val edit = ServerBookEdit(title = " Caliban's War ", author = "Daniel Abraham, Ty Franck ,")
+    val result = bookUpdate(repo).update(bookId, edit)
+
+    assertEquals(ServerEdit.Saved, result)
+    val request = server.takeRequest(1, TimeUnit.SECONDS)!!
+    assertEquals("/api/items/item/media", request.url.encodedPath)
+    assertEquals(
+      """{"metadata":{"title":"Caliban's War","authors":[{"name":"Daniel Abraham"},{"name":"Ty Franck"}]}}""",
+      request.body!!.utf8(),
+    )
+    val book = repo.get(bookId)!!
+    assertEquals("Caliban's War", book.name)
+    assertEquals("Daniel Abraham, Ty Franck", book.author)
+    assertEquals("The Expanse", book.series)
+  }
+
+  @Test
+  fun `an empty author takes all authors off the book`() = runTest {
+    val repo = MemoryBookRepository(book(emptyList()))
+    server.enqueue(MockResponse(code = 200))
+
+    val result = bookUpdate(repo).update(bookId, ServerBookEdit(author = " "))
+
+    assertEquals(ServerEdit.Saved, result)
+    assertEquals("""{"metadata":{"authors":[]}}""", server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8())
+    assertEquals(null, repo.get(bookId)!!.author)
+  }
+
+  @Test
   fun `an account that can't change books is told so, and the book stays`() = runTest {
     val series = listOf(AbsSeries("The Expanse", "1"))
     val repo = MemoryBookRepository(book(series))
     enqueueItem(series)
     server.enqueue(MockResponse(code = 403))
 
-    val result = seriesUpdate(repo).update(bookId, series = "Expanse", part = "")
+    val result = bookUpdate(repo).update(bookId, ServerBookEdit(series = "Expanse", part = ""))
 
     assertEquals(ServerEdit.NotAllowed, result)
     assertEquals("The Expanse", repo.get(bookId)!!.series)
@@ -172,7 +207,7 @@ class SeriesUpdateTest {
     val repo = MemoryBookRepository(book(emptyList()))
     server.close()
 
-    assertEquals(ServerEdit.Failed, seriesUpdate(repo).update(bookId, series = "Expanse", part = ""))
+    assertEquals(ServerEdit.Failed, bookUpdate(repo).update(bookId, ServerBookEdit(series = "Expanse", part = "")))
   }
 
   private fun enqueueItem(series: List<AbsSeries>) {
@@ -180,7 +215,7 @@ class SeriesUpdateTest {
     server.enqueue(MockResponse(code = 200, body = audiobookshelfJson.encodeToString(response)))
   }
 
-  private fun seriesUpdate(repo: MemoryBookRepository) = SeriesUpdate(
+  private fun bookUpdate(repo: MemoryBookRepository) = ServerBookUpdate(
     http = AudiobookshelfHttp(AccountStore(MemoryDataStore<Account?>(account)), mockk { every { versionName } returns "1.0.0" }),
     accountStore = AccountStore(MemoryDataStore<Account?>(account)),
     bookRepository = repo,

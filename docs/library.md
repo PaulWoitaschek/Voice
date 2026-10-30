@@ -55,7 +55,7 @@ fixing many books at once has to take a few taps.
 - The library stays one calm screen. Nothing new to learn for a listener with ten books.
 - It stays quick with 5,000 books and a series of 200 episodes.
 - No book gets lost. Search always finds grouped and hidden books.
-- Edits never touch the files. Only the series of a book from Audiobookshelf is saved on the server.
+- Edits never touch the files. Edits of a book from Audiobookshelf are saved on the server.
 - Grouping needs no setting.
 
 ## 1. Series in the library
@@ -219,8 +219,8 @@ For books already in the library:
 - "Use the names from the files" undoes all edits.
 - Edits stay in Voice and sync through `.voice`, like the name does. What wasn't edited still follows the files, so a
   fixed tag shows up in Voice.
-- Books from Audiobookshelf show only series and part, and Save writes them to the server, so every app connected to
-  it shows the same series. Their title, author and cover are still edited on the server.
+- Save writes the edits of a book from Audiobookshelf to the server, so every app connected to it shows the same
+  book. Several authors are separated by commas, like Voice shows them. The cover is still edited on the server.
 
 ### Several books at once
 

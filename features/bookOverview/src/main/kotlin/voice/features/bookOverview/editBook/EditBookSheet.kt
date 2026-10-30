@@ -167,9 +167,9 @@ private fun EditBookContent(
       if (viewState.confirmButtonEnabled) onSave()
     },
   )
-  val firstField = remember { FocusRequester() }
+  val focusRequester = remember { FocusRequester() }
   LaunchedEffect(Unit) {
-    firstField.requestFocus()
+    focusRequester.requestFocus()
   }
   Column(
     modifier = Modifier
@@ -209,44 +209,42 @@ private fun EditBookContent(
       )
     }
     Spacer(Modifier.height(28.dp))
-    if (!viewState.remote) {
-      OutlinedTextField(
-        value = title,
-        onValueChange = {
-          title = it
-          onTitleChange(it.text)
-        },
-        modifier = Modifier
-          .fillMaxWidth()
-          .focusRequester(firstField),
-        label = { Text(stringResource(StringsR.string.book_edit_title_label)) },
-        singleLine = true,
-        readOnly = readOnly,
-        shape = RoundedCornerShape(16.dp),
-        keyboardOptions = KeyboardOptions(
-          capitalization = KeyboardCapitalization.Sentences,
-          imeAction = ImeAction.Next,
-        ),
-      )
-      Spacer(Modifier.height(16.dp))
-      OutlinedTextField(
-        value = author,
-        onValueChange = {
-          author = it
-          onAuthorChange(it.text)
-        },
-        modifier = Modifier.fillMaxWidth(),
-        label = { Text(stringResource(StringsR.string.book_edit_author_label)) },
-        singleLine = true,
-        readOnly = readOnly,
-        shape = RoundedCornerShape(16.dp),
-        keyboardOptions = KeyboardOptions(
-          capitalization = KeyboardCapitalization.Words,
-          imeAction = if (viewState.showSeries) ImeAction.Next else ImeAction.Done,
-        ),
-        keyboardActions = onDone,
-      )
-    }
+    OutlinedTextField(
+      value = title,
+      onValueChange = {
+        title = it
+        onTitleChange(it.text)
+      },
+      modifier = Modifier
+        .fillMaxWidth()
+        .focusRequester(focusRequester),
+      label = { Text(stringResource(StringsR.string.book_edit_title_label)) },
+      singleLine = true,
+      readOnly = readOnly,
+      shape = RoundedCornerShape(16.dp),
+      keyboardOptions = KeyboardOptions(
+        capitalization = KeyboardCapitalization.Sentences,
+        imeAction = ImeAction.Next,
+      ),
+    )
+    Spacer(Modifier.height(16.dp))
+    OutlinedTextField(
+      value = author,
+      onValueChange = {
+        author = it
+        onAuthorChange(it.text)
+      },
+      modifier = Modifier.fillMaxWidth(),
+      label = { Text(stringResource(StringsR.string.book_edit_author_label)) },
+      singleLine = true,
+      readOnly = readOnly,
+      shape = RoundedCornerShape(16.dp),
+      keyboardOptions = KeyboardOptions(
+        capitalization = KeyboardCapitalization.Words,
+        imeAction = if (viewState.showSeries) ImeAction.Next else ImeAction.Done,
+      ),
+      keyboardActions = onDone,
+    )
     if (viewState.showSeries) {
       val partFocusRequester = remember { FocusRequester() }
       var seriesFocused by remember { mutableStateOf(false) }
@@ -274,7 +272,7 @@ private fun EditBookContent(
       }
       // at large font sizes, the part goes below the series, so the series stays wide enough to read
       val partBelow = LocalDensity.current.fontScale >= 1.5F
-      if (!viewState.remote) Spacer(Modifier.height(16.dp))
+      Spacer(Modifier.height(16.dp))
       Row {
         Column(
           modifier = Modifier
@@ -288,9 +286,7 @@ private fun EditBookContent(
               series = it
               onSeriesChange(it.text)
             },
-            modifier = Modifier
-              .fillMaxWidth()
-              .then(if (viewState.remote) Modifier.focusRequester(firstField) else Modifier),
+            modifier = Modifier.fillMaxWidth(),
             label = { Text(stringResource(StringsR.string.book_edit_series_label)) },
             singleLine = true,
             readOnly = readOnly,

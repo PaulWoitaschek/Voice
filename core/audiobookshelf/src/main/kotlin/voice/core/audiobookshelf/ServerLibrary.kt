@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 import voice.core.audiobookshelf.download.AudiobookshelfDownloads
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.audiobookshelf.sync.AudiobookshelfSync
-import voice.core.audiobookshelf.sync.SeriesUpdate
+import voice.core.audiobookshelf.sync.ServerBookUpdate
 import voice.core.audiobookshelf.sync.ServerReachability
 import voice.core.data.BookId
 import voice.core.data.isRemote
@@ -48,13 +48,21 @@ interface ServerLibrary {
 
   suspend fun onAskedForNotifications()
 
-  /** Replaces the series Voice shows for a server book on the server. The other series it has there stay. */
-  suspend fun updateSeries(
+  /** Saves what a listener changed about a server book on the server. */
+  suspend fun updateBook(
     bookId: BookId,
-    series: String,
-    part: String,
+    edit: ServerBookEdit,
   ): ServerEdit
 }
+
+/** What's null stays as the server has it. */
+data class ServerBookEdit(
+  val title: String? = null,
+  val author: String? = null,
+  /** Replaces the series Voice shows, together with [part]. The other series the book has on the server stay. */
+  val series: String? = null,
+  val part: String? = null,
+)
 
 enum class ServerEdit {
   Saved,
@@ -68,7 +76,7 @@ class AudiobookshelfServerLibrary internal constructor(
   private val audiobookshelf: Audiobookshelf,
   private val audiobookshelfSync: AudiobookshelfSync,
   private val downloads: AudiobookshelfDownloads,
-  private val seriesUpdate: SeriesUpdate,
+  private val serverBookUpdate: ServerBookUpdate,
   bookRepository: BookRepository,
 ) : ServerLibrary {
 
@@ -110,9 +118,8 @@ class AudiobookshelfServerLibrary internal constructor(
     downloads.onAskedForNotifications()
   }
 
-  override suspend fun updateSeries(
+  override suspend fun updateBook(
     bookId: BookId,
-    series: String,
-    part: String,
-  ): ServerEdit = seriesUpdate.update(bookId, series, part)
+    edit: ServerBookEdit,
+  ): ServerEdit = serverBookUpdate.update(bookId, edit)
 }

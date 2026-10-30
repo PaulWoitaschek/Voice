@@ -6,6 +6,7 @@ import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.ServerBookEdit
 import voice.core.audiobookshelf.ServerEdit
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.comparator.NaturalOrderComparator
@@ -30,7 +31,7 @@ class EditBookViewModel(
   internal val state: State<EditBookState?> get() = _state
 
   override suspend fun items(bookId: BookId): List<BottomSheetItem> {
-    // server books take their names from the server, and only their series is written back to it
+    // edits of server books are saved on the server, which is new and waits for the flag
     if (bookId.isRemote && !editSeriesFeatureFlag.get()) return emptyList()
     return listOf(BottomSheetItem.Edit)
   }
@@ -90,23 +91,21 @@ class EditBookViewModel(
   }
 
   internal fun onConfirm() {
-    val state = _state.value
-    if (state?.remote == true) {
+    val state = _state.value ?: return
+    check(state.confirmButtonEnabled)
+    if (state.remote) {
       saveOnServer(state)
       return
     }
-    if (state != null) {
-      check(state.confirmButtonEnabled)
-      scope.launch {
-        // only what the listener changed, so the other name keeps following the files
-        repo.updateCustomMetadata(state.bookId) { custom ->
-          var edited = custom
-          if (state.title != state.initialTitle) edited = edited.copy(name = state.title.trim())
-          if (state.author != state.initialAuthor) edited = edited.copy(author = state.author.trim().ifEmpty { null })
-          if (state.series != state.initialSeries) edited = edited.copy(series = state.series.trim().ifEmpty { null })
-          if (state.part != state.initialPart) edited = edited.copy(part = state.part.trim().ifEmpty { null })
-          edited
-        }
+    scope.launch {
+      // only what the listener changed, so the other name keeps following the files
+      repo.updateCustomMetadata(state.bookId) { custom ->
+        var edited = custom
+        if (state.title != state.initialTitle) edited = edited.copy(name = state.title.trim())
+        if (state.author != state.initialAuthor) edited = edited.copy(author = state.author.trim().ifEmpty { null })
+        if (state.series != state.initialSeries) edited = edited.copy(series = state.series.trim().ifEmpty { null })
+        if (state.part != state.initialPart) edited = edited.copy(part = state.part.trim().ifEmpty { null })
+        edited
       }
     }
     _state.value = null
@@ -114,13 +113,21 @@ class EditBookViewModel(
 
   private fun saveOnServer(state: EditBookState) {
     if (state.saving) return
-    if (state.series == state.initialSeries && state.part == state.initialPart) {
+    val seriesChanged = state.series != state.initialSeries || state.part != state.initialPart
+    // only what the listener changed, so the rest stays as the server has it
+    val edit = ServerBookEdit(
+      title = state.title.takeIf { it != state.initialTitle },
+      author = state.author.takeIf { it != state.initialAuthor },
+      series = state.series.takeIf { seriesChanged },
+      part = state.part.takeIf { seriesChanged },
+    )
+    if (edit == ServerBookEdit()) {
       _state.value = state.copy(serverResult = ServerEdit.Saved)
       return
     }
     _state.value = state.copy(saving = true, serverResult = null)
     scope.launch {
-      val result = serverLibrary.updateSeries(state.bookId, state.series, state.part)
+      val result = serverLibrary.updateBook(state.bookId, edit)
       _state.value = _state.value?.copy(saving = false, serverResult = result)
     }
   }

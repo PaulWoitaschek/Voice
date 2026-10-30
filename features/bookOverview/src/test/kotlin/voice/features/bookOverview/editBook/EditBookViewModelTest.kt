@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import voice.core.audiobookshelf.ServerBookEdit
 import voice.core.audiobookshelf.ServerEdit
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.data.Book
@@ -42,7 +43,7 @@ class EditBookViewModelTest {
   }
   private val editSeriesFeatureFlag = MemoryFeatureFlag(true)
   private val serverLibrary = mockk<ServerLibrary> {
-    coEvery { updateSeries(any(), any(), any()) } returns ServerEdit.Saved
+    coEvery { updateBook(any(), any()) } returns ServerEdit.Saved
   }
   private val viewModel = EditBookViewModel(repo, EditSeriesFeatureFlag(editSeriesFeatureFlag), serverLibrary)
   private val serverBook = book(name = "Leviathan Wakes", series = "The Expanse", part = "1", id = BookId("abs://item/item"))
@@ -242,14 +243,27 @@ class EditBookViewModelTest {
 
     assertTrue(viewModel.state.value!!.saving)
     advanceUntilIdle()
-    coVerify { val _ = serverLibrary.updateSeries(serverBook.id, "Expanse", "2") }
+    coVerify { val _ = serverLibrary.updateBook(serverBook.id, ServerBookEdit(series = "Expanse", part = "2")) }
     assertEquals(ServerEdit.Saved, viewModel.state.value?.serverResult)
     assertFalse(viewModel.state.value!!.saving)
   }
 
   @Test
+  fun `only what the listener changed goes to the server, a part with its series`() = runTest(dispatcher) {
+    openServerBook()
+    viewModel.onTitleChange("Caliban's War")
+    viewModel.onPartChange("2")
+
+    viewModel.onConfirm()
+    advanceUntilIdle()
+
+    val edit = ServerBookEdit(title = "Caliban's War", series = "The Expanse", part = "2")
+    coVerify { val _ = serverLibrary.updateBook(serverBook.id, edit) }
+  }
+
+  @Test
   fun `a server that didn't take the series keeps what the listener typed`() = runTest(dispatcher) {
-    coEvery { serverLibrary.updateSeries(any(), any(), any()) } returns ServerEdit.NotAllowed
+    coEvery { serverLibrary.updateBook(any(), any()) } returns ServerEdit.NotAllowed
     openServerBook()
     viewModel.onSeriesChange("Expanse")
 
@@ -268,7 +282,7 @@ class EditBookViewModelTest {
     advanceUntilIdle()
 
     assertEquals(ServerEdit.Saved, viewModel.state.value?.serverResult)
-    coVerify(exactly = 0) { val _ = serverLibrary.updateSeries(any(), any(), any()) }
+    coVerify(exactly = 0) { val _ = serverLibrary.updateBook(any(), any()) }
   }
 
   private suspend fun openServerBook() {
