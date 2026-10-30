@@ -10,6 +10,7 @@ import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.media3.exoplayer.scheduler.Requirements
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
@@ -28,9 +29,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import voice.core.audiobookshelf.account.Preferences
+import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.account.PreferencesStore
-import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
@@ -38,17 +38,12 @@ import voice.core.logging.api.Logger
 import java.util.concurrent.Executors
 import kotlin.time.Duration.Companion.seconds
 
-/** A server book with a download, and how far it got. */
-public data class BookDownload(
-  val book: Book,
-  val state: BookDownloadState,
-)
-
 /**
  * Downloads server books so they play without a connection. Each audio file is a download of its own, tagged with
  * its book. While books download, a notification shows their progress and lets the listener stop them.
  */
 @SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 @Inject
 public class AudiobookshelfDownloads internal constructor(
   private val context: Context,
@@ -56,7 +51,7 @@ public class AudiobookshelfDownloads internal constructor(
   private val bookRepository: BookRepository,
   private val preferencesStore: PreferencesStore,
   private val notifications: DownloadNotifications,
-) {
+) : ServerDownloads {
 
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
   private val files = MutableStateFlow<Map<String, FileDownload>>(emptyMap())
@@ -157,46 +152,38 @@ public class AudiobookshelfDownloads internal constructor(
     appVisible = false
   }
 
-  public fun state(bookId: BookId): Flow<BookDownloadState> = tracked.map { it[bookId]?.state ?: BookDownloadState.NotDownloaded }
+  override val states: Flow<Map<BookId, BookDownloadState>> = tracked.map { tracked -> tracked.mapValues { it.value.state } }
     .distinctUntilChanged()
 
-  /** The download state of the server books that are downloaded, or on their way. */
-  public fun states(): Flow<Map<BookId, BookDownloadState>> = tracked.map { tracked -> tracked.mapValues { it.value.state } }
-    .distinctUntilChanged()
-
-  /** The server books that are downloaded, or on their way, by name. */
-  public val books: Flow<List<BookDownload>> = tracked.map { tracked ->
+  override val books: Flow<List<BookDownload>> = tracked.map { tracked ->
     tracked.values.sortedBy { it.book.name.lowercase() }
   }.distinctUntilChanged()
 
-  public val usedBytes: Flow<Long> = files.map { files ->
+  override val usedBytes: Flow<Long> = files.map { files ->
     files.values.sumOf { it.bytesDownloaded }
   }.distinctUntilChanged()
 
-  public val downloadOverMobileData: Flow<Boolean> = preferencesStore.data.map { it.downloadOverMobileData }
+  override val downloadOverMobileData: Flow<Boolean> = preferencesStore.data.map { it.downloadOverMobileData }
     .distinctUntilChanged()
 
-  public suspend fun setDownloadOverMobileData(enabled: Boolean) {
+  override suspend fun setDownloadOverMobileData(enabled: Boolean) {
     preferencesStore.updateData { it.copy(downloadOverMobileData = enabled) }
     withContext(Dispatchers.Main) {
       downloadManager.requirements = requirements(enabled)
     }
   }
 
-  /** Whether to ask for notifications before a download, so its progress shows. Voice asks once. */
-  public suspend fun shouldAskForNotifications(): Boolean = !preferencesStore.data.first().askedForNotifications
+  override suspend fun shouldAskForNotifications(): Boolean = !preferencesStore.data.first().askedForNotifications
 
-  public suspend fun onAskedForNotifications() {
+  override suspend fun onAskedForNotifications() {
     preferencesStore.updateData { it.copy(askedForNotifications = true) }
   }
 
-  /** Downloads the files of the book that aren't on the device yet. */
-  public suspend fun download(bookId: BookId) {
+  override suspend fun download(bookId: BookId) {
     if (addMissingFiles(bookId)) startService()
   }
 
-  /** Stops the download of a book, or removes it. The book streams again. */
-  public suspend fun remove(bookId: BookId) {
+  override suspend fun remove(bookId: BookId) {
     remove(setOf(bookId))
   }
 
@@ -210,7 +197,7 @@ public class AudiobookshelfDownloads internal constructor(
     bookIds.forEach(notifications::cancelResult)
   }
 
-  public suspend fun removeAll() {
+  override suspend fun removeAll() {
     withContext(Dispatchers.Main) {
       downloadManager.removeAllDownloads()
     }

@@ -26,6 +26,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
+import voice.core.audiobookshelf.ServerReachability
 import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.AccountStore
 import voice.core.audiobookshelf.download.AudiobookshelfDownloads
@@ -42,15 +43,6 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 private val MIN_SYNC_INTERVAL = 1.minutes
-
-/**
- * Whether the server can be reached right now, as far as Voice knows.
- */
-public enum class ServerReachability {
-  Unknown,
-  Reachable,
-  Unreachable,
-}
 
 /**
  * Runs the syncs with the server: the whole library when the app starts, when the library opens and when the

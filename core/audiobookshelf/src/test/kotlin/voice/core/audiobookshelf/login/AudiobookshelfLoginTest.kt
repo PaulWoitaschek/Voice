@@ -1,4 +1,4 @@
-package voice.core.audiobookshelf
+package voice.core.audiobookshelf.login
 
 import io.mockk.coVerify
 import io.mockk.every
@@ -10,11 +10,13 @@ import mockwebserver3.MockWebServer
 import okhttp3.Headers
 import org.junit.After
 import org.junit.Before
+import voice.core.audiobookshelf.FindServerResult
+import voice.core.audiobookshelf.LoginResult
+import voice.core.audiobookshelf.MemoryDataStore
+import voice.core.audiobookshelf.ServerAccount
 import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.AccountStore
-import voice.core.audiobookshelf.download.AudiobookshelfDownloads
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
-import voice.core.data.store.CurrentBookStore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -40,10 +42,10 @@ class AudiobookshelfLoginTest {
       MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}"""),
     )
     server.enqueue(MockResponse(code = 200, body = """{"user":{"id":"1","username":"paul","accessToken":"a","refreshToken":"r"}}"""))
-    val audiobookshelf = audiobookshelf()
+    val serverLogin = serverLogin()
 
-    val found = assertIs<FindServerResult.Found>(audiobookshelf.findServer(server.url("/").toString()))
-    val login = audiobookshelf.login(found.server, "paul", "voice")
+    val found = assertIs<FindServerResult.Found>(serverLogin.findServer(server.url("/").toString()))
+    val login = serverLogin.login(found.server, "paul", "voice")
 
     assertIs<LoginResult.Success>(login)
     val requests = List(2) { server.takeRequest() }
@@ -56,11 +58,11 @@ class AudiobookshelfLoginTest {
       MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}"""),
     )
     server.enqueue(MockResponse(code = 200, body = "<html>Sign in to the proxy</html>"))
-    val audiobookshelf = audiobookshelf()
+    val serverLogin = serverLogin()
 
-    val found = assertIs<FindServerResult.Found>(audiobookshelf.findServer(server.url("/").toString()))
+    val found = assertIs<FindServerResult.Found>(serverLogin.findServer(server.url("/").toString()))
 
-    assertEquals(LoginResult.Failed, audiobookshelf.login(found.server, "paul", "voice"))
+    assertEquals(LoginResult.Failed, serverLogin.login(found.server, "paul", "voice"))
   }
 
   @Test
@@ -69,7 +71,7 @@ class AudiobookshelfLoginTest {
       MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.20.0","isInit":true,"authMethods":["local"]}"""),
     )
 
-    assertEquals(FindServerResult.TooOld("2.20.0"), audiobookshelf().findServer(server.url("/").toString()))
+    assertEquals(FindServerResult.TooOld("2.20.0"), serverLogin().findServer(server.url("/").toString()))
   }
 
   @Test
@@ -79,7 +81,7 @@ class AudiobookshelfLoginTest {
       MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}"""),
     )
 
-    val found = assertIs<FindServerResult.Found>(audiobookshelf().findServer(server.url("/").toString()))
+    val found = assertIs<FindServerResult.Found>(serverLogin().findServer(server.url("/").toString()))
 
     assertEquals(server.url("/audiobookshelf/").toString(), found.server.url)
   }
@@ -100,12 +102,12 @@ class AudiobookshelfLoginTest {
       serverVersion = "2.37.1",
     )
     val accountStore = MemoryDataStore<Account?>(stored)
-    val audiobookshelf = audiobookshelf(accountStore)
+    val serverLogin = serverLogin(accountStore)
 
-    val found = assertIs<FindServerResult.Found>(audiobookshelf.findServer(server.url("/").toString()))
-    val login = assertIs<LoginResult.Success>(audiobookshelf.login(found.server, "kim", "voice"))
+    val found = assertIs<FindServerResult.Found>(serverLogin.findServer(server.url("/").toString()))
+    val login = assertIs<LoginResult.Success>(serverLogin.login(found.server, "kim", "voice"))
 
-    assertFalse(audiobookshelf.renewLogin(login.login))
+    assertFalse(serverLogin.renewLogin(login.login))
     assertEquals(stored, accountStore.data.first())
   }
 
@@ -115,8 +117,6 @@ class AudiobookshelfLoginTest {
       MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}"""),
     )
     server.enqueue(MockResponse(code = 200, body = """{"user":{"id":"2","username":"kim","accessToken":"a","refreshToken":"r"}}"""))
-    // the logout of the previous account
-    server.enqueue(MockResponse(code = 200))
     val accountStore = MemoryDataStore<Account?>(
       Account(
         serverUrl = server.url("/").toString(),
@@ -128,31 +128,30 @@ class AudiobookshelfLoginTest {
         serverVersion = "2.37.1",
       ),
     )
-    val downloads = mockk<AudiobookshelfDownloads>(relaxed = true)
-    val audiobookshelf = audiobookshelf(accountStore, downloads)
+    val serverAccount = mockk<ServerAccount>(relaxUnitFun = true)
+    val serverLogin = serverLogin(accountStore, serverAccount)
 
-    val found = assertIs<FindServerResult.Found>(audiobookshelf.findServer(server.url("/").toString()))
-    val login = assertIs<LoginResult.Success>(audiobookshelf.login(found.server, "kim", "voice"))
-    audiobookshelf.connect(login.login, listOf("library"))
+    val found = assertIs<FindServerResult.Found>(serverLogin.findServer(server.url("/").toString()))
+    val login = assertIs<LoginResult.Success>(serverLogin.login(found.server, "kim", "voice"))
+    serverLogin.connect(login.login, listOf("library"))
 
-    coVerify { downloads.removeAll() }
+    coVerify { serverAccount.signOut() }
     assertEquals("2", accountStore.data.first()?.userId)
   }
 
-  private fun audiobookshelf(
+  private fun serverLogin(
     accountStore: MemoryDataStore<Account?> = MemoryDataStore(null),
-    downloads: AudiobookshelfDownloads = mockk(relaxed = true),
-  ): Audiobookshelf {
-    return Audiobookshelf(
-      accountStore = AccountStore(accountStore),
-      http = AudiobookshelfHttp(AccountStore(accountStore), mockk { every { versionName } returns "1.0.0" }),
+    serverAccount: ServerAccount = mockk(),
+  ): AudiobookshelfLogin {
+    val store = AccountStore(accountStore)
+    val http = AudiobookshelfHttp(store, mockk { every { versionName } returns "1.0.0" })
+    return AudiobookshelfLogin(
+      serverFinder = ServerFinder(http),
+      previews = LibrariesPreviews(http, context = mockk()),
+      serverAccount = serverAccount,
+      accountStore = store,
+      http = http,
       sync = mockk(relaxed = true),
-      progressSync = mockk(relaxed = true),
-      downloads = downloads,
-      contentRepo = mockk(relaxed = true),
-      currentBookStore = CurrentBookStore(MemoryDataStore(null)),
-      playerController = mockk(relaxed = true),
-      context = mockk(relaxed = true),
       analytics = mockk(relaxed = true),
     )
   }

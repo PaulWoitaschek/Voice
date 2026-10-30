@@ -55,3 +55,10 @@ internal fun isLocalHost(host: String): Boolean {
     (octets[0] == 172 && octets[1] in 16..31) ||
     (octets[0] == 100 && octets[1] in 64..127)
 }
+
+internal fun serverName(serverUrl: String): String {
+  val url = serverUrl.toHttpUrlOrNull() ?: return serverUrl
+  val port = if (url.port == if (url.isHttps) 443 else 80) "" else ":${url.port}"
+  val path = url.encodedPath.trimEnd('/')
+  return url.host + port + path
+}
