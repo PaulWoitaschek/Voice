@@ -145,10 +145,10 @@ public class FolderSync internal constructor(
     if (place != null && place != mine.place) {
       copies.forEach { takeOver(it.id, place) }
     }
-    copies.takeOver(mine.name, newest.name) { custom, name -> custom.copy(name = name) }
-    copies.takeOver(mine.author, newest.author) { custom, author -> custom.copy(author = author) }
-    copies.takeOver(mine.series, newest.series) { custom, series -> custom.copy(series = series) }
-    copies.takeOver(mine.part, newest.part) { custom, part -> custom.copy(part = part) }
+    copies.takeOverText(mine.name, newest.name) { custom, name -> custom.copy(name = name) }
+    copies.takeOverText(mine.author, newest.author) { custom, author -> custom.copy(author = author) }
+    copies.takeOverText(mine.series, newest.series) { custom, series -> custom.copy(series = series) }
+    copies.takeOverText(mine.part, newest.part) { custom, part -> custom.copy(part = part) }
     (mine.bookmarks.keys - newest.bookmarks.keys).forEach { bookmarkRepo.deleteBookmark(Bookmark.Id(it)) }
     val book = copies.maxBy { it.content.lastPlayedAt }
     newest.bookmarks.forEach { (id, bookmark) ->
@@ -169,7 +169,7 @@ public class FolderSync internal constructor(
     }
   }
 
-  private suspend fun List<Book>.takeOver(
+  private suspend fun List<Book>.takeOverText(
     mine: SyncedText?,
     newest: SyncedText?,
     update: (CustomMetadata, String?) -> CustomMetadata,
