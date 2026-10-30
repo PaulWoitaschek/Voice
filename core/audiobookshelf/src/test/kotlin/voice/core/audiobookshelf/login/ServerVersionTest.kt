@@ -1,4 +1,4 @@
-package voice.core.audiobookshelf
+package voice.core.audiobookshelf.login
 
 import kotlin.test.Test
 import kotlin.test.assertFalse

@@ -7,7 +7,7 @@ import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.launch
 import voice.core.analytics.api.Analytics
 import voice.core.audiobookshelf.AudiobookshelfFeatureFlag
-import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.ServerAccount
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.folders.AudiobookFolders
@@ -25,7 +25,7 @@ class AddContentViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val navigator: Navigator,
   private val audiobookshelfFeatureFlag: AudiobookshelfFeatureFlag,
-  private val serverLibrary: ServerLibrary,
+  private val serverAccount: ServerAccount,
   private val analytics: Analytics,
   dispatcherProvider: DispatcherProvider,
   @Assisted
@@ -71,7 +71,7 @@ class AddContentViewModel(
   internal fun connectAudiobookshelf() {
     scope.launch {
       navigator.goTo(
-        if (serverLibrary.isConnected()) {
+        if (serverAccount.isConnected()) {
           Destination.AudiobookshelfSettings
         } else {
           Destination.AudiobookshelfLogin(origin)

@@ -9,11 +9,12 @@ import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import voice.core.audiobookshelf.Audiobookshelf
 import voice.core.audiobookshelf.AudiobookshelfServer
 import voice.core.audiobookshelf.FindServerResult
 import voice.core.audiobookshelf.LoginResult
 import voice.core.audiobookshelf.PendingLogin
+import voice.core.audiobookshelf.ServerAccount
+import voice.core.audiobookshelf.ServerLogin
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.navigation.Destination
@@ -22,7 +23,8 @@ import voice.navigation.Origin
 
 @AssistedInject
 class AudiobookshelfLoginViewModel(
-  private val audiobookshelf: Audiobookshelf,
+  private val serverLogin: ServerLogin,
+  private val serverAccount: ServerAccount,
   private val navigator: Navigator,
   dispatcherProvider: DispatcherProvider,
   @Assisted
@@ -46,7 +48,7 @@ class AudiobookshelfLoginViewModel(
   init {
     if (renew) {
       scope.launch {
-        val connection = audiobookshelf.connection.first() ?: return@launch
+        val connection = serverAccount.connection.first() ?: return@launch
         knownUsername = connection.username
         state = AudiobookshelfLoginViewState.Address(address = connection.serverName)
         onFindServer()
@@ -64,7 +66,7 @@ class AudiobookshelfLoginViewModel(
     if (current.busy || current.address.isBlank()) return
     state = current.copy(busy = true, error = null)
     request = scope.launch {
-      when (val result = audiobookshelf.findServer(current.address)) {
+      when (val result = serverLogin.findServer(current.address)) {
         is FindServerResult.Found -> {
           server = result.server
           state = AudiobookshelfLoginViewState.Credentials(
@@ -97,11 +99,11 @@ class AudiobookshelfLoginViewModel(
     if (current.busy || current.username.isBlank()) return
     state = current.copy(busy = true, error = null)
     request = scope.launch {
-      when (val result = audiobookshelf.login(server, current.username, current.password)) {
+      when (val result = serverLogin.login(server, current.username, current.password)) {
         is LoginResult.Success -> {
           login = result.login
           if (renew) {
-            if (audiobookshelf.renewLogin(result.login)) {
+            if (serverLogin.renewLogin(result.login)) {
               navigator.goBack()
             } else {
               state = current.copy(error = CredentialsError.OtherAccount)
@@ -122,7 +124,7 @@ class AudiobookshelfLoginViewModel(
     serverName: String,
   ) {
     state = AudiobookshelfLoginViewState.Libraries(serverName = serverName, loading = true)
-    val preview = audiobookshelf.preview(login)
+    val preview = serverLogin.preview(login)
     state = AudiobookshelfLoginViewState.Libraries(
       serverName = serverName,
       loading = false,
@@ -162,7 +164,7 @@ class AudiobookshelfLoginViewModel(
     if (current.busy) return
     state = current.copy(busy = true)
     scope.launch {
-      audiobookshelf.connect(login, current.libraries.filter { it.selected }.map { it.id })
+      serverLogin.connect(login, current.libraries.filter { it.selected }.map { it.id })
       when (origin) {
         Origin.Default -> navigator.setRoot(Destination.BookOverview)
         Origin.Onboarding -> navigator.goTo(Destination.OnboardingCompletion)

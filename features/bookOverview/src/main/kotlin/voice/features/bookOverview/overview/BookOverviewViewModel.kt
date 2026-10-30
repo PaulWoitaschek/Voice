@@ -19,6 +19,7 @@ import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
@@ -66,6 +67,7 @@ class BookOverviewViewModel(
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   dispatcherProvider: DispatcherProvider,
   private val serverLibrary: ServerLibrary,
+  private val serverDownloads: ServerDownloads,
   private val audiobookFolders: AudiobookFolders,
   private val emptyLibraryTracker: EmptyLibraryTracker,
   private val survey: Survey,
@@ -100,7 +102,7 @@ class BookOverviewViewModel(
     val scannerActive = scanning || syncing
     val unavailableBooks = remember { serverLibrary.unavailableBooks }
       .collectAsState(initial = emptySet()).value
-    val downloadStates = remember { serverLibrary.downloadStates }
+    val downloadStates = remember { serverDownloads.states }
       .collectAsState(initial = emptyMap()).value
     val folderPickerMovedDialogShown = remember { folderPickerMovedDialogShownStore.data }
       .collectAsState(initial = null).value

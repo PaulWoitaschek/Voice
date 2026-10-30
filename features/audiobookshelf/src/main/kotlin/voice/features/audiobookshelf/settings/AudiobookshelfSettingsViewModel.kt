@@ -9,12 +9,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.launch
-import voice.core.audiobookshelf.Audiobookshelf
 import voice.core.audiobookshelf.AudiobookshelfConnection
-import voice.core.audiobookshelf.download.AudiobookshelfDownloads
+import voice.core.audiobookshelf.ServerAccount
+import voice.core.audiobookshelf.ServerDownloads
+import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.ServerReachability
 import voice.core.audiobookshelf.download.BookDownloadState
-import voice.core.audiobookshelf.sync.AudiobookshelfSync
-import voice.core.audiobookshelf.sync.ServerReachability
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.BookId
@@ -24,9 +24,9 @@ import voice.navigation.Origin
 
 @Inject
 class AudiobookshelfSettingsViewModel(
-  private val audiobookshelf: Audiobookshelf,
-  private val sync: AudiobookshelfSync,
-  private val downloads: AudiobookshelfDownloads,
+  private val serverAccount: ServerAccount,
+  private val serverLibrary: ServerLibrary,
+  private val downloads: ServerDownloads,
   private val navigator: Navigator,
   dispatcherProvider: DispatcherProvider,
 ) {
@@ -39,9 +39,9 @@ class AudiobookshelfSettingsViewModel(
 
   @Composable
   internal fun viewState(): AudiobookshelfSettingsViewState? {
-    val connection: AudiobookshelfConnection? by remember { audiobookshelf.connection }.collectAsState(initial = null)
-    val reachability by sync.reachability.collectAsState()
-    val syncing by sync.syncing.collectAsState()
+    val connection: AudiobookshelfConnection? by remember { serverAccount.connection }.collectAsState(initial = null)
+    val reachability by serverLibrary.reachability.collectAsState()
+    val syncing by serverLibrary.syncing.collectAsState()
     val usedBytes by remember { downloads.usedBytes }.collectAsState(initial = 0L)
     val books by remember { downloads.books }.collectAsState(initial = emptyList())
     val downloadOverMobileData by remember { downloads.downloadOverMobileData }.collectAsState(initial = false)
@@ -76,7 +76,7 @@ class AudiobookshelfSettingsViewModel(
   }
 
   private suspend fun loadLibraries() {
-    val preview = audiobookshelf.libraries()
+    val preview = serverAccount.libraries()
     librariesUnavailable = preview == null
     if (preview == null) return
     libraries = preview.libraries.map { library ->
@@ -92,7 +92,7 @@ class AudiobookshelfSettingsViewModel(
     // without a library there would be nothing left to sync
     if (updated.isEmpty()) return
     scope.launch {
-      audiobookshelf.setLibraries(updated)
+      serverAccount.setLibraries(updated)
     }
   }
 
@@ -125,7 +125,7 @@ class AudiobookshelfSettingsViewModel(
   }
 
   internal fun onSyncNow() {
-    sync.sync(force = true)
+    serverLibrary.sync(force = true)
   }
 
   internal fun onSignOut() {
@@ -143,7 +143,7 @@ class AudiobookshelfSettingsViewModel(
     navigator.goBack()
     // the screen is gone by then, the sign out finishes anyway
     scope.launch {
-      audiobookshelf.signOut()
+      serverAccount.signOut()
     }
   }
 
