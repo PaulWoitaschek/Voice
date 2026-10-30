@@ -167,6 +167,7 @@ private fun SeriesScreen(
 private fun Header(viewState: SeriesViewState) {
   Row(verticalAlignment = Alignment.CenterVertically) {
     SeriesCover(
+      seriesKey = viewState.key,
       covers = viewState.covers,
       modifier = Modifier.size(136.dp),
     )
@@ -248,6 +249,7 @@ private fun SeriesScreenPreview() {
   VoiceTheme {
     SeriesScreen(
       viewState = SeriesViewState(
+        key = "thesignalsaga",
         name = "The Signal Saga",
         author = "Daniel Hartwell",
         covers = listOf(null, null, null),

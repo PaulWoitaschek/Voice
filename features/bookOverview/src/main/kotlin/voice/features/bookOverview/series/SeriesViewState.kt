@@ -6,6 +6,7 @@ import voice.features.bookOverview.overview.BookOverviewItemViewState
 
 @Immutable
 data class SeriesViewState(
+  val key: String,
   val name: String,
   val author: String?,
   val covers: List<String?>,

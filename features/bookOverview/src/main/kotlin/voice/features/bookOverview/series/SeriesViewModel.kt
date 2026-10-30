@@ -79,6 +79,7 @@ class SeriesViewModel(
       )
     }
     return SeriesViewState(
+      key = series.key,
       name = series.name,
       author = series.author,
       covers = series.covers,

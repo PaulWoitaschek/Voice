@@ -48,6 +48,7 @@ import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
+import voice.core.ui.seriesCoverSharedElementModifier
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.SeriesStackViewState
 import java.text.NumberFormat
@@ -74,6 +75,7 @@ internal fun ListSeriesRow(
       verticalAlignment = Alignment.CenterVertically,
     ) {
       SeriesCover(
+        seriesKey = series.key,
         covers = series.covers,
         gapColor = MaterialTheme.colorScheme.surfaceContainer,
         modifier = Modifier.size(64.dp),
@@ -141,6 +143,7 @@ internal fun GridSeries(
       .padding(6.dp),
   ) {
     SeriesCover(
+      seriesKey = series.key,
       covers = series.covers,
       modifier = Modifier
         .fillMaxWidth()
@@ -184,32 +187,39 @@ internal fun GridSeries(
 }
 
 /**
- * The covers of the books, the one that's next in front. It's no shared element, as the same
- * book can be on the Continue listening card at the same time.
+ * The covers of the books, the one that's next in front. It flies as the series and not as its front book, which can
+ * be on the Continue listening card at the same time.
  */
 @Composable
 internal fun SeriesCover(
+  seriesKey: String,
   covers: List<String?>,
   modifier: Modifier = Modifier,
   gapColor: Color = MaterialTheme.colorScheme.surface,
   badge: @Composable BoxScope.() -> Unit = {},
 ) {
   Box(modifier = modifier) {
-    val behind = covers.size - 1
-    covers.asReversed().forEachIndexed { index, cover ->
-      val depth = if (behind == 0) 0F else (behind - index).toFloat() / behind
-      AsyncImage(
-        modifier = Modifier
-          .fillMaxSize(if (behind == 0) 1F else STACKED_COVER_SIZE)
-          .align(BiasAlignment(horizontalBias = -1F + 2F * depth, verticalBias = 1F - 2F * depth))
-          .clip(CoverShape)
-          .border(2.dp, gapColor, CoverShape),
-        model = rememberCoverThumbnailRequest(cover),
-        placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
-        error = painterResource(id = UiR.drawable.album_art),
-        contentScale = ContentScale.Crop,
-        contentDescription = null,
-      )
+    Box(
+      Modifier
+        .fillMaxSize()
+        .seriesCoverSharedElementModifier(seriesKey),
+    ) {
+      val behind = covers.size - 1
+      covers.asReversed().forEachIndexed { index, cover ->
+        val depth = if (behind == 0) 0F else (behind - index).toFloat() / behind
+        AsyncImage(
+          modifier = Modifier
+            .fillMaxSize(if (behind == 0) 1F else STACKED_COVER_SIZE)
+            .align(BiasAlignment(horizontalBias = -1F + 2F * depth, verticalBias = 1F - 2F * depth))
+            .clip(CoverShape)
+            .border(2.dp, gapColor, CoverShape),
+          model = rememberCoverThumbnailRequest(cover),
+          placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
+          error = painterResource(id = UiR.drawable.album_art),
+          contentScale = ContentScale.Crop,
+          contentDescription = null,
+        )
+      }
     }
     badge()
   }

@@ -125,7 +125,7 @@ val SharedElementFadeEnterTransition =
 val SharedElementFadeExitTransition =
   fadeOut(animationSpec = tween(durationMillis = DurationMedium1, easing = EmphasizedAccelerateEasing))
 
-internal fun Scene<Destination.Compose>.destination(): Destination.Compose? {
+internal fun Scene<*>.destination(): Destination.Compose? {
   return entries.lastOrNull()?.metadata?.get(DestinationMetadataKey)
 }
 
@@ -145,4 +145,16 @@ private fun Destination.Compose.sharesElements(): Boolean {
     this == Destination.LibrarySearch ||
     this is Destination.Series ||
     this is Destination.Playback
+}
+
+/**
+ * The library's Continue listening card can show a book of the series, and its cover would fly into the book's row.
+ * The stack flies into the series instead.
+ */
+internal fun sharesCovers(
+  initial: Scene<*>,
+  target: Scene<*>,
+): Boolean {
+  val destinations = listOf(initial.destination(), target.destination())
+  return Destination.BookOverview !in destinations || destinations.none { it is Destination.Series }
 }
