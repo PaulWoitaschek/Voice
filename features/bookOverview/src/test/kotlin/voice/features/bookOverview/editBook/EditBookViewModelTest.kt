@@ -103,6 +103,25 @@ class EditBookViewModelTest {
   }
 
   @Test
+  fun `at most three series are suggested, in natural order`() = runTest(dispatcher) {
+    coEvery { repo.all() } returns listOf(
+      book,
+      book(series = "Saga 10"),
+      book(series = "Saga 2"),
+      book(series = "Saga 1"),
+      book(series = "Saga 3"),
+    )
+    viewModel.onItemClick(book.id, BottomSheetItem.Edit)
+
+    viewModel.onSeriesChange("saga")
+
+    assertEquals(
+      expected = listOf("Saga 1", "Saga 2", "Saga 3"),
+      actual = viewModel.state.value?.suggestions?.map { it.name },
+    )
+  }
+
+  @Test
   fun `nothing is suggested before the listener changes the series`() = runTest(dispatcher) {
     coEvery { repo.all() } returns listOf(book, book(series = "Dune Chronicles Extras"))
 

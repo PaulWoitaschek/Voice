@@ -49,6 +49,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -227,14 +228,39 @@ private fun EditBookContent(
       keyboardActions = onDone,
     )
     if (viewState.showSeries) {
-      Spacer(Modifier.height(16.dp))
       val partFocusRequester = remember { FocusRequester() }
       var seriesFocused by remember { mutableStateOf(false) }
+      // grows with the text, so its label stays on one line at large font sizes
+      val partField = @Composable {
+        OutlinedTextField(
+          value = part,
+          onValueChange = {
+            part = it
+            onPartChange(it.text)
+          },
+          modifier = Modifier
+            .width(96.dp * LocalDensity.current.fontScale)
+            .focusRequester(partFocusRequester),
+          label = { Text(stringResource(StringsR.string.book_edit_part_label)) },
+          singleLine = true,
+          readOnly = readOnly,
+          shape = RoundedCornerShape(16.dp),
+          keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal,
+            imeAction = ImeAction.Done,
+          ),
+          keyboardActions = onDone,
+        )
+      }
+      // at large font sizes, the part goes below the series, so the series stays wide enough to read
+      val partBelow = LocalDensity.current.fontScale >= 1.5F
+      Spacer(Modifier.height(16.dp))
       Row {
         Column(
           modifier = Modifier
             .weight(1F)
-            .animateContentSize(),
+            .animateContentSize()
+            .onFocusChanged { seriesFocused = it.hasFocus },
         ) {
           OutlinedTextField(
             value = series,
@@ -242,9 +268,7 @@ private fun EditBookContent(
               series = it
               onSeriesChange(it.text)
             },
-            modifier = Modifier
-              .fillMaxWidth()
-              .onFocusChanged { seriesFocused = it.isFocused },
+            modifier = Modifier.fillMaxWidth(),
             label = { Text(stringResource(StringsR.string.book_edit_series_label)) },
             singleLine = true,
             readOnly = readOnly,
@@ -266,26 +290,14 @@ private fun EditBookContent(
             )
           }
         }
-        Spacer(Modifier.width(12.dp))
-        OutlinedTextField(
-          value = part,
-          onValueChange = {
-            part = it
-            onPartChange(it.text)
-          },
-          modifier = Modifier
-            .width(96.dp)
-            .focusRequester(partFocusRequester),
-          label = { Text(stringResource(StringsR.string.book_edit_part_label)) },
-          singleLine = true,
-          readOnly = readOnly,
-          shape = RoundedCornerShape(16.dp),
-          keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal,
-            imeAction = ImeAction.Done,
-          ),
-          keyboardActions = onDone,
-        )
+        if (!partBelow) {
+          Spacer(Modifier.width(12.dp))
+          partField()
+        }
+      }
+      if (partBelow) {
+        Spacer(Modifier.height(16.dp))
+        partField()
       }
     }
     Spacer(Modifier.height(24.dp))
@@ -347,7 +359,7 @@ private fun SeriesSuggestions(
 @Preview
 private fun EditBookPreview() {
   VoiceTheme {
-    Surface {
+    Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       EditBookContent(
         viewState = EditBookState(
           title = "Interference",
@@ -374,7 +386,7 @@ private fun EditBookPreview() {
 @Preview(widthDp = 280)
 private fun SeriesSuggestionsPreview() {
   VoiceTheme {
-    Surface {
+    Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       SeriesSuggestions(
         suggestions = listOf(
           SeriesSuggestion("The Signal Saga", bookCount = 4),
