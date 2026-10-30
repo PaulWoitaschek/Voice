@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.map
 import voice.core.audiobookshelf.download.AudiobookshelfDownloads
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.audiobookshelf.sync.AudiobookshelfSync
+import voice.core.audiobookshelf.sync.ServerBookUpdate
 import voice.core.audiobookshelf.sync.ServerReachability
 import voice.core.data.BookId
 import voice.core.data.isRemote
@@ -46,6 +47,27 @@ interface ServerLibrary {
   suspend fun shouldAskForNotifications(): Boolean
 
   suspend fun onAskedForNotifications()
+
+  /** Saves what a listener changed about a server book on the server. */
+  suspend fun updateBook(
+    bookId: BookId,
+    edit: ServerBookEdit,
+  ): ServerEdit
+}
+
+/** What's null stays as the server has it. */
+data class ServerBookEdit(
+  val title: String? = null,
+  val author: String? = null,
+  /** Replaces the series Voice shows, together with [part]. The other series the book has on the server stay. */
+  val series: String? = null,
+  val part: String? = null,
+)
+
+enum class ServerEdit {
+  Saved,
+  NotAllowed,
+  Failed,
 }
 
 @ContributesBinding(AppScope::class)
@@ -54,6 +76,7 @@ class AudiobookshelfServerLibrary internal constructor(
   private val audiobookshelf: Audiobookshelf,
   private val audiobookshelfSync: AudiobookshelfSync,
   private val downloads: AudiobookshelfDownloads,
+  private val serverBookUpdate: ServerBookUpdate,
   bookRepository: BookRepository,
 ) : ServerLibrary {
 
@@ -94,4 +117,9 @@ class AudiobookshelfServerLibrary internal constructor(
   override suspend fun onAskedForNotifications() {
     downloads.onAskedForNotifications()
   }
+
+  override suspend fun updateBook(
+    bookId: BookId,
+    edit: ServerBookEdit,
+  ): ServerEdit = serverBookUpdate.update(bookId, edit)
 }

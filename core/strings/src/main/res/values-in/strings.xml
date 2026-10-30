@@ -75,6 +75,8 @@
     <string name="book.edit.cover.internet">Sampul dari Internet</string>
     <string name="book.edit.part.label">Bagian</string>
     <string name="book.edit.series.label">Seri</string>
+    <string name="book.edit.server.failed">Tidak dapat menyimpan ke server Anda. Coba lagi.</string>
+    <string name="book.edit.server.not_allowed">Akun Anda di server tidak dapat mengubah buku.</string>
     <string name="book.edit.title.label">Judul</string>
     <string name="book.source.device">Di perangkat ini</string>
     <string name="book.source.server_downloaded">%s · sudah diunduh</string>

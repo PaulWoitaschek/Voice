@@ -3,6 +3,7 @@ package voice.core.audiobookshelf.sync
 import voice.core.audiobookshelf.AudiobookshelfIds
 import voice.core.audiobookshelf.api.AbsChapter
 import voice.core.audiobookshelf.api.AbsLibraryItem
+import voice.core.audiobookshelf.api.AbsSeries
 import voice.core.audiobookshelf.api.AbsTrack
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -63,7 +64,7 @@ internal fun AbsLibraryItem.toBookContent(
 ): BookContent {
   val chapterIds = chapters.map { it.id }
   val metadata = media.metadata
-  val series = metadata.series?.firstOrNull()
+  val series = metadata.series?.shown(existing?.metadata?.series)
   val position = existing?.let { content ->
     if (content.currentChapter in chapterIds) {
       BookPosition(content.currentChapter, content.positionInChapter)
@@ -96,6 +97,12 @@ internal fun AbsLibraryItem.toBookContent(
       fileLastModified = null,
     ),
   )
+}
+
+// the server puts a series it just got last, so the one a listener gave the book stays while the server has it.
+// The server matches series names ignoring case and keeps the spelling it had.
+internal fun List<AbsSeries>.shown(current: String?): AbsSeries? {
+  return firstOrNull { it.name.equals(current, ignoreCase = true) } ?: firstOrNull()
 }
 
 internal data class BookPosition(

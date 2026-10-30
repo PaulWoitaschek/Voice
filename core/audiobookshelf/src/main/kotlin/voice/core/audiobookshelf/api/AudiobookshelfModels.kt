@@ -90,6 +90,20 @@ internal data class AbsSeries(
 )
 
 @Serializable
+internal data class MediaUpdate(val metadata: MetadataUpdate)
+
+// what's null stays as it is. A list replaces the whole list: the book loses every author or series not in it.
+@Serializable
+internal data class MetadataUpdate(
+  val title: String? = null,
+  val authors: List<AbsAuthor>? = null,
+  val series: List<AbsSeries>? = null,
+)
+
+@Serializable
+internal data class AbsAuthor(val name: String)
+
+@Serializable
 internal data class AbsTrack(
   val index: Int,
   val ino: String,

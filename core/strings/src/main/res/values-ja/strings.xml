@@ -75,6 +75,8 @@
     <string name="book.edit.cover.internet">インターネットからのカバー</string>
     <string name="book.edit.part.label">巻</string>
     <string name="book.edit.series.label">シリーズ</string>
+    <string name="book.edit.server.failed">サーバーに保存できませんでした。もう一度お試しください。</string>
+    <string name="book.edit.server.not_allowed">このアカウントには、サーバー上の本を変更する権限がありません。</string>
     <string name="book.edit.title.label">タイトル</string>
     <string name="book.source.device">この端末</string>
     <string name="book.source.server_downloaded">%s · ダウンロード済み</string>

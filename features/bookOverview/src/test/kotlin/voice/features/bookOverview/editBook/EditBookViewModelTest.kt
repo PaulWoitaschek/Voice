@@ -12,7 +12,11 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import voice.core.audiobookshelf.ServerBookEdit
+import voice.core.audiobookshelf.ServerEdit
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.data.Book
+import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
 import voice.core.featureflag.MemoryFeatureFlag
@@ -38,7 +42,11 @@ class EditBookViewModelTest {
     coEvery { updateCustomMetadata(book.id, capture(update)) } returns Unit
   }
   private val editSeriesFeatureFlag = MemoryFeatureFlag(true)
-  private val viewModel = EditBookViewModel(repo, EditSeriesFeatureFlag(editSeriesFeatureFlag))
+  private val serverLibrary = mockk<ServerLibrary> {
+    coEvery { updateBook(any(), any()) } returns ServerEdit.Saved
+  }
+  private val viewModel = EditBookViewModel(repo, EditSeriesFeatureFlag(editSeriesFeatureFlag), serverLibrary)
+  private val serverBook = book(name = "Leviathan Wakes", series = "The Expanse", part = "1", id = BookId("abs://item/item"))
 
   @BeforeTest
   fun setUp() {
@@ -214,6 +222,73 @@ class EditBookViewModelTest {
 
     assertNull(saved.custom.name)
     assertEquals(expected = "Frank Herbert", actual = saved.author)
+  }
+
+  @Test
+  fun `server books can be edited only with the feature flag`() = runTest(dispatcher) {
+    assertEquals(listOf(BottomSheetItem.Edit), viewModel.items(serverBook.id))
+
+    editSeriesFeatureFlag.value = false
+
+    assertEquals(emptyList(), viewModel.items(serverBook.id))
+  }
+
+  @Test
+  fun `the series of a server book is saved on the server, and the sheet stays until it's saved`() = runTest(dispatcher) {
+    openServerBook()
+    viewModel.onSeriesChange("Expanse")
+    viewModel.onPartChange("2")
+
+    viewModel.onConfirm()
+
+    assertTrue(viewModel.state.value!!.saving)
+    advanceUntilIdle()
+    coVerify { val _ = serverLibrary.updateBook(serverBook.id, ServerBookEdit(series = "Expanse", part = "2")) }
+    assertEquals(ServerEdit.Saved, viewModel.state.value?.serverResult)
+    assertFalse(viewModel.state.value!!.saving)
+  }
+
+  @Test
+  fun `only what the listener changed goes to the server, a part with its series`() = runTest(dispatcher) {
+    openServerBook()
+    viewModel.onTitleChange("Caliban's War")
+    viewModel.onPartChange("2")
+
+    viewModel.onConfirm()
+    advanceUntilIdle()
+
+    val edit = ServerBookEdit(title = "Caliban's War", series = "The Expanse", part = "2")
+    coVerify { val _ = serverLibrary.updateBook(serverBook.id, edit) }
+  }
+
+  @Test
+  fun `a server that didn't take the series keeps what the listener typed`() = runTest(dispatcher) {
+    coEvery { serverLibrary.updateBook(any(), any()) } returns ServerEdit.NotAllowed
+    openServerBook()
+    viewModel.onSeriesChange("Expanse")
+
+    viewModel.onConfirm()
+    advanceUntilIdle()
+
+    assertEquals(ServerEdit.NotAllowed, viewModel.state.value?.serverResult)
+    assertEquals("Expanse", viewModel.state.value?.series)
+  }
+
+  @Test
+  fun `saving a server book without changes doesn't ask the server`() = runTest(dispatcher) {
+    openServerBook()
+
+    viewModel.onConfirm()
+    advanceUntilIdle()
+
+    assertEquals(ServerEdit.Saved, viewModel.state.value?.serverResult)
+    coVerify(exactly = 0) { val _ = serverLibrary.updateBook(any(), any()) }
+  }
+
+  private suspend fun openServerBook() {
+    coEvery { repo.get(serverBook.id) } returns serverBook
+    viewModel.onItemClick(serverBook.id, BottomSheetItem.Edit)
+    assertTrue(viewModel.state.value!!.remote)
   }
 
   private suspend fun TestScope.save(

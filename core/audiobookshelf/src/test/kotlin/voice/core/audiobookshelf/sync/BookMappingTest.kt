@@ -77,6 +77,24 @@ class BookMappingTest {
   }
 
   @Test
+  fun `a book in several series keeps showing the one it showed`() {
+    val tracks = listOf(track(1, 0.0, 10.0, "a.mp3"))
+    val series = listOf(AbsSeries("Space Operas", "4"), AbsSeries("The Expanse", "1"))
+    val item = item(tracks = tracks, metadata = AbsBookMetadata(title = "Leviathan Wakes", series = series))
+    val existing = item.toBookContent(item.chapters(), existing = null)
+
+    val shown = existing.copy(metadata = existing.metadata.copy(series = "The Expanse", part = "1"))
+    val gone = existing.copy(metadata = existing.metadata.copy(series = "Expanse", part = "1"))
+    val otherCase = existing.copy(metadata = existing.metadata.copy(series = "the expanse", part = "1"))
+
+    assertEquals("Space Operas", existing.metadata.series)
+    assertEquals("1", item.toBookContent(item.chapters(), shown).metadata.part)
+    assertEquals("The Expanse", item.toBookContent(item.chapters(), shown).metadata.series)
+    assertEquals("Space Operas", item.toBookContent(item.chapters(), gone).metadata.series)
+    assertEquals("The Expanse", item.toBookContent(item.chapters(), otherCase).metadata.series)
+  }
+
+  @Test
   fun `the book takes the metadata of the server`() {
     val item = item(
       tracks = listOf(track(1, 0.0, 10.0, "a.mp3")),

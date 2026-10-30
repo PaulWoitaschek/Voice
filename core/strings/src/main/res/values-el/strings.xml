@@ -78,6 +78,8 @@
     <string name="book.edit.cover.internet">Εξώφυλλο από το Διαδίκτυο</string>
     <string name="book.edit.part.label">Μέρος</string>
     <string name="book.edit.series.label">Σειρά</string>
+    <string name="book.edit.server.failed">Δεν ήταν δυνατή η αποθήκευση στον διακομιστή σας. Δοκιμάστε ξανά.</string>
+    <string name="book.edit.server.not_allowed">Ο λογαριασμός σας στον διακομιστή δεν μπορεί να αλλάζει βιβλία.</string>
     <string name="book.edit.title.label">Τίτλος</string>
     <string name="book.source.device">Σε αυτή τη συσκευή</string>
     <string name="book.source.server_downloaded">%s · έγινε λήψη</string>

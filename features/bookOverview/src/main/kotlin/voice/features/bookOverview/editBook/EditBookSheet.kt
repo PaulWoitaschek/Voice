@@ -24,6 +24,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -40,6 +42,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +56,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -63,6 +69,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.ServerEdit
 import voice.core.data.BookId
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
@@ -103,18 +110,29 @@ internal fun EditBookSheet(
       }
     }
   }
+  val dismiss by rememberUpdatedState(onDismiss)
+  LaunchedEffect(viewState.serverResult) {
+    if (viewState.serverResult == ServerEdit.Saved) hideThen(dismiss)
+  }
   ModalBottomSheet(
     onDismissRequest = { if (!closing) onDismiss() },
     sheetState = sheetState,
   ) {
     EditBookContent(
       viewState = viewState,
-      readOnly = closing,
+      readOnly = closing || viewState.saving,
       onTitleChange = onTitleChange,
       onAuthorChange = onAuthorChange,
       onSeriesChange = onSeriesChange,
       onPartChange = onPartChange,
-      onSave = { hideThen(onConfirm) },
+      // the sheet of a server book stays until the server took the edit
+      onSave = {
+        if (!viewState.remote) {
+          hideThen(onConfirm)
+        } else if (!closing) {
+          onConfirm()
+        }
+      },
       onCancel = { hideThen(onDismiss) },
     )
   }
@@ -300,6 +318,20 @@ private fun EditBookContent(
         partField()
       }
     }
+    val error = when (viewState.serverResult) {
+      ServerEdit.NotAllowed -> StringsR.string.book_edit_server_not_allowed
+      ServerEdit.Failed -> StringsR.string.book_edit_server_failed
+      ServerEdit.Saved, null -> null
+    }
+    if (error != null) {
+      Spacer(Modifier.height(16.dp))
+      Text(
+        text = stringResource(error),
+        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.error,
+      )
+    }
     Spacer(Modifier.height(24.dp))
     Row(verticalAlignment = Alignment.CenterVertically) {
       Spacer(Modifier.weight(1F))
@@ -312,7 +344,11 @@ private fun EditBookContent(
         enabled = viewState.confirmButtonEnabled,
         shapes = ButtonDefaults.shapes(),
       ) {
-        Icon(VoiceIcons.Check, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+        if (viewState.saving) {
+          LoadingIndicator(Modifier.size(ButtonDefaults.IconSize), color = LocalContentColor.current)
+        } else {
+          Icon(VoiceIcons.Check, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+        }
         Spacer(Modifier.width(ButtonDefaults.IconSpacing))
         Text(stringResource(StringsR.string.common_action_save))
       }
@@ -369,6 +405,35 @@ private fun EditBookPreview() {
           series = "The Signal Saga",
           part = "2",
           showSeries = true,
+        ),
+        readOnly = false,
+        onTitleChange = {},
+        onAuthorChange = {},
+        onSeriesChange = {},
+        onPartChange = {},
+        onSave = {},
+        onCancel = {},
+      )
+    }
+  }
+}
+
+@Composable
+@Preview
+private fun EditServerBookPreview() {
+  VoiceTheme {
+    Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
+      EditBookContent(
+        viewState = EditBookState(
+          title = "Interference",
+          author = "Sue Burke",
+          bookId = BookId("preview"),
+          cover = null,
+          series = "The Signal Saga",
+          part = "2",
+          showSeries = true,
+          remote = true,
+          serverResult = ServerEdit.Failed,
         ),
         readOnly = false,
         onTitleChange = {},
