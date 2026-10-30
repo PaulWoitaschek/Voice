@@ -2,6 +2,7 @@ package voice.features.bookOverview.editBook
 
 import voice.core.audiobookshelf.ServerEdit
 import voice.core.data.BookId
+import voice.core.data.isRemote
 
 internal data class EditBookState(
   val title: String,
@@ -11,7 +12,6 @@ internal data class EditBookState(
   val series: String = "",
   val part: String = "",
   val showSeries: Boolean = false,
-  val remote: Boolean = false,
   val saving: Boolean = false,
   val serverResult: ServerEdit? = null,
   val allSeries: List<SeriesSuggestion> = emptyList(),
@@ -20,6 +20,8 @@ internal data class EditBookState(
   val initialSeries: String = series,
   val initialPart: String = part,
 ) {
+
+  val remote: Boolean = bookId.isRemote
 
   val confirmButtonEnabled: Boolean = title.trim().isNotEmpty()
 

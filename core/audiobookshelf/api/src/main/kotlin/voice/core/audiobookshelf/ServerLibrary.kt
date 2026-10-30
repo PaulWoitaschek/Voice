@@ -22,7 +22,6 @@ interface ServerLibrary {
    */
   fun sync(force: Boolean = false)
 
-  /** Saves what a listener changed about a server book on the server. */
   suspend fun updateBook(
     bookId: BookId,
     edit: ServerBookEdit,
