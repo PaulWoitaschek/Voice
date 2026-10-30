@@ -78,6 +78,8 @@
     <string name="book.edit.cover.internet">इंटरनेट से कवर</string>
     <string name="book.edit.part.label">भाग</string>
     <string name="book.edit.series.label">सीरीज़</string>
+    <string name="book.edit.server.failed">आपके सर्वर पर सहेजा नहीं जा सका। फिर से कोशिश करें।</string>
+    <string name="book.edit.server.not_allowed">सर्वर पर आपके खाते को पुस्तकें बदलने की अनुमति नहीं है।</string>
     <string name="book.edit.title.label">शीर्षक</string>
     <string name="book.source.device">इस डिवाइस पर</string>
     <string name="book.source.server_downloaded">%s · डाउनलोड की गई</string>

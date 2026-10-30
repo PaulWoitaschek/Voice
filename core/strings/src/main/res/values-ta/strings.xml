@@ -78,6 +78,8 @@
     <string name="book.edit.cover.internet">இணையத்திலிருந்து அட்டைப்படம்</string>
     <string name="book.edit.part.label">பாகம்</string>
     <string name="book.edit.series.label">தொடர்</string>
+    <string name="book.edit.server.failed">உங்கள் சர்வரில் சேமிக்க முடியவில்லை. மீண்டும் முயலவும்.</string>
+    <string name="book.edit.server.not_allowed">சர்வரில் உள்ள உங்கள் கணக்கால் புத்தகங்களை மாற்ற முடியாது.</string>
     <string name="book.edit.title.label">தலைப்பு</string>
     <string name="book.source.device">இந்தச் சாதனத்தில்</string>
     <string name="book.source.server_downloaded">%s · பதிவிறக்கப்பட்டது</string>

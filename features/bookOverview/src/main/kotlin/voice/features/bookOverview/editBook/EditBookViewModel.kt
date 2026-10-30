@@ -6,6 +6,8 @@ import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import voice.core.audiobookshelf.ServerEdit
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
@@ -18,6 +20,7 @@ import voice.features.bookOverview.di.BookActionsScope
 class EditBookViewModel(
   private val repo: BookRepository,
   private val editSeriesFeatureFlag: EditSeriesFeatureFlag,
+  private val serverLibrary: ServerLibrary,
 ) : BottomSheetItemViewModel {
 
   private val scope = MainScope()
@@ -26,8 +29,8 @@ class EditBookViewModel(
   internal val state: State<EditBookState?> get() = _state
 
   override suspend fun items(bookId: BookId): List<BottomSheetItem> {
-    // server books take their names from the server
-    if (bookId.isRemote) return emptyList()
+    // server books take their names from the server, and only their series is written back to it
+    if (bookId.isRemote && !editSeriesFeatureFlag.get()) return emptyList()
     return listOf(BottomSheetItem.Edit)
   }
 
@@ -46,6 +49,7 @@ class EditBookViewModel(
       series = book.series.orEmpty(),
       part = book.part.orEmpty(),
       showSeries = showSeries,
+      remote = bookId.isRemote,
       allSeries = if (showSeries) seriesOfOtherBooks(bookId) else emptyList(),
     )
   }
@@ -86,6 +90,10 @@ class EditBookViewModel(
 
   internal fun onConfirm() {
     val state = _state.value
+    if (state?.remote == true) {
+      saveOnServer(state)
+      return
+    }
     if (state != null) {
       check(state.confirmButtonEnabled)
       scope.launch {
@@ -101,5 +109,18 @@ class EditBookViewModel(
       }
     }
     _state.value = null
+  }
+
+  private fun saveOnServer(state: EditBookState) {
+    if (state.saving) return
+    if (state.series == state.initialSeries && state.part == state.initialPart) {
+      _state.value = state.copy(serverResult = ServerEdit.Saved)
+      return
+    }
+    _state.value = state.copy(saving = true, serverResult = null)
+    scope.launch {
+      val result = serverLibrary.updateSeries(state.bookId, state.series, state.part)
+      _state.value = _state.value?.copy(saving = false, serverResult = result)
+    }
   }
 }

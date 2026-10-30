@@ -78,6 +78,8 @@
     <string name="book.edit.cover.internet">Cover aus dem Internet</string>
     <string name="book.edit.part.label">Teil</string>
     <string name="book.edit.series.label">Reihe</string>
+    <string name="book.edit.server.failed">Speichern auf Deinem Server hat nicht geklappt. Versuche es noch einmal.</string>
+    <string name="book.edit.server.not_allowed">Dein Konto auf dem Server darf keine Bücher ändern.</string>
     <string name="book.edit.title.label">Titel</string>
     <string name="book.source.device">Auf diesem Gerät</string>
     <string name="book.source.server_downloaded">%s · heruntergeladen</string>

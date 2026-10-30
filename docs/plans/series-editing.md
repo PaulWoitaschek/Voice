@@ -7,7 +7,7 @@ Audiobookshelf the series is written to the server. Everything is behind the `ed
 (`EditSeriesFeatureFlag`, off by default).
 
 This file is for the sessions that build it. Each pull request updates its row and notes what it did differently
-from the plan. The last one deletes this file.
+from the plan. It goes once all four are merged, so sessions working on review feedback still find it.
 
 To start the next step: "Read `docs/plans/series-editing.md` and build PR N."
 
@@ -18,7 +18,7 @@ To start the next step: "Read `docs/plans/series-editing.md` and build PR N."
 | 1 | Edit series and part of books on the device | In review: [#4081](https://github.com/PaulWoitaschek/Voice/pull/4081), branch `edit-book-series` |
 | 2 | Suggest series the library already has | In review: [#4082](https://github.com/PaulWoitaschek/Voice/pull/4082), branch `series-suggestions` |
 | 3 | Sync series and part through `.voice` | In review: [#4083](https://github.com/PaulWoitaschek/Voice/pull/4083), branch `sync-series` |
-| 4 | Write the series of Audiobookshelf books to the server | Open |
+| 4 | Write the series of Audiobookshelf books to the server | In review, branch `audiobookshelf-series` |
 
 The pull requests are stacked: each branches off the one before and targets its branch, so each diff shows one step.
 After a merge, the next one is retargeted to `main`.
@@ -102,6 +102,11 @@ In `:features:bookOverview`:
 - Strings: "Couldn't save on your server. Try again." and "Your account on the server can't change books."
 - Answer the open question in `docs/library.md` about editing books from Audiobookshelf, and update
   `website/src/pages/audiobookshelf.md`, which says names are edited on the server.
+- Done differently:
+  - The server puts a series it just got last. So the library sync keeps showing the series Voice showed while the
+    server still has it, and `SeriesUpdate` replaces that one, not the first.
+  - The sheet has one `serverResult: ServerEdit?` instead of `saved` and `error`.
+  - The website page stays as it is, like the FAQ in PR 3, until the flag goes away.
 
 ## Left out
 
@@ -109,6 +114,4 @@ In `:features:bookOverview`:
   files", like the author.
 - Author suggestions, "Use the names from the files", and suggesting the next part.
 - The series shows nowhere but search. Series stacks are step 4 of the spec.
-- A book in several series on Audiobookshelf: after renaming the first, another may come first, depending on how the
-  server orders them.
 - No retry queue when the server can't be reached. The sheet shows the error.

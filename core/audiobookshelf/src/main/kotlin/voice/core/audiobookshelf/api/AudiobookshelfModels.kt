@@ -89,6 +89,13 @@ internal data class AbsSeries(
   val sequence: String? = null,
 )
 
+// the server removes the book from every series that isn't in the list
+@Serializable
+internal data class MediaUpdate(val metadata: MetadataUpdate)
+
+@Serializable
+internal data class MetadataUpdate(val series: List<AbsSeries>)
+
 @Serializable
 internal data class AbsTrack(
   val index: Int,

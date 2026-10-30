@@ -1,5 +1,6 @@
 package voice.features.bookOverview.editBook
 
+import voice.core.audiobookshelf.ServerEdit
 import voice.core.data.BookId
 
 internal data class EditBookState(
@@ -10,6 +11,9 @@ internal data class EditBookState(
   val series: String = "",
   val part: String = "",
   val showSeries: Boolean = false,
+  val remote: Boolean = false,
+  val saving: Boolean = false,
+  val serverResult: ServerEdit? = null,
   val allSeries: List<SeriesSuggestion> = emptyList(),
   val initialTitle: String = title,
   val initialAuthor: String = author,

@@ -81,6 +81,8 @@
     <string name="book.edit.cover.internet">עטיפות מהאינטרנט</string>
     <string name="book.edit.part.label">חלק</string>
     <string name="book.edit.series.label">סדרה</string>
+    <string name="book.edit.server.failed">השמירה בשרת נכשלה. נסו שוב.</string>
+    <string name="book.edit.server.not_allowed">לחשבון שלכם בשרת אין הרשאה לשנות ספרים.</string>
     <string name="book.edit.title.label">כותר</string>
     <string name="book.source.device">במכשיר הזה</string>
     <string name="book.source.server_downloaded">%s · ההורדה הושלמה</string>

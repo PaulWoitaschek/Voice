@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.map
 import voice.core.audiobookshelf.download.AudiobookshelfDownloads
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.audiobookshelf.sync.AudiobookshelfSync
+import voice.core.audiobookshelf.sync.SeriesUpdate
 import voice.core.audiobookshelf.sync.ServerReachability
 import voice.core.data.BookId
 import voice.core.data.isRemote
@@ -46,6 +47,19 @@ interface ServerLibrary {
   suspend fun shouldAskForNotifications(): Boolean
 
   suspend fun onAskedForNotifications()
+
+  /** Puts a server book into another series on the server, or into none with a null [series]. */
+  suspend fun updateSeries(
+    bookId: BookId,
+    series: String?,
+    part: String?,
+  ): ServerEdit
+}
+
+enum class ServerEdit {
+  Saved,
+  NotAllowed,
+  Failed,
 }
 
 @ContributesBinding(AppScope::class)
@@ -54,6 +68,7 @@ class AudiobookshelfServerLibrary internal constructor(
   private val audiobookshelf: Audiobookshelf,
   private val audiobookshelfSync: AudiobookshelfSync,
   private val downloads: AudiobookshelfDownloads,
+  private val seriesUpdate: SeriesUpdate,
   bookRepository: BookRepository,
 ) : ServerLibrary {
 
@@ -94,4 +109,10 @@ class AudiobookshelfServerLibrary internal constructor(
   override suspend fun onAskedForNotifications() {
     downloads.onAskedForNotifications()
   }
+
+  override suspend fun updateSeries(
+    bookId: BookId,
+    series: String?,
+    part: String?,
+  ): ServerEdit = seriesUpdate.update(bookId, series, part)
 }

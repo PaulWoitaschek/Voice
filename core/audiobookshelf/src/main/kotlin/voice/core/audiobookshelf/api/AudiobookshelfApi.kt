@@ -45,6 +45,12 @@ internal interface AudiobookshelfApi {
   @POST("api/items/batch/get")
   suspend fun items(@Body request: BatchGetRequest): BatchGetResponse
 
+  @PATCH("api/items/{itemId}/media")
+  suspend fun updateMedia(
+    @Path("itemId") itemId: String,
+    @Body update: MediaUpdate,
+  ): Response<Unit>
+
   @PATCH("api/me/progress/{itemId}")
   suspend fun updateProgress(
     @Path("itemId") itemId: String,
