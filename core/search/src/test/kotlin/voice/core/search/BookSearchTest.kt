@@ -229,7 +229,7 @@ class BookSearchTest {
 
   @Test
   fun `the series and part the listener gave a book are found`() {
-    val interference = book(name = "Interference", series = "Signal", part = "1").let {
+    val interference = book(name = "Interference", author = "Sue Burke", series = "Signal", part = "1").let {
       it.copy(custom = it.custom.copy(series = "The Signal Saga", part = "2"))
     }
     test(interference) {

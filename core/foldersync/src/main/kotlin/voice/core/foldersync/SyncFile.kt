@@ -13,7 +13,7 @@ import kotlin.uuid.Uuid
 internal data class SyncFile(val books: Map<String, SyncedBook>)
 
 /**
- * Every part has its own time, so an app that doesn't know a part yet never overwrites it.
+ * Every field has its own time, so an app that doesn't know a field yet never overwrites it.
  *
  * @param deletedBookmarks when each bookmark was deleted, by its id, so another device doesn't bring it back
  */

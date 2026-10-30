@@ -8,6 +8,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerEdit
 import voice.core.audiobookshelf.ServerLibrary
+import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
@@ -65,7 +66,7 @@ class EditBookViewModel(
           bookCount = names.size,
         )
       }
-      .sortedBy { it.name.lowercase() }
+      .sortedWith(compareBy(NaturalOrderComparator.stringComparator) { it.name.lowercase() })
   }
 
   internal fun onDismiss() {

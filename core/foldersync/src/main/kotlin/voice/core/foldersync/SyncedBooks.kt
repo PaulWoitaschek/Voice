@@ -8,7 +8,7 @@ import java.time.Instant
 import kotlin.uuid.Uuid
 
 /**
- * What this device has to say about the copies of one book. A part keeps its time from [own], the entry this device
+ * What this device has to say about the copies of one book. A field keeps its time from [own], the entry this device
  * wrote last, unless it changed since.
  */
 internal fun List<Book>.toSyncedBook(
