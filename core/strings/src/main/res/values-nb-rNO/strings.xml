@@ -344,6 +344,10 @@
     <string name="review.prompt.stat.hours">Timer lyttet</string>
     <string name="review.prompt.thanks.message">Sender deg til Google Play…</string>
     <string name="review.prompt.thanks.title">Takk!</string>
+    <string name="series.continue">Fortsett å lytte</string>
+    <string name="series.continue_book">Fortsett med bok %s</string>
+    <string name="series.start">Begynn å lytte</string>
+    <string name="series.start_book">Begynn på bok %s</string>
     <string name="settings.about.app_version.title">Programversjon</string>
     <string name="settings.action.open">Innstillinger</string>
     <string name="settings.analytics_consent.description">Tillat anonym innsamling av bruksdata for å bidra til å forbedre appen</string>

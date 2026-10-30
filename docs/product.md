@@ -78,11 +78,12 @@ Listeners find the book they want in seconds and see how far along they are in e
 - **A book's title, author or cover is wrong.** Edit its title and author, or pick a cover from a file or the
   internet.
 - **Deleting a book can delete more than I meant.** Voice shows which files go and that they can't be brought back.
+- **The books of a series are scattered and out of order.** Two or more books of a series are one stack, in Current
+  once one is started. Its screen lists the books by their part and continues the right one. [#1748]
 
 **Planned**, see the [library spec](library.md)
 
-- **The books of a series aren't grouped or in order.** A series becomes one stack, its books are in order, and Voice
-  offers the next one when a book ends. [#1748]
+- **When a book of a series ends, I have to find the next one.** Voice offers the next one. [#1748]
 - **I can't put my books in the order I want.** Sort by progress, title, author or recently added. [#1543]
 - **With thousands of books, I can't go through them by author.** Sorted by author, each author is one stack. [#3946]
 - **Fixing the author means editing the files.** Edit the title, author, series and part in Voice. [#1407]

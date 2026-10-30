@@ -344,6 +344,10 @@
     <string name="review.prompt.stat.hours">Oras ascurtadas</string>
     <string name="review.prompt.thanks.message">Ti semus giughende a Google Play…</string>
     <string name="review.prompt.thanks.title">Gràtzias!</string>
+    <string name="series.continue">Sighi</string>
+    <string name="series.continue_book">Sighi su libru %s</string>
+    <string name="series.start">Incumintza</string>
+    <string name="series.start_book">Incumintza su libru %s</string>
     <string name="settings.about.app_version.title">Versione de s\'aplicatzione</string>
     <string name="settings.action.open">Impostatziones</string>
     <string name="settings.analytics_consent.description">Permite sa regorta de datos anònimos de impreu pro agiudare a megiorare s\'aplicatzione</string>

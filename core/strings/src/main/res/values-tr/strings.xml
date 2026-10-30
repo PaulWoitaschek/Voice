@@ -344,6 +344,10 @@
     <string name="review.prompt.stat.hours">Dinlenen saatler</string>
     <string name="review.prompt.thanks.message">Google Play\'e yönlendiriliyorsunuz…</string>
     <string name="review.prompt.thanks.title">Teşekkürler!</string>
+    <string name="series.continue">Devam et</string>
+    <string name="series.continue_book">Kitap %s ile devam et</string>
+    <string name="series.start">Başla</string>
+    <string name="series.start_book">Kitap %s ile başla</string>
     <string name="settings.about.app_version.title">Uygulama sürümü</string>
     <string name="settings.action.open">Ayarlar</string>
     <string name="settings.analytics_consent.description">Uygulamayı iyileştirmeye katkı sağlaması için anonim kullanım verileri toplanmasına izin ver</string>

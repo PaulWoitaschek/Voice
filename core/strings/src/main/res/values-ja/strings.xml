@@ -326,6 +326,10 @@
     <string name="review.prompt.stat.hours">聴いた時間</string>
     <string name="review.prompt.thanks.message">Google Play に移動しています…</string>
     <string name="review.prompt.thanks.title">ありがとうございます！</string>
+    <string name="series.continue">続きを聴く</string>
+    <string name="series.continue_book">第%s巻の続きを聴く</string>
+    <string name="series.start">聴き始める</string>
+    <string name="series.start_book">第%s巻を聴き始める</string>
     <string name="settings.about.app_version.title">アプリのバージョン</string>
     <string name="settings.action.open">設定</string>
     <string name="settings.analytics_consent.description">アプリ改善のため、匿名の利用状況データの収集を許可する</string>

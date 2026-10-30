@@ -380,6 +380,10 @@
     <string name="review.prompt.stat.hours">Hodiny poslechu</string>
     <string name="review.prompt.thanks.message">Přecházíme na Google Play…</string>
     <string name="review.prompt.thanks.title">Děkujeme!</string>
+    <string name="series.continue">Pokračovat</string>
+    <string name="series.continue_book">Pokračovat v knize %s</string>
+    <string name="series.start">Začít</string>
+    <string name="series.start_book">Začít knihu %s</string>
     <string name="settings.about.app_version.title">Verze aplikace</string>
     <string name="settings.action.open">Nastavení</string>
     <string name="settings.analytics_consent.description">Povolit shromažďování anonymních údajů o používání pro zlepšení aplikace</string>

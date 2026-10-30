@@ -19,6 +19,8 @@ fun book(
   narrator: String? = null,
   genre: String? = null,
   series: String? = null,
+  part: String? = null,
+  lastPlayedAt: Instant = Instant.EPOCH,
   id: BookId = BookId(Uuid.random().toString()),
 ): Book {
   return Book(
@@ -29,7 +31,7 @@ fun book(
       chapters = chapters.map { it.id },
       currentChapter = currentChapter,
       isActive = true,
-      lastPlayedAt = Instant.EPOCH,
+      lastPlayedAt = lastPlayedAt,
       skipSilence = false,
       id = id,
       gain = 0F,
@@ -41,7 +43,7 @@ fun book(
         genre = genre,
         narrator = narrator,
         series = series,
-        part = null,
+        part = part,
         cover = null,
         fileLastModified = null,
       ),

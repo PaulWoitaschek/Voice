@@ -380,6 +380,10 @@
     <string name="review.prompt.stat.hours">Hodiny počúvania</string>
     <string name="review.prompt.thanks.message">Presmerovanie na Google Play…</string>
     <string name="review.prompt.thanks.title">Ďakujeme!</string>
+    <string name="series.continue">Pokračovať</string>
+    <string name="series.continue_book">Pokračovať v knihe %s</string>
+    <string name="series.start">Začať</string>
+    <string name="series.start_book">Začať knihu %s</string>
     <string name="settings.about.app_version.title">Verzia aplikácie</string>
     <string name="settings.action.open">Nastavenia</string>
     <string name="settings.analytics_consent.description">Povoliť zber anonymných údajov o používaní s cieľom ďalej vylepšovať aplikáciu</string>

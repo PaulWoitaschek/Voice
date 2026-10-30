@@ -411,7 +411,7 @@
     </plurals>
     <!-- Header above the browse section of the library search, which lists the library by authors, series, narrators or genres. -->
     <string name="library.search.browse.title">Browse</string>
-    <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. -->
+    <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. Also below a series in the library and on the screen of a series. -->
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d book</item>
         <item quantity="other">%d books</item>
@@ -589,6 +589,14 @@
     <string name="review.prompt.thanks.message" tools:ignore="UnusedResources">Taking you to Google Play…</string>
     <!-- Title after choosing to rate Voice. -->
     <string name="review.prompt.thanks.title" tools:ignore="UnusedResources">Thank you!</string>
+    <!-- Button on the screen of a series, for a book in progress that has no number in the series. Continues listening to it. -->
+    <string name="series.continue">Continue</string>
+    <!-- Button on the screen of a series, for a book in progress. %s is its number in the series, e.g. "Continue book 2". It may also be a number like 2.5 or a word. -->
+    <string name="series.continue_book">Continue book %s</string>
+    <!-- Button on the screen of a series, for the first book not finished yet, when it has no number in the series. Starts listening to it. -->
+    <string name="series.start">Start</string>
+    <!-- Button on the screen of a series, for the first book not finished yet. %s is its number in the series, e.g. "Start book 3". It may also be a number like 2.5 or a word. -->
+    <string name="series.start_book">Start book %s</string>
     <!-- Settings about row showing the app version. -->
     <string name="settings.about.app_version.title">App version</string>
     <!-- Title and content description for opening settings. -->

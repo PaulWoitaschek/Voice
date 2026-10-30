@@ -344,6 +344,10 @@
     <string name="review.prompt.stat.hours">Kuunnellut tunnit</string>
     <string name="review.prompt.thanks.message">Siirrytään Google Playhin…</string>
     <string name="review.prompt.thanks.title">Kiitos!</string>
+    <string name="series.continue">Jatka</string>
+    <string name="series.continue_book">Jatka kirjaa %s</string>
+    <string name="series.start">Aloita</string>
+    <string name="series.start_book">Aloita kirja %s</string>
     <string name="settings.about.app_version.title">Sovelluksen versio</string>
     <string name="settings.action.open">Asetukset</string>
     <string name="settings.analytics_consent.description">Salli anonyymien käyttötietojen kerääminen sovelluksen parantamiseksi</string>

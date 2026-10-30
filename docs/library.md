@@ -29,8 +29,8 @@ it, open the [clickable prototype](https://voice.woitaschek.de/prototypes/librar
 
 ## What Voice knows today
 
-- Every book has a title, author, narrator, genre, series and part. The library only shows the title and the author,
-  and search only lists books.
+- Every book has a title, author, narrator, genre, series and part. The library shows the title and the author, and
+  two or more books of a series as one stack. Search only lists books.
 - Series and part come from Audiobookshelf, and from the tags the usual taggers and Audiobookshelf write into MP3,
   M4B, FLAC, OGG and MKA files.
 - A book of one file is named after its album. 160 episodes with the album "Die drei ???" all get that name, and their
@@ -62,28 +62,19 @@ fixing many books at once has to take a few taps.
 
 ![Sketch: series as stacks, in the list and in the grid](sketches/library-series-stacks.png)
 
-- Two or more books of a series show as one stack, in the list and in the grid. A single book of a series shows as a
-  book.
-- The stack has the series' name, its author and the cover of the book that's next. The list says how many books
-  there are, or how many are finished, and the grid counts them in a badge on the cover. The bar of a started series
-  shows how much of the whole series is listened.
-- A book in progress stands for its series. It shows on its own, with its series and part, and the other books of its
-  series don't show in the library. Two books of one series in progress are both in Current.
-- A series with no book in progress is a stack: in Not started yet before its first book, in Current between two
-  books, and in Completed after its last.
-- That's with Progress. The other orders show every series as one stack in All books, see Sorting and filtering.
-- A tap on a stack opens the series. A long press renames or hides it.
+Series stacks are in the library, see the [product spec](product.md#library). Still to come:
+
+- A long press on a stack renames or hides it.
+- The orders other than Progress show every series as one stack in All books, see Sorting and filtering.
 
 ## 2. The series
 
 ![Sketch: the series screen](sketches/series.png)
 
-- The cover stack, the name of the series, its author and how many books are finished.
-- One button continues the book in progress, or starts the first book that isn't finished.
-- Books in the order of their parts. Books without a part come after them, in the order of their folder or file names,
-  with 2 before 10. That's where most libraries keep the number, like "Book 4 - The Ruin.m4b" or "Folge 063".
+The series screen opens from a stack, see the [product spec](product.md#library). Still to come:
+
 - More options rename the series for all its books, or hide it. Picking a suggested name joins the two series.
-- Opens from a stack, from a book's series in the player and the book actions, and from search.
+- It also opens from a book's series in the player and the book actions, and from search.
 
 ## 3. The author
 
@@ -159,6 +150,7 @@ For books already in the library:
 
 - **Sort by:** Progress, Title, Author, Recently added.
 - Current is always on top, in the order it was listened in, so the books in progress are one tap away in every order.
+  A started series is a stack in it, like with Progress.
 - **Progress** is the default and the library of today: below Current come Not started yet by title and Completed
   by last listened. A series there sorts by its name or by its last listened book.
 - **Title, Author and Recently added** show the whole library below Current, in one list called All books. Every
@@ -350,8 +342,8 @@ What goes:
 - **Fewer books in Current:** it shows every book in progress, also the dozens Audiobookshelf can bring. Mark as not
   started yet and Hide clear it up.
 - **Putting books in any order by hand:** sorting and the order of a series cover what listeners describe.
-- **Sorting the whole library by file name** ([#3235]): books in a series already follow their file names, and editing
-  fixes the rest.
+- **Sorting the whole library by file name** ([#3235]): books in a series follow their parts, then their names, which
+  mostly come from their folders or files, and editing fixes the rest.
 - **Splitting a book at a chapter, or joining books from different folders:** a book stays one folder or one file, so
   its progress, bookmarks and sync keep working.
 
@@ -364,6 +356,8 @@ What goes:
 - Until every device has the update, a split series folder and the long book it was don't sync their places.
 - Two series with the same name from different authors become one, and a book in several series only shows in the
   first one.
+- Books of a series without a part follow their names, not their file names, because Voice doesn't keep the file
+  names of a book.
 - An author tag with several names gets one author screen and one stack for all of them. Names in another order, like
   "Rowling, J. K.", are joined by one rename.
 - Authors sort by their name as it's written, so "Stephen King" comes under S, not K.
@@ -382,25 +376,22 @@ Each step helps on its own.
 1. Radio plays and other episodes: each file keeps its own title, and files that share an album become a series.
 2. "Folders are authors": the folder is the author of books whose tags have none.
 3. The edit sheet with author, series and part.
-4. Series stacks in the library and the series screen.
-5. Offering the next book of a series.
-6. Series folders with "Folders are authors". It changes which files make a book, so it comes once stacks show the
-   result.
-7. The author screen.
-8. Authors and series in search, Browse opening their screen, and numbers in search.
-9. Hiding books.
-10. The sort sheet, with All books for the orders other than Progress.
-11. Author stacks when sorted by author. They open the author screen from step 7.
-12. Selecting several books.
-13. Android Auto using the library search.
-14. "Voice finds the books", as an A/B test with new listeners. It needs the series stacks from step 4 to show what it
-    found.
-15. If the test works, replacing the layouts for everyone.
+4. Offering the next book of a series.
+5. Series folders with "Folders are authors". It changes which files make a book.
+6. The author screen.
+7. Authors and series in search, Browse opening their screen, and numbers in search.
+8. Hiding books.
+9. The sort sheet, with All books for the orders other than Progress.
+10. Author stacks when sorted by author. They open the author screen from step 6.
+11. Selecting several books.
+12. Android Auto using the library search.
+13. "Voice finds the books", as an A/B test with new listeners.
+14. If the test works, replacing the layouts for everyone.
 
 ## Open questions
 
 - Should books from Audiobookshelf be editable in Voice after all?
 - Are folders enough as shelves ([#1214]), or do listeners need shelves they make in Voice?
-- Should step 6 go, since replacing the layouts splits series folders anyway, and no library changes before the test?
+- Should step 5 go, since replacing the layouts splits series folders anyway, and no library changes before the test?
 - When the layouts are replaced: should folders that look like several books be split, or keep their books with a join?
 - Do listeners with thousands of books need a fast scroller with letters, when sorted by title or author?

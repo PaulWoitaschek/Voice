@@ -29,6 +29,7 @@ import voice.core.data.folders.AudiobookFolders
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.featureflag.FeatureFlag
+import voice.core.kioskmode.DemoAudiobook
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
@@ -146,25 +147,35 @@ class BookOverviewViewModel(
       remember { mutableStateOf(null) }
     }
 
+    @Composable
+    fun Book.itemState() = itemViewState(
+      currentBookId = currentBookId,
+      livePlaybackState = { livePlaybackState.value },
+      unavailable = id in unavailableBooks,
+      download = downloadStates[id].badge(),
+    )
+
+    val entries = remember(books) { libraryEntries(books) }
+    val inProgressCount = remember(books) { books.count { it.category == BookOverviewCategory.CURRENT } }
     return BookOverviewViewState(
       layoutMode = layoutMode,
-      books = books
-        .groupBy {
-          it.category
-        }
-        .mapValues { (category, books) ->
-          books
-            .sortedWith(category.comparator)
-            .associate { book ->
-              book.id to book.itemViewState(
-                currentBookId = currentBookId,
-                livePlaybackState = { livePlaybackState.value },
-                unavailable = book.id in unavailableBooks,
-                download = downloadStates[book.id].badge(),
-              )
+      sections = entries
+        .mapValues { (_, entries) ->
+          entries.mapNotNull { entry ->
+            when (entry) {
+              // the Continue listening card shows it
+              is LibraryEntry.Single -> if (entry.book.id == currentBookId) {
+                null
+              } else {
+                LibraryItem.Book(entry.book.id, entry.book.itemState())
+              }
+              is LibraryEntry.Stack -> LibraryItem.Series(entry.series.toStackViewState())
             }
+          }
         }
-        .toSortedMap(),
+        .filterValues { it.isNotEmpty() },
+      hero = currentBookId?.let { id -> books.find { it.id == id } }?.itemState(),
+      inProgressCount = inProgressCount,
       currentBookId = currentBookId,
       playButtonState = if (playState == PlayStateManager.PlayState.Playing) {
         BookOverviewViewState.PlayButtonState.Playing
@@ -188,20 +199,13 @@ class BookOverviewViewModel(
   private fun kioskModeState(): BookOverviewViewState {
     return BookOverviewViewState(
       layoutMode = BookOverviewLayoutMode.List,
-      books = mapOf(
-        BookOverviewCategory.CURRENT to KioskModeDemoData.demoAudiobooks.associate { book ->
-          book.id to mutableStateOf(
-            BookOverviewItemViewState(
-              name = book.title,
-              author = book.author,
-              cover = book.coverUrl,
-              progress = book.progress / 100F,
-              id = book.id,
-              remainingTime = book.remaining,
-            ),
-          )
-        },
+      sections = mapOf(
+        BookOverviewCategory.CURRENT to KioskModeDemoData.demoAudiobooks
+          .filter { it.id != KioskModeDemoData.currentlyPlaying.id }
+          .map { book -> LibraryItem.Book(book.id, mutableStateOf(book.toItemViewState())) },
       ),
+      hero = mutableStateOf(KioskModeDemoData.currentlyPlaying.toItemViewState()),
+      inProgressCount = KioskModeDemoData.demoAudiobooks.size,
       currentBookId = KioskModeDemoData.currentlyPlaying.id,
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
       showEmptyLibrary = false,
@@ -229,6 +233,10 @@ class BookOverviewViewModel(
 
   fun onBookLongClick(id: BookId) {
     navigator.goTo(Destination.BookActions(id))
+  }
+
+  fun onSeriesClick(name: String) {
+    navigator.goTo(Destination.Series(name))
   }
 
   fun onBookFolderClick() {
@@ -300,6 +308,15 @@ private fun Book.itemViewState(
     }
   }
 }
+
+private fun DemoAudiobook.toItemViewState() = BookOverviewItemViewState(
+  name = title,
+  author = author,
+  cover = coverUrl,
+  progress = progress / 100F,
+  id = id,
+  remainingTime = remaining,
+)
 
 /** Distinguishes "no current book" from "not loaded yet". */
 private data class CurrentBook(val id: BookId?)

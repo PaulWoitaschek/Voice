@@ -326,6 +326,10 @@
     <string name="review.prompt.stat.hours">收听小时数</string>
     <string name="review.prompt.thanks.message">正在前往 Google Play…</string>
     <string name="review.prompt.thanks.title">谢谢！</string>
+    <string name="series.continue">继续收听</string>
+    <string name="series.continue_book">继续收听第 %s 卷</string>
+    <string name="series.start">开始收听</string>
+    <string name="series.start_book">开始收听第 %s 卷</string>
     <string name="settings.about.app_version.title">软件版本</string>
     <string name="settings.action.open">设置</string>
     <string name="settings.analytics_consent.description">允许收集匿名使用数据，以帮助改进应用</string>

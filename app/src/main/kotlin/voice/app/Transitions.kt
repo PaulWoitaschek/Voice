@@ -130,7 +130,7 @@ internal fun Scene<Destination.Compose>.destination(): Destination.Compose? {
 }
 
 /**
- * Library, search and player share the book covers, and the library's search pill grows into the search field.
+ * Library, search, series and player share the book covers, and the library's search pill grows into the search field.
  */
 internal fun isSharedElementTransition(
   initial: Destination.Compose?,
@@ -141,5 +141,8 @@ internal fun isSharedElementTransition(
 }
 
 private fun Destination.Compose.sharesElements(): Boolean {
-  return this == Destination.BookOverview || this == Destination.LibrarySearch || this is Destination.Playback
+  return this == Destination.BookOverview ||
+    this == Destination.LibrarySearch ||
+    this is Destination.Series ||
+    this is Destination.Playback
 }

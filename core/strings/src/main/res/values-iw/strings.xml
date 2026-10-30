@@ -362,6 +362,10 @@
     <string name="review.prompt.stat.hours">שעות האזנה</string>
     <string name="review.prompt.thanks.message">עוברים ל-Google Play…</string>
     <string name="review.prompt.thanks.title">תודה!</string>
+    <string name="series.continue">המשך</string>
+    <string name="series.continue_book">המשך האזנה לספר %s</string>
+    <string name="series.start">התחלה</string>
+    <string name="series.start_book">התחלת ספר %s</string>
     <string name="settings.about.app_version.title">גרסת יישום</string>
     <string name="settings.action.open">הגדרות</string>
     <string name="settings.analytics_consent.description">אפשרו איסוף נתוני שימוש אנונימיים כדי לעזור לשפר את האפליקציה</string>

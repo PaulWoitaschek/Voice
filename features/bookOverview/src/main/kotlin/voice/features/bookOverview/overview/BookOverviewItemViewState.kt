@@ -16,6 +16,7 @@ data class BookOverviewItemViewState(
   val progress: Float,
   val id: BookId,
   val remainingTime: String,
+  val series: String? = null,
   /** A server book that isn't downloaded while the server can't be reached. */
   val unavailable: Boolean = false,
   val download: DownloadBadge? = null,
@@ -47,6 +48,7 @@ internal fun Book.toItemViewState(
   id = id,
   progress = progress(),
   remainingTime = formatTime(duration - position),
+  series = seriesLine,
   unavailable = unavailable,
   download = download,
 )

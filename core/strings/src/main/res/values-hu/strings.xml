@@ -344,6 +344,10 @@
     <string name="review.prompt.stat.hours">Meghallgatott órák</string>
     <string name="review.prompt.thanks.message">Átirányítás a Google Playre…</string>
     <string name="review.prompt.thanks.title">Köszönjük!</string>
+    <string name="series.continue">Folytatás</string>
+    <string name="series.continue_book">%s. könyv folytatása</string>
+    <string name="series.start">Kezdés</string>
+    <string name="series.start_book">%s. könyv elkezdése</string>
     <string name="settings.about.app_version.title">Alkalmazásverzió</string>
     <string name="settings.action.open">Beállítások</string>
     <string name="settings.analytics_consent.description">Névtelen használati adatok gyűjtésének engedélyezése az alkalmazás fejlesztéséhez</string>

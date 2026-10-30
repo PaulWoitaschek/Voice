@@ -344,6 +344,10 @@
     <string name="review.prompt.stat.hours">Uren geluisterd</string>
     <string name="review.prompt.thanks.message">Je gaat naar Google Play…</string>
     <string name="review.prompt.thanks.title">Bedankt!</string>
+    <string name="series.continue">Verder luisteren</string>
+    <string name="series.continue_book">Verder met boek %s</string>
+    <string name="series.start">Beginnen</string>
+    <string name="series.start_book">Beginnen aan boek %s</string>
     <string name="settings.about.app_version.title">Appversie</string>
     <string name="settings.action.open">Instellingen</string>
     <string name="settings.analytics_consent.description">Anonieme gebruiksgegevens verzamelen toestaan om de app te verbeteren</string>

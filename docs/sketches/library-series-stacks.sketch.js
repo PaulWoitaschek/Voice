@@ -62,7 +62,7 @@ const { x, y } = p;
 topBar(x, y);
 
 text(x + 20, y + 134, 'Good evening', { size: 28 });
-text(x + 20, y + 160, '3 books in progress', { size: 14, fill: GREY });
+text(x + 20, y + 160, '2 books in progress', { size: 14, fill: GREY });
 
 roundRect(x + 16, y + 180, 328, 176, 32);
 image(x + 36, y + 200, 88, 88, 14);
@@ -78,7 +78,7 @@ circle(x + 308, y + 320, 56, HATCH);
 icon.play(x + 310, y + 320, 10);
 
 header(x + 20, y + 400, 'Current', 2);
-listRow(x, y + 414, { title: 'Stars over Ashford', author: 'Daniel Hartwell', progress: 0.5, caption: '1 of 2 finished', stacked: true });
+listRow(x, y + 414, { title: 'The Signal Saga', author: 'Daniel Hartwell', progress: 0.4, caption: '1 of 4 finished', stacked: true });
 listRow(x, y + 500, { title: 'Beyond the Horizon', author: 'Alexander Reeves', progress: 0.3, caption: '7:26:05 left' });
 
 header(x + 20, y + 626, 'Not started yet', 12);
@@ -87,8 +87,8 @@ listRow(x, y + 642, { title: 'Maple Street Mysteries', author: 'Lena Morgan', ca
 note(20, y + 190, ['Continue listening', 'shows the book,', 'with its series', 'and part.']);
 arrow([[200, y + 300], [250, y + 300], [x + 10, y + 270]]);
 
-note(20, y + 410, ['A started series is', 'in Current, also', 'between two books.']);
-arrow([[200, y + 480], [250, y + 470], [x + 22, y + 456]]);
+note(20, y + 410, ['A started series', 'stays one stack,', 'also with the', 'book you continue.']);
+arrow([[190, y + 440], [250, y + 446], [x + 22, y + 456]]);
 
 note(20, y + 650, ['Any other series', 'is one stack.']);
 arrow([[200, y + 690], [250, y + 700], [x + 22, y + 684]]);
@@ -99,7 +99,7 @@ topBar(gx, y);
 
 header(gx + 20, y + 136, 'Current', 2);
 gridTile(gx + 22, y + 152, { title: 'Beyond the Horizon', author: 'Alexander Reeves', progress: 0.3 });
-const started = gridTile(gx + 190, y + 152, { title: 'Stars over Ashford', author: 'Daniel Hartwell', progress: 0.5, count: 2 });
+const started = gridTile(gx + 190, y + 152, { title: 'The Signal Saga', author: 'Daniel Hartwell', progress: 0.4, count: 4 });
 
 header(gx + 20, y + 418, 'Not started yet', 12);
 gridTile(gx + 22, y + 434, { title: 'Maple Street Mysteries', author: 'Lena Morgan', count: 5 });

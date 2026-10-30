@@ -110,12 +110,11 @@ class BookOverviewViewModelTest {
     }.test {
       assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
       val initial = awaitItem()
-      val initialCurrentItem = initial.currentBook(currentBook.id)
-      val initialOtherItem = initial.currentBook(otherBook.id)
-      val initialKeys = initial.books.getValue(BookOverviewCategory.CURRENT).keys.toList()
+      val initialOtherItem = initial.book(otherBook.id)
 
-      assertEquals(expected = currentBook.toItemViewState(), actual = initialCurrentItem)
+      assertEquals(expected = currentBook.toItemViewState(), actual = initial.hero?.value)
       assertEquals(expected = otherBook.toItemViewState(), actual = initialOtherItem)
+      assertEquals(expected = listOf(otherBook.id.value), actual = initial.keys(BookOverviewCategory.CURRENT))
       assertEquals(expected = currentBook.id, actual = initial.currentBookId)
 
       val livePlaybackState = LivePlaybackState(
@@ -128,9 +127,8 @@ class BookOverviewViewModelTest {
       livePlaybackFlow.value = livePlaybackState
       yield()
 
-      assertEquals(expected = initialKeys, actual = initial.books.getValue(BookOverviewCategory.CURRENT).keys.toList())
-      assertEquals(expected = currentBook.overlay(livePlaybackState).toItemViewState(), actual = initial.currentBook(currentBook.id))
-      assertEquals(expected = initialOtherItem, actual = initial.currentBook(otherBook.id))
+      assertEquals(expected = currentBook.overlay(livePlaybackState).toItemViewState(), actual = initial.hero?.value)
+      assertEquals(expected = initialOtherItem, actual = initial.book(otherBook.id))
       expectNoEvents()
     }
   }
@@ -173,14 +171,46 @@ class BookOverviewViewModelTest {
     }.test {
       val state = awaitItem()
       assertEquals(
-        expected = KioskModeDemoData.demoAudiobooks.map {
-          it.id
-        },
-        actual = state.books.getValue(BookOverviewCategory.CURRENT).keys.toList(),
+        expected = KioskModeDemoData.demoAudiobooks.map { it.id.value } - KioskModeDemoData.currentlyPlaying.id.value,
+        actual = state.keys(BookOverviewCategory.CURRENT),
       )
-      assertEquals(expected = "Echoes of Tomorrow", actual = state.currentBook(KioskModeDemoData.currentlyPlaying.id).name)
+      assertEquals(expected = "Echoes of Tomorrow", actual = state.hero?.value?.name)
       assertEquals(expected = KioskModeDemoData.currentlyPlaying.id, actual = state.currentBookId)
       assertEquals(expected = false, actual = state.showFolderAccessBadge)
+    }
+  }
+
+  @Test
+  fun `the books of a series are one stack, which keeps the book that is continued`() = runTest {
+    val first = book(name = "First", series = "Saga", part = "1", time = 20_000, lastPlayedAt = java.time.Instant.ofEpochSecond(1))
+    val second = book(name = "Second", series = "Saga", part = "2", time = 1_000, lastPlayedAt = java.time.Instant.ofEpochSecond(3))
+    val single = book(name = "Single", time = 1_000, lastPlayedAt = java.time.Instant.ofEpochSecond(2))
+    val viewModel = viewModel(books = listOf(first, second, single), currentBookId = second.id)
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      val state = awaitItem()
+      assertEquals(expected = "Second", actual = state.hero?.value?.name)
+      assertEquals(expected = "Saga 2", actual = state.hero?.value?.series)
+      assertEquals(expected = listOf("series:saga", single.id.value), actual = state.keys(BookOverviewCategory.CURRENT))
+      val stack = state.sections.getValue(BookOverviewCategory.CURRENT).first() as LibraryItem.Series
+      assertEquals(expected = 2, actual = stack.series.bookCount)
+      assertEquals(expected = 1, actual = stack.series.finishedCount)
+      assertEquals(expected = 2, actual = state.inProgressCount)
+    }
+  }
+
+  @Test
+  fun `a stack opens its series`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel = viewModel(navigator = navigator)
+
+    viewModel.onSeriesClick("Saga")
+
+    verify {
+      navigator.goTo(Destination.Series("Saga"))
     }
   }
 
@@ -458,8 +488,12 @@ class BookOverviewViewModelTest {
     }
   }
 
-  private fun BookOverviewViewState.currentBook(bookId: BookId): BookOverviewItemViewState {
-    return books.getValue(BookOverviewCategory.CURRENT).getValue(bookId).value
+  private fun BookOverviewViewState.book(bookId: BookId): BookOverviewItemViewState {
+    return sections.values.flatten().filterIsInstance<LibraryItem.Book>().single { it.id == bookId }.state.value
+  }
+
+  private fun BookOverviewViewState.keys(category: BookOverviewCategory): List<String> {
+    return sections.getValue(category).map { it.key }
   }
 
   private fun viewModel(

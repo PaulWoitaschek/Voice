@@ -42,6 +42,7 @@ import voice.core.ui.rememberEntranceState
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
+import voice.features.bookOverview.overview.LibraryItem
 import java.util.Calendar
 
 /**
@@ -54,6 +55,7 @@ internal fun Library(
   gridState: LazyGridState,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
+  onSeriesClick: (String) -> Unit,
   onPlayClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
   onSurveyClick: () -> Unit,
@@ -69,9 +71,7 @@ internal fun Library(
   val entrance = rememberEntranceState(animate = !entered)
   LaunchedEffect(Unit) { entered = true }
   val grid = viewState.layoutMode == BookOverviewLayoutMode.Grid
-  val heroId = viewState.currentBookId
-  val hero = heroId?.let { id -> viewState.books.values.firstNotNullOfOrNull { it[id] } }
-  val inProgressCount = viewState.books[BookOverviewCategory.CURRENT].orEmpty().size
+  val hero = viewState.hero
 
   CenteredContent(modifier = modifier) { centeredPadding ->
     val horizontalPadding = if (grid) 16.dp else centeredPadding
@@ -103,7 +103,7 @@ internal fun Library(
       val greetingIndex = entranceIndex()
       item(key = "greeting", span = { GridItemSpan(maxLineSpan) }, contentType = "greeting") {
         LibraryGreeting(
-          inProgressCount = inProgressCount,
+          inProgressCount = viewState.inProgressCount,
           modifier = Modifier
             .entrance(entrance, greetingIndex)
             .padding(top = 16.dp, bottom = 20.dp, start = 4.dp),
@@ -141,52 +141,70 @@ internal fun Library(
         }
       }
       BookOverviewCategory.entries.forEach { category ->
-        val books = viewState.books[category].orEmpty().filterKeys { it != heroId }.toList()
-        if (books.isEmpty()) return@forEach
+        val items = viewState.sections[category].orEmpty()
+        if (items.isEmpty()) return@forEach
         val finished = category == BookOverviewCategory.FINISHED
         val headerIndex = entranceIndex()
         item(key = category, span = { GridItemSpan(maxLineSpan) }, contentType = "header") {
           Header(
             category = category,
-            count = books.size,
+            count = items.size,
             modifier = Modifier
               .entrance(entrance, headerIndex)
               .padding(top = 32.dp, bottom = 12.dp, start = 4.dp),
           )
         }
-        val bookIndexes = books.map { entranceIndex() }
+        val itemIndexes = items.map { entranceIndex() }
         if (grid) {
           itemsIndexed(
-            items = books,
-            key = { _, (bookId, _) -> bookId.value },
-            contentType = { _, _ -> "gridBook" },
-          ) { index, (_, book) ->
-            GridBook(
-              book = book.value,
-              onBookClick = onBookClick,
-              onBookLongClick = onBookLongClick,
-              finished = finished,
-              modifier = Modifier
-                .entrance(entrance, bookIndexes[index])
-                .padding(bottom = 8.dp),
-            )
+            items = items,
+            key = { _, item -> item.key },
+            contentType = { _, item -> if (item is LibraryItem.Series) "gridSeries" else "gridBook" },
+          ) { index, item ->
+            val itemModifier = Modifier
+              .entrance(entrance, itemIndexes[index])
+              .padding(bottom = 8.dp)
+            when (item) {
+              is LibraryItem.Book -> GridBook(
+                book = item.state.value,
+                onBookClick = onBookClick,
+                onBookLongClick = onBookLongClick,
+                finished = finished,
+                modifier = itemModifier,
+              )
+              is LibraryItem.Series -> GridSeries(
+                series = item.series,
+                onClick = { onSeriesClick(item.series.name) },
+                modifier = itemModifier,
+              )
+            }
           }
         } else {
           itemsIndexed(
-            items = books,
-            key = { _, (bookId, _) -> bookId.value },
-            contentType = { _, _ -> "listBook" },
-          ) { index, (_, book) ->
-            ListBookRow(
-              book = book.value,
-              onBookClick = onBookClick,
-              onBookLongClick = onBookLongClick,
-              finished = finished,
-              shape = segmentedShape(index, books.size),
-              modifier = Modifier
-                .entrance(entrance, bookIndexes[index])
-                .padding(bottom = 2.dp),
-            )
+            items = items,
+            key = { _, item -> item.key },
+            contentType = { _, item -> if (item is LibraryItem.Series) "listSeries" else "listBook" },
+          ) { index, item ->
+            val shape = segmentedShape(index, items.size)
+            val itemModifier = Modifier
+              .entrance(entrance, itemIndexes[index])
+              .padding(bottom = 2.dp)
+            when (item) {
+              is LibraryItem.Book -> ListBookRow(
+                book = item.state.value,
+                onBookClick = onBookClick,
+                onBookLongClick = onBookLongClick,
+                finished = finished,
+                shape = shape,
+                modifier = itemModifier,
+              )
+              is LibraryItem.Series -> ListSeriesRow(
+                series = item.series,
+                onClick = { onSeriesClick(item.series.name) },
+                shape = shape,
+                modifier = itemModifier,
+              )
+            }
           }
         }
       }

@@ -344,6 +344,10 @@
     <string name="review.prompt.stat.hours">Kuulatud tunnid</string>
     <string name="review.prompt.thanks.message">Suuname sind Google Playsse…</string>
     <string name="review.prompt.thanks.title">Aitäh!</string>
+    <string name="series.continue">Jätka</string>
+    <string name="series.continue_book">Jätka raamatut %s</string>
+    <string name="series.start">Alusta</string>
+    <string name="series.start_book">Alusta raamatut %s</string>
     <string name="settings.about.app_version.title">Rakenduse versioon</string>
     <string name="settings.action.open">Seaded</string>
     <string name="settings.analytics_consent.description">Luba anonüümsete kasutusandmete kogumine, et aidata rakendust paremaks muuta</string>
