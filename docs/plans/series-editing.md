@@ -17,7 +17,7 @@ To start the next step: "Read `docs/plans/series-editing.md` and build PR N."
 |----|------|--------|
 | 1 | Edit series and part of books on the device | In review: [#4081](https://github.com/PaulWoitaschek/Voice/pull/4081), branch `edit-book-series` |
 | 2 | Suggest series the library already has | In review: [#4082](https://github.com/PaulWoitaschek/Voice/pull/4082), branch `series-suggestions` |
-| 3 | Sync series and part through `.voice` | Open |
+| 3 | Sync series and part through `.voice` | In review, branch `sync-series` |
 | 4 | Write the series of Audiobookshelf books to the server | Open |
 
 The pull requests are stacked: each branches off the one before and targets its branch, so each diff shows one step.
@@ -61,6 +61,9 @@ All in `:core:foldersync`, the same as the author in #4053.
 - `FolderSync.takeOver()`: `updateCustomMetadata { it.copy(series = …) }` and the same for `part`.
 - Tests: `SyncedBooksTest`, `FolderSyncTest` (the author tests are the template), `LibraryFiles.book(…)` gets
   `series` and `part`. Update `website/src/pages/faq.md` where it lists what syncs.
+- Done differently: `takeOver()` uses one small helper for the four edited texts instead of a block each. The FAQ
+  still lists titles and authors, since listeners can't edit the series before the flag goes away. Whoever removes
+  the flag adds the series there.
 
 ## 4. Write the series of Audiobookshelf books to the server
 

@@ -30,6 +30,8 @@ internal fun List<Book>.toSyncedBook(
     place = played.content.place(),
     name = syncedText(played.custom.name, files.name, own?.name, ownFileExists, now),
     author = syncedText(played.custom.author, files.author, own?.author, ownFileExists, now),
+    series = syncedText(played.custom.series, files.series, own?.series, ownFileExists, now),
+    part = syncedText(played.custom.part, files.part, own?.part, ownFileExists, now),
     bookmarks = localBookmarks,
     deletedBookmarks = own?.deletedBookmarks.orEmpty() - localBookmarks.keys + deletedNow,
   )
@@ -41,6 +43,8 @@ internal fun SyncedBook.withoutFilesNames(copies: List<Book>): SyncedBook {
   return copy(
     name = name?.takeUnless { it.isFrom(files.name) },
     author = author?.takeUnless { it.isFrom(files.author) },
+    series = series?.takeUnless { it.isFrom(files.series) },
+    part = part?.takeUnless { it.isFrom(files.part) },
   )
 }
 
@@ -103,6 +107,8 @@ internal fun SyncedBook.with(other: SyncedBook): SyncedBook {
     place = newer(place, other.place) { it.playedAt },
     name = newer(name, other.name) { it.changedAt },
     author = newer(author, other.author) { it.changedAt },
+    series = newer(series, other.series) { it.changedAt },
+    part = newer(part, other.part) { it.changedAt },
     bookmarks = bookmarks - newerBookmarks + other.bookmarks.filterKeys { it in newerBookmarks },
     deletedBookmarks = deletedBookmarks - newerBookmarks + other.deletedBookmarks.filterKeys { it in newerBookmarks },
   )

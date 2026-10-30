@@ -22,6 +22,8 @@ internal data class SyncedBook(
   val place: SyncedPlace? = null,
   val name: SyncedText? = null,
   val author: SyncedText? = null,
+  val series: SyncedText? = null,
+  val part: SyncedText? = null,
   val bookmarks: Map<Uuid, SyncedBookmark> = emptyMap(),
   val deletedBookmarks: Map<Uuid, Long> = emptyMap(),
 )
