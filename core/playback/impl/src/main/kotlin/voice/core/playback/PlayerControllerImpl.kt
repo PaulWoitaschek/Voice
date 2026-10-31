@@ -13,7 +13,6 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
@@ -60,24 +59,12 @@ class PlayerControllerImpl(
   private val historyRecorder: ListeningHistoryRecorder,
 ) : PlayerController {
 
-  private var _controller: Deferred<MediaController> = newControllerAsync()
-
-  private fun newControllerAsync() = MediaController
-    .Builder(context, SessionToken(context, ComponentName(context, PlaybackService::class.java)))
-    .buildAsync()
-    .asDeferred()
-
-  private val controller: Deferred<MediaController>
-    get() {
-      if (_controller.isCompleted) {
-        val completedController = _controller.getCompleted()
-        if (!completedController.isConnected) {
-          completedController.release()
-          _controller = newControllerAsync()
-        }
-      }
-      return _controller
-    }
+  private val connection = MediaControllerConnection {
+    MediaController
+      .Builder(context, SessionToken(context, ComponentName(context, PlaybackService::class.java)))
+      .buildAsync()
+      .asDeferred()
+  }
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
   override fun setPosition(
@@ -329,7 +316,7 @@ class PlayerControllerImpl(
   @IgnorableReturnValue
   internal suspend fun awaitConnect(): MediaController? {
     return try {
-      controller.await()
+      connection.get().await()
     } catch (e: Exception) {
       if (e is CancellationException) currentCoroutineContext().ensureActive()
       Logger.w(e, "Error while connecting to media controller")
