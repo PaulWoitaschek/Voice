@@ -11,7 +11,6 @@ import voice.core.audiobookshelf.ServerEdit
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.BookId
-import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.BottomSheetItemViewModel
@@ -21,7 +20,6 @@ import voice.features.bookOverview.di.BookActionsScope
 @ContributesIntoSet(BookActionsScope::class)
 class EditBookViewModel(
   private val repo: BookRepository,
-  private val editSeriesFeatureFlag: EditSeriesFeatureFlag,
   private val serverLibrary: ServerLibrary,
 ) : BottomSheetItemViewModel {
 
@@ -30,11 +28,7 @@ class EditBookViewModel(
   private val _state = mutableStateOf<EditBookState?>(null)
   internal val state: State<EditBookState?> get() = _state
 
-  override suspend fun items(bookId: BookId): List<BottomSheetItem> {
-    // edits of server books are saved on the server, which is new and waits for the flag
-    if (bookId.isRemote && !editSeriesFeatureFlag.get()) return emptyList()
-    return listOf(BottomSheetItem.Edit)
-  }
+  override suspend fun items(bookId: BookId): List<BottomSheetItem> = listOf(BottomSheetItem.Edit)
 
   override suspend fun onItemClick(
     bookId: BookId,
@@ -42,7 +36,6 @@ class EditBookViewModel(
   ) {
     if (item != BottomSheetItem.Edit) return
     val book = repo.get(bookId) ?: return
-    val showSeries = editSeriesFeatureFlag.get()
     _state.value = EditBookState(
       title = book.name,
       author = book.author.orEmpty(),
@@ -50,8 +43,7 @@ class EditBookViewModel(
       cover = book.coverUrl,
       series = book.series.orEmpty(),
       part = book.part.orEmpty(),
-      showSeries = showSeries,
-      allSeries = if (showSeries) seriesOfOtherBooks(bookId) else emptyList(),
+      allSeries = seriesOfOtherBooks(bookId),
     )
   }
 
