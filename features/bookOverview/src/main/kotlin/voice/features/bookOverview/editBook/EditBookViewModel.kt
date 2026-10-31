@@ -51,7 +51,6 @@ class EditBookViewModel(
       series = book.series.orEmpty(),
       part = book.part.orEmpty(),
       showSeries = showSeries,
-      remote = bookId.isRemote,
       allSeries = if (showSeries) seriesOfOtherBooks(bookId) else emptyList(),
     )
   }

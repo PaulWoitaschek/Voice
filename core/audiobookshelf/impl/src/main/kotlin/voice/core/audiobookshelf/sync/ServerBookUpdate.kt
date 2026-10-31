@@ -38,7 +38,9 @@ internal class ServerBookUpdate(
     val authors = edit.author?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
     return try {
       val api = http.authenticatedApi(account.serverUrl)
-      val series = edit.series?.let { series(api, itemId, bookId, name = it, part = edit.part.orEmpty()) }
+      val series = edit.series?.let {
+        series(api, itemId, bookId, name = it, part = edit.part.orEmpty()) ?: return ServerEdit.Failed
+      }
       val response = api.updateMedia(itemId, MediaUpdate(MetadataUpdate(title, authors?.map(::AbsAuthor), series)))
       when {
         response.isSuccessful -> {
@@ -77,14 +79,15 @@ internal class ServerBookUpdate(
     bookId: BookId,
     name: String,
     part: String,
-  ): List<AbsSeries> {
+  ): List<AbsSeries>? {
     val trimmed = name.trim().takeIf { it.isNotEmpty() }
     val edited = trimmed?.let { AbsSeries(it, sequence = part.trim().takeIf(String::isNotEmpty)) }
     // Voice shows only one series, and the server would drop the others if they were left out
-    val current = api.items(BatchGetRequest(listOf(itemId))).libraryItems.singleOrNull()
-      ?.media?.metadata?.series.orEmpty()
-    // with none shown, a series the server got since the last sync isn't the listener's to replace
-    val replaced = bookRepository.get(bookId)?.content?.metadata?.series?.let(current::shown)
+    val item = api.items(BatchGetRequest(listOf(itemId))).libraryItems.singleOrNull() ?: return null
+    val current = item.media.metadata.series.orEmpty()
+    // only the series the listener saw is theirs to replace, not one the server got since the last sync
+    val shown = bookRepository.get(bookId)?.content?.metadata?.series
+    val replaced = current.firstOrNull { it.name.equals(shown, ignoreCase = true) }
     val others = current.filter { it != replaced && !it.name.equals(trimmed, ignoreCase = true) }
     return listOfNotNull(edited) + others
   }
