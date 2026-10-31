@@ -7,6 +7,8 @@ import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -60,6 +62,8 @@ class VoicePlayer(
 ) : ForwardingPlayer(player) {
 
   private var skipSilence = false
+
+  private var detailsJob: Job? = null
 
   private val endOfChapterSleepTimerListener = object : Player.Listener {
     override fun onMediaItemTransition(
@@ -362,6 +366,10 @@ class VoicePlayer(
             startItemIndex = currentPlaybackItem.index,
             positionInItemMs = currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
           )
+          detailsJob?.cancel()
+          detailsJob = scope.launch {
+            repo.flow(book.id).filterNotNull().collect { player.updateDetails(it) }
+          }
         }
       } else {
         Logger.w("Unexpected media id type ${mediaId::class.simpleName}")

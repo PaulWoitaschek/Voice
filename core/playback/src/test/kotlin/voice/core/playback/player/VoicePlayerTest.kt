@@ -18,6 +18,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verifyOrder
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -113,6 +114,7 @@ class VoicePlayerTest {
     player = chapterMarkPlayer,
     repo = mockk {
       coEvery { get(bookId) } answers { currentBook }
+      every { flow(bookId) } returns emptyFlow()
       coEvery { updateBook(bookId, any()) } answers {
         currentBook = currentBook.update(secondArg<(BookContent) -> BookContent>())
       }

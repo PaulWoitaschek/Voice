@@ -117,6 +117,19 @@ class ChapterMarkPlayer(
     invalidateState()
   }
 
+  /**
+   * A new cover is saved under a new name and the old file is deleted. Cars load the cover from the uri of the
+   * loaded chapters, so without this they would show none until the book is loaded again.
+   */
+  internal fun updateDetails(book: Book) {
+    val current = this.book ?: return
+    if (current.id != book.id || (current.cover == book.cover && current.author == book.author)) return
+    val updated = current.copy(content = current.content.copy(metadata = book.content.metadata), custom = book.custom)
+    val playlist = applyBook(updated)
+    registerBoundaryMessages(playlist)
+    invalidateState()
+  }
+
   fun setSkipSilenceEnabled(enabled: Boolean) {
     player.skipSilenceEnabled = enabled
   }

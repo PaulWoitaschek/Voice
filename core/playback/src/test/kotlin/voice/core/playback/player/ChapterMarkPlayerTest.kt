@@ -1,5 +1,6 @@
 package voice.core.playback.player
 
+import android.net.Uri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.test.utils.FakeMediaSource
@@ -19,6 +20,7 @@ import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
 import voice.core.playback.session.toMediaIdOrNull
+import java.io.File
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
@@ -58,7 +60,15 @@ class ChapterMarkPlayerTest {
     )
     .build()
 
-  private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk())
+  private val mediaItemProvider = MediaItemProvider(
+    bookRepository = mockk(),
+    application = mockk(),
+    chapterRepo = mockk(),
+    imageFileProvider = mockk {
+      every { uri(any()) } answers { Uri.fromFile(firstArg()) }
+    },
+    currentBookStoreId = mockk(),
+  )
   private val player = ChapterMarkPlayer(exoPlayer, mediaItemProvider)
 
   @Test
@@ -190,6 +200,17 @@ class ChapterMarkPlayerTest {
     assertEquals(expected = 9_999, actual = player.mediaMetadata.durationMs)
     assertEquals(expected = 8_000, actual = player.currentPosition)
     assertEquals(expected = 13_000, actual = exoPlayer.currentPosition)
+  }
+
+  @Test
+  fun `points at a new cover of the loaded book`() {
+    setBook(listOf(singleFileWithThreeMarks()))
+    val cover = File("new-cover.webp")
+
+    player.updateDetails(book.copy(custom = book.custom.copy(cover = cover)))
+
+    assertEquals(expected = Uri.fromFile(cover), actual = player.mediaMetadata.artworkUri)
+    assertEquals(expected = Uri.fromFile(cover), actual = player.getMediaItemAt(2).mediaMetadata.artworkUri)
   }
 
   @Test
