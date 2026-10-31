@@ -53,6 +53,8 @@ import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
+import voice.features.bookOverview.overview.LibraryItem
+import voice.features.bookOverview.overview.SeriesStackViewState
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import kotlin.uuid.Uuid
@@ -89,6 +91,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onSettingsClick = bookOverviewViewModel::onSettingsClick,
     onBookClick = bookOverviewViewModel::onBookClick,
     onBookLongClick = bookOverviewViewModel::onBookLongClick,
+    onSeriesClick = bookOverviewViewModel::onSeriesClick,
     onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
     onFolderPickerMovedDialogDismiss = bookOverviewViewModel::onFolderPickerMovedDialogDismiss,
     onPlayButtonClick = bookOverviewViewModel::playPause,
@@ -107,6 +110,7 @@ internal fun BookOverview(
   onSettingsClick: () -> Unit,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
+  onSeriesClick: (String) -> Unit,
   onBookFolderClick: () -> Unit,
   onFolderPickerMovedDialogDismiss: () -> Unit,
   onPlayButtonClick: () -> Unit,
@@ -155,6 +159,7 @@ internal fun BookOverview(
       gridState = gridState,
       onBookClick = onBookClick,
       onBookLongClick = onBookLongClick,
+      onSeriesClick = onSeriesClick,
       onPlayClick = onPlayButtonClick,
       onPermissionBugCardClick = onPermissionBugCardClick,
       onSurveyClick = onSurveyClick,
@@ -231,6 +236,7 @@ fun BookOverviewPreview(
       onSettingsClick = {},
       onBookClick = {},
       onBookLongClick = {},
+      onSeriesClick = {},
       onBookFolderClick = {},
       onFolderPickerMovedDialogDismiss = {},
       onPlayButtonClick = {},
@@ -258,24 +264,34 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
 
   private val library = BookOverviewViewState(
     currentBookId = null,
-    books = mapOf(
-      BookOverviewCategory.CURRENT to buildMap {
-        repeat(10) {
-          put(
-            BookId(Uuid.random().toString()),
-            mutableStateOf(book()),
-          )
+    sections = mapOf(
+      BookOverviewCategory.CURRENT to buildList {
+        add(
+          LibraryItem.Series(
+            SeriesStackViewState(
+              key = "signalsaga",
+              name = "The Signal Saga",
+              author = "Author",
+              covers = listOf(null, null, null),
+              bookCount = 4,
+              finishedCount = 1,
+              progress = 0.4F,
+              category = BookOverviewCategory.CURRENT,
+            ),
+          ),
+        )
+        repeat(9) {
+          val book = book()
+          add(LibraryItem.Book(book.id, mutableStateOf(book)))
         }
       },
-      BookOverviewCategory.FINISHED to buildMap {
-        repeat(2) {
-          put(
-            BookId(Uuid.random().toString()),
-            mutableStateOf(book()),
-          )
-        }
+      BookOverviewCategory.FINISHED to List(2) {
+        val book = book()
+        LibraryItem.Book(book.id, mutableStateOf(book))
       },
     ),
+    hero = mutableStateOf(book().copy(series = "The Signal Saga 2")),
+    inProgressCount = 10,
     layoutMode = BookOverviewLayoutMode.List,
     playButtonState = BookOverviewViewState.PlayButtonState.Paused,
     showEmptyLibrary = false,

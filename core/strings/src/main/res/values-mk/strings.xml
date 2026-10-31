@@ -348,6 +348,10 @@
     <string name="review.prompt.stat.hours">Слушани часови</string>
     <string name="review.prompt.thanks.message">Ве носиме на Google Play…</string>
     <string name="review.prompt.thanks.title">Ви благодариме!</string>
+    <string name="series.continue">Продолжи</string>
+    <string name="series.continue_book">Продолжи со книга %s</string>
+    <string name="series.start">Почни</string>
+    <string name="series.start_book">Почни со книга %s</string>
     <string name="settings.about.app_version.title">Верзија на апликацијата</string>
     <string name="settings.action.open">Поставки</string>
     <string name="settings.analytics_consent.description">Дозволете анонимно собирање податоци за користење за да се подобри апликацијата</string>

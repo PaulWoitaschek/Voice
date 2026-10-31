@@ -39,6 +39,7 @@ import voice.core.ui.CoverColorsStore
 import voice.core.ui.CoverSeedColors
 import voice.core.ui.LocalCoverSeedColors
 import voice.core.ui.LocalSharedTransitionScope
+import voice.core.ui.LocalSharesCovers
 import voice.core.ui.LocalSplashScreenHolds
 import voice.core.ui.PureBlackStore
 import voice.core.ui.SplashScreenHolds
@@ -137,6 +138,7 @@ class MainActivity : AppCompatActivity() {
         SharedTransitionLayout {
           CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
+            LocalSharesCovers provides ::sharesCovers,
             LocalCoverSeedColors provides coverSeedColors.takeIf { coverColors },
             LocalSplashScreenHolds provides splashScreenHolds,
           ) {

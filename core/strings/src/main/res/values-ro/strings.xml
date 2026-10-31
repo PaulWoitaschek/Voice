@@ -366,6 +366,10 @@
     <string name="review.prompt.stat.hours">Ore ascultate</string>
     <string name="review.prompt.thanks.message">Te ducem la Google Play…</string>
     <string name="review.prompt.thanks.title">Mulțumim!</string>
+    <string name="series.continue">Continuă</string>
+    <string name="series.continue_book">Continuă cartea %s</string>
+    <string name="series.start">Începe</string>
+    <string name="series.start_book">Începe cartea %s</string>
     <string name="settings.about.app_version.title">Versiune aplicație</string>
     <string name="settings.action.open">Setări</string>
     <string name="settings.analytics_consent.description">Permite colectarea de date anonime de utilizare pentru a îmbunătăți aplicația</string>

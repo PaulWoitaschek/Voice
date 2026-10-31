@@ -348,6 +348,10 @@
     <string name="review.prompt.stat.hours">கேட்ட மணிநேரங்கள்</string>
     <string name="review.prompt.thanks.message">Google Play-க்குச் செல்கிறது…</string>
     <string name="review.prompt.thanks.title">நன்றி!</string>
+    <string name="series.continue">தொடர்க</string>
+    <string name="series.continue_book">புத்தகம் %s-ஐத் தொடர்க</string>
+    <string name="series.start">தொடங்கு</string>
+    <string name="series.start_book">புத்தகம் %s-ஐத் தொடங்கு</string>
     <string name="settings.about.app_version.title">பயன்பாட்டு பதிப்பு</string>
     <string name="settings.action.open">அமைப்புகள்</string>
     <string name="settings.analytics_consent.description">பயன்பாட்டை மேம்படுத்த உதவ அநாமதேய பயன்பாட்டுத் தரவு சேகரிப்பை அனுமதி</string>

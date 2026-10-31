@@ -19,7 +19,6 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
-import voice.core.featureflag.MemoryFeatureFlag
 import voice.features.bookOverview.book
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import kotlin.test.AfterTest
@@ -41,11 +40,10 @@ class EditBookViewModelTest {
     coEvery { all() } returns listOf(book)
     coEvery { updateCustomMetadata(book.id, capture(update)) } returns Unit
   }
-  private val editSeriesFeatureFlag = MemoryFeatureFlag(true)
   private val serverLibrary = mockk<ServerLibrary> {
     coEvery { updateBook(any(), any()) } returns ServerEdit.Saved
   }
-  private val viewModel = EditBookViewModel(repo, EditSeriesFeatureFlag(editSeriesFeatureFlag), serverLibrary)
+  private val viewModel = EditBookViewModel(repo, serverLibrary)
   private val serverBook = book(name = "Leviathan Wakes", series = "The Expanse", part = "1", id = BookId("abs://item/item"))
 
   @BeforeTest
@@ -72,16 +70,6 @@ class EditBookViewModelTest {
 
     assertEquals(expected = "Dune Chronicles", actual = viewModel.state.value?.series)
     assertEquals(expected = "1", actual = viewModel.state.value?.part)
-    assertTrue(viewModel.state.value!!.showSeries)
-  }
-
-  @Test
-  fun `the series stays hidden without the feature flag`() = runTest(dispatcher) {
-    editSeriesFeatureFlag.value = false
-
-    viewModel.onItemClick(book.id, BottomSheetItem.Edit)
-
-    assertFalse(viewModel.state.value!!.showSeries)
   }
 
   @Test
@@ -225,12 +213,8 @@ class EditBookViewModelTest {
   }
 
   @Test
-  fun `server books can be edited only with the feature flag`() = runTest(dispatcher) {
+  fun `server books can be edited`() = runTest(dispatcher) {
     assertEquals(listOf(BottomSheetItem.Edit), viewModel.items(serverBook.id))
-
-    editSeriesFeatureFlag.value = false
-
-    assertEquals(emptyList(), viewModel.items(serverBook.id))
   }
 
   @Test

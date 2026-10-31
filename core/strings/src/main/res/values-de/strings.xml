@@ -348,6 +348,10 @@
     <string name="review.prompt.stat.hours">Stunden gehört</string>
     <string name="review.prompt.thanks.message">Weiter zu Google Play…</string>
     <string name="review.prompt.thanks.title">Danke!</string>
+    <string name="series.continue">Weiterhören</string>
+    <string name="series.continue_book">Buch %s weiterhören</string>
+    <string name="series.start">Anhören</string>
+    <string name="series.start_book">Buch %s anhören</string>
     <string name="settings.about.app_version.title">App-Version</string>
     <string name="settings.action.open">Einstellungen</string>
     <string name="settings.analytics_consent.description">Erlaube die Freigabe anonymer Nutzungsdaten zur Verbesserung der App</string>

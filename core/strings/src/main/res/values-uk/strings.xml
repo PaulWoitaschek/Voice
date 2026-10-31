@@ -384,6 +384,10 @@
     <string name="review.prompt.stat.hours">Прослухано годин</string>
     <string name="review.prompt.thanks.message">Переходимо до Google Play…</string>
     <string name="review.prompt.thanks.title">Дякуємо!</string>
+    <string name="series.continue">Продовжити</string>
+    <string name="series.continue_book">Продовжити книгу %s</string>
+    <string name="series.start">Почати</string>
+    <string name="series.start_book">Почати книгу %s</string>
     <string name="settings.about.app_version.title">Версія</string>
     <string name="settings.action.open">Налаштування</string>
     <string name="settings.analytics_consent.description">Дозволити анонімне збирання даних для покращення додатку</string>
