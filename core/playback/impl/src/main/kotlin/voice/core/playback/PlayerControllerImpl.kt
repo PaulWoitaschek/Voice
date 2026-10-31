@@ -98,13 +98,16 @@ class PlayerControllerImpl(
     }
   }
 
-  override fun pauseIfCurrentBookDifferentFrom(id: BookId) {
+  override fun pauseIfCurrentBookDifferentFrom(
+    id: BookId,
+    source: ListeningEvent.Source,
+  ) {
     scope.launch {
       val controller = awaitConnect() ?: return@launch
       val currentBookId = controller.currentBookId()
       if (currentBookId != null && currentBookId != id) {
         if (controller.playWhenReady) {
-          controller.record(ListeningEvent.Type.Pause)
+          controller.record(ListeningEvent.Type.Pause, source)
         }
         controller.pause()
       }
