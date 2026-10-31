@@ -14,7 +14,7 @@
 
     <!-- exported to be used with tasker -->
     <receiver
-      android:name=".receiver.WidgetButtonReceiver"
+      android:name="voice.core.playback.receiver.WidgetButtonReceiver"
       android:exported="true"
       tools:ignore="ExportedReceiver">
 

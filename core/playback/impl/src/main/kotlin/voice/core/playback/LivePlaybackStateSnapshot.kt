@@ -3,21 +3,11 @@ package voice.core.playback
 import androidx.media3.common.C
 import androidx.media3.common.util.Util
 import androidx.media3.session.MediaController
-import voice.core.data.Book
 import voice.core.data.BookId
-import voice.core.data.ChapterId
 import voice.core.playback.session.bookId
 import voice.core.playback.session.positionInChapter
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.toMediaIdOrNull
-
-data class LivePlaybackState(
-  val bookId: BookId,
-  val chapterId: ChapterId,
-  val positionMs: Long,
-  val isPlaying: Boolean,
-  val playbackSpeed: Float,
-)
 
 internal fun MediaController.livePlaybackStateSnapshot(bookId: BookId? = null): LivePlaybackState? {
   val mediaId = currentMediaItem?.mediaId?.toMediaIdOrNull() ?: return null
@@ -35,18 +25,4 @@ internal fun MediaController.livePlaybackStateSnapshot(bookId: BookId? = null): 
     isPlaying = !Util.shouldShowPlayButton(this),
     playbackSpeed = playbackParameters.speed,
   )
-}
-
-fun Book.overlay(livePlaybackState: LivePlaybackState): Book {
-  return if (livePlaybackState.bookId == id) {
-    update {
-      it.copy(
-        currentChapter = livePlaybackState.chapterId,
-        positionInChapter = livePlaybackState.positionMs,
-        playbackSpeed = livePlaybackState.playbackSpeed,
-      )
-    }
-  } else {
-    this
-  }
 }

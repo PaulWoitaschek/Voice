@@ -40,7 +40,7 @@ command.
     `coVerify { val _ = billing.consume(token) }`.
 - Use the real class when it's cheap: pure classes, NoOp implementations, `MemoryFeatureFlag(value)` from
   `:core:featureflag`, and `MemoryDataStore(initial)`. `MemoryDataStore` is copied once per module into test sources
-  (e.g. `core/playback/src/test/kotlin/voice/core/playback/MemoryDataStore.kt`); don't create a shared module.
+  (e.g. `core/playback/impl/src/test/kotlin/voice/core/playback/MemoryDataStore.kt`); don't create a shared module.
 - Write a fake only when the test needs real state, such as writes that later reads observe or flows that must re-emit
   after a change. Reuse one the module's tests already have; otherwise keep one fake per type per module, in its own
   file. A fake that only returns canned values, records calls, or copies production logic should be a mock.
