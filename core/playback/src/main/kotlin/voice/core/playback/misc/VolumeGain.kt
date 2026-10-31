@@ -103,8 +103,4 @@ class VolumeGain(private val volumeGainSetter: VolumeGainSetter) {
       volumeGainSetter.reset()
     }
   }
-
-  companion object {
-    val MAX_GAIN = Decibel(9F)
-  }
 }

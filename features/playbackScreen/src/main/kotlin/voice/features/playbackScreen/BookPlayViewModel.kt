@@ -38,7 +38,6 @@ import voice.core.playback.SeekTimeStore
 import voice.core.playback.history.Jump
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.misc.Decibel
-import voice.core.playback.misc.VolumeGain
 import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.withDefaultSpeed
@@ -366,7 +365,7 @@ class BookPlayViewModel(
   private fun volumeGainDialogViewState(gain: Decibel): BookPlayDialogViewState.VolumeGainDialog {
     return BookPlayDialogViewState.VolumeGainDialog(
       gain = gain,
-      maxGain = VolumeGain.MAX_GAIN,
+      maxGain = MAX_VOLUME_GAIN,
       valueFormatted = volumeGainFormatter.format(gain),
     )
   }
@@ -451,6 +450,8 @@ class BookPlayViewModel(
 }
 
 private const val DEFAULT_SKIP_SECONDS = 20
+
+private val MAX_VOLUME_GAIN = Decibel(9F)
 
 private fun Book.chapterSegments(): List<Float> {
   if (duration <= 0L) return emptyList()

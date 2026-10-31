@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.MainScope
@@ -17,7 +18,7 @@ import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
-import voice.core.playback.PlayerController
+import voice.core.playback.PlayerControllerImpl
 import kotlin.time.Duration.Companion.seconds
 
 class WidgetButtonReceiver : BroadcastReceiver() {
@@ -25,7 +26,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   private val scope = MainScope()
 
   @Inject
-  lateinit var player: PlayerController
+  lateinit var player: PlayerControllerImpl
 
   @Inject
   lateinit var bookRepository: BookRepository
@@ -95,30 +96,6 @@ class WidgetButtonReceiver : BroadcastReceiver() {
     fun inject(target: WidgetButtonReceiver)
   }
 
-  companion object {
-
-    private const val ACTION_KEY = "action"
-    private const val BOOK_ID_KEY = "bookId"
-    private const val WIDGET_ACTION = "voice.WidgetAction"
-
-    fun intent(
-      context: Context,
-      action: Action,
-    ): Intent {
-      return Intent(WIDGET_ACTION)
-        .setComponent(ComponentName(context, WidgetButtonReceiver::class.java))
-        .putExtra(ACTION_KEY, action.name)
-    }
-
-    fun playBookIntent(
-      context: Context,
-      bookId: BookId,
-    ): Intent {
-      return intent(context, Action.PlayBook)
-        .putExtra(BOOK_ID_KEY, bookId.value)
-    }
-  }
-
   // the names are sent by automation apps like Tasker, so they must not change
   enum class Action {
     PlayPause,
@@ -140,3 +117,31 @@ class WidgetButtonReceiver : BroadcastReceiver() {
     }
   }
 }
+
+@ContributesBinding(AppScope::class)
+@Inject
+class WidgetButtonIntentsImpl(private val context: Context) : WidgetButtonIntents {
+
+  override fun playPause(): Intent = intent(WidgetButtonReceiver.Action.PlayPause)
+
+  override fun rewind(): Intent = intent(WidgetButtonReceiver.Action.Rewind)
+
+  override fun fastForward(): Intent = intent(WidgetButtonReceiver.Action.FastForward)
+
+  override fun startOver(): Intent = intent(WidgetButtonReceiver.Action.StartOver)
+
+  override fun playBook(id: BookId): Intent {
+    return intent(WidgetButtonReceiver.Action.PlayBook)
+      .putExtra(BOOK_ID_KEY, id.value)
+  }
+
+  private fun intent(action: WidgetButtonReceiver.Action): Intent {
+    return Intent(WIDGET_ACTION)
+      .setComponent(ComponentName(context, WidgetButtonReceiver::class.java))
+      .putExtra(ACTION_KEY, action.name)
+  }
+}
+
+private const val ACTION_KEY = "action"
+private const val BOOK_ID_KEY = "bookId"
+private const val WIDGET_ACTION = "voice.WidgetAction"
