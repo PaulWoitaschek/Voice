@@ -8,7 +8,7 @@ dependencies {
   implementation(projects.core.common)
   implementation(projects.core.strings)
   implementation(projects.core.ui)
-  implementation(projects.core.playback)
+  implementation(projects.core.playback.api)
   implementation(projects.core.sleeptimer.api)
   implementation(projects.navigation)
   implementation(projects.core.data.api)

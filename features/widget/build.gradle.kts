@@ -16,7 +16,7 @@ dependencies {
   implementation(projects.core.ui)
   implementation(projects.core.initializer)
   implementation(projects.core.data.api)
-  implementation(projects.core.playback)
+  implementation(projects.core.playback.api)
   implementation(projects.core.sleeptimer.api)
   implementation(projects.core.logging.api)
 
