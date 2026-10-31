@@ -10,4 +10,6 @@ dependencies {
   api(projects.core.datastore)
 
   implementation(libs.serialization.json)
+
+  testImplementation(libs.androidxCore)
 }

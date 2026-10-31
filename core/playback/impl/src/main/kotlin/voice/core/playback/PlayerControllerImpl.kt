@@ -327,7 +327,7 @@ class PlayerControllerImpl(
   }
 
   @IgnorableReturnValue
-  suspend fun awaitConnect(): MediaController? {
+  internal suspend fun awaitConnect(): MediaController? {
     return try {
       controller.await()
     } catch (e: Exception) {
