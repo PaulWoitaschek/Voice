@@ -2,11 +2,6 @@ name: Upload Play Metadata
 
 on:
   workflow_dispatch:
-    inputs:
-      version_code:
-        description: Version code of the Play release to update
-        required: true
-        type: string
 
 permissions:
   contents: read
@@ -52,4 +47,4 @@ jobs:
         run: ./scripts/ci_setup_play_access.sh
 
       - name: Upload Play Metadata
-        run: fastlane android upload_metadata version_code:${{ inputs.version_code }}
+        run: fastlane android upload_metadata

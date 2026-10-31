@@ -19,8 +19,9 @@ platform :android do
     )
   end
 
-  lane :upload_metadata do |options|
-    version_code = parse_version_code_option!(options)
+  lane :upload_metadata do
+    # supply only uploads the listing when it can match a release on the track
+    version_code = google_play_track_version_codes.max
 
     supply(
       skip_upload_apk: true,
