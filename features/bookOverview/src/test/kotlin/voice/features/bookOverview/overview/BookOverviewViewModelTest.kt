@@ -11,9 +11,11 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -24,6 +26,7 @@ import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.CustomMetadata
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
@@ -43,6 +46,7 @@ import voice.core.ui.GridMode
 import voice.core.ui.GridModeStore
 import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
+import voice.features.bookOverview.hideBook.BookHider
 import voice.features.bookOverview.survey.HandledSurveysStore
 import voice.features.bookOverview.survey.Survey
 import voice.features.bookOverview.survey.SurveyUrlFeatureFlag
@@ -107,6 +111,8 @@ class BookOverviewViewModelTest {
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey(),
+      showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+      bookHider = BookHider(mockk()),
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -169,6 +175,8 @@ class BookOverviewViewModelTest {
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey(),
+      showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+      bookHider = BookHider(mockk()),
     )
 
     backgroundScope.launchMolecule(RecompositionMode.Immediate) {
@@ -205,6 +213,77 @@ class BookOverviewViewModelTest {
       assertEquals(expected = 1, actual = stack.series.finishedCount)
       assertEquals(expected = 2, actual = state.inProgressCount)
     }
+  }
+
+  @Test
+  fun `hidden books leave the library and still count for the filter`() = runTest {
+    val hidden = book(name = "Hidden", time = 1_000, hidden = true)
+    val visible = book(name = "Visible", time = 1_000)
+    val viewModel = viewModel(books = listOf(hidden, visible), currentBookId = hidden.id)
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      val state = awaitItem()
+      assertEquals(expected = listOf(visible.id.value), actual = state.keys(BookOverviewCategory.CURRENT))
+      assertEquals(expected = null, actual = state.hero)
+      assertEquals(expected = null, actual = state.playButtonState)
+      assertEquals(expected = 1, actual = state.inProgressCount)
+      assertEquals(expected = 1, actual = state.hiddenBookCount)
+    }
+  }
+
+  @Test
+  fun `a library with only hidden books isn't empty`() = runTest {
+    val viewModel = viewModel(books = listOf(book(hidden = true)))
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      val state = awaitItem()
+      assertEquals(expected = false, actual = state.showEmptyLibrary)
+      assertEquals(expected = true, actual = state.showSearchIcon)
+      assertEquals(expected = emptyMap(), actual = state.sections)
+    }
+  }
+
+  @Test
+  fun `showing hidden books brings them back with a label`() = runTest {
+    val hidden = book(name = "Hidden", time = 1_000, hidden = true)
+    val store = MemoryDataStore(false)
+    val viewModel = viewModel(books = listOf(hidden), showHiddenBooksStore = store)
+
+    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
+      viewModel.state()
+    }.test {
+      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+      assertEquals(expected = emptyMap(), actual = awaitItem().sections)
+
+      viewModel.onShowHiddenBooksChange(true)
+
+      val state = awaitItem()
+      assertEquals(expected = true, actual = state.showHiddenBooks)
+      assertEquals(expected = true, actual = state.book(hidden.id).hidden)
+      assertEquals(expected = true, actual = store.data.first())
+    }
+  }
+
+  @Test
+  fun `undo shows the hidden book again`() = runTest {
+    val book = book(hidden = true)
+    val repo = mockk<BookRepository> {
+      every { flow() } returns MutableStateFlow(emptyList())
+      coEvery { updateCustomMetadata(book.id, any()) } just Runs
+    }
+    val viewModel = viewModel(repo = repo)
+
+    viewModel.onUndoHide(book.id)
+
+    val update = slot<(CustomMetadata) -> CustomMetadata>()
+    coVerify { repo.updateCustomMetadata(book.id, capture(update)) }
+    assertEquals(expected = false, actual = update.captured(book.custom).hidden)
   }
 
   @Test
@@ -510,11 +589,13 @@ class BookOverviewViewModelTest {
     currentBookId: BookId? = null,
     scanning: Flow<Boolean> = MutableStateFlow(false),
     survey: Survey = survey(),
+    showHiddenBooksStore: DataStore<Boolean> = MemoryDataStore(false),
+    repo: BookRepository = mockk {
+      every { flow() } returns MutableStateFlow(books)
+    },
   ): BookOverviewViewModel {
     return BookOverviewViewModel(
-      repo = mockk<BookRepository> {
-        every { flow() } returns MutableStateFlow(books)
-      },
+      repo = repo,
       mediaScanner = mockk<MediaScanTrigger> {
         every { scannerActive } returns scanning
         every { scan(any()) } just Runs
@@ -541,6 +622,8 @@ class BookOverviewViewModelTest {
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey,
+      showHiddenBooksStore = ShowHiddenBooksStore(showHiddenBooksStore),
+      bookHider = BookHider(repo),
     )
   }
 

@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Speichern auf Deinem Server hat nicht geklappt. Versuche es noch einmal.</string>
     <string name="book.edit.server.not_allowed">Dein Konto auf dem Server darf keine Bücher ändern.</string>
     <string name="book.edit.title.label">Titel</string>
+    <string name="book.hide">Aus der Bibliothek ausblenden</string>
+    <string name="book.show">In der Bibliothek anzeigen</string>
     <string name="book.source.device">Auf diesem Gerät</string>
     <string name="book.source.server_downloaded">%s · heruntergeladen</string>
     <string name="bookmark.action.add_note">Notiz hinzufügen</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Smartwatch</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Wird heruntergeladen</string>
+    <string name="library.book.hidden">Ausgeblendet</string>
+    <string name="library.book.hidden.message">%1$s ist ausgeblendet</string>
     <string name="library.book.offline">Offline nicht verfügbar</string>
     <string name="library.category.completed.title">Abgeschlossen</string>
     <string name="library.category.current.title">Aktuell</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Keine Hörbücher gefunden</string>
     <string name="library.empty.message">Voice findet in Deinen Ordnern keine Hörbücher. Prüfe, ob die Dateien noch da sind, oder füge einen Ordner hinzu.</string>
     <string name="library.empty.action">Ordner anzeigen</string>
+    <string name="library.filter">Filter</string>
+    <string name="library.filter.hidden_books">Ausgeblendete Bücher</string>
+    <string name="library.filter.show">Anzeigen</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
     <string name="library.folders.moved.dialog.title">Hörbuch-Ordner verschoben</string>
     <string name="library.folders.moved.dialog.message">Du kannst Hörbuch-Ordner jetzt in den Einstellungen verwalten.</string>

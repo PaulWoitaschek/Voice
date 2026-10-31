@@ -40,8 +40,8 @@ it, open the [clickable prototype](https://voice.woitaschek.de/prototypes/librar
 - Folder names never become an author or a series. With "Folders are authors", a series folder in an author's folder
   becomes one long book.
 - Only the title and the cover can be changed, and only for books on the device. Voice never writes tags.
-- Current and Completed are in the order they were last listened, Not started yet by title. There's no sorting,
-  filtering or hiding.
+- Current and Completed are in the order they were last listened, Not started yet by title. There's no sorting or
+  filtering, and books are hidden one at a time.
 
 **So: group by series, and by author only when sorted by author.** A series is short and ordered by its parts. Authors
 are messy and most of them have a single book, so they only group when the listener asks for them. Libraries with
@@ -195,11 +195,10 @@ For books already in the library:
 
 ![Sketch: hide from library in the book actions](sketches/book-actions-hide.png)
 
-- Hide from library in the book actions, on a series' or an author's stack or screen, and for selected books. A snackbar offers to
-  undo it.
-- Hidden books leave the library, Continue listening, the Shelf widget and Android Auto. Search still finds them,
-  marked as hidden. The sort sheet shows them again, and the book actions unhide them.
-- Progress, bookmarks and files stay, and a scan doesn't bring the book back.
+Single books can be hidden from the book actions, see the [product spec](product.md#library). The sort sheet only
+has the switch for hidden books so far, and its button only shows once a book is hidden. Still to come:
+
+- Hide from library on a series' or an author's stack or screen, and for selected books.
 - Hiding syncs through `.voice`, like the name does.
 
 ## 7. Editing title, author and series
@@ -381,13 +380,12 @@ Each step helps on its own.
 5. Series folders with "Folders are authors". It changes which files make a book.
 6. The author screen.
 7. Authors and series in search, Browse opening their screen, and numbers in search.
-8. Hiding books.
-9. The sort sheet, with All books for the orders other than Progress.
-10. Author stacks when sorted by author. They open the author screen from step 6.
-11. Selecting several books.
-12. Android Auto using the library search.
-13. "Voice finds the books", as an A/B test with new listeners.
-14. If the test works, replacing the layouts for everyone.
+8. The sort sheet, with All books for the orders other than Progress.
+9. Author stacks when sorted by author. They open the author screen from step 6.
+10. Selecting several books.
+11. Android Auto using the library search.
+12. "Voice finds the books", as an A/B test with new listeners.
+13. If the test works, replacing the layouts for everyone.
 
 ## Open questions
 

@@ -84,6 +84,8 @@
     <string name="book.edit.server.failed">Impossible d\'enregistrer sur votre serveur. Réessayez.</string>
     <string name="book.edit.server.not_allowed">Votre compte sur le serveur ne peut pas modifier les livres.</string>
     <string name="book.edit.title.label">Titre</string>
+    <string name="book.hide">Masquer de la bibliothèque</string>
+    <string name="book.show">Afficher dans la bibliothèque</string>
     <string name="book.source.device">Sur cet appareil</string>
     <string name="book.source.server_downloaded">%s · téléchargé</string>
     <string name="bookmark.action.add_note">Ajouter une note</string>
@@ -241,6 +243,8 @@
     <string name="history.source.watch">Montre</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Téléchargement en cours</string>
+    <string name="library.book.hidden">Masqué</string>
+    <string name="library.book.hidden.message">Vous avez masqué %1$s</string>
     <string name="library.book.offline">Indisponible hors connexion</string>
     <string name="library.category.completed.title">Terminé</string>
     <string name="library.category.current.title">En cours</string>
@@ -250,6 +254,9 @@
     <string name="library.empty.title">Aucun livre audio trouvé</string>
     <string name="library.empty.message">Voice ne trouve aucun livre audio dans vos dossiers. Vérifiez que les fichiers sont toujours là ou ajoutez un dossier.</string>
     <string name="library.empty.action">Afficher les dossiers</string>
+    <string name="library.filter">Filtrer</string>
+    <string name="library.filter.hidden_books">Livres masqués</string>
+    <string name="library.filter.show">Afficher</string>
     <string name="library.folders.title">Dossiers de livres audio</string>
     <string name="library.folders.moved.dialog.title">Dossiers de livres audio déplacés</string>
     <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Paramètres.</string>

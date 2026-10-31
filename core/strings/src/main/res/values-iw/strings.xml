@@ -84,6 +84,8 @@
     <string name="book.edit.server.failed">השמירה בשרת נכשלה. נסו שוב.</string>
     <string name="book.edit.server.not_allowed">לחשבון שלכם בשרת אין הרשאה לשנות ספרים.</string>
     <string name="book.edit.title.label">כותר</string>
+    <string name="book.hide">הסתרה מהספרייה</string>
+    <string name="book.show">הצגה בספרייה</string>
     <string name="book.source.device">במכשיר הזה</string>
     <string name="book.source.server_downloaded">%s · ההורדה הושלמה</string>
     <string name="bookmark.action.add_note">הוספת הערה</string>
@@ -241,6 +243,8 @@
     <string name="history.source.watch">שעון</string>
     <string name="history.source.widget">ווידג׳ט</string>
     <string name="library.book.downloading">בהורדה</string>
+    <string name="library.book.hidden">מוסתר</string>
+    <string name="library.book.hidden.message">הספר %1$s הוסתר</string>
     <string name="library.book.offline">לא זמין אופליין</string>
     <string name="library.category.completed.title">הושלמו</string>
     <string name="library.category.current.title">בהאזנה</string>
@@ -250,6 +254,9 @@
     <string name="library.empty.title">לא נמצאו קולספרים</string>
     <string name="library.empty.message">בתיקיות שלכם לא נמצאו קולספרים. בדקו שהקבצים עדיין במקומם, או הוסיפו תיקייה.</string>
     <string name="library.empty.action">הצגת התיקיות</string>
+    <string name="library.filter">סינון</string>
+    <string name="library.filter.hidden_books">ספרים מוסתרים</string>
+    <string name="library.filter.show">הצגה</string>
     <string name="library.folders.title">תיקיות קולספרים</string>
     <string name="library.folders.moved.dialog.title">תיקיות הקולספרים הועברו</string>
     <string name="library.folders.moved.dialog.message">כעת ניתן לנהל את תיקיות הקולספרים בהגדרות.</string>

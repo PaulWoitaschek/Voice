@@ -53,6 +53,7 @@ import voice.core.ui.playButtonSharedElementModifier
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.views.BookCover
+import voice.features.bookOverview.views.HiddenLabel
 import java.text.NumberFormat
 import voice.core.strings.R as StringsR
 
@@ -212,6 +213,10 @@ private fun TopResult(
               maxLines = 1,
             )
           }
+          if (result.hidden) {
+            Spacer(Modifier.width(12.dp))
+            HiddenLabel()
+          }
           Spacer(Modifier.width(12.dp))
           PlayButton(
             playing = playing,
@@ -283,6 +288,10 @@ private fun SearchResultRow(
             )
           }
         }
+      }
+      if (result.hidden) {
+        Spacer(Modifier.width(12.dp))
+        HiddenLabel()
       }
       Spacer(Modifier.width(12.dp))
       ResultTrailing(result)

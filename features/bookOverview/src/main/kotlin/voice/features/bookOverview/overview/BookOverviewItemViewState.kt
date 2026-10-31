@@ -20,6 +20,7 @@ data class BookOverviewItemViewState(
   /** A server book that isn't downloaded while the server can't be reached. */
   val unavailable: Boolean = false,
   val download: DownloadBadge? = null,
+  val hidden: Boolean = false,
 )
 
 @Immutable
@@ -51,6 +52,7 @@ internal fun Book.toItemViewState(
   series = seriesLine,
   unavailable = unavailable,
   download = download,
+  hidden = custom.hidden,
 )
 
 private fun Book.progress(): Float {

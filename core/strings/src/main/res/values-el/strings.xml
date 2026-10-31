@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Δεν ήταν δυνατή η αποθήκευση στον διακομιστή σας. Δοκιμάστε ξανά.</string>
     <string name="book.edit.server.not_allowed">Ο λογαριασμός σας στον διακομιστή δεν μπορεί να αλλάζει βιβλία.</string>
     <string name="book.edit.title.label">Τίτλος</string>
+    <string name="book.hide">Απόκρυψη από τη βιβλιοθήκη</string>
+    <string name="book.show">Εμφάνιση στη βιβλιοθήκη</string>
     <string name="book.source.device">Σε αυτή τη συσκευή</string>
     <string name="book.source.server_downloaded">%s · έγινε λήψη</string>
     <string name="bookmark.action.add_note">Προσθήκη σημείωσης</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Ρολόι</string>
     <string name="history.source.widget">Γραφικό στοιχείο</string>
     <string name="library.book.downloading">Λήψη σε εξέλιξη</string>
+    <string name="library.book.hidden">Κρυφό</string>
+    <string name="library.book.hidden.message">Το βιβλίο «%1$s» αποκρύφθηκε</string>
     <string name="library.book.offline">Μη διαθέσιμο εκτός σύνδεσης</string>
     <string name="library.category.completed.title">Ολοκληρωμένα</string>
     <string name="library.category.current.title">Τρέχοντα</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Δεν βρέθηκαν ηχητικά βιβλία</string>
     <string name="library.empty.message">Το Voice δεν βρίσκει ηχητικά βιβλία στους φακέλους σας. Ελέγξτε αν τα αρχεία βρίσκονται ακόμα εκεί ή προσθέστε έναν φάκελο.</string>
     <string name="library.empty.action">Εμφάνιση φακέλων</string>
+    <string name="library.filter">Φίλτρο</string>
+    <string name="library.filter.hidden_books">Κρυφά βιβλία</string>
+    <string name="library.filter.show">Εμφάνιση</string>
     <string name="library.folders.title">Φάκελοι ηχητικών βιβλίων</string>
     <string name="library.folders.moved.dialog.title">Οι φάκελοι ηχητικών βιβλίων μετακινήθηκαν</string>
     <string name="library.folders.moved.dialog.message">Μπορείτε πλέον να διαχειρίζεστε τους φακέλους ηχητικών βιβλίων στις Ρυθμίσεις.</string>

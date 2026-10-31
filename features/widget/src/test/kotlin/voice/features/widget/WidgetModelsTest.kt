@@ -126,6 +126,17 @@ class WidgetModelsTest {
   }
 
   @Test
+  fun `the shelf leaves out hidden books, even the current one`() {
+    val started = book(positionInChapter = 1_000)
+    val hidden = book(positionInChapter = 1_000, hidden = true)
+    val current = book(hidden = true)
+
+    val shelf = shelfBooks(listOf(started, hidden, current), currentBookId = current.id, playing = false)
+
+    assertEquals(listOf(started.id), shelf.map { it.id })
+  }
+
+  @Test
   fun `the shelf holds at most five books`() {
     val books = List(8) { book(positionInChapter = 1_000) }
 

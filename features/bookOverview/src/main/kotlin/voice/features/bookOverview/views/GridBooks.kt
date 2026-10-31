@@ -52,6 +52,7 @@ internal fun GridBook(
       finished = finished,
       unavailable = book.unavailable,
       download = book.download,
+      hidden = book.hidden,
       modifier = Modifier
         .fillMaxWidth()
         .aspectRatio(1F),
@@ -111,6 +112,16 @@ private fun GridBookPreviewFinished() {
   VoiceTheme {
     Surface {
       GridBook(BookOverviewPreviewParameterProvider().book().copy(progress = 1f), {}, {}, finished = true)
+    }
+  }
+}
+
+@Composable
+@Preview(widthDp = 200)
+private fun GridBookPreviewHidden() {
+  VoiceTheme {
+    Surface {
+      GridBook(BookOverviewPreviewParameterProvider().book().copy(progress = 0.3f, hidden = true), {}, {})
     }
   }
 }

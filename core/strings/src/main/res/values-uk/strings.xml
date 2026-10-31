@@ -87,6 +87,8 @@
     <string name="book.edit.server.failed">Не вдалося зберегти на вашому сервері. Спробуйте ще раз.</string>
     <string name="book.edit.server.not_allowed">Ваш обліковий запис на сервері не може змінювати книги.</string>
     <string name="book.edit.title.label">Назва</string>
+    <string name="book.hide">Приховати з бібліотеки</string>
+    <string name="book.show">Показати в бібліотеці</string>
     <string name="book.source.device">На цьому пристрої</string>
     <string name="book.source.server_downloaded">%s · завантажено</string>
     <string name="bookmark.action.add_note">Додати нотатку</string>
@@ -254,6 +256,8 @@
     <string name="history.source.watch">Годинник</string>
     <string name="history.source.widget">Віджет</string>
     <string name="library.book.downloading">Завантажується</string>
+    <string name="library.book.hidden">Прихована</string>
+    <string name="library.book.hidden.message">Книгу «%1$s» приховано</string>
     <string name="library.book.offline">Недоступно офлайн</string>
     <string name="library.category.completed.title">Завершені</string>
     <string name="library.category.current.title">Поточні</string>
@@ -263,6 +267,9 @@
     <string name="library.empty.title">Аудіокниг не знайдено</string>
     <string name="library.empty.message">Voice не знаходить аудіокниг у ваших папках. Перевірте, чи файли досі на місці, або додайте папку.</string>
     <string name="library.empty.action">Показати папки</string>
+    <string name="library.filter">Фільтр</string>
+    <string name="library.filter.hidden_books">Приховані книги</string>
+    <string name="library.filter.show">Показувати</string>
     <string name="library.folders.title">Папки з аудіокнигами</string>
     <string name="library.folders.moved.dialog.title">Папки аудіокниг переміщено</string>
     <string name="library.folders.moved.dialog.message">Тепер папками аудіокниг можна керувати в налаштуваннях.</string>

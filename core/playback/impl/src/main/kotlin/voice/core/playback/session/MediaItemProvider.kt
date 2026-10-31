@@ -119,6 +119,7 @@ class MediaItemProvider(
     return when (mediaId) {
       MediaId.Root -> {
         bookRepository.all()
+          .filterNot { it.custom.hidden }
           .sortedWith(BookComparator.ByLastPlayed)
           .map { book ->
             mediaItem(book)

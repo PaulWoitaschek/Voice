@@ -43,6 +43,8 @@ enum class BottomSheetItem(
   Edit(StringsR.string.common_action_edit, VoiceIcons.Edit),
   InternetCover(StringsR.string.book_edit_cover_internet, VoiceIcons.ImageSearch),
   FileCover(StringsR.string.book_edit_cover_file, VoiceIcons.Image),
+  Hide(StringsR.string.book_hide, VoiceIcons.VisibilityOff),
+  Show(StringsR.string.book_show, VoiceIcons.Visibility),
   Download(StringsR.string.book_download_action, VoiceIcons.Download),
   StopDownload(StringsR.string.book_download_stop, VoiceIcons.Close),
   RetryDownload(StringsR.string.book_download_retry, VoiceIcons.Replay),

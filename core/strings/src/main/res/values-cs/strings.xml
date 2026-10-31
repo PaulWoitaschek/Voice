@@ -87,6 +87,8 @@
     <string name="book.edit.server.failed">Uložení na váš server se nepodařilo. Zkuste to znovu.</string>
     <string name="book.edit.server.not_allowed">Váš účet na serveru nemůže měnit knihy.</string>
     <string name="book.edit.title.label">Název</string>
+    <string name="book.hide">Skrýt z knihovny</string>
+    <string name="book.show">Zobrazit v knihovně</string>
     <string name="book.source.device">Na tomto zařízení</string>
     <string name="book.source.server_downloaded">%s · staženo</string>
     <string name="bookmark.action.add_note">Přidat poznámku</string>
@@ -254,6 +256,8 @@
     <string name="history.source.watch">Hodinky</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Stahuje se</string>
+    <string name="library.book.hidden">Skrytá</string>
+    <string name="library.book.hidden.message">Kniha „%1$s“ je skrytá</string>
     <string name="library.book.offline">Není k dispozici offline</string>
     <string name="library.category.completed.title">Dokončené</string>
     <string name="library.category.current.title">Aktuální</string>
@@ -263,6 +267,9 @@
     <string name="library.empty.title">Nenašly se žádné audioknihy</string>
     <string name="library.empty.message">Voice ve vašich složkách nemůže najít žádné audioknihy. Zkontrolujte, jestli jsou soubory stále na svém místě, nebo přidejte složku.</string>
     <string name="library.empty.action">Zobrazit složky</string>
+    <string name="library.filter">Filtr</string>
+    <string name="library.filter.hidden_books">Skryté knihy</string>
+    <string name="library.filter.show">Zobrazit</string>
     <string name="library.folders.title">Složky s audioknihami</string>
     <string name="library.folders.moved.dialog.title">Složky audioknih přesunuty</string>
     <string name="library.folders.moved.dialog.message">Složky audioknih teď můžete spravovat v Nastavení.</string>

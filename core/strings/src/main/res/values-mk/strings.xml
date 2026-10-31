@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Не успеавме да зачуваме на вашиот сервер. Обидете се повторно.</string>
     <string name="book.edit.server.not_allowed">Вашата сметка на серверот нема дозвола да менува книги.</string>
     <string name="book.edit.title.label">Наслов</string>
+    <string name="book.hide">Скриј од библиотеката</string>
+    <string name="book.show">Прикажи во библиотеката</string>
     <string name="book.source.device">На овој уред</string>
     <string name="book.source.server_downloaded">%s · преземено</string>
     <string name="bookmark.action.add_note">Додај белешка</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Часовник</string>
     <string name="history.source.widget">Виџет</string>
     <string name="library.book.downloading">Се презема</string>
+    <string name="library.book.hidden">Скриена</string>
+    <string name="library.book.hidden.message">Книгата „%1$s“ е скриена</string>
     <string name="library.book.offline">Недостапно без интернет</string>
     <string name="library.category.completed.title">Завршени</string>
     <string name="library.category.current.title">Тековни</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Не се пронајдени аудио книги</string>
     <string name="library.empty.message">Voice не може да најде аудио книги во вашите фолдери. Проверете дали датотеките сè уште се таму или додајте фолдер.</string>
     <string name="library.empty.action">Прикажи фолдери</string>
+    <string name="library.filter">Филтер</string>
+    <string name="library.filter.hidden_books">Скриени книги</string>
+    <string name="library.filter.show">Прикажи</string>
     <string name="library.folders.title">Фолдери со аудио книги</string>
     <string name="library.folders.moved.dialog.title">Фолдерите со аудио книги се преместени</string>
     <string name="library.folders.moved.dialog.message">Сега можете да управувате со фолдерите со аудио книги во Поставки.</string>

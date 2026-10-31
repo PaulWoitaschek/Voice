@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Kunne ikke lagre på serveren din. Prøv igjen.</string>
     <string name="book.edit.server.not_allowed">Kontoen din på serveren kan ikke endre bøker.</string>
     <string name="book.edit.title.label">Tittel</string>
+    <string name="book.hide">Skjul fra biblioteket</string>
+    <string name="book.show">Vis i biblioteket</string>
     <string name="book.source.device">På denne enheten</string>
     <string name="book.source.server_downloaded">%s · lastet ned</string>
     <string name="bookmark.action.add_note">Legg til notat</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Klokke</string>
     <string name="history.source.widget">Modul</string>
     <string name="library.book.downloading">Laster ned</string>
+    <string name="library.book.hidden">Skjult</string>
+    <string name="library.book.hidden.message">%1$s er skjult</string>
     <string name="library.book.offline">Ikke tilgjengelig uten nett</string>
     <string name="library.category.completed.title">Fullført</string>
     <string name="library.category.current.title">Pågående</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Ingen lydbøker funnet</string>
     <string name="library.empty.message">Voice finner ingen lydbøker i mappene dine. Sjekk at filene fortsatt er der, eller legg til en mappe.</string>
     <string name="library.empty.action">Vis mapper</string>
+    <string name="library.filter">Filter</string>
+    <string name="library.filter.hidden_books">Skjulte bøker</string>
+    <string name="library.filter.show">Vis</string>
     <string name="library.folders.title">Lydbokmapper</string>
     <string name="library.folders.moved.dialog.title">Lydbokmapper flyttet</string>
     <string name="library.folders.moved.dialog.message">Du kan nå administrere lydbokmapper i Innstillinger.</string>

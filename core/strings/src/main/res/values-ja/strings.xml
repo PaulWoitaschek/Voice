@@ -78,6 +78,8 @@
     <string name="book.edit.server.failed">サーバーに保存できませんでした。もう一度お試しください。</string>
     <string name="book.edit.server.not_allowed">このアカウントには、サーバー上の本を変更する権限がありません。</string>
     <string name="book.edit.title.label">タイトル</string>
+    <string name="book.hide">ライブラリで非表示</string>
+    <string name="book.show">ライブラリに表示</string>
     <string name="book.source.device">この端末</string>
     <string name="book.source.server_downloaded">%s · ダウンロード済み</string>
     <string name="bookmark.action.add_note">メモを追加</string>
@@ -215,6 +217,8 @@
     <string name="history.source.watch">スマートウォッチ</string>
     <string name="history.source.widget">ウィジェット</string>
     <string name="library.book.downloading">ダウンロード中</string>
+    <string name="library.book.hidden">非表示</string>
+    <string name="library.book.hidden.message">「%1$s」を非表示にしました</string>
     <string name="library.book.offline">オフラインでは利用不可</string>
     <string name="library.category.completed.title">完了</string>
     <string name="library.category.current.title">聴きかけ</string>
@@ -224,6 +228,9 @@
     <string name="library.empty.title">オーディオブックが見つかりません</string>
     <string name="library.empty.message">追加したフォルダー内に、Voice で聴けるオーディオブックが見つかりません。ファイルが移動・削除されていないか確認するか、フォルダーを追加してください。</string>
     <string name="library.empty.action">フォルダーを表示</string>
+    <string name="library.filter">フィルター</string>
+    <string name="library.filter.hidden_books">非表示の本</string>
+    <string name="library.filter.show">表示</string>
     <string name="library.folders.title">オーディオブック フォルダー</string>
     <string name="library.folders.moved.dialog.title">オーディオブックフォルダーを移動しました</string>
     <string name="library.folders.moved.dialog.message">オーディオブックフォルダーは設定で管理できるようになりました。</string>

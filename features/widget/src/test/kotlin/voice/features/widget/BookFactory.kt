@@ -18,6 +18,7 @@ fun book(
   speed: Float = 1F,
   lastPlayedAt: Instant = Instant.EPOCH,
   id: BookId = BookId(Uuid.random().toString()),
+  hidden: Boolean = false,
 ): Book {
   return Book(
     content = BookContent(
@@ -45,7 +46,7 @@ fun book(
       ),
     ),
     chapters = chapters,
-    custom = CustomMetadata(id),
+    custom = CustomMetadata(id, hidden = hidden),
   )
 }
 

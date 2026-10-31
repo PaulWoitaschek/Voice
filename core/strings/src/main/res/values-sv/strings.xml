@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Det gick inte att spara på din server. Försök igen.</string>
     <string name="book.edit.server.not_allowed">Ditt konto på servern får inte ändra böcker.</string>
     <string name="book.edit.title.label">Titel</string>
+    <string name="book.hide">Dölj från biblioteket</string>
+    <string name="book.show">Visa i biblioteket</string>
     <string name="book.source.device">På den här enheten</string>
     <string name="book.source.server_downloaded">%s · nedladdad</string>
     <string name="bookmark.action.add_note">Lägg till anteckning</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Klocka</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Laddar ned</string>
+    <string name="library.book.hidden">Dold</string>
+    <string name="library.book.hidden.message">%1$s är dold</string>
     <string name="library.book.offline">Inte tillgänglig offline</string>
     <string name="library.category.completed.title">Färdiglyssnade</string>
     <string name="library.category.current.title">Pågående</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Inga ljudböcker hittades</string>
     <string name="library.empty.message">Voice hittar inga ljudböcker i dina mappar. Kontrollera att filerna finns kvar, eller lägg till en mapp.</string>
     <string name="library.empty.action">Visa mappar</string>
+    <string name="library.filter">Filter</string>
+    <string name="library.filter.hidden_books">Dolda böcker</string>
+    <string name="library.filter.show">Visa</string>
     <string name="library.folders.title">Ljudboksmappar</string>
     <string name="library.folders.moved.dialog.title">Ljudboksmapparna har flyttats</string>
     <string name="library.folders.moved.dialog.message">Du kan nu hantera ljudboksmappar under Inställningar.</string>

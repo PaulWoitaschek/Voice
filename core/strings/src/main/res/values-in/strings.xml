@@ -78,6 +78,8 @@
     <string name="book.edit.server.failed">Tidak dapat menyimpan ke server Anda. Coba lagi.</string>
     <string name="book.edit.server.not_allowed">Akun Anda di server tidak dapat mengubah buku.</string>
     <string name="book.edit.title.label">Judul</string>
+    <string name="book.hide">Sembunyikan dari pustaka</string>
+    <string name="book.show">Tampilkan di pustaka</string>
     <string name="book.source.device">Di perangkat ini</string>
     <string name="book.source.server_downloaded">%s · sudah diunduh</string>
     <string name="bookmark.action.add_note">Tambah catatan</string>
@@ -215,6 +217,8 @@
     <string name="history.source.watch">Jam tangan</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Mengunduh</string>
+    <string name="library.book.hidden">Tersembunyi</string>
+    <string name="library.book.hidden.message">%1$s disembunyikan</string>
     <string name="library.book.offline">Tidak tersedia offline</string>
     <string name="library.category.completed.title">Selesai</string>
     <string name="library.category.current.title">Sedang didengarkan</string>
@@ -224,6 +228,9 @@
     <string name="library.empty.title">Buku audio tidak ditemukan</string>
     <string name="library.empty.message">Voice tidak dapat menemukan buku audio apa pun di folder Anda. Pastikan berkasnya masih ada, atau tambahkan folder.</string>
     <string name="library.empty.action">Tampilkan folder</string>
+    <string name="library.filter">Filter</string>
+    <string name="library.filter.hidden_books">Buku tersembunyi</string>
+    <string name="library.filter.show">Tampilkan</string>
     <string name="library.folders.title">Folder buku audio</string>
     <string name="library.folders.moved.dialog.title">Folder buku audio dipindahkan</string>
     <string name="library.folders.moved.dialog.message">Sekarang Anda dapat mengelola folder buku audio di Setelan.</string>

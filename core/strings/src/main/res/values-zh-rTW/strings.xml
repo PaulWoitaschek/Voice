@@ -78,6 +78,8 @@
     <string name="book.edit.server.failed">無法儲存到你的伺服器，請再試一次。</string>
     <string name="book.edit.server.not_allowed">你在伺服器上的帳號沒有修改書籍的權限。</string>
     <string name="book.edit.title.label">書名</string>
+    <string name="book.hide">從書庫中隱藏</string>
+    <string name="book.show">在書庫中顯示</string>
     <string name="book.source.device">在這部裝置上</string>
     <string name="book.source.server_downloaded">%s · 已下載</string>
     <string name="bookmark.action.add_note">新增筆記</string>
@@ -215,6 +217,8 @@
     <string name="history.source.watch">手錶</string>
     <string name="history.source.widget">小工具</string>
     <string name="library.book.downloading">下載中</string>
+    <string name="library.book.hidden">已隱藏</string>
+    <string name="library.book.hidden.message">《%1$s》已隱藏</string>
     <string name="library.book.offline">無法離線使用</string>
     <string name="library.category.completed.title">已聽完</string>
     <string name="library.category.current.title">收聽中</string>
@@ -224,6 +228,9 @@
     <string name="library.empty.title">找不到有聲書</string>
     <string name="library.empty.message">Voice 在你的資料夾中找不到任何有聲書。請確認檔案還在，或新增資料夾。</string>
     <string name="library.empty.action">查看資料夾</string>
+    <string name="library.filter">篩選</string>
+    <string name="library.filter.hidden_books">已隱藏的書</string>
+    <string name="library.filter.show">顯示</string>
     <string name="library.folders.title">有聲書資料夾</string>
     <string name="library.folders.moved.dialog.title">有聲書資料夾換地方了</string>
     <string name="library.folders.moved.dialog.message">現在可以在「設定」中管理有聲書資料夾了。</string>

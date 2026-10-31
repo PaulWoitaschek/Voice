@@ -87,6 +87,8 @@
     <string name="book.edit.server.failed">Не удалось сохранить на вашем сервере. Попробуйте ещё раз.</string>
     <string name="book.edit.server.not_allowed">Ваша учётная запись на сервере не может изменять книги.</string>
     <string name="book.edit.title.label">Название</string>
+    <string name="book.hide">Скрыть из библиотеки</string>
+    <string name="book.show">Показать в библиотеке</string>
     <string name="book.source.device">На этом устройстве</string>
     <string name="book.source.server_downloaded">%s · скачано</string>
     <string name="bookmark.action.add_note">Добавить заметку</string>
@@ -254,6 +256,8 @@
     <string name="history.source.watch">Часы</string>
     <string name="history.source.widget">Виджет</string>
     <string name="library.book.downloading">Скачивается</string>
+    <string name="library.book.hidden">Скрыта</string>
+    <string name="library.book.hidden.message">Книга «%1$s» скрыта</string>
     <string name="library.book.offline">Недоступно офлайн</string>
     <string name="library.category.completed.title">Прослушанные</string>
     <string name="library.category.current.title">Слушаю</string>
@@ -263,6 +267,9 @@
     <string name="library.empty.title">Аудиокниги не найдены</string>
     <string name="library.empty.message">Voice не находит аудиокниг в ваших папках. Проверьте, на месте ли файлы, или добавьте папку.</string>
     <string name="library.empty.action">Показать папки</string>
+    <string name="library.filter">Фильтр</string>
+    <string name="library.filter.hidden_books">Скрытые книги</string>
+    <string name="library.filter.show">Показывать</string>
     <string name="library.folders.title">Папки с аудиокнигами</string>
     <string name="library.folders.moved.dialog.title">Папки аудиокниг перенесены</string>
     <string name="library.folders.moved.dialog.message">Теперь папками аудиокниг можно управлять в настройках.</string>

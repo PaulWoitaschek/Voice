@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Serverisse salvestamine ebaõnnestus. Proovi uuesti.</string>
     <string name="book.edit.server.not_allowed">Sinu kontol pole serveris luba raamatuid muuta.</string>
     <string name="book.edit.title.label">Pealkiri</string>
+    <string name="book.hide">Peida raamatukogust</string>
+    <string name="book.show">Näita raamatukogus</string>
     <string name="book.source.device">Selles seadmes</string>
     <string name="book.source.server_downloaded">%s · alla laaditud</string>
     <string name="bookmark.action.add_note">Lisa märkus</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Nutikell</string>
     <string name="history.source.widget">Vidin</string>
     <string name="library.book.downloading">Laaditakse alla</string>
+    <string name="library.book.hidden">Peidetud</string>
+    <string name="library.book.hidden.message">%1$s on peidetud</string>
     <string name="library.book.offline">Pole võrguühenduseta saadaval</string>
     <string name="library.category.completed.title">Kuulatud</string>
     <string name="library.category.current.title">Kuulamisel</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Heliraamatuid ei leitud</string>
     <string name="library.empty.message">Voice ei leia sinu kaustadest ühtegi heliraamatut. Kontrolli, kas failid on veel alles, või lisa kaust.</string>
     <string name="library.empty.action">Näita kaustu</string>
+    <string name="library.filter">Filtreeri</string>
+    <string name="library.filter.hidden_books">Peidetud raamatud</string>
+    <string name="library.filter.show">Näita</string>
     <string name="library.folders.title">Heliraamatute kaustad</string>
     <string name="library.folders.moved.dialog.title">Audioraamatute kaustad teisaldati</string>
     <string name="library.folders.moved.dialog.message">Nüüd saad audioraamatute kaustu hallata seadetes.</string>

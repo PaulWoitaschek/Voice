@@ -84,6 +84,8 @@
     <string name="book.edit.server.failed">No s\'ha pogut desar al vostre servidor. Torneu-ho a provar.</string>
     <string name="book.edit.server.not_allowed">El vostre compte del servidor no pot canviar llibres.</string>
     <string name="book.edit.title.label">Títol</string>
+    <string name="book.hide">Amaga de la biblioteca</string>
+    <string name="book.show">Mostra a la biblioteca</string>
     <string name="book.source.device">En aquest dispositiu</string>
     <string name="book.source.server_downloaded">%s · baixat</string>
     <string name="bookmark.action.add_note">Afegeix una nota</string>
@@ -241,6 +243,8 @@
     <string name="history.source.watch">Rellotge</string>
     <string name="history.source.widget">Giny</string>
     <string name="library.book.downloading">S\'està baixant</string>
+    <string name="library.book.hidden">Amagat</string>
+    <string name="library.book.hidden.message">S\'ha amagat %1$s</string>
     <string name="library.book.offline">No disponible sense connexió</string>
     <string name="library.category.completed.title">Completat</string>
     <string name="library.category.current.title">En curs</string>
@@ -250,6 +254,9 @@
     <string name="library.empty.title">No s\'ha trobat cap audiollibre</string>
     <string name="library.empty.message">Voice no troba cap audiollibre a les vostres carpetes. Comproveu que els fitxers encara hi siguin o afegiu una carpeta.</string>
     <string name="library.empty.action">Mostra les carpetes</string>
+    <string name="library.filter">Filtra</string>
+    <string name="library.filter.hidden_books">Llibres amagats</string>
+    <string name="library.filter.show">Mostra</string>
     <string name="library.folders.title">Carpetes d\'audiollibres</string>
     <string name="library.folders.moved.dialog.title">Les carpetes d\'audiollibres han canviat de lloc</string>
     <string name="library.folders.moved.dialog.message">Ara podeu gestionar les carpetes d\'audiollibres a Configuració.</string>

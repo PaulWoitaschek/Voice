@@ -84,6 +84,8 @@
     <string name="book.edit.server.failed">No se pudo guardar en tu servidor. Inténtalo de nuevo.</string>
     <string name="book.edit.server.not_allowed">Tu cuenta del servidor no puede cambiar libros.</string>
     <string name="book.edit.title.label">Título</string>
+    <string name="book.hide">Ocultar de la biblioteca</string>
+    <string name="book.show">Mostrar en la biblioteca</string>
     <string name="book.source.device">En este dispositivo</string>
     <string name="book.source.server_downloaded">%s · descargado</string>
     <string name="bookmark.action.add_note">Añadir nota</string>
@@ -241,6 +243,8 @@
     <string name="history.source.watch">Reloj</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Descargando</string>
+    <string name="library.book.hidden">Oculto</string>
+    <string name="library.book.hidden.message">Se ha ocultado %1$s</string>
     <string name="library.book.offline">No disponible sin conexión</string>
     <string name="library.category.completed.title">Completado</string>
     <string name="library.category.current.title">En curso</string>
@@ -250,6 +254,9 @@
     <string name="library.empty.title">No se han encontrado audiolibros</string>
     <string name="library.empty.message">Voice no encuentra ningún audiolibro en tus carpetas. Comprueba que los archivos siguen ahí o añade una carpeta.</string>
     <string name="library.empty.action">Mostrar carpetas</string>
+    <string name="library.filter">Filtrar</string>
+    <string name="library.filter.hidden_books">Libros ocultos</string>
+    <string name="library.filter.show">Mostrar</string>
     <string name="library.folders.title">Carpetas de audiolibros</string>
     <string name="library.folders.moved.dialog.title">Carpetas de audiolibros trasladadas</string>
     <string name="library.folders.moved.dialog.message">Ahora puedes gestionar las carpetas de audiolibros en Ajustes.</string>

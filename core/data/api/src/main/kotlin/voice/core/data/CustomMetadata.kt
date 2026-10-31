@@ -1,5 +1,6 @@
 package voice.core.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.File
@@ -13,6 +14,8 @@ public data class CustomMetadata(
   val cover: File? = null,
   val series: String? = null,
   val part: String? = null,
+  @ColumnInfo(defaultValue = "0")
+  val hidden: Boolean = false,
 ) {
 
   public fun followingFiles(metadata: BookMetadata): CustomMetadata {
