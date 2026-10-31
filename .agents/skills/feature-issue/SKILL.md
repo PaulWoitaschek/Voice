@@ -15,5 +15,3 @@ so only open a feature issue when asked to.
 ```sh
 gh issue create --label feature --title "<title>" --body "<body>"
 ```
-
-Then comment `Planned in #<issue>` on the discussion.
