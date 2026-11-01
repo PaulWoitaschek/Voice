@@ -76,7 +76,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
     when {
       currentBookStore.data.first() == id -> player.playPause(ListeningEvent.Source.Widget)
       bookRepository.get(id)?.content?.isActive == true -> {
-        player.pauseIfCurrentBookDifferentFrom(id)
+        player.pauseIfCurrentBookDifferentFrom(id, ListeningEvent.Source.Widget)
         currentBookStore.updateData { id }
         player.play(ListeningEvent.Source.Widget)
       }
@@ -87,7 +87,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   private suspend fun startOver() {
     val bookId = currentBookStore.data.first() ?: return
     val book = bookRepository.get(bookId) ?: return
-    player.setPosition(0, book.chapters.first().id)
+    player.setPosition(0, book.chapters.first().id, source = ListeningEvent.Source.Widget)
     player.play(ListeningEvent.Source.Widget)
   }
 
