@@ -6,6 +6,88 @@ description: Answers to common questions about Voice, the audiobook player for A
 
 # Questions and answers
 
+<h2 id="folders">How does Voice find the books in my folder?</h2>
+
+In Voice, a book is always one folder or one file. All audio files in a book's folder are its chapters, also those in
+folders inside it, in the order of their names.
+
+When you add a folder, Voice guesses how it's organized and shows you the books it found before adding them. If they
+don't look right, tap **Change how books are found**. The three options only differ in how deep the books are:
+
+| Option                     | A book is                            | Example                                |
+|----------------------------|--------------------------------------|----------------------------------------|
+| **One book**               | The folder you picked                | `The Hobbit/01.mp3`                    |
+| **Every folder is a book** | Each folder in the folder you picked | `Audiobooks/The Hobbit/01.mp3`         |
+| **Folders are authors**    | Each folder one level deeper         | `Audiobooks/Tolkien/The Hobbit/01.mp3` |
+
+You can change the option later under **Settings » Library » Audiobook folders** by tapping the folder. Your progress
+and bookmarks stay with your books.
+
+### One book
+
+The folder you picked is one book. Pick this when you add a single book.
+
+```
+Pride and Prejudice/      ← the folder you picked
+├─ CD 1/
+│   ├─ 01.mp3
+│   └─ 02.mp3
+└─ CD 2/
+    └─ 01.mp3
+```
+
+Voice finds one book, `Pride and Prejudice`, with three chapters.
+
+### Every folder is a book
+
+Each folder in the folder you picked is a book. So is each audio file right in it, like an M4B file.
+
+```
+Audiobooks/               ← the folder you picked
+├─ The Hobbit/
+│   ├─ 01.mp3
+│   └─ 02.mp3
+├─ Moby Dick/
+│   ├─ CD 1/
+│   └─ CD 2/
+└─ The Little Prince.m4b
+```
+
+Voice finds three books: `The Hobbit`, `Moby Dick` and `The Little Prince`.
+
+### Folders are authors
+
+Each folder in the folder you picked holds the books of one author, or of one series. Each folder or audio file in it is
+a book.
+
+```
+Audiobooks/               ← the folder you picked
+├─ Tolkien/
+│   ├─ The Hobbit/
+│   │   ├─ 01.mp3
+│   │   └─ 02.mp3
+│   └─ The Silmarillion.m4b
+└─ Woolf/
+    ├─ Mrs Dalloway/
+    └─ To the Lighthouse/
+```
+
+Voice finds four books: `The Hobbit`, `The Silmarillion`, `Mrs Dalloway` and `To the Lighthouse`. The author folders
+only tell Voice where the books are. The name of the author comes from the tags in your files.
+
+### When your books don't look right
+
+- **Several books became one long book**, with all their chapters in a row: your books are one folder deeper. Pick the
+  next option down in the table above.
+- **Every chapter became a book of its own**: your books are one folder higher. Pick the next option up.
+- **"Looks like 7 books"** on a book in the list of books found: the folders in it look like books of their own.
+  The next option down usually fits.
+- **Your books are organized in different ways**, like an author folder with a series folder in it: Voice uses one
+  option for the whole folder. Keep the books that are organized differently in a folder of their own, and add it with
+  the option that fits it.
+
+To add a book that's a single audio file, tap **Add a single file instead**.
+
 ## Does Voice support Android Auto?
 
 Yes, Voice fully supports Android Auto!
@@ -76,65 +158,6 @@ left off.
 
 If you share a folder with your family and don't want each other's place, names and bookmarks, let your sync tool
 ignore `.voice`. In Syncthing, add `.voice` to the folder's ignore patterns.
-
-<h2 id="folders">How does Voice find the books in my folder?</h2>
-
-Pick the folder with your audiobooks. Voice looks at how the files inside are organized and shows you the books it found before
-adding them. If the books don't look right, tap **Change how books are found** and pick one of the three options below. You can
-change this later in the settings under **Audiobook folders** by tapping the folder. Your progress and bookmarks stay with your books.
-
-### Every folder is a book
-
-Each folder within your selected folder is a separate audiobook. Any audio files directly inside the selected folder (not in a
-subfolder) are audiobooks as well.
-
-```
-/Audiobooks
-├─ TheHobbit/
-│   ├─ chapter1.mp3
-│   └─ chapter2.mp3
-├─ MobyDick/
-│   ├─ chapter1.mp3
-│   └─ chapter2.mp3
-└─ LittlePrince.mp3
-```
-
-Voice recognizes three audiobooks: `TheHobbit`, `MobyDick`, and the single-file book `LittlePrince`.
-
-### One book
-
-The selected folder itself is one audiobook, with files inside treated as chapters. This includes files in subfolders, such as
-`CD 1` and `CD 2`.
-
-```
-/PrideAndPrejudice
-├─ Chapter1.mp3
-├─ Chapter2.mp3
-└─ Chapter3.mp3
-```
-
-Voice recognizes one audiobook: `PrideAndPrejudice`.
-
-### Folders are authors
-
-First-level folders represent authors (or series), and their subfolders represent audiobooks.
-
-```
-/Authors
-├─ Woolf/
-│   ├─ MrsDalloway/
-│   │   ├─ chapter1.mp3
-│   │   └─ chapter2.mp3
-│   └─ ToTheLighthouse/
-│       ├─ chapter1.mp3
-│       └─ chapter2.mp3
-└─ Tolkien/
-    └─ TheHobbit/
-        ├─ chapter1.mp3
-        └─ chapter2.mp3
-```
-
-Voice recognizes authors (`Woolf`, `Tolkien`) and their audiobooks (`MrsDalloway`, `ToTheLighthouse`, `TheHobbit`).
 
 ## Didn't find an answer?
 
