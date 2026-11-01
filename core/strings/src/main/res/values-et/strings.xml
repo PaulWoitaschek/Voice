@@ -258,6 +258,10 @@
         <item quantity="one">%d pooleli raamat</item>
         <item quantity="other">%d pooleli raamatut</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d peidetud raamat</item>
+        <item quantity="other">%d peidetud raamatut</item>
+    </plurals>
     <string name="library.search.browse.title">Sirvi</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d raamat</item>

@@ -258,6 +258,10 @@
         <item quantity="one">%d angefangenes Buch</item>
         <item quantity="other">%d angefangene Bücher</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d ausgeblendetes Buch</item>
+        <item quantity="other">%d ausgeblendete Bücher</item>
+    </plurals>
     <string name="library.search.browse.title">Stöbern</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d Buch</item>

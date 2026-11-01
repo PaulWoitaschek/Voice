@@ -258,6 +258,10 @@
         <item quantity="one">%d kitap devam ediyor</item>
         <item quantity="other">%d kitap devam ediyor</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d gizli kitap</item>
+        <item quantity="other">%d gizli kitap</item>
+    </plurals>
     <string name="library.search.browse.title">Göz at</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d kitap</item>

@@ -244,6 +244,9 @@
     <plurals name="library.header.in_progress">
         <item quantity="other">正在听 %d 本书</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="other">已隐藏 %d 本书</item>
+    </plurals>
     <string name="library.search.browse.title">浏览</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="other">%d 本书</item>

@@ -258,6 +258,10 @@
         <item quantity="one">%d βιβλίο σε εξέλιξη</item>
         <item quantity="other">%d βιβλία σε εξέλιξη</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d κρυφό βιβλίο</item>
+        <item quantity="other">%d κρυφά βιβλία</item>
+    </plurals>
     <string name="library.search.browse.title">Περιήγηση</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d βιβλίο</item>

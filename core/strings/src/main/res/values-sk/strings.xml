@@ -286,6 +286,12 @@
         <item quantity="many">%d rozpočúvaných kníh</item>
         <item quantity="other">%d rozpočúvaných kníh</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d skrytá kniha</item>
+        <item quantity="few">%d skryté knihy</item>
+        <item quantity="many">%d skrytých kníh</item>
+        <item quantity="other">%d skrytých kníh</item>
+    </plurals>
     <string name="library.search.browse.title">Prehliadať</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d kniha</item>

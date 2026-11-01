@@ -272,6 +272,11 @@
         <item quantity="many">%d llibres en curs</item>
         <item quantity="other">%d llibres en curs</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d llibre amagat</item>
+        <item quantity="many">%d llibres amagats</item>
+        <item quantity="other">%d llibres amagats</item>
+    </plurals>
     <string name="library.search.browse.title">Explora</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d llibre</item>

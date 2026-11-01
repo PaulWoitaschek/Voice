@@ -258,6 +258,10 @@
         <item quantity="one">%d könyv folyamatban</item>
         <item quantity="other">%d könyv folyamatban</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d rejtett könyv</item>
+        <item quantity="other">%d rejtett könyv</item>
+    </plurals>
     <string name="library.search.browse.title">Böngészés</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d könyv</item>

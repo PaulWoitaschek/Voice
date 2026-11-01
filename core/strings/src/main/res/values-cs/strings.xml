@@ -286,6 +286,12 @@
         <item quantity="many">%d rozposlouchaných knih</item>
         <item quantity="other">%d rozposlouchaných knih</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d skrytá kniha</item>
+        <item quantity="few">%d skryté knihy</item>
+        <item quantity="many">%d skrytých knih</item>
+        <item quantity="other">%d skrytých knih</item>
+    </plurals>
     <string name="library.search.browse.title">Procházet</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d kniha</item>

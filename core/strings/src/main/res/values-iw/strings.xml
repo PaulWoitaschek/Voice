@@ -272,6 +272,11 @@
         <item quantity="two">%d ספרים בהאזנה</item>
         <item quantity="other">%d ספרים בהאזנה</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d ספר מוסתר</item>
+        <item quantity="two">%d ספרים מוסתרים</item>
+        <item quantity="other">%d ספרים מוסתרים</item>
+    </plurals>
     <string name="library.search.browse.title">עיון</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d ספר</item>

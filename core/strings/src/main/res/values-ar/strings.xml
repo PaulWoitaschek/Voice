@@ -314,6 +314,14 @@
         <item quantity="many">%d كتابًا قيد الاستماع</item>
         <item quantity="other">%d كتاب قيد الاستماع</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="zero">%d كتاب مخفي</item>
+        <item quantity="one">%d كتاب مخفي</item>
+        <item quantity="two">%d كتابان مخفيان</item>
+        <item quantity="few">%d كتب مخفية</item>
+        <item quantity="many">%d كتابًا مخفيًا</item>
+        <item quantity="other">%d كتاب مخفي</item>
+    </plurals>
     <string name="library.search.browse.title">تصفح</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="zero">%d كتاب</item>

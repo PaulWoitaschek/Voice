@@ -272,6 +272,11 @@
         <item quantity="few">%d cărți în curs</item>
         <item quantity="other">%d de cărți în curs</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d carte ascunsă</item>
+        <item quantity="few">%d cărți ascunse</item>
+        <item quantity="other">%d de cărți ascunse</item>
+    </plurals>
     <string name="library.search.browse.title">Răsfoiește</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d carte</item>

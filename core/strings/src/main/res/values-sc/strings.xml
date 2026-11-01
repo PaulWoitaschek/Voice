@@ -258,6 +258,10 @@
         <item quantity="one">%d libru in cursu</item>
         <item quantity="other">%d libros in cursu</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d libru cuadu</item>
+        <item quantity="other">%d libros cuados</item>
+    </plurals>
     <string name="library.search.browse.title">Esplora</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d libru</item>

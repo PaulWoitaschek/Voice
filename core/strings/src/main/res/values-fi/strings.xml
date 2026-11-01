@@ -258,6 +258,10 @@
         <item quantity="one">%d kirja kesken</item>
         <item quantity="other">%d kirjaa kesken</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d piilotettu kirja</item>
+        <item quantity="other">%d piilotettua kirjaa</item>
+    </plurals>
     <string name="library.search.browse.title">Selaa</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d kirja</item>

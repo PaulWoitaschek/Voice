@@ -286,6 +286,12 @@
         <item quantity="many">%d книг в процессе</item>
         <item quantity="other">%d книг в процессе</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d скрытая книга</item>
+        <item quantity="few">%d скрытые книги</item>
+        <item quantity="many">%d скрытых книг</item>
+        <item quantity="other">%d скрытых книг</item>
+    </plurals>
     <string name="library.search.browse.title">Обзор</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d книга</item>

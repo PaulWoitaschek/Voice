@@ -258,6 +258,10 @@
         <item quantity="one">%d boek begonnen</item>
         <item quantity="other">%d boeken begonnen</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d verborgen boek</item>
+        <item quantity="other">%d verborgen boeken</item>
+    </plurals>
     <string name="library.search.browse.title">Bladeren</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d boek</item>

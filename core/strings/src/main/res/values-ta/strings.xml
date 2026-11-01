@@ -258,6 +258,10 @@
         <item quantity="one">%d புத்தகம் கேட்கப்படுகிறது</item>
         <item quantity="other">%d புத்தகங்கள் கேட்கப்படுகின்றன</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d மறைக்கப்பட்ட புத்தகம்</item>
+        <item quantity="other">%d மறைக்கப்பட்ட புத்தகங்கள்</item>
+    </plurals>
     <string name="library.search.browse.title">உலாவு</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d புத்தகம்</item>

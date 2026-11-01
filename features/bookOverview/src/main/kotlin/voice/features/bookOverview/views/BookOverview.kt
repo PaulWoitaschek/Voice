@@ -195,6 +195,7 @@ internal fun BookOverview(
       onSurveyClick = onSurveyClick,
       onSurveyDismiss = onSurveyDismiss,
       onShowFoldersClick = onShowFoldersClick,
+      onHiddenBooksClick = { showFilterSheet = true },
       modifier = Modifier
         .padding(contentPadding)
         .consumeWindowInsets(contentPadding),
@@ -351,6 +352,13 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       showEmptyLibrary = true,
       showFolderAccessBadge = true,
       showFolderPickerIcon = false,
+    ),
+    library.copy(
+      sections = emptyMap(),
+      hero = null,
+      inProgressCount = 0,
+      playButtonState = null,
+      hiddenBookCount = 3,
     ),
   )
 }

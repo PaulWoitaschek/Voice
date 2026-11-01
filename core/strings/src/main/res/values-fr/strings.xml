@@ -272,6 +272,11 @@
         <item quantity="many">%d livres en cours</item>
         <item quantity="other">%d livres en cours</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d livre masqué</item>
+        <item quantity="many">%d livres masqués</item>
+        <item quantity="other">%d livres masqués</item>
+    </plurals>
     <string name="library.search.browse.title">Parcourir</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d livre</item>

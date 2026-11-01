@@ -258,6 +258,10 @@
         <item quantity="one">%d påbörjad bok</item>
         <item quantity="other">%d påbörjade böcker</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d dold bok</item>
+        <item quantity="other">%d dolda böcker</item>
+    </plurals>
     <string name="library.search.browse.title">Bläddra</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d bok</item>

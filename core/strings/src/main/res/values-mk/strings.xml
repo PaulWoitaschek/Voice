@@ -258,6 +258,10 @@
         <item quantity="one">%d книга во тек</item>
         <item quantity="other">%d книги во тек</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d скриена книга</item>
+        <item quantity="other">%d скриени книги</item>
+    </plurals>
     <string name="library.search.browse.title">Прегледај</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d книга</item>

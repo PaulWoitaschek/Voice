@@ -258,6 +258,10 @@
         <item quantity="one">%d पुस्तक जारी है</item>
         <item quantity="other">%d पुस्तकें जारी हैं</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d छिपी हुई पुस्तक</item>
+        <item quantity="other">%d छिपी हुई पुस्तकें</item>
+    </plurals>
     <string name="library.search.browse.title">ब्राउज़ करें</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d पुस्तक</item>

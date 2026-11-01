@@ -258,6 +258,10 @@
         <item quantity="one">%d bog i gang</item>
         <item quantity="other">%d bøger i gang</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d skjult bog</item>
+        <item quantity="other">%d skjulte bøger</item>
+    </plurals>
     <string name="library.search.browse.title">Gennemse</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d bog</item>

@@ -431,6 +431,11 @@
         <item quantity="one">%d book in progress</item>
         <item quantity="other">%d books in progress</item>
     </plurals>
+    <!-- Quiet button at the end of the library while books are hidden from it. Opens the sheet with the switch that shows them again. -->
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d hidden book</item>
+        <item quantity="other">%d hidden books</item>
+    </plurals>
     <!-- Header above the browse section of the library search, which lists the library by authors, series, narrators or genres. -->
     <string name="library.search.browse.title">Browse</string>
     <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. Also below a series in the library, on the screen of a series, below each series suggested while editing a book, and below Hidden books in the library filter. -->

@@ -272,6 +272,11 @@
         <item quantity="many">%d libri in corso</item>
         <item quantity="other">%d libri in corso</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d libro nascosto</item>
+        <item quantity="many">%d libri nascosti</item>
+        <item quantity="other">%d libri nascosti</item>
+    </plurals>
     <string name="library.search.browse.title">Sfoglia</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d libro</item>

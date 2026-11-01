@@ -244,6 +244,9 @@
     <plurals name="library.header.in_progress">
         <item quantity="other">%d buku sedang didengarkan</item>
     </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="other">%d buku tersembunyi</item>
+    </plurals>
     <string name="library.search.browse.title">Jelajahi</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="other">%d buku</item>
