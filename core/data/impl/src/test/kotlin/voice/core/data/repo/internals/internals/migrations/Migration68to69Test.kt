@@ -9,6 +9,7 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.allMigrations
+import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
 import voice.core.data.repo.internals.mapRows
@@ -26,7 +27,7 @@ class Migration68to69Test {
   )
 
   @Test
-  fun `the edits stay and have no series yet`() {
+  fun `the edits stay, with no series yet and no book hidden`() {
     val dbName = "testDb"
     helper.createDatabase(dbName, 68).use { db ->
       db.insert(
@@ -43,9 +44,16 @@ class Migration68to69Test {
     val migrated = helper.runMigrationsAndValidate(dbName, 69, true, *allMigrations())
 
     assertEquals(
-      expected = listOf(listOf("content://hyperion", "Hyperion Cantos", "Dan Simmons", null, null)),
+      expected = listOf(listOf("content://hyperion", "Hyperion Cantos", "Dan Simmons", null, null, 0L)),
       actual = migrated.query("SELECT * FROM customMetadata").mapRows {
-        listOf(getString("bookId"), getStringOrNull("name"), getStringOrNull("author"), getStringOrNull("series"), getStringOrNull("part"))
+        listOf(
+          getString("bookId"),
+          getStringOrNull("name"),
+          getStringOrNull("author"),
+          getStringOrNull("series"),
+          getStringOrNull("part"),
+          getLong("hidden"),
+        )
       },
     )
   }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 69,
-    "identityHash": "fef246c9ddea28657a0888fd168eede5",
+    "identityHash": "74fb692ebe197e141714d56b64e4deca",
     "entities": [
       {
         "tableName": "chapters2",
@@ -406,7 +406,7 @@
       },
       {
         "tableName": "customMetadata",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `name` TEXT, `author` TEXT, `cover` TEXT, `series` TEXT, `part` TEXT, PRIMARY KEY(`bookId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` TEXT NOT NULL, `name` TEXT, `author` TEXT, `cover` TEXT, `series` TEXT, `part` TEXT, `hidden` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`bookId`))",
         "fields": [
           {
             "fieldPath": "bookId",
@@ -438,6 +438,13 @@
             "fieldPath": "part",
             "columnName": "part",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "hidden",
+            "columnName": "hidden",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
@@ -450,7 +457,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fef246c9ddea28657a0888fd168eede5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '74fb692ebe197e141714d56b64e4deca')"
     ]
   }
 }
