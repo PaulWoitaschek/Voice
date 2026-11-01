@@ -159,14 +159,25 @@ class LibrarySeriesTest {
   }
 
   @Test
-  fun `progress weighs the books by their length`() {
-    val short = book(series = "Saga", part = "1", chapters = listOf(chapter(duration = 10_000)), time = 10_000)
+  fun `each book has its own progress`() {
+    val short = book(series = "Saga", part = "1", chapters = listOf(chapter(duration = 10_000)), time = 9_000)
     val long = book(series = "Saga", part = "2", chapters = listOf(chapter(duration = 10_000), chapter(duration = 10_000)), time = 5_000)
+    val third = notStarted(series = "Saga", part = "3")
 
-    val series = listOf(short, long).series().single()
+    val series = listOf(third, short, long).series().single()
 
-    assertEquals(expected = 0.5F, actual = series.progress)
+    assertEquals(expected = listOf(1F, 0.25F, 0F), actual = series.progress)
     assertEquals(expected = 1, actual = series.finishedCount)
+  }
+
+  @Test
+  fun `a book without a length has no progress`() {
+    val empty = book(series = "Saga", part = "1", chapters = listOf(chapter(duration = 0)), time = 0)
+    val other = notStarted(series = "Saga", part = "2")
+
+    val series = listOf(empty, other).series().single()
+
+    assertEquals(expected = listOf(0F, 0F), actual = series.progress)
   }
 
   @Test

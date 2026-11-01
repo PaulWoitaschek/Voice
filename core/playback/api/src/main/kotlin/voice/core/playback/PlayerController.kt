@@ -20,7 +20,10 @@ interface PlayerController {
     source: ListeningEvent.Source = ListeningEvent.Source.App,
   )
 
-  fun pauseIfCurrentBookDifferentFrom(id: BookId)
+  fun pauseIfCurrentBookDifferentFrom(
+    id: BookId,
+    source: ListeningEvent.Source = ListeningEvent.Source.App,
+  )
 
   fun pause()
 

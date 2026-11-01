@@ -60,11 +60,7 @@ internal class Series(
 
   val lastPlayedAt: Instant = books.maxOf { it.content.lastPlayedAt }
 
-  val progress: Float = run {
-    val duration = books.sumOf { it.duration }
-    val listened = books.sumOf { if (it.category == BookOverviewCategory.FINISHED) it.duration else it.position }
-    if (duration > 0) (listened.toFloat() / duration).coerceIn(0F, 1F) else 0F
-  }
+  val progress: List<Float> = books.map { if (it.category == BookOverviewCategory.FINISHED) 1F else it.progress() }
 }
 
 internal fun List<Book>.series(): List<Series> {

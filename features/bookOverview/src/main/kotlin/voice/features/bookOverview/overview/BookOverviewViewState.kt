@@ -81,7 +81,7 @@ data class SeriesStackViewState(
   val covers: List<String?>,
   val bookCount: Int,
   val finishedCount: Int,
-  val progress: Float,
+  val progress: List<Float>,
   val category: BookOverviewCategory,
 )
 
