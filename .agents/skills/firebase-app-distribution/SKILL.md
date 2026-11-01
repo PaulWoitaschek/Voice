@@ -19,6 +19,9 @@ Use this when `signing/signing.properties` in the main checkout and `app/src/pla
 
 It builds the working tree. With uncommitted changes, the commit in the version name and the notes gets `-dirty`.
 
+When it's done, post the tester link, the URL after `Share this release with testers who have access`. Testers open it
+on their phone to install the build.
+
 ## GitHub workflow
 
 Otherwise, ask first. Say that it builds the pushed branch, so uncommitted or unpushed changes need to be committed and
