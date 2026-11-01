@@ -17,8 +17,7 @@ Use this when `signing/signing.properties` in the main checkout and `app/src/pla
 ./scripts/firebase_app_distribution.sh                 # --groups <aliases> for other groups
 ```
 
-It builds the Play release of the latest commit and refuses uncommitted changes. Then ask whether to commit them, or
-to upload the working tree with the script's steps, `-dirty` appended to the version name and the notes saying so.
+It builds the working tree. With uncommitted changes, the commit in the version name and the notes gets `-dirty`.
 
 ## GitHub workflow
 

@@ -22,11 +22,6 @@ done
 
 cd "$(git rev-parse --show-toplevel)"
 
-if [[ -n "$(git status --porcelain)" ]]; then
-  echo "Error: Commit your changes first. The release notes name the latest commit." >&2
-  exit 1
-fi
-
 # Without these the release build is unsigned or lacks Firebase. Signing must use the app signing key so tester
 # builds install over Play Store installs.
 main_checkout=$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")
@@ -46,6 +41,9 @@ version_name=$(sed -n 's/^version_name=//p' "$version_output")
 version_code=$(sed -n 's/^version_code=//p' "$version_output")
 
 commit=$(git rev-parse --short=7 HEAD)
+if [[ -n "$(git status --porcelain)" ]]; then
+  commit="$commit-dirty"
+fi
 # testers see which branch a build comes from, a detached HEAD has none
 branch=$(git branch --show-current)
 release_notes="$commit: $(git log -1 --format=%s)"
