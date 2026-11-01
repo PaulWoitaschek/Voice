@@ -17,12 +17,12 @@ object VoiceIcons {
    */
   val Add: ImageVector =
     ImageVector.Builder(
-      name = "Add",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Add",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -59,12 +59,12 @@ object VoiceIcons {
    */
   val Analytics: ImageVector =
     ImageVector.Builder(
-      name = "Analytics",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Analytics",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -135,12 +135,12 @@ object VoiceIcons {
    */
   val ArrowBack: ImageVector =
     ImageVector.Builder(
-      name = "ArrowBack",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "ArrowBack",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -174,12 +174,12 @@ object VoiceIcons {
    */
   val ArrowDropDown: ImageVector =
     ImageVector.Builder(
-      name = "ArrowDropDown",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "ArrowDropDown",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -207,12 +207,12 @@ object VoiceIcons {
    */
   val ArrowForward: ImageVector =
     ImageVector.Builder(
-      name = "ArrowForward",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "ArrowForward",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -246,12 +246,12 @@ object VoiceIcons {
    */
   val AudioFile: ImageVector =
     ImageVector.Builder(
-      name = "AudioFile",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "AudioFile",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -317,12 +317,12 @@ object VoiceIcons {
    */
   val AutoAwesome: ImageVector =
     ImageVector.Builder(
-      name = "AutoAwesome",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "AutoAwesome",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -387,12 +387,12 @@ object VoiceIcons {
    */
   val Bedtime: ImageVector =
     ImageVector.Builder(
-      name = "Bedtime",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Bedtime",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -443,12 +443,12 @@ object VoiceIcons {
    */
   val BedtimeOff: ImageVector =
     ImageVector.Builder(
-      name = "BedtimeOff",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "BedtimeOff",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -520,12 +520,12 @@ object VoiceIcons {
    */
   val Book: ImageVector =
     ImageVector.Builder(
-      name = "Book",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Book",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -583,12 +583,12 @@ object VoiceIcons {
    */
   val Bookmark: ImageVector =
     ImageVector.Builder(
-      name = "Bookmark",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Bookmark",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -634,12 +634,12 @@ object VoiceIcons {
    */
   val BookmarkAdd: ImageVector =
     ImageVector.Builder(
-      name = "BookmarkAdd",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "BookmarkAdd",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -699,12 +699,12 @@ object VoiceIcons {
    */
   val BugReport: ImageVector =
     ImageVector.Builder(
-      name = "BugReport",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "BugReport",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -797,12 +797,12 @@ object VoiceIcons {
    */
   val Call: ImageVector =
     ImageVector.Builder(
-      name = "Call",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Call",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -871,12 +871,12 @@ object VoiceIcons {
    */
   val Check: ImageVector =
     ImageVector.Builder(
-      name = "Check",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Check",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -901,18 +901,18 @@ object VoiceIcons {
       }
       .build()
 
-/*
- * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/chevron_right.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
- * Generated: 2026-10-07T16:07:28Z
- */
+  /*
+   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/chevron_right.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+   * Generated: 2026-10-07T16:07:28Z
+   */
   val ChevronRight: ImageVector =
     ImageVector.Builder(
-      name = "ChevronRight",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "ChevronRight",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -943,12 +943,12 @@ object VoiceIcons {
    */
   val Close: ImageVector =
     ImageVector.Builder(
-      name = "Close",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Close",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -985,12 +985,12 @@ object VoiceIcons {
    */
   val Cloud: ImageVector =
     ImageVector.Builder(
-      name = "Cloud",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Cloud",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1048,12 +1048,12 @@ object VoiceIcons {
    */
   val CloudDone: ImageVector =
     ImageVector.Builder(
-      name = "CloudDone",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "CloudDone",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1119,12 +1119,12 @@ object VoiceIcons {
    */
   val CloudOff: ImageVector =
     ImageVector.Builder(
-      name = "CloudOff",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "CloudOff",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1198,12 +1198,12 @@ object VoiceIcons {
    */
   val Coffee: ImageVector =
     ImageVector.Builder(
-      name = "Coffee",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Coffee",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1274,12 +1274,12 @@ object VoiceIcons {
    */
   val CollectionsBookmark: ImageVector =
     ImageVector.Builder(
-      name = "CollectionsBookmark",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "CollectionsBookmark",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1349,12 +1349,12 @@ object VoiceIcons {
    */
   val Construction: ImageVector =
     ImageVector.Builder(
-      name = "Construction",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Construction",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1422,12 +1422,12 @@ object VoiceIcons {
    */
   val Contrast: ImageVector =
     ImageVector.Builder(
-      name = "Contrast",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Contrast",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1475,12 +1475,12 @@ object VoiceIcons {
    */
   val ContentCut: ImageVector =
     ImageVector.Builder(
-      name = "ContentCut",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "ContentCut",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1569,12 +1569,12 @@ object VoiceIcons {
    */
   val Crop: ImageVector =
     ImageVector.Builder(
-      name = "Crop",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Crop",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1625,12 +1625,12 @@ object VoiceIcons {
    */
   val Delete: ImageVector =
     ImageVector.Builder(
-      name = "Delete",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Delete",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1693,12 +1693,12 @@ object VoiceIcons {
    */
   val Devices: ImageVector =
     ImageVector.Builder(
-      name = "Devices",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Devices",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1776,12 +1776,12 @@ object VoiceIcons {
    */
   val DirectionsCar: ImageVector =
     ImageVector.Builder(
-      name = "DirectionsCar",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "DirectionsCar",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1864,12 +1864,12 @@ object VoiceIcons {
    */
   val Dns: ImageVector =
     ImageVector.Builder(
-      name = "Dns",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Dns",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1960,12 +1960,12 @@ object VoiceIcons {
    */
   val Done: ImageVector =
     ImageVector.Builder(
-      name = "Done",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Done",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -1996,12 +1996,12 @@ object VoiceIcons {
    */
   val Download: ImageVector =
     ImageVector.Builder(
-      name = "Download",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Download",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2049,12 +2049,12 @@ object VoiceIcons {
    */
   val DownloadDone: ImageVector =
     ImageVector.Builder(
-      name = "DownloadDone",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "DownloadDone",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2091,12 +2091,12 @@ object VoiceIcons {
    */
   val Edit: ImageVector =
     ImageVector.Builder(
-      name = "Edit",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Edit",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2150,12 +2150,12 @@ object VoiceIcons {
    */
   val EmojiFoodBeverage: ImageVector =
     ImageVector.Builder(
-      name = "EmojiFoodBeverage",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "EmojiFoodBeverage",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2242,12 +2242,12 @@ object VoiceIcons {
    */
   val Error: ImageVector =
     ImageVector.Builder(
-      name = "Error",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Error",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2316,12 +2316,12 @@ object VoiceIcons {
    */
   val ExpandMore: ImageVector =
     ImageVector.Builder(
-      name = "ExpandMore",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "ExpandMore",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2352,12 +2352,12 @@ object VoiceIcons {
    */
   val FastForward: ImageVector =
     ImageVector.Builder(
-      name = "FastForward",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "FastForward",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2404,12 +2404,12 @@ object VoiceIcons {
    */
   val FastRewind: ImageVector =
     ImageVector.Builder(
-      name = "FastRewind",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "FastRewind",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2456,12 +2456,12 @@ object VoiceIcons {
    */
   val Favorite: ImageVector =
     ImageVector.Builder(
-      name = "Favorite",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Favorite",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2525,12 +2525,12 @@ object VoiceIcons {
    */
   val Folder: ImageVector =
     ImageVector.Builder(
-      name = "Folder",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Folder",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2582,12 +2582,12 @@ object VoiceIcons {
    */
   val FormatQuote: ImageVector =
     ImageVector.Builder(
-      name = "FormatQuote",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "FormatQuote",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2654,18 +2654,18 @@ object VoiceIcons {
       }
       .build()
 
-/*
- * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/forum.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
- * Generated: 2026-10-07T16:07:28Z
- */
+  /*
+   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/forum.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+   * Generated: 2026-10-07T16:07:28Z
+   */
   val Forum: ImageVector =
     ImageVector.Builder(
-      name = "Forum",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Forum",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2727,12 +2727,12 @@ object VoiceIcons {
    */
   val Headphones: ImageVector =
     ImageVector.Builder(
-      name = "Headphones",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Headphones",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2803,12 +2803,12 @@ object VoiceIcons {
    */
   val Help: ImageVector =
     ImageVector.Builder(
-      name = "Help",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Help",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2891,12 +2891,12 @@ object VoiceIcons {
    */
   val History: ImageVector =
     ImageVector.Builder(
-      name = "History",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "History",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -2956,12 +2956,12 @@ object VoiceIcons {
    */
   val Hive: ImageVector =
     ImageVector.Builder(
-      name = "Hive",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Hive",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3060,12 +3060,12 @@ object VoiceIcons {
    */
   val HourglassEmpty: ImageVector =
     ImageVector.Builder(
-      name = "HourglassEmpty",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "HourglassEmpty",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3130,12 +3130,12 @@ object VoiceIcons {
    */
   val Image: ImageVector =
     ImageVector.Builder(
-      name = "Image",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Image",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3189,12 +3189,12 @@ object VoiceIcons {
    */
   val ImageSearch: ImageVector =
     ImageVector.Builder(
-      name = "ImageSearch",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "ImageSearch",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3272,12 +3272,12 @@ object VoiceIcons {
    */
   val KeyboardArrowDown: ImageVector =
     ImageVector.Builder(
-      name = "KeyboardArrowDown",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "KeyboardArrowDown",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3308,12 +3308,12 @@ object VoiceIcons {
    */
   val Laptop: ImageVector =
     ImageVector.Builder(
-      name = "Laptop",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Laptop",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3376,12 +3376,12 @@ object VoiceIcons {
    */
   val LibraryBooks: ImageVector =
     ImageVector.Builder(
-      name = "LibraryBooks",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "LibraryBooks",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3450,18 +3450,18 @@ object VoiceIcons {
       }
       .build()
 
-/*
- * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/light_mode.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
- * Generated: 2026-10-07T16:07:28Z
- */
+  /*
+   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/light_mode.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+   * Generated: 2026-10-07T16:07:28Z
+   */
   val LightMode: ImageVector =
     ImageVector.Builder(
-      name = "LightMode",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "LightMode",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3554,12 +3554,12 @@ object VoiceIcons {
    */
   val Lightbulb: ImageVector =
     ImageVector.Builder(
-      name = "Lightbulb",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Lightbulb",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3619,12 +3619,12 @@ object VoiceIcons {
    */
   val LockOpen: ImageVector =
     ImageVector.Builder(
-      name = "LockOpen",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "LockOpen",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3693,12 +3693,12 @@ object VoiceIcons {
    */
   val Logout: ImageVector =
     ImageVector.Builder(
-      name = "Logout",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Logout",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3746,12 +3746,12 @@ object VoiceIcons {
    */
   val Mail: ImageVector =
     ImageVector.Builder(
-      name = "Mail",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Mail",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3806,12 +3806,12 @@ object VoiceIcons {
    */
   val Mic: ImageVector =
     ImageVector.Builder(
-      name = "Mic",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Mic",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3875,12 +3875,12 @@ object VoiceIcons {
    */
   val MoreVert: ImageVector =
     ImageVector.Builder(
-      name = "MoreVert",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "MoreVert",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3933,12 +3933,12 @@ object VoiceIcons {
    */
   val NetworkCell: ImageVector =
     ImageVector.Builder(
-      name = "NetworkCell",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "NetworkCell",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -3972,12 +3972,12 @@ object VoiceIcons {
    */
   val NotStarted: ImageVector =
     ImageVector.Builder(
-      name = "NotStarted",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "NotStarted",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4041,12 +4041,12 @@ object VoiceIcons {
    */
   val Notifications: ImageVector =
     ImageVector.Builder(
-      name = "Notifications",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Notifications",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4106,12 +4106,12 @@ object VoiceIcons {
    */
   val Palette: ImageVector =
     ImageVector.Builder(
-      name = "Palette",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Palette",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4216,12 +4216,12 @@ object VoiceIcons {
    */
   val Pause: ImageVector =
     ImageVector.Builder(
-      name = "Pause",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Pause",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4276,12 +4276,12 @@ object VoiceIcons {
    */
   val Person: ImageVector =
     ImageVector.Builder(
-      name = "Person",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Person",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4354,12 +4354,12 @@ object VoiceIcons {
    */
   val PlayArrow: ImageVector =
     ImageVector.Builder(
-      name = "PlayArrow",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "PlayArrow",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4394,12 +4394,12 @@ object VoiceIcons {
    */
   val PushPin: ImageVector =
     ImageVector.Builder(
-      name = "PushPin",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "PushPin",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4451,12 +4451,12 @@ object VoiceIcons {
    */
   val Remove: ImageVector =
     ImageVector.Builder(
-      name = "Remove",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Remove",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4485,12 +4485,12 @@ object VoiceIcons {
    */
   val Replay: ImageVector =
     ImageVector.Builder(
-      name = "Replay",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Replay",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4542,12 +4542,12 @@ object VoiceIcons {
    */
   val Schedule: ImageVector =
     ImageVector.Builder(
-      name = "Schedule",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Schedule",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4608,12 +4608,12 @@ object VoiceIcons {
    */
   val Search: ImageVector =
     ImageVector.Builder(
-      name = "Search",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Search",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4661,12 +4661,12 @@ object VoiceIcons {
    */
   val SearchOff: ImageVector =
     ImageVector.Builder(
-      name = "SearchOff",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "SearchOff",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4738,12 +4738,12 @@ object VoiceIcons {
    */
   val Settings: ImageVector =
     ImageVector.Builder(
-      name = "Settings",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Settings",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4850,12 +4850,12 @@ object VoiceIcons {
    */
   val SkipNext: ImageVector =
     ImageVector.Builder(
-      name = "SkipNext",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "SkipNext",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4896,12 +4896,12 @@ object VoiceIcons {
    */
   val SkipPrevious: ImageVector =
     ImageVector.Builder(
-      name = "SkipPrevious",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "SkipPrevious",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -4942,12 +4942,12 @@ object VoiceIcons {
    */
   val Smartphone: ImageVector =
     ImageVector.Builder(
-      name = "Smartphone",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Smartphone",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5010,12 +5010,12 @@ object VoiceIcons {
    */
   val Sort: ImageVector =
     ImageVector.Builder(
-      name = "Sort",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Sort",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5056,12 +5056,12 @@ object VoiceIcons {
    */
   val Speed: ImageVector =
     ImageVector.Builder(
-      name = "Speed",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Speed",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5126,12 +5126,12 @@ object VoiceIcons {
    */
   val Star: ImageVector =
     ImageVector.Builder(
-      name = "Star",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Star",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5180,12 +5180,12 @@ object VoiceIcons {
    */
   val SwapHoriz: ImageVector =
     ImageVector.Builder(
-      name = "SwapHoriz",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "SwapHoriz",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5230,12 +5230,12 @@ object VoiceIcons {
    */
   val Sync: ImageVector =
     ImageVector.Builder(
-      name = "Sync",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Sync",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5296,12 +5296,12 @@ object VoiceIcons {
    */
   val Timer: ImageVector =
     ImageVector.Builder(
-      name = "Timer",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Timer",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5369,12 +5369,12 @@ object VoiceIcons {
    */
   val TouchApp: ImageVector =
     ImageVector.Builder(
-      name = "TouchApp",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "TouchApp",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5453,12 +5453,12 @@ object VoiceIcons {
    */
   val Undo: ImageVector =
     ImageVector.Builder(
-      name = "Undo",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Undo",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5496,18 +5496,18 @@ object VoiceIcons {
       }
       .build()
 
-/*
- * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/vibration.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
- * Generated: 2026-10-07T16:07:28Z
- */
+  /*
+   * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/vibration.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
+   * Generated: 2026-10-07T16:07:28Z
+   */
   val Vibration: ImageVector =
     ImageVector.Builder(
-      name = "Vibration",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Vibration",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5588,12 +5588,12 @@ object VoiceIcons {
    */
   val ViewList: ImageVector =
     ImageVector.Builder(
-      name = "ViewList",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "ViewList",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5666,12 +5666,12 @@ object VoiceIcons {
    */
   val Visibility: ImageVector =
     ImageVector.Builder(
-      name = "Visibility",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Visibility",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5736,12 +5736,12 @@ object VoiceIcons {
    */
   val VisibilityOff: ImageVector =
     ImageVector.Builder(
-      name = "VisibilityOff",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "VisibilityOff",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5825,12 +5825,12 @@ object VoiceIcons {
    */
   val VolumeUp: ImageVector =
     ImageVector.Builder(
-      name = "VolumeUp",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "VolumeUp",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5890,12 +5890,12 @@ object VoiceIcons {
    */
   val VolunteerActivism: ImageVector =
     ImageVector.Builder(
-      name = "VolunteerActivism",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "VolunteerActivism",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -5996,12 +5996,12 @@ object VoiceIcons {
    */
   val Watch: ImageVector =
     ImageVector.Builder(
-      name = "Watch",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Watch",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),
@@ -6082,12 +6082,12 @@ object VoiceIcons {
    */
   val Widgets: ImageVector =
     ImageVector.Builder(
-      name = "Widgets",
-      defaultWidth = 24.dp,
-      defaultHeight = 24.dp,
-      viewportWidth = 24f,
-      viewportHeight = 24f,
-    )
+        name = "Widgets",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+      )
       .apply {
         path(
           fill = SolidColor(Color.Black),

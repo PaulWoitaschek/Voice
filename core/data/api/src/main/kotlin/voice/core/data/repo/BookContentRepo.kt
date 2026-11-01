@@ -8,6 +8,7 @@ public interface BookContentRepo {
   public fun flow(): Flow<List<BookContent>>
 
   public suspend fun all(): List<BookContent>
+
   public fun flow(id: BookId): Flow<BookContent?>
 
   public suspend fun get(id: BookId): BookContent?

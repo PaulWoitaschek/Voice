@@ -18,9 +18,10 @@ private const val BOOK_TIME = "bookTime"
 public class Migration39to40 : IncrementalMigration(39) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    val positionZeroContentValues = ContentValues().apply {
-      put(BOOK_TIME, 0)
-    }
+    val positionZeroContentValues =
+      ContentValues().apply {
+        put(BOOK_TIME, 0)
+      }
     db.update(
       BOOK_TABLE_NAME,
       SQLiteDatabase.CONFLICT_FAIL,

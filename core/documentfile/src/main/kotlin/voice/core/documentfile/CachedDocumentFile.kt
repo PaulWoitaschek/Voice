@@ -18,9 +18,7 @@ fun CachedDocumentFile.nameWithoutExtension(): String {
     uri.nameFromPath()
   } else {
     if (isFile) {
-      name.substringBeforeLast(".")
-        .takeUnless { it.isEmpty() }
-        ?: name
+      name.substringBeforeLast(".").takeUnless { it.isEmpty() } ?: name
     } else {
       name
     }
@@ -28,9 +26,5 @@ fun CachedDocumentFile.nameWithoutExtension(): String {
 }
 
 fun Uri.nameFromPath(): String {
-  return pathSegments.lastOrNull()
-    ?.dropWhile { it != ':' }
-    ?.removePrefix(":")
-    ?.takeUnless { it.isBlank() }
-    ?: toString()
+  return pathSegments.lastOrNull()?.dropWhile { it != ':' }?.removePrefix(":")?.takeUnless { it.isBlank() } ?: toString()
 }

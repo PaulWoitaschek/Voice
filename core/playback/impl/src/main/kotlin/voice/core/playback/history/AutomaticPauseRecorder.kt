@@ -7,8 +7,8 @@ import voice.core.data.ListeningEvent
 import voice.core.playback.di.PlaybackScope
 
 /**
- * Records the pauses the player does on its own, when another app takes the audio focus, when
- * headphones are unplugged or when the book ends, and when it goes on after a call.
+ * Records the pauses the player does on its own, when another app takes the audio focus, when headphones are unplugged or when the book
+ * ends, and when it goes on after a call.
  */
 @SingleIn(PlaybackScope::class)
 @Inject
@@ -28,12 +28,13 @@ class AutomaticPauseRecorder(private val recorder: ListeningHistoryRecorder) {
           if (playWhenReady) return
           val wasHeldBack = heldBack
           heldBack = false
-          val source = when (reason) {
-            // when holding back turns into a lasting loss, the pause was already recorded
-            Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS -> if (wasHeldBack) return else ListeningEvent.Source.AudioFocus
-            Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY -> ListeningEvent.Source.Unplugged
-            else -> return
-          }
+          val source =
+            when (reason) {
+              // when holding back turns into a lasting loss, the pause was already recorded
+              Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS -> if (wasHeldBack) return else ListeningEvent.Source.AudioFocus
+              Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY -> ListeningEvent.Source.Unplugged
+              else -> return
+            }
           record(player, ListeningEvent.Type.Pause, source)
         }
 

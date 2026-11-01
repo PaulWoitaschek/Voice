@@ -3,6 +3,9 @@ package voice.core.audiobookshelf.http
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.io.IOException
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -21,13 +24,10 @@ import voice.core.audiobookshelf.api.AudiobookshelfApi
 import voice.core.audiobookshelf.audiobookshelfJson
 import voice.core.common.AppInfoProvider
 import voice.core.logging.api.Logger
-import java.io.IOException
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
 
 /**
- * Talks to the server of the signed in account. Requests to it carry the access token, and an expired token is
- * swapped for a fresh one on the fly, so neither the api calls nor the player have to care.
+ * Talks to the server of the signed in account. Requests to it carry the access token, and an expired token is swapped for a fresh one on
+ * the fly, so neither the api calls nor the player have to care.
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -38,22 +38,19 @@ internal class AudiobookshelfHttp(
 
   private val userAgent = "Voice/${appInfoProvider.versionName}"
 
-  val client: OkHttpClient = OkHttpClient.Builder()
-    .connectTimeout(10, TimeUnit.SECONDS)
-    .readTimeout(30, TimeUnit.SECONDS)
-    .addInterceptor { chain ->
-      chain.proceed(
-        chain.request().newBuilder()
-          .header("User-Agent", userAgent)
-          .build(),
-      )
-    }
-    .build()
+  val client: OkHttpClient =
+    OkHttpClient.Builder()
+      .connectTimeout(10, TimeUnit.SECONDS)
+      .readTimeout(30, TimeUnit.SECONDS)
+      .addInterceptor { chain ->
+        chain.proceed(
+          chain.request().newBuilder().header("User-Agent", userAgent).build(),
+        )
+      }
+      .build()
 
-  val authenticatedClient: OkHttpClient = client.newBuilder()
-    .addInterceptor(AccessTokenInterceptor())
-    .authenticator(TokenRefresher())
-    .build()
+  val authenticatedClient: OkHttpClient =
+    client.newBuilder().addInterceptor(AccessTokenInterceptor()).authenticator(TokenRefresher()).build()
 
   private val apis = ConcurrentHashMap<String, AudiobookshelfApi>()
   private val authenticatedApis = ConcurrentHashMap<String, AudiobookshelfApi>()
@@ -64,16 +61,12 @@ internal class AudiobookshelfHttp(
     return authenticatedApis.getOrPut(serverUrl) { retrofit(serverUrl, authenticatedClient) }
   }
 
-  /**
-   * For a login that isn't stored yet.
-   */
+  /** For a login that isn't stored yet. */
   fun withToken(
     serverUrl: String,
     token: String,
   ): AudiobookshelfApi {
-    val tokenClient = client.newBuilder()
-      .addInterceptor { chain -> chain.proceed(chain.request().withToken(token)) }
-      .build()
+    val tokenClient = client.newBuilder().addInterceptor { chain -> chain.proceed(chain.request().withToken(token)) }.build()
     return retrofit(serverUrl, tokenClient)
   }
 
@@ -120,12 +113,13 @@ internal class AudiobookshelfHttp(
           return request.withToken(account.accessToken)
         }
 
-        val refreshed = try {
-          api(account.serverUrl).refresh(account.refreshToken).execute()
-        } catch (e: IOException) {
-          Logger.w(e, "Could not refresh the access token")
-          return null
-        }
+        val refreshed =
+          try {
+            api(account.serverUrl).refresh(account.refreshToken).execute()
+          } catch (e: IOException) {
+            Logger.w(e, "Could not refresh the access token")
+            return null
+          }
         val user = refreshed.body()?.user
         val accessToken = user?.accessToken
         val refreshToken = user?.refreshToken
@@ -150,7 +144,5 @@ internal class AudiobookshelfHttp(
 }
 
 private fun Request.withToken(token: String): Request {
-  return newBuilder()
-    .header("Authorization", "Bearer $token")
-    .build()
+  return newBuilder().header("Authorization", "Bearer $token").build()
 }

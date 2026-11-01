@@ -44,9 +44,7 @@ internal constructor(
   }
 
   internal companion object {
-    /**
-     * Enough for a few dozen listening sessions, while the table stays small.
-     */
+    /** Enough for a few dozen listening sessions, while the table stays small. */
     const val MAX_EVENTS_PER_BOOK = 250
   }
 }

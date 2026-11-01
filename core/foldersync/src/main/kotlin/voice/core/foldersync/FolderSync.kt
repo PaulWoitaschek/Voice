@@ -5,6 +5,12 @@ import android.net.Uri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.io.File
+import java.io.IOException
+import java.time.Clock
+import java.time.Instant
+import java.util.UUID
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
@@ -30,21 +36,16 @@ import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.MediaScanTrigger
-import java.io.File
-import java.io.IOException
-import java.time.Clock
-import java.time.Instant
-import java.util.UUID
-import kotlin.time.Duration.Companion.seconds
 
 /**
- * Takes the listener's place, speed, names and bookmarks to their other devices without a server. Each device writes
- * what it knows into a file in the library folders, which the listener syncs with a tool of their own, and takes over
- * what changed later in the files of the other devices.
+ * Takes the listener's place, speed, names and bookmarks to their other devices without a server. Each device writes what it knows into a
+ * file in the library folders, which the listener syncs with a tool of their own, and takes over what changed later in the files of the
+ * other devices.
  */
 @SingleIn(AppScope::class)
 @Inject
-public class FolderSync internal constructor(
+public class FolderSync
+internal constructor(
   private val context: Context,
   private val syncFiles: SyncFiles,
   private val audiobookFolders: AudiobookFolders,
@@ -80,12 +81,13 @@ public class FolderSync internal constructor(
   private suspend fun syncChanges() {
     // while playing, the position changes every few hundred ms, so this syncs once playback stops
     combine(
-      audiobookFolders.all(),
-      bookRepository.flow(),
-      bookmarkRepo.flow(),
-      // so a book becomes the current one once the scan is done
-      mediaScanTrigger.scannerActive,
-    ) { _, _, _, _ -> }
+        audiobookFolders.all(),
+        bookRepository.flow(),
+        bookmarkRepo.flow(),
+        // so a book becomes the current one once the scan is done
+        mediaScanTrigger.scannerActive,
+      ) { _, _, _, _ ->
+      }
       .debounce(3.seconds)
       .collect { sync() }
   }
@@ -101,10 +103,7 @@ public class FolderSync internal constructor(
   // the current book isn't synced, so a new phone, or one whose Voice data was cleared, would have nothing to continue
   private suspend fun continueBookPlayedLast() {
     if (currentBookStore.data.first() != null) return
-    val book = bookRepository.all()
-      .filter { it.content.lastPlayedAt != Instant.EPOCH }
-      .maxByOrNull { it.content.lastPlayedAt }
-      ?: return
+    val book = bookRepository.all().filter { it.content.lastPlayedAt != Instant.EPOCH }.maxByOrNull { it.content.lastPlayedAt } ?: return
     currentBookStore.updateData { it ?: book.id }
   }
 
@@ -120,8 +119,8 @@ public class FolderSync internal constructor(
     val own = ownFile?.books.orEmpty()
     val others = (files - ownFileName).values
     val now = clock.millis()
-    val synced = books.groupBy(keySelector = { it.key }, valueTransform = { it.book })
-      .mapValues { (key, copies) ->
+    val synced =
+      books.groupBy(keySelector = { it.key }, valueTransform = { it.book }).mapValues { (key, copies) ->
         val mine = copies.toSyncedBook(bookmarks, own[key], ownFileExists = ownFile != null, now = now)
         val newest = others.mapNotNull { it.books[key] }.fold(mine, SyncedBook::with)
         // before writing, so if Voice stops in between, the next sync sends back what it took, not what it replaced
@@ -213,30 +212,30 @@ public class FolderSync internal constructor(
     }
   }
 
-  private inline fun <T> inFolder(action: () -> T): T? = try {
-    action()
-  } catch (e: IOException) {
-    Logger.w(e, "Could not sync through a folder")
-    null
-  } catch (e: SecurityException) {
-    // the listener took away the access to the folder
-    Logger.w(e, "Could not sync through a folder")
-    null
-  } catch (e: IllegalArgumentException) {
-    // how the storage provider reports a file or storage that went away since the last query
-    Logger.w(e, "Could not sync through a folder")
-    null
-  } catch (e: IllegalStateException) {
-    // how the storage provider reports a file or folder it couldn't create, like on an SD card that's read-only
-    Logger.w(e, "Could not sync through a folder")
-    null
-  }
+  private inline fun <T> inFolder(action: () -> T): T? =
+    try {
+      action()
+    } catch (e: IOException) {
+      Logger.w(e, "Could not sync through a folder")
+      null
+    } catch (e: SecurityException) {
+      // the listener took away the access to the folder
+      Logger.w(e, "Could not sync through a folder")
+      null
+    } catch (e: IllegalArgumentException) {
+      // how the storage provider reports a file or storage that went away since the last query
+      Logger.w(e, "Could not sync through a folder")
+      null
+    } catch (e: IllegalStateException) {
+      // how the storage provider reports a file or folder it couldn't create, like on an SD card that's read-only
+      Logger.w(e, "Could not sync through a folder")
+      null
+    }
 
   // not backed up, so a phone restored from a backup counts as another device
   private fun deviceId(): String {
     val file = File(context.noBackupFilesDir, "folderSyncDeviceId")
-    return file.takeIf { it.exists() }?.readText()?.takeIf { it.isNotBlank() }
-      ?: UUID.randomUUID().toString().also { file.writeText(it) }
+    return file.takeIf { it.exists() }?.readText()?.takeIf { it.isNotBlank() } ?: UUID.randomUUID().toString().also { file.writeText(it) }
   }
 }
 

@@ -8,6 +8,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -19,20 +20,16 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerControllerImpl
-import kotlin.time.Duration.Companion.seconds
 
 class WidgetButtonReceiver : BroadcastReceiver() {
 
   private val scope = MainScope()
 
-  @Inject
-  lateinit var player: PlayerControllerImpl
+  @Inject lateinit var player: PlayerControllerImpl
 
-  @Inject
-  lateinit var bookRepository: BookRepository
+  @Inject lateinit var bookRepository: BookRepository
 
-  @Inject
-  lateinit var currentBookStore: CurrentBookStore
+  @Inject lateinit var currentBookStore: CurrentBookStore
 
   override fun onReceive(
     context: Context,
@@ -102,8 +99,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
     FastForward,
     Rewind,
     PlayBook,
-    StartOver,
-    ;
+    StartOver;
 
     companion object {
       fun parse(intent: Intent?): Action? {
@@ -131,14 +127,11 @@ class WidgetButtonIntentsImpl(private val context: Context) : WidgetButtonIntent
   override fun startOver(): Intent = intent(WidgetButtonReceiver.Action.StartOver)
 
   override fun playBook(id: BookId): Intent {
-    return intent(WidgetButtonReceiver.Action.PlayBook)
-      .putExtra(BOOK_ID_KEY, id.value)
+    return intent(WidgetButtonReceiver.Action.PlayBook).putExtra(BOOK_ID_KEY, id.value)
   }
 
   private fun intent(action: WidgetButtonReceiver.Action): Intent {
-    return Intent(WIDGET_ACTION)
-      .setComponent(ComponentName(context, WidgetButtonReceiver::class.java))
-      .putExtra(ACTION_KEY, action.name)
+    return Intent(WIDGET_ACTION).setComponent(ComponentName(context, WidgetButtonReceiver::class.java)).putExtra(ACTION_KEY, action.name)
   }
 }
 

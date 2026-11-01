@@ -1,11 +1,11 @@
 package voice.features.bookOverview.overview
 
-import voice.core.data.Book
-import voice.features.bookOverview.book
-import voice.features.bookOverview.chapter
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import voice.core.data.Book
+import voice.features.bookOverview.book
+import voice.features.bookOverview.chapter
 
 class LibrarySeriesTest {
 
@@ -56,12 +56,14 @@ class LibrarySeriesTest {
 
   @Test
   fun `series names match regardless of case, accents and punctuation`() {
-    val series = listOf(
-      notStarted(series = "Harry Potter"),
-      notStarted(series = " harry-potter "),
-      notStarted(series = "Härry Potter"),
-      notStarted(series = "Harry Potter"),
-    ).series()
+    val series =
+      listOf(
+          notStarted(series = "Harry Potter"),
+          notStarted(series = " harry-potter "),
+          notStarted(series = "Härry Potter"),
+          notStarted(series = "Harry Potter"),
+        )
+        .series()
 
     assertEquals(expected = 1, actual = series.size)
     assertEquals(expected = "Harry Potter", actual = series.single().name)
@@ -69,12 +71,14 @@ class LibrarySeriesTest {
 
   @Test
   fun `the marks of other scripts keep series apart`() {
-    val series = listOf(
-      notStarted(series = "कमल"),
-      notStarted(series = "कमला"),
-      notStarted(series = "ハリー"),
-      notStarted(series = "バリー"),
-    ).series()
+    val series =
+      listOf(
+          notStarted(series = "कमल"),
+          notStarted(series = "कमला"),
+          notStarted(series = "ハリー"),
+          notStarted(series = "バリー"),
+        )
+        .series()
 
     assertEquals(expected = 4, actual = series.size)
   }
@@ -100,9 +104,10 @@ class LibrarySeriesTest {
   @Test
   fun `a series and part given in Voice win over the files`() {
     val tagged = notStarted(series = "Saga", part = "2")
-    val untagged = notStarted(series = "Other", part = "9").let { book ->
-      book.copy(custom = book.custom.copy(series = "Saga", part = "1"))
-    }
+    val untagged =
+      notStarted(series = "Other", part = "9").let { book ->
+        book.copy(custom = book.custom.copy(series = "Saga", part = "1"))
+      }
 
     val series = listOf(tagged, untagged).series().single()
 
@@ -182,12 +187,15 @@ class LibrarySeriesTest {
 
   @Test
   fun `the author is the one most books name`() {
-    val series = listOf(
-      notStarted(series = "Saga", author = "Daniel Hartwell"),
-      notStarted(series = "Saga", author = "D. Hartwell"),
-      notStarted(series = "Saga", author = "Daniel Hartwell"),
-      notStarted(series = "Saga", author = null),
-    ).series().single()
+    val series =
+      listOf(
+          notStarted(series = "Saga", author = "Daniel Hartwell"),
+          notStarted(series = "Saga", author = "D. Hartwell"),
+          notStarted(series = "Saga", author = "Daniel Hartwell"),
+          notStarted(series = "Saga", author = null),
+        )
+        .series()
+        .single()
 
     assertEquals(expected = "Daniel Hartwell", actual = series.author)
   }
@@ -206,14 +214,15 @@ class LibrarySeriesTest {
 
   @Test
   fun `stacks and books not started yet are sorted by name`() {
-    val entries = libraryEntries(
-      listOf(
-        notStarted(name = "Part 10"),
-        notStarted(series = "Part 3"),
-        notStarted(name = "Part 2"),
-        notStarted(series = "Part 3"),
-      ),
-    )
+    val entries =
+      libraryEntries(
+        listOf(
+          notStarted(name = "Part 10"),
+          notStarted(series = "Part 3"),
+          notStarted(name = "Part 2"),
+          notStarted(series = "Part 3"),
+        ),
+      )
 
     assertEquals(
       expected = listOf("Part 2", "Part 3", "Part 10"),
@@ -223,10 +232,11 @@ class LibrarySeriesTest {
 
   private fun List<LibraryEntry>.stack(): Series = (single() as LibraryEntry.Stack).series
 
-  private fun LibraryEntry.title(): String = when (this) {
-    is LibraryEntry.Single -> book.name
-    is LibraryEntry.Stack -> series.name
-  }
+  private fun LibraryEntry.title(): String =
+    when (this) {
+      is LibraryEntry.Single -> book.name
+      is LibraryEntry.Stack -> series.name
+    }
 
   private fun notStarted(
     series: String? = null,

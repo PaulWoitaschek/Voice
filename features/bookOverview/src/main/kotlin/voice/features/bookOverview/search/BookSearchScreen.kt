@@ -59,12 +59,12 @@ import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.search.BookSearchField
+import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
 import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.di.BookOverviewGraph
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import voice.core.strings.R as StringsR
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -72,19 +72,20 @@ object BookSearchProvider {
 
   @Provides
   @IntoSet
-  fun bookSearchNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.LibrarySearch> { key ->
-    NavEntry(key) {
-      BookSearchScreen()
+  fun bookSearchNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.LibrarySearch> { key ->
+      NavEntry(key) {
+        BookSearchScreen()
+      }
     }
-  }
 }
 
 @Composable
 fun BookSearchScreen(modifier: Modifier = Modifier) {
-  val bookGraph = retain<BookOverviewGraph> {
-    rootGraphAs<BookOverviewGraph.Factory.Provider>()
-      .bookOverviewGraphProviderFactory.create()
-  }
+  val bookGraph =
+    retain<BookOverviewGraph> {
+      rootGraphAs<BookOverviewGraph.Factory.Provider>().bookOverviewGraphProviderFactory.create()
+    }
   val viewModel = bookGraph.bookSearchViewModel
   rememberSaveable(saver = viewModel.saver) { viewModel }
   val viewState = viewModel.state()
@@ -92,69 +93,103 @@ fun BookSearchScreen(modifier: Modifier = Modifier) {
   BookSearch(
     viewState = viewState,
     query = viewModel.query,
-    listener = object : BookSearchListener {
-      override fun onBackClick() = viewModel.onBackClick()
-      override fun onSearch() = viewModel.onSearch()
-      override fun onRecentSearchClick(recentSearch: String) = viewModel.onRecentSearchClick(recentSearch)
-      override fun onRemoveRecentSearch(recentSearch: String) = viewModel.onRemoveRecentSearch(recentSearch)
-      override fun onClearRecentSearches() = viewModel.onClearRecentSearches()
-      override fun onBrowseCategoryClick(category: BrowseCategory) = viewModel.onBrowseCategoryClick(category)
-      override fun onBrowseEntryClick(
-        category: BrowseCategory,
-        name: String,
-      ) = viewModel.onBrowseEntryClick(category, name)
+    listener =
+      object : BookSearchListener {
+        override fun onBackClick() = viewModel.onBackClick()
 
-      override fun onFilterClick(field: BookSearchField?) = viewModel.onFilterClick(field)
-      override fun onBookClick(id: BookId) = viewModel.onBookClick(id)
-      override fun onBookLongClick(id: BookId) = viewModel.onBookLongClick(id)
+        override fun onSearch() = viewModel.onSearch()
 
-      override fun onPlayClick(id: BookId) = viewModel.onPlayClick(id)
-      override fun onFoldersClick() = viewModel.onFoldersClick()
-      override fun onSearchEverythingClick() = viewModel.onSearchEverythingClick()
-    },
+        override fun onRecentSearchClick(recentSearch: String) = viewModel.onRecentSearchClick(recentSearch)
+
+        override fun onRemoveRecentSearch(recentSearch: String) = viewModel.onRemoveRecentSearch(recentSearch)
+
+        override fun onClearRecentSearches() = viewModel.onClearRecentSearches()
+
+        override fun onBrowseCategoryClick(category: BrowseCategory) = viewModel.onBrowseCategoryClick(category)
+
+        override fun onBrowseEntryClick(
+          category: BrowseCategory,
+          name: String,
+        ) = viewModel.onBrowseEntryClick(category, name)
+
+        override fun onFilterClick(field: BookSearchField?) = viewModel.onFilterClick(field)
+
+        override fun onBookClick(id: BookId) = viewModel.onBookClick(id)
+
+        override fun onBookLongClick(id: BookId) = viewModel.onBookLongClick(id)
+
+        override fun onPlayClick(id: BookId) = viewModel.onPlayClick(id)
+
+        override fun onFoldersClick() = viewModel.onFoldersClick()
+
+        override fun onSearchEverythingClick() = viewModel.onSearchEverythingClick()
+      },
     modifier = modifier,
   )
 }
 
 internal interface BookSearchListener {
   fun onBackClick()
+
   fun onSearch()
+
   fun onRecentSearchClick(recentSearch: String)
+
   fun onRemoveRecentSearch(recentSearch: String)
+
   fun onClearRecentSearches()
+
   fun onBrowseCategoryClick(category: BrowseCategory)
+
   fun onBrowseEntryClick(
     category: BrowseCategory,
     name: String,
   )
 
   fun onFilterClick(field: BookSearchField?)
+
   fun onBookClick(id: BookId)
+
   fun onBookLongClick(id: BookId)
+
   fun onPlayClick(id: BookId)
+
   fun onFoldersClick()
+
   fun onSearchEverythingClick()
 
   companion object {
-    val Noop = object : BookSearchListener {
-      override fun onBackClick() {}
-      override fun onSearch() {}
-      override fun onRecentSearchClick(recentSearch: String) {}
-      override fun onRemoveRecentSearch(recentSearch: String) {}
-      override fun onClearRecentSearches() {}
-      override fun onBrowseCategoryClick(category: BrowseCategory) {}
-      override fun onBrowseEntryClick(
-        category: BrowseCategory,
-        name: String,
-      ) {}
+    val Noop =
+      object : BookSearchListener {
+        override fun onBackClick() {}
 
-      override fun onFilterClick(field: BookSearchField?) {}
-      override fun onBookClick(id: BookId) {}
-      override fun onBookLongClick(id: BookId) {}
-      override fun onPlayClick(id: BookId) {}
-      override fun onFoldersClick() {}
-      override fun onSearchEverythingClick() {}
-    }
+        override fun onSearch() {}
+
+        override fun onRecentSearchClick(recentSearch: String) {}
+
+        override fun onRemoveRecentSearch(recentSearch: String) {}
+
+        override fun onClearRecentSearches() {}
+
+        override fun onBrowseCategoryClick(category: BrowseCategory) {}
+
+        override fun onBrowseEntryClick(
+          category: BrowseCategory,
+          name: String,
+        ) {}
+
+        override fun onFilterClick(field: BookSearchField?) {}
+
+        override fun onBookClick(id: BookId) {}
+
+        override fun onBookLongClick(id: BookId) {}
+
+        override fun onPlayClick(id: BookId) {}
+
+        override fun onFoldersClick() {}
+
+        override fun onSearchEverythingClick() {}
+      }
   }
 }
 
@@ -167,25 +202,23 @@ internal fun BookSearch(
 ) {
   val keyboard = LocalSoftwareKeyboardController.current
   // scrolling the results means reading them, so the keyboard makes room
-  val hideKeyboardOnScroll = remember(keyboard) {
-    object : NestedScrollConnection {
-      override fun onPreScroll(
-        available: Offset,
-        source: NestedScrollSource,
-      ): Offset {
-        if (source == NestedScrollSource.UserInput && available.y != 0F) {
-          keyboard?.hide()
+  val hideKeyboardOnScroll =
+    remember(keyboard) {
+      object : NestedScrollConnection {
+        override fun onPreScroll(
+          available: Offset,
+          source: NestedScrollSource,
+        ): Offset {
+          if (source == NestedScrollSource.UserInput && available.y != 0F) {
+            keyboard?.hide()
+          }
+          return Offset.Zero
         }
-        return Offset.Zero
       }
     }
-  }
   CenteredContent(modifier = modifier) { horizontalPadding ->
     Column(
-      modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.surface)
-        .statusBarsPadding(),
+      modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface).statusBarsPadding(),
     ) {
       SearchField(
         query = query,
@@ -197,9 +230,7 @@ internal fun BookSearch(
         modifier = Modifier.padding(start = horizontalPadding, end = horizontalPadding, top = 8.dp, bottom = 16.dp),
       )
       Surface(
-        modifier = Modifier
-          .fillMaxSize()
-          .nestedScroll(hideKeyboardOnScroll),
+        modifier = Modifier.fillMaxSize().nestedScroll(hideKeyboardOnScroll),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
       ) {
@@ -211,22 +242,25 @@ internal fun BookSearch(
           label = "searchContent",
         ) { state ->
           when (state) {
-            is BookSearchViewState.Idle -> IdleSearch(
-              viewState = state,
-              contentPadding = contentPadding,
-              listener = listener,
-            )
-            is BookSearchViewState.Results -> SearchResults(
-              viewState = state,
-              contentPadding = contentPadding,
-              listener = listener,
-            )
-            is BookSearchViewState.NoResults -> NoResults(
-              viewState = state,
-              contentPadding = contentPadding,
-              onFoldersClick = listener::onFoldersClick,
-              onSearchEverythingClick = listener::onSearchEverythingClick,
-            )
+            is BookSearchViewState.Idle ->
+              IdleSearch(
+                viewState = state,
+                contentPadding = contentPadding,
+                listener = listener,
+              )
+            is BookSearchViewState.Results ->
+              SearchResults(
+                viewState = state,
+                contentPadding = contentPadding,
+                listener = listener,
+              )
+            is BookSearchViewState.NoResults ->
+              NoResults(
+                viewState = state,
+                contentPadding = contentPadding,
+                onFoldersClick = listener::onFoldersClick,
+                onSearchEverythingClick = listener::onSearchEverythingClick,
+              )
           }
         }
       }
@@ -268,10 +302,7 @@ private fun SearchField(
     // this screen is the expanded search, so the field never collapses
     searchBarState = rememberSearchBarState(initialValue = SearchBarValue.Expanded),
     onSearch = { onSearch() },
-    modifier = modifier
-      .searchBarSharedBounds(shape)
-      .fillMaxWidth()
-      .focusRequester(focusRequester),
+    modifier = modifier.searchBarSharedBounds(shape).fillMaxWidth().focusRequester(focusRequester),
     placeholder = {
       Text(stringResource(StringsR.string.library_search_hint))
     },
@@ -283,28 +314,30 @@ private fun SearchField(
         )
       }
     },
-    trailingIcon = if (query.text.isNotEmpty()) {
-      {
-        IconButton(
-          onClick = {
-            query.clearText()
-            focusRequester.requestFocus()
-          },
-        ) {
-          Icon(
-            imageVector = VoiceIcons.Close,
-            contentDescription = stringResource(StringsR.string.library_search_clear),
-          )
+    trailingIcon =
+      if (query.text.isNotEmpty()) {
+        {
+          IconButton(
+            onClick = {
+              query.clearText()
+              focusRequester.requestFocus()
+            },
+          ) {
+            Icon(
+              imageVector = VoiceIcons.Close,
+              contentDescription = stringResource(StringsR.string.library_search_clear),
+            )
+          }
         }
-      }
-    } else {
-      null
-    },
+      } else {
+        null
+      },
     shape = shape,
-    colors = SearchBarDefaults.inputFieldColors(
-      focusedContainerColor = containerColor,
-      unfocusedContainerColor = containerColor,
-    ),
+    colors =
+      SearchBarDefaults.inputFieldColors(
+        focusedContainerColor = containerColor,
+        unfocusedContainerColor = containerColor,
+      ),
   )
 }
 

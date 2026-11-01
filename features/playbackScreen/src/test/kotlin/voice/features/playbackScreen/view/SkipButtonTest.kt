@@ -22,24 +22,24 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
 import voice.core.ui.VoiceTheme
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class SkipButtonTest {
 
-  private val motionScale = object : MotionDurationScale {
-    override var scaleFactor by mutableFloatStateOf(0F)
-  }
+  private val motionScale =
+    object : MotionDurationScale {
+      override var scaleFactor by mutableFloatStateOf(0F)
+    }
 
-  @get:Rule
-  val compose = createComposeRule(effectContext = motionScale)
+  @get:Rule val compose = createComposeRule(effectContext = motionScale)
 
   @Test
   fun `pressing skip buttons with animations off keeps both controls in place`() {

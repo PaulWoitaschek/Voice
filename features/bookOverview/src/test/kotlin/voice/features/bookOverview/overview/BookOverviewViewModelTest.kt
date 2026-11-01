@@ -13,6 +13,11 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import java.time.Clock
+import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -52,26 +57,24 @@ import voice.features.bookOverview.survey.Survey
 import voice.features.bookOverview.survey.SurveyUrlFeatureFlag
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import java.time.Clock
-import java.time.ZoneOffset
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.time.Instant
 
 class BookOverviewViewModelTest {
 
   private val testDispatcher = UnconfinedTestDispatcher()
-  private val serverLibrary = mockk<ServerLibrary>(relaxUnitFun = true) {
-    every { syncing } returns MutableStateFlow(false)
-    every { unavailableBooks } returns flowOf(emptySet())
-  }
-  private val serverDownloads = mockk<ServerDownloads> {
-    every { states } returns flowOf(emptyMap())
-  }
+  private val serverLibrary =
+    mockk<ServerLibrary>(relaxUnitFun = true) {
+      every { syncing } returns MutableStateFlow(false)
+      every { unavailableBooks } returns flowOf(emptySet())
+    }
+  private val serverDownloads =
+    mockk<ServerDownloads> {
+      every { states } returns flowOf(emptyMap())
+    }
   private val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
-  private val audiobookFolders = mockk<AudiobookFolders> {
-    every { withoutAccess() } returns flowOf(emptyMap())
-  }
+  private val audiobookFolders =
+    mockk<AudiobookFolders> {
+      every { withoutAccess() } returns flowOf(emptyMap())
+    }
   private val emptyLibraryTracker = mockk<EmptyLibraryTracker>(relaxUnitFun = true)
 
   @Test
@@ -79,118 +82,134 @@ class BookOverviewViewModelTest {
     val currentBook = book(name = "Current", time = 1_000)
     val otherBook = book(name = "Other", time = 2_000)
     val livePlaybackFlow = MutableStateFlow<LivePlaybackState?>(null)
-    val viewModel = BookOverviewViewModel(
-      repo = mockk<BookRepository> {
-        every { flow() } returns MutableStateFlow(listOf(currentBook, otherBook))
-      },
-      mediaScanner = mockk<MediaScanTrigger> {
-        every { scannerActive } returns MutableStateFlow(false)
-        every { scan(any()) } just Runs
-      },
-      playStateManager = PlayStateManager(),
-      playerController = mockk<PlayerController> {
-        every { livePlaybackStateFlow(currentBook.id) } returns livePlaybackFlow
-      },
-      currentBookStoreDataStore = CurrentBookStore(MemoryDataStore(currentBook.id)),
-      folderPickerMovedDialogShownStore = FolderPickerMovedDialogShownStore(MemoryDataStore(false)),
-      gridModeStore = GridModeStore(MemoryDataStore(GridMode.LIST)),
-      gridCount = mockk<GridCount> {
-        every { useGridAsDefault() } returns false
-      },
-      navigator = mockk<Navigator>(),
-      appInfoProvider = appInfoProvider(),
-      deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
-        every { hasBug } returns MutableStateFlow(false)
-      },
-      folderPickerInSettingsFeatureFlag = FolderPickerInSettingsFeatureFlag(MemoryFeatureFlag(false)),
-      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
-      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
-      dispatcherProvider = dispatcherProvider,
-      serverLibrary = serverLibrary,
-      serverDownloads = serverDownloads,
-      audiobookFolders = audiobookFolders,
-      emptyLibraryTracker = emptyLibraryTracker,
-      survey = survey(),
-      showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
-      bookHider = BookHider(mockk()),
-    )
-
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      val initial = awaitItem()
-      val initialOtherItem = initial.book(otherBook.id)
-
-      assertEquals(expected = currentBook.toItemViewState(), actual = initial.hero?.value)
-      assertEquals(expected = otherBook.toItemViewState(), actual = initialOtherItem)
-      assertEquals(expected = listOf(otherBook.id.value), actual = initial.keys(BookOverviewCategory.CURRENT))
-      assertEquals(expected = currentBook.id, actual = initial.currentBookId)
-
-      val livePlaybackState = LivePlaybackState(
-        bookId = currentBook.id,
-        chapterId = currentBook.chapters.first().id,
-        positionMs = 6_000,
-        isPlaying = true,
-        playbackSpeed = 1F,
+    val viewModel =
+      BookOverviewViewModel(
+        repo =
+          mockk<BookRepository> {
+            every { flow() } returns MutableStateFlow(listOf(currentBook, otherBook))
+          },
+        mediaScanner =
+          mockk<MediaScanTrigger> {
+            every { scannerActive } returns MutableStateFlow(false)
+            every { scan(any()) } just Runs
+          },
+        playStateManager = PlayStateManager(),
+        playerController =
+          mockk<PlayerController> {
+            every { livePlaybackStateFlow(currentBook.id) } returns livePlaybackFlow
+          },
+        currentBookStoreDataStore = CurrentBookStore(MemoryDataStore(currentBook.id)),
+        folderPickerMovedDialogShownStore = FolderPickerMovedDialogShownStore(MemoryDataStore(false)),
+        gridModeStore = GridModeStore(MemoryDataStore(GridMode.LIST)),
+        gridCount =
+          mockk<GridCount> {
+            every { useGridAsDefault() } returns false
+          },
+        navigator = mockk<Navigator>(),
+        appInfoProvider = appInfoProvider(),
+        deviceHasStoragePermissionBug =
+          mockk<DeviceHasStoragePermissionBug> {
+            every { hasBug } returns MutableStateFlow(false)
+          },
+        folderPickerInSettingsFeatureFlag = FolderPickerInSettingsFeatureFlag(MemoryFeatureFlag(false)),
+        experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
+        kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
+        dispatcherProvider = dispatcherProvider,
+        serverLibrary = serverLibrary,
+        serverDownloads = serverDownloads,
+        audiobookFolders = audiobookFolders,
+        emptyLibraryTracker = emptyLibraryTracker,
+        survey = survey(),
+        showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+        bookHider = BookHider(mockk()),
       )
-      livePlaybackFlow.value = livePlaybackState
-      yield()
 
-      assertEquals(expected = currentBook.overlay(livePlaybackState).toItemViewState(), actual = initial.hero?.value)
-      assertEquals(expected = initialOtherItem, actual = initial.book(otherBook.id))
-      expectNoEvents()
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val initial = awaitItem()
+        val initialOtherItem = initial.book(otherBook.id)
+
+        assertEquals(expected = currentBook.toItemViewState(), actual = initial.hero?.value)
+        assertEquals(expected = otherBook.toItemViewState(), actual = initialOtherItem)
+        assertEquals(expected = listOf(otherBook.id.value), actual = initial.keys(BookOverviewCategory.CURRENT))
+        assertEquals(expected = currentBook.id, actual = initial.currentBookId)
+
+        val livePlaybackState =
+          LivePlaybackState(
+            bookId = currentBook.id,
+            chapterId = currentBook.chapters.first().id,
+            positionMs = 6_000,
+            isPlaying = true,
+            playbackSpeed = 1F,
+          )
+        livePlaybackFlow.value = livePlaybackState
+        yield()
+
+        assertEquals(expected = currentBook.overlay(livePlaybackState).toItemViewState(), actual = initial.hero?.value)
+        assertEquals(expected = initialOtherItem, actual = initial.book(otherBook.id))
+        expectNoEvents()
+      }
   }
 
   @Test
   fun `state uses demo books in kiosk mode`() = runTest {
-    val viewModel = BookOverviewViewModel(
-      repo = mockk<BookRepository> {
-        every { flow() } returns MutableStateFlow(emptyList())
-      },
-      mediaScanner = mockk<MediaScanTrigger> {
-        every { scannerActive } returns MutableStateFlow(false)
-        every { scan(any()) } just Runs
-      },
-      playStateManager = PlayStateManager(),
-      playerController = mockk(),
-      currentBookStoreDataStore = CurrentBookStore(MemoryDataStore(null)),
-      folderPickerMovedDialogShownStore = FolderPickerMovedDialogShownStore(MemoryDataStore(false)),
-      gridModeStore = GridModeStore(MemoryDataStore(GridMode.LIST)),
-      gridCount = mockk<GridCount> {
-        every { useGridAsDefault() } returns false
-      },
-      navigator = mockk<Navigator>(),
-      appInfoProvider = appInfoProvider(),
-      deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
-        every { hasBug } returns MutableStateFlow(false)
-      },
-      folderPickerInSettingsFeatureFlag = FolderPickerInSettingsFeatureFlag(MemoryFeatureFlag(false)),
-      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
-      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(true)),
-      dispatcherProvider = dispatcherProvider,
-      serverLibrary = serverLibrary,
-      serverDownloads = serverDownloads,
-      audiobookFolders = audiobookFolders,
-      emptyLibraryTracker = emptyLibraryTracker,
-      survey = survey(),
-      showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
-      bookHider = BookHider(mockk()),
-    )
-
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      val state = awaitItem()
-      assertEquals(
-        expected = KioskModeDemoData.demoAudiobooks.map { it.id.value } - KioskModeDemoData.currentlyPlaying.id.value,
-        actual = state.keys(BookOverviewCategory.CURRENT),
+    val viewModel =
+      BookOverviewViewModel(
+        repo =
+          mockk<BookRepository> {
+            every { flow() } returns MutableStateFlow(emptyList())
+          },
+        mediaScanner =
+          mockk<MediaScanTrigger> {
+            every { scannerActive } returns MutableStateFlow(false)
+            every { scan(any()) } just Runs
+          },
+        playStateManager = PlayStateManager(),
+        playerController = mockk(),
+        currentBookStoreDataStore = CurrentBookStore(MemoryDataStore(null)),
+        folderPickerMovedDialogShownStore = FolderPickerMovedDialogShownStore(MemoryDataStore(false)),
+        gridModeStore = GridModeStore(MemoryDataStore(GridMode.LIST)),
+        gridCount =
+          mockk<GridCount> {
+            every { useGridAsDefault() } returns false
+          },
+        navigator = mockk<Navigator>(),
+        appInfoProvider = appInfoProvider(),
+        deviceHasStoragePermissionBug =
+          mockk<DeviceHasStoragePermissionBug> {
+            every { hasBug } returns MutableStateFlow(false)
+          },
+        folderPickerInSettingsFeatureFlag = FolderPickerInSettingsFeatureFlag(MemoryFeatureFlag(false)),
+        experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
+        kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(true)),
+        dispatcherProvider = dispatcherProvider,
+        serverLibrary = serverLibrary,
+        serverDownloads = serverDownloads,
+        audiobookFolders = audiobookFolders,
+        emptyLibraryTracker = emptyLibraryTracker,
+        survey = survey(),
+        showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+        bookHider = BookHider(mockk()),
       )
-      assertEquals(expected = "Echoes of Tomorrow", actual = state.hero?.value?.name)
-      assertEquals(expected = KioskModeDemoData.currentlyPlaying.id, actual = state.currentBookId)
-      assertEquals(expected = false, actual = state.showFolderAccessBadge)
-    }
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        val state = awaitItem()
+        assertEquals(
+          expected = KioskModeDemoData.demoAudiobooks.map { it.id.value } - KioskModeDemoData.currentlyPlaying.id.value,
+          actual = state.keys(BookOverviewCategory.CURRENT),
+        )
+        assertEquals(expected = "Echoes of Tomorrow", actual = state.hero?.value?.name)
+        assertEquals(expected = KioskModeDemoData.currentlyPlaying.id, actual = state.currentBookId)
+        assertEquals(expected = false, actual = state.showFolderAccessBadge)
+      }
   }
 
   @Test
@@ -200,19 +219,21 @@ class BookOverviewViewModelTest {
     val single = book(name = "Single", time = 1_000, lastPlayedAt = java.time.Instant.ofEpochSecond(2))
     val viewModel = viewModel(books = listOf(first, second, single), currentBookId = second.id)
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      val state = awaitItem()
-      assertEquals(expected = "Second", actual = state.hero?.value?.name)
-      assertEquals(expected = "Saga 2", actual = state.hero?.value?.series)
-      assertEquals(expected = listOf("series:saga", single.id.value), actual = state.keys(BookOverviewCategory.CURRENT))
-      val stack = state.sections.getValue(BookOverviewCategory.CURRENT).first() as LibraryItem.Series
-      assertEquals(expected = 2, actual = stack.series.bookCount)
-      assertEquals(expected = 1, actual = stack.series.finishedCount)
-      assertEquals(expected = 2, actual = state.inProgressCount)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = "Second", actual = state.hero?.value?.name)
+        assertEquals(expected = "Saga 2", actual = state.hero?.value?.series)
+        assertEquals(expected = listOf("series:saga", single.id.value), actual = state.keys(BookOverviewCategory.CURRENT))
+        val stack = state.sections.getValue(BookOverviewCategory.CURRENT).first() as LibraryItem.Series
+        assertEquals(expected = 2, actual = stack.series.bookCount)
+        assertEquals(expected = 1, actual = stack.series.finishedCount)
+        assertEquals(expected = 2, actual = state.inProgressCount)
+      }
   }
 
   @Test
@@ -221,32 +242,36 @@ class BookOverviewViewModelTest {
     val visible = book(name = "Visible", time = 1_000)
     val viewModel = viewModel(books = listOf(hidden, visible), currentBookId = hidden.id)
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      val state = awaitItem()
-      assertEquals(expected = listOf(visible.id.value), actual = state.keys(BookOverviewCategory.CURRENT))
-      assertEquals(expected = null, actual = state.hero)
-      assertEquals(expected = null, actual = state.playButtonState)
-      assertEquals(expected = 1, actual = state.inProgressCount)
-      assertEquals(expected = 1, actual = state.hiddenBookCount)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = listOf(visible.id.value), actual = state.keys(BookOverviewCategory.CURRENT))
+        assertEquals(expected = null, actual = state.hero)
+        assertEquals(expected = null, actual = state.playButtonState)
+        assertEquals(expected = 1, actual = state.inProgressCount)
+        assertEquals(expected = 1, actual = state.hiddenBookCount)
+      }
   }
 
   @Test
   fun `a library with only hidden books isn't empty`() = runTest {
     val viewModel = viewModel(books = listOf(book(hidden = true)))
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      val state = awaitItem()
-      assertEquals(expected = false, actual = state.showEmptyLibrary)
-      assertEquals(expected = true, actual = state.showSearchIcon)
-      assertEquals(expected = emptyMap(), actual = state.sections)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = false, actual = state.showEmptyLibrary)
+        assertEquals(expected = true, actual = state.showSearchIcon)
+        assertEquals(expected = emptyMap(), actual = state.sections)
+      }
   }
 
   @Test
@@ -255,28 +280,31 @@ class BookOverviewViewModelTest {
     val store = MemoryDataStore(false)
     val viewModel = viewModel(books = listOf(hidden), showHiddenBooksStore = store)
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = emptyMap(), actual = awaitItem().sections)
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = emptyMap(), actual = awaitItem().sections)
 
-      viewModel.onShowHiddenBooksChange(true)
+        viewModel.onShowHiddenBooksChange(true)
 
-      val state = awaitItem()
-      assertEquals(expected = true, actual = state.showHiddenBooks)
-      assertEquals(expected = true, actual = state.book(hidden.id).hidden)
-      assertEquals(expected = true, actual = store.data.first())
-    }
+        val state = awaitItem()
+        assertEquals(expected = true, actual = state.showHiddenBooks)
+        assertEquals(expected = true, actual = state.book(hidden.id).hidden)
+        assertEquals(expected = true, actual = store.data.first())
+      }
   }
 
   @Test
   fun `undo shows the hidden book again`() = runTest {
     val book = book(hidden = true)
-    val repo = mockk<BookRepository> {
-      every { flow() } returns MutableStateFlow(emptyList())
-      coEvery { updateCustomMetadata(book.id, any()) } just Runs
-    }
+    val repo =
+      mockk<BookRepository> {
+        every { flow() } returns MutableStateFlow(emptyList())
+        coEvery { updateCustomMetadata(book.id, any()) } just Runs
+      }
     val viewModel = viewModel(repo = repo)
 
     viewModel.onUndoHide(book.id)
@@ -300,116 +328,134 @@ class BookOverviewViewModelTest {
 
   @Test
   fun `folder picker icon is hidden when folder picker in settings flag is true`() = runTest {
-    val viewModel = viewModel(
-      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(true),
-      folderPickerMovedDialogShownStore = MemoryDataStore(false),
-    )
+    val viewModel =
+      viewModel(
+        folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(true),
+        folderPickerMovedDialogShownStore = MemoryDataStore(false),
+      )
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
+      }
   }
 
   @Test
   fun `folder picker icon is shown once when flag is false`() = runTest {
-    val viewModel = viewModel(
-      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
-      folderPickerMovedDialogShownStore = MemoryDataStore(false),
-    )
+    val viewModel =
+      viewModel(
+        folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
+        folderPickerMovedDialogShownStore = MemoryDataStore(false),
+      )
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = true, actual = awaitItem().showFolderPickerIcon)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = true, actual = awaitItem().showFolderPickerIcon)
+      }
   }
 
   @Test
   fun `folder picker icon is hidden when moved dialog was shown`() = runTest {
-    val viewModel = viewModel(
-      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
-      folderPickerMovedDialogShownStore = MemoryDataStore(true),
-    )
+    val viewModel =
+      viewModel(
+        folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
+        folderPickerMovedDialogShownStore = MemoryDataStore(true),
+      )
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
+      }
   }
 
   @Test
   fun `folder picker icon is hidden for installs on migration cutoff date`() = runTest {
-    val viewModel = viewModel(
-      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
-      folderPickerMovedDialogShownStore = MemoryDataStore(false),
-      appInfoProvider = appInfoProvider(installTime = Instant.parse("2026-06-17T00:00:00Z")),
-    )
+    val viewModel =
+      viewModel(
+        folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
+        folderPickerMovedDialogShownStore = MemoryDataStore(false),
+        appInfoProvider = appInfoProvider(installTime = Instant.parse("2026-06-17T00:00:00Z")),
+      )
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
+      }
   }
 
   @Test
   fun `folder picker click shows moved dialog instead of navigating`() = runTest {
     val navigator = mockk<Navigator>(relaxed = true)
-    val viewModel = viewModel(
-      navigator = navigator,
-      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
-      folderPickerMovedDialogShownStore = MemoryDataStore(false),
-    )
+    val viewModel =
+      viewModel(
+        navigator = navigator,
+        folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
+        folderPickerMovedDialogShownStore = MemoryDataStore(false),
+      )
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = null, actual = awaitItem().dialog)
-
-      viewModel.onBookFolderClick()
-
-      assertEquals(expected = BookOverviewViewState.Dialog.FolderPickerMovedToSettings, actual = awaitItem().dialog)
-      verify(exactly = 0) {
-        navigator.goTo(Destination.FolderPicker)
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
       }
-    }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = null, actual = awaitItem().dialog)
+
+        viewModel.onBookFolderClick()
+
+        assertEquals(expected = BookOverviewViewState.Dialog.FolderPickerMovedToSettings, actual = awaitItem().dialog)
+        verify(exactly = 0) {
+          navigator.goTo(Destination.FolderPicker)
+        }
+      }
   }
 
   @Test
   fun `dismissing moved dialog marks it shown and hides folder picker icon`() = runTest {
     val folderPickerMovedDialogShownStore = MemoryDataStore(false)
-    val viewModel = viewModel(
-      folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
-      folderPickerMovedDialogShownStore = folderPickerMovedDialogShownStore,
-    )
+    val viewModel =
+      viewModel(
+        folderPickerInSettingsFeatureFlag = MemoryFeatureFlag(false),
+        folderPickerMovedDialogShownStore = folderPickerMovedDialogShownStore,
+      )
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = true, actual = awaitItem().showFolderPickerIcon)
-
-      viewModel.onBookFolderClick()
-      assertEquals(expected = BookOverviewViewState.Dialog.FolderPickerMovedToSettings, actual = awaitItem().dialog)
-
-      viewModel.onFolderPickerMovedDialogDismiss()
-
-      val dismissed = awaitItem()
-      assertEquals(expected = null, actual = dismissed.dialog)
-      if (dismissed.showFolderPickerIcon) {
-        assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
-      } else {
-        assertEquals(expected = false, actual = dismissed.showFolderPickerIcon)
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
       }
-    }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = true, actual = awaitItem().showFolderPickerIcon)
+
+        viewModel.onBookFolderClick()
+        assertEquals(expected = BookOverviewViewState.Dialog.FolderPickerMovedToSettings, actual = awaitItem().dialog)
+
+        viewModel.onFolderPickerMovedDialogDismiss()
+
+        val dismissed = awaitItem()
+        assertEquals(expected = null, actual = dismissed.dialog)
+        if (dismissed.showFolderPickerIcon) {
+          assertEquals(expected = false, actual = awaitItem().showFolderPickerIcon)
+        } else {
+          assertEquals(expected = false, actual = dismissed.showFolderPickerIcon)
+        }
+      }
   }
 
   @Test
@@ -417,24 +463,28 @@ class BookOverviewViewModelTest {
     val book = book(name = "Present", time = 1_000)
     val viewModel = viewModel(books = listOf(book), currentBookId = BookId("removed"))
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = null, actual = awaitItem().currentBookId)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = null, actual = awaitItem().currentBookId)
+      }
   }
 
   @Test
   fun `a library without books shows that no books were found`() = runTest {
     val viewModel = viewModel()
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = true, actual = awaitItem().showEmptyLibrary)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = true, actual = awaitItem().showEmptyLibrary)
+      }
   }
 
   @Test
@@ -442,27 +492,31 @@ class BookOverviewViewModelTest {
     val scanning = MutableStateFlow(true)
     val viewModel = viewModel(scanning = scanning)
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      testScheduler.runCurrent()
-      assertEquals(expected = false, actual = expectMostRecentItem().showEmptyLibrary)
-      scanning.value = false
-      assertEquals(expected = true, actual = awaitItem().showEmptyLibrary)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        assertEquals(expected = false, actual = expectMostRecentItem().showEmptyLibrary)
+        scanning.value = false
+        assertEquals(expected = true, actual = awaitItem().showEmptyLibrary)
+      }
   }
 
   @Test
   fun `an empty library is tracked`() = runTest {
     val viewModel = viewModel()
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = true, actual = awaitItem().showEmptyLibrary)
-      testScheduler.runCurrent()
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = true, actual = awaitItem().showEmptyLibrary)
+        testScheduler.runCurrent()
+      }
 
     coVerify { emptyLibraryTracker.track() }
   }
@@ -472,38 +526,44 @@ class BookOverviewViewModelTest {
     every { audiobookFolders.withoutAccess() } returns flowOf(mapOf(FolderType.Root to listOf(mockk<Uri>())))
     val viewModel = viewModel()
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
-      assertEquals(expected = true, actual = awaitItem().showFolderAccessBadge)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = true, actual = awaitItem().showFolderAccessBadge)
+      }
   }
 
   @Test
   fun `a survey shows its card`() = runTest {
     val viewModel = viewModel(books = listOf(book()), survey = survey(remoteUrl = SURVEY_URL))
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      testScheduler.runCurrent()
-      assertEquals(expected = true, actual = expectMostRecentItem().showSurveyCard)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        assertEquals(expected = true, actual = expectMostRecentItem().showSurveyCard)
+      }
   }
 
   @Test
   fun `an empty library hides the survey card`() = runTest {
     val viewModel = viewModel(survey = survey(remoteUrl = SURVEY_URL))
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      testScheduler.runCurrent()
-      val state = expectMostRecentItem()
-      assertEquals(expected = true, actual = state.showEmptyLibrary)
-      assertEquals(expected = false, actual = state.showSurveyCard)
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        val state = expectMostRecentItem()
+        assertEquals(expected = true, actual = state.showEmptyLibrary)
+        assertEquals(expected = false, actual = state.showSurveyCard)
+      }
   }
 
   @Test
@@ -511,17 +571,19 @@ class BookOverviewViewModelTest {
     val navigator = mockk<Navigator>(relaxed = true)
     val viewModel = viewModel(books = listOf(book()), navigator = navigator, survey = survey(remoteUrl = SURVEY_URL))
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      testScheduler.runCurrent()
-      assertEquals(expected = true, actual = expectMostRecentItem().showSurveyCard)
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        assertEquals(expected = true, actual = expectMostRecentItem().showSurveyCard)
 
-      viewModel.onSurveyClick()
-      testScheduler.runCurrent()
+        viewModel.onSurveyClick()
+        testScheduler.runCurrent()
 
-      assertEquals(expected = false, actual = expectMostRecentItem().showSurveyCard)
-    }
+        assertEquals(expected = false, actual = expectMostRecentItem().showSurveyCard)
+      }
     verify {
       navigator.goTo(Destination.Website("$SURVEY_URL?app_version=1.2.3&source=org.fdroid.fdroid&days_installed=14"))
     }
@@ -532,17 +594,19 @@ class BookOverviewViewModelTest {
     val navigator = mockk<Navigator>(relaxed = true)
     val viewModel = viewModel(books = listOf(book()), navigator = navigator, survey = survey(remoteUrl = SURVEY_URL))
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test {
-      testScheduler.runCurrent()
-      assertEquals(expected = true, actual = expectMostRecentItem().showSurveyCard)
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        testScheduler.runCurrent()
+        assertEquals(expected = true, actual = expectMostRecentItem().showSurveyCard)
 
-      viewModel.onSurveyDismiss()
-      testScheduler.runCurrent()
+        viewModel.onSurveyDismiss()
+        testScheduler.runCurrent()
 
-      assertEquals(expected = false, actual = expectMostRecentItem().showSurveyCard)
-    }
+        assertEquals(expected = false, actual = expectMostRecentItem().showSurveyCard)
+      }
     verify(exactly = 0) {
       navigator.goTo(any())
     }
@@ -596,23 +660,26 @@ class BookOverviewViewModelTest {
   ): BookOverviewViewModel {
     return BookOverviewViewModel(
       repo = repo,
-      mediaScanner = mockk<MediaScanTrigger> {
-        every { scannerActive } returns scanning
-        every { scan(any()) } just Runs
-      },
+      mediaScanner =
+        mockk<MediaScanTrigger> {
+          every { scannerActive } returns scanning
+          every { scan(any()) } just Runs
+        },
       playStateManager = PlayStateManager(),
       playerController = mockk(),
       currentBookStoreDataStore = CurrentBookStore(MemoryDataStore(currentBookId)),
       folderPickerMovedDialogShownStore = FolderPickerMovedDialogShownStore(folderPickerMovedDialogShownStore),
       gridModeStore = GridModeStore(MemoryDataStore(GridMode.LIST)),
-      gridCount = mockk<GridCount> {
-        every { useGridAsDefault() } returns false
-      },
+      gridCount =
+        mockk<GridCount> {
+          every { useGridAsDefault() } returns false
+        },
       navigator = navigator,
       appInfoProvider = appInfoProvider,
-      deviceHasStoragePermissionBug = mockk<DeviceHasStoragePermissionBug> {
-        every { hasBug } returns MutableStateFlow(false)
-      },
+      deviceHasStoragePermissionBug =
+        mockk<DeviceHasStoragePermissionBug> {
+          every { hasBug } returns MutableStateFlow(false)
+        },
       folderPickerInSettingsFeatureFlag = FolderPickerInSettingsFeatureFlag(folderPickerInSettingsFeatureFlag),
       experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(false)),
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
@@ -631,15 +698,17 @@ class BookOverviewViewModelTest {
     return Survey(
       surveyUrlFeatureFlag = SurveyUrlFeatureFlag(MemoryFeatureFlag(remoteUrl)),
       handledSurveysStore = HandledSurveysStore(MemoryDataStore(emptyMap())),
-      localSurvey = mockk {
-        coEvery { url() } returns null
-      },
+      localSurvey =
+        mockk {
+          coEvery { url() } returns null
+        },
       clock = Clock.fixed(java.time.Instant.parse("2026-10-20T10:00:00Z"), ZoneOffset.UTC),
-      appInfoProvider = mockk {
-        every { versionName } returns "1.2.3"
-        every { installer } returns "org.fdroid.fdroid"
-        every { installTime } returns Instant.parse("2026-10-06T10:00:00Z")
-      },
+      appInfoProvider =
+        mockk {
+          every { versionName } returns "1.2.3"
+          every { installer } returns "org.fdroid.fdroid"
+          every { installTime } returns Instant.parse("2026-10-06T10:00:00Z")
+        },
       analytics = mockk(relaxUnitFun = true),
     )
   }

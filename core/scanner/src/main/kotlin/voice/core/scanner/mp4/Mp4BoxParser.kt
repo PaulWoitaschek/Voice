@@ -21,14 +21,15 @@ internal class Mp4BoxParser(
   chapVisitor: ChapVisitor,
 ) {
 
-  private val visitors = listOf(
-    stscVisitor,
-    mdhdVisitor,
-    sttsVisitor,
-    stcoVisitor,
-    chplVisitor,
-    chapVisitor,
-  )
+  private val visitors =
+    listOf(
+      stscVisitor,
+      mdhdVisitor,
+      sttsVisitor,
+      stcoVisitor,
+      chplVisitor,
+      chapVisitor,
+    )
   private val visitorByPath = visitors.associateBy { it.path }
 
   operator fun invoke(input: ExtractorInput): Mp4ChpaterExtractorOutput {

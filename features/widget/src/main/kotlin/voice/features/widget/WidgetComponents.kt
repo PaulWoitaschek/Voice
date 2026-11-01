@@ -45,9 +45,10 @@ internal fun PlayButton(
     shape = if (playing) WidgetShape.Square else WidgetShape.Cookie9,
     size = size,
     icon = if (playing) R.drawable.widget_ic_pause else R.drawable.widget_ic_play,
-    contentDescription = LocalContext.current.getString(
-      if (playing) StringsR.string.playback_action_pause else StringsR.string.playback_action_play,
-    ),
+    contentDescription =
+      LocalContext.current.getString(
+        if (playing) StringsR.string.playback_action_pause else StringsR.string.playback_action_play,
+      ),
     images = images,
     onClick = onClick,
     modifier = modifier,
@@ -66,9 +67,10 @@ internal fun SkipButton(
     shape = WidgetShape.Circle,
     size = size,
     icon = if (forward) UiR.drawable.ic_fast_forward_white_36dp else UiR.drawable.ic_rewind_white_36dp,
-    contentDescription = LocalContext.current.getString(
-      if (forward) StringsR.string.playback_action_fast_forward else StringsR.string.playback_action_rewind,
-    ),
+    contentDescription =
+      LocalContext.current.getString(
+        if (forward) StringsR.string.playback_action_fast_forward else StringsR.string.playback_action_rewind,
+      ),
     images = images,
     onClick = onClick,
     modifier = modifier,
@@ -201,9 +203,7 @@ internal fun SpeedChip(
   modifier: GlanceModifier = GlanceModifier,
 ) {
   Box(
-    modifier = modifier
-      .pillBackground(GlanceTheme.colors.secondaryContainer)
-      .padding(horizontal = 8.dp, vertical = 2.dp),
+    modifier = modifier.pillBackground(GlanceTheme.colors.secondaryContainer).padding(horizontal = 8.dp, vertical = 2.dp),
   ) {
     Text(
       text = formatSpeed(speed),
@@ -221,10 +221,7 @@ internal fun PillButton(
   @DrawableRes icon: Int? = null,
 ) {
   Row(
-    modifier = modifier
-      .pillBackground(GlanceTheme.colors.primary)
-      .clickable(onClick)
-      .padding(horizontal = 14.dp, vertical = 8.dp),
+    modifier = modifier.pillBackground(GlanceTheme.colors.primary).clickable(onClick).padding(horizontal = 14.dp, vertical = 8.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     if (icon != null) {

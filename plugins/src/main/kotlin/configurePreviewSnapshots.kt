@@ -6,8 +6,8 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Provider
-import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.getByType
@@ -25,9 +25,10 @@ internal fun Project.configurePreviewSnapshots() {
   // the test activity the previews are rendered in
   dependencies.add("debugImplementation", libs.findLibrary("compose-ui-testManifest").get())
 
-  val generate = tasks.register<GeneratePreviewSnapshotTest>("generatePreviewSnapshotTest") {
-    outputDir.set(layout.buildDirectory.dir("generated/previewSnapshotTest"))
-  }
+  val generate =
+    tasks.register<GeneratePreviewSnapshotTest>("generatePreviewSnapshotTest") {
+      outputDir.set(layout.buildDirectory.dir("generated/previewSnapshotTest"))
+    }
   extensions.getByType<LibraryAndroidComponentsExtension>().apply {
     onVariants(selector().withBuildType("debug")) { variant ->
       variant.hostTests[HostTestBuilder.UNIT_TEST_TYPE]
@@ -53,9 +54,7 @@ internal fun Project.configurePreviewSnapshots() {
     classpath = unitTest.classpath
     javaLauncher.set(unitTest.javaLauncher)
     // the Android resources reach Robolectric through a properties file with paths, so they need declaring
-    inputs.files(unitTest.inputs.files)
-      .withPropertyName("unitTestInputs")
-      .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files(unitTest.inputs.files).withPropertyName("unitTestInputs").withPathSensitivity(PathSensitivity.RELATIVE)
     useJUnit()
     include(SNAPSHOT_TEST_CLASS)
     systemProperty("java.awt.headless", "true")
@@ -68,8 +67,7 @@ internal fun Project.configurePreviewSnapshots() {
 @DisableCachingByDefault(because = "Writing one small file is faster than the cache")
 abstract class GeneratePreviewSnapshotTest : DefaultTask() {
 
-  @get:OutputDirectory
-  abstract val outputDir: DirectoryProperty
+  @get:OutputDirectory abstract val outputDir: DirectoryProperty
 
   @TaskAction
   fun generate() {
@@ -82,8 +80,8 @@ abstract class GeneratePreviewSnapshotTest : DefaultTask() {
         |package voice.core.snapshot
         |
         |class PreviewSnapshots : PreviewSnapshotTest()
-        |
-        """.trimMargin(),
+        |"""
+          .trimMargin(),
       )
     }
   }

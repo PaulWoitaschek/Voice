@@ -8,6 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.binding
+import kotlin.uuid.Uuid
 import voice.core.data.repo.internals.consumeEach
 import voice.core.data.repo.internals.getFloat
 import voice.core.data.repo.internals.getInt
@@ -16,7 +17,6 @@ import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
 import voice.core.data.repo.internals.moveToNextLoop
-import kotlin.uuid.Uuid
 
 @ContributesIntoSet(
   scope = AppScope::class,
@@ -38,7 +38,8 @@ public class Migration43to44 : IncrementalMigration(43) {
       `title` TEXT NOT NULL,
       `time` INTEGER NOT NULL,
       `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)
-      """.trimIndent(),
+      """
+        .trimIndent(),
     )
     db.execSQL(
       """
@@ -50,7 +51,8 @@ public class Migration43to44 : IncrementalMigration(43) {
       `marks` TEXT NOT NULL,
       `bookId` TEXT NOT NULL,
       `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)
-      """.trimIndent(),
+      """
+        .trimIndent(),
     )
     db.execSQL("CREATE  INDEX `index_chapters_bookId` ON `chapters` (`bookId`)")
     db.execSQL(
@@ -62,7 +64,8 @@ public class Migration43to44 : IncrementalMigration(43) {
       `name` TEXT NOT NULL,
       `root` TEXT NOT NULL,
       `addedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))
-      """.trimIndent(),
+      """
+        .trimIndent(),
     )
     db.execSQL(
       """
@@ -75,7 +78,8 @@ public class Migration43to44 : IncrementalMigration(43) {
       `skipSilence` INTEGER NOT NULL,
       `active` INTEGER NOT NULL,
       `lastPlayedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))
-      """.trimIndent(),
+      """
+        .trimIndent(),
     )
   }
 

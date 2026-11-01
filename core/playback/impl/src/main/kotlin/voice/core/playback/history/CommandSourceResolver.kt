@@ -13,8 +13,7 @@ data class CommandSource(val source: ListeningEvent.Source)
 /**
  * Tells where a command that reaches the session's player came from.
  *
- * Commands from the app's own controllers are recorded where they are sent, with
- * their intent, so they resolve to null here.
+ * Commands from the app's own controllers are recorded where they are sent, with their intent, so they resolve to null here.
  */
 @SingleIn(PlaybackScope::class)
 @Inject
@@ -26,19 +25,22 @@ class CommandSourceResolver(private val context: Context) {
 
   internal fun onMediaButtonEvent(controller: MediaSession.ControllerInfo) {
     val session = session ?: return
-    val source = when {
-      session.isMediaNotificationController(controller) -> CommandSource(ListeningEvent.Source.Notification)
-      controller.packageName == BLUETOOTH_PACKAGE -> CommandSource(ListeningEvent.Source.Bluetooth)
-      else -> sourceForPackage(session, controller)
-        ?.takeUnless { it.source == ListeningEvent.Source.OtherApp || it.source == ListeningEvent.Source.Unknown }
-        ?: CommandSource(ListeningEvent.Source.Headset)
-    }
-    lastMediaButton = MediaButton(
-      source = source,
-      callerPackage = controller.packageName,
-      callerUid = controller.uid,
-      atMillis = SystemClock.elapsedRealtime(),
-    )
+    val source =
+      when {
+        session.isMediaNotificationController(controller) -> CommandSource(ListeningEvent.Source.Notification)
+        controller.packageName == BLUETOOTH_PACKAGE -> CommandSource(ListeningEvent.Source.Bluetooth)
+        else ->
+          sourceForPackage(session, controller)?.takeUnless {
+            it.source == ListeningEvent.Source.OtherApp || it.source == ListeningEvent.Source.Unknown
+          } ?: CommandSource(ListeningEvent.Source.Headset)
+      }
+    lastMediaButton =
+      MediaButton(
+        source = source,
+        callerPackage = controller.packageName,
+        callerUid = controller.uid,
+        atMillis = SystemClock.elapsedRealtime(),
+      )
   }
 
   internal fun current(): CommandSource? {
@@ -51,8 +53,7 @@ class CommandSourceResolver(private val context: Context) {
     session: MediaSession,
     controller: MediaSession.ControllerInfo,
   ): CommandSource? {
-    val mediaButton = lastMediaButton
-      ?.takeIf { SystemClock.elapsedRealtime() - it.atMillis < MEDIA_BUTTON_WINDOW_MS }
+    val mediaButton = lastMediaButton?.takeIf { SystemClock.elapsedRealtime() - it.atMillis < MEDIA_BUTTON_WINDOW_MS }
     if (session.isMediaNotificationController(controller)) {
       // media buttons from headsets are passed on as if the notification sent them
       return mediaButton?.source ?: CommandSource(ListeningEvent.Source.Notification)
@@ -73,9 +74,8 @@ class CommandSourceResolver(private val context: Context) {
   ): CommandSource? {
     val packageName = controller.packageName
     return when {
-      session.isAutomotiveController(controller) ||
-        session.isAutoCompanionController(controller) ||
-        packageName == ANDROID_AUTO_PACKAGE -> CommandSource(ListeningEvent.Source.Car)
+      session.isAutomotiveController(controller) || session.isAutoCompanionController(controller) || packageName == ANDROID_AUTO_PACKAGE ->
+        CommandSource(ListeningEvent.Source.Car)
       packageName in watchPackages -> CommandSource(ListeningEvent.Source.Watch)
       packageName == BLUETOOTH_PACKAGE -> CommandSource(ListeningEvent.Source.Bluetooth)
       packageName == SYSTEM_UI_PACKAGE -> CommandSource(ListeningEvent.Source.Notification)
@@ -102,10 +102,11 @@ class CommandSourceResolver(private val context: Context) {
     const val ANDROID_AUTO_PACKAGE = "com.google.android.projection.gearhead"
     const val BLUETOOTH_PACKAGE = "com.android.bluetooth"
     const val SYSTEM_UI_PACKAGE = "com.android.systemui"
-    val watchPackages = setOf(
-      "com.google.android.wearable.app",
-      "com.google.android.apps.wear.companion",
-      "com.samsung.android.app.watchmanager",
-    )
+    val watchPackages =
+      setOf(
+        "com.google.android.wearable.app",
+        "com.google.android.apps.wear.companion",
+        "com.samsung.android.app.watchmanager",
+      )
   }
 }

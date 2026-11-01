@@ -6,6 +6,8 @@ import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
@@ -14,8 +16,6 @@ import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
 import voice.core.data.repo.internals.mapRows
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 private const val DB_NAME = "testDb"
 
@@ -24,10 +24,11 @@ class Migration67to68Test {
 
   @Rule
   @JvmField
-  val helper = MigrationTestHelper(
-    InstrumentationRegistry.getInstrumentation(),
-    AppDb::class.java,
-  )
+  val helper =
+    MigrationTestHelper(
+      InstrumentationRegistry.getInstrumentation(),
+      AppDb::class.java,
+    )
 
   @Test
   fun `the edits move to their own table`() {
@@ -45,23 +46,27 @@ class Migration67to68Test {
     val migrated = helper.runMigrationsAndValidate(DB_NAME, 68, true, *allMigrations())
 
     assertEquals(
-      expected = listOf(
-        listOf("content://hyperion", "Hyperion Cantos", null, "/covers/hyperion.webp"),
-        listOf("content://solaris", null, null, "/covers/solaris.webp"),
-      ),
-      actual = migrated.query("SELECT * FROM customMetadata ORDER BY bookId").mapRows {
-        listOf(getString("bookId"), getStringOrNull("name"), getStringOrNull("author"), getStringOrNull("cover"))
-      },
+      expected =
+        listOf(
+          listOf("content://hyperion", "Hyperion Cantos", null, "/covers/hyperion.webp"),
+          listOf("content://solaris", null, null, "/covers/solaris.webp"),
+        ),
+      actual =
+        migrated.query("SELECT * FROM customMetadata ORDER BY bookId").mapRows {
+          listOf(getString("bookId"), getStringOrNull("name"), getStringOrNull("author"), getStringOrNull("cover"))
+        },
     )
     assertEquals(
-      expected = listOf(
-        listOf("content://dune", "Dune", "Herbert", 1234L),
-        listOf("content://hyperion", "Hyperion", "Dan Simmons", 1234L),
-        listOf("content://solaris", "Solaris", "Lem", 1234L),
-      ),
-      actual = migrated.query("SELECT * FROM content2 ORDER BY id").mapRows {
-        listOf(getString("id"), getString("name"), getStringOrNull("author"), getLong("positionInChapter"))
-      },
+      expected =
+        listOf(
+          listOf("content://dune", "Dune", "Herbert", 1234L),
+          listOf("content://hyperion", "Hyperion", "Dan Simmons", 1234L),
+          listOf("content://solaris", "Solaris", "Lem", 1234L),
+        ),
+      actual =
+        migrated.query("SELECT * FROM content2 ORDER BY id").mapRows {
+          listOf(getString("id"), getString("name"), getStringOrNull("author"), getLong("positionInChapter"))
+        },
     )
   }
 
@@ -109,18 +114,19 @@ class Migration67to68Test {
     id: String,
     name: String,
     author: String,
-  ) = ContentValues().apply {
-    put("id", id)
-    put("playbackSpeed", 1F)
-    put("skipSilence", 0)
-    put("isActive", 1)
-    put("lastPlayedAt", "1970-01-01T00:00:00Z")
-    put("name", name)
-    put("author", author)
-    put("addedAt", "1970-01-01T00:00:00Z")
-    put("chapters", "[\"$id/1.mp3\"]")
-    put("currentChapter", "$id/1.mp3")
-    put("positionInChapter", 1234L)
-    put("gain", 0F)
-  }
+  ) =
+    ContentValues().apply {
+      put("id", id)
+      put("playbackSpeed", 1F)
+      put("skipSilence", 0)
+      put("isActive", 1)
+      put("lastPlayedAt", "1970-01-01T00:00:00Z")
+      put("name", name)
+      put("author", author)
+      put("addedAt", "1970-01-01T00:00:00Z")
+      put("chapters", "[\"$id/1.mp3\"]")
+      put("currentChapter", "$id/1.mp3")
+      put("positionInChapter", 1234L)
+      put("gain", 0F)
+    }
 }

@@ -3,6 +3,11 @@ package voice.core.playback.session.search
 import android.provider.MediaStore
 import io.mockk.coEvery
 import io.mockk.mockk
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.test.runTest
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -14,11 +19,6 @@ import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.MemoryDataStore
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.uuid.Uuid
 
 class BookSearchHandlerTest {
 
@@ -62,41 +62,47 @@ class BookSearchHandlerTest {
 
   @Test
   fun mediaFocusArtist() = runTest {
-    val bookSearch = VoiceSearch(
-      mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
-      artist = bookToFind.content.metadata.author,
-    )
+    val bookSearch =
+      VoiceSearch(
+        mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
+        artist = bookToFind.content.metadata.author,
+      )
     assertEquals(expected = bookToFind, actual = searchHandler.handle(bookSearch))
   }
 
   @Test
   fun mediaFocusArtistInTitleNoArtistInBook() = runTest {
-    val bookToFind = bookToFind.copy(
-      content = bookToFind.content.copy(
-        metadata = bookToFind.content.metadata.copy(
-          author = null,
-          name = "The book of Tim",
-        ),
-      ),
-    )
+    val bookToFind =
+      bookToFind.copy(
+        content =
+          bookToFind.content.copy(
+            metadata =
+              bookToFind.content.metadata.copy(
+                author = null,
+                name = "The book of Tim",
+              ),
+          ),
+      )
     coEvery { repo.all() } coAnswers { listOf(bookToFind) }
 
-    val bookSearch = VoiceSearch(
-      mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
-      query = "Tim",
-      artist = "Tim",
-    )
+    val bookSearch =
+      VoiceSearch(
+        mediaFocus = MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE,
+        query = "Tim",
+        artist = "Tim",
+      )
     assertEquals(expected = bookToFind, actual = searchHandler.handle(bookSearch))
   }
 
   @Test
   fun mediaFocusAlbum() = runTest {
-    val bookSearch = VoiceSearch(
-      mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
-      artist = bookToFind.content.metadata.author,
-      album = bookToFind.name,
-      query = null,
-    )
+    val bookSearch =
+      VoiceSearch(
+        mediaFocus = MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
+        artist = bookToFind.content.metadata.author,
+        album = bookToFind.name,
+        query = null,
+      )
     assertEquals(expected = bookToFind, actual = searchHandler.handle(bookSearch))
   }
 }
@@ -107,30 +113,32 @@ fun book(
   positionInChapter: Long = 0,
 ): Book {
   return Book(
-    content = BookContent(
-      positionInChapter = positionInChapter,
-      playbackSpeed = 1F,
-      addedAt = Instant.EPOCH,
-      chapters = chapters.map { it.id },
-      currentChapter = chapters.first().id,
-      isActive = true,
-      lastPlayedAt = Instant.EPOCH,
-      skipSilence = false,
-      id = id,
-      gain = 0F,
-      metadata = BookMetadata(
-        name = Uuid.random().toString(),
-        author = Uuid.random().toString(),
-        album = null,
-        title = null,
-        genre = null,
-        narrator = null,
-        series = null,
-        part = null,
-        cover = null,
-        fileLastModified = null,
+    content =
+      BookContent(
+        positionInChapter = positionInChapter,
+        playbackSpeed = 1F,
+        addedAt = Instant.EPOCH,
+        chapters = chapters.map { it.id },
+        currentChapter = chapters.first().id,
+        isActive = true,
+        lastPlayedAt = Instant.EPOCH,
+        skipSilence = false,
+        id = id,
+        gain = 0F,
+        metadata =
+          BookMetadata(
+            name = Uuid.random().toString(),
+            author = Uuid.random().toString(),
+            album = null,
+            title = null,
+            genre = null,
+            narrator = null,
+            series = null,
+            part = null,
+            cover = null,
+            fileLastModified = null,
+          ),
       ),
-    ),
     chapters = chapters,
     custom = CustomMetadata(id),
   )

@@ -11,14 +11,13 @@ internal fun Int.isActive(): Boolean {
 /** A download of one audio file of a book, as Voice last saw it. */
 internal data class FileDownload(
   val bookId: BookId?,
-  @param:Download.State
-  val state: Int,
+  @param:Download.State val state: Int,
   val bytesDownloaded: Long,
 )
 
 /**
- * The download state of a book, judged by the files it has now. A book that got new files on the server isn't
- * downloaded anymore until those are. Null when none of its files are downloaded.
+ * The download state of a book, judged by the files it has now. A book that got new files on the server isn't downloaded anymore until
+ * those are. Null when none of its files are downloaded.
  */
 internal fun bookDownloadState(
   chapters: List<Chapter>,
@@ -38,11 +37,12 @@ internal fun bookDownloadState(
   val downloadedBytes = tracked.sumOf { it.second?.bytesDownloaded ?: 0L }
   val sizesKnown = chapters.all { it.fileSize > 0 }
   val totalBytes = if (sizesKnown) chapters.sumOf { it.fileSize } else 0L
-  val progress = if (sizesKnown) {
-    downloadedBytes.toFloat() / totalBytes
-  } else {
-    tracked.count { it.second?.state == Download.STATE_COMPLETED }.toFloat() / chapters.size
-  }
+  val progress =
+    if (sizesKnown) {
+      downloadedBytes.toFloat() / totalBytes
+    } else {
+      tracked.count { it.second?.state == Download.STATE_COMPLETED }.toFloat() / chapters.size
+    }
   return BookDownloadState.Downloading(
     progress = progress.coerceIn(0F, 1F),
     downloadedBytes = downloadedBytes,

@@ -1,5 +1,7 @@
 package voice.core.audiobookshelf.sync
 
+import java.time.Instant
+import kotlin.math.roundToLong
 import voice.core.audiobookshelf.AudiobookshelfIds
 import voice.core.audiobookshelf.api.AbsChapter
 import voice.core.audiobookshelf.api.AbsLibraryItem
@@ -11,15 +13,14 @@ import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
-import java.time.Instant
-import kotlin.math.roundToLong
 
 // the durations of the tracks and the chapters don't line up to the millisecond
 private const val BOUNDARY_TOLERANCE_SECONDS = 0.5
 
 internal fun AbsLibraryItem.chapters(): List<Chapter> {
   val bookChapters = media.chapters.orEmpty().sortedBy { it.start }
-  return media.tracks.orEmpty()
+  return media.tracks
+    .orEmpty()
     .sortedBy { it.index }
     .map { track ->
       val marks = track.marks(bookChapters)
@@ -65,14 +66,15 @@ internal fun AbsLibraryItem.toBookContent(
   val chapterIds = chapters.map { it.id }
   val metadata = media.metadata
   val series = metadata.series?.shown(existing?.metadata?.series)
-  val position = existing?.let { content ->
-    if (content.currentChapter in chapterIds) {
-      BookPosition(content.currentChapter, content.positionInChapter)
-    } else {
-      // the server replaced the files, the place in the book stays
-      previousChapters.positionInBook(content.currentChapter, content.positionInChapter)?.let(chapters::positionAt)
-    }
-  } ?: BookPosition(chapterIds.first(), 0L)
+  val position =
+    existing?.let { content ->
+      if (content.currentChapter in chapterIds) {
+        BookPosition(content.currentChapter, content.positionInChapter)
+      } else {
+        // the server replaced the files, the place in the book stays
+        previousChapters.positionInBook(content.currentChapter, content.positionInChapter)?.let(chapters::positionAt)
+      }
+    } ?: BookPosition(chapterIds.first(), 0L)
   return BookContent(
     id = AudiobookshelfIds.bookId(id),
     playbackSpeed = existing?.playbackSpeed ?: 1F,
@@ -84,18 +86,19 @@ internal fun AbsLibraryItem.toBookContent(
     currentChapter = position.chapterId,
     positionInChapter = position.positionInChapter.coerceIn(0, chapters.first { it.id == position.chapterId }.duration),
     gain = existing?.gain ?: 0F,
-    metadata = BookMetadata(
-      name = metadata.title?.takeIf { it.isNotBlank() } ?: chapters.first().name ?: id,
-      author = metadata.authorName?.takeIf { it.isNotBlank() },
-      album = null,
-      title = null,
-      genre = metadata.genres.joinToString(", ").takeIf { it.isNotBlank() },
-      narrator = metadata.narratorName?.takeIf { it.isNotBlank() },
-      series = series?.name?.takeIf { it.isNotBlank() } ?: metadata.seriesName?.takeIf { it.isNotBlank() },
-      part = series?.sequence?.takeIf { it.isNotBlank() },
-      cover = existing?.metadata?.cover,
-      fileLastModified = null,
-    ),
+    metadata =
+      BookMetadata(
+        name = metadata.title?.takeIf { it.isNotBlank() } ?: chapters.first().name ?: id,
+        author = metadata.authorName?.takeIf { it.isNotBlank() },
+        album = null,
+        title = null,
+        genre = metadata.genres.joinToString(", ").takeIf { it.isNotBlank() },
+        narrator = metadata.narratorName?.takeIf { it.isNotBlank() },
+        series = series?.name?.takeIf { it.isNotBlank() } ?: metadata.seriesName?.takeIf { it.isNotBlank() },
+        part = series?.sequence?.takeIf { it.isNotBlank() },
+        cover = existing?.metadata?.cover,
+        fileLastModified = null,
+      ),
   )
 }
 
@@ -134,4 +137,5 @@ internal fun List<Chapter>.positionInBook(
 // the server's line, as it resets a finished book to its start when it's told the book isn't finished
 internal const val FINISHED_REMAINING_MS = 10_000L
 
-internal val Book.isFinished: Boolean get() = position > 0 && duration - position < FINISHED_REMAINING_MS
+internal val Book.isFinished: Boolean
+  get() = position > 0 && duration - position < FINISHED_REMAINING_MS

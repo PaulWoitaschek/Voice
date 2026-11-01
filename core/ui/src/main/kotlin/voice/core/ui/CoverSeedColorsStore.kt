@@ -12,7 +12,9 @@ import voice.core.datastore.VoiceDataStoreFactory
 class CoverSeedColorsStore(store: DataStore<Map<String, Int>>) : DataStore<Map<String, Int>> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.create(
       serializer = MapSerializer(String.serializer(), Int.serializer()),
       defaultValue = emptyMap(),

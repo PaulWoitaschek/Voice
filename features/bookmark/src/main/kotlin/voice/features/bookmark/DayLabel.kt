@@ -7,18 +7,24 @@ import java.time.LocalTime
 import java.time.ZoneId
 import kotlin.time.Duration.Companion.minutes
 
-/**
- * When something happened, in the words people use: "Just now", "Last night", "Thu", "28 Sep".
- */
+/** When something happened, in the words people use: "Just now", "Last night", "Thu", "28 Sep". */
 internal sealed interface DayLabel {
   data object JustNow : DayLabel
+
   data class Today(val time: LocalTime) : DayLabel
+
   data object ThisMorning : DayLabel
+
   data object ThisAfternoon : DayLabel
+
   data object ThisEvening : DayLabel
+
   data object LastNight : DayLabel
+
   data object Yesterday : DayLabel
+
   data class Weekday(val day: DayOfWeek) : DayLabel
+
   data class Date(
     val date: LocalDate,
     val withYear: Boolean,

@@ -13,9 +13,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import java.util.Locale
 import kotlin.time.Duration
 
-/**
- * A duration as people say it, like "1 hr, 29 min" or "45 sec", in the user's language.
- */
+/** A duration as people say it, like "1 hr, 29 min" or "45 sec", in the user's language. */
 @Composable
 internal fun durationText(duration: Duration): String {
   val locale = LocalConfiguration.current.locales[0]
@@ -30,9 +28,7 @@ internal fun durationText(duration: Duration): String {
   }
 }
 
-/**
- * Seconds with their sign, like "+15s" or "-15s", in the user's language.
- */
+/** Seconds with their sign, like "+15s" or "-15s", in the user's language. */
 @Composable
 internal fun signedSecondsText(seconds: Long): String {
   val locale = LocalConfiguration.current.locales[0]

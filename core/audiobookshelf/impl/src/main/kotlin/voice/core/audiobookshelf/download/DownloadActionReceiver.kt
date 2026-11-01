@@ -8,9 +8,7 @@ import android.net.Uri
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 
-/**
- * The buttons of the download notifications.
- */
+/** The buttons of the download notifications. */
 class DownloadActionReceiver : BroadcastReceiver() {
 
   override fun onReceive(
@@ -42,11 +40,12 @@ class DownloadActionReceiver : BroadcastReceiver() {
       action: String,
       bookIds: List<BookId>,
     ): PendingIntent {
-      val intent = Intent(context, DownloadActionReceiver::class.java)
-        .setAction(action)
-        // one intent per book, so the buttons of two books don't replace each other
-        .setData(Uri.fromParts("voice", bookIds.joinToString(",") { it.value }, null))
-        .withBookIds(bookIds)
+      val intent =
+        Intent(context, DownloadActionReceiver::class.java)
+          .setAction(action)
+          // one intent per book, so the buttons of two books don't replace each other
+          .setData(Uri.fromParts("voice", bookIds.joinToString(",") { it.value }, null))
+          .withBookIds(bookIds)
       return PendingIntent.getBroadcast(
         context,
         0,

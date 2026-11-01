@@ -1,10 +1,6 @@
 package voice.features.widget
 
 import android.graphics.Bitmap
-import voice.core.data.Book
-import voice.core.data.BookId
-import voice.core.sleeptimer.SleepTimerState
-import voice.core.ui.ThemeColorScheme
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.math.ceil
@@ -14,6 +10,10 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
+import voice.core.data.Book
+import voice.core.data.BookId
+import voice.core.sleeptimer.SleepTimerState
+import voice.core.ui.ThemeColorScheme
 
 internal data class WidgetTheme(
   val seed: Int?,
@@ -104,10 +104,7 @@ internal data class ShelfBook(
 
 internal const val SHELF_MAX_BOOKS = 5
 
-/**
- * The position only counts in whole minutes, so a playing book changes the widget once a minute and
- * not with every position update.
- */
+/** The position only counts in whole minutes, so a playing book changes the widget once a minute and not with every position update. */
 internal fun nowPlayingBook(
   book: Book,
   playing: Boolean,
@@ -115,8 +112,10 @@ internal fun nowPlayingBook(
   now: Instant,
 ): NowPlayingBook {
   val chapterCount = book.chapters.sumOf { it.chapterMarks.count() }
-  val chapterNumber = book.chapters.take(book.content.currentChapterIndex).sumOf { it.chapterMarks.count() } +
-    book.currentChapter.chapterMarks.indexOf(book.currentMark) + 1
+  val chapterNumber =
+    book.chapters.take(book.content.currentChapterIndex).sumOf { it.chapterMarks.count() } +
+      book.currentChapter.chapterMarks.indexOf(book.currentMark) +
+      1
   val speed = book.content.playbackSpeed
   val position = book.position / MINUTE_MS * MINUTE_MS
   return NowPlayingBook(
@@ -143,17 +142,19 @@ internal fun sleepTimerEnd(
 ): SleepTimerEnd? {
   return when (state) {
     SleepTimerState.Disabled -> null
-    is SleepTimerState.Enabled.WithDuration -> if (playing) {
-      SleepTimerEnd.At((now + state.leftDuration.toJavaDuration()).roundToMinute())
-    } else {
-      SleepTimerEnd.After(state.leftDuration.roundUpToMinutes())
-    }
-    SleepTimerState.Enabled.WithEndOfChapter -> if (playing && book != null) {
-      val leftInChapter = (book.currentMark.endMs - book.content.positionInChapter).coerceAtLeast(0).milliseconds
-      SleepTimerEnd.At((now + (leftInChapter / book.content.playbackSpeed.atSpeed()).toJavaDuration()).roundToMinute())
-    } else {
-      SleepTimerEnd.EndOfChapter
-    }
+    is SleepTimerState.Enabled.WithDuration ->
+      if (playing) {
+        SleepTimerEnd.At((now + state.leftDuration.toJavaDuration()).roundToMinute())
+      } else {
+        SleepTimerEnd.After(state.leftDuration.roundUpToMinutes())
+      }
+    SleepTimerState.Enabled.WithEndOfChapter ->
+      if (playing && book != null) {
+        val leftInChapter = (book.currentMark.endMs - book.content.positionInChapter).coerceAtLeast(0).milliseconds
+        SleepTimerEnd.At((now + (leftInChapter / book.content.playbackSpeed.atSpeed()).toJavaDuration()).roundToMinute())
+      } else {
+        SleepTimerEnd.EndOfChapter
+      }
   }
 }
 

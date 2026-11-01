@@ -10,8 +10,8 @@ private const val THUMBNAIL_SIZE_PX = 480
 private fun thumbnailMemoryCacheKey(cover: String): String = "cover-thumbnail:$cover"
 
 /**
- * Image model for small cover renditions (lists, cards). All of them share one memory cache entry
- * per cover, which [rememberFullSizeCoverRequest] shows as its placeholder.
+ * Image model for small cover renditions (lists, cards). All of them share one memory cache entry per cover, which
+ * [rememberFullSizeCoverRequest] shows as its placeholder.
  */
 @Composable
 fun rememberCoverThumbnailRequest(cover: String?): ImageRequest {
@@ -28,8 +28,8 @@ fun rememberCoverThumbnailRequest(cover: String?): ImageRequest {
 }
 
 /**
- * Image model for a large cover. While it loads, the already decoded thumbnail is shown, so a shared
- * element transition from a list never flashes the empty placeholder.
+ * Image model for a large cover. While it loads, the already decoded thumbnail is shown, so a shared element transition from a list never
+ * flashes the empty placeholder.
  */
 @Composable
 fun rememberFullSizeCoverRequest(cover: String?): ImageRequest {

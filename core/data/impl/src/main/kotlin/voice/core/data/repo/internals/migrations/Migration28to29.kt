@@ -7,8 +7,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.binding
-import org.json.JSONObject
 import java.io.File
+import org.json.JSONObject
 
 @ContributesIntoSet(
   scope = AppScope::class,
@@ -17,32 +17,32 @@ import java.io.File
 public class Migration28to29 : IncrementalMigration(28) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ID"))
-      .use { cursor ->
-        while (cursor.moveToNext()) {
-          val book = JSONObject(cursor.getString(0))
-          val chapters = book.getJSONArray("chapters")
-          for (i in 0 until chapters.length()) {
-            val chapter = chapters.getJSONObject(i)
-            val fileName = File(chapter.getString("path")).name
-            val dotIndex = fileName.lastIndexOf(".")
-            val chapterName = if (dotIndex > 0) {
+    db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ID")).use { cursor ->
+      while (cursor.moveToNext()) {
+        val book = JSONObject(cursor.getString(0))
+        val chapters = book.getJSONArray("chapters")
+        for (i in 0 until chapters.length()) {
+          val chapter = chapters.getJSONObject(i)
+          val fileName = File(chapter.getString("path")).name
+          val dotIndex = fileName.lastIndexOf(".")
+          val chapterName =
+            if (dotIndex > 0) {
               fileName.substring(0, dotIndex)
             } else {
               fileName
             }
-            chapter.put("name", chapterName)
-          }
-          val cv = ContentValues()
-          cv.put("BOOK_JSON", book.toString())
-          db.update(
-            "TABLE_BOOK",
-            SQLiteDatabase.CONFLICT_FAIL,
-            cv,
-            "BOOK_ID" + "=?",
-            arrayOf(cursor.getLong(1).toString()),
-          )
+          chapter.put("name", chapterName)
         }
+        val cv = ContentValues()
+        cv.put("BOOK_JSON", book.toString())
+        db.update(
+          "TABLE_BOOK",
+          SQLiteDatabase.CONFLICT_FAIL,
+          cv,
+          "BOOK_ID" + "=?",
+          arrayOf(cursor.getLong(1).toString()),
+        )
       }
+    }
   }
 }

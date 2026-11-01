@@ -1,19 +1,18 @@
 package voice.features.folderPicker.selectType
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.documentfile.FileBasedDocumentFile
-import java.io.File
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class FolderStructureTest {
 
-  @get:Rule
-  val temporaryFolder = TemporaryFolder()
+  @get:Rule val temporaryFolder = TemporaryFolder()
 
   @Test
   fun `a folder of chapter files is one book`() {
@@ -81,10 +80,11 @@ class FolderStructureTest {
     val folder = folder("Dan Simmons/Hyperion/01.mp3", "Dan Simmons/Hyperion/02.mp3", "Loose.m4b")
 
     assertEquals(
-      expected = listOf(
-        SelectFolderTypeViewState.Book("Hyperion", author = "Dan Simmons", fileCount = 2, partCount = 0, possibleBookCount = 0),
-        SelectFolderTypeViewState.Book("Loose", author = null, fileCount = 1, partCount = 0, possibleBookCount = 0),
-      ),
+      expected =
+        listOf(
+          SelectFolderTypeViewState.Book("Hyperion", author = "Dan Simmons", fileCount = 2, partCount = 0, possibleBookCount = 0),
+          SelectFolderTypeViewState.Book("Loose", author = null, fileCount = 1, partCount = 0, possibleBookCount = 0),
+        ),
       actual = folder.books(FolderMode.Authors).map { it.book }.sortedBy { it.name },
     )
   }

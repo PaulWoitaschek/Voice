@@ -11,22 +11,19 @@ import voice.core.playback.misc.Decibel
 @Serializable
 internal sealed interface CustomCommand {
 
-  @Serializable
-  data object ForceSeekToNext : CustomCommand
+  @Serializable data object ForceSeekToNext : CustomCommand
 
-  @Serializable
-  data object ForceSeekToPrevious : CustomCommand
+  @Serializable data object ForceSeekToPrevious : CustomCommand
 
-  @Serializable
-  data class SetSkipSilence(val skipSilence: Boolean) : CustomCommand
+  @Serializable data class SetSkipSilence(val skipSilence: Boolean) : CustomCommand
 
-  @Serializable
-  data class SetGain(val gain: Decibel) : CustomCommand
+  @Serializable data class SetGain(val gain: Decibel) : CustomCommand
 
   companion object {
 
     const val CUSTOM_COMMAND_ACTION = "voiceCommandAction"
     internal const val CUSTOM_COMMAND_EXTRA = "voiceCommandExtra"
+
     internal fun parse(
       command: SessionCommand,
       args: Bundle,

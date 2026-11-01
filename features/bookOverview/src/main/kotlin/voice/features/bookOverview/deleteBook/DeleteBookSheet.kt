@@ -62,13 +62,13 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
+import voice.core.strings.R as StringsR
 import voice.core.ui.MorphShape
+import voice.core.ui.R as UiR
 import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.features.bookOverview.views.CoverShape
-import voice.core.strings.R as StringsR
-import voice.core.ui.R as UiR
 
 @Composable
 internal fun DeleteBookSheet(
@@ -77,10 +77,11 @@ internal fun DeleteBookSheet(
   onConfirmDeletion: () -> Unit,
   onDeleteCheckBoxCheck: (Boolean) -> Unit,
 ) {
-  val sheetState = rememberBottomSheetState(
-    initialValue = Hidden,
-    enabledValues = setOf(Hidden, Expanded),
-  )
+  val sheetState =
+    rememberBottomSheetState(
+      initialValue = Hidden,
+      enabledValues = setOf(Hidden, Expanded),
+    )
   val scope = rememberCoroutineScope()
   // the first choice wins, so taps while the sheet slides away can't change or undo it
   var closing by remember { mutableStateOf(false) }
@@ -103,11 +104,11 @@ internal fun DeleteBookSheet(
     sheetState = sheetState,
   ) {
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState())
-        .navigationBarsPadding()
-        .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
+      modifier =
+        Modifier.fillMaxWidth()
+          .verticalScroll(rememberScrollState())
+          .navigationBarsPadding()
+          .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       DeleteHero(cover = viewState.cover, armed = armed)
@@ -136,10 +137,10 @@ internal fun DeleteBookSheet(
       )
       Spacer(Modifier.height(16.dp))
       Column(
-        modifier = Modifier
-          .fillMaxWidth()
-          .background(colors.surfaceContainerHigh, RoundedCornerShape(20.dp))
-          .padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier =
+          Modifier.fillMaxWidth()
+            .background(colors.surfaceContainerHigh, RoundedCornerShape(20.dp))
+            .padding(horizontal = 16.dp, vertical = 12.dp),
       ) {
         Text(
           text = viewState.fileToDelete,
@@ -154,28 +155,30 @@ internal fun DeleteBookSheet(
         }
       }
       Spacer(Modifier.height(12.dp))
-      val confirmContainer by animateColorAsState(
-        targetValue = if (armed) colors.errorContainer else colors.surfaceContainerHigh,
-        label = "confirmContainer",
-      )
+      val confirmContainer by
+        animateColorAsState(
+          targetValue = if (armed) colors.errorContainer else colors.surfaceContainerHigh,
+          label = "confirmContainer",
+        )
       Row(
-        modifier = Modifier
-          .fillMaxWidth()
-          .clip(RoundedCornerShape(20.dp))
-          .background(confirmContainer)
-          .toggleable(value = armed, enabled = !closing, role = Role.Checkbox, onValueChange = onDeleteCheckBoxCheck)
-          .heightIn(min = 56.dp)
-          .padding(start = 4.dp, end = 16.dp),
+        modifier =
+          Modifier.fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .background(confirmContainer)
+            .toggleable(value = armed, enabled = !closing, role = Role.Checkbox, onValueChange = onDeleteCheckBoxCheck)
+            .heightIn(min = 56.dp)
+            .padding(start = 4.dp, end = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
       ) {
         Checkbox(
           checked = armed,
           onCheckedChange = null,
           modifier = Modifier.padding(12.dp),
-          colors = CheckboxDefaults.colors(
-            checkedColor = colors.error,
-            checkmarkColor = colors.onError,
-          ),
+          colors =
+            CheckboxDefaults.colors(
+              checkedColor = colors.error,
+              checkmarkColor = colors.onError,
+            ),
         )
         Text(
           text = stringResource(StringsR.string.book_delete_dialog_confirm_files),
@@ -191,9 +194,7 @@ internal fun DeleteBookSheet(
         OutlinedButton(
           onClick = { hideThen(onDismiss) },
           shapes = ButtonDefaults.shapes(),
-          modifier = Modifier
-            .weight(1F)
-            .heightIn(min = ButtonDefaults.MediumContainerHeight),
+          modifier = Modifier.weight(1F).heightIn(min = ButtonDefaults.MediumContainerHeight),
         ) {
           Text(stringResource(StringsR.string.common_dialog_cancel))
         }
@@ -201,13 +202,12 @@ internal fun DeleteBookSheet(
           onClick = { hideThen(onConfirmDeletion) },
           enabled = armed,
           shapes = ButtonDefaults.shapes(),
-          colors = ButtonDefaults.buttonColors(
-            containerColor = colors.error,
-            contentColor = colors.onError,
-          ),
-          modifier = Modifier
-            .weight(1F)
-            .heightIn(min = ButtonDefaults.MediumContainerHeight),
+          colors =
+            ButtonDefaults.buttonColors(
+              containerColor = colors.error,
+              contentColor = colors.onError,
+            ),
+          modifier = Modifier.weight(1F).heightIn(min = ButtonDefaults.MediumContainerHeight),
         ) {
           Icon(VoiceIcons.Delete, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
           Spacer(Modifier.width(ButtonDefaults.IconSpacing))
@@ -224,25 +224,27 @@ private fun DeleteHero(
   armed: Boolean,
 ) {
   val colors = MaterialTheme.colorScheme
-  val lean by animateFloatAsState(
-    targetValue = if (armed) 1F else 0F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
-    label = "coverLean",
-  )
+  val lean by
+    animateFloatAsState(
+      targetValue = if (armed) 1F else 0F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
+      label = "coverLean",
+    )
   val morph = remember { Morph(MaterialShapes.Circle, MaterialShapes.Cookie9Sided) }
   val shake = remember { Animatable(0F) }
   LaunchedEffect(armed) {
     if (armed) {
       shake.animateTo(
         targetValue = 0F,
-        animationSpec = keyframes {
-          durationMillis = 480
-          -14F at 60
-          12F at 140
-          -9F at 220
-          6F at 300
-          -3F at 380
-        },
+        animationSpec =
+          keyframes {
+            durationMillis = 480
+            -14F at 60
+            12F at 140
+            -9F at 220
+            6F at 300
+            -3F at 380
+          },
       )
     }
   }
@@ -251,16 +253,16 @@ private fun DeleteHero(
     contentAlignment = Alignment.Center,
   ) {
     AsyncImage(
-      modifier = Modifier
-        .size(104.dp)
-        .graphicsLayer {
-          rotationZ = -4F - lean * 6F
-          val scale = 1F - lean * 0.06F
-          scaleX = scale
-          scaleY = scale
-          alpha = 1F - lean * 0.25F
-        }
-        .clip(CoverShape),
+      modifier =
+        Modifier.size(104.dp)
+          .graphicsLayer {
+            rotationZ = -4F - lean * 6F
+            val scale = 1F - lean * 0.06F
+            scaleX = scale
+            scaleY = scale
+            alpha = 1F - lean * 0.25F
+          }
+          .clip(CoverShape),
       model = rememberCoverThumbnailRequest(cover),
       placeholder = ColorPainter(colors.surfaceContainerHighest),
       error = painterResource(id = UiR.drawable.album_art),
@@ -268,16 +270,11 @@ private fun DeleteHero(
       contentDescription = null,
     )
     Box(
-      modifier = Modifier
-        .align(Alignment.BottomEnd)
-        .size(52.dp)
-        .graphicsLayer { rotationZ = shake.value + lean * 20F },
+      modifier = Modifier.align(Alignment.BottomEnd).size(52.dp).graphicsLayer { rotationZ = shake.value + lean * 20F },
       contentAlignment = Alignment.Center,
     ) {
       Box(
-        Modifier
-          .matchParentSize()
-          .background(colors.error, MorphShape(morph, lean)),
+        Modifier.matchParentSize().background(colors.error, MorphShape(morph, lean)),
       )
       Icon(
         imageVector = VoiceIcons.Delete,

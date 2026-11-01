@@ -1,11 +1,11 @@
 package voice.core.foldersync
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.runner.RunWith
 import voice.core.data.Book
 import voice.core.data.Bookmark
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class SyncedBooksTest {
@@ -149,29 +149,32 @@ class SyncedBooksTest {
 
   @Test
   fun `what changed later wins, and on a tie this device's stays`() {
-    val mine = SyncedBook(
-      place = place(playedAt = 2000),
-      name = SyncedText("Mine", changedAt = 1000),
-      author = SyncedText("Mine", changedAt = 3000),
-      series = SyncedText("Mine", changedAt = 1000),
-      part = SyncedText("1", changedAt = 3000),
-    )
-    val other = SyncedBook(
-      place = place(file = 0, playedAt = 1000),
-      name = SyncedText("Other", changedAt = 3000),
-      author = SyncedText("Other", changedAt = 1000),
-      series = SyncedText("Other", changedAt = 3000),
-      part = SyncedText("2", changedAt = 1000),
-    )
+    val mine =
+      SyncedBook(
+        place = place(playedAt = 2000),
+        name = SyncedText("Mine", changedAt = 1000),
+        author = SyncedText("Mine", changedAt = 3000),
+        series = SyncedText("Mine", changedAt = 1000),
+        part = SyncedText("1", changedAt = 3000),
+      )
+    val other =
+      SyncedBook(
+        place = place(file = 0, playedAt = 1000),
+        name = SyncedText("Other", changedAt = 3000),
+        author = SyncedText("Other", changedAt = 1000),
+        series = SyncedText("Other", changedAt = 3000),
+        part = SyncedText("2", changedAt = 1000),
+      )
 
     assertEquals(
-      expected = SyncedBook(
-        place = mine.place,
-        name = other.name,
-        author = mine.author,
-        series = other.series,
-        part = mine.part,
-      ),
+      expected =
+        SyncedBook(
+          place = mine.place,
+          name = other.name,
+          author = mine.author,
+          series = other.series,
+          part = mine.part,
+        ),
       actual = mine.with(other),
     )
     assertEquals(mine, mine.with(mine.copy(name = SyncedText("Other", changedAt = 1000))))
@@ -192,11 +195,12 @@ class SyncedBooksTest {
   @Test
   fun `a device that didn't play, rename or bookmark the book takes nothing away`() {
     val bookmark = book().bookmark()
-    val mine = SyncedBook(
-      place = place(),
-      name = SyncedText("Mine", changedAt = 0),
-      bookmarks = mapOf(bookmark.id.value to bookmark.synced()),
-    )
+    val mine =
+      SyncedBook(
+        place = place(),
+        name = SyncedText("Mine", changedAt = 0),
+        bookmarks = mapOf(bookmark.id.value to bookmark.synced()),
+      )
 
     assertEquals(mine, mine.with(SyncedBook()))
     assertEquals(mine, SyncedBook().with(mine))

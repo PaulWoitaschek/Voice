@@ -1,12 +1,12 @@
 package voice.navigation
 
+import kotlin.reflect.KClass
+import kotlin.test.Test
+import kotlin.test.assertNotNull
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializerOrNull
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import kotlin.reflect.KClass
-import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 @OptIn(InternalSerializationApi::class)
 @RunWith(Parameterized::class)
@@ -14,6 +14,7 @@ class DestinationTest(val destinationClass: KClass<out Destination>) {
 
   /**
    * Navigation3 serializes the NavKeys, therefore all [Destination.Compose]s must be
+   *
    * @Serializable.
    */
   @Test

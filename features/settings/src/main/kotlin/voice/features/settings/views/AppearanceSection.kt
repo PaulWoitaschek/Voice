@@ -66,6 +66,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
+import androidx.graphics.shapes.toPath as toAndroidPath
+import voice.core.strings.R as StringsR
 import voice.core.ui.CheckBadge
 import voice.core.ui.MorphShape
 import voice.core.ui.ShapedIcon
@@ -73,8 +75,6 @@ import voice.core.ui.ThemeColorScheme
 import voice.core.ui.ThemeMode
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberThemeColorScheme
-import androidx.graphics.shapes.toPath as toAndroidPath
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun AppearanceSection(
@@ -90,11 +90,12 @@ internal fun AppearanceSection(
   modifier: Modifier = Modifier,
 ) {
   // a stored dynamic scheme falls back to Voice blue where it's not supported, so that's what shows as selected
-  val selectedColorScheme = if (themeColorScheme == ThemeColorScheme.Dynamic && !dynamicColorAvailable) {
-    ThemeColorScheme.VoiceBlue
-  } else {
-    themeColorScheme
-  }
+  val selectedColorScheme =
+    if (themeColorScheme == ThemeColorScheme.Dynamic && !dynamicColorAvailable) {
+      ThemeColorScheme.VoiceBlue
+    } else {
+      themeColorScheme
+    }
   SettingsIsland(
     modifier = modifier,
     title = stringResource(StringsR.string.settings_appearance_title),
@@ -103,9 +104,7 @@ internal fun AppearanceSection(
     Column {
       SectionLabel(stringResource(StringsR.string.settings_appearance_theme_title))
       Row(
-        modifier = Modifier
-          .selectableGroup()
-          .padding(horizontal = 16.dp),
+        modifier = Modifier.selectableGroup().padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
       ) {
         ThemeMode.entries.forEach { mode ->
@@ -140,9 +139,7 @@ internal fun AppearanceSection(
       Spacer(Modifier.height(24.dp))
       SectionLabel(stringResource(StringsR.string.settings_appearance_color_scheme_title))
       FlowRow(
-        modifier = Modifier
-          .selectableGroup()
-          .padding(horizontal = 16.dp),
+        modifier = Modifier.selectableGroup().padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
       ) {
@@ -199,45 +196,44 @@ private fun ThemeModeTile(
   val playPath = remember { MaterialShapes.Cookie9Sided.toAndroidPath().asComposePath() }
   val playIconPath = remember { playIconPath() }
   val splitPath = remember { Path() }
-  val scale by animateFloatAsState(
-    targetValue = if (selected) 1F else 0.92F,
-    animationSpec = spring(dampingRatio = 0.45F, stiffness = Spring.StiffnessMediumLow),
-    label = "tileScale",
-  )
-  val borderWidth by animateDpAsState(
-    targetValue = if (selected) 3.dp else 1.dp,
-    animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-    label = "tileBorderWidth",
-  )
-  val borderColor by animateColorAsState(
-    targetValue = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
-    label = "tileBorderColor",
-  )
+  val scale by
+    animateFloatAsState(
+      targetValue = if (selected) 1F else 0.92F,
+      animationSpec = spring(dampingRatio = 0.45F, stiffness = Spring.StiffnessMediumLow),
+      label = "tileScale",
+    )
+  val borderWidth by
+    animateDpAsState(
+      targetValue = if (selected) 3.dp else 1.dp,
+      animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+      label = "tileBorderWidth",
+    )
+  val borderColor by
+    animateColorAsState(
+      targetValue = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
+      label = "tileBorderColor",
+    )
   val shape = RoundedCornerShape(20.dp)
   Column(
-    modifier = modifier
-      .clip(RoundedCornerShape(16.dp))
-      .selectable(
-        selected = selected,
-        onClick = onClick,
-        role = Role.RadioButton,
-      ),
+    modifier =
+      modifier
+        .clip(RoundedCornerShape(16.dp))
+        .selectable(
+          selected = selected,
+          onClick = onClick,
+          role = Role.RadioButton,
+        ),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Box(
-      modifier = Modifier
-        .fillMaxWidth()
-        .aspectRatio(0.75F)
-        .graphicsLayer {
+      modifier =
+        Modifier.fillMaxWidth().aspectRatio(0.75F).graphicsLayer {
           scaleX = scale
           scaleY = scale
         },
     ) {
       Canvas(
-        Modifier
-          .fillMaxSize()
-          .clip(shape)
-          .border(borderWidth, borderColor, shape),
+        Modifier.fillMaxSize().clip(shape).border(borderWidth, borderColor, shape),
       ) {
         when (themeMode) {
           ThemeMode.Light -> drawMiniScreen(light, playPath, playIconPath)
@@ -257,9 +253,7 @@ private fun ThemeModeTile(
       }
       CheckBadge(
         visible = selected,
-        modifier = Modifier
-          .align(Alignment.TopEnd)
-          .padding(8.dp),
+        modifier = Modifier.align(Alignment.TopEnd).padding(8.dp),
       )
     }
     Spacer(Modifier.height(8.dp))
@@ -326,12 +320,13 @@ private fun DrawScope.drawMiniScreen(
 }
 
 /** A play triangle in a 1x1 box. */
-private fun playIconPath(): Path = Path().apply {
-  moveTo(0.4F, 0.32F)
-  lineTo(0.7F, 0.5F)
-  lineTo(0.4F, 0.68F)
-  close()
-}
+private fun playIconPath(): Path =
+  Path().apply {
+    moveTo(0.4F, 0.32F)
+    lineTo(0.7F, 0.5F)
+    lineTo(0.4F, 0.68F)
+    close()
+  }
 
 @Composable
 private fun PaletteSwatch(
@@ -342,27 +337,27 @@ private fun PaletteSwatch(
   val dark = MaterialTheme.colorScheme.surface.luminance() < 0.5F
   val colors = rememberThemeColorScheme(themeColorScheme, dark)
   val morph = remember { Morph(MaterialShapes.Circle, MaterialShapes.Cookie9Sided) }
-  val progress by animateFloatAsState(
-    targetValue = if (selected) 1F else 0F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
-    label = "swatchMorph",
-  )
+  val progress by
+    animateFloatAsState(
+      targetValue = if (selected) 1F else 0F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
+      label = "swatchMorph",
+    )
   val label = themeColorScheme.label()
   Box(
-    modifier = Modifier
-      .size(56.dp)
-      .clip(CircleShape)
-      .semantics { contentDescription = label }
-      .selectable(
-        selected = selected,
-        onClick = onClick,
-        role = Role.RadioButton,
-      ),
+    modifier =
+      Modifier.size(56.dp)
+        .clip(CircleShape)
+        .semantics { contentDescription = label }
+        .selectable(
+          selected = selected,
+          onClick = onClick,
+          role = Role.RadioButton,
+        ),
     contentAlignment = Alignment.Center,
   ) {
     Canvas(
-      Modifier
-        .fillMaxSize()
+      Modifier.fillMaxSize()
         .graphicsLayer {
           rotationZ = progress * 40F
           // the cookie's bumps stick out, so it shrinks a little to keep the same visual size
@@ -390,9 +385,7 @@ private fun PaletteSwatch(
       exit = scaleOut() + fadeOut(),
     ) {
       Box(
-        modifier = Modifier
-          .size(28.dp)
-          .background(colors.primaryContainer, CircleShape),
+        modifier = Modifier.size(28.dp).background(colors.primaryContainer, CircleShape),
         contentAlignment = Alignment.Center,
       ) {
         Icon(

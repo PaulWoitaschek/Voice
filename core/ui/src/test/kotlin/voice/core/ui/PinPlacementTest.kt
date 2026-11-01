@@ -2,18 +2,19 @@ package voice.core.ui
 
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import voice.core.data.Bookmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import voice.core.data.Bookmark
 
 class PinPlacementTest {
 
   private val density = Density(1F)
   private val pinSize = 14.dp
 
-  private fun place(vararg positions: Float) = with(density) {
-    placePins(positions.map { BookBarPin(it, Bookmark.Kind.Note) }, segments = listOf(1F), width = 300F, pinSize = pinSize)
-  }
+  private fun place(vararg positions: Float) =
+    with(density) {
+      placePins(positions.map { BookBarPin(it, Bookmark.Kind.Note) }, segments = listOf(1F), width = 300F, pinSize = pinSize)
+    }
 
   @Test
   fun `pins at the ends stay on the bar`() {

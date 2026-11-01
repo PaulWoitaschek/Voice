@@ -38,11 +38,11 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.core.data.supporter.SupporterBadge
+import voice.core.strings.R as StringsR
 import voice.core.ui.SupporterBadgeIcon
 import voice.core.ui.drawConfetti
 import voice.core.ui.label
 import voice.core.ui.rememberConfettiState
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun ThankYou(
@@ -66,16 +66,13 @@ internal fun ThankYou(
     confetti.burst()
   }
   Column(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(top = 24.dp),
+    modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(8.dp),
   ) {
     Box(
-      modifier = Modifier
-        .size(160.dp)
-        .drawWithContent {
+      modifier =
+        Modifier.size(160.dp).drawWithContent {
           drawContent()
           drawConfetti(
             state = confetti,
@@ -90,11 +87,12 @@ internal fun ThankYou(
         badge = shown,
         size = 112.dp,
         contentDescription = shown.label(),
-        modifier = Modifier.graphicsLayer {
-          scaleX = pop.value
-          scaleY = pop.value
-          rotationZ = (1F - pop.value) * -90F
-        },
+        modifier =
+          Modifier.graphicsLayer {
+            scaleX = pop.value
+            scaleY = pop.value
+            rotationZ = (1F - pop.value) * -90F
+          },
       )
     }
     Text(
@@ -121,9 +119,7 @@ internal fun ThankYou(
     Spacer(Modifier.height(16.dp))
     val size = ButtonDefaults.MediumContainerHeight
     Button(
-      modifier = Modifier
-        .fillMaxWidth()
-        .heightIn(size),
+      modifier = Modifier.fillMaxWidth().heightIn(size),
       onClick = onDone,
       contentPadding = ButtonDefaults.contentPaddingFor(size),
       shapes = ButtonDefaults.shapesFor(size),

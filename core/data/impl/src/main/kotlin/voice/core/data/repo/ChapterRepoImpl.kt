@@ -3,11 +3,11 @@ package voice.core.data.repo
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import java.util.Collections
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.internals.dao.ChapterDao
 import voice.core.data.runForMaxSqlVariableNumber
-import java.util.Collections
 
 // one cache for the whole app, so chapters a sync updates show up everywhere
 @SingleIn(AppScope::class)

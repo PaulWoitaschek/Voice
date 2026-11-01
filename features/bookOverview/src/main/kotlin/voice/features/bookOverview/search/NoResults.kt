@@ -32,13 +32,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
-import voice.core.strings.R as StringsR
 
 /**
- * Says what was searched and where search looks. A missing book is usually in a folder Voice doesn't know about yet,
- * so the audiobook folders are one tap away.
+ * Says what was searched and where search looks. A missing book is usually in a folder Voice doesn't know about yet, so the audiobook
+ * folders are one tap away.
  */
 @Composable
 internal fun NoResults(
@@ -49,18 +49,13 @@ internal fun NoResults(
   modifier: Modifier = Modifier,
 ) {
   Column(
-    modifier = modifier
-      .fillMaxSize()
-      .verticalScroll(rememberScrollState())
-      .padding(contentPadding)
-      .padding(horizontal = 16.dp, vertical = 32.dp),
+    modifier =
+      modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(horizontal = 16.dp, vertical = 32.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(16.dp),
   ) {
     Box(
-      modifier = Modifier
-        .size(128.dp)
-        .background(MaterialTheme.colorScheme.tertiaryContainer, MaterialShapes.Flower.toShape()),
+      modifier = Modifier.size(128.dp).background(MaterialTheme.colorScheme.tertiaryContainer, MaterialShapes.Flower.toShape()),
       contentAlignment = Alignment.Center,
     ) {
       Icon(

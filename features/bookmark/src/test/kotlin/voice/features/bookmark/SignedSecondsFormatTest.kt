@@ -3,11 +3,11 @@ package voice.features.bookmark
 import android.icu.util.Measure
 import android.icu.util.MeasureUnit
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.runner.RunWith
 import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SignedSecondsFormatTest {

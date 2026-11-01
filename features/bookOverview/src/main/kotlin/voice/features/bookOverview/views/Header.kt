@@ -19,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import voice.features.bookOverview.overview.BookOverviewCategory
 import java.text.NumberFormat
+import voice.features.bookOverview.overview.BookOverviewCategory
 
 @Composable
 internal fun Header(
@@ -38,9 +38,8 @@ internal fun Header(
     )
     Spacer(Modifier.width(10.dp))
     Text(
-      modifier = Modifier
-        .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape)
-        .padding(horizontal = 10.dp, vertical = 2.dp),
+      modifier =
+        Modifier.background(MaterialTheme.colorScheme.secondaryContainer, CircleShape).padding(horizontal = 10.dp, vertical = 2.dp),
       // localized digits, like the counts in the other library texts
       text = remember(count) { NumberFormat.getIntegerInstance().format(count) },
       style = MaterialTheme.typography.labelLargeEmphasized,

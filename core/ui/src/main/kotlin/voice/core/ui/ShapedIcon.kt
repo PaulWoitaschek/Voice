@@ -33,10 +33,7 @@ fun ShapedIcon(
     contentAlignment = Alignment.Center,
   ) {
     Box(
-      Modifier
-        .size(size)
-        .graphicsLayer { rotationZ = shapeRotation }
-        .background(containerColor, shape.toShape()),
+      Modifier.size(size).graphicsLayer { rotationZ = shapeRotation }.background(containerColor, shape.toShape()),
     )
     Icon(
       modifier = Modifier.size(size * 0.5F),

@@ -17,9 +17,10 @@ import java.time.Instant
 public class Migration53 : IncrementalMigration(53) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    val lastModifiedCv = ContentValues().apply {
-      put("fileLastModified", Instant.EPOCH.toString())
-    }
+    val lastModifiedCv =
+      ContentValues().apply {
+        put("fileLastModified", Instant.EPOCH.toString())
+      }
     db.update(
       "chapters2",
       SQLiteDatabase.CONFLICT_FAIL,

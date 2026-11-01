@@ -61,10 +61,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import coil.compose.AsyncImage
+import voice.core.strings.R as StringsR
 import voice.core.ui.icons.VoiceIcons
 import voice.features.cover.SelectCoverFromInternetViewModel.Results
 import voice.features.cover.api.SearchResponse
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun CoverContents(
@@ -83,48 +83,51 @@ internal fun CoverContents(
     label = "coverContent",
   ) { state ->
     when (state) {
-      is Results.Content -> CoverGrid(
-        results = state,
-        downloading = downloading,
-        contentPadding = contentPadding,
-        onCoverClick = onCoverClick,
-        onRetry = onRetry,
-      )
-      is Results.Loading -> Box(
-        modifier = Modifier
-          .fillMaxSize()
-          .padding(contentPadding),
-        contentAlignment = Alignment.Center,
-      ) {
-        LoadingIndicator(Modifier.size(64.dp))
-      }
-      is Results.Idle -> Message(
-        contentPadding = contentPadding,
-        icon = VoiceIcons.ImageSearch,
-        shape = MaterialShapes.Clover4Leaf,
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        title = stringResource(StringsR.string.cover_search_hint),
-      )
-      is Results.Empty -> Message(
-        contentPadding = contentPadding,
-        icon = VoiceIcons.SearchOff,
-        shape = MaterialShapes.Flower,
-        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        title = stringResource(StringsR.string.cover_search_no_results_title),
-        message = stringResource(StringsR.string.cover_search_no_results_message),
-      )
-      is Results.Error -> Message(
-        contentPadding = contentPadding,
-        icon = VoiceIcons.CloudOff,
-        shape = MaterialShapes.SoftBurst,
-        containerColor = MaterialTheme.colorScheme.errorContainer,
-        contentColor = MaterialTheme.colorScheme.onErrorContainer,
-        title = stringResource(StringsR.string.common_error_generic_message),
-      ) {
-        RetryButton(onRetry)
-      }
+      is Results.Content ->
+        CoverGrid(
+          results = state,
+          downloading = downloading,
+          contentPadding = contentPadding,
+          onCoverClick = onCoverClick,
+          onRetry = onRetry,
+        )
+      is Results.Loading ->
+        Box(
+          modifier = Modifier.fillMaxSize().padding(contentPadding),
+          contentAlignment = Alignment.Center,
+        ) {
+          LoadingIndicator(Modifier.size(64.dp))
+        }
+      is Results.Idle ->
+        Message(
+          contentPadding = contentPadding,
+          icon = VoiceIcons.ImageSearch,
+          shape = MaterialShapes.Clover4Leaf,
+          containerColor = MaterialTheme.colorScheme.primaryContainer,
+          contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+          title = stringResource(StringsR.string.cover_search_hint),
+        )
+      is Results.Empty ->
+        Message(
+          contentPadding = contentPadding,
+          icon = VoiceIcons.SearchOff,
+          shape = MaterialShapes.Flower,
+          containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+          contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+          title = stringResource(StringsR.string.cover_search_no_results_title),
+          message = stringResource(StringsR.string.cover_search_no_results_message),
+        )
+      is Results.Error ->
+        Message(
+          contentPadding = contentPadding,
+          icon = VoiceIcons.CloudOff,
+          shape = MaterialShapes.SoftBurst,
+          containerColor = MaterialTheme.colorScheme.errorContainer,
+          contentColor = MaterialTheme.colorScheme.onErrorContainer,
+          title = stringResource(StringsR.string.common_error_generic_message),
+        ) {
+          RetryButton(onRetry)
+        }
     }
   }
 }
@@ -160,9 +163,7 @@ private fun CoverGrid(
     if (results.loadingMore || results.loadingMoreFailed) {
       item(span = StaggeredGridItemSpan.FullLine) {
         Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp),
+          modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
           contentAlignment = Alignment.Center,
         ) {
           if (results.loadingMoreFailed) {
@@ -186,38 +187,41 @@ private fun CoverTile(
   val colors = MaterialTheme.colorScheme
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
-  val scale by animateFloatAsState(
-    targetValue = if (pressed || downloading) 0.94F else 1F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
-    label = "coverScale",
-  )
-  val alpha by animateFloatAsState(
-    targetValue = if (dimmed) 0.38F else 1F,
-    label = "coverAlpha",
-  )
-  val aspectRatio = if (item.width > 0 && item.height > 0) {
-    (item.width.toFloat() / item.height).coerceIn(0.5F, 2F)
-  } else {
-    1F
-  }
+  val scale by
+    animateFloatAsState(
+      targetValue = if (pressed || downloading) 0.94F else 1F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
+      label = "coverScale",
+    )
+  val alpha by
+    animateFloatAsState(
+      targetValue = if (dimmed) 0.38F else 1F,
+      label = "coverAlpha",
+    )
+  val aspectRatio =
+    if (item.width > 0 && item.height > 0) {
+      (item.width.toFloat() / item.height).coerceIn(0.5F, 2F)
+    } else {
+      1F
+    }
   Box(
-    modifier = Modifier
-      .fillMaxWidth()
-      .aspectRatio(aspectRatio)
-      .graphicsLayer {
-        scaleX = scale
-        scaleY = scale
-        this.alpha = alpha
-      }
-      .clip(RoundedCornerShape(20.dp))
-      .background(colors.surfaceContainerHighest)
-      .clickable(
-        interactionSource = interactionSource,
-        indication = ripple(),
-        enabled = !dimmed && !downloading,
-        role = Role.Button,
-        onClick = onClick,
-      ),
+    modifier =
+      Modifier.fillMaxWidth()
+        .aspectRatio(aspectRatio)
+        .graphicsLayer {
+          scaleX = scale
+          scaleY = scale
+          this.alpha = alpha
+        }
+        .clip(RoundedCornerShape(20.dp))
+        .background(colors.surfaceContainerHighest)
+        .clickable(
+          interactionSource = interactionSource,
+          indication = ripple(),
+          enabled = !dimmed && !downloading,
+          role = Role.Button,
+          onClick = onClick,
+        ),
   ) {
     AsyncImage(
       model = item.thumbnail,
@@ -228,11 +232,11 @@ private fun CoverTile(
     if (item.width > 0 && item.height > 0) {
       Text(
         text = "${item.width} × ${item.height}",
-        modifier = Modifier
-          .align(Alignment.BottomStart)
-          .padding(8.dp)
-          .background(colors.surfaceContainerHighest.copy(alpha = 0.85F), CircleShape)
-          .padding(horizontal = 8.dp, vertical = 2.dp),
+        modifier =
+          Modifier.align(Alignment.BottomStart)
+            .padding(8.dp)
+            .background(colors.surfaceContainerHighest.copy(alpha = 0.85F), CircleShape)
+            .padding(horizontal = 8.dp, vertical = 2.dp),
         style = MaterialTheme.typography.labelSmall,
         color = colors.onSurface,
       )
@@ -269,18 +273,14 @@ private fun Message(
     appear.animateTo(1F, spring(dampingRatio = 0.45F, stiffness = Spring.StiffnessLow))
   }
   Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .verticalScroll(rememberScrollState())
-      .padding(contentPadding)
-      .padding(horizontal = 16.dp, vertical = 32.dp),
+    modifier =
+      Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(horizontal = 16.dp, vertical = 32.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(16.dp),
   ) {
     Box(
-      modifier = Modifier
-        .size(128.dp)
-        .graphicsLayer {
+      modifier =
+        Modifier.size(128.dp).graphicsLayer {
           val scale = 0.6F + 0.4F * appear.value
           scaleX = scale
           scaleY = scale
@@ -288,10 +288,7 @@ private fun Message(
       contentAlignment = Alignment.Center,
     ) {
       Box(
-        Modifier
-          .matchParentSize()
-          .graphicsLayer { rotationZ = (1F - appear.value) * -45F }
-          .background(containerColor, shape.toShape()),
+        Modifier.matchParentSize().graphicsLayer { rotationZ = (1F - appear.value) * -45F }.background(containerColor, shape.toShape()),
       )
       Icon(
         imageVector = icon,

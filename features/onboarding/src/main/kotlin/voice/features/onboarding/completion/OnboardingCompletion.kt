@@ -13,13 +13,13 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
+import voice.core.strings.R as StringsR
 import voice.core.ui.OnboardingButton
 import voice.core.ui.OnboardingScaffold
 import voice.core.ui.OnboardingStep
 import voice.core.ui.VoiceTheme
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface OnboardingCompletionGraph {
@@ -32,18 +32,20 @@ object OnboardingCompletionProvider {
 
   @Provides
   @IntoSet
-  fun onboardingCompletionNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.OnboardingCompletion> { key ->
-    NavEntry(key) {
-      OnboardingCompletion()
+  fun onboardingCompletionNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.OnboardingCompletion> { key ->
+      NavEntry(key) {
+        OnboardingCompletion()
+      }
     }
-  }
 }
 
 @Composable
 fun OnboardingCompletion(modifier: Modifier = Modifier) {
-  val viewModel = retain<OnboardingCompletionViewModel> {
-    rootGraphAs<OnboardingCompletionGraph>().onboardingCompletionViewModel
-  }
+  val viewModel =
+    retain<OnboardingCompletionViewModel> {
+      rootGraphAs<OnboardingCompletionGraph>().onboardingCompletionViewModel
+    }
   OnboardingCompletion(
     modifier = modifier,
     onNext = viewModel::next,

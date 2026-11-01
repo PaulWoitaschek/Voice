@@ -35,10 +35,11 @@ internal fun PlaybackTopBar(
   modifier: Modifier = Modifier,
 ) {
   Row(
-    modifier = modifier
-      .fillMaxWidth()
-      .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))
-      .padding(horizontal = 12.dp, vertical = 8.dp),
+    modifier =
+      modifier
+        .fillMaxWidth()
+        .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))
+        .padding(horizontal = 12.dp, vertical = 8.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     CloseButton(onClick = onCloseClick)
@@ -110,6 +111,7 @@ private fun TopBarButton(
 }
 
 @Composable
-private fun topBarButtonColors(): IconButtonColors = IconButtonDefaults.filledTonalIconButtonColors(
-  containerColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.9F),
-)
+private fun topBarButtonColors(): IconButtonColors =
+  IconButtonDefaults.filledTonalIconButtonColors(
+    containerColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.9F),
+  )

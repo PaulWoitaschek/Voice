@@ -22,12 +22,13 @@ internal class SttsVisitor : AtomVisitor {
     } else {
       buffer.skipBytes(3) // flags
       val numberOfEntriesInSttsTable = buffer.readUnsignedIntToInt()
-      val durations = (0 until numberOfEntriesInSttsTable).map {
-        SttsEntry(
-          sampleCount = buffer.readUnsignedInt(),
-          sampleDuration = buffer.readUnsignedInt(),
-        )
-      }
+      val durations =
+        (0 until numberOfEntriesInSttsTable).map {
+          SttsEntry(
+            sampleCount = buffer.readUnsignedInt(),
+            sampleDuration = buffer.readUnsignedInt(),
+          )
+        }
       parseOutput.durations.add(durations)
     }
   }

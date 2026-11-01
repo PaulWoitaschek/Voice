@@ -2,8 +2,6 @@ package voice.features.widget
 
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import voice.core.data.MarkData
-import voice.core.sleeptimer.SleepTimerState
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -12,6 +10,8 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import voice.core.data.MarkData
+import voice.core.sleeptimer.SleepTimerState
 
 class WidgetModelsTest {
 
@@ -19,10 +19,11 @@ class WidgetModelsTest {
 
   @Test
   fun `chapter number counts the marks of earlier chapters`() {
-    val marked = chapter(
-      duration = 20.minutes.inWholeMilliseconds,
-      marks = listOf(MarkData(0, "Loomings"), MarkData(10.minutes.inWholeMilliseconds, "The Carpet-Bag")),
-    )
+    val marked =
+      chapter(
+        duration = 20.minutes.inWholeMilliseconds,
+        marks = listOf(MarkData(0, "Loomings"), MarkData(10.minutes.inWholeMilliseconds, "The Carpet-Bag")),
+      )
     val second = chapter(name = "The Spouter-Inn")
     val third = chapter(name = "The Counterpane")
     val book = book(chapters = listOf(marked, second, third), currentChapter = third.id)
@@ -45,12 +46,13 @@ class WidgetModelsTest {
   fun `time left is at the playback speed and the position only counts in whole minutes`() {
     val first = chapter(duration = 30.minutes.inWholeMilliseconds)
     val second = chapter(duration = 30.minutes.inWholeMilliseconds)
-    val book = book(
-      chapters = listOf(first, second),
-      currentChapter = second.id,
-      positionInChapter = (10.minutes + 20.seconds).inWholeMilliseconds,
-      speed = 2F,
-    )
+    val book =
+      book(
+        chapters = listOf(first, second),
+        currentChapter = second.id,
+        positionInChapter = (10.minutes + 20.seconds).inWholeMilliseconds,
+        speed = 2F,
+      )
 
     val nowPlaying = nowPlayingBook(book, playing = true, SleepTimerState.Disabled, now)
 

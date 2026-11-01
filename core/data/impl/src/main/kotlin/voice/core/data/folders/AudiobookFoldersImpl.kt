@@ -42,14 +42,17 @@ internal constructor(
   // allowing access to a folder that's already stored again leaves the stores unchanged, so they don't emit
   private val grantsChanged = MutableStateFlow(0)
 
-  private val storedFolders: Flow<StoredFolders> = combine(
-    FolderType.entries.map { folderType -> dataStore(folderType).data.map { folderType to it } },
-  ) { it.toMap() }
-    .combine(grantsChanged) { stored, _ ->
-      StoredFolders(stored = stored, withAccess = persistedUriPermissions.persistedUris())
-    }
-    // reading the access asks the system, which the library would otherwise do on the main thread at start
-    .flowOn(Dispatchers.IO)
+  private val storedFolders: Flow<StoredFolders> =
+    combine(
+        FolderType.entries.map { folderType -> dataStore(folderType).data.map { folderType to it } },
+      ) {
+        it.toMap()
+      }
+      .combine(grantsChanged) { stored, _ ->
+        StoredFolders(stored = stored, withAccess = persistedUriPermissions.persistedUris())
+      }
+      // reading the access asks the system, which the library would otherwise do on the main thread at start
+      .flowOn(Dispatchers.IO)
 
   public override fun all(): Flow<Map<FolderType, List<DocumentFileWithUri>>> {
     return storedFolders.map { folders ->
@@ -75,18 +78,18 @@ internal constructor(
   }
 
   private fun Uri.toDocumentFile(folderType: FolderType): CachedDocumentFile {
-    val uri = when (folderType) {
-      FolderType.SingleFile -> this
-      FolderType.SingleFolder,
-      FolderType.Root,
-      FolderType.Author,
-      -> {
-        DocumentsContract.buildDocumentUriUsingTree(
-          this,
-          DocumentsContract.getTreeDocumentId(this),
-        )
+    val uri =
+      when (folderType) {
+        FolderType.SingleFile -> this
+        FolderType.SingleFolder,
+        FolderType.Root,
+        FolderType.Author -> {
+          DocumentsContract.buildDocumentUriUsingTree(
+            this,
+            DocumentsContract.getTreeDocumentId(this),
+          )
+        }
       }
-    }
     return cachedDocumentFileFactory.create(uri)
   }
 

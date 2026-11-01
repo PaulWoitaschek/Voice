@@ -4,6 +4,10 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import kotlin.math.max
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -27,14 +31,11 @@ import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.playstate.PlayStateManager.PlayState.Playing
-import kotlin.math.max
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class SleepTimerImpl internal constructor(
+class SleepTimerImpl
+internal constructor(
   private val playStateManager: PlayStateManager,
   private val shakeDetector: ShakeDetector,
   private val sleepTimerPreferenceStore: SleepTimerPreferenceStore,
@@ -87,13 +88,15 @@ class SleepTimerImpl internal constructor(
     val trigger = coroutineScope {
       // Only listen from the fade-out on, so turning over in bed while falling asleep doesn't restart the timer
       val shake = async(start = CoroutineStart.LAZY) { shakeDetector.detect() }
-      val trigger = countDown(duration, fadeOutDuration, shake) ?: run {
-        playerController.setVolume(1F)
-        state.value = SleepTimerState.Disabled
-        playerController.record(ListeningEvent.Type.SleepTimerEnded, ListeningEvent.Source.SleepTimer)
-        playerController.pauseWithRewind(fadeOutDuration)
-        awaitRestart(shake)
-      }
+      val trigger =
+        countDown(duration, fadeOutDuration, shake)
+          ?: run {
+            playerController.setVolume(1F)
+            state.value = SleepTimerState.Disabled
+            playerController.record(ListeningEvent.Type.SleepTimerEnded, ListeningEvent.Source.SleepTimer)
+            playerController.pauseWithRewind(fadeOutDuration)
+            awaitRestart(shake)
+          }
       shake.cancel()
       trigger
     }
@@ -142,16 +145,14 @@ class SleepTimerImpl internal constructor(
   private suspend fun awaitRestart(shake: Deferred<Unit>): RestartTrigger? {
     return withTimeoutOrNull(SHAKE_TO_RESET_TIME) {
       merge(
-        flow {
-          shake.await()
-          emit(RestartTrigger.ShakeAfterPause)
-        },
-        // pauseWithRewind takes effect asynchronously, so the player can still be playing at this point
-        playStateManager.playStateFlow
-          .dropWhile { it == Playing }
-          .filter { it == Playing }
-          .map { RestartTrigger.Play },
-      ).first()
+          flow {
+            shake.await()
+            emit(RestartTrigger.ShakeAfterPause)
+          },
+          // pauseWithRewind takes effect asynchronously, so the player can still be playing at this point
+          playStateManager.playStateFlow.dropWhile { it == Playing }.filter { it == Playing }.map { RestartTrigger.Play },
+        )
+        .first()
     }
   }
 

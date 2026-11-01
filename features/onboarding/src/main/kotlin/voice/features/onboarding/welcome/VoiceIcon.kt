@@ -36,10 +36,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.math.min
 import kotlin.math.sqrt
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /** Tapping it is just for fun, so it's hidden from accessibility services. */
 @Composable
@@ -57,11 +57,12 @@ internal fun VoiceIcon(
   val bounce = remember { Animatable(0F) }
   val ripple = remember { Animatable(1F) }
   var pressed by remember { mutableStateOf(false) }
-  val squish by animateFloatAsState(
-    targetValue = if (pressed) 0.9F else 1F,
-    animationSpec = spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMedium),
-    label = "iconSquish",
-  )
+  val squish by
+    animateFloatAsState(
+      targetValue = if (pressed) 0.9F else 1F,
+      animationSpec = spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMedium),
+      label = "iconSquish",
+    )
   LaunchedEffect(Unit) {
     if (shown) return@LaunchedEffect
     launch { pop.animateTo(1F, spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow)) }
@@ -73,27 +74,28 @@ internal fun VoiceIcon(
   val wave = remember { Path() }
   val tile = remember { Path() }
   Canvas(
-    modifier = modifier
-      .clearAndSetSemantics {}
-      .pointerInput(Unit) {
-        detectTapGestures(
-          onPress = {
-            pressed = true
-            tryAwaitRelease()
-            pressed = false
-          },
-          onTap = {
-            haptics.performHapticFeedback(HapticFeedbackType.SegmentTick)
-            scope.launch {
-              bounce.animateTo(0F, spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessLow), initialVelocity = 5F)
-            }
-            scope.launch {
-              ripple.snapTo(0F)
-              ripple.animateTo(1F, tween(durationMillis = 900, easing = LinearOutSlowInEasing))
-            }
-          },
-        )
-      },
+    modifier =
+      modifier
+        .clearAndSetSemantics {}
+        .pointerInput(Unit) {
+          detectTapGestures(
+            onPress = {
+              pressed = true
+              tryAwaitRelease()
+              pressed = false
+            },
+            onTap = {
+              haptics.performHapticFeedback(HapticFeedbackType.SegmentTick)
+              scope.launch {
+                bounce.animateTo(0F, spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessLow), initialVelocity = 5F)
+              }
+              scope.launch {
+                ripple.snapTo(0F)
+                ripple.animateTo(1F, tween(durationMillis = 900, easing = LinearOutSlowInEasing))
+              }
+            },
+          )
+        },
   ) {
     val t = clock()
     val side = min(min(size.width, size.height) * 0.6F, 200.dp.toPx())

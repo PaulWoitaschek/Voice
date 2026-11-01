@@ -60,18 +60,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
+import java.text.NumberFormat
 import voice.core.data.Bookmark
 import voice.core.strings.R
 import voice.core.ui.BookmarkBadge
 import voice.core.ui.MorphShape
 import voice.core.ui.bookmarkStyle
 import voice.core.ui.icons.VoiceIcons
-import java.text.NumberFormat
 
-/**
- * Details for a bookmark. A new bookmark is already saved when this opens, so swiping the sheet
- * away loses nothing.
- */
+/** Details for a bookmark. A new bookmark is already saved when this opens, so swiping the sheet away loses nothing. */
 @Composable
 internal fun BookmarkEditorSheet(
   editor: BookmarkEditorViewState,
@@ -85,16 +82,14 @@ internal fun BookmarkEditorSheet(
 ) {
   ModalBottomSheet(
     onDismissRequest = onDone,
-    sheetState = rememberBottomSheetState(
-      initialValue = Hidden,
-      enabledValues = setOf(Hidden, Expanded),
-    ),
+    sheetState =
+      rememberBottomSheetState(
+        initialValue = Hidden,
+        enabledValues = setOf(Hidden, Expanded),
+      ),
   ) {
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .navigationBarsPadding()
-        .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
+      modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
     ) {
       EditorHeader(editor)
       Spacer(Modifier.height(20.dp))
@@ -163,14 +158,14 @@ private fun EditorHeader(editor: BookmarkEditorViewState) {
         pop.animateTo(1F, spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow))
       }
       Box(
-        modifier = Modifier
-          .size(56.dp)
-          .graphicsLayer {
-            scaleX = pop.value
-            scaleY = pop.value
-            rotationZ = (1F - pop.value) * -90F
-          }
-          .background(colors.primary, MaterialShapes.SoftBurst.toShape()),
+        modifier =
+          Modifier.size(56.dp)
+            .graphicsLayer {
+              scaleX = pop.value
+              scaleY = pop.value
+              rotationZ = (1F - pop.value) * -90F
+            }
+            .background(colors.primary, MaterialShapes.SoftBurst.toShape()),
         contentAlignment = Alignment.Center,
       ) {
         Icon(VoiceIcons.Check, contentDescription = null, tint = colors.onPrimary)
@@ -239,9 +234,7 @@ private fun KindPicker(
 ) {
   // the tiles share the width: they don't all fit side by side at full size on a small phone
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .selectableGroup(),
+    modifier = Modifier.fillMaxWidth().selectableGroup(),
     horizontalArrangement = Arrangement.SpaceEvenly,
   ) {
     Bookmark.Kind.entries.forEach { kind ->
@@ -265,37 +258,36 @@ private fun KindTile(
   val colors = MaterialTheme.colorScheme
   val style = bookmarkStyle(kind)
   val morph = remember(style.polygon) { Morph(MaterialShapes.Circle, style.polygon) }
-  val progress by animateFloatAsState(
-    targetValue = if (selected) 1F else 0F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
-    label = "kindMorph",
-  )
+  val progress by
+    animateFloatAsState(
+      targetValue = if (selected) 1F else 0F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
+      label = "kindMorph",
+    )
   Column(
-    modifier = modifier
-      .clip(MaterialTheme.shapes.large)
-      .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
-      .padding(4.dp),
+    modifier =
+      modifier.clip(MaterialTheme.shapes.large).selectable(selected = selected, onClick = onClick, role = Role.RadioButton).padding(4.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Box(
-      modifier = Modifier
-        .widthIn(max = 64.dp)
-        .fillMaxWidth()
-        .aspectRatio(1F)
-        .border(
-          width = 2.dp,
-          color = if (selected) colors.primary else Color.Transparent,
-          shape = CircleShape,
-        )
-        .padding(6.dp),
+      modifier =
+        Modifier.widthIn(max = 64.dp)
+          .fillMaxWidth()
+          .aspectRatio(1F)
+          .border(
+            width = 2.dp,
+            color = if (selected) colors.primary else Color.Transparent,
+            shape = CircleShape,
+          )
+          .padding(6.dp),
       contentAlignment = Alignment.Center,
     ) {
       Box(
-        modifier = Modifier
-          .fillMaxSize()
-          .graphicsLayer { rotationZ = progress * 20F }
-          .clip(MorphShape(morph, progress))
-          .background(if (selected) style.container else colors.surfaceContainerHighest),
+        modifier =
+          Modifier.fillMaxSize()
+            .graphicsLayer { rotationZ = progress * 20F }
+            .clip(MorphShape(morph, progress))
+            .background(if (selected) style.container else colors.surfaceContainerHighest),
         contentAlignment = Alignment.Center,
       ) {
         val icon = style.icon ?: VoiceIcons.Favorite
@@ -303,9 +295,7 @@ private fun KindTile(
           imageVector = icon,
           contentDescription = null,
           tint = if (selected) style.content else colors.onSurfaceVariant,
-          modifier = Modifier
-            .size(24.dp)
-            .graphicsLayer { rotationZ = progress * -20F },
+          modifier = Modifier.size(24.dp).graphicsLayer { rotationZ = progress * -20F },
         )
       }
     }

@@ -4,6 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalTime
+import java.time.YearMonth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -19,16 +23,13 @@ import voice.core.common.DispatcherProvider
 import voice.core.common.FeedbackLinks
 import voice.core.common.MainScope
 import voice.core.data.folders.AudiobookFolders
-import voice.core.data.supporter.SupporterStatus
 import voice.core.data.supporter.SupporterStatusStore
 import voice.core.documentfile.nameWithoutExtension
-import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.AutoRewindAmountStore
 import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.SeekTimeStore
-import voice.core.sleeptimer.SleepTimerPreference
 import voice.core.sleeptimer.SleepTimerPreferenceStore
 import voice.core.ui.CoverColorsStore
 import voice.core.ui.DynamicColorAvailability
@@ -43,10 +44,6 @@ import voice.core.ui.ThemeModeStore
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import voice.navigation.Origin
-import java.time.Clock
-import java.time.Instant
-import java.time.LocalTime
-import java.time.YearMonth
 
 @Inject
 class SettingsViewModel(
@@ -81,8 +78,8 @@ class SettingsViewModel(
   private var appVersionTapCount = 0
 
   /**
-   * Null until every setting is read. Placeholder values would show for a moment and then animate
-   * over to the real ones, as if they had just been changed.
+   * Null until every setting is read. Placeholder values would show for a moment and then animate over to the real ones, as if they had
+   * just been changed.
    */
   @Composable
   fun viewState(): SettingsViewState? {
@@ -104,30 +101,31 @@ class SettingsViewModel(
     val supporterStatus = remember { supporterStatusStore.data }.collectAsState(initial = null).value
     val audiobookshelfServer = remember {
       serverAccount.serverName.map(::AudiobookshelfServerName)
-    }.collectAsState(initial = null).value
-    val audiobookshelfEnabled = remember { audiobookshelfFeatureFlag.flow.map { it.value } }
-      .collectAsState(initial = null).value
+    }
+      .collectAsState(initial = null)
+      .value
+    val audiobookshelfEnabled = remember { audiobookshelfFeatureFlag.flow.map { it.value } }.collectAsState(initial = null).value
     val dynamicColorAvailable = remember {
       dynamicColorAvailability.isSupported()
     }
     if (
       themeMode == null ||
-      themeColorScheme == null ||
-      pureBlack == null ||
-      coverColors == null ||
-      autoRewindAmount == null ||
-      seekTime == null ||
-      lockScreenSlider == null ||
-      gridMode == null ||
-      autoSleepTimer == null ||
-      analyticsEnabled == null ||
-      folderNames == null ||
-      foldersWithoutAccess == null ||
-      showDeveloperMenu == null ||
-      showSupportDevelopment == null ||
-      supporterStatus == null ||
-      audiobookshelfServer == null ||
-      audiobookshelfEnabled == null
+        themeColorScheme == null ||
+        pureBlack == null ||
+        coverColors == null ||
+        autoRewindAmount == null ||
+        seekTime == null ||
+        lockScreenSlider == null ||
+        gridMode == null ||
+        autoSleepTimer == null ||
+        analyticsEnabled == null ||
+        folderNames == null ||
+        foldersWithoutAccess == null ||
+        showDeveloperMenu == null ||
+        showSupportDevelopment == null ||
+        supporterStatus == null ||
+        audiobookshelfServer == null ||
+        audiobookshelfEnabled == null
     ) {
       return null
     }
@@ -141,24 +139,27 @@ class SettingsViewModel(
       autoRewindInSeconds = autoRewindAmount,
       lockScreenSlider = lockScreenSlider,
       appVersion = appInfoProvider.versionName,
-      useGrid = when (gridMode) {
-        GridMode.LIST -> false
-        GridMode.GRID -> true
-        GridMode.FOLLOW_DEVICE -> gridCount.useGridAsDefault()
-      },
-      autoSleepTimer = SettingsViewState.AutoSleepTimerViewState(
-        enabled = autoSleepTimer.autoSleepTimerEnabled,
-        startTime = autoSleepTimer.autoSleepStartTime,
-        endTime = autoSleepTimer.autoSleepEndTime,
-      ),
+      useGrid =
+        when (gridMode) {
+          GridMode.LIST -> false
+          GridMode.GRID -> true
+          GridMode.FOLLOW_DEVICE -> gridCount.useGridAsDefault()
+        },
+      autoSleepTimer =
+        SettingsViewState.AutoSleepTimerViewState(
+          enabled = autoSleepTimer.autoSleepTimerEnabled,
+          startTime = autoSleepTimer.autoSleepStartTime,
+          endTime = autoSleepTimer.autoSleepEndTime,
+        ),
       analyticsEnabled = analyticsEnabled,
       showAnalyticSetting = appInfoProvider.analyticsIncluded,
       showDeveloperMenu = showDeveloperMenu,
       showSupportDevelopment = showSupportDevelopment,
       supporterBadge = supporterStatus.badge,
-      supporterSince = supporterStatus.supporterSince?.let {
-        YearMonth.from(Instant.ofEpochMilli(it).atZone(clock.zone))
-      },
+      supporterSince =
+        supporterStatus.supporterSince?.let {
+          YearMonth.from(Instant.ofEpochMilli(it).atZone(clock.zone))
+        },
       folderNames = folderNames,
       foldersWithoutAccess = foldersWithoutAccess,
       audiobookshelfServer = audiobookshelfServer.name,
@@ -175,9 +176,7 @@ class SettingsViewModel(
       return flowOf(KioskModeDemoData.folderNames)
     }
     return audiobookFolders.all().map { folders ->
-      folders.values.flatten()
-        .map { it.documentFile.nameWithoutExtension() }
-        .sortedWith(String.CASE_INSENSITIVE_ORDER)
+      folders.values.flatten().map { it.documentFile.nameWithoutExtension() }.sortedWith(String.CASE_INSENSITIVE_ORDER)
     }
   }
 

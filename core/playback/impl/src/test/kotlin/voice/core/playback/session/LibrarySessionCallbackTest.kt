@@ -12,6 +12,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -22,10 +26,6 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.session.search.BookSearchParser
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class LibrarySessionCallbackTest {
@@ -35,22 +35,24 @@ class LibrarySessionCallbackTest {
   private val session = MediaSession.Builder(context, player).build()
   private val scope = TestScope()
   private val lockScreenSliderStore = MemoryDataStore(true)
-  private val notificationSession = mockk<MediaSession>(relaxed = true) {
-    every { isMediaNotificationController(any()) } returns true
-  }
+  private val notificationSession =
+    mockk<MediaSession>(relaxed = true) {
+      every { isMediaNotificationController(any()) } returns true
+    }
   private val notification = controller(context.packageName, context.applicationInfo.uid)
-  private val callback = LibrarySessionCallback(
-    mediaItemProvider = mockk(),
-    scope = scope.backgroundScope,
-    player = mockk(relaxed = true),
-    bookSearchParser = BookSearchParser(),
-    bookSearchHandler = mockk(),
-    currentBookStoreId = CurrentBookStore(MemoryDataStore<BookId?>(null)),
-    bookRepository = mockk(),
-    commandSourceResolver = mockk(relaxed = true),
-    context = context,
-    lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
-  )
+  private val callback =
+    LibrarySessionCallback(
+      mediaItemProvider = mockk(),
+      scope = scope.backgroundScope,
+      player = mockk(relaxed = true),
+      bookSearchParser = BookSearchParser(),
+      bookSearchHandler = mockk(),
+      currentBookStoreId = CurrentBookStore(MemoryDataStore<BookId?>(null)),
+      bookRepository = mockk(),
+      commandSourceResolver = mockk(relaxed = true),
+      context = context,
+      lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
+    )
   private val customCommand = SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY)
 
   @After
@@ -76,9 +78,10 @@ class LibrarySessionCallbackTest {
 
   @Test
   fun `a malformed custom command is rejected`() {
-    val args = Bundle().apply {
-      putString(CustomCommand.CUSTOM_COMMAND_EXTRA, "{")
-    }
+    val args =
+      Bundle().apply {
+        putString(CustomCommand.CUSTOM_COMMAND_EXTRA, "{")
+      }
 
     val result = callback.onCustomCommand(session, controller(context.packageName, context.applicationInfo.uid), customCommand, args)
 
@@ -128,16 +131,17 @@ class LibrarySessionCallbackTest {
   private fun controller(
     packageName: String,
     uid: Int,
-  ) = MediaSession.ControllerInfo.createTestOnlyControllerInfo(
-    packageName,
-    0,
-    uid,
-    MEDIA3_CONTROLLER_VERSION,
-    MEDIA3_CONTROLLER_VERSION,
-    false,
-    Bundle.EMPTY,
-    true,
-  )
+  ) =
+    MediaSession.ControllerInfo.createTestOnlyControllerInfo(
+      packageName,
+      0,
+      uid,
+      MEDIA3_CONTROLLER_VERSION,
+      MEDIA3_CONTROLLER_VERSION,
+      false,
+      Bundle.EMPTY,
+      true,
+    )
 
   private companion object {
     const val OTHER_PACKAGE = "com.example.remote"

@@ -6,17 +6,15 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Decides whether the device is being shaken based on a sliding window of accelerometer samples.
  *
- * A shake is reported once the samples span at least [MIN_WINDOW] and [MIN_ACCELERATING_SHARE] of them are accelerating.
- * Samples older than [MAX_WINDOW] are dropped, while keeping at least [MIN_SAMPLES] samples.
+ * A shake is reported once the samples span at least [MIN_WINDOW] and [MIN_ACCELERATING_SHARE] of them are accelerating. Samples older than
+ * [MAX_WINDOW] are dropped, while keeping at least [MIN_SAMPLES] samples.
  */
 internal class ShakeWindow {
 
   private val samples = ArrayDeque<Sample>()
   private var acceleratingCount = 0
 
-  /**
-   * Adds a sample and returns whether the device is being shaken.
-   */
+  /** Adds a sample and returns whether the device is being shaken. */
   fun add(
     timestamp: Duration,
     accelerating: Boolean,

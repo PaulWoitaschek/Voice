@@ -77,15 +77,20 @@ private fun Metadata.Builder.readText(entry: TextInformationFrame) {
     "TALB" -> album = value
     "TCON" -> genre = value
     "TCOM" -> narrator = value
-    "TXXX" -> when (val description = entry.description) {
-      "TXXX:NARRATOR" -> narrator = if (narrator.isNullOrBlank()) value else narrator
-      null -> {}
-      else -> tag(description, value)
-    }
+    "TXXX" ->
+      when (val description = entry.description) {
+        "TXXX:NARRATOR" -> narrator = if (narrator.isNullOrBlank()) value else narrator
+        null -> {}
+        else -> tag(description, value)
+      }
     // media3 names MP4 atoms like ID3 frames: ©mvn is MVNM, tvsh is TVSHOW and ©grp is TIT1
-    "MVNM", "MVIN", "TIT1" -> tag(entry.id, value)
+    "MVNM",
+    "MVIN",
+    "TIT1" -> tag(entry.id, value)
     "TVSHOW" -> tag("SHOW", value)
-    "TRCK", "TYER", "TSSE" -> {}
+    "TRCK",
+    "TYER",
+    "TSSE" -> {}
     else -> Logger.v("Unknown frame ID: ${entry.id}")
   }
 }
@@ -99,12 +104,13 @@ private fun Metadata.Builder.readBinary(entry: BinaryFrame) {
 
 private fun ByteArray.id3Text(): String? {
   if (isEmpty()) return null
-  val charset = when (this[0].toInt()) {
-    0 -> Charsets.ISO_8859_1
-    1 -> Charsets.UTF_16
-    2 -> Charsets.UTF_16BE
-    3 -> Charsets.UTF_8
-    else -> return null
-  }
+  val charset =
+    when (this[0].toInt()) {
+      0 -> Charsets.ISO_8859_1
+      1 -> Charsets.UTF_16
+      2 -> Charsets.UTF_16BE
+      3 -> Charsets.UTF_8
+      else -> return null
+    }
   return String(this, 1, size - 1, charset).substringBefore('\u0000')
 }

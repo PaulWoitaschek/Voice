@@ -18,6 +18,17 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verifyOrder
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -53,17 +64,6 @@ import voice.core.playback.session.toMediaIdOrNull
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerMode
 import voice.core.sleeptimer.SleepTimerState
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
-import java.util.concurrent.TimeUnit
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotEquals
-import kotlin.test.assertTrue
-import kotlin.time.Duration.Companion.seconds
-import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
 class VoicePlayerTest {
@@ -72,30 +72,33 @@ class VoicePlayerTest {
   private val autoRewindAmountStore = MemoryDataStore(2)
   private val lastPlaybackSpeedStore = MemoryDataStore(1F)
 
-  private val internalPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
-    .setMaxSeekToPreviousPositionMs(2_000)
-    .setMediaSourceFactory(
-      mockk {
-        every { createMediaSource(any()) } answers {
-          val mediaItem = arg<MediaItem>(0)
-          val mediaId = mediaItem.mediaId
-          val chapter = currentBook.chapters.single {
-            it.id == mediaId.toMediaIdOrNull()!!.realChapterId
-          }
-          FakeMediaSource(
-            FakeTimeline(
-              FakeTimeline.TimelineWindowDefinition.Builder()
-                .setPeriodCount(1)
-                .setSeekable(true)
-                .setDurationUs(TimeUnit.MILLISECONDS.toMicros(chapter.duration))
-                .setMediaItem(mediaItem)
-                .build(),
-            ),
-          )
-        }
-      },
-    )
-    .build()
+  private val internalPlayer =
+    TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
+      .setMaxSeekToPreviousPositionMs(2_000)
+      .setMediaSourceFactory(
+        mockk {
+          every { createMediaSource(any()) } answers
+            {
+              val mediaItem = arg<MediaItem>(0)
+              val mediaId = mediaItem.mediaId
+              val chapter =
+                currentBook.chapters.single {
+                  it.id == mediaId.toMediaIdOrNull()!!.realChapterId
+                }
+              FakeMediaSource(
+                FakeTimeline(
+                  FakeTimeline.TimelineWindowDefinition.Builder()
+                    .setPeriodCount(1)
+                    .setSeekable(true)
+                    .setDurationUs(TimeUnit.MILLISECONDS.toMicros(chapter.duration))
+                    .setMediaItem(mediaItem)
+                    .build(),
+                ),
+              )
+            }
+        },
+      )
+      .build()
 
   private val scope = TestScope()
   private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk())
@@ -104,34 +107,39 @@ class VoicePlayerTest {
   private lateinit var currentBook: Book
   private val sleepTimer = FakeSleepTimer()
   private val historyEvents = mutableListOf<ListeningEvent>()
-  private val historyRepo = mockk<ListeningHistoryRepo> {
-    coEvery { add(capture(historyEvents)) } just Runs
-  }
+  private val historyRepo =
+    mockk<ListeningHistoryRepo> {
+      coEvery { add(capture(historyEvents)) } just Runs
+    }
   private val analytics = mockk<Analytics>(relaxUnitFun = true)
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
-  private val player = VoicePlayer(
-    player = chapterMarkPlayer,
-    repo = mockk {
-      coEvery { get(bookId) } answers { currentBook }
-      coEvery { updateBook(bookId, any()) } answers {
-        currentBook = currentBook.update(secondArg<(BookContent) -> BookContent>())
-      }
-    },
-    currentBookStoreId = CurrentBookStore(currentBookStore),
-    seekTimeStore = SeekTimeStore(seekTimeStore),
-    autoRewindAmountStore = AutoRewindAmountStore(autoRewindAmountStore),
-    lastPlaybackSpeedStore = LastPlaybackSpeedStore(lastPlaybackSpeedStore),
-    scope = scope,
-    volumeGain = VolumeGain(VolumeGainSetter()),
-    sleepTimer = sleepTimer,
-    analytics = analytics,
-    historyRecorder = ListeningHistoryRecorder(
-      repo = historyRepo,
-      clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+  private val player =
+    VoicePlayer(
+      player = chapterMarkPlayer,
+      repo =
+        mockk {
+          coEvery { get(bookId) } answers { currentBook }
+          coEvery { updateBook(bookId, any()) } answers
+            {
+              currentBook = currentBook.update(secondArg<(BookContent) -> BookContent>())
+            }
+        },
+      currentBookStoreId = CurrentBookStore(currentBookStore),
+      seekTimeStore = SeekTimeStore(seekTimeStore),
+      autoRewindAmountStore = AutoRewindAmountStore(autoRewindAmountStore),
+      lastPlaybackSpeedStore = LastPlaybackSpeedStore(lastPlaybackSpeedStore),
       scope = scope,
-    ),
-    commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
-  )
+      volumeGain = VolumeGain(VolumeGainSetter()),
+      sleepTimer = sleepTimer,
+      analytics = analytics,
+      historyRecorder =
+        ListeningHistoryRecorder(
+          repo = historyRepo,
+          clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+          scope = scope,
+        ),
+      commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
+    )
 
   @Test
   fun `seekToNext carries over into the next chapter mark`() = scope.runTest {
@@ -307,10 +315,11 @@ class VoicePlayerTest {
 
   @Test
   fun `setBook resumes inside matching chapter mark`() = scope.runTest {
-    val chapter = chapter(
-      ChapterMark(startMs = 0, endMs = 11_999, name = null),
-      ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
-    )
+    val chapter =
+      chapter(
+        ChapterMark(startMs = 0, endMs = 11_999, name = null),
+        ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
+      )
     setMediaItems(
       chapters = listOf(chapter),
       currentChapter = chapter,
@@ -467,10 +476,11 @@ class VoicePlayerTest {
 
   @Test
   fun `end of chapter sleep timer records once where it paused`() = scope.runTest {
-    val chapter = chapter(
-      ChapterMark(startMs = 0, endMs = 1_000, name = null),
-      ChapterMark(startMs = 1_000, endMs = 2_000, name = null),
-    )
+    val chapter =
+      chapter(
+        ChapterMark(startMs = 0, endMs = 1_000, name = null),
+        ChapterMark(startMs = 1_000, endMs = 2_000, name = null),
+      )
     setMediaItems(listOf(chapter))
 
     player.prepare()
@@ -706,15 +716,16 @@ class VoicePlayerTest {
     lastPlayedAt: Instant = Instant.EPOCH,
     gain: Float = 0F,
   ) {
-    currentBook = book(chapters, bookId).update {
-      it.copy(
-        currentChapter = currentChapter.id,
-        positionInChapter = positionInChapter,
-        playbackSpeed = playbackSpeed,
-        lastPlayedAt = lastPlayedAt,
-        gain = gain,
-      )
-    }
+    currentBook =
+      book(chapters, bookId).update {
+        it.copy(
+          currentChapter = currentChapter.id,
+          positionInChapter = positionInChapter,
+          playbackSpeed = playbackSpeed,
+          lastPlayedAt = lastPlayedAt,
+          gain = gain,
+        )
+      }
     player.setMediaItem(mediaItemProvider.mediaItem(currentBook))
     runCurrent()
   }
@@ -753,9 +764,10 @@ class VoicePlayerTest {
       name = "chapter",
       duration = marks.maxOf { it.endMs },
       fileLastModified = Instant.EPOCH,
-      markData = marks.map {
-        MarkData(it.startMs, it.name ?: "mark ")
-      },
+      markData =
+        marks.map {
+          MarkData(it.startMs, it.name ?: "mark ")
+        },
       fileSize = 0,
     )
   }

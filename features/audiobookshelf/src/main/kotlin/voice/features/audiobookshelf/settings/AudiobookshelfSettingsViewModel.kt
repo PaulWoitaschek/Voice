@@ -53,23 +53,25 @@ class AudiobookshelfSettingsViewModel(
     return AudiobookshelfSettingsViewState(
       serverName = current.serverName,
       username = current.username,
-      status = when {
-        current.needsLogin -> ServerStatus.NeedsLogin
-        syncing -> ServerStatus.Syncing
-        reachability == ServerReachability.Unreachable -> ServerStatus.Offline
-        else -> ServerStatus.Connected
-      },
+      status =
+        when {
+          current.needsLogin -> ServerStatus.NeedsLogin
+          syncing -> ServerStatus.Syncing
+          reachability == ServerReachability.Unreachable -> ServerStatus.Offline
+          else -> ServerStatus.Connected
+        },
       libraries = libraries?.map { it.copy(selected = it.id in current.libraryIds) },
       librariesUnavailable = librariesUnavailable,
       usedBytes = usedBytes,
-      downloads = books.map { download ->
-        DownloadViewState(
-          bookId = download.book.id,
-          name = download.book.name,
-          cover = download.book.coverUrl,
-          state = download.state,
-        )
-      },
+      downloads =
+        books.map { download ->
+          DownloadViewState(
+            bookId = download.book.id,
+            name = download.book.name,
+            cover = download.book.coverUrl,
+            state = download.state,
+          )
+        },
       downloadOverMobileData = downloadOverMobileData,
       confirmSignOut = confirmSignOut,
     )
@@ -79,9 +81,10 @@ class AudiobookshelfSettingsViewModel(
     val preview = serverAccount.libraries()
     librariesUnavailable = preview == null
     if (preview == null) return
-    libraries = preview.libraries.map { library ->
-      LibraryViewState(id = library.id, name = library.name, bookCount = library.bookCount, selected = false)
-    }
+    libraries =
+      preview.libraries.map { library ->
+        LibraryViewState(id = library.id, name = library.name, bookCount = library.bookCount, selected = false)
+      }
   }
 
   internal fun onLibraryToggle(
@@ -165,7 +168,8 @@ internal data class AudiobookshelfSettingsViewState(
   val downloadOverMobileData: Boolean,
   val confirmSignOut: Boolean,
 ) {
-  val selectedLibraryIds: List<String> get() = libraries.orEmpty().filter { it.selected }.map { it.id }
+  val selectedLibraryIds: List<String>
+    get() = libraries.orEmpty().filter { it.selected }.map { it.id }
 }
 
 internal data class DownloadViewState(

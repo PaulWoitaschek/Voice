@@ -28,8 +28,11 @@ internal sealed interface AudiobookshelfLoginViewState {
     /** The server didn't answer with its libraries. */
     val failed: Boolean = false,
   ) : AudiobookshelfLoginViewState {
-    val bookCount: Int get() = libraries.filter { it.selected }.sumOf { it.bookCount }
-    val canConnect: Boolean get() = !loading && !busy && libraries.any { it.selected }
+    val bookCount: Int
+      get() = libraries.filter { it.selected }.sumOf { it.bookCount }
+
+    val canConnect: Boolean
+      get() = !loading && !busy && libraries.any { it.selected }
   }
 }
 
@@ -42,8 +45,11 @@ internal data class LibraryViewState(
 
 internal sealed interface AddressError {
   data object NotFound : AddressError
+
   data object CertificateNotTrusted : AddressError
+
   data object NotSetUp : AddressError
+
   data class TooOld(val version: String) : AddressError
 }
 

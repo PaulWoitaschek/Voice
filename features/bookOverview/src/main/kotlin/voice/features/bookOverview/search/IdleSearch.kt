@@ -45,11 +45,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun IdleSearch(
@@ -119,10 +119,7 @@ private fun SectionHeader(
   action: (@Composable () -> Unit)? = null,
 ) {
   Row(
-    modifier = modifier
-      .fillMaxWidth()
-      .heightIn(min = 40.dp)
-      .padding(start = 8.dp),
+    modifier = modifier.fillMaxWidth().heightIn(min = 40.dp).padding(start = 8.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Text(
@@ -168,10 +165,7 @@ private fun RecentSearches(
           Icon(
             imageVector = VoiceIcons.Close,
             contentDescription = stringResource(StringsR.string.library_search_recent_remove, recentSearch),
-            modifier = Modifier
-              .size(InputChipDefaults.IconSize)
-              .clip(CircleShape)
-              .clickable(role = Role.Button) { onRemove(recentSearch) },
+            modifier = Modifier.size(InputChipDefaults.IconSize).clip(CircleShape).clickable(role = Role.Button) { onRemove(recentSearch) },
           )
         },
       )
@@ -194,14 +188,13 @@ private fun BrowseTabs(
       ToggleButton(
         checked = category == selected,
         onCheckedChange = { onClick(category) },
-        modifier = Modifier
-          .weight(1F)
-          .semantics { role = Role.RadioButton },
-        shapes = when (index) {
-          0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-          categories.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
-          else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-        },
+        modifier = Modifier.weight(1F).semantics { role = Role.RadioButton },
+        shapes =
+          when (index) {
+            0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+            categories.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+            else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+          },
         contentPadding = PaddingValues(horizontal = 8.dp),
       ) {
         Text(
@@ -214,12 +207,13 @@ private fun BrowseTabs(
   }
 }
 
-private val BrowseShapes = listOf(
-  MaterialShapes.Cookie9Sided,
-  MaterialShapes.Sunny,
-  MaterialShapes.Clover4Leaf,
-  MaterialShapes.Flower,
-)
+private val BrowseShapes =
+  listOf(
+    MaterialShapes.Cookie9Sided,
+    MaterialShapes.Sunny,
+    MaterialShapes.Clover4Leaf,
+    MaterialShapes.Flower,
+  )
 
 @Composable
 private fun BrowseRow(
@@ -241,9 +235,7 @@ private fun BrowseRow(
     ) {
       val (containerColor, contentColor) = browseColors(index)
       Box(
-        modifier = Modifier
-          .size(44.dp)
-          .background(containerColor, BrowseShapes[index % BrowseShapes.size].toShape()),
+        modifier = Modifier.size(44.dp).background(containerColor, BrowseShapes[index % BrowseShapes.size].toShape()),
         contentAlignment = Alignment.Center,
       ) {
         Text(
@@ -290,31 +282,33 @@ private fun browseColors(index: Int): Pair<Color, Color> {
 @Composable
 private fun browseSummary(entry: BookSearchViewState.BrowseEntry): String {
   return buildList {
-    add(pluralStringResource(StringsR.plurals.library_search_browse_book_count, entry.bookCount, entry.bookCount))
-    if (entry.inProgressCount > 0) {
-      add(
-        pluralStringResource(
-          StringsR.plurals.library_search_browse_in_progress,
-          entry.inProgressCount,
-          entry.inProgressCount,
-        ),
-      )
+      add(pluralStringResource(StringsR.plurals.library_search_browse_book_count, entry.bookCount, entry.bookCount))
+      if (entry.inProgressCount > 0) {
+        add(
+          pluralStringResource(
+            StringsR.plurals.library_search_browse_in_progress,
+            entry.inProgressCount,
+            entry.inProgressCount,
+          ),
+        )
+      }
+      if (entry.finishedCount > 0) {
+        add(
+          pluralStringResource(
+            StringsR.plurals.library_search_browse_finished,
+            entry.finishedCount,
+            entry.finishedCount,
+          ),
+        )
+      }
     }
-    if (entry.finishedCount > 0) {
-      add(
-        pluralStringResource(
-          StringsR.plurals.library_search_browse_finished,
-          entry.finishedCount,
-          entry.finishedCount,
-        ),
-      )
-    }
-  }.joinToString(separator = " · ")
+    .joinToString(separator = " · ")
 }
 
 private fun initials(name: String): String {
   val words = name.split(' ').filter { word -> word.firstOrNull()?.isLetterOrDigit() == true }
-  return words.take(2)
+  return words
+    .take(2)
     .joinToString(separator = "") { it.first().uppercase() }
     // a whole code point, so an emoji isn't cut in half
     .ifEmpty { name.take(name.offsetByCodePoints(0, minOf(1, name.length))).uppercase() }
@@ -326,19 +320,22 @@ private fun IdleSearchPreview() {
   VoiceTheme {
     Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       IdleSearch(
-        viewState = BookSearchViewState.Idle(
-          recentSearches = listOf("king", "hail mary", "kate reading"),
-          browse = BookSearchViewState.Browse(
-            categories = BrowseCategory.entries,
-            selectedCategory = BrowseCategory.Authors,
-            entries = listOf(
-              BookSearchViewState.BrowseEntry("Brandon Sanderson", 4, 1, 0),
-              BookSearchViewState.BrowseEntry("Stephen King", 2, 0, 1),
-              BookSearchViewState.BrowseEntry("Patrick Rothfuss", 2, 0, 0),
-              BookSearchViewState.BrowseEntry("Susanna Clarke", 1, 1, 0),
-            ),
+        viewState =
+          BookSearchViewState.Idle(
+            recentSearches = listOf("king", "hail mary", "kate reading"),
+            browse =
+              BookSearchViewState.Browse(
+                categories = BrowseCategory.entries,
+                selectedCategory = BrowseCategory.Authors,
+                entries =
+                  listOf(
+                    BookSearchViewState.BrowseEntry("Brandon Sanderson", 4, 1, 0),
+                    BookSearchViewState.BrowseEntry("Stephen King", 2, 0, 1),
+                    BookSearchViewState.BrowseEntry("Patrick Rothfuss", 2, 0, 0),
+                    BookSearchViewState.BrowseEntry("Susanna Clarke", 1, 1, 0),
+                  ),
+              ),
           ),
-        ),
         contentPadding = PaddingValues(12.dp),
         listener = BookSearchListener.Noop,
       )

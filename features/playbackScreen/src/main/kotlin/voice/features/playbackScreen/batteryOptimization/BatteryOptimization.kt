@@ -10,11 +10,12 @@ class BatteryOptimization(
   private val amountOfBatteryOptimizationsRequested: AmountOfBatteryOptimizationRequestedStore,
 ) {
 
-  suspend fun shouldRequest(): Boolean = when {
-    isIgnoringBatteryOptimizations() -> false
-    Build.MANUFACTURER.equals("Google", ignoreCase = true) -> false
-    else -> amountOfBatteryOptimizationsRequested.data.first() <= 3
-  }
+  suspend fun shouldRequest(): Boolean =
+    when {
+      isIgnoringBatteryOptimizations() -> false
+      Build.MANUFACTURER.equals("Google", ignoreCase = true) -> false
+      else -> amountOfBatteryOptimizationsRequested.data.first() <= 3
+    }
 
   suspend fun onBatteryOptimizationsRequested() {
     amountOfBatteryOptimizationsRequested.updateData { it + 1 }

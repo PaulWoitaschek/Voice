@@ -1,5 +1,12 @@
 package voice.features.bookmark.history
 
+import java.time.LocalTime
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import voice.core.data.Book
 import voice.core.data.ListeningEvent
 import voice.core.data.ListeningEvent.Source
@@ -13,13 +20,6 @@ import voice.features.bookmark.testEvent
 import voice.features.bookmark.testZone
 import voice.features.bookmark.today
 import voice.features.bookmark.yesterday
-import java.time.LocalTime
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 class HistoryTimelineTest {
 
@@ -47,12 +47,13 @@ class HistoryTimelineTest {
 
   @Test
   fun `the newest comes first`() {
-    val state = timeline(
-      testEvent(Type.Play, yesterday(9), arrival, 1.minutes),
-      testEvent(Type.Pause, yesterday(9, 10), arrival, 2.minutes),
-      testEvent(Type.Play, today(9), arrival, 3.minutes),
-      testEvent(Type.Pause, today(9, 10), arrival, 4.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, yesterday(9), arrival, 1.minutes),
+        testEvent(Type.Pause, yesterday(9, 10), arrival, 2.minutes),
+        testEvent(Type.Play, today(9), arrival, 3.minutes),
+        testEvent(Type.Pause, today(9, 10), arrival, 4.minutes),
+      )
 
     assertEquals(expected = listOf(DayLabel.ThisMorning, DayLabel.Yesterday), actual = state.days.map { it.label })
     assertEquals(
@@ -67,36 +68,39 @@ class HistoryTimelineTest {
     val pause = testEvent(Type.Pause, today(9, 10), signal, 2.minutes, source = Source.Car)
 
     assertEquals(
-      expected = listOf(
-        HistoryEvent(pause.id, LocalTime.of(9, 10), playingBefore = true, Type.Pause, Source.Car, inSignal(2.minutes)),
-        HistoryEvent(play.id, LocalTime.of(9, 0), playingBefore = false, Type.Play, Source.Headset, inArrival(1.minutes)),
-      ),
+      expected =
+        listOf(
+          HistoryEvent(pause.id, LocalTime.of(9, 10), playingBefore = true, Type.Pause, Source.Car, inSignal(2.minutes)),
+          HistoryEvent(play.id, LocalTime.of(9, 0), playingBefore = false, Type.Play, Source.Headset, inArrival(1.minutes)),
+        ),
       actual = timeline(play, pause).events(),
     )
   }
 
   @Test
   fun `the line is solid while playing and dotted while paused`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.ChapterChange, today(9, 5), arrival, 9.minutes, to = signal to Duration.ZERO),
-      testEvent(Type.Pause, today(9, 10), signal, 2.minutes),
-      testEvent(Type.BookmarkJump, today(9, 20), signal, 2.minutes, to = arrival to 4.minutes),
-      testEvent(Type.Play, today(9, 30), arrival, 4.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.ChapterChange, today(9, 5), arrival, 9.minutes, to = signal to Duration.ZERO),
+        testEvent(Type.Pause, today(9, 10), signal, 2.minutes),
+        testEvent(Type.BookmarkJump, today(9, 20), signal, 2.minutes, to = arrival to 4.minutes),
+        testEvent(Type.Play, today(9, 30), arrival, 4.minutes),
+      )
 
     assertEquals(expected = listOf(false, false, true, true, false), actual = state.rows().map { it.playingBefore })
   }
 
   @Test
   fun `a long pause starts a new card and a short one doesn't`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.Pause, today(9, 10), arrival, 2.minutes),
-      testEvent(Type.Play, today(9, 39), arrival, 2.minutes),
-      testEvent(Type.Pause, today(9, 50), arrival, 3.minutes),
-      testEvent(Type.Play, today(10, 20), arrival, 3.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.Pause, today(9, 10), arrival, 2.minutes),
+        testEvent(Type.Play, today(9, 39), arrival, 2.minutes),
+        testEvent(Type.Pause, today(9, 50), arrival, 3.minutes),
+        testEvent(Type.Play, today(10, 20), arrival, 3.minutes),
+      )
 
     val sessions = state.days.single().sessions
     assertEquals(expected = listOf(1, 4), actual = sessions.map { it.rows.size })
@@ -106,22 +110,24 @@ class HistoryTimelineTest {
   @Test
   fun `listening without events stays one card`() {
     val long = testChapter(2.hours)
-    val state = timeline(
-      testEvent(Type.Play, yesterday(22), long, 1.minutes),
-      testEvent(Type.SleepTimerEnded, yesterday(23, 30), long, 1.hours + 31.minutes, source = Source.SleepTimer),
-      book = testBook(listOf(long)),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, yesterday(22), long, 1.minutes),
+        testEvent(Type.SleepTimerEnded, yesterday(23, 30), long, 1.hours + 31.minutes, source = Source.SleepTimer),
+        book = testBook(listOf(long)),
+      )
 
     assertEquals(expected = 1, actual = state.days.single().sessions.size)
   }
 
   @Test
   fun `a lost pause doesn't keep the card going`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.BookmarkJump, today(10), arrival, 3.minutes, to = signal to 1.minutes),
-      testEvent(Type.Play, today(10, 1), signal, 1.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.BookmarkJump, today(10), arrival, 3.minutes, to = signal to 1.minutes),
+        testEvent(Type.Play, today(10, 1), signal, 1.minutes),
+      )
 
     assertEquals(expected = listOf(2, 1), actual = state.days.single().sessions.map { it.rows.size })
     assertEquals(expected = listOf(false, false, false), actual = state.rows().map { it.playingBefore })
@@ -129,10 +135,11 @@ class HistoryTimelineTest {
 
   @Test
   fun `a play after a lost pause starts a new card`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.Play, today(10), arrival, 5.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.Play, today(10), arrival, 5.minutes),
+      )
 
     assertEquals(expected = 2, actual = state.days.single().sessions.size)
     assertEquals(expected = listOf(false, false), actual = state.rows().map { it.playingBefore })
@@ -140,10 +147,11 @@ class HistoryTimelineTest {
 
   @Test
   fun `a card stays under the part of the day it started in`() {
-    val state = timeline(
-      testEvent(Type.Play, today(11, 50), arrival, 1.minutes),
-      testEvent(Type.Pause, today(12, 10), arrival, 5.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(11, 50), arrival, 1.minutes),
+        testEvent(Type.Pause, today(12, 10), arrival, 5.minutes),
+      )
 
     assertEquals(expected = listOf(DayLabel.ThisMorning), actual = state.days.map { it.label })
     assertEquals(expected = listOf(true, false), actual = state.rows().map { it.playingBefore })
@@ -151,11 +159,12 @@ class HistoryTimelineTest {
 
   @Test
   fun `a long call stays in the card`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.Pause, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
-      testEvent(Type.Play, today(9, 50), arrival, 2.minutes, source = Source.AudioFocus),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.Pause, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
+        testEvent(Type.Play, today(9, 50), arrival, 2.minutes, source = Source.AudioFocus),
+      )
 
     val rows = state.days.single().sessions.single().rows
     assertEquals(expected = 40.minutes, actual = (rows.first() as HistoryInterruption).duration)
@@ -163,15 +172,16 @@ class HistoryTimelineTest {
 
   @Test
   fun `taps in a row in the same direction add up`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.SkipBack, today(9, 1), arrival, 2.minutes),
-      testEvent(Type.SkipBack, today(9, 1).plusSeconds(20), arrival, 2.minutes),
-      testEvent(Type.SkipBack, today(9, 1).plusSeconds(40), arrival, 2.minutes),
-      testEvent(Type.SkipForward, today(9, 2), arrival, 2.minutes),
-      testEvent(Type.SkipForward, today(9, 2).plusSeconds(30), arrival, 2.minutes),
-      testEvent(Type.SkipForward, today(9, 20), arrival, 5.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.SkipBack, today(9, 1), arrival, 2.minutes),
+        testEvent(Type.SkipBack, today(9, 1).plusSeconds(20), arrival, 2.minutes),
+        testEvent(Type.SkipBack, today(9, 1).plusSeconds(40), arrival, 2.minutes),
+        testEvent(Type.SkipForward, today(9, 2), arrival, 2.minutes),
+        testEvent(Type.SkipForward, today(9, 2).plusSeconds(30), arrival, 2.minutes),
+        testEvent(Type.SkipForward, today(9, 20), arrival, 5.minutes),
+      )
 
     val skips = state.rows().filterIsInstance<HistorySkips>()
     assertEquals(expected = listOf(false to 1, false to 2, true to 3), actual = skips.map { it.back to it.count })
@@ -181,20 +191,22 @@ class HistoryTimelineTest {
 
   @Test
   fun `a small seek is left out`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.Pause, today(9, 10), arrival, 2.minutes),
-      testEvent(Type.Seek, today(9, 20), arrival, 2.minutes - 2.seconds, to = arrival to 2.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.Pause, today(9, 10), arrival, 2.minutes),
+        testEvent(Type.Seek, today(9, 20), arrival, 2.minutes - 2.seconds, to = arrival to 2.minutes),
+      )
 
     assertEquals(expected = listOf(Type.Pause, Type.Play), actual = state.rows().map { (it as? HistoryEvent)?.type })
   }
 
   @Test
   fun `a big seek is a jump with both ends`() {
-    val state = timeline(
-      testEvent(Type.Seek, today(9), arrival, 1.minutes, source = Source.Notification, to = signal to 3.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Seek, today(9), arrival, 1.minutes, source = Source.Notification, to = signal to 3.minutes),
+      )
 
     val jump = state.events().single()
     assertEquals(expected = Type.Seek, actual = jump.type)
@@ -204,22 +216,24 @@ class HistoryTimelineTest {
 
   @Test
   fun `a jump back is a jump of its own`() {
-    val state = timeline(
-      testEvent(Type.ChapterChange, today(9), arrival, 4.minutes, to = signal to Duration.ZERO),
-      testEvent(Type.JumpBack, today(9, 1), signal, 20.seconds, to = arrival to 4.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.ChapterChange, today(9), arrival, 4.minutes, to = signal to Duration.ZERO),
+        testEvent(Type.JumpBack, today(9, 1), signal, 20.seconds, to = arrival to 4.minutes),
+      )
 
     assertEquals(expected = listOf(Type.JumpBack, Type.ChapterChange), actual = state.events().map { it.type })
   }
 
   @Test
   fun `a call is one row with how long it lasted`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.Pause, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
-      testEvent(Type.Play, today(9, 13), arrival, 2.minutes, source = Source.AudioFocus),
-      testEvent(Type.Pause, today(9, 20), arrival, 3.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.Pause, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
+        testEvent(Type.Play, today(9, 13), arrival, 2.minutes, source = Source.AudioFocus),
+        testEvent(Type.Pause, today(9, 20), arrival, 3.minutes),
+      )
 
     val rows = state.rows()
     assertEquals(expected = 3, actual = rows.size)
@@ -231,12 +245,13 @@ class HistoryTimelineTest {
 
   @Test
   fun `a navigation prompt is left out`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.Pause, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
-      testEvent(Type.Play, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
-      testEvent(Type.Pause, today(9, 20), arrival, 3.minutes),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.Pause, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
+        testEvent(Type.Play, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
+        testEvent(Type.Pause, today(9, 20), arrival, 3.minutes),
+      )
 
     assertEquals(expected = listOf(Type.Pause, Type.Play), actual = state.events().map { it.type })
     assertEquals(expected = true, actual = state.events().first().playingBefore)
@@ -244,11 +259,12 @@ class HistoryTimelineTest {
 
   @Test
   fun `an interruption that doesn't end by itself is a pause`() {
-    val state = timeline(
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.Pause, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
-      testEvent(Type.Play, today(9, 30), arrival, 2.minutes, source = Source.Headset),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.Pause, today(9, 10), arrival, 2.minutes, source = Source.AudioFocus),
+        testEvent(Type.Play, today(9, 30), arrival, 2.minutes, source = Source.Headset),
+      )
 
     assertEquals(
       expected = listOf(Type.Play to Source.Headset, Type.Pause to Source.AudioFocus, Type.Play to Source.App),
@@ -258,25 +274,27 @@ class HistoryTimelineTest {
 
   @Test
   fun `a night with the sleep timer`() {
-    val state = timeline(
-      testEvent(Type.SleepTimerSet, yesterday(9), arrival, 1.minutes),
-      testEvent(Type.Play, today(1), arrival, 1.minutes),
-      testEvent(Type.SleepTimerStarted, today(1), arrival, 1.minutes),
-      testEvent(Type.SleepTimerEnded, today(1, 20), arrival, 5.minutes, source = Source.SleepTimer),
-      testEvent(Type.SleepTimerExtended, today(1, 20), arrival, 5.minutes, source = Source.SleepTimer),
-      testEvent(Type.SleepTimerEnded, today(1, 40), signal, 3.minutes, source = Source.SleepTimer),
-    )
+    val state =
+      timeline(
+        testEvent(Type.SleepTimerSet, yesterday(9), arrival, 1.minutes),
+        testEvent(Type.Play, today(1), arrival, 1.minutes),
+        testEvent(Type.SleepTimerStarted, today(1), arrival, 1.minutes),
+        testEvent(Type.SleepTimerEnded, today(1, 20), arrival, 5.minutes, source = Source.SleepTimer),
+        testEvent(Type.SleepTimerExtended, today(1, 20), arrival, 5.minutes, source = Source.SleepTimer),
+        testEvent(Type.SleepTimerEnded, today(1, 40), signal, 3.minutes, source = Source.SleepTimer),
+      )
 
     val night = state.days.first()
     assertEquals(expected = DayLabel.LastNight, actual = night.label)
     assertEquals(
-      expected = listOf(
-        Type.SleepTimerEnded to true,
-        Type.SleepTimerExtended to false,
-        Type.SleepTimerEnded to true,
-        Type.SleepTimerStarted to true,
-        Type.Play to false,
-      ),
+      expected =
+        listOf(
+          Type.SleepTimerEnded to true,
+          Type.SleepTimerExtended to false,
+          Type.SleepTimerEnded to true,
+          Type.SleepTimerStarted to true,
+          Type.Play to false,
+        ),
       actual = night.sessions.single().rows.map { (it as HistoryEvent).type to it.playingBefore },
     )
     assertEquals(expected = Type.SleepTimerSet, actual = (state.days.last().sessions.single().rows.single() as HistoryEvent).type)
@@ -285,11 +303,12 @@ class HistoryTimelineTest {
   @Test
   fun `events in a chapter that's gone are left out`() {
     val gone = testChapter()
-    val state = timeline(
-      testEvent(Type.Play, yesterday(9), gone, 1.minutes),
-      testEvent(Type.Play, today(9), arrival, 1.minutes),
-      testEvent(Type.ChapterChange, today(9, 5), arrival, 9.minutes, to = gone to Duration.ZERO),
-    )
+    val state =
+      timeline(
+        testEvent(Type.Play, yesterday(9), gone, 1.minutes),
+        testEvent(Type.Play, today(9), arrival, 1.minutes),
+        testEvent(Type.ChapterChange, today(9, 5), arrival, 9.minutes, to = gone to Duration.ZERO),
+      )
 
     assertEquals(expected = listOf(DayLabel.ThisMorning), actual = state.days.map { it.label })
     assertEquals(expected = listOf(null, null), actual = state.events().map { it.to })

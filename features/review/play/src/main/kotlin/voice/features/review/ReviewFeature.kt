@@ -14,17 +14,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import voice.core.common.FeedbackLinks
 import voice.core.common.rootGraphAs
 import voice.core.logging.api.Logger
-import kotlin.time.Duration.Companion.seconds
 import voice.core.strings.R as StringsR
 
-/**
- * Shows the rating prompt when the time is right, but only while [canShow], so it never covers
- * anything but the library.
- */
+/** Shows the rating prompt when the time is right, but only while [canShow], so it never covers anything but the library. */
 @Composable
 fun ReviewFeature(canShow: Boolean) {
   val controller = remember { rootGraphAs<ReviewGraph>().reviewPromptController }
@@ -38,16 +35,18 @@ fun ReviewFeature(canShow: Boolean) {
   }
   val context = LocalContext.current
   // Away from the library, the prompt waits and comes back with it.
-  prompt?.takeIf { canShow }?.let { current ->
-    ReviewPromptSheet(
-      prompt = current,
-      onAnswer = { answer ->
-        prompt = null
-        controller.answer(current, answer)
-        context.follow(answer, controller.versionName)
-      },
-    )
-  }
+  prompt
+    ?.takeIf { canShow }
+    ?.let { current ->
+      ReviewPromptSheet(
+        prompt = current,
+        onAnswer = { answer ->
+          prompt = null
+          controller.answer(current, answer)
+          context.follow(answer, controller.versionName)
+        },
+      )
+    }
 }
 
 private fun Context.follow(
@@ -59,16 +58,19 @@ private fun Context.follow(
     ReviewAnswer.Idea -> open(Intent(Intent.ACTION_VIEW, FeedbackLinks.IDEAS.toUri()))
     ReviewAnswer.Bug -> open(Intent(Intent.ACTION_VIEW, FeedbackLinks.bugReport(versionName).toUri()))
     ReviewAnswer.Email -> {
-      val body = listOf(
-        "\n\n—",
-        "Voice $versionName",
-        "Android ${Build.VERSION.RELEASE} (${Build.VERSION.SDK_INT})",
-        "${Build.MANUFACTURER} ${Build.MODEL}",
-      ).joinToString(separator = "\n")
-      val intent = Intent(Intent.ACTION_SENDTO, "mailto:".toUri())
-        .putExtra(Intent.EXTRA_EMAIL, arrayOf(FeedbackLinks.EMAIL))
-        .putExtra(Intent.EXTRA_SUBJECT, getString(StringsR.string.review_prompt_email_subject))
-        .putExtra(Intent.EXTRA_TEXT, body)
+      val body =
+        listOf(
+            "\n\n—",
+            "Voice $versionName",
+            "Android ${Build.VERSION.RELEASE} (${Build.VERSION.SDK_INT})",
+            "${Build.MANUFACTURER} ${Build.MODEL}",
+          )
+          .joinToString(separator = "\n")
+      val intent =
+        Intent(Intent.ACTION_SENDTO, "mailto:".toUri())
+          .putExtra(Intent.EXTRA_EMAIL, arrayOf(FeedbackLinks.EMAIL))
+          .putExtra(Intent.EXTRA_SUBJECT, getString(StringsR.string.review_prompt_email_subject))
+          .putExtra(Intent.EXTRA_TEXT, body)
       open(intent)
     }
     ReviewAnswer.Later -> Unit
@@ -76,8 +78,7 @@ private fun Context.follow(
 }
 
 private fun Context.openStoreListing() {
-  val market = Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri())
-    .setPackage("com.android.vending")
+  val market = Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()).setPackage("com.android.vending")
   try {
     startActivity(market)
   } catch (_: ActivityNotFoundException) {

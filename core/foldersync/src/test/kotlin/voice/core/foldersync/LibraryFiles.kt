@@ -2,6 +2,8 @@ package voice.core.foldersync
 
 import android.net.Uri
 import android.provider.DocumentsContract
+import java.time.Instant
+import kotlin.uuid.Uuid
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -10,8 +12,6 @@ import voice.core.data.Bookmark
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.CustomMetadata
-import java.time.Instant
-import kotlin.uuid.Uuid
 
 private const val AUTHORITY = "com.android.externalstorage.documents"
 
@@ -47,30 +47,32 @@ fun book(
   }
   val id = BookId(bookUri.toString())
   return Book(
-    content = BookContent(
-      id = id,
-      playbackSpeed = playbackSpeed,
-      skipSilence = false,
-      isActive = true,
-      lastPlayedAt = Instant.ofEpochMilli(lastPlayedAt),
-      addedAt = Instant.EPOCH,
-      chapters = chapters.map { it.id },
-      currentChapter = chapters[currentFile].id,
-      positionInChapter = position,
-      gain = 0F,
-      metadata = BookMetadata(
-        name = path,
-        author = author,
-        album = null,
-        title = null,
-        genre = null,
-        narrator = null,
-        series = series,
-        part = part,
-        cover = null,
-        fileLastModified = null,
+    content =
+      BookContent(
+        id = id,
+        playbackSpeed = playbackSpeed,
+        skipSilence = false,
+        isActive = true,
+        lastPlayedAt = Instant.ofEpochMilli(lastPlayedAt),
+        addedAt = Instant.EPOCH,
+        chapters = chapters.map { it.id },
+        currentChapter = chapters[currentFile].id,
+        positionInChapter = position,
+        gain = 0F,
+        metadata =
+          BookMetadata(
+            name = path,
+            author = author,
+            album = null,
+            title = null,
+            genre = null,
+            narrator = null,
+            series = series,
+            part = part,
+            cover = null,
+            fileLastModified = null,
+          ),
       ),
-    ),
     chapters = chapters,
     custom = CustomMetadata(id, name = customName, author = customAuthor, series = customSeries, part = customPart),
   )
@@ -89,23 +91,25 @@ internal fun Book.bookmark(
   title: String? = "Note",
   addedAt: Long = 100,
   id: Uuid = Uuid.parse("00000000-0000-0000-0000-000000000001"),
-): Bookmark = Bookmark(
-  bookId = this.id,
-  chapterId = chapters[file].id,
-  title = title,
-  time = time,
-  addedAt = Instant.ofEpochMilli(addedAt),
-  id = Bookmark.Id(id),
-)
+): Bookmark =
+  Bookmark(
+    bookId = this.id,
+    chapterId = chapters[file].id,
+    title = title,
+    time = time,
+    addedAt = Instant.ofEpochMilli(addedAt),
+    id = Bookmark.Id(id),
+  )
 
 internal fun Bookmark.synced(
   file: Int = 1,
   changedAt: Long = addedAt.toEpochMilli(),
-): SyncedBookmark = SyncedBookmark(
-  file = file,
-  time = time,
-  title = title,
-  kind = kind,
-  addedAt = addedAt.toEpochMilli(),
-  changedAt = changedAt,
-)
+): SyncedBookmark =
+  SyncedBookmark(
+    file = file,
+    time = time,
+    title = title,
+    kind = kind,
+    addedAt = addedAt.toEpochMilli(),
+    changedAt = changedAt,
+  )

@@ -23,6 +23,10 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.io.File
+import java.net.URI
+import java.nio.file.Path
+import java.util.Locale
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,29 +36,23 @@ import sergio.sastre.composable.preview.scanner.android.AndroidComposablePreview
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.android.screenshotid.AndroidPreviewScreenshotIdBuilder
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
-import java.io.File
-import java.net.URI
-import java.nio.file.Path
-import java.util.Locale
 
 /** Subclassed in every library module with Compose by the `voice.compose` plugin, run with `./gradlew :<module>:snapshot`. */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 abstract class PreviewSnapshotTest {
 
-  @get:Rule
-  val compose = createEmptyComposeRule()
+  @get:Rule val compose = createEmptyComposeRule()
 
   @Test
   fun snapshot() {
     val outputDir = File(System.getProperty(OUTPUT_DIR_PROPERTY) ?: "build/snapshots").apply { mkdirs() }
     // Gradle runs the tests in the module's directory, and the module's classes come from its build directory
     val moduleBuildDir = File(System.getProperty("user.dir"), "build").toPath()
-    val previews = AndroidComposablePreviewScanner()
-      .scanPackageTrees("voice")
-      .includePrivatePreviews()
-      .getPreviews()
-      .filter { classLocation(it.declaringClass)?.startsWith(moduleBuildDir) == true }
+    val previews =
+      AndroidComposablePreviewScanner().scanPackageTrees("voice").includePrivatePreviews().getPreviews().filter {
+        classLocation(it.declaringClass)?.startsWith(moduleBuildDir) == true
+      }
     val ids = previews.map { AndroidPreviewScreenshotIdBuilder(it).encodeUnsafeCharacters().build() }
     val shortNames = previews.zip(ids) { preview, id -> id.removePrefix(preview.declaringClass.substringBeforeLast('.') + ".") }
     val failures = mutableListOf<String>()
@@ -86,8 +84,11 @@ abstract class PreviewSnapshotTest {
         render(preview, info.copy(uiMode = info.uiMode or Configuration.UI_MODE_NIGHT_YES), "${name}_dark")
       }
       // filling the whole window makes it a screen, and screens change their layout in other windows
-      val screen = info.widthDp <= 0 && info.heightDp <= 0 &&
-        bitmap.width == DEFAULT_WIDTH_DP * DENSITY && bitmap.height == DEFAULT_HEIGHT_DP * DENSITY
+      val screen =
+        info.widthDp <= 0 &&
+          info.heightDp <= 0 &&
+          bitmap.width == DEFAULT_WIDTH_DP * DENSITY &&
+          bitmap.height == DEFAULT_HEIGHT_DP * DENSITY
       if (screen) {
         render(preview, info.copy(widthDp = DEFAULT_HEIGHT_DP, heightDp = DEFAULT_WIDTH_DP), "${name}_landscape")
         render(preview, info.copy(widthDp = TABLET_WIDTH_DP, heightDp = TABLET_HEIGHT_DP), "${name}_tablet")
@@ -129,8 +130,7 @@ abstract class PreviewSnapshotTest {
               // like Android Studio: a size from the annotation is exact, otherwise the preview wraps its content
               Box(Modifier.wrapContentSize(Alignment.TopStart)) {
                 Box(
-                  Modifier
-                    .then(if (info.widthDp > 0) Modifier.width(info.widthDp.dp) else Modifier)
+                  Modifier.then(if (info.widthDp > 0) Modifier.width(info.widthDp.dp) else Modifier)
                     .then(if (info.heightDp > 0) Modifier.height(info.heightDp.dp) else Modifier)
                     .then(if (info.showBackground) Modifier.background(backgroundColor(info)) else Modifier)
                     .testTag(PREVIEW_TAG),
@@ -164,13 +164,14 @@ abstract class PreviewSnapshotTest {
   ): String {
     val locale = info.locale.takeIf { it.isNotEmpty() }
     return listOfNotNull(
-      locale,
-      if (rtl) "ldrtl" else "ldltr",
-      "w${info.widthDp.takeIf { it > 0 } ?: DEFAULT_WIDTH_DP}dp",
-      "h${info.heightDp.takeIf { it > 0 } ?: DEFAULT_HEIGHT_DP}dp",
-      if (night) "night" else "notnight",
-      "xhdpi",
-    ).joinToString("-")
+        locale,
+        if (rtl) "ldrtl" else "ldltr",
+        "w${info.widthDp.takeIf { it > 0 } ?: DEFAULT_WIDTH_DP}dp",
+        "h${info.heightDp.takeIf { it > 0 } ?: DEFAULT_HEIGHT_DP}dp",
+        if (night) "night" else "notnight",
+        "xhdpi",
+      )
+      .joinToString("-")
   }
 
   private fun backgroundColor(info: AndroidPreviewInfo): Color {

@@ -3,22 +3,21 @@ package voice.core.data.repo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class RecentBookSearchRepoImplTest {
 
-  private val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
-    .allowMainThreadQueries()
-    .build()
+  private val db =
+    Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java).allowMainThreadQueries().build()
   private val repo = RecentBookSearchRepoImpl(db.recentBookSearchDao())
 
   @After

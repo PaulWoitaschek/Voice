@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.offset
 import java.text.Bidi
 
 /**
- * A single line that scrolls once if it doesn't fit, then rests at its start with the cut off end faded out.
- * It scrolls up to [bleed] beyond its bounds, into the padding around it.
+ * A single line that scrolls once if it doesn't fit, then rests at its start with the cut off end faded out. It scrolls up to [bleed]
+ * beyond its bounds, into the padding around it.
  */
 @Composable
 internal fun MarqueeText(
@@ -39,9 +39,10 @@ internal fun MarqueeText(
 ) {
   var textWidth by remember { mutableIntStateOf(0) }
   // the marquee rests at the side of the layout direction, so an English title in an RTL layout would show its end
-  val textDirection = remember(text) {
-    if (Bidi(text, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).baseIsLeftToRight()) LayoutDirection.Ltr else LayoutDirection.Rtl
-  }
+  val textDirection =
+    remember(text) {
+      if (Bidi(text, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT).baseIsLeftToRight()) LayoutDirection.Ltr else LayoutDirection.Rtl
+    }
   CompositionLocalProvider(LocalLayoutDirection provides textDirection) {
     Text(
       text = text,
@@ -49,32 +50,34 @@ internal fun MarqueeText(
       color = color,
       maxLines = 1,
       onTextLayout = { textWidth = it.size.width },
-      modifier = modifier
-        .layout { measurable, constraints ->
-          val bleedPx = bleed.roundToPx()
-          val placeable = measurable.measure(constraints.offset(horizontal = 2 * bleedPx))
-          layout(placeable.width - 2 * bleedPx, placeable.height) {
-            placeable.place(-bleedPx, 0)
+      modifier =
+        modifier
+          .layout { measurable, constraints ->
+            val bleedPx = bleed.roundToPx()
+            val placeable = measurable.measure(constraints.offset(horizontal = 2 * bleedPx))
+            layout(placeable.width - 2 * bleedPx, placeable.height) {
+              placeable.place(-bleedPx, 0)
+            }
           }
-        }
-        .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
-        .drawWithContent {
-          drawContent()
-          if (textWidth > size.width - 2 * bleed.roundToPx()) {
-            val fade = 24.dp.toPx()
-            val ltr = layoutDirection == LayoutDirection.Ltr
-            drawRect(
-              brush = Brush.horizontalGradient(
-                colors = if (ltr) listOf(Color.Black, Color.Transparent) else listOf(Color.Transparent, Color.Black),
-                startX = if (ltr) size.width - fade else 0F,
-                endX = if (ltr) size.width else fade,
-              ),
-              blendMode = BlendMode.DstIn,
-            )
+          .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
+          .drawWithContent {
+            drawContent()
+            if (textWidth > size.width - 2 * bleed.roundToPx()) {
+              val fade = 24.dp.toPx()
+              val ltr = layoutDirection == LayoutDirection.Ltr
+              drawRect(
+                brush =
+                  Brush.horizontalGradient(
+                    colors = if (ltr) listOf(Color.Black, Color.Transparent) else listOf(Color.Transparent, Color.Black),
+                    startX = if (ltr) size.width - fade else 0F,
+                    endX = if (ltr) size.width else fade,
+                  ),
+                blendMode = BlendMode.DstIn,
+              )
+            }
           }
-        }
-        .basicMarquee(iterations = 1)
-        .padding(horizontal = bleed),
+          .basicMarquee(iterations = 1)
+          .padding(horizontal = bleed),
     )
   }
 }

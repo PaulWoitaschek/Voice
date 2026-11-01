@@ -22,23 +22,28 @@ public data class Book(
     }
   }
 
-  val name: String get() = custom.name ?: content.metadata.name
+  val name: String
+    get() = custom.name ?: content.metadata.name
 
-  val author: String? get() = custom.author ?: content.metadata.author
+  val author: String?
+    get() = custom.author ?: content.metadata.author
 
-  val cover: File? get() = custom.cover ?: content.metadata.cover
+  val cover: File?
+    get() = custom.cover ?: content.metadata.cover
 
-  val series: String? get() = custom.series ?: content.metadata.series
+  val series: String?
+    get() = custom.series ?: content.metadata.series
 
-  val part: String? get() = custom.part ?: content.metadata.part
+  val part: String?
+    get() = custom.part ?: content.metadata.part
 
-  val coverUrl: String? get() = cover?.toURI()?.toString()
+  val coverUrl: String?
+    get() = cover?.toURI()?.toString()
 
   val currentChapter: Chapter = chapters[content.currentChapterIndex]
   val currentMark: ChapterMark = currentChapter.markForPosition(content.positionInChapter)
 
-  val position: Long = chapters.takeWhile { it.id != content.currentChapter }
-    .sumOf { it.duration } + content.positionInChapter
+  val position: Long = chapters.takeWhile { it.id != content.currentChapter }.sumOf { it.duration } + content.positionInChapter
   val duration: Long = chapters.sumOf { it.duration }
 
   public inline fun update(update: (BookContent) -> BookContent): Book {

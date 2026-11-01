@@ -2,20 +2,18 @@ package voice.core.foldersync
 
 import android.net.Uri
 import android.provider.DocumentsContract
+import java.time.Instant
+import kotlin.math.abs
 import voice.core.data.Book
 import voice.core.data.ChapterId
 import voice.core.data.syncKey
-import java.time.Instant
-import kotlin.math.abs
 
 internal data class KeyedBook(
   val key: String,
   val book: Book,
 )
 
-/**
- * The books from [folder] that another device can recognize.
- */
+/** The books from [folder] that another device can recognize. */
 internal fun List<Book>.keyedIn(folder: Uri): List<KeyedBook> {
   val tree = folder.tree() ?: return emptyList()
   return mapNotNull { book ->
@@ -25,11 +23,12 @@ internal fun List<Book>.keyedIn(folder: Uri): List<KeyedBook> {
 }
 
 // a single file added on its own has a document uri, not a tree uri
-private fun Uri.tree(): Pair<String?, String>? = if (DocumentsContract.isTreeUri(this)) {
-  authority to DocumentsContract.getTreeDocumentId(this)
-} else {
-  null
-}
+private fun Uri.tree(): Pair<String?, String>? =
+  if (DocumentsContract.isTreeUri(this)) {
+    authority to DocumentsContract.getTreeDocumentId(this)
+  } else {
+    null
+  }
 
 internal data class TakenOverPosition(
   val chapterId: ChapterId,
@@ -37,9 +36,7 @@ internal data class TakenOverPosition(
   val playedAt: Instant,
 )
 
-/**
- * Where [remote] moves this book to, or null if it was played here since or is at the same place.
- */
+/** Where [remote] moves this book to, or null if it was played here since or is at the same place. */
 internal fun Book.positionFrom(remote: SyncedPlace): TakenOverPosition? {
   if (remote.playedAt <= content.lastPlayedAt.toEpochMilli()) return null
   val chapter = chapters.getOrNull(remote.file) ?: return null

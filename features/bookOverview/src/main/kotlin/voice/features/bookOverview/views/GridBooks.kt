@@ -23,11 +23,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 import voice.core.data.BookId
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.features.bookOverview.overview.BookOverviewItemViewState
-import kotlin.math.roundToInt
 
 @Composable
 internal fun GridBook(
@@ -38,13 +38,14 @@ internal fun GridBook(
   finished: Boolean = false,
 ) {
   Column(
-    modifier = modifier
-      .clip(RoundedCornerShape(24.dp))
-      .combinedClickable(
-        onClick = { onBookClick(book.id) },
-        onLongClick = { onBookLongClick(book.id) },
-      )
-      .padding(6.dp),
+    modifier =
+      modifier
+        .clip(RoundedCornerShape(24.dp))
+        .combinedClickable(
+          onClick = { onBookClick(book.id) },
+          onLongClick = { onBookLongClick(book.id) },
+        )
+        .padding(6.dp),
   ) {
     BookCover(
       bookId = book.id,
@@ -53,9 +54,7 @@ internal fun GridBook(
       unavailable = book.unavailable,
       download = book.download,
       hidden = book.hidden,
-      modifier = Modifier
-        .fillMaxWidth()
-        .aspectRatio(1F),
+      modifier = Modifier.fillMaxWidth().aspectRatio(1F),
     )
     // right under the cover, so the bars in a row line up however long the titles are
     if (!finished && book.progress > 0F) {

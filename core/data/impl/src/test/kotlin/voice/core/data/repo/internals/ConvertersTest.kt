@@ -1,11 +1,11 @@
 package voice.core.data.repo.internals
 
-import voice.core.data.MarkData
 import java.io.File
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.uuid.Uuid
+import voice.core.data.MarkData
 
 class ConvertersTest {
 
@@ -32,11 +32,12 @@ class ConvertersTest {
   @Test
   fun marks() {
     test(
-      value = listOf(
-        MarkData(0L, "Hello"),
-        MarkData(5L, "World"),
-        MarkData(Long.MIN_VALUE, ""),
-      ),
+      value =
+        listOf(
+          MarkData(0L, "Hello"),
+          MarkData(5L, "World"),
+          MarkData(Long.MIN_VALUE, ""),
+        ),
       serialize = Converters::fromMarks,
       deSerialize = Converters::toMarks,
     )

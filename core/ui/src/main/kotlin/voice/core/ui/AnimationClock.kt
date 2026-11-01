@@ -13,18 +13,19 @@ import androidx.compose.ui.MotionDurationScale
 import kotlinx.coroutines.flow.first
 
 /**
- * A clock in seconds that only ticks while [running], e.g. while audio plays. Its speed eases in and
- * out, so everything driven by it (the seek bar wave, the aurora) glides to a halt instead of
- * freezing abruptly. When stopped, or with animations turned off, it stops requesting frames entirely.
+ * A clock in seconds that only ticks while [running], e.g. while audio plays. Its speed eases in and out, so everything driven by it (the
+ * seek bar wave, the aurora) glides to a halt instead of freezing abruptly. When stopped, or with animations turned off, it stops
+ * requesting frames entirely.
  */
 @Composable
 fun rememberAnimationClock(running: Boolean): State<Float> {
   val time = remember { mutableFloatStateOf(0F) }
-  val speed = animateFloatAsState(
-    targetValue = if (running) 1F else 0F,
-    animationSpec = tween(durationMillis = 1200),
-    label = "clockSpeed",
-  )
+  val speed =
+    animateFloatAsState(
+      targetValue = if (running) 1F else 0F,
+      animationSpec = tween(durationMillis = 1200),
+      label = "clockSpeed",
+    )
   LaunchedEffect(time, speed) {
     // zero when animations are turned off in the system settings
     val motionDurationScale = coroutineContext[MotionDurationScale]

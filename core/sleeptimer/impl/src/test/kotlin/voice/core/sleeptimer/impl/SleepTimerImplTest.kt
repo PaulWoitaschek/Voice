@@ -6,6 +6,12 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -28,12 +34,6 @@ import voice.core.sleeptimer.SleepTimerPreference
 import voice.core.sleeptimer.SleepTimerPreferenceStore
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.sleeptimer.SleepTimerTracker
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 private class TestShakeDetector : ShakeDetector {
   private val shakes = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
@@ -56,24 +56,28 @@ private class TestShakeDetector : ShakeDetector {
 
 class SleepTimerImplTest {
 
-  private val playStateManager = PlayStateManager().apply {
-    playState = PlayStateManager.PlayState.Playing
-  }
+  private val playStateManager =
+    PlayStateManager().apply {
+      playState = PlayStateManager.PlayState.Playing
+    }
   private val shakeDetector = TestShakeDetector()
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
   private val setVolumeSlots = mutableListOf<Float>()
-  private val playerController = mockk<PlayerController> {
-    every { setVolume(capture(setVolumeSlots)) } just Runs
-    every { pauseWithRewind(any()) } answers {
-      playStateManager.playState = PlayStateManager.PlayState.Paused
+  private val playerController =
+    mockk<PlayerController> {
+      every { setVolume(capture(setVolumeSlots)) } just Runs
+      every { pauseWithRewind(any()) } answers
+        {
+          playStateManager.playState = PlayStateManager.PlayState.Paused
+        }
+      every { record(any(), any()) } just Runs
+      every {
+        play(any())
+      } answers
+        {
+          playStateManager.playState = PlayStateManager.PlayState.Playing
+        }
     }
-    every { record(any(), any()) } just Runs
-    every {
-      play(any())
-    } answers {
-      playStateManager.playState = PlayStateManager.PlayState.Playing
-    }
-  }
 
   private val fadeOutStore = MemoryDataStore(2.seconds)
   private val tracker = mockk<SleepTimerTracker>(relaxed = true)
@@ -84,15 +88,16 @@ class SleepTimerImplTest {
 
   init {
     val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
-    sleepTimer = SleepTimerImpl(
-      playStateManager,
-      shakeDetector,
-      SleepTimerPreferenceStore(sleepTimerPreferenceStore),
-      playerController,
-      FadeOutStore(fadeOutStore),
-      dispatcherProvider,
-      tracker,
-    )
+    sleepTimer =
+      SleepTimerImpl(
+        playStateManager,
+        shakeDetector,
+        SleepTimerPreferenceStore(sleepTimerPreferenceStore),
+        playerController,
+        FadeOutStore(fadeOutStore),
+        dispatcherProvider,
+        tracker,
+      )
   }
 
   @Test

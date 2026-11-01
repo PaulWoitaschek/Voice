@@ -10,6 +10,8 @@ import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -24,26 +26,26 @@ import voice.core.scanner.MediaScanTrigger
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import voice.navigation.Origin
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class FolderPickerViewModelTest {
 
   private val foldersWithAccess = MutableStateFlow<Map<FolderType, List<DocumentFileWithUri>>>(emptyMap())
   private val foldersWithoutAccess = MutableStateFlow<Map<FolderType, List<Uri>>>(emptyMap())
-  private val audiobookFolders = mockk<AudiobookFolders>(relaxUnitFun = true) {
-    every { all() } returns foldersWithAccess
-    every { withoutAccess() } returns foldersWithoutAccess
-  }
+  private val audiobookFolders =
+    mockk<AudiobookFolders>(relaxUnitFun = true) {
+      every { all() } returns foldersWithAccess
+      every { withoutAccess() } returns foldersWithoutAccess
+    }
   private val navigator = mockk<Navigator>(relaxUnitFun = true)
   private val mediaScanTrigger = mockk<MediaScanTrigger>(relaxUnitFun = true)
-  private val viewModel = FolderPickerViewModel(
-    audiobookFolders = audiobookFolders,
-    navigator = navigator,
-    mediaScanTrigger = mediaScanTrigger,
-    kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
-  )
+  private val viewModel =
+    FolderPickerViewModel(
+      audiobookFolders = audiobookFolders,
+      navigator = navigator,
+      mediaScanTrigger = mediaScanTrigger,
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
+    )
 
   private val fantasy = tree("primary:Audiobooks/Fantasy")
   private val crime = tree("primary:Crime")
@@ -55,15 +57,16 @@ class FolderPickerViewModelTest {
 
     viewStates {
       assertEquals(
-        expected = listOf(
-          FolderPickerViewState.Item(
-            name = "Audiobooks/Fantasy",
-            id = fantasy,
-            folderType = FolderType.SingleFolder,
-            hasAccess = false,
+        expected =
+          listOf(
+            FolderPickerViewState.Item(
+              name = "Audiobooks/Fantasy",
+              id = fantasy,
+              folderType = FolderType.SingleFolder,
+              hasAccess = false,
+            ),
+            FolderPickerViewState.Item(name = "Crime", id = crime, folderType = FolderType.Root),
           ),
-          FolderPickerViewState.Item(name = "Crime", id = crime, folderType = FolderType.Root),
-        ),
         actual = awaitLoaded().items,
       )
     }
@@ -119,9 +122,11 @@ class FolderPickerViewModelTest {
   }
 
   private suspend fun TestScope.viewStates(validate: suspend ReceiveTurbine<FolderPickerViewState>.() -> Unit) {
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.test(validate = validate)
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test(validate = validate)
   }
 
   private suspend fun ReceiveTurbine<FolderPickerViewState>.awaitLoaded(): FolderPickerViewState {

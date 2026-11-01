@@ -16,13 +16,14 @@ internal data class PlaybackItem(
   val mark: ChapterMark,
 ) {
   val mediaId: MediaId.ChapterMark
-    get() = MediaId.ChapterMark(
-      bookId = bookId,
-      chapterId = chapter.id,
-      markIndex = markIndex,
-      startMs = mark.startMs,
-      endMs = mark.endMs,
-    )
+    get() =
+      MediaId.ChapterMark(
+        bookId = bookId,
+        chapterId = chapter.id,
+        markIndex = markIndex,
+        startMs = mark.startMs,
+        endMs = mark.endMs,
+      )
 }
 
 internal fun Book.playbackItems(): List<PlaybackItem> {
@@ -41,8 +42,8 @@ internal fun Book.playbackItems(): List<PlaybackItem> {
 }
 
 /**
- * The playlist as the session and the UI see it: one entry per chapter mark, together with the
- * index of the audio file each entry lives in. The underlying player only holds one item per file.
+ * The playlist as the session and the UI see it: one entry per chapter mark, together with the index of the audio file each entry lives in.
+ * The underlying player only holds one item per file.
  */
 internal class ChapterMarkPlaylist(
   val items: List<PlaybackItem>,
@@ -88,24 +89,24 @@ internal fun Book.playbackItemForPosition(
 }
 
 internal val MediaId.bookId: BookId?
-  get() = when (this) {
-    is MediaId.Book -> id
-    is MediaId.Chapter -> bookId
-    is MediaId.ChapterMark -> bookId
-    MediaId.Recent,
-    MediaId.Root,
-    -> null
-  }
+  get() =
+    when (this) {
+      is MediaId.Book -> id
+      is MediaId.Chapter -> bookId
+      is MediaId.ChapterMark -> bookId
+      MediaId.Recent,
+      MediaId.Root -> null
+    }
 
 internal val MediaId.realChapterId: ChapterId?
-  get() = when (this) {
-    is MediaId.Chapter -> chapterId
-    is MediaId.ChapterMark -> chapterId
-    is MediaId.Book,
-    MediaId.Recent,
-    MediaId.Root,
-    -> null
-  }
+  get() =
+    when (this) {
+      is MediaId.Chapter -> chapterId
+      is MediaId.ChapterMark -> chapterId
+      is MediaId.Book,
+      MediaId.Recent,
+      MediaId.Root -> null
+    }
 
 internal fun MediaId.positionInChapter(positionInCurrentMediaItemMs: Long): Long? {
   return when (this) {
@@ -113,8 +114,7 @@ internal fun MediaId.positionInChapter(positionInCurrentMediaItemMs: Long): Long
     is MediaId.ChapterMark -> startMs + positionInCurrentMediaItemMs
     is MediaId.Book,
     MediaId.Recent,
-    MediaId.Root,
-    -> null
+    MediaId.Root -> null
   }
 }
 

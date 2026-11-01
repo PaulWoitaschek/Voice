@@ -3,12 +3,12 @@ package voice.core.scanner
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import voice.core.data.BookId
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.CustomMetadataRepo
 import voice.core.documentfile.CachedDocumentFile
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
 
 public data class BookPreview(
   val name: String,

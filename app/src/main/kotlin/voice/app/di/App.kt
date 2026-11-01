@@ -8,14 +8,13 @@ import voice.core.initializer.AppInitializer
 
 class App : Application() {
 
-  @Inject
-  lateinit var appInitializers: Set<AppInitializer>
+  @Inject lateinit var appInitializers: Set<AppInitializer>
 
   override fun onCreate() {
     super.onCreate()
 
-    rootGraph = createGraphFactory<AppGraph.Factory>().create(this)
-      .also { graph ->
+    rootGraph =
+      createGraphFactory<AppGraph.Factory>().create(this).also { graph ->
         graph.inject(this)
       }
 

@@ -1,7 +1,7 @@
 package voice.core.scanner
 
-import voice.core.data.MarkData
 import kotlin.time.Duration
+import voice.core.data.MarkData
 
 internal data class Metadata(
   val duration: Long,
@@ -39,17 +39,15 @@ internal data class Metadata(
     }
 
     fun build(duration: Duration): Metadata {
-      vorbisChapterNames.keys.toList()
-        .sorted()
-        .mapNotNullTo(chapters) { index ->
-          val name = vorbisChapterNames[index]
-          val start = vorbisChapterStarts[index]
-          if (name != null && start != null) {
-            MarkData(startMs = start, name = name)
-          } else {
-            null
-          }
+      vorbisChapterNames.keys.toList().sorted().mapNotNullTo(chapters) { index ->
+        val name = vorbisChapterNames[index]
+        val start = vorbisChapterStarts[index]
+        if (name != null && start != null) {
+          MarkData(startMs = start, name = name)
+        } else {
+          null
         }
+      }
 
       val (series, part) = seriesAndPart()
 
@@ -70,27 +68,25 @@ internal data class Metadata(
     private fun seriesAndPart(): Pair<String?, String?> {
       val tagged = seriesAndPartTags.firstNotNullOfOrNull { (seriesTag, partTag) ->
         val series = tags[seriesTag] ?: return@firstNotNullOfOrNull null
-        val part = tags[partTag]
-          // Mp3tag writes the movement with its count, like 3/7
-          ?.let { if (partTag == "MVIN") it.substringBefore('/') else it }
-          ?: tags["PART"]
-          ?: tags["TXXX:PART"]
+        val part =
+          tags[partTag]
+            // Mp3tag writes the movement with its count, like 3/7
+            ?.let { if (partTag == "MVIN") it.substringBefore('/') else it } ?: tags["PART"] ?: tags["TXXX:PART"]
         series to part
       }
-      return tagged
-        ?: groupingTags.firstNotNullOfOrNull { tags[it]?.let(::parseGrouping) }
-        ?: (null to null)
+      return tagged ?: groupingTags.firstNotNullOfOrNull { tags[it]?.let(::parseGrouping) } ?: (null to null)
     }
   }
 }
 
 // the series tags Audiobookshelf reads, in its order, each with its part
-private val seriesAndPartTags = listOf(
-  "SERIES" to "SERIES-PART",
-  "SHOW" to "EPISODE_ID",
-  "MVNM" to "MVIN",
-  "MOVEMENTNAME" to "MOVEMENT",
-)
+private val seriesAndPartTags =
+  listOf(
+    "SERIES" to "SERIES-PART",
+    "SHOW" to "EPISODE_ID",
+    "MVNM" to "MVIN",
+    "MOVEMENTNAME" to "MOVEMENT",
+  )
 
 // iTunes moved the grouping of MP3 files from TIT1 to GRP1, and TIT1 became the work
 private val groupingTags = listOf("GROUPING", "GRP1", "TIT1")

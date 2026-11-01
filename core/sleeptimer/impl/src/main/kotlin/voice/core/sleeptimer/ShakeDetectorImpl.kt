@@ -8,9 +8,9 @@ import android.hardware.SensorManager
 import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import kotlin.time.Duration.Companion.nanoseconds
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.awaitCancellation
-import kotlin.time.Duration.Companion.nanoseconds
 
 @ContributesBinding(AppScope::class)
 class ShakeDetectorImpl(private val context: Context) : ShakeDetector {
@@ -20,18 +20,19 @@ class ShakeDetectorImpl(private val context: Context) : ShakeDetector {
     val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) ?: awaitCancellation()
     val shaken = CompletableDeferred<Unit>()
     val shakeWindow = ShakeWindow()
-    val listener = object : SensorEventListener {
-      override fun onSensorChanged(event: SensorEvent) {
-        if (shakeWindow.add(event.timestamp.nanoseconds, event.isAccelerating())) {
-          shaken.complete(Unit)
+    val listener =
+      object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent) {
+          if (shakeWindow.add(event.timestamp.nanoseconds, event.isAccelerating())) {
+            shaken.complete(Unit)
+          }
         }
-      }
 
-      override fun onAccuracyChanged(
-        sensor: Sensor,
-        accuracy: Int,
-      ) {}
-    }
+        override fun onAccuracyChanged(
+          sensor: Sensor,
+          accuracy: Int,
+        ) {}
+      }
     sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_GAME)
     try {
       shaken.await()

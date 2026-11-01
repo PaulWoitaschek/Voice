@@ -6,6 +6,7 @@ import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import dev.zacsweers.metro.Inject
+import java.io.File
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.core.data.Book
@@ -17,7 +18,6 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.toUri
-import java.io.File
 import voice.core.strings.R as StringsR
 
 @Inject
@@ -29,23 +29,26 @@ class MediaItemProvider(
   private val currentBookStoreId: CurrentBookStore,
 ) {
 
-  fun root(): MediaItem = MediaItem(
-    title = application.getString(StringsR.string.media_session_library_root),
-    browsable = true,
-    isPlayable = false,
-    mediaId = MediaId.Root,
-    mediaType = MediaType.AudioBookRoot,
-  )
+  fun root(): MediaItem =
+    MediaItem(
+      title = application.getString(StringsR.string.media_session_library_root),
+      browsable = true,
+      isPlayable = false,
+      mediaId = MediaId.Root,
+      mediaType = MediaType.AudioBookRoot,
+    )
 
   // Blocking on purpose: legacy browsers get the library root on the main thread and wait for it there, so a
   // coroutine that resumes on the main thread would never finish.
-  fun recent(): MediaItem? = MediaItem(
-    title = application.getString(StringsR.string.media_session_library_recent),
-    browsable = true,
-    isPlayable = false,
-    mediaId = MediaId.Recent,
-    mediaType = MediaType.AudioBook,
-  ).takeIf { runBlocking { currentBookStoreId.data.first() != null } }
+  fun recent(): MediaItem? =
+    MediaItem(
+        title = application.getString(StringsR.string.media_session_library_recent),
+        browsable = true,
+        isPlayable = false,
+        mediaId = MediaId.Recent,
+        mediaType = MediaType.AudioBook,
+      )
+      .takeIf { runBlocking { currentBookStoreId.data.first() != null } }
 
   suspend fun item(id: String): MediaItem? {
     val mediaId = id.toMediaIdOrNull() ?: return null
@@ -65,13 +68,14 @@ class MediaItemProvider(
         val chapter = chapterRepo.get(mediaId.chapterId) ?: return null
         val mark = chapter.chapterMarks.getOrNull(mediaId.markIndex) ?: return null
         mediaItem(
-          playbackItem = PlaybackItem(
-            index = 0,
-            bookId = mediaId.bookId,
-            chapter = chapter,
-            markIndex = mediaId.markIndex,
-            mark = mark,
-          ),
+          playbackItem =
+            PlaybackItem(
+              index = 0,
+              bookId = mediaId.bookId,
+              chapter = chapter,
+              markIndex = mediaId.markIndex,
+              mark = mark,
+            ),
           book = book,
         )
       }
@@ -93,7 +97,11 @@ class MediaItemProvider(
         val book = bookRepository.get(mediaId.id) ?: return null
         mediaItemsWithStartPosition(book)
       }
-      is MediaId.Chapter, is MediaId.ChapterMark, MediaId.Root, MediaId.Recent, null -> null
+      is MediaId.Chapter,
+      is MediaId.ChapterMark,
+      MediaId.Root,
+      MediaId.Recent,
+      null -> null
     }
   }
 
@@ -118,7 +126,8 @@ class MediaItemProvider(
     val mediaId = id.toMediaIdOrNull() ?: return null
     return when (mediaId) {
       MediaId.Root -> {
-        bookRepository.all()
+        bookRepository
+          .all()
           .filterNot { it.custom.hidden }
           .sortedWith(BookComparator.ByLastPlayed)
           .map { book ->
@@ -126,7 +135,8 @@ class MediaItemProvider(
           }
       }
       is MediaId.Book -> chapters(mediaId.id)
-      is MediaId.Chapter, is MediaId.ChapterMark -> null
+      is MediaId.Chapter,
+      is MediaId.ChapterMark -> null
       MediaId.Recent -> {
         val bookId = currentBookStoreId.data.first() ?: return null
         val book = bookRepository.get(bookId) ?: return null
@@ -135,45 +145,46 @@ class MediaItemProvider(
     }
   }
 
-  fun mediaItem(book: Book): MediaItem = MediaItem(
-    title = book.name,
-    mediaId = MediaId.Book(book.id),
-    browsable = false,
-    isPlayable = true,
-    imageUri = book.cover?.toProvidedUri(),
-    mediaType = MediaType.AudioBook,
-  )
+  fun mediaItem(book: Book): MediaItem =
+    MediaItem(
+      title = book.name,
+      mediaId = MediaId.Book(book.id),
+      browsable = false,
+      isPlayable = true,
+      imageUri = book.cover?.toProvidedUri(),
+      mediaType = MediaType.AudioBook,
+    )
 
   private fun mediaItem(
     chapter: Chapter,
     book: Book,
-  ) = MediaItem(
-    title = chapter.name ?: chapter.id.value,
-    mediaId = MediaId.Chapter(bookId = book.id, chapterId = chapter.id),
-    browsable = false,
-    isPlayable = true,
-    sourceUri = chapter.id.toUri(),
-    imageUri = book.cover?.toProvidedUri(),
-    artist = book.author,
-    mediaType = MediaType.AudioBookChapter,
-  )
+  ) =
+    MediaItem(
+      title = chapter.name ?: chapter.id.value,
+      mediaId = MediaId.Chapter(bookId = book.id, chapterId = chapter.id),
+      browsable = false,
+      isPlayable = true,
+      sourceUri = chapter.id.toUri(),
+      imageUri = book.cover?.toProvidedUri(),
+      artist = book.author,
+      mediaType = MediaType.AudioBookChapter,
+    )
 
   private fun mediaItem(
     playbackItem: PlaybackItem,
     book: Book,
-  ) = MediaItem(
-    title = playbackItem.mark.name
-      ?: playbackItem.chapter.name
-      ?: playbackItem.chapter.id.value,
-    mediaId = playbackItem.mediaId,
-    browsable = false,
-    isPlayable = true,
-    sourceUri = playbackItem.chapter.id.toUri(),
-    imageUri = book.cover?.toProvidedUri(),
-    artist = book.author,
-    durationMs = playbackItem.mark.durationMs,
-    mediaType = MediaType.AudioBookChapter,
-  )
+  ) =
+    MediaItem(
+      title = playbackItem.mark.name ?: playbackItem.chapter.name ?: playbackItem.chapter.id.value,
+      mediaId = playbackItem.mediaId,
+      browsable = false,
+      isPlayable = true,
+      sourceUri = playbackItem.chapter.id.toUri(),
+      imageUri = book.cover?.toProvidedUri(),
+      artist = book.author,
+      durationMs = playbackItem.mark.durationMs,
+      mediaType = MediaType.AudioBookChapter,
+    )
 
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
 }

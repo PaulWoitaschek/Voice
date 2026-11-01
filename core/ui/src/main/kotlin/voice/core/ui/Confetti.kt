@@ -20,16 +20,16 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
-import kotlinx.coroutines.channels.Channel
+import androidx.graphics.shapes.toPath as toAndroidPath
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
-import androidx.graphics.shapes.toPath as toAndroidPath
+import kotlinx.coroutines.channels.Channel
 
 /**
- * Confetti made of Material shapes. Every [burst] tosses a handful out of a ring around the center,
- * which then floats down like paper and fades out. Draw it with [drawConfetti].
+ * Confetti made of Material shapes. Every [burst] tosses a handful out of a ring around the center, which then floats down like paper and
+ * fades out. Draw it with [drawConfetti].
  */
 @Stable
 class ConfettiState internal constructor() {
@@ -70,20 +70,21 @@ class ConfettiState internal constructor() {
     repeat(PARTICLE_COUNT) {
       val angle = random.nextFloat() * 2 * PI.toFloat()
       val speed = 2F + random.nextFloat() * 3F
-      flying += Particle(
-        x = cos(angle) * 0.8F,
-        y = sin(angle) * 0.8F,
-        vx = cos(angle) * speed,
-        // a bit of an upward toss, so it rains down afterwards
-        vy = sin(angle) * speed - 1.6F,
-        rotation = random.nextFloat() * 360F,
-        spin = (random.nextFloat() - 0.5F) * 720F,
-        flip = 4F + random.nextFloat() * 8F,
-        size = 0.14F + random.nextFloat() * 0.14F,
-        shape = random.nextInt(CONFETTI_SHAPES.size),
-        color = random.nextInt(Int.MAX_VALUE),
-        lifetime = 2.4F + random.nextFloat() * 1.2F,
-      )
+      flying +=
+        Particle(
+          x = cos(angle) * 0.8F,
+          y = sin(angle) * 0.8F,
+          vx = cos(angle) * speed,
+          // a bit of an upward toss, so it rains down afterwards
+          vy = sin(angle) * speed - 1.6F,
+          rotation = random.nextFloat() * 360F,
+          spin = (random.nextFloat() - 0.5F) * 720F,
+          flip = 4F + random.nextFloat() * 8F,
+          size = 0.14F + random.nextFloat() * 0.14F,
+          shape = random.nextInt(CONFETTI_SHAPES.size),
+          color = random.nextInt(Int.MAX_VALUE),
+          lifetime = 2.4F + random.nextFloat() * 1.2F,
+        )
     }
   }
 
@@ -120,8 +121,8 @@ fun rememberConfettiState(): ConfettiState {
 }
 
 /**
- * Draws the flying confetti of [state] around [center]. Positions, speeds and sizes are in multiples
- * of [radius], so the physics don't depend on the screen size. Each piece picks one of the [colors].
+ * Draws the flying confetti of [state] around [center]. Positions, speeds and sizes are in multiples of [radius], so the physics don't
+ * depend on the screen size. Each piece picks one of the [colors].
  */
 fun DrawScope.drawConfetti(
   state: ConfettiState,
@@ -168,12 +169,13 @@ internal class Particle(
 private const val PARTICLE_COUNT = 56
 private const val GRAVITY = 2.6F
 
-private val CONFETTI_SHAPES = listOf(
-  MaterialShapes.Heart,
-  MaterialShapes.Sunny,
-  MaterialShapes.Pill,
-  MaterialShapes.Cookie4Sided,
-  MaterialShapes.Clover4Leaf,
-  MaterialShapes.Triangle,
-  MaterialShapes.Circle,
-)
+private val CONFETTI_SHAPES =
+  listOf(
+    MaterialShapes.Heart,
+    MaterialShapes.Sunny,
+    MaterialShapes.Pill,
+    MaterialShapes.Cookie4Sided,
+    MaterialShapes.Clover4Leaf,
+    MaterialShapes.Triangle,
+    MaterialShapes.Circle,
+  )

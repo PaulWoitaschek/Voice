@@ -33,27 +33,31 @@ sealed interface DownloadBadge {
   data object Failed : DownloadBadge
 }
 
-internal fun BookDownloadState?.badge(): DownloadBadge? = when (this) {
-  is BookDownloadState.Downloading -> DownloadBadge.Running(progress, waitingFor)
-  BookDownloadState.Failed -> DownloadBadge.Failed
-  is BookDownloadState.Downloaded, BookDownloadState.NotDownloaded, null -> null
-}
+internal fun BookDownloadState?.badge(): DownloadBadge? =
+  when (this) {
+    is BookDownloadState.Downloading -> DownloadBadge.Running(progress, waitingFor)
+    BookDownloadState.Failed -> DownloadBadge.Failed
+    is BookDownloadState.Downloaded,
+    BookDownloadState.NotDownloaded,
+    null -> null
+  }
 
 internal fun Book.toItemViewState(
   unavailable: Boolean = false,
   download: DownloadBadge? = null,
-) = BookOverviewItemViewState(
-  name = name,
-  author = author,
-  cover = coverUrl,
-  id = id,
-  progress = progress(),
-  remainingTime = formatTime(duration - position),
-  series = seriesLine,
-  unavailable = unavailable,
-  download = download,
-  hidden = custom.hidden,
-)
+) =
+  BookOverviewItemViewState(
+    name = name,
+    author = author,
+    cover = coverUrl,
+    id = id,
+    progress = progress(),
+    remainingTime = formatTime(duration - position),
+    series = seriesLine,
+    unavailable = unavailable,
+    download = download,
+    hidden = custom.hidden,
+  )
 
 internal fun Book.progress(): Float {
   val globalPosition = position

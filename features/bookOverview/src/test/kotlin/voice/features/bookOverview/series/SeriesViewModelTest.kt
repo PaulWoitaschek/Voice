@@ -8,6 +8,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -32,9 +35,6 @@ import voice.features.bookOverview.overview.DownloadBadge
 import voice.features.bookOverview.overview.toItemViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class SeriesViewModelTest {
 
@@ -62,16 +62,23 @@ class SeriesViewModelTest {
       assertEquals(expected = 2, actual = state.bookCount)
       assertEquals(expected = 1, actual = state.finishedCount)
       assertEquals(
-        expected = listOf(
-          SeriesViewState.Book(book = first.toItemViewStateWithoutAuthor(), part = "1", finished = true, current = false, playing = false),
-          SeriesViewState.Book(
-            book = second.toItemViewStateWithoutAuthor(),
-            part = "2",
-            finished = false,
-            current = false,
-            playing = false,
+        expected =
+          listOf(
+            SeriesViewState.Book(
+              book = first.toItemViewStateWithoutAuthor(),
+              part = "1",
+              finished = true,
+              current = false,
+              playing = false,
+            ),
+            SeriesViewState.Book(
+              book = second.toItemViewStateWithoutAuthor(),
+              part = "2",
+              finished = false,
+              current = false,
+              playing = false,
+            ),
           ),
-        ),
         actual = state.books,
       )
     }
@@ -162,13 +169,14 @@ class SeriesViewModelTest {
     val book = book(series = "Saga", author = "Author", time = 0)
     books.value = listOf(book, book(series = "Saga", author = "Author", time = 0))
     currentBookStore.updateData { book.id }
-    val livePlaybackState = LivePlaybackState(
-      bookId = book.id,
-      chapterId = book.content.currentChapter,
-      positionMs = 5_000,
-      isPlaying = true,
-      playbackSpeed = 1F,
-    )
+    val livePlaybackState =
+      LivePlaybackState(
+        bookId = book.id,
+        chapterId = book.content.currentChapter,
+        positionMs = 5_000,
+        isPlaying = true,
+        playbackSpeed = 1F,
+      )
     every { playerController.livePlaybackStateFlow(book.id) } returns flowOf(livePlaybackState)
 
     testState(experimentalPlaybackPersistence = true) {
@@ -222,22 +230,26 @@ class SeriesViewModelTest {
 
   private fun viewModel(experimentalPlaybackPersistence: Boolean = false): SeriesViewModel {
     return SeriesViewModel(
-      repo = mockk<BookRepository> {
-        every { flow() } returns books
-      },
+      repo =
+        mockk<BookRepository> {
+          every { flow() } returns books
+        },
       navigator = navigator,
       playerController = playerController,
       currentBookStore = CurrentBookStore(currentBookStore),
       playStateManager = playStateManager,
-      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
-        MemoryFeatureFlag(experimentalPlaybackPersistence),
-      ),
-      serverLibrary = mockk {
-        every { unavailableBooks } returns unavailable
-      },
-      serverDownloads = mockk {
-        every { states } returns downloads
-      },
+      experimentalPlaybackPersistenceFeatureFlag =
+        ExperimentalPlaybackPersistenceFeatureFlag(
+          MemoryFeatureFlag(experimentalPlaybackPersistence),
+        ),
+      serverLibrary =
+        mockk {
+          every { unavailableBooks } returns unavailable
+        },
+      serverDownloads =
+        mockk {
+          every { states } returns downloads
+        },
       dispatcherProvider = dispatcherProvider,
       name = "Saga",
     )
@@ -248,12 +260,14 @@ class SeriesViewModelTest {
     validate: suspend ReceiveTurbine<SeriesViewState?>.() -> Unit,
   ) {
     val viewModel = viewModel(experimentalPlaybackPersistence)
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.test {
-      // the books are still loading
-      assertEquals(expected = null, actual = awaitItem())
-      validate()
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test {
+        // the books are still loading
+        assertEquals(expected = null, actual = awaitItem())
+        validate()
+      }
   }
 }

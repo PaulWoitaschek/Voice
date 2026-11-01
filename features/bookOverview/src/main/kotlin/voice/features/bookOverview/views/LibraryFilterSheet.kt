@@ -34,9 +34,9 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun LibraryFilterSheet(
@@ -47,10 +47,11 @@ internal fun LibraryFilterSheet(
 ) {
   ModalBottomSheet(
     onDismissRequest = onDismiss,
-    sheetState = rememberBottomSheetState(
-      initialValue = Hidden,
-      enabledValues = setOf(Hidden, Expanded),
-    ),
+    sheetState =
+      rememberBottomSheetState(
+        initialValue = Hidden,
+        enabledValues = setOf(Hidden, Expanded),
+      ),
   ) {
     LibraryFilterContent(
       hiddenBookCount = hiddenBookCount,
@@ -68,26 +69,21 @@ private fun LibraryFilterContent(
   modifier: Modifier = Modifier,
 ) {
   Column(
-    modifier = modifier
-      .fillMaxWidth()
-      .padding(horizontal = 12.dp)
-      .padding(bottom = 24.dp),
+    modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 24.dp),
   ) {
     Text(
-      modifier = Modifier
-        .padding(horizontal = 12.dp)
-        .semantics { heading() },
+      modifier = Modifier.padding(horizontal = 12.dp).semantics { heading() },
       text = stringResource(StringsR.string.library_filter_show),
       style = MaterialTheme.typography.labelLargeEmphasized,
     )
     Spacer(Modifier.height(8.dp))
     Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(24.dp))
-        .toggleable(value = showHiddenBooks, role = Role.Switch, onValueChange = onShowHiddenBooksChange)
-        .heightIn(min = 64.dp)
-        .padding(horizontal = 12.dp),
+      modifier =
+        Modifier.fillMaxWidth()
+          .clip(RoundedCornerShape(24.dp))
+          .toggleable(value = showHiddenBooks, role = Role.Switch, onValueChange = onShowHiddenBooksChange)
+          .heightIn(min = 64.dp)
+          .padding(horizontal = 12.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
       Icon(VoiceIcons.VisibilityOff, contentDescription = null)

@@ -23,23 +23,24 @@ import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import voice.core.strings.R
 import voice.core.ui.BookBar
 import voice.core.ui.formatTime
 import voice.features.playbackScreen.BookPlayViewState
-import java.text.DecimalFormat
-import java.text.NumberFormat
 
 @Composable
 internal fun BookProgress(
   viewState: BookPlayViewState,
   modifier: Modifier = Modifier,
 ) {
-  val progress by animateFloatAsState(
-    targetValue = viewState.bookProgress,
-    animationSpec = spring(stiffness = Spring.StiffnessLow),
-    label = "bookProgress",
-  )
+  val progress by
+    animateFloatAsState(
+      targetValue = viewState.bookProgress,
+      animationSpec = spring(stiffness = Spring.StiffnessLow),
+      label = "bookProgress",
+    )
   val percentFormat = remember { NumberFormat.getPercentInstance() }
   val speedFormat = remember { DecimalFormat("0.0#") }
   val percent = percentFormat.format(viewState.bookProgress.toDouble())
@@ -49,9 +50,10 @@ internal fun BookProgress(
   val currentSegment = viewState.chapterNumber - 1
 
   Column(
-    modifier = modifier.semantics(mergeDescendants = true) {
-      progressBarRangeInfo = ProgressBarRangeInfo(current = viewState.bookProgress, range = 0F..1F)
-    },
+    modifier =
+      modifier.semantics(mergeDescendants = true) {
+        progressBarRangeInfo = ProgressBarRangeInfo(current = viewState.bookProgress, range = 0F..1F)
+      },
   ) {
     BookBar(
       segments = segments,
@@ -68,15 +70,16 @@ internal fun BookProgress(
       Spacer(Modifier.weight(1F))
       val remainingText = formatTime(remaining.inWholeMilliseconds)
       Text(
-        text = if (viewState.playbackSpeed in 0.99F..1.01F) {
-          stringResource(R.string.playback_book_progress_remaining, remainingText)
-        } else {
-          stringResource(
-            R.string.playback_book_progress_remaining_at_speed,
-            remainingText,
-            speedFormat.format(viewState.playbackSpeed) + "×",
-          )
-        },
+        text =
+          if (viewState.playbackSpeed in 0.99F..1.01F) {
+            stringResource(R.string.playback_book_progress_remaining, remainingText)
+          } else {
+            stringResource(
+              R.string.playback_book_progress_remaining_at_speed,
+              remainingText,
+              speedFormat.format(viewState.playbackSpeed) + "×",
+            )
+          },
         style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
         color = colors.onSurfaceVariant,
         maxLines = 1,

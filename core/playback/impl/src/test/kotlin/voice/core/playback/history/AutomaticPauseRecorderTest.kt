@@ -6,6 +6,11 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.just
 import io.mockk.mockk
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -16,30 +21,27 @@ import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.playback.FakePlayer
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class AutomaticPauseRecorderTest {
 
   private val scope = TestScope()
   private val events = mutableListOf<ListeningEvent>()
-  private val repo = mockk<ListeningHistoryRepo> {
-    coEvery { add(capture(events)) } just Runs
-  }
+  private val repo =
+    mockk<ListeningHistoryRepo> {
+      coEvery { add(capture(events)) } just Runs
+    }
   private val player = FakePlayer(BookId("book"), contentPositionMs = 5_000)
 
   init {
     AutomaticPauseRecorder(
-      ListeningHistoryRecorder(
-        repo = repo,
-        clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
-        scope = scope,
-      ),
-    ).attachTo(player)
+        ListeningHistoryRecorder(
+          repo = repo,
+          clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+          scope = scope,
+        ),
+      )
+      .attachTo(player)
   }
 
   private suspend fun TestScope.recorded(): List<Pair<Type, Source>> {

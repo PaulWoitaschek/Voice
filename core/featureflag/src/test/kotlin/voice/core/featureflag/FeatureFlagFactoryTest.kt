@@ -4,6 +4,12 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import io.mockk.every
 import io.mockk.mockk
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.concurrent.Executors
+import kotlin.io.path.createTempDirectory
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -13,16 +19,13 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import voice.core.remoteconfig.api.RemoteConfig
-import java.io.InputStream
-import java.io.OutputStream
-import java.util.concurrent.Executors
-import kotlin.io.path.createTempDirectory
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class FeatureFlagFactoryTest {
 
-  private enum class Style { Classic, Calm }
+  private enum class Style {
+    Classic,
+    Calm,
+  }
 
   private val remoteConfig = mockk<RemoteConfig>()
   private val overridesStore = MemoryDataStore<Map<String, FeatureFlagOverride>>(emptyMap())
@@ -72,8 +75,9 @@ class FeatureFlagFactoryTest {
     val mainThread = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     runBlocking(mainThread) {
-      val flag = FeatureFlagFactory(remoteConfig, FeatureFlagOverridesStore(store), CoroutineScope(mainThread))
-        .boolean(key = "flag", description = "")
+      val flag =
+        FeatureFlagFactory(remoteConfig, FeatureFlagOverridesStore(store), CoroutineScope(mainThread))
+          .boolean(key = "flag", description = "")
       readStarted.await()
 
       assertEquals(true, flag.get())

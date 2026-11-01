@@ -1,7 +1,5 @@
 package voice.features.review
 
-import voice.core.data.BookId
-import voice.core.data.repo.FinishedBook
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -10,6 +8,8 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.toJavaDuration
+import voice.core.data.BookId
+import voice.core.data.repo.FinishedBook
 
 class ReviewPromptPolicyTest {
 
@@ -22,13 +22,14 @@ class ReviewPromptPolicyTest {
     listened: Duration = 7.hours,
     listeningDays: Int = 4,
     finishedBooks: List<FinishedBook> = emptyList(),
-  ) = ReviewSignals(
-    now = now,
-    installedAt = installedAt,
-    listened = listened,
-    listeningDays = listeningDays,
-    finishedBooks = finishedBooks,
-  )
+  ) =
+    ReviewSignals(
+      now = now,
+      installedAt = installedAt,
+      listened = listened,
+      listeningDays = listeningDays,
+      finishedBooks = finishedBooks,
+    )
 
   private fun trigger(
     state: ReviewPromptState = ReviewPromptState(),
@@ -94,13 +95,14 @@ class ReviewPromptPolicyTest {
     val state = ReviewPromptPolicy.asked(ReviewPromptState(), signals)
 
     assertEquals(
-      expected = ReviewPromptState(
-        asks = 1,
-        lastAskedAtMillis = now.toEpochMilli(),
-        listenedAtLastAskMillis = 12.hours.inWholeMilliseconds,
-        celebratedMilestoneHours = 10,
-        snoozedUntilMillis = (now + 30.days).toEpochMilli(),
-      ),
+      expected =
+        ReviewPromptState(
+          asks = 1,
+          lastAskedAtMillis = now.toEpochMilli(),
+          listenedAtLastAskMillis = 12.hours.inWholeMilliseconds,
+          celebratedMilestoneHours = 10,
+          snoozedUntilMillis = (now + 30.days).toEpochMilli(),
+        ),
       actual = state,
     )
   }

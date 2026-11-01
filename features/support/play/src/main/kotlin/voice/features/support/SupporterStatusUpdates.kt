@@ -1,9 +1,9 @@
 package voice.features.support
 
-import voice.core.data.supporter.SupporterStatus
 import java.time.Instant
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
+import voice.core.data.supporter.SupporterStatus
 
 internal fun SupporterStatus.withTip(at: Instant): SupporterStatus {
   return copy(
@@ -22,10 +22,7 @@ internal fun SupporterStatus.withSubscription(
   }
   // switching tiers starts a new purchase, which doesn't restart the count
   val since = minOfNotNull(subscribedSince, activeSince.toEpochMilli())
-  val months = ChronoUnit.MONTHS
-    .between(Instant.ofEpochMilli(since).atZone(zone), now.atZone(zone))
-    .toInt()
-    .coerceAtLeast(0)
+  val months = ChronoUnit.MONTHS.between(Instant.ofEpochMilli(since).atZone(zone), now.atZone(zone)).toInt().coerceAtLeast(0)
   return copy(
     supporterSince = minOfNotNull(supporterSince, since),
     subscribedSince = since,

@@ -15,7 +15,6 @@ kotlin {
 }
 
 android {
-
   sourceSets {
     named("test") {
       assets.directories += "schemas"

@@ -59,6 +59,7 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
+import java.text.NumberFormat
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.strings.R
@@ -73,7 +74,6 @@ import voice.features.bookmark.history.HistoryViewModel
 import voice.features.bookmark.history.HistoryViewState
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import java.text.NumberFormat
 
 @ContributesTo(AppScope::class)
 interface Graph {
@@ -87,11 +87,12 @@ object BookmarkProvider {
 
   @Provides
   @IntoSet
-  fun bookmarkNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Bookmarks> { key ->
-    NavEntry(key) {
-      BookmarkScreen(bookId = key.bookId, editBookmarkId = key.editBookmarkId)
+  fun bookmarkNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.Bookmarks> { key ->
+      NavEntry(key) {
+        BookmarkScreen(bookId = key.bookId, editBookmarkId = key.editBookmarkId)
+      }
     }
-  }
 }
 
 @Composable
@@ -99,12 +100,14 @@ fun BookmarkScreen(
   bookId: BookId,
   editBookmarkId: String?,
 ) {
-  val viewModel = retain(bookId.value, editBookmarkId) {
-    rootGraphAs<Graph>().bookmarkViewModelFactory.create(bookId, editBookmarkId)
-  }
-  val historyViewModel = retain(bookId.value) {
-    rootGraphAs<Graph>().historyViewModelFactory.create(bookId)
-  }
+  val viewModel =
+    retain(bookId.value, editBookmarkId) {
+      rootGraphAs<Graph>().bookmarkViewModelFactory.create(bookId, editBookmarkId)
+    }
+  val historyViewModel =
+    retain(bookId.value) {
+      rootGraphAs<Graph>().historyViewModelFactory.create(bookId)
+    }
   val viewState = viewModel.viewState()
   val historyViewState = historyViewModel.viewState()
   val snackbarHostState = remember { SnackbarHostState() }
@@ -115,11 +118,12 @@ fun BookmarkScreen(
     viewModel.viewEffects.collect { effect ->
       when (effect) {
         is BookmarkViewEffect.Deleted -> {
-          val result = snackbarHostState.showSnackbar(
-            message = deletedMessage,
-            actionLabel = undoLabel,
-            duration = SnackbarDuration.Short,
-          )
+          val result =
+            snackbarHostState.showSnackbar(
+              message = deletedMessage,
+              actionLabel = undoLabel,
+              duration = SnackbarDuration.Short,
+            )
           if (result == SnackbarResult.ActionPerformed) {
             viewModel.onUndoDelete(effect.bookmark)
           }
@@ -225,11 +229,12 @@ private fun BookmarkScreen(
       // the list scrolls behind the navigation bar at the bottom, but not behind one at the side
       val layoutDirection = LocalLayoutDirection.current
       CenteredContent(
-        modifier = Modifier.padding(
-          start = contentPadding.calculateStartPadding(layoutDirection),
-          top = contentPadding.calculateTopPadding(),
-          end = contentPadding.calculateEndPadding(layoutDirection),
-        ),
+        modifier =
+          Modifier.padding(
+            start = contentPadding.calculateStartPadding(layoutDirection),
+            top = contentPadding.calculateTopPadding(),
+            end = contentPadding.calculateEndPadding(layoutDirection),
+          ),
       ) { horizontalPadding ->
         Column {
           Tabs(
@@ -238,11 +243,12 @@ private fun BookmarkScreen(
             onTabChange = onTabChange,
             horizontalPadding = horizontalPadding,
           )
-          val listPadding = PaddingValues(
-            start = horizontalPadding,
-            end = horizontalPadding,
-            bottom = contentPadding.calculateBottomPadding(),
-          )
+          val listPadding =
+            PaddingValues(
+              start = horizontalPadding,
+              end = horizontalPadding,
+              bottom = contentPadding.calculateBottomPadding(),
+            )
           when (tab) {
             BookmarkTab.Bookmarks -> bookmarkList(listState, listPadding)
             BookmarkTab.History -> historyList(listPadding)
@@ -336,11 +342,12 @@ private fun SortMenu(
               ),
             )
           },
-          trailingIcon = if (option == sort) {
-            { Icon(VoiceIcons.Check, contentDescription = null) }
-          } else {
-            null
-          },
+          trailingIcon =
+            if (option == sort) {
+              { Icon(VoiceIcons.Check, contentDescription = null) }
+            } else {
+              null
+            },
           onClick = {
             expanded = false
             onSortChange(option)
@@ -361,9 +368,7 @@ private fun Tabs(
   val locale = LocalConfiguration.current.locales[0]
   val countFormat = remember(locale) { NumberFormat.getIntegerInstance(locale) }
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(horizontal = horizontalPadding, vertical = 8.dp),
+    modifier = Modifier.fillMaxWidth().padding(horizontal = horizontalPadding, vertical = 8.dp),
     horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
   ) {
     TabButton(
@@ -401,11 +406,12 @@ private fun TabButton(
     checked = checked,
     onCheckedChange = { onClick() },
     modifier = modifier,
-    shapes = if (leading) {
-      ButtonGroupDefaults.connectedLeadingButtonShapes()
-    } else {
-      ButtonGroupDefaults.connectedTrailingButtonShapes()
-    },
+    shapes =
+      if (leading) {
+        ButtonGroupDefaults.connectedLeadingButtonShapes()
+      } else {
+        ButtonGroupDefaults.connectedTrailingButtonShapes()
+      },
   ) {
     Icon(icon, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
     Spacer(Modifier.width(ButtonDefaults.IconSpacing))

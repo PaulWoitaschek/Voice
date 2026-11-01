@@ -53,6 +53,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import java.text.NumberFormat
+import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
@@ -60,9 +63,6 @@ import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.seriesCoverSharedElementModifier
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.SeriesStackViewState
-import java.text.NumberFormat
-import voice.core.strings.R as StringsR
-import voice.core.ui.R as UiR
 
 @Composable
 internal fun ListSeriesRow(
@@ -72,10 +72,7 @@ internal fun ListSeriesRow(
   shape: Shape = RoundedCornerShape(24.dp),
 ) {
   Surface(
-    modifier = modifier
-      .fillMaxWidth()
-      .clip(shape)
-      .clickable(onClick = onClick),
+    modifier = modifier.fillMaxWidth().clip(shape).clickable(onClick = onClick),
     shape = shape,
     color = MaterialTheme.colorScheme.surfaceContainer,
   ) {
@@ -93,9 +90,7 @@ internal fun ListSeriesRow(
           series = series,
           // the row says how many books it has
           describe = false,
-          modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .offset(x = 4.dp, y = 4.dp),
+          modifier = Modifier.align(Alignment.BottomEnd).offset(x = 4.dp, y = 4.dp),
         )
       }
       Spacer(Modifier.width(16.dp))
@@ -120,9 +115,7 @@ internal fun ListSeriesRow(
           if (series.category == BookOverviewCategory.CURRENT) {
             SeriesProgress(
               progress = series.progress,
-              modifier = Modifier
-                .weight(1F)
-                .padding(end = 12.dp),
+              modifier = Modifier.weight(1F).padding(end = 12.dp),
             )
           }
           Text(
@@ -144,24 +137,17 @@ internal fun GridSeries(
   modifier: Modifier = Modifier,
 ) {
   Column(
-    modifier = modifier
-      .clip(RoundedCornerShape(24.dp))
-      .clickable(onClick = onClick)
-      .padding(6.dp),
+    modifier = modifier.clip(RoundedCornerShape(24.dp)).clickable(onClick = onClick).padding(6.dp),
   ) {
     SeriesCover(
       seriesKey = series.key,
       covers = series.covers,
-      modifier = Modifier
-        .fillMaxWidth()
-        .aspectRatio(1F),
+      modifier = Modifier.fillMaxWidth().aspectRatio(1F),
     ) {
       SeriesBadge(
         series = series,
         describe = true,
-        modifier = Modifier
-          .align(Alignment.BottomEnd)
-          .offset(x = 4.dp, y = 4.dp),
+        modifier = Modifier.align(Alignment.BottomEnd).offset(x = 4.dp, y = 4.dp),
       )
     }
     // right under the cover, so the bars in a row line up however long the titles are
@@ -200,9 +186,7 @@ private fun SeriesProgress(
   val trackColor = ProgressIndicatorDefaults.linearTrackColor
   val average = progress.average().toFloat()
   Canvas(
-    modifier
-      .height(4.dp)
-      .progressSemantics(average),
+    modifier.height(4.dp).progressSemantics(average),
   ) {
     val gap = SEGMENT_GAP.toPx()
     val fits = (size.width - gap * (progress.size - 1)) / progress.size >= MIN_SEGMENT_WIDTH.toPx()
@@ -242,11 +226,11 @@ internal fun SeriesCover(
       // a cover keeps its image when another book comes to the front
       key(cover) {
         AsyncImage(
-          modifier = Modifier
-            .fillMaxSize(if (behind == 0) 1F else STACKED_COVER_SIZE)
-            .align(BiasAlignment(horizontalBias = -1F + 2F * depth, verticalBias = 1F - 2F * depth))
-            .clip(CoverShape)
-            .border(2.dp, gapColor, CoverShape),
+          modifier =
+            Modifier.fillMaxSize(if (behind == 0) 1F else STACKED_COVER_SIZE)
+              .align(BiasAlignment(horizontalBias = -1F + 2F * depth, verticalBias = 1F - 2F * depth))
+              .clip(CoverShape)
+              .border(2.dp, gapColor, CoverShape),
           model = rememberCoverThumbnailRequest(cover),
           placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
           error = painterResource(id = UiR.drawable.album_art),
@@ -270,17 +254,18 @@ private fun SeriesBadge(
   val finished = series.category == BookOverviewCategory.FINISHED
   val description = seriesCounts(series.bookCount, series.finishedCount)
   Box(
-    modifier = modifier
-      .sizeIn(minWidth = 24.dp, minHeight = 24.dp)
-      .background(MaterialTheme.colorScheme.surface, CircleShape)
-      .padding(2.dp)
-      .background(
-        if (finished) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer,
-        CircleShape,
-      )
-      .clearAndSetSemantics {
-        if (describe) contentDescription = description
-      },
+    modifier =
+      modifier
+        .sizeIn(minWidth = 24.dp, minHeight = 24.dp)
+        .background(MaterialTheme.colorScheme.surface, CircleShape)
+        .padding(2.dp)
+        .background(
+          if (finished) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer,
+          CircleShape,
+        )
+        .clearAndSetSemantics {
+          if (describe) contentDescription = description
+        },
     contentAlignment = Alignment.Center,
   ) {
     if (finished) {
@@ -312,16 +297,17 @@ internal fun seriesCounts(
   return "$books · $finished"
 }
 
-private fun previewSeries(category: BookOverviewCategory) = SeriesStackViewState(
-  key = "signalsaga",
-  name = "The Signal Saga",
-  author = "Daniel Hartwell",
-  covers = listOf(null, null, null),
-  bookCount = 4,
-  finishedCount = if (category == BookOverviewCategory.FINISHED) 4 else 1,
-  progress = listOf(1F, 0.4F, 0F, 0F),
-  category = category,
-)
+private fun previewSeries(category: BookOverviewCategory) =
+  SeriesStackViewState(
+    key = "signalsaga",
+    name = "The Signal Saga",
+    author = "Daniel Hartwell",
+    covers = listOf(null, null, null),
+    bookCount = 4,
+    finishedCount = if (category == BookOverviewCategory.FINISHED) 4 else 1,
+    progress = listOf(1F, 0.4F, 0F, 0F),
+    category = category,
+  )
 
 @Composable
 @Preview

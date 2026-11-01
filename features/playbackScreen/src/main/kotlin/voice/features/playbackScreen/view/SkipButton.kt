@@ -37,11 +37,11 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 import voice.core.strings.R
 import voice.core.ui.animationsEnabled
 import voice.core.ui.icons.VoiceIcons
-import kotlin.math.roundToInt
 
 /** Pressing stretches the button, nudging its neighbours aside. */
 @Composable
@@ -56,16 +56,18 @@ internal fun SkipButton(
   val haptics = LocalHapticFeedback.current
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
-  val widthRatio by animateFloatAsState(
-    targetValue = if (pressed && animate) 1.3F else 1F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
-    label = "skipWidth",
-  )
-  val cornerPercent by animateFloatAsState(
-    targetValue = if (pressed && animate) 25F else 50F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
-    label = "skipCorner",
-  )
+  val widthRatio by
+    animateFloatAsState(
+      targetValue = if (pressed && animate) 1.3F else 1F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
+      label = "skipWidth",
+    )
+  val cornerPercent by
+    animateFloatAsState(
+      targetValue = if (pressed && animate) 25F else 50F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
+      label = "skipCorner",
+    )
   val nudge = remember { Animatable(0F) }
   var bursts by remember { mutableStateOf(emptyList<Long>()) }
   var nextBurstId by remember { mutableLongStateOf(0L) }
@@ -83,9 +85,7 @@ internal fun SkipButton(
           }
         }
       },
-      modifier = Modifier
-        .fillMaxHeight()
-        .aspectRatio(widthRatio, matchHeightConstraintsFirst = true),
+      modifier = Modifier.fillMaxHeight().aspectRatio(widthRatio, matchHeightConstraintsFirst = true),
       shape = RoundedCornerShape(percent = cornerPercent.roundToInt()),
       color = MaterialTheme.colorScheme.secondaryContainer,
       contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -93,18 +93,17 @@ internal fun SkipButton(
     ) {
       Box(contentAlignment = Alignment.Center) {
         Icon(
-          modifier = Modifier
-            .fillMaxHeight(0.5F)
-            .aspectRatio(1F, matchHeightConstraintsFirst = true)
-            .graphicsLayer {
+          modifier =
+            Modifier.fillMaxHeight(0.5F).aspectRatio(1F, matchHeightConstraintsFirst = true).graphicsLayer {
               rotationZ = nudge.value * if (forward) 40F else -40F
               // the same circular arrows media3 uses in the notification, forward is the mirrored replay symbol
               scaleX = if (forward) -1F else 1F
             },
           imageVector = VoiceIcons.Replay,
-          contentDescription = stringResource(
-            id = if (forward) R.string.playback_action_fast_forward else R.string.playback_action_rewind,
-          ),
+          contentDescription =
+            stringResource(
+              id = if (forward) R.string.playback_action_fast_forward else R.string.playback_action_rewind,
+            ),
         )
       }
     }
@@ -133,15 +132,16 @@ private fun SkipBurst(
     currentOnFinish()
   }
   Text(
-    modifier = modifier
-      .clearAndSetSemantics {}
-      .graphicsLayer {
-        val p = progress.value
-        translationY = -p * 56.dp.toPx()
-        alpha = 1F - p
-        scaleX = 0.8F + 0.5F * p
-        scaleY = 0.8F + 0.5F * p
-      },
+    modifier =
+      modifier
+        .clearAndSetSemantics {}
+        .graphicsLayer {
+          val p = progress.value
+          translationY = -p * 56.dp.toPx()
+          alpha = 1F - p
+          scaleX = 0.8F + 0.5F * p
+          scaleY = 0.8F + 0.5F * p
+        },
     text = text,
     style = MaterialTheme.typography.titleMediumEmphasized,
     color = MaterialTheme.colorScheme.primary,

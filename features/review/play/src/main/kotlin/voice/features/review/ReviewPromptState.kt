@@ -2,30 +2,18 @@ package voice.features.review
 
 import kotlinx.serialization.Serializable
 
-/**
- * What happened with the prompt asking for a rating so far.
- */
+/** What happened with the prompt asking for a rating so far. */
 @Serializable
 data class ReviewPromptState(
-  /**
-   * How often the prompt was shown.
-   */
+  /** How often the prompt was shown. */
   val asks: Int = 0,
   val lastAskedAtMillis: Long? = null,
-  /**
-   * The total listening time when the prompt was last shown.
-   */
+  /** The total listening time when the prompt was last shown. */
   val listenedAtLastAskMillis: Long = 0,
-  /**
-   * The highest listening milestone, in hours, that was celebrated with the prompt.
-   */
+  /** The highest listening milestone, in hours, that was celebrated with the prompt. */
   val celebratedMilestoneHours: Int = 0,
-  /**
-   * The prompt waits until then.
-   */
+  /** The prompt waits until then. */
   val snoozedUntilMillis: Long? = null,
-  /**
-   * The listener went to rate, so the prompt never shows again.
-   */
+  /** The listener went to rate, so the prompt never shows again. */
   val done: Boolean = false,
 )

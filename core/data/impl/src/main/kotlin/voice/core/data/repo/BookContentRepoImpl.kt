@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.data.BookContent
@@ -45,10 +44,7 @@ public class BookContentRepoImpl(private val dao: BookContentDao) : BookContentR
   }
 
   override fun flow(id: BookId): Flow<BookContent?> {
-    return cache.onStart { fillCache() }
-      .filterNotNull()
-      .map { contents -> contents.find { it.id == id } }
-      .distinctUntilChanged()
+    return cache.onStart { fillCache() }.filterNotNull().map { contents -> contents.find { it.id == id } }.distinctUntilChanged()
   }
 
   override suspend fun get(id: BookId): BookContent? {

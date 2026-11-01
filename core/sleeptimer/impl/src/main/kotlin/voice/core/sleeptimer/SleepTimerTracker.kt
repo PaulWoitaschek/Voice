@@ -33,11 +33,12 @@ internal class SleepTimerTracker(private val analytics: Analytics) {
     analytics.event(
       "sleep_timer_restarted",
       mapOf(
-        "trigger" to when (trigger) {
-          RestartTrigger.ShakeWhileFading -> "shake_while_fading"
-          RestartTrigger.ShakeAfterPause -> "shake_after_pause"
-          RestartTrigger.Play -> "play"
-        },
+        "trigger" to
+          when (trigger) {
+            RestartTrigger.ShakeWhileFading -> "shake_while_fading"
+            RestartTrigger.ShakeAfterPause -> "shake_after_pause"
+            RestartTrigger.Play -> "play"
+          },
       ),
     )
   }

@@ -3,6 +3,11 @@ package voice.core.audiobookshelf.sync
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import java.time.Instant
+import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -26,23 +31,18 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.store.CurrentBookStore
-import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
-import java.time.Instant
-import java.util.concurrent.TimeUnit
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class ProgressSyncTest {
 
   private val server = MockWebServer()
   private lateinit var account: Account
 
-  private val item = item(
-    tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")),
-    id = "item",
-  )
+  private val item =
+    item(
+      tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")),
+      id = "item",
+    )
   private val chapters = item.chapters()
   private val bookId = BookId("abs://item/item")
   private val syncedProgress = MemoryDataStore<Map<String, SyncedProgress>>(emptyMap())
@@ -50,15 +50,16 @@ class ProgressSyncTest {
   @Before
   fun setUp() {
     server.start()
-    account = Account(
-      serverUrl = server.url("/").toString(),
-      userId = "user",
-      username = "paul",
-      accessToken = "access",
-      refreshToken = "refresh",
-      libraryIds = listOf("library"),
-      serverVersion = "2.37.1",
-    )
+    account =
+      Account(
+        serverUrl = server.url("/").toString(),
+        userId = "user",
+        username = "paul",
+        accessToken = "access",
+        refreshToken = "refresh",
+        libraryIds = listOf("library"),
+        serverVersion = "2.37.1",
+      )
   }
 
   @After
@@ -127,10 +128,11 @@ class ProgressSyncTest {
     val repo = MemoryBookRepository(book(positionMs = 112_000))
     syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(112_000, finished = true, serverLastUpdate = 10)) }
 
-    progressSync(repo).syncAll(
-      account,
-      listOf(serverProgress(currentTime = 112.0, lastUpdate = 20, isFinished = true)),
-    )
+    progressSync(repo)
+      .syncAll(
+        account,
+        listOf(serverProgress(currentTime = 112.0, lastUpdate = 20, isFinished = true)),
+      )
 
     assertEquals(112_000, repo.get(bookId)!!.position)
     assertEquals(0, server.requestCount)
@@ -141,10 +143,11 @@ class ProgressSyncTest {
     val repo = MemoryBookRepository(book(positionMs = 30_000))
     syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(30_000, finished = false, serverLastUpdate = 10)) }
 
-    progressSync(repo).syncAll(
-      account,
-      listOf(serverProgress(currentTime = 50.0, lastUpdate = 20, isFinished = true)),
-    )
+    progressSync(repo)
+      .syncAll(
+        account,
+        listOf(serverProgress(currentTime = 50.0, lastUpdate = 20, isFinished = true)),
+      )
 
     assertEquals(120_000, repo.get(bookId)!!.position)
   }
@@ -206,9 +209,10 @@ class ProgressSyncTest {
       syncedProgressStore = SyncedProgressStore(syncedProgress),
       currentBookStore = CurrentBookStore(MemoryDataStore<BookId?>(null)),
       playStateManager = PlayStateManager(),
-      playerController = mockk {
-        coEvery { livePlaybackState(any()) } returns null
-      },
+      playerController =
+        mockk {
+          coEvery { livePlaybackState(any()) } returns null
+        },
     )
   }
 
@@ -227,11 +231,12 @@ class ProgressSyncTest {
     currentTime: Double,
     lastUpdate: Long,
     isFinished: Boolean = false,
-  ) = AbsMediaProgress(
-    libraryItemId = "item",
-    duration = 120.0,
-    currentTime = currentTime,
-    isFinished = isFinished,
-    lastUpdate = lastUpdate,
-  )
+  ) =
+    AbsMediaProgress(
+      libraryItemId = "item",
+      duration = 120.0,
+      currentTime = currentTime,
+      isFinished = isFinished,
+      lastUpdate = lastUpdate,
+    )
 }

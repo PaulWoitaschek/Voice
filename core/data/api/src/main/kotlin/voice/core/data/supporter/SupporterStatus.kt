@@ -28,8 +28,7 @@ public enum class SupporterBadge {
   FirstCup,
   ThreeMonths,
   SixMonths,
-  OneYear,
-  ;
+  OneYear;
 
   public companion object {
     public val growth: List<SupporterBadge> = listOf(FirstCup, ThreeMonths, SixMonths, OneYear)

@@ -34,10 +34,11 @@ private fun Cursor.parseRows(
 }
 
 private fun Context.query(uri: Uri): Cursor? {
-  val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-    uri,
-    DocumentsContract.getDocumentId(uri),
-  )
+  val childrenUri =
+    DocumentsContract.buildChildDocumentsUriUsingTree(
+      uri,
+      DocumentsContract.getDocumentId(uri),
+    )
   return try {
     contentResolver.query(
       childrenUri,

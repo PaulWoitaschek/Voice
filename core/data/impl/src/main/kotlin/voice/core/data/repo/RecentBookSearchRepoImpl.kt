@@ -6,8 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import voice.core.data.repo.internals.dao.RecentBookSearchDao
 
 @ContributesBinding(AppScope::class)
-public class RecentBookSearchRepoImpl
-internal constructor(private val dao: RecentBookSearchDao) : RecentBookSearchRepo {
+public class RecentBookSearchRepoImpl internal constructor(private val dao: RecentBookSearchDao) : RecentBookSearchRepo {
 
   override fun flow(): Flow<List<String>> = dao.recentBookSearches()
 

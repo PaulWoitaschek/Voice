@@ -18,6 +18,8 @@ import com.materialkolor.ktx.themeColorOrNull
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -27,8 +29,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import voice.core.logging.api.Logger
-import java.io.File
-import java.util.concurrent.ConcurrentHashMap
 
 /** Provided by the activity. Without it (e.g. in previews or with cover colors off), covers don't re-theme anything. */
 val LocalCoverSeedColors = staticCompositionLocalOf<CoverSeedColors?> { null }
@@ -36,9 +36,8 @@ val LocalCoverSeedColors = staticCompositionLocalOf<CoverSeedColors?> { null }
 /**
  * The theme seed colors extracted from covers, keyed by cover url.
  *
- * They are persisted, so after a restart a cover is themed from its very first frame instead of
- * showing the default colors while it is analyzed again. Covers are stored under unique file names,
- * so a changed cover always gets a new key.
+ * They are persisted, so after a restart a cover is themed from its very first frame instead of showing the default colors while it is
+ * analyzed again. Covers are stored under unique file names, so a changed cover always gets a new key.
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -51,23 +50,25 @@ class CoverSeedColors(
   // Color.Unspecified marks covers without a usable color
   private val memory = ConcurrentHashMap<String, Color>()
 
-  private val restored = scope.async(start = CoroutineStart.LAZY) {
-    val colors = try {
-      store.data.first()
-    } catch (e: CancellationException) {
-      throw e
-    } catch (e: Exception) {
-      // only a cache: without it, covers are just analyzed again
-      Logger.w(e, "Can't restore the cover colors")
-      emptyMap()
+  private val restored =
+    scope.async(start = CoroutineStart.LAZY) {
+      val colors =
+        try {
+          store.data.first()
+        } catch (e: CancellationException) {
+          throw e
+        } catch (e: Exception) {
+          // only a cache: without it, covers are just analyzed again
+          Logger.w(e, "Can't restore the cover colors")
+          emptyMap()
+        }
+      colors.forEach { (cover, argb) ->
+        memory.putIfAbsent(cover, if (argb == NO_COLOR) Color.Unspecified else Color(argb))
+      }
+      scope.launch(Dispatchers.IO) {
+        persist { stored -> stored.filterKeys(::coverExists) }
+      }
     }
-    colors.forEach { (cover, argb) ->
-      memory.putIfAbsent(cover, if (argb == NO_COLOR) Color.Unspecified else Color(argb))
-    }
-    scope.launch(Dispatchers.IO) {
-      persist { stored -> stored.filterKeys(::coverExists) }
-    }
-  }
 
   /** Loads the colors of earlier sessions. Await this before showing covers to avoid a color flash. */
   suspend fun restore() {
@@ -79,20 +80,23 @@ class CoverSeedColors(
   /** The seed for [cover], extracting it if it is not known yet. Null if the cover can't be loaded. */
   suspend fun load(cover: String): Color? {
     restore()
-    memory[cover]?.let { return it }
-    val request = ImageRequest.Builder(application)
-      .data(cover)
-      .size(128)
-      .allowHardware(false)
-      // its key would be the full size cover's, which this small software bitmap would replace
-      .memoryCachePolicy(CachePolicy.DISABLED)
-      .build()
+    memory[cover]?.let {
+      return it
+    }
+    val request =
+      ImageRequest.Builder(application)
+        .data(cover)
+        .size(128)
+        .allowHardware(false)
+        // its key would be the full size cover's, which this small software bitmap would replace
+        .memoryCachePolicy(CachePolicy.DISABLED)
+        .build()
     // failed loads are not cached so they are retried the next time
-    val result = application.imageLoader.execute(request) as? SuccessResult
-      ?: return null
-    val color = withContext(Dispatchers.Default) {
-      result.drawable.toBitmap().asImageBitmap().themeColorOrNull()
-    } ?: Color.Unspecified
+    val result = application.imageLoader.execute(request) as? SuccessResult ?: return null
+    val color =
+      withContext(Dispatchers.Default) {
+        result.drawable.toBitmap().asImageBitmap().themeColorOrNull()
+      } ?: Color.Unspecified
     memory[cover] = color
     scope.launch {
       persist { stored ->

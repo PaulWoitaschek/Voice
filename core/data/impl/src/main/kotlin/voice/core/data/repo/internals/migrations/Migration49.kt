@@ -7,11 +7,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.binding
+import java.time.Instant
+import kotlin.uuid.Uuid
 import voice.core.data.repo.internals.getInt
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.moveToNextLoop
-import java.time.Instant
-import kotlin.uuid.Uuid
 
 @ContributesIntoSet(
   scope = AppScope::class,
@@ -23,14 +23,16 @@ public class Migration49 : IncrementalMigration(49) {
     with(db) {
       execSQL("ALTER TABLE bookmark RENAME TO bookmark_old")
       execSQL(
-        """CREATE TABLE `bookmark`
+        """
+        |CREATE TABLE `bookmark`
         |(`file` TEXT NOT NULL,
         |`title` TEXT,
         |`time` INTEGER NOT NULL,
         |`addedAt` TEXT NOT NULL,
         |`setBySleepTimer` INTEGER NOT NULL,
         |`id` TEXT NOT NULL, PRIMARY KEY(`id`))
-        """.trimMargin(),
+        """
+          .trimMargin(),
       )
       query("SELECT * FROM bookmark_old").moveToNextLoop {
         val file = getString("file")

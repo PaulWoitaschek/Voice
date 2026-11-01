@@ -1,5 +1,10 @@
 package voice.features.bookmark.history
 
+import java.time.Instant
+import java.time.ZoneId
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.ListeningEvent.Source
@@ -8,11 +13,6 @@ import voice.core.data.at
 import voice.core.data.isUndoableJump
 import voice.features.bookmark.BookIndex
 import voice.features.bookmark.sessionLabel
-import java.time.Instant
-import java.time.ZoneId
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 
 /** Shorter interruptions, like navigation prompts, would crowd a drive. */
 private val MIN_INTERRUPTION = 1.minutes
@@ -31,10 +31,8 @@ internal fun historyViewState(
   now: Instant,
   zone: ZoneId,
 ): HistoryViewState {
-  val sessions = Timeline(index, zone)
-    .sessions(events.sortedWith(compareBy({ it.atMillis }, { it.id })))
-    .filter { it.rows.isNotEmpty() }
-    .asReversed()
+  val sessions =
+    Timeline(index, zone).sessions(events.sortedWith(compareBy({ it.atMillis }, { it.id }))).filter { it.rows.isNotEmpty() }.asReversed()
   return HistoryViewState(
     // each label covers one stretch of time, so grouping keeps the sessions in order
     sessions
@@ -93,22 +91,26 @@ private class Timeline(
         }
         else -> {
           val playingBefore = playingBefore(event)
-          playing = when (event.type) {
-            Type.Play, Type.SleepTimerExtended -> true
-            Type.Pause, Type.SleepTimerEnded -> false
-            else -> playing
-          }
+          playing =
+            when (event.type) {
+              Type.Play,
+              Type.SleepTimerExtended -> true
+              Type.Pause,
+              Type.SleepTimerEnded -> false
+              else -> playing
+            }
           val place = place(event.chapterId, event.time)
           if (place != null) {
-            rows += HistoryEvent(
-              key = event.id,
-              at = event.localTime(),
-              playingBefore = playingBefore,
-              type = event.type,
-              source = event.source,
-              place = place,
-              to = event.toChapterId?.let { place(it, event.toTime ?: 0L) },
-            )
+            rows +=
+              HistoryEvent(
+                key = event.id,
+                at = event.localTime(),
+                playingBefore = playingBefore,
+                type = event.type,
+                source = event.source,
+                place = place,
+                to = event.toChapterId?.let { place(it, event.toTime ?: 0L) },
+              )
           }
         }
       }
@@ -125,9 +127,10 @@ private class Timeline(
     event: ListeningEvent,
     gap: Duration,
   ): Boolean {
-    val from = previous.toChapterId?.let { index.locate(it, previous.toTime ?: 0L) }
-      ?: index.locate(previous.chapterId, previous.time)
-      ?: return true
+    val from =
+      previous.toChapterId?.let { index.locate(it, previous.toTime ?: 0L) }
+        ?: index.locate(previous.chapterId, previous.time)
+        ?: return true
     val to = index.locate(event.chapterId, event.time) ?: return true
     return to.bookPosition - from.bookPosition >= gap.inWholeMilliseconds * SLOWEST_SPEED
   }
@@ -146,11 +149,12 @@ private class Timeline(
   private fun ListeningEvent.localTime() = at.atZone(zone).toLocalTime().withSecond(0).withNano(0)
 }
 
-private fun ListeningEvent.skipsBack(): Boolean? = when (type) {
-  Type.SkipBack -> true
-  Type.SkipForward -> false
-  else -> null
-}
+private fun ListeningEvent.skipsBack(): Boolean? =
+  when (type) {
+    Type.SkipBack -> true
+    Type.SkipForward -> false
+    else -> null
+  }
 
 private fun ListeningEvent.isHeldBackUntil(next: ListeningEvent): Boolean {
   return type == Type.Pause && source == Source.AudioFocus && next.type == Type.Play && next.source == Source.AudioFocus

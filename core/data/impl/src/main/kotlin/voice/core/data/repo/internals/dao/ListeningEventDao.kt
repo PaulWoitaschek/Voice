@@ -11,16 +11,12 @@ import voice.core.data.ListeningEvent
 @Dao
 public interface ListeningEventDao {
 
-  @Insert
-  public suspend fun insert(event: ListeningEvent)
+  @Insert public suspend fun insert(event: ListeningEvent)
 
   @Query("SELECT * FROM listening_event WHERE bookId = :bookId ORDER BY atMillis DESC, id DESC")
   public fun events(bookId: BookId): Flow<List<ListeningEvent>>
 
-  /**
-   * The nights from the sleep timer's bookmarks are older than anything recorded and no more come,
-   * so they don't count and stay.
-   */
+  /** The nights from the sleep timer's bookmarks are older than anything recorded and no more come, so they don't count and stay. */
   @Query(
     """
     DELETE FROM listening_event WHERE bookId = :bookId AND type != 'SleepTimerSet' AND id NOT IN (

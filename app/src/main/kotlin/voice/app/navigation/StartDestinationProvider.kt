@@ -8,7 +8,6 @@ import kotlinx.serialization.json.Json
 import voice.app.BuildConfig
 import voice.app.MainActivity
 import voice.core.audiobookshelf.ServerAccount
-import voice.core.data.BookId
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.PlayerController
@@ -26,7 +25,9 @@ class StartDestinationProvider(
 ) {
 
   operator fun invoke(intent: Intent): List<Destination.Compose> {
-    debugBackStack(intent)?.let { return it }
+    debugBackStack(intent)?.let {
+      return it
+    }
 
     val showOnboarding = runBlocking { showOnboarding() }
     if (showOnboarding) {

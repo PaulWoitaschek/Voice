@@ -3,6 +3,8 @@ package voice.core.audiobookshelf.sync
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.io.IOException
+import java.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -20,12 +22,10 @@ import voice.core.data.isRemote
 import voice.core.data.markForPosition
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
-import java.io.IOException
-import java.time.Instant
 
 /**
- * Brings bookmarks over in both directions. The server only knows a time and a title, so a bookmark is
- * identified by its book and the second it points to.
+ * Brings bookmarks over in both directions. The server only knows a time and a title, so a bookmark is identified by its book and the
+ * second it points to.
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -52,8 +52,7 @@ internal class BookmarkSync(
         val itemId = book.id.itemId ?: return@forEach
         syncBook(api, book, itemId, serverByItem[itemId].orEmpty(), synced)
       }
-    } catch (_: IOException) {
-    } finally {
+    } catch (_: IOException) {} finally {
       syncedBookmarksStore.updateData { synced.toMap() }
     }
   }
@@ -65,8 +64,7 @@ internal class BookmarkSync(
     server: List<AbsBookmark>,
     synced: MutableMap<String, String>,
   ) {
-    val local = bookmarkRepo.bookmarks(book.content)
-      .associateBy { key(itemId, book.secondOf(it)) }
+    val local = bookmarkRepo.bookmarks(book.content).associateBy { key(itemId, book.secondOf(it)) }
     val onServer = server.associateBy { key(itemId, it.time.toLong()) }
 
     onServer.forEach { (key, bookmark) ->
@@ -86,26 +84,27 @@ internal class BookmarkSync(
       when {
         serverBookmark != null -> {
           val serverTitle = serverBookmark.title.orEmpty()
-          synced[key] = when {
-            syncedTitle == null || serverTitle == title -> title
-            title == syncedTitle -> {
-              bookmarkRepo.addBookmark(bookmark.copy(title = serverTitle))
-              serverTitle
+          synced[key] =
+            when {
+              syncedTitle == null || serverTitle == title -> title
+              title == syncedTitle -> {
+                bookmarkRepo.addBookmark(bookmark.copy(title = serverTitle))
+                serverTitle
+              }
+              serverTitle == syncedTitle -> {
+                // the server finds the bookmark by its exact time, which other apps store with a fraction
+                val request = BookmarkRequest(time = serverBookmark.time, title = title)
+                if (!api.updateBookmark(itemId, request).isSuccessful) return@forEach
+                title
+              }
+              // both renamed it, and this device is where the listener is right now
+              else -> {
+                // the server finds the bookmark by its exact time, which other apps store with a fraction
+                val request = BookmarkRequest(time = serverBookmark.time, title = title)
+                if (!api.updateBookmark(itemId, request).isSuccessful) return@forEach
+                title
+              }
             }
-            serverTitle == syncedTitle -> {
-              // the server finds the bookmark by its exact time, which other apps store with a fraction
-              val request = BookmarkRequest(time = serverBookmark.time, title = title)
-              if (!api.updateBookmark(itemId, request).isSuccessful) return@forEach
-              title
-            }
-            // both renamed it, and this device is where the listener is right now
-            else -> {
-              // the server finds the bookmark by its exact time, which other apps store with a fraction
-              val request = BookmarkRequest(time = serverBookmark.time, title = title)
-              if (!api.updateBookmark(itemId, request).isSuccessful) return@forEach
-              title
-            }
-          }
         }
         syncedTitle != null -> {
           bookmarkRepo.deleteBookmark(bookmark.id)
@@ -147,12 +146,8 @@ private fun Book.bookmarkAt(bookmark: AbsBookmark): Bookmark {
   )
 }
 
-/**
- * The server needs a title, and the chapter tells most about where an untitled bookmark is.
- */
+/** The server needs a title, and the chapter tells most about where an untitled bookmark is. */
 private fun Book.markNameAt(bookmark: Bookmark): String {
   val chapter = chapters.firstOrNull { it.id == bookmark.chapterId }
-  return chapter?.markForPosition(bookmark.time)?.name?.takeIf { it.isNotBlank() }
-    ?: chapter?.name?.takeIf { it.isNotBlank() }
-    ?: name
+  return chapter?.markForPosition(bookmark.time)?.name?.takeIf { it.isNotBlank() } ?: chapter?.name?.takeIf { it.isNotBlank() } ?: name
 }

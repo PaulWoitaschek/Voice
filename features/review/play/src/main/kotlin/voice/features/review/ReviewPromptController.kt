@@ -3,6 +3,10 @@ package voice.features.review
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.time.Clock
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaInstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -12,12 +16,7 @@ import voice.core.data.Book
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.repo.ListeningSummary
-import voice.core.featureflag.FeatureFlag
 import voice.core.playback.playstate.PlayStateManager
-import java.time.Clock
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toJavaInstant
 
 @SingleIn(AppScope::class)
 @Inject
@@ -39,11 +38,14 @@ class ReviewPromptController(
   // shown but not answered yet, so it comes back when the activity is recreated
   private var showing: ReviewPrompt? = null
 
-  internal val versionName: String get() = appInfoProvider.versionName
+  internal val versionName: String
+    get() = appInfoProvider.versionName
 
   // showing it counts as an ask right away, so it never comes back too soon, even when the app gets closed while open
   internal suspend fun prompt(): ReviewPrompt? {
-    showing?.let { return it }
+    showing?.let {
+      return it
+    }
     return newPrompt()?.also { showing = it }
   }
 
@@ -67,10 +69,11 @@ class ReviewPromptController(
     store.updateData { ReviewPromptPolicy.asked(it, signals) }
     analytics.event(
       name = "review_prompt_shown",
-      params = mapOf(
-        "trigger" to trigger.analyticsName,
-        "ask" to (state.asks + 1).toString(),
-      ),
+      params =
+        mapOf(
+          "trigger" to trigger.analyticsName,
+          "ask" to (state.asks + 1).toString(),
+        ),
     )
     return prompt(trigger, books, summary, forced = false)
   }
@@ -92,11 +95,12 @@ class ReviewPromptController(
     val books = bookRepository.all()
     val summary = listeningStatsRepo.summary()
     val finished = summary.finishedBooks.firstOrNull { finished -> books.any { it.id == finished.bookId } }
-    val trigger = if (finished != null) {
-      ReviewTrigger.BookFinished(finished.bookId)
-    } else {
-      ReviewTrigger.Milestone(ReviewPromptPolicy.MILESTONE_HOURS.first())
-    }
+    val trigger =
+      if (finished != null) {
+        ReviewTrigger.BookFinished(finished.bookId)
+      } else {
+        ReviewTrigger.Milestone(ReviewPromptPolicy.MILESTONE_HOURS.first())
+      }
     return prompt(trigger, books, summary, forced = true)
   }
 
@@ -121,19 +125,20 @@ class ReviewPromptController(
     summary: ListeningSummary,
     forced: Boolean,
   ): ReviewPrompt {
-    val headline = when (trigger) {
-      is ReviewTrigger.BookFinished -> {
-        val book = books.first { it.id == trigger.bookId }
-        ReviewPrompt.Headline.BookFinished(name = book.name, cover = book.coverUrl)
+    val headline =
+      when (trigger) {
+        is ReviewTrigger.BookFinished -> {
+          val book = books.first { it.id == trigger.bookId }
+          ReviewPrompt.Headline.BookFinished(name = book.name, cover = book.coverUrl)
+        }
+        is ReviewTrigger.Milestone -> ReviewPrompt.Headline.Milestone
       }
-      is ReviewTrigger.Milestone -> ReviewPrompt.Headline.Milestone
-    }
     return ReviewPrompt(headline = headline, stats = stats(books, summary), forced = forced)
   }
 
   /**
-   * Taken from the library rather than the listening sessions, so listeners who were around long
-   * before Voice started to count see all they listened to.
+   * Taken from the library rather than the listening sessions, so listeners who were around long before Voice started to count see all they
+   * listened to.
    */
   private fun stats(
     books: List<Book>,
@@ -155,16 +160,18 @@ class ReviewPromptController(
 }
 
 private val ReviewTrigger.analyticsName: String
-  get() = when (this) {
-    is ReviewTrigger.BookFinished -> "book_finished"
-    is ReviewTrigger.Milestone -> "milestone_$hours"
-  }
+  get() =
+    when (this) {
+      is ReviewTrigger.BookFinished -> "book_finished"
+      is ReviewTrigger.Milestone -> "milestone_$hours"
+    }
 
 private val ReviewAnswer.analyticsName: String
-  get() = when (this) {
-    ReviewAnswer.Rate -> "rate"
-    ReviewAnswer.Idea -> "idea"
-    ReviewAnswer.Bug -> "bug"
-    ReviewAnswer.Email -> "email"
-    ReviewAnswer.Later -> "later"
-  }
+  get() =
+    when (this) {
+      ReviewAnswer.Rate -> "rate"
+      ReviewAnswer.Idea -> "idea"
+      ReviewAnswer.Bug -> "bug"
+      ReviewAnswer.Email -> "email"
+      ReviewAnswer.Later -> "later"
+    }

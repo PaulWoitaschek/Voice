@@ -16,8 +16,7 @@ internal data class LoginRequest(
   val password: String,
 )
 
-@Serializable
-internal data class LoginResponse(val user: AbsUser)
+@Serializable internal data class LoginResponse(val user: AbsUser)
 
 @Serializable
 internal data class AbsUser(
@@ -29,8 +28,7 @@ internal data class AbsUser(
   val bookmarks: List<AbsBookmark> = emptyList(),
 )
 
-@Serializable
-internal data class LibrariesResponse(val libraries: List<AbsLibrary>)
+@Serializable internal data class LibrariesResponse(val libraries: List<AbsLibrary>)
 
 @Serializable
 internal data class AbsLibrary(
@@ -45,11 +43,9 @@ internal data class LibraryItemsResponse(
   val total: Int = 0,
 )
 
-@Serializable
-internal data class BatchGetRequest(val libraryItemIds: List<String>)
+@Serializable internal data class BatchGetRequest(val libraryItemIds: List<String>)
 
-@Serializable
-internal data class BatchGetResponse(val libraryItems: List<AbsLibraryItem>)
+@Serializable internal data class BatchGetResponse(val libraryItems: List<AbsLibraryItem>)
 
 @Serializable
 internal data class AbsLibraryItem(
@@ -89,8 +85,7 @@ internal data class AbsSeries(
   val sequence: String? = null,
 )
 
-@Serializable
-internal data class MediaUpdate(val metadata: MetadataUpdate)
+@Serializable internal data class MediaUpdate(val metadata: MetadataUpdate)
 
 // what's null stays as it is. A list replaces the whole list: the book loses every author or series not in it.
 @Serializable
@@ -100,8 +95,7 @@ internal data class MetadataUpdate(
   val series: List<AbsSeries>? = null,
 )
 
-@Serializable
-internal data class AbsAuthor(val name: String)
+@Serializable internal data class AbsAuthor(val name: String)
 
 @Serializable
 internal data class AbsTrack(
@@ -143,8 +137,8 @@ internal data class ProgressUpdate(
   val duration: Double,
   val progress: Double,
   /**
-   * Told that a finished book isn't finished, the server starts it over. Without the flag it takes the time and
-   * un-finishes the book by itself, as long as the time changed.
+   * Told that a finished book isn't finished, the server starts it over. Without the flag it takes the time and un-finishes the book by
+   * itself, as long as the time changed.
    */
   val isFinished: Boolean? = null,
 )
@@ -182,8 +176,7 @@ internal data class DeviceInfo(
   val deviceId: String,
 )
 
-@Serializable
-internal data class PlaybackSessionResponse(val id: String)
+@Serializable internal data class PlaybackSessionResponse(val id: String)
 
 @Serializable
 internal data class SessionSyncRequest(

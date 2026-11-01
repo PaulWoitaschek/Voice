@@ -1,14 +1,13 @@
 package voice.core.documentfile
 
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 
 class NameWithoutExtensionTest {
 
-  @get:Rule
-  val testFolder = TemporaryFolder()
+  @get:Rule val testFolder = TemporaryFolder()
 
   @Test
   fun keepsDotsForDirectoryNames() {

@@ -5,6 +5,11 @@ import android.os.SystemClock
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.io.IOException
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
@@ -18,9 +23,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
-import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.AccountStore
-import voice.core.audiobookshelf.account.Preferences
 import voice.core.audiobookshelf.account.PreferencesStore
 import voice.core.audiobookshelf.api.DeviceInfo
 import voice.core.audiobookshelf.api.SessionSyncRequest
@@ -36,19 +39,14 @@ import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
-import java.io.IOException
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
-import kotlin.uuid.Uuid
 
 private val REPORT_INTERVAL = 30.seconds
 private val CLOSE_AFTER_PAUSE = 10.minutes
 
 /**
- * Tells the server what is played, the way its own apps do: a listening session per stretch of listening, synced
- * while playing. That keeps the progress current on the other devices and fills the listening stats of the
- * server. Without a connection the progress is sent later by the [ProgressSync].
+ * Tells the server what is played, the way its own apps do: a listening session per stretch of listening, synced while playing. That keeps
+ * the progress current on the other devices and fills the listening stats of the server. Without a connection the progress is sent later by
+ * the [ProgressSync].
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -118,14 +116,16 @@ internal class ListeningSessionReporter(
     val book = playerController.livePlaybackState(bookId)?.let(stored::overlay) ?: stored
     val itemId = bookId.itemId ?: return@withLock
     val api = http.authenticatedApi(account.serverUrl)
-    val request = SessionSyncRequest(
-      currentTime = book.position / 1000.0,
-      timeListened = listenedMs / 1000.0,
-      duration = book.duration / 1000.0,
-    )
+    val request =
+      SessionSyncRequest(
+        currentTime = book.position / 1000.0,
+        timeListened = listenedMs / 1000.0,
+        duration = book.duration / 1000.0,
+      )
     try {
-      val sessionId = session?.takeIf { it.bookId == bookId }?.id
-        ?: api.startSession(itemId, startSessionRequest()).id.also { session = Session(it, bookId) }
+      val sessionId =
+        session?.takeIf { it.bookId == bookId }?.id
+          ?: api.startSession(itemId, startSessionRequest()).id.also { session = Session(it, bookId) }
       val response = api.syncSession(sessionId, request)
       if (response.isSuccessful) {
         progressSync.markSent(book)
@@ -134,14 +134,12 @@ internal class ListeningSessionReporter(
       // the server forgets sessions when it restarts
       if (response.code() == 404) session = null
       Logger.w("Could not sync the listening session: ${response.code()}")
-    } catch (_: IOException) {
-    } catch (e: HttpException) {
+    } catch (_: IOException) {} catch (e: HttpException) {
       Logger.w(e, "Could not start a listening session: HTTP ${e.code()}")
     } catch (e: SerializationException) {
       Logger.w(e, "Could not start a listening session")
     }
-    @Suppress("RETURN_VALUE_NOT_USED")
-    progressSync.push(account, bookId)
+    @Suppress("RETURN_VALUE_NOT_USED") progressSync.push(account, bookId)
   }
 
   // the last report already sent the position, and by now another device may have moved on
@@ -150,22 +148,21 @@ internal class ListeningSessionReporter(
     session = null
     val account = accountStore.data.first() ?: return@withLock
     try {
-      @Suppress("RETURN_VALUE_NOT_USED")
-      http.authenticatedApi(account.serverUrl).closeSession(closing.id)
-    } catch (_: IOException) {
-    }
+      @Suppress("RETURN_VALUE_NOT_USED") http.authenticatedApi(account.serverUrl).closeSession(closing.id)
+    } catch (_: IOException) {}
   }
 
   private suspend fun startSessionRequest(): StartSessionRequest {
     return StartSessionRequest(
-      deviceInfo = DeviceInfo(
-        clientName = "Voice",
-        clientVersion = appInfoProvider.versionName,
-        manufacturer = Build.MANUFACTURER,
-        model = Build.MODEL,
-        sdkVersion = Build.VERSION.SDK_INT,
-        deviceId = deviceId(),
-      ),
+      deviceInfo =
+        DeviceInfo(
+          clientName = "Voice",
+          clientVersion = appInfoProvider.versionName,
+          manufacturer = Build.MANUFACTURER,
+          model = Build.MODEL,
+          sdkVersion = Build.VERSION.SDK_INT,
+          deviceId = deviceId(),
+        ),
       mediaPlayer = "Voice",
       forceDirectPlay = true,
       forceTranscode = false,
@@ -176,18 +173,21 @@ internal class ListeningSessionReporter(
   private suspend fun deviceId(): String {
     val stored = preferencesStore.data.first().deviceId
     if (stored != null) return stored
-    return preferencesStore.updateData { preferences ->
-      if (preferences.deviceId != null) preferences else preferences.copy(deviceId = Uuid.random().toString())
-    }.deviceId!!
+    return preferencesStore
+      .updateData { preferences ->
+        if (preferences.deviceId != null) preferences else preferences.copy(deviceId = Uuid.random().toString())
+      }
+      .deviceId!!
   }
 }
 
-private val SUPPORTED_MIME_TYPES = listOf(
-  "audio/flac",
-  "audio/mpeg",
-  "audio/mp4",
-  "audio/ogg",
-  "audio/aac",
-  "audio/webm",
-  "audio/x-matroska",
-)
+private val SUPPORTED_MIME_TYPES =
+  listOf(
+    "audio/flac",
+    "audio/mpeg",
+    "audio/mp4",
+    "audio/ogg",
+    "audio/aac",
+    "audio/webm",
+    "audio/x-matroska",
+  )

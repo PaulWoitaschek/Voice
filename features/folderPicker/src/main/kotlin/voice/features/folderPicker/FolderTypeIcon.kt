@@ -6,8 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import voice.core.data.folders.FolderType
-import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
+import voice.core.ui.icons.VoiceIcons
 
 // decorative, the label next to it tells the type
 @Composable
@@ -22,20 +22,22 @@ internal fun FolderTypeIcon(
   )
 }
 
-internal fun FolderType.icon(): ImageVector = when (this) {
-  FolderType.SingleFile -> VoiceIcons.AudioFile
-  FolderType.SingleFolder -> VoiceIcons.Folder
-  FolderType.Root -> VoiceIcons.LibraryBooks
-  FolderType.Author -> VoiceIcons.Person
-}
+internal fun FolderType.icon(): ImageVector =
+  when (this) {
+    FolderType.SingleFile -> VoiceIcons.AudioFile
+    FolderType.SingleFolder -> VoiceIcons.Folder
+    FolderType.Root -> VoiceIcons.LibraryBooks
+    FolderType.Author -> VoiceIcons.Person
+  }
 
 @Composable
 internal fun FolderType.label(): String {
-  val res = when (this) {
-    FolderType.SingleFile -> StringsR.string.folder_mode_file_label
-    FolderType.SingleFolder -> StringsR.string.folder_mode_single_label
-    FolderType.Root -> StringsR.string.folder_mode_root_label
-    FolderType.Author -> StringsR.string.folder_mode_author_label
-  }
+  val res =
+    when (this) {
+      FolderType.SingleFile -> StringsR.string.folder_mode_file_label
+      FolderType.SingleFolder -> StringsR.string.folder_mode_single_label
+      FolderType.Root -> StringsR.string.folder_mode_root_label
+      FolderType.Author -> StringsR.string.folder_mode_author_label
+    }
   return stringResource(res)
 }

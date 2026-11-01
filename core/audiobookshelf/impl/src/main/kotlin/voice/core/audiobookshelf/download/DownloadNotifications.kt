@@ -19,12 +19,12 @@ import androidx.core.content.ContextCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import voice.core.data.Book
-import voice.core.data.BookId
-import voice.core.playback.notification.MainActivityIntentProvider
 import java.io.File
 import java.text.NumberFormat
 import kotlin.math.roundToInt
+import voice.core.data.Book
+import voice.core.data.BookId
+import voice.core.playback.notification.MainActivityIntentProvider
 import voice.core.strings.R as StringsR
 
 internal const val DOWNLOAD_NOTIFICATION_ID = 4242
@@ -40,8 +40,8 @@ internal data class ActiveDownload(
 )
 
 /**
- * The notifications of the downloads: one with the progress while books download, and one per book once it's
- * ready or failed, for listeners who left Voice in the meantime.
+ * The notifications of the downloads: one with the progress while books download, and one per book once it's ready or failed, for listeners
+ * who left Voice in the meantime.
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -63,14 +63,15 @@ internal class DownloadNotifications(
   }
 
   fun progress(downloads: List<ActiveDownload>): Notification {
-    val builder = NotificationCompat.Builder(context, DOWNLOAD_CHANNEL_ID)
-      .setSmallIcon(android.R.drawable.stat_sys_download)
-      .setCategory(NotificationCompat.CATEGORY_PROGRESS)
-      .setOngoing(true)
-      .setOnlyAlertOnce(true)
-      .setShowWhen(false)
-      .setSilent(true)
-      .setContentIntent(openLibrary())
+    val builder =
+      NotificationCompat.Builder(context, DOWNLOAD_CHANNEL_ID)
+        .setSmallIcon(android.R.drawable.stat_sys_download)
+        .setCategory(NotificationCompat.CATEGORY_PROGRESS)
+        .setOngoing(true)
+        .setOnlyAlertOnce(true)
+        .setShowWhen(false)
+        .setSilent(true)
+        .setContentIntent(openLibrary())
     if (downloads.isEmpty()) {
       return builder
         .setContentTitle(context.getString(StringsR.string.audiobookshelf_download_notification_title))
@@ -79,26 +80,24 @@ internal class DownloadNotifications(
     }
     val single = downloads.singleOrNull()
     if (single != null) {
-      builder
-        .setContentTitle(single.book.name)
-        .setLargeIcon(single.book.cover?.let(::cover))
+      builder.setContentTitle(single.book.name).setLargeIcon(single.book.cover?.let(::cover))
     } else {
-      builder
-        .setContentTitle(
-          context.resources.getQuantityString(
-            StringsR.plurals.audiobookshelf_download_notification_books,
-            downloads.size,
-            downloads.size,
-          ),
-        )
+      builder.setContentTitle(
+        context.resources.getQuantityString(
+          StringsR.plurals.audiobookshelf_download_notification_books,
+          downloads.size,
+          downloads.size,
+        ),
+      )
     }
     val waitingFor = downloads.firstNotNullOfOrNull { it.state.waitingFor }
     val progress = downloads.map { it.state.progress }.average().toFloat()
-    val text = when {
-      waitingFor != null -> waitingText(waitingFor)
-      single != null -> progressText(single.state)
-      else -> downloads.joinToString { it.book.name }
-    }
+    val text =
+      when {
+        waitingFor != null -> waitingText(waitingFor)
+        single != null -> progressText(single.state)
+        else -> downloads.joinToString { it.book.name }
+      }
     return builder
       .setContentText(text)
       .setProgress(100, (progress * 100).roundToInt(), false)
@@ -122,12 +121,13 @@ internal class DownloadNotifications(
     }
   }
 
-  private fun waitingText(waitingFor: WaitingFor): String = context.getString(
-    when (waitingFor) {
-      WaitingFor.Wifi -> StringsR.string.book_download_waiting_for_wifi
-      WaitingFor.Connection -> StringsR.string.book_download_waiting_for_connection
-    },
-  )
+  private fun waitingText(waitingFor: WaitingFor): String =
+    context.getString(
+      when (waitingFor) {
+        WaitingFor.Wifi -> StringsR.string.book_download_waiting_for_wifi
+        WaitingFor.Connection -> StringsR.string.book_download_waiting_for_connection
+      },
+    )
 
   fun downloaded(book: Book) {
     notifyResult(
@@ -171,9 +171,7 @@ internal class DownloadNotifications(
   }
 
   fun cancelResults() {
-    notificationManager.activeNotifications
-      .filter { it.id == RESULT_NOTIFICATION_ID }
-      .forEach { notificationManager.cancel(it.tag, it.id) }
+    notificationManager.activeNotifications.filter { it.id == RESULT_NOTIFICATION_ID }.forEach { notificationManager.cancel(it.tag, it.id) }
   }
 
   @SuppressLint("MissingPermission")
@@ -181,33 +179,36 @@ internal class DownloadNotifications(
     bookId: BookId,
     notification: Notification,
   ) {
-    val allowed = Build.VERSION.SDK_INT < 33 ||
-      ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+    val allowed =
+      Build.VERSION.SDK_INT < 33 ||
+        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
     if (!allowed) return
     createChannel()
     notificationManager.notify(bookId.value, RESULT_NOTIFICATION_ID, notification)
   }
 
-  private fun openLibrary(): PendingIntent = PendingIntent.getActivity(
-    context,
-    LIBRARY_REQUEST_CODE,
-    mainActivityIntentProvider.libraryIntent(),
-    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-  )
+  private fun openLibrary(): PendingIntent =
+    PendingIntent.getActivity(
+      context,
+      LIBRARY_REQUEST_CODE,
+      mainActivityIntentProvider.libraryIntent(),
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+    )
 
   private fun cover(file: File): Bitmap? {
     if (!file.exists()) return null
     // the server can change a cover, which rewrites its file
     val key = "${file.path}:${file.lastModified()}"
-    covers.get(key)?.let { return it }
+    covers.get(key)?.let {
+      return it
+    }
     val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
     BitmapFactory.decodeFile(file.path, bounds)
     var sampleSize = 1
     while (bounds.outWidth / (sampleSize * 2) >= COVER_SIZE_PX && bounds.outHeight / (sampleSize * 2) >= COVER_SIZE_PX) {
       sampleSize *= 2
     }
-    val bitmap = BitmapFactory.decodeFile(file.path, BitmapFactory.Options().apply { inSampleSize = sampleSize })
-      ?: return null
+    val bitmap = BitmapFactory.decodeFile(file.path, BitmapFactory.Options().apply { inSampleSize = sampleSize }) ?: return null
     covers.put(key, bitmap)
     return bitmap
   }

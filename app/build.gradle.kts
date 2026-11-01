@@ -13,13 +13,13 @@ plugins {
 }
 
 val playGoogleServicesJson = layout.projectDirectory.file("src/play/google-services.json")
+
 if (playGoogleServicesJson.asFile.canRead()) {
   pluginManager.apply(libs.plugins.googleServices.get().pluginId)
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }
 
 android {
-
   namespace = "voice.app"
 
   dependenciesInfo {
@@ -57,19 +57,21 @@ android {
   val signingDir = mainCheckoutDir(layout.projectDirectory.dir("..").asFile).resolve("signing")
   val signingPropertiesFile = signingDir.resolve("signing.properties")
   val signingKeystoreFile = signingDir.resolve("signing.keystore")
-  val appSigningConfig = if (signingPropertiesFile.isFile) {
-    val signingProperties = Properties().apply {
-      signingPropertiesFile.inputStream().use(::load)
+  val appSigningConfig =
+    if (signingPropertiesFile.isFile) {
+      val signingProperties =
+        Properties().apply {
+          signingPropertiesFile.inputStream().use(::load)
+        }
+      signingConfigs.create("signing") {
+        storeFile = signingKeystoreFile
+        storePassword = signingProperties.getProperty("STORE_PASSWORD")
+        keyAlias = signingProperties.getProperty("KEY_ALIAS")
+        keyPassword = signingProperties.getProperty("KEY_PASSWORD")
+      }
+    } else {
+      null
     }
-    signingConfigs.create("signing") {
-      storeFile = signingKeystoreFile
-      storePassword = signingProperties.getProperty("STORE_PASSWORD")
-      keyAlias = signingProperties.getProperty("KEY_ALIAS")
-      keyPassword = signingProperties.getProperty("KEY_PASSWORD")
-    }
-  } else {
-    null
-  }
 
   buildTypes {
     getByName("release") {
@@ -111,30 +113,31 @@ android {
   }
 }
 
-val validatePlayGoogleServices = tasks.register("validatePlayGoogleServices") {
-  val playGoogleServicesJsonPath = playGoogleServicesJson.asFile.absolutePath
+val validatePlayGoogleServices =
+  tasks.register("validatePlayGoogleServices") {
+    val playGoogleServicesJsonPath = playGoogleServicesJson.asFile.absolutePath
 
-  doLast {
-    check(File(playGoogleServicesJsonPath).canRead()) {
-      "app/src/play/google-services.json is required for Play builds. " +
-        "Use the free variant for F-Droid/GitHub builds."
+    doLast {
+      check(File(playGoogleServicesJsonPath).canRead()) {
+        "app/src/play/google-services.json is required for Play builds. " + "Use the free variant for F-Droid/GitHub builds."
+      }
     }
   }
-}
 
-tasks.matching { it.name in setOf("prePlayDebugBuild", "prePlayReleaseBuild") }.configureEach {
-  dependsOn(validatePlayGoogleServices)
-}
+tasks
+  .matching { it.name in setOf("prePlayDebugBuild", "prePlayReleaseBuild") }
+  .configureEach {
+    dependsOn(validatePlayGoogleServices)
+  }
 
-tasks.matching {
-  val isPlayTask = it.name.contains("Play")
-  !isPlayTask && (
-    it.name.startsWith("process") && it.name.endsWith("GoogleServices") ||
-      it.name.startsWith("injectCrashlytics")
-    )
-}.configureEach {
-  enabled = false
-}
+tasks
+  .matching {
+    val isPlayTask = it.name.contains("Play")
+    !isPlayTask && (it.name.startsWith("process") && it.name.endsWith("GoogleServices") || it.name.startsWith("injectCrashlytics"))
+  }
+  .configureEach {
+    enabled = false
+  }
 
 dependencies {
   implementation(projects.core.strings)

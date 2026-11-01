@@ -1,15 +1,15 @@
 package voice.features.bookOverview.survey
 
 import dev.zacsweers.metro.Inject
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import voice.core.analytics.api.Analytics
-import voice.core.common.AppInfoProvider
 import java.net.URLEncoder
 import java.time.Clock
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.time.toJavaInstant
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import voice.core.analytics.api.Analytics
+import voice.core.common.AppInfoProvider
 
 @Inject
 class Survey(
@@ -27,8 +27,7 @@ class Survey(
       if (today() in handled.values) {
         null
       } else {
-        listOfNotNull(remoteUrl.value.ifEmpty { null }, localSurvey.url())
-          .firstOrNull { it !in handled }
+        listOfNotNull(remoteUrl.value.ifEmpty { null }, localSurvey.url()).firstOrNull { it !in handled }
       }
     }
   }
@@ -36,13 +35,15 @@ class Survey(
   suspend fun open(url: String): String {
     handled(url, action = "open")
     // named like the hidden fields of the Tally forms, which fill them from the query
-    val params = listOf(
-      "app_version" to appInfoProvider.versionName,
-      "source" to (appInfoProvider.installer ?: "unknown"),
-      "days_installed" to ChronoUnit.DAYS.between(appInfoProvider.installTime.toJavaInstant(), clock.instant()).toString(),
-    ).joinToString(separator = "&") { (key, value) ->
-      "$key=${URLEncoder.encode(value, "UTF-8")}"
-    }
+    val params =
+      listOf(
+          "app_version" to appInfoProvider.versionName,
+          "source" to (appInfoProvider.installer ?: "unknown"),
+          "days_installed" to ChronoUnit.DAYS.between(appInfoProvider.installTime.toJavaInstant(), clock.instant()).toString(),
+        )
+        .joinToString(separator = "&") { (key, value) ->
+          "$key=${URLEncoder.encode(value, "UTF-8")}"
+        }
     val separator = if ('?' in url) '&' else '?'
     return "$url$separator$params"
   }

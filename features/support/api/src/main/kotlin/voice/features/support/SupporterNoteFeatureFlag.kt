@@ -13,7 +13,9 @@ import voice.core.featureflag.FeatureFlagFactory
 class SupporterNoteFeatureFlag(flag: FeatureFlag<String>) : FeatureFlag<String> by flag {
 
   @Inject
-  constructor(factory: FeatureFlagFactory) : this(
+  constructor(
+    factory: FeatureFlagFactory,
+  ) : this(
     factory.string(
       key = "supporter_note",
       description = "A note on the support sheet, e.g. what the support paid for this month. Hidden when empty.",

@@ -21,6 +21,6 @@ class MainActivityIntentProviderImpl(private val context: Context) : MainActivit
 
   override fun currentBookIntent(): Intent = MainActivity.goToBookIntent(context)
 
-  override fun libraryIntent(): Intent = Intent(context, MainActivity::class.java)
-    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+  override fun libraryIntent(): Intent =
+    Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
 }

@@ -75,17 +75,18 @@ internal object NaturalComparator : Comparator<String> {
       } else if (likeFileNames) {
         // for super natural comparison (IDEA-80435)
         if (ch1 != ch2) {
-          val diff: Int = when {
-            ch1 == '-' && ch2 != '_' -> {
-              compareChars('_', ch2)
+          val diff: Int =
+            when {
+              ch1 == '-' && ch2 != '_' -> {
+                compareChars('_', ch2)
+              }
+              ch2 == '-' && ch1 != '_' -> {
+                compareChars(ch1, '_')
+              }
+              else -> {
+                compareChars(ch1, ch2)
+              }
             }
-            ch2 == '-' && ch1 != '_' -> {
-              compareChars(ch1, '_')
-            }
-            else -> {
-              compareChars(ch1, ch2)
-            }
-          }
           if (diff != 0) return diff
         }
       } else {

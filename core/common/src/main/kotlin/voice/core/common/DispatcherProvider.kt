@@ -1,9 +1,9 @@
 package voice.core.common
 
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlin.coroutines.CoroutineContext
 
 data class DispatcherProvider(
   val main: CoroutineContext = Dispatchers.Main,

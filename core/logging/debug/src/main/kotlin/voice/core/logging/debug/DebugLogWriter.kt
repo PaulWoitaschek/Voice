@@ -1,27 +1,22 @@
 package voice.core.logging.debug
 
 import android.util.Log
-import voice.core.logging.api.LogWriter
-import voice.core.logging.api.Logger
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.regex.Pattern
+import voice.core.logging.api.LogWriter
+import voice.core.logging.api.Logger
 
 internal class DebugLogWriter : LogWriter {
 
-  /**
-   * This logic was borrowed from Timber: https://github.com/JakeWharton/timber
-   */
+  /** This logic was borrowed from Timber: https://github.com/JakeWharton/timber */
   override fun log(
     severity: Logger.Severity,
     message: String?,
     throwable: Throwable?,
   ) {
-    val text = listOfNotNull(message?.ifEmpty { null }, throwable?.let(::getStackTraceString))
-      .joinToString(separator = "\n")
-    val tag = Throwable().stackTrace
-      .first { it.className !in fqcnIgnore }
-      .let(::createStackElementTag)
+    val text = listOfNotNull(message?.ifEmpty { null }, throwable?.let(::getStackTraceString)).joinToString(separator = "\n")
+    val tag = Throwable().stackTrace.first { it.className !in fqcnIgnore }.let(::createStackElementTag)
     val priority = severity.priority
     if (text.length < MAX_LOG_LENGTH) {
       if (priority == Log.ASSERT) {
@@ -53,10 +48,11 @@ internal class DebugLogWriter : LogWriter {
   }
 }
 
-private val fqcnIgnore = listOf(
-  DebugLogWriter::class.java.name,
-  Logger::class.java.name,
-)
+private val fqcnIgnore =
+  listOf(
+    DebugLogWriter::class.java.name,
+    Logger::class.java.name,
+  )
 
 private fun getStackTraceString(t: Throwable): String {
   // Don't replace this with Log.getStackTraceString() - it hides
@@ -81,10 +77,11 @@ private fun createStackElementTag(element: StackTraceElement): String {
 }
 
 private val Logger.Severity.priority: Int
-  get() = when (this) {
-    Logger.Severity.Verbose -> Log.VERBOSE
-    Logger.Severity.Debug -> Log.DEBUG
-    Logger.Severity.Info -> Log.INFO
-    Logger.Severity.Warn -> Log.WARN
-    Logger.Severity.Error -> Log.ERROR
-  }
+  get() =
+    when (this) {
+      Logger.Severity.Verbose -> Log.VERBOSE
+      Logger.Severity.Debug -> Log.DEBUG
+      Logger.Severity.Info -> Log.INFO
+      Logger.Severity.Warn -> Log.WARN
+      Logger.Severity.Error -> Log.ERROR
+    }

@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.graphics.shapes.RoundedPolygon
 import voice.core.data.supporter.SupporterBadge
+import voice.core.strings.R as StringsR
 import voice.core.ui.CheckBadge
 import voice.core.ui.ShapedIcon
 import voice.core.ui.SupporterBadgeIcon
@@ -59,7 +60,6 @@ import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.label
 import voice.features.support.SupportViewState.Action
 import voice.features.support.SupportViewState.Message
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun PlayContent(
@@ -100,9 +100,10 @@ internal fun PlayContent(
         onClick = { activity?.let(listener::confirm) },
       )
       Text(
-        text = stringResource(
-          if (content.action is Action.Tip) StringsR.string.support_fine_print_tip else StringsR.string.support_fine_print,
-        ),
+        text =
+          stringResource(
+            if (content.action is Action.Tip) StringsR.string.support_fine_print_tip else StringsR.string.support_fine_print,
+          ),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         textAlign = TextAlign.Center,
@@ -127,40 +128,39 @@ private fun FrequencyToggle(
   onFrequencySelect: (SupportFrequency) -> Unit,
 ) {
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .selectableGroup(),
+    modifier = Modifier.fillMaxWidth().selectableGroup(),
     horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
   ) {
     frequencies.forEachIndexed { index, entry ->
       ToggleButton(
         checked = frequency == entry,
         onCheckedChange = { onFrequencySelect(entry) },
-        modifier = Modifier
-          .weight(1F)
-          .semantics { role = Role.RadioButton },
-        shapes = when (index) {
-          0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-          frequencies.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
-          else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-        },
-        colors = ToggleButtonDefaults.colors(
-          containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-          contentColor = MaterialTheme.colorScheme.onSurface,
-          checkedContainerColor = MaterialTheme.colorScheme.secondary,
-          checkedContentColor = MaterialTheme.colorScheme.onSecondary,
-        ),
+        modifier = Modifier.weight(1F).semantics { role = Role.RadioButton },
+        shapes =
+          when (index) {
+            0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+            frequencies.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+            else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+          },
+        colors =
+          ToggleButtonDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            checkedContainerColor = MaterialTheme.colorScheme.secondary,
+            checkedContentColor = MaterialTheme.colorScheme.onSecondary,
+          ),
         contentPadding = PaddingValues(horizontal = 8.dp),
       ) {
         val labelStyle = MaterialTheme.typography.labelLarge
         Text(
-          text = stringResource(
-            when (entry) {
-              SupportFrequency.Monthly -> StringsR.string.support_period_monthly
-              SupportFrequency.Yearly -> StringsR.string.support_period_yearly
-              SupportFrequency.Once -> StringsR.string.support_period_once
-            },
-          ),
+          text =
+            stringResource(
+              when (entry) {
+                SupportFrequency.Monthly -> StringsR.string.support_period_monthly
+                SupportFrequency.Yearly -> StringsR.string.support_period_yearly
+                SupportFrequency.Once -> StringsR.string.support_period_once
+              },
+            ),
           style = labelStyle,
           maxLines = 1,
           softWrap = false,
@@ -180,9 +180,7 @@ private fun Tiers(
   onTierSelect: (SupporterTier) -> Unit,
 ) {
   Column(
-    modifier = Modifier
-      .fillMaxWidth()
-      .selectableGroup(),
+    modifier = Modifier.fillMaxWidth().selectableGroup(),
     verticalArrangement = Arrangement.spacedBy(8.dp),
   ) {
     tiers.forEach { tier ->
@@ -204,23 +202,23 @@ private fun TierCard(
   onClick: () -> Unit,
 ) {
   val colors = MaterialTheme.colorScheme
-  val containerColor by animateColorAsState(
-    targetValue = if (selected) colors.primaryContainer else colors.surfaceContainerHigh,
-    label = "tierContainer",
-  )
-  val contentColor by animateColorAsState(
-    targetValue = if (selected) colors.onPrimaryContainer else colors.onSurface,
-    label = "tierContent",
-  )
+  val containerColor by
+    animateColorAsState(
+      targetValue = if (selected) colors.primaryContainer else colors.surfaceContainerHigh,
+      label = "tierContainer",
+    )
+  val contentColor by
+    animateColorAsState(
+      targetValue = if (selected) colors.onPrimaryContainer else colors.onSurface,
+      label = "tierContent",
+    )
   // with large fonts, a price beside the text leaves the title too little room
   val stacked = LocalDensity.current.fontScale >= 1.5F
   val priceDescription = pricePer(tier.formattedPrice, frequency)
   Surface(
     selected = selected,
     onClick = onClick,
-    modifier = Modifier
-      .fillMaxWidth()
-      .semantics { role = Role.RadioButton },
+    modifier = Modifier.fillMaxWidth().semantics { role = Role.RadioButton },
     shape = RoundedCornerShape(24.dp),
     color = containerColor,
     contentColor = contentColor,
@@ -242,13 +240,14 @@ private fun TierCard(
           style = MaterialTheme.typography.titleMedium,
         )
         Text(
-          text = stringResource(
-            when (tier.tier) {
-              SupporterTier.Tea -> StringsR.string.support_tier_tea_summary
-              SupporterTier.HoneyTea -> StringsR.string.support_tier_honey_tea_summary
-              SupporterTier.GoldenMic -> StringsR.string.support_tier_golden_mic_summary
-            },
-          ),
+          text =
+            stringResource(
+              when (tier.tier) {
+                SupporterTier.Tea -> StringsR.string.support_tier_tea_summary
+                SupporterTier.HoneyTea -> StringsR.string.support_tier_honey_tea_summary
+                SupporterTier.GoldenMic -> StringsR.string.support_tier_golden_mic_summary
+              },
+            ),
           style = MaterialTheme.typography.bodyMedium,
         )
         if (stacked) {
@@ -260,10 +259,8 @@ private fun TierCard(
         }
         if (tier.active) {
           Text(
-            modifier = Modifier
-              .padding(top = 4.dp)
-              .background(colors.primary, RoundedCornerShape(8.dp))
-              .padding(horizontal = 8.dp, vertical = 2.dp),
+            modifier =
+              Modifier.padding(top = 4.dp).background(colors.primary, RoundedCornerShape(8.dp)).padding(horizontal = 8.dp, vertical = 2.dp),
             text = stringResource(StringsR.string.support_tier_current),
             style = MaterialTheme.typography.labelMedium,
             color = colors.onPrimary,
@@ -311,9 +308,7 @@ private fun TierIcon(
     CheckBadge(
       visible = selected,
       outlineColor = ringColor,
-      modifier = Modifier
-        .align(Alignment.BottomEnd)
-        .offset(x = 6.dp, y = 6.dp),
+      modifier = Modifier.align(Alignment.BottomEnd).offset(x = 6.dp, y = 6.dp),
     )
   }
 }
@@ -325,21 +320,25 @@ private fun ActionButton(
   onClick: () -> Unit,
 ) {
   val size = ButtonDefaults.MediumContainerHeight
-  val text = when (action) {
-    is Action.Subscribe -> stringResource(
-      StringsR.string.support_action_subscribe,
-      pricePer(action.formattedPrice, frequency),
-    )
-    is Action.Switch -> stringResource(
-      StringsR.string.support_action_switch,
-      pricePer(action.formattedPrice, frequency),
-    )
-    is Action.Tip -> stringResource(
-      StringsR.string.support_action_subscribe,
-      pricePer(action.formattedPrice, frequency),
-    )
-    Action.Manage -> stringResource(StringsR.string.support_action_manage_subscription)
-  }
+  val text =
+    when (action) {
+      is Action.Subscribe ->
+        stringResource(
+          StringsR.string.support_action_subscribe,
+          pricePer(action.formattedPrice, frequency),
+        )
+      is Action.Switch ->
+        stringResource(
+          StringsR.string.support_action_switch,
+          pricePer(action.formattedPrice, frequency),
+        )
+      is Action.Tip ->
+        stringResource(
+          StringsR.string.support_action_subscribe,
+          pricePer(action.formattedPrice, frequency),
+        )
+      Action.Manage -> stringResource(StringsR.string.support_action_manage_subscription)
+    }
   val content: @Composable () -> Unit = {
     Text(
       text = text,
@@ -347,23 +346,25 @@ private fun ActionButton(
       textAlign = TextAlign.Center,
     )
   }
-  val modifier = Modifier
-    .fillMaxWidth()
-    .heightIn(size)
+  val modifier = Modifier.fillMaxWidth().heightIn(size)
   if (action == Action.Manage) {
     FilledTonalButton(
       modifier = modifier,
       onClick = onClick,
       contentPadding = ButtonDefaults.contentPaddingFor(size),
       shapes = ButtonDefaults.shapesFor(size),
-    ) { content() }
+    ) {
+      content()
+    }
   } else {
     Button(
       modifier = modifier,
       onClick = onClick,
       contentPadding = ButtonDefaults.contentPaddingFor(size),
       shapes = ButtonDefaults.shapesFor(size),
-    ) { content() }
+    ) {
+      content()
+    }
   }
 }
 
@@ -373,14 +374,16 @@ private fun MessageCard(message: Message) {
   Surface(
     modifier = Modifier.fillMaxWidth(),
     shape = RoundedCornerShape(16.dp),
-    color = when (message) {
-      Message.Pending -> colors.tertiaryContainer
-      Message.Failed -> colors.errorContainer
-    },
-    contentColor = when (message) {
-      Message.Pending -> colors.onTertiaryContainer
-      Message.Failed -> colors.onErrorContainer
-    },
+    color =
+      when (message) {
+        Message.Pending -> colors.tertiaryContainer
+        Message.Failed -> colors.errorContainer
+      },
+    contentColor =
+      when (message) {
+        Message.Pending -> colors.onTertiaryContainer
+        Message.Failed -> colors.onErrorContainer
+      },
   ) {
     Row(
       modifier = Modifier.padding(16.dp),
@@ -388,19 +391,21 @@ private fun MessageCard(message: Message) {
       horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
       Icon(
-        imageVector = when (message) {
-          Message.Pending -> VoiceIcons.HourglassEmpty
-          Message.Failed -> VoiceIcons.Close
-        },
+        imageVector =
+          when (message) {
+            Message.Pending -> VoiceIcons.HourglassEmpty
+            Message.Failed -> VoiceIcons.Close
+          },
         contentDescription = null,
       )
       Text(
-        text = stringResource(
-          when (message) {
-            Message.Pending -> StringsR.string.support_message_pending
-            Message.Failed -> StringsR.string.support_message_failed
-          },
-        ),
+        text =
+          stringResource(
+            when (message) {
+              Message.Pending -> StringsR.string.support_message_pending
+              Message.Failed -> StringsR.string.support_message_failed
+            },
+          ),
         style = MaterialTheme.typography.bodyMedium,
       )
     }
@@ -424,13 +429,12 @@ private fun BadgeGrowth(badge: SupporterBadge?) {
     ) {
       SupporterBadge.growth.forEach { growth ->
         val earned = badge != null && badge.ordinal >= growth.ordinal
-        val state = stringResource(
-          if (earned) StringsR.string.support_badge_earned else StringsR.string.support_badge_not_earned,
-        )
+        val state =
+          stringResource(
+            if (earned) StringsR.string.support_badge_earned else StringsR.string.support_badge_not_earned,
+          )
         Column(
-          modifier = Modifier
-            .weight(1F)
-            .semantics(mergeDescendants = true) { stateDescription = state },
+          modifier = Modifier.weight(1F).semantics(mergeDescendants = true) { stateDescription = state },
           horizontalAlignment = Alignment.CenterHorizontally,
           verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
@@ -519,23 +523,26 @@ private class TierStyle(
 private fun SupporterTier.style(): TierStyle {
   val colors = MaterialTheme.colorScheme
   return when (this) {
-    SupporterTier.Tea -> TierStyle(
-      shape = MaterialShapes.Circle,
-      icon = VoiceIcons.EmojiFoodBeverage,
-      container = colors.tertiaryContainer,
-      content = colors.onTertiaryContainer,
-    )
-    SupporterTier.HoneyTea -> TierStyle(
-      shape = MaterialShapes.Cookie6Sided,
-      icon = VoiceIcons.Hive,
-      container = colors.primary,
-      content = colors.onPrimary,
-    )
-    SupporterTier.GoldenMic -> TierStyle(
-      shape = MaterialShapes.Sunny,
-      icon = VoiceIcons.Mic,
-      container = Color(0xFFF2C14E),
-      content = Color(0xFF3D2E00),
-    )
+    SupporterTier.Tea ->
+      TierStyle(
+        shape = MaterialShapes.Circle,
+        icon = VoiceIcons.EmojiFoodBeverage,
+        container = colors.tertiaryContainer,
+        content = colors.onTertiaryContainer,
+      )
+    SupporterTier.HoneyTea ->
+      TierStyle(
+        shape = MaterialShapes.Cookie6Sided,
+        icon = VoiceIcons.Hive,
+        container = colors.primary,
+        content = colors.onPrimary,
+      )
+    SupporterTier.GoldenMic ->
+      TierStyle(
+        shape = MaterialShapes.Sunny,
+        icon = VoiceIcons.Mic,
+        container = Color(0xFFF2C14E),
+        content = Color(0xFF3D2E00),
+      )
   }
 }

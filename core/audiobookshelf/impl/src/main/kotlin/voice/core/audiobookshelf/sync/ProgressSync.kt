@@ -3,6 +3,9 @@ package voice.core.audiobookshelf.sync
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.io.IOException
+import java.time.Instant
+import kotlin.math.abs
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -22,14 +25,11 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
-import java.io.IOException
-import java.time.Instant
-import kotlin.math.abs
 
 /**
- * Keeps the position of server books in step with the server. The newest position wins: what was played on this
- * device goes up, what was played on another device comes down. A position that couldn't be sent stays different
- * from the [SyncedProgress] and goes up with the next sync.
+ * Keeps the position of server books in step with the server. The newest position wins: what was played on this device goes up, what was
+ * played on another device comes down. A position that couldn't be sent stays different from the [SyncedProgress] and goes up with the next
+ * sync.
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -48,10 +48,9 @@ internal class ProgressSync(
     account: Account,
     serverProgress: List<AbsMediaProgress>,
   ) {
-    val progressByItem = serverProgress
-      .filter { it.episodeId == null && it.libraryItemId != null }
-      .associateBy { it.libraryItemId!! }
-    bookRepository.all()
+    val progressByItem = serverProgress.filter { it.episodeId == null && it.libraryItemId != null }.associateBy { it.libraryItemId!! }
+    bookRepository
+      .all()
       .filter { it.id.isRemote }
       .forEach { book ->
         val itemId = book.id.itemId ?: return@forEach
@@ -59,9 +58,7 @@ internal class ProgressSync(
       }
   }
 
-  /**
-   * Sends the position of [bookId] if it moved since it was last synced. Returns whether the server is up to date.
-   */
+  /** Sends the position of [bookId] if it moved since it was last synced. Returns whether the server is up to date. */
   suspend fun push(
     account: Account,
     bookId: BookId,
@@ -72,9 +69,7 @@ internal class ProgressSync(
     send(account, book, serverLastUpdate = synced?.serverLastUpdate ?: 0)
   }
 
-  /**
-   * Remembers that the server got the position of [book] in another way, like a listening session.
-   */
+  /** Remembers that the server got the position of [book] in another way, like a listening session. */
   suspend fun markSent(book: Book) = mutex.withLock {
     val previous = syncedProgressStore.data.first()[book.id.value]
     remember(book.id, book.syncedProgress(serverLastUpdate = previous?.serverLastUpdate ?: 0))
@@ -90,10 +85,11 @@ internal class ProgressSync(
     val localChanged = book.movedAwayFrom(synced)
     val serverProgress = server?.let(book::progressOnServer)
     // what Voice sent itself comes back with a newer time, which isn't a change of another device
-    val serverChanged = server != null &&
-      serverProgress != null &&
-      server.lastUpdate > (synced?.serverLastUpdate ?: -1) &&
-      (synced == null || serverProgress.differsFrom(synced))
+    val serverChanged =
+      server != null &&
+        serverProgress != null &&
+        server.lastUpdate > (synced?.serverLastUpdate ?: -1) &&
+        (synced == null || serverProgress.differsFrom(synced))
     if (server != null && synced != null && !serverChanged && server.lastUpdate > synced.serverLastUpdate) {
       remember(bookId, synced.copy(serverLastUpdate = server.lastUpdate))
     }
@@ -102,15 +98,13 @@ internal class ProgressSync(
       serverChanged && !localChanged -> applyServer(book, server)
       serverChanged && localChanged -> {
         if (isPlaying(bookId) || book.content.lastPlayedAt.toEpochMilli() > server.lastUpdate) {
-          @Suppress("RETURN_VALUE_NOT_USED")
-          send(account, book, server.lastUpdate)
+          @Suppress("RETURN_VALUE_NOT_USED") send(account, book, server.lastUpdate)
         } else {
           applyServer(book, server)
         }
       }
       localChanged -> {
-        @Suppress("RETURN_VALUE_NOT_USED")
-        send(account, book, synced?.serverLastUpdate ?: 0)
+        @Suppress("RETURN_VALUE_NOT_USED") send(account, book, synced?.serverLastUpdate ?: 0)
       }
     }
   }
@@ -154,17 +148,19 @@ internal class ProgressSync(
     val itemId = book.id.itemId ?: return true
     val durationSeconds = book.duration / 1000.0
     val finished = book.isFinished
-    val update = ProgressUpdate(
-      currentTime = book.position / 1000.0,
-      duration = durationSeconds,
-      progress = if (finished) 1.0 else (book.position.toDouble() / book.duration).coerceIn(0.0, 1.0),
-      isFinished = when {
-        finished -> true
-        // told that a finished book isn't, the server starts it over, which is right for a book at its start
-        book.position < BOOK_START_MS -> false
-        else -> null
-      },
-    )
+    val update =
+      ProgressUpdate(
+        currentTime = book.position / 1000.0,
+        duration = durationSeconds,
+        progress = if (finished) 1.0 else (book.position.toDouble() / book.duration).coerceIn(0.0, 1.0),
+        isFinished =
+          when {
+            finished -> true
+            // told that a finished book isn't, the server starts it over, which is right for a book at its start
+            book.position < BOOK_START_MS -> false
+            else -> null
+          },
+      )
     return try {
       val response = http.authenticatedApi(account.serverUrl).updateProgress(itemId, update)
       if (response.isSuccessful) {
@@ -180,8 +176,7 @@ internal class ProgressSync(
   }
 
   private suspend fun isPlaying(bookId: BookId): Boolean {
-    return playStateManager.playState == PlayStateManager.PlayState.Playing &&
-      currentBookStore.data.first() == bookId
+    return playStateManager.playState == PlayStateManager.PlayState.Playing && currentBookStore.data.first() == bookId
   }
 
   private suspend fun remember(
@@ -197,29 +192,29 @@ internal class ProgressSync(
   }
 }
 
-private fun Book.syncedProgress(serverLastUpdate: Long) = SyncedProgress(
-  positionMs = position,
-  finished = isFinished,
-  serverLastUpdate = serverLastUpdate,
-)
+private fun Book.syncedProgress(serverLastUpdate: Long) =
+  SyncedProgress(
+    positionMs = position,
+    finished = isFinished,
+    serverLastUpdate = serverLastUpdate,
+  )
 
 private fun Book.progressOnServer(server: AbsMediaProgress): SyncedProgress {
   val serverPosition = (server.currentTime * 1000).toLong().coerceIn(0, duration)
   return SyncedProgress(
     // a book finished elsewhere ends up at its end here, unless it is already in its last seconds
-    positionMs = if (server.isFinished && duration - serverPosition >= FINISHED_REMAINING_MS) {
-      duration
-    } else {
-      serverPosition
-    },
+    positionMs =
+      if (server.isFinished && duration - serverPosition >= FINISHED_REMAINING_MS) {
+        duration
+      } else {
+        serverPosition
+      },
     finished = server.isFinished,
     serverLastUpdate = server.lastUpdate,
   )
 }
 
-/**
- * Small differences come from rounding the position to the seconds the server stores.
- */
+/** Small differences come from rounding the position to the seconds the server stores. */
 private fun Book.movedAwayFrom(progress: SyncedProgress?): Boolean {
   if (progress == null) return position > 0
   return isFinished != progress.finished || abs(position - progress.positionMs) > POSITION_TOLERANCE_MS

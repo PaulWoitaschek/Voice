@@ -3,18 +3,17 @@ package voice.core.scanner.matroska
 import android.content.ContentResolver
 import android.net.Uri
 import android.os.ParcelFileDescriptor
-import org.ebml.io.DataSource
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import kotlin.math.max
+import org.ebml.io.DataSource
 
 internal class SafSeekableDataSource(
   contentResolver: ContentResolver,
   uri: Uri,
-) : DataSource,
-  AutoCloseable {
+) : DataSource, AutoCloseable {
 
   private var fileInputStream: FileInputStream
   private val fileChannel: FileChannel
@@ -24,8 +23,7 @@ internal class SafSeekableDataSource(
 
   init {
     try {
-      parcelFileDescriptor = contentResolver.openFileDescriptor(uri, "r")
-        ?: throw IOException("Cannot open URI as seekable source")
+      parcelFileDescriptor = contentResolver.openFileDescriptor(uri, "r") ?: throw IOException("Cannot open URI as seekable source")
       val fileDescriptor = parcelFileDescriptor.fileDescriptor
       fileInputStream = FileInputStream(fileDescriptor)
       fileChannel = fileInputStream.channel

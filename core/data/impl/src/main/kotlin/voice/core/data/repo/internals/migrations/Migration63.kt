@@ -18,7 +18,8 @@ public class Migration63 : IncrementalMigration(63) {
       """
       DELETE FROM listening_event
       WHERE type IN ('SpeedChanged', 'SkipSilenceChanged', 'VolumeBoostChanged', 'BookmarkAdded', 'BookmarkDeleted')
-      """.trimIndent(),
+      """
+        .trimIndent(),
     )
   }
 }

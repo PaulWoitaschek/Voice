@@ -10,10 +10,7 @@ internal fun Player.seekBackBy(
   rewind: Duration,
   crossMediaItems: Boolean,
 ) {
-  var currentPosition = currentPosition.takeUnless { it == C.TIME_UNSET }
-    ?.milliseconds
-    ?.coerceAtLeast(ZERO)
-    ?: return
+  var currentPosition = currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds?.coerceAtLeast(ZERO) ?: return
   var remaining = rewind
   var mediaItemIndex = currentMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: return
 

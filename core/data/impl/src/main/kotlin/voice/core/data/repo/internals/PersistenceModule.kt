@@ -20,26 +20,19 @@ import voice.core.data.repo.internals.dao.RecentBookSearchDao
 @ContributesTo(AppScope::class)
 public object PersistenceModule {
 
-  @Provides
-  private fun chapterDao(appDb: AppDb): ChapterDao = appDb.chapterDao()
+  @Provides private fun chapterDao(appDb: AppDb): ChapterDao = appDb.chapterDao()
 
-  @Provides
-  private fun bookContentDao(appDb: AppDb): BookContentDao = appDb.bookContentDao()
+  @Provides private fun bookContentDao(appDb: AppDb): BookContentDao = appDb.bookContentDao()
 
-  @Provides
-  private fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
+  @Provides private fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
 
-  @Provides
-  private fun customMetadataDao(appDb: AppDb): CustomMetadataDao = appDb.customMetadataDao()
+  @Provides private fun customMetadataDao(appDb: AppDb): CustomMetadataDao = appDb.customMetadataDao()
 
-  @Provides
-  private fun recentBookSearchDao(appDb: AppDb): RecentBookSearchDao = appDb.recentBookSearchDao()
+  @Provides private fun recentBookSearchDao(appDb: AppDb): RecentBookSearchDao = appDb.recentBookSearchDao()
 
-  @Provides
-  private fun listeningEventDao(appDb: AppDb): ListeningEventDao = appDb.listeningEventDao()
+  @Provides private fun listeningEventDao(appDb: AppDb): ListeningEventDao = appDb.listeningEventDao()
 
-  @Provides
-  private fun listeningSessionDao(appDb: AppDb): ListeningSessionDao = appDb.listeningSessionDao()
+  @Provides private fun listeningSessionDao(appDb: AppDb): ListeningSessionDao = appDb.listeningSessionDao()
 
   @Provides
   @SingleIn(AppScope::class)
@@ -47,8 +40,6 @@ public object PersistenceModule {
     context: Context,
     migrations: Set<@JvmSuppressWildcards Migration>,
   ): AppDb {
-    return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
-      .addMigrations(*migrations.toTypedArray())
-      .build()
+    return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME).addMigrations(*migrations.toTypedArray()).build()
   }
 }

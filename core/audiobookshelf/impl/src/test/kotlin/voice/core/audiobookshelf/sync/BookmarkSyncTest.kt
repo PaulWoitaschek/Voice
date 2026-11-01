@@ -5,6 +5,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import java.time.Instant
+import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -27,40 +31,39 @@ import voice.core.data.Book
 import voice.core.data.Bookmark
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookmarkRepo
-import java.time.Instant
-import java.util.concurrent.TimeUnit
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class BookmarkSyncTest {
 
   private val server = MockWebServer()
   private lateinit var account: Account
 
-  private val item = item(
-    tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")),
-    chapters = listOf(AbsChapter(0.0, 60.0, "One"), AbsChapter(60.0, 120.0, "Two")),
-    id = "item",
-  )
+  private val item =
+    item(
+      tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")),
+      chapters = listOf(AbsChapter(0.0, 60.0, "One"), AbsChapter(60.0, 120.0, "Two")),
+      id = "item",
+    )
   private val chapters = item.chapters()
   private val book = item.toBookContent(chapters, existing = null).let { Book(it, chapters, CustomMetadata(it.id)) }
   private val synced = MemoryDataStore<Map<String, String>>(emptyMap())
-  private val bookmarkRepo = mockk<BookmarkRepo>(relaxUnitFun = true) {
-    coEvery { bookmarks(any()) } returns emptyList()
-  }
+  private val bookmarkRepo =
+    mockk<BookmarkRepo>(relaxUnitFun = true) {
+      coEvery { bookmarks(any()) } returns emptyList()
+    }
 
   @Before
   fun setUp() {
     server.start()
-    account = Account(
-      serverUrl = server.url("/").toString(),
-      userId = "user",
-      username = "paul",
-      accessToken = "access",
-      refreshToken = "refresh",
-      libraryIds = listOf("library"),
-      serverVersion = "2.37.1",
-    )
+    account =
+      Account(
+        serverUrl = server.url("/").toString(),
+        userId = "user",
+        username = "paul",
+        accessToken = "access",
+        refreshToken = "refresh",
+        libraryIds = listOf("library"),
+        serverVersion = "2.37.1",
+      )
   }
 
   @After
@@ -173,10 +176,11 @@ class BookmarkSyncTest {
 
   private fun bookmarkSync(): BookmarkSync {
     return BookmarkSync(
-      http = AudiobookshelfHttp(
-        AccountStore(MemoryDataStore<Account?>(account)),
-        mockk { every { versionName } returns "1.0.0" },
-      ),
+      http =
+        AudiobookshelfHttp(
+          AccountStore(MemoryDataStore<Account?>(account)),
+          mockk { every { versionName } returns "1.0.0" },
+        ),
       bookRepository = MemoryBookRepository(book),
       bookmarkRepo = bookmarkRepo,
       syncedBookmarksStore = SyncedBookmarksStore(synced),
@@ -187,12 +191,13 @@ class BookmarkSyncTest {
     chapter: Int,
     timeMs: Long,
     title: String?,
-  ) = Bookmark(
-    bookId = book.id,
-    chapterId = chapters[chapter].id,
-    title = title,
-    time = timeMs,
-    addedAt = Instant.EPOCH,
-    id = Bookmark.Id.random(),
-  )
+  ) =
+    Bookmark(
+      bookId = book.id,
+      chapterId = chapters[chapter].id,
+      title = title,
+      time = timeMs,
+      addedAt = Instant.EPOCH,
+      id = Bookmark.Id.random(),
+    )
 }

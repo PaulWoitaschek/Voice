@@ -10,6 +10,16 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Clock
+import java.time.Instant
+import java.time.YearMonth
+import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,48 +36,42 @@ import voice.navigation.BottomSheetNav
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.Navigator
-import java.time.Clock
-import java.time.Instant
-import java.time.YearMonth
-import java.time.ZoneOffset
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 class SupportViewModelTest {
 
   private val scope = TestScope()
   private val backend = FakeSupportBackend()
-  private val navigator = mockk<Navigator> {
-    every { goBack() } just Runs
-  }
+  private val navigator =
+    mockk<Navigator> {
+      every { goBack() } just Runs
+    }
   private val supporterStatusStore = MemoryDataStore(SupporterStatus())
   private val supporterNoteFeatureFlag = MemoryFeatureFlag("")
   private val activity = mockk<Activity>()
-  private val viewModel = SupportViewModel(
-    backend = backend,
-    navigator = navigator,
-    supporterStatusStore = SupporterStatusStore(supporterStatusStore),
-    supporterNoteFeatureFlag = SupporterNoteFeatureFlag(supporterNoteFeatureFlag),
-    clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
-  )
+  private val viewModel =
+    SupportViewModel(
+      backend = backend,
+      navigator = navigator,
+      supporterStatusStore = SupporterStatusStore(supporterStatusStore),
+      supporterNoteFeatureFlag = SupporterNoteFeatureFlag(supporterNoteFeatureFlag),
+      clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+    )
 
-  private val offers = listOf(
-    SubscriptionOffer(SupporterTier.GoldenMic, SupportPeriod.Monthly, "€6"),
-    SubscriptionOffer(SupporterTier.Tea, SupportPeriod.Monthly, "€1"),
-    SubscriptionOffer(SupporterTier.HoneyTea, SupportPeriod.Monthly, "€3"),
-    SubscriptionOffer(SupporterTier.Tea, SupportPeriod.Yearly, "€10"),
-    SubscriptionOffer(SupporterTier.HoneyTea, SupportPeriod.Yearly, "€30"),
-    SubscriptionOffer(SupporterTier.GoldenMic, SupportPeriod.Yearly, "€60"),
-  )
-  private val tips = listOf(
-    TipOffer(SupporterTier.GoldenMic, "€10"),
-    TipOffer(SupporterTier.Tea, "€2"),
-    TipOffer(SupporterTier.HoneyTea, "€5"),
-  )
+  private val offers =
+    listOf(
+      SubscriptionOffer(SupporterTier.GoldenMic, SupportPeriod.Monthly, "€6"),
+      SubscriptionOffer(SupporterTier.Tea, SupportPeriod.Monthly, "€1"),
+      SubscriptionOffer(SupporterTier.HoneyTea, SupportPeriod.Monthly, "€3"),
+      SubscriptionOffer(SupporterTier.Tea, SupportPeriod.Yearly, "€10"),
+      SubscriptionOffer(SupporterTier.HoneyTea, SupportPeriod.Yearly, "€30"),
+      SubscriptionOffer(SupporterTier.GoldenMic, SupportPeriod.Yearly, "€60"),
+    )
+  private val tips =
+    listOf(
+      TipOffer(SupporterTier.GoldenMic, "€10"),
+      TipOffer(SupporterTier.Tea, "€2"),
+      TipOffer(SupporterTier.HoneyTea, "€5"),
+    )
 
   @Test
   fun `ko-fi stays ko-fi`() = scope.runTest {
@@ -111,11 +115,12 @@ class SupportViewModelTest {
 
   @Test
   fun `the running subscription is picked and managed`() = scope.runTest {
-    backend.mutableState.value = SupportBackendState.Play(
-      subscriptions = offers,
-      tips = tips,
-      activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Yearly),
-    )
+    backend.mutableState.value =
+      SupportBackendState.Play(
+        subscriptions = offers,
+        tips = tips,
+        activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Yearly),
+      )
 
     val content = assertIs<Content.Play>(viewState().content)
 
@@ -132,11 +137,12 @@ class SupportViewModelTest {
 
   @Test
   fun `another tier switches the running subscription`() = scope.runTest {
-    backend.mutableState.value = SupportBackendState.Play(
-      subscriptions = offers,
-      tips = tips,
-      activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Yearly),
-    )
+    backend.mutableState.value =
+      SupportBackendState.Play(
+        subscriptions = offers,
+        tips = tips,
+        activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Yearly),
+      )
 
     viewModel.selectTier(SupporterTier.HoneyTea)
     val content = assertIs<Content.Play>(viewState().content)
@@ -150,11 +156,12 @@ class SupportViewModelTest {
 
   @Test
   fun `another period switches the running subscription`() = scope.runTest {
-    backend.mutableState.value = SupportBackendState.Play(
-      subscriptions = offers,
-      tips = tips,
-      activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly),
-    )
+    backend.mutableState.value =
+      SupportBackendState.Play(
+        subscriptions = offers,
+        tips = tips,
+        activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly),
+      )
 
     viewModel.selectFrequency(SupportFrequency.Yearly)
     val content = assertIs<Content.Play>(viewState().content)
@@ -186,11 +193,12 @@ class SupportViewModelTest {
 
   @Test
   fun `a tip keeps the running subscription as it is`() = scope.runTest {
-    backend.mutableState.value = SupportBackendState.Play(
-      subscriptions = offers,
-      tips = tips,
-      activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly),
-    )
+    backend.mutableState.value =
+      SupportBackendState.Play(
+        subscriptions = offers,
+        tips = tips,
+        activeSubscription = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly),
+      )
 
     viewModel.selectFrequency(SupportFrequency.Once)
     val content = assertIs<Content.Play>(viewState().content)
@@ -271,21 +279,23 @@ class SupportViewModelTest {
   fun `a purchase that went through says thank you`() = scope.runTest {
     backend.mutableState.value = SupportBackendState.Play(offers, tips, activeSubscription = null)
 
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.test {
-      runCurrent()
-      backend.eventFlow.emit(SupportEvent.Failed)
-      runCurrent()
-      assertEquals(expected = SupportViewState.Message.Failed, actual = expectMostRecentItem().message)
-
-      backend.eventFlow.emit(SupportEvent.ThankYou)
-      runCurrent()
-      expectMostRecentItem().let {
-        assertTrue(it.thankYou)
-        assertNull(it.message)
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
       }
-    }
+      .test {
+        runCurrent()
+        backend.eventFlow.emit(SupportEvent.Failed)
+        runCurrent()
+        assertEquals(expected = SupportViewState.Message.Failed, actual = expectMostRecentItem().message)
+
+        backend.eventFlow.emit(SupportEvent.ThankYou)
+        runCurrent()
+        expectMostRecentItem().let {
+          assertTrue(it.thankYou)
+          assertNull(it.message)
+        }
+      }
   }
 
   @Test
@@ -306,13 +316,15 @@ class SupportViewModelTest {
 
   private suspend fun TestScope.viewState(): SupportViewState {
     lateinit var viewState: SupportViewState
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.test {
-      runCurrent()
-      viewState = expectMostRecentItem()
-      cancelAndIgnoreRemainingEvents()
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test {
+        runCurrent()
+        viewState = expectMostRecentItem()
+        cancelAndIgnoreRemainingEvents()
+      }
     return viewState
   }
 }

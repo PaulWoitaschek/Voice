@@ -1,12 +1,12 @@
 package voice.features.bookmark
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.runner.RunWith
 import java.time.LocalTime
 import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class TimeOfDayFormatTest {

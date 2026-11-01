@@ -8,6 +8,9 @@ import androidx.datastore.core.Serializer
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -15,9 +18,6 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 import voice.core.audiobookshelf.audiobookshelfJson
-import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
 
 @Serializable
 internal data class Account(
@@ -42,8 +42,8 @@ internal data class Preferences(
 )
 
 /**
- * What Voice last agreed on with the server for a book. A local position that moved away from it was played on
- * this device, a newer [serverLastUpdate] means another device listened.
+ * What Voice last agreed on with the server for a book. A local position that moved away from it was played on this device, a newer
+ * [serverLastUpdate] means another device listened.
  */
 @Serializable
 internal data class SyncedProgress(
@@ -56,7 +56,9 @@ internal data class SyncedProgress(
 internal class AccountStore(store: DataStore<Account?>) : DataStore<Account?> by store {
 
   @Inject
-  constructor(context: Context) : this(
+  constructor(
+    context: Context,
+  ) : this(
     jsonStore(
       context = context,
       fileName = "account",
@@ -70,7 +72,9 @@ internal class AccountStore(store: DataStore<Account?>) : DataStore<Account?> by
 internal class PreferencesStore(store: DataStore<Preferences>) : DataStore<Preferences> by store {
 
   @Inject
-  constructor(context: Context) : this(
+  constructor(
+    context: Context,
+  ) : this(
     jsonStore(
       context = context,
       fileName = "preferences",
@@ -84,7 +88,9 @@ internal class PreferencesStore(store: DataStore<Preferences>) : DataStore<Prefe
 internal class SyncedProgressStore(store: DataStore<Map<String, SyncedProgress>>) : DataStore<Map<String, SyncedProgress>> by store {
 
   @Inject
-  constructor(context: Context) : this(
+  constructor(
+    context: Context,
+  ) : this(
     jsonStore(
       context = context,
       fileName = "syncedProgress",
@@ -95,14 +101,16 @@ internal class SyncedProgressStore(store: DataStore<Map<String, SyncedProgress>>
 }
 
 /**
- * The bookmarks both sides had at the last sync, with their titles. A bookmark that is missing on one side was
- * deleted there when it is in here, and is new on the other side when it isn't.
+ * The bookmarks both sides had at the last sync, with their titles. A bookmark that is missing on one side was deleted there when it is in
+ * here, and is new on the other side when it isn't.
  */
 @SingleIn(AppScope::class)
 internal class SyncedBookmarksStore(store: DataStore<Map<String, String>>) : DataStore<Map<String, String>> by store {
 
   @Inject
-  constructor(context: Context) : this(
+  constructor(
+    context: Context,
+  ) : this(
     jsonStore(
       context = context,
       fileName = "syncedBookmarks",
@@ -119,24 +127,25 @@ private fun <T> jsonStore(
   defaultValue: T,
 ): DataStore<T> {
   return DataStoreFactory.create(
-    serializer = object : Serializer<T> {
-      override val defaultValue: T = defaultValue
+    serializer =
+      object : Serializer<T> {
+        override val defaultValue: T = defaultValue
 
-      override suspend fun readFrom(input: InputStream): T {
-        return try {
-          audiobookshelfJson.decodeFromString(serializer, input.readBytes().decodeToString())
-        } catch (e: SerializationException) {
-          throw CorruptionException("Could not read $fileName", e)
+        override suspend fun readFrom(input: InputStream): T {
+          return try {
+            audiobookshelfJson.decodeFromString(serializer, input.readBytes().decodeToString())
+          } catch (e: SerializationException) {
+            throw CorruptionException("Could not read $fileName", e)
+          }
         }
-      }
 
-      override suspend fun writeTo(
-        t: T,
-        output: OutputStream,
-      ) {
-        output.write(audiobookshelfJson.encodeToString(serializer, t).encodeToByteArray())
-      }
-    },
+        override suspend fun writeTo(
+          t: T,
+          output: OutputStream,
+        ) {
+          output.write(audiobookshelfJson.encodeToString(serializer, t).encodeToByteArray())
+        }
+      },
   ) {
     File(context.filesDir, "audiobookshelf/$fileName.json")
   }

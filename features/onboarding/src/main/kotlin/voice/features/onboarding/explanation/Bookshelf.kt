@@ -29,16 +29,16 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sin
 import kotlin.random.Random
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
- * A little bookshelf filling up: books drop onto it one after another and land with a bounce. Now
- * and then one of them hops. Tapping the shelf sends a wave through all of them.
+ * A little bookshelf filling up: books drop onto it one after another and land with a bounce. Now and then one of them hops. Tapping the
+ * shelf sends a wave through all of them.
  */
 @Composable
 internal fun Bookshelf(
@@ -72,19 +72,20 @@ internal fun Bookshelf(
   }
   val sparkle = remember { sparklePath() }
   Canvas(
-    modifier = modifier
-      .clearAndSetSemantics {}
-      .pointerInput(Unit) {
-        detectTapGestures {
-          haptics.performHapticFeedback(HapticFeedbackType.ContextClick)
-          hops.forEachIndexed { index, hop ->
-            scope.launch {
-              delay(index * 55L)
-              hop(hop, height = 1F)
+    modifier =
+      modifier
+        .clearAndSetSemantics {}
+        .pointerInput(Unit) {
+          detectTapGestures {
+            haptics.performHapticFeedback(HapticFeedbackType.ContextClick)
+            hops.forEachIndexed { index, hop ->
+              scope.launch {
+                delay(index * 55L)
+                hop(hop, height = 1F)
+              }
             }
           }
-        }
-      },
+        },
   ) {
     val t = clock()
     val shelfWidth = min(min(size.width * 0.8F, size.height * 1.3F), 340.dp.toPx())
@@ -201,25 +202,27 @@ private class Book(
   val band: Float,
   val leaning: Boolean = false,
 ) {
-  fun colors(scheme: ColorScheme): Pair<Color, Color> = when (color) {
-    BookColor.Primary -> scheme.primary to scheme.onPrimary.copy(alpha = 0.55F)
-    BookColor.PrimaryContainer -> scheme.primaryContainer to scheme.onPrimaryContainer.copy(alpha = 0.4F)
-    BookColor.Secondary -> scheme.secondary to scheme.onSecondary.copy(alpha = 0.55F)
-    BookColor.SecondaryContainer -> scheme.secondaryContainer to scheme.onSecondaryContainer.copy(alpha = 0.4F)
-    BookColor.Tertiary -> scheme.tertiary to scheme.onTertiary.copy(alpha = 0.55F)
-    BookColor.TertiaryContainer -> scheme.tertiaryContainer to scheme.onTertiaryContainer.copy(alpha = 0.4F)
-  }
+  fun colors(scheme: ColorScheme): Pair<Color, Color> =
+    when (color) {
+      BookColor.Primary -> scheme.primary to scheme.onPrimary.copy(alpha = 0.55F)
+      BookColor.PrimaryContainer -> scheme.primaryContainer to scheme.onPrimaryContainer.copy(alpha = 0.4F)
+      BookColor.Secondary -> scheme.secondary to scheme.onSecondary.copy(alpha = 0.55F)
+      BookColor.SecondaryContainer -> scheme.secondaryContainer to scheme.onSecondaryContainer.copy(alpha = 0.4F)
+      BookColor.Tertiary -> scheme.tertiary to scheme.onTertiary.copy(alpha = 0.55F)
+      BookColor.TertiaryContainer -> scheme.tertiaryContainer to scheme.onTertiaryContainer.copy(alpha = 0.4F)
+    }
 }
 
-private val BOOKS = listOf(
-  Book(width = 26F, height = 0.78F, color = BookColor.Primary, band = 0.16F),
-  Book(width = 34F, height = 0.94F, color = BookColor.TertiaryContainer, band = 0.22F),
-  Book(width = 22F, height = 0.66F, color = BookColor.Secondary, band = 0.14F),
-  Book(width = 30F, height = 0.86F, color = BookColor.PrimaryContainer, band = 0.2F),
-  Book(width = 26F, height = 0.72F, color = BookColor.Tertiary, band = 0.18F),
-  Book(width = 36F, height = 1F, color = BookColor.SecondaryContainer, band = 0.26F),
-  Book(width = 24F, height = 0.7F, color = BookColor.Primary, band = 0.16F, leaning = true),
-)
+private val BOOKS =
+  listOf(
+    Book(width = 26F, height = 0.78F, color = BookColor.Primary, band = 0.16F),
+    Book(width = 34F, height = 0.94F, color = BookColor.TertiaryContainer, band = 0.22F),
+    Book(width = 22F, height = 0.66F, color = BookColor.Secondary, band = 0.14F),
+    Book(width = 30F, height = 0.86F, color = BookColor.PrimaryContainer, band = 0.2F),
+    Book(width = 26F, height = 0.72F, color = BookColor.Tertiary, band = 0.18F),
+    Book(width = 36F, height = 1F, color = BookColor.SecondaryContainer, band = 0.26F),
+    Book(width = 24F, height = 0.7F, color = BookColor.Primary, band = 0.16F, leaning = true),
+  )
 
 private class Sparkle(
   val x: Float,
@@ -229,18 +232,20 @@ private class Sparkle(
   val phase: Float,
 )
 
-private val SPARKLES = listOf(
-  Sparkle(x = 0.08F, y = 1.22F, size = 18F, speed = 2.1F, phase = 0F),
-  Sparkle(x = 0.9F, y = 1.36F, size = 24F, speed = 1.6F, phase = 1.7F),
-  Sparkle(x = 0.62F, y = 1.5F, size = 12F, speed = 2.8F, phase = 3.1F),
-)
+private val SPARKLES =
+  listOf(
+    Sparkle(x = 0.08F, y = 1.22F, size = 18F, speed = 2.1F, phase = 0F),
+    Sparkle(x = 0.9F, y = 1.36F, size = 24F, speed = 1.6F, phase = 1.7F),
+    Sparkle(x = 0.62F, y = 1.5F, size = 12F, speed = 2.8F, phase = 3.1F),
+  )
 
 /** A four pointed sparkle in a 1x1 box. */
-private fun sparklePath(): Path = Path().apply {
-  moveTo(0.5F, 0F)
-  quadraticTo(0.5F, 0.5F, 1F, 0.5F)
-  quadraticTo(0.5F, 0.5F, 0.5F, 1F)
-  quadraticTo(0.5F, 0.5F, 0F, 0.5F)
-  quadraticTo(0.5F, 0.5F, 0.5F, 0F)
-  close()
-}
+private fun sparklePath(): Path =
+  Path().apply {
+    moveTo(0.5F, 0F)
+    quadraticTo(0.5F, 0.5F, 1F, 0.5F)
+    quadraticTo(0.5F, 0.5F, 0.5F, 1F)
+    quadraticTo(0.5F, 0.5F, 0F, 0.5F)
+    quadraticTo(0.5F, 0.5F, 0.5F, 0F)
+    close()
+  }

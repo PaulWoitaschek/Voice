@@ -49,8 +49,7 @@ internal fun writeContactSheet(
     row.forEach { cell ->
       graphics.color = Color.WHITE
       // labels are cut from the start, the end tells previews of one file apart
-      val label = generateSequence(cell.label) { it.drop(1) }
-        .first { it.isEmpty() || metrics.stringWidth(it) <= cell.width }
+      val label = generateSequence(cell.label) { it.drop(1) }.first { it.isEmpty() || metrics.stringWidth(it) <= cell.width }
       graphics.drawString(label, x, y + LABEL_HEIGHT - 8)
       graphics.drawImage(cell.image, x, y + LABEL_HEIGHT, null)
       x += cell.width + GAP
@@ -66,8 +65,11 @@ private class Cell(
   val image: BufferedImage,
 ) {
   // narrow previews still get room for a readable label
-  val width: Int get() = maxOf(image.width, MIN_CELL_WIDTH)
-  val height: Int get() = image.height
+  val width: Int
+    get() = maxOf(image.width, MIN_CELL_WIDTH)
+
+  val height: Int
+    get() = image.height
 }
 
 private const val CELL_WIDTH = 900

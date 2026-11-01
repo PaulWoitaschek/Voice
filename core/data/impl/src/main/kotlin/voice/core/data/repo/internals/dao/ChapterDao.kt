@@ -10,12 +10,9 @@ import voice.core.data.ChapterId
 @Dao
 public interface ChapterDao {
 
-  @Query("SELECT * FROM chapters2 WHERE id = :id")
-  public suspend fun chapter(id: ChapterId): Chapter?
+  @Query("SELECT * FROM chapters2 WHERE id = :id") public suspend fun chapter(id: ChapterId): Chapter?
 
-  @Query("SELECT * FROM chapters2 WHERE id IN (:ids)")
-  public suspend fun chapters(ids: List<ChapterId>): List<Chapter>
+  @Query("SELECT * FROM chapters2 WHERE id IN (:ids)") public suspend fun chapters(ids: List<ChapterId>): List<Chapter>
 
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  public suspend fun insert(chapter: Chapter)
+  @Insert(onConflict = OnConflictStrategy.REPLACE) public suspend fun insert(chapter: Chapter)
 }

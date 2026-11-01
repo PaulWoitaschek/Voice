@@ -18,11 +18,12 @@ internal fun Context.formatDuration(
   compact: Boolean = false,
 ): String {
   val format = MeasureFormat.getInstance(resources.configuration.locales[0], MeasureFormat.FormatWidth.SHORT)
-  val rounded = if (compact && duration >= 1.hours) {
-    (duration + 30.minutes).inWholeHours.hours
-  } else {
-    duration
-  }
+  val rounded =
+    if (compact && duration >= 1.hours) {
+      (duration + 30.minutes).inWholeHours.hours
+    } else {
+      duration
+    }
   return rounded.toComponents { hours, minutes, _, _ ->
     when {
       hours > 0 && minutes > 0 -> format.formatMeasures(Measure(hours, MeasureUnit.HOUR), Measure(minutes, MeasureUnit.MINUTE))

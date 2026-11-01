@@ -2,6 +2,9 @@ package voice.core.audiobookshelf.sync
 
 import io.mockk.every
 import io.mockk.mockk
+import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
@@ -21,9 +24,6 @@ import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
-import java.util.concurrent.TimeUnit
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class ServerBookUpdateTest {
 
@@ -34,15 +34,16 @@ class ServerBookUpdateTest {
   @Before
   fun setUp() {
     server.start()
-    account = Account(
-      serverUrl = server.url("/").toString(),
-      userId = "user",
-      username = "paul",
-      accessToken = "access",
-      refreshToken = "refresh",
-      libraryIds = listOf("library"),
-      serverVersion = "2.37.1",
-    )
+    account =
+      Account(
+        serverUrl = server.url("/").toString(),
+        userId = "user",
+        username = "paul",
+        accessToken = "access",
+        refreshToken = "refresh",
+        libraryIds = listOf("library"),
+        serverVersion = "2.37.1",
+      )
   }
 
   @After
@@ -243,16 +244,18 @@ class ServerBookUpdateTest {
     server.enqueue(MockResponse(code = 200, body = audiobookshelfJson.encodeToString(response)))
   }
 
-  private fun bookUpdate(repo: MemoryBookRepository) = ServerBookUpdate(
-    http = AudiobookshelfHttp(AccountStore(MemoryDataStore<Account?>(account)), mockk { every { versionName } returns "1.0.0" }),
-    accountStore = AccountStore(MemoryDataStore<Account?>(account)),
-    bookRepository = repo,
-  )
+  private fun bookUpdate(repo: MemoryBookRepository) =
+    ServerBookUpdate(
+      http = AudiobookshelfHttp(AccountStore(MemoryDataStore<Account?>(account)), mockk { every { versionName } returns "1.0.0" }),
+      accountStore = AccountStore(MemoryDataStore<Account?>(account)),
+      bookRepository = repo,
+    )
 
-  private fun item(series: List<AbsSeries>) = item(
-    tracks = listOf(track(1, 0.0, 60.0, "a.mp3")),
-    metadata = AbsBookMetadata(title = "Leviathan Wakes", series = series),
-  )
+  private fun item(series: List<AbsSeries>) =
+    item(
+      tracks = listOf(track(1, 0.0, 60.0, "a.mp3")),
+      metadata = AbsBookMetadata(title = "Leviathan Wakes", series = series),
+    )
 
   private fun book(series: List<AbsSeries>): Book {
     val item = item(series)

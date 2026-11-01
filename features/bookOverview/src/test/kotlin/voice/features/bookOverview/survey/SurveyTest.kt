@@ -4,12 +4,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
-import voice.core.analytics.api.Analytics
-import voice.core.common.AppInfoProvider
-import voice.core.featureflag.MemoryFeatureFlag
-import voice.features.bookOverview.MemoryDataStore
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
@@ -18,6 +12,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.time.toKotlinInstant
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
+import voice.core.analytics.api.Analytics
+import voice.core.common.AppInfoProvider
+import voice.core.featureflag.MemoryFeatureFlag
+import voice.features.bookOverview.MemoryDataStore
 
 class SurveyTest {
 
@@ -106,15 +106,17 @@ class SurveyTest {
     return Survey(
       surveyUrlFeatureFlag = SurveyUrlFeatureFlag(MemoryFeatureFlag(remoteUrl)),
       handledSurveysStore = HandledSurveysStore(store),
-      localSurvey = mockk {
-        coEvery { url() } returns localUrl
-      },
+      localSurvey =
+        mockk {
+          coEvery { url() } returns localUrl
+        },
       clock = Clock.fixed(Instant.parse("2026-10-20T10:00:00Z"), ZoneOffset.UTC),
-      appInfoProvider = mockk<AppInfoProvider> {
-        every { versionName } returns "1.2.3"
-        every { this@mockk.installer } returns installer
-        every { installTime } returns Instant.parse("2026-10-06T10:00:00Z").toKotlinInstant()
-      },
+      appInfoProvider =
+        mockk<AppInfoProvider> {
+          every { versionName } returns "1.2.3"
+          every { this@mockk.installer } returns installer
+          every { installTime } returns Instant.parse("2026-10-06T10:00:00Z").toKotlinInstant()
+        },
       analytics = analytics,
     )
   }

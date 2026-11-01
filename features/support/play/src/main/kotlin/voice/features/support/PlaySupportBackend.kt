@@ -4,6 +4,8 @@ import android.app.Activity
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import java.time.Clock
+import java.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,13 +16,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.analytics.api.Analytics
-import voice.core.data.supporter.SupporterStatus
 import voice.core.data.supporter.SupporterStatusStore
 import voice.core.logging.api.Logger
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import java.time.Clock
-import java.time.Instant
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -91,11 +90,12 @@ class PlaySupportBackend(
 
   override fun manageSubscription() {
     val productId = activePurchase?.productId
-    val url = if (productId == null) {
-      MANAGE_SUBSCRIPTIONS_URL
-    } else {
-      "$MANAGE_SUBSCRIPTIONS_URL?sku=$productId&package=${billing.packageName}"
-    }
+    val url =
+      if (productId == null) {
+        MANAGE_SUBSCRIPTIONS_URL
+      } else {
+        "$MANAGE_SUBSCRIPTIONS_URL?sku=$productId&package=${billing.packageName}"
+      }
     navigator.goTo(Destination.Website(url))
   }
 
@@ -148,17 +148,20 @@ class PlaySupportBackend(
       val purchased = purchases.filter { it.state == BillingPurchase.State.Purchased }
       handle(purchased)
       updateSubscription(purchased.filter { it.productId in SupportProducts.subscriptions })
-      _state.value = SupportBackendState.Play(
-        subscriptions = products.mapNotNull { product ->
-          val offer = SupportProducts.subscriptions[product.productId] ?: return@mapNotNull null
-          SubscriptionOffer(tier = offer.tier, period = offer.period, formattedPrice = product.formattedPrice)
-        },
-        tips = products.mapNotNull { product ->
-          val tier = SupportProducts.tips[product.productId] ?: return@mapNotNull null
-          TipOffer(tier = tier, formattedPrice = product.formattedPrice)
-        },
-        activeSubscription = activeSubscription(),
-      )
+      _state.value =
+        SupportBackendState.Play(
+          subscriptions =
+            products.mapNotNull { product ->
+              val offer = SupportProducts.subscriptions[product.productId] ?: return@mapNotNull null
+              SubscriptionOffer(tier = offer.tier, period = offer.period, formattedPrice = product.formattedPrice)
+            },
+          tips =
+            products.mapNotNull { product ->
+              val tier = SupportProducts.tips[product.productId] ?: return@mapNotNull null
+              TipOffer(tier = tier, formattedPrice = product.formattedPrice)
+            },
+          activeSubscription = activeSubscription(),
+        )
     }
   }
 

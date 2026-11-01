@@ -48,12 +48,12 @@ import kotlinx.coroutines.withContext
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.scanner.CoverSaver
+import voice.core.strings.R as StringsR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.icons.VoiceIcons
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.Navigator
-import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface EditCoverComponent {
@@ -66,11 +66,12 @@ object EditCoverDialogProvider {
 
   @Provides
   @IntoSet
-  fun editCoverDialogNavEntryProvider(navigator: Navigator): NavEntryProvider<*> = NavEntryProvider<Destination.EditCover> { key ->
-    NavEntry(key, metadata = DialogSceneStrategy.dialog()) {
-      EditCoverDialog(coverUri = key.cover, bookId = key.bookId, onDismiss = navigator::goBack)
+  fun editCoverDialogNavEntryProvider(navigator: Navigator): NavEntryProvider<*> =
+    NavEntryProvider<Destination.EditCover> { key ->
+      NavEntry(key, metadata = DialogSceneStrategy.dialog()) {
+        EditCoverDialog(coverUri = key.cover, bookId = key.bookId, onDismiss = navigator::goBack)
+      }
     }
-  }
 }
 
 @Composable
@@ -116,9 +117,7 @@ fun EditCoverDialog(
         cover = coverUri,
         onCropChange = { crop = it },
         // shrinks to leave room for the buttons on short screens
-        modifier = Modifier
-          .weight(1F, fill = false)
-          .heightIn(max = 420.dp),
+        modifier = Modifier.weight(1F, fill = false).heightIn(max = 420.dp),
       )
       Spacer(Modifier.size(24.dp))
       Row(verticalAlignment = Alignment.CenterVertically) {
@@ -135,14 +134,13 @@ fun EditCoverDialog(
             val selected = crop ?: return@Button
             saving = true
             scope.launch {
-              val bitmap = context.imageLoader
-                .execute(
-                  ImageRequest.Builder(context)
-                    .data(coverUri)
-                    .transformations(CropTransformation(selected))
-                    .build(),
-                )
-                .drawable?.toBitmap()
+              val bitmap =
+                context.imageLoader
+                  .execute(
+                    ImageRequest.Builder(context).data(coverUri).transformations(CropTransformation(selected)).build(),
+                  )
+                  .drawable
+                  ?.toBitmap()
               if (bitmap != null) {
                 // leaving the dialog mid-save would leave the book pointing at a deleted cover
                 withContext(NonCancellable) {

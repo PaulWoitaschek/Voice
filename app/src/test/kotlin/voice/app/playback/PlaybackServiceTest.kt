@@ -5,6 +5,7 @@ import android.content.ComponentName
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.zacsweers.metro.createGraphFactory
+import kotlin.test.assertSame
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -13,7 +14,6 @@ import org.robolectric.annotation.Config
 import voice.app.di.AppGraph
 import voice.core.common.rootGraph
 import voice.core.playback.session.PlaybackService
-import kotlin.test.assertSame
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
@@ -24,10 +24,11 @@ class PlaybackServiceTest {
     val application = ApplicationProvider.getApplicationContext<Application>()
     rootGraph = createGraphFactory<AppGraph.Factory>().create(application)
     // Robolectric connects bound services without a component name, which crashes the MediaController.
-    shadowOf(application).setComponentNameAndServiceForBindService(
-      ComponentName(application, PlaybackService::class.java),
-      null,
-    )
+    shadowOf(application)
+      .setComponentNameAndServiceForBindService(
+        ComponentName(application, PlaybackService::class.java),
+        null,
+      )
 
     val service = Robolectric.buildService(PlaybackService::class.java).create().get()
 

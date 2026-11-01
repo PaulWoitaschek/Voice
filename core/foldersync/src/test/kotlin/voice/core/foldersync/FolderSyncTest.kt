@@ -8,6 +8,14 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import java.io.IOException
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -29,14 +37,6 @@ import voice.core.data.syncKey
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.MediaScanTrigger
-import java.io.IOException
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.time.Duration.Companion.seconds
 
 @RunWith(AndroidJUnit4::class)
 class FolderSyncTest {
@@ -46,20 +46,24 @@ class FolderSyncTest {
   private val playStateManager = PlayStateManager()
   private val currentBookStore = MemoryDataStore<BookId?>(null)
   private val scannerActive = MutableStateFlow(false)
-  private val mediaScanTrigger = mockk<MediaScanTrigger> {
-    every { scannerActive } returns this@FolderSyncTest.scannerActive
-  }
+  private val mediaScanTrigger =
+    mockk<MediaScanTrigger> {
+      every { scannerActive } returns this@FolderSyncTest.scannerActive
+    }
   private val written = mutableListOf<SyncFile>()
-  private val syncFiles = mockk<SyncFiles> {
-    every { canWrite(any()) } returns true
-    every { read(any()) } returns emptyMap()
-    every { write(folder(), any(), capture(written)) } returns Unit
-  }
-  private val audiobookFolders = mockk<AudiobookFolders> {
-    every { all() } returns flowOf(
-      mapOf(FolderType.Root to listOf(DocumentFileWithUri(documentFile = mockk(), uri = folder()))),
-    )
-  }
+  private val syncFiles =
+    mockk<SyncFiles> {
+      every { canWrite(any()) } returns true
+      every { read(any()) } returns emptyMap()
+      every { write(folder(), any(), capture(written)) } returns Unit
+    }
+  private val audiobookFolders =
+    mockk<AudiobookFolders> {
+      every { all() } returns
+        flowOf(
+          mapOf(FolderType.Root to listOf(DocumentFileWithUri(documentFile = mockk(), uri = folder()))),
+        )
+    }
 
   @Test
   fun `a newer place from another device is taken over with its speed`() = scope.runTest {
@@ -149,14 +153,16 @@ class FolderSyncTest {
   fun `without a current book, the book played last on another device becomes the current one`() = scope.runTest {
     val older = book(path = "Older", fileSizes = listOf(10, 20))
     val newer = book(path = "Newer", fileSizes = listOf(30, 40))
-    every { syncFiles.read(folder()) } returns mapOf(
-      "sync-other.json" to SyncFile(
-        mapOf(
-          older.key() to SyncedBook(place = place(playedAt = 1000)),
-          newer.key() to SyncedBook(place = place(playedAt = 2000)),
-        ),
-      ),
-    )
+    every { syncFiles.read(folder()) } returns
+      mapOf(
+        "sync-other.json" to
+          SyncFile(
+            mapOf(
+              older.key() to SyncedBook(place = place(playedAt = 1000)),
+              newer.key() to SyncedBook(place = place(playedAt = 2000)),
+            ),
+          ),
+      )
 
     folderSync(MemoryBookRepository(older, newer)).sync()
 
@@ -247,10 +253,11 @@ class FolderSyncTest {
     val book = book(customName = "Mine")
     val repo = MemoryBookRepository(book)
     val folderSync = folderSync(repo)
-    every { syncFiles.read(folder()) } returns mapOf(
-      folderSync.ownFileName to SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Earlier", changedAt = 1000)))),
-      "sync-other.json" to SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Other", changedAt = 2000)))),
-    )
+    every { syncFiles.read(folder()) } returns
+      mapOf(
+        folderSync.ownFileName to SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Earlier", changedAt = 1000)))),
+        "sync-other.json" to SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Other", changedAt = 2000)))),
+      )
 
     folderSync.sync()
 

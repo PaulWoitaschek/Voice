@@ -47,8 +47,7 @@ class SeriesViewModel(
   private val serverLibrary: ServerLibrary,
   private val serverDownloads: ServerDownloads,
   dispatcherProvider: DispatcherProvider,
-  @Assisted
-  private val name: String,
+  @Assisted private val name: String,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -64,12 +63,10 @@ class SeriesViewModel(
     val downloadStates = remember { serverDownloads.states }.collectAsState(initial = emptyMap()).value
     val livePlaybackState = livePlaybackState(currentBookId)
     val seriesBooks = remember(books) { books.filter { book -> book.seriesName?.let(::seriesKey) == key } }
-    val series = remember(seriesBooks, livePlaybackState) {
-      seriesBooks
-        .map { book -> livePlaybackState?.let(book::overlay) ?: book }
-        .series()
-        .singleOrNull()
-    }
+    val series =
+      remember(seriesBooks, livePlaybackState) {
+        seriesBooks.map { book -> livePlaybackState?.let(book::overlay) ?: book }.series().singleOrNull()
+      }
     LaunchedEffect(series == null) {
       if (series == null) {
         navigator.remove(Destination.Series(name))
@@ -77,14 +74,15 @@ class SeriesViewModel(
     }
     if (series == null) return null
     val playingBook = series.books.find { it.id == currentBookId }?.takeIf { playing }
-    val action = (playingBook ?: series.inProgress ?: series.firstUnfinished)?.let { book ->
-      SeriesViewState.Action(
-        bookId = book.id,
-        part = book.seriesPart,
-        continues = book.category == BookOverviewCategory.CURRENT,
-        playing = book == playingBook,
-      )
-    }
+    val action =
+      (playingBook ?: series.inProgress ?: series.firstUnfinished)?.let { book ->
+        SeriesViewState.Action(
+          bookId = book.id,
+          part = book.seriesPart,
+          continues = book.category == BookOverviewCategory.CURRENT,
+          playing = book == playingBook,
+        )
+      }
     return SeriesViewState(
       key = series.key,
       name = series.name,
@@ -93,17 +91,20 @@ class SeriesViewModel(
       bookCount = series.books.size,
       finishedCount = series.finishedCount,
       action = action,
-      books = series.books.map { book ->
-        SeriesViewState.Book(
-          // the header names the author already
-          book = book.toItemViewState(unavailable = book.id in unavailableBooks, download = downloadStates[book.id].badge())
-            .let { if (it.author == series.author) it.copy(author = null) else it },
-          part = book.seriesPart,
-          finished = book.category == BookOverviewCategory.FINISHED,
-          current = book.id == currentBookId,
-          playing = book == playingBook,
-        )
-      },
+      books =
+        series.books.map { book ->
+          SeriesViewState.Book(
+            // the header names the author already
+            book =
+              book.toItemViewState(unavailable = book.id in unavailableBooks, download = downloadStates[book.id].badge()).let {
+                if (it.author == series.author) it.copy(author = null) else it
+              },
+            part = book.seriesPart,
+            finished = book.category == BookOverviewCategory.FINISHED,
+            current = book.id == currentBookId,
+            playing = book == playingBook,
+          )
+        },
     )
   }
 
@@ -124,8 +125,7 @@ class SeriesViewModel(
   private fun livePlaybackState(currentBookId: BookId?): LivePlaybackState? {
     val experimentalPlaybackPersistence = remember { experimentalPlaybackPersistenceFeatureFlag.get() }
     if (!experimentalPlaybackPersistence || currentBookId == null) return null
-    return remember(currentBookId) { playerController.livePlaybackStateFlow(currentBookId) }
-      .collectAsState(initial = null).value
+    return remember(currentBookId) { playerController.livePlaybackStateFlow(currentBookId) }.collectAsState(initial = null).value
   }
 
   internal fun onBookClick(id: BookId) {

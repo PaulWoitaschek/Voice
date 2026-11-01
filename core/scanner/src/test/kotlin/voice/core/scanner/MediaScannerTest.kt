@@ -8,6 +8,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.io.Closeable
+import java.io.File
+import java.nio.file.Files
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
@@ -30,13 +37,6 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.data.toUri
 import voice.core.documentfile.FileBasedDocumentFactory
 import voice.core.documentfile.FileBasedDocumentFile
-import java.io.Closeable
-import java.io.File
-import java.nio.file.Files
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.time.Duration.Companion.seconds
 
 @RunWith(AndroidJUnit4::class)
 class MediaScannerTest {
@@ -46,11 +46,12 @@ class MediaScannerTest {
     val audiobookFolder = folder("audiobooks")
 
     val book1 = File(audiobookFolder, "book1")
-    val book1Chapters = listOf(
-      audioFile(book1, "1.mp3"),
-      audioFile(book1, "2.mp3"),
-      audioFile(book1, "10.mp3"),
-    )
+    val book1Chapters =
+      listOf(
+        audioFile(book1, "1.mp3"),
+        audioFile(book1, "2.mp3"),
+        audioFile(book1, "10.mp3"),
+      )
 
     scan(FolderType.Root, audiobookFolder)
 
@@ -110,11 +111,12 @@ class MediaScannerTest {
 
     val book1 = File(audiobookFolder, "book1")
     val book1Id = BookId(book1.toUri())
-    val book1Chapters = listOf(
-      audioFile(book1, "1.mp3"),
-      audioFile(book1, "2.mp3"),
-      audioFile(book1, "10.mp3"),
-    )
+    val book1Chapters =
+      listOf(
+        audioFile(book1, "1.mp3"),
+        audioFile(book1, "2.mp3"),
+        audioFile(book1, "10.mp3"),
+      )
 
     scan(FolderType.Root, audiobookFolder)
 
@@ -140,11 +142,12 @@ class MediaScannerTest {
     val topFileBook = audioFile(parent = audiobookFolder1, "test.mp3")
 
     val book1 = File(audiobookFolder1, "book1")
-    val book1Chapters = listOf(
-      audioFile(book1, "1.mp3"),
-      audioFile(book1, "2.mp3"),
-      audioFile(book1, "10.mp3"),
-    )
+    val book1Chapters =
+      listOf(
+        audioFile(book1, "1.mp3"),
+        audioFile(book1, "2.mp3"),
+        audioFile(book1, "10.mp3"),
+      )
 
     val audiobookFolder2 = folder("audiobooks1")
 
@@ -167,18 +170,20 @@ class MediaScannerTest {
     val topFileBook = audioFile(parent = audiobookFolder, "test.mp3")
 
     val book1 = File(audiobookFolder, "book1")
-    val book1Chapters = listOf(
-      audioFile(book1, "1.mp3"),
-      audioFile(book1, "2.mp3"),
-      audioFile(book1, "10.mp3"),
-    )
+    val book1Chapters =
+      listOf(
+        audioFile(book1, "1.mp3"),
+        audioFile(book1, "2.mp3"),
+        audioFile(book1, "10.mp3"),
+      )
 
     val book2 = File(audiobookFolder, "book2")
-    val book2Chapters = listOf(
-      audioFile(book2, "1.mp3"),
-      audioFile(book2, "2.mp3"),
-      audioFile(book2, "10.mp3"),
-    )
+    val book2Chapters =
+      listOf(
+        audioFile(book2, "1.mp3"),
+        audioFile(book2, "2.mp3"),
+        audioFile(book2, "10.mp3"),
+      )
 
     scan(FolderType.Root, audiobookFolder)
 
@@ -194,30 +199,32 @@ class MediaScannerTest {
     val audiobookFolder = folder("audiobooks")
     audioFile(File(audiobookFolder, "book"), "1.mp3")
     val serverChapter = ChapterId("abs://item/remote/track/1/ino")
-    val serverBook = BookContent(
-      id = BookId("abs://item/remote"),
-      playbackSpeed = 1F,
-      skipSilence = false,
-      isActive = true,
-      lastPlayedAt = Instant.EPOCH,
-      addedAt = Instant.EPOCH,
-      chapters = listOf(serverChapter),
-      currentChapter = serverChapter,
-      positionInChapter = 0,
-      gain = 0F,
-      metadata = BookMetadata(
-        name = "On the server",
-        author = null,
-        album = null,
-        title = null,
-        genre = null,
-        narrator = null,
-        series = null,
-        part = null,
-        cover = null,
-        fileLastModified = null,
-      ),
-    )
+    val serverBook =
+      BookContent(
+        id = BookId("abs://item/remote"),
+        playbackSpeed = 1F,
+        skipSilence = false,
+        isActive = true,
+        lastPlayedAt = Instant.EPOCH,
+        addedAt = Instant.EPOCH,
+        chapters = listOf(serverChapter),
+        currentChapter = serverChapter,
+        positionInChapter = 0,
+        gain = 0F,
+        metadata =
+          BookMetadata(
+            name = "On the server",
+            author = null,
+            album = null,
+            title = null,
+            genre = null,
+            narrator = null,
+            series = null,
+            part = null,
+            cover = null,
+            fileLastModified = null,
+          ),
+      )
     bookContentRepo.put(serverBook)
 
     scan(FolderType.Root, audiobookFolder)
@@ -360,14 +367,15 @@ class MediaScannerTest {
     val oldId = BookId(book.toUri())
     play(oldId, chapter, position = 100, playedAt = Instant.parse("2026-01-01T10:00:00Z"))
     currentBookStore.updateData { oldId }
-    val bookmark = Bookmark(
-      bookId = oldId,
-      chapterId = ChapterId(chapter.toUri()),
-      title = null,
-      time = 100,
-      addedAt = Instant.EPOCH,
-      id = Bookmark.Id.random(),
-    )
+    val bookmark =
+      Bookmark(
+        bookId = oldId,
+        chapterId = ChapterId(chapter.toUri()),
+        title = null,
+        time = 100,
+        addedAt = Instant.EPOCH,
+        id = Bookmark.Id.random(),
+      )
     coEvery { bookmarkRepo.bookmarks(match { it.id == oldId }) } returns listOf(bookmark)
 
     scan(FolderType.SingleFile, chapter)
@@ -407,14 +415,15 @@ class MediaScannerTest {
     val oldId = BookId(book.toUri())
     play(oldId, chapter2, position = 100, playedAt = Instant.parse("2026-01-01T10:00:00Z"))
     currentBookStore.updateData { oldId }
-    val bookmark = Bookmark(
-      bookId = oldId,
-      chapterId = ChapterId(chapter2.toUri()),
-      title = null,
-      time = 50,
-      addedAt = Instant.EPOCH,
-      id = Bookmark.Id.random(),
-    )
+    val bookmark =
+      Bookmark(
+        bookId = oldId,
+        chapterId = ChapterId(chapter2.toUri()),
+        title = null,
+        time = 50,
+        addedAt = Instant.EPOCH,
+        id = Bookmark.Id.random(),
+      )
     coEvery { bookmarkRepo.bookmarks(match { it.id == oldId }) } returns listOf(bookmark)
 
     val renamed = File(audiobookFolder, "book (2020)")
@@ -630,9 +639,8 @@ class MediaScannerTest {
 
   private class TestEnvironment : Closeable {
 
-    private val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
-      .allowMainThreadQueries()
-      .build()
+    private val db =
+      Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java).allowMainThreadQueries().build()
     val bookContentRepo = BookContentRepoImpl(db.bookContentDao())
     val customMetadataRepo = CustomMetadataRepoImpl(db.customMetadataDao())
     private val chapterRepo = ChapterRepoImpl(db.chapterDao())
@@ -641,52 +649,62 @@ class MediaScannerTest {
     var album = "Book Name"
     var artist = "Author"
     var filesReadable = true
-    val bookmarkRepo = mockk<BookmarkRepo>(relaxUnitFun = true) {
-      coEvery { bookmarks(any()) } returns emptyList()
-    }
+    val bookmarkRepo =
+      mockk<BookmarkRepo>(relaxUnitFun = true) {
+        coEvery { bookmarks(any()) } returns emptyList()
+      }
     val currentBookStore = MemoryDataStore<BookId?>(null)
     private val scannedRepo = ScannedBooksRecordingRepo(bookContentRepo)
-    val scannedBooks: List<BookId> get() = scannedRepo.scannedBooks
-    private val scanner = MediaScanner(
-      contentRepo = scannedRepo,
-      chapterParser = ChapterParser(
+    val scannedBooks: List<BookId>
+      get() = scannedRepo.scannedBooks
+
+    private val scanner =
+      MediaScanner(
+        contentRepo = scannedRepo,
+        chapterParser =
+          ChapterParser(
+            chapterRepo = chapterRepo,
+            mediaAnalyzer = mediaAnalyzer,
+          ),
+        bookParser =
+          BookParser(
+            contentRepo = bookContentRepo,
+            customMetadataRepo = customMetadataRepo,
+            mediaAnalyzer = mediaAnalyzer,
+            fileFactory = FileBasedDocumentFactory,
+          ),
+        deviceHasPermissionBug = mockk(),
+        progressCarryOver =
+          ProgressCarryOver(
+            bookmarkRepo = bookmarkRepo,
+            listeningHistoryRepo = mockk(relaxUnitFun = true),
+            listeningStatsRepo = mockk(relaxUnitFun = true),
+            currentBookStore = CurrentBookStore(currentBookStore),
+            customMetadataRepo = customMetadataRepo,
+          ),
         chapterRepo = chapterRepo,
-        mediaAnalyzer = mediaAnalyzer,
-      ),
-      bookParser = BookParser(
-        contentRepo = bookContentRepo,
-        customMetadataRepo = customMetadataRepo,
-        mediaAnalyzer = mediaAnalyzer,
-        fileFactory = FileBasedDocumentFactory,
-      ),
-      deviceHasPermissionBug = mockk(),
-      progressCarryOver = ProgressCarryOver(
-        bookmarkRepo = bookmarkRepo,
-        listeningHistoryRepo = mockk(relaxUnitFun = true),
-        listeningStatsRepo = mockk(relaxUnitFun = true),
-        currentBookStore = CurrentBookStore(currentBookStore),
-        customMetadataRepo = customMetadataRepo,
-      ),
-      chapterRepo = chapterRepo,
-    )
+      )
 
     val bookRepo = BookRepositoryImpl(chapterRepo, bookContentRepo, customMetadataRepo)
 
     // with its own chapter repo like in the app, so only the database is shared with the scanner
-    val previewer = BookPreviewerImpl(
-      contentRepo = bookContentRepo,
-      customMetadataRepo = customMetadataRepo,
-      chapterParser = ChapterParser(
-        chapterRepo = ChapterRepoImpl(db.chapterDao()),
-        mediaAnalyzer = mediaAnalyzer,
-      ),
-      bookParser = BookParser(
+    val previewer =
+      BookPreviewerImpl(
         contentRepo = bookContentRepo,
         customMetadataRepo = customMetadataRepo,
-        mediaAnalyzer = mediaAnalyzer,
-        fileFactory = FileBasedDocumentFactory,
-      ),
-    )
+        chapterParser =
+          ChapterParser(
+            chapterRepo = ChapterRepoImpl(db.chapterDao()),
+            mediaAnalyzer = mediaAnalyzer,
+          ),
+        bookParser =
+          BookParser(
+            contentRepo = bookContentRepo,
+            customMetadataRepo = customMetadataRepo,
+            mediaAnalyzer = mediaAnalyzer,
+            fileFactory = FileBasedDocumentFactory,
+          ),
+      )
 
     private val root: File = Files.createTempDirectory(this::class.java.canonicalName!!).toFile()
 
@@ -720,22 +738,23 @@ class MediaScannerTest {
           it.writeText(name)
         }
         .also {
-          coEvery { mediaAnalyzer.analyze(any()) } coAnswers {
-            analyzeCalls++
-            if (!filesReadable) return@coAnswers null
-            Metadata(
-              duration = 1000L,
-              artist = artist,
-              album = album,
-              fileName = "Chapter",
-              chapters = emptyList(),
-              title = "Title",
-              genre = "Genre",
-              narrator = "Narrator",
-              series = "Series",
-              part = "Part",
-            )
-          }
+          coEvery { mediaAnalyzer.analyze(any()) } coAnswers
+            {
+              analyzeCalls++
+              if (!filesReadable) return@coAnswers null
+              Metadata(
+                duration = 1000L,
+                artist = artist,
+                album = album,
+                fileName = "Chapter",
+                chapters = emptyList(),
+                title = "Title",
+                genre = "Genre",
+                narrator = "Narrator",
+                series = "Series",
+                part = "Part",
+              )
+            }
         }
     }
 
@@ -773,18 +792,19 @@ class MediaScannerTest {
     }
 
     fun folder(name: String): File {
-      return File(root, name)
-        .also { it.mkdirs() }
+      return File(root, name).also { it.mkdirs() }
     }
 
     suspend fun assertBookContents(vararg expected: BookContentView) {
-      bookRepo.all()
+      bookRepo
+        .all()
         .map {
           BookContentView(
             id = it.id.toUri().toFile(),
-            chapters = it.content.chapters.map { chapter ->
-              chapter.toUri().toFile()
-            },
+            chapters =
+              it.content.chapters.map { chapter ->
+                chapter.toUri().toFile()
+              },
           )
         }
         .let { actual ->

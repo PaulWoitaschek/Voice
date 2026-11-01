@@ -8,13 +8,15 @@ class NaturalOrderComparatorTest {
   private fun assertSorted(values: List<String>) {
     assertEquals(
       expected = values,
-      actual = values.toMutableList()
-        .apply {
-          repeat(values.size / 2) {
-            add(removeAt(0))
+      actual =
+        values
+          .toMutableList()
+          .apply {
+            repeat(values.size / 2) {
+              add(removeAt(0))
+            }
           }
-        }
-        .sortedWith(NaturalOrderComparator.stringComparator),
+          .sortedWith(NaturalOrderComparator.stringComparator),
     )
   }
 

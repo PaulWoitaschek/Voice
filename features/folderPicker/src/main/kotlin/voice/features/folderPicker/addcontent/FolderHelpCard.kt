@@ -24,10 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import voice.core.strings.R as StringsR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
-import voice.core.strings.R as StringsR
 
 internal enum class FolderHelp {
   PickerClosed,
@@ -96,8 +96,7 @@ private fun HelpText(@StringRes text: Int) {
 @Composable
 @Preview
 private fun FolderHelpCardPreview(
-  @PreviewParameter(FolderHelpPreviewParameterProvider::class)
-  help: FolderHelp,
+  @PreviewParameter(FolderHelpPreviewParameterProvider::class) help: FolderHelp,
 ) {
   VoiceTheme {
     FolderHelpCard(help)

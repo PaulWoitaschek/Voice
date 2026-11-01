@@ -12,12 +12,12 @@ import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class AudiobookFoldersImplTest {
@@ -26,20 +26,23 @@ class AudiobookFoldersImplTest {
   private val withAccess = mutableSetOf<Uri>()
   private val uri = DocumentsContract.buildTreeDocumentUri("com.android.externalstorage.documents", "primary:Audiobooks")
 
-  private fun folders(context: Context = ApplicationProvider.getApplicationContext()) = AudiobookFoldersImpl(
-    rootAudioBookFoldersStore = RootAudiobookFoldersStore(stores.getValue(FolderType.Root)),
-    singleFolderAudiobookFoldersStore = SingleFolderAudiobookFoldersStore(stores.getValue(FolderType.SingleFolder)),
-    singleFileAudiobookFoldersStore = SingleFileAudiobookFoldersStore(stores.getValue(FolderType.SingleFile)),
-    authorAudiobookFoldersStore = AuthorAudiobookFoldersStore(stores.getValue(FolderType.Author)),
-    context = context,
-    cachedDocumentFileFactory = mockk {
-      every { create(any()) } returns mockk()
-    },
-    analytics = mockk(relaxUnitFun = true),
-    persistedUriPermissions = object : PersistedUriPermissions {
-      override fun persistedUris(): Set<Uri> = withAccess.toSet()
-    },
-  )
+  private fun folders(context: Context = ApplicationProvider.getApplicationContext()) =
+    AudiobookFoldersImpl(
+      rootAudioBookFoldersStore = RootAudiobookFoldersStore(stores.getValue(FolderType.Root)),
+      singleFolderAudiobookFoldersStore = SingleFolderAudiobookFoldersStore(stores.getValue(FolderType.SingleFolder)),
+      singleFileAudiobookFoldersStore = SingleFileAudiobookFoldersStore(stores.getValue(FolderType.SingleFile)),
+      authorAudiobookFoldersStore = AuthorAudiobookFoldersStore(stores.getValue(FolderType.Author)),
+      context = context,
+      cachedDocumentFileFactory =
+        mockk {
+          every { create(any()) } returns mockk()
+        },
+      analytics = mockk(relaxUnitFun = true),
+      persistedUriPermissions =
+        object : PersistedUriPermissions {
+          override fun persistedUris(): Set<Uri> = withAccess.toSet()
+        },
+    )
 
   @Test
   fun `adding a folder again with another type moves it`() = runTest {
@@ -51,12 +54,13 @@ class AudiobookFoldersImplTest {
     shadowOf(Looper.getMainLooper()).idle()
 
     assertEquals(
-      expected = mapOf(
-        FolderType.SingleFile to emptySet(),
-        FolderType.SingleFolder to emptySet(),
-        FolderType.Root to setOf(uri),
-        FolderType.Author to emptySet(),
-      ),
+      expected =
+        mapOf(
+          FolderType.SingleFile to emptySet(),
+          FolderType.SingleFolder to emptySet(),
+          FolderType.Root to setOf(uri),
+          FolderType.Author to emptySet(),
+        ),
       actual = stores.mapValues { it.value.data.first() },
     )
   }

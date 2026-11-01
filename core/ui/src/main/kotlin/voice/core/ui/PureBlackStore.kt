@@ -6,14 +6,14 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import voice.core.datastore.VoiceDataStoreFactory
 
-/**
- * Whether the dark theme paints its background black instead of a dark tone.
- */
+/** Whether the dark theme paints its background black instead of a dark tone. */
 @SingleIn(AppScope::class)
 class PureBlackStore(store: DataStore<Boolean>) : DataStore<Boolean> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.boolean("pureBlack", defaultValue = false),
   )
 }

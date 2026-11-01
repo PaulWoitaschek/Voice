@@ -5,6 +5,8 @@ import android.content.Intent
 
 interface MainActivityIntentProvider {
   fun toCurrentBook(): PendingIntent
+
   fun currentBookIntent(): Intent
+
   fun libraryIntent(): Intent
 }

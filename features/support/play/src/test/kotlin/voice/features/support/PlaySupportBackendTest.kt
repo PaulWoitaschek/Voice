@@ -9,6 +9,14 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -20,34 +28,28 @@ import voice.core.data.supporter.SupporterStatus
 import voice.core.data.supporter.SupporterStatusStore
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 class PlaySupportBackendTest {
 
   private val scope = TestScope()
   private val now = Instant.parse("2026-10-07T10:00:00Z")
   private val updates = MutableSharedFlow<PurchaseUpdate>()
-  private val billing = mockk<Billing> {
-    every { packageName } returns "de.ph1b.audiobook"
-    every { purchaseUpdates } returns updates
-    coEvery { products() } returns SupportProducts.subscriptions.keys.map { BillingProduct(it, "€2") } +
-      SupportProducts.tips.keys.map { BillingProduct(it, "€1") }
-    coEvery { purchases() } returns emptyList()
-    coEvery { acknowledge(any()) } returns true
-    coEvery { consume(any()) } returns true
-    every { launch(any(), any(), any()) } returns true
-  }
+  private val billing =
+    mockk<Billing> {
+      every { packageName } returns "de.ph1b.audiobook"
+      every { purchaseUpdates } returns updates
+      coEvery { products() } returns
+        SupportProducts.subscriptions.keys.map { BillingProduct(it, "€2") } + SupportProducts.tips.keys.map { BillingProduct(it, "€1") }
+      coEvery { purchases() } returns emptyList()
+      coEvery { acknowledge(any()) } returns true
+      coEvery { consume(any()) } returns true
+      every { launch(any(), any(), any()) } returns true
+    }
   private val supporterStatusStore = MemoryDataStore(SupporterStatus())
-  private val navigator = mockk<Navigator> {
-    every { goTo(any()) } just Runs
-  }
+  private val navigator =
+    mockk<Navigator> {
+      every { goTo(any()) } just Runs
+    }
   private val activity = mockk<Activity>()
 
   @Test
@@ -92,8 +94,12 @@ class PlaySupportBackendTest {
       expected = ActiveSubscription(SupporterTier.HoneyTea, SupportPeriod.Yearly),
       actual = state.activeSubscription,
     )
-    coVerify(exactly = 1) { val _ = billing.acknowledge(any()) }
-    coVerify { val _ = billing.acknowledge("token_supporter_honey_tea_yearly") }
+    coVerify(exactly = 1) {
+      val _ = billing.acknowledge(any())
+    }
+    coVerify {
+      val _ = billing.acknowledge("token_supporter_honey_tea_yearly")
+    }
     val status = supporterStatusStore.data.first()
     assertEquals(expected = 4, actual = status.subscribedMonths)
     assertEquals(expected = purchaseTime.toEpochMilli(), actual = status.supporterSince)
@@ -126,8 +132,12 @@ class PlaySupportBackendTest {
 
       assertEquals(expected = SupportEvent.ThankYou, actual = awaitItem())
     }
-    coVerify(exactly = 1) { val _ = billing.consume(any()) }
-    coVerify { val _ = billing.consume("token_tip_small") }
+    coVerify(exactly = 1) {
+      val _ = billing.consume(any())
+    }
+    coVerify {
+      val _ = billing.consume("token_tip_small")
+    }
     val status = supporterStatusStore.data.first()
     assertTrue(status.tipped)
     assertEquals(expected = SupporterBadge.TipJar, actual = status.badge)
@@ -159,7 +169,9 @@ class PlaySupportBackendTest {
 
     val state = assertIs<SupportBackendState.Play>(backend.state.value)
     assertEquals(expected = ActiveSubscription(SupporterTier.Tea, SupportPeriod.Monthly), actual = state.activeSubscription)
-    verify(exactly = 1) { val _ = billing.launch(activity, "supporter_golden_mic_yearly", bought) }
+    verify(exactly = 1) {
+      val _ = billing.launch(activity, "supporter_golden_mic_yearly", bought)
+    }
     assertEquals(expected = SupporterBadge.FirstCup, actual = supporterStatusStore.data.first().badge)
   }
 
@@ -175,7 +187,9 @@ class PlaySupportBackendTest {
 
       assertEquals(expected = SupportEvent.Pending, actual = awaitItem())
     }
-    coVerify(exactly = 0) { val _ = billing.consume(any()) }
+    coVerify(exactly = 0) {
+      val _ = billing.consume(any())
+    }
   }
 
   @Test
@@ -200,7 +214,9 @@ class PlaySupportBackendTest {
 
     backend.subscribe(activity, SupporterTier.GoldenMic, SupportPeriod.Yearly)
 
-    verify(exactly = 1) { val _ = billing.launch(activity, "supporter_golden_mic_yearly", running) }
+    verify(exactly = 1) {
+      val _ = billing.launch(activity, "supporter_golden_mic_yearly", running)
+    }
   }
 
   @Test
@@ -209,7 +225,9 @@ class PlaySupportBackendTest {
 
     backend.tip(activity, SupporterTier.HoneyTea)
 
-    verify(exactly = 1) { val _ = billing.launch(activity, "tip_medium", null) }
+    verify(exactly = 1) {
+      val _ = billing.launch(activity, "tip_medium", null)
+    }
   }
 
   @Test
@@ -258,11 +276,12 @@ class PlaySupportBackendTest {
     purchaseTime: Instant,
     state: BillingPurchase.State = BillingPurchase.State.Purchased,
     acknowledged: Boolean = true,
-  ) = BillingPurchase(
-    productId = productId,
-    purchaseToken = "token_$productId",
-    purchaseTime = purchaseTime.toEpochMilli(),
-    state = state,
-    acknowledged = acknowledged,
-  )
+  ) =
+    BillingPurchase(
+      productId = productId,
+      purchaseToken = "token_$productId",
+      purchaseTime = purchaseTime.toEpochMilli(),
+      state = state,
+      acknowledged = acknowledged,
+    )
 }

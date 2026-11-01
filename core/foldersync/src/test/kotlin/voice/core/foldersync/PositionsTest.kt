@@ -2,16 +2,16 @@ package voice.core.foldersync
 
 import android.provider.DocumentsContract
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.runner.RunWith
-import voice.core.data.Book
-import voice.core.data.BookId
-import voice.core.data.Bookmark
-import voice.core.data.CustomMetadata
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.uuid.Uuid
+import org.junit.runner.RunWith
+import voice.core.data.Book
+import voice.core.data.BookId
+import voice.core.data.Bookmark
+import voice.core.data.CustomMetadata
 
 @RunWith(AndroidJUnit4::class)
 class PositionsTest {

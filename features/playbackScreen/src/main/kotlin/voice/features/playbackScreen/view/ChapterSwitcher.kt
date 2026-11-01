@@ -62,9 +62,7 @@ internal fun ChapterSwitcher(
     }
     Surface(
       onClick = onChapterClick,
-      modifier = Modifier
-        .weight(1F)
-        .heightIn(min = 56.dp),
+      modifier = Modifier.weight(1F).heightIn(min = 56.dp),
       shape = RoundedCornerShape(20.dp),
       color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.85F),
     ) {

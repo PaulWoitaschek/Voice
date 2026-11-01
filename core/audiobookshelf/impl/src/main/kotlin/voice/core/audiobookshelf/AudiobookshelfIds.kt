@@ -7,8 +7,8 @@ import voice.core.data.ChapterId
 private const val ITEM_PREFIX = "$AUDIOBOOKSHELF_SCHEME://item/"
 
 /**
- * Server books keep their ids whether they are streamed or downloaded, so progress, bookmarks and the listening
- * history stay with them. The track index comes first so the chapters sort in the order of the book.
+ * Server books keep their ids whether they are streamed or downloaded, so progress, bookmarks and the listening history stay with them. The
+ * track index comes first so the chapters sort in the order of the book.
  */
 internal object AudiobookshelfIds {
 
@@ -22,9 +22,7 @@ internal object AudiobookshelfIds {
 }
 
 internal val BookId.itemId: String?
-  get() = value.takeIf { it.startsWith(ITEM_PREFIX) }
-    ?.removePrefix(ITEM_PREFIX)
-    ?.takeIf { it.isNotEmpty() && '/' !in it }
+  get() = value.takeIf { it.startsWith(ITEM_PREFIX) }?.removePrefix(ITEM_PREFIX)?.takeIf { it.isNotEmpty() && '/' !in it }
 
 internal data class TrackRef(
   val itemId: String,
@@ -40,4 +38,5 @@ internal fun trackRef(uri: String): TrackRef? {
   return TrackRef(itemId = itemId, ino = ino)
 }
 
-internal val ChapterId.trackRef: TrackRef? get() = trackRef(value)
+internal val ChapterId.trackRef: TrackRef?
+  get() = trackRef(value)

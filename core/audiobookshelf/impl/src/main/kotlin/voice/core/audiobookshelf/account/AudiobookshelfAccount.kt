@@ -4,6 +4,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -22,12 +23,12 @@ import voice.core.data.isRemote
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.PlayerController
-import java.io.IOException
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 @Inject
-class AudiobookshelfAccount internal constructor(
+class AudiobookshelfAccount
+internal constructor(
   private val accountStore: AccountStore,
   private val http: AudiobookshelfHttp,
   private val previews: LibrariesPreviews,
@@ -40,9 +41,7 @@ class AudiobookshelfAccount internal constructor(
   private val analytics: Analytics,
 ) : ServerAccount {
 
-  override val connection: Flow<AudiobookshelfConnection?> = accountStore.data
-    .map { it?.toConnection() }
-    .distinctUntilChanged()
+  override val connection: Flow<AudiobookshelfConnection?> = accountStore.data.map { it?.toConnection() }.distinctUntilChanged()
 
   override val serverName: Flow<String?> = connection.map { it?.serverName }.distinctUntilChanged()
 
@@ -75,16 +74,15 @@ class AudiobookshelfAccount internal constructor(
     sync.onSignedOut()
     // last, as a server that can't be reached takes a while to answer
     try {
-      @Suppress("RETURN_VALUE_NOT_USED")
-      http.api(account.serverUrl).logout(account.refreshToken)
-    } catch (_: IOException) {
-    }
+      @Suppress("RETURN_VALUE_NOT_USED") http.api(account.serverUrl).logout(account.refreshToken)
+    } catch (_: IOException) {}
   }
 }
 
-private fun Account.toConnection() = AudiobookshelfConnection(
-  serverName = serverName(serverUrl),
-  username = username,
-  libraryIds = libraryIds,
-  needsLogin = needsLogin,
-)
+private fun Account.toConnection() =
+  AudiobookshelfConnection(
+    serverName = serverName(serverUrl),
+    username = username,
+    libraryIds = libraryIds,
+    needsLogin = needsLogin,
+  )

@@ -32,11 +32,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import voice.core.strings.R as StringsR
 import voice.core.ui.ConfettiState
 import voice.core.ui.drawConfetti
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
-import voice.core.strings.R as StringsR
 
 /** Unlocking the developer menu (the 13th tap) is celebrated with [confetti] bursting out of the badge. */
 @Composable
@@ -53,34 +53,32 @@ internal fun AboutFooter(
   val colors = MaterialTheme.colorScheme
   val confettiColors = listOf(colors.primary, colors.secondary, colors.tertiary, colors.primaryContainer, colors.tertiaryContainer)
   Column(
-    modifier = modifier
-      .fillMaxWidth()
-      .padding(vertical = 8.dp),
+    modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Column(
-      modifier = Modifier
-        // without a clipping ripple, so the confetti can fly everywhere. The squish is the feedback.
-        .clickable(
-          interactionSource = remember { MutableInteractionSource() },
-          indication = null,
-        ) {
-          onClick()
-          scope.launch {
-            spin.animateTo(spin.value + 90F, spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessLow))
+      modifier =
+        Modifier
+          // without a clipping ripple, so the confetti can fly everywhere. The squish is the feedback.
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+          ) {
+            onClick()
+            scope.launch {
+              spin.animateTo(spin.value + 90F, spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessLow))
+            }
+            scope.launch {
+              squish.snapTo(0.8F)
+              squish.animateTo(1F, spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessMedium))
+            }
           }
-          scope.launch {
-            squish.snapTo(0.8F)
-            squish.animateTo(1F, spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessMedium))
-          }
-        }
-        .padding(horizontal = 24.dp, vertical = 12.dp),
+          .padding(horizontal = 24.dp, vertical = 12.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Box(
-        modifier = Modifier
-          .size(64.dp)
-          .drawWithContent {
+        modifier =
+          Modifier.size(64.dp).drawWithContent {
             drawContent()
             drawConfetti(
               state = confetti,
@@ -92,8 +90,7 @@ internal fun AboutFooter(
         contentAlignment = Alignment.Center,
       ) {
         Box(
-          Modifier
-            .matchParentSize()
+          Modifier.matchParentSize()
             .graphicsLayer {
               rotationZ = clock.value * 8F + spin.value
               scaleX = squish.value

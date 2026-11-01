@@ -3,6 +3,10 @@ package voice.core.audiobookshelf.login
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
@@ -17,10 +21,6 @@ import voice.core.audiobookshelf.ServerAccount
 import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.AccountStore
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertIs
 
 class AudiobookshelfLoginTest {
 
@@ -92,15 +92,16 @@ class AudiobookshelfLoginTest {
       MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}"""),
     )
     server.enqueue(MockResponse(code = 200, body = """{"user":{"id":"2","username":"kim","accessToken":"a","refreshToken":"r"}}"""))
-    val stored = Account(
-      serverUrl = server.url("/").toString(),
-      userId = "1",
-      username = "paul",
-      accessToken = "old",
-      refreshToken = "old",
-      libraryIds = listOf("library"),
-      serverVersion = "2.37.1",
-    )
+    val stored =
+      Account(
+        serverUrl = server.url("/").toString(),
+        userId = "1",
+        username = "paul",
+        accessToken = "old",
+        refreshToken = "old",
+        libraryIds = listOf("library"),
+        serverVersion = "2.37.1",
+      )
     val accountStore = MemoryDataStore<Account?>(stored)
     val serverLogin = serverLogin(accountStore)
 
@@ -117,17 +118,18 @@ class AudiobookshelfLoginTest {
       MockResponse(code = 200, body = """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}"""),
     )
     server.enqueue(MockResponse(code = 200, body = """{"user":{"id":"2","username":"kim","accessToken":"a","refreshToken":"r"}}"""))
-    val accountStore = MemoryDataStore<Account?>(
-      Account(
-        serverUrl = server.url("/").toString(),
-        userId = "1",
-        username = "paul",
-        accessToken = "old",
-        refreshToken = "old",
-        libraryIds = listOf("library"),
-        serverVersion = "2.37.1",
-      ),
-    )
+    val accountStore =
+      MemoryDataStore<Account?>(
+        Account(
+          serverUrl = server.url("/").toString(),
+          userId = "1",
+          username = "paul",
+          accessToken = "old",
+          refreshToken = "old",
+          libraryIds = listOf("library"),
+          serverVersion = "2.37.1",
+        ),
+      )
     val serverAccount = mockk<ServerAccount>(relaxUnitFun = true)
     val serverLogin = serverLogin(accountStore, serverAccount)
 

@@ -8,6 +8,7 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import java.time.Clock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
@@ -16,17 +17,14 @@ import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.playback.notification.MainActivityIntentProvider
-import java.time.Clock
 
 @BindingContainer
 @ContributesTo(AppScope::class)
 object AndroidModule {
 
-  @Provides
-  fun provideContext(app: Application): Context = app
+  @Provides fun provideContext(app: Application): Context = app
 
-  @Provides
-  fun coroutineScope(dispatcherProvider: DispatcherProvider): CoroutineScope = MainScope(dispatcherProvider)
+  @Provides fun coroutineScope(dispatcherProvider: DispatcherProvider): CoroutineScope = MainScope(dispatcherProvider)
 
   @Provides
   @SingleIn(AppScope::class)
@@ -34,11 +32,9 @@ object AndroidModule {
     return context.getSystemService(Context.POWER_SERVICE) as PowerManager
   }
 
-  @Provides
-  fun toToBookIntentProvider(impl: MainActivityIntentProviderImpl): MainActivityIntentProvider = impl
+  @Provides fun toToBookIntentProvider(impl: MainActivityIntentProviderImpl): MainActivityIntentProvider = impl
 
-  @Provides
-  fun applicationIdProvider(impl: AppInfoProviderImpl): AppInfoProvider = impl
+  @Provides fun applicationIdProvider(impl: AppInfoProviderImpl): AppInfoProvider = impl
 
   @Provides
   @SingleIn(AppScope::class)
@@ -52,6 +48,5 @@ object AndroidModule {
     return DispatcherProvider()
   }
 
-  @Provides
-  fun clock(): Clock = Clock.systemDefaultZone()
+  @Provides fun clock(): Clock = Clock.systemDefaultZone()
 }

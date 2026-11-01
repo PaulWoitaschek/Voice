@@ -54,6 +54,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
+import voice.core.strings.R as StringsR
 import voice.core.ui.OnboardingButton
 import voice.core.ui.OnboardingScaffold
 import voice.core.ui.OnboardingStep
@@ -64,7 +65,6 @@ import voice.features.audiobookshelf.views.ServerHero
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.Origin
-import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface AudiobookshelfLoginGraph {
@@ -77,11 +77,12 @@ object AudiobookshelfLoginProvider {
 
   @Provides
   @IntoSet
-  fun audiobookshelfLoginNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.AudiobookshelfLogin> { key ->
-    NavEntry(key) {
-      AudiobookshelfLogin(origin = key.origin, renew = key.renew)
+  fun audiobookshelfLoginNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.AudiobookshelfLogin> { key ->
+      NavEntry(key) {
+        AudiobookshelfLogin(origin = key.origin, renew = key.renew)
+      }
     }
-  }
 }
 
 @Composable
@@ -89,9 +90,10 @@ private fun AudiobookshelfLogin(
   origin: Origin,
   renew: Boolean,
 ) {
-  val viewModel = retain(origin.name, renew) {
-    rootGraphAs<AudiobookshelfLoginGraph>().audiobookshelfLoginViewModelFactory.create(origin, renew)
-  }
+  val viewModel =
+    retain(origin.name, renew) {
+      rootGraphAs<AudiobookshelfLoginGraph>().audiobookshelfLoginViewModelFactory.create(origin, renew)
+    }
   BackHandler(onBack = viewModel::onBack)
   AudiobookshelfLogin(
     state = viewModel.state,
@@ -122,89 +124,95 @@ private fun AudiobookshelfLogin(
   onConnect: () -> Unit,
   onRetryLibraries: () -> Unit,
 ) {
-  val step = when (origin) {
-    Origin.Default -> null
-    Origin.Onboarding -> OnboardingStep.AddContent
-  }
+  val step =
+    when (origin) {
+      Origin.Default -> null
+      Origin.Onboarding -> OnboardingStep.AddContent
+    }
   when (state) {
-    is AudiobookshelfLoginViewState.Address -> OnboardingScaffold(
-      step = step,
-      onBack = onBack,
-      title = stringResource(StringsR.string.audiobookshelf_login_address_title),
-      subtitle = stringResource(StringsR.string.audiobookshelf_login_address_subtitle),
-      hero = { clock -> ServerHero(clock = clock, modifier = Modifier.fillMaxSize()) },
-      details = { AddressDetails(state, onAddressChange, onFindServer) },
-      actions = {
-        BusyButton(
-          text = stringResource(StringsR.string.audiobookshelf_login_address_action),
-          busy = state.busy,
-          enabled = state.address.isNotBlank(),
-          onClick = onFindServer,
-        )
-      },
-    )
-    is AudiobookshelfLoginViewState.Credentials -> OnboardingScaffold(
-      step = step,
-      onBack = onBack,
-      title = stringResource(StringsR.string.audiobookshelf_login_credentials_title),
-      subtitle = if (state.passwordLogin) {
-        stringResource(StringsR.string.audiobookshelf_login_credentials_subtitle, state.serverName)
-      } else {
-        stringResource(StringsR.string.audiobookshelf_login_credentials_no_password)
-      },
-      hero = { clock -> ServerHero(clock = clock, modifier = Modifier.fillMaxSize()) },
-      details = {
-        if (state.passwordLogin) {
-          CredentialsDetails(state, onUsernameChange, onPasswordChange, onLogin)
-        }
-      },
-      actions = {
-        if (state.passwordLogin) {
+    is AudiobookshelfLoginViewState.Address ->
+      OnboardingScaffold(
+        step = step,
+        onBack = onBack,
+        title = stringResource(StringsR.string.audiobookshelf_login_address_title),
+        subtitle = stringResource(StringsR.string.audiobookshelf_login_address_subtitle),
+        hero = { clock -> ServerHero(clock = clock, modifier = Modifier.fillMaxSize()) },
+        details = { AddressDetails(state, onAddressChange, onFindServer) },
+        actions = {
           BusyButton(
-            text = stringResource(StringsR.string.audiobookshelf_login_credentials_action),
+            text = stringResource(StringsR.string.audiobookshelf_login_address_action),
             busy = state.busy,
-            enabled = state.username.isNotBlank(),
-            onClick = onLogin,
+            enabled = state.address.isNotBlank(),
+            onClick = onFindServer,
           )
-        }
-      },
-    )
-    is AudiobookshelfLoginViewState.Libraries -> OnboardingScaffold(
-      step = step,
-      onBack = onBack,
-      title = when {
-        state.loading -> stringResource(StringsR.string.audiobookshelf_login_libraries_loading)
-        state.failed -> stringResource(StringsR.string.audiobookshelf_login_error_unreachable)
-        state.libraries.isEmpty() -> stringResource(StringsR.string.audiobookshelf_login_libraries_none)
-        else -> pluralStringResource(StringsR.plurals.audiobookshelf_login_libraries_title, state.bookCount, state.bookCount)
-      },
-      subtitle = stringResource(StringsR.string.audiobookshelf_login_libraries_subtitle),
-      hero = { clock ->
-        if (state.covers.isEmpty()) {
-          ServerHero(clock = clock, modifier = Modifier.fillMaxSize())
-        } else {
-          CoversHero(covers = state.covers, modifier = Modifier.fillMaxSize())
-        }
-      },
-      details = { LibrariesDetails(state, onLibraryToggle) },
-      actions = {
-        if (state.failed) {
-          BusyButton(
-            text = stringResource(StringsR.string.audiobookshelf_settings_try_again),
-            busy = false,
-            enabled = true,
-            onClick = onRetryLibraries,
-          )
-        } else {
-          BusyButton(
-            text = stringResource(StringsR.string.audiobookshelf_login_libraries_action),
-            busy = state.loading || state.busy,
-            enabled = state.canConnect,
-            onClick = onConnect,
-          )
-        }
-      },
-    )
+        },
+      )
+    is AudiobookshelfLoginViewState.Credentials ->
+      OnboardingScaffold(
+        step = step,
+        onBack = onBack,
+        title = stringResource(StringsR.string.audiobookshelf_login_credentials_title),
+        subtitle =
+          if (state.passwordLogin) {
+            stringResource(StringsR.string.audiobookshelf_login_credentials_subtitle, state.serverName)
+          } else {
+            stringResource(StringsR.string.audiobookshelf_login_credentials_no_password)
+          },
+        hero = { clock -> ServerHero(clock = clock, modifier = Modifier.fillMaxSize()) },
+        details = {
+          if (state.passwordLogin) {
+            CredentialsDetails(state, onUsernameChange, onPasswordChange, onLogin)
+          }
+        },
+        actions = {
+          if (state.passwordLogin) {
+            BusyButton(
+              text = stringResource(StringsR.string.audiobookshelf_login_credentials_action),
+              busy = state.busy,
+              enabled = state.username.isNotBlank(),
+              onClick = onLogin,
+            )
+          }
+        },
+      )
+    is AudiobookshelfLoginViewState.Libraries ->
+      OnboardingScaffold(
+        step = step,
+        onBack = onBack,
+        title =
+          when {
+            state.loading -> stringResource(StringsR.string.audiobookshelf_login_libraries_loading)
+            state.failed -> stringResource(StringsR.string.audiobookshelf_login_error_unreachable)
+            state.libraries.isEmpty() -> stringResource(StringsR.string.audiobookshelf_login_libraries_none)
+            else -> pluralStringResource(StringsR.plurals.audiobookshelf_login_libraries_title, state.bookCount, state.bookCount)
+          },
+        subtitle = stringResource(StringsR.string.audiobookshelf_login_libraries_subtitle),
+        hero = { clock ->
+          if (state.covers.isEmpty()) {
+            ServerHero(clock = clock, modifier = Modifier.fillMaxSize())
+          } else {
+            CoversHero(covers = state.covers, modifier = Modifier.fillMaxSize())
+          }
+        },
+        details = { LibrariesDetails(state, onLibraryToggle) },
+        actions = {
+          if (state.failed) {
+            BusyButton(
+              text = stringResource(StringsR.string.audiobookshelf_settings_try_again),
+              busy = false,
+              enabled = true,
+              onClick = onRetryLibraries,
+            )
+          } else {
+            BusyButton(
+              text = stringResource(StringsR.string.audiobookshelf_login_libraries_action),
+              busy = state.loading || state.busy,
+              enabled = state.canConnect,
+              onClick = onConnect,
+            )
+          }
+        },
+      )
   }
 }
 
@@ -218,9 +226,7 @@ private fun ColumnScope.AddressDetails(
   LaunchedEffect(focusRequester) { focusRequester.requestFocus() }
   Spacer(Modifier.height(24.dp))
   OutlinedTextField(
-    modifier = Modifier
-      .fillMaxWidth()
-      .focusRequester(focusRequester),
+    modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
     value = state.address,
     onValueChange = onAddressChange,
     enabled = !state.busy,
@@ -228,31 +234,34 @@ private fun ColumnScope.AddressDetails(
     label = { Text(stringResource(StringsR.string.audiobookshelf_login_address_label)) },
     placeholder = { Text(stringResource(StringsR.string.audiobookshelf_login_address_placeholder)) },
     isError = state.error != null,
-    supportingText = state.error?.let { error ->
-      {
-        Text(
-          modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-          text = error.message(),
-        )
-      }
-    },
-    keyboardOptions = KeyboardOptions(
-      keyboardType = KeyboardType.Uri,
-      imeAction = ImeAction.Go,
-      autoCorrectEnabled = false,
-      capitalization = KeyboardCapitalization.None,
-    ),
+    supportingText =
+      state.error?.let { error ->
+        {
+          Text(
+            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+            text = error.message(),
+          )
+        }
+      },
+    keyboardOptions =
+      KeyboardOptions(
+        keyboardType = KeyboardType.Uri,
+        imeAction = ImeAction.Go,
+        autoCorrectEnabled = false,
+        capitalization = KeyboardCapitalization.None,
+      ),
     keyboardActions = KeyboardActions(onGo = { onFindServer() }),
   )
 }
 
 @Composable
-private fun AddressError.message(): String = when (this) {
-  AddressError.NotFound -> stringResource(StringsR.string.audiobookshelf_login_error_not_found)
-  AddressError.CertificateNotTrusted -> stringResource(StringsR.string.audiobookshelf_login_error_certificate)
-  AddressError.NotSetUp -> stringResource(StringsR.string.audiobookshelf_login_error_not_set_up)
-  is AddressError.TooOld -> stringResource(StringsR.string.audiobookshelf_login_error_too_old, version)
-}
+private fun AddressError.message(): String =
+  when (this) {
+    AddressError.NotFound -> stringResource(StringsR.string.audiobookshelf_login_error_not_found)
+    AddressError.CertificateNotTrusted -> stringResource(StringsR.string.audiobookshelf_login_error_certificate)
+    AddressError.NotSetUp -> stringResource(StringsR.string.audiobookshelf_login_error_not_set_up)
+    is AddressError.TooOld -> stringResource(StringsR.string.audiobookshelf_login_error_too_old, version)
+  }
 
 @Composable
 private fun ColumnScope.CredentialsDetails(
@@ -269,29 +278,24 @@ private fun ColumnScope.CredentialsDetails(
   var showPassword by rememberSaveable { mutableStateOf(false) }
   Spacer(Modifier.height(24.dp))
   OutlinedTextField(
-    modifier = Modifier
-      .fillMaxWidth()
-      .focusRequester(usernameFocus)
-      .semantics { contentType = ContentType.Username },
+    modifier = Modifier.fillMaxWidth().focusRequester(usernameFocus).semantics { contentType = ContentType.Username },
     value = state.username,
     onValueChange = onUsernameChange,
     enabled = !state.busy,
     singleLine = true,
     label = { Text(stringResource(StringsR.string.audiobookshelf_login_username)) },
-    keyboardOptions = KeyboardOptions(
-      keyboardType = KeyboardType.Text,
-      imeAction = ImeAction.Next,
-      autoCorrectEnabled = false,
-      capitalization = KeyboardCapitalization.None,
-    ),
+    keyboardOptions =
+      KeyboardOptions(
+        keyboardType = KeyboardType.Text,
+        imeAction = ImeAction.Next,
+        autoCorrectEnabled = false,
+        capitalization = KeyboardCapitalization.None,
+      ),
     keyboardActions = KeyboardActions(onNext = { passwordFocus.requestFocus() }),
   )
   Spacer(Modifier.height(8.dp))
   OutlinedTextField(
-    modifier = Modifier
-      .fillMaxWidth()
-      .focusRequester(passwordFocus)
-      .semantics { contentType = ContentType.Password },
+    modifier = Modifier.fillMaxWidth().focusRequester(passwordFocus).semantics { contentType = ContentType.Password },
     value = state.password,
     onValueChange = onPasswordChange,
     enabled = !state.busy,
@@ -302,37 +306,41 @@ private fun ColumnScope.CredentialsDetails(
       IconButton(onClick = { showPassword = !showPassword }) {
         Icon(
           imageVector = if (showPassword) VoiceIcons.VisibilityOff else VoiceIcons.Visibility,
-          contentDescription = stringResource(
-            if (showPassword) {
-              StringsR.string.audiobookshelf_login_password_hide
-            } else {
-              StringsR.string.audiobookshelf_login_password_show
-            },
-          ),
+          contentDescription =
+            stringResource(
+              if (showPassword) {
+                StringsR.string.audiobookshelf_login_password_hide
+              } else {
+                StringsR.string.audiobookshelf_login_password_show
+              },
+            ),
         )
       }
     },
     isError = state.error != null,
-    supportingText = state.error?.let { error ->
-      {
-        Text(
-          modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-          text = stringResource(
-            when (error) {
-              CredentialsError.WrongCredentials -> StringsR.string.audiobookshelf_login_error_credentials
-              CredentialsError.Unreachable -> StringsR.string.audiobookshelf_login_error_unreachable
-              CredentialsError.Failed -> StringsR.string.audiobookshelf_login_error_failed
-              CredentialsError.OtherAccount -> StringsR.string.audiobookshelf_login_error_other_account
-            },
-          ),
-        )
-      }
-    },
-    keyboardOptions = KeyboardOptions(
-      keyboardType = KeyboardType.Password,
-      imeAction = ImeAction.Done,
-      autoCorrectEnabled = false,
-    ),
+    supportingText =
+      state.error?.let { error ->
+        {
+          Text(
+            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+            text =
+              stringResource(
+                when (error) {
+                  CredentialsError.WrongCredentials -> StringsR.string.audiobookshelf_login_error_credentials
+                  CredentialsError.Unreachable -> StringsR.string.audiobookshelf_login_error_unreachable
+                  CredentialsError.Failed -> StringsR.string.audiobookshelf_login_error_failed
+                  CredentialsError.OtherAccount -> StringsR.string.audiobookshelf_login_error_other_account
+                },
+              ),
+          )
+        }
+      },
+    keyboardOptions =
+      KeyboardOptions(
+        keyboardType = KeyboardType.Password,
+        imeAction = ImeAction.Done,
+        autoCorrectEnabled = false,
+      ),
     keyboardActions = KeyboardActions(onDone = { onLogin() }),
   )
 }
@@ -355,11 +363,12 @@ private fun ColumnScope.LibrariesDetails(
         selected = library.selected,
         onClick = { onLibraryToggle(library.id) },
         enabled = !state.busy,
-        leadingIcon = if (library.selected) {
-          { Icon(VoiceIcons.Check, contentDescription = null, modifier = Modifier.size(18.dp)) }
-        } else {
-          null
-        },
+        leadingIcon =
+          if (library.selected) {
+            { Icon(VoiceIcons.Check, contentDescription = null, modifier = Modifier.size(18.dp)) }
+          } else {
+            null
+          },
         label = {
           Text(
             pluralStringResource(
@@ -384,9 +393,7 @@ private fun BusyButton(
 ) {
   if (busy) {
     Box(
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(56.dp),
+      modifier = Modifier.fillMaxWidth().height(56.dp),
       contentAlignment = Alignment.Center,
     ) {
       LoadingIndicator(Modifier.size(48.dp))
@@ -426,14 +433,16 @@ private fun AddressPreview() {
 private fun LibrariesPreview() {
   VoiceTheme {
     AudiobookshelfLogin(
-      state = AudiobookshelfLoginViewState.Libraries(
-        serverName = "audiobooks.example.com",
-        loading = false,
-        libraries = listOf(
-          LibraryViewState(id = "1", name = "Audiobooks", bookCount = 132, selected = true),
-          LibraryViewState(id = "2", name = "Kids", bookCount = 24, selected = false),
+      state =
+        AudiobookshelfLoginViewState.Libraries(
+          serverName = "audiobooks.example.com",
+          loading = false,
+          libraries =
+            listOf(
+              LibraryViewState(id = "1", name = "Audiobooks", bookCount = 132, selected = true),
+              LibraryViewState(id = "2", name = "Kids", bookCount = 24, selected = false),
+            ),
         ),
-      ),
       origin = Origin.Default,
       onBack = {},
       onAddressChange = {},

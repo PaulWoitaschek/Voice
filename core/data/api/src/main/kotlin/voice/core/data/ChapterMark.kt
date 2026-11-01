@@ -1,7 +1,7 @@
 package voice.core.data
 
-import kotlinx.serialization.Serializable
 import kotlin.time.Duration
+import kotlinx.serialization.Serializable
 
 @Serializable
 public data class MarkData(
@@ -27,16 +27,18 @@ public data class ChapterMark(
   }
 
   public operator fun contains(position: Duration): Boolean = position.inWholeMilliseconds in startMs..endMs
+
   public operator fun contains(positionMs: Long): Boolean = positionMs in startMs..endMs
 }
 
-public val ChapterMark.durationMs: Long get() = (endMs - startMs).coerceAtLeast(0L)
+public val ChapterMark.durationMs: Long
+  get() = (endMs - startMs).coerceAtLeast(0L)
 
 public fun Chapter.markForPosition(positionInChapterMs: Long): ChapterMark {
-  val clampedPositionInChapterMs = positionInChapterMs.coerceIn(
-    0L,
-    (duration - 1).coerceAtLeast(0L),
-  )
-  return chapterMarks.find { clampedPositionInChapterMs in it.startMs..it.endMs }
-    ?: chapterMarks.first()
+  val clampedPositionInChapterMs =
+    positionInChapterMs.coerceIn(
+      0L,
+      (duration - 1).coerceAtLeast(0L),
+    )
+  return chapterMarks.find { clampedPositionInChapterMs in it.startMs..it.endMs } ?: chapterMarks.first()
 }

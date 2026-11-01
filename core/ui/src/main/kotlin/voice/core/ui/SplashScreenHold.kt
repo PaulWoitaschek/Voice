@@ -7,14 +7,15 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 
 /**
- * Counts the screens that are not ready to be shown yet. While there are any, the activity keeps the
- * splash screen up, so the app opens straight onto a finished screen instead of a half loaded one.
+ * Counts the screens that are not ready to be shown yet. While there are any, the activity keeps the splash screen up, so the app opens
+ * straight onto a finished screen instead of a half loaded one.
  */
 class SplashScreenHolds {
 
   private var count = 0
 
-  val holding: Boolean get() = count > 0
+  val holding: Boolean
+    get() = count > 0
 
   internal fun add() {
     count++

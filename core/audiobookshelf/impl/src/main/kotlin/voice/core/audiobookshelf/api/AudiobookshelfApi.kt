@@ -15,24 +15,17 @@ import retrofit2.http.Query
 
 internal interface AudiobookshelfApi {
 
-  @GET("status")
-  suspend fun status(): Response<StatusResponse>
+  @GET("status") suspend fun status(): Response<StatusResponse>
 
-  @Headers("x-return-tokens: true")
-  @POST("login")
-  suspend fun login(@Body request: LoginRequest): LoginResponse
+  @Headers("x-return-tokens: true") @POST("login") suspend fun login(@Body request: LoginRequest): LoginResponse
 
-  @POST("auth/refresh")
-  fun refresh(@Header("x-refresh-token") refreshToken: String): Call<LoginResponse>
+  @POST("auth/refresh") fun refresh(@Header("x-refresh-token") refreshToken: String): Call<LoginResponse>
 
-  @POST("logout")
-  suspend fun logout(@Header("x-refresh-token") refreshToken: String): Response<Unit>
+  @POST("logout") suspend fun logout(@Header("x-refresh-token") refreshToken: String): Response<Unit>
 
-  @GET("api/me")
-  suspend fun me(): AbsUser
+  @GET("api/me") suspend fun me(): AbsUser
 
-  @GET("api/libraries")
-  suspend fun libraries(): LibrariesResponse
+  @GET("api/libraries") suspend fun libraries(): LibrariesResponse
 
   @GET("api/libraries/{id}/items")
   suspend fun libraryItems(
@@ -42,8 +35,7 @@ internal interface AudiobookshelfApi {
     @Query("minified") minified: Int = 1,
   ): LibraryItemsResponse
 
-  @POST("api/items/batch/get")
-  suspend fun items(@Body request: BatchGetRequest): BatchGetResponse
+  @POST("api/items/batch/get") suspend fun items(@Body request: BatchGetRequest): BatchGetResponse
 
   @PATCH("api/items/{itemId}/media")
   suspend fun updateMedia(

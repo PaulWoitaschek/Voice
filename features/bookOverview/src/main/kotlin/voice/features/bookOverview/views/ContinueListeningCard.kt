@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.text.NumberFormat
 import voice.core.strings.R
 import voice.core.ui.CoverTheme
 import voice.core.ui.PlayButton
@@ -41,7 +42,6 @@ import voice.core.ui.ProgressWave
 import voice.core.ui.bookText
 import voice.core.ui.playButtonSharedElementModifier
 import voice.features.bookOverview.overview.BookOverviewItemViewState
-import java.text.NumberFormat
 
 /** Uses the same cover theme as the player, so cover and play button hand over seamlessly. */
 @Composable
@@ -60,17 +60,18 @@ internal fun ContinueListeningCard(
     // accents use surface / primary roles, which stay legible on either.
     val tint = if (colors.surface.luminance() < 0.5F) 0.35F else 0.85F
     Box(
-      modifier = modifier
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(32.dp))
-        .background(colors.surfaceContainerHigh)
-        .background(
-          Brush.linearGradient(
-            listOf(colors.primaryContainer.copy(alpha = tint), colors.tertiaryContainer.copy(alpha = tint)),
-          ),
-        )
-        .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-        .padding(20.dp),
+      modifier =
+        modifier
+          .fillMaxWidth()
+          .clip(RoundedCornerShape(32.dp))
+          .background(colors.surfaceContainerHigh)
+          .background(
+            Brush.linearGradient(
+              listOf(colors.primaryContainer.copy(alpha = tint), colors.tertiaryContainer.copy(alpha = tint)),
+            ),
+          )
+          .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+          .padding(20.dp),
     ) {
       CompositionLocalProvider(LocalContentColor provides colors.onSurface) {
         Column {

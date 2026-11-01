@@ -11,6 +11,8 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import java.time.Clock
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -24,7 +26,6 @@ import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.BookmarkRepo
 import voice.core.data.store.CurrentBookStore
-import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.CurrentBookResolver
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
@@ -35,8 +36,6 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.core.playback.withDefaultSpeed
 import voice.core.sleeptimer.SleepTimer
 import voice.navigation.Navigator
-import java.time.Clock
-import kotlin.time.Duration.Companion.seconds
 
 @AssistedInject
 class BookmarkViewModel(
@@ -54,10 +53,8 @@ class BookmarkViewModel(
   private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
   private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
   private val historyTabOpenStore: HistoryTabOpenStore,
-  @Assisted
-  private val bookId: BookId,
-  @Assisted
-  private val editBookmarkId: String?,
+  @Assisted private val bookId: BookId,
+  @Assisted private val editBookmarkId: String?,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -89,22 +86,26 @@ class BookmarkViewModel(
     var openedEditorFromNavigation by rememberSaveable { mutableStateOf(false) }
     val defaultSpeed = remember { lastPlaybackSpeedStore.data }.collectAsState(initial = null).value
     val historyTabOpen = remember { historyTabOpenStore.data }.collectAsState(initial = null).value ?: return null
-    val persistedBook = remember(bookId) { bookRepository.flow(bookId) }
-      .collectAsState(initial = null).value
-      ?.withDefaultSpeed { defaultSpeed ?: return null }
-      ?: return null
+    val persistedBook =
+      remember(bookId) { bookRepository.flow(bookId) }
+        .collectAsState(initial = null)
+        .value
+        ?.withDefaultSpeed { defaultSpeed ?: return null } ?: return null
     // with the experimental playback persistence, the stored position lags behind while playing
     val experimentalPlaybackPersistence = remember { experimentalPlaybackPersistenceFeatureFlag.get() }
-    val livePlaybackState = if (experimentalPlaybackPersistence) {
-      remember(bookId) { playerController.livePlaybackStateFlow(bookId) }
-        .collectAsState(initial = null).value
-    } else {
-      null
-    }
+    val livePlaybackState =
+      if (experimentalPlaybackPersistence) {
+        remember(bookId) { playerController.livePlaybackStateFlow(bookId) }.collectAsState(initial = null).value
+      } else {
+        null
+      }
     val book = if (livePlaybackState != null) persistedBook.overlay(livePlaybackState) else persistedBook
-    val bookmarks = remember(book.id, book.content.chapters) {
-      bookmarkRepo.bookmarksFlow(book.content)
-    }.collectAsState(initial = null).value ?: return null
+    val bookmarks =
+      remember(book.id, book.content.chapters) {
+          bookmarkRepo.bookmarksFlow(book.content)
+        }
+        .collectAsState(initial = null)
+        .value ?: return null
     this.book = book
     this.bookmarks = bookmarks
 
@@ -134,12 +135,14 @@ class BookmarkViewModel(
       items = bookmarkListItems(index, visible, sort, now, clock.zone),
       totalCount = bookmarks.size,
       editor = draft?.let { editorViewState(index, it) },
-      tab = pickedTab ?: when {
-        // the bookmark to edit is in the list of bookmarks
-        editBookmarkId != null -> BookmarkTab.Bookmarks
-        historyTabOpen -> BookmarkTab.History
-        else -> BookmarkTab.Bookmarks
-      },
+      tab =
+        pickedTab
+          ?: when {
+            // the bookmark to edit is in the list of bookmarks
+            editBookmarkId != null -> BookmarkTab.Bookmarks
+            historyTabOpen -> BookmarkTab.History
+            else -> BookmarkTab.Bookmarks
+          },
     )
   }
 
@@ -207,10 +210,11 @@ class BookmarkViewModel(
     scope.launch {
       try {
         val book = currentBookResolver.book(bookId) ?: return@launch
-        val bookmark = bookmarkRepo.addBookmarkAtBookPosition(
-          book = book,
-          title = null,
-        )
+        val bookmark =
+          bookmarkRepo.addBookmarkAtBookPosition(
+            book = book,
+            title = null,
+          )
         // a filter for another kind would hide the new bookmark
         selectedCategory = null
         edit(bookmark, isNew = true)
@@ -247,11 +251,12 @@ class BookmarkViewModel(
   internal fun onEditorDone() {
     val draft = draft ?: return
     this.draft = null
-    val updated = draft.bookmark.copy(
-      title = draft.note.trim().takeIf { it.isNotEmpty() },
-      kind = draft.kind,
-      time = draft.time,
-    )
+    val updated =
+      draft.bookmark.copy(
+        title = draft.note.trim().takeIf { it.isNotEmpty() },
+        kind = draft.kind,
+        time = draft.time,
+      )
     if (updated != draft.bookmark) {
       scope.launch {
         bookmarkRepo.addBookmark(updated)
@@ -301,13 +306,14 @@ class BookmarkViewModel(
     bookmark: Bookmark,
     isNew: Boolean,
   ) {
-    draft = Draft(
-      bookmark = bookmark,
-      isNew = isNew,
-      note = bookmark.title.orEmpty(),
-      kind = bookmark.kind,
-      time = bookmark.time,
-    )
+    draft =
+      Draft(
+        bookmark = bookmark,
+        isNew = isNew,
+        note = bookmark.title.orEmpty(),
+        kind = bookmark.kind,
+        time = bookmark.time,
+      )
   }
 
   private data class Draft(

@@ -34,12 +34,12 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import voice.core.ui.icons.VoiceIcons
-import voice.features.playbackScreen.view.RollingText
 import java.text.DecimalFormat
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import voice.core.strings.R as StringsR
+import voice.core.ui.icons.VoiceIcons
+import voice.features.playbackScreen.view.RollingText
 
 private const val MIN_SPEED = 0.5F
 private const val MAX_SPEED = 3.5F
@@ -56,16 +56,14 @@ internal fun SpeedSheet(
   val speed = dialogState.speed
   ModalBottomSheet(
     onDismissRequest = onDismiss,
-    sheetState = rememberBottomSheetState(
-      initialValue = Hidden,
-      enabledValues = setOf(Hidden, Expanded),
-    ),
+    sheetState =
+      rememberBottomSheetState(
+        initialValue = Hidden,
+        enabledValues = setOf(Hidden, Expanded),
+      ),
   ) {
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 24.dp)
-        .padding(bottom = 32.dp),
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).padding(bottom = 32.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Text(
@@ -92,9 +90,7 @@ internal fun SpeedSheet(
         val sliderState = rememberSliderState(value = speed, trackRange = MIN_SPEED..MAX_SPEED)
         SideEffect { sliderState.value = speed }
         Slider(
-          modifier = Modifier
-            .weight(1F)
-            .padding(horizontal = 12.dp),
+          modifier = Modifier.weight(1F).padding(horizontal = 12.dp),
           state = sliderState,
           onValueChange = {
             val snapped = it.snapToStep()
@@ -119,14 +115,13 @@ internal fun SpeedSheet(
           ToggleButton(
             checked = abs(speed - preset) < 0.01F,
             onCheckedChange = { onSpeedChange(preset) },
-            modifier = Modifier
-              .weight(1F)
-              .semantics { role = Role.RadioButton },
-            shapes = when (index) {
-              0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-              SPEED_PRESETS.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
-              else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-            },
+            modifier = Modifier.weight(1F).semantics { role = Role.RadioButton },
+            shapes =
+              when (index) {
+                0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                SPEED_PRESETS.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+              },
           ) {
             Text(speedFormat.format(preset), maxLines = 1)
           }

@@ -63,12 +63,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.dp
+import java.text.DecimalFormat
 import kotlinx.coroutines.launch
 import voice.core.strings.R
 import voice.core.ui.formatTime
 import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState
-import java.text.DecimalFormat
 
 @Composable
 internal fun ActionToolbar(
@@ -96,8 +96,10 @@ internal fun ActionToolbar(
       // a click cancels a running timer
       icon = if (sleepTimerActive) VoiceIcons.BedtimeOff else VoiceIcons.Bedtime,
       contentDescription = stringResource(R.string.sleep_timer_action_open),
-      label = (sleepTimerState as? BookPlayViewState.SleepTimerViewState.Enabled.WithDuration)
-        ?.let { formatTime(it.leftDuration.inWholeMilliseconds) },
+      label =
+        (sleepTimerState as? BookPlayViewState.SleepTimerViewState.Enabled.WithDuration)?.let {
+          formatTime(it.leftDuration.inWholeMilliseconds)
+        },
       // it counts down every second, rolling would keep it moving the whole time
       rollLabel = false,
       onClick = onSleepTimerClick,
@@ -152,16 +154,16 @@ private fun BookmarkAction(
   Box(modifier = modifier, contentAlignment = Alignment.Center) {
     if (burst.value < 1F) {
       Box(
-        modifier = Modifier
-          .size(48.dp)
-          .graphicsLayer {
-            val p = burst.value
-            scaleX = 0.4F + 1.2F * p
-            scaleY = 0.4F + 1.2F * p
-            rotationZ = 120F * p
-            alpha = 1F - p
-          }
-          .background(burstColor, burstShape),
+        modifier =
+          Modifier.size(48.dp)
+            .graphicsLayer {
+              val p = burst.value
+              scaleX = 0.4F + 1.2F * p
+              scaleY = 0.4F + 1.2F * p
+              rotationZ = 120F * p
+              alpha = 1F - p
+            }
+            .background(burstColor, burstShape),
       )
     }
     ToolbarAction(
@@ -244,51 +246,56 @@ private fun ToolbarActionContent(
   val colors = MaterialTheme.colorScheme
   val inactiveContent = LocalContentColor.current
   // The vibrant toolbar sits on primaryContainer, so active items invert it for maximum contrast.
-  val container by animateColorAsState(
-    targetValue = if (active) colors.onPrimaryContainer else Color.Transparent,
-    label = "toolbarContainer",
-  )
-  val content by animateColorAsState(
-    targetValue = if (active) colors.primaryContainer else inactiveContent,
-    label = "toolbarContent",
-  )
-  val corner by animateDpAsState(
-    targetValue = if (pressed) 12.dp else 24.dp,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
-    label = "toolbarCorner",
-  )
-  val scale by animateFloatAsState(
-    targetValue = if (pressed) 0.9F else 1F,
-    animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium),
-    label = "toolbarScale",
-  )
+  val container by
+    animateColorAsState(
+      targetValue = if (active) colors.onPrimaryContainer else Color.Transparent,
+      label = "toolbarContainer",
+    )
+  val content by
+    animateColorAsState(
+      targetValue = if (active) colors.primaryContainer else inactiveContent,
+      label = "toolbarContent",
+    )
+  val corner by
+    animateDpAsState(
+      targetValue = if (pressed) 12.dp else 24.dp,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
+      label = "toolbarCorner",
+    )
+  val scale by
+    animateFloatAsState(
+      targetValue = if (pressed) 0.9F else 1F,
+      animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium),
+      label = "toolbarScale",
+    )
   Row(
-    modifier = modifier
-      .graphicsLayer {
-        scaleX = scale
-        scaleY = scale
-      }
-      .animateContentSize(spring(dampingRatio = 0.6F, stiffness = Spring.StiffnessMediumLow))
-      .height(48.dp)
-      .widthIn(min = 48.dp)
-      .clip(RoundedCornerShape(corner))
-      .background(container)
-      .combinedClickable(
-        interactionSource = interactionSource,
-        indication = ripple(),
-        role = if (toggle) Role.Switch else Role.Button,
-        onClick = onClick,
-        onLongClick = onLongClick,
-        onLongClickLabel = onLongClickLabel,
-      )
-      .semantics {
-        this.contentDescription = contentDescription
-        when {
-          toggle -> toggleableState = ToggleableState(active)
-          selectable -> selected = active
+    modifier =
+      modifier
+        .graphicsLayer {
+          scaleX = scale
+          scaleY = scale
         }
-      }
-      .padding(horizontal = if (label != null) 10.dp else 12.dp),
+        .animateContentSize(spring(dampingRatio = 0.6F, stiffness = Spring.StiffnessMediumLow))
+        .height(48.dp)
+        .widthIn(min = 48.dp)
+        .clip(RoundedCornerShape(corner))
+        .background(container)
+        .combinedClickable(
+          interactionSource = interactionSource,
+          indication = ripple(),
+          role = if (toggle) Role.Switch else Role.Button,
+          onClick = onClick,
+          onLongClick = onLongClick,
+          onLongClickLabel = onLongClickLabel,
+        )
+        .semantics {
+          this.contentDescription = contentDescription
+          when {
+            toggle -> toggleableState = ToggleableState(active)
+            selectable -> selected = active
+          }
+        }
+        .padding(horizontal = if (label != null) 10.dp else 12.dp),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center,
   ) {

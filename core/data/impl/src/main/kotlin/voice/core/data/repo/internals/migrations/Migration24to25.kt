@@ -9,13 +9,13 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.binding
+import java.io.File
+import java.io.IOException
+import java.util.InvalidPropertiesFormatException
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import voice.core.data.repo.internals.moveToNextLoop
-import java.io.File
-import java.io.IOException
-import java.util.InvalidPropertiesFormatException
 
 @ContributesIntoSet(
   scope = AppScope::class,
@@ -35,25 +35,28 @@ public class Migration24to25 : IncrementalMigration(24) {
     val createBookTable =
       """CREATE TABLE $newBookTable (
         |BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, BOOK_JSON TEXT NOT NULL)
-      """.trimMargin()
+      """
+        .trimMargin()
     db.execSQL(createBookTable)
 
-    val bookCursor = db.query(
-      copyBookTableName,
-      arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
-    )
+    val bookCursor =
+      db.query(
+        copyBookTableName,
+        arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
+      )
 
     bookCursor.moveToNextLoop {
       val bookId = bookCursor.getLong(0)
       val root = bookCursor.getString(1)
       val type = bookCursor.getString(2)
 
-      val mediaCursor = db.query(
-        SupportSQLiteQueryBuilder.builder("copyChapterTableName")
-          .columns(arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"))
-          .selection("BOOK_ID" + "=?", arrayOf(bookId))
-          .create(),
-      )
+      val mediaCursor =
+        db.query(
+          SupportSQLiteQueryBuilder.builder("copyChapterTableName")
+            .columns(arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"))
+            .selection("BOOK_ID" + "=?", arrayOf(bookId))
+            .create(),
+        )
       val chapterNames = ArrayList<String>(mediaCursor.count)
       val chapterDurations = ArrayList<Int>(mediaCursor.count)
       val chapterPaths = ArrayList<String>(mediaCursor.count)
@@ -63,11 +66,14 @@ public class Migration24to25 : IncrementalMigration(24) {
         chapterNames.add(mediaCursor.getString(2))
       }
 
-      val configFile = when (type) {
-        "COLLECTION_FILE", "SINGLE_FILE" -> File(root, "." + chapterNames[0] + "-map.json")
-        "COLLECTION_FOLDER", "SINGLE_FOLDER" -> File(root, "." + (File(root).name) + "-map.json")
-        else -> throw InvalidPropertiesFormatException("Upgrade failed due to unknown type=$type")
-      }
+      val configFile =
+        when (type) {
+          "COLLECTION_FILE",
+          "SINGLE_FILE" -> File(root, "." + chapterNames[0] + "-map.json")
+          "COLLECTION_FOLDER",
+          "SINGLE_FOLDER" -> File(root, "." + (File(root).name) + "-map.json")
+          else -> throw InvalidPropertiesFormatException("Upgrade failed due to unknown type=$type")
+        }
       val backupFile = File(configFile.absolutePath + ".backup")
 
       val configFileValid = configFile.exists() && configFile.canRead() && configFile.length() > 0
@@ -173,12 +179,13 @@ public class Migration24to25 : IncrementalMigration(24) {
       }
 
       if (name.isEmpty()) {
-        name = if (chapterPaths.size == 1) {
-          val chapterPath = chapterPaths.first()
-          chapterPath.take(chapterPath.lastIndexOf("."))
-        } else {
-          File(root).name
-        }
+        name =
+          if (chapterPaths.size == 1) {
+            val chapterPath = chapterPaths.first()
+            chapterPath.take(chapterPath.lastIndexOf("."))
+          } else {
+            File(root).name
+          }
       }
 
       var useCoverReplacement = false

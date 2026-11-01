@@ -2,6 +2,8 @@ package voice.core.scanner
 
 import android.content.Context
 import dev.zacsweers.metro.Inject
+import java.io.File
+import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import voice.core.data.Book
@@ -11,8 +13,6 @@ import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.logging.api.Logger
-import java.io.File
-import java.io.IOException
 
 private val imageExtensions = setOf("jpg", "jpeg", "png", "webp")
 
@@ -55,33 +55,37 @@ internal class CoverScanner(
   private suspend fun findAndSaveCoverFromDisc(
     book: Book,
     image: File,
-  ): Boolean = withContext(Dispatchers.IO) {
-    documentFileFactory.create(book.id.toUri()).children
-      .filter { it.isImage() }
-      .sortedBy { it.coverRank() }
-      .forEach { child ->
-        val copied = try {
-          context.contentResolver.openInputStream(child.uri)?.use { input ->
-            image.outputStream().use { output ->
-              input.copyTo(output)
+  ): Boolean =
+    withContext(Dispatchers.IO) {
+      documentFileFactory
+        .create(book.id.toUri())
+        .children
+        .filter { it.isImage() }
+        .sortedBy { it.coverRank() }
+        .forEach { child ->
+          val copied =
+            try {
+              context.contentResolver.openInputStream(child.uri)?.use { input ->
+                image.outputStream().use { output ->
+                  input.copyTo(output)
+                }
+              }
+              true
+            } catch (e: IOException) {
+              Logger.w(e, "Can't copy a cover image")
+              false
+            } catch (e: IllegalStateException) {
+              // On some Samsung Devices, openInputStream throws this exception, though it should not.
+              Logger.w(e, "Can't copy a cover image")
+              false
             }
+          if (copied && coverSaver.saveExtractedCover(image, book.id)) {
+            return@withContext true
           }
-          true
-        } catch (e: IOException) {
-          Logger.w(e, "Can't copy a cover image")
-          false
-        } catch (e: IllegalStateException) {
-          // On some Samsung Devices, openInputStream throws this exception, though it should not.
-          Logger.w(e, "Can't copy a cover image")
-          false
         }
-        if (copied && coverSaver.saveExtractedCover(image, book.id)) {
-          return@withContext true
-        }
-      }
 
-    false
-  }
+      false
+    }
 
   private fun CachedDocumentFile.coverRank(): Int {
     val rank = coverNames.indexOf(nameWithoutExtension().lowercase())
@@ -98,10 +102,11 @@ internal class CoverScanner(
     book: Book,
     image: File,
   ) {
-    val success = coverExtractor.extractCover(
-      input = book.chapters.first().id.toUri(),
-      outputFile = image,
-    )
+    val success =
+      coverExtractor.extractCover(
+        input = book.chapters.first().id.toUri(),
+        outputFile = image,
+      )
     if (success && image.length() > 0) {
       val _ = coverSaver.saveExtractedCover(image, bookId = book.id)
     }

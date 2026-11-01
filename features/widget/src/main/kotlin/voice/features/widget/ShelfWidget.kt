@@ -43,9 +43,10 @@ class ShelfWidget : GlanceAppWidget() {
 
   override val sizeMode: SizeMode = SizeMode.Exact
 
-  override val previewSizeMode = SizeMode.Responsive(
-    setOf(DpSize(130.dp, 130.dp), DpSize(180.dp, 180.dp), DpSize(300.dp, 180.dp)),
-  )
+  override val previewSizeMode =
+    SizeMode.Responsive(
+      setOf(DpSize(130.dp, 130.dp), DpSize(180.dp, 180.dp), DpSize(300.dp, 180.dp)),
+    )
 
   override suspend fun provideGlance(
     context: Context,
@@ -75,13 +76,14 @@ class ShelfWidget : GlanceAppWidget() {
 }
 
 /** Each slot keeps its shape, so covers change shape as they move along, like books on a shelf. */
-private val SlotShapes = listOf(
-  WidgetShape.Cookie9,
-  WidgetShape.Clover,
-  WidgetShape.Arch,
-  WidgetShape.Sunny,
-  WidgetShape.Pentagon,
-)
+private val SlotShapes =
+  listOf(
+    WidgetShape.Cookie9,
+    WidgetShape.Clover,
+    WidgetShape.Arch,
+    WidgetShape.Sunny,
+    WidgetShape.Pentagon,
+  )
 
 @Composable
 internal fun ShelfContent(
@@ -92,10 +94,7 @@ internal fun ShelfContent(
   WidgetColors(theme = state.theme) {
     val size = LocalSize.current
     Box(
-      modifier = GlanceModifier
-        .fillMaxSize()
-        .appWidgetBackground()
-        .widgetSurface(GlanceTheme.colors.widgetBackground),
+      modifier = GlanceModifier.fillMaxSize().appWidgetBackground().widgetSurface(GlanceTheme.colors.widgetBackground),
     ) {
       when {
         state.books.isEmpty() -> ShelfEmpty(actions)
@@ -206,11 +205,8 @@ private fun ShelfCover(
 ) {
   val description = LocalContext.current.getString(StringsR.string.widget_shelf_play, item.book.title)
   Box(
-    modifier = GlanceModifier
-      .width(size)
-      .height(size)
-      .clickable(actions.playBook(item.book.id))
-      .semantics { contentDescription = description },
+    modifier =
+      GlanceModifier.width(size).height(size).clickable(actions.playBook(item.book.id)).semantics { contentDescription = description },
     contentAlignment = Alignment.TopEnd,
   ) {
     ShapedCover(cover = item.cover, shape = shape, size = size, images = images)

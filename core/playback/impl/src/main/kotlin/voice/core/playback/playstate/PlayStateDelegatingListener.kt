@@ -26,10 +26,11 @@ class PlayStateDelegatingListener(private val playStateManager: PlayStateManager
 
   private fun updatePlayState() {
     val playbackState = player.playbackState
-    playStateManager.playState = when {
-      playbackState == Player.STATE_ENDED || playbackState == Player.STATE_IDLE -> PlayStateManager.PlayState.Paused
-      player.playWhenReady -> PlayStateManager.PlayState.Playing
-      else -> PlayStateManager.PlayState.Paused
-    }
+    playStateManager.playState =
+      when {
+        playbackState == Player.STATE_ENDED || playbackState == Player.STATE_IDLE -> PlayStateManager.PlayState.Paused
+        player.playWhenReady -> PlayStateManager.PlayState.Playing
+        else -> PlayStateManager.PlayState.Paused
+      }
   }
 }

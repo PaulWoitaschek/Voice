@@ -11,6 +11,12 @@ import io.mockk.MockKMatcherScope
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
+import java.io.File
+import java.io.IOException
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -28,25 +34,19 @@ import voice.core.scanner.BookPreviewer
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import voice.navigation.Origin
-import java.io.File
-import java.io.IOException
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-import kotlin.time.Duration.Companion.hours
 
 @RunWith(AndroidJUnit4::class)
 class SelectFolderTypeViewModelTest {
 
-  @get:Rule
-  val temporaryFolder = TemporaryFolder()
+  @get:Rule val temporaryFolder = TemporaryFolder()
 
   private val audiobookFolders = mockk<AudiobookFolders>(relaxed = true)
   private val navigator = mockk<Navigator>(relaxed = true)
   private val previewed = mutableListOf<CachedDocumentFile>()
-  private val bookPreviewer = mockk<BookPreviewer> {
-    coEvery { preview(capture(previewed)) } answers { tagged(firstArg()) }
-  }
+  private val bookPreviewer =
+    mockk<BookPreviewer> {
+      coEvery { preview(capture(previewed)) } answers { tagged(firstArg()) }
+    }
 
   @Test
   fun `the guessed mode is selected and shows its books`() = runTest {
@@ -90,10 +90,11 @@ class SelectFolderTypeViewModelTest {
         viewState = awaitItem()
       }
       assertEquals(
-        expected = listOf(
-          book("Tagged FirstBook", fileCount = 1).copy(author = "Author", duration = 2.hours),
-          book("Tagged SecondBook", fileCount = 2).copy(author = "Author", duration = 2.hours),
-        ),
+        expected =
+          listOf(
+            book("Tagged FirstBook", fileCount = 1).copy(author = "Author", duration = 2.hours),
+            book("Tagged SecondBook", fileCount = 2).copy(author = "Author", duration = 2.hours),
+          ),
         actual = viewState.books.sortedBy { it.name },
       )
     }
@@ -102,10 +103,11 @@ class SelectFolderTypeViewModelTest {
   @Test
   fun `the book being analyzed is marked`() = runTest {
     val analyzed = CompletableDeferred<Unit>()
-    coEvery { bookPreviewer.preview(any()) } coAnswers {
-      analyzed.await()
-      tagged(firstArg())
-    }
+    coEvery { bookPreviewer.preview(any()) } coAnswers
+      {
+        analyzed.await()
+        tagged(firstArg())
+      }
     val viewModel = viewModel(library())
 
     viewStates(viewModel) {
@@ -139,10 +141,11 @@ class SelectFolderTypeViewModelTest {
     viewStates(viewModel) {
       val viewState = awaitAnalyzed()
       assertEquals(
-        expected = listOf(
-          book("FirstBook", fileCount = 1),
-          book("Tagged SecondBook", fileCount = 2).copy(author = "Author", duration = 2.hours),
-        ),
+        expected =
+          listOf(
+            book("FirstBook", fileCount = 1),
+            book("Tagged SecondBook", fileCount = 2).copy(author = "Author", duration = 2.hours),
+          ),
         actual = viewState.books.sortedBy { it.name },
       )
     }
@@ -260,29 +263,32 @@ class SelectFolderTypeViewModelTest {
     folder: File,
     origin: Origin = Origin.Default,
     currentType: FolderType? = null,
-  ) = SelectFolderTypeViewModel(
-    dispatcherProvider = DispatcherProvider(coroutineContext, coroutineContext, coroutineContext),
-    audiobookFolders = audiobookFolders,
-    navigator = navigator,
-    documentFileFactory = FileBasedDocumentFactory,
-    bookPreviewer = bookPreviewer,
-    uri = folder.toUri(),
-    documentFile = DocumentFile.fromFile(folder),
-    origin = origin,
-    currentType = currentType,
-  )
+  ) =
+    SelectFolderTypeViewModel(
+      dispatcherProvider = DispatcherProvider(coroutineContext, coroutineContext, coroutineContext),
+      audiobookFolders = audiobookFolders,
+      navigator = navigator,
+      documentFileFactory = FileBasedDocumentFactory,
+      bookPreviewer = bookPreviewer,
+      uri = folder.toUri(),
+      documentFile = DocumentFile.fromFile(folder),
+      origin = origin,
+      currentType = currentType,
+    )
 
   private suspend fun TestScope.viewStates(
     viewModel: SelectFolderTypeViewModel,
     validate: suspend ReceiveTurbine<SelectFolderTypeViewState>.() -> Unit,
   ) {
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.test {
-      validate()
-      // the books keep filling in after what a test looks at
-      cancelAndIgnoreRemainingEvents()
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test {
+        validate()
+        // the books keep filling in after what a test looks at
+        cancelAndIgnoreRemainingEvents()
+      }
   }
 
   private suspend fun ReceiveTurbine<SelectFolderTypeViewState>.awaitAnalyzed(): SelectFolderTypeViewState {
@@ -307,22 +313,24 @@ class SelectFolderTypeViewModelTest {
     return books.map { it.copy(analyzing = false) }.sortedBy { it.name }
   }
 
-  private fun tagged(file: CachedDocumentFile) = BookPreview(
-    name = "Tagged ${file.nameWithoutExtension()}",
-    author = "Author",
-    duration = 2.hours,
-  )
+  private fun tagged(file: CachedDocumentFile) =
+    BookPreview(
+      name = "Tagged ${file.nameWithoutExtension()}",
+      author = "Author",
+      duration = 2.hours,
+    )
 
   private fun MockKMatcherScope.named(name: String) = match<CachedDocumentFile> { it.nameWithoutExtension() == name }
 
   private fun book(
     name: String,
     fileCount: Int,
-  ) = SelectFolderTypeViewState.Book(
-    name = name,
-    author = null,
-    fileCount = fileCount,
-    partCount = 0,
-    possibleBookCount = 0,
-  )
+  ) =
+    SelectFolderTypeViewState.Book(
+      name = name,
+      author = null,
+      fileCount = fileCount,
+      partCount = 0,
+      possibleBookCount = 0,
+    )
 }

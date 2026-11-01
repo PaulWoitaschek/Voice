@@ -23,13 +23,13 @@ import com.android.billingclient.api.queryPurchasesAsync
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import kotlin.coroutines.resume
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.logging.api.Logger
-import kotlin.coroutines.resume
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -40,22 +40,23 @@ class PlayBilling(context: Context) : Billing {
   private val updates = MutableSharedFlow<PurchaseUpdate>(extraBufferCapacity = 8)
   override val purchaseUpdates: Flow<PurchaseUpdate> = updates
 
-  private val client = BillingClient.newBuilder(context)
-    .setListener { result, purchases ->
-      updates.tryEmit(
-        when (result.responseCode) {
-          BillingResponseCode.OK -> PurchaseUpdate.Purchases(purchases.orEmpty().mapNotNull { it.toBillingPurchase() })
-          BillingResponseCode.USER_CANCELED -> PurchaseUpdate.Canceled
-          else -> {
-            Logger.w("Purchase failed with ${result.responseCode}: ${result.debugMessage}")
-            PurchaseUpdate.Failed
-          }
-        },
-      )
-    }
-    .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
-    .enableAutoServiceReconnection()
-    .build()
+  private val client =
+    BillingClient.newBuilder(context)
+      .setListener { result, purchases ->
+        updates.tryEmit(
+          when (result.responseCode) {
+            BillingResponseCode.OK -> PurchaseUpdate.Purchases(purchases.orEmpty().mapNotNull { it.toBillingPurchase() })
+            BillingResponseCode.USER_CANCELED -> PurchaseUpdate.Canceled
+            else -> {
+              Logger.w("Purchase failed with ${result.responseCode}: ${result.debugMessage}")
+              PurchaseUpdate.Failed
+            }
+          },
+        )
+      }
+      .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
+      .enableAutoServiceReconnection()
+      .build()
 
   private val connectMutex = Mutex()
   private var connected = false
@@ -67,9 +68,10 @@ class PlayBilling(context: Context) : Billing {
     val tips = queryProductDetails(ProductType.INAPP, SupportProducts.tips.keys) ?: return null
     return (subscriptions + tips).mapNotNull { details ->
       productDetails[details.productId] = details
-      val price = details.baseSubscriptionOffer()?.pricingPhases?.pricingPhaseList?.lastOrNull()?.formattedPrice
-        ?: details.oneTimePurchaseOfferDetails?.formattedPrice
-        ?: return@mapNotNull null
+      val price =
+        details.baseSubscriptionOffer()?.pricingPhases?.pricingPhaseList?.lastOrNull()?.formattedPrice
+          ?: details.oneTimePurchaseOfferDetails?.formattedPrice
+          ?: return@mapNotNull null
       BillingProduct(productId = details.productId, formattedPrice = price)
     }
   }
@@ -78,16 +80,14 @@ class PlayBilling(context: Context) : Billing {
     type: String,
     productIds: Collection<String>,
   ): List<ProductDetails>? {
-    val params = QueryProductDetailsParams.newBuilder()
-      .setProductList(
-        productIds.map { productId ->
-          QueryProductDetailsParams.Product.newBuilder()
-            .setProductId(productId)
-            .setProductType(type)
-            .build()
-        },
-      )
-      .build()
+    val params =
+      QueryProductDetailsParams.newBuilder()
+        .setProductList(
+          productIds.map { productId ->
+            QueryProductDetailsParams.Product.newBuilder().setProductId(productId).setProductType(type).build()
+          },
+        )
+        .build()
     val result = client.queryProductDetails(params)
     if (result.billingResult.responseCode != BillingResponseCode.OK) {
       Logger.w("Querying $type products failed with ${result.billingResult.responseCode}: ${result.billingResult.debugMessage}")
@@ -126,34 +126,33 @@ class PlayBilling(context: Context) : Billing {
     replace: BillingPurchase?,
   ): Boolean {
     val details = productDetails[productId] ?: return false
-    val offerToken = details.baseSubscriptionOffer()?.offerToken
-      ?: details.oneTimePurchaseOfferDetails?.offerToken
-    val productParams = BillingFlowParams.ProductDetailsParams.newBuilder()
-      .setProductDetails(details)
-      .apply {
-        if (offerToken != null) setOfferToken(offerToken)
-        if (replace != null) {
-          setSubscriptionProductReplacementParams(
-            SubscriptionProductReplacementParams.newBuilder()
-              .setOldProductId(replace.productId)
-              .setReplacementMode(SubscriptionProductReplacementParams.ReplacementMode.WITH_TIME_PRORATION)
-              .build(),
-          )
+    val offerToken = details.baseSubscriptionOffer()?.offerToken ?: details.oneTimePurchaseOfferDetails?.offerToken
+    val productParams =
+      BillingFlowParams.ProductDetailsParams.newBuilder()
+        .setProductDetails(details)
+        .apply {
+          if (offerToken != null) setOfferToken(offerToken)
+          if (replace != null) {
+            setSubscriptionProductReplacementParams(
+              SubscriptionProductReplacementParams.newBuilder()
+                .setOldProductId(replace.productId)
+                .setReplacementMode(SubscriptionProductReplacementParams.ReplacementMode.WITH_TIME_PRORATION)
+                .build(),
+            )
+          }
         }
-      }
-      .build()
-    val flowParams = BillingFlowParams.newBuilder()
-      .setProductDetailsParamsList(listOf(productParams))
-      .apply {
-        if (replace != null) {
-          setSubscriptionUpdateParams(
-            BillingFlowParams.SubscriptionUpdateParams.newBuilder()
-              .setOldPurchaseToken(replace.purchaseToken)
-              .build(),
-          )
+        .build()
+    val flowParams =
+      BillingFlowParams.newBuilder()
+        .setProductDetailsParamsList(listOf(productParams))
+        .apply {
+          if (replace != null) {
+            setSubscriptionUpdateParams(
+              BillingFlowParams.SubscriptionUpdateParams.newBuilder().setOldPurchaseToken(replace.purchaseToken).build(),
+            )
+          }
         }
-      }
-      .build()
+        .build()
     val result = client.launchBillingFlow(activity, flowParams)
     if (!result.isOk()) {
       Logger.w("Launching the purchase of $productId failed with ${result.responseCode}: ${result.debugMessage}")
@@ -195,11 +194,12 @@ private fun Purchase.toBillingPurchase(): BillingPurchase? {
     productId = products.firstOrNull() ?: return null,
     purchaseToken = purchaseToken,
     purchaseTime = purchaseTime,
-    state = when (purchaseState) {
-      Purchase.PurchaseState.PURCHASED -> BillingPurchase.State.Purchased
-      Purchase.PurchaseState.PENDING -> BillingPurchase.State.Pending
-      else -> return null
-    },
+    state =
+      when (purchaseState) {
+        Purchase.PurchaseState.PURCHASED -> BillingPurchase.State.Purchased
+        Purchase.PurchaseState.PENDING -> BillingPurchase.State.Pending
+        else -> return null
+      },
     acknowledged = isAcknowledged,
   )
 }

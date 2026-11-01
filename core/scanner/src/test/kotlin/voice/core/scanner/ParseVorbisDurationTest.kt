@@ -1,7 +1,5 @@
 package voice.core.scanner
 
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -10,6 +8,8 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
 class ParseVorbisDurationTest {

@@ -7,28 +7,31 @@ import kotlin.test.assertEquals
 class ChapterTest {
 
   @Test
-  fun `duplicates are ignored`() = test2(
-    """
+  fun `duplicates are ignored`() =
+    test2(
+      """
     A#...................
     B.....#..............
     C.....#..............
     D..........#.........
     =AAAAABBBBBCCCCCCCCCC
     """,
-  )
+    )
 
   @Test
-  fun `missing start at 0 creates implicit leading mark`() = test2(
-    """
+  fun `missing start at 0 creates implicit leading mark`() =
+    test2(
+      """
     A.....#..............
     B..........#.........
     =AAAAAAAAAABBBBBBBBBB
     """,
-  )
+    )
 
   @Test
-  fun `adjacent starts are ignored`() = test2(
-    """
+  fun `adjacent starts are ignored`() =
+    test2(
+      """
     A#...................
     B.....#..............
     C......#.............
@@ -36,68 +39,75 @@ class ChapterTest {
     E..........#.........
     =AAAAABBBBBCCCCCCCCCC
     """,
-  )
+    )
 
   @Test
-  fun `start at last tick does not create a new segment`() = test2(
-    """
+  fun `start at last tick does not create a new segment`() =
+    test2(
+      """
     A#...................
     B..........#.........
     C...................#
     =AAAAAAAAAABBBBBBBBBB
     """,
-  )
+    )
 
   @Test
-  fun `no valid starts creates single fallback`() = test2(
-    """
+  fun `no valid starts creates single fallback`() =
+    test2(
+      """
     =AAAAAAAAAAAAAAAAAAAA
     """,
-  )
+    )
 
   @Test
-  fun `negative-only starts create single fallback`() = test2(
-    """
+  fun `negative-only starts create single fallback`() =
+    test2(
+      """
     A@-2
     B@-1
     =AAAAAAAAAAAAAAAAAAAA
     """,
-  )
+    )
 
   @Test
-  fun `single nonzero start creates single fallback`() = test2(
-    """
+  fun `single nonzero start creates single fallback`() =
+    test2(
+      """
     A.....#..............
     =AAAAAAAAAAAAAAAAAAAA
     """,
-  )
+    )
 
   @Test
-  fun `first mark at tick 1 is ignored`() = test2(
-    """
+  fun `first mark at tick 1 is ignored`() =
+    test2(
+      """
     A#...................
     B.#..................
     C.....#..............
     =AAAAABBBBBBBBBBBBBBB
     """,
-  )
+    )
 
   @Test
   fun `markForPosition clamps positions to chapter bounds`() {
-    val chapter = chapter(
-      duration = 20,
-      MarkData(startMs = 0, name = "First"),
-      MarkData(startMs = 12, name = "Last"),
-    )
-    val cases = listOf(
-      -1L to "First",
-      0L to "First",
-      11L to "First",
-      12L to "Last",
-      19L to "Last",
-      20L to "Last",
-      21L to "Last",
-    )
+    val chapter =
+      chapter(
+        duration = 20,
+        MarkData(startMs = 0, name = "First"),
+        MarkData(startMs = 12, name = "Last"),
+      )
+    val cases =
+      listOf(
+        -1L to "First",
+        0L to "First",
+        11L to "First",
+        12L to "Last",
+        19L to "Last",
+        20L to "Last",
+        21L to "Last",
+      )
 
     cases.forEach { (position, expectedMarkName) ->
       assertEquals(expected = expectedMarkName, actual = chapter.markForPosition(position).name)
@@ -115,12 +125,7 @@ class ChapterTest {
    * - `=AAAABBB...` (each char = one tick; length = duration)
    */
   private fun test2(case: String) {
-    val lines = case
-      .trimIndent()
-      .lineSequence()
-      .map { it.trimEnd() }
-      .filter { it.isNotBlank() }
-      .toList()
+    val lines = case.trimIndent().lineSequence().map { it.trimEnd() }.filter { it.isNotBlank() }.toList()
 
     check(lines.isNotEmpty()) { "Need at least an expected line (e.g. =AAAA)" }
 
@@ -151,8 +156,7 @@ class ChapterTest {
     val marks = startLines.mapNotNull { line ->
       when {
         '@' in line -> {
-          val start = line.substringAfter('@').trim().toLongOrNull()
-            ?: error("Bad numeric start line: `$line` (expected like A@-2)")
+          val start = line.substringAfter('@').trim().toLongOrNull() ?: error("Bad numeric start line: `$line` (expected like A@-2)")
           MarkData(startMs = start, name = line.first().toString())
         }
         '#' in line -> {
@@ -165,14 +169,17 @@ class ChapterTest {
 
     val duration = timelineLen.toLong()
 
-    val actualPositions = Chapter(
-      duration = duration,
-      fileLastModified = Instant.now(),
-      id = ChapterId(""),
-      markData = marks,
-      name = "Chapter",
-      fileSize = 0,
-    ).chapterMarks.map { MarkPosition(it.startMs, it.endMs) }
+    val actualPositions =
+      Chapter(
+          duration = duration,
+          fileLastModified = Instant.now(),
+          id = ChapterId(""),
+          markData = marks,
+          name = "Chapter",
+          fileSize = 0,
+        )
+        .chapterMarks
+        .map { MarkPosition(it.startMs, it.endMs) }
 
     val expectedPositions = coverageToPositions(expectedCoverage)
     val actualCoverage = positionsToCoverage(actualPositions, timelineLen)
@@ -180,12 +187,14 @@ class ChapterTest {
     assertEquals(
       expected = expectedPositions,
       actual = actualPositions,
-      message = """
+      message =
+        """
       Expected: $expectedCoverage
       Actual  : $actualCoverage
       Starts  : ${marks.map { it.startMs }.sorted()}
       Duration: $duration
-      """.trimIndent(),
+      """
+          .trimIndent(),
     )
   }
 

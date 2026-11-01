@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
 class Navigator {
 
   private val _navigationCommands = MutableSharedFlow<NavigationCommand>(extraBufferCapacity = 10)
-  val navigationCommands: Flow<NavigationCommand> get() = _navigationCommands
+  val navigationCommands: Flow<NavigationCommand>
+    get() = _navigationCommands
 
   private val scope = MainScope()
 
@@ -30,8 +31,8 @@ class Navigator {
   }
 
   /**
-   * Removes the destination wherever it is in the back stack, unlike [goBack] which pops the top. An overlay can
-   * close itself this way after it opened another screen on top of it.
+   * Removes the destination wherever it is in the back stack, unlike [goBack] which pops the top. An overlay can close itself this way
+   * after it opened another screen on top of it.
    */
   fun remove(destination: Destination.Compose) {
     scope.launch {

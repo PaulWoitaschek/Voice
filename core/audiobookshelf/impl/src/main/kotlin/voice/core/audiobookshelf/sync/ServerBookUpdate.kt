@@ -1,6 +1,7 @@
 package voice.core.audiobookshelf.sync
 
 import dev.zacsweers.metro.Inject
+import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
@@ -18,7 +19,6 @@ import voice.core.audiobookshelf.itemId
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
-import java.io.IOException
 
 @Inject
 internal class ServerBookUpdate(
@@ -38,9 +38,10 @@ internal class ServerBookUpdate(
     val authors = edit.author?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
     return try {
       val api = http.authenticatedApi(account.serverUrl)
-      val series = edit.series?.let {
-        series(api, itemId, bookId, name = it, part = edit.part.orEmpty()) ?: return ServerEdit.Failed
-      }
+      val series =
+        edit.series?.let {
+          series(api, itemId, bookId, name = it, part = edit.part.orEmpty()) ?: return ServerEdit.Failed
+        }
       val response = api.updateMedia(itemId, MediaUpdate(MetadataUpdate(title, authors?.map(::AbsAuthor), series)))
       when {
         response.isSuccessful -> {

@@ -11,9 +11,9 @@ import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraph
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import org.junit.runner.RunWith
 
 @SingleIn(AppScope::class)
 @DependencyGraph(scope = AppScope::class)
@@ -22,7 +22,8 @@ interface DataStoreTestGraph {
   val sharedPreferences: SharedPreferences
 
   @Provides
-  val application: Application get() = ApplicationProvider.getApplicationContext()
+  val application: Application
+    get() = ApplicationProvider.getApplicationContext()
 }
 
 @RunWith(AndroidJUnit4::class)
@@ -31,8 +32,7 @@ class DataStoreModuleTest {
   @Test
   fun `migrations read the preferences file older versions wrote`() {
     val application = ApplicationProvider.getApplicationContext<Application>()
-    application.getSharedPreferences("${application.packageName}_preferences", Context.MODE_PRIVATE)
-      .edit { putInt("SEEK_TIME", 15) }
+    application.getSharedPreferences("${application.packageName}_preferences", Context.MODE_PRIVATE).edit { putInt("SEEK_TIME", 15) }
 
     val sharedPreferences = createGraph<DataStoreTestGraph>().sharedPreferences
 

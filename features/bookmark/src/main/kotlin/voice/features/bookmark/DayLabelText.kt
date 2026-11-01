@@ -7,12 +7,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import voice.core.strings.R
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Date
 import java.util.Locale
+import voice.core.strings.R
 
 @Composable
 internal fun dayLabelText(label: DayLabel): String {
@@ -28,9 +28,10 @@ internal fun dayLabelText(label: DayLabel): String {
     is DayLabel.Weekday -> label.day.getDisplayName(TextStyle.SHORT, locale)
     is DayLabel.Date -> {
       val pattern = if (label.withYear) "d MMM yyyy" else "d MMM"
-      val formatter = remember(locale, pattern) {
-        DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, pattern), locale)
-      }
+      val formatter =
+        remember(locale, pattern) {
+          DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, pattern), locale)
+        }
       formatter.format(label.date)
     }
   }
@@ -40,24 +41,26 @@ internal fun dayLabelText(label: DayLabel): String {
 internal fun timeText(time: LocalTime): String {
   val context = LocalContext.current
   val locale = LocalConfiguration.current.locales[0]
-  val format = remember(context, locale) {
-    TimeOfDayFormat(locale, is24HourFormat = android.text.format.DateFormat.is24HourFormat(context))
-  }
+  val format =
+    remember(context, locale) {
+      TimeOfDayFormat(locale, is24HourFormat = android.text.format.DateFormat.is24HourFormat(context))
+    }
   return format.format(time)
 }
 
 /**
- * Formats with ICU itself: some languages' 12-hour patterns use a day period like "in the
- * afternoon", which java.time can't read before Android 14.
+ * Formats with ICU itself: some languages' 12-hour patterns use a day period like "in the afternoon", which java.time can't read before
+ * Android 14.
  */
 internal class TimeOfDayFormat(
   locale: Locale,
   is24HourFormat: Boolean,
 ) {
 
-  private val format = DateFormat.getInstanceForSkeleton(if (is24HourFormat) "Hm" else "hm", locale).apply {
-    timeZone = TimeZone.GMT_ZONE
-  }
+  private val format =
+    DateFormat.getInstanceForSkeleton(if (is24HourFormat) "Hm" else "hm", locale).apply {
+      timeZone = TimeZone.GMT_ZONE
+    }
 
   fun format(time: LocalTime): String = format.format(Date(time.toSecondOfDay() * 1000L))
 }

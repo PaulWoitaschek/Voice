@@ -1,17 +1,17 @@
 package voice.core.playback
 
+import kotlin.time.Duration
 import kotlinx.coroutines.flow.Flow
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.playback.misc.Decibel
-import kotlin.time.Duration
 
 interface PlayerController {
 
   /**
-   * @param type how the jump is recorded in the listening history: [ListeningEvent.Type.Seek],
-   * [ListeningEvent.Type.ChapterChange], [ListeningEvent.Type.BookmarkJump] or [ListeningEvent.Type.JumpBack].
+   * @param type how the jump is recorded in the listening history: [ListeningEvent.Type.Seek], [ListeningEvent.Type.ChapterChange],
+   *   [ListeningEvent.Type.BookmarkJump] or [ListeningEvent.Type.JumpBack].
    */
   fun setPosition(
     time: Long,
@@ -37,16 +37,12 @@ interface PlayerController {
 
   fun next()
 
-  /**
-   * @param source recorded in the listening history, or null to not record it.
-   */
+  /** @param source recorded in the listening history, or null to not record it. */
   fun play(source: ListeningEvent.Source? = ListeningEvent.Source.App)
 
   fun playPause(source: ListeningEvent.Source = ListeningEvent.Source.App)
 
-  /**
-   * Records an event at the current position in the listening history.
-   */
+  /** Records an event at the current position in the listening history. */
   fun record(
     type: ListeningEvent.Type,
     source: ListeningEvent.Source,

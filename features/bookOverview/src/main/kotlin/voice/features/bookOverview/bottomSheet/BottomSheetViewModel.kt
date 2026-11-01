@@ -21,7 +21,6 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
-import voice.core.featureflag.FeatureFlag
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
@@ -50,22 +49,26 @@ class BottomSheetViewModel(
   @Composable
   internal fun state(): EditBookBottomSheetState? {
     val book = remember { book() }.collectAsState(initial = null).value
-    val items = produceState<List<BottomSheetItem>?>(initialValue = null) {
-      value = viewModels.flatMap { it.items(bookId) }
-        .toSet()
-        .sorted()
-    }.value
+    val items =
+      produceState<List<BottomSheetItem>?>(initialValue = null) {
+          value = viewModels.flatMap { it.items(bookId) }.toSet().sorted()
+        }
+        .value
     val server = remember { serverAccount.serverName.map(::ServerName) }.collectAsState(initial = null).value
     // the download goes on while the sheet is open
-    val download = if (bookId.isRemote) {
-      remember { serverDownloads.states.map { it[bookId] ?: BookDownloadState.NotDownloaded }.distinctUntilChanged() }
-        .collectAsState(initial = null).value ?: return null
-    } else {
-      null
-    }
-    val askForNotifications = produceState<Boolean?>(initialValue = null) {
-      value = bookId.isRemote && serverDownloads.shouldAskForNotifications()
-    }.value
+    val download =
+      if (bookId.isRemote) {
+        remember { serverDownloads.states.map { it[bookId] ?: BookDownloadState.NotDownloaded }.distinctUntilChanged() }
+          .collectAsState(initial = null)
+          .value ?: return null
+      } else {
+        null
+      }
+    val askForNotifications =
+      produceState<Boolean?>(initialValue = null) {
+          value = bookId.isRemote && serverDownloads.shouldAskForNotifications()
+        }
+        .value
     if (book == null || items == null || server == null || askForNotifications == null) return null
     return EditBookBottomSheetState(
       book = book.toItemViewState(),
@@ -92,12 +95,14 @@ class BottomSheetViewModel(
   }
 
   private fun book(): Flow<Book> {
-    val book = repo.flow(bookId)
-      .onEach { book ->
-        // with no book there is no menu to show, and an invisible one would swallow the next back press
-        if (book == null) onClose()
-      }
-      .filterNotNull()
+    val book =
+      repo
+        .flow(bookId)
+        .onEach { book ->
+          // with no book there is no menu to show, and an invisible one would swallow the next back press
+          if (book == null) onClose()
+        }
+        .filterNotNull()
     // with the experimental persistence, the stored position of the playing book lags behind
     return if (experimentalPlaybackPersistenceFeatureFlag.get()) {
       book.combine(playerController.livePlaybackStateFlow(bookId)) { book, livePlaybackState ->
@@ -109,19 +114,24 @@ class BottomSheetViewModel(
   }
 
   /**
-   * Returns once the item is handled, e.g. when the sheet it opens has its state. The work itself runs in this
-   * scope, so it completes even if the caller goes away.
+   * Returns once the item is handled, e.g. when the sheet it opens has its state. The work itself runs in this scope, so it completes even
+   * if the caller goes away.
    */
   internal suspend fun onItemClick(item: BottomSheetItem) {
-    scope.launch {
-      when (item) {
-        BottomSheetItem.Download, BottomSheetItem.RetryDownload -> serverDownloads.download(bookId)
-        BottomSheetItem.StopDownload, BottomSheetItem.RemoveDownload -> serverDownloads.remove(bookId)
-        else -> viewModels.forEach {
-          it.onItemClick(bookId, item)
+    scope
+      .launch {
+        when (item) {
+          BottomSheetItem.Download,
+          BottomSheetItem.RetryDownload -> serverDownloads.download(bookId)
+          BottomSheetItem.StopDownload,
+          BottomSheetItem.RemoveDownload -> serverDownloads.remove(bookId)
+          else ->
+            viewModels.forEach {
+              it.onItemClick(bookId, item)
+            }
         }
       }
-    }.join()
+      .join()
   }
 
   internal fun onAskedForNotifications() {
@@ -137,9 +147,10 @@ class BottomSheetViewModel(
 
 private class ServerName(val name: String?)
 
-private fun BookDownloadState.items(): List<BottomSheetItem> = when (this) {
-  BookDownloadState.NotDownloaded -> listOf(BottomSheetItem.Download)
-  is BookDownloadState.Downloading -> listOf(BottomSheetItem.StopDownload)
-  BookDownloadState.Failed -> listOf(BottomSheetItem.RetryDownload, BottomSheetItem.RemoveDownload)
-  is BookDownloadState.Downloaded -> listOf(BottomSheetItem.RemoveDownload)
-}
+private fun BookDownloadState.items(): List<BottomSheetItem> =
+  when (this) {
+    BookDownloadState.NotDownloaded -> listOf(BottomSheetItem.Download)
+    is BookDownloadState.Downloading -> listOf(BottomSheetItem.StopDownload)
+    BookDownloadState.Failed -> listOf(BottomSheetItem.RetryDownload, BottomSheetItem.RemoveDownload)
+    is BookDownloadState.Downloaded -> listOf(BottomSheetItem.RemoveDownload)
+  }

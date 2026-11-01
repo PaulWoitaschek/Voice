@@ -41,12 +41,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
+import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.search.searchBarSharedBounds
-import kotlin.time.Duration.Companion.seconds
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun LibraryTopBar(
@@ -93,19 +93,18 @@ internal fun LibraryTopBar(
         SettingsIcon(showFolderAccessBadge = showFolderAccessBadge, onSettingsClick = onSettingsClick)
       },
       // the pill draws its own container, so it can grow into the search field
-      colors = SearchBarDefaults.appBarWithSearchColors(
-        searchBarColors = SearchBarDefaults.colors(containerColor = Color.Transparent),
-        scrolledSearchBarContainerColor = Color.Transparent,
-      ),
+      colors =
+        SearchBarDefaults.appBarWithSearchColors(
+          searchBarColors = SearchBarDefaults.colors(containerColor = Color.Transparent),
+          scrolledSearchBarContainerColor = Color.Transparent,
+        ),
       scrollBehavior = scrollBehavior,
     )
     // without books there's no pill to show the scan in. Drawn over the bar's bottom edge so it
     // doesn't push the library down.
     AnimatedVisibility(
       visible = showLoading && !showSearch,
-      modifier = Modifier
-        .matchParentSize()
-        .wrapContentHeight(Alignment.Bottom),
+      modifier = Modifier.matchParentSize().wrapContentHeight(Alignment.Bottom),
       enter = fadeIn(),
       exit = fadeOut(),
     ) {
@@ -123,10 +122,7 @@ private fun LibrarySearchPill(
   val shape = SearchBarDefaults.inputFieldShape
   Surface(
     onClick = onClick,
-    modifier = modifier
-      .searchBarSharedBounds(shape)
-      .fillMaxWidth()
-      .height(SearchBarDefaults.InputFieldHeight),
+    modifier = modifier.searchBarSharedBounds(shape).fillMaxWidth().height(SearchBarDefaults.InputFieldHeight),
     shape = shape,
     color = MaterialTheme.colorScheme.surfaceContainerHigh,
     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,

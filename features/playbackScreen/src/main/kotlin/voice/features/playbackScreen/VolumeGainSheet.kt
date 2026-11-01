@@ -36,10 +36,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import voice.core.playback.misc.Decibel
-import voice.features.playbackScreen.view.RollingText
 import kotlin.math.ceil
+import voice.core.playback.misc.Decibel
 import voice.core.strings.R as StringsR
+import voice.features.playbackScreen.view.RollingText
 
 private const val METER_BARS = 18
 
@@ -52,16 +52,14 @@ internal fun VolumeGainSheet(
   val fraction = (dialogState.gain.value / dialogState.maxGain.value).coerceIn(0F, 1F)
   ModalBottomSheet(
     onDismissRequest = onDismiss,
-    sheetState = rememberBottomSheetState(
-      initialValue = Hidden,
-      enabledValues = setOf(Hidden, Expanded),
-    ),
+    sheetState =
+      rememberBottomSheetState(
+        initialValue = Hidden,
+        enabledValues = setOf(Hidden, Expanded),
+      ),
   ) {
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 24.dp)
-        .padding(bottom = 32.dp),
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).padding(bottom = 32.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Text(
@@ -107,30 +105,26 @@ private fun GainMeter(
   modifier: Modifier = Modifier,
 ) {
   Row(
-    modifier = modifier
-      .fillMaxWidth()
-      .height(56.dp)
-      .clearAndSetSemantics {},
+    modifier = modifier.fillMaxWidth().height(56.dp).clearAndSetSemantics {},
     horizontalArrangement = Arrangement.spacedBy(4.dp),
     verticalAlignment = Alignment.Bottom,
   ) {
     repeat(METER_BARS) { index ->
       val lit = fraction > 0F && index < ceil(fraction * METER_BARS).toInt()
-      val color by animateColorAsState(
-        targetValue = if (lit) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHighest,
-        label = "meterColor",
-      )
+      val color by
+        animateColorAsState(
+          targetValue = if (lit) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHighest,
+          label = "meterColor",
+        )
       val baseHeight = 12.dp + (44.dp - 12.dp) * (index / (METER_BARS - 1F))
-      val height by animateDpAsState(
-        targetValue = if (lit) baseHeight else baseHeight * 0.8F,
-        animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium),
-        label = "meterHeight",
-      )
+      val height by
+        animateDpAsState(
+          targetValue = if (lit) baseHeight else baseHeight * 0.8F,
+          animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium),
+          label = "meterHeight",
+        )
       Box(
-        modifier = Modifier
-          .weight(1F)
-          .height(height)
-          .background(color, RoundedCornerShape(percent = 50)),
+        modifier = Modifier.weight(1F).height(height).background(color, RoundedCornerShape(percent = 50)),
       )
     }
   }

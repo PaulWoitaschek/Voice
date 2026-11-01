@@ -2,6 +2,8 @@ package voice.features.bookOverview.editBookCategory
 
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.SingleIn
+import java.time.Instant
+import kotlin.time.Duration
 import kotlinx.coroutines.flow.first
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
@@ -12,10 +14,6 @@ import voice.core.playback.withDefaultSpeed
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.bottomSheet.BottomSheetItemViewModel
 import voice.features.bookOverview.di.BookActionsScope
-import voice.features.bookOverview.overview.BookOverviewCategory
-import voice.features.bookOverview.overview.category
-import java.time.Instant
-import kotlin.time.Duration
 
 @SingleIn(BookActionsScope::class)
 @ContributesIntoSet(BookActionsScope::class)
@@ -35,19 +33,20 @@ class EditBookCategoryViewModel(
   ) {
     val book = repo.get(bookId) ?: return
 
-    val (currentChapter, positionInChapter) = when (item) {
-      BottomSheetItem.BookCategoryMarkAsCurrent -> {
-        book.chapters.first().id to 1L
+    val (currentChapter, positionInChapter) =
+      when (item) {
+        BottomSheetItem.BookCategoryMarkAsCurrent -> {
+          book.chapters.first().id to 1L
+        }
+        BottomSheetItem.BookCategoryMarkAsNotStarted -> {
+          book.chapters.first().id to 0L
+        }
+        BottomSheetItem.BookCategoryMarkAsCompleted -> {
+          val lastChapter = book.chapters.last()
+          lastChapter.id to lastChapter.duration
+        }
+        else -> return
       }
-      BottomSheetItem.BookCategoryMarkAsNotStarted -> {
-        book.chapters.first().id to 0L
-      }
-      BottomSheetItem.BookCategoryMarkAsCompleted -> {
-        val lastChapter = book.chapters.last()
-        lastChapter.id to lastChapter.duration
-      }
-      else -> return
-    }
 
     val speed = book.withDefaultSpeed { lastPlaybackSpeedStore.data.first() }.content.playbackSpeed
     repo.updateBook(book.id) {

@@ -6,10 +6,7 @@ import voice.core.data.durationMs
 import voice.core.data.markForPosition
 import voice.core.ui.formatTime
 
-/**
- * Chapters here are the book's chapter marks, numbered across all files, the same way the player
- * counts them.
- */
+/** Chapters here are the book's chapter marks, numbered across all files, the same way the player counts them. */
 internal data class BookLocation(
   val chapterNumber: Int,
   val chapterName: String?,
@@ -19,7 +16,8 @@ internal data class BookLocation(
   val bookDuration: Long,
 ) {
 
-  val time: String get() = formatTime(timeInChapter, chapterDuration)
+  val time: String
+    get() = formatTime(timeInChapter, chapterDuration)
 
   val percent: Int
     get() = if (bookDuration > 0) (bookPosition * 100 / bookDuration).toInt().coerceIn(0, 100) else 0
@@ -42,11 +40,12 @@ internal class BookIndex(private val book: Book) {
   val current: BookLocation? = locate(book.content.currentChapter, book.content.positionInChapter)
 
   /** The chapter segments of the book bar, as fractions of the whole book. */
-  val segments: List<Float> = if (duration <= 0L) {
-    emptyList()
-  } else {
-    book.chapters.flatMap { chapter -> chapter.chapterMarks.map { it.durationMs.toFloat() / duration } }
-  }
+  val segments: List<Float> =
+    if (duration <= 0L) {
+      emptyList()
+    } else {
+      book.chapters.flatMap { chapter -> chapter.chapterMarks.map { it.durationMs.toFloat() / duration } }
+    }
 
   fun locate(
     chapterId: ChapterId,

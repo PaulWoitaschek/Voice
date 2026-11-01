@@ -4,7 +4,6 @@ import android.provider.MediaStore
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import voice.core.data.Book
-import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
@@ -20,8 +19,7 @@ class BookSearchHandler(
     return when (search.mediaFocus) {
       MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE -> searchByArtist(search)
       MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE,
-      MediaStore.Audio.Media.ENTRY_CONTENT_TYPE,
-      -> searchAlbum(search)
+      MediaStore.Audio.Media.ENTRY_CONTENT_TYPE -> searchAlbum(search)
       else -> null
     } ?: searchUnstructured(search.query)
   }
@@ -30,8 +28,7 @@ class BookSearchHandler(
     if (search.album != null) {
       val foundMatch = findBook {
         val nameMatches = it.name.contains(search.album, ignoreCase = true)
-        val artistMatches =
-          search.artist == null || it.author?.contains(search.artist, ignoreCase = true) == true
+        val artistMatches = search.artist == null || it.author?.contains(search.artist, ignoreCase = true) == true
         nameMatches && artistMatches
       }
       if (foundMatch != null) return foundMatch
@@ -45,10 +42,11 @@ class BookSearchHandler(
       val foundMatch = findBook {
         val bookNameMatches = it.name.contains(query, ignoreCase = true)
         val authorMatches = it.author?.contains(query, ignoreCase = true) == true
-        val chapterNameMatches = it.chapters.any { chapter ->
-          val chapterName = chapter.name
-          chapterName != null && chapterName.contains(query, ignoreCase = true)
-        }
+        val chapterNameMatches =
+          it.chapters.any { chapter ->
+            val chapterName = chapter.name
+            chapterName != null && chapterName.contains(query, ignoreCase = true)
+          }
         bookNameMatches || authorMatches || chapterNameMatches
       }
       if (foundMatch != null) return foundMatch

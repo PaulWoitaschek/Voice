@@ -19,7 +19,8 @@ import voice.core.data.repo.BookRepository
 
 @ContributesBinding(AppScope::class)
 @Inject
-class AudiobookshelfServerLibrary internal constructor(
+class AudiobookshelfServerLibrary
+internal constructor(
   private val audiobookshelfSync: AudiobookshelfSync,
   private val serverBookUpdate: ServerBookUpdate,
   downloads: AudiobookshelfDownloads,
@@ -30,17 +31,16 @@ class AudiobookshelfServerLibrary internal constructor(
 
   override val reachability: StateFlow<ServerReachability> = audiobookshelfSync.reachability
 
-  override val unavailableBooks: Flow<Set<BookId>> = combine(
-    audiobookshelfSync.reachability,
-    downloads.states,
-    bookRepository.flow(),
-  ) { reachability, downloadStates, books ->
-    if (reachability != ServerReachability.Unreachable) return@combine emptySet()
-    books
-      .filter { it.id.isRemote && downloadStates[it.id] !is BookDownloadState.Downloaded }
-      .map { it.id }
-      .toSet()
-  }.distinctUntilChanged()
+  override val unavailableBooks: Flow<Set<BookId>> =
+    combine(
+        audiobookshelfSync.reachability,
+        downloads.states,
+        bookRepository.flow(),
+      ) { reachability, downloadStates, books ->
+        if (reachability != ServerReachability.Unreachable) return@combine emptySet()
+        books.filter { it.id.isRemote && downloadStates[it.id] !is BookDownloadState.Downloaded }.map { it.id }.toSet()
+      }
+      .distinctUntilChanged()
 
   override fun sync(force: Boolean) {
     audiobookshelfSync.sync(force)

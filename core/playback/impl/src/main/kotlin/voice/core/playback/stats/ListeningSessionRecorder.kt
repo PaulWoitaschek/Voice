@@ -6,6 +6,11 @@ import androidx.media3.common.Player
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.time.Clock
+import java.time.Instant
+import kotlin.math.roundToLong
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,11 +22,6 @@ import voice.core.data.ListeningSession
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.playback.session.bookId
 import voice.core.playback.session.toMediaIdOrNull
-import java.time.Clock
-import java.time.Instant
-import kotlin.math.roundToLong
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * Records the listening sessions for the listening stats, from what the player does.
@@ -91,15 +91,16 @@ class ListeningSessionRecorder(
     stopped()
     val now = clock.millis()
     val previous = session
-    session = if (previous != null && previous.bookId == bookId && now - previous.endedAtMillis <= CONTINUE_WITHIN) {
-      previous
-    } else {
-      OpenSession(
-        bookId = bookId,
-        startedAtMillis = now,
-        utcOffsetSeconds = clock.zone.rules.getOffset(Instant.ofEpochMilli(now)).totalSeconds,
-      )
-    }
+    session =
+      if (previous != null && previous.bookId == bookId && now - previous.endedAtMillis <= CONTINUE_WITHIN) {
+        previous
+      } else {
+        OpenSession(
+          bookId = bookId,
+          startedAtMillis = now,
+          utcOffsetSeconds = clock.zone.rules.getOffset(Instant.ofEpochMilli(now)).totalSeconds,
+        )
+      }
     this.speed = speed
     playing = true
     countedUntil = now
@@ -172,16 +173,17 @@ class ListeningSessionRecorder(
     var reachedEnd = false
     var id = 0L
 
-    fun toListeningSession() = ListeningSession(
-      bookId = bookId,
-      startedAtMillis = startedAtMillis,
-      endedAtMillis = endedAtMillis,
-      listenedMillis = listenedMillis,
-      audioMillis = audioMillis,
-      utcOffsetSeconds = utcOffsetSeconds,
-      reachedEnd = reachedEnd,
-      id = id,
-    )
+    fun toListeningSession() =
+      ListeningSession(
+        bookId = bookId,
+        startedAtMillis = startedAtMillis,
+        endedAtMillis = endedAtMillis,
+        listenedMillis = listenedMillis,
+        audioMillis = audioMillis,
+        utcOffsetSeconds = utcOffsetSeconds,
+        reachedEnd = reachedEnd,
+        id = id,
+      )
   }
 
   private companion object {

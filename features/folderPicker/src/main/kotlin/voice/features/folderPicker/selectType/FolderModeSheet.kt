@@ -35,9 +35,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import voice.core.strings.R as StringsR
 import voice.core.ui.icons.VoiceIcons
 import voice.features.folderPicker.FolderTypeIcon
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun FolderModeSheet(
@@ -47,22 +47,17 @@ internal fun FolderModeSheet(
 ) {
   ModalBottomSheet(
     onDismissRequest = onDismiss,
-    sheetState = rememberBottomSheetState(
-      initialValue = Hidden,
-      enabledValues = setOf(Hidden, Expanded),
-    ),
+    sheetState =
+      rememberBottomSheetState(
+        initialValue = Hidden,
+        enabledValues = setOf(Hidden, Expanded),
+      ),
   ) {
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState())
-        .padding(horizontal = 16.dp)
-        .padding(bottom = 32.dp),
+      modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp).padding(bottom = 32.dp),
     ) {
       Text(
-        modifier = Modifier
-          .fillMaxWidth()
-          .padding(horizontal = 8.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
         text = stringResource(StringsR.string.folder_mode_sheet_title, viewState.folderName),
         style = MaterialTheme.typography.headlineSmallEmphasized,
         textAlign = TextAlign.Center,
@@ -96,9 +91,7 @@ private fun FolderModeOption(
 ) {
   val colorScheme = MaterialTheme.colorScheme
   Surface(
-    modifier = Modifier
-      .fillMaxWidth()
-      .selectable(selected = selected, onClick = onClick, role = Role.RadioButton),
+    modifier = Modifier.fillMaxWidth().selectable(selected = selected, onClick = onClick, role = Role.RadioButton),
     shape = RoundedCornerShape(24.dp),
     color = if (selected) colorScheme.secondaryContainer else colorScheme.surfaceContainerHigh,
     contentColor = if (selected) colorScheme.onSecondaryContainer else colorScheme.onSurface,
@@ -162,8 +155,7 @@ private fun SelectFolderTypeViewState.Option.summary(): String {
   return when (mode) {
     FolderMode.SingleBook -> stringResource(StringsR.string.folder_mode_single_summary)
     FolderMode.Audiobooks,
-    FolderMode.Authors,
-    -> {
+    FolderMode.Authors -> {
       val examples = books.take(3).joinToString(separator = ", ") { it.name }
       if (books.size > 3) "$examples, …" else examples
     }
@@ -172,10 +164,11 @@ private fun SelectFolderTypeViewState.Option.summary(): String {
 
 @Composable
 internal fun FolderMode.optionTitle(folderName: String): String {
-  val res = when (this) {
-    FolderMode.SingleBook -> StringsR.string.folder_mode_single_option
-    FolderMode.Audiobooks -> StringsR.string.folder_mode_root_option
-    FolderMode.Authors -> StringsR.string.folder_mode_author_option
-  }
+  val res =
+    when (this) {
+      FolderMode.SingleBook -> StringsR.string.folder_mode_single_option
+      FolderMode.Audiobooks -> StringsR.string.folder_mode_root_option
+      FolderMode.Authors -> StringsR.string.folder_mode_author_option
+    }
   return stringResource(res, folderName)
 }

@@ -94,19 +94,14 @@ internal fun HistoryList(
           text = dayLabelText(day.label),
           style = MaterialTheme.typography.titleSmallEmphasized,
           color = MaterialTheme.colorScheme.primary,
-          modifier = Modifier
-            .animateItem()
-            .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 6.dp)
-            .semantics { heading() },
+          modifier = Modifier.animateItem().padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 6.dp).semantics { heading() },
         )
       }
       items(day.sessions, key = { "session-${it.key}" }) { session ->
         Session(
           session = session,
           onGoTo = onGoTo,
-          modifier = Modifier
-            .animateItem()
-            .padding(bottom = 8.dp),
+          modifier = Modifier.animateItem().padding(bottom = 8.dp),
         )
       }
     }
@@ -125,9 +120,10 @@ private fun Session(
   val measurer = rememberTextMeasurer()
   val density = LocalDensity.current
   // the line has to be straight, so every time takes the room of the widest one
-  val timeWidth = remember(times, timeStyle, density) {
-    with(density) { times.maxOf { measurer.measure(it, timeStyle).size.width }.toDp() }
-  }
+  val timeWidth =
+    remember(times, timeStyle, density) {
+      with(density) { times.maxOf { measurer.measure(it, timeStyle).size.width }.toDp() }
+    }
   Surface(
     shape = MaterialTheme.shapes.extraLarge,
     color = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -150,7 +146,11 @@ private fun Session(
   }
 }
 
-private enum class Line { None, Playing, Paused }
+private enum class Line {
+  None,
+  Playing,
+  Paused,
+}
 
 private fun line(playing: Boolean) = if (playing) Line.Playing else Line.Paused
 
@@ -167,24 +167,22 @@ private fun TimelineRow(
   val colors = MaterialTheme.colorScheme
   val quiet = row !is HistoryEvent
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .timeline(
-        x = timeWidth + Gap + LineColumnWidth / 2,
-        nodeSize = if (quiet) DotSize else NodeSize,
-        above = above,
-        below = below,
-        playing = colors.primary,
-        paused = colors.outline,
-      )
-      .padding(top = RowTop, bottom = if (quiet) RowTop else 0.dp)
-      .semantics(mergeDescendants = true) {},
+    modifier =
+      Modifier.fillMaxWidth()
+        .timeline(
+          x = timeWidth + Gap + LineColumnWidth / 2,
+          nodeSize = if (quiet) DotSize else NodeSize,
+          above = above,
+          below = below,
+          playing = colors.primary,
+          paused = colors.outline,
+        )
+        .padding(top = RowTop, bottom = if (quiet) RowTop else 0.dp)
+        .semantics(mergeDescendants = true) {},
     horizontalArrangement = Arrangement.spacedBy(Gap),
   ) {
     Box(
-      modifier = Modifier
-        .width(timeWidth)
-        .heightIn(min = NodeSize),
+      modifier = Modifier.width(timeWidth).heightIn(min = NodeSize),
       contentAlignment = Alignment.CenterEnd,
     ) {
       Text(
@@ -194,18 +192,14 @@ private fun TimelineRow(
       )
     }
     Box(
-      modifier = Modifier
-        .width(LineColumnWidth)
-        .height(NodeSize),
+      modifier = Modifier.width(LineColumnWidth).height(NodeSize),
       contentAlignment = Alignment.Center,
     ) {
       if (row is HistoryEvent) {
         EventNode(row.type)
       } else {
         Box(
-          Modifier
-            .size(DotSize)
-            .background(colors.onSurfaceVariant, CircleShape),
+          Modifier.size(DotSize).background(colors.onSurfaceVariant, CircleShape),
         )
       }
     }
@@ -265,18 +259,23 @@ private fun DrawScope.segment(
 @Composable
 private fun EventNode(type: Type) {
   val colors = MaterialTheme.colorScheme
-  val (container, content) = when (type) {
-    Type.Play -> colors.primaryContainer to colors.onPrimaryContainer
-    Type.Pause -> colors.surfaceContainerHighest to colors.onSurfaceVariant
-    Type.SleepTimerSet, Type.SleepTimerStarted, Type.SleepTimerEnded, Type.SleepTimerExtended ->
-      colors.tertiaryContainer to colors.onTertiaryContainer
-    Type.Seek, Type.SkipBack, Type.SkipForward, Type.ChapterChange, Type.BookmarkJump, Type.JumpBack ->
-      colors.secondaryContainer to colors.onSecondaryContainer
-  }
+  val (container, content) =
+    when (type) {
+      Type.Play -> colors.primaryContainer to colors.onPrimaryContainer
+      Type.Pause -> colors.surfaceContainerHighest to colors.onSurfaceVariant
+      Type.SleepTimerSet,
+      Type.SleepTimerStarted,
+      Type.SleepTimerEnded,
+      Type.SleepTimerExtended -> colors.tertiaryContainer to colors.onTertiaryContainer
+      Type.Seek,
+      Type.SkipBack,
+      Type.SkipForward,
+      Type.ChapterChange,
+      Type.BookmarkJump,
+      Type.JumpBack -> colors.secondaryContainer to colors.onSecondaryContainer
+    }
   Box(
-    modifier = Modifier
-      .size(NodeSize)
-      .background(container, CircleShape),
+    modifier = Modifier.size(NodeSize).background(container, CircleShape),
     contentAlignment = Alignment.Center,
   ) {
     Icon(
@@ -337,31 +336,37 @@ private fun PlaceButton(
 }
 
 @Composable
-private fun rowText(row: HistoryRow): String = when (row) {
-  is HistoryEvent -> eventText(row)
-  is HistorySkips -> pluralStringResource(
-    if (row.back) R.plurals.history_event_rewound else R.plurals.history_event_skipped_ahead,
-    row.count,
-    row.count,
-  )
-  is HistoryInterruption -> stringResource(R.string.history_event_interrupted, durationText(row.duration))
-}
+private fun rowText(row: HistoryRow): String =
+  when (row) {
+    is HistoryEvent -> eventText(row)
+    is HistorySkips ->
+      pluralStringResource(
+        if (row.back) R.plurals.history_event_rewound else R.plurals.history_event_skipped_ahead,
+        row.count,
+        row.count,
+      )
+    is HistoryInterruption -> stringResource(R.string.history_event_interrupted, durationText(row.duration))
+  }
 
 @Composable
 private fun eventText(event: HistoryEvent): String {
-  val text = stringResource(
-    when (event.type) {
-      Type.Play -> R.string.history_event_played
-      Type.Pause -> R.string.history_event_paused
-      Type.SleepTimerSet, Type.SleepTimerStarted -> R.string.history_event_sleep_timer_on
-      Type.SleepTimerEnded -> R.string.history_event_sleep_timer_ended
-      Type.SleepTimerExtended -> R.string.history_event_shook
-      Type.ChapterChange -> R.string.history_event_chapter_change
-      Type.BookmarkJump -> R.string.history_event_bookmark_jump
-      Type.JumpBack -> R.string.history_event_jump_back
-      Type.Seek, Type.SkipBack, Type.SkipForward -> R.string.history_event_moved
-    },
-  )
+  val text =
+    stringResource(
+      when (event.type) {
+        Type.Play -> R.string.history_event_played
+        Type.Pause -> R.string.history_event_paused
+        Type.SleepTimerSet,
+        Type.SleepTimerStarted -> R.string.history_event_sleep_timer_on
+        Type.SleepTimerEnded -> R.string.history_event_sleep_timer_ended
+        Type.SleepTimerExtended -> R.string.history_event_shook
+        Type.ChapterChange -> R.string.history_event_chapter_change
+        Type.BookmarkJump -> R.string.history_event_bookmark_jump
+        Type.JumpBack -> R.string.history_event_jump_back
+        Type.Seek,
+        Type.SkipBack,
+        Type.SkipForward -> R.string.history_event_moved
+      },
+    )
   // playing on after a call isn't an interruption, it's the end of one
   val source = if (event.source == Source.AudioFocus && event.type == Type.Play) null else sourceLabel(event.source)
   return if (source != null) "$text · $source" else text
@@ -378,49 +383,50 @@ private fun locationText(location: HistoryLocation): String {
 }
 
 @Composable
-private fun sourceLabel(source: Source): String? = stringResource(
-  when (source) {
-    Source.App, Source.Unknown, Source.SleepTimer -> return null
-    Source.Widget -> R.string.history_source_widget
-    Source.Notification -> R.string.history_source_notification
-    Source.Headset -> R.string.history_source_headset
-    Source.Bluetooth -> R.string.history_source_bluetooth
-    Source.Car -> R.string.history_source_car
-    Source.Watch -> R.string.history_source_watch
-    Source.OtherApp -> R.string.history_source_other_app
-    Source.AudioFocus -> R.string.history_source_audio_focus
-    Source.Unplugged -> R.string.history_source_unplugged
-    Source.OtherDevice -> R.string.history_source_other_device
-  },
-)
+private fun sourceLabel(source: Source): String? =
+  stringResource(
+    when (source) {
+      Source.App,
+      Source.Unknown,
+      Source.SleepTimer -> return null
+      Source.Widget -> R.string.history_source_widget
+      Source.Notification -> R.string.history_source_notification
+      Source.Headset -> R.string.history_source_headset
+      Source.Bluetooth -> R.string.history_source_bluetooth
+      Source.Car -> R.string.history_source_car
+      Source.Watch -> R.string.history_source_watch
+      Source.OtherApp -> R.string.history_source_other_app
+      Source.AudioFocus -> R.string.history_source_audio_focus
+      Source.Unplugged -> R.string.history_source_unplugged
+      Source.OtherDevice -> R.string.history_source_other_device
+    },
+  )
 
-private fun Type.icon(): ImageVector = when (this) {
-  Type.Play -> VoiceIcons.PlayArrow
-  Type.Pause -> VoiceIcons.Pause
-  Type.SleepTimerSet, Type.SleepTimerStarted -> VoiceIcons.Bedtime
-  Type.SleepTimerEnded -> VoiceIcons.BedtimeOff
-  Type.SleepTimerExtended -> VoiceIcons.Vibration
-  Type.ChapterChange -> VoiceIcons.SkipNext
-  Type.BookmarkJump -> VoiceIcons.Bookmark
-  Type.JumpBack -> VoiceIcons.Undo
-  Type.SkipBack -> VoiceIcons.FastRewind
-  Type.SkipForward -> VoiceIcons.FastForward
-  Type.Seek -> VoiceIcons.SwapHoriz
-}
+private fun Type.icon(): ImageVector =
+  when (this) {
+    Type.Play -> VoiceIcons.PlayArrow
+    Type.Pause -> VoiceIcons.Pause
+    Type.SleepTimerSet,
+    Type.SleepTimerStarted -> VoiceIcons.Bedtime
+    Type.SleepTimerEnded -> VoiceIcons.BedtimeOff
+    Type.SleepTimerExtended -> VoiceIcons.Vibration
+    Type.ChapterChange -> VoiceIcons.SkipNext
+    Type.BookmarkJump -> VoiceIcons.Bookmark
+    Type.JumpBack -> VoiceIcons.Undo
+    Type.SkipBack -> VoiceIcons.FastRewind
+    Type.SkipForward -> VoiceIcons.FastForward
+    Type.Seek -> VoiceIcons.SwapHoriz
+  }
 
 @Composable
 private fun HistoryEmpty(modifier: Modifier = Modifier) {
   val colors = MaterialTheme.colorScheme
   Column(
-    modifier = modifier
-      .fillMaxWidth()
-      .padding(horizontal = 24.dp),
+    modifier = modifier.fillMaxWidth().padding(horizontal = 24.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Box(
-      modifier = Modifier
-        .size(120.dp)
-        .background(colors.secondaryContainer, MaterialShapes.Cookie12Sided.toShape()),
+      modifier = Modifier.size(120.dp).background(colors.secondaryContainer, MaterialShapes.Cookie12Sided.toShape()),
       contentAlignment = Alignment.Center,
     ) {
       Icon(VoiceIcons.History, contentDescription = null, tint = colors.onSecondaryContainer, modifier = Modifier.size(48.dp))

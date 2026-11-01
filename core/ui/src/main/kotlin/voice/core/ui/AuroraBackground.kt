@@ -24,10 +24,8 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 /**
- * Soft blobs of the theme's container colors drifting around as the [clock] ticks. A pure black
- * theme stays black, so the blobs fade out there.
- * With [showStars], a field of twinkling sparkles fades in (the player shows them while a sleep
- * timer runs).
+ * Soft blobs of the theme's container colors drifting around as the [clock] ticks. A pure black theme stays black, so the blobs fade out
+ * there. With [showStars], a field of twinkling sparkles fades in (the player shows them while a sleep timer runs).
  */
 @Composable
 fun AuroraBackground(
@@ -36,78 +34,82 @@ fun AuroraBackground(
   modifier: Modifier = Modifier,
 ) {
   val colorScheme = MaterialTheme.colorScheme
-  val starAlpha by animateFloatAsState(
-    targetValue = if (showStars) 1F else 0F,
-    animationSpec = tween(durationMillis = 1500),
-    label = "starAlpha",
-  )
-  val blobAlpha by animateFloatAsState(
-    targetValue = if (colorScheme.isPureBlack) 0F else 1F,
-    label = "blobAlpha",
-  )
+  val starAlpha by
+    animateFloatAsState(
+      targetValue = if (showStars) 1F else 0F,
+      animationSpec = tween(durationMillis = 1500),
+      label = "starAlpha",
+    )
+  val blobAlpha by
+    animateFloatAsState(
+      targetValue = if (colorScheme.isPureBlack) 0F else 1F,
+      label = "blobAlpha",
+    )
   val stars = remember { generateStars() }
   // Dark containers can still be quite bright (yellows especially), so keep the blobs subtle there
   // to preserve text contrast against the surface.
   val strength = if (colorScheme.surface.luminance() < 0.5F) 0.35F else 0.85F
   Spacer(
-    modifier = modifier.drawWithCache {
-      val sparkle = sparklePath()
-      // built once and moved around per frame, as every new gradient allocates a shader
-      val primaryBlob = blobBrush(colorScheme.primaryContainer.copy(alpha = strength))
-      val tertiaryBlob = blobBrush(colorScheme.tertiaryContainer.copy(alpha = strength * 0.8F))
-      val secondaryBlob = blobBrush(colorScheme.secondaryContainer.copy(alpha = strength * 0.85F))
-      onDrawBehind {
-        val t = clock()
-        val w = size.width
-        val h = size.height
-        val radius = max(w, h) * 0.7F
-        drawRect(colorScheme.surface)
-        if (blobAlpha > 0F) {
-          drawBlob(
-            brush = primaryBlob,
-            center = Offset(w * (0.25F + 0.2F * sin(t * 0.21F)), h * (0.18F + 0.1F * cos(t * 0.17F))),
-            radius = radius * (1F + 0.08F * sin(t * 0.5F)),
-            alpha = blobAlpha,
-          )
-          drawBlob(
-            brush = tertiaryBlob,
-            center = Offset(w * (0.85F + 0.15F * cos(t * 0.19F + 1F)), h * (0.5F + 0.12F * sin(t * 0.23F))),
-            radius = radius * 0.85F,
-            alpha = blobAlpha,
-          )
-          drawBlob(
-            brush = secondaryBlob,
-            center = Offset(w * (0.2F + 0.25F * sin(t * 0.13F + 2F)), h * (0.95F + 0.06F * cos(t * 0.29F))),
-            radius = radius * (1F + 0.1F * cos(t * 0.4F)),
-            alpha = blobAlpha,
-          )
-        }
-        if (starAlpha > 0F) {
-          stars.forEach { star ->
-            val twinkle = 0.25F + 0.75F * (0.5F + 0.5F * sin(t * star.speed + star.phase))
-            val starSize = star.size.dp.toPx()
-            withTransform(
-              {
-                translate(left = star.x * w, top = star.y * h)
-                scale(scaleX = starSize, scaleY = starSize, pivot = Offset.Zero)
-              },
-            ) {
-              drawPath(path = sparkle, color = colorScheme.primary, alpha = starAlpha * twinkle)
+    modifier =
+      modifier.drawWithCache {
+        val sparkle = sparklePath()
+        // built once and moved around per frame, as every new gradient allocates a shader
+        val primaryBlob = blobBrush(colorScheme.primaryContainer.copy(alpha = strength))
+        val tertiaryBlob = blobBrush(colorScheme.tertiaryContainer.copy(alpha = strength * 0.8F))
+        val secondaryBlob = blobBrush(colorScheme.secondaryContainer.copy(alpha = strength * 0.85F))
+        onDrawBehind {
+          val t = clock()
+          val w = size.width
+          val h = size.height
+          val radius = max(w, h) * 0.7F
+          drawRect(colorScheme.surface)
+          if (blobAlpha > 0F) {
+            drawBlob(
+              brush = primaryBlob,
+              center = Offset(w * (0.25F + 0.2F * sin(t * 0.21F)), h * (0.18F + 0.1F * cos(t * 0.17F))),
+              radius = radius * (1F + 0.08F * sin(t * 0.5F)),
+              alpha = blobAlpha,
+            )
+            drawBlob(
+              brush = tertiaryBlob,
+              center = Offset(w * (0.85F + 0.15F * cos(t * 0.19F + 1F)), h * (0.5F + 0.12F * sin(t * 0.23F))),
+              radius = radius * 0.85F,
+              alpha = blobAlpha,
+            )
+            drawBlob(
+              brush = secondaryBlob,
+              center = Offset(w * (0.2F + 0.25F * sin(t * 0.13F + 2F)), h * (0.95F + 0.06F * cos(t * 0.29F))),
+              radius = radius * (1F + 0.1F * cos(t * 0.4F)),
+              alpha = blobAlpha,
+            )
+          }
+          if (starAlpha > 0F) {
+            stars.forEach { star ->
+              val twinkle = 0.25F + 0.75F * (0.5F + 0.5F * sin(t * star.speed + star.phase))
+              val starSize = star.size.dp.toPx()
+              withTransform(
+                {
+                  translate(left = star.x * w, top = star.y * h)
+                  scale(scaleX = starSize, scaleY = starSize, pivot = Offset.Zero)
+                },
+              ) {
+                drawPath(path = sparkle, color = colorScheme.primary, alpha = starAlpha * twinkle)
+              }
             }
           }
         }
-      }
-    },
+      },
   )
 }
 
 /** A soft blob with a radius of 1, centered at the origin. */
-private fun blobBrush(color: Color): Brush = Brush.radialGradient(
-  0F to color,
-  1F to color.copy(alpha = 0F),
-  center = Offset.Zero,
-  radius = 1F,
-)
+private fun blobBrush(color: Color): Brush =
+  Brush.radialGradient(
+    0F to color,
+    1F to color.copy(alpha = 0F),
+    center = Offset.Zero,
+    radius = 1F,
+  )
 
 private fun DrawScope.drawBlob(
   brush: Brush,
@@ -147,11 +149,12 @@ private fun generateStars(): List<Star> {
 }
 
 /** A four pointed sparkle with a radius of 1, centered at the origin. */
-private fun sparklePath(): Path = Path().apply {
-  moveTo(0F, -1F)
-  quadraticTo(0F, 0F, 1F, 0F)
-  quadraticTo(0F, 0F, 0F, 1F)
-  quadraticTo(0F, 0F, -1F, 0F)
-  quadraticTo(0F, 0F, 0F, -1F)
-  close()
-}
+private fun sparklePath(): Path =
+  Path().apply {
+    moveTo(0F, -1F)
+    quadraticTo(0F, 0F, 1F, 0F)
+    quadraticTo(0F, 0F, 0F, 1F)
+    quadraticTo(0F, 0F, -1F, 0F)
+    quadraticTo(0F, 0F, 0F, -1F)
+    close()
+  }

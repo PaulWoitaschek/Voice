@@ -22,15 +22,16 @@ internal class StscVisitor : AtomVisitor {
     } else {
       buffer.skipBytes(3) // flags
       val numberOfEntries = buffer.readUnsignedIntToInt()
-      val stscEntriesForTrack = (0 until numberOfEntries).map {
-        val firstChunk = buffer.readUnsignedInt()
-        val samplesPerChunk = buffer.readUnsignedIntToInt()
-        buffer.skipBytes(4) // skip sample description index
-        StscEntry(
-          firstChunk = firstChunk,
-          samplesPerChunk = samplesPerChunk,
-        )
-      }
+      val stscEntriesForTrack =
+        (0 until numberOfEntries).map {
+          val firstChunk = buffer.readUnsignedInt()
+          val samplesPerChunk = buffer.readUnsignedIntToInt()
+          buffer.skipBytes(4) // skip sample description index
+          StscEntry(
+            firstChunk = firstChunk,
+            samplesPerChunk = samplesPerChunk,
+          )
+        }
       parseOutput.stscEntries.add(stscEntriesForTrack)
     }
   }

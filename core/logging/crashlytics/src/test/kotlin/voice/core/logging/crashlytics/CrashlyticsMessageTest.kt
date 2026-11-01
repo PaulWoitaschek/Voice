@@ -17,10 +17,11 @@ class CrashlyticsMessageTest {
 
   @Test
   fun `exceptions show only their types`() {
-    val throwable = IOException(
-      "content://com.android.externalstorage.documents/tree/primary%3AAudiobooks",
-      FileNotFoundException("/storage/emulated/0/Audiobooks/My Book/01.mp3"),
-    )
+    val throwable =
+      IOException(
+        "content://com.android.externalstorage.documents/tree/primary%3AAudiobooks",
+        FileNotFoundException("/storage/emulated/0/Audiobooks/My Book/01.mp3"),
+      )
     assertEquals(
       expected = "Could not open the file: java.io.IOException caused by java.io.FileNotFoundException",
       actual = crashlyticsMessage("Could not open the file", throwable),

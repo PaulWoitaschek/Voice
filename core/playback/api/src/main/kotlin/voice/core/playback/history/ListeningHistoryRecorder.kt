@@ -3,6 +3,8 @@ package voice.core.playback.history
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.time.Clock
+import java.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,8 +14,6 @@ import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.isUndoableJump
 import voice.core.data.repo.ListeningHistoryRepo
-import java.time.Clock
-import java.time.Instant
 
 data class PlaybackPosition(
   val bookId: BookId,
@@ -21,9 +21,7 @@ data class PlaybackPosition(
   val time: Long,
 )
 
-/**
- * A jump that can be undone from the player.
- */
+/** A jump that can be undone from the player. */
 data class Jump(
   val from: PlaybackPosition,
   val to: PlaybackPosition?,
@@ -48,25 +46,24 @@ class ListeningHistoryRecorder(
     position: PlaybackPosition,
     to: PlaybackPosition? = null,
   ) {
-    val event = ListeningEvent(
-      bookId = position.bookId,
-      type = type,
-      source = source,
-      atMillis = clock.millis(),
-      chapterId = position.chapterId,
-      time = position.time,
-      toChapterId = to?.chapterId,
-      toTime = to?.time,
-    )
+    val event =
+      ListeningEvent(
+        bookId = position.bookId,
+        type = type,
+        source = source,
+        atMillis = clock.millis(),
+        chapterId = position.chapterId,
+        time = position.time,
+        toChapterId = to?.chapterId,
+        toTime = to?.time,
+      )
     updateLastJump(event, position, to)
     scope.launch {
       repo.add(event)
     }
   }
 
-  /**
-   * Clears [jump] unless a newer jump replaced it in the meantime.
-   */
+  /** Clears [jump] unless a newer jump replaced it in the meantime. */
   fun clearJump(jump: Jump) {
     lastJump.compareAndSet(jump, null)
   }
@@ -78,12 +75,14 @@ class ListeningHistoryRecorder(
   ) {
     when {
       event.type == ListeningEvent.Type.JumpBack -> lastJump.value = null
-      event.isUndoableJump() -> lastJump.value = Jump(
-        from = from,
-        to = to,
-        type = event.type,
-        at = Instant.ofEpochMilli(event.atMillis),
-      )
+      event.isUndoableJump() ->
+        lastJump.value =
+          Jump(
+            from = from,
+            to = to,
+            type = event.type,
+            at = Instant.ofEpochMilli(event.atMillis),
+          )
     }
   }
 }

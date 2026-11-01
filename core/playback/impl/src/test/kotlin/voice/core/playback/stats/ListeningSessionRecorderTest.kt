@@ -2,15 +2,6 @@ package voice.core.playback.stats
 
 import androidx.media3.common.Player
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.runCurrent
-import kotlinx.coroutines.test.runTest
-import org.junit.runner.RunWith
-import voice.core.data.BookId
-import voice.core.data.ListeningSession
-import voice.core.playback.FakePlayer
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
@@ -20,6 +11,15 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
+import org.junit.runner.RunWith
+import voice.core.data.BookId
+import voice.core.data.ListeningSession
+import voice.core.playback.FakePlayer
 
 @RunWith(AndroidJUnit4::class)
 class ListeningSessionRecorderTest {
@@ -40,17 +40,18 @@ class ListeningSessionRecorderTest {
     reachedEnd: Boolean = false,
     bookId: BookId = dune,
     id: Long = 1,
-  ) = ListeningSession(
-    bookId = bookId,
-    startedAtMillis = start.toEpochMilli() + started.inWholeMilliseconds,
-    endedAtMillis = start.toEpochMilli() + ended.inWholeMilliseconds,
-    listenedMillis = listened.inWholeMilliseconds,
-    audioMillis = audio.inWholeMilliseconds,
-    // summer time in Berlin
-    utcOffsetSeconds = 2.hours.inWholeSeconds.toInt(),
-    reachedEnd = reachedEnd,
-    id = id,
-  )
+  ) =
+    ListeningSession(
+      bookId = bookId,
+      startedAtMillis = start.toEpochMilli() + started.inWholeMilliseconds,
+      endedAtMillis = start.toEpochMilli() + ended.inWholeMilliseconds,
+      listenedMillis = listened.inWholeMilliseconds,
+      audioMillis = audio.inWholeMilliseconds,
+      // summer time in Berlin
+      utcOffsetSeconds = 2.hours.inWholeSeconds.toInt(),
+      reachedEnd = reachedEnd,
+      id = id,
+    )
 
   @Test
   fun `listening is saved as one session`() = scope.runTest {
@@ -111,10 +112,11 @@ class ListeningSessionRecorderTest {
     runCurrent()
 
     assertEquals(
-      expected = listOf(
-        session(started = 0.minutes, ended = 5.minutes, listened = 5.minutes),
-        session(started = 11.minutes, ended = 16.minutes, listened = 5.minutes, id = 2),
-      ),
+      expected =
+        listOf(
+          session(started = 0.minutes, ended = 5.minutes, listened = 5.minutes),
+          session(started = 11.minutes, ended = 16.minutes, listened = 5.minutes, id = 2),
+        ),
       actual = repo.all,
     )
   }
@@ -129,10 +131,11 @@ class ListeningSessionRecorderTest {
     runCurrent()
 
     assertEquals(
-      expected = listOf(
-        session(started = 0.minutes, ended = 5.minutes, listened = 5.minutes),
-        session(started = 5.minutes, ended = 10.minutes, listened = 5.minutes, bookId = hyperion, id = 2),
-      ),
+      expected =
+        listOf(
+          session(started = 0.minutes, ended = 5.minutes, listened = 5.minutes),
+          session(started = 5.minutes, ended = 10.minutes, listened = 5.minutes, bookId = hyperion, id = 2),
+        ),
       actual = repo.all,
     )
   }

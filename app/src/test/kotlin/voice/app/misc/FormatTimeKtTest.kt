@@ -1,9 +1,9 @@
 package voice.app.misc
 
-import voice.core.ui.formatTime
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import voice.core.ui.formatTime
 
 class FormatTimeKtTest {
 
@@ -47,8 +47,6 @@ class FormatTimeKtTest {
     minutes: Long,
     seconds: Long,
   ): Long {
-    return TimeUnit.HOURS.toMillis(hours) +
-      TimeUnit.MINUTES.toMillis(minutes) +
-      TimeUnit.SECONDS.toMillis(seconds)
+    return TimeUnit.HOURS.toMillis(hours) + TimeUnit.MINUTES.toMillis(minutes) + TimeUnit.SECONDS.toMillis(seconds)
   }
 }

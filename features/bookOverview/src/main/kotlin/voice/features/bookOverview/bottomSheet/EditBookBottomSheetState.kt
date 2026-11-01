@@ -3,10 +3,10 @@ package voice.features.bookOverview.bottomSheet
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import voice.core.audiobookshelf.download.BookDownloadState
+import voice.core.strings.R as StringsR
 import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
-import voice.core.strings.R as StringsR
 
 internal data class EditBookBottomSheetState(
   val book: BookOverviewItemViewState,
@@ -55,8 +55,9 @@ enum class BottomSheetItem(
   BookCategoryMarkAsCompleted(StringsR.string.book_category_action_mark_completed, VoiceIcons.Done),
 }
 
-internal fun BookOverviewCategory.markAsItem(): BottomSheetItem = when (this) {
-  BookOverviewCategory.NOT_STARTED -> BottomSheetItem.BookCategoryMarkAsNotStarted
-  BookOverviewCategory.CURRENT -> BottomSheetItem.BookCategoryMarkAsCurrent
-  BookOverviewCategory.FINISHED -> BottomSheetItem.BookCategoryMarkAsCompleted
-}
+internal fun BookOverviewCategory.markAsItem(): BottomSheetItem =
+  when (this) {
+    BookOverviewCategory.NOT_STARTED -> BottomSheetItem.BookCategoryMarkAsNotStarted
+    BookOverviewCategory.CURRENT -> BottomSheetItem.BookCategoryMarkAsCurrent
+    BookOverviewCategory.FINISHED -> BottomSheetItem.BookCategoryMarkAsCompleted
+  }

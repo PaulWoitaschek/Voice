@@ -24,16 +24,17 @@ internal data class EditBookState(
 
   val confirmButtonEnabled: Boolean = title.trim().isNotEmpty()
 
-  val suggestions: List<SeriesSuggestion> = series.trim().let { typed ->
-    if (typed.isEmpty() || series == initialSeries) {
-      emptyList()
-    } else {
-      allSeries
-        .filter { it.name.contains(typed, ignoreCase = true) && !it.name.equals(typed, ignoreCase = true) }
-        .sortedByDescending { it.name.startsWith(typed, ignoreCase = true) }
-        .take(3)
+  val suggestions: List<SeriesSuggestion> =
+    series.trim().let { typed ->
+      if (typed.isEmpty() || series == initialSeries) {
+        emptyList()
+      } else {
+        allSeries
+          .filter { it.name.contains(typed, ignoreCase = true) && !it.name.equals(typed, ignoreCase = true) }
+          .sortedByDescending { it.name.startsWith(typed, ignoreCase = true) }
+          .take(3)
+      }
     }
-  }
 }
 
 internal data class SeriesSuggestion(

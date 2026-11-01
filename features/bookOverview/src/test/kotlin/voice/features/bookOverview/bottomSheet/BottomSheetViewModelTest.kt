@@ -9,6 +9,13 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -36,13 +43,6 @@ import voice.features.bookOverview.chapter
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BottomSheetViewModelTest {
@@ -53,27 +53,32 @@ class BottomSheetViewModelTest {
   private val storedBook = MutableStateFlow<Book?>(book)
   private val serverBook = book(time = 0, id = BookId("abs://item/1"))
   private val downloadStates = MutableStateFlow<Map<BookId, BookDownloadState>>(emptyMap())
-  private val serverAccount = mockk<ServerAccount> {
-    every { serverName } returns flowOf("audiobooks.example.com")
-  }
-  private val serverDownloads = mockk<ServerDownloads>(relaxUnitFun = true) {
-    every { states } returns downloadStates
-    coEvery { shouldAskForNotifications() } returns true
-  }
+  private val serverAccount =
+    mockk<ServerAccount> {
+      every { serverName } returns flowOf("audiobooks.example.com")
+    }
+  private val serverDownloads =
+    mockk<ServerDownloads>(relaxUnitFun = true) {
+      every { states } returns downloadStates
+      coEvery { shouldAskForNotifications() } returns true
+    }
   private val livePlaybackState = MutableStateFlow<LivePlaybackState?>(null)
 
-  private val repo = mockk<BookRepository> {
-    every { flow(book.id) } returns storedBook
-    every { flow(serverBook.id) } returns MutableStateFlow(serverBook)
-  }
-  private val playerController = mockk<PlayerController> {
-    every { livePlaybackStateFlow(book.id) } returns livePlaybackState
-  }
+  private val repo =
+    mockk<BookRepository> {
+      every { flow(book.id) } returns storedBook
+      every { flow(serverBook.id) } returns MutableStateFlow(serverBook)
+    }
+  private val playerController =
+    mockk<PlayerController> {
+      every { livePlaybackStateFlow(book.id) } returns livePlaybackState
+    }
   private val navigator = mockk<Navigator>(relaxUnitFun = true)
 
-  private val itemViewModel = mockk<BottomSheetItemViewModel>(relaxUnitFun = true) {
-    coEvery { items(any()) } returns listOf(BottomSheetItem.Edit)
-  }
+  private val itemViewModel =
+    mockk<BottomSheetItemViewModel>(relaxUnitFun = true) {
+      coEvery { items(any()) } returns listOf(BottomSheetItem.Edit)
+    }
 
   @BeforeTest
   fun setUp() {
@@ -86,160 +91,177 @@ class BottomSheetViewModelTest {
   }
 
   @Test
-  fun `shows the book with its category and items`() = runTest(dispatcher) {
-    viewModel().test {
-      val state = awaitLoaded()
-      assertEquals(book.name, state.book.name)
-      assertEquals(BookOverviewCategory.NOT_STARTED, state.category)
-      assertEquals(listOf(BottomSheetItem.Edit), state.items)
-    }
-  }
-
-  @Test
-  fun `follows the book while it plays`() = runTest(dispatcher) {
-    viewModel().test {
-      assertEquals(0F, awaitLoaded().book.progress)
-
-      storedBook.value = book.update { it.copy(currentChapter = book.chapters[1].id, positionInChapter = 0) }
-
-      val state = awaitItem()!!
-      assertEquals(0.5F, state.book.progress)
-      assertEquals(BookOverviewCategory.CURRENT, state.category)
-    }
-  }
-
-  @Test
-  fun `follows the live position with the experimental persistence`() = runTest(dispatcher) {
-    viewModel(experimentalPlaybackPersistence = true).test {
-      assertEquals(0F, awaitLoaded().book.progress)
-
-      livePlaybackState.value = LivePlaybackState(
-        bookId = book.id,
-        chapterId = book.chapters[1].id,
-        positionMs = 5_000,
-        isPlaying = true,
-        playbackSpeed = 1F,
-      )
-
-      assertEquals(0.75F, awaitItem()!!.book.progress)
-    }
-  }
-
-  @Test
-  fun `a book that is gone closes the menu`() = runTest(dispatcher) {
-    storedBook.value = null
-
-    val state = viewModel()
-    runCurrent()
-
-    assertNull(state.value)
-    verify { navigator.remove(Destination.BookActions(book.id)) }
-  }
-
-  @Test
-  fun `an item click returns once the item is handled`() = runTest(dispatcher) {
-    var handledItem: BottomSheetItem? = null
-    val slowItemViewModel = mockk<BottomSheetItemViewModel> {
-      coEvery { items(any()) } returns listOf(BottomSheetItem.Edit)
-      coEvery { onItemClick(any(), any()) } coAnswers {
-        delay(1_000)
-        handledItem = secondArg()
+  fun `shows the book with its category and items`() =
+    runTest(dispatcher) {
+      viewModel().test {
+        val state = awaitLoaded()
+        assertEquals(book.name, state.book.name)
+        assertEquals(BookOverviewCategory.NOT_STARTED, state.category)
+        assertEquals(listOf(BottomSheetItem.Edit), state.items)
       }
     }
 
-    bottomSheetViewModel(itemViewModels = setOf(slowItemViewModel)).onItemClick(BottomSheetItem.Edit)
-
-    assertEquals(BottomSheetItem.Edit, handledItem)
-  }
-
   @Test
-  fun `a server book offers the download that fits its state while the sheet is open`() = runTest(dispatcher) {
-    viewModel(bookId = serverBook.id).test {
-      assertEquals(listOf(BottomSheetItem.Edit, BottomSheetItem.Download), awaitLoaded().items)
+  fun `follows the book while it plays`() =
+    runTest(dispatcher) {
+      viewModel().test {
+        assertEquals(0F, awaitLoaded().book.progress)
 
-      val downloading = BookDownloadState.Downloading(progress = 0.5F, downloadedBytes = 5, totalBytes = 10, waitingFor = null)
-      downloadStates.value = mapOf(serverBook.id to downloading)
-      val state = awaitItem()!!
-      assertEquals(listOf(BottomSheetItem.Edit, BottomSheetItem.StopDownload), state.items)
-      assertEquals(downloading, state.download)
+        storedBook.value = book.update { it.copy(currentChapter = book.chapters[1].id, positionInChapter = 0) }
 
-      downloadStates.value = mapOf(serverBook.id to BookDownloadState.Failed)
-      assertEquals(
-        listOf(BottomSheetItem.Edit, BottomSheetItem.RetryDownload, BottomSheetItem.RemoveDownload),
-        awaitItem()!!.items,
-      )
+        val state = awaitItem()!!
+        assertEquals(0.5F, state.book.progress)
+        assertEquals(BookOverviewCategory.CURRENT, state.category)
+      }
     }
-  }
 
   @Test
-  fun `a book on the device shows where it comes from once a server is connected`() = runTest(dispatcher) {
-    viewModel().test {
-      val state = awaitLoaded()
-      assertEquals(BookSource.Device, state.source)
-      assertNull(state.download)
+  fun `follows the live position with the experimental persistence`() =
+    runTest(dispatcher) {
+      viewModel(experimentalPlaybackPersistence = true).test {
+        assertEquals(0F, awaitLoaded().book.progress)
+
+        livePlaybackState.value =
+          LivePlaybackState(
+            bookId = book.id,
+            chapterId = book.chapters[1].id,
+            positionMs = 5_000,
+            isPlaying = true,
+            playbackSpeed = 1F,
+          )
+
+        assertEquals(0.75F, awaitItem()!!.book.progress)
+      }
     }
-  }
 
   @Test
-  fun `stopping a download removes it`() = runTest(dispatcher) {
-    val viewModel = bottomSheetViewModel(bookId = serverBook.id)
+  fun `a book that is gone closes the menu`() =
+    runTest(dispatcher) {
+      storedBook.value = null
 
-    viewModel.onItemClick(BottomSheetItem.Download)
-    viewModel.onItemClick(BottomSheetItem.StopDownload)
+      val state = viewModel()
+      runCurrent()
 
-    coVerify(exactly = 1) {
-      serverDownloads.download(serverBook.id)
-      serverDownloads.remove(serverBook.id)
+      assertNull(state.value)
+      verify { navigator.remove(Destination.BookActions(book.id)) }
     }
-  }
 
   @Test
-  fun `voice asks for notifications when the server library wants it`() = runTest(dispatcher) {
-    viewModel(bookId = serverBook.id).test {
-      assertTrue(awaitLoaded().askForNotifications)
+  fun `an item click returns once the item is handled`() =
+    runTest(dispatcher) {
+      var handledItem: BottomSheetItem? = null
+      val slowItemViewModel =
+        mockk<BottomSheetItemViewModel> {
+          coEvery { items(any()) } returns listOf(BottomSheetItem.Edit)
+          coEvery { onItemClick(any(), any()) } coAnswers
+            {
+              delay(1_000)
+              handledItem = secondArg()
+            }
+        }
+
+      bottomSheetViewModel(itemViewModels = setOf(slowItemViewModel)).onItemClick(BottomSheetItem.Edit)
+
+      assertEquals(BottomSheetItem.Edit, handledItem)
     }
-  }
 
   @Test
-  fun `voice does not ask for notifications again once the server library has them`() = runTest(dispatcher) {
-    coEvery { serverDownloads.shouldAskForNotifications() } returns false
+  fun `a server book offers the download that fits its state while the sheet is open`() =
+    runTest(dispatcher) {
+      viewModel(bookId = serverBook.id).test {
+        assertEquals(listOf(BottomSheetItem.Edit, BottomSheetItem.Download), awaitLoaded().items)
 
-    viewModel(bookId = serverBook.id).test {
-      assertFalse(awaitLoaded().askForNotifications)
+        val downloading = BookDownloadState.Downloading(progress = 0.5F, downloadedBytes = 5, totalBytes = 10, waitingFor = null)
+        downloadStates.value = mapOf(serverBook.id to downloading)
+        val state = awaitItem()!!
+        assertEquals(listOf(BottomSheetItem.Edit, BottomSheetItem.StopDownload), state.items)
+        assertEquals(downloading, state.download)
+
+        downloadStates.value = mapOf(serverBook.id to BookDownloadState.Failed)
+        assertEquals(
+          listOf(BottomSheetItem.Edit, BottomSheetItem.RetryDownload, BottomSheetItem.RemoveDownload),
+          awaitItem()!!.items,
+        )
+      }
     }
-  }
 
   @Test
-  fun `asking for notifications is passed on to the server library`() = runTest(dispatcher) {
-    bottomSheetViewModel(bookId = serverBook.id).onAskedForNotifications()
-    runCurrent()
-
-    coVerify { serverDownloads.onAskedForNotifications() }
-  }
+  fun `a book on the device shows where it comes from once a server is connected`() =
+    runTest(dispatcher) {
+      viewModel().test {
+        val state = awaitLoaded()
+        assertEquals(BookSource.Device, state.source)
+        assertNull(state.download)
+      }
+    }
 
   @Test
-  fun `closing removes the menu of the book`() = runTest(dispatcher) {
-    bottomSheetViewModel().onClose()
+  fun `stopping a download removes it`() =
+    runTest(dispatcher) {
+      val viewModel = bottomSheetViewModel(bookId = serverBook.id)
 
-    verify { navigator.remove(Destination.BookActions(book.id)) }
-  }
+      viewModel.onItemClick(BottomSheetItem.Download)
+      viewModel.onItemClick(BottomSheetItem.StopDownload)
+
+      coVerify(exactly = 1) {
+        serverDownloads.download(serverBook.id)
+        serverDownloads.remove(serverBook.id)
+      }
+    }
+
+  @Test
+  fun `voice asks for notifications when the server library wants it`() =
+    runTest(dispatcher) {
+      viewModel(bookId = serverBook.id).test {
+        assertTrue(awaitLoaded().askForNotifications)
+      }
+    }
+
+  @Test
+  fun `voice does not ask for notifications again once the server library has them`() =
+    runTest(dispatcher) {
+      coEvery { serverDownloads.shouldAskForNotifications() } returns false
+
+      viewModel(bookId = serverBook.id).test {
+        assertFalse(awaitLoaded().askForNotifications)
+      }
+    }
+
+  @Test
+  fun `asking for notifications is passed on to the server library`() =
+    runTest(dispatcher) {
+      bottomSheetViewModel(bookId = serverBook.id).onAskedForNotifications()
+      runCurrent()
+
+      coVerify { serverDownloads.onAskedForNotifications() }
+    }
+
+  @Test
+  fun `closing removes the menu of the book`() =
+    runTest(dispatcher) {
+      bottomSheetViewModel().onClose()
+
+      verify { navigator.remove(Destination.BookActions(book.id)) }
+    }
 
   private fun bottomSheetViewModel(
     itemViewModels: Set<BottomSheetItemViewModel> = setOf(itemViewModel),
     experimentalPlaybackPersistence: Boolean = false,
     bookId: BookId = book.id,
-  ) = BottomSheetViewModel(
-    bookId = bookId,
-    viewModels = itemViewModels,
-    repo = repo,
-    serverAccount = serverAccount,
-    serverDownloads = serverDownloads,
-    navigator = navigator,
-    playerController = playerController,
-    experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
-      MemoryFeatureFlag(experimentalPlaybackPersistence),
-    ),
-  )
+  ) =
+    BottomSheetViewModel(
+      bookId = bookId,
+      viewModels = itemViewModels,
+      repo = repo,
+      serverAccount = serverAccount,
+      serverDownloads = serverDownloads,
+      navigator = navigator,
+      playerController = playerController,
+      experimentalPlaybackPersistenceFeatureFlag =
+        ExperimentalPlaybackPersistenceFeatureFlag(
+          MemoryFeatureFlag(experimentalPlaybackPersistence),
+        ),
+    )
 
   private fun TestScope.viewModel(
     experimentalPlaybackPersistence: Boolean = false,
@@ -253,7 +275,9 @@ class BottomSheetViewModelTest {
 
   private suspend fun ReceiveTurbine<EditBookBottomSheetState?>.awaitLoaded(): EditBookBottomSheetState {
     while (true) {
-      awaitItem()?.let { return it }
+      awaitItem()?.let {
+        return it
+      }
     }
   }
 }

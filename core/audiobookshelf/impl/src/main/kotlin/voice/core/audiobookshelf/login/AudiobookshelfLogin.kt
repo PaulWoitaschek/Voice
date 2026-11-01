@@ -3,6 +3,7 @@ package voice.core.audiobookshelf.login
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
@@ -20,11 +21,11 @@ import voice.core.audiobookshelf.api.LoginRequest
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.audiobookshelf.sync.AudiobookshelfSync
 import voice.core.logging.api.Logger
-import java.io.IOException
 
 @ContributesBinding(AppScope::class)
 @Inject
-class AudiobookshelfLogin internal constructor(
+class AudiobookshelfLogin
+internal constructor(
   private val serverFinder: ServerFinder,
   private val previews: LibrariesPreviews,
   private val serverAccount: ServerAccount,
@@ -39,13 +40,14 @@ class AudiobookshelfLogin internal constructor(
       analytics.event(
         "audiobookshelf_find_server",
         mapOf(
-          "result" to when (result) {
-            is FindServerResult.Found -> "found"
-            FindServerResult.NotFound -> "not_found"
-            FindServerResult.CertificateNotTrusted -> "certificate"
-            FindServerResult.NotSetUp -> "not_set_up"
-            is FindServerResult.TooOld -> "too_old"
-          },
+          "result" to
+            when (result) {
+              is FindServerResult.Found -> "found"
+              FindServerResult.NotFound -> "not_found"
+              FindServerResult.CertificateNotTrusted -> "certificate"
+              FindServerResult.NotSetUp -> "not_set_up"
+              is FindServerResult.TooOld -> "too_old"
+            },
         ),
       )
     }
@@ -60,12 +62,13 @@ class AudiobookshelfLogin internal constructor(
       analytics.event(
         "audiobookshelf_login",
         mapOf(
-          "result" to when (result) {
-            is LoginResult.Success -> "success"
-            LoginResult.WrongCredentials -> "wrong_credentials"
-            LoginResult.Unreachable -> "unreachable"
-            LoginResult.Failed -> "failed"
-          },
+          "result" to
+            when (result) {
+              is LoginResult.Success -> "success"
+              LoginResult.WrongCredentials -> "wrong_credentials"
+              LoginResult.Unreachable -> "unreachable"
+              LoginResult.Failed -> "failed"
+            },
         ),
       )
     }
@@ -130,7 +133,9 @@ class AudiobookshelfLogin internal constructor(
 }
 
 internal class AccountLogin(val account: Account) : PendingLogin {
-  override val serverName: String get() = serverName(account.serverUrl)
+  override val serverName: String
+    get() = serverName(account.serverUrl)
 }
 
-private val PendingLogin.account: Account get() = (this as AccountLogin).account
+private val PendingLogin.account: Account
+  get() = (this as AccountLogin).account

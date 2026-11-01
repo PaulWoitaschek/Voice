@@ -24,18 +24,20 @@ object AddContentProvider {
 
   @Provides
   @IntoSet
-  fun addContentNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.AddContent> { key ->
-    NavEntry(key) {
-      AddContent(origin = key.origin)
+  fun addContentNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.AddContent> { key ->
+      NavEntry(key) {
+        AddContent(origin = key.origin)
+      }
     }
-  }
 }
 
 @Composable
 fun AddContent(origin: Origin) {
-  val viewModel = retain(origin.name) {
-    rootGraphAs<AddContentGraph>().viewModelFactory.create(origin)
-  }
+  val viewModel =
+    retain(origin.name) {
+      rootGraphAs<AddContentGraph>().viewModelFactory.create(origin)
+    }
   SelectFolder(
     onBack = {
       viewModel.back()

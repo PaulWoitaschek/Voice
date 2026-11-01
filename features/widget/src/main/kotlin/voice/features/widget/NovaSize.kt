@@ -13,9 +13,9 @@ import androidx.glance.LocalSize
 import androidx.glance.appwidget.LocalAppWidgetOptions
 
 /**
- * Nova reports widgets taller than it lays them out. Then none of the sizes fits, and Android shows the one with the
- * smallest area, often the landscape one in portrait. So on Nova every size is laid out for the current orientation,
- * a bit shorter than Nova reports, so nothing gets cut off.
+ * Nova reports widgets taller than it lays them out. Then none of the sizes fits, and Android shows the one with the smallest area, often
+ * the landscape one in portrait. So on Nova every size is laid out for the current orientation, a bit shorter than Nova reports, so nothing
+ * gets cut off.
  */
 @Composable
 internal fun ProvideNovaSize(content: @Composable () -> Unit) {

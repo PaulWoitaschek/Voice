@@ -3,6 +3,9 @@ package voice.core.data.repo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.runner.RunWith
@@ -12,16 +15,12 @@ import voice.core.data.BookMetadata
 import voice.core.data.ChapterId
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.internals.AppDb
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class BookRepositoryImplTest {
 
-  private val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
-    .allowMainThreadQueries()
-    .build()
+  private val db =
+    Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java).allowMainThreadQueries().build()
   private val contentRepo = BookContentRepoImpl(db.bookContentDao())
   private val customMetadataRepo = CustomMetadataRepoImpl(db.customMetadataDao())
   private val repo = BookRepositoryImpl(ChapterRepoImpl(db.chapterDao()), contentRepo, customMetadataRepo)
@@ -71,28 +70,30 @@ class BookRepositoryImplTest {
     author: String,
     series: String? = null,
     part: String? = null,
-  ) = BookContent(
-    id = BookId(name),
-    playbackSpeed = 1F,
-    skipSilence = false,
-    isActive = true,
-    lastPlayedAt = Instant.EPOCH,
-    addedAt = Instant.EPOCH,
-    chapters = listOf(ChapterId("chapter")),
-    currentChapter = ChapterId("chapter"),
-    positionInChapter = 0,
-    gain = 0F,
-    metadata = BookMetadata(
-      name = name,
-      author = author,
-      album = null,
-      title = null,
-      genre = null,
-      narrator = null,
-      series = series,
-      part = part,
-      cover = null,
-      fileLastModified = null,
-    ),
-  )
+  ) =
+    BookContent(
+      id = BookId(name),
+      playbackSpeed = 1F,
+      skipSilence = false,
+      isActive = true,
+      lastPlayedAt = Instant.EPOCH,
+      addedAt = Instant.EPOCH,
+      chapters = listOf(ChapterId("chapter")),
+      currentChapter = ChapterId("chapter"),
+      positionInChapter = 0,
+      gain = 0F,
+      metadata =
+        BookMetadata(
+          name = name,
+          author = author,
+          album = null,
+          title = null,
+          genre = null,
+          narrator = null,
+          series = series,
+          part = part,
+          cover = null,
+          fileLastModified = null,
+        ),
+    )
 }

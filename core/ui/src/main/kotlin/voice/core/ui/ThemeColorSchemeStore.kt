@@ -10,7 +10,9 @@ import voice.core.datastore.VoiceDataStoreFactory
 class ThemeColorSchemeStore(store: DataStore<ThemeColorScheme>) : DataStore<ThemeColorScheme> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.create(
       serializer = ThemeColorScheme.serializer(),
       fileName = "themeColorScheme",

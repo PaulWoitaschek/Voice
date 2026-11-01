@@ -43,15 +43,13 @@ internal class ProgressCarryOver(
     // sessions don't know their chapters, so they go along with where the listener was
     listeningStatsRepo.moveToBook(from = playedHere.map { it.id }, to = content.id)
 
-    val withEdits = predecessors.sameBook?.let { sameBook ->
-      val edits = customMetadataRepo.get(sameBook.id)
-      customMetadataRepo.put(edits.copy(bookId = content.id).followingFiles(content.metadata))
-      content.withEditsOf(sameBook)
-    } ?: content
-    val source = playedHere
-      .maxByOrNull { it.lastPlayedAt }
-      ?.takeIf { it.lastPlayedAt > content.lastPlayedAt }
-      ?: return withEdits
+    val withEdits =
+      predecessors.sameBook?.let { sameBook ->
+        val edits = customMetadataRepo.get(sameBook.id)
+        customMetadataRepo.put(edits.copy(bookId = content.id).followingFiles(content.metadata))
+        content.withEditsOf(sameBook)
+      } ?: content
+    val source = playedHere.maxByOrNull { it.lastPlayedAt }?.takeIf { it.lastPlayedAt > content.lastPlayedAt } ?: return withEdits
     return withEdits.copy(
       currentChapter = moved.getValue(source.currentChapter),
       positionInChapter = source.positionInChapter,
@@ -108,9 +106,10 @@ internal class PreviousBooks(
   private val books = library.filter { it.id !in scanned }
   private val inLibrary = library.filter { it.isActive }.map { it.id }.toSet()
 
-  private val byDocument: Map<String, List<BookContent>> = this.books
-    .flatMap { book -> book.chapters.map { it.documentKey() to book } }
-    .groupBy(keySelector = { it.first }, valueTransform = { it.second })
+  private val byDocument: Map<String, List<BookContent>> =
+    this.books
+      .flatMap { book -> book.chapters.map { it.documentKey() to book } }
+      .groupBy(keySelector = { it.first }, valueTransform = { it.second })
 
   private var byFiles: Map<List<FileFingerprint>, BookContent>? = null
 
@@ -126,21 +125,17 @@ internal class PreviousBooks(
     isNew: Boolean,
   ): Predecessors? {
     val chapterByKey = content.chapters.associateBy { it.documentKey() }
-    val books = chapterByKey.keys
-      .flatMap { byDocument[it].orEmpty() }
-      .distinctBy { it.id }
+    val books = chapterByKey.keys.flatMap { byDocument[it].orEmpty() }.distinctBy { it.id }
     if (books.isEmpty()) return null
-    val moved = books
-      .flatMap { it.chapters }
-      .mapNotNull { chapter -> chapterByKey[chapter.documentKey()]?.let { chapter to it } }
-      .toMap()
+    val moved = books.flatMap { it.chapters }.mapNotNull { chapter -> chapterByKey[chapter.documentKey()]?.let { chapter to it } }.toMap()
     // a split up book gets its names from its files, and a book that was in the library already keeps its own
     val bookKey = content.id.toUri().documentKey()
-    val sameBook = if (isNew) {
-      books.filter { it.id.toUri().documentKey() == bookKey }.maxByOrNull { it.lastPlayedAt }
-    } else {
-      null
-    }
+    val sameBook =
+      if (isNew) {
+        books.filter { it.id.toUri().documentKey() == bookKey }.maxByOrNull { it.lastPlayedAt }
+      } else {
+        null
+      }
     return Predecessors(books = books, chapters = moved, sameBook = sameBook)
   }
 
@@ -153,7 +148,9 @@ internal class PreviousBooks(
   }
 
   private suspend fun byFiles(): Map<List<FileFingerprint>, BookContent> {
-    byFiles?.let { return it }
+    byFiles?.let {
+      return it
+    }
     val chapters = chapterRepo.get(books.flatMap { it.chapters }).associateBy { it.id }
     return books
       // of copies with the same files, the one played last wins

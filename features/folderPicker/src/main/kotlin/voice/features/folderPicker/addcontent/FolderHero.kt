@@ -32,12 +32,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
+import androidx.graphics.shapes.toPath as toAndroidPath
+import kotlin.math.min
+import kotlin.math.sin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.min
-import kotlin.math.sin
-import androidx.graphics.shapes.toPath as toAndroidPath
 
 @Composable
 internal fun FolderHero(
@@ -57,15 +57,16 @@ internal fun FolderHero(
     toss(open, hops)
   }
   Canvas(
-    modifier = modifier
-      // tapping is just for fun, so it's hidden from accessibility services
-      .clearAndSetSemantics {}
-      .pointerInput(Unit) {
-        detectTapGestures {
-          haptics.performHapticFeedback(HapticFeedbackType.ContextClick)
-          scope.launch { toss(open, hops) }
-        }
-      },
+    modifier =
+      modifier
+        // tapping is just for fun, so it's hidden from accessibility services
+        .clearAndSetSemantics {}
+        .pointerInput(Unit) {
+          detectTapGestures {
+            haptics.performHapticFeedback(HapticFeedbackType.ContextClick)
+            scope.launch { toss(open, hops) }
+          }
+        },
   ) {
     val t = clock()
     val width = min(min(size.width * 0.62F, size.height * 0.95F), 300.dp.toPx())
@@ -207,15 +208,17 @@ private class AudioFile(
   val tilt: Float,
   val color: FileColor,
 ) {
-  fun colors(scheme: ColorScheme): Pair<Color, Color> = when (color) {
-    FileColor.Primary -> scheme.primaryContainer to scheme.onPrimaryContainer
-    FileColor.Secondary -> scheme.secondaryContainer to scheme.onSecondaryContainer
-    FileColor.Tertiary -> scheme.tertiaryContainer to scheme.onTertiaryContainer
-  }
+  fun colors(scheme: ColorScheme): Pair<Color, Color> =
+    when (color) {
+      FileColor.Primary -> scheme.primaryContainer to scheme.onPrimaryContainer
+      FileColor.Secondary -> scheme.secondaryContainer to scheme.onSecondaryContainer
+      FileColor.Tertiary -> scheme.tertiaryContainer to scheme.onTertiaryContainer
+    }
 }
 
-private val FILES = listOf(
-  AudioFile(x = 0.27F, tilt = -10F, color = FileColor.Tertiary),
-  AudioFile(x = 0.5F, tilt = 2F, color = FileColor.Primary),
-  AudioFile(x = 0.73F, tilt = 12F, color = FileColor.Secondary),
-)
+private val FILES =
+  listOf(
+    AudioFile(x = 0.27F, tilt = -10F, color = FileColor.Tertiary),
+    AudioFile(x = 0.5F, tilt = 2F, color = FileColor.Primary),
+    AudioFile(x = 0.73F, tilt = 12F, color = FileColor.Secondary),
+  )

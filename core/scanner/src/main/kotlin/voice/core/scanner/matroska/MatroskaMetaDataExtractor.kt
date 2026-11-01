@@ -3,11 +3,11 @@ package voice.core.scanner.matroska
 import android.content.Context
 import android.net.Uri
 import dev.zacsweers.metro.Inject
+import java.util.Locale
 import org.ebml.EBMLReader
 import org.ebml.Element
 import org.ebml.matroska.MatroskaDocTypes
 import voice.core.data.MarkData
-import java.util.Locale
 
 internal class MatroskaMetaDataExtractor(
   private val dataSource: SafSeekableDataSource,
@@ -28,55 +28,57 @@ internal class MatroskaMetaDataExtractor(
     MatroskaDocTypes.Void.level
   }
 
-  fun readMediaInfo(): MatroskaMediaInfo = try {
-    validateHeader(dataSource, reader)
+  fun readMediaInfo(): MatroskaMediaInfo =
+    try {
+      validateHeader(dataSource, reader)
 
-    val segment = reader.readNextElement()
-    if (!(segment isType MatroskaDocTypes.Segment)) {
-      throw MatroskaParseException("Expected Segment element")
-    }
+      val segment = reader.readNextElement()
+      if (!(segment isType MatroskaDocTypes.Segment)) {
+        throw MatroskaParseException("Expected Segment element")
+      }
 
-    var chapters = emptyList<MatroskaChapter>()
-    var album: String? = null
-    var artist: String? = null
-    var title: String? = null
-    val tags = mutableMapOf<String, String>()
+      var chapters = emptyList<MatroskaChapter>()
+      var album: String? = null
+      var artist: String? = null
+      var title: String? = null
+      val tags = mutableMapOf<String, String>()
 
-    segment.forEachChild { element ->
-      when {
-        element isType MatroskaDocTypes.Chapters -> {
-          chapters = readChapters(element)
-        }
-        element isType MatroskaDocTypes.Info -> {
-          title = readTitle(element) ?: title
-        }
-        element isType MatroskaDocTypes.Tags -> {
-          val read = readTags(element)
-          tags += read
-          album = read["ALBUM"] ?: album
-          artist = read["ARTIST"] ?: read["PERFORMER"] ?: artist
-          title = read["TITLE"] ?: title
+      segment.forEachChild { element ->
+        when {
+          element isType MatroskaDocTypes.Chapters -> {
+            chapters = readChapters(element)
+          }
+          element isType MatroskaDocTypes.Info -> {
+            title = readTitle(element) ?: title
+          }
+          element isType MatroskaDocTypes.Tags -> {
+            val read = readTags(element)
+            tags += read
+            album = read["ALBUM"] ?: album
+            artist = read["ARTIST"] ?: read["PERFORMER"] ?: artist
+            title = read["TITLE"] ?: title
+          }
         }
       }
-    }
 
-    val preferredLanguages = listOf(Locale.getDefault().isO3Language, "eng")
-    MatroskaMediaInfo(
-      album = album,
-      artist = artist,
-      title = title,
-      tags = tags,
-      chapters = chapters.mapIndexed { index, chapter ->
-        MarkData(
-          chapter.startTime / 1000000,
-          chapter.bestName(preferredLanguages) ?: "Chapter ${index + 1}",
-        )
-      },
-    )
-  } catch (e: RuntimeException) {
-    // jebml throws undeclared exceptions, so we need wrap them :/
-    throw MatroskaParseException("Failed to read Matroska metadata", e)
-  }
+      val preferredLanguages = listOf(Locale.getDefault().isO3Language, "eng")
+      MatroskaMediaInfo(
+        album = album,
+        artist = artist,
+        title = title,
+        tags = tags,
+        chapters =
+          chapters.mapIndexed { index, chapter ->
+            MarkData(
+              chapter.startTime / 1000000,
+              chapter.bestName(preferredLanguages) ?: "Chapter ${index + 1}",
+            )
+          },
+      )
+    } catch (e: RuntimeException) {
+      // jebml throws undeclared exceptions, so we need wrap them :/
+      throw MatroskaParseException("Failed to read Matroska metadata", e)
+    }
 
   private fun readChapters(element: Element): List<MatroskaChapter> {
     val chapters = mutableListOf<MatroskaChapter>()
@@ -196,6 +198,7 @@ internal class MatroskaMetaDataExtractor(
   }
 
   private inline fun Element.forEachChild(action: (Element) -> Unit) = forEachChild(dataSource, reader, action)
+
   private fun Element.readString(): String = readString(dataSource)
 
   override fun close() = dataSource.close()
@@ -203,5 +206,6 @@ internal class MatroskaMetaDataExtractor(
 
 internal class MatroskaParseException : RuntimeException {
   constructor(message: String) : super(message)
+
   constructor(message: String, cause: Throwable) : super(message, cause)
 }

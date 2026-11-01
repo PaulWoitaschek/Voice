@@ -16,8 +16,8 @@ import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
+import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun CoverSearchBar(
@@ -44,22 +44,24 @@ internal fun CoverSearchBar(
         )
       }
     },
-    trailingIcon = if (query.text.isNotEmpty()) {
-      {
-        IconButton(onClick = { query.clearText() }) {
-          Icon(
-            imageVector = VoiceIcons.Close,
-            contentDescription = stringResource(StringsR.string.library_search_clear),
-          )
+    trailingIcon =
+      if (query.text.isNotEmpty()) {
+        {
+          IconButton(onClick = { query.clearText() }) {
+            Icon(
+              imageVector = VoiceIcons.Close,
+              contentDescription = stringResource(StringsR.string.library_search_clear),
+            )
+          }
         }
-      }
-    } else {
-      null
-    },
+      } else {
+        null
+      },
     shape = SearchBarDefaults.inputFieldShape,
-    colors = SearchBarDefaults.inputFieldColors(
-      focusedContainerColor = containerColor,
-      unfocusedContainerColor = containerColor,
-    ),
+    colors =
+      SearchBarDefaults.inputFieldColors(
+        focusedContainerColor = containerColor,
+        unfocusedContainerColor = containerColor,
+      ),
   )
 }

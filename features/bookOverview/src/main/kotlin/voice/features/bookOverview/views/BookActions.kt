@@ -49,25 +49,26 @@ object BookActionsProvider {
 
   @Provides
   @IntoSet
-  fun bookActionsNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.BookActions> { key ->
-    NavEntry(key, metadata = OverlayNav.overlay()) {
-      BookActionsScreen(key.bookId)
+  fun bookActionsNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.BookActions> { key ->
+      NavEntry(key, metadata = OverlayNav.overlay()) {
+        BookActionsScreen(key.bookId)
+      }
     }
-  }
 }
 
 @Composable
 private fun BookActionsScreen(bookId: BookId) {
-  val bookGraph = retain<BookActionsGraph>(bookId) {
-    rootGraphAs<BookActionsGraph.Factory.Provider>()
-      .bookActionsGraphProviderFactory.createBookActionsGraph(bookId)
-  }
+  val bookGraph =
+    retain<BookActionsGraph>(bookId) {
+      rootGraphAs<BookActionsGraph.Factory.Provider>().bookActionsGraphProviderFactory.createBookActionsGraph(bookId)
+    }
   BookActions(bookId, bookGraph)
 }
 
 /**
- * The menu of a book and the sheets its items lead to. It closes once its last sheet is gone, so it is still around to
- * show the rename and delete sheets and to receive the picked cover.
+ * The menu of a book and the sheets its items lead to. It closes once its last sheet is gone, so it is still around to show the rename and
+ * delete sheets and to receive the picked cover.
  */
 @Composable
 private fun BookActions(
@@ -83,11 +84,7 @@ private fun BookActions(
   var showMenu by rememberSaveable { mutableStateOf(true) }
   var pickingCover by rememberSaveable { mutableStateOf(false) }
   fun closeIfDone() {
-    if (!showMenu &&
-      !pickingCover &&
-      editBookViewModel.state.value == null &&
-      deleteBookViewModel.state.value == null
-    ) {
+    if (!showMenu && !pickingCover && editBookViewModel.state.value == null && deleteBookViewModel.state.value == null) {
       bottomSheetViewModel.onClose()
     }
   }
@@ -96,22 +93,24 @@ private fun BookActions(
     closeIfDone()
   }
 
-  val getContentLauncher = rememberLauncherForActivityResult(
-    contract = ActivityResultContracts.GetContent(),
-    onResult = { uri ->
-      pickingCover = false
-      if (uri != null) {
-        fileCoverViewModel.onImagePicked(bookId, uri)
-      }
-      closeIfDone()
-    },
-  )
+  val getContentLauncher =
+    rememberLauncherForActivityResult(
+      contract = ActivityResultContracts.GetContent(),
+      onResult = { uri ->
+        pickingCover = false
+        if (uri != null) {
+          fileCoverViewModel.onImagePicked(bookId, uri)
+        }
+        closeIfDone()
+      },
+    )
 
   // the download shows its progress in a notification, which needs the permission since Android 13
-  val notificationPermissionLauncher = rememberLauncherForActivityResult(
-    contract = ActivityResultContracts.RequestPermission(),
-    onResult = {},
-  )
+  val notificationPermissionLauncher =
+    rememberLauncherForActivityResult(
+      contract = ActivityResultContracts.RequestPermission(),
+      onResult = {},
+    )
   val context = LocalContext.current
 
   val deleteBookViewState = deleteBookViewModel.state.value
@@ -156,10 +155,11 @@ private fun BookActions(
   // shown once the book is loaded, so the sheet rises at its full height
   if (showMenu && state != null) {
     CoverTheme(cover = state.book.cover) {
-      val sheetState = rememberBottomSheetState(
-        initialValue = Hidden,
-        enabledValues = setOf(Hidden, Expanded),
-      )
+      val sheetState =
+        rememberBottomSheetState(
+          initialValue = Hidden,
+          enabledValues = setOf(Hidden, Expanded),
+        )
       var pendingStatusChange by remember { mutableStateOf<Job?>(null) }
       // the first choice wins, so taps while the sheet slides away can't add a second action
       var closing by remember { mutableStateOf(false) }

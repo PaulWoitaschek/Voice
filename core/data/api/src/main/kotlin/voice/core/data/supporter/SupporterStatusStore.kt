@@ -10,7 +10,9 @@ import voice.core.datastore.VoiceDataStoreFactory
 public class SupporterStatusStore(store: DataStore<SupporterStatus>) : DataStore<SupporterStatus> by store {
 
   @Inject
-  public constructor(factory: VoiceDataStoreFactory) : this(
+  public constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.create(
       serializer = SupporterStatus.serializer(),
       defaultValue = SupporterStatus(),

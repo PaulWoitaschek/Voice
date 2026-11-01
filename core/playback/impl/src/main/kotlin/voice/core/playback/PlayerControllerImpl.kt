@@ -11,6 +11,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,8 +47,6 @@ import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.sendCustomCommand
 import voice.core.playback.session.toMediaIdOrNull
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -60,10 +60,7 @@ class PlayerControllerImpl(
 ) : PlayerController {
 
   private val connection = MediaControllerConnection {
-    MediaController
-      .Builder(context, SessionToken(context, ComponentName(context, PlaybackService::class.java)))
-      .buildAsync()
-      .asDeferred()
+    MediaController.Builder(context, SessionToken(context, ComponentName(context, PlaybackService::class.java))).buildAsync().asDeferred()
   }
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
@@ -75,10 +72,11 @@ class PlayerControllerImpl(
   ) = executeAfterPrepare { controller ->
     val bookId = currentBookStoreId.data.first() ?: return@executeAfterPrepare
     val book = bookRepository.get(bookId) ?: return@executeAfterPrepare
-    val playbackItem = book.playbackItemForPosition(
-      chapterId = id,
-      positionInChapterMs = time,
-    )
+    val playbackItem =
+      book.playbackItemForPosition(
+        chapterId = id,
+        positionInChapterMs = time,
+      )
     if (playbackItem != null) {
       controller.record(type, source, to = PlaybackPosition(bookId, id, time))
       controller.seekTo(playbackItem.index, playbackItem.positionInMediaItem(time))
@@ -123,17 +121,19 @@ class PlayerControllerImpl(
 
   override fun previous() = executeAfterPrepare { controller ->
     val currentIndex = controller.currentMediaItemIndex
-    val index = if (controller.currentPosition > controller.maxSeekToPreviousPosition) {
-      currentIndex
-    } else {
-      controller.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentIndex
-    }
+    val index =
+      if (controller.currentPosition > controller.maxSeekToPreviousPosition) {
+        currentIndex
+      } else {
+        controller.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentIndex
+      }
     val to = controller.playbackPosition(index, 0)
-    val type = previousJumpType(
-      from = controller.playbackPosition(),
-      to = to,
-      sameItem = index == currentIndex,
-    )
+    val type =
+      previousJumpType(
+        from = controller.playbackPosition(),
+        to = to,
+        sameItem = index == currentIndex,
+      )
     if (type != null) {
       controller.record(type, to = to)
     }
@@ -189,8 +189,8 @@ class PlayerControllerImpl(
   }
 
   /**
-   * Right after [maybePrepare] the player only holds the book until the service expands it into chapters,
-   * so the position comes from the book itself.
+   * Right after [maybePrepare] the player only holds the book until the service expands it into chapters, so the position comes from the
+   * book itself.
    */
   private suspend fun storedPosition(): PlaybackPosition? {
     val bookId = currentBookStoreId.data.first() ?: return null
@@ -200,9 +200,7 @@ class PlayerControllerImpl(
 
   private suspend fun maybePrepare(controller: MediaController): Boolean {
     val bookId = currentBookStoreId.data.first() ?: return false
-    if (controller.currentBookId() == bookId &&
-      controller.playbackState in listOf(Player.STATE_READY, Player.STATE_BUFFERING)
-    ) {
+    if (controller.currentBookId() == bookId && controller.playbackState in listOf(Player.STATE_READY, Player.STATE_BUFFERING)) {
       return true
     }
     val book = bookRepository.get(bookId) ?: return false
@@ -240,10 +238,11 @@ class PlayerControllerImpl(
   }
 
   // the controller only answers on the main thread
-  override suspend fun livePlaybackState(bookId: BookId?): LivePlaybackState? = withContext(Dispatchers.Main.immediate) {
-    val controller = awaitConnect() ?: return@withContext null
-    controller.livePlaybackStateSnapshot(bookId)
-  }
+  override suspend fun livePlaybackState(bookId: BookId?): LivePlaybackState? =
+    withContext(Dispatchers.Main.immediate) {
+      val controller = awaitConnect() ?: return@withContext null
+      controller.livePlaybackStateSnapshot(bookId)
+    }
 
   override fun livePlaybackStateFlow(bookId: BookId?): Flow<LivePlaybackState?> = callbackFlow {
     val controller = awaitConnect()
@@ -274,29 +273,32 @@ class PlayerControllerImpl(
       }
     }
 
-    val listener = object : Player.Listener {
-      override fun onEvents(
-        player: Player,
-        events: Player.Events,
-      ) {
-        if (events.containsAny(
-            Player.EVENT_PLAY_WHEN_READY_CHANGED,
-            Player.EVENT_MEDIA_ITEM_TRANSITION,
-            Player.EVENT_PLAYBACK_STATE_CHANGED,
-          )
+    val listener =
+      object : Player.Listener {
+        override fun onEvents(
+          player: Player,
+          events: Player.Events,
         ) {
-          emitSnapshot()
-          updateTicking()
-        }
-        if (events.containsAny(
-            Player.EVENT_POSITION_DISCONTINUITY,
-            Player.EVENT_PLAYBACK_PARAMETERS_CHANGED,
-          )
-        ) {
-          emitSnapshot()
+          if (
+            events.containsAny(
+              Player.EVENT_PLAY_WHEN_READY_CHANGED,
+              Player.EVENT_MEDIA_ITEM_TRANSITION,
+              Player.EVENT_PLAYBACK_STATE_CHANGED,
+            )
+          ) {
+            emitSnapshot()
+            updateTicking()
+          }
+          if (
+            events.containsAny(
+              Player.EVENT_POSITION_DISCONTINUITY,
+              Player.EVENT_PLAYBACK_PARAMETERS_CHANGED,
+            )
+          ) {
+            emitSnapshot()
+          }
         }
       }
-    }
 
     controller.addListener(listener)
     emitSnapshot()
@@ -329,17 +331,17 @@ class PlayerControllerImpl(
 }
 
 /**
- * Skipping back restarts the current chapter when it already played for a while, or when there is no chapter
- * before it. That is only a seek, so it can be undone only when it goes back far enough. Returns null when
- * playback is already where it would go, or when it's not known where it goes, as right after preparing, before
- * the book is split into its chapters.
+ * Skipping back restarts the current chapter when it already played for a while, or when there is no chapter before it. That is only a
+ * seek, so it can be undone only when it goes back far enough. Returns null when playback is already where it would go, or when it's not
+ * known where it goes, as right after preparing, before the book is split into its chapters.
  */
 internal fun previousJumpType(
   from: PlaybackPosition?,
   to: PlaybackPosition?,
   sameItem: Boolean,
-): ListeningEvent.Type? = when {
-  to == null || to == from -> null
-  sameItem -> ListeningEvent.Type.Seek
-  else -> ListeningEvent.Type.ChapterChange
-}
+): ListeningEvent.Type? =
+  when {
+    to == null || to == from -> null
+    sameItem -> ListeningEvent.Type.Seek
+    else -> ListeningEvent.Type.ChapterChange
+  }

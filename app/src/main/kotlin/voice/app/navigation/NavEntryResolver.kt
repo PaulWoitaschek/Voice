@@ -15,15 +15,16 @@ class NavEntryResolver(private val providers: Set<NavEntryProvider<*>>) {
   internal fun registeredClasses() = providers.map { it.key }
 
   fun create(key: Destination.Compose): NavEntry<Destination.Compose> {
-    @Suppress("UNCHECKED_CAST")
-    val provider = typedProviders[key::class]!! as NavEntryProvider<Destination.Compose>
+    @Suppress("UNCHECKED_CAST") val provider = typedProviders[key::class]!! as NavEntryProvider<Destination.Compose>
     val navEntry = provider.create(key)
     return NavEntry(
       key = key,
       contentKey = navEntry.contentKey,
-      metadata = navEntry.metadata + metadata {
-        put(DestinationMetadataKey, key)
-      },
+      metadata =
+        navEntry.metadata +
+          metadata {
+            put(DestinationMetadataKey, key)
+          },
     ) {
       navEntry.Content()
     }

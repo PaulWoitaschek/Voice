@@ -1,7 +1,7 @@
 package voice.core.featureflag
 
-import kotlinx.coroutines.flow.Flow
 import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.Flow
 
 data class FeatureFlagValue<T : Any>(
   val value: T,
@@ -11,6 +11,7 @@ data class FeatureFlagValue<T : Any>(
 interface FeatureFlag<T : Any> {
   val key: String
   val description: String
+
   fun get(): T
 
   val flow: Flow<FeatureFlagValue<T>>

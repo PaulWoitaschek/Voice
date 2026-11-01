@@ -9,14 +9,14 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.getInt
 import voice.core.data.repo.internals.mapRows
 import voice.core.data.repo.internals.migrations.Migration39to40
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class Migration39to40Test {
@@ -26,23 +26,22 @@ class Migration39to40Test {
 
   @Before
   fun setUp() {
-    val config = SupportSQLiteOpenHelper.Configuration
-      .builder(getApplicationContext())
-      .callback(
-        object : SupportSQLiteOpenHelper.Callback(39) {
-          override fun onCreate(db: SupportSQLiteDatabase) {
-            db.execSQL(BookTable.CREATE_TABLE)
-          }
+    val config =
+      SupportSQLiteOpenHelper.Configuration.builder(getApplicationContext())
+        .callback(
+          object : SupportSQLiteOpenHelper.Callback(39) {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+              db.execSQL(BookTable.CREATE_TABLE)
+            }
 
-          override fun onUpgrade(
-            db: SupportSQLiteDatabase,
-            oldVersion: Int,
-            newVersion: Int,
-          ) {
-          }
-        },
-      )
-      .build()
+            override fun onUpgrade(
+              db: SupportSQLiteDatabase,
+              oldVersion: Int,
+              newVersion: Int,
+            ) {}
+          },
+        )
+        .build()
     helper = FrameworkSQLiteOpenHelperFactory().create(config)
     db = helper.writableDatabase
   }
@@ -62,23 +61,21 @@ class Migration39to40Test {
 
     Migration39to40().migrate(db)
 
-    val query = SupportSQLiteQueryBuilder.builder(BookTable.TABLE_NAME)
-      .columns(arrayOf(BookTable.TIME))
-      .create()
-    val times = db.query(query)
-      .mapRows { getInt(BookTable.TIME) }
+    val query = SupportSQLiteQueryBuilder.builder(BookTable.TABLE_NAME).columns(arrayOf(BookTable.TIME)).create()
+    val times = db.query(query).mapRows { getInt(BookTable.TIME) }
     assertEquals(expected = listOf(0, 5000), actual = times)
   }
 
   @SuppressLint("SdCardPath")
-  private fun contentValuesForBookWithTime(time: Int) = ContentValues().apply {
-    put(BookTable.NAME, "firstBookName")
-    put(BookTable.CURRENT_MEDIA_PATH, "/sdcard/file1.mp3")
-    put(BookTable.PLAYBACK_SPEED, 1F)
-    put(BookTable.ROOT, "/sdcard")
-    put(BookTable.TIME, time)
-    put(BookTable.TYPE, "COLLECTION_FOLDER")
-  }
+  private fun contentValuesForBookWithTime(time: Int) =
+    ContentValues().apply {
+      put(BookTable.NAME, "firstBookName")
+      put(BookTable.CURRENT_MEDIA_PATH, "/sdcard/file1.mp3")
+      put(BookTable.PLAYBACK_SPEED, 1F)
+      put(BookTable.ROOT, "/sdcard")
+      put(BookTable.TIME, time)
+      put(BookTable.TYPE, "COLLECTION_FOLDER")
+    }
 
   private object BookTable {
     const val ID = "bookId"
@@ -91,7 +88,8 @@ class Migration39to40Test {
     const val TYPE = "bookType"
     const val ACTIVE = "BOOK_ACTIVE"
     const val TABLE_NAME = "tableBooks"
-    const val CREATE_TABLE = """
+    const val CREATE_TABLE =
+      """
       CREATE TABLE $TABLE_NAME (
         $ID INTEGER PRIMARY KEY AUTOINCREMENT,
         $NAME TEXT NOT NULL,

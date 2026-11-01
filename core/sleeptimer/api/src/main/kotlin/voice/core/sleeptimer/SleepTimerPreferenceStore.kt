@@ -10,7 +10,9 @@ import voice.core.datastore.VoiceDataStoreFactory
 class SleepTimerPreferenceStore(store: DataStore<SleepTimerPreference>) : DataStore<SleepTimerPreference> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.create(
       serializer = SleepTimerPreference.serializer(),
       fileName = "sleepTime3",

@@ -53,6 +53,7 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.folders.FolderType
+import voice.core.strings.R as StringsR
 import voice.core.ui.AuroraBackground
 import voice.core.ui.EntranceState
 import voice.core.ui.MaxContentWidth
@@ -66,7 +67,6 @@ import voice.core.ui.segmentedShape
 import voice.features.folderPicker.addcontent.FolderHero
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface FolderPickerGraph {
@@ -79,19 +79,20 @@ object FolderPickerProvider {
 
   @Provides
   @IntoSet
-  fun folderPickerNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.FolderPicker> { key ->
-    NavEntry(key) {
-      FolderOverview()
+  fun folderPickerNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.FolderPicker> { key ->
+      NavEntry(key) {
+        FolderOverview()
+      }
     }
-  }
 }
 
 @Composable
 fun FolderOverview() {
-  val viewModel: FolderPickerViewModel = retain<FolderPickerViewModel> {
-    rootGraphAs<FolderPickerGraph>()
-      .folderPickerViewModel
-  }
+  val viewModel: FolderPickerViewModel =
+    retain<FolderPickerViewModel> {
+      rootGraphAs<FolderPickerGraph>().folderPickerViewModel
+    }
   val viewState = viewModel.viewState()
   val allowAccess = rememberAllowAccess(viewModel::onAccessAllowed)
   FolderOverviewView(
@@ -180,9 +181,7 @@ private fun LazyListScope.folders(
   onAllowAccessClick: (FolderPickerViewState.Item) -> Unit,
   onDeleteClick: (FolderPickerViewState.Item) -> Unit,
 ) {
-  val itemModifier = Modifier
-    .widthIn(max = MaxContentWidth)
-    .fillMaxWidth()
+  val itemModifier = Modifier.widthIn(max = MaxContentWidth).fillMaxWidth()
   if (viewState.items.isEmpty()) {
     item(key = "empty") {
       EmptyFolders(
@@ -201,25 +200,26 @@ private fun LazyListScope.folders(
     FolderRow(
       item = item,
       shape = segmentedShape(index, viewState.items.size),
-      onClick = if (canChangeType) {
-        { onFolderClick(item) }
-      } else {
-        null
-      },
-      onAllowAccessClick = if (viewState.showActions && !item.hasAccess) {
-        { onAllowAccessClick(item) }
-      } else {
-        null
-      },
-      onDeleteClick = if (viewState.showActions) {
-        { onDeleteClick(item) }
-      } else {
-        null
-      },
+      onClick =
+        if (canChangeType) {
+          { onFolderClick(item) }
+        } else {
+          null
+        },
+      onAllowAccessClick =
+        if (viewState.showActions && !item.hasAccess) {
+          { onAllowAccessClick(item) }
+        } else {
+          null
+        },
+      onDeleteClick =
+        if (viewState.showActions) {
+          { onDeleteClick(item) }
+        } else {
+          null
+        },
       // the entrance is over by the time later folders are scrolled to, so they share the last delay
-      modifier = itemModifier
-        .animateItem()
-        .entrance(entrance, minOf(index, 6)),
+      modifier = itemModifier.animateItem().entrance(entrance, minOf(index, 6)),
     )
   }
 }
@@ -235,9 +235,7 @@ private fun EmptyFolders(
   ) {
     FolderHero(
       clock = clock,
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(240.dp),
+      modifier = Modifier.fillMaxWidth().height(240.dp),
     )
     Spacer(Modifier.height(24.dp))
     Text(
@@ -270,10 +268,11 @@ private fun FolderOverviewTopBar(
         )
       }
     },
-    colors = TopAppBarDefaults.topAppBarColors(
-      containerColor = Color.Transparent,
-      scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-    ),
+    colors =
+      TopAppBarDefaults.topAppBarColors(
+        containerColor = Color.Transparent,
+        scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+      ),
     scrollBehavior = scrollBehavior,
   )
 }
@@ -283,36 +282,38 @@ private fun FolderOverviewTopBar(
 private fun FolderOverviewPreview() {
   VoiceTheme {
     FolderOverviewView(
-      viewState = FolderPickerViewState(
-        items = listOf(
-          FolderPickerViewState.Item(
-            name = "Audiobooks/Fantasy",
-            id = "content://preview/fantasy".toUri(),
-            folderType = FolderType.SingleFolder,
-            hasAccess = false,
-          ),
-          FolderPickerViewState.Item(
-            name = "My Audiobooks",
-            id = Uri.EMPTY,
-            folderType = FolderType.Root,
-          ),
-          FolderPickerViewState.Item(
-            name = "Brandon Sanderson",
-            id = Uri.EMPTY,
-            folderType = FolderType.Author,
-          ),
-          FolderPickerViewState.Item(
-            name = "Bobiverse 1-4",
-            id = Uri.EMPTY,
-            folderType = FolderType.SingleFolder,
-          ),
-          FolderPickerViewState.Item(
-            name = "Harry Potter 1",
-            id = Uri.EMPTY,
-            folderType = FolderType.SingleFile,
-          ),
+      viewState =
+        FolderPickerViewState(
+          items =
+            listOf(
+              FolderPickerViewState.Item(
+                name = "Audiobooks/Fantasy",
+                id = "content://preview/fantasy".toUri(),
+                folderType = FolderType.SingleFolder,
+                hasAccess = false,
+              ),
+              FolderPickerViewState.Item(
+                name = "My Audiobooks",
+                id = Uri.EMPTY,
+                folderType = FolderType.Root,
+              ),
+              FolderPickerViewState.Item(
+                name = "Brandon Sanderson",
+                id = Uri.EMPTY,
+                folderType = FolderType.Author,
+              ),
+              FolderPickerViewState.Item(
+                name = "Bobiverse 1-4",
+                id = Uri.EMPTY,
+                folderType = FolderType.SingleFolder,
+              ),
+              FolderPickerViewState.Item(
+                name = "Harry Potter 1",
+                id = Uri.EMPTY,
+                folderType = FolderType.SingleFile,
+              ),
+            ),
         ),
-      ),
       onAddClick = {},
       onDeleteClick = {},
       onFolderClick = {},

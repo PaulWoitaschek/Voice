@@ -6,13 +6,16 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.time.Instant
+import kotlin.time.Duration.Companion.ZERO
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
-import voice.core.data.BookId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
@@ -36,11 +39,6 @@ import voice.core.playback.session.toMediaIdOrNull
 import voice.core.playback.withDefaultSpeed
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerState
-import java.time.Instant
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.ZERO
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 @Inject
 @SingleIn(PlaybackScope::class)
@@ -61,58 +59,60 @@ class VoicePlayer(
 
   private var skipSilence = false
 
-  private val endOfChapterSleepTimerListener = object : Player.Listener {
-    override fun onMediaItemTransition(
-      mediaItem: MediaItem?,
-      reason: Int,
-    ) {
-      player.setSkipSilenceEnabled(skipSilence)
-    }
+  private val endOfChapterSleepTimerListener =
+    object : Player.Listener {
+      override fun onMediaItemTransition(
+        mediaItem: MediaItem?,
+        reason: Int,
+      ) {
+        player.setSkipSilenceEnabled(skipSilence)
+      }
 
-    override fun onPositionDiscontinuity(
-      oldPosition: Player.PositionInfo,
-      newPosition: Player.PositionInfo,
-      reason: Int,
-    ) {
-      if (reason == DISCONTINUITY_REASON_AUTO_TRANSITION) {
-        pauseAndDisableSleepTimerIfEndOfChapter()
+      override fun onPositionDiscontinuity(
+        oldPosition: Player.PositionInfo,
+        newPosition: Player.PositionInfo,
+        reason: Int,
+      ) {
+        if (reason == DISCONTINUITY_REASON_AUTO_TRANSITION) {
+          pauseAndDisableSleepTimerIfEndOfChapter()
+        }
+      }
+
+      override fun onPlaybackStateChanged(playbackState: Int) {
+        if (playbackState == STATE_ENDED) {
+          pauseAndDisableSleepTimerIfEndOfChapter()
+        }
+      }
+
+      private fun pauseAndDisableSleepTimerIfEndOfChapter() {
+        if (sleepTimer.state.value !is SleepTimerState.Enabled.WithEndOfChapter) return
+        sleepTimer.disable()
+        player.pause()
+        player.playbackPosition()?.let { position ->
+          historyRecorder.record(
+            type = ListeningEvent.Type.SleepTimerEnded,
+            source = ListeningEvent.Source.SleepTimer,
+            position = position,
+          )
+        }
       }
     }
-
-    override fun onPlaybackStateChanged(playbackState: Int) {
-      if (playbackState == STATE_ENDED) {
-        pauseAndDisableSleepTimerIfEndOfChapter()
-      }
-    }
-
-    private fun pauseAndDisableSleepTimerIfEndOfChapter() {
-      if (sleepTimer.state.value !is SleepTimerState.Enabled.WithEndOfChapter) return
-      sleepTimer.disable()
-      player.pause()
-      player.playbackPosition()?.let { position ->
-        historyRecorder.record(
-          type = ListeningEvent.Type.SleepTimerEnded,
-          source = ListeningEvent.Source.SleepTimer,
-          position = position,
-        )
-      }
-    }
-  }
 
   /**
-   * Rewinds when playback actually paused, so a pause command while already paused doesn't rewind again, and the
-   * pauses ExoPlayer does on its own rewind as well.
+   * Rewinds when playback actually paused, so a pause command while already paused doesn't rewind again, and the pauses ExoPlayer does on
+   * its own rewind as well.
    */
-  private val autoRewindListener = object : Player.Listener {
-    override fun onPlayWhenReadyChanged(
-      playWhenReady: Boolean,
-      reason: Int,
-    ) {
-      if (!playWhenReady && reason in autoRewindReasons) {
-        autoRewind()
+  private val autoRewindListener =
+    object : Player.Listener {
+      override fun onPlayWhenReadyChanged(
+        playWhenReady: Boolean,
+        reason: Int,
+      ) {
+        if (!playWhenReady && reason in autoRewindReasons) {
+          autoRewind()
+        }
       }
     }
-  }
 
   init {
     player.addListener(endOfChapterSleepTimerListener)
@@ -172,19 +172,13 @@ class VoicePlayer(
       val skipAmount = seekTimeStore.data.first().seconds
       recordExternalCommand(source, ListeningEvent.Type.SkipForward, position)
 
-      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }
-        ?.milliseconds
-        ?.coerceAtLeast(ZERO)
-        ?: return@launch
+      val currentPosition = player.currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds?.coerceAtLeast(ZERO) ?: return@launch
       val newPosition = currentPosition + skipAmount
 
-      val duration = player.duration.takeUnless { it == C.TIME_UNSET }
-        ?.milliseconds
-        ?: return@launch
+      val duration = player.duration.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: return@launch
 
       if (newPosition > duration) {
-        val nextMediaItemIndex = nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET }
-          ?: return@launch
+        val nextMediaItemIndex = nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: return@launch
         player.seekTo(nextMediaItemIndex, (duration - newPosition).absoluteValue.inWholeMilliseconds)
       } else {
         player.seekTo(newPosition.inWholeMilliseconds)
@@ -215,11 +209,12 @@ class VoicePlayer(
     positionMs: Long,
   ) {
     val source = commandSourceResolver.current() ?: return
-    val type = if (mediaItemIndex == currentMediaItemIndex) {
-      ListeningEvent.Type.Seek
-    } else {
-      ListeningEvent.Type.ChapterChange
-    }
+    val type =
+      if (mediaItemIndex == currentMediaItemIndex) {
+        ListeningEvent.Type.Seek
+      } else {
+        ListeningEvent.Type.ChapterChange
+      }
     recordExternalCommand(
       source = source,
       type = type,
@@ -353,10 +348,11 @@ class VoicePlayer(
           }
           setSkipSilenceEnabled(book.content.skipSilence)
           volumeGain.gain = Decibel(book.content.gain)
-          val currentPlaybackItem = book.playbackItemForPosition(
-            chapterId = book.content.currentChapter,
-            positionInChapterMs = book.content.positionInChapter,
-          ) ?: return
+          val currentPlaybackItem =
+            book.playbackItemForPosition(
+              chapterId = book.content.currentChapter,
+              positionInChapterMs = book.content.positionInChapter,
+            ) ?: return
           player.setBook(
             book = book,
             startItemIndex = currentPlaybackItem.index,
@@ -377,9 +373,7 @@ class VoicePlayer(
     rememberSpeed(speed)
   }
 
-  /**
-   * Books that were never played start at this speed, see [withDefaultSpeed].
-   */
+  /** Books that were never played start at this speed, see [withDefaultSpeed]. */
   private fun rememberSpeed(speed: Float) {
     scope.launch {
       lastPlaybackSpeedStore.updateData { speed }
@@ -407,8 +401,9 @@ class VoicePlayer(
   }
 }
 
-private val autoRewindReasons = setOf(
-  Player.PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST,
-  Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS,
-  Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY,
-)
+private val autoRewindReasons =
+  setOf(
+    Player.PLAY_WHEN_READY_CHANGE_REASON_USER_REQUEST,
+    Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS,
+    Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY,
+  )

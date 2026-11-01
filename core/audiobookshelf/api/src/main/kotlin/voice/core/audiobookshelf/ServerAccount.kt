@@ -15,9 +15,7 @@ interface ServerAccount {
 
   suspend fun setLibraries(libraryIds: List<String>)
 
-  /**
-   * Removes the server books and their downloads from Voice. Their progress lives on on the server.
-   */
+  /** Removes the server books and their downloads from Voice. Their progress lives on on the server. */
   suspend fun signOut()
 }
 

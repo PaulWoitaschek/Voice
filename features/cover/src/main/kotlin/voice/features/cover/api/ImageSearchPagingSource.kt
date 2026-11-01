@@ -2,9 +2,9 @@ package voice.features.cover.api
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import java.io.IOException
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
-import java.io.IOException
 
 internal class ImageSearchPagingSource(
   private val api: CoverApi,
@@ -27,19 +27,20 @@ internal class ImageSearchPagingSource(
       )
     }
     return try {
-      val searchParams = params.key ?: freshSearchParams()
-        ?: return LoadResult.Error(IOException("No params"))
+      val searchParams = params.key ?: freshSearchParams() ?: return LoadResult.Error(IOException("No params"))
 
-      val response = api.search(
-        query = query,
-        auth = searchParams.auth,
-        url = searchParams.url,
-      )
-      val nextKey = if (response.next != null) {
-        ImageSearchParams(url = response.next, auth = searchParams.auth)
-      } else {
-        null
-      }
+      val response =
+        api.search(
+          query = query,
+          auth = searchParams.auth,
+          url = searchParams.url,
+        )
+      val nextKey =
+        if (response.next != null) {
+          ImageSearchParams(url = response.next, auth = searchParams.auth)
+        } else {
+          null
+        }
       LoadResult.Page(
         prevKey = null,
         nextKey = nextKey,
