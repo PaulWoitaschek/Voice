@@ -12,8 +12,8 @@ glance = "1.2.0"
 jvm-bytecode = "17"
 jvm-toolchain = "25"
 agp = "9.5.0"
-ktlint-core = "1.8.0"
-ktlint-gradlePlugin = "0.14.0"
+ktfmt = "0.65"
+spotless = "8.10.4"
 retrofit = "3.0.0"
 metro = "1.5.1"
 navigation3 = "1.2.0"
@@ -102,9 +102,9 @@ navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", ver
 
 metro-runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
-ktlint-core = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint-core" }
-ktlint-gradlePlugin = { module = "io.github.usefulness:ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
-ktlint-compose = "io.nlopez.compose.rules:ktlint:0.6.8"
+ktfmt = { module = "org.jetbrains.kotlinx:ktfmt", version.ref = "ktfmt" }
+spotless-gradlePlugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
+compose-lint-checks = "com.slack.lint.compose:compose-lint-checks:1.6.1"
 
 [bundles]
 compose = [
@@ -146,5 +146,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.3.13" }
-ktlint = { id = "io.github.usefulness.ktlint-gradle-plugin", version.ref = "ktlint-gradlePlugin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }

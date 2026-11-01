@@ -48,14 +48,6 @@
       ]
     },
     {
-      "groupName": "Ktlint",
-      "matchPackageNames": [
-        "com.pinterest.ktlint{/,}**",
-        "io.nlopez.compose.rules{/,}**",
-        "io.github.usefulness{/,}**"
-      ]
-    },
-    {
       "matchUpdateTypes": [
         "minor",
         "patch",

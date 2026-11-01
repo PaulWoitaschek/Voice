@@ -53,28 +53,33 @@ ANDROID_SERIAL=<serial from adb devices> .agents/skills/emulator/scripts/ui.py o
 
 Agents use this through the emulator skill in `.agents/skills/emulator`, which also gives every agent its own emulator.
 
-## Ktlint
+## Formatting
 
-Voice uses **Ktlint** to enforce consistent code formatting.
+Voice formats Kotlin with **ktfmt** through Spotless, in Google style with a line width of 140.
 
 - Check for formatting issues:
 
 ```sh
-./gradlew lintKotlin
+./gradlew spotlessCheck
 ```
 
 - Auto-fix formatting:
 
 ```sh
-./gradlew formatKotlin
+./gradlew spotlessApply
 ```
+
+- To format from Android Studio, install the [ktfmt plugin](https://plugins.jetbrains.com/plugin/14912-ktfmt) and choose
+  "Enable for This Project" when it asks. It picks up the project's settings from `.idea/ktfmt.xml`.
 
 - To make commits fail on formatting errors, set up a pre-commit hook:
 
 ```sh
-echo "./gradlew lintKotlin" > .git/hooks/pre-commit
+echo "./gradlew spotlessCheck" > .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
 ```
+
+Compose rules come from Slack's [compose-lints](https://slackhq.github.io/compose-lints/) and run as part of Android Lint.
 
 ## Releasing
 

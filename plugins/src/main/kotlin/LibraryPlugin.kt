@@ -6,7 +6,7 @@ class LibraryPlugin : Plugin<Project> {
 
   override fun apply(target: Project) {
     target.pluginManager.run {
-      apply("voice.ktlint")
+      apply("voice.ktfmt")
       apply("com.android.library")
       withPlugin("com.android.library") {
         target.baseSetup()

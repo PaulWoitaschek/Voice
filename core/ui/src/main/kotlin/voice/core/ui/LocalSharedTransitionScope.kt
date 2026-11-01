@@ -1,4 +1,4 @@
-@file:Suppress("ktlint:compose:compositionlocal-allowlist")
+@file:Suppress("ComposeCompositionLocalUsage")
 
 package voice.core.ui
 

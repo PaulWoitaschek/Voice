@@ -5,7 +5,7 @@ class AppPlugin : Plugin<Project> {
 
   override fun apply(target: Project) {
     target.pluginManager.run {
-      apply("voice.ktlint")
+      apply("voice.ktfmt")
       apply("com.android.application")
       withPlugin("com.android.application") {
         target.baseSetup()

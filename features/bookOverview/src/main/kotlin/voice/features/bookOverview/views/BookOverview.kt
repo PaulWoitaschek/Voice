@@ -270,7 +270,7 @@ private fun Dialog(
   }
 }
 
-@Suppress("ktlint:compose:preview-public-check")
+@Suppress("ComposePreviewPublic")
 @Preview
 @Composable
 fun BookOverviewPreview(

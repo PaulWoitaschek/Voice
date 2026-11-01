@@ -35,7 +35,7 @@ Background and diagram: `docs/architecture.md`. Module inventory: `settings.grad
 2. Add `id("voice.compose")` for Compose and `alias(libs.plugins.metro)` for DI.
 3. Add it to `app/build.gradle.kts` so its DI contributions reach the graph.
 
-Convention plugins (`voice.library`, `voice.app`, `voice.compose`, `voice.ktlint`) live in `plugins/src/main/kotlin`.
+Convention plugins (`voice.library`, `voice.app`, `voice.compose`, `voice.ktfmt`) live in `plugins/src/main/kotlin`.
 
 ## DI (Metro)
 

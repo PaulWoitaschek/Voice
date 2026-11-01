@@ -1,5 +1,6 @@
 plugins {
   `kotlin-dsl`
+  alias(libs.plugins.spotless)
 }
 
 dependencies {
@@ -7,7 +8,7 @@ dependencies {
   implementation(libs.kotlin.pluginForGradle)
   implementation(libs.kotlin.powerAssert)
   implementation(libs.compose.compiler.gradle.plugin)
-  implementation(libs.ktlint.gradlePlugin)
+  implementation(libs.spotless.gradlePlugin)
 }
 
 gradlePlugin {
@@ -24,10 +25,21 @@ gradlePlugin {
       id = "voice.compose"
       implementationClass = "ComposePlugin"
     }
-    create("ktlint") {
-      id = "voice.ktlint"
-      implementationClass = "KtlintPlugin"
+    create("ktfmt") {
+      id = "voice.ktfmt"
+      implementationClass = "KtfmtPlugin"
     }
+  }
+}
+
+spotless {
+  kotlin {
+    target("src/**/*.kt")
+    ktfmt(libs.versions.ktfmt.get()).googleStyle().configure { it.setMaxWidth(140) }
+  }
+  kotlinGradle {
+    target("*.kts")
+    ktfmt(libs.versions.ktfmt.get()).googleStyle().configure { it.setMaxWidth(140) }
   }
 }
 
