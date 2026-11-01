@@ -196,30 +196,25 @@ internal fun SeriesCover(
   gapColor: Color = MaterialTheme.colorScheme.surface,
   badge: @Composable BoxScope.() -> Unit = {},
 ) {
-  Box(modifier = modifier) {
-    Box(
-      Modifier
-        .fillMaxSize()
-        .seriesCoverSharedElementModifier(seriesKey),
-    ) {
-      val behind = covers.size - 1
-      covers.asReversed().forEachIndexed { index, cover ->
-        val depth = if (behind == 0) 0F else (behind - index).toFloat() / behind
-        // a cover keeps its image when another book comes to the front
-        key(cover) {
-          AsyncImage(
-            modifier = Modifier
-              .fillMaxSize(if (behind == 0) 1F else STACKED_COVER_SIZE)
-              .align(BiasAlignment(horizontalBias = -1F + 2F * depth, verticalBias = 1F - 2F * depth))
-              .clip(CoverShape)
-              .border(2.dp, gapColor, CoverShape),
-            model = rememberCoverThumbnailRequest(cover),
-            placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
-            error = painterResource(id = UiR.drawable.album_art),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-          )
-        }
+  // the badge flies along, or the flying covers would hide it
+  Box(modifier = modifier.seriesCoverSharedElementModifier(seriesKey)) {
+    val behind = covers.size - 1
+    covers.asReversed().forEachIndexed { index, cover ->
+      val depth = if (behind == 0) 0F else (behind - index).toFloat() / behind
+      // a cover keeps its image when another book comes to the front
+      key(cover) {
+        AsyncImage(
+          modifier = Modifier
+            .fillMaxSize(if (behind == 0) 1F else STACKED_COVER_SIZE)
+            .align(BiasAlignment(horizontalBias = -1F + 2F * depth, verticalBias = 1F - 2F * depth))
+            .clip(CoverShape)
+            .border(2.dp, gapColor, CoverShape),
+          model = rememberCoverThumbnailRequest(cover),
+          placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
+          error = painterResource(id = UiR.drawable.album_art),
+          contentScale = ContentScale.Crop,
+          contentDescription = null,
+        )
       }
     }
     badge()
