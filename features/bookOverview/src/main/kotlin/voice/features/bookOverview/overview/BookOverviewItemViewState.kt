@@ -53,9 +53,10 @@ internal fun Book.toItemViewState(
   download = download,
 )
 
-private fun Book.progress(): Float {
+internal fun Book.progress(): Float {
   val globalPosition = position
   val totalDuration = duration
+  if (totalDuration == 0L) return 0F
   val progress = globalPosition.toFloat() / totalDuration.toFloat()
   if (progress < 0F) {
     Logger.w("Negative progress: position=$globalPosition, duration=$totalDuration")

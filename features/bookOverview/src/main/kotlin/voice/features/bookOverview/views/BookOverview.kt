@@ -283,7 +283,7 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
               covers = listOf(null, null, null),
               bookCount = 4,
               finishedCount = 1,
-              progress = 0.4F,
+              progress = listOf(1F, 0.6F, 0F, 0F),
               category = BookOverviewCategory.CURRENT,
             ),
           ),

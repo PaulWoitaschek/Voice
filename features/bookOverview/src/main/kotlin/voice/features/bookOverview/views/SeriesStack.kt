@@ -2,6 +2,7 @@
 
 package voice.features.bookOverview.views
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,12 +20,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,8 +35,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -43,6 +50,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import voice.core.ui.VoiceTheme
@@ -110,13 +118,11 @@ internal fun ListSeriesRow(
         Spacer(Modifier.height(6.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
           if (series.category == BookOverviewCategory.CURRENT) {
-            LinearProgressIndicator(
-              progress = { series.progress },
+            SeriesProgress(
+              progress = series.progress,
               modifier = Modifier
                 .weight(1F)
                 .padding(end = 12.dp),
-              gapSize = 0.dp,
-              drawStopIndicator = {},
             )
           }
           Text(
@@ -161,11 +167,9 @@ internal fun GridSeries(
     // right under the cover, so the bars in a row line up however long the titles are
     if (series.category == BookOverviewCategory.CURRENT) {
       Spacer(Modifier.height(8.dp))
-      LinearProgressIndicator(
-        progress = { series.progress },
+      SeriesProgress(
+        progress = series.progress,
         modifier = Modifier.fillMaxWidth(),
-        gapSize = 0.dp,
-        drawStopIndicator = {},
       )
     }
     Spacer(Modifier.height(8.dp))
@@ -186,6 +190,40 @@ internal fun GridSeries(
     }
   }
 }
+
+@Composable
+private fun SeriesProgress(
+  progress: List<Float>,
+  modifier: Modifier = Modifier,
+) {
+  val color = ProgressIndicatorDefaults.linearColor
+  val trackColor = ProgressIndicatorDefaults.linearTrackColor
+  val average = progress.average().toFloat()
+  Canvas(
+    modifier
+      .height(4.dp)
+      .progressSemantics(average),
+  ) {
+    val gap = SEGMENT_GAP.toPx()
+    val fits = (size.width - gap * (progress.size - 1)) / progress.size >= MIN_SEGMENT_WIDTH.toPx()
+    // a series with many books is too long for segments
+    val segments = if (fits) progress else listOf(average)
+    val width = (size.width - gap * (segments.size - 1)) / segments.size
+    val radius = CornerRadius(size.height / 2)
+    scale(scaleX = if (layoutDirection == LayoutDirection.Rtl) -1F else 1F, scaleY = 1F) {
+      segments.forEachIndexed { index, segment ->
+        val left = index * (width + gap)
+        drawRoundRect(trackColor, Offset(left, 0F), Size(width, size.height), radius)
+        clipRect(left = left, right = left + width * segment) {
+          drawRoundRect(color, Offset(left, 0F), Size(width, size.height), radius)
+        }
+      }
+    }
+  }
+}
+
+private val SEGMENT_GAP = 4.dp
+private val MIN_SEGMENT_WIDTH = 8.dp
 
 // flies as the series and not as its front book, which can be on the Continue listening card at the same time
 @Composable
@@ -281,7 +319,7 @@ private fun previewSeries(category: BookOverviewCategory) = SeriesStackViewState
   covers = listOf(null, null, null),
   bookCount = 4,
   finishedCount = if (category == BookOverviewCategory.FINISHED) 4 else 1,
-  progress = 0.4F,
+  progress = listOf(1F, 0.4F, 0F, 0F),
   category = category,
 )
 
