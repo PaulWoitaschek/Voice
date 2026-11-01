@@ -27,6 +27,16 @@ const description = frontmatter?.description ?? Astro.props.description
   </article>
 </Base>
 
+<script>
+  // In the browser, as Astro gives the headings their ids after all Markdown plugins ran.
+  for (const heading of document.querySelectorAll('.prose :is(h2, h3)[id]')) {
+    const link = document.createElement('a')
+    link.href = `#${heading.id}`
+    link.append(...heading.childNodes)
+    heading.append(link)
+  }
+</script>
+
 <style>
   .band {
     position: absolute;
@@ -82,6 +92,23 @@ const description = frontmatter?.description ?? Astro.props.description
   .prose :global(a) {
     color: var(--primary);
     font-weight: 550;
+  }
+
+  .prose :global(:is(h2, h3) > a) {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+
+  .prose :global(:is(h2, h3) > a::after) {
+    content: '#';
+    margin-left: 0.3em;
+    color: var(--primary);
+    opacity: 0;
+  }
+
+  .prose :global(:is(h2, h3) > a:is(:hover, :focus-visible)::after) {
+    opacity: 1;
   }
 
   .prose :global(code) {
