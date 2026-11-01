@@ -35,11 +35,11 @@ gradlePlugin {
 spotless {
   kotlin {
     target("src/**/*.kt")
-    ktfmt(libs.versions.ktfmt.get()).googleStyle().configure { it.setMaxWidth(140) }
+    ktfmt(libs.versions.ktfmt.get()).googleStyle()
   }
   kotlinGradle {
     target("*.kts")
-    ktfmt(libs.versions.ktfmt.get()).googleStyle().configure { it.setMaxWidth(140) }
+    ktfmt(libs.versions.ktfmt.get()).googleStyle()
   }
 }
 

@@ -8,8 +8,8 @@ description: Formatting Kotlin and writing or running tests in Voice. Use when a
 ## Formatting
 
 - Don't hand-format. Run `./gradlew spotlessApply`. It formats every module, the convention plugins and the build scripts.
-- Formatting is ktfmt's Google style with a width of 140, run through Spotless. It's set in the `voice.ktfmt` convention
-  plugin and `plugins/build.gradle.kts`, and the ktfmt version is in `gradle/libs.versions.toml`.
+- Formatting is ktfmt's Google style, run through Spotless. The style is set in the `voice.ktfmt` convention plugin and
+  `plugins/build.gradle.kts`, and the ktfmt version is in `gradle/libs.versions.toml`.
 - Compose rules come from Slack's compose-lints and run with Android Lint: `./gradlew :app:lintFreeDebug`.
 
 ## Running tests

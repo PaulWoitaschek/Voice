@@ -55,7 +55,7 @@ Agents use this through the emulator skill in `.agents/skills/emulator`, which a
 
 ## Formatting
 
-Voice formats Kotlin with **ktfmt** through Spotless, in Google style with a line width of 140.
+Voice formats Kotlin with **ktfmt** in its Google style, through Spotless.
 
 - Check for formatting issues:
 

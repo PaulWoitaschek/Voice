@@ -1,4 +1,3 @@
-import com.diffplug.gradle.spotless.BaseKotlinExtension
 import com.diffplug.gradle.spotless.SpotlessExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -14,16 +13,12 @@ class KtfmtPlugin : Plugin<Project> {
     target.extensions.configure<SpotlessExtension> {
       kotlin {
         target("src/**/*.kt")
-        voiceKtfmt(ktfmtVersion)
+        ktfmt(ktfmtVersion).googleStyle()
       }
       kotlinGradle {
         target("*.kts")
-        voiceKtfmt(ktfmtVersion)
+        ktfmt(ktfmtVersion).googleStyle()
       }
     }
-  }
-
-  private fun BaseKotlinExtension.voiceKtfmt(version: String) {
-    ktfmt(version).googleStyle().configure { it.setMaxWidth(140) }
   }
 }

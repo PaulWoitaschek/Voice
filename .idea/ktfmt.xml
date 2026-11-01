@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="KtfmtSettings">
-    <option name="customBlockIndent" value="2" />
-    <option name="customContinuationIndent" value="2" />
-    <option name="customMaxLineLength" value="140" />
-    <option name="customTrailingCommaManagementStrategy" value="COMPLETE" />
     <option name="enableKtfmt" value="Enabled" />
-    <option name="uiFormatterStyle" value="Custom" />
+    <option name="uiFormatterStyle" value="Google" />
   </component>
 </project>
