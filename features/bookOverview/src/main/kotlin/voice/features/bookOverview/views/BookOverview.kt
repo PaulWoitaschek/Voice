@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
@@ -123,6 +124,13 @@ internal fun BookOverview(
 ) {
   val scrollBehavior = SearchBarDefaults.enterAlwaysSearchBarScrollBehavior()
   val gridState = rememberLazyGridState()
+  LaunchedEffect(scrollBehavior, gridState) {
+    // the bar adds up scroll deltas to tell whether the library is under it. They drift when books
+    // above the visible ones change, which kept the bar tinted with the library at the top.
+    snapshotFlow { gridState.canScrollBackward }.collect { scrolled ->
+      if (!scrolled) scrollBehavior.scrollState.contentOffset = 0F
+    }
+  }
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
