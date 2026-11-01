@@ -5,6 +5,10 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.testing.MigrationTestHelper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlin.random.Random
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.uuid.Uuid
 import org.junit.Rule
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
@@ -14,20 +18,17 @@ import voice.core.data.repo.internals.getInt
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
 import voice.core.data.repo.internals.mapRows
-import kotlin.random.Random
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
 class DataBaseMigratorTest {
 
   @Rule
   @JvmField
-  val helper = MigrationTestHelper(
-    InstrumentationRegistry.getInstrumentation(),
-    AppDb::class.java,
-  )
+  val helper =
+    MigrationTestHelper(
+      InstrumentationRegistry.getInstrumentation(),
+      AppDb::class.java,
+    )
 
   @Test
   fun emptyTableLeadsToCorrectSchema() {
@@ -80,37 +81,42 @@ class DataBaseMigratorTest {
     val correctBookId = "id1"
     val file1 = "file1"
     val file2 = "file2"
-    val correctBookSettings = BookSetting(id = correctBookId, currentFile = file1, positionInChapter = 5)
+    val correctBookSettings =
+      BookSetting(id = correctBookId, currentFile = file1, positionInChapter = 5)
     insertBookSettings(correctBookSettings)
     insertChapter(Chapter(file1, correctBookId))
     insertChapter(Chapter(file2, correctBookId))
 
     val defectBookId = "id2"
-    val defectBookSetting = BookSetting(id = defectBookId, currentFile = file1, positionInChapter = 10)
+    val defectBookSetting =
+      BookSetting(id = defectBookId, currentFile = file1, positionInChapter = 10)
     insertBookSettings(defectBookSetting)
     insertChapter(Chapter(file2, defectBookId))
 
     db.close()
 
-    val migratedDb = helper.runMigrationsAndValidate(
-      dbName,
-      45,
-      true,
-      *allMigrations(),
-    )
-
-    val migratedBookSettings = migratedDb.query("SELECT * FROM bookSettings").mapRows {
-      BookSetting(
-        id = getString("id"),
-        currentFile = getString("currentFile"),
-        positionInChapter = getInt("positionInChapter"),
+    val migratedDb =
+      helper.runMigrationsAndValidate(
+        dbName,
+        45,
+        true,
+        *allMigrations(),
       )
-    }
+
+    val migratedBookSettings =
+      migratedDb.query("SELECT * FROM bookSettings").mapRows {
+        BookSetting(
+          id = getString("id"),
+          currentFile = getString("currentFile"),
+          positionInChapter = getInt("positionInChapter"),
+        )
+      }
     assertEquals(
-      expected = listOf(
-        correctBookSettings,
-        BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0),
-      ),
+      expected =
+        listOf(
+          correctBookSettings,
+          BookSetting(id = defectBookId, currentFile = file2, positionInChapter = 0),
+        ),
       actual = migratedBookSettings,
     )
   }
@@ -179,30 +185,32 @@ class DataBaseMigratorTest {
     }
 
     val books = run {
-      val firstBook = Book(
-        author = randomString(),
-        name = randomString(),
-        currentMediaPath = randomString(),
-        playbackSpeed = 1.1F,
-        root = randomString(),
-        type = randomString(),
-        loudnessGain = randomInt(),
-        active = 1,
-        time = randomInt(),
-        chapters = chapters(),
-      )
-      val secondBook = Book(
-        author = null,
-        name = randomString(),
-        currentMediaPath = randomString(),
-        playbackSpeed = 1.1F,
-        root = randomString(),
-        type = randomString(),
-        loudnessGain = randomInt(),
-        active = 0,
-        time = randomInt(),
-        chapters = emptyList(),
-      )
+      val firstBook =
+        Book(
+          author = randomString(),
+          name = randomString(),
+          currentMediaPath = randomString(),
+          playbackSpeed = 1.1F,
+          root = randomString(),
+          type = randomString(),
+          loudnessGain = randomInt(),
+          active = 1,
+          time = randomInt(),
+          chapters = chapters(),
+        )
+      val secondBook =
+        Book(
+          author = null,
+          name = randomString(),
+          currentMediaPath = randomString(),
+          playbackSpeed = 1.1F,
+          root = randomString(),
+          type = randomString(),
+          loudnessGain = randomInt(),
+          active = 0,
+          time = randomInt(),
+          chapters = emptyList(),
+        )
 
       listOf(firstBook, secondBook)
     }
@@ -241,12 +249,13 @@ class DataBaseMigratorTest {
     }
     db.close()
 
-    val migratedDb = helper.runMigrationsAndValidate(
-      dbName,
-      44,
-      true,
-      *allMigrations(),
-    )
+    val migratedDb =
+      helper.runMigrationsAndValidate(
+        dbName,
+        44,
+        true,
+        *allMigrations(),
+      )
 
     val metaDataCursor = migratedDb.query("SELECT * FROM bookMetaData")
     val bookSettingsCursor = migratedDb.query("SELECT * FROM bookSettings")
@@ -263,9 +272,15 @@ class DataBaseMigratorTest {
 
       bookSettingsCursor.moveToPosition(bookIndex)
       val bookSettingsId = bookSettingsCursor.getString("id")
-      assertEquals(expected = book.currentMediaPath, actual = bookSettingsCursor.getString("currentFile"))
+      assertEquals(
+        expected = book.currentMediaPath,
+        actual = bookSettingsCursor.getString("currentFile"),
+      )
       assertEquals(expected = book.time, actual = bookSettingsCursor.getInt("positionInChapter"))
-      assertEquals(expected = book.playbackSpeed, actual = bookSettingsCursor.getFloat("playbackSpeed"))
+      assertEquals(
+        expected = book.playbackSpeed,
+        actual = bookSettingsCursor.getFloat("playbackSpeed"),
+      )
       assertEquals(expected = book.loudnessGain, actual = bookSettingsCursor.getInt("loudnessGain"))
       assertEquals(expected = 0, actual = bookSettingsCursor.getInt("skipSilence"))
       assertEquals(expected = book.active, actual = bookSettingsCursor.getInt("active"))
@@ -280,8 +295,14 @@ class DataBaseMigratorTest {
         assertEquals(expected = chapter.path, actual = chapterCursor.getString("file"))
         assertEquals(expected = chapter.duration, actual = chapterCursor.getInt("duration"))
         assertEquals(expected = chapter.name, actual = chapterCursor.getString("name"))
-        assertEquals(expected = chapter.lastModified, actual = chapterCursor.getInt("fileLastModified"))
-        assertEquals(expected = (chapter.marks ?: "{}"), actual = chapterCursor.getStringOrNull("marks"))
+        assertEquals(
+          expected = chapter.lastModified,
+          actual = chapterCursor.getInt("fileLastModified"),
+        )
+        assertEquals(
+          expected = (chapter.marks ?: "{}"),
+          actual = chapterCursor.getStringOrNull("marks"),
+        )
       }
       chapterCursor.close()
     }
@@ -312,7 +333,8 @@ class DataBaseMigratorTest {
     const val ACTIVE = "BOOK_ACTIVE"
     const val LOUDNESS_GAIN = "loudnessGain"
     const val TABLE_NAME = "tableBooks"
-    const val CREATE_TABLE = """
+    const val CREATE_TABLE =
+      """
     CREATE TABLE $TABLE_NAME (
       $ID INTEGER PRIMARY KEY AUTOINCREMENT,
       $NAME TEXT NOT NULL,
@@ -337,7 +359,8 @@ class DataBaseMigratorTest {
     const val BOOK_ID = "bookId"
     const val LAST_MODIFIED = "lastModified"
     const val MARKS = "marks"
-    const val CREATE_TABLE = """
+    const val CREATE_TABLE =
+      """
     CREATE TABLE $TABLE_NAME (
       $DURATION INTEGER NOT NULL,
       $NAME TEXT NOT NULL,
@@ -357,7 +380,8 @@ class DataBaseMigratorTest {
     const val TABLE_NAME = "tableBookmarks"
     const val TIME = "bookmarkTime"
     const val ID = "_id"
-    const val CREATE_TABLE = """
+    const val CREATE_TABLE =
+      """
     CREATE TABLE $TABLE_NAME (
       $ID INTEGER PRIMARY KEY AUTOINCREMENT,
       $PATH TEXT NOT NULL,

@@ -36,10 +36,10 @@ fun CheckBadge(
     exit = scaleOut() + fadeOut(),
   ) {
     Box(
-      modifier = Modifier
-        .size(24.dp)
-        .background(containerColor, CircleShape)
-        .border(2.dp, outlineColor, CircleShape),
+      modifier =
+        Modifier.size(24.dp)
+          .background(containerColor, CircleShape)
+          .border(2.dp, outlineColor, CircleShape),
       contentAlignment = Alignment.Center,
     ) {
       Icon(

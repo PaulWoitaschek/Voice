@@ -19,9 +19,10 @@ public class Migration37to38 : IncrementalMigration(37) {
       db.execSQL("ALTER TABLE tableChapters ADD marks TEXT")
 
       // invalidate modification time stamps so the chapters will be re-scanned
-      val cv = ContentValues().apply {
-        put("lastModified", 0)
-      }
+      val cv =
+        ContentValues().apply {
+          put("lastModified", 0)
+        }
       db.update("tableChapters", SQLiteDatabase.CONFLICT_FAIL, cv, null, null)
     }
   }

@@ -36,10 +36,10 @@ internal fun TransportControls(
     PlayButton(
       playing = playing,
       onClick = onPlayClick,
-      modifier = Modifier
-        .playButtonSharedElementModifier(bookId)
-        .fillMaxHeight()
-        .aspectRatio(1F, matchHeightConstraintsFirst = true),
+      modifier =
+        Modifier.playButtonSharedElementModifier(bookId)
+          .fillMaxHeight()
+          .aspectRatio(1F, matchHeightConstraintsFirst = true),
     )
     SkipButton(
       forward = true,

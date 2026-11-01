@@ -13,10 +13,13 @@ import voice.core.featureflag.FeatureFlagFactory
 class AudiobookshelfFeatureFlag(flag: FeatureFlag<Boolean>) : FeatureFlag<Boolean> by flag {
 
   @Inject
-  constructor(factory: FeatureFlagFactory) : this(
+  constructor(
+    factory: FeatureFlagFactory,
+  ) : this(
     factory.boolean(
       key = "audiobookshelf",
-      description = "Lets listeners connect an Audiobookshelf server. A server that is connected stays, also when this is off.",
+      description =
+        "Lets listeners connect an Audiobookshelf server. A server that is connected stays, also when this is off.",
     ),
   )
 }

@@ -1,19 +1,18 @@
 package voice.features.folderPicker.selectType
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
 import voice.core.documentfile.FileBasedDocumentFile
-import java.io.File
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class FolderStructureTest {
 
-  @get:Rule
-  val temporaryFolder = TemporaryFolder()
+  @get:Rule val temporaryFolder = TemporaryFolder()
 
   @Test
   fun `a folder of chapter files is one book`() {
@@ -52,7 +51,13 @@ class FolderStructureTest {
 
   @Test
   fun `book folders are a library`() {
-    assertGuess(FolderMode.Audiobooks, "Dune/01.mp3", "Hyperion/01.mp3", "Hyperion/CD 2/01.mp3", "Neuromancer.m4b")
+    assertGuess(
+      FolderMode.Audiobooks,
+      "Dune/01.mp3",
+      "Hyperion/01.mp3",
+      "Hyperion/CD 2/01.mp3",
+      "Neuromancer.m4b",
+    )
   }
 
   @Test
@@ -67,7 +72,8 @@ class FolderStructureTest {
 
   @Test
   fun `a book that looks like several books is flagged`() {
-    val folder = folder("Discworld/Mort/1.mp3", "Discworld/Eric/1.mp3", "Dune/1.mp3", "Dune/CD 2/1.mp3")
+    val folder =
+      folder("Discworld/Mort/1.mp3", "Discworld/Eric/1.mp3", "Dune/1.mp3", "Dune/CD 2/1.mp3")
 
     val books = folder.books(FolderMode.Audiobooks).map { it.book }.associateBy { it.name }
 
@@ -81,10 +87,23 @@ class FolderStructureTest {
     val folder = folder("Dan Simmons/Hyperion/01.mp3", "Dan Simmons/Hyperion/02.mp3", "Loose.m4b")
 
     assertEquals(
-      expected = listOf(
-        SelectFolderTypeViewState.Book("Hyperion", author = "Dan Simmons", fileCount = 2, partCount = 0, possibleBookCount = 0),
-        SelectFolderTypeViewState.Book("Loose", author = null, fileCount = 1, partCount = 0, possibleBookCount = 0),
-      ),
+      expected =
+        listOf(
+          SelectFolderTypeViewState.Book(
+            "Hyperion",
+            author = "Dan Simmons",
+            fileCount = 2,
+            partCount = 0,
+            possibleBookCount = 0,
+          ),
+          SelectFolderTypeViewState.Book(
+            "Loose",
+            author = null,
+            fileCount = 1,
+            partCount = 0,
+            possibleBookCount = 0,
+          ),
+        ),
       actual = folder.books(FolderMode.Authors).map { it.book }.sortedBy { it.name },
     )
   }
@@ -93,7 +112,10 @@ class FolderStructureTest {
   fun `folders without audio are no books`() {
     val folder = folder("Dune/01.mp3", "Covers/dune.jpg")
 
-    assertEquals(expected = listOf("Dune"), actual = folder.books(FolderMode.Audiobooks).map { it.book.name })
+    assertEquals(
+      expected = listOf("Dune"),
+      actual = folder.books(FolderMode.Audiobooks).map { it.book.name },
+    )
   }
 
   private fun assertGuess(
@@ -101,7 +123,10 @@ class FolderStructureTest {
     vararg files: String,
     folderName: String = "folder",
   ) {
-    assertEquals(expected = expected, actual = folder(*files, folderName = folderName).guessFolderMode())
+    assertEquals(
+      expected = expected,
+      actual = folder(*files, folderName = folderName).guessFolderMode(),
+    )
   }
 
   private fun folder(

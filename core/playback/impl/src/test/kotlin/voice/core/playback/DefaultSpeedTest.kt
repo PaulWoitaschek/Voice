@@ -1,26 +1,28 @@
 package voice.core.playback
 
-import voice.core.data.Chapter
-import voice.core.data.ChapterId
-import voice.core.playback.session.search.book
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import voice.core.data.Chapter
+import voice.core.data.ChapterId
+import voice.core.playback.session.search.book
 
 class DefaultSpeedTest {
 
-  private val book = book(
-    chapters = listOf(
-      Chapter(
-        id = ChapterId("chapter"),
-        name = "Chapter",
-        duration = 10_000,
-        fileLastModified = Instant.EPOCH,
-        markData = emptyList(),
-        fileSize = 0,
-      ),
-    ),
-  )
+  private val book =
+    book(
+      chapters =
+        listOf(
+          Chapter(
+            id = ChapterId("chapter"),
+            name = "Chapter",
+            duration = 10_000,
+            fileLastModified = Instant.EPOCH,
+            markData = emptyList(),
+            fileSize = 0,
+          ),
+        ),
+    )
 
   @Test
   fun `a book that was never played starts at the default speed`() {
@@ -29,9 +31,13 @@ class DefaultSpeedTest {
 
   @Test
   fun `a book that was played keeps its own speed without reading the default`() {
-    val played = book.update { it.copy(playbackSpeed = 1.25F, lastPlayedAt = Instant.ofEpochSecond(1)) }
+    val played = book.update {
+      it.copy(playbackSpeed = 1.25F, lastPlayedAt = Instant.ofEpochSecond(1))
+    }
 
-    val result = played.withDefaultSpeed { error("the default speed is only read for a book that was never played") }
+    val result = played.withDefaultSpeed {
+      error("the default speed is only read for a book that was never played")
+    }
 
     assertEquals(expected = 1.25F, actual = result.content.playbackSpeed)
   }

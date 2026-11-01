@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.text.NumberFormat
 import voice.core.strings.R
 import voice.core.ui.CoverTheme
 import voice.core.ui.PlayButton
@@ -41,7 +42,6 @@ import voice.core.ui.ProgressWave
 import voice.core.ui.bookText
 import voice.core.ui.playButtonSharedElementModifier
 import voice.features.bookOverview.overview.BookOverviewItemViewState
-import java.text.NumberFormat
 
 /** Uses the same cover theme as the player, so cover and play button hand over seamlessly. */
 @Composable
@@ -60,17 +60,21 @@ internal fun ContinueListeningCard(
     // accents use surface / primary roles, which stay legible on either.
     val tint = if (colors.surface.luminance() < 0.5F) 0.35F else 0.85F
     Box(
-      modifier = modifier
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(32.dp))
-        .background(colors.surfaceContainerHigh)
-        .background(
-          Brush.linearGradient(
-            listOf(colors.primaryContainer.copy(alpha = tint), colors.tertiaryContainer.copy(alpha = tint)),
-          ),
-        )
-        .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-        .padding(20.dp),
+      modifier =
+        modifier
+          .fillMaxWidth()
+          .clip(RoundedCornerShape(32.dp))
+          .background(colors.surfaceContainerHigh)
+          .background(
+            Brush.linearGradient(
+              listOf(
+                colors.primaryContainer.copy(alpha = tint),
+                colors.tertiaryContainer.copy(alpha = tint),
+              ),
+            ),
+          )
+          .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+          .padding(20.dp),
     ) {
       CompositionLocalProvider(LocalContentColor provides colors.onSurface) {
         Column {
@@ -120,10 +124,19 @@ internal fun ContinueListeningCard(
           Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1F)) {
               val density = LocalDensity.current
-              val stroke = remember(density) { Stroke(width = with(density) { ProgressWave.StrokeWidth.toPx() }, cap = StrokeCap.Round) }
-              // Material takes the amplitude as a share of the room the stroke leaves in its container
+              val stroke =
+                remember(density) {
+                  Stroke(
+                    width = with(density) { ProgressWave.StrokeWidth.toPx() },
+                    cap = StrokeCap.Round,
+                  )
+                }
+              // Material takes the amplitude as a share of the room the stroke leaves in its
+              // container
               val amplitude =
-                ProgressWave.Amplitude / ((WavyProgressIndicatorDefaults.LinearContainerHeight - ProgressWave.StrokeWidth) / 2)
+                ProgressWave.Amplitude /
+                  ((WavyProgressIndicatorDefaults.LinearContainerHeight -
+                    ProgressWave.StrokeWidth) / 2)
               LinearWavyProgressIndicator(
                 progress = { book.progress },
                 modifier = Modifier.fillMaxWidth(),
@@ -140,7 +153,11 @@ internal fun ContinueListeningCard(
               Row {
                 Text(
                   modifier = Modifier.weight(1F),
-                  text = stringResource(R.string.playback_book_progress_read, percentFormat.format(book.progress.toDouble())),
+                  text =
+                    stringResource(
+                      R.string.playback_book_progress_read,
+                      percentFormat.format(book.progress.toDouble()),
+                    ),
                   style = MaterialTheme.typography.labelLargeEmphasized,
                   color = colors.primary,
                   maxLines = 1,
@@ -148,7 +165,8 @@ internal fun ContinueListeningCard(
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
-                  text = stringResource(R.string.playback_book_progress_remaining, book.remainingTime),
+                  text =
+                    stringResource(R.string.playback_book_progress_remaining, book.remainingTime),
                   style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
                   maxLines = 1,
                   softWrap = false,

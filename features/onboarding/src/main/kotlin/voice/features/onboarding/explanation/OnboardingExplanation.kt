@@ -7,18 +7,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import voice.core.common.rootGraphAs
+import voice.core.strings.R as StringsR
 import voice.core.ui.OnboardingButton
 import voice.core.ui.OnboardingScaffold
 import voice.core.ui.OnboardingStep
 import voice.core.ui.VoiceTheme
-import voice.core.strings.R as StringsR
 
 @Composable
 fun OnboardingExplanation(modifier: Modifier = Modifier) {
-  val viewModel = retain<OnboardingExplanationViewModel> {
-    rootGraphAs<OnboardingExplanationProvider>()
-      .onboardingExplanationViewModel
-  }
+  val viewModel =
+    retain<OnboardingExplanationViewModel> {
+      rootGraphAs<OnboardingExplanationProvider>().onboardingExplanationViewModel
+    }
   OnboardingExplanation(
     modifier = modifier,
     onClose = viewModel::onClose,

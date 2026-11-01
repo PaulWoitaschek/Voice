@@ -14,10 +14,11 @@ import org.json.JSONObject
 public class Migration25to26 : IncrementalMigration(25) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    val cursor = db.query(
-      "TABLE_BOOK",
-      arrayOf("BOOK_ID", "BOOK_JSON"),
-    )
+    val cursor =
+      db.query(
+        "TABLE_BOOK",
+        arrayOf("BOOK_ID", "BOOK_JSON"),
+      )
     val allBooks = ArrayList<JSONObject>(cursor.count)
     cursor.use {
       while (it.moveToNext()) {

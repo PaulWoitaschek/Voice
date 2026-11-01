@@ -4,8 +4,8 @@ import android.media.audiofx.LoudnessEnhancer
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import voice.core.logging.api.Logger
 import kotlin.properties.Delegates
+import voice.core.logging.api.Logger
 
 @Inject
 class VolumeGainSetter {

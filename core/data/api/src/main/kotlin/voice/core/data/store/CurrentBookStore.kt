@@ -12,7 +12,9 @@ import voice.core.datastore.VoiceDataStoreFactory
 public class CurrentBookStore(store: DataStore<BookId?>) : DataStore<BookId?> by store {
 
   @Inject
-  public constructor(factory: VoiceDataStoreFactory) : this(
+  public constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.create(
       serializer = BookId.serializer().nullable,
       fileName = "currentBook",

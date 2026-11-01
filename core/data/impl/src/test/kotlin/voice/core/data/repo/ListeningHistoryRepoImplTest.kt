@@ -3,6 +3,11 @@ package voice.core.data.repo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -11,23 +16,20 @@ import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.internals.AppDb
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 
 @RunWith(AndroidJUnit4::class)
 class ListeningHistoryRepoImplTest {
 
-  private val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
-    .allowMainThreadQueries()
-    .build()
+  private val db =
+    Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
+      .allowMainThreadQueries()
+      .build()
   private val now = Instant.parse("2026-10-07T10:00:00Z")
-  private val repo = ListeningHistoryRepoImpl(
-    dao = db.listeningEventDao(),
-    appDb = db,
-  )
+  private val repo =
+    ListeningHistoryRepoImpl(
+      dao = db.listeningEventDao(),
+      appDb = db,
+    )
   private val bookId = BookId("book")
 
   @After
@@ -41,19 +43,21 @@ class ListeningHistoryRepoImplTest {
     bookId: BookId = this.bookId,
     chapterId: ChapterId = ChapterId("chapter"),
     toChapterId: ChapterId? = null,
-  ) = ListeningEvent(
-    bookId = bookId,
-    type = type,
-    source = ListeningEvent.Source.App,
-    atMillis = at.toEpochMilli(),
-    chapterId = chapterId,
-    time = 0,
-    toChapterId = toChapterId,
-  )
+  ) =
+    ListeningEvent(
+      bookId = bookId,
+      type = type,
+      source = ListeningEvent.Source.App,
+      atMillis = at.toEpochMilli(),
+      chapterId = chapterId,
+      time = 0,
+      toChapterId = toChapterId,
+    )
 
   private fun ago(duration: Duration): Instant = now.minusMillis(duration.inWholeMilliseconds)
 
-  private suspend fun types(): List<ListeningEvent.Type> = repo.events(bookId).first().map { it.type }
+  private suspend fun types(): List<ListeningEvent.Type> =
+    repo.events(bookId).first().map { it.type }
 
   @Test
   fun `events of the book come newest first`() = runTest {
@@ -61,7 +65,10 @@ class ListeningHistoryRepoImplTest {
     repo.add(event(ListeningEvent.Type.Pause, ago(5.minutes)))
     repo.add(event(ListeningEvent.Type.Play, now, bookId = BookId("other")))
 
-    assertEquals(expected = listOf(ListeningEvent.Type.Pause, ListeningEvent.Type.Play), actual = types())
+    assertEquals(
+      expected = listOf(ListeningEvent.Type.Pause, ListeningEvent.Type.Play),
+      actual = types(),
+    )
   }
 
   @Test
@@ -99,10 +106,17 @@ class ListeningHistoryRepoImplTest {
     val unrelatedBook = BookId("unrelated")
     repo.add(event(ListeningEvent.Type.Play, ago(3.minutes), chapterId = oldChapters[0]))
     repo.add(
-      event(ListeningEvent.Type.ChapterChange, ago(2.minutes), chapterId = oldChapters[0], toChapterId = oldChapters[1]),
+      event(
+        ListeningEvent.Type.ChapterChange,
+        ago(2.minutes),
+        chapterId = oldChapters[0],
+        toChapterId = oldChapters[1],
+      ),
     )
     repo.add(event(ListeningEvent.Type.Pause, ago(1.minutes), chapterId = oldChapters[2]))
-    repo.add(event(ListeningEvent.Type.Play, now, bookId = unrelatedBook, chapterId = oldChapters[0]))
+    repo.add(
+      event(ListeningEvent.Type.Play, now, bookId = unrelatedBook, chapterId = oldChapters[0]),
+    )
 
     repo.moveToBook(
       from = listOf(bookId),
@@ -111,10 +125,11 @@ class ListeningHistoryRepoImplTest {
     )
 
     assertEquals(
-      expected = listOf(
-        Triple(ListeningEvent.Type.ChapterChange, newChapters[0], newChapters[1]),
-        Triple(ListeningEvent.Type.Play, newChapters[0], null),
-      ),
+      expected =
+        listOf(
+          Triple(ListeningEvent.Type.ChapterChange, newChapters[0], newChapters[1]),
+          Triple(ListeningEvent.Type.Play, newChapters[0], null),
+        ),
       actual = repo.events(newBook).first().map { Triple(it.type, it.chapterId, it.toChapterId) },
     )
     // the chapter that is not part of the new book stays where it was

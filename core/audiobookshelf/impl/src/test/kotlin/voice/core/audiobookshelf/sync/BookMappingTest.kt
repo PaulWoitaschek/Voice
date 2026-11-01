@@ -1,5 +1,8 @@
 package voice.core.audiobookshelf.sync
 
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import voice.core.audiobookshelf.AudiobookshelfIds
 import voice.core.audiobookshelf.api.AbsBookMedia
 import voice.core.audiobookshelf.api.AbsBookMetadata
@@ -11,18 +14,16 @@ import voice.core.audiobookshelf.api.AbsTrack
 import voice.core.data.Book
 import voice.core.data.ChapterMark
 import voice.core.data.CustomMetadata
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class BookMappingTest {
 
   @Test
   fun `a chapter per file names each file after its chapter`() {
-    val item = item(
-      tracks = listOf(track(1, 0.0, 54.0, "01.mp3"), track(2, 54.0, 51.0, "02.mp3")),
-      chapters = listOf(AbsChapter(0.0, 54.0, "Kapitel 1"), AbsChapter(54.0, 105.0, "Kapitel 2")),
-    )
+    val item =
+      item(
+        tracks = listOf(track(1, 0.0, 54.0, "01.mp3"), track(2, 54.0, 51.0, "02.mp3")),
+        chapters = listOf(AbsChapter(0.0, 54.0, "Kapitel 1"), AbsChapter(54.0, 105.0, "Kapitel 2")),
+      )
 
     val chapters = item.chapters()
 
@@ -33,29 +34,35 @@ class BookMappingTest {
 
   @Test
   fun `a single file gets the chapters of the book as its marks`() {
-    val item = item(
-      tracks = listOf(track(1, 0.0, 107.4, "Das Kapitelbuch.m4b")),
-      chapters = listOf(
-        AbsChapter(0.0, 28.44, "Teil 1"),
-        AbsChapter(28.44, 55.07, "Teil 2"),
-        AbsChapter(55.07, 80.82, "Teil 3"),
-        AbsChapter(80.82, 107.4, "Teil 4"),
-      ),
-    )
+    val item =
+      item(
+        tracks = listOf(track(1, 0.0, 107.4, "Das Kapitelbuch.m4b")),
+        chapters =
+          listOf(
+            AbsChapter(0.0, 28.44, "Teil 1"),
+            AbsChapter(28.44, 55.07, "Teil 2"),
+            AbsChapter(55.07, 80.82, "Teil 3"),
+            AbsChapter(80.82, 107.4, "Teil 4"),
+          ),
+      )
 
     val chapter = item.chapters().single()
 
     assertEquals("Das Kapitelbuch", chapter.name)
-    assertEquals(listOf("Teil 1", "Teil 2", "Teil 3", "Teil 4"), chapter.chapterMarks.map { it.name })
+    assertEquals(
+      listOf("Teil 1", "Teil 2", "Teil 3", "Teil 4"),
+      chapter.chapterMarks.map { it.name },
+    )
     assertEquals(listOf(0L, 28_440L, 55_070L, 80_820L), chapter.chapterMarks.map { it.startMs })
   }
 
   @Test
   fun `a chapter running into the next file goes on at its start`() {
-    val item = item(
-      tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")),
-      chapters = listOf(AbsChapter(0.0, 90.0, "Long one"), AbsChapter(90.0, 120.0, "Short one")),
-    )
+    val item =
+      item(
+        tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")),
+        chapters = listOf(AbsChapter(0.0, 90.0, "Long one"), AbsChapter(90.0, 120.0, "Short one")),
+      )
 
     val second = item.chapters()[1]
 
@@ -65,7 +72,14 @@ class BookMappingTest {
 
   @Test
   fun `the tracks keep their order and become stable ids`() {
-    val item = item(tracks = listOf(track(2, 10.0, 10.0, "b.mp3", ino = "22"), track(1, 0.0, 10.0, "a.mp3", ino = "11")))
+    val item =
+      item(
+        tracks =
+          listOf(
+            track(2, 10.0, 10.0, "b.mp3", ino = "22"),
+            track(1, 0.0, 10.0, "a.mp3", ino = "11"),
+          ),
+      )
 
     assertEquals(
       listOf(
@@ -80,12 +94,14 @@ class BookMappingTest {
   fun `a book in several series keeps showing the one it showed`() {
     val tracks = listOf(track(1, 0.0, 10.0, "a.mp3"))
     val series = listOf(AbsSeries("Space Operas", "4"), AbsSeries("The Expanse", "1"))
-    val item = item(tracks = tracks, metadata = AbsBookMetadata(title = "Leviathan Wakes", series = series))
+    val item =
+      item(tracks = tracks, metadata = AbsBookMetadata(title = "Leviathan Wakes", series = series))
     val existing = item.toBookContent(item.chapters(), existing = null)
 
     val shown = existing.copy(metadata = existing.metadata.copy(series = "The Expanse", part = "1"))
     val gone = existing.copy(metadata = existing.metadata.copy(series = "Expanse", part = "1"))
-    val otherCase = existing.copy(metadata = existing.metadata.copy(series = "the expanse", part = "1"))
+    val otherCase =
+      existing.copy(metadata = existing.metadata.copy(series = "the expanse", part = "1"))
 
     assertEquals("Space Operas", existing.metadata.series)
     assertEquals("1", item.toBookContent(item.chapters(), shown).metadata.part)
@@ -96,16 +112,18 @@ class BookMappingTest {
 
   @Test
   fun `the book takes the metadata of the server`() {
-    val item = item(
-      tracks = listOf(track(1, 0.0, 10.0, "a.mp3")),
-      metadata = AbsBookMetadata(
-        title = "Title",
-        authorName = "Author",
-        narratorName = "",
-        series = listOf(AbsSeries("Series", "2")),
-        genres = listOf("Fantasy", "Adventure"),
-      ),
-    )
+    val item =
+      item(
+        tracks = listOf(track(1, 0.0, 10.0, "a.mp3")),
+        metadata =
+          AbsBookMetadata(
+            title = "Title",
+            authorName = "Author",
+            narratorName = "",
+            series = listOf(AbsSeries("Series", "2")),
+            genres = listOf("Fantasy", "Adventure"),
+          ),
+      )
 
     val content = item.toBookContent(item.chapters(), existing = null)
 
@@ -122,15 +140,20 @@ class BookMappingTest {
   fun `an update keeps where the listener is and how they listen`() {
     val item = item(tracks = listOf(track(1, 0.0, 10.0, "a.mp3"), track(2, 10.0, 10.0, "b.mp3")))
     val chapters = item.chapters()
-    val existing = item.toBookContent(chapters, existing = null).copy(
-      currentChapter = chapters[1].id,
-      positionInChapter = 4_000,
-      playbackSpeed = 1.5F,
-      lastPlayedAt = Instant.ofEpochMilli(5_000),
-    )
+    val existing =
+      item
+        .toBookContent(chapters, existing = null)
+        .copy(
+          currentChapter = chapters[1].id,
+          positionInChapter = 4_000,
+          playbackSpeed = 1.5F,
+          lastPlayedAt = Instant.ofEpochMilli(5_000),
+        )
 
-    val updated = item.copy(media = item.media.copy(metadata = AbsBookMetadata(title = "Renamed")))
-      .toBookContent(chapters, existing)
+    val updated =
+      item
+        .copy(media = item.media.copy(metadata = AbsBookMetadata(title = "Renamed")))
+        .toBookContent(chapters, existing)
 
     assertEquals("Renamed", updated.metadata.name)
     assertEquals(chapters[1].id, updated.currentChapter)
@@ -143,10 +166,13 @@ class BookMappingTest {
   fun `files replaced on the server keep the place in the book`() {
     val before = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")))
     val previousChapters = before.chapters()
-    val existing = before.toBookContent(previousChapters, existing = null).copy(
-      currentChapter = previousChapters[1].id,
-      positionInChapter = 10_000,
-    )
+    val existing =
+      before
+        .toBookContent(previousChapters, existing = null)
+        .copy(
+          currentChapter = previousChapters[1].id,
+          positionInChapter = 10_000,
+        )
     // merged into one file, like the tools of the server do
     val after = item(tracks = listOf(track(1, 0.0, 120.0, "book.m4b", ino = "merged")))
     val chapters = after.chapters()
@@ -175,9 +201,20 @@ class BookMappingTest {
     val chapters = item.chapters()
     val content = item.toBookContent(chapters, existing = null)
 
-    assertEquals(false, Book(content.copy(positionInChapter = 89_000), chapters, CustomMetadata(content.id)).isFinished)
-    assertEquals(true, Book(content.copy(positionInChapter = 92_000), chapters, CustomMetadata(content.id)).isFinished)
-    assertEquals(false, Book(content.copy(positionInChapter = 0), chapters, CustomMetadata(content.id)).isFinished)
+    assertEquals(
+      false,
+      Book(content.copy(positionInChapter = 89_000), chapters, CustomMetadata(content.id))
+        .isFinished,
+    )
+    assertEquals(
+      true,
+      Book(content.copy(positionInChapter = 92_000), chapters, CustomMetadata(content.id))
+        .isFinished,
+    )
+    assertEquals(
+      false,
+      Book(content.copy(positionInChapter = 0), chapters, CustomMetadata(content.id)).isFinished,
+    )
   }
 }
 
@@ -187,20 +224,22 @@ internal fun item(
   metadata: AbsBookMetadata = AbsBookMetadata(title = "Book"),
   id: String = "item",
   updatedAt: Long = 2_000,
-) = AbsLibraryItem(
-  id = id,
-  libraryId = "library",
-  mediaType = "book",
-  addedAt = 1_000,
-  updatedAt = updatedAt,
-  media = AbsBookMedia(
-    metadata = metadata,
-    duration = tracks.sumOf { it.duration },
-    numTracks = tracks.size,
-    tracks = tracks,
-    chapters = chapters,
-  ),
-)
+) =
+  AbsLibraryItem(
+    id = id,
+    libraryId = "library",
+    mediaType = "book",
+    addedAt = 1_000,
+    updatedAt = updatedAt,
+    media =
+      AbsBookMedia(
+        metadata = metadata,
+        duration = tracks.sumOf { it.duration },
+        numTracks = tracks.size,
+        tracks = tracks,
+        chapters = chapters,
+      ),
+  )
 
 internal fun track(
   index: Int,
@@ -208,10 +247,11 @@ internal fun track(
   duration: Double,
   fileName: String,
   ino: String = "ino$index",
-) = AbsTrack(
-  index = index,
-  ino = ino,
-  startOffset = startOffset,
-  duration = duration,
-  metadata = AbsFileMetadata(filename = fileName, size = 1_000),
-)
+) =
+  AbsTrack(
+    index = index,
+    ino = ino,
+    startOffset = startOffset,
+    duration = duration,
+    metadata = AbsFileMetadata(filename = fileName, size = 1_000),
+  )

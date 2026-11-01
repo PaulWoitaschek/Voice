@@ -8,6 +8,14 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import java.io.IOException
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -29,14 +37,6 @@ import voice.core.data.syncKey
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.MediaScanTrigger
-import java.io.IOException
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.time.Duration.Companion.seconds
 
 @RunWith(AndroidJUnit4::class)
 class FolderSyncTest {
@@ -46,26 +46,35 @@ class FolderSyncTest {
   private val playStateManager = PlayStateManager()
   private val currentBookStore = MemoryDataStore<BookId?>(null)
   private val scannerActive = MutableStateFlow(false)
-  private val mediaScanTrigger = mockk<MediaScanTrigger> {
-    every { scannerActive } returns this@FolderSyncTest.scannerActive
-  }
+  private val mediaScanTrigger =
+    mockk<MediaScanTrigger> {
+      every { scannerActive } returns this@FolderSyncTest.scannerActive
+    }
   private val written = mutableListOf<SyncFile>()
-  private val syncFiles = mockk<SyncFiles> {
-    every { canWrite(any()) } returns true
-    every { read(any()) } returns emptyMap()
-    every { write(folder(), any(), capture(written)) } returns Unit
-  }
-  private val audiobookFolders = mockk<AudiobookFolders> {
-    every { all() } returns flowOf(
-      mapOf(FolderType.Root to listOf(DocumentFileWithUri(documentFile = mockk(), uri = folder()))),
-    )
-  }
+  private val syncFiles =
+    mockk<SyncFiles> {
+      every { canWrite(any()) } returns true
+      every { read(any()) } returns emptyMap()
+      every { write(folder(), any(), capture(written)) } returns Unit
+    }
+  private val audiobookFolders =
+    mockk<AudiobookFolders> {
+      every { all() } returns
+        flowOf(
+          mapOf(
+            FolderType.Root to listOf(DocumentFileWithUri(documentFile = mockk(), uri = folder())),
+          ),
+        )
+    }
 
   @Test
   fun `a newer place from another device is taken over with its speed`() = scope.runTest {
     val book = book(currentFile = 0, position = 5000, lastPlayedAt = 1000, playbackSpeed = 1.25F)
     val repo = MemoryBookRepository(book)
-    otherDevice(book, SyncedBook(place = place(file = 1, position = 3000, speed = 1.5F, playedAt = 2000)))
+    otherDevice(
+      book,
+      SyncedBook(place = place(file = 1, position = 3000, speed = 1.5F, playedAt = 2000)),
+    )
 
     folderSync(repo).sync()
 
@@ -82,7 +91,8 @@ class FolderSyncTest {
     val book = book(currentFile = 0, position = 5000, lastPlayedAt = 1000, playbackSpeed = 1.25F)
     val repo = MemoryBookRepository(book)
 
-    folderSync(repo).takeOver(book.id, place(file = 1, position = 3000, speed = 0F, playedAt = 2000))
+    folderSync(repo)
+      .takeOver(book.id, place(file = 1, position = 3000, speed = 0F, playedAt = 2000))
 
     val content = repo.get(book.id)!!.content
     assertEquals(3000, content.positionInChapter)
@@ -95,7 +105,8 @@ class FolderSyncTest {
     currentBookStore.updateData { book.id }
     coEvery { playerController.livePlaybackState(book.id) } returns mockk()
 
-    folderSync(MemoryBookRepository(book)).takeOver(book.id, place(file = 1, position = 3000, speed = 1.5F))
+    folderSync(MemoryBookRepository(book))
+      .takeOver(book.id, place(file = 1, position = 3000, speed = 1.5F))
 
     verify {
       playerController.setPosition(
@@ -128,7 +139,14 @@ class FolderSyncTest {
     testScheduler.advanceTimeBy(4.seconds)
 
     assertEquals(
-      expected = listOf(SyncFile(mapOf(book.key() to SyncedBook(place = place(file = 1, position = 3000, playedAt = 2000))))),
+      expected =
+        listOf(
+          SyncFile(
+            mapOf(
+              book.key() to SyncedBook(place = place(file = 1, position = 3000, playedAt = 2000)),
+            ),
+          ),
+        ),
       actual = written,
     )
   }
@@ -146,22 +164,25 @@ class FolderSyncTest {
   }
 
   @Test
-  fun `without a current book, the book played last on another device becomes the current one`() = scope.runTest {
-    val older = book(path = "Older", fileSizes = listOf(10, 20))
-    val newer = book(path = "Newer", fileSizes = listOf(30, 40))
-    every { syncFiles.read(folder()) } returns mapOf(
-      "sync-other.json" to SyncFile(
+  fun `without a current book, the book played last on another device becomes the current one`() =
+    scope.runTest {
+      val older = book(path = "Older", fileSizes = listOf(10, 20))
+      val newer = book(path = "Newer", fileSizes = listOf(30, 40))
+      every { syncFiles.read(folder()) } returns
         mapOf(
-          older.key() to SyncedBook(place = place(playedAt = 1000)),
-          newer.key() to SyncedBook(place = place(playedAt = 2000)),
-        ),
-      ),
-    )
+          "sync-other.json" to
+            SyncFile(
+              mapOf(
+                older.key() to SyncedBook(place = place(playedAt = 1000)),
+                newer.key() to SyncedBook(place = place(playedAt = 2000)),
+              ),
+            ),
+        )
 
-    folderSync(MemoryBookRepository(older, newer)).sync()
+      folderSync(MemoryBookRepository(older, newer)).sync()
 
-    assertEquals(newer.id, currentBookStore.data.first())
-  }
+      assertEquals(newer.id, currentBookStore.data.first())
+    }
 
   @Test
   fun `the current book stays when another book was played on another device`() = scope.runTest {
@@ -223,8 +244,16 @@ class FolderSyncTest {
 
   @Test
   fun `a custom name that is the files' name is not written`() = scope.runTest {
-    // the update that kept names apart from the files copied every name into the custom one until the next scan
-    val book = book(path = "Book", customName = "Book", currentFile = 1, position = 3000, lastPlayedAt = 2000)
+    // the update that kept names apart from the files copied every name into the custom one until
+    // the next scan
+    val book =
+      book(
+        path = "Book",
+        customName = "Book",
+        currentFile = 1,
+        position = 3000,
+        lastPlayedAt = 2000,
+      )
 
     folderSync(MemoryBookRepository(book)).sync()
 
@@ -235,7 +264,10 @@ class FolderSyncTest {
   fun `a name written before that is the files' name goes away`() = scope.runTest {
     val book = book(path = "Book")
     val folderSync = folderSync(MemoryBookRepository(book))
-    ownFile(folderSync, SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Book", changedAt = 0)))))
+    ownFile(
+      folderSync,
+      SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Book", changedAt = 0)))),
+    )
 
     folderSync.sync()
 
@@ -247,10 +279,13 @@ class FolderSyncTest {
     val book = book(customName = "Mine")
     val repo = MemoryBookRepository(book)
     val folderSync = folderSync(repo)
-    every { syncFiles.read(folder()) } returns mapOf(
-      folderSync.ownFileName to SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Earlier", changedAt = 1000)))),
-      "sync-other.json" to SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Other", changedAt = 2000)))),
-    )
+    every { syncFiles.read(folder()) } returns
+      mapOf(
+        folderSync.ownFileName to
+          SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Earlier", changedAt = 1000)))),
+        "sync-other.json" to
+          SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Other", changedAt = 2000)))),
+      )
 
     folderSync.sync()
 
@@ -289,25 +324,44 @@ class FolderSyncTest {
 
     assertEquals("Other", repo.get(book.id)!!.custom.series)
     assertEquals("2", repo.get(book.id)!!.custom.part)
-    assertEquals(listOf(SyncFile(mapOf(book.key() to SyncedBook(series = series, part = part)))), written)
+    assertEquals(
+      listOf(SyncFile(mapOf(book.key() to SyncedBook(series = series, part = part)))),
+      written,
+    )
   }
 
   @Test
-  fun `putting the author back to the files' one is written, also when the files have none`() = scope.runTest {
-    val book = book()
-    val folderSync = folderSync(MemoryBookRepository(book))
-    ownFile(folderSync, SyncFile(mapOf(book.key() to SyncedBook(author = SyncedText("Mine", changedAt = 1000)))))
+  fun `putting the author back to the files' one is written, also when the files have none`() =
+    scope.runTest {
+      val book = book()
+      val folderSync = folderSync(MemoryBookRepository(book))
+      ownFile(
+        folderSync,
+        SyncFile(mapOf(book.key() to SyncedBook(author = SyncedText("Mine", changedAt = 1000)))),
+      )
 
-    folderSync.sync()
+      folderSync.sync()
 
-    assertEquals(listOf(SyncFile(mapOf(book.key() to SyncedBook(author = SyncedText(value = null, changedAt = NOW))))), written)
-  }
+      assertEquals(
+        listOf(
+          SyncFile(
+            mapOf(book.key() to SyncedBook(author = SyncedText(value = null, changedAt = NOW))),
+          ),
+        ),
+        written,
+      )
+    }
 
   @Test
   fun `nothing is written when nothing changed`() = scope.runTest {
     val book = book(lastPlayedAt = 2000)
     val folderSync = folderSync(MemoryBookRepository(book))
-    ownFile(folderSync, SyncFile(mapOf(book.key() to SyncedBook(place = place(file = 0, position = 0, playedAt = 2000)))))
+    ownFile(
+      folderSync,
+      SyncFile(
+        mapOf(book.key() to SyncedBook(place = place(file = 0, position = 0, playedAt = 2000))),
+      ),
+    )
 
     folderSync.sync()
 
@@ -327,7 +381,8 @@ class FolderSyncTest {
   @Test
   fun `a folder the sync file can't be created in is left alone`() = scope.runTest {
     val book = book(lastPlayedAt = 2000)
-    every { syncFiles.write(folder(), any(), any()) } throws IllegalStateException("Failed to mkdir")
+    every { syncFiles.write(folder(), any(), any()) } throws
+      IllegalStateException("Failed to mkdir")
 
     folderSync(MemoryBookRepository(book)).sync()
   }
@@ -358,22 +413,29 @@ class FolderSyncTest {
   }
 
   @Test
-  fun `a bookmark from another device goes into the copy played last, and is not sent back`() = scope.runTest {
-    val older = book(path = "Book", lastPlayedAt = 1000)
-    val newer = book(path = "Copy of Book", lastPlayedAt = 2000)
-    val bookmark = newer.bookmark(file = 1, time = 1000, addedAt = 100)
-    val bookmarkRepo = spyk(MemoryBookmarkRepo())
-    otherDevice(newer, SyncedBook(bookmarks = mapOf(bookmark.id.value to bookmark.synced(changedAt = 1500))))
-    val folderSync = folderSync(MemoryBookRepository(older, newer), bookmarkRepo)
+  fun `a bookmark from another device goes into the copy played last, and is not sent back`() =
+    scope.runTest {
+      val older = book(path = "Book", lastPlayedAt = 1000)
+      val newer = book(path = "Copy of Book", lastPlayedAt = 2000)
+      val bookmark = newer.bookmark(file = 1, time = 1000, addedAt = 100)
+      val bookmarkRepo = spyk(MemoryBookmarkRepo())
+      otherDevice(
+        newer,
+        SyncedBook(bookmarks = mapOf(bookmark.id.value to bookmark.synced(changedAt = 1500))),
+      )
+      val folderSync = folderSync(MemoryBookRepository(older, newer), bookmarkRepo)
 
-    folderSync.sync()
-    ownFile(folderSync, written.single())
-    folderSync.sync()
+      folderSync.sync()
+      ownFile(folderSync, written.single())
+      folderSync.sync()
 
-    assertEquals(listOf(bookmark), bookmarkRepo.bookmarks.value)
-    coVerify(exactly = 1) { bookmarkRepo.addBookmark(any()) }
-    assertEquals(bookmark.synced(changedAt = 1500), written.single().books[newer.key()]!!.bookmarks[bookmark.id.value])
-  }
+      assertEquals(listOf(bookmark), bookmarkRepo.bookmarks.value)
+      coVerify(exactly = 1) { bookmarkRepo.addBookmark(any()) }
+      assertEquals(
+        bookmark.synced(changedAt = 1500),
+        written.single().books[newer.key()]!!.bookmarks[bookmark.id.value],
+      )
+    }
 
   @Test
   fun `a bookmark deleted on another device is deleted here`() = scope.runTest {
@@ -386,7 +448,10 @@ class FolderSyncTest {
 
     assertEquals(emptyList(), bookmarkRepo.bookmarks.value)
     assertEquals(
-      expected = SyncFile(mapOf(book.key() to SyncedBook(deletedBookmarks = mapOf(bookmark.id.value to 2000)))),
+      expected =
+        SyncFile(
+          mapOf(book.key() to SyncedBook(deletedBookmarks = mapOf(bookmark.id.value to 2000))),
+        ),
       actual = written.single(),
     )
   }
@@ -395,7 +460,8 @@ class FolderSyncTest {
     book: Book,
     synced: SyncedBook,
   ) {
-    every { syncFiles.read(folder()) } returns mapOf("sync-other.json" to SyncFile(mapOf(book.key() to synced)))
+    every { syncFiles.read(folder()) } returns
+      mapOf("sync-other.json" to SyncFile(mapOf(book.key() to synced)))
   }
 
   private fun ownFile(
@@ -424,7 +490,8 @@ class FolderSyncTest {
       mediaScanTrigger = mediaScanTrigger,
       currentBookStore = CurrentBookStore(currentBookStore),
       clock = Clock.fixed(Instant.ofEpochMilli(NOW), ZoneOffset.UTC),
-      dispatcherProvider = DispatcherProvider(main = dispatcher, io = dispatcher, mainImmediate = dispatcher),
+      dispatcherProvider =
+        DispatcherProvider(main = dispatcher, io = dispatcher, mainImmediate = dispatcher),
     )
   }
 }

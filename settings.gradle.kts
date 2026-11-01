@@ -5,19 +5,18 @@ import org.gradle.api.internal.FeaturePreviews
 rootProject.name = "voice"
 
 FeaturePreviews.Feature.entries.forEach { feature ->
-  val enable = when (feature) {
-    FeaturePreviews.Feature.TYPESAFE_PROJECT_ACCESSORS,
-    FeaturePreviews.Feature.STABLE_CONFIGURATION_CACHE,
-    FeaturePreviews.Feature.NO_IMPLICIT_LOOKUP_IN_PARENT_PROJECTS,
-    FeaturePreviews.Feature.ENHANCED_GRAPH_ORDERING,
-      -> true
-    FeaturePreviews.Feature.GROOVY_COMPILATION_AVOIDANCE,
-    FeaturePreviews.Feature.INTERNAL_BUILD_SERVICE_USAGE,
-    FeaturePreviews.Feature.ALWAYS_INACTIVE,
-      -> false
-  }
+  val enable =
+    when (feature) {
+      FeaturePreviews.Feature.TYPESAFE_PROJECT_ACCESSORS,
+      FeaturePreviews.Feature.STABLE_CONFIGURATION_CACHE,
+      FeaturePreviews.Feature.NO_IMPLICIT_LOOKUP_IN_PARENT_PROJECTS,
+      FeaturePreviews.Feature.ENHANCED_GRAPH_ORDERING -> true
+      FeaturePreviews.Feature.GROOVY_COMPILATION_AVOIDANCE,
+      FeaturePreviews.Feature.INTERNAL_BUILD_SERVICE_USAGE,
+      FeaturePreviews.Feature.ALWAYS_INACTIVE -> false
+    }
   if (enable) {
-    check(feature.isActive){
+    check(feature.isActive) {
       "Feature $feature is not active"
     }
     enableFeaturePreview(feature.name)
@@ -57,49 +56,91 @@ develocity {
 }
 
 include(":app")
+
 include(":navigation")
 
 include(":core:analytics:api")
+
 include(":core:analytics:noop")
+
 include(":core:analytics:firebase")
+
 include(":core:common")
+
 include(":core:data:api")
+
 include(":core:data:impl")
+
 include(":core:documentfile")
+
 include(":core:initializer")
+
 include(":core:logging:api")
+
 include(":core:logging:crashlytics")
+
 include(":core:logging:debug")
+
 include(":core:playback:api")
+
 include(":core:playback:impl")
+
 include(":core:remoteconfig:api")
+
 include(":core:remoteconfig:firebase")
+
 include(":core:remoteconfig:noop")
+
 include(":core:scanner")
+
 include(":core:search")
+
 include(":core:sleeptimer:api")
+
 include(":core:sleeptimer:impl")
+
 include(":core:strings")
+
 include(":core:ui")
 
 include(":features:bookOverview")
+
 include(":features:bookmark")
+
 include(":features:cover")
+
 include(":features:folderPicker")
+
 include(":features:onboarding")
+
 include(":features:playbackScreen")
+
 include(":features:review:noop")
+
 include(":features:review:play")
+
 include(":features:settings")
+
 include(":features:support:api")
+
 include(":features:support:free")
+
 include(":features:support:play")
+
 include(":features:widget")
+
 include(":core:featureflag")
+
 include(":core:kioskmode")
+
 include(":core:audiobookshelf:api")
+
 include(":core:audiobookshelf:impl")
+
 include(":features:audiobookshelf")
+
 include(":core:snapshot")
+
 include(":core:foldersync")
+
 include(":core:datastore")

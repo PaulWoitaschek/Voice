@@ -4,6 +4,12 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.just
 import io.mockk.mockk
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -11,25 +17,21 @@ import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.repo.ListeningHistoryRepo
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class ListeningHistoryRecorderTest {
 
   private val scope = TestScope()
   private val events = mutableListOf<ListeningEvent>()
-  private val repo = mockk<ListeningHistoryRepo> {
-    coEvery { add(capture(events)) } just Runs
-  }
-  private val recorder = ListeningHistoryRecorder(
-    repo = repo,
-    clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
-    scope = scope,
-  )
+  private val repo =
+    mockk<ListeningHistoryRepo> {
+      coEvery { add(capture(events)) } just Runs
+    }
+  private val recorder =
+    ListeningHistoryRecorder(
+      repo = repo,
+      clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+      scope = scope,
+    )
   private val chapter = ChapterId("chapter")
   private val otherChapter = ChapterId("other")
 
@@ -59,7 +61,12 @@ class ListeningHistoryRecorderTest {
   @Test
   fun `skipping does not replace the jump to undo`() = scope.runTest {
     seek(at(0), at(60_000))
-    recorder.record(ListeningEvent.Type.SkipForward, ListeningEvent.Source.Headset, at(60_000), at(90_000))
+    recorder.record(
+      ListeningEvent.Type.SkipForward,
+      ListeningEvent.Source.Headset,
+      at(60_000),
+      at(90_000),
+    )
 
     assertEquals(expected = at(0), actual = recorder.lastJump.value?.from)
   }

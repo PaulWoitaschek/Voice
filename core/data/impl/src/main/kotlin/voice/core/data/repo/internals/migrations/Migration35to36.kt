@@ -25,7 +25,8 @@ private const val TIME = "bookTime"
 private const val TYPE = "bookType"
 private const val ACTIVE = "BOOK_ACTIVE"
 private const val TABLE_NAME = "tableBooks"
-private const val CREATE_TABLE = """
+private const val CREATE_TABLE =
+  """
     CREATE TABLE $TABLE_NAME (
       $ID INTEGER PRIMARY KEY AUTOINCREMENT,
       $NAME TEXT NOT NULL,
@@ -46,8 +47,8 @@ private const val CREATE_TABLE = """
 public class Migration35to36 : IncrementalMigration(35) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    val entries = db.query(TABLE_NAME)
-      .mapRows {
+    val entries =
+      db.query(TABLE_NAME).mapRows {
         Holder(
           getLong(ID),
           getString(NAME),
@@ -64,17 +65,18 @@ public class Migration35to36 : IncrementalMigration(35) {
       db.execSQL("DROP TABLE $TABLE_NAME")
       db.execSQL(CREATE_TABLE)
       entries.forEach {
-        val cv = ContentValues().apply {
-          put(ID, it.id)
-          put(NAME, it.name)
-          put(AUTHOR, it.author)
-          put(CURRENT_MEDIA_PATH, it.path)
-          put(PLAYBACK_SPEED, it.speed)
-          put(ROOT, it.root)
-          put(TIME, it.time)
-          put(TYPE, it.type)
-          put(ACTIVE, it.active)
-        }
+        val cv =
+          ContentValues().apply {
+            put(ID, it.id)
+            put(NAME, it.name)
+            put(AUTHOR, it.author)
+            put(CURRENT_MEDIA_PATH, it.path)
+            put(PLAYBACK_SPEED, it.speed)
+            put(ROOT, it.root)
+            put(TIME, it.time)
+            put(TYPE, it.type)
+            put(ACTIVE, it.active)
+          }
         db.insert(TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, cv)
       }
     }

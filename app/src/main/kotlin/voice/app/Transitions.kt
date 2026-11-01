@@ -103,7 +103,9 @@ val SharedZAxisEnterTransition =
     )
 
 val SharedZAxisExitTransition =
-  fadeOut(animationSpec = tween(durationMillis = DurationMedium1, easing = EmphasizedAccelerateEasing)) +
+  fadeOut(
+    animationSpec = tween(durationMillis = DurationMedium1, easing = EmphasizedAccelerateEasing),
+  ) +
     scaleOut(
       targetScale = 0.8f,
       transformOrigin = TransformOrigin(0.5f, 1f),
@@ -111,29 +113,35 @@ val SharedZAxisExitTransition =
     )
 
 /**
- * Library, search and player: the cover and play button fly between the screens as shared elements, so the
- * screens themselves only cross-fade. Scaling them as well makes the shared elements chase a moving
- * target and overshoot.
+ * Library, search and player: the cover and play button fly between the screens as shared elements,
+ * so the screens themselves only cross-fade. Scaling them as well makes the shared elements chase a
+ * moving target and overshoot.
  */
 val SharedElementFadeEnterTransition =
   fadeIn(animationSpec = tween(durationMillis = DurationLong1, easing = EmphasizedEasing))
 
 val SharedElementFadeExitTransition =
-  fadeOut(animationSpec = tween(durationMillis = DurationMedium1, easing = EmphasizedAccelerateEasing))
+  fadeOut(
+    animationSpec = tween(durationMillis = DurationMedium1, easing = EmphasizedAccelerateEasing),
+  )
 
 internal fun Scene<*>.destination(): Destination.Compose? {
   return entries.lastOrNull()?.metadata?.get(DestinationMetadataKey)
 }
 
 /**
- * Library, search, series and player share the book covers, and the library's search pill grows into the search field.
+ * Library, search, series and player share the book covers, and the library's search pill grows
+ * into the search field.
  */
 internal fun isSharedElementTransition(
   initial: Destination.Compose?,
   target: Destination.Compose?,
 ): Boolean {
-  return initial != null && target != null && initial::class != target::class &&
-    initial.sharesElements() && target.sharesElements()
+  return initial != null &&
+    target != null &&
+    initial::class != target::class &&
+    initial.sharesElements() &&
+    target.sharesElements()
 }
 
 private fun Destination.Compose.sharesElements(): Boolean {
@@ -144,8 +152,8 @@ private fun Destination.Compose.sharesElements(): Boolean {
 }
 
 /**
- * The library's Continue listening card can show a book of the series, and its cover would fly into the book's row.
- * The stack flies into the series instead.
+ * The library's Continue listening card can show a book of the series, and its cover would fly into
+ * the book's row. The stack flies into the series instead.
  */
 internal fun sharesCovers(
   initial: Scene<*>,

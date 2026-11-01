@@ -2,18 +2,24 @@ package voice.core.ui
 
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import voice.core.data.Bookmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import voice.core.data.Bookmark
 
 class PinPlacementTest {
 
   private val density = Density(1F)
   private val pinSize = 14.dp
 
-  private fun place(vararg positions: Float) = with(density) {
-    placePins(positions.map { BookBarPin(it, Bookmark.Kind.Note) }, segments = listOf(1F), width = 300F, pinSize = pinSize)
-  }
+  private fun place(vararg positions: Float) =
+    with(density) {
+      placePins(
+        positions.map { BookBarPin(it, Bookmark.Kind.Note) },
+        segments = listOf(1F),
+        width = 300F,
+        pinSize = pinSize,
+      )
+    }
 
   @Test
   fun `pins at the ends stay on the bar`() {
@@ -33,8 +39,20 @@ class PinPlacementTest {
     val upper = placement.tops.indexOf(placement.tops.min())
     val lower = 1 - upper
 
-    val tapUpper = placement.pinAt(placement.centers[lower], placement.tops[upper] + 7F, pinSize = 14F, reach = 20F)
-    val tapLower = placement.pinAt(placement.centers[upper], placement.tops[lower] + 7F, pinSize = 14F, reach = 20F)
+    val tapUpper =
+      placement.pinAt(
+        placement.centers[lower],
+        placement.tops[upper] + 7F,
+        pinSize = 14F,
+        reach = 20F,
+      )
+    val tapLower =
+      placement.pinAt(
+        placement.centers[upper],
+        placement.tops[lower] + 7F,
+        pinSize = 14F,
+        reach = 20F,
+      )
 
     assertEquals(expected = upper, actual = tapUpper)
     assertEquals(expected = lower, actual = tapLower)

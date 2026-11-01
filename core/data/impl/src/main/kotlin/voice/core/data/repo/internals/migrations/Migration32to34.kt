@@ -23,7 +23,8 @@ private const val TITLE = "bookmarkTitle"
 private const val TABLE_NAME = "tableBookmarks"
 private const val TIME = "bookmarkTime"
 private const val ID = BaseColumns._ID
-private const val CREATE_TABLE_BOOKMARKS = """
+private const val CREATE_TABLE_BOOKMARKS =
+  """
     CREATE TABLE $TABLE_NAME (
       $ID INTEGER PRIMARY KEY AUTOINCREMENT,
       $PATH TEXT NOT NULL,
@@ -51,11 +52,12 @@ public class Migration32to34 : Migration(32, 34) {
 
     db.transaction {
       entries.forEach {
-        val cv = ContentValues().apply {
-          put(PATH, it.path)
-          put(TITLE, it.title)
-          put(TIME, it.time)
-        }
+        val cv =
+          ContentValues().apply {
+            put(PATH, it.path)
+            put(TITLE, it.title)
+            put(TIME, it.time)
+          }
         db.insert(TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, cv)
       }
     }

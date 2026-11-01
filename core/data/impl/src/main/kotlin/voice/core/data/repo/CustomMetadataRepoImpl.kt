@@ -38,9 +38,7 @@ public class CustomMetadataRepoImpl(private val dao: CustomMetadataDao) : Custom
   }
 
   override fun flow(id: BookId): Flow<CustomMetadata> {
-    return flow()
-      .map { it[id] ?: CustomMetadata(id) }
-      .distinctUntilChanged()
+    return flow().map { it[id] ?: CustomMetadata(id) }.distinctUntilChanged()
   }
 
   override suspend fun get(id: BookId): CustomMetadata {

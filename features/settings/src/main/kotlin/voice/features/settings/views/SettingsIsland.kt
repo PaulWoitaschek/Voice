@@ -9,10 +9,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -23,7 +21,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -83,9 +80,7 @@ internal fun IslandTitle(
   modifier: Modifier = Modifier,
 ) {
   Text(
-    modifier = modifier
-      .padding(horizontal = IslandContentPadding)
-      .semantics { heading() },
+    modifier = modifier.padding(horizontal = IslandContentPadding).semantics { heading() },
     text = text,
     style = MaterialTheme.typography.titleLargeEmphasized,
   )
@@ -97,9 +92,7 @@ internal fun IslandLabel(
   modifier: Modifier = Modifier,
 ) {
   Text(
-    modifier = modifier
-      .padding(horizontal = IslandContentPadding)
-      .semantics { heading() },
+    modifier = modifier.padding(horizontal = IslandContentPadding).semantics { heading() },
     text = text,
     style = MaterialTheme.typography.labelLargeEmphasized,
   )
@@ -119,10 +112,11 @@ internal fun IslandRow(
   trailing: @Composable () -> Unit = { Chevron() },
 ) {
   IslandRowLayout(
-    modifier = modifier
-      .padding(horizontal = 12.dp)
-      .clip(RoundedCornerShape(24.dp))
-      .clickable(onClick = onClick),
+    modifier =
+      modifier
+        .padding(horizontal = 12.dp)
+        .clip(RoundedCornerShape(24.dp))
+        .clickable(onClick = onClick),
     title = title,
     titleStyle = MaterialTheme.typography.titleMedium,
     leading = leading,
@@ -143,10 +137,11 @@ internal fun IslandSwitchRow(
   titleStyle: TextStyle = MaterialTheme.typography.titleMedium,
 ) {
   IslandRowLayout(
-    modifier = modifier
-      .padding(horizontal = 12.dp)
-      .clip(RoundedCornerShape(24.dp))
-      .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange),
+    modifier =
+      modifier
+        .padding(horizontal = 12.dp)
+        .clip(RoundedCornerShape(24.dp))
+        .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange),
     title = title,
     titleStyle = titleStyle,
     leading = leading,
@@ -158,7 +153,8 @@ internal fun IslandSwitchRow(
         thumbContent = {
           AnimatedVisibility(
             visible = checked,
-            enter = scaleIn(spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium)) + fadeIn(),
+            enter =
+              scaleIn(spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium)) + fadeIn(),
             exit = scaleOut() + fadeOut(),
           ) {
             Icon(
@@ -183,10 +179,8 @@ private fun IslandRowLayout(
   modifier: Modifier = Modifier,
 ) {
   Row(
-    modifier = modifier
-      .fillMaxWidth()
-      .heightIn(min = 72.dp)
-      .padding(horizontal = 12.dp, vertical = 8.dp),
+    modifier =
+      modifier.fillMaxWidth().heightIn(min = 72.dp).padding(horizontal = 12.dp, vertical = 8.dp),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.spacedBy(16.dp),
   ) {

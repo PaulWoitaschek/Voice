@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 value class Decibel(val value: Float) {
 
-  val milliBel: Int get() = (value * 100).toInt()
+  val milliBel: Int
+    get() = (value * 100).toInt()
 
   operator fun compareTo(other: Decibel) = value.compareTo(other.value)
 

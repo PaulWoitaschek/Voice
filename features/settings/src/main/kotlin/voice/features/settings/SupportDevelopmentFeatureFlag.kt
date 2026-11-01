@@ -20,7 +20,8 @@ class SupportDevelopmentFeatureFlag(flag: FeatureFlag<Boolean>) : FeatureFlag<Bo
   ) : this(
     factory.boolean(
       key = "support_development",
-      description = "Shows the support card in the settings. Play builds turn it on remotely once the supporter products are live.",
+      description =
+        "Shows the support card in the settings. Play builds turn it on remotely once the supporter products are live.",
       defaultValue = appInfoProvider.supportDevelopmentIncluded,
     ),
   )

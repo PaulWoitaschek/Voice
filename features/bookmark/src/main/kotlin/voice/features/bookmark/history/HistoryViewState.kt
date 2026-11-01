@@ -1,15 +1,17 @@
 package voice.features.bookmark.history
 
 import androidx.compose.runtime.Immutable
+import java.time.LocalTime
+import kotlin.time.Duration
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.features.bookmark.DayLabel
-import java.time.LocalTime
-import kotlin.time.Duration
 
-/** What happened while listening, under the part of the day each listening session started in, newest first. */
-@Immutable
-internal data class HistoryViewState(val days: List<HistoryDay>)
+/**
+ * What happened while listening, under the part of the day each listening session started in,
+ * newest first.
+ */
+@Immutable internal data class HistoryViewState(val days: List<HistoryDay>)
 
 @Immutable
 internal data class HistoryDay(
@@ -19,7 +21,8 @@ internal data class HistoryDay(
 
 @Immutable
 internal data class HistorySession(val rows: List<HistoryRow>) {
-  val key: Long get() = rows.last().key
+  val key: Long
+    get() = rows.last().key
 }
 
 @Immutable
@@ -31,7 +34,10 @@ internal sealed interface HistoryRow {
   val playingBefore: Boolean
 }
 
-/** Something that happened at [place]. A jump also has [to], unless that spot is gone after a rescan. */
+/**
+ * Something that happened at [place]. A jump also has [to], unless that spot is gone after a
+ * rescan.
+ */
 @Immutable
 internal data class HistoryEvent(
   override val key: Long,
@@ -73,9 +79,7 @@ internal data class HistorySpot(
   val time: Long,
 )
 
-/**
- * Where something happened. [chapterNumber] is null when the book has a single chapter.
- */
+/** Where something happened. [chapterNumber] is null when the book has a single chapter. */
 @Immutable
 internal data class HistoryLocation(
   val chapterNumber: Int?,

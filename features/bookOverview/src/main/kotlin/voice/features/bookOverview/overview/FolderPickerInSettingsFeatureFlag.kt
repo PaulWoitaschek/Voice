@@ -13,7 +13,9 @@ import voice.core.featureflag.FeatureFlagFactory
 class FolderPickerInSettingsFeatureFlag(flag: FeatureFlag<Boolean>) : FeatureFlag<Boolean> by flag {
 
   @Inject
-  constructor(factory: FeatureFlagFactory) : this(
+  constructor(
+    factory: FeatureFlagFactory,
+  ) : this(
     factory.boolean(
       key = "folder_picker_in_settings",
       description = "Shows the folder picker entry directly in settings.",

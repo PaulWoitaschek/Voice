@@ -28,8 +28,8 @@ fun rememberCoverThumbnailRequest(cover: String?): ImageRequest {
 }
 
 /**
- * Image model for a large cover. While it loads, the already decoded thumbnail is shown, so a shared
- * element transition from a list never flashes the empty placeholder.
+ * Image model for a large cover. While it loads, the already decoded thumbnail is shown, so a
+ * shared element transition from a list never flashes the empty placeholder.
  */
 @Composable
 fun rememberFullSizeCoverRequest(cover: String?): ImageRequest {

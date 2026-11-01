@@ -4,6 +4,8 @@ import android.app.Activity
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import java.time.Clock
+import java.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,13 +16,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import voice.core.analytics.api.Analytics
-import voice.core.data.supporter.SupporterStatus
 import voice.core.data.supporter.SupporterStatusStore
 import voice.core.logging.api.Logger
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import java.time.Clock
-import java.time.Instant
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -91,11 +90,12 @@ class PlaySupportBackend(
 
   override fun manageSubscription() {
     val productId = activePurchase?.productId
-    val url = if (productId == null) {
-      MANAGE_SUBSCRIPTIONS_URL
-    } else {
-      "$MANAGE_SUBSCRIPTIONS_URL?sku=$productId&package=${billing.packageName}"
-    }
+    val url =
+      if (productId == null) {
+        MANAGE_SUBSCRIPTIONS_URL
+      } else {
+        "$MANAGE_SUBSCRIPTIONS_URL?sku=$productId&package=${billing.packageName}"
+      }
     navigator.goTo(Destination.Website(url))
   }
 
@@ -106,7 +106,8 @@ class PlaySupportBackend(
         if (purchased.isNotEmpty()) {
           handle(purchased)
           val subscriptions = purchased.filter { it.productId in SupportProducts.subscriptions }
-          // set right away, so a failing reload can't lead to a second subscription instead of a switch
+          // set right away, so a failing reload can't lead to a second subscription instead of a
+          // switch
           if (subscriptions.isNotEmpty()) {
             updateSubscription(subscriptions)
             (_state.value as? SupportBackendState.Play)?.let { state ->
@@ -148,17 +149,24 @@ class PlaySupportBackend(
       val purchased = purchases.filter { it.state == BillingPurchase.State.Purchased }
       handle(purchased)
       updateSubscription(purchased.filter { it.productId in SupportProducts.subscriptions })
-      _state.value = SupportBackendState.Play(
-        subscriptions = products.mapNotNull { product ->
-          val offer = SupportProducts.subscriptions[product.productId] ?: return@mapNotNull null
-          SubscriptionOffer(tier = offer.tier, period = offer.period, formattedPrice = product.formattedPrice)
-        },
-        tips = products.mapNotNull { product ->
-          val tier = SupportProducts.tips[product.productId] ?: return@mapNotNull null
-          TipOffer(tier = tier, formattedPrice = product.formattedPrice)
-        },
-        activeSubscription = activeSubscription(),
-      )
+      _state.value =
+        SupportBackendState.Play(
+          subscriptions =
+            products.mapNotNull { product ->
+              val offer = SupportProducts.subscriptions[product.productId] ?: return@mapNotNull null
+              SubscriptionOffer(
+                tier = offer.tier,
+                period = offer.period,
+                formattedPrice = product.formattedPrice,
+              )
+            },
+          tips =
+            products.mapNotNull { product ->
+              val tier = SupportProducts.tips[product.productId] ?: return@mapNotNull null
+              TipOffer(tier = tier, formattedPrice = product.formattedPrice)
+            },
+          activeSubscription = activeSubscription(),
+        )
     }
   }
 
@@ -189,7 +197,9 @@ class PlaySupportBackend(
         }
         in SupportProducts.tips -> {
           // credited first, as a consumed tip is gone even when the result doesn't make it back
-          supporterStatusStore.updateData { it.withTip(Instant.ofEpochMilli(purchase.purchaseTime)) }
+          supporterStatusStore.updateData {
+            it.withTip(Instant.ofEpochMilli(purchase.purchaseTime))
+          }
           if (!billing.consume(purchase.purchaseToken)) {
             Logger.w("Consuming ${purchase.productId} failed")
           }

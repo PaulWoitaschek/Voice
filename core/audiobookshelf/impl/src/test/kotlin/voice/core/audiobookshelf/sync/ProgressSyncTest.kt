@@ -3,6 +3,11 @@ package voice.core.audiobookshelf.sync
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import java.time.Instant
+import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -26,23 +31,18 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.store.CurrentBookStore
-import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
-import java.time.Instant
-import java.util.concurrent.TimeUnit
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class ProgressSyncTest {
 
   private val server = MockWebServer()
   private lateinit var account: Account
 
-  private val item = item(
-    tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")),
-    id = "item",
-  )
+  private val item =
+    item(
+      tracks = listOf(track(1, 0.0, 60.0, "a.mp3"), track(2, 60.0, 60.0, "b.mp3")),
+      id = "item",
+    )
   private val chapters = item.chapters()
   private val bookId = BookId("abs://item/item")
   private val syncedProgress = MemoryDataStore<Map<String, SyncedProgress>>(emptyMap())
@@ -50,15 +50,16 @@ class ProgressSyncTest {
   @Before
   fun setUp() {
     server.start()
-    account = Account(
-      serverUrl = server.url("/").toString(),
-      userId = "user",
-      username = "paul",
-      accessToken = "access",
-      refreshToken = "refresh",
-      libraryIds = listOf("library"),
-      serverVersion = "2.37.1",
-    )
+    account =
+      Account(
+        serverUrl = server.url("/").toString(),
+        userId = "user",
+        username = "paul",
+        accessToken = "access",
+        refreshToken = "refresh",
+        libraryIds = listOf("library"),
+        serverVersion = "2.37.1",
+      )
   }
 
   @After
@@ -80,7 +81,9 @@ class ProgressSyncTest {
   @Test
   fun `progress played here is sent`() = runTest {
     val repo = MemoryBookRepository(book(positionMs = 30_000))
-    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(0, finished = false, serverLastUpdate = 10)) }
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(0, finished = false, serverLastUpdate = 10))
+    }
     server.enqueue(MockResponse(code = 200))
 
     progressSync(repo).syncAll(account, listOf(serverProgress(currentTime = 0.0, lastUpdate = 10)))
@@ -96,41 +99,61 @@ class ProgressSyncTest {
 
   @Test
   fun `listening to a finished book again doesn't send it back to its start`() = runTest {
-    // told that a finished book isn't finished, the server starts it over. Without the flag it keeps the time.
+    // told that a finished book isn't finished, the server starts it over. Without the flag it
+    // keeps the time.
     val repo = MemoryBookRepository(book(positionMs = 30_000))
-    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(120_000, finished = true, serverLastUpdate = 10)) }
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(120_000, finished = true, serverLastUpdate = 10))
+    }
     server.enqueue(MockResponse(code = 200))
 
-    progressSync(repo).syncAll(account, listOf(serverProgress(currentTime = 120.0, lastUpdate = 10, isFinished = true)))
+    progressSync(repo)
+      .syncAll(
+        account,
+        listOf(serverProgress(currentTime = 120.0, lastUpdate = 10, isFinished = true)),
+      )
 
-    val body = Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
+    val body =
+      Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
     assertEquals(30.0, body.getValue("currentTime").jsonPrimitive.double)
     assertNull(body["isFinished"])
   }
 
   @Test
   fun `a finished book marked as not started starts over on the server too`() = runTest {
-    // the server keeps a finished book finished when only its time is sent and the time didn't change
+    // the server keeps a finished book finished when only its time is sent and the time didn't
+    // change
     val repo = MemoryBookRepository(book(positionMs = 0))
-    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(120_000, finished = true, serverLastUpdate = 10)) }
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(120_000, finished = true, serverLastUpdate = 10))
+    }
     server.enqueue(MockResponse(code = 200))
 
-    progressSync(repo).syncAll(account, listOf(serverProgress(currentTime = 0.0, lastUpdate = 10, isFinished = true)))
+    progressSync(repo)
+      .syncAll(
+        account,
+        listOf(serverProgress(currentTime = 0.0, lastUpdate = 10, isFinished = true)),
+      )
 
-    val body = Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
+    val body =
+      Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
     assertEquals(false, body.getValue("isFinished").jsonPrimitive.boolean)
   }
 
   @Test
   fun `a book in its last seconds stays there when the server marked it finished`() = runTest {
-    // the server counts the last ten seconds as finished and resets a finished book when it's told otherwise
+    // the server counts the last ten seconds as finished and resets a finished book when it's told
+    // otherwise
     val repo = MemoryBookRepository(book(positionMs = 112_000))
-    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(112_000, finished = true, serverLastUpdate = 10)) }
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(112_000, finished = true, serverLastUpdate = 10))
+    }
 
-    progressSync(repo).syncAll(
-      account,
-      listOf(serverProgress(currentTime = 112.0, lastUpdate = 20, isFinished = true)),
-    )
+    progressSync(repo)
+      .syncAll(
+        account,
+        listOf(serverProgress(currentTime = 112.0, lastUpdate = 20, isFinished = true)),
+      )
 
     assertEquals(112_000, repo.get(bookId)!!.position)
     assertEquals(0, server.requestCount)
@@ -139,12 +162,15 @@ class ProgressSyncTest {
   @Test
   fun `a book finished on another device moves to its end`() = runTest {
     val repo = MemoryBookRepository(book(positionMs = 30_000))
-    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(30_000, finished = false, serverLastUpdate = 10)) }
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(30_000, finished = false, serverLastUpdate = 10))
+    }
 
-    progressSync(repo).syncAll(
-      account,
-      listOf(serverProgress(currentTime = 50.0, lastUpdate = 20, isFinished = true)),
-    )
+    progressSync(repo)
+      .syncAll(
+        account,
+        listOf(serverProgress(currentTime = 50.0, lastUpdate = 20, isFinished = true)),
+      )
 
     assertEquals(120_000, repo.get(bookId)!!.position)
   }
@@ -152,9 +178,12 @@ class ProgressSyncTest {
   @Test
   fun `when both sides moved, the newer position wins`() = runTest {
     val repo = MemoryBookRepository(book(positionMs = 30_000, lastPlayedAt = 5_000))
-    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(0, finished = false, serverLastUpdate = 1)) }
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(0, finished = false, serverLastUpdate = 1))
+    }
 
-    progressSync(repo).syncAll(account, listOf(serverProgress(currentTime = 90.0, lastUpdate = 9_000)))
+    progressSync(repo)
+      .syncAll(account, listOf(serverProgress(currentTime = 90.0, lastUpdate = 9_000)))
 
     assertEquals(90_000, repo.get(bookId)!!.position)
     assertEquals(0, server.requestCount)
@@ -164,13 +193,16 @@ class ProgressSyncTest {
   fun `what Voice sent itself doesn't count as a change on the server`() = runTest {
     // marked as finished here, without playing, after the earlier position went up
     val repo = MemoryBookRepository(book(positionMs = 120_000, lastPlayedAt = 1))
-    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(30_000, finished = false, serverLastUpdate = 10)) }
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(30_000, finished = false, serverLastUpdate = 10))
+    }
     server.enqueue(MockResponse(code = 200))
 
     progressSync(repo).syncAll(account, listOf(serverProgress(currentTime = 30.0, lastUpdate = 20)))
 
     assertEquals(120_000, repo.get(bookId)!!.position)
-    val body = Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
+    val body =
+      Json.parseToJsonElement(server.takeRequest(1, TimeUnit.SECONDS)!!.body!!.utf8()).jsonObject
     assertEquals(true, body.getValue("isFinished").jsonPrimitive.boolean)
   }
 
@@ -192,7 +224,9 @@ class ProgressSyncTest {
   @Test
   fun `a position that didn't move isn't sent again`() = runTest {
     val repo = MemoryBookRepository(book(positionMs = 30_000))
-    syncedProgress.updateData { mapOf(bookId.value to SyncedProgress(30_500, finished = false, serverLastUpdate = 10)) }
+    syncedProgress.updateData {
+      mapOf(bookId.value to SyncedProgress(30_500, finished = false, serverLastUpdate = 10))
+    }
 
     assertEquals(true, progressSync(repo).push(account, bookId))
     assertEquals(0, server.requestCount)
@@ -201,14 +235,19 @@ class ProgressSyncTest {
   private fun progressSync(repo: MemoryBookRepository): ProgressSync {
     val accountStore = MemoryDataStore<Account?>(account)
     return ProgressSync(
-      http = AudiobookshelfHttp(AccountStore(accountStore), mockk { every { versionName } returns "1.0.0" }),
+      http =
+        AudiobookshelfHttp(
+          AccountStore(accountStore),
+          mockk { every { versionName } returns "1.0.0" },
+        ),
       bookRepository = repo,
       syncedProgressStore = SyncedProgressStore(syncedProgress),
       currentBookStore = CurrentBookStore(MemoryDataStore<BookId?>(null)),
       playStateManager = PlayStateManager(),
-      playerController = mockk {
-        coEvery { livePlaybackState(any()) } returns null
-      },
+      playerController =
+        mockk {
+          coEvery { livePlaybackState(any()) } returns null
+        },
     )
   }
 
@@ -216,10 +255,15 @@ class ProgressSyncTest {
     positionMs: Long,
     lastPlayedAt: Long = 0,
   ): Book {
-    val content = item.toBookContent(chapters, existing = null).copy(lastPlayedAt = Instant.ofEpochMilli(lastPlayedAt))
+    val content =
+      item
+        .toBookContent(chapters, existing = null)
+        .copy(lastPlayedAt = Instant.ofEpochMilli(lastPlayedAt))
     return Book(content, chapters, CustomMetadata(content.id)).let { book ->
       val position = book.positionAt(positionMs)
-      book.update { it.copy(currentChapter = position.chapterId, positionInChapter = position.positionInChapter) }
+      book.update {
+        it.copy(currentChapter = position.chapterId, positionInChapter = position.positionInChapter)
+      }
     }
   }
 
@@ -227,11 +271,12 @@ class ProgressSyncTest {
     currentTime: Double,
     lastUpdate: Long,
     isFinished: Boolean = false,
-  ) = AbsMediaProgress(
-    libraryItemId = "item",
-    duration = 120.0,
-    currentTime = currentTime,
-    isFinished = isFinished,
-    lastUpdate = lastUpdate,
-  )
+  ) =
+    AbsMediaProgress(
+      libraryItemId = "item",
+      duration = 120.0,
+      currentTime = currentTime,
+      isFinished = isFinished,
+      lastUpdate = lastUpdate,
+    )
 }

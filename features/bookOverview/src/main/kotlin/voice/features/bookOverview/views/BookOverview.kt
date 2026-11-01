@@ -50,8 +50,10 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
+import kotlin.uuid.Uuid
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
+import voice.core.strings.R as StringsR
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
@@ -64,8 +66,6 @@ import voice.features.bookOverview.overview.LibraryItem
 import voice.features.bookOverview.overview.SeriesStackViewState
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import kotlin.uuid.Uuid
-import voice.core.strings.R as StringsR
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -73,19 +73,20 @@ object BookOverviewProvider {
 
   @Provides
   @IntoSet
-  fun bookOverviewNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.BookOverview> { key ->
-    NavEntry(key) {
-      BookOverviewScreen()
+  fun bookOverviewNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.BookOverview> { key ->
+      NavEntry(key) {
+        BookOverviewScreen()
+      }
     }
-  }
 }
 
 @Composable
 fun BookOverviewScreen(modifier: Modifier = Modifier) {
-  val bookGraph = retain<BookOverviewGraph> {
-    rootGraphAs<BookOverviewGraph.Factory.Provider>()
-      .bookOverviewGraphProviderFactory.create()
-  }
+  val bookGraph =
+    retain<BookOverviewGraph> {
+      rootGraphAs<BookOverviewGraph.Factory.Provider>().bookOverviewGraphProviderFactory.create()
+    }
   val bookOverviewViewModel = bookGraph.bookOverviewViewModel
 
   LaunchedEffect(Unit) {
@@ -97,11 +98,12 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
   val undoLabel = stringResource(StringsR.string.common_action_undo)
   LaunchedEffect(bookOverviewViewModel) {
     bookOverviewViewModel.hiddenBooks.collect { book ->
-      val result = snackbarHostState.showSnackbar(
-        message = resources.getString(StringsR.string.library_book_hidden_message, book.name),
-        actionLabel = undoLabel,
-        duration = SnackbarDuration.Short,
-      )
+      val result =
+        snackbarHostState.showSnackbar(
+          message = resources.getString(StringsR.string.library_book_hidden_message, book.name),
+          actionLabel = undoLabel,
+          duration = SnackbarDuration.Short,
+        )
       if (result == SnackbarResult.ActionPerformed) {
         bookOverviewViewModel.onUndoHide(book.id)
       }
@@ -153,9 +155,10 @@ internal fun BookOverview(
   LaunchedEffect(scrollBehavior, gridState) {
     // the bar adds up scroll deltas to tell whether the library is under it. They drift when books
     // above the visible ones change, which kept the bar tinted with the library at the top.
-    snapshotFlow { gridState.canScrollBackward }.collect { scrolled ->
-      if (!scrolled) scrollBehavior.scrollState.contentOffset = 0F
-    }
+    snapshotFlow { gridState.canScrollBackward }
+      .collect { scrolled ->
+        if (!scrolled) scrollBehavior.scrollState.contentOffset = 0F
+      }
   }
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -204,9 +207,7 @@ internal fun BookOverview(
       onSurveyDismiss = onSurveyDismiss,
       onShowFoldersClick = onShowFoldersClick,
       onHiddenBooksClick = { showFilterSheet = true },
-      modifier = Modifier
-        .padding(contentPadding)
-        .consumeWindowInsets(contentPadding),
+      modifier = Modifier.padding(contentPadding).consumeWindowInsets(contentPadding),
     )
   }
   Dialog(
@@ -228,12 +229,14 @@ internal fun BookOverview(
 private fun LazyGridState.heroPlayButtonVisible(): Boolean {
   // the play button sits at the bottom of the card
   val playButtonInset = with(LocalDensity.current) { 56.dp.roundToPx() }
-  val visible by remember(this, playButtonInset) {
-    derivedStateOf {
-      val hero = layoutInfo.visibleItemsInfo.firstOrNull { it.key == HERO_KEY }
-      hero != null && hero.offset.y + hero.size.height - playButtonInset > layoutInfo.viewportStartOffset
+  val visible by
+    remember(this, playButtonInset) {
+      derivedStateOf {
+        val hero = layoutInfo.visibleItemsInfo.firstOrNull { it.key == HERO_KEY }
+        hero != null &&
+          hero.offset.y + hero.size.height - playButtonInset > layoutInfo.viewportStartOffset
+      }
     }
-  }
   return visible
 }
 
@@ -274,8 +277,7 @@ private fun Dialog(
 @Preview
 @Composable
 fun BookOverviewPreview(
-  @PreviewParameter(BookOverviewPreviewParameterProvider::class)
-  viewState: BookOverviewViewState,
+  @PreviewParameter(BookOverviewPreviewParameterProvider::class) viewState: BookOverviewViewState,
 ) {
   VoiceTheme {
     BookOverview(
@@ -297,7 +299,8 @@ fun BookOverviewPreview(
   }
 }
 
-internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<BookOverviewViewState> {
+internal class BookOverviewPreviewParameterProvider :
+  PreviewParameterProvider<BookOverviewViewState> {
 
   fun book(): BookOverviewItemViewState {
     return BookOverviewItemViewState(
@@ -310,63 +313,68 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
     )
   }
 
-  private val library = BookOverviewViewState(
-    currentBookId = null,
-    sections = mapOf(
-      BookOverviewCategory.CURRENT to buildList {
-        add(
-          LibraryItem.Series(
-            SeriesStackViewState(
-              key = "signalsaga",
-              name = "The Signal Saga",
-              author = "Author",
-              covers = listOf(null, null, null),
-              bookCount = 4,
-              finishedCount = 1,
-              progress = listOf(1F, 0.6F, 0F, 0F),
-              category = BookOverviewCategory.CURRENT,
-            ),
-          ),
-        )
-        repeat(9) {
-          val book = book()
-          add(LibraryItem.Book(book.id, mutableStateOf(book)))
-        }
-      },
-      BookOverviewCategory.FINISHED to List(2) {
-        val book = book()
-        LibraryItem.Book(book.id, mutableStateOf(book))
-      },
-    ),
-    hero = mutableStateOf(book().copy(series = "The Signal Saga 2")),
-    inProgressCount = 10,
-    layoutMode = BookOverviewLayoutMode.List,
-    playButtonState = BookOverviewViewState.PlayButtonState.Paused,
-    showEmptyLibrary = false,
-    showSearchIcon = true,
-    isLoading = true,
-    showStoragePermissionBugCard = false,
-    showSurveyCard = false,
-    showFolderAccessBadge = false,
-    showFolderPickerIcon = true,
-    dialog = null,
-  )
+  private val library =
+    BookOverviewViewState(
+      currentBookId = null,
+      sections =
+        mapOf(
+          BookOverviewCategory.CURRENT to
+            buildList {
+              add(
+                LibraryItem.Series(
+                  SeriesStackViewState(
+                    key = "signalsaga",
+                    name = "The Signal Saga",
+                    author = "Author",
+                    covers = listOf(null, null, null),
+                    bookCount = 4,
+                    finishedCount = 1,
+                    progress = listOf(1F, 0.6F, 0F, 0F),
+                    category = BookOverviewCategory.CURRENT,
+                  ),
+                ),
+              )
+              repeat(9) {
+                val book = book()
+                add(LibraryItem.Book(book.id, mutableStateOf(book)))
+              }
+            },
+          BookOverviewCategory.FINISHED to
+            List(2) {
+              val book = book()
+              LibraryItem.Book(book.id, mutableStateOf(book))
+            },
+        ),
+      hero = mutableStateOf(book().copy(series = "The Signal Saga 2")),
+      inProgressCount = 10,
+      layoutMode = BookOverviewLayoutMode.List,
+      playButtonState = BookOverviewViewState.PlayButtonState.Paused,
+      showEmptyLibrary = false,
+      showSearchIcon = true,
+      isLoading = true,
+      showStoragePermissionBugCard = false,
+      showSurveyCard = false,
+      showFolderAccessBadge = false,
+      showFolderPickerIcon = true,
+      dialog = null,
+    )
 
-  override val values = sequenceOf(
-    library,
-    library.copy(layoutMode = BookOverviewLayoutMode.Grid, showSurveyCard = true),
-    BookOverviewViewState.Loading.copy(
-      isLoading = false,
-      showEmptyLibrary = true,
-      showFolderAccessBadge = true,
-      showFolderPickerIcon = false,
-    ),
-    library.copy(
-      sections = emptyMap(),
-      hero = null,
-      inProgressCount = 0,
-      playButtonState = null,
-      hiddenBookCount = 3,
-    ),
-  )
+  override val values =
+    sequenceOf(
+      library,
+      library.copy(layoutMode = BookOverviewLayoutMode.Grid, showSurveyCard = true),
+      BookOverviewViewState.Loading.copy(
+        isLoading = false,
+        showEmptyLibrary = true,
+        showFolderAccessBadge = true,
+        showFolderPickerIcon = false,
+      ),
+      library.copy(
+        sections = emptyMap(),
+        hero = null,
+        inProgressCount = 0,
+        playButtonState = null,
+        hiddenBookCount = 3,
+      ),
+    )
 }

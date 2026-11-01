@@ -25,9 +25,10 @@ internal fun EnumFeatureFlagRow(
 ) {
   var expanded by remember { mutableStateOf(false) }
   ListItem(
-    modifier = Modifier.clickable {
-      expanded = true
-    },
+    modifier =
+      Modifier.clickable {
+        expanded = true
+      },
     supportingContent = {
       Column {
         Text(viewState.description)

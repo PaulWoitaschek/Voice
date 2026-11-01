@@ -72,6 +72,8 @@ import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerEdit
 import voice.core.data.BookId
+import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
@@ -79,8 +81,6 @@ import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.views.CoverShape
-import voice.core.strings.R as StringsR
-import voice.core.ui.R as UiR
 
 @Composable
 internal fun EditBookSheet(
@@ -92,10 +92,11 @@ internal fun EditBookSheet(
   onConfirm: () -> Unit,
   onDismiss: () -> Unit,
 ) {
-  val sheetState = rememberBottomSheetState(
-    initialValue = Hidden,
-    enabledValues = setOf(Hidden, Expanded),
-  )
+  val sheetState =
+    rememberBottomSheetState(
+      initialValue = Hidden,
+      enabledValues = setOf(Hidden, Expanded),
+    )
   val scope = rememberCoroutineScope()
   // the first choice wins, so taps while the sheet slides away can't change or undo it
   var closing by remember { mutableStateOf(false) }
@@ -120,10 +121,11 @@ internal fun EditBookSheet(
     sheetState = sheetState,
     // a save on the server can't be called back, so the sheet waits for its answer
     sheetGesturesEnabled = !viewState.saving,
-    properties = ModalBottomSheetProperties(
-      shouldDismissOnBackPress = !viewState.saving,
-      shouldDismissOnClickOutside = !viewState.saving,
-    ),
+    properties =
+      ModalBottomSheetProperties(
+        shouldDismissOnBackPress = !viewState.saving,
+        shouldDismissOnClickOutside = !viewState.saving,
+      ),
   ) {
     EditBookContent(
       viewState = viewState,
@@ -158,7 +160,9 @@ private fun EditBookContent(
 ) {
   // the whole title starts selected, so typing replaces it
   var title by remember {
-    mutableStateOf(TextFieldValue(viewState.title, selection = TextRange(0, viewState.title.length)))
+    mutableStateOf(
+      TextFieldValue(viewState.title, selection = TextRange(0, viewState.title.length)),
+    )
   }
   var author by remember {
     mutableStateOf(TextFieldValue(viewState.author, selection = TextRange(viewState.author.length)))
@@ -169,29 +173,28 @@ private fun EditBookContent(
   var part by remember {
     mutableStateOf(TextFieldValue(viewState.part, selection = TextRange(viewState.part.length)))
   }
-  val onDone = KeyboardActions(
-    onDone = {
-      if (viewState.confirmButtonEnabled) onSave()
-    },
-  )
+  val onDone =
+    KeyboardActions(
+      onDone = {
+        if (viewState.confirmButtonEnabled) onSave()
+      },
+    )
   val focusRequester = remember { FocusRequester() }
   LaunchedEffect(Unit) {
     focusRequester.requestFocus()
   }
   Column(
-    modifier = Modifier
-      .fillMaxWidth()
-      // in landscape, the keyboard leaves room for one field at a time
-      .verticalScroll(rememberScrollState())
-      .navigationBarsPadding()
-      .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
+    modifier =
+      Modifier.fillMaxWidth()
+        // in landscape, the keyboard leaves room for one field at a time
+        .verticalScroll(rememberScrollState())
+        .navigationBarsPadding()
+        .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
   ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
       Box {
         AsyncImage(
-          modifier = Modifier
-            .size(64.dp)
-            .clip(CoverShape),
+          modifier = Modifier.size(64.dp).clip(CoverShape),
           model = rememberCoverThumbnailRequest(viewState.cover),
           placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceContainerHighest),
           error = painterResource(id = UiR.drawable.album_art),
@@ -204,9 +207,7 @@ private fun EditBookContent(
           containerColor = MaterialTheme.colorScheme.secondary,
           contentColor = MaterialTheme.colorScheme.onSecondary,
           size = 32.dp,
-          modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .offset(x = 10.dp, y = 10.dp),
+          modifier = Modifier.align(Alignment.BottomEnd).offset(x = 10.dp, y = 10.dp),
         )
       }
       Spacer(Modifier.width(24.dp))
@@ -222,17 +223,16 @@ private fun EditBookContent(
         title = it
         onTitleChange(it.text)
       },
-      modifier = Modifier
-        .fillMaxWidth()
-        .focusRequester(focusRequester),
+      modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
       label = { Text(stringResource(StringsR.string.book_edit_title_label)) },
       singleLine = true,
       readOnly = readOnly,
       shape = RoundedCornerShape(16.dp),
-      keyboardOptions = KeyboardOptions(
-        capitalization = KeyboardCapitalization.Sentences,
-        imeAction = ImeAction.Next,
-      ),
+      keyboardOptions =
+        KeyboardOptions(
+          capitalization = KeyboardCapitalization.Sentences,
+          imeAction = ImeAction.Next,
+        ),
     )
     Spacer(Modifier.height(16.dp))
     OutlinedTextField(
@@ -246,44 +246,45 @@ private fun EditBookContent(
       singleLine = true,
       readOnly = readOnly,
       shape = RoundedCornerShape(16.dp),
-      keyboardOptions = KeyboardOptions(
-        capitalization = KeyboardCapitalization.Words,
-        imeAction = ImeAction.Next,
-      ),
+      keyboardOptions =
+        KeyboardOptions(
+          capitalization = KeyboardCapitalization.Words,
+          imeAction = ImeAction.Next,
+        ),
     )
     val partFocusRequester = remember { FocusRequester() }
     var seriesFocused by remember { mutableStateOf(false) }
     // grows with the text, so its label stays on one line at large font sizes
-    val partField = @Composable {
-      OutlinedTextField(
-        value = part,
-        onValueChange = {
-          part = it
-          onPartChange(it.text)
-        },
-        modifier = Modifier
-          .width(96.dp * LocalDensity.current.fontScale)
-          .focusRequester(partFocusRequester),
-        label = { Text(stringResource(StringsR.string.book_edit_part_label)) },
-        singleLine = true,
-        readOnly = readOnly,
-        shape = RoundedCornerShape(16.dp),
-        keyboardOptions = KeyboardOptions(
-          keyboardType = KeyboardType.Decimal,
-          imeAction = ImeAction.Done,
-        ),
-        keyboardActions = onDone,
-      )
-    }
+    val partField =
+      @Composable {
+        OutlinedTextField(
+          value = part,
+          onValueChange = {
+            part = it
+            onPartChange(it.text)
+          },
+          modifier =
+            Modifier.width(96.dp * LocalDensity.current.fontScale)
+              .focusRequester(partFocusRequester),
+          label = { Text(stringResource(StringsR.string.book_edit_part_label)) },
+          singleLine = true,
+          readOnly = readOnly,
+          shape = RoundedCornerShape(16.dp),
+          keyboardOptions =
+            KeyboardOptions(
+              keyboardType = KeyboardType.Decimal,
+              imeAction = ImeAction.Done,
+            ),
+          keyboardActions = onDone,
+        )
+      }
     // at large font sizes, the part goes below the series, so the series stays wide enough to read
     val partBelow = LocalDensity.current.fontScale >= 1.5F
     Spacer(Modifier.height(16.dp))
     Row {
       Column(
-        modifier = Modifier
-          .weight(1F)
-          .animateContentSize()
-          .onFocusChanged { seriesFocused = it.hasFocus },
+        modifier =
+          Modifier.weight(1F).animateContentSize().onFocusChanged { seriesFocused = it.hasFocus },
       ) {
         OutlinedTextField(
           value = series,
@@ -296,10 +297,11 @@ private fun EditBookContent(
           singleLine = true,
           readOnly = readOnly,
           shape = RoundedCornerShape(16.dp),
-          keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.Words,
-            imeAction = ImeAction.Next,
-          ),
+          keyboardOptions =
+            KeyboardOptions(
+              capitalization = KeyboardCapitalization.Words,
+              imeAction = ImeAction.Next,
+            ),
         )
         if (seriesFocused && !readOnly && viewState.suggestions.isNotEmpty()) {
           Spacer(Modifier.height(8.dp))
@@ -322,11 +324,13 @@ private fun EditBookContent(
       Spacer(Modifier.height(16.dp))
       partField()
     }
-    val error = when (viewState.serverResult) {
-      ServerEdit.NotAllowed -> StringsR.string.book_edit_server_not_allowed
-      ServerEdit.Failed -> StringsR.string.book_edit_server_failed
-      ServerEdit.Saved, null -> null
-    }
+    val error =
+      when (viewState.serverResult) {
+        ServerEdit.NotAllowed -> StringsR.string.book_edit_server_not_allowed
+        ServerEdit.Failed -> StringsR.string.book_edit_server_failed
+        ServerEdit.Saved,
+        null -> null
+      }
     if (error != null) {
       Spacer(Modifier.height(16.dp))
       Text(
@@ -349,9 +353,16 @@ private fun EditBookContent(
         shapes = ButtonDefaults.shapes(),
       ) {
         if (viewState.saving) {
-          LoadingIndicator(Modifier.size(ButtonDefaults.IconSize), color = LocalContentColor.current)
+          LoadingIndicator(
+            Modifier.size(ButtonDefaults.IconSize),
+            color = LocalContentColor.current,
+          )
         } else {
-          Icon(VoiceIcons.Check, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+          Icon(
+            VoiceIcons.Check,
+            contentDescription = null,
+            modifier = Modifier.size(ButtonDefaults.IconSize),
+          )
         }
         Spacer(Modifier.width(ButtonDefaults.IconSpacing))
         Text(stringResource(StringsR.string.common_action_save))
@@ -381,11 +392,12 @@ private fun SeriesSuggestions(
             overflow = TextOverflow.Ellipsis,
           )
           Text(
-            text = pluralStringResource(
-              StringsR.plurals.library_search_browse_book_count,
-              suggestion.bookCount,
-              suggestion.bookCount,
-            ),
+            text =
+              pluralStringResource(
+                StringsR.plurals.library_search_browse_book_count,
+                suggestion.bookCount,
+                suggestion.bookCount,
+              ),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
           )
@@ -401,14 +413,15 @@ private fun EditBookPreview() {
   VoiceTheme {
     Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       EditBookContent(
-        viewState = EditBookState(
-          title = "Interference",
-          author = "Sue Burke",
-          bookId = BookId("preview"),
-          cover = null,
-          series = "The Signal Saga",
-          part = "2",
-        ),
+        viewState =
+          EditBookState(
+            title = "Interference",
+            author = "Sue Burke",
+            bookId = BookId("preview"),
+            cover = null,
+            series = "The Signal Saga",
+            part = "2",
+          ),
         readOnly = false,
         onTitleChange = {},
         onAuthorChange = {},
@@ -427,15 +440,16 @@ private fun EditServerBookPreview() {
   VoiceTheme {
     Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       EditBookContent(
-        viewState = EditBookState(
-          title = "Interference",
-          author = "Sue Burke",
-          bookId = BookId("abs://item/preview"),
-          cover = null,
-          series = "The Signal Saga",
-          part = "2",
-          serverResult = ServerEdit.Failed,
-        ),
+        viewState =
+          EditBookState(
+            title = "Interference",
+            author = "Sue Burke",
+            bookId = BookId("abs://item/preview"),
+            cover = null,
+            series = "The Signal Saga",
+            part = "2",
+            serverResult = ServerEdit.Failed,
+          ),
         readOnly = false,
         onTitleChange = {},
         onAuthorChange = {},
@@ -454,10 +468,11 @@ private fun SeriesSuggestionsPreview() {
   VoiceTheme {
     Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       SeriesSuggestions(
-        suggestions = listOf(
-          SeriesSuggestion("The Signal Saga", bookCount = 4),
-          SeriesSuggestion("Signals from the Deep Sky Survey Expedition", bookCount = 1),
-        ),
+        suggestions =
+          listOf(
+            SeriesSuggestion("The Signal Saga", bookCount = 4),
+            SeriesSuggestion("Signals from the Deep Sky Survey Expedition", bookCount = 1),
+          ),
         onClick = {},
       )
     }

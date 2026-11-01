@@ -9,10 +9,13 @@ import kotlinx.serialization.builtins.serializer
 import voice.core.datastore.VoiceDataStoreFactory
 
 @SingleIn(AppScope::class)
-class CoverSeedColorsStore(store: DataStore<Map<String, Int>>) : DataStore<Map<String, Int>> by store {
+class CoverSeedColorsStore(store: DataStore<Map<String, Int>>) :
+  DataStore<Map<String, Int>> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.create(
       serializer = MapSerializer(String.serializer(), Int.serializer()),
       defaultValue = emptyMap(),

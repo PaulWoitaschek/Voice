@@ -36,7 +36,10 @@ class MemoryBookRepository(vararg books: Book) : BookRepository {
     update: (CustomMetadata) -> CustomMetadata,
   ) {
     books.update { books ->
-      books.map { if (it.id == id) it.copy(custom = update(it.custom).followingFiles(it.content.metadata)) else it }
+      books.map {
+        if (it.id == id) it.copy(custom = update(it.custom).followingFiles(it.content.metadata))
+        else it
+      }
     }
   }
 }

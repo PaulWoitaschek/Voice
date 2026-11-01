@@ -67,11 +67,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import voice.core.ui.icons.VoiceIcons
 import kotlin.math.PI
 import kotlin.math.sin
+import kotlinx.coroutines.delay
 import voice.core.strings.R as StringsR
+import voice.core.ui.icons.VoiceIcons
 
 /** The steps of the first start. The progress wave on top of each of them counts them. */
 enum class OnboardingStep {
@@ -158,9 +158,7 @@ fun OnboardingButton(
       NudgingArrow(Modifier.size(ButtonDefaults.iconSizeFor(height)))
     }
   }
-  val buttonModifier = modifier
-    .fillMaxWidth()
-    .heightIn(min = height)
+  val buttonModifier = modifier.fillMaxWidth().heightIn(min = height)
   val contentPadding = ButtonDefaults.contentPaddingFor(height, hasEndIcon = trailingArrow)
   if (primary) {
     Button(
@@ -188,13 +186,14 @@ private fun NudgingArrow(modifier: Modifier = Modifier) {
   val clock = rememberAnimationClock(running = true)
   val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
   Icon(
-    modifier = modifier.graphicsLayer {
-      // two quick hops, then a rest
-      val phase = (clock.value % 1.6F) / 1.6F
-      val hop = if (phase < 0.5F) sin(phase * 4 * PI.toFloat()).coerceAtLeast(0F) else 0F
-      translationX = hop * 4.dp.toPx() * if (rtl) -1 else 1
-      scaleX = if (rtl) -1F else 1F
-    },
+    modifier =
+      modifier.graphicsLayer {
+        // two quick hops, then a rest
+        val phase = (clock.value % 1.6F) / 1.6F
+        val hop = if (phase < 0.5F) sin(phase * 4 * PI.toFloat()).coerceAtLeast(0F) else 0F
+        translationX = hop * 4.dp.toPx() * if (rtl) -1 else 1
+        scaleX = if (rtl) -1F else 1F
+      },
     imageVector = VoiceIcons.ArrowForward,
     contentDescription = null,
   )
@@ -207,11 +206,14 @@ fun OnboardingTopBar(
   modifier: Modifier = Modifier,
 ) {
   Row(
-    modifier = modifier
-      .fillMaxWidth()
-      .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))
-      .height(64.dp)
-      .padding(horizontal = 4.dp),
+    modifier =
+      modifier
+        .fillMaxWidth()
+        .windowInsetsPadding(
+          WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
+        )
+        .height(64.dp)
+        .padding(horizontal = 4.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
@@ -227,17 +229,13 @@ fun OnboardingTopBar(
       }
     }
     Box(
-      modifier = Modifier
-        .weight(1F)
-        .padding(horizontal = 16.dp),
+      modifier = Modifier.weight(1F).padding(horizontal = 16.dp),
       contentAlignment = Alignment.Center,
     ) {
       if (step != null) {
         OnboardingProgress(
           step = step,
-          modifier = Modifier
-            .widthIn(max = 220.dp)
-            .fillMaxWidth(),
+          modifier = Modifier.widthIn(max = 220.dp).fillMaxWidth(),
         )
       }
     }
@@ -289,11 +287,11 @@ private fun OnboardingText(
 ) {
   Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
     Column(
-      modifier = Modifier
-        .widthIn(max = 520.dp)
-        .fillMaxWidth()
-        .padding(horizontal = 24.dp)
-        .padding(top = 8.dp, bottom = 24.dp),
+      modifier =
+        Modifier.widthIn(max = 520.dp)
+          .fillMaxWidth()
+          .padding(horizontal = 24.dp)
+          .padding(top = 8.dp, bottom = 24.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Text(
@@ -317,10 +315,7 @@ private fun OnboardingText(
       )
       Spacer(Modifier.height(32.dp))
       Column(
-        modifier = Modifier
-          .entrance(entrance, 4)
-          .widthIn(max = 400.dp)
-          .fillMaxWidth(),
+        modifier = Modifier.entrance(entrance, 4).widthIn(max = 400.dp).fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
         content = actions,
@@ -336,7 +331,8 @@ private fun PortraitLayout(
   text: @Composable () -> Unit,
 ) {
   val layoutDirection = LocalLayoutDirection.current
-  // with the keyboard open the hero gives up all its space, so the field and its action stay in view
+  // with the keyboard open the hero gives up all its space, so the field and its action stay in
+  // view
   val minHeroHeight = if (WindowInsets.isImeVisible) 0.dp else MIN_HERO_HEIGHT
   val scrollState = rememberScrollState()
   val scrollable = scrollState.maxValue > 0
@@ -344,21 +340,22 @@ private fun PortraitLayout(
     val viewportHeight = constraints.maxHeight
     Layout(
       contents = listOf(hero, text),
-      modifier = Modifier
-        // without anything to scroll, dragging shouldn't stretch the screen
-        .verticalScroll(scrollState, enabled = scrollable)
-        .padding(
-          start = contentPadding.calculateStartPadding(layoutDirection),
-          end = contentPadding.calculateEndPadding(layoutDirection),
-        ),
+      modifier =
+        Modifier
+          // without anything to scroll, dragging shouldn't stretch the screen
+          .verticalScroll(scrollState, enabled = scrollable)
+          .padding(
+            start = contentPadding.calculateStartPadding(layoutDirection),
+            end = contentPadding.calculateEndPadding(layoutDirection),
+          ),
     ) { (heroMeasurables, textMeasurables), constraints ->
       val top = contentPadding.calculateTopPadding().roundToPx()
       val bottom = contentPadding.calculateBottomPadding().roundToPx()
       val width = constraints.maxWidth
       val textPlaceables = textMeasurables.map { it.measure(Constraints.fixedWidth(width)) }
       val textHeight = textPlaceables.sumOf { it.height }
-      val heroHeight = (viewportHeight - top - bottom - textHeight)
-        .coerceAtLeast(minHeroHeight.roundToPx())
+      val heroHeight =
+        (viewportHeight - top - bottom - textHeight).coerceAtLeast(minHeroHeight.roundToPx())
       val heroPlaceables = heroMeasurables.map { it.measure(Constraints.fixed(width, heroHeight)) }
       layout(width, top + heroHeight + textHeight + bottom) {
         heroPlaceables.forEach { it.place(0, top) }
@@ -379,24 +376,17 @@ private fun LandscapeLayout(
   text: @Composable () -> Unit,
 ) {
   Row(
-    modifier = Modifier
-      .fillMaxSize()
-      .padding(contentPadding),
+    modifier = Modifier.fillMaxSize().padding(contentPadding),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Box(
-      modifier = Modifier
-        .weight(1F)
-        .fillMaxHeight(),
+      modifier = Modifier.weight(1F).fillMaxHeight(),
       contentAlignment = Alignment.Center,
     ) {
       hero()
     }
     Column(
-      modifier = Modifier
-        .weight(1F)
-        .fillMaxHeight()
-        .verticalScroll(rememberScrollState()),
+      modifier = Modifier.weight(1F).fillMaxHeight().verticalScroll(rememberScrollState()),
       verticalArrangement = Arrangement.Center,
     ) {
       text()

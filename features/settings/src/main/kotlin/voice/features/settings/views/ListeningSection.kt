@@ -76,15 +76,15 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.text.NumberFormat
+import kotlin.math.PI
+import kotlin.math.sin
+import voice.core.strings.R as StringsR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.features.settings.AUTO_REWIND_RANGE
 import voice.features.settings.SEEK_TIME_RANGE
-import java.text.NumberFormat
-import kotlin.math.PI
-import kotlin.math.sin
-import voice.core.strings.R as StringsR
 
 private val SEEK_TIME_PRESETS = listOf(10, 15, 20, 30, 60)
 private val AUTO_REWIND_PRESETS = listOf(0, 2, 5, 10, 20)
@@ -125,7 +125,9 @@ internal fun ListeningSection(
       presets = AUTO_REWIND_PRESETS,
       onSecondsChange = onAutoRewindChange,
       onStep = onAutoRewindStep,
-      illustration = { RewindIllustration(autoRewindInSeconds, maxSeconds = AUTO_REWIND_RANGE.last) },
+      illustration = {
+        RewindIllustration(autoRewindInSeconds, maxSeconds = AUTO_REWIND_RANGE.last)
+      },
     )
     Spacer(Modifier.height(20.dp))
     IslandSwitchRow(
@@ -140,7 +142,9 @@ internal fun ListeningSection(
           contentColor = MaterialTheme.colorScheme.onSecondary,
         )
       },
-      summary = { Text(stringResource(StringsR.string.settings_playback_lock_screen_slider_summary)) },
+      summary = {
+        Text(stringResource(StringsR.string.settings_playback_lock_screen_slider_summary))
+      },
     )
   }
 }
@@ -158,9 +162,7 @@ private fun SecondsSetting(
 ) {
   Column {
     Text(
-      modifier = Modifier
-        .padding(horizontal = IslandContentPadding)
-        .semantics { heading() },
+      modifier = Modifier.padding(horizontal = IslandContentPadding).semantics { heading() },
       text = title,
       style = MaterialTheme.typography.titleMedium,
     )
@@ -183,16 +185,11 @@ private fun SecondsSetting(
         onClick = { onStep(-1) },
       )
       Column(
-        modifier = Modifier
-          .weight(1F)
-          .padding(horizontal = 8.dp),
+        modifier = Modifier.weight(1F).padding(horizontal = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
       ) {
         Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp)
-            .clearAndSetSemantics {},
+          modifier = Modifier.fillMaxWidth().height(40.dp).clearAndSetSemantics {},
           contentAlignment = Alignment.Center,
         ) {
           illustration()
@@ -223,17 +220,20 @@ private fun Stepper(
   enabled: Boolean,
   onClick: () -> Unit,
 ) {
-  val action = stringResource(
-    if (increase) StringsR.string.sleep_timer_dialog_action_increment else StringsR.string.sleep_timer_dialog_action_decrement,
-  )
+  val action =
+    stringResource(
+      if (increase) StringsR.string.sleep_timer_dialog_action_increment
+      else StringsR.string.sleep_timer_dialog_action_decrement,
+    )
   FilledIconButton(
     onClick = onClick,
     shapes = IconButtonDefaults.shapes(),
     enabled = enabled,
-    colors = IconButtonDefaults.filledIconButtonColors(
-      containerColor = MaterialTheme.colorScheme.secondary,
-      contentColor = MaterialTheme.colorScheme.onSecondary,
-    ),
+    colors =
+      IconButtonDefaults.filledIconButtonColors(
+        containerColor = MaterialTheme.colorScheme.secondary,
+        contentColor = MaterialTheme.colorScheme.onSecondary,
+      ),
   ) {
     Icon(
       imageVector = if (increase) VoiceIcons.Add else VoiceIcons.Remove,
@@ -257,10 +257,11 @@ private fun SecondsValue(seconds: Int) {
   val text = secondsText(seconds)
   AnimatedContent(
     // while rolling, both the old and the new value are shown, but only the new one is announced
-    modifier = Modifier.clearAndSetSemantics {
-      contentDescription = text
-      liveRegion = LiveRegionMode.Polite
-    },
+    modifier =
+      Modifier.clearAndSetSemantics {
+        contentDescription = text
+        liveRegion = LiveRegionMode.Polite
+      },
     targetState = seconds,
     transitionSpec = {
       val up = targetState > initialState
@@ -274,10 +275,11 @@ private fun SecondsValue(seconds: Int) {
       text = secondsText(value),
       style = MaterialTheme.typography.titleLargeEmphasized,
       maxLines = 1,
-      autoSize = TextAutoSize.StepBased(
-        minFontSize = 12.sp,
-        maxFontSize = MaterialTheme.typography.titleLargeEmphasized.fontSize,
-      ),
+      autoSize =
+        TextAutoSize.StepBased(
+          minFontSize = 12.sp,
+          maxFontSize = MaterialTheme.typography.titleLargeEmphasized.fontSize,
+        ),
     )
   }
 }
@@ -290,10 +292,7 @@ private fun SecondsPresets(
 ) {
   val numberFormat = remember { NumberFormat.getIntegerInstance() }
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(horizontal = IslandContentPadding)
-      .selectableGroup(),
+    modifier = Modifier.fillMaxWidth().padding(horizontal = IslandContentPadding).selectableGroup(),
     horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
   ) {
     presets.forEachIndexed { index, preset ->
@@ -304,23 +303,24 @@ private fun SecondsPresets(
       ToggleButton(
         checked = seconds == preset,
         onCheckedChange = { onSecondsChange(preset) },
-        modifier = Modifier
-          .weight(1F)
-          .semantics {
+        modifier =
+          Modifier.weight(1F).semantics {
             role = Role.RadioButton
             contentDescription = description
           },
-        shapes = when (index) {
-          0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-          presets.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
-          else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-        },
-        colors = ToggleButtonDefaults.colors(
-          containerColor = MaterialTheme.colorScheme.surfaceBright,
-          contentColor = MaterialTheme.colorScheme.onSurface,
-          checkedContainerColor = MaterialTheme.colorScheme.secondary,
-          checkedContentColor = MaterialTheme.colorScheme.onSecondary,
-        ),
+        shapes =
+          when (index) {
+            0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+            presets.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+            else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+          },
+        colors =
+          ToggleButtonDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceBright,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            checkedContainerColor = MaterialTheme.colorScheme.secondary,
+            checkedContentColor = MaterialTheme.colorScheme.onSecondary,
+          ),
         contentPadding = PaddingValues(horizontal = 4.dp),
       ) {
         Text(
@@ -361,11 +361,16 @@ private fun SkipIllustration(seconds: Int) {
     horizontalArrangement = Arrangement.spacedBy(6.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    MiniSkipButton(forward = false, nudge = { nudge.value }, bursts = bursts, onBurstFinish = { bursts = bursts - it })
+    MiniSkipButton(
+      forward = false,
+      nudge = { nudge.value },
+      bursts = bursts,
+      onBurstFinish = { bursts = bursts - it },
+    )
     Box(
-      modifier = Modifier
-        .size(36.dp)
-        .background(MaterialTheme.colorScheme.primary, MaterialShapes.Cookie9Sided.toShape()),
+      modifier =
+        Modifier.size(36.dp)
+          .background(MaterialTheme.colorScheme.primary, MaterialShapes.Cookie9Sided.toShape()),
       contentAlignment = Alignment.Center,
     ) {
       Icon(
@@ -375,7 +380,12 @@ private fun SkipIllustration(seconds: Int) {
         tint = MaterialTheme.colorScheme.onPrimary,
       )
     }
-    MiniSkipButton(forward = true, nudge = { nudge.value }, bursts = bursts, onBurstFinish = { bursts = bursts - it })
+    MiniSkipButton(
+      forward = true,
+      nudge = { nudge.value },
+      bursts = bursts,
+      onBurstFinish = { bursts = bursts - it },
+    )
   }
 }
 
@@ -388,15 +398,14 @@ private fun MiniSkipButton(
 ) {
   Box(contentAlignment = Alignment.Center) {
     Box(
-      modifier = Modifier
-        .size(width = 48.dp, height = 32.dp)
-        .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(16.dp)),
+      modifier =
+        Modifier.size(width = 48.dp, height = 32.dp)
+          .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(16.dp)),
       contentAlignment = Alignment.Center,
     ) {
       Icon(
-        modifier = Modifier
-          .size(20.dp)
-          .graphicsLayer {
+        modifier =
+          Modifier.size(20.dp).graphicsLayer {
             rotationZ = nudge() * if (forward) 40F else -40F
             scaleX = if (forward) -1F else 1F
           },
@@ -428,13 +437,14 @@ private fun FloatingAmount(
     currentOnFinish()
   }
   Text(
-    modifier = Modifier.graphicsLayer {
-      val p = progress.value
-      translationY = -p * 40.dp.toPx()
-      alpha = 1F - p
-      scaleX = 0.8F + 0.5F * p
-      scaleY = 0.8F + 0.5F * p
-    },
+    modifier =
+      Modifier.graphicsLayer {
+        val p = progress.value
+        translationY = -p * 40.dp.toPx()
+        alpha = 1F - p
+        scaleX = 0.8F + 0.5F * p
+        scaleY = 0.8F + 0.5F * p
+      },
     text = text,
     style = MaterialTheme.typography.titleSmallEmphasized,
     color = MaterialTheme.colorScheme.primary,
@@ -457,69 +467,69 @@ private fun RewindIllustration(
   }
   val colors = MaterialTheme.colorScheme
   val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-  // the wave moves with every frame, so everything that doesn't is only created when the size changes
+  // the wave moves with every frame, so everything that doesn't is only created when the size
+  // changes
   Spacer(
-    Modifier
-      .fillMaxSize()
-      .drawWithCache {
-        val wave = Path()
-        val arc = Path()
-        val lineY = size.height * 0.72F
-        val strokeWidth = 4.dp.toPx()
-        val pauseX = size.width * 0.82F
-        val amplitude = 2.5.dp.toPx()
-        val wavelength = 16.dp.toPx()
-        val waveStroke = Stroke(width = strokeWidth, cap = StrokeCap.Round)
-        val pauseStroke = Stroke(width = 2.dp.toPx())
-        val arcStroke = Stroke(
+    Modifier.fillMaxSize().drawWithCache {
+      val wave = Path()
+      val arc = Path()
+      val lineY = size.height * 0.72F
+      val strokeWidth = 4.dp.toPx()
+      val pauseX = size.width * 0.82F
+      val amplitude = 2.5.dp.toPx()
+      val wavelength = 16.dp.toPx()
+      val waveStroke = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+      val pauseStroke = Stroke(width = 2.dp.toPx())
+      val arcStroke =
+        Stroke(
           width = 2.dp.toPx(),
           cap = StrokeCap.Round,
           pathEffect = PathEffect.dashPathEffect(floatArrayOf(4.dp.toPx(), 4.dp.toPx())),
         )
-        onDrawBehind {
-          val playheadX = pauseX - rewind.value * size.width * 0.6F
-          scale(scaleX = if (rtl) -1F else 1F, scaleY = 1F) {
-            drawLine(
-              color = colors.secondary.copy(alpha = 0.25F),
-              start = Offset(strokeWidth, lineY),
-              end = Offset(size.width - strokeWidth, lineY),
-              strokeWidth = strokeWidth,
-              cap = StrokeCap.Round,
-            )
-            wave.reset()
-            val phase = clock.value * 2 * PI.toFloat() * 0.6F
-            var x = strokeWidth
-            wave.moveTo(x, lineY)
-            while (x < playheadX) {
-              x = (x + 2F).coerceAtMost(playheadX)
-              wave.lineTo(x, lineY + amplitude * sin(x / wavelength * 2 * PI.toFloat() + phase))
-            }
-            drawPath(wave, color = colors.secondary, style = waveStroke)
-            drawCircle(
-              color = colors.onSecondaryContainer.copy(alpha = 0.45F),
-              radius = 5.dp.toPx(),
-              center = Offset(pauseX, lineY),
-              style = pauseStroke,
-            )
-            val distance = pauseX - playheadX
-            if (distance > 6.dp.toPx()) {
-              arc.reset()
-              arc.moveTo(pauseX, lineY - 8.dp.toPx())
-              arc.quadraticTo(
-                (pauseX + playheadX) / 2,
-                lineY - 8.dp.toPx() - (distance * 0.35F).coerceAtMost(size.height * 0.6F),
-                playheadX + 3.dp.toPx(),
-                lineY - 10.dp.toPx(),
-              )
-              drawPath(path = arc, color = colors.tertiary, style = arcStroke)
-            }
-            drawCircle(
-              color = colors.primary,
-              radius = 7.dp.toPx(),
-              center = Offset(playheadX, lineY),
-            )
+      onDrawBehind {
+        val playheadX = pauseX - rewind.value * size.width * 0.6F
+        scale(scaleX = if (rtl) -1F else 1F, scaleY = 1F) {
+          drawLine(
+            color = colors.secondary.copy(alpha = 0.25F),
+            start = Offset(strokeWidth, lineY),
+            end = Offset(size.width - strokeWidth, lineY),
+            strokeWidth = strokeWidth,
+            cap = StrokeCap.Round,
+          )
+          wave.reset()
+          val phase = clock.value * 2 * PI.toFloat() * 0.6F
+          var x = strokeWidth
+          wave.moveTo(x, lineY)
+          while (x < playheadX) {
+            x = (x + 2F).coerceAtMost(playheadX)
+            wave.lineTo(x, lineY + amplitude * sin(x / wavelength * 2 * PI.toFloat() + phase))
           }
+          drawPath(wave, color = colors.secondary, style = waveStroke)
+          drawCircle(
+            color = colors.onSecondaryContainer.copy(alpha = 0.45F),
+            radius = 5.dp.toPx(),
+            center = Offset(pauseX, lineY),
+            style = pauseStroke,
+          )
+          val distance = pauseX - playheadX
+          if (distance > 6.dp.toPx()) {
+            arc.reset()
+            arc.moveTo(pauseX, lineY - 8.dp.toPx())
+            arc.quadraticTo(
+              (pauseX + playheadX) / 2,
+              lineY - 8.dp.toPx() - (distance * 0.35F).coerceAtMost(size.height * 0.6F),
+              playheadX + 3.dp.toPx(),
+              lineY - 10.dp.toPx(),
+            )
+            drawPath(path = arc, color = colors.tertiary, style = arcStroke)
+          }
+          drawCircle(
+            color = colors.primary,
+            radius = 7.dp.toPx(),
+            center = Offset(playheadX, lineY),
+          )
         }
-      },
+      }
+    },
   )
 }

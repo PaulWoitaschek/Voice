@@ -21,8 +21,7 @@ public class DeviceHasStoragePermissionBug(private val context: Context) {
     field = MutableStateFlow(false)
 
   internal suspend fun checkForBugAndSet(probeFile: CachedDocumentFile): Boolean {
-    return deviceHasPermissionBug(probeFile)
-      .also { hasBug.emit(it) }
+    return deviceHasPermissionBug(probeFile).also { hasBug.emit(it) }
   }
 
   private suspend fun deviceHasPermissionBug(probeFile: CachedDocumentFile): Boolean {

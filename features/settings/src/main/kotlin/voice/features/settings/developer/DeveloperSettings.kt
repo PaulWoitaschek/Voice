@@ -33,11 +33,11 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.launch
 import voice.core.common.rootGraphAs
+import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
 import voice.core.ui.icons.VoiceIcons
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import voice.core.strings.R as StringsR
 
 @Composable
 private fun DeveloperSettings(
@@ -66,20 +66,22 @@ private fun DeveloperSettings(
   ) { contentPadding ->
     val layoutDirection = LocalLayoutDirection.current
     CenteredContent(
-      modifier = Modifier.padding(
-        start = contentPadding.calculateStartPadding(layoutDirection),
-        end = contentPadding.calculateEndPadding(layoutDirection),
-      ),
+      modifier =
+        Modifier.padding(
+          start = contentPadding.calculateStartPadding(layoutDirection),
+          end = contentPadding.calculateEndPadding(layoutDirection),
+        ),
     ) { horizontalPadding ->
       // the rows bring their own 16dp
       val listPadding = horizontalPadding - 16.dp
       LazyColumn(
-        contentPadding = PaddingValues(
-          start = listPadding,
-          top = contentPadding.calculateTopPadding(),
-          end = listPadding,
-          bottom = contentPadding.calculateBottomPadding(),
-        ),
+        contentPadding =
+          PaddingValues(
+            start = listPadding,
+            top = contentPadding.calculateTopPadding(),
+            end = listPadding,
+            bottom = contentPadding.calculateBottomPadding(),
+          ),
       ) {
         item {
           ListItem(
@@ -186,16 +188,20 @@ object DeveloperSettingsProvider {
 
   @Provides
   @IntoSet
-  fun navEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.DeveloperSettings> { key ->
-    NavEntry(key) {
-      DeveloperSettings()
+  fun navEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.DeveloperSettings> { key ->
+      NavEntry(key) {
+        DeveloperSettings()
+      }
     }
-  }
 }
 
 @Composable
 fun DeveloperSettings() {
-  val viewModel = retain<DeveloperSettingsViewModel> { rootGraphAs<DeveloperSettingsGraph>().developerSettingsViewModel }
+  val viewModel =
+    retain<DeveloperSettingsViewModel> {
+      rootGraphAs<DeveloperSettingsGraph>().developerSettingsViewModel
+    }
   val viewState = viewModel.viewState()
   DeveloperSettings(viewState, viewModel)
 }

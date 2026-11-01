@@ -17,9 +17,10 @@ internal fun BooleanFeatureFlagRow(
   setOverride: (Boolean) -> Unit,
 ) {
   ListItem(
-    modifier = Modifier.clickable {
-      setOverride(!viewState.value)
-    },
+    modifier =
+      Modifier.clickable {
+        setOverride(!viewState.value)
+      },
     supportingContent = {
       Column {
         Text(viewState.description)

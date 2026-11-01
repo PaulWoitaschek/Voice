@@ -3,11 +3,11 @@ package voice.core.scanner.matroska
 import android.content.Context
 import android.net.Uri
 import dev.zacsweers.metro.Inject
+import java.io.File
 import org.ebml.EBMLReader
 import org.ebml.Element
 import org.ebml.matroska.MatroskaDocTypes
 import voice.core.logging.api.Logger
-import java.io.File
 
 @Inject
 internal class MatroskaCoverExtractor(private val context: Context) {
@@ -98,14 +98,21 @@ internal class MatroskaCoverExtractor(private val context: Context) {
     }
 
     return if (data != null && isImageMimeType(mimeType)) {
-      AttachmentInfo(filename = filename, mimeType = mimeType, description = description, data = data)
+      AttachmentInfo(
+        filename = filename,
+        mimeType = mimeType,
+        description = description,
+        data = data,
+      )
     } else {
       null
     }
   }
 
   private fun findBestCover(attachments: List<AttachmentInfo>): AttachmentInfo? {
-    return attachments.maxByOrNull { calculatePriority(filename = it.filename, description = it.description) }
+    return attachments.maxByOrNull {
+      calculatePriority(filename = it.filename, description = it.description)
+    }
   }
 
   private fun isImageMimeType(mimeType: String?): Boolean {

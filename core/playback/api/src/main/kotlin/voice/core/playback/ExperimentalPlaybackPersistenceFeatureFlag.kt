@@ -10,10 +10,13 @@ import voice.core.featureflag.FeatureFlagFactory
 
 @SingleIn(AppScope::class)
 @ContributesIntoSet(AppScope::class, binding = binding<FeatureFlag<*>>())
-class ExperimentalPlaybackPersistenceFeatureFlag(flag: FeatureFlag<Boolean>) : FeatureFlag<Boolean> by flag {
+class ExperimentalPlaybackPersistenceFeatureFlag(flag: FeatureFlag<Boolean>) :
+  FeatureFlag<Boolean> by flag {
 
   @Inject
-  constructor(factory: FeatureFlagFactory) : this(
+  constructor(
+    factory: FeatureFlagFactory,
+  ) : this(
     factory.boolean(
       key = "experimental_playback_persistence",
       description = "Uses the experimental playback persistence implementation.",

@@ -10,14 +10,14 @@ import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.After
 import org.junit.Before
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.getInt
 import voice.core.data.repo.internals.mapRows
 import voice.core.data.repo.internals.migrations.Migration40to41
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class Migration40to41Test {
@@ -27,23 +27,22 @@ class Migration40to41Test {
 
   @Before
   fun setUp() {
-    val config = SupportSQLiteOpenHelper.Configuration
-      .builder(getApplicationContext())
-      .callback(
-        object : SupportSQLiteOpenHelper.Callback(39) {
-          override fun onCreate(db: SupportSQLiteDatabase) {
-            db.execSQL(BookTable.CREATE_TABLE)
-          }
+    val config =
+      SupportSQLiteOpenHelper.Configuration.builder(getApplicationContext())
+        .callback(
+          object : SupportSQLiteOpenHelper.Callback(39) {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+              db.execSQL(BookTable.CREATE_TABLE)
+            }
 
-          override fun onUpgrade(
-            db: SupportSQLiteDatabase,
-            oldVersion: Int,
-            newVersion: Int,
-          ) {
-          }
-        },
-      )
-      .build()
+            override fun onUpgrade(
+              db: SupportSQLiteDatabase,
+              oldVersion: Int,
+              newVersion: Int,
+            ) {}
+          },
+        )
+        .build()
     helper = FrameworkSQLiteOpenHelperFactory().create(config)
     db = helper.writableDatabase
   }
@@ -62,9 +61,10 @@ class Migration40to41Test {
 
     Migration40to41().migrate(db)
 
-    val loudnessGainCv = ContentValues().apply {
-      put("loudnessGain", 100)
-    }
+    val loudnessGainCv =
+      ContentValues().apply {
+        put("loudnessGain", 100)
+      }
     db.update(
       BookTable.TABLE_NAME,
       SQLiteDatabase.CONFLICT_FAIL,
@@ -73,25 +73,27 @@ class Migration40to41Test {
       arrayOf(id),
     )
 
-    val query = SupportSQLiteQueryBuilder.builder(BookTable.TABLE_NAME)
-      .columns(arrayOf("loudnessGain"))
-      .create()
-    val loudnessGains = db.query(query)
-      .mapRows {
+    val query =
+      SupportSQLiteQueryBuilder.builder(BookTable.TABLE_NAME)
+        .columns(arrayOf("loudnessGain"))
+        .create()
+    val loudnessGains =
+      db.query(query).mapRows {
         getInt("loudnessGain")
       }
     assertEquals(expected = listOf(100), actual = loudnessGains)
   }
 
   @SuppressLint("SdCardPath")
-  private fun bookContentValues() = ContentValues().apply {
-    put(BookTable.NAME, "firstBookName")
-    put(BookTable.CURRENT_MEDIA_PATH, "/sdcard/file1.mp3")
-    put(BookTable.PLAYBACK_SPEED, 1F)
-    put(BookTable.ROOT, "/sdcard")
-    put(BookTable.TIME, 500)
-    put(BookTable.TYPE, "COLLECTION_FOLDER")
-  }
+  private fun bookContentValues() =
+    ContentValues().apply {
+      put(BookTable.NAME, "firstBookName")
+      put(BookTable.CURRENT_MEDIA_PATH, "/sdcard/file1.mp3")
+      put(BookTable.PLAYBACK_SPEED, 1F)
+      put(BookTable.ROOT, "/sdcard")
+      put(BookTable.TIME, 500)
+      put(BookTable.TYPE, "COLLECTION_FOLDER")
+    }
 
   @After
   fun tearDown() {
@@ -109,7 +111,8 @@ class Migration40to41Test {
     const val TYPE = "bookType"
     const val ACTIVE = "BOOK_ACTIVE"
     const val TABLE_NAME = "tableBooks"
-    const val CREATE_TABLE = """
+    const val CREATE_TABLE =
+      """
       CREATE TABLE $TABLE_NAME (
         $ID INTEGER PRIMARY KEY AUTOINCREMENT,
         $NAME TEXT NOT NULL,

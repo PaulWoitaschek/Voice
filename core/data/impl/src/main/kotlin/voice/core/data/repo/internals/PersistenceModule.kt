@@ -20,14 +20,11 @@ import voice.core.data.repo.internals.dao.RecentBookSearchDao
 @ContributesTo(AppScope::class)
 public object PersistenceModule {
 
-  @Provides
-  private fun chapterDao(appDb: AppDb): ChapterDao = appDb.chapterDao()
+  @Provides private fun chapterDao(appDb: AppDb): ChapterDao = appDb.chapterDao()
 
-  @Provides
-  private fun bookContentDao(appDb: AppDb): BookContentDao = appDb.bookContentDao()
+  @Provides private fun bookContentDao(appDb: AppDb): BookContentDao = appDb.bookContentDao()
 
-  @Provides
-  private fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
+  @Provides private fun bookmarkDao(appDb: AppDb): BookmarkDao = appDb.bookmarkDao()
 
   @Provides
   private fun customMetadataDao(appDb: AppDb): CustomMetadataDao = appDb.customMetadataDao()

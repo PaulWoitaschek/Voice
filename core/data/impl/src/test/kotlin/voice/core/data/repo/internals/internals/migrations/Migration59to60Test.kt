@@ -5,24 +5,25 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.testing.MigrationTestHelper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.allMigrations
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.mapRows
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class Migration59to60Test {
 
   @Rule
   @JvmField
-  val helper = MigrationTestHelper(
-    InstrumentationRegistry.getInstrumentation(),
-    AppDb::class.java,
-  )
+  val helper =
+    MigrationTestHelper(
+      InstrumentationRegistry.getInstrumentation(),
+      AppDb::class.java,
+    )
 
   @Test
   fun `existing bookmarks become notes and the history starts empty`() {

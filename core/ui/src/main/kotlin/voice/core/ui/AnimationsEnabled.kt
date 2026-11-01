@@ -5,8 +5,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.MotionDurationScale
 
 /**
- * False when animations are turned off in the system settings. Then animations jump to their end on the next frame,
- * so motion that only plays out and goes away, like a burst, would flash for that frame. Leave it out instead.
+ * False when animations are turned off in the system settings. Then animations jump to their end on
+ * the next frame, so motion that only plays out and goes away, like a burst, would flash for that
+ * frame. Leave it out instead.
  */
 @Composable
 fun animationsEnabled(): Boolean {

@@ -18,7 +18,8 @@ private const val NAME = "chapterName"
 private const val PATH = "chapterPath"
 private const val BOOK_ID = "bookId"
 private const val LAST_MODIFIED = "lastModified"
-private const val CREATE_TABLE = """
+private const val CREATE_TABLE =
+  """
       CREATE TABLE $TABLE_NAME (
         $DURATION INTEGER NOT NULL,
         $NAME TEXT NOT NULL,
@@ -36,21 +37,23 @@ private const val CREATE_TABLE = """
 public class Migration36to37 : IncrementalMigration(36) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    val data = db.query("SELECT * FROM $TABLE_NAME").mapRows {
-      Holder(getLong(DURATION), getString(NAME), getString(PATH), getLong(BOOK_ID))
-    }
+    val data =
+      db.query("SELECT * FROM $TABLE_NAME").mapRows {
+        Holder(getLong(DURATION), getString(NAME), getString(PATH), getLong(BOOK_ID))
+      }
 
     db.transaction {
       db.execSQL("DROP TABLE $TABLE_NAME")
       db.execSQL(CREATE_TABLE)
       data.forEach {
-        val cv = ContentValues().apply {
-          put(DURATION, it.duration)
-          put(NAME, it.name)
-          put(BOOK_ID, it.bookId)
-          put(PATH, it.path)
-          put(LAST_MODIFIED, 0L)
-        }
+        val cv =
+          ContentValues().apply {
+            put(DURATION, it.duration)
+            put(NAME, it.name)
+            put(BOOK_ID, it.bookId)
+            put(PATH, it.path)
+            put(LAST_MODIFIED, 0L)
+          }
         db.insert(TABLE_NAME, SQLiteDatabase.CONFLICT_FAIL, cv)
       }
     }

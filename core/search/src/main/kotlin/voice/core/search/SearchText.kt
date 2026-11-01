@@ -4,8 +4,9 @@ import java.text.Normalizer
 import java.util.Locale
 
 /**
- * A text split into lowercase words without diacritics, so "Café" and "cafe" become the same word. Words are
- * separated by anything that isn't a letter, a digit or a mark, and remember where they came from in the original.
+ * A text split into lowercase words without diacritics, so "Café" and "cafe" become the same word.
+ * Words are separated by anything that isn't a letter, a digit or a mark, and remember where they
+ * came from in the original.
  */
 internal class SearchText(original: String) {
 
@@ -15,9 +16,7 @@ internal class SearchText(original: String) {
     private val originalEnds: IntArray,
   ) {
 
-    /**
-     * The range in the original text that the first [length] characters of this word came from.
-     */
+    /** The range in the original text that the first [length] characters of this word came from. */
     fun originalRange(length: Int): IntRange = originalStarts.first()..originalEnds[length - 1]
   }
 
@@ -42,7 +41,10 @@ internal class SearchText(original: String) {
       val codePoint = original.codePointAt(index)
       val charCount = Character.charCount(codePoint)
       val lowercase = String(Character.toChars(codePoint)).lowercase(Locale.ROOT)
-      val normalized = Normalizer.normalize(lowercase, Normalizer.Form.NFD).filterNot { it in COMBINING_DIACRITICS }
+      val normalized =
+        Normalizer.normalize(lowercase, Normalizer.Form.NFD).filterNot {
+          it in COMBINING_DIACRITICS
+        }
       normalized.codePoints().forEach { normalizedCodePoint ->
         if (normalizedCodePoint.isWordCharacter()) {
           repeat(Character.charCount(normalizedCodePoint)) {
@@ -63,19 +65,22 @@ internal class SearchText(original: String) {
   private companion object {
     val COMBINING_DIACRITICS = '̀'..'ͯ'
 
-    val WORD_CHARACTER_TYPES = setOf(
-      Character.UPPERCASE_LETTER,
-      Character.LOWERCASE_LETTER,
-      Character.TITLECASE_LETTER,
-      Character.MODIFIER_LETTER,
-      Character.OTHER_LETTER,
-      Character.DECIMAL_DIGIT_NUMBER,
-      Character.LETTER_NUMBER,
-      Character.OTHER_NUMBER,
-      Character.NON_SPACING_MARK,
-      Character.COMBINING_SPACING_MARK,
-      Character.ENCLOSING_MARK,
-    ).map { it.toInt() }.toSet()
+    val WORD_CHARACTER_TYPES =
+      setOf(
+          Character.UPPERCASE_LETTER,
+          Character.LOWERCASE_LETTER,
+          Character.TITLECASE_LETTER,
+          Character.MODIFIER_LETTER,
+          Character.OTHER_LETTER,
+          Character.DECIMAL_DIGIT_NUMBER,
+          Character.LETTER_NUMBER,
+          Character.OTHER_NUMBER,
+          Character.NON_SPACING_MARK,
+          Character.COMBINING_SPACING_MARK,
+          Character.ENCLOSING_MARK,
+        )
+        .map { it.toInt() }
+        .toSet()
 
     fun Int.isWordCharacter(): Boolean = Character.getType(this) in WORD_CHARACTER_TYPES
   }

@@ -8,6 +8,8 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.source.TrackGroupArray
 import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.microseconds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -18,8 +20,6 @@ import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
 import voice.core.scanner.matroska.MatroskaParseException
 import voice.core.scanner.mp4.Mp4ChapterExtractor
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.microseconds
 
 @Inject
 internal class MediaAnalyzer(
@@ -30,9 +30,9 @@ internal class MediaAnalyzer(
 
   suspend fun analyze(file: CachedDocumentFile): Metadata? {
     val builder = Metadata.Builder(file.nameWithoutExtension())
-    val (duration, trackGroups) = retrieveDurationAndTrackGroups(file.uri)
-      ?: return null
-    val extension = (file.name ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
+    val (duration, trackGroups) = retrieveDurationAndTrackGroups(file.uri) ?: return null
+    val extension =
+      (file.name ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
     if (duration <= Duration.ZERO) {
       Logger.w("Duration is zero or negative for a .$extension file")
       return null
@@ -53,7 +53,9 @@ internal class MediaAnalyzer(
     }
 
     val fileType = FileTypes.inferFileTypeFromUri(file.uri)
-    if (fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b") {
+    if (
+      fileType == FileTypes.MP4 || extension == "mp4" || extension == "m4a" || extension == "m4b"
+    ) {
       parseMp4Chapters(file, builder)
     }
     if (fileType == FileTypes.MATROSKA || extension == "mka" || extension == "mkv") {
@@ -94,11 +96,9 @@ internal class MediaAnalyzer(
   // A single retriever prepares the file once for both the duration and the track groups.
   private suspend fun retrieveDurationAndTrackGroups(uri: Uri): Pair<Duration, TrackGroupArray>? {
     return try {
-      MetadataRetriever.Builder(context, MediaItem.fromUri(uri))
-        .build()
-        .use {
-          it.retrieveDurationUs().await().microseconds to it.retrieveTrackGroups().await()
-        }
+      MetadataRetriever.Builder(context, MediaItem.fromUri(uri)).build().use {
+        it.retrieveDurationUs().await().microseconds to it.retrieveTrackGroups().await()
+      }
     } catch (e: Exception) {
       if (e is CancellationException) currentCoroutineContext().ensureActive()
       Logger.w(e, "Error retrieving metadata")

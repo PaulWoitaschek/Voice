@@ -28,7 +28,10 @@ class ServerAddressTest {
 
   @Test
   fun `a typed scheme is kept`() {
-    assertEquals(listOf("http://audiobooks.example.com/"), serverUrlCandidates("http://audiobooks.example.com"))
+    assertEquals(
+      listOf("http://audiobooks.example.com/"),
+      serverUrlCandidates("http://audiobooks.example.com"),
+    )
   }
 
   @Test

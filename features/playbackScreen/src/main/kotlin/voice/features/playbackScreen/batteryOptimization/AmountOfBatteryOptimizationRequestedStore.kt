@@ -10,7 +10,9 @@ import voice.core.datastore.VoiceDataStoreFactory
 class AmountOfBatteryOptimizationRequestedStore(store: DataStore<Int>) : DataStore<Int> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.int("amountOfBatteryOptimizationsRequestedStore", 0),
   )
 }

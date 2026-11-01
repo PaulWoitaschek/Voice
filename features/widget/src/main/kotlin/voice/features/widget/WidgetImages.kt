@@ -51,19 +51,20 @@ internal data class ProgressImages(
 
 /**
  * App widgets are RemoteViews, which can't clip to a path or draw a wave. So shaped covers, shaped
- * buttons and the progress line are drawn into bitmaps. They are white where they're not a cover, so
- * the widget tints them with its colors, which keeps them right in light and dark mode.
+ * buttons and the progress line are drawn into bitmaps. They are white where they're not a cover,
+ * so the widget tints them with its colors, which keeps them right in light and dark mode.
  */
 @SingleIn(AppScope::class)
 @Inject
 class WidgetImages(private val context: Context) {
 
-  private val cache = object : LruCache<String, Bitmap>(CACHE_BYTES) {
-    override fun sizeOf(
-      key: String,
-      value: Bitmap,
-    ): Int = value.allocationByteCount
-  }
+  private val cache =
+    object : LruCache<String, Bitmap>(CACHE_BYTES) {
+      override fun sizeOf(
+        key: String,
+        value: Bitmap,
+      ): Int = value.allocationByteCount
+    }
 
   internal suspend fun cover(cover: String?): WidgetCover {
     if (cover != null) {
@@ -73,21 +74,26 @@ class WidgetImages(private val context: Context) {
         return WidgetCover(cover, bitmap)
       }
     }
-    val placeholder = cache.get(PLACEHOLDER_KEY)
-      ?: ContextCompat.getDrawable(context, UiR.drawable.album_art)!!
-        .toBitmap(COVER_SIZE_PX, COVER_SIZE_PX)
-        .also { cache.put(PLACEHOLDER_KEY, it) }
+    val placeholder =
+      cache.get(PLACEHOLDER_KEY)
+        ?: ContextCompat.getDrawable(context, UiR.drawable.album_art)!!.toBitmap(
+            COVER_SIZE_PX,
+            COVER_SIZE_PX,
+          )
+          .also { cache.put(PLACEHOLDER_KEY, it) }
     return WidgetCover(PLACEHOLDER_KEY, placeholder)
   }
 
   private suspend fun load(cover: String): Bitmap? {
-    val request = ImageRequest.Builder(context)
-      .data(cover)
-      .size(COVER_SIZE_PX)
-      // RemoteViews can't hold hardware bitmaps, and the memory cache shared with the app may have one
-      .allowHardware(false)
-      .memoryCachePolicy(CachePolicy.DISABLED)
-      .build()
+    val request =
+      ImageRequest.Builder(context)
+        .data(cover)
+        .size(COVER_SIZE_PX)
+        // RemoteViews can't hold hardware bitmaps, and the memory cache shared with the app may
+        // have one
+        .allowHardware(false)
+        .memoryCachePolicy(CachePolicy.DISABLED)
+        .build()
     val result = context.imageLoader.execute(request) as? SuccessResult ?: return null
     return result.drawable.toBitmap()
   }
@@ -160,31 +166,42 @@ class WidgetImages(private val context: Context) {
     val centerY = heightPx / 2F
     val activeEnd = half + (widthPx - stroke) * fraction
     val hasActive = activeEnd - half >= 1F
-    val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      color = Color.WHITE
-      style = Paint.Style.STROKE
-      strokeWidth = stroke
-      strokeCap = Paint.Cap.ROUND
-      strokeJoin = Paint.Join.ROUND
-    }
-    val active = cached("progress:active:$widthPx:$fraction:$wavy") {
-      createBitmap(widthPx, heightPx).applyCanvas {
-        if (hasActive) {
-          val amplitude = if (wavy) WAVE_AMPLITUDE.toPxFloat() else 0F
-          drawPath(wavePath(half, activeEnd, centerY, amplitude, WAVE_LENGTH.toPxFloat()), linePaint)
-        }
-        drawCircle(widthPx - half, centerY, half, Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE })
+    val linePaint =
+      Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        style = Paint.Style.STROKE
+        strokeWidth = stroke
+        strokeCap = Paint.Cap.ROUND
+        strokeJoin = Paint.Join.ROUND
       }
-    }
-    val track = cached("progress:track:$widthPx:$fraction") {
-      createBitmap(widthPx, heightPx).applyCanvas {
-        val start = if (hasActive) activeEnd + stroke + PROGRESS_GAP.toPxFloat() else half
-        val end = widthPx - half
-        if (start < end) {
-          drawLine(start, centerY, end, centerY, linePaint)
+    val active =
+      cached("progress:active:$widthPx:$fraction:$wavy") {
+        createBitmap(widthPx, heightPx).applyCanvas {
+          if (hasActive) {
+            val amplitude = if (wavy) WAVE_AMPLITUDE.toPxFloat() else 0F
+            drawPath(
+              wavePath(half, activeEnd, centerY, amplitude, WAVE_LENGTH.toPxFloat()),
+              linePaint,
+            )
+          }
+          drawCircle(
+            widthPx - half,
+            centerY,
+            half,
+            Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE },
+          )
         }
       }
-    }
+    val track =
+      cached("progress:track:$widthPx:$fraction") {
+        createBitmap(widthPx, heightPx).applyCanvas {
+          val start = if (hasActive) activeEnd + stroke + PROGRESS_GAP.toPxFloat() else half
+          val end = widthPx - half
+          if (start < end) {
+            drawLine(start, centerY, end, centerY, linePaint)
+          }
+        }
+      }
     return ProgressImages(active = active, track = track)
   }
 
@@ -218,14 +235,15 @@ class WidgetImages(private val context: Context) {
     val scale = max(width / cover.width.toFloat(), height / cover.height.toFloat())
     val dx = (width - cover.width * scale) / 2
     val dy = if (alignTop) 0F else (height - cover.height * scale) / 2
-    val shader = BitmapShader(cover, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP).apply {
-      setLocalMatrix(
-        Matrix().apply {
-          setScale(scale, scale)
-          postTranslate(dx, dy)
-        },
-      )
-    }
+    val shader =
+      BitmapShader(cover, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP).apply {
+        setLocalMatrix(
+          Matrix().apply {
+            setScale(scale, scale)
+            postTranslate(dx, dy)
+          },
+        )
+      }
     return Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG).apply { this.shader = shader }
   }
 

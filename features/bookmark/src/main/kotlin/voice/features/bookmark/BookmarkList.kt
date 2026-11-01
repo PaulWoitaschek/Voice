@@ -58,6 +58,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.text.NumberFormat
 import kotlinx.coroutines.launch
 import voice.core.data.Bookmark
 import voice.core.strings.R
@@ -68,7 +69,6 @@ import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.plus
 import voice.core.ui.segmentedShape
-import java.text.NumberFormat
 
 @Composable
 internal fun BookmarkList(
@@ -116,28 +116,28 @@ internal fun BookmarkList(
     if (viewState.totalCount == 0) {
       item(key = "empty") {
         EmptyHero(
-          Modifier
-            .animateItem()
-            .padding(top = 32.dp, bottom = 24.dp),
+          Modifier.animateItem().padding(top = 32.dp, bottom = 24.dp),
         )
       }
     }
     items(viewState.items, key = { it.key }, contentType = { it::class }) { item ->
       when (item) {
         is BookmarkListItem.ChapterHeader -> ChapterHeader(item, Modifier.animateItem())
-        is BookmarkListItem.Row -> BookmarkRow(
-          row = item.bookmark,
-          group = item.group,
-          onClick = onClick,
-          onLongClick = onLongClick,
-          onDelete = onDelete,
-          modifier = Modifier.animateItem(),
-        )
-        is BookmarkListItem.YouAreHere -> YouAreHereRow(
-          item = item,
-          playing = viewState.playing,
-          modifier = Modifier.animateItem(),
-        )
+        is BookmarkListItem.Row ->
+          BookmarkRow(
+            row = item.bookmark,
+            group = item.group,
+            onClick = onClick,
+            onLongClick = onLongClick,
+            onDelete = onDelete,
+            modifier = Modifier.animateItem(),
+          )
+        is BookmarkListItem.YouAreHere ->
+          YouAreHereRow(
+            item = item,
+            playing = viewState.playing,
+            modifier = Modifier.animateItem(),
+          )
       }
     }
   }
@@ -164,7 +164,11 @@ private fun BookBarHeader(
     Spacer(Modifier.height(6.dp))
     Row(verticalAlignment = Alignment.CenterVertically) {
       Text(
-        text = stringResource(R.string.playback_book_progress_read, percentFormat.format(bookBar.percent / 100.0)),
+        text =
+          stringResource(
+            R.string.playback_book_progress_read,
+            percentFormat.format(bookBar.percent / 100.0),
+          ),
         style = MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
         color = MaterialTheme.colorScheme.primary,
       )
@@ -195,7 +199,12 @@ private fun CategoryChips(
       FilterChip(
         selected = selected == null,
         onClick = { onClick(null) },
-        label = { ChipLabel(stringResource(R.string.bookmark_category_all), countFormat.format(total.toLong())) },
+        label = {
+          ChipLabel(
+            stringResource(R.string.bookmark_category_all),
+            countFormat.format(total.toLong()),
+          )
+        },
       )
     }
     items(categories, key = { it.kind }) { (kind, count) ->
@@ -221,34 +230,37 @@ private fun ChipLabel(
 }
 
 @Composable
-private fun categoryLabel(kind: Bookmark.Kind): String = stringResource(
-  when (kind) {
-    Bookmark.Kind.Note -> R.string.bookmark_category_notes
-    Bookmark.Kind.Favorite -> R.string.bookmark_category_favorites
-    Bookmark.Kind.Quote -> R.string.bookmark_category_quotes
-    Bookmark.Kind.Revisit -> R.string.bookmark_category_revisit
-  },
-)
+private fun categoryLabel(kind: Bookmark.Kind): String =
+  stringResource(
+    when (kind) {
+      Bookmark.Kind.Note -> R.string.bookmark_category_notes
+      Bookmark.Kind.Favorite -> R.string.bookmark_category_favorites
+      Bookmark.Kind.Quote -> R.string.bookmark_category_quotes
+      Bookmark.Kind.Revisit -> R.string.bookmark_category_revisit
+    },
+  )
 
 @Composable
-internal fun kindLabel(kind: Bookmark.Kind): String = stringResource(
-  when (kind) {
-    Bookmark.Kind.Note -> R.string.bookmark_kind_note
-    Bookmark.Kind.Favorite -> R.string.bookmark_kind_favorite
-    Bookmark.Kind.Quote -> R.string.bookmark_kind_quote
-    Bookmark.Kind.Revisit -> R.string.bookmark_kind_revisit
-  },
-)
+internal fun kindLabel(kind: Bookmark.Kind): String =
+  stringResource(
+    when (kind) {
+      Bookmark.Kind.Note -> R.string.bookmark_kind_note
+      Bookmark.Kind.Favorite -> R.string.bookmark_kind_favorite
+      Bookmark.Kind.Quote -> R.string.bookmark_kind_quote
+      Bookmark.Kind.Revisit -> R.string.bookmark_kind_revisit
+    },
+  )
 
 @Composable
 internal fun chapterLabel(
   number: Int,
   name: String?,
-): String = if (name != null) {
-  stringResource(R.string.bookmark_chapter_with_name, number, name)
-} else {
-  stringResource(R.string.bookmark_chapter, number)
-}
+): String =
+  if (name != null) {
+    stringResource(R.string.bookmark_chapter_with_name, number, name)
+  } else {
+    stringResource(R.string.bookmark_chapter, number)
+  }
 
 @Composable
 private fun ChapterHeader(
@@ -261,9 +273,10 @@ private fun ChapterHeader(
     color = MaterialTheme.colorScheme.primary,
     maxLines = 1,
     overflow = TextOverflow.Ellipsis,
-    modifier = modifier
-      .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 6.dp)
-      .semantics { heading() },
+    modifier =
+      modifier.padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 6.dp).semantics {
+        heading()
+      },
   )
 }
 
@@ -301,7 +314,9 @@ private fun BookmarkRow(
   // Not saveable: the list keeps saved state per key, so a row brought back by undo would come
   // back swiped away and be deleted again.
   val positionalThreshold = SwipeToDismissBoxDefaults.positionalThreshold
-  val dismissState = remember { SwipeToDismissBoxState(SwipeToDismissBoxValue.Settled, positionalThreshold) }
+  val dismissState = remember {
+    SwipeToDismissBoxState(SwipeToDismissBoxValue.Settled, positionalThreshold)
+  }
   // a new callback would restart the box's effect and delete the swiped away row once more
   val currentOnDelete by rememberUpdatedState(onDelete)
   val onDismiss = remember(row.id) { { _: SwipeToDismissBoxValue -> currentOnDelete(row.id) } }
@@ -309,36 +324,39 @@ private fun BookmarkRow(
     state = dismissState,
     modifier = modifier,
     onDismiss = onDismiss,
-    backgroundContent = { DeleteBackground(progress = dismissState.progress, direction = dismissState.dismissDirection) },
+    backgroundContent = {
+      DeleteBackground(progress = dismissState.progress, direction = dismissState.dismissDirection)
+    },
   ) {
     Surface(
       shape = shape,
       color = MaterialTheme.colorScheme.surfaceContainerHigh,
-      modifier = Modifier
-        .fillMaxWidth()
-        .clip(shape)
-        .combinedClickable(
-          onClick = { onClick(row.id) },
-          onLongClick = { onLongClick(row.id) },
-          onLongClickLabel = editLabel,
-        )
-        .clearAndSetSemantics {
-          contentDescription = description
-          onClick {
-            onClick(row.id)
-            true
-          }
-          customActions = listOf(
-            CustomAccessibilityAction(editLabel) {
-              onLongClick(row.id)
-              true
-            },
-            CustomAccessibilityAction(deleteLabel) {
-              onDelete(row.id)
-              true
-            },
+      modifier =
+        Modifier.fillMaxWidth()
+          .clip(shape)
+          .combinedClickable(
+            onClick = { onClick(row.id) },
+            onLongClick = { onLongClick(row.id) },
+            onLongClickLabel = editLabel,
           )
-        },
+          .clearAndSetSemantics {
+            contentDescription = description
+            onClick {
+              onClick(row.id)
+              true
+            }
+            customActions =
+              listOf(
+                CustomAccessibilityAction(editLabel) {
+                  onLongClick(row.id)
+                  true
+                },
+                CustomAccessibilityAction(deleteLabel) {
+                  onDelete(row.id)
+                  true
+                },
+              )
+          },
     ) {
       Row(
         modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
@@ -350,7 +368,9 @@ private fun BookmarkRow(
           Text(
             text = headline,
             style = MaterialTheme.typography.titleMedium.bookText(),
-            color = if (row.note == null) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+            color =
+              if (row.note == null) MaterialTheme.colorScheme.onSurfaceVariant
+              else MaterialTheme.colorScheme.onSurface,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
           )
@@ -392,25 +412,26 @@ private fun DeleteBackground(
   direction: SwipeToDismissBoxValue,
 ) {
   val colors = MaterialTheme.colorScheme
-  val scale by animateFloatAsState(
-    targetValue = if (progress > 0.35F) 1.15F else (progress / 0.35F).coerceIn(0.3F, 1F),
-    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
-    label = "deleteScale",
-  )
+  val scale by
+    animateFloatAsState(
+      targetValue = if (progress > 0.35F) 1.15F else (progress / 0.35F).coerceIn(0.3F, 1F),
+      animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+      label = "deleteScale",
+    )
   Box(
-    modifier = Modifier
-      .fillMaxSize()
-      .padding(horizontal = 16.dp),
-    contentAlignment = if (direction == SwipeToDismissBoxValue.EndToStart) Alignment.CenterEnd else Alignment.CenterStart,
+    modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+    contentAlignment =
+      if (direction == SwipeToDismissBoxValue.EndToStart) Alignment.CenterEnd
+      else Alignment.CenterStart,
   ) {
     Box(
-      modifier = Modifier
-        .size(44.dp)
-        .graphicsLayer {
-          scaleX = scale
-          scaleY = scale
-        }
-        .background(colors.errorContainer, MaterialShapes.Cookie6Sided.toShape()),
+      modifier =
+        Modifier.size(44.dp)
+          .graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+          }
+          .background(colors.errorContainer, MaterialShapes.Cookie6Sided.toShape()),
       contentAlignment = Alignment.Center,
     ) {
       Icon(
@@ -434,18 +455,15 @@ private fun YouAreHereRow(
     shape = segmentedShape(item.group.index, item.group.count),
     color = colors.primaryContainer,
     contentColor = colors.onPrimaryContainer,
-    modifier = modifier
-      .fillMaxWidth()
-      .semantics(mergeDescendants = true) {},
+    modifier = modifier.fillMaxWidth().semantics(mergeDescendants = true) {},
   ) {
     Row(
       modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
       Box(
-        modifier = Modifier
-          .size(44.dp)
-          .background(colors.primary, MaterialShapes.Cookie9Sided.toShape()),
+        modifier =
+          Modifier.size(44.dp).background(colors.primary, MaterialShapes.Cookie9Sided.toShape()),
         contentAlignment = Alignment.Center,
       ) {
         NowPlayingBars(playing = playing, color = colors.onPrimary)
@@ -471,25 +489,31 @@ private fun EmptyHero(modifier: Modifier = Modifier) {
   val scope = rememberCoroutineScope()
   val wiggle = remember { Animatable(0F) }
   Column(
-    modifier = modifier
-      .fillMaxWidth()
-      .padding(horizontal = 24.dp),
+    modifier = modifier.fillMaxWidth().padding(horizontal = 24.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Box(
-      modifier = Modifier
-        .size(160.dp)
-        .graphicsLayer { rotationZ = wiggle.value }
-        .clip(MaterialShapes.Cookie12Sided.toShape())
-        .background(colors.tertiaryContainer)
-        // before the click, so screen readers don't offer a button without a label
-        .clearAndSetSemantics {}
-        .combinedClickable(onClick = {
-          scope.launch {
-            wiggle.snapTo(18F)
-            wiggle.animateTo(0F, spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow))
-          }
-        }),
+      modifier =
+        Modifier.size(160.dp)
+          .graphicsLayer { rotationZ = wiggle.value }
+          .clip(MaterialShapes.Cookie12Sided.toShape())
+          .background(colors.tertiaryContainer)
+          // before the click, so screen readers don't offer a button without a label
+          .clearAndSetSemantics {}
+          .combinedClickable(
+            onClick = {
+              scope.launch {
+                wiggle.snapTo(18F)
+                wiggle.animateTo(
+                  0F,
+                  spring(
+                    dampingRatio = Spring.DampingRatioHighBouncy,
+                    stiffness = Spring.StiffnessLow,
+                  ),
+                )
+              }
+            },
+          ),
       contentAlignment = Alignment.Center,
     ) {
       Icon(

@@ -25,8 +25,7 @@ class FileCoverViewModel(private val navigator: Navigator) : BottomSheetItemView
   override suspend fun onItemClick(
     bookId: BookId,
     item: BottomSheetItem,
-  ) {
-  }
+  ) {}
 
   fun onImagePicked(
     bookId: BookId,

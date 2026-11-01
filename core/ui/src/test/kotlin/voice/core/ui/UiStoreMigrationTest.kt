@@ -6,20 +6,21 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.runner.RunWith
 import voice.core.datastore.VoiceDataStoreFactory
-import java.io.File
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class UiStoreMigrationTest {
 
   private val application: Application = ApplicationProvider.getApplicationContext()
-  private val sharedPreferences: SharedPreferences = application.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+  private val sharedPreferences: SharedPreferences =
+    application.getSharedPreferences("prefs", Context.MODE_PRIVATE)
   private val factory = VoiceDataStoreFactory(Json.Default, application)
 
   private fun themeModeStore() = ThemeModeStore(factory, application, sharedPreferences)
@@ -55,7 +56,10 @@ class UiStoreMigrationTest {
   @Test
   fun `defaults are used when SharedPreferences empty`() = runTest {
     assertEquals(expected = ThemeMode.FollowSystem, actual = themeModeStore().data.first())
-    assertEquals(expected = ThemeColorScheme.VoiceBlue, actual = ThemeColorSchemeStore(factory).data.first())
+    assertEquals(
+      expected = ThemeColorScheme.VoiceBlue,
+      actual = ThemeColorSchemeStore(factory).data.first(),
+    )
   }
 
   @Test

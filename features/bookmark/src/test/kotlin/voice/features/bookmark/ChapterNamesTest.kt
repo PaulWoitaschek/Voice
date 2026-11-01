@@ -7,7 +7,10 @@ class ChapterNamesTest {
 
   @Test
   fun `a single chapter has no name`() {
-    assertEquals(expected = listOf(null), actual = meaningfulChapterNames(listOf("Echoes of Tomorrow")))
+    assertEquals(
+      expected = listOf(null),
+      actual = meaningfulChapterNames(listOf("Echoes of Tomorrow")),
+    )
   }
 
   @Test
@@ -30,12 +33,18 @@ class ChapterNamesTest {
   fun `a file name repeated with a running number is dropped`() {
     assertEquals(
       expected = listOf("Prologue", null, null),
-      actual = meaningfulChapterNames(listOf("Prologue", "Echoes of Tomorrow 01", "Echoes of Tomorrow 02")),
+      actual =
+        meaningfulChapterNames(
+          listOf("Prologue", "Echoes of Tomorrow 01", "Echoes of Tomorrow 02"),
+        ),
     )
   }
 
   @Test
   fun `names without letters are dropped`() {
-    assertEquals(expected = listOf(null, "Mira"), actual = meaningfulChapterNames(listOf("001", "Mira")))
+    assertEquals(
+      expected = listOf(null, "Mira"),
+      actual = meaningfulChapterNames(listOf("001", "Mira")),
+    )
   }
 }

@@ -1,7 +1,7 @@
 package voice.features.support
 
-import voice.core.data.supporter.SupporterBadge
 import java.time.YearMonth
+import voice.core.data.supporter.SupporterBadge
 
 data class SupportViewState(
   val content: Content,
@@ -57,26 +57,29 @@ data class SupportViewState(
   }
 
   companion object {
-    fun preview(content: Content = previewPlayContent()) = SupportViewState(
-      content = content,
-      badge = SupporterBadge.ThreeMonths,
-      supporterSince = YearMonth.of(2026, 3),
-      thankYou = false,
-      message = null,
-    )
+    fun preview(content: Content = previewPlayContent()) =
+      SupportViewState(
+        content = content,
+        badge = SupporterBadge.ThreeMonths,
+        supporterSince = YearMonth.of(2026, 3),
+        thankYou = false,
+        message = null,
+      )
 
-    fun previewPlayContent() = Content.Play(
-      frequencies = SupportFrequency.entries,
-      frequency = SupportFrequency.Monthly,
-      tiers = listOf(
-        Tier(SupporterTier.Tea, "€0.99", active = false),
-        Tier(SupporterTier.HoneyTea, "€2.99", active = true),
-        Tier(SupporterTier.GoldenMic, "€5.99", active = false),
-      ),
-      selectedTier = SupporterTier.GoldenMic,
-      action = Action.Switch("€5.99", SupportPeriod.Monthly),
-      note = "This month your tea paid for Android 17 testing and the new sleep timer.",
-    )
+    fun previewPlayContent() =
+      Content.Play(
+        frequencies = SupportFrequency.entries,
+        frequency = SupportFrequency.Monthly,
+        tiers =
+          listOf(
+            Tier(SupporterTier.Tea, "€0.99", active = false),
+            Tier(SupporterTier.HoneyTea, "€2.99", active = true),
+            Tier(SupporterTier.GoldenMic, "€5.99", active = false),
+          ),
+        selectedTier = SupporterTier.GoldenMic,
+        action = Action.Switch("€5.99", SupportPeriod.Monthly),
+        note = "This month your tea paid for Android 17 testing and the new sleep timer.",
+      )
   }
 }
 

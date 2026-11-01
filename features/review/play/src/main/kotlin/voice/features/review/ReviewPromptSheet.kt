@@ -83,12 +83,17 @@ import androidx.compose.ui.unit.toSize
 import androidx.graphics.shapes.Morph
 import androidx.graphics.shapes.RoundedPolygon
 import coil.compose.AsyncImage
+import java.text.NumberFormat
+import kotlin.math.roundToInt
+import kotlin.math.sin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.core.common.FeedbackLinks
+import voice.core.strings.R as StringsR
 import voice.core.ui.ConfettiState
 import voice.core.ui.EntranceState
 import voice.core.ui.MorphShape
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
@@ -100,11 +105,6 @@ import voice.core.ui.rememberConfettiState
 import voice.core.ui.rememberEntranceState
 import voice.core.ui.rememberFullSizeCoverRequest
 import voice.core.ui.segmentedShape
-import java.text.NumberFormat
-import kotlin.math.roundToInt
-import kotlin.math.sin
-import voice.core.strings.R as StringsR
-import voice.core.ui.R as UiR
 
 internal enum class ReviewStep {
   Ask,
@@ -113,8 +113,8 @@ internal enum class ReviewStep {
 }
 
 /**
- * Celebrates the listener's win and asks for a rating. Everyone gets the same choices: rating Voice,
- * sharing feedback or leaving it for now.
+ * Celebrates the listener's win and asks for a rating. Everyone gets the same choices: rating
+ * Voice, sharing feedback or leaving it for now.
  *
  * [onAnswer] is called once, after the sheet is gone.
  */
@@ -123,10 +123,11 @@ internal fun ReviewPromptSheet(
   prompt: ReviewPrompt,
   onAnswer: (ReviewAnswer) -> Unit,
 ) {
-  val sheetState = rememberBottomSheetState(
-    initialValue = Hidden,
-    enabledValues = setOf(Hidden, Expanded),
-  )
+  val sheetState =
+    rememberBottomSheetState(
+      initialValue = Hidden,
+      enabledValues = setOf(Hidden, Expanded),
+    )
   val scope = rememberCoroutineScope()
   var step by rememberSaveable { mutableStateOf(ReviewStep.Ask) }
   var answered by remember { mutableStateOf(false) }
@@ -179,73 +180,78 @@ private fun ReviewPromptContent(
   val entrance = rememberEntranceState()
   val confetti = rememberConfettiState()
   val colors = MaterialTheme.colorScheme
-  val confettiColors = listOf(
-    colors.primary,
-    colors.secondary,
-    colors.tertiary,
-    colors.primaryContainer,
-    colors.secondaryContainer,
-    colors.tertiaryContainer,
-  )
+  val confettiColors =
+    listOf(
+      colors.primary,
+      colors.secondary,
+      colors.tertiary,
+      colors.primaryContainer,
+      colors.secondaryContainer,
+      colors.tertiaryContainer,
+    )
   var contentCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
   var heroCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
   // The confetti is drawn out here, as the scrolling column would cut it off right above the hero.
   Box(
-    modifier = modifier
-      .onPlaced { contentCoordinates = it }
-      .drawWithContent {
-        drawContent()
-        val content = contentCoordinates?.takeIf { it.isAttached } ?: return@drawWithContent
-        val hero = heroCoordinates?.takeIf { it.isAttached } ?: return@drawWithContent
-        drawConfetti(
-          state = confetti,
-          center = content.localPositionOf(hero, hero.size.toSize().center),
-          radius = BadgeSize.toPx() / 2,
-          colors = confettiColors,
-        )
-      },
+    modifier =
+      modifier
+        .onPlaced { contentCoordinates = it }
+        .drawWithContent {
+          drawContent()
+          val content = contentCoordinates?.takeIf { it.isAttached } ?: return@drawWithContent
+          val hero = heroCoordinates?.takeIf { it.isAttached } ?: return@drawWithContent
+          drawConfetti(
+            state = confetti,
+            center = content.localPositionOf(hero, hero.size.toSize().center),
+            radius = BadgeSize.toPx() / 2,
+            colors = confettiColors,
+          )
+        },
   ) {
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState())
-        .padding(horizontal = 24.dp)
-        .padding(bottom = 24.dp),
+      modifier =
+        Modifier.fillMaxWidth()
+          .verticalScroll(rememberScrollState())
+          .padding(horizontal = 24.dp)
+          .padding(bottom = 24.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       ReviewHero(
         headline = prompt.headline,
         thanked = step == ReviewStep.Thanks,
         confetti = confetti,
-        modifier = Modifier
-          .entrance(entrance, index = 0)
-          .fillMaxWidth()
-          .height(196.dp)
-          .onPlaced { heroCoordinates = it },
+        modifier =
+          Modifier.entrance(entrance, index = 0).fillMaxWidth().height(196.dp).onPlaced {
+            heroCoordinates = it
+          },
       )
       Spacer(Modifier.height(8.dp))
       AnimatedContent(
         targetState = step,
         transitionSpec = {
-          val enter = fadeIn(tween(durationMillis = 220, delayMillis = 90)) +
-            scaleIn(tween(durationMillis = 220, delayMillis = 90), initialScale = 0.92F)
-          (enter togetherWith fadeOut(tween(durationMillis = 90)))
-            .using(SizeTransform(clip = false))
+          val enter =
+            fadeIn(tween(durationMillis = 220, delayMillis = 90)) +
+              scaleIn(tween(durationMillis = 220, delayMillis = 90), initialScale = 0.92F)
+          (enter togetherWith fadeOut(tween(durationMillis = 90))).using(
+            SizeTransform(clip = false),
+          )
         },
         label = "reviewStep",
       ) { step ->
         when (step) {
-          ReviewStep.Ask -> AskStep(
-            prompt = prompt,
-            entrance = entrance,
-            onRate = { onStep(ReviewStep.Thanks) },
-            onFeedback = { onStep(ReviewStep.Feedback) },
-            onLater = { onAnswer(ReviewAnswer.Later) },
-          )
-          ReviewStep.Feedback -> FeedbackStep(
-            onBack = { onStep(ReviewStep.Ask) },
-            onAnswer = onAnswer,
-          )
+          ReviewStep.Ask ->
+            AskStep(
+              prompt = prompt,
+              entrance = entrance,
+              onRate = { onStep(ReviewStep.Thanks) },
+              onFeedback = { onStep(ReviewStep.Feedback) },
+              onLater = { onAnswer(ReviewAnswer.Later) },
+            )
+          ReviewStep.Feedback ->
+            FeedbackStep(
+              onBack = { onStep(ReviewStep.Ask) },
+              onAnswer = onAnswer,
+            )
           ReviewStep.Thanks -> ThanksStep()
         }
       }
@@ -271,7 +277,12 @@ private fun ReviewHero(
   val pop = remember { Animatable(0F) }
   LaunchedEffect(pop) {
     delay(150)
-    launch { pop.animateTo(1F, spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow)) }
+    launch {
+      pop.animateTo(
+        1F,
+        spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow),
+      )
+    }
     delay(250)
     confetti.burst()
   }
@@ -282,38 +293,40 @@ private fun ReviewHero(
     }
   }
   val morph = remember { Morph(MaterialShapes.SoftBurst, MaterialShapes.Heart) }
-  val heart by animateFloatAsState(
-    targetValue = if (thanked) 1F else 0F,
-    animationSpec = spring(dampingRatio = 0.45F, stiffness = Spring.StiffnessMediumLow),
-    label = "heroHeart",
-  )
+  val heart by
+    animateFloatAsState(
+      targetValue = if (thanked) 1F else 0F,
+      animationSpec = spring(dampingRatio = 0.45F, stiffness = Spring.StiffnessMediumLow),
+      label = "heroHeart",
+    )
   var pressed by remember { mutableStateOf(false) }
-  val squish by animateFloatAsState(
-    targetValue = if (pressed) 0.86F else 1F,
-    animationSpec = spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMedium),
-    label = "heroSquish",
-  )
+  val squish by
+    animateFloatAsState(
+      targetValue = if (pressed) 0.86F else 1F,
+      animationSpec = spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMedium),
+      label = "heroSquish",
+    )
   Box(
-    modifier = modifier
-      .clearAndSetSemantics {}
-      .pointerInput(Unit) {
-        detectTapGestures(
-          onPress = {
-            pressed = true
-            tryAwaitRelease()
-            pressed = false
-          },
-          onTap = {
-            haptics.performHapticFeedback(HapticFeedbackType.Confirm)
-            confetti.burst()
-          },
-        )
-      },
+    modifier =
+      modifier
+        .clearAndSetSemantics {}
+        .pointerInput(Unit) {
+          detectTapGestures(
+            onPress = {
+              pressed = true
+              tryAwaitRelease()
+              pressed = false
+            },
+            onTap = {
+              haptics.performHapticFeedback(HapticFeedbackType.Confirm)
+              confetti.burst()
+            },
+          )
+        },
     contentAlignment = Alignment.Center,
   ) {
     Box(
-      Modifier
-        .size(HaloSize)
+      Modifier.size(HaloSize)
         .graphicsLayer {
           scaleX = pop.value
           scaleY = pop.value
@@ -322,33 +335,35 @@ private fun ReviewHero(
         .background(colors.tertiaryContainer, MaterialShapes.Cookie12Sided.toShape()),
     )
     Box(
-      modifier = Modifier
-        .size(BadgeSize)
-        .graphicsLayer {
-          val scale = pop.value * squish * (1F + 0.025F * sin(clock.value * 2.4F))
-          scaleX = scale
-          scaleY = scale
-          // spins in while popping up
-          rotationZ = (1F - pop.value) * -90F
-        }
-        .clip(MorphShape(morph, heart))
-        .background(colors.primary),
+      modifier =
+        Modifier.size(BadgeSize)
+          .graphicsLayer {
+            val scale = pop.value * squish * (1F + 0.025F * sin(clock.value * 2.4F))
+            scaleX = scale
+            scaleY = scale
+            // spins in while popping up
+            rotationZ = (1F - pop.value) * -90F
+          }
+          .clip(MorphShape(morph, heart))
+          .background(colors.primary),
       contentAlignment = Alignment.Center,
     ) {
       when (headline) {
-        is ReviewPrompt.Headline.BookFinished -> AsyncImage(
-          modifier = Modifier.fillMaxSize(),
-          model = rememberFullSizeCoverRequest(headline.cover),
-          error = painterResource(UiR.drawable.album_art),
-          contentScale = ContentScale.Crop,
-          contentDescription = null,
-        )
-        ReviewPrompt.Headline.Milestone -> Icon(
-          modifier = Modifier.size(BadgeSize * 0.42F),
-          imageVector = VoiceIcons.Headphones,
-          contentDescription = null,
-          tint = colors.onPrimary,
-        )
+        is ReviewPrompt.Headline.BookFinished ->
+          AsyncImage(
+            modifier = Modifier.fillMaxSize(),
+            model = rememberFullSizeCoverRequest(headline.cover),
+            error = painterResource(UiR.drawable.album_art),
+            contentScale = ContentScale.Crop,
+            contentDescription = null,
+          )
+        ReviewPrompt.Headline.Milestone ->
+          Icon(
+            modifier = Modifier.size(BadgeSize * 0.42F),
+            imageVector = VoiceIcons.Headphones,
+            contentDescription = null,
+            tint = colors.onPrimary,
+          )
       }
     }
   }
@@ -384,14 +399,17 @@ private fun AskStep(
         Spacer(Modifier.height(4.dp))
       }
       Text(
-        text = when (headline) {
-          is ReviewPrompt.Headline.BookFinished -> stringResource(StringsR.string.review_prompt_finished_title)
-          ReviewPrompt.Headline.Milestone -> pluralStringResource(
-            StringsR.plurals.review_prompt_milestone_title,
-            prompt.stats.listenedHours,
-            prompt.stats.listenedHours,
-          )
-        },
+        text =
+          when (headline) {
+            is ReviewPrompt.Headline.BookFinished ->
+              stringResource(StringsR.string.review_prompt_finished_title)
+            ReviewPrompt.Headline.Milestone ->
+              pluralStringResource(
+                StringsR.plurals.review_prompt_milestone_title,
+                prompt.stats.listenedHours,
+                prompt.stats.listenedHours,
+              )
+          },
         style = MaterialTheme.typography.headlineSmallEmphasized,
         textAlign = TextAlign.Center,
       )
@@ -414,9 +432,7 @@ private fun AskStep(
           StatTile(
             stat = stat,
             style = StatStyles[index % StatStyles.size],
-            modifier = Modifier
-              .weight(1F)
-              .entrance(entrance, index = 3 + index),
+            modifier = Modifier.weight(1F).entrance(entrance, index = 3 + index),
           )
         }
       }
@@ -428,9 +444,7 @@ private fun AskStep(
     ) {
       val size = ButtonDefaults.MediumContainerHeight
       Button(
-        modifier = Modifier
-          .fillMaxWidth()
-          .heightIn(size),
+        modifier = Modifier.fillMaxWidth().heightIn(size),
         onClick = onRate,
         shapes = ButtonDefaults.shapes(),
         contentPadding = ButtonDefaults.contentPaddingFor(size, hasStartIcon = true),
@@ -448,9 +462,7 @@ private fun AskStep(
       }
       Spacer(Modifier.height(8.dp))
       FilledTonalButton(
-        modifier = Modifier
-          .fillMaxWidth()
-          .heightIn(size),
+        modifier = Modifier.fillMaxWidth().heightIn(size),
         onClick = onFeedback,
         shapes = ButtonDefaults.shapes(),
         contentPadding = ButtonDefaults.contentPaddingFor(size, hasStartIcon = true),
@@ -483,9 +495,7 @@ private data class Stat(
   @StringRes val label: Int,
 )
 
-/**
- * A milestone already has the hours in its title, and a zero is nothing to show off.
- */
+/** A milestone already has the hours in its title, and a zero is nothing to show off. */
 private fun ReviewPrompt.Stats.tiles(headline: ReviewPrompt.Headline): List<Stat> = buildList {
   if (headline is ReviewPrompt.Headline.BookFinished) {
     add(Stat(listenedHours, StringsR.string.review_prompt_stat_hours))
@@ -500,23 +510,24 @@ private data class StatStyle(
   val content: @Composable () -> Color,
 )
 
-private val StatStyles = listOf(
-  StatStyle(
-    shape = MaterialShapes.Cookie6Sided,
-    container = { MaterialTheme.colorScheme.primaryContainer },
-    content = { MaterialTheme.colorScheme.onPrimaryContainer },
-  ),
-  StatStyle(
-    shape = MaterialShapes.Sunny,
-    container = { MaterialTheme.colorScheme.tertiaryContainer },
-    content = { MaterialTheme.colorScheme.onTertiaryContainer },
-  ),
-  StatStyle(
-    shape = MaterialShapes.Cookie9Sided,
-    container = { MaterialTheme.colorScheme.secondaryContainer },
-    content = { MaterialTheme.colorScheme.onSecondaryContainer },
-  ),
-)
+private val StatStyles =
+  listOf(
+    StatStyle(
+      shape = MaterialShapes.Cookie6Sided,
+      container = { MaterialTheme.colorScheme.primaryContainer },
+      content = { MaterialTheme.colorScheme.onPrimaryContainer },
+    ),
+    StatStyle(
+      shape = MaterialShapes.Sunny,
+      container = { MaterialTheme.colorScheme.tertiaryContainer },
+      content = { MaterialTheme.colorScheme.onTertiaryContainer },
+    ),
+    StatStyle(
+      shape = MaterialShapes.Cookie9Sided,
+      container = { MaterialTheme.colorScheme.secondaryContainer },
+      content = { MaterialTheme.colorScheme.onSecondaryContainer },
+    ),
+  )
 
 /** A number in a shape that counts up, with what it counts below. */
 @Composable
@@ -530,19 +541,21 @@ private fun StatTile(
   val count = remember { Animatable(0F) }
   LaunchedEffect(stat.value) {
     delay(300)
-    count.animateTo(stat.value.toFloat(), tween(durationMillis = 1000, easing = FastOutSlowInEasing))
+    count.animateTo(
+      stat.value.toFloat(),
+      tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+    )
   }
   Column(
     // the count up is just for show, so it reads the final number
-    modifier = modifier.clearAndSetSemantics {
-      contentDescription = "${numberFormat.format(stat.value)} $label"
-    },
+    modifier =
+      modifier.clearAndSetSemantics {
+        contentDescription = "${numberFormat.format(stat.value)} $label"
+      },
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Box(
-      modifier = Modifier
-        .size(80.dp)
-        .background(style.container(), style.shape.toShape()),
+      modifier = Modifier.size(80.dp).background(style.container(), style.shape.toShape()),
       contentAlignment = Alignment.Center,
     ) {
       Text(
@@ -571,29 +584,30 @@ private class FeedbackOption(
   val subtitle: @Composable () -> String,
 )
 
-private val FeedbackOptions = listOf(
-  FeedbackOption(
-    answer = ReviewAnswer.Idea,
-    icon = VoiceIcons.Lightbulb,
-    shape = MaterialShapes.Sunny,
-    title = StringsR.string.review_prompt_feedback_idea_title,
-    subtitle = { stringResource(StringsR.string.review_prompt_feedback_idea_subtitle) },
-  ),
-  FeedbackOption(
-    answer = ReviewAnswer.Bug,
-    icon = VoiceIcons.BugReport,
-    shape = MaterialShapes.Cookie6Sided,
-    title = StringsR.string.review_prompt_feedback_bug_title,
-    subtitle = { stringResource(StringsR.string.review_prompt_feedback_bug_subtitle) },
-  ),
-  FeedbackOption(
-    answer = ReviewAnswer.Email,
-    icon = VoiceIcons.Mail,
-    shape = MaterialShapes.Cookie9Sided,
-    title = StringsR.string.review_prompt_feedback_email_title,
-    subtitle = { FeedbackLinks.EMAIL },
-  ),
-)
+private val FeedbackOptions =
+  listOf(
+    FeedbackOption(
+      answer = ReviewAnswer.Idea,
+      icon = VoiceIcons.Lightbulb,
+      shape = MaterialShapes.Sunny,
+      title = StringsR.string.review_prompt_feedback_idea_title,
+      subtitle = { stringResource(StringsR.string.review_prompt_feedback_idea_subtitle) },
+    ),
+    FeedbackOption(
+      answer = ReviewAnswer.Bug,
+      icon = VoiceIcons.BugReport,
+      shape = MaterialShapes.Cookie6Sided,
+      title = StringsR.string.review_prompt_feedback_bug_title,
+      subtitle = { stringResource(StringsR.string.review_prompt_feedback_bug_subtitle) },
+    ),
+    FeedbackOption(
+      answer = ReviewAnswer.Email,
+      icon = VoiceIcons.Mail,
+      shape = MaterialShapes.Cookie9Sided,
+      title = StringsR.string.review_prompt_feedback_email_title,
+      subtitle = { FeedbackLinks.EMAIL },
+    ),
+  )
 
 @Composable
 private fun FeedbackStep(
@@ -724,11 +738,13 @@ private fun ReviewPromptPreview(
 @Preview
 private fun ReviewPromptBookFinishedPreview() {
   ReviewPromptPreview(
-    prompt = ReviewPrompt(
-      headline = ReviewPrompt.Headline.BookFinished(name = "The Left Hand of Darkness", cover = null),
-      stats = previewStats,
-      forced = false,
-    ),
+    prompt =
+      ReviewPrompt(
+        headline =
+          ReviewPrompt.Headline.BookFinished(name = "The Left Hand of Darkness", cover = null),
+        stats = previewStats,
+        forced = false,
+      ),
     step = ReviewStep.Ask,
   )
 }
@@ -737,7 +753,12 @@ private fun ReviewPromptBookFinishedPreview() {
 @Preview
 private fun ReviewPromptMilestonePreview() {
   ReviewPromptPreview(
-    prompt = ReviewPrompt(headline = ReviewPrompt.Headline.Milestone, stats = previewStats, forced = false),
+    prompt =
+      ReviewPrompt(
+        headline = ReviewPrompt.Headline.Milestone,
+        stats = previewStats,
+        forced = false,
+      ),
     step = ReviewStep.Ask,
   )
 }
@@ -746,7 +767,12 @@ private fun ReviewPromptMilestonePreview() {
 @Preview
 private fun ReviewPromptFeedbackPreview() {
   ReviewPromptPreview(
-    prompt = ReviewPrompt(headline = ReviewPrompt.Headline.Milestone, stats = previewStats, forced = false),
+    prompt =
+      ReviewPrompt(
+        headline = ReviewPrompt.Headline.Milestone,
+        stats = previewStats,
+        forced = false,
+      ),
     step = ReviewStep.Feedback,
   )
 }
@@ -755,7 +781,12 @@ private fun ReviewPromptFeedbackPreview() {
 @Preview
 private fun ReviewPromptThanksPreview() {
   ReviewPromptPreview(
-    prompt = ReviewPrompt(headline = ReviewPrompt.Headline.Milestone, stats = previewStats, forced = false),
+    prompt =
+      ReviewPrompt(
+        headline = ReviewPrompt.Headline.Milestone,
+        stats = previewStats,
+        forced = false,
+      ),
     step = ReviewStep.Thanks,
   )
 }

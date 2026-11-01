@@ -43,14 +43,14 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.core.strings.R
 import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState.JumpBackViewState
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 private val JUMP_BACK_VISIBLE = 10.seconds
 
@@ -60,14 +60,13 @@ internal fun rememberJumpBackVisibleFor(): Duration {
   val accessibilityManager = LocalAccessibilityManager.current
   return remember(accessibilityManager) {
     val millis = JUMP_BACK_VISIBLE.inWholeMilliseconds
-    (
-      accessibilityManager?.calculateRecommendedTimeoutMillis(
+    (accessibilityManager?.calculateRecommendedTimeoutMillis(
         originalTimeoutMillis = millis,
         containsIcons = true,
         containsText = true,
         containsControls = true,
-      ) ?: millis
-      ).milliseconds
+      ) ?: millis)
+      .milliseconds
   }
 }
 
@@ -83,8 +82,9 @@ internal fun JumpBackPill(
     targetState = jumpBack?.takeIf { it.elapsed < visibleFor },
     contentKey = { it?.id },
     transitionSpec = {
-      (scaleIn(spring(dampingRatio = Spring.DampingRatioMediumBouncy)) + fadeIn())
-        .togetherWith(scaleOut(targetScale = 0.8F) + fadeOut())
+      (scaleIn(spring(dampingRatio = Spring.DampingRatioMediumBouncy)) + fadeIn()).togetherWith(
+        scaleOut(targetScale = 0.8F) + fadeOut(),
+      )
     },
     contentAlignment = Alignment.Center,
     modifier = modifier,
@@ -112,15 +112,17 @@ private fun Pill(
 ) {
   val currentOnExpire by rememberUpdatedState(onExpire)
   val remaining = remember(state.id) { (visibleFor - state.elapsed).coerceAtLeast(Duration.ZERO) }
-  val countdown = remember(state.id) {
-    Animatable((remaining / visibleFor).toFloat().coerceIn(0F, 1F))
-  }
+  val countdown =
+    remember(state.id) {
+      Animatable((remaining / visibleFor).toFloat().coerceIn(0F, 1F))
+    }
   LaunchedEffect(state.id) {
     // the ring is only decoration, so it may skip ahead when animations are off
     launch {
       countdown.animateTo(
         targetValue = 0F,
-        animationSpec = tween(durationMillis = remaining.inWholeMilliseconds.toInt(), easing = LinearEasing),
+        animationSpec =
+          tween(durationMillis = remaining.inWholeMilliseconds.toInt(), easing = LinearEasing),
       )
     }
     delay(remaining)
@@ -132,9 +134,7 @@ private fun Pill(
     shape = CircleShape,
     color = colors.tertiaryContainer,
     contentColor = colors.onTertiaryContainer,
-    modifier = Modifier
-      .heightIn(min = 32.dp)
-      .semantics { liveRegion = LiveRegionMode.Polite },
+    modifier = Modifier.heightIn(min = 32.dp).semantics { liveRegion = LiveRegionMode.Polite },
   ) {
     Row(
       modifier = Modifier.padding(start = 6.dp, end = 12.dp),
@@ -145,7 +145,13 @@ private fun Pill(
         val trackColor = ringColor.copy(alpha = 0.2F)
         Canvas(Modifier.size(22.dp)) {
           val stroke = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
-          drawArc(color = trackColor, startAngle = 0F, sweepAngle = 360F, useCenter = false, style = stroke)
+          drawArc(
+            color = trackColor,
+            startAngle = 0F,
+            sweepAngle = 360F,
+            useCenter = false,
+            style = stroke,
+          )
           drawArc(
             color = ringColor,
             startAngle = -90F,
@@ -162,11 +168,12 @@ private fun Pill(
       }
       Spacer(Modifier.width(6.dp))
       Text(
-        text = if (state.chapterNumber != null) {
-          stringResource(R.string.playback_jump_back_chapter, state.chapterNumber, state.time)
-        } else {
-          stringResource(R.string.playback_jump_back, state.time)
-        },
+        text =
+          if (state.chapterNumber != null) {
+            stringResource(R.string.playback_jump_back_chapter, state.chapterNumber, state.time)
+          } else {
+            stringResource(R.string.playback_jump_back, state.time)
+          },
         style = MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,

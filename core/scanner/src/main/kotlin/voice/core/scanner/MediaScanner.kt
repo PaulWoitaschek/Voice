@@ -26,7 +26,8 @@ internal class MediaScanner(
   suspend fun scan(folders: Map<FolderType, List<CachedDocumentFile>>) {
     val files = folders.flatMap { (folderType, files) ->
       when (folderType) {
-        FolderType.SingleFile, FolderType.SingleFolder -> {
+        FolderType.SingleFile,
+        FolderType.SingleFolder -> {
           files
         }
         FolderType.Root -> {
@@ -49,12 +50,14 @@ internal class MediaScanner(
     }
 
     val bookIds = files.map { BookId(it.uri) }
-    // before the books found again become active, so they can be told apart from the books still in the library
-    val previousBooks = PreviousBooks(
-      library = contentRepo.all().filterNot { it.id.isRemote },
-      scanned = bookIds.toSet(),
-      chapterRepo = chapterRepo,
-    )
+    // before the books found again become active, so they can be told apart from the books still in
+    // the library
+    val previousBooks =
+      PreviousBooks(
+        library = contentRepo.all().filterNot { it.id.isRemote },
+        scanned = bookIds.toSet(),
+        chapterRepo = chapterRepo,
+      )
     contentRepo.setAllInactiveExcept(bookIds)
 
     val probeFile = folders.values.flatten().findProbeFile()
@@ -73,7 +76,8 @@ internal class MediaScanner(
   }
 
   private fun List<CachedDocumentFile>.findProbeFile(): CachedDocumentFile? {
-    return asSequence().flatMap { it.walk() }
+    return asSequence()
+      .flatMap { it.walk() }
       .firstOrNull { child ->
         child.isAudioFile() && child.uri.authority == "com.android.externalstorage.documents"
       }
@@ -88,7 +92,11 @@ internal class MediaScanner(
     if (chapters.isEmpty()) return
     val chapterIds = chapters.map { it.id }
     if (!chapterIds.fitIntoOneBook()) {
-      Logger.nonFatal(IllegalStateException("Skipping a book with ${chapters.size} chapters, too many for one book"))
+      Logger.nonFatal(
+        IllegalStateException(
+          "Skipping a book with ${chapters.size} chapters, too many for one book",
+        ),
+      )
       return
     }
 
@@ -97,15 +105,17 @@ internal class MediaScanner(
     val currentChapterGone = content.currentChapter !in chapterIds
     val currentChapter = if (currentChapterGone) chapterIds.first() else content.currentChapter
     val positionInChapter = if (currentChapterGone) 0 else content.positionInChapter
-    val updated = progressCarryOver.carryOver(
-      content = content.copy(
-        chapters = chapterIds,
-        currentChapter = currentChapter,
-        positionInChapter = positionInChapter,
-        isActive = true,
-      ),
-      previousBooks = previousBooks,
-    )
+    val updated =
+      progressCarryOver.carryOver(
+        content =
+          content.copy(
+            chapters = chapterIds,
+            currentChapter = currentChapter,
+            positionInChapter = positionInChapter,
+            isActive = true,
+          ),
+        previousBooks = previousBooks,
+      )
     if (content != updated) {
       validateIntegrity(updated, chapters)
       contentRepo.put(updated)

@@ -19,10 +19,12 @@ internal data class BookLocation(
   val bookDuration: Long,
 ) {
 
-  val time: String get() = formatTime(timeInChapter, chapterDuration)
+  val time: String
+    get() = formatTime(timeInChapter, chapterDuration)
 
   val percent: Int
-    get() = if (bookDuration > 0) (bookPosition * 100 / bookDuration).toInt().coerceIn(0, 100) else 0
+    get() =
+      if (bookDuration > 0) (bookPosition * 100 / bookDuration).toInt().coerceIn(0, 100) else 0
 
   val progress: Float
     get() = if (bookDuration > 0) (bookPosition.toFloat() / bookDuration).coerceIn(0F, 1F) else 0F
@@ -30,10 +32,16 @@ internal data class BookLocation(
 
 internal class BookIndex(private val book: Book) {
 
-  private val chapterIndices = book.chapters.withIndex().associate { (index, chapter) -> chapter.id to index }
-  private val chapterOffsets = book.chapters.runningFold(0L) { offset, chapter -> offset + chapter.duration }
-  private val firstChapterNumbers = book.chapters.runningFold(1) { number, chapter -> number + chapter.chapterMarks.size }
-  private val chapterNames = meaningfulChapterNames(book.chapters.flatMap { chapter -> chapter.chapterMarks.map { it.name } })
+  private val chapterIndices =
+    book.chapters.withIndex().associate { (index, chapter) -> chapter.id to index }
+  private val chapterOffsets =
+    book.chapters.runningFold(0L) { offset, chapter -> offset + chapter.duration }
+  private val firstChapterNumbers =
+    book.chapters.runningFold(1) { number, chapter -> number + chapter.chapterMarks.size }
+  private val chapterNames =
+    meaningfulChapterNames(
+      book.chapters.flatMap { chapter -> chapter.chapterMarks.map { it.name } },
+    )
 
   val chapterCount: Int = chapterNames.size
 
@@ -42,11 +50,14 @@ internal class BookIndex(private val book: Book) {
   val current: BookLocation? = locate(book.content.currentChapter, book.content.positionInChapter)
 
   /** The chapter segments of the book bar, as fractions of the whole book. */
-  val segments: List<Float> = if (duration <= 0L) {
-    emptyList()
-  } else {
-    book.chapters.flatMap { chapter -> chapter.chapterMarks.map { it.durationMs.toFloat() / duration } }
-  }
+  val segments: List<Float> =
+    if (duration <= 0L) {
+      emptyList()
+    } else {
+      book.chapters.flatMap { chapter ->
+        chapter.chapterMarks.map { it.durationMs.toFloat() / duration }
+      }
+    }
 
   fun locate(
     chapterId: ChapterId,

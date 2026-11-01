@@ -22,11 +22,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.LayoutDirection
 
 /**
- * Text where every character rolls like an odometer when it changes.
- * Characters are keyed from the end so that "9:59" -> "10:00" keeps the trailing digits in place.
+ * Text where every character rolls like an odometer when it changes. Characters are keyed from the
+ * end so that "9:59" -> "10:00" keeps the trailing digits in place.
  *
- * Only meant for numbers, times and the like, which read left to right in every locale. Words
- * must not be split into characters, as many scripts join or reorder them.
+ * Only meant for numbers, times and the like, which read left to right in every locale. Words must
+ * not be split into characters, as many scripts join or reorder them.
  */
 @Composable
 internal fun RollingText(

@@ -5,7 +5,6 @@ package voice.features.playbackScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,10 +36,10 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import voice.core.strings.R as StringsR
 import voice.core.ui.NowPlayingBars
 import voice.core.ui.bookText
 import voice.core.ui.segmentedShape
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun ChapterSheet(
@@ -53,15 +52,14 @@ internal fun ChapterSheet(
   val selectedIndex = items.indexOfFirst { it.active }
   ModalBottomSheet(
     onDismissRequest = onDismiss,
-    sheetState = rememberBottomSheetState(
-      initialValue = Hidden,
-      enabledValues = setOf(Hidden, Expanded),
-    ),
+    sheetState =
+      rememberBottomSheetState(
+        initialValue = Hidden,
+        enabledValues = setOf(Hidden, Expanded),
+      ),
   ) {
     Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 24.dp, vertical = 8.dp),
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 8.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
       Text(
@@ -107,12 +105,12 @@ private fun ChapterItem(
   modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
-  val currentDescription = stringResource(StringsR.string.playback_chapter_current_content_description)
+  val currentDescription =
+    stringResource(StringsR.string.playback_chapter_current_content_description)
   Surface(
     onClick = onClick,
-    modifier = modifier
-      .fillMaxWidth()
-      .semantics {
+    modifier =
+      modifier.fillMaxWidth().semantics {
         selected = chapter.active
         if (chapter.active) contentDescription = currentDescription
       },
@@ -125,12 +123,12 @@ private fun ChapterItem(
       verticalAlignment = Alignment.CenterVertically,
     ) {
       Box(
-        modifier = Modifier
-          .size(44.dp)
-          .background(
-            color = if (chapter.active) colors.primary else colors.secondaryContainer,
-            shape = if (chapter.active) MaterialShapes.Cookie9Sided.toShape() else CircleShape,
-          ),
+        modifier =
+          Modifier.size(44.dp)
+            .background(
+              color = if (chapter.active) colors.primary else colors.secondaryContainer,
+              shape = if (chapter.active) MaterialShapes.Cookie9Sided.toShape() else CircleShape,
+            ),
         contentAlignment = Alignment.Center,
       ) {
         if (chapter.active) {
@@ -144,10 +142,13 @@ private fun ChapterItem(
         }
       }
       Spacer(Modifier.width(16.dp))
-      val nameStyle = if (chapter.active) MaterialTheme.typography.titleMediumEmphasized else MaterialTheme.typography.bodyLarge
+      val nameStyle =
+        if (chapter.active) MaterialTheme.typography.titleMediumEmphasized
+        else MaterialTheme.typography.bodyLarge
       Text(
         modifier = Modifier.weight(1F),
-        text = chapter.name ?: stringResource(StringsR.string.playback_chapter_unnamed, chapter.number),
+        text =
+          chapter.name ?: stringResource(StringsR.string.playback_chapter_unnamed, chapter.number),
         style = if (chapter.name != null) nameStyle.bookText() else nameStyle,
         color = if (played) colors.onSurfaceVariant else Color.Unspecified,
         maxLines = 2,

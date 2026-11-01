@@ -6,8 +6,8 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Parses a vorbis chapter duration, i.e. 01:54:12.8
- * See [Chapter Extension](https://wiki.xiph.org/Chapter_Extension)
+ * Parses a vorbis chapter duration, i.e. 01:54:12.8 See
+ * [Chapter Extension](https://wiki.xiph.org/Chapter_Extension)
  */
 internal fun parseVorbisDuration(value: String): Duration? {
   val split = value.split(":")

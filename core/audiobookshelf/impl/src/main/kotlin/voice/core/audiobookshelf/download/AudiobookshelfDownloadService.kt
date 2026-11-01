@@ -23,14 +23,17 @@ class AudiobookshelfDownloadService :
     0,
   ) {
 
-  private val downloads by lazy { rootGraphAs<AudiobookshelfDownloadGraph>().audiobookshelfDownloads }
+  private val downloads by lazy {
+    rootGraphAs<AudiobookshelfDownloadGraph>().audiobookshelfDownloads
+  }
   private val scope = MainScope()
 
   override fun onCreate() {
     super.onCreate()
     scope.launch {
       downloads.foregroundNotificationChanges.collect {
-        // once the downloads are done the service stops, an update then would leave the notification behind
+        // once the downloads are done the service stops, an update then would leave the
+        // notification behind
         if (downloads.hasActiveDownloads()) invalidateForegroundNotification()
       }
     }

@@ -6,19 +6,20 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.runner.RunWith
 import voice.core.datastore.VoiceDataStoreFactory
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class PlaybackStoreMigrationTest {
 
   private val application: Application = ApplicationProvider.getApplicationContext()
-  private val sharedPreferences: SharedPreferences = application.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+  private val sharedPreferences: SharedPreferences =
+    application.getSharedPreferences("prefs", Context.MODE_PRIVATE)
   private val factory = VoiceDataStoreFactory(Json.Default, application)
 
   @Test
@@ -33,14 +34,20 @@ class PlaybackStoreMigrationTest {
   fun `autoRewind migrates from SharedPreferences and cleans up`() = runTest {
     sharedPreferences.edit { putInt("AUTO_REWIND", 5) }
 
-    assertEquals(expected = 5, actual = AutoRewindAmountStore(factory, sharedPreferences).data.first())
+    assertEquals(
+      expected = 5,
+      actual = AutoRewindAmountStore(factory, sharedPreferences).data.first(),
+    )
     assertEquals(expected = false, actual = sharedPreferences.contains("AUTO_REWIND"))
   }
 
   @Test
   fun `defaults are used when SharedPreferences empty`() = runTest {
     assertEquals(expected = 20, actual = SeekTimeStore(factory, sharedPreferences).data.first())
-    assertEquals(expected = 2, actual = AutoRewindAmountStore(factory, sharedPreferences).data.first())
+    assertEquals(
+      expected = 2,
+      actual = AutoRewindAmountStore(factory, sharedPreferences).data.first(),
+    )
   }
 
   @Test
@@ -53,7 +60,10 @@ class PlaybackStoreMigrationTest {
     assertEquals(expected = 15, actual = SeekTimeStore(factory, sharedPreferences).data.first())
     assertEquals(expected = 5, actual = sharedPreferences.getInt("AUTO_REWIND", 0))
 
-    assertEquals(expected = 5, actual = AutoRewindAmountStore(factory, sharedPreferences).data.first())
+    assertEquals(
+      expected = 5,
+      actual = AutoRewindAmountStore(factory, sharedPreferences).data.first(),
+    )
     assertEquals(expected = false, actual = sharedPreferences.contains("SEEK_TIME"))
     assertEquals(expected = false, actual = sharedPreferences.contains("AUTO_REWIND"))
   }

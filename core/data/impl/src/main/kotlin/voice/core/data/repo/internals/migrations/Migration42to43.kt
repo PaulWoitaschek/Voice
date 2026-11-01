@@ -15,9 +15,10 @@ import dev.zacsweers.metro.binding
 public class Migration42to43 : IncrementalMigration(42) {
   override fun migrate(db: SupportSQLiteDatabase) {
     // invalidate modification time stamps so the chapters will be re-scanned
-    val lastModifiedCv = ContentValues().apply {
-      put("lastModified", 0)
-    }
+    val lastModifiedCv =
+      ContentValues().apply {
+        put("lastModified", 0)
+      }
     db.update("tableChapters", SQLiteDatabase.CONFLICT_FAIL, lastModifiedCv, null, null)
   }
 }

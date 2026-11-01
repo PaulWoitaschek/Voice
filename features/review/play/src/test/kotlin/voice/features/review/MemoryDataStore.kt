@@ -9,7 +9,8 @@ class MemoryDataStore<T>(initial: T) : DataStore<T> {
 
   private val value = MutableStateFlow(initial)
 
-  override val data: Flow<T> get() = value
+  override val data: Flow<T>
+    get() = value
 
   override suspend fun updateData(transform: suspend (t: T) -> T): T {
     return value.updateAndGet { transform(it) }

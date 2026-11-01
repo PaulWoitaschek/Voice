@@ -31,9 +31,10 @@ class DeveloperSettingsViewModel(
 
   @Composable
   fun viewState(): DeveloperSettingsViewState {
-    val fcmToken: String? by produceState(null) {
-      value = fmcTokenProvider.token()
-    }
+    val fcmToken: String? by
+      produceState(null) {
+        value = fmcTokenProvider.token()
+      }
 
     val flags = remember {
       val flags = featureFlags.toList()
@@ -42,40 +43,47 @@ class DeveloperSettingsViewModel(
           flags[index] to value
         }
       }
-    }.collectAsState(emptyList()).value
+    }
+      .collectAsState(emptyList())
+      .value
 
     return DeveloperSettingsViewState(
       fcmToken = fcmToken,
-      featureFlags = flags
-        .sortedBy { it.first.key }
-        .map { (featureFlag, value) ->
-          when {
-            featureFlag is EnumFeatureFlag<*> -> DeveloperSettingsViewState.FeatureFlagViewState.EnumFlag(
-              key = featureFlag.key,
-              description = featureFlag.description,
-              value = (value.value as Enum<*>).name,
-              entries = featureFlag.entries.map { it.name },
-              isOverridden = value.isOverridden,
-            )
-            featureFlag.type == Boolean::class -> DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag(
-              key = featureFlag.key,
-              description = featureFlag.description,
-              value = value.value as Boolean,
-              isOverridden = value.isOverridden,
-            )
-            featureFlag.type == String::class -> DeveloperSettingsViewState.FeatureFlagViewState.StringFlag(
-              key = featureFlag.key,
-              description = featureFlag.description,
-              value = value.value as String,
-              isOverridden = value.isOverridden,
-            )
-            else -> error("Invalid feature flag type: ${featureFlag.type}")
-          }
-        },
+      featureFlags =
+        flags
+          .sortedBy { it.first.key }
+          .map { (featureFlag, value) ->
+            when {
+              featureFlag is EnumFeatureFlag<*> ->
+                DeveloperSettingsViewState.FeatureFlagViewState.EnumFlag(
+                  key = featureFlag.key,
+                  description = featureFlag.description,
+                  value = (value.value as Enum<*>).name,
+                  entries = featureFlag.entries.map { it.name },
+                  isOverridden = value.isOverridden,
+                )
+              featureFlag.type == Boolean::class ->
+                DeveloperSettingsViewState.FeatureFlagViewState.BooleanFlag(
+                  key = featureFlag.key,
+                  description = featureFlag.description,
+                  value = value.value as Boolean,
+                  isOverridden = value.isOverridden,
+                )
+              featureFlag.type == String::class ->
+                DeveloperSettingsViewState.FeatureFlagViewState.StringFlag(
+                  key = featureFlag.key,
+                  description = featureFlag.description,
+                  value = value.value as String,
+                  isOverridden = value.isOverridden,
+                )
+              else -> error("Invalid feature flag type: ${featureFlag.type}")
+            }
+          },
     )
   }
 
   private var refreshJob: Job? = null
+
   fun refreshRemoteConfig() {
     if (refreshJob?.isActive == true) return
     refreshJob = scope.launch {
@@ -97,8 +105,7 @@ class DeveloperSettingsViewModel(
   ) {
     featureFlags.forEach {
       if (it.key == key) {
-        @Suppress("UNCHECKED_CAST")
-        (it as FeatureFlag<Boolean>).overwrite(value)
+        @Suppress("UNCHECKED_CAST") (it as FeatureFlag<Boolean>).overwrite(value)
       }
     }
   }
@@ -109,8 +116,7 @@ class DeveloperSettingsViewModel(
   ) {
     featureFlags.forEach {
       if (it.key == key) {
-        @Suppress("UNCHECKED_CAST")
-        (it as FeatureFlag<String>).overwrite(value)
+        @Suppress("UNCHECKED_CAST") (it as FeatureFlag<String>).overwrite(value)
       }
     }
   }

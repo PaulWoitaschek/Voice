@@ -1,5 +1,6 @@
 package voice.features.bookmark
 
+import java.time.Clock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -7,7 +8,6 @@ import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.Bookmark
 import voice.core.data.repo.BookmarkRepo
-import java.time.Clock
 
 internal class FakeBookmarkRepo(private val clock: Clock) : BookmarkRepo {
 
@@ -25,14 +25,15 @@ internal class FakeBookmarkRepo(private val clock: Clock) : BookmarkRepo {
     book: Book,
     title: String?,
   ): Bookmark {
-    val bookmark = Bookmark(
-      bookId = book.id,
-      chapterId = book.content.currentChapter,
-      title = title,
-      time = book.content.positionInChapter,
-      addedAt = clock.instant(),
-      id = Bookmark.Id.random(),
-    )
+    val bookmark =
+      Bookmark(
+        bookId = book.id,
+        chapterId = book.content.currentChapter,
+        title = title,
+        time = book.content.positionInChapter,
+        addedAt = clock.instant(),
+        id = Bookmark.Id.random(),
+      )
     addBookmark(bookmark)
     return bookmark
   }

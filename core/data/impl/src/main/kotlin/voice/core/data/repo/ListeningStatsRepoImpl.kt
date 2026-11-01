@@ -2,15 +2,15 @@ package voice.core.data.repo
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import java.time.Instant
+import kotlin.time.Duration.Companion.milliseconds
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
 import voice.core.data.repo.internals.dao.ListeningSessionDao
-import java.time.Instant
-import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesBinding(AppScope::class)
-public class ListeningStatsRepoImpl
-internal constructor(private val dao: ListeningSessionDao) : ListeningStatsRepo {
+public class ListeningStatsRepoImpl internal constructor(private val dao: ListeningSessionDao) :
+  ListeningStatsRepo {
 
   override suspend fun save(session: ListeningSession): Long {
     val id = dao.upsert(session)
@@ -27,9 +27,10 @@ internal constructor(private val dao: ListeningSessionDao) : ListeningStatsRepo 
     return ListeningSummary(
       listened = dao.listenedMillis(fromMillis, toMillis).milliseconds,
       listeningDays = dao.listeningDays(fromMillis, toMillis),
-      finishedBooks = dao.finishedBooks(fromMillis, toMillis).map {
-        FinishedBook(bookId = it.bookId, at = Instant.ofEpochMilli(it.atMillis))
-      },
+      finishedBooks =
+        dao.finishedBooks(fromMillis, toMillis).map {
+          FinishedBook(bookId = it.bookId, at = Instant.ofEpochMilli(it.atMillis))
+        },
     )
   }
 

@@ -23,8 +23,7 @@ class OnlyAudioRenderersFactory(context: Context) : DefaultRenderersFactory(cont
     eventListener: VideoRendererEventListener,
     allowedVideoJoiningTimeMs: Long,
     out: ArrayList<Renderer>,
-  ) {
-  }
+  ) {}
 
   override fun buildTextRenderers(
     context: Context,
@@ -32,8 +31,7 @@ class OnlyAudioRenderersFactory(context: Context) : DefaultRenderersFactory(cont
     outputLooper: Looper,
     extensionRendererMode: Int,
     out: ArrayList<Renderer>,
-  ) {
-  }
+  ) {}
 
   override fun buildMetadataRenderers(
     context: Context,
@@ -41,21 +39,18 @@ class OnlyAudioRenderersFactory(context: Context) : DefaultRenderersFactory(cont
     outputLooper: Looper,
     extensionRendererMode: Int,
     out: ArrayList<Renderer>,
-  ) {
-  }
+  ) {}
 
   override fun buildCameraMotionRenderers(
     context: Context,
     extensionRendererMode: Int,
     out: ArrayList<Renderer>,
-  ) {
-  }
+  ) {}
 
   override fun buildMiscellaneousRenderers(
     context: Context,
     eventHandler: Handler,
     extensionRendererMode: Int,
     out: ArrayList<Renderer>,
-  ) {
-  }
+  ) {}
 }

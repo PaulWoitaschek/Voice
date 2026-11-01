@@ -1,26 +1,28 @@
 package voice.features.bookmark
 
-private val audioExtension = Regex("""\.(mp3|m4a|m4b|aac|ogg|oga|opus|flac|wav|wma|mka|mp4)$""", RegexOption.IGNORE_CASE)
+private val audioExtension =
+  Regex("""\.(mp3|m4a|m4b|aac|ogg|oga|opus|flac|wav|wma|mka|mp4)$""", RegexOption.IGNORE_CASE)
 private val leadingNumber = Regex("""^\d+\s*[-_.:)\]]*\s*""")
 private val digits = Regex("""\d+""")
-private val genericWords = setOf(
-  "chapter",
-  "track",
-  "part",
-  "disc",
-  "cd",
-  "kapitel",
-  "teil",
-  "chapitre",
-  "partie",
-  "capitulo",
-  "capítulo",
-  "parte",
-  "hoofdstuk",
-  "rozdział",
-  "глава",
-  "часть",
-)
+private val genericWords =
+  setOf(
+    "chapter",
+    "track",
+    "part",
+    "disc",
+    "cd",
+    "kapitel",
+    "teil",
+    "chapitre",
+    "partie",
+    "capitulo",
+    "capítulo",
+    "parte",
+    "hoofdstuk",
+    "rozdział",
+    "глава",
+    "часть",
+  )
 
 /**
  * Keeps only the chapter names that tell something about the chapter.
@@ -32,11 +34,10 @@ private val genericWords = setOf(
 internal fun meaningfulChapterNames(names: List<String?>): List<String?> {
   if (names.size <= 1) return names.map { null }
   val cleaned = names.map { name ->
-    name?.trim()
-      ?.replace(audioExtension, "")
-      ?.replace(leadingNumber, "")
-      ?.trim()
-      ?.takeIf { cleanedName -> cleanedName.any { it.isLetter() } }
+    name?.trim()?.replace(audioExtension, "")?.replace(leadingNumber, "")?.trim()?.takeIf {
+      cleanedName ->
+      cleanedName.any { it.isLetter() }
+    }
   }
   val skeletons = cleaned.map { it?.replace(digits, "#")?.lowercase() }
   val skeletonCounts = skeletons.filterNotNull().groupingBy { it }.eachCount()

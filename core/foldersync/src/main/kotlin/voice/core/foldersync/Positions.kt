@@ -2,20 +2,18 @@ package voice.core.foldersync
 
 import android.net.Uri
 import android.provider.DocumentsContract
+import java.time.Instant
+import kotlin.math.abs
 import voice.core.data.Book
 import voice.core.data.ChapterId
 import voice.core.data.syncKey
-import java.time.Instant
-import kotlin.math.abs
 
 internal data class KeyedBook(
   val key: String,
   val book: Book,
 )
 
-/**
- * The books from [folder] that another device can recognize.
- */
+/** The books from [folder] that another device can recognize. */
 internal fun List<Book>.keyedIn(folder: Uri): List<KeyedBook> {
   val tree = folder.tree() ?: return emptyList()
   return mapNotNull { book ->
@@ -25,11 +23,12 @@ internal fun List<Book>.keyedIn(folder: Uri): List<KeyedBook> {
 }
 
 // a single file added on its own has a document uri, not a tree uri
-private fun Uri.tree(): Pair<String?, String>? = if (DocumentsContract.isTreeUri(this)) {
-  authority to DocumentsContract.getTreeDocumentId(this)
-} else {
-  null
-}
+private fun Uri.tree(): Pair<String?, String>? =
+  if (DocumentsContract.isTreeUri(this)) {
+    authority to DocumentsContract.getTreeDocumentId(this)
+  } else {
+    null
+  }
 
 internal data class TakenOverPosition(
   val chapterId: ChapterId,
@@ -44,8 +43,11 @@ internal fun Book.positionFrom(remote: SyncedPlace): TakenOverPosition? {
   if (remote.playedAt <= content.lastPlayedAt.toEpochMilli()) return null
   val chapter = chapters.getOrNull(remote.file) ?: return null
   val position = remote.position.coerceIn(0, chapter.duration)
-  // taking over a place seeks, which makes it newer here, so a small difference would go back and forth
-  val samePlace = chapter.id == content.currentChapter && abs(position - content.positionInChapter) <= SAME_PLACE_MS
+  // taking over a place seeks, which makes it newer here, so a small difference would go back and
+  // forth
+  val samePlace =
+    chapter.id == content.currentChapter &&
+      abs(position - content.positionInChapter) <= SAME_PLACE_MS
   if (samePlace) return null
   return TakenOverPosition(
     chapterId = chapter.id,

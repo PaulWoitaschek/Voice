@@ -47,6 +47,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
+import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.features.cover.SelectCoverFromInternetViewModel.Events
 import voice.features.cover.SelectCoverFromInternetViewModel.Results
@@ -54,7 +55,6 @@ import voice.features.cover.SelectCoverFromInternetViewModel.ViewState
 import voice.features.cover.api.SearchResponse
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import voice.core.strings.R as StringsR
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -62,22 +62,22 @@ object SelectCoverFromInternetProvider {
 
   @Provides
   @IntoSet
-  fun selectCoverFromInternetNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.CoverFromInternet> { key ->
-    NavEntry(key) {
-      SelectCoverFromInternet(
-        bookId = key.bookId,
-      )
+  fun selectCoverFromInternetNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.CoverFromInternet> { key ->
+      NavEntry(key) {
+        SelectCoverFromInternet(
+          bookId = key.bookId,
+        )
+      }
     }
-  }
 }
 
 @Composable
 fun SelectCoverFromInternet(bookId: BookId) {
-  val viewModel = retain(bookId.value) {
-    rootGraphAs<SelectCoverFromInternetViewModel.Factory.Provider>()
-      .factory
-      .create(bookId)
-  }
+  val viewModel =
+    retain(bookId.value) {
+      rootGraphAs<SelectCoverFromInternetViewModel.Factory.Provider>().factory.create(bookId)
+    }
 
   // a new flow would restart the view model's event collection and cancel a running download
   val sink = remember { MutableSharedFlow<Events>(extraBufferCapacity = 1) }
@@ -104,19 +104,20 @@ private fun SelectCoverFromInternet(
 ) {
   val keyboard = LocalSoftwareKeyboardController.current
   // scrolling the covers means looking at them, so the keyboard makes room
-  val hideKeyboardOnScroll = remember(keyboard) {
-    object : NestedScrollConnection {
-      override fun onPreScroll(
-        available: Offset,
-        source: NestedScrollSource,
-      ): Offset {
-        if (source == NestedScrollSource.UserInput && available.y != 0F) {
-          keyboard?.hide()
+  val hideKeyboardOnScroll =
+    remember(keyboard) {
+      object : NestedScrollConnection {
+        override fun onPreScroll(
+          available: Offset,
+          source: NestedScrollSource,
+        ): Offset {
+          if (source == NestedScrollSource.UserInput && available.y != 0F) {
+            keyboard?.hide()
+          }
+          return Offset.Zero
         }
-        return Offset.Zero
       }
     }
-  }
   val snackbarHostState = remember { SnackbarHostState() }
   val downloadFailed = viewState.downloadFailed
   val downloadFailedMessage = stringResource(StringsR.string.cover_search_download_failed)
@@ -128,9 +129,7 @@ private fun SelectCoverFromInternet(
     }
   }
   Box(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(MaterialTheme.colorScheme.surface),
+    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface),
   ) {
     Column(Modifier.statusBarsPadding()) {
       CoverSearchBar(
@@ -143,9 +142,7 @@ private fun SelectCoverFromInternet(
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
       )
       Surface(
-        modifier = Modifier
-          .fillMaxSize()
-          .nestedScroll(hideKeyboardOnScroll),
+        modifier = Modifier.fillMaxSize().nestedScroll(hideKeyboardOnScroll),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
       ) {
@@ -163,9 +160,9 @@ private fun SelectCoverFromInternet(
     }
     SnackbarHost(
       hostState = snackbarHostState,
-      modifier = Modifier
-        .align(Alignment.BottomCenter)
-        .windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets.ime)),
+      modifier =
+        Modifier.align(Alignment.BottomCenter)
+          .windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets.ime)),
     )
   }
 }
@@ -230,17 +227,20 @@ private fun ListPreview() {
           },
         ),
       )
-    }.collectAsLazyPagingItems()
+    }
+      .collectAsLazyPagingItems()
     SelectCoverFromInternet(
-      viewState = ViewState(
-        results = Results.Content(
-          items = items,
-          loadingMore = true,
-          loadingMoreFailed = false,
+      viewState =
+        ViewState(
+          results =
+            Results.Content(
+              items = items,
+              loadingMore = true,
+              loadingMoreFailed = false,
+            ),
+          downloading = null,
+          downloadFailed = false,
         ),
-        downloading = null,
-        downloadFailed = false,
-      ),
       query = TextFieldState("Dune by Frank Herbert audiobook cover"),
       onCloseClick = {},
       onCoverClick = {},

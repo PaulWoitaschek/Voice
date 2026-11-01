@@ -13,30 +13,32 @@ fun book(
 ): Book {
   val id = BookId(Uuid.random().toString())
   return Book(
-    content = BookContent(
-      positionInChapter = time,
-      playbackSpeed = 1F,
-      addedAt = Instant.ofEpochMilli(addedAtMillis),
-      chapters = chapters.map { it.id },
-      currentChapter = currentChapter,
-      isActive = true,
-      lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
-      skipSilence = false,
-      id = id,
-      gain = 0F,
-      metadata = BookMetadata(
-        name = name,
-        author = Uuid.random().toString(),
-        album = null,
-        title = null,
-        genre = null,
-        narrator = null,
-        series = null,
-        part = null,
-        cover = null,
-        fileLastModified = null,
+    content =
+      BookContent(
+        positionInChapter = time,
+        playbackSpeed = 1F,
+        addedAt = Instant.ofEpochMilli(addedAtMillis),
+        chapters = chapters.map { it.id },
+        currentChapter = currentChapter,
+        isActive = true,
+        lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
+        skipSilence = false,
+        id = id,
+        gain = 0F,
+        metadata =
+          BookMetadata(
+            name = name,
+            author = Uuid.random().toString(),
+            album = null,
+            title = null,
+            genre = null,
+            narrator = null,
+            series = null,
+            part = null,
+            cover = null,
+            fileLastModified = null,
+          ),
       ),
-    ),
     chapters = chapters,
     custom = CustomMetadata(id),
   )

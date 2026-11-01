@@ -30,20 +30,22 @@ internal class ChplVisitor : AtomVisitor {
 
     val chapterCount = buffer.readUnsignedByte()
 
-    val chapters = (0 until chapterCount).map {
-      val timestamp = if (version == 0) {
-        buffer.readUnsignedInt()
-      } else {
-        buffer.readUnsignedLongToLong()
+    val chapters =
+      (0 until chapterCount).map {
+        val timestamp =
+          if (version == 0) {
+            buffer.readUnsignedInt()
+          } else {
+            buffer.readUnsignedLongToLong()
+          }
+
+        val titleLength = buffer.readUnsignedByte()
+        val title = buffer.readString(titleLength)
+
+        // Convert from 100ns units to milliseconds (10,000 units per ms)
+        val startTimeMs = timestamp / 10_000
+        MarkData(startMs = startTimeMs, name = title)
       }
-
-      val titleLength = buffer.readUnsignedByte()
-      val title = buffer.readString(titleLength)
-
-      // Convert from 100ns units to milliseconds (10,000 units per ms)
-      val startTimeMs = timestamp / 10_000
-      MarkData(startMs = startTimeMs, name = title)
-    }
 
     parseOutput.chplChapters = chapters
   }

@@ -9,10 +9,11 @@ import voice.core.data.ListeningSession
 @Dao
 public interface ListeningSessionDao {
 
-  @Upsert
-  public suspend fun upsert(session: ListeningSession): Long
+  @Upsert public suspend fun upsert(session: ListeningSession): Long
 
-  @Query("SELECT COALESCE(SUM(listenedMillis), 0) FROM listening_session WHERE startedAtMillis >= :from AND startedAtMillis < :to")
+  @Query(
+    "SELECT COALESCE(SUM(listenedMillis), 0) FROM listening_session WHERE startedAtMillis >= :from AND startedAtMillis < :to",
+  )
   public suspend fun listenedMillis(
     from: Long,
     to: Long,

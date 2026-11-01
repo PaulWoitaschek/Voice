@@ -9,6 +9,7 @@ import androidx.glance.appwidget.updateAll
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import voice.core.initializer.AppInitializer
 import voice.core.logging.api.Logger
-import kotlin.time.Duration.Companion.seconds
 
 @ContributesIntoSet(AppScope::class)
 @Inject
@@ -35,7 +35,8 @@ class TriggerWidgetOnChange(
     placedWidgets.refresh()
     WidgetKind.entries.forEach { kind ->
       scope.launch(Dispatchers.Default) {
-        placedWidgets.placed(kind)
+        placedWidgets
+          .placed(kind)
           .flatMapLatest { placed -> if (placed) changes(kind) else emptyFlow() }
           .conflate()
           .collect { update(kind) }
@@ -50,10 +51,11 @@ class TriggerWidgetOnChange(
     }
   }
 
-  private fun changes(kind: WidgetKind): Flow<Any> = when (kind) {
-    WidgetKind.NowPlaying -> widgetData.nowPlaying
-    WidgetKind.Shelf -> widgetData.shelf
-  }
+  private fun changes(kind: WidgetKind): Flow<Any> =
+    when (kind) {
+      WidgetKind.NowPlaying -> widgetData.nowPlaying
+      WidgetKind.Shelf -> widgetData.shelf
+    }
 
   private suspend fun update(kind: WidgetKind) {
     try {
@@ -69,18 +71,20 @@ class TriggerWidgetOnChange(
   @RequiresApi(35)
   private suspend fun updatePreviews() {
     val manager = GlanceAppWidgetManager(context)
-    WidgetKind.entries.flatMap { it.receivers }.forEach { receiver ->
-      try {
-        val result = manager.setWidgetPreviews(receiver.kotlin)
-        if (result != GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_SUCCESS) {
-          // the system rate limits this, which is fine as the previews don't have to be current
-          Logger.d("The preview of ${receiver.simpleName} wasn't set: $result")
+    WidgetKind.entries
+      .flatMap { it.receivers }
+      .forEach { receiver ->
+        try {
+          val result = manager.setWidgetPreviews(receiver.kotlin)
+          if (result != GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_SUCCESS) {
+            // the system rate limits this, which is fine as the previews don't have to be current
+            Logger.d("The preview of ${receiver.simpleName} wasn't set: $result")
+          }
+        } catch (e: CancellationException) {
+          throw e
+        } catch (e: Exception) {
+          Logger.w(e, "Can't set the preview of ${receiver.simpleName}")
         }
-      } catch (e: CancellationException) {
-        throw e
-      } catch (e: Exception) {
-        Logger.w(e, "Can't set the preview of ${receiver.simpleName}")
       }
-    }
   }
 }

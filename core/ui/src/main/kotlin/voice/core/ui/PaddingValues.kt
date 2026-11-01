@@ -9,7 +9,8 @@ operator fun PaddingValues.plus(other: PaddingValues): PaddingValues {
   return object : PaddingValues {
 
     override fun calculateLeftPadding(layoutDirection: LayoutDirection): Dp {
-      return self.calculateLeftPadding(layoutDirection) + other.calculateLeftPadding(layoutDirection)
+      return self.calculateLeftPadding(layoutDirection) +
+        other.calculateLeftPadding(layoutDirection)
     }
 
     override fun calculateTopPadding(): Dp {
@@ -17,7 +18,8 @@ operator fun PaddingValues.plus(other: PaddingValues): PaddingValues {
     }
 
     override fun calculateRightPadding(layoutDirection: LayoutDirection): Dp {
-      return self.calculateRightPadding(layoutDirection) + other.calculateRightPadding(layoutDirection)
+      return self.calculateRightPadding(layoutDirection) +
+        other.calculateRightPadding(layoutDirection)
     }
 
     override fun calculateBottomPadding(): Dp {

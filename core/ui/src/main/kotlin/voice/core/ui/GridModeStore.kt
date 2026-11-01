@@ -20,19 +20,20 @@ class GridModeStore(store: DataStore<GridMode>) : DataStore<GridMode> by store {
       GridMode.serializer(),
       GridMode.FOLLOW_DEVICE,
       "gridMode",
-      migrations = listOf(
-        PrefsDataMigration(
-          sharedPreferences,
-          key = "gridView",
-          getFromSharedPreferences = {
-            when (sharedPreferences.getString("gridView", null)) {
-              "LIST" -> GridMode.LIST
-              "GRID" -> GridMode.GRID
-              else -> GridMode.FOLLOW_DEVICE
-            }
-          },
+      migrations =
+        listOf(
+          PrefsDataMigration(
+            sharedPreferences,
+            key = "gridView",
+            getFromSharedPreferences = {
+              when (sharedPreferences.getString("gridView", null)) {
+                "LIST" -> GridMode.LIST
+                "GRID" -> GridMode.GRID
+                else -> GridMode.FOLLOW_DEVICE
+              }
+            },
+          ),
         ),
-      ),
     ),
   )
 }

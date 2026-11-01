@@ -1,6 +1,7 @@
 package voice.core.scanner
 
 import dev.zacsweers.metro.Inject
+import java.time.Instant
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -13,7 +14,6 @@ import voice.core.data.toUri
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.logging.api.Logger
-import java.time.Instant
 
 @Inject
 internal class BookParser(
@@ -28,17 +28,18 @@ internal class BookParser(
     file: CachedDocumentFile,
     firstChapterMetadata: Metadata?,
   ): BookContent {
-    val stored = contentRepo.get(BookId(file.uri))
-      ?: return parse(chapters, file, firstChapterMetadata).also { contentRepo.put(it) }
+    val stored =
+      contentRepo.get(BookId(file.uri))
+        ?: return parse(chapters, file, firstChapterMetadata).also { contentRepo.put(it) }
     val firstChapter = chapters.first()
-    val upToDate = firstChapterMetadata == null &&
-      stored.chapters.first() == firstChapter.id &&
-      stored.metadata.fileLastModified == firstChapter.fileLastModified
+    val upToDate =
+      firstChapterMetadata == null &&
+        stored.chapters.first() == firstChapter.id &&
+        stored.metadata.fileLastModified == firstChapter.fileLastModified
     if (upToDate) return stored
     // a file that can't be read right now, like on an offline cloud, keeps what was read before
     val analyzed = firstChapterMetadata ?: analyze(firstChapter) ?: return stored
-    val metadata = metadata(chapters, file, analyzed)
-      .copy(cover = stored.metadata.cover)
+    val metadata = metadata(chapters, file, analyzed).copy(cover = stored.metadata.cover)
     val custom = customMetadataRepo.get(stored.id)
     val updatedCustom = custom.followingFiles(metadata)
     if (updatedCustom != custom) customMetadataRepo.put(updatedCustom)
@@ -52,7 +53,12 @@ internal class BookParser(
     file: CachedDocumentFile,
     firstChapterMetadata: Metadata?,
   ): BookContent {
-    return parse(chapters, BookId(file.uri), firstChapterMetadata ?: analyze(chapters.first()), file)
+    return parse(
+      chapters,
+      BookId(file.uri),
+      firstChapterMetadata ?: analyze(chapters.first()),
+      file,
+    )
   }
 
   fun parse(
@@ -62,20 +68,21 @@ internal class BookParser(
     file: CachedDocumentFile,
   ): BookContent {
     return BookContent(
-      id = id,
-      isActive = true,
-      addedAt = Instant.now(),
-      lastPlayedAt = Instant.EPOCH,
-      playbackSpeed = 1F,
-      skipSilence = false,
-      chapters = chapters.map { it.id },
-      positionInChapter = 0L,
-      currentChapter = chapters.first().id,
-      gain = 0F,
-      metadata = metadata(chapters, file, analyzed),
-    ).also {
-      validateIntegrity(it, chapters)
-    }
+        id = id,
+        isActive = true,
+        addedAt = Instant.now(),
+        lastPlayedAt = Instant.EPOCH,
+        playbackSpeed = 1F,
+        skipSilence = false,
+        chapters = chapters.map { it.id },
+        positionInChapter = 0L,
+        currentChapter = chapters.first().id,
+        gain = 0F,
+        metadata = metadata(chapters, file, analyzed),
+      )
+      .also {
+        validateIntegrity(it, chapters)
+      }
   }
 
   private suspend fun analyze(chapter: Chapter): Metadata? {
@@ -88,9 +95,10 @@ internal class BookParser(
     analyzed: Metadata?,
   ): BookMetadata {
     return BookMetadata(
-      name = analyzed?.album
-        ?: (analyzed?.title ?: analyzed?.fileName)?.takeIf { file.isFile }
-        ?: file.bookName(),
+      name =
+        analyzed?.album
+          ?: (analyzed?.title ?: analyzed?.fileName)?.takeIf { file.isFile }
+          ?: file.bookName(),
       author = analyzed?.artist,
       album = analyzed?.album,
       title = analyzed?.title,
@@ -106,7 +114,8 @@ internal class BookParser(
   private fun CachedDocumentFile.bookName(): String {
     val fileName = name
     return if (fileName == null) {
-      uri.toString()
+      uri
+        .toString()
         .removePrefix("/storage/emulated/0/")
         .removePrefix("/storage/emulated/")
         .removePrefix("/storage/")
@@ -128,6 +137,5 @@ internal fun validateIntegrity(
   chapters: List<Chapter>,
 ) {
   // the init block performs integrity validation
-  @Suppress("RETURN_VALUE_NOT_USED")
-  Book(content, chapters, CustomMetadata(content.id))
+  @Suppress("RETURN_VALUE_NOT_USED") Book(content, chapters, CustomMetadata(content.id))
 }

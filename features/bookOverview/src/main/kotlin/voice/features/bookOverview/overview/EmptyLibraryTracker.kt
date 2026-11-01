@@ -22,17 +22,20 @@ class EmptyLibraryTracker(
 
   private var tracked = false
 
-  // tells apart folders that lost access, books that vanished from their folders and a library that never had any (#3965)
+  // tells apart folders that lost access, books that vanished from their folders and a library that
+  // never had any (#3965)
   suspend fun track() {
     if (tracked) return
     tracked = true
-    val params = withContext(dispatcherProvider.io) {
-      mapOf(
-        "folders" to audiobookFolders.all().first().values.sumOf { it.size }.toString(),
-        "folders_without_access" to audiobookFolders.withoutAccess().first().values.sumOf { it.size }.toString(),
-        "inactive_books" to bookContentRepo.all().count { !it.isActive }.toString(),
-      )
-    }
+    val params =
+      withContext(dispatcherProvider.io) {
+        mapOf(
+          "folders" to audiobookFolders.all().first().values.sumOf { it.size }.toString(),
+          "folders_without_access" to
+            audiobookFolders.withoutAccess().first().values.sumOf { it.size }.toString(),
+          "inactive_books" to bookContentRepo.all().count { !it.isActive }.toString(),
+        )
+      }
     analytics.event("library_empty", params)
   }
 }

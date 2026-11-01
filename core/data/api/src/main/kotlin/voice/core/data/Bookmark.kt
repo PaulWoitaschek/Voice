@@ -13,10 +13,8 @@ public data class Bookmark(
   val title: String?,
   val time: Long,
   val addedAt: Instant,
-  @PrimaryKey
-  val id: Id,
-  @ColumnInfo(defaultValue = "Note")
-  val kind: Kind = Kind.Note,
+  @PrimaryKey val id: Id,
+  @ColumnInfo(defaultValue = "Note") val kind: Kind = Kind.Note,
 ) {
 
   public data class Id(val value: Uuid) {

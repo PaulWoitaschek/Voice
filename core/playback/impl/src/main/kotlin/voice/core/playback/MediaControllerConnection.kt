@@ -10,7 +10,8 @@ internal class MediaControllerConnection(private val connect: () -> Deferred<Med
   fun get(): Deferred<MediaController> {
     if (controller.isCompleted) {
       // a connection that failed is retried, like one that was dropped
-      val completedController = if (controller.getCompletionExceptionOrNull() == null) controller.getCompleted() else null
+      val completedController =
+        if (controller.getCompletionExceptionOrNull() == null) controller.getCompleted() else null
       if (completedController?.isConnected != true) {
         completedController?.release()
         controller = connect()

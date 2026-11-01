@@ -61,12 +61,12 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import voice.core.strings.R as StringsR
 import voice.core.ui.AttentionBadge
 import voice.core.ui.CheckBadge
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun LibrarySection(
@@ -86,7 +86,9 @@ internal fun LibrarySection(
   SettingsIsland(
     modifier = modifier,
     title = stringResource(StringsR.string.settings_library_title),
-    containerColor = if (dark) colors.tertiary.copy(alpha = 0.2F).compositeOver(colors.surfaceContainer) else colors.tertiaryContainer,
+    containerColor =
+      if (dark) colors.tertiary.copy(alpha = 0.2F).compositeOver(colors.surfaceContainer)
+      else colors.tertiaryContainer,
     contentColor = if (dark) colors.onSurface else colors.onTertiaryContainer,
   ) {
     IslandRow(
@@ -115,9 +117,7 @@ internal fun LibrarySection(
     }
     Spacer(Modifier.height(12.dp))
     Row(
-      modifier = Modifier
-        .selectableGroup()
-        .padding(horizontal = 16.dp),
+      modifier = Modifier.selectableGroup().padding(horizontal = 16.dp),
       horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
       LayoutTile(
@@ -143,9 +143,7 @@ private fun FolderNames(folderNames: List<String>) {
     return
   }
   FlowRow(
-    modifier = Modifier
-      .padding(top = 4.dp)
-      .animateContentSize(),
+    modifier = Modifier.padding(top = 4.dp).animateContentSize(),
     horizontalArrangement = Arrangement.spacedBy(6.dp),
     verticalArrangement = Arrangement.spacedBy(6.dp),
   ) {
@@ -166,9 +164,7 @@ private fun FolderChip(text: String) {
     contentColor = LocalContentColor.current,
   ) {
     Text(
-      modifier = Modifier
-        .widthIn(max = 160.dp)
-        .padding(horizontal = 10.dp, vertical = 4.dp),
+      modifier = Modifier.widthIn(max = 160.dp).padding(horizontal = 10.dp, vertical = 4.dp),
       text = text,
       style = MaterialTheme.typography.labelMedium,
       maxLines = 1,
@@ -187,20 +183,23 @@ private fun LayoutTile(
   modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
-  val scale by animateFloatAsState(
-    targetValue = if (selected) 1F else 0.92F,
-    animationSpec = spring(dampingRatio = 0.45F, stiffness = Spring.StiffnessMediumLow),
-    label = "layoutTileScale",
-  )
-  val borderWidth by animateDpAsState(
-    targetValue = if (selected) 3.dp else 1.dp,
-    animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-    label = "layoutTileBorderWidth",
-  )
-  val borderColor by animateColorAsState(
-    targetValue = if (selected) colors.tertiary else colors.outlineVariant,
-    label = "layoutTileBorderColor",
-  )
+  val scale by
+    animateFloatAsState(
+      targetValue = if (selected) 1F else 0.92F,
+      animationSpec = spring(dampingRatio = 0.45F, stiffness = Spring.StiffnessMediumLow),
+      label = "layoutTileScale",
+    )
+  val borderWidth by
+    animateDpAsState(
+      targetValue = if (selected) 3.dp else 1.dp,
+      animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+      label = "layoutTileBorderWidth",
+    )
+  val borderColor by
+    animateColorAsState(
+      targetValue = if (selected) colors.tertiary else colors.outlineVariant,
+      label = "layoutTileBorderColor",
+    )
   val pop = remember { Animatable(1F) }
   var wasSelected by remember { mutableStateOf(selected) }
   LaunchedEffect(selected) {
@@ -215,29 +214,25 @@ private fun LayoutTile(
   }
   val shape = RoundedCornerShape(20.dp)
   Column(
-    modifier = modifier
-      .clip(RoundedCornerShape(16.dp))
-      .selectable(
-        selected = selected,
-        onClick = onClick,
-        role = Role.RadioButton,
-      ),
+    modifier =
+      modifier
+        .clip(RoundedCornerShape(16.dp))
+        .selectable(
+          selected = selected,
+          onClick = onClick,
+          role = Role.RadioButton,
+        ),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Box(
-      modifier = Modifier
-        .fillMaxWidth()
-        .aspectRatio(1.1F)
-        .graphicsLayer {
+      modifier =
+        Modifier.fillMaxWidth().aspectRatio(1.1F).graphicsLayer {
           scaleX = scale
           scaleY = scale
         },
     ) {
       Canvas(
-        Modifier
-          .fillMaxSize()
-          .clip(shape)
-          .border(borderWidth, borderColor, shape),
+        Modifier.fillMaxSize().clip(shape).border(borderWidth, borderColor, shape),
       ) {
         drawRect(colors.surface)
         if (grid) {
@@ -249,30 +244,31 @@ private fun LayoutTile(
       CheckBadge(
         visible = selected,
         containerColor = colors.tertiary,
-        modifier = Modifier
-          .align(Alignment.TopEnd)
-          .padding(8.dp),
+        modifier = Modifier.align(Alignment.TopEnd).padding(8.dp),
       )
     }
     Spacer(Modifier.height(8.dp))
     Text(
-      text = stringResource(
-        if (grid) StringsR.string.settings_library_layout_grid else StringsR.string.settings_library_layout_list,
-      ),
+      text =
+        stringResource(
+          if (grid) StringsR.string.settings_library_layout_grid
+          else StringsR.string.settings_library_layout_list,
+        ),
       style = MaterialTheme.typography.labelLarge,
       color = LocalContentColor.current.copy(alpha = if (selected) 1F else 0.7F),
     )
   }
 }
 
-private fun ColorScheme.coverColors(): List<Color> = listOf(
-  primary,
-  tertiary,
-  secondary,
-  primaryFixedDim,
-  tertiaryFixedDim,
-  secondaryFixedDim,
-)
+private fun ColorScheme.coverColors(): List<Color> =
+  listOf(
+    primary,
+    tertiary,
+    secondary,
+    primaryFixedDim,
+    tertiaryFixedDim,
+    secondaryFixedDim,
+  )
 
 /** Covers with higher [index] pop in later as [pop] runs from 0 to 1. */
 private fun coverScale(

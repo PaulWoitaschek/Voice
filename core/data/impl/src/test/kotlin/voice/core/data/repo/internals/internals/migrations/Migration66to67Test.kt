@@ -6,6 +6,8 @@ import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
@@ -13,8 +15,6 @@ import voice.core.data.repo.internals.allMigrations
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
 import voice.core.data.repo.internals.mapRows
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 private const val DB_NAME = "testDb"
 
@@ -23,10 +23,11 @@ class Migration66to67Test {
 
   @Rule
   @JvmField
-  val helper = MigrationTestHelper(
-    InstrumentationRegistry.getInstrumentation(),
-    AppDb::class.java,
-  )
+  val helper =
+    MigrationTestHelper(
+      InstrumentationRegistry.getInstrumentation(),
+      AppDb::class.java,
+    )
 
   @Test
   fun `names of books on the device count as the listener's until a scan compares them with the files`() {
@@ -35,15 +36,23 @@ class Migration66to67Test {
       insert(book(id = "abs://item/1", name = "Server Book"))
     }
 
-    val rows = migrated.query("SELECT id, name, customName, metadataFileLastModified FROM content2")
-      .mapRows {
-        listOf(getString("id"), getString("name"), getStringOrNull("customName"), getStringOrNull("metadataFileLastModified"))
-      }
+    val rows =
+      migrated
+        .query("SELECT id, name, customName, metadataFileLastModified FROM content2")
+        .mapRows {
+          listOf(
+            getString("id"),
+            getString("name"),
+            getStringOrNull("customName"),
+            getStringOrNull("metadataFileLastModified"),
+          )
+        }
     assertEquals(
-      expected = listOf(
-        listOf("abs://item/1", "Server Book", null, null),
-        listOf("content://book", "Dune", "Dune", null),
-      ),
+      expected =
+        listOf(
+          listOf("abs://item/1", "Server Book", null, null),
+          listOf("content://book", "Dune", "Dune", null),
+        ),
       actual = rows.sortedBy { it.first() },
     )
   }
@@ -60,17 +69,18 @@ class Migration66to67Test {
   private fun book(
     id: String,
     name: String,
-  ) = ContentValues().apply {
-    put("id", id)
-    put("playbackSpeed", 1F)
-    put("skipSilence", 0)
-    put("isActive", 1)
-    put("lastPlayedAt", "1970-01-01T00:00:00Z")
-    put("name", name)
-    put("addedAt", "1970-01-01T00:00:00Z")
-    put("chapters", "[\"$id/1.mp3\"]")
-    put("currentChapter", "$id/1.mp3")
-    put("positionInChapter", 0L)
-    put("gain", 0F)
-  }
+  ) =
+    ContentValues().apply {
+      put("id", id)
+      put("playbackSpeed", 1F)
+      put("skipSilence", 0)
+      put("isActive", 1)
+      put("lastPlayedAt", "1970-01-01T00:00:00Z")
+      put("name", name)
+      put("addedAt", "1970-01-01T00:00:00Z")
+      put("chapters", "[\"$id/1.mp3\"]")
+      put("currentChapter", "$id/1.mp3")
+      put("positionInChapter", 0L)
+      put("gain", 0F)
+    }
 }

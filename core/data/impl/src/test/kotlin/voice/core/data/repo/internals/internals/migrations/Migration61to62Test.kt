@@ -6,6 +6,9 @@ import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
@@ -14,19 +17,17 @@ import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
 import voice.core.data.repo.internals.mapRows
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class Migration61to62Test {
 
   @Rule
   @JvmField
-  val helper = MigrationTestHelper(
-    InstrumentationRegistry.getInstrumentation(),
-    AppDb::class.java,
-  )
+  val helper =
+    MigrationTestHelper(
+      InstrumentationRegistry.getInstrumentation(),
+      AppDb::class.java,
+    )
 
   private val night = Instant.parse("2026-10-11T21:40:00Z")
 
@@ -38,7 +39,15 @@ class Migration61to62Test {
 
     assertEquals(expected = emptyList(), actual = migrated.bookmarkIds())
     assertEquals(
-      expected = listOf(Event(type = "SleepTimerSet", source = "SleepTimer", atMillis = night.toEpochMilli(), time = 4_000)),
+      expected =
+        listOf(
+          Event(
+            type = "SleepTimerSet",
+            source = "SleepTimer",
+            atMillis = night.toEpochMilli(),
+            time = 4_000,
+          ),
+        ),
       actual = migrated.events(),
     )
   }
@@ -152,10 +161,11 @@ class Migration61to62Test {
     )
   }
 
-  private fun SupportSQLiteDatabase.bookmarkIds() = query("SELECT id FROM bookmark2").mapRows { getString("id") }
+  private fun SupportSQLiteDatabase.bookmarkIds() =
+    query("SELECT id FROM bookmark2").mapRows { getString("id") }
 
-  private fun SupportSQLiteDatabase.events() = query("SELECT * FROM listening_event")
-    .mapRows {
+  private fun SupportSQLiteDatabase.events() =
+    query("SELECT * FROM listening_event").mapRows {
       Event(
         type = getString("type"),
         source = getString("source"),

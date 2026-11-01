@@ -1,16 +1,16 @@
 package voice.core.playback
 
-import voice.core.data.BookId
-import voice.core.data.ChapterId
-import voice.core.data.ListeningEvent
-import voice.core.data.isUndoableJump
-import voice.core.playback.history.PlaybackPosition
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import voice.core.data.BookId
+import voice.core.data.ChapterId
+import voice.core.data.ListeningEvent
+import voice.core.data.isUndoableJump
+import voice.core.playback.history.PlaybackPosition
 
 class PreviousJumpTypeTest {
 
@@ -26,16 +26,18 @@ class PreviousJumpTypeTest {
     type: ListeningEvent.Type,
     from: PlaybackPosition,
     to: PlaybackPosition,
-  ) = ListeningEvent(
-    bookId = from.bookId,
-    type = type,
-    source = ListeningEvent.Source.App,
-    atMillis = 0,
-    chapterId = from.chapterId,
-    time = from.time,
-    toChapterId = to.chapterId,
-    toTime = to.time,
-  ).isUndoableJump()
+  ) =
+    ListeningEvent(
+        bookId = from.bookId,
+        type = type,
+        source = ListeningEvent.Source.App,
+        atMillis = 0,
+        chapterId = from.chapterId,
+        time = from.time,
+        toChapterId = to.chapterId,
+        toTime = to.time,
+      )
+      .isUndoableJump()
 
   @Test
   fun `restarting the chapter a few seconds in is a seek that can't be undone`() {

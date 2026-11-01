@@ -11,8 +11,7 @@ import voice.core.data.ListeningEvent
 @Dao
 public interface ListeningEventDao {
 
-  @Insert
-  public suspend fun insert(event: ListeningEvent)
+  @Insert public suspend fun insert(event: ListeningEvent)
 
   @Query("SELECT * FROM listening_event WHERE bookId = :bookId ORDER BY atMillis DESC, id DESC")
   public fun events(bookId: BookId): Flow<List<ListeningEvent>>
@@ -47,7 +46,9 @@ public interface ListeningEventDao {
     newChapterId: ChapterId,
   )
 
-  @Query("UPDATE listening_event SET toChapterId = :newChapterId WHERE bookId = :bookId AND toChapterId = :oldChapterId")
+  @Query(
+    "UPDATE listening_event SET toChapterId = :newChapterId WHERE bookId = :bookId AND toChapterId = :oldChapterId",
+  )
   public suspend fun moveJumpTarget(
     bookId: BookId,
     oldChapterId: ChapterId,

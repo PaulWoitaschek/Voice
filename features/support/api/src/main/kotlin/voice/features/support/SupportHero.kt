@@ -16,13 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import java.time.YearMonth
 import voice.core.data.supporter.SupporterBadge
+import voice.core.strings.R as StringsR
 import voice.core.ui.BeatingHeart
 import voice.core.ui.SupporterBadgeIcon
 import voice.core.ui.label
 import voice.core.ui.supporterSinceText
-import java.time.YearMonth
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun SupportHero(

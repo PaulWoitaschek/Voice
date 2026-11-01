@@ -13,13 +13,17 @@ import androidx.glance.LocalSize
 import androidx.glance.appwidget.LocalAppWidgetOptions
 
 /**
- * Nova reports widgets taller than it lays them out. Then none of the sizes fits, and Android shows the one with the
- * smallest area, often the landscape one in portrait. So on Nova every size is laid out for the current orientation,
- * a bit shorter than Nova reports, so nothing gets cut off.
+ * Nova reports widgets taller than it lays them out. Then none of the sizes fits, and Android shows
+ * the one with the smallest area, often the landscape one in portrait. So on Nova every size is
+ * laid out for the current orientation, a bit shorter than Nova reports, so nothing gets cut off.
  */
 @Composable
 internal fun ProvideNovaSize(content: @Composable () -> Unit) {
-  val size = novaSize(LocalAppWidgetOptions.current, LocalContext.current.resources.configuration.orientation)
+  val size =
+    novaSize(
+      LocalAppWidgetOptions.current,
+      LocalContext.current.resources.configuration.orientation,
+    )
   if (size == null) {
     content()
   } else {
@@ -32,10 +36,19 @@ internal fun novaSize(
   orientation: Int,
 ): DpSize? {
   // before Android 12, Android itself shows the layout for the orientation
-  if (Build.VERSION.SDK_INT < 31 || options.keySet().none { it.startsWith(NOVA_OPTION_PREFIX) }) return null
+  if (Build.VERSION.SDK_INT < 31 || options.keySet().none { it.startsWith(NOVA_OPTION_PREFIX) })
+    return null
   val landscape = orientation == Configuration.ORIENTATION_LANDSCAPE
-  val width = options.getInt(if (landscape) AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH else AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
-  val height = options.getInt(if (landscape) AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT else AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+  val width =
+    options.getInt(
+      if (landscape) AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
+      else AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,
+    )
+  val height =
+    options.getInt(
+      if (landscape) AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
+      else AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,
+    )
   if (width <= 0 || height <= 0) return null
   return DpSize(width.dp, height.dp * NOVA_HEIGHT_FACTOR)
 }

@@ -23,7 +23,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import voice.core.data.AUDIOBOOKSHELF_SCHEME
-import voice.core.featureflag.FeatureFlag
 import voice.core.logging.api.Logger
 import voice.core.playback.Media3AudioOffloadFeatureFlag
 import voice.core.playback.history.AutomaticPauseRecorder
@@ -51,10 +50,10 @@ object PlaybackModule {
     context: Context,
     @RemoteMediaDataSource remoteDataSourceFactory: DataSource.Factory,
   ): MediaSource.Factory {
-    // schemes the default data source doesn't know, like the ids of server books, go to the remote one
+    // schemes the default data source doesn't know, like the ids of server books, go to the remote
+    // one
     val dataSourceFactory = DefaultDataSource.Factory(context, remoteDataSourceFactory)
-    val extractorsFactory = DefaultExtractorsFactory()
-      .setConstantBitrateSeekingEnabled(true)
+    val extractorsFactory = DefaultExtractorsFactory().setConstantBitrateSeekingEnabled(true)
     return DefaultMediaSourceFactory(dataSourceFactory, extractorsFactory)
   }
 
@@ -72,10 +71,11 @@ object PlaybackModule {
     listeningSessionRecorder: ListeningSessionRecorder,
     media3AudioOffloadFeatureFlag: Media3AudioOffloadFeatureFlag,
   ): ExoPlayer {
-    val audioAttributes = AudioAttributes.Builder()
-      .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
-      .setUsage(C.USAGE_MEDIA)
-      .build()
+    val audioAttributes =
+      AudioAttributes.Builder()
+        .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
+        .setUsage(C.USAGE_MEDIA)
+        .build()
 
     return ExoPlayer.Builder(context, onlyAudioRenderersFactory, mediaSourceFactory)
       .setAudioAttributes(audioAttributes, true)
@@ -85,16 +85,19 @@ object PlaybackModule {
       .build()
       .also { player ->
         if (media3AudioOffloadFeatureFlag.get()) {
-          player.trackSelectionParameters = player.trackSelectionParameters
-            .buildUpon()
-            .setAudioOffloadPreferences(
-              TrackSelectionParameters.AudioOffloadPreferences.Builder()
-                .setAudioOffloadMode(TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
-                .setIsGaplessSupportRequired(true)
-                .setIsSpeedChangeSupportRequired(true)
-                .build(),
-            )
-            .build()
+          player.trackSelectionParameters =
+            player.trackSelectionParameters
+              .buildUpon()
+              .setAudioOffloadPreferences(
+                TrackSelectionParameters.AudioOffloadPreferences.Builder()
+                  .setAudioOffloadMode(
+                    TrackSelectionParameters.AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED,
+                  )
+                  .setIsGaplessSupportRequired(true)
+                  .setIsSpeedChangeSupportRequired(true)
+                  .build(),
+              )
+              .build()
         }
         playStateDelegatingListener.attachTo(player)
         positionUpdater.attachTo(player)
@@ -106,7 +109,8 @@ object PlaybackModule {
         }
         player.addListener(
           object : Player.Listener {
-            // a server book streams, and over Wi-Fi that needs the Wi-Fi to stay awake while the screen is off
+            // a server book streams, and over Wi-Fi that needs the Wi-Fi to stay awake while the
+            // screen is off
             override fun onMediaItemTransition(
               mediaItem: MediaItem?,
               reason: Int,

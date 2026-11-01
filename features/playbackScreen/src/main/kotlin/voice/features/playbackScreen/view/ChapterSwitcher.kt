@@ -62,9 +62,7 @@ internal fun ChapterSwitcher(
     }
     Surface(
       onClick = onChapterClick,
-      modifier = Modifier
-        .weight(1F)
-        .heightIn(min = 56.dp),
+      modifier = Modifier.weight(1F).heightIn(min = 56.dp),
       shape = RoundedCornerShape(20.dp),
       color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.85F),
     ) {
@@ -77,8 +75,10 @@ internal fun ChapterSwitcher(
           targetState = ChapterLabel(chapterNumber, chapterName),
           transitionSpec = {
             val forward = targetState.number >= initialState.number
-            val enter = slideInHorizontally { width -> if (forward) width / 2 else -width / 2 } + fadeIn()
-            val exit = slideOutHorizontally { width -> if (forward) -width / 2 else width / 2 } + fadeOut()
+            val enter =
+              slideInHorizontally { width -> if (forward) width / 2 else -width / 2 } + fadeIn()
+            val exit =
+              slideOutHorizontally { width -> if (forward) -width / 2 else width / 2 } + fadeOut()
             (enter togetherWith exit).using(SizeTransform(clip = false))
           },
           contentAlignment = Alignment.CenterStart,

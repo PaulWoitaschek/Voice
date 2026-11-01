@@ -25,22 +25,23 @@ data class BookOverviewViewState(
 ) {
 
   companion object {
-    val Loading = BookOverviewViewState(
-      sections = mapOf(),
-      hero = null,
-      inProgressCount = 0,
-      currentBookId = null,
-      layoutMode = BookOverviewLayoutMode.List,
-      playButtonState = null,
-      showEmptyLibrary = false,
-      showSearchIcon = false,
-      isLoading = true,
-      showStoragePermissionBugCard = false,
-      showSurveyCard = false,
-      showFolderAccessBadge = false,
-      showFolderPickerIcon = true,
-      dialog = null,
-    )
+    val Loading =
+      BookOverviewViewState(
+        sections = mapOf(),
+        hero = null,
+        inProgressCount = 0,
+        currentBookId = null,
+        layoutMode = BookOverviewLayoutMode.List,
+        playButtonState = null,
+        showEmptyLibrary = false,
+        showSearchIcon = false,
+        isLoading = true,
+        showStoragePermissionBugCard = false,
+        showSurveyCard = false,
+        showFolderAccessBadge = false,
+        showFolderPickerIcon = true,
+        dialog = null,
+      )
   }
 
   enum class PlayButtonState {
@@ -63,13 +64,15 @@ sealed interface LibraryItem {
     val id: BookId,
     val state: State<BookOverviewItemViewState>,
   ) : LibraryItem {
-    override val key: String get() = id.value
+    override val key: String
+      get() = id.value
   }
 
   @Immutable
   data class Series(val series: SeriesStackViewState) : LibraryItem {
     // a book id is a URI or starts with abs:, so this never clashes with one
-    override val key: String get() = "series:${series.key}"
+    override val key: String
+      get() = "series:${series.key}"
   }
 }
 
@@ -85,13 +88,14 @@ data class SeriesStackViewState(
   val category: BookOverviewCategory,
 )
 
-internal fun Series.toStackViewState() = SeriesStackViewState(
-  key = key,
-  name = name,
-  author = author,
-  covers = covers,
-  bookCount = books.size,
-  finishedCount = finishedCount,
-  progress = progress,
-  category = category,
-)
+internal fun Series.toStackViewState() =
+  SeriesStackViewState(
+    key = key,
+    name = name,
+    author = author,
+    covers = covers,
+    bookCount = books.size,
+    finishedCount = finishedCount,
+    progress = progress,
+    category = category,
+  )

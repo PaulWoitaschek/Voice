@@ -21,9 +21,11 @@ class NavEntryResolver(private val providers: Set<NavEntryProvider<*>>) {
     return NavEntry(
       key = key,
       contentKey = navEntry.contentKey,
-      metadata = navEntry.metadata + metadata {
-        put(DestinationMetadataKey, key)
-      },
+      metadata =
+        navEntry.metadata +
+          metadata {
+            put(DestinationMetadataKey, key)
+          },
     ) {
       navEntry.Content()
     }

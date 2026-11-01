@@ -43,9 +43,10 @@ class ShelfWidget : GlanceAppWidget() {
 
   override val sizeMode: SizeMode = SizeMode.Exact
 
-  override val previewSizeMode = SizeMode.Responsive(
-    setOf(DpSize(130.dp, 130.dp), DpSize(180.dp, 180.dp), DpSize(300.dp, 180.dp)),
-  )
+  override val previewSizeMode =
+    SizeMode.Responsive(
+      setOf(DpSize(130.dp, 130.dp), DpSize(180.dp, 180.dp), DpSize(300.dp, 180.dp)),
+    )
 
   override suspend fun provideGlance(
     context: Context,
@@ -75,13 +76,14 @@ class ShelfWidget : GlanceAppWidget() {
 }
 
 /** Each slot keeps its shape, so covers change shape as they move along, like books on a shelf. */
-private val SlotShapes = listOf(
-  WidgetShape.Cookie9,
-  WidgetShape.Clover,
-  WidgetShape.Arch,
-  WidgetShape.Sunny,
-  WidgetShape.Pentagon,
-)
+private val SlotShapes =
+  listOf(
+    WidgetShape.Cookie9,
+    WidgetShape.Clover,
+    WidgetShape.Arch,
+    WidgetShape.Sunny,
+    WidgetShape.Pentagon,
+  )
 
 @Composable
 internal fun ShelfContent(
@@ -92,15 +94,21 @@ internal fun ShelfContent(
   WidgetColors(theme = state.theme) {
     val size = LocalSize.current
     Box(
-      modifier = GlanceModifier
-        .fillMaxSize()
-        .appWidgetBackground()
-        .widgetSurface(GlanceTheme.colors.widgetBackground),
+      modifier =
+        GlanceModifier.fillMaxSize()
+          .appWidgetBackground()
+          .widgetSurface(GlanceTheme.colors.widgetBackground),
     ) {
       when {
         state.books.isEmpty() -> ShelfEmpty(actions)
         size.width < 220.dp -> ShelfGrid(state.books.take(4), images, actions)
-        else -> ShelfRow(state.books, slots = if (size.width >= 400.dp) SHELF_MAX_BOOKS else 4, images, actions)
+        else ->
+          ShelfRow(
+            state.books,
+            slots = if (size.width >= 400.dp) SHELF_MAX_BOOKS else 4,
+            images,
+            actions,
+          )
       }
     }
   }
@@ -117,7 +125,11 @@ private fun ShelfGrid(
   val gap = 6.dp
   val columns = if (books.size == 1) 1 else 2
   val rows = if (books.size <= 2) 1 else 2
-  val slot = min((size.width - padding * 2 - gap * (columns - 1)) / columns, (size.height - padding * 2 - gap * (rows - 1)) / rows)
+  val slot =
+    min(
+      (size.width - padding * 2 - gap * (columns - 1)) / columns,
+      (size.height - padding * 2 - gap * (rows - 1)) / rows,
+    )
   Column(
     modifier = GlanceModifier.fillMaxSize().padding(padding),
     horizontalAlignment = Alignment.CenterHorizontally,
@@ -156,10 +168,13 @@ private fun ShelfRow(
   val slotWidth = (size.width - padding * 2 - gap * (slots - 1)) / slots
   val withDetails = size.height >= 150.dp
   val detailsHeight = if (withDetails) 34.dp else 0.dp
-  val coverSize = min(slotWidth, size.height - padding * 2 - headerHeight - 8.dp - detailsHeight).coerceAtMost(120.dp)
+  val coverSize =
+    min(slotWidth, size.height - padding * 2 - headerHeight - 8.dp - detailsHeight)
+      .coerceAtMost(120.dp)
   Column(modifier = GlanceModifier.fillMaxSize().padding(padding)) {
     Row(
-      modifier = GlanceModifier.fillMaxWidth().height(headerHeight).clickable(actions.openLibrary()),
+      modifier =
+        GlanceModifier.fillMaxWidth().height(headerHeight).clickable(actions.openLibrary()),
       verticalAlignment = Alignment.CenterVertically,
     ) {
       TitleText(
@@ -167,7 +182,11 @@ private fun ShelfRow(
         modifier = GlanceModifier.defaultWeight(),
         fontSize = 15.sp,
       )
-      WidgetIcon(icon = R.drawable.widget_ic_library, size = 20.dp, color = GlanceTheme.colors.onSurfaceVariant)
+      WidgetIcon(
+        icon = R.drawable.widget_ic_library,
+        size = 20.dp,
+        color = GlanceTheme.colors.onSurfaceVariant,
+      )
     }
     Spacer(GlanceModifier.defaultWeight())
     Row(modifier = GlanceModifier.fillMaxWidth()) {
@@ -187,7 +206,12 @@ private fun ShelfRow(
             Spacer(GlanceModifier.height(4.dp))
             SubtitleText(text = item.book.title, fontSize = 12.sp)
             Spacer(GlanceModifier.height(2.dp))
-            ProgressWave(progress = item.book.progress, wavy = item.book.playing, width = coverSize, images = images)
+            ProgressWave(
+              progress = item.book.progress,
+              wavy = item.book.playing,
+              width = coverSize,
+              images = images,
+            )
           }
         }
       }
@@ -204,13 +228,13 @@ private fun ShelfCover(
   images: WidgetImages,
   actions: WidgetActions,
 ) {
-  val description = LocalContext.current.getString(StringsR.string.widget_shelf_play, item.book.title)
+  val description =
+    LocalContext.current.getString(StringsR.string.widget_shelf_play, item.book.title)
   Box(
-    modifier = GlanceModifier
-      .width(size)
-      .height(size)
-      .clickable(actions.playBook(item.book.id))
-      .semantics { contentDescription = description },
+    modifier =
+      GlanceModifier.width(size).height(size).clickable(actions.playBook(item.book.id)).semantics {
+        contentDescription = description
+      },
     contentAlignment = Alignment.TopEnd,
   ) {
     ShapedCover(cover = item.cover, shape = shape, size = size, images = images)
@@ -252,11 +276,18 @@ private fun ShelfEmpty(actions: WidgetActions) {
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    WidgetIcon(icon = R.drawable.widget_ic_library, size = 28.dp, color = GlanceTheme.colors.primary)
+    WidgetIcon(
+      icon = R.drawable.widget_ic_library,
+      size = 28.dp,
+      color = GlanceTheme.colors.primary,
+    )
     Spacer(GlanceModifier.height(8.dp))
     TitleText(text = context.getString(StringsR.string.widget_shelf_title), fontSize = 15.sp)
     SubtitleText(text = context.getString(StringsR.string.widget_shelf_empty), maxLines = 2)
     Spacer(GlanceModifier.height(10.dp))
-    PillButton(text = context.getString(StringsR.string.widget_no_book_action), onClick = actions.openLibrary())
+    PillButton(
+      text = context.getString(StringsR.string.widget_no_book_action),
+      onClick = actions.openLibrary(),
+    )
   }
 }

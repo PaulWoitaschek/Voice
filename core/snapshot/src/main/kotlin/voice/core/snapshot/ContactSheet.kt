@@ -14,12 +14,16 @@ internal fun writeContactSheet(
   val labeled = snapshots.map { file ->
     // scaled right away, so a module with many previews doesn't hold them all at full size
     val image = ImageIO.read(file)
-    val scale = minOf(1.0, CELL_HEIGHT.toDouble() / image.height, CELL_WIDTH.toDouble() / image.width)
+    val scale =
+      minOf(1.0, CELL_HEIGHT.toDouble() / image.height, CELL_WIDTH.toDouble() / image.width)
     val width = (image.width * scale).toInt().coerceAtLeast(1)
     val height = (image.height * scale).toInt().coerceAtLeast(1)
     val scaled = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
     scaled.createGraphics().apply {
-      setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
+      setRenderingHint(
+        RenderingHints.KEY_INTERPOLATION,
+        RenderingHints.VALUE_INTERPOLATION_BILINEAR,
+      )
       drawImage(image, 0, 0, width, height, null)
       dispose()
     }
@@ -38,7 +42,10 @@ internal fun writeContactSheet(
   val height = rows.sumOf { row -> row.maxOf { it.height } + LABEL_HEIGHT + GAP } + GAP
   val sheet = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
   val graphics = sheet.createGraphics()
-  graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
+  graphics.setRenderingHint(
+    RenderingHints.KEY_TEXT_ANTIALIASING,
+    RenderingHints.VALUE_TEXT_ANTIALIAS_ON,
+  )
   graphics.color = Color(0x77, 0x77, 0x77)
   graphics.fillRect(0, 0, width, height)
   graphics.font = Font(Font.SANS_SERIF, Font.PLAIN, 18)
@@ -49,8 +56,9 @@ internal fun writeContactSheet(
     row.forEach { cell ->
       graphics.color = Color.WHITE
       // labels are cut from the start, the end tells previews of one file apart
-      val label = generateSequence(cell.label) { it.drop(1) }
-        .first { it.isEmpty() || metrics.stringWidth(it) <= cell.width }
+      val label =
+        generateSequence(cell.label) { it.drop(1) }
+          .first { it.isEmpty() || metrics.stringWidth(it) <= cell.width }
       graphics.drawString(label, x, y + LABEL_HEIGHT - 8)
       graphics.drawImage(cell.image, x, y + LABEL_HEIGHT, null)
       x += cell.width + GAP
@@ -66,8 +74,11 @@ private class Cell(
   val image: BufferedImage,
 ) {
   // narrow previews still get room for a readable label
-  val width: Int get() = maxOf(image.width, MIN_CELL_WIDTH)
-  val height: Int get() = image.height
+  val width: Int
+    get() = maxOf(image.width, MIN_CELL_WIDTH)
+
+  val height: Int
+    get() = image.height
 }
 
 private const val CELL_WIDTH = 900

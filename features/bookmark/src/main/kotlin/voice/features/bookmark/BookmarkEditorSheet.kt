@@ -60,13 +60,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
+import java.text.NumberFormat
 import voice.core.data.Bookmark
 import voice.core.strings.R
 import voice.core.ui.BookmarkBadge
 import voice.core.ui.MorphShape
 import voice.core.ui.bookmarkStyle
 import voice.core.ui.icons.VoiceIcons
-import java.text.NumberFormat
 
 /**
  * Details for a bookmark. A new bookmark is already saved when this opens, so swiping the sheet
@@ -85,21 +85,25 @@ internal fun BookmarkEditorSheet(
 ) {
   ModalBottomSheet(
     onDismissRequest = onDone,
-    sheetState = rememberBottomSheetState(
-      initialValue = Hidden,
-      enabledValues = setOf(Hidden, Expanded),
-    ),
+    sheetState =
+      rememberBottomSheetState(
+        initialValue = Hidden,
+        enabledValues = setOf(Hidden, Expanded),
+      ),
   ) {
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .navigationBarsPadding()
-        .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
+      modifier =
+        Modifier.fillMaxWidth()
+          .navigationBarsPadding()
+          .padding(start = 24.dp, end = 24.dp, bottom = 16.dp),
     ) {
       EditorHeader(editor)
       Spacer(Modifier.height(20.dp))
       Text(
-        text = stringResource(if (editor.isNew) R.string.bookmark_nudge_new else R.string.bookmark_nudge_edit),
+        text =
+          stringResource(
+            if (editor.isNew) R.string.bookmark_nudge_new else R.string.bookmark_nudge_edit,
+          ),
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
       )
@@ -129,20 +133,32 @@ internal fun BookmarkEditorSheet(
       Row(verticalAlignment = Alignment.CenterVertically) {
         if (editor.isNew) {
           TextButton(onClick = onUndo) {
-            Icon(VoiceIcons.Undo, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+            Icon(
+              VoiceIcons.Undo,
+              contentDescription = null,
+              modifier = Modifier.size(ButtonDefaults.IconSize),
+            )
             Spacer(Modifier.width(ButtonDefaults.IconSpacing))
             Text(stringResource(R.string.common_action_undo))
           }
         } else {
           TextButton(onClick = onDelete) {
-            Icon(VoiceIcons.Delete, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+            Icon(
+              VoiceIcons.Delete,
+              contentDescription = null,
+              modifier = Modifier.size(ButtonDefaults.IconSize),
+            )
             Spacer(Modifier.width(ButtonDefaults.IconSpacing))
             Text(stringResource(R.string.common_action_delete))
           }
         }
         Spacer(Modifier.weight(1F))
         Button(onClick = onDone, shapes = ButtonDefaults.shapes()) {
-          Icon(VoiceIcons.Check, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+          Icon(
+            VoiceIcons.Check,
+            contentDescription = null,
+            modifier = Modifier.size(ButtonDefaults.IconSize),
+          )
           Spacer(Modifier.width(ButtonDefaults.IconSpacing))
           Text(stringResource(R.string.common_action_done))
         }
@@ -160,17 +176,20 @@ private fun EditorHeader(editor: BookmarkEditorViewState) {
       // the burst from the player's long press, popping in
       val pop = remember { Animatable(0F) }
       LaunchedEffect(Unit) {
-        pop.animateTo(1F, spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow))
+        pop.animateTo(
+          1F,
+          spring(dampingRatio = Spring.DampingRatioHighBouncy, stiffness = Spring.StiffnessLow),
+        )
       }
       Box(
-        modifier = Modifier
-          .size(56.dp)
-          .graphicsLayer {
-            scaleX = pop.value
-            scaleY = pop.value
-            rotationZ = (1F - pop.value) * -90F
-          }
-          .background(colors.primary, MaterialShapes.SoftBurst.toShape()),
+        modifier =
+          Modifier.size(56.dp)
+            .graphicsLayer {
+              scaleX = pop.value
+              scaleY = pop.value
+              rotationZ = (1F - pop.value) * -90F
+            }
+            .background(colors.primary, MaterialShapes.SoftBurst.toShape()),
         contentAlignment = Alignment.Center,
       ) {
         Icon(VoiceIcons.Check, contentDescription = null, tint = colors.onPrimary)
@@ -181,12 +200,18 @@ private fun EditorHeader(editor: BookmarkEditorViewState) {
     Spacer(Modifier.width(16.dp))
     Column {
       Text(
-        text = stringResource(if (editor.isNew) R.string.bookmark_saved else R.string.bookmark_edit_title),
+        text =
+          stringResource(
+            if (editor.isNew) R.string.bookmark_saved else R.string.bookmark_edit_title,
+          ),
         style = MaterialTheme.typography.headlineSmallEmphasized,
       )
-      val chapter = if (editor.showChapter) chapterLabel(editor.chapterNumber, editor.chapterName) else null
+      val chapter =
+        if (editor.showChapter) chapterLabel(editor.chapterNumber, editor.chapterName) else null
       Text(
-        text = listOfNotNull(chapter, editor.time, percentFormat.format(editor.percent / 100.0)).joinToString(" · "),
+        text =
+          listOfNotNull(chapter, editor.time, percentFormat.format(editor.percent / 100.0))
+            .joinToString(" · "),
         style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
         color = colors.onSurfaceVariant,
         maxLines = 2,
@@ -239,9 +264,7 @@ private fun KindPicker(
 ) {
   // the tiles share the width: they don't all fit side by side at full size on a small phone
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .selectableGroup(),
+    modifier = Modifier.fillMaxWidth().selectableGroup(),
     horizontalArrangement = Arrangement.SpaceEvenly,
   ) {
     Bookmark.Kind.entries.forEach { kind ->
@@ -265,37 +288,39 @@ private fun KindTile(
   val colors = MaterialTheme.colorScheme
   val style = bookmarkStyle(kind)
   val morph = remember(style.polygon) { Morph(MaterialShapes.Circle, style.polygon) }
-  val progress by animateFloatAsState(
-    targetValue = if (selected) 1F else 0F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
-    label = "kindMorph",
-  )
+  val progress by
+    animateFloatAsState(
+      targetValue = if (selected) 1F else 0F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
+      label = "kindMorph",
+    )
   Column(
-    modifier = modifier
-      .clip(MaterialTheme.shapes.large)
-      .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
-      .padding(4.dp),
+    modifier =
+      modifier
+        .clip(MaterialTheme.shapes.large)
+        .selectable(selected = selected, onClick = onClick, role = Role.RadioButton)
+        .padding(4.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Box(
-      modifier = Modifier
-        .widthIn(max = 64.dp)
-        .fillMaxWidth()
-        .aspectRatio(1F)
-        .border(
-          width = 2.dp,
-          color = if (selected) colors.primary else Color.Transparent,
-          shape = CircleShape,
-        )
-        .padding(6.dp),
+      modifier =
+        Modifier.widthIn(max = 64.dp)
+          .fillMaxWidth()
+          .aspectRatio(1F)
+          .border(
+            width = 2.dp,
+            color = if (selected) colors.primary else Color.Transparent,
+            shape = CircleShape,
+          )
+          .padding(6.dp),
       contentAlignment = Alignment.Center,
     ) {
       Box(
-        modifier = Modifier
-          .fillMaxSize()
-          .graphicsLayer { rotationZ = progress * 20F }
-          .clip(MorphShape(morph, progress))
-          .background(if (selected) style.container else colors.surfaceContainerHighest),
+        modifier =
+          Modifier.fillMaxSize()
+            .graphicsLayer { rotationZ = progress * 20F }
+            .clip(MorphShape(morph, progress))
+            .background(if (selected) style.container else colors.surfaceContainerHighest),
         contentAlignment = Alignment.Center,
       ) {
         val icon = style.icon ?: VoiceIcons.Favorite
@@ -303,9 +328,7 @@ private fun KindTile(
           imageVector = icon,
           contentDescription = null,
           tint = if (selected) style.content else colors.onSurfaceVariant,
-          modifier = Modifier
-            .size(24.dp)
-            .graphicsLayer { rotationZ = progress * -20F },
+          modifier = Modifier.size(24.dp).graphicsLayer { rotationZ = progress * -20F },
         )
       }
     }

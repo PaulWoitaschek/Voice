@@ -1,10 +1,10 @@
 package voice.features.settings
 
+import java.time.LocalTime
+import java.time.YearMonth
 import voice.core.data.supporter.SupporterBadge
 import voice.core.ui.ThemeColorScheme
 import voice.core.ui.ThemeMode
-import java.time.LocalTime
-import java.time.YearMonth
 
 data class SettingsViewState(
   val themeMode: ThemeMode,

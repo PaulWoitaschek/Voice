@@ -7,6 +7,13 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.mockk
+import java.io.File
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
@@ -16,13 +23,6 @@ import voice.core.data.BookMetadata
 import voice.core.data.ChapterId
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
-import java.io.File
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
@@ -31,17 +31,21 @@ class CoverSaverTest {
   private val context = ApplicationProvider.getApplicationContext<Context>()
   private val contents = mutableMapOf<BookId, BookContent>()
   private val customs = mutableMapOf<BookId, CustomMetadata>()
-  private val repo = mockk<BookRepository> {
-    coEvery { this@mockk.get(any()) } returns null
-    coEvery { updateBook(any(), any()) } answers {
-      val id = firstArg<BookId>()
-      contents[id] = secondArg<(BookContent) -> BookContent>()(contents.getValue(id))
+  private val repo =
+    mockk<BookRepository> {
+      coEvery { this@mockk.get(any()) } returns null
+      coEvery { updateBook(any(), any()) } answers
+        {
+          val id = firstArg<BookId>()
+          contents[id] = secondArg<(BookContent) -> BookContent>()(contents.getValue(id))
+        }
+      coEvery { updateCustomMetadata(any(), any()) } answers
+        {
+          val id = firstArg<BookId>()
+          customs[id] =
+            secondArg<(CustomMetadata) -> CustomMetadata>()(customs[id] ?: CustomMetadata(id))
+        }
     }
-    coEvery { updateCustomMetadata(any(), any()) } answers {
-      val id = firstArg<BookId>()
-      customs[id] = secondArg<(CustomMetadata) -> CustomMetadata>()(customs[id] ?: CustomMetadata(id))
-    }
-  }
   private val coverSaver = CoverSaver(repo = repo, context = context)
 
   @Test
@@ -84,7 +88,8 @@ class CoverSaverTest {
   ): File {
     return File(context.cacheDir, "image.jpg").apply {
       outputStream().use {
-        Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).compress(Bitmap.CompressFormat.JPEG, 90, it)
+        Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+          .compress(Bitmap.CompressFormat.JPEG, 90, it)
       }
     }
   }
@@ -104,28 +109,30 @@ class CoverSaverTest {
   private fun content(name: String): BookContent {
     val chapter = ChapterId("$name.mp3")
     return BookContent(
-      id = BookId(name),
-      playbackSpeed = 1F,
-      skipSilence = false,
-      isActive = true,
-      lastPlayedAt = Instant.EPOCH,
-      addedAt = Instant.EPOCH,
-      chapters = listOf(chapter),
-      currentChapter = chapter,
-      positionInChapter = 0,
-      gain = 0F,
-      metadata = BookMetadata(
-        name = name,
-        author = null,
-        album = null,
-        title = null,
-        genre = null,
-        narrator = null,
-        series = null,
-        part = null,
-        cover = null,
-        fileLastModified = null,
-      ),
-    ).also { contents[it.id] = it }
+        id = BookId(name),
+        playbackSpeed = 1F,
+        skipSilence = false,
+        isActive = true,
+        lastPlayedAt = Instant.EPOCH,
+        addedAt = Instant.EPOCH,
+        chapters = listOf(chapter),
+        currentChapter = chapter,
+        positionInChapter = 0,
+        gain = 0F,
+        metadata =
+          BookMetadata(
+            name = name,
+            author = null,
+            album = null,
+            title = null,
+            genre = null,
+            narrator = null,
+            series = null,
+            part = null,
+            cover = null,
+            fileLastModified = null,
+          ),
+      )
+      .also { contents[it.id] = it }
   }
 }

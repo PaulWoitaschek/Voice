@@ -8,8 +8,8 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import voice.core.datastore.VoiceDataStoreFactory
 import java.io.File
+import voice.core.datastore.VoiceDataStoreFactory
 
 @SingleIn(AppScope::class)
 class ThemeModeStore(store: DataStore<ThemeMode>) : DataStore<ThemeMode> by store {
@@ -24,9 +24,10 @@ class ThemeModeStore(store: DataStore<ThemeMode>) : DataStore<ThemeMode> by stor
       serializer = ThemeMode.serializer(),
       fileName = "themeMode",
       defaultValue = ThemeMode.FollowSystem,
-      migrations = listOf(
-        LegacyDarkThemeMigration(application, sharedPreferences),
-      ),
+      migrations =
+        listOf(
+          LegacyDarkThemeMigration(application, sharedPreferences),
+        ),
     ),
   )
 }
@@ -36,7 +37,8 @@ private class LegacyDarkThemeMigration(
   private val sharedPreferences: SharedPreferences,
 ) : DataMigration<ThemeMode> {
 
-  private val oldDataStoreFile = File(application.applicationContext.filesDir, "datastore/darkTheme")
+  private val oldDataStoreFile =
+    File(application.applicationContext.filesDir, "datastore/darkTheme")
 
   override suspend fun cleanUp() {
     oldDataStoreFile.delete()
@@ -46,11 +48,12 @@ private class LegacyDarkThemeMigration(
   }
 
   override suspend fun migrate(currentData: ThemeMode): ThemeMode {
-    val legacyValue = when {
-      oldDataStoreFile.exists() -> oldDataStoreFile.readText().trim().toBooleanStrictOrNull()
-      sharedPreferences.contains("darkTheme") -> sharedPreferences.getBoolean("darkTheme", false)
-      else -> null
-    }
+    val legacyValue =
+      when {
+        oldDataStoreFile.exists() -> oldDataStoreFile.readText().trim().toBooleanStrictOrNull()
+        sharedPreferences.contains("darkTheme") -> sharedPreferences.getBoolean("darkTheme", false)
+        else -> null
+      }
     return when (legacyValue) {
       true -> ThemeMode.Dark
       false -> ThemeMode.Light

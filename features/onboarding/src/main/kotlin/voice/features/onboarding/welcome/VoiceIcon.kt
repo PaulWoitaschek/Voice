@@ -36,10 +36,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.math.min
 import kotlin.math.sqrt
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /** Tapping it is just for fun, so it's hidden from accessibility services. */
 @Composable
@@ -57,15 +57,17 @@ internal fun VoiceIcon(
   val bounce = remember { Animatable(0F) }
   val ripple = remember { Animatable(1F) }
   var pressed by remember { mutableStateOf(false) }
-  val squish by animateFloatAsState(
-    targetValue = if (pressed) 0.9F else 1F,
-    animationSpec = spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMedium),
-    label = "iconSquish",
-  )
+  val squish by
+    animateFloatAsState(
+      targetValue = if (pressed) 0.9F else 1F,
+      animationSpec = spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMedium),
+      label = "iconSquish",
+    )
   LaunchedEffect(Unit) {
     if (shown) return@LaunchedEffect
     launch { pop.animateTo(1F, spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow)) }
-    // the waves start as a flat line and rise once the icon is there, like a voice starting to speak
+    // the waves start as a flat line and rise once the icon is there, like a voice starting to
+    // speak
     delay(200)
     rise.animateTo(1F, spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessMediumLow))
     shown = true
@@ -73,27 +75,32 @@ internal fun VoiceIcon(
   val wave = remember { Path() }
   val tile = remember { Path() }
   Canvas(
-    modifier = modifier
-      .clearAndSetSemantics {}
-      .pointerInput(Unit) {
-        detectTapGestures(
-          onPress = {
-            pressed = true
-            tryAwaitRelease()
-            pressed = false
-          },
-          onTap = {
-            haptics.performHapticFeedback(HapticFeedbackType.SegmentTick)
-            scope.launch {
-              bounce.animateTo(0F, spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessLow), initialVelocity = 5F)
-            }
-            scope.launch {
-              ripple.snapTo(0F)
-              ripple.animateTo(1F, tween(durationMillis = 900, easing = LinearOutSlowInEasing))
-            }
-          },
-        )
-      },
+    modifier =
+      modifier
+        .clearAndSetSemantics {}
+        .pointerInput(Unit) {
+          detectTapGestures(
+            onPress = {
+              pressed = true
+              tryAwaitRelease()
+              pressed = false
+            },
+            onTap = {
+              haptics.performHapticFeedback(HapticFeedbackType.SegmentTick)
+              scope.launch {
+                bounce.animateTo(
+                  0F,
+                  spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessLow),
+                  initialVelocity = 5F,
+                )
+              }
+              scope.launch {
+                ripple.snapTo(0F)
+                ripple.animateTo(1F, tween(durationMillis = 900, easing = LinearOutSlowInEasing))
+              }
+            },
+          )
+        },
   ) {
     val t = clock()
     val side = min(min(size.width, size.height) * 0.6F, 200.dp.toPx())
@@ -163,17 +170,25 @@ private fun DrawScope.drawWave(
     val point = topLeft + Offset((x - VISIBLE_START) * unit, (y - VISIBLE_START) * unit)
     if (i == 0) path.moveTo(point.x, point.y) else path.lineTo(point.x, point.y)
   }
-  drawPath(path, color, alpha = alpha, style = Stroke(width = STROKE_WIDTH * unit, cap = StrokeCap.Round, join = StrokeJoin.Round))
+  drawPath(
+    path,
+    color,
+    alpha = alpha,
+    style = Stroke(width = STROKE_WIDTH * unit, cap = StrokeCap.Round, join = StrokeJoin.Round),
+  )
 }
 
-// the wave of the launcher icon, in the units of its vector: a round dip, a slope up, a round crest and a slope down
+// the wave of the launcher icon, in the units of its vector: a round dip, a slope up, a round crest
+// and a slope down
 private fun waveY(x: Float): Float {
   val u = ((x % PERIOD) + PERIOD) % PERIOD
   val crestStart = CHORD + SLOPE
   return when {
     u < CHORD -> BOTTOM - ARC_OFFSET + sqrt(RADIUS * RADIUS - (u - CHORD / 2) * (u - CHORD / 2))
     u < crestStart -> BOTTOM - (u - CHORD) / SLOPE * (BOTTOM - TOP)
-    u < crestStart + CHORD -> TOP + ARC_OFFSET - sqrt(RADIUS * RADIUS - (u - crestStart - CHORD / 2) * (u - crestStart - CHORD / 2))
+    u < crestStart + CHORD ->
+      TOP + ARC_OFFSET -
+        sqrt(RADIUS * RADIUS - (u - crestStart - CHORD / 2) * (u - crestStart - CHORD / 2))
     else -> TOP + (u - crestStart - CHORD) / SLOPE * (BOTTOM - TOP)
   }
 }

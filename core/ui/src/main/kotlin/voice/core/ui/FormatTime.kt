@@ -15,11 +15,12 @@ fun formatTime(
     "%1\$0${hourDigits}d:%2\$02d:%3\$02d".format(h, m, s)
   } else {
     val minuteDigits = largerTime.minutes().digits()
-    val pattern = if (minuteDigits == 0) {
-      "%1\$d:%2\$02d"
-    } else {
-      "%1\$0${minuteDigits}d:%2\$02d"
-    }
+    val pattern =
+      if (minuteDigits == 0) {
+        "%1\$d:%2\$02d"
+      } else {
+        "%1\$0${minuteDigits}d:%2\$02d"
+      }
     pattern.format(m, s)
   }
 }

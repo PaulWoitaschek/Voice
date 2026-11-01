@@ -4,18 +4,19 @@ import androidx.media3.session.MediaController
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
 import kotlin.test.Test
 import kotlin.test.assertSame
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
 
 class MediaControllerConnectionTest {
 
   @Test
   fun `a failed connection is retried`() {
-    val failed = CompletableDeferred<MediaController>().apply {
-      completeExceptionally(SecurityException("Session rejected the connection request."))
-    }
+    val failed =
+      CompletableDeferred<MediaController>().apply {
+        completeExceptionally(SecurityException("Session rejected the connection request."))
+      }
     val connected = CompletableDeferred(controller(connected = true))
     val connection = connection(failed, connected)
 
@@ -46,7 +47,8 @@ class MediaControllerConnectionTest {
     return MediaControllerConnection { remaining.next() }
   }
 
-  private fun controller(connected: Boolean): MediaController = mockk(relaxUnitFun = true) {
-    every { isConnected } returns connected
-  }
+  private fun controller(connected: Boolean): MediaController =
+    mockk(relaxUnitFun = true) {
+      every { isConnected } returns connected
+    }
 }

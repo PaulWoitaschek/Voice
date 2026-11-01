@@ -10,6 +10,13 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockk
+import java.time.Instant
+import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 import org.junit.runner.RunWith
 import voice.core.data.Book
 import voice.core.data.Chapter
@@ -19,13 +26,6 @@ import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
 import voice.core.playback.session.toMediaIdOrNull
-import java.time.Instant
-import java.util.concurrent.TimeUnit
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
 class ChapterMarkPlayerTest {
@@ -35,28 +35,35 @@ class ChapterMarkPlayerTest {
   /** Durations the wrapped player resolves when they differ from the stored ones. */
   private val resolvedDurations = mutableMapOf<ChapterId, Long>()
 
-  private val exoPlayer = TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
-    .setMediaSourceFactory(
-      mockk {
-        every { createMediaSource(any()) } answers {
-          val mediaItem = arg<MediaItem>(0)
-          val chapter = book.chapters.single {
-            it.id == mediaItem.mediaId.toMediaIdOrNull()!!.realChapterId
-          }
-          FakeMediaSource(
-            FakeTimeline(
-              FakeTimeline.TimelineWindowDefinition.Builder()
-                .setPeriodCount(1)
-                .setSeekable(true)
-                .setDurationUs(TimeUnit.MILLISECONDS.toMicros(resolvedDurations[chapter.id] ?: chapter.duration))
-                .setMediaItem(mediaItem)
-                .build(),
-            ),
-          )
-        }
-      },
-    )
-    .build()
+  private val exoPlayer =
+    TestExoPlayerBuilder(ApplicationProvider.getApplicationContext())
+      .setMediaSourceFactory(
+        mockk {
+          every { createMediaSource(any()) } answers
+            {
+              val mediaItem = arg<MediaItem>(0)
+              val chapter =
+                book.chapters.single {
+                  it.id == mediaItem.mediaId.toMediaIdOrNull()!!.realChapterId
+                }
+              FakeMediaSource(
+                FakeTimeline(
+                  FakeTimeline.TimelineWindowDefinition.Builder()
+                    .setPeriodCount(1)
+                    .setSeekable(true)
+                    .setDurationUs(
+                      TimeUnit.MILLISECONDS.toMicros(
+                        resolvedDurations[chapter.id] ?: chapter.duration,
+                      ),
+                    )
+                    .setMediaItem(mediaItem)
+                    .build(),
+                ),
+              )
+            }
+        },
+      )
+      .build()
 
   private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk())
   private val player = ChapterMarkPlayer(exoPlayer, mediaItemProvider)
@@ -126,17 +133,19 @@ class ChapterMarkPlayerTest {
     assertEquals(expected = 0, actual = autoTransitions.single().first.mediaItemIndex)
     assertEquals(expected = 1, actual = autoTransitions.single().second.mediaItemIndex)
     assertEquals(
-      expected = listOf<Pair<CharSequence?, Int>>("One" to Player.MEDIA_ITEM_TRANSITION_REASON_AUTO),
+      expected =
+        listOf<Pair<CharSequence?, Int>>("One" to Player.MEDIA_ITEM_TRANSITION_REASON_AUTO),
       actual = transitions,
     )
   }
 
   @Test
   fun `crossing a file boundary reports a single auto transition`() {
-    val chapters = listOf(
-      chapter(duration = 10_000, MarkData(0, "One"), MarkData(5_000, "Two")),
-      chapter(duration = 10_000, MarkData(0, "Three"), MarkData(5_000, "Four")),
-    )
+    val chapters =
+      listOf(
+        chapter(duration = 10_000, MarkData(0, "One"), MarkData(5_000, "Two")),
+        chapter(duration = 10_000, MarkData(0, "Three"), MarkData(5_000, "Four")),
+      )
     setBook(chapters, startItemIndex = 1, positionInItemMs = 4_500)
     val autoTransitions = recordDiscontinuities(Player.DISCONTINUITY_REASON_AUTO_TRANSITION)
 
@@ -235,7 +244,9 @@ class ChapterMarkPlayerTest {
     assertFalse(exoPlayer.shuffleModeEnabled)
   }
 
-  private fun recordDiscontinuities(reason: Int): List<Pair<Player.PositionInfo, Player.PositionInfo>> {
+  private fun recordDiscontinuities(
+    reason: Int,
+  ): List<Pair<Player.PositionInfo, Player.PositionInfo>> {
     val recorded = mutableListOf<Pair<Player.PositionInfo, Player.PositionInfo>>()
     player.addListener(
       object : Player.Listener {
@@ -268,12 +279,13 @@ class ChapterMarkPlayerTest {
     TestPlayerRunHelper.runUntilPlaybackState(exoPlayer, Player.STATE_READY)
   }
 
-  private val nextAndPrevious = listOf(
-    Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM,
-    Player.COMMAND_SEEK_TO_PREVIOUS,
-    Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
-    Player.COMMAND_SEEK_TO_NEXT,
-  )
+  private val nextAndPrevious =
+    listOf(
+      Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM,
+      Player.COMMAND_SEEK_TO_PREVIOUS,
+      Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM,
+      Player.COMMAND_SEEK_TO_NEXT,
+    )
 
   private fun singleFileWithThreeMarks(): Chapter {
     return chapter(

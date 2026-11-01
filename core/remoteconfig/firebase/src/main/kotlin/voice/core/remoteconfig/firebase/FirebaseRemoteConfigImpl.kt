@@ -18,14 +18,22 @@ class FirebaseRemoteConfigImpl : RemoteConfig {
     key: String,
     defaultValue: Boolean,
   ): Boolean {
-    return valueIfRemote(key = key, default = defaultValue, get = FirebaseRemoteConfigValue::asBoolean)
+    return valueIfRemote(
+      key = key,
+      default = defaultValue,
+      get = FirebaseRemoteConfigValue::asBoolean,
+    )
   }
 
   override fun string(
     key: String,
     defaultValue: String,
   ): String {
-    return valueIfRemote(key = key, default = defaultValue, get = FirebaseRemoteConfigValue::asString)
+    return valueIfRemote(
+      key = key,
+      default = defaultValue,
+      get = FirebaseRemoteConfigValue::asString,
+    )
   }
 
   private fun <T> valueIfRemote(

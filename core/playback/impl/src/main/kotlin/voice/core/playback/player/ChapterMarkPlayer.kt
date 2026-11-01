@@ -77,15 +77,17 @@ class ChapterMarkPlayer(
     val markMediaItems = mediaItemProvider.playbackItems(book)
     this.book = book
     this.playlist = playlist
-    markItems = playlist.items.mapIndexed { index, item ->
-      // Not the media id: it contains the mark's end, which moves when the file duration is corrected.
-      MediaItemData.Builder(item.chapter.id to item.markIndex)
-        .setMediaItem(markMediaItems[index])
-        .setDurationUs(item.mark.durationMs * 1000)
-        .setIsSeekable(true)
-        .setIsDynamic(false)
-        .build()
-    }
+    markItems =
+      playlist.items.mapIndexed { index, item ->
+        // Not the media id: it contains the mark's end, which moves when the file duration is
+        // corrected.
+        MediaItemData.Builder(item.chapter.id to item.markIndex)
+          .setMediaItem(markMediaItems[index])
+          .setDurationUs(item.mark.durationMs * 1000)
+          .setIsSeekable(true)
+          .setIsDynamic(false)
+          .build()
+      }
     return playlist
   }
 
@@ -100,16 +102,17 @@ class ChapterMarkPlayer(
     if (timeline.windowCount != book.chapters.size) return
     val window = Timeline.Window()
     var changed = false
-    val chapters = book.chapters.mapIndexed { index, chapter ->
-      timeline.getWindow(index, window)
-      val durationMs = window.durationMs
-      if (window.isPlaceholder || durationMs == C.TIME_UNSET || durationMs == chapter.duration) {
-        chapter
-      } else {
-        changed = true
-        chapter.copy(duration = durationMs)
+    val chapters =
+      book.chapters.mapIndexed { index, chapter ->
+        timeline.getWindow(index, window)
+        val durationMs = window.durationMs
+        if (window.isPlaceholder || durationMs == C.TIME_UNSET || durationMs == chapter.duration) {
+          chapter
+        } else {
+          changed = true
+          chapter.copy(duration = durationMs)
+        }
       }
-    }
     if (!changed) return
     val playlist = applyBook(book.copy(chapters = chapters))
     reportedItemIndex = playlist.itemIndexFor(player.currentMediaItemIndex, player.contentPosition)
@@ -144,10 +147,12 @@ class ChapterMarkPlayer(
     positionInFileMs: Long,
     action: () -> Unit,
   ) {
-    val message = player.createMessage { _, _ -> action() }
-      .setPosition(playlist.fileIndexOf(itemIndex), positionInFileMs)
-      .setDeleteAfterDelivery(false)
-      .setLooper(player.applicationLooper)
+    val message =
+      player
+        .createMessage { _, _ -> action() }
+        .setPosition(playlist.fileIndexOf(itemIndex), positionInFileMs)
+        .setDeleteAfterDelivery(false)
+        .setLooper(player.applicationLooper)
     boundaryMessages += message
     message.send()
   }
@@ -172,15 +177,16 @@ class ChapterMarkPlayer(
     val previousItemIndex = reportedItemIndex
     reportedItemIndex = itemIndex
 
-    val builder = state.buildUpon()
-      .setPlaylist(playlistWithCurrentItem(itemIndex, state))
-      .setCurrentMediaItemIndex(itemIndex)
-      .setContentPositionMs { mark.rebase(positionInFileSupplier.get()) }
-      .setContentBufferedPositionMs { mark.rebase(bufferedSupplier.get()) }
+    val builder =
+      state
+        .buildUpon()
+        .setPlaylist(playlistWithCurrentItem(itemIndex, state))
+        .setCurrentMediaItemIndex(itemIndex)
+        .setContentPositionMs { mark.rebase(positionInFileSupplier.get()) }
+        .setContentBufferedPositionMs { mark.rebase(bufferedSupplier.get()) }
 
-    val crossedMark = previousItemIndex != null &&
-      previousItemIndex != itemIndex &&
-      !state.isSeekDiscontinuity()
+    val crossedMark =
+      previousItemIndex != null && previousItemIndex != itemIndex && !state.isSeekDiscontinuity()
     if (crossedMark) {
       builder.setPositionDiscontinuity(
         DISCONTINUITY_REASON_AUTO_TRANSITION,
@@ -199,12 +205,12 @@ class ChapterMarkPlayer(
    * Repeat and shuffle would be applied to the files of the wrapped player, so they would act on
    * whole files instead of on the chapters we present.
    *
-   * Next and previous stay available in the first and the last chapter, because [VoicePlayer] turns them into skips,
-   * and headsets and cars only send them while they are available.
+   * Next and previous stay available in the first and the last chapter, because [VoicePlayer] turns
+   * them into skips, and headsets and cars only send them while they are available.
    */
   private fun State.withPresentedCommands(): State {
-    val commands = availableCommands.buildUpon()
-      .removeAll(COMMAND_SET_REPEAT_MODE, COMMAND_SET_SHUFFLE_MODE)
+    val commands =
+      availableCommands.buildUpon().removeAll(COMMAND_SET_REPEAT_MODE, COMMAND_SET_SHUFFLE_MODE)
     if (!timeline.isEmpty) {
       commands.addAll(
         COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM,
@@ -213,17 +219,13 @@ class ChapterMarkPlayer(
         COMMAND_SEEK_TO_NEXT,
       )
     }
-    return buildUpon()
-      .setAvailableCommands(commands.build())
-      .build()
+    return buildUpon().setAvailableCommands(commands.build()).build()
   }
 
   private fun State.isSeekDiscontinuity(): Boolean {
     return hasPositionDiscontinuity &&
-      (
-        positionDiscontinuityReason == DISCONTINUITY_REASON_SEEK ||
-          positionDiscontinuityReason == DISCONTINUITY_REASON_SEEK_ADJUSTMENT
-        )
+      (positionDiscontinuityReason == DISCONTINUITY_REASON_SEEK ||
+        positionDiscontinuityReason == DISCONTINUITY_REASON_SEEK_ADJUSTMENT)
   }
 
   private fun ChapterMark.rebase(positionInFileMs: Long): Long {
@@ -231,22 +233,19 @@ class ChapterMarkPlayer(
   }
 
   /**
-   * The wrapped player combines the metadata embedded in the file with the file's media item.
-   * Keep that and overlay the mark's own metadata, the same way ExoPlayer does for its items.
+   * The wrapped player combines the metadata embedded in the file with the file's media item. Keep
+   * that and overlay the mark's own metadata, the same way ExoPlayer does for its items.
    */
   private fun playlistWithCurrentItem(
     itemIndex: Int,
     state: State,
   ): List<MediaItemData> {
     val current = markItems[itemIndex]
-    val metadata = state.currentMetadata.buildUpon()
-      .populate(current.mediaItem.mediaMetadata)
-      .build()
+    val metadata =
+      state.currentMetadata.buildUpon().populate(current.mediaItem.mediaMetadata).build()
     return markItems.toMutableList().also { items ->
-      items[itemIndex] = current.buildUpon()
-        .setTracks(state.currentTracks)
-        .setMediaMetadata(metadata)
-        .build()
+      items[itemIndex] =
+        current.buildUpon().setTracks(state.currentTracks).setMediaMetadata(metadata).build()
     }
   }
 

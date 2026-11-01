@@ -1,8 +1,8 @@
 package voice.features.playbackScreen
 
 import dev.zacsweers.metro.Inject
-import voice.core.playback.misc.Decibel
 import java.text.DecimalFormat
+import voice.core.playback.misc.Decibel
 
 @Inject
 class VolumeGainFormatter {

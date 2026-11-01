@@ -9,16 +9,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import kotlinx.coroutines.flow.map
-import voice.core.data.supporter.SupporterStatus
-import voice.core.data.supporter.SupporterStatusStore
-import voice.core.featureflag.FeatureFlag
-import voice.features.support.SupportViewState.Action
-import voice.features.support.SupportViewState.Content
-import voice.navigation.Navigator
 import java.time.Clock
 import java.time.Instant
 import java.time.YearMonth
+import kotlinx.coroutines.flow.map
+import voice.core.data.supporter.SupporterStatus
+import voice.core.data.supporter.SupporterStatusStore
+import voice.features.support.SupportViewState.Action
+import voice.features.support.SupportViewState.Content
+import voice.navigation.Navigator
 
 @Inject
 class SupportViewModel(
@@ -53,19 +52,24 @@ class SupportViewModel(
     }
     val backendState by backend.state.collectAsState()
     val status by remember { supporterStatusStore.data }.collectAsState(initial = SupporterStatus())
-    val note by remember { supporterNoteFeatureFlag.flow.map { it.value } }
+    val note by remember {
+      supporterNoteFeatureFlag.flow.map { it.value }
+    }
       .collectAsState(initial = supporterNoteFeatureFlag.get())
     return SupportViewState(
-      content = when (val state = backendState) {
-        SupportBackendState.KoFi -> Content.KoFi
-        SupportBackendState.Loading -> Content.Loading
-        SupportBackendState.Unavailable -> Content.Unavailable
-        is SupportBackendState.Play -> playContent(state, note.takeIf { it.isNotBlank() }) ?: Content.Unavailable
-      },
+      content =
+        when (val state = backendState) {
+          SupportBackendState.KoFi -> Content.KoFi
+          SupportBackendState.Loading -> Content.Loading
+          SupportBackendState.Unavailable -> Content.Unavailable
+          is SupportBackendState.Play ->
+            playContent(state, note.takeIf { it.isNotBlank() }) ?: Content.Unavailable
+        },
       badge = status.badge,
-      supporterSince = status.supporterSince?.let {
-        YearMonth.from(Instant.ofEpochMilli(it).atZone(clock.zone))
-      },
+      supporterSince =
+        status.supporterSince?.let {
+          YearMonth.from(Instant.ofEpochMilli(it).atZone(clock.zone))
+        },
       thankYou = thankYou,
       message = message,
     )
@@ -76,24 +80,25 @@ class SupportViewModel(
     note: String?,
   ): Content.Play? {
     val active = state.activeSubscription
-    val tiersByFrequency = SupportFrequency.entries
-      .associateWith { state.tiers(it) }
-      .filterValues { it.isNotEmpty() }
+    val tiersByFrequency =
+      SupportFrequency.entries.associateWith { state.tiers(it) }.filterValues { it.isNotEmpty() }
     val frequencies = tiersByFrequency.keys.toList()
-    val frequency = chosenFrequency?.takeIf { it in tiersByFrequency }
-      ?: frequencies.firstOrNull { active != null && it.period == active.period }
-      ?: frequencies.firstOrNull()
-      ?: return null
+    val frequency =
+      chosenFrequency?.takeIf { it in tiersByFrequency }
+        ?: frequencies.firstOrNull { active != null && it.period == active.period }
+        ?: frequencies.firstOrNull()
+        ?: return null
     val tiers = tiersByFrequency.getValue(frequency)
     val wanted = chosenTier ?: active?.tier ?: SupporterTier.HoneyTea
     val selected = tiers.firstOrNull { it.tier == wanted } ?: tiers.first()
     val period = frequency.period
-    val action = when {
-      period == null -> Action.Tip(selected.formattedPrice)
-      selected.active -> Action.Manage
-      active == null -> Action.Subscribe(selected.formattedPrice, period)
-      else -> Action.Switch(selected.formattedPrice, period)
-    }
+    val action =
+      when {
+        period == null -> Action.Tip(selected.formattedPrice)
+        selected.active -> Action.Manage
+        active == null -> Action.Subscribe(selected.formattedPrice, period)
+        else -> Action.Switch(selected.formattedPrice, period)
+      }
     return Content.Play(
       frequencies = frequencies,
       frequency = frequency,
@@ -104,13 +109,16 @@ class SupportViewModel(
     )
   }
 
-  private fun SupportBackendState.Play.tiers(frequency: SupportFrequency): List<SupportViewState.Tier> {
+  private fun SupportBackendState.Play.tiers(
+    frequency: SupportFrequency,
+  ): List<SupportViewState.Tier> {
     val period = frequency.period
-    val prices = if (period == null) {
-      tips.map { it.tier to it.formattedPrice }
-    } else {
-      subscriptions.filter { it.period == period }.map { it.tier to it.formattedPrice }
-    }
+    val prices =
+      if (period == null) {
+        tips.map { it.tier to it.formattedPrice }
+      } else {
+        subscriptions.filter { it.period == period }.map { it.tier to it.formattedPrice }
+      }
     return prices
       .sortedBy { (tier, _) -> tier.ordinal }
       .map { (tier, formattedPrice) ->

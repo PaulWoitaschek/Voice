@@ -9,13 +9,13 @@ import androidx.media3.extractor.metadata.flac.PictureFrame
 import androidx.media3.extractor.metadata.id3.ApicFrame
 import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
+import java.io.File
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaCoverExtractor
-import java.io.File
 
 @Inject
 internal class CoverExtractor(
@@ -28,13 +28,13 @@ internal class CoverExtractor(
     outputFile: File,
   ): Boolean {
     val fileType = FileTypes.inferFileTypeFromUri(input)
-    val extension = (input.path ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
+    val extension =
+      (input.path ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
     if (fileType == FileTypes.MATROSKA || extension == "mka" || extension == "mkv") {
       return matroskaCoverExtractor.extract(input, outputFile)
     }
 
-    val trackGroups = retrieveMetadata(input)
-      ?: return false
+    val trackGroups = retrieveMetadata(input) ?: return false
 
     repeat(trackGroups.length) { trackGroupIndex ->
       val trackGroup = trackGroups[trackGroupIndex]
@@ -66,9 +66,9 @@ internal class CoverExtractor(
 
   private suspend fun retrieveMetadata(uri: Uri): TrackGroupArray? {
     return try {
-      MetadataRetriever.Builder(context, MediaItem.fromUri(uri))
-        .build()
-        .use { it.retrieveTrackGroups().await() }
+      MetadataRetriever.Builder(context, MediaItem.fromUri(uri)).build().use {
+        it.retrieveTrackGroups().await()
+      }
     } catch (e: Exception) {
       if (e is CancellationException) currentCoroutineContext().ensureActive()
       Logger.w(e, "Can't read the embedded cover")

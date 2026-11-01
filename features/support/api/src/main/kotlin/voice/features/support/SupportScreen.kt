@@ -36,11 +36,11 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
+import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.navigation.BottomSheetNav
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import voice.core.strings.R as StringsR
 
 @Composable
 @Preview(heightDp = 1150)
@@ -56,16 +56,19 @@ private fun SupportPlayPreview() {
 private fun SupportOncePreview() {
   SupportPreview(
     SupportViewState.preview(
-      content = SupportViewState.previewPlayContent().copy(
-        frequency = SupportFrequency.Once,
-        tiers = listOf(
-          SupportViewState.Tier(SupporterTier.Tea, "€2.99", active = false),
-          SupportViewState.Tier(SupporterTier.HoneyTea, "€4.99", active = false),
-          SupportViewState.Tier(SupporterTier.GoldenMic, "€9.99", active = false),
-        ),
-        selectedTier = SupporterTier.HoneyTea,
-        action = SupportViewState.Action.Tip("€4.99"),
-      ),
+      content =
+        SupportViewState.previewPlayContent()
+          .copy(
+            frequency = SupportFrequency.Once,
+            tiers =
+              listOf(
+                SupportViewState.Tier(SupporterTier.Tea, "€2.99", active = false),
+                SupportViewState.Tier(SupporterTier.HoneyTea, "€4.99", active = false),
+                SupportViewState.Tier(SupporterTier.GoldenMic, "€9.99", active = false),
+              ),
+            selectedTier = SupporterTier.HoneyTea,
+            action = SupportViewState.Action.Tip("€4.99"),
+          ),
     ),
   )
 }
@@ -74,7 +77,8 @@ private fun SupportOncePreview() {
 @Preview
 private fun SupportKoFiPreview() {
   SupportPreview(
-    SupportViewState.preview(content = SupportViewState.Content.KoFi).copy(badge = null, supporterSince = null),
+    SupportViewState.preview(content = SupportViewState.Content.KoFi)
+      .copy(badge = null, supporterSince = null),
   )
 }
 
@@ -107,11 +111,11 @@ private fun Support(
     label = "thankYou",
   ) { thankYou ->
     Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState())
-        .padding(horizontal = 24.dp)
-        .padding(bottom = 32.dp),
+      modifier =
+        Modifier.fillMaxWidth()
+          .verticalScroll(rememberScrollState())
+          .padding(horizontal = 24.dp)
+          .padding(bottom = 32.dp),
       verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
       if (thankYou) {
@@ -132,12 +136,13 @@ private fun Support(
             }
           }
           SupportViewState.Content.Unavailable -> Unavailable(onRetry = listener::retry)
-          is SupportViewState.Content.Play -> PlayContent(
-            content = content,
-            message = viewState.message,
-            badge = viewState.badge,
-            listener = listener,
-          )
+          is SupportViewState.Content.Play ->
+            PlayContent(
+              content = content,
+              message = viewState.message,
+              badge = viewState.badge,
+              listener = listener,
+            )
         }
       }
     }
@@ -179,14 +184,15 @@ object SupportProvider {
 
   @Provides
   @IntoSet
-  fun supportNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.SupportVoice> { key ->
-    NavEntry(
-      key,
-      metadata = BottomSheetNav.bottomSheet(),
-    ) {
-      Support()
+  fun supportNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.SupportVoice> { key ->
+      NavEntry(
+        key,
+        metadata = BottomSheetNav.bottomSheet(),
+      ) {
+        Support()
+      }
     }
-  }
 }
 
 @Composable

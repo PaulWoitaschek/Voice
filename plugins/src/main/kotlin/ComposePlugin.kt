@@ -30,15 +30,25 @@ class ComposePlugin : Plugin<Project> {
   private fun configureCompose(extension: CommonExtension, target: Project) {
     val libs = target.extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
     target.dependencies.add("implementation", libs.findBundle("compose").get())
-    target.dependencies.add("debugImplementation", libs.findLibrary("compose-ui-tooling-core").get())
+    target.dependencies.add(
+      "debugImplementation",
+      libs.findLibrary("compose-ui-tooling-core").get(),
+    )
     target.dependencies.add("testImplementation", libs.findLibrary("molecule").get())
     target.dependencies.add("lintChecks", libs.findLibrary("compose-lint-checks").get())
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
     target.extensions.configure<ComposeCompilerGradlePluginExtension> {
-      if (target.providers.gradleProperty("voice.composeCompilerReports").orNull?.toBooleanStrictOrNull() == true) {
+      if (
+        target.providers
+          .gradleProperty("voice.composeCompilerReports")
+          .orNull
+          ?.toBooleanStrictOrNull() == true
+      ) {
         reportsDestination.set(target.layout.buildDirectory.dir("compose_compiler"))
       }
-      stabilityConfigurationFiles.add(target.layout.settingsDirectory.file("compose_stability.conf"))
+      stabilityConfigurationFiles.add(
+        target.layout.settingsDirectory.file("compose_stability.conf"),
+      )
     }
     extension.buildFeatures.compose = true
     target.tasks.withType<KotlinCompile> {

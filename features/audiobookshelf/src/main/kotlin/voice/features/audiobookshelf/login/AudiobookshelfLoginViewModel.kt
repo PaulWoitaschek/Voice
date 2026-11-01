@@ -27,10 +27,8 @@ class AudiobookshelfLoginViewModel(
   private val serverAccount: ServerAccount,
   private val navigator: Navigator,
   dispatcherProvider: DispatcherProvider,
-  @Assisted
-  private val origin: Origin,
-  @Assisted
-  private val renew: Boolean,
+  @Assisted private val origin: Origin,
+  @Assisted private val renew: Boolean,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -39,10 +37,12 @@ class AudiobookshelfLoginViewModel(
   private var login: PendingLogin? = null
   private var knownUsername = ""
 
-  // the request of the step on screen. Going back cancels it, so its answer can't take over another step.
+  // the request of the step on screen. Going back cancels it, so its answer can't take over another
+  // step.
   private var request: Job? = null
 
-  internal var state: AudiobookshelfLoginViewState by mutableStateOf(AudiobookshelfLoginViewState.Address())
+  internal var state: AudiobookshelfLoginViewState by
+    mutableStateOf(AudiobookshelfLoginViewState.Address())
     private set
 
   init {
@@ -69,16 +69,19 @@ class AudiobookshelfLoginViewModel(
       when (val result = serverLogin.findServer(current.address)) {
         is FindServerResult.Found -> {
           server = result.server
-          state = AudiobookshelfLoginViewState.Credentials(
-            serverName = current.address.trim().removeSuffix("/"),
-            username = knownUsername,
-            passwordLogin = result.server.passwordLogin,
-          )
+          state =
+            AudiobookshelfLoginViewState.Credentials(
+              serverName = current.address.trim().removeSuffix("/"),
+              username = knownUsername,
+              passwordLogin = result.server.passwordLogin,
+            )
         }
         FindServerResult.NotFound -> state = current.copy(error = AddressError.NotFound)
-        FindServerResult.CertificateNotTrusted -> state = current.copy(error = AddressError.CertificateNotTrusted)
+        FindServerResult.CertificateNotTrusted ->
+          state = current.copy(error = AddressError.CertificateNotTrusted)
         FindServerResult.NotSetUp -> state = current.copy(error = AddressError.NotSetUp)
-        is FindServerResult.TooOld -> state = current.copy(error = AddressError.TooOld(result.version))
+        is FindServerResult.TooOld ->
+          state = current.copy(error = AddressError.TooOld(result.version))
       }
     }
   }
@@ -112,7 +115,8 @@ class AudiobookshelfLoginViewModel(
             showLibraries(result.login, current.serverName)
           }
         }
-        LoginResult.WrongCredentials -> state = current.copy(error = CredentialsError.WrongCredentials)
+        LoginResult.WrongCredentials ->
+          state = current.copy(error = CredentialsError.WrongCredentials)
         LoginResult.Unreachable -> state = current.copy(error = CredentialsError.Unreachable)
         LoginResult.Failed -> state = current.copy(error = CredentialsError.Failed)
       }
@@ -125,20 +129,22 @@ class AudiobookshelfLoginViewModel(
   ) {
     state = AudiobookshelfLoginViewState.Libraries(serverName = serverName, loading = true)
     val preview = serverLogin.preview(login)
-    state = AudiobookshelfLoginViewState.Libraries(
-      serverName = serverName,
-      loading = false,
-      failed = preview == null,
-      libraries = preview?.libraries.orEmpty().map { library ->
-        LibraryViewState(
-          id = library.id,
-          name = library.name,
-          bookCount = library.bookCount,
-          selected = true,
-        )
-      },
-      covers = preview?.covers.orEmpty(),
-    )
+    state =
+      AudiobookshelfLoginViewState.Libraries(
+        serverName = serverName,
+        loading = false,
+        failed = preview == null,
+        libraries =
+          preview?.libraries.orEmpty().map { library ->
+            LibraryViewState(
+              id = library.id,
+              name = library.name,
+              bookCount = library.bookCount,
+              selected = true,
+            )
+          },
+        covers = preview?.covers.orEmpty(),
+      )
   }
 
   internal fun onRetryLibraries() {
@@ -151,11 +157,13 @@ class AudiobookshelfLoginViewModel(
 
   internal fun onLibraryToggle(id: String) {
     val current = state as? AudiobookshelfLoginViewState.Libraries ?: return
-    state = current.copy(
-      libraries = current.libraries.map {
-        if (it.id == id) it.copy(selected = !it.selected) else it
-      },
-    )
+    state =
+      current.copy(
+        libraries =
+          current.libraries.map {
+            if (it.id == id) it.copy(selected = !it.selected) else it
+          },
+      )
   }
 
   internal fun onConnect() {
@@ -174,17 +182,20 @@ class AudiobookshelfLoginViewModel(
 
   internal fun onBack() {
     request?.cancel()
-    state = when (val current = state) {
-      is AudiobookshelfLoginViewState.Address -> {
-        navigator.goBack()
-        return
+    state =
+      when (val current = state) {
+        is AudiobookshelfLoginViewState.Address -> {
+          navigator.goBack()
+          return
+        }
+        is AudiobookshelfLoginViewState.Credentials ->
+          AudiobookshelfLoginViewState.Address(address = current.serverName)
+        is AudiobookshelfLoginViewState.Libraries ->
+          AudiobookshelfLoginViewState.Credentials(
+            serverName = current.serverName,
+            passwordLogin = server?.passwordLogin ?: true,
+          )
       }
-      is AudiobookshelfLoginViewState.Credentials -> AudiobookshelfLoginViewState.Address(address = current.serverName)
-      is AudiobookshelfLoginViewState.Libraries -> AudiobookshelfLoginViewState.Credentials(
-        serverName = current.serverName,
-        passwordLogin = server?.passwordLogin ?: true,
-      )
-    }
   }
 
   @AssistedFactory

@@ -43,9 +43,7 @@ import voice.core.ui.LocalSharesCovers
 import voice.core.ui.LocalSplashScreenHolds
 import voice.core.ui.PureBlackStore
 import voice.core.ui.SplashScreenHolds
-import voice.core.ui.ThemeColorScheme
 import voice.core.ui.ThemeColorSchemeStore
-import voice.core.ui.ThemeMode
 import voice.core.ui.ThemeModeStore
 import voice.core.ui.VoiceTheme
 import voice.features.review.ReviewFeature
@@ -60,32 +58,23 @@ interface MainActivityGraph {
 
 class MainActivity : AppCompatActivity() {
 
-  @Inject
-  private lateinit var navigator: Navigator
+  @Inject private lateinit var navigator: Navigator
 
-  @Inject
-  lateinit var navEntryResolver: NavEntryResolver
+  @Inject lateinit var navEntryResolver: NavEntryResolver
 
-  @Inject
-  private lateinit var startDestinationProvider: StartDestinationProvider
+  @Inject private lateinit var startDestinationProvider: StartDestinationProvider
 
-  @Inject
-  private lateinit var analytics: Analytics
+  @Inject private lateinit var analytics: Analytics
 
-  @Inject
-  private lateinit var themeModeStore: ThemeModeStore
+  @Inject private lateinit var themeModeStore: ThemeModeStore
 
-  @Inject
-  private lateinit var themeColorSchemeStore: ThemeColorSchemeStore
+  @Inject private lateinit var themeColorSchemeStore: ThemeColorSchemeStore
 
-  @Inject
-  private lateinit var pureBlackStore: PureBlackStore
+  @Inject private lateinit var pureBlackStore: PureBlackStore
 
-  @Inject
-  private lateinit var coverColorsStore: CoverColorsStore
+  @Inject private lateinit var coverColorsStore: CoverColorsStore
 
-  @Inject
-  private lateinit var coverSeedColors: CoverSeedColors
+  @Inject private lateinit var coverSeedColors: CoverSeedColors
 
   private val splashScreenHolds = SplashScreenHolds()
   private var contentComposed = false
@@ -111,16 +100,18 @@ class MainActivity : AppCompatActivity() {
       val themeColorScheme = themeColorSchemeStore.data.collectAsState(initial = null).value
       val pureBlack = pureBlackStore.data.collectAsState(initial = null).value
       val coverColors = coverColorsStore.data.collectAsState(initial = null).value
-      val coverSeedColorsRestored = produceState(initialValue = false) {
-        coverSeedColors.restore()
-        value = true
-      }.value
+      val coverSeedColorsRestored =
+        produceState(initialValue = false) {
+            coverSeedColors.restore()
+            value = true
+          }
+          .value
       if (
         themeMode == null ||
-        themeColorScheme == null ||
-        pureBlack == null ||
-        coverColors == null ||
-        !coverSeedColorsRestored
+          themeColorScheme == null ||
+          pureBlack == null ||
+          coverColors == null ||
+          !coverSeedColorsRestored
       ) {
         return@setContent
       }
@@ -147,21 +138,28 @@ class MainActivity : AppCompatActivity() {
               sceneStrategies = listOf(bottomSheetStrategy, dialogStrategy, overlayStrategy),
               sharedTransitionScope = this,
               transitionSpec = {
-                if (isSharedElementTransition(initialState.destination(), targetState.destination())) {
+                if (
+                  isSharedElementTransition(initialState.destination(), targetState.destination())
+                ) {
                   SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
                 } else {
-                  SharedXAxisEnterTransition(density) togetherWith SharedXAxisExitTransition(density)
+                  SharedXAxisEnterTransition(density) togetherWith
+                    SharedXAxisExitTransition(density)
                 }
               },
               popTransitionSpec = {
-                if (isSharedElementTransition(initialState.destination(), targetState.destination())) {
+                if (
+                  isSharedElementTransition(initialState.destination(), targetState.destination())
+                ) {
                   SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
                 } else {
                   SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
                 }
               },
               predictivePopTransitionSpec = {
-                if (isSharedElementTransition(initialState.destination(), targetState.destination())) {
+                if (
+                  isSharedElementTransition(initialState.destination(), targetState.destination())
+                ) {
                   SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
                 } else {
                   SharedZAxisEnterTransition togetherWith SharedZAxisExitTransition
@@ -254,8 +252,8 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun toBatteryOptimizations() {
-    val intent = Intent()
-      .apply {
+    val intent =
+      Intent().apply {
         @Suppress("BatteryLife")
         action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
         data = "package:$packageName".toUri()
@@ -273,9 +271,10 @@ class MainActivity : AppCompatActivity() {
     const val NI_GO_TO_BOOK = "niGotoBook"
     const val DEBUG_BACK_STACK = "debugBackStack"
 
-    fun goToBookIntent(context: Context) = Intent(context, MainActivity::class.java).apply {
-      putExtra(NI_GO_TO_BOOK, true)
-      flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-    }
+    fun goToBookIntent(context: Context) =
+      Intent(context, MainActivity::class.java).apply {
+        putExtra(NI_GO_TO_BOOK, true)
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+      }
   }
 }

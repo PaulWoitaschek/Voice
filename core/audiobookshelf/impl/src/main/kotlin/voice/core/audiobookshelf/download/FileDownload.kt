@@ -5,20 +5,21 @@ import voice.core.data.BookId
 import voice.core.data.Chapter
 
 internal fun Int.isActive(): Boolean {
-  return this == Download.STATE_QUEUED || this == Download.STATE_DOWNLOADING || this == Download.STATE_RESTARTING
+  return this == Download.STATE_QUEUED ||
+    this == Download.STATE_DOWNLOADING ||
+    this == Download.STATE_RESTARTING
 }
 
 /** A download of one audio file of a book, as Voice last saw it. */
 internal data class FileDownload(
   val bookId: BookId?,
-  @param:Download.State
-  val state: Int,
+  @param:Download.State val state: Int,
   val bytesDownloaded: Long,
 )
 
 /**
- * The download state of a book, judged by the files it has now. A book that got new files on the server isn't
- * downloaded anymore until those are. Null when none of its files are downloaded.
+ * The download state of a book, judged by the files it has now. A book that got new files on the
+ * server isn't downloaded anymore until those are. Null when none of its files are downloaded.
  */
 internal fun bookDownloadState(
   chapters: List<Chapter>,
@@ -26,23 +27,27 @@ internal fun bookDownloadState(
   waitingFor: WaitingFor?,
 ): BookDownloadState? {
   // a stopped download is on its way out
-  val tracked = chapters.map { chapter -> chapter to files[chapter.id.value]?.takeUnless { it.state == Download.STATE_REMOVING } }
+  val tracked = chapters.map { chapter ->
+    chapter to files[chapter.id.value]?.takeUnless { it.state == Download.STATE_REMOVING }
+  }
   if (tracked.all { it.second == null }) return null
   if (tracked.all { it.second?.state == Download.STATE_COMPLETED }) {
     return BookDownloadState.Downloaded(bytes = tracked.sumOf { it.second!!.bytesDownloaded })
   }
   // the other files go on after one failed, the book only failed once they are done
   val active = tracked.any { (_, file) -> file != null && file.state.isActive() }
-  if (!active && tracked.any { it.second?.state == Download.STATE_FAILED }) return BookDownloadState.Failed
+  if (!active && tracked.any { it.second?.state == Download.STATE_FAILED })
+    return BookDownloadState.Failed
 
   val downloadedBytes = tracked.sumOf { it.second?.bytesDownloaded ?: 0L }
   val sizesKnown = chapters.all { it.fileSize > 0 }
   val totalBytes = if (sizesKnown) chapters.sumOf { it.fileSize } else 0L
-  val progress = if (sizesKnown) {
-    downloadedBytes.toFloat() / totalBytes
-  } else {
-    tracked.count { it.second?.state == Download.STATE_COMPLETED }.toFloat() / chapters.size
-  }
+  val progress =
+    if (sizesKnown) {
+      downloadedBytes.toFloat() / totalBytes
+    } else {
+      tracked.count { it.second?.state == Download.STATE_COMPLETED }.toFloat() / chapters.size
+    }
   return BookDownloadState.Downloading(
     progress = progress.coerceIn(0F, 1F),
     downloadedBytes = downloadedBytes,

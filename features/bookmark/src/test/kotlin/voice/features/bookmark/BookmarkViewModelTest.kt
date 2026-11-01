@@ -13,6 +13,13 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Clock
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -35,70 +42,76 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.formatTime
 import voice.navigation.Navigator
-import java.time.Clock
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 class BookmarkViewModelTest {
 
   private val scope = TestScope()
   private val arrival = testChapter()
   private val signal = testChapter()
-  private val book = testBook(listOf(arrival, signal), currentChapter = signal.id, positionInChapter = 5.minutes)
+  private val book =
+    testBook(listOf(arrival, signal), currentChapter = signal.id, positionInChapter = 5.minutes)
   private val clock = Clock.fixed(today(10), testZone)
   private val bookmarkRepo = FakeBookmarkRepo(clock)
   private val playStateManager = PlayStateManager()
   private val livePlaybackState = MutableStateFlow<LivePlaybackState?>(null)
-  private val playerController = mockk<PlayerController>(relaxed = true) {
-    every { livePlaybackStateFlow(book.id) } returns livePlaybackState
-  }
-  private val navigator = mockk<Navigator> {
-    every { goBack() } just Runs
-  }
+  private val playerController =
+    mockk<PlayerController>(relaxed = true) {
+      every { livePlaybackStateFlow(book.id) } returns livePlaybackState
+    }
+  private val navigator =
+    mockk<Navigator> {
+      every { goBack() } just Runs
+    }
 
   private fun viewModel(
     editBookmarkId: String? = null,
     experimentalPlaybackPersistence: Boolean = false,
     lastPlaybackSpeed: Float = 1F,
     historyTabOpenStore: MemoryDataStore<Boolean> = MemoryDataStore(true),
-  ) = BookmarkViewModel(
-    currentBookStore = CurrentBookStore(MemoryDataStore<BookId?>(null)),
-    bookRepository = mockk {
-      every { flow(book.id) } returns flowOf(book)
-    },
-    bookmarkRepo = bookmarkRepo,
-    currentBookResolver = mockk {
-      coEvery { book(book.id) } returns book
-    },
-    playStateManager = playStateManager,
-    playerController = playerController,
-    sleepTimer = mockk {
-      every { state } returns MutableStateFlow(SleepTimerState.Disabled)
-    },
-    navigator = navigator,
-    clock = clock,
-    dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
-    kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
-    experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
-      MemoryFeatureFlag(experimentalPlaybackPersistence),
-    ),
-    lastPlaybackSpeedStore = LastPlaybackSpeedStore(MemoryDataStore(lastPlaybackSpeed)),
-    historyTabOpenStore = HistoryTabOpenStore(historyTabOpenStore),
-    bookId = book.id,
-    editBookmarkId = editBookmarkId,
-  )
+  ) =
+    BookmarkViewModel(
+      currentBookStore = CurrentBookStore(MemoryDataStore<BookId?>(null)),
+      bookRepository =
+        mockk {
+          every { flow(book.id) } returns flowOf(book)
+        },
+      bookmarkRepo = bookmarkRepo,
+      currentBookResolver =
+        mockk {
+          coEvery { book(book.id) } returns book
+        },
+      playStateManager = playStateManager,
+      playerController = playerController,
+      sleepTimer =
+        mockk {
+          every { state } returns MutableStateFlow(SleepTimerState.Disabled)
+        },
+      navigator = navigator,
+      clock = clock,
+      dispatcherProvider =
+        DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
+      experimentalPlaybackPersistenceFeatureFlag =
+        ExperimentalPlaybackPersistenceFeatureFlag(
+          MemoryFeatureFlag(experimentalPlaybackPersistence),
+        ),
+      lastPlaybackSpeedStore = LastPlaybackSpeedStore(MemoryDataStore(lastPlaybackSpeed)),
+      historyTabOpenStore = HistoryTabOpenStore(historyTabOpenStore),
+      bookId = book.id,
+      editBookmarkId = editBookmarkId,
+    )
 
-  private fun BookmarkViewModel.test(validate: suspend ReceiveTurbine<BookmarkViewState?>.() -> Unit) = scope.runTest {
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewState()
-    }.test {
-      validate()
-      cancelAndIgnoreRemainingEvents()
-    }
+  private fun BookmarkViewModel.test(
+    validate: suspend ReceiveTurbine<BookmarkViewState?>.() -> Unit,
+  ) = scope.runTest {
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewState()
+      }
+      .test {
+        validate()
+        cancelAndIgnoreRemainingEvents()
+      }
   }
 
   @IgnorableReturnValue
@@ -157,7 +170,10 @@ class BookmarkViewModelTest {
       assertTrue(editor.isNew)
       assertEquals(expected = 2, actual = editor.chapterNumber)
       assertEquals(expected = chapterTime(5.minutes), actual = editor.time)
-      assertEquals(expected = listOf(editor.id), actual = bookmarkRepo.bookmarks.value.map { it.id })
+      assertEquals(
+        expected = listOf(editor.id),
+        actual = bookmarkRepo.bookmarks.value.map { it.id },
+      )
     }
   }
 
@@ -172,9 +188,15 @@ class BookmarkViewModelTest {
       viewModel.onMoveEarlier()
       viewModel.onNoteChange("  Mira finds the signal ")
       viewModel.onKindChange(Bookmark.Kind.Quote)
-      assertEquals(expected = chapterTime(4.5.minutes), actual = awaitState { it.editor?.kind == Bookmark.Kind.Quote }.editor?.time)
+      assertEquals(
+        expected = chapterTime(4.5.minutes),
+        actual = awaitState { it.editor?.kind == Bookmark.Kind.Quote }.editor?.time,
+      )
       viewModel.onEditorDone()
-      awaitState { it.editor == null && it.items.any { item -> item is BookmarkListItem.Row && item.bookmark.note != null } }
+      awaitState {
+        it.editor == null &&
+          it.items.any { item -> item is BookmarkListItem.Row && item.bookmark.note != null }
+      }
       val saved = bookmarkRepo.bookmarks.value.single()
       assertEquals(expected = 4.5.minutes.inWholeMilliseconds, actual = saved.time)
       assertEquals(expected = "Mira finds the signal", actual = saved.title)
@@ -232,13 +254,17 @@ class BookmarkViewModelTest {
       awaitState { it.totalCount == 0 }
       // advanceUntilIdle doesn't run the background collector
       scope.testScheduler.advanceTimeBy(1.minutes)
-      assertEquals<List<BookmarkViewEffect>>(expected = bookmarks.map { BookmarkViewEffect.Deleted(it) }, actual = shown)
+      assertEquals<List<BookmarkViewEffect>>(
+        expected = bookmarks.map { BookmarkViewEffect.Deleted(it) },
+        actual = shown,
+      )
     }
   }
 
   @Test
   fun `saving shows all kinds again, so the new bookmark is not filtered away`() {
-    bookmarkRepo.bookmarks.value = listOf(testBookmark(arrival, 1.minutes, kind = Bookmark.Kind.Favorite))
+    bookmarkRepo.bookmarks.value =
+      listOf(testBookmark(arrival, 1.minutes, kind = Bookmark.Kind.Favorite))
     val viewModel = viewModel()
     viewModel.test {
       awaitState { it.totalCount == 1 }
@@ -247,7 +273,9 @@ class BookmarkViewModelTest {
       viewModel.onSaveClick()
       val state = awaitState { it.editor != null && it.totalCount == 2 }
       assertNull(state.selectedCategory)
-      assertTrue(state.items.any { it is BookmarkListItem.Row && it.bookmark.id == state.editor?.id })
+      assertTrue(
+        state.items.any { it is BookmarkListItem.Row && it.bookmark.id == state.editor?.id },
+      )
     }
   }
 
@@ -288,7 +316,10 @@ class BookmarkViewModelTest {
     viewModel(lastPlaybackSpeed = 2F).test {
       // 5 of 20 minutes are left
       val state = awaitState { it.bookBar != null }
-      assertEquals(expected = formatTime(2.5.minutes.inWholeMilliseconds), actual = state.bookBar!!.remaining)
+      assertEquals(
+        expected = formatTime(2.5.minutes.inWholeMilliseconds),
+        actual = state.bookBar!!.remaining,
+      )
     }
   }
 
@@ -299,13 +330,14 @@ class BookmarkViewModelTest {
     viewModel.test {
       // the stored position: 5 minutes into the second of two 10 minute chapters
       awaitState { it.bookBar?.percent == 75 }
-      livePlaybackState.value = LivePlaybackState(
-        bookId = book.id,
-        chapterId = arrival.id,
-        positionMs = 2.minutes.inWholeMilliseconds,
-        isPlaying = true,
-        playbackSpeed = 1F,
-      )
+      livePlaybackState.value =
+        LivePlaybackState(
+          bookId = book.id,
+          chapterId = arrival.id,
+          positionMs = 2.minutes.inWholeMilliseconds,
+          isPlaying = true,
+          playbackSpeed = 1F,
+        )
       val state = awaitState { it.bookBar?.percent == 10 }
       assertTrue(state.playing)
       val youAreHere = state.items.filterIsInstance<BookmarkListItem.YouAreHere>().single()
@@ -335,7 +367,11 @@ class BookmarkViewModelTest {
       viewModel.onBookmarkClick(bookmark.id)
       scope.testScheduler.advanceUntilIdle()
       verify {
-        playerController.setPosition(2.minutes.inWholeMilliseconds, arrival.id, ListeningEvent.Type.BookmarkJump)
+        playerController.setPosition(
+          2.minutes.inWholeMilliseconds,
+          arrival.id,
+          ListeningEvent.Type.BookmarkJump,
+        )
         playerController.play()
         navigator.goBack()
       }
@@ -366,7 +402,8 @@ class BookmarkViewModelTest {
     }
 
     // as after process death: a new view model, with what the screen saved
-    val restored = SaveableStateRegistry(restoredValues = registry.performSave(), canBeSaved = { true })
+    val restored =
+      SaveableStateRegistry(restoredValues = registry.performSave(), canBeSaved = { true })
     viewModel(editBookmarkId = editBookmarkId).states(restored).test {
       assertNull(awaitState().editor)
       testScheduler.runCurrent()

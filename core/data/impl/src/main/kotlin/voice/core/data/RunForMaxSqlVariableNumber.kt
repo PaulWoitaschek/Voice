@@ -4,11 +4,11 @@ import androidx.annotation.VisibleForTesting
 
 internal const val SQLITE_MAX_VARIABLE_NUMBER: Int = 990
 
-// we can only query SQLITE_MAX_VARIABLE_NUMBER at once (999 bugs on some devices so we use a number a little smaller.)
+// we can only query SQLITE_MAX_VARIABLE_NUMBER at once (999 bugs on some devices so we use a number
+// a little smaller.)
 // if it's larger than the limit, we query in chunks.
 internal inline fun <T, R> List<T>.runForMaxSqlVariableNumber(
-  @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-  limit: Int = SQLITE_MAX_VARIABLE_NUMBER,
+  @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) limit: Int = SQLITE_MAX_VARIABLE_NUMBER,
   action: (List<T>) -> List<R>,
 ): List<R> {
   return when {

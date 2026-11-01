@@ -8,6 +8,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -32,14 +35,12 @@ import voice.features.bookOverview.overview.DownloadBadge
 import voice.features.bookOverview.overview.toItemViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class SeriesViewModelTest {
 
   private val testDispatcher = UnconfinedTestDispatcher()
-  private val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
+  private val dispatcherProvider =
+    DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
   private val navigator = mockk<Navigator>(relaxed = true)
   private val playerController = mockk<PlayerController>(relaxed = true)
   private val currentBookStore = MemoryDataStore<BookId?>(null)
@@ -62,16 +63,23 @@ class SeriesViewModelTest {
       assertEquals(expected = 2, actual = state.bookCount)
       assertEquals(expected = 1, actual = state.finishedCount)
       assertEquals(
-        expected = listOf(
-          SeriesViewState.Book(book = first.toItemViewStateWithoutAuthor(), part = "1", finished = true, current = false, playing = false),
-          SeriesViewState.Book(
-            book = second.toItemViewStateWithoutAuthor(),
-            part = "2",
-            finished = false,
-            current = false,
-            playing = false,
+        expected =
+          listOf(
+            SeriesViewState.Book(
+              book = first.toItemViewStateWithoutAuthor(),
+              part = "1",
+              finished = true,
+              current = false,
+              playing = false,
+            ),
+            SeriesViewState.Book(
+              book = second.toItemViewStateWithoutAuthor(),
+              part = "2",
+              finished = false,
+              current = false,
+              playing = false,
+            ),
           ),
-        ),
         actual = state.books,
       )
     }
@@ -96,13 +104,16 @@ class SeriesViewModelTest {
 
   @Test
   fun `the button continues the book in progress played last`() = runTest {
-    val first = book(series = "Saga", part = "1", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(2))
-    val second = book(series = "Saga", part = "2", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(1))
+    val first =
+      book(series = "Saga", part = "1", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(2))
+    val second =
+      book(series = "Saga", part = "2", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(1))
     books.value = listOf(first, second)
 
     testState {
       assertEquals(
-        expected = SeriesViewState.Action(bookId = first.id, part = "1", continues = true, playing = false),
+        expected =
+          SeriesViewState.Action(bookId = first.id, part = "1", continues = true, playing = false),
         actual = awaitItem()!!.action,
       )
     }
@@ -116,7 +127,13 @@ class SeriesViewModelTest {
 
     testState {
       assertEquals(
-        expected = SeriesViewState.Action(bookId = second.id, part = null, continues = false, playing = false),
+        expected =
+          SeriesViewState.Action(
+            bookId = second.id,
+            part = null,
+            continues = false,
+            playing = false,
+          ),
         actual = awaitItem()!!.action,
       )
     }
@@ -133,7 +150,8 @@ class SeriesViewModelTest {
 
   @Test
   fun `while a book of the series plays, the button pauses it and its row shows it`() = runTest {
-    val first = book(series = "Saga", part = "1", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(2))
+    val first =
+      book(series = "Saga", part = "1", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(2))
     val second = book(series = "Saga", part = "2", time = 0)
     books.value = listOf(first, second)
     currentBookStore.updateData { second.id }
@@ -142,18 +160,26 @@ class SeriesViewModelTest {
     testState {
       val state = awaitItem()!!
       assertEquals(
-        expected = SeriesViewState.Action(bookId = second.id, part = "2", continues = false, playing = true),
+        expected =
+          SeriesViewState.Action(bookId = second.id, part = "2", continues = false, playing = true),
         actual = state.action,
       )
-      assertEquals(expected = listOf(false to false, true to true), actual = state.books.map { it.current to it.playing })
+      assertEquals(
+        expected = listOf(false to false, true to true),
+        actual = state.books.map { it.current to it.playing },
+      )
 
       playStateManager.playState = PlayStateManager.PlayState.Paused
       val paused = awaitItem()!!
       assertEquals(
-        expected = SeriesViewState.Action(bookId = first.id, part = "1", continues = true, playing = false),
+        expected =
+          SeriesViewState.Action(bookId = first.id, part = "1", continues = true, playing = false),
         actual = paused.action,
       )
-      assertEquals(expected = listOf(false to false, true to false), actual = paused.books.map { it.current to it.playing })
+      assertEquals(
+        expected = listOf(false to false, true to false),
+        actual = paused.books.map { it.current to it.playing },
+      )
     }
   }
 
@@ -162,20 +188,24 @@ class SeriesViewModelTest {
     val book = book(series = "Saga", author = "Author", time = 0)
     books.value = listOf(book, book(series = "Saga", author = "Author", time = 0))
     currentBookStore.updateData { book.id }
-    val livePlaybackState = LivePlaybackState(
-      bookId = book.id,
-      chapterId = book.content.currentChapter,
-      positionMs = 5_000,
-      isPlaying = true,
-      playbackSpeed = 1F,
-    )
+    val livePlaybackState =
+      LivePlaybackState(
+        bookId = book.id,
+        chapterId = book.content.currentChapter,
+        positionMs = 5_000,
+        isPlaying = true,
+        playbackSpeed = 1F,
+      )
     every { playerController.livePlaybackStateFlow(book.id) } returns flowOf(livePlaybackState)
 
     testState(experimentalPlaybackPersistence = true) {
       // the live position arrives after the stored one
       awaitItem()
       val row = awaitItem()!!.books.single { it.book.id == book.id }
-      assertEquals(expected = book.overlay(livePlaybackState).toItemViewStateWithoutAuthor(), actual = row.book)
+      assertEquals(
+        expected = book.overlay(livePlaybackState).toItemViewStateWithoutAuthor(),
+        actual = row.book,
+      )
     }
   }
 
@@ -222,22 +252,26 @@ class SeriesViewModelTest {
 
   private fun viewModel(experimentalPlaybackPersistence: Boolean = false): SeriesViewModel {
     return SeriesViewModel(
-      repo = mockk<BookRepository> {
-        every { flow() } returns books
-      },
+      repo =
+        mockk<BookRepository> {
+          every { flow() } returns books
+        },
       navigator = navigator,
       playerController = playerController,
       currentBookStore = CurrentBookStore(currentBookStore),
       playStateManager = playStateManager,
-      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
-        MemoryFeatureFlag(experimentalPlaybackPersistence),
-      ),
-      serverLibrary = mockk {
-        every { unavailableBooks } returns unavailable
-      },
-      serverDownloads = mockk {
-        every { states } returns downloads
-      },
+      experimentalPlaybackPersistenceFeatureFlag =
+        ExperimentalPlaybackPersistenceFeatureFlag(
+          MemoryFeatureFlag(experimentalPlaybackPersistence),
+        ),
+      serverLibrary =
+        mockk {
+          every { unavailableBooks } returns unavailable
+        },
+      serverDownloads =
+        mockk {
+          every { states } returns downloads
+        },
       dispatcherProvider = dispatcherProvider,
       name = "Saga",
     )
@@ -248,12 +282,14 @@ class SeriesViewModelTest {
     validate: suspend ReceiveTurbine<SeriesViewState?>.() -> Unit,
   ) {
     val viewModel = viewModel(experimentalPlaybackPersistence)
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.test {
-      // the books are still loading
-      assertEquals(expected = null, actual = awaitItem())
-      validate()
-    }
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test {
+        // the books are still loading
+        assertEquals(expected = null, actual = awaitItem())
+        validate()
+      }
   }
 }

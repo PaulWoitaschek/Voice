@@ -18,7 +18,8 @@ class AutomaticPauseRecorder(private val recorder: ListeningHistoryRecorder) {
     player.addListener(
       object : Player.Listener {
 
-        // a call or a navigation prompt holds playback back without pausing it, and it goes on afterwards
+        // a call or a navigation prompt holds playback back without pausing it, and it goes on
+        // afterwards
         private var heldBack = false
 
         override fun onPlayWhenReadyChanged(
@@ -28,24 +29,30 @@ class AutomaticPauseRecorder(private val recorder: ListeningHistoryRecorder) {
           if (playWhenReady) return
           val wasHeldBack = heldBack
           heldBack = false
-          val source = when (reason) {
-            // when holding back turns into a lasting loss, the pause was already recorded
-            Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS -> if (wasHeldBack) return else ListeningEvent.Source.AudioFocus
-            Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY -> ListeningEvent.Source.Unplugged
-            else -> return
-          }
+          val source =
+            when (reason) {
+              // when holding back turns into a lasting loss, the pause was already recorded
+              Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS ->
+                if (wasHeldBack) return else ListeningEvent.Source.AudioFocus
+              Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY ->
+                ListeningEvent.Source.Unplugged
+              else -> return
+            }
           record(player, ListeningEvent.Type.Pause, source)
         }
 
         override fun onPlaybackStateChanged(playbackState: Int) {
-          // the book ends without a pause, but the history needs one to know where listening stopped
+          // the book ends without a pause, but the history needs one to know where listening
+          // stopped
           if (playbackState == Player.STATE_ENDED && player.playWhenReady) {
             record(player, ListeningEvent.Type.Pause, ListeningEvent.Source.Unknown)
           }
         }
 
         override fun onPlaybackSuppressionReasonChanged(playbackSuppressionReason: Int) {
-          val held = playbackSuppressionReason == Player.PLAYBACK_SUPPRESSION_REASON_TRANSIENT_AUDIO_FOCUS_LOSS
+          val held =
+            playbackSuppressionReason ==
+              Player.PLAYBACK_SUPPRESSION_REASON_TRANSIENT_AUDIO_FOCUS_LOSS
           if (held == heldBack || !player.playWhenReady) return
           heldBack = held
           record(

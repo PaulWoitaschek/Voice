@@ -39,17 +39,24 @@ internal constructor(
 
   private val scope = MainScope()
 
-  // allowing access to a folder that's already stored again leaves the stores unchanged, so they don't emit
+  // allowing access to a folder that's already stored again leaves the stores unchanged, so they
+  // don't emit
   private val grantsChanged = MutableStateFlow(0)
 
-  private val storedFolders: Flow<StoredFolders> = combine(
-    FolderType.entries.map { folderType -> dataStore(folderType).data.map { folderType to it } },
-  ) { it.toMap() }
-    .combine(grantsChanged) { stored, _ ->
-      StoredFolders(stored = stored, withAccess = persistedUriPermissions.persistedUris())
-    }
-    // reading the access asks the system, which the library would otherwise do on the main thread at start
-    .flowOn(Dispatchers.IO)
+  private val storedFolders: Flow<StoredFolders> =
+    combine(
+        FolderType.entries.map { folderType ->
+          dataStore(folderType).data.map { folderType to it }
+        },
+      ) {
+        it.toMap()
+      }
+      .combine(grantsChanged) { stored, _ ->
+        StoredFolders(stored = stored, withAccess = persistedUriPermissions.persistedUris())
+      }
+      // reading the access asks the system, which the library would otherwise do on the main thread
+      // at start
+      .flowOn(Dispatchers.IO)
 
   public override fun all(): Flow<Map<FolderType, List<DocumentFileWithUri>>> {
     return storedFolders.map { folders ->
@@ -75,18 +82,18 @@ internal constructor(
   }
 
   private fun Uri.toDocumentFile(folderType: FolderType): CachedDocumentFile {
-    val uri = when (folderType) {
-      FolderType.SingleFile -> this
-      FolderType.SingleFolder,
-      FolderType.Root,
-      FolderType.Author,
-      -> {
-        DocumentsContract.buildDocumentUriUsingTree(
-          this,
-          DocumentsContract.getTreeDocumentId(this),
-        )
+    val uri =
+      when (folderType) {
+        FolderType.SingleFile -> this
+        FolderType.SingleFolder,
+        FolderType.Root,
+        FolderType.Author -> {
+          DocumentsContract.buildDocumentUriUsingTree(
+            this,
+            DocumentsContract.getTreeDocumentId(this),
+          )
+        }
       }
-    }
     return cachedDocumentFileFactory.create(uri)
   }
 
@@ -99,7 +106,8 @@ internal constructor(
     grantsChanged.update { it + 1 }
     scope.launch {
       dataStore(type).updateData { it + uri }
-      // a folder has one type, so adding it again with another type moves it. It's added first so a scan in
+      // a folder has one type, so adding it again with another type moves it. It's added first so a
+      // scan in
       // between never misses its books.
       FolderType.entries
         .filter { it != type }

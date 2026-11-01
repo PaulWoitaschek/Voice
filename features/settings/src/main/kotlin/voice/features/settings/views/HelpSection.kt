@@ -32,9 +32,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
+import voice.core.strings.R as StringsR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.icons.VoiceIcons
-import voice.core.strings.R as StringsR
 
 private class HelpTile(
   val title: String,
@@ -57,38 +57,42 @@ internal fun HelpSection(
   modifier: Modifier = Modifier,
 ) {
   val colors = MaterialTheme.colorScheme
-  val faq = HelpTile(
-    title = stringResource(StringsR.string.settings_support_faq_title),
-    icon = VoiceIcons.Help,
-    shape = MaterialShapes.Cookie4Sided,
-    containerColor = colors.primaryContainer,
-    contentColor = colors.onPrimaryContainer,
-    onClick = onFaqClick,
-  )
-  val getHelp = HelpTile(
-    title = stringResource(StringsR.string.settings_support_get_support_title),
-    icon = VoiceIcons.Forum,
-    shape = MaterialShapes.Clover4Leaf,
-    containerColor = colors.tertiaryContainer,
-    contentColor = colors.onTertiaryContainer,
-    onClick = onGetHelpClick,
-  )
-  val report = HelpTile(
-    title = stringResource(StringsR.string.settings_support_report_issue_title),
-    icon = VoiceIcons.BugReport,
-    shape = MaterialShapes.Pentagon,
-    containerColor = colors.secondaryContainer,
-    contentColor = colors.onSecondaryContainer,
-    onClick = onReportClick,
-  )
-  val suggest = HelpTile(
-    title = stringResource(StringsR.string.settings_support_suggest_idea_title),
-    icon = VoiceIcons.Lightbulb,
-    shape = MaterialShapes.Sunny,
-    containerColor = colors.tertiaryContainer,
-    contentColor = colors.onTertiaryContainer,
-    onClick = onSuggestClick,
-  )
+  val faq =
+    HelpTile(
+      title = stringResource(StringsR.string.settings_support_faq_title),
+      icon = VoiceIcons.Help,
+      shape = MaterialShapes.Cookie4Sided,
+      containerColor = colors.primaryContainer,
+      contentColor = colors.onPrimaryContainer,
+      onClick = onFaqClick,
+    )
+  val getHelp =
+    HelpTile(
+      title = stringResource(StringsR.string.settings_support_get_support_title),
+      icon = VoiceIcons.Forum,
+      shape = MaterialShapes.Clover4Leaf,
+      containerColor = colors.tertiaryContainer,
+      contentColor = colors.onTertiaryContainer,
+      onClick = onGetHelpClick,
+    )
+  val report =
+    HelpTile(
+      title = stringResource(StringsR.string.settings_support_report_issue_title),
+      icon = VoiceIcons.BugReport,
+      shape = MaterialShapes.Pentagon,
+      containerColor = colors.secondaryContainer,
+      contentColor = colors.onSecondaryContainer,
+      onClick = onReportClick,
+    )
+  val suggest =
+    HelpTile(
+      title = stringResource(StringsR.string.settings_support_suggest_idea_title),
+      icon = VoiceIcons.Lightbulb,
+      shape = MaterialShapes.Sunny,
+      containerColor = colors.tertiaryContainer,
+      contentColor = colors.onTertiaryContainer,
+      onClick = onSuggestClick,
+    )
   SettingsIsland(
     modifier = modifier,
     title = stringResource(StringsR.string.settings_support_title),
@@ -137,22 +141,16 @@ private fun TileRow(
   end: HelpTile,
 ) {
   Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .height(IntrinsicSize.Min),
+    modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
   ) {
     TileButton(
       tile = start,
-      modifier = Modifier
-        .weight(1F)
-        .fillMaxHeight(),
+      modifier = Modifier.weight(1F).fillMaxHeight(),
     )
     TileButton(
       tile = end,
-      modifier = Modifier
-        .weight(1F)
-        .fillMaxHeight(),
+      modifier = Modifier.weight(1F).fillMaxHeight(),
     )
   }
 }
@@ -164,11 +162,12 @@ private fun TileButton(
 ) {
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
-  val rotation by animateFloatAsState(
-    targetValue = if (pressed) 45F else 0F,
-    animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMediumLow),
-    label = "tileIconRotation",
-  )
+  val rotation by
+    animateFloatAsState(
+      targetValue = if (pressed) 45F else 0F,
+      animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMediumLow),
+      label = "tileIconRotation",
+    )
   Surface(
     onClick = tile.onClick,
     modifier = modifier,
