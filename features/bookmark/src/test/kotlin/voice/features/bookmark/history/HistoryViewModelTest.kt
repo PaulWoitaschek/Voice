@@ -8,6 +8,10 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Clock
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -33,75 +37,85 @@ import voice.features.bookmark.testEvent
 import voice.features.bookmark.testZone
 import voice.features.bookmark.today
 import voice.navigation.Navigator
-import java.time.Clock
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.time.Duration.Companion.minutes
 
 class HistoryViewModelTest {
 
   private val scope = TestScope()
   private val arrival = testChapter()
   private val signal = testChapter()
-  private val book = MutableStateFlow(
-    testBook(listOf(arrival, signal), currentChapter = signal.id, positionInChapter = 5.minutes),
-  )
+  private val book =
+    MutableStateFlow(
+      testBook(listOf(arrival, signal), currentChapter = signal.id, positionInChapter = 5.minutes),
+    )
   private val bookId = book.value.id
-  private val bookRepository = mockk<BookRepository> {
-    every { flow(bookId) } returns book
-    coEvery { get(bookId) } answers { book.value }
-  }
+  private val bookRepository =
+    mockk<BookRepository> {
+      every { flow(bookId) } returns book
+      coEvery { get(bookId) } answers { book.value }
+    }
   private val clock = Clock.fixed(today(10), testZone)
   private val historyEvents = mutableListOf<ListeningEvent>()
-  private val historyRepo = mockk<ListeningHistoryRepo> {
-    every { events(bookId) } answers { flowOf(historyEvents.sortedByDescending { it.atMillis }) }
-  }
+  private val historyRepo =
+    mockk<ListeningHistoryRepo> {
+      every { events(bookId) } answers { flowOf(historyEvents.sortedByDescending { it.atMillis }) }
+    }
   private val currentBookStore = MemoryDataStore<BookId?>(null)
   private val playStateManager = PlayStateManager()
   private val playerController = mockk<PlayerController>(relaxed = true)
   private val navigator = mockk<Navigator>(relaxed = true)
 
-  private fun viewModel() = HistoryViewModel(
-    currentBookStore = CurrentBookStore(currentBookStore),
-    bookRepository = bookRepository,
-    listeningHistoryRepo = historyRepo,
-    playStateManager = playStateManager,
-    playerController = playerController,
-    navigator = navigator,
-    clock = clock,
-    dispatcherProvider = DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
-    kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
-    bookId = bookId,
-  )
+  private fun viewModel() =
+    HistoryViewModel(
+      currentBookStore = CurrentBookStore(currentBookStore),
+      bookRepository = bookRepository,
+      listeningHistoryRepo = historyRepo,
+      playStateManager = playStateManager,
+      playerController = playerController,
+      navigator = navigator,
+      clock = clock,
+      dispatcherProvider =
+        DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
+      bookId = bookId,
+    )
 
-  private fun test(validate: suspend ReceiveTurbine<HistoryViewState?>.(HistoryViewModel) -> Unit) = scope.runTest {
-    val viewModel = viewModel()
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.test {
-      validate(viewModel)
-      cancelAndIgnoreRemainingEvents()
+  private fun test(validate: suspend ReceiveTurbine<HistoryViewState?>.(HistoryViewModel) -> Unit) =
+    scope.runTest {
+      val viewModel = viewModel()
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.viewState()
+        }
+        .test {
+          validate(viewModel)
+          cancelAndIgnoreRemainingEvents()
+        }
     }
-  }
 
   @IgnorableReturnValue
-  private suspend fun ReceiveTurbine<HistoryViewState?>.awaitState(predicate: (HistoryViewState) -> Boolean = { true }): HistoryViewState {
+  private suspend fun ReceiveTurbine<HistoryViewState?>.awaitState(
+    predicate: (HistoryViewState) -> Boolean = { true },
+  ): HistoryViewState {
     while (true) {
       val state = awaitItem()
       if (state != null && predicate(state)) return state
     }
   }
 
-  private fun HistoryViewState.events(): List<HistoryEvent> = days.flatMap { day ->
-    day.sessions.flatMap { it.rows }
-  }.filterIsInstance<HistoryEvent>()
+  private fun HistoryViewState.events(): List<HistoryEvent> =
+    days
+      .flatMap { day ->
+        day.sessions.flatMap { it.rows }
+      }
+      .filterIsInstance<HistoryEvent>()
 
   private fun listenedUntilPause() {
     historyEvents += testEvent(Type.Play, today(9), arrival, 1.minutes)
     historyEvents += testEvent(Type.Pause, today(9, 20), signal, 2.minutes)
   }
 
-  private suspend fun ReceiveTurbine<HistoryViewState?>.pausedAt(): HistorySpot = awaitState().events().first().place.spot
+  private suspend fun ReceiveTurbine<HistoryViewState?>.pausedAt(): HistorySpot =
+    awaitState().events().first().place.spot
 
   @Test
   fun `tapping a place goes there, keeps playing and closes the screen`() {
@@ -147,7 +161,15 @@ class HistoryViewModelTest {
 
   @Test
   fun `going back from a jump goes to where it left`() {
-    historyEvents += testEvent(Type.ChapterChange, today(9), arrival, 4.minutes, source = Source.Headset, to = signal to 0.minutes)
+    historyEvents +=
+      testEvent(
+        Type.ChapterChange,
+        today(9),
+        arrival,
+        4.minutes,
+        source = Source.Headset,
+        to = signal to 0.minutes,
+      )
     test { viewModel ->
       val jump = awaitState().events().single()
       assertEquals(expected = HistorySpot(signal.id, 0), actual = jump.to?.spot)
@@ -166,7 +188,10 @@ class HistoryViewModelTest {
     test {
       awaitState { it.events().size == 2 }
       book.value = testBook(listOf(signal))
-      awaitState { state -> state.events().map { it.place.location } == listOf(HistoryLocation(null, chapterTime(2.minutes))) }
+      awaitState { state ->
+        state.events().map { it.place.location } ==
+          listOf(HistoryLocation(null, chapterTime(2.minutes)))
+      }
     }
   }
 }

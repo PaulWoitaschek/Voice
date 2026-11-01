@@ -2,8 +2,6 @@ package voice.features.widget
 
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import voice.core.data.MarkData
-import voice.core.sleeptimer.SleepTimerState
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -12,6 +10,8 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import voice.core.data.MarkData
+import voice.core.sleeptimer.SleepTimerState
 
 class WidgetModelsTest {
 
@@ -19,10 +19,15 @@ class WidgetModelsTest {
 
   @Test
   fun `chapter number counts the marks of earlier chapters`() {
-    val marked = chapter(
-      duration = 20.minutes.inWholeMilliseconds,
-      marks = listOf(MarkData(0, "Loomings"), MarkData(10.minutes.inWholeMilliseconds, "The Carpet-Bag")),
-    )
+    val marked =
+      chapter(
+        duration = 20.minutes.inWholeMilliseconds,
+        marks =
+          listOf(
+            MarkData(0, "Loomings"),
+            MarkData(10.minutes.inWholeMilliseconds, "The Carpet-Bag"),
+          ),
+      )
     val second = chapter(name = "The Spouter-Inn")
     val third = chapter(name = "The Counterpane")
     val book = book(chapters = listOf(marked, second, third), currentChapter = third.id)
@@ -45,12 +50,13 @@ class WidgetModelsTest {
   fun `time left is at the playback speed and the position only counts in whole minutes`() {
     val first = chapter(duration = 30.minutes.inWholeMilliseconds)
     val second = chapter(duration = 30.minutes.inWholeMilliseconds)
-    val book = book(
-      chapters = listOf(first, second),
-      currentChapter = second.id,
-      positionInChapter = (10.minutes + 20.seconds).inWholeMilliseconds,
-      speed = 2F,
-    )
+    val book =
+      book(
+        chapters = listOf(first, second),
+        currentChapter = second.id,
+        positionInChapter = (10.minutes + 20.seconds).inWholeMilliseconds,
+        speed = 2F,
+      )
 
     val nowPlaying = nowPlayingBook(book, playing = true, SleepTimerState.Disabled, now)
 
@@ -64,15 +70,26 @@ class WidgetModelsTest {
     val single = chapter(duration = (2.minutes + 30.seconds).inWholeMilliseconds)
     val book = book(chapters = listOf(single))
 
-    assertEquals(3.minutes, nowPlayingBook(book, playing = false, SleepTimerState.Disabled, now).remaining)
+    assertEquals(
+      3.minutes,
+      nowPlayingBook(book, playing = false, SleepTimerState.Disabled, now).remaining,
+    )
   }
 
   @Test
   fun `a book within five seconds of its end is finished`() {
     val single = chapter(duration = 10.minutes.inWholeMilliseconds)
 
-    val almost = book(chapters = listOf(single), positionInChapter = (10.minutes - 6.seconds).inWholeMilliseconds)
-    val finished = book(chapters = listOf(single), positionInChapter = (10.minutes - 4.seconds).inWholeMilliseconds)
+    val almost =
+      book(
+        chapters = listOf(single),
+        positionInChapter = (10.minutes - 6.seconds).inWholeMilliseconds,
+      )
+    val finished =
+      book(
+        chapters = listOf(single),
+        positionInChapter = (10.minutes - 4.seconds).inWholeMilliseconds,
+      )
 
     assertFalse(nowPlayingBook(almost, playing = false, SleepTimerState.Disabled, now).finished)
     assertTrue(nowPlayingBook(finished, playing = false, SleepTimerState.Disabled, now).finished)
@@ -80,14 +97,26 @@ class WidgetModelsTest {
 
   @Test
   fun `a timed sleep timer ends at a clock time rounded to the minute`() {
-    val end = sleepTimerEnd(SleepTimerState.Enabled.WithDuration(20.minutes + 20.seconds), playing = true, book = null, now)
+    val end =
+      sleepTimerEnd(
+        SleepTimerState.Enabled.WithDuration(20.minutes + 20.seconds),
+        playing = true,
+        book = null,
+        now,
+      )
 
     assertEquals(SleepTimerEnd.At(Instant.parse("2026-10-08T22:20:00Z")), end)
   }
 
   @Test
   fun `a paused timed sleep timer has the time left instead of a clock time`() {
-    val end = sleepTimerEnd(SleepTimerState.Enabled.WithDuration(14.minutes + 20.seconds), playing = false, book = null, now)
+    val end =
+      sleepTimerEnd(
+        SleepTimerState.Enabled.WithDuration(14.minutes + 20.seconds),
+        playing = false,
+        book = null,
+        now,
+      )
 
     assertEquals(SleepTimerEnd.After(15.minutes), end)
   }
@@ -95,7 +124,12 @@ class WidgetModelsTest {
   @Test
   fun `an end of chapter sleep timer ends with the chapter at the playback speed`() {
     val single = chapter(duration = 30.minutes.inWholeMilliseconds)
-    val book = book(chapters = listOf(single), positionInChapter = 10.minutes.inWholeMilliseconds, speed = 2F)
+    val book =
+      book(
+        chapters = listOf(single),
+        positionInChapter = 10.minutes.inWholeMilliseconds,
+        speed = 2F,
+      )
 
     val end = sleepTimerEnd(SleepTimerState.Enabled.WithEndOfChapter, playing = true, book, now)
 
@@ -106,8 +140,14 @@ class WidgetModelsTest {
   fun `an end of chapter sleep timer has no end time while paused or without a book`() {
     val book = book(chapters = listOf(chapter(duration = 30.minutes.inWholeMilliseconds)))
 
-    assertEquals(SleepTimerEnd.EndOfChapter, sleepTimerEnd(SleepTimerState.Enabled.WithEndOfChapter, playing = false, book, now))
-    assertEquals(SleepTimerEnd.EndOfChapter, sleepTimerEnd(SleepTimerState.Enabled.WithEndOfChapter, playing = true, book = null, now))
+    assertEquals(
+      SleepTimerEnd.EndOfChapter,
+      sleepTimerEnd(SleepTimerState.Enabled.WithEndOfChapter, playing = false, book, now),
+    )
+    assertEquals(
+      SleepTimerEnd.EndOfChapter,
+      sleepTimerEnd(SleepTimerState.Enabled.WithEndOfChapter, playing = true, book = null, now),
+    )
   }
 
   @Test
@@ -116,10 +156,20 @@ class WidgetModelsTest {
     val recent = book(positionInChapter = 1_000, lastPlayedAt = Instant.ofEpochSecond(5))
     val notStarted = book(lastPlayedAt = Instant.ofEpochSecond(9))
     val single = chapter()
-    val finished = book(chapters = listOf(single), positionInChapter = single.duration, lastPlayedAt = Instant.ofEpochSecond(8))
+    val finished =
+      book(
+        chapters = listOf(single),
+        positionInChapter = single.duration,
+        lastPlayedAt = Instant.ofEpochSecond(8),
+      )
     val current = book(lastPlayedAt = Instant.ofEpochSecond(1))
 
-    val shelf = shelfBooks(listOf(started, recent, notStarted, finished, current), currentBookId = current.id, playing = true)
+    val shelf =
+      shelfBooks(
+        listOf(started, recent, notStarted, finished, current),
+        currentBookId = current.id,
+        playing = true,
+      )
 
     assertEquals(listOf(current.id, recent.id, started.id), shelf.map { it.id })
     assertEquals(listOf(true, false, false), shelf.map { it.playing })
@@ -131,7 +181,8 @@ class WidgetModelsTest {
     val hidden = book(positionInChapter = 1_000, hidden = true)
     val current = book(hidden = true)
 
-    val shelf = shelfBooks(listOf(started, hidden, current), currentBookId = current.id, playing = false)
+    val shelf =
+      shelfBooks(listOf(started, hidden, current), currentBookId = current.id, playing = false)
 
     assertEquals(listOf(started.id), shelf.map { it.id })
   }

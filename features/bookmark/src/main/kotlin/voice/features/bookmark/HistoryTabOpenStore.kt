@@ -14,7 +14,9 @@ import voice.core.datastore.VoiceDataStoreFactory
 class HistoryTabOpenStore(store: DataStore<Boolean>) : DataStore<Boolean> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.boolean("historyTabOpen", defaultValue = true),
   )
 }

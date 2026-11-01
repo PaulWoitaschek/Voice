@@ -13,10 +13,13 @@ import voice.core.featureflag.FeatureFlagFactory
 class SurveyUrlFeatureFlag(flag: FeatureFlag<String>) : FeatureFlag<String> by flag {
 
   @Inject
-  constructor(factory: FeatureFlagFactory) : this(
+  constructor(
+    factory: FeatureFlagFactory,
+  ) : this(
     factory.string(
       key = "survey_url",
-      description = "The URL of a survey the library invites to, ahead of the one built into the app. Empty leaves only the built-in one.",
+      description =
+        "The URL of a survey the library invites to, ahead of the one built into the app. Empty leaves only the built-in one.",
       defaultValue = "",
     ),
   )

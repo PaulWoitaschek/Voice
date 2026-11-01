@@ -1,5 +1,7 @@
 package voice.features.bookOverview
 
+import java.time.Instant
+import kotlin.uuid.Uuid
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -7,8 +9,6 @@ import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.CustomMetadata
-import java.time.Instant
-import kotlin.uuid.Uuid
 
 fun book(
   chapters: List<Chapter> = listOf(chapter(), chapter()),
@@ -25,30 +25,32 @@ fun book(
   hidden: Boolean = false,
 ): Book {
   return Book(
-    content = BookContent(
-      positionInChapter = time,
-      playbackSpeed = 1F,
-      addedAt = Instant.EPOCH,
-      chapters = chapters.map { it.id },
-      currentChapter = currentChapter,
-      isActive = true,
-      lastPlayedAt = lastPlayedAt,
-      skipSilence = false,
-      id = id,
-      gain = 0F,
-      metadata = BookMetadata(
-        name = name,
-        author = author,
-        album = null,
-        title = null,
-        genre = genre,
-        narrator = narrator,
-        series = series,
-        part = part,
-        cover = null,
-        fileLastModified = null,
+    content =
+      BookContent(
+        positionInChapter = time,
+        playbackSpeed = 1F,
+        addedAt = Instant.EPOCH,
+        chapters = chapters.map { it.id },
+        currentChapter = currentChapter,
+        isActive = true,
+        lastPlayedAt = lastPlayedAt,
+        skipSilence = false,
+        id = id,
+        gain = 0F,
+        metadata =
+          BookMetadata(
+            name = name,
+            author = author,
+            album = null,
+            title = null,
+            genre = genre,
+            narrator = narrator,
+            series = series,
+            part = part,
+            cover = null,
+            fileLastModified = null,
+          ),
       ),
-    ),
     chapters = chapters,
     custom = CustomMetadata(id, hidden = hidden),
   )

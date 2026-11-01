@@ -10,6 +10,8 @@ import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -24,46 +26,49 @@ import voice.core.scanner.MediaScanTrigger
 import voice.navigation.Destination
 import voice.navigation.Navigator
 import voice.navigation.Origin
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class FolderPickerViewModelTest {
 
-  private val foldersWithAccess = MutableStateFlow<Map<FolderType, List<DocumentFileWithUri>>>(emptyMap())
+  private val foldersWithAccess =
+    MutableStateFlow<Map<FolderType, List<DocumentFileWithUri>>>(emptyMap())
   private val foldersWithoutAccess = MutableStateFlow<Map<FolderType, List<Uri>>>(emptyMap())
-  private val audiobookFolders = mockk<AudiobookFolders>(relaxUnitFun = true) {
-    every { all() } returns foldersWithAccess
-    every { withoutAccess() } returns foldersWithoutAccess
-  }
+  private val audiobookFolders =
+    mockk<AudiobookFolders>(relaxUnitFun = true) {
+      every { all() } returns foldersWithAccess
+      every { withoutAccess() } returns foldersWithoutAccess
+    }
   private val navigator = mockk<Navigator>(relaxUnitFun = true)
   private val mediaScanTrigger = mockk<MediaScanTrigger>(relaxUnitFun = true)
-  private val viewModel = FolderPickerViewModel(
-    audiobookFolders = audiobookFolders,
-    navigator = navigator,
-    mediaScanTrigger = mediaScanTrigger,
-    kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
-  )
+  private val viewModel =
+    FolderPickerViewModel(
+      audiobookFolders = audiobookFolders,
+      navigator = navigator,
+      mediaScanTrigger = mediaScanTrigger,
+      kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
+    )
 
   private val fantasy = tree("primary:Audiobooks/Fantasy")
   private val crime = tree("primary:Crime")
 
   @Test
   fun `a folder without access comes first and is named after its path`() = runTest {
-    foldersWithAccess.value = mapOf(FolderType.Root to listOf(DocumentFileWithUri(documentFile("Crime"), crime)))
+    foldersWithAccess.value =
+      mapOf(FolderType.Root to listOf(DocumentFileWithUri(documentFile("Crime"), crime)))
     foldersWithoutAccess.value = mapOf(FolderType.SingleFolder to listOf(fantasy))
 
     viewStates {
       assertEquals(
-        expected = listOf(
-          FolderPickerViewState.Item(
-            name = "Audiobooks/Fantasy",
-            id = fantasy,
-            folderType = FolderType.SingleFolder,
-            hasAccess = false,
+        expected =
+          listOf(
+            FolderPickerViewState.Item(
+              name = "Audiobooks/Fantasy",
+              id = fantasy,
+              folderType = FolderType.SingleFolder,
+              hasAccess = false,
+            ),
+            FolderPickerViewState.Item(name = "Crime", id = crime, folderType = FolderType.Root),
           ),
-          FolderPickerViewState.Item(name = "Crime", id = crime, folderType = FolderType.Root),
-        ),
         actual = awaitLoaded().items,
       )
     }
@@ -71,12 +76,16 @@ class FolderPickerViewModelTest {
 
   @Test
   fun `a folder that just got access again is listed once`() = runTest {
-    foldersWithAccess.value = mapOf(FolderType.Root to listOf(DocumentFileWithUri(documentFile("Crime"), crime)))
+    foldersWithAccess.value =
+      mapOf(FolderType.Root to listOf(DocumentFileWithUri(documentFile("Crime"), crime)))
     foldersWithoutAccess.value = mapOf(FolderType.Root to listOf(crime))
 
     viewStates {
       assertEquals(
-        expected = listOf(FolderPickerViewState.Item(name = "Crime", id = crime, folderType = FolderType.Root)),
+        expected =
+          listOf(
+            FolderPickerViewState.Item(name = "Crime", id = crime, folderType = FolderType.Root),
+          ),
         actual = awaitLoaded().items,
       )
     }
@@ -84,7 +93,11 @@ class FolderPickerViewModelTest {
 
   @Test
   fun `picking the same folder again allows access to it`() {
-    viewModel.onAccessAllowed(uri = fantasy, folderType = FolderType.SingleFolder, pickedUri = fantasy)
+    viewModel.onAccessAllowed(
+      uri = fantasy,
+      folderType = FolderType.SingleFolder,
+      pickedUri = fantasy,
+    )
 
     verify {
       audiobookFolders.add(fantasy, FolderType.SingleFolder)
@@ -95,7 +108,11 @@ class FolderPickerViewModelTest {
 
   @Test
   fun `picking another folder replaces it and asks for its type again`() {
-    viewModel.onAccessAllowed(uri = fantasy, folderType = FolderType.SingleFolder, pickedUri = crime)
+    viewModel.onAccessAllowed(
+      uri = fantasy,
+      folderType = FolderType.SingleFolder,
+      pickedUri = crime,
+    )
 
     verify {
       audiobookFolders.remove(fantasy, FolderType.SingleFolder)
@@ -118,10 +135,14 @@ class FolderPickerViewModelTest {
     }
   }
 
-  private suspend fun TestScope.viewStates(validate: suspend ReceiveTurbine<FolderPickerViewState>.() -> Unit) {
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.viewState()
-    }.test(validate = validate)
+  private suspend fun TestScope.viewStates(
+    validate: suspend ReceiveTurbine<FolderPickerViewState>.() -> Unit,
+  ) {
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test(validate = validate)
   }
 
   private suspend fun ReceiveTurbine<FolderPickerViewState>.awaitLoaded(): FolderPickerViewState {
@@ -137,9 +158,11 @@ class FolderPickerViewModelTest {
     every { isFile } returns false
   }
 
-  private fun tree(documentId: String): Uri = DocumentsContract.buildTreeDocumentUri(AUTHORITY, documentId)
+  private fun tree(documentId: String): Uri =
+    DocumentsContract.buildTreeDocumentUri(AUTHORITY, documentId)
 
-  private fun document(documentId: String): Uri = DocumentsContract.buildDocumentUri(AUTHORITY, documentId)
+  private fun document(documentId: String): Uri =
+    DocumentsContract.buildDocumentUri(AUTHORITY, documentId)
 
   private companion object {
     const val AUTHORITY = "com.android.externalstorage.documents"

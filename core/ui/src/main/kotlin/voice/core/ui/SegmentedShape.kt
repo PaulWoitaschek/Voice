@@ -11,8 +11,10 @@ fun segmentedShape(
   val small = 6.dp
   return when {
     count == 1 -> RoundedCornerShape(large)
-    index == 0 -> RoundedCornerShape(topStart = large, topEnd = large, bottomStart = small, bottomEnd = small)
-    index == count - 1 -> RoundedCornerShape(topStart = small, topEnd = small, bottomStart = large, bottomEnd = large)
+    index == 0 ->
+      RoundedCornerShape(topStart = large, topEnd = large, bottomStart = small, bottomEnd = small)
+    index == count - 1 ->
+      RoundedCornerShape(topStart = small, topEnd = small, bottomStart = large, bottomEnd = large)
     else -> RoundedCornerShape(small)
   }
 }

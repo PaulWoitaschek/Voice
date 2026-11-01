@@ -17,7 +17,8 @@ import androidx.compose.runtime.setValue
 import voice.core.data.folders.FolderType
 import voice.core.logging.api.Logger
 
-// the picker starts where the folder or file was. Picking the same one again brings its books back as they were.
+// the picker starts where the folder or file was. Picking the same one again brings its books back
+// as they were.
 @Composable
 internal fun rememberAllowAccess(
   onPick: (uri: Uri, folderType: FolderType, pickedUri: Uri) -> Unit,
@@ -32,7 +33,8 @@ internal fun rememberAllowAccess(
       onPick(uri, folderType, pickedUri)
     }
   }
-  val treeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree(), onResult)
+  val treeLauncher =
+    rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree(), onResult)
   val fileLauncher = rememberLauncherForActivityResult(OpenDocumentAt(), onResult)
   return { item ->
     uri = item.id
@@ -42,10 +44,14 @@ internal fun rememberAllowAccess(
         FolderType.SingleFile -> fileLauncher.launch(item.id)
         FolderType.SingleFolder,
         FolderType.Root,
-        FolderType.Author,
-        -> {
+        FolderType.Author -> {
           // the picker ignores a tree uri as the place to start
-          treeLauncher.launch(DocumentsContract.buildDocumentUriUsingTree(item.id, DocumentsContract.getTreeDocumentId(item.id)))
+          treeLauncher.launch(
+            DocumentsContract.buildDocumentUriUsingTree(
+              item.id,
+              DocumentsContract.getTreeDocumentId(item.id),
+            ),
+          )
         }
       }
     } catch (e: ActivityNotFoundException) {

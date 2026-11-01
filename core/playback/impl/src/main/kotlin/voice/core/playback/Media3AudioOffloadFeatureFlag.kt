@@ -13,7 +13,9 @@ import voice.core.featureflag.FeatureFlagFactory
 class Media3AudioOffloadFeatureFlag(flag: FeatureFlag<Boolean>) : FeatureFlag<Boolean> by flag {
 
   @Inject
-  constructor(factory: FeatureFlagFactory) : this(
+  constructor(
+    factory: FeatureFlagFactory,
+  ) : this(
     factory.boolean(
       key = "media3_audio_offload",
       description = "Uses Media3 audio offload when the device supports it.",

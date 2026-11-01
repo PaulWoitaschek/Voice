@@ -17,12 +17,14 @@ class CrashlyticsMessageTest {
 
   @Test
   fun `exceptions show only their types`() {
-    val throwable = IOException(
-      "content://com.android.externalstorage.documents/tree/primary%3AAudiobooks",
-      FileNotFoundException("/storage/emulated/0/Audiobooks/My Book/01.mp3"),
-    )
+    val throwable =
+      IOException(
+        "content://com.android.externalstorage.documents/tree/primary%3AAudiobooks",
+        FileNotFoundException("/storage/emulated/0/Audiobooks/My Book/01.mp3"),
+      )
     assertEquals(
-      expected = "Could not open the file: java.io.IOException caused by java.io.FileNotFoundException",
+      expected =
+        "Could not open the file: java.io.IOException caused by java.io.FileNotFoundException",
       actual = crashlyticsMessage("Could not open the file", throwable),
     )
   }
@@ -31,7 +33,11 @@ class CrashlyticsMessageTest {
   fun `a non-fatal logs only its type`() {
     assertEquals(
       expected = "java.lang.IllegalStateException",
-      actual = crashlyticsMessage(message = null, IllegalStateException("Skipping a book with 30000 chapters")),
+      actual =
+        crashlyticsMessage(
+          message = null,
+          IllegalStateException("Skipping a book with 30000 chapters"),
+        ),
     )
   }
 }

@@ -12,13 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import voice.core.logging.api.Logger
+import voice.core.strings.R as StringsR
 import voice.core.ui.OnboardingButton
 import voice.features.folderPicker.folderPicker.FileTypeSelection
-import voice.core.strings.R as StringsR
 
 /**
- * Picking a folder is the way to go: it can hold one book or a whole library. A server is the
- * other way to bring books, and a single file is the exception, so they are quieter.
+ * Picking a folder is the way to go: it can hold one book or a whole library. A server is the other
+ * way to bring books, and a single file is the exception, so they are quieter.
  */
 @Composable
 internal fun ColumnScope.ContentTypeChoices(
@@ -27,18 +27,20 @@ internal fun ColumnScope.ContentTypeChoices(
   onNoPicker: () -> Unit,
   onConnectAudiobookshelf: (() -> Unit)?,
 ) {
-  val openDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-    if (uri != null) {
-      onAdd(FileTypeSelection.File, uri)
+  val openDocumentLauncher =
+    rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+      if (uri != null) {
+        onAdd(FileTypeSelection.File, uri)
+      }
     }
-  }
-  val documentTreeLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
-    if (uri != null) {
-      onAdd(FileTypeSelection.Folder, uri)
-    } else {
-      onFolderPickerCancel()
+  val documentTreeLauncher =
+    rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
+      if (uri != null) {
+        onAdd(FileTypeSelection.Folder, uri)
+      } else {
+        onFolderPickerCancel()
+      }
     }
-  }
   OnboardingButton(
     text = stringResource(StringsR.string.folder_add_action_folder),
     onClick = {

@@ -8,6 +8,11 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.time.Duration
 import kotlinx.coroutines.test.runTest
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -20,32 +25,34 @@ import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.chapter
-import java.time.Instant
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-import kotlin.time.Duration
 
 class EditBookCategoryViewModelTest {
 
   private val lastChapter = chapter(duration = 7_000)
   private val book = book(chapters = listOf(chapter(duration = 5_000), lastChapter), time = 1_000)
 
-  private val repo = mockk<BookRepository> {
-    coEvery { get(book.id) } returns book
-    coEvery { updateBook(book.id, any()) } just runs
-  }
+  private val repo =
+    mockk<BookRepository> {
+      coEvery { get(book.id) } returns book
+      coEvery { updateBook(book.id, any()) } just runs
+    }
 
-  private val playerController = mockk<PlayerController> {
-    coEvery { livePlaybackState(book.id) } returns null
-    every { setPosition(any(), any(), any()) } just runs
-    every { pauseWithRewind(any()) } just runs
-  }
+  private val playerController =
+    mockk<PlayerController> {
+      coEvery { livePlaybackState(book.id) } returns null
+      every { setPosition(any(), any(), any()) } just runs
+      every { pauseWithRewind(any()) } just runs
+    }
 
   private val currentBookStore = MemoryDataStore<BookId?>(book.id)
 
   private val viewModel =
-    EditBookCategoryViewModel(repo, playerController, CurrentBookStore(currentBookStore), LastPlaybackSpeedStore(MemoryDataStore(1.5F)))
+    EditBookCategoryViewModel(
+      repo,
+      playerController,
+      CurrentBookStore(currentBookStore),
+      LastPlaybackSpeedStore(MemoryDataStore(1.5F)),
+    )
 
   @Test
   fun `marking a book as completed moves it to the end`() = runTest {
@@ -59,17 +66,18 @@ class EditBookCategoryViewModelTest {
   }
 
   @Test
-  fun `a marked book counts as played now and keeps the speed it would have started at`() = runTest {
-    val before = Instant.now()
+  fun `a marked book counts as played now and keeps the speed it would have started at`() =
+    runTest {
+      val before = Instant.now()
 
-    viewModel.onItemClick(book.id, BottomSheetItem.BookCategoryMarkAsCurrent)
+      viewModel.onItemClick(book.id, BottomSheetItem.BookCategoryMarkAsCurrent)
 
-    val update = slot<(BookContent) -> BookContent>()
-    coVerify { repo.updateBook(book.id, capture(update)) }
-    val updated = update.captured(book.content)
-    assertTrue(updated.lastPlayedAt >= before)
-    assertEquals(1.5F, updated.playbackSpeed)
-  }
+      val update = slot<(BookContent) -> BookContent>()
+      coVerify { repo.updateBook(book.id, capture(update)) }
+      val updated = update.captured(book.content)
+      assertTrue(updated.lastPlayedAt >= before)
+      assertEquals(1.5F, updated.playbackSpeed)
+    }
 
   @Test
   fun `marking the book the player holds moves the player too`() = runTest {
@@ -109,12 +117,13 @@ class EditBookCategoryViewModelTest {
   }
 
   private fun playerHoldsBook() {
-    coEvery { playerController.livePlaybackState(book.id) } returns LivePlaybackState(
-      bookId = book.id,
-      chapterId = book.content.currentChapter,
-      positionMs = 1_000,
-      isPlaying = true,
-      playbackSpeed = 1F,
-    )
+    coEvery { playerController.livePlaybackState(book.id) } returns
+      LivePlaybackState(
+        bookId = book.id,
+        chapterId = book.content.currentChapter,
+        positionMs = 1_000,
+        isPlaying = true,
+        playbackSpeed = 1F,
+      )
   }
 }

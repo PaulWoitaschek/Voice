@@ -6,36 +6,35 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import java.time.Instant
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.time.Instant
 
 @Entity(tableName = "chapters2")
 public data class Chapter(
-  @PrimaryKey
-  val id: ChapterId,
+  @PrimaryKey val id: ChapterId,
   val name: String?,
   val duration: Long,
   val fileLastModified: Instant,
-  @ColumnInfo(defaultValue = "0")
-  val fileSize: Long,
+  @ColumnInfo(defaultValue = "0") val fileSize: Long,
   val markData: List<MarkData>,
 ) {
 
-  @Ignore
-  val chapterMarks: List<ChapterMark> = parseMarkData()
+  @Ignore val chapterMarks: List<ChapterMark> = parseMarkData()
 }
 
 private fun Chapter.parseMarkData(): List<ChapterMark> {
   return try {
     val positions = markData.map { it.startMs }.toSet()
-    val sorted = markData.filterNot { it.startMs - 1 in positions || it.startMs < 0 }
-      .distinctBy { it.startMs }
-      .sortedBy { it.startMs }
+    val sorted =
+      markData
+        .filterNot { it.startMs - 1 in positions || it.startMs < 0 }
+        .distinctBy { it.startMs }
+        .sortedBy { it.startMs }
     val maxEndMs = (duration - 1).coerceAtLeast(1)
     if (sorted.isEmpty()) {
       return listOf(ChapterMark(name, 0L, maxEndMs))
@@ -47,29 +46,35 @@ private fun Chapter.parseMarkData(): List<ChapterMark> {
       val previous = result.lastOrNull()
       val next = sorted.getOrNull(index + 1)
 
-      val endMs = if (next != null && next.startMs <= duration - 2) {
-        next.startMs - 1
-      } else {
-        maxEndMs
-      }
+      val endMs =
+        if (next != null && next.startMs <= duration - 2) {
+          next.startMs - 1
+        } else {
+          maxEndMs
+        }
 
       if (previous == null) {
-        result += ChapterMark(
-          name = name,
-          startMs = 0L,
-          endMs = endMs,
-        )
+        result +=
+          ChapterMark(
+            name = name,
+            startMs = 0L,
+            endMs = endMs,
+          )
       } else if (previous.endMs + 1 < duration && previous.endMs + 1 < endMs) {
-        result += ChapterMark(
-          name = name,
-          startMs = previous.endMs + 1,
-          endMs = endMs,
-        )
+        result +=
+          ChapterMark(
+            name = name,
+            startMs = previous.endMs + 1,
+            endMs = endMs,
+          )
       }
     }
     result
   } catch (e: Exception) {
-    throw IllegalStateException("Could not parse ${markData.size} marks of a chapter with duration $duration", e)
+    throw IllegalStateException(
+      "Could not parse ${markData.size} marks of a chapter with duration $duration",
+      e,
+    )
   }
 }
 

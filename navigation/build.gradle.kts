@@ -13,7 +13,7 @@ dependencies {
   testImplementation(libs.serialization.json)
 }
 
-kotlin{
+kotlin {
   compilerOptions {
     optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
   }

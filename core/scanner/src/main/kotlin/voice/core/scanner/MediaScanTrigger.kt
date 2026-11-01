@@ -3,6 +3,7 @@ package voice.core.scanner
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import kotlin.time.measureTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -17,7 +18,6 @@ import voice.core.data.repo.BookRepository
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.CachedDocumentFileFactory
 import voice.core.logging.api.Logger
-import kotlin.time.measureTime
 
 @SingleIn(AppScope::class)
 @Inject
@@ -47,17 +47,17 @@ internal constructor(
       oldJob?.cancelAndJoin()
 
       measureTime {
-        val folders: Map<FolderType, List<CachedDocumentFile>> = audiobookFolders.all()
-          .first()
-          .mapValues { (_, documentFilesWithUri) ->
+        val folders: Map<FolderType, List<CachedDocumentFile>> =
+          audiobookFolders.all().first().mapValues { (_, documentFilesWithUri) ->
             documentFilesWithUri.map {
               documentFileFactory.create(it.documentFile.uri)
             }
           }
         scanner.scan(folders)
-      }.also {
-        Logger.i("scan took $it")
       }
+        .also {
+          Logger.i("scan took $it")
+        }
       scannerActive.value = false
 
       val books = bookRepo.all()

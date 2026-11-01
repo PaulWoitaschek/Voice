@@ -1,8 +1,8 @@
 package voice.features.playbackScreen
 
 import androidx.compose.runtime.Immutable
-import voice.core.playback.misc.Decibel
 import kotlin.time.Duration
+import voice.core.playback.misc.Decibel
 
 @Immutable
 data class BookPlayViewState(
@@ -45,11 +45,12 @@ data class BookPlayViewState(
   )
 
   val bookProgress: Float
-    get() = if (bookDuration > Duration.ZERO) {
-      (bookPlayedTime / bookDuration).toFloat().coerceIn(0F, 1F)
-    } else {
-      0F
-    }
+    get() =
+      if (bookDuration > Duration.ZERO) {
+        (bookPlayedTime / bookDuration).toFloat().coerceIn(0F, 1F)
+      } else {
+        0F
+      }
 
   sealed interface SleepTimerViewState {
     data object Disabled : SleepTimerViewState
@@ -57,8 +58,7 @@ data class BookPlayViewState(
     sealed interface Enabled : SleepTimerViewState {
       data object WithEndOfChapter : Enabled
 
-      @JvmInline
-      value class WithDuration(val leftDuration: Duration) : Enabled
+      @JvmInline value class WithDuration(val leftDuration: Duration) : Enabled
     }
   }
 
@@ -88,6 +88,5 @@ internal sealed interface BookPlayDialogViewState {
     )
   }
 
-  @JvmInline
-  value class SleepTimer(val viewState: SleepTimerViewState) : BookPlayDialogViewState
+  @JvmInline value class SleepTimer(val viewState: SleepTimerViewState) : BookPlayDialogViewState
 }

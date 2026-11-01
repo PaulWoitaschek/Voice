@@ -5,6 +5,7 @@ interface RemoteConfig {
     key: String,
     defaultValue: Boolean = false,
   ): Boolean
+
   fun string(
     key: String,
     defaultValue: String,

@@ -22,24 +22,24 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
 import voice.core.ui.VoiceTheme
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class SkipButtonTest {
 
-  private val motionScale = object : MotionDurationScale {
-    override var scaleFactor by mutableFloatStateOf(0F)
-  }
+  private val motionScale =
+    object : MotionDurationScale {
+      override var scaleFactor by mutableFloatStateOf(0F)
+    }
 
-  @get:Rule
-  val compose = createComposeRule(effectContext = motionScale)
+  @get:Rule val compose = createComposeRule(effectContext = motionScale)
 
   @Test
   fun `pressing skip buttons with animations off keeps both controls in place`() {
@@ -85,7 +85,9 @@ class SkipButtonTest {
     val before = compose.onRoot().captureToImage().asAndroidBitmap()
 
     // a click through semantics has no ripple, which would change the image
-    compose.onNode(hasClickAction() and hasParent(hasTestTag("forward"))).performSemanticsAction(SemanticsActions.OnClick)
+    compose
+      .onNode(hasClickAction() and hasParent(hasTestTag("forward")))
+      .performSemanticsAction(SemanticsActions.OnClick)
     repeat(3) {
       compose.mainClock.advanceTimeByFrame()
       assertTrue(before.sameAs(compose.onRoot().captureToImage().asAndroidBitmap()))
@@ -97,8 +99,18 @@ class SkipButtonTest {
     compose.setContent {
       VoiceTheme {
         Row {
-          SkipButton(forward = false, seconds = 10, onClick = {}, modifier = Modifier.height(72.dp).testTag("rewind"))
-          SkipButton(forward = true, seconds = 10, onClick = {}, modifier = Modifier.height(72.dp).testTag("forward"))
+          SkipButton(
+            forward = false,
+            seconds = 10,
+            onClick = {},
+            modifier = Modifier.height(72.dp).testTag("rewind"),
+          )
+          SkipButton(
+            forward = true,
+            seconds = 10,
+            onClick = {},
+            modifier = Modifier.height(72.dp).testTag("forward"),
+          )
         }
       }
     }

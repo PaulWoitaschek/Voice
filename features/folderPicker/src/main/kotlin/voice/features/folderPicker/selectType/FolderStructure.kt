@@ -16,9 +16,8 @@ internal fun CachedDocumentFile.guessFolderMode(): FolderMode {
   if (folders.isNotEmpty() && folders.all { it.isPartFolder() }) {
     return FolderMode.SingleBook
   }
-  val (wholeBooks, looseChapters) = children
-    .filter { it.isAudioFile() }
-    .partition { it.looksLikeWholeBook() }
+  val (wholeBooks, looseChapters) =
+    children.filter { it.isAudioFile() }.partition { it.looksLikeWholeBook() }
   if (looseChapters.size > folders.size + wholeBooks.size) {
     return FolderMode.SingleBook
   }
@@ -26,27 +25,24 @@ internal fun CachedDocumentFile.guessFolderMode(): FolderMode {
   return if (authorFolders * 2 > folders.size) FolderMode.Authors else FolderMode.Audiobooks
 }
 
-/**
- * The books Voice finds in this folder in the given [mode]. This mirrors what the scanner does.
- */
+/** The books Voice finds in this folder in the given [mode]. This mirrors what the scanner does. */
 internal fun CachedDocumentFile.books(mode: FolderMode): List<FolderBook> {
   return when (mode) {
     FolderMode.SingleBook -> listOf(toFolderBook(author = null))
     FolderMode.Audiobooks -> children.map { it.toFolderBook(author = null) }
-    FolderMode.Authors -> children.flatMap { author ->
-      if (author.isFile) {
-        listOf(author.toFolderBook(author = null))
-      } else {
-        val authorName = author.nameWithoutExtension()
-        author.children.map { it.toFolderBook(author = authorName) }
+    FolderMode.Authors ->
+      children.flatMap { author ->
+        if (author.isFile) {
+          listOf(author.toFolderBook(author = null))
+        } else {
+          val authorName = author.nameWithoutExtension()
+          author.children.map { it.toFolderBook(author = authorName) }
+        }
       }
-    }
   }.filter { it.book.fileCount > 0 }
 }
 
-/**
- * A book in the folder and what its files tell without analyzing them.
- */
+/** A book in the folder and what its files tell without analyzing them. */
 internal class FolderBook(
   val file: CachedDocumentFile,
   val book: SelectFolderTypeViewState.Book,
@@ -56,14 +52,15 @@ private fun CachedDocumentFile.toFolderBook(author: String?): FolderBook {
   val (parts, books) = audioFolders().partition { it.isPartFolder() }
   return FolderBook(
     file = this,
-    book = SelectFolderTypeViewState.Book(
-      name = nameWithoutExtension(),
-      author = author,
-      fileCount = audioFileCount(),
-      partCount = parts.size,
-      // a single sub folder is often just bonus material
-      possibleBookCount = books.size.takeIf { it > 1 } ?: 0,
-    ),
+    book =
+      SelectFolderTypeViewState.Book(
+        name = nameWithoutExtension(),
+        author = author,
+        fileCount = audioFileCount(),
+        partCount = parts.size,
+        // a single sub folder is often just bonus material
+        possibleBookCount = books.size.takeIf { it > 1 } ?: 0,
+      ),
   )
 }
 
@@ -80,11 +77,13 @@ private fun CachedDocumentFile.looksLikeWholeBook(): Boolean {
   return name.orEmpty().endsWith(".m4b", ignoreCase = true) || length > WHOLE_BOOK_MIN_BYTES
 }
 
-private fun CachedDocumentFile.isPartFolder(): Boolean = partFolderName.matches(name.orEmpty().trim())
+private fun CachedDocumentFile.isPartFolder(): Boolean =
+  partFolderName.matches(name.orEmpty().trim())
 
 // "CD 1", "Disc 02", "My Book - CD2", "Part 3", "Teil 1", "Vol. 2" or just "01"
-private val partFolderName = Regex(
-  """(?i)^((.*[\s._-])?(cd|disc|disk|tape|side)|part|teil|vol\.?|volume)?[\s._-]*\d{1,3}$""",
-)
+private val partFolderName =
+  Regex(
+    """(?i)^((.*[\s._-])?(cd|disc|disk|tape|side)|part|teil|vol\.?|volume)?[\s._-]*\d{1,3}$""",
+  )
 
 private const val WHOLE_BOOK_MIN_BYTES = 200_000_000L

@@ -1,10 +1,10 @@
 package voice.features.bookmark
 
+import java.time.Instant
+import java.time.ZoneId
 import voice.core.data.Bookmark
 import voice.core.ui.BookBarPin
 import voice.core.ui.formatTime
-import java.time.Instant
-import java.time.ZoneId
 
 /**
  * The bookmarks of a book, either flat with the most recently saved first, or in story order,
@@ -41,21 +41,28 @@ private fun storyOrder(
   zone: ZoneId,
 ): List<BookmarkListItem> {
   val current = index.current
-  val byChapter = located
-    .sortedWith(compareBy<Pair<Bookmark, BookLocation>> { it.second.bookPosition }.thenBy { it.first.addedAt })
-    .groupBy { it.second.chapterNumber }
+  val byChapter =
+    located
+      .sortedWith(
+        compareBy<Pair<Bookmark, BookLocation>> { it.second.bookPosition }
+          .thenBy { it.first.addedAt },
+      )
+      .groupBy { it.second.chapterNumber }
   val chapterNumbers = (byChapter.keys + listOfNotNull(current?.chapterNumber)).toSortedSet()
   return buildList {
     chapterNumbers.forEach { chapterNumber ->
       val inChapter = byChapter[chapterNumber].orEmpty()
-      val youAreHereAt = if (current != null && current.chapterNumber == chapterNumber) {
-        inChapter.count { it.second.bookPosition <= current.bookPosition }
-      } else {
-        null
-      }
+      val youAreHereAt =
+        if (current != null && current.chapterNumber == chapterNumber) {
+          inChapter.count { it.second.bookPosition <= current.bookPosition }
+        } else {
+          null
+        }
       val count = inChapter.size + if (youAreHereAt != null) 1 else 0
       if (index.chapterCount > 1) {
-        val name = inChapter.firstOrNull()?.second?.chapterName ?: current?.takeIf { it.chapterNumber == chapterNumber }?.chapterName
+        val name =
+          inChapter.firstOrNull()?.second?.chapterName
+            ?: current?.takeIf { it.chapterNumber == chapterNumber }?.chapterName
         add(BookmarkListItem.ChapterHeader(number = chapterNumber, name = name))
       }
       var position = 0
@@ -114,19 +121,24 @@ internal fun bookBar(
   playbackSpeed: Float,
 ): BookBarViewState? {
   val current = index.current ?: return null
-  val pinned = bookmarks
-    .mapNotNull { bookmark -> index.locate(bookmark.chapterId, bookmark.time)?.let { bookmark to it } }
-    .sortedBy { it.second.bookPosition }
-  val remaining = ((index.duration - current.bookPosition) / playbackSpeed.coerceAtLeast(0.1F)).toLong()
+  val pinned =
+    bookmarks
+      .mapNotNull { bookmark ->
+        index.locate(bookmark.chapterId, bookmark.time)?.let { bookmark to it }
+      }
+      .sortedBy { it.second.bookPosition }
+  val remaining =
+    ((index.duration - current.bookPosition) / playbackSpeed.coerceAtLeast(0.1F)).toLong()
   return BookBarViewState(
     segments = index.segments,
     currentSegment = current.chapterNumber - 1,
     progress = current.progress,
     percent = current.percent,
     remaining = formatTime(remaining.coerceAtLeast(0L)),
-    pins = pinned.map { (bookmark, location) ->
-      BookBarPin(position = location.progress, kind = bookmark.kind)
-    },
+    pins =
+      pinned.map { (bookmark, location) ->
+        BookBarPin(position = location.progress, kind = bookmark.kind)
+      },
     pinKeys = pinned.map { (bookmark, _) -> bookmark.id.value.toString() },
   )
 }

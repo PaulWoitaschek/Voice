@@ -1,12 +1,12 @@
 package voice.features.support
 
-import voice.core.data.supporter.SupporterBadge
-import voice.core.data.supporter.SupporterStatus
 import java.time.Instant
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import voice.core.data.supporter.SupporterBadge
+import voice.core.data.supporter.SupporterStatus
 
 class SupporterStatusUpdatesTest {
 
@@ -14,7 +14,8 @@ class SupporterStatusUpdatesTest {
 
   @Test
   fun `a new subscription earns the first cup`() {
-    val status = SupporterStatus().withSubscription(activeSince = now, now = now, zone = ZoneOffset.UTC)
+    val status =
+      SupporterStatus().withSubscription(activeSince = now, now = now, zone = ZoneOffset.UTC)
 
     assertEquals(expected = 0, actual = status.subscribedMonths)
     assertEquals(expected = SupporterBadge.FirstCup, actual = status.badge)
@@ -23,19 +24,22 @@ class SupporterStatusUpdatesTest {
 
   @Test
   fun `a year of subscribing turns golden`() {
-    val status = SupporterStatus().withSubscription(
-      activeSince = monthsAgo(12),
-      now = now,
-      zone = ZoneOffset.UTC,
-    )
+    val status =
+      SupporterStatus()
+        .withSubscription(
+          activeSince = monthsAgo(12),
+          now = now,
+          zone = ZoneOffset.UTC,
+        )
 
     assertEquals(expected = SupporterBadge.OneYear, actual = status.badge)
   }
 
   @Test
   fun `switching tiers keeps counting from the first subscription`() {
-    val status = SupporterStatus(subscribedSince = monthsAgo(5).toEpochMilli(), subscribedMonths = 5)
-      .withSubscription(activeSince = monthsAgo(1), now = now, zone = ZoneOffset.UTC)
+    val status =
+      SupporterStatus(subscribedSince = monthsAgo(5).toEpochMilli(), subscribedMonths = 5)
+        .withSubscription(activeSince = monthsAgo(1), now = now, zone = ZoneOffset.UTC)
 
     assertEquals(expected = monthsAgo(5).toEpochMilli(), actual = status.subscribedSince)
     assertEquals(expected = 5, actual = status.subscribedMonths)
@@ -43,8 +47,9 @@ class SupporterStatusUpdatesTest {
 
   @Test
   fun `subscribing again keeps the badge reached before`() {
-    val status = SupporterStatus(subscribedMonths = 7)
-      .withSubscription(activeSince = monthsAgo(1), now = now, zone = ZoneOffset.UTC)
+    val status =
+      SupporterStatus(subscribedMonths = 7)
+        .withSubscription(activeSince = monthsAgo(1), now = now, zone = ZoneOffset.UTC)
 
     assertEquals(expected = 7, actual = status.subscribedMonths)
     assertEquals(expected = SupporterBadge.SixMonths, actual = status.badge)
@@ -52,8 +57,9 @@ class SupporterStatusUpdatesTest {
 
   @Test
   fun `without a subscription only the running one is forgotten`() {
-    val status = SupporterStatus(supporterSince = 1, subscribedSince = 1, subscribedMonths = 3)
-      .withSubscription(activeSince = null, now = now, zone = ZoneOffset.UTC)
+    val status =
+      SupporterStatus(supporterSince = 1, subscribedSince = 1, subscribedMonths = 3)
+        .withSubscription(activeSince = null, now = now, zone = ZoneOffset.UTC)
 
     assertNull(status.subscribedSince)
     assertEquals(expected = SupporterBadge.ThreeMonths, actual = status.badge)
@@ -72,5 +78,6 @@ class SupporterStatusUpdatesTest {
     )
   }
 
-  private fun monthsAgo(months: Long): Instant = now.atZone(ZoneOffset.UTC).minusMonths(months).toInstant()
+  private fun monthsAgo(months: Long): Instant =
+    now.atZone(ZoneOffset.UTC).minusMonths(months).toInstant()
 }

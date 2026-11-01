@@ -1,11 +1,11 @@
 package voice.core.common.serialization
 
+import java.time.LocalTime
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.time.LocalTime
 
 object LocalTimeSerializer : KSerializer<LocalTime> {
 

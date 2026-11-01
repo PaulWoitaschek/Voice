@@ -34,8 +34,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
-import voice.core.ui.icons.VoiceIcons
 import voice.core.strings.R as StringsR
+import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun KoFiContent(onKoFiClick: () -> Unit) {
@@ -46,9 +46,7 @@ internal fun KoFiContent(onKoFiClick: () -> Unit) {
     SupportHelps()
     val size = ButtonDefaults.MediumContainerHeight
     Button(
-      modifier = Modifier
-        .fillMaxWidth()
-        .heightIn(size),
+      modifier = Modifier.fillMaxWidth().heightIn(size),
       onClick = onKoFiClick,
       contentPadding = ButtonDefaults.contentPaddingFor(size, hasStartIcon = true),
       shapes = ButtonDefaults.shapesFor(size),
@@ -87,9 +85,7 @@ private fun SupportHelps() {
     )
     val colors = MaterialTheme.colorScheme
     Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(IntrinsicSize.Min),
+      modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
       horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       HelpTile(
@@ -141,9 +137,7 @@ private fun HelpTile(
       verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       Box(
-        modifier = Modifier
-          .size(44.dp)
-          .background(content, shape.toShape()),
+        modifier = Modifier.size(44.dp).background(content, shape.toShape()),
         contentAlignment = Alignment.Center,
       ) {
         Icon(

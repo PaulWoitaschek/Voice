@@ -35,13 +35,13 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
+import androidx.graphics.shapes.toPath as toAndroidPath
+import kotlin.math.min
+import kotlin.math.sin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.core.ui.drawConfetti
 import voice.core.ui.rememberConfettiState
-import kotlin.math.min
-import kotlin.math.sin
-import androidx.graphics.shapes.toPath as toAndroidPath
 
 /** Tapping it throws more confetti just for fun, so it's hidden from accessibility services. */
 @Composable
@@ -51,14 +51,15 @@ internal fun Celebration(
 ) {
   val haptics = LocalHapticFeedback.current
   val colors = MaterialTheme.colorScheme
-  val confettiColors = listOf(
-    colors.primary,
-    colors.secondary,
-    colors.tertiary,
-    colors.primaryContainer,
-    colors.secondaryContainer,
-    colors.tertiaryContainer,
-  )
+  val confettiColors =
+    listOf(
+      colors.primary,
+      colors.secondary,
+      colors.tertiary,
+      colors.primaryContainer,
+      colors.secondaryContainer,
+      colors.tertiaryContainer,
+    )
   val badgePath = remember { MaterialShapes.SoftBurst.toAndroidPath().asComposePath() }
   val haloPath = remember { MaterialShapes.Cookie12Sided.toAndroidPath().asComposePath() }
   val checkMeasure = remember { PathMeasure().apply { setPath(checkPath(), forceClosed = false) } }
@@ -67,11 +68,12 @@ internal fun Celebration(
   val pop = remember { Animatable(0F) }
   val check = remember { Animatable(0F) }
   var pressed by remember { mutableStateOf(false) }
-  val squish by animateFloatAsState(
-    targetValue = if (pressed) 0.86F else 1F,
-    animationSpec = spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMedium),
-    label = "badgeSquish",
-  )
+  val squish by
+    animateFloatAsState(
+      targetValue = if (pressed) 0.86F else 1F,
+      animationSpec = spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMedium),
+      label = "badgeSquish",
+    )
   LaunchedEffect(pop, check) {
     delay(200)
     launch { pop.animateTo(1F, spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessLow)) }
@@ -81,21 +83,22 @@ internal fun Celebration(
     check.animateTo(1F, tween(durationMillis = 450, easing = FastOutSlowInEasing))
   }
   Canvas(
-    modifier = modifier
-      .clearAndSetSemantics {}
-      .pointerInput(Unit) {
-        detectTapGestures(
-          onPress = {
-            pressed = true
-            tryAwaitRelease()
-            pressed = false
-          },
-          onTap = {
-            haptics.performHapticFeedback(HapticFeedbackType.Confirm)
-            confetti.burst()
-          },
-        )
-      },
+    modifier =
+      modifier
+        .clearAndSetSemantics {}
+        .pointerInput(Unit) {
+          detectTapGestures(
+            onPress = {
+              pressed = true
+              tryAwaitRelease()
+              pressed = false
+            },
+            onTap = {
+              haptics.performHapticFeedback(HapticFeedbackType.Confirm)
+              confetti.burst()
+            },
+          )
+        },
   ) {
     val t = clock()
     val radius = min(min(size.width, size.height) * 0.3F, 120.dp.toPx())
@@ -112,13 +115,21 @@ internal fun Celebration(
     val badgeSize = radius * 2F * pop.value * squish * (1F + 0.025F * sin(t * 2.4F))
     translate(left = center.x - badgeSize / 2, top = center.y - badgeSize / 2) {
       // spins in while popping up, then keeps turning slowly
-      rotate(degrees = t * 10F - (1F - pop.value) * 120F, pivot = Offset(badgeSize / 2, badgeSize / 2)) {
+      rotate(
+        degrees = t * 10F - (1F - pop.value) * 120F,
+        pivot = Offset(badgeSize / 2, badgeSize / 2),
+      ) {
         scale(scaleX = badgeSize, scaleY = badgeSize, pivot = Offset.Zero) {
           drawPath(path = badgePath, color = colors.primary)
         }
       }
       checkSegment.reset()
-      checkMeasure.getSegment(0F, checkMeasure.length * check.value, checkSegment, startWithMoveTo = true)
+      checkMeasure.getSegment(
+        0F,
+        checkMeasure.length * check.value,
+        checkSegment,
+        startWithMoveTo = true,
+      )
       scale(scaleX = badgeSize, scaleY = badgeSize, pivot = Offset.Zero) {
         drawPath(
           path = checkSegment,
@@ -133,8 +144,9 @@ internal fun Celebration(
 }
 
 /** A check mark in a 1x1 box. */
-private fun checkPath(): Path = Path().apply {
-  moveTo(0.3F, 0.52F)
-  lineTo(0.44F, 0.66F)
-  lineTo(0.71F, 0.38F)
-}
+private fun checkPath(): Path =
+  Path().apply {
+    moveTo(0.3F, 0.52F)
+    lineTo(0.44F, 0.66F)
+    lineTo(0.71F, 0.38F)
+  }

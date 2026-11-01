@@ -6,6 +6,11 @@ import androidx.media3.common.Player
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.time.Clock
+import java.time.Instant
+import kotlin.math.roundToLong
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,16 +22,12 @@ import voice.core.data.ListeningSession
 import voice.core.data.repo.ListeningStatsRepo
 import voice.core.playback.session.bookId
 import voice.core.playback.session.toMediaIdOrNull
-import java.time.Clock
-import java.time.Instant
-import kotlin.math.roundToLong
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * Records the listening sessions for the listening stats, from what the player does.
  *
- * While playing, the session is saved every now and then, so little is lost when the app gets killed.
+ * While playing, the session is saved every now and then, so little is lost when the app gets
+ * killed.
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -91,15 +92,20 @@ class ListeningSessionRecorder(
     stopped()
     val now = clock.millis()
     val previous = session
-    session = if (previous != null && previous.bookId == bookId && now - previous.endedAtMillis <= CONTINUE_WITHIN) {
-      previous
-    } else {
-      OpenSession(
-        bookId = bookId,
-        startedAtMillis = now,
-        utcOffsetSeconds = clock.zone.rules.getOffset(Instant.ofEpochMilli(now)).totalSeconds,
-      )
-    }
+    session =
+      if (
+        previous != null &&
+          previous.bookId == bookId &&
+          now - previous.endedAtMillis <= CONTINUE_WITHIN
+      ) {
+        previous
+      } else {
+        OpenSession(
+          bookId = bookId,
+          startedAtMillis = now,
+          utcOffsetSeconds = clock.zone.rules.getOffset(Instant.ofEpochMilli(now)).totalSeconds,
+        )
+      }
     this.speed = speed
     playing = true
     countedUntil = now
@@ -129,7 +135,8 @@ class ListeningSessionRecorder(
 
   fun bookEnded(bookId: BookId) {
     val session = session ?: return
-    // A book that is opened at its end was not finished just now, and neither was the last one listened to.
+    // A book that is opened at its end was not finished just now, and neither was the last one
+    // listened to.
     val justListened = playing || clock.millis() - session.endedAtMillis <= CONTINUE_WITHIN
     if (session.bookId != bookId || !justListened) return
     count()
@@ -172,16 +179,17 @@ class ListeningSessionRecorder(
     var reachedEnd = false
     var id = 0L
 
-    fun toListeningSession() = ListeningSession(
-      bookId = bookId,
-      startedAtMillis = startedAtMillis,
-      endedAtMillis = endedAtMillis,
-      listenedMillis = listenedMillis,
-      audioMillis = audioMillis,
-      utcOffsetSeconds = utcOffsetSeconds,
-      reachedEnd = reachedEnd,
-      id = id,
-    )
+    fun toListeningSession() =
+      ListeningSession(
+        bookId = bookId,
+        startedAtMillis = startedAtMillis,
+        endedAtMillis = endedAtMillis,
+        listenedMillis = listenedMillis,
+        audioMillis = audioMillis,
+        utcOffsetSeconds = utcOffsetSeconds,
+        reachedEnd = reachedEnd,
+        id = id,
+      )
   }
 
   private companion object {

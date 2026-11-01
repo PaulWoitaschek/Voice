@@ -35,14 +35,10 @@ class SelectFolderTypeViewModel(
   private val navigator: Navigator,
   private val documentFileFactory: CachedDocumentFileFactory,
   private val bookPreviewer: BookPreviewer,
-  @Assisted
-  private val uri: Uri,
-  @Assisted
-  private val documentFile: DocumentFile,
-  @Assisted
-  private val origin: Origin,
-  @Assisted
-  private val currentType: FolderType?,
+  @Assisted private val uri: Uri,
+  @Assisted private val documentFile: DocumentFile,
+  @Assisted private val origin: Origin,
+  @Assisted private val currentType: FolderType?,
 ) {
 
   private val currentMode = currentType?.toFolderMode()
@@ -89,21 +85,24 @@ class SelectFolderTypeViewModel(
     val folder: CachedDocumentFile = remember {
       documentFileFactory.create(documentFile.uri)
     }
-    val folderName by produceState(initialValue = "") {
-      value = withContext(dispatcherProvider.io) { folder.nameWithoutExtension() }
-    }
-    val structure by produceState<FolderStructure?>(initialValue = null) {
-      val loaded = withContext(dispatcherProvider.io) {
-        FolderStructure(
-          guess = folder.guessFolderMode(),
-          books = FolderMode.entries.associateWith { folder.books(it) },
-        )
+    val folderName by
+      produceState(initialValue = "") {
+        value = withContext(dispatcherProvider.io) { folder.nameWithoutExtension() }
       }
-      if (selectedMode.value == null) {
-        selectedMode.value = loaded.guess
+    val structure by
+      produceState<FolderStructure?>(initialValue = null) {
+        val loaded =
+          withContext(dispatcherProvider.io) {
+            FolderStructure(
+              guess = folder.guessFolderMode(),
+              books = FolderMode.entries.associateWith { folder.books(it) },
+            )
+          }
+        if (selectedMode.value == null) {
+          selectedMode.value = loaded.guess
+        }
+        value = loaded
       }
-      value = loaded
-    }
     val loadedStructure = structure
     val selectedMode = selectedMode.value ?: FolderMode.SingleBook
     val selectedBooks = loadedStructure?.books?.get(selectedMode).orEmpty()
@@ -118,12 +117,13 @@ class SelectFolderTypeViewModel(
       selectedMode = selectedMode,
       guessedMode = loadedStructure?.guess,
       books = selectedBooks.withPreviews(analyzing),
-      options = FolderMode.entries.map { mode ->
-        SelectFolderTypeViewState.Option(
-          mode = mode,
-          books = loadedStructure?.books?.get(mode).orEmpty().withPreviews(analyzing),
-        )
-      },
+      options =
+        FolderMode.entries.map { mode ->
+          SelectFolderTypeViewState.Option(
+            mode = mode,
+            books = loadedStructure?.books?.get(mode).orEmpty().withPreviews(analyzing),
+          )
+        },
       editing = currentType != null,
       onboarding = origin == Origin.Onboarding && currentType == null,
     )
@@ -135,9 +135,10 @@ class SelectFolderTypeViewModel(
       if (book.isAnalyzed()) return@forEach
       val uri = book.file.uri
       try {
-        previews[uri] = withContext(dispatcherProvider.io) {
-          bookPreviewer.preview(book.file)
-        }
+        previews[uri] =
+          withContext(dispatcherProvider.io) {
+            bookPreviewer.preview(book.file)
+          }
       } catch (e: CancellationException) {
         throw e
       } catch (e: Exception) {
@@ -155,7 +156,11 @@ class SelectFolderTypeViewModel(
       val uri = folderBook.file.uri
       if (uri in previews) {
         val preview = previews[uri] ?: return@mapNotNull null
-        folderBook.book.copy(name = preview.name, author = preview.author, duration = preview.duration)
+        folderBook.book.copy(
+          name = preview.name,
+          author = preview.author,
+          duration = preview.duration,
+        )
       } else {
         folderBook.book.copy(analyzing = uri == analyzing)
       }

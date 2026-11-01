@@ -3,37 +3,35 @@ package voice.core.data.repo.internals
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.room.TypeConverter
+import java.io.File
+import java.time.Instant
+import kotlin.uuid.Uuid
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
-import java.io.File
-import java.time.Instant
-import kotlin.uuid.Uuid
 
 internal class Converters {
 
   private val json = Json { allowStructuredMapKeys = true }
 
   @TypeConverter
-  fun fromMarks(data: List<MarkData>): String = json.encodeToString(ListSerializer(MarkData.serializer()), data)
+  fun fromMarks(data: List<MarkData>): String =
+    json.encodeToString(ListSerializer(MarkData.serializer()), data)
 
   @TypeConverter
-  fun toMarks(string: String): List<MarkData> = json.decodeFromString(ListSerializer(MarkData.serializer()), string)
+  fun toMarks(string: String): List<MarkData> =
+    json.decodeFromString(ListSerializer(MarkData.serializer()), string)
 
-  @TypeConverter
-  fun fromFile(file: File): String = file.absolutePath
+  @TypeConverter fun fromFile(file: File): String = file.absolutePath
 
-  @TypeConverter
-  fun toFile(path: String) = File(path)
+  @TypeConverter fun toFile(path: String) = File(path)
 
-  @TypeConverter
-  fun fromUuid(uuid: Uuid): String = uuid.toHexString()
+  @TypeConverter fun fromUuid(uuid: Uuid): String = uuid.toHexString()
 
-  @TypeConverter
-  fun toUuid(string: String): Uuid = Uuid.parse(string)
+  @TypeConverter fun toUuid(string: String): Uuid = Uuid.parse(string)
 
   @TypeConverter
   fun fromInstant(instant: Instant): String {
@@ -45,11 +43,9 @@ internal class Converters {
     return Instant.parse(string)
   }
 
-  @TypeConverter
-  fun fromUri(uri: Uri): String = uri.toString()
+  @TypeConverter fun fromUri(uri: Uri): String = uri.toString()
 
-  @TypeConverter
-  fun toUri(string: String): Uri = string.toUri()
+  @TypeConverter fun toUri(string: String): Uri = string.toUri()
 
   @TypeConverter
   fun fromChapterList(list: List<ChapterId>): String {
@@ -61,21 +57,15 @@ internal class Converters {
     return json.decodeFromString(ListSerializer(ChapterId.serializer()), string)
   }
 
-  @TypeConverter
-  fun toBookId(value: String): BookId = BookId(value)
+  @TypeConverter fun toBookId(value: String): BookId = BookId(value)
 
-  @TypeConverter
-  fun fromBookId(id: BookId): String = id.value
+  @TypeConverter fun fromBookId(id: BookId): String = id.value
 
-  @TypeConverter
-  fun toChapterId(value: String): ChapterId = ChapterId(value)
+  @TypeConverter fun toChapterId(value: String): ChapterId = ChapterId(value)
 
-  @TypeConverter
-  fun fromChapterId(id: ChapterId): String = id.value
+  @TypeConverter fun fromChapterId(id: ChapterId): String = id.value
 
-  @TypeConverter
-  fun toBookmarkId(value: String): Bookmark.Id = Bookmark.Id(Uuid.parse(value))
+  @TypeConverter fun toBookmarkId(value: String): Bookmark.Id = Bookmark.Id(Uuid.parse(value))
 
-  @TypeConverter
-  fun fromBookmarkId(id: Bookmark.Id): String = id.value.toString()
+  @TypeConverter fun fromBookmarkId(id: Bookmark.Id): String = id.value.toString()
 }

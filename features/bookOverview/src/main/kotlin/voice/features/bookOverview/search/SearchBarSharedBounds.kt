@@ -8,14 +8,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import voice.core.ui.LocalSharedTransitionScope
 
-/**
- * Lets the library's search pill grow into the search field, and shrink back.
- */
+/** Lets the library's search pill grow into the search field, and shrink back. */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun Modifier.searchBarSharedBounds(shape: Shape): Modifier {
-  val sharedTransitionScope = LocalSharedTransitionScope.current
-    ?: return this
+  val sharedTransitionScope = LocalSharedTransitionScope.current ?: return this
   return with(sharedTransitionScope) {
     sharedBounds(
       sharedContentState = rememberSharedContentState(key = "library-search-bar"),

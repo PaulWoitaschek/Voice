@@ -5,6 +5,15 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toKotlinInstant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
@@ -23,15 +32,6 @@ import voice.core.data.repo.ListeningStatsRepo
 import voice.core.data.repo.ListeningSummary
 import voice.core.featureflag.MemoryFeatureFlag
 import voice.core.playback.playstate.PlayStateManager
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.toKotlinInstant
 
 class ReviewPromptControllerTest {
 
@@ -41,32 +41,58 @@ class ReviewPromptControllerTest {
   private val enabled = MemoryFeatureFlag(true)
   private val force = MemoryFeatureFlag(false)
   private val analytics = mockk<Analytics>(relaxUnitFun = true)
-  private val statsRepo = mockk<ListeningStatsRepo> {
-    coEvery { summary(any(), any()) } returns ListeningSummary(listened = 0.hours, listeningDays = 0, finishedBooks = emptyList())
-  }
+  private val statsRepo =
+    mockk<ListeningStatsRepo> {
+      coEvery { summary(any(), any()) } returns
+        ListeningSummary(listened = 0.hours, listeningDays = 0, finishedBooks = emptyList())
+    }
   private var books = emptyList<Book>()
-  private val bookRepository = mockk<BookRepository> {
-    coEvery { all() } answers { books }
-  }
+  private val bookRepository =
+    mockk<BookRepository> {
+      coEvery { all() } answers { books }
+    }
 
-  private val dune = book(id = "dune", name = "Dune", author = "Frank Herbert", listenedMinutes = 600, durationMinutes = 600)
-  private val hyperion = book(id = "hyperion", name = "Hyperion", author = "Dan Simmons", listenedMinutes = 60, durationMinutes = 600)
-  private val emma = book(id = "emma", name = "Emma", author = "frank herbert ", listenedMinutes = 0, durationMinutes = 600)
+  private val dune =
+    book(
+      id = "dune",
+      name = "Dune",
+      author = "Frank Herbert",
+      listenedMinutes = 600,
+      durationMinutes = 600,
+    )
+  private val hyperion =
+    book(
+      id = "hyperion",
+      name = "Hyperion",
+      author = "Dan Simmons",
+      listenedMinutes = 60,
+      durationMinutes = 600,
+    )
+  private val emma =
+    book(
+      id = "emma",
+      name = "Emma",
+      author = "frank herbert ",
+      listenedMinutes = 0,
+      durationMinutes = 600,
+    )
 
-  private fun TestScope.controller() = ReviewPromptController(
-    store = ReviewPromptStateStore(store),
-    listeningStatsRepo = statsRepo,
-    bookRepository = bookRepository,
-    playStateManager = playStateManager,
-    appInfoProvider = mockk {
-      every { installTime } returns Instant.parse("2026-06-01T00:00:00Z").toKotlinInstant()
-    },
-    clock = Clock.fixed(now, ZoneOffset.UTC),
-    analytics = analytics,
-    enabled = ReviewEnabledFeatureFlag(enabled),
-    force = ReviewPromptForceFeatureFlag(force),
-    scope = this,
-  )
+  private fun TestScope.controller() =
+    ReviewPromptController(
+      store = ReviewPromptStateStore(store),
+      listeningStatsRepo = statsRepo,
+      bookRepository = bookRepository,
+      playStateManager = playStateManager,
+      appInfoProvider =
+        mockk {
+          every { installTime } returns Instant.parse("2026-06-01T00:00:00Z").toKotlinInstant()
+        },
+      clock = Clock.fixed(now, ZoneOffset.UTC),
+      analytics = analytics,
+      enabled = ReviewEnabledFeatureFlag(enabled),
+      force = ReviewPromptForceFeatureFlag(force),
+      scope = this,
+    )
 
   private fun listenedEnough(finishedBooks: List<FinishedBook> = emptyList()) {
     coEvery { statsRepo.summary(any(), any()) } returns
@@ -81,15 +107,18 @@ class ReviewPromptControllerTest {
     val prompt = controller().prompt()
 
     assertEquals(
-      expected = ReviewPrompt(
-        headline = ReviewPrompt.Headline.BookFinished(name = "Dune", cover = null),
-        stats = ReviewPrompt.Stats(listenedHours = 11, finishedBooks = 1, authors = 2),
-        forced = false,
-      ),
+      expected =
+        ReviewPrompt(
+          headline = ReviewPrompt.Headline.BookFinished(name = "Dune", cover = null),
+          stats = ReviewPrompt.Stats(listenedHours = 11, finishedBooks = 1, authors = 2),
+          forced = false,
+        ),
       actual = prompt,
     )
     assertEquals(expected = 1, actual = store.data.first().asks)
-    verify { analytics.event("review_prompt_shown", mapOf("trigger" to "book_finished", "ask" to "1")) }
+    verify {
+      analytics.event("review_prompt_shown", mapOf("trigger" to "book_finished", "ask" to "1"))
+    }
     confirmVerified(analytics)
   }
 
@@ -102,14 +131,17 @@ class ReviewPromptControllerTest {
     val prompt = controller().prompt()
 
     assertEquals(
-      expected = ReviewPrompt(
-        headline = ReviewPrompt.Headline.Milestone,
-        stats = ReviewPrompt.Stats(listenedHours = 26, finishedBooks = 0, authors = 1),
-        forced = false,
-      ),
+      expected =
+        ReviewPrompt(
+          headline = ReviewPrompt.Headline.Milestone,
+          stats = ReviewPrompt.Stats(listenedHours = 26, finishedBooks = 0, authors = 1),
+          forced = false,
+        ),
       actual = prompt,
     )
-    verify { analytics.event("review_prompt_shown", mapOf("trigger" to "milestone_25", "ask" to "1")) }
+    verify {
+      analytics.event("review_prompt_shown", mapOf("trigger" to "milestone_25", "ask" to "1"))
+    }
     confirmVerified(analytics)
   }
 
@@ -118,7 +150,10 @@ class ReviewPromptControllerTest {
     books = listOf(hyperion)
     listenedEnough(finishedBooks = listOf(FinishedBook(dune.id, at = now.minusSeconds(60))))
 
-    assertEquals(expected = ReviewPrompt.Headline.Milestone, actual = controller().prompt()?.headline)
+    assertEquals(
+      expected = ReviewPrompt.Headline.Milestone,
+      actual = controller().prompt()?.headline,
+    )
   }
 
   @Test
@@ -193,39 +228,42 @@ class ReviewPromptControllerTest {
     listenedMinutes: Long,
     durationMinutes: Long,
   ): Book {
-    val chapter = Chapter(
-      id = ChapterId("$id-chapter"),
-      name = null,
-      duration = durationMinutes.minutes.inWholeMilliseconds,
-      fileLastModified = Instant.EPOCH,
-      markData = emptyList(),
-      fileSize = 0,
-    )
+    val chapter =
+      Chapter(
+        id = ChapterId("$id-chapter"),
+        name = null,
+        duration = durationMinutes.minutes.inWholeMilliseconds,
+        fileLastModified = Instant.EPOCH,
+        markData = emptyList(),
+        fileSize = 0,
+      )
     return Book(
-      content = BookContent(
-        id = BookId(id),
-        playbackSpeed = 1F,
-        skipSilence = false,
-        isActive = true,
-        lastPlayedAt = Instant.EPOCH,
-        addedAt = Instant.EPOCH,
-        chapters = listOf(chapter.id),
-        currentChapter = chapter.id,
-        positionInChapter = listenedMinutes.minutes.inWholeMilliseconds,
-        gain = 0F,
-        metadata = BookMetadata(
-          name = name,
-          author = author,
-          album = null,
-          title = null,
-          genre = null,
-          narrator = null,
-          series = null,
-          part = null,
-          cover = null,
-          fileLastModified = null,
+      content =
+        BookContent(
+          id = BookId(id),
+          playbackSpeed = 1F,
+          skipSilence = false,
+          isActive = true,
+          lastPlayedAt = Instant.EPOCH,
+          addedAt = Instant.EPOCH,
+          chapters = listOf(chapter.id),
+          currentChapter = chapter.id,
+          positionInChapter = listenedMinutes.minutes.inWholeMilliseconds,
+          gain = 0F,
+          metadata =
+            BookMetadata(
+              name = name,
+              author = author,
+              album = null,
+              title = null,
+              genre = null,
+              narrator = null,
+              series = null,
+              part = null,
+              cover = null,
+              fileLastModified = null,
+            ),
         ),
-      ),
       chapters = listOf(chapter),
       custom = CustomMetadata(BookId(id)),
     )

@@ -17,10 +17,11 @@ fun TimePickerDialog(
   onConfirm: (TimePickerState) -> Unit,
   onDismiss: () -> Unit,
 ) {
-  val timePickerState = rememberTimePickerState(
-    initialHour = initialHour,
-    initialMinute = initialMinute,
-  )
+  val timePickerState =
+    rememberTimePickerState(
+      initialHour = initialHour,
+      initialMinute = initialMinute,
+    )
 
   AlertDialog(
     onDismissRequest = onDismiss,

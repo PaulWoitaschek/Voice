@@ -17,9 +17,10 @@ public class Migration50 : IncrementalMigration(50) {
   override fun migrate(db: SupportSQLiteDatabase) {
     with(db) {
       // there was a bug a in the chapter parsing, trigger a scan.
-      val lastModifiedCv = ContentValues().apply {
-        put("fileLastModified", 0)
-      }
+      val lastModifiedCv =
+        ContentValues().apply {
+          put("fileLastModified", 0)
+        }
       update("chapters", SQLiteDatabase.CONFLICT_FAIL, lastModifiedCv, null, null)
     }
   }

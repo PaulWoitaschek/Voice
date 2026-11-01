@@ -21,9 +21,10 @@ internal fun StringFeatureFlagRow(
 ) {
   var showDialog by remember { mutableStateOf(false) }
   ListItem(
-    modifier = Modifier.clickable {
-      showDialog = true
-    },
+    modifier =
+      Modifier.clickable {
+        showDialog = true
+      },
     supportingContent = {
       Column {
         Text(viewState.description)

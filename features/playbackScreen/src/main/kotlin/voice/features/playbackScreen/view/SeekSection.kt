@@ -63,11 +63,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import voice.core.ui.ProgressWave
-import voice.core.ui.formatTime
-import voice.core.ui.icons.VoiceIcons
-import voice.features.playbackScreen.BookPlayViewState
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.min
@@ -75,14 +70,19 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
 import voice.core.strings.R as StringsR
+import voice.core.ui.ProgressWave
+import voice.core.ui.formatTime
+import voice.core.ui.icons.VoiceIcons
+import voice.features.playbackScreen.BookPlayViewState
 
 private val HorizontalInset = 12.dp
 
 /**
  * Seek bar for the current chapter: a wave that ripples while audio plays and flattens when paused
- * or grabbed. Dragging pops up a bubble with the target time. Tap the right label to toggle
- * between remaining and total time. After a big jump, a pill between the labels offers the way back.
+ * or grabbed. Dragging pops up a bubble with the target time. Tap the right label to toggle between
+ * remaining and total time. After a big jump, a pill between the labels offers the way back.
  */
 @Composable
 internal fun SeekSection(
@@ -133,73 +133,87 @@ internal fun SeekSection(
       },
       modifier = Modifier.fillMaxWidth(),
     )
-    val elapsedColor by animateColorAsState(
-      targetValue = if (dragging) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-      label = "elapsedColor",
-    )
+    val elapsedColor by
+      animateColorAsState(
+        targetValue =
+          if (dragging) MaterialTheme.colorScheme.primary
+          else MaterialTheme.colorScheme.onSurfaceVariant,
+        label = "elapsedColor",
+      )
     // a jump that expired while the player was closed shows no pill, so it doesn't hide this one
     val jumpBackVisibleFor = rememberJumpBackVisibleFor()
     val jumpBackShown = jumpBack != null && jumpBack.elapsed < jumpBackVisibleFor
     Layout(
-      contents = listOf(
-        {
-          Text(
-            text = formatTime(shownTime.inWholeMilliseconds, duration.inWholeMilliseconds),
-            style = MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
-            color = elapsedColor,
-          )
-        },
-        {
-          if (unavailable && !jumpBackShown) {
-            OfflinePill(Modifier.padding(horizontal = 4.dp))
-          } else {
-            JumpBackPill(
-              jumpBack = jumpBack,
-              onClick = onJumpBack,
-              onExpire = onJumpBackExpire,
-              modifier = Modifier.padding(horizontal = 4.dp),
-            )
-          }
-        },
-        {
-          Text(
-            modifier = Modifier
-              .clip(RoundedCornerShape(8.dp))
-              .clickable { showRemaining = !showRemaining }
-              .padding(horizontal = 4.dp, vertical = 2.dp),
-            text = if (showRemaining) {
-              "−" + formatTime((duration - shownTime).inWholeMilliseconds, duration.inWholeMilliseconds)
-            } else {
-              formatTime(duration.inWholeMilliseconds, duration.inWholeMilliseconds)
-            },
-            style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-          )
-        },
-        {
-          if (bookPercent != null) {
-            val percentAlpha by animateFloatAsState(
-              targetValue = if (jumpBackShown || unavailable) 0F else 1F,
-              label = "bookPercentAlpha",
-            )
+      contents =
+        listOf(
+          {
             Text(
-              text = bookPercent,
+              text = formatTime(shownTime.inWholeMilliseconds, duration.inWholeMilliseconds),
+              style =
+                MaterialTheme.typography.labelLargeEmphasized.copy(fontFeatureSettings = "tnum"),
+              color = elapsedColor,
+            )
+          },
+          {
+            if (unavailable && !jumpBackShown) {
+              OfflinePill(Modifier.padding(horizontal = 4.dp))
+            } else {
+              JumpBackPill(
+                jumpBack = jumpBack,
+                onClick = onJumpBack,
+                onExpire = onJumpBackExpire,
+                modifier = Modifier.padding(horizontal = 4.dp),
+              )
+            }
+          },
+          {
+            Text(
+              modifier =
+                Modifier.clip(RoundedCornerShape(8.dp))
+                  .clickable { showRemaining = !showRemaining }
+                  .padding(horizontal = 4.dp, vertical = 2.dp),
+              text =
+                if (showRemaining) {
+                  "−" +
+                    formatTime(
+                      (duration - shownTime).inWholeMilliseconds,
+                      duration.inWholeMilliseconds,
+                    )
+                } else {
+                  formatTime(duration.inWholeMilliseconds, duration.inWholeMilliseconds)
+                },
               style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
               color = MaterialTheme.colorScheme.onSurfaceVariant,
-              modifier = Modifier.graphicsLayer { alpha = percentAlpha },
             )
-          }
-        },
-      ),
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 4.dp),
+          },
+          {
+            if (bookPercent != null) {
+              val percentAlpha by
+                animateFloatAsState(
+                  targetValue = if (jumpBackShown || unavailable) 0F else 1F,
+                  label = "bookPercentAlpha",
+                )
+              Text(
+                text = bookPercent,
+                style = MaterialTheme.typography.labelLarge.copy(fontFeatureSettings = "tnum"),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.graphicsLayer { alpha = percentAlpha },
+              )
+            }
+          },
+        ),
+      modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
     ) { (elapsedSlot, pillSlot, remainingSlot, percentSlot), constraints ->
       val width = constraints.maxWidth
       val loose = constraints.copy(minWidth = 0, minHeight = 0)
       val elapsed = elapsedSlot.single().measure(loose)
       val remaining = remainingSlot.single().measure(loose)
-      val pill = pillSlot.firstOrNull()?.measure(Constraints(maxWidth = (width - elapsed.width - remaining.width).coerceAtLeast(0)))
+      val pill =
+        pillSlot
+          .firstOrNull()
+          ?.measure(
+            Constraints(maxWidth = (width - elapsed.width - remaining.width).coerceAtLeast(0)),
+          )
       val percent = percentSlot.firstOrNull()?.measure(loose)
       val height = maxOf(elapsed.height, remaining.height)
       val gap = 8.dp.roundToPx()
@@ -209,10 +223,12 @@ internal fun SeekSection(
         remaining.placeAt(width - remaining.width)
         // the pill is a bit taller than the labels, it may overlap the space around the row
         pill?.placeAt(elapsed.width)
-        // under the middle of the bar rather than between the times, unless that would run into them
+        // under the middle of the bar rather than between the times, unless that would run into
+        // them
         if (percent != null) {
           val x = (width - percent.width) / 2
-          if (x >= elapsed.width + gap && x + percent.width + gap <= width - remaining.width) percent.placeAt(x)
+          if (x >= elapsed.width + gap && x + percent.width + gap <= width - remaining.width)
+            percent.placeAt(x)
         }
       }
     }
@@ -232,25 +248,29 @@ private fun WavySeekBar(
 ) {
   val colors = MaterialTheme.colorScheme
   val haptics = LocalHapticFeedback.current
-  val amplitude by animateFloatAsState(
-    targetValue = if (wavy) 1F else 0F,
-    animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
-    label = "waveAmplitude",
-  )
-  val thumbWidth by animateDpAsState(
-    targetValue = if (dragging) 3.dp else 5.dp,
-    label = "thumbWidth",
-  )
-  val thumbHeight by animateDpAsState(
-    targetValue = if (dragging) 40.dp else 28.dp,
-    animationSpec = spring(dampingRatio = 0.45F, stiffness = Spring.StiffnessMedium),
-    label = "thumbHeight",
-  )
-  val bubbleScale by animateFloatAsState(
-    targetValue = if (dragging) 1F else 0F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
-    label = "bubbleScale",
-  )
+  val amplitude by
+    animateFloatAsState(
+      targetValue = if (wavy) 1F else 0F,
+      animationSpec = spring(stiffness = Spring.StiffnessVeryLow),
+      label = "waveAmplitude",
+    )
+  val thumbWidth by
+    animateDpAsState(
+      targetValue = if (dragging) 3.dp else 5.dp,
+      label = "thumbWidth",
+    )
+  val thumbHeight by
+    animateDpAsState(
+      targetValue = if (dragging) 40.dp else 28.dp,
+      animationSpec = spring(dampingRatio = 0.45F, stiffness = Spring.StiffnessMedium),
+      label = "thumbHeight",
+    )
+  val bubbleScale by
+    animateFloatAsState(
+      targetValue = if (dragging) 1F else 0F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
+      label = "bubbleScale",
+    )
   val currentFraction by rememberUpdatedState(fraction)
   val currentOnDrag by rememberUpdatedState(onDrag)
   val currentOnSeek by rememberUpdatedState(onSeek)
@@ -260,69 +280,69 @@ private fun WavySeekBar(
     modifier = modifier,
     content = {
       Spacer(
-        modifier = Modifier
-          .fillMaxWidth()
-          .height(48.dp)
-          .semantics {
-            progressBarRangeInfo = ProgressBarRangeInfo(current = fraction, range = 0F..1F)
-            setProgress { target ->
-              currentOnSeek(target.coerceIn(0F, 1F))
-              true
+        modifier =
+          Modifier.fillMaxWidth()
+            .height(48.dp)
+            .semantics {
+              progressBarRangeInfo = ProgressBarRangeInfo(current = fraction, range = 0F..1F)
+              setProgress { target ->
+                currentOnSeek(target.coerceIn(0F, 1F))
+                true
+              }
             }
-          }
-          .pointerInput(Unit) {
-            detectTapGestures { offset ->
+            .pointerInput(Unit) {
+              detectTapGestures { offset ->
+                val inset = HorizontalInset.toPx()
+                currentOnSeek(((offset.x - inset) / (size.width - 2 * inset)).coerceIn(0F, 1F))
+              }
+            }
+            .pointerInput(Unit) {
               val inset = HorizontalInset.toPx()
-              currentOnSeek(((offset.x - inset) / (size.width - 2 * inset)).coerceIn(0F, 1F))
-            }
-          }
-          .pointerInput(Unit) {
-            val inset = HorizontalInset.toPx()
-            fun fractionAt(x: Float) = ((x - inset) / (size.width - 2 * inset)).coerceIn(0F, 1F)
-            detectHorizontalDragGestures(
-              onDragStart = { offset ->
-                lastDragFraction = fractionAt(offset.x)
-                currentOnDrag(lastDragFraction)
-                haptics.performHapticFeedback(HapticFeedbackType.GestureThresholdActivate)
-              },
-              onDragEnd = {
-                currentOnSeek(lastDragFraction)
-                haptics.performHapticFeedback(HapticFeedbackType.GestureEnd)
-              },
-              onDragCancel = { currentOnSeek(lastDragFraction) },
-              onHorizontalDrag = { change, _ ->
-                change.consume()
-                lastDragFraction = fractionAt(change.position.x)
-                currentOnDrag(lastDragFraction)
-              },
-            )
-          }
-          .drawWithCache {
-            val wavePath = Path()
-            onDrawBehind {
-              drawWavyTrack(
-                path = wavePath,
-                fraction = currentFraction,
-                amplitudeFactor = amplitude,
-                phase = clock() * 2F * PI.toFloat() * ProgressWave.WavesPerSecond,
-                thumbWidth = thumbWidth.toPx(),
-                thumbHeight = thumbHeight.toPx(),
-                activeColor = colors.primary,
-                inactiveColor = colors.secondaryContainer,
+              fun fractionAt(x: Float) = ((x - inset) / (size.width - 2 * inset)).coerceIn(0F, 1F)
+              detectHorizontalDragGestures(
+                onDragStart = { offset ->
+                  lastDragFraction = fractionAt(offset.x)
+                  currentOnDrag(lastDragFraction)
+                  haptics.performHapticFeedback(HapticFeedbackType.GestureThresholdActivate)
+                },
+                onDragEnd = {
+                  currentOnSeek(lastDragFraction)
+                  haptics.performHapticFeedback(HapticFeedbackType.GestureEnd)
+                },
+                onDragCancel = { currentOnSeek(lastDragFraction) },
+                onHorizontalDrag = { change, _ ->
+                  change.consume()
+                  lastDragFraction = fractionAt(change.position.x)
+                  currentOnDrag(lastDragFraction)
+                },
               )
             }
-          },
+            .drawWithCache {
+              val wavePath = Path()
+              onDrawBehind {
+                drawWavyTrack(
+                  path = wavePath,
+                  fraction = currentFraction,
+                  amplitudeFactor = amplitude,
+                  phase = clock() * 2F * PI.toFloat() * ProgressWave.WavesPerSecond,
+                  thumbWidth = thumbWidth.toPx(),
+                  thumbHeight = thumbHeight.toPx(),
+                  activeColor = colors.primary,
+                  inactiveColor = colors.secondaryContainer,
+                )
+              }
+            },
       )
       Box(
-        modifier = Modifier
-          .graphicsLayer {
-            scaleX = bubbleScale
-            scaleY = bubbleScale
-            alpha = bubbleScale.coerceIn(0F, 1F)
-            transformOrigin = TransformOrigin(0.5F, 1F)
-          }
-          .background(colors.primary, RoundedCornerShape(percent = 50))
-          .padding(horizontal = 14.dp, vertical = 6.dp),
+        modifier =
+          Modifier.graphicsLayer {
+              scaleX = bubbleScale
+              scaleY = bubbleScale
+              alpha = bubbleScale.coerceIn(0F, 1F)
+              transformOrigin = TransformOrigin(0.5F, 1F)
+            }
+            .background(colors.primary, RoundedCornerShape(percent = 50))
+            .padding(horizontal = 14.dp, vertical = 6.dp),
       ) {
         Text(
           text = bubbleText,
@@ -338,8 +358,10 @@ private fun WavySeekBar(
       bar.place(0, 0)
       val inset = HorizontalInset.toPx()
       val thumbX = inset + (bar.width - 2 * inset) * currentFraction
-      val x = (thumbX - bubble.width / 2F).roundToInt()
-        .coerceIn(0, (bar.width - bubble.width).coerceAtLeast(0))
+      val x =
+        (thumbX - bubble.width / 2F)
+          .roundToInt()
+          .coerceIn(0, (bar.width - bubble.width).coerceAtLeast(0))
       bubble.place(x, -bubble.height + 2.dp.roundToPx())
     }
   }
@@ -402,16 +424,15 @@ private fun DrawScope.drawWavyTrack(
   )
 }
 
-/**
- * Takes the place of the jump back pill while the book can't stream.
- */
+/** Takes the place of the jump back pill while the book can't stream. */
 @Composable
 private fun OfflinePill(modifier: Modifier = Modifier) {
   Row(
-    modifier = modifier
-      .clip(CircleShape)
-      .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-      .padding(horizontal = 12.dp, vertical = 6.dp),
+    modifier =
+      modifier
+        .clip(CircleShape)
+        .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+        .padding(horizontal = 12.dp, vertical = 6.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Icon(

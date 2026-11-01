@@ -31,10 +31,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import voice.core.strings.R as StringsR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun EmptyLibrary(
@@ -42,12 +42,11 @@ internal fun EmptyLibrary(
   modifier: Modifier = Modifier,
 ) {
   // on short windows, like a phone in landscape, the button would end up below the fold
-  val showHero = with(LocalDensity.current) { LocalWindowInfo.current.containerSize.height.toDp() } >= 600.dp
+  val showHero =
+    with(LocalDensity.current) { LocalWindowInfo.current.containerSize.height.toDp() } >= 600.dp
   Box(modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
     Column(
-      modifier = Modifier
-        .widthIn(max = 480.dp)
-        .padding(horizontal = 16.dp, vertical = 8.dp),
+      modifier = Modifier.widthIn(max = 480.dp).padding(horizontal = 16.dp, vertical = 8.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       if (showHero) {

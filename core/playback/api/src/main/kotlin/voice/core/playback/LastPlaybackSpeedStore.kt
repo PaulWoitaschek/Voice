@@ -14,7 +14,9 @@ import voice.core.datastore.VoiceDataStoreFactory
 class LastPlaybackSpeedStore(store: DataStore<Float>) : DataStore<Float> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.create(
       serializer = Float.serializer(),
       defaultValue = 1F,

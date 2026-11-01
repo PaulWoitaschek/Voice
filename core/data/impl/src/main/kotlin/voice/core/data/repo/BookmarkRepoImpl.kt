@@ -2,6 +2,7 @@ package voice.core.data.repo
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import java.time.Clock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -13,7 +14,6 @@ import voice.core.data.repo.internals.AppDb
 import voice.core.data.repo.internals.dao.BookmarkDao
 import voice.core.data.repo.internals.transaction
 import voice.core.data.runForMaxSqlVariableNumber
-import java.time.Clock
 
 @ContributesBinding(AppScope::class)
 public class BookmarkRepoImpl
@@ -36,14 +36,15 @@ internal constructor(
     title: String?,
   ): Bookmark {
     return withContext(Dispatchers.IO) {
-      val bookMark = Bookmark(
-        title = title,
-        time = book.content.positionInChapter,
-        id = Bookmark.Id.random(),
-        addedAt = clock.instant(),
-        chapterId = book.content.currentChapter,
-        bookId = book.id,
-      )
+      val bookMark =
+        Bookmark(
+          title = title,
+          time = book.content.positionInChapter,
+          id = Bookmark.Id.random(),
+          addedAt = clock.instant(),
+          chapterId = book.content.currentChapter,
+          bookId = book.id,
+        )
       addBookmark(bookMark)
       bookMark
     }
@@ -59,13 +60,11 @@ internal constructor(
   }
 
   override fun bookmarksFlow(book: BookContent): Flow<List<Bookmark>> {
-    return appDb.invalidationTracker.createFlow(BOOKMARK_TABLE)
-      .map { bookmarks(book) }
+    return appDb.invalidationTracker.createFlow(BOOKMARK_TABLE).map { bookmarks(book) }
   }
 
   override fun flow(): Flow<List<Bookmark>> {
-    return appDb.invalidationTracker.createFlow(BOOKMARK_TABLE)
-      .map { dao.all() }
+    return appDb.invalidationTracker.createFlow(BOOKMARK_TABLE).map { dao.all() }
   }
 
   private companion object {

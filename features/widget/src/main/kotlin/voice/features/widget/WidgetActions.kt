@@ -24,7 +24,9 @@ class WidgetActions(
 
   internal fun playBook(id: BookId): Action = actionSendBroadcast(widgetButtonIntents.playBook(id))
 
-  internal fun openPlayer(): Action = actionStartActivity(mainActivityIntentProvider.currentBookIntent())
+  internal fun openPlayer(): Action =
+    actionStartActivity(mainActivityIntentProvider.currentBookIntent())
 
-  internal fun openLibrary(): Action = actionStartActivity(mainActivityIntentProvider.libraryIntent())
+  internal fun openLibrary(): Action =
+    actionStartActivity(mainActivityIntentProvider.libraryIntent())
 }

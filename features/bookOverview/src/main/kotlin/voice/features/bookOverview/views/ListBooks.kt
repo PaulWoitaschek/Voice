@@ -56,16 +56,17 @@ internal fun ListBookRow(
   val colors = MaterialTheme.colorScheme
   val secondaryColor = if (current) colors.onPrimaryContainer else colors.onSurfaceVariant
   Surface(
-    modifier = modifier
-      .fillMaxWidth()
-      .clip(shape)
-      .combinedClickable(
-        onClick = { onBookClick(book.id) },
-        onLongClick = { onBookLongClick(book.id) },
-      )
-      .semantics {
-        if (current) selected = true
-      },
+    modifier =
+      modifier
+        .fillMaxWidth()
+        .clip(shape)
+        .combinedClickable(
+          onClick = { onBookClick(book.id) },
+          onLongClick = { onBookLongClick(book.id) },
+        )
+        .semantics {
+          if (current) selected = true
+        },
     shape = shape,
     color = if (current) colors.primaryContainer else colors.surfaceContainer,
     contentColor = if (current) colors.onPrimaryContainer else colors.onSurface,
@@ -77,10 +78,10 @@ internal fun ListBookRow(
       // like the current chapter in the chapter list
       if (current) {
         Box(
-          modifier = Modifier
-            .padding(end = 8.dp)
-            .size(PartWidth)
-            .background(colors.primary, MaterialShapes.Cookie9Sided.toShape()),
+          modifier =
+            Modifier.padding(end = 8.dp)
+              .size(PartWidth)
+              .background(colors.primary, MaterialShapes.Cookie9Sided.toShape()),
           contentAlignment = Alignment.Center,
         ) {
           NowPlayingBars(playing = playing, color = colors.onPrimary)
@@ -92,9 +93,7 @@ internal fun ListBookRow(
           textAlign = TextAlign.Center,
           maxLines = 1,
           overflow = TextOverflow.Ellipsis,
-          modifier = Modifier
-            .padding(end = 8.dp)
-            .widthIn(min = PartWidth, max = 56.dp),
+          modifier = Modifier.padding(end = 8.dp).widthIn(min = PartWidth, max = 56.dp),
         )
       }
       BookCover(
@@ -128,9 +127,7 @@ internal fun ListBookRow(
             if (book.progress > 0F) {
               LinearProgressIndicator(
                 progress = { book.progress },
-                modifier = Modifier
-                  .weight(1F)
-                  .padding(end = 12.dp),
+                modifier = Modifier.weight(1F).padding(end = 12.dp),
                 gapSize = 0.dp,
                 drawStopIndicator = {},
               )
@@ -169,7 +166,12 @@ private fun ListBookRowPreviewWithProgress() {
 private fun ListBookRowPreviewFinished() {
   VoiceTheme {
     Surface {
-      ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 1f), {}, {}, finished = true)
+      ListBookRow(
+        BookOverviewPreviewParameterProvider().book().copy(progress = 1f),
+        {},
+        {},
+        finished = true,
+      )
     }
   }
 }
@@ -179,7 +181,11 @@ private fun ListBookRowPreviewFinished() {
 private fun ListBookRowPreviewHidden() {
   VoiceTheme {
     Surface {
-      ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 0.3f, hidden = true), {}, {})
+      ListBookRow(
+        BookOverviewPreviewParameterProvider().book().copy(progress = 0.3f, hidden = true),
+        {},
+        {},
+      )
     }
   }
 }

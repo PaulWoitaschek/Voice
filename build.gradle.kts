@@ -1,6 +1,12 @@
 plugins {
   alias(libs.plugins.compose.compiler) apply false
-  id("voice.ktlint")
+  id("voice.ktfmt")
+}
+
+listOf("spotlessCheck", "spotlessApply").forEach { taskName ->
+  tasks.named(taskName) {
+    dependsOn(gradle.includedBuild("plugins").task(":$taskName"))
+  }
 }
 
 tasks.wrapper {

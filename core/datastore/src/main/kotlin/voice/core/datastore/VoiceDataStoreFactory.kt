@@ -5,10 +5,10 @@ import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import dev.zacsweers.metro.Inject
+import java.io.File
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
-import java.io.File
 
 @Inject
 class VoiceDataStoreFactory(
@@ -24,11 +24,12 @@ class VoiceDataStoreFactory(
   ): DataStore<T> {
     return DataStoreFactory.create(
       migrations = migrations,
-      serializer = KotlinxDataStoreSerializer(
-        defaultValue = defaultValue,
-        json = json,
-        serializer = serializer,
-      ),
+      serializer =
+        KotlinxDataStoreSerializer(
+          defaultValue = defaultValue,
+          json = json,
+          serializer = serializer,
+        ),
     ) {
       File(context.applicationContext.filesDir, "datastore/$fileName")
     }

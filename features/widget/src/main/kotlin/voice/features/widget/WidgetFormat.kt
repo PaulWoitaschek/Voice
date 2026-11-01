@@ -17,15 +17,21 @@ internal fun Context.formatDuration(
   duration: Duration,
   compact: Boolean = false,
 ): String {
-  val format = MeasureFormat.getInstance(resources.configuration.locales[0], MeasureFormat.FormatWidth.SHORT)
-  val rounded = if (compact && duration >= 1.hours) {
-    (duration + 30.minutes).inWholeHours.hours
-  } else {
-    duration
-  }
+  val format =
+    MeasureFormat.getInstance(resources.configuration.locales[0], MeasureFormat.FormatWidth.SHORT)
+  val rounded =
+    if (compact && duration >= 1.hours) {
+      (duration + 30.minutes).inWholeHours.hours
+    } else {
+      duration
+    }
   return rounded.toComponents { hours, minutes, _, _ ->
     when {
-      hours > 0 && minutes > 0 -> format.formatMeasures(Measure(hours, MeasureUnit.HOUR), Measure(minutes, MeasureUnit.MINUTE))
+      hours > 0 && minutes > 0 ->
+        format.formatMeasures(
+          Measure(hours, MeasureUnit.HOUR),
+          Measure(minutes, MeasureUnit.MINUTE),
+        )
       hours > 0 -> format.format(Measure(hours, MeasureUnit.HOUR))
       else -> format.format(Measure(minutes.coerceAtLeast(1), MeasureUnit.MINUTE))
     }
@@ -36,7 +42,10 @@ internal fun Context.formatTimeLeft(
   remaining: Duration,
   compact: Boolean = false,
 ): String {
-  return getString(StringsR.string.playback_book_progress_remaining, formatDuration(remaining, compact))
+  return getString(
+    StringsR.string.playback_book_progress_remaining,
+    formatDuration(remaining, compact),
+  )
 }
 
 internal fun Context.formatClockTime(instant: Instant): String {

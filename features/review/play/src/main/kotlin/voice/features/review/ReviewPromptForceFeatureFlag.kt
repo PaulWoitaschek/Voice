@@ -13,7 +13,9 @@ import voice.core.featureflag.FeatureFlagFactory
 class ReviewPromptForceFeatureFlag(flag: FeatureFlag<Boolean>) : FeatureFlag<Boolean> by flag {
 
   @Inject
-  constructor(factory: FeatureFlagFactory) : this(
+  constructor(
+    factory: FeatureFlagFactory,
+  ) : this(
     factory.boolean(
       key = "review_prompt_force",
       description = "Shows the rating prompt on the next visit to the library, ignoring its rules.",

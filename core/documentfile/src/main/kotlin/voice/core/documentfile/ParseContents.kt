@@ -22,7 +22,8 @@ private fun Cursor.parseRows(
 ): List<CachedDocumentFile> {
   val files = mutableListOf<CachedDocumentFile>()
   while (moveToNext()) {
-    val documentId = getStringOrNull(getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DOCUMENT_ID))
+    val documentId =
+      getStringOrNull(getColumnIndexOrThrow(DocumentsContract.Document.COLUMN_DOCUMENT_ID))
     val documentUri = DocumentsContract.buildDocumentUriUsingTree(uri, documentId)
     val contents = FileContents.readFrom(this)
     if (contents.name?.startsWith(".") == true) {
@@ -34,10 +35,11 @@ private fun Cursor.parseRows(
 }
 
 private fun Context.query(uri: Uri): Cursor? {
-  val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-    uri,
-    DocumentsContract.getDocumentId(uri),
-  )
+  val childrenUri =
+    DocumentsContract.buildChildDocumentsUriUsingTree(
+      uri,
+      DocumentsContract.getDocumentId(uri),
+    )
   return try {
     contentResolver.query(
       childrenUri,

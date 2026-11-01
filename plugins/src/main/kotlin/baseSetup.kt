@@ -16,7 +16,8 @@ import org.jetbrains.kotlin.powerassert.gradle.PowerAssertGradleExtension
 
 fun Project.baseSetup() {
   val project = this
-  val libs: VersionCatalog = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+  val libs: VersionCatalog =
+    extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
   configurePowerAssert(libs)
 
   val jvmBytecodeVersion = libs.findVersion("jvm-bytecode").get().requiredVersion.toInt()
@@ -37,11 +38,14 @@ fun Project.baseSetup() {
           "kotlinx.coroutines.FlowPreview",
         ),
       )
-      allWarningsAsErrors.set(providers.gradleProperty("voice.warningsAsErrors").map(String::toBooleanStrict))
+      allWarningsAsErrors.set(
+        providers.gradleProperty("voice.warningsAsErrors").map(String::toBooleanStrict),
+      )
     }
   }
   tasks.withType(Test::class.java).configureEach {
-    // run tests in parallel https://docs.gradle.org/current/userguide/performance.html#a_run_tests_in_parallel
+    // run tests in parallel
+    // https://docs.gradle.org/current/userguide/performance.html#a_run_tests_in_parallel
     maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
   }
   extensions.configure<KotlinProjectExtension> {

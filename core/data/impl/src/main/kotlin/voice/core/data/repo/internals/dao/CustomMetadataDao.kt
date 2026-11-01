@@ -10,12 +10,9 @@ import voice.core.data.CustomMetadata
 @Dao
 public interface CustomMetadataDao {
 
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  public suspend fun insert(custom: CustomMetadata)
+  @Insert(onConflict = OnConflictStrategy.REPLACE) public suspend fun insert(custom: CustomMetadata)
 
-  @Query("DELETE FROM customMetadata WHERE bookId = :id")
-  public suspend fun delete(id: BookId)
+  @Query("DELETE FROM customMetadata WHERE bookId = :id") public suspend fun delete(id: BookId)
 
-  @Query("SELECT * FROM customMetadata")
-  public suspend fun all(): List<CustomMetadata>
+  @Query("SELECT * FROM customMetadata") public suspend fun all(): List<CustomMetadata>
 }

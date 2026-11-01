@@ -10,6 +10,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asContextElement
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -26,56 +28,61 @@ import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.chapter
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class DeleteBookViewModelTest {
 
   private val dispatcher = StandardTestDispatcher()
-  private val book = book(
-    chapters = listOf(chapter(), chapter(), chapter()),
-    id = BookId("content://$AUTHORITY/document/book"),
-  )
+  private val book =
+    book(
+      chapters = listOf(chapter(), chapter(), chapter()),
+      id = BookId("content://$AUTHORITY/document/book"),
+    )
   private val navigator = mockk<Navigator>(relaxUnitFun = true)
 
-  private val viewModel = DeleteBookViewModel(
-    application = ApplicationProvider.getApplicationContext(),
-    mediaScanTrigger = mockk(relaxed = true),
-    repo = mockk<BookRepository> {
-      coEvery { get(book.id) } returns book
-    },
-    navigator = navigator,
-    dispatcherProvider = DispatcherProvider(
-      main = dispatcher,
-      io = dispatcher + onIoDispatcher.asContextElement(true),
-      mainImmediate = dispatcher,
-    ),
-  )
+  private val viewModel =
+    DeleteBookViewModel(
+      application = ApplicationProvider.getApplicationContext(),
+      mediaScanTrigger = mockk(relaxed = true),
+      repo =
+        mockk<BookRepository> {
+          coEvery { get(book.id) } returns book
+        },
+      navigator = navigator,
+      dispatcherProvider =
+        DispatcherProvider(
+          main = dispatcher,
+          io = dispatcher + onIoDispatcher.asContextElement(true),
+          mainImmediate = dispatcher,
+        ),
+    )
 
   @Test
-  fun `the sheet shows how many files get deleted`() = runTest(dispatcher) {
-    viewModel.onItemClick(book.id, BottomSheetItem.DeleteBook)
+  fun `the sheet shows how many files get deleted`() =
+    runTest(dispatcher) {
+      viewModel.onItemClick(book.id, BottomSheetItem.DeleteBook)
 
-    assertEquals(expected = 3, actual = viewModel.state.value?.fileCount)
-  }
-
-  @Test
-  fun `deleting a book closes its player`() = runTest(dispatcher) {
-    Robolectric.setupContentProvider(DocumentsProvider::class.java, AUTHORITY)
-
-    delete()
-
-    verify { navigator.remove(Destination.Playback(book.id)) }
-  }
+      assertEquals(expected = 3, actual = viewModel.state.value?.fileCount)
+    }
 
   @Test
-  fun `a failed deletion keeps the player`() = runTest(dispatcher) {
-    delete()
+  fun `deleting a book closes its player`() =
+    runTest(dispatcher) {
+      Robolectric.setupContentProvider(DocumentsProvider::class.java, AUTHORITY)
 
-    verify(exactly = 0) { navigator.remove(any()) }
-  }
+      delete()
+
+      verify { navigator.remove(Destination.Playback(book.id)) }
+    }
+
+  @Test
+  fun `a failed deletion keeps the player`() =
+    runTest(dispatcher) {
+      delete()
+
+      verify(exactly = 0) { navigator.remove(any()) }
+    }
 
   private suspend fun TestScope.delete() {
     viewModel.onItemClick(book.id, BottomSheetItem.DeleteBook)
@@ -84,7 +91,9 @@ class DeleteBookViewModelTest {
     advanceUntilIdle()
   }
 
-  /** Answers calls made on the IO dispatcher, which is how a documents provider confirms a deletion. */
+  /**
+   * Answers calls made on the IO dispatcher, which is how a documents provider confirms a deletion.
+   */
   class DocumentsProvider : ContentProvider() {
     override fun onCreate(): Boolean = true
 

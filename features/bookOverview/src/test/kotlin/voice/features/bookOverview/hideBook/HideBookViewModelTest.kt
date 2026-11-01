@@ -7,24 +7,25 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
 import voice.features.bookOverview.book
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class HideBookViewModelTest {
 
   private val book = book(name = "Dune")
   private val hiddenBook = book(hidden = true)
 
-  private val repo = mockk<BookRepository> {
-    coEvery { get(book.id) } returns book
-    coEvery { get(hiddenBook.id) } returns hiddenBook
-    coEvery { updateCustomMetadata(any(), any()) } just runs
-  }
+  private val repo =
+    mockk<BookRepository> {
+      coEvery { get(book.id) } returns book
+      coEvery { get(hiddenBook.id) } returns hiddenBook
+      coEvery { updateCustomMetadata(any(), any()) } just runs
+    }
 
   private val bookHider = BookHider(repo)
 

@@ -1,8 +1,8 @@
 package voice.core.featureflag
 
+import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlin.reflect.KClass
 
 inline fun <reified T : Any> MemoryFeatureFlag(
   initialValue: T,
@@ -20,38 +20,43 @@ class MemoryFeatureFlag<T : Any>(
 ) : FeatureFlag<T> {
 
   private var defaultValue: T = initialValue
-  private val state = MutableStateFlow(
-    FeatureFlagValue(
-      value = initialValue,
-      isOverridden = false,
-    ),
-  )
+  private val state =
+    MutableStateFlow(
+      FeatureFlagValue(
+        value = initialValue,
+        isOverridden = false,
+      ),
+    )
 
   var value: T
     get() = state.value.value
     set(value) {
       defaultValue = value
       if (!state.value.isOverridden) {
-        state.value = FeatureFlagValue(
-          value = value,
-          isOverridden = false,
-        )
+        state.value =
+          FeatureFlagValue(
+            value = value,
+            isOverridden = false,
+          )
       }
     }
+
   override fun get(): T = state.value.value
 
   override fun overwrite(value: T) {
-    state.value = FeatureFlagValue(
-      value = value,
-      isOverridden = true,
-    )
+    state.value =
+      FeatureFlagValue(
+        value = value,
+        isOverridden = true,
+      )
   }
 
   override fun clearOverwrite() {
-    state.value = FeatureFlagValue(
-      value = defaultValue,
-      isOverridden = false,
-    )
+    state.value =
+      FeatureFlagValue(
+        value = defaultValue,
+        isOverridden = false,
+      )
   }
 
   override val flow: Flow<FeatureFlagValue<T>> = state

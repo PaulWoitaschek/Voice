@@ -9,22 +9,24 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlin.test.Test
+import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
-import kotlin.test.Test
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class PlayButtonTest {
 
   @get:Rule
-  val compose = createComposeRule(
-    effectContext = object : MotionDurationScale {
-      override val scaleFactor = 0F
-    },
-  )
+  val compose =
+    createComposeRule(
+      effectContext =
+        object : MotionDurationScale {
+          override val scaleFactor = 0F
+        },
+    )
 
   @Test
   fun `with animations off the button doesn't turn on click`() {

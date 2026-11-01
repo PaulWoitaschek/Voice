@@ -15,9 +15,10 @@ interface OnboardingWelcomeProvider {
 
   @Provides
   @IntoSet
-  fun onboardingWelcomeNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.OnboardingWelcome> { key ->
-    NavEntry(key) {
-      OnboardingWelcome()
+  fun onboardingWelcomeNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.OnboardingWelcome> { key ->
+      NavEntry(key) {
+        OnboardingWelcome()
+      }
     }
-  }
 }

@@ -63,14 +63,16 @@ internal sealed interface BookmarkListItem {
     val number: Int,
     val name: String?,
   ) : BookmarkListItem {
-    override val key: String get() = "chapter-$number"
+    override val key: String
+      get() = "chapter-$number"
   }
 
   data class Row(
     val bookmark: BookmarkRowViewState,
     val group: GroupPosition,
   ) : BookmarkListItem {
-    override val key: String get() = bookmark.id.value.toString()
+    override val key: String
+      get() = bookmark.id.value.toString()
   }
 
   data class YouAreHere(
@@ -78,7 +80,8 @@ internal sealed interface BookmarkListItem {
     val percent: Int,
     val group: GroupPosition,
   ) : BookmarkListItem {
-    override val key: String get() = YOU_ARE_HERE_KEY
+    override val key: String
+      get() = YOU_ARE_HERE_KEY
   }
 }
 

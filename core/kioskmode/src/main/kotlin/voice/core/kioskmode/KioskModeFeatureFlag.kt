@@ -13,7 +13,9 @@ import voice.core.featureflag.FeatureFlagFactory
 class KioskModeFeatureFlag(flag: FeatureFlag<Boolean>) : FeatureFlag<Boolean> by flag {
 
   @Inject
-  constructor(factory: FeatureFlagFactory) : this(
+  constructor(
+    factory: FeatureFlagFactory,
+  ) : this(
     factory.boolean(
       key = "kiosk_mode",
       description = "Shows demo content on the overview, playback, and bookmark screens.",

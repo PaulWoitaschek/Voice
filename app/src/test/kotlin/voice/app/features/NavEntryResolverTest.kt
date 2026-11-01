@@ -7,11 +7,11 @@ import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.createGraph
-import voice.app.navigation.NavEntryResolver
-import voice.navigation.Destination
 import kotlin.reflect.KClass
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import voice.app.navigation.NavEntryResolver
+import voice.navigation.Destination
 
 @Suppress("SUSPICIOUS_UNUSED_MULTIBINDING")
 @SingleIn(AppScope::class)
@@ -21,7 +21,8 @@ import kotlin.test.assertEquals
 interface NavEntryResolverTestGraph {
 
   @Provides
-  val application: Application get() = ApplicationProvider.getApplicationContext()
+  val application: Application
+    get() = ApplicationProvider.getApplicationContext()
 
   val resolver: NavEntryResolver
 }

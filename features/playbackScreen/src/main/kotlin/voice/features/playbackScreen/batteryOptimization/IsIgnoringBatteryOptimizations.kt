@@ -11,10 +11,10 @@ fun interface IsIgnoringBatteryOptimizations {
 }
 
 @ContributesBinding(AppScope::class)
-class IsIgnoringBatteryOptimizationsImpl(private val context: Application) : IsIgnoringBatteryOptimizations {
+class IsIgnoringBatteryOptimizationsImpl(private val context: Application) :
+  IsIgnoringBatteryOptimizations {
   override fun invoke(): Boolean {
-    val powerManager = context.getSystemService<PowerManager>()
-      ?: return true
+    val powerManager = context.getSystemService<PowerManager>() ?: return true
     return powerManager.isIgnoringBatteryOptimizations(context.packageName)
   }
 }

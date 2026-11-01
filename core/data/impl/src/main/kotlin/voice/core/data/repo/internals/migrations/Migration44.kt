@@ -31,11 +31,18 @@ public class Migration44 : IncrementalMigration(44) {
           if (!chapterForCurrentFileFound) {
             if (chapterCursor.moveToFirst()) {
               val firstChapterFile = chapterCursor.getString("file")
-              val contentValues = ContentValues().apply {
-                put("currentFile", firstChapterFile)
-                put("positionInChapter", 0)
-              }
-              db.update("bookSettings", SQLiteDatabase.CONFLICT_FAIL, contentValues, "id =?", arrayOf(bookId))
+              val contentValues =
+                ContentValues().apply {
+                  put("currentFile", firstChapterFile)
+                  put("positionInChapter", 0)
+                }
+              db.update(
+                "bookSettings",
+                SQLiteDatabase.CONFLICT_FAIL,
+                contentValues,
+                "id =?",
+                arrayOf(bookId),
+              )
             }
           }
         }

@@ -49,10 +49,11 @@ private data class BottomSheetScene<T : Any>(
 
   override val content: @Composable (() -> Unit) = {
     val lifecycleOwner = rememberLifecycleOwner()
-    val sheetState = rememberBottomSheetState(
-      initialValue = Hidden,
-      enabledValues = setOf(Hidden, Expanded),
-    )
+    val sheetState =
+      rememberBottomSheetState(
+        initialValue = Hidden,
+        enabledValues = setOf(Hidden, Expanded),
+      )
     ModalBottomSheet(
       onDismissRequest = onBack,
       properties = modalBottomSheetProperties,

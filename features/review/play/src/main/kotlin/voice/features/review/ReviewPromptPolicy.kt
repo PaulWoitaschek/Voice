@@ -1,33 +1,28 @@
 package voice.features.review
 
-import voice.core.data.BookId
-import voice.core.data.repo.FinishedBook
 import java.time.Instant
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.toJavaDuration
+import voice.core.data.BookId
+import voice.core.data.repo.FinishedBook
 
-/**
- * What the policy needs to know about the listener.
- */
+/** What the policy needs to know about the listener. */
 internal data class ReviewSignals(
   val now: Instant,
   val installedAt: Instant,
   val listened: Duration,
   val listeningDays: Int,
-  /**
-   * Newest first.
-   */
+  /** Newest first. */
   val finishedBooks: List<FinishedBook>,
 )
 
-/**
- * The win the prompt celebrates.
- */
+/** The win the prompt celebrates. */
 internal sealed interface ReviewTrigger {
   data class BookFinished(val bookId: BookId) : ReviewTrigger
+
   data class Milestone(val hours: Int) : ReviewTrigger
 }
 
@@ -40,7 +35,8 @@ internal enum class ReviewAnswer {
 }
 
 /**
- * Decides when to ask for a rating: after a win, once the listener got to know Voice, and never pushy.
+ * Decides when to ask for a rating: after a win, once the listener got to know Voice, and never
+ * pushy.
  *
  * Everyone sees the same prompt with the same choices, whatever they think of Voice.
  */
@@ -69,12 +65,17 @@ internal object ReviewPromptPolicy {
     if (signals.listened < MIN_LISTENED || signals.listeningDays < MIN_LISTENING_DAYS) return null
     val snoozedUntil = state.snoozedUntilMillis
     if (snoozedUntil != null && signals.now.toEpochMilli() < snoozedUntil) return null
-    if (state.asks > 0 && signals.listened - state.listenedAtLastAskMillis.milliseconds < LISTENED_BETWEEN_ASKS) return null
+    if (
+      state.asks > 0 &&
+        signals.listened - state.listenedAtLastAskMillis.milliseconds < LISTENED_BETWEEN_ASKS
+    )
+      return null
 
     val lastAsked = state.lastAskedAtMillis?.let(Instant::ofEpochMilli) ?: Instant.EPOCH
-    val finished = signals.finishedBooks.firstOrNull {
-      it.at > lastAsked && it.at >= signals.now - RECENTLY_FINISHED
-    }
+    val finished =
+      signals.finishedBooks.firstOrNull {
+        it.at > lastAsked && it.at >= signals.now - RECENTLY_FINISHED
+      }
     if (finished != null) return ReviewTrigger.BookFinished(finished.bookId)
 
     val milestone = reachedMilestone(signals.listened)
@@ -82,9 +83,7 @@ internal object ReviewPromptPolicy {
     return null
   }
 
-  /**
-   * The prompt is showing. Until there's an answer, it counts as one to ask later.
-   */
+  /** The prompt is showing. Until there's an answer, it counts as one to ask later. */
   fun asked(
     state: ReviewPromptState,
     signals: ReviewSignals,
@@ -94,7 +93,8 @@ internal object ReviewPromptPolicy {
       asks = state.asks + 1,
       lastAskedAtMillis = now,
       listenedAtLastAskMillis = signals.listened.inWholeMilliseconds,
-      celebratedMilestoneHours = maxOf(state.celebratedMilestoneHours, reachedMilestone(signals.listened)),
+      celebratedMilestoneHours =
+        maxOf(state.celebratedMilestoneHours, reachedMilestone(signals.listened)),
       snoozedUntilMillis = now + SNOOZE.inWholeMilliseconds,
     )
   }
@@ -104,11 +104,14 @@ internal object ReviewPromptPolicy {
     answer: ReviewAnswer,
     now: Instant,
   ): ReviewPromptState {
-    val snooze = when (answer) {
-      ReviewAnswer.Rate -> return state.copy(done = true)
-      ReviewAnswer.Idea, ReviewAnswer.Bug, ReviewAnswer.Email -> LONG_SNOOZE
-      ReviewAnswer.Later -> if (state.asks >= 2) LONG_SNOOZE else SNOOZE
-    }
+    val snooze =
+      when (answer) {
+        ReviewAnswer.Rate -> return state.copy(done = true)
+        ReviewAnswer.Idea,
+        ReviewAnswer.Bug,
+        ReviewAnswer.Email -> LONG_SNOOZE
+        ReviewAnswer.Later -> if (state.asks >= 2) LONG_SNOOZE else SNOOZE
+      }
     return state.copy(snoozedUntilMillis = (now + snooze).toEpochMilli())
   }
 

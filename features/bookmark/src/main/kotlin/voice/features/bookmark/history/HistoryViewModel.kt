@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import java.time.Clock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -21,14 +22,12 @@ import voice.core.data.ListeningEvent
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ListeningHistoryRepo
 import voice.core.data.store.CurrentBookStore
-import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 import voice.features.bookmark.BookIndex
 import voice.features.bookmark.kioskModeHistoryViewState
 import voice.navigation.Navigator
-import java.time.Clock
 
 @AssistedInject
 class HistoryViewModel(
@@ -41,8 +40,7 @@ class HistoryViewModel(
   private val clock: Clock,
   private val dispatcherProvider: DispatcherProvider,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
-  @Assisted
-  private val bookId: BookId,
+  @Assisted private val bookId: BookId,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
@@ -62,14 +60,20 @@ class HistoryViewModel(
    * chapters, so it's built off the main thread only when something it shows changes.
    */
   private fun viewStates(): Flow<HistoryViewState> {
-    return bookRepository.flow(bookId)
+    return bookRepository
+      .flow(bookId)
       .filterNotNull()
       .distinctUntilChanged { old, new -> old.chapters == new.chapters }
       .mapLatest { book -> withContext(dispatcherProvider.io) { BookIndex(book) } }
       .flatMapLatest { index ->
         listeningHistoryRepo.events(bookId).map { events ->
           withContext(dispatcherProvider.io) {
-            historyViewState(events = events, index = index, now = clock.instant(), zone = clock.zone)
+            historyViewState(
+              events = events,
+              index = index,
+              now = clock.instant(),
+              zone = clock.zone,
+            )
           }
         }
       }

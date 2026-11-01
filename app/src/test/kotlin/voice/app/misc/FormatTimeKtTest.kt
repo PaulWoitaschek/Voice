@@ -1,9 +1,9 @@
 package voice.app.misc
 
-import voice.core.ui.formatTime
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import voice.core.ui.formatTime
 
 class FormatTimeKtTest {
 

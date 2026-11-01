@@ -65,10 +65,13 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
 import androidx.graphics.shapes.RoundedPolygon
 import coil.compose.AsyncImage
+import java.text.NumberFormat
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.audiobookshelf.download.WaitingFor
+import voice.core.strings.R as StringsR
 import voice.core.ui.MorphShape
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.bookText
 import voice.core.ui.drawConfetti
@@ -81,24 +84,27 @@ import voice.core.ui.segmentedShape
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.views.CoverShape
-import java.text.NumberFormat
-import voice.core.strings.R as StringsR
-import voice.core.ui.R as UiR
 
-private val EditItems = listOf(
-  BottomSheetItem.Download,
-  BottomSheetItem.StopDownload,
-  BottomSheetItem.RetryDownload,
-  BottomSheetItem.RemoveDownload,
-  BottomSheetItem.Edit,
-  BottomSheetItem.InternetCover,
-  BottomSheetItem.FileCover,
-  BottomSheetItem.Hide,
-  BottomSheetItem.Show,
-)
+private val EditItems =
+  listOf(
+    BottomSheetItem.Download,
+    BottomSheetItem.StopDownload,
+    BottomSheetItem.RetryDownload,
+    BottomSheetItem.RemoveDownload,
+    BottomSheetItem.Edit,
+    BottomSheetItem.InternetCover,
+    BottomSheetItem.FileCover,
+    BottomSheetItem.Hide,
+    BottomSheetItem.Show,
+  )
 
 /** The order a book moves through, so the picker reads like a timeline. */
-private val StatusOrder = listOf(BookOverviewCategory.NOT_STARTED, BookOverviewCategory.CURRENT, BookOverviewCategory.FINISHED)
+private val StatusOrder =
+  listOf(
+    BookOverviewCategory.NOT_STARTED,
+    BookOverviewCategory.CURRENT,
+    BookOverviewCategory.FINISHED,
+  )
 
 @Composable
 internal fun BookActionsContent(
@@ -114,18 +120,17 @@ internal fun BookActionsContent(
 ) {
   val entrance = rememberEntranceState()
   Column(
-    modifier = modifier
-      .fillMaxWidth()
-      .verticalScroll(rememberScrollState())
-      .padding(horizontal = 16.dp)
-      .padding(bottom = 24.dp),
+    modifier =
+      modifier
+        .fillMaxWidth()
+        .verticalScroll(rememberScrollState())
+        .padding(horizontal = 16.dp)
+        .padding(bottom = 24.dp),
   ) {
     BookHeader(
       book = book,
       source = source,
-      modifier = Modifier
-        .entrance(entrance, 0)
-        .padding(horizontal = 8.dp),
+      modifier = Modifier.entrance(entrance, 0).padding(horizontal = 8.dp),
     )
     Spacer(Modifier.height(24.dp))
     StatusPicker(
@@ -145,7 +150,10 @@ internal fun BookActionsContent(
             onClick = { onItemClick(item) },
             modifier = Modifier.entrance(entrance, 2 + index),
             supportingText = item.supportingText(download, bookSize),
-            progress = (download as? BookDownloadState.Downloading)?.progress?.takeIf { item == BottomSheetItem.StopDownload },
+            progress =
+              (download as? BookDownloadState.Downloading)?.progress?.takeIf {
+                item == BottomSheetItem.StopDownload
+              },
           )
         }
       }
@@ -177,9 +185,7 @@ private fun BookHeader(
     verticalAlignment = Alignment.CenterVertically,
   ) {
     AsyncImage(
-      modifier = Modifier
-        .size(88.dp)
-        .clip(CoverShape),
+      modifier = Modifier.size(88.dp).clip(CoverShape),
       model = rememberCoverThumbnailRequest(book.cover),
       placeholder = ColorPainter(colors.surfaceContainerHighest),
       error = painterResource(id = UiR.drawable.album_art),
@@ -219,7 +225,11 @@ private fun BookHeader(
       Row {
         Text(
           modifier = Modifier.weight(1F),
-          text = stringResource(StringsR.string.playback_book_progress_read, percentFormat.format(book.progress.toDouble())),
+          text =
+            stringResource(
+              StringsR.string.playback_book_progress_read,
+              percentFormat.format(book.progress.toDouble()),
+            ),
           style = MaterialTheme.typography.labelMediumEmphasized,
           color = colors.primary,
           maxLines = 1,
@@ -227,7 +237,8 @@ private fun BookHeader(
         )
         Spacer(Modifier.width(8.dp))
         Text(
-          text = stringResource(StringsR.string.playback_book_progress_remaining, book.remainingTime),
+          text =
+            stringResource(StringsR.string.playback_book_progress_remaining, book.remainingTime),
           style = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum"),
           color = colors.onSurfaceVariant,
           maxLines = 1,
@@ -241,13 +252,18 @@ private fun BookHeader(
 
 @Composable
 private fun SourceLine(source: BookSource) {
-  val (icon, text) = when (source) {
-    BookSource.Device -> VoiceIcons.Smartphone to stringResource(StringsR.string.book_source_device)
-    is BookSource.Server -> VoiceIcons.Dns to when (source.download) {
-      BookSource.Download.None -> source.name
-      BookSource.Download.Done -> stringResource(StringsR.string.book_source_server_downloaded, source.name)
+  val (icon, text) =
+    when (source) {
+      BookSource.Device ->
+        VoiceIcons.Smartphone to stringResource(StringsR.string.book_source_device)
+      is BookSource.Server ->
+        VoiceIcons.Dns to
+          when (source.download) {
+            BookSource.Download.None -> source.name
+            BookSource.Download.Done ->
+              stringResource(StringsR.string.book_source_server_downloaded, source.name)
+          }
     }
-  }
   Row(verticalAlignment = Alignment.CenterVertically) {
     Icon(
       imageVector = icon,
@@ -278,27 +294,30 @@ private class StatusStyle(
 private fun BookOverviewCategory.style(): StatusStyle {
   val colors = MaterialTheme.colorScheme
   return when (this) {
-    BookOverviewCategory.NOT_STARTED -> StatusStyle(
-      icon = VoiceIcons.HourglassEmpty,
-      shape = MaterialShapes.Cookie6Sided,
-      tile = colors.secondaryContainer,
-      blob = colors.secondary,
-      onBlob = colors.onSecondary,
-    )
-    BookOverviewCategory.CURRENT -> StatusStyle(
-      icon = VoiceIcons.Headphones,
-      shape = MaterialShapes.Sunny,
-      tile = colors.primaryContainer,
-      blob = colors.primary,
-      onBlob = colors.onPrimary,
-    )
-    BookOverviewCategory.FINISHED -> StatusStyle(
-      icon = VoiceIcons.Check,
-      shape = MaterialShapes.SoftBurst,
-      tile = colors.tertiaryContainer,
-      blob = colors.tertiary,
-      onBlob = colors.onTertiary,
-    )
+    BookOverviewCategory.NOT_STARTED ->
+      StatusStyle(
+        icon = VoiceIcons.HourglassEmpty,
+        shape = MaterialShapes.Cookie6Sided,
+        tile = colors.secondaryContainer,
+        blob = colors.secondary,
+        onBlob = colors.onSecondary,
+      )
+    BookOverviewCategory.CURRENT ->
+      StatusStyle(
+        icon = VoiceIcons.Headphones,
+        shape = MaterialShapes.Sunny,
+        tile = colors.primaryContainer,
+        blob = colors.primary,
+        onBlob = colors.onPrimary,
+      )
+    BookOverviewCategory.FINISHED ->
+      StatusStyle(
+        icon = VoiceIcons.Check,
+        shape = MaterialShapes.SoftBurst,
+        tile = colors.tertiaryContainer,
+        blob = colors.tertiary,
+        onBlob = colors.onTertiary,
+      )
   }
 }
 
@@ -311,10 +330,7 @@ private fun StatusPicker(
   var selected by remember(current) { mutableStateOf(current) }
   val haptics = LocalHapticFeedback.current
   Row(
-    modifier = modifier
-      .fillMaxWidth()
-      .height(IntrinsicSize.Min)
-      .selectableGroup(),
+    modifier = modifier.fillMaxWidth().height(IntrinsicSize.Min).selectableGroup(),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
   ) {
     StatusOrder.forEach { category ->
@@ -328,9 +344,7 @@ private fun StatusPicker(
             onSelect(category)
           }
         },
-        modifier = Modifier
-          .weight(1F)
-          .fillMaxHeight(),
+        modifier = Modifier.weight(1F).fillMaxHeight(),
       )
     }
   }
@@ -346,54 +360,70 @@ private fun StatusTile(
   val colors = MaterialTheme.colorScheme
   val style = category.style()
   val morph = remember(style.shape) { Morph(MaterialShapes.Circle, style.shape) }
-  val progress by animateFloatAsState(
-    targetValue = if (selected) 1F else 0F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
-    label = "statusMorph",
-  )
-  val tileColor by animateColorAsState(if (selected) style.tile else colors.surfaceContainerHigh, label = "statusTile")
-  val blobColor by animateColorAsState(if (selected) style.blob else colors.surfaceContainerHighest, label = "statusBlob")
-  val iconColor by animateColorAsState(if (selected) style.onBlob else colors.onSurfaceVariant, label = "statusIcon")
+  val progress by
+    animateFloatAsState(
+      targetValue = if (selected) 1F else 0F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMediumLow),
+      label = "statusMorph",
+    )
+  val tileColor by
+    animateColorAsState(
+      if (selected) style.tile else colors.surfaceContainerHigh,
+      label = "statusTile",
+    )
+  val blobColor by
+    animateColorAsState(
+      if (selected) style.blob else colors.surfaceContainerHighest,
+      label = "statusBlob",
+    )
+  val iconColor by
+    animateColorAsState(
+      if (selected) style.onBlob else colors.onSurfaceVariant,
+      label = "statusIcon",
+    )
   val confetti = rememberConfettiState()
-  val confettiColors = listOf(colors.primary, colors.secondary, colors.tertiary, colors.tertiaryContainer)
+  val confettiColors =
+    listOf(colors.primary, colors.secondary, colors.tertiary, colors.tertiaryContainer)
   val squish = remember { Animatable(1F) }
   val scope = rememberCoroutineScope()
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
-  val pressScale by animateFloatAsState(
-    targetValue = if (pressed) 0.94F else 1F,
-    animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
-    label = "statusPress",
-  )
+  val pressScale by
+    animateFloatAsState(
+      targetValue = if (pressed) 0.94F else 1F,
+      animationSpec = spring(dampingRatio = 0.5F, stiffness = Spring.StiffnessMedium),
+      label = "statusPress",
+    )
   Column(
-    modifier = modifier
-      .graphicsLayer {
-        scaleX = pressScale * squish.value
-        scaleY = pressScale * squish.value
-      }
-      .background(tileColor, RoundedCornerShape(24.dp))
-      // unclipped, so the confetti of a finished book can fly beyond the tile. The squish is the feedback.
-      .selectable(
-        selected = selected,
-        interactionSource = interactionSource,
-        indication = null,
-        role = Role.RadioButton,
-        onClick = {
-          onClick()
-          if (category == BookOverviewCategory.FINISHED) confetti.burst()
-          scope.launch {
-            squish.snapTo(0.9F)
-            squish.animateTo(1F, spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessMedium))
-          }
-        },
-      )
-      .padding(horizontal = 8.dp, vertical = 14.dp),
+    modifier =
+      modifier
+        .graphicsLayer {
+          scaleX = pressScale * squish.value
+          scaleY = pressScale * squish.value
+        }
+        .background(tileColor, RoundedCornerShape(24.dp))
+        // unclipped, so the confetti of a finished book can fly beyond the tile. The squish is the
+        // feedback.
+        .selectable(
+          selected = selected,
+          interactionSource = interactionSource,
+          indication = null,
+          role = Role.RadioButton,
+          onClick = {
+            onClick()
+            if (category == BookOverviewCategory.FINISHED) confetti.burst()
+            scope.launch {
+              squish.snapTo(0.9F)
+              squish.animateTo(1F, spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessMedium))
+            }
+          },
+        )
+        .padding(horizontal = 8.dp, vertical = 14.dp),
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Box(
-      modifier = Modifier
-        .size(52.dp)
-        .drawWithContent {
+      modifier =
+        Modifier.size(52.dp).drawWithContent {
           drawContent()
           drawConfetti(
             state = confetti,
@@ -405,8 +435,7 @@ private fun StatusTile(
       contentAlignment = Alignment.Center,
     ) {
       Box(
-        Modifier
-          .matchParentSize()
+        Modifier.matchParentSize()
           .graphicsLayer { rotationZ = progress * 30F }
           .background(blobColor, MorphShape(morph, progress)),
       )
@@ -420,7 +449,9 @@ private fun StatusTile(
     Spacer(Modifier.height(8.dp))
     Text(
       text = stringResource(category.nameRes),
-      style = if (selected) MaterialTheme.typography.labelLargeEmphasized else MaterialTheme.typography.labelLarge,
+      style =
+        if (selected) MaterialTheme.typography.labelLargeEmphasized
+        else MaterialTheme.typography.labelLarge,
       color = if (selected) colors.onSurface else colors.onSurfaceVariant,
       textAlign = TextAlign.Center,
       maxLines = 2,
@@ -440,22 +471,27 @@ private class ActionStyle(
 private fun BottomSheetItem.style(): ActionStyle {
   val colors = MaterialTheme.colorScheme
   return when (this) {
-    BottomSheetItem.Edit -> ActionStyle(MaterialShapes.Pentagon, colors.secondaryContainer, colors.onSecondaryContainer)
-    BottomSheetItem.InternetCover -> ActionStyle(MaterialShapes.Clover4Leaf, colors.tertiaryContainer, colors.onTertiaryContainer)
-    BottomSheetItem.FileCover -> ActionStyle(MaterialShapes.Cookie4Sided, colors.primaryContainer, colors.onPrimaryContainer)
+    BottomSheetItem.Edit ->
+      ActionStyle(MaterialShapes.Pentagon, colors.secondaryContainer, colors.onSecondaryContainer)
+    BottomSheetItem.InternetCover ->
+      ActionStyle(MaterialShapes.Clover4Leaf, colors.tertiaryContainer, colors.onTertiaryContainer)
+    BottomSheetItem.FileCover ->
+      ActionStyle(MaterialShapes.Cookie4Sided, colors.primaryContainer, colors.onPrimaryContainer)
     BottomSheetItem.Hide,
-    BottomSheetItem.Show,
-    -> ActionStyle(MaterialShapes.Ghostish, colors.secondaryContainer, colors.onSecondaryContainer)
-    BottomSheetItem.DeleteBook -> ActionStyle(MaterialShapes.Cookie9Sided, colors.errorContainer, colors.onErrorContainer)
+    BottomSheetItem.Show ->
+      ActionStyle(MaterialShapes.Ghostish, colors.secondaryContainer, colors.onSecondaryContainer)
+    BottomSheetItem.DeleteBook ->
+      ActionStyle(MaterialShapes.Cookie9Sided, colors.errorContainer, colors.onErrorContainer)
     BottomSheetItem.Download,
     BottomSheetItem.StopDownload,
-    BottomSheetItem.RetryDownload,
-    -> ActionStyle(MaterialShapes.Sunny, colors.primaryContainer, colors.onPrimaryContainer)
-    BottomSheetItem.RemoveDownload -> ActionStyle(MaterialShapes.Sunny, colors.surfaceContainerHighest, colors.onSurfaceVariant)
+    BottomSheetItem.RetryDownload ->
+      ActionStyle(MaterialShapes.Sunny, colors.primaryContainer, colors.onPrimaryContainer)
+    BottomSheetItem.RemoveDownload ->
+      ActionStyle(MaterialShapes.Sunny, colors.surfaceContainerHighest, colors.onSurfaceVariant)
     BottomSheetItem.BookCategoryMarkAsNotStarted,
     BottomSheetItem.BookCategoryMarkAsCurrent,
-    BottomSheetItem.BookCategoryMarkAsCompleted,
-    -> ActionStyle(MaterialShapes.Circle, colors.surfaceContainerHighest, colors.onSurfaceVariant)
+    BottomSheetItem.BookCategoryMarkAsCompleted ->
+      ActionStyle(MaterialShapes.Circle, colors.surfaceContainerHighest, colors.onSurfaceVariant)
   }
 }
 
@@ -472,11 +508,12 @@ private fun ActionRow(
 ) {
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
-  val rotation by animateFloatAsState(
-    targetValue = if (pressed) 45F else 0F,
-    animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMediumLow),
-    label = "actionIconRotation",
-  )
+  val rotation by
+    animateFloatAsState(
+      targetValue = if (pressed) 45F else 0F,
+      animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMediumLow),
+      label = "actionIconRotation",
+    )
   Surface(
     onClick = onClick,
     modifier = modifier.fillMaxWidth(),
@@ -485,9 +522,7 @@ private fun ActionRow(
     interactionSource = interactionSource,
   ) {
     Row(
-      modifier = Modifier
-        .heightIn(min = 68.dp)
-        .padding(horizontal = 12.dp, vertical = 10.dp),
+      modifier = Modifier.heightIn(min = 68.dp).padding(horizontal = 12.dp, vertical = 10.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
       Box(contentAlignment = Alignment.Center) {
@@ -540,27 +575,34 @@ private fun BottomSheetItem.supportingText(
 ): String? {
   val context = LocalContext.current
   return when (this) {
-    BottomSheetItem.Download -> bookSize.takeIf { it > 0 }?.let { Formatter.formatShortFileSize(context, it) }
+    BottomSheetItem.Download ->
+      bookSize.takeIf { it > 0 }?.let { Formatter.formatShortFileSize(context, it) }
     BottomSheetItem.StopDownload -> {
       val downloading = download as? BookDownloadState.Downloading ?: return null
       when (downloading.waitingFor) {
         WaitingFor.Wifi -> stringResource(StringsR.string.book_download_waiting_for_wifi)
-        WaitingFor.Connection -> stringResource(StringsR.string.book_download_waiting_for_connection)
-        null -> if (downloading.totalBytes > 0) {
-          stringResource(
-            StringsR.string.book_download_progress,
-            Formatter.formatShortFileSize(context, downloading.downloadedBytes),
-            Formatter.formatShortFileSize(context, downloading.totalBytes),
-          )
-        } else {
-          NumberFormat.getPercentInstance().format(downloading.progress)
-        }
+        WaitingFor.Connection ->
+          stringResource(StringsR.string.book_download_waiting_for_connection)
+        null ->
+          if (downloading.totalBytes > 0) {
+            stringResource(
+              StringsR.string.book_download_progress,
+              Formatter.formatShortFileSize(context, downloading.downloadedBytes),
+              Formatter.formatShortFileSize(context, downloading.totalBytes),
+            )
+          } else {
+            NumberFormat.getPercentInstance().format(downloading.progress)
+          }
       }
     }
     BottomSheetItem.RetryDownload -> stringResource(StringsR.string.book_download_failed)
-    BottomSheetItem.RemoveDownload -> (download as? BookDownloadState.Downloaded)?.let {
-      stringResource(StringsR.string.audiobookshelf_settings_downloads_used, Formatter.formatShortFileSize(context, it.bytes))
-    }
+    BottomSheetItem.RemoveDownload ->
+      (download as? BookDownloadState.Downloaded)?.let {
+        stringResource(
+          StringsR.string.audiobookshelf_settings_downloads_used,
+          Formatter.formatShortFileSize(context, it.bytes),
+        )
+      }
     else -> null
   }
 }

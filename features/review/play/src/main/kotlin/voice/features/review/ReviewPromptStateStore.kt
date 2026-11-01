@@ -6,11 +6,12 @@ import androidx.datastore.core.DataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import voice.core.datastore.VoiceDataStoreFactory
 import java.io.File
+import voice.core.datastore.VoiceDataStoreFactory
 
 @SingleIn(AppScope::class)
-class ReviewPromptStateStore(store: DataStore<ReviewPromptState>) : DataStore<ReviewPromptState> by store {
+class ReviewPromptStateStore(store: DataStore<ReviewPromptState>) :
+  DataStore<ReviewPromptState> by store {
 
   @Inject
   constructor(
@@ -26,14 +27,15 @@ class ReviewPromptStateStore(store: DataStore<ReviewPromptState>) : DataStore<Re
   )
 }
 
-/**
- * The prompt used to ask once and remember that it did. Whoever saw it isn't asked again.
- */
-private class ReviewDialogShownMigration(application: Application) : DataMigration<ReviewPromptState> {
+/** The prompt used to ask once and remember that it did. Whoever saw it isn't asked again. */
+private class ReviewDialogShownMigration(application: Application) :
+  DataMigration<ReviewPromptState> {
 
-  private val oldDataStoreFile = File(application.applicationContext.filesDir, "datastore/reviewDialogShown")
+  private val oldDataStoreFile =
+    File(application.applicationContext.filesDir, "datastore/reviewDialogShown")
 
-  override suspend fun shouldMigrate(currentData: ReviewPromptState): Boolean = oldDataStoreFile.exists()
+  override suspend fun shouldMigrate(currentData: ReviewPromptState): Boolean =
+    oldDataStoreFile.exists()
 
   override suspend fun migrate(currentData: ReviewPromptState): ReviewPromptState {
     val shown = oldDataStoreFile.readText().trim().toBooleanStrictOrNull() ?: false

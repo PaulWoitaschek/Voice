@@ -39,9 +39,7 @@ sealed interface BookSearchViewState {
     val finishedCount: Int,
   )
 
-  /**
-   * A filter chip. [field] is null for the one that shows all results.
-   */
+  /** A filter chip. [field] is null for the one that shows all results. */
   data class Filter(
     val field: BookSearchField?,
     val count: Int,

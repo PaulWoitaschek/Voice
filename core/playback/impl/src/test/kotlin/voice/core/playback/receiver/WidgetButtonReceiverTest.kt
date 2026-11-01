@@ -8,6 +8,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Instant
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
 import voice.core.common.rootGraph
@@ -20,51 +23,60 @@ import voice.core.data.store.CurrentBookStore
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.PlayerControllerImpl
 import voice.core.playback.session.search.book
-import java.time.Instant
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 
 @RunWith(AndroidJUnit4::class)
 class WidgetButtonReceiverTest {
 
   private val context = ApplicationProvider.getApplicationContext<Application>()
   private val intents = WidgetButtonIntentsImpl(context)
-  private val book = book(
-    chapters = listOf(
-      Chapter(
-        id = ChapterId("chapter"),
-        name = "Chapter",
-        duration = 10_000,
-        fileLastModified = Instant.EPOCH,
-        markData = emptyList(),
-        fileSize = 0,
-      ),
-    ),
-  )
+  private val book =
+    book(
+      chapters =
+        listOf(
+          Chapter(
+            id = ChapterId("chapter"),
+            name = "Chapter",
+            duration = 10_000,
+            fileLastModified = Instant.EPOCH,
+            markData = emptyList(),
+            fileSize = 0,
+          ),
+        ),
+    )
   private var currentBookId: BookId? = book.id
-  private val player = mockk<PlayerControllerImpl>(relaxUnitFun = true) {
-    coEvery { awaitConnect() } returns null
-  }
-  private val bookRepository = mockk<BookRepository> {
-    coEvery { get(book.id) } returns book
-  }
+  private val player =
+    mockk<PlayerControllerImpl>(relaxUnitFun = true) {
+      coEvery { awaitConnect() } returns null
+    }
+  private val bookRepository =
+    mockk<BookRepository> {
+      coEvery { get(book.id) } returns book
+    }
 
   @BeforeTest
   fun setUp() {
-    rootGraph = object : WidgetButtonReceiver.Graph {
-      override fun inject(target: WidgetButtonReceiver) {
-        target.player = player
-        target.bookRepository = bookRepository
-        target.currentBookStore = CurrentBookStore(MemoryDataStore(currentBookId))
+    rootGraph =
+      object : WidgetButtonReceiver.Graph {
+        override fun inject(target: WidgetButtonReceiver) {
+          target.player = player
+          target.bookRepository = bookRepository
+          target.currentBookStore = CurrentBookStore(MemoryDataStore(currentBookId))
+        }
       }
-    }
   }
 
   @Test
   fun `start over is recorded as coming from the widget`() {
     send(intents.startOver())
 
-    verify { player.setPosition(0, book.chapters.first().id, ListeningEvent.Type.Seek, ListeningEvent.Source.Widget) }
+    verify {
+      player.setPosition(
+        0,
+        book.chapters.first().id,
+        ListeningEvent.Type.Seek,
+        ListeningEvent.Source.Widget,
+      )
+    }
   }
 
   @Test

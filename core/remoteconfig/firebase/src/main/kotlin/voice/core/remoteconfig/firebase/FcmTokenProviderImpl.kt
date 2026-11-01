@@ -11,13 +11,13 @@ import voice.core.remoteconfig.api.FmcTokenProvider
 class FcmTokenProviderImpl : FmcTokenProvider {
 
   override suspend fun token(): String? {
-    val tokenResult = try {
-      FirebaseInstallations.getInstance().getToken(true)
-        .await()
-    } catch (e: Exception) {
-      Logger.w(e, "Can't get the installation token")
-      return null
-    }
+    val tokenResult =
+      try {
+        FirebaseInstallations.getInstance().getToken(true).await()
+      } catch (e: Exception) {
+        Logger.w(e, "Can't get the installation token")
+        return null
+      }
     return tokenResult.token
   }
 }

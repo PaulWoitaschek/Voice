@@ -7,7 +7,11 @@ internal data class MatroskaChapter(
 
   fun bestName(preferredLanguages: List<String>): String? {
     for (language in preferredLanguages) {
-      names.find { language in it.languages }?.let { return it.name }
+      names
+        .find { language in it.languages }
+        ?.let {
+          return it.name
+        }
     }
 
     return names.firstOrNull()?.name

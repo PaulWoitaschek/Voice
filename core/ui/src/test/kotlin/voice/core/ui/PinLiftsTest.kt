@@ -7,7 +7,10 @@ class PinLiftsTest {
 
   @Test
   fun `pins with room stay on the bar`() {
-    assertEquals(expected = listOf(0, 0, 0), actual = pinLifts(listOf(10F, 22F, 100F), pinWidth = 12F))
+    assertEquals(
+      expected = listOf(0, 0, 0),
+      actual = pinLifts(listOf(10F, 22F, 100F), pinWidth = 12F),
+    )
   }
 
   @Test

@@ -1,13 +1,13 @@
 package voice.core.analytics.firebase
 
 import android.app.Application
+import com.google.firebase.analytics.FirebaseAnalytics as GmsFirebaseAnalytics
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import voice.core.analytics.api.AnalyticsConsentStore
 import voice.core.initializer.AppInitializer
-import com.google.firebase.analytics.FirebaseAnalytics as GmsFirebaseAnalytics
 
 @ContributesIntoSet(AppScope::class)
 class EnableAnalyticsOnConsent(

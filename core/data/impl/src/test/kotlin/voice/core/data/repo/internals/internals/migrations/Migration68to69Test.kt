@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.testing.MigrationTestHelper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
@@ -13,18 +15,17 @@ import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
 import voice.core.data.repo.internals.mapRows
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class Migration68to69Test {
 
   @Rule
   @JvmField
-  val helper = MigrationTestHelper(
-    InstrumentationRegistry.getInstrumentation(),
-    AppDb::class.java,
-  )
+  val helper =
+    MigrationTestHelper(
+      InstrumentationRegistry.getInstrumentation(),
+      AppDb::class.java,
+    )
 
   @Test
   fun `the edits stay, with no series yet and no book hidden`() {
@@ -44,17 +45,19 @@ class Migration68to69Test {
     val migrated = helper.runMigrationsAndValidate(dbName, 69, true, *allMigrations())
 
     assertEquals(
-      expected = listOf(listOf("content://hyperion", "Hyperion Cantos", "Dan Simmons", null, null, 0L)),
-      actual = migrated.query("SELECT * FROM customMetadata").mapRows {
-        listOf(
-          getString("bookId"),
-          getStringOrNull("name"),
-          getStringOrNull("author"),
-          getStringOrNull("series"),
-          getStringOrNull("part"),
-          getLong("hidden"),
-        )
-      },
+      expected =
+        listOf(listOf("content://hyperion", "Hyperion Cantos", "Dan Simmons", null, null, 0L)),
+      actual =
+        migrated.query("SELECT * FROM customMetadata").mapRows {
+          listOf(
+            getString("bookId"),
+            getStringOrNull("name"),
+            getStringOrNull("author"),
+            getStringOrNull("series"),
+            getStringOrNull("part"),
+            getLong("hidden"),
+          )
+        },
     )
   }
 }

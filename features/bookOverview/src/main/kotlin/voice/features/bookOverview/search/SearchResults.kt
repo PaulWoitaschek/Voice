@@ -43,8 +43,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import java.text.NumberFormat
 import voice.core.data.BookId
 import voice.core.search.BookSearchField
+import voice.core.strings.R as StringsR
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
@@ -54,8 +56,6 @@ import voice.core.ui.segmentedShape
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.views.BookCover
 import voice.features.bookOverview.views.HiddenLabel
-import java.text.NumberFormat
-import voice.core.strings.R as StringsR
 
 @Composable
 internal fun SearchResults(
@@ -85,9 +85,7 @@ internal fun SearchResults(
         onClick = { listener.onBookClick(viewState.topResult.id) },
         onLongClick = { listener.onBookLongClick(viewState.topResult.id) },
         onPlayClick = { listener.onPlayClick(viewState.topResult.id) },
-        modifier = Modifier
-          .animateItem()
-          .padding(bottom = 10.dp),
+        modifier = Modifier.animateItem().padding(bottom = 10.dp),
       )
     }
     itemsIndexed(
@@ -113,10 +111,8 @@ private fun Filters(
   modifier: Modifier = Modifier,
 ) {
   Row(
-    modifier = modifier
-      .fillMaxWidth()
-      .horizontalScroll(rememberScrollState())
-      .padding(horizontal = 4.dp),
+    modifier =
+      modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 4.dp),
     horizontalArrangement = Arrangement.spacedBy(8.dp),
   ) {
     filters.forEach { filter ->
@@ -131,17 +127,18 @@ private fun Filters(
             fontWeight = FontWeight.SemiBold,
           )
         },
-        leadingIcon = if (filter.selected) {
-          {
-            Icon(
-              imageVector = VoiceIcons.Check,
-              contentDescription = null,
-              modifier = Modifier.size(FilterChipDefaults.IconSize),
-            )
-          }
-        } else {
-          null
-        },
+        leadingIcon =
+          if (filter.selected) {
+            {
+              Icon(
+                imageVector = VoiceIcons.Check,
+                contentDescription = null,
+                modifier = Modifier.size(FilterChipDefaults.IconSize),
+              )
+            }
+          } else {
+            null
+          },
       )
     }
   }
@@ -159,10 +156,11 @@ private fun TopResult(
   val shape = RoundedCornerShape(28.dp)
   val colors = MaterialTheme.colorScheme
   Surface(
-    modifier = modifier
-      .fillMaxWidth()
-      .clip(shape)
-      .combinedClickable(onClick = onClick, onLongClick = onLongClick),
+    modifier =
+      modifier
+        .fillMaxWidth()
+        .clip(shape)
+        .combinedClickable(onClick = onClick, onLongClick = onLongClick),
     shape = shape,
     color = colors.primaryContainer,
     contentColor = colors.onPrimaryContainer,
@@ -177,14 +175,20 @@ private fun TopResult(
       Spacer(Modifier.width(16.dp))
       Column(Modifier.weight(1F)) {
         Text(
-          text = result.title.annotated(SpanStyle(background = colors.primary, color = colors.onPrimary)),
+          text =
+            result.title.annotated(
+              SpanStyle(background = colors.primary, color = colors.onPrimary),
+            ),
           style = MaterialTheme.typography.titleLargeEmphasized.bookText(),
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
         )
         if (result.author != null) {
           Text(
-            text = result.author.annotated(SpanStyle(background = colors.primary, color = colors.onPrimary)),
+            text =
+              result.author.annotated(
+                SpanStyle(background = colors.primary, color = colors.onPrimary),
+              ),
             style = MaterialTheme.typography.bodyMedium.bookText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -202,13 +206,15 @@ private fun TopResult(
             if (result.category == BookOverviewCategory.CURRENT) {
               LinearProgressIndicator(
                 progress = { result.progress },
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(bottom = 6.dp),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp),
               )
             }
             Text(
-              text = stringResource(StringsR.string.playback_book_progress_remaining, result.remainingTime),
+              text =
+                stringResource(
+                  StringsR.string.playback_book_progress_remaining,
+                  result.remainingTime,
+                ),
               style = MaterialTheme.typography.labelMedium,
               maxLines = 1,
             )
@@ -240,10 +246,11 @@ private fun SearchResultRow(
 ) {
   val colors = MaterialTheme.colorScheme
   Surface(
-    modifier = modifier
-      .fillMaxWidth()
-      .clip(shape)
-      .combinedClickable(onClick = onClick, onLongClick = onLongClick),
+    modifier =
+      modifier
+        .fillMaxWidth()
+        .clip(shape)
+        .combinedClickable(onClick = onClick, onLongClick = onLongClick),
     shape = shape,
     color = colors.surfaceBright,
   ) {
@@ -259,7 +266,8 @@ private fun SearchResultRow(
       )
       Spacer(Modifier.width(16.dp))
       Column(Modifier.weight(1F)) {
-        val highlight = SpanStyle(background = colors.primaryContainer, color = colors.onPrimaryContainer)
+        val highlight =
+          SpanStyle(background = colors.primaryContainer, color = colors.onPrimaryContainer)
         Text(
           text = result.title.annotated(highlight),
           style = MaterialTheme.typography.titleMediumEmphasized.bookText(),
@@ -312,7 +320,8 @@ private fun ResultTrailing(result: SearchResultViewState) {
         )
         Spacer(Modifier.height(4.dp))
         Text(
-          text = remember(result.progress) { NumberFormat.getPercentInstance().format(result.progress) },
+          text =
+            remember(result.progress) { NumberFormat.getPercentInstance().format(result.progress) },
           style = MaterialTheme.typography.labelSmall,
           color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -335,23 +344,30 @@ private fun MatchTagText(
   tag: MatchTag,
   modifier: Modifier = Modifier,
 ) {
-  val label = stringResource(
-    when (tag.field) {
-      BookSearchField.Series -> StringsR.string.library_search_match_series
-      BookSearchField.Narrator -> StringsR.string.library_search_match_narrator
-      else -> StringsR.string.library_search_match_genre
-    },
-    tag.text.text,
-  )
-  val text = remember(label, tag) {
-    val offset = label.indexOf(tag.text.text)
-    HighlightedText(
-      text = label,
-      highlights = if (offset < 0) emptyList() else tag.text.highlights.map { it.first + offset..it.last + offset },
+  val label =
+    stringResource(
+      when (tag.field) {
+        BookSearchField.Series -> StringsR.string.library_search_match_series
+        BookSearchField.Narrator -> StringsR.string.library_search_match_narrator
+        else -> StringsR.string.library_search_match_genre
+      },
+      tag.text.text,
     )
-  }
+  val text =
+    remember(label, tag) {
+      val offset = label.indexOf(tag.text.text)
+      HighlightedText(
+        text = label,
+        highlights =
+          if (offset < 0) emptyList()
+          else tag.text.highlights.map { it.first + offset..it.last + offset },
+      )
+    }
   Text(
-    text = text.annotated(SpanStyle(fontWeight = FontWeight.ExtraBold, textDecoration = TextDecoration.Underline)),
+    text =
+      text.annotated(
+        SpanStyle(fontWeight = FontWeight.ExtraBold, textDecoration = TextDecoration.Underline),
+      ),
     modifier = modifier,
     style = MaterialTheme.typography.labelMedium,
     maxLines = 1,
@@ -383,60 +399,81 @@ private fun SearchResultsPreview() {
     titleHighlights: List<IntRange> = emptyList(),
     authorHighlights: List<IntRange> = emptyList(),
     matchTag: MatchTag? = null,
-  ) = SearchResultViewState(
-    id = BookId(title),
-    title = HighlightedText(title, titleHighlights),
-    author = HighlightedText(author, authorHighlights),
-    cover = null,
-    category = category,
-    progress = 0.34F,
-    remainingTime = "28:12:00",
-    matchTag = matchTag,
-  )
+  ) =
+    SearchResultViewState(
+      id = BookId(title),
+      title = HighlightedText(title, titleHighlights),
+      author = HighlightedText(author, authorHighlights),
+      cover = null,
+      category = category,
+      progress = 0.34F,
+      remainingTime = "28:12:00",
+      matchTag = matchTag,
+    )
   VoiceTheme {
     Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
       SearchResults(
-        viewState = BookSearchViewState.Results(
-          filters = listOf(
-            BookSearchViewState.Filter(field = null, count = 5, selected = true),
-            BookSearchViewState.Filter(field = BookSearchField.Title, count = 2, selected = false),
-            BookSearchViewState.Filter(field = BookSearchField.Author, count = 2, selected = false),
-            BookSearchViewState.Filter(field = BookSearchField.Series, count = 1, selected = false),
+        viewState =
+          BookSearchViewState.Results(
+            filters =
+              listOf(
+                BookSearchViewState.Filter(field = null, count = 5, selected = true),
+                BookSearchViewState.Filter(
+                  field = BookSearchField.Title,
+                  count = 2,
+                  selected = false,
+                ),
+                BookSearchViewState.Filter(
+                  field = BookSearchField.Author,
+                  count = 2,
+                  selected = false,
+                ),
+                BookSearchViewState.Filter(
+                  field = BookSearchField.Series,
+                  count = 1,
+                  selected = false,
+                ),
+              ),
+            topResult =
+              result(
+                title = "The Way of Kings",
+                author = "Brandon Sanderson",
+                category = BookOverviewCategory.CURRENT,
+                titleHighlights = listOf(11..14),
+              ),
+            topResultPlaying = false,
+            otherResults =
+              listOf(
+                result(
+                  title = "The King of Elfland's Daughter",
+                  author = "Lord Dunsany",
+                  category = BookOverviewCategory.NOT_STARTED,
+                  titleHighlights = listOf(4..7),
+                ),
+                result(
+                  title = "Fairy Tale",
+                  author = "Stephen King",
+                  category = BookOverviewCategory.CURRENT,
+                  authorHighlights = listOf(8..11),
+                ),
+                result(
+                  title = "The Stand",
+                  author = "Stephen King",
+                  category = BookOverviewCategory.FINISHED,
+                  authorHighlights = listOf(8..11),
+                ),
+                result(
+                  title = "The Name of the Wind",
+                  author = "Patrick Rothfuss",
+                  category = BookOverviewCategory.NOT_STARTED,
+                  matchTag =
+                    MatchTag(
+                      BookSearchField.Series,
+                      HighlightedText("Kingkiller Chronicle 1", listOf(0..3)),
+                    ),
+                ),
+              ),
           ),
-          topResult = result(
-            title = "The Way of Kings",
-            author = "Brandon Sanderson",
-            category = BookOverviewCategory.CURRENT,
-            titleHighlights = listOf(11..14),
-          ),
-          topResultPlaying = false,
-          otherResults = listOf(
-            result(
-              title = "The King of Elfland's Daughter",
-              author = "Lord Dunsany",
-              category = BookOverviewCategory.NOT_STARTED,
-              titleHighlights = listOf(4..7),
-            ),
-            result(
-              title = "Fairy Tale",
-              author = "Stephen King",
-              category = BookOverviewCategory.CURRENT,
-              authorHighlights = listOf(8..11),
-            ),
-            result(
-              title = "The Stand",
-              author = "Stephen King",
-              category = BookOverviewCategory.FINISHED,
-              authorHighlights = listOf(8..11),
-            ),
-            result(
-              title = "The Name of the Wind",
-              author = "Patrick Rothfuss",
-              category = BookOverviewCategory.NOT_STARTED,
-              matchTag = MatchTag(BookSearchField.Series, HighlightedText("Kingkiller Chronicle 1", listOf(0..3))),
-            ),
-          ),
-        ),
         contentPadding = PaddingValues(12.dp),
         listener = BookSearchListener.Noop,
       )

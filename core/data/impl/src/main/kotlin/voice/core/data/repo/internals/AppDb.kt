@@ -24,37 +24,41 @@ import voice.core.data.repo.internals.migrations.Migration64
 import voice.core.data.repo.internals.migrations.Migration66
 
 @Database(
-  entities = [
-    Chapter::class,
-    BookContent::class,
-    Bookmark::class,
-    RecentBookSearch::class,
-    ListeningEvent::class,
-    ListeningSession::class,
-    CustomMetadata::class,
-  ],
+  entities =
+    [
+      Chapter::class,
+      BookContent::class,
+      Bookmark::class,
+      RecentBookSearch::class,
+      ListeningEvent::class,
+      ListeningSession::class,
+      CustomMetadata::class,
+    ],
   version = AppDb.VERSION,
-  autoMigrations = [
-    AutoMigration(from = 51, to = 52),
-    AutoMigration(from = 52, to = 53),
-    AutoMigration(from = 54, to = 55),
-    AutoMigration(from = 55, to = 56),
-    AutoMigration(from = 56, to = 57, spec = Migration56::class),
-    AutoMigration(from = 57, to = 58),
-    AutoMigration(from = 58, to = 59),
-    AutoMigration(from = 59, to = 60),
-    AutoMigration(from = 60, to = 61),
-    AutoMigration(from = 62, to = 63, spec = Migration62::class),
-    AutoMigration(from = 64, to = 65, spec = Migration64::class),
-    AutoMigration(from = 66, to = 67, spec = Migration66::class),
-    AutoMigration(from = 68, to = 69),
-  ],
+  autoMigrations =
+    [
+      AutoMigration(from = 51, to = 52),
+      AutoMigration(from = 52, to = 53),
+      AutoMigration(from = 54, to = 55),
+      AutoMigration(from = 55, to = 56),
+      AutoMigration(from = 56, to = 57, spec = Migration56::class),
+      AutoMigration(from = 57, to = 58),
+      AutoMigration(from = 58, to = 59),
+      AutoMigration(from = 59, to = 60),
+      AutoMigration(from = 60, to = 61),
+      AutoMigration(from = 62, to = 63, spec = Migration62::class),
+      AutoMigration(from = 64, to = 65, spec = Migration64::class),
+      AutoMigration(from = 66, to = 67, spec = Migration66::class),
+      AutoMigration(from = 68, to = 69),
+    ],
 )
 @TypeConverters(Converters::class)
 public abstract class AppDb : RoomDatabase() {
 
   public abstract fun chapterDao(): ChapterDao
+
   public abstract fun bookContentDao(): BookContentDao
+
   public abstract fun bookmarkDao(): BookmarkDao
 
   public abstract fun customMetadataDao(): CustomMetadataDao

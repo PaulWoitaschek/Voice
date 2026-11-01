@@ -4,6 +4,9 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.time.Instant
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -12,7 +15,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.data.repo.BookRepository
-import voice.core.featureflag.FeatureFlag
 import voice.core.logging.api.Logger
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.di.PlaybackScope
@@ -20,9 +22,6 @@ import voice.core.playback.session.bookId
 import voice.core.playback.session.positionInChapter
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.toMediaIdOrNull
-import java.time.Instant
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 
 @Inject
 @SingleIn(PlaybackScope::class)
@@ -30,7 +29,8 @@ class PositionUpdater(
   private val bookRepo: BookRepository,
   private val scope: CoroutineScope,
   private val playStateManager: PlayStateManager,
-  private val experimentalPlaybackPersistenceFeatureFlag: ExperimentalPlaybackPersistenceFeatureFlag,
+  private val experimentalPlaybackPersistenceFeatureFlag:
+    ExperimentalPlaybackPersistenceFeatureFlag,
 ) : Player.Listener {
 
   private var player: Player? = null
@@ -99,8 +99,7 @@ class PositionUpdater(
   suspend fun flushPositionNow() {
     val player = player ?: return
     val mediaItem = player.currentMediaItem ?: return
-    val currentPosition = player.currentPosition
-      .takeIf { it >= 0 } ?: return
+    val currentPosition = player.currentPosition.takeIf { it >= 0 } ?: return
     val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
     val bookId = mediaId.bookId ?: return
     val chapterId = mediaId.realChapterId ?: return

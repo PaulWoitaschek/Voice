@@ -43,10 +43,7 @@ internal class ChapterTrackProcessor {
     val names = chunkOffsets.map { offset ->
       dataSource.close()
       dataSource.open(
-        DataSpec.Builder()
-          .setUri(uri)
-          .setPosition(offset)
-          .build(),
+        DataSpec.Builder().setUri(uri).setPosition(offset).build(),
       )
       val buffer = ParsableByteArray()
       buffer.reset(2)
@@ -71,12 +68,13 @@ internal class ChapterTrackProcessor {
         val chapterName = names[chunkIndex]
 
         val samplesInThisChunk = getSamplesPerChunk(chunkIndex, stscEntries)
-        val chunkDuration = consumeDuration(
-          sampleCount = samplesInThisChunk,
-          durations = durations,
-          durationEntryIndex = durationEntryIndex,
-          samplesConsumedInDurationEntry = samplesConsumedInDurationEntry,
-        )
+        val chunkDuration =
+          consumeDuration(
+            sampleCount = samplesInThisChunk,
+            durations = durations,
+            durationEntryIndex = durationEntryIndex,
+            samplesConsumedInDurationEntry = samplesConsumedInDurationEntry,
+          )
         durationEntryIndex = chunkDuration.durationEntryIndex
         samplesConsumedInDurationEntry = chunkDuration.samplesConsumedInDurationEntry
         if (!chunkDuration.hasEnoughDurations) {
@@ -84,11 +82,12 @@ internal class ChapterTrackProcessor {
         }
 
         MarkData(
-          startMs = position * 1000 / timeScale,
-          name = chapterName,
-        ).also {
-          position += chunkDuration.duration
-        }
+            startMs = position * 1000 / timeScale,
+            name = chapterName,
+          )
+          .also {
+            position += chunkDuration.duration
+          }
       }
       .sorted()
   }
@@ -105,13 +104,14 @@ internal class ChapterTrackProcessor {
     var duration = 0L
 
     while (remainingSamples > 0) {
-      val entry = durations.getOrNull(entryIndex)
-        ?: return ConsumedDuration(
-          duration = duration,
-          durationEntryIndex = entryIndex,
-          samplesConsumedInDurationEntry = consumedInEntry,
-          hasEnoughDurations = false,
-        )
+      val entry =
+        durations.getOrNull(entryIndex)
+          ?: return ConsumedDuration(
+            duration = duration,
+            durationEntryIndex = entryIndex,
+            samplesConsumedInDurationEntry = consumedInEntry,
+            hasEnoughDurations = false,
+          )
 
       val samplesLeftInEntry = entry.sampleCount - consumedInEntry
       if (samplesLeftInEntry <= 0) {

@@ -14,27 +14,19 @@ import voice.core.playback.stats.ListeningSessionRecorder
 
 class PlaybackService : MediaLibraryService() {
 
-  @Inject
-  lateinit var session: MediaLibrarySession
+  @Inject lateinit var session: MediaLibrarySession
 
-  @Inject
-  lateinit var scope: CoroutineScope
+  @Inject lateinit var scope: CoroutineScope
 
-  @Inject
-  lateinit var player: VoicePlayer
+  @Inject lateinit var player: VoicePlayer
 
-  @Inject
-  lateinit var positionUpdater: PositionUpdater
+  @Inject lateinit var positionUpdater: PositionUpdater
 
-  @Inject
-  lateinit var listeningSessionRecorder: ListeningSessionRecorder
+  @Inject lateinit var listeningSessionRecorder: ListeningSessionRecorder
 
   override fun onCreate() {
     super.onCreate()
-    rootGraphAs<PlaybackGraph.Provider>()
-      .playbackGraphFactory
-      .create(this)
-      .inject(this)
+    rootGraphAs<PlaybackGraph.Provider>().playbackGraphFactory.create(this).inject(this)
   }
 
   private fun release() {
@@ -53,5 +45,6 @@ class PlaybackService : MediaLibraryService() {
     super.onDestroy()
   }
 
-  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession = session
+  override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession =
+    session
 }

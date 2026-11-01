@@ -13,7 +13,9 @@ import voice.core.featureflag.FeatureFlagFactory
 class ReviewEnabledFeatureFlag(flag: FeatureFlag<Boolean>) : FeatureFlag<Boolean> by flag {
 
   @Inject
-  constructor(factory: FeatureFlagFactory) : this(
+  constructor(
+    factory: FeatureFlagFactory,
+  ) : this(
     factory.boolean(
       key = "review_enabled",
       description = "Shows the rating prompt after a finished book or a listening milestone.",

@@ -2,7 +2,8 @@ package voice.core.data
 
 import voice.core.common.comparator.NaturalOrderComparator
 
-public enum class BookComparator(private val comparatorFunction: Comparator<Book>) : Comparator<Book> by comparatorFunction {
+public enum class BookComparator(private val comparatorFunction: Comparator<Book>) :
+  Comparator<Book> by comparatorFunction {
 
   ByLastPlayed(
     compareByDescending {

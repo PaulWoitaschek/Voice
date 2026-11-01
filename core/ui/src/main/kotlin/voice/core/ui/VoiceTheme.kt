@@ -32,13 +32,15 @@ fun VoiceTheme(
   pureBlack: Boolean = false,
   content: @Composable () -> Unit,
 ) {
-  val darkTheme = when (themeMode) {
-    ThemeMode.FollowSystem -> isSystemInDarkTheme()
-    ThemeMode.Light -> false
-    ThemeMode.Dark -> true
-  }
+  val darkTheme =
+    when (themeMode) {
+      ThemeMode.FollowSystem -> isSystemInDarkTheme()
+      ThemeMode.Light -> false
+      ThemeMode.Dark -> true
+    }
   MaterialExpressiveTheme(
-    colorScheme = animateColorScheme(rememberThemeColorScheme(themeColorScheme, darkTheme, pureBlack)),
+    colorScheme =
+      animateColorScheme(rememberThemeColorScheme(themeColorScheme, darkTheme, pureBlack)),
     typography = VoiceTypography,
     content = content,
   )
@@ -78,25 +80,29 @@ fun rememberThemeColorScheme(
   }
 }
 
-/** The colors [themeColorScheme] produces outside of composition, see [rememberThemeColorScheme]. */
+/**
+ * The colors [themeColorScheme] produces outside of composition, see [rememberThemeColorScheme].
+ */
 fun themeColorScheme(
   context: Context,
   themeColorScheme: ThemeColorScheme,
   dark: Boolean,
   pureBlack: Boolean = false,
 ): ColorScheme {
-  val colors = if (themeColorScheme == ThemeColorScheme.Dynamic && Build.VERSION.SDK_INT >= 31) {
-    if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-  } else {
-    dynamicColorScheme(
-      // the seed as primary keeps its full saturation, e.g. the deep Voice blue of the launcher icon
-      primary = seedColor(themeColorScheme),
-      isDark = dark,
-      // derives secondary and tertiary the same way Android does from the wallpaper
-      style = PaletteStyle.TonalSpot,
-      specVersion = ColorSpec.SpecVersion.SPEC_2025,
-    )
-  }
+  val colors =
+    if (themeColorScheme == ThemeColorScheme.Dynamic && Build.VERSION.SDK_INT >= 31) {
+      if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    } else {
+      dynamicColorScheme(
+        // the seed as primary keeps its full saturation, e.g. the deep Voice blue of the launcher
+        // icon
+        primary = seedColor(themeColorScheme),
+        isDark = dark,
+        // derives secondary and tertiary the same way Android does from the wallpaper
+        style = PaletteStyle.TonalSpot,
+        specVersion = ColorSpec.SpecVersion.SPEC_2025,
+      )
+    }
   return if (dark && pureBlack) colors.withPureBlack() else colors
 }
 
@@ -104,23 +110,24 @@ fun themeColorScheme(
  * Only the background turns black. Containers keep their tones, so cards, sheets and bars still
  * stand out from it.
  */
-internal fun ColorScheme.withPureBlack(): ColorScheme = copy(
-  background = Color.Black,
-  surface = Color.Black,
-  surfaceDim = Color.Black,
-  surfaceContainerLowest = Color.Black,
-)
+internal fun ColorScheme.withPureBlack(): ColorScheme =
+  copy(
+    background = Color.Black,
+    surface = Color.Black,
+    surfaceDim = Color.Black,
+    surfaceContainerLowest = Color.Black,
+  )
 
 internal val ColorScheme.isPureBlack: Boolean
   get() = surface == Color.Black
 
-private fun seedColor(themeColorScheme: ThemeColorScheme): Color = when (themeColorScheme) {
-  ThemeColorScheme.VoiceBlue,
-  ThemeColorScheme.Dynamic,
-  -> VoiceBlue
-  ThemeColorScheme.Lagoon -> Color(0xFF00696E)
-  ThemeColorScheme.Forest -> Color(0xFF3B6D2A)
-  ThemeColorScheme.Sunset -> Color(0xFFC4501F)
-  ThemeColorScheme.Berry -> Color(0xFFA3305F)
-  ThemeColorScheme.Lavender -> Color(0xFF6B4EB8)
-}
+private fun seedColor(themeColorScheme: ThemeColorScheme): Color =
+  when (themeColorScheme) {
+    ThemeColorScheme.VoiceBlue,
+    ThemeColorScheme.Dynamic -> VoiceBlue
+    ThemeColorScheme.Lagoon -> Color(0xFF00696E)
+    ThemeColorScheme.Forest -> Color(0xFF3B6D2A)
+    ThemeColorScheme.Sunset -> Color(0xFFC4501F)
+    ThemeColorScheme.Berry -> Color(0xFFA3305F)
+    ThemeColorScheme.Lavender -> Color(0xFF6B4EB8)
+  }

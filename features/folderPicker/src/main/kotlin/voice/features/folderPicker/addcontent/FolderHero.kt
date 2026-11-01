@@ -32,12 +32,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
+import androidx.graphics.shapes.toPath as toAndroidPath
+import kotlin.math.min
+import kotlin.math.sin
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.min
-import kotlin.math.sin
-import androidx.graphics.shapes.toPath as toAndroidPath
 
 @Composable
 internal fun FolderHero(
@@ -57,21 +57,23 @@ internal fun FolderHero(
     toss(open, hops)
   }
   Canvas(
-    modifier = modifier
-      // tapping is just for fun, so it's hidden from accessibility services
-      .clearAndSetSemantics {}
-      .pointerInput(Unit) {
-        detectTapGestures {
-          haptics.performHapticFeedback(HapticFeedbackType.ContextClick)
-          scope.launch { toss(open, hops) }
-        }
-      },
+    modifier =
+      modifier
+        // tapping is just for fun, so it's hidden from accessibility services
+        .clearAndSetSemantics {}
+        .pointerInput(Unit) {
+          detectTapGestures {
+            haptics.performHapticFeedback(HapticFeedbackType.ContextClick)
+            scope.launch { toss(open, hops) }
+          }
+        },
   ) {
     val t = clock()
     val width = min(min(size.width * 0.62F, size.height * 0.95F), 300.dp.toPx())
     val height = width * 0.78F
     val left = center.x - width / 2
-    // the files sticking out of the top count towards the height, so this shifts the folder down a bit
+    // the files sticking out of the top count towards the height, so this shifts the folder down a
+    // bit
     val top = center.y - height / 2 + width * 0.08F
     val corner = CornerRadius(width * 0.08F)
 
@@ -100,13 +102,25 @@ internal fun FolderHero(
         degrees = file.tilt + hop * file.tilt * 1.6F,
         pivot = Offset(cardLeft + cardWidth / 2, cardTop + cardHeight),
       ) {
-        drawFile(t = t + index, left = cardLeft, top = cardTop, width = cardWidth, height = cardHeight, paper = paper, ink = ink)
+        drawFile(
+          t = t + index,
+          left = cardLeft,
+          top = cardTop,
+          width = cardWidth,
+          height = cardHeight,
+          paper = paper,
+          ink = ink,
+        )
       }
     }
 
     // the flap tips forward when opening, which looks like it shrinks towards its bottom edge
     val flapTop = top + height * 0.36F
-    scale(scaleX = 1F + open.value * 0.04F, scaleY = 1F - open.value * 0.3F, pivot = Offset(center.x, top + height)) {
+    scale(
+      scaleX = 1F + open.value * 0.04F,
+      scaleY = 1F - open.value * 0.3F,
+      pivot = Offset(center.x, top + height),
+    ) {
       drawRoundRect(
         color = colors.primary,
         topLeft = Offset(left, flapTop),
@@ -189,7 +203,11 @@ private fun DrawScope.drawFile(
     val barHeight = height * (0.12F + 0.22F * level)
     drawRoundRect(
       color = ink,
-      topLeft = Offset(left + (width - totalWidth) / 2 + bar * (barWidth + gap), top + height * 0.36F - barHeight / 2),
+      topLeft =
+        Offset(
+          left + (width - totalWidth) / 2 + bar * (barWidth + gap),
+          top + height * 0.36F - barHeight / 2,
+        ),
       size = Size(barWidth, barHeight),
       cornerRadius = CornerRadius(barWidth / 2),
     )
@@ -207,15 +225,17 @@ private class AudioFile(
   val tilt: Float,
   val color: FileColor,
 ) {
-  fun colors(scheme: ColorScheme): Pair<Color, Color> = when (color) {
-    FileColor.Primary -> scheme.primaryContainer to scheme.onPrimaryContainer
-    FileColor.Secondary -> scheme.secondaryContainer to scheme.onSecondaryContainer
-    FileColor.Tertiary -> scheme.tertiaryContainer to scheme.onTertiaryContainer
-  }
+  fun colors(scheme: ColorScheme): Pair<Color, Color> =
+    when (color) {
+      FileColor.Primary -> scheme.primaryContainer to scheme.onPrimaryContainer
+      FileColor.Secondary -> scheme.secondaryContainer to scheme.onSecondaryContainer
+      FileColor.Tertiary -> scheme.tertiaryContainer to scheme.onTertiaryContainer
+    }
 }
 
-private val FILES = listOf(
-  AudioFile(x = 0.27F, tilt = -10F, color = FileColor.Tertiary),
-  AudioFile(x = 0.5F, tilt = 2F, color = FileColor.Primary),
-  AudioFile(x = 0.73F, tilt = 12F, color = FileColor.Secondary),
-)
+private val FILES =
+  listOf(
+    AudioFile(x = 0.27F, tilt = -10F, color = FileColor.Tertiary),
+    AudioFile(x = 0.5F, tilt = 2F, color = FileColor.Primary),
+    AudioFile(x = 0.73F, tilt = 12F, color = FileColor.Secondary),
+  )

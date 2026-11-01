@@ -15,6 +15,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -41,56 +44,72 @@ import voice.features.bookOverview.book
 import voice.features.bookOverview.overview.toItemViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
 
 class BookSearchViewModelTest {
 
   private val testDispatcher = UnconfinedTestDispatcher()
-  private val dispatcherProvider = DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
+  private val dispatcherProvider =
+    DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
 
   private val shining = book(name = "The Shining", author = "Stephen King", genre = "Horror")
   private val carrie = book(name = "Carrie", author = "stephen king", genre = "Horror")
-  private val kingkiller = book(name = "The Name of the Wind", author = "Patrick Rothfuss", series = "Kingkiller")
+  private val kingkiller =
+    book(name = "The Name of the Wind", author = "Patrick Rothfuss", series = "Kingkiller")
 
   private val recentSearches = MutableStateFlow(listOf("hail mary", "rothfuss"))
-  private val recentBookSearchRepo = mockk<RecentBookSearchRepo> {
-    every { flow() } returns recentSearches
-    coEvery { add(any()) } just Runs
-    coEvery { delete(any()) } just Runs
-    coEvery { clear() } just Runs
-  }
+  private val recentBookSearchRepo =
+    mockk<RecentBookSearchRepo> {
+      every { flow() } returns recentSearches
+      coEvery { add(any()) } just Runs
+      coEvery { delete(any()) } just Runs
+      coEvery { clear() } just Runs
+    }
   private val navigator = mockk<Navigator>(relaxed = true)
   private val playerController = mockk<PlayerController>(relaxed = true)
   private val currentBookStore = MemoryDataStore<BookId?>(null)
   private val lastResults = LastBookSearchResults()
-  private val search = mockk<BookSearch> {
-    coEvery { search(any()) } returns emptyList()
-    coEvery { search("king") } returns listOf(
-      shining.result(BookSearchField.Author),
-      carrie.result(BookSearchField.Author),
-      kingkiller.result(BookSearchField.Series),
-    )
-  }
+  private val search =
+    mockk<BookSearch> {
+      coEvery { search(any()) } returns emptyList()
+      coEvery { search("king") } returns
+        listOf(
+          shining.result(BookSearchField.Author),
+          carrie.result(BookSearchField.Author),
+          kingkiller.result(BookSearchField.Series),
+        )
+    }
 
   @Test
   fun `idle shows the recent searches and browses by author`() = runTest {
     val viewModel = viewModel()
 
     testState(viewModel) {
-      val state = awaitState<BookSearchViewState.Idle> { it.browse != null && it.recentSearches.isNotEmpty() }
+      val state =
+        awaitState<BookSearchViewState.Idle> { it.browse != null && it.recentSearches.isNotEmpty() }
       assertEquals(expected = listOf("hail mary", "rothfuss"), actual = state.recentSearches)
       assertEquals(
-        expected = BookSearchViewState.Browse(
-          categories = listOf(BrowseCategory.Authors, BrowseCategory.Series, BrowseCategory.Genres),
-          selectedCategory = BrowseCategory.Authors,
-          entries = listOf(
-            BookSearchViewState.BrowseEntry(name = "Patrick Rothfuss", bookCount = 1, inProgressCount = 1, finishedCount = 0),
-            // grouped regardless of the spelling
-            BookSearchViewState.BrowseEntry(name = "Stephen King", bookCount = 2, inProgressCount = 2, finishedCount = 0),
+        expected =
+          BookSearchViewState.Browse(
+            categories =
+              listOf(BrowseCategory.Authors, BrowseCategory.Series, BrowseCategory.Genres),
+            selectedCategory = BrowseCategory.Authors,
+            entries =
+              listOf(
+                BookSearchViewState.BrowseEntry(
+                  name = "Patrick Rothfuss",
+                  bookCount = 1,
+                  inProgressCount = 1,
+                  finishedCount = 0,
+                ),
+                // grouped regardless of the spelling
+                BookSearchViewState.BrowseEntry(
+                  name = "Stephen King",
+                  bookCount = 2,
+                  inProgressCount = 2,
+                  finishedCount = 0,
+                ),
+              ),
           ),
-        ),
         actual = state.browse,
       )
     }
@@ -104,11 +123,21 @@ class BookSearchViewModelTest {
       awaitState<BookSearchViewState.Idle> { it.browse != null }
       viewModel.onBrowseCategoryClick(BrowseCategory.Genres)
 
-      val browse = awaitState<BookSearchViewState.Idle> { it.browse?.selectedCategory == BrowseCategory.Genres }.browse!!
+      val browse =
+        awaitState<BookSearchViewState.Idle> {
+            it.browse?.selectedCategory == BrowseCategory.Genres
+          }
+          .browse!!
       assertEquals(
-        expected = listOf(
-          BookSearchViewState.BrowseEntry(name = "Horror", bookCount = 2, inProgressCount = 2, finishedCount = 0),
-        ),
+        expected =
+          listOf(
+            BookSearchViewState.BrowseEntry(
+              name = "Horror",
+              bookCount = 2,
+              inProgressCount = 2,
+              finishedCount = 0,
+            ),
+          ),
         actual = browse.entries,
       )
     }
@@ -123,13 +152,17 @@ class BookSearchViewModelTest {
 
       val state = awaitState<BookSearchViewState.Results>()
       assertEquals(expected = shining.id, actual = state.topResult.id)
-      assertEquals(expected = listOf(carrie.id, kingkiller.id), actual = state.otherResults.map { it.id })
       assertEquals(
-        expected = listOf(
-          BookSearchViewState.Filter(field = null, count = 3, selected = true),
-          BookSearchViewState.Filter(field = BookSearchField.Author, count = 2, selected = false),
-          BookSearchViewState.Filter(field = BookSearchField.Series, count = 1, selected = false),
-        ),
+        expected = listOf(carrie.id, kingkiller.id),
+        actual = state.otherResults.map { it.id },
+      )
+      assertEquals(
+        expected =
+          listOf(
+            BookSearchViewState.Filter(field = null, count = 3, selected = true),
+            BookSearchViewState.Filter(field = BookSearchField.Author, count = 2, selected = false),
+            BookSearchViewState.Filter(field = BookSearchField.Series, count = 1, selected = false),
+          ),
         actual = state.filters,
       )
       assertEquals(expected = false, actual = state.topResultPlaying)
@@ -148,22 +181,29 @@ class BookSearchViewModelTest {
 
       val state = awaitState<BookSearchViewState.Results> { it.topResult.id == kingkiller.id }
       assertEquals(expected = emptyList(), actual = state.otherResults)
-      assertEquals(expected = BookSearchField.Series, actual = state.filters.single { it.selected }.field)
+      assertEquals(
+        expected = BookSearchField.Series,
+        actual = state.filters.single { it.selected }.field,
+      )
     }
   }
 
   @Test
   fun `filters are hidden when none of them narrows the results`() = runTest {
-    coEvery { search.search("horror") } returns listOf(
-      shining.result(BookSearchField.Genre),
-      carrie.result(BookSearchField.Genre),
-    )
+    coEvery { search.search("horror") } returns
+      listOf(
+        shining.result(BookSearchField.Genre),
+        carrie.result(BookSearchField.Genre),
+      )
     val viewModel = viewModel()
 
     testState(viewModel) {
       viewModel.onRecentSearchClick("horror")
 
-      assertEquals(expected = emptyList(), actual = awaitState<BookSearchViewState.Results>().filters)
+      assertEquals(
+        expected = emptyList(),
+        actual = awaitState<BookSearchViewState.Results>().filters,
+      )
     }
   }
 
@@ -189,14 +229,16 @@ class BookSearchViewModelTest {
 
   @Test
   fun `the playing book shows its live progress`() = runTest {
-    val livePlaybackState = LivePlaybackState(
-      bookId = shining.id,
-      chapterId = shining.chapters.last().id,
-      positionMs = 5_000,
-      isPlaying = true,
-      playbackSpeed = 1F,
-    )
-    every { playerController.livePlaybackStateFlow(shining.id) } returns MutableStateFlow(livePlaybackState)
+    val livePlaybackState =
+      LivePlaybackState(
+        bookId = shining.id,
+        chapterId = shining.chapters.last().id,
+        positionMs = 5_000,
+        isPlaying = true,
+        playbackSpeed = 1F,
+      )
+    every { playerController.livePlaybackStateFlow(shining.id) } returns
+      MutableStateFlow(livePlaybackState)
     currentBookStore.updateData { shining.id }
     val viewModel = viewModel(experimentalPlaybackPersistence = true)
 
@@ -204,9 +246,13 @@ class BookSearchViewModelTest {
       viewModel.onRecentSearchClick("king")
 
       val expected = shining.overlay(livePlaybackState).toItemViewState()
-      val state = awaitState<BookSearchViewState.Results> { it.topResult.progress == expected.progress }
+      val state =
+        awaitState<BookSearchViewState.Results> { it.topResult.progress == expected.progress }
       assertEquals(expected = expected.remainingTime, actual = state.topResult.remainingTime)
-      assertEquals(expected = carrie.toItemViewState().progress, actual = state.otherResults.first().progress)
+      assertEquals(
+        expected = carrie.toItemViewState().progress,
+        actual = state.otherResults.first().progress,
+      )
     }
   }
 
@@ -248,10 +294,11 @@ class BookSearchViewModelTest {
 
   @Test
   fun `browse entry click searches within that category`() = runTest {
-    coEvery { search.search("Stephen King") } returns listOf(
-      shining.result(BookSearchField.Author),
-      kingkiller.result(BookSearchField.Title),
-    )
+    coEvery { search.search("Stephen King") } returns
+      listOf(
+        shining.result(BookSearchField.Author),
+        kingkiller.result(BookSearchField.Title),
+      )
     val viewModel = viewModel()
 
     testState(viewModel) {
@@ -316,9 +363,10 @@ class BookSearchViewModelTest {
 
   private fun viewModel(experimentalPlaybackPersistence: Boolean = false): BookSearchViewModel {
     return BookSearchViewModel(
-      repo = mockk<BookRepository> {
-        every { flow() } returns MutableStateFlow(listOf(shining, carrie, kingkiller))
-      },
+      repo =
+        mockk<BookRepository> {
+          every { flow() } returns MutableStateFlow(listOf(shining, carrie, kingkiller))
+        },
       search = search,
       recentBookSearchRepo = recentBookSearchRepo,
       navigator = navigator,
@@ -326,9 +374,10 @@ class BookSearchViewModelTest {
       playStateManager = PlayStateManager(),
       currentBookStore = CurrentBookStore(currentBookStore),
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
-      experimentalPlaybackPersistenceFeatureFlag = ExperimentalPlaybackPersistenceFeatureFlag(
-        MemoryFeatureFlag(experimentalPlaybackPersistence),
-      ),
+      experimentalPlaybackPersistenceFeatureFlag =
+        ExperimentalPlaybackPersistenceFeatureFlag(
+          MemoryFeatureFlag(experimentalPlaybackPersistence),
+        ),
       lastResults = lastResults,
       dispatcherProvider = dispatcherProvider,
     )
@@ -338,9 +387,11 @@ class BookSearchViewModelTest {
     viewModel: BookSearchViewModel,
     validate: suspend ReceiveTurbine<BookSearchViewState>.() -> Unit,
   ) {
-    backgroundScope.launchMolecule(RecompositionMode.Immediate) {
-      viewModel.state()
-    }.test(validate = validate)
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test(validate = validate)
   }
 }
 
@@ -355,7 +406,8 @@ private fun Book.result(vararg fieldsMatchingAllWords: BookSearchField): BookSea
 
 /** Skips the states on the way, e.g. the ones before the library loaded. */
 @IgnorableReturnValue
-private suspend inline fun <reified T : BookSearchViewState> ReceiveTurbine<BookSearchViewState>.awaitState(
+private suspend inline fun <reified T : BookSearchViewState> ReceiveTurbine<BookSearchViewState>
+  .awaitState(
   predicate: (T) -> Boolean = { true },
 ): T {
   while (true) {

@@ -63,8 +63,12 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import voice.core.common.rootGraphAs
 import voice.core.data.folders.FolderType
+import voice.core.strings.R as StringsR
 import voice.core.ui.AuroraBackground
 import voice.core.ui.OnboardingButton
 import voice.core.ui.OnboardingStep
@@ -75,10 +79,6 @@ import voice.core.ui.rememberAnimationClock
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.Origin
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
-import voice.core.strings.R as StringsR
 
 @ContributesTo(AppScope::class)
 interface SelectFolderTypeGraph {
@@ -91,15 +91,16 @@ object SelectFolderTypeProvider {
 
   @Provides
   @IntoSet
-  fun selectFolderTypeNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.SelectFolderType> { key ->
-    NavEntry(key) {
-      SelectFolderType(
-        uri = key.uri,
-        origin = key.origin,
-        currentType = key.currentType,
-      )
+  fun selectFolderTypeNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.SelectFolderType> { key ->
+      NavEntry(key) {
+        SelectFolderType(
+          uri = key.uri,
+          origin = key.origin,
+          currentType = key.currentType,
+        )
+      }
     }
-  }
 }
 
 @Composable
@@ -109,15 +110,17 @@ fun SelectFolderType(
   currentType: FolderType?,
 ) {
   val context = LocalContext.current
-  val viewModel = retain(uri.toString(), origin.name, currentType?.name) {
-    rootGraphAs<SelectFolderTypeGraph>().selectFolderTypeViewModelFactory
-      .create(
-        uri = uri,
-        origin = origin,
-        documentFile = DocumentFile.fromTreeUri(context, uri)!!,
-        currentType = currentType,
-      )
-  }
+  val viewModel =
+    retain(uri.toString(), origin.name, currentType?.name) {
+      rootGraphAs<SelectFolderTypeGraph>()
+        .selectFolderTypeViewModelFactory
+        .create(
+          uri = uri,
+          origin = origin,
+          documentFile = DocumentFile.fromTreeUri(context, uri)!!,
+          currentType = currentType,
+        )
+    }
   SelectFolderType(
     viewState = viewModel.viewState(),
     onModeSelect = viewModel::selectMode,
@@ -184,10 +187,7 @@ private fun ReviewContent(
   viewState: SelectFolderTypeViewState,
   onBookClick: () -> Unit,
 ) {
-  val itemModifier = Modifier
-    .widthIn(max = 560.dp)
-    .fillMaxWidth()
-    .padding(horizontal = 16.dp)
+  val itemModifier = Modifier.widthIn(max = 560.dp).fillMaxWidth().padding(horizontal = 16.dp)
   LazyColumn(
     modifier = Modifier.fillMaxSize(),
     contentPadding = contentPadding,
@@ -228,22 +228,30 @@ private fun ReviewHeader(
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
     Text(
-      text = when {
-        viewState.loading -> stringResource(StringsR.string.folder_review_loading, viewState.folderName)
-        empty -> stringResource(StringsR.string.folder_review_empty_title, viewState.folderName)
-        else -> pluralStringResource(StringsR.plurals.folder_review_title, viewState.books.size, viewState.books.size)
-      },
+      text =
+        when {
+          viewState.loading ->
+            stringResource(StringsR.string.folder_review_loading, viewState.folderName)
+          empty -> stringResource(StringsR.string.folder_review_empty_title, viewState.folderName)
+          else ->
+            pluralStringResource(
+              StringsR.plurals.folder_review_title,
+              viewState.books.size,
+              viewState.books.size,
+            )
+        },
       style = MaterialTheme.typography.displaySmallEmphasized,
       textAlign = TextAlign.Center,
     )
     if (!viewState.loading) {
       Spacer(Modifier.height(12.dp))
       Text(
-        text = if (empty) {
-          stringResource(StringsR.string.folder_review_empty_subtitle)
-        } else {
-          viewState.selectedMode.optionTitle(viewState.folderName)
-        },
+        text =
+          if (empty) {
+            stringResource(StringsR.string.folder_review_empty_subtitle)
+          } else {
+            viewState.selectedMode.optionTitle(viewState.folderName)
+          },
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         textAlign = TextAlign.Center,
@@ -260,12 +268,13 @@ private fun BookRow(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val shape = RoundedCornerShape(
-    topStart = if (index == 0) 24.dp else 6.dp,
-    topEnd = if (index == 0) 24.dp else 6.dp,
-    bottomStart = if (index == count - 1) 24.dp else 6.dp,
-    bottomEnd = if (index == count - 1) 24.dp else 6.dp,
-  )
+  val shape =
+    RoundedCornerShape(
+      topStart = if (index == 0) 24.dp else 6.dp,
+      topEnd = if (index == 0) 24.dp else 6.dp,
+      bottomStart = if (index == count - 1) 24.dp else 6.dp,
+      bottomEnd = if (index == count - 1) 24.dp else 6.dp,
+    )
   val content: @Composable () -> Unit = {
     Row(
       modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -309,36 +318,43 @@ private fun BookRow(
 @Composable
 private fun SelectFolderTypeViewState.Book.details(): String {
   return listOfNotNull(
-    author,
-    duration?.let { formatDuration(it) },
-    pluralStringResource(StringsR.plurals.folder_type_file_count, fileCount, fileCount),
-    if (partCount > 1) pluralStringResource(StringsR.plurals.folder_review_folder_count, partCount, partCount) else null,
-  ).joinToString(separator = " · ")
+      author,
+      duration?.let { formatDuration(it) },
+      pluralStringResource(StringsR.plurals.folder_type_file_count, fileCount, fileCount),
+      if (partCount > 1)
+        pluralStringResource(StringsR.plurals.folder_review_folder_count, partCount, partCount)
+      else null,
+    )
+    .joinToString(separator = " · ")
 }
 
 // "21 hr, 2 min" in the user's language, without own translations
 @Composable
 private fun formatDuration(duration: Duration): String {
   val locale = LocalConfiguration.current.locales[0]
-  val format = remember(locale) { MeasureFormat.getInstance(locale, MeasureFormat.FormatWidth.SHORT) }
+  val format =
+    remember(locale) { MeasureFormat.getInstance(locale, MeasureFormat.FormatWidth.SHORT) }
   val hours = duration.inWholeHours
   val minutes = duration.inWholeMinutes % 60
-  val measures = when {
-    hours > 0 && minutes > 0 -> listOf(Measure(hours, MeasureUnit.HOUR), Measure(minutes, MeasureUnit.MINUTE))
-    hours > 0 -> listOf(Measure(hours, MeasureUnit.HOUR))
-    minutes > 0 -> listOf(Measure(minutes, MeasureUnit.MINUTE))
-    else -> listOf(Measure(duration.inWholeSeconds, MeasureUnit.SECOND))
-  }
+  val measures =
+    when {
+      hours > 0 && minutes > 0 ->
+        listOf(Measure(hours, MeasureUnit.HOUR), Measure(minutes, MeasureUnit.MINUTE))
+      hours > 0 -> listOf(Measure(hours, MeasureUnit.HOUR))
+      minutes > 0 -> listOf(Measure(minutes, MeasureUnit.MINUTE))
+      else -> listOf(Measure(duration.inWholeSeconds, MeasureUnit.SECOND))
+    }
   return format.formatMeasures(*measures.toTypedArray())
 }
 
-private val initialShapes = listOf(
-  MaterialShapes.Cookie9Sided,
-  MaterialShapes.Clover4Leaf,
-  MaterialShapes.Sunny,
-  MaterialShapes.Cookie4Sided,
-  MaterialShapes.Pill,
-)
+private val initialShapes =
+  listOf(
+    MaterialShapes.Cookie9Sided,
+    MaterialShapes.Clover4Leaf,
+    MaterialShapes.Sunny,
+    MaterialShapes.Cookie4Sided,
+    MaterialShapes.Pill,
+  )
 
 /** The first letter of a book on a playful shape, standing in for a cover we don't have yet. */
 @Composable
@@ -347,15 +363,16 @@ private fun BookInitial(
   index: Int,
 ) {
   val colorScheme = MaterialTheme.colorScheme
-  val (container, content) = when (index % 3) {
-    0 -> colorScheme.primaryContainer to colorScheme.onPrimaryContainer
-    1 -> colorScheme.tertiaryContainer to colorScheme.onTertiaryContainer
-    else -> colorScheme.secondaryContainer to colorScheme.onSecondaryContainer
-  }
+  val (container, content) =
+    when (index % 3) {
+      0 -> colorScheme.primaryContainer to colorScheme.onPrimaryContainer
+      1 -> colorScheme.tertiaryContainer to colorScheme.onTertiaryContainer
+      else -> colorScheme.secondaryContainer to colorScheme.onSecondaryContainer
+    }
   Box(
-    modifier = Modifier
-      .size(44.dp)
-      .background(container, initialShapes[index % initialShapes.size].toShape()),
+    modifier =
+      Modifier.size(44.dp)
+        .background(container, initialShapes[index % initialShapes.size].toShape()),
     contentAlignment = Alignment.Center,
   ) {
     Text(
@@ -390,18 +407,23 @@ private fun ReviewActions(
 ) {
   val surface = MaterialTheme.colorScheme.surface
   Box(
-    modifier = Modifier
-      .fillMaxWidth()
-      // keeps the books scrolling underneath readable
-      .background(Brush.verticalGradient(0F to surface.copy(alpha = 0F), 0.3F to surface.copy(alpha = 0.9F)))
-      .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal))
-      .padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 16.dp),
+    modifier =
+      Modifier.fillMaxWidth()
+        // keeps the books scrolling underneath readable
+        .background(
+          Brush.verticalGradient(
+            0F to surface.copy(alpha = 0F),
+            0.3F to surface.copy(alpha = 0.9F),
+          ),
+        )
+        .windowInsetsPadding(
+          WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal),
+        )
+        .padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 16.dp),
     contentAlignment = Alignment.Center,
   ) {
     Column(
-      modifier = Modifier
-        .widthIn(max = 400.dp)
-        .fillMaxWidth(),
+      modifier = Modifier.widthIn(max = 400.dp).fillMaxWidth(),
       verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
       if (!viewState.loading && viewState.books.isEmpty()) {
@@ -411,11 +433,16 @@ private fun ReviewActions(
         )
       } else {
         OnboardingButton(
-          text = if (viewState.editing) {
-            stringResource(StringsR.string.common_action_save)
-          } else {
-            pluralStringResource(StringsR.plurals.folder_review_action_add, viewState.books.size, viewState.books.size)
-          },
+          text =
+            if (viewState.editing) {
+              stringResource(StringsR.string.common_action_save)
+            } else {
+              pluralStringResource(
+                StringsR.plurals.folder_review_action_add,
+                viewState.books.size,
+                viewState.books.size,
+              )
+            },
           onClick = onAddClick,
           enabled = !viewState.loading,
         )
@@ -434,37 +461,45 @@ private fun ReviewActions(
 @Preview
 @Composable
 private fun SelectFolderTypePreview() {
-  val books = listOf(
-    SelectFolderTypeViewState.Book(
-      name = "Dune",
-      author = "Frank Herbert",
-      fileCount = 24,
-      partCount = 0,
-      possibleBookCount = 0,
-      duration = 21.hours + 2.minutes,
-    ),
-    SelectFolderTypeViewState.Book(
-      name = "Hyperion",
-      author = null,
-      fileCount = 31,
-      partCount = 2,
-      possibleBookCount = 0,
-      analyzing = true,
-    ),
-    SelectFolderTypeViewState.Book("Discworld", author = null, fileCount = 312, partCount = 0, possibleBookCount = 41),
-  )
+  val books =
+    listOf(
+      SelectFolderTypeViewState.Book(
+        name = "Dune",
+        author = "Frank Herbert",
+        fileCount = 24,
+        partCount = 0,
+        possibleBookCount = 0,
+        duration = 21.hours + 2.minutes,
+      ),
+      SelectFolderTypeViewState.Book(
+        name = "Hyperion",
+        author = null,
+        fileCount = 31,
+        partCount = 2,
+        possibleBookCount = 0,
+        analyzing = true,
+      ),
+      SelectFolderTypeViewState.Book(
+        "Discworld",
+        author = null,
+        fileCount = 312,
+        partCount = 0,
+        possibleBookCount = 41,
+      ),
+    )
   VoiceTheme {
     SelectFolderType(
-      viewState = SelectFolderTypeViewState(
-        folderName = "Audiobooks",
-        loading = false,
-        selectedMode = FolderMode.Audiobooks,
-        guessedMode = FolderMode.Audiobooks,
-        books = books,
-        options = FolderMode.entries.map { SelectFolderTypeViewState.Option(it, books) },
-        editing = false,
-        onboarding = true,
-      ),
+      viewState =
+        SelectFolderTypeViewState(
+          folderName = "Audiobooks",
+          loading = false,
+          selectedMode = FolderMode.Audiobooks,
+          guessedMode = FolderMode.Audiobooks,
+          books = books,
+          options = FolderMode.entries.map { SelectFolderTypeViewState.Option(it, books) },
+          editing = false,
+          onboarding = true,
+        ),
       onModeSelect = {},
       onAddClick = {},
       onBackClick = {},

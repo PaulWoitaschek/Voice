@@ -2,16 +2,16 @@ package voice.core.foldersync
 
 import android.provider.DocumentsContract
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.runner.RunWith
-import voice.core.data.Book
-import voice.core.data.BookId
-import voice.core.data.Bookmark
-import voice.core.data.CustomMetadata
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.uuid.Uuid
+import org.junit.runner.RunWith
+import voice.core.data.Book
+import voice.core.data.BookId
+import voice.core.data.Bookmark
+import voice.core.data.CustomMetadata
 
 @RunWith(AndroidJUnit4::class)
 class PositionsTest {
@@ -20,9 +20,16 @@ class PositionsTest {
   fun `only books in the folder are written`() {
     val inFolder = book(lastPlayedAt = 1)
     val otherFolder = book(tree = "primary:Other", lastPlayedAt = 1)
-    val singleFileUri = DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Book.m4b")
+    val singleFileUri =
+      DocumentsContract.buildDocumentUri(
+        "com.android.externalstorage.documents",
+        "primary:Book.m4b",
+      )
     val singleFileId = BookId(singleFileUri.toString())
-    val singleFile = book(lastPlayedAt = 1).let { Book(it.content.copy(id = singleFileId), it.chapters, CustomMetadata(singleFileId)) }
+    val singleFile =
+      book(lastPlayedAt = 1).let {
+        Book(it.content.copy(id = singleFileId), it.chapters, CustomMetadata(singleFileId))
+      }
 
     val books = listOf(inFolder, otherFolder, singleFile)
 
@@ -35,7 +42,12 @@ class PositionsTest {
     val book = book(currentFile = 0, position = 5000, lastPlayedAt = 1000)
 
     assertEquals(
-      expected = TakenOverPosition(book.chapters[1].id, positionInChapter = 3000, playedAt = Instant.ofEpochMilli(2000)),
+      expected =
+        TakenOverPosition(
+          book.chapters[1].id,
+          positionInChapter = 3000,
+          playedAt = Instant.ofEpochMilli(2000),
+        ),
       actual = book.positionFrom(place(file = 1, position = 3000, playedAt = 2000)),
     )
   }
@@ -50,7 +62,8 @@ class PositionsTest {
 
   @Test
   fun `a newer time at the same place is not taken over`() {
-    // taking over a place seeks, which stores a newer time at that place, and the other device must not take it back
+    // taking over a place seeks, which stores a newer time at that place, and the other device must
+    // not take it back
     val book = book(currentFile = 1, position = 5000, lastPlayedAt = 1000)
 
     assertNull(book.positionFrom(place(file = 1, position = 6000, playedAt = 2000)))
@@ -60,7 +73,10 @@ class PositionsTest {
   fun `a position past the end of its file stops at the end`() {
     val book = book(lastPlayedAt = 1000)
 
-    assertEquals(60_000, book.positionFrom(place(file = 1, position = 90_000, playedAt = 2000))?.positionInChapter)
+    assertEquals(
+      60_000,
+      book.positionFrom(place(file = 1, position = 90_000, playedAt = 2000))?.positionInChapter,
+    )
   }
 
   @Test
@@ -72,8 +88,15 @@ class PositionsTest {
 
   @Test
   fun `a file with unknown fields can be read, a broken one is skipped`() {
-    val text = """{"books":{"a":{"place":{"file":1,"position":2,"speed":1.5,"playedAt":3},"narrator":{}}},"other":{}}"""
-    val file = SyncFile(mapOf("a" to SyncedBook(place = SyncedPlace(file = 1, position = 2, speed = 1.5F, playedAt = 3))))
+    val text =
+      """{"books":{"a":{"place":{"file":1,"position":2,"speed":1.5,"playedAt":3},"narrator":{}}},"other":{}}"""
+    val file =
+      SyncFile(
+        mapOf(
+          "a" to
+            SyncedBook(place = SyncedPlace(file = 1, position = 2, speed = 1.5F, playedAt = 3)),
+        ),
+      )
 
     assertEquals(file, parseSyncFile(text))
     assertEquals(file, parseSyncFile(file.encode()))
@@ -84,10 +107,12 @@ class PositionsTest {
   @Test
   fun `a bookmark kind this version doesn't know is read as a note`() {
     val id = "00000000-0000-0000-0000-000000000001"
-    val text = """{"books":{"a":{"bookmarks":{"$id":{"file":1,"time":2,"kind":"Later","addedAt":3,"changedAt":4}}}}}"""
+    val text =
+      """{"books":{"a":{"bookmarks":{"$id":{"file":1,"time":2,"kind":"Later","addedAt":3,"changedAt":4}}}}}"""
 
     assertEquals(
-      expected = SyncedBookmark(file = 1, time = 2, kind = Bookmark.Kind.Note, addedAt = 3, changedAt = 4),
+      expected =
+        SyncedBookmark(file = 1, time = 2, kind = Bookmark.Kind.Note, addedAt = 3, changedAt = 4),
       actual = parseSyncFile(text)?.books?.get("a")?.bookmarks?.get(Uuid.parse(id)),
     )
   }

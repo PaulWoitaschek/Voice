@@ -47,6 +47,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
+import voice.core.strings.R as StringsR
 import voice.core.ui.AuroraBackground
 import voice.core.ui.ConfettiState
 import voice.core.ui.EntranceState
@@ -65,7 +66,6 @@ import voice.features.settings.SettingsViewState
 import voice.features.settings.views.sleeptimer.AutoSleepTimerSection
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import voice.core.strings.R as StringsR
 
 @Composable
 @Preview
@@ -113,7 +113,8 @@ private fun Settings(
     ) { contentPadding ->
       LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = contentPadding + PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
+        contentPadding =
+          contentPadding + PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
       ) {
@@ -140,10 +141,7 @@ private fun LazyListScope.sections(
     val entranceIndex = minOf(index++, 6)
     item(key = key) {
       content(
-        Modifier
-          .widthIn(max = MaxContentWidth)
-          .fillMaxWidth()
-          .entrance(entrance, entranceIndex),
+        Modifier.widthIn(max = MaxContentWidth).fillMaxWidth().entrance(entrance, entranceIndex),
       )
     }
   }
@@ -259,10 +257,11 @@ private fun SettingsTopBar(
         )
       }
     },
-    colors = TopAppBarDefaults.topAppBarColors(
-      containerColor = Color.Transparent,
-      scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-    ),
+    colors =
+      TopAppBarDefaults.topAppBarColors(
+        containerColor = Color.Transparent,
+        scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+      ),
     scrollBehavior = scrollBehavior,
   )
 }
@@ -278,11 +277,12 @@ object SettingsProvider {
 
   @Provides
   @IntoSet
-  fun settingsNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Settings> { key ->
-    NavEntry(key) {
-      Settings()
+  fun settingsNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.Settings> { key ->
+      NavEntry(key) {
+        Settings()
+      }
     }
-  }
 }
 
 @Composable

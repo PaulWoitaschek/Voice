@@ -30,19 +30,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import coil.compose.AsyncImage
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import voice.core.ui.ShapedIcon
-import voice.core.ui.icons.VoiceIcons
 import java.io.File
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import voice.core.ui.ShapedIcon
+import voice.core.ui.icons.VoiceIcons
 
-/**
- * The server, turning slowly, with stories on their way to the listener circling around it.
- */
+/** The server, turning slowly, with stories on their way to the listener circling around it. */
 @Composable
 internal fun ServerHero(
   clock: () -> Float,
@@ -59,10 +57,11 @@ internal fun ServerHero(
       bookColors.forEachIndexed { index, color ->
         val angle = seconds * 0.35F + index * 2 * PI.toFloat() / bookColors.size
         val bob = sin(seconds * 1.3F + index) * radius * 0.04F
-        val position = Offset(
-          x = center.x + cos(angle) * (radius + bob),
-          y = center.y + sin(angle) * (radius + bob) * 0.55F,
-        )
+        val position =
+          Offset(
+            x = center.x + cos(angle) * (radius + bob),
+            y = center.y + sin(angle) * (radius + bob) * 0.55F,
+          )
         drawRoundRect(
           color = color,
           topLeft = position - Offset(radius * 0.09F, radius * 0.12F),
@@ -82,9 +81,7 @@ internal fun ServerHero(
   }
 }
 
-/**
- * A few books from the server, fanned out like a hand of cards.
- */
+/** A few books from the server, fanned out like a hand of cards. */
 @Composable
 internal fun CoversHero(
   covers: List<File>,
@@ -104,32 +101,33 @@ internal fun CoversHero(
     val coverSize = min(min(maxWidth * 0.36F, maxHeight * 0.7F), 180.dp)
     val middle = (shown.size - 1) / 2F
     // the middle cover lies on top
-    shown.indices.sortedByDescending { abs(it - middle) }.forEach { index ->
-      val cover = shown[index]
-      val offset = index - middle
-      Box(
-        Modifier
-          .size(coverSize)
-          .graphicsLayer {
-            val pop = pops[index].value
-            translationX = offset * coverSize.toPx() * 0.42F * pop
-            translationY = abs(offset) * coverSize.toPx() * 0.06F
-            rotationZ = offset * 7F * pop
-            scaleX = 0.6F + 0.4F * pop
-            scaleY = 0.6F + 0.4F * pop
-            alpha = pop.coerceIn(0F, 1F)
-          }
-          .aspectRatio(1F)
-          .shadow(8.dp, RoundedCornerShape(20.dp))
-          .clip(RoundedCornerShape(20.dp)),
-      ) {
-        AsyncImage(
-          model = cover,
-          contentDescription = null,
-          contentScale = ContentScale.Crop,
-          modifier = Modifier.fillMaxSize(),
-        )
+    shown.indices
+      .sortedByDescending { abs(it - middle) }
+      .forEach { index ->
+        val cover = shown[index]
+        val offset = index - middle
+        Box(
+          Modifier.size(coverSize)
+            .graphicsLayer {
+              val pop = pops[index].value
+              translationX = offset * coverSize.toPx() * 0.42F * pop
+              translationY = abs(offset) * coverSize.toPx() * 0.06F
+              rotationZ = offset * 7F * pop
+              scaleX = 0.6F + 0.4F * pop
+              scaleY = 0.6F + 0.4F * pop
+              alpha = pop.coerceIn(0F, 1F)
+            }
+            .aspectRatio(1F)
+            .shadow(8.dp, RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(20.dp)),
+        ) {
+          AsyncImage(
+            model = cover,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+          )
+        }
       }
-    }
   }
 }

@@ -29,7 +29,6 @@ import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
 import kotlinx.coroutines.launch
 import voice.core.data.Book
-import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
@@ -83,12 +82,21 @@ class LibrarySessionCallback(
     startIndex: Int,
     startPositionMs: Long,
   ): ListenableFuture<MediaItemsWithStartPosition> {
-    Logger.d("onSetMediaItems(mediaItems.size=${mediaItems.size}, startIndex=$startIndex, startPosition=$startPositionMs)")
+    Logger.d(
+      "onSetMediaItems(mediaItems.size=${mediaItems.size}, startIndex=$startIndex, startPosition=$startPositionMs)",
+    )
     val item = mediaItems.singleOrNull()
     return if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
       scope.future {
         onSetMediaItemsForSingleItem(item)
-          ?: super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs).await()
+          ?: super.onSetMediaItems(
+              mediaSession,
+              controller,
+              mediaItems,
+              startIndex,
+              startPositionMs,
+            )
+            .await()
       }
     } else {
       super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs)
@@ -115,11 +123,12 @@ class LibrarySessionCallback(
     browser: ControllerInfo,
     params: LibraryParams?,
   ): ListenableFuture<LibraryResult<MediaItem>> {
-    val mediaItem = if (params?.isRecent == true) {
-      mediaItemProvider.recent() ?: mediaItemProvider.root()
-    } else {
-      mediaItemProvider.root()
-    }
+    val mediaItem =
+      if (params?.isRecent == true) {
+        mediaItemProvider.recent() ?: mediaItemProvider.root()
+      } else {
+        mediaItemProvider.root()
+      }
     Logger.d("onGetLibraryRoot(isRecent=${params?.isRecent == true})")
     return Futures.immediateFuture(LibraryResult.ofItem(mediaItem, params))
   }
@@ -179,16 +188,18 @@ class LibrarySessionCallback(
     controller: ControllerInfo,
   ): ConnectionResult {
     if (controller.packageName != context.packageName) {
-      val controllerKind = when {
-        session.isAutoCompanionController(controller) -> "Android Auto"
-        session.isAutomotiveController(controller) -> "Android Automotive"
-        else -> "another app"
-      }
+      val controllerKind =
+        when {
+          session.isAutoCompanionController(controller) -> "Android Auto"
+          session.isAutomotiveController(controller) -> "Android Automotive"
+          else -> "another app"
+        }
       Logger.d("onConnect from $controllerKind")
     }
 
-    if (player.playbackState == Player.STATE_IDLE &&
-      controller.packageName == "com.google.android.projection.gearhead"
+    if (
+      player.playbackState == Player.STATE_IDLE &&
+        controller.packageName == "com.google.android.projection.gearhead"
     ) {
       Logger.d("Preparing current book so it shows up as recently played")
       scope.launch {
@@ -197,7 +208,8 @@ class LibrarySessionCallback(
     }
 
     val connectionResult = super.onConnect(session, controller)
-    // The service is exported, but the custom commands are only meant for the app's own PlayerController.
+    // The service is exported, but the custom commands are only meant for the app's own
+    // PlayerController.
     if (controller.packageName != context.packageName) {
       return connectionResult
     }
@@ -219,20 +231,22 @@ class LibrarySessionCallback(
     controller: ControllerInfo,
   ) {
     if (!session.isMediaNotificationController(controller)) return
-    // The notification controller's commands become the platform session's actions, which the lock screen reads.
+    // The notification controller's commands become the platform session's actions, which the lock
+    // screen reads.
     val connectionResult = super.onConnect(session, controller)
     val sessionCommands = withCustomCommand(connectionResult.availableSessionCommands)
     notificationCommandsJob?.cancel()
     notificationCommandsJob = scope.launch {
       lockScreenSliderStore.data.distinctUntilChanged().collect { lockScreenSlider ->
-        val playerCommands = if (lockScreenSlider) {
-          connectionResult.availablePlayerCommands
-        } else {
-          connectionResult.availablePlayerCommands
-            .buildUpon()
-            .remove(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM)
-            .build()
-        }
+        val playerCommands =
+          if (lockScreenSlider) {
+            connectionResult.availablePlayerCommands
+          } else {
+            connectionResult.availablePlayerCommands
+              .buildUpon()
+              .remove(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM)
+              .build()
+          }
         session.setAvailableCommands(controller, sessionCommands, playerCommands)
       }
     }
@@ -262,8 +276,9 @@ class LibrarySessionCallback(
     customCommand: SessionCommand,
     args: Bundle,
   ): ListenableFuture<SessionResult> {
-    val command = CustomCommand.parse(customCommand, args)
-      ?: return super.onCustomCommand(session, controller, customCommand, args)
+    val command =
+      CustomCommand.parse(customCommand, args)
+        ?: return super.onCustomCommand(session, controller, customCommand, args)
     when (command) {
       CustomCommand.ForceSeekToNext -> {
         player.forceSeekToNext()

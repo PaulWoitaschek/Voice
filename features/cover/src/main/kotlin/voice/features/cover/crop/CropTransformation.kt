@@ -17,12 +17,14 @@ internal class CropTransformation(private val crop: Rect) : Transformation {
   ): Bitmap {
     val left = (crop.left * input.width).roundToInt().coerceIn(0, input.width - 1)
     val top = (crop.top * input.height).roundToInt().coerceIn(0, input.height - 1)
-    val side = minOf(
-      (crop.width * input.width).roundToInt(),
-      (crop.height * input.height).roundToInt(),
-      input.width - left,
-      input.height - top,
-    ).coerceAtLeast(1)
+    val side =
+      minOf(
+          (crop.width * input.width).roundToInt(),
+          (crop.height * input.height).roundToInt(),
+          input.width - left,
+          input.height - top,
+        )
+        .coerceAtLeast(1)
     return Bitmap.createBitmap(input, left, top, side, side)
   }
 }

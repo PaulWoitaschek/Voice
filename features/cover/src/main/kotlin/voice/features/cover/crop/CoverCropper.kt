@@ -57,11 +57,11 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import coil.compose.AsyncImage
-import voice.core.ui.ShapedIcon
-import voice.core.ui.icons.VoiceIcons
 import kotlin.math.max
 import kotlin.math.min
 import voice.core.strings.R as StringsR
+import voice.core.ui.ShapedIcon
+import voice.core.ui.icons.VoiceIcons
 
 /** [onCropChange] gets the frame relative to the image, from 0 to 1 on both axes. */
 @Composable
@@ -78,14 +78,12 @@ internal fun CoverCropper(
   ) {
     val ratio = aspectRatio
     Box(
-      modifier = Modifier
-        .then(
+      modifier =
+        Modifier.then(
           if (ratio != null) {
             Modifier.aspectRatio(ratio)
           } else {
-            Modifier
-              .fillMaxWidth()
-              .height(240.dp)
+            Modifier.fillMaxWidth().height(240.dp)
           },
         ),
       contentAlignment = Alignment.Center,
@@ -93,12 +91,13 @@ internal fun CoverCropper(
       AsyncImage(
         model = cover,
         contentDescription = null,
-        // the box takes the image's aspect ratio, so nothing is distorted and the frame maps onto the image
+        // the box takes the image's aspect ratio, so nothing is distorted and the frame maps onto
+        // the image
         contentScale = ContentScale.FillBounds,
-        modifier = Modifier
-          .matchParentSize()
-          .clip(RoundedCornerShape(IMAGE_CORNER_RADIUS))
-          .background(MaterialTheme.colorScheme.surfaceContainerHighest),
+        modifier =
+          Modifier.matchParentSize()
+            .clip(RoundedCornerShape(IMAGE_CORNER_RADIUS))
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest),
         onSuccess = { state ->
           val drawable = state.result.drawable
           if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
@@ -153,79 +152,89 @@ private fun CropFrame(
   var bounds by remember { mutableStateOf(IntSize.Zero) }
   var crop by remember { mutableStateOf(Rect.Zero) }
   var active by remember { mutableStateOf(false) }
-  val activeProgress by animateFloatAsState(
-    targetValue = if (active) 1F else 0F,
-    animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
-    label = "cropActive",
-  )
+  val activeProgress by
+    animateFloatAsState(
+      targetValue = if (active) 1F else 0F,
+      animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
+      label = "cropActive",
+    )
   Box(
-    modifier = modifier
-      .onSizeChanged { size ->
-        if (size != bounds) {
-          bounds = size
-          val side = min(size.width, size.height).toFloat()
-          crop = Rect(
-            offset = Offset((size.width - side) / 2F, (size.height - side) / 2F),
-            size = Size(side, side),
-          )
-          currentOnCropChange(crop.relativeTo(size))
-        }
-      }
-      .pointerInput(Unit) {
-        val grabRadius = 32.dp.toPx()
-        awaitEachGesture {
-          val down = awaitFirstDown(requireUnconsumed = false)
-          val area = size.toSize()
-          val minSide = min(area.width, area.height) / 4F
-          var corner = Corner.entries
-            .map { it to (crop.point(it) - down.position).getDistance() }
-            .filter { (_, distance) -> distance <= grabRadius }
-            .minByOrNull { (_, distance) -> distance }
-            ?.first
-          var cornerPosition = corner?.let(crop::point) ?: Offset.Zero
-          active = true
-          do {
-            val event = awaitPointerEvent()
-            val pressed = event.changes.filter { it.pressed }
-            crop = when {
-              pressed.size > 1 -> {
-                corner = null
-                crop.zoomed(event.calculateZoom(), minSide, area).moved(event.calculatePan(), area)
-              }
-              corner != null -> {
-                cornerPosition += pressed.firstOrNull()?.positionChange() ?: Offset.Zero
-                crop.resized(corner, cornerPosition, minSide, area)
-              }
-              else -> crop.moved(event.calculatePan(), area)
-            }
-            event.changes.forEach { if (it.positionChanged()) it.consume() }
-          } while (event.changes.any { it.pressed })
-          active = false
-          currentOnCropChange(crop.relativeTo(size))
-        }
-      }
-      .drawBehind {
-        if (crop.isEmpty) return@drawBehind
-        val image = Path().apply {
-          addRoundRect(RoundRect(size.toRect(), CornerRadius(IMAGE_CORNER_RADIUS.toPx())))
-        }
-        val frame = Path().apply {
-          addRoundRect(RoundRect(crop, CornerRadius(crop.width * FRAME_CORNER_RADIUS)))
-        }
-        // the frame itself is drawn unclipped, so it stays whole when it reaches the edges of the image
-        clipPath(image) {
-          clipPath(frame, ClipOp.Difference) {
-            drawRect(Color.Black.copy(alpha = 0.55F))
-          }
-          if (activeProgress > 0F) {
-            clipPath(frame) {
-              drawThirds(crop, Color.White.copy(alpha = 0.6F * activeProgress))
-            }
+    modifier =
+      modifier
+        .onSizeChanged { size ->
+          if (size != bounds) {
+            bounds = size
+            val side = min(size.width, size.height).toFloat()
+            crop =
+              Rect(
+                offset = Offset((size.width - side) / 2F, (size.height - side) / 2F),
+                size = Size(side, side),
+              )
+            currentOnCropChange(crop.relativeTo(size))
           }
         }
-        drawPath(frame, Color.White, style = Stroke(width = 1.5.dp.toPx()))
-        drawCornerBrackets(crop, strokeWidth = (3F + 2F * activeProgress).dp.toPx())
-      },
+        .pointerInput(Unit) {
+          val grabRadius = 32.dp.toPx()
+          awaitEachGesture {
+            val down = awaitFirstDown(requireUnconsumed = false)
+            val area = size.toSize()
+            val minSide = min(area.width, area.height) / 4F
+            var corner =
+              Corner.entries
+                .map { it to (crop.point(it) - down.position).getDistance() }
+                .filter { (_, distance) -> distance <= grabRadius }
+                .minByOrNull { (_, distance) -> distance }
+                ?.first
+            var cornerPosition = corner?.let(crop::point) ?: Offset.Zero
+            active = true
+            do {
+              val event = awaitPointerEvent()
+              val pressed = event.changes.filter { it.pressed }
+              crop =
+                when {
+                  pressed.size > 1 -> {
+                    corner = null
+                    crop
+                      .zoomed(event.calculateZoom(), minSide, area)
+                      .moved(event.calculatePan(), area)
+                  }
+                  corner != null -> {
+                    cornerPosition += pressed.firstOrNull()?.positionChange() ?: Offset.Zero
+                    crop.resized(corner, cornerPosition, minSide, area)
+                  }
+                  else -> crop.moved(event.calculatePan(), area)
+                }
+              event.changes.forEach { if (it.positionChanged()) it.consume() }
+            } while (event.changes.any { it.pressed })
+            active = false
+            currentOnCropChange(crop.relativeTo(size))
+          }
+        }
+        .drawBehind {
+          if (crop.isEmpty) return@drawBehind
+          val image =
+            Path().apply {
+              addRoundRect(RoundRect(size.toRect(), CornerRadius(IMAGE_CORNER_RADIUS.toPx())))
+            }
+          val frame =
+            Path().apply {
+              addRoundRect(RoundRect(crop, CornerRadius(crop.width * FRAME_CORNER_RADIUS)))
+            }
+          // the frame itself is drawn unclipped, so it stays whole when it reaches the edges of the
+          // image
+          clipPath(image) {
+            clipPath(frame, ClipOp.Difference) {
+              drawRect(Color.Black.copy(alpha = 0.55F))
+            }
+            if (activeProgress > 0F) {
+              clipPath(frame) {
+                drawThirds(crop, Color.White.copy(alpha = 0.6F * activeProgress))
+              }
+            }
+          }
+          drawPath(frame, Color.White, style = Stroke(width = 1.5.dp.toPx()))
+          drawCornerBrackets(crop, strokeWidth = (3F + 2F * activeProgress).dp.toPx())
+        },
   )
 }
 
@@ -242,28 +251,32 @@ private enum class Corner(
   BottomLeft(-1, 1),
 }
 
-private fun Rect.point(corner: Corner): Offset = Offset(
-  x = if (corner.horizontal < 0) left else right,
-  y = if (corner.vertical < 0) top else bottom,
-)
+private fun Rect.point(corner: Corner): Offset =
+  Offset(
+    x = if (corner.horizontal < 0) left else right,
+    y = if (corner.vertical < 0) top else bottom,
+  )
 
-private fun Rect.relativeTo(size: IntSize): Rect = Rect(
-  left = left / size.width,
-  top = top / size.height,
-  right = right / size.width,
-  bottom = bottom / size.height,
-)
+private fun Rect.relativeTo(size: IntSize): Rect =
+  Rect(
+    left = left / size.width,
+    top = top / size.height,
+    right = right / size.width,
+    bottom = bottom / size.height,
+  )
 
 private fun Rect.moved(
   by: Offset,
   area: Size,
-): Rect = Rect(
-  offset = Offset(
-    x = (left + by.x).coerceIn(0F, max(0F, area.width - width)),
-    y = (top + by.y).coerceIn(0F, max(0F, area.height - height)),
-  ),
-  size = size,
-)
+): Rect =
+  Rect(
+    offset =
+      Offset(
+        x = (left + by.x).coerceIn(0F, max(0F, area.width - width)),
+        y = (top + by.y).coerceIn(0F, max(0F, area.height - height)),
+      ),
+    size = size,
+  )
 
 private fun Rect.zoomed(
   zoom: Float,
@@ -280,20 +293,30 @@ private fun Rect.resized(
   minSide: Float,
   area: Size,
 ): Rect {
-  val anchor = point(Corner.entries.first { it.horizontal == -corner.horizontal && it.vertical == -corner.vertical })
-  val maxSide = min(
-    if (corner.horizontal < 0) anchor.x else area.width - anchor.x,
-    if (corner.vertical < 0) anchor.y else area.height - anchor.y,
-  )
-  val side = max(
-    (position.x - anchor.x) * corner.horizontal,
-    (position.y - anchor.y) * corner.vertical,
-  ).coerceAtMost(maxSide).coerceAtLeast(min(minSide, maxSide))
+  val anchor =
+    point(
+      Corner.entries.first {
+        it.horizontal == -corner.horizontal && it.vertical == -corner.vertical
+      },
+    )
+  val maxSide =
+    min(
+      if (corner.horizontal < 0) anchor.x else area.width - anchor.x,
+      if (corner.vertical < 0) anchor.y else area.height - anchor.y,
+    )
+  val side =
+    max(
+        (position.x - anchor.x) * corner.horizontal,
+        (position.y - anchor.y) * corner.vertical,
+      )
+      .coerceAtMost(maxSide)
+      .coerceAtLeast(min(minSide, maxSide))
   return Rect(
-    offset = Offset(
-      x = if (corner.horizontal < 0) anchor.x - side else anchor.x,
-      y = if (corner.vertical < 0) anchor.y - side else anchor.y,
-    ),
+    offset =
+      Offset(
+        x = if (corner.horizontal < 0) anchor.x - side else anchor.x,
+        y = if (corner.vertical < 0) anchor.y - side else anchor.y,
+      ),
     size = Size(side, side),
   )
 }
@@ -317,17 +340,18 @@ private fun DrawScope.drawCornerBrackets(
 ) {
   val radius = crop.width * FRAME_CORNER_RADIUS
   val length = min(16.dp.toPx(), crop.width * 0.15F)
-  val bracket = Path().apply {
-    moveTo(crop.left, crop.top + radius + length)
-    lineTo(crop.left, crop.top + radius)
-    arcTo(
-      rect = Rect(crop.left, crop.top, crop.left + 2 * radius, crop.top + 2 * radius),
-      startAngleDegrees = 180F,
-      sweepAngleDegrees = 90F,
-      forceMoveTo = false,
-    )
-    lineTo(crop.left + radius + length, crop.top)
-  }
+  val bracket =
+    Path().apply {
+      moveTo(crop.left, crop.top + radius + length)
+      lineTo(crop.left, crop.top + radius)
+      arcTo(
+        rect = Rect(crop.left, crop.top, crop.left + 2 * radius, crop.top + 2 * radius),
+        startAngleDegrees = 180F,
+        sweepAngleDegrees = 90F,
+        forceMoveTo = false,
+      )
+      lineTo(crop.left + radius + length, crop.top)
+    }
   val stroke = Stroke(width = strokeWidth, cap = StrokeCap.Round)
   // the frame is square, so turning the top left bracket around the center gives the others
   for (quarter in 0..3) {

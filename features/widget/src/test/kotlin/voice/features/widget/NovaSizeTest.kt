@@ -6,10 +6,10 @@ import android.os.Bundle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class NovaSizeTest {
@@ -33,13 +33,14 @@ class NovaSizeTest {
     assertNull(novaSize(options(nova = false), Configuration.ORIENTATION_PORTRAIT))
   }
 
-  private fun options(nova: Boolean) = Bundle().apply {
-    putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 313)
-    putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, 538)
-    putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 118)
-    putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 236)
-    if (nova) {
-      putInt("com.teslacoilsw.launcher.appWidgetCornerRadius", 16)
+  private fun options(nova: Boolean) =
+    Bundle().apply {
+      putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 313)
+      putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, 538)
+      putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 118)
+      putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 236)
+      if (nova) {
+        putInt("com.teslacoilsw.launcher.appWidgetCornerRadius", 16)
+      }
     }
-  }
 }

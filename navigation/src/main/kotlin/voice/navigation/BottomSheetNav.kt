@@ -7,7 +7,9 @@ import androidx.navigation3.runtime.metadata
 object BottomSheetNav {
   object BottomSheetKey : NavMetadataKey<ModalBottomSheetProperties>
 
-  fun bottomSheet(modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties()) = metadata {
+  fun bottomSheet(
+    modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
+  ) = metadata {
     put(BottomSheetKey, modalBottomSheetProperties)
   }
 }

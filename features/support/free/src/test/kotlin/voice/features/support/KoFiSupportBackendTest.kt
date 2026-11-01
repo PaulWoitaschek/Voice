@@ -6,11 +6,11 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import voice.navigation.Destination
 import voice.navigation.Navigator
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class KoFiSupportBackendTest {
 
@@ -25,9 +25,10 @@ class KoFiSupportBackendTest {
 
   @Test
   fun `openKoFi opens Ko-fi`() = runTest {
-    val navigator = mockk<Navigator> {
-      every { goTo(any()) } just Runs
-    }
+    val navigator =
+      mockk<Navigator> {
+        every { goTo(any()) } just Runs
+      }
     val backend = createBackend(navigator = navigator)
 
     backend.openKoFi()

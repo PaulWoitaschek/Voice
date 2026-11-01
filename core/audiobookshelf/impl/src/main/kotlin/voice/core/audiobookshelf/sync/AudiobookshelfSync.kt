@@ -9,6 +9,9 @@ import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import java.io.IOException
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,19 +41,17 @@ import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.playstate.PlayStateManager
-import java.io.IOException
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 private val MIN_SYNC_INTERVAL = 1.minutes
 
 /**
- * Runs the syncs with the server: the whole library when the app starts, when the library opens and when the
- * device gets back online, and the position of a book shortly after it changed here.
+ * Runs the syncs with the server: the whole library when the app starts, when the library opens and
+ * when the device gets back online, and the position of a book shortly after it changed here.
  */
 @SingleIn(AppScope::class)
 @Inject
-public class AudiobookshelfSync internal constructor(
+public class AudiobookshelfSync
+internal constructor(
   private val accountStore: AccountStore,
   private val http: AudiobookshelfHttp,
   private val librarySync: LibrarySync,
@@ -66,18 +67,20 @@ public class AudiobookshelfSync internal constructor(
 ) {
 
   // a sync must never take the app down, whatever the server answers
-  private val scope = CoroutineScope(
-    SupervisorJob() + Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-      Logger.w(throwable, "Syncing with the server failed")
-    },
-  )
+  private val scope =
+    CoroutineScope(
+      SupervisorJob() +
+        Dispatchers.IO +
+        CoroutineExceptionHandler { _, throwable ->
+          Logger.w(throwable, "Syncing with the server failed")
+        },
+    )
   private val mutex = Mutex()
   private var syncJob: Job? = null
   private var started = false
   private var lastSyncAt: Long? = null
 
-  @Volatile
-  private var resyncRequested = false
+  @Volatile private var resyncRequested = false
   private var validatedNetwork: Network? = null
 
   public val syncing: StateFlow<Boolean>
@@ -97,8 +100,8 @@ public class AudiobookshelfSync internal constructor(
   }
 
   /**
-   * Syncs the library with the server, unless a sync is already running. Without [force], a sync that finished
-   * less than a minute ago is enough.
+   * Syncs the library with the server, unless a sync is already running. Without [force], a sync
+   * that finished less than a minute ago is enough.
    */
   // the network callback calls this from another thread
   @Synchronized
@@ -109,7 +112,12 @@ public class AudiobookshelfSync internal constructor(
       return
     }
     val last = lastSyncAt
-    if (!force && last != null && SystemClock.elapsedRealtime() - last < MIN_SYNC_INTERVAL.inWholeMilliseconds) return
+    if (
+      !force &&
+        last != null &&
+        SystemClock.elapsedRealtime() - last < MIN_SYNC_INTERVAL.inWholeMilliseconds
+    )
+      return
     syncJob = scope.launch {
       mutex.withLock {
         syncing.value = true
@@ -131,10 +139,12 @@ public class AudiobookshelfSync internal constructor(
     syncJob?.cancelAndJoin()
   }
 
-  // the books of a server stay hidden while signed out, for example after a restore from a backup without the login
+  // the books of a server stay hidden while signed out, for example after a restore from a backup
+  // without the login
   private suspend fun hideBooksWithoutAccount() {
     if (accountStore.data.first() != null) return
-    contentRepo.all()
+    contentRepo
+      .all()
       .filter { it.isActive && it.id.isRemote }
       .forEach { contentRepo.put(it.copy(isActive = false)) }
   }
@@ -142,8 +152,7 @@ public class AudiobookshelfSync internal constructor(
   private suspend fun syncNow(account: Account) {
     try {
       val api = http.authenticatedApi(account.serverUrl)
-      @Suppress("RETURN_VALUE_NOT_USED")
-      api.me()
+      @Suppress("RETURN_VALUE_NOT_USED") api.me()
       reachability.value = ServerReachability.Reachable
       syncLibrary(account)
       // the library sync can take a while, the progress fetched after it is as fresh as it gets
@@ -162,12 +171,14 @@ public class AudiobookshelfSync internal constructor(
     }
   }
 
-  // a book that moved since Voice started, like after a seek. What moved before goes through the sync, which first
+  // a book that moved since Voice started, like after a seek. What moved before goes through the
+  // sync, which first
   // checks whether another device listened since.
   private fun pushLocalChanges() {
     scope.launch {
       var previous: Map<BookId, Long>? = null
-      bookRepository.flow()
+      bookRepository
+        .flow()
         .map { books ->
           books.filter { it.id.isRemote }.associate { it.id to it.position }
         }
@@ -181,9 +192,12 @@ public class AudiobookshelfSync internal constructor(
             return@collect
           }
           // the listening session sends the book that plays
-          val playing = currentBookStore.data.first()
-            ?.takeIf { playStateManager.playState == PlayStateManager.PlayState.Playing }
-          val moved = positions.keys.filter { it in before && before[it] != positions[it] && it != playing }
+          val playing =
+            currentBookStore.data.first()?.takeIf {
+              playStateManager.playState == PlayStateManager.PlayState.Playing
+            }
+          val moved =
+            positions.keys.filter { it in before && before[it] != positions[it] && it != playing }
           val pushed = mutableSetOf<BookId>()
           val account = accountStore.data.first()?.takeUnless { it.needsLogin }
           if (account != null) {
@@ -221,7 +235,8 @@ public class AudiobookshelfSync internal constructor(
           network: Network,
           networkCapabilities: NetworkCapabilities,
         ) {
-          val validated = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+          val validated =
+            networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
           if (validated && network != validatedNetwork) {
             validatedNetwork = network
             sync(force = true)

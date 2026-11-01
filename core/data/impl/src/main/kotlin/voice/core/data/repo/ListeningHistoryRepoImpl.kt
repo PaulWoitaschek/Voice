@@ -32,7 +32,12 @@ internal constructor(
     if (from.isEmpty() || chapters.isEmpty()) return
     appDb.transaction {
       chapters.forEach { (oldChapterId, newChapterId) ->
-        dao.moveChapter(from = from, to = to, oldChapterId = oldChapterId, newChapterId = newChapterId)
+        dao.moveChapter(
+          from = from,
+          to = to,
+          oldChapterId = oldChapterId,
+          newChapterId = newChapterId,
+        )
       }
       chapters.forEach { (oldChapterId, newChapterId) ->
         if (oldChapterId != newChapterId) {
@@ -44,9 +49,7 @@ internal constructor(
   }
 
   internal companion object {
-    /**
-     * Enough for a few dozen listening sessions, while the table stays small.
-     */
+    /** Enough for a few dozen listening sessions, while the table stays small. */
     const val MAX_EVENTS_PER_BOOK = 250
   }
 }

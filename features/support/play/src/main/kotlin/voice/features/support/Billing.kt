@@ -45,6 +45,8 @@ data class BillingPurchase(
 
 sealed interface PurchaseUpdate {
   data class Purchases(val purchases: List<BillingPurchase>) : PurchaseUpdate
+
   data object Canceled : PurchaseUpdate
+
   data object Failed : PurchaseUpdate
 }

@@ -27,7 +27,8 @@ private fun moduleDependencyViolation(
     to == from -> null
     toFeature != null && fromFeature == null -> "Only :app depends on features."
     toFeature != null && toFeature != fromFeature -> "Features don't depend on other features."
-    !isTest && to.isImplementation() -> "Depend on the :api module instead, :app picks the implementation."
+    !isTest && to.isImplementation() ->
+      "Depend on the :api module instead, :app picks the implementation."
     else -> null
   }
 }

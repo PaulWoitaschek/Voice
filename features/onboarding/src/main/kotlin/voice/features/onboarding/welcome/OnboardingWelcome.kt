@@ -16,18 +16,18 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import voice.core.common.rootGraphAs
+import voice.core.strings.R as StringsR
 import voice.core.ui.OnboardingButton
 import voice.core.ui.OnboardingScaffold
 import voice.core.ui.OnboardingStep
 import voice.core.ui.VoiceTheme
-import voice.core.strings.R as StringsR
 
 @Composable
 fun OnboardingWelcome(modifier: Modifier = Modifier) {
-  val viewModel = retain<OnboardingWelcomeViewModel> {
-    rootGraphAs<OnboardingWelcomeProvider>()
-      .onboardingWelcomeViewModel
-  }
+  val viewModel =
+    retain<OnboardingWelcomeViewModel> {
+      rootGraphAs<OnboardingWelcomeProvider>().onboardingWelcomeViewModel
+    }
   OnboardingWelcome(
     modifier = modifier,
     viewState = viewModel.viewState(),
@@ -90,13 +90,15 @@ private fun OnboardingWelcome(
   )
 }
 
-private class OnboardingWelcomePreviewParameterProvider : PreviewParameterProvider<OnboardingWelcomeViewState> {
+private class OnboardingWelcomePreviewParameterProvider :
+  PreviewParameterProvider<OnboardingWelcomeViewState> {
 
   override val values: Sequence<OnboardingWelcomeViewState>
-    get() = sequenceOf(
-      OnboardingWelcomeViewState(askForAnalytics = true),
-      OnboardingWelcomeViewState(askForAnalytics = false),
-    )
+    get() =
+      sequenceOf(
+        OnboardingWelcomeViewState(askForAnalytics = true),
+        OnboardingWelcomeViewState(askForAnalytics = false),
+      )
 }
 
 @Composable

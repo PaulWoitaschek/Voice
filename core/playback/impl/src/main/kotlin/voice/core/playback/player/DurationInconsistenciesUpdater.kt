@@ -23,8 +23,7 @@ class DurationInconsistenciesUpdater(private val chapterRepo: ChapterRepo) : Pla
 
   override fun onPlaybackStateChanged(playbackState: Int) {
     if (playbackState != Player.STATE_READY) return
-    val mediaId = player.currentMediaItem?.mediaId?.toMediaIdOrNull()
-      ?: return
+    val mediaId = player.currentMediaItem?.mediaId?.toMediaIdOrNull() ?: return
     if (mediaId is MediaId.Chapter) {
       val playerDuration = player.duration
       scope.launch {

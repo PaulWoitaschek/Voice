@@ -34,7 +34,8 @@ private const val BOOKMARK_TIME = "bookmarkTime"
 private const val BOOKMARK_PATH = "bookmarkPath"
 private const val BOOKMARK_TITLE = "bookmarkTitle"
 
-private const val CREATE_TABLE_BOOK = """
+private const val CREATE_TABLE_BOOK =
+  """
     CREATE TABLE $TABLE_BOOK (
       $BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT,
       $BOOK_NAME TEXT NOT NULL, $BOOK_AUTHOR TEXT,
@@ -48,7 +49,8 @@ private const val CREATE_TABLE_BOOK = """
     )
   """
 
-private const val CREATE_TABLE_CHAPTERS = """
+private const val CREATE_TABLE_CHAPTERS =
+  """
     CREATE TABLE $TABLE_CHAPTERS (
       $CHAPTER_DURATION INTEGER NOT NULL,
       $CHAPTER_NAME TEXT NOT NULL,
@@ -58,7 +60,8 @@ private const val CREATE_TABLE_CHAPTERS = """
     )
   """
 
-private const val CREATE_TABLE_BOOKMARKS = """
+private const val CREATE_TABLE_BOOKMARKS =
+  """
     CREATE TABLE $TABLE_BOOKMARKS (
       $BOOKMARK_PATH TEXT NOT NULL,
       $BOOKMARK_TITLE TEXT NOT NULL,
@@ -76,10 +79,11 @@ private const val CREATE_TABLE_BOOKMARKS = """
 public class Migration29to30 : IncrementalMigration(29) {
 
   override fun migrate(db: SupportSQLiteDatabase) {
-    val cursor = db.query(
-      "TABLE_BOOK",
-      arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
-    )
+    val cursor =
+      db.query(
+        "TABLE_BOOK",
+        arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
+      )
     val bookContents = ArrayList<String>(cursor.count)
     val activeMapping = ArrayList<Boolean>(cursor.count)
     cursor.moveToNextLoop {

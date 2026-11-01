@@ -15,7 +15,6 @@ import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.documentfile.nameFromPath
 import voice.core.documentfile.nameWithoutExtension
-import voice.core.featureflag.FeatureFlag
 import voice.core.kioskmode.KioskModeFeatureFlag
 import voice.core.scanner.MediaScanTrigger
 import voice.navigation.Destination
@@ -42,7 +41,8 @@ class FolderPickerViewModel(
 
     val folders: List<FolderPickerViewState.Item>? by remember {
       items()
-    }.collectAsState(initial = null)
+    }
+      .collectAsState(initial = null)
     return FolderPickerViewState(
       items = folders.orEmpty(),
       // keeps the empty state from flashing up while the folders are read
@@ -51,7 +51,9 @@ class FolderPickerViewModel(
   }
 
   private fun items(): Flow<List<FolderPickerViewState.Item>> {
-    return combine(audiobookFolders.all(), audiobookFolders.withoutAccess()) { folders, foldersWithoutAccess ->
+    return combine(audiobookFolders.all(), audiobookFolders.withoutAccess()) {
+      folders,
+      foldersWithoutAccess ->
       withContext(Dispatchers.IO) {
         val withAccess = folders.flatMap { (folderType, folders) ->
           folders.map { (documentFile, uri) ->
@@ -64,18 +66,23 @@ class FolderPickerViewModel(
         }
         // right after access is allowed again, the two flows can disagree for a moment
         val uris = withAccess.map { it.id }.toSet()
-        val withoutAccess = foldersWithoutAccess.flatMap { (folderType, uris) ->
-          uris.map { uri ->
-            FolderPickerViewState.Item(
-              // the folder can't be asked for its name without access
-              name = uri.nameFromPath(),
-              id = uri,
-              folderType = folderType,
-              hasAccess = false,
-            )
-          }
-        }.filter { it.id !in uris }
-        (withAccess + withoutAccess).sortedWith(compareBy<FolderPickerViewState.Item> { it.hasAccess }.then(reverseOrder()))
+        val withoutAccess =
+          foldersWithoutAccess
+            .flatMap { (folderType, uris) ->
+              uris.map { uri ->
+                FolderPickerViewState.Item(
+                  // the folder can't be asked for its name without access
+                  name = uri.nameFromPath(),
+                  id = uri,
+                  folderType = folderType,
+                  hasAccess = false,
+                )
+              }
+            }
+            .filter { it.id !in uris }
+        (withAccess + withoutAccess).sortedWith(
+          compareBy<FolderPickerViewState.Item> { it.hasAccess }.then(reverseOrder()),
+        )
       }
     }
   }
@@ -128,22 +135,23 @@ class FolderPickerViewModel(
 
   private companion object {
     // made up folders, each with its own uri, as the uri tells them apart
-    val kioskModeItems = listOf(
-      FolderPickerViewState.Item(
-        name = "Audiobooks",
-        id = "kiosk:audiobooks".toUri(),
-        folderType = FolderType.Root,
-      ),
-      FolderPickerViewState.Item(
-        name = "Sci-Fi",
-        id = "kiosk:sci-fi".toUri(),
-        folderType = FolderType.SingleFolder,
-      ),
-      FolderPickerViewState.Item(
-        name = "Non-Fiction",
-        id = "kiosk:non-fiction".toUri(),
-        folderType = FolderType.SingleFolder,
-      ),
-    )
+    val kioskModeItems =
+      listOf(
+        FolderPickerViewState.Item(
+          name = "Audiobooks",
+          id = "kiosk:audiobooks".toUri(),
+          folderType = FolderType.Root,
+        ),
+        FolderPickerViewState.Item(
+          name = "Sci-Fi",
+          id = "kiosk:sci-fi".toUri(),
+          folderType = FolderType.SingleFolder,
+        ),
+        FolderPickerViewState.Item(
+          name = "Non-Fiction",
+          id = "kiosk:non-fiction".toUri(),
+          folderType = FolderType.SingleFolder,
+        ),
+      )
   }
 }

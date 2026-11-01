@@ -13,11 +13,12 @@ class FakeSleepTimer : SleepTimer {
   private val stateFlow = MutableStateFlow<SleepTimerState>(SleepTimerState.Disabled)
 
   override fun enable(mode: SleepTimerMode) {
-    stateFlow.value = when (mode) {
-      is SleepTimerMode.TimedWithDuration -> SleepTimerState.Enabled.WithDuration(mode.duration)
-      SleepTimerMode.TimedWithDefault -> error("TimedWithDefault is not used in these tests")
-      SleepTimerMode.EndOfChapter -> SleepTimerState.Enabled.WithEndOfChapter
-    }
+    stateFlow.value =
+      when (mode) {
+        is SleepTimerMode.TimedWithDuration -> SleepTimerState.Enabled.WithDuration(mode.duration)
+        SleepTimerMode.TimedWithDefault -> error("TimedWithDefault is not used in these tests")
+        SleepTimerMode.EndOfChapter -> SleepTimerState.Enabled.WithEndOfChapter
+      }
   }
 
   override fun disable() {

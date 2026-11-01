@@ -1,10 +1,6 @@
 package voice.features.widget
 
 import android.graphics.Bitmap
-import voice.core.data.Book
-import voice.core.data.BookId
-import voice.core.sleeptimer.SleepTimerState
-import voice.core.ui.ThemeColorScheme
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.math.ceil
@@ -14,6 +10,10 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
+import voice.core.data.Book
+import voice.core.data.BookId
+import voice.core.sleeptimer.SleepTimerState
+import voice.core.ui.ThemeColorScheme
 
 internal data class WidgetTheme(
   val seed: Int?,
@@ -115,8 +115,10 @@ internal fun nowPlayingBook(
   now: Instant,
 ): NowPlayingBook {
   val chapterCount = book.chapters.sumOf { it.chapterMarks.count() }
-  val chapterNumber = book.chapters.take(book.content.currentChapterIndex).sumOf { it.chapterMarks.count() } +
-    book.currentChapter.chapterMarks.indexOf(book.currentMark) + 1
+  val chapterNumber =
+    book.chapters.take(book.content.currentChapterIndex).sumOf { it.chapterMarks.count() } +
+      book.currentChapter.chapterMarks.indexOf(book.currentMark) +
+      1
   val speed = book.content.playbackSpeed
   val position = book.position / MINUTE_MS * MINUTE_MS
   return NowPlayingBook(
@@ -126,7 +128,9 @@ internal fun nowPlayingBook(
     chapterNumber = chapterNumber.coerceAtLeast(1),
     chapterCount = chapterCount,
     progress = progress(position, book.duration),
-    remaining = ((book.duration - position).coerceAtLeast(0).milliseconds / speed.atSpeed()).roundUpToMinutes(),
+    remaining =
+      ((book.duration - position).coerceAtLeast(0).milliseconds / speed.atSpeed())
+        .roundUpToMinutes(),
     duration = book.duration.milliseconds,
     speed = speed,
     playing = playing,
@@ -143,17 +147,23 @@ internal fun sleepTimerEnd(
 ): SleepTimerEnd? {
   return when (state) {
     SleepTimerState.Disabled -> null
-    is SleepTimerState.Enabled.WithDuration -> if (playing) {
-      SleepTimerEnd.At((now + state.leftDuration.toJavaDuration()).roundToMinute())
-    } else {
-      SleepTimerEnd.After(state.leftDuration.roundUpToMinutes())
-    }
-    SleepTimerState.Enabled.WithEndOfChapter -> if (playing && book != null) {
-      val leftInChapter = (book.currentMark.endMs - book.content.positionInChapter).coerceAtLeast(0).milliseconds
-      SleepTimerEnd.At((now + (leftInChapter / book.content.playbackSpeed.atSpeed()).toJavaDuration()).roundToMinute())
-    } else {
-      SleepTimerEnd.EndOfChapter
-    }
+    is SleepTimerState.Enabled.WithDuration ->
+      if (playing) {
+        SleepTimerEnd.At((now + state.leftDuration.toJavaDuration()).roundToMinute())
+      } else {
+        SleepTimerEnd.After(state.leftDuration.roundUpToMinutes())
+      }
+    SleepTimerState.Enabled.WithEndOfChapter ->
+      if (playing && book != null) {
+        val leftInChapter =
+          (book.currentMark.endMs - book.content.positionInChapter).coerceAtLeast(0).milliseconds
+        SleepTimerEnd.At(
+          (now + (leftInChapter / book.content.playbackSpeed.atSpeed()).toJavaDuration())
+            .roundToMinute(),
+        )
+      } else {
+        SleepTimerEnd.EndOfChapter
+      }
   }
 }
 
@@ -165,7 +175,10 @@ internal fun shelfBooks(
 ): List<ShelfBook> {
   return books
     .filter { !it.custom.hidden && !it.finished() && (it.position > 0 || it.id == currentBookId) }
-    .sortedWith(compareByDescending<Book> { it.id == currentBookId }.thenByDescending { it.content.lastPlayedAt })
+    .sortedWith(
+      compareByDescending<Book> { it.id == currentBookId }
+        .thenByDescending { it.content.lastPlayedAt },
+    )
     .take(SHELF_MAX_BOOKS)
     .map { book ->
       ShelfBook(
@@ -190,7 +203,8 @@ private fun progress(
 }
 
 // the same rule the library uses to show a book as completed
-private fun Book.finished(): Boolean = position > 0 && position >= duration - 5.seconds.inWholeMilliseconds
+private fun Book.finished(): Boolean =
+  position > 0 && position >= duration - 5.seconds.inWholeMilliseconds
 
 private fun Float.atSpeed(): Double = coerceAtLeast(0.1F).toDouble()
 

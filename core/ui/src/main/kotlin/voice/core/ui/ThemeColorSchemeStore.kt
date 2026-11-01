@@ -7,10 +7,13 @@ import dev.zacsweers.metro.SingleIn
 import voice.core.datastore.VoiceDataStoreFactory
 
 @SingleIn(AppScope::class)
-class ThemeColorSchemeStore(store: DataStore<ThemeColorScheme>) : DataStore<ThemeColorScheme> by store {
+class ThemeColorSchemeStore(store: DataStore<ThemeColorScheme>) :
+  DataStore<ThemeColorScheme> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.create(
       serializer = ThemeColorScheme.serializer(),
       fileName = "themeColorScheme",

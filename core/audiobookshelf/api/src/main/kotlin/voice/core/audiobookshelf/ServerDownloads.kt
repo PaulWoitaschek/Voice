@@ -19,7 +19,10 @@ interface ServerDownloads {
 
   suspend fun setDownloadOverMobileData(enabled: Boolean)
 
-  /** Downloads the files of a server book that aren't on the device yet, so it plays without a connection. */
+  /**
+   * Downloads the files of a server book that aren't on the device yet, so it plays without a
+   * connection.
+   */
   suspend fun download(bookId: BookId)
 
   /** Stops the download of a server book, or removes it. The book streams again. */

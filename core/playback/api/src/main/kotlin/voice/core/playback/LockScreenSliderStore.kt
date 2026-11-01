@@ -10,7 +10,9 @@ import voice.core.datastore.VoiceDataStoreFactory
 class LockScreenSliderStore(store: DataStore<Boolean>) : DataStore<Boolean> by store {
 
   @Inject
-  constructor(factory: VoiceDataStoreFactory) : this(
+  constructor(
+    factory: VoiceDataStoreFactory,
+  ) : this(
     factory.boolean("lockScreenSlider", defaultValue = true),
   )
 }

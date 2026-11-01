@@ -15,11 +15,11 @@ import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
 import androidx.glance.color.ColorProviders
 import androidx.glance.color.DynamicThemeColorProviders
+import androidx.glance.material3.ColorProviders as Material3ColorProviders
 import androidx.glance.unit.ColorProvider
 import voice.core.ui.ThemeColorScheme
 import voice.core.ui.coverColorScheme
 import voice.core.ui.themeColorScheme
-import androidx.glance.material3.ColorProviders as Material3ColorProviders
 
 @Composable
 internal fun WidgetColors(
@@ -38,15 +38,18 @@ private fun widgetColors(
   night: Boolean,
 ): ColorProviders {
   val seed = theme.seed?.let(::Color)
-  fun scheme(dark: Boolean): ColorScheme = if (seed != null) {
-    coverColorScheme(seed, dark)
-  } else {
-    themeColorScheme(context, theme.themeColorScheme, dark)
-  }
+  fun scheme(dark: Boolean): ColorScheme =
+    if (seed != null) {
+      coverColorScheme(seed, dark)
+    } else {
+      themeColorScheme(context, theme.themeColorScheme, dark)
+    }
   return when {
     night -> Material3ColorProviders(scheme(dark = true))
     // these follow wallpaper changes without the widget having to update
-    seed == null && theme.themeColorScheme == ThemeColorScheme.Dynamic && Build.VERSION.SDK_INT >= 31 -> DynamicThemeColorProviders
+    seed == null &&
+      theme.themeColorScheme == ThemeColorScheme.Dynamic &&
+      Build.VERSION.SDK_INT >= 31 -> DynamicThemeColorProviders
     else -> Material3ColorProviders(light = scheme(dark = false), dark = scheme(dark = true))
   }
 }
@@ -58,8 +61,10 @@ internal fun GlanceModifier.widgetSurface(
 ): GlanceModifier {
   return when {
     pill -> pillBackground(color)
-    Build.VERSION.SDK_INT >= 31 -> background(color).cornerRadius(android.R.dimen.system_app_widget_background_radius)
-    else -> background(ImageProvider(R.drawable.widget_surface), colorFilter = ColorFilter.tint(color))
+    Build.VERSION.SDK_INT >= 31 ->
+      background(color).cornerRadius(android.R.dimen.system_app_widget_background_radius)
+    else ->
+      background(ImageProvider(R.drawable.widget_surface), colorFilter = ColorFilter.tint(color))
   }
 }
 

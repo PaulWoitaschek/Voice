@@ -3,22 +3,23 @@ package voice.core.data.repo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.runner.RunWith
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.internals.AppDb
-import java.io.File
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class CustomMetadataRepoImplTest {
 
-  private val db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
-    .allowMainThreadQueries()
-    .build()
+  private val db =
+    Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDb::class.java)
+      .allowMainThreadQueries()
+      .build()
   private val repo = CustomMetadataRepoImpl(db.customMetadataDao())
 
   @After
@@ -28,7 +29,13 @@ class CustomMetadataRepoImplTest {
 
   @Test
   fun `edits are read back`() = runTest {
-    val custom = CustomMetadata(BookId("dune"), name = "Dune", author = "Frank Herbert", cover = File("/covers/dune.webp"))
+    val custom =
+      CustomMetadata(
+        BookId("dune"),
+        name = "Dune",
+        author = "Frank Herbert",
+        cover = File("/covers/dune.webp"),
+      )
     repo.put(custom)
 
     assertEquals(custom, CustomMetadataRepoImpl(db.customMetadataDao()).get(custom.bookId))

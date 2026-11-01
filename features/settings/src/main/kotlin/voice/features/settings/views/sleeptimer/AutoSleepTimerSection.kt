@@ -43,6 +43,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.graphics.shapes.RoundedPolygon
+import java.time.LocalTime
+import voice.core.strings.R as StringsR
 import voice.core.ui.AuroraBackground
 import voice.core.ui.NightTheme
 import voice.core.ui.ShapedIcon
@@ -54,10 +56,10 @@ import voice.features.settings.SettingsViewState
 import voice.features.settings.views.IslandShape
 import voice.features.settings.views.IslandSwitchRow
 import voice.features.settings.views.TimePickerDialog
-import java.time.LocalTime
-import voice.core.strings.R as StringsR
 
-/** Turning it on turns the island into a night sky with twinkling stars, whatever the app's theme. */
+/**
+ * Turning it on turns the island into a night sky with twinkling stars, whatever the app's theme.
+ */
 @Composable
 internal fun AutoSleepTimerSection(
   viewState: SettingsViewState.AutoSleepTimerViewState,
@@ -70,11 +72,12 @@ internal fun AutoSleepTimerSection(
   val night = viewState.enabled
   NightTheme(themeColorScheme = themeColorScheme, night = night) {
     // read while drawing, so fading doesn't recompose everything with every frame
-    val skyAlpha = animateFloatAsState(
-      targetValue = if (night) 1F else 0F,
-      animationSpec = tween(durationMillis = 1200),
-      label = "skyAlpha",
-    )
+    val skyAlpha =
+      animateFloatAsState(
+        targetValue = if (night) 1F else 0F,
+        animationSpec = tween(durationMillis = 1200),
+        label = "skyAlpha",
+      )
     val showSky by remember { derivedStateOf { skyAlpha.value > 0F } }
     val clock = rememberAnimationClock(running = night)
     Surface(
@@ -88,9 +91,7 @@ internal fun AutoSleepTimerSection(
           AuroraBackground(
             clock = { clock.value },
             showStars = night,
-            modifier = Modifier
-              .matchParentSize()
-              .graphicsLayer { alpha = skyAlpha.value },
+            modifier = Modifier.matchParentSize().graphicsLayer { alpha = skyAlpha.value },
           )
         }
         Column(Modifier.padding(vertical = 12.dp)) {
@@ -169,23 +170,25 @@ private fun TimeTile(
   modifier: Modifier = Modifier,
 ) {
   var showTimePicker by remember { mutableStateOf(false) }
-  val alpha by animateFloatAsState(
-    targetValue = if (enabled) 1F else 0.5F,
-    label = "timeTileAlpha",
-  )
+  val alpha by
+    animateFloatAsState(
+      targetValue = if (enabled) 1F else 0.5F,
+      label = "timeTileAlpha",
+    )
   val timeFormatter = rememberLocalTimeFormatter()
   Column(
-    modifier = modifier
-      .graphicsLayer { this.alpha = alpha }
-      .clip(RoundedCornerShape(24.dp))
-      .background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.8F))
-      .clickable(
-        enabled = enabled,
-        onClickLabel = label,
-        role = Role.Button,
-        onClick = { showTimePicker = true },
-      )
-      .padding(16.dp),
+    modifier =
+      modifier
+        .graphicsLayer { this.alpha = alpha }
+        .clip(RoundedCornerShape(24.dp))
+        .background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.8F))
+        .clickable(
+          enabled = enabled,
+          onClickLabel = label,
+          role = Role.Button,
+          onClick = { showTimePicker = true },
+        )
+        .padding(16.dp),
   ) {
     ShapedIcon(
       icon = icon,

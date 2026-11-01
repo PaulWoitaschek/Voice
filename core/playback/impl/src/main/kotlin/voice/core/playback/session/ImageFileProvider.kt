@@ -19,8 +19,7 @@ class ImageFileProvider(private val application: Application) {
   internal fun uri(file: File): Uri = uris.computeIfAbsent(file) { grantedUri(file) }
 
   private fun grantedUri(file: File): Uri {
-    return FileProvider
-      .getUriForFile(
+    return FileProvider.getUriForFile(
         application,
         application.packageName + ".coverprovider",
         file,
@@ -33,19 +32,20 @@ class ImageFileProvider(private val application: Application) {
         // The others are related to watch and car
         // https://github.com/android/uamp/blob/2136c37bcef54da1ee350fd642fc61a744e86654/common/src/main/res/xml/allowed_media_browser_callers.xml
         listOf(
-          "com.android.systemui",
-          "com.google.android.autosimulator",
-          "com.google.android.carassistant",
-          "com.google.android.googlequicksearchbox",
-          "com.google.android.projection.gearhead",
-          "com.google.android.wearable.app",
-        ).forEach { grantedPackage ->
-          application.grantUriPermission(
-            grantedPackage,
-            uri,
-            Intent.FLAG_GRANT_READ_URI_PERMISSION,
+            "com.android.systemui",
+            "com.google.android.autosimulator",
+            "com.google.android.carassistant",
+            "com.google.android.googlequicksearchbox",
+            "com.google.android.projection.gearhead",
+            "com.google.android.wearable.app",
           )
-        }
+          .forEach { grantedPackage ->
+            application.grantUriPermission(
+              grantedPackage,
+              uri,
+              Intent.FLAG_GRANT_READ_URI_PERMISSION,
+            )
+          }
       }
   }
 }

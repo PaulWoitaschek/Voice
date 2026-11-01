@@ -16,20 +16,19 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import voice.core.common.rootGraphAs
 import voice.core.data.BookId
+import voice.core.strings.R as StringsR
 import voice.core.ui.CoverTheme
 import voice.core.ui.HoldSplashScreenWhile
 import voice.features.playbackScreen.view.BookPlayView
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
-import voice.core.strings.R as StringsR
 
 @Composable
 fun BookPlayScreen(bookId: BookId) {
-  val viewModel = retain(bookId.value) {
-    rootGraphAs<BookPlayGraph>()
-      .bookPlayViewModelFactory
-      .create(bookId)
-  }
+  val viewModel =
+    retain(bookId.value) {
+      rootGraphAs<BookPlayGraph>().bookPlayViewModelFactory.create(bookId)
+    }
   val snackbarHostState = remember { SnackbarHostState() }
   val dialogState = viewModel.dialogState.value
   val viewState = viewModel.viewState()
@@ -37,27 +36,31 @@ fun BookPlayScreen(bookId: BookId) {
   if (viewState == null) return
   val bookmarkAddedMessage = stringResource(StringsR.string.bookmark_added_snackbar)
   val addNoteAction = stringResource(StringsR.string.bookmark_action_add_note)
-  val batteryOptimizationMessage = stringResource(StringsR.string.playback_battery_optimization_rationale)
-  val batteryOptimizationAction = stringResource(StringsR.string.playback_battery_optimization_action)
+  val batteryOptimizationMessage =
+    stringResource(StringsR.string.playback_battery_optimization_rationale)
+  val batteryOptimizationAction =
+    stringResource(StringsR.string.playback_battery_optimization_action)
   LaunchedEffect(viewModel) {
     viewModel.viewEffects.collect { viewEffect ->
       when (viewEffect) {
         is BookPlayViewEffect.BookmarkAdded -> {
-          val result = snackbarHostState.showSnackbar(
-            message = bookmarkAddedMessage,
-            actionLabel = addNoteAction,
-            duration = SnackbarDuration.Short,
-          )
+          val result =
+            snackbarHostState.showSnackbar(
+              message = bookmarkAddedMessage,
+              actionLabel = addNoteAction,
+              duration = SnackbarDuration.Short,
+            )
           if (result == SnackbarResult.ActionPerformed) {
             viewModel.onAddBookmarkNote(viewEffect.id)
           }
         }
         BookPlayViewEffect.RequestIgnoreBatteryOptimization -> {
-          val result = snackbarHostState.showSnackbar(
-            message = batteryOptimizationMessage,
-            duration = SnackbarDuration.Long,
-            actionLabel = batteryOptimizationAction,
-          )
+          val result =
+            snackbarHostState.showSnackbar(
+              message = batteryOptimizationMessage,
+              duration = SnackbarDuration.Long,
+              actionLabel = batteryOptimizationAction,
+            )
           if (result == SnackbarResult.ActionPerformed) {
             viewModel.onBatteryOptimizationRequested()
           }
@@ -137,9 +140,10 @@ object BookPlayProvider {
 
   @Provides
   @IntoSet
-  fun bookPlayNavEntryProvider(): NavEntryProvider<*> = NavEntryProvider<Destination.Playback> { key ->
-    NavEntry(key) {
-      BookPlayScreen(bookId = key.bookId)
+  fun bookPlayNavEntryProvider(): NavEntryProvider<*> =
+    NavEntryProvider<Destination.Playback> { key ->
+      NavEntry(key) {
+        BookPlayScreen(bookId = key.bookId)
+      }
     }
-  }
 }

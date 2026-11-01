@@ -28,7 +28,14 @@ internal object NaturalComparator : Comparator<String> {
       return 0
     }
     return with(collatorThreadLocal.get()!!) {
-      naturalCompare(s1 = s1, s2 = s2, length1 = s1.length, length2 = s2.length, ignoreCase = true, likeFileNames = true)
+      naturalCompare(
+        s1 = s1,
+        s2 = s2,
+        length1 = s1.length,
+        length2 = s2.length,
+        ignoreCase = true,
+        likeFileNames = true,
+      )
     }
   }
 
@@ -75,17 +82,18 @@ internal object NaturalComparator : Comparator<String> {
       } else if (likeFileNames) {
         // for super natural comparison (IDEA-80435)
         if (ch1 != ch2) {
-          val diff: Int = when {
-            ch1 == '-' && ch2 != '_' -> {
-              compareChars('_', ch2)
+          val diff: Int =
+            when {
+              ch1 == '-' && ch2 != '_' -> {
+                compareChars('_', ch2)
+              }
+              ch2 == '-' && ch1 != '_' -> {
+                compareChars(ch1, '_')
+              }
+              else -> {
+                compareChars(ch1, ch2)
+              }
             }
-            ch2 == '-' && ch1 != '_' -> {
-              compareChars(ch1, '_')
-            }
-            else -> {
-              compareChars(ch1, ch2)
-            }
-          }
           if (diff != 0) return diff
         }
       } else {

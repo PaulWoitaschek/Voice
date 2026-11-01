@@ -28,9 +28,7 @@ public class BookRepositoryImpl(
     if (warmedUp) return
     mutex.withLock {
       if (warmedUp) return@withLock
-      val chapters = contentRepo.all()
-        .filter { it.isActive }
-        .flatMap { it.chapters }
+      val chapters = contentRepo.all().filter { it.isActive }.flatMap { it.chapters }
       chapterRepo.warmup(chapters)
       warmedUp = true
     }
@@ -38,7 +36,8 @@ public class BookRepositoryImpl(
 
   override fun flow(): Flow<List<Book>> {
     return combine(contentRepo.flow(), customMetadataRepo.flow()) { contents, customs ->
-      contents.filter { it.isActive }
+      contents
+        .filter { it.isActive }
         .mapNotNull { content ->
           content.book(customs[content.id] ?: CustomMetadata(content.id))
         }
@@ -46,7 +45,8 @@ public class BookRepositoryImpl(
   }
 
   override suspend fun all(): List<Book> {
-    return contentRepo.all()
+    return contentRepo
+      .all()
       .filter { it.isActive }
       .mapNotNull { it.book(customMetadataRepo.get(it.id)) }
   }
@@ -92,14 +92,15 @@ public class BookRepositoryImpl(
     warmUp()
     return Book(
       content = this,
-      chapters = chapters.map { chapterId ->
-        val chapter = chapterRepo.get(chapterId)
-        if (chapter == null) {
-          Logger.w("A book misses one of its ${chapters.size} chapters")
-          return null
-        }
-        chapter
-      },
+      chapters =
+        chapters.map { chapterId ->
+          val chapter = chapterRepo.get(chapterId)
+          if (chapter == null) {
+            Logger.w("A book misses one of its ${chapters.size} chapters")
+            return null
+          }
+          chapter
+        },
       custom = custom,
     )
   }

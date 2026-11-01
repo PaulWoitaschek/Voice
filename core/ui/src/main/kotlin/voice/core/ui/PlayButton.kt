@@ -58,55 +58,62 @@ fun PlayButton(
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
   val morph = remember { Morph(MaterialShapes.Cookie9Sided, MaterialShapes.Square) }
-  val morphProgress by animateFloatAsState(
-    targetValue = if (playing) 1F else 0F,
-    animationSpec = spring(dampingRatio = 0.6F, stiffness = Spring.StiffnessMediumLow),
-    label = "playMorph",
-  )
-  val scale by animateFloatAsState(
-    targetValue = if (pressed) 0.86F else 1F,
-    animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium),
-    label = "playScale",
-  )
+  val morphProgress by
+    animateFloatAsState(
+      targetValue = if (playing) 1F else 0F,
+      animationSpec = spring(dampingRatio = 0.6F, stiffness = Spring.StiffnessMediumLow),
+      label = "playMorph",
+    )
+  val scale by
+    animateFloatAsState(
+      targetValue = if (pressed) 0.86F else 1F,
+      animationSpec = spring(dampingRatio = 0.4F, stiffness = Spring.StiffnessMedium),
+      label = "playScale",
+    )
   var turns by remember { mutableIntStateOf(0) }
-  val rotation by animateFloatAsState(
-    targetValue = turns * 90F,
-    animationSpec = spring(dampingRatio = 0.55F, stiffness = Spring.StiffnessLow),
-    label = "playRotation",
-  )
+  val rotation by
+    animateFloatAsState(
+      targetValue = turns * 90F,
+      animationSpec = spring(dampingRatio = 0.55F, stiffness = Spring.StiffnessLow),
+      label = "playRotation",
+    )
   val containerColor = MaterialTheme.colorScheme.primary
   val contentColor = MaterialTheme.colorScheme.onPrimary
   Box(
-    modifier = modifier
-      .size(size)
-      .graphicsLayer {
-        scaleX = scale
-        scaleY = scale
-        rotationZ = rotation
-      }
-      .clip(MorphShape(morph, morphProgress.coerceIn(0F, 1F)))
-      .background(containerColor)
-      .clickable(
-        interactionSource = interactionSource,
-        indication = ripple(color = contentColor),
-        role = Role.Button,
-      ) {
-        if (animate) turns++
-        haptics.performHapticFeedback(if (playing) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn)
-        onClick()
-      },
+    modifier =
+      modifier
+        .size(size)
+        .graphicsLayer {
+          scaleX = scale
+          scaleY = scale
+          rotationZ = rotation
+        }
+        .clip(MorphShape(morph, morphProgress.coerceIn(0F, 1F)))
+        .background(containerColor)
+        .clickable(
+          interactionSource = interactionSource,
+          indication = ripple(color = contentColor),
+          role = Role.Button,
+        ) {
+          if (animate) turns++
+          haptics.performHapticFeedback(
+            if (playing) HapticFeedbackType.ToggleOff else HapticFeedbackType.ToggleOn,
+          )
+          onClick()
+        },
     contentAlignment = Alignment.Center,
   ) {
     // animated vectors always mirror in right to left layouts, but a play arrow never points left
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
       Icon(
-        modifier = Modifier
-          .fillMaxSize(0.4F)
-          .graphicsLayer { rotationZ = -rotation },
+        modifier = Modifier.fillMaxSize(0.4F).graphicsLayer { rotationZ = -rotation },
         painter = rememberPlayPausePainter(playing),
-        contentDescription = stringResource(
-          id = if (playing) StringsR.string.playback_action_pause else StringsR.string.playback_action_play,
-        ),
+        contentDescription =
+          stringResource(
+            id =
+              if (playing) StringsR.string.playback_action_pause
+              else StringsR.string.playback_action_play,
+          ),
         tint = contentColor,
       )
     }
@@ -116,7 +123,8 @@ fun PlayButton(
 @Composable
 private fun rememberPlayPausePainter(playing: Boolean): Painter {
   return rememberAnimatedVectorPainter(
-    animatedImageVector = AnimatedImageVector.animatedVectorResource(id = R.drawable.avd_pause_to_play),
+    animatedImageVector =
+      AnimatedImageVector.animatedVectorResource(id = R.drawable.avd_pause_to_play),
     atEnd = !playing,
   )
 }

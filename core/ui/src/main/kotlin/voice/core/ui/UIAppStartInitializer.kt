@@ -20,18 +20,17 @@ class UIAppStartInitializer(
 
   override fun onAppStart(application: Application) {
     Coil.setImageLoader(
-      ImageLoader.Builder(application)
-        .addLastModifiedToFileCacheKey(false)
-        .build(),
+      ImageLoader.Builder(application).addLastModifiedToFileCacheKey(false).build(),
     )
     themeModeStore.data
       .distinctUntilChanged()
       .onEach { themeMode ->
-        val nightMode = when (themeMode) {
-          ThemeMode.FollowSystem -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-          ThemeMode.Light -> AppCompatDelegate.MODE_NIGHT_NO
-          ThemeMode.Dark -> AppCompatDelegate.MODE_NIGHT_YES
-        }
+        val nightMode =
+          when (themeMode) {
+            ThemeMode.FollowSystem -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            ThemeMode.Light -> AppCompatDelegate.MODE_NIGHT_NO
+            ThemeMode.Dark -> AppCompatDelegate.MODE_NIGHT_YES
+          }
         AppCompatDelegate.setDefaultNightMode(nightMode)
       }
       .launchIn(scope)

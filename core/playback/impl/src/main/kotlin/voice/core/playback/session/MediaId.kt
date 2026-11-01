@@ -7,13 +7,9 @@ import voice.core.data.ChapterId
 
 @Serializable
 sealed interface MediaId {
-  @Serializable
-  @SerialName("root")
-  data object Root : MediaId
+  @Serializable @SerialName("root") data object Root : MediaId
 
-  @Serializable
-  @SerialName("book")
-  data class Book(val id: BookId) : MediaId
+  @Serializable @SerialName("book") data class Book(val id: BookId) : MediaId
 
   @Serializable
   @SerialName("chapter")
@@ -32,7 +28,5 @@ sealed interface MediaId {
     val endMs: Long,
   ) : MediaId
 
-  @Serializable
-  @SerialName("recent")
-  data object Recent : MediaId
+  @Serializable @SerialName("recent") data object Recent : MediaId
 }
