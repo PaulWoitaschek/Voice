@@ -19,6 +19,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -28,11 +32,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.retain.retain
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -86,6 +92,21 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     bookOverviewViewModel.attach()
   }
   val viewState = bookOverviewViewModel.state()
+  val snackbarHostState = remember { SnackbarHostState() }
+  val resources = LocalResources.current
+  val undoLabel = stringResource(StringsR.string.common_action_undo)
+  LaunchedEffect(bookOverviewViewModel) {
+    bookOverviewViewModel.hiddenBooks.collect { book ->
+      val result = snackbarHostState.showSnackbar(
+        message = resources.getString(StringsR.string.library_book_hidden_message, book.name),
+        actionLabel = undoLabel,
+        duration = SnackbarDuration.Short,
+      )
+      if (result == SnackbarResult.ActionPerformed) {
+        bookOverviewViewModel.onUndoHide(book.id)
+      }
+    }
+  }
 
   BookOverview(
     viewState = viewState,
@@ -101,6 +122,8 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onSurveyClick = bookOverviewViewModel::onSurveyClick,
     onSurveyDismiss = bookOverviewViewModel::onSurveyDismiss,
     onShowFoldersClick = bookOverviewViewModel::onShowFoldersClick,
+    onShowHiddenBooksChange = bookOverviewViewModel::onShowHiddenBooksChange,
+    snackbarHostState = snackbarHostState,
     modifier = modifier,
   )
 }
@@ -120,10 +143,13 @@ internal fun BookOverview(
   onSurveyClick: () -> Unit,
   onSurveyDismiss: () -> Unit,
   onShowFoldersClick: () -> Unit,
+  onShowHiddenBooksChange: (Boolean) -> Unit,
   modifier: Modifier = Modifier,
+  snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   val scrollBehavior = SearchBarDefaults.enterAlwaysSearchBarScrollBehavior()
   val gridState = rememberLazyGridState()
+  var showFilterSheet by rememberSaveable { mutableStateOf(false) }
   LaunchedEffect(scrollBehavior, gridState) {
     // the bar adds up scroll deltas to tell whether the library is under it. They drift when books
     // above the visible ones change, which kept the bar tinted with the library at the top.
@@ -138,13 +164,17 @@ internal fun BookOverview(
         showSearch = viewState.showSearchIcon,
         showFolderPickerIcon = viewState.showFolderPickerIcon,
         showFolderAccessBadge = viewState.showFolderAccessBadge,
+        // only there once a book is hidden, so a library without any stays as it was
+        showFilter = viewState.hiddenBookCount > 0 || viewState.showHiddenBooks,
         isLoading = viewState.isLoading,
         scrollBehavior = scrollBehavior,
         onSearchClick = onSearchClick,
         onBookFolderClick = onBookFolderClick,
+        onFilterClick = { showFilterSheet = true },
         onSettingsClick = onSettingsClick,
       )
     },
+    snackbarHost = { SnackbarHost(snackbarHostState) },
     floatingActionButton = {
       val playButtonState = viewState.playButtonState
       AnimatedVisibility(
@@ -173,6 +203,7 @@ internal fun BookOverview(
       onSurveyClick = onSurveyClick,
       onSurveyDismiss = onSurveyDismiss,
       onShowFoldersClick = onShowFoldersClick,
+      onHiddenBooksClick = { showFilterSheet = true },
       modifier = Modifier
         .padding(contentPadding)
         .consumeWindowInsets(contentPadding),
@@ -182,6 +213,14 @@ internal fun BookOverview(
     dialog = viewState.dialog,
     onFolderPickerMovedDialogDismiss = onFolderPickerMovedDialogDismiss,
   )
+  if (showFilterSheet) {
+    LibraryFilterSheet(
+      hiddenBookCount = viewState.hiddenBookCount,
+      showHiddenBooks = viewState.showHiddenBooks,
+      onShowHiddenBooksChange = onShowHiddenBooksChange,
+      onDismiss = { showFilterSheet = false },
+    )
+  }
 }
 
 /** Whether the hero card's play button is on screen, which makes a floating one redundant. */
@@ -253,6 +292,7 @@ fun BookOverviewPreview(
       onSurveyClick = {},
       onSurveyDismiss = {},
       onShowFoldersClick = {},
+      onShowHiddenBooksChange = {},
     )
   }
 }
@@ -320,6 +360,13 @@ internal class BookOverviewPreviewParameterProvider : PreviewParameterProvider<B
       showEmptyLibrary = true,
       showFolderAccessBadge = true,
       showFolderPickerIcon = false,
+    ),
+    library.copy(
+      sections = emptyMap(),
+      hero = null,
+      inProgressCount = 0,
+      playButtonState = null,
+      hiddenBookCount = 3,
     ),
   )
 }

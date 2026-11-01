@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">ذخیره در سرورتان انجام نشد. دوباره امتحان کنید.</string>
     <string name="book.edit.server.not_allowed">حساب شما در سرور اجازهٔ تغییر کتاب‌ها را ندارد.</string>
     <string name="book.edit.title.label">عنوان</string>
+    <string name="book.hide">پنهان کردن از کتابخانه</string>
+    <string name="book.show">نمایش در کتابخانه</string>
     <string name="book.source.device">در این دستگاه</string>
     <string name="book.source.server_downloaded">%s · دانلودشده</string>
     <string name="bookmark.action.add_note">افزودن یادداشت</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">ساعت هوشمند</string>
     <string name="history.source.widget">ویجت</string>
     <string name="library.book.downloading">در حال دانلود</string>
+    <string name="library.book.hidden">پنهان</string>
+    <string name="library.book.hidden.message">کتاب %1$s پنهان شد</string>
     <string name="library.book.offline">آفلاین در دسترس نیست</string>
     <string name="library.category.completed.title">تمام‌شده</string>
     <string name="library.category.current.title">جاری</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">هیچ کتاب صوتی‌ای پیدا نشد</string>
     <string name="library.empty.message">در پوشه‌های شما، Voice هیچ کتاب صوتی‌ای پیدا نمی‌کند. مطمئن شوید فایل‌ها هنوز سر جایشان هستند، یا یک پوشه اضافه کنید.</string>
     <string name="library.empty.action">نمایش پوشه‌ها</string>
+    <string name="library.filter">فیلتر</string>
+    <string name="library.filter.hidden_books">کتاب‌های پنهان</string>
+    <string name="library.filter.show">نمایش</string>
     <string name="library.folders.title">پوشه‌های کتاب صوتی</string>
     <string name="library.folders.moved.dialog.title">پوشه‌های کتاب صوتی منتقل شدند</string>
     <string name="library.folders.moved.dialog.message">اکنون می‌توانید پوشه‌های کتاب صوتی را در تنظیمات مدیریت کنید.</string>
@@ -250,6 +257,10 @@
     <plurals name="library.header.in_progress">
         <item quantity="one">%d کتاب در حال گوش دادن</item>
         <item quantity="other">%d کتاب در حال گوش دادن</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d کتاب پنهان</item>
+        <item quantity="other">%d کتاب پنهان</item>
     </plurals>
     <string name="library.search.browse.title">مرور</string>
     <plurals name="library.search.browse.book_count">

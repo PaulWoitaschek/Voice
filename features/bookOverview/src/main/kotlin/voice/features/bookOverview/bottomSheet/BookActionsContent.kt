@@ -93,6 +93,8 @@ private val EditItems = listOf(
   BottomSheetItem.Edit,
   BottomSheetItem.InternetCover,
   BottomSheetItem.FileCover,
+  BottomSheetItem.Hide,
+  BottomSheetItem.Show,
 )
 
 /** The order a book moves through, so the picker reads like a timeline. */
@@ -441,6 +443,9 @@ private fun BottomSheetItem.style(): ActionStyle {
     BottomSheetItem.Edit -> ActionStyle(MaterialShapes.Pentagon, colors.secondaryContainer, colors.onSecondaryContainer)
     BottomSheetItem.InternetCover -> ActionStyle(MaterialShapes.Clover4Leaf, colors.tertiaryContainer, colors.onTertiaryContainer)
     BottomSheetItem.FileCover -> ActionStyle(MaterialShapes.Cookie4Sided, colors.primaryContainer, colors.onPrimaryContainer)
+    BottomSheetItem.Hide,
+    BottomSheetItem.Show,
+    -> ActionStyle(MaterialShapes.Ghostish, colors.secondaryContainer, colors.onSecondaryContainer)
     BottomSheetItem.DeleteBook -> ActionStyle(MaterialShapes.Cookie9Sided, colors.errorContainer, colors.onErrorContainer)
     BottomSheetItem.Download,
     BottomSheetItem.StopDownload,

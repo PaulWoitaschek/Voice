@@ -164,7 +164,7 @@ internal fun shelfBooks(
   playing: Boolean,
 ): List<ShelfBook> {
   return books
-    .filter { !it.finished() && (it.position > 0 || it.id == currentBookId) }
+    .filter { !it.custom.hidden && !it.finished() && (it.position > 0 || it.id == currentBookId) }
     .sortedWith(compareByDescending<Book> { it.id == currentBookId }.thenByDescending { it.content.lastPlayedAt })
     .take(SHELF_MAX_BOOKS)
     .map { book ->

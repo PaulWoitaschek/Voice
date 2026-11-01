@@ -157,6 +157,10 @@
     <string name="book.edit.server.not_allowed">Your account on the server can\'t change books.</string>
     <!-- Label for the field with the book's title, in the sheet that edits a book. -->
     <string name="book.edit.title.label">Title</string>
+    <!-- Action in the book actions sheet. Takes the book out of the library, Continue listening, the widgets and Android Auto, without deleting its files. Search still finds it. -->
+    <string name="book.hide">Hide from library</string>
+    <!-- Action in the book actions sheet of a hidden book. Brings it back into the library. -->
+    <string name="book.show">Show in library</string>
     <!-- Shown under the title in the book actions sheet for a book whose files are on the phone, once a server is connected too. -->
     <string name="book.source.device">On this device</string>
     <!-- Shown under the title in the book actions sheet for a downloaded server book. %s is the address of the server, like audiobooks.example.com. -->
@@ -374,6 +378,10 @@
     <string name="history.source.widget">Widget</string>
     <!-- Read out by screen readers for the progress ring on the cover of a server book that downloads. -->
     <string name="library.book.downloading">Downloading</string>
+    <!-- Small label on a hidden book: in search results, on the screen of its series, and in the library while hidden books are shown. Keep it short. -->
+    <string name="library.book.hidden">Hidden</string>
+    <!-- Snackbar message after a book was hidden from the library, with a button to undo it. %1$s is the title of the book. -->
+    <string name="library.book.hidden.message">%1$s is hidden</string>
     <!-- Shown for a server book that isn't downloaded while the server can't be reached: on the icon on its cover, and as a small label in the player. Keep it short. -->
     <string name="library.book.offline">Not available offline</string>
     <!-- Library category header for completed books. -->
@@ -392,6 +400,12 @@
     <string name="library.empty.message">Voice can\'t find any audiobooks in your folders. Check that the files are still there, or add a folder.</string>
     <!-- Button on the library card shown when no audiobooks were found. Opens the audiobook folders screen. -->
     <string name="library.empty.action">Show folders</string>
+    <!-- Read out by screen readers for the button in the library's top bar that opens what the library shows, like hidden books. -->
+    <string name="library.filter">Filter</string>
+    <!-- Switch in the library filter sheet that shows the hidden books in the library again, with a "Hidden" label. Below it is how many books are hidden, like "12 books". -->
+    <string name="library.filter.hidden_books">Hidden books</string>
+    <!-- Heading in the library filter sheet, above switches for which books the library shows. -->
+    <string name="library.filter.show">Show</string>
     <!-- Title for screens and rows that manage audiobook folders. -->
     <string name="library.folders.title">Audiobook folders</string>
     <!-- Title for the one-time dialog shown from the old audiobook folders shortcut. -->
@@ -417,9 +431,14 @@
         <item quantity="one">%d book in progress</item>
         <item quantity="other">%d books in progress</item>
     </plurals>
+    <!-- Quiet button at the end of the library while books are hidden from it. Opens the sheet with the switch that shows them again. -->
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d hidden book</item>
+        <item quantity="other">%d hidden books</item>
+    </plurals>
     <!-- Header above the browse section of the library search, which lists the library by authors, series, narrators or genres. -->
     <string name="library.search.browse.title">Browse</string>
-    <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. Also below a series in the library, on the screen of a series and below each series suggested while editing a book. -->
+    <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. Also below a series in the library, on the screen of a series, below each series suggested while editing a book, and below Hidden books in the library filter. -->
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d book</item>
         <item quantity="other">%d books</item>

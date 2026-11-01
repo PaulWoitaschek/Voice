@@ -84,6 +84,8 @@
     <string name="book.edit.server.failed">Não foi possível guardar no servidor. Tente novamente.</string>
     <string name="book.edit.server.not_allowed">A conta no servidor não tem permissão para alterar livros.</string>
     <string name="book.edit.title.label">Título</string>
+    <string name="book.hide">Ocultar da biblioteca</string>
+    <string name="book.show">Mostrar na biblioteca</string>
     <string name="book.source.device">Neste dispositivo</string>
     <string name="book.source.server_downloaded">%s · transferido</string>
     <string name="bookmark.action.add_note">Adicionar nota</string>
@@ -241,6 +243,8 @@
     <string name="history.source.watch">Relógio</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">A transferir</string>
+    <string name="library.book.hidden">Oculto</string>
+    <string name="library.book.hidden.message">Ocultou %1$s</string>
     <string name="library.book.offline">Indisponível sem ligação</string>
     <string name="library.category.completed.title">Concluído</string>
     <string name="library.category.current.title">Em curso</string>
@@ -250,6 +254,9 @@
     <string name="library.empty.title">Nenhum audiolivro encontrado</string>
     <string name="library.empty.message">O Voice não encontra nenhum audiolivro nas suas pastas. Verifique se os ficheiros ainda lá estão ou adicione uma pasta.</string>
     <string name="library.empty.action">Mostrar pastas</string>
+    <string name="library.filter">Filtrar</string>
+    <string name="library.filter.hidden_books">Livros ocultos</string>
+    <string name="library.filter.show">Mostrar</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
     <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
     <string name="library.folders.moved.dialog.message">Agora pode gerir as pastas de audiolivros nas Definições.</string>
@@ -264,6 +271,11 @@
         <item quantity="one">%d livro em curso</item>
         <item quantity="many">%d livros em curso</item>
         <item quantity="other">%d livros em curso</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d livro oculto</item>
+        <item quantity="many">%d livros ocultos</item>
+        <item quantity="other">%d livros ocultos</item>
     </plurals>
     <string name="library.search.browse.title">Explorar</string>
     <plurals name="library.search.browse.book_count">

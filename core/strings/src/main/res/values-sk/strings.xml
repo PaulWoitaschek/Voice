@@ -87,6 +87,8 @@
     <string name="book.edit.server.failed">Uloženie na váš server sa nepodarilo. Skúste to znova.</string>
     <string name="book.edit.server.not_allowed">Váš účet na serveri nemôže meniť knihy.</string>
     <string name="book.edit.title.label">Názov</string>
+    <string name="book.hide">Skryť z knižnice</string>
+    <string name="book.show">Zobraziť v knižnici</string>
     <string name="book.source.device">Na tomto zariadení</string>
     <string name="book.source.server_downloaded">%s · stiahnuté</string>
     <string name="bookmark.action.add_note">Pridať poznámku</string>
@@ -254,6 +256,8 @@
     <string name="history.source.watch">Hodinky</string>
     <string name="history.source.widget">Miniaplikácia</string>
     <string name="library.book.downloading">Sťahuje sa</string>
+    <string name="library.book.hidden">Skrytá</string>
+    <string name="library.book.hidden.message">Kniha „%1$s“ je skrytá</string>
     <string name="library.book.offline">Nie je k dispozícii offline</string>
     <string name="library.category.completed.title">Vypočuté</string>
     <string name="library.category.current.title">Rozpočúvané</string>
@@ -263,6 +267,9 @@
     <string name="library.empty.title">Nenašli sa žiadne zvukové knihy</string>
     <string name="library.empty.message">Voice vo vašich priečinkoch nemôže nájsť žiadne zvukové knihy. Skontrolujte, či sú súbory stále na svojom mieste, alebo pridajte priečinok.</string>
     <string name="library.empty.action">Zobraziť priečinky</string>
+    <string name="library.filter">Filter</string>
+    <string name="library.filter.hidden_books">Skryté knihy</string>
+    <string name="library.filter.show">Zobraziť</string>
     <string name="library.folders.title">Priečinky so zvukovými knihami</string>
     <string name="library.folders.moved.dialog.title">Priečinky audiokníh presunuté</string>
     <string name="library.folders.moved.dialog.message">Priečinky audiokníh teraz môžete spravovať v nastaveniach.</string>
@@ -278,6 +285,12 @@
         <item quantity="few">%d rozpočúvané knihy</item>
         <item quantity="many">%d rozpočúvaných kníh</item>
         <item quantity="other">%d rozpočúvaných kníh</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d skrytá kniha</item>
+        <item quantity="few">%d skryté knihy</item>
+        <item quantity="many">%d skrytých kníh</item>
+        <item quantity="other">%d skrytých kníh</item>
     </plurals>
     <string name="library.search.browse.title">Prehliadať</string>
     <plurals name="library.search.browse.book_count">

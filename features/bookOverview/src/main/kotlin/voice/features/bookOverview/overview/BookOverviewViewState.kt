@@ -20,6 +20,8 @@ data class BookOverviewViewState(
   val showFolderAccessBadge: Boolean,
   val showFolderPickerIcon: Boolean,
   val dialog: Dialog?,
+  val hiddenBookCount: Int = 0,
+  val showHiddenBooks: Boolean = false,
 ) {
 
   companion object {

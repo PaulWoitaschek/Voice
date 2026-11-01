@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">No est istadu possìbile sarvare in su serbidore tuo. Torra a proare.</string>
     <string name="book.edit.server.not_allowed">Su contu tuo in su serbidore non podet cambiare libros.</string>
     <string name="book.edit.title.label">Tìtulu</string>
+    <string name="book.hide">Cua dae sa biblioteca</string>
+    <string name="book.show">Mustra in sa biblioteca</string>
     <string name="book.source.device">In custu dispositivu</string>
     <string name="book.source.server_downloaded">%s · iscarrigadu</string>
     <string name="bookmark.action.add_note">Agiunghe una nota</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Rellògiu</string>
     <string name="history.source.widget">Trastu</string>
     <string name="library.book.downloading">Iscarrighende</string>
+    <string name="library.book.hidden">Cuadu</string>
+    <string name="library.book.hidden.message">As cuadu %1$s</string>
     <string name="library.book.offline">No a disponimentu chene connessione</string>
     <string name="library.category.completed.title">Acabbadu</string>
     <string name="library.category.current.title">In cursu</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Perunu audiolibru agatadu</string>
     <string name="library.empty.message">Voice non agatat perunu audiolibru in sas cartellas tuas. Controlla si sos documentos bi sunt galu o agiunghe una cartella.</string>
     <string name="library.empty.action">Mustra sas cartellas</string>
+    <string name="library.filter">Filtra</string>
+    <string name="library.filter.hidden_books">Libros cuados</string>
+    <string name="library.filter.show">Mustra</string>
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
     <string name="library.folders.moved.dialog.title">Cartellas de audiolibros tramudadas</string>
     <string name="library.folders.moved.dialog.message">Como podes manigiare sas cartellas de audiolibros in sas Impostatziones.</string>
@@ -250,6 +257,10 @@
     <plurals name="library.header.in_progress">
         <item quantity="one">%d libru in cursu</item>
         <item quantity="other">%d libros in cursu</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d libru cuadu</item>
+        <item quantity="other">%d libros cuados</item>
     </plurals>
     <string name="library.search.browse.title">Esplora</string>
     <plurals name="library.search.browse.book_count">

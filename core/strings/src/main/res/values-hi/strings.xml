@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">आपके सर्वर पर सहेजा नहीं जा सका। फिर से कोशिश करें।</string>
     <string name="book.edit.server.not_allowed">सर्वर पर आपके खाते को पुस्तकें बदलने की अनुमति नहीं है।</string>
     <string name="book.edit.title.label">शीर्षक</string>
+    <string name="book.hide">लाइब्रेरी से छिपाएँ</string>
+    <string name="book.show">लाइब्रेरी में दिखाएँ</string>
     <string name="book.source.device">इस डिवाइस पर</string>
     <string name="book.source.server_downloaded">%s · डाउनलोड की गई</string>
     <string name="bookmark.action.add_note">नोट जोड़ें</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">घड़ी</string>
     <string name="history.source.widget">विजेट</string>
     <string name="library.book.downloading">डाउनलोड हो रहा है</string>
+    <string name="library.book.hidden">छिपी हुई</string>
+    <string name="library.book.hidden.message">%1$s को छिपा दिया गया</string>
     <string name="library.book.offline">ऑफ़लाइन उपलब्ध नहीं</string>
     <string name="library.category.completed.title">पूर्ण</string>
     <string name="library.category.current.title">जारी</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">कोई ऑडियोबुक नहीं मिली</string>
     <string name="library.empty.message">Voice को आपके फ़ोल्डरों में कोई ऑडियोबुक नहीं मिल रही है। देख लें कि फ़ाइलें अभी भी वहीं हैं, या कोई फ़ोल्डर जोड़ें।</string>
     <string name="library.empty.action">फ़ोल्डर दिखाएँ</string>
+    <string name="library.filter">फ़िल्टर</string>
+    <string name="library.filter.hidden_books">छिपी हुई पुस्तकें</string>
+    <string name="library.filter.show">दिखाएँ</string>
     <string name="library.folders.title">ऑडियोबुक फ़ोल्डर</string>
     <string name="library.folders.moved.dialog.title">ऑडियोबुक फ़ोल्डर की जगह बदल गई</string>
     <string name="library.folders.moved.dialog.message">ऑडियोबुक फ़ोल्डर अब सेटिंग्स में मैनेज होते हैं।</string>
@@ -250,6 +257,10 @@
     <plurals name="library.header.in_progress">
         <item quantity="one">%d पुस्तक जारी है</item>
         <item quantity="other">%d पुस्तकें जारी हैं</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d छिपी हुई पुस्तक</item>
+        <item quantity="other">%d छिपी हुई पुस्तकें</item>
     </plurals>
     <string name="library.search.browse.title">ब्राउज़ करें</string>
     <plurals name="library.search.browse.book_count">

@@ -84,6 +84,8 @@
     <string name="book.edit.server.failed">Nu s-a putut salva pe serverul tău. Încearcă din nou.</string>
     <string name="book.edit.server.not_allowed">Contul tău de pe server nu poate modifica cărți.</string>
     <string name="book.edit.title.label">Titlu</string>
+    <string name="book.hide">Ascunde din bibliotecă</string>
+    <string name="book.show">Afișează în bibliotecă</string>
     <string name="book.source.device">Pe acest dispozitiv</string>
     <string name="book.source.server_downloaded">%s · descărcată</string>
     <string name="bookmark.action.add_note">Adaugă notă</string>
@@ -241,6 +243,8 @@
     <string name="history.source.watch">Ceas</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Se descarcă</string>
+    <string name="library.book.hidden">Ascunsă</string>
+    <string name="library.book.hidden.message">Ai ascuns %1$s</string>
     <string name="library.book.offline">Indisponibilă offline</string>
     <string name="library.category.completed.title">Cărți terminate</string>
     <string name="library.category.current.title">Cărți în curs</string>
@@ -250,6 +254,9 @@
     <string name="library.empty.title">Nu s-au găsit cărți audio</string>
     <string name="library.empty.message">Voice nu găsește nicio carte audio în directoarele tale. Verifică dacă fișierele mai sunt acolo sau adaugă un director.</string>
     <string name="library.empty.action">Afișează directoarele</string>
+    <string name="library.filter">Filtrează</string>
+    <string name="library.filter.hidden_books">Cărți ascunse</string>
+    <string name="library.filter.show">Afișează</string>
     <string name="library.folders.title">Directoare cărți</string>
     <string name="library.folders.moved.dialog.title">Directoarele cu cărți audio s-au mutat</string>
     <string name="library.folders.moved.dialog.message">Acum poți gestiona directoarele cu cărți audio din Setări.</string>
@@ -264,6 +271,11 @@
         <item quantity="one">%d carte în curs</item>
         <item quantity="few">%d cărți în curs</item>
         <item quantity="other">%d de cărți în curs</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d carte ascunsă</item>
+        <item quantity="few">%d cărți ascunse</item>
+        <item quantity="other">%d de cărți ascunse</item>
     </plurals>
     <string name="library.search.browse.title">Răsfoiește</string>
     <plurals name="library.search.browse.book_count">

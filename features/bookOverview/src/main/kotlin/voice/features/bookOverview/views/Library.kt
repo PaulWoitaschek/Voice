@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -17,9 +19,12 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,6 +43,7 @@ import voice.core.ui.CenteredContent
 import voice.core.ui.HoldSplashScreenWhile
 import voice.core.ui.MaxContentWidth
 import voice.core.ui.entrance
+import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberEntranceState
 import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
@@ -61,6 +67,7 @@ internal fun Library(
   onSurveyClick: () -> Unit,
   onSurveyDismiss: () -> Unit,
   onShowFoldersClick: () -> Unit,
+  onHiddenBooksClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var entered by rememberSaveable { mutableStateOf(false) }
@@ -208,6 +215,20 @@ internal fun Library(
           }
         }
       }
+      // where the books were, so they can still be found weeks later
+      if (viewState.hiddenBookCount > 0 && !viewState.showHiddenBooks) {
+        val index = entranceIndex()
+        item(key = "hiddenBooks", span = { GridItemSpan(maxLineSpan) }, contentType = "hiddenBooks") {
+          HiddenBooksButton(
+            count = viewState.hiddenBookCount,
+            onClick = onHiddenBooksClick,
+            modifier = Modifier
+              .entrance(entrance, index)
+              .padding(top = 24.dp)
+              .wrapContentWidth(Alignment.CenterHorizontally),
+          )
+        }
+      }
       item(span = { GridItemSpan(maxLineSpan) }, contentType = "navigationBarSpacer") {
         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
       }
@@ -244,5 +265,26 @@ private fun LibraryGreeting(
         color = MaterialTheme.colorScheme.onSurfaceVariant,
       )
     }
+  }
+}
+
+@Composable
+private fun HiddenBooksButton(
+  count: Int,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  TextButton(
+    onClick = onClick,
+    modifier = modifier,
+    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurfaceVariant),
+  ) {
+    Icon(
+      imageVector = VoiceIcons.VisibilityOff,
+      contentDescription = null,
+      modifier = Modifier.size(ButtonDefaults.IconSize),
+    )
+    Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+    Text(pluralStringResource(R.plurals.library_hidden_books, count, count))
   }
 }

@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Kunne ikke gemme på din server. Prøv igen.</string>
     <string name="book.edit.server.not_allowed">Din konto på serveren kan ikke ændre bøger.</string>
     <string name="book.edit.title.label">Titel</string>
+    <string name="book.hide">Skjul fra biblioteket</string>
+    <string name="book.show">Vis i biblioteket</string>
     <string name="book.source.device">På denne enhed</string>
     <string name="book.source.server_downloaded">%s · downloadet</string>
     <string name="bookmark.action.add_note">Tilføj note</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Ur</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Downloader</string>
+    <string name="library.book.hidden">Skjult</string>
+    <string name="library.book.hidden.message">%1$s er skjult</string>
     <string name="library.book.offline">Ikke tilgængelig offline</string>
     <string name="library.category.completed.title">Afsluttet</string>
     <string name="library.category.current.title">Igangværende</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Ingen lydbøger fundet</string>
     <string name="library.empty.message">Voice kan ikke finde nogen lydbøger i dine mapper. Tjek, at filerne stadig er der, eller tilføj en mappe.</string>
     <string name="library.empty.action">Vis mapper</string>
+    <string name="library.filter">Filter</string>
+    <string name="library.filter.hidden_books">Skjulte bøger</string>
+    <string name="library.filter.show">Vis</string>
     <string name="library.folders.title">Lydbogsmapper</string>
     <string name="library.folders.moved.dialog.title">Lydbogsmapper er flyttet</string>
     <string name="library.folders.moved.dialog.message">Du kan nu administrere lydbogsmapper under Indstillinger.</string>
@@ -250,6 +257,10 @@
     <plurals name="library.header.in_progress">
         <item quantity="one">%d bog i gang</item>
         <item quantity="other">%d bøger i gang</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d skjult bog</item>
+        <item quantity="other">%d skjulte bøger</item>
     </plurals>
     <string name="library.search.browse.title">Gennemse</string>
     <plurals name="library.search.browse.book_count">

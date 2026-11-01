@@ -84,6 +84,8 @@
     <string name="book.edit.server.failed">Impossibile salvare sul tuo server. Riprova.</string>
     <string name="book.edit.server.not_allowed">Il tuo account sul server non può modificare i libri.</string>
     <string name="book.edit.title.label">Titolo</string>
+    <string name="book.hide">Nascondi dalla libreria</string>
+    <string name="book.show">Mostra nella libreria</string>
     <string name="book.source.device">Su questo dispositivo</string>
     <string name="book.source.server_downloaded">%s · scaricato</string>
     <string name="bookmark.action.add_note">Aggiungi nota</string>
@@ -241,6 +243,8 @@
     <string name="history.source.watch">Orologio</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Download in corso</string>
+    <string name="library.book.hidden">Nascosto</string>
+    <string name="library.book.hidden.message">Hai nascosto %1$s</string>
     <string name="library.book.offline">Non disponibile offline</string>
     <string name="library.category.completed.title">Completato</string>
     <string name="library.category.current.title">In corso</string>
@@ -250,6 +254,9 @@
     <string name="library.empty.title">Nessun audiolibro trovato</string>
     <string name="library.empty.message">Voice non trova nessun audiolibro nelle tue cartelle. Controlla che i file siano ancora lì o aggiungi una cartella.</string>
     <string name="library.empty.action">Mostra cartelle</string>
+    <string name="library.filter">Filtra</string>
+    <string name="library.filter.hidden_books">Libri nascosti</string>
+    <string name="library.filter.show">Mostra</string>
     <string name="library.folders.title">Cartelle audiolibri</string>
     <string name="library.folders.moved.dialog.title">Cartelle degli audiolibri spostate</string>
     <string name="library.folders.moved.dialog.message">Ora puoi gestire le cartelle degli audiolibri nelle Impostazioni.</string>
@@ -264,6 +271,11 @@
         <item quantity="one">%d libro in corso</item>
         <item quantity="many">%d libri in corso</item>
         <item quantity="other">%d libri in corso</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d libro nascosto</item>
+        <item quantity="many">%d libri nascosti</item>
+        <item quantity="other">%d libri nascosti</item>
     </plurals>
     <string name="library.search.browse.title">Sfoglia</string>
     <plurals name="library.search.browse.book_count">

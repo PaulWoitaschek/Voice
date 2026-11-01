@@ -87,6 +87,8 @@
     <string name="book.edit.server.failed">Nie udało się zapisać na serwerze. Spróbuj ponownie.</string>
     <string name="book.edit.server.not_allowed">Twoje konto na serwerze nie może zmieniać książek.</string>
     <string name="book.edit.title.label">Tytuł</string>
+    <string name="book.hide">Ukryj w bibliotece</string>
+    <string name="book.show">Pokaż w bibliotece</string>
     <string name="book.source.device">Na tym urządzeniu</string>
     <string name="book.source.server_downloaded">%s · pobrano</string>
     <string name="bookmark.action.add_note">Dodaj notatkę</string>
@@ -254,6 +256,8 @@
     <string name="history.source.watch">Zegarek</string>
     <string name="history.source.widget">Widżet</string>
     <string name="library.book.downloading">Pobieranie</string>
+    <string name="library.book.hidden">Ukryta</string>
+    <string name="library.book.hidden.message">Ukryto książkę „%1$s”</string>
     <string name="library.book.offline">Niedostępne offline</string>
     <string name="library.category.completed.title">Ukończone</string>
     <string name="library.category.current.title">Aktualne</string>
@@ -263,6 +267,9 @@
     <string name="library.empty.title">Nie znaleziono audiobooków</string>
     <string name="library.empty.message">Voice nie może znaleźć żadnych audiobooków w twoich folderach. Sprawdź, czy pliki nadal tam są, albo dodaj folder.</string>
     <string name="library.empty.action">Pokaż foldery</string>
+    <string name="library.filter">Filtruj</string>
+    <string name="library.filter.hidden_books">Ukryte książki</string>
+    <string name="library.filter.show">Pokaż</string>
     <string name="library.folders.title">Foldery audiobooków</string>
     <string name="library.folders.moved.dialog.title">Foldery audiobooków przeniesione</string>
     <string name="library.folders.moved.dialog.message">Folderami audiobooków możesz teraz zarządzać w Ustawieniach.</string>
@@ -278,6 +285,12 @@
         <item quantity="few">%d rozpoczęte książki</item>
         <item quantity="many">%d rozpoczętych książek</item>
         <item quantity="other">%d rozpoczętych książek</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d ukryta książka</item>
+        <item quantity="few">%d ukryte książki</item>
+        <item quantity="many">%d ukrytych książek</item>
+        <item quantity="other">%d ukrytych książek</item>
     </plurals>
     <string name="library.search.browse.title">Przeglądaj</string>
     <plurals name="library.search.browse.book_count">

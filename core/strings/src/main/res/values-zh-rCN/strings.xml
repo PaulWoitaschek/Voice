@@ -78,6 +78,8 @@
     <string name="book.edit.server.failed">无法保存到您的服务器。请重试。</string>
     <string name="book.edit.server.not_allowed">您在服务器上的账号无权修改书籍。</string>
     <string name="book.edit.title.label">书名</string>
+    <string name="book.hide">从书库中隐藏</string>
+    <string name="book.show">在书库中显示</string>
     <string name="book.source.device">在本设备上</string>
     <string name="book.source.server_downloaded">%s · 已下载</string>
     <string name="bookmark.action.add_note">添加笔记</string>
@@ -215,6 +217,8 @@
     <string name="history.source.watch">手表</string>
     <string name="history.source.widget">小部件</string>
     <string name="library.book.downloading">正在下载</string>
+    <string name="library.book.hidden">已隐藏</string>
+    <string name="library.book.hidden.message">《%1$s》已隐藏</string>
     <string name="library.book.offline">离线不可用</string>
     <string name="library.category.completed.title">已听完</string>
     <string name="library.category.current.title">在听</string>
@@ -224,6 +228,9 @@
     <string name="library.empty.title">未找到有声书</string>
     <string name="library.empty.message">Voice 在您的文件夹中找不到任何有声书。请检查文件是否还在原处，或添加文件夹。</string>
     <string name="library.empty.action">查看文件夹</string>
+    <string name="library.filter">筛选</string>
+    <string name="library.filter.hidden_books">已隐藏的书</string>
+    <string name="library.filter.show">显示</string>
     <string name="library.folders.title">有声书文件夹</string>
     <string name="library.folders.moved.dialog.title">有声书文件夹已移动</string>
     <string name="library.folders.moved.dialog.message">您现在可以在“设置”中管理有声书文件夹。</string>
@@ -236,6 +243,9 @@
     <string name="library.greeting.night">您好，夜猫子</string>
     <plurals name="library.header.in_progress">
         <item quantity="other">正在听 %d 本书</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="other">已隐藏 %d 本书</item>
     </plurals>
     <string name="library.search.browse.title">浏览</string>
     <plurals name="library.search.browse.book_count">

@@ -67,6 +67,7 @@ data class SearchResultViewState(
   val remainingTime: String,
   /** Why a book matched when it wasn't its title or author, e.g. its series. */
   val matchTag: MatchTag?,
+  val hidden: Boolean = false,
 )
 
 @Immutable

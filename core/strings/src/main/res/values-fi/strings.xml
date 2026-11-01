@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Tallennus palvelimellesi epäonnistui. Yritä uudelleen.</string>
     <string name="book.edit.server.not_allowed">Tililläsi ei ole palvelimella oikeutta muuttaa kirjoja.</string>
     <string name="book.edit.title.label">Nimi</string>
+    <string name="book.hide">Piilota kirjastosta</string>
+    <string name="book.show">Näytä kirjastossa</string>
     <string name="book.source.device">Tällä laitteella</string>
     <string name="book.source.server_downloaded">%s · ladattu</string>
     <string name="bookmark.action.add_note">Lisää muistiinpano</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Kello</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Ladataan</string>
+    <string name="library.book.hidden">Piilotettu</string>
+    <string name="library.book.hidden.message">%1$s on piilotettu</string>
     <string name="library.book.offline">Ei saatavilla offline-tilassa</string>
     <string name="library.category.completed.title">Kuunneltu</string>
     <string name="library.category.current.title">Nykyinen</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Äänikirjoja ei löytynyt</string>
     <string name="library.empty.message">Voice ei löydä kansioistasi yhtään äänikirjaa. Tarkista, että tiedostot ovat yhä paikoillaan, tai lisää kansio.</string>
     <string name="library.empty.action">Näytä kansiot</string>
+    <string name="library.filter">Suodata</string>
+    <string name="library.filter.hidden_books">Piilotetut kirjat</string>
+    <string name="library.filter.show">Näytä</string>
     <string name="library.folders.title">Äänikirjakansiot</string>
     <string name="library.folders.moved.dialog.title">Äänikirjakansiot siirretty</string>
     <string name="library.folders.moved.dialog.message">Voit nyt hallita äänikirjakansioita asetuksissa.</string>
@@ -250,6 +257,10 @@
     <plurals name="library.header.in_progress">
         <item quantity="one">%d kirja kesken</item>
         <item quantity="other">%d kirjaa kesken</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d piilotettu kirja</item>
+        <item quantity="other">%d piilotettua kirjaa</item>
     </plurals>
     <string name="library.search.browse.title">Selaa</string>
     <plurals name="library.search.browse.book_count">

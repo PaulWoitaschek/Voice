@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Sunucunuza kaydedilemedi. Tekrar deneyin.</string>
     <string name="book.edit.server.not_allowed">Sunucudaki hesabınız kitapları değiştiremez.</string>
     <string name="book.edit.title.label">Başlık</string>
+    <string name="book.hide">Kitaplıktan gizle</string>
+    <string name="book.show">Kitaplıkta göster</string>
     <string name="book.source.device">Bu cihazda</string>
     <string name="book.source.server_downloaded">%s · indirildi</string>
     <string name="bookmark.action.add_note">Not ekle</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Akıllı saat</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">İndiriliyor</string>
+    <string name="library.book.hidden">Gizli</string>
+    <string name="library.book.hidden.message">%1$s gizlendi</string>
     <string name="library.book.offline">Çevrimdışı kullanılamaz</string>
     <string name="library.category.completed.title">Tamamlandı</string>
     <string name="library.category.current.title">Dinleniyor</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Sesli kitap bulunamadı</string>
     <string name="library.empty.message">Voice, klasörlerinizde hiç sesli kitap bulamıyor. Dosyaların hâlâ yerinde olup olmadığını kontrol edin veya bir klasör ekleyin.</string>
     <string name="library.empty.action">Klasörleri göster</string>
+    <string name="library.filter">Filtrele</string>
+    <string name="library.filter.hidden_books">Gizli kitaplar</string>
+    <string name="library.filter.show">Göster</string>
     <string name="library.folders.title">Sesli kitap klasörleri</string>
     <string name="library.folders.moved.dialog.title">Sesli kitap klasörleri taşındı</string>
     <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Ayarlar\'da yönetebilirsiniz.</string>
@@ -250,6 +257,10 @@
     <plurals name="library.header.in_progress">
         <item quantity="one">%d kitap devam ediyor</item>
         <item quantity="other">%d kitap devam ediyor</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d gizli kitap</item>
+        <item quantity="other">%d gizli kitap</item>
     </plurals>
     <string name="library.search.browse.title">Göz at</string>
     <plurals name="library.search.browse.book_count">

@@ -18,8 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,6 +50,7 @@ internal fun BookCover(
   finished: Boolean = false,
   unavailable: Boolean = false,
   download: DownloadBadge? = null,
+  hidden: Boolean = false,
 ) {
   Box(modifier = modifier) {
     AsyncImage(
@@ -63,52 +66,60 @@ internal fun BookCover(
       contentScale = ContentScale.Crop,
       contentDescription = null,
     )
-    // one badge per cover, what a download or the connection says matters more than being finished
-    if (finished && download == null && !unavailable) {
-      Box(
-        modifier = Modifier
-          .align(Alignment.BottomEnd)
-          .offset(x = 4.dp, y = 4.dp)
-          .size(24.dp)
-          .background(MaterialTheme.colorScheme.surface, CircleShape)
-          .padding(2.dp)
-          .background(MaterialTheme.colorScheme.primary, CircleShape),
-        contentAlignment = Alignment.Center,
-      ) {
-        Icon(
-          modifier = Modifier.size(14.dp),
-          imageVector = VoiceIcons.Check,
-          contentDescription = null,
-          tint = MaterialTheme.colorScheme.onPrimary,
-        )
-      }
-    }
-    if (download != null) {
-      DownloadBadgeIcon(
-        badge = download,
-        modifier = Modifier
-          .align(Alignment.BottomEnd)
-          .offset(x = 4.dp, y = 4.dp),
+    // one badge per cover, what a download or the connection says matters most, being finished least
+    val badgeModifier = Modifier
+      .align(Alignment.BottomEnd)
+      .offset(x = 4.dp, y = 4.dp)
+    val colors = MaterialTheme.colorScheme
+    when {
+      download != null -> DownloadBadgeIcon(badge = download, modifier = badgeModifier)
+      unavailable -> CoverBadge(
+        icon = VoiceIcons.CloudOff,
+        contentDescription = stringResource(StringsR.string.library_book_offline),
+        containerColor = colors.surfaceContainerHighest,
+        contentColor = colors.onSurfaceVariant,
+        modifier = badgeModifier,
       )
-    } else if (unavailable) {
-      Box(
-        modifier = Modifier
-          .align(Alignment.BottomEnd)
-          .offset(x = 4.dp, y = 4.dp)
-          .size(24.dp)
-          .background(MaterialTheme.colorScheme.surface, CircleShape)
-          .padding(2.dp)
-          .background(MaterialTheme.colorScheme.surfaceContainerHighest, CircleShape),
-        contentAlignment = Alignment.Center,
-      ) {
-        Icon(
-          modifier = Modifier.size(14.dp),
-          imageVector = VoiceIcons.CloudOff,
-          contentDescription = stringResource(StringsR.string.library_book_offline),
-          tint = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
+      hidden -> CoverBadge(
+        icon = VoiceIcons.VisibilityOff,
+        contentDescription = stringResource(StringsR.string.library_book_hidden),
+        containerColor = colors.surfaceContainerHighest,
+        contentColor = colors.onSurfaceVariant,
+        modifier = badgeModifier,
+      )
+      finished -> CoverBadge(
+        icon = VoiceIcons.Check,
+        contentDescription = null,
+        containerColor = colors.primary,
+        contentColor = colors.onPrimary,
+        modifier = badgeModifier,
+      )
     }
+  }
+}
+
+@Composable
+private fun CoverBadge(
+  icon: ImageVector,
+  contentDescription: String?,
+  containerColor: Color,
+  contentColor: Color,
+  modifier: Modifier = Modifier,
+) {
+  Box(
+    modifier = modifier
+      .size(24.dp)
+      .background(MaterialTheme.colorScheme.surface, CircleShape)
+      .padding(2.dp)
+      .background(containerColor, CircleShape),
+    contentAlignment = Alignment.Center,
+  ) {
+    Icon(
+      modifier = Modifier.size(14.dp),
+      imageVector = icon,
+      contentDescription = contentDescription,
+      tint = contentColor,
+    )
   }
 }
 

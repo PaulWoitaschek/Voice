@@ -47,11 +47,12 @@ internal class Series(
     else -> BookOverviewCategory.CURRENT
   }
 
+  // the series screen lists hidden books too, but doesn't offer to continue one
   val inProgress: Book? = books
-    .filter { it.category == BookOverviewCategory.CURRENT }
+    .filter { it.category == BookOverviewCategory.CURRENT && !it.custom.hidden }
     .maxByOrNull { it.content.lastPlayedAt }
 
-  val firstUnfinished: Book? = books.firstOrNull { it.category != BookOverviewCategory.FINISHED }
+  val firstUnfinished: Book? = books.firstOrNull { it.category != BookOverviewCategory.FINISHED && !it.custom.hidden }
 
   val front: Book = inProgress ?: firstUnfinished ?: books.first()
 

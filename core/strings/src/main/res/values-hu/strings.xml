@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">Nem sikerült menteni a szerverre. Próbálja újra.</string>
     <string name="book.edit.server.not_allowed">A szerveren lévő fiókja nem módosíthat könyveket.</string>
     <string name="book.edit.title.label">Cím</string>
+    <string name="book.hide">Elrejtés a könyvtárból</string>
+    <string name="book.show">Megjelenítés a könyvtárban</string>
     <string name="book.source.device">Ezen az eszközön</string>
     <string name="book.source.server_downloaded">%s · letöltve</string>
     <string name="bookmark.action.add_note">Jegyzet hozzáadása</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">Óra</string>
     <string name="history.source.widget">Widget</string>
     <string name="library.book.downloading">Letöltés folyamatban</string>
+    <string name="library.book.hidden">Rejtett</string>
+    <string name="library.book.hidden.message">„%1$s” elrejtve</string>
     <string name="library.book.offline">Offline nem érhető el</string>
     <string name="library.category.completed.title">Befejezett</string>
     <string name="library.category.current.title">Aktuális</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">Nem található hangoskönyv</string>
     <string name="library.empty.message">A Voice nem talál hangoskönyvet a mappáiban. Ellenőrizze, hogy a fájlok még a helyükön vannak-e, vagy adjon hozzá egy mappát.</string>
     <string name="library.empty.action">Mappák megjelenítése</string>
+    <string name="library.filter">Szűrés</string>
+    <string name="library.filter.hidden_books">Rejtett könyvek</string>
+    <string name="library.filter.show">Megjelenítés</string>
     <string name="library.folders.title">Hangoskönyv mappák</string>
     <string name="library.folders.moved.dialog.title">Új helyen a hangoskönyv mappák</string>
     <string name="library.folders.moved.dialog.message">A hangoskönyv mappákat mostantól a Beállításokban kezelheti.</string>
@@ -250,6 +257,10 @@
     <plurals name="library.header.in_progress">
         <item quantity="one">%d könyv folyamatban</item>
         <item quantity="other">%d könyv folyamatban</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d rejtett könyv</item>
+        <item quantity="other">%d rejtett könyv</item>
     </plurals>
     <string name="library.search.browse.title">Böngészés</string>
     <plurals name="library.search.browse.book_count">

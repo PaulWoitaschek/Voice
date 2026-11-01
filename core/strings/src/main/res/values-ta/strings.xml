@@ -81,6 +81,8 @@
     <string name="book.edit.server.failed">உங்கள் சர்வரில் சேமிக்க முடியவில்லை. மீண்டும் முயலவும்.</string>
     <string name="book.edit.server.not_allowed">சர்வரில் உள்ள உங்கள் கணக்கால் புத்தகங்களை மாற்ற முடியாது.</string>
     <string name="book.edit.title.label">தலைப்பு</string>
+    <string name="book.hide">நூலகத்திலிருந்து மறை</string>
+    <string name="book.show">நூலகத்தில் காட்டு</string>
     <string name="book.source.device">இந்தச் சாதனத்தில்</string>
     <string name="book.source.server_downloaded">%s · பதிவிறக்கப்பட்டது</string>
     <string name="bookmark.action.add_note">குறிப்பைச் சேர்</string>
@@ -228,6 +230,8 @@
     <string name="history.source.watch">கைக்கடிகாரம்</string>
     <string name="history.source.widget">விட்ஜெட்</string>
     <string name="library.book.downloading">பதிவிறக்குகிறது</string>
+    <string name="library.book.hidden">மறைக்கப்பட்டது</string>
+    <string name="library.book.hidden.message">%1$s மறைக்கப்பட்டது</string>
     <string name="library.book.offline">ஆஃப்லைனில் கிடைக்காது</string>
     <string name="library.category.completed.title">முடித்தவை</string>
     <string name="library.category.current.title">தற்போது கேட்பவை</string>
@@ -237,6 +241,9 @@
     <string name="library.empty.title">ஆடியோபுக்குகள் எதுவும் கிடைக்கவில்லை</string>
     <string name="library.empty.message">உங்கள் கோப்புறைகளில் Voice-ஆல் எந்த ஆடியோபுக்கையும் கண்டறிய முடியவில்லை. கோப்புகள் இன்னும் அங்கே உள்ளனவா எனச் சரிபார்க்கவும், அல்லது ஒரு கோப்புறையைச் சேர்க்கவும்.</string>
     <string name="library.empty.action">கோப்புறைகளைக் காட்டு</string>
+    <string name="library.filter">வடிகட்டு</string>
+    <string name="library.filter.hidden_books">மறைக்கப்பட்ட புத்தகங்கள்</string>
+    <string name="library.filter.show">காட்டு</string>
     <string name="library.folders.title">ஆடியோபுக் கோப்புறைகள்</string>
     <string name="library.folders.moved.dialog.title">ஆடியோபுக் கோப்புறைகள் நகர்த்தப்பட்டன</string>
     <string name="library.folders.moved.dialog.message">இப்போது ஆடியோபுக் கோப்புறைகளை அமைப்புகளில் நிர்வகிக்கலாம்.</string>
@@ -250,6 +257,10 @@
     <plurals name="library.header.in_progress">
         <item quantity="one">%d புத்தகம் கேட்கப்படுகிறது</item>
         <item quantity="other">%d புத்தகங்கள் கேட்கப்படுகின்றன</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="one">%d மறைக்கப்பட்ட புத்தகம்</item>
+        <item quantity="other">%d மறைக்கப்பட்ட புத்தகங்கள்</item>
     </plurals>
     <string name="library.search.browse.title">உலாவு</string>
     <plurals name="library.search.browse.book_count">

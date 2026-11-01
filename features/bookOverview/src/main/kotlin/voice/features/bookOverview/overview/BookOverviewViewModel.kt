@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -44,6 +45,8 @@ import voice.core.ui.GridCount
 import voice.core.ui.GridMode
 import voice.core.ui.GridModeStore
 import voice.features.bookOverview.di.BookOverviewScope
+import voice.features.bookOverview.hideBook.BookHider
+import voice.features.bookOverview.hideBook.HiddenBook
 import voice.features.bookOverview.survey.Survey
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -72,10 +75,14 @@ class BookOverviewViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val emptyLibraryTracker: EmptyLibraryTracker,
   private val survey: Survey,
+  private val showHiddenBooksStore: ShowHiddenBooksStore,
+  private val bookHider: BookHider,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
   private var dialog by mutableStateOf<BookOverviewViewState.Dialog?>(null)
+
+  internal val hiddenBooks: Flow<HiddenBook> get() = bookHider.hidden
 
   fun attach() {
     mediaScanner.scan()
@@ -93,7 +100,7 @@ class BookOverviewViewModel(
       .collectAsState().value
     // Everything shown on the first frame stays loading until known, so the library never shows a
     // half loaded state (e.g. no hero card, or top bar icons that disappear again).
-    val books = remember { repo.flow() }
+    val allBooks = remember { repo.flow() }
       .collectAsState(initial = null).value
     val currentBook = remember { currentBookStoreDataStore.data.map(::CurrentBook) }
       .collectAsState(initial = null).value
@@ -113,19 +120,26 @@ class BookOverviewViewModel(
       audiobookFolders.withoutAccess().map { folders -> folders.values.any { it.isNotEmpty() } }
     }.collectAsState(initial = null).value
     val hasSurvey = remember { survey.url().map { it != null } }.collectAsState(initial = null).value
-    if (books == null ||
+    val showHiddenBooks = remember { showHiddenBooksStore.data }.collectAsState(initial = null).value
+    if (allBooks == null ||
       currentBook == null ||
       folderPickerMovedDialogShown == null ||
       gridMode == null ||
       hasFoldersWithoutAccess == null ||
-      hasSurvey == null
+      hasSurvey == null ||
+      showHiddenBooks == null
     ) {
       return BookOverviewViewState.Loading
+    }
+    val hiddenBookCount = remember(allBooks) { allBooks.count { it.custom.hidden } }
+    val books = remember(allBooks, showHiddenBooks) {
+      if (showHiddenBooks) allBooks else allBooks.filterNot { it.custom.hidden }
     }
     // a deleted book can stay the current one
     val currentBookId = currentBook.id?.takeIf { id -> books.any { it.id == id } }
 
-    val showEmptyLibrary = !hasStoragePermissionBug && !scannerActive && books.isEmpty()
+    // with every book hidden, the folders still have books, so there's nothing to add
+    val showEmptyLibrary = !hasStoragePermissionBug && !scannerActive && allBooks.isEmpty()
     LaunchedEffect(showEmptyLibrary) {
       if (showEmptyLibrary) emptyLibraryTracker.track()
     }
@@ -185,7 +199,7 @@ class BookOverviewViewModel(
         BookOverviewViewState.PlayButtonState.Paused
       }.takeIf { currentBookId != null },
       showEmptyLibrary = showEmptyLibrary,
-      showSearchIcon = books.isNotEmpty(),
+      showSearchIcon = allBooks.isNotEmpty(),
       isLoading = scannerActive,
       showStoragePermissionBugCard = hasStoragePermissionBug,
       // adding books comes first
@@ -195,6 +209,8 @@ class BookOverviewViewModel(
         !folderPickerMovedDialogShown &&
         appInfoProvider.installTime < FolderPickerMigrationInstallTimeCutoff,
       dialog = dialog,
+      hiddenBookCount = hiddenBookCount,
+      showHiddenBooks = showHiddenBooks,
     )
   }
 
@@ -239,6 +255,18 @@ class BookOverviewViewModel(
 
   fun onSeriesClick(name: String) {
     navigator.goTo(Destination.Series(name))
+  }
+
+  fun onShowHiddenBooksChange(show: Boolean) {
+    scope.launch {
+      showHiddenBooksStore.updateData { show }
+    }
+  }
+
+  internal fun onUndoHide(id: BookId) {
+    scope.launch {
+      bookHider.show(id)
+    }
   }
 
   fun onBookFolderClick() {

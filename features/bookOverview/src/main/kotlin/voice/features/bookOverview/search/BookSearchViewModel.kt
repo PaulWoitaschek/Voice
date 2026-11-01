@@ -354,5 +354,6 @@ private fun BookSearchResult.toViewState(livePlaybackState: LivePlaybackState?):
       val text = field.text(book) ?: return@firstNotNullOfOrNull null
       MatchTag(field, HighlightedText(text, highlights))
     },
+    hidden = item.hidden,
   )
 }

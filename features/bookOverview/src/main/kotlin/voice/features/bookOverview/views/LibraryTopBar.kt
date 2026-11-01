@@ -19,6 +19,7 @@ import androidx.compose.material3.AppBarWithSearch
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
@@ -52,10 +53,12 @@ internal fun LibraryTopBar(
   showSearch: Boolean,
   showFolderPickerIcon: Boolean,
   showFolderAccessBadge: Boolean,
+  showFilter: Boolean,
   isLoading: Boolean,
   scrollBehavior: SearchBarScrollBehavior?,
   onSearchClick: () -> Unit,
   onBookFolderClick: () -> Unit,
+  onFilterClick: () -> Unit,
   onSettingsClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -81,6 +84,11 @@ internal fun LibraryTopBar(
       actions = {
         if (showFolderPickerIcon) {
           BookFolderIcon(onClick = onBookFolderClick)
+        }
+        if (showFilter) {
+          IconButton(onClick = onFilterClick) {
+            Icon(imageVector = VoiceIcons.Sort, contentDescription = stringResource(StringsR.string.library_filter))
+          }
         }
         SettingsIcon(showFolderAccessBadge = showFolderAccessBadge, onSettingsClick = onSettingsClick)
       },
@@ -153,10 +161,12 @@ private fun LibraryTopBarPreview() {
       showSearch = true,
       showFolderPickerIcon = true,
       showFolderAccessBadge = true,
+      showFilter = true,
       isLoading = false,
       scrollBehavior = null,
       onSearchClick = {},
       onBookFolderClick = {},
+      onFilterClick = {},
       onSettingsClick = {},
     )
   }

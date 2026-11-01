@@ -136,6 +136,18 @@ class LibrarySeriesTest {
   }
 
   @Test
+  fun `hidden books aren't the ones to continue`() {
+    val first = inProgress(series = "Saga", part = "1", lastPlayedAt = Instant.ofEpochSecond(1))
+    val second = book(series = "Saga", part = "2", time = 5_000, lastPlayedAt = Instant.ofEpochSecond(3), hidden = true)
+    val third = book(series = "Saga", part = "3", time = 0, hidden = true)
+
+    val series = listOf(first, second, third).series().single()
+
+    assertEquals(expected = first, actual = series.inProgress)
+    assertEquals(expected = first, actual = series.firstUnfinished)
+  }
+
+  @Test
   fun `a finished series shows its first book`() {
     val first = finished(series = "Saga", part = "1")
     val second = finished(series = "Saga", part = "2")

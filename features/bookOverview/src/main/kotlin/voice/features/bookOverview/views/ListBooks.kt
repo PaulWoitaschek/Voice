@@ -144,6 +144,10 @@ internal fun ListBookRow(
           }
         }
       }
+      if (book.hidden) {
+        Spacer(Modifier.width(12.dp))
+        HiddenLabel()
+      }
     }
   }
 }
@@ -166,6 +170,16 @@ private fun ListBookRowPreviewFinished() {
   VoiceTheme {
     Surface {
       ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 1f), {}, {}, finished = true)
+    }
+  }
+}
+
+@Composable
+@Preview
+private fun ListBookRowPreviewHidden() {
+  VoiceTheme {
+    Surface {
+      ListBookRow(BookOverviewPreviewParameterProvider().book().copy(progress = 0.3f, hidden = true), {}, {})
     }
   }
 }

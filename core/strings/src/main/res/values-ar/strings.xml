@@ -93,6 +93,8 @@
     <string name="book.edit.server.failed">تعذّر الحفظ على خادمك. يمكنك المحاولة مجددًا.</string>
     <string name="book.edit.server.not_allowed">لا يملك حسابك على الخادم صلاحية تعديل الكتب.</string>
     <string name="book.edit.title.label">العنوان</string>
+    <string name="book.hide">إخفاء من المكتبة</string>
+    <string name="book.show">إظهار في المكتبة</string>
     <string name="book.source.device">على هذا الجهاز</string>
     <string name="book.source.server_downloaded">تم التنزيل من %s</string>
     <string name="bookmark.action.add_note">إضافة ملاحظة</string>
@@ -280,6 +282,8 @@
     <string name="history.source.watch">الساعة</string>
     <string name="history.source.widget">الأداة المصغّرة</string>
     <string name="library.book.downloading">جارٍ التنزيل</string>
+    <string name="library.book.hidden">مخفي</string>
+    <string name="library.book.hidden.message">تم إخفاء %1$s</string>
     <string name="library.book.offline">غير متاح بلا اتصال</string>
     <string name="library.category.completed.title">مكتمل</string>
     <string name="library.category.current.title">الحالي</string>
@@ -289,6 +293,9 @@
     <string name="library.empty.title">لم يُعثر على كتب صوتية</string>
     <string name="library.empty.message">يتعذّر على Voice العثور على أي كتب صوتية في مجلداتك. يمكنك التحقّق من أنّ الملفات ما زالت في مكانها، أو إضافة مجلد.</string>
     <string name="library.empty.action">عرض المجلدات</string>
+    <string name="library.filter">تصفية</string>
+    <string name="library.filter.hidden_books">الكتب المخفية</string>
+    <string name="library.filter.show">عرض</string>
     <string name="library.folders.title">مجلدات الكتب الصوتية</string>
     <string name="library.folders.moved.dialog.title">نُقلت مجلدات الكتب الصوتية</string>
     <string name="library.folders.moved.dialog.message">يمكنك الآن إدارة مجلدات الكتب الصوتية من الإعدادات.</string>
@@ -306,6 +313,14 @@
         <item quantity="few">%d كتب قيد الاستماع</item>
         <item quantity="many">%d كتابًا قيد الاستماع</item>
         <item quantity="other">%d كتاب قيد الاستماع</item>
+    </plurals>
+    <plurals name="library.hidden_books">
+        <item quantity="zero">%d كتاب مخفي</item>
+        <item quantity="one">%d كتاب مخفي</item>
+        <item quantity="two">%d كتابان مخفيان</item>
+        <item quantity="few">%d كتب مخفية</item>
+        <item quantity="many">%d كتابًا مخفيًا</item>
+        <item quantity="other">%d كتاب مخفي</item>
     </plurals>
     <string name="library.search.browse.title">تصفح</string>
     <plurals name="library.search.browse.book_count">
