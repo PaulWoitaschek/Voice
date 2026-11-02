@@ -108,5 +108,5 @@ architecture skill). For wording, follow the tone in the translate-strings skill
 
 Check light and dark, a non-default palette, Dynamic color, large fonts (1.5× and 2×), animations off, RTL, a short
 landscape screen, a short split screen pane, and a tablet in portrait and landscape. For cover-colored screens, try a
-very bright cover and a very dark one. Previews rendered with the `snapshot` task (the snapshots skill) cover sizes,
+very bright cover and a very dark one. Previews rendered with `android preview` (the previews skill) cover sizes,
 fonts, dark and RTL in seconds. The rest needs an emulator (the emulator skill).

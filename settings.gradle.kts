@@ -139,8 +139,6 @@ include(":core:audiobookshelf:impl")
 
 include(":features:audiobookshelf")
 
-include(":core:snapshot")
-
 include(":core:foldersync")
 
 include(":core:datastore")
