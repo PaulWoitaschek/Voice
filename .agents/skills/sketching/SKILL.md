@@ -1,6 +1,6 @@
 ---
 name: sketching
-description: Drawing low-fi sketches of Voice screens in a hand-drawn style, from a short scene file and one render command. Use when asked to sketch, wireframe or mock up a screen, a flow or an idea, for a product spec, an issue, a discussion or a pull request, before it's built. To see how the real app looks, use the snapshots or emulator skill instead.
+description: Drawing low-fi sketches of Voice screens in a hand-drawn style, from a short scene file and one render command. Use when asked to sketch, wireframe or mock up a screen, a flow or an idea, for a product spec, an issue, a discussion or a pull request, before it's built. To see how the real app looks, use the previews or emulator skill instead.
 ---
 
 # Sketching

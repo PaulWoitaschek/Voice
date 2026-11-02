@@ -22,4 +22,5 @@ dependencies {
   implementation(libs.navigation3.ui)
 
   testImplementation(libs.compose.ui.testJunit)
+  debugImplementation(libs.compose.ui.testManifest)
 }
