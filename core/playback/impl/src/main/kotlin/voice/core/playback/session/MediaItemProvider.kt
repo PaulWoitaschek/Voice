@@ -137,8 +137,17 @@ class MediaItemProvider(
   suspend fun children(id: String): List<MediaItem>? {
     val mediaId = id.toMediaIdOrNull() ?: return null
     return when (mediaId) {
-      MediaId.Root -> rootChildren(libraryBooks())
-      is MediaId.Category -> categoryChildren(libraryBooks(), mediaId.category)
+      // Android Auto shows these as tabs
+      MediaId.Root -> {
+        val categories = libraryBooks().map { it.category }.toSet()
+        BookCategory.entries.filter { it in categories }.map(::mediaItem)
+      }
+      is MediaId.Category -> {
+        libraryBooks()
+          .filter { it.category == mediaId.category }
+          .sortedWith(mediaId.category.comparator)
+          .map(::mediaItem)
+      }
       is MediaId.Book -> chapters(mediaId.id)
       is MediaId.Chapter,
       is MediaId.ChapterMark -> null
@@ -149,25 +158,6 @@ class MediaItemProvider(
       }
     }
   }
-
-  fun libraryLists(books: List<Book>): Map<String, List<MediaItem>> {
-    val library = books.filterNot { it.custom.hidden }
-    return BookCategory.entries.associate {
-      mediaItem(it).mediaId to categoryChildren(library, it)
-    } + (root().mediaId to rootChildren(library))
-  }
-
-  // Android Auto shows these as tabs
-  private fun rootChildren(library: List<Book>): List<MediaItem> {
-    val categories = library.map { it.category }.toSet()
-    return BookCategory.entries.filter { it in categories }.map(::mediaItem)
-  }
-
-  private fun categoryChildren(
-    library: List<Book>,
-    category: BookCategory,
-  ): List<MediaItem> =
-    library.filter { it.category == category }.sortedWith(category.comparator).map(::mediaItem)
 
   private suspend fun libraryBooks(): List<Book> =
     bookRepository.all().filterNot { it.custom.hidden }
