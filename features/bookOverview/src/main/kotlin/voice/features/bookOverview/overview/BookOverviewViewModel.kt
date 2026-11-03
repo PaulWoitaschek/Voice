@@ -27,7 +27,9 @@ import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.core.data.BookId
+import voice.core.data.category
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
@@ -205,8 +207,7 @@ class BookOverviewViewModel(
       )
 
     val entries = remember(books) { libraryEntries(books) }
-    val inProgressCount =
-      remember(books) { books.count { it.category == BookOverviewCategory.CURRENT } }
+    val inProgressCount = remember(books) { books.count { it.category == BookCategory.CURRENT } }
     return BookOverviewViewState(
       layoutMode = layoutMode,
       sections =
@@ -258,7 +259,7 @@ class BookOverviewViewModel(
       layoutMode = BookOverviewLayoutMode.List,
       sections =
         mapOf(
-          BookOverviewCategory.CURRENT to
+          BookCategory.CURRENT to
             KioskModeDemoData.demoAudiobooks
               .filter { it.id != KioskModeDemoData.currentlyPlaying.id }
               .map { book -> LibraryItem.Book(book.id, mutableStateOf(book.toItemViewState())) },

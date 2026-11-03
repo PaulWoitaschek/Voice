@@ -1,11 +1,12 @@
 package voice.core.search
 
 import dev.zacsweers.metro.Inject
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.withContext
 import voice.core.common.DispatcherProvider
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
+import voice.core.data.BookCategory
+import voice.core.data.category
 import voice.core.data.repo.BookRepository
 
 @Inject
@@ -124,7 +125,7 @@ class BookSearch(
 
     val resultComparator: Comparator<BookSearchResult> =
       compareByDescending<BookSearchResult> { it.score }
-        .thenByDescending { it.book.isInProgress() }
+        .thenByDescending { it.book.category == BookCategory.CURRENT }
         .thenByDescending { it.book.content.lastPlayedAt }
         .thenBy(NaturalOrderComparator.stringComparator) { it.book.part.orEmpty() }
         .thenBy(NaturalOrderComparator.stringComparator) { it.book.name }
@@ -140,10 +141,6 @@ private val BookSearchField.weight: Int
       BookSearchField.Narrator -> 2
       BookSearchField.Genre -> 1
     }
-
-private fun Book.isInProgress(): Boolean {
-  return position > 0 && position < duration - TimeUnit.SECONDS.toMillis(5)
-}
 
 // ranges only apart by spaces are joined too, so "stephen king" is highlighted as one
 private fun List<IntRange>.merged(text: String): List<IntRange> {

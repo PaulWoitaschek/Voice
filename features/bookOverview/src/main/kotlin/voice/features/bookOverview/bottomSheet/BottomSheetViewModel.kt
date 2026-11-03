@@ -19,13 +19,13 @@ import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.category
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.features.bookOverview.di.BookActionsScope
-import voice.features.bookOverview.overview.category
 import voice.features.bookOverview.overview.toItemViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator

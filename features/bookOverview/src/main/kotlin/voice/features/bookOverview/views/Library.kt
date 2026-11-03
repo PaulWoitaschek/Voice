@@ -38,6 +38,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import java.util.Calendar
+import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.strings.R
 import voice.core.ui.CenteredContent
@@ -46,7 +47,6 @@ import voice.core.ui.MaxContentWidth
 import voice.core.ui.entrance
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberEntranceState
-import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.overview.LibraryItem
@@ -146,10 +146,10 @@ internal fun Library(
           )
         }
       }
-      BookOverviewCategory.entries.forEach { category ->
+      BookCategory.entries.forEach { category ->
         val items = viewState.sections[category].orEmpty()
         if (items.isEmpty()) return@forEach
-        val finished = category == BookOverviewCategory.FINISHED
+        val finished = category == BookCategory.FINISHED
         val headerIndex = entranceIndex()
         item(key = category, span = { GridItemSpan(maxLineSpan) }, contentType = "header") {
           Header(

@@ -69,6 +69,7 @@ import java.text.NumberFormat
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.audiobookshelf.download.WaitingFor
+import voice.core.data.BookCategory
 import voice.core.strings.R as StringsR
 import voice.core.ui.MorphShape
 import voice.core.ui.R as UiR
@@ -81,8 +82,8 @@ import voice.core.ui.rememberConfettiState
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.rememberEntranceState
 import voice.core.ui.segmentedShape
-import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
+import voice.features.bookOverview.overview.nameRes
 import voice.features.bookOverview.views.CoverShape
 
 private val EditItems =
@@ -101,9 +102,9 @@ private val EditItems =
 /** The order a book moves through, so the picker reads like a timeline. */
 private val StatusOrder =
   listOf(
-    BookOverviewCategory.NOT_STARTED,
-    BookOverviewCategory.CURRENT,
-    BookOverviewCategory.FINISHED,
+    BookCategory.NOT_STARTED,
+    BookCategory.CURRENT,
+    BookCategory.FINISHED,
   )
 
 @Composable
@@ -112,10 +113,10 @@ internal fun BookActionsContent(
   source: BookSource?,
   download: BookDownloadState?,
   bookSize: Long,
-  category: BookOverviewCategory,
+  category: BookCategory,
   items: List<BottomSheetItem>,
   onItemClick: (BottomSheetItem) -> Unit,
-  onStatusChange: (BookOverviewCategory) -> Unit,
+  onStatusChange: (BookCategory) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val entrance = rememberEntranceState()
@@ -291,10 +292,10 @@ private class StatusStyle(
 )
 
 @Composable
-private fun BookOverviewCategory.style(): StatusStyle {
+private fun BookCategory.style(): StatusStyle {
   val colors = MaterialTheme.colorScheme
   return when (this) {
-    BookOverviewCategory.NOT_STARTED ->
+    BookCategory.NOT_STARTED ->
       StatusStyle(
         icon = VoiceIcons.HourglassEmpty,
         shape = MaterialShapes.Cookie6Sided,
@@ -302,7 +303,7 @@ private fun BookOverviewCategory.style(): StatusStyle {
         blob = colors.secondary,
         onBlob = colors.onSecondary,
       )
-    BookOverviewCategory.CURRENT ->
+    BookCategory.CURRENT ->
       StatusStyle(
         icon = VoiceIcons.Headphones,
         shape = MaterialShapes.Sunny,
@@ -310,7 +311,7 @@ private fun BookOverviewCategory.style(): StatusStyle {
         blob = colors.primary,
         onBlob = colors.onPrimary,
       )
-    BookOverviewCategory.FINISHED ->
+    BookCategory.FINISHED ->
       StatusStyle(
         icon = VoiceIcons.Check,
         shape = MaterialShapes.SoftBurst,
@@ -323,8 +324,8 @@ private fun BookOverviewCategory.style(): StatusStyle {
 
 @Composable
 private fun StatusPicker(
-  current: BookOverviewCategory,
-  onSelect: (BookOverviewCategory) -> Unit,
+  current: BookCategory,
+  onSelect: (BookCategory) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var selected by remember(current) { mutableStateOf(current) }
@@ -352,7 +353,7 @@ private fun StatusPicker(
 
 @Composable
 private fun StatusTile(
-  category: BookOverviewCategory,
+  category: BookCategory,
   selected: Boolean,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
@@ -411,7 +412,7 @@ private fun StatusTile(
           role = Role.RadioButton,
           onClick = {
             onClick()
-            if (category == BookOverviewCategory.FINISHED) confetti.burst()
+            if (category == BookCategory.FINISHED) confetti.burst()
             scope.launch {
               squish.snapTo(0.9F)
               squish.animateTo(1F, spring(dampingRatio = 0.3F, stiffness = Spring.StiffnessMedium))
