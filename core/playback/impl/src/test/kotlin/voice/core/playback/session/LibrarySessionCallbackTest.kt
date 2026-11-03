@@ -3,12 +3,14 @@ package voice.core.playback.session
 import android.content.Context
 import android.os.Bundle
 import androidx.media3.common.Player
+import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.MediaSession
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionError
 import androidx.media3.test.utils.TestExoPlayerBuilder
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -21,11 +23,14 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.runner.RunWith
+import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.session.search.BookSearchParser
+import voice.core.search.BookSearch
+import voice.core.search.BookSearchResult
 
 @RunWith(AndroidJUnit4::class)
 class LibrarySessionCallbackTest {
@@ -40,9 +45,11 @@ class LibrarySessionCallbackTest {
       every { isMediaNotificationController(any()) } returns true
     }
   private val notification = controller(context.packageName, context.applicationInfo.uid)
+  private val mediaItemProvider = mockk<MediaItemProvider>()
+  private val bookSearch = mockk<BookSearch>()
   private val callback =
     LibrarySessionCallback(
-      mediaItemProvider = mockk(),
+      mediaItemProvider = mediaItemProvider,
       scope = scope.backgroundScope,
       player = mockk(relaxed = true),
       bookSearchParser = BookSearchParser(),
@@ -52,6 +59,7 @@ class LibrarySessionCallbackTest {
       commandSourceResolver = mockk(relaxed = true),
       context = context,
       lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
+      bookSearch = bookSearch,
     )
   private val customCommand = SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY)
 
@@ -130,6 +138,32 @@ class LibrarySessionCallbackTest {
     assertTrue(result.availablePlayerCommands.contains(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM))
   }
 
+  @Test
+  fun `searching in Android Auto lists the matching books`() = scope.runTest {
+    val book = mockk<Book>()
+    val item =
+      MediaItem(
+        title = "The Hobbit",
+        mediaId = MediaId.Book(BookId("book")),
+        isPlayable = true,
+        browsable = false,
+        mediaType = MediaType.AudioBook,
+      )
+    every { mediaItemProvider.mediaItem(book) } returns item
+    coEvery { bookSearch.search("tolkien") } returns
+      listOf(BookSearchResult(book, emptyMap(), emptySet(), score = 1))
+    val librarySession = mockk<MediaLibrarySession>(relaxed = true)
+    val androidAuto = controller(ANDROID_AUTO_PACKAGE, OTHER_UID)
+
+    val _ = callback.onSearch(librarySession, androidAuto, "tolkien", null)
+    val result =
+      callback.onGetSearchResult(librarySession, androidAuto, "tolkien", 0, Int.MAX_VALUE, null)
+    runCurrent()
+
+    verify { librarySession.notifySearchResultChanged(androidAuto, "tolkien", 1, null) }
+    assertEquals(expected = listOf(item), actual = result.get().value?.toList())
+  }
+
   private fun notificationCommands(): List<Player.Commands> {
     val commands = mutableListOf<Player.Commands>()
     verify { notificationSession.setAvailableCommands(notification, any(), capture(commands)) }
@@ -153,6 +187,7 @@ class LibrarySessionCallbackTest {
 
   private companion object {
     const val OTHER_PACKAGE = "com.example.remote"
+    const val ANDROID_AUTO_PACKAGE = "com.google.android.projection.gearhead"
     const val OTHER_UID = 10_123
     const val MEDIA3_CONTROLLER_VERSION = 1
   }
