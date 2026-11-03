@@ -53,13 +53,31 @@ class CommandSourceResolver(private val context: Context) {
     return sourceFor(session, controller)
   }
 
+  internal fun currentIsMediaButton(): Boolean {
+    val session = session ?: return false
+    val controller = session.controllerForCurrentRequest ?: return false
+    return isMediaButton(session, controller)
+  }
+
+  internal fun isMediaButton(
+    session: MediaSession,
+    controller: MediaSession.ControllerInfo,
+  ): Boolean {
+    // Bluetooth only relays the keys of car stereos and headsets, however it passes them on
+    if (controller.packageName == BLUETOOTH_PACKAGE) return true
+    val mediaButton = recentMediaButton() ?: return false
+    return when {
+      session.isMediaNotificationController(controller) -> true
+      controller.packageName == context.packageName -> false
+      else -> mediaButton.sentBy(controller)
+    }
+  }
+
   internal fun sourceFor(
     session: MediaSession,
     controller: MediaSession.ControllerInfo,
   ): CommandSource? {
-    val mediaButton = lastMediaButton?.takeIf {
-      SystemClock.elapsedRealtime() - it.atMillis < MEDIA_BUTTON_WINDOW_MS
-    }
+    val mediaButton = recentMediaButton()
     if (session.isMediaNotificationController(controller)) {
       // media buttons from headsets are passed on as if the notification sent them
       return mediaButton?.source ?: CommandSource(ListeningEvent.Source.Notification)
@@ -73,6 +91,10 @@ class CommandSourceResolver(private val context: Context) {
       return mediaButton.source
     }
     return sourceForPackage(session, controller)
+  }
+
+  private fun recentMediaButton(): MediaButton? = lastMediaButton?.takeIf {
+    SystemClock.elapsedRealtime() - it.atMillis < MEDIA_BUTTON_WINDOW_MS
   }
 
   private fun sourceForPackage(

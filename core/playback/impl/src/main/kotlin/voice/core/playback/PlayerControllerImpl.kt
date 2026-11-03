@@ -125,19 +125,13 @@ class PlayerControllerImpl(
   }
 
   override fun previous() = executeAfterPrepare { controller ->
-    val currentIndex = controller.currentMediaItemIndex
-    val index =
-      if (controller.currentPosition > controller.maxSeekToPreviousPosition) {
-        currentIndex
-      } else {
-        controller.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentIndex
-      }
+    val index = controller.seekToPreviousIndex()
     val to = controller.playbackPosition(index, 0)
     val type =
       previousJumpType(
         from = controller.playbackPosition(),
         to = to,
-        sameItem = index == currentIndex,
+        sameItem = index == controller.currentMediaItemIndex,
       )
     if (type != null) {
       controller.record(type, to = to)
@@ -339,6 +333,15 @@ class PlayerControllerImpl(
       Logger.w(e, "Error while connecting to media controller")
       null
     }
+  }
+}
+
+internal fun Player.seekToPreviousIndex(): Int {
+  val currentIndex = currentMediaItemIndex
+  return if (currentPosition > maxSeekToPreviousPosition) {
+    currentIndex
+  } else {
+    previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentIndex
   }
 }
 

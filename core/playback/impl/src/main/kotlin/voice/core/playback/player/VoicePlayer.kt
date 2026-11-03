@@ -31,6 +31,8 @@ import voice.core.playback.history.PlaybackPosition
 import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
+import voice.core.playback.previousJumpType
+import voice.core.playback.seekToPreviousIndex
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.bookId
 import voice.core.playback.session.playbackItemForPosition
@@ -140,23 +142,54 @@ class VoicePlayer(
     player.seekToPrevious()
   }
 
-  // Next and previous from headsets, cars and watches skip instead of changing the chapter, so
-  // listeners keep their
-  // place.
+  // Next and previous keys on headsets and car stereos don't show what they do, so they skip
+  // instead of changing the chapter, and listeners keep their place. Buttons on a screen, like in
+  // Android Auto, and the Assistant change it.
   override fun seekToPreviousMediaItem() {
-    seekBack()
+    seekToPrevious()
   }
 
   override fun seekToNextMediaItem() {
-    seekForward()
+    seekToNext()
   }
 
   override fun seekToPrevious() {
-    seekBack()
+    if (commandSourceResolver.currentIsMediaButton()) {
+      seekBack()
+    } else {
+      recordExternalPrevious()
+      forceSeekToPrevious()
+    }
   }
 
   override fun seekToNext() {
-    seekForward()
+    if (commandSourceResolver.currentIsMediaButton()) {
+      seekForward()
+    } else {
+      recordExternalNext()
+      forceSeekToNext()
+    }
+  }
+
+  private fun recordExternalPrevious() {
+    val source = commandSourceResolver.current() ?: return
+    val index = player.seekToPreviousIndex()
+    val from = player.playbackPosition()
+    val to = player.playbackPosition(index, 0)
+    val type =
+      previousJumpType(from = from, to = to, sameItem = index == player.currentMediaItemIndex)
+        ?: return
+    recordExternalCommand(source, type, from, to)
+  }
+
+  private fun recordExternalNext() {
+    val index = player.nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: return
+    recordExternalCommand(
+      source = commandSourceResolver.current(),
+      type = ListeningEvent.Type.ChapterChange,
+      position = player.playbackPosition(),
+      to = player.playbackPosition(index, 0),
+    )
   }
 
   override fun seekBack() {
