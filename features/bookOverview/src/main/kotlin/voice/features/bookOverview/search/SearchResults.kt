@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import java.text.NumberFormat
+import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.search.BookSearchField
 import voice.core.strings.R as StringsR
@@ -53,7 +54,6 @@ import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.playButtonSharedElementModifier
 import voice.core.ui.segmentedShape
-import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.views.BookCover
 import voice.features.bookOverview.views.HiddenLabel
 
@@ -169,7 +169,7 @@ private fun TopResult(
       BookCover(
         bookId = result.id,
         cover = result.cover,
-        finished = result.category == BookOverviewCategory.FINISHED,
+        finished = result.category == BookCategory.FINISHED,
         modifier = Modifier.size(96.dp),
       )
       Spacer(Modifier.width(16.dp))
@@ -203,7 +203,7 @@ private fun TopResult(
         Spacer(Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
           Column(Modifier.weight(1F)) {
-            if (result.category == BookOverviewCategory.CURRENT) {
+            if (result.category == BookCategory.CURRENT) {
               LinearProgressIndicator(
                 progress = { result.progress },
                 modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp),
@@ -261,7 +261,7 @@ private fun SearchResultRow(
       BookCover(
         bookId = result.id,
         cover = result.cover,
-        finished = result.category == BookOverviewCategory.FINISHED,
+        finished = result.category == BookCategory.FINISHED,
         modifier = Modifier.size(56.dp),
       )
       Spacer(Modifier.width(16.dp))
@@ -310,7 +310,7 @@ private fun SearchResultRow(
 @Composable
 private fun ResultTrailing(result: SearchResultViewState) {
   when (result.category) {
-    BookOverviewCategory.CURRENT -> {
+    BookCategory.CURRENT -> {
       Column(horizontalAlignment = Alignment.CenterHorizontally) {
         CircularProgressIndicator(
           progress = { result.progress },
@@ -327,7 +327,7 @@ private fun ResultTrailing(result: SearchResultViewState) {
         )
       }
     }
-    BookOverviewCategory.NOT_STARTED -> {
+    BookCategory.NOT_STARTED -> {
       Text(
         text = result.remainingTime,
         style = MaterialTheme.typography.labelMedium,
@@ -335,7 +335,7 @@ private fun ResultTrailing(result: SearchResultViewState) {
       )
     }
     // the cover shows a check
-    BookOverviewCategory.FINISHED -> Unit
+    BookCategory.FINISHED -> Unit
   }
 }
 
@@ -395,7 +395,7 @@ private fun SearchResultsPreview() {
   fun result(
     title: String,
     author: String,
-    category: BookOverviewCategory,
+    category: BookCategory,
     titleHighlights: List<IntRange> = emptyList(),
     authorHighlights: List<IntRange> = emptyList(),
     matchTag: MatchTag? = null,
@@ -438,7 +438,7 @@ private fun SearchResultsPreview() {
               result(
                 title = "The Way of Kings",
                 author = "Brandon Sanderson",
-                category = BookOverviewCategory.CURRENT,
+                category = BookCategory.CURRENT,
                 titleHighlights = listOf(11..14),
               ),
             topResultPlaying = false,
@@ -447,25 +447,25 @@ private fun SearchResultsPreview() {
                 result(
                   title = "The King of Elfland's Daughter",
                   author = "Lord Dunsany",
-                  category = BookOverviewCategory.NOT_STARTED,
+                  category = BookCategory.NOT_STARTED,
                   titleHighlights = listOf(4..7),
                 ),
                 result(
                   title = "Fairy Tale",
                   author = "Stephen King",
-                  category = BookOverviewCategory.CURRENT,
+                  category = BookCategory.CURRENT,
                   authorHighlights = listOf(8..11),
                 ),
                 result(
                   title = "The Stand",
                   author = "Stephen King",
-                  category = BookOverviewCategory.FINISHED,
+                  category = BookCategory.FINISHED,
                   authorHighlights = listOf(8..11),
                 ),
                 result(
                   title = "The Name of the Wind",
                   author = "Patrick Rothfuss",
-                  category = BookOverviewCategory.NOT_STARTED,
+                  category = BookCategory.NOT_STARTED,
                   matchTag =
                     MatchTag(
                       BookSearchField.Series,

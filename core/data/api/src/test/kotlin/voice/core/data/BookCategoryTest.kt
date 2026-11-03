@@ -1,11 +1,9 @@
-package voice.features.bookOverview
+package voice.core.data
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import voice.features.bookOverview.overview.BookOverviewCategory
-import voice.features.bookOverview.overview.category
 
-class BookOverviewCategoryTest {
+class BookCategoryTest {
 
   @Test
   fun finished() {
@@ -20,7 +18,7 @@ class BookOverviewCategoryTest {
             ),
         )
       }
-    assertEquals(expected = BookOverviewCategory.FINISHED, actual = book.category)
+    assertEquals(expected = BookCategory.FINISHED, actual = book.category)
   }
 
   @Test
@@ -36,7 +34,7 @@ class BookOverviewCategoryTest {
             ),
         )
       }
-    assertEquals(expected = BookOverviewCategory.NOT_STARTED, actual = book.category)
+    assertEquals(expected = BookCategory.NOT_STARTED, actual = book.category)
   }
 
   @Test
@@ -51,6 +49,6 @@ class BookOverviewCategoryTest {
             ),
         )
       }
-    assertEquals(expected = BookOverviewCategory.CURRENT, actual = book.category)
+    assertEquals(expected = BookCategory.CURRENT, actual = book.category)
   }
 }

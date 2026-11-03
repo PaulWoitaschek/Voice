@@ -29,7 +29,9 @@ import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.core.data.BookId
+import voice.core.data.category
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.RecentBookSearchRepo
 import voice.core.data.store.CurrentBookStore
@@ -44,8 +46,6 @@ import voice.core.search.BookSearch
 import voice.core.search.BookSearchField
 import voice.core.search.BookSearchResult
 import voice.features.bookOverview.di.BookOverviewScope
-import voice.features.bookOverview.overview.BookOverviewCategory
-import voice.features.bookOverview.overview.category
 import voice.features.bookOverview.overview.toItemViewState
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -217,8 +217,8 @@ class BookSearchViewModel(
           BookSearchViewState.BrowseEntry(
             name = name,
             bookCount = values.size,
-            inProgressCount = bookCategories.count { it == BookOverviewCategory.CURRENT },
-            finishedCount = bookCategories.count { it == BookOverviewCategory.FINISHED },
+            inProgressCount = bookCategories.count { it == BookCategory.CURRENT },
+            finishedCount = bookCategories.count { it == BookCategory.FINISHED },
           )
         }
         .sortedWith(compareBy(NaturalOrderComparator.stringComparator) { it.name.lowercase() })

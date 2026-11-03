@@ -20,11 +20,12 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import java.text.NumberFormat
-import voice.features.bookOverview.overview.BookOverviewCategory
+import voice.core.data.BookCategory
+import voice.features.bookOverview.overview.nameRes
 
 @Composable
 internal fun Header(
-  category: BookOverviewCategory,
+  category: BookCategory,
   count: Int,
   modifier: Modifier = Modifier,
 ) {

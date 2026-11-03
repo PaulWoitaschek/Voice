@@ -16,7 +16,9 @@ import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
+import voice.core.data.BookCategory
 import voice.core.data.BookId
+import voice.core.data.category
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
@@ -24,10 +26,8 @@ import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
-import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.CurrentBook
 import voice.features.bookOverview.overview.badge
-import voice.features.bookOverview.overview.category
 import voice.features.bookOverview.overview.series
 import voice.features.bookOverview.overview.seriesKey
 import voice.features.bookOverview.overview.seriesName
@@ -97,7 +97,7 @@ class SeriesViewModel(
         SeriesViewState.Action(
           bookId = book.id,
           part = book.seriesPart,
-          continues = book.category == BookOverviewCategory.CURRENT,
+          continues = book.category == BookCategory.CURRENT,
           playing = book == playingBook,
         )
       }
@@ -121,7 +121,7 @@ class SeriesViewModel(
                 )
                 .let { if (it.author == series.author) it.copy(author = null) else it },
             part = book.seriesPart,
-            finished = book.category == BookOverviewCategory.FINISHED,
+            finished = book.category == BookCategory.FINISHED,
             current = book.id == currentBookId,
             playing = book == playingBook,
           )

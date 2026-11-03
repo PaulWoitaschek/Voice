@@ -4,7 +4,9 @@ import java.text.Normalizer
 import java.time.Instant
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.core.data.BookComparator
+import voice.core.data.category
 
 internal fun seriesKey(name: String): String? {
   return Normalizer.normalize(name, Normalizer.Form.NFKD)
@@ -47,24 +49,23 @@ internal class Series(
 
   val author: String? = books.mapNotNull { it.author }.mostCommon()
 
-  val finishedCount: Int = books.count { it.category == BookOverviewCategory.FINISHED }
+  val finishedCount: Int = books.count { it.category == BookCategory.FINISHED }
 
-  val category: BookOverviewCategory =
+  val category: BookCategory =
     when {
-      finishedCount == books.size -> BookOverviewCategory.FINISHED
-      books.all { it.category == BookOverviewCategory.NOT_STARTED } ->
-        BookOverviewCategory.NOT_STARTED
-      else -> BookOverviewCategory.CURRENT
+      finishedCount == books.size -> BookCategory.FINISHED
+      books.all { it.category == BookCategory.NOT_STARTED } -> BookCategory.NOT_STARTED
+      else -> BookCategory.CURRENT
     }
 
   // the series screen lists hidden books too, but doesn't offer to continue one
   val inProgress: Book? =
     books
-      .filter { it.category == BookOverviewCategory.CURRENT && !it.custom.hidden }
+      .filter { it.category == BookCategory.CURRENT && !it.custom.hidden }
       .maxByOrNull { it.content.lastPlayedAt }
 
   val firstUnfinished: Book? = books.firstOrNull {
-    it.category != BookOverviewCategory.FINISHED && !it.custom.hidden
+    it.category != BookCategory.FINISHED && !it.custom.hidden
   }
 
   val front: Book = inProgress ?: firstUnfinished ?: books.first()
@@ -75,7 +76,7 @@ internal class Series(
   val lastPlayedAt: Instant = books.maxOf { it.content.lastPlayedAt }
 
   val progress: List<Float> = books.map {
-    if (it.category == BookOverviewCategory.FINISHED) 1F else it.progress()
+    if (it.category == BookCategory.FINISHED) 1F else it.progress()
   }
 }
 
@@ -99,7 +100,7 @@ internal sealed interface LibraryEntry {
 }
 
 // a started series stays one stack too, so none of its books disappears from the library
-internal fun libraryEntries(books: List<Book>): Map<BookOverviewCategory, List<LibraryEntry>> {
+internal fun libraryEntries(books: List<Book>): Map<BookCategory, List<LibraryEntry>> {
   val stacks = books.series().filter { it.books.size >= 2 }
   val stacked = stacks.flatMapTo(HashSet()) { series -> series.books.map { it.id } }
   val entries =
@@ -111,7 +112,7 @@ internal fun libraryEntries(books: List<Book>): Map<BookOverviewCategory, List<L
     .toSortedMap()
 }
 
-private val LibraryEntry.category: BookOverviewCategory
+private val LibraryEntry.category: BookCategory
   get() =
     when (this) {
       is LibraryEntry.Single -> book.category
@@ -132,12 +133,11 @@ private val LibraryEntry.name: String
       is LibraryEntry.Stack -> series.name
     }
 
-private fun BookOverviewCategory.entryComparator(): Comparator<LibraryEntry> =
+private fun BookCategory.entryComparator(): Comparator<LibraryEntry> =
   when (this) {
-    BookOverviewCategory.CURRENT,
-    BookOverviewCategory.FINISHED -> compareByDescending { it.lastPlayedAt }
-    BookOverviewCategory.NOT_STARTED ->
-      compareBy(NaturalOrderComparator.stringComparator) { it.name }
+    BookCategory.CURRENT,
+    BookCategory.FINISHED -> compareByDescending { it.lastPlayedAt }
+    BookCategory.NOT_STARTED -> compareBy(NaturalOrderComparator.stringComparator) { it.name }
   }
 
 private fun List<String>.mostCommon(): String? {
