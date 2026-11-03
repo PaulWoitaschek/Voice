@@ -547,7 +547,7 @@
     <string name="playback.battery_optimization.rationale">Battery optimization might stop playback in the background.</string>
     <!-- Global book progress on the playback screen. The placeholder is a localized percentage, e.g. "72%". -->
     <string name="playback.book_progress.read">%1$s of book</string>
-    <!-- Remaining listening time for the whole book on the playback screen, adjusted for playback speed. The placeholder is a duration like "4:03:15". -->
+    <!-- Remaining listening time for the whole book on the playback screen, adjusted for playback speed. Also shown after the author below a book in Android Auto. The placeholder is a duration like "4:03:15". -->
     <string name="playback.book_progress.remaining">%1$s left</string>
     <!-- Remaining listening time for the whole book when playing faster or slower than normal. Placeholders are a duration like "4:03:15" and a playback speed like "1.5×". -->
     <string name="playback.book_progress.remaining_at_speed">%1$s left at %2$s</string>

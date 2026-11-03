@@ -1,5 +1,10 @@
 package voice.core.playback.session
 
+import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_PERCENTAGE
+import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_STATUS
+import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_FULLY_PLAYED
+import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_NOT_PLAYED
+import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_PARTIALLY_PLAYED
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
@@ -60,6 +65,51 @@ class MediaItemProviderTest {
     )
   }
 
+  @Test
+  fun `a book shows its author and how far it was listened to`() {
+    val metadata = provider.mediaItem(libraryBook("Current", position = 15_000)).mediaMetadata
+
+    assertEquals(expected = "Author", actual = metadata.artist)
+    assertEquals(expected = "Author · 00:30 left", actual = metadata.subtitle?.toString())
+    assertEquals(
+      expected = EXTRAS_VALUE_COMPLETION_STATUS_PARTIALLY_PLAYED,
+      actual = metadata.extras!!.getInt(EXTRAS_KEY_COMPLETION_STATUS),
+    )
+    assertEquals(
+      expected = 0.25,
+      actual = metadata.extras!!.getDouble(EXTRAS_KEY_COMPLETION_PERCENTAGE),
+    )
+  }
+
+  @Test
+  fun `books not started and finished show only their author`() {
+    val subtitles =
+      listOf(0L, 60_000L).map { position ->
+        provider.mediaItem(libraryBook("Book", position)).mediaMetadata.subtitle
+      }
+
+    assertEquals(expected = listOf(null, null), actual = subtitles)
+  }
+
+  @Test
+  fun `books not started and finished get their badge`() {
+    assertEquals(
+      expected =
+        listOf(
+          EXTRAS_VALUE_COMPLETION_STATUS_NOT_PLAYED,
+          EXTRAS_VALUE_COMPLETION_STATUS_FULLY_PLAYED,
+        ),
+      actual =
+        listOf(0L, 60_000L).map { position ->
+          provider
+            .mediaItem(libraryBook("Book", position))
+            .mediaMetadata
+            .extras!!
+            .getInt(EXTRAS_KEY_COMPLETION_STATUS)
+        },
+    )
+  }
+
   private suspend fun titles(category: BookCategory): List<String> =
     children(MediaId.Category(category)).map { it.mediaMetadata.title.toString() }
 
@@ -86,7 +136,8 @@ class MediaItemProviderTest {
       content =
         book.content.copy(
           lastPlayedAt = lastPlayedAt,
-          metadata = book.content.metadata.copy(name = name),
+          playbackSpeed = 1.5F,
+          metadata = book.content.metadata.copy(name = name, author = "Author"),
         ),
       custom = book.custom.copy(hidden = hidden),
     )
