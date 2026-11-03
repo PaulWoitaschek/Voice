@@ -6,7 +6,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import java.io.File
-import java.io.IOException
 import java.time.Clock
 import java.time.Instant
 import java.util.UUID
@@ -121,7 +120,7 @@ internal constructor(
     val bookmarks = bookmarkRepo.flow().first().groupBy { it.chapterId }
     // writing without its own file would lose the times in it, so the folder waits for the next
     // sync
-    val files = inFolder { syncFiles.read(folder) } ?: return
+    val files = syncFiles.read(folder) ?: return
     val ownFile = files[ownFileName]
     val own = ownFile?.books.orEmpty()
     val others = (files - ownFileName).values
@@ -141,7 +140,7 @@ internal constructor(
     val file = SyncFile((own + synced).filterValues { it != SyncedBook() })
     // a folder without a book that was played, edited or bookmarked gets no .voice folder
     if (file != (ownFile ?: SyncFile(emptyMap()))) {
-      val _ = inFolder { syncFiles.write(folder, ownFileName, file) }
+      syncFiles.write(folder, ownFileName, file)
     }
   }
 
@@ -228,19 +227,6 @@ internal constructor(
       )
     }
   }
-
-  private inline fun <T> inFolder(action: () -> T): T? =
-    try {
-      action()
-    } catch (e: IOException) {
-      Logger.w(e, "Could not sync through a folder")
-      null
-    } catch (e: RuntimeException) {
-      // the storage provider can send any exception across the binder, like a SecurityException
-      // when the listener took away the access, or a NullPointerException from a bug of its own
-      Logger.w(e, "Could not sync through a folder")
-      null
-    }
 
   // not backed up, so a phone restored from a backup counts as another device
   private fun deviceId(): String {
