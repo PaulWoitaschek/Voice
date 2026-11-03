@@ -1,6 +1,7 @@
 package voice.core.playback.session
 
 import android.net.Uri
+import android.os.Bundle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaItem.ClippingConfiguration
 import androidx.media3.common.MediaMetadata
@@ -20,17 +21,22 @@ internal fun MediaItem(
   browsable: Boolean,
   album: String? = null,
   artist: String? = null,
+  subtitle: String? = null,
   genre: String? = null,
   sourceUri: Uri? = null,
   imageUri: Uri? = null,
   durationMs: Long? = null,
   clippingConfiguration: ClippingConfiguration = ClippingConfiguration.UNSET,
   mediaType: MediaType,
+  extras: Bundle? = null,
 ): MediaItem {
   val metadata =
     MediaMetadata.Builder()
       .setAlbumTitle(album)
       .setTitle(title)
+      // with a display title, Android Auto shows the subtitle instead of the artist
+      .setDisplayTitle(title.takeIf { subtitle != null })
+      .setSubtitle(subtitle)
       .setArtist(artist)
       .setGenre(genre)
       .setIsBrowsable(browsable)
@@ -44,6 +50,7 @@ internal fun MediaItem(
           MediaType.AudioBookFolder -> MediaMetadata.MEDIA_TYPE_FOLDER_AUDIO_BOOKS
         },
       )
+      .setExtras(extras)
       .build()
 
   return MediaItem.Builder()
