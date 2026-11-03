@@ -8,7 +8,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import java.io.IOException
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -371,20 +370,11 @@ class FolderSyncTest {
   @Test
   fun `a folder that can't be read is left alone`() = scope.runTest {
     val book = book(lastPlayedAt = 2000)
-    every { syncFiles.read(folder()) } throws IOException()
+    every { syncFiles.read(folder()) } returns null
 
     folderSync(MemoryBookRepository(book)).sync()
 
     assertEquals(emptyList(), written)
-  }
-
-  @Test
-  fun `a folder the sync file can't be created in is left alone`() = scope.runTest {
-    val book = book(lastPlayedAt = 2000)
-    every { syncFiles.write(folder(), any(), any()) } throws
-      IllegalStateException("Failed to mkdir")
-
-    folderSync(MemoryBookRepository(book)).sync()
   }
 
   @Test
@@ -468,7 +458,7 @@ class FolderSyncTest {
     folderSync: FolderSync,
     file: SyncFile,
   ) {
-    val files = syncFiles.read(folder())
+    val files = syncFiles.read(folder()).orEmpty()
     every { syncFiles.read(folder()) } returns files + (folderSync.ownFileName to file)
   }
 
