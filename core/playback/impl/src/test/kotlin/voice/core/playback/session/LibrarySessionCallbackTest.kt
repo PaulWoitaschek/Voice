@@ -60,6 +60,7 @@ class LibrarySessionCallbackTest {
       context = context,
       lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
       bookSearch = bookSearch,
+      mediaButtons = mockk(relaxed = true),
     )
   private val customCommand = SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY)
 
@@ -82,6 +83,15 @@ class LibrarySessionCallbackTest {
     val result = callback.onConnect(session, controller(OTHER_PACKAGE, OTHER_UID))
 
     assertTrue(result.isAccepted)
+    assertFalse(result.availableSessionCommands.contains(customCommand))
+  }
+
+  @Test
+  fun `Android Auto can use the buttons for the car`() {
+    val result = callback.onConnect(session, controller(ANDROID_AUTO_PACKAGE, OTHER_UID))
+
+    assertTrue(result.availableSessionCommands.contains(MediaButtons.ADD_BOOKMARK))
+    assertTrue(result.availableSessionCommands.contains(MediaButtons.NEXT_SPEED))
     assertFalse(result.availableSessionCommands.contains(customCommand))
   }
 
