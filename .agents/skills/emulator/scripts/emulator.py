@@ -68,6 +68,14 @@ def system_image():
   return f"system-images;android-{API_LEVEL};google_apis_playstore;{abi}"
 
 
+def avd_home():
+  return Path(os.environ.get("ANDROID_AVD_HOME", Path.home() / ".android" / "avd"))
+
+
+def prepared():
+  return PREPARED_FILE.is_file() and (avd_home() / f"{AVD_NAME}.ini").is_file()
+
+
 @contextmanager
 def lock():
   STATE_DIR.mkdir(parents=True, exist_ok=True)
@@ -165,7 +173,7 @@ def launch(port, extra_flags, log_file):
 
 def command_start(args):
   owner = owner_key(args)
-  if not PREPARED_FILE.is_file():
+  if not prepared():
     print(f"The {AVD_NAME} AVD isn't prepared yet, preparing it first.")
     prepare(args, only_if_missing=True)
   with lock():
@@ -224,9 +232,9 @@ def command_list(args):
     print("No agent emulators are running.")
   for instance in running:
     print(f"{instance['serial']}  started {instance['started']}  idle {instance['idle_hours']:.1f}h  {instance['owner']}")
-  if PREPARED_FILE.is_file():
-    prepared = json.loads(PREPARED_FILE.read_text())
-    print(f"Base AVD {AVD_NAME} prepared {prepared['date']} from {prepared['commit']}.")
+  if prepared():
+    state = json.loads(PREPARED_FILE.read_text())
+    print(f"Base AVD {AVD_NAME} prepared {state['date']} from {state['commit']}.")
   else:
     print(f"Base AVD {AVD_NAME} isn't prepared yet.")
 
@@ -247,8 +255,7 @@ def create_avd():
   if not (sdk_root() / image.replace(";", "/")).is_dir():
     run([sdkmanager, image], env=sdk_env())
   run([avdmanager, "create", "avd", "--force", "-n", AVD_NAME, "-k", image, "-d", DEVICE], input="no\n", env=sdk_env())
-  avd_home = Path(os.environ.get("ANDROID_AVD_HOME", Path.home() / ".android" / "avd"))
-  config = avd_home / f"{AVD_NAME}.avd" / "config.ini"
+  config = avd_home() / f"{AVD_NAME}.avd" / "config.ini"
   overrides = {"hw.keyboard": "yes", "hw.gpu.enabled": "yes", "hw.gpu.mode": "host"}
   lines = [line for line in config.read_text().splitlines() if line.split("=", 1)[0] not in overrides]
   lines += [f"{key}={value}" for key, value in overrides.items()]
@@ -290,7 +297,7 @@ def tap_when_visible(query):
 def prepare(args, only_if_missing=False):
   root = repo_root()
   with lock():
-    if only_if_missing and PREPARED_FILE.is_file():
+    if only_if_missing and prepared():
       return
     running = instances()
     if running:
