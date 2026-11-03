@@ -21,4 +21,6 @@ dependencies {
   implementation(libs.navigation3.ui)
 
   implementation(libs.serialization.json)
+
+  testImplementation(libs.okhttp.mockwebserver)
 }

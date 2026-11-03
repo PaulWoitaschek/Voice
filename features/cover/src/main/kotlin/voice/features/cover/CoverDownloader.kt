@@ -20,26 +20,26 @@ class CoverDownloader(
   private val context: Context,
 ) {
 
-  internal suspend fun download(url: String): File? {
-    val tempFolder =
-      File(context.cacheDir, "coverDownload").apply {
-        deleteRecursively()
-        mkdirs()
-      }
-    val request = Request.Builder().url(url).build()
-    val response =
-      try {
-        client.newCall(request).executeAsync()
-      } catch (e: IOException) {
-        Logger.w(e, "Cover download failed")
-        return null
-      }
-    return response.use {
-      if (!response.isSuccessful) {
-        Logger.w("Cover download failed with HTTP ${response.code}")
-        return null
-      }
-      withContext(Dispatchers.IO) {
+  internal suspend fun download(url: String): File? =
+    withContext(Dispatchers.IO) {
+      val tempFolder =
+        File(context.cacheDir, "coverDownload").apply {
+          deleteRecursively()
+          mkdirs()
+        }
+      val request = Request.Builder().url(url).build()
+      val response =
+        try {
+          client.newCall(request).executeAsync()
+        } catch (e: IOException) {
+          Logger.w(e, "Cover download failed")
+          return@withContext null
+        }
+      response.use {
+        if (!response.isSuccessful) {
+          Logger.w("Cover download failed with HTTP ${response.code}")
+          return@withContext null
+        }
         try {
           // select a random name so on updating this, the old image is not cached
           val file = File(tempFolder, Uuid.random().toString())
@@ -60,7 +60,6 @@ class CoverDownloader(
         }
       }
     }
-  }
 }
 
 private fun File.isImage(): Boolean {
