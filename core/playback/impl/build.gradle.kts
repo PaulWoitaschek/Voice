@@ -17,6 +17,7 @@ dependencies {
   implementation(projects.core.featureflag)
   implementation(projects.core.sleeptimer.api)
   implementation(projects.core.data.api)
+  implementation(projects.core.search)
   implementation(projects.core.analytics.api)
 
   implementation(libs.androidxCore)
