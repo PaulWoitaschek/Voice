@@ -3,6 +3,7 @@ package voice.core.playback.session
 import android.content.Context
 import android.os.Bundle
 import androidx.media3.common.Player
+import androidx.media3.session.MediaLibraryService.LibraryParams
 import androidx.media3.session.MediaSession
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionError
@@ -40,9 +41,10 @@ class LibrarySessionCallbackTest {
       every { isMediaNotificationController(any()) } returns true
     }
   private val notification = controller(context.packageName, context.applicationInfo.uid)
+  private val mediaItemProvider = mockk<MediaItemProvider>()
   private val callback =
     LibrarySessionCallback(
-      mediaItemProvider = mockk(),
+      mediaItemProvider = mediaItemProvider,
       scope = scope.backgroundScope,
       player = mockk(relaxed = true),
       bookSearchParser = BookSearchParser(),
@@ -128,6 +130,20 @@ class LibrarySessionCallbackTest {
       callback.onConnect(session, controller(context.packageName, context.applicationInfo.uid))
 
     assertTrue(result.availablePlayerCommands.contains(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM))
+  }
+
+  @Test
+  fun `without a book to resume, Android offers no recent book`() {
+    every { mediaItemProvider.recent() } returns null
+
+    val result =
+      callback.onGetLibraryRoot(
+        mockk(),
+        controller(OTHER_PACKAGE, OTHER_UID),
+        LibraryParams.Builder().setRecent(true).build(),
+      )
+
+    assertEquals(SessionError.ERROR_NOT_SUPPORTED, result.get().resultCode)
   }
 
   private fun notificationCommands(): List<Player.Commands> {

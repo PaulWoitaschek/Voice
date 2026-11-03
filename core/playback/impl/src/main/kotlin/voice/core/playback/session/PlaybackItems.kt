@@ -95,6 +95,7 @@ internal val MediaId.bookId: BookId?
       is MediaId.Book -> id
       is MediaId.Chapter -> bookId
       is MediaId.ChapterMark -> bookId
+      is MediaId.Category,
       MediaId.Recent,
       MediaId.Root -> null
     }
@@ -105,6 +106,7 @@ internal val MediaId.realChapterId: ChapterId?
       is MediaId.Chapter -> chapterId
       is MediaId.ChapterMark -> chapterId
       is MediaId.Book,
+      is MediaId.Category,
       MediaId.Recent,
       MediaId.Root -> null
     }
@@ -114,6 +116,7 @@ internal fun MediaId.positionInChapter(positionInCurrentMediaItemMs: Long): Long
     is MediaId.Chapter -> positionInCurrentMediaItemMs
     is MediaId.ChapterMark -> startMs + positionInCurrentMediaItemMs
     is MediaId.Book,
+    is MediaId.Category,
     MediaId.Recent,
     MediaId.Root -> null
   }
