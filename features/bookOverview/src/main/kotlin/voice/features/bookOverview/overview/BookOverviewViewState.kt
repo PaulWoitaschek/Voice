@@ -2,11 +2,12 @@ package voice.features.bookOverview.overview
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
+import voice.core.data.BookCategory
 import voice.core.data.BookId
 
 @Immutable
 data class BookOverviewViewState(
-  val sections: Map<BookOverviewCategory, List<LibraryItem>>,
+  val sections: Map<BookCategory, List<LibraryItem>>,
   val hero: State<BookOverviewItemViewState>?,
   val inProgressCount: Int,
   val currentBookId: BookId?,
@@ -85,7 +86,7 @@ data class SeriesStackViewState(
   val bookCount: Int,
   val finishedCount: Int,
   val progress: List<Float>,
-  val category: BookOverviewCategory,
+  val category: BookCategory,
 )
 
 internal fun Series.toStackViewState() =

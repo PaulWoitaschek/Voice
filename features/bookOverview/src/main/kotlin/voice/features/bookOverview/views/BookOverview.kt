@@ -52,13 +52,13 @@ import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
 import kotlin.uuid.Uuid
 import voice.core.common.rootGraphAs
+import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.PlayButton
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.di.BookOverviewGraph
-import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
@@ -318,7 +318,7 @@ internal class BookOverviewPreviewParameterProvider :
       currentBookId = null,
       sections =
         mapOf(
-          BookOverviewCategory.CURRENT to
+          BookCategory.CURRENT to
             buildList {
               add(
                 LibraryItem.Series(
@@ -330,7 +330,7 @@ internal class BookOverviewPreviewParameterProvider :
                     bookCount = 4,
                     finishedCount = 1,
                     progress = listOf(1F, 0.6F, 0F, 0F),
-                    category = BookOverviewCategory.CURRENT,
+                    category = BookCategory.CURRENT,
                   ),
                 ),
               )
@@ -339,7 +339,7 @@ internal class BookOverviewPreviewParameterProvider :
                 add(LibraryItem.Book(book.id, mutableStateOf(book)))
               }
             },
-          BookOverviewCategory.FINISHED to
+          BookCategory.FINISHED to
             List(2) {
               val book = book()
               LibraryItem.Book(book.id, mutableStateOf(book))

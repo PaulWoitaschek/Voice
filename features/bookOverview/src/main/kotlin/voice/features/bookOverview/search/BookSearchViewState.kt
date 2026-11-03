@@ -1,9 +1,9 @@
 package voice.features.bookOverview.search
 
 import androidx.compose.runtime.Immutable
+import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.search.BookSearchField
-import voice.features.bookOverview.overview.BookOverviewCategory
 
 @Immutable
 sealed interface BookSearchViewState {
@@ -60,7 +60,7 @@ data class SearchResultViewState(
   val title: HighlightedText,
   val author: HighlightedText?,
   val cover: String?,
-  val category: BookOverviewCategory,
+  val category: BookCategory,
   val progress: Float,
   val remainingTime: String,
   /** Why a book matched when it wasn't its title or author, e.g. its series. */

@@ -32,6 +32,7 @@ import voice.core.audiobookshelf.ServerAccount
 import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
 import voice.core.featureflag.MemoryFeatureFlag
@@ -40,7 +41,6 @@ import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.features.bookOverview.book
 import voice.features.bookOverview.chapter
-import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.navigation.Destination
 import voice.navigation.Navigator
 
@@ -97,7 +97,7 @@ class BottomSheetViewModelTest {
       viewModel().test {
         val state = awaitLoaded()
         assertEquals(book.name, state.book.name)
-        assertEquals(BookOverviewCategory.NOT_STARTED, state.category)
+        assertEquals(BookCategory.NOT_STARTED, state.category)
         assertEquals(listOf(BottomSheetItem.Edit), state.items)
       }
     }
@@ -114,7 +114,7 @@ class BottomSheetViewModelTest {
 
         val state = awaitItem()!!
         assertEquals(0.5F, state.book.progress)
-        assertEquals(BookOverviewCategory.CURRENT, state.category)
+        assertEquals(BookCategory.CURRENT, state.category)
       }
     }
 

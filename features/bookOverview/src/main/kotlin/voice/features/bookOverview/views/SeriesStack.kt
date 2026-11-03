@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import java.text.NumberFormat
+import voice.core.data.BookCategory
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
@@ -61,7 +62,6 @@ import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.seriesCoverSharedElementModifier
-import voice.features.bookOverview.overview.BookOverviewCategory
 import voice.features.bookOverview.overview.SeriesStackViewState
 
 @Composable
@@ -112,7 +112,7 @@ internal fun ListSeriesRow(
         }
         Spacer(Modifier.height(6.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-          if (series.category == BookOverviewCategory.CURRENT) {
+          if (series.category == BookCategory.CURRENT) {
             SeriesProgress(
               progress = series.progress,
               modifier = Modifier.weight(1F).padding(end = 12.dp),
@@ -151,7 +151,7 @@ internal fun GridSeries(
       )
     }
     // right under the cover, so the bars in a row line up however long the titles are
-    if (series.category == BookOverviewCategory.CURRENT) {
+    if (series.category == BookCategory.CURRENT) {
       Spacer(Modifier.height(8.dp))
       SeriesProgress(
         progress = series.progress,
@@ -254,7 +254,7 @@ private fun SeriesBadge(
   describe: Boolean,
   modifier: Modifier = Modifier,
 ) {
-  val finished = series.category == BookOverviewCategory.FINISHED
+  val finished = series.category == BookCategory.FINISHED
   val description = seriesCounts(series.bookCount, series.finishedCount)
   Box(
     modifier =
@@ -307,14 +307,14 @@ internal fun seriesCounts(
   return "$books · $finished"
 }
 
-private fun previewSeries(category: BookOverviewCategory) =
+private fun previewSeries(category: BookCategory) =
   SeriesStackViewState(
     key = "signalsaga",
     name = "The Signal Saga",
     author = "Daniel Hartwell",
     covers = listOf(null, null, null),
     bookCount = 4,
-    finishedCount = if (category == BookOverviewCategory.FINISHED) 4 else 1,
+    finishedCount = if (category == BookCategory.FINISHED) 4 else 1,
     progress = listOf(1F, 0.4F, 0F, 0F),
     category = category,
   )
@@ -324,7 +324,7 @@ private fun previewSeries(category: BookOverviewCategory) =
 private fun ListSeriesRowPreviewStarted() {
   VoiceTheme {
     Surface {
-      ListSeriesRow(previewSeries(BookOverviewCategory.CURRENT), {})
+      ListSeriesRow(previewSeries(BookCategory.CURRENT), {})
     }
   }
 }
@@ -334,7 +334,7 @@ private fun ListSeriesRowPreviewStarted() {
 private fun ListSeriesRowPreviewNotStarted() {
   VoiceTheme {
     Surface {
-      ListSeriesRow(previewSeries(BookOverviewCategory.NOT_STARTED), {})
+      ListSeriesRow(previewSeries(BookCategory.NOT_STARTED), {})
     }
   }
 }
@@ -344,7 +344,7 @@ private fun ListSeriesRowPreviewNotStarted() {
 private fun GridSeriesPreviewStarted() {
   VoiceTheme {
     Surface {
-      GridSeries(previewSeries(BookOverviewCategory.CURRENT), {})
+      GridSeries(previewSeries(BookCategory.CURRENT), {})
     }
   }
 }
@@ -354,7 +354,7 @@ private fun GridSeriesPreviewStarted() {
 private fun GridSeriesPreviewFinished() {
   VoiceTheme {
     Surface {
-      GridSeries(previewSeries(BookOverviewCategory.FINISHED), {})
+      GridSeries(previewSeries(BookCategory.FINISHED), {})
     }
   }
 }

@@ -30,6 +30,7 @@ import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.folders.AudiobookFolders
@@ -141,7 +142,7 @@ class BookOverviewViewModelTest {
         assertEquals(expected = otherBook.toItemViewState(), actual = initialOtherItem)
         assertEquals(
           expected = listOf(otherBook.id.value),
-          actual = initial.keys(BookOverviewCategory.CURRENT),
+          actual = initial.keys(BookCategory.CURRENT),
         )
         assertEquals(expected = currentBook.id, actual = initial.currentBookId)
 
@@ -219,7 +220,7 @@ class BookOverviewViewModelTest {
           expected =
             KioskModeDemoData.demoAudiobooks.map { it.id.value } -
               KioskModeDemoData.currentlyPlaying.id.value,
-          actual = state.keys(BookOverviewCategory.CURRENT),
+          actual = state.keys(BookCategory.CURRENT),
         )
         assertEquals(expected = "Echoes of Tomorrow", actual = state.hero?.value?.name)
         assertEquals(expected = KioskModeDemoData.currentlyPlaying.id, actual = state.currentBookId)
@@ -260,10 +261,9 @@ class BookOverviewViewModelTest {
         assertEquals(expected = "Saga 2", actual = state.hero?.value?.series)
         assertEquals(
           expected = listOf("series:saga", single.id.value),
-          actual = state.keys(BookOverviewCategory.CURRENT),
+          actual = state.keys(BookCategory.CURRENT),
         )
-        val stack =
-          state.sections.getValue(BookOverviewCategory.CURRENT).first() as LibraryItem.Series
+        val stack = state.sections.getValue(BookCategory.CURRENT).first() as LibraryItem.Series
         assertEquals(expected = 2, actual = stack.series.bookCount)
         assertEquals(expected = 1, actual = stack.series.finishedCount)
         assertEquals(expected = 2, actual = state.inProgressCount)
@@ -285,7 +285,7 @@ class BookOverviewViewModelTest {
         val state = awaitItem()
         assertEquals(
           expected = listOf(visible.id.value),
-          actual = state.keys(BookOverviewCategory.CURRENT),
+          actual = state.keys(BookCategory.CURRENT),
         )
         assertEquals(expected = null, actual = state.hero)
         assertEquals(expected = null, actual = state.playButtonState)
@@ -703,7 +703,7 @@ class BookOverviewViewModelTest {
       .value
   }
 
-  private fun BookOverviewViewState.keys(category: BookOverviewCategory): List<String> {
+  private fun BookOverviewViewState.keys(category: BookCategory): List<String> {
     return sections.getValue(category).map { it.key }
   }
 

@@ -4,6 +4,7 @@ import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.features.bookOverview.book
 import voice.features.bookOverview.chapter
 
@@ -14,7 +15,7 @@ class LibrarySeriesTest {
     val book = inProgress(series = "Saga")
 
     assertEquals(
-      expected = mapOf(BookOverviewCategory.CURRENT to listOf(LibraryEntry.Single(book))),
+      expected = mapOf(BookCategory.CURRENT to listOf(LibraryEntry.Single(book))),
       actual = libraryEntries(listOf(book)),
     )
   }
@@ -29,16 +30,16 @@ class LibrarySeriesTest {
     val entries = libraryEntries(listOf(third, other, second, first))
 
     assertEquals(
-      expected = listOf(BookOverviewCategory.CURRENT, BookOverviewCategory.NOT_STARTED),
+      expected = listOf(BookCategory.CURRENT, BookCategory.NOT_STARTED),
       actual = entries.keys.toList(),
     )
     assertEquals(
       expected = listOf(first, second, third),
-      actual = entries.getValue(BookOverviewCategory.CURRENT).stack().books,
+      actual = entries.getValue(BookCategory.CURRENT).stack().books,
     )
     assertEquals(
       expected = listOf(LibraryEntry.Single(other)),
-      actual = entries.getValue(BookOverviewCategory.NOT_STARTED),
+      actual = entries.getValue(BookCategory.NOT_STARTED),
     )
   }
 
@@ -46,21 +47,21 @@ class LibrarySeriesTest {
   fun `a series that is not started is not started`() {
     val entries = libraryEntries(listOf(notStarted(series = "Saga"), notStarted(series = "Saga")))
 
-    assertEquals(expected = setOf(BookOverviewCategory.NOT_STARTED), actual = entries.keys)
+    assertEquals(expected = setOf(BookCategory.NOT_STARTED), actual = entries.keys)
   }
 
   @Test
   fun `a series with every book finished is completed`() {
     val entries = libraryEntries(listOf(finished(series = "Saga"), finished(series = "Saga")))
 
-    assertEquals(expected = setOf(BookOverviewCategory.FINISHED), actual = entries.keys)
+    assertEquals(expected = setOf(BookCategory.FINISHED), actual = entries.keys)
   }
 
   @Test
   fun `a series between two books is current`() {
     val entries = libraryEntries(listOf(finished(series = "Saga"), notStarted(series = "Saga")))
 
-    assertEquals(expected = setOf(BookOverviewCategory.CURRENT), actual = entries.keys)
+    assertEquals(expected = setOf(BookCategory.CURRENT), actual = entries.keys)
   }
 
   @Test
@@ -238,8 +239,7 @@ class LibrarySeriesTest {
     val newest = inProgress(name = "Newest", lastPlayedAt = Instant.ofEpochSecond(4))
 
     val current =
-      libraryEntries(listOf(book, sagaFirst, sagaSecond, newest))
-        .getValue(BookOverviewCategory.CURRENT)
+      libraryEntries(listOf(book, sagaFirst, sagaSecond, newest)).getValue(BookCategory.CURRENT)
 
     assertEquals(expected = listOf("Newest", "Saga", "Book"), actual = current.map { it.title() })
   }
@@ -258,7 +258,7 @@ class LibrarySeriesTest {
 
     assertEquals(
       expected = listOf("Part 2", "Part 3", "Part 10"),
-      actual = entries.getValue(BookOverviewCategory.NOT_STARTED).map { it.title() },
+      actual = entries.getValue(BookCategory.NOT_STARTED).map { it.title() },
     )
   }
 
