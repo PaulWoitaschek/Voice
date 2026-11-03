@@ -37,6 +37,7 @@ import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.session.search.BookSearchHandler
 import voice.core.playback.session.search.BookSearchParser
+import voice.core.search.BookSearch
 
 @Inject
 class LibrarySessionCallback(
@@ -50,6 +51,7 @@ class LibrarySessionCallback(
   private val commandSourceResolver: CommandSourceResolver,
   private val context: Context,
   private val lockScreenSliderStore: LockScreenSliderStore,
+  private val bookSearch: BookSearch,
 ) : MediaLibrarySession.Callback {
 
   private var notificationCommandsJob: Job? = null
@@ -161,6 +163,31 @@ class LibrarySessionCallback(
     } else {
       LibraryResult.ofError(SessionError.ERROR_BAD_VALUE)
     }
+  }
+
+  override fun onSearch(
+    session: MediaLibrarySession,
+    browser: ControllerInfo,
+    query: String,
+    params: LibraryParams?,
+  ): ListenableFuture<LibraryResult<Void>> = scope.future {
+    session.notifySearchResultChanged(browser, query, search(query).size, params)
+    LibraryResult.ofVoid()
+  }
+
+  override fun onGetSearchResult(
+    session: MediaLibrarySession,
+    browser: ControllerInfo,
+    query: String,
+    page: Int,
+    pageSize: Int,
+    params: LibraryParams?,
+  ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.future {
+    LibraryResult.ofItemList(search(query), params)
+  }
+
+  private suspend fun search(query: String): List<MediaItem> {
+    return bookSearch.search(query).map { mediaItemProvider.mediaItem(it.book) }
   }
 
   override fun onPlaybackResumption(
