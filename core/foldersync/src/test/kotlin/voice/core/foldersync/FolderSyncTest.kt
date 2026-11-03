@@ -381,8 +381,7 @@ class FolderSyncTest {
   @Test
   fun `a folder the sync file can't be created in is left alone`() = scope.runTest {
     val book = book(lastPlayedAt = 2000)
-    every { syncFiles.write(folder(), any(), any()) } throws
-      IllegalStateException("Failed to mkdir")
+    every { syncFiles.write(folder(), any(), any()) } throws NullPointerException()
 
     folderSync(MemoryBookRepository(book)).sync()
   }

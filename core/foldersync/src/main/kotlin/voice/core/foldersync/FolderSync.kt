@@ -235,17 +235,9 @@ internal constructor(
     } catch (e: IOException) {
       Logger.w(e, "Could not sync through a folder")
       null
-    } catch (e: SecurityException) {
-      // the listener took away the access to the folder
-      Logger.w(e, "Could not sync through a folder")
-      null
-    } catch (e: IllegalArgumentException) {
-      // how the storage provider reports a file or storage that went away since the last query
-      Logger.w(e, "Could not sync through a folder")
-      null
-    } catch (e: IllegalStateException) {
-      // how the storage provider reports a file or folder it couldn't create, like on an SD card
-      // that's read-only
+    } catch (e: RuntimeException) {
+      // the storage provider can send any exception across the binder, like a SecurityException
+      // when the listener took away the access, or a NullPointerException from a bug of its own
       Logger.w(e, "Could not sync through a folder")
       null
     }
