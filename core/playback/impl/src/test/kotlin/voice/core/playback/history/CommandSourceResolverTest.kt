@@ -10,7 +10,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.time.Duration
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import org.junit.After
 import org.junit.runner.RunWith
 import org.robolectric.shadows.ShadowSystemClock
@@ -88,6 +90,41 @@ class CommandSourceResolverTest {
     assertNull(resolver.sourceFor(session, appController()))
   }
 
+  @Test
+  fun `a key passed on by the notification is a media button`() {
+    resolver.onMediaButtonEvent(legacyController(SYSTEM_PACKAGE))
+
+    assertTrue(resolver.isMediaButton(session, notificationController()))
+  }
+
+  @Test
+  fun `a command from the caller of a key is a media button`() {
+    resolver.onMediaButtonEvent(legacyController(SYSTEM_PACKAGE))
+
+    assertTrue(resolver.isMediaButton(session, legacyController(SYSTEM_PACKAGE)))
+  }
+
+  @Test
+  fun `commands relayed by Bluetooth are media buttons`() {
+    assertTrue(resolver.isMediaButton(session, legacyController(BLUETOOTH_PACKAGE)))
+  }
+
+  @Test
+  fun `buttons on a screen right after a key are not media buttons`() {
+    resolver.onMediaButtonEvent(legacyController(SYSTEM_PACKAGE))
+
+    assertFalse(resolver.isMediaButton(session, legacyController(ANDROID_AUTO_PACKAGE)))
+    assertFalse(resolver.isMediaButton(session, appController()))
+  }
+
+  @Test
+  fun `the notification without a recent key is no media button`() {
+    resolver.onMediaButtonEvent(legacyController(SYSTEM_PACKAGE))
+    ShadowSystemClock.advanceBy(Duration.ofSeconds(2))
+
+    assertFalse(resolver.isMediaButton(session, notificationController()))
+  }
+
   private fun legacyController(
     packageName: String,
     uid: Int = SYSTEM_UID,
@@ -129,6 +166,7 @@ class CommandSourceResolverTest {
     const val OTHER_UID = 10_123
     const val BLUETOOTH_PACKAGE = "com.android.bluetooth"
     const val OTHER_PACKAGE = "com.example.remote"
+    const val ANDROID_AUTO_PACKAGE = "com.google.android.projection.gearhead"
     const val MEDIA3_CONTROLLER_VERSION = 1
   }
 }

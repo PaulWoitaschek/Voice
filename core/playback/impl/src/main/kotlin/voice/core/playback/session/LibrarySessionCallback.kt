@@ -50,6 +50,7 @@ class LibrarySessionCallback(
   private val commandSourceResolver: CommandSourceResolver,
   private val context: Context,
   private val lockScreenSliderStore: LockScreenSliderStore,
+  private val mediaButtons: MediaButtons,
 ) : MediaLibrarySession.Callback {
 
   private var notificationCommandsJob: Job? = null
@@ -208,21 +209,26 @@ class LibrarySessionCallback(
     }
 
     val connectionResult = super.onConnect(session, controller)
-    // The service is exported, but the custom commands are only meant for the app's own
-    // PlayerController.
-    if (controller.packageName != context.packageName) {
-      return connectionResult
-    }
     return ConnectionResult.accept(
-      withCustomCommand(connectionResult.availableSessionCommands),
+      withCustomCommands(connectionResult.availableSessionCommands, controller),
       connectionResult.availablePlayerCommands,
     )
   }
 
-  private fun withCustomCommand(sessionCommands: SessionCommands): SessionCommands {
+  private fun withCustomCommands(
+    sessionCommands: SessionCommands,
+    controller: ControllerInfo,
+  ): SessionCommands {
     return sessionCommands
       .buildUpon()
-      .add(SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY))
+      .apply {
+        MediaButtons.commands.forEach(::add)
+        // The service is exported, but these custom commands are only meant for the app's own
+        // PlayerController.
+        if (controller.packageName == context.packageName) {
+          add(SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY))
+        }
+      }
       .build()
   }
 
@@ -234,7 +240,7 @@ class LibrarySessionCallback(
     // The notification controller's commands become the platform session's actions, which the lock
     // screen reads.
     val connectionResult = super.onConnect(session, controller)
-    val sessionCommands = withCustomCommand(connectionResult.availableSessionCommands)
+    val sessionCommands = withCustomCommands(connectionResult.availableSessionCommands, controller)
     notificationCommandsJob?.cancel()
     notificationCommandsJob = scope.launch {
       lockScreenSliderStore.data.distinctUntilChanged().collect { lockScreenSlider ->
@@ -276,6 +282,9 @@ class LibrarySessionCallback(
     customCommand: SessionCommand,
     args: Bundle,
   ): ListenableFuture<SessionResult> {
+    if (mediaButtons.onCustomCommand(customCommand)) {
+      return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+    }
     val command =
       CustomCommand.parse(customCommand, args)
         ?: return super.onCustomCommand(session, controller, customCommand, args)

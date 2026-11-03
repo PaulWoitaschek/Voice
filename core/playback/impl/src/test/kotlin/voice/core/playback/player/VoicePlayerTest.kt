@@ -51,6 +51,7 @@ import voice.core.playback.AutoRewindAmountStore
 import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.SeekTimeStore
+import voice.core.playback.history.CommandSource
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
@@ -112,6 +113,13 @@ class VoicePlayerTest {
       coEvery { add(capture(historyEvents)) } just Runs
     }
   private val analytics = mockk<Analytics>(relaxUnitFun = true)
+  private var commandSource: CommandSource? = null
+  private var fromMediaButton = false
+  private val commandSourceResolver =
+    mockk<CommandSourceResolver> {
+      every { current() } answers { commandSource }
+      every { currentIsMediaButton() } answers { fromMediaButton }
+    }
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
   private val player =
     VoicePlayer(
@@ -138,11 +146,12 @@ class VoicePlayerTest {
           clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
           scope = scope,
         ),
-      commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
+      commandSourceResolver = commandSourceResolver,
     )
 
   @Test
-  fun `seekToNext carries over into the next chapter mark`() = scope.runTest {
+  fun `the next key skips and carries over into the next chapter mark`() = scope.runTest {
+    fromMediaButton = true
     setMediaItems(
       listOf(
         chapter(
@@ -183,7 +192,8 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `seekToPrevious carries over into the previous chapter mark`() = scope.runTest {
+  fun `the previous key skips and carries over into the previous chapter mark`() = scope.runTest {
+    fromMediaButton = true
     setMediaItems(
       listOf(
         chapter(
@@ -217,6 +227,55 @@ class VoicePlayerTest {
 
     player.seekToPrevious()
     player.shouldHavePosition(0, 0)
+  }
+
+  @Test
+  fun `next from a screen goes to the next chapter and is recorded`() = scope.runTest {
+    val chapter =
+      chapter(
+        ChapterMark(startMs = 0, endMs = 11_999, name = null),
+        ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
+      )
+    setMediaItems(listOf(chapter))
+    player.prepare()
+    awaitReady()
+    commandSource = CommandSource(ListeningEvent.Source.Car)
+
+    player.seekToNext()
+
+    player.shouldHavePosition(1, 0)
+    val event = historyEvents.single()
+    assertEquals(
+      expected = Triple(ListeningEvent.Type.ChapterChange, ListeningEvent.Source.Car, 12_000L),
+      actual = Triple(event.type, event.source, event.toTime),
+    )
+  }
+
+  @Test
+  fun `previous from a screen restarts the chapter, then goes to the one before`() = scope.runTest {
+    setMediaItems(
+      listOf(
+        chapter(
+          ChapterMark(startMs = 0, endMs = 11_999, name = null),
+          ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
+        ),
+      ),
+    )
+    player.seekTo(1, 5_000)
+    player.prepare()
+    awaitReady()
+    commandSource = CommandSource(ListeningEvent.Source.Car)
+
+    player.seekToPrevious()
+    player.shouldHavePosition(1, 0)
+
+    player.seekToPrevious()
+    player.shouldHavePosition(0, 0)
+
+    assertEquals(
+      expected = listOf(ListeningEvent.Type.Seek, ListeningEvent.Type.ChapterChange),
+      actual = historyEvents.map { it.type },
+    )
   }
 
   @Test
