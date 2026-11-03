@@ -2,8 +2,15 @@ package voice.core.playback.session
 
 import android.app.Application
 import android.net.Uri
+import android.os.Bundle
+import android.text.format.DateUtils
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_PERCENTAGE
+import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_STATUS
+import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_FULLY_PLAYED
+import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_NOT_PLAYED
+import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_PARTIALLY_PLAYED
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import dev.zacsweers.metro.Inject
 import java.io.File
@@ -162,8 +169,23 @@ class MediaItemProvider(
       browsable = false,
       isPlayable = true,
       imageUri = book.cover?.toProvidedUri(),
+      artist = book.author,
+      subtitle = book.subtitle(),
       mediaType = MediaType.AudioBook,
+      extras = book.completionExtras(),
     )
+
+  // Android Auto doesn't always draw the progress bar
+  private fun Book.subtitle(): String? {
+    if (category != BookCategory.CURRENT) return null
+    val remainingSeconds = ((duration - position) / content.playbackSpeed / 1000).toLong()
+    val remaining =
+      application.getString(
+        StringsR.string.playback_book_progress_remaining,
+        DateUtils.formatElapsedTime(remainingSeconds),
+      )
+    return listOfNotNull(author, remaining).joinToString(" · ")
+  }
 
   private fun mediaItem(category: BookCategory): MediaItem =
     MediaItem(
@@ -224,3 +246,17 @@ private val BookCategory.title: Int
       BookCategory.NOT_STARTED -> StringsR.string.library_category_not_started_title
       BookCategory.FINISHED -> StringsR.string.library_category_completed_title
     }
+
+private fun Book.completionExtras(): Bundle =
+  Bundle().apply {
+    when (category) {
+      BookCategory.NOT_STARTED ->
+        putInt(EXTRAS_KEY_COMPLETION_STATUS, EXTRAS_VALUE_COMPLETION_STATUS_NOT_PLAYED)
+      BookCategory.CURRENT -> {
+        putInt(EXTRAS_KEY_COMPLETION_STATUS, EXTRAS_VALUE_COMPLETION_STATUS_PARTIALLY_PLAYED)
+        putDouble(EXTRAS_KEY_COMPLETION_PERCENTAGE, position.toDouble() / duration)
+      }
+      BookCategory.FINISHED ->
+        putInt(EXTRAS_KEY_COMPLETION_STATUS, EXTRAS_VALUE_COMPLETION_STATUS_FULLY_PLAYED)
+    }
+  }
