@@ -90,47 +90,49 @@ internal fun ActionToolbar(
     modifier = modifier,
     colors = FloatingToolbarDefaults.vibrantFloatingToolbarColors(),
   ) {
-    val sleepTimerActive = sleepTimerState is BookPlayViewState.SleepTimerViewState.Enabled
-    ToolbarAction(
-      active = sleepTimerActive,
-      // a click cancels a running timer
-      icon = if (sleepTimerActive) VoiceIcons.BedtimeOff else VoiceIcons.Bedtime,
-      contentDescription = stringResource(R.string.sleep_timer_action_open),
-      label =
-        (sleepTimerState as? BookPlayViewState.SleepTimerViewState.Enabled.WithDuration)?.let {
-          formatTime(it.leftDuration.inWholeMilliseconds)
-        },
-      // it counts down every second, rolling would keep it moving the whole time
-      rollLabel = false,
-      onClick = onSleepTimerClick,
-    )
-    val speedChanged = playbackSpeed !in 0.99F..1.01F
-    ToolbarAction(
-      active = speedChanged,
-      icon = VoiceIcons.Speed,
-      contentDescription = stringResource(R.string.playback_speed_title),
-      label = if (speedChanged) speedFormat.format(playbackSpeed) + "×" else null,
-      onClick = onSpeedClick,
-    )
-    BookmarkAction(
-      onClick = onBookmarkClick,
-      onLongClick = onBookmarkLongClick,
-    )
-    ToolbarAction(
-      active = skipSilence,
-      icon = VoiceIcons.ContentCut,
-      contentDescription = stringResource(R.string.playback_option_skip_silence),
-      onClick = onSkipSilenceClick,
-      toggle = true,
-      // the only option that doesn't open a titled screen, and its icon alone is ambiguous
-      showTooltipOnClick = true,
-    )
-    ToolbarAction(
-      active = volumeBoostActive,
-      icon = VoiceIcons.VolumeUp,
-      contentDescription = stringResource(R.string.playback_option_volume_boost),
-      onClick = onVolumeBoostClick,
-    )
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+      val sleepTimerActive = sleepTimerState is BookPlayViewState.SleepTimerViewState.Enabled
+      ToolbarAction(
+        active = sleepTimerActive,
+        // a click cancels a running timer
+        icon = if (sleepTimerActive) VoiceIcons.BedtimeOff else VoiceIcons.Bedtime,
+        contentDescription = stringResource(R.string.sleep_timer_action_open),
+        label =
+          (sleepTimerState as? BookPlayViewState.SleepTimerViewState.Enabled.WithDuration)?.let {
+            formatTime(it.leftDuration.inWholeMilliseconds)
+          },
+        // it counts down every second, rolling would keep it moving the whole time
+        rollLabel = false,
+        onClick = onSleepTimerClick,
+      )
+      val speedChanged = playbackSpeed !in 0.99F..1.01F
+      ToolbarAction(
+        active = speedChanged,
+        icon = VoiceIcons.Speed,
+        contentDescription = stringResource(R.string.playback_speed_title),
+        label = if (speedChanged) speedFormat.format(playbackSpeed) + "×" else null,
+        onClick = onSpeedClick,
+      )
+      BookmarkAction(
+        onClick = onBookmarkClick,
+        onLongClick = onBookmarkLongClick,
+      )
+      ToolbarAction(
+        active = skipSilence,
+        icon = VoiceIcons.ContentCut,
+        contentDescription = stringResource(R.string.playback_option_skip_silence),
+        onClick = onSkipSilenceClick,
+        toggle = true,
+        // the only option that doesn't open a titled screen, and its icon alone is ambiguous
+        showTooltipOnClick = true,
+      )
+      ToolbarAction(
+        active = volumeBoostActive,
+        icon = VoiceIcons.VolumeUp,
+        contentDescription = stringResource(R.string.playback_option_volume_boost),
+        onClick = onVolumeBoostClick,
+      )
+    }
   }
 }
 
