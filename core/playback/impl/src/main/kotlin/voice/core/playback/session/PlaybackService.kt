@@ -5,6 +5,7 @@ import androidx.media3.session.MediaSession
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import voice.core.common.rootGraphAs
 import voice.core.playback.di.PlaybackGraph
@@ -24,9 +25,12 @@ class PlaybackService : MediaLibraryService() {
 
   @Inject lateinit var listeningSessionRecorder: ListeningSessionRecorder
 
+  @Inject lateinit var libraryChangeNotifier: LibraryChangeNotifier
+
   override fun onCreate() {
     super.onCreate()
     rootGraphAs<PlaybackGraph.Provider>().playbackGraphFactory.create(this).inject(this)
+    scope.launch { libraryChangeNotifier.notifyChanges(session) }
   }
 
   private fun release() {
