@@ -10,7 +10,7 @@ another device: not the user's phone, not their own emulators, not another agent
 
 To see how a composable looks at a size, font scale, dark, or right to left, the previews skill is faster. Use the
 emulator for what previews can't show: real data and playback, flows across screens, sheets and dialogs, system bars,
-and Dynamic color.
+and Dynamic color. For Android Auto, the android-auto skill connects a desktop head unit to your emulator.
 
 The scripts live in `.agents/skills/emulator/scripts/`: `emulator.py` for the emulator's lifecycle and `ui.py` for the
 screen. Run them from the repository root. They need only Python 3.9+.
