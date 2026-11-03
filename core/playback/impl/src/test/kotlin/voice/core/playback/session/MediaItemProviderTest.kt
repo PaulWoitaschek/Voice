@@ -1,0 +1,94 @@
+package voice.core.playback.session
+
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.coEvery
+import io.mockk.mockk
+import java.time.Instant
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
+import org.junit.runner.RunWith
+import voice.core.data.Book
+import voice.core.data.BookCategory
+import voice.core.data.Chapter
+import voice.core.data.ChapterId
+import voice.core.playback.session.search.book
+
+@RunWith(AndroidJUnit4::class)
+class MediaItemProviderTest {
+
+  private val books = mutableListOf<Book>()
+  private val provider =
+    MediaItemProvider(
+      bookRepository = mockk { coEvery { all() } answers { books } },
+      application = ApplicationProvider.getApplicationContext(),
+      chapterRepo = mockk(),
+      imageFileProvider = mockk(),
+      currentBookStoreId = mockk(),
+    )
+
+  @Test
+  fun `the library is split into the groups of the app, leaving out empty ones`() = runTest {
+    books += libraryBook("Current", position = 30_000)
+    books += libraryBook("Finished", position = 60_000)
+    books += libraryBook("Hidden", position = 0, hidden = true)
+
+    assertEquals(
+      expected =
+        listOf(MediaId.Category(BookCategory.CURRENT), MediaId.Category(BookCategory.FINISHED)),
+      actual = children(MediaId.Root).map { it.mediaId.toMediaIdOrNull() },
+    )
+  }
+
+  @Test
+  fun `each group is sorted like in the app and leaves out hidden books`() = runTest {
+    books += libraryBook("B", position = 0)
+    books += libraryBook("A", position = 0)
+    books += libraryBook("Hidden", position = 0, hidden = true)
+    books += libraryBook("Old", position = 30_000, lastPlayedAt = Instant.ofEpochSecond(1))
+    books += libraryBook("New", position = 30_000, lastPlayedAt = Instant.ofEpochSecond(2))
+
+    assertEquals(
+      expected = listOf("A", "B"),
+      actual = titles(BookCategory.NOT_STARTED),
+    )
+    assertEquals(
+      expected = listOf("New", "Old"),
+      actual = titles(BookCategory.CURRENT),
+    )
+  }
+
+  private suspend fun titles(category: BookCategory): List<String> =
+    children(MediaId.Category(category)).map { it.mediaMetadata.title.toString() }
+
+  private suspend fun children(mediaId: MediaId) =
+    provider.children(Json.encodeToString(MediaId.serializer(), mediaId))!!
+
+  private fun libraryBook(
+    name: String,
+    position: Long,
+    lastPlayedAt: Instant = Instant.EPOCH,
+    hidden: Boolean = false,
+  ): Book {
+    val chapter =
+      Chapter(
+        id = ChapterId(name),
+        name = name,
+        duration = 60_000,
+        fileLastModified = Instant.EPOCH,
+        markData = emptyList(),
+        fileSize = 0,
+      )
+    val book = book(chapters = listOf(chapter), positionInChapter = position)
+    return book.copy(
+      content =
+        book.content.copy(
+          lastPlayedAt = lastPlayedAt,
+          metadata = book.content.metadata.copy(name = name),
+        ),
+      custom = book.custom.copy(hidden = hidden),
+    )
+  }
+}

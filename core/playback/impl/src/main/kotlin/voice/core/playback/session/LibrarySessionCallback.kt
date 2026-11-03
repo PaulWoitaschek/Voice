@@ -125,13 +125,14 @@ class LibrarySessionCallback(
     browser: ControllerInfo,
     params: LibraryParams?,
   ): ListenableFuture<LibraryResult<MediaItem>> {
+    Logger.d("onGetLibraryRoot(isRecent=${params?.isRecent == true})")
     val mediaItem =
       if (params?.isRecent == true) {
-        mediaItemProvider.recent() ?: mediaItemProvider.root()
+        mediaItemProvider.recent()
+          ?: return Futures.immediateFuture(LibraryResult.ofError(SessionError.ERROR_NOT_SUPPORTED))
       } else {
         mediaItemProvider.root()
       }
-    Logger.d("onGetLibraryRoot(isRecent=${params?.isRecent == true})")
     return Futures.immediateFuture(LibraryResult.ofItem(mediaItem, params))
   }
 

@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 internal enum class MediaType {
   AudioBook,
   AudioBookChapter,
-  AudioBookRoot,
+  AudioBookFolder,
 }
 
 internal fun MediaItem(
@@ -41,7 +41,7 @@ internal fun MediaItem(
         when (mediaType) {
           MediaType.AudioBook -> MediaMetadata.MEDIA_TYPE_AUDIO_BOOK
           MediaType.AudioBookChapter -> MediaMetadata.MEDIA_TYPE_AUDIO_BOOK_CHAPTER
-          MediaType.AudioBookRoot -> MediaMetadata.MEDIA_TYPE_FOLDER_AUDIO_BOOKS
+          MediaType.AudioBookFolder -> MediaMetadata.MEDIA_TYPE_FOLDER_AUDIO_BOOKS
         },
       )
       .build()

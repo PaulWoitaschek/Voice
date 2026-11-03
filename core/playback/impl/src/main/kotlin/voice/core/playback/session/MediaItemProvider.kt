@@ -10,9 +10,11 @@ import java.io.File
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.core.data.BookComparator
 import voice.core.data.BookId
 import voice.core.data.Chapter
+import voice.core.data.category
 import voice.core.data.durationMs
 import voice.core.data.repo.BookRepository
 import voice.core.data.repo.ChapterRepo
@@ -35,7 +37,7 @@ class MediaItemProvider(
       browsable = true,
       isPlayable = false,
       mediaId = MediaId.Root,
-      mediaType = MediaType.AudioBookRoot,
+      mediaType = MediaType.AudioBookFolder,
     )
 
   // Blocking on purpose: legacy browsers get the library root on the main thread and wait for it
@@ -81,6 +83,7 @@ class MediaItemProvider(
         )
       }
       MediaId.Recent -> recent()
+      is MediaId.Category -> mediaItem(mediaId.category)
     }
   }
 
@@ -100,6 +103,7 @@ class MediaItemProvider(
       }
       is MediaId.Chapter,
       is MediaId.ChapterMark,
+      is MediaId.Category,
       MediaId.Root,
       MediaId.Recent,
       null -> null
@@ -126,14 +130,16 @@ class MediaItemProvider(
   suspend fun children(id: String): List<MediaItem>? {
     val mediaId = id.toMediaIdOrNull() ?: return null
     return when (mediaId) {
+      // Android Auto shows these as tabs
       MediaId.Root -> {
-        bookRepository
-          .all()
-          .filterNot { it.custom.hidden }
-          .sortedWith(BookComparator.ByLastPlayed)
-          .map { book ->
-            mediaItem(book)
-          }
+        val categories = libraryBooks().map { it.category }.toSet()
+        BookCategory.entries.filter { it in categories }.map(::mediaItem)
+      }
+      is MediaId.Category -> {
+        libraryBooks()
+          .filter { it.category == mediaId.category }
+          .sortedWith(mediaId.category.comparator)
+          .map(::mediaItem)
       }
       is MediaId.Book -> chapters(mediaId.id)
       is MediaId.Chapter,
@@ -146,6 +152,9 @@ class MediaItemProvider(
     }
   }
 
+  private suspend fun libraryBooks(): List<Book> =
+    bookRepository.all().filterNot { it.custom.hidden }
+
   fun mediaItem(book: Book): MediaItem =
     MediaItem(
       title = book.name,
@@ -154,6 +163,15 @@ class MediaItemProvider(
       isPlayable = true,
       imageUri = book.cover?.toProvidedUri(),
       mediaType = MediaType.AudioBook,
+    )
+
+  private fun mediaItem(category: BookCategory): MediaItem =
+    MediaItem(
+      title = application.getString(category.title),
+      mediaId = MediaId.Category(category),
+      browsable = true,
+      isPlayable = false,
+      mediaType = MediaType.AudioBookFolder,
     )
 
   private fun mediaItem(
@@ -189,3 +207,20 @@ class MediaItemProvider(
 
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
 }
+
+// the same order as in the library
+private val BookCategory.comparator: Comparator<Book>
+  get() =
+    when (this) {
+      BookCategory.CURRENT,
+      BookCategory.FINISHED -> BookComparator.ByLastPlayed
+      BookCategory.NOT_STARTED -> BookComparator.ByName
+    }
+
+private val BookCategory.title: Int
+  get() =
+    when (this) {
+      BookCategory.CURRENT -> StringsR.string.library_category_current_title
+      BookCategory.NOT_STARTED -> StringsR.string.library_category_not_started_title
+      BookCategory.FINISHED -> StringsR.string.library_category_completed_title
+    }
