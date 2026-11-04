@@ -23,10 +23,11 @@ internal class CoverExtractor(
   private val matroskaCoverExtractor: MatroskaCoverExtractor,
 ) {
 
+  // null if the file can't be read right now, like on an offline cloud
   suspend fun extractCover(
     input: Uri,
     outputFile: File,
-  ): Boolean {
+  ): Boolean? {
     val fileType = FileTypes.inferFileTypeFromUri(input)
     val extension =
       (input.path ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
@@ -34,7 +35,7 @@ internal class CoverExtractor(
       return matroskaCoverExtractor.extract(input, outputFile)
     }
 
-    val trackGroups = retrieveMetadata(input) ?: return false
+    val trackGroups = retrieveMetadata(input) ?: return null
 
     repeat(trackGroups.length) { trackGroupIndex ->
       val trackGroup = trackGroups[trackGroupIndex]

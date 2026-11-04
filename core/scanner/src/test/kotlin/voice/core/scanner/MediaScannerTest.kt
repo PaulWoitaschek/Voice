@@ -551,6 +551,22 @@ class MediaScannerTest {
   }
 
   @Test
+  fun `a book is looked through for an embedded cover again when its first file changes`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter1 = audioFile(book, "1.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    val id = BookId(book.toUri())
+    val content = bookContentRepo.get(id)!!
+    bookContentRepo.put(content.copy(metadata = content.metadata.copy(noEmbeddedCover = true)))
+
+    changed(chapter1)
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = false, actual = bookContentRepo.get(id)!!.metadata.noEmbeddedCover)
+  }
+
+  @Test
   fun `a book keeps the title and author the listener gave it when its files change`() = test {
     val audiobookFolder = folder("audiobooks")
     val book = File(audiobookFolder, "book")
