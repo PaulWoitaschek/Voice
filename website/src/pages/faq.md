@@ -143,10 +143,10 @@ On some devices (e.g. Samsung S20fe) shake-to-resume may not work reliably.
 
 ## How do I continue a book on another device?
 
-Voice keeps your place, your playback speed, your bookmarks and the titles and authors you gave your books in a
-hidden `.voice` folder inside each audiobook folder you added. Sync these folders between your devices with a tool of
-your own, like [Syncthing](https://syncthing.net), and when you open Voice on the other device, it picks up where you
-left off.
+Voice keeps your place, your playback speed, your bookmarks, the titles and authors you gave your books and the books
+you hid from your library in a hidden `.voice` folder inside each audiobook folder you added. Sync these folders between
+your devices with a tool of your own, like [Syncthing](https://syncthing.net), and when you open Voice on the other
+device, it picks up where you left off.
 
 - Add the same folder on every device, and the same way, for example as "Every folder is a book" on both. Where the
   folder is on each device doesn't matter.
@@ -156,8 +156,8 @@ left off.
 - Your sync tool has to copy hidden folders.
 - A book that is playing stays where it is.
 
-If you share a folder with your family and don't want each other's place, names and bookmarks, let your sync tool
-ignore `.voice`. In Syncthing, add `.voice` to the folder's ignore patterns.
+If you share a folder with your family and don't want each other's place, names, hidden books and bookmarks, let your
+sync tool ignore `.voice`. In Syncthing, add `.voice` to the folder's ignore patterns.
 
 ## Didn't find an answer?
 
