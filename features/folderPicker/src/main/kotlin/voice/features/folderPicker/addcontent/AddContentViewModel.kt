@@ -19,6 +19,8 @@ import voice.navigation.Destination.SelectFolderType
 import voice.navigation.Navigator
 import voice.navigation.Origin
 
+internal const val HELP_SURVEY_URL = "https://tally.so/r/Ge6Nqj"
+
 @AssistedInject
 class AddContentViewModel(
   private val audiobookFolders: AudiobookFolders,
@@ -62,6 +64,26 @@ class AddContentViewModel(
 
   internal fun onFolderPickerCancel() {
     analytics.event("folder_picker_cancelled")
+  }
+
+  internal fun onHelpAnswer(answer: FolderHelpAnswer) {
+    analytics.event("folder_help_answer", mapOf("answer" to answer.value()))
+  }
+
+  internal fun openLibriVox() {
+    navigator.goTo(Destination.Website("https://librivox.org"))
+  }
+
+  internal fun openHelpSurvey() {
+    navigator.goTo(Destination.Website(HELP_SURVEY_URL))
+  }
+
+  private fun FolderHelpAnswer.value(): String {
+    return when (this) {
+      FolderHelpAnswer.NoFiles -> "no_files"
+      FolderHelpAnswer.NotFound -> "not_found"
+      FolderHelpAnswer.OtherApp -> "other_app"
+    }
   }
 
   private val scope = MainScope(dispatcherProvider)

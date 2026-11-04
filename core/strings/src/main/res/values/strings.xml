@@ -263,11 +263,23 @@
     <string name="folder.add.action.file">Add a single file instead</string>
     <!-- Main button on the add content screen that opens the system folder picker. Also shown when a picked folder has no audio files. -->
     <string name="folder.add.action.folder">Choose a folder</string>
-    <!-- Tip on the add content screen after the system folder picker was closed without a folder. The second Audiobooks is the name of the folder on the phone, which is always in English, so keep it untranslated. -->
+    <!-- Answer chip under "Didn't find your audiobooks?" on the add content screen, shown after the system folder picker was closed without a folder. The listener has no audiobook files at all yet. Keep it short. -->
+    <string name="folder.add.help.answer.no_files">No audiobooks yet</string>
+    <!-- Answer chip under "Didn't find your audiobooks?" on the add content screen, shown after the system folder picker was closed without a folder. The listener has audiobooks but couldn't find them in the picker. Keep it short. -->
+    <string name="folder.add.help.answer.not_found">Can\'t find them</string>
+    <!-- Answer chip under "Didn't find your audiobooks?" on the add content screen, shown after the system folder picker was closed without a folder. The listener's audiobooks are in another app, like Audible. Keep it short. -->
+    <string name="folder.add.help.answer.other_app">They\'re in another app</string>
+    <!-- Tip on the add content screen after the listener answered that they can't find their audiobooks. The second Audiobooks is the name of the folder on the phone, which is always in English, so keep it untranslated. -->
     <string name="folder.add.help.computer">Audiobooks still on your computer? Copy them to your phone first, for example into the Audiobooks folder.</string>
-    <!-- Tip on the add content screen after the system folder picker was closed without a folder. Android 11 and newer don't allow picking the Download folder itself, only folders inside it. Download is the name of the folder on the phone, which is always in English, so keep it untranslated. -->
+    <!-- Tip on the add content screen after the listener answered that they can't find their audiobooks. Android 11 and newer don't allow picking the Download folder itself, only folders inside it. Download is the name of the folder on the phone, which is always in English, so keep it untranslated. -->
     <string name="folder.add.help.download">Android doesn\'t let apps open the Download folder itself. Pick a folder inside it.</string>
-    <!-- Title of the tips on the add content screen, shown after the system folder picker was closed without a folder. -->
+    <!-- Tip on the add content screen after the listener answered that they have no audiobooks yet. LibriVox is a website with free public domain audiobooks. The name opens it, so keep it written as LibriVox. -->
+    <string name="folder.add.help.no_files">Voice plays audiobook files from your phone. LibriVox has thousands of free ones to download.</string>
+    <!-- Tip on the add content screen after the listener answered that their audiobooks are in another app. Audible and Spotify are app names, keep them. MP3 and M4B are file formats. -->
+    <string name="folder.add.help.other_app">Books from apps like Audible or Spotify only play in those apps. Voice plays audiobook files, like MP3 or M4B.</string>
+    <!-- Text button on the card that asks "Didn't find your audiobooks?" on the add content screen. Opens a short survey in the browser about what kept the listener from adding audiobooks. -->
+    <string name="folder.add.help.survey">Tell us more</string>
+    <!-- Title of the tips on the add content screen, shown after the system folder picker was closed without a folder. Answer chips below it ask what's in the way. -->
     <string name="folder.add.help.title">Didn\'t find your audiobooks?</string>
     <!-- Text on the add content screen when the device has no system file picker, so tapping Choose a folder or Add a single file instead can't open anything. Happens on reduced Android builds like bike computers. Use the word Android uses for the system picker that opens files and folders. -->
     <string name="folder.add.no_picker.message">Voice opens your audiobooks through Android\'s file picker. Without it, Voice can\'t open your folders or files.</string>

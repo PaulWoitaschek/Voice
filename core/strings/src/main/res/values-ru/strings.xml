@@ -162,8 +162,14 @@
     <string name="folder.add.action.audiobookshelf">Подключить Audiobookshelf</string>
     <string name="folder.add.action.file">Добавить один файл вместо папки</string>
     <string name="folder.add.action.folder">Выбрать папку</string>
+    <string name="folder.add.help.answer.no_files">Аудиокниг пока нет</string>
+    <string name="folder.add.help.answer.not_found">Не могу их найти</string>
+    <string name="folder.add.help.answer.other_app">Они в другом приложении</string>
     <string name="folder.add.help.computer">Аудиокниги всё ещё на компьютере? Сначала скопируйте их на телефон, например в папку Audiobooks.</string>
     <string name="folder.add.help.download">Android не позволяет приложениям открывать саму папку Download. Выберите папку внутри неё.</string>
+    <string name="folder.add.help.no_files">Voice воспроизводит файлы аудиокниг с вашего телефона. На LibriVox можно бесплатно скачать тысячи книг.</string>
+    <string name="folder.add.help.other_app">Книги из приложений вроде Audible или Spotify можно слушать только в этих приложениях. Voice воспроизводит файлы аудиокниг, например MP3 или M4B.</string>
+    <string name="folder.add.help.survey">Рассказать подробнее</string>
     <string name="folder.add.help.title">Не нашли свои аудиокниги?</string>
     <string name="folder.add.no_picker.message">Voice открывает ваши аудиокниги через средство выбора файлов Android. Без него Voice не может открыть ни папки, ни файлы.</string>
     <string name="folder.add.no_picker.title">На устройстве нет средства выбора файлов</string>

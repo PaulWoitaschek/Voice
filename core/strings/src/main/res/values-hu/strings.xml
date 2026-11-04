@@ -152,8 +152,14 @@
     <string name="folder.add.action.audiobookshelf">Audiobookshelf csatlakoztatása</string>
     <string name="folder.add.action.file">Inkább egyetlen fájl hozzáadása</string>
     <string name="folder.add.action.folder">Mappa kiválasztása</string>
+    <string name="folder.add.help.answer.no_files">Még nincs hangoskönyvem</string>
+    <string name="folder.add.help.answer.not_found">Nem találom őket</string>
+    <string name="folder.add.help.answer.other_app">Másik alkalmazásban vannak</string>
     <string name="folder.add.help.computer">A hangoskönyvei még a számítógépén vannak? Másolja át őket előbb a telefonjára, például az Audiobooks mappába.</string>
     <string name="folder.add.help.download">Az Android nem engedi, hogy az alkalmazások megnyissák magát a Download mappát. Válasszon egy mappát azon belül.</string>
+    <string name="folder.add.help.no_files">A Voice a telefonján lévő hangoskönyvfájlokat játssza le. A LibriVoxról ezreket tölthet le ingyen.</string>
+    <string name="folder.add.help.other_app">Az olyan alkalmazások könyvei, mint az Audible vagy a Spotify, csak ezekben az alkalmazásokban játszhatók le. A Voice hangoskönyvfájlokat játszik le, például MP3-at vagy M4B-t.</string>
+    <string name="folder.add.help.survey">Részletek megosztása</string>
     <string name="folder.add.help.title">Nem találja a hangoskönyveit?</string>
     <string name="folder.add.no_picker.message">A Voice az Android fájlválasztójával nyitja meg a hangoskönyveit. Nélküle a Voice sem a mappáit, sem a fájljait nem tudja megnyitni.</string>
     <string name="folder.add.no_picker.title">Ezen az eszközön nincs fájlválasztó</string>

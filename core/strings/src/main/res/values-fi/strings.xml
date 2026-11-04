@@ -152,8 +152,14 @@
     <string name="folder.add.action.audiobookshelf">Yhdistä Audiobookshelf</string>
     <string name="folder.add.action.file">Lisää sen sijaan yksittäinen tiedosto</string>
     <string name="folder.add.action.folder">Valitse kansio</string>
+    <string name="folder.add.help.answer.no_files">Ei vielä äänikirjoja</string>
+    <string name="folder.add.help.answer.not_found">En löydä niitä</string>
+    <string name="folder.add.help.answer.other_app">Toisessa sovelluksessa</string>
     <string name="folder.add.help.computer">Ovatko äänikirjasi vielä tietokoneella? Kopioi ne ensin puhelimeesi, esimerkiksi Audiobooks-kansioon.</string>
     <string name="folder.add.help.download">Android ei salli sovellusten avata suoraan Download-kansiota. Valitse jokin sen sisällä oleva kansio.</string>
+    <string name="folder.add.help.no_files">Voice toistaa puhelimesi äänikirjatiedostoja. LibriVoxista voit ladata tuhansia ilmaisia äänikirjoja.</string>
+    <string name="folder.add.help.other_app">Audiblen tai Spotifyn kaltaisten sovellusten kirjoja voi kuunnella vain niissä sovelluksissa. Voice toistaa äänikirjatiedostoja, kuten MP3- ja M4B-tiedostoja.</string>
+    <string name="folder.add.help.survey">Kerro lisää</string>
     <string name="folder.add.help.title">Etkö löytänyt äänikirjojasi?</string>
     <string name="folder.add.no_picker.message">Voice avaa äänikirjasi Androidin tiedostovalitsimen kautta. Ilman sitä Voice ei voi avata kansioitasi tai tiedostojasi.</string>
     <string name="folder.add.no_picker.title">Tässä laitteessa ei ole tiedostovalitsinta</string>

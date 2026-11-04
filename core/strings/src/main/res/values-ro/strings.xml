@@ -157,8 +157,14 @@
     <string name="folder.add.action.audiobookshelf">Conectează Audiobookshelf</string>
     <string name="folder.add.action.file">Adaugă doar un fișier</string>
     <string name="folder.add.action.folder">Alege un director</string>
+    <string name="folder.add.help.answer.no_files">Încă nu am cărți audio</string>
+    <string name="folder.add.help.answer.not_found">Nu le găsesc</string>
+    <string name="folder.add.help.answer.other_app">Sunt în altă aplicație</string>
     <string name="folder.add.help.computer">Mai ai cărți audio pe calculator? Copiază-le mai întâi pe telefon, de exemplu în directorul Audiobooks.</string>
     <string name="folder.add.help.download">Android nu permite aplicațiilor să deschidă direct directorul Download. Alege un director din interiorul lui.</string>
+    <string name="folder.add.help.no_files">Voice redă fișiere cu cărți audio de pe telefonul tău. LibriVox are mii de cărți audio gratuite pe care le poți descărca.</string>
+    <string name="folder.add.help.other_app">Cărțile din aplicații precum Audible sau Spotify pot fi ascultate doar în aplicațiile respective. Voice redă fișiere cu cărți audio, cum ar fi MP3 sau M4B.</string>
+    <string name="folder.add.help.survey">Spune-ne mai multe</string>
     <string name="folder.add.help.title">Nu ai găsit cărțile tale audio?</string>
     <string name="folder.add.no_picker.message">Voice îți deschide cărțile audio prin selectorul de fișiere din Android. Fără el, Voice nu poate deschide nici directoarele, nici fișierele tale.</string>
     <string name="folder.add.no_picker.title">Acest dispozitiv nu are selector de fișiere</string>

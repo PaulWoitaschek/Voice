@@ -157,8 +157,14 @@
     <string name="folder.add.action.audiobookshelf">חיבור ל-Audiobookshelf</string>
     <string name="folder.add.action.file">הוספת קובץ בודד במקום זאת</string>
     <string name="folder.add.action.folder">בחירת תיקייה</string>
+    <string name="folder.add.help.answer.no_files">עדיין אין לי קולספרים</string>
+    <string name="folder.add.help.answer.not_found">לא מצאתי אותם</string>
+    <string name="folder.add.help.answer.other_app">הם באפליקציה אחרת</string>
     <string name="folder.add.help.computer">הקולספרים עדיין במחשב? העתיקו אותם לטלפון קודם, למשל לתיקיית Audiobooks.</string>
     <string name="folder.add.help.download">ב-Android, אפליקציות לא יכולות לפתוח את תיקיית Download עצמה. בחרו תיקייה שבתוכה.</string>
+    <string name="folder.add.help.no_files">עם Voice אפשר להאזין לקבצי קולספר שבטלפון שלכם. ב-LibriVox יש אלפי קולספרים להורדה בחינם.</string>
+    <string name="folder.add.help.other_app">ספרים מאפליקציות כמו Audible או Spotify מתנגנים רק באפליקציות האלה. Voice משמיעה קבצי קולספר, כמו MP3 או M4B.</string>
+    <string name="folder.add.help.survey">ספרו לנו עוד</string>
     <string name="folder.add.help.title">לא נמצאו הקולספרים שלכם?</string>
     <string name="folder.add.no_picker.message">הגישה של Voice לקולספרים שלכם עוברת דרך בוחר הקבצים של Android. בלעדיו, אי אפשר לפתוח ב-Voice תיקיות או קבצים.</string>
     <string name="folder.add.no_picker.title">אין במכשיר הזה בוחר קבצים</string>

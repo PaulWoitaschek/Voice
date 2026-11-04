@@ -147,8 +147,14 @@
     <string name="folder.add.action.audiobookshelf">Audiobookshelf に接続</string>
     <string name="folder.add.action.file">代わりに単一ファイルを追加</string>
     <string name="folder.add.action.folder">フォルダーを選択</string>
+    <string name="folder.add.help.answer.no_files">まだ持っていない</string>
+    <string name="folder.add.help.answer.not_found">見つけられない</string>
+    <string name="folder.add.help.answer.other_app">他のアプリにある</string>
     <string name="folder.add.help.computer">オーディオブックがまだパソコンに入っていますか？ 先にスマートフォンの Audiobooks フォルダーなどにコピーしてください。</string>
     <string name="folder.add.help.download">Android では、アプリが Download フォルダー自体を開くことはできません。その中のフォルダーを選んでください。</string>
+    <string name="folder.add.help.no_files">Voice はスマートフォン内のオーディオブックのファイルを再生します。LibriVox では、無料のオーディオブックを何千冊もダウンロードできます。</string>
+    <string name="folder.add.help.other_app">Audible や Spotify などのアプリの本は、そのアプリでしか再生できません。Voice で再生できるのは、MP3 や M4B などのオーディオブックのファイルです。</string>
+    <string name="folder.add.help.survey">詳しく伝える</string>
     <string name="folder.add.help.title">オーディオブックが見つかりませんか？</string>
     <string name="folder.add.no_picker.message">Voice は Android のファイル選択ツールでオーディオブックを開きます。これがないと、Voice ではフォルダーやファイルを開けません。</string>
     <string name="folder.add.no_picker.title">この端末にはファイル選択ツールがありません</string>

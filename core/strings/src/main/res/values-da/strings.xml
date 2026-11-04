@@ -152,8 +152,14 @@
     <string name="folder.add.action.audiobookshelf">Tilslut Audiobookshelf</string>
     <string name="folder.add.action.file">Tilføj en enkelt fil i stedet</string>
     <string name="folder.add.action.folder">Vælg en mappe</string>
+    <string name="folder.add.help.answer.no_files">Ingen lydbøger endnu</string>
+    <string name="folder.add.help.answer.not_found">Kan ikke finde dem</string>
+    <string name="folder.add.help.answer.other_app">De er i en anden app</string>
     <string name="folder.add.help.computer">Har du stadig lydbøger på computeren? Kopiér dem først over på telefonen, for eksempel til mappen Audiobooks.</string>
     <string name="folder.add.help.download">Android lader ikke apps åbne selve mappen Download. Vælg en mappe inde i den.</string>
+    <string name="folder.add.help.no_files">Voice afspiller lydbogsfiler på din telefon. LibriVox har tusindvis af gratis lydbøger, du kan downloade.</string>
+    <string name="folder.add.help.other_app">Bøger fra apps som Audible eller Spotify kan kun afspilles i de apps. Voice afspiller lydbogsfiler, for eksempel MP3 eller M4B.</string>
+    <string name="folder.add.help.survey">Fortæl os mere</string>
     <string name="folder.add.help.title">Fandt du ikke dine lydbøger?</string>
     <string name="folder.add.no_picker.message">Voice åbner dine lydbøger via Androids filvælger. Uden den kan Voice ikke åbne dine mapper eller filer.</string>
     <string name="folder.add.no_picker.title">Denne enhed har ingen filvælger</string>
