@@ -174,10 +174,13 @@ private fun BookActions(
         if (closing) return
         closing = true
         scope.launch {
-          sheetState.hide()
-          bottomSheetViewModel.onItemClick(item)
-          showMenu = false
-          closeIfDone()
+          try {
+            sheetState.hide()
+          } finally {
+            bottomSheetViewModel.onItemClick(item)
+            showMenu = false
+            closeIfDone()
+          }
         }
       }
       ModalBottomSheet(
