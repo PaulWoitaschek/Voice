@@ -180,6 +180,23 @@ class SyncedBooksTest {
   }
 
   @Test
+  fun `hiding and showing a book is changed now, a book that stays keeps its time`() {
+    val own = SyncedBook(hidden = SyncedFlag(true, changedAt = 1000))
+
+    assertEquals(SyncedFlag(true, changedAt = NOW), listOf(book(hidden = true)).synced().hidden)
+    assertEquals(own.hidden, listOf(book(hidden = true)).synced(own).hidden)
+    assertEquals(SyncedFlag(false, changedAt = NOW), listOf(book()).synced(own).hidden)
+  }
+
+  @Test
+  fun `a book hidden before this device synced the folder counts as old`() {
+    assertEquals(
+      SyncedFlag(true, changedAt = 0),
+      listOf(book(hidden = true)).synced(ownFileExists = false).hidden,
+    )
+  }
+
+  @Test
   fun `what changed later wins, and on a tie this device's stays`() {
     val mine =
       SyncedBook(
@@ -188,6 +205,7 @@ class SyncedBooksTest {
         author = SyncedText("Mine", changedAt = 3000),
         series = SyncedText("Mine", changedAt = 1000),
         part = SyncedText("1", changedAt = 3000),
+        hidden = SyncedFlag(true, changedAt = 1000),
       )
     val other =
       SyncedBook(
@@ -196,6 +214,7 @@ class SyncedBooksTest {
         author = SyncedText("Other", changedAt = 1000),
         series = SyncedText("Other", changedAt = 3000),
         part = SyncedText("2", changedAt = 1000),
+        hidden = SyncedFlag(false, changedAt = 3000),
       )
 
     assertEquals(
@@ -206,6 +225,7 @@ class SyncedBooksTest {
           author = mine.author,
           series = other.series,
           part = mine.part,
+          hidden = other.hidden,
         ),
       actual = mine.with(other),
     )

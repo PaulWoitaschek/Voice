@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if ./gradlew --quiet spotlessCheck > /dev/null 2>&1; then
+  exit 0
+fi
+
+./gradlew --quiet spotlessApply || exit 1
+echo "Formatted the code. Stage the changes and commit again." >&2
+exit 1

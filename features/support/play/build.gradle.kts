@@ -1,6 +1,5 @@
 plugins {
   id("voice.library")
-  alias(libs.plugins.metro)
 }
 
 dependencies {
@@ -12,6 +11,5 @@ dependencies {
   implementation(projects.core.analytics.api)
   implementation(projects.core.data.api)
   implementation(projects.core.initializer)
-  implementation(projects.core.logging.api)
   implementation(projects.navigation)
 }

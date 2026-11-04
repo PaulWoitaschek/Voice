@@ -14,6 +14,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.withTimeout
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaCoverExtractor
 
@@ -23,10 +24,11 @@ internal class CoverExtractor(
   private val matroskaCoverExtractor: MatroskaCoverExtractor,
 ) {
 
+  // null if the file can't be read right now, like on an offline cloud
   suspend fun extractCover(
     input: Uri,
     outputFile: File,
-  ): Boolean {
+  ): Boolean? {
     val fileType = FileTypes.inferFileTypeFromUri(input)
     val extension =
       (input.path ?: "").substringAfterLast(delimiter = ".", missingDelimiterValue = "").lowercase()
@@ -34,7 +36,7 @@ internal class CoverExtractor(
       return matroskaCoverExtractor.extract(input, outputFile)
     }
 
-    val trackGroups = retrieveMetadata(input) ?: return false
+    val trackGroups = retrieveMetadata(input) ?: return null
 
     repeat(trackGroups.length) { trackGroupIndex ->
       val trackGroup = trackGroups[trackGroupIndex]
@@ -67,7 +69,7 @@ internal class CoverExtractor(
   private suspend fun retrieveMetadata(uri: Uri): TrackGroupArray? {
     return try {
       MetadataRetriever.Builder(context, MediaItem.fromUri(uri)).build().use {
-        it.retrieveTrackGroups().await()
+        withTimeout(metadataRetrievalTimeout) { it.retrieveTrackGroups().await() }
       }
     } catch (e: Exception) {
       if (e is CancellationException) currentCoroutineContext().ensureActive()

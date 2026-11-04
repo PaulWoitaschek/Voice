@@ -10,16 +10,21 @@ import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.withTimeout
 import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.nameWithoutExtension
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaMetaDataExtractor
 import voice.core.scanner.matroska.MatroskaParseException
 import voice.core.scanner.mp4.Mp4ChapterExtractor
+
+// a cloud app whose download stalls never answers, and the scan would wait for it forever
+internal val metadataRetrievalTimeout = 1.minutes
 
 @Inject
 internal class MediaAnalyzer(
@@ -97,7 +102,9 @@ internal class MediaAnalyzer(
   private suspend fun retrieveDurationAndTrackGroups(uri: Uri): Pair<Duration, TrackGroupArray>? {
     return try {
       MetadataRetriever.Builder(context, MediaItem.fromUri(uri)).build().use {
-        it.retrieveDurationUs().await().microseconds to it.retrieveTrackGroups().await()
+        withTimeout(metadataRetrievalTimeout) {
+          it.retrieveDurationUs().await().microseconds to it.retrieveTrackGroups().await()
+        }
       }
     } catch (e: Exception) {
       if (e is CancellationException) currentCoroutineContext().ensureActive()

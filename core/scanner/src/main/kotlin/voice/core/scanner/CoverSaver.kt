@@ -57,6 +57,12 @@ internal constructor(
     }
   }
 
+  internal suspend fun rememberNoEmbeddedCover(bookId: BookId) {
+    repo.updateBook(bookId) {
+      it.copy(metadata = it.metadata.copy(noEmbeddedCover = true))
+    }
+  }
+
   internal fun newTemporaryFile(): File = File(context.cacheDir, "cover-${Uuid.random()}")
 
   internal suspend fun saveExtractedCover(

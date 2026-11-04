@@ -1,16 +1,10 @@
 plugins {
-  id("voice.library")
-  id("voice.compose")
-  alias(libs.plugins.metro)
+  id("voice.feature")
 }
 
 dependencies {
-  implementation(projects.core.common)
-  implementation(projects.core.strings)
-  implementation(projects.core.ui)
   implementation(projects.core.playback.api)
   implementation(projects.core.sleeptimer.api)
-  implementation(projects.navigation)
   implementation(projects.core.data.api)
   implementation(projects.core.datastore)
   implementation(projects.core.featureflag)

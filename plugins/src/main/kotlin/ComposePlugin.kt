@@ -32,6 +32,11 @@ class ComposePlugin : Plugin<Project> {
       libs.findLibrary("compose-ui-tooling-core").get(),
     )
     target.dependencies.add("testImplementation", libs.findLibrary("molecule").get())
+    target.dependencies.add("testImplementation", libs.findLibrary("compose-ui-testJunit").get())
+    target.dependencies.add(
+      "debugImplementation",
+      libs.findLibrary("compose-ui-testManifest").get(),
+    )
     target.dependencies.add("lintChecks", libs.findLibrary("compose-lint-checks").get())
     target.plugins.apply("org.jetbrains.kotlin.plugin.compose")
     target.extensions.configure<ComposeCompilerGradlePluginExtension> {

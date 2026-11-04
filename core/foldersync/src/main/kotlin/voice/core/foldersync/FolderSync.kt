@@ -37,9 +37,10 @@ import voice.core.playback.playstate.PlayStateManager
 import voice.core.scanner.MediaScanTrigger
 
 /**
- * Takes the listener's place, speed, names and bookmarks to their other devices without a server.
- * Each device writes what it knows into a file in the library folders, which the listener syncs
- * with a tool of their own, and takes over what changed later in the files of the other devices.
+ * Takes the listener's place, speed, names, hidden books and bookmarks to their other devices
+ * without a server. Each device writes what it knows into a file in the library folders, which the
+ * listener syncs with a tool of their own, and takes over what changed later in the files of the
+ * other devices.
  */
 @SingleIn(AppScope::class)
 @Inject
@@ -138,7 +139,7 @@ internal constructor(
       }
     // books that are missing for now, like on an SD card that's out, keep their entry
     val file = SyncFile((own + synced).filterValues { it != SyncedBook() })
-    // a folder without a book that was played, edited or bookmarked gets no .voice folder
+    // a folder without a book that was played, edited, hidden or bookmarked gets no .voice folder
     if (file != (ownFile ?: SyncFile(emptyMap()))) {
       syncFiles.write(folder, ownFileName, file)
     }
@@ -161,6 +162,12 @@ internal constructor(
       custom.copy(series = series)
     }
     copies.takeOverText(mine.part, newest.part) { custom, part -> custom.copy(part = part) }
+    val hidden = newest.hidden
+    if (hidden != null && hidden != mine.hidden) {
+      copies.forEach { copy ->
+        bookRepository.updateCustomMetadata(copy.id) { it.copy(hidden = hidden.value) }
+      }
+    }
     (mine.bookmarks.keys - newest.bookmarks.keys).forEach {
       bookmarkRepo.deleteBookmark(Bookmark.Id(it))
     }

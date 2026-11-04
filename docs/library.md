@@ -196,11 +196,10 @@ For books already in the library:
 ![Sketch: hide from library in the book actions](sketches/book-actions-hide.png)
 
 Books can be hidden from the book actions, and a series from its stack or screen, see the
-[product spec](product.md#library). The sort sheet only has the switch for hidden books so far, and its button only
-shows once a book is hidden. Still to come:
+[product spec](product.md#library). Hiding syncs through `.voice`, like the name does. The sort sheet only has the
+switch for hidden books so far, and its button only shows once a book is hidden. Still to come:
 
 - Hide from library on an author's stack or screen, and for selected books.
-- Hiding syncs through `.voice`, like the name does.
 
 ## 7. Editing title, author and series
 

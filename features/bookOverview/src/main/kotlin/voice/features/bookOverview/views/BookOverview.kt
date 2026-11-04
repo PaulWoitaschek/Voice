@@ -44,6 +44,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation3.runtime.NavEntry
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
@@ -89,7 +91,8 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     }
   val bookOverviewViewModel = bookGraph.bookOverviewViewModel
 
-  LaunchedEffect(Unit) {
+  // Voice stays alive in the background, so books copied meanwhile are found when it comes back
+  LifecycleEventEffect(Lifecycle.Event.ON_START) {
     bookOverviewViewModel.attach()
   }
   val viewState = bookOverviewViewModel.state()
