@@ -75,7 +75,7 @@ internal class MediaScanner(
 
     // carrying progress over moves bookmarks and history between books, so one book at a time
     val carryOverLock = Mutex()
-    val parallelBooks = Semaphore(4)
+    val parallelBooks = Semaphore(5)
     coroutineScope {
       files.forEach { file ->
         launch { parallelBooks.withPermit { scan(file, previousBooks, carryOverLock) } }
