@@ -1,13 +1,5 @@
 plugins {
   id("voice.library")
-  alias(libs.plugins.metro)
-  alias(libs.plugins.kotlin.serialization)
-}
-
-android {
-  androidResources {
-    enable = true
-  }
 }
 
 dependencies {
@@ -20,10 +12,8 @@ dependencies {
   implementation(projects.core.search)
   implementation(projects.core.analytics.api)
 
-  implementation(libs.androidxCore)
   implementation(libs.coil)
   implementation(libs.coroutines.guava)
-  implementation(libs.serialization.json)
 
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.session)

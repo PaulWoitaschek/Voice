@@ -6,8 +6,6 @@ import java.util.Properties
 plugins {
   id("voice.app")
   id("voice.compose")
-  alias(libs.plugins.kotlin.serialization)
-  alias(libs.plugins.metro)
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
 }
@@ -179,8 +177,6 @@ dependencies {
 
   implementation(libs.navigation3.ui)
 
-  implementation(libs.serialization.json)
-
   implementation(libs.coil)
 
   add("playImplementation", libs.firebase.crashlytics)
@@ -200,8 +196,6 @@ dependencies {
   add("freeImplementation", projects.core.analytics.noop)
 
   debugImplementation(projects.core.logging.debug)
-
-  implementation(libs.androidxCore)
 
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.session)

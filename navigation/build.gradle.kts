@@ -1,7 +1,5 @@
 plugins {
   id("voice.library")
-  alias(libs.plugins.metro)
-  alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {
@@ -10,7 +8,6 @@ dependencies {
   implementation(projects.core.common)
   implementation(libs.compose.material3)
   testImplementation(kotlin("reflect"))
-  testImplementation(libs.serialization.json)
 }
 
 kotlin {
