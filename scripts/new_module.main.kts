@@ -50,7 +50,7 @@ class NewFeatureModule : CliktCommand() {
 
   private fun gradleContent(): String {
     val plugins = buildList {
-      add("voice.library")
+      add(if (name.startsWith(":features:")) "voice.feature" else "voice.library")
     }
 
     return buildString {

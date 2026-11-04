@@ -1,16 +1,10 @@
 plugins {
-  id("voice.library")
-  id("voice.compose")
-  alias(libs.plugins.metro)
+  id("voice.feature")
 }
 
 dependencies {
-  implementation(projects.core.common)
-  implementation(projects.navigation)
-  implementation(projects.core.strings)
   implementation(projects.core.featureflag)
   implementation(projects.core.kioskmode)
-  implementation(projects.core.ui)
   implementation(projects.core.remoteconfig.api)
   implementation(projects.core.data.api)
   implementation(projects.core.datastore)
@@ -19,6 +13,4 @@ dependencies {
   implementation(projects.core.analytics.api)
   implementation(projects.core.documentfile)
   implementation(projects.core.audiobookshelf.api)
-
-  implementation(libs.androidxCore)
 }

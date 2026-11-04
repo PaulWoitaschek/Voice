@@ -1,12 +1,6 @@
 plugins {
   id("voice.library")
   id("voice.compose")
-  alias(libs.plugins.metro)
-  alias(libs.plugins.kotlin.serialization)
-}
-
-android {
-  androidResources.enable = true
 }
 
 dependencies {
@@ -19,7 +13,4 @@ dependencies {
   implementation(libs.materialKolor)
   implementation(libs.coil)
   implementation(libs.navigation3.ui)
-
-  testImplementation(libs.compose.ui.testJunit)
-  debugImplementation(libs.compose.ui.testManifest)
 }

@@ -18,6 +18,8 @@ fun Project.baseSetup() {
   val project = this
   val libs: VersionCatalog =
     extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
+  pluginManager.apply("dev.zacsweers.metro")
+  pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
   configurePowerAssert(libs)
 
   val jvmBytecodeVersion = libs.findVersion("jvm-bytecode").get().requiredVersion.toInt()
@@ -79,6 +81,8 @@ fun Project.baseSetup() {
     add("implementation", platform(libs.findLibrary("firebase-bom").get()))
     add("implementation", libs.findLibrary("coroutines.core").get())
     add("implementation", libs.findLibrary("coroutines.android").get())
+    add("implementation", libs.findLibrary("androidxCore").get())
+    add("implementation", libs.findLibrary("serialization.json").get())
     if (project.path != ":core:logging:api") {
       add("implementation", project(":core:logging:api"))
     }

@@ -30,12 +30,18 @@ Background and diagram: `docs/architecture.md`. Module inventory: `settings.grad
 
 ## New module
 
-1. `./scripts/new_module.main.kts :features:<name>` creates `build.gradle.kts` with `voice.library`, the
-   `src/{main,test}/kotlin/voice/...` folders, and registers the module in `settings.gradle.kts`.
-2. Add `id("voice.compose")` for Compose and `alias(libs.plugins.metro)` for DI.
-3. Add it to `app/build.gradle.kts` so its DI contributions reach the graph.
+1. `./scripts/new_module.main.kts :features:<name>` creates `build.gradle.kts`, the `src/{main,test}/kotlin/voice/...`
+   folders, and registers the module in `settings.gradle.kts`. Features get `voice.feature`, other modules
+   `voice.library`.
+2. Add it to `app/build.gradle.kts` so its DI contributions reach the graph.
 
-Convention plugins (`voice.library`, `voice.app`, `voice.compose`, `voice.ktfmt`) live in `plugins/src/main/kotlin`.
+Convention plugins live in `plugins/src/main/kotlin`. Don't declare in a module what they already set up:
+
+- `voice.library` and `voice.app`: Metro, kotlinx.serialization with its JSON library, coroutines, core-ktx and
+  `:core:logging:api`. A library turns on Android resources when it has `src/main/res`.
+- `voice.compose`: Compose and its test libraries.
+- `voice.feature`: `voice.library` and `voice.compose`, plus `:core:common`, `:core:strings`, `:core:ui` and
+  `:navigation`. Use it for features with UI.
 
 ## DI (Metro)
 
