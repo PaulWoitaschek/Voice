@@ -248,6 +248,13 @@ class SeriesViewModelTest {
     verify { navigator.remove(Destination.Series("Saga")) }
   }
 
+  @Test
+  fun `more options open the actions of the series`() = runTest {
+    viewModel().onMoreClick()
+
+    verify { navigator.goTo(Destination.SeriesActions("Saga")) }
+  }
+
   private fun Book.toItemViewStateWithoutAuthor() = toItemViewState().copy(author = null)
 
   private fun viewModel(experimentalPlaybackPersistence: Boolean = false): SeriesViewModel {

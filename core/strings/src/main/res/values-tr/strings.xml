@@ -293,6 +293,7 @@
     <string name="library.search.recent.clear_all">Tümünü temizle</string>
     <string name="library.search.recent.remove">Kaldır: %s</string>
     <string name="library.search.recent.title">Son aramalar</string>
+    <string name="library.series.hidden.message">%1$s gizlendi</string>
     <string name="library.storage_permission_bug.action">İzin ver</string>
     <string name="library.storage_permission_bug.message">Belirli cihazlarda, bir sistem uygulamasının harici depolamaya erişim için gerekli izni yoktur. Bu erişim, Voice\'un sesli kitaplarınızı okuyabilmesi için gereklidir.</string>
     <string name="library.storage_permission_bug.title">İzin gerekli</string>

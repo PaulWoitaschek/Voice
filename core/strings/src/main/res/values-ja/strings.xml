@@ -275,6 +275,7 @@
     <string name="library.search.recent.clear_all">すべて消去</string>
     <string name="library.search.recent.remove">「%s」を削除</string>
     <string name="library.search.recent.title">最近の検索</string>
+    <string name="library.series.hidden.message">「%1$s」を非表示にしました</string>
     <string name="library.storage_permission_bug.action">権限を付与</string>
     <string name="library.storage_permission_bug.message">一部のデバイスでは、システムアプリに外部ストレージへアクセスするために必要な権限がありません。このアクセスは、Voice がオーディオブックを読み取るために必要です。</string>
     <string name="library.storage_permission_bug.title">権限が必要です</string>

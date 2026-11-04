@@ -293,6 +293,7 @@
     <string name="library.search.recent.clear_all">Összes törlése</string>
     <string name="library.search.recent.remove">%s eltávolítása</string>
     <string name="library.search.recent.title">Legutóbbiak</string>
+    <string name="library.series.hidden.message">„%1$s” elrejtve</string>
     <string name="library.storage_permission_bug.action">Hozzáférés engedélyezése</string>
     <string name="library.storage_permission_bug.message">Egyes eszközökön egy rendszeralkalmazásnak nincs meg a külső tárhely eléréséhez szükséges engedélye. Erre szükség van ahhoz, hogy a Voice be tudja olvasni az Ön hangoskönyveit.</string>
     <string name="library.storage_permission_bug.title">Hozzáférés szükséges</string>

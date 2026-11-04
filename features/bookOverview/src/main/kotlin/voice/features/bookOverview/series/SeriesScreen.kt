@@ -92,6 +92,7 @@ fun SeriesScreen(name: String) {
       onActionClick = viewModel::onActionClick,
       onBookClick = viewModel::onBookClick,
       onBookLongClick = viewModel::onBookLongClick,
+      onMoreClick = viewModel::onMoreClick,
     )
   }
 }
@@ -103,6 +104,7 @@ private fun SeriesScreen(
   onActionClick: (BookId) -> Unit,
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
+  onMoreClick: () -> Unit,
 ) {
   Scaffold(
     topBar = {
@@ -113,6 +115,14 @@ private fun SeriesScreen(
             Icon(
               VoiceIcons.ArrowBack,
               contentDescription = stringResource(StringsR.string.common_action_back),
+            )
+          }
+        },
+        actions = {
+          IconButton(onClick = onMoreClick) {
+            Icon(
+              VoiceIcons.MoreVert,
+              contentDescription = stringResource(StringsR.string.common_action_more),
             )
           }
         },
@@ -310,6 +320,7 @@ private fun SeriesScreenPreview() {
       onActionClick = {},
       onBookClick = {},
       onBookLongClick = {},
+      onMoreClick = {},
     )
   }
 }

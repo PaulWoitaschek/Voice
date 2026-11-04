@@ -48,7 +48,7 @@ import voice.core.ui.GridMode
 import voice.core.ui.GridModeStore
 import voice.features.bookOverview.di.BookOverviewScope
 import voice.features.bookOverview.hideBook.BookHider
-import voice.features.bookOverview.hideBook.HiddenBook
+import voice.features.bookOverview.hideBook.HiddenBooks
 import voice.features.bookOverview.survey.Survey
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -84,7 +84,7 @@ class BookOverviewViewModel(
   private val scope = MainScope(dispatcherProvider)
   private var dialog by mutableStateOf<BookOverviewViewState.Dialog?>(null)
 
-  internal val hiddenBooks: Flow<HiddenBook>
+  internal val hiddenBooks: Flow<HiddenBooks>
     get() = bookHider.hidden
 
   fun attach() {
@@ -299,15 +299,19 @@ class BookOverviewViewModel(
     navigator.goTo(Destination.Series(name))
   }
 
+  fun onSeriesLongClick(name: String) {
+    navigator.goTo(Destination.SeriesActions(name))
+  }
+
   fun onShowHiddenBooksChange(show: Boolean) {
     scope.launch {
       showHiddenBooksStore.updateData { show }
     }
   }
 
-  internal fun onUndoHide(id: BookId) {
+  internal fun onUndoHide(ids: List<BookId>) {
     scope.launch {
-      bookHider.show(id)
+      bookHider.show(ids)
     }
   }
 

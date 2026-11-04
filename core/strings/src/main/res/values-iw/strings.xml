@@ -311,6 +311,7 @@
     <string name="library.search.recent.clear_all">ניקוי הכול</string>
     <string name="library.search.recent.remove">הסרת %s</string>
     <string name="library.search.recent.title">אחרונים</string>
+    <string name="library.series.hidden.message">הסדרה %1$s הוסתרה</string>
     <string name="library.storage_permission_bug.action">הענקת הרשאה</string>
     <string name="library.storage_permission_bug.message">במכשירים מסוימים, לאפליקציית מערכת חסרה ההרשאה הנדרשת לגישה לאחסון החיצוני. גישה זו חיונית כדי ש-Voice יוכל לקרוא את הקולספרים שלכם.</string>
     <string name="library.storage_permission_bug.title">נדרשת הרשאה</string>

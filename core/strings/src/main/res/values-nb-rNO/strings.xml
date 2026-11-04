@@ -293,6 +293,7 @@
     <string name="library.search.recent.clear_all">Tøm alt</string>
     <string name="library.search.recent.remove">Fjern %s</string>
     <string name="library.search.recent.title">Nylig</string>
+    <string name="library.series.hidden.message">%1$s er skjult</string>
     <string name="library.storage_permission_bug.action">Innvilg tillatelse</string>
     <string name="library.storage_permission_bug.message">På enkelte enheter mangler en systemapp den nødvendige tillatelsen for å få tilgang til det eksterne lagringsmediet. Denne tilgangen er avgjørende for at Voice skal kunne lese lydbøkene dine.</string>
     <string name="library.storage_permission_bug.title">Tillatelse kreves</string>

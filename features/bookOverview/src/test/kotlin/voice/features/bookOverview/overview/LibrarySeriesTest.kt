@@ -176,6 +176,29 @@ class LibrarySeriesTest {
   }
 
   @Test
+  fun `a series is hidden once all of its books are`() {
+    val visible = notStarted(series = "Saga")
+    val hidden = book(series = "Saga", hidden = true)
+
+    assertEquals(expected = false, actual = listOf(visible, hidden).series().single().hidden)
+    assertEquals(expected = true, actual = listOf(hidden, hidden).series().single().hidden)
+  }
+
+  @Test
+  fun `the books in a series are found by its name however it's spelled`() {
+    val first = notStarted(series = "The Saga")
+    val second = notStarted(series = "the saga ")
+    val other = notStarted(series = "Other")
+    val single = notStarted()
+
+    assertEquals(
+      expected = listOf(first, second),
+      actual = listOf(first, other, second, single).inSeries("The Saga"),
+    )
+    assertEquals(expected = emptyList(), actual = listOf(single).inSeries("!"))
+  }
+
+  @Test
   fun `a finished series shows its first book`() {
     val first = finished(series = "Saga", part = "1")
     val second = finished(series = "Saga", part = "2")

@@ -462,14 +462,14 @@ private fun StatusTile(
   }
 }
 
-private class ActionStyle(
+internal class ActionStyle(
   val shape: RoundedPolygon,
   val container: Color,
   val content: Color,
 )
 
 @Composable
-private fun BottomSheetItem.style(): ActionStyle {
+internal fun BottomSheetItem.style(): ActionStyle {
   val colors = MaterialTheme.colorScheme
   return when (this) {
     BottomSheetItem.Edit ->
@@ -497,7 +497,7 @@ private fun BottomSheetItem.style(): ActionStyle {
 }
 
 @Composable
-private fun ActionRow(
+internal fun ActionRow(
   item: BottomSheetItem,
   style: ActionStyle,
   shape: RoundedCornerShape,

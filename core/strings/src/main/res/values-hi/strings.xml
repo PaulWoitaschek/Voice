@@ -293,6 +293,7 @@
     <string name="library.search.recent.clear_all">सभी साफ़ करें</string>
     <string name="library.search.recent.remove">%s हटाएँ</string>
     <string name="library.search.recent.title">हालिया</string>
+    <string name="library.series.hidden.message">%1$s को छिपा दिया गया</string>
     <string name="library.storage_permission_bug.action">अनुमति प्रदान करें</string>
     <string name="library.storage_permission_bug.message">कुछ डिवाइस पर, एक सिस्टम ऐप के पास बाहरी स्टोरेज तक पहुँचने की ज़रूरी अनुमति नहीं होती। Voice को आपकी ऑडियोबुक पढ़ने के लिए यह पहुँच चाहिए।</string>
     <string name="library.storage_permission_bug.title">अनुमति आवश्यक है</string>

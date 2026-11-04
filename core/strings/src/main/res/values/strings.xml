@@ -157,9 +157,9 @@
     <string name="book.edit.server.not_allowed">Your account on the server can\'t change books.</string>
     <!-- Label for the field with the book's title, in the sheet that edits a book. -->
     <string name="book.edit.title.label">Title</string>
-    <!-- Action in the book actions sheet. Takes the book out of the library, Continue listening, the widgets and Android Auto, without deleting its files. Search still finds it. -->
+    <!-- Action in the book actions sheet. Takes the book out of the library, Continue listening, the widgets and Android Auto, without deleting its files. Search still finds it. Also in the sheet of a series, where it hides all of its books. -->
     <string name="book.hide">Hide from library</string>
-    <!-- Action in the book actions sheet of a hidden book. Brings it back into the library. -->
+    <!-- Action in the book actions sheet of a hidden book. Brings it back into the library. Also in the sheet of a series whose books are all hidden, where it brings all of them back. -->
     <string name="book.show">Show in library</string>
     <!-- Shown under the title in the book actions sheet for a book whose files are on the phone, once a server is connected too. -->
     <string name="book.source.device">On this device</string>
@@ -489,6 +489,8 @@
     <string name="library.search.recent.remove">Remove %s</string>
     <!-- Header above the recent searches in the library search. -->
     <string name="library.search.recent.title">Recent</string>
+    <!-- Snackbar message after a series was hidden from the library, with a button to undo it. %1$s is the name of the series. -->
+    <string name="library.series.hidden.message">%1$s is hidden</string>
     <!-- Button label for granting the storage permission workaround. -->
     <string name="library.storage_permission_bug.action">Grant permission</string>
     <!-- Message explaining why a storage permission workaround is needed. -->
