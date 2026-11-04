@@ -94,8 +94,9 @@ internal fun ListSeriesRow(
       ) {
         SeriesBadge(
           series = series,
-          // the row says how many books it has, and that they're hidden
-          describe = false,
+          // in a series in progress, the bar takes the place of the counts, and the row has its own
+          // hidden label
+          describe = series.category == BookCategory.CURRENT,
           hidden = false,
           modifier = Modifier.align(Alignment.BottomEnd).offset(x = 4.dp, y = 4.dp),
         )
@@ -117,14 +118,14 @@ internal fun ListSeriesRow(
             overflow = TextOverflow.Ellipsis,
           )
         }
-        Spacer(Modifier.height(6.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-          if (series.category == BookCategory.CURRENT) {
-            SeriesProgress(
-              progress = series.progress,
-              modifier = Modifier.weight(1F).padding(end = 12.dp),
-            )
-          }
+        if (series.category == BookCategory.CURRENT) {
+          Spacer(Modifier.height(10.dp))
+          SeriesProgress(
+            progress = series.progress,
+            modifier = Modifier.fillMaxWidth(),
+          )
+        } else {
+          Spacer(Modifier.height(6.dp))
           Text(
             text = seriesCounts(series.bookCount, series.finishedCount),
             style = MaterialTheme.typography.labelMedium,
