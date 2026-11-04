@@ -44,4 +44,6 @@ public data class BookMetadata(
   val cover: File?,
   // null for books on a server, and for books from before it was stored, which the scan reads again
   @ColumnInfo(name = "metadataFileLastModified") val fileLastModified: Instant?,
+  // back to false when the scan reads changed files again, so it looks for a cover once more
+  @ColumnInfo(defaultValue = "0") val noEmbeddedCover: Boolean = false,
 )
