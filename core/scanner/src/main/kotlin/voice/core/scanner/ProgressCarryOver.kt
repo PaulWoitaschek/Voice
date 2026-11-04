@@ -4,6 +4,8 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.core.net.toUri
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ChapterId
@@ -29,11 +31,15 @@ internal class ProgressCarryOver(
   private val customMetadataRepo: CustomMetadataRepo,
 ) {
 
+  // books are scanned at once, and two copies of a book carrying over at the same time would split
+  // its bookmarks and history between them
+  private val mutex = Mutex()
+
   suspend fun carryOver(
     content: BookContent,
     previousBooks: PreviousBooks,
-  ): BookContent {
-    val predecessors = previousBooks.of(content) ?: return content
+  ): BookContent = mutex.withLock {
+    val predecessors = previousBooks.of(content) ?: return@withLock content
     val previous = predecessors.books
     val moved = predecessors.chapters
 
@@ -57,8 +63,8 @@ internal class ProgressCarryOver(
       } ?: content
     val source =
       playedHere.maxByOrNull { it.lastPlayedAt }?.takeIf { it.lastPlayedAt > content.lastPlayedAt }
-        ?: return withEdits
-    return withEdits.copy(
+        ?: return@withLock withEdits
+    withEdits.copy(
       currentChapter = moved.getValue(source.currentChapter),
       positionInChapter = source.positionInChapter,
       lastPlayedAt = source.lastPlayedAt,

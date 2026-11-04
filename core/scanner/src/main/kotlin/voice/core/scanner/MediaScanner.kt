@@ -1,8 +1,11 @@
 package voice.core.scanner
 
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import voice.core.data.BookId
-import voice.core.data.audioFileCount
 import voice.core.data.fitIntoOneBook
 import voice.core.data.folders.FolderType
 import voice.core.data.isAudioFile
@@ -68,11 +71,12 @@ internal class MediaScanner(
       }
     }
 
-    files
-      .sortedBy { it.audioFileCount() }
-      .forEach { file ->
-        scan(file, previousBooks)
+    val parallelBooks = Semaphore(5)
+    coroutineScope {
+      files.forEach { file ->
+        launch { parallelBooks.withPermit { scan(file, previousBooks) } }
       }
+    }
   }
 
   private fun List<CachedDocumentFile>.findProbeFile(): CachedDocumentFile? {
