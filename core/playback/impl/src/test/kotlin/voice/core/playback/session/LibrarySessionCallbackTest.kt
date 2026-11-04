@@ -14,12 +14,20 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkAll
 import io.mockk.verify
+import java.util.concurrent.ExecutionException
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -27,6 +35,7 @@ import org.junit.runner.RunWith
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.store.CurrentBookStore
+import voice.core.logging.api.Logger
 import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.session.search.BookSearchParser
@@ -48,26 +57,14 @@ class LibrarySessionCallbackTest {
   private val notification = controller(context.packageName, context.applicationInfo.uid)
   private val mediaItemProvider = mockk<MediaItemProvider>()
   private val bookSearch = mockk<BookSearch>()
-  private val callback =
-    LibrarySessionCallback(
-      mediaItemProvider = mediaItemProvider,
-      scope = scope.backgroundScope,
-      player = mockk(relaxed = true),
-      bookSearchParser = BookSearchParser(),
-      bookSearchHandler = mockk(),
-      currentBookStoreId = CurrentBookStore(MemoryDataStore<BookId?>(null)),
-      bookRepository = mockk(),
-      commandSourceResolver = mockk(relaxed = true),
-      context = context,
-      lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
-      bookSearch = bookSearch,
-    )
+  private val callback = callback(scope.backgroundScope)
   private val customCommand = SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY)
 
   @After
   fun tearDown() {
     session.release()
     player.release()
+    unmockkAll()
   }
 
   @Test
@@ -178,6 +175,48 @@ class LibrarySessionCallbackTest {
     verify { librarySession.notifySearchResultChanged(androidAuto, "tolkien", 1, null) }
     assertEquals(expected = listOf(item), actual = result.get().value?.toList())
   }
+
+  @Test
+  fun `a failing library lookup is reported`() {
+    mockkObject(Logger)
+    coEvery { mediaItemProvider.item("book") } throws IllegalStateException()
+
+    val result =
+      callback(serviceLikeScope())
+        .onGetItem(mockk(), controller(ANDROID_AUTO_PACKAGE, OTHER_UID), "book")
+
+    assertFailsWith<ExecutionException> { result.get() }
+    verify { Logger.nonFatal(ofType<IllegalStateException>()) }
+  }
+
+  @Test
+  fun `without a current book, there is nothing to resume`() {
+    mockkObject(Logger)
+
+    val result = callback(serviceLikeScope()).onPlaybackResumption(session, notification, true)
+
+    val exception = assertFailsWith<ExecutionException> { result.get() }
+    assertIs<UnsupportedOperationException>(exception.cause)
+    verify(exactly = 0) { Logger.nonFatal(any()) }
+  }
+
+  // Unlike TestScope.backgroundScope, it doesn't fail the test when a future fails.
+  private fun serviceLikeScope() = CoroutineScope(SupervisorJob() + UnconfinedTestDispatcher())
+
+  private fun callback(coroutineScope: CoroutineScope) =
+    LibrarySessionCallback(
+      mediaItemProvider = mediaItemProvider,
+      scope = coroutineScope,
+      player = mockk(relaxed = true),
+      bookSearchParser = BookSearchParser(),
+      bookSearchHandler = mockk(),
+      currentBookStoreId = CurrentBookStore(MemoryDataStore<BookId?>(null)),
+      bookRepository = mockk(),
+      commandSourceResolver = mockk(relaxed = true),
+      context = context,
+      lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
+      bookSearch = bookSearch,
+    )
 
   private fun notificationCommands(): List<Player.Commands> {
     val commands = mutableListOf<Player.Commands>()

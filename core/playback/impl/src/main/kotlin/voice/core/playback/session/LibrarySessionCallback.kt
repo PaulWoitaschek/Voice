@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import dev.zacsweers.metro.Inject
+import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -70,7 +71,7 @@ class LibrarySessionCallback(
     controller: ControllerInfo,
     mediaItems: MutableList<MediaItem>,
   ): ListenableFuture<List<MediaItem>> {
-    return scope.future {
+    return scope.reportingFuture {
       mediaItems.map { item ->
         mediaItemProvider.item(item.mediaId) ?: item
       }
@@ -89,7 +90,7 @@ class LibrarySessionCallback(
     )
     val item = mediaItems.singleOrNull()
     return if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
-      scope.future {
+      scope.reportingFuture {
         onSetMediaItemsForSingleItem(item)
           ?: super.onSetMediaItems(
               mediaSession,
@@ -140,7 +141,7 @@ class LibrarySessionCallback(
     session: MediaLibrarySession,
     browser: ControllerInfo,
     mediaId: String,
-  ): ListenableFuture<LibraryResult<MediaItem>> = scope.future {
+  ): ListenableFuture<LibraryResult<MediaItem>> = scope.reportingFuture {
     val item = mediaItemProvider.item(mediaId)
     if (item != null) {
       LibraryResult.ofItem(item, null)
@@ -156,7 +157,7 @@ class LibrarySessionCallback(
     page: Int,
     pageSize: Int,
     params: LibraryParams?,
-  ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.future {
+  ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.reportingFuture {
     val children = mediaItemProvider.children(parentId)
     if (children != null) {
       LibraryResult.ofItemList(children, params)
@@ -170,7 +171,7 @@ class LibrarySessionCallback(
     browser: ControllerInfo,
     query: String,
     params: LibraryParams?,
-  ): ListenableFuture<LibraryResult<Void>> = scope.future {
+  ): ListenableFuture<LibraryResult<Void>> = scope.reportingFuture {
     session.notifySearchResultChanged(browser, query, search(query).size, params)
     LibraryResult.ofVoid()
   }
@@ -182,7 +183,7 @@ class LibrarySessionCallback(
     page: Int,
     pageSize: Int,
     params: LibraryParams?,
-  ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.future {
+  ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.reportingFuture {
     LibraryResult.ofItemList(search(query), params)
   }
 
@@ -196,7 +197,7 @@ class LibrarySessionCallback(
     isForPlayback: Boolean,
   ): ListenableFuture<MediaItemsWithStartPosition> {
     Logger.d("onPlaybackResumption")
-    return scope.future {
+    return scope.reportingFuture {
       val currentBook = currentBook()
       if (currentBook != null) {
         mediaItemProvider.mediaItemsWithStartPosition(currentBook)
@@ -323,5 +324,20 @@ class LibrarySessionCallback(
     }
 
     return Futures.immediateFuture(SessionResult(SessionResult.RESULT_SUCCESS))
+  }
+}
+
+// Media3 only logs a failed future. An UnsupportedOperationException is how it expects to be told
+// that something isn't supported, so that one isn't a bug.
+private fun <T> CoroutineScope.reportingFuture(
+  block: suspend CoroutineScope.() -> T,
+): ListenableFuture<T> = future {
+  try {
+    block()
+  } catch (e: Exception) {
+    if (e !is CancellationException && e !is UnsupportedOperationException) {
+      Logger.nonFatal(e)
+    }
+    throw e
   }
 }
