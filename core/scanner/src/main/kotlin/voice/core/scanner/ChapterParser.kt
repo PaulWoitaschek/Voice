@@ -27,9 +27,11 @@ internal class ChapterParser(
   private val mediaAnalyzer: MediaAnalyzer,
 ) {
 
+  // shared by the books scanned at once, so they don't read more files at once than one book did
+  private val parallelAnalyses = Semaphore(4)
+
   suspend fun parse(documentFile: CachedDocumentFile): ChapterParseResult = coroutineScope {
     val analyzedMetadata = ConcurrentHashMap<ChapterId, Metadata>()
-    val parallelAnalyses = Semaphore(4)
 
     val chapters =
       documentFile

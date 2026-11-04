@@ -1,8 +1,13 @@
 package voice.core.scanner
 
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.sync.withPermit
 import voice.core.data.BookId
-import voice.core.data.audioFileCount
 import voice.core.data.fitIntoOneBook
 import voice.core.data.folders.FolderType
 import voice.core.data.isAudioFile
@@ -68,11 +73,14 @@ internal class MediaScanner(
       }
     }
 
-    files
-      .sortedBy { it.audioFileCount() }
-      .forEach { file ->
-        scan(file, previousBooks)
+    // carrying progress over moves bookmarks and history between books, so one book at a time
+    val carryOverLock = Mutex()
+    val parallelBooks = Semaphore(4)
+    coroutineScope {
+      files.forEach { file ->
+        launch { parallelBooks.withPermit { scan(file, previousBooks, carryOverLock) } }
       }
+    }
   }
 
   private fun List<CachedDocumentFile>.findProbeFile(): CachedDocumentFile? {
@@ -86,6 +94,7 @@ internal class MediaScanner(
   private suspend fun scan(
     file: CachedDocumentFile,
     previousBooks: PreviousBooks,
+    carryOverLock: Mutex,
   ) {
     val parseResult = chapterParser.parse(file)
     val chapters = parseResult.chapters
@@ -105,7 +114,7 @@ internal class MediaScanner(
     val currentChapterGone = content.currentChapter !in chapterIds
     val currentChapter = if (currentChapterGone) chapterIds.first() else content.currentChapter
     val positionInChapter = if (currentChapterGone) 0 else content.positionInChapter
-    val updated =
+    val updated = carryOverLock.withLock {
       progressCarryOver.carryOver(
         content =
           content.copy(
@@ -116,6 +125,7 @@ internal class MediaScanner(
           ),
         previousBooks = previousBooks,
       )
+    }
     if (content != updated) {
       validateIntegrity(updated, chapters)
       contentRepo.put(updated)
