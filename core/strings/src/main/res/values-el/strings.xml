@@ -152,8 +152,13 @@
     <string name="folder.add.action.audiobookshelf">Σύνδεση με το Audiobookshelf</string>
     <string name="folder.add.action.file">Προσθήκη μεμονωμένου αρχείου</string>
     <string name="folder.add.action.folder">Επιλογή φακέλου</string>
+    <string name="folder.add.help.answer.no_files">Δεν έχω ακόμα κανένα</string>
+    <string name="folder.add.help.answer.not_found">Δεν τα βρίσκω</string>
+    <string name="folder.add.help.answer.other_app">Είναι σε άλλη εφαρμογή</string>
     <string name="folder.add.help.computer">Τα ηχητικά βιβλία είναι ακόμα στον υπολογιστή σας; Αντιγράψτε τα πρώτα στο τηλέφωνό σας, για παράδειγμα στον φάκελο Audiobooks.</string>
     <string name="folder.add.help.download">Το Android δεν επιτρέπει στις εφαρμογές να ανοίγουν απευθείας τον φάκελο Download. Επιλέξτε έναν φάκελο μέσα σε αυτόν.</string>
+    <string name="folder.add.help.no_files">Το Voice παίζει αρχεία ηχητικών βιβλίων από το τηλέφωνό σας. Στο LibriVox μπορείτε να κατεβάσετε χιλιάδες δωρεάν.</string>
+    <string name="folder.add.help.other_app">Τα βιβλία από εφαρμογές όπως το Audible ή το Spotify παίζουν μόνο μέσα σε αυτές. Το Voice παίζει αρχεία ηχητικών βιβλίων, όπως MP3 ή M4B.</string>
     <string name="folder.add.help.title">Δεν βρήκατε τα ηχητικά σας βιβλία;</string>
     <string name="folder.add.no_picker.message">Το Voice ανοίγει τα ηχητικά σας βιβλία μέσω του επιλογέα αρχείων του Android. Χωρίς αυτόν, το Voice δεν μπορεί να ανοίξει τους φακέλους ή τα αρχεία σας.</string>
     <string name="folder.add.no_picker.title">Αυτή η συσκευή δεν έχει επιλογέα αρχείων</string>

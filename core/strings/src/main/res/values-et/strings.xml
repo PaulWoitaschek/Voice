@@ -152,8 +152,13 @@
     <string name="folder.add.action.audiobookshelf">Ühenda Audiobookshelf</string>
     <string name="folder.add.action.file">Lisa hoopis üksik fail</string>
     <string name="folder.add.action.folder">Vali kaust</string>
+    <string name="folder.add.help.answer.no_files">Pole veel heliraamatuid</string>
+    <string name="folder.add.help.answer.not_found">Ei leia neid</string>
+    <string name="folder.add.help.answer.other_app">Need on teises rakenduses</string>
     <string name="folder.add.help.computer">Kas sinu heliraamatud on veel arvutis? Kopeeri need kõigepealt telefoni, näiteks kausta Audiobooks.</string>
     <string name="folder.add.help.download">Android ei luba rakendustel avada kausta Download ennast. Vali kaust selle seest.</string>
+    <string name="folder.add.help.no_files">Voice esitab sinu telefonis olevaid heliraamatufaile. LibriVox pakub allalaadimiseks tuhandeid tasuta heliraamatuid.</string>
+    <string name="folder.add.help.other_app">Selliste rakenduste nagu Audible või Spotify raamatuid saab kuulata ainult neis rakendustes. Voice esitab heliraamatufaile, näiteks MP3 või M4B.</string>
     <string name="folder.add.help.title">Ei leidnud oma heliraamatuid?</string>
     <string name="folder.add.no_picker.message">Voice avab sinu heliraamatud Androidi failivalija kaudu. Ilma selleta ei saa Voice sinu kaustu ega faile avada.</string>
     <string name="folder.add.no_picker.title">Selles seadmes pole failivalijat</string>

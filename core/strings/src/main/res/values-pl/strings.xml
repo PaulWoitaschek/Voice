@@ -162,8 +162,13 @@
     <string name="folder.add.action.audiobookshelf">Połącz z Audiobookshelf</string>
     <string name="folder.add.action.file">Zamiast tego dodaj pojedynczy plik</string>
     <string name="folder.add.action.folder">Wybierz folder</string>
+    <string name="folder.add.help.answer.no_files">Nie mam jeszcze audiobooków</string>
+    <string name="folder.add.help.answer.not_found">Nie mogę ich znaleźć</string>
+    <string name="folder.add.help.answer.other_app">Są w innej aplikacji</string>
     <string name="folder.add.help.computer">Masz jeszcze audiobooki na komputerze? Najpierw skopiuj je na telefon, na przykład do folderu Audiobooks.</string>
     <string name="folder.add.help.download">Android nie pozwala aplikacjom samodzielnie otwierać folderu Download. Wybierz folder znajdujący się w nim.</string>
+    <string name="folder.add.help.no_files">Voice odtwarza pliki audiobooków z twojego telefonu. Na LibriVox znajdziesz tysiące darmowych do pobrania.</string>
+    <string name="folder.add.help.other_app">Książki z aplikacji takich jak Audible czy Spotify można odtwarzać tylko w tych aplikacjach. Voice odtwarza pliki audiobooków, takie jak MP3 czy M4B.</string>
     <string name="folder.add.help.title">Nie możesz znaleźć swoich audiobooków?</string>
     <string name="folder.add.no_picker.message">Voice otwiera twoje audiobooki za pomocą selektora plików Androida. Bez niego Voice nie może otworzyć twoich folderów ani plików.</string>
     <string name="folder.add.no_picker.title">To urządzenie nie ma selektora plików</string>

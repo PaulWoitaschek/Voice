@@ -64,6 +64,16 @@ class AddContentViewModel(
     analytics.event("folder_picker_cancelled")
   }
 
+  internal fun onHelpAnswer(answer: FolderHelpAnswer) {
+    val value =
+      when (answer) {
+        FolderHelpAnswer.NoFiles -> "no_files"
+        FolderHelpAnswer.NotFound -> "not_found"
+        FolderHelpAnswer.OtherApp -> "other_app"
+      }
+    analytics.event("folder_help_answer", mapOf("answer" to value))
+  }
+
   private val scope = MainScope(dispatcherProvider)
 
   // a connected server is managed in its settings, connecting another one there signs it out first

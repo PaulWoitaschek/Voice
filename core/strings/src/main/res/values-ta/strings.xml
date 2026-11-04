@@ -152,8 +152,13 @@
     <string name="folder.add.action.audiobookshelf">Audiobookshelf-ஐ இணைக்கவும்</string>
     <string name="folder.add.action.file">பதிலாக ஒரு கோப்பை மட்டும் சேர்க்கவும்</string>
     <string name="folder.add.action.folder">கோப்புறையைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="folder.add.help.answer.no_files">இன்னும் ஆடியோபுக் இல்லை</string>
+    <string name="folder.add.help.answer.not_found">கண்டுபிடிக்க முடியவில்லை</string>
+    <string name="folder.add.help.answer.other_app">மற்றொரு பயன்பாட்டில் உள்ளன</string>
     <string name="folder.add.help.computer">ஆடியோபுக்குகள் இன்னும் உங்கள் கணினியில் உள்ளனவா? முதலில் அவற்றை உங்கள் போனுக்கு நகலெடுக்கவும், எடுத்துக்காட்டாக Audiobooks கோப்புறையில்.</string>
     <string name="folder.add.help.download">Download கோப்புறையை நேரடியாகத் திறக்க Android பயன்பாடுகளை அனுமதிக்காது. அதற்குள் உள்ள ஒரு கோப்புறையைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="folder.add.help.no_files">Voice உங்கள் போனில் உள்ள ஆடியோபுக் கோப்புகளை இயக்கும். LibriVox-இல் ஆயிரக்கணக்கான இலவச ஆடியோபுக்குகளைப் பதிவிறக்கலாம்.</string>
+    <string name="folder.add.help.other_app">Audible அல்லது Spotify போன்ற பயன்பாடுகளில் உள்ள புத்தகங்கள் அந்தப் பயன்பாடுகளில் மட்டுமே இயங்கும். Voice, MP3 அல்லது M4B போன்ற ஆடியோபுக் கோப்புகளை இயக்கும்.</string>
     <string name="folder.add.help.title">உங்கள் ஆடியோபுக்குகள் கிடைக்கவில்லையா?</string>
     <string name="folder.add.no_picker.message">Voice உங்கள் ஆடியோபுக்குகளை Android-இன் கோப்புத் தேர்வுக் கருவி மூலம் திறக்கிறது. அது இல்லாமல், உங்கள் கோப்புறைகளையோ கோப்புகளையோ Voice-ஆல் திறக்க முடியாது.</string>
     <string name="folder.add.no_picker.title">இந்தச் சாதனத்தில் கோப்புத் தேர்வுக் கருவி இல்லை</string>

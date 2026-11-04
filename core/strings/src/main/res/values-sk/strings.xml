@@ -162,8 +162,13 @@
     <string name="folder.add.action.audiobookshelf">Pripojiť Audiobookshelf</string>
     <string name="folder.add.action.file">Radšej pridať jeden súbor</string>
     <string name="folder.add.action.folder">Vybrať priečinok</string>
+    <string name="folder.add.help.answer.no_files">Zatiaľ nemám žiadne</string>
+    <string name="folder.add.help.answer.not_found">Nemôžem ich nájsť</string>
+    <string name="folder.add.help.answer.other_app">Sú v inej aplikácii</string>
     <string name="folder.add.help.computer">Máte zvukové knihy ešte v počítači? Najprv ich skopírujte do telefónu, napríklad do priečinka Audiobooks.</string>
     <string name="folder.add.help.download">Android nedovoľuje aplikáciám otvoriť priamo priečinok Download. Vyberte priečinok vo vnútri neho.</string>
+    <string name="folder.add.help.no_files">Voice prehráva súbory zvukových kníh vo vašom telefóne. LibriVox ponúka na stiahnutie tisíce kníh zadarmo.</string>
+    <string name="folder.add.help.other_app">Knihy z aplikácií ako Audible alebo Spotify sa dajú prehrať iba v týchto aplikáciách. Voice prehráva súbory zvukových kníh, napríklad MP3 alebo M4B.</string>
     <string name="folder.add.help.title">Nenašli ste svoje zvukové knihy?</string>
     <string name="folder.add.no_picker.message">Voice otvára vaše zvukové knihy cez výber súborov systému Android. Bez neho Voice nemôže otvoriť vaše priečinky ani súbory.</string>
     <string name="folder.add.no_picker.title">Toto zariadenie nemá výber súborov</string>

@@ -152,8 +152,13 @@
     <string name="folder.add.action.audiobookshelf">اتصال به Audiobookshelf</string>
     <string name="folder.add.action.file">افزودن یک فایل به‌جای پوشه</string>
     <string name="folder.add.action.folder">انتخاب پوشه</string>
+    <string name="folder.add.help.answer.no_files">هنوز کتاب صوتی ندارم</string>
+    <string name="folder.add.help.answer.not_found">پیدایشان نمی‌کنم</string>
+    <string name="folder.add.help.answer.other_app">در برنامهٔ دیگری هستند</string>
     <string name="folder.add.help.computer">کتاب‌های صوتی هنوز روی کامپیوترتان هستند؟ ابتدا آن‌ها را به گوشی‌تان کپی کنید، مثلاً به پوشه‌ی Audiobooks.</string>
     <string name="folder.add.help.download">در Android، برنامه‌ها نمی‌توانند خود پوشه‌ی Download را باز کنند. پوشه‌ای داخل آن انتخاب کنید.</string>
+    <string name="folder.add.help.no_files">کار Voice پخش فایل‌های کتاب صوتی روی گوشی شماست. سایت LibriVox هزاران کتاب صوتی رایگان برای دانلود دارد.</string>
+    <string name="folder.add.help.other_app">کتاب‌های برنامه‌هایی مثل Audible یا Spotify فقط در همان برنامه‌ها پخش می‌شوند. اما Voice فایل‌های کتاب صوتی مثل MP3 یا M4B را پخش می‌کند.</string>
     <string name="folder.add.help.title">کتاب‌های صوتی خود را پیدا نکردید؟</string>
     <string name="folder.add.no_picker.message">کتاب‌های صوتی شما در Voice از طریق انتخابگر فایل Android باز می‌شوند. بدون آن، Voice نمی‌تواند پوشه‌ها یا فایل‌هایتان را باز کند.</string>
     <string name="folder.add.no_picker.title">این دستگاه انتخابگر فایل ندارد</string>

@@ -27,10 +27,12 @@ internal fun SelectFolder(
   /** Null while connecting a server isn't available. */
   onConnectAudiobookshelf: (() -> Unit)?,
   onFolderPickerCancel: () -> Unit,
+  onHelpAnswer: (FolderHelpAnswer) -> Unit,
   origin: Origin,
   modifier: Modifier = Modifier,
 ) {
   var help by rememberSaveable { mutableStateOf<FolderHelp?>(null) }
+  var helpAnswer by rememberSaveable { mutableStateOf<FolderHelpAnswer?>(null) }
   OnboardingScaffold(
     modifier = modifier,
     // outside of the onboarding there are no steps to count
@@ -54,7 +56,16 @@ internal fun SelectFolder(
     details = {
       help?.let {
         Spacer(Modifier.height(24.dp))
-        FolderHelpCard(it)
+        FolderHelpCard(
+          help = it,
+          answer = helpAnswer,
+          onAnswer = { answer ->
+            if (answer != helpAnswer) {
+              helpAnswer = answer
+              onHelpAnswer(answer)
+            }
+          },
+        )
       }
     },
     actions = {
@@ -80,6 +91,7 @@ private fun SelectFolderPreview() {
       onAdd = { _, _ -> },
       onConnectAudiobookshelf = {},
       onFolderPickerCancel = {},
+      onHelpAnswer = {},
       origin = Origin.Onboarding,
     )
   }
