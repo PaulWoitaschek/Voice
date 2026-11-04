@@ -10,7 +10,7 @@ Voice is a modular Android audiobook player.
 
 ## Writing style
 
-Write comments, commit messages, pull requests, issues and docs in ASD-STE100 Simplified Technical English: active voice, simple tenses, one word per meaning, noun clusters of three words or fewer, and sentences of 20 words or fewer. UI strings and the store listing follow the translate-strings skill instead.
+Write replies to the user, comments, commit messages, pull requests, issues and docs in ASD-STE100 Simplified Technical English: active voice, simple tenses, one word per meaning, noun clusters of three words or fewer, and sentences of 20 words or fewer. UI strings and the store listing follow the translate-strings skill instead.
 
 ## Pull requests from contributors
 
