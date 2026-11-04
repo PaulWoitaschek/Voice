@@ -26,7 +26,7 @@ class HideBookViewModel(
   ) {
     when (item) {
       BottomSheetItem.Hide -> bookHider.hide(bookId)
-      BottomSheetItem.Show -> bookHider.show(bookId)
+      BottomSheetItem.Show -> bookHider.show(listOf(bookId))
       else -> {}
     }
   }

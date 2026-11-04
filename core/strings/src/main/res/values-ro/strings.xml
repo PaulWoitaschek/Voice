@@ -311,6 +311,7 @@
     <string name="library.search.recent.clear_all">Șterge tot</string>
     <string name="library.search.recent.remove">Elimină %s</string>
     <string name="library.search.recent.title">Recente</string>
+    <string name="library.series.hidden.message">Ai ascuns %1$s</string>
     <string name="library.storage_permission_bug.action">Acordă permisiune</string>
     <string name="library.storage_permission_bug.message">Pe anumite dispozitive, o aplicație de sistem are nevoie de anumite permisiuni pentru a accesa stocarea externă. Aceste permisiuni sunt esențiale pentru ca Voice să poată citi cărțile tale audio.</string>
     <string name="library.storage_permission_bug.title">Permisiune necesară</string>

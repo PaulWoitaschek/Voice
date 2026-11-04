@@ -311,6 +311,7 @@
     <string name="library.search.recent.clear_all">Esborra-ho tot</string>
     <string name="library.search.recent.remove">Suprimeix %s</string>
     <string name="library.search.recent.title">Recents</string>
+    <string name="library.series.hidden.message">S\'ha amagat %1$s</string>
     <string name="library.storage_permission_bug.action">Concedeix el permís</string>
     <string name="library.storage_permission_bug.message">Per a determinats dispositius, a una aplicació del sistema li falta el permís necessari per accedir a l\'emmagatzematge extern. Aquest accés és essencial perquè Voice llegeixi els audiollibres.</string>
     <string name="library.storage_permission_bug.title">Es requereix el permís</string>

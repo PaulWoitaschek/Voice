@@ -97,15 +97,21 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
   val resources = LocalResources.current
   val undoLabel = stringResource(StringsR.string.common_action_undo)
   LaunchedEffect(bookOverviewViewModel) {
-    bookOverviewViewModel.hiddenBooks.collect { book ->
+    bookOverviewViewModel.hiddenBooks.collect { hidden ->
+      val message =
+        if (hidden.series) {
+          StringsR.string.library_series_hidden_message
+        } else {
+          StringsR.string.library_book_hidden_message
+        }
       val result =
         snackbarHostState.showSnackbar(
-          message = resources.getString(StringsR.string.library_book_hidden_message, book.name),
+          message = resources.getString(message, hidden.name),
           actionLabel = undoLabel,
           duration = SnackbarDuration.Short,
         )
       if (result == SnackbarResult.ActionPerformed) {
-        bookOverviewViewModel.onUndoHide(book.id)
+        bookOverviewViewModel.onUndoHide(hidden.ids)
       }
     }
   }
@@ -116,6 +122,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onBookClick = bookOverviewViewModel::onBookClick,
     onBookLongClick = bookOverviewViewModel::onBookLongClick,
     onSeriesClick = bookOverviewViewModel::onSeriesClick,
+    onSeriesLongClick = bookOverviewViewModel::onSeriesLongClick,
     onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
     onFolderPickerMovedDialogDismiss = bookOverviewViewModel::onFolderPickerMovedDialogDismiss,
     onPlayButtonClick = bookOverviewViewModel::playPause,
@@ -137,6 +144,7 @@ internal fun BookOverview(
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   onSeriesClick: (String) -> Unit,
+  onSeriesLongClick: (String) -> Unit,
   onBookFolderClick: () -> Unit,
   onFolderPickerMovedDialogDismiss: () -> Unit,
   onPlayButtonClick: () -> Unit,
@@ -201,6 +209,7 @@ internal fun BookOverview(
       onBookClick = onBookClick,
       onBookLongClick = onBookLongClick,
       onSeriesClick = onSeriesClick,
+      onSeriesLongClick = onSeriesLongClick,
       onPlayClick = onPlayButtonClick,
       onPermissionBugCardClick = onPermissionBugCardClick,
       onSurveyClick = onSurveyClick,
@@ -286,6 +295,7 @@ fun BookOverviewPreview(
       onBookClick = {},
       onBookLongClick = {},
       onSeriesClick = {},
+      onSeriesLongClick = {},
       onBookFolderClick = {},
       onFolderPickerMovedDialogDismiss = {},
       onPlayButtonClick = {},

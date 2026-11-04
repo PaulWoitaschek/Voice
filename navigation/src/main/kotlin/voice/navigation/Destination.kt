@@ -93,6 +93,12 @@ sealed interface Destination {
   }
 
   @Serializable
+  data class SeriesActions(val name: String) : Compose {
+    override val trackingName: String
+      get() = "SeriesActions"
+  }
+
+  @Serializable
   data object FolderPicker : Compose {
     override val trackingName: String
       get() = "FolderPicker"

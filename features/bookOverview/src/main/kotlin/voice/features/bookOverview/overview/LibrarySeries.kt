@@ -78,6 +78,13 @@ internal class Series(
   val progress: List<Float> = books.map {
     if (it.category == BookCategory.FINISHED) 1F else it.progress()
   }
+
+  val hidden: Boolean = books.all { it.custom.hidden }
+}
+
+internal fun List<Book>.inSeries(name: String): List<Book> {
+  val key = seriesKey(name) ?: return emptyList()
+  return filter { book -> book.seriesName?.let(::seriesKey) == key }
 }
 
 internal fun List<Book>.series(): List<Series> {

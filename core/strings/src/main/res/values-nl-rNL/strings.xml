@@ -293,6 +293,7 @@
     <string name="library.search.recent.clear_all">Alles wissen</string>
     <string name="library.search.recent.remove">%s verwijderen</string>
     <string name="library.search.recent.title">Recent</string>
+    <string name="library.series.hidden.message">%1$s is verborgen</string>
     <string name="library.storage_permission_bug.action">Toegang geven</string>
     <string name="library.storage_permission_bug.message">Op sommige apparaten mist een systeemapp toegang tot de externe opslag. Voice heeft die toegang nodig om je luisterboeken te kunnen lezen.</string>
     <string name="library.storage_permission_bug.title">Toegang vereist</string>

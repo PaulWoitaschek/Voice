@@ -293,6 +293,7 @@
     <string name="library.search.recent.clear_all">Εκκαθάριση όλων</string>
     <string name="library.search.recent.remove">Αφαίρεση %s</string>
     <string name="library.search.recent.title">Πρόσφατα</string>
+    <string name="library.series.hidden.message">Η σειρά «%1$s» αποκρύφθηκε</string>
     <string name="library.storage_permission_bug.action">Παραχώρηση άδειας</string>
     <string name="library.storage_permission_bug.message">Σε ορισμένες συσκευές, σε μια εφαρμογή συστήματος λείπει η άδεια πρόσβασης στον εξωτερικό αποθηκευτικό χώρο. Το Voice τη χρειάζεται για να διαβάζει τα ηχητικά σας βιβλία.</string>
     <string name="library.storage_permission_bug.title">Απαιτείται άδεια</string>

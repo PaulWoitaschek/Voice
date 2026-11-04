@@ -329,6 +329,7 @@
     <string name="library.search.recent.clear_all">Очистить всё</string>
     <string name="library.search.recent.remove">Удалить %s</string>
     <string name="library.search.recent.title">Недавние</string>
+    <string name="library.series.hidden.message">Серия «%1$s» скрыта</string>
     <string name="library.storage_permission_bug.action">Предоставить разрешение</string>
     <string name="library.storage_permission_bug.message">На некоторых устройствах системное приложение не имеет необходимого разрешения для доступа к внешнему хранилищу. Этот доступ необходим для того, чтобы Voice мог читать ваши аудиокниги.</string>
     <string name="library.storage_permission_bug.title">Требуется разрешение</string>

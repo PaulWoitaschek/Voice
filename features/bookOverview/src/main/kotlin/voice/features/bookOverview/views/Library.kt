@@ -62,6 +62,7 @@ internal fun Library(
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   onSeriesClick: (String) -> Unit,
+  onSeriesLongClick: (String) -> Unit,
   onPlayClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
   onSurveyClick: () -> Unit,
@@ -184,6 +185,7 @@ internal fun Library(
                 GridSeries(
                   series = item.series,
                   onClick = { onSeriesClick(item.series.name) },
+                  onLongClick = { onSeriesLongClick(item.series.name) },
                   modifier = itemModifier,
                 )
             }
@@ -213,6 +215,7 @@ internal fun Library(
                 ListSeriesRow(
                   series = item.series,
                   onClick = { onSeriesClick(item.series.name) },
+                  onLongClick = { onSeriesLongClick(item.series.name) },
                   shape = shape,
                   modifier = itemModifier,
                 )

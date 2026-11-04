@@ -82,6 +82,8 @@ Listeners find the book they want in seconds and see how far along they are in e
   once one is started. Its screen lists the books by their part and continues the right one. [#1748]
 - **Removing a book from the library deletes its files.** Hide it from the library and keep its files and progress.
   Search still finds it, and the library shows hidden books again with one switch. [#3397]
+- **Hiding a series means hiding each of its books.** A long press on its stack or More options on its screen hide all
+  of them at once. [#3397]
 
 **Planned**, see the [library spec](library.md)
 
@@ -89,7 +91,7 @@ Listeners find the book they want in seconds and see how far along they are in e
 - **I can't put my books in the order I want.** Sort by progress, title, author or recently added. [#1543]
 - **With thousands of books, I can't go through them by author.** Sorted by author, each author is one stack. [#3946]
 - **Fixing the author means editing the files.** Edit the title, author, series and part in Voice. [#1407]
-- **Hiding a series means hiding each of its books.** Hide a series or several books at once. [#3397]
+- **Hiding many books means hiding them one by one.** Select several books and hide them at once. [#3397]
 - **The episodes of a radio play all have the album's name.** Each episode keeps its own title, the album becomes the
   series, and search finds an episode by its number. [#3132]
 

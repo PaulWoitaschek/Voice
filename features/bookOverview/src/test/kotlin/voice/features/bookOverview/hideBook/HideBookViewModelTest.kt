@@ -46,7 +46,7 @@ class HideBookViewModelTest {
     bookHider.hidden.test {
       viewModel.onItemClick(book.id, BottomSheetItem.Hide)
 
-      assertEquals(HiddenBook(book.id, "Dune"), awaitItem())
+      assertEquals(HiddenBooks(listOf(book.id), "Dune", series = false), awaitItem())
     }
     val update = slot<(CustomMetadata) -> CustomMetadata>()
     coVerify { repo.updateCustomMetadata(book.id, capture(update)) }

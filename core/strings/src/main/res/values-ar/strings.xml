@@ -365,6 +365,7 @@
     <string name="library.search.recent.clear_all">مسح الكل</string>
     <string name="library.search.recent.remove">إزالة %s</string>
     <string name="library.search.recent.title">الأخيرة</string>
+    <string name="library.series.hidden.message">تم إخفاء %1$s</string>
     <string name="library.storage_permission_bug.action">منح الإذن</string>
     <string name="library.storage_permission_bug.message">في بعض الأجهزة، يفتقد أحد تطبيقات النظام الإذن اللازم للوصول إلى وحدة التخزين الخارجية، وهذا الوصول ضروري ليتمكن Voice من قراءة كتبك الصوتية.</string>
     <string name="library.storage_permission_bug.title">الإذن مطلوب</string>
