@@ -4,30 +4,29 @@ package voice.features.folderPicker.addcontent
 
 import android.os.Build
 import androidx.annotation.StringRes
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,6 +48,7 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.segmentedShape
 
 internal enum class FolderHelp {
   PickerClosed,
@@ -105,31 +105,36 @@ internal fun FolderHelpCard(
           Answers(answer = answer, onAnswer = onAnswer)
           when (answer) {
             FolderHelpAnswer.NoFiles -> {
-              Spacer(Modifier.height(8.dp))
+              Spacer(Modifier.height(12.dp))
               NoFilesText(onLibriVox = onLibriVox)
             }
             FolderHelpAnswer.NotFound -> {
               // older versions of Android still let apps open the Download folder
               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(12.dp))
                 HelpText(StringsR.string.folder_add_help_download)
               }
               Spacer(Modifier.height(8.dp))
               HelpText(StringsR.string.folder_add_help_computer)
             }
             FolderHelpAnswer.OtherApp -> {
-              Spacer(Modifier.height(8.dp))
+              Spacer(Modifier.height(12.dp))
               HelpText(StringsR.string.folder_add_help_other_app)
             }
             null -> {}
           }
-          Spacer(Modifier.height(4.dp))
-          TextButton(
-            modifier = Modifier.align(Alignment.End),
+          Spacer(Modifier.height(12.dp))
+          val size = ButtonDefaults.ExtraSmallContainerHeight
+          FilledTonalButton(
             onClick = onSurvey,
-            shapes = ButtonDefaults.shapes(),
+            contentPadding = ButtonDefaults.contentPaddingFor(size),
+            shapes = ButtonDefaults.shapesFor(size),
+            modifier = Modifier.heightIn(size),
           ) {
-            Text(stringResource(StringsR.string.folder_add_help_survey))
+            Text(
+              text = stringResource(StringsR.string.folder_add_help_survey),
+              style = ButtonDefaults.textStyleFor(size),
+            )
           }
         }
         FolderHelp.NoPicker -> {
@@ -146,41 +151,57 @@ private fun Answers(
   answer: FolderHelpAnswer?,
   onAnswer: (FolderHelpAnswer) -> Unit,
 ) {
-  FlowRow(
+  Column(
     modifier = Modifier.selectableGroup(),
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
-    verticalArrangement = Arrangement.spacedBy(4.dp),
+    verticalArrangement = Arrangement.spacedBy(2.dp),
   ) {
-    FolderHelpAnswer.entries.forEach { option ->
+    FolderHelpAnswer.entries.forEachIndexed { index, option ->
       val selected = option == answer
-      FilterChip(
+      val color by
+        animateColorAsState(
+          targetValue =
+            if (selected) {
+              MaterialTheme.colorScheme.secondaryContainer
+            } else {
+              MaterialTheme.colorScheme.surfaceBright
+            },
+          animationSpec = MaterialTheme.motionScheme.defaultEffectsSpec(),
+        )
+      Surface(
         selected = selected,
         onClick = { onAnswer(option) },
-        modifier = Modifier.semantics { role = Role.RadioButton },
-        leadingIcon =
+        modifier = Modifier.fillMaxWidth().semantics { role = Role.RadioButton },
+        shape = segmentedShape(index, FolderHelpAnswer.entries.size),
+        color = color,
+        contentColor =
           if (selected) {
-            {
-              Icon(
-                imageVector = VoiceIcons.Check,
-                contentDescription = null,
-                modifier = Modifier.size(FilterChipDefaults.IconSize),
-              )
-            }
+            MaterialTheme.colorScheme.onSecondaryContainer
           } else {
-            null
+            MaterialTheme.colorScheme.onSurface
           },
-        label = {
+      ) {
+        Row(
+          modifier = Modifier.heightIn(min = 48.dp).padding(horizontal = 16.dp, vertical = 8.dp),
+          verticalAlignment = Alignment.CenterVertically,
+        ) {
           Text(
-            stringResource(
-              when (option) {
-                FolderHelpAnswer.NoFiles -> StringsR.string.folder_add_help_answer_no_files
-                FolderHelpAnswer.NotFound -> StringsR.string.folder_add_help_answer_not_found
-                FolderHelpAnswer.OtherApp -> StringsR.string.folder_add_help_answer_other_app
-              },
-            ),
+            text =
+              stringResource(
+                when (option) {
+                  FolderHelpAnswer.NoFiles -> StringsR.string.folder_add_help_answer_no_files
+                  FolderHelpAnswer.NotFound -> StringsR.string.folder_add_help_answer_not_found
+                  FolderHelpAnswer.OtherApp -> StringsR.string.folder_add_help_answer_other_app
+                },
+              ),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(1F),
           )
-        },
-      )
+          if (selected) {
+            Spacer(Modifier.width(8.dp))
+            Icon(imageVector = VoiceIcons.Check, contentDescription = null)
+          }
+        }
+      }
     }
   }
 }
