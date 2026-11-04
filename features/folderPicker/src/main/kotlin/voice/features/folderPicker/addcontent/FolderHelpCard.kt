@@ -67,8 +67,7 @@ internal fun FolderHelpCard(
   answer: FolderHelpAnswer?,
   onAnswer: (FolderHelpAnswer) -> Unit,
   onLibriVox: () -> Unit,
-  /** Null while there's no survey to invite to. */
-  onSurvey: (() -> Unit)?,
+  onSurvey: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Surface(
@@ -124,15 +123,13 @@ internal fun FolderHelpCard(
             }
             null -> {}
           }
-          if (onSurvey != null) {
-            Spacer(Modifier.height(4.dp))
-            TextButton(
-              modifier = Modifier.align(Alignment.End),
-              onClick = onSurvey,
-              shapes = ButtonDefaults.shapes(),
-            ) {
-              Text(stringResource(StringsR.string.folder_add_help_survey))
-            }
+          Spacer(Modifier.height(4.dp))
+          TextButton(
+            modifier = Modifier.align(Alignment.End),
+            onClick = onSurvey,
+            shapes = ButtonDefaults.shapes(),
+          ) {
+            Text(stringResource(StringsR.string.folder_add_help_survey))
           }
         }
         FolderHelp.NoPicker -> {

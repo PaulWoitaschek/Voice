@@ -29,8 +29,7 @@ internal fun SelectFolder(
   onFolderPickerCancel: () -> Unit,
   onHelpAnswer: (FolderHelpAnswer) -> Unit,
   onOpenLibriVox: () -> Unit,
-  /** Null while there's no survey to invite to. */
-  onHelpSurvey: ((FolderHelpAnswer?) -> Unit)?,
+  onHelpSurvey: () -> Unit,
   origin: Origin,
   modifier: Modifier = Modifier,
 ) {
@@ -69,7 +68,7 @@ internal fun SelectFolder(
             }
           },
           onLibriVox = onOpenLibriVox,
-          onSurvey = onHelpSurvey?.let { open -> { open(helpAnswer) } },
+          onSurvey = onHelpSurvey,
         )
       }
     },

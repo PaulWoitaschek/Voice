@@ -49,7 +49,7 @@ fun AddContent(origin: Origin) {
     onFolderPickerCancel = viewModel::onFolderPickerCancel,
     onHelpAnswer = viewModel::onHelpAnswer,
     onOpenLibriVox = viewModel::openLibriVox,
-    onHelpSurvey = if (viewModel.canOpenHelpSurvey) viewModel::openHelpSurvey else null,
+    onHelpSurvey = viewModel::openHelpSurvey,
     onConnectAudiobookshelf =
       if (viewModel.canConnectAudiobookshelf) viewModel::connectAudiobookshelf else null,
   )
