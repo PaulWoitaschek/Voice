@@ -164,6 +164,7 @@
     <string name="folder.add.help.download">Android no deixa que les aplicacions obrin directament la carpeta Download. Trieu una carpeta del seu interior.</string>
     <string name="folder.add.help.no_files">Voice reprodueix fitxers d\'audiollibres del vostre telèfon. LibriVox en té milers que podeu baixar de franc.</string>
     <string name="folder.add.help.other_app">Els llibres d\'aplicacions com Audible o Spotify només es poden escoltar en aquestes aplicacions. Voice reprodueix fitxers d\'audiollibres, com ara MP3 o M4B.</string>
+    <string name="folder.add.help.survey">Explica\'ns més</string>
     <string name="folder.add.help.title">No heu trobat els vostres audiollibres?</string>
     <string name="folder.add.no_picker.message">Voice obre els vostres audiollibres amb el selector de fitxers d\'Android. Sense el selector, Voice no pot obrir les vostres carpetes ni els vostres fitxers.</string>
     <string name="folder.add.no_picker.title">Aquest dispositiu no té selector de fitxers</string>

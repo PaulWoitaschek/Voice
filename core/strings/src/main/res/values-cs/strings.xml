@@ -169,6 +169,7 @@
     <string name="folder.add.help.download">Android nedovolí aplikacím otevřít přímo složku Download. Vyberte složku uvnitř ní.</string>
     <string name="folder.add.help.no_files">Voice přehrává soubory audioknih ve vašem telefonu. LibriVox jich nabízí tisíce ke stažení zdarma.</string>
     <string name="folder.add.help.other_app">Knihy z aplikací jako Audible nebo Spotify se dají přehrát jen v těchto aplikacích. Voice přehrává soubory audioknih, například MP3 nebo M4B.</string>
+    <string name="folder.add.help.survey">Napsat nám víc</string>
     <string name="folder.add.help.title">Nenašli jste své audioknihy?</string>
     <string name="folder.add.no_picker.message">Voice otevírá vaše audioknihy přes výběr souborů systému Android. Bez něj Voice nemůže otevřít vaše složky ani soubory.</string>
     <string name="folder.add.no_picker.title">Toto zařízení nemá výběr souborů</string>

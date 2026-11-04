@@ -179,6 +179,7 @@
     <string name="folder.add.help.download">لا يسمح Android للتطبيقات بفتح مجلد Download نفسه. يمكنك اختيار مجلد بداخله.</string>
     <string name="folder.add.help.no_files">يشغّل Voice ملفات الكتب الصوتية الموجودة على هاتفك. ويوفّر موقع LibriVox آلاف الكتب الصوتية المجانية للتنزيل.</string>
     <string name="folder.add.help.other_app">لا يمكن تشغيل الكتب من تطبيقات مثل Audible أو Spotify إلا داخل تلك التطبيقات. أمّا Voice فيشغّل ملفات الكتب الصوتية، مثل MP3 أو M4B.</string>
+    <string name="folder.add.help.survey">مشاركة المزيد معنا</string>
     <string name="folder.add.help.title">لم يُعثر على كتبك الصوتية؟</string>
     <string name="folder.add.no_picker.message">يفتح Voice كتبك الصوتية عبر أداة اختيار الملفات في Android. وبدونها، يتعذّر على Voice فتح مجلداتك أو ملفاتك.</string>
     <string name="folder.add.no_picker.title">لا تتوفّر أداة اختيار الملفات على هذا الجهاز</string>

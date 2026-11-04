@@ -154,6 +154,7 @@
     <string name="folder.add.help.download">Android tidak mengizinkan aplikasi membuka folder Download secara langsung. Pilih folder di dalamnya.</string>
     <string name="folder.add.help.no_files">Voice memutar berkas buku audio dari ponsel Anda. LibriVox menyediakan ribuan buku audio gratis yang bisa diunduh.</string>
     <string name="folder.add.help.other_app">Buku dari aplikasi seperti Audible atau Spotify hanya bisa diputar di aplikasi tersebut. Voice memutar berkas buku audio, seperti MP3 atau M4B.</string>
+    <string name="folder.add.help.survey">Ceritakan lebih lanjut</string>
     <string name="folder.add.help.title">Buku audio Anda tidak ditemukan?</string>
     <string name="folder.add.no_picker.message">Voice membuka buku audio Anda melalui pemilih berkas Android. Tanpanya, Voice tidak dapat membuka folder atau berkas Anda.</string>
     <string name="folder.add.no_picker.title">Perangkat ini tidak memiliki pemilih berkas</string>

@@ -159,6 +159,7 @@
     <string name="folder.add.help.download">Android не дозволува апликациите сами да го отвораат фолдерот Download. Изберете фолдер во него.</string>
     <string name="folder.add.help.no_files">Voice пушта датотеки со аудио книги од вашиот телефон. На LibriVox можете бесплатно да преземете илјадници.</string>
     <string name="folder.add.help.other_app">Книгите од апликации како Audible или Spotify се пуштаат само во тие апликации. Voice пушта датотеки со аудио книги, како MP3 или M4B.</string>
+    <string name="folder.add.help.survey">Кажи ни повеќе</string>
     <string name="folder.add.help.title">Не ги најдовте вашите аудио книги?</string>
     <string name="folder.add.no_picker.message">Voice ги отвора вашите аудио книги преку избирачот на датотеки на Android. Без него, Voice не може да ги отвори вашите фолдери и датотеки.</string>
     <string name="folder.add.no_picker.title">Овој уред нема избирач на датотеки</string>

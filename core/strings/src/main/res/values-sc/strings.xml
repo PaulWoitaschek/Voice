@@ -159,6 +159,7 @@
     <string name="folder.add.help.download">Android non permitit a sas aplicatziones de abèrrere deretu sa cartella Download. Issèbera una cartella a intro de cussa.</string>
     <string name="folder.add.help.no_files">Voice ti faghet ascurtare sos documentos de audiolibros de su telèfonu tuo. LibriVox nde tenet mìgias chi podes iscarrigare de badas.</string>
     <string name="folder.add.help.other_app">Sos libros de aplicatziones comente Audible o Spotify si podent ascurtare petzi in cussas aplicatziones. Voice ti faghet ascurtare documentos de audiolibros, comente MP3 o M4B.</string>
+    <string name="folder.add.help.survey">Nàranos de prus</string>
     <string name="folder.add.help.title">No as agatadu sos audiolibros tuos?</string>
     <string name="folder.add.no_picker.message">Voice aberit sos audiolibros tuos cun su seletzionadore de documentos de Android. Chene cussu, Voice non podet abèrrere sas cartellas o sos documentos tuos.</string>
     <string name="folder.add.no_picker.title">Custu dispositivu non tenet unu seletzionadore de documentos</string>

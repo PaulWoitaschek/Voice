@@ -164,6 +164,7 @@
     <string name="folder.add.help.download">Android non consente alle app di aprire direttamente la cartella Download. Scegli una cartella al suo interno.</string>
     <string name="folder.add.help.no_files">Voice riproduce i file di audiolibri che hai sul telefono. LibriVox ne ha migliaia da scaricare gratis.</string>
     <string name="folder.add.help.other_app">I libri di app come Audible o Spotify si ascoltano solo in quelle app. Voice riproduce file di audiolibri, come MP3 o M4B.</string>
+    <string name="folder.add.help.survey">Raccontaci di più</string>
     <string name="folder.add.help.title">Non hai trovato i tuoi audiolibri?</string>
     <string name="folder.add.no_picker.message">Voice apre i tuoi audiolibri con il selettore di file di Android. Se manca, Voice non può aprire le tue cartelle né i tuoi file.</string>
     <string name="folder.add.no_picker.title">Questo dispositivo non ha un selettore di file</string>

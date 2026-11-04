@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -25,7 +26,9 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,6 +36,11 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -58,6 +66,9 @@ internal fun FolderHelpCard(
   help: FolderHelp,
   answer: FolderHelpAnswer?,
   onAnswer: (FolderHelpAnswer) -> Unit,
+  onLibriVox: () -> Unit,
+  /** Null while there's no survey to invite to. */
+  onSurvey: (() -> Unit)?,
   modifier: Modifier = Modifier,
 ) {
   Surface(
@@ -96,7 +107,7 @@ internal fun FolderHelpCard(
           when (answer) {
             FolderHelpAnswer.NoFiles -> {
               Spacer(Modifier.height(8.dp))
-              HelpText(StringsR.string.folder_add_help_no_files)
+              NoFilesText(onLibriVox = onLibriVox)
             }
             FolderHelpAnswer.NotFound -> {
               // older versions of Android still let apps open the Download folder
@@ -112,6 +123,16 @@ internal fun FolderHelpCard(
               HelpText(StringsR.string.folder_add_help_other_app)
             }
             null -> {}
+          }
+          if (onSurvey != null) {
+            Spacer(Modifier.height(4.dp))
+            TextButton(
+              modifier = Modifier.align(Alignment.End),
+              onClick = onSurvey,
+              shapes = ButtonDefaults.shapes(),
+            ) {
+              Text(stringResource(StringsR.string.folder_add_help_survey))
+            }
           }
         }
         FolderHelp.NoPicker -> {
@@ -168,6 +189,42 @@ private fun Answers(
 }
 
 @Composable
+private fun NoFilesText(onLibriVox: () -> Unit) {
+  val text = stringResource(StringsR.string.folder_add_help_no_files)
+  val linkColor = MaterialTheme.colorScheme.primary
+  val linkedText =
+    remember(text, linkColor, onLibriVox) {
+      buildAnnotatedString {
+        append(text)
+        // the translations keep the name, some with an ending, like LibriVoxista
+        val start = text.indexOf(LIBRIVOX)
+        if (start >= 0) {
+          addLink(
+            LinkAnnotation.Clickable(
+              tag = LIBRIVOX,
+              styles =
+                TextLinkStyles(
+                  SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline),
+                ),
+            ) {
+              onLibriVox()
+            },
+            start = start,
+            end = start + LIBRIVOX.length,
+          )
+        }
+      }
+    }
+  Text(
+    text = linkedText,
+    style = MaterialTheme.typography.bodyMedium,
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
+  )
+}
+
+private const val LIBRIVOX = "LibriVox"
+
+@Composable
 private fun HelpText(@StringRes text: Int) {
   Text(
     text = stringResource(text),
@@ -183,7 +240,13 @@ private fun FolderHelpCardPreview(
   state: Pair<FolderHelp, FolderHelpAnswer?>,
 ) {
   VoiceTheme {
-    FolderHelpCard(help = state.first, answer = state.second, onAnswer = {})
+    FolderHelpCard(
+      help = state.first,
+      answer = state.second,
+      onAnswer = {},
+      onLibriVox = {},
+      onSurvey = {},
+    )
   }
 }
 

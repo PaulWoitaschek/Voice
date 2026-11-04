@@ -159,6 +159,7 @@
     <string name="folder.add.help.download">Android erlaubt Apps nicht, den Ordner Download selbst zu öffnen. Wähle einen Ordner darin.</string>
     <string name="folder.add.help.no_files">Voice spielt Hörbuchdateien auf Deinem Handy ab. Bei LibriVox kannst Du Tausende kostenlose Hörbücher herunterladen.</string>
     <string name="folder.add.help.other_app">Bücher aus Apps wie Audible oder Spotify lassen sich nur dort abspielen. Voice spielt Hörbuchdateien wie MP3 oder M4B ab.</string>
+    <string name="folder.add.help.survey">Mehr erzählen</string>
     <string name="folder.add.help.title">Deine Hörbücher nicht gefunden?</string>
     <string name="folder.add.no_picker.message">Voice öffnet Deine Hörbücher über die Dateiauswahl von Android. Ohne sie kann Voice weder Ordner noch Dateien öffnen.</string>
     <string name="folder.add.no_picker.title">Dieses Gerät hat keine Dateiauswahl</string>

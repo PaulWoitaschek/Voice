@@ -4,10 +4,12 @@ import android.net.Uri
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import java.net.URLEncoder
 import kotlinx.coroutines.launch
 import voice.core.analytics.api.Analytics
 import voice.core.audiobookshelf.AudiobookshelfFeatureFlag
 import voice.core.audiobookshelf.ServerAccount
+import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.folders.AudiobookFolders
@@ -26,6 +28,8 @@ class AddContentViewModel(
   private val audiobookshelfFeatureFlag: AudiobookshelfFeatureFlag,
   private val serverAccount: ServerAccount,
   private val analytics: Analytics,
+  private val helpSurveyUrlFeatureFlag: FolderHelpSurveyUrlFeatureFlag,
+  private val appInfoProvider: AppInfoProvider,
   dispatcherProvider: DispatcherProvider,
   @Assisted private val origin: Origin,
 ) {
@@ -65,13 +69,40 @@ class AddContentViewModel(
   }
 
   internal fun onHelpAnswer(answer: FolderHelpAnswer) {
-    val value =
-      when (answer) {
-        FolderHelpAnswer.NoFiles -> "no_files"
-        FolderHelpAnswer.NotFound -> "not_found"
-        FolderHelpAnswer.OtherApp -> "other_app"
+    analytics.event("folder_help_answer", mapOf("answer" to answer.value()))
+  }
+
+  internal fun openLibriVox() {
+    navigator.goTo(Destination.Website("https://librivox.org"))
+  }
+
+  internal val canOpenHelpSurvey: Boolean
+    get() = helpSurveyUrlFeatureFlag.get().isNotEmpty()
+
+  internal fun openHelpSurvey(answer: FolderHelpAnswer?) {
+    val url =
+      helpSurveyUrlFeatureFlag.get().ifEmpty {
+        return
       }
-    analytics.event("folder_help_answer", mapOf("answer" to value))
+    // named like the hidden fields of the Tally form, which fills them from the query
+    val params =
+      listOfNotNull(
+          answer?.let { "answer" to it.value() },
+          "app_version" to appInfoProvider.versionName,
+        )
+        .joinToString(separator = "&") { (key, value) ->
+          "$key=${URLEncoder.encode(value, "UTF-8")}"
+        }
+    val separator = if ('?' in url) '&' else '?'
+    navigator.goTo(Destination.Website("$url$separator$params"))
+  }
+
+  private fun FolderHelpAnswer.value(): String {
+    return when (this) {
+      FolderHelpAnswer.NoFiles -> "no_files"
+      FolderHelpAnswer.NotFound -> "not_found"
+      FolderHelpAnswer.OtherApp -> "other_app"
+    }
   }
 
   private val scope = MainScope(dispatcherProvider)

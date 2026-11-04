@@ -159,6 +159,7 @@
     <string name="folder.add.help.download">Android ऐप्स को सीधे Download फ़ोल्डर खोलने नहीं देता। इसके अंदर का कोई फ़ोल्डर चुनें।</string>
     <string name="folder.add.help.no_files">Voice आपके फ़ोन पर मौजूद ऑडियोबुक फ़ाइलें चलाती है। LibriVox पर हज़ारों मुफ़्त ऑडियोबुक डाउनलोड के लिए उपलब्ध हैं।</string>
     <string name="folder.add.help.other_app">Audible या Spotify जैसे ऐप्स की पुस्तकें सिर्फ़ उन्हीं ऐप्स में चलती हैं। Voice MP3 या M4B जैसी ऑडियोबुक फ़ाइलें चलाती है।</string>
+    <string name="folder.add.help.survey">हमें और बताएँ</string>
     <string name="folder.add.help.title">आपकी ऑडियोबुक नहीं मिलीं?</string>
     <string name="folder.add.no_picker.message">Voice आपकी ऑडियोबुक Android के फ़ाइल पिकर से खोलती है। इसके बिना Voice आपके फ़ोल्डर या फ़ाइलें नहीं खोल सकती।</string>
     <string name="folder.add.no_picker.title">इस डिवाइस में फ़ाइल पिकर नहीं है</string>

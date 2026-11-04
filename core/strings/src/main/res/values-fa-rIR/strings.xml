@@ -159,6 +159,7 @@
     <string name="folder.add.help.download">در Android، برنامه‌ها نمی‌توانند خود پوشه‌ی Download را باز کنند. پوشه‌ای داخل آن انتخاب کنید.</string>
     <string name="folder.add.help.no_files">کار Voice پخش فایل‌های کتاب صوتی روی گوشی شماست. سایت LibriVox هزاران کتاب صوتی رایگان برای دانلود دارد.</string>
     <string name="folder.add.help.other_app">کتاب‌های برنامه‌هایی مثل Audible یا Spotify فقط در همان برنامه‌ها پخش می‌شوند. اما Voice فایل‌های کتاب صوتی مثل MP3 یا M4B را پخش می‌کند.</string>
+    <string name="folder.add.help.survey">بیشتر بگویید</string>
     <string name="folder.add.help.title">کتاب‌های صوتی خود را پیدا نکردید؟</string>
     <string name="folder.add.no_picker.message">کتاب‌های صوتی شما در Voice از طریق انتخابگر فایل Android باز می‌شوند. بدون آن، Voice نمی‌تواند پوشه‌ها یا فایل‌هایتان را باز کند.</string>
     <string name="folder.add.no_picker.title">این دستگاه انتخابگر فایل ندارد</string>

@@ -159,6 +159,7 @@
     <string name="folder.add.help.download">Android, uygulamaların Download klasörünü doğrudan açmasına izin vermez. İçindeki bir klasörü seçin.</string>
     <string name="folder.add.help.no_files">Voice, telefonunuzdaki sesli kitap dosyalarını oynatır. LibriVox\'ta indirebileceğiniz binlerce ücretsiz sesli kitap var.</string>
     <string name="folder.add.help.other_app">Audible veya Spotify gibi uygulamalardaki kitaplar yalnızca o uygulamalarda oynatılabilir. Voice ise MP3 veya M4B gibi sesli kitap dosyalarını oynatır.</string>
+    <string name="folder.add.help.survey">Daha fazlasını anlat</string>
     <string name="folder.add.help.title">Sesli kitaplarınızı bulamadınız mı?</string>
     <string name="folder.add.no_picker.message">Voice, sesli kitaplarınızı Android\'in dosya seçicisiyle açar. Dosya seçici olmadan klasörlerinizi veya dosyalarınızı açamaz.</string>
     <string name="folder.add.no_picker.title">Bu cihazda dosya seçici yok</string>

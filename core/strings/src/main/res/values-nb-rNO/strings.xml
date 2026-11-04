@@ -159,6 +159,7 @@
     <string name="folder.add.help.download">Android lar ikke apper åpne selve Download-mappen. Velg en mappe inni den.</string>
     <string name="folder.add.help.no_files">Voice spiller av lydbokfiler på telefonen din. LibriVox har tusenvis av gratis lydbøker du kan laste ned.</string>
     <string name="folder.add.help.other_app">Bøker fra apper som Audible eller Spotify kan bare spilles av i de appene. Voice spiller av lydbokfiler, for eksempel MP3 eller M4B.</string>
+    <string name="folder.add.help.survey">Fortell oss mer</string>
     <string name="folder.add.help.title">Fant du ikke lydbøkene dine?</string>
     <string name="folder.add.no_picker.message">Voice åpner lydbøkene dine via Androids filvelger. Uten den kan Voice ikke åpne mappene eller filene dine.</string>
     <string name="folder.add.no_picker.title">Denne enheten har ingen filvelger</string>

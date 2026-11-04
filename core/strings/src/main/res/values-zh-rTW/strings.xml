@@ -154,6 +154,7 @@
     <string name="folder.add.help.download">Android 不允許應用程式直接開啟 Download 資料夾，請改選裡面的資料夾。</string>
     <string name="folder.add.help.no_files">Voice 播放的是你手機裡的有聲書檔案。LibriVox 上有數千本免費有聲書可以下載。</string>
     <string name="folder.add.help.other_app">Audible 或 Spotify 等應用程式裡的書，只能在這些應用程式中播放。Voice 播放的是有聲書檔案，例如 MP3 或 M4B。</string>
+    <string name="folder.add.help.survey">告訴我們更多</string>
     <string name="folder.add.help.title">找不到你的有聲書？</string>
     <string name="folder.add.no_picker.message">Voice 會透過 Android 的檔案選擇器開啟你的有聲書。少了它，Voice 就無法開啟你的資料夾或檔案。</string>
     <string name="folder.add.no_picker.title">這部裝置沒有檔案選擇器</string>

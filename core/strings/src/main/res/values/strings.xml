@@ -273,10 +273,12 @@
     <string name="folder.add.help.computer">Audiobooks still on your computer? Copy them to your phone first, for example into the Audiobooks folder.</string>
     <!-- Tip on the add content screen after the listener answered that they can't find their audiobooks. Android 11 and newer don't allow picking the Download folder itself, only folders inside it. Download is the name of the folder on the phone, which is always in English, so keep it untranslated. -->
     <string name="folder.add.help.download">Android doesn\'t let apps open the Download folder itself. Pick a folder inside it.</string>
-    <!-- Tip on the add content screen after the listener answered that they have no audiobooks yet. LibriVox is a website with free public domain audiobooks, keep the name. -->
+    <!-- Tip on the add content screen after the listener answered that they have no audiobooks yet. LibriVox is a website with free public domain audiobooks. The name opens it, so keep it written as LibriVox. -->
     <string name="folder.add.help.no_files">Voice plays audiobook files from your phone. LibriVox has thousands of free ones to download.</string>
     <!-- Tip on the add content screen after the listener answered that their audiobooks are in another app. Audible and Spotify are app names, keep them. MP3 and M4B are file formats. -->
     <string name="folder.add.help.other_app">Books from apps like Audible or Spotify only play in those apps. Voice plays audiobook files, like MP3 or M4B.</string>
+    <!-- Text button on the card that asks "Didn't find your audiobooks?" on the add content screen. Opens a short survey in the browser about what kept the listener from adding audiobooks. -->
+    <string name="folder.add.help.survey">Tell us more</string>
     <!-- Title of the tips on the add content screen, shown after the system folder picker was closed without a folder. Answer chips below it ask what's in the way. -->
     <string name="folder.add.help.title">Didn\'t find your audiobooks?</string>
     <!-- Text on the add content screen when the device has no system file picker, so tapping Choose a folder or Add a single file instead can't open anything. Happens on reduced Android builds like bike computers. Use the word Android uses for the system picker that opens files and folders. -->

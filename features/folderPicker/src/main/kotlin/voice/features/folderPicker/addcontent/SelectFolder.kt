@@ -28,6 +28,9 @@ internal fun SelectFolder(
   onConnectAudiobookshelf: (() -> Unit)?,
   onFolderPickerCancel: () -> Unit,
   onHelpAnswer: (FolderHelpAnswer) -> Unit,
+  onOpenLibriVox: () -> Unit,
+  /** Null while there's no survey to invite to. */
+  onHelpSurvey: ((FolderHelpAnswer?) -> Unit)?,
   origin: Origin,
   modifier: Modifier = Modifier,
 ) {
@@ -65,6 +68,8 @@ internal fun SelectFolder(
               onHelpAnswer(answer)
             }
           },
+          onLibriVox = onOpenLibriVox,
+          onSurvey = onHelpSurvey?.let { open -> { open(helpAnswer) } },
         )
       }
     },
@@ -92,6 +97,8 @@ private fun SelectFolderPreview() {
       onConnectAudiobookshelf = {},
       onFolderPickerCancel = {},
       onHelpAnswer = {},
+      onOpenLibriVox = {},
+      onHelpSurvey = {},
       origin = Origin.Onboarding,
     )
   }
