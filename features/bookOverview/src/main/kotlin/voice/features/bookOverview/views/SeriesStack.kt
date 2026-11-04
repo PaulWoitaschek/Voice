@@ -5,7 +5,7 @@ package voice.features.bookOverview.views
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.style.TextOverflow
@@ -68,11 +69,16 @@ import voice.features.bookOverview.overview.SeriesStackViewState
 internal fun ListSeriesRow(
   series: SeriesStackViewState,
   onClick: () -> Unit,
+  onLongClick: () -> Unit,
   modifier: Modifier = Modifier,
   shape: Shape = RoundedCornerShape(24.dp),
 ) {
   Surface(
-    modifier = modifier.fillMaxWidth().clip(shape).clickable(onClick = onClick),
+    modifier =
+      modifier
+        .fillMaxWidth()
+        .clip(shape)
+        .combinedClickable(onClick = onClick, onLongClick = onLongClick),
     shape = shape,
     color = MaterialTheme.colorScheme.surfaceContainer,
   ) {
@@ -88,8 +94,10 @@ internal fun ListSeriesRow(
       ) {
         SeriesBadge(
           series = series,
-          // in a series in progress, the bar takes the place of the counts
+          // in a series in progress, the bar takes the place of the counts, and the row has its own
+          // hidden label
           describe = series.category == BookCategory.CURRENT,
+          hidden = false,
           modifier = Modifier.align(Alignment.BottomEnd).offset(x = 4.dp, y = 4.dp),
         )
       }
@@ -126,6 +134,10 @@ internal fun ListSeriesRow(
           )
         }
       }
+      if (series.hidden) {
+        Spacer(Modifier.width(12.dp))
+        HiddenLabel()
+      }
     }
   }
 }
@@ -134,10 +146,15 @@ internal fun ListSeriesRow(
 internal fun GridSeries(
   series: SeriesStackViewState,
   onClick: () -> Unit,
+  onLongClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(
-    modifier = modifier.clip(RoundedCornerShape(24.dp)).clickable(onClick = onClick).padding(6.dp),
+    modifier =
+      modifier
+        .clip(RoundedCornerShape(24.dp))
+        .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+        .padding(6.dp),
   ) {
     SeriesCover(
       seriesKey = series.key,
@@ -147,6 +164,7 @@ internal fun GridSeries(
       SeriesBadge(
         series = series,
         describe = true,
+        hidden = series.hidden,
         modifier = Modifier.align(Alignment.BottomEnd).offset(x = 4.dp, y = 4.dp),
       )
     }
@@ -220,7 +238,22 @@ internal fun SeriesCover(
   badge: @Composable BoxScope.() -> Unit = {},
 ) {
   // the badge flies along, or the flying covers would hide it
-  Box(modifier = modifier.seriesCoverSharedElementModifier(seriesKey)) {
+  CoverStack(
+    covers = covers,
+    modifier = modifier.seriesCoverSharedElementModifier(seriesKey),
+    gapColor = gapColor,
+    badge = badge,
+  )
+}
+
+@Composable
+internal fun CoverStack(
+  covers: List<String?>,
+  modifier: Modifier = Modifier,
+  gapColor: Color = MaterialTheme.colorScheme.surface,
+  badge: @Composable BoxScope.() -> Unit = {},
+) {
+  Box(modifier = modifier) {
     val behind = covers.size - 1
     covers.asReversed().forEachIndexed { index, cover ->
       val depth = if (behind == 0) 0F else (behind - index).toFloat() / behind
@@ -252,19 +285,26 @@ private const val STACKED_COVER_SIZE = 0.8F
 private fun SeriesBadge(
   series: SeriesStackViewState,
   describe: Boolean,
+  hidden: Boolean,
   modifier: Modifier = Modifier,
 ) {
   val finished = series.category == BookCategory.FINISHED
-  val description = seriesCounts(series.bookCount, series.finishedCount)
+  val counts = seriesCounts(series.bookCount, series.finishedCount)
+  val description =
+    if (hidden) "$counts, ${stringResource(StringsR.string.library_book_hidden)}" else counts
+  val colors = MaterialTheme.colorScheme
   Box(
     modifier =
       modifier
         .sizeIn(minWidth = 24.dp, minHeight = 24.dp)
-        .background(MaterialTheme.colorScheme.surface, CircleShape)
+        .background(colors.surface, CircleShape)
         .padding(2.dp)
         .background(
-          if (finished) MaterialTheme.colorScheme.primary
-          else MaterialTheme.colorScheme.secondaryContainer,
+          when {
+            hidden -> colors.surfaceContainerHighest
+            finished -> colors.primary
+            else -> colors.secondaryContainer
+          },
           CircleShape,
         )
         .clearAndSetSemantics {
@@ -272,20 +312,28 @@ private fun SeriesBadge(
         },
     contentAlignment = Alignment.Center,
   ) {
-    if (finished) {
-      Icon(
-        modifier = Modifier.size(14.dp),
-        imageVector = VoiceIcons.Check,
-        contentDescription = null,
-        tint = MaterialTheme.colorScheme.onPrimary,
-      )
-    } else {
-      Text(
-        text = NumberFormat.getIntegerInstance().format(series.bookCount),
-        style = MaterialTheme.typography.labelMedium,
-        color = MaterialTheme.colorScheme.onSecondaryContainer,
-        modifier = Modifier.padding(horizontal = 6.dp),
-      )
+    when {
+      hidden ->
+        Icon(
+          modifier = Modifier.size(14.dp),
+          imageVector = VoiceIcons.VisibilityOff,
+          contentDescription = null,
+          tint = colors.onSurfaceVariant,
+        )
+      finished ->
+        Icon(
+          modifier = Modifier.size(14.dp),
+          imageVector = VoiceIcons.Check,
+          contentDescription = null,
+          tint = colors.onPrimary,
+        )
+      else ->
+        Text(
+          text = NumberFormat.getIntegerInstance().format(series.bookCount),
+          style = MaterialTheme.typography.labelMedium,
+          color = colors.onSecondaryContainer,
+          modifier = Modifier.padding(horizontal = 6.dp),
+        )
     }
   }
 }
@@ -307,7 +355,10 @@ internal fun seriesCounts(
   return "$books · $finished"
 }
 
-private fun previewSeries(category: BookCategory) =
+private fun previewSeries(
+  category: BookCategory,
+  hidden: Boolean = false,
+) =
   SeriesStackViewState(
     key = "signalsaga",
     name = "The Signal Saga",
@@ -317,6 +368,7 @@ private fun previewSeries(category: BookCategory) =
     finishedCount = if (category == BookCategory.FINISHED) 4 else 1,
     progress = listOf(1F, 0.4F, 0F, 0F),
     category = category,
+    hidden = hidden,
   )
 
 @Composable
@@ -324,7 +376,7 @@ private fun previewSeries(category: BookCategory) =
 private fun ListSeriesRowPreviewStarted() {
   VoiceTheme {
     Surface {
-      ListSeriesRow(previewSeries(BookCategory.CURRENT), {})
+      ListSeriesRow(previewSeries(BookCategory.CURRENT), {}, {})
     }
   }
 }
@@ -334,7 +386,7 @@ private fun ListSeriesRowPreviewStarted() {
 private fun ListSeriesRowPreviewNotStarted() {
   VoiceTheme {
     Surface {
-      ListSeriesRow(previewSeries(BookCategory.NOT_STARTED), {})
+      ListSeriesRow(previewSeries(BookCategory.NOT_STARTED), {}, {})
     }
   }
 }
@@ -344,7 +396,7 @@ private fun ListSeriesRowPreviewNotStarted() {
 private fun GridSeriesPreviewStarted() {
   VoiceTheme {
     Surface {
-      GridSeries(previewSeries(BookCategory.CURRENT), {})
+      GridSeries(previewSeries(BookCategory.CURRENT), {}, {})
     }
   }
 }
@@ -354,7 +406,27 @@ private fun GridSeriesPreviewStarted() {
 private fun GridSeriesPreviewFinished() {
   VoiceTheme {
     Surface {
-      GridSeries(previewSeries(BookCategory.FINISHED), {})
+      GridSeries(previewSeries(BookCategory.FINISHED), {}, {})
+    }
+  }
+}
+
+@Composable
+@Preview
+private fun ListSeriesRowPreviewHidden() {
+  VoiceTheme {
+    Surface {
+      ListSeriesRow(previewSeries(BookCategory.NOT_STARTED, hidden = true), {}, {})
+    }
+  }
+}
+
+@Composable
+@Preview(widthDp = 200)
+private fun GridSeriesPreviewHidden() {
+  VoiceTheme {
+    Surface {
+      GridSeries(previewSeries(BookCategory.NOT_STARTED, hidden = true), {}, {})
     }
   }
 }

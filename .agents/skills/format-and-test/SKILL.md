@@ -7,7 +7,8 @@ description: Formatting Kotlin and writing or running tests in Voice. Use when a
 
 ## Formatting
 
-- Don't hand-format. Run `./gradlew spotlessApply`. It formats every module, the convention plugins and the build scripts.
+- Don't hand-format or run Spotless yourself. The pre-commit hook in `.githooks` checks the formatting. When the check
+  fails, it formats the code and stops the commit: stage the changes and commit again.
 - Formatting is ktfmt's Google style, run through Spotless. The style is set in the `voice.ktfmt` convention plugin and
   `plugins/build.gradle.kts`, and the ktfmt version is in `gradle/libs.versions.toml`.
 - Compose rules come from Slack's compose-lints and run with Android Lint: `./gradlew :app:lintFreeDebug`.
@@ -31,8 +32,8 @@ command.
 - Use `kotlin.test` with backtick names that describe behavior. Power-assert is enabled for `assert`, `assertEquals`,
   `assertTrue`, and `assertNull`, so skip message strings.
 - Test dependencies come from the convention plugin: every module's unit tests already have kotlin.test, JUnit, mockk,
-  Turbine, coroutines-test, Robolectric, and AndroidX Test, and Compose modules also have Molecule. Don't add these to a
-  module's build file. Only add what a single module needs, such as `room-testing`.
+  Turbine, coroutines-test, Robolectric, and AndroidX Test, and Compose modules also have Molecule and Compose UI
+  tests. Don't add these to a module's build file. Only add what a single module needs, such as `room-testing`.
 - Mock collaborators with mockk:
   - `mockk<X>(relaxUnitFun = true)`, with `every`/`coEvery` for each value the code under test reads.
   - `relaxed = true` only when the returned values don't matter; plain `mockk<X>()` for constructor fillers that are

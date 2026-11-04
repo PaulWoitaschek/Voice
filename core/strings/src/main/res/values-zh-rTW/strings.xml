@@ -281,6 +281,7 @@
     <string name="library.search.recent.clear_all">全部清除</string>
     <string name="library.search.recent.remove">移除 %s</string>
     <string name="library.search.recent.title">最近搜尋</string>
+    <string name="library.series.hidden.message">《%1$s》已隱藏</string>
     <string name="library.storage_permission_bug.action">授予權限</string>
     <string name="library.storage_permission_bug.message">在某些裝置上，系統應用程式缺少存取外部儲存空間的必要權限。Voice 需要這項權限才能讀取你的有聲書。</string>
     <string name="library.storage_permission_bug.title">需要權限</string>

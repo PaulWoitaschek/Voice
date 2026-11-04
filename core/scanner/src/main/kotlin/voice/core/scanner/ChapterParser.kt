@@ -1,5 +1,6 @@
 package voice.core.scanner
 
+import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
@@ -27,9 +28,11 @@ internal class ChapterParser(
   private val mediaAnalyzer: MediaAnalyzer,
 ) {
 
+  // shared by the books scanned at once, since media3 doesn't read more files at once anyway
+  private val parallelAnalyses = Semaphore(MetadataRetriever.DEFAULT_MAXIMUM_PARALLEL_RETRIEVALS)
+
   suspend fun parse(documentFile: CachedDocumentFile): ChapterParseResult = coroutineScope {
     val analyzedMetadata = ConcurrentHashMap<ChapterId, Metadata>()
-    val parallelAnalyses = Semaphore(4)
 
     val chapters =
       documentFile

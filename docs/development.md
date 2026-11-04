@@ -72,11 +72,12 @@ Voice formats Kotlin with **ktfmt** in its Google style, through Spotless.
 - To format from Android Studio, install the [ktfmt plugin](https://plugins.jetbrains.com/plugin/14912-ktfmt) and choose
   "Enable for This Project" when it asks. It picks up the project's settings from `.idea/ktfmt.xml`.
 
-- To make commits fail on formatting errors, set up a pre-commit hook:
+- To check the formatting on every commit, turn on the pre-commit hook in `.githooks`. When the check fails, it formats
+  the code and stops the commit, so you can stage the changes and commit again. Claude Code sessions turn it on for you.
+  Otherwise, run this once per clone, it covers all worktrees:
 
 ```sh
-echo "./gradlew spotlessCheck" > .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
+git config core.hooksPath .githooks
 ```
 
 Compose rules come from Slack's [compose-lints](https://slackhq.github.io/compose-lints/) and run as part of Android Lint.

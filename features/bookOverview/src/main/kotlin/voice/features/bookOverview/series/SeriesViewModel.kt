@@ -28,9 +28,8 @@ import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.features.bookOverview.overview.CurrentBook
 import voice.features.bookOverview.overview.badge
+import voice.features.bookOverview.overview.inSeries
 import voice.features.bookOverview.overview.series
-import voice.features.bookOverview.overview.seriesKey
-import voice.features.bookOverview.overview.seriesName
 import voice.features.bookOverview.overview.seriesPart
 import voice.features.bookOverview.overview.toItemViewState
 import voice.navigation.Destination
@@ -52,7 +51,6 @@ class SeriesViewModel(
 ) {
 
   private val scope = MainScope(dispatcherProvider)
-  private val key = seriesKey(name)
 
   @Composable
   internal fun viewState(): SeriesViewState? {
@@ -76,8 +74,7 @@ class SeriesViewModel(
       .collectAsState(initial = emptyMap())
       .value
     val livePlaybackState = livePlaybackState(currentBookId)
-    val seriesBooks =
-      remember(books) { books.filter { book -> book.seriesName?.let(::seriesKey) == key } }
+    val seriesBooks = remember(books) { books.inSeries(name) }
     val series =
       remember(seriesBooks, livePlaybackState) {
         seriesBooks
@@ -159,6 +156,10 @@ class SeriesViewModel(
 
   internal fun onBookLongClick(id: BookId) {
     navigator.goTo(Destination.BookActions(id))
+  }
+
+  internal fun onMoreClick() {
+    navigator.goTo(Destination.SeriesActions(name))
   }
 
   internal fun onCloseClick() {

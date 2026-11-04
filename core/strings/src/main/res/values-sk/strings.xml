@@ -335,6 +335,7 @@
     <string name="library.search.recent.clear_all">Vymazať všetko</string>
     <string name="library.search.recent.remove">Odstrániť %s</string>
     <string name="library.search.recent.title">Nedávne</string>
+    <string name="library.series.hidden.message">Séria „%1$s“ je skrytá</string>
     <string name="library.storage_permission_bug.action">Udeliť oprávnenie</string>
     <string name="library.storage_permission_bug.message">Systémová aplikácia na niektorých zariadeniach nemá udelené potrebné povolenie pristupovať k externému úložisku. Tento prístup je nevyhnutný, aby mohla aplikácia Voice čítať vaše zvukové knihy.</string>
     <string name="library.storage_permission_bug.title">Vyžaduje sa povolenie</string>

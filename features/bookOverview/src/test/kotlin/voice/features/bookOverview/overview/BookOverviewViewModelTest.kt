@@ -344,11 +344,54 @@ class BookOverviewViewModelTest {
       }
     val viewModel = viewModel(repo = repo)
 
-    viewModel.onUndoHide(book.id)
+    viewModel.onUndoHide(listOf(book.id))
 
     val update = slot<(CustomMetadata) -> CustomMetadata>()
     coVerify { repo.updateCustomMetadata(book.id, capture(update)) }
     assertEquals(expected = false, actual = update.captured(book.custom).hidden)
+  }
+
+  @Test
+  fun `with hidden books shown, a stack whose books are all hidden is marked hidden`() = runTest {
+    val hiddenSeries =
+      listOf(
+        book(series = "Saga", time = 0, hidden = true),
+        book(series = "Saga", time = 0, hidden = true),
+      )
+    val partlyHidden =
+      listOf(book(series = "Other", time = 0, hidden = true), book(series = "Other", time = 0))
+    val viewModel =
+      viewModel(
+        books = hiddenSeries + partlyHidden,
+        showHiddenBooksStore = MemoryDataStore(true),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val stacks =
+          awaitItem()
+            .sections
+            .getValue(BookCategory.NOT_STARTED)
+            .filterIsInstance<LibraryItem.Series>()
+            .associate { it.series.name to it.series.hidden }
+        assertEquals(expected = mapOf("Other" to false, "Saga" to true), actual = stacks)
+      }
+  }
+
+  @Test
+  fun `a long press on a stack offers its actions`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel = viewModel(navigator = navigator)
+
+    viewModel.onSeriesLongClick("Saga")
+
+    verify {
+      navigator.goTo(Destination.SeriesActions("Saga"))
+    }
   }
 
   @Test

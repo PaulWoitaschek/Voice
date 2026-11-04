@@ -24,6 +24,7 @@ internal data class SyncedBook(
   val author: SyncedText? = null,
   val series: SyncedText? = null,
   val part: SyncedText? = null,
+  val hidden: SyncedFlag? = null,
   val bookmarks: Map<Uuid, SyncedBookmark> = emptyMap(),
   val deletedBookmarks: Map<Uuid, Long> = emptyMap(),
 )
@@ -48,6 +49,13 @@ internal data class SyncedPlace(
 @Serializable
 internal data class SyncedText(
   val value: String?,
+  val changedAt: Long,
+)
+
+/** @param changedAt when the listener changed it, in ms since the epoch */
+@Serializable
+internal data class SyncedFlag(
+  val value: Boolean,
   val changedAt: Long,
 )
 

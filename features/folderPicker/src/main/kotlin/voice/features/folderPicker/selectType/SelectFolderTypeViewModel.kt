@@ -15,6 +15,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
+import voice.core.analytics.api.Analytics
 import voice.core.common.DispatcherProvider
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
@@ -35,6 +36,7 @@ class SelectFolderTypeViewModel(
   private val navigator: Navigator,
   private val documentFileFactory: CachedDocumentFileFactory,
   private val bookPreviewer: BookPreviewer,
+  private val analytics: Analytics,
   @Assisted private val uri: Uri,
   @Assisted private val documentFile: DocumentFile,
   @Assisted private val origin: Origin,
@@ -100,6 +102,11 @@ class SelectFolderTypeViewModel(
           }
         if (selectedMode.value == null) {
           selectedMode.value = loaded.guess
+          // only once and only for a new folder, as one added before starts with its own mode
+          analytics.event(
+            "folder_review",
+            mapOf("books" to loaded.books.getValue(loaded.guess).size.toString()),
+          )
         }
         value = loaded
       }

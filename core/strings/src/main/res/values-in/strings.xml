@@ -281,6 +281,7 @@
     <string name="library.search.recent.clear_all">Hapus semua</string>
     <string name="library.search.recent.remove">Hapus %s</string>
     <string name="library.search.recent.title">Terbaru</string>
+    <string name="library.series.hidden.message">%1$s disembunyikan</string>
     <string name="library.storage_permission_bug.action">Berikan izin</string>
     <string name="library.storage_permission_bug.message">Untuk perangkat tertentu, aplikasi sistem tidak memiliki izin yang diperlukan untuk mengakses penyimpanan eksternal. Akses ini penting agar Voice dapat membaca buku audio Anda.</string>
     <string name="library.storage_permission_bug.title">Izin diperlukan</string>

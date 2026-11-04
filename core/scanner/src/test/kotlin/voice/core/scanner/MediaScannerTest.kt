@@ -15,7 +15,10 @@ import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import voice.core.data.BookContent
@@ -35,6 +38,7 @@ import voice.core.data.repo.CustomMetadataRepoImpl
 import voice.core.data.repo.internals.AppDb
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.toUri
+import voice.core.documentfile.CachedDocumentFile
 import voice.core.documentfile.FileBasedDocumentFactory
 import voice.core.documentfile.FileBasedDocumentFile
 
@@ -551,6 +555,22 @@ class MediaScannerTest {
   }
 
   @Test
+  fun `a book is looked through for an embedded cover again when its first file changes`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter1 = audioFile(book, "1.mp3")
+    scan(FolderType.Root, audiobookFolder)
+    val id = BookId(book.toUri())
+    val content = bookContentRepo.get(id)!!
+    bookContentRepo.put(content.copy(metadata = content.metadata.copy(noEmbeddedCover = true)))
+
+    changed(chapter1)
+    scan(FolderType.Root, audiobookFolder)
+
+    assertEquals(expected = false, actual = bookContentRepo.get(id)!!.metadata.noEmbeddedCover)
+  }
+
+  @Test
   fun `a book keeps the title and author the listener gave it when its files change`() = test {
     val audiobookFolder = folder("audiobooks")
     val book = File(audiobookFolder, "book")
@@ -693,6 +713,30 @@ class MediaScannerTest {
       assertEquals(expected = "Mine", actual = bookRepo.get(BookId(renamed.toUri()))!!.name)
     }
 
+  @Test
+  fun `a book that is slow to read does not hold up the others`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val slowBook = File(audiobookFolder, "slow")
+    val slowFile = audioFile(slowBook, "1.mp3")
+    // with more files, so a scan one book after another would read it last
+    val quickBook = File(audiobookFolder, "quick")
+    audioFile(quickBook, "1.mp3")
+    audioFile(quickBook, "2.mp3")
+    val slowFileRead = CompletableDeferred<Unit>()
+    beforeRead = { if (it == slowFile) slowFileRead.await() }
+
+    coroutineScope {
+      launch { scan(FolderType.Root, audiobookFolder) }
+      bookContentRepo.flow().first { books -> books.any { it.id == BookId(quickBook.toUri()) } }
+      slowFileRead.complete(Unit)
+    }
+
+    assertBookContents(
+      BookContentView(id = slowBook, chapters = listOf(slowFile)),
+      BookContentView(id = quickBook, chapters = quickBook.listFiles()!!.sortedBy { it.name }),
+    )
+  }
+
   private fun test(test: suspend TestEnvironment.() -> Unit) {
     runTest {
       TestEnvironment().use { test(it) }
@@ -713,6 +757,7 @@ class MediaScannerTest {
     var album = "Book Name"
     var artist = "Author"
     var filesReadable = true
+    var beforeRead: suspend (File) -> Unit = {}
     val bookmarkRepo =
       mockk<BookmarkRepo>(relaxUnitFun = true) {
         coEvery { bookmarks(any()) } returns emptyList()
@@ -807,6 +852,7 @@ class MediaScannerTest {
           coEvery { mediaAnalyzer.analyze(any()) } coAnswers
             {
               analyzeCalls++
+              beforeRead(firstArg<CachedDocumentFile>().uri.toFile())
               if (!filesReadable) return@coAnswers null
               Metadata(
                 duration = 1000L,

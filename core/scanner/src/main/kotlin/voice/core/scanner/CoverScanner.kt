@@ -46,7 +46,7 @@ internal class CoverScanner(
 
     val image = coverSaver.newTemporaryFile()
     try {
-      if (!findAndSaveCoverFromDisc(book, image)) {
+      if (!findAndSaveCoverFromDisc(book, image) && !book.content.metadata.noEmbeddedCover) {
         scanForEmbeddedCover(book, image)
       }
     } finally {
@@ -105,13 +105,15 @@ internal class CoverScanner(
     book: Book,
     image: File,
   ) {
-    val success =
+    val found =
       coverExtractor.extractCover(
         input = book.chapters.first().id.toUri(),
         outputFile = image,
-      )
-    if (success && image.length() > 0) {
+      ) ?: return
+    if (found && image.length() > 0) {
       val _ = coverSaver.saveExtractedCover(image, bookId = book.id)
+    } else {
+      coverSaver.rememberNoEmbeddedCover(book.id)
     }
   }
 }

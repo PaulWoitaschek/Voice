@@ -33,6 +33,7 @@ internal fun List<Book>.toSyncedBook(
     author = syncedText(played.custom.author, files.author, own?.author, ownFileExists, now),
     series = syncedText(played.custom.series, files.series, own?.series, ownFileExists, now),
     part = syncedText(played.custom.part, files.part, own?.part, ownFileExists, now),
+    hidden = syncedHidden(played.custom.hidden, own?.hidden, ownFileExists, now),
     bookmarks = localBookmarks,
     deletedBookmarks = own?.deletedBookmarks.orEmpty() - localBookmarks.keys + deletedNow,
   )
@@ -80,6 +81,19 @@ private fun syncedText(
     else -> SyncedText(custom, changedAt = if (ownFileExists) now else 0)
   }
 
+private fun syncedHidden(
+  hidden: Boolean,
+  own: SyncedFlag?,
+  ownFileExists: Boolean,
+  now: Long,
+): SyncedFlag? =
+  when {
+    own != null -> if (own.value == hidden) own else SyncedFlag(hidden, now)
+    !hidden -> null
+    // like a name, hiding before this device synced the folder loses against a change since
+    else -> SyncedFlag(true, changedAt = if (ownFileExists) now else 0)
+  }
+
 private fun Bookmark.synced(
   file: Int,
   own: SyncedBook?,
@@ -113,6 +127,7 @@ internal fun SyncedBook.with(other: SyncedBook): SyncedBook {
     author = newer(author, other.author) { it.changedAt },
     series = newer(series, other.series) { it.changedAt },
     part = newer(part, other.part) { it.changedAt },
+    hidden = newer(hidden, other.hidden) { it.changedAt },
     bookmarks = bookmarks - newerBookmarks + other.bookmarks.filterKeys { it in newerBookmarks },
     deletedBookmarks =
       deletedBookmarks - newerBookmarks +

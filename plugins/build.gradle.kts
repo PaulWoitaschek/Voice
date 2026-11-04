@@ -8,6 +8,8 @@ dependencies {
   implementation(libs.kotlin.pluginForGradle)
   implementation(libs.kotlin.powerAssert)
   implementation(libs.compose.compiler.gradle.plugin)
+  implementation(libs.kotlin.serialization.gradlePlugin)
+  implementation(libs.metro.gradlePlugin)
   implementation(libs.spotless.gradlePlugin)
 }
 
@@ -20,6 +22,10 @@ gradlePlugin {
     create("app") {
       id = "voice.app"
       implementationClass = "AppPlugin"
+    }
+    create("feature") {
+      id = "voice.feature"
+      implementationClass = "FeaturePlugin"
     }
     create("compose") {
       id = "voice.compose"

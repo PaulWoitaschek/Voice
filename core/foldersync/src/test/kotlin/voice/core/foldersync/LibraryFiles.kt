@@ -33,6 +33,7 @@ fun book(
   customSeries: String? = null,
   part: String? = null,
   customPart: String? = null,
+  hidden: Boolean = false,
 ): Book {
   val bookUri = DocumentsContract.buildDocumentUriUsingTree(folder(tree), "$tree/$path")
   val chapters = fileSizes.mapIndexed { index, size ->
@@ -83,6 +84,7 @@ fun book(
         author = customAuthor,
         series = customSeries,
         part = customPart,
+        hidden = hidden,
       ),
   )
 }

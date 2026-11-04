@@ -1,26 +1,16 @@
 plugins {
-  id("voice.library")
-  id("voice.compose")
-  alias(libs.plugins.metro)
+  id("voice.feature")
 }
 
 dependencies {
-  implementation(projects.navigation)
-  implementation(projects.core.common)
-  implementation(projects.core.strings)
   implementation(projects.core.playback.api)
   implementation(projects.core.audiobookshelf.api)
   implementation(projects.core.data.api)
   implementation(projects.core.datastore)
   implementation(projects.core.featureflag)
   implementation(projects.core.kioskmode)
-  implementation(projects.core.ui)
   implementation(projects.core.sleeptimer.api)
 
   implementation(libs.coil)
-  implementation(libs.androidxCore)
   implementation(libs.navigation3.ui)
-
-  testImplementation(libs.compose.ui.testJunit)
-  debugImplementation(libs.compose.ui.testManifest)
 }

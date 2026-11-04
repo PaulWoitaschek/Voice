@@ -299,6 +299,7 @@
     <string name="library.search.recent.clear_all">Tyhjennä kaikki</string>
     <string name="library.search.recent.remove">Poista %s</string>
     <string name="library.search.recent.title">Viimeisimmät</string>
+    <string name="library.series.hidden.message">%1$s on piilotettu</string>
     <string name="library.storage_permission_bug.action">Anna käyttöoikeus</string>
     <string name="library.storage_permission_bug.message">Eräillä laitteilla joltakin järjestelmän sovellukselta puuttuu tarvittava käyttöoikeus ulkoiseen tallennustilaan. Tämä oikeus on välttämätön jotta Voice voi lukea äänikirjojasi.</string>
     <string name="library.storage_permission_bug.title">Käyttöoikeus tarvitaan</string>

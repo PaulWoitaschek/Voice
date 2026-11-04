@@ -299,6 +299,7 @@
     <string name="library.search.recent.clear_all">அனைத்தையும் அழி</string>
     <string name="library.search.recent.remove">%s ஐ அகற்று</string>
     <string name="library.search.recent.title">அண்மையவை</string>
+    <string name="library.series.hidden.message">%1$s மறைக்கப்பட்டது</string>
     <string name="library.storage_permission_bug.action">அனுமதி வழங்கு</string>
     <string name="library.storage_permission_bug.message">சில சாதனங்களுக்கு, ஒரு கணினி பயன்பாடு வெளிப்புற சேமிப்பிடத்தை அணுக தேவையான அனுமதியைக் காணவில்லை. உங்கள் ஆடியோபுக்குகளைப் படிக்க Voice-க்கு இந்த அணுகல் தேவை.</string>
     <string name="library.storage_permission_bug.title">அனுமதி தேவை</string>

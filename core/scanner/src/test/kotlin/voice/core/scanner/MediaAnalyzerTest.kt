@@ -6,9 +6,11 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
@@ -212,6 +214,13 @@ internal class MediaAnalyzerTest {
         ),
       actual = metadata.chapters,
     )
+  }
+
+  @Test
+  fun `a file that never opens is given up on`() = runTest {
+    val file = tempFolder.newStalledFile("stalled.mp3")
+
+    assertNull(analyzer.analyze(FileBasedDocumentFile(file)))
   }
 }
 

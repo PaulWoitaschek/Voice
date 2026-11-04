@@ -317,6 +317,7 @@
     <string name="library.search.recent.clear_all">Limpar tudo</string>
     <string name="library.search.recent.remove">Remover %s</string>
     <string name="library.search.recent.title">Recentes</string>
+    <string name="library.series.hidden.message">Você ocultou %1$s</string>
     <string name="library.storage_permission_bug.action">Conceder permissão</string>
     <string name="library.storage_permission_bug.message">Em alguns dispositivos, um app do sistema não tem a permissão necessária para acessar o armazenamento externo. Esse acesso é essencial para o Voice ler seus audiolivros.</string>
     <string name="library.storage_permission_bug.title">Permissão necessária</string>

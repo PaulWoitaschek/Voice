@@ -87,6 +87,7 @@ data class SeriesStackViewState(
   val finishedCount: Int,
   val progress: List<Float>,
   val category: BookCategory,
+  val hidden: Boolean = false,
 )
 
 internal fun Series.toStackViewState() =
@@ -99,4 +100,5 @@ internal fun Series.toStackViewState() =
     finishedCount = finishedCount,
     progress = progress,
     category = category,
+    hidden = hidden,
   )

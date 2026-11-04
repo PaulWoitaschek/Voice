@@ -299,6 +299,7 @@
     <string name="library.search.recent.clear_all">Rensa alla</string>
     <string name="library.search.recent.remove">Ta bort %s</string>
     <string name="library.search.recent.title">Senaste</string>
+    <string name="library.series.hidden.message">%1$s är dold</string>
     <string name="library.storage_permission_bug.action">Ge behörighet</string>
     <string name="library.storage_permission_bug.message">På vissa enheter saknar en systemapp den behörighet som krävs för att komma åt den externa lagringen. Den åtkomsten är nödvändig för att Voice ska kunna läsa dina ljudböcker.</string>
     <string name="library.storage_permission_bug.title">Behörighet krävs</string>

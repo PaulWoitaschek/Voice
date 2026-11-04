@@ -154,7 +154,56 @@ class CoverScannerTest {
     scan(book(folder))
 
     assertEquals(expected = listOf("embedded"), actual = savedImages)
+    coVerify(exactly = 0) { coverSaver.rememberNoEmbeddedCover(any()) }
   }
+
+  @Test
+  fun `a book whose first file has no cover is remembered`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    val book = book(folder)
+
+    scan(book)
+
+    coVerify { coverSaver.rememberNoEmbeddedCover(book.id) }
+  }
+
+  @Test
+  fun `the first file isn't read again once it had no cover`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+
+    scan(book(folder).withoutEmbeddedCover())
+
+    coVerify(exactly = 0) {
+      val _ = coverExtractor.extractCover(any(), any())
+    }
+  }
+
+  @Test
+  fun `an image in the folder still becomes the cover once the first file had none`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    File(folder, "cover.jpg").writeText("cover")
+
+    scan(book(folder).withoutEmbeddedCover())
+
+    assertEquals(expected = listOf("cover"), actual = savedImages)
+  }
+
+  @Test
+  fun `a first file that can't be read is read again next time`() = runTest {
+    val folder = testFolder.newFolder("Book")
+    File(folder, "1.mp3").writeText("audio")
+    coEvery { coverExtractor.extractCover(any(), any()) } returns null
+
+    scan(book(folder))
+
+    coVerify(exactly = 0) { coverSaver.rememberNoEmbeddedCover(any()) }
+  }
+
+  private fun Book.withoutEmbeddedCover(): Book =
+    copy(content = content.copy(metadata = content.metadata.copy(noEmbeddedCover = true)))
 
   private suspend fun scan(
     book: Book,

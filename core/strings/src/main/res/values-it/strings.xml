@@ -317,6 +317,7 @@
     <string name="library.search.recent.clear_all">Cancella tutto</string>
     <string name="library.search.recent.remove">Rimuovi %s</string>
     <string name="library.search.recent.title">Recenti</string>
+    <string name="library.series.hidden.message">Hai nascosto %1$s</string>
     <string name="library.storage_permission_bug.action">Concedi l\'autorizzazione</string>
     <string name="library.storage_permission_bug.message">Per alcuni dispositivi, un\'app di sistema non dispone dell\'autorizzazione necessaria per accedere alla memoria esterna. Questo accesso è essenziale per consentire a Voice di leggere i tuoi audiolibri.</string>
     <string name="library.storage_permission_bug.title">Autorizzazione richiesta</string>

@@ -13,7 +13,9 @@ import java.time.Instant
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -327,6 +329,40 @@ class FolderSyncTest {
       listOf(SyncFile(mapOf(book.key() to SyncedBook(series = series, part = part)))),
       written,
     )
+  }
+
+  @Test
+  fun `a book hidden on another device is hidden here, and not sent back`() = scope.runTest {
+    val book = book()
+    val repo = MemoryBookRepository(book)
+    val hidden = SyncedFlag(true, changedAt = 1000)
+    otherDevice(book, SyncedBook(hidden = hidden))
+    val folderSync = folderSync(repo)
+
+    folderSync.sync()
+    ownFile(folderSync, written.single())
+    folderSync.sync()
+
+    assertTrue(repo.get(book.id)!!.custom.hidden)
+    assertEquals(listOf(SyncFile(mapOf(book.key() to SyncedBook(hidden = hidden)))), written)
+  }
+
+  @Test
+  fun `a book shown again on another device is shown here`() = scope.runTest {
+    val book = book(hidden = true)
+    val repo = MemoryBookRepository(book)
+    val folderSync = folderSync(repo)
+    every { syncFiles.read(folder()) } returns
+      mapOf(
+        folderSync.ownFileName to
+          SyncFile(mapOf(book.key() to SyncedBook(hidden = SyncedFlag(true, changedAt = 1000)))),
+        "sync-other.json" to
+          SyncFile(mapOf(book.key() to SyncedBook(hidden = SyncedFlag(false, changedAt = 2000)))),
+      )
+
+    folderSync.sync()
+
+    assertFalse(repo.get(book.id)!!.custom.hidden)
   }
 
   @Test

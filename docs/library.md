@@ -41,7 +41,7 @@ it, open the [clickable prototype](https://voice.woitaschek.de/prototypes/librar
   becomes one long book.
 - Only the title and the cover can be changed, and only for books on the device. Voice never writes tags.
 - Current and Completed are in the order they were last listened, Not started yet by title. There's no sorting or
-  filtering, and books are hidden one at a time.
+  filtering, and books are hidden one at a time or by series.
 
 **So: group by series, and by author only when sorted by author.** A series is short and ordered by its parts. Authors
 are messy and most of them have a single book, so they only group when the listener asks for them. Libraries with
@@ -64,7 +64,7 @@ fixing many books at once has to take a few taps.
 
 Series stacks are in the library, see the [product spec](product.md#library). Still to come:
 
-- A long press on a stack renames or hides it.
+- A long press on a stack renames it.
 - The orders other than Progress show every series as one stack in All books, see Sorting and filtering.
 
 ## 2. The series
@@ -73,7 +73,7 @@ Series stacks are in the library, see the [product spec](product.md#library). St
 
 The series screen opens from a stack, see the [product spec](product.md#library). Still to come:
 
-- More options rename the series for all its books, or hide it. Picking a suggested name joins the two series.
+- More options rename the series for all its books. Picking a suggested name joins the two series.
 - It also opens from a book's series in the player and the book actions, and from search.
 
 ## 3. The author
@@ -195,11 +195,11 @@ For books already in the library:
 
 ![Sketch: hide from library in the book actions](sketches/book-actions-hide.png)
 
-Single books can be hidden from the book actions, see the [product spec](product.md#library). The sort sheet only
-has the switch for hidden books so far, and its button only shows once a book is hidden. Still to come:
+Books can be hidden from the book actions, and a series from its stack or screen, see the
+[product spec](product.md#library). Hiding syncs through `.voice`, like the name does. The sort sheet only has the
+switch for hidden books so far, and its button only shows once a book is hidden. Still to come:
 
-- Hide from library on a series' or an author's stack or screen, and for selected books.
-- Hiding syncs through `.voice`, like the name does.
+- Hide from library on an author's stack or screen, and for selected books.
 
 ## 7. Editing title, author and series
 
