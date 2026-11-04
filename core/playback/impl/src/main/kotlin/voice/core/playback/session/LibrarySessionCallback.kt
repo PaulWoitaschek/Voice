@@ -52,9 +52,11 @@ class LibrarySessionCallback(
   private val context: Context,
   private val lockScreenSliderStore: LockScreenSliderStore,
   private val bookSearch: BookSearch,
+  private val libraryChangeNotifier: LibraryChangeNotifier,
 ) : MediaLibrarySession.Callback {
 
   private var notificationCommandsJob: Job? = null
+  private var libraryChangesJob: Job? = null
 
   override fun onMediaButtonEvent(
     session: MediaSession,
@@ -223,6 +225,16 @@ class LibrarySessionCallback(
           else -> "another app"
         }
       Logger.d("onConnect from $controllerKind")
+    }
+
+    if (
+      session is MediaLibrarySession &&
+        libraryChangesJob == null &&
+        (session.isAutoCompanionController(controller) ||
+          session.isAutomotiveController(controller))
+    ) {
+      // Media3 never sees Android Auto leave, so this runs until the service stops
+      libraryChangesJob = scope.launch { libraryChangeNotifier.notifyChanges(session) }
     }
 
     if (

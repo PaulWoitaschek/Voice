@@ -11,8 +11,11 @@ import androidx.media3.session.SessionError
 import androidx.media3.test.utils.TestExoPlayerBuilder
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.Awaits
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlin.test.Test
@@ -48,6 +51,7 @@ class LibrarySessionCallbackTest {
   private val notification = controller(context.packageName, context.applicationInfo.uid)
   private val mediaItemProvider = mockk<MediaItemProvider>()
   private val bookSearch = mockk<BookSearch>()
+  private val libraryChangeNotifier = mockk<LibraryChangeNotifier>()
   private val callback =
     LibrarySessionCallback(
       mediaItemProvider = mediaItemProvider,
@@ -61,6 +65,7 @@ class LibrarySessionCallbackTest {
       context = context,
       lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
       bookSearch = bookSearch,
+      libraryChangeNotifier = libraryChangeNotifier,
     )
   private val customCommand = SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY)
 
@@ -177,6 +182,32 @@ class LibrarySessionCallbackTest {
 
     verify { librarySession.notifySearchResultChanged(androidAuto, "tolkien", 1, null) }
     assertEquals(expected = listOf(item), actual = result.get().value?.toList())
+  }
+
+  @Test
+  fun `Android Auto connecting keeps its lists up to date once`() = scope.runTest {
+    coEvery { libraryChangeNotifier.notifyChanges(any()) } just Awaits
+    val librarySession =
+      mockk<MediaLibrarySession>(relaxed = true) {
+        every { isAutoCompanionController(any()) } returns true
+      }
+    val androidAuto = controller(ANDROID_AUTO_PACKAGE, OTHER_UID)
+
+    val _ = callback.onConnect(librarySession, androidAuto)
+    val _ = callback.onConnect(librarySession, androidAuto)
+    runCurrent()
+
+    coVerify(exactly = 1) { libraryChangeNotifier.notifyChanges(librarySession) }
+  }
+
+  @Test
+  fun `other apps connecting don't follow the library`() = scope.runTest {
+    val librarySession = mockk<MediaLibrarySession>(relaxed = true)
+
+    val _ = callback.onConnect(librarySession, controller(OTHER_PACKAGE, OTHER_UID))
+    runCurrent()
+
+    coVerify(exactly = 0) { libraryChangeNotifier.notifyChanges(any()) }
   }
 
   private fun notificationCommands(): List<Player.Commands> {
