@@ -21,6 +21,7 @@ dependencies {
 
   implementation(libs.androidxCore)
   implementation(libs.lifecycle)
+  implementation(libs.lifecycle.compose)
   implementation(libs.documentFile)
   implementation(libs.navigation3.ui)
 }
