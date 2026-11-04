@@ -14,6 +14,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.withTimeout
 import voice.core.logging.api.Logger
 import voice.core.scanner.matroska.MatroskaCoverExtractor
 
@@ -68,7 +69,7 @@ internal class CoverExtractor(
   private suspend fun retrieveMetadata(uri: Uri): TrackGroupArray? {
     return try {
       MetadataRetriever.Builder(context, MediaItem.fromUri(uri)).build().use {
-        it.retrieveTrackGroups().await()
+        withTimeout(metadataRetrievalTimeout) { it.retrieveTrackGroups().await() }
       }
     } catch (e: Exception) {
       if (e is CancellationException) currentCoroutineContext().ensureActive()

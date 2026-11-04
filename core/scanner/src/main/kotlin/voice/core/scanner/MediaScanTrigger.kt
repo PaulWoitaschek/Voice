@@ -5,13 +5,13 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.time.measureTime
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import voice.core.common.DispatcherProvider
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
 import voice.core.data.repo.BookRepository
@@ -28,22 +28,24 @@ internal constructor(
   private val coverScanner: CoverScanner,
   private val bookRepo: BookRepository,
   private val documentFileFactory: CachedDocumentFileFactory,
+  dispatcherProvider: DispatcherProvider,
 ) {
 
   public val scannerActive: Flow<Boolean>
     field = MutableStateFlow(false)
 
-  private val scope = CoroutineScope(Dispatchers.IO)
+  private val scope = CoroutineScope(dispatcherProvider.io)
   private var scanningJob: Job? = null
 
   public fun scan(restartIfScanning: Boolean = false) {
     Logger.i("scanForFiles with restartIfScanning=$restartIfScanning")
-    if (scanningJob?.isActive == true && !restartIfScanning) {
+    // looking for covers can take long, so a request then starts over instead of missing new books
+    if (scannerActive.value && !restartIfScanning) {
       return
     }
+    scannerActive.value = true
     val oldJob = scanningJob
     scanningJob = scope.launch {
-      scannerActive.value = true
       oldJob?.cancelAndJoin()
 
       measureTime {
