@@ -3,9 +3,7 @@ package voice.core.scanner
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
 import voice.core.data.BookId
 import voice.core.data.fitIntoOneBook
@@ -73,12 +71,10 @@ internal class MediaScanner(
       }
     }
 
-    // carrying progress over moves bookmarks and history between books, so one book at a time
-    val carryOverLock = Mutex()
     val parallelBooks = Semaphore(5)
     coroutineScope {
       files.forEach { file ->
-        launch { parallelBooks.withPermit { scan(file, previousBooks, carryOverLock) } }
+        launch { parallelBooks.withPermit { scan(file, previousBooks) } }
       }
     }
   }
@@ -94,7 +90,6 @@ internal class MediaScanner(
   private suspend fun scan(
     file: CachedDocumentFile,
     previousBooks: PreviousBooks,
-    carryOverLock: Mutex,
   ) {
     val parseResult = chapterParser.parse(file)
     val chapters = parseResult.chapters
@@ -114,7 +109,7 @@ internal class MediaScanner(
     val currentChapterGone = content.currentChapter !in chapterIds
     val currentChapter = if (currentChapterGone) chapterIds.first() else content.currentChapter
     val positionInChapter = if (currentChapterGone) 0 else content.positionInChapter
-    val updated = carryOverLock.withLock {
+    val updated =
       progressCarryOver.carryOver(
         content =
           content.copy(
@@ -125,7 +120,6 @@ internal class MediaScanner(
           ),
         previousBooks = previousBooks,
       )
-    }
     if (content != updated) {
       validateIntegrity(updated, chapters)
       contentRepo.put(updated)
