@@ -23,6 +23,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
+import voice.core.analytics.api.Analytics
 import voice.core.common.DispatcherProvider
 import voice.core.data.folders.AudiobookFolders
 import voice.core.data.folders.FolderType
@@ -42,6 +43,7 @@ class SelectFolderTypeViewModelTest {
 
   private val audiobookFolders = mockk<AudiobookFolders>(relaxed = true)
   private val navigator = mockk<Navigator>(relaxed = true)
+  private val analytics = mockk<Analytics>(relaxUnitFun = true)
   private val previewed = mutableListOf<CachedDocumentFile>()
   private val bookPreviewer =
     mockk<BookPreviewer> {
@@ -212,6 +214,41 @@ class SelectFolderTypeViewModelTest {
   }
 
   @Test
+  fun `a new folder logs how many books the guessed mode finds, once`() = runTest {
+    val viewModel = viewModel(library())
+
+    viewStates(viewModel) {
+      awaitLoaded()
+      viewModel.selectMode(FolderMode.SingleBook)
+      awaitLoaded()
+    }
+
+    verify(exactly = 1) { analytics.event("folder_review", mapOf("books" to "2")) }
+  }
+
+  @Test
+  fun `a folder without audiobooks logs no books`() = runTest {
+    val viewModel = viewModel(temporaryFolder.newFolder("photos"))
+
+    viewStates(viewModel) {
+      awaitLoaded()
+    }
+
+    verify { analytics.event("folder_review", mapOf("books" to "0")) }
+  }
+
+  @Test
+  fun `a folder added before logs nothing`() = runTest {
+    val viewModel = viewModel(library(), currentType = FolderType.Root)
+
+    viewStates(viewModel) {
+      awaitLoaded()
+    }
+
+    verify(exactly = 0) { analytics.event(any(), any()) }
+  }
+
+  @Test
   fun `adding during the onboarding adds the selected mode and completes it`() = runTest {
     val folder = library()
     val viewModel = viewModel(folder, origin = Origin.Onboarding)
@@ -282,6 +319,7 @@ class SelectFolderTypeViewModelTest {
       navigator = navigator,
       documentFileFactory = FileBasedDocumentFactory,
       bookPreviewer = bookPreviewer,
+      analytics = analytics,
       uri = folder.toUri(),
       documentFile = DocumentFile.fromFile(folder),
       origin = origin,
