@@ -16,7 +16,7 @@ ktfmt = "0.65"
 spotless = "8.11.0"
 retrofit = "3.0.0"
 metro = "1.5.2"
-navigation3 = "1.2.0"
+navigation3 = "1.2.1"
 androidx-lifecycle = "2.11.0"
 
 [libraries]
