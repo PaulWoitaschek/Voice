@@ -46,5 +46,10 @@ jobs:
       - name: Setup Play Access
         run: ./scripts/ci_setup_play_access.sh
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
       - name: Upload Play Metadata
-        run: fastlane android upload_metadata
+        run: bundle exec fastlane android upload_metadata

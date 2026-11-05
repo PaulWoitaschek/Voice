@@ -55,6 +55,12 @@ jobs:
           PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
         run: ./scripts/ci_setup_play_access.sh
 
+      - uses: ruby/setup-ruby@v1
+        if: inputs.submit_to_stores
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
       - name: Build Play AAB
         env:
           PLAY_SIGNING_STORE_PASSWORD: ${{ secrets.PLAY_SIGNING_STORE_PASSWORD }}
@@ -89,11 +95,11 @@ jobs:
 
       - name: Upload to INTERNAL
         if: inputs.submit_to_stores
-        run: fastlane android upload_internal aab_path:artifacts/app-play-release.aab
+        run: bundle exec fastlane android upload_internal aab_path:artifacts/app-play-release.aab
 
       - name: Promote INTERNAL -> PRODUCTION (0.1%)
         if: inputs.submit_to_stores
-        run: fastlane android promote version_code:${{ steps.tag.outputs.version_code }}
+        run: bundle exec fastlane android promote version_code:${{ steps.tag.outputs.version_code }}
 
       - name: Create GitHub Release
         env:
