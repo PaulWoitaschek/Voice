@@ -203,6 +203,9 @@ Example: `25.9.1` → `(25+28)=53`, `MM=09`, `RELEASE=001` → `5309001`.
 
 This code is embedded in the git tag by `determine_release_tag.main.kts` and used by CI and Fastlane.
 
+Builds without `-Pvoice.versionCode` take the code of the newest release tag. So a local build installs over that
+release from Play, and Play replaces it with the next release.
+
 ## Website
 
 The [website](https://voice.woitaschek.de/) is an Astro project in `website/`, for listeners only. Contributor docs
