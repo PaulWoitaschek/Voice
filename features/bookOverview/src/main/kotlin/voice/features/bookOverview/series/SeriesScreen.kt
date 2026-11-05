@@ -2,6 +2,10 @@
 
 package voice.features.bookOverview.series
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,6 +23,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +36,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +61,7 @@ import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
 import voice.core.ui.CoverTheme
+import voice.core.ui.PlayPauseIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
@@ -238,6 +247,19 @@ private fun ActionButton(
       action.part != null -> stringResource(StringsR.string.series_start_book, action.part)
       else -> stringResource(StringsR.string.series_start)
     }
+  val interactionSource = remember { MutableInteractionSource() }
+  val pressed by interactionSource.collectIsPressedAsState()
+  val cornerPercent by
+    animateFloatAsState(
+      targetValue =
+        when {
+          pressed -> 20F
+          action.playing -> 30F
+          else -> 50F
+        },
+      animationSpec = MaterialTheme.motionScheme.fastSpatialSpec(),
+      label = "actionCorner",
+    )
   Button(
     onClick = {
       haptics.performHapticFeedback(
@@ -246,15 +268,19 @@ private fun ActionButton(
       onClick()
     },
     modifier = modifier.fillMaxWidth().heightIn(min = ButtonDefaults.MediumContainerHeight),
+    shape = RoundedCornerShape(CornerSize(cornerPercent.coerceIn(0F, 50F))),
     contentPadding = ButtonDefaults.contentPaddingFor(ButtonDefaults.MediumContainerHeight),
+    interactionSource = interactionSource,
   ) {
-    Icon(
-      imageVector = if (action.playing) VoiceIcons.Pause else VoiceIcons.PlayArrow,
+    PlayPauseIcon(
+      playing = action.playing,
       contentDescription = null,
       modifier = Modifier.size(ButtonDefaults.iconSizeFor(ButtonDefaults.MediumContainerHeight)),
     )
     Spacer(Modifier.width(ButtonDefaults.iconSpacingFor(ButtonDefaults.MediumContainerHeight)))
-    Text(label, style = ButtonDefaults.textStyleFor(ButtonDefaults.MediumContainerHeight))
+    AnimatedContent(targetState = label, label = "actionLabel") { text ->
+      Text(text, style = ButtonDefaults.textStyleFor(ButtonDefaults.MediumContainerHeight))
+    }
   }
 }
 
