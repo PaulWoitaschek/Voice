@@ -146,7 +146,40 @@ class MediaScannerTest {
     audioFile(book1, "2.mp3")
     audioFile(book1, "10.mp3")
 
-    assertEquals(expected = contentWithPositionAtLastChapter, actual = bookContentRepo.get(book1Id))
+    scan(FolderType.Root, audiobookFolder)
+
+    val content = bookContentRepo.get(book1Id)!!
+    assertEquals(expected = true, actual = content.isActive)
+    assertEquals(
+      expected = contentWithPositionAtLastChapter.currentChapter,
+      actual = content.currentChapter,
+    )
+  }
+
+  @Test
+  fun `a book whose folder is left without audio files leaves the library`() = test {
+    val audiobookFolder = folder("audiobooks")
+    val book = File(audiobookFolder, "book")
+    val chapter = audioFile(book, "1.mp3")
+    File(book, "cover.jpg").writeText("cover")
+    scan(FolderType.Root, audiobookFolder)
+
+    check(chapter.delete())
+    scan(FolderType.Root, audiobookFolder)
+
+    assertBookContents()
+  }
+
+  @Test
+  fun `a single folder book leaves the library when its folder is deleted`() = test {
+    val book = folder("book")
+    audioFile(book, "1.mp3")
+    scan(FolderType.SingleFolder, book)
+
+    check(book.deleteRecursively())
+    scan(FolderType.SingleFolder, book)
+
+    assertBookContents()
   }
 
   @Test
