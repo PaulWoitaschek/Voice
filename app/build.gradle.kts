@@ -17,6 +17,23 @@ if (playGoogleServicesJson.asFile.canRead()) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }
 
+val releaseCode =
+  providers
+    .exec {
+      commandLine(
+        "git",
+        "for-each-ref",
+        "--count=1",
+        "--sort=-v:refname",
+        "--format=%(refname:short)",
+        "refs/tags/[0-9]*-[0-9]*",
+      )
+      isIgnoreExitValue = true
+    }
+    .standardOutput
+    .asText
+    .map { it.trim().substringAfterLast('-').toIntOrNull() ?: Int.MAX_VALUE }
+
 android {
   namespace = "voice.app"
 
@@ -29,7 +46,8 @@ android {
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
     versionName = providers.gradleProperty("voice.versionName").orNull ?: "1.0.0"
-    versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: Int.MAX_VALUE
+    // F-Droid replaces the next line with sed, keep it on one line.
+    versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: releaseCode.get()
   }
 
   val distributionFlavor = "distribution"
