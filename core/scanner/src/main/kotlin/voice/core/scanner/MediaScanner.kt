@@ -93,7 +93,13 @@ internal class MediaScanner(
   ) {
     val parseResult = chapterParser.parse(file)
     val chapters = parseResult.chapters
-    if (chapters.isEmpty()) return
+    if (chapters.isEmpty()) {
+      // the folder of a book can stay behind without its audio files, like after a deletion that
+      // stopped halfway
+      val content = contentRepo.get(BookId(file.uri))
+      if (content?.isActive == true) contentRepo.put(content.copy(isActive = false))
+      return
+    }
     val chapterIds = chapters.map { it.id }
     if (!chapterIds.fitIntoOneBook()) {
       Logger.nonFatal(
