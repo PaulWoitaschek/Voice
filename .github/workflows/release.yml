@@ -58,7 +58,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         if: inputs.submit_to_stores
         with:
-          ruby-version: '3.4'
+          ruby-version: '4.0'
           bundler-cache: true
 
       - name: Build Play AAB
