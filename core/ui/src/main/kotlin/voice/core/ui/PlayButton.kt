@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -103,20 +105,35 @@ fun PlayButton(
         },
     contentAlignment = Alignment.Center,
   ) {
-    // animated vectors always mirror in right to left layouts, but a play arrow never points left
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-      Icon(
-        modifier = Modifier.fillMaxSize(0.4F).graphicsLayer { rotationZ = -rotation },
-        painter = rememberPlayPausePainter(playing),
-        contentDescription =
-          stringResource(
-            id =
-              if (playing) StringsR.string.playback_action_pause
-              else StringsR.string.playback_action_play,
-          ),
-        tint = contentColor,
-      )
-    }
+    PlayPauseIcon(
+      playing = playing,
+      contentDescription =
+        stringResource(
+          id =
+            if (playing) StringsR.string.playback_action_pause
+            else StringsR.string.playback_action_play,
+        ),
+      modifier = Modifier.fillMaxSize(0.4F).graphicsLayer { rotationZ = -rotation },
+      tint = contentColor,
+    )
+  }
+}
+
+@Composable
+fun PlayPauseIcon(
+  playing: Boolean,
+  contentDescription: String?,
+  modifier: Modifier = Modifier,
+  tint: Color = LocalContentColor.current,
+) {
+  // animated vectors always mirror in right to left layouts, but a play arrow never points left
+  CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+    Icon(
+      painter = rememberPlayPausePainter(playing),
+      contentDescription = contentDescription,
+      modifier = modifier,
+      tint = tint,
+    )
   }
 }
 
