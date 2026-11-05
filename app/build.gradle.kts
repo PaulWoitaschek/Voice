@@ -17,8 +17,6 @@ if (playGoogleServicesJson.asFile.canRead()) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }
 
-// Local builds carry the code of the newest release, so they install over it and the next Play
-// update replaces them.
 val releaseCode =
   providers
     .exec {
@@ -48,7 +46,7 @@ android {
   defaultConfig {
     applicationId = "de.ph1b.audiobook"
     versionName = providers.gradleProperty("voice.versionName").orNull ?: "1.0.0"
-    // F-Droid's build recipe replaces the next line with sed, so it must stay on one line.
+    // F-Droid replaces the next line with sed, keep it on one line.
     versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: releaseCode.get()
   }
 
