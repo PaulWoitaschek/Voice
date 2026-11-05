@@ -1,9 +1,13 @@
 package voice.core.foldersync
 
 import android.content.ContentResolver
+import android.database.MatrixCursor
+import android.os.Bundle
+import android.provider.DocumentsContract.Document
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlin.test.Test
 import kotlin.test.assertNull
 import org.junit.runner.RunWith
@@ -30,4 +34,35 @@ class SyncFilesTest {
 
     syncFiles.write(folder(), "sync-device.json", SyncFile(emptyMap()))
   }
+
+  @Test
+  fun `deleting the last sync file deletes the voice folder`() {
+    every { contentResolver.query(any(), any(), any(), any(), any()) } returnsMany
+      listOf(cursor("voice" to ".voice"), cursor("own" to "sync-device.json"), cursor())
+    every { contentResolver.call(any<String>(), any(), any(), any()) } returns Bundle()
+
+    syncFiles.delete(folder(), "sync-device.json")
+
+    verify(exactly = 2) {
+      contentResolver.call(any<String>(), "android:deleteDocument", any(), any())
+    }
+  }
+
+  @Test
+  fun `a voice folder the storage provider can't list is kept`() {
+    every { contentResolver.query(any(), any(), any(), any(), any()) } returnsMany
+      listOf(cursor("voice" to ".voice"), cursor("own" to "sync-device.json"), null)
+    every { contentResolver.call(any<String>(), any(), any(), any()) } returns Bundle()
+
+    syncFiles.delete(folder(), "sync-device.json")
+
+    verify(exactly = 1) {
+      contentResolver.call(any<String>(), "android:deleteDocument", any(), any())
+    }
+  }
+
+  private fun cursor(vararg children: Pair<String, String>) =
+    MatrixCursor(arrayOf(Document.COLUMN_DOCUMENT_ID, Document.COLUMN_DISPLAY_NAME)).apply {
+      children.forEach { (id, name) -> addRow(arrayOf(id, name)) }
+    }
 }

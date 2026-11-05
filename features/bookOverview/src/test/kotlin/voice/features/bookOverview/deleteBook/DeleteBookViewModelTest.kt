@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
 import kotlin.test.Test
@@ -23,6 +24,7 @@ import org.robolectric.Robolectric
 import voice.core.common.DispatcherProvider
 import voice.core.data.BookId
 import voice.core.data.repo.BookRepository
+import voice.core.foldersync.FolderSync
 import voice.features.bookOverview.book
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.chapter
@@ -40,6 +42,7 @@ class DeleteBookViewModelTest {
       id = BookId("content://$AUTHORITY/document/book"),
     )
   private val navigator = mockk<Navigator>(relaxUnitFun = true)
+  private val folderSync = mockk<FolderSync>(relaxUnitFun = true)
 
   private val viewModel =
     DeleteBookViewModel(
@@ -56,6 +59,7 @@ class DeleteBookViewModelTest {
           io = dispatcher + onIoDispatcher.asContextElement(true),
           mainImmediate = dispatcher,
         ),
+      folderSync = folderSync,
     )
 
   @Test
@@ -74,6 +78,7 @@ class DeleteBookViewModelTest {
       delete()
 
       verify { navigator.remove(Destination.Playback(book.id)) }
+      coVerify { folderSync.forget(book.id) }
     }
 
   @Test
@@ -82,6 +87,7 @@ class DeleteBookViewModelTest {
       delete()
 
       verify(exactly = 0) { navigator.remove(any()) }
+      coVerify(exactly = 0) { folderSync.forget(any()) }
     }
 
   private suspend fun TestScope.delete() {

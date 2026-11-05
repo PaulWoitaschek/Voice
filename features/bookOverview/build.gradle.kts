@@ -8,6 +8,7 @@ dependencies {
   implementation(projects.core.playback.api)
   implementation(projects.core.data.api)
   implementation(projects.core.datastore)
+  implementation(projects.core.foldersync)
   implementation(projects.core.scanner)
   implementation(projects.core.featureflag)
   implementation(projects.core.kioskmode)

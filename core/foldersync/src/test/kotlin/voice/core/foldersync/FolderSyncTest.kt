@@ -52,11 +52,13 @@ class FolderSyncTest {
       every { scannerActive } returns this@FolderSyncTest.scannerActive
     }
   private val written = mutableListOf<SyncFile>()
+  private val deleted = mutableListOf<String>()
   private val syncFiles =
     mockk<SyncFiles> {
       every { canWrite(any()) } returns true
       every { read(any()) } returns emptyMap()
       every { write(folder(), any(), capture(written)) } returns Unit
+      every { delete(folder(), capture(deleted)) } returns Unit
     }
   private val audiobookFolders =
     mockk<AudiobookFolders> {
@@ -480,6 +482,36 @@ class FolderSyncTest {
         ),
       actual = written.single(),
     )
+  }
+
+  @Test
+  fun `a deleted book loses its entry`() = scope.runTest {
+    val book = book(path = "Book")
+    val other = book(path = "Other", fileSizes = listOf(30))
+    val folderSync = folderSync(MemoryBookRepository(book, other))
+    val entry = SyncedBook(name = SyncedText("Name", changedAt = 1000))
+    ownFile(folderSync, SyncFile(mapOf(book.key() to entry, other.key() to entry)))
+
+    folderSync.forget(book.id)
+
+    assertEquals(listOf(SyncFile(mapOf(other.key() to entry))), written)
+    assertEquals(emptyList(), deleted)
+  }
+
+  @Test
+  fun `deleting the last book with an entry deletes the sync file`() = scope.runTest {
+    val book = book()
+    val folderSync = folderSync(MemoryBookRepository(book))
+    otherDevice(book, SyncedBook(name = SyncedText("Other", changedAt = 1000)))
+    ownFile(
+      folderSync,
+      SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Mine", changedAt = 1000)))),
+    )
+
+    folderSync.forget(book.id)
+
+    assertEquals(listOf(folderSync.ownFileName), deleted)
+    assertEquals(emptyList(), written)
   }
 
   private fun otherDevice(

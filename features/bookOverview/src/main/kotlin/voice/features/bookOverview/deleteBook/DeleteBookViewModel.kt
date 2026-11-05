@@ -13,6 +13,7 @@ import voice.core.common.MainScope
 import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
+import voice.core.foldersync.FolderSync
 import voice.core.logging.api.Logger
 import voice.core.scanner.MediaScanTrigger
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
@@ -29,6 +30,7 @@ class DeleteBookViewModel(
   private val repo: BookRepository,
   private val navigator: Navigator,
   private val dispatcherProvider: DispatcherProvider,
+  private val folderSync: FolderSync,
 ) : BottomSheetItemViewModel {
 
   private val scope = MainScope(dispatcherProvider)
@@ -90,6 +92,7 @@ class DeleteBookViewModel(
         if (deleted) {
           // the player of a deleted book would be left without a book
           navigator.remove(Destination.Playback(state.id))
+          withContext(dispatcherProvider.io) { folderSync.forget(state.id) }
         }
         mediaScanTrigger.scan(restartIfScanning = true)
       }

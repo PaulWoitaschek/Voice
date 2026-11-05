@@ -100,6 +100,25 @@ internal constructor(
     }
   }
 
+  // a sync keeps the entries of missing books, so a deleted book would keep its entry for good
+  public suspend fun forget(bookId: BookId) {
+    val book = bookRepository.get(bookId) ?: return
+    lock.withLock {
+      audiobookFolders.all().first().uris().forEach { folder ->
+        val key = listOf(book).keyedIn(folder).singleOrNull()?.key ?: return@forEach
+        if (!syncFiles.canWrite(folder)) return@forEach
+        val own = syncFiles.read(folder)?.get(ownFileName) ?: return@forEach
+        if (key !in own.books) return@forEach
+        val left = SyncFile(own.books - key)
+        if (left.books.isEmpty()) {
+          syncFiles.delete(folder, ownFileName)
+        } else {
+          syncFiles.write(folder, ownFileName, left)
+        }
+      }
+    }
+  }
+
   // the current book isn't synced, so a new phone, or one whose Voice data was cleared, would have
   // nothing to continue
   private suspend fun continueBookPlayedLast() {
