@@ -37,6 +37,11 @@ jobs:
           PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
         run: ./scripts/ci_setup_play_access.sh
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
       - name: Build Play AAB
         env:
           VERSION_CODE: ${{ inputs.version_code }}
@@ -54,4 +59,4 @@ jobs:
 
       # Only the internal track: no tag, so no F-Droid build, and nothing reaches production.
       - name: Upload to INTERNAL
-        run: fastlane android upload_internal aab_path:app/build/outputs/bundle/playRelease/app-play-release.aab
+        run: bundle exec fastlane android upload_internal aab_path:app/build/outputs/bundle/playRelease/app-play-release.aab
