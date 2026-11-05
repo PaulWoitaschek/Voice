@@ -36,22 +36,9 @@ class SyncFilesTest {
   }
 
   @Test
-  fun `deleting the last sync file deletes the voice folder`() {
+  fun `deleting a sync file keeps the voice folder`() {
     every { contentResolver.query(any(), any(), any(), any(), any()) } returnsMany
-      listOf(cursor("voice" to ".voice"), cursor("own" to "sync-device.json"), cursor())
-    every { contentResolver.call(any<String>(), any(), any(), any()) } returns Bundle()
-
-    syncFiles.delete(folder(), "sync-device.json")
-
-    verify(exactly = 2) {
-      contentResolver.call(any<String>(), "android:deleteDocument", any(), any())
-    }
-  }
-
-  @Test
-  fun `a voice folder the storage provider can't list is kept`() {
-    every { contentResolver.query(any(), any(), any(), any(), any()) } returnsMany
-      listOf(cursor("voice" to ".voice"), cursor("own" to "sync-device.json"), null)
+      listOf(cursor("voice" to ".voice"), cursor("own" to "sync-device.json"))
     every { contentResolver.call(any<String>(), any(), any(), any()) } returns Bundle()
 
     syncFiles.delete(folder(), "sync-device.json")

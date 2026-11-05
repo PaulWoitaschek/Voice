@@ -20,9 +20,11 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import voice.core.common.DispatcherProvider
@@ -488,7 +490,7 @@ class FolderSyncTest {
   fun `a deleted book loses its entry`() = scope.runTest {
     val book = book(path = "Book")
     val other = book(path = "Other", fileSizes = listOf(30))
-    val folderSync = folderSync(MemoryBookRepository(book, other))
+    val folderSync = folderSync(MemoryBookRepository(other, inactive = listOf(book)))
     val entry = SyncedBook(name = SyncedText("Name", changedAt = 1000))
     ownFile(folderSync, SyncFile(mapOf(book.key() to entry, other.key() to entry)))
 
@@ -501,7 +503,7 @@ class FolderSyncTest {
   @Test
   fun `deleting the last book with an entry deletes the sync file`() = scope.runTest {
     val book = book()
-    val folderSync = folderSync(MemoryBookRepository(book))
+    val folderSync = folderSync(MemoryBookRepository(inactive = listOf(book)))
     otherDevice(book, SyncedBook(name = SyncedText("Other", changedAt = 1000)))
     ownFile(
       folderSync,
@@ -512,6 +514,41 @@ class FolderSyncTest {
 
     assertEquals(listOf(folderSync.ownFileName), deleted)
     assertEquals(emptyList(), written)
+  }
+
+  @Test
+  fun `a copy that is left keeps the entry`() = scope.runTest {
+    val book = book(path = "Book")
+    val copy = book(path = "Copy of Book")
+    val folderSync = folderSync(MemoryBookRepository(copy, inactive = listOf(book)))
+    ownFile(
+      folderSync,
+      SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Name", changedAt = 1000)))),
+    )
+
+    folderSync.forget(book.id)
+
+    assertEquals(emptyList(), written)
+    assertEquals(emptyList(), deleted)
+  }
+
+  @Test
+  fun `a deleted book loses its entry once the scan is done`() = scope.runTest {
+    val book = book()
+    val folderSync = folderSync(MemoryBookRepository(inactive = listOf(book)))
+    ownFile(
+      folderSync,
+      SyncFile(mapOf(book.key() to SyncedBook(name = SyncedText("Name", changedAt = 1000)))),
+    )
+    scannerActive.value = true
+
+    launch { folderSync.forget(book.id) }
+    runCurrent()
+    assertEquals(emptyList(), deleted)
+
+    scannerActive.value = false
+    runCurrent()
+    assertEquals(listOf(folderSync.ownFileName), deleted)
   }
 
   private fun otherDevice(

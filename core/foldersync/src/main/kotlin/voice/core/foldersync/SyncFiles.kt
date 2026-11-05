@@ -69,23 +69,13 @@ internal class SyncFiles(private val context: Context) {
         children(folder, DocumentsContract.getTreeDocumentId(folder)).find {
           it.name == FOLDER_NAME
         } ?: return
-      children(folder, voiceFolder.id)
-        .find { it.name == name }
-        ?.let { deleteDocument(folder, it.id) }
-      // deleting the folder deletes what is in it, so a provider that can't list it keeps it
-      if (childrenOrNull(folder, voiceFolder.id)?.isEmpty() == true) {
-        deleteDocument(folder, voiceFolder.id)
+      // the folder stays, as deleting it would also delete a file a sync tool puts in at that
+      // moment
+      val file = children(folder, voiceFolder.id).find { it.name == name } ?: return
+      val uri = DocumentsContract.buildDocumentUriUsingTree(folder, file.id)
+      if (!DocumentsContract.deleteDocument(context.contentResolver, uri)) {
+        throw IOException("Can't delete a sync file")
       }
-    }
-  }
-
-  private fun deleteDocument(
-    folder: Uri,
-    id: String,
-  ) {
-    val uri = DocumentsContract.buildDocumentUriUsingTree(folder, id)
-    if (!DocumentsContract.deleteDocument(context.contentResolver, uri)) {
-      throw IOException("Can't delete a sync document")
     }
   }
 
@@ -107,12 +97,7 @@ internal class SyncFiles(private val context: Context) {
   private fun children(
     folder: Uri,
     parentId: String,
-  ): List<Child> = childrenOrNull(folder, parentId) ?: emptyList()
-
-  private fun childrenOrNull(
-    folder: Uri,
-    parentId: String,
-  ): List<Child>? {
+  ): List<Child> {
     val uri = DocumentsContract.buildChildDocumentsUriUsingTree(folder, parentId)
     val columns = arrayOf(Document.COLUMN_DOCUMENT_ID, Document.COLUMN_DISPLAY_NAME)
     return context.contentResolver.query(uri, columns, null, null, null)?.use { cursor ->
@@ -123,7 +108,7 @@ internal class SyncFiles(private val context: Context) {
           add(Child(id, name))
         }
       }
-    }
+    } ?: emptyList()
   }
 
   // the storage provider can send any exception across the binder, like a SecurityException when

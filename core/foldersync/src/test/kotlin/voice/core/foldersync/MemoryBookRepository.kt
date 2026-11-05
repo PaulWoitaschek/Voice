@@ -10,7 +10,10 @@ import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
 
-class MemoryBookRepository(vararg books: Book) : BookRepository {
+class MemoryBookRepository(
+  vararg books: Book,
+  private val inactive: List<Book> = emptyList(),
+) : BookRepository {
 
   private val books = MutableStateFlow(books.toList())
 
@@ -20,7 +23,7 @@ class MemoryBookRepository(vararg books: Book) : BookRepository {
 
   override fun flow(id: BookId): Flow<Book?> = books.map { books -> books.find { it.id == id } }
 
-  override suspend fun get(id: BookId): Book? = books.value.find { it.id == id }
+  override suspend fun get(id: BookId): Book? = (books.value + inactive).find { it.id == id }
 
   override suspend fun updateBook(
     id: BookId,

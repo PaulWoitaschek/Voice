@@ -103,9 +103,14 @@ internal constructor(
   // a sync keeps the entries of missing books, so a deleted book would keep its entry for good
   public suspend fun forget(bookId: BookId) {
     val book = bookRepository.get(bookId) ?: return
+    // until the scan finds the book gone, a sync writes its entry again
+    mediaScanTrigger.scannerActive.first { !it }
     lock.withLock {
+      val books = bookRepository.all()
       audiobookFolders.all().first().uris().forEach { folder ->
         val key = listOf(book).keyedIn(folder).singleOrNull()?.key ?: return@forEach
+        // another copy of the book still uses the entry
+        if (books.keyedIn(folder).any { it.key == key }) return@forEach
         if (!syncFiles.canWrite(folder)) return@forEach
         val own = syncFiles.read(folder)?.get(ownFileName) ?: return@forEach
         if (key !in own.books) return@forEach

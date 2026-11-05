@@ -92,9 +92,12 @@ class DeleteBookViewModel(
         if (deleted) {
           // the player of a deleted book would be left without a book
           navigator.remove(Destination.Playback(state.id))
+        }
+        // forget waits for this scan, so it has to start first
+        mediaScanTrigger.scan(restartIfScanning = true)
+        if (deleted) {
           withContext(dispatcherProvider.io) { folderSync.forget(state.id) }
         }
-        mediaScanTrigger.scan(restartIfScanning = true)
       }
     }
     _state.value = null
