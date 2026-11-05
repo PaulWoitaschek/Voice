@@ -22,17 +22,19 @@ if (playGoogleServicesJson.asFile.canRead()) {
 val releaseCode =
   providers
     .exec {
-      commandLine("git", "tag", "--list")
+      commandLine(
+        "git",
+        "for-each-ref",
+        "--count=1",
+        "--sort=-v:refname",
+        "--format=%(refname:short)",
+        "refs/tags/[0-9]*-[0-9]*",
+      )
       isIgnoreExitValue = true
     }
     .standardOutput
     .asText
-    .map { tags ->
-      tags
-        .lines()
-        .mapNotNull { Regex("""^[\d.]+-(\d+)$""").find(it)?.groupValues?.get(1)?.toIntOrNull() }
-        .maxOrNull() ?: Int.MAX_VALUE
-    }
+    .map { it.trim().substringAfterLast('-').toIntOrNull() ?: Int.MAX_VALUE }
 
 android {
   namespace = "voice.app"
