@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import voice.core.data.BookId
 import voice.core.data.ChapterId
@@ -68,6 +70,7 @@ class PlayerControllerImpl(
       .asDeferred()
   }
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
+  private val prepareMutex = Mutex()
 
   override fun setPosition(
     time: Long,
@@ -196,17 +199,15 @@ class PlayerControllerImpl(
     )
   }
 
-  /**
-   * Right after [maybePrepare] the player only holds the book until the service expands it into
-   * chapters, so the position comes from the book itself.
-   */
+  /** While the player holds no book yet, the position comes from the book itself. */
   private suspend fun storedPosition(): PlaybackPosition? {
     val bookId = currentBookStoreId.data.first() ?: return null
     val content = bookRepository.get(bookId)?.content ?: return null
     return PlaybackPosition(bookId, content.currentChapter, content.positionInChapter)
   }
 
-  private suspend fun maybePrepare(controller: MediaController): Boolean {
+  // Without it, fast commands like from the speed slider would each load the book again.
+  private suspend fun maybePrepare(controller: MediaController): Boolean = prepareMutex.withLock {
     val bookId = currentBookStoreId.data.first() ?: return false
     if (
       controller.currentBookId() == bookId &&
@@ -215,9 +216,13 @@ class PlayerControllerImpl(
       return true
     }
     val book = bookRepository.get(bookId) ?: return false
-    controller.setMediaItem(mediaItemProvider.mediaItem(book))
+    // Not the book as one item: the player replaces it with the chapter marks, and commands sent in
+    // between, like from dragging the speed slider, crash the controller with "Invalid PlayerInfo
+    // update".
+    val items = mediaItemProvider.mediaItemsWithStartPosition(book)
+    controller.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     controller.prepare()
-    return true
+    true
   }
 
   private fun MediaController.currentBookId(): BookId? {

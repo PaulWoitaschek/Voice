@@ -95,10 +95,15 @@ class MediaItemProvider(
   }
 
   fun mediaItemsWithStartPosition(book: Book): MediaItemsWithStartPosition {
+    val startItem =
+      book.playbackItemForPosition(
+        chapterId = book.content.currentChapter,
+        positionInChapterMs = book.content.positionInChapter,
+      )
     return MediaItemsWithStartPosition(
-      listOf(mediaItem(book)),
-      C.INDEX_UNSET,
-      C.TIME_UNSET,
+      playbackItems(book),
+      startItem?.index ?: C.INDEX_UNSET,
+      startItem?.positionInMediaItem(book.content.positionInChapter) ?: C.TIME_UNSET,
     )
   }
 

@@ -88,6 +88,12 @@ class LibrarySessionCallback(
     Logger.d(
       "onSetMediaItems(mediaItems.size=${mediaItems.size}, startIndex=$startIndex, startPosition=$startPositionMs)",
     )
+    // VoicePlayer loads the book once, so resolving every chapter mark would only slow it down.
+    if (mediaItems.firstOrNull()?.mediaId?.toMediaIdOrNull() is MediaId.ChapterMark) {
+      return Futures.immediateFuture(
+        MediaItemsWithStartPosition(mediaItems, startIndex, startPositionMs),
+      )
+    }
     val item = mediaItems.singleOrNull()
     return if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
       scope.reportingFuture {
