@@ -11,14 +11,14 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import voice.core.data.Book
-import voice.core.data.ChapterMark
-import voice.core.data.durationMs
+import voice.core.data.toUri
 import voice.core.logging.api.Logger
 import voice.core.playback.di.PlaybackScope
 import voice.core.playback.session.ChapterMarkPlaylist
-import voice.core.playback.session.MediaItemProvider
-import voice.core.playback.session.chapterMarkPlaylist
+import voice.core.playback.session.MediaId
+import voice.core.playback.session.durationMs
+import voice.core.playback.session.encode
+import voice.core.playback.session.toMediaIdOrNull
 
 /**
  * Presents the wrapped player, which holds one media item per audio file, as a playlist with one
@@ -29,12 +29,8 @@ import voice.core.playback.session.chapterMarkPlaylist
  */
 @Inject
 @SingleIn(PlaybackScope::class)
-class ChapterMarkPlayer(
-  private val player: ExoPlayer,
-  private val mediaItemProvider: MediaItemProvider,
-) : ForwardingSimpleBasePlayer(player) {
+class ChapterMarkPlayer(private val player: ExoPlayer) : ForwardingSimpleBasePlayer(player) {
 
-  private var book: Book? = null
   private var playlist: ChapterMarkPlaylist? = null
   private var markItems: List<MediaItemData> = emptyList()
   private var reportedItemIndex: Int? = null
@@ -55,40 +51,59 @@ class ChapterMarkPlayer(
     )
   }
 
-  internal fun setBook(
-    book: Book,
-    startItemIndex: Int,
-    positionInItemMs: Long,
+  internal fun setChapterMarks(
+    mediaItems: List<MediaItem>,
+    startIndex: Int,
+    startPositionMs: Long,
   ) {
-    val playlist = applyBook(book)
-    reportedItemIndex = startItemIndex
+    val playlist = applyChapterMarks(mediaItems)
+    if (playlist == null) {
+      Logger.w("Ignoring ${mediaItems.size} media items that are not all chapter marks")
+      return
+    }
+    val itemIndex = startIndex.takeIf { it in playlist.marks.indices } ?: 0
+    val mark = playlist.marks[itemIndex]
+    val positionInItemMs = startPositionMs.takeUnless { it == C.TIME_UNSET } ?: 0L
+    reportedItemIndex = itemIndex
     player.setMediaItems(
-      mediaItemProvider.chapterMediaItems(book),
-      playlist.fileIndexOf(startItemIndex),
-      playlist.items[startItemIndex].mark.startMs + positionInItemMs,
+      playlist.fileMediaItems(),
+      playlist.fileIndexOf(itemIndex),
+      mark.startMs + positionInItemMs.coerceIn(0L, mark.durationMs),
     )
     registerBoundaryMessages(playlist)
     invalidateState()
   }
 
-  private fun applyBook(book: Book): ChapterMarkPlaylist {
+  private fun applyChapterMarks(mediaItems: List<MediaItem>): ChapterMarkPlaylist? {
+    val marks = mediaItems.map {
+      it.mediaId.toMediaIdOrNull() as? MediaId.ChapterMark ?: return null
+    }
+    if (marks.isEmpty()) return null
     clearBoundaryMessages()
-    val playlist = book.chapterMarkPlaylist()
-    val markMediaItems = mediaItemProvider.playbackItems(book)
-    this.book = book
+    val playlist = ChapterMarkPlaylist(marks)
     this.playlist = playlist
-    markItems =
-      playlist.items.mapIndexed { index, item ->
-        // Not the media id: it contains the mark's end, which moves when the file duration is
-        // corrected.
-        MediaItemData.Builder(item.chapter.id to item.markIndex)
-          .setMediaItem(markMediaItems[index])
-          .setDurationUs(item.mark.durationMs * 1000)
-          .setIsSeekable(true)
-          .setIsDynamic(false)
-          .build()
-      }
+    markItems = mediaItems.mapIndexed { index, mediaItem ->
+      val mark = marks[index]
+      // Not the media id: it contains the mark's end, which moves when the file duration is
+      // corrected.
+      MediaItemData.Builder(mark.chapterId to mark.markIndex)
+        .setMediaItem(mediaItem)
+        .setDurationUs(mark.durationMs * 1000)
+        .setIsSeekable(true)
+        .setIsDynamic(false)
+        .build()
+    }
     return playlist
+  }
+
+  private fun ChapterMarkPlaylist.fileMediaItems(): List<MediaItem> {
+    val bookId = marks.first().bookId
+    return files.map { file ->
+      MediaItem.Builder()
+        .setMediaId(MediaId.Chapter(bookId = bookId, chapterId = file).encode())
+        .setUri(file.toUri())
+        .build()
+    }
   }
 
   /**
@@ -98,26 +113,36 @@ class ChapterMarkPlayer(
    * would end too early, cutting off its progress and its seek range.
    */
   private fun adoptResolvedDurations(timeline: Timeline) {
-    val book = book ?: return
-    if (timeline.windowCount != book.chapters.size) return
+    val playlist = playlist ?: return
+    if (timeline.windowCount != playlist.files.size) return
     val window = Timeline.Window()
+    val mediaItems = markItems.map { it.mediaItem }.toMutableList()
     var changed = false
-    val chapters =
-      book.chapters.mapIndexed { index, chapter ->
-        timeline.getWindow(index, window)
-        val durationMs = window.durationMs
-        if (window.isPlaceholder || durationMs == C.TIME_UNSET || durationMs == chapter.duration) {
-          chapter
-        } else {
-          changed = true
-          chapter.copy(duration = durationMs)
-        }
+    playlist.files.indices.forEach { fileIndex ->
+      timeline.getWindow(fileIndex, window)
+      val durationMs = window.durationMs
+      if (window.isPlaceholder || durationMs == C.TIME_UNSET) return@forEach
+      val itemIndex = playlist.lastItemIndexOf(fileIndex)
+      val mark = playlist.marks[itemIndex]
+      // the last mark ends 1ms before the end of the file, as in Chapter.chapterMarks
+      val endMs = (durationMs - 1).coerceAtLeast(mark.startMs + 1)
+      if (endMs != mark.endMs) {
+        changed = true
+        mediaItems[itemIndex] = mediaItems[itemIndex].withMark(mark.copy(endMs = endMs))
       }
+    }
     if (!changed) return
-    val playlist = applyBook(book.copy(chapters = chapters))
-    reportedItemIndex = playlist.itemIndexFor(player.currentMediaItemIndex, player.contentPosition)
-    registerBoundaryMessages(playlist)
+    val updated = applyChapterMarks(mediaItems) ?: return
+    reportedItemIndex = updated.itemIndexFor(player.currentMediaItemIndex, player.contentPosition)
+    registerBoundaryMessages(updated)
     invalidateState()
+  }
+
+  private fun MediaItem.withMark(mark: MediaId.ChapterMark): MediaItem {
+    return buildUpon()
+      .setMediaId(mark.encode())
+      .setMediaMetadata(mediaMetadata.buildUpon().setDurationMs(mark.durationMs).build())
+      .build()
   }
 
   fun setSkipSilenceEnabled(enabled: Boolean) {
@@ -132,11 +157,11 @@ class ChapterMarkPlayer(
    * exactly on its position.
    */
   private fun registerBoundaryMessages(playlist: ChapterMarkPlaylist) {
-    playlist.items.forEachIndexed { index, item ->
-      if (item.mark.startMs > 0) {
-        sendMessage(playlist, index, item.mark.startMs) { invalidateState() }
+    playlist.marks.forEachIndexed { index, mark ->
+      if (mark.startMs > 0) {
+        sendMessage(playlist, index, mark.startMs) { invalidateState() }
       }
-      val endingMs = (item.mark.endMs - CHAPTER_ENDING_MS).coerceAtLeast(item.mark.startMs)
+      val endingMs = (mark.endMs - CHAPTER_ENDING_MS).coerceAtLeast(mark.startMs)
       sendMessage(playlist, index, endingMs) { onChapterEnding() }
     }
   }
@@ -164,15 +189,14 @@ class ChapterMarkPlayer(
 
   override fun getState(): State {
     val state = super.getState().withPresentedCommands()
-    val book = book ?: return state
     val playlist = playlist ?: return state
     // The wrapped playlist is set asynchronously, so ignore states that do not match it yet.
-    if (state.timeline.windowCount != book.chapters.size || markItems.isEmpty()) return state
+    if (state.timeline.windowCount != playlist.files.size) return state
 
     val fileIndex = state.currentMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: 0
     val positionInFileSupplier = state.contentPositionMsSupplier
     val itemIndex = playlist.itemIndexFor(fileIndex, positionInFileSupplier.get()) ?: return state
-    val mark = playlist.items[itemIndex].mark
+    val mark = playlist.marks[itemIndex]
     val bufferedSupplier = state.contentBufferedPositionMsSupplier
     val previousItemIndex = reportedItemIndex
     reportedItemIndex = itemIndex
@@ -228,7 +252,7 @@ class ChapterMarkPlayer(
         positionDiscontinuityReason == DISCONTINUITY_REASON_SEEK_ADJUSTMENT)
   }
 
-  private fun ChapterMark.rebase(positionInFileMs: Long): Long {
+  private fun MediaId.ChapterMark.rebase(positionInFileMs: Long): Long {
     return (positionInFileMs - startMs).coerceIn(0L, durationMs)
   }
 
@@ -254,15 +278,12 @@ class ChapterMarkPlayer(
     positionMs: Long,
     seekCommand: Int,
   ): ListenableFuture<*> {
-    val playlist = playlist
-    if (playlist == null || markItems.isEmpty()) {
-      return super.handleSeek(mediaItemIndex, positionMs, seekCommand)
-    }
+    val playlist = playlist ?: return super.handleSeek(mediaItemIndex, positionMs, seekCommand)
     // a seek without a target, like next in the last chapter, does nothing
     if (mediaItemIndex == C.INDEX_UNSET) return Futures.immediateVoidFuture()
     val itemIndex = mediaItemIndex
-    val item = playlist.items.getOrNull(itemIndex)
-    if (item == null) {
+    val mark = playlist.marks.getOrNull(itemIndex)
+    if (mark == null) {
       Logger.w("handleSeek to unknown itemIndex=$itemIndex")
       return super.handleSeek(mediaItemIndex, positionMs, seekCommand)
     }
@@ -270,20 +291,20 @@ class ChapterMarkPlayer(
     reportedItemIndex = itemIndex
     player.seekTo(
       playlist.fileIndexOf(itemIndex),
-      item.mark.startMs + positionInItem.coerceIn(0L, item.mark.durationMs),
+      mark.startMs + positionInItem.coerceIn(0L, mark.durationMs),
     )
     return Futures.immediateVoidFuture()
   }
 
-  // Controllers can replace the whole book, which VoicePlayer maps to setBook, or clear it. Editing
-  // single chapters would have to be translated into edits of the files of the wrapped player, so
-  // such requests are ignored.
+  // Controllers can replace the whole book, which VoicePlayer maps to setChapterMarks, or clear it.
+  // Editing single chapters would have to be translated into edits of the files of the wrapped
+  // player, so such requests are ignored.
 
   override fun handleAddMediaItems(
     index: Int,
     mediaItems: List<MediaItem>,
   ): ListenableFuture<*> {
-    if (book == null) return super.handleAddMediaItems(index, mediaItems)
+    if (playlist == null) return super.handleAddMediaItems(index, mediaItems)
     return ignoreChapterEdit("add")
   }
 
@@ -292,7 +313,7 @@ class ChapterMarkPlayer(
     toIndex: Int,
     newIndex: Int,
   ): ListenableFuture<*> {
-    if (book == null) return super.handleMoveMediaItems(fromIndex, toIndex, newIndex)
+    if (playlist == null) return super.handleMoveMediaItems(fromIndex, toIndex, newIndex)
     return ignoreChapterEdit("move")
   }
 
@@ -301,7 +322,7 @@ class ChapterMarkPlayer(
     toIndex: Int,
     mediaItems: List<MediaItem>,
   ): ListenableFuture<*> {
-    if (book == null) return super.handleReplaceMediaItems(fromIndex, toIndex, mediaItems)
+    if (playlist == null) return super.handleReplaceMediaItems(fromIndex, toIndex, mediaItems)
     return ignoreChapterEdit("replace")
   }
 
@@ -309,10 +330,9 @@ class ChapterMarkPlayer(
     fromIndex: Int,
     toIndex: Int,
   ): ListenableFuture<*> {
-    if (book == null) return super.handleRemoveMediaItems(fromIndex, toIndex)
+    if (playlist == null) return super.handleRemoveMediaItems(fromIndex, toIndex)
     if (fromIndex > 0 || toIndex < markItems.size) return ignoreChapterEdit("remove")
     clearBoundaryMessages()
-    book = null
     playlist = null
     markItems = emptyList()
     reportedItemIndex = null

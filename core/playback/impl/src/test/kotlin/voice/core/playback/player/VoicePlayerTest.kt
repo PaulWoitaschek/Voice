@@ -112,13 +112,12 @@ class VoicePlayerTest {
       coEvery { add(capture(historyEvents)) } just Runs
     }
   private val analytics = mockk<Analytics>(relaxUnitFun = true)
-  private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer, mediaItemProvider)
+  private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer)
   private val player =
     VoicePlayer(
       player = chapterMarkPlayer,
       repo =
         mockk {
-          coEvery { get(bookId) } answers { currentBook }
           coEvery { updateBook(bookId, any()) } answers
             {
               currentBook = currentBook.update(secondArg<(BookContent) -> BookContent>())
@@ -314,7 +313,7 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `setBook resumes inside matching chapter mark`() = scope.runTest {
+  fun `the chapter marks start in the mark where the book stopped`() = scope.runTest {
     val chapter =
       chapter(
         ChapterMark(startMs = 0, endMs = 11_999, name = null),
@@ -325,24 +324,6 @@ class VoicePlayerTest {
       currentChapter = chapter,
       positionInChapter = 15_000,
     )
-
-    player.prepare()
-    awaitReady()
-
-    player.shouldHavePosition(1, 3_000)
-  }
-
-  @Test
-  fun `the chapter marks from the controller start where the book stopped`() = scope.runTest {
-    val chapter =
-      chapter(
-        ChapterMark(startMs = 0, endMs = 11_999, name = null),
-        ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
-      )
-    currentBook = book(listOf(chapter), bookId).update { it.copy(positionInChapter = 15_000) }
-    val items = mediaItemProvider.mediaItemsWithStartPosition(currentBook)
-    player.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
-    runCurrent()
 
     player.prepare()
     awaitReady()
@@ -368,45 +349,18 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `a single chapter mark starts at that mark`() = scope.runTest {
-    val chapter =
-      chapter(
-        ChapterMark(startMs = 0, endMs = 11_999, name = null),
-        ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
-      )
-    currentBook = book(listOf(chapter), bookId).update { it.copy(positionInChapter = 3_000) }
-    player.setMediaItem(mediaItemProvider.playbackItems(currentBook)[1])
-    runCurrent()
+  fun `the settings of the book stay when its chapter marks are set`() = scope.runTest {
+    setMediaItems(
+      listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))),
+      playbackSpeed = 1.5F,
+      skipSilence = true,
+    )
 
     player.prepare()
     awaitReady()
 
-    player.shouldHavePosition(1, 0)
-  }
-
-  @Test
-  fun `setBook starts a book that was never played at the last speed and keeps it`() =
-    scope.runTest {
-      lastPlaybackSpeedStore.updateData { 1.5F }
-
-      setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
-
-      assertEquals(expected = 1.5F, actual = internalPlayer.playbackParameters.speed)
-      assertEquals(expected = 1.5F, actual = currentBook.content.playbackSpeed)
-    }
-
-  @Test
-  fun `setBook starts a played book at its own speed`() = scope.runTest {
-    lastPlaybackSpeedStore.updateData { 1.5F }
-
-    setMediaItems(
-      listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))),
-      playbackSpeed = 1.25F,
-      lastPlayedAt = Instant.ofEpochSecond(1),
-    )
-
-    assertEquals(expected = 1.25F, actual = internalPlayer.playbackParameters.speed)
-    assertEquals(expected = 1.25F, actual = currentBook.content.playbackSpeed)
+    assertEquals(expected = 1.5F, actual = internalPlayer.playbackParameters.speed)
+    assertTrue(internalPlayer.skipSilenceEnabled)
   }
 
   @Test
@@ -774,6 +728,7 @@ class VoicePlayerTest {
     playbackSpeed: Float = 1F,
     lastPlayedAt: Instant = Instant.EPOCH,
     gain: Float = 0F,
+    skipSilence: Boolean = false,
   ) {
     currentBook =
       book(chapters, bookId).update {
@@ -783,9 +738,12 @@ class VoicePlayerTest {
           playbackSpeed = playbackSpeed,
           lastPlayedAt = lastPlayedAt,
           gain = gain,
+          skipSilence = skipSilence,
         )
       }
-    player.setMediaItem(mediaItemProvider.mediaItem(currentBook))
+    player.applySettings(currentBook.content)
+    val items = mediaItemProvider.mediaItemsWithStartPosition(currentBook)
+    player.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     runCurrent()
   }
 

@@ -45,38 +45,37 @@ internal fun Book.playbackItems(): List<PlaybackItem> {
  * The playlist as the session and the UI see it: one entry per chapter mark, together with the
  * index of the audio file each entry lives in. The underlying player only holds one item per file.
  */
-internal class ChapterMarkPlaylist(
-  val items: List<PlaybackItem>,
-  private val fileIndexByItem: IntArray,
-) {
+internal class ChapterMarkPlaylist(val marks: List<MediaId.ChapterMark>) {
+
+  val files: List<ChapterId> = marks.map { it.chapterId }.distinct()
+
+  private val fileIndexByItem: IntArray = run {
+    val fileIndexByChapterId = files.withIndex().associate { (index, file) -> file to index }
+    IntArray(marks.size) { fileIndexByChapterId.getValue(marks[it].chapterId) }
+  }
 
   fun fileIndexOf(itemIndex: Int): Int = fileIndexByItem[itemIndex]
+
+  fun lastItemIndexOf(fileIndex: Int): Int = fileIndexByItem.lastIndexOf(fileIndex)
 
   fun itemIndexFor(
     fileIndex: Int,
     positionInFileMs: Long,
   ): Int? {
     var result: Int? = null
-    for (index in items.indices) {
+    for (index in marks.indices) {
       if (fileIndexByItem[index] != fileIndex) continue
-      if (result == null || items[index].mark.startMs <= positionInFileMs) {
+      if (result == null || marks[index].startMs <= positionInFileMs) {
         result = index
       }
-      if (items[index].mark.startMs > positionInFileMs) break
+      if (marks[index].startMs > positionInFileMs) break
     }
     return result
   }
 }
 
-internal fun Book.chapterMarkPlaylist(): ChapterMarkPlaylist {
-  val items = playbackItems()
-  val fileIndexByChapterId =
-    chapters.withIndex().associate { (index, chapter) -> chapter.id to index }
-  return ChapterMarkPlaylist(
-    items = items,
-    fileIndexByItem = IntArray(items.size) { fileIndexByChapterId.getValue(items[it].chapter.id) },
-  )
-}
+internal val MediaId.ChapterMark.durationMs: Long
+  get() = (endMs - startMs).coerceAtLeast(0L)
 
 internal fun Book.playbackItemForPosition(
   chapterId: ChapterId,

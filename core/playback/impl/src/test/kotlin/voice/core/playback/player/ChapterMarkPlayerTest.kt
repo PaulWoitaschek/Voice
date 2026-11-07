@@ -66,7 +66,7 @@ class ChapterMarkPlayerTest {
       .build()
 
   private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk())
-  private val player = ChapterMarkPlayer(exoPlayer, mediaItemProvider)
+  private val player = ChapterMarkPlayer(exoPlayer)
 
   @Test
   fun `presents one media item per mark while the wrapped player holds one per file`() {
@@ -270,11 +270,7 @@ class ChapterMarkPlayerTest {
     positionInItemMs: Long = 0,
   ) {
     book = book(chapters)
-    player.setBook(
-      book = book,
-      startItemIndex = startItemIndex,
-      positionInItemMs = positionInItemMs,
-    )
+    player.setChapterMarks(mediaItemProvider.playbackItems(book), startItemIndex, positionInItemMs)
     player.prepare()
     TestPlayerRunHelper.runUntilPlaybackState(exoPlayer, Player.STATE_READY)
   }

@@ -54,12 +54,14 @@ internal fun MediaItem(
       .build()
 
   return MediaItem.Builder()
-    .setMediaId(Json.encodeToString(MediaId.serializer(), mediaId))
+    .setMediaId(mediaId.encode())
     .setMediaMetadata(metadata)
     .setUri(sourceUri)
     .setClippingConfiguration(clippingConfiguration)
     .build()
 }
+
+internal fun MediaId.encode(): String = Json.encodeToString(MediaId.serializer(), this)
 
 fun String.toMediaIdOrNull(): MediaId? =
   try {
