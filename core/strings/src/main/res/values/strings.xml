@@ -111,6 +111,8 @@
     <string name="audiobookshelf.status.syncing">Syncing…</string>
     <!-- Name of the self-hosted audiobook server. Product name, not translated. -->
     <string name="audiobookshelf.title" translatable="false">Audiobookshelf</string>
+    <!-- Button below the short text about an author on the author's screen. Opens the author's Wikipedia article in the browser. Write Wikipedia the way the language does, e.g. Википедия in Russian. -->
+    <string name="author.wikipedia">Read more on Wikipedia</string>
     <!-- Bottom-sheet action for moving a book to the completed category. -->
     <string name="book.category.action.mark_completed">Mark as Completed</string>
     <!-- Bottom-sheet action for moving a book to the current category. -->

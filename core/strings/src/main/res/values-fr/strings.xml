@@ -61,6 +61,7 @@
     <string name="audiobookshelf.status.needs_login">Le serveur vous demande de vous reconnecter</string>
     <string name="audiobookshelf.status.offline">Impossible de joindre le serveur pour le moment. Vous pouvez toujours écouter les livres téléchargés.</string>
     <string name="audiobookshelf.status.syncing">Synchronisation…</string>
+    <string name="author.wikipedia">En savoir plus sur Wikipédia</string>
     <string name="book.category.action.mark_completed">Marquer comme terminé</string>
     <string name="book.category.action.mark_current">Marquer comme en cours</string>
     <string name="book.category.action.mark_not_started">Marquer comme non commencé</string>

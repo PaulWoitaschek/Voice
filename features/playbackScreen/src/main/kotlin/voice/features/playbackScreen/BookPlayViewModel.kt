@@ -332,6 +332,10 @@ class BookPlayViewModel(
     navigator.goTo(Destination.BookActions(bookId))
   }
 
+  fun onAuthorClick(author: String) {
+    navigator.goTo(Destination.Author(author))
+  }
+
   fun onCurrentChapterClick() {
     scope.launch {
       val book = currentBook() ?: return@launch

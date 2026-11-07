@@ -58,6 +58,7 @@
     <string name="audiobookshelf.status.needs_login">Der Server möchte, dass Du Dich erneut anmeldest</string>
     <string name="audiobookshelf.status.offline">Der Server ist gerade nicht erreichbar. Heruntergeladene Bücher kannst Du trotzdem hören.</string>
     <string name="audiobookshelf.status.syncing">Wird synchronisiert…</string>
+    <string name="author.wikipedia">Mehr auf Wikipedia lesen</string>
     <string name="book.category.action.mark_completed">Als „Abgeschlossen“ markieren</string>
     <string name="book.category.action.mark_current">Als „Aktuell“ markieren</string>
     <string name="book.category.action.mark_not_started">Als „Neu“ markieren</string>

@@ -272,6 +272,10 @@ class BookSearchViewModel(
     category: BrowseCategory,
     name: String,
   ) {
+    if (category == BrowseCategory.Authors) {
+      navigator.goTo(Destination.Author(name))
+      return
+    }
     query.setTextAndPlaceCursorAtEnd(name)
     selectedFilter = category.field
     saveRecentSearch(name)

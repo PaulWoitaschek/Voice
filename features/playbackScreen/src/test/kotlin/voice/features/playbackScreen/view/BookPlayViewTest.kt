@@ -75,6 +75,7 @@ class BookPlayViewTest {
               onSkipToPrevious = {},
               onCloseClick = {},
               onBookActionsClick = {},
+              onAuthorClick = {},
               onCurrentChapterClick = {},
               onJumpBack = {},
               onJumpBackExpire = {},

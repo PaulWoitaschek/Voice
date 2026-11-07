@@ -14,6 +14,7 @@ Voice. Like every website, the service sees your IP address, and its own privacy
 These are the services:
 
 - Audiobookshelf: only the server you connect Voice to.
+- Authors: Wikipedia and Wikidata, from the Wikimedia Foundation.
 - Cover search: DuckDuckGo, and the website of the cover you pick.
 - Links: the website that opens in your browser.
 

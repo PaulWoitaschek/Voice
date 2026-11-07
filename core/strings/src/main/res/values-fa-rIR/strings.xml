@@ -58,6 +58,7 @@
     <string name="audiobookshelf.status.needs_login">سرور می‌خواهد دوباره وارد شوید</string>
     <string name="audiobookshelf.status.offline">فعلاً دسترسی به سرور ممکن نیست. کتاب‌های دانلودشده همچنان پخش می‌شوند.</string>
     <string name="audiobookshelf.status.syncing">در حال همگام‌سازی…</string>
+    <string name="author.wikipedia">خواندن بیشتر در ویکی‌پدیا</string>
     <string name="book.category.action.mark_completed">علامت زدن به عنوان تمام‌شده</string>
     <string name="book.category.action.mark_current">علامت زدن به عنوان جاری</string>
     <string name="book.category.action.mark_not_started">علامت زدن به عنوان شروع نشده</string>

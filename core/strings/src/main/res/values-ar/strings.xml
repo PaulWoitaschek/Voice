@@ -70,6 +70,7 @@
     <string name="audiobookshelf.status.needs_login">يطلب الخادم تسجيل الدخول مجددًا</string>
     <string name="audiobookshelf.status.offline">يتعذّر الوصول إلى الخادم حاليًا. لا يزال بالإمكان تشغيل الكتب المنزّلة.</string>
     <string name="audiobookshelf.status.syncing">جارٍ المزامنة…</string>
+    <string name="author.wikipedia">قراءة المزيد في ويكيبيديا</string>
     <string name="book.category.action.mark_completed">وضع علامة «مكتمل»</string>
     <string name="book.category.action.mark_current">وضع علامة «حالي»</string>
     <string name="book.category.action.mark_not_started">وضع علامة «لم يبدأ بعد»</string>
