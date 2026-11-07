@@ -15,8 +15,6 @@ export default defineConfig({
     '/contributing/': `${github}/CONTRIBUTING.md`,
     '/development/': `${github}/docs/development.md`,
     '/architecture/': `${github}/docs/architecture.md`,
-    '/product/': `${github}/docs/product.md`,
-    '/library/': `${github}/docs/library.md`,
   },
   markdown: { syntaxHighlight: false },
   vite: {

@@ -222,7 +222,6 @@ npm run dev
 - The FAQ and the Audiobookshelf guide are Markdown in `website/src/pages/`. The privacy policy page renders
   `PRIVACY.md`.
 - Old URLs redirect in `website/astro.config.mjs`.
-- The clickable library prototype in `docs/prototypes/` is served under `/prototypes/`.
 
 The [Pages workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/deploy_pages.yml) builds the website on
 pull requests that touch it and deploys it when such a change lands on `main`.
