@@ -6,15 +6,21 @@ device, who gets it and why.
 
 ## Features that use the internet
 
-Some features need the internet, like the cover search, a server you connect, or a link to help or a survey. Voice then
+Some features need the internet, like the cover search, Audiobookshelf, or a link to help or a survey. Voice then
 sends the service behind the feature only what the feature needs. For example, that is your search for a cover, or
-your login and progress for your own server. A link can add your app version and how and when you installed Voice. Like every
-website, the service sees your IP address, and its own privacy policy applies.
+your login and progress for your Audiobookshelf server. A link can add your app version and how and when you installed
+Voice. Like every website, the service sees your IP address, and its own privacy policy applies.
+
+These are the services:
+
+- Audiobookshelf: only the server you connect Voice to.
+- Cover search: DuckDuckGo, and the website of the cover you pick.
+- Links: the website that opens in your browser.
 
 ## Backups
 
 If backups are on on your phone, Android backs up Voice's data, like your library, progress and bookmarks, to your
-backup account, on most phones your Google account. The login to a server isn't backed up.
+backup account, on most phones your Google account. The login to an Audiobookshelf server isn't backed up.
 
 ## Google Play build
 
