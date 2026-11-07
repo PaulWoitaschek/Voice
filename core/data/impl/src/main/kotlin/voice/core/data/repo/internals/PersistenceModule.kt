@@ -43,9 +43,19 @@ public object PersistenceModule {
   private fun appDb(
     context: Context,
     migrations: Set<@JvmSuppressWildcards Migration>,
-  ): AppDb {
-    return Room.databaseBuilder(context, AppDb::class.java, AppDb.DATABASE_NAME)
-      .addMigrations(*migrations.toTypedArray())
-      .build()
-  }
+  ): AppDb = createAppDb(context, AppDb.DATABASE_NAME, migrations)
+}
+
+internal fun createAppDb(
+  context: Context,
+  name: String,
+  migrations: Set<Migration>,
+): AppDb {
+  return Room.databaseBuilder(context, AppDb::class.java, name)
+    .addMigrations(*migrations.toTypedArray())
+    .fallbackToDestructiveMigrationFrom(
+      dropAllTables = true,
+      *(1..<AppDb.OLDEST_MIGRATED_VERSION).toList().toIntArray(),
+    )
+    .build()
 }

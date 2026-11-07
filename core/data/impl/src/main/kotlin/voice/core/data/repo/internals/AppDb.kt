@@ -37,10 +37,6 @@ import voice.core.data.repo.internals.migrations.Migration66
   version = AppDb.VERSION,
   autoMigrations =
     [
-      AutoMigration(from = 51, to = 52),
-      AutoMigration(from = 52, to = 53),
-      AutoMigration(from = 54, to = 55),
-      AutoMigration(from = 55, to = 56),
       AutoMigration(from = 56, to = 57, spec = Migration56::class),
       AutoMigration(from = 57, to = 58),
       AutoMigration(from = 58, to = 59),
@@ -72,5 +68,8 @@ public abstract class AppDb : RoomDatabase() {
   internal companion object {
     const val VERSION = 69
     const val DATABASE_NAME = "autoBookDB"
+
+    // the last app with an older database shipped in September 2022
+    const val OLDEST_MIGRATED_VERSION = 56
   }
 }
