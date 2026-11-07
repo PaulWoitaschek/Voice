@@ -114,7 +114,7 @@ class MediaItemProvider(
       }
       is MediaId.ChapterMark -> {
         val book = bookRepository.get(mediaId.bookId) ?: return null
-        val startItem = book.playbackItems().firstOrNull { it.mediaId == mediaId } ?: return null
+        val startItem = book.playbackItem(mediaId) ?: return mediaItemsWithStartPosition(book)
         MediaItemsWithStartPosition(playbackItems(book), startItem.index, 0)
       }
       is MediaId.Chapter,

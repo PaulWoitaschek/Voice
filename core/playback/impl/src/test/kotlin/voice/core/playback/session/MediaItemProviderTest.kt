@@ -12,6 +12,7 @@ import io.mockk.mockk
 import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.runner.RunWith
@@ -117,18 +118,7 @@ class MediaItemProviderTest {
 
   @Test
   fun `a chapter picked in the car plays the whole book from that chapter`() = runTest {
-    val chapters =
-      listOf("First", "Second").map {
-        Chapter(
-          id = ChapterId(it),
-          name = it,
-          duration = 60_000,
-          fileLastModified = Instant.EPOCH,
-          markData = emptyList(),
-          fileSize = 0,
-        )
-      }
-    books += book(chapters)
+    books += book(twoChapters())
     val marks = provider.playbackItems(books.single())
 
     val items = provider.mediaItemsWithStartPosition(marks[1].mediaId)!!
@@ -138,11 +128,49 @@ class MediaItemProviderTest {
     assertEquals(expected = 0, actual = items.startPositionMs)
   }
 
+  @Test
+  fun `a chapter mark whose end moved still starts at that mark`() = runTest {
+    books += book(twoChapters())
+    val mark = secondMark()
+
+    val items =
+      provider.mediaItemsWithStartPosition(mark.copy(endMs = mark.endMs - 1_000).string())!!
+
+    assertEquals(expected = 1, actual = items.startIndex)
+    assertEquals(expected = 0, actual = items.startPositionMs)
+  }
+
+  @Test
+  fun `a chapter mark that is gone starts where the book stopped`() = runTest {
+    books += book(twoChapters(), positionInChapter = 30_000)
+
+    val items = provider.mediaItemsWithStartPosition(secondMark().copy(markIndex = 1).string())!!
+
+    assertEquals(expected = 0, actual = items.startIndex)
+    assertEquals(expected = 30_000, actual = items.startPositionMs)
+  }
+
+  private fun twoChapters(): List<Chapter> =
+    listOf("First", "Second").map {
+      Chapter(
+        id = ChapterId(it),
+        name = it,
+        duration = 60_000,
+        fileLastModified = Instant.EPOCH,
+        markData = emptyList(),
+        fileSize = 0,
+      )
+    }
+
+  private fun secondMark(): MediaId.ChapterMark =
+    assertIs(provider.playbackItems(books.single())[1].mediaId.toMediaIdOrNull())
+
+  private fun MediaId.string(): String = Json.encodeToString(MediaId.serializer(), this)
+
   private suspend fun titles(category: BookCategory): List<String> =
     children(MediaId.Category(category)).map { it.mediaMetadata.title.toString() }
 
-  private suspend fun children(mediaId: MediaId) =
-    provider.children(Json.encodeToString(MediaId.serializer(), mediaId))!!
+  private suspend fun children(mediaId: MediaId) = provider.children(mediaId.string())!!
 
   private fun libraryBook(
     name: String,

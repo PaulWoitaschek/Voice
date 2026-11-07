@@ -88,10 +88,14 @@ class LibrarySessionCallback(
     Logger.d(
       "onSetMediaItems(mediaItems.size=${mediaItems.size}, startIndex=$startIndex, startPosition=$startPositionMs)",
     )
-    val item = mediaItems.singleOrNull()
-    if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
+    // VoicePlayer plays one book, so the item that starts it stands for all items.
+    val startItem = mediaItems.getOrNull(startIndex) ?: mediaItems.firstOrNull()
+    val startMediaId = startItem?.mediaId?.toMediaIdOrNull()
+    val isSingleItem =
+      mediaItems.size == 1 && startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET
+    if (startItem != null && (isSingleItem || startMediaId is MediaId.Book)) {
       return scope.reportingFuture {
-        onSetMediaItemsForSingleItem(item)
+        chapterMarksFor(startItem)
           ?: super.onSetMediaItems(
               mediaSession,
               controller,
@@ -104,7 +108,7 @@ class LibrarySessionCallback(
     }
     // The app sends all chapter marks of the book. VoicePlayer loads the book once, so resolving
     // every chapter mark would only slow it down.
-    if (mediaItems.firstOrNull()?.mediaId?.toMediaIdOrNull() is MediaId.ChapterMark) {
+    if (startMediaId is MediaId.ChapterMark) {
       return Futures.immediateFuture(
         MediaItemsWithStartPosition(mediaItems, startIndex, startPositionMs),
       )
@@ -112,7 +116,7 @@ class LibrarySessionCallback(
     return super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs)
   }
 
-  private suspend fun onSetMediaItemsForSingleItem(item: MediaItem): MediaItemsWithStartPosition? {
+  private suspend fun chapterMarksFor(item: MediaItem): MediaItemsWithStartPosition? {
     val searchQuery = item.requestMetadata.searchQuery
     return if (searchQuery != null) {
       val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
@@ -120,10 +124,11 @@ class LibrarySessionCallback(
       currentBookStoreId.updateData { searchResult.id }
       mediaItemProvider.mediaItemsWithStartPosition(searchResult)
     } else {
+      val items = mediaItemProvider.mediaItemsWithStartPosition(item.mediaId) ?: return null
       item.mediaId.toMediaIdOrNull()?.bookId?.let { bookId ->
         currentBookStoreId.updateData { bookId }
       }
-      mediaItemProvider.mediaItemsWithStartPosition(item.mediaId)
+      items
     }
   }
 
@@ -299,10 +304,9 @@ class LibrarySessionCallback(
   }
 
   private suspend fun prepareCurrentBook() {
-    val bookId = currentBookStoreId.data.first() ?: return
-    val book = bookRepository.get(bookId) ?: return
-    val item = mediaItemProvider.mediaItem(book)
-    player.setMediaItem(item)
+    val book = currentBook() ?: return
+    val items = mediaItemProvider.mediaItemsWithStartPosition(book)
+    player.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     player.prepare()
   }
 

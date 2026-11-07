@@ -6,6 +6,7 @@ import androidx.media3.common.Player
 import androidx.media3.session.MediaLibraryService.LibraryParams
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionError
 import androidx.media3.test.utils.TestExoPlayerBuilder
@@ -17,6 +18,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
+import io.mockk.verifyOrder
 import java.util.concurrent.ExecutionException
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,6 +28,7 @@ import kotlin.test.assertIs
 import kotlin.test.assertTrue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runCurrent
@@ -34,10 +37,13 @@ import org.junit.After
 import org.junit.runner.RunWith
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.ChapterId
+import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.MemoryDataStore
+import voice.core.playback.player.VoicePlayer
 import voice.core.playback.session.search.BookSearchParser
 import voice.core.search.BookSearch
 import voice.core.search.BookSearchResult
@@ -57,6 +63,30 @@ class LibrarySessionCallbackTest {
   private val notification = controller(context.packageName, context.applicationInfo.uid)
   private val mediaItemProvider = mockk<MediaItemProvider>()
   private val bookSearch = mockk<BookSearch>()
+  private val voicePlayer = mockk<VoicePlayer>(relaxed = true)
+  private val currentBookStore = MemoryDataStore<BookId?>(null)
+  private val bookRepository = mockk<BookRepository>()
+  private val chapterMarks =
+    MediaItemsWithStartPosition(
+      List(2) { markIndex ->
+        MediaItem(
+          title = "Mark $markIndex",
+          mediaId =
+            MediaId.ChapterMark(
+              bookId = BOOK_ID,
+              chapterId = ChapterId("chapter"),
+              markIndex = markIndex,
+              startMs = markIndex * 10_000L,
+              endMs = (markIndex + 1) * 10_000L,
+            ),
+          isPlayable = true,
+          browsable = false,
+          mediaType = MediaType.AudioBookChapter,
+        )
+      },
+      1,
+      3_000,
+    )
   private val callback = callback(scope.backgroundScope)
   private val customCommand = SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY)
 
@@ -200,6 +230,56 @@ class LibrarySessionCallbackTest {
     verify(exactly = 0) { Logger.nonFatal(any()) }
   }
 
+  @Test
+  fun `when Android Auto connects, the current book starts at its stored position`() =
+    scope.runTest {
+      val book = mockk<Book>()
+      currentBookStore.updateData { BOOK_ID }
+      coEvery { bookRepository.get(BOOK_ID) } returns book
+      every { mediaItemProvider.mediaItemsWithStartPosition(book) } returns chapterMarks
+      every { voicePlayer.playbackState } returns Player.STATE_IDLE
+
+      val _ = callback.onConnect(session, controller(ANDROID_AUTO_PACKAGE, OTHER_UID))
+      runCurrent()
+
+      verifyOrder {
+        voicePlayer.setMediaItems(
+          chapterMarks.mediaItems,
+          chapterMarks.startIndex,
+          chapterMarks.startPositionMs,
+        )
+        voicePlayer.prepare()
+      }
+    }
+
+  @Test
+  fun `a book item with a start index starts where the book stopped`() = scope.runTest {
+    val bookItem = bookItem(BOOK_ID)
+    coEvery { mediaItemProvider.mediaItemsWithStartPosition(bookItem.mediaId) } returns chapterMarks
+
+    val result =
+      callback.onSetMediaItems(
+        session,
+        controller(OTHER_PACKAGE, OTHER_UID),
+        mutableListOf(bookItem(BookId("other")), bookItem),
+        1,
+        0,
+      )
+    runCurrent()
+
+    assertEquals(expected = chapterMarks, actual = result.get())
+    assertEquals(expected = BOOK_ID, actual = currentBookStore.data.first())
+  }
+
+  private fun bookItem(id: BookId) =
+    MediaItem(
+      title = "The Hobbit",
+      mediaId = MediaId.Book(id),
+      isPlayable = true,
+      browsable = false,
+      mediaType = MediaType.AudioBook,
+    )
+
   // Unlike TestScope.backgroundScope, it doesn't fail the test when a future fails.
   private fun serviceLikeScope() = CoroutineScope(SupervisorJob() + UnconfinedTestDispatcher())
 
@@ -207,11 +287,11 @@ class LibrarySessionCallbackTest {
     LibrarySessionCallback(
       mediaItemProvider = mediaItemProvider,
       scope = coroutineScope,
-      player = mockk(relaxed = true),
+      player = voicePlayer,
       bookSearchParser = BookSearchParser(),
       bookSearchHandler = mockk(),
-      currentBookStoreId = CurrentBookStore(MemoryDataStore<BookId?>(null)),
-      bookRepository = mockk(),
+      currentBookStoreId = CurrentBookStore(currentBookStore),
+      bookRepository = bookRepository,
       commandSourceResolver = mockk(relaxed = true),
       context = context,
       lockScreenSliderStore = LockScreenSliderStore(lockScreenSliderStore),
@@ -244,5 +324,6 @@ class LibrarySessionCallbackTest {
     const val ANDROID_AUTO_PACKAGE = "com.google.android.projection.gearhead"
     const val OTHER_UID = 10_123
     const val MEDIA3_CONTROLLER_VERSION = 1
+    val BOOK_ID = BookId("book")
   }
 }

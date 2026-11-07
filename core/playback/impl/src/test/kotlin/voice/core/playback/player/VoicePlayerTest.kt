@@ -333,21 +333,13 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `the chapter marks from the controller start where the book stopped`() = scope.runTest {
-    val chapter =
-      chapter(
-        ChapterMark(startMs = 0, endMs = 11_999, name = null),
-        ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
-      )
-    currentBook = book(listOf(chapter), bookId).update { it.copy(positionInChapter = 15_000) }
-    val items = mediaItemProvider.mediaItemsWithStartPosition(currentBook)
-    player.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
+  fun `a book item does not load the book`() = scope.runTest {
+    currentBook =
+      book(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))), bookId)
+    player.setMediaItem(mediaItemProvider.mediaItem(currentBook))
     runCurrent()
 
-    player.prepare()
-    awaitReady()
-
-    player.shouldHavePosition(1, 3_000)
+    assertEquals(expected = 0, actual = player.mediaItemCount)
   }
 
   @Test
@@ -785,7 +777,8 @@ class VoicePlayerTest {
           gain = gain,
         )
       }
-    player.setMediaItem(mediaItemProvider.mediaItem(currentBook))
+    val items = mediaItemProvider.mediaItemsWithStartPosition(currentBook)
+    player.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     runCurrent()
   }
 

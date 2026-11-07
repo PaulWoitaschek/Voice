@@ -34,9 +34,7 @@ import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.bookId
-import voice.core.playback.session.playbackItemForPosition
-import voice.core.playback.session.playbackItems
-import voice.core.playback.session.positionInMediaItem
+import voice.core.playback.session.playbackItem
 import voice.core.playback.session.toMediaIdOrNull
 import voice.core.playback.withDefaultSpeed
 import voice.core.sleeptimer.SleepTimer
@@ -131,9 +129,8 @@ class VoicePlayer(
     }
   }
 
-  // The app changes chapters through custom commands that end up here, because its controller can
-  // still hold the book
-  // before it was split into chapters.
+  // The app changes chapters through custom commands that end up here, because next and previous
+  // only skip, see below.
   fun forceSeekToNext() {
     player.seekToNextMediaItem()
   }
@@ -352,16 +349,16 @@ class VoicePlayer(
     startPositionMs: Long = C.TIME_UNSET,
   ) {
     val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
-    val bookId =
-      when (mediaId) {
-        is MediaId.Book -> mediaId.id
-        is MediaId.ChapterMark -> mediaId.bookId
-        else -> {
-          Logger.w("Unexpected media id type ${mediaId::class.simpleName}")
-          return
-        }
-      }
-    val book = runBlocking { repo.get(bookId) } ?: return
+    if (mediaId !is MediaId.ChapterMark) {
+      Logger.w("Unexpected media id type ${mediaId::class.simpleName}")
+      return
+    }
+    val book = runBlocking { repo.get(mediaId.bookId) } ?: return
+    val startItem = book.playbackItem(mediaId)
+    if (startItem == null) {
+      Logger.w("Chapter mark not in book")
+      return
+    }
     val speed =
       book
         .withDefaultSpeed { runBlocking { lastPlaybackSpeedStore.data.first() } }
@@ -376,30 +373,11 @@ class VoicePlayer(
     }
     setSkipSilenceEnabled(book.content.skipSilence)
     volumeGain.gain = Decibel(book.content.gain)
-    val requestedItem =
-      if (mediaId is MediaId.ChapterMark) {
-        book.playbackItems().firstOrNull { it.mediaId == mediaId }
-      } else {
-        null
-      }
-    if (requestedItem != null) {
-      val position = startPositionMs.takeUnless { it == C.TIME_UNSET } ?: 0L
-      player.setBook(
-        book = book,
-        startItemIndex = requestedItem.index,
-        positionInItemMs = position.coerceIn(0L, requestedItem.mark.durationMs),
-      )
-      return
-    }
-    val currentPlaybackItem =
-      book.playbackItemForPosition(
-        chapterId = book.content.currentChapter,
-        positionInChapterMs = book.content.positionInChapter,
-      ) ?: return
+    val position = startPositionMs.takeUnless { it == C.TIME_UNSET } ?: 0L
     player.setBook(
       book = book,
-      startItemIndex = currentPlaybackItem.index,
-      positionInItemMs = currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
+      startItemIndex = startItem.index,
+      positionInItemMs = position.coerceIn(0L, startItem.mark.durationMs),
     )
   }
 

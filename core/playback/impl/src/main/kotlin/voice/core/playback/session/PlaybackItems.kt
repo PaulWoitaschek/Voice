@@ -89,6 +89,13 @@ internal fun Book.playbackItemForPosition(
   }
 }
 
+// Not by media id: it holds the mark's end, which moves when the file duration is corrected.
+internal fun Book.playbackItem(mediaId: MediaId.ChapterMark): PlaybackItem? {
+  return playbackItems().firstOrNull {
+    it.chapter.id == mediaId.chapterId && it.markIndex == mediaId.markIndex
+  }
+}
+
 internal val MediaId.bookId: BookId?
   get() =
     when (this) {
