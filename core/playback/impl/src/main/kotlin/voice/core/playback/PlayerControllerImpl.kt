@@ -27,8 +27,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import voice.core.data.BookId
 import voice.core.data.ChapterId
@@ -70,7 +68,6 @@ class PlayerControllerImpl(
       .asDeferred()
   }
   private val scope = CoroutineScope(Dispatchers.Main.immediate)
-  private val prepareMutex = Mutex()
 
   override fun setPosition(
     time: Long,
@@ -206,8 +203,7 @@ class PlayerControllerImpl(
     return PlaybackPosition(bookId, content.currentChapter, content.positionInChapter)
   }
 
-  // Without it, fast commands like from the speed slider would each load the book again.
-  private suspend fun maybePrepare(controller: MediaController): Boolean = prepareMutex.withLock {
+  private suspend fun maybePrepare(controller: MediaController): Boolean {
     val bookId = currentBookStoreId.data.first() ?: return false
     if (
       controller.currentBookId() == bookId &&
@@ -222,7 +218,7 @@ class PlayerControllerImpl(
     val items = mediaItemProvider.mediaItemsWithStartPosition(book)
     controller.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     controller.prepare()
-    true
+    return true
   }
 
   private fun MediaController.currentBookId(): BookId? {
