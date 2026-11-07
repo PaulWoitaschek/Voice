@@ -131,17 +131,6 @@ class VoicePlayer(
     }
   }
 
-  // The app changes chapters through custom commands that end up here, because its controller can
-  // still hold the book
-  // before it was split into chapters.
-  fun forceSeekToNext() {
-    player.seekToNextMediaItem()
-  }
-
-  fun forceSeekToPrevious() {
-    player.seekToPrevious()
-  }
-
   // Next and previous from headsets, cars and watches skip instead of changing the chapter, so
   // listeners keep their
   // place.

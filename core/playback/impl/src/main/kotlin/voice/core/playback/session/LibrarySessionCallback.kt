@@ -316,12 +316,6 @@ class LibrarySessionCallback(
       CustomCommand.parse(customCommand, args)
         ?: return super.onCustomCommand(session, controller, customCommand, args)
     when (command) {
-      CustomCommand.ForceSeekToNext -> {
-        player.forceSeekToNext()
-      }
-      CustomCommand.ForceSeekToPrevious -> {
-        player.forceSeekToPrevious()
-      }
       is CustomCommand.SetSkipSilence -> {
         player.setSkipSilenceEnabled(command.skipSilence)
       }

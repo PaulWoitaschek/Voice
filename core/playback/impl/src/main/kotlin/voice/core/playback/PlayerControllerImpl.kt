@@ -126,12 +126,7 @@ class PlayerControllerImpl(
 
   override fun previous() = executeAfterPrepare { controller ->
     val currentIndex = controller.currentMediaItemIndex
-    val index =
-      if (controller.currentPosition > controller.maxSeekToPreviousPosition) {
-        currentIndex
-      } else {
-        controller.previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentIndex
-      }
+    val index = controller.previousChapterIndex()
     val to = controller.playbackPosition(index, 0)
     val type =
       previousJumpType(
@@ -142,18 +137,14 @@ class PlayerControllerImpl(
     if (type != null) {
       controller.record(type, to = to)
     }
-    controller.sendCustomCommand(CustomCommand.ForceSeekToPrevious)
+    controller.seekTo(index, 0)
   }
 
   override fun next() = executeAfterPrepare { controller ->
     val index = controller.nextMediaItemIndex
-    if (index != C.INDEX_UNSET) {
-      controller.record(
-        ListeningEvent.Type.ChapterChange,
-        to = controller.playbackPosition(index, 0),
-      )
-    }
-    controller.sendCustomCommand(CustomCommand.ForceSeekToNext)
+    if (index == C.INDEX_UNSET) return@executeAfterPrepare
+    controller.record(ListeningEvent.Type.ChapterChange, to = controller.playbackPosition(index, 0))
+    controller.seekTo(index, 0)
   }
 
   override fun play(source: ListeningEvent.Source?) = executeAfterPrepare { controller ->
@@ -358,3 +349,9 @@ internal fun previousJumpType(
     sameItem -> ListeningEvent.Type.Seek
     else -> ListeningEvent.Type.ChapterChange
   }
+
+// Like seekToPrevious, which VoicePlayer turns into a skip for headsets and cars.
+internal fun Player.previousChapterIndex(): Int {
+  if (currentPosition > maxSeekToPreviousPosition) return currentMediaItemIndex
+  return previousMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: currentMediaItemIndex
+}
