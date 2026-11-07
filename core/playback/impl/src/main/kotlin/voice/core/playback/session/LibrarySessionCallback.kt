@@ -242,21 +242,19 @@ class LibrarySessionCallback(
       }
     }
 
-    val connectionResult = super.onConnect(session, controller)
     // The service is exported, but the custom commands are only meant for the app's own
     // PlayerController.
-    if (controller.packageName != context.packageName) {
-      return connectionResult
-    }
-    return ConnectionResult.accept(
-      withCustomCommand(connectionResult.availableSessionCommands),
-      connectionResult.availablePlayerCommands,
-    )
+    val sessionCommands =
+      if (controller.packageName == context.packageName) {
+        sessionCommandsWithCustomCommand()
+      } else {
+        ConnectionResult.DEFAULT_SESSION_AND_LIBRARY_COMMANDS
+      }
+    return ConnectionResult.accept(sessionCommands, ConnectionResult.DEFAULT_PLAYER_COMMANDS)
   }
 
-  private fun withCustomCommand(sessionCommands: SessionCommands): SessionCommands {
-    return sessionCommands
-      .buildUpon()
+  private fun sessionCommandsWithCustomCommand(): SessionCommands {
+    return ConnectionResult.DEFAULT_SESSION_AND_LIBRARY_COMMANDS.buildUpon()
       .add(SessionCommand(CustomCommand.CUSTOM_COMMAND_ACTION, Bundle.EMPTY))
       .build()
   }
@@ -268,17 +266,15 @@ class LibrarySessionCallback(
     if (!session.isMediaNotificationController(controller)) return
     // The notification controller's commands become the platform session's actions, which the lock
     // screen reads.
-    val connectionResult = super.onConnect(session, controller)
-    val sessionCommands = withCustomCommand(connectionResult.availableSessionCommands)
+    val sessionCommands = sessionCommandsWithCustomCommand()
     notificationCommandsJob?.cancel()
     notificationCommandsJob = scope.launch {
       lockScreenSliderStore.data.distinctUntilChanged().collect { lockScreenSlider ->
         val playerCommands =
           if (lockScreenSlider) {
-            connectionResult.availablePlayerCommands
+            ConnectionResult.DEFAULT_PLAYER_COMMANDS
           } else {
-            connectionResult.availablePlayerCommands
-              .buildUpon()
+            ConnectionResult.DEFAULT_PLAYER_COMMANDS.buildUpon()
               .remove(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM)
               .build()
           }
