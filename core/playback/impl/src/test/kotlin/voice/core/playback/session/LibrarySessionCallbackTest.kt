@@ -18,6 +18,7 @@ import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
+import io.mockk.verifyOrder
 import java.time.Instant
 import java.util.concurrent.ExecutionException
 import kotlin.test.Test
@@ -296,6 +297,25 @@ class LibrarySessionCallbackTest {
 
     verify { voicePlayer.applySettings(book.content) }
   }
+
+  @Test
+  fun `when Android Auto connects, the current book starts at its stored position`() =
+    scope.runTest {
+      val book = addBook { it.copy(gain = 3F) }
+      currentBookStore.updateData { book.id }
+      val items = MediaItemsWithStartPosition(playbackItems(book), 1, 3_000)
+      every { mediaItemProvider.mediaItemsWithStartPosition(book) } returns items
+      every { voicePlayer.playbackState } returns Player.STATE_IDLE
+
+      val _ = callback.onConnect(session, controller(ANDROID_AUTO_PACKAGE, OTHER_UID))
+      runCurrent()
+
+      verifyOrder {
+        voicePlayer.applySettings(book.content)
+        voicePlayer.setMediaItems(items.mediaItems, 1, 3_000)
+        voicePlayer.prepare()
+      }
+    }
 
   private fun TestScope.setChapterMarksFromApp(book: Book) {
     val result = callback.onSetMediaItems(session, app, playbackItems(book).toMutableList(), 0, 0)

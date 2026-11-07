@@ -160,6 +160,27 @@ class MediaItemProviderTest {
   }
 
   @Test
+  fun `a chapter mark that a rescan removed starts where the book stopped`() = runTest {
+    val chapter =
+      Chapter(
+        id = ChapterId("file"),
+        name = "file",
+        duration = 20_000,
+        fileLastModified = Instant.EPOCH,
+        markData = listOf(MarkData(0, "One"), MarkData(12_000, "Two")),
+        fileSize = 0,
+      )
+    books += book(listOf(chapter), positionInChapter = 15_000)
+    val lastMark = provider.playbackItems(books.single())[1].mediaId.toMediaIdOrNull()
+    val removed = (lastMark as MediaId.ChapterMark).copy(markIndex = 2)
+
+    val items = provider.mediaItemsWithStartPosition(removed.encode())!!
+
+    assertEquals(expected = 1, actual = items.startIndex)
+    assertEquals(expected = 3_000, actual = items.startPositionMs)
+  }
+
+  @Test
   fun `a book starts in the chapter mark where it stopped`() {
     val chapter =
       Chapter(

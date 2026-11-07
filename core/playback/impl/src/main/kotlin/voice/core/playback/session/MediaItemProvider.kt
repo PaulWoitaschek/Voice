@@ -110,11 +110,11 @@ class MediaItemProvider(
       is MediaId.ChapterMark -> {
         val book = bookRepository.get(mediaId.bookId) ?: return null
         // Not the whole id: the end of a mark moves when a file duration is corrected, so a car can
-        // still hold an id with the old end.
+        // still hold an id with the old end, or the id of a mark that a rescan removed.
         val startItem =
           book.playbackItems().firstOrNull {
             it.chapter.id == mediaId.chapterId && it.markIndex == mediaId.markIndex
-          } ?: return null
+          } ?: return mediaItemsWithStartPosition(book)
         MediaItemsWithStartPosition(playbackItems(book), startItem.index, 0)
       }
       is MediaId.Chapter,
