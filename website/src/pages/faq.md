@@ -129,6 +129,19 @@ To check your API level, go to **Settings » About » Android version** on your 
 | Android 7.1     | 25              | [8.2.4‑2](https://github.com/PaulWoitaschek/Voice/releases/tag/8.2.4-2) |
 | Android 7.0     | 24              | [6.0.10](https://github.com/PaulWoitaschek/Voice/releases/tag/6.0.10)   |
 
+## How do I verify the Voice APK?
+
+Voice from Google Play, GitHub and IzzyOnDroid is signed with my key. Compare the SHA-256 fingerprint of its signing
+certificate with this one, for example with [AppVerifier](https://github.com/soupslurpr/AppVerifier) or
+`apksigner verify --print-certs`:
+
+```
+de.ph1b.audiobook
+11:A4:CA:EE:0B:A3:EB:5A:35:2D:11:25:AB:D3:29:25:20:9E:89:60:15:A5:D9:CA:0F:D9:F8:2D:AE:20:4F:AA
+```
+
+F-Droid builds Voice from the source code and signs it with its own key, so its fingerprint is different.
+
 ## How do I resume playback after the sleep timer stops?
 
 Before the sleep timer elapses, the sound fades out for a few seconds, then Voice pauses playback. To keep listening,
