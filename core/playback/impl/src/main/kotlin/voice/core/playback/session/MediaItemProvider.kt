@@ -4,7 +4,6 @@ import android.app.Application
 import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateUtils
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_PERCENTAGE
 import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_STATUS
@@ -95,10 +94,15 @@ class MediaItemProvider(
   }
 
   fun mediaItemsWithStartPosition(book: Book): MediaItemsWithStartPosition {
+    val startItem =
+      book.playbackItemForPosition(
+        chapterId = book.content.currentChapter,
+        positionInChapterMs = book.content.positionInChapter,
+      )
     return MediaItemsWithStartPosition(
-      listOf(mediaItem(book)),
-      C.INDEX_UNSET,
-      C.TIME_UNSET,
+      playbackItems(book),
+      startItem?.index ?: 0,
+      startItem?.positionInMediaItem(book.content.positionInChapter) ?: 0,
     )
   }
 
@@ -108,8 +112,12 @@ class MediaItemProvider(
         val book = bookRepository.get(mediaId.id) ?: return null
         mediaItemsWithStartPosition(book)
       }
+      is MediaId.ChapterMark -> {
+        val book = bookRepository.get(mediaId.bookId) ?: return null
+        val startItem = book.playbackItems().firstOrNull { it.mediaId == mediaId } ?: return null
+        MediaItemsWithStartPosition(playbackItems(book), startItem.index, 0)
+      }
       is MediaId.Chapter,
-      is MediaId.ChapterMark,
       is MediaId.Category,
       MediaId.Root,
       MediaId.Recent,

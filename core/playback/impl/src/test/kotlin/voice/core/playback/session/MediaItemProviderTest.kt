@@ -19,6 +19,7 @@ import voice.core.data.Book
 import voice.core.data.BookCategory
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.repo.BookRepository
 import voice.core.playback.session.search.book
 
 @RunWith(AndroidJUnit4::class)
@@ -27,7 +28,11 @@ class MediaItemProviderTest {
   private val books = mutableListOf<Book>()
   private val provider =
     MediaItemProvider(
-      bookRepository = mockk { coEvery { all() } answers { books } },
+      bookRepository =
+        mockk<BookRepository> {
+          coEvery { all() } answers { books }
+          coEvery { this@mockk.get(any()) } answers { books.find { it.id == firstArg() } }
+        },
       application = ApplicationProvider.getApplicationContext(),
       chapterRepo = mockk(),
       imageFileProvider = mockk(),
@@ -108,6 +113,29 @@ class MediaItemProviderTest {
             .getInt(EXTRAS_KEY_COMPLETION_STATUS)
         },
     )
+  }
+
+  @Test
+  fun `a chapter picked in the car plays the whole book from that chapter`() = runTest {
+    val chapters =
+      listOf("First", "Second").map {
+        Chapter(
+          id = ChapterId(it),
+          name = it,
+          duration = 60_000,
+          fileLastModified = Instant.EPOCH,
+          markData = emptyList(),
+          fileSize = 0,
+        )
+      }
+    books += book(chapters)
+    val marks = provider.playbackItems(books.single())
+
+    val items = provider.mediaItemsWithStartPosition(marks[1].mediaId)!!
+
+    assertEquals(expected = marks.map { it.mediaId }, actual = items.mediaItems.map { it.mediaId })
+    assertEquals(expected = 1, actual = items.startIndex)
+    assertEquals(expected = 0, actual = items.startPositionMs)
   }
 
   private suspend fun titles(category: BookCategory): List<String> =

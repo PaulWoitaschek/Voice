@@ -196,10 +196,7 @@ class PlayerControllerImpl(
     )
   }
 
-  /**
-   * Right after [maybePrepare] the player only holds the book until the service expands it into
-   * chapters, so the position comes from the book itself.
-   */
+  /** While the player holds no book yet, the position comes from the book itself. */
   private suspend fun storedPosition(): PlaybackPosition? {
     val bookId = currentBookStoreId.data.first() ?: return null
     val content = bookRepository.get(bookId)?.content ?: return null
@@ -215,7 +212,11 @@ class PlayerControllerImpl(
       return true
     }
     val book = bookRepository.get(bookId) ?: return false
-    controller.setMediaItem(mediaItemProvider.mediaItem(book))
+    // Not the book as one item: the player replaces it with the chapter marks, and commands sent in
+    // between, like from dragging the speed slider, crash the controller with "Invalid PlayerInfo
+    // update".
+    val items = mediaItemProvider.mediaItemsWithStartPosition(book)
+    controller.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     controller.prepare()
     return true
   }
@@ -345,8 +346,7 @@ class PlayerControllerImpl(
 /**
  * Skipping back restarts the current chapter when it already played for a while, or when there is
  * no chapter before it. That is only a seek, so it can be undone only when it goes back far enough.
- * Returns null when playback is already where it would go, or when it's not known where it goes, as
- * right after preparing, before the book is split into its chapters.
+ * Returns null when playback is already where it would go, or when it's not known where it goes.
  */
 internal fun previousJumpType(
   from: PlaybackPosition?,

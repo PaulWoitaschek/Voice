@@ -89,8 +89,8 @@ class LibrarySessionCallback(
       "onSetMediaItems(mediaItems.size=${mediaItems.size}, startIndex=$startIndex, startPosition=$startPositionMs)",
     )
     val item = mediaItems.singleOrNull()
-    return if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
-      scope.reportingFuture {
+    if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
+      return scope.reportingFuture {
         onSetMediaItemsForSingleItem(item)
           ?: super.onSetMediaItems(
               mediaSession,
@@ -101,9 +101,15 @@ class LibrarySessionCallback(
             )
             .await()
       }
-    } else {
-      super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs)
     }
+    // The app sends all chapter marks of the book. VoicePlayer loads the book once, so resolving
+    // every chapter mark would only slow it down.
+    if (mediaItems.firstOrNull()?.mediaId?.toMediaIdOrNull() is MediaId.ChapterMark) {
+      return Futures.immediateFuture(
+        MediaItemsWithStartPosition(mediaItems, startIndex, startPositionMs),
+      )
+    }
+    return super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs)
   }
 
   private suspend fun onSetMediaItemsForSingleItem(item: MediaItem): MediaItemsWithStartPosition? {
@@ -114,8 +120,8 @@ class LibrarySessionCallback(
       currentBookStoreId.updateData { searchResult.id }
       mediaItemProvider.mediaItemsWithStartPosition(searchResult)
     } else {
-      (item.mediaId.toMediaIdOrNull() as? MediaId.Book)?.let { bookId ->
-        currentBookStoreId.updateData { bookId.id }
+      item.mediaId.toMediaIdOrNull()?.bookId?.let { bookId ->
+        currentBookStoreId.updateData { bookId }
       }
       mediaItemProvider.mediaItemsWithStartPosition(item.mediaId)
     }
@@ -198,11 +204,16 @@ class LibrarySessionCallback(
   ): ListenableFuture<MediaItemsWithStartPosition> {
     Logger.d("onPlaybackResumption")
     return scope.reportingFuture {
-      val currentBook = currentBook()
-      if (currentBook != null) {
+      val currentBook = currentBook() ?: throw UnsupportedOperationException()
+      if (isForPlayback) {
         mediaItemProvider.mediaItemsWithStartPosition(currentBook)
       } else {
-        throw UnsupportedOperationException()
+        // System UI shows this item on its resumption card, so it needs the book, not a chapter.
+        MediaItemsWithStartPosition(
+          listOf(mediaItemProvider.mediaItem(currentBook)),
+          C.INDEX_UNSET,
+          C.TIME_UNSET,
+        )
       }
     }
   }

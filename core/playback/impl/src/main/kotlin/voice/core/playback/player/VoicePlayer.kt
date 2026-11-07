@@ -17,6 +17,7 @@ import kotlinx.coroutines.runBlocking
 import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.ListeningEvent
+import voice.core.data.durationMs
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
@@ -34,6 +35,7 @@ import voice.core.playback.misc.VolumeGain
 import voice.core.playback.session.MediaId
 import voice.core.playback.session.bookId
 import voice.core.playback.session.playbackItemForPosition
+import voice.core.playback.session.playbackItems
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.toMediaIdOrNull
 import voice.core.playback.withDefaultSpeed
@@ -341,48 +343,64 @@ class VoicePlayer(
     startIndex: Int,
     startPositionMs: Long,
   ) {
-    val first = mediaItems.firstOrNull() ?: return
-    setBook(first)
+    val startItem = mediaItems.getOrNull(startIndex) ?: mediaItems.firstOrNull() ?: return
+    setBook(startItem, startPositionMs)
   }
 
-  private fun setBook(mediaItem: MediaItem) {
-    val mediaId = mediaItem.mediaId.toMediaIdOrNull()
-    if (mediaId != null) {
-      if (mediaId is MediaId.Book) {
-        val book = runBlocking {
-          repo.get(mediaId.id)
+  private fun setBook(
+    mediaItem: MediaItem,
+    startPositionMs: Long = C.TIME_UNSET,
+  ) {
+    val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
+    val bookId =
+      when (mediaId) {
+        is MediaId.Book -> mediaId.id
+        is MediaId.ChapterMark -> mediaId.bookId
+        else -> {
+          Logger.w("Unexpected media id type ${mediaId::class.simpleName}")
+          return
         }
-        if (book != null) {
-          val speed =
-            book
-              .withDefaultSpeed { runBlocking { lastPlaybackSpeedStore.data.first() } }
-              .content
-              .playbackSpeed
-          player.setPlaybackSpeed(speed)
-          if (speed != book.content.playbackSpeed) {
-            // loading the book marks it as played, so from here on this is its own speed
-            scope.launch {
-              repo.updateBook(book.id) { it.copy(playbackSpeed = speed) }
-            }
-          }
-          setSkipSilenceEnabled(book.content.skipSilence)
-          volumeGain.gain = Decibel(book.content.gain)
-          val currentPlaybackItem =
-            book.playbackItemForPosition(
-              chapterId = book.content.currentChapter,
-              positionInChapterMs = book.content.positionInChapter,
-            ) ?: return
-          player.setBook(
-            book = book,
-            startItemIndex = currentPlaybackItem.index,
-            positionInItemMs =
-              currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
-          )
-        }
-      } else {
-        Logger.w("Unexpected media id type ${mediaId::class.simpleName}")
+      }
+    val book = runBlocking { repo.get(bookId) } ?: return
+    val speed =
+      book
+        .withDefaultSpeed { runBlocking { lastPlaybackSpeedStore.data.first() } }
+        .content
+        .playbackSpeed
+    player.setPlaybackSpeed(speed)
+    if (speed != book.content.playbackSpeed) {
+      // loading the book marks it as played, so from here on this is its own speed
+      scope.launch {
+        repo.updateBook(book.id) { it.copy(playbackSpeed = speed) }
       }
     }
+    setSkipSilenceEnabled(book.content.skipSilence)
+    volumeGain.gain = Decibel(book.content.gain)
+    val requestedItem =
+      if (mediaId is MediaId.ChapterMark) {
+        book.playbackItems().firstOrNull { it.mediaId == mediaId }
+      } else {
+        null
+      }
+    if (requestedItem != null) {
+      val position = startPositionMs.takeUnless { it == C.TIME_UNSET } ?: 0L
+      player.setBook(
+        book = book,
+        startItemIndex = requestedItem.index,
+        positionInItemMs = position.coerceIn(0L, requestedItem.mark.durationMs),
+      )
+      return
+    }
+    val currentPlaybackItem =
+      book.playbackItemForPosition(
+        chapterId = book.content.currentChapter,
+        positionInChapterMs = book.content.positionInChapter,
+      ) ?: return
+    player.setBook(
+      book = book,
+      startItemIndex = currentPlaybackItem.index,
+      positionInItemMs = currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
+    )
   }
 
   override fun setPlaybackSpeed(speed: Float) {
