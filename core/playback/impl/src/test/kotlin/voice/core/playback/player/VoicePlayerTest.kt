@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.os.Looper
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.test.utils.FakeMediaSource
@@ -57,6 +58,7 @@ import voice.core.playback.history.PlaybackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.misc.VolumeGainSetter
+import voice.core.playback.previousChapterIndex
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
 import voice.core.playback.session.search.book
@@ -219,7 +221,7 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `forceSeekToNext jumps to chapters`() = scope.runTest {
+  fun `next goes to the start of the next chapter`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -237,22 +239,20 @@ class VoicePlayerTest {
     awaitReady()
     player.shouldHavePosition(0, 0)
 
-    player.forceSeekToNext()
+    player.seekTo(player.nextMediaItemIndex, 0)
     player.shouldHavePosition(1, 0)
 
-    player.forceSeekToNext()
+    player.seekTo(player.nextMediaItemIndex, 0)
     player.shouldHavePosition(2, 0)
 
-    player.forceSeekToNext()
+    player.seekTo(player.nextMediaItemIndex, 0)
     player.shouldHavePosition(3, 0)
 
-    player.seekTo(3, 5_000)
-    player.forceSeekToNext()
-    player.shouldHavePosition(3, 5_000)
+    assertEquals(expected = C.INDEX_UNSET, actual = player.nextMediaItemIndex)
   }
 
   @Test
-  fun `forceSeekToPrevious jumps to chapters`() = scope.runTest {
+  fun `previous restarts the chapter and then goes back chapter by chapter`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -271,21 +271,21 @@ class VoicePlayerTest {
     awaitReady()
     player.shouldHavePosition(3, 6_000)
 
-    player.forceSeekToPrevious()
+    player.seekTo(player.previousChapterIndex(), 0)
     player.shouldHavePosition(3, 0)
 
-    player.forceSeekToPrevious()
+    player.seekTo(player.previousChapterIndex(), 0)
     player.shouldHavePosition(2, 0)
 
-    player.forceSeekToPrevious()
+    player.seekTo(player.previousChapterIndex(), 0)
     player.shouldHavePosition(1, 0)
 
-    player.forceSeekToPrevious()
+    player.seekTo(player.previousChapterIndex(), 0)
     player.shouldHavePosition(0, 0)
   }
 
   @Test
-  fun `forceSeekToPrevious jumps to previous chapter when in the 2s window`() = scope.runTest {
+  fun `previous goes to the previous chapter when in the 2s window`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -304,11 +304,11 @@ class VoicePlayerTest {
     awaitReady()
     player.shouldHavePosition(2, 1_000)
 
-    player.forceSeekToPrevious()
+    player.seekTo(player.previousChapterIndex(), 0)
     player.shouldHavePosition(1, 0)
 
     player.seekTo(1, 1_000)
-    player.forceSeekToPrevious()
+    player.seekTo(player.previousChapterIndex(), 0)
     player.shouldHavePosition(0, 0)
   }
 
@@ -523,7 +523,7 @@ class VoicePlayerTest {
     awaitReady()
     sleepTimer.enable(SleepTimerMode.EndOfChapter)
 
-    player.forceSeekToNext()
+    player.seekTo(1, 0)
     player.shouldHavePosition(1, 0)
     awaitReady()
     shadowOf(Looper.getMainLooper()).idle()
@@ -748,7 +748,7 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `forceSeekToPrevious jumps to chapter start when outside the 2s window`() = scope.runTest {
+  fun `previous restarts the chapter when outside the 2s window`() = scope.runTest {
     setMediaItems(
       listOf(
         chapter(
@@ -767,11 +767,11 @@ class VoicePlayerTest {
     awaitReady()
     player.shouldHavePosition(2, 3_000)
 
-    player.forceSeekToPrevious()
+    player.seekTo(player.previousChapterIndex(), 0)
     player.shouldHavePosition(2, 0)
 
     player.seekTo(2, 1_000)
-    player.forceSeekToPrevious()
+    player.seekTo(player.previousChapterIndex(), 0)
     player.shouldHavePosition(1, 0)
   }
 
