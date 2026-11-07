@@ -10,17 +10,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import okhttp3.OkHttpClient
 import voice.core.initializer.AppInitializer
 
 @ContributesIntoSet(AppScope::class)
 class UIAppStartInitializer(
   private val themeModeStore: ThemeModeStore,
   private val scope: CoroutineScope,
+  private val okHttpClient: Lazy<OkHttpClient>,
 ) : AppInitializer {
 
   override fun onAppStart(application: Application) {
     Coil.setImageLoader(
-      ImageLoader.Builder(application).addLastModifiedToFileCacheKey(false).build(),
+      ImageLoader.Builder(application)
+        .okHttpClient { okHttpClient.value }
+        .addLastModifiedToFileCacheKey(false)
+        .build(),
     )
     themeModeStore.data
       .distinctUntilChanged()

@@ -137,11 +137,13 @@ object AuthorInfoModule {
   @Provides
   @SingleIn(AppScope::class)
   fun authorInfoLookup(
+    okHttpClient: OkHttpClient,
     context: Context,
     dispatcherProvider: DispatcherProvider,
   ): AuthorInfoLookup {
     val client =
-      OkHttpClient.Builder()
+      okHttpClient
+        .newBuilder()
         .cache(Cache(File(context.cacheDir, "authorInfo"), maxSize = 5L * 1024 * 1024))
         .addInterceptor { chain ->
           chain.proceed(

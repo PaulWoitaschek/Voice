@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import okhttp3.Headers
+import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Before
 import voice.core.audiobookshelf.FindServerResult
@@ -191,7 +192,8 @@ class AudiobookshelfLoginTest {
     serverAccount: ServerAccount = mockk(),
   ): AudiobookshelfLogin {
     val store = AccountStore(accountStore)
-    val http = AudiobookshelfHttp(store, mockk { every { versionName } returns "1.0.0" })
+    val http =
+      AudiobookshelfHttp(store, mockk { every { versionName } returns "1.0.0" }, OkHttpClient())
     return AudiobookshelfLogin(
       serverFinder = ServerFinder(http),
       previews = LibrariesPreviews(http, context = mockk()),

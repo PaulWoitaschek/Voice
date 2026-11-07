@@ -17,6 +17,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
+import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Before
 import voice.core.audiobookshelf.MemoryBookRepository
@@ -193,6 +194,7 @@ class BookmarkSyncTest {
         AudiobookshelfHttp(
           AccountStore(MemoryDataStore<Account?>(account)),
           mockk { every { versionName } returns "1.0.0" },
+          OkHttpClient(),
         ),
       bookRepository = MemoryBookRepository(book),
       bookmarkRepo = bookmarkRepo,

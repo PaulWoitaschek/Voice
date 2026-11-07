@@ -8,6 +8,7 @@ import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
+import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Before
 import voice.core.audiobookshelf.MemoryBookRepository
@@ -279,6 +280,7 @@ class ServerBookUpdateTest {
         AudiobookshelfHttp(
           AccountStore(MemoryDataStore<Account?>(account)),
           mockk { every { versionName } returns "1.0.0" },
+          OkHttpClient(),
         ),
       accountStore = AccountStore(MemoryDataStore<Account?>(account)),
       bookRepository = repo,

@@ -35,12 +35,14 @@ import voice.core.logging.api.Logger
 internal class AudiobookshelfHttp(
   private val accountStore: AccountStore,
   appInfoProvider: AppInfoProvider,
+  okHttpClient: OkHttpClient,
 ) {
 
   private val userAgent = "Voice/${appInfoProvider.versionName}"
 
   val client: OkHttpClient =
-    OkHttpClient.Builder()
+    okHttpClient
+      .newBuilder()
       .connectTimeout(10, TimeUnit.SECONDS)
       .readTimeout(30, TimeUnit.SECONDS)
       .addInterceptor { chain ->
