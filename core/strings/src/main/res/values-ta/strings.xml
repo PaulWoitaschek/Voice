@@ -58,6 +58,7 @@
     <string name="audiobookshelf.status.needs_login">நீங்கள் மீண்டும் உள்நுழைய வேண்டும் என சர்வர் கேட்கிறது</string>
     <string name="audiobookshelf.status.offline">இப்போது சர்வரை அணுக முடியவில்லை. பதிவிறக்கிய புத்தகங்கள் தொடர்ந்து இயங்கும்.</string>
     <string name="audiobookshelf.status.syncing">ஒத்திசைக்கிறது…</string>
+    <string name="author.wikipedia">விக்கிப்பீடியாவில் மேலும் படிக்கவும்</string>
     <string name="book.category.action.mark_completed">முடித்ததாகக் குறி</string>
     <string name="book.category.action.mark_current">தற்போது கேட்பதாகக் குறி</string>
     <string name="book.category.action.mark_not_started">தொடங்காததாகக் குறி</string>

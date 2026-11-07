@@ -8,7 +8,7 @@ import voice.core.data.BookCategory
 import voice.core.data.BookComparator
 import voice.core.data.category
 
-internal fun seriesKey(name: String): String? {
+internal fun nameKey(name: String): String? {
   return Normalizer.normalize(name, Normalizer.Form.NFKD)
     // accents like the one of ä can go, but in scripts like Devanagari the marks are part of the
     // letters
@@ -83,12 +83,12 @@ internal class Series(
 }
 
 internal fun List<Book>.inSeries(name: String): List<Book> {
-  val key = seriesKey(name) ?: return emptyList()
-  return filter { book -> book.seriesName?.let(::seriesKey) == key }
+  val key = nameKey(name) ?: return emptyList()
+  return filter { book -> book.seriesName?.let(::nameKey) == key }
 }
 
 internal fun List<Book>.series(): List<Series> {
-  return mapNotNull { book -> book.seriesName?.let(::seriesKey)?.let { key -> key to book } }
+  return mapNotNull { book -> book.seriesName?.let(::nameKey)?.let { key -> key to book } }
     .groupBy(keySelector = { it.first }, valueTransform = { it.second })
     .map { (key, books) ->
       Series(
@@ -147,6 +147,6 @@ private fun BookCategory.entryComparator(): Comparator<LibraryEntry> =
     BookCategory.NOT_STARTED -> compareBy(NaturalOrderComparator.stringComparator) { it.name }
   }
 
-private fun List<String>.mostCommon(): String? {
+internal fun List<String>.mostCommon(): String? {
   return groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
 }

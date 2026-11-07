@@ -17,4 +17,5 @@ dependencies {
   implementation(libs.lifecycle.compose)
   implementation(libs.documentFile)
   implementation(libs.navigation3.ui)
+  implementation(libs.okhttp)
 }

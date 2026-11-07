@@ -2,6 +2,7 @@
 
 package voice.features.playbackScreen.view
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -61,6 +63,7 @@ internal fun BookPlayContent(
   onVolumeBoostClick: () -> Unit,
   onCloseClick: () -> Unit,
   onBookActionsClick: () -> Unit,
+  onAuthorClick: (String) -> Unit,
   onJumpBack: (id: Long) -> Unit,
   onJumpBackExpire: (id: Long) -> Unit,
 ) {
@@ -94,6 +97,7 @@ internal fun BookPlayContent(
     TitleBlock(
       title = viewState.title,
       author = viewState.author,
+      onAuthorClick = onAuthorClick,
       modifier = Modifier.fillMaxWidth().entrance(entrance, 0),
     )
   }
@@ -347,6 +351,7 @@ private val MIN_COVER_HEIGHT = 120.dp
 private fun TitleBlock(
   title: String,
   author: String?,
+  onAuthorClick: (String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(modifier = modifier) {
@@ -361,6 +366,7 @@ private fun TitleBlock(
         style = MaterialTheme.typography.titleMedium.bookText(),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         bleed = HORIZONTAL_PADDING,
+        modifier = Modifier.clickable(role = Role.Button) { onAuthorClick(author) },
       )
     }
   }

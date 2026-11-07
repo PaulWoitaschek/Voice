@@ -158,6 +158,10 @@ class SeriesViewModel(
     navigator.goTo(Destination.BookActions(id))
   }
 
+  internal fun onAuthorClick(author: String) {
+    navigator.goTo(Destination.Author(author))
+  }
+
   internal fun onMoreClick() {
     navigator.goTo(Destination.SeriesActions(name))
   }
