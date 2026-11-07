@@ -369,6 +369,16 @@
     <string name="review.prompt.thanks.title">Teşekkürler!</string>
     <string name="series.continue">Devam et</string>
     <string name="series.continue_book">Kitap %s ile devam et</string>
+    <string name="series.mark_completed">Tamamlandı olarak işaretle</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">%d kitapta kaldığınız yeri kaybedersiniz.</item>
+        <item quantity="other">%d kitapta kaldığınız yeri kaybedersiniz.</item>
+    </plurals>
+    <string name="series.mark_not_started">Henüz başlanmadı olarak işaretle</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">%d kitaptaki ilerlemenizi kaybedersiniz.</item>
+        <item quantity="other">%d kitaptaki ilerlemenizi kaybedersiniz.</item>
+    </plurals>
     <string name="series.start">Başla</string>
     <string name="series.start_book">Kitap %s ile başla</string>
     <string name="settings.about.app_version.title">Uygulama sürümü</string>

@@ -369,6 +369,16 @@
     <string name="review.prompt.thanks.title">நன்றி!</string>
     <string name="series.continue">தொடர்க</string>
     <string name="series.continue_book">புத்தகம் %s-ஐத் தொடர்க</string>
+    <string name="series.mark_completed">முடித்ததாகக் குறி</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">%d புத்தகத்தில் நீங்கள் நிறுத்திய இடத்தை இழப்பீர்கள்.</item>
+        <item quantity="other">%d புத்தகங்களில் நீங்கள் நிறுத்திய இடத்தை இழப்பீர்கள்.</item>
+    </plurals>
+    <string name="series.mark_not_started">தொடங்காததாகக் குறி</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">%d புத்தகத்தில் உங்கள் முன்னேற்றத்தை இழப்பீர்கள்.</item>
+        <item quantity="other">%d புத்தகங்களில் உங்கள் முன்னேற்றத்தை இழப்பீர்கள்.</item>
+    </plurals>
     <string name="series.start">தொடங்கு</string>
     <string name="series.start_book">புத்தகம் %s-ஐத் தொடங்கு</string>
     <string name="settings.about.app_version.title">பயன்பாட்டு பதிப்பு</string>

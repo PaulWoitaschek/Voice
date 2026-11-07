@@ -67,3 +67,12 @@ internal fun BookCategory.markAsItem(): BottomSheetItem =
     BookCategory.CURRENT -> BottomSheetItem.BookCategoryMarkAsCurrent
     BookCategory.FINISHED -> BottomSheetItem.BookCategoryMarkAsCompleted
   }
+
+internal val BottomSheetItem.category: BookCategory?
+  get() =
+    when (this) {
+      BottomSheetItem.BookCategoryMarkAsNotStarted -> BookCategory.NOT_STARTED
+      BottomSheetItem.BookCategoryMarkAsCurrent -> BookCategory.CURRENT
+      BottomSheetItem.BookCategoryMarkAsCompleted -> BookCategory.FINISHED
+      else -> null
+    }

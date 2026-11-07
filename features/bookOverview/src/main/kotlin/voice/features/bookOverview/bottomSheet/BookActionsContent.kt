@@ -489,10 +489,17 @@ internal fun BottomSheetItem.style(): ActionStyle {
       ActionStyle(MaterialShapes.Sunny, colors.primaryContainer, colors.onPrimaryContainer)
     BottomSheetItem.RemoveDownload ->
       ActionStyle(MaterialShapes.Sunny, colors.surfaceContainerHighest, colors.onSurfaceVariant)
-    BottomSheetItem.BookCategoryMarkAsNotStarted,
-    BottomSheetItem.BookCategoryMarkAsCurrent,
+    // the shapes and colors of the status picker
+    BottomSheetItem.BookCategoryMarkAsNotStarted ->
+      ActionStyle(
+        MaterialShapes.Cookie6Sided,
+        colors.secondaryContainer,
+        colors.onSecondaryContainer,
+      )
+    BottomSheetItem.BookCategoryMarkAsCurrent ->
+      ActionStyle(MaterialShapes.Sunny, colors.primaryContainer, colors.onPrimaryContainer)
     BottomSheetItem.BookCategoryMarkAsCompleted ->
-      ActionStyle(MaterialShapes.Circle, colors.surfaceContainerHighest, colors.onSurfaceVariant)
+      ActionStyle(MaterialShapes.SoftBurst, colors.tertiaryContainer, colors.onTertiaryContainer)
   }
 }
 
@@ -503,6 +510,7 @@ internal fun ActionRow(
   shape: RoundedCornerShape,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
+  title: String = stringResource(item.titleRes),
   titleColor: Color = MaterialTheme.colorScheme.onSurface,
   supportingText: String? = null,
   progress: Float? = null,
@@ -547,7 +555,7 @@ internal fun ActionRow(
       Spacer(Modifier.width(16.dp))
       Column(Modifier.weight(1F)) {
         Text(
-          text = stringResource(item.titleRes),
+          text = title,
           style = MaterialTheme.typography.titleMedium.copy(hyphens = Hyphens.Auto),
           color = titleColor,
         )

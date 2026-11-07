@@ -388,6 +388,18 @@
     <string name="review.prompt.thanks.title">תודה!</string>
     <string name="series.continue">המשך</string>
     <string name="series.continue_book">המשך האזנה לספר %s</string>
+    <string name="series.mark_completed">סימון כהושלמה</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">תאבדו את המקום שבו עצרתם ב-%d ספר.</item>
+        <item quantity="two">תאבדו את המקום שבו עצרתם ב-%d ספרים.</item>
+        <item quantity="other">תאבדו את המקום שבו עצרתם ב-%d ספרים.</item>
+    </plurals>
+    <string name="series.mark_not_started">סימון כ\"טרם הותחלה\"</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">תאבדו את ההתקדמות שלכם ב-%d ספר.</item>
+        <item quantity="two">תאבדו את ההתקדמות שלכם ב-%d ספרים.</item>
+        <item quantity="other">תאבדו את ההתקדמות שלכם ב-%d ספרים.</item>
+    </plurals>
     <string name="series.start">התחלה</string>
     <string name="series.start_book">התחלת ספר %s</string>
     <string name="settings.about.app_version.title">גרסת יישום</string>

@@ -407,6 +407,20 @@
     <string name="review.prompt.thanks.title">Děkujeme!</string>
     <string name="series.continue">Pokračovat</string>
     <string name="series.continue_book">Pokračovat v knize %s</string>
+    <string name="series.mark_completed">Označit jako dokončenou</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">U %d knihy přijdete o místo, kde jste skončili.</item>
+        <item quantity="few">U %d knih přijdete o místo, kde jste skončili.</item>
+        <item quantity="many">U %d knih přijdete o místo, kde jste skončili.</item>
+        <item quantity="other">U %d knih přijdete o místo, kde jste skončili.</item>
+    </plurals>
+    <string name="series.mark_not_started">Označit jako nezačatou</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">U %d knihy přijdete o postup.</item>
+        <item quantity="few">U %d knih přijdete o postup.</item>
+        <item quantity="many">U %d knih přijdete o postup.</item>
+        <item quantity="other">U %d knih přijdete o postup.</item>
+    </plurals>
     <string name="series.start">Začít</string>
     <string name="series.start_book">Začít knihu %s</string>
     <string name="settings.about.app_version.title">Verze aplikace</string>

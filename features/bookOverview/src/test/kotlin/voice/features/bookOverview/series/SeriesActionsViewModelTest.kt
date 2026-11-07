@@ -13,16 +13,21 @@ import io.mockk.slot
 import io.mockk.verify
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
+import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
 import voice.core.data.repo.BookRepository
 import voice.features.bookOverview.book
 import voice.features.bookOverview.bottomSheet.BottomSheetItem
+import voice.features.bookOverview.editBookCategory.BookCategoryChanger
 import voice.features.bookOverview.hideBook.BookHider
 import voice.features.bookOverview.hideBook.HiddenBooks
 import voice.navigation.Destination
@@ -46,8 +51,16 @@ class SeriesActionsViewModelTest {
       coEvery { updateCustomMetadata(any(), any()) } just runs
     }
   private val bookHider = BookHider(repo)
+  private val bookCategoryChanger = mockk<BookCategoryChanger>(relaxUnitFun = true)
   private val viewModel =
-    SeriesActionsViewModel(repo, bookHider, navigator, dispatcherProvider, "Saga")
+    SeriesActionsViewModel(
+      repo,
+      bookHider,
+      bookCategoryChanger,
+      navigator,
+      dispatcherProvider,
+      "Saga",
+    )
 
   @Test
   fun `the sheet shows the series`() = runTest {
@@ -57,14 +70,14 @@ class SeriesActionsViewModelTest {
       }
       .test {
         assertEquals(expected = null, actual = awaitItem())
-        val state = awaitItem()!!
+        val state = awaitItem()!!.series
         assertEquals(expected = "Saga", actual = state.name)
         assertEquals(expected = 3, actual = state.bookCount)
         assertEquals(expected = false, actual = state.hidden)
 
         books.value = listOf(first.hide(), second.hide(), hidden, other)
 
-        assertEquals(expected = true, actual = awaitItem()!!.hidden)
+        assertEquals(expected = true, actual = awaitItem()!!.series.hidden)
       }
   }
 
@@ -106,7 +119,7 @@ class SeriesActionsViewModelTest {
       }
       .test {
         assertEquals(expected = null, actual = awaitItem())
-        assertEquals(expected = 3, actual = awaitItem()!!.bookCount)
+        assertEquals(expected = 3, actual = awaitItem()!!.series.bookCount)
 
         books.value = listOf(other)
 
@@ -115,6 +128,82 @@ class SeriesActionsViewModelTest {
     verify { navigator.remove(Destination.SeriesActions("Saga")) }
     coVerify(exactly = 0) { repo.updateCustomMetadata(any(), any()) }
   }
+
+  @Test
+  fun `the sheet offers the statuses the series isn't in and counts the books that lose progress`() =
+    runTest {
+      books.value =
+        listOf(
+          book(series = "Saga", time = 0),
+          book(series = "Saga", time = 1_000),
+          book(series = "Saga", time = 20_000),
+        )
+
+      statuses().test {
+        assertEquals(expected = null, actual = awaitItem())
+        assertEquals(
+          expected =
+            listOf(
+              SeriesActionsViewState.Status(
+                BottomSheetItem.BookCategoryMarkAsNotStarted,
+                resets = 2,
+              ),
+              SeriesActionsViewState.Status(
+                BottomSheetItem.BookCategoryMarkAsCompleted,
+                resets = 1,
+              ),
+            ),
+          actual = awaitItem(),
+        )
+      }
+    }
+
+  @Test
+  fun `a series not started yet only offers to complete it, and it loses nothing`() = runTest {
+    books.value = listOf(book(series = "Saga", time = 0), book(series = "Saga", time = 0))
+
+    statuses().test {
+      assertEquals(expected = null, actual = awaitItem())
+      assertEquals(
+        expected =
+          listOf(
+            SeriesActionsViewState.Status(BottomSheetItem.BookCategoryMarkAsCompleted, resets = 0),
+          ),
+        actual = awaitItem(),
+      )
+    }
+  }
+
+  @Test
+  fun `completing a series completes the books that aren't yet`() = runTest {
+    val notStarted = book(series = "Saga", time = 0)
+    val current = book(series = "Saga", time = 1_000)
+    val finished = book(series = "Saga", time = 20_000)
+    books.value = listOf(notStarted, current, finished, other)
+
+    viewModel.onItemClick(BottomSheetItem.BookCategoryMarkAsCompleted)
+
+    coVerify { bookCategoryChanger.change(notStarted.id, BookCategory.FINISHED) }
+    coVerify { bookCategoryChanger.change(current.id, BookCategory.FINISHED) }
+    coVerify(exactly = 2) { bookCategoryChanger.change(any(), any()) }
+  }
+
+  @Test
+  fun `marking a series as not started resets its hidden books too`() = runTest {
+    viewModel.onItemClick(BottomSheetItem.BookCategoryMarkAsNotStarted)
+
+    listOf(first, second, hidden).forEach { book ->
+      coVerify { bookCategoryChanger.change(book.id, BookCategory.NOT_STARTED) }
+    }
+    coVerify(exactly = 3) { bookCategoryChanger.change(any(), any()) }
+  }
+
+  private fun TestScope.statuses(): Flow<List<SeriesActionsViewState.Status>?> =
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .map { it?.statuses }
 
   private fun update(id: BookId): (CustomMetadata) -> CustomMetadata {
     val update = slot<(CustomMetadata) -> CustomMetadata>()
