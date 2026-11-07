@@ -19,6 +19,7 @@ import voice.core.data.Book
 import voice.core.data.BookCategory
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
+import voice.core.data.MarkData
 import voice.core.data.repo.BookRepository
 import voice.core.playback.session.search.book
 
@@ -136,6 +137,66 @@ class MediaItemProviderTest {
     assertEquals(expected = marks.map { it.mediaId }, actual = items.mediaItems.map { it.mediaId })
     assertEquals(expected = 1, actual = items.startIndex)
     assertEquals(expected = 0, actual = items.startPositionMs)
+  }
+
+  @Test
+  fun `a chapter mark whose end moved since the car got it still plays from that mark`() = runTest {
+    val chapter =
+      Chapter(
+        id = ChapterId("file"),
+        name = "file",
+        duration = 20_000,
+        fileLastModified = Instant.EPOCH,
+        markData = listOf(MarkData(0, "One"), MarkData(12_000, "Two")),
+        fileSize = 0,
+      )
+    books += book(listOf(chapter))
+    val lastMark = provider.playbackItems(books.single())[1].mediaId.toMediaIdOrNull()
+    val outdated = (lastMark as MediaId.ChapterMark).copy(endMs = 15_000)
+
+    val items = provider.mediaItemsWithStartPosition(outdated.encode())!!
+
+    assertEquals(expected = 1, actual = items.startIndex)
+  }
+
+  @Test
+  fun `a chapter mark that a rescan removed starts where the book stopped`() = runTest {
+    val chapter =
+      Chapter(
+        id = ChapterId("file"),
+        name = "file",
+        duration = 20_000,
+        fileLastModified = Instant.EPOCH,
+        markData = listOf(MarkData(0, "One"), MarkData(12_000, "Two")),
+        fileSize = 0,
+      )
+    books += book(listOf(chapter), positionInChapter = 15_000)
+    val lastMark = provider.playbackItems(books.single())[1].mediaId.toMediaIdOrNull()
+    val removed = (lastMark as MediaId.ChapterMark).copy(markIndex = 2)
+
+    val items = provider.mediaItemsWithStartPosition(removed.encode())!!
+
+    assertEquals(expected = 1, actual = items.startIndex)
+    assertEquals(expected = 3_000, actual = items.startPositionMs)
+  }
+
+  @Test
+  fun `a book starts in the chapter mark where it stopped`() {
+    val chapter =
+      Chapter(
+        id = ChapterId("file"),
+        name = "file",
+        duration = 20_000,
+        fileLastModified = Instant.EPOCH,
+        markData = listOf(MarkData(0, "One"), MarkData(12_000, "Two")),
+        fileSize = 0,
+      )
+
+    val items =
+      provider.mediaItemsWithStartPosition(book(listOf(chapter), positionInChapter = 15_000))
+
+    assertEquals(expected = 1, actual = items.startIndex)
+    assertEquals(expected = 3_000, actual = items.startPositionMs)
   }
 
   private suspend fun titles(category: BookCategory): List<String> =

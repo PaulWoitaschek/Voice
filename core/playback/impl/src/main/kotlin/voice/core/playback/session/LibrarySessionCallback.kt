@@ -26,18 +26,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.guava.future
 import kotlinx.coroutines.launch
 import voice.core.data.Book
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
+import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.LockScreenSliderStore
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.player.VoicePlayer
 import voice.core.playback.session.search.BookSearchHandler
 import voice.core.playback.session.search.BookSearchParser
+import voice.core.playback.withDefaultSpeed
 import voice.core.search.BookSearch
 
 @Inject
@@ -53,6 +54,7 @@ class LibrarySessionCallback(
   private val context: Context,
   private val lockScreenSliderStore: LockScreenSliderStore,
   private val bookSearch: BookSearch,
+  private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
 ) : MediaLibrarySession.Callback {
 
   private var notificationCommandsJob: Job? = null
@@ -66,18 +68,6 @@ class LibrarySessionCallback(
     return super.onMediaButtonEvent(session, controllerInfo, intent)
   }
 
-  override fun onAddMediaItems(
-    mediaSession: MediaSession,
-    controller: ControllerInfo,
-    mediaItems: MutableList<MediaItem>,
-  ): ListenableFuture<List<MediaItem>> {
-    return scope.reportingFuture {
-      mediaItems.map { item ->
-        mediaItemProvider.item(item.mediaId) ?: item
-      }
-    }
-  }
-
   override fun onSetMediaItems(
     mediaSession: MediaSession,
     controller: ControllerInfo,
@@ -88,31 +78,31 @@ class LibrarySessionCallback(
     Logger.d(
       "onSetMediaItems(mediaItems.size=${mediaItems.size}, startIndex=$startIndex, startPosition=$startPositionMs)",
     )
-    val item = mediaItems.singleOrNull()
-    if (startIndex == C.INDEX_UNSET && startPositionMs == C.TIME_UNSET && item != null) {
-      return scope.reportingFuture {
-        onSetMediaItemsForSingleItem(item)
-          ?: super.onSetMediaItems(
-              mediaSession,
-              controller,
-              mediaItems,
-              startIndex,
-              startPositionMs,
-            )
-            .await()
-      }
+    return scope.reportingFuture {
+      val items =
+        chapterMarks(controller, mediaItems, startIndex, startPositionMs)
+          ?: throw UnsupportedOperationException()
+      val bookId = items.mediaItems.firstOrNull()?.mediaId?.toMediaIdOrNull()?.bookId
+      bookId?.let { bookRepository.get(it) }?.let { applySettings(it) }
+      items
     }
-    // The app sends all chapter marks of the book. VoicePlayer loads the book once, so resolving
-    // every chapter mark would only slow it down.
-    if (mediaItems.firstOrNull()?.mediaId?.toMediaIdOrNull() is MediaId.ChapterMark) {
-      return Futures.immediateFuture(
-        MediaItemsWithStartPosition(mediaItems, startIndex, startPositionMs),
-      )
-    }
-    return super.onSetMediaItems(mediaSession, controller, mediaItems, startIndex, startPositionMs)
   }
 
-  private suspend fun onSetMediaItemsForSingleItem(item: MediaItem): MediaItemsWithStartPosition? {
+  private suspend fun chapterMarks(
+    controller: ControllerInfo,
+    mediaItems: List<MediaItem>,
+    startIndex: Int,
+    startPositionMs: Long,
+  ): MediaItemsWithStartPosition? {
+    // The app sends all chapter marks of the book. Other apps can send any part of a book, and the
+    // player plays exactly what it gets, so their items are resolved from the book.
+    if (
+      controller.packageName == context.packageName &&
+        mediaItems.firstOrNull()?.mediaId?.toMediaIdOrNull() is MediaId.ChapterMark
+    ) {
+      return MediaItemsWithStartPosition(mediaItems, startIndex, startPositionMs)
+    }
+    val item = mediaItems.getOrNull(startIndex) ?: mediaItems.firstOrNull() ?: return null
     val searchQuery = item.requestMetadata.searchQuery
     return if (searchQuery != null) {
       val search = bookSearchParser.parse(searchQuery, item.requestMetadata.extras)
@@ -125,6 +115,15 @@ class LibrarySessionCallback(
       }
       mediaItemProvider.mediaItemsWithStartPosition(item.mediaId)
     }
+  }
+
+  private suspend fun applySettings(book: Book) {
+    val content = book.withDefaultSpeed { lastPlaybackSpeedStore.data.first() }.content
+    if (content.playbackSpeed != book.content.playbackSpeed) {
+      // loading the book marks it as played, so from here on this is its own speed
+      bookRepository.updateBook(book.id) { it.copy(playbackSpeed = content.playbackSpeed) }
+    }
+    player.applySettings(content)
   }
 
   override fun onGetLibraryRoot(
@@ -206,6 +205,7 @@ class LibrarySessionCallback(
     return scope.reportingFuture {
       val currentBook = currentBook() ?: throw UnsupportedOperationException()
       if (isForPlayback) {
+        applySettings(currentBook)
         mediaItemProvider.mediaItemsWithStartPosition(currentBook)
       } else {
         // System UI shows this item on its resumption card, so it needs the book, not a chapter.
@@ -299,10 +299,10 @@ class LibrarySessionCallback(
   }
 
   private suspend fun prepareCurrentBook() {
-    val bookId = currentBookStoreId.data.first() ?: return
-    val book = bookRepository.get(bookId) ?: return
-    val item = mediaItemProvider.mediaItem(book)
-    player.setMediaItem(item)
+    val book = currentBook() ?: return
+    val items = mediaItemProvider.mediaItemsWithStartPosition(book)
+    applySettings(book)
+    player.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     player.prepare()
   }
 
@@ -316,12 +316,6 @@ class LibrarySessionCallback(
       CustomCommand.parse(customCommand, args)
         ?: return super.onCustomCommand(session, controller, customCommand, args)
     when (command) {
-      CustomCommand.ForceSeekToNext -> {
-        player.forceSeekToNext()
-      }
-      CustomCommand.ForceSeekToPrevious -> {
-        player.forceSeekToPrevious()
-      }
       is CustomCommand.SetSkipSilence -> {
         player.setSkipSilenceEnabled(command.skipSilence)
       }

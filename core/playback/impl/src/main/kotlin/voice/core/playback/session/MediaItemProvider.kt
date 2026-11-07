@@ -19,7 +19,6 @@ import voice.core.data.Book
 import voice.core.data.BookCategory
 import voice.core.data.BookComparator
 import voice.core.data.BookId
-import voice.core.data.Chapter
 import voice.core.data.category
 import voice.core.data.durationMs
 import voice.core.data.repo.BookRepository
@@ -66,12 +65,8 @@ class MediaItemProvider(
       is MediaId.Book -> {
         bookRepository.get(mediaId.id)?.let(::mediaItem)
       }
-      is MediaId.Chapter -> {
-        val book = bookRepository.get(mediaId.bookId) ?: return null
-        chapterRepo.get(mediaId.chapterId)?.let {
-          mediaItem(it, book)
-        }
-      }
+      // only the files inside the player have these ids, controllers never see them
+      is MediaId.Chapter -> null
       is MediaId.ChapterMark -> {
         val book = bookRepository.get(mediaId.bookId) ?: return null
         val chapter = chapterRepo.get(mediaId.chapterId) ?: return null
@@ -114,7 +109,12 @@ class MediaItemProvider(
       }
       is MediaId.ChapterMark -> {
         val book = bookRepository.get(mediaId.bookId) ?: return null
-        val startItem = book.playbackItems().firstOrNull { it.mediaId == mediaId } ?: return null
+        // Not the whole id: the end of a mark moves when a file duration is corrected, so a car can
+        // still hold an id with the old end, or the id of a mark that a rescan removed.
+        val startItem =
+          book.playbackItems().firstOrNull {
+            it.chapter.id == mediaId.chapterId && it.markIndex == mediaId.markIndex
+          } ?: return mediaItemsWithStartPosition(book)
         MediaItemsWithStartPosition(playbackItems(book), startItem.index, 0)
       }
       is MediaId.Chapter,
@@ -128,12 +128,6 @@ class MediaItemProvider(
   suspend fun chapters(bookId: BookId): List<MediaItem>? {
     val book = bookRepository.get(bookId) ?: return null
     return playbackItems(book)
-  }
-
-  internal fun chapterMediaItems(book: Book): List<MediaItem> {
-    return book.chapters.map { chapter ->
-      mediaItem(chapter, book)
-    }
   }
 
   internal fun playbackItems(book: Book): List<MediaItem> {
@@ -202,21 +196,6 @@ class MediaItemProvider(
       browsable = true,
       isPlayable = false,
       mediaType = MediaType.AudioBookFolder,
-    )
-
-  private fun mediaItem(
-    chapter: Chapter,
-    book: Book,
-  ) =
-    MediaItem(
-      title = chapter.name ?: chapter.id.value,
-      mediaId = MediaId.Chapter(bookId = book.id, chapterId = chapter.id),
-      browsable = false,
-      isPlayable = true,
-      sourceUri = chapter.id.toUri(),
-      imageUri = book.cover?.toProvidedUri(),
-      artist = book.author,
-      mediaType = MediaType.AudioBookChapter,
     )
 
   private fun mediaItem(

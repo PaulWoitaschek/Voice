@@ -13,11 +13,9 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.ListeningEvent
-import voice.core.data.durationMs
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
@@ -32,13 +30,8 @@ import voice.core.playback.history.PlaybackPosition
 import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
-import voice.core.playback.session.MediaId
 import voice.core.playback.session.bookId
-import voice.core.playback.session.playbackItemForPosition
-import voice.core.playback.session.playbackItems
-import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.toMediaIdOrNull
-import voice.core.playback.withDefaultSpeed
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerState
 
@@ -129,17 +122,6 @@ class VoicePlayer(
         player.setSkipSilenceEnabled(false)
       }
     }
-  }
-
-  // The app changes chapters through custom commands that end up here, because its controller can
-  // still hold the book
-  // before it was split into chapters.
-  fun forceSeekToNext() {
-    player.seekToNextMediaItem()
-  }
-
-  fun forceSeekToPrevious() {
-    player.seekToPrevious()
   }
 
   // Next and previous from headsets, cars and watches skip instead of changing the chapter, so
@@ -307,100 +289,15 @@ class VoicePlayer(
     }
   }
 
-  override fun setMediaItem(
-    mediaItem: MediaItem,
-    startPositionMs: Long,
-  ) {
-    setBook(mediaItem)
-  }
-
-  override fun setMediaItem(
-    mediaItem: MediaItem,
-    resetPosition: Boolean,
-  ) {
-    setBook(mediaItem)
-  }
-
-  override fun setMediaItems(mediaItems: List<MediaItem>) {
-    val first = mediaItems.firstOrNull() ?: return
-    setBook(first)
-  }
-
-  override fun setMediaItems(
-    mediaItems: List<MediaItem>,
-    resetPosition: Boolean,
-  ) {
-    val first = mediaItems.firstOrNull() ?: return
-    setBook(first)
-  }
-
-  override fun setMediaItem(mediaItem: MediaItem) {
-    setBook(mediaItem)
-  }
-
-  override fun setMediaItems(
-    mediaItems: List<MediaItem>,
-    startIndex: Int,
-    startPositionMs: Long,
-  ) {
-    val startItem = mediaItems.getOrNull(startIndex) ?: mediaItems.firstOrNull() ?: return
-    setBook(startItem, startPositionMs)
-  }
-
-  private fun setBook(
-    mediaItem: MediaItem,
-    startPositionMs: Long = C.TIME_UNSET,
-  ) {
-    val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
-    val bookId =
-      when (mediaId) {
-        is MediaId.Book -> mediaId.id
-        is MediaId.ChapterMark -> mediaId.bookId
-        else -> {
-          Logger.w("Unexpected media id type ${mediaId::class.simpleName}")
-          return
-        }
-      }
-    val book = runBlocking { repo.get(bookId) } ?: return
-    val speed =
-      book
-        .withDefaultSpeed { runBlocking { lastPlaybackSpeedStore.data.first() } }
-        .content
-        .playbackSpeed
-    player.setPlaybackSpeed(speed)
-    if (speed != book.content.playbackSpeed) {
-      // loading the book marks it as played, so from here on this is its own speed
-      scope.launch {
-        repo.updateBook(book.id) { it.copy(playbackSpeed = speed) }
-      }
-    }
-    setSkipSilenceEnabled(book.content.skipSilence)
-    volumeGain.gain = Decibel(book.content.gain)
-    val requestedItem =
-      if (mediaId is MediaId.ChapterMark) {
-        book.playbackItems().firstOrNull { it.mediaId == mediaId }
-      } else {
-        null
-      }
-    if (requestedItem != null) {
-      val position = startPositionMs.takeUnless { it == C.TIME_UNSET } ?: 0L
-      player.setBook(
-        book = book,
-        startItemIndex = requestedItem.index,
-        positionInItemMs = position.coerceIn(0L, requestedItem.mark.durationMs),
-      )
-      return
-    }
-    val currentPlaybackItem =
-      book.playbackItemForPosition(
-        chapterId = book.content.currentChapter,
-        positionInChapterMs = book.content.positionInChapter,
-      ) ?: return
-    player.setBook(
-      book = book,
-      startItemIndex = currentPlaybackItem.index,
-      positionInItemMs = currentPlaybackItem.positionInMediaItem(book.content.positionInChapter),
-    )
+  /**
+   * Applies the settings of the book that is about to play. Unlike the setters, it doesn't store
+   * them, as they already are the book's own.
+   */
+  fun applySettings(content: BookContent) {
+    player.setPlaybackSpeed(content.playbackSpeed)
+    skipSilence = content.skipSilence
+    player.setSkipSilenceEnabled(content.skipSilence)
+    volumeGain.gain = Decibel(content.gain)
   }
 
   override fun setPlaybackSpeed(speed: Float) {

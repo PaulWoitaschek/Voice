@@ -66,7 +66,7 @@ class ChapterMarkPlayerTest {
       .build()
 
   private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk())
-  private val player = ChapterMarkPlayer(exoPlayer, mediaItemProvider)
+  private val player = ChapterMarkPlayer(exoPlayer)
 
   @Test
   fun `presents one media item per mark while the wrapped player holds one per file`() {
@@ -231,6 +231,17 @@ class ChapterMarkPlayerTest {
   }
 
   @Test
+  fun `ignores chapters added while no book is loaded`() {
+    book = book(listOf(singleFileWithThreeMarks()))
+
+    player.addMediaItems(mediaItemProvider.playbackItems(book))
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 0, actual = exoPlayer.mediaItemCount)
+    assertEquals(expected = 0, actual = player.mediaItemCount)
+  }
+
+  @Test
   fun `does not offer repeat or shuffle because they would apply to whole files`() {
     setBook(listOf(singleFileWithThreeMarks()))
 
@@ -270,11 +281,7 @@ class ChapterMarkPlayerTest {
     positionInItemMs: Long = 0,
   ) {
     book = book(chapters)
-    player.setBook(
-      book = book,
-      startItemIndex = startItemIndex,
-      positionInItemMs = positionInItemMs,
-    )
+    player.setMediaItems(mediaItemProvider.playbackItems(book), startItemIndex, positionInItemMs)
     player.prepare()
     TestPlayerRunHelper.runUntilPlaybackState(exoPlayer, Player.STATE_READY)
   }
