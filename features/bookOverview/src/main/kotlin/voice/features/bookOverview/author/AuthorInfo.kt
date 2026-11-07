@@ -5,7 +5,9 @@ import androidx.compose.runtime.Immutable
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.Qualifier
 import dev.zacsweers.metro.SingleIn
 import java.io.File
 import java.io.IOException
@@ -39,10 +41,13 @@ data class AuthorPhoto(
   val page: String,
 )
 
+@Qualifier annotation class AuthorInfoClient
+
 // A name alone often leads to someone else, like the composer for John Williams, so a page only
 // counts when Wikidata knows its person as the author of a work
+@Inject
 class AuthorInfoLookup(
-  private val client: OkHttpClient,
+  @AuthorInfoClient private val client: OkHttpClient,
   private val dispatcherProvider: DispatcherProvider,
 ) {
 
@@ -155,25 +160,23 @@ object AuthorInfoModule {
 
   @Provides
   @SingleIn(AppScope::class)
-  fun authorInfoLookup(
+  @AuthorInfoClient
+  fun client(
     okHttpClient: OkHttpClient,
     context: Context,
-    dispatcherProvider: DispatcherProvider,
-  ): AuthorInfoLookup {
-    val client =
-      okHttpClient
-        .newBuilder()
-        .cache(Cache(File(context.cacheDir, "authorInfo"), maxSize = 5L * 1024 * 1024))
-        // Wikipedia allows 5 minutes and Wikidata none, but what we show about an author rarely
-        // changes. Missing pages are kept as well, so authors without one cost no requests.
-        .addNetworkInterceptor { chain ->
-          chain
-            .proceed(chain.request())
-            .newBuilder()
-            .header("Cache-Control", "max-age=${30.days.inWholeSeconds}")
-            .build()
-        }
-        .build()
-    return AuthorInfoLookup(client, dispatcherProvider)
+  ): OkHttpClient {
+    return okHttpClient
+      .newBuilder()
+      .cache(Cache(File(context.cacheDir, "authorInfo"), maxSize = 5L * 1024 * 1024))
+      // Wikipedia allows 5 minutes and Wikidata none, but what we show about an author rarely
+      // changes. Missing pages are kept as well, so authors without one cost no requests.
+      .addNetworkInterceptor { chain ->
+        chain
+          .proceed(chain.request())
+          .newBuilder()
+          .header("Cache-Control", "max-age=${30.days.inWholeSeconds}")
+          .build()
+      }
+      .build()
   }
 }
