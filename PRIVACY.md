@@ -1,8 +1,8 @@
 # Privacy Policy
 
 Voice is an audiobook player made by Paul Woitaschek. Your audiobooks, your progress, your bookmarks and your listening
-history stay on your device and in your own folders. This page lists every case where Voice sends something off your
-device, who gets it and why.
+history stay on your device and in your own folders. This page describes what Voice sends off your device, who gets it
+and why.
 
 ## Which build you have
 
@@ -47,29 +47,30 @@ handles both under its own privacy policy.
 
 ## In every build
 
-### Cover search
+### Online lookups
 
-When you search for a cover online, Voice sends your search, which starts as the book's name, to DuckDuckGo. The
-previews come from DuckDuckGo, and the cover you pick is downloaded from the website it's on.
+Some features look up information online, like covers for your books. Voice then sends only what it looks up, like the
+name of a book, to the service that answers it, such as DuckDuckGo. Like every website, that service sees your IP
+address. A cover you pick comes from the website it's on.
 
-### Audiobookshelf
+### Servers you connect
 
-You can connect Voice to an Audiobookshelf server that you or someone you trust runs. Voice then sends your username
-and password to that server to sign in, and exchanges your listening progress, bookmarks and listening sessions,
-including your device model and the app version, with it. It also streams and downloads audiobooks from it. This data
-goes only to the server you entered. I run no server for this and never receive this data. Signing out removes the
-books of the server and their downloads from your device.
+You can connect Voice to a server that you or someone you trust runs, like Audiobookshelf. Voice signs in with the
+login you enter, and streams and downloads audiobooks from the server. It also exchanges your listening progress,
+bookmarks and listening sessions with it, including your device model and the app version. This data goes only to the
+server you entered. I run no server for this and never receive this data. Signing out removes the server's books and
+their downloads from your device.
 
 ### Backups
 
 If backups are on on your phone, Android backs up Voice's data, like your library, progress and bookmarks, to your
-backup account, on most phones your Google account. The login to an Audiobookshelf server isn't backed up.
+backup account, on most phones your Google account. The login to a server isn't backed up.
 
 ### Links
 
-Help, feedback, the FAQ, Ko-fi and surveys open in your browser. The sites they open have their own privacy policies.
-A survey's link includes your app version, the app that installed Voice, such as the Play Store or F-Droid, and how many
-days ago you installed Voice, so answers can be told apart. Your answers go to the site that runs the survey.
+Some buttons, like help, feedback, Ko-fi or a survey, open a website in your browser. That site has its own privacy
+policy, and what you enter there goes to it. A link can include your app version and where and when you installed
+Voice, so a survey can tell answers apart.
 
 ## Who sees the data
 
@@ -89,6 +90,7 @@ and have it corrected or deleted. You can also object to its use and complain to
 
 Paul Woitaschek, [woitaschek@gmail.com](mailto:woitaschek@gmail.com)
 
-When Voice starts sending something new, this page changes with that release.
+When Voice starts sending a new kind of data, or sends data to a new kind of service, this page changes with that
+release.
 
-Last updated: 2026-10-24
+Last updated: 2026-11-07
