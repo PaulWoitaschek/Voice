@@ -4,7 +4,6 @@ import android.app.Application
 import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateUtils
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_PERCENTAGE
 import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_STATUS
@@ -102,8 +101,8 @@ class MediaItemProvider(
       )
     return MediaItemsWithStartPosition(
       playbackItems(book),
-      startItem?.index ?: C.INDEX_UNSET,
-      startItem?.positionInMediaItem(book.content.positionInChapter) ?: C.TIME_UNSET,
+      startItem?.index ?: 0,
+      startItem?.positionInMediaItem(book.content.positionInChapter) ?: 0,
     )
   }
 
@@ -113,8 +112,12 @@ class MediaItemProvider(
         val book = bookRepository.get(mediaId.id) ?: return null
         mediaItemsWithStartPosition(book)
       }
+      is MediaId.ChapterMark -> {
+        val book = bookRepository.get(mediaId.bookId) ?: return null
+        val startItem = book.playbackItems().firstOrNull { it.mediaId == mediaId } ?: return null
+        MediaItemsWithStartPosition(playbackItems(book), startItem.index, 0)
+      }
       is MediaId.Chapter,
-      is MediaId.ChapterMark,
       is MediaId.Category,
       MediaId.Root,
       MediaId.Recent,

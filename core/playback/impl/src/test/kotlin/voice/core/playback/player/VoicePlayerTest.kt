@@ -368,6 +368,23 @@ class VoicePlayerTest {
   }
 
   @Test
+  fun `a single chapter mark starts at that mark`() = scope.runTest {
+    val chapter =
+      chapter(
+        ChapterMark(startMs = 0, endMs = 11_999, name = null),
+        ChapterMark(startMs = 12_000, endMs = 20_000, name = null),
+      )
+    currentBook = book(listOf(chapter), bookId).update { it.copy(positionInChapter = 3_000) }
+    player.setMediaItem(mediaItemProvider.playbackItems(currentBook)[1])
+    runCurrent()
+
+    player.prepare()
+    awaitReady()
+
+    player.shouldHavePosition(1, 0)
+  }
+
+  @Test
   fun `setBook starts a book that was never played at the last speed and keeps it`() =
     scope.runTest {
       lastPlaybackSpeedStore.updateData { 1.5F }

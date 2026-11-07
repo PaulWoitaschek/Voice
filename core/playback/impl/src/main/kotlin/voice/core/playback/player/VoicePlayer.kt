@@ -17,6 +17,7 @@ import kotlinx.coroutines.runBlocking
 import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.ListeningEvent
+import voice.core.data.durationMs
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
@@ -342,13 +343,12 @@ class VoicePlayer(
     startIndex: Int,
     startPositionMs: Long,
   ) {
-    val first = mediaItems.firstOrNull() ?: return
-    setBook(first, startIndex, startPositionMs)
+    val startItem = mediaItems.getOrNull(startIndex) ?: mediaItems.firstOrNull() ?: return
+    setBook(startItem, startPositionMs)
   }
 
   private fun setBook(
     mediaItem: MediaItem,
-    startIndex: Int = C.INDEX_UNSET,
     startPositionMs: Long = C.TIME_UNSET,
   ) {
     val mediaId = mediaItem.mediaId.toMediaIdOrNull() ?: return
@@ -377,12 +377,17 @@ class VoicePlayer(
     setSkipSilenceEnabled(book.content.skipSilence)
     volumeGain.gain = Decibel(book.content.gain)
     val requestedItem =
-      if (mediaId is MediaId.ChapterMark) book.playbackItems().getOrNull(startIndex) else null
+      if (mediaId is MediaId.ChapterMark) {
+        book.playbackItems().firstOrNull { it.mediaId == mediaId }
+      } else {
+        null
+      }
     if (requestedItem != null) {
+      val position = startPositionMs.takeUnless { it == C.TIME_UNSET } ?: 0L
       player.setBook(
         book = book,
         startItemIndex = requestedItem.index,
-        positionInItemMs = startPositionMs.takeUnless { it == C.TIME_UNSET } ?: 0L,
+        positionInItemMs = position.coerceIn(0L, requestedItem.mark.durationMs),
       )
       return
     }

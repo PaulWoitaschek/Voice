@@ -346,8 +346,7 @@ class PlayerControllerImpl(
 /**
  * Skipping back restarts the current chapter when it already played for a while, or when there is
  * no chapter before it. That is only a seek, so it can be undone only when it goes back far enough.
- * Returns null when playback is already where it would go, or when it's not known where it goes, as
- * right after preparing, before the book is split into its chapters.
+ * Returns null when playback is already where it would go, or when it's not known where it goes.
  */
 internal fun previousJumpType(
   from: PlaybackPosition?,
