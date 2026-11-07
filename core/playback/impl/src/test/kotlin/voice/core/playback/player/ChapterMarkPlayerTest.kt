@@ -231,6 +231,17 @@ class ChapterMarkPlayerTest {
   }
 
   @Test
+  fun `ignores chapters added while no book is loaded`() {
+    book = book(listOf(singleFileWithThreeMarks()))
+
+    player.addMediaItems(mediaItemProvider.playbackItems(book))
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(exoPlayer)
+
+    assertEquals(expected = 0, actual = exoPlayer.mediaItemCount)
+    assertEquals(expected = 0, actual = player.mediaItemCount)
+  }
+
+  @Test
   fun `does not offer repeat or shuffle because they would apply to whole files`() {
     setBook(listOf(singleFileWithThreeMarks()))
 

@@ -68,18 +68,6 @@ class LibrarySessionCallback(
     return super.onMediaButtonEvent(session, controllerInfo, intent)
   }
 
-  override fun onAddMediaItems(
-    mediaSession: MediaSession,
-    controller: ControllerInfo,
-    mediaItems: MutableList<MediaItem>,
-  ): ListenableFuture<List<MediaItem>> {
-    return scope.reportingFuture {
-      mediaItems.map { item ->
-        mediaItemProvider.item(item.mediaId) ?: item
-      }
-    }
-  }
-
   override fun onSetMediaItems(
     mediaSession: MediaSession,
     controller: ControllerInfo,

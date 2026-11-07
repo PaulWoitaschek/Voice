@@ -19,7 +19,6 @@ import voice.core.data.Book
 import voice.core.data.BookCategory
 import voice.core.data.BookComparator
 import voice.core.data.BookId
-import voice.core.data.Chapter
 import voice.core.data.category
 import voice.core.data.durationMs
 import voice.core.data.repo.BookRepository
@@ -66,12 +65,8 @@ class MediaItemProvider(
       is MediaId.Book -> {
         bookRepository.get(mediaId.id)?.let(::mediaItem)
       }
-      is MediaId.Chapter -> {
-        val book = bookRepository.get(mediaId.bookId) ?: return null
-        chapterRepo.get(mediaId.chapterId)?.let {
-          mediaItem(it, book)
-        }
-      }
+      // only the files inside the player have these ids, controllers never see them
+      is MediaId.Chapter -> null
       is MediaId.ChapterMark -> {
         val book = bookRepository.get(mediaId.bookId) ?: return null
         val chapter = chapterRepo.get(mediaId.chapterId) ?: return null
@@ -201,21 +196,6 @@ class MediaItemProvider(
       browsable = true,
       isPlayable = false,
       mediaType = MediaType.AudioBookFolder,
-    )
-
-  private fun mediaItem(
-    chapter: Chapter,
-    book: Book,
-  ) =
-    MediaItem(
-      title = chapter.name ?: chapter.id.value,
-      mediaId = MediaId.Chapter(bookId = book.id, chapterId = chapter.id),
-      browsable = false,
-      isPlayable = true,
-      sourceUri = chapter.id.toUri(),
-      imageUri = book.cover?.toProvidedUri(),
-      artist = book.author,
-      mediaType = MediaType.AudioBookChapter,
     )
 
   private fun mediaItem(

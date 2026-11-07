@@ -280,17 +280,11 @@ class ChapterMarkPlayer(private val player: ExoPlayer) : ForwardingSimpleBasePla
   ): ListenableFuture<*> {
     val playlist = playlist ?: return super.handleSeek(mediaItemIndex, positionMs, seekCommand)
     // a seek without a target, like next in the last chapter, does nothing
-    if (mediaItemIndex == C.INDEX_UNSET) return Futures.immediateVoidFuture()
-    val itemIndex = mediaItemIndex
-    val mark = playlist.marks.getOrNull(itemIndex)
-    if (mark == null) {
-      Logger.w("handleSeek to unknown itemIndex=$itemIndex")
-      return super.handleSeek(mediaItemIndex, positionMs, seekCommand)
-    }
+    val mark = playlist.marks.getOrNull(mediaItemIndex) ?: return Futures.immediateVoidFuture()
     val positionInItem = positionMs.takeUnless { it == C.TIME_UNSET } ?: 0L
-    reportedItemIndex = itemIndex
+    reportedItemIndex = mediaItemIndex
     player.seekTo(
-      playlist.fileIndexOf(itemIndex),
+      playlist.fileIndexOf(mediaItemIndex),
       mark.startMs + positionInItem.coerceIn(0L, mark.durationMs),
     )
     return Futures.immediateVoidFuture()
@@ -304,7 +298,6 @@ class ChapterMarkPlayer(private val player: ExoPlayer) : ForwardingSimpleBasePla
     index: Int,
     mediaItems: List<MediaItem>,
   ): ListenableFuture<*> {
-    if (playlist == null) return super.handleAddMediaItems(index, mediaItems)
     return ignoreChapterEdit("add")
   }
 
@@ -313,7 +306,6 @@ class ChapterMarkPlayer(private val player: ExoPlayer) : ForwardingSimpleBasePla
     toIndex: Int,
     newIndex: Int,
   ): ListenableFuture<*> {
-    if (playlist == null) return super.handleMoveMediaItems(fromIndex, toIndex, newIndex)
     return ignoreChapterEdit("move")
   }
 
@@ -322,7 +314,6 @@ class ChapterMarkPlayer(private val player: ExoPlayer) : ForwardingSimpleBasePla
     toIndex: Int,
     mediaItems: List<MediaItem>,
   ): ListenableFuture<*> {
-    if (playlist == null) return super.handleReplaceMediaItems(fromIndex, toIndex, mediaItems)
     return ignoreChapterEdit("replace")
   }
 
@@ -330,7 +321,6 @@ class ChapterMarkPlayer(private val player: ExoPlayer) : ForwardingSimpleBasePla
     fromIndex: Int,
     toIndex: Int,
   ): ListenableFuture<*> {
-    if (playlist == null) return super.handleRemoveMediaItems(fromIndex, toIndex)
     if (fromIndex > 0 || toIndex < markItems.size) return ignoreChapterEdit("remove")
     clearBoundaryMessages()
     playlist = null
