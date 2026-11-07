@@ -1,20 +1,31 @@
 # Privacy Policy
 
 Voice is an audiobook player made by Paul Woitaschek. Your audiobooks, your progress, your bookmarks and your listening
-history stay on your device and in your own folders. This page lists every case where Voice sends something off your
+history stay on your device and in your own folders. I run no server for Voice. This page describes what leaves your
 device, who gets it and why.
 
-## Which build you have
+## Features that use the internet
 
-Voice comes in two builds, and they differ in what they send:
+Some features need the internet, like the cover search, Audiobookshelf, or a link to help or a survey. Voice then
+sends the service behind the feature only what the feature needs. For example, that is your search for a cover, or
+your login and progress for your Audiobookshelf server. A link can add your app version and how and when you installed
+Voice. Like every website, the service sees your IP address, and its own privacy policy applies.
 
-- The **Google Play** build includes Firebase from Google, for crash reports, remote settings and, only if you agree,
-  usage analytics.
-- The **F-Droid, GitHub and IzzyDroid** builds contain no Google libraries. They send nothing to Google or to me.
+These are the services:
 
-The parts under "In every build" apply to both.
+- Audiobookshelf: only the server you connect Voice to.
+- Cover search: DuckDuckGo, and the website of the cover you pick.
+- Links: the website that opens in your browser.
+
+## Backups
+
+If backups are on on your phone, Android backs up Voice's data, like your library, progress and bookmarks, to your
+backup account, on most phones your Google account. The login to an Audiobookshelf server isn't backed up.
 
 ## Google Play build
+
+The Google Play build includes Firebase from Google. The F-Droid, GitHub and IzzyDroid builds contain no Google
+libraries, and nothing in this section applies to them.
 
 ### Crash reports
 
@@ -45,32 +56,6 @@ includes a random ID for this installation and the app version.
 Supporting Voice runs through Google Play's billing, and the rating prompt opens Google Play's review dialog. Google
 handles both under its own privacy policy.
 
-## In every build
-
-### Cover search
-
-When you search for a cover online, Voice sends your search, which starts as the book's name, to DuckDuckGo. The
-previews come from DuckDuckGo, and the cover you pick is downloaded from the website it's on.
-
-### Audiobookshelf
-
-You can connect Voice to an Audiobookshelf server that you or someone you trust runs. Voice then sends your username
-and password to that server to sign in, and exchanges your listening progress, bookmarks and listening sessions,
-including your device model and the app version, with it. It also streams and downloads audiobooks from it. This data
-goes only to the server you entered. I run no server for this and never receive this data. Signing out removes the
-books of the server and their downloads from your device.
-
-### Backups
-
-If backups are on on your phone, Android backs up Voice's data, like your library, progress and bookmarks, to your
-backup account, on most phones your Google account. The login to an Audiobookshelf server isn't backed up.
-
-### Links
-
-Help, feedback, the FAQ, Ko-fi and surveys open in your browser. The sites they open have their own privacy policies.
-A survey's link includes your app version, the app that installed Voice, such as the Play Store or F-Droid, and how many
-days ago you installed Voice, so answers can be told apart. Your answers go to the site that runs the survey.
-
 ## Who sees the data
 
 Only I see the crash reports and analytics, in the Firebase console. I use them to fix bugs and to decide what to work
@@ -89,6 +74,6 @@ and have it corrected or deleted. You can also object to its use and complain to
 
 Paul Woitaschek, [woitaschek@gmail.com](mailto:woitaschek@gmail.com)
 
-When Voice starts sending something new, this page changes with that release.
+When Voice starts sending a new kind of data, this page changes with that release.
 
-Last updated: 2026-10-24
+Last updated: 2026-11-07
