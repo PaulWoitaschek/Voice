@@ -1,7 +1,6 @@
 package voice.core.audiobookshelf.sync
 
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -239,7 +238,6 @@ class ProgressSyncTest {
       http =
         AudiobookshelfHttp(
           AccountStore(accountStore),
-          mockk { every { versionName } returns "1.0.0" },
           OkHttpClient(),
         ),
       bookRepository = repo,

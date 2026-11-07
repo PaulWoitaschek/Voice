@@ -1,7 +1,6 @@
 package voice.core.audiobookshelf.login
 
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -192,8 +191,7 @@ class AudiobookshelfLoginTest {
     serverAccount: ServerAccount = mockk(),
   ): AudiobookshelfLogin {
     val store = AccountStore(accountStore)
-    val http =
-      AudiobookshelfHttp(store, mockk { every { versionName } returns "1.0.0" }, OkHttpClient())
+    val http = AudiobookshelfHttp(store, OkHttpClient())
     return AudiobookshelfLogin(
       serverFinder = ServerFinder(http),
       previews = LibrariesPreviews(http, context = mockk()),

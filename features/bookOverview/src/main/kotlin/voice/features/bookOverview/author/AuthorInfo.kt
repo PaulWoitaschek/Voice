@@ -19,20 +19,24 @@ import kotlinx.serialization.json.JsonObject
 import okhttp3.Cache
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.coroutines.executeAsync
 import voice.core.common.DispatcherProvider
 
-// Wikimedia blocks the default user agent of OkHttp, for the images too
-internal const val WIKIMEDIA_USER_AGENT = "Voice (https://github.com/PaulWoitaschek/Voice)"
-
 @Immutable
 data class AuthorInfo(
   val description: String?,
   val extract: String,
-  val photo: String?,
+  val photo: AuthorPhoto?,
   val url: String,
+)
+
+@Immutable
+data class AuthorPhoto(
+  val url: String,
+  val page: String,
 )
 
 // A name alone often leads to someone else, like the composer for John Williams, so a page only
@@ -58,7 +62,7 @@ class AuthorInfoLookup(
     return AuthorInfo(
       description = summary.description?.replaceFirstChar { it.titlecase(locale) },
       extract = extract,
-      photo = summary.thumbnail?.source,
+      photo = summary.thumbnail?.source?.let(::commonsPhoto),
       url = summary.contentUrls.mobile.page,
     )
   }
@@ -103,6 +107,21 @@ class AuthorInfoLookup(
     }
   }
 
+  // Wikipedia also shows images that it may only use as fair use, which doesn't extend to apps
+  private fun commonsPhoto(url: String): AuthorPhoto? {
+    val segments = url.toHttpUrlOrNull()?.pathSegments ?: return null
+    if (segments.take(2) != listOf("wikipedia", "commons")) return null
+    val file = segments.getOrNull(if (segments.getOrNull(2) == "thumb") 5 else 4) ?: return null
+    val page =
+      HttpUrl.Builder()
+        .scheme("https")
+        .host("commons.wikimedia.org")
+        .addPathSegment("wiki")
+        .addPathSegment("File:$file")
+        .build()
+    return AuthorPhoto(url = url, page = page.toString())
+  }
+
   @Serializable
   private data class Summary(
     val type: String,
@@ -145,11 +164,6 @@ object AuthorInfoModule {
       okHttpClient
         .newBuilder()
         .cache(Cache(File(context.cacheDir, "authorInfo"), maxSize = 5L * 1024 * 1024))
-        .addInterceptor { chain ->
-          chain.proceed(
-            chain.request().newBuilder().header("User-Agent", WIKIMEDIA_USER_AGENT).build(),
-          )
-        }
         // Wikipedia allows 5 minutes and Wikidata none, but what we show about an author rarely
         // changes. Missing pages are kept as well, so authors without one cost no requests.
         .addNetworkInterceptor { chain ->

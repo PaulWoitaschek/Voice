@@ -2,7 +2,6 @@ package voice.core.audiobookshelf.sync
 
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import java.time.Instant
@@ -193,7 +192,6 @@ class BookmarkSyncTest {
       http =
         AudiobookshelfHttp(
           AccountStore(MemoryDataStore<Account?>(account)),
-          mockk { every { versionName } returns "1.0.0" },
           OkHttpClient(),
         ),
       bookRepository = MemoryBookRepository(book),

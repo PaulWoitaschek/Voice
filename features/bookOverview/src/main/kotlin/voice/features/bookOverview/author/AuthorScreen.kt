@@ -53,7 +53,13 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
@@ -109,7 +115,7 @@ fun AuthorScreen(name: String) {
     onBookLongClick = viewModel::onBookLongClick,
     onSeriesClick = viewModel::onSeriesClick,
     onSeriesLongClick = viewModel::onSeriesLongClick,
-    onWikipediaClick = viewModel::onWikipediaClick,
+    onLinkClick = viewModel::onLinkClick,
   )
 }
 
@@ -121,7 +127,7 @@ private fun AuthorScreen(
   onBookLongClick: (BookId) -> Unit,
   onSeriesClick: (String) -> Unit,
   onSeriesLongClick: (String) -> Unit,
-  onWikipediaClick: (String) -> Unit,
+  onLinkClick: (String) -> Unit,
 ) {
   Scaffold(
     topBar = {
@@ -165,7 +171,7 @@ private fun AuthorScreen(
           item(key = "about") {
             About(
               info = info,
-              onWikipediaClick = { onWikipediaClick(info.url) },
+              onLinkClick = onLinkClick,
               modifier = Modifier.animateItem().padding(top = 24.dp),
             )
           }
@@ -207,7 +213,7 @@ private fun AuthorScreen(
 @Composable
 private fun Header(viewState: AuthorViewState) {
   Row(verticalAlignment = Alignment.CenterVertically) {
-    Portrait(photo = viewState.info?.photo, modifier = Modifier.size(112.dp))
+    Portrait(photo = viewState.info?.photo?.url, modifier = Modifier.size(112.dp))
     Spacer(Modifier.width(20.dp))
     Column(Modifier.weight(1F)) {
       Text(
@@ -260,11 +266,7 @@ private fun Portrait(
       AsyncImage(
         model =
           remember(photo, context) {
-            ImageRequest.Builder(context)
-              .data(photo)
-              .setHeader("User-Agent", WIKIMEDIA_USER_AGENT)
-              .crossfade(true)
-              .build()
+            ImageRequest.Builder(context).data(photo).crossfade(true).build()
           },
         contentDescription = null,
         contentScale = ContentScale.Crop,
@@ -279,7 +281,7 @@ private fun Portrait(
 @Composable
 private fun About(
   info: AuthorInfo,
-  onWikipediaClick: () -> Unit,
+  onLinkClick: (String) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var expanded by rememberSaveable { mutableStateOf(false) }
@@ -289,7 +291,7 @@ private fun About(
     shape = RoundedCornerShape(32.dp),
     color = MaterialTheme.colorScheme.surfaceContainer,
   ) {
-    Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 8.dp)) {
+    Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 16.dp)) {
       Text(
         text = info.extract,
         style = MaterialTheme.typography.bodyLarge,
@@ -299,12 +301,41 @@ private fun About(
       )
       Spacer(Modifier.height(4.dp))
       // lines the label up with the text
-      TextButton(onClick = onWikipediaClick, modifier = Modifier.offset(x = (-12).dp)) {
+      TextButton(onClick = { onLinkClick(info.url) }, modifier = Modifier.offset(x = (-12).dp)) {
         Text(stringResource(StringsR.string.author_wikipedia))
       }
+      Credits(photo = info.photo, onLinkClick = onLinkClick)
     }
   }
 }
+
+// The text and the photo may only be shown with their license. The Commons page of the photo
+// names its own license and the photographer.
+@Composable
+private fun Credits(
+  photo: AuthorPhoto?,
+  onLinkClick: (String) -> Unit,
+) {
+  val linkStyles = TextLinkStyles(SpanStyle(textDecoration = TextDecoration.Underline))
+  val text = buildAnnotatedString {
+    withLink(LinkAnnotation.Url(TEXT_LICENSE, linkStyles) { onLinkClick(TEXT_LICENSE) }) {
+      append("CC BY-SA 4.0")
+    }
+    if (photo != null) {
+      append(" · ")
+      withLink(LinkAnnotation.Url(photo.page, linkStyles) { onLinkClick(photo.page) }) {
+        append("Wikimedia Commons")
+      }
+    }
+  }
+  Text(
+    text = text,
+    style = MaterialTheme.typography.labelMedium,
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
+  )
+}
+
+private const val TEXT_LICENSE = "https://creativecommons.org/licenses/by-sa/4.0/"
 
 @Composable
 @Preview
@@ -357,7 +388,7 @@ private fun AuthorScreenPreview() {
       onBookLongClick = {},
       onSeriesClick = {},
       onSeriesLongClick = {},
-      onWikipediaClick = {},
+      onLinkClick = {},
     )
   }
 }

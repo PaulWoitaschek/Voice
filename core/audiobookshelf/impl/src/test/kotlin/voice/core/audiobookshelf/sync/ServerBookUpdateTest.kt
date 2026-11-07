@@ -1,7 +1,5 @@
 package voice.core.audiobookshelf.sync
 
-import io.mockk.every
-import io.mockk.mockk
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -279,7 +277,6 @@ class ServerBookUpdateTest {
       http =
         AudiobookshelfHttp(
           AccountStore(MemoryDataStore<Account?>(account)),
-          mockk { every { versionName } returns "1.0.0" },
           OkHttpClient(),
         ),
       accountStore = AccountStore(MemoryDataStore<Account?>(account)),

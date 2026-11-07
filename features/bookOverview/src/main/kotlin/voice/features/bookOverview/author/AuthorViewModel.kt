@@ -133,7 +133,7 @@ class AuthorViewModel(
     navigator.goTo(Destination.SeriesActions(name))
   }
 
-  internal fun onWikipediaClick(url: String) {
+  internal fun onLinkClick(url: String) {
     navigator.goTo(Destination.Website(url))
   }
 

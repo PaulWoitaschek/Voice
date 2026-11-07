@@ -35,7 +35,7 @@ object CoverModule {
           chain
             .request()
             .newBuilder()
-            .addHeader(
+            .header(
               name = "User-Agent",
               value = remoteConfig.string(key = "user_agent", defaultValue = "Mozilla/5.0"),
             )

@@ -13,5 +13,15 @@ object HttpModule {
 
   // Clients that need their own settings derive from this one with newBuilder(), so all of them
   // share one connection pool and its threads
-  @Provides @SingleIn(AppScope::class) fun okHttpClient(): OkHttpClient = OkHttpClient()
+  @Provides
+  @SingleIn(AppScope::class)
+  fun okHttpClient(appInfoProvider: AppInfoProvider): OkHttpClient {
+    // Wikimedia blocks the default user agent of OkHttp and asks for a version and a contact
+    val userAgent = "Voice/${appInfoProvider.versionName} (https://github.com/PaulWoitaschek/Voice)"
+    return OkHttpClient.Builder()
+      .addInterceptor { chain ->
+        chain.proceed(chain.request().newBuilder().header("User-Agent", userAgent).build())
+      }
+      .build()
+  }
 }

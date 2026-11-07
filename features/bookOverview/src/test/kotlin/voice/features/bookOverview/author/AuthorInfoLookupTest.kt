@@ -29,11 +29,32 @@ class AuthorInfoLookupTest {
         AuthorInfo(
           description = "American author (born 1947)",
           extract = "Stephen Edwin King is an American author.",
-          photo = "https://upload.wikimedia.org/king.jpg",
+          photo =
+            AuthorPhoto(
+              url = COMMONS_THUMBNAIL,
+              page = "https://commons.wikimedia.org/wiki/File:Stephen_King_(cropped).jpg",
+            ),
           url = "https://en.wikipedia.org/wiki/Stephen_King",
         ),
       actual = lookup.info("Stephen King", Locale.ENGLISH),
     )
+  }
+
+  @Test
+  fun `a photo that is not on Wikimedia Commons is left out`() = runTest {
+    val lookup = lookup { url ->
+      when {
+        url.isSummary("en", "Banksy") ->
+          summary(
+            item = "Q133600",
+            thumbnail = "https://upload.wikimedia.org/wikipedia/en/3/3f/Banksy-ps2.jpg",
+          )
+        url.isAuthorSearch("Q133600") -> AUTHOR_FOUND
+        else -> null
+      }
+    }
+
+    assertEquals(expected = null, actual = lookup.info("Banksy", Locale.ENGLISH)?.photo)
   }
 
   @Test
@@ -118,13 +139,14 @@ class AuthorInfoLookupTest {
   private fun summary(
     item: String,
     type: String = "standard",
+    thumbnail: String = COMMONS_THUMBNAIL,
   ): String {
     return """
       {
         "type": "$type",
         "description": "American author (born 1947)",
         "extract": "Stephen Edwin King is an American author.",
-        "thumbnail": { "source": "https://upload.wikimedia.org/king.jpg", "width": 330 },
+        "thumbnail": { "source": "$thumbnail", "width": 330 },
         "wikibase_item": "$item",
         "content_urls": {
           "desktop": { "page": "https://en.wikipedia.org/wiki/Stephen_King" },
@@ -135,6 +157,10 @@ class AuthorInfoLookupTest {
       .trimIndent()
   }
 }
+
+private const val COMMONS_THUMBNAIL =
+  "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Stephen_King_%28cropped%29.jpg/" +
+    "330px-Stephen_King_%28cropped%29.jpg?utm_source=en.wikipedia.org"
 
 private const val AUTHOR_FOUND =
   """{"batchcomplete":"","query":{"search":[{"ns":0,"title":"Q753290","pageid":708707}]}}"""
