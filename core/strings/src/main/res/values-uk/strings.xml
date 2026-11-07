@@ -407,6 +407,20 @@
     <string name="review.prompt.thanks.title">Дякуємо!</string>
     <string name="series.continue">Продовжити</string>
     <string name="series.continue_book">Продовжити книгу %s</string>
+    <string name="series.mark_completed">Позначити як завершену</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Ви втратите місце, де зупинилися, у %d книзі.</item>
+        <item quantity="few">Ви втратите місце, де зупинилися, у %d книгах.</item>
+        <item quantity="many">Ви втратите місце, де зупинилися, у %d книгах.</item>
+        <item quantity="other">Ви втратите місце, де зупинилися, у %d книгах.</item>
+    </plurals>
+    <string name="series.mark_not_started">Позначити як ще не почату</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Ви втратите прогрес у %d книзі.</item>
+        <item quantity="few">Ви втратите прогрес у %d книгах.</item>
+        <item quantity="many">Ви втратите прогрес у %d книгах.</item>
+        <item quantity="other">Ви втратите прогрес у %d книгах.</item>
+    </plurals>
     <string name="series.start">Почати</string>
     <string name="series.start_book">Почати книгу %s</string>
     <string name="settings.about.app_version.title">Версія</string>

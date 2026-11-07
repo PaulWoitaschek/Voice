@@ -369,6 +369,16 @@
     <string name="review.prompt.thanks.title">ممنون!</string>
     <string name="series.continue">ادامه</string>
     <string name="series.continue_book">ادامهٔ کتاب %s</string>
+    <string name="series.mark_completed">علامت زدن به عنوان تمام‌شده</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">جایی را که در %d کتاب بودید از دست می‌دهید.</item>
+        <item quantity="other">جایی را که در %d کتاب بودید از دست می‌دهید.</item>
+    </plurals>
+    <string name="series.mark_not_started">علامت زدن به عنوان شروع نشده</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">پیشرفت خود را در %d کتاب از دست می‌دهید.</item>
+        <item quantity="other">پیشرفت خود را در %d کتاب از دست می‌دهید.</item>
+    </plurals>
     <string name="series.start">شروع</string>
     <string name="series.start_book">شروع کتاب %s</string>
     <string name="settings.about.app_version.title">ورژن اپلیکیشن</string>

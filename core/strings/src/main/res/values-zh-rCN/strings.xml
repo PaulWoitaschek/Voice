@@ -350,6 +350,14 @@
     <string name="review.prompt.thanks.title">谢谢！</string>
     <string name="series.continue">继续收听</string>
     <string name="series.continue_book">继续收听第 %s 卷</string>
+    <string name="series.mark_completed">标记为已听完</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="other">%d 本书的收听位置会丢失。</item>
+    </plurals>
+    <string name="series.mark_not_started">标记为未开始</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="other">%d 本书的收听进度会丢失。</item>
+    </plurals>
     <string name="series.start">开始收听</string>
     <string name="series.start_book">开始收听第 %s 卷</string>
     <string name="settings.about.app_version.title">软件版本</string>

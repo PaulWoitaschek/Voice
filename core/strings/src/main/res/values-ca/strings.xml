@@ -388,6 +388,18 @@
     <string name="review.prompt.thanks.title">Gràcies!</string>
     <string name="series.continue">Continua</string>
     <string name="series.continue_book">Continua el llibre %s</string>
+    <string name="series.mark_completed">Marca com a completada</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Perdreu per on anàveu en %d llibre.</item>
+        <item quantity="many">Perdreu per on anàveu en %d llibres.</item>
+        <item quantity="other">Perdreu per on anàveu en %d llibres.</item>
+    </plurals>
+    <string name="series.mark_not_started">Marca com a no començada</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Perdreu el vostre progrés en %d llibre.</item>
+        <item quantity="many">Perdreu el vostre progrés en %d llibres.</item>
+        <item quantity="other">Perdreu el vostre progrés en %d llibres.</item>
+    </plurals>
     <string name="series.start">Comença</string>
     <string name="series.start_book">Comença el llibre %s</string>
     <string name="settings.about.app_version.title">Versió de l\'aplicació</string>

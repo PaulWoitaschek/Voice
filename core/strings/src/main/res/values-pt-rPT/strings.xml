@@ -388,6 +388,18 @@
     <string name="review.prompt.thanks.title">Obrigado!</string>
     <string name="series.continue">Continuar</string>
     <string name="series.continue_book">Continuar o livro %s</string>
+    <string name="series.mark_completed">Marcar como concluída</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Perderá o ponto onde ia em %d livro.</item>
+        <item quantity="many">Perderá o ponto onde ia em %d livros.</item>
+        <item quantity="other">Perderá o ponto onde ia em %d livros.</item>
+    </plurals>
+    <string name="series.mark_not_started">Marcar como não iniciada</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Perderá o seu progresso em %d livro.</item>
+        <item quantity="many">Perderá o seu progresso em %d livros.</item>
+        <item quantity="other">Perderá o seu progresso em %d livros.</item>
+    </plurals>
     <string name="series.start">Começar</string>
     <string name="series.start_book">Começar o livro %s</string>
     <string name="settings.about.app_version.title">Versão</string>

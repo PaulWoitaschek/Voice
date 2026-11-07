@@ -369,6 +369,16 @@
     <string name="review.prompt.thanks.title">Aitäh!</string>
     <string name="series.continue">Jätka</string>
     <string name="series.continue_book">Jätka raamatut %s</string>
+    <string name="series.mark_completed">Märgi kuulatuks</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Sa kaotad oma järje %d raamatus.</item>
+        <item quantity="other">Sa kaotad oma järje %d raamatus.</item>
+    </plurals>
+    <string name="series.mark_not_started">Märgi ootel olevaks</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Sa kaotad oma edenemise %d raamatus.</item>
+        <item quantity="other">Sa kaotad oma edenemise %d raamatus.</item>
+    </plurals>
     <string name="series.start">Alusta</string>
     <string name="series.start_book">Alusta raamatut %s</string>
     <string name="settings.about.app_version.title">Rakenduse versioon</string>

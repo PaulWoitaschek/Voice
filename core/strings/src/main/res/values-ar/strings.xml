@@ -445,6 +445,24 @@
     <string name="review.prompt.thanks.title">شكرًا لك!</string>
     <string name="series.continue">متابعة</string>
     <string name="series.continue_book">متابعة الكتاب %s</string>
+    <string name="series.mark_completed">وضع علامة «مكتملة»</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="zero">سيضيع موضع استماعك في %d كتاب.</item>
+        <item quantity="one">سيضيع موضع استماعك في %d كتاب.</item>
+        <item quantity="two">سيضيع موضع استماعك في %d كتابين.</item>
+        <item quantity="few">سيضيع موضع استماعك في %d كتب.</item>
+        <item quantity="many">سيضيع موضع استماعك في %d كتابًا.</item>
+        <item quantity="other">سيضيع موضع استماعك في %d كتاب.</item>
+    </plurals>
+    <string name="series.mark_not_started">وضع علامة «لم تبدأ بعد»</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="zero">سيضيع تقدّمك في %d كتاب.</item>
+        <item quantity="one">سيضيع تقدّمك في %d كتاب.</item>
+        <item quantity="two">سيضيع تقدّمك في %d كتابين.</item>
+        <item quantity="few">سيضيع تقدّمك في %d كتب.</item>
+        <item quantity="many">سيضيع تقدّمك في %d كتابًا.</item>
+        <item quantity="other">سيضيع تقدّمك في %d كتاب.</item>
+    </plurals>
     <string name="series.start">بدء</string>
     <string name="series.start_book">بدء الكتاب %s</string>
     <string name="settings.about.app_version.title">إصدارة التطبيق</string>

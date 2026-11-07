@@ -350,6 +350,14 @@
     <string name="review.prompt.thanks.title">ありがとうございます！</string>
     <string name="series.continue">続きを聴く</string>
     <string name="series.continue_book">第%s巻の続きを聴く</string>
+    <string name="series.mark_completed">完了としてマーク</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="other">%d 冊の再生位置が失われます。</item>
+    </plurals>
+    <string name="series.mark_not_started">未再生としてマーク</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="other">%d 冊の進み具合が失われます。</item>
+    </plurals>
     <string name="series.start">聴き始める</string>
     <string name="series.start_book">第%s巻を聴き始める</string>
     <string name="settings.about.app_version.title">アプリのバージョン</string>
