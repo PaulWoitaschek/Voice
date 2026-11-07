@@ -51,15 +51,15 @@ class ChapterMarkPlayer(private val player: ExoPlayer) : ForwardingSimpleBasePla
     )
   }
 
-  internal fun setChapterMarks(
+  override fun handleSetMediaItems(
     mediaItems: List<MediaItem>,
     startIndex: Int,
     startPositionMs: Long,
-  ) {
+  ): ListenableFuture<*> {
     val playlist = applyChapterMarks(mediaItems)
     if (playlist == null) {
       Logger.w("Ignoring ${mediaItems.size} media items that are not all chapter marks")
-      return
+      return Futures.immediateVoidFuture()
     }
     val itemIndex = startIndex.takeIf { it in playlist.marks.indices } ?: 0
     val mark = playlist.marks[itemIndex]
@@ -71,7 +71,7 @@ class ChapterMarkPlayer(private val player: ExoPlayer) : ForwardingSimpleBasePla
       mark.startMs + positionInItemMs.coerceIn(0L, mark.durationMs),
     )
     registerBoundaryMessages(playlist)
-    invalidateState()
+    return Futures.immediateVoidFuture()
   }
 
   private fun applyChapterMarks(mediaItems: List<MediaItem>): ChapterMarkPlaylist? {
@@ -296,7 +296,7 @@ class ChapterMarkPlayer(private val player: ExoPlayer) : ForwardingSimpleBasePla
     return Futures.immediateVoidFuture()
   }
 
-  // Controllers can replace the whole book, which VoicePlayer maps to setChapterMarks, or clear it.
+  // Controllers can replace the whole book or clear it.
   // Editing single chapters would have to be translated into edits of the files of the wrapped
   // player, so such requests are ignored.
 

@@ -270,7 +270,7 @@ class ChapterMarkPlayerTest {
     positionInItemMs: Long = 0,
   ) {
     book = book(chapters)
-    player.setChapterMarks(mediaItemProvider.playbackItems(book), startItemIndex, positionInItemMs)
+    player.setMediaItems(mediaItemProvider.playbackItems(book), startItemIndex, positionInItemMs)
     player.prepare()
     TestPlayerRunHelper.runUntilPlaybackState(exoPlayer, Player.STATE_READY)
   }

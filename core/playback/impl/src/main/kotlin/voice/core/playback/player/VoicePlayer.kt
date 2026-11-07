@@ -300,43 +300,6 @@ class VoicePlayer(
     }
   }
 
-  override fun setMediaItem(mediaItem: MediaItem) {
-    setMediaItems(listOf(mediaItem))
-  }
-
-  override fun setMediaItem(
-    mediaItem: MediaItem,
-    startPositionMs: Long,
-  ) {
-    setMediaItems(listOf(mediaItem), 0, startPositionMs)
-  }
-
-  override fun setMediaItem(
-    mediaItem: MediaItem,
-    resetPosition: Boolean,
-  ) {
-    setMediaItems(listOf(mediaItem))
-  }
-
-  override fun setMediaItems(mediaItems: List<MediaItem>) {
-    setMediaItems(mediaItems, 0, C.TIME_UNSET)
-  }
-
-  override fun setMediaItems(
-    mediaItems: List<MediaItem>,
-    resetPosition: Boolean,
-  ) {
-    setMediaItems(mediaItems)
-  }
-
-  override fun setMediaItems(
-    mediaItems: List<MediaItem>,
-    startIndex: Int,
-    startPositionMs: Long,
-  ) {
-    player.setChapterMarks(mediaItems, startIndex, startPositionMs)
-  }
-
   /**
    * Applies the settings of the book that is about to play. Unlike the setters, it doesn't store
    * them, as they already are the book's own.
