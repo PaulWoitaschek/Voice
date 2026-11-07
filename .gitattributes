@@ -1,0 +1,7 @@
+core/data/impl/schemas/** linguist-generated=true
+
+core/strings/src/main/res/values-*/strings.xml linguist-generated=true
+core/strings/src/main/res/values-de/strings.xml -linguist-generated
+fastlane/metadata/android/** linguist-generated=true
+fastlane/metadata/android/en-US/** -linguist-generated
+fastlane/metadata/android/de-DE/** -linguist-generated
