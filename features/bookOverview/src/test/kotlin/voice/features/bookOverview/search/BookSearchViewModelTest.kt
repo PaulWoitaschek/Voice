@@ -294,22 +294,32 @@ class BookSearchViewModelTest {
 
   @Test
   fun `browse entry click searches within that category`() = runTest {
-    coEvery { search.search("Stephen King") } returns
+    coEvery { search.search("Horror") } returns
       listOf(
-        shining.result(BookSearchField.Author),
+        shining.result(BookSearchField.Genre),
         kingkiller.result(BookSearchField.Title),
       )
     val viewModel = viewModel()
 
     testState(viewModel) {
-      viewModel.onBrowseEntryClick(BrowseCategory.Authors, "Stephen King")
+      viewModel.onBrowseEntryClick(BrowseCategory.Genres, "Horror")
 
       val state = awaitState<BookSearchViewState.Results>()
-      assertEquals(expected = "Stephen King", actual = viewModel.query.text.toString())
+      assertEquals(expected = "Horror", actual = viewModel.query.text.toString())
       assertEquals(expected = shining.id, actual = state.topResult.id)
       assertEquals(expected = emptyList(), actual = state.otherResults)
-      coVerify { recentBookSearchRepo.add("Stephen King") }
+      coVerify { recentBookSearchRepo.add("Horror") }
     }
+  }
+
+  @Test
+  fun `browse author click opens the author`() = runTest {
+    val viewModel = viewModel()
+
+    viewModel.onBrowseEntryClick(BrowseCategory.Authors, "Stephen King")
+
+    verify { navigator.goTo(Destination.Author("Stephen King")) }
+    assertEquals(expected = "", actual = viewModel.query.text.toString())
   }
 
   @Test

@@ -22,7 +22,6 @@ import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.AccountStore
 import voice.core.audiobookshelf.api.AudiobookshelfApi
 import voice.core.audiobookshelf.audiobookshelfJson
-import voice.core.common.AppInfoProvider
 import voice.core.logging.api.Logger
 
 /**
@@ -34,20 +33,14 @@ import voice.core.logging.api.Logger
 @Inject
 internal class AudiobookshelfHttp(
   private val accountStore: AccountStore,
-  appInfoProvider: AppInfoProvider,
+  okHttpClient: OkHttpClient,
 ) {
 
-  private val userAgent = "Voice/${appInfoProvider.versionName}"
-
   val client: OkHttpClient =
-    OkHttpClient.Builder()
+    okHttpClient
+      .newBuilder()
       .connectTimeout(10, TimeUnit.SECONDS)
       .readTimeout(30, TimeUnit.SECONDS)
-      .addInterceptor { chain ->
-        chain.proceed(
-          chain.request().newBuilder().header("User-Agent", userAgent).build(),
-        )
-      }
       .build()
 
   val authenticatedClient: OkHttpClient =

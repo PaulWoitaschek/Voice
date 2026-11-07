@@ -64,6 +64,7 @@
     <string name="audiobookshelf.status.needs_login">Server vyžaduje nové přihlášení</string>
     <string name="audiobookshelf.status.offline">Server teď není dostupný. Stažené knihy můžete poslouchat dál.</string>
     <string name="audiobookshelf.status.syncing">Synchronizace…</string>
+    <string name="author.wikipedia">Více na Wikipedii</string>
     <string name="book.category.action.mark_completed">Označit jako dokončené</string>
     <string name="book.category.action.mark_current">Označit jako aktuální</string>
     <string name="book.category.action.mark_not_started">Označit jako nezačaté</string>

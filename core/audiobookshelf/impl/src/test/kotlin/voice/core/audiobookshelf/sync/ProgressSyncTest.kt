@@ -1,7 +1,6 @@
 package voice.core.audiobookshelf.sync
 
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -17,6 +16,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
+import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Before
 import voice.core.audiobookshelf.MemoryBookRepository
@@ -238,7 +238,7 @@ class ProgressSyncTest {
       http =
         AudiobookshelfHttp(
           AccountStore(accountStore),
-          mockk { every { versionName } returns "1.0.0" },
+          OkHttpClient(),
         ),
       bookRepository = repo,
       syncedProgressStore = SyncedProgressStore(syncedProgress),

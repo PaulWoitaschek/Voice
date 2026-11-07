@@ -13,10 +13,11 @@ import okhttp3.Request
 import okhttp3.coroutines.executeAsync
 import okio.sink
 import voice.core.logging.api.Logger
+import voice.features.cover.api.CoverClient
 
 @Inject
 class CoverDownloader(
-  private val client: OkHttpClient,
+  @CoverClient private val client: OkHttpClient,
   private val context: Context,
 ) {
 

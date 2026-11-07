@@ -4,6 +4,7 @@ package voice.features.bookOverview.series
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -102,6 +104,7 @@ fun SeriesScreen(name: String) {
       onBookClick = viewModel::onBookClick,
       onBookLongClick = viewModel::onBookLongClick,
       onMoreClick = viewModel::onMoreClick,
+      onAuthorClick = viewModel::onAuthorClick,
     )
   }
 }
@@ -114,6 +117,7 @@ private fun SeriesScreen(
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   onMoreClick: () -> Unit,
+  onAuthorClick: (String) -> Unit,
 ) {
   Scaffold(
     topBar = {
@@ -158,7 +162,7 @@ private fun SeriesScreen(
           ),
       ) {
         item(key = "header") {
-          Header(viewState)
+          Header(viewState, onAuthorClick = onAuthorClick)
         }
         val action = viewState.action
         if (action != null) {
@@ -195,7 +199,10 @@ private fun SeriesScreen(
 }
 
 @Composable
-private fun Header(viewState: SeriesViewState) {
+private fun Header(
+  viewState: SeriesViewState,
+  onAuthorClick: (String) -> Unit,
+) {
   Row(verticalAlignment = Alignment.CenterVertically) {
     SeriesCover(
       seriesKey = viewState.key,
@@ -211,14 +218,16 @@ private fun Header(viewState: SeriesViewState) {
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier.semantics { heading() },
       )
-      if (viewState.author != null) {
+      val author = viewState.author
+      if (author != null) {
         Spacer(Modifier.height(4.dp))
         Text(
-          text = viewState.author,
+          text = author,
           style = MaterialTheme.typography.bodyLarge.bookText(),
           color = MaterialTheme.colorScheme.onSurfaceVariant,
           maxLines = 2,
           overflow = TextOverflow.Ellipsis,
+          modifier = Modifier.clickable(role = Role.Button) { onAuthorClick(author) },
         )
       }
       Spacer(Modifier.height(4.dp))
@@ -347,6 +356,7 @@ private fun SeriesScreenPreview() {
       onBookClick = {},
       onBookLongClick = {},
       onMoreClick = {},
+      onAuthorClick = {},
     )
   }
 }
