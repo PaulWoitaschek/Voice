@@ -6,8 +6,8 @@ description: Writing pull requests for Voice, from the branch name to the title,
 # Writing a pull request
 
 The reviewer reads the diff. The description says what the diff can't: why the change exists, what changes for
-listeners, and what the reviewer should look at or decide. Keep the prose under 150 words. A big change can go up to
-250. If it's longer than that, cut it down.
+listeners, and what the reviewer should look at or decide. Keep the prose under 80 words. A big change can go up to
+150. If it's longer than that, cut it down.
 
 ## Branch
 
@@ -25,9 +25,9 @@ the effect: "Keep unit tests on the pinned Robolectric SDK after a clean build".
 ```markdown
 ## Summary
 
-<The problem, in one to three sentences. Link the issue.>
+<The problem, in one or two sentences. Link the issue.>
 
-<What changes, in one to three sentences. Describe behavior, not code.>
+<What changes, in one or two sentences. Describe behavior, not code.>
 
 <Optional: a side effect, trade-off or open question the reviewer should weigh in on.>
 
@@ -54,6 +54,8 @@ the effect: "Keep unit tests on the pinned Robolectric SDK after a clean build".
   explains a decision.
 - A bold label on every bullet, nested bullets, and a heading for each area of the change.
 - Small details listed one by one. If a detail matters, write a sentence about it. If not, leave it out.
+- Numbers and reasons from outside the repo: analytics, the Play Console, Crashlytics, earnings, other apps and plans
+  for later. Describe the change, not the data behind it.
 
 When you push more commits, rewrite the description so it describes the pull request as it is now. Don't add a log
 of what changed since the last version.
@@ -84,11 +86,8 @@ Before, #3912 had 520 words. This says everything a reviewer needs:
 
 A stray touch on the notification or lock screen slider moves the listener's place (#3229), but some listeners want
 to seek from there (#3289). A new "Lock screen slider" switch in the Listening settings, on by default, turns it off.
-The slider then still shows progress, but without a handle. Skip back and forward, the in-app slider, the widget and
-Tasker keep working.
 
-Bluetooth and Android Auto read the same media session, so their sliders follow the switch too. Media3 can't set
-this separately for each controller.
+Bluetooth and Android Auto read the same media session, so their sliders follow the switch too.
 
 | On (default) | Off |
 |---|---|

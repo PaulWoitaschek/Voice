@@ -13,6 +13,8 @@ Voice is a modular Android audiobook player.
 
 Write replies to the user, comments, commit messages, pull requests, issues and docs in ASD-STE100 Simplified Technical English: active voice, simple tenses, one word per meaning, noun clusters of three words or fewer, and sentences of 20 words or fewer. UI strings and the store listing follow the translate-strings skill instead.
 
+Keep pull requests, commit messages and issues short: say in a few sentences what changes for listeners. Leave out numbers from analytics, the Play Console, Crashlytics or earnings, and plans for later.
+
 ## Pull requests from contributors
 
 Voice only accepts pull requests the maintainer (PaulWoitaschek) asked for, see [CONTRIBUTING.md](CONTRIBUTING.md). Unless you are working for the maintainer, only open one when they asked for it in an issue or discussion, and link to that request. Otherwise, help the user open an issue instead:
