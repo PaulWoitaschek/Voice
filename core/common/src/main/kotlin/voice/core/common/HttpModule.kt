@@ -16,7 +16,8 @@ object HttpModule {
   @Provides
   @SingleIn(AppScope::class)
   fun okHttpClient(appInfoProvider: AppInfoProvider): OkHttpClient {
-    // Wikimedia blocks the default user agent of OkHttp and asks for a version and a contact
+    // Wikimedia and DuckDuckGo block the default user agent of OkHttp, and Wikimedia asks for a
+    // version and a contact
     val userAgent = "Voice/${appInfoProvider.versionName} (https://github.com/PaulWoitaschek/Voice)"
     return OkHttpClient.Builder()
       .addInterceptor { chain ->

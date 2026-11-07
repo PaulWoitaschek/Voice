@@ -5,7 +5,6 @@ plugins {
 dependencies {
   implementation(projects.core.data.api)
   implementation(projects.core.scanner)
-  implementation(projects.core.remoteconfig.api)
 
   implementation(libs.bundles.retrofit)
   implementation(libs.okhttp)
