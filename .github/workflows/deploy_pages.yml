@@ -9,7 +9,6 @@ on:
       - 'artwork/public/**'
       - artwork/src/templates/decor.ts
       - fastlane/metadata/android/en-US/images/featureGraphic.png
-      - 'docs/prototypes/**'
       - .github/workflows/deploy_pages.yml
   pull_request:
     paths: *paths
