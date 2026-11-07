@@ -1,20 +1,25 @@
 # Privacy Policy
 
 Voice is an audiobook player made by Paul Woitaschek. Your audiobooks, your progress, your bookmarks and your listening
-history stay on your device and in your own folders. This page describes what Voice sends off your device, who gets it
-and why.
+history stay on your device and in your own folders. I run no server for Voice. This page describes what leaves your
+device, who gets it and why.
 
-## Which build you have
+## Features that use the internet
 
-Voice comes in two builds, and they differ in what they send:
+Some features need the internet, like the cover search, a server you connect, or a link to help or a survey. Voice then
+sends the service behind the feature only what the feature needs. For example, that is your search for a cover, or
+your login and progress for your own server. A link can add your app version and how and when you installed Voice. Like every
+website, the service sees your IP address, and its own privacy policy applies.
 
-- The **Google Play** build includes Firebase from Google, for crash reports, remote settings and, only if you agree,
-  usage analytics.
-- The **F-Droid, GitHub and IzzyDroid** builds contain no Google libraries. They send nothing to Google or to me.
+## Backups
 
-The parts under "In every build" apply to both.
+If backups are on on your phone, Android backs up Voice's data, like your library, progress and bookmarks, to your
+backup account, on most phones your Google account. The login to a server isn't backed up.
 
 ## Google Play build
+
+The Google Play build includes Firebase from Google. The F-Droid, GitHub and IzzyDroid builds contain no Google
+libraries, and nothing in this section applies to them.
 
 ### Crash reports
 
@@ -45,33 +50,6 @@ includes a random ID for this installation and the app version.
 Supporting Voice runs through Google Play's billing, and the rating prompt opens Google Play's review dialog. Google
 handles both under its own privacy policy.
 
-## In every build
-
-### Online lookups
-
-Some features look up information online, like covers for your books. Voice then sends only what it looks up, like the
-name of a book, to the service that answers it, such as DuckDuckGo. Like every website, that service sees your IP
-address. A cover you pick comes from the website it's on.
-
-### Servers you connect
-
-You can connect Voice to a server that you or someone you trust runs, like Audiobookshelf. Voice signs in with the
-login you enter, and streams and downloads audiobooks from the server. It also exchanges your listening progress,
-bookmarks and listening sessions with it, including your device model and the app version. This data goes only to the
-server you entered. I run no server for this and never receive this data. Signing out removes the server's books and
-their downloads from your device.
-
-### Backups
-
-If backups are on on your phone, Android backs up Voice's data, like your library, progress and bookmarks, to your
-backup account, on most phones your Google account. The login to a server isn't backed up.
-
-### Links
-
-Some buttons, like help, feedback, Ko-fi or a survey, open a website in your browser. That site has its own privacy
-policy, and what you enter there goes to it. A link can include your app version and where and when you installed
-Voice, so a survey can tell answers apart.
-
 ## Who sees the data
 
 Only I see the crash reports and analytics, in the Firebase console. I use them to fix bugs and to decide what to work
@@ -90,7 +68,6 @@ and have it corrected or deleted. You can also object to its use and complain to
 
 Paul Woitaschek, [woitaschek@gmail.com](mailto:woitaschek@gmail.com)
 
-When Voice starts sending a new kind of data, or sends data to a new kind of service, this page changes with that
-release.
+When Voice starts sending a new kind of data, this page changes with that release.
 
 Last updated: 2026-11-07
