@@ -2,6 +2,7 @@
 
 package voice.core.ui
 
+import android.util.LruCache
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
@@ -49,17 +50,24 @@ fun CoverTheme(
   )
 }
 
+// a scheme takes long enough to drop frames, and screens of one cover often follow each other
+private val coverColorSchemes = LruCache<Pair<Color, Boolean>, ColorScheme>(16)
+
 /** The colors a cover with the theme [seed] paints, light or [dark]. */
 fun coverColorScheme(
   seed: Color,
   dark: Boolean,
-): ColorScheme =
-  dynamicColorScheme(
-    seedColor = seed,
-    isDark = dark,
-    style = PaletteStyle.Vibrant,
-    specVersion = ColorSpec.SpecVersion.SPEC_2025,
-  )
+): ColorScheme {
+  val key = seed to dark
+  return coverColorSchemes[key]
+    ?: dynamicColorScheme(
+        seedColor = seed,
+        isDark = dark,
+        style = PaletteStyle.Vibrant,
+        specVersion = ColorSpec.SpecVersion.SPEC_2025,
+      )
+      .also { coverColorSchemes.put(key, it) }
+}
 
 /** The theme seed for [cover], or null while unknown or if the cover has no usable color. */
 @Composable
