@@ -130,7 +130,10 @@ internal constructor(
     val current = accountStore.data.first()
     if (current != null && current.userId != login.account.userId) return false
     accountStore.updateData { stored ->
-      login.account.copy(libraryIds = stored?.libraryIds.orEmpty())
+      login.account.copy(
+        libraryIds = stored?.libraryIds.orEmpty(),
+        libraryNames = stored?.libraryNames.orEmpty(),
+      )
     }
     sync.sync(force = true)
     return true

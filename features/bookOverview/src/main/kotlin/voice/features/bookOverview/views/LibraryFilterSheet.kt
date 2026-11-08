@@ -40,12 +40,15 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.overview.BookOverviewViewState
+import voice.features.bookOverview.overview.LibrarySource
+import voice.features.bookOverview.overview.LibrarySourceViewState
 
 @Composable
 internal fun LibraryFilterSheet(
   viewState: BookOverviewViewState,
   onShowHiddenBooksChange: (Boolean) -> Unit,
   onShowNotDownloadedBooksChange: (Boolean) -> Unit,
+  onSourceChange: (LibrarySource, Boolean) -> Unit,
   onDismiss: () -> Unit,
 ) {
   // the rows stay while the sheet is open, so a switch doesn't vanish under the finger
@@ -65,6 +68,7 @@ internal fun LibraryFilterSheet(
       showNotDownloadedBooksSwitch = showNotDownloadedBooksSwitch,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
       onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
+      onSourceChange = onSourceChange,
     )
   }
 }
@@ -76,6 +80,7 @@ private fun LibraryFilterContent(
   showNotDownloadedBooksSwitch: Boolean,
   onShowHiddenBooksChange: (Boolean) -> Unit,
   onShowNotDownloadedBooksChange: (Boolean) -> Unit,
+  onSourceChange: (LibrarySource, Boolean) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(
@@ -105,6 +110,22 @@ private fun LibraryFilterContent(
         onCheckedChange = onShowNotDownloadedBooksChange,
       )
     }
+    val shownSources = viewState.sources.count { it.shown }
+    viewState.sources.forEach { source ->
+      FilterSwitch(
+        icon =
+          when (source.source) {
+            is LibrarySource.Folder -> VoiceIcons.Folder
+            is LibrarySource.ServerLibrary -> VoiceIcons.Dns
+          },
+        title = source.name,
+        bookCount = source.bookCount,
+        checked = source.shown,
+        // a library without any source shown would look empty
+        enabled = !source.shown || shownSources > 1,
+        onCheckedChange = { onSourceChange(source.source, it) },
+      )
+    }
   }
 }
 
@@ -115,6 +136,7 @@ private fun FilterSwitch(
   bookCount: Int,
   checked: Boolean,
   onCheckedChange: (Boolean) -> Unit,
+  enabled: Boolean = true,
 ) {
   Row(
     modifier =
@@ -122,6 +144,7 @@ private fun FilterSwitch(
         .clip(RoundedCornerShape(24.dp))
         .toggleable(
           value = checked,
+          enabled = enabled,
           role = Role.Switch,
           onValueChange = onCheckedChange,
         )
@@ -148,7 +171,7 @@ private fun FilterSwitch(
       )
     }
     Spacer(Modifier.width(12.dp))
-    Switch(checked = checked, onCheckedChange = null)
+    Switch(checked = checked, onCheckedChange = null, enabled = enabled)
   }
 }
 
@@ -164,6 +187,47 @@ private fun LibraryFilterContentPreview() {
         showNotDownloadedBooksSwitch = true,
         onShowHiddenBooksChange = {},
         onShowNotDownloadedBooksChange = {},
+        onSourceChange = { _, _ -> },
+      )
+    }
+  }
+}
+
+@Preview
+@Composable
+private fun LibraryFilterContentSourcesPreview() {
+  VoiceTheme {
+    Surface {
+      LibraryFilterContent(
+        viewState =
+          BookOverviewViewState.Loading.copy(
+            sources =
+              listOf(
+                LibrarySourceViewState(
+                  source = LibrarySource.Folder("content://audiobooks"),
+                  name = "Audiobooks",
+                  bookCount = 214,
+                  shown = true,
+                ),
+                LibrarySourceViewState(
+                  source = LibrarySource.Folder("content://kids"),
+                  name = "Kids",
+                  bookCount = 38,
+                  shown = false,
+                ),
+                LibrarySourceViewState(
+                  source = LibrarySource.ServerLibrary("radio-plays"),
+                  name = "Radio plays",
+                  bookCount = 1207,
+                  shown = true,
+                ),
+              ),
+          ),
+        showHiddenBooksSwitch = false,
+        showNotDownloadedBooksSwitch = false,
+        onShowHiddenBooksChange = {},
+        onShowNotDownloadedBooksChange = {},
+        onSourceChange = { _, _ -> },
       )
     }
   }

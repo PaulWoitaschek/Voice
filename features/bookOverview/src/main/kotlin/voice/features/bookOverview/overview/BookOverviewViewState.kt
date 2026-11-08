@@ -25,6 +25,7 @@ data class BookOverviewViewState(
   val showHiddenBooks: Boolean = false,
   val notDownloadedBookCount: Int = 0,
   val showNotDownloadedBooks: Boolean = true,
+  val sources: List<LibrarySourceViewState> = emptyList(),
 ) {
 
   // a switch only shows once it has something to filter, so a library without it stays as it was
@@ -63,6 +64,14 @@ data class BookOverviewViewState(
     FolderPickerMovedToSettings,
   }
 }
+
+@Immutable
+data class LibrarySourceViewState(
+  val source: LibrarySource,
+  val name: String,
+  val bookCount: Int,
+  val shown: Boolean,
+)
 
 @Immutable
 sealed interface LibraryItem {

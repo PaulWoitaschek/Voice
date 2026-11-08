@@ -1,11 +1,11 @@
 package voice.core.foldersync
 
 import android.net.Uri
-import android.provider.DocumentsContract
 import java.time.Instant
 import kotlin.math.abs
 import voice.core.data.Book
 import voice.core.data.ChapterId
+import voice.core.data.isIn
 import voice.core.data.syncKey
 
 internal data class KeyedBook(
@@ -15,20 +15,11 @@ internal data class KeyedBook(
 
 /** The books from [folder] that another device can recognize. */
 internal fun List<Book>.keyedIn(folder: Uri): List<KeyedBook> {
-  val tree = folder.tree() ?: return emptyList()
   return mapNotNull { book ->
-    if (book.id.toUri().tree() != tree) return@mapNotNull null
+    if (!book.id.isIn(folder)) return@mapNotNull null
     book.chapters.syncKey()?.let { KeyedBook(it, book) }
   }
 }
-
-// a single file added on its own has a document uri, not a tree uri
-private fun Uri.tree(): Pair<String?, String>? =
-  if (DocumentsContract.isTreeUri(this)) {
-    authority to DocumentsContract.getTreeDocumentId(this)
-  } else {
-    null
-  }
 
 internal data class TakenOverPosition(
   val chapterId: ChapterId,

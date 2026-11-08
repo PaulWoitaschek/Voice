@@ -12,6 +12,7 @@ import okhttp3.Request
 import retrofit2.HttpException
 import voice.core.audiobookshelf.AudiobookshelfIds
 import voice.core.audiobookshelf.account.Account
+import voice.core.audiobookshelf.account.AccountStore
 import voice.core.audiobookshelf.api.AbsLibraryItem
 import voice.core.audiobookshelf.api.AudiobookshelfApi
 import voice.core.audiobookshelf.api.BatchGetRequest
@@ -36,6 +37,7 @@ internal class LibrarySync(
   private val contentRepo: BookContentRepo,
   private val chapterRepo: ChapterRepo,
   private val bookmarkRepo: BookmarkRepo,
+  private val accountStore: AccountStore,
   private val context: Context,
 ) {
 
@@ -80,16 +82,23 @@ internal class LibrarySync(
     }
 
     val onServer = items.map { AudiobookshelfIds.bookId(it.id) }.toSet()
+    val libraryOf = books.associate { AudiobookshelfIds.bookId(it.id) to it.libraryId }
     contentRepo
       .all()
       .filter { it.id.isRemote }
       .forEach { content ->
-        if (content.id in flagged) return@forEach
-        val active = content.id in onServer
-        if (content.isActive != active) {
-          contentRepo.put(content.copy(isActive = active))
+        val active = if (content.id in flagged) content.isActive else content.id in onServer
+        // unchanged books aren't stored again, so they get their library here
+        val libraryId = libraryOf[content.id] ?: content.serverLibraryId
+        if (content.isActive != active || content.serverLibraryId != libraryId) {
+          // read right before writing, so a pause or a seek during the loop isn't undone
+          val current = contentRepo.get(content.id) ?: return@forEach
+          contentRepo.put(current.copy(isActive = active, serverLibraryId = libraryId))
         }
       }
+    // stored after the books got their library, so a library never shows without its books
+    val libraryNames = api.libraries().libraries.associate { it.id to it.name }
+    accountStore.updateData { it?.copy(libraryNames = libraryNames) }
 
     downloadMissingCovers(account, items)
   }
