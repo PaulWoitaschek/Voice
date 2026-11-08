@@ -263,6 +263,7 @@
     <string name="library.empty.action">Mostra cartelle</string>
     <string name="library.filter">Filtra</string>
     <string name="library.filter.hidden_books">Libri nascosti</string>
+    <string name="library.filter.not_downloaded">Non scaricati</string>
     <string name="library.filter.show">Mostra</string>
     <string name="library.folders.title">Cartelle audiolibri</string>
     <string name="library.folders.moved.dialog.title">Cartelle degli audiolibri spostate</string>

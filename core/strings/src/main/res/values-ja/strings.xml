@@ -237,6 +237,7 @@
     <string name="library.empty.action">フォルダーを表示</string>
     <string name="library.filter">フィルター</string>
     <string name="library.filter.hidden_books">非表示の本</string>
+    <string name="library.filter.not_downloaded">未ダウンロード</string>
     <string name="library.filter.show">表示</string>
     <string name="library.folders.title">オーディオブック フォルダー</string>
     <string name="library.folders.moved.dialog.title">オーディオブックフォルダーを移動しました</string>

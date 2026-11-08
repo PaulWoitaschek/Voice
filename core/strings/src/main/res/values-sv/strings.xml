@@ -250,6 +250,7 @@
     <string name="library.empty.action">Visa mappar</string>
     <string name="library.filter">Filter</string>
     <string name="library.filter.hidden_books">Dolda böcker</string>
+    <string name="library.filter.not_downloaded">Inte nedladdade</string>
     <string name="library.filter.show">Visa</string>
     <string name="library.folders.title">Ljudboksmappar</string>
     <string name="library.folders.moved.dialog.title">Ljudboksmapparna har flyttats</string>

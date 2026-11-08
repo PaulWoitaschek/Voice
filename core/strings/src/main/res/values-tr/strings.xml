@@ -250,6 +250,7 @@
     <string name="library.empty.action">Klasörleri göster</string>
     <string name="library.filter">Filtrele</string>
     <string name="library.filter.hidden_books">Gizli kitaplar</string>
+    <string name="library.filter.not_downloaded">İndirilmemiş</string>
     <string name="library.filter.show">Göster</string>
     <string name="library.folders.title">Sesli kitap klasörleri</string>
     <string name="library.folders.moved.dialog.title">Sesli kitap klasörleri taşındı</string>

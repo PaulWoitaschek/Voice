@@ -250,6 +250,7 @@
     <string name="library.empty.action">نمایش پوشه‌ها</string>
     <string name="library.filter">فیلتر</string>
     <string name="library.filter.hidden_books">کتاب‌های پنهان</string>
+    <string name="library.filter.not_downloaded">دانلودنشده</string>
     <string name="library.filter.show">نمایش</string>
     <string name="library.folders.title">پوشه‌های کتاب صوتی</string>
     <string name="library.folders.moved.dialog.title">پوشه‌های کتاب صوتی منتقل شدند</string>

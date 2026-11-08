@@ -250,6 +250,7 @@
     <string name="library.empty.action">Vis mapper</string>
     <string name="library.filter">Filter</string>
     <string name="library.filter.hidden_books">Skjulte bøker</string>
+    <string name="library.filter.not_downloaded">Ikke lastet ned</string>
     <string name="library.filter.show">Vis</string>
     <string name="library.folders.title">Lydbokmapper</string>
     <string name="library.folders.moved.dialog.title">Lydbokmapper flyttet</string>

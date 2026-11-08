@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -31,6 +32,7 @@ import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.category
 import voice.core.data.folders.AudiobookFolders
+import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.kioskmode.DemoAudiobook
@@ -78,6 +80,7 @@ class BookOverviewViewModel(
   private val emptyLibraryTracker: EmptyLibraryTracker,
   private val survey: Survey,
   private val showHiddenBooksStore: ShowHiddenBooksStore,
+  private val showNotDownloadedBooksStore: ShowNotDownloadedBooksStore,
   private val bookHider: BookHider,
 ) {
 
@@ -126,7 +129,7 @@ class BookOverviewViewModel(
     val downloadStates = remember {
       serverDownloads.states
     }
-      .collectAsState(initial = emptyMap())
+      .collectAsState(initial = null)
       .value
     val folderPickerMovedDialogShown = remember {
       folderPickerMovedDialogShownStore.data
@@ -149,6 +152,11 @@ class BookOverviewViewModel(
     }
       .collectAsState(initial = null)
       .value
+    val showNotDownloadedBooks = remember {
+      showNotDownloadedBooksStore.data
+    }
+      .collectAsState(initial = null)
+      .value
     if (
       allBooks == null ||
         currentBook == null ||
@@ -156,14 +164,32 @@ class BookOverviewViewModel(
         gridMode == null ||
         hasFoldersWithoutAccess == null ||
         hasSurvey == null ||
-        showHiddenBooks == null
+        showHiddenBooks == null ||
+        showNotDownloadedBooks == null ||
+        // server books would pop in and out of the library while their downloads load
+        (downloadStates == null && allBooks.any { it.id.isRemote })
     ) {
       return BookOverviewViewState.Loading
     }
-    val hiddenBookCount = remember(allBooks) { allBooks.count { it.custom.hidden } }
+    // the current book stays, so the library keeps its controls while it plays
+    fun Book.notDownloaded() =
+      id.isRemote &&
+        id != currentBook.id &&
+        downloadStates?.get(id) !is BookDownloadState.Downloaded
+    fun Book.passesHiddenFilter() = showHiddenBooks || !custom.hidden
+    fun Book.passesNotDownloadedFilter() = showNotDownloadedBooks || !notDownloaded()
+    // each count is what its switch changes, with the other switch as it is
+    val hiddenBookCount = allBooks.count { it.custom.hidden && it.passesNotDownloadedFilter() }
+    val notDownloadedBookCount = allBooks.count { it.notDownloaded() && it.passesHiddenFilter() }
     val books =
-      remember(allBooks, showHiddenBooks) {
-        if (showHiddenBooks) allBooks else allBooks.filterNot { it.custom.hidden }
+      remember(
+        allBooks,
+        downloadStates,
+        currentBook,
+        showHiddenBooks,
+        showNotDownloadedBooks,
+      ) {
+        allBooks.filter { it.passesHiddenFilter() && it.passesNotDownloadedFilter() }
       }
     // a deleted book can stay the current one
     val currentBookId = currentBook.id?.takeIf { id -> books.any { it.id == id } }
@@ -203,7 +229,7 @@ class BookOverviewViewModel(
         currentBookId = currentBookId,
         livePlaybackState = { livePlaybackState.value },
         unavailable = id in unavailableBooks,
-        download = downloadStates[id].badge(),
+        download = downloadStates?.get(id).badge(),
       )
 
     val entries = remember(books) { libraryEntries(books) }
@@ -251,6 +277,8 @@ class BookOverviewViewModel(
       dialog = dialog,
       hiddenBookCount = hiddenBookCount,
       showHiddenBooks = showHiddenBooks,
+      notDownloadedBookCount = notDownloadedBookCount,
+      showNotDownloadedBooks = showNotDownloadedBooks,
     )
   }
 
@@ -306,6 +334,12 @@ class BookOverviewViewModel(
   fun onShowHiddenBooksChange(show: Boolean) {
     scope.launch {
       showHiddenBooksStore.updateData { show }
+    }
+  }
+
+  fun onShowNotDownloadedBooksChange(show: Boolean) {
+    scope.launch {
+      showNotDownloadedBooksStore.updateData { show }
     }
   }
 

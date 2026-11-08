@@ -250,6 +250,7 @@
     <string name="library.empty.action">Mustra sas cartellas</string>
     <string name="library.filter">Filtra</string>
     <string name="library.filter.hidden_books">Libros cuados</string>
+    <string name="library.filter.not_downloaded">No iscarrigados</string>
     <string name="library.filter.show">Mustra</string>
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
     <string name="library.folders.moved.dialog.title">Cartellas de audiolibros tramudadas</string>

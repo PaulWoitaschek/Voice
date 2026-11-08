@@ -135,6 +135,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onSurveyDismiss = bookOverviewViewModel::onSurveyDismiss,
     onShowFoldersClick = bookOverviewViewModel::onShowFoldersClick,
     onShowHiddenBooksChange = bookOverviewViewModel::onShowHiddenBooksChange,
+    onShowNotDownloadedBooksChange = bookOverviewViewModel::onShowNotDownloadedBooksChange,
     snackbarHostState = snackbarHostState,
     modifier = modifier,
   )
@@ -157,6 +158,7 @@ internal fun BookOverview(
   onSurveyDismiss: () -> Unit,
   onShowFoldersClick: () -> Unit,
   onShowHiddenBooksChange: (Boolean) -> Unit,
+  onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   modifier: Modifier = Modifier,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -178,8 +180,7 @@ internal fun BookOverview(
         showSearch = viewState.showSearchIcon,
         showFolderPickerIcon = viewState.showFolderPickerIcon,
         showFolderAccessBadge = viewState.showFolderAccessBadge,
-        // only there once a book is hidden, so a library without any stays as it was
-        showFilter = viewState.hiddenBookCount > 0 || viewState.showHiddenBooks,
+        showFilter = viewState.showHiddenBooksSwitch || viewState.showNotDownloadedBooksSwitch,
         isLoading = viewState.isLoading,
         scrollBehavior = scrollBehavior,
         onSearchClick = onSearchClick,
@@ -228,9 +229,9 @@ internal fun BookOverview(
   )
   if (showFilterSheet) {
     LibraryFilterSheet(
-      hiddenBookCount = viewState.hiddenBookCount,
-      showHiddenBooks = viewState.showHiddenBooks,
+      viewState = viewState,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
+      onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
       onDismiss = { showFilterSheet = false },
     )
   }
@@ -308,6 +309,7 @@ fun BookOverviewPreview(
       onSurveyDismiss = {},
       onShowFoldersClick = {},
       onShowHiddenBooksChange = {},
+      onShowNotDownloadedBooksChange = {},
     )
   }
 }

@@ -250,6 +250,7 @@
     <string name="library.empty.action">Ordner anzeigen</string>
     <string name="library.filter">Filter</string>
     <string name="library.filter.hidden_books">Ausgeblendete Bücher</string>
+    <string name="library.filter.not_downloaded">Nicht heruntergeladen</string>
     <string name="library.filter.show">Anzeigen</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
     <string name="library.folders.moved.dialog.title">Hörbuch-Ordner verschoben</string>

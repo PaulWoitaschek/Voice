@@ -237,6 +237,7 @@
     <string name="library.empty.action">查看資料夾</string>
     <string name="library.filter">篩選</string>
     <string name="library.filter.hidden_books">已隱藏的書</string>
+    <string name="library.filter.not_downloaded">未下載</string>
     <string name="library.filter.show">顯示</string>
     <string name="library.folders.title">有聲書資料夾</string>
     <string name="library.folders.moved.dialog.title">有聲書資料夾換地方了</string>

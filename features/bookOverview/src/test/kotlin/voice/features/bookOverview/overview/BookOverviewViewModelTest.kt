@@ -20,6 +20,7 @@ import kotlin.test.assertEquals
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -27,6 +28,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
@@ -126,6 +128,7 @@ class BookOverviewViewModelTest {
         emptyLibraryTracker = emptyLibraryTracker,
         survey = survey(),
         showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+        showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(MemoryDataStore(true)),
         bookHider = BookHider(mockk()),
       )
 
@@ -207,6 +210,7 @@ class BookOverviewViewModelTest {
         emptyLibraryTracker = emptyLibraryTracker,
         survey = survey(),
         showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+        showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(MemoryDataStore(true)),
         bookHider = BookHider(mockk()),
       )
 
@@ -379,6 +383,107 @@ class BookOverviewViewModelTest {
             .filterIsInstance<LibraryItem.Series>()
             .associate { it.series.name to it.series.hidden }
         assertEquals(expected = mapOf("Other" to false, "Saga" to true), actual = stacks)
+      }
+  }
+
+  @Test
+  fun `without books that aren't downloaded, the library keeps the ones on the device`() = runTest {
+    val local = book(time = 0)
+    val streamed = book(time = 0, id = BookId("abs://item/streamed"))
+    val hiddenStreamed = book(time = 0, id = BookId("abs://item/hidden"), hidden = true)
+    val downloaded = book(time = 0, id = BookId("abs://item/downloaded"))
+    val downloading = book(time = 0, id = BookId("abs://item/downloading"))
+    val store = MemoryDataStore(true)
+    val viewModel =
+      viewModel(
+        books = listOf(local, streamed, hiddenStreamed, downloaded, downloading),
+        downloadStates =
+          flowOf(
+            mapOf(
+              downloaded.id to BookDownloadState.Downloaded(bytes = 2),
+              downloading.id to
+                BookDownloadState.Downloading(
+                  progress = 0.5F,
+                  downloadedBytes = 1,
+                  totalBytes = 2,
+                  waitingFor = null,
+                ),
+            ),
+          ),
+        showNotDownloadedBooksStore = store,
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = 2, actual = state.notDownloadedBookCount)
+        assertEquals(expected = 1, actual = state.hiddenBookCount)
+        assertEquals(expected = 4, actual = state.keys(BookCategory.NOT_STARTED).size)
+
+        viewModel.onShowNotDownloadedBooksChange(false)
+
+        val filtered = awaitItem()
+        assertEquals(
+          expected = setOf(local.id.value, downloaded.id.value),
+          actual = filtered.keys(BookCategory.NOT_STARTED).toSet(),
+        )
+        assertEquals(expected = 0, actual = filtered.hiddenBookCount)
+        assertEquals(expected = false, actual = store.data.first())
+      }
+  }
+
+  @Test
+  fun `a library with server books waits for their downloads`() = runTest {
+    val downloadStates = MutableStateFlow<Map<BookId, BookDownloadState>?>(null)
+    val downloaded = book(time = 0, id = BookId("abs://item/downloaded"))
+    val viewModel =
+      viewModel(
+        books = listOf(downloaded),
+        downloadStates = downloadStates.filterNotNull(),
+        showNotDownloadedBooksStore = MemoryDataStore(false),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+
+        downloadStates.value = mapOf(downloaded.id to BookDownloadState.Downloaded(bytes = 1))
+
+        val state = awaitItem()
+        assertEquals(
+          expected = listOf(downloaded.id.value),
+          actual = state.keys(BookCategory.NOT_STARTED),
+        )
+        assertEquals(expected = false, actual = state.showNotDownloadedBooksSwitch)
+      }
+  }
+
+  @Test
+  fun `the current book stays when books that aren't downloaded are filtered out`() = runTest {
+    val current = book(id = BookId("abs://item/current"))
+    val viewModel =
+      viewModel(
+        books = listOf(current),
+        currentBookId = current.id,
+        showNotDownloadedBooksStore = MemoryDataStore(false),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = current.id, actual = state.hero?.value?.id)
+        assertEquals(expected = 0, actual = state.notDownloadedBookCount)
       }
   }
 
@@ -760,6 +865,8 @@ class BookOverviewViewModelTest {
     scanning: Flow<Boolean> = MutableStateFlow(false),
     survey: Survey = survey(),
     showHiddenBooksStore: DataStore<Boolean> = MemoryDataStore(false),
+    showNotDownloadedBooksStore: DataStore<Boolean> = MemoryDataStore(true),
+    downloadStates: Flow<Map<BookId, BookDownloadState>> = flowOf(emptyMap()),
     repo: BookRepository = mockk {
       every { flow() } returns MutableStateFlow(books)
     },
@@ -794,11 +901,15 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
-      serverDownloads = serverDownloads,
+      serverDownloads =
+        mockk {
+          every { states } returns downloadStates
+        },
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey,
       showHiddenBooksStore = ShowHiddenBooksStore(showHiddenBooksStore),
+      showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(showNotDownloadedBooksStore),
       bookHider = BookHider(repo),
     )
   }

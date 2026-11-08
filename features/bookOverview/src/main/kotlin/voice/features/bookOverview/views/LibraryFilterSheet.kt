@@ -24,9 +24,11 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -37,14 +39,18 @@ import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
+import voice.features.bookOverview.overview.BookOverviewViewState
 
 @Composable
 internal fun LibraryFilterSheet(
-  hiddenBookCount: Int,
-  showHiddenBooks: Boolean,
+  viewState: BookOverviewViewState,
   onShowHiddenBooksChange: (Boolean) -> Unit,
+  onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   onDismiss: () -> Unit,
 ) {
+  // the rows stay while the sheet is open, so a switch doesn't vanish under the finger
+  val showHiddenBooksSwitch = remember { viewState.showHiddenBooksSwitch }
+  val showNotDownloadedBooksSwitch = remember { viewState.showNotDownloadedBooksSwitch }
   ModalBottomSheet(
     onDismissRequest = onDismiss,
     sheetState =
@@ -54,18 +60,22 @@ internal fun LibraryFilterSheet(
       ),
   ) {
     LibraryFilterContent(
-      hiddenBookCount = hiddenBookCount,
-      showHiddenBooks = showHiddenBooks,
+      viewState = viewState,
+      showHiddenBooksSwitch = showHiddenBooksSwitch,
+      showNotDownloadedBooksSwitch = showNotDownloadedBooksSwitch,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
+      onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
     )
   }
 }
 
 @Composable
 private fun LibraryFilterContent(
-  hiddenBookCount: Int,
-  showHiddenBooks: Boolean,
+  viewState: BookOverviewViewState,
+  showHiddenBooksSwitch: Boolean,
+  showNotDownloadedBooksSwitch: Boolean,
   onShowHiddenBooksChange: (Boolean) -> Unit,
+  onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(
@@ -77,40 +87,68 @@ private fun LibraryFilterContent(
       style = MaterialTheme.typography.labelLargeEmphasized,
     )
     Spacer(Modifier.height(8.dp))
-    Row(
-      modifier =
-        Modifier.fillMaxWidth()
-          .clip(RoundedCornerShape(24.dp))
-          .toggleable(
-            value = showHiddenBooks,
-            role = Role.Switch,
-            onValueChange = onShowHiddenBooksChange,
-          )
-          .heightIn(min = 64.dp)
-          .padding(horizontal = 12.dp),
-      verticalAlignment = Alignment.CenterVertically,
-    ) {
-      Icon(VoiceIcons.VisibilityOff, contentDescription = null)
-      Spacer(Modifier.width(16.dp))
-      Column(Modifier.weight(1F)) {
-        Text(
-          text = stringResource(StringsR.string.library_filter_hidden_books),
-          style = MaterialTheme.typography.bodyLarge,
-        )
-        Text(
-          text =
-            pluralStringResource(
-              StringsR.plurals.library_search_browse_book_count,
-              hiddenBookCount,
-              hiddenBookCount,
-            ),
-          style = MaterialTheme.typography.bodyMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
-      Spacer(Modifier.width(12.dp))
-      Switch(checked = showHiddenBooks, onCheckedChange = null)
+    if (showHiddenBooksSwitch) {
+      FilterSwitch(
+        icon = VoiceIcons.VisibilityOff,
+        title = stringResource(StringsR.string.library_filter_hidden_books),
+        bookCount = viewState.hiddenBookCount,
+        checked = viewState.showHiddenBooks,
+        onCheckedChange = onShowHiddenBooksChange,
+      )
     }
+    if (showNotDownloadedBooksSwitch) {
+      FilterSwitch(
+        icon = VoiceIcons.Cloud,
+        title = stringResource(StringsR.string.library_filter_not_downloaded),
+        bookCount = viewState.notDownloadedBookCount,
+        checked = viewState.showNotDownloadedBooks,
+        onCheckedChange = onShowNotDownloadedBooksChange,
+      )
+    }
+  }
+}
+
+@Composable
+private fun FilterSwitch(
+  icon: ImageVector,
+  title: String,
+  bookCount: Int,
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+) {
+  Row(
+    modifier =
+      Modifier.fillMaxWidth()
+        .clip(RoundedCornerShape(24.dp))
+        .toggleable(
+          value = checked,
+          role = Role.Switch,
+          onValueChange = onCheckedChange,
+        )
+        .heightIn(min = 64.dp)
+        .padding(horizontal = 12.dp),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Icon(icon, contentDescription = null)
+    Spacer(Modifier.width(16.dp))
+    Column(Modifier.weight(1F)) {
+      Text(
+        text = title,
+        style = MaterialTheme.typography.bodyLarge,
+      )
+      Text(
+        text =
+          pluralStringResource(
+            StringsR.plurals.library_search_browse_book_count,
+            bookCount,
+            bookCount,
+          ),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+    }
+    Spacer(Modifier.width(12.dp))
+    Switch(checked = checked, onCheckedChange = null)
   }
 }
 
@@ -120,9 +158,12 @@ private fun LibraryFilterContentPreview() {
   VoiceTheme {
     Surface {
       LibraryFilterContent(
-        hiddenBookCount = 12,
-        showHiddenBooks = false,
+        viewState =
+          BookOverviewViewState.Loading.copy(hiddenBookCount = 12, notDownloadedBookCount = 30),
+        showHiddenBooksSwitch = true,
+        showNotDownloadedBooksSwitch = true,
         onShowHiddenBooksChange = {},
+        onShowNotDownloadedBooksChange = {},
       )
     }
   }

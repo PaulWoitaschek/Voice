@@ -250,6 +250,7 @@
     <string name="library.empty.action">கோப்புறைகளைக் காட்டு</string>
     <string name="library.filter">வடிகட்டு</string>
     <string name="library.filter.hidden_books">மறைக்கப்பட்ட புத்தகங்கள்</string>
+    <string name="library.filter.not_downloaded">பதிவிறக்கப்படாதவை</string>
     <string name="library.filter.show">காட்டு</string>
     <string name="library.folders.title">ஆடியோபுக் கோப்புறைகள்</string>
     <string name="library.folders.moved.dialog.title">ஆடியோபுக் கோப்புறைகள் நகர்த்தப்பட்டன</string>

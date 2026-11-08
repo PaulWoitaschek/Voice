@@ -237,6 +237,7 @@
     <string name="library.empty.action">Tampilkan folder</string>
     <string name="library.filter">Filter</string>
     <string name="library.filter.hidden_books">Buku tersembunyi</string>
+    <string name="library.filter.not_downloaded">Belum diunduh</string>
     <string name="library.filter.show">Tampilkan</string>
     <string name="library.folders.title">Folder buku audio</string>
     <string name="library.folders.moved.dialog.title">Folder buku audio dipindahkan</string>

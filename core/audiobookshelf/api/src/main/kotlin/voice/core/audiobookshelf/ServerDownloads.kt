@@ -7,7 +7,10 @@ import voice.core.data.BookId
 
 interface ServerDownloads {
 
-  /** The download state of the server books that are downloaded, or on their way. */
+  /**
+   * The download state of the server books that are downloaded, or on their way. Emits once the
+   * stored downloads are read.
+   */
   val states: Flow<Map<BookId, BookDownloadState>>
 
   /** The server books that are downloaded, or on their way, by name. */

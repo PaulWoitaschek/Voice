@@ -250,6 +250,7 @@
     <string name="library.empty.action">Näita kaustu</string>
     <string name="library.filter">Filtreeri</string>
     <string name="library.filter.hidden_books">Peidetud raamatud</string>
+    <string name="library.filter.not_downloaded">Alla laadimata</string>
     <string name="library.filter.show">Näita</string>
     <string name="library.folders.title">Heliraamatute kaustad</string>
     <string name="library.folders.moved.dialog.title">Audioraamatute kaustad teisaldati</string>

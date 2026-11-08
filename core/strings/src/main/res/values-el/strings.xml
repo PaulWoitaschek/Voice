@@ -250,6 +250,7 @@
     <string name="library.empty.action">Εμφάνιση φακέλων</string>
     <string name="library.filter">Φίλτρο</string>
     <string name="library.filter.hidden_books">Κρυφά βιβλία</string>
+    <string name="library.filter.not_downloaded">Χωρίς λήψη</string>
     <string name="library.filter.show">Εμφάνιση</string>
     <string name="library.folders.title">Φάκελοι ηχητικών βιβλίων</string>
     <string name="library.folders.moved.dialog.title">Οι φάκελοι ηχητικών βιβλίων μετακινήθηκαν</string>

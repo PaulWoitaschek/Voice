@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -113,12 +114,15 @@ internal constructor(
       }
   }
 
-  private val tracked: StateFlow<Map<BookId, BookDownload>> =
+  // null until the stored downloads are read, so a downloaded book never looks streamed
+  private val tracked: StateFlow<Map<BookId, BookDownload>?> =
     combine(
+        initialized,
         files,
         notMetRequirements,
         bookRepository.flow(),
-      ) { files, notMetRequirements, books ->
+      ) { initialized, files, notMetRequirements, books ->
+        if (!initialized) return@combine null
         val waitingFor =
           when {
             notMetRequirements and Requirements.NETWORK_UNMETERED != 0 -> WaitingFor.Wifi
@@ -134,7 +138,9 @@ internal constructor(
           }
           .toMap()
       }
-      .stateIn(scope, SharingStarted.Eagerly, emptyMap())
+      .stateIn(scope, SharingStarted.Eagerly, null)
+
+  private val known: Flow<Map<BookId, BookDownload>> = tracked.filterNotNull()
 
   // the notification channel comes with the first download, as long as there is none it stays out
   // of the settings
@@ -161,10 +167,10 @@ internal constructor(
   }
 
   override val states: Flow<Map<BookId, BookDownloadState>> =
-    tracked.map { tracked -> tracked.mapValues { it.value.state } }.distinctUntilChanged()
+    known.map { tracked -> tracked.mapValues { it.value.state } }.distinctUntilChanged()
 
   override val books: Flow<List<BookDownload>> =
-    tracked
+    known
       .map { tracked ->
         tracked.values.sortedBy { it.book.name.lowercase() }
       }
@@ -270,13 +276,13 @@ internal constructor(
 
   /** Changes of what the notification shows while books download. */
   internal val foregroundNotificationChanges: Flow<Unit> =
-    tracked
+    known
       .map { tracked -> activeDownloads(tracked.keys).map { it.book.name to it.state } }
       .distinctUntilChanged()
       .map {}
 
   private fun activeDownloads(bookIds: Set<BookId>): List<ActiveDownload> {
-    val tracked = tracked.value
+    val tracked = tracked.value.orEmpty()
     return bookIds.mapNotNull { bookId ->
       val download = tracked[bookId] ?: return@mapNotNull null
       val state = download.state as? BookDownloadState.Downloading ?: return@mapNotNull null
@@ -318,7 +324,7 @@ internal constructor(
   private fun notifyResults() {
     scope.launch {
       var previous: Map<BookId, BookDownload>? = null
-      tracked.collect { current ->
+      known.collect { current ->
         val before = previous
         previous = current
         if (before == null) return@collect

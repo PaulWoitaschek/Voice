@@ -276,6 +276,7 @@
     <string name="library.empty.action">Pokaż foldery</string>
     <string name="library.filter">Filtruj</string>
     <string name="library.filter.hidden_books">Ukryte książki</string>
+    <string name="library.filter.not_downloaded">Niepobrane</string>
     <string name="library.filter.show">Pokaż</string>
     <string name="library.folders.title">Foldery audiobooków</string>
     <string name="library.folders.moved.dialog.title">Foldery audiobooków przeniesione</string>

@@ -276,6 +276,7 @@
     <string name="library.empty.action">Zobrazit složky</string>
     <string name="library.filter">Filtr</string>
     <string name="library.filter.hidden_books">Skryté knihy</string>
+    <string name="library.filter.not_downloaded">Nestažené</string>
     <string name="library.filter.show">Zobrazit</string>
     <string name="library.folders.title">Složky s audioknihami</string>
     <string name="library.folders.moved.dialog.title">Složky audioknih přesunuty</string>
