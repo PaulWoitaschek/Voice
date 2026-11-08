@@ -72,14 +72,15 @@ private const val DurationLong2 = 500
 private val EmphasizedEasing = PathEasing(pathForAnimation)
 private val EmphasizedAccelerateEasing = CubicBezierEasing(0.3f, 0f, 0.8f, 0.15f)
 
-val SharedXAxisEnterTransition: (Density) -> EnterTransition = {
+val SharedXAxisEnterTransition: (windowWidth: Int) -> EnterTransition = { windowWidth ->
   fadeIn(
     animationSpec = tween(durationMillis = DurationLong1, easing = EmphasizedEasing),
   ) +
     slideInHorizontally(
       animationSpec = tween(durationMillis = DurationLong2, easing = EmphasizedEasing),
     ) {
-      it / 2
+      // not the screen's own width: a screen that still loads has no width in its first frame
+      windowWidth / 2
     }
 }
 
