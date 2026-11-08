@@ -27,6 +27,13 @@ data class BookOverviewViewState(
   val showNotDownloadedBooks: Boolean = true,
 ) {
 
+  // a switch only shows once it has something to filter, so a library without it stays as it was
+  val showHiddenBooksSwitch: Boolean
+    get() = hiddenBookCount > 0 || showHiddenBooks
+
+  val showNotDownloadedBooksSwitch: Boolean
+    get() = notDownloadedBookCount > 0
+
   companion object {
     val Loading =
       BookOverviewViewState(

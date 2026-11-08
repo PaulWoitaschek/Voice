@@ -24,6 +24,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,17 +39,18 @@ import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
+import voice.features.bookOverview.overview.BookOverviewViewState
 
 @Composable
 internal fun LibraryFilterSheet(
-  hiddenBookCount: Int,
-  showHiddenBooks: Boolean,
+  viewState: BookOverviewViewState,
   onShowHiddenBooksChange: (Boolean) -> Unit,
-  notDownloadedBookCount: Int,
-  showNotDownloadedBooks: Boolean,
   onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   onDismiss: () -> Unit,
 ) {
+  // the rows stay while the sheet is open, so a switch doesn't vanish under the finger
+  val showHiddenBooksSwitch = remember { viewState.showHiddenBooksSwitch }
+  val showNotDownloadedBooksSwitch = remember { viewState.showNotDownloadedBooksSwitch }
   ModalBottomSheet(
     onDismissRequest = onDismiss,
     sheetState =
@@ -58,11 +60,10 @@ internal fun LibraryFilterSheet(
       ),
   ) {
     LibraryFilterContent(
-      hiddenBookCount = hiddenBookCount,
-      showHiddenBooks = showHiddenBooks,
+      viewState = viewState,
+      showHiddenBooksSwitch = showHiddenBooksSwitch,
+      showNotDownloadedBooksSwitch = showNotDownloadedBooksSwitch,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
-      notDownloadedBookCount = notDownloadedBookCount,
-      showNotDownloadedBooks = showNotDownloadedBooks,
       onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
     )
   }
@@ -70,11 +71,10 @@ internal fun LibraryFilterSheet(
 
 @Composable
 private fun LibraryFilterContent(
-  hiddenBookCount: Int,
-  showHiddenBooks: Boolean,
+  viewState: BookOverviewViewState,
+  showHiddenBooksSwitch: Boolean,
+  showNotDownloadedBooksSwitch: Boolean,
   onShowHiddenBooksChange: (Boolean) -> Unit,
-  notDownloadedBookCount: Int,
-  showNotDownloadedBooks: Boolean,
   onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -87,22 +87,21 @@ private fun LibraryFilterContent(
       style = MaterialTheme.typography.labelLargeEmphasized,
     )
     Spacer(Modifier.height(8.dp))
-    if (hiddenBookCount > 0 || showHiddenBooks) {
+    if (showHiddenBooksSwitch) {
       FilterSwitch(
         icon = VoiceIcons.VisibilityOff,
         title = stringResource(StringsR.string.library_filter_hidden_books),
-        bookCount = hiddenBookCount,
-        checked = showHiddenBooks,
+        bookCount = viewState.hiddenBookCount,
+        checked = viewState.showHiddenBooks,
         onCheckedChange = onShowHiddenBooksChange,
       )
     }
-    // with every server book downloaded there's nothing to filter, whatever the switch says
-    if (notDownloadedBookCount > 0) {
+    if (showNotDownloadedBooksSwitch) {
       FilterSwitch(
         icon = VoiceIcons.Cloud,
         title = stringResource(StringsR.string.library_filter_not_downloaded),
-        bookCount = notDownloadedBookCount,
-        checked = showNotDownloadedBooks,
+        bookCount = viewState.notDownloadedBookCount,
+        checked = viewState.showNotDownloadedBooks,
         onCheckedChange = onShowNotDownloadedBooksChange,
       )
     }
@@ -159,11 +158,11 @@ private fun LibraryFilterContentPreview() {
   VoiceTheme {
     Surface {
       LibraryFilterContent(
-        hiddenBookCount = 12,
-        showHiddenBooks = false,
+        viewState =
+          BookOverviewViewState.Loading.copy(hiddenBookCount = 12, notDownloadedBookCount = 30),
+        showHiddenBooksSwitch = true,
+        showNotDownloadedBooksSwitch = true,
         onShowHiddenBooksChange = {},
-        notDownloadedBookCount = 30,
-        showNotDownloadedBooks = true,
         onShowNotDownloadedBooksChange = {},
       )
     }

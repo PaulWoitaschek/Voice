@@ -129,7 +129,7 @@ class BookOverviewViewModel(
     val downloadStates = remember {
       serverDownloads.states
     }
-      .collectAsState(initial = emptyMap())
+      .collectAsState(initial = null)
       .value
     val folderPickerMovedDialogShown = remember {
       folderPickerMovedDialogShownStore.data
@@ -165,22 +165,31 @@ class BookOverviewViewModel(
         hasFoldersWithoutAccess == null ||
         hasSurvey == null ||
         showHiddenBooks == null ||
-        showNotDownloadedBooks == null
+        showNotDownloadedBooks == null ||
+        // server books would pop in and out of the library while their downloads load
+        (downloadStates == null && allBooks.any { it.id.isRemote })
     ) {
       return BookOverviewViewState.Loading
     }
-    val hiddenBookCount = remember(allBooks) { allBooks.count { it.custom.hidden } }
-    // a book that downloads, or whose download failed, stays: the listener wants it on the device
+    // the current book stays, so the library keeps its controls while it plays
     fun Book.notDownloaded() =
-      id.isRemote && downloadStates[id].let { it == null || it == BookDownloadState.NotDownloaded }
-    val notDownloadedBookCount =
-      remember(allBooks, downloadStates) { allBooks.count { it.notDownloaded() } }
+      id.isRemote &&
+        id != currentBook.id &&
+        downloadStates?.get(id) !is BookDownloadState.Downloaded
+    fun Book.passesHiddenFilter() = showHiddenBooks || !custom.hidden
+    fun Book.passesNotDownloadedFilter() = showNotDownloadedBooks || !notDownloaded()
+    // each count is what its switch changes, with the other switch as it is
+    val hiddenBookCount = allBooks.count { it.custom.hidden && it.passesNotDownloadedFilter() }
+    val notDownloadedBookCount = allBooks.count { it.notDownloaded() && it.passesHiddenFilter() }
     val books =
-      remember(allBooks, downloadStates, showHiddenBooks, showNotDownloadedBooks) {
-        allBooks.filter { book ->
-          (showHiddenBooks || !book.custom.hidden) &&
-            (showNotDownloadedBooks || !book.notDownloaded())
-        }
+      remember(
+        allBooks,
+        downloadStates,
+        currentBook,
+        showHiddenBooks,
+        showNotDownloadedBooks,
+      ) {
+        allBooks.filter { it.passesHiddenFilter() && it.passesNotDownloadedFilter() }
       }
     // a deleted book can stay the current one
     val currentBookId = currentBook.id?.takeIf { id -> books.any { it.id == id } }
@@ -220,7 +229,7 @@ class BookOverviewViewModel(
         currentBookId = currentBookId,
         livePlaybackState = { livePlaybackState.value },
         unavailable = id in unavailableBooks,
-        download = downloadStates[id].badge(),
+        download = downloadStates?.get(id).badge(),
       )
 
     val entries = remember(books) { libraryEntries(books) }

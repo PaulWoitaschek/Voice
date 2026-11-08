@@ -180,11 +180,7 @@ internal fun BookOverview(
         showSearch = viewState.showSearchIcon,
         showFolderPickerIcon = viewState.showFolderPickerIcon,
         showFolderAccessBadge = viewState.showFolderAccessBadge,
-        // only there once it has something to filter, so a library without it stays as it was
-        showFilter =
-          viewState.hiddenBookCount > 0 ||
-            viewState.showHiddenBooks ||
-            viewState.notDownloadedBookCount > 0,
+        showFilter = viewState.showHiddenBooksSwitch || viewState.showNotDownloadedBooksSwitch,
         isLoading = viewState.isLoading,
         scrollBehavior = scrollBehavior,
         onSearchClick = onSearchClick,
@@ -233,11 +229,8 @@ internal fun BookOverview(
   )
   if (showFilterSheet) {
     LibraryFilterSheet(
-      hiddenBookCount = viewState.hiddenBookCount,
-      showHiddenBooks = viewState.showHiddenBooks,
+      viewState = viewState,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
-      notDownloadedBookCount = viewState.notDownloadedBookCount,
-      showNotDownloadedBooks = viewState.showNotDownloadedBooks,
       onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
       onDismiss = { showFilterSheet = false },
     )
