@@ -418,6 +418,8 @@
     <string name="library.filter">Filter</string>
     <!-- Switch in the library filter sheet that shows the hidden books in the library again, with a "Hidden" label. Below it is how many books are hidden, like "12 books". -->
     <string name="library.filter.hidden_books">Hidden books</string>
+    <!-- Switch in the library filter sheet that shows the server books that aren't downloaded. Turned off, the library only shows books that play without a connection. Below it is how many books aren't downloaded, like "12 books". -->
+    <string name="library.filter.not_downloaded">Not downloaded</string>
     <!-- Heading in the library filter sheet, above switches for which books the library shows. -->
     <string name="library.filter.show">Show</string>
     <!-- Title for screens and rows that manage audiobook folders. -->

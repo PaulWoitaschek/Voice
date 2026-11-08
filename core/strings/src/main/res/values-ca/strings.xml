@@ -263,6 +263,7 @@
     <string name="library.empty.action">Mostra les carpetes</string>
     <string name="library.filter">Filtra</string>
     <string name="library.filter.hidden_books">Llibres amagats</string>
+    <string name="library.filter.not_downloaded">No baixats</string>
     <string name="library.filter.show">Mostra</string>
     <string name="library.folders.title">Carpetes d\'audiollibres</string>
     <string name="library.folders.moved.dialog.title">Les carpetes d\'audiollibres han canviat de lloc</string>

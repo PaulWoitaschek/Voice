@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -43,6 +44,9 @@ internal fun LibraryFilterSheet(
   hiddenBookCount: Int,
   showHiddenBooks: Boolean,
   onShowHiddenBooksChange: (Boolean) -> Unit,
+  notDownloadedBookCount: Int,
+  showNotDownloadedBooks: Boolean,
+  onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   onDismiss: () -> Unit,
 ) {
   ModalBottomSheet(
@@ -57,6 +61,9 @@ internal fun LibraryFilterSheet(
       hiddenBookCount = hiddenBookCount,
       showHiddenBooks = showHiddenBooks,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
+      notDownloadedBookCount = notDownloadedBookCount,
+      showNotDownloadedBooks = showNotDownloadedBooks,
+      onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
     )
   }
 }
@@ -66,6 +73,9 @@ private fun LibraryFilterContent(
   hiddenBookCount: Int,
   showHiddenBooks: Boolean,
   onShowHiddenBooksChange: (Boolean) -> Unit,
+  notDownloadedBookCount: Int,
+  showNotDownloadedBooks: Boolean,
+  onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(
@@ -77,40 +87,69 @@ private fun LibraryFilterContent(
       style = MaterialTheme.typography.labelLargeEmphasized,
     )
     Spacer(Modifier.height(8.dp))
-    Row(
-      modifier =
-        Modifier.fillMaxWidth()
-          .clip(RoundedCornerShape(24.dp))
-          .toggleable(
-            value = showHiddenBooks,
-            role = Role.Switch,
-            onValueChange = onShowHiddenBooksChange,
-          )
-          .heightIn(min = 64.dp)
-          .padding(horizontal = 12.dp),
-      verticalAlignment = Alignment.CenterVertically,
-    ) {
-      Icon(VoiceIcons.VisibilityOff, contentDescription = null)
-      Spacer(Modifier.width(16.dp))
-      Column(Modifier.weight(1F)) {
-        Text(
-          text = stringResource(StringsR.string.library_filter_hidden_books),
-          style = MaterialTheme.typography.bodyLarge,
-        )
-        Text(
-          text =
-            pluralStringResource(
-              StringsR.plurals.library_search_browse_book_count,
-              hiddenBookCount,
-              hiddenBookCount,
-            ),
-          style = MaterialTheme.typography.bodyMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-      }
-      Spacer(Modifier.width(12.dp))
-      Switch(checked = showHiddenBooks, onCheckedChange = null)
+    if (hiddenBookCount > 0 || showHiddenBooks) {
+      FilterSwitch(
+        icon = VoiceIcons.VisibilityOff,
+        title = stringResource(StringsR.string.library_filter_hidden_books),
+        bookCount = hiddenBookCount,
+        checked = showHiddenBooks,
+        onCheckedChange = onShowHiddenBooksChange,
+      )
     }
+    // with every server book downloaded there's nothing to filter, whatever the switch says
+    if (notDownloadedBookCount > 0) {
+      FilterSwitch(
+        icon = VoiceIcons.Cloud,
+        title = stringResource(StringsR.string.library_filter_not_downloaded),
+        bookCount = notDownloadedBookCount,
+        checked = showNotDownloadedBooks,
+        onCheckedChange = onShowNotDownloadedBooksChange,
+      )
+    }
+  }
+}
+
+@Composable
+private fun FilterSwitch(
+  icon: ImageVector,
+  title: String,
+  bookCount: Int,
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+) {
+  Row(
+    modifier =
+      Modifier.fillMaxWidth()
+        .clip(RoundedCornerShape(24.dp))
+        .toggleable(
+          value = checked,
+          role = Role.Switch,
+          onValueChange = onCheckedChange,
+        )
+        .heightIn(min = 64.dp)
+        .padding(horizontal = 12.dp),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
+    Icon(icon, contentDescription = null)
+    Spacer(Modifier.width(16.dp))
+    Column(Modifier.weight(1F)) {
+      Text(
+        text = title,
+        style = MaterialTheme.typography.bodyLarge,
+      )
+      Text(
+        text =
+          pluralStringResource(
+            StringsR.plurals.library_search_browse_book_count,
+            bookCount,
+            bookCount,
+          ),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+      )
+    }
+    Spacer(Modifier.width(12.dp))
+    Switch(checked = checked, onCheckedChange = null)
   }
 }
 
@@ -123,6 +162,9 @@ private fun LibraryFilterContentPreview() {
         hiddenBookCount = 12,
         showHiddenBooks = false,
         onShowHiddenBooksChange = {},
+        notDownloadedBookCount = 30,
+        showNotDownloadedBooks = true,
+        onShowNotDownloadedBooksChange = {},
       )
     }
   }

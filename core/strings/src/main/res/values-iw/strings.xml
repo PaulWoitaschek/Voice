@@ -263,6 +263,7 @@
     <string name="library.empty.action">הצגת התיקיות</string>
     <string name="library.filter">סינון</string>
     <string name="library.filter.hidden_books">ספרים מוסתרים</string>
+    <string name="library.filter.not_downloaded">לא הורדו</string>
     <string name="library.filter.show">הצגה</string>
     <string name="library.folders.title">תיקיות קולספרים</string>
     <string name="library.folders.moved.dialog.title">תיקיות הקולספרים הועברו</string>

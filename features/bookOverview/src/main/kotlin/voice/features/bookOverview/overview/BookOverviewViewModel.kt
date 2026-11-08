@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -31,6 +32,7 @@ import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.category
 import voice.core.data.folders.AudiobookFolders
+import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.kioskmode.DemoAudiobook
@@ -78,6 +80,7 @@ class BookOverviewViewModel(
   private val emptyLibraryTracker: EmptyLibraryTracker,
   private val survey: Survey,
   private val showHiddenBooksStore: ShowHiddenBooksStore,
+  private val showNotDownloadedBooksStore: ShowNotDownloadedBooksStore,
   private val bookHider: BookHider,
 ) {
 
@@ -149,6 +152,11 @@ class BookOverviewViewModel(
     }
       .collectAsState(initial = null)
       .value
+    val showNotDownloadedBooks = remember {
+      showNotDownloadedBooksStore.data
+    }
+      .collectAsState(initial = null)
+      .value
     if (
       allBooks == null ||
         currentBook == null ||
@@ -156,14 +164,23 @@ class BookOverviewViewModel(
         gridMode == null ||
         hasFoldersWithoutAccess == null ||
         hasSurvey == null ||
-        showHiddenBooks == null
+        showHiddenBooks == null ||
+        showNotDownloadedBooks == null
     ) {
       return BookOverviewViewState.Loading
     }
     val hiddenBookCount = remember(allBooks) { allBooks.count { it.custom.hidden } }
+    // a book that downloads, or whose download failed, stays: the listener wants it on the device
+    fun Book.notDownloaded() =
+      id.isRemote && downloadStates[id].let { it == null || it == BookDownloadState.NotDownloaded }
+    val notDownloadedBookCount =
+      remember(allBooks, downloadStates) { allBooks.count { it.notDownloaded() } }
     val books =
-      remember(allBooks, showHiddenBooks) {
-        if (showHiddenBooks) allBooks else allBooks.filterNot { it.custom.hidden }
+      remember(allBooks, downloadStates, showHiddenBooks, showNotDownloadedBooks) {
+        allBooks.filter { book ->
+          (showHiddenBooks || !book.custom.hidden) &&
+            (showNotDownloadedBooks || !book.notDownloaded())
+        }
       }
     // a deleted book can stay the current one
     val currentBookId = currentBook.id?.takeIf { id -> books.any { it.id == id } }
@@ -251,6 +268,8 @@ class BookOverviewViewModel(
       dialog = dialog,
       hiddenBookCount = hiddenBookCount,
       showHiddenBooks = showHiddenBooks,
+      notDownloadedBookCount = notDownloadedBookCount,
+      showNotDownloadedBooks = showNotDownloadedBooks,
     )
   }
 
@@ -306,6 +325,12 @@ class BookOverviewViewModel(
   fun onShowHiddenBooksChange(show: Boolean) {
     scope.launch {
       showHiddenBooksStore.updateData { show }
+    }
+  }
+
+  fun onShowNotDownloadedBooksChange(show: Boolean) {
+    scope.launch {
+      showNotDownloadedBooksStore.updateData { show }
     }
   }
 

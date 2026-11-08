@@ -250,6 +250,7 @@
     <string name="library.empty.action">Mappen tonen</string>
     <string name="library.filter">Filteren</string>
     <string name="library.filter.hidden_books">Verborgen boeken</string>
+    <string name="library.filter.not_downloaded">Niet gedownload</string>
     <string name="library.filter.show">Tonen</string>
     <string name="library.folders.title">Luisterboekmappen</string>
     <string name="library.folders.moved.dialog.title">Audioboekmappen verplaatst</string>

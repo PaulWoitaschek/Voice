@@ -27,6 +27,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
@@ -126,6 +127,7 @@ class BookOverviewViewModelTest {
         emptyLibraryTracker = emptyLibraryTracker,
         survey = survey(),
         showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+        showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(MemoryDataStore(true)),
         bookHider = BookHider(mockk()),
       )
 
@@ -207,6 +209,7 @@ class BookOverviewViewModelTest {
         emptyLibraryTracker = emptyLibraryTracker,
         survey = survey(),
         showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+        showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(MemoryDataStore(true)),
         bookHider = BookHider(mockk()),
       )
 
@@ -379,6 +382,50 @@ class BookOverviewViewModelTest {
             .filterIsInstance<LibraryItem.Series>()
             .associate { it.series.name to it.series.hidden }
         assertEquals(expected = mapOf("Other" to false, "Saga" to true), actual = stacks)
+      }
+  }
+
+  @Test
+  fun `without books that aren't downloaded, the library keeps the ones on the device`() = runTest {
+    val local = book(time = 0)
+    val streamed = book(time = 0, id = BookId("abs://item/streamed"))
+    val downloaded = book(time = 0, id = BookId("abs://item/downloaded"))
+    val downloading = book(time = 0, id = BookId("abs://item/downloading"))
+    val store = MemoryDataStore(true)
+    val viewModel =
+      viewModel(
+        books = listOf(local, streamed, downloaded, downloading),
+        downloadStates =
+          mapOf(
+            downloaded.id to BookDownloadState.Downloaded(bytes = 2),
+            downloading.id to
+              BookDownloadState.Downloading(
+                progress = 0.5F,
+                downloadedBytes = 1,
+                totalBytes = 2,
+                waitingFor = null,
+              ),
+          ),
+        showNotDownloadedBooksStore = store,
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = 1, actual = state.notDownloadedBookCount)
+        assertEquals(expected = 4, actual = state.keys(BookCategory.NOT_STARTED).size)
+
+        viewModel.onShowNotDownloadedBooksChange(false)
+
+        assertEquals(
+          expected = setOf(local.id.value, downloaded.id.value, downloading.id.value),
+          actual = awaitItem().keys(BookCategory.NOT_STARTED).toSet(),
+        )
+        assertEquals(expected = false, actual = store.data.first())
       }
   }
 
@@ -760,6 +807,8 @@ class BookOverviewViewModelTest {
     scanning: Flow<Boolean> = MutableStateFlow(false),
     survey: Survey = survey(),
     showHiddenBooksStore: DataStore<Boolean> = MemoryDataStore(false),
+    showNotDownloadedBooksStore: DataStore<Boolean> = MemoryDataStore(true),
+    downloadStates: Map<BookId, BookDownloadState> = emptyMap(),
     repo: BookRepository = mockk {
       every { flow() } returns MutableStateFlow(books)
     },
@@ -794,11 +843,15 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
-      serverDownloads = serverDownloads,
+      serverDownloads =
+        mockk {
+          every { states } returns flowOf(downloadStates)
+        },
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey,
       showHiddenBooksStore = ShowHiddenBooksStore(showHiddenBooksStore),
+      showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(showNotDownloadedBooksStore),
       bookHider = BookHider(repo),
     )
   }

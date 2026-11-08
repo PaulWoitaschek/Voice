@@ -250,6 +250,7 @@
     <string name="library.empty.action">फ़ोल्डर दिखाएँ</string>
     <string name="library.filter">फ़िल्टर</string>
     <string name="library.filter.hidden_books">छिपी हुई पुस्तकें</string>
+    <string name="library.filter.not_downloaded">डाउनलोड नहीं की गईं</string>
     <string name="library.filter.show">दिखाएँ</string>
     <string name="library.folders.title">ऑडियोबुक फ़ोल्डर</string>
     <string name="library.folders.moved.dialog.title">ऑडियोबुक फ़ोल्डर की जगह बदल गई</string>

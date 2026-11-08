@@ -263,6 +263,7 @@
     <string name="library.empty.action">Mostrar pastas</string>
     <string name="library.filter">Filtrar</string>
     <string name="library.filter.hidden_books">Livros ocultos</string>
+    <string name="library.filter.not_downloaded">Não baixados</string>
     <string name="library.filter.show">Mostrar</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
     <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>

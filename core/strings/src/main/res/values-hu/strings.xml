@@ -250,6 +250,7 @@
     <string name="library.empty.action">Mappák megjelenítése</string>
     <string name="library.filter">Szűrés</string>
     <string name="library.filter.hidden_books">Rejtett könyvek</string>
+    <string name="library.filter.not_downloaded">Nem letöltött</string>
     <string name="library.filter.show">Megjelenítés</string>
     <string name="library.folders.title">Hangoskönyv mappák</string>
     <string name="library.folders.moved.dialog.title">Új helyen a hangoskönyv mappák</string>

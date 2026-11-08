@@ -276,6 +276,7 @@
     <string name="library.empty.action">Показать папки</string>
     <string name="library.filter">Фильтр</string>
     <string name="library.filter.hidden_books">Скрытые книги</string>
+    <string name="library.filter.not_downloaded">Не скачанные</string>
     <string name="library.filter.show">Показывать</string>
     <string name="library.folders.title">Папки с аудиокнигами</string>
     <string name="library.folders.moved.dialog.title">Папки аудиокниг перенесены</string>

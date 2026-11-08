@@ -263,6 +263,7 @@
     <string name="library.empty.action">Afișează directoarele</string>
     <string name="library.filter">Filtrează</string>
     <string name="library.filter.hidden_books">Cărți ascunse</string>
+    <string name="library.filter.not_downloaded">Nedescărcate</string>
     <string name="library.filter.show">Afișează</string>
     <string name="library.folders.title">Directoare cărți</string>
     <string name="library.folders.moved.dialog.title">Directoarele cu cărți audio s-au mutat</string>

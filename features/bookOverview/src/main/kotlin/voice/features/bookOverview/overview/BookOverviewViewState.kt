@@ -23,6 +23,8 @@ data class BookOverviewViewState(
   val dialog: Dialog?,
   val hiddenBookCount: Int = 0,
   val showHiddenBooks: Boolean = false,
+  val notDownloadedBookCount: Int = 0,
+  val showNotDownloadedBooks: Boolean = true,
 ) {
 
   companion object {

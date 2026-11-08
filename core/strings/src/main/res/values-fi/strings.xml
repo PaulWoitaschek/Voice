@@ -250,6 +250,7 @@
     <string name="library.empty.action">Näytä kansiot</string>
     <string name="library.filter">Suodata</string>
     <string name="library.filter.hidden_books">Piilotetut kirjat</string>
+    <string name="library.filter.not_downloaded">Lataamattomat</string>
     <string name="library.filter.show">Näytä</string>
     <string name="library.folders.title">Äänikirjakansiot</string>
     <string name="library.folders.moved.dialog.title">Äänikirjakansiot siirretty</string>
