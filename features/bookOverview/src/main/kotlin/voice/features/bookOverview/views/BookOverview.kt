@@ -65,6 +65,7 @@ import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.overview.LibraryItem
+import voice.features.bookOverview.overview.LibrarySource
 import voice.features.bookOverview.overview.SeriesStackViewState
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -136,6 +137,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onShowFoldersClick = bookOverviewViewModel::onShowFoldersClick,
     onShowHiddenBooksChange = bookOverviewViewModel::onShowHiddenBooksChange,
     onShowNotDownloadedBooksChange = bookOverviewViewModel::onShowNotDownloadedBooksChange,
+    onSourceChange = bookOverviewViewModel::onSourceChange,
     snackbarHostState = snackbarHostState,
     modifier = modifier,
   )
@@ -159,6 +161,7 @@ internal fun BookOverview(
   onShowFoldersClick: () -> Unit,
   onShowHiddenBooksChange: (Boolean) -> Unit,
   onShowNotDownloadedBooksChange: (Boolean) -> Unit,
+  onSourceChange: (LibrarySource, Boolean) -> Unit,
   modifier: Modifier = Modifier,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -180,7 +183,10 @@ internal fun BookOverview(
         showSearch = viewState.showSearchIcon,
         showFolderPickerIcon = viewState.showFolderPickerIcon,
         showFolderAccessBadge = viewState.showFolderAccessBadge,
-        showFilter = viewState.showHiddenBooksSwitch || viewState.showNotDownloadedBooksSwitch,
+        showFilter =
+          viewState.showHiddenBooksSwitch ||
+            viewState.showNotDownloadedBooksSwitch ||
+            viewState.sources.isNotEmpty(),
         isLoading = viewState.isLoading,
         scrollBehavior = scrollBehavior,
         onSearchClick = onSearchClick,
@@ -232,6 +238,7 @@ internal fun BookOverview(
       viewState = viewState,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
       onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
+      onSourceChange = onSourceChange,
       onDismiss = { showFilterSheet = false },
     )
   }
@@ -310,6 +317,7 @@ fun BookOverviewPreview(
       onShowFoldersClick = {},
       onShowHiddenBooksChange = {},
       onShowNotDownloadedBooksChange = {},
+      onSourceChange = { _, _ -> },
     )
   }
 }

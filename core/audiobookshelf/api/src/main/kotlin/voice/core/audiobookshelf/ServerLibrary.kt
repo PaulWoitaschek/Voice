@@ -14,6 +14,9 @@ interface ServerLibrary {
   /** Server books that can't play right now: not downloaded while the server can't be reached. */
   val unavailableBooks: Flow<Set<BookId>>
 
+  /** The libraries picked in the settings, once a sync got their names. */
+  val libraries: Flow<List<PickedLibrary>>
+
   /**
    * Syncs with the server, unless there is no server. Without [force], a sync that is running or
    * finished less than a minute ago is enough.
@@ -25,6 +28,11 @@ interface ServerLibrary {
     edit: ServerBookEdit,
   ): ServerEdit
 }
+
+data class PickedLibrary(
+  val id: String,
+  val name: String,
+)
 
 /** Whether the server can be reached right now, as far as Voice knows. */
 enum class ServerReachability {

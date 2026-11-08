@@ -21,6 +21,8 @@ public data class BookContent(
   val positionInChapter: Long,
   @ColumnInfo(defaultValue = "0") val gain: Float,
   @Embedded val metadata: BookMetadata,
+  // null for books on the device, and for server books until the next sync
+  val serverLibraryId: String? = null,
 ) {
 
   @Ignore val currentChapterIndex: Int = chapters.indexOf(currentChapter)

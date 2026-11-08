@@ -113,6 +113,7 @@ internal fun AbsLibraryItem.toBookContent(
         cover = existing?.metadata?.cover,
         fileLastModified = null,
       ),
+    serverLibraryId = libraryId,
   )
 }
 
