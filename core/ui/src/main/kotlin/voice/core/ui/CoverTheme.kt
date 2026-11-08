@@ -17,6 +17,7 @@ import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamicColorScheme
 import com.materialkolor.dynamiccolor.ColorSpec
 import com.materialkolor.ktx.animateColorScheme
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Seeds are cached (see [CoverSeedColors]), so a cover that was analyzed before themes the screen
@@ -49,17 +50,22 @@ fun CoverTheme(
   )
 }
 
+// a scheme takes long enough to drop frames, and screens of one cover often follow each other
+private val coverColorSchemes = ConcurrentHashMap<Pair<Color, Boolean>, ColorScheme>()
+
 /** The colors a cover with the theme [seed] paints, light or [dark]. */
 fun coverColorScheme(
   seed: Color,
   dark: Boolean,
 ): ColorScheme =
-  dynamicColorScheme(
-    seedColor = seed,
-    isDark = dark,
-    style = PaletteStyle.Vibrant,
-    specVersion = ColorSpec.SpecVersion.SPEC_2025,
-  )
+  coverColorSchemes.getOrPut(seed to dark) {
+    dynamicColorScheme(
+      seedColor = seed,
+      isDark = dark,
+      style = PaletteStyle.Vibrant,
+      specVersion = ColorSpec.SpecVersion.SPEC_2025,
+    )
+  }
 
 /** The theme seed for [cover], or null while unknown or if the cover has no usable color. */
 @Composable
