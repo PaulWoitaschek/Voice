@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
@@ -49,8 +50,8 @@ import voice.core.common.rootGraphAs
 import voice.core.data.BookId
 import voice.core.scanner.CoverSaver
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
-import voice.core.ui.icons.VoiceIcons
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.Navigator
@@ -94,7 +95,7 @@ fun EditCoverDialog(
     Column(Modifier.padding(24.dp)) {
       Row(verticalAlignment = Alignment.CenterVertically) {
         ShapedIcon(
-          icon = VoiceIcons.Crop,
+          icon = UiR.drawable.ic_crop,
           shape = MaterialShapes.Cookie4Sided,
           containerColor = colors.primaryContainer,
           contentColor = colors.onPrimaryContainer,
@@ -160,7 +161,7 @@ fun EditCoverDialog(
             LoadingIndicator(Modifier.size(ButtonDefaults.IconSize))
           } else {
             Icon(
-              VoiceIcons.Check,
+              painterResource(UiR.drawable.ic_check),
               contentDescription = null,
               modifier = Modifier.size(ButtonDefaults.IconSize),
             )

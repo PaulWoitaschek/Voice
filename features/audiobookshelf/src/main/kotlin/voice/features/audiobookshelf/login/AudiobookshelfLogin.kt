@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -58,8 +59,8 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.OnboardingButton
 import voice.core.ui.OnboardingScaffold
 import voice.core.ui.OnboardingStep
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.features.audiobookshelf.views.CoversHero
 import voice.features.audiobookshelf.views.ServerHero
 import voice.navigation.Destination
@@ -327,7 +328,10 @@ private fun ColumnScope.CredentialsDetails(
     trailingIcon = {
       IconButton(onClick = { showPassword = !showPassword }) {
         Icon(
-          imageVector = if (showPassword) VoiceIcons.VisibilityOff else VoiceIcons.Visibility,
+          painter =
+            painterResource(
+              if (showPassword) UiR.drawable.ic_visibility_off else UiR.drawable.ic_visibility,
+            ),
           contentDescription =
             stringResource(
               if (showPassword) {
@@ -390,7 +394,13 @@ private fun ColumnScope.LibrariesDetails(
         enabled = !state.busy,
         leadingIcon =
           if (library.selected) {
-            { Icon(VoiceIcons.Check, contentDescription = null, modifier = Modifier.size(18.dp)) }
+            {
+              Icon(
+                painterResource(UiR.drawable.ic_check),
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
+              )
+            }
           } else {
             null
           },

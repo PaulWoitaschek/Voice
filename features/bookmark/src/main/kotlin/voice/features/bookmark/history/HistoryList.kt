@@ -3,6 +3,7 @@
 package voice.features.bookmark.history
 
 import android.content.res.Configuration
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,9 +41,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -58,8 +59,8 @@ import androidx.compose.ui.unit.dp
 import voice.core.data.ListeningEvent.Source
 import voice.core.data.ListeningEvent.Type
 import voice.core.strings.R
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.plus
 import voice.features.bookmark.dayLabelText
 import voice.features.bookmark.durationText
@@ -283,7 +284,7 @@ private fun EventNode(type: Type) {
     contentAlignment = Alignment.Center,
   ) {
     Icon(
-      imageVector = type.icon(),
+      painter = painterResource(type.icon()),
       contentDescription = null,
       tint = content,
       modifier = Modifier.size(18.dp),
@@ -409,20 +410,21 @@ private fun sourceLabel(source: Source): String? =
     },
   )
 
-private fun Type.icon(): ImageVector =
+@DrawableRes
+private fun Type.icon(): Int =
   when (this) {
-    Type.Play -> VoiceIcons.PlayArrow
-    Type.Pause -> VoiceIcons.Pause
+    Type.Play -> UiR.drawable.ic_play_arrow
+    Type.Pause -> UiR.drawable.ic_pause
     Type.SleepTimerSet,
-    Type.SleepTimerStarted -> VoiceIcons.Bedtime
-    Type.SleepTimerEnded -> VoiceIcons.BedtimeOff
-    Type.SleepTimerExtended -> VoiceIcons.Vibration
-    Type.ChapterChange -> VoiceIcons.SkipNext
-    Type.BookmarkJump -> VoiceIcons.Bookmark
-    Type.JumpBack -> VoiceIcons.Undo
-    Type.SkipBack -> VoiceIcons.FastRewind
-    Type.SkipForward -> VoiceIcons.FastForward
-    Type.Seek -> VoiceIcons.SwapHoriz
+    Type.SleepTimerStarted -> UiR.drawable.ic_bedtime
+    Type.SleepTimerEnded -> UiR.drawable.ic_bedtime_off
+    Type.SleepTimerExtended -> UiR.drawable.ic_vibration
+    Type.ChapterChange -> UiR.drawable.ic_skip_next
+    Type.BookmarkJump -> UiR.drawable.ic_bookmark
+    Type.JumpBack -> UiR.drawable.ic_undo
+    Type.SkipBack -> UiR.drawable.ic_fast_rewind
+    Type.SkipForward -> UiR.drawable.ic_fast_forward
+    Type.Seek -> UiR.drawable.ic_swap_horiz
   }
 
 @Composable
@@ -439,7 +441,7 @@ private fun HistoryEmpty(modifier: Modifier = Modifier) {
       contentAlignment = Alignment.Center,
     ) {
       Icon(
-        VoiceIcons.History,
+        painterResource(UiR.drawable.ic_history),
         contentDescription = null,
         tint = colors.onSecondaryContainer,
         modifier = Modifier.size(48.dp),

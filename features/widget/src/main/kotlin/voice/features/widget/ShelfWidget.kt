@@ -38,6 +38,7 @@ import androidx.glance.semantics.contentDescription
 import androidx.glance.semantics.semantics
 import kotlinx.coroutines.flow.first
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 
 class ShelfWidget : GlanceAppWidget() {
 
@@ -183,7 +184,7 @@ private fun ShelfRow(
         fontSize = 15.sp,
       )
       WidgetIcon(
-        icon = R.drawable.widget_ic_library,
+        icon = UiR.drawable.ic_library_books,
         size = 20.dp,
         color = GlanceTheme.colors.onSurfaceVariant,
       )
@@ -242,7 +243,7 @@ private fun ShelfCover(
       ShapeButton(
         shape = WidgetShape.Circle,
         size = (size * 0.32F).coerceAtMost(28.dp),
-        icon = R.drawable.widget_ic_equalizer,
+        icon = UiR.drawable.ic_equalizer_rounded_filled,
         contentDescription = null,
         images = images,
         onClick = null,
@@ -277,7 +278,7 @@ private fun ShelfEmpty(actions: WidgetActions) {
     verticalAlignment = Alignment.CenterVertically,
   ) {
     WidgetIcon(
-      icon = R.drawable.widget_ic_library,
+      icon = UiR.drawable.ic_library_books,
       size = 28.dp,
       color = GlanceTheme.colors.primary,
     )

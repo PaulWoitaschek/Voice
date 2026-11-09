@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -49,9 +50,9 @@ import voice.core.data.BookId
 import voice.core.search.BookSearchField
 import voice.core.strings.R as StringsR
 import voice.core.ui.PlayButton
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.playButtonSharedElementModifier
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.views.BookCover
@@ -131,7 +132,7 @@ private fun Filters(
           if (filter.selected) {
             {
               Icon(
-                imageVector = VoiceIcons.Check,
+                painter = painterResource(UiR.drawable.ic_check),
                 contentDescription = null,
                 modifier = Modifier.size(FilterChipDefaults.IconSize),
               )

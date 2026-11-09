@@ -59,6 +59,7 @@ import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -70,10 +71,10 @@ import androidx.graphics.shapes.toPath as toAndroidPath
 import voice.core.strings.R as StringsR
 import voice.core.ui.CheckBadge
 import voice.core.ui.MorphShape
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.ThemeColorScheme
 import voice.core.ui.ThemeMode
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberThemeColorScheme
 
 @Composable
@@ -128,7 +129,7 @@ internal fun AppearanceSection(
           onCheckedChange = { onPureBlackToggle() },
           leading = {
             ShapedIcon(
-              icon = VoiceIcons.Contrast,
+              icon = UiR.drawable.ic_contrast,
               shape = MaterialShapes.Cookie12Sided,
               containerColor = MaterialTheme.colorScheme.primary,
               contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -165,7 +166,7 @@ internal fun AppearanceSection(
         onCheckedChange = { onCoverColorsToggle() },
         leading = {
           ShapedIcon(
-            icon = VoiceIcons.Palette,
+            icon = UiR.drawable.ic_palette,
             shape = MaterialShapes.Flower,
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -389,7 +390,7 @@ private fun PaletteSwatch(
     }
     if (themeColorScheme == ThemeColorScheme.Dynamic && !selected) {
       Icon(
-        imageVector = VoiceIcons.AutoAwesome,
+        painter = painterResource(UiR.drawable.ic_auto_awesome),
         contentDescription = null,
         tint = colors.onPrimary,
         modifier = Modifier.size(20.dp),
@@ -405,7 +406,7 @@ private fun PaletteSwatch(
         contentAlignment = Alignment.Center,
       ) {
         Icon(
-          imageVector = VoiceIcons.Check,
+          painter = painterResource(UiR.drawable.ic_check),
           contentDescription = null,
           tint = colors.onPrimaryContainer,
           modifier = Modifier.size(18.dp),

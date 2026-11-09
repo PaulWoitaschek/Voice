@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -46,9 +47,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 
 @Composable
@@ -156,14 +157,14 @@ private fun RecentSearches(
         },
         avatar = {
           Icon(
-            imageVector = VoiceIcons.History,
+            painter = painterResource(UiR.drawable.ic_history),
             contentDescription = null,
             modifier = Modifier.size(InputChipDefaults.AvatarSize),
           )
         },
         trailingIcon = {
           Icon(
-            imageVector = VoiceIcons.Close,
+            painter = painterResource(UiR.drawable.ic_close),
             contentDescription =
               stringResource(StringsR.string.library_search_recent_remove, recentSearch),
             modifier =
@@ -269,7 +270,7 @@ private fun BrowseRow(
         )
       }
       Icon(
-        imageVector = VoiceIcons.ChevronRight,
+        painter = painterResource(UiR.drawable.ic_chevron_right),
         contentDescription = null,
         tint = MaterialTheme.colorScheme.onSurfaceVariant,
       )

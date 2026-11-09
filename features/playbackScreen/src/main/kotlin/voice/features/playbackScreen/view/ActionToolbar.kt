@@ -2,6 +2,7 @@
 
 package voice.features.playbackScreen.view
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
@@ -52,9 +53,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -66,8 +67,8 @@ import androidx.compose.ui.unit.dp
 import java.text.DecimalFormat
 import kotlinx.coroutines.launch
 import voice.core.strings.R
+import voice.core.ui.R as UiR
 import voice.core.ui.formatTime
-import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState
 
 @Composable
@@ -95,7 +96,7 @@ internal fun ActionToolbar(
       ToolbarAction(
         active = sleepTimerActive,
         // a click cancels a running timer
-        icon = if (sleepTimerActive) VoiceIcons.BedtimeOff else VoiceIcons.Bedtime,
+        icon = if (sleepTimerActive) UiR.drawable.ic_bedtime_off else UiR.drawable.ic_bedtime,
         contentDescription = stringResource(R.string.sleep_timer_action_open),
         label =
           (sleepTimerState as? BookPlayViewState.SleepTimerViewState.Enabled.WithDuration)?.let {
@@ -108,7 +109,7 @@ internal fun ActionToolbar(
       val speedChanged = playbackSpeed !in 0.99F..1.01F
       ToolbarAction(
         active = speedChanged,
-        icon = VoiceIcons.Speed,
+        icon = UiR.drawable.ic_speed,
         contentDescription = stringResource(R.string.playback_speed_title),
         label = if (speedChanged) speedFormat.format(playbackSpeed) + "×" else null,
         onClick = onSpeedClick,
@@ -119,7 +120,7 @@ internal fun ActionToolbar(
       )
       ToolbarAction(
         active = skipSilence,
-        icon = VoiceIcons.ContentCut,
+        icon = UiR.drawable.ic_content_cut,
         contentDescription = stringResource(R.string.playback_option_skip_silence),
         onClick = onSkipSilenceClick,
         toggle = true,
@@ -128,7 +129,7 @@ internal fun ActionToolbar(
       )
       ToolbarAction(
         active = volumeBoostActive,
-        icon = VoiceIcons.VolumeUp,
+        icon = UiR.drawable.ic_volume_up,
         contentDescription = stringResource(R.string.playback_option_volume_boost),
         onClick = onVolumeBoostClick,
       )
@@ -170,7 +171,9 @@ private fun BookmarkAction(
     }
     ToolbarAction(
       active = burst.value < 0.5F,
-      icon = if (burst.value < 1F) VoiceIcons.BookmarkAdd else VoiceIcons.CollectionsBookmark,
+      icon =
+        if (burst.value < 1F) UiR.drawable.ic_bookmark_add
+        else UiR.drawable.ic_collections_bookmark,
       contentDescription = stringResource(R.string.bookmark_title),
       onClick = onClick,
       onLongClick = {
@@ -187,7 +190,7 @@ private fun BookmarkAction(
 @Composable
 private fun ToolbarAction(
   active: Boolean,
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   contentDescription: String,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
@@ -232,7 +235,7 @@ private fun ToolbarAction(
 @Composable
 private fun ToolbarActionContent(
   active: Boolean,
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   contentDescription: String,
   label: String?,
   rollLabel: Boolean,
@@ -301,7 +304,7 @@ private fun ToolbarActionContent(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Center,
   ) {
-    Icon(imageVector = icon, contentDescription = null, tint = content)
+    Icon(painter = painterResource(icon), contentDescription = null, tint = content)
     if (label != null) {
       Spacer(Modifier.width(4.dp))
       if (rollLabel) {

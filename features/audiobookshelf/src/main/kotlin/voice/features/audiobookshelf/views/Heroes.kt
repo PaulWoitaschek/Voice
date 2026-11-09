@@ -37,8 +37,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
-import voice.core.ui.icons.VoiceIcons
 
 /** The server, turning slowly, with stories on their way to the listener circling around it. */
 @Composable
@@ -71,7 +71,7 @@ internal fun ServerHero(
       }
     }
     ShapedIcon(
-      icon = VoiceIcons.Dns,
+      icon = UiR.drawable.ic_dns,
       shape = MaterialShapes.Cookie9Sided,
       containerColor = colors.primaryContainer,
       contentColor = colors.onPrimaryContainer,

@@ -66,7 +66,6 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.MorphShape
 import voice.core.ui.R as UiR
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.features.bookOverview.views.CoverShape
 
@@ -220,7 +219,7 @@ internal fun DeleteBookSheet(
           modifier = Modifier.weight(1F).heightIn(min = ButtonDefaults.MediumContainerHeight),
         ) {
           Icon(
-            VoiceIcons.Delete,
+            painterResource(UiR.drawable.ic_delete),
             contentDescription = null,
             modifier = Modifier.size(ButtonDefaults.IconSize),
           )
@@ -294,7 +293,7 @@ private fun DeleteHero(
         Modifier.matchParentSize().background(colors.error, MorphShape(morph, lean)),
       )
       Icon(
-        imageVector = VoiceIcons.Delete,
+        painter = painterResource(UiR.drawable.ic_delete),
         contentDescription = null,
         tint = colors.onError,
         modifier = Modifier.size(26.dp),

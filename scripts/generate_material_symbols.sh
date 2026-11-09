@@ -1,145 +1,144 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly PACKAGE="voice.core.ui.icons"
-readonly OUT_DIR="core/ui/src/main/kotlin/voice/core/ui/icons"
-readonly BASE_URL="https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp"
-readonly VARIANT="opsz,wght,FILL,GRAD,ROND@24,400,0,0,50"
-readonly GENERATED_AT="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+readonly OUT_DIR="core/ui/src/main/res/drawable"
+readonly BASE_URL="https://fonts.gstatic.com/render/v1"
 
-mkdir -p "${OUT_DIR}"
-find "${OUT_DIR}" -maxdepth 1 -type f -name '*.kt' -delete
-
-cat > "${OUT_DIR}/VoiceIcons.kt" <<EOF
-package ${PACKAGE}
-
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathFillType
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.path
-import androidx.compose.ui.unit.dp
-
-public object VoiceIcons {
-EOF
-
-generate_icon() {
-  local icon_name="$1"
-  local property_name="$2"
-  local source_url="${BASE_URL}/${icon_name}.kt?var=${VARIANT}"
-
-  {
-    printf '\n'
-    printf '/*\n'
-    printf ' * Source: %s\n' "${source_url}"
-    printf ' * Generated: %s\n' "${GENERATED_AT}"
-    printf ' */\n'
-    curl --compressed --fail --silent --show-error --location "${source_url}" |
-      perl -0pe '
-        s/^package com\.example\.test\n\n(?:import [^\n]+\n)+\n//;
-        s/\@Suppress\("CheckReturnValue"\)\npublic val '"${icon_name}"': ImageVector\n  get\(\) \{\n    if \(_'"${icon_name}"' != null\) \{\n      return _'"${icon_name}"'!!\n    \}\n    _'"${icon_name}"' =/internal val '"${property_name}"'Icon: ImageVector =/;
-        s/internal val '"${property_name}"'Icon: ImageVector =/  public val '"${property_name}"': ImageVector =/;
-        s/name = "'"${icon_name}"'"/name = "'"${property_name}"'"/g;
-        s/PathFillType\.Companion\./PathFillType./g;
-        s/\n    return _'"${icon_name}"'!!\n  \}\n\nprivate var _'"${icon_name}"': ImageVector\? = null\n?/\n/s;
-      '
-  } >> "${OUT_DIR}/VoiceIcons.kt"
+# Usage: icon <name> [rounded] [filled] [mirrored] [play]
+icon() {
+  local name="$1"
+  shift
+  local style="Outlined"
+  local fill=0
+  local suffix=""
+  local attributes=""
+  local option
+  for option in "$@"; do
+    case "${option}" in
+      rounded)
+        style="Rounded"
+        ;;
+      filled)
+        fill=1
+        ;;
+      mirrored)
+        # For the icons that Google marks as auto mirrored, so they point the right way in
+        # right-to-left layouts.
+        attributes='
+    android:autoMirrored="true"'
+        ;;
+      play)
+        # Lint only checks the free build, which doesn't show these icons.
+        attributes='
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedResources"'
+        ;;
+      *)
+        echo "Unknown option ${option} for ${name}" >&2
+        exit 1
+        ;;
+    esac
+  done
+  if [[ "${style}" == "Rounded" ]]; then
+    suffix="${suffix}_rounded"
+  fi
+  if [[ "${fill}" == 1 ]]; then
+    suffix="${suffix}_filled"
+  fi
+  local xml
+  xml="$(curl --compressed --fail --silent --show-error --location \
+    "${BASE_URL}/Material+Symbols+${style}/24dp/${name}.xml?var=opsz,wght,FILL,GRAD,ROND@24,400,${fill},0,50")"
+  printf '%s\n' "${xml/android:viewportHeight=\"24\">/android:viewportHeight=\"24\"${attributes}>}" \
+    > "${OUT_DIR}/ic_${name}${suffix}.xml"
 }
 
-generate_icon add Add
-generate_icon analytics Analytics
-generate_icon arrow_back ArrowBack
-generate_icon arrow_drop_down ArrowDropDown
-generate_icon arrow_forward ArrowForward
-generate_icon audio_file AudioFile
-generate_icon auto_awesome AutoAwesome
-generate_icon bedtime Bedtime
-generate_icon bedtime_off BedtimeOff
-generate_icon book Book
-generate_icon bookmark Bookmark
-generate_icon bookmark_add BookmarkAdd
-generate_icon bug_report BugReport
-generate_icon call Call
-generate_icon check Check
-generate_icon chevron_right ChevronRight
-generate_icon close Close
-generate_icon cloud Cloud
-generate_icon cloud_done CloudDone
-generate_icon cloud_off CloudOff
-generate_icon coffee Coffee
-generate_icon collections_bookmark CollectionsBookmark
-generate_icon construction Construction
-generate_icon contrast Contrast
-generate_icon content_cut ContentCut
-generate_icon crop Crop
-generate_icon delete Delete
-generate_icon devices Devices
-generate_icon directions_car DirectionsCar
-generate_icon dns Dns
-generate_icon done Done
-generate_icon download Download
-generate_icon download_done DownloadDone
-generate_icon edit Edit
-generate_icon emoji_food_beverage EmojiFoodBeverage
-generate_icon error Error
-generate_icon expand_more ExpandMore
-generate_icon fast_forward FastForward
-generate_icon fast_rewind FastRewind
-generate_icon favorite Favorite
-generate_icon folder Folder
-generate_icon format_quote FormatQuote
-generate_icon forum Forum
-generate_icon headphones Headphones
-generate_icon help Help
-generate_icon history History
-generate_icon hive Hive
-generate_icon hourglass_empty HourglassEmpty
-generate_icon image Image
-generate_icon image_search ImageSearch
-generate_icon keyboard_arrow_down KeyboardArrowDown
-generate_icon laptop_mac Laptop
-generate_icon library_books LibraryBooks
-generate_icon light_mode LightMode
-generate_icon lightbulb Lightbulb
-generate_icon lock_open LockOpen
-generate_icon logout Logout
-generate_icon mail Mail
-generate_icon mic Mic
-generate_icon more_vert MoreVert
-generate_icon network_cell NetworkCell
-generate_icon not_started NotStarted
-generate_icon notifications Notifications
-generate_icon palette Palette
-generate_icon pause Pause
-generate_icon person Person
-generate_icon play_arrow PlayArrow
-generate_icon push_pin PushPin
-generate_icon remove Remove
-generate_icon replay Replay
-generate_icon schedule Schedule
-generate_icon search Search
-generate_icon search_off SearchOff
-generate_icon settings Settings
-generate_icon skip_next SkipNext
-generate_icon skip_previous SkipPrevious
-generate_icon smartphone Smartphone
-generate_icon sort Sort
-generate_icon speed Speed
-generate_icon star Star
-generate_icon swap_horiz SwapHoriz
-generate_icon sync Sync
-generate_icon timer Timer
-generate_icon touch_app TouchApp
-generate_icon undo Undo
-generate_icon vibration Vibration
-generate_icon view_list ViewList
-generate_icon visibility Visibility
-generate_icon visibility_off VisibilityOff
-generate_icon volume_up VolumeUp
-generate_icon volunteer_activism VolunteerActivism
-generate_icon watch Watch
-generate_icon widgets Widgets
-
-printf '}\n' >> "${OUT_DIR}/VoiceIcons.kt"
+icon add
+icon analytics
+icon arrow_back mirrored
+icon arrow_drop_down
+icon arrow_forward mirrored
+icon audio_file
+icon auto_awesome
+icon bedtime
+icon bedtime filled
+icon bedtime_off
+icon book
+icon bookmark
+icon bookmark_add
+icon bug_report
+icon check
+icon chevron_right mirrored
+icon close
+icon cloud
+icon cloud_done
+icon cloud_off
+icon coffee
+icon collections_bookmark
+icon construction
+icon content_cut
+icon contrast mirrored
+icon crop
+icon delete
+icon dns
+icon done
+icon download
+icon download_done
+icon edit
+icon emoji_food_beverage
+icon equalizer rounded filled
+icon error
+icon expand_more
+icon fast_forward
+icon fast_rewind
+icon favorite
+icon folder
+icon format_quote
+icon forum
+icon forward_media
+icon headphones
+icon help mirrored
+icon history
+icon hive
+icon hourglass_empty
+icon image
+icon image_search
+icon keyboard_arrow_down
+icon laptop_mac
+icon library_books mirrored
+icon light_mode
+icon lightbulb
+icon lock_open
+icon logout mirrored
+icon mail play
+icon mic
+icon more_vert
+icon network_cell
+icon not_started
+icon palette
+icon pause
+icon pause rounded filled
+icon person
+icon play_arrow
+icon play_arrow rounded filled
+icon remove
+icon replay
+icon schedule
+icon search
+icon search_off
+icon settings
+icon skip_next
+icon skip_previous
+icon smartphone
+icon sort mirrored
+icon speed
+icon star play
+icon swap_horiz
+icon sync
+icon touch_app
+icon undo mirrored
+icon vibration
+icon view_list mirrored
+icon visibility
+icon visibility_off
+icon volume_up mirrored
+icon volunteer_activism

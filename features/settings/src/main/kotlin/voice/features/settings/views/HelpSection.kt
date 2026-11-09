@@ -2,6 +2,7 @@
 
 package voice.features.settings.views
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -27,18 +28,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
-import voice.core.ui.icons.VoiceIcons
 
 private class HelpTile(
   val title: String,
-  val icon: ImageVector,
+  @DrawableRes val icon: Int,
   val shape: RoundedPolygon,
   val containerColor: Color,
   val contentColor: Color,
@@ -60,7 +60,7 @@ internal fun HelpSection(
   val faq =
     HelpTile(
       title = stringResource(StringsR.string.settings_support_faq_title),
-      icon = VoiceIcons.Help,
+      icon = UiR.drawable.ic_help,
       shape = MaterialShapes.Cookie4Sided,
       containerColor = colors.primaryContainer,
       contentColor = colors.onPrimaryContainer,
@@ -69,7 +69,7 @@ internal fun HelpSection(
   val getHelp =
     HelpTile(
       title = stringResource(StringsR.string.settings_support_get_support_title),
-      icon = VoiceIcons.Forum,
+      icon = UiR.drawable.ic_forum,
       shape = MaterialShapes.Clover4Leaf,
       containerColor = colors.tertiaryContainer,
       contentColor = colors.onTertiaryContainer,
@@ -78,7 +78,7 @@ internal fun HelpSection(
   val report =
     HelpTile(
       title = stringResource(StringsR.string.settings_support_report_issue_title),
-      icon = VoiceIcons.BugReport,
+      icon = UiR.drawable.ic_bug_report,
       shape = MaterialShapes.Pentagon,
       containerColor = colors.secondaryContainer,
       contentColor = colors.onSecondaryContainer,
@@ -87,7 +87,7 @@ internal fun HelpSection(
   val suggest =
     HelpTile(
       title = stringResource(StringsR.string.settings_support_suggest_idea_title),
-      icon = VoiceIcons.Lightbulb,
+      icon = UiR.drawable.ic_lightbulb,
       shape = MaterialShapes.Sunny,
       containerColor = colors.tertiaryContainer,
       contentColor = colors.onTertiaryContainer,
@@ -123,7 +123,7 @@ internal fun HelpSection(
         onCheckedChange = { onAnalyticsToggle() },
         leading = {
           ShapedIcon(
-            icon = VoiceIcons.Analytics,
+            icon = UiR.drawable.ic_analytics,
             shape = MaterialShapes.Square,
             containerColor = colors.surfaceContainerHighest,
             contentColor = colors.onSurfaceVariant,

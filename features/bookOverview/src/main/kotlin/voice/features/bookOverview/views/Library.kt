@@ -34,6 +34,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,8 +45,8 @@ import voice.core.strings.R
 import voice.core.ui.CenteredContent
 import voice.core.ui.HoldSplashScreenWhile
 import voice.core.ui.MaxContentWidth
+import voice.core.ui.R as UiR
 import voice.core.ui.entrance
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberEntranceState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
@@ -330,7 +331,7 @@ private fun HiddenBooksButton(
       ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurfaceVariant),
   ) {
     Icon(
-      imageVector = VoiceIcons.VisibilityOff,
+      painter = painterResource(UiR.drawable.ic_visibility_off),
       contentDescription = null,
       modifier = Modifier.size(ButtonDefaults.IconSize),
     )

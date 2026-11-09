@@ -2,6 +2,7 @@
 
 package voice.features.settings.views.sleeptimer
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -36,7 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,10 +48,10 @@ import java.time.LocalTime
 import voice.core.strings.R as StringsR
 import voice.core.ui.AuroraBackground
 import voice.core.ui.NightTheme
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.ThemeColorScheme
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.features.settings.SettingsViewState
 import voice.features.settings.views.IslandShape
@@ -103,7 +104,7 @@ internal fun AutoSleepTimerSection(
             onCheckedChange = onEnabledChange,
             leading = {
               ShapedIcon(
-                icon = VoiceIcons.Bedtime,
+                icon = UiR.drawable.ic_bedtime,
                 shape = MaterialShapes.Cookie7Sided,
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -126,7 +127,7 @@ internal fun AutoSleepTimerSection(
           ) {
             TimeTile(
               modifier = Modifier.weight(1F),
-              icon = VoiceIcons.Bedtime,
+              icon = UiR.drawable.ic_bedtime,
               shape = MaterialShapes.Circle,
               iconContainerColor = MaterialTheme.colorScheme.primaryContainer,
               iconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -137,7 +138,7 @@ internal fun AutoSleepTimerSection(
             )
             TimeTile(
               modifier = Modifier.weight(1F),
-              icon = VoiceIcons.LightMode,
+              icon = UiR.drawable.ic_light_mode,
               shape = MaterialShapes.Sunny,
               iconContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
               iconContentColor = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -159,7 +160,7 @@ internal fun AutoSleepTimerSection(
 
 @Composable
 private fun TimeTile(
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   shape: RoundedPolygon,
   iconContainerColor: Color,
   iconContentColor: Color,
@@ -231,7 +232,7 @@ private fun ShakeHint() {
   ) {
     Icon(
       modifier = Modifier.size(20.dp),
-      imageVector = VoiceIcons.Vibration,
+      painter = painterResource(UiR.drawable.ic_vibration),
       contentDescription = null,
     )
     Text(

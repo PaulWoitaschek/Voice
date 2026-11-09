@@ -2,6 +2,7 @@
 
 package voice.features.bookOverview.views
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,7 @@ import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
@@ -39,8 +40,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.overview.LibraryGrouping
 import voice.features.bookOverview.overview.LibrarySource
@@ -110,8 +111,8 @@ private fun LibraryFilterContent(
           onClick = { onGroupingChange(option) },
           icon =
             when (option) {
-              LibraryGrouping.Series -> VoiceIcons.CollectionsBookmark
-              LibraryGrouping.Author -> VoiceIcons.Person
+              LibraryGrouping.Series -> UiR.drawable.ic_collections_bookmark
+              LibraryGrouping.Author -> UiR.drawable.ic_person
             },
           label =
             stringResource(
@@ -138,8 +139,8 @@ private fun LibraryFilterContent(
             onClick = { onSourceChange(source.source, !source.shown) },
             icon =
               when (source.source) {
-                is LibrarySource.Folder -> VoiceIcons.Folder
-                is LibrarySource.ServerLibrary -> VoiceIcons.Dns
+                is LibrarySource.Folder -> UiR.drawable.ic_folder
+                is LibrarySource.ServerLibrary -> UiR.drawable.ic_dns
               },
             label = source.name,
           )
@@ -148,7 +149,7 @@ private fun LibraryFilterContent(
           LibraryChip(
             selected = viewState.showHiddenBooks,
             onClick = { onShowHiddenBooksChange(!viewState.showHiddenBooks) },
-            icon = VoiceIcons.VisibilityOff,
+            icon = UiR.drawable.ic_visibility_off,
             label =
               stringResource(StringsR.string.library_filter_hidden_books) +
                 " · ${viewState.hiddenBookCount}",
@@ -158,7 +159,7 @@ private fun LibraryFilterContent(
           LibraryChip(
             selected = viewState.showNotDownloadedBooks,
             onClick = { onShowNotDownloadedBooksChange(!viewState.showNotDownloadedBooks) },
-            icon = VoiceIcons.Cloud,
+            icon = UiR.drawable.ic_cloud,
             label =
               stringResource(StringsR.string.library_filter_not_downloaded) +
                 " · ${viewState.notDownloadedBookCount}",
@@ -182,7 +183,7 @@ private fun SectionTitle(@StringRes text: Int) {
 private fun LibraryChip(
   selected: Boolean,
   onClick: () -> Unit,
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   label: String,
   modifier: Modifier = Modifier,
 ) {
@@ -192,7 +193,7 @@ private fun LibraryChip(
     modifier = modifier,
     leadingIcon = {
       Icon(
-        imageVector = if (selected) VoiceIcons.Check else icon,
+        painter = painterResource(if (selected) UiR.drawable.ic_check else icon),
         contentDescription = null,
         modifier = Modifier.size(FilterChipDefaults.IconSize),
       )

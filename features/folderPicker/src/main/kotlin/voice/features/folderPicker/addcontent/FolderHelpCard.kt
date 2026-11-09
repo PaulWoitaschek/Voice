@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
@@ -45,9 +46,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 
 internal enum class FolderHelp {
@@ -80,7 +81,7 @@ internal fun FolderHelpCard(
     ) {
       Row(verticalAlignment = Alignment.CenterVertically) {
         ShapedIcon(
-          icon = VoiceIcons.Lightbulb,
+          icon = UiR.drawable.ic_lightbulb,
           shape = MaterialShapes.Sunny,
           containerColor = MaterialTheme.colorScheme.tertiaryContainer,
           contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -198,7 +199,7 @@ private fun Answers(
           )
           if (selected) {
             Spacer(Modifier.width(8.dp))
-            Icon(imageVector = VoiceIcons.Check, contentDescription = null)
+            Icon(painter = painterResource(UiR.drawable.ic_check), contentDescription = null)
           }
         }
       }

@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -36,8 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import voice.core.data.folders.FolderType
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
-import voice.core.ui.icons.VoiceIcons
 import voice.features.folderPicker.icon
 import voice.features.folderPicker.label
 
@@ -118,7 +119,7 @@ internal fun FolderRow(
           shapes = IconButtonDefaults.shapes(),
         ) {
           Icon(
-            imageVector = VoiceIcons.Delete,
+            painter = painterResource(UiR.drawable.ic_delete),
             // every row has one, so say which folder goes
             contentDescription =
               "${stringResource(StringsR.string.common_action_delete)}, ${item.name}",
@@ -137,7 +138,7 @@ private fun NoAccess() {
   ) {
     Icon(
       modifier = Modifier.size(18.dp),
-      imageVector = VoiceIcons.Error,
+      painter = painterResource(UiR.drawable.ic_error),
       contentDescription = null,
       tint = MaterialTheme.colorScheme.error,
     )
@@ -172,7 +173,7 @@ private fun FolderTypeChip(
     if (changeable) {
       Icon(
         modifier = Modifier.size(18.dp),
-        imageVector = VoiceIcons.ArrowDropDown,
+        painter = painterResource(UiR.drawable.ic_arrow_drop_down),
         contentDescription = null,
         tint = style.onContainer,
       )

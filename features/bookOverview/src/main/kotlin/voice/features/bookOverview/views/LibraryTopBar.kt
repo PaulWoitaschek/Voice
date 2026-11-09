@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,8 +45,8 @@ import androidx.compose.ui.unit.dp
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.search.searchBarSharedBounds
 
 @Composable
@@ -88,7 +89,7 @@ internal fun LibraryTopBar(
         if (showFilter) {
           IconButton(onClick = onFilterClick) {
             Icon(
-              imageVector = VoiceIcons.Sort,
+              painter = painterResource(UiR.drawable.ic_sort),
               contentDescription = stringResource(StringsR.string.library_filter),
             )
           }
@@ -145,7 +146,7 @@ private fun LibrarySearchPill(
         if (showSpinner) {
           LoadingIndicator()
         } else {
-          Icon(imageVector = VoiceIcons.Search, contentDescription = null)
+          Icon(painter = painterResource(UiR.drawable.ic_search), contentDescription = null)
         }
       }
       Spacer(Modifier.width(16.dp))

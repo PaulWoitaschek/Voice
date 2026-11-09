@@ -71,8 +71,10 @@ glance what belongs to the story and what belongs to the app.
   `bookmarkStyle`).
 - Never convey meaning by color alone. Pair the color with a shape and an icon.
 - A selected item can change its shape (`MorphShape`).
-- Icons come only from `VoiceIcons`. To add one, list it in `scripts/generate_material_symbols.sh` and regenerate.
-  Mirror directional icons, like chevrons and back arrows, in RTL.
+- Icons are Material Symbols drawables in `:core:ui` (`UiR.drawable.ic_*`), shown with `painterResource`. Widgets
+  use the same drawables. To add one, list it in `scripts/generate_material_symbols.sh` and run the script. The file
+  takes Google's name, with `_rounded` and `_filled` for those variants. Mark the icons that Google mirrors, like
+  chevrons and back arrows, as `mirrored`. They then flip in RTL by themselves, so don't flip icons in code.
 
 ## Motion and delight
 

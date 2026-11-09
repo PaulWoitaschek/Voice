@@ -14,12 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.PI
 import kotlin.math.max
 import kotlin.math.sin
-import voice.core.ui.icons.VoiceIcons
 
 @Composable
 fun BeatingHeart(
@@ -45,7 +45,7 @@ fun BeatingHeart(
           scaleX = scale
           scaleY = scale
         },
-      imageVector = VoiceIcons.Favorite,
+      painter = painterResource(R.drawable.ic_favorite),
       contentDescription = null,
       tint = contentColor,
     )

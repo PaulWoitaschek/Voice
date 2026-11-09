@@ -23,6 +23,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
@@ -35,7 +36,7 @@ import kotlinx.coroutines.launch
 import voice.core.common.rootGraphAs
 import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 
@@ -56,7 +57,7 @@ private fun DeveloperSettings(
         navigationIcon = {
           IconButton(onClick = viewModel::close) {
             Icon(
-              imageVector = VoiceIcons.Close,
+              painter = painterResource(UiR.drawable.ic_close),
               contentDescription = stringResource(StringsR.string.common_action_close),
             )
           }

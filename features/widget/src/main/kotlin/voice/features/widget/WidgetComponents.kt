@@ -44,7 +44,9 @@ internal fun PlayButton(
   ShapeButton(
     shape = if (playing) WidgetShape.Square else WidgetShape.Cookie9,
     size = size,
-    icon = if (playing) R.drawable.widget_ic_pause else R.drawable.widget_ic_play,
+    icon =
+      if (playing) UiR.drawable.ic_pause_rounded_filled
+      else UiR.drawable.ic_play_arrow_rounded_filled,
     contentDescription =
       LocalContext.current.getString(
         if (playing) StringsR.string.playback_action_pause
@@ -67,8 +69,7 @@ internal fun SkipButton(
   ShapeButton(
     shape = WidgetShape.Circle,
     size = size,
-    icon =
-      if (forward) UiR.drawable.ic_fast_forward_white_36dp else UiR.drawable.ic_rewind_white_36dp,
+    icon = if (forward) UiR.drawable.ic_forward_media else UiR.drawable.ic_replay,
     contentDescription =
       LocalContext.current.getString(
         if (forward) StringsR.string.playback_action_fast_forward
@@ -147,7 +148,9 @@ internal fun PlayBadge(
     ShapeButton(
       shape = if (playing) WidgetShape.Square else WidgetShape.Cookie9,
       size = size - 4.dp,
-      icon = if (playing) R.drawable.widget_ic_pause else R.drawable.widget_ic_play,
+      icon =
+        if (playing) UiR.drawable.ic_pause_rounded_filled
+        else UiR.drawable.ic_play_arrow_rounded_filled,
       contentDescription = null,
       images = images,
       onClick = null,

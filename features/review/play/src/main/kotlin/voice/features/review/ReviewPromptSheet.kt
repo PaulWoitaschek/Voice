@@ -2,6 +2,7 @@
 
 package voice.features.review
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
@@ -63,7 +64,6 @@ import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -99,7 +99,6 @@ import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.drawConfetti
 import voice.core.ui.entrance
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.core.ui.rememberConfettiState
 import voice.core.ui.rememberEntranceState
@@ -360,7 +359,7 @@ private fun ReviewHero(
         ReviewPrompt.Headline.Milestone ->
           Icon(
             modifier = Modifier.size(BadgeSize * 0.42F),
-            imageVector = VoiceIcons.Headphones,
+            painter = painterResource(UiR.drawable.ic_headphones),
             contentDescription = null,
             tint = colors.onPrimary,
           )
@@ -450,7 +449,7 @@ private fun AskStep(
         contentPadding = ButtonDefaults.contentPaddingFor(size, hasStartIcon = true),
       ) {
         Icon(
-          imageVector = VoiceIcons.Star,
+          painter = painterResource(UiR.drawable.ic_star),
           contentDescription = null,
           modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
         )
@@ -468,7 +467,7 @@ private fun AskStep(
         contentPadding = ButtonDefaults.contentPaddingFor(size, hasStartIcon = true),
       ) {
         Icon(
-          imageVector = VoiceIcons.Forum,
+          painter = painterResource(UiR.drawable.ic_forum),
           contentDescription = null,
           modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
         )
@@ -578,7 +577,7 @@ private fun StatTile(
 
 private class FeedbackOption(
   val answer: ReviewAnswer,
-  val icon: ImageVector,
+  @DrawableRes val icon: Int,
   val shape: RoundedPolygon,
   @StringRes val title: Int,
   val subtitle: @Composable () -> String,
@@ -588,21 +587,21 @@ private val FeedbackOptions =
   listOf(
     FeedbackOption(
       answer = ReviewAnswer.Idea,
-      icon = VoiceIcons.Lightbulb,
+      icon = UiR.drawable.ic_lightbulb,
       shape = MaterialShapes.Sunny,
       title = StringsR.string.review_prompt_feedback_idea_title,
       subtitle = { stringResource(StringsR.string.review_prompt_feedback_idea_subtitle) },
     ),
     FeedbackOption(
       answer = ReviewAnswer.Bug,
-      icon = VoiceIcons.BugReport,
+      icon = UiR.drawable.ic_bug_report,
       shape = MaterialShapes.Cookie6Sided,
       title = StringsR.string.review_prompt_feedback_bug_title,
       subtitle = { stringResource(StringsR.string.review_prompt_feedback_bug_subtitle) },
     ),
     FeedbackOption(
       answer = ReviewAnswer.Email,
-      icon = VoiceIcons.Mail,
+      icon = UiR.drawable.ic_mail,
       shape = MaterialShapes.Cookie9Sided,
       title = StringsR.string.review_prompt_feedback_email_title,
       subtitle = { FeedbackLinks.EMAIL },
@@ -624,7 +623,7 @@ private fun FeedbackStep(
         onClick = onBack,
       ) {
         Icon(
-          imageVector = VoiceIcons.ArrowBack,
+          painter = painterResource(UiR.drawable.ic_arrow_back),
           contentDescription = stringResource(StringsR.string.common_action_back),
         )
       }
@@ -685,7 +684,7 @@ private fun FeedbackRow(
         )
       }
       Icon(
-        imageVector = VoiceIcons.ChevronRight,
+        painter = painterResource(UiR.drawable.ic_chevron_right),
         contentDescription = null,
         tint = colors.onSurfaceVariant,
       )

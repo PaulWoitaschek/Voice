@@ -29,11 +29,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
+import voice.core.ui.R as UiR
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun ChapterSwitcher(
@@ -56,7 +57,7 @@ internal fun ChapterSwitcher(
       modifier = Modifier.size(IconButtonDefaults.mediumContainerSize()),
     ) {
       Icon(
-        imageVector = VoiceIcons.SkipPrevious,
+        painter = painterResource(UiR.drawable.ic_skip_previous),
         contentDescription = stringResource(R.string.playback_chapter_previous),
       )
     }
@@ -100,7 +101,7 @@ internal fun ChapterSwitcher(
         }
         Spacer(Modifier.width(8.dp))
         Icon(
-          imageVector = VoiceIcons.ExpandMore,
+          painter = painterResource(UiR.drawable.ic_expand_more),
           contentDescription = null,
           tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -112,7 +113,7 @@ internal fun ChapterSwitcher(
       modifier = Modifier.size(IconButtonDefaults.mediumContainerSize()),
     ) {
       Icon(
-        imageVector = VoiceIcons.SkipNext,
+        painter = painterResource(UiR.drawable.ic_skip_next),
         contentDescription = stringResource(R.string.playback_chapter_next),
       )
     }

@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -58,8 +59,8 @@ import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.PlayButton
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.di.BookOverviewGraph
 import voice.features.bookOverview.overview.AuthorEntryViewState
 import voice.features.bookOverview.overview.BookOverviewItemViewState
@@ -276,9 +277,12 @@ private fun Dialog(
         onDismissRequest = onFolderPickerMovedDialogDismiss,
         icon = {
           Row {
-            Icon(imageVector = VoiceIcons.ArrowForward, contentDescription = null)
-            Icon(imageVector = VoiceIcons.Settings, contentDescription = null)
-            Icon(imageVector = VoiceIcons.ArrowBack, contentDescription = null)
+            Icon(
+              painter = painterResource(UiR.drawable.ic_arrow_forward),
+              contentDescription = null,
+            )
+            Icon(painter = painterResource(UiR.drawable.ic_settings), contentDescription = null)
+            Icon(painter = painterResource(UiR.drawable.ic_arrow_back), contentDescription = null)
           }
         },
         title = {

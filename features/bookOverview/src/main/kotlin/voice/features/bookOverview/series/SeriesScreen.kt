@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
@@ -64,9 +65,9 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
 import voice.core.ui.CoverTheme
 import voice.core.ui.PlayPauseIcon
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.views.BookOverviewPreviewParameterProvider
 import voice.features.bookOverview.views.ListBookRow
@@ -126,7 +127,7 @@ private fun SeriesScreen(
         navigationIcon = {
           IconButton(onClick = onCloseClick) {
             Icon(
-              VoiceIcons.ArrowBack,
+              painterResource(UiR.drawable.ic_arrow_back),
               contentDescription = stringResource(StringsR.string.common_action_back),
             )
           }
@@ -134,7 +135,7 @@ private fun SeriesScreen(
         actions = {
           IconButton(onClick = onMoreClick) {
             Icon(
-              VoiceIcons.MoreVert,
+              painterResource(UiR.drawable.ic_more_vert),
               contentDescription = stringResource(StringsR.string.common_action_more),
             )
           }

@@ -29,13 +29,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import voice.core.strings.R as StringsR
 import voice.core.ui.ConfettiState
+import voice.core.ui.R as UiR
 import voice.core.ui.drawConfetti
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 
 /**
@@ -114,7 +115,7 @@ internal fun AboutFooter(
         )
         Icon(
           modifier = Modifier.size(32.dp),
-          imageVector = VoiceIcons.PlayArrow,
+          painter = painterResource(UiR.drawable.ic_play_arrow),
           contentDescription = null,
           tint = colors.onPrimary,
         )

@@ -1,5 +1,6 @@
 package voice.features.bookOverview.views
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -21,7 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,7 +33,6 @@ import voice.core.audiobookshelf.download.WaitingFor
 import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.sharedCoverElementModifier
 import voice.features.bookOverview.overview.DownloadBadge
@@ -74,7 +73,7 @@ internal fun BookCover(
       download != null -> DownloadBadgeIcon(badge = download, modifier = badgeModifier)
       unavailable ->
         CoverBadge(
-          icon = VoiceIcons.CloudOff,
+          icon = UiR.drawable.ic_cloud_off,
           contentDescription = stringResource(StringsR.string.library_book_offline),
           containerColor = colors.surfaceContainerHighest,
           contentColor = colors.onSurfaceVariant,
@@ -82,7 +81,7 @@ internal fun BookCover(
         )
       hidden ->
         CoverBadge(
-          icon = VoiceIcons.VisibilityOff,
+          icon = UiR.drawable.ic_visibility_off,
           contentDescription = stringResource(StringsR.string.library_book_hidden),
           containerColor = colors.surfaceContainerHighest,
           contentColor = colors.onSurfaceVariant,
@@ -90,7 +89,7 @@ internal fun BookCover(
         )
       finished ->
         CoverBadge(
-          icon = VoiceIcons.Check,
+          icon = UiR.drawable.ic_check,
           contentDescription = null,
           containerColor = colors.primary,
           contentColor = colors.onPrimary,
@@ -102,7 +101,7 @@ internal fun BookCover(
 
 @Composable
 private fun CoverBadge(
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   contentDescription: String?,
   containerColor: Color,
   contentColor: Color,
@@ -119,7 +118,7 @@ private fun CoverBadge(
   ) {
     Icon(
       modifier = Modifier.size(14.dp),
-      imageVector = icon,
+      painter = painterResource(icon),
       contentDescription = contentDescription,
       tint = contentColor,
     )
@@ -159,7 +158,8 @@ private fun DownloadBadgeIcon(
         Icon(
           modifier = Modifier.size(12.dp),
           // a clock, so a waiting download doesn't look stuck
-          imageVector = if (waiting) VoiceIcons.Schedule else VoiceIcons.Download,
+          painter =
+            painterResource(if (waiting) UiR.drawable.ic_schedule else UiR.drawable.ic_download),
           contentDescription = null,
           tint = if (waiting) colors.onSurfaceVariant else colors.primary,
         )
@@ -177,7 +177,7 @@ private fun DownloadBadgeIcon(
       ) {
         Icon(
           modifier = Modifier.size(14.dp),
-          imageVector = VoiceIcons.Error,
+          painter = painterResource(UiR.drawable.ic_error),
           contentDescription = stringResource(StringsR.string.book_download_failed),
           tint = colors.onErrorContainer,
         )

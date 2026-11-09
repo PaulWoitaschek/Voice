@@ -26,9 +26,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun PermissionBugCard(
@@ -46,7 +46,7 @@ internal fun PermissionBugCard(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
       ) {
         ShapedIcon(
-          icon = VoiceIcons.Error,
+          icon = UiR.drawable.ic_error,
           shape = MaterialShapes.SoftBurst,
           containerColor = MaterialTheme.colorScheme.error,
           contentColor = MaterialTheme.colorScheme.onError,

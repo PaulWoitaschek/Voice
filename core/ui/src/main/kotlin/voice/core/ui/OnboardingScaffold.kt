@@ -62,6 +62,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
@@ -71,7 +72,6 @@ import kotlin.math.PI
 import kotlin.math.sin
 import kotlinx.coroutines.delay
 import voice.core.strings.R as StringsR
-import voice.core.ui.icons.VoiceIcons
 
 /** The steps of the first start. The progress wave on top of each of them counts them. */
 enum class OnboardingStep {
@@ -192,9 +192,8 @@ private fun NudgingArrow(modifier: Modifier = Modifier) {
         val phase = (clock.value % 1.6F) / 1.6F
         val hop = if (phase < 0.5F) sin(phase * 4 * PI.toFloat()).coerceAtLeast(0F) else 0F
         translationX = hop * 4.dp.toPx() * if (rtl) -1 else 1
-        scaleX = if (rtl) -1F else 1F
       },
-    imageVector = VoiceIcons.ArrowForward,
+    painter = painterResource(R.drawable.ic_arrow_forward),
     contentDescription = null,
   )
 }
@@ -218,11 +217,9 @@ fun OnboardingTopBar(
   ) {
     Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
       if (onBack != null) {
-        val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         IconButton(onClick = onBack) {
           Icon(
-            modifier = Modifier.graphicsLayer { scaleX = if (rtl) -1F else 1F },
-            imageVector = VoiceIcons.ArrowBack,
+            painter = painterResource(R.drawable.ic_arrow_back),
             contentDescription = stringResource(StringsR.string.common_action_close),
           )
         }
