@@ -223,6 +223,9 @@
     <string name="history.source.unplugged">オーディオ切断</string>
     <string name="history.source.watch">スマートウォッチ</string>
     <string name="history.source.widget">ウィジェット</string>
+    <plurals name="library.author.series_count">
+        <item quantity="other">%d シリーズ</item>
+    </plurals>
     <string name="library.book.downloading">ダウンロード中</string>
     <string name="library.book.hidden">非表示</string>
     <string name="library.book.hidden.message">「%1$s」を非表示にしました</string>
@@ -236,6 +239,9 @@
     <string name="library.empty.message">追加したフォルダー内に、Voice で聴けるオーディオブックが見つかりません。ファイルが移動・削除されていないか確認するか、フォルダーを追加してください。</string>
     <string name="library.empty.action">フォルダーを表示</string>
     <string name="library.filter">フィルター</string>
+    <string name="library.filter.group_by">グループ化</string>
+    <string name="library.filter.group_by.author">著者</string>
+    <string name="library.filter.group_by.series">シリーズ</string>
     <string name="library.filter.hidden_books">非表示の本</string>
     <string name="library.filter.not_downloaded">未ダウンロード</string>
     <string name="library.filter.show">表示</string>
@@ -255,6 +261,7 @@
     <plurals name="library.hidden_books">
         <item quantity="other">非表示の本 %d 冊</item>
     </plurals>
+    <string name="library.no_author">著者なし</string>
     <string name="library.search.browse.title">ブラウズ</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="other">%d 冊</item>

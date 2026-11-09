@@ -262,6 +262,12 @@
     <string name="history.source.unplugged">Аудиоустройство отключено</string>
     <string name="history.source.watch">Часы</string>
     <string name="history.source.widget">Виджет</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d серия</item>
+        <item quantity="few">%d серии</item>
+        <item quantity="many">%d серий</item>
+        <item quantity="other">%d серий</item>
+    </plurals>
     <string name="library.book.downloading">Скачивается</string>
     <string name="library.book.hidden">Скрыта</string>
     <string name="library.book.hidden.message">Книга «%1$s» скрыта</string>
@@ -275,6 +281,9 @@
     <string name="library.empty.message">Voice не находит аудиокниг в ваших папках. Проверьте, на месте ли файлы, или добавьте папку.</string>
     <string name="library.empty.action">Показать папки</string>
     <string name="library.filter">Фильтр</string>
+    <string name="library.filter.group_by">Группировка</string>
+    <string name="library.filter.group_by.author">Автор</string>
+    <string name="library.filter.group_by.series">Серия</string>
     <string name="library.filter.hidden_books">Скрытые книги</string>
     <string name="library.filter.not_downloaded">Не скачанные</string>
     <string name="library.filter.show">Показывать</string>
@@ -300,6 +309,7 @@
         <item quantity="many">%d скрытых книг</item>
         <item quantity="other">%d скрытых книг</item>
     </plurals>
+    <string name="library.no_author">Без автора</string>
     <string name="library.search.browse.title">Обзор</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d книга</item>

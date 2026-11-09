@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">Аудио уредот е откачен</string>
     <string name="history.source.watch">Часовник</string>
     <string name="history.source.widget">Виџет</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d серијал</item>
+        <item quantity="other">%d серијали</item>
+    </plurals>
     <string name="library.book.downloading">Се презема</string>
     <string name="library.book.hidden">Скриена</string>
     <string name="library.book.hidden.message">Книгата „%1$s“ е скриена</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">Voice не може да најде аудио книги во вашите фолдери. Проверете дали датотеките сè уште се таму или додајте фолдер.</string>
     <string name="library.empty.action">Прикажи фолдери</string>
     <string name="library.filter">Филтер</string>
+    <string name="library.filter.group_by">Групирај според</string>
+    <string name="library.filter.group_by.author">Автор</string>
+    <string name="library.filter.group_by.series">Серијал</string>
     <string name="library.filter.hidden_books">Скриени книги</string>
     <string name="library.filter.not_downloaded">Непреземени</string>
     <string name="library.filter.show">Прикажи</string>
@@ -270,6 +277,7 @@
         <item quantity="one">%d скриена книга</item>
         <item quantity="other">%d скриени книги</item>
     </plurals>
+    <string name="library.no_author">Без автор</string>
     <string name="library.search.browse.title">Прегледај</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d книга</item>

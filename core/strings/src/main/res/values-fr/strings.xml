@@ -249,6 +249,11 @@
     <string name="history.source.unplugged">Audio déconnecté</string>
     <string name="history.source.watch">Montre</string>
     <string name="history.source.widget">Widget</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d série</item>
+        <item quantity="many">%d séries</item>
+        <item quantity="other">%d séries</item>
+    </plurals>
     <string name="library.book.downloading">Téléchargement en cours</string>
     <string name="library.book.hidden">Masqué</string>
     <string name="library.book.hidden.message">Vous avez masqué %1$s</string>
@@ -262,6 +267,9 @@
     <string name="library.empty.message">Voice ne trouve aucun livre audio dans vos dossiers. Vérifiez que les fichiers sont toujours là ou ajoutez un dossier.</string>
     <string name="library.empty.action">Afficher les dossiers</string>
     <string name="library.filter">Filtrer</string>
+    <string name="library.filter.group_by">Regrouper par</string>
+    <string name="library.filter.group_by.author">Auteur</string>
+    <string name="library.filter.group_by.series">Série</string>
     <string name="library.filter.hidden_books">Livres masqués</string>
     <string name="library.filter.not_downloaded">Non téléchargés</string>
     <string name="library.filter.show">Afficher</string>
@@ -285,6 +293,7 @@
         <item quantity="many">%d livres masqués</item>
         <item quantity="other">%d livres masqués</item>
     </plurals>
+    <string name="library.no_author">Sans auteur</string>
     <string name="library.search.browse.title">Parcourir</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d livre</item>

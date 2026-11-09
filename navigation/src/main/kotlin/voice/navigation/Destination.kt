@@ -98,8 +98,9 @@ sealed interface Destination {
       get() = "SeriesActions"
   }
 
+  // null lists the books with no author
   @Serializable
-  data class Author(val name: String) : Compose {
+  data class Author(val name: String?) : Compose {
     override val trackingName: String
       get() = "Author"
   }

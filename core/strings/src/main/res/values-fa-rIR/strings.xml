@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">اتصال صدا قطع شد</string>
     <string name="history.source.watch">ساعت هوشمند</string>
     <string name="history.source.widget">ویجت</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d مجموعه</item>
+        <item quantity="other">%d مجموعه</item>
+    </plurals>
     <string name="library.book.downloading">در حال دانلود</string>
     <string name="library.book.hidden">پنهان</string>
     <string name="library.book.hidden.message">کتاب %1$s پنهان شد</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">در پوشه‌های شما، Voice هیچ کتاب صوتی‌ای پیدا نمی‌کند. مطمئن شوید فایل‌ها هنوز سر جایشان هستند، یا یک پوشه اضافه کنید.</string>
     <string name="library.empty.action">نمایش پوشه‌ها</string>
     <string name="library.filter">فیلتر</string>
+    <string name="library.filter.group_by">گروه‌بندی بر اساس</string>
+    <string name="library.filter.group_by.author">نویسنده</string>
+    <string name="library.filter.group_by.series">مجموعه</string>
     <string name="library.filter.hidden_books">کتاب‌های پنهان</string>
     <string name="library.filter.not_downloaded">دانلودنشده</string>
     <string name="library.filter.show">نمایش</string>
@@ -270,6 +277,7 @@
         <item quantity="one">%d کتاب پنهان</item>
         <item quantity="other">%d کتاب پنهان</item>
     </plurals>
+    <string name="library.no_author">بدون نویسنده</string>
     <string name="library.search.browse.title">مرور</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d کتاب</item>

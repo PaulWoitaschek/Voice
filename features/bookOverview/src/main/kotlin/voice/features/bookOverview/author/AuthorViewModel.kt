@@ -20,17 +20,17 @@ import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
-import voice.core.data.Book
 import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.category
 import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
 import voice.features.bookOverview.overview.LibraryEntry
+import voice.features.bookOverview.overview.authorKey
 import voice.features.bookOverview.overview.badge
+import voice.features.bookOverview.overview.byAuthor
 import voice.features.bookOverview.overview.libraryEntries
 import voice.features.bookOverview.overview.mostCommon
-import voice.features.bookOverview.overview.nameKey
 import voice.features.bookOverview.overview.toItemViewState
 import voice.features.bookOverview.overview.toStackViewState
 import voice.navigation.Destination
@@ -44,10 +44,13 @@ class AuthorViewModel(
   private val serverDownloads: ServerDownloads,
   private val authorInfoLookup: AuthorInfoLookup,
   dispatcherProvider: DispatcherProvider,
-  @Assisted private val name: String,
+  @Assisted private val name: String?,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
+
+  // a placeholder like "Unknown" from the player lists the books with no author too
+  private val key = authorKey(name)
 
   private val info: StateFlow<AuthorInfo?> = flow {
     emit(lookUpInfo())
@@ -97,7 +100,10 @@ class AuthorViewModel(
           }
         }
     return AuthorViewState(
-      name = authorBooks.mapNotNull { it.author?.trim() }.mostCommon() ?: name,
+      name =
+        key?.let {
+          authorBooks.filter { it.authorKey == key }.mapNotNull { it.author?.trim() }.mostCommon()
+        },
       bookCount = authorBooks.size,
       finishedCount = authorBooks.count { it.category == BookCategory.FINISHED },
       info = authorInfo,
@@ -106,6 +112,7 @@ class AuthorViewModel(
   }
 
   private suspend fun lookUpInfo(): AuthorInfo? {
+    val name = name?.takeIf { key != null } ?: return null
     return try {
       authorInfoLookup.info(name, Locale.getDefault())
     } catch (e: IOException) {
@@ -143,16 +150,11 @@ class AuthorViewModel(
 
   @AssistedFactory
   interface Factory {
-    fun create(name: String): AuthorViewModel
+    fun create(name: String?): AuthorViewModel
 
     @ContributesTo(AppScope::class)
     interface Provider {
       val authorViewModelFactory: Factory
     }
   }
-}
-
-private fun List<Book>.byAuthor(name: String): List<Book> {
-  val key = nameKey(name) ?: return emptyList()
-  return filter { book -> book.author?.let(::nameKey) == key }
 }

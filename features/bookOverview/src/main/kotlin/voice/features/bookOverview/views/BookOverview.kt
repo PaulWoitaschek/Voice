@@ -62,9 +62,11 @@ import voice.core.ui.PlayButton
 import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.features.bookOverview.di.BookOverviewGraph
+import voice.features.bookOverview.overview.AuthorEntryViewState
 import voice.features.bookOverview.overview.BookOverviewItemViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
+import voice.features.bookOverview.overview.LibraryGrouping
 import voice.features.bookOverview.overview.LibraryItem
 import voice.features.bookOverview.overview.LibrarySource
 import voice.features.bookOverview.overview.SeriesStackViewState
@@ -128,6 +130,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onBookLongClick = bookOverviewViewModel::onBookLongClick,
     onSeriesClick = bookOverviewViewModel::onSeriesClick,
     onSeriesLongClick = bookOverviewViewModel::onSeriesLongClick,
+    onAuthorClick = bookOverviewViewModel::onAuthorClick,
     onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
     onFolderPickerMovedDialogDismiss = bookOverviewViewModel::onFolderPickerMovedDialogDismiss,
     onPlayButtonClick = bookOverviewViewModel::playPause,
@@ -137,6 +140,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onSurveyDismiss = bookOverviewViewModel::onSurveyDismiss,
     onShowFoldersClick = bookOverviewViewModel::onShowFoldersClick,
     onShowHiddenBooksChange = bookOverviewViewModel::onShowHiddenBooksChange,
+    onGroupingChange = bookOverviewViewModel::onGroupingChange,
     onShowNotDownloadedBooksChange = bookOverviewViewModel::onShowNotDownloadedBooksChange,
     onSourceChange = bookOverviewViewModel::onSourceChange,
     snackbarHostState = snackbarHostState,
@@ -152,6 +156,7 @@ internal fun BookOverview(
   onBookLongClick: (BookId) -> Unit,
   onSeriesClick: (String) -> Unit,
   onSeriesLongClick: (String) -> Unit,
+  onAuthorClick: (String?) -> Unit,
   onBookFolderClick: () -> Unit,
   onFolderPickerMovedDialogDismiss: () -> Unit,
   onPlayButtonClick: () -> Unit,
@@ -161,6 +166,7 @@ internal fun BookOverview(
   onSurveyDismiss: () -> Unit,
   onShowFoldersClick: () -> Unit,
   onShowHiddenBooksChange: (Boolean) -> Unit,
+  onGroupingChange: (LibraryGrouping) -> Unit,
   onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   onSourceChange: (LibrarySource, Boolean) -> Unit,
   modifier: Modifier = Modifier,
@@ -184,10 +190,7 @@ internal fun BookOverview(
         showSearch = viewState.showSearchIcon,
         showFolderPickerIcon = viewState.showFolderPickerIcon,
         showFolderAccessBadge = viewState.showFolderAccessBadge,
-        showFilter =
-          viewState.showHiddenBooksSwitch ||
-            viewState.showNotDownloadedBooksSwitch ||
-            viewState.sources.isNotEmpty(),
+        showFilter = viewState.showFilterIcon,
         isLoading = viewState.isLoading,
         scrollBehavior = scrollBehavior,
         onSearchClick = onSearchClick,
@@ -221,6 +224,7 @@ internal fun BookOverview(
       onBookLongClick = onBookLongClick,
       onSeriesClick = onSeriesClick,
       onSeriesLongClick = onSeriesLongClick,
+      onAuthorClick = onAuthorClick,
       onPlayClick = onPlayButtonClick,
       onPermissionBugCardClick = onPermissionBugCardClick,
       onSurveyClick = onSurveyClick,
@@ -237,6 +241,7 @@ internal fun BookOverview(
   if (showFilterSheet) {
     LibraryFilterSheet(
       viewState = viewState,
+      onGroupingChange = onGroupingChange,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
       onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
       onSourceChange = onSourceChange,
@@ -311,6 +316,7 @@ fun BookOverviewPreview(
       onBookLongClick = {},
       onSeriesClick = {},
       onSeriesLongClick = {},
+      onAuthorClick = {},
       onBookFolderClick = {},
       onFolderPickerMovedDialogDismiss = {},
       onPlayButtonClick = {},
@@ -320,6 +326,7 @@ fun BookOverviewPreview(
       onSurveyDismiss = {},
       onShowFoldersClick = {},
       onShowHiddenBooksChange = {},
+      onGroupingChange = {},
       onShowNotDownloadedBooksChange = {},
       onSourceChange = { _, _ -> },
     )
@@ -378,6 +385,7 @@ internal class BookOverviewPreviewParameterProvider :
       playButtonState = BookOverviewViewState.PlayButtonState.Paused,
       showEmptyLibrary = false,
       showSearchIcon = true,
+      showFilterIcon = true,
       isLoading = true,
       showStoragePermissionBugCard = false,
       showSurveyCard = false,
@@ -403,5 +411,35 @@ internal class BookOverviewPreviewParameterProvider :
         playButtonState = null,
         hiddenBookCount = 3,
       ),
+      library.copy(
+        grouping = LibraryGrouping.Author,
+        hero = null,
+        sections =
+          mapOf(
+            BookCategory.CURRENT to library.sections.getValue(BookCategory.CURRENT).take(2),
+            BookCategory.NOT_STARTED to
+              listOf(
+                  author("Lena Morgan", 1, 4),
+                  author("Nora Whitfield", 0, 1),
+                  author(null, 0, 3),
+                )
+                .map { LibraryItem.Author(it.copy(category = BookCategory.NOT_STARTED)) },
+            BookCategory.FINISHED to listOf(LibraryItem.Author(author("Daniel Hartwell", 0, 2))),
+          ),
+      ),
+    )
+
+  private fun author(
+    name: String?,
+    seriesCount: Int,
+    bookCount: Int,
+  ) =
+    AuthorEntryViewState(
+      key = name?.lowercase(),
+      name = name,
+      covers = List(minOf(bookCount, 4)) { null },
+      seriesCount = seriesCount,
+      bookCount = bookCount,
+      category = BookCategory.FINISHED,
     )
 }
