@@ -63,6 +63,7 @@ internal fun Library(
   onBookLongClick: (BookId) -> Unit,
   onSeriesClick: (String) -> Unit,
   onSeriesLongClick: (String) -> Unit,
+  onAuthorClick: (String?) -> Unit,
   onPlayClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
   onSurveyClick: () -> Unit,
@@ -72,6 +73,8 @@ internal fun Library(
   modifier: Modifier = Modifier,
 ) {
   var entered by rememberSaveable { mutableStateOf(false) }
+  // an author can be in two sections, and only the tapped tile flies
+  var openedAuthor by rememberSaveable { mutableStateOf<String?>(null) }
   // by identity, as a loaded empty library can equal the loading state
   val loading = viewState === BookOverviewViewState.Loading
   HoldSplashScreenWhile(loading = loading)
@@ -167,7 +170,11 @@ internal fun Library(
             items = items,
             key = { _, item -> item.key },
             contentType = { _, item ->
-              if (item is LibraryItem.Series) "gridSeries" else "gridBook"
+              when (item) {
+                is LibraryItem.Book -> "gridBook"
+                is LibraryItem.Series -> "gridSeries"
+                is LibraryItem.Author -> "gridAuthor"
+              }
             },
           ) { index, item ->
             val itemModifier =
@@ -188,6 +195,16 @@ internal fun Library(
                   onLongClick = { onSeriesLongClick(item.series.name) },
                   modifier = itemModifier,
                 )
+              is LibraryItem.Author ->
+                GridAuthor(
+                  author = item.author,
+                  onClick = {
+                    openedAuthor = item.key
+                    onAuthorClick(item.author.name)
+                  },
+                  flies = item.key == openedAuthor,
+                  modifier = itemModifier,
+                )
             }
           }
         } else {
@@ -195,7 +212,11 @@ internal fun Library(
             items = items,
             key = { _, item -> item.key },
             contentType = { _, item ->
-              if (item is LibraryItem.Series) "listSeries" else "listBook"
+              when (item) {
+                is LibraryItem.Book -> "listBook"
+                is LibraryItem.Series -> "listSeries"
+                is LibraryItem.Author -> "listAuthor"
+              }
             },
           ) { index, item ->
             val shape = segmentedShape(index, items.size)
@@ -216,6 +237,17 @@ internal fun Library(
                   series = item.series,
                   onClick = { onSeriesClick(item.series.name) },
                   onLongClick = { onSeriesLongClick(item.series.name) },
+                  shape = shape,
+                  modifier = itemModifier,
+                )
+              is LibraryItem.Author ->
+                ListAuthorRow(
+                  author = item.author,
+                  onClick = {
+                    openedAuthor = item.key
+                    onAuthorClick(item.author.name)
+                  },
+                  flies = item.key == openedAuthor,
                   shape = shape,
                   modifier = itemModifier,
                 )

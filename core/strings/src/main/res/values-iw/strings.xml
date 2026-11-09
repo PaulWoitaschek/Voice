@@ -249,6 +249,11 @@
     <string name="history.source.unplugged">השמע נותק</string>
     <string name="history.source.watch">שעון</string>
     <string name="history.source.widget">ווידג׳ט</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d סדרה</item>
+        <item quantity="two">%d סדרות</item>
+        <item quantity="other">%d סדרות</item>
+    </plurals>
     <string name="library.book.downloading">בהורדה</string>
     <string name="library.book.hidden">מוסתר</string>
     <string name="library.book.hidden.message">הספר %1$s הוסתר</string>
@@ -262,6 +267,9 @@
     <string name="library.empty.message">בתיקיות שלכם לא נמצאו קולספרים. בדקו שהקבצים עדיין במקומם, או הוסיפו תיקייה.</string>
     <string name="library.empty.action">הצגת התיקיות</string>
     <string name="library.filter">סינון</string>
+    <string name="library.filter.group_by">קיבוץ לפי</string>
+    <string name="library.filter.group_by.author">מחבר</string>
+    <string name="library.filter.group_by.series">סדרה</string>
     <string name="library.filter.hidden_books">ספרים מוסתרים</string>
     <string name="library.filter.not_downloaded">לא הורדו</string>
     <string name="library.filter.show">הצגה</string>
@@ -285,6 +293,7 @@
         <item quantity="two">%d ספרים מוסתרים</item>
         <item quantity="other">%d ספרים מוסתרים</item>
     </plurals>
+    <string name="library.no_author">ללא מחבר</string>
     <string name="library.search.browse.title">עיון</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d ספר</item>

@@ -2,20 +2,17 @@
 
 package voice.features.bookOverview.views
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -27,19 +24,16 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue.Expanded
 import androidx.compose.material3.SheetValue.Hidden
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,18 +42,20 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.overview.BookOverviewViewState
+import voice.features.bookOverview.overview.LibraryGrouping
 import voice.features.bookOverview.overview.LibrarySource
 import voice.features.bookOverview.overview.LibrarySourceViewState
 
 @Composable
 internal fun LibraryFilterSheet(
   viewState: BookOverviewViewState,
+  onGroupingChange: (LibraryGrouping) -> Unit,
   onShowHiddenBooksChange: (Boolean) -> Unit,
   onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   onSourceChange: (LibrarySource, Boolean) -> Unit,
   onDismiss: () -> Unit,
 ) {
-  // the rows stay while the sheet is open, so a switch doesn't vanish under the finger
+  // the chips stay while the sheet is open, so one doesn't vanish under the finger
   val showHiddenBooksSwitch = remember { viewState.showHiddenBooksSwitch }
   val showNotDownloadedBooksSwitch = remember { viewState.showNotDownloadedBooksSwitch }
   ModalBottomSheet(
@@ -72,6 +68,7 @@ internal fun LibraryFilterSheet(
   ) {
     LibraryFilterContent(
       viewState = viewState,
+      onGroupingChange = onGroupingChange,
       showHiddenBooksSwitch = showHiddenBooksSwitch,
       showNotDownloadedBooksSwitch = showNotDownloadedBooksSwitch,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
@@ -84,6 +81,7 @@ internal fun LibraryFilterSheet(
 @Composable
 private fun LibraryFilterContent(
   viewState: BookOverviewViewState,
+  onGroupingChange: (LibraryGrouping) -> Unit,
   showHiddenBooksSwitch: Boolean,
   showNotDownloadedBooksSwitch: Boolean,
   onShowHiddenBooksChange: (Boolean) -> Unit,
@@ -100,108 +98,106 @@ private fun LibraryFilterContent(
         .padding(horizontal = 12.dp)
         .padding(bottom = 24.dp),
   ) {
-    Text(
-      modifier = Modifier.padding(horizontal = 12.dp).semantics { heading() },
-      text = stringResource(StringsR.string.library_filter_show),
-      style = MaterialTheme.typography.labelLargeEmphasized,
-    )
+    SectionTitle(StringsR.string.library_filter_group_by)
     Spacer(Modifier.height(8.dp))
-    if (viewState.sources.isNotEmpty()) {
+    FlowRow(
+      modifier = Modifier.padding(horizontal = 12.dp).selectableGroup(),
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+      LibraryGrouping.entries.forEach { option ->
+        LibraryChip(
+          selected = viewState.grouping == option,
+          onClick = { onGroupingChange(option) },
+          icon =
+            when (option) {
+              LibraryGrouping.Series -> VoiceIcons.CollectionsBookmark
+              LibraryGrouping.Author -> VoiceIcons.Person
+            },
+          label =
+            stringResource(
+              when (option) {
+                LibraryGrouping.Series -> StringsR.string.library_filter_group_by_series
+                LibraryGrouping.Author -> StringsR.string.library_filter_group_by_author
+              },
+            ),
+          modifier = Modifier.semantics { role = Role.RadioButton },
+        )
+      }
+    }
+    if (showHiddenBooksSwitch || showNotDownloadedBooksSwitch || viewState.sources.isNotEmpty()) {
+      Spacer(Modifier.height(24.dp))
+      SectionTitle(StringsR.string.library_filter_show)
+      Spacer(Modifier.height(8.dp))
       FlowRow(
         modifier = Modifier.padding(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
       ) {
         viewState.sources.forEach { source ->
-          SourceChip(source = source, onClick = { onSourceChange(source.source, !source.shown) })
+          LibraryChip(
+            selected = source.shown,
+            onClick = { onSourceChange(source.source, !source.shown) },
+            icon =
+              when (source.source) {
+                is LibrarySource.Folder -> VoiceIcons.Folder
+                is LibrarySource.ServerLibrary -> VoiceIcons.Dns
+              },
+            label = source.name,
+          )
+        }
+        if (showHiddenBooksSwitch) {
+          LibraryChip(
+            selected = viewState.showHiddenBooks,
+            onClick = { onShowHiddenBooksChange(!viewState.showHiddenBooks) },
+            icon = VoiceIcons.VisibilityOff,
+            label =
+              stringResource(StringsR.string.library_filter_hidden_books) +
+                " · ${viewState.hiddenBookCount}",
+          )
+        }
+        if (showNotDownloadedBooksSwitch) {
+          LibraryChip(
+            selected = viewState.showNotDownloadedBooks,
+            onClick = { onShowNotDownloadedBooksChange(!viewState.showNotDownloadedBooks) },
+            icon = VoiceIcons.Cloud,
+            label =
+              stringResource(StringsR.string.library_filter_not_downloaded) +
+                " · ${viewState.notDownloadedBookCount}",
+          )
         }
       }
     }
-    if (showHiddenBooksSwitch) {
-      FilterSwitch(
-        icon = VoiceIcons.VisibilityOff,
-        title = stringResource(StringsR.string.library_filter_hidden_books),
-        bookCount = viewState.hiddenBookCount,
-        checked = viewState.showHiddenBooks,
-        onCheckedChange = onShowHiddenBooksChange,
-      )
-    }
-    if (showNotDownloadedBooksSwitch) {
-      FilterSwitch(
-        icon = VoiceIcons.Cloud,
-        title = stringResource(StringsR.string.library_filter_not_downloaded),
-        bookCount = viewState.notDownloadedBookCount,
-        checked = viewState.showNotDownloadedBooks,
-        onCheckedChange = onShowNotDownloadedBooksChange,
-      )
-    }
   }
 }
 
 @Composable
-private fun FilterSwitch(
-  icon: ImageVector,
-  title: String,
-  bookCount: Int,
-  checked: Boolean,
-  onCheckedChange: (Boolean) -> Unit,
-) {
-  Row(
-    modifier =
-      Modifier.fillMaxWidth()
-        .clip(RoundedCornerShape(24.dp))
-        .toggleable(
-          value = checked,
-          role = Role.Switch,
-          onValueChange = onCheckedChange,
-        )
-        .heightIn(min = 64.dp)
-        .padding(horizontal = 12.dp),
-    verticalAlignment = Alignment.CenterVertically,
-  ) {
-    Icon(icon, contentDescription = null)
-    Spacer(Modifier.width(16.dp))
-    Column(Modifier.weight(1F)) {
-      Text(
-        text = title,
-        style = MaterialTheme.typography.bodyLarge,
-      )
-      Text(
-        text =
-          pluralStringResource(
-            StringsR.plurals.library_search_browse_book_count,
-            bookCount,
-            bookCount,
-          ),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-      )
-    }
-    Spacer(Modifier.width(12.dp))
-    Switch(checked = checked, onCheckedChange = null)
-  }
+private fun SectionTitle(@StringRes text: Int) {
+  Text(
+    modifier = Modifier.padding(horizontal = 12.dp).semantics { heading() },
+    text = stringResource(text),
+    style = MaterialTheme.typography.labelLargeEmphasized,
+  )
 }
 
 @Composable
-private fun SourceChip(
-  source: LibrarySourceViewState,
+private fun LibraryChip(
+  selected: Boolean,
   onClick: () -> Unit,
+  icon: ImageVector,
+  label: String,
+  modifier: Modifier = Modifier,
 ) {
   FilterChip(
-    selected = source.shown,
+    selected = selected,
     onClick = onClick,
+    modifier = modifier,
     leadingIcon = {
       Icon(
-        imageVector =
-          when {
-            source.shown -> VoiceIcons.Check
-            source.source is LibrarySource.Folder -> VoiceIcons.Folder
-            else -> VoiceIcons.Dns
-          },
+        imageVector = if (selected) VoiceIcons.Check else icon,
         contentDescription = null,
         modifier = Modifier.size(FilterChipDefaults.IconSize),
       )
     },
-    label = { Text(source.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+    label = { Text(label, maxLines = 1, overflow = TextOverflow.Ellipsis) },
   )
 }
 
@@ -213,6 +209,7 @@ private fun LibraryFilterContentPreview() {
       LibraryFilterContent(
         viewState =
           BookOverviewViewState.Loading.copy(hiddenBookCount = 12, notDownloadedBookCount = 30),
+        onGroupingChange = {},
         showHiddenBooksSwitch = true,
         showNotDownloadedBooksSwitch = true,
         onShowHiddenBooksChange = {},
@@ -278,6 +275,7 @@ private fun SourcesPreview(
                 )
               },
           ),
+        onGroupingChange = {},
         showHiddenBooksSwitch = hiddenBookCount > 0,
         showNotDownloadedBooksSwitch = false,
         onShowHiddenBooksChange = {},

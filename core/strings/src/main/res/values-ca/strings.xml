@@ -249,6 +249,11 @@
     <string name="history.source.unplugged">Àudio desconnectat</string>
     <string name="history.source.watch">Rellotge</string>
     <string name="history.source.widget">Giny</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d sèrie</item>
+        <item quantity="many">%d sèries</item>
+        <item quantity="other">%d sèries</item>
+    </plurals>
     <string name="library.book.downloading">S\'està baixant</string>
     <string name="library.book.hidden">Amagat</string>
     <string name="library.book.hidden.message">S\'ha amagat %1$s</string>
@@ -262,6 +267,9 @@
     <string name="library.empty.message">Voice no troba cap audiollibre a les vostres carpetes. Comproveu que els fitxers encara hi siguin o afegiu una carpeta.</string>
     <string name="library.empty.action">Mostra les carpetes</string>
     <string name="library.filter">Filtra</string>
+    <string name="library.filter.group_by">Agrupa per</string>
+    <string name="library.filter.group_by.author">Autor</string>
+    <string name="library.filter.group_by.series">Sèrie</string>
     <string name="library.filter.hidden_books">Llibres amagats</string>
     <string name="library.filter.not_downloaded">No baixats</string>
     <string name="library.filter.show">Mostra</string>
@@ -285,6 +293,7 @@
         <item quantity="many">%d llibres amagats</item>
         <item quantity="other">%d llibres amagats</item>
     </plurals>
+    <string name="library.no_author">Sense autor</string>
     <string name="library.search.browse.title">Explora</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d llibre</item>

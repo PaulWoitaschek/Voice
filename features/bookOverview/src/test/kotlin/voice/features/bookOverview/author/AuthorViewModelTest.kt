@@ -5,6 +5,7 @@ import app.cash.molecule.launchMolecule
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -113,13 +114,31 @@ class AuthorViewModelTest {
   }
 
   @Test
+  fun `no author lists the books without one and looks nothing up`() = runTest {
+    val noAuthor = book(name = "No author", author = null)
+    val placeholder = book(name = "Placeholder", author = "<Unknown>")
+    books.value = listOf(noAuthor, placeholder, book(author = "Author"))
+
+    testState(name = null) {
+      val state = awaitItem()!!
+      assertEquals(expected = null, actual = state.name)
+      assertEquals(expected = 2, actual = state.bookCount)
+      assertEquals(expected = null, actual = state.info)
+      expectNoEvents()
+    }
+    coVerify(exactly = 0) {
+      val _ = authorInfoLookup.info(any(), any())
+    }
+  }
+
+  @Test
   fun `a series opens its screen`() {
     viewModel().onSeriesClick("Saga")
 
     verify { navigator.goTo(Destination.Series("Saga")) }
   }
 
-  private fun viewModel(): AuthorViewModel {
+  private fun viewModel(name: String? = "Author"): AuthorViewModel {
     return AuthorViewModel(
       repo =
         mockk<BookRepository> {
@@ -136,14 +155,15 @@ class AuthorViewModelTest {
         },
       authorInfoLookup = authorInfoLookup,
       dispatcherProvider = dispatcherProvider,
-      name = "Author",
+      name = name,
     )
   }
 
   private suspend fun TestScope.testState(
+    name: String? = "Author",
     validate: suspend ReceiveTurbine<AuthorViewState?>.() -> Unit,
   ) {
-    val viewModel = viewModel()
+    val viewModel = viewModel(name)
     backgroundScope
       .launchMolecule(RecompositionMode.Immediate) {
         viewModel.viewState()

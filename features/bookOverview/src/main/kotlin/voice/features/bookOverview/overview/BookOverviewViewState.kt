@@ -26,6 +26,8 @@ data class BookOverviewViewState(
   val notDownloadedBookCount: Int = 0,
   val showNotDownloadedBooks: Boolean = true,
   val sources: List<LibrarySourceViewState> = emptyList(),
+  val grouping: LibraryGrouping = LibraryGrouping.Series,
+  val showFilterIcon: Boolean = false,
 ) {
 
   // a switch only shows once it has something to filter, so a library without it stays as it was
@@ -92,6 +94,13 @@ sealed interface LibraryItem {
     override val key: String
       get() = "series:${series.key}"
   }
+
+  @Immutable
+  data class Author(val author: AuthorEntryViewState) : LibraryItem {
+    // an author can be in two sections
+    override val key: String
+      get() = "author:${author.category}:${author.key.orEmpty()}"
+  }
 }
 
 @Immutable
@@ -116,6 +125,28 @@ internal fun Series.toStackViewState() =
     bookCount = books.size,
     finishedCount = finishedCount,
     progress = progress,
+    category = category,
+    hidden = hidden,
+  )
+
+@Immutable
+data class AuthorEntryViewState(
+  val key: String?,
+  val name: String?,
+  val covers: List<String?>,
+  val seriesCount: Int,
+  val bookCount: Int,
+  val category: BookCategory,
+  val hidden: Boolean = false,
+)
+
+internal fun AuthorGroup.toEntryViewState(category: BookCategory) =
+  AuthorEntryViewState(
+    key = key,
+    name = name,
+    covers = covers,
+    seriesCount = seriesCount,
+    bookCount = books.size,
     category = category,
     hidden = hidden,
   )

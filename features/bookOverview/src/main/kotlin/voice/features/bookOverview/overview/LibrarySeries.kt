@@ -147,6 +147,6 @@ private fun BookCategory.entryComparator(): Comparator<LibraryEntry> =
     BookCategory.NOT_STARTED -> compareBy(NaturalOrderComparator.stringComparator) { it.name }
   }
 
-internal fun List<String>.mostCommon(): String? {
+internal fun <T> List<T>.mostCommon(): T? {
   return groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
 }
