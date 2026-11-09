@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -297,7 +296,7 @@ private fun About(
   Surface(
     onClick = { expanded = !expanded },
     modifier = modifier.fillMaxWidth(),
-    shape = RoundedCornerShape(32.dp),
+    shape = MaterialTheme.shapes.extraLargeIncreased,
     color = MaterialTheme.colorScheme.surfaceContainer,
   ) {
     Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 16.dp)) {

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -40,7 +39,7 @@ internal fun SurveyCard(
 ) {
   Surface(
     modifier = modifier.fillMaxWidth(),
-    shape = RoundedCornerShape(32.dp),
+    shape = MaterialTheme.shapes.extraLargeIncreased,
     color = MaterialTheme.colorScheme.surfaceContainerHigh,
   ) {
     Column(Modifier.padding(24.dp)) {

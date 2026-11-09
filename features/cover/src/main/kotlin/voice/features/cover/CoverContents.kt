@@ -32,7 +32,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ContainedLoadingIndicator
@@ -214,7 +213,7 @@ private fun CoverTile(
           scaleY = scale
           this.alpha = alpha
         }
-        .clip(RoundedCornerShape(20.dp))
+        .clip(MaterialTheme.shapes.largeIncreased)
         .background(colors.surfaceContainerHighest)
         .clickable(
           interactionSource = interactionSource,

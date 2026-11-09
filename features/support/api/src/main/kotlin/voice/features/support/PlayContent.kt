@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -221,7 +220,7 @@ private fun TierCard(
     selected = selected,
     onClick = onClick,
     modifier = Modifier.fillMaxWidth().semantics { role = Role.RadioButton },
-    shape = RoundedCornerShape(24.dp),
+    shape = MaterialTheme.shapes.largeIncreased,
     color = containerColor,
     contentColor = contentColor,
     border = if (selected) BorderStroke(2.dp, colors.primary) else null,
@@ -263,7 +262,7 @@ private fun TierCard(
           Text(
             modifier =
               Modifier.padding(top = 4.dp)
-                .background(colors.primary, RoundedCornerShape(8.dp))
+                .background(colors.primary, MaterialTheme.shapes.small)
                 .padding(horizontal = 8.dp, vertical = 2.dp),
             text = stringResource(StringsR.string.support_tier_current),
             style = MaterialTheme.typography.labelMedium,
@@ -377,7 +376,7 @@ private fun MessageCard(message: Message) {
   val colors = MaterialTheme.colorScheme
   Surface(
     modifier = Modifier.fillMaxWidth(),
-    shape = RoundedCornerShape(16.dp),
+    shape = MaterialTheme.shapes.large,
     color =
       when (message) {
         Message.Pending -> colors.tertiaryContainer
@@ -467,7 +466,7 @@ private fun BadgeGrowth(badge: SupporterBadge?) {
 private fun Note(note: String) {
   Surface(
     modifier = Modifier.fillMaxWidth(),
-    shape = RoundedCornerShape(24.dp),
+    shape = MaterialTheme.shapes.largeIncreased,
     color = MaterialTheme.colorScheme.surfaceContainerHigh,
   ) {
     Column(

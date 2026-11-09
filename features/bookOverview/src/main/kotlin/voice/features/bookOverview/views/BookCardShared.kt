@@ -184,19 +184,3 @@ private fun DownloadBadgeIcon(
       }
   }
 }
-
-internal fun segmentedShape(
-  index: Int,
-  count: Int,
-): Shape {
-  val large = 24.dp
-  val small = 6.dp
-  return when {
-    count == 1 -> RoundedCornerShape(large)
-    index == 0 ->
-      RoundedCornerShape(topStart = large, topEnd = large, bottomStart = small, bottomEnd = small)
-    index == count - 1 ->
-      RoundedCornerShape(topStart = small, topEnd = small, bottomStart = large, bottomEnd = large)
-    else -> RoundedCornerShape(small)
-  }
-}

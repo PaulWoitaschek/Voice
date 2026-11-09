@@ -34,7 +34,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -221,11 +220,11 @@ private fun ThemeModeTile(
         else MaterialTheme.colorScheme.outlineVariant,
       label = "tileBorderColor",
     )
-  val shape = RoundedCornerShape(20.dp)
+  val shape = MaterialTheme.shapes.largeIncreased
   Column(
     modifier =
       modifier
-        .clip(RoundedCornerShape(16.dp))
+        .clip(MaterialTheme.shapes.large)
         .selectable(
           selected = selected,
           onClick = onClick,

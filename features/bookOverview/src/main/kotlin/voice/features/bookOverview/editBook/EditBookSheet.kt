@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -226,7 +225,7 @@ private fun EditBookContent(
       label = { Text(stringResource(StringsR.string.book_edit_title_label)) },
       singleLine = true,
       readOnly = readOnly,
-      shape = RoundedCornerShape(16.dp),
+      shape = MaterialTheme.shapes.large,
       keyboardOptions =
         KeyboardOptions(
           capitalization = KeyboardCapitalization.Sentences,
@@ -244,7 +243,7 @@ private fun EditBookContent(
       label = { Text(stringResource(StringsR.string.book_edit_author_label)) },
       singleLine = true,
       readOnly = readOnly,
-      shape = RoundedCornerShape(16.dp),
+      shape = MaterialTheme.shapes.large,
       keyboardOptions =
         KeyboardOptions(
           capitalization = KeyboardCapitalization.Words,
@@ -268,7 +267,7 @@ private fun EditBookContent(
           label = { Text(stringResource(StringsR.string.book_edit_part_label)) },
           singleLine = true,
           readOnly = readOnly,
-          shape = RoundedCornerShape(16.dp),
+          shape = MaterialTheme.shapes.large,
           keyboardOptions =
             KeyboardOptions(
               keyboardType = KeyboardType.Decimal,
@@ -295,7 +294,7 @@ private fun EditBookContent(
           label = { Text(stringResource(StringsR.string.book_edit_series_label)) },
           singleLine = true,
           readOnly = readOnly,
-          shape = RoundedCornerShape(16.dp),
+          shape = MaterialTheme.shapes.large,
           keyboardOptions =
             KeyboardOptions(
               capitalization = KeyboardCapitalization.Words,

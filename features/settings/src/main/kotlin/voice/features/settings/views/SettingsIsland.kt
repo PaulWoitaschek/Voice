@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -45,8 +44,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import voice.core.ui.R as UiR
 
-internal val IslandShape = RoundedCornerShape(32.dp)
-
 /** Content lines up with the title when it keeps [IslandContentPadding] to the island's edges. */
 @Composable
 internal fun SettingsIsland(
@@ -58,7 +55,7 @@ internal fun SettingsIsland(
 ) {
   Surface(
     modifier = modifier.fillMaxWidth(),
-    shape = IslandShape,
+    shape = MaterialTheme.shapes.extraLargeIncreased,
     color = containerColor,
     contentColor = contentColor,
   ) {
@@ -113,7 +110,7 @@ internal fun IslandRow(
     modifier =
       modifier
         .padding(horizontal = 12.dp)
-        .clip(RoundedCornerShape(24.dp))
+        .clip(MaterialTheme.shapes.largeIncreased)
         .clickable(onClick = onClick),
     title = title,
     titleStyle = MaterialTheme.typography.titleMedium,
@@ -138,7 +135,7 @@ internal fun IslandSwitchRow(
     modifier =
       modifier
         .padding(horizontal = 12.dp)
-        .clip(RoundedCornerShape(24.dp))
+        .clip(MaterialTheme.shapes.largeIncreased)
         .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange),
     title = title,
     titleStyle = titleStyle,

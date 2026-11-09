@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +39,7 @@ internal fun GridBook(
   Column(
     modifier =
       modifier
-        .clip(RoundedCornerShape(24.dp))
+        .clip(MaterialTheme.shapes.largeIncreased)
         .combinedClickable(
           onClick = { onBookClick(book.id) },
           onLongClick = { onBookLongClick(book.id) },

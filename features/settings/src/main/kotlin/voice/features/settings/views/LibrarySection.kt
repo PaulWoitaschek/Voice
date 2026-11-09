@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -212,11 +211,11 @@ private fun LayoutTile(
     }
     wasSelected = selected
   }
-  val shape = RoundedCornerShape(20.dp)
+  val shape = MaterialTheme.shapes.largeIncreased
   Column(
     modifier =
       modifier
-        .clip(RoundedCornerShape(16.dp))
+        .clip(MaterialTheme.shapes.large)
         .selectable(
           selected = selected,
           onClick = onClick,

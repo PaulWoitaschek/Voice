@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.union
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -243,7 +243,11 @@ internal fun BookSearch(
       Surface(
         modifier = Modifier.fillMaxSize().nestedScroll(hideKeyboardOnScroll),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        shape =
+          MaterialTheme.shapes.extraLarge.copy(
+            bottomStart = ZeroCornerSize,
+            bottomEnd = ZeroCornerSize,
+          ),
       ) {
         val contentPadding = searchContentPadding(horizontal = horizontalPadding - 4.dp)
         AnimatedContent(

@@ -36,7 +36,7 @@ Lean expressive: bold shapes, rich color, springy motion.
   `HorizontalFloatingToolbar`, `FilterChip`. Titles use the `*Emphasized` type styles.
 - Use sheets for new flows, not dialogs: a `ModalBottomSheet` with a header that shows what it's about (cover, title).
   Rename, delete, and book actions are examples.
-- Group related content in large rounded containers, like the 32dp islands in settings. For connected rows, use
+- Group related content in large rounded containers, like the islands in settings. For connected rows, use
   `segmentedShape`.
 - On a tablet, lists and text stay in a readable column (`CenteredContent`), and grids fill the width. Layouts follow
   the space they get, not the window or a window size class, so they keep working in a pane.
@@ -66,6 +66,11 @@ glance what belongs to the story and what belongs to the app.
 
 ## Shape and icons
 
+- Corners come from `MaterialTheme.shapes`, never from a fixed `RoundedCornerShape(x.dp)`. Large containers like the
+  settings islands use `extraLargeIncreased` (32dp), cards and panels `extraLarge` (28dp), rows and tiles
+  `largeIncreased` (20dp), fields `large` (16dp), and tags `small` (8dp). A shape inside another one gets the outer
+  corner minus the padding between them, so rows with 12dp padding in a 32dp island get 20dp.
+- Covers keep a percent corner, so it scales with the cover. Pills use `CircleShape`.
 - Shapes carry meaning. Use `ShapedIcon` with `MaterialShapes` (cookies, clover, sunny, soft burst, flower) to make
   icon stickers. Give each concept one shape and color and keep it the same everywhere (folder modes,
   `bookmarkStyle`).

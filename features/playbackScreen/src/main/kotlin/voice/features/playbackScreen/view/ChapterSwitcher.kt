@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
@@ -64,7 +63,7 @@ internal fun ChapterSwitcher(
     Surface(
       onClick = onChapterClick,
       modifier = Modifier.weight(1F).heightIn(min = 56.dp),
-      shape = RoundedCornerShape(20.dp),
+      shape = MaterialTheme.shapes.largeIncreased,
       color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.85F),
     ) {
       Row(
