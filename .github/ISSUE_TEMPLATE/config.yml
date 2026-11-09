@@ -3,6 +3,6 @@ contact_links:
   - name: Feature Request
     url: https://github.com/PaulWoitaschek/Voice/discussions/new?category=ideas
     about: Suggest a feature or change.
-  - name: Discussion
-    url: https://github.com/PaulWoitaschek/Voice/discussions
-    about: Questions, upvotes and general ideas.
+  - name: Question
+    url: https://github.com/PaulWoitaschek/Voice/discussions/categories/q-a
+    about: Ask for help or ask a question.
