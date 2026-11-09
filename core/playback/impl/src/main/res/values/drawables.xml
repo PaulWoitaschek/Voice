@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <drawable name="media3_notification_pause" tools:ignore="UnusedResources">@drawable/ic_notification_pause</drawable>
   <drawable name="media3_notification_small_icon" tools:ignore="UnusedResources">@drawable/ic_notification</drawable>
-  <drawable name="media3_notification_play" tools:ignore="UnusedResources">@drawable/ic_notification_play</drawable>
 </resources>

@@ -2,38 +2,54 @@
 set -euo pipefail
 
 readonly OUT_DIR="core/ui/src/main/res/drawable"
-readonly BASE_URL="https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp"
+readonly BASE_URL="https://fonts.gstatic.com/render/v1"
 
-# Usage: icon <name> [filled|mirrored|play]
+# Usage: icon <name> [rounded] [filled] [mirrored] [play]
 icon() {
   local name="$1"
-  local option="${2:-}"
+  shift
+  local style="Outlined"
   local fill=0
-  local file="ic_${name}"
+  local suffix=""
   local attributes=""
-  case "${option}" in
-    filled)
-      fill=1
-      file="ic_${name}_filled"
-      ;;
-    mirrored)
-      # For the icons that Google marks as auto mirrored, so they point the right way in
-      # right-to-left layouts.
-      attributes='
+  local option
+  for option in "$@"; do
+    case "${option}" in
+      rounded)
+        style="Rounded"
+        ;;
+      filled)
+        fill=1
+        ;;
+      mirrored)
+        # For the icons that Google marks as auto mirrored, so they point the right way in
+        # right-to-left layouts.
+        attributes='
     android:autoMirrored="true"'
-      ;;
-    play)
-      # Lint only checks the free build, which doesn't show these icons.
-      attributes='
+        ;;
+      play)
+        # Lint only checks the free build, which doesn't show these icons.
+        attributes='
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="UnusedResources"'
-      ;;
-  esac
+        ;;
+      *)
+        echo "Unknown option ${option} for ${name}" >&2
+        exit 1
+        ;;
+    esac
+  done
+  if [[ "${style}" == "Rounded" ]]; then
+    suffix="${suffix}_rounded"
+  fi
+  if [[ "${fill}" == 1 ]]; then
+    suffix="${suffix}_filled"
+  fi
   local xml
   xml="$(curl --compressed --fail --silent --show-error --location \
-    "${BASE_URL}/${name}.xml?var=opsz,wght,FILL,GRAD,ROND@24,400,${fill},0,50")"
+    "${BASE_URL}/Material+Symbols+${style}/24dp/${name}.xml?var=opsz,wght,FILL,GRAD,ROND@24,400,${fill},0,50")"
   printf '%s\n' "${xml/android:viewportHeight=\"24\">/android:viewportHeight=\"24\"${attributes}>}" \
-    > "${OUT_DIR}/${file}.xml"
+    > "${OUT_DIR}/ic_${name}${suffix}.xml"
 }
 
 icon add
@@ -69,6 +85,7 @@ icon download
 icon download_done
 icon edit
 icon emoji_food_beverage
+icon equalizer rounded filled
 icon error
 icon expand_more
 icon fast_forward
@@ -99,8 +116,10 @@ icon network_cell
 icon not_started
 icon palette
 icon pause
+icon pause rounded filled
 icon person
 icon play_arrow
+icon play_arrow rounded filled
 icon remove
 icon replay
 icon schedule

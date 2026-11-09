@@ -243,7 +243,7 @@ private fun ShelfCover(
       ShapeButton(
         shape = WidgetShape.Circle,
         size = (size * 0.32F).coerceAtMost(28.dp),
-        icon = R.drawable.widget_ic_equalizer,
+        icon = UiR.drawable.ic_equalizer_rounded_filled,
         contentDescription = null,
         images = images,
         onClick = null,
