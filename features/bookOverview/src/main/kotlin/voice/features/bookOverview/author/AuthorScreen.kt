@@ -77,7 +77,6 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
 import voice.core.ui.VoiceTheme
 import voice.core.ui.authorSharedBoundsModifier
-import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.overview.SeriesStackViewState
@@ -85,6 +84,7 @@ import voice.features.bookOverview.overview.authorKey
 import voice.features.bookOverview.views.BookOverviewPreviewParameterProvider
 import voice.features.bookOverview.views.ListBookRow
 import voice.features.bookOverview.views.ListSeriesRow
+import voice.features.bookOverview.views.nameText
 import voice.features.bookOverview.views.seriesCounts
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -226,7 +226,7 @@ private fun Header(viewState: AuthorViewState) {
     Column(Modifier.weight(1F)) {
       Text(
         text = viewState.name ?: stringResource(StringsR.string.library_no_author),
-        style = MaterialTheme.typography.headlineMediumEmphasized.bookText(),
+        style = MaterialTheme.typography.headlineMediumEmphasized.nameText(viewState.name),
         maxLines = 3,
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier.semantics { heading() },

@@ -99,8 +99,9 @@ internal fun GridAuthor(
   Column(
     modifier = modifier.clip(RoundedCornerShape(24.dp)).clickable(onClick = onClick).padding(6.dp),
   ) {
-    Box(Modifier.fillMaxWidth().aspectRatio(1F)) {
-      AuthorCovers(covers = author.covers, modifier = Modifier.fillMaxSize().flying(author, flies))
+    // the badge flies along, or the flying covers would hide it
+    Box(Modifier.fillMaxWidth().aspectRatio(1F).flying(author, flies)) {
+      AuthorCovers(covers = author.covers, modifier = Modifier.fillMaxSize())
       CountBadge(
         count = author.bookCount,
         finished = author.category == BookCategory.FINISHED,
@@ -176,7 +177,7 @@ private fun authorName(author: AuthorEntryViewState): String =
   author.name ?: stringResource(StringsR.string.library_no_author)
 
 // "No author" is Voice's own words, not the book's
-private fun TextStyle.nameText(name: String?): TextStyle = if (name != null) bookText() else this
+internal fun TextStyle.nameText(name: String?): TextStyle = if (name != null) bookText() else this
 
 @Composable
 private fun authorCounts(
