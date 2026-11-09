@@ -40,10 +40,10 @@ generate_icon() {
       perl -0pe '
         s/^package com\.example\.test\n\n(?:import [^\n]+\n)+\n//;
         s/\@Suppress\("CheckReturnValue"\)\npublic val '"${icon_name}"': ImageVector\n  get\(\) \{\n    if \(_'"${icon_name}"' != null\) \{\n      return _'"${icon_name}"'!!\n    \}\n    _'"${icon_name}"' =/internal val '"${property_name}"'Icon: ImageVector =/;
-        s/internal val '"${property_name}"'Icon: ImageVector =/  public val '"${property_name}"': ImageVector =/;
+        s/internal val '"${property_name}"'Icon: ImageVector =/  public val '"${property_name}"': ImageVector by lazy {/;
         s/name = "'"${icon_name}"'"/name = "'"${property_name}"'"/g;
         s/PathFillType\.Companion\./PathFillType./g;
-        s/\n    return _'"${icon_name}"'!!\n  \}\n\nprivate var _'"${icon_name}"': ImageVector\? = null\n?/\n/s;
+        s/\n    return _'"${icon_name}"'!!\n  \}\n\nprivate var _'"${icon_name}"': ImageVector\? = null\n?/\n  }\n/s;
       '
   } >> "${OUT_DIR}/VoiceIcons.kt"
 }

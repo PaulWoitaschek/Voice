@@ -15,7 +15,7 @@ object VoiceIcons {
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/add.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Add: ImageVector =
+  val Add: ImageVector by lazy {
     ImageVector.Builder(
         name = "Add",
         defaultWidth = 24.dp,
@@ -52,12 +52,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/analytics.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Analytics: ImageVector =
+  val Analytics: ImageVector by lazy {
     ImageVector.Builder(
         name = "Analytics",
         defaultWidth = 24.dp,
@@ -128,12 +129,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/arrow_back.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val ArrowBack: ImageVector =
+  val ArrowBack: ImageVector by lazy {
     ImageVector.Builder(
         name = "ArrowBack",
         defaultWidth = 24.dp,
@@ -167,12 +169,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/arrow_drop_down.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val ArrowDropDown: ImageVector =
+  val ArrowDropDown: ImageVector by lazy {
     ImageVector.Builder(
         name = "ArrowDropDown",
         defaultWidth = 24.dp,
@@ -200,12 +203,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/arrow_forward.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val ArrowForward: ImageVector =
+  val ArrowForward: ImageVector by lazy {
     ImageVector.Builder(
         name = "ArrowForward",
         defaultWidth = 24.dp,
@@ -239,12 +243,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/audio_file.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val AudioFile: ImageVector =
+  val AudioFile: ImageVector by lazy {
     ImageVector.Builder(
         name = "AudioFile",
         defaultWidth = 24.dp,
@@ -310,12 +315,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/auto_awesome.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val AutoAwesome: ImageVector =
+  val AutoAwesome: ImageVector by lazy {
     ImageVector.Builder(
         name = "AutoAwesome",
         defaultWidth = 24.dp,
@@ -380,12 +386,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/bedtime.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Bedtime: ImageVector =
+  val Bedtime: ImageVector by lazy {
     ImageVector.Builder(
         name = "Bedtime",
         defaultWidth = 24.dp,
@@ -436,12 +443,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/bedtime_off.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val BedtimeOff: ImageVector =
+  val BedtimeOff: ImageVector by lazy {
     ImageVector.Builder(
         name = "BedtimeOff",
         defaultWidth = 24.dp,
@@ -513,12 +521,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/book.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Book: ImageVector =
+  val Book: ImageVector by lazy {
     ImageVector.Builder(
         name = "Book",
         defaultWidth = 24.dp,
@@ -576,12 +585,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/bookmark.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Bookmark: ImageVector =
+  val Bookmark: ImageVector by lazy {
     ImageVector.Builder(
         name = "Bookmark",
         defaultWidth = 24.dp,
@@ -627,12 +637,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/bookmark_add.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-04T10:20:30Z
    */
-  val BookmarkAdd: ImageVector =
+  val BookmarkAdd: ImageVector by lazy {
     ImageVector.Builder(
         name = "BookmarkAdd",
         defaultWidth = 24.dp,
@@ -692,12 +703,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/bug_report.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val BugReport: ImageVector =
+  val BugReport: ImageVector by lazy {
     ImageVector.Builder(
         name = "BugReport",
         defaultWidth = 24.dp,
@@ -790,12 +802,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/call.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Call: ImageVector =
+  val Call: ImageVector by lazy {
     ImageVector.Builder(
         name = "Call",
         defaultWidth = 24.dp,
@@ -864,12 +877,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/check.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Check: ImageVector =
+  val Check: ImageVector by lazy {
     ImageVector.Builder(
         name = "Check",
         defaultWidth = 24.dp,
@@ -900,12 +914,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/chevron_right.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:07:28Z
    */
-  val ChevronRight: ImageVector =
+  val ChevronRight: ImageVector by lazy {
     ImageVector.Builder(
         name = "ChevronRight",
         defaultWidth = 24.dp,
@@ -936,12 +951,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/close.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Close: ImageVector =
+  val Close: ImageVector by lazy {
     ImageVector.Builder(
         name = "Close",
         defaultWidth = 24.dp,
@@ -978,12 +994,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/cloud.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T17:42:44Z
    */
-  val Cloud: ImageVector =
+  val Cloud: ImageVector by lazy {
     ImageVector.Builder(
         name = "Cloud",
         defaultWidth = 24.dp,
@@ -1041,12 +1058,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/cloud_done.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T17:42:44Z
    */
-  val CloudDone: ImageVector =
+  val CloudDone: ImageVector by lazy {
     ImageVector.Builder(
         name = "CloudDone",
         defaultWidth = 24.dp,
@@ -1112,12 +1130,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/cloud_off.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T04:50:50Z
    */
-  val CloudOff: ImageVector =
+  val CloudOff: ImageVector by lazy {
     ImageVector.Builder(
         name = "CloudOff",
         defaultWidth = 24.dp,
@@ -1191,12 +1210,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/coffee.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Coffee: ImageVector =
+  val Coffee: ImageVector by lazy {
     ImageVector.Builder(
         name = "Coffee",
         defaultWidth = 24.dp,
@@ -1267,12 +1287,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/collections_bookmark.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val CollectionsBookmark: ImageVector =
+  val CollectionsBookmark: ImageVector by lazy {
     ImageVector.Builder(
         name = "CollectionsBookmark",
         defaultWidth = 24.dp,
@@ -1342,12 +1363,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/construction.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Construction: ImageVector =
+  val Construction: ImageVector by lazy {
     ImageVector.Builder(
         name = "Construction",
         defaultWidth = 24.dp,
@@ -1415,12 +1437,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/contrast.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-15T05:59:52Z
    */
-  val Contrast: ImageVector =
+  val Contrast: ImageVector by lazy {
     ImageVector.Builder(
         name = "Contrast",
         defaultWidth = 24.dp,
@@ -1468,12 +1491,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/content_cut.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T05:36:18Z
    */
-  val ContentCut: ImageVector =
+  val ContentCut: ImageVector by lazy {
     ImageVector.Builder(
         name = "ContentCut",
         defaultWidth = 24.dp,
@@ -1562,12 +1586,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/crop.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T04:50:53Z
    */
-  val Crop: ImageVector =
+  val Crop: ImageVector by lazy {
     ImageVector.Builder(
         name = "Crop",
         defaultWidth = 24.dp,
@@ -1618,12 +1643,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/delete.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Delete: ImageVector =
+  val Delete: ImageVector by lazy {
     ImageVector.Builder(
         name = "Delete",
         defaultWidth = 24.dp,
@@ -1686,12 +1712,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/devices.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Devices: ImageVector =
+  val Devices: ImageVector by lazy {
     ImageVector.Builder(
         name = "Devices",
         defaultWidth = 24.dp,
@@ -1769,12 +1796,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/directions_car.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val DirectionsCar: ImageVector =
+  val DirectionsCar: ImageVector by lazy {
     ImageVector.Builder(
         name = "DirectionsCar",
         defaultWidth = 24.dp,
@@ -1857,12 +1885,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/dns.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T17:42:44Z
    */
-  val Dns: ImageVector =
+  val Dns: ImageVector by lazy {
     ImageVector.Builder(
         name = "Dns",
         defaultWidth = 24.dp,
@@ -1953,12 +1982,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/done.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Done: ImageVector =
+  val Done: ImageVector by lazy {
     ImageVector.Builder(
         name = "Done",
         defaultWidth = 24.dp,
@@ -1989,12 +2019,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/download.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Download: ImageVector =
+  val Download: ImageVector by lazy {
     ImageVector.Builder(
         name = "Download",
         defaultWidth = 24.dp,
@@ -2042,12 +2073,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/download_done.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T17:42:44Z
    */
-  val DownloadDone: ImageVector =
+  val DownloadDone: ImageVector by lazy {
     ImageVector.Builder(
         name = "DownloadDone",
         defaultWidth = 24.dp,
@@ -2084,12 +2116,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/edit.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-26T21:27:50Z
    */
-  val Edit: ImageVector =
+  val Edit: ImageVector by lazy {
     ImageVector.Builder(
         name = "Edit",
         defaultWidth = 24.dp,
@@ -2143,12 +2176,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/emoji_food_beverage.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T19:36:09Z
    */
-  val EmojiFoodBeverage: ImageVector =
+  val EmojiFoodBeverage: ImageVector by lazy {
     ImageVector.Builder(
         name = "EmojiFoodBeverage",
         defaultWidth = 24.dp,
@@ -2235,12 +2269,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/error.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-09T08:11:11Z
    */
-  val Error: ImageVector =
+  val Error: ImageVector by lazy {
     ImageVector.Builder(
         name = "Error",
         defaultWidth = 24.dp,
@@ -2309,12 +2344,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/expand_more.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val ExpandMore: ImageVector =
+  val ExpandMore: ImageVector by lazy {
     ImageVector.Builder(
         name = "ExpandMore",
         defaultWidth = 24.dp,
@@ -2345,12 +2381,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/fast_forward.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val FastForward: ImageVector =
+  val FastForward: ImageVector by lazy {
     ImageVector.Builder(
         name = "FastForward",
         defaultWidth = 24.dp,
@@ -2397,12 +2434,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/fast_rewind.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val FastRewind: ImageVector =
+  val FastRewind: ImageVector by lazy {
     ImageVector.Builder(
         name = "FastRewind",
         defaultWidth = 24.dp,
@@ -2449,12 +2487,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/favorite.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Favorite: ImageVector =
+  val Favorite: ImageVector by lazy {
     ImageVector.Builder(
         name = "Favorite",
         defaultWidth = 24.dp,
@@ -2518,12 +2557,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/folder.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Folder: ImageVector =
+  val Folder: ImageVector by lazy {
     ImageVector.Builder(
         name = "Folder",
         defaultWidth = 24.dp,
@@ -2575,12 +2615,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/format_quote.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val FormatQuote: ImageVector =
+  val FormatQuote: ImageVector by lazy {
     ImageVector.Builder(
         name = "FormatQuote",
         defaultWidth = 24.dp,
@@ -2653,12 +2694,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/forum.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:07:28Z
    */
-  val Forum: ImageVector =
+  val Forum: ImageVector by lazy {
     ImageVector.Builder(
         name = "Forum",
         defaultWidth = 24.dp,
@@ -2720,12 +2762,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/headphones.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Headphones: ImageVector =
+  val Headphones: ImageVector by lazy {
     ImageVector.Builder(
         name = "Headphones",
         defaultWidth = 24.dp,
@@ -2796,12 +2839,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/help.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Help: ImageVector =
+  val Help: ImageVector by lazy {
     ImageVector.Builder(
         name = "Help",
         defaultWidth = 24.dp,
@@ -2884,12 +2928,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/history.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val History: ImageVector =
+  val History: ImageVector by lazy {
     ImageVector.Builder(
         name = "History",
         defaultWidth = 24.dp,
@@ -2949,12 +2994,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/hive.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T19:36:09Z
    */
-  val Hive: ImageVector =
+  val Hive: ImageVector by lazy {
     ImageVector.Builder(
         name = "Hive",
         defaultWidth = 24.dp,
@@ -3053,12 +3099,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/hourglass_empty.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val HourglassEmpty: ImageVector =
+  val HourglassEmpty: ImageVector by lazy {
     ImageVector.Builder(
         name = "HourglassEmpty",
         defaultWidth = 24.dp,
@@ -3123,12 +3170,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/image.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Image: ImageVector =
+  val Image: ImageVector by lazy {
     ImageVector.Builder(
         name = "Image",
         defaultWidth = 24.dp,
@@ -3182,12 +3230,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/image_search.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T04:50:55Z
    */
-  val ImageSearch: ImageVector =
+  val ImageSearch: ImageVector by lazy {
     ImageVector.Builder(
         name = "ImageSearch",
         defaultWidth = 24.dp,
@@ -3265,12 +3314,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/keyboard_arrow_down.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-04T10:20:30Z
    */
-  val KeyboardArrowDown: ImageVector =
+  val KeyboardArrowDown: ImageVector by lazy {
     ImageVector.Builder(
         name = "KeyboardArrowDown",
         defaultWidth = 24.dp,
@@ -3301,12 +3351,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/laptop_mac.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Laptop: ImageVector =
+  val Laptop: ImageVector by lazy {
     ImageVector.Builder(
         name = "Laptop",
         defaultWidth = 24.dp,
@@ -3369,12 +3420,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/library_books.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val LibraryBooks: ImageVector =
+  val LibraryBooks: ImageVector by lazy {
     ImageVector.Builder(
         name = "LibraryBooks",
         defaultWidth = 24.dp,
@@ -3449,12 +3501,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/light_mode.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:07:28Z
    */
-  val LightMode: ImageVector =
+  val LightMode: ImageVector by lazy {
     ImageVector.Builder(
         name = "LightMode",
         defaultWidth = 24.dp,
@@ -3547,12 +3600,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/lightbulb.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Lightbulb: ImageVector =
+  val Lightbulb: ImageVector by lazy {
     ImageVector.Builder(
         name = "Lightbulb",
         defaultWidth = 24.dp,
@@ -3612,12 +3666,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/lock_open.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val LockOpen: ImageVector =
+  val LockOpen: ImageVector by lazy {
     ImageVector.Builder(
         name = "LockOpen",
         defaultWidth = 24.dp,
@@ -3686,12 +3741,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/logout.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T17:42:44Z
    */
-  val Logout: ImageVector =
+  val Logout: ImageVector by lazy {
     ImageVector.Builder(
         name = "Logout",
         defaultWidth = 24.dp,
@@ -3739,12 +3795,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/mail.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T21:05:25Z
    */
-  val Mail: ImageVector =
+  val Mail: ImageVector by lazy {
     ImageVector.Builder(
         name = "Mail",
         defaultWidth = 24.dp,
@@ -3799,12 +3856,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/mic.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T19:36:09Z
    */
-  val Mic: ImageVector =
+  val Mic: ImageVector by lazy {
     ImageVector.Builder(
         name = "Mic",
         defaultWidth = 24.dp,
@@ -3868,12 +3926,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/more_vert.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val MoreVert: ImageVector =
+  val MoreVert: ImageVector by lazy {
     ImageVector.Builder(
         name = "MoreVert",
         defaultWidth = 24.dp,
@@ -3926,12 +3985,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/network_cell.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T17:42:44Z
    */
-  val NetworkCell: ImageVector =
+  val NetworkCell: ImageVector by lazy {
     ImageVector.Builder(
         name = "NetworkCell",
         defaultWidth = 24.dp,
@@ -3965,12 +4025,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/not_started.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val NotStarted: ImageVector =
+  val NotStarted: ImageVector by lazy {
     ImageVector.Builder(
         name = "NotStarted",
         defaultWidth = 24.dp,
@@ -4034,12 +4095,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/notifications.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Notifications: ImageVector =
+  val Notifications: ImageVector by lazy {
     ImageVector.Builder(
         name = "Notifications",
         defaultWidth = 24.dp,
@@ -4099,12 +4161,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/palette.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-25T09:29:03Z
    */
-  val Palette: ImageVector =
+  val Palette: ImageVector by lazy {
     ImageVector.Builder(
         name = "Palette",
         defaultWidth = 24.dp,
@@ -4209,12 +4272,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/pause.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-04T10:20:30Z
    */
-  val Pause: ImageVector =
+  val Pause: ImageVector by lazy {
     ImageVector.Builder(
         name = "Pause",
         defaultWidth = 24.dp,
@@ -4269,12 +4333,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/person.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Person: ImageVector =
+  val Person: ImageVector by lazy {
     ImageVector.Builder(
         name = "Person",
         defaultWidth = 24.dp,
@@ -4347,12 +4412,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/play_arrow.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-04T10:20:30Z
    */
-  val PlayArrow: ImageVector =
+  val PlayArrow: ImageVector by lazy {
     ImageVector.Builder(
         name = "PlayArrow",
         defaultWidth = 24.dp,
@@ -4387,12 +4453,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/push_pin.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val PushPin: ImageVector =
+  val PushPin: ImageVector by lazy {
     ImageVector.Builder(
         name = "PushPin",
         defaultWidth = 24.dp,
@@ -4444,12 +4511,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/remove.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Remove: ImageVector =
+  val Remove: ImageVector by lazy {
     ImageVector.Builder(
         name = "Remove",
         defaultWidth = 24.dp,
@@ -4478,12 +4546,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/replay.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T10:25:32Z
    */
-  val Replay: ImageVector =
+  val Replay: ImageVector by lazy {
     ImageVector.Builder(
         name = "Replay",
         defaultWidth = 24.dp,
@@ -4535,12 +4604,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/schedule.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-09T08:11:11Z
    */
-  val Schedule: ImageVector =
+  val Schedule: ImageVector by lazy {
     ImageVector.Builder(
         name = "Schedule",
         defaultWidth = 24.dp,
@@ -4601,12 +4671,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/search.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Search: ImageVector =
+  val Search: ImageVector by lazy {
     ImageVector.Builder(
         name = "Search",
         defaultWidth = 24.dp,
@@ -4654,12 +4725,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/search_off.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T19:51:09Z
    */
-  val SearchOff: ImageVector =
+  val SearchOff: ImageVector by lazy {
     ImageVector.Builder(
         name = "SearchOff",
         defaultWidth = 24.dp,
@@ -4731,12 +4803,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/settings.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Settings: ImageVector =
+  val Settings: ImageVector by lazy {
     ImageVector.Builder(
         name = "Settings",
         defaultWidth = 24.dp,
@@ -4843,12 +4916,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/skip_next.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-04T10:20:30Z
    */
-  val SkipNext: ImageVector =
+  val SkipNext: ImageVector by lazy {
     ImageVector.Builder(
         name = "SkipNext",
         defaultWidth = 24.dp,
@@ -4889,12 +4963,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/skip_previous.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-04T10:20:30Z
    */
-  val SkipPrevious: ImageVector =
+  val SkipPrevious: ImageVector by lazy {
     ImageVector.Builder(
         name = "SkipPrevious",
         defaultWidth = 24.dp,
@@ -4935,12 +5010,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/smartphone.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Smartphone: ImageVector =
+  val Smartphone: ImageVector by lazy {
     ImageVector.Builder(
         name = "Smartphone",
         defaultWidth = 24.dp,
@@ -5003,12 +5079,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/sort.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Sort: ImageVector =
+  val Sort: ImageVector by lazy {
     ImageVector.Builder(
         name = "Sort",
         defaultWidth = 24.dp,
@@ -5049,12 +5126,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/speed.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Speed: ImageVector =
+  val Speed: ImageVector by lazy {
     ImageVector.Builder(
         name = "Speed",
         defaultWidth = 24.dp,
@@ -5119,12 +5197,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/star.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T21:05:25Z
    */
-  val Star: ImageVector =
+  val Star: ImageVector by lazy {
     ImageVector.Builder(
         name = "Star",
         defaultWidth = 24.dp,
@@ -5173,12 +5252,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/swap_horiz.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val SwapHoriz: ImageVector =
+  val SwapHoriz: ImageVector by lazy {
     ImageVector.Builder(
         name = "SwapHoriz",
         defaultWidth = 24.dp,
@@ -5223,12 +5303,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/sync.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T17:42:44Z
    */
-  val Sync: ImageVector =
+  val Sync: ImageVector by lazy {
     ImageVector.Builder(
         name = "Sync",
         defaultWidth = 24.dp,
@@ -5289,12 +5370,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/timer.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val Timer: ImageVector =
+  val Timer: ImageVector by lazy {
     ImageVector.Builder(
         name = "Timer",
         defaultWidth = 24.dp,
@@ -5362,12 +5444,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/touch_app.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val TouchApp: ImageVector =
+  val TouchApp: ImageVector by lazy {
     ImageVector.Builder(
         name = "TouchApp",
         defaultWidth = 24.dp,
@@ -5446,12 +5529,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/undo.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Undo: ImageVector =
+  val Undo: ImageVector by lazy {
     ImageVector.Builder(
         name = "Undo",
         defaultWidth = 24.dp,
@@ -5495,12 +5579,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/vibration.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:07:28Z
    */
-  val Vibration: ImageVector =
+  val Vibration: ImageVector by lazy {
     ImageVector.Builder(
         name = "Vibration",
         defaultWidth = 24.dp,
@@ -5581,12 +5666,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/view_list.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-06-20T11:13:08Z
    */
-  val ViewList: ImageVector =
+  val ViewList: ImageVector by lazy {
     ImageVector.Builder(
         name = "ViewList",
         defaultWidth = 24.dp,
@@ -5659,12 +5745,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/visibility.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T17:42:44Z
    */
-  val Visibility: ImageVector =
+  val Visibility: ImageVector by lazy {
     ImageVector.Builder(
         name = "Visibility",
         defaultWidth = 24.dp,
@@ -5729,12 +5816,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/visibility_off.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-08T17:42:44Z
    */
-  val VisibilityOff: ImageVector =
+  val VisibilityOff: ImageVector by lazy {
     ImageVector.Builder(
         name = "VisibilityOff",
         defaultWidth = 24.dp,
@@ -5818,12 +5906,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/volume_up.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-04T10:20:30Z
    */
-  val VolumeUp: ImageVector =
+  val VolumeUp: ImageVector by lazy {
     ImageVector.Builder(
         name = "VolumeUp",
         defaultWidth = 24.dp,
@@ -5883,12 +5972,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/volunteer_activism.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T19:36:09Z
    */
-  val VolunteerActivism: ImageVector =
+  val VolunteerActivism: ImageVector by lazy {
     ImageVector.Builder(
         name = "VolunteerActivism",
         defaultWidth = 24.dp,
@@ -5989,12 +6079,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/watch.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Watch: ImageVector =
+  val Watch: ImageVector by lazy {
     ImageVector.Builder(
         name = "Watch",
         defaultWidth = 24.dp,
@@ -6075,12 +6166,13 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 
   /*
    * Source: https://fonts.gstatic.com/render/v1/Material+Symbols+Outlined/24dp/widgets.kt?var=opsz,wght,FILL,GRAD,ROND@24,400,0,0,50
    * Generated: 2026-10-07T16:24:37Z
    */
-  val Widgets: ImageVector =
+  val Widgets: ImageVector by lazy {
     ImageVector.Builder(
         name = "Widgets",
         defaultWidth = 24.dp,
@@ -6159,4 +6251,5 @@ object VoiceIcons {
         }
       }
       .build()
+  }
 }
