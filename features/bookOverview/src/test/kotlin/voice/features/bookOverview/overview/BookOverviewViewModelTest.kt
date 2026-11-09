@@ -841,10 +841,9 @@ class BookOverviewViewModelTest {
               LibrarySourceViewState(
                 LibrarySource.ServerLibrary("mine"),
                 name = "Mine",
-                bookCount = 1,
                 shown = true,
               ),
-              LibrarySourceViewState(kidsSource, name = "Kids", bookCount = 2, shown = false),
+              LibrarySourceViewState(kidsSource, name = "Kids", shown = false),
             ),
           actual = state.sources,
         )
@@ -852,7 +851,7 @@ class BookOverviewViewModelTest {
   }
 
   @Test
-  fun `a single source has no switch`() = runTest {
+  fun `a single source has no chip`() = runTest {
     every { serverLibrary.libraries } returns flowOf(listOf(PickedLibrary("mine", "Mine")))
     val viewModel = viewModel(books = listOf(serverBook(libraryId = "mine")))
 
@@ -867,14 +866,12 @@ class BookOverviewViewModelTest {
   }
 
   @Test
-  fun `with every source hidden, all books show`() = runTest {
+  fun `every source can be hidden`() = runTest {
     every { serverLibrary.libraries } returns
       flowOf(listOf(PickedLibrary("mine", "Mine"), PickedLibrary("kids", "Kids")))
-    val mine = serverBook(libraryId = "mine")
-    val kids = serverBook(libraryId = "kids")
     val viewModel =
       viewModel(
-        books = listOf(mine, kids),
+        books = listOf(serverBook(libraryId = "mine"), serverBook(libraryId = "kids")),
         hiddenSourcesStore =
           MemoryDataStore(
             setOf(LibrarySource.ServerLibrary("mine"), LibrarySource.ServerLibrary("kids")),
@@ -888,11 +885,32 @@ class BookOverviewViewModelTest {
       .test {
         assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
         val state = awaitItem()
+        assertEquals(expected = emptyList(), actual = state.sections.values.flatten())
+        assertEquals(expected = listOf(false, false), actual = state.sources.map { it.shown })
+      }
+  }
+
+  @Test
+  fun `a book from a removed library shows`() = runTest {
+    every { serverLibrary.libraries } returns
+      flowOf(listOf(PickedLibrary("mine", "Mine"), PickedLibrary("kids", "Kids")))
+    val removed = serverBook(libraryId = "removed")
+    val viewModel =
+      viewModel(
+        books = listOf(removed),
+        hiddenSourcesStore = MemoryDataStore(setOf(LibrarySource.ServerLibrary("removed"))),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
         assertEquals(
-          expected = setOf(mine.id.value, kids.id.value),
-          actual = state.keys(BookCategory.CURRENT).toSet(),
+          expected = listOf(removed.id.value),
+          actual = awaitItem().keys(BookCategory.CURRENT),
         )
-        assertEquals(expected = listOf(true, true), actual = state.sources.map { it.shown })
       }
   }
 
@@ -909,21 +927,6 @@ class BookOverviewViewModelTest {
 
     viewModel.onSourceChange(kids, show = true)
     assertEquals(expected = emptySet(), actual = store.data.first())
-  }
-
-  @Test
-  fun `with every source hidden, switching one off hides only that one`() = runTest {
-    every { serverLibrary.libraries } returns
-      flowOf(listOf(PickedLibrary("mine", "Mine"), PickedLibrary("kids", "Kids")))
-    val mine = LibrarySource.ServerLibrary("mine")
-    val kids = LibrarySource.ServerLibrary("kids")
-    val removed = LibrarySource.Folder("content://removed")
-    val store = MemoryDataStore<Set<LibrarySource>>(setOf(mine, kids, removed))
-    val viewModel = viewModel(hiddenSourcesStore = store)
-
-    viewModel.onSourceChange(kids, show = false)
-
-    assertEquals(expected = setOf(kids, removed), actual = store.data.first())
   }
 
   @Test

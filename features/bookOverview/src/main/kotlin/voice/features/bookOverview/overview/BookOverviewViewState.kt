@@ -71,7 +71,6 @@ data class BookOverviewViewState(
 data class LibrarySourceViewState(
   val source: LibrarySource,
   val name: String,
-  val bookCount: Int,
   val shown: Boolean,
 )
 

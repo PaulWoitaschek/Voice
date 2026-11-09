@@ -5,19 +5,25 @@ package voice.features.bookOverview.views
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -95,7 +101,13 @@ private fun LibraryFilterContent(
   modifier: Modifier = Modifier,
 ) {
   Column(
-    modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 24.dp),
+    modifier =
+      modifier
+        .fillMaxWidth()
+        // with many sources, the chips can be taller than the screen
+        .verticalScroll(rememberScrollState())
+        .padding(horizontal = 12.dp)
+        .padding(bottom = 24.dp),
   ) {
     SectionTitle(StringsR.string.library_filter_group_by)
     Spacer(Modifier.height(8.dp))
@@ -134,6 +146,16 @@ private fun LibraryFilterContent(
       SectionTitle(StringsR.string.library_filter_show)
       Spacer(Modifier.height(8.dp))
     }
+    if (viewState.sources.isNotEmpty()) {
+      FlowRow(
+        modifier = Modifier.padding(horizontal = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+      ) {
+        viewState.sources.forEach { source ->
+          SourceChip(source = source, onClick = { onSourceChange(source.source, !source.shown) })
+        }
+      }
+    }
     if (showHiddenBooksSwitch) {
       FilterSwitch(
         icon = VoiceIcons.VisibilityOff,
@@ -150,22 +172,6 @@ private fun LibraryFilterContent(
         bookCount = viewState.notDownloadedBookCount,
         checked = viewState.showNotDownloadedBooks,
         onCheckedChange = onShowNotDownloadedBooksChange,
-      )
-    }
-    val shownSources = viewState.sources.count { it.shown }
-    viewState.sources.forEach { source ->
-      FilterSwitch(
-        icon =
-          when (source.source) {
-            is LibrarySource.Folder -> VoiceIcons.Folder
-            is LibrarySource.ServerLibrary -> VoiceIcons.Dns
-          },
-        title = source.name,
-        bookCount = source.bookCount,
-        checked = source.shown,
-        // a library without any source shown would look empty
-        enabled = !source.shown || shownSources > 1,
-        onCheckedChange = { onSourceChange(source.source, it) },
       )
     }
   }
@@ -187,7 +193,6 @@ private fun FilterSwitch(
   bookCount: Int,
   checked: Boolean,
   onCheckedChange: (Boolean) -> Unit,
-  enabled: Boolean = true,
 ) {
   Row(
     modifier =
@@ -195,7 +200,6 @@ private fun FilterSwitch(
         .clip(RoundedCornerShape(24.dp))
         .toggleable(
           value = checked,
-          enabled = enabled,
           role = Role.Switch,
           onValueChange = onCheckedChange,
         )
@@ -222,8 +226,32 @@ private fun FilterSwitch(
       )
     }
     Spacer(Modifier.width(12.dp))
-    Switch(checked = checked, onCheckedChange = null, enabled = enabled)
+    Switch(checked = checked, onCheckedChange = null)
   }
+}
+
+@Composable
+private fun SourceChip(
+  source: LibrarySourceViewState,
+  onClick: () -> Unit,
+) {
+  FilterChip(
+    selected = source.shown,
+    onClick = onClick,
+    leadingIcon = {
+      Icon(
+        imageVector =
+          when {
+            source.shown -> VoiceIcons.Check
+            source.source is LibrarySource.Folder -> VoiceIcons.Folder
+            else -> VoiceIcons.Dns
+          },
+        contentDescription = null,
+        modifier = Modifier.size(FilterChipDefaults.IconSize),
+      )
+    },
+    label = { Text(source.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+  )
 }
 
 @Preview
@@ -248,35 +276,60 @@ private fun LibraryFilterContentPreview() {
 @Preview
 @Composable
 private fun LibraryFilterContentSourcesPreview() {
+  SourcesPreview(names = listOf("Audiobooks", "Kids", "Radio plays"), hiddenBookCount = 12)
+}
+
+@Preview
+@Composable
+private fun LibraryFilterContentManySourcesPreview() {
+  SourcesPreview(
+    names =
+      listOf(
+        "Audiobooks",
+        "Kids",
+        "Radio plays",
+        "Fantasy",
+        "Science fiction",
+        "Podcasts",
+        "The complete works of Terry Pratchett, read by Stephen Briggs",
+        "Crime",
+        "Classics",
+        "Language courses",
+        "Biographies",
+        "History",
+        "Bedtime stories",
+        "Downloads",
+      ),
+  )
+}
+
+@Composable
+private fun SourcesPreview(
+  names: List<String>,
+  hiddenBookCount: Int = 0,
+) {
   VoiceTheme {
     Surface {
       LibraryFilterContent(
         viewState =
           BookOverviewViewState.Loading.copy(
+            hiddenBookCount = hiddenBookCount,
             sources =
-              listOf(
+              names.mapIndexed { index, name ->
                 LibrarySourceViewState(
-                  source = LibrarySource.Folder("content://audiobooks"),
-                  name = "Audiobooks",
-                  bookCount = 214,
-                  shown = true,
-                ),
-                LibrarySourceViewState(
-                  source = LibrarySource.Folder("content://kids"),
-                  name = "Kids",
-                  bookCount = 38,
-                  shown = false,
-                ),
-                LibrarySourceViewState(
-                  source = LibrarySource.ServerLibrary("radio-plays"),
-                  name = "Radio plays",
-                  bookCount = 1207,
-                  shown = true,
-                ),
-              ),
+                  source =
+                    if (index % 3 == 2) {
+                      LibrarySource.ServerLibrary(name)
+                    } else {
+                      LibrarySource.Folder(name)
+                    },
+                  name = name,
+                  shown = index % 4 != 1,
+                )
+              },
           ),
         onGroupingChange = {},
-        showHiddenBooksSwitch = false,
+        showHiddenBooksSwitch = hiddenBookCount > 0,
         showNotDownloadedBooksSwitch = false,
         onShowHiddenBooksChange = {},
         onShowNotDownloadedBooksChange = {},
