@@ -2,6 +2,7 @@
 
 package voice.features.bookOverview.views
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -35,7 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -45,8 +46,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.overview.LibrarySource
 import voice.features.bookOverview.overview.LibrarySourceViewState
@@ -118,7 +119,7 @@ private fun LibraryFilterContent(
     }
     if (showHiddenBooksSwitch) {
       FilterSwitch(
-        icon = VoiceIcons.VisibilityOff,
+        icon = UiR.drawable.ic_visibility_off,
         title = stringResource(StringsR.string.library_filter_hidden_books),
         bookCount = viewState.hiddenBookCount,
         checked = viewState.showHiddenBooks,
@@ -127,7 +128,7 @@ private fun LibraryFilterContent(
     }
     if (showNotDownloadedBooksSwitch) {
       FilterSwitch(
-        icon = VoiceIcons.Cloud,
+        icon = UiR.drawable.ic_cloud,
         title = stringResource(StringsR.string.library_filter_not_downloaded),
         bookCount = viewState.notDownloadedBookCount,
         checked = viewState.showNotDownloadedBooks,
@@ -139,7 +140,7 @@ private fun LibraryFilterContent(
 
 @Composable
 private fun FilterSwitch(
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   title: String,
   bookCount: Int,
   checked: Boolean,
@@ -158,7 +159,7 @@ private fun FilterSwitch(
         .padding(horizontal = 12.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    Icon(icon, contentDescription = null)
+    Icon(painterResource(icon), contentDescription = null)
     Spacer(Modifier.width(16.dp))
     Column(Modifier.weight(1F)) {
       Text(
@@ -191,12 +192,14 @@ private fun SourceChip(
     onClick = onClick,
     leadingIcon = {
       Icon(
-        imageVector =
-          when {
-            source.shown -> VoiceIcons.Check
-            source.source is LibrarySource.Folder -> VoiceIcons.Folder
-            else -> VoiceIcons.Dns
-          },
+        painter =
+          painterResource(
+            when {
+              source.shown -> UiR.drawable.ic_check
+              source.source is LibrarySource.Folder -> UiR.drawable.ic_folder
+              else -> UiR.drawable.ic_dns
+            },
+          ),
         contentDescription = null,
         modifier = Modifier.size(FilterChipDefaults.IconSize),
       )

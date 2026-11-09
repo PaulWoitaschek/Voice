@@ -4,10 +4,11 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import voice.core.strings.R as StringsR
 import voice.core.ui.AttentionBadge
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 
 @Composable
 internal fun SettingsIcon(
@@ -23,7 +24,7 @@ internal fun SettingsIcon(
       },
     ) {
       Icon(
-        imageVector = VoiceIcons.Settings,
+        painter = painterResource(UiR.drawable.ic_settings),
         contentDescription = stringResource(StringsR.string.settings_action_open),
       )
     }

@@ -37,15 +37,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 
 internal val IslandShape = RoundedCornerShape(32.dp)
 
@@ -159,7 +157,7 @@ internal fun IslandSwitchRow(
           ) {
             Icon(
               modifier = Modifier.size(16.dp),
-              imageVector = VoiceIcons.Check,
+              painter = painterResource(UiR.drawable.ic_check),
               contentDescription = null,
             )
           }
@@ -208,10 +206,9 @@ private fun IslandRowLayout(
 
 @Composable
 internal fun Chevron(modifier: Modifier = Modifier) {
-  val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
   Icon(
-    modifier = modifier.graphicsLayer { scaleX = if (rtl) -1F else 1F },
-    imageVector = VoiceIcons.ChevronRight,
+    modifier = modifier,
+    painter = painterResource(UiR.drawable.ic_chevron_right),
     contentDescription = null,
   )
 }

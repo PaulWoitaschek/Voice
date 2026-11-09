@@ -50,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -65,8 +66,8 @@ import voice.core.data.Bookmark
 import voice.core.strings.R
 import voice.core.ui.BookmarkBadge
 import voice.core.ui.MorphShape
+import voice.core.ui.R as UiR
 import voice.core.ui.bookmarkStyle
-import voice.core.ui.icons.VoiceIcons
 
 /**
  * Details for a bookmark. A new bookmark is already saved when this opens, so swiping the sheet
@@ -134,7 +135,7 @@ internal fun BookmarkEditorSheet(
         if (editor.isNew) {
           TextButton(onClick = onUndo) {
             Icon(
-              VoiceIcons.Undo,
+              painterResource(UiR.drawable.ic_undo),
               contentDescription = null,
               modifier = Modifier.size(ButtonDefaults.IconSize),
             )
@@ -144,7 +145,7 @@ internal fun BookmarkEditorSheet(
         } else {
           TextButton(onClick = onDelete) {
             Icon(
-              VoiceIcons.Delete,
+              painterResource(UiR.drawable.ic_delete),
               contentDescription = null,
               modifier = Modifier.size(ButtonDefaults.IconSize),
             )
@@ -155,7 +156,7 @@ internal fun BookmarkEditorSheet(
         Spacer(Modifier.weight(1F))
         Button(onClick = onDone, shapes = ButtonDefaults.shapes()) {
           Icon(
-            VoiceIcons.Check,
+            painterResource(UiR.drawable.ic_check),
             contentDescription = null,
             modifier = Modifier.size(ButtonDefaults.IconSize),
           )
@@ -192,7 +193,11 @@ private fun EditorHeader(editor: BookmarkEditorViewState) {
             .background(colors.primary, MaterialShapes.SoftBurst.toShape()),
         contentAlignment = Alignment.Center,
       ) {
-        Icon(VoiceIcons.Check, contentDescription = null, tint = colors.onPrimary)
+        Icon(
+          painterResource(UiR.drawable.ic_check),
+          contentDescription = null,
+          tint = colors.onPrimary,
+        )
       }
     } else {
       BookmarkBadge(kind = editor.kind, size = 56.dp)
@@ -323,9 +328,9 @@ private fun KindTile(
             .background(if (selected) style.container else colors.surfaceContainerHighest),
         contentAlignment = Alignment.Center,
       ) {
-        val icon = style.icon ?: VoiceIcons.Favorite
+        val icon = style.icon ?: UiR.drawable.ic_favorite
         Icon(
-          imageVector = icon,
+          painter = painterResource(icon),
           contentDescription = null,
           tint = if (selected) style.content else colors.onSurfaceVariant,
           modifier = Modifier.size(24.dp).graphicsLayer { rotationZ = progress * -20F },

@@ -63,6 +63,7 @@ import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -80,8 +81,8 @@ import java.text.NumberFormat
 import kotlin.math.PI
 import kotlin.math.sin
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.features.settings.AUTO_REWIND_RANGE
 import voice.features.settings.SEEK_TIME_RANGE
@@ -136,7 +137,7 @@ internal fun ListeningSection(
       onCheckedChange = { onLockScreenSliderToggle() },
       leading = {
         ShapedIcon(
-          icon = VoiceIcons.TouchApp,
+          icon = UiR.drawable.ic_touch_app,
           shape = MaterialShapes.Cookie4Sided,
           containerColor = MaterialTheme.colorScheme.secondary,
           contentColor = MaterialTheme.colorScheme.onSecondary,
@@ -236,7 +237,7 @@ private fun Stepper(
       ),
   ) {
     Icon(
-      imageVector = if (increase) VoiceIcons.Add else VoiceIcons.Remove,
+      painter = painterResource(if (increase) UiR.drawable.ic_add else UiR.drawable.ic_remove),
       // both settings have steppers, so say which one this is
       contentDescription = "$action, $settingTitle",
     )
@@ -375,7 +376,7 @@ private fun SkipIllustration(seconds: Int) {
     ) {
       Icon(
         modifier = Modifier.size(20.dp),
-        imageVector = VoiceIcons.PlayArrow,
+        painter = painterResource(UiR.drawable.ic_play_arrow),
         contentDescription = null,
         tint = MaterialTheme.colorScheme.onPrimary,
       )
@@ -409,7 +410,7 @@ private fun MiniSkipButton(
             rotationZ = nudge() * if (forward) 40F else -40F
             scaleX = if (forward) -1F else 1F
           },
-        imageVector = VoiceIcons.Replay,
+        painter = painterResource(UiR.drawable.ic_replay),
         contentDescription = null,
         tint = MaterialTheme.colorScheme.onSecondary,
       )

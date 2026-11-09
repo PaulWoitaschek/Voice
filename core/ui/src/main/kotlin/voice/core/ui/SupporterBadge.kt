@@ -3,6 +3,7 @@
 package voice.core.ui
 
 import android.text.format.DateFormat
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -18,8 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -28,7 +29,6 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import voice.core.data.supporter.SupporterBadge
 import voice.core.strings.R as StringsR
-import voice.core.ui.icons.VoiceIcons
 
 @Composable
 fun SupporterBadgeIcon(
@@ -59,7 +59,7 @@ fun SupporterBadgeIcon(
     )
     Icon(
       modifier = Modifier.size(size * 0.44F),
-      imageVector = style.icon,
+      painter = painterResource(style.icon),
       contentDescription = contentDescription,
       tint = if (earned) style.content else outline,
     )
@@ -92,7 +92,7 @@ fun supporterSinceText(since: YearMonth): String {
 
 private class BadgeStyle(
   val shape: RoundedPolygon,
-  val icon: ImageVector,
+  @DrawableRes val icon: Int,
   val container: Color,
   val content: Color,
 )
@@ -104,28 +104,28 @@ private fun SupporterBadge.style(): BadgeStyle {
     SupporterBadge.TipJar ->
       BadgeStyle(
         shape = MaterialShapes.Clover4Leaf,
-        icon = VoiceIcons.VolunteerActivism,
+        icon = R.drawable.ic_volunteer_activism,
         container = colors.tertiaryContainer,
         content = colors.onTertiaryContainer,
       )
     SupporterBadge.FirstCup ->
       BadgeStyle(
         shape = MaterialShapes.Cookie4Sided,
-        icon = VoiceIcons.Favorite,
+        icon = R.drawable.ic_favorite,
         container = colors.secondaryContainer,
         content = colors.onSecondaryContainer,
       )
     SupporterBadge.ThreeMonths ->
       BadgeStyle(
         shape = MaterialShapes.Cookie6Sided,
-        icon = VoiceIcons.Favorite,
+        icon = R.drawable.ic_favorite,
         container = colors.primaryContainer,
         content = colors.onPrimaryContainer,
       )
     SupporterBadge.SixMonths ->
       BadgeStyle(
         shape = MaterialShapes.Cookie9Sided,
-        icon = VoiceIcons.Favorite,
+        icon = R.drawable.ic_favorite,
         container = colors.primary,
         content = colors.onPrimary,
       )
@@ -133,7 +133,7 @@ private fun SupporterBadge.style(): BadgeStyle {
     SupporterBadge.OneYear ->
       BadgeStyle(
         shape = MaterialShapes.VerySunny,
-        icon = VoiceIcons.AutoAwesome,
+        icon = R.drawable.ic_auto_awesome,
         container = Color(0xFFF2C14E),
         content = Color(0xFF3D2E00),
       )

@@ -64,9 +64,9 @@ import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
 import voice.core.ui.AttentionBadge
 import voice.core.ui.CheckBadge
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun LibrarySection(
@@ -103,7 +103,7 @@ internal fun LibrarySection(
           },
         ) {
           ShapedIcon(
-            icon = VoiceIcons.Folder,
+            icon = UiR.drawable.ic_folder,
             shape = MaterialShapes.Cookie6Sided,
             containerColor = MaterialTheme.colorScheme.tertiary,
             contentColor = MaterialTheme.colorScheme.onTertiary,
@@ -371,7 +371,7 @@ private fun AudiobookshelfRow(
     onClick = onClick,
     leading = {
       ShapedIcon(
-        icon = VoiceIcons.Dns,
+        icon = UiR.drawable.ic_dns,
         shape = MaterialShapes.Cookie9Sided,
         containerColor = MaterialTheme.colorScheme.tertiary,
         contentColor = MaterialTheme.colorScheme.onTertiary,

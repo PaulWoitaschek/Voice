@@ -2,6 +2,7 @@
 
 package voice.features.bookmark
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,9 +47,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -66,8 +67,8 @@ import voice.core.strings.R
 import voice.core.ui.AuroraBackground
 import voice.core.ui.CenteredContent
 import voice.core.ui.CoverTheme
+import voice.core.ui.R as UiR
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberAnimationClock
 import voice.features.bookmark.history.HistoryList
 import voice.features.bookmark.history.HistoryViewModel
@@ -219,7 +220,9 @@ private fun BookmarkScreen(
           ExtendedFloatingActionButton(
             text = { Text(label) },
             // the text alone doesn't reach accessibility services
-            icon = { Icon(VoiceIcons.BookmarkAdd, contentDescription = label) },
+            icon = {
+              Icon(painterResource(UiR.drawable.ic_bookmark_add), contentDescription = label)
+            },
             onClick = onSaveClick,
             expanded = !listState.canScrollBackward || !listState.isScrollInProgress,
           )
@@ -289,7 +292,10 @@ private fun BookmarkTopBar(
     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
     navigationIcon = {
       IconButton(onClick = onClose) {
-        Icon(VoiceIcons.ArrowBack, contentDescription = stringResource(R.string.common_action_back))
+        Icon(
+          painterResource(UiR.drawable.ic_arrow_back),
+          contentDescription = stringResource(R.string.common_action_back),
+        )
       }
     },
     title = {
@@ -327,7 +333,10 @@ private fun SortMenu(
   var expanded by remember { mutableStateOf(false) }
   Box {
     IconButton(onClick = { expanded = true }) {
-      Icon(VoiceIcons.Sort, contentDescription = stringResource(R.string.bookmark_sort))
+      Icon(
+        painterResource(UiR.drawable.ic_sort),
+        contentDescription = stringResource(R.string.bookmark_sort),
+      )
     }
     DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
       BookmarkSort.entries.forEach { option ->
@@ -344,7 +353,7 @@ private fun SortMenu(
           },
           trailingIcon =
             if (option == sort) {
-              { Icon(VoiceIcons.Check, contentDescription = null) }
+              { Icon(painterResource(UiR.drawable.ic_check), contentDescription = null) }
             } else {
               null
             },
@@ -374,7 +383,7 @@ private fun Tabs(
     TabButton(
       checked = tab == BookmarkTab.Bookmarks,
       onClick = { onTabChange(BookmarkTab.Bookmarks) },
-      icon = VoiceIcons.CollectionsBookmark,
+      icon = UiR.drawable.ic_collections_bookmark,
       label = stringResource(R.string.bookmark_tab_bookmarks),
       badge = bookmarkCount.takeIf { it > 0 }?.let { countFormat.format(it.toLong()) },
       leading = true,
@@ -383,7 +392,7 @@ private fun Tabs(
     TabButton(
       checked = tab == BookmarkTab.History,
       onClick = { onTabChange(BookmarkTab.History) },
-      icon = VoiceIcons.History,
+      icon = UiR.drawable.ic_history,
       label = stringResource(R.string.bookmark_tab_history),
       badge = null,
       leading = false,
@@ -396,7 +405,7 @@ private fun Tabs(
 private fun TabButton(
   checked: Boolean,
   onClick: () -> Unit,
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   label: String,
   badge: String?,
   leading: Boolean,
@@ -413,7 +422,11 @@ private fun TabButton(
         ButtonGroupDefaults.connectedTrailingButtonShapes()
       },
   ) {
-    Icon(icon, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+    Icon(
+      painterResource(icon),
+      contentDescription = null,
+      modifier = Modifier.size(ButtonDefaults.IconSize),
+    )
     Spacer(Modifier.width(ButtonDefaults.IconSpacing))
     Text(
       text = label,

@@ -36,13 +36,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation3.runtime.NavEntry
@@ -57,9 +55,9 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.AuroraBackground
 import voice.core.ui.EntranceState
 import voice.core.ui.MaxContentWidth
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.entrance
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.plus
 import voice.core.ui.rememberAnimationClock
 import voice.core.ui.rememberEntranceState
@@ -145,7 +143,7 @@ private fun FolderOverviewView(
           ExtendedFloatingActionButton(
             text = { Text(text) },
             // the text alone doesn't reach accessibility services
-            icon = { Icon(VoiceIcons.Add, contentDescription = text) },
+            icon = { Icon(painterResource(UiR.drawable.ic_add), contentDescription = text) },
             onClick = onAddClick,
           )
         }
@@ -262,11 +260,9 @@ private fun FolderOverviewTopBar(
       Text(stringResource(StringsR.string.settings_library_folders_summary))
     },
     navigationIcon = {
-      val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
       IconButton(onClick = onCloseClick) {
         Icon(
-          modifier = Modifier.graphicsLayer { scaleX = if (rtl) -1F else 1F },
-          imageVector = VoiceIcons.ArrowBack,
+          painter = painterResource(UiR.drawable.ic_arrow_back),
           contentDescription = stringResource(StringsR.string.common_action_back),
         )
       }

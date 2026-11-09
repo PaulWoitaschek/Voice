@@ -67,8 +67,7 @@ internal fun SkipButton(
   ShapeButton(
     shape = WidgetShape.Circle,
     size = size,
-    icon =
-      if (forward) UiR.drawable.ic_fast_forward_white_36dp else UiR.drawable.ic_rewind_white_36dp,
+    icon = if (forward) UiR.drawable.ic_forward_media else UiR.drawable.ic_replay,
     contentDescription =
       LocalContext.current.getString(
         if (forward) StringsR.string.playback_action_fast_forward

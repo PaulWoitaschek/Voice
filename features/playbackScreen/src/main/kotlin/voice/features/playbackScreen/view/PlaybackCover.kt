@@ -53,7 +53,6 @@ import kotlinx.coroutines.launch
 import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberFullSizeCoverRequest
 import voice.core.ui.sharedCoverElementModifier
 
@@ -201,7 +200,10 @@ internal fun PlaybackCover(
       ) {
         Icon(
           modifier = Modifier.size(64.dp),
-          imageVector = if (popShowsPlay) VoiceIcons.PlayArrow else VoiceIcons.Pause,
+          painter =
+            painterResource(
+              if (popShowsPlay) UiR.drawable.ic_play_arrow else UiR.drawable.ic_pause,
+            ),
           contentDescription = null,
           tint = Color.White,
         )

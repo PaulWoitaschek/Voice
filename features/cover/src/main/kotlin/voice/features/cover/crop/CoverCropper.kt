@@ -60,8 +60,8 @@ import coil.compose.AsyncImage
 import kotlin.math.max
 import kotlin.math.min
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
-import voice.core.ui.icons.VoiceIcons
 
 /** [onCropChange] gets the frame relative to the image, from 0 to 1 on both axes. */
 @Composable
@@ -129,7 +129,7 @@ private fun LoadingFailed() {
     verticalArrangement = Arrangement.spacedBy(12.dp),
   ) {
     ShapedIcon(
-      icon = VoiceIcons.Image,
+      icon = UiR.drawable.ic_image,
       shape = MaterialShapes.SoftBurst,
       containerColor = colors.errorContainer,
       contentColor = colors.onErrorContainer,

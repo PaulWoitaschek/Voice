@@ -3,6 +3,7 @@
 package voice.features.bookOverview.bottomSheet
 
 import android.text.format.Formatter
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -50,7 +51,6 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -77,7 +77,6 @@ import voice.core.ui.ShapedIcon
 import voice.core.ui.bookText
 import voice.core.ui.drawConfetti
 import voice.core.ui.entrance
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberConfettiState
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.rememberEntranceState
@@ -256,9 +255,9 @@ private fun SourceLine(source: BookSource) {
   val (icon, text) =
     when (source) {
       BookSource.Device ->
-        VoiceIcons.Smartphone to stringResource(StringsR.string.book_source_device)
+        UiR.drawable.ic_smartphone to stringResource(StringsR.string.book_source_device)
       is BookSource.Server ->
-        VoiceIcons.Dns to
+        UiR.drawable.ic_dns to
           when (source.download) {
             BookSource.Download.None -> source.name
             BookSource.Download.Done ->
@@ -267,7 +266,7 @@ private fun SourceLine(source: BookSource) {
     }
   Row(verticalAlignment = Alignment.CenterVertically) {
     Icon(
-      imageVector = icon,
+      painter = painterResource(icon),
       contentDescription = null,
       tint = MaterialTheme.colorScheme.onSurfaceVariant,
       modifier = Modifier.size(16.dp),
@@ -284,7 +283,7 @@ private fun SourceLine(source: BookSource) {
 }
 
 private class StatusStyle(
-  val icon: ImageVector,
+  @DrawableRes val icon: Int,
   val shape: RoundedPolygon,
   val tile: Color,
   val blob: Color,
@@ -297,7 +296,7 @@ private fun BookCategory.style(): StatusStyle {
   return when (this) {
     BookCategory.NOT_STARTED ->
       StatusStyle(
-        icon = VoiceIcons.HourglassEmpty,
+        icon = UiR.drawable.ic_hourglass_empty,
         shape = MaterialShapes.Cookie6Sided,
         tile = colors.secondaryContainer,
         blob = colors.secondary,
@@ -305,7 +304,7 @@ private fun BookCategory.style(): StatusStyle {
       )
     BookCategory.CURRENT ->
       StatusStyle(
-        icon = VoiceIcons.Headphones,
+        icon = UiR.drawable.ic_headphones,
         shape = MaterialShapes.Sunny,
         tile = colors.primaryContainer,
         blob = colors.primary,
@@ -313,7 +312,7 @@ private fun BookCategory.style(): StatusStyle {
       )
     BookCategory.FINISHED ->
       StatusStyle(
-        icon = VoiceIcons.Check,
+        icon = UiR.drawable.ic_check,
         shape = MaterialShapes.SoftBurst,
         tile = colors.tertiaryContainer,
         blob = colors.tertiary,
@@ -441,7 +440,7 @@ private fun StatusTile(
           .background(blobColor, MorphShape(morph, progress)),
       )
       Icon(
-        imageVector = style.icon,
+        painter = painterResource(style.icon),
         contentDescription = null,
         tint = iconColor,
         modifier = Modifier.size(24.dp),
@@ -569,7 +568,7 @@ internal fun ActionRow(
       }
       Spacer(Modifier.width(8.dp))
       Icon(
-        imageVector = VoiceIcons.ChevronRight,
+        painter = painterResource(UiR.drawable.ic_chevron_right),
         contentDescription = null,
         tint = MaterialTheme.colorScheme.onSurfaceVariant,
       )

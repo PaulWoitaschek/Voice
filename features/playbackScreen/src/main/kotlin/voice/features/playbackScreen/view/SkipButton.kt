@@ -34,14 +34,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 import voice.core.strings.R
+import voice.core.ui.R as UiR
 import voice.core.ui.animationsEnabled
-import voice.core.ui.icons.VoiceIcons
 
 /** Pressing stretches the button, nudging its neighbours aside. */
 @Composable
@@ -103,7 +104,7 @@ internal fun SkipButton(
                 // replay symbol
                 scaleX = if (forward) -1F else 1F
               },
-          imageVector = VoiceIcons.Replay,
+          painter = painterResource(UiR.drawable.ic_replay),
           contentDescription =
             stringResource(
               id =

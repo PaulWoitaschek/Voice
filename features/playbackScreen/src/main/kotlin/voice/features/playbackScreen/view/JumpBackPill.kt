@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalAccessibilityManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -49,7 +50,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import voice.core.strings.R
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 import voice.features.playbackScreen.BookPlayViewState.JumpBackViewState
 
 private val JUMP_BACK_VISIBLE = 10.seconds
@@ -161,7 +162,7 @@ private fun Pill(
           )
         }
         Icon(
-          imageVector = VoiceIcons.Undo,
+          painter = painterResource(UiR.drawable.ic_undo),
           contentDescription = null,
           modifier = Modifier.size(14.dp),
         )

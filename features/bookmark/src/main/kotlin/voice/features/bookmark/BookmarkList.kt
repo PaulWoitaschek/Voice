@@ -47,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -65,8 +66,8 @@ import voice.core.strings.R
 import voice.core.ui.BookBar
 import voice.core.ui.BookmarkBadge
 import voice.core.ui.NowPlayingBars
+import voice.core.ui.R as UiR
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.plus
 import voice.core.ui.segmentedShape
 
@@ -435,7 +436,7 @@ private fun DeleteBackground(
       contentAlignment = Alignment.Center,
     ) {
       Icon(
-        imageVector = VoiceIcons.Delete,
+        painter = painterResource(UiR.drawable.ic_delete),
         contentDescription = null,
         tint = colors.onErrorContainer,
       )
@@ -517,7 +518,7 @@ private fun EmptyHero(modifier: Modifier = Modifier) {
       contentAlignment = Alignment.Center,
     ) {
       Icon(
-        imageVector = VoiceIcons.Bookmark,
+        painter = painterResource(UiR.drawable.ic_bookmark),
         contentDescription = null,
         tint = colors.onTertiaryContainer,
         modifier = Modifier.size(72.dp),

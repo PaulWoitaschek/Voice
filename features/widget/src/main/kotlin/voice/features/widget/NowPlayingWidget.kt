@@ -43,6 +43,7 @@ import androidx.glance.semantics.semantics
 import androidx.glance.unit.ColorProvider
 import kotlinx.coroutines.flow.first
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 
 class NowPlayingWidget : GlanceAppWidget() {
 
@@ -555,7 +556,7 @@ private fun Subtitle(
   when {
     sleepTimerEnd != null ->
       IconSubtitle(
-        icon = R.drawable.widget_ic_moon,
+        icon = UiR.drawable.ic_bedtime_filled,
         text =
           when (sleepTimerEnd) {
             is SleepTimerEnd.At ->
@@ -607,7 +608,7 @@ private fun Finished(
           ShapeButton(
             shape = WidgetShape.Circle,
             size = coverSize * 0.4F,
-            icon = R.drawable.widget_ic_replay,
+            icon = UiR.drawable.ic_replay,
             contentDescription = startOver,
             images = images,
             onClick = null,
@@ -630,7 +631,7 @@ private fun Finished(
         ShapeButton(
           shape = WidgetShape.SoftBurst,
           size = (size.height - 16.dp).coerceIn(36.dp, 64.dp),
-          icon = R.drawable.widget_ic_replay,
+          icon = UiR.drawable.ic_replay,
           contentDescription = startOver,
           images = images,
           onClick = actions.startOver(),
@@ -666,7 +667,7 @@ private fun Finished(
           PillButton(
             text = startOver,
             onClick = actions.startOver(),
-            icon = R.drawable.widget_ic_replay,
+            icon = UiR.drawable.ic_replay,
           )
           Spacer(GlanceModifier.width(4.dp))
         }
@@ -709,7 +710,7 @@ private fun Finished(
           PillButton(
             text = startOver,
             onClick = actions.startOver(),
-            icon = R.drawable.widget_ic_replay,
+            icon = UiR.drawable.ic_replay,
           )
         }
       }
@@ -724,7 +725,7 @@ private fun CheckBurst(
   ShapeButton(
     shape = WidgetShape.SoftBurst,
     size = size,
-    icon = R.drawable.widget_ic_check,
+    icon = UiR.drawable.ic_check,
     contentDescription = null,
     images = images,
     onClick = null,
@@ -761,7 +762,7 @@ private fun NowPlayingEmpty(
 ) {
   val context = LocalContext.current
   val size = LocalSize.current
-  val icon = if (libraryEmpty) R.drawable.widget_ic_folder else R.drawable.widget_ic_library
+  val icon = if (libraryEmpty) UiR.drawable.ic_folder else UiR.drawable.ic_library_books
   val title =
     context.getString(
       if (libraryEmpty) StringsR.string.widget_empty_title

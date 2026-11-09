@@ -2,6 +2,7 @@
 
 package voice.features.support
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,13 +30,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import voice.core.strings.R as StringsR
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 
 @Composable
 internal fun KoFiContent(onKoFiClick: () -> Unit) {
@@ -52,7 +53,7 @@ internal fun KoFiContent(onKoFiClick: () -> Unit) {
       shapes = ButtonDefaults.shapesFor(size),
     ) {
       Icon(
-        imageVector = VoiceIcons.Coffee,
+        painter = painterResource(UiR.drawable.ic_coffee),
         contentDescription = null,
         modifier = Modifier.size(ButtonDefaults.iconSizeFor(size)),
       )
@@ -89,7 +90,7 @@ private fun SupportHelps() {
       horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       HelpTile(
-        icon = VoiceIcons.Construction,
+        icon = UiR.drawable.ic_construction,
         title = stringResource(StringsR.string.support_helps_maintenance),
         shape = MaterialShapes.Cookie4Sided,
         container = colors.secondaryContainer,
@@ -97,7 +98,7 @@ private fun SupportHelps() {
         modifier = Modifier.weight(1F),
       )
       HelpTile(
-        icon = VoiceIcons.AutoAwesome,
+        icon = UiR.drawable.ic_auto_awesome,
         title = stringResource(StringsR.string.support_helps_features),
         shape = MaterialShapes.Sunny,
         container = colors.tertiaryContainer,
@@ -105,7 +106,7 @@ private fun SupportHelps() {
         modifier = Modifier.weight(1F),
       )
       HelpTile(
-        icon = VoiceIcons.LockOpen,
+        icon = UiR.drawable.ic_lock_open,
         title = stringResource(StringsR.string.support_helps_open_source),
         shape = MaterialShapes.Clover4Leaf,
         container = colors.primaryContainer,
@@ -118,7 +119,7 @@ private fun SupportHelps() {
 
 @Composable
 private fun HelpTile(
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   title: String,
   shape: RoundedPolygon,
   container: Color,
@@ -142,7 +143,7 @@ private fun HelpTile(
       ) {
         Icon(
           modifier = Modifier.size(22.dp),
-          imageVector = icon,
+          painter = painterResource(icon),
           contentDescription = null,
           tint = container,
         )

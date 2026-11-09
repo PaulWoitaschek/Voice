@@ -28,6 +28,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
@@ -38,7 +39,7 @@ import java.text.DecimalFormat
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import voice.core.strings.R as StringsR
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 import voice.features.playbackScreen.view.RollingText
 
 private const val MIN_SPEED = 0.5F
@@ -86,7 +87,7 @@ internal fun SpeedSheet(
           enabled = speed > MIN_SPEED,
         ) {
           Icon(
-            VoiceIcons.Remove,
+            painterResource(UiR.drawable.ic_remove),
             contentDescription = stringResource(StringsR.string.playback_speed_decrease),
           )
         }
@@ -107,7 +108,7 @@ internal fun SpeedSheet(
           enabled = speed < MAX_SPEED,
         ) {
           Icon(
-            VoiceIcons.Add,
+            painterResource(UiR.drawable.ic_add),
             contentDescription = stringResource(StringsR.string.playback_speed_increase),
           )
         }

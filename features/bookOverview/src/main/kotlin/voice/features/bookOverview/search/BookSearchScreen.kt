@@ -47,6 +47,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -61,7 +62,7 @@ import voice.core.data.BookId
 import voice.core.search.BookSearchField
 import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 import voice.features.bookOverview.di.BookOverviewGraph
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -319,7 +320,7 @@ private fun SearchField(
     leadingIcon = {
       IconButton(onClick = onBackClick) {
         Icon(
-          imageVector = VoiceIcons.ArrowBack,
+          painter = painterResource(UiR.drawable.ic_arrow_back),
           contentDescription = stringResource(StringsR.string.common_action_back),
         )
       }
@@ -334,7 +335,7 @@ private fun SearchField(
             },
           ) {
             Icon(
-              imageVector = VoiceIcons.Close,
+              painter = painterResource(UiR.drawable.ic_close),
               contentDescription = stringResource(StringsR.string.library_search_clear),
             )
           }

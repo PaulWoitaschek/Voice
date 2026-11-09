@@ -77,7 +77,6 @@ import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.views.CoverShape
@@ -202,7 +201,7 @@ private fun EditBookContent(
           contentDescription = null,
         )
         ShapedIcon(
-          icon = VoiceIcons.Edit,
+          icon = UiR.drawable.ic_edit,
           shape = MaterialShapes.Pentagon,
           containerColor = MaterialTheme.colorScheme.secondary,
           contentColor = MaterialTheme.colorScheme.onSecondary,
@@ -359,7 +358,7 @@ private fun EditBookContent(
           )
         } else {
           Icon(
-            VoiceIcons.Check,
+            painterResource(UiR.drawable.ic_check),
             contentDescription = null,
             modifier = Modifier.size(ButtonDefaults.IconSize),
           )

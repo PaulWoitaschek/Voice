@@ -2,6 +2,7 @@
 
 package voice.features.cover
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -53,8 +54,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
@@ -62,7 +63,7 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import coil.compose.AsyncImage
 import voice.core.strings.R as StringsR
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 import voice.features.cover.SelectCoverFromInternetViewModel.Results
 import voice.features.cover.api.SearchResponse
 
@@ -101,7 +102,7 @@ internal fun CoverContents(
       is Results.Idle ->
         Message(
           contentPadding = contentPadding,
-          icon = VoiceIcons.ImageSearch,
+          icon = UiR.drawable.ic_image_search,
           shape = MaterialShapes.Clover4Leaf,
           containerColor = MaterialTheme.colorScheme.primaryContainer,
           contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -110,7 +111,7 @@ internal fun CoverContents(
       is Results.Empty ->
         Message(
           contentPadding = contentPadding,
-          icon = VoiceIcons.SearchOff,
+          icon = UiR.drawable.ic_search_off,
           shape = MaterialShapes.Flower,
           containerColor = MaterialTheme.colorScheme.tertiaryContainer,
           contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -120,7 +121,7 @@ internal fun CoverContents(
       is Results.Error ->
         Message(
           contentPadding = contentPadding,
-          icon = VoiceIcons.CloudOff,
+          icon = UiR.drawable.ic_cloud_off,
           shape = MaterialShapes.SoftBurst,
           containerColor = MaterialTheme.colorScheme.errorContainer,
           contentColor = MaterialTheme.colorScheme.onErrorContainer,
@@ -260,7 +261,7 @@ private fun CoverTile(
 @Composable
 private fun Message(
   contentPadding: PaddingValues,
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   shape: RoundedPolygon,
   containerColor: Color,
   contentColor: Color,
@@ -296,7 +297,7 @@ private fun Message(
           .background(containerColor, shape.toShape()),
       )
       Icon(
-        imageVector = icon,
+        painter = painterResource(icon),
         contentDescription = null,
         modifier = Modifier.size(52.dp),
         tint = contentColor,
@@ -330,7 +331,7 @@ private fun RetryButton(onClick: () -> Unit) {
     shapes = ButtonDefaults.shapes(),
   ) {
     Icon(
-      imageVector = VoiceIcons.Replay,
+      painter = painterResource(UiR.drawable.ic_replay),
       contentDescription = null,
       modifier = Modifier.size(ButtonDefaults.IconSize),
     )

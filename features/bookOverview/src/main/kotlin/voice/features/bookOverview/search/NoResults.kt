@@ -28,13 +28,14 @@ import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 
 /**
  * Says what was searched and where search looks. A missing book is usually in a folder Voice
@@ -65,7 +66,7 @@ internal fun NoResults(
       contentAlignment = Alignment.Center,
     ) {
       Icon(
-        imageVector = VoiceIcons.SearchOff,
+        painter = painterResource(UiR.drawable.ic_search_off),
         contentDescription = null,
         modifier = Modifier.size(52.dp),
         tint = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -86,7 +87,7 @@ internal fun NoResults(
     if (viewState.filtered) {
       Button(onClick = onSearchEverythingClick) {
         Icon(
-          imageVector = VoiceIcons.Search,
+          painter = painterResource(UiR.drawable.ic_search),
           contentDescription = null,
           modifier = Modifier.size(ButtonDefaults.IconSize),
         )
@@ -96,7 +97,7 @@ internal fun NoResults(
     }
     FilledTonalButton(onClick = onFoldersClick) {
       Icon(
-        imageVector = VoiceIcons.Folder,
+        painter = painterResource(UiR.drawable.ic_folder),
         contentDescription = null,
         modifier = Modifier.size(ButtonDefaults.IconSize),
       )

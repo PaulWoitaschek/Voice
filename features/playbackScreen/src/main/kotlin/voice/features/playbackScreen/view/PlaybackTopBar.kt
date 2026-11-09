@@ -2,6 +2,7 @@
 
 package voice.features.playbackScreen.view
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -20,11 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 
 @Composable
 internal fun PlaybackTopBar(
@@ -59,7 +60,7 @@ internal fun ChaptersButton(
   modifier: Modifier = Modifier,
 ) {
   TopBarButton(
-    icon = VoiceIcons.ViewList,
+    icon = UiR.drawable.ic_view_list,
     contentDescription = stringResource(R.string.playback_chapters_title),
     onClick = onClick,
     modifier = modifier,
@@ -72,7 +73,7 @@ internal fun BookActionsButton(
   modifier: Modifier = Modifier,
 ) {
   TopBarButton(
-    icon = VoiceIcons.MoreVert,
+    icon = UiR.drawable.ic_more_vert,
     contentDescription = stringResource(R.string.common_action_more),
     onClick = onClick,
     modifier = modifier,
@@ -85,7 +86,7 @@ internal fun CloseButton(
   modifier: Modifier = Modifier,
 ) {
   TopBarButton(
-    icon = VoiceIcons.KeyboardArrowDown,
+    icon = UiR.drawable.ic_keyboard_arrow_down,
     contentDescription = stringResource(R.string.common_action_close),
     onClick = onClick,
     modifier = modifier,
@@ -94,7 +95,7 @@ internal fun CloseButton(
 
 @Composable
 private fun TopBarButton(
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   contentDescription: String,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
@@ -106,7 +107,7 @@ private fun TopBarButton(
     colors = topBarButtonColors(),
   ) {
     Icon(
-      imageVector = icon,
+      painter = painterResource(icon),
       contentDescription = contentDescription,
     )
   }

@@ -3,6 +3,7 @@
 package voice.features.support
 
 import androidx.activity.compose.LocalActivity
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -38,8 +39,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -54,9 +55,9 @@ import androidx.graphics.shapes.RoundedPolygon
 import voice.core.data.supporter.SupporterBadge
 import voice.core.strings.R as StringsR
 import voice.core.ui.CheckBadge
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.SupporterBadgeIcon
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.label
 import voice.features.support.SupportViewState.Action
 import voice.features.support.SupportViewState.Message
@@ -394,11 +395,13 @@ private fun MessageCard(message: Message) {
       horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
       Icon(
-        imageVector =
-          when (message) {
-            Message.Pending -> VoiceIcons.HourglassEmpty
-            Message.Failed -> VoiceIcons.Close
-          },
+        painter =
+          painterResource(
+            when (message) {
+              Message.Pending -> UiR.drawable.ic_hourglass_empty
+              Message.Failed -> UiR.drawable.ic_close
+            },
+          ),
         contentDescription = null,
       )
       Text(
@@ -472,7 +475,7 @@ private fun Note(note: String) {
       verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
       Icon(
-        imageVector = VoiceIcons.FormatQuote,
+        painter = painterResource(UiR.drawable.ic_format_quote),
         contentDescription = null,
         tint = MaterialTheme.colorScheme.primary,
       )
@@ -519,7 +522,7 @@ private fun SupporterTier.title(): String {
 
 private class TierStyle(
   val shape: RoundedPolygon,
-  val icon: ImageVector,
+  @DrawableRes val icon: Int,
   val container: Color,
   val content: Color,
 )
@@ -531,21 +534,21 @@ private fun SupporterTier.style(): TierStyle {
     SupporterTier.Tea ->
       TierStyle(
         shape = MaterialShapes.Circle,
-        icon = VoiceIcons.EmojiFoodBeverage,
+        icon = UiR.drawable.ic_emoji_food_beverage,
         container = colors.tertiaryContainer,
         content = colors.onTertiaryContainer,
       )
     SupporterTier.HoneyTea ->
       TierStyle(
         shape = MaterialShapes.Cookie6Sided,
-        icon = VoiceIcons.Hive,
+        icon = UiR.drawable.ic_hive,
         container = colors.primary,
         content = colors.onPrimary,
       )
     SupporterTier.GoldenMic ->
       TierStyle(
         shape = MaterialShapes.Sunny,
-        icon = VoiceIcons.Mic,
+        icon = UiR.drawable.ic_mic,
         container = Color(0xFFF2C14E),
         content = Color(0xFF3D2E00),
       )

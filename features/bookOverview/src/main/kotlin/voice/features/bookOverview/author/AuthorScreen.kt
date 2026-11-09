@@ -50,6 +50,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -75,9 +76,9 @@ import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
+import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.overview.SeriesStackViewState
 import voice.features.bookOverview.views.BookOverviewPreviewParameterProvider
@@ -136,7 +137,7 @@ private fun AuthorScreen(
         navigationIcon = {
           IconButton(onClick = onCloseClick) {
             Icon(
-              VoiceIcons.ArrowBack,
+              painterResource(UiR.drawable.ic_arrow_back),
               contentDescription = stringResource(StringsR.string.common_action_back),
             )
           }
@@ -256,7 +257,7 @@ private fun Portrait(
     contentAlignment = Alignment.Center,
   ) {
     Icon(
-      imageVector = VoiceIcons.Person,
+      painter = painterResource(UiR.drawable.ic_person),
       contentDescription = null,
       tint = colors.onSecondaryContainer,
       modifier = Modifier.size(56.dp),

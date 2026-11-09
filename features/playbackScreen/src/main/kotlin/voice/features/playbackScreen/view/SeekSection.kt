@@ -56,6 +56,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.progressBarRangeInfo
@@ -73,8 +74,8 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import voice.core.strings.R as StringsR
 import voice.core.ui.ProgressWave
+import voice.core.ui.R as UiR
 import voice.core.ui.formatTime
-import voice.core.ui.icons.VoiceIcons
 import voice.features.playbackScreen.BookPlayViewState
 
 private val HorizontalInset = 12.dp
@@ -436,7 +437,7 @@ private fun OfflinePill(modifier: Modifier = Modifier) {
     verticalAlignment = Alignment.CenterVertically,
   ) {
     Icon(
-      imageVector = VoiceIcons.CloudOff,
+      painter = painterResource(UiR.drawable.ic_cloud_off),
       contentDescription = null,
       tint = MaterialTheme.colorScheme.onSurfaceVariant,
       modifier = Modifier.size(16.dp),

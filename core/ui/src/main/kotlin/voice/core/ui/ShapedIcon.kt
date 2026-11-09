@@ -2,6 +2,7 @@
 
 package voice.core.ui
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -13,14 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 
 @Composable
 fun ShapedIcon(
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   shape: RoundedPolygon,
   containerColor: Color,
   contentColor: Color,
@@ -39,7 +40,7 @@ fun ShapedIcon(
     )
     Icon(
       modifier = Modifier.size(size * 0.5F),
-      imageVector = icon,
+      painter = painterResource(icon),
       contentDescription = null,
       tint = contentColor,
     )

@@ -28,9 +28,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun SurveyCard(
@@ -49,7 +49,7 @@ internal fun SurveyCard(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
       ) {
         ShapedIcon(
-          icon = VoiceIcons.Forum,
+          icon = UiR.drawable.ic_forum,
           shape = MaterialShapes.Cookie9Sided,
           containerColor = MaterialTheme.colorScheme.tertiary,
           contentColor = MaterialTheme.colorScheme.onTertiary,

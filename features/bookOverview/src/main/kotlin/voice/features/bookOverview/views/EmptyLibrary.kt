@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -32,9 +33,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
+import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
 import voice.core.ui.VoiceTheme
-import voice.core.ui.icons.VoiceIcons
 
 @Composable
 internal fun EmptyLibrary(
@@ -74,7 +75,7 @@ internal fun EmptyLibrary(
         modifier = Modifier.heightIn(min = ButtonDefaults.MediumContainerHeight),
       ) {
         Icon(
-          imageVector = VoiceIcons.Folder,
+          painter = painterResource(UiR.drawable.ic_folder),
           contentDescription = null,
           modifier = Modifier.size(ButtonDefaults.MediumIconSize),
         )
@@ -92,14 +93,14 @@ internal fun EmptyLibrary(
 private fun EmptyLibraryHero() {
   Box(Modifier.size(200.dp), contentAlignment = Alignment.Center) {
     ShapedIcon(
-      icon = VoiceIcons.LibraryBooks,
+      icon = UiR.drawable.ic_library_books,
       shape = MaterialShapes.Cookie12Sided,
       containerColor = MaterialTheme.colorScheme.primaryContainer,
       contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
       size = 168.dp,
     )
     ShapedIcon(
-      icon = VoiceIcons.SearchOff,
+      icon = UiR.drawable.ic_search_off,
       shape = MaterialShapes.SoftBurst,
       containerColor = MaterialTheme.colorScheme.tertiary,
       contentColor = MaterialTheme.colorScheme.onTertiary,

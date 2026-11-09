@@ -60,7 +60,6 @@ import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
-import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.rememberCoverThumbnailRequest
 import voice.core.ui.seriesCoverSharedElementModifier
 import voice.features.bookOverview.overview.SeriesStackViewState
@@ -316,14 +315,14 @@ private fun SeriesBadge(
       hidden ->
         Icon(
           modifier = Modifier.size(14.dp),
-          imageVector = VoiceIcons.VisibilityOff,
+          painter = painterResource(UiR.drawable.ic_visibility_off),
           contentDescription = null,
           tint = colors.onSurfaceVariant,
         )
       finished ->
         Icon(
           modifier = Modifier.size(14.dp),
-          imageVector = VoiceIcons.Check,
+          painter = painterResource(UiR.drawable.ic_check),
           contentDescription = null,
           tint = colors.onPrimary,
         )

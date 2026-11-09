@@ -2,6 +2,7 @@
 
 package voice.features.playbackScreen
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.Spring
@@ -58,7 +59,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -71,7 +72,7 @@ import androidx.graphics.shapes.RoundedPolygon
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import voice.core.strings.R as StringsR
-import voice.core.ui.icons.VoiceIcons
+import voice.core.ui.R as UiR
 
 private val PRESETS = listOf(5, 15, 30, 60)
 
@@ -150,7 +151,7 @@ internal fun SleepTimerDialog(
         ) {
           ContinuousPressIcon(
             onEmit = onDecrementSleepTime,
-            icon = VoiceIcons.Remove,
+            icon = UiR.drawable.ic_remove,
             contentDescription =
               stringResource(id = StringsR.string.sleep_timer_dialog_action_decrement),
           )
@@ -175,7 +176,7 @@ internal fun SleepTimerDialog(
           }
           ContinuousPressIcon(
             onEmit = onIncrementSleepTime,
-            icon = VoiceIcons.Add,
+            icon = UiR.drawable.ic_add,
             contentDescription =
               stringResource(id = StringsR.string.sleep_timer_dialog_action_increment),
           )
@@ -185,7 +186,7 @@ internal fun SleepTimerDialog(
             modifier = Modifier.size(IconButtonDefaults.mediumContainerSize()),
           ) {
             Icon(
-              imageVector = VoiceIcons.Check,
+              painter = painterResource(UiR.drawable.ic_check),
               contentDescription = minutes(minutes = viewState.customSleepTime),
             )
           }
@@ -197,7 +198,7 @@ internal fun SleepTimerDialog(
         onClick = onAcceptSleepAtEndOfChapter,
         shapes = ButtonDefaults.shapes(),
       ) {
-        Icon(imageVector = VoiceIcons.Bedtime, contentDescription = null)
+        Icon(painter = painterResource(UiR.drawable.ic_bedtime), contentDescription = null)
         Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
         Text(text = stringResource(id = StringsR.string.sleep_timer_end_of_chapter))
       }
@@ -283,7 +284,7 @@ private fun PresetButton(
 @Composable
 private fun ContinuousPressIcon(
   onEmit: () -> Unit,
-  icon: ImageVector,
+  @DrawableRes icon: Int,
   contentDescription: String,
   modifier: Modifier = Modifier,
 ) {
@@ -300,7 +301,7 @@ private fun ContinuousPressIcon(
   }
   val interactionSource = remember { MutableInteractionSource() }
   Icon(
-    imageVector = icon,
+    painter = painterResource(icon),
     contentDescription = contentDescription,
     modifier =
       modifier
