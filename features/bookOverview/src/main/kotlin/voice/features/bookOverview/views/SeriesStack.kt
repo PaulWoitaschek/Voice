@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -70,7 +69,7 @@ internal fun ListSeriesRow(
   onClick: () -> Unit,
   onLongClick: () -> Unit,
   modifier: Modifier = Modifier,
-  shape: Shape = RoundedCornerShape(24.dp),
+  shape: Shape = MaterialTheme.shapes.largeIncreased,
 ) {
   Surface(
     modifier =
@@ -151,7 +150,7 @@ internal fun GridSeries(
   Column(
     modifier =
       modifier
-        .clip(RoundedCornerShape(24.dp))
+        .clip(MaterialTheme.shapes.largeIncreased)
         .combinedClickable(onClick = onClick, onLongClick = onLongClick)
         .padding(6.dp),
   ) {

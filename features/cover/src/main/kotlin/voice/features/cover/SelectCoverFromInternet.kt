@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -144,7 +144,11 @@ private fun SelectCoverFromInternet(
       Surface(
         modifier = Modifier.fillMaxSize().nestedScroll(hideKeyboardOnScroll),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
-        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        shape =
+          MaterialTheme.shapes.extraLarge.copy(
+            bottomStart = ZeroCornerSize,
+            bottomEnd = ZeroCornerSize,
+          ),
       ) {
         CoverContents(
           results = viewState.results,

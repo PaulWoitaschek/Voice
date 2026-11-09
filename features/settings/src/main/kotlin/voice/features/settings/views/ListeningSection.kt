@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -401,7 +400,7 @@ private fun MiniSkipButton(
     Box(
       modifier =
         Modifier.size(width = 48.dp, height = 32.dp)
-          .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(16.dp)),
+          .background(MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.large),
       contentAlignment = Alignment.Center,
     ) {
       Icon(

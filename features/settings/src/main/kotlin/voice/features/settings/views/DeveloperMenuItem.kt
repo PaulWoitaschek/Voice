@@ -21,7 +21,7 @@ internal fun DeveloperMenuItem(
 ) {
   Surface(
     modifier = modifier.fillMaxWidth(),
-    shape = IslandShape,
+    shape = MaterialTheme.shapes.extraLargeIncreased,
     color = MaterialTheme.colorScheme.surfaceContainerHigh,
   ) {
     IslandRow(

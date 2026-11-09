@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
@@ -118,8 +117,8 @@ internal fun CoversHero(
               alpha = pop.coerceIn(0F, 1F)
             }
             .aspectRatio(1F)
-            .shadow(8.dp, RoundedCornerShape(20.dp))
-            .clip(RoundedCornerShape(20.dp)),
+            .shadow(8.dp, MaterialTheme.shapes.largeIncreased)
+            .clip(MaterialTheme.shapes.largeIncreased),
         ) {
           AsyncImage(
             model = cover,

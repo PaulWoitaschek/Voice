@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -99,7 +98,7 @@ private fun FolderModeOption(
     modifier =
       Modifier.fillMaxWidth()
         .selectable(selected = selected, onClick = onClick, role = Role.RadioButton),
-    shape = RoundedCornerShape(24.dp),
+    shape = MaterialTheme.shapes.largeIncreased,
     color = if (selected) colorScheme.secondaryContainer else colorScheme.surfaceContainerHigh,
     contentColor = if (selected) colorScheme.onSecondaryContainer else colorScheme.onSurface,
     border = if (selected) BorderStroke(2.dp, colorScheme.primary) else null,

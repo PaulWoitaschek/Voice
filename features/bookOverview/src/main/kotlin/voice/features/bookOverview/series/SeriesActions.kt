@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
@@ -222,7 +221,7 @@ private fun SeriesActionRows(
     ActionRow(
       item = visibility,
       style = visibility.style(),
-      shape = RoundedCornerShape(24.dp),
+      shape = MaterialTheme.shapes.largeIncreased,
       onClick = { onItemClick(visibility) },
       modifier = Modifier.entrance(entrance, 1 + state.statuses.size),
     )

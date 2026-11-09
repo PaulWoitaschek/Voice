@@ -35,7 +35,7 @@ internal fun SupportCard(
   Surface(
     onClick = onClick,
     modifier = modifier.fillMaxWidth(),
-    shape = IslandShape,
+    shape = MaterialTheme.shapes.extraLargeIncreased,
     color = MaterialTheme.colorScheme.tertiary,
     contentColor = MaterialTheme.colorScheme.onTertiary,
   ) {

@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -52,7 +51,7 @@ internal fun ListAuthorRow(
   author: AuthorEntryViewState,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
-  shape: Shape = RoundedCornerShape(24.dp),
+  shape: Shape = MaterialTheme.shapes.largeIncreased,
   flies: Boolean = false,
 ) {
   Surface(
@@ -97,7 +96,8 @@ internal fun GridAuthor(
   flies: Boolean = false,
 ) {
   Column(
-    modifier = modifier.clip(RoundedCornerShape(24.dp)).clickable(onClick = onClick).padding(6.dp),
+    modifier =
+      modifier.clip(MaterialTheme.shapes.largeIncreased).clickable(onClick = onClick).padding(6.dp),
   ) {
     // the badge flies along, or the flying covers would hide it
     Box(Modifier.fillMaxWidth().aspectRatio(1F).flying(author, flies)) {

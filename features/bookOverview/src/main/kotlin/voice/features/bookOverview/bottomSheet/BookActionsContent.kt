@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -49,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -163,7 +163,7 @@ internal fun BookActionsContent(
       ActionRow(
         item = BottomSheetItem.DeleteBook,
         style = BottomSheetItem.DeleteBook.style(),
-        shape = RoundedCornerShape(24.dp),
+        shape = MaterialTheme.shapes.largeIncreased,
         onClick = { onItemClick(BottomSheetItem.DeleteBook) },
         modifier = Modifier.entrance(entrance, 2 + edits.size),
         titleColor = MaterialTheme.colorScheme.error,
@@ -401,7 +401,7 @@ private fun StatusTile(
           scaleX = pressScale * squish.value
           scaleY = pressScale * squish.value
         }
-        .background(tileColor, RoundedCornerShape(24.dp))
+        .background(tileColor, MaterialTheme.shapes.largeIncreased)
         // unclipped, so the confetti of a finished book can fly beyond the tile. The squish is the
         // feedback.
         .selectable(
@@ -506,7 +506,7 @@ internal fun BottomSheetItem.style(): ActionStyle {
 internal fun ActionRow(
   item: BottomSheetItem,
   style: ActionStyle,
-  shape: RoundedCornerShape,
+  shape: Shape,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
   title: String = stringResource(item.titleRes),

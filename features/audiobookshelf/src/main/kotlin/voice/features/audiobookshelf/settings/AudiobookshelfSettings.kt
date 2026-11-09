@@ -254,7 +254,10 @@ private fun Island(
       modifier
         .widthIn(max = 520.dp)
         .fillMaxWidth()
-        .background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(32.dp))
+        .background(
+          MaterialTheme.colorScheme.surfaceContainer,
+          MaterialTheme.shapes.extraLargeIncreased,
+        )
         .padding(20.dp),
   ) {
     if (title != null) {
@@ -322,7 +325,7 @@ private fun ServerIsland(
         Modifier.fillMaxWidth()
           .background(
             if (needsLogin) colors.errorContainer else colors.secondaryContainer,
-            RoundedCornerShape(20.dp),
+            MaterialTheme.shapes.largeIncreased,
           )
           .padding(horizontal = 16.dp, vertical = 12.dp),
       verticalAlignment = Alignment.CenterVertically,

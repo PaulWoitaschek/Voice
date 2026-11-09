@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialShapes
@@ -47,7 +46,7 @@ internal fun ListBookRow(
   onBookClick: (BookId) -> Unit,
   onBookLongClick: (BookId) -> Unit,
   modifier: Modifier = Modifier,
-  shape: Shape = RoundedCornerShape(24.dp),
+  shape: Shape = MaterialTheme.shapes.largeIncreased,
   finished: Boolean = false,
   part: String? = null,
   current: Boolean = false,

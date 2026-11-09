@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -130,8 +130,7 @@ private fun GainMeter(
           label = "meterHeight",
         )
       Box(
-        modifier =
-          Modifier.weight(1F).height(height).background(color, RoundedCornerShape(percent = 50)),
+        modifier = Modifier.weight(1F).height(height).background(color, CircleShape),
       )
     }
   }

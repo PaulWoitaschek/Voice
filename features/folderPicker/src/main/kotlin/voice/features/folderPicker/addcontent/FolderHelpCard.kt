@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
@@ -73,7 +72,7 @@ internal fun FolderHelpCard(
 ) {
   Surface(
     modifier = modifier.fillMaxWidth(),
-    shape = RoundedCornerShape(28.dp),
+    shape = MaterialTheme.shapes.extraLarge,
     color = MaterialTheme.colorScheme.surfaceContainerHigh,
   ) {
     Column(

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilterChip
@@ -154,7 +153,7 @@ private fun TopResult(
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val shape = RoundedCornerShape(28.dp)
+  val shape = MaterialTheme.shapes.extraLarge
   val colors = MaterialTheme.colorScheme
   Surface(
     modifier =
@@ -287,7 +286,7 @@ private fun SearchResultRow(
         if (result.matchTag != null) {
           Surface(
             modifier = Modifier.padding(top = 4.dp),
-            shape = RoundedCornerShape(6.dp),
+            shape = MaterialTheme.shapes.small,
             color = colors.tertiaryContainer,
             contentColor = colors.onTertiaryContainer,
           ) {

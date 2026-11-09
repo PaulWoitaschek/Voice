@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialShapes
@@ -76,6 +75,7 @@ import voice.core.ui.OnboardingTopBar
 import voice.core.ui.VoiceTheme
 import voice.core.ui.bookText
 import voice.core.ui.rememberAnimationClock
+import voice.core.ui.segmentedShape
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 import voice.navigation.Origin
@@ -268,13 +268,7 @@ private fun BookRow(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  val shape =
-    RoundedCornerShape(
-      topStart = if (index == 0) 24.dp else 6.dp,
-      topEnd = if (index == 0) 24.dp else 6.dp,
-      bottomStart = if (index == count - 1) 24.dp else 6.dp,
-      bottomEnd = if (index == count - 1) 24.dp else 6.dp,
-    )
+  val shape = segmentedShape(index, count)
   val content: @Composable () -> Unit = {
     Row(
       modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),

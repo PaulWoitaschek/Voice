@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -138,7 +137,7 @@ internal fun DeleteBookSheet(
       Column(
         modifier =
           Modifier.fillMaxWidth()
-            .background(colors.surfaceContainerHigh, RoundedCornerShape(20.dp))
+            .background(colors.surfaceContainerHigh, MaterialTheme.shapes.largeIncreased)
             .padding(horizontal = 16.dp, vertical = 12.dp),
       ) {
         Text(
@@ -167,7 +166,7 @@ internal fun DeleteBookSheet(
       Row(
         modifier =
           Modifier.fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(MaterialTheme.shapes.largeIncreased)
             .background(confirmContainer)
             .toggleable(
               value = armed,

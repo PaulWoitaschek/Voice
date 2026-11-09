@@ -1,7 +1,6 @@
 package voice.features.bookOverview.views
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -15,7 +14,7 @@ import voice.core.strings.R as StringsR
 internal fun HiddenLabel(modifier: Modifier = Modifier) {
   Surface(
     modifier = modifier,
-    shape = RoundedCornerShape(6.dp),
+    shape = MaterialTheme.shapes.small,
     color = MaterialTheme.colorScheme.surfaceContainerHighest,
     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
   ) {

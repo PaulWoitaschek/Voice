@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -170,7 +169,7 @@ internal fun SeekSection(
           {
             Text(
               modifier =
-                Modifier.clip(RoundedCornerShape(8.dp))
+                Modifier.clip(MaterialTheme.shapes.small)
                   .clickable { showRemaining = !showRemaining }
                   .padding(horizontal = 4.dp, vertical = 2.dp),
               text =
@@ -342,7 +341,7 @@ private fun WavySeekBar(
               alpha = bubbleScale.coerceIn(0F, 1F)
               transformOrigin = TransformOrigin(0.5F, 1F)
             }
-            .background(colors.primary, RoundedCornerShape(percent = 50))
+            .background(colors.primary, CircleShape)
             .padding(horizontal = 14.dp, vertical = 6.dp),
       ) {
         Text(

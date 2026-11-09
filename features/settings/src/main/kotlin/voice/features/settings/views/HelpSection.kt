@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
@@ -171,7 +170,7 @@ private fun TileButton(
   Surface(
     onClick = tile.onClick,
     modifier = modifier,
-    shape = RoundedCornerShape(24.dp),
+    shape = MaterialTheme.shapes.largeIncreased,
     color = MaterialTheme.colorScheme.surfaceBright,
     interactionSource = interactionSource,
   ) {

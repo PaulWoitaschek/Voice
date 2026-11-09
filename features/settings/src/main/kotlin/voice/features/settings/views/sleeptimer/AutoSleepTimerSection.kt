@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -54,7 +53,6 @@ import voice.core.ui.ThemeColorScheme
 import voice.core.ui.VoiceTheme
 import voice.core.ui.rememberAnimationClock
 import voice.features.settings.SettingsViewState
-import voice.features.settings.views.IslandShape
 import voice.features.settings.views.IslandSwitchRow
 import voice.features.settings.views.TimePickerDialog
 
@@ -83,7 +81,7 @@ internal fun AutoSleepTimerSection(
     val clock = rememberAnimationClock(running = night)
     Surface(
       modifier = modifier.fillMaxWidth(),
-      shape = IslandShape,
+      shape = MaterialTheme.shapes.extraLargeIncreased,
       color = MaterialTheme.colorScheme.surfaceContainerHigh,
       contentColor = MaterialTheme.colorScheme.onSurface,
     ) {
@@ -181,7 +179,7 @@ private fun TimeTile(
     modifier =
       modifier
         .graphicsLayer { this.alpha = alpha }
-        .clip(RoundedCornerShape(24.dp))
+        .clip(MaterialTheme.shapes.largeIncreased)
         .background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.8F))
         .clickable(
           enabled = enabled,

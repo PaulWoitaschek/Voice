@@ -48,6 +48,7 @@ import voice.core.ui.MaxContentWidth
 import voice.core.ui.R as UiR
 import voice.core.ui.entrance
 import voice.core.ui.rememberEntranceState
+import voice.core.ui.segmentedShape
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.overview.LibraryItem

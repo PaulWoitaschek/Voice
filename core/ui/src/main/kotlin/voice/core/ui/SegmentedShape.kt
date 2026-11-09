@@ -1,20 +1,20 @@
 package voice.core.ui
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 
+@Composable
 fun segmentedShape(
   index: Int,
   count: Int,
-): RoundedCornerShape {
-  val large = 24.dp
-  val small = 6.dp
+): CornerBasedShape {
+  val outer = MaterialTheme.shapes.largeIncreased
+  val inner = MaterialTheme.shapes.extraSmall
   return when {
-    count == 1 -> RoundedCornerShape(large)
-    index == 0 ->
-      RoundedCornerShape(topStart = large, topEnd = large, bottomStart = small, bottomEnd = small)
-    index == count - 1 ->
-      RoundedCornerShape(topStart = small, topEnd = small, bottomStart = large, bottomEnd = large)
-    else -> RoundedCornerShape(small)
+    count == 1 -> outer
+    index == 0 -> outer.copy(bottomStart = inner.bottomStart, bottomEnd = inner.bottomEnd)
+    index == count - 1 -> outer.copy(topStart = inner.topStart, topEnd = inner.topEnd)
+    else -> inner
   }
 }
