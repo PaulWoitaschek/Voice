@@ -6,7 +6,7 @@ import voice.features.bookOverview.overview.SeriesStackViewState
 
 @Immutable
 data class AuthorViewState(
-  val name: String,
+  val name: String?,
   val bookCount: Int,
   val finishedCount: Int,
   val info: AuthorInfo?,

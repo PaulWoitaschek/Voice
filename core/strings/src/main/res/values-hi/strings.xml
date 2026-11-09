@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">ऑडियो डिस्कनेक्ट हुआ</string>
     <string name="history.source.watch">घड़ी</string>
     <string name="history.source.widget">विजेट</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d सीरीज़</item>
+        <item quantity="other">%d सीरीज़</item>
+    </plurals>
     <string name="library.book.downloading">डाउनलोड हो रहा है</string>
     <string name="library.book.hidden">छिपी हुई</string>
     <string name="library.book.hidden.message">%1$s को छिपा दिया गया</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">Voice को आपके फ़ोल्डरों में कोई ऑडियोबुक नहीं मिल रही है। देख लें कि फ़ाइलें अभी भी वहीं हैं, या कोई फ़ोल्डर जोड़ें।</string>
     <string name="library.empty.action">फ़ोल्डर दिखाएँ</string>
     <string name="library.filter">फ़िल्टर</string>
+    <string name="library.filter.group_by">इसके अनुसार समूह बनाएँ</string>
+    <string name="library.filter.group_by.author">लेखक</string>
+    <string name="library.filter.group_by.series">सीरीज़</string>
     <string name="library.filter.hidden_books">छिपी हुई पुस्तकें</string>
     <string name="library.filter.show">दिखाएँ</string>
     <string name="library.folders.title">ऑडियोबुक फ़ोल्डर</string>
@@ -269,6 +276,7 @@
         <item quantity="one">%d छिपी हुई पुस्तक</item>
         <item quantity="other">%d छिपी हुई पुस्तकें</item>
     </plurals>
+    <string name="library.no_author">बिना लेखक</string>
     <string name="library.search.browse.title">ब्राउज़ करें</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d पुस्तक</item>

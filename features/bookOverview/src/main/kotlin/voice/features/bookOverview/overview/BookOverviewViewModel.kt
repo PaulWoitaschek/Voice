@@ -78,6 +78,7 @@ class BookOverviewViewModel(
   private val emptyLibraryTracker: EmptyLibraryTracker,
   private val survey: Survey,
   private val showHiddenBooksStore: ShowHiddenBooksStore,
+  private val libraryGroupingStore: LibraryGroupingStore,
   private val bookHider: BookHider,
 ) {
 
@@ -149,6 +150,7 @@ class BookOverviewViewModel(
     }
       .collectAsState(initial = null)
       .value
+    val grouping = remember { libraryGroupingStore.data }.collectAsState(initial = null).value
     if (
       allBooks == null ||
         currentBook == null ||
@@ -156,7 +158,8 @@ class BookOverviewViewModel(
         gridMode == null ||
         hasFoldersWithoutAccess == null ||
         hasSurvey == null ||
-        showHiddenBooks == null
+        showHiddenBooks == null ||
+        grouping == null
     ) {
       return BookOverviewViewState.Loading
     }
@@ -206,25 +209,30 @@ class BookOverviewViewModel(
         download = downloadStates[id].badge(),
       )
 
-    val entries = remember(books) { libraryEntries(books) }
+    val entries =
+      remember(books, currentBookId) {
+        // the Continue listening card shows it
+        libraryEntries(books).mapValues { (_, entries) ->
+          entries.filterNot { it is LibraryEntry.Single && it.book.id == currentBookId }
+        }
+      }
+    val authors =
+      remember(entries, grouping) {
+        if (grouping == LibraryGrouping.Author) entries.groupedByAuthor() else emptyMap()
+      }
     val inProgressCount = remember(books) { books.count { it.category == BookCategory.CURRENT } }
     return BookOverviewViewState(
       layoutMode = layoutMode,
       sections =
         entries
-          .mapValues { (_, entries) ->
-            entries.mapNotNull { entry ->
-              when (entry) {
-                // the Continue listening card shows it
-                is LibraryEntry.Single ->
-                  if (entry.book.id == currentBookId) {
-                    null
-                  } else {
-                    LibraryItem.Book(entry.book.id, entry.book.itemState())
-                  }
-                is LibraryEntry.Stack -> LibraryItem.Series(entry.series.toStackViewState())
+          .mapValues { (category, entries) ->
+            authors[category]?.map { LibraryItem.Author(it.toEntryViewState(category)) }
+              ?: entries.map { entry ->
+                when (entry) {
+                  is LibraryEntry.Single -> LibraryItem.Book(entry.book.id, entry.book.itemState())
+                  is LibraryEntry.Stack -> LibraryItem.Series(entry.series.toStackViewState())
+                }
               }
-            }
           }
           .filterValues { it.isNotEmpty() },
       hero = currentBookId?.let { id -> books.find { it.id == id } }?.itemState(),
@@ -239,6 +247,7 @@ class BookOverviewViewModel(
           .takeIf { currentBookId != null },
       showEmptyLibrary = showEmptyLibrary,
       showSearchIcon = allBooks.isNotEmpty(),
+      showFilterIcon = allBooks.isNotEmpty(),
       isLoading = scannerActive,
       showStoragePermissionBugCard = hasStoragePermissionBug,
       // adding books comes first
@@ -251,6 +260,7 @@ class BookOverviewViewModel(
       dialog = dialog,
       hiddenBookCount = hiddenBookCount,
       showHiddenBooks = showHiddenBooks,
+      grouping = grouping,
     )
   }
 
@@ -301,6 +311,16 @@ class BookOverviewViewModel(
 
   fun onSeriesLongClick(name: String) {
     navigator.goTo(Destination.SeriesActions(name))
+  }
+
+  fun onAuthorClick(name: String?) {
+    navigator.goTo(Destination.Author(name))
+  }
+
+  fun onGroupingChange(grouping: LibraryGrouping) {
+    scope.launch {
+      libraryGroupingStore.updateData { grouping }
+    }
   }
 
   fun onShowHiddenBooksChange(show: Boolean) {

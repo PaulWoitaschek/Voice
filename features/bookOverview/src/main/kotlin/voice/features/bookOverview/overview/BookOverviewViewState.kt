@@ -23,6 +23,8 @@ data class BookOverviewViewState(
   val dialog: Dialog?,
   val hiddenBookCount: Int = 0,
   val showHiddenBooks: Boolean = false,
+  val grouping: LibraryGrouping = LibraryGrouping.Series,
+  val showFilterIcon: Boolean = false,
 ) {
 
   companion object {
@@ -75,6 +77,13 @@ sealed interface LibraryItem {
     override val key: String
       get() = "series:${series.key}"
   }
+
+  @Immutable
+  data class Author(val author: AuthorEntryViewState) : LibraryItem {
+    // an author can be in two sections
+    override val key: String
+      get() = "author:${author.category}:${author.key.orEmpty()}"
+  }
 }
 
 @Immutable
@@ -99,6 +108,28 @@ internal fun Series.toStackViewState() =
     bookCount = books.size,
     finishedCount = finishedCount,
     progress = progress,
+    category = category,
+    hidden = hidden,
+  )
+
+@Immutable
+data class AuthorEntryViewState(
+  val key: String?,
+  val name: String?,
+  val covers: List<String?>,
+  val seriesCount: Int,
+  val bookCount: Int,
+  val category: BookCategory,
+  val hidden: Boolean = false,
+)
+
+internal fun AuthorGroup.toEntryViewState(category: BookCategory) =
+  AuthorEntryViewState(
+    key = key,
+    name = name,
+    covers = covers,
+    seriesCount = seriesCount,
+    bookCount = books.size,
     category = category,
     hidden = hidden,
   )

@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">Hangkapcsolat megszakadt</string>
     <string name="history.source.watch">Óra</string>
     <string name="history.source.widget">Widget</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d sorozat</item>
+        <item quantity="other">%d sorozat</item>
+    </plurals>
     <string name="library.book.downloading">Letöltés folyamatban</string>
     <string name="library.book.hidden">Rejtett</string>
     <string name="library.book.hidden.message">„%1$s” elrejtve</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">A Voice nem talál hangoskönyvet a mappáiban. Ellenőrizze, hogy a fájlok még a helyükön vannak-e, vagy adjon hozzá egy mappát.</string>
     <string name="library.empty.action">Mappák megjelenítése</string>
     <string name="library.filter">Szűrés</string>
+    <string name="library.filter.group_by">Csoportosítás</string>
+    <string name="library.filter.group_by.author">Szerző</string>
+    <string name="library.filter.group_by.series">Sorozat</string>
     <string name="library.filter.hidden_books">Rejtett könyvek</string>
     <string name="library.filter.show">Megjelenítés</string>
     <string name="library.folders.title">Hangoskönyv mappák</string>
@@ -269,6 +276,7 @@
         <item quantity="one">%d rejtett könyv</item>
         <item quantity="other">%d rejtett könyv</item>
     </plurals>
+    <string name="library.no_author">Szerző nélkül</string>
     <string name="library.search.browse.title">Böngészés</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d könyv</item>

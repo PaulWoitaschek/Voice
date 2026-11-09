@@ -249,6 +249,11 @@
     <string name="history.source.unplugged">Audio deconectat</string>
     <string name="history.source.watch">Ceas</string>
     <string name="history.source.widget">Widget</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d serie</item>
+        <item quantity="few">%d serii</item>
+        <item quantity="other">%d de serii</item>
+    </plurals>
     <string name="library.book.downloading">Se descarcă</string>
     <string name="library.book.hidden">Ascunsă</string>
     <string name="library.book.hidden.message">Ai ascuns %1$s</string>
@@ -262,6 +267,9 @@
     <string name="library.empty.message">Voice nu găsește nicio carte audio în directoarele tale. Verifică dacă fișierele mai sunt acolo sau adaugă un director.</string>
     <string name="library.empty.action">Afișează directoarele</string>
     <string name="library.filter">Filtrează</string>
+    <string name="library.filter.group_by">Grupează după</string>
+    <string name="library.filter.group_by.author">Autor</string>
+    <string name="library.filter.group_by.series">Serie</string>
     <string name="library.filter.hidden_books">Cărți ascunse</string>
     <string name="library.filter.show">Afișează</string>
     <string name="library.folders.title">Directoare cărți</string>
@@ -284,6 +292,7 @@
         <item quantity="few">%d cărți ascunse</item>
         <item quantity="other">%d de cărți ascunse</item>
     </plurals>
+    <string name="library.no_author">Fără autor</string>
     <string name="library.search.browse.title">Răsfoiește</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d carte</item>

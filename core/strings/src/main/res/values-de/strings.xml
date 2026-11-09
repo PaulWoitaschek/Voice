@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">Audio getrennt</string>
     <string name="history.source.watch">Smartwatch</string>
     <string name="history.source.widget">Widget</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d Reihe</item>
+        <item quantity="other">%d Reihen</item>
+    </plurals>
     <string name="library.book.downloading">Wird heruntergeladen</string>
     <string name="library.book.hidden">Ausgeblendet</string>
     <string name="library.book.hidden.message">%1$s ist ausgeblendet</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">Voice findet in Deinen Ordnern keine Hörbücher. Prüfe, ob die Dateien noch da sind, oder füge einen Ordner hinzu.</string>
     <string name="library.empty.action">Ordner anzeigen</string>
     <string name="library.filter">Filter</string>
+    <string name="library.filter.group_by">Gruppieren nach</string>
+    <string name="library.filter.group_by.author">Autor</string>
+    <string name="library.filter.group_by.series">Reihe</string>
     <string name="library.filter.hidden_books">Ausgeblendete Bücher</string>
     <string name="library.filter.show">Anzeigen</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
@@ -269,6 +276,7 @@
         <item quantity="one">%d ausgeblendetes Buch</item>
         <item quantity="other">%d ausgeblendete Bücher</item>
     </plurals>
+    <string name="library.no_author">Ohne Autor</string>
     <string name="library.search.browse.title">Stöbern</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d Buch</item>

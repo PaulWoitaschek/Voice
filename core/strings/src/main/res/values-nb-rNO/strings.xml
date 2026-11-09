@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">Lyd frakoblet</string>
     <string name="history.source.watch">Klokke</string>
     <string name="history.source.widget">Modul</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d serie</item>
+        <item quantity="other">%d serier</item>
+    </plurals>
     <string name="library.book.downloading">Laster ned</string>
     <string name="library.book.hidden">Skjult</string>
     <string name="library.book.hidden.message">%1$s er skjult</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">Voice finner ingen lydbøker i mappene dine. Sjekk at filene fortsatt er der, eller legg til en mappe.</string>
     <string name="library.empty.action">Vis mapper</string>
     <string name="library.filter">Filter</string>
+    <string name="library.filter.group_by">Grupper etter</string>
+    <string name="library.filter.group_by.author">Forfatter</string>
+    <string name="library.filter.group_by.series">Serie</string>
     <string name="library.filter.hidden_books">Skjulte bøker</string>
     <string name="library.filter.show">Vis</string>
     <string name="library.folders.title">Lydbokmapper</string>
@@ -269,6 +276,7 @@
         <item quantity="one">%d skjult bok</item>
         <item quantity="other">%d skjulte bøker</item>
     </plurals>
+    <string name="library.no_author">Ingen forfatter</string>
     <string name="library.search.browse.title">Bla gjennom</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d bok</item>

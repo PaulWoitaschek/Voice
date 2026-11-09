@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">Ses bağlantısı kesildi</string>
     <string name="history.source.watch">Akıllı saat</string>
     <string name="history.source.widget">Widget</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d seri</item>
+        <item quantity="other">%d seri</item>
+    </plurals>
     <string name="library.book.downloading">İndiriliyor</string>
     <string name="library.book.hidden">Gizli</string>
     <string name="library.book.hidden.message">%1$s gizlendi</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">Voice, klasörlerinizde hiç sesli kitap bulamıyor. Dosyaların hâlâ yerinde olup olmadığını kontrol edin veya bir klasör ekleyin.</string>
     <string name="library.empty.action">Klasörleri göster</string>
     <string name="library.filter">Filtrele</string>
+    <string name="library.filter.group_by">Grupla</string>
+    <string name="library.filter.group_by.author">Yazar</string>
+    <string name="library.filter.group_by.series">Seri</string>
     <string name="library.filter.hidden_books">Gizli kitaplar</string>
     <string name="library.filter.show">Göster</string>
     <string name="library.folders.title">Sesli kitap klasörleri</string>
@@ -269,6 +276,7 @@
         <item quantity="one">%d gizli kitap</item>
         <item quantity="other">%d gizli kitap</item>
     </plurals>
+    <string name="library.no_author">Yazar yok</string>
     <string name="library.search.browse.title">Göz at</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d kitap</item>

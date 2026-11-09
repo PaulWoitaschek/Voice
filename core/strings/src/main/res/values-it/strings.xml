@@ -249,6 +249,11 @@
     <string name="history.source.unplugged">Audio scollegato</string>
     <string name="history.source.watch">Orologio</string>
     <string name="history.source.widget">Widget</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d serie</item>
+        <item quantity="many">%d serie</item>
+        <item quantity="other">%d serie</item>
+    </plurals>
     <string name="library.book.downloading">Download in corso</string>
     <string name="library.book.hidden">Nascosto</string>
     <string name="library.book.hidden.message">Hai nascosto %1$s</string>
@@ -262,6 +267,9 @@
     <string name="library.empty.message">Voice non trova nessun audiolibro nelle tue cartelle. Controlla che i file siano ancora lì o aggiungi una cartella.</string>
     <string name="library.empty.action">Mostra cartelle</string>
     <string name="library.filter">Filtra</string>
+    <string name="library.filter.group_by">Raggruppa per</string>
+    <string name="library.filter.group_by.author">Autore</string>
+    <string name="library.filter.group_by.series">Serie</string>
     <string name="library.filter.hidden_books">Libri nascosti</string>
     <string name="library.filter.show">Mostra</string>
     <string name="library.folders.title">Cartelle audiolibri</string>
@@ -284,6 +292,7 @@
         <item quantity="many">%d libri nascosti</item>
         <item quantity="other">%d libri nascosti</item>
     </plurals>
+    <string name="library.no_author">Senza autore</string>
     <string name="library.search.browse.title">Sfoglia</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d libro</item>

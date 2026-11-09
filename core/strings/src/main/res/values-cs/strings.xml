@@ -262,6 +262,12 @@
     <string name="history.source.unplugged">Zvuk odpojen</string>
     <string name="history.source.watch">Hodinky</string>
     <string name="history.source.widget">Widget</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d série</item>
+        <item quantity="few">%d série</item>
+        <item quantity="many">%d sérií</item>
+        <item quantity="other">%d sérií</item>
+    </plurals>
     <string name="library.book.downloading">Stahuje se</string>
     <string name="library.book.hidden">Skrytá</string>
     <string name="library.book.hidden.message">Kniha „%1$s“ je skrytá</string>
@@ -275,6 +281,9 @@
     <string name="library.empty.message">Voice ve vašich složkách nemůže najít žádné audioknihy. Zkontrolujte, jestli jsou soubory stále na svém místě, nebo přidejte složku.</string>
     <string name="library.empty.action">Zobrazit složky</string>
     <string name="library.filter">Filtr</string>
+    <string name="library.filter.group_by">Seskupit podle</string>
+    <string name="library.filter.group_by.author">Autor</string>
+    <string name="library.filter.group_by.series">Série</string>
     <string name="library.filter.hidden_books">Skryté knihy</string>
     <string name="library.filter.show">Zobrazit</string>
     <string name="library.folders.title">Složky s audioknihami</string>
@@ -299,6 +308,7 @@
         <item quantity="many">%d skrytých knih</item>
         <item quantity="other">%d skrytých knih</item>
     </plurals>
+    <string name="library.no_author">Bez autora</string>
     <string name="library.search.browse.title">Procházet</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d kniha</item>

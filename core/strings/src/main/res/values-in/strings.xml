@@ -223,6 +223,9 @@
     <string name="history.source.unplugged">Audio terputus</string>
     <string name="history.source.watch">Jam tangan</string>
     <string name="history.source.widget">Widget</string>
+    <plurals name="library.author.series_count">
+        <item quantity="other">%d seri</item>
+    </plurals>
     <string name="library.book.downloading">Mengunduh</string>
     <string name="library.book.hidden">Tersembunyi</string>
     <string name="library.book.hidden.message">%1$s disembunyikan</string>
@@ -236,6 +239,9 @@
     <string name="library.empty.message">Voice tidak dapat menemukan buku audio apa pun di folder Anda. Pastikan berkasnya masih ada, atau tambahkan folder.</string>
     <string name="library.empty.action">Tampilkan folder</string>
     <string name="library.filter">Filter</string>
+    <string name="library.filter.group_by">Kelompokkan menurut</string>
+    <string name="library.filter.group_by.author">Penulis</string>
+    <string name="library.filter.group_by.series">Seri</string>
     <string name="library.filter.hidden_books">Buku tersembunyi</string>
     <string name="library.filter.show">Tampilkan</string>
     <string name="library.folders.title">Folder buku audio</string>
@@ -254,6 +260,7 @@
     <plurals name="library.hidden_books">
         <item quantity="other">%d buku tersembunyi</item>
     </plurals>
+    <string name="library.no_author">Tanpa penulis</string>
     <string name="library.search.browse.title">Jelajahi</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="other">%d buku</item>

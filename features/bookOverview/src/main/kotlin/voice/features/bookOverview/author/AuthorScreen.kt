@@ -76,10 +76,12 @@ import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.CenteredContent
 import voice.core.ui.VoiceTheme
+import voice.core.ui.authorSharedBoundsModifier
 import voice.core.ui.bookText
 import voice.core.ui.icons.VoiceIcons
 import voice.core.ui.segmentedShape
 import voice.features.bookOverview.overview.SeriesStackViewState
+import voice.features.bookOverview.overview.authorKey
 import voice.features.bookOverview.views.BookOverviewPreviewParameterProvider
 import voice.features.bookOverview.views.ListBookRow
 import voice.features.bookOverview.views.ListSeriesRow
@@ -102,7 +104,7 @@ object AuthorProvider {
 }
 
 @Composable
-fun AuthorScreen(name: String) {
+fun AuthorScreen(name: String?) {
   val viewModel =
     retain(name) {
       rootGraphAs<AuthorViewModel.Factory.Provider>().authorViewModelFactory.create(name)
@@ -213,11 +215,17 @@ private fun AuthorScreen(
 @Composable
 private fun Header(viewState: AuthorViewState) {
   Row(verticalAlignment = Alignment.CenterVertically) {
-    Portrait(photo = viewState.info?.photo?.url, modifier = Modifier.size(112.dp))
-    Spacer(Modifier.width(20.dp))
+    if (viewState.name != null) {
+      Portrait(
+        photo = viewState.info?.photo?.url,
+        modifier =
+          Modifier.size(112.dp).authorSharedBoundsModifier(authorKey(viewState.name).orEmpty()),
+      )
+      Spacer(Modifier.width(20.dp))
+    }
     Column(Modifier.weight(1F)) {
       Text(
-        text = viewState.name,
+        text = viewState.name ?: stringResource(StringsR.string.library_no_author),
         style = MaterialTheme.typography.headlineMediumEmphasized.bookText(),
         maxLines = 3,
         overflow = TextOverflow.Ellipsis,

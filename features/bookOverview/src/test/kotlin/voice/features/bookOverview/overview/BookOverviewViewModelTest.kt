@@ -126,6 +126,7 @@ class BookOverviewViewModelTest {
         emptyLibraryTracker = emptyLibraryTracker,
         survey = survey(),
         showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+        libraryGroupingStore = LibraryGroupingStore(MemoryDataStore(LibraryGrouping.Series)),
         bookHider = BookHider(mockk()),
       )
 
@@ -207,6 +208,7 @@ class BookOverviewViewModelTest {
         emptyLibraryTracker = emptyLibraryTracker,
         survey = survey(),
         showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
+        libraryGroupingStore = LibraryGroupingStore(MemoryDataStore(LibraryGrouping.Series)),
         bookHider = BookHider(mockk()),
       )
 
@@ -225,6 +227,7 @@ class BookOverviewViewModelTest {
         assertEquals(expected = "Echoes of Tomorrow", actual = state.hero?.value?.name)
         assertEquals(expected = KioskModeDemoData.currentlyPlaying.id, actual = state.currentBookId)
         assertEquals(expected = false, actual = state.showFolderAccessBadge)
+        assertEquals(expected = false, actual = state.showFilterIcon)
       }
   }
 
@@ -403,6 +406,89 @@ class BookOverviewViewModelTest {
 
     verify {
       navigator.goTo(Destination.Series("Saga"))
+    }
+  }
+
+  @Test
+  fun `grouped by author, each author is one entry below current`() = runTest {
+    val started = book(author = "Lena Morgan", time = 1_000)
+    val notStarted = book(author = "Lena Morgan", time = 0)
+    val finished = book(author = "Lena Morgan", time = 20_000)
+    val noAuthor = book(author = null, time = 0)
+    val store = MemoryDataStore(LibraryGrouping.Series)
+    val viewModel =
+      viewModel(
+        books = listOf(started, notStarted, finished, noAuthor),
+        libraryGroupingStore = store,
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(
+          expected = listOf(notStarted.id.value, noAuthor.id.value).sorted(),
+          actual = awaitItem().keys(BookCategory.NOT_STARTED).sorted(),
+        )
+
+        viewModel.onGroupingChange(LibraryGrouping.Author)
+
+        val state = awaitItem()
+        assertEquals(expected = LibraryGrouping.Author, actual = state.grouping)
+        assertEquals(expected = LibraryGrouping.Author, actual = store.data.first())
+        assertEquals(
+          expected = listOf(started.id.value),
+          actual = state.keys(BookCategory.CURRENT),
+        )
+        assertEquals(
+          expected = listOf("author:NOT_STARTED:lenamorgan", "author:NOT_STARTED:"),
+          actual = state.keys(BookCategory.NOT_STARTED),
+        )
+        assertEquals(
+          expected = listOf("author:FINISHED:lenamorgan"),
+          actual = state.keys(BookCategory.FINISHED),
+        )
+      }
+  }
+
+  @Test
+  fun `grouped by author, the book on the continue listening card is in no author entry`() =
+    runTest {
+      val current = book(author = "Lena Morgan", time = 0)
+      val other = book(author = "Nora Whitfield", time = 0)
+      val viewModel =
+        viewModel(
+          books = listOf(current, other),
+          currentBookId = current.id,
+          libraryGroupingStore = MemoryDataStore(LibraryGrouping.Author),
+        )
+
+      backgroundScope
+        .launchMolecule(RecompositionMode.Immediate) {
+          viewModel.state()
+        }
+        .test {
+          assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+          assertEquals(
+            expected = listOf("author:NOT_STARTED:norawhitfield"),
+            actual = awaitItem().keys(BookCategory.NOT_STARTED),
+          )
+        }
+    }
+
+  @Test
+  fun `an author opens their screen`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel = viewModel(navigator = navigator)
+
+    viewModel.onAuthorClick("Lena Morgan")
+    viewModel.onAuthorClick(null)
+
+    verify {
+      navigator.goTo(Destination.Author("Lena Morgan"))
+      navigator.goTo(Destination.Author(null))
     }
   }
 
@@ -760,6 +846,7 @@ class BookOverviewViewModelTest {
     scanning: Flow<Boolean> = MutableStateFlow(false),
     survey: Survey = survey(),
     showHiddenBooksStore: DataStore<Boolean> = MemoryDataStore(false),
+    libraryGroupingStore: DataStore<LibraryGrouping> = MemoryDataStore(LibraryGrouping.Series),
     repo: BookRepository = mockk {
       every { flow() } returns MutableStateFlow(books)
     },
@@ -799,6 +886,7 @@ class BookOverviewViewModelTest {
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey,
       showHiddenBooksStore = ShowHiddenBooksStore(showHiddenBooksStore),
+      libraryGroupingStore = LibraryGroupingStore(libraryGroupingStore),
       bookHider = BookHider(repo),
     )
   }

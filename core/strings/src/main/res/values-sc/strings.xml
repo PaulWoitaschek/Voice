@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">Àudio disconnètidu</string>
     <string name="history.source.watch">Rellògiu</string>
     <string name="history.source.widget">Trastu</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d sèrie</item>
+        <item quantity="other">%d sèries</item>
+    </plurals>
     <string name="library.book.downloading">Iscarrighende</string>
     <string name="library.book.hidden">Cuadu</string>
     <string name="library.book.hidden.message">As cuadu %1$s</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">Voice non agatat perunu audiolibru in sas cartellas tuas. Controlla si sos documentos bi sunt galu o agiunghe una cartella.</string>
     <string name="library.empty.action">Mustra sas cartellas</string>
     <string name="library.filter">Filtra</string>
+    <string name="library.filter.group_by">Agrupa pro</string>
+    <string name="library.filter.group_by.author">Autore</string>
+    <string name="library.filter.group_by.series">Sèrie</string>
     <string name="library.filter.hidden_books">Libros cuados</string>
     <string name="library.filter.show">Mustra</string>
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
@@ -269,6 +276,7 @@
         <item quantity="one">%d libru cuadu</item>
         <item quantity="other">%d libros cuados</item>
     </plurals>
+    <string name="library.no_author">Chene autore</string>
     <string name="library.search.browse.title">Esplora</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d libru</item>

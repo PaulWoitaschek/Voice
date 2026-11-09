@@ -288,10 +288,24 @@ private fun SeriesBadge(
   hidden: Boolean,
   modifier: Modifier = Modifier,
 ) {
-  val finished = series.category == BookCategory.FINISHED
-  val counts = seriesCounts(series.bookCount, series.finishedCount)
-  val description =
-    if (hidden) "$counts, ${stringResource(StringsR.string.library_book_hidden)}" else counts
+  CountBadge(
+    count = series.bookCount,
+    finished = series.category == BookCategory.FINISHED,
+    hidden = hidden,
+    description = seriesCounts(series.bookCount, series.finishedCount).takeIf { describe },
+    modifier = modifier,
+  )
+}
+
+@Composable
+internal fun CountBadge(
+  count: Int,
+  finished: Boolean,
+  hidden: Boolean,
+  description: String?,
+  modifier: Modifier = Modifier,
+) {
+  val hiddenLabel = stringResource(StringsR.string.library_book_hidden)
   val colors = MaterialTheme.colorScheme
   Box(
     modifier =
@@ -308,7 +322,9 @@ private fun SeriesBadge(
           CircleShape,
         )
         .clearAndSetSemantics {
-          if (describe) contentDescription = description
+          if (description != null) {
+            contentDescription = if (hidden) "$description, $hiddenLabel" else description
+          }
         },
     contentAlignment = Alignment.Center,
   ) {
@@ -329,7 +345,7 @@ private fun SeriesBadge(
         )
       else ->
         Text(
-          text = NumberFormat.getIntegerInstance().format(series.bookCount),
+          text = NumberFormat.getIntegerInstance().format(count),
           style = MaterialTheme.typography.labelMedium,
           color = colors.onSecondaryContainer,
           modifier = Modifier.padding(horizontal = 6.dp),

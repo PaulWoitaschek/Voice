@@ -262,6 +262,12 @@
     <string name="history.source.unplugged">Аудіопристрій від’єднано</string>
     <string name="history.source.watch">Годинник</string>
     <string name="history.source.widget">Віджет</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d серія</item>
+        <item quantity="few">%d серії</item>
+        <item quantity="many">%d серій</item>
+        <item quantity="other">%d серій</item>
+    </plurals>
     <string name="library.book.downloading">Завантажується</string>
     <string name="library.book.hidden">Прихована</string>
     <string name="library.book.hidden.message">Книгу «%1$s» приховано</string>
@@ -275,6 +281,9 @@
     <string name="library.empty.message">Voice не знаходить аудіокниг у ваших папках. Перевірте, чи файли досі на місці, або додайте папку.</string>
     <string name="library.empty.action">Показати папки</string>
     <string name="library.filter">Фільтр</string>
+    <string name="library.filter.group_by">Групування</string>
+    <string name="library.filter.group_by.author">Автор</string>
+    <string name="library.filter.group_by.series">Серія</string>
     <string name="library.filter.hidden_books">Приховані книги</string>
     <string name="library.filter.show">Показувати</string>
     <string name="library.folders.title">Папки з аудіокнигами</string>
@@ -299,6 +308,7 @@
         <item quantity="many">%d прихованих книг</item>
         <item quantity="other">%d прихованих книг</item>
     </plurals>
+    <string name="library.no_author">Без автора</string>
     <string name="library.search.browse.title">Огляд</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d книга</item>

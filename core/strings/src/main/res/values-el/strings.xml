@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">Αποσύνδεση ήχου</string>
     <string name="history.source.watch">Ρολόι</string>
     <string name="history.source.widget">Γραφικό στοιχείο</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d σειρά</item>
+        <item quantity="other">%d σειρές</item>
+    </plurals>
     <string name="library.book.downloading">Λήψη σε εξέλιξη</string>
     <string name="library.book.hidden">Κρυφό</string>
     <string name="library.book.hidden.message">Το βιβλίο «%1$s» αποκρύφθηκε</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">Το Voice δεν βρίσκει ηχητικά βιβλία στους φακέλους σας. Ελέγξτε αν τα αρχεία βρίσκονται ακόμα εκεί ή προσθέστε έναν φάκελο.</string>
     <string name="library.empty.action">Εμφάνιση φακέλων</string>
     <string name="library.filter">Φίλτρο</string>
+    <string name="library.filter.group_by">Ομαδοποίηση κατά</string>
+    <string name="library.filter.group_by.author">Συγγραφέας</string>
+    <string name="library.filter.group_by.series">Σειρά</string>
     <string name="library.filter.hidden_books">Κρυφά βιβλία</string>
     <string name="library.filter.show">Εμφάνιση</string>
     <string name="library.folders.title">Φάκελοι ηχητικών βιβλίων</string>
@@ -269,6 +276,7 @@
         <item quantity="one">%d κρυφό βιβλίο</item>
         <item quantity="other">%d κρυφά βιβλία</item>
     </plurals>
+    <string name="library.no_author">Χωρίς συγγραφέα</string>
     <string name="library.search.browse.title">Περιήγηση</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d βιβλίο</item>

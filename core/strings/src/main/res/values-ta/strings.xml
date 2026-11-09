@@ -236,6 +236,10 @@
     <string name="history.source.unplugged">ஆடியோ துண்டிக்கப்பட்டது</string>
     <string name="history.source.watch">கைக்கடிகாரம்</string>
     <string name="history.source.widget">விட்ஜெட்</string>
+    <plurals name="library.author.series_count">
+        <item quantity="one">%d தொடர்</item>
+        <item quantity="other">%d தொடர்கள்</item>
+    </plurals>
     <string name="library.book.downloading">பதிவிறக்குகிறது</string>
     <string name="library.book.hidden">மறைக்கப்பட்டது</string>
     <string name="library.book.hidden.message">%1$s மறைக்கப்பட்டது</string>
@@ -249,6 +253,9 @@
     <string name="library.empty.message">உங்கள் கோப்புறைகளில் Voice-ஆல் எந்த ஆடியோபுக்கையும் கண்டறிய முடியவில்லை. கோப்புகள் இன்னும் அங்கே உள்ளனவா எனச் சரிபார்க்கவும், அல்லது ஒரு கோப்புறையைச் சேர்க்கவும்.</string>
     <string name="library.empty.action">கோப்புறைகளைக் காட்டு</string>
     <string name="library.filter">வடிகட்டு</string>
+    <string name="library.filter.group_by">இதன்படி குழுவாக்கு</string>
+    <string name="library.filter.group_by.author">ஆசிரியர்</string>
+    <string name="library.filter.group_by.series">தொடர்</string>
     <string name="library.filter.hidden_books">மறைக்கப்பட்ட புத்தகங்கள்</string>
     <string name="library.filter.show">காட்டு</string>
     <string name="library.folders.title">ஆடியோபுக் கோப்புறைகள்</string>
@@ -269,6 +276,7 @@
         <item quantity="one">%d மறைக்கப்பட்ட புத்தகம்</item>
         <item quantity="other">%d மறைக்கப்பட்ட புத்தகங்கள்</item>
     </plurals>
+    <string name="library.no_author">ஆசிரியர் இல்லை</string>
     <string name="library.search.browse.title">உலாவு</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d புத்தகம்</item>

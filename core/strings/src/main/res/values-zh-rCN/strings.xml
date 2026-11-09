@@ -223,6 +223,9 @@
     <string name="history.source.unplugged">音频设备已断开</string>
     <string name="history.source.watch">手表</string>
     <string name="history.source.widget">小部件</string>
+    <plurals name="library.author.series_count">
+        <item quantity="other">%d 个系列</item>
+    </plurals>
     <string name="library.book.downloading">正在下载</string>
     <string name="library.book.hidden">已隐藏</string>
     <string name="library.book.hidden.message">《%1$s》已隐藏</string>
@@ -236,6 +239,9 @@
     <string name="library.empty.message">Voice 在您的文件夹中找不到任何有声书。请检查文件是否还在原处，或添加文件夹。</string>
     <string name="library.empty.action">查看文件夹</string>
     <string name="library.filter">筛选</string>
+    <string name="library.filter.group_by">分组方式</string>
+    <string name="library.filter.group_by.author">作者</string>
+    <string name="library.filter.group_by.series">系列</string>
     <string name="library.filter.hidden_books">已隐藏的书</string>
     <string name="library.filter.show">显示</string>
     <string name="library.folders.title">有声书文件夹</string>
@@ -254,6 +260,7 @@
     <plurals name="library.hidden_books">
         <item quantity="other">已隐藏 %d 本书</item>
     </plurals>
+    <string name="library.no_author">无作者</string>
     <string name="library.search.browse.title">浏览</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="other">%d 本书</item>

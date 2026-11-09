@@ -288,6 +288,14 @@
     <string name="history.source.unplugged">انفصال الصوت</string>
     <string name="history.source.watch">الساعة</string>
     <string name="history.source.widget">الأداة المصغّرة</string>
+    <plurals name="library.author.series_count">
+        <item quantity="zero">%d سلسلة</item>
+        <item quantity="one">%d سلسلة</item>
+        <item quantity="two">%d سلسلتان</item>
+        <item quantity="few">%d سلاسل</item>
+        <item quantity="many">%d سلسلة</item>
+        <item quantity="other">%d سلسلة</item>
+    </plurals>
     <string name="library.book.downloading">جارٍ التنزيل</string>
     <string name="library.book.hidden">مخفي</string>
     <string name="library.book.hidden.message">تم إخفاء %1$s</string>
@@ -301,6 +309,9 @@
     <string name="library.empty.message">يتعذّر على Voice العثور على أي كتب صوتية في مجلداتك. يمكنك التحقّق من أنّ الملفات ما زالت في مكانها، أو إضافة مجلد.</string>
     <string name="library.empty.action">عرض المجلدات</string>
     <string name="library.filter">تصفية</string>
+    <string name="library.filter.group_by">تجميع حسب</string>
+    <string name="library.filter.group_by.author">المؤلف</string>
+    <string name="library.filter.group_by.series">السلسلة</string>
     <string name="library.filter.hidden_books">الكتب المخفية</string>
     <string name="library.filter.show">عرض</string>
     <string name="library.folders.title">مجلدات الكتب الصوتية</string>
@@ -329,6 +340,7 @@
         <item quantity="many">%d كتابًا مخفيًا</item>
         <item quantity="other">%d كتاب مخفي</item>
     </plurals>
+    <string name="library.no_author">بلا مؤلف</string>
     <string name="library.search.browse.title">تصفح</string>
     <plurals name="library.search.browse.book_count">
         <item quantity="zero">%d كتاب</item>
