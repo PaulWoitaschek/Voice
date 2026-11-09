@@ -298,8 +298,9 @@ class BookOverviewViewModel(
           (source as? LibrarySource.Folder)?.uri?.toUri()
         }
         val sourceOf = books.associate { it.id to it.source(folders) }
-        val bookCounts = sourceOf.values.groupingBy { it }.eachCount()
-        val hidden = storedHidden.hiddenOf(sources.map { (source) -> source })
+        // a book whose source has no chip, like one from a removed library, always shows
+        val hidden =
+          sources.map { (source) -> source }.filterTo(mutableSetOf()) { it in storedHidden }
         SourcedLibrary(
           books = books,
           shownBooks = books.filter { sourceOf[it.id] !in hidden },
@@ -308,7 +309,6 @@ class BookOverviewViewModel(
               LibrarySourceViewState(
                 source = source,
                 name = name,
-                bookCount = bookCounts[source] ?: 0,
                 shown = source !in hidden,
               )
             },
@@ -393,18 +393,8 @@ class BookOverviewViewModel(
     source: LibrarySource,
     show: Boolean,
   ) {
-    scope.launch(dispatcherProvider.io) {
-      val sources = sources().first().map { (source) -> source }
-      hiddenSourcesStore.updateData { stored ->
-        if (show) {
-          stored - source
-        } else {
-          // when the library ignores the stored set, all switches are on, so this one is the only
-          // hidden source
-          val shown = sources - stored.hiddenOf(sources)
-          stored - shown.toSet() + source
-        }
-      }
+    scope.launch {
+      hiddenSourcesStore.updateData { hidden -> if (show) hidden - source else hidden + source }
     }
   }
 
@@ -494,13 +484,6 @@ private fun DemoAudiobook.toItemViewState() =
     id = id,
     remainingTime = remaining,
   )
-
-// after a source is removed, the hidden ones can be all that's left, and books of a source
-// without a switch always show
-private fun Set<LibrarySource>.hiddenOf(sources: List<LibrarySource>): Set<LibrarySource> {
-  val hidden = sources.filterTo(mutableSetOf()) { it in this }
-  return if (hidden.size < sources.size) hidden else emptySet()
-}
 
 private class SourcedLibrary(
   val books: List<Book>,
