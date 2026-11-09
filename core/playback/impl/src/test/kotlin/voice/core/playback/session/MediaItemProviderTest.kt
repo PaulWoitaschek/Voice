@@ -35,7 +35,6 @@ class MediaItemProviderTest {
           coEvery { this@mockk.get(any()) } answers { books.find { it.id == firstArg() } }
         },
       application = ApplicationProvider.getApplicationContext(),
-      chapterRepo = mockk(),
       imageFileProvider = mockk(),
       currentBookStoreId = mockk(),
     )
@@ -137,6 +136,34 @@ class MediaItemProviderTest {
     assertEquals(expected = marks.map { it.mediaId }, actual = items.mediaItems.map { it.mediaId })
     assertEquals(expected = 1, actual = items.startIndex)
     assertEquals(expected = 0, actual = items.startPositionMs)
+  }
+
+  @Test
+  fun `chapters show the same names as in the app`() {
+    val chapters =
+      listOf("01 - The Signal.mp3", "002.mp3").map {
+        Chapter(
+          id = ChapterId(it),
+          name = it,
+          duration = 60_000,
+          fileLastModified = Instant.EPOCH,
+          markData = emptyList(),
+          fileSize = 0,
+        )
+      }
+
+    val titles = provider.playbackItems(book(chapters)).map { it.mediaMetadata.title.toString() }
+
+    assertEquals(expected = listOf("The Signal", "Chapter 2"), actual = titles)
+  }
+
+  @Test
+  fun `the chapter of a book with one chapter shows the book name`() {
+    val book = libraryBook("Echoes of Tomorrow", position = 0)
+
+    val title = provider.playbackItems(book).single().mediaMetadata.title.toString()
+
+    assertEquals(expected = "Echoes of Tomorrow", actual = title)
   }
 
   @Test

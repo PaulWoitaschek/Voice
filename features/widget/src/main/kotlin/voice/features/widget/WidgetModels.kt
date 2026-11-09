@@ -12,6 +12,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.displayName
 import voice.core.sleeptimer.SleepTimerState
 import voice.core.ui.ThemeColorScheme
 
@@ -124,7 +125,7 @@ internal fun nowPlayingBook(
   return NowPlayingBook(
     title = book.name,
     cover = book.coverUrl,
-    chapterName = book.currentMark.name?.takeIf { chapterCount > 1 && it.isNotBlank() },
+    chapterName = book.currentMark.displayName(chapterNumber, chapterCount),
     chapterNumber = chapterNumber.coerceAtLeast(1),
     chapterCount = chapterCount,
     progress = progress(position, book.duration),

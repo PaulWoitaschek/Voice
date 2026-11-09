@@ -20,9 +20,9 @@ import voice.core.data.BookCategory
 import voice.core.data.BookComparator
 import voice.core.data.BookId
 import voice.core.data.category
+import voice.core.data.displayName
 import voice.core.data.durationMs
 import voice.core.data.repo.BookRepository
-import voice.core.data.repo.ChapterRepo
 import voice.core.data.store.CurrentBookStore
 import voice.core.data.toUri
 import voice.core.strings.R as StringsR
@@ -31,7 +31,6 @@ import voice.core.strings.R as StringsR
 class MediaItemProvider(
   private val bookRepository: BookRepository,
   private val application: Application,
-  private val chapterRepo: ChapterRepo,
   private val imageFileProvider: ImageFileProvider,
   private val currentBookStoreId: CurrentBookStore,
 ) {
@@ -69,19 +68,12 @@ class MediaItemProvider(
       is MediaId.Chapter -> null
       is MediaId.ChapterMark -> {
         val book = bookRepository.get(mediaId.bookId) ?: return null
-        val chapter = chapterRepo.get(mediaId.chapterId) ?: return null
-        val mark = chapter.chapterMarks.getOrNull(mediaId.markIndex) ?: return null
-        mediaItem(
-          playbackItem =
-            PlaybackItem(
-              index = 0,
-              bookId = mediaId.bookId,
-              chapter = chapter,
-              markIndex = mediaId.markIndex,
-              mark = mark,
-            ),
-          book = book,
-        )
+        val playbackItems = book.playbackItems()
+        val playbackItem =
+          playbackItems.firstOrNull {
+            it.chapter.id == mediaId.chapterId && it.markIndex == mediaId.markIndex
+          } ?: return null
+        mediaItem(playbackItem, book, playbackItems.size)
       }
       MediaId.Recent -> recent()
       is MediaId.Category -> mediaItem(mediaId.category)
@@ -131,8 +123,9 @@ class MediaItemProvider(
   }
 
   internal fun playbackItems(book: Book): List<MediaItem> {
-    return book.playbackItems().map { playbackItem ->
-      mediaItem(playbackItem, book)
+    val playbackItems = book.playbackItems()
+    return playbackItems.map { playbackItem ->
+      mediaItem(playbackItem, book, playbackItems.size)
     }
   }
 
@@ -201,9 +194,18 @@ class MediaItemProvider(
   private fun mediaItem(
     playbackItem: PlaybackItem,
     book: Book,
-  ) =
-    MediaItem(
-      title = playbackItem.mark.name ?: playbackItem.chapter.name ?: playbackItem.chapter.id.value,
+    chapterCount: Int,
+  ): MediaItem {
+    val number = playbackItem.index + 1
+    val title =
+      playbackItem.mark.displayName(number, chapterCount)
+        ?: if (chapterCount > 1) {
+          application.getString(StringsR.string.playback_chapter_unnamed, number)
+        } else {
+          book.name
+        }
+    return MediaItem(
+      title = title,
       mediaId = playbackItem.mediaId,
       browsable = false,
       isPlayable = true,
@@ -213,6 +215,7 @@ class MediaItemProvider(
       durationMs = playbackItem.mark.durationMs,
       mediaType = MediaType.AudioBookChapter,
     )
+  }
 
   private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
 }

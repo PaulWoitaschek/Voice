@@ -337,7 +337,7 @@ class LibrarySessionCallbackTest {
   }
 
   private fun playbackItems(book: Book) =
-    MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk()).playbackItems(book)
+    MediaItemProvider(mockk(), mockk(), mockk(), mockk()).playbackItems(book)
 
   // Unlike TestScope.backgroundScope, it doesn't fail the test when a future fails.
   private fun serviceLikeScope() = CoroutineScope(SupervisorJob() + UnconfinedTestDispatcher())
