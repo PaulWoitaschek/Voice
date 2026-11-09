@@ -6,6 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
@@ -146,6 +147,46 @@ class AudiobookshelfLoginTest {
 
     assertFalse(serverLogin.renewLogin(login.login))
     assertEquals(stored, accountStore.data.first())
+  }
+
+  @Test
+  fun `signing in again keeps the libraries and their names`() = runTest {
+    server.enqueue(
+      MockResponse(
+        code = 200,
+        body =
+          """{"app":"audiobookshelf","serverVersion":"2.37.1","isInit":true,"authMethods":["local"]}""",
+      ),
+    )
+    server.enqueue(
+      MockResponse(
+        code = 200,
+        body = """{"user":{"id":"1","username":"paul","accessToken":"a","refreshToken":"r"}}""",
+      ),
+    )
+    val stored =
+      Account(
+        serverUrl = server.url("/").toString(),
+        userId = "1",
+        username = "paul",
+        accessToken = "old",
+        refreshToken = "old",
+        libraryIds = listOf("library"),
+        libraryNames = mapOf("library" to "Kids"),
+        serverVersion = "2.37.1",
+        needsLogin = true,
+      )
+    val accountStore = MemoryDataStore<Account?>(stored)
+    val serverLogin = serverLogin(accountStore)
+
+    val found = assertIs<FindServerResult.Found>(serverLogin.findServer(server.url("/").toString()))
+    val login = assertIs<LoginResult.Success>(serverLogin.login(found.server, "paul", "voice"))
+
+    assertTrue(serverLogin.renewLogin(login.login))
+    assertEquals(
+      expected = stored.copy(accessToken = "a", refreshToken = "r", needsLogin = false),
+      actual = accountStore.data.first(),
+    )
   }
 
   @Test

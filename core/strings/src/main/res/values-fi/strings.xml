@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">Tekijä</string>
     <string name="library.filter.group_by.series">Sarja</string>
     <string name="library.filter.hidden_books">Piilotetut kirjat</string>
+    <string name="library.filter.not_downloaded">Lataamattomat</string>
     <string name="library.filter.show">Näytä</string>
     <string name="library.folders.title">Äänikirjakansiot</string>
     <string name="library.folders.moved.dialog.title">Äänikirjakansiot siirretty</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">Kiitos!</string>
     <string name="series.continue">Jatka</string>
     <string name="series.continue_book">Jatka kirjaa %s</string>
+    <string name="series.mark_completed">Merkitse kuunnelluksi</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Menetät kuuntelukohtasi %d kirjassa.</item>
+        <item quantity="other">Menetät kuuntelukohtasi %d kirjassa.</item>
+    </plurals>
+    <string name="series.mark_not_started">Merkitse aloittamattomaksi</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Menetät edistymisesi %d kirjassa.</item>
+        <item quantity="other">Menetät edistymisesi %d kirjassa.</item>
+    </plurals>
     <string name="series.start">Aloita</string>
     <string name="series.start_book">Aloita kirja %s</string>
     <string name="settings.about.app_version.title">Sovelluksen versio</string>

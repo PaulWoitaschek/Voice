@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">Autor</string>
     <string name="library.filter.group_by.series">Reihe</string>
     <string name="library.filter.hidden_books">Ausgeblendete Bücher</string>
+    <string name="library.filter.not_downloaded">Nicht heruntergeladen</string>
     <string name="library.filter.show">Anzeigen</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
     <string name="library.folders.moved.dialog.title">Hörbuch-Ordner verschoben</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">Danke!</string>
     <string name="series.continue">Weiterhören</string>
     <string name="series.continue_book">Buch %s weiterhören</string>
+    <string name="series.mark_completed">Als „Abgeschlossen“ markieren</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Du verlierst Deine Stelle in %d Buch.</item>
+        <item quantity="other">Du verlierst Deine Stelle in %d Büchern.</item>
+    </plurals>
+    <string name="series.mark_not_started">Als „Neu“ markieren</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Du verlierst Deinen Fortschritt in %d Buch.</item>
+        <item quantity="other">Du verlierst Deinen Fortschritt in %d Büchern.</item>
+    </plurals>
     <string name="series.start">Anhören</string>
     <string name="series.start_book">Buch %s anhören</string>
     <string name="settings.about.app_version.title">App-Version</string>

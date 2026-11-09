@@ -243,6 +243,7 @@
     <string name="library.filter.group_by.author">Penulis</string>
     <string name="library.filter.group_by.series">Seri</string>
     <string name="library.filter.hidden_books">Buku tersembunyi</string>
+    <string name="library.filter.not_downloaded">Belum diunduh</string>
     <string name="library.filter.show">Tampilkan</string>
     <string name="library.folders.title">Folder buku audio</string>
     <string name="library.folders.moved.dialog.title">Folder buku audio dipindahkan</string>
@@ -357,6 +358,14 @@
     <string name="review.prompt.thanks.title">Terima kasih!</string>
     <string name="series.continue">Lanjutkan</string>
     <string name="series.continue_book">Lanjutkan buku %s</string>
+    <string name="series.mark_completed">Tandai selesai</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="other">Anda akan kehilangan posisi terakhir di %d buku.</item>
+    </plurals>
+    <string name="series.mark_not_started">Tandai belum dimulai</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="other">Anda akan kehilangan progres di %d buku.</item>
+    </plurals>
     <string name="series.start">Mulai</string>
     <string name="series.start_book">Mulai buku %s</string>
     <string name="settings.about.app_version.title">Versi aplikasi</string>

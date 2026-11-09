@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">Autore</string>
     <string name="library.filter.group_by.series">Sèrie</string>
     <string name="library.filter.hidden_books">Libros cuados</string>
+    <string name="library.filter.not_downloaded">No iscarrigados</string>
     <string name="library.filter.show">Mustra</string>
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
     <string name="library.folders.moved.dialog.title">Cartellas de audiolibros tramudadas</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">Gràtzias!</string>
     <string name="series.continue">Sighi</string>
     <string name="series.continue_book">Sighi su libru %s</string>
+    <string name="series.mark_completed">Marca comente acabbada</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">As a pèrdere in ue fias in %d libru.</item>
+        <item quantity="other">As a pèrdere in ue fias in %d libros.</item>
+    </plurals>
+    <string name="series.mark_not_started">Marca comente galu no incumintzada</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">As a pèrdere su progressu tuo in %d libru.</item>
+        <item quantity="other">As a pèrdere su progressu tuo in %d libros.</item>
+    </plurals>
     <string name="series.start">Incumintza</string>
     <string name="series.start_book">Incumintza su libru %s</string>
     <string name="settings.about.app_version.title">Versione de s\'aplicatzione</string>

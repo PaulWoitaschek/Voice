@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">Συγγραφέας</string>
     <string name="library.filter.group_by.series">Σειρά</string>
     <string name="library.filter.hidden_books">Κρυφά βιβλία</string>
+    <string name="library.filter.not_downloaded">Χωρίς λήψη</string>
     <string name="library.filter.show">Εμφάνιση</string>
     <string name="library.folders.title">Φάκελοι ηχητικών βιβλίων</string>
     <string name="library.folders.moved.dialog.title">Οι φάκελοι ηχητικών βιβλίων μετακινήθηκαν</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">Ευχαριστούμε!</string>
     <string name="series.continue">Συνέχεια</string>
     <string name="series.continue_book">Συνέχεια βιβλίου %s</string>
+    <string name="series.mark_completed">Επισήμανση ως ολοκληρωμένα</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Θα χάσετε το σημείο σας σε %d βιβλίο.</item>
+        <item quantity="other">Θα χάσετε το σημείο σας σε %d βιβλία.</item>
+    </plurals>
+    <string name="series.mark_not_started">Επισήμανση ως μη διαβασμένα</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Θα χάσετε την πρόοδό σας σε %d βιβλίο.</item>
+        <item quantity="other">Θα χάσετε την πρόοδό σας σε %d βιβλία.</item>
+    </plurals>
     <string name="series.start">Έναρξη</string>
     <string name="series.start_book">Έναρξη βιβλίου %s</string>
     <string name="settings.about.app_version.title">Έκδοση εφαρμογής</string>

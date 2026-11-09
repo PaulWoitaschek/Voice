@@ -18,11 +18,14 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -31,8 +34,11 @@ import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.data.category
 import voice.core.data.folders.AudiobookFolders
+import voice.core.data.folders.FolderType
+import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
+import voice.core.documentfile.nameWithoutExtension
 import voice.core.kioskmode.DemoAudiobook
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
@@ -71,7 +77,7 @@ class BookOverviewViewModel(
   private val experimentalPlaybackPersistenceFeatureFlag:
     ExperimentalPlaybackPersistenceFeatureFlag,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
-  dispatcherProvider: DispatcherProvider,
+  private val dispatcherProvider: DispatcherProvider,
   private val serverLibrary: ServerLibrary,
   private val serverDownloads: ServerDownloads,
   private val audiobookFolders: AudiobookFolders,
@@ -79,6 +85,8 @@ class BookOverviewViewModel(
   private val survey: Survey,
   private val showHiddenBooksStore: ShowHiddenBooksStore,
   private val libraryGroupingStore: LibraryGroupingStore,
+  private val showNotDownloadedBooksStore: ShowNotDownloadedBooksStore,
+  private val hiddenSourcesStore: HiddenSourcesStore,
   private val bookHider: BookHider,
 ) {
 
@@ -110,7 +118,7 @@ class BookOverviewViewModel(
       .value
     // Everything shown on the first frame stays loading until known, so the library never shows a
     // half loaded state (e.g. no hero card, or top bar icons that disappear again).
-    val allBooks = remember { repo.flow() }.collectAsState(initial = null).value
+    val library = remember { library() }.collectAsState(initial = null).value
     val currentBook = remember {
       currentBookStoreDataStore.data.map(::CurrentBook)
     }
@@ -127,7 +135,7 @@ class BookOverviewViewModel(
     val downloadStates = remember {
       serverDownloads.states
     }
-      .collectAsState(initial = emptyMap())
+      .collectAsState(initial = null)
       .value
     val folderPickerMovedDialogShown = remember {
       folderPickerMovedDialogShownStore.data
@@ -150,29 +158,54 @@ class BookOverviewViewModel(
     }
       .collectAsState(initial = null)
       .value
+    val showNotDownloadedBooks = remember {
+      showNotDownloadedBooksStore.data
+    }
+      .collectAsState(initial = null)
+      .value
     val grouping = remember { libraryGroupingStore.data }.collectAsState(initial = null).value
     if (
-      allBooks == null ||
+      library == null ||
         currentBook == null ||
         folderPickerMovedDialogShown == null ||
         gridMode == null ||
         hasFoldersWithoutAccess == null ||
         hasSurvey == null ||
         showHiddenBooks == null ||
-        grouping == null
+        showNotDownloadedBooks == null ||
+        grouping == null ||
+        // server books would pop in and out of the library while their downloads load
+        (downloadStates == null && library.books.any { it.id.isRemote })
     ) {
       return BookOverviewViewState.Loading
     }
-    val hiddenBookCount = remember(allBooks) { allBooks.count { it.custom.hidden } }
+    // the current book stays, so the library keeps its controls while it plays
+    fun Book.notDownloaded() =
+      id.isRemote &&
+        id != currentBook.id &&
+        downloadStates?.get(id) !is BookDownloadState.Downloaded
+    fun Book.passesHiddenFilter() = showHiddenBooks || !custom.hidden
+    fun Book.passesNotDownloadedFilter() = showNotDownloadedBooks || !notDownloaded()
+    // each count is what its switch changes, with the other switch as it is
+    val hiddenBookCount =
+      library.shownBooks.count { it.custom.hidden && it.passesNotDownloadedFilter() }
+    val notDownloadedBookCount =
+      library.shownBooks.count { it.notDownloaded() && it.passesHiddenFilter() }
     val books =
-      remember(allBooks, showHiddenBooks) {
-        if (showHiddenBooks) allBooks else allBooks.filterNot { it.custom.hidden }
+      remember(
+        library,
+        downloadStates,
+        currentBook,
+        showHiddenBooks,
+        showNotDownloadedBooks,
+      ) {
+        library.shownBooks.filter { it.passesHiddenFilter() && it.passesNotDownloadedFilter() }
       }
     // a deleted book can stay the current one
     val currentBookId = currentBook.id?.takeIf { id -> books.any { it.id == id } }
 
     // with every book hidden, the folders still have books, so there's nothing to add
-    val showEmptyLibrary = !hasStoragePermissionBug && !scannerActive && allBooks.isEmpty()
+    val showEmptyLibrary = !hasStoragePermissionBug && !scannerActive && library.books.isEmpty()
     LaunchedEffect(showEmptyLibrary) {
       if (showEmptyLibrary) emptyLibraryTracker.track()
     }
@@ -206,7 +239,7 @@ class BookOverviewViewModel(
         currentBookId = currentBookId,
         livePlaybackState = { livePlaybackState.value },
         unavailable = id in unavailableBooks,
-        download = downloadStates[id].badge(),
+        download = downloadStates?.get(id).badge(),
       )
 
     val entries =
@@ -246,8 +279,8 @@ class BookOverviewViewModel(
           }
           .takeIf { currentBookId != null },
       showEmptyLibrary = showEmptyLibrary,
-      showSearchIcon = allBooks.isNotEmpty(),
-      showFilterIcon = allBooks.isNotEmpty(),
+      showSearchIcon = library.books.isNotEmpty(),
+      showFilterIcon = library.books.isNotEmpty(),
       isLoading = scannerActive,
       showStoragePermissionBugCard = hasStoragePermissionBug,
       // adding books comes first
@@ -260,8 +293,49 @@ class BookOverviewViewModel(
       dialog = dialog,
       hiddenBookCount = hiddenBookCount,
       showHiddenBooks = showHiddenBooks,
+      notDownloadedBookCount = notDownloadedBookCount,
+      showNotDownloadedBooks = showNotDownloadedBooks,
+      sources = library.sources,
       grouping = grouping,
     )
+  }
+
+  private fun library(): Flow<SourcedLibrary> {
+    return combine(repo.flow(), sources(), hiddenSourcesStore.data) { books, sources, storedHidden
+        ->
+        if (sources.size < 2) return@combine SourcedLibrary(books, books, emptyList())
+        val folders = sources.mapNotNull { (source) ->
+          (source as? LibrarySource.Folder)?.uri?.toUri()
+        }
+        val sourceOf = books.associate { it.id to it.source(folders) }
+        val bookCounts = sourceOf.values.groupingBy { it }.eachCount()
+        val hidden = storedHidden.hiddenOf(sources.map { (source) -> source })
+        SourcedLibrary(
+          books = books,
+          shownBooks = books.filter { sourceOf[it.id] !in hidden },
+          sources =
+            sources.map { (source, name) ->
+              LibrarySourceViewState(
+                source = source,
+                name = name,
+                bookCount = bookCounts[source] ?: 0,
+                shown = source !in hidden,
+              )
+            },
+        )
+      }
+      .flowOn(dispatcherProvider.io)
+  }
+
+  private fun sources(): Flow<List<Pair<LibrarySource, String>>> {
+    return combine(audiobookFolders.all(), serverLibrary.libraries) { folders, libraries ->
+      // a book that is a folder or a file of its own can be hidden on its own
+      val sourceFolders = folders[FolderType.Root].orEmpty() + folders[FolderType.Author].orEmpty()
+      sourceFolders
+        .map { LibrarySource.Folder(it.uri.toString()) to it.documentFile.nameWithoutExtension() }
+        .sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.second }) +
+        libraries.map { LibrarySource.ServerLibrary(it.id) to it.name }
+    }
   }
 
   private fun kioskModeState(): BookOverviewViewState {
@@ -326,6 +400,31 @@ class BookOverviewViewModel(
   fun onShowHiddenBooksChange(show: Boolean) {
     scope.launch {
       showHiddenBooksStore.updateData { show }
+    }
+  }
+
+  fun onShowNotDownloadedBooksChange(show: Boolean) {
+    scope.launch {
+      showNotDownloadedBooksStore.updateData { show }
+    }
+  }
+
+  fun onSourceChange(
+    source: LibrarySource,
+    show: Boolean,
+  ) {
+    scope.launch(dispatcherProvider.io) {
+      val sources = sources().first().map { (source) -> source }
+      hiddenSourcesStore.updateData { stored ->
+        if (show) {
+          stored - source
+        } else {
+          // when the library ignores the stored set, all switches are on, so this one is the only
+          // hidden source
+          val shown = sources - stored.hiddenOf(sources)
+          stored - shown.toSet() + source
+        }
+      }
     }
   }
 
@@ -415,6 +514,19 @@ private fun DemoAudiobook.toItemViewState() =
     id = id,
     remainingTime = remaining,
   )
+
+// after a source is removed, the hidden ones can be all that's left, and books of a source
+// without a switch always show
+private fun Set<LibrarySource>.hiddenOf(sources: List<LibrarySource>): Set<LibrarySource> {
+  val hidden = sources.filterTo(mutableSetOf()) { it in this }
+  return if (hidden.size < sources.size) hidden else emptySet()
+}
+
+private class SourcedLibrary(
+  val books: List<Book>,
+  val shownBooks: List<Book>,
+  val sources: List<LibrarySourceViewState>,
+)
 
 /** Distinguishes "no current book" from "not loaded yet". */
 internal data class CurrentBook(val id: BookId?)

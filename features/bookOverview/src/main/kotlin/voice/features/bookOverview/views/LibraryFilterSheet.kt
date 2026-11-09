@@ -29,9 +29,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -44,17 +46,23 @@ import androidx.compose.ui.unit.dp
 import voice.core.strings.R as StringsR
 import voice.core.ui.VoiceTheme
 import voice.core.ui.icons.VoiceIcons
+import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.overview.LibraryGrouping
+import voice.features.bookOverview.overview.LibrarySource
+import voice.features.bookOverview.overview.LibrarySourceViewState
 
 @Composable
 internal fun LibraryFilterSheet(
-  grouping: LibraryGrouping,
+  viewState: BookOverviewViewState,
   onGroupingChange: (LibraryGrouping) -> Unit,
-  hiddenBookCount: Int,
-  showHiddenBooks: Boolean,
   onShowHiddenBooksChange: (Boolean) -> Unit,
+  onShowNotDownloadedBooksChange: (Boolean) -> Unit,
+  onSourceChange: (LibrarySource, Boolean) -> Unit,
   onDismiss: () -> Unit,
 ) {
+  // the rows stay while the sheet is open, so a switch doesn't vanish under the finger
+  val showHiddenBooksSwitch = remember { viewState.showHiddenBooksSwitch }
+  val showNotDownloadedBooksSwitch = remember { viewState.showNotDownloadedBooksSwitch }
   ModalBottomSheet(
     onDismissRequest = onDismiss,
     sheetState =
@@ -64,22 +72,26 @@ internal fun LibraryFilterSheet(
       ),
   ) {
     LibraryFilterContent(
-      grouping = grouping,
+      viewState = viewState,
       onGroupingChange = onGroupingChange,
-      hiddenBookCount = hiddenBookCount,
-      showHiddenBooks = showHiddenBooks,
+      showHiddenBooksSwitch = showHiddenBooksSwitch,
+      showNotDownloadedBooksSwitch = showNotDownloadedBooksSwitch,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
+      onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
+      onSourceChange = onSourceChange,
     )
   }
 }
 
 @Composable
 private fun LibraryFilterContent(
-  grouping: LibraryGrouping,
+  viewState: BookOverviewViewState,
   onGroupingChange: (LibraryGrouping) -> Unit,
-  hiddenBookCount: Int,
-  showHiddenBooks: Boolean,
+  showHiddenBooksSwitch: Boolean,
+  showNotDownloadedBooksSwitch: Boolean,
   onShowHiddenBooksChange: (Boolean) -> Unit,
+  onShowNotDownloadedBooksChange: (Boolean) -> Unit,
+  onSourceChange: (LibrarySource, Boolean) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Column(
@@ -93,7 +105,7 @@ private fun LibraryFilterContent(
     ) {
       LibraryGrouping.entries.forEachIndexed { index, option ->
         ToggleButton(
-          checked = grouping == option,
+          checked = viewState.grouping == option,
           onCheckedChange = { onGroupingChange(option) },
           modifier = Modifier.weight(1F).semantics { role = Role.RadioButton },
           shapes =
@@ -117,11 +129,44 @@ private fun LibraryFilterContent(
         }
       }
     }
-    if (hiddenBookCount > 0 || showHiddenBooks) {
+    if (showHiddenBooksSwitch || showNotDownloadedBooksSwitch || viewState.sources.isNotEmpty()) {
       Spacer(Modifier.height(24.dp))
       SectionTitle(StringsR.string.library_filter_show)
       Spacer(Modifier.height(8.dp))
-      HiddenBooksRow(hiddenBookCount, showHiddenBooks, onShowHiddenBooksChange)
+    }
+    if (showHiddenBooksSwitch) {
+      FilterSwitch(
+        icon = VoiceIcons.VisibilityOff,
+        title = stringResource(StringsR.string.library_filter_hidden_books),
+        bookCount = viewState.hiddenBookCount,
+        checked = viewState.showHiddenBooks,
+        onCheckedChange = onShowHiddenBooksChange,
+      )
+    }
+    if (showNotDownloadedBooksSwitch) {
+      FilterSwitch(
+        icon = VoiceIcons.Cloud,
+        title = stringResource(StringsR.string.library_filter_not_downloaded),
+        bookCount = viewState.notDownloadedBookCount,
+        checked = viewState.showNotDownloadedBooks,
+        onCheckedChange = onShowNotDownloadedBooksChange,
+      )
+    }
+    val shownSources = viewState.sources.count { it.shown }
+    viewState.sources.forEach { source ->
+      FilterSwitch(
+        icon =
+          when (source.source) {
+            is LibrarySource.Folder -> VoiceIcons.Folder
+            is LibrarySource.ServerLibrary -> VoiceIcons.Dns
+          },
+        title = source.name,
+        bookCount = source.bookCount,
+        checked = source.shown,
+        // a library without any source shown would look empty
+        enabled = !source.shown || shownSources > 1,
+        onCheckedChange = { onSourceChange(source.source, it) },
+      )
     }
   }
 }
@@ -136,44 +181,48 @@ private fun SectionTitle(@StringRes text: Int) {
 }
 
 @Composable
-private fun HiddenBooksRow(
-  hiddenBookCount: Int,
-  showHiddenBooks: Boolean,
-  onShowHiddenBooksChange: (Boolean) -> Unit,
+private fun FilterSwitch(
+  icon: ImageVector,
+  title: String,
+  bookCount: Int,
+  checked: Boolean,
+  onCheckedChange: (Boolean) -> Unit,
+  enabled: Boolean = true,
 ) {
   Row(
     modifier =
       Modifier.fillMaxWidth()
         .clip(RoundedCornerShape(24.dp))
         .toggleable(
-          value = showHiddenBooks,
+          value = checked,
+          enabled = enabled,
           role = Role.Switch,
-          onValueChange = onShowHiddenBooksChange,
+          onValueChange = onCheckedChange,
         )
         .heightIn(min = 64.dp)
         .padding(horizontal = 12.dp),
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    Icon(VoiceIcons.VisibilityOff, contentDescription = null)
+    Icon(icon, contentDescription = null)
     Spacer(Modifier.width(16.dp))
     Column(Modifier.weight(1F)) {
       Text(
-        text = stringResource(StringsR.string.library_filter_hidden_books),
+        text = title,
         style = MaterialTheme.typography.bodyLarge,
       )
       Text(
         text =
           pluralStringResource(
             StringsR.plurals.library_search_browse_book_count,
-            hiddenBookCount,
-            hiddenBookCount,
+            bookCount,
+            bookCount,
           ),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
       )
     }
     Spacer(Modifier.width(12.dp))
-    Switch(checked = showHiddenBooks, onCheckedChange = null)
+    Switch(checked = checked, onCheckedChange = null, enabled = enabled)
   }
 }
 
@@ -183,11 +232,55 @@ private fun LibraryFilterContentPreview() {
   VoiceTheme {
     Surface {
       LibraryFilterContent(
-        grouping = LibraryGrouping.Series,
+        viewState =
+          BookOverviewViewState.Loading.copy(hiddenBookCount = 12, notDownloadedBookCount = 30),
         onGroupingChange = {},
-        hiddenBookCount = 12,
-        showHiddenBooks = false,
+        showHiddenBooksSwitch = true,
+        showNotDownloadedBooksSwitch = true,
         onShowHiddenBooksChange = {},
+        onShowNotDownloadedBooksChange = {},
+        onSourceChange = { _, _ -> },
+      )
+    }
+  }
+}
+
+@Preview
+@Composable
+private fun LibraryFilterContentSourcesPreview() {
+  VoiceTheme {
+    Surface {
+      LibraryFilterContent(
+        viewState =
+          BookOverviewViewState.Loading.copy(
+            sources =
+              listOf(
+                LibrarySourceViewState(
+                  source = LibrarySource.Folder("content://audiobooks"),
+                  name = "Audiobooks",
+                  bookCount = 214,
+                  shown = true,
+                ),
+                LibrarySourceViewState(
+                  source = LibrarySource.Folder("content://kids"),
+                  name = "Kids",
+                  bookCount = 38,
+                  shown = false,
+                ),
+                LibrarySourceViewState(
+                  source = LibrarySource.ServerLibrary("radio-plays"),
+                  name = "Radio plays",
+                  bookCount = 1207,
+                  shown = true,
+                ),
+              ),
+          ),
+        onGroupingChange = {},
+        showHiddenBooksSwitch = false,
+        showNotDownloadedBooksSwitch = false,
+        onShowHiddenBooksChange = {},
+        onShowNotDownloadedBooksChange = {},
+        onSourceChange = { _, _ -> },
       )
     }
   }

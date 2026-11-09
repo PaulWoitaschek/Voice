@@ -271,6 +271,7 @@
     <string name="library.filter.group_by.author">Autor</string>
     <string name="library.filter.group_by.series">Serie</string>
     <string name="library.filter.hidden_books">Cărți ascunse</string>
+    <string name="library.filter.not_downloaded">Nedescărcate</string>
     <string name="library.filter.show">Afișează</string>
     <string name="library.folders.title">Directoare cărți</string>
     <string name="library.folders.moved.dialog.title">Directoarele cu cărți audio s-au mutat</string>
@@ -397,6 +398,18 @@
     <string name="review.prompt.thanks.title">Mulțumim!</string>
     <string name="series.continue">Continuă</string>
     <string name="series.continue_book">Continuă cartea %s</string>
+    <string name="series.mark_completed">Marchează ca terminată</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Vei pierde locul unde ai rămas în %d carte.</item>
+        <item quantity="few">Vei pierde locul unde ai rămas în %d cărți.</item>
+        <item quantity="other">Vei pierde locul unde ai rămas în %d de cărți.</item>
+    </plurals>
+    <string name="series.mark_not_started">Marchează ca neîncepută încă</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Vei pierde progresul din %d carte.</item>
+        <item quantity="few">Vei pierde progresul din %d cărți.</item>
+        <item quantity="other">Vei pierde progresul din %d de cărți.</item>
+    </plurals>
     <string name="series.start">Începe</string>
     <string name="series.start_book">Începe cartea %s</string>
     <string name="settings.about.app_version.title">Versiune aplicație</string>

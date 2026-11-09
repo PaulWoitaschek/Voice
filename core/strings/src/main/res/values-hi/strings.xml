@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">लेखक</string>
     <string name="library.filter.group_by.series">सीरीज़</string>
     <string name="library.filter.hidden_books">छिपी हुई पुस्तकें</string>
+    <string name="library.filter.not_downloaded">डाउनलोड नहीं की गईं</string>
     <string name="library.filter.show">दिखाएँ</string>
     <string name="library.folders.title">ऑडियोबुक फ़ोल्डर</string>
     <string name="library.folders.moved.dialog.title">ऑडियोबुक फ़ोल्डर की जगह बदल गई</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">धन्यवाद!</string>
     <string name="series.continue">जारी रखें</string>
     <string name="series.continue_book">पुस्तक %s जारी रखें</string>
+    <string name="series.mark_completed">पूर्ण चिह्नित करें</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">%d पुस्तक में आपकी जगह खो जाएगी।</item>
+        <item quantity="other">%d पुस्तकों में आपकी जगह खो जाएगी।</item>
+    </plurals>
+    <string name="series.mark_not_started">शुरू नहीं हुई के रूप में चिह्नित करें</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">%d पुस्तक में आपकी प्रगति खो जाएगी।</item>
+        <item quantity="other">%d पुस्तकों में आपकी प्रगति खो जाएगी।</item>
+    </plurals>
     <string name="series.start">शुरू करें</string>
     <string name="series.start_book">पुस्तक %s शुरू करें</string>
     <string name="settings.about.app_version.title">ऐप संस्करण</string>

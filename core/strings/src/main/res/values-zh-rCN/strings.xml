@@ -243,6 +243,7 @@
     <string name="library.filter.group_by.author">作者</string>
     <string name="library.filter.group_by.series">系列</string>
     <string name="library.filter.hidden_books">已隐藏的书</string>
+    <string name="library.filter.not_downloaded">未下载</string>
     <string name="library.filter.show">显示</string>
     <string name="library.folders.title">有声书文件夹</string>
     <string name="library.folders.moved.dialog.title">有声书文件夹已移动</string>
@@ -357,6 +358,14 @@
     <string name="review.prompt.thanks.title">谢谢！</string>
     <string name="series.continue">继续收听</string>
     <string name="series.continue_book">继续收听第 %s 卷</string>
+    <string name="series.mark_completed">标记为已听完</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="other">%d 本书的收听位置会丢失。</item>
+    </plurals>
+    <string name="series.mark_not_started">标记为未开始</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="other">%d 本书的收听进度会丢失。</item>
+    </plurals>
     <string name="series.start">开始收听</string>
     <string name="series.start_book">开始收听第 %s 卷</string>
     <string name="settings.about.app_version.title">软件版本</string>

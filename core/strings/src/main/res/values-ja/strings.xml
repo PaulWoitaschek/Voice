@@ -243,6 +243,7 @@
     <string name="library.filter.group_by.author">著者</string>
     <string name="library.filter.group_by.series">シリーズ</string>
     <string name="library.filter.hidden_books">非表示の本</string>
+    <string name="library.filter.not_downloaded">未ダウンロード</string>
     <string name="library.filter.show">表示</string>
     <string name="library.folders.title">オーディオブック フォルダー</string>
     <string name="library.folders.moved.dialog.title">オーディオブックフォルダーを移動しました</string>
@@ -357,6 +358,14 @@
     <string name="review.prompt.thanks.title">ありがとうございます！</string>
     <string name="series.continue">続きを聴く</string>
     <string name="series.continue_book">第%s巻の続きを聴く</string>
+    <string name="series.mark_completed">完了としてマーク</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="other">%d 冊の再生位置が失われます。</item>
+    </plurals>
+    <string name="series.mark_not_started">未再生としてマーク</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="other">%d 冊の進み具合が失われます。</item>
+    </plurals>
     <string name="series.start">聴き始める</string>
     <string name="series.start_book">第%s巻を聴き始める</string>
     <string name="settings.about.app_version.title">アプリのバージョン</string>

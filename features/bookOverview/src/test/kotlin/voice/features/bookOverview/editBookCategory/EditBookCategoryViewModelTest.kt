@@ -48,10 +48,12 @@ class EditBookCategoryViewModelTest {
 
   private val viewModel =
     EditBookCategoryViewModel(
-      repo,
-      playerController,
-      CurrentBookStore(currentBookStore),
-      LastPlaybackSpeedStore(MemoryDataStore(1.5F)),
+      BookCategoryChanger(
+        repo,
+        playerController,
+        CurrentBookStore(currentBookStore),
+        LastPlaybackSpeedStore(MemoryDataStore(1.5F)),
+      ),
     )
 
   @Test

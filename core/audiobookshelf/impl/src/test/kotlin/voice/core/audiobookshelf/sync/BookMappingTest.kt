@@ -134,6 +134,7 @@ class BookMappingTest {
     assertEquals("2", content.metadata.part)
     assertEquals("Fantasy, Adventure", content.metadata.genre)
     assertEquals(Instant.ofEpochMilli(1_000), content.addedAt)
+    assertEquals("library", content.serverLibraryId)
   }
 
   @Test

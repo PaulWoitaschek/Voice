@@ -429,6 +429,8 @@
     <string name="library.filter.group_by.series">Series</string>
     <!-- Switch in the library filter sheet that shows the hidden books in the library again, with a "Hidden" label. Below it is how many books are hidden, like "12 books". -->
     <string name="library.filter.hidden_books">Hidden books</string>
+    <!-- Switch in the library filter sheet that shows the server books that aren't downloaded. Turned off, the library only shows books that play without a connection. Below it is how many books aren't downloaded, like "12 books". -->
+    <string name="library.filter.not_downloaded">Not downloaded</string>
     <!-- Heading in the library filter sheet, above switches for which books the library shows. -->
     <string name="library.filter.show">Show</string>
     <!-- Title for screens and rows that manage audiobook folders. -->
@@ -649,6 +651,20 @@
     <string name="series.continue">Continue</string>
     <!-- Button on the screen of a series, for a book in progress. %s is its number in the series, e.g. "Continue book 2". It may also be a number like 2.5 or a word. -->
     <string name="series.continue_book">Continue book %s</string>
+    <!-- Action in the sheet of a book series. Marks every book of the series as completed, at the end of each book. -->
+    <string name="series.mark_completed">Mark as completed</string>
+    <!-- Shown in the sheet of a book series after a tap on "Mark as completed", while books of the series are in progress. Each of them jumps to its end, so the listener loses the place they were at. Below it are the buttons "Mark as completed" and "Cancel". -->
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">You lose your place in %d book.</item>
+        <item quantity="other">You lose your place in %d books.</item>
+    </plurals>
+    <!-- Action in the sheet of a book series. Marks every book of the series as not started yet, back at the start of each book. -->
+    <string name="series.mark_not_started">Mark as not started yet</string>
+    <!-- Shown in the sheet of a book series after a tap on "Mark as not started yet". The books in progress and the finished books of the series go back to their start. Below it are the buttons "Mark as not started yet" and "Cancel". -->
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">You lose your progress in %d book.</item>
+        <item quantity="other">You lose your progress in %d books.</item>
+    </plurals>
     <!-- Button on the screen of a series, for the first book not finished yet, when it has no number in the series. Starts listening to it. -->
     <string name="series.start">Start</string>
     <!-- Button on the screen of a series, for the first book not finished yet. %s is its number in the series, e.g. "Start book 3". It may also be a number like 2.5 or a word. -->

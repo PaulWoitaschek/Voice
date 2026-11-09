@@ -285,6 +285,7 @@
     <string name="library.filter.group_by.author">Autor</string>
     <string name="library.filter.group_by.series">Seria</string>
     <string name="library.filter.hidden_books">Ukryte książki</string>
+    <string name="library.filter.not_downloaded">Niepobrane</string>
     <string name="library.filter.show">Pokaż</string>
     <string name="library.folders.title">Foldery audiobooków</string>
     <string name="library.folders.moved.dialog.title">Foldery audiobooków przeniesione</string>
@@ -417,6 +418,20 @@
     <string name="review.prompt.thanks.title">Dziękujemy!</string>
     <string name="series.continue">Kontynuuj</string>
     <string name="series.continue_book">Kontynuuj książkę %s</string>
+    <string name="series.mark_completed">Oznacz jako ukończoną</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Stracisz miejsce słuchania w %d książce.</item>
+        <item quantity="few">Stracisz miejsce słuchania w %d książkach.</item>
+        <item quantity="many">Stracisz miejsce słuchania w %d książkach.</item>
+        <item quantity="other">Stracisz miejsce słuchania w %d książkach.</item>
+    </plurals>
+    <string name="series.mark_not_started">Oznacz jako nierozpoczętą</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Stracisz postępy w %d książce.</item>
+        <item quantity="few">Stracisz postępy w %d książkach.</item>
+        <item quantity="many">Stracisz postępy w %d książkach.</item>
+        <item quantity="other">Stracisz postępy w %d książkach.</item>
+    </plurals>
     <string name="series.start">Zacznij</string>
     <string name="series.start_book">Zacznij książkę %s</string>
     <string name="settings.about.app_version.title">Wersja aplikacji</string>

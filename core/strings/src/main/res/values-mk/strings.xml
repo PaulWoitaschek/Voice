@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">Автор</string>
     <string name="library.filter.group_by.series">Серијал</string>
     <string name="library.filter.hidden_books">Скриени книги</string>
+    <string name="library.filter.not_downloaded">Непреземени</string>
     <string name="library.filter.show">Прикажи</string>
     <string name="library.folders.title">Фолдери со аудио книги</string>
     <string name="library.folders.moved.dialog.title">Фолдерите со аудио книги се преместени</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">Ви благодариме!</string>
     <string name="series.continue">Продолжи</string>
     <string name="series.continue_book">Продолжи со книга %s</string>
+    <string name="series.mark_completed">Обележи како завршен</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Во %d книга ќе го изгубите местото каде што застанавте.</item>
+        <item quantity="other">Во %d книги ќе го изгубите местото каде што застанавте.</item>
+    </plurals>
+    <string name="series.mark_not_started">Обележи како непочнат</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Во %d книга ќе го изгубите напредокот.</item>
+        <item quantity="other">Во %d книги ќе го изгубите напредокот.</item>
+    </plurals>
     <string name="series.start">Почни</string>
     <string name="series.start_book">Почни со книга %s</string>
     <string name="settings.about.app_version.title">Верзија на апликацијата</string>

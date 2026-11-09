@@ -18,15 +18,20 @@ import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
+import voice.core.audiobookshelf.PickedLibrary
 import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
+import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
@@ -66,15 +71,22 @@ class BookOverviewViewModelTest {
     mockk<ServerLibrary>(relaxUnitFun = true) {
       every { syncing } returns MutableStateFlow(false)
       every { unavailableBooks } returns flowOf(emptySet())
+      every { libraries } returns flowOf(emptyList())
     }
   private val serverDownloads =
     mockk<ServerDownloads> {
       every { states } returns flowOf(emptyMap())
     }
+  // combine yields, and the test dispatcher's scheduler isn't the one runTest advances
   private val dispatcherProvider =
-    DispatcherProvider(testDispatcher, testDispatcher, testDispatcher)
+    DispatcherProvider(
+      main = testDispatcher,
+      io = Dispatchers.Unconfined,
+      mainImmediate = testDispatcher,
+    )
   private val audiobookFolders =
     mockk<AudiobookFolders> {
+      every { all() } returns flowOf(emptyMap())
       every { withoutAccess() } returns flowOf(emptyMap())
     }
   private val emptyLibraryTracker = mockk<EmptyLibraryTracker>(relaxUnitFun = true)
@@ -127,6 +139,8 @@ class BookOverviewViewModelTest {
         survey = survey(),
         showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
         libraryGroupingStore = LibraryGroupingStore(MemoryDataStore(LibraryGrouping.Series)),
+        showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(MemoryDataStore(true)),
+        hiddenSourcesStore = HiddenSourcesStore(MemoryDataStore(emptySet())),
         bookHider = BookHider(mockk()),
       )
 
@@ -209,6 +223,8 @@ class BookOverviewViewModelTest {
         survey = survey(),
         showHiddenBooksStore = ShowHiddenBooksStore(MemoryDataStore(false)),
         libraryGroupingStore = LibraryGroupingStore(MemoryDataStore(LibraryGrouping.Series)),
+        showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(MemoryDataStore(true)),
+        hiddenSourcesStore = HiddenSourcesStore(MemoryDataStore(emptySet())),
         bookHider = BookHider(mockk()),
       )
 
@@ -382,6 +398,107 @@ class BookOverviewViewModelTest {
             .filterIsInstance<LibraryItem.Series>()
             .associate { it.series.name to it.series.hidden }
         assertEquals(expected = mapOf("Other" to false, "Saga" to true), actual = stacks)
+      }
+  }
+
+  @Test
+  fun `without books that aren't downloaded, the library keeps the ones on the device`() = runTest {
+    val local = book(time = 0)
+    val streamed = book(time = 0, id = BookId("abs://item/streamed"))
+    val hiddenStreamed = book(time = 0, id = BookId("abs://item/hidden"), hidden = true)
+    val downloaded = book(time = 0, id = BookId("abs://item/downloaded"))
+    val downloading = book(time = 0, id = BookId("abs://item/downloading"))
+    val store = MemoryDataStore(true)
+    val viewModel =
+      viewModel(
+        books = listOf(local, streamed, hiddenStreamed, downloaded, downloading),
+        downloadStates =
+          flowOf(
+            mapOf(
+              downloaded.id to BookDownloadState.Downloaded(bytes = 2),
+              downloading.id to
+                BookDownloadState.Downloading(
+                  progress = 0.5F,
+                  downloadedBytes = 1,
+                  totalBytes = 2,
+                  waitingFor = null,
+                ),
+            ),
+          ),
+        showNotDownloadedBooksStore = store,
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = 2, actual = state.notDownloadedBookCount)
+        assertEquals(expected = 1, actual = state.hiddenBookCount)
+        assertEquals(expected = 4, actual = state.keys(BookCategory.NOT_STARTED).size)
+
+        viewModel.onShowNotDownloadedBooksChange(false)
+
+        val filtered = awaitItem()
+        assertEquals(
+          expected = setOf(local.id.value, downloaded.id.value),
+          actual = filtered.keys(BookCategory.NOT_STARTED).toSet(),
+        )
+        assertEquals(expected = 0, actual = filtered.hiddenBookCount)
+        assertEquals(expected = false, actual = store.data.first())
+      }
+  }
+
+  @Test
+  fun `a library with server books waits for their downloads`() = runTest {
+    val downloadStates = MutableStateFlow<Map<BookId, BookDownloadState>?>(null)
+    val downloaded = book(time = 0, id = BookId("abs://item/downloaded"))
+    val viewModel =
+      viewModel(
+        books = listOf(downloaded),
+        downloadStates = downloadStates.filterNotNull(),
+        showNotDownloadedBooksStore = MemoryDataStore(false),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+
+        downloadStates.value = mapOf(downloaded.id to BookDownloadState.Downloaded(bytes = 1))
+
+        val state = awaitItem()
+        assertEquals(
+          expected = listOf(downloaded.id.value),
+          actual = state.keys(BookCategory.NOT_STARTED),
+        )
+        assertEquals(expected = false, actual = state.showNotDownloadedBooksSwitch)
+      }
+  }
+
+  @Test
+  fun `the current book stays when books that aren't downloaded are filtered out`() = runTest {
+    val current = book(id = BookId("abs://item/current"))
+    val viewModel =
+      viewModel(
+        books = listOf(current),
+        currentBookId = current.id,
+        showNotDownloadedBooksStore = MemoryDataStore(false),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = current.id, actual = state.hero?.value?.id)
+        assertEquals(expected = 0, actual = state.notDownloadedBookCount)
       }
   }
 
@@ -694,6 +811,122 @@ class BookOverviewViewModelTest {
   }
 
   @Test
+  fun `a hidden source leaves the library`() = runTest {
+    every { serverLibrary.libraries } returns
+      flowOf(listOf(PickedLibrary("mine", "Mine"), PickedLibrary("kids", "Kids")))
+    val mine = serverBook(libraryId = "mine")
+    val kids = serverBook(libraryId = "kids")
+    val hiddenKids = serverBook(libraryId = "kids", hidden = true)
+    val kidsSource = LibrarySource.ServerLibrary("kids")
+    val viewModel =
+      viewModel(
+        books = listOf(mine, kids, hiddenKids),
+        currentBookId = kids.id,
+        hiddenSourcesStore = MemoryDataStore(setOf(kidsSource)),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(expected = listOf(mine.id.value), actual = state.keys(BookCategory.CURRENT))
+        assertEquals(expected = null, actual = state.hero)
+        assertEquals(expected = 0, actual = state.hiddenBookCount)
+        assertEquals(
+          expected =
+            listOf(
+              LibrarySourceViewState(
+                LibrarySource.ServerLibrary("mine"),
+                name = "Mine",
+                bookCount = 1,
+                shown = true,
+              ),
+              LibrarySourceViewState(kidsSource, name = "Kids", bookCount = 2, shown = false),
+            ),
+          actual = state.sources,
+        )
+      }
+  }
+
+  @Test
+  fun `a single source has no switch`() = runTest {
+    every { serverLibrary.libraries } returns flowOf(listOf(PickedLibrary("mine", "Mine")))
+    val viewModel = viewModel(books = listOf(serverBook(libraryId = "mine")))
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = emptyList(), actual = awaitItem().sources)
+      }
+  }
+
+  @Test
+  fun `with every source hidden, all books show`() = runTest {
+    every { serverLibrary.libraries } returns
+      flowOf(listOf(PickedLibrary("mine", "Mine"), PickedLibrary("kids", "Kids")))
+    val mine = serverBook(libraryId = "mine")
+    val kids = serverBook(libraryId = "kids")
+    val viewModel =
+      viewModel(
+        books = listOf(mine, kids),
+        hiddenSourcesStore =
+          MemoryDataStore(
+            setOf(LibrarySource.ServerLibrary("mine"), LibrarySource.ServerLibrary("kids")),
+          ),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val state = awaitItem()
+        assertEquals(
+          expected = setOf(mine.id.value, kids.id.value),
+          actual = state.keys(BookCategory.CURRENT).toSet(),
+        )
+        assertEquals(expected = listOf(true, true), actual = state.sources.map { it.shown })
+      }
+  }
+
+  @Test
+  fun `switching a source hides and shows it`() = runTest {
+    every { serverLibrary.libraries } returns
+      flowOf(listOf(PickedLibrary("mine", "Mine"), PickedLibrary("kids", "Kids")))
+    val kids = LibrarySource.ServerLibrary("kids")
+    val store = MemoryDataStore<Set<LibrarySource>>(emptySet())
+    val viewModel = viewModel(hiddenSourcesStore = store)
+
+    viewModel.onSourceChange(kids, show = false)
+    assertEquals(expected = setOf(kids), actual = store.data.first())
+
+    viewModel.onSourceChange(kids, show = true)
+    assertEquals(expected = emptySet(), actual = store.data.first())
+  }
+
+  @Test
+  fun `with every source hidden, switching one off hides only that one`() = runTest {
+    every { serverLibrary.libraries } returns
+      flowOf(listOf(PickedLibrary("mine", "Mine"), PickedLibrary("kids", "Kids")))
+    val mine = LibrarySource.ServerLibrary("mine")
+    val kids = LibrarySource.ServerLibrary("kids")
+    val removed = LibrarySource.Folder("content://removed")
+    val store = MemoryDataStore<Set<LibrarySource>>(setOf(mine, kids, removed))
+    val viewModel = viewModel(hiddenSourcesStore = store)
+
+    viewModel.onSourceChange(kids, show = false)
+
+    assertEquals(expected = setOf(kids, removed), actual = store.data.first())
+  }
+
+  @Test
   fun `folders without access show the badge`() = runTest {
     every { audiobookFolders.withoutAccess() } returns
       flowOf(mapOf(FolderType.Root to listOf(mockk<Uri>())))
@@ -832,6 +1065,14 @@ class BookOverviewViewModelTest {
       .value
   }
 
+  private fun serverBook(
+    libraryId: String,
+    hidden: Boolean = false,
+  ): Book {
+    val book = book(id = BookId("abs://item/${Uuid.random()}"), hidden = hidden)
+    return book.copy(content = book.content.copy(serverLibraryId = libraryId))
+  }
+
   private fun BookOverviewViewState.keys(category: BookCategory): List<String> {
     return sections.getValue(category).map { it.key }
   }
@@ -847,6 +1088,9 @@ class BookOverviewViewModelTest {
     survey: Survey = survey(),
     showHiddenBooksStore: DataStore<Boolean> = MemoryDataStore(false),
     libraryGroupingStore: DataStore<LibraryGrouping> = MemoryDataStore(LibraryGrouping.Series),
+    showNotDownloadedBooksStore: DataStore<Boolean> = MemoryDataStore(true),
+    downloadStates: Flow<Map<BookId, BookDownloadState>> = flowOf(emptyMap()),
+    hiddenSourcesStore: DataStore<Set<LibrarySource>> = MemoryDataStore(emptySet()),
     repo: BookRepository = mockk {
       every { flow() } returns MutableStateFlow(books)
     },
@@ -881,12 +1125,17 @@ class BookOverviewViewModelTest {
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
       dispatcherProvider = dispatcherProvider,
       serverLibrary = serverLibrary,
-      serverDownloads = serverDownloads,
+      serverDownloads =
+        mockk {
+          every { states } returns downloadStates
+        },
       audiobookFolders = audiobookFolders,
       emptyLibraryTracker = emptyLibraryTracker,
       survey = survey,
       showHiddenBooksStore = ShowHiddenBooksStore(showHiddenBooksStore),
       libraryGroupingStore = LibraryGroupingStore(libraryGroupingStore),
+      showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(showNotDownloadedBooksStore),
+      hiddenSourcesStore = HiddenSourcesStore(hiddenSourcesStore),
       bookHider = BookHider(repo),
     )
   }

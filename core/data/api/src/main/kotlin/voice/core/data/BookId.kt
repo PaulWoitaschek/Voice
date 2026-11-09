@@ -1,6 +1,7 @@
 package voice.core.data
 
 import android.net.Uri
+import android.provider.DocumentsContract
 import androidx.core.net.toUri
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -26,6 +27,15 @@ public const val AUDIOBOOKSHELF_SCHEME: String = "abs"
 /** Whether the book is streamed from a server rather than found on the device by the scanner. */
 public val BookId.isRemote: Boolean
   get() = value.startsWith("$AUDIOBOOKSHELF_SCHEME:")
+
+public fun BookId.isIn(folder: Uri): Boolean {
+  val book = toUri()
+  // a single file added on its own has a document uri, so nothing is in it
+  return DocumentsContract.isTreeUri(folder) &&
+    DocumentsContract.isTreeUri(book) &&
+    book.authority == folder.authority &&
+    DocumentsContract.getTreeDocumentId(book) == DocumentsContract.getTreeDocumentId(folder)
+}
 
 public object BookIdSerializer : KSerializer<BookId> {
 

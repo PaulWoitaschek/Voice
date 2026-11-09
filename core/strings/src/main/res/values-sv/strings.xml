@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">Författare</string>
     <string name="library.filter.group_by.series">Serie</string>
     <string name="library.filter.hidden_books">Dolda böcker</string>
+    <string name="library.filter.not_downloaded">Inte nedladdade</string>
     <string name="library.filter.show">Visa</string>
     <string name="library.folders.title">Ljudboksmappar</string>
     <string name="library.folders.moved.dialog.title">Ljudboksmapparna har flyttats</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">Tack!</string>
     <string name="series.continue">Fortsätt lyssna</string>
     <string name="series.continue_book">Fortsätt med bok %s</string>
+    <string name="series.mark_completed">Markera som färdiglyssnad</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Du tappar bort var du var i %d bok.</item>
+        <item quantity="other">Du tappar bort var du var i %d böcker.</item>
+    </plurals>
+    <string name="series.mark_not_started">Markera som inte påbörjad</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Du förlorar dina framsteg i %d bok.</item>
+        <item quantity="other">Du förlorar dina framsteg i %d böcker.</item>
+    </plurals>
     <string name="series.start">Börja lyssna</string>
     <string name="series.start_book">Börja på bok %s</string>
     <string name="settings.about.app_version.title">Appversion</string>

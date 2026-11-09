@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">Szerző</string>
     <string name="library.filter.group_by.series">Sorozat</string>
     <string name="library.filter.hidden_books">Rejtett könyvek</string>
+    <string name="library.filter.not_downloaded">Nem letöltött</string>
     <string name="library.filter.show">Megjelenítés</string>
     <string name="library.folders.title">Hangoskönyv mappák</string>
     <string name="library.folders.moved.dialog.title">Új helyen a hangoskönyv mappák</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">Köszönjük!</string>
     <string name="series.continue">Folytatás</string>
     <string name="series.continue_book">%s. könyv folytatása</string>
+    <string name="series.mark_completed">Megjelölés befejezettként</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">%d könyvnél elveszíti, hol tartott.</item>
+        <item quantity="other">%d könyvnél elveszíti, hol tartott.</item>
+    </plurals>
+    <string name="series.mark_not_started">Megjelölés még el nem kezdettként</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">%d könyvnél elveszíti az előrehaladását.</item>
+        <item quantity="other">%d könyvnél elveszíti az előrehaladását.</item>
+    </plurals>
     <string name="series.start">Kezdés</string>
     <string name="series.start_book">%s. könyv elkezdése</string>
     <string name="settings.about.app_version.title">Alkalmazásverzió</string>

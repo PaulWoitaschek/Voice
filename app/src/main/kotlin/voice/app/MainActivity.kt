@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.core.net.toUri
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.scene.DialogSceneStrategy
@@ -126,6 +127,7 @@ class MainActivity : AppCompatActivity() {
         val dialogStrategy = remember { DialogSceneStrategy<Destination.Compose>() }
         val overlayStrategy = remember { OverlaySceneStrategy<Destination.Compose>() }
         val density = LocalDensity.current
+        val windowWidth = LocalWindowInfo.current.containerSize.width
 
         SharedTransitionLayout {
           CompositionLocalProvider(
@@ -145,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                   SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition
                 } else {
-                  SharedXAxisEnterTransition(density) togetherWith
+                  SharedXAxisEnterTransition(windowWidth) togetherWith
                     SharedXAxisExitTransition(density)
                 }
               },

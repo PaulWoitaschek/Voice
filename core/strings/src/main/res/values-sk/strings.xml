@@ -285,6 +285,7 @@
     <string name="library.filter.group_by.author">Autor</string>
     <string name="library.filter.group_by.series">Séria</string>
     <string name="library.filter.hidden_books">Skryté knihy</string>
+    <string name="library.filter.not_downloaded">Nestiahnuté</string>
     <string name="library.filter.show">Zobraziť</string>
     <string name="library.folders.title">Priečinky so zvukovými knihami</string>
     <string name="library.folders.moved.dialog.title">Priečinky audiokníh presunuté</string>
@@ -417,6 +418,20 @@
     <string name="review.prompt.thanks.title">Ďakujeme!</string>
     <string name="series.continue">Pokračovať</string>
     <string name="series.continue_book">Pokračovať v knihe %s</string>
+    <string name="series.mark_completed">Označiť ako vypočutú</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Pri %d knihe stratíte miesto, kde ste skončili.</item>
+        <item quantity="few">Pri %d knihách stratíte miesto, kde ste skončili.</item>
+        <item quantity="many">Pri %d knihách stratíte miesto, kde ste skončili.</item>
+        <item quantity="other">Pri %d knihách stratíte miesto, kde ste skončili.</item>
+    </plurals>
+    <string name="series.mark_not_started">Označiť ako ešte nepočúvanú</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Pri %d knihe stratíte postup.</item>
+        <item quantity="few">Pri %d knihách stratíte postup.</item>
+        <item quantity="many">Pri %d knihách stratíte postup.</item>
+        <item quantity="other">Pri %d knihách stratíte postup.</item>
+    </plurals>
     <string name="series.start">Začať</string>
     <string name="series.start_book">Začať knihu %s</string>
     <string name="settings.about.app_version.title">Verzia aplikácie</string>

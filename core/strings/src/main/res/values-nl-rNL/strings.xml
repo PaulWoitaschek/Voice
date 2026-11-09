@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">Auteur</string>
     <string name="library.filter.group_by.series">Reeks</string>
     <string name="library.filter.hidden_books">Verborgen boeken</string>
+    <string name="library.filter.not_downloaded">Niet gedownload</string>
     <string name="library.filter.show">Tonen</string>
     <string name="library.folders.title">Luisterboekmappen</string>
     <string name="library.folders.moved.dialog.title">Audioboekmappen verplaatst</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">Bedankt!</string>
     <string name="series.continue">Verder luisteren</string>
     <string name="series.continue_book">Verder met boek %s</string>
+    <string name="series.mark_completed">Markeren als voltooid</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Je raakt je plek kwijt in %d boek.</item>
+        <item quantity="other">Je raakt je plek kwijt in %d boeken.</item>
+    </plurals>
+    <string name="series.mark_not_started">Markeren als nog niet begonnen</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Je raakt je voortgang kwijt in %d boek.</item>
+        <item quantity="other">Je raakt je voortgang kwijt in %d boeken.</item>
+    </plurals>
     <string name="series.start">Beginnen</string>
     <string name="series.start_book">Beginnen aan boek %s</string>
     <string name="settings.about.app_version.title">Appversie</string>

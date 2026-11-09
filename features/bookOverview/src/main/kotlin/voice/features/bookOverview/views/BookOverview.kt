@@ -67,6 +67,7 @@ import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.overview.LibraryGrouping
 import voice.features.bookOverview.overview.LibraryItem
+import voice.features.bookOverview.overview.LibrarySource
 import voice.features.bookOverview.overview.SeriesStackViewState
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
@@ -139,6 +140,8 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onShowFoldersClick = bookOverviewViewModel::onShowFoldersClick,
     onShowHiddenBooksChange = bookOverviewViewModel::onShowHiddenBooksChange,
     onGroupingChange = bookOverviewViewModel::onGroupingChange,
+    onShowNotDownloadedBooksChange = bookOverviewViewModel::onShowNotDownloadedBooksChange,
+    onSourceChange = bookOverviewViewModel::onSourceChange,
     snackbarHostState = snackbarHostState,
     modifier = modifier,
   )
@@ -163,6 +166,8 @@ internal fun BookOverview(
   onShowFoldersClick: () -> Unit,
   onShowHiddenBooksChange: (Boolean) -> Unit,
   onGroupingChange: (LibraryGrouping) -> Unit,
+  onShowNotDownloadedBooksChange: (Boolean) -> Unit,
+  onSourceChange: (LibrarySource, Boolean) -> Unit,
   modifier: Modifier = Modifier,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
@@ -234,11 +239,11 @@ internal fun BookOverview(
   )
   if (showFilterSheet) {
     LibraryFilterSheet(
-      grouping = viewState.grouping,
+      viewState = viewState,
       onGroupingChange = onGroupingChange,
-      hiddenBookCount = viewState.hiddenBookCount,
-      showHiddenBooks = viewState.showHiddenBooks,
       onShowHiddenBooksChange = onShowHiddenBooksChange,
+      onShowNotDownloadedBooksChange = onShowNotDownloadedBooksChange,
+      onSourceChange = onSourceChange,
       onDismiss = { showFilterSheet = false },
     )
   }
@@ -318,6 +323,8 @@ fun BookOverviewPreview(
       onShowFoldersClick = {},
       onShowHiddenBooksChange = {},
       onGroupingChange = {},
+      onShowNotDownloadedBooksChange = {},
+      onSourceChange = { _, _ -> },
     )
   }
 }

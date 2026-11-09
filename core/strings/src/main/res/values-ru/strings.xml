@@ -285,6 +285,7 @@
     <string name="library.filter.group_by.author">Автор</string>
     <string name="library.filter.group_by.series">Серия</string>
     <string name="library.filter.hidden_books">Скрытые книги</string>
+    <string name="library.filter.not_downloaded">Не скачанные</string>
     <string name="library.filter.show">Показывать</string>
     <string name="library.folders.title">Папки с аудиокнигами</string>
     <string name="library.folders.moved.dialog.title">Папки аудиокниг перенесены</string>
@@ -417,6 +418,20 @@
     <string name="review.prompt.thanks.title">Спасибо!</string>
     <string name="series.continue">Продолжить</string>
     <string name="series.continue_book">Продолжить книгу %s</string>
+    <string name="series.mark_completed">Пометить как прослушанную</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Вы потеряете место, где остановились, в %d книге.</item>
+        <item quantity="few">Вы потеряете место, где остановились, в %d книгах.</item>
+        <item quantity="many">Вы потеряете место, где остановились, в %d книгах.</item>
+        <item quantity="other">Вы потеряете место, где остановились, в %d книгах.</item>
+    </plurals>
+    <string name="series.mark_not_started">Пометить как непрослушанную</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Вы потеряете прогресс в %d книге.</item>
+        <item quantity="few">Вы потеряете прогресс в %d книгах.</item>
+        <item quantity="many">Вы потеряете прогресс в %d книгах.</item>
+        <item quantity="other">Вы потеряете прогресс в %d книгах.</item>
+    </plurals>
     <string name="series.start">Начать</string>
     <string name="series.start_book">Начать книгу %s</string>
     <string name="settings.about.app_version.title">Версия приложения</string>

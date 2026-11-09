@@ -257,6 +257,7 @@
     <string name="library.filter.group_by.author">Forfatter</string>
     <string name="library.filter.group_by.series">Serie</string>
     <string name="library.filter.hidden_books">Skjulte bøger</string>
+    <string name="library.filter.not_downloaded">Ikke downloadet</string>
     <string name="library.filter.show">Vis</string>
     <string name="library.folders.title">Lydbogsmapper</string>
     <string name="library.folders.moved.dialog.title">Lydbogsmapper er flyttet</string>
@@ -377,6 +378,16 @@
     <string name="review.prompt.thanks.title">Tak!</string>
     <string name="series.continue">Lyt videre</string>
     <string name="series.continue_book">Fortsæt med bog %s</string>
+    <string name="series.mark_completed">Markér som afsluttet</string>
+    <plurals name="series.mark_completed.confirm">
+        <item quantity="one">Voice glemmer, hvor du er nået til i %d bog.</item>
+        <item quantity="other">Voice glemmer, hvor du er nået til i %d bøger.</item>
+    </plurals>
+    <string name="series.mark_not_started">Markér som endnu ikke startet</string>
+    <plurals name="series.mark_not_started.confirm">
+        <item quantity="one">Du mister dine fremskridt i %d bog.</item>
+        <item quantity="other">Du mister dine fremskridt i %d bøger.</item>
+    </plurals>
     <string name="series.start">Begynd at lytte</string>
     <string name="series.start_book">Begynd på bog %s</string>
     <string name="settings.about.app_version.title">Appversion</string>

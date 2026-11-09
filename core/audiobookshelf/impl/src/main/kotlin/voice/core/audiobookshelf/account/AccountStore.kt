@@ -27,6 +27,7 @@ internal data class Account(
   val accessToken: String,
   val refreshToken: String,
   val libraryIds: List<String>,
+  val libraryNames: Map<String, String> = emptyMap(),
   val serverVersion: String,
   /** The server no longer accepts the tokens, so the listener has to sign in again. */
   val needsLogin: Boolean = false,
