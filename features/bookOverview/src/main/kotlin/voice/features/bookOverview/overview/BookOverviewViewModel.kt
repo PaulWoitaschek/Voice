@@ -127,16 +127,8 @@ class BookOverviewViewModel(
     val scanning = remember { mediaScanner.scannerActive }.collectAsState(initial = false).value
     val syncing = remember { serverLibrary.syncing }.collectAsState(initial = false).value
     val scannerActive = scanning || syncing
-    val unavailableBooks = remember {
-      serverLibrary.unavailableBooks
-    }
-      .collectAsState(initial = emptySet())
-      .value
-    val downloadStates = remember {
-      serverDownloads.states
-    }
-      .collectAsState(initial = null)
-      .value
+    val serverStates = rememberServerBookStates(serverLibrary, serverDownloads)
+    val downloadStates = serverStates.downloads
     val folderPickerMovedDialogShown = remember {
       folderPickerMovedDialogShownStore.data
     }
@@ -238,7 +230,7 @@ class BookOverviewViewModel(
       itemViewState(
         currentBookId = currentBookId,
         livePlaybackState = { livePlaybackState.value },
-        unavailable = id in unavailableBooks,
+        unavailable = id in serverStates.unavailable,
         download = downloadStates?.get(id).badge(),
       )
 

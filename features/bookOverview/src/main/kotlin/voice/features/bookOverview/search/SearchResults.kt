@@ -170,6 +170,8 @@ private fun TopResult(
         bookId = result.id,
         cover = result.cover,
         finished = result.category == BookCategory.FINISHED,
+        unavailable = result.unavailable,
+        download = result.download,
         modifier = Modifier.size(96.dp),
       )
       Spacer(Modifier.width(16.dp))
@@ -262,6 +264,8 @@ private fun SearchResultRow(
         bookId = result.id,
         cover = result.cover,
         finished = result.category == BookCategory.FINISHED,
+        unavailable = result.unavailable,
+        download = result.download,
         modifier = Modifier.size(56.dp),
       )
       Spacer(Modifier.width(16.dp))

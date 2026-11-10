@@ -27,10 +27,10 @@ import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
 import voice.features.bookOverview.overview.LibraryEntry
 import voice.features.bookOverview.overview.authorKey
-import voice.features.bookOverview.overview.badge
 import voice.features.bookOverview.overview.byAuthor
 import voice.features.bookOverview.overview.libraryEntries
 import voice.features.bookOverview.overview.mostCommon
+import voice.features.bookOverview.overview.rememberServerBookStates
 import voice.features.bookOverview.overview.toItemViewState
 import voice.features.bookOverview.overview.toStackViewState
 import voice.navigation.Destination
@@ -60,16 +60,7 @@ class AuthorViewModel(
   @Composable
   internal fun viewState(): AuthorViewState? {
     val books = remember { repo.flow() }.collectAsState(initial = null).value ?: return null
-    val unavailableBooks = remember {
-      serverLibrary.unavailableBooks
-    }
-      .collectAsState(initial = emptySet())
-      .value
-    val downloadStates = remember {
-      serverDownloads.states
-    }
-      .collectAsState(initial = emptyMap())
-      .value
+    val serverStates = rememberServerBookStates(serverLibrary, serverDownloads)
     val authorInfo = info.collectAsState().value
     val authorBooks = remember(books) { books.byAuthor(name) }
     LaunchedEffect(authorBooks.isEmpty()) {
@@ -86,13 +77,7 @@ class AuthorViewModel(
             is LibraryEntry.Single ->
               AuthorViewState.Entry.Book(
                 // the header names the author already
-                book =
-                  entry.book
-                    .toItemViewState(
-                      unavailable = entry.book.id in unavailableBooks,
-                      download = downloadStates[entry.book.id].badge(),
-                    )
-                    .copy(author = null),
+                book = entry.book.toItemViewState(serverStates).copy(author = null),
                 finished = entry.book.category == BookCategory.FINISHED,
               )
             is LibraryEntry.Stack ->

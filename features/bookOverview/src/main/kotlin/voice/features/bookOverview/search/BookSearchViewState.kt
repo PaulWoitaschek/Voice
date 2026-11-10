@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.search.BookSearchField
+import voice.features.bookOverview.overview.DownloadBadge
 
 @Immutable
 sealed interface BookSearchViewState {
@@ -66,6 +67,8 @@ data class SearchResultViewState(
   /** Why a book matched when it wasn't its title or author, e.g. its series. */
   val matchTag: MatchTag?,
   val hidden: Boolean = false,
+  val unavailable: Boolean = false,
+  val download: DownloadBadge? = null,
 )
 
 @Immutable
