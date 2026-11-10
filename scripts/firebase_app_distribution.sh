@@ -6,6 +6,8 @@ app_id="1:789552645904:android:804ab75bd5031ced"
 # renovate: datasource=npm depName=firebase-tools
 firebase_tools_version="15.35.0"
 groups="beta-testers"
+notes=""
+usage="Usage: $0 --notes <what the build changes> [--groups <comma-separated tester group aliases>]"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -13,12 +15,21 @@ while [[ $# -gt 0 ]]; do
       groups="${2:?--groups needs comma-separated tester group aliases}"
       shift 2
       ;;
+    --notes)
+      notes="${2:?--notes needs a short description of the build}"
+      shift 2
+      ;;
     *)
-      echo "Usage: $0 [--groups <comma-separated tester group aliases>]" >&2
+      echo "$usage" >&2
       exit 1
       ;;
   esac
 done
+
+if [[ -z "$notes" ]]; then
+  echo "$usage" >&2
+  exit 1
+fi
 
 cd "$(git rev-parse --show-toplevel)"
 
@@ -44,12 +55,6 @@ commit=$(git rev-parse --short=7 HEAD)
 if [[ -n "$(git status --porcelain)" ]]; then
   commit="$commit-dirty"
 fi
-# testers see which branch a build comes from, a detached HEAD has none
-branch=$(git branch --show-current)
-release_notes="$commit: $(git log -1 --format=%s)"
-if [[ -n "$branch" ]]; then
-  release_notes="$branch · $release_notes"
-fi
 
 ./gradlew :app:assemblePlayRelease \
   -Pvoice.versionName="$version_name-$commit" \
@@ -58,5 +63,5 @@ fi
 npx --yes "firebase-tools@$firebase_tools_version" appdistribution:distribute \
   app/build/outputs/apk/play/release/app-play-release.apk \
   --app "$app_id" \
-  --release-notes "$release_notes" \
+  --release-notes "$notes" \
   --groups "$groups"
