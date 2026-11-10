@@ -139,7 +139,7 @@ class MediaItemProviderTest {
   }
 
   @Test
-  fun `chapters show the same names as in the app`() {
+  fun `chapters show the same names as in the app`() = runTest {
     val chapters =
       listOf("01 - The Signal.mp3", "002.mp3").map {
         Chapter(
@@ -151,19 +151,36 @@ class MediaItemProviderTest {
           fileSize = 0,
         )
       }
+    books += book(chapters)
 
-    val titles = provider.playbackItems(book(chapters)).map { it.mediaMetadata.title.toString() }
+    val items = provider.playbackItems(books.single())
 
-    assertEquals(expected = listOf("The Signal", "Chapter 2"), actual = titles)
+    assertEquals(
+      expected = listOf("The Signal", "Chapter 2"),
+      actual = items.map { it.mediaMetadata.title.toString() },
+    )
+    assertEquals(
+      expected = "Chapter 2",
+      actual = provider.item(items[1].mediaId)?.mediaMetadata?.title?.toString(),
+    )
   }
 
   @Test
   fun `the chapter of a book with one chapter shows the book name`() {
-    val book = libraryBook("Echoes of Tomorrow", position = 0)
+    val chapter =
+      Chapter(
+        id = ChapterId("Track 01.mp3"),
+        name = "Track 01.mp3",
+        duration = 60_000,
+        fileLastModified = Instant.EPOCH,
+        markData = emptyList(),
+        fileSize = 0,
+      )
+    val book = book(listOf(chapter))
 
     val title = provider.playbackItems(book).single().mediaMetadata.title.toString()
 
-    assertEquals(expected = "Echoes of Tomorrow", actual = title)
+    assertEquals(expected = book.name, actual = title)
   }
 
   @Test

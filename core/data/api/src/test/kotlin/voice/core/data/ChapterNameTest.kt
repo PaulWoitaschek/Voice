@@ -26,7 +26,16 @@ class ChapterNameTest {
 
   @Test
   fun `a generic name with the chapter number is dropped`() {
-    listOf("Chapter 3", "Kapitel 03", "Track_3", "CD3", "3. Kapitel", "Глава 3", "Kapitel")
+    listOf(
+        "Chapter 3",
+        "Kapitel 03",
+        "Track_3",
+        "CD3",
+        "3. Kapitel",
+        "Capitolo 3",
+        "Глава 3",
+        "Kapitel",
+      )
       .forEach {
         assertEquals(expected = null, actual = name(it, number = 3))
       }
@@ -41,6 +50,7 @@ class ChapterNameTest {
   @Test
   fun `a track number that matches the chapter number is stripped`() {
     assertEquals(expected = "The Signal", actual = name("03 - The Signal", number = 3))
+    assertEquals(expected = "The Signal", actual = name("3 - The Signal", number = 3))
     assertEquals(expected = "Static", actual = name("3_Static.m4a", number = 3))
     assertEquals(expected = "The Lighthouse", actual = name("0007 The Lighthouse", number = 7))
     assertEquals(expected = null, actual = name("01 - Kapitel 1", number = 1))
@@ -56,6 +66,14 @@ class ChapterNameTest {
     assertEquals(expected = "1 Mose", actual = name("1 Mose", number = 1))
     assertEquals(expected = "1. Akt", actual = name("1. Akt", number = 1))
     assertEquals(expected = "3 Musketiere", actual = name("3 Musketiere", number = 5))
+    assertEquals(expected = "5-Minute Stories", actual = name("5-Minute Stories", number = 5))
+    assertEquals(expected = "1:23 - Speech", actual = name("1:23 - Speech", number = 1))
+  }
+
+  @Test
+  fun `a disc and track number stays`() {
+    assertEquals(expected = "1-01 Arrival", actual = name("1-01 Arrival", number = 1))
+    assertEquals(expected = "01-01 Arrival", actual = name("01-01 Arrival", number = 1))
   }
 
   @Test
