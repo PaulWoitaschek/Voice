@@ -96,6 +96,7 @@ class BookPlayViewModel(
     val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeViewState()
 
+    // read before the first return, so that it loads alongside the book
     val isCurrentBook = remember {
       currentBookStoreId.data.map { it == bookId }
     }
@@ -309,10 +310,16 @@ class BookPlayViewModel(
   fun playPause() {
     scope.launch {
       val startsPlaying =
-        currentBookStoreId.data.first() != bookId ||
-          playStateManager.playState != PlayStateManager.PlayState.Playing
-      selectBook()
-      player.playPause()
+        if (currentBookStoreId.data.first() == bookId) {
+          val playing = playStateManager.playState == PlayStateManager.PlayState.Playing
+          player.playPause()
+          !playing
+        } else {
+          // a toggle could pause, if it runs before the other book is paused
+          selectBook()
+          player.play()
+          true
+        }
       if (startsPlaying && batteryOptimization.shouldRequest()) {
         viewEffectChannel.trySend(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
         batteryOptimization.onBatteryOptimizationsRequested()
@@ -366,12 +373,12 @@ class BookPlayViewModel(
   fun onChapterClick(number: Int) {
     scope.launch {
       val book = currentBook() ?: return@launch
-      selectBook()
       var currentIndex = -1
       book.chapters.forEach { chapter ->
         chapter.chapterMarks.forEach { mark ->
           currentIndex++
           if (currentIndex == number - 1) {
+            selectBook()
             player.setPosition(mark.startMs, chapter.id, ListeningEvent.Type.ChapterChange)
             dialogState.value = null
             return@launch

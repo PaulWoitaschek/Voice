@@ -86,6 +86,7 @@ class BookmarkViewModel(
 
     // saved, so that the editor does not open again once the screen comes back after process death
     var openedEditorFromNavigation by rememberSaveable { mutableStateOf(false) }
+    // read before the first return, so that it loads alongside the book
     val isCurrentBook = remember {
       currentBookStore.data.map { it == bookId }
     }

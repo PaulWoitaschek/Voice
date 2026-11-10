@@ -60,7 +60,7 @@ class HistoryViewModelTest {
     mockk<ListeningHistoryRepo> {
       every { events(bookId) } answers { flowOf(historyEvents.sortedByDescending { it.atMillis }) }
     }
-  private var currentBookStore = MemoryDataStore<BookId?>(bookId)
+  private var currentBookStore = MemoryDataStore<BookId?>(null)
   private val playStateManager = PlayStateManager()
   private val playerController = mockk<PlayerController>(relaxed = true)
   private val navigator = mockk<Navigator>(relaxed = true)

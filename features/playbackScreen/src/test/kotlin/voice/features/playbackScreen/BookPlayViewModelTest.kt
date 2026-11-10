@@ -597,7 +597,7 @@ class BookPlayViewModelTest {
   @Test
   fun `playing the opened book stops the other book`() = scope.runTest {
     val currentBookStore = MemoryDataStore<BookId?>(BookId("other"))
-    val player = mockk<PlayerController> { every { playPause() } just Runs }
+    val player = mockk<PlayerController> { every { play() } just Runs }
     val viewModel =
       viewModel(
         player = player,
@@ -610,7 +610,7 @@ class BookPlayViewModelTest {
 
     verifyOrder {
       player.pauseIfCurrentBookDifferentFrom(book.id)
-      player.playPause()
+      player.play()
     }
     assertEquals(expected = book.id, actual = currentBookStore.data.first())
   }
@@ -629,6 +629,20 @@ class BookPlayViewModelTest {
       player.fastForward()
     }
     assertEquals(expected = book.id, actual = currentBookStore.data.first())
+  }
+
+  @Test
+  fun `a chapter that no longer exists doesn't stop the other book`() = scope.runTest {
+    val otherBook = BookId("other")
+    val currentBookStore = MemoryDataStore<BookId?>(otherBook)
+    val player = mockk<PlayerController>()
+    val viewModel = viewModel(player = player, currentBookStore = currentBookStore)
+
+    viewModel.onChapterClick(number = 99)
+    runCurrent()
+
+    verify(exactly = 0) { player.pauseIfCurrentBookDifferentFrom(any()) }
+    assertEquals(expected = otherBook, actual = currentBookStore.data.first())
   }
 
   @Test
