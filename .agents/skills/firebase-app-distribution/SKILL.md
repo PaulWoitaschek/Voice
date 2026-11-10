@@ -7,6 +7,10 @@ description: Uploading a Play release build of Voice to Firebase App Distributio
 
 Notify `beta-testers`, unless the user names other groups.
 
+Always give release notes that say in a few words what the build changes, for example `Group the library by author`.
+App Tester shows them below the version, so the user can tell the builds apart. Don't use the branch name or the last
+commit message: worktree branches have random names, and with uncommitted changes the commit is not the change.
+
 ## Locally
 
 Use this when `signing/signing.properties` in the main checkout and `app/src/play/google-services.json` exist, and
@@ -14,10 +18,10 @@ Use this when `signing/signing.properties` in the main checkout and `app/src/pla
 `firebase_tools_version` in the script.
 
 ```sh
-./scripts/firebase_app_distribution.sh                 # --groups <aliases> for other groups
+./scripts/firebase_app_distribution.sh --notes "<what the build changes>"   # --groups <aliases> for other groups
 ```
 
-It builds the working tree. With uncommitted changes, the commit in the version name and the notes gets `-dirty`.
+It builds the working tree. With uncommitted changes, the commit in the version name gets `-dirty`.
 
 When it's done, post the tester link, the URL after `Share this release with testers who have access`. Testers open it
 on their phone to install the build.
@@ -28,7 +32,7 @@ Otherwise, ask first. Say that it builds the pushed branch, so uncommitted or un
 pushed first.
 
 ```sh
-gh workflow run firebase_app_distribution.yml --ref <branch> -f groups=beta-testers
+gh workflow run firebase_app_distribution.yml --ref <branch> -f groups=beta-testers -f release_notes="<what the build changes>"
 ```
 
 ## Errors
