@@ -8,6 +8,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import java.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -59,7 +60,7 @@ class HistoryViewModelTest {
     mockk<ListeningHistoryRepo> {
       every { events(bookId) } answers { flowOf(historyEvents.sortedByDescending { it.atMillis }) }
     }
-  private val currentBookStore = MemoryDataStore<BookId?>(null)
+  private var currentBookStore = MemoryDataStore<BookId?>(bookId)
   private val playStateManager = PlayStateManager()
   private val playerController = mockk<PlayerController>(relaxed = true)
   private val navigator = mockk<Navigator>(relaxed = true)
@@ -141,6 +142,23 @@ class HistoryViewModelTest {
       scope.testScheduler.advanceUntilIdle()
       verify { playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek) }
       verify(exactly = 0) { playerController.play() }
+    }
+  }
+
+  @Test
+  fun `going there while another book plays goes on in this book`() {
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+    currentBookStore = MemoryDataStore(BookId("other"))
+    listenedUntilPause()
+    test { viewModel ->
+      viewModel.onGoTo(pausedAt())
+      scope.testScheduler.advanceUntilIdle()
+      assertEquals(expected = bookId, actual = currentBookStore.data.first())
+      verifyOrder {
+        playerController.pauseIfCurrentBookDifferentFrom(bookId)
+        playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek)
+        playerController.play()
+      }
     }
   }
 

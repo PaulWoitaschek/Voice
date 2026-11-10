@@ -84,6 +84,7 @@ class HistoryViewModel(
     leaving = true
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
     scope.launch {
+      playerController.pauseIfCurrentBookDifferentFrom(bookId)
       currentBookStore.updateData { bookId }
       // a seek, so the player offers the way back
       playerController.setPosition(spot.time, spot.chapterId, ListeningEvent.Type.Seek)

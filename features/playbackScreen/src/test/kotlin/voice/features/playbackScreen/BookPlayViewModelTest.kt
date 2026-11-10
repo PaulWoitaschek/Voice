@@ -106,7 +106,7 @@ class BookPlayViewModelTest {
     mockk<PlayStateManager> {
       every { playStateFlow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
     }
-  private val currentBookStoreId = MemoryDataStore<BookId?>(null)
+  private val currentBookStoreId = MemoryDataStore<BookId?>(book.id)
   private val currentBookResolver =
     mockk<CurrentBookResolver> {
       coEvery { book(book.id) } returns book
@@ -285,7 +285,7 @@ class BookPlayViewModelTest {
     assertIs<BookPlayDialogViewState.SelectChapterDialog>(viewModel.dialogState.value)
 
     viewModel.onChapterClick(number = 2)
-    yield()
+    runCurrent()
 
     // The second mark starts at 2 minutes position in the first chapter
     verify(exactly = 1) {
@@ -500,6 +500,7 @@ class BookPlayViewModelTest {
         assertEquals(expected = Duration.ZERO, actual = jumpBack.elapsed)
 
         viewModel.onJumpBackClick(jumpBack.id)
+        runCurrent()
         verify(exactly = 1) {
           player.setPosition(
             time = from.time,
@@ -569,9 +570,92 @@ class BookPlayViewModelTest {
       }
   }
 
+  @Test
+  fun `opening a book lets another book play on`() = scope.runTest {
+    val otherBook = BookId("other")
+    val currentBookStore = MemoryDataStore<BookId?>(otherBook)
+    val player = mockk<PlayerController>()
+    val viewModel =
+      viewModel(
+        player = player,
+        currentBookStore = currentBookStore,
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.viewState()
+      }
+      .test {
+        assertEquals(expected = null, actual = awaitItem())
+        assertEquals(expected = false, actual = awaitItem()!!.playing)
+      }
+    verify(exactly = 0) { player.pauseIfCurrentBookDifferentFrom(any()) }
+    assertEquals(expected = otherBook, actual = currentBookStore.data.first())
+  }
+
+  @Test
+  fun `playing the opened book stops the other book`() = scope.runTest {
+    val currentBookStore = MemoryDataStore<BookId?>(BookId("other"))
+    val player = mockk<PlayerController> { every { playPause() } just Runs }
+    val viewModel =
+      viewModel(
+        player = player,
+        currentBookStore = currentBookStore,
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+      )
+
+    viewModel.playPause()
+    runCurrent()
+
+    verifyOrder {
+      player.pauseIfCurrentBookDifferentFrom(book.id)
+      player.playPause()
+    }
+    assertEquals(expected = book.id, actual = currentBookStore.data.first())
+  }
+
+  @Test
+  fun `skipping in the opened book stops the other book`() = scope.runTest {
+    val currentBookStore = MemoryDataStore<BookId?>(BookId("other"))
+    val player = mockk<PlayerController> { every { fastForward() } just Runs }
+    val viewModel = viewModel(player = player, currentBookStore = currentBookStore)
+
+    viewModel.fastForward()
+    runCurrent()
+
+    verifyOrder {
+      player.pauseIfCurrentBookDifferentFrom(book.id)
+      player.fastForward()
+    }
+    assertEquals(expected = book.id, actual = currentBookStore.data.first())
+  }
+
+  @Test
+  fun `the speed sheet only stops the other book once the speed changes`() = scope.runTest {
+    val otherBook = BookId("other")
+    val currentBookStore = MemoryDataStore<BookId?>(otherBook)
+    val player = mockk<PlayerController> { every { setSpeed(any()) } just Runs }
+    val viewModel = viewModel(player = player, currentBookStore = currentBookStore)
+
+    viewModel.onPlaybackSpeedIconClick()
+    runCurrent()
+    verify(exactly = 0) { player.pauseIfCurrentBookDifferentFrom(any()) }
+    assertEquals(expected = otherBook, actual = currentBookStore.data.first())
+
+    viewModel.onPlaybackSpeedChanged(1.5F)
+    runCurrent()
+    verifyOrder {
+      player.pauseIfCurrentBookDifferentFrom(book.id)
+      player.setSpeed(1.5F)
+    }
+    assertEquals(expected = book.id, actual = currentBookStore.data.first())
+  }
+
   private fun viewModel(
     book: Book = this.book,
     player: PlayerController? = null,
+    currentBookStore: MemoryDataStore<BookId?> = MemoryDataStore(book.id),
     experimentalPlaybackPersistence: Boolean = false,
     kioskMode: Boolean = false,
     livePlaybackFlow: MutableStateFlow<LivePlaybackState?> = MutableStateFlow(null),
@@ -597,11 +681,11 @@ class BookPlayViewModelTest {
           every { this@mockk.playStateFlow } returns playStateFlow
           every { playState } returns playStateFlow.value
         },
-      currentBookStoreId = CurrentBookStore(MemoryDataStore(null)),
+      currentBookStoreId = CurrentBookStore(currentBookStore),
       navigator = mockk(),
       bookmarkRepository = mockk(),
       volumeGainFormatter = mockk(),
-      batteryOptimization = mockk(),
+      batteryOptimization = mockk { coEvery { shouldRequest() } returns false },
       sleepTimerPreferenceStore = SleepTimerPreferenceStore(sleepTimerDataStore),
       seekTimeStore = SeekTimeStore(MemoryDataStore(20)),
       bookId = book.id,
