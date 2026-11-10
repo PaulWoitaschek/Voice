@@ -27,8 +27,8 @@ import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.core.playback.playstate.PlayStateManager
 import voice.features.bookOverview.overview.CurrentBook
-import voice.features.bookOverview.overview.badge
 import voice.features.bookOverview.overview.inSeries
+import voice.features.bookOverview.overview.rememberServerBookStates
 import voice.features.bookOverview.overview.series
 import voice.features.bookOverview.overview.seriesPart
 import voice.features.bookOverview.overview.toItemViewState
@@ -63,16 +63,7 @@ class SeriesViewModel(
     val playing =
       remember { playStateManager.playStateFlow }.collectAsState().value ==
         PlayStateManager.PlayState.Playing
-    val unavailableBooks = remember {
-      serverLibrary.unavailableBooks
-    }
-      .collectAsState(initial = emptySet())
-      .value
-    val downloadStates = remember {
-      serverDownloads.states
-    }
-      .collectAsState(initial = emptyMap())
-      .value
+    val serverStates = rememberServerBookStates(serverLibrary, serverDownloads)
     val livePlaybackState = livePlaybackState(currentBookId)
     val seriesBooks = remember(books) { books.inSeries(name) }
     val series =
@@ -111,12 +102,9 @@ class SeriesViewModel(
           SeriesViewState.Book(
             // the header names the author already
             book =
-              book
-                .toItemViewState(
-                  unavailable = book.id in unavailableBooks,
-                  download = downloadStates[book.id].badge(),
-                )
-                .let { if (it.author == series.author) it.copy(author = null) else it },
+              book.toItemViewState(serverStates).let {
+                if (it.author == series.author) it.copy(author = null) else it
+              },
             part = book.seriesPart,
             finished = book.category == BookCategory.FINISHED,
             current = book.id == currentBookId,

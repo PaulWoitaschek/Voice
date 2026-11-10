@@ -17,6 +17,7 @@ import java.time.Clock
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertSame
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.Dispatchers
@@ -499,6 +500,62 @@ class BookOverviewViewModelTest {
         val state = awaitItem()
         assertEquals(expected = current.id, actual = state.hero?.value?.id)
         assertEquals(expected = 0, actual = state.notDownloadedBookCount)
+      }
+  }
+
+  @Test
+  fun `the continue listening card follows the download of its book`() = runTest {
+    val current = book(id = BookId("abs://item/current"))
+    val downloadStates =
+      MutableStateFlow<Map<BookId, BookDownloadState>>(
+        mapOf(current.id to BookDownloadState.Failed),
+      )
+    val viewModel =
+      viewModel(
+        books = listOf(current),
+        currentBookId = current.id,
+        downloadStates = downloadStates,
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        assertEquals(expected = DownloadBadge.Failed, actual = awaitItem().hero?.value?.download)
+
+        downloadStates.value = mapOf(current.id to BookDownloadState.Downloaded(bytes = 1))
+
+        assertEquals(expected = null, actual = awaitItem().hero?.value?.download)
+      }
+  }
+
+  @Test
+  fun `the download of another book leaves the continue listening card as it is`() = runTest {
+    val current = book(id = BookId("abs://item/current"))
+    val other = book(id = BookId("abs://item/other"))
+    val downloadStates = MutableStateFlow<Map<BookId, BookDownloadState>>(emptyMap())
+    val viewModel =
+      viewModel(
+        books = listOf(current, other),
+        currentBookId = current.id,
+        downloadStates = downloadStates,
+      )
+
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .test {
+        assertEquals(expected = BookOverviewViewState.Loading, actual = awaitItem())
+        val hero = awaitItem().hero
+
+        downloadStates.value = mapOf(other.id to BookDownloadState.Downloaded(bytes = 1))
+
+        val state = awaitItem()
+        assertEquals(expected = 0, actual = state.notDownloadedBookCount)
+        assertSame(expected = hero, actual = state.hero)
       }
   }
 

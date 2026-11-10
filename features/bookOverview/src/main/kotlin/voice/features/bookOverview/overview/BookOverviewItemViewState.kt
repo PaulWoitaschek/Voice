@@ -1,6 +1,11 @@
 package voice.features.bookOverview.overview
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import voice.core.audiobookshelf.ServerDownloads
+import voice.core.audiobookshelf.ServerLibrary
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.audiobookshelf.download.WaitingFor
 import voice.core.data.Book
@@ -41,6 +46,32 @@ internal fun BookDownloadState?.badge(): DownloadBadge? =
     BookDownloadState.NotDownloaded,
     null -> null
   }
+
+@Immutable
+internal data class ServerBookStates(
+  val unavailable: Set<BookId>,
+  val downloads: Map<BookId, BookDownloadState>?,
+)
+
+@Composable
+internal fun rememberServerBookStates(
+  serverLibrary: ServerLibrary,
+  serverDownloads: ServerDownloads,
+): ServerBookStates {
+  val unavailable = remember {
+    serverLibrary.unavailableBooks
+  }
+    .collectAsState(initial = emptySet())
+    .value
+  val downloads = remember { serverDownloads.states }.collectAsState(initial = null).value
+  return ServerBookStates(unavailable, downloads)
+}
+
+internal fun Book.toItemViewState(serverStates: ServerBookStates) =
+  toItemViewState(
+    unavailable = id in serverStates.unavailable,
+    download = serverStates.downloads?.get(id).badge(),
+  )
 
 internal fun Book.toItemViewState(
   unavailable: Boolean = false,
