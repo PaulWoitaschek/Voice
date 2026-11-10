@@ -13,9 +13,11 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import java.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.minutes
@@ -62,6 +64,7 @@ class BookmarkViewModelTest {
     mockk<Navigator> {
       every { goBack() } just Runs
     }
+  private var currentBookStore = MemoryDataStore<BookId?>(book.id)
 
   private fun viewModel(
     editBookmarkId: String? = null,
@@ -70,7 +73,7 @@ class BookmarkViewModelTest {
     historyTabOpenStore: MemoryDataStore<Boolean> = MemoryDataStore(true),
   ) =
     BookmarkViewModel(
-      currentBookStore = CurrentBookStore(MemoryDataStore<BookId?>(null)),
+      currentBookStore = CurrentBookStore(currentBookStore),
       bookRepository =
         mockk {
           every { flow(book.id) } returns flowOf(book)
@@ -375,6 +378,30 @@ class BookmarkViewModelTest {
         playerController.play()
         navigator.goBack()
       }
+    }
+  }
+
+  @Test
+  fun `clicking a bookmark while another book plays stops that book`() {
+    val bookmark = testBookmark(arrival, 2.minutes)
+    bookmarkRepo.bookmarks.value = listOf(bookmark)
+    playStateManager.playState = PlayStateManager.PlayState.Playing
+    currentBookStore = MemoryDataStore(BookId("other"))
+    val viewModel = viewModel()
+    viewModel.test {
+      assertFalse(awaitState { it.totalCount == 1 }.playing)
+      viewModel.onBookmarkClick(bookmark.id)
+      scope.testScheduler.advanceUntilIdle()
+      verifyOrder {
+        playerController.pauseIfCurrentBookDifferentFrom(book.id)
+        playerController.setPosition(
+          2.minutes.inWholeMilliseconds,
+          arrival.id,
+          ListeningEvent.Type.BookmarkJump,
+        )
+      }
+      verify(exactly = 0) { playerController.play() }
+      assertEquals(expected = book.id, actual = currentBookStore.data.first())
     }
   }
 

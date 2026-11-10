@@ -10,6 +10,7 @@ import java.time.Clock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
@@ -82,8 +83,10 @@ class HistoryViewModel(
   internal fun onGoTo(spot: HistorySpot) {
     if (leaving) return
     leaving = true
-    val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
+    val playing = playStateManager.playState == PlayStateManager.PlayState.Playing
     scope.launch {
+      val wasPlaying = playing && currentBookStore.data.first() == bookId
+      playerController.pauseIfCurrentBookDifferentFrom(bookId)
       currentBookStore.updateData { bookId }
       // a seek, so the player offers the way back
       playerController.setPosition(spot.time, spot.chapterId, ListeningEvent.Type.Seek)

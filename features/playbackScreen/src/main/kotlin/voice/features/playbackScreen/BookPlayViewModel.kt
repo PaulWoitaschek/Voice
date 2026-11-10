@@ -19,8 +19,11 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -83,6 +86,7 @@ class BookPlayViewModel(
 ) {
 
   private val scope = MainScope(dispatcherProvider)
+  private val selection = Mutex()
 
   private val viewEffectChannel = Channel<BookPlayViewEffect>(Channel.UNLIMITED)
   internal val viewEffects: Flow<BookPlayViewEffect> = viewEffectChannel.receiveAsFlow()
@@ -91,9 +95,11 @@ class BookPlayViewModel(
     field = mutableStateOf<BookPlayDialogViewState?>(null)
 
   init {
-    scope.launch {
-      player.pauseIfCurrentBookDifferentFrom(bookId)
-      currentBookStoreId.updateData { bookId }
+    // a playing book goes on, only an idle player switches to the opened book
+    inOrder {
+      if (playStateManager.playState != PlayStateManager.PlayState.Playing) {
+        selectBook()
+      }
     }
   }
 
@@ -102,6 +108,12 @@ class BookPlayViewModel(
     val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeViewState()
 
+    // read before the first return, so that it loads alongside the book
+    val isCurrentBook = remember {
+      currentBookStoreId.data.map { it == bookId }
+    }
+      .collectAsState(initial = null)
+      .value
     val defaultSpeed = remember { lastPlaybackSpeedStore.data }.collectAsState(initial = null).value
     val persistedBook =
       remember(bookId) {
@@ -110,6 +122,7 @@ class BookPlayViewModel(
         .collectAsState(initial = null)
         .value
         ?.withDefaultSpeed { defaultSpeed ?: return null } ?: return null
+    if (isCurrentBook == null) return null
 
     val experimentalPlaybackPersistence = experimentalPlaybackPersistenceFeatureFlag.get()
     val livePlaybackState =
@@ -130,7 +143,8 @@ class BookPlayViewModel(
         persistedBook
       }
     val isPlaying =
-      livePlaybackState?.isPlaying ?: (managerPlayState == PlayStateManager.PlayState.Playing)
+      livePlaybackState?.isPlaying
+        ?: (isCurrentBook && managerPlayState == PlayStateManager.PlayState.Playing)
 
     val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
     val positionInCurrentMark =
@@ -289,40 +303,46 @@ class BookPlayViewModel(
 
   fun onPlaybackSpeedChanged(speed: Float) {
     dialogState.value = BookPlayDialogViewState.SpeedDialog(speed)
-    player.setSpeed(speed)
+    withSelectedBook { player.setSpeed(speed) }
   }
 
   fun onVolumeGainChanged(gain: Decibel) {
     dialogState.value = volumeGainDialogViewState(gain)
-    player.setGain(gain)
+    withSelectedBook { player.setGain(gain) }
   }
 
   fun next() {
-    player.next()
+    withSelectedBook { player.next() }
   }
 
   fun previous() {
-    player.previous()
+    withSelectedBook { player.previous() }
   }
 
   fun playPause() {
-    if (playStateManager.playState != PlayStateManager.PlayState.Playing) {
-      scope.launch {
-        if (batteryOptimization.shouldRequest()) {
-          viewEffectChannel.trySend(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
-          batteryOptimization.onBatteryOptimizationsRequested()
+    inOrder {
+      val switched = selectBook()
+      val startsPlaying =
+        switched || playStateManager.playState != PlayStateManager.PlayState.Playing
+      // a toggle could pause, if it runs before the other book is paused
+      if (switched) player.play() else player.playPause()
+      if (startsPlaying) {
+        scope.launch {
+          if (batteryOptimization.shouldRequest()) {
+            viewEffectChannel.trySend(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
+            batteryOptimization.onBatteryOptimizationsRequested()
+          }
         }
       }
     }
-    player.playPause()
   }
 
   fun rewind() {
-    player.rewind()
+    withSelectedBook { player.rewind() }
   }
 
   fun fastForward() {
-    player.fastForward()
+    withSelectedBook { player.fastForward() }
   }
 
   fun onCloseClick() {
@@ -361,16 +381,17 @@ class BookPlayViewModel(
   }
 
   fun onChapterClick(number: Int) {
-    scope.launch {
-      val book = currentBook() ?: return@launch
+    inOrder {
+      val book = currentBook() ?: return@inOrder
       var currentIndex = -1
       book.chapters.forEach { chapter ->
         chapter.chapterMarks.forEach { mark ->
           currentIndex++
           if (currentIndex == number - 1) {
+            selectBook()
             player.setPosition(mark.startMs, chapter.id, ListeningEvent.Type.ChapterChange)
             dialogState.value = null
-            return@launch
+            return@inOrder
           }
         }
       }
@@ -425,7 +446,9 @@ class BookPlayViewModel(
 
   fun onJumpBackClick(id: Long) {
     val jump = jump(id) ?: return
-    player.setPosition(jump.from.time, jump.from.chapterId, ListeningEvent.Type.JumpBack)
+    withSelectedBook {
+      player.setPosition(jump.from.time, jump.from.chapterId, ListeningEvent.Type.JumpBack)
+    }
   }
 
   fun onJumpBackExpire(id: Long) {
@@ -438,10 +461,11 @@ class BookPlayViewModel(
     historyRecorder.lastJump.value?.takeIf { it.at.toEpochMilli() == id }
 
   fun seekTo(position: Duration) {
-    scope.launch {
-      val book = currentBook() ?: return@launch
+    inOrder {
+      val book = currentBook() ?: return@inOrder
       val currentChapter = book.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
+      selectBook()
       player.setPosition(currentMark.startMs + position.inWholeMilliseconds, currentChapter.id)
     }
   }
@@ -469,14 +493,37 @@ class BookPlayViewModel(
   }
 
   fun toggleSkipSilence() {
-    scope.launch {
-      val skipSilence = currentBook()?.content?.skipSilence ?: return@launch
+    inOrder {
+      val skipSilence = currentBook()?.content?.skipSilence ?: return@inOrder
+      selectBook()
       player.skipSilence(!skipSilence)
     }
   }
 
   private suspend fun currentBook(): Book? {
     return currentBookResolver.book(bookId)
+  }
+
+  // while the book switches, a later tap must not reach the player first
+  private fun inOrder(action: suspend () -> Unit) {
+    scope.launch {
+      selection.withLock { action() }
+    }
+  }
+
+  private fun withSelectedBook(action: () -> Unit) {
+    inOrder {
+      selectBook()
+      action()
+    }
+  }
+
+  @IgnorableReturnValue
+  private suspend fun selectBook(): Boolean {
+    if (currentBookStoreId.data.first() == bookId) return false
+    player.pauseIfCurrentBookDifferentFrom(bookId)
+    currentBookStoreId.updateData { bookId }
+    return true
   }
 
   @AssistedFactory
