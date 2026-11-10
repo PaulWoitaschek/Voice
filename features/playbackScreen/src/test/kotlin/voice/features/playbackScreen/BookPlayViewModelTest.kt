@@ -105,6 +105,7 @@ class BookPlayViewModelTest {
   private val playStateManager =
     mockk<PlayStateManager> {
       every { playStateFlow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
+      every { playState } returns PlayStateManager.PlayState.Paused
     }
   private val currentBookStoreId = MemoryDataStore<BookId?>(book.id)
   private val currentBookResolver =
@@ -591,6 +592,18 @@ class BookPlayViewModelTest {
   }
 
   @Test
+  fun `opening a book while nothing plays makes it the current book`() = scope.runTest {
+    val currentBookStore = MemoryDataStore<BookId?>(BookId("other"))
+    val player = mockk<PlayerController>()
+
+    val _ = viewModel(player = player, currentBookStore = currentBookStore)
+    runCurrent()
+
+    verify { player.pauseIfCurrentBookDifferentFrom(book.id) }
+    assertEquals(expected = book.id, actual = currentBookStore.data.first())
+  }
+
+  @Test
   fun `playing the opened book stops the other book`() = scope.runTest {
     val currentBookStore = MemoryDataStore<BookId?>(BookId("other"))
     val player = mockk<PlayerController> { every { play() } just Runs }
@@ -615,7 +628,12 @@ class BookPlayViewModelTest {
   fun `skipping in the opened book stops the other book`() = scope.runTest {
     val currentBookStore = MemoryDataStore<BookId?>(BookId("other"))
     val player = mockk<PlayerController> { every { fastForward() } just Runs }
-    val viewModel = viewModel(player = player, currentBookStore = currentBookStore)
+    val viewModel =
+      viewModel(
+        player = player,
+        currentBookStore = currentBookStore,
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+      )
 
     viewModel.fastForward()
     runCurrent()
@@ -644,7 +662,12 @@ class BookPlayViewModelTest {
     val otherBook = BookId("other")
     val currentBookStore = MemoryDataStore<BookId?>(otherBook)
     val player = mockk<PlayerController>()
-    val viewModel = viewModel(player = player, currentBookStore = currentBookStore)
+    val viewModel =
+      viewModel(
+        player = player,
+        currentBookStore = currentBookStore,
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+      )
 
     viewModel.onChapterClick(number = 99)
     runCurrent()
@@ -658,7 +681,12 @@ class BookPlayViewModelTest {
     val otherBook = BookId("other")
     val currentBookStore = MemoryDataStore<BookId?>(otherBook)
     val player = mockk<PlayerController> { every { setSpeed(any()) } just Runs }
-    val viewModel = viewModel(player = player, currentBookStore = currentBookStore)
+    val viewModel =
+      viewModel(
+        player = player,
+        currentBookStore = currentBookStore,
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+      )
 
     viewModel.onPlaybackSpeedIconClick()
     runCurrent()

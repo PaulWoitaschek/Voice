@@ -94,6 +94,15 @@ class BookPlayViewModel(
   internal val dialogState: State<BookPlayDialogViewState?>
     field = mutableStateOf<BookPlayDialogViewState?>(null)
 
+  init {
+    // a playing book goes on, only an idle player switches to the opened book
+    inOrder {
+      if (playStateManager.playState != PlayStateManager.PlayState.Playing) {
+        selectBook()
+      }
+    }
+  }
+
   @Composable
   fun viewState(): BookPlayViewState? {
     val kioskMode = remember { kioskModeFeatureFlag.get() }
