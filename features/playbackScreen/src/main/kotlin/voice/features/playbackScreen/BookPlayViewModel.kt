@@ -311,7 +311,8 @@ class BookPlayViewModel(
   }
 
   fun playPause() {
-    withSelectedBook { switched ->
+    inOrder {
+      val switched = selectBook()
       val startsPlaying =
         switched || playStateManager.playState != PlayStateManager.PlayState.Playing
       // a toggle could pause, if it runs before the other book is paused
@@ -371,18 +372,17 @@ class BookPlayViewModel(
   }
 
   fun onChapterClick(number: Int) {
-    scope.launch {
-      val book = currentBook() ?: return@launch
+    inOrder {
+      val book = currentBook() ?: return@inOrder
       var currentIndex = -1
       book.chapters.forEach { chapter ->
         chapter.chapterMarks.forEach { mark ->
           currentIndex++
           if (currentIndex == number - 1) {
-            withSelectedBook {
-              player.setPosition(mark.startMs, chapter.id, ListeningEvent.Type.ChapterChange)
-            }
+            selectBook()
+            player.setPosition(mark.startMs, chapter.id, ListeningEvent.Type.ChapterChange)
             dialogState.value = null
-            return@launch
+            return@inOrder
           }
         }
       }
@@ -452,13 +452,12 @@ class BookPlayViewModel(
     historyRecorder.lastJump.value?.takeIf { it.at.toEpochMilli() == id }
 
   fun seekTo(position: Duration) {
-    scope.launch {
-      val book = currentBook() ?: return@launch
+    inOrder {
+      val book = currentBook() ?: return@inOrder
       val currentChapter = book.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
-      withSelectedBook {
-        player.setPosition(currentMark.startMs + position.inWholeMilliseconds, currentChapter.id)
-      }
+      selectBook()
+      player.setPosition(currentMark.startMs + position.inWholeMilliseconds, currentChapter.id)
     }
   }
 
@@ -485,9 +484,10 @@ class BookPlayViewModel(
   }
 
   fun toggleSkipSilence() {
-    scope.launch {
-      val skipSilence = currentBook()?.content?.skipSilence ?: return@launch
-      withSelectedBook { player.skipSilence(!skipSilence) }
+    inOrder {
+      val skipSilence = currentBook()?.content?.skipSilence ?: return@inOrder
+      selectBook()
+      player.skipSilence(!skipSilence)
     }
   }
 
@@ -495,18 +495,26 @@ class BookPlayViewModel(
     return currentBookResolver.book(bookId)
   }
 
-  private fun withSelectedBook(action: (switched: Boolean) -> Unit) {
+  // while the book switches, a later tap must not reach the player first
+  private fun inOrder(action: suspend () -> Unit) {
     scope.launch {
-      // while the book switches, a later tap must not reach the player first
-      selection.withLock {
-        val switched = currentBookStoreId.data.first() != bookId
-        if (switched) {
-          player.pauseIfCurrentBookDifferentFrom(bookId)
-          currentBookStoreId.updateData { bookId }
-        }
-        action(switched)
-      }
+      selection.withLock { action() }
     }
+  }
+
+  private fun withSelectedBook(action: () -> Unit) {
+    inOrder {
+      selectBook()
+      action()
+    }
+  }
+
+  @IgnorableReturnValue
+  private suspend fun selectBook(): Boolean {
+    if (currentBookStoreId.data.first() == bookId) return false
+    player.pauseIfCurrentBookDifferentFrom(bookId)
+    currentBookStoreId.updateData { bookId }
+    return true
   }
 
   @AssistedFactory

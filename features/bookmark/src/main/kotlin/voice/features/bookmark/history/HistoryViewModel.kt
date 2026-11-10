@@ -83,10 +83,9 @@ class HistoryViewModel(
   internal fun onGoTo(spot: HistorySpot) {
     if (leaving) return
     leaving = true
+    val playing = playStateManager.playState == PlayStateManager.PlayState.Playing
     scope.launch {
-      val wasPlaying =
-        currentBookStore.data.first() == bookId &&
-          playStateManager.playState == PlayStateManager.PlayState.Playing
+      val wasPlaying = playing && currentBookStore.data.first() == bookId
       playerController.pauseIfCurrentBookDifferentFrom(bookId)
       currentBookStore.updateData { bookId }
       // a seek, so the player offers the way back
