@@ -135,10 +135,7 @@ class BookPlayViewModelTest {
           every { flow(book.id) } returns MutableStateFlow(book)
         },
       currentBookResolver = currentBookResolver,
-      player =
-        player.apply {
-          every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
-        },
+      player = player,
       sleepTimer = sleepTimer,
       playStateManager = playStateManager,
       currentBookStoreId = CurrentBookStore(currentBookStoreId),
@@ -469,7 +466,6 @@ class BookPlayViewModelTest {
   fun `a big jump offers the way back`() = scope.runTest {
     val player =
       mockk<PlayerController> {
-        every { pauseIfCurrentBookDifferentFrom(book.id) } just Runs
         every { setPosition(any(), any(), any()) } just Runs
       }
     val viewModel = viewModel(player = player)
