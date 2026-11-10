@@ -35,7 +35,6 @@ class MediaItemProviderTest {
           coEvery { this@mockk.get(any()) } answers { books.find { it.id == firstArg() } }
         },
       application = ApplicationProvider.getApplicationContext(),
-      chapterRepo = mockk(),
       imageFileProvider = mockk(),
       currentBookStoreId = mockk(),
     )
@@ -137,6 +136,51 @@ class MediaItemProviderTest {
     assertEquals(expected = marks.map { it.mediaId }, actual = items.mediaItems.map { it.mediaId })
     assertEquals(expected = 1, actual = items.startIndex)
     assertEquals(expected = 0, actual = items.startPositionMs)
+  }
+
+  @Test
+  fun `chapters show the same names as in the app`() = runTest {
+    val chapters =
+      listOf("01 - The Signal.mp3", "002.mp3").map {
+        Chapter(
+          id = ChapterId(it),
+          name = it,
+          duration = 60_000,
+          fileLastModified = Instant.EPOCH,
+          markData = emptyList(),
+          fileSize = 0,
+        )
+      }
+    books += book(chapters)
+
+    val items = provider.playbackItems(books.single())
+
+    assertEquals(
+      expected = listOf("The Signal", "Chapter 2"),
+      actual = items.map { it.mediaMetadata.title.toString() },
+    )
+    assertEquals(
+      expected = "Chapter 2",
+      actual = provider.item(items[1].mediaId)?.mediaMetadata?.title?.toString(),
+    )
+  }
+
+  @Test
+  fun `the chapter of a book with one chapter shows the book name`() {
+    val chapter =
+      Chapter(
+        id = ChapterId("Track 01.mp3"),
+        name = "Track 01.mp3",
+        duration = 60_000,
+        fileLastModified = Instant.EPOCH,
+        markData = emptyList(),
+        fileSize = 0,
+      )
+    val book = book(listOf(chapter))
+
+    val title = provider.playbackItems(book).single().mediaMetadata.title.toString()
+
+    assertEquals(expected = book.name, actual = title)
   }
 
   @Test

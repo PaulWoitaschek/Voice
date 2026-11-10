@@ -28,6 +28,7 @@ import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Bookmark
 import voice.core.data.ListeningEvent
+import voice.core.data.displayName
 import voice.core.data.durationMs
 import voice.core.data.markForPosition
 import voice.core.data.repo.BookRepository
@@ -161,7 +162,7 @@ class BookPlayViewModel(
       title = book.name,
       author = book.author,
       showPreviousNextButtons = hasMoreThanOneChapter,
-      chapterName = currentMark.name?.takeIf { hasMoreThanOneChapter && it.isNotBlank() },
+      chapterName = currentMark.displayName(chapterNumber, chapterCount),
       duration = currentMark.durationMs.milliseconds,
       playedTime = positionInCurrentMark.milliseconds,
       cover = book.coverUrl,
@@ -339,15 +340,17 @@ class BookPlayViewModel(
   fun onCurrentChapterClick() {
     scope.launch {
       val book = currentBook() ?: return@launch
+      val chapterCount = book.chapters.sumOf { it.chapterMarks.count() }
       dialogState.value =
         BookPlayDialogViewState.SelectChapterDialog(
           items =
             book.chapters.flatMapIndexed { chapterIndex, chapter ->
               chapter.chapterMarks.mapIndexed { markIndex, chapterMark ->
                 val previousChapters = book.chapters.take(chapterIndex)
+                val number = previousChapters.sumOf { it.chapterMarks.count() } + markIndex + 1
                 BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
-                  number = previousChapters.sumOf { it.chapterMarks.count() } + markIndex + 1,
-                  name = chapterMark.name?.takeIf { it.isNotBlank() },
+                  number = number,
+                  name = chapterMark.displayName(number, chapterCount),
                   active = chapterMark == book.currentMark && chapter == book.currentChapter,
                   time = formatTime(previousChapters.sumOf { it.duration } + chapterMark.startMs),
                 )

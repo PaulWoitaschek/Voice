@@ -65,7 +65,7 @@ class ChapterMarkPlayerTest {
       )
       .build()
 
-  private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk(), mockk())
+  private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk())
   private val player = ChapterMarkPlayer(exoPlayer)
 
   @Test
