@@ -21,7 +21,6 @@ import voice.core.data.BookId
 import voice.core.data.ListeningEvent
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
-import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
@@ -37,7 +36,6 @@ internal class ProgressSync(
   private val http: AudiobookshelfHttp,
   private val bookRepository: BookRepository,
   private val syncedProgressStore: SyncedProgressStore,
-  private val currentBookStore: CurrentBookStore,
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
 ) {
@@ -190,9 +188,8 @@ internal class ProgressSync(
     }
   }
 
-  private suspend fun isPlaying(bookId: BookId): Boolean {
-    return playStateManager.playState == PlayStateManager.PlayState.Playing &&
-      currentBookStore.data.first() == bookId
+  private fun isPlaying(bookId: BookId): Boolean {
+    return playStateManager.playState == PlayStateManager.PlayState.Playing(bookId)
   }
 
   private suspend fun remember(

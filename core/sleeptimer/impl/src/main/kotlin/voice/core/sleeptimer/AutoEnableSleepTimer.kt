@@ -24,7 +24,7 @@ class AutoEnableSleepTimer(
 
   override fun onAppStart(application: Application) {
     playStateManager.playStateFlow
-      .filter { it == Playing }
+      .filter { it is Playing }
       .onEach {
         val autoSleepTimerPreference = sleepTimerPreferenceStore.data.first()
         if (

@@ -1,7 +1,10 @@
 package voice.core.playback.playstate
 
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
+import voice.core.playback.session.bookId
+import voice.core.playback.session.toMediaIdOrNull
 
 @Inject
 class PlayStateDelegatingListener(private val playStateManager: PlayStateManager) :
@@ -25,13 +28,21 @@ class PlayStateDelegatingListener(private val playStateManager: PlayStateManager
     updatePlayState()
   }
 
+  override fun onMediaItemTransition(
+    mediaItem: MediaItem?,
+    reason: Int,
+  ) {
+    updatePlayState()
+  }
+
   private fun updatePlayState() {
     val playbackState = player.playbackState
+    val bookId = player.currentMediaItem?.mediaId?.toMediaIdOrNull()?.bookId
     playStateManager.playState =
       when {
         playbackState == Player.STATE_ENDED || playbackState == Player.STATE_IDLE ->
           PlayStateManager.PlayState.Paused
-        player.playWhenReady -> PlayStateManager.PlayState.Playing
+        player.playWhenReady && bookId != null -> PlayStateManager.PlayState.Playing(bookId)
         else -> PlayStateManager.PlayState.Paused
       }
   }

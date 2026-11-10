@@ -16,6 +16,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
+import voice.core.data.BookId
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.impl.MemoryDataStore
 
@@ -56,7 +57,7 @@ class AutoEnableSleepTimerMinimalTest {
     sleepTimerPreferenceStore.updateData { prefs(enabled = true) }
 
     sut.onAppStart(mockk())
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
     advanceUntilIdle()
     yield()
 
@@ -68,7 +69,7 @@ class AutoEnableSleepTimerMinimalTest {
     sleepTimerPreferenceStore.updateData { prefs(enabled = false) }
 
     sut.onAppStart(mockk())
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
     advanceUntilIdle()
     yield()
 

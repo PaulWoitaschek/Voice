@@ -30,7 +30,6 @@ import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
-import voice.core.data.store.CurrentBookStore
 import voice.core.playback.playstate.PlayStateManager
 
 class ProgressSyncTest {
@@ -242,7 +241,6 @@ class ProgressSyncTest {
         ),
       bookRepository = repo,
       syncedProgressStore = SyncedProgressStore(syncedProgress),
-      currentBookStore = CurrentBookStore(MemoryDataStore<BookId?>(null)),
       playStateManager = PlayStateManager(),
       playerController =
         mockk {

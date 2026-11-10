@@ -148,8 +148,7 @@ class BookSearchViewModel(
     return BookSearchViewState.Results(
       filters = filters(results.results, filter),
       topResult = topResult,
-      topResultPlaying =
-        topResult.id == currentBookId && playState == PlayStateManager.PlayState.Playing,
+      topResultPlaying = playState == PlayStateManager.PlayState.Playing(topResult.id),
       otherResults = filtered.drop(1).map { it.toViewState(livePlaybackState, serverStates) },
     )
   }

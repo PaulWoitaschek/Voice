@@ -52,7 +52,7 @@ class ReviewPromptController(
 
   private suspend fun newPrompt(): ReviewPrompt? {
     // never interrupt a story
-    if (playStateManager.playState == PlayStateManager.PlayState.Playing) return null
+    if (playStateManager.playState is PlayStateManager.PlayState.Playing) return null
 
     if (force.get() && !forcedShown) {
       forcedShown = true
