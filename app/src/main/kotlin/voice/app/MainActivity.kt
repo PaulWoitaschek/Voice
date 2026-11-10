@@ -39,10 +39,12 @@ import voice.core.logging.api.Logger
 import voice.core.ui.CoverColorsStore
 import voice.core.ui.CoverSeedColors
 import voice.core.ui.LocalCoverSeedColors
+import voice.core.ui.LocalPlayerDrag
 import voice.core.ui.LocalSharedTransitionScope
 import voice.core.ui.LocalSharesCovers
 import voice.core.ui.LocalSharesSeriesCovers
 import voice.core.ui.LocalSplashScreenHolds
+import voice.core.ui.PlayerDrag
 import voice.core.ui.PureBlackStore
 import voice.core.ui.SplashScreenHolds
 import voice.core.ui.ThemeColorSchemeStore
@@ -128,6 +130,7 @@ class MainActivity : AppCompatActivity() {
         val overlayStrategy = remember { OverlaySceneStrategy<Destination.Compose>() }
         val density = LocalDensity.current
         val windowWidth = LocalWindowInfo.current.containerSize.width
+        val playerDrag = remember { PlayerDrag() }
 
         SharedTransitionLayout {
           CompositionLocalProvider(
@@ -136,6 +139,7 @@ class MainActivity : AppCompatActivity() {
             LocalSharesSeriesCovers provides ::sharesSeriesCovers,
             LocalCoverSeedColors provides coverSeedColors.takeIf { coverColors },
             LocalSplashScreenHolds provides splashScreenHolds,
+            LocalPlayerDrag provides playerDrag,
           ) {
             NavDisplay(
               backStack = backStack,
@@ -161,7 +165,9 @@ class MainActivity : AppCompatActivity() {
                 }
               },
               predictivePopTransitionSpec = {
-                if (
+                if (playerDrag.active) {
+                  dragDownTransform()
+                } else if (
                   isSharedElementTransition(initialState.destination(), targetState.destination())
                 ) {
                   SharedElementFadeEnterTransition togetherWith SharedElementFadeExitTransition

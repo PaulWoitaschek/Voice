@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +22,7 @@ import kotlin.time.Duration.Companion.seconds
 import voice.core.data.BookId
 import voice.core.ui.AuroraBackground
 import voice.core.ui.CoverTheme
+import voice.core.ui.LocalSharedTransitionScope
 import voice.core.ui.VoiceTheme
 import voice.core.ui.rememberAnimationClock
 import voice.features.playbackScreen.BookPlayViewState
@@ -50,7 +52,8 @@ internal fun BookPlayView(
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
   val clock = rememberAnimationClock(running = viewState.playing)
-  BoxWithConstraints(Modifier.fillMaxSize()) {
+  val dragDownToClose = rememberDragDownToCloseState()
+  BoxWithConstraints(Modifier.fillMaxSize().dragDownToClose(dragDownToClose)) {
     // split screen panes are often wider than tall, but too narrow or too short for a cover next to
     // the controls
     val sideBySide = maxWidth > maxHeight && maxWidth >= 600.dp && maxHeight >= 360.dp
@@ -76,31 +79,37 @@ internal fun BookPlayView(
         }
       },
       content = { contentPadding ->
-        BookPlayContent(
-          contentPadding = contentPadding,
-          viewState = viewState,
-          bookId = bookId,
-          clock = { clock.value },
-          sideBySide = sideBySide,
-          onPlayClick = onPlayClick,
-          onRewindClick = onRewindClick,
-          onFastForwardClick = onFastForwardClick,
-          onSeek = onSeek,
-          onSkipToNext = onSkipToNext,
-          onSkipToPrevious = onSkipToPrevious,
-          onCurrentChapterClick = onCurrentChapterClick,
-          onSleepTimerClick = onSleepTimerClick,
-          onSpeedChangeClick = onSpeedChangeClick,
-          onBookmarkClick = onBookmarkClick,
-          onBookmarkLongClick = onBookmarkLongClick,
-          onSkipSilenceClick = onSkipSilenceClick,
-          onVolumeBoostClick = onVolumeBoostClick,
-          onCloseClick = onCloseClick,
-          onBookActionsClick = onBookActionsClick,
-          onAuthorClick = onAuthorClick,
-          onJumpBack = onJumpBack,
-          onJumpBackExpire = onJumpBackExpire,
-        )
+        // the cover and play button slide down with the player instead of flying to the library
+        CompositionLocalProvider(
+          LocalSharedTransitionScope provides
+            LocalSharedTransitionScope.current.takeUnless { dragDownToClose.dragged },
+        ) {
+          BookPlayContent(
+            contentPadding = contentPadding,
+            viewState = viewState,
+            bookId = bookId,
+            clock = { clock.value },
+            sideBySide = sideBySide,
+            onPlayClick = onPlayClick,
+            onRewindClick = onRewindClick,
+            onFastForwardClick = onFastForwardClick,
+            onSeek = onSeek,
+            onSkipToNext = onSkipToNext,
+            onSkipToPrevious = onSkipToPrevious,
+            onCurrentChapterClick = onCurrentChapterClick,
+            onSleepTimerClick = onSleepTimerClick,
+            onSpeedChangeClick = onSpeedChangeClick,
+            onBookmarkClick = onBookmarkClick,
+            onBookmarkLongClick = onBookmarkLongClick,
+            onSkipSilenceClick = onSkipSilenceClick,
+            onVolumeBoostClick = onVolumeBoostClick,
+            onCloseClick = onCloseClick,
+            onBookActionsClick = onBookActionsClick,
+            onAuthorClick = onAuthorClick,
+            onJumpBack = onJumpBack,
+            onJumpBackExpire = onJumpBackExpire,
+          )
+        }
       },
     )
   }

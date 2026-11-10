@@ -35,6 +35,7 @@
  */
 package voice.app
 
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.CubicBezierEasing
@@ -124,6 +125,14 @@ val SharedElementFadeEnterTransition =
 val SharedElementFadeExitTransition =
   fadeOut(
     animationSpec = tween(durationMillis = DurationMedium1, easing = EmphasizedAccelerateEasing),
+  )
+
+/** The player moves by itself while it's dragged down, in front of the library. */
+internal fun dragDownTransform(): ContentTransform =
+  ContentTransform(
+    targetContentEnter = EnterTransition.None,
+    initialContentExit = ExitTransition.None,
+    targetContentZIndex = -1F,
   )
 
 internal fun Scene<*>.destination(): Destination.Compose? {
