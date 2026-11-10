@@ -9,13 +9,14 @@ on:
         type: string
         default: beta-testers
       release_notes:
-        description: Release notes shown in App Tester. Defaults to the branch, commit and commit message.
+        description: Release notes shown in App Tester. Defaults to the title of the branch's pull request, or else the last commit message.
         required: false
         type: string
 
 # Draft releases are only listed with write access, and the version has to count them.
 permissions:
   contents: write
+  pull-requests: read
 
 jobs:
   distribute:
@@ -78,12 +79,13 @@ jobs:
           FIREBASE_TOOLS_VERSION: 15.35.0
           TESTER_GROUPS: ${{ inputs.groups }}
           RELEASE_NOTES: ${{ inputs.release_notes }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           app_id=$(jq -er '.client[]
             | select(.client_info.android_client_info.package_name == "de.ph1b.audiobook")
             | .client_info.mobilesdk_app_id' app/src/play/google-services.json)
           if [[ -z "$RELEASE_NOTES" ]]; then
-            RELEASE_NOTES="$GITHUB_REF_NAME@${GITHUB_SHA::7}: $(git log -1 --format=%s)"
+            RELEASE_NOTES=$(gh pr view "$GITHUB_REF_NAME" --json title --jq .title || git log -1 --format=%s)
           fi
 
           args=(--app "$app_id" --release-notes "$RELEASE_NOTES")
