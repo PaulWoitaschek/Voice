@@ -65,6 +65,21 @@ class AutoEnableSleepTimerMinimalTest {
   }
 
   @Test
+  fun `another book that plays right away doesn't enable it again`() = testScope.runTest {
+    sleepTimerPreferenceStore.updateData { prefs(enabled = true) }
+
+    sut.onAppStart(mockk())
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
+    advanceUntilIdle()
+    yield()
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("other"))
+    advanceUntilIdle()
+    yield()
+
+    coVerify(exactly = 1) { sleepTimer.enable(any()) }
+  }
+
+  @Test
   fun `does nothing when sleeptimer is disabled`() = testScope.runTest {
     sleepTimerPreferenceStore.updateData { prefs(enabled = false) }
 

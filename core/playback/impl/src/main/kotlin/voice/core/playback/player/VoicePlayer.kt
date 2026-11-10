@@ -30,8 +30,7 @@ import voice.core.playback.history.PlaybackPosition
 import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
-import voice.core.playback.session.bookId
-import voice.core.playback.session.toMediaIdOrNull
+import voice.core.playback.session.currentBookId
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerState
 
@@ -281,7 +280,7 @@ class VoicePlayer(
 
   private fun updateLastPlayedAt() {
     // the book that plays, which can differ from the current book until the app loads that one
-    val bookId = player.currentMediaItem?.mediaId?.toMediaIdOrNull()?.bookId ?: return
+    val bookId = player.currentBookId() ?: return
     scope.launch {
       repo.updateBook(bookId) {
         it.copy(lastPlayedAt = Instant.now())

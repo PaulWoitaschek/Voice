@@ -5,9 +5,11 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import java.time.Clock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import voice.core.initializer.AppInitializer
 import voice.core.playback.playstate.PlayStateManager
@@ -24,7 +26,10 @@ class AutoEnableSleepTimer(
 
   override fun onAppStart(application: Application) {
     playStateManager.playStateFlow
-      .filter { it is Playing }
+      // only a start, and not another book that plays right away
+      .map { it is Playing }
+      .distinctUntilChanged()
+      .filter { it }
       .onEach {
         val autoSleepTimerPreference = sleepTimerPreferenceStore.data.first()
         if (

@@ -1,5 +1,6 @@
 package voice.core.playback.session
 
+import androidx.media3.common.Player
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.Chapter
@@ -98,6 +99,8 @@ internal val MediaId.bookId: BookId?
       MediaId.Recent,
       MediaId.Root -> null
     }
+
+internal fun Player.currentBookId(): BookId? = currentMediaItem?.mediaId?.toMediaIdOrNull()?.bookId
 
 internal val MediaId.realChapterId: ChapterId?
   get() =
