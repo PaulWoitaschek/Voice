@@ -84,7 +84,7 @@ internal class ListeningSessionReporter(
           }
           if (session?.bookId != bookId) close()
 
-          if (playState == PlayStateManager.PlayState.Playing) {
+          if (playState == PlayStateManager.PlayState.Playing(bookId)) {
             var reportedAt = SystemClock.elapsedRealtime()
             try {
               while (true) {

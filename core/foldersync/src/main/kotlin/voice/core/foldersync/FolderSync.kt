@@ -209,11 +209,11 @@ internal constructor(
   ) {
     val book = bookRepository.get(bookId) ?: return
     val position = book.positionFrom(remote) ?: return
-    val isCurrent = currentBookStore.data.first() == bookId
-    if (isCurrent && playStateManager.playState == PlayStateManager.PlayState.Playing) {
+    if (playStateManager.playState == PlayStateManager.PlayState.Playing(bookId)) {
       // what plays here is newer than anything another device wrote
       return
     }
+    val isCurrent = currentBookStore.data.first() == bookId
     Logger.d("Taking over a position from another device (current=$isCurrent)")
     // the player fails on a speed of 0 or less, and would again every time it loads the book
     val speed = remote.speed.takeIf { it > 0 } ?: book.content.playbackSpeed

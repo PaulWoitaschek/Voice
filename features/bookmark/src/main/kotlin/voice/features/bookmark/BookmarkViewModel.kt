@@ -15,8 +15,6 @@ import java.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import voice.core.common.DispatcherProvider
@@ -87,12 +85,6 @@ class BookmarkViewModel(
 
     // saved, so that the editor does not open again once the screen comes back after process death
     var openedEditorFromNavigation by rememberSaveable { mutableStateOf(false) }
-    // read before the first return, so that it loads alongside the book
-    val isCurrentBook = remember {
-      currentBookStore.data.map { it == bookId }
-    }
-      .collectAsState(initial = null)
-      .value
     val defaultSpeed = remember { lastPlaybackSpeedStore.data }.collectAsState(initial = null).value
     val historyTabOpen =
       remember { historyTabOpenStore.data }.collectAsState(initial = null).value ?: return null
@@ -101,7 +93,6 @@ class BookmarkViewModel(
         .collectAsState(initial = null)
         .value
         ?.withDefaultSpeed { defaultSpeed ?: return null } ?: return null
-    if (isCurrentBook == null) return null
     // with the experimental playback persistence, the stored position lags behind while playing
     val experimentalPlaybackPersistence = remember {
       experimentalPlaybackPersistenceFeatureFlag.get()
@@ -143,8 +134,7 @@ class BookmarkViewModel(
       bookAuthor = book.author,
       cover = book.coverUrl,
       playing =
-        livePlaybackState?.isPlaying
-          ?: (isCurrentBook && playState == PlayStateManager.PlayState.Playing),
+        livePlaybackState?.isPlaying ?: (playState == PlayStateManager.PlayState.Playing(bookId)),
       sleepTimerActive = sleepTimerState.enabled,
       bookBar = bookBar(index, visible, book.content.playbackSpeed),
       sort = sort,
@@ -204,9 +194,8 @@ class BookmarkViewModel(
     if (leaving) return
     val bookmark = bookmarks.find { it.id == id } ?: return
     leaving = true
-    val playing = playStateManager.playState == PlayStateManager.PlayState.Playing
+    val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing(bookId)
     scope.launch {
-      val wasPlaying = playing && currentBookStore.data.first() == bookId
       playerController.pauseIfCurrentBookDifferentFrom(bookId)
       currentBookStore.updateData { bookId }
       playerController.setPosition(

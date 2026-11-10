@@ -43,7 +43,7 @@ class PositionUpdater(
 
     updateJob = scope.launch {
       playStateManager.playStateFlow
-        .map { it == PlayStateManager.PlayState.Playing }
+        .map { it is PlayStateManager.PlayState.Playing }
         .distinctUntilChanged()
         .collectLatest { playing ->
           if (playing) {

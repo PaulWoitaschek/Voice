@@ -19,7 +19,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -97,7 +96,7 @@ class BookPlayViewModel(
   init {
     // a playing book goes on, only an idle player switches to the opened book
     inOrder {
-      if (playStateManager.playState != PlayStateManager.PlayState.Playing) {
+      if (playStateManager.playState !is PlayStateManager.PlayState.Playing) {
         selectBook()
       }
     }
@@ -108,12 +107,6 @@ class BookPlayViewModel(
     val kioskMode = remember { kioskModeFeatureFlag.get() }
     if (kioskMode) return kioskModeViewState()
 
-    // read before the first return, so that it loads alongside the book
-    val isCurrentBook = remember {
-      currentBookStoreId.data.map { it == bookId }
-    }
-      .collectAsState(initial = null)
-      .value
     val defaultSpeed = remember { lastPlaybackSpeedStore.data }.collectAsState(initial = null).value
     val persistedBook =
       remember(bookId) {
@@ -122,7 +115,6 @@ class BookPlayViewModel(
         .collectAsState(initial = null)
         .value
         ?.withDefaultSpeed { defaultSpeed ?: return null } ?: return null
-    if (isCurrentBook == null) return null
 
     val experimentalPlaybackPersistence = experimentalPlaybackPersistenceFeatureFlag.get()
     val livePlaybackState =
@@ -144,7 +136,7 @@ class BookPlayViewModel(
       }
     val isPlaying =
       livePlaybackState?.isPlaying
-        ?: (isCurrentBook && managerPlayState == PlayStateManager.PlayState.Playing)
+        ?: (managerPlayState == PlayStateManager.PlayState.Playing(bookId))
 
     val currentMark = book.currentChapter.markForPosition(book.content.positionInChapter)
     val positionInCurrentMark =
@@ -321,9 +313,8 @@ class BookPlayViewModel(
 
   fun playPause() {
     inOrder {
+      val startsPlaying = playStateManager.playState != PlayStateManager.PlayState.Playing(bookId)
       val switched = selectBook()
-      val startsPlaying =
-        switched || playStateManager.playState != PlayStateManager.PlayState.Playing
       // a toggle could pause, if it runs before the other book is paused
       if (switched) player.play() else player.playPause()
       if (startsPlaying) {

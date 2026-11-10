@@ -60,9 +60,7 @@ class SeriesViewModel(
       (remember { currentBookStore.data.map(::CurrentBook) }.collectAsState(initial = null).value
           ?: return null)
         .id
-    val playing =
-      remember { playStateManager.playStateFlow }.collectAsState().value ==
-        PlayStateManager.PlayState.Playing
+    val playState = remember { playStateManager.playStateFlow }.collectAsState().value
     val serverStates = rememberServerBookStates(serverLibrary, serverDownloads)
     val livePlaybackState = livePlaybackState(currentBookId)
     val seriesBooks = remember(books) { books.inSeries(name) }
@@ -79,7 +77,7 @@ class SeriesViewModel(
       }
     }
     if (series == null) return null
-    val playingBook = series.books.find { it.id == currentBookId }?.takeIf { playing }
+    val playingBook = series.books.find { playState == PlayStateManager.PlayState.Playing(it.id) }
     val action =
       (playingBook ?: series.inProgress ?: series.firstUnfinished)?.let { book ->
         SeriesViewState.Action(

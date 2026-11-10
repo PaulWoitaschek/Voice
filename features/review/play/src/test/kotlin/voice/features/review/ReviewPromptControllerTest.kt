@@ -160,7 +160,7 @@ class ReviewPromptControllerTest {
   fun `nothing interrupts a story`() = runTest {
     books = listOf(dune)
     listenedEnough()
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
 
     assertNull(controller().prompt())
     assertEquals(expected = ReviewPromptState(), actual = store.data.first())

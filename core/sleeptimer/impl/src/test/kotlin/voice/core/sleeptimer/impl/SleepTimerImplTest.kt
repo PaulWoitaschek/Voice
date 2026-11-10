@@ -21,6 +21,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.common.DispatcherProvider
+import voice.core.data.BookId
 import voice.core.data.ListeningEvent
 import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
@@ -58,7 +59,7 @@ class SleepTimerImplTest {
 
   private val playStateManager =
     PlayStateManager().apply {
-      playState = PlayStateManager.PlayState.Playing
+      playState = PlayStateManager.PlayState.Playing(BookId("book"))
     }
   private val shakeDetector = TestShakeDetector()
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
@@ -75,7 +76,7 @@ class SleepTimerImplTest {
         play(any())
       } answers
         {
-          playStateManager.playState = PlayStateManager.PlayState.Playing
+          playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
         }
     }
 
@@ -250,7 +251,7 @@ class SleepTimerImplTest {
     runCurrent()
     assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
 
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
     runCurrent()
 
     assertEquals(
@@ -279,7 +280,7 @@ class SleepTimerImplTest {
     runCurrent()
     assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
 
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
     runCurrent()
     assertEquals(
       expected = SleepTimerState.Enabled.WithDuration(5.seconds),
@@ -293,7 +294,7 @@ class SleepTimerImplTest {
     advanceTimeBy(6.seconds + SleepTimerImpl.SHAKE_TO_RESET_TIME)
     runCurrent()
 
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
     runCurrent()
 
     assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)

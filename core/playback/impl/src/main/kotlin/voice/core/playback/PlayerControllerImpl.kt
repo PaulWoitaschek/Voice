@@ -42,11 +42,10 @@ import voice.core.playback.player.seekBackBy
 import voice.core.playback.session.CustomCommand
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.PlaybackService
-import voice.core.playback.session.bookId
+import voice.core.playback.session.currentBookId
 import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.sendCustomCommand
-import voice.core.playback.session.toMediaIdOrNull
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -210,12 +209,6 @@ class PlayerControllerImpl(
     controller.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     controller.prepare()
     return true
-  }
-
-  private fun MediaController.currentBookId(): BookId? {
-    val currentMediaItem = currentMediaItem ?: return null
-    val mediaId = currentMediaItem.mediaId.toMediaIdOrNull() ?: return null
-    return mediaId.bookId
   }
 
   override fun pauseWithRewind(rewind: Duration) = executeAfterPrepare { controller ->

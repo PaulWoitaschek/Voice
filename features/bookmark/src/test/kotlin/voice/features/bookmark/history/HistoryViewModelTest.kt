@@ -120,7 +120,7 @@ class HistoryViewModelTest {
 
   @Test
   fun `tapping a place goes there, keeps playing and closes the screen`() {
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(bookId)
     currentBookStore = MemoryDataStore(bookId)
     listenedUntilPause()
     test { viewModel ->
@@ -147,7 +147,7 @@ class HistoryViewModelTest {
 
   @Test
   fun `going there while another book plays stops that book`() {
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("other"))
     currentBookStore = MemoryDataStore(BookId("other"))
     listenedUntilPause()
     test { viewModel ->

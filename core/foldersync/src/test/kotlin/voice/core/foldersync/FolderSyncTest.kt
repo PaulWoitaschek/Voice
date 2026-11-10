@@ -124,7 +124,7 @@ class FolderSyncTest {
     val book = book(lastPlayedAt = 1000)
     val repo = MemoryBookRepository(book)
     currentBookStore.updateData { book.id }
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(book.id)
 
     folderSync(repo).takeOver(book.id, place(playedAt = 2000))
 

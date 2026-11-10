@@ -264,7 +264,7 @@ class BookOverviewViewModel(
       inProgressCount = inProgressCount,
       currentBookId = currentBookId,
       playButtonState =
-        if (playState == PlayStateManager.PlayState.Playing) {
+        if (playState is PlayStateManager.PlayState.Playing) {
             BookOverviewViewState.PlayButtonState.Playing
           } else {
             BookOverviewViewState.PlayButtonState.Paused

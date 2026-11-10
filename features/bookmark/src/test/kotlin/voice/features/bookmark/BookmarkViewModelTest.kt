@@ -363,7 +363,7 @@ class BookmarkViewModelTest {
   fun `clicking a bookmark jumps there and keeps playing`() {
     val bookmark = testBookmark(arrival, 2.minutes)
     bookmarkRepo.bookmarks.value = listOf(bookmark)
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(book.id)
     val viewModel = viewModel()
     viewModel.test {
       awaitState { it.totalCount == 1 }
@@ -385,7 +385,7 @@ class BookmarkViewModelTest {
   fun `clicking a bookmark while another book plays stops that book`() {
     val bookmark = testBookmark(arrival, 2.minutes)
     bookmarkRepo.bookmarks.value = listOf(bookmark)
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("other"))
     currentBookStore = MemoryDataStore(BookId("other"))
     val viewModel = viewModel()
     viewModel.test {

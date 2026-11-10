@@ -62,7 +62,7 @@ class WidgetData(
 
   private val playing: Flow<Boolean> =
     playStateManager.playStateFlow
-      .map { it == PlayStateManager.PlayState.Playing }
+      .map { it is PlayStateManager.PlayState.Playing }
       .distinctUntilChanged()
 
   private val currentBookId: Flow<BookId?> = currentBookStore.data.distinctUntilChanged()

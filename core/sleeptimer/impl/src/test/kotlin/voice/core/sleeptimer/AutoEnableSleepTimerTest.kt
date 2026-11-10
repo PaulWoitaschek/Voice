@@ -16,6 +16,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
+import voice.core.data.BookId
 import voice.core.playback.playstate.PlayStateManager
 import voice.core.sleeptimer.impl.MemoryDataStore
 
@@ -56,7 +57,7 @@ class AutoEnableSleepTimerMinimalTest {
     sleepTimerPreferenceStore.updateData { prefs(enabled = true) }
 
     sut.onAppStart(mockk())
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
     advanceUntilIdle()
     yield()
 
@@ -64,11 +65,26 @@ class AutoEnableSleepTimerMinimalTest {
   }
 
   @Test
+  fun `another book that plays right away doesn't enable it again`() = testScope.runTest {
+    sleepTimerPreferenceStore.updateData { prefs(enabled = true) }
+
+    sut.onAppStart(mockk())
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
+    advanceUntilIdle()
+    yield()
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("other"))
+    advanceUntilIdle()
+    yield()
+
+    coVerify(exactly = 1) { sleepTimer.enable(any()) }
+  }
+
+  @Test
   fun `does nothing when sleeptimer is disabled`() = testScope.runTest {
     sleepTimerPreferenceStore.updateData { prefs(enabled = false) }
 
     sut.onAppStart(mockk())
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(BookId("book"))
     advanceUntilIdle()
     yield()
 

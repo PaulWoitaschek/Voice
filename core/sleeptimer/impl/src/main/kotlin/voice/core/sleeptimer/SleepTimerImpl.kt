@@ -166,8 +166,8 @@ internal constructor(
           // pauseWithRewind takes effect asynchronously, so the player can still be playing at this
           // point
           playStateManager.playStateFlow
-            .dropWhile { it == Playing }
-            .filter { it == Playing }
+            .dropWhile { it is Playing }
+            .filter { it is Playing }
             .map { RestartTrigger.Play },
         )
         .first()
@@ -184,8 +184,8 @@ internal constructor(
   }
 
   private suspend fun suspendUntilPlaying() {
-    if (playStateManager.playState != Playing) {
-      playStateManager.playStateFlow.first { it == Playing }
+    if (playStateManager.playState !is Playing) {
+      playStateManager.playStateFlow.first { it is Playing }
     }
   }
 

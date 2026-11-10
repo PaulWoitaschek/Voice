@@ -5,13 +5,14 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import voice.core.data.BookId
 
 @SingleIn(AppScope::class)
 @Inject
 class PlayStateManager {
 
   val playStateFlow: StateFlow<PlayState>
-    field = MutableStateFlow(PlayState.Paused)
+    field = MutableStateFlow<PlayState>(PlayState.Paused)
 
   var playState: PlayState
     set(value) {
@@ -19,8 +20,9 @@ class PlayStateManager {
     }
     get() = playStateFlow.value
 
-  enum class PlayState {
-    Playing,
-    Paused,
+  sealed interface PlayState {
+    data class Playing(val bookId: BookId) : PlayState
+
+    data object Paused : PlayState
   }
 }

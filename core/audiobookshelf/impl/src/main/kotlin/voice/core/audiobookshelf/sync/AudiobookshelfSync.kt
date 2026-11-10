@@ -38,7 +38,6 @@ import voice.core.data.BookId
 import voice.core.data.isRemote
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
-import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
 import voice.core.playback.playstate.PlayStateManager
 
@@ -62,7 +61,6 @@ internal constructor(
   private val bookRepository: BookRepository,
   private val contentRepo: BookContentRepo,
   private val playStateManager: PlayStateManager,
-  private val currentBookStore: CurrentBookStore,
   private val context: Context,
 ) {
 
@@ -192,10 +190,7 @@ internal constructor(
             return@collect
           }
           // the listening session sends the book that plays
-          val playing =
-            currentBookStore.data.first()?.takeIf {
-              playStateManager.playState == PlayStateManager.PlayState.Playing
-            }
+          val playing = (playStateManager.playState as? PlayStateManager.PlayState.Playing)?.bookId
           val moved =
             positions.keys.filter { it in before && before[it] != positions[it] && it != playing }
           val pushed = mutableSetOf<BookId>()

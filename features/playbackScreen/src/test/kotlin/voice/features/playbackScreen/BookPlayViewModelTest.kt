@@ -363,7 +363,7 @@ class BookPlayViewModelTest {
         viewModel(
           experimentalPlaybackPersistence = true,
           livePlaybackFlow = MutableStateFlow(null),
-          playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+          playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing(book.id)),
         )
 
       backgroundScope
@@ -576,7 +576,7 @@ class BookPlayViewModelTest {
       viewModel(
         player = player,
         currentBookStore = currentBookStore,
-        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing(BookId("other"))),
       )
 
     backgroundScope
@@ -611,7 +611,7 @@ class BookPlayViewModelTest {
       viewModel(
         player = player,
         currentBookStore = currentBookStore,
-        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing(BookId("other"))),
       )
 
     viewModel.playPause()
@@ -632,7 +632,7 @@ class BookPlayViewModelTest {
       viewModel(
         player = player,
         currentBookStore = currentBookStore,
-        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing(BookId("other"))),
       )
 
     viewModel.fastForward()
@@ -666,7 +666,7 @@ class BookPlayViewModelTest {
       viewModel(
         player = player,
         currentBookStore = currentBookStore,
-        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing(BookId("other"))),
       )
 
     viewModel.onChapterClick(number = 99)
@@ -685,7 +685,7 @@ class BookPlayViewModelTest {
       viewModel(
         player = player,
         currentBookStore = currentBookStore,
-        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing),
+        playStateFlow = MutableStateFlow(PlayStateManager.PlayState.Playing(BookId("other"))),
       )
 
     viewModel.onPlaybackSpeedIconClick()

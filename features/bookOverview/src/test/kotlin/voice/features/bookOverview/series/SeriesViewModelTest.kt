@@ -155,7 +155,7 @@ class SeriesViewModelTest {
     val second = book(series = "Saga", part = "2", time = 0)
     books.value = listOf(first, second)
     currentBookStore.updateData { second.id }
-    playStateManager.playState = PlayStateManager.PlayState.Playing
+    playStateManager.playState = PlayStateManager.PlayState.Playing(second.id)
 
     testState {
       val state = awaitItem()!!
