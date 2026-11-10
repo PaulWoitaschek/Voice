@@ -15,6 +15,7 @@ import java.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -203,8 +204,10 @@ class BookmarkViewModel(
     if (leaving) return
     val bookmark = bookmarks.find { it.id == id } ?: return
     leaving = true
-    val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing
     scope.launch {
+      val wasPlaying =
+        currentBookStore.data.first() == bookId &&
+          playStateManager.playState == PlayStateManager.PlayState.Playing
       playerController.pauseIfCurrentBookDifferentFrom(bookId)
       currentBookStore.updateData { bookId }
       playerController.setPosition(

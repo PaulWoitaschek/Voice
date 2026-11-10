@@ -22,6 +22,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
@@ -84,6 +86,7 @@ class BookPlayViewModel(
 ) {
 
   private val scope = MainScope(dispatcherProvider)
+  private val selection = Mutex()
 
   private val viewEffectChannel = Channel<BookPlayViewEffect>(Channel.UNLIMITED)
   internal val viewEffects: Flow<BookPlayViewEffect> = viewEffectChannel.receiveAsFlow()
@@ -308,21 +311,18 @@ class BookPlayViewModel(
   }
 
   fun playPause() {
-    scope.launch {
+    withSelectedBook { switched ->
       val startsPlaying =
-        if (currentBookStoreId.data.first() == bookId) {
-          val playing = playStateManager.playState == PlayStateManager.PlayState.Playing
-          player.playPause()
-          !playing
-        } else {
-          // a toggle could pause, if it runs before the other book is paused
-          selectBook()
-          player.play()
-          true
+        switched || playStateManager.playState != PlayStateManager.PlayState.Playing
+      // a toggle could pause, if it runs before the other book is paused
+      if (switched) player.play() else player.playPause()
+      if (startsPlaying) {
+        scope.launch {
+          if (batteryOptimization.shouldRequest()) {
+            viewEffectChannel.trySend(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
+            batteryOptimization.onBatteryOptimizationsRequested()
+          }
         }
-      if (startsPlaying && batteryOptimization.shouldRequest()) {
-        viewEffectChannel.trySend(BookPlayViewEffect.RequestIgnoreBatteryOptimization)
-        batteryOptimization.onBatteryOptimizationsRequested()
       }
     }
   }
@@ -378,8 +378,9 @@ class BookPlayViewModel(
         chapter.chapterMarks.forEach { mark ->
           currentIndex++
           if (currentIndex == number - 1) {
-            selectBook()
-            player.setPosition(mark.startMs, chapter.id, ListeningEvent.Type.ChapterChange)
+            withSelectedBook {
+              player.setPosition(mark.startMs, chapter.id, ListeningEvent.Type.ChapterChange)
+            }
             dialogState.value = null
             return@launch
           }
@@ -455,8 +456,9 @@ class BookPlayViewModel(
       val book = currentBook() ?: return@launch
       val currentChapter = book.currentChapter
       val currentMark = currentChapter.markForPosition(book.content.positionInChapter)
-      selectBook()
-      player.setPosition(currentMark.startMs + position.inWholeMilliseconds, currentChapter.id)
+      withSelectedBook {
+        player.setPosition(currentMark.startMs + position.inWholeMilliseconds, currentChapter.id)
+      }
     }
   }
 
@@ -485,8 +487,7 @@ class BookPlayViewModel(
   fun toggleSkipSilence() {
     scope.launch {
       val skipSilence = currentBook()?.content?.skipSilence ?: return@launch
-      selectBook()
-      player.skipSilence(!skipSilence)
+      withSelectedBook { player.skipSilence(!skipSilence) }
     }
   }
 
@@ -494,16 +495,17 @@ class BookPlayViewModel(
     return currentBookResolver.book(bookId)
   }
 
-  // the playing book goes on until the listener uses the controls of this one
-  private suspend fun selectBook() {
-    player.pauseIfCurrentBookDifferentFrom(bookId)
-    currentBookStoreId.updateData { bookId }
-  }
-
-  private fun withSelectedBook(action: () -> Unit) {
+  private fun withSelectedBook(action: (switched: Boolean) -> Unit) {
     scope.launch {
-      selectBook()
-      action()
+      // while the book switches, a later tap must not reach the player first
+      selection.withLock {
+        val switched = currentBookStoreId.data.first() != bookId
+        if (switched) {
+          player.pauseIfCurrentBookDifferentFrom(bookId)
+          currentBookStoreId.updateData { bookId }
+        }
+        action(switched)
+      }
     }
   }
 

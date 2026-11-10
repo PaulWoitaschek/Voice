@@ -632,6 +632,18 @@ class BookPlayViewModelTest {
   }
 
   @Test
+  fun `skipping in the current book doesn't switch books`() = scope.runTest {
+    val player = mockk<PlayerController> { every { fastForward() } just Runs }
+    val viewModel = viewModel(player = player)
+
+    viewModel.fastForward()
+    runCurrent()
+
+    verify(exactly = 1) { player.fastForward() }
+    verify(exactly = 0) { player.pauseIfCurrentBookDifferentFrom(any()) }
+  }
+
+  @Test
   fun `a chapter that no longer exists doesn't stop the other book`() = scope.runTest {
     val otherBook = BookId("other")
     val currentBookStore = MemoryDataStore<BookId?>(otherBook)

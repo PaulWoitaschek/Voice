@@ -121,11 +121,11 @@ class HistoryViewModelTest {
   @Test
   fun `tapping a place goes there, keeps playing and closes the screen`() {
     playStateManager.playState = PlayStateManager.PlayState.Playing
+    currentBookStore = MemoryDataStore(bookId)
     listenedUntilPause()
     test { viewModel ->
       viewModel.onGoTo(pausedAt())
       scope.testScheduler.advanceUntilIdle()
-      assertEquals(expected = bookId, actual = currentBookStore.data.first())
       verify {
         playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek)
         playerController.play()
@@ -146,7 +146,7 @@ class HistoryViewModelTest {
   }
 
   @Test
-  fun `going there while another book plays goes on in this book`() {
+  fun `going there while another book plays stops that book`() {
     playStateManager.playState = PlayStateManager.PlayState.Playing
     currentBookStore = MemoryDataStore(BookId("other"))
     listenedUntilPause()
@@ -157,8 +157,8 @@ class HistoryViewModelTest {
       verifyOrder {
         playerController.pauseIfCurrentBookDifferentFrom(bookId)
         playerController.setPosition(2.minutes.inWholeMilliseconds, signal.id, Type.Seek)
-        playerController.play()
       }
+      verify(exactly = 0) { playerController.play() }
     }
   }
 

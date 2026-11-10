@@ -382,7 +382,7 @@ class BookmarkViewModelTest {
   }
 
   @Test
-  fun `clicking a bookmark while another book plays goes on in this book`() {
+  fun `clicking a bookmark while another book plays stops that book`() {
     val bookmark = testBookmark(arrival, 2.minutes)
     bookmarkRepo.bookmarks.value = listOf(bookmark)
     playStateManager.playState = PlayStateManager.PlayState.Playing
@@ -399,8 +399,8 @@ class BookmarkViewModelTest {
           arrival.id,
           ListeningEvent.Type.BookmarkJump,
         )
-        playerController.play()
       }
+      verify(exactly = 0) { playerController.play() }
       assertEquals(expected = book.id, actual = currentBookStore.data.first())
     }
   }
