@@ -1399,6 +1399,51 @@ class BookOverviewViewModelTest {
   }
 
   @Test
+  fun `a selected book that leaves the library doesn't come back selected`() = runTest {
+    val book = book(time = 0)
+    val other = book(time = 0)
+    val repo = libraryRepo(book, other)
+    val viewModel = viewModel(repo = repo)
+    val state = viewModel.stateIn(backgroundScope)
+    state.first { it.sections.isNotEmpty() }
+
+    viewModel.onSelectionStart(listOf(book.id, other.id))
+    state.first { it.selection?.ids?.size == 2 }
+    repo.updateCustomMetadata(book.id) { it.copy(hidden = true) }
+    state.first { it.selection?.ids == setOf(other.id) }
+    repo.updateCustomMetadata(book.id) { it.copy(hidden = false) }
+
+    assertEquals(
+      expected = setOf(other.id),
+      actual = state.first { it.sections.values.flatten().size == 2 }.selection?.ids,
+    )
+  }
+
+  @Test
+  fun `the undo of a server book sends what the server had, not a local edit`() = runTest {
+    val serverBook = serverBook("library").copyMetadata(author = "Server")
+    val book = serverBook.copy(custom = serverBook.custom.copy(author = "Local"))
+    coEvery { serverLibrary.updateBook(book.id, any()) } returns ServerEdit.Saved
+    val repo = libraryRepo(book)
+    val viewModel = viewModel(repo = repo)
+    val state = viewModel.stateIn(backgroundScope)
+    val edits = mutableListOf<BooksEdited>()
+    backgroundScope.launch(testDispatcher) { viewModel.booksEdited.collect { edits += it } }
+    state.first { it.sections.isNotEmpty() }
+
+    viewModel.onSelectionStart(listOf(book.id))
+    viewModel.onSelectionEdit(BookField.Author)
+    state.first { it.selectionEdit != null }
+    viewModel.onSelectionEditSave("New")
+    state.first { it.selectionEdit?.saved == true }
+    viewModel.onUndoEdit(edits.single())
+
+    coVerify {
+      val _ = serverLibrary.updateBook(book.id, ServerBookEdit(author = "Server"))
+    }
+  }
+
+  @Test
   fun `a series for server books keeps their part`() = runTest {
     val book = serverBook("library").copyMetadata(series = null, part = "3")
     coEvery { serverLibrary.updateBook(book.id, any()) } returns ServerEdit.Saved

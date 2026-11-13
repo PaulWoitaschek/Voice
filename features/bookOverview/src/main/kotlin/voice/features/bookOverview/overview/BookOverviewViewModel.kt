@@ -222,12 +222,11 @@ class BookOverviewViewModel(
     val currentBookId = currentBook.id?.takeIf { id -> books.any { it.id == id } }
     val bookIds = remember(books) { books.mapTo(mutableSetOf()) { it.id } }
     SideEffect { shownBookIds = bookIds }
-    // books that leave the library, like hidden ones, leave the selection too
+    // books that leave the library, like hidden ones, leave the selection too, so they don't come
+    // back selected
     val selected = selection?.intersect(bookIds)?.takeIf { it.isNotEmpty() }
-    // or selecting would start again by itself once the books come back
-    val selectionGone = selection != null && selected == null
-    LaunchedEffect(selectionGone) {
-      if (selectionGone) selection = null
+    LaunchedEffect(bookIds, selection) {
+      selection = selection?.intersect(bookIds)?.takeIf { it.isNotEmpty() }
     }
 
     // with every book hidden, the folders still have books, so there's nothing to add

@@ -6,6 +6,7 @@ import voice.core.audiobookshelf.ServerEdit
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.BookMetadata
 import voice.core.data.CustomMetadata
 import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
@@ -62,9 +63,8 @@ class SelectedBooksEditor(
             serverLibrary.updateBook(book.id, serverEdit(book, field, value))
           }
         when (result) {
-          ServerEdit.Saved -> {
-            undo[book.id] = field.of(book)
-          }
+          // a local edit from before the server edits can cover what the server has
+          ServerEdit.Saved -> undo[book.id] = field.of(book.content.metadata)
           ServerEdit.NotAllowed -> {
             failed += book.id
             notAllowed = true
@@ -99,7 +99,7 @@ private fun serverEdit(
 ): ServerBookEdit =
   when (field) {
     // the part goes along, or the server would lose it
-    BookField.Series -> ServerBookEdit(series = value.orEmpty(), part = book.part)
+    BookField.Series -> ServerBookEdit(series = value.orEmpty(), part = book.content.metadata.part)
     BookField.Author -> ServerBookEdit(author = value.orEmpty())
   }
 
@@ -107,6 +107,12 @@ internal fun BookField.of(book: Book): String? =
   when (this) {
     BookField.Series -> book.series
     BookField.Author -> book.author
+  }
+
+private fun BookField.of(metadata: BookMetadata): String? =
+  when (this) {
+    BookField.Series -> metadata.series
+    BookField.Author -> metadata.author
   }
 
 private fun BookField.of(custom: CustomMetadata): String? =
