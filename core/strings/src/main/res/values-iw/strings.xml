@@ -86,6 +86,7 @@
     <string name="book.edit.server.not_allowed">לחשבון שלכם בשרת אין הרשאה לשנות ספרים.</string>
     <string name="book.edit.title.label">כותר</string>
     <string name="book.hide">הסתרה מהספרייה</string>
+    <string name="book.select">בחירה</string>
     <string name="book.show">הצגה בספרייה</string>
     <string name="book.source.device">במכשיר הזה</string>
     <string name="book.source.server_downloaded">%s · ההורדה הושלמה</string>
@@ -328,6 +329,34 @@
     <string name="library.search.recent.clear_all">ניקוי הכול</string>
     <string name="library.search.recent.remove">הסרת %s</string>
     <string name="library.search.recent.title">אחרונים</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">המחבר הוגדר ל-%d ספר</item>
+        <item quantity="two">המחבר הוגדר ל-%d ספרים</item>
+        <item quantity="other">המחבר הוגדר ל-%d ספרים</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d נבחר</item>
+        <item quantity="two">%d נבחרו</item>
+        <item quantity="other">%d נבחרו</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d ספר הוסתר</item>
+        <item quantity="two">%d ספרים הוסתרו</item>
+        <item quantity="other">%d ספרים הוסתרו</item>
+    </plurals>
+    <string name="library.selection.hide">הסתרה</string>
+    <string name="library.selection.select_all">בחירת הכול</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">הסדרה הוגדרה ל-%d ספר</item>
+        <item quantity="two">הסדרה הוגדרה ל-%d ספרים</item>
+        <item quantity="other">הסדרה הוגדרה ל-%d ספרים</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">שמירת %d ספר בשרת נכשלה</item>
+        <item quantity="two">שמירת %d ספרים בשרת נכשלה</item>
+        <item quantity="other">שמירת %d ספרים בשרת נכשלה</item>
+    </plurals>
+    <string name="library.selection.show">הצגה</string>
     <string name="library.series.hidden.message">הסדרה %1$s הוסתרה</string>
     <string name="library.storage_permission_bug.action">הענקת הרשאה</string>
     <string name="library.storage_permission_bug.message">במכשירים מסוימים, לאפליקציית מערכת חסרה ההרשאה הנדרשת לגישה לאחסון החיצוני. גישה זו חיונית כדי ש-Voice יוכל לקרוא את הקולספרים שלכם.</string>

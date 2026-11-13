@@ -20,17 +20,22 @@ import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
 import voice.core.audiobookshelf.PickedLibrary
+import voice.core.audiobookshelf.ServerBookEdit
 import voice.core.audiobookshelf.ServerDownloads
+import voice.core.audiobookshelf.ServerEdit
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.audiobookshelf.download.BookDownloadState
 import voice.core.common.AppInfoProvider
@@ -59,6 +64,11 @@ import voice.core.ui.GridModeStore
 import voice.features.bookOverview.MemoryDataStore
 import voice.features.bookOverview.book
 import voice.features.bookOverview.hideBook.BookHider
+import voice.features.bookOverview.hideBook.HiddenBooks
+import voice.features.bookOverview.select.BookField
+import voice.features.bookOverview.select.BookSelectionRequests
+import voice.features.bookOverview.select.BooksEdited
+import voice.features.bookOverview.select.SelectedBooksEditor
 import voice.features.bookOverview.survey.HandledSurveysStore
 import voice.features.bookOverview.survey.Survey
 import voice.features.bookOverview.survey.SurveyUrlFeatureFlag
@@ -143,6 +153,8 @@ class BookOverviewViewModelTest {
         showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(MemoryDataStore(true)),
         hiddenSourcesStore = HiddenSourcesStore(MemoryDataStore(emptySet())),
         bookHider = BookHider(mockk()),
+        bookSelectionRequests = BookSelectionRequests(),
+        selectedBooksEditor = SelectedBooksEditor(mockk(), serverLibrary),
       )
 
     backgroundScope
@@ -227,6 +239,8 @@ class BookOverviewViewModelTest {
         showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(MemoryDataStore(true)),
         hiddenSourcesStore = HiddenSourcesStore(MemoryDataStore(emptySet())),
         bookHider = BookHider(mockk()),
+        bookSelectionRequests = BookSelectionRequests(),
+        selectedBooksEditor = SelectedBooksEditor(mockk(), serverLibrary),
       )
 
     backgroundScope
@@ -663,6 +677,30 @@ class BookOverviewViewModelTest {
     verify {
       navigator.goTo(Destination.Author("Lena Morgan"))
       navigator.goTo(Destination.Author(null))
+    }
+  }
+
+  @Test
+  fun `a long press on an author offers the actions for the books of the entry`() = runTest {
+    val navigator = mockk<Navigator>(relaxed = true)
+    val viewModel = viewModel(navigator = navigator)
+    val first = BookId("first")
+    val second = BookId("second")
+
+    viewModel.onAuthorLongClick(
+      AuthorEntryViewState(
+        key = "lenamorgan",
+        name = "Lena Morgan",
+        covers = emptyList(),
+        seriesCount = 0,
+        bookCount = 2,
+        category = BookCategory.CURRENT,
+        bookIds = listOf(first, second),
+      ),
+    )
+
+    verify {
+      navigator.goTo(Destination.AuthorActions("Lena Morgan", listOf(first, second)))
     }
   }
 
@@ -1116,6 +1154,360 @@ class BookOverviewViewModelTest {
     }
   }
 
+  @Test
+  fun `a request from the book actions starts selecting the book`() = runTest {
+    val book = book(time = 0)
+    val requests = BookSelectionRequests()
+    val viewModel = viewModel(books = listOf(book), bookSelectionRequests = requests)
+    val state = viewModel.stateIn(backgroundScope)
+    backgroundScope.launch(testDispatcher) {
+      viewModel.selectionRequests.collect(viewModel::onSelectionStart)
+    }
+
+    requests.select(listOf(book.id))
+
+    assertEquals(setOf(book.id), state.first { it.selection != null }.selection?.ids)
+  }
+
+  @Test
+  fun `a tap on a stack selects all its books, and removing the last book ends selecting`() =
+    runTest {
+      val first = book(series = "Saga", time = 0)
+      val second = book(series = "Saga", time = 0)
+      val single = book(time = 0)
+      val viewModel = viewModel(books = listOf(first, second, single))
+      val state = viewModel.stateIn(backgroundScope)
+      state.first { it.sections.isNotEmpty() }
+
+      viewModel.onSelectionStart(listOf(single.id))
+      val stack =
+        state.value.sections.values.flatten().filterIsInstance<LibraryItem.Series>().single()
+      viewModel.onSelectionToggle(stack.series.bookIds)
+      assertEquals(
+        expected = setOf(first.id, second.id, single.id),
+        actual = state.first { it.selection?.ids?.size == 3 }.selection?.ids,
+      )
+
+      viewModel.onSelectionToggle(stack.series.bookIds)
+      viewModel.onSelectionToggle(listOf(single.id))
+      state.first { it.selection == null }
+    }
+
+  @Test
+  fun `select all takes the books on screen and leaves out hidden ones`() = runTest {
+    val current = book(time = 1_000)
+    val other = book(time = 0)
+    val hidden = book(time = 0, hidden = true)
+    val viewModel = viewModel(books = listOf(current, other, hidden), currentBookId = current.id)
+    val state = viewModel.stateIn(backgroundScope)
+    state.first { it.hero != null }
+
+    viewModel.onSelectionStart(listOf(other.id))
+    viewModel.onSelectAll()
+
+    val selection = state.first { it.selection?.allSelected == true }.selection
+    assertEquals(expected = setOf(current.id, other.id), actual = selection?.ids)
+  }
+
+  @Test
+  fun `hide hides the selected books, ends selecting and offers one undo`() = runTest {
+    val first = book(time = 0)
+    val second = book(time = 0)
+    val repo = libraryRepo(first, second)
+    val viewModel = viewModel(repo = repo)
+    val state = viewModel.stateIn(backgroundScope)
+    val hidden = mutableListOf<HiddenBooks>()
+    backgroundScope.launch(testDispatcher) { viewModel.hiddenBooks.collect { hidden += it } }
+    state.first { it.sections.isNotEmpty() }
+
+    viewModel.onSelectionStart(listOf(first.id))
+    viewModel.onSelectionToggle(listOf(second.id))
+    state.first { it.selection?.ids?.size == 2 }
+    viewModel.onSelectionHide()
+
+    state.first { it.selection == null && it.hiddenBookCount == 2 }
+    assertEquals(
+      expected = listOf(HiddenBooks(listOf(first.id, second.id), name = null, series = false)),
+      actual = hidden,
+    )
+  }
+
+  @Test
+  fun `a series for device books is set, and undo lets them follow their files again`() = runTest {
+    val first = book(series = "Sagaa", time = 0)
+    val second = book(series = "Saga", time = 0)
+    val repo = libraryRepo(first, second)
+    val viewModel = viewModel(repo = repo)
+    val state = viewModel.stateIn(backgroundScope)
+    val edits = mutableListOf<BooksEdited>()
+    backgroundScope.launch(testDispatcher) { viewModel.booksEdited.collect { edits += it } }
+    state.first { it.sections.isNotEmpty() }
+
+    viewModel.onSelectionStart(listOf(first.id))
+    viewModel.onSelectionToggle(listOf(second.id))
+    state.first { it.selection?.ids?.size == 2 }
+    viewModel.onSelectionEdit(BookField.Series)
+    val edit = state.first { it.selectionEdit != null }.selectionEdit
+    assertEquals(expected = "", actual = edit?.value)
+    assertEquals(expected = listOf("Saga", "Sagaa"), actual = edit?.suggestions?.map { it.name })
+
+    viewModel.onSelectionEditSave(" Saga ")
+
+    assertEquals(
+      expected = true,
+      actual = state.first { it.selection == null }.selectionEdit?.saved,
+    )
+    assertEquals(expected = listOf("Saga", "Saga"), actual = repo.all().map { it.series })
+    val edited = edits.single()
+    assertEquals(expected = 2, actual = edited.count)
+    assertEquals(expected = emptySet(), actual = edited.failed)
+
+    viewModel.onUndoEdit(edited)
+
+    assertEquals(expected = listOf(null, null), actual = repo.all().map { it.custom.series })
+  }
+
+  @Test
+  fun `an author for server books is saved on the server, and failed books stay selected`() =
+    runTest {
+      val saved = serverBook("library").copyMetadata(author = "Old", series = "Saga", part = "2")
+      val failed = serverBook("library")
+      coEvery { serverLibrary.updateBook(saved.id, any()) } returns ServerEdit.Saved
+      coEvery { serverLibrary.updateBook(failed.id, any()) } returns ServerEdit.Failed
+      val repo = libraryRepo(saved, failed)
+      val viewModel = viewModel(repo = repo)
+      val state = viewModel.stateIn(backgroundScope)
+      val edits = mutableListOf<BooksEdited>()
+      backgroundScope.launch(testDispatcher) { viewModel.booksEdited.collect { edits += it } }
+      state.first { it.sections.isNotEmpty() }
+
+      viewModel.onSelectionStart(listOf(saved.id))
+      viewModel.onSelectionToggle(listOf(failed.id))
+      state.first { it.selection?.ids?.size == 2 }
+      viewModel.onSelectionEdit(BookField.Author)
+      state.first { it.selectionEdit != null }
+      viewModel.onSelectionEditSave("New")
+      state.first { it.selectionEdit?.saved == true }
+
+      coVerify {
+        val _ = serverLibrary.updateBook(saved.id, ServerBookEdit(author = "New"))
+      }
+      val edited = edits.single()
+      assertEquals(expected = 1, actual = edited.count)
+      assertEquals(expected = setOf(failed.id), actual = edited.failed)
+      assertEquals(expected = setOf(failed.id), actual = state.value.selection?.ids)
+
+      viewModel.onUndoEdit(edited)
+
+      coVerify {
+        val _ = serverLibrary.updateBook(saved.id, ServerBookEdit(author = "Old"))
+      }
+      coVerify(exactly = 0) {
+        val _ = serverLibrary.updateBook(failed.id, ServerBookEdit(author = null))
+      }
+    }
+
+  @Test
+  fun `after the server declines a book, the others are not sent and the listener learns why`() =
+    runTest {
+      val first = serverBook("library")
+      val second = serverBook("library")
+      coEvery { serverLibrary.updateBook(any(), any()) } returns ServerEdit.NotAllowed
+      val viewModel = viewModel(repo = libraryRepo(first, second))
+      val state = viewModel.stateIn(backgroundScope)
+      val edits = mutableListOf<BooksEdited>()
+      backgroundScope.launch(testDispatcher) { viewModel.booksEdited.collect { edits += it } }
+      state.first { it.sections.isNotEmpty() }
+
+      viewModel.onSelectionStart(listOf(first.id, second.id))
+      viewModel.onSelectionEdit(BookField.Author)
+      state.first { it.selectionEdit != null }
+      viewModel.onSelectionEditSave("New")
+      state.first { it.selectionEdit?.saved == true }
+
+      val edited = edits.single()
+      assertEquals(expected = setOf(first.id, second.id), actual = edited.failed)
+      assertEquals(expected = true, actual = edited.notAllowed)
+      coVerify(exactly = 1) {
+        val _ = serverLibrary.updateBook(any(), any())
+      }
+    }
+
+  @Test
+  fun `an undo that fails on the server selects the books it left, with no undo of its own`() =
+    runTest {
+      val book = serverBook("library")
+      coEvery { serverLibrary.updateBook(book.id, any()) } returns
+        ServerEdit.Saved andThen
+        ServerEdit.Failed
+      val viewModel = viewModel(repo = libraryRepo(book))
+      val state = viewModel.stateIn(backgroundScope)
+      val edits = mutableListOf<BooksEdited>()
+      backgroundScope.launch(testDispatcher) { viewModel.booksEdited.collect { edits += it } }
+      state.first { it.sections.isNotEmpty() }
+
+      viewModel.onSelectionStart(listOf(book.id))
+      viewModel.onSelectionEdit(BookField.Series)
+      state.first { it.selectionEdit != null }
+      viewModel.onSelectionEditSave("Saga")
+      state.first { it.selectionEdit?.saved == true }
+      viewModel.onUndoEdit(edits.single())
+
+      val undone = edits.last()
+      assertEquals(expected = setOf(book.id), actual = undone.failed)
+      assertEquals(expected = 0, actual = undone.count)
+      assertEquals(
+        expected = setOf(book.id),
+        actual = state.first { it.selection != null }.selection?.ids,
+      )
+    }
+
+  @Test
+  fun `a second edit while the sheet is open keeps the first`() = runTest {
+    val book = book(time = 0)
+    val viewModel = viewModel(repo = libraryRepo(book))
+    val state = viewModel.stateIn(backgroundScope)
+    state.first { it.sections.isNotEmpty() }
+
+    viewModel.onSelectionStart(listOf(book.id))
+    viewModel.onSelectionEdit(BookField.Series)
+    state.first { it.selectionEdit != null }
+    viewModel.onSelectionEdit(BookField.Author)
+
+    assertEquals(expected = BookField.Series, actual = state.value.selectionEdit?.field)
+  }
+
+  @Test
+  fun `selecting ends for good once the selected books leave the library`() = runTest {
+    val book = book(time = 0)
+    val other = book(time = 0)
+    val repo = libraryRepo(book, other)
+    val viewModel = viewModel(repo = repo)
+    val state = viewModel.stateIn(backgroundScope)
+    state.first { it.sections.isNotEmpty() }
+
+    viewModel.onSelectionStart(listOf(book.id))
+    state.first { it.selection != null }
+    repo.updateCustomMetadata(book.id) { it.copy(hidden = true) }
+    state.first { it.selection == null }
+    repo.updateCustomMetadata(book.id) { it.copy(hidden = false) }
+
+    assertEquals(
+      expected = null,
+      actual = state.first { it.sections.values.flatten().size == 2 }.selection,
+    )
+  }
+
+  @Test
+  fun `a selected book that leaves the library doesn't come back selected`() = runTest {
+    val book = book(time = 0)
+    val other = book(time = 0)
+    val repo = libraryRepo(book, other)
+    val viewModel = viewModel(repo = repo)
+    val state = viewModel.stateIn(backgroundScope)
+    state.first { it.sections.isNotEmpty() }
+
+    viewModel.onSelectionStart(listOf(book.id, other.id))
+    state.first { it.selection?.ids?.size == 2 }
+    repo.updateCustomMetadata(book.id) { it.copy(hidden = true) }
+    state.first { it.selection?.ids == setOf(other.id) }
+    repo.updateCustomMetadata(book.id) { it.copy(hidden = false) }
+
+    assertEquals(
+      expected = setOf(other.id),
+      actual = state.first { it.sections.values.flatten().size == 2 }.selection?.ids,
+    )
+  }
+
+  @Test
+  fun `the undo of a server book sends what the server had, not a local edit`() = runTest {
+    val serverBook = serverBook("library").copyMetadata(author = "Server")
+    val book = serverBook.copy(custom = serverBook.custom.copy(author = "Local"))
+    coEvery { serverLibrary.updateBook(book.id, any()) } returns ServerEdit.Saved
+    val repo = libraryRepo(book)
+    val viewModel = viewModel(repo = repo)
+    val state = viewModel.stateIn(backgroundScope)
+    val edits = mutableListOf<BooksEdited>()
+    backgroundScope.launch(testDispatcher) { viewModel.booksEdited.collect { edits += it } }
+    state.first { it.sections.isNotEmpty() }
+
+    viewModel.onSelectionStart(listOf(book.id))
+    viewModel.onSelectionEdit(BookField.Author)
+    state.first { it.selectionEdit != null }
+    viewModel.onSelectionEditSave("New")
+    state.first { it.selectionEdit?.saved == true }
+    viewModel.onUndoEdit(edits.single())
+
+    coVerify {
+      val _ = serverLibrary.updateBook(book.id, ServerBookEdit(author = "Server"))
+    }
+  }
+
+  @Test
+  fun `a series for server books keeps their part`() = runTest {
+    val book = serverBook("library").copyMetadata(series = null, part = "3")
+    coEvery { serverLibrary.updateBook(book.id, any()) } returns ServerEdit.Saved
+    val repo = libraryRepo(book)
+    val viewModel = viewModel(repo = repo)
+    val state = viewModel.stateIn(backgroundScope)
+    val edits = mutableListOf<BooksEdited>()
+    backgroundScope.launch(testDispatcher) { viewModel.booksEdited.collect { edits += it } }
+    state.first { it.sections.isNotEmpty() }
+
+    viewModel.onSelectionStart(listOf(book.id))
+    viewModel.onSelectionEdit(BookField.Series)
+    state.first { it.selectionEdit != null }
+    viewModel.onSelectionEditSave("Saga")
+    state.first { it.selectionEdit?.saved == true }
+    viewModel.onUndoEdit(edits.single())
+
+    coVerify {
+      val _ = serverLibrary.updateBook(book.id, ServerBookEdit(series = "Saga", part = "3"))
+    }
+    // the server has no "follow the files", so the undo takes the series off
+    coVerify {
+      val _ = serverLibrary.updateBook(book.id, ServerBookEdit(series = "", part = "3"))
+    }
+  }
+
+  private fun BookOverviewViewModel.stateIn(
+    scope: CoroutineScope,
+  ): StateFlow<BookOverviewViewState> =
+    scope.launchMolecule(RecompositionMode.Immediate) { state() }
+
+  // a repository that keeps the books in memory, so edits show in the library
+  private fun libraryRepo(vararg books: Book): BookRepository {
+    val stored = MutableStateFlow(books.toList())
+    val repo = mockk<BookRepository>()
+    every { repo.flow() } returns stored
+    coEvery { repo.all() } answers { stored.value }
+    coEvery { repo.get(any()) } answers
+      {
+        val id = firstArg<BookId>()
+        stored.value.find { it.id == id }
+      }
+    coEvery { repo.updateCustomMetadata(any(), any()) } answers
+      {
+        val id = firstArg<BookId>()
+        val update = secondArg<(CustomMetadata) -> CustomMetadata>()
+        stored.value =
+          stored.value.map { if (it.id == id) it.copy(custom = update(it.custom)) else it }
+      }
+    return repo
+  }
+
+  private fun Book.copyMetadata(
+    author: String? = this.author,
+    series: String? = this.series,
+    part: String? = this.part,
+  ): Book =
+    copy(
+      content =
+        content.copy(
+          metadata = content.metadata.copy(author = author, series = series, part = part),
+        ),
+    )
+
   private fun BookOverviewViewState.book(bookId: BookId): BookOverviewItemViewState {
     return sections.values
       .flatten()
@@ -1154,6 +1546,7 @@ class BookOverviewViewModelTest {
     repo: BookRepository = mockk {
       every { flow() } returns MutableStateFlow(books)
     },
+    bookSelectionRequests: BookSelectionRequests = BookSelectionRequests(),
   ): BookOverviewViewModel {
     return BookOverviewViewModel(
       repo = repo,
@@ -1197,6 +1590,8 @@ class BookOverviewViewModelTest {
       showNotDownloadedBooksStore = ShowNotDownloadedBooksStore(showNotDownloadedBooksStore),
       hiddenSourcesStore = HiddenSourcesStore(hiddenSourcesStore),
       bookHider = BookHider(repo),
+      bookSelectionRequests = bookSelectionRequests,
+      selectedBooksEditor = SelectedBooksEditor(repo, serverLibrary),
     )
   }
 

@@ -54,6 +54,18 @@ class HideBookViewModelTest {
   }
 
   @Test
+  fun `hiding several books leaves out the hidden ones, so the undo keeps them hidden`() = runTest {
+    val other = book()
+    coEvery { repo.get(other.id) } returns other
+    bookHider.hidden.test {
+      bookHider.hide(listOf(book.id, hiddenBook.id, other.id))
+
+      assertEquals(HiddenBooks(listOf(book.id, other.id), name = null, series = false), awaitItem())
+    }
+    coVerify(exactly = 0) { repo.updateCustomMetadata(hiddenBook.id, any()) }
+  }
+
+  @Test
   fun `showing a book takes the mark off`() = runTest {
     viewModel.onItemClick(hiddenBook.id, BottomSheetItem.Show)
 

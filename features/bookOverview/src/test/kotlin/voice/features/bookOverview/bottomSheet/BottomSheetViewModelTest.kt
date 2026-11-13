@@ -22,6 +22,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.resetMain
@@ -41,6 +42,7 @@ import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
 import voice.features.bookOverview.book
 import voice.features.bookOverview.chapter
+import voice.features.bookOverview.select.BookSelectionRequests
 import voice.navigation.Destination
 import voice.navigation.Navigator
 
@@ -75,6 +77,7 @@ class BottomSheetViewModelTest {
       every { livePlaybackStateFlow(book.id) } returns livePlaybackState
     }
   private val navigator = mockk<Navigator>(relaxUnitFun = true)
+  private val bookSelectionRequests = BookSelectionRequests()
 
   private val itemViewModel =
     mockk<BottomSheetItemViewModel>(relaxUnitFun = true) {
@@ -251,6 +254,31 @@ class BottomSheetViewModelTest {
     }
 
   @Test
+  fun `select only shows while a screen under the sheet can select`() =
+    runTest(dispatcher) {
+      viewModel().test {
+        assertFalse(BottomSheetItem.Select in awaitLoaded().items)
+
+        backgroundScope.launch { bookSelectionRequests.requests.collect {} }
+
+        assertEquals(listOf(BottomSheetItem.Edit, BottomSheetItem.Select), awaitItem()!!.items)
+      }
+    }
+
+  @Test
+  fun `select asks the screen to select the book`() =
+    runTest(dispatcher) {
+      val requests = mutableListOf<BookId>()
+      backgroundScope.launch { bookSelectionRequests.requests.collect { requests += it } }
+      runCurrent()
+
+      bottomSheetViewModel().onItemClick(BottomSheetItem.Select)
+      runCurrent()
+
+      assertEquals(listOf(book.id), requests)
+    }
+
+  @Test
   fun `closing removes the menu of the book`() =
     runTest(dispatcher) {
       bottomSheetViewModel().onClose()
@@ -271,6 +299,7 @@ class BottomSheetViewModelTest {
       serverDownloads = serverDownloads,
       navigator = navigator,
       playerController = playerController,
+      bookSelectionRequests = bookSelectionRequests,
       experimentalPlaybackPersistenceFeatureFlag =
         ExperimentalPlaybackPersistenceFeatureFlag(
           MemoryFeatureFlag(experimentalPlaybackPersistence),

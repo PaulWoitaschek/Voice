@@ -18,10 +18,12 @@ class BookHider(private val repo: BookRepository) {
   internal val hidden: SharedFlow<HiddenBooks>
     field = MutableSharedFlow<HiddenBooks>(extraBufferCapacity = 1)
 
-  internal suspend fun hide(id: BookId) {
-    val book = repo.get(id) ?: return
-    repo.updateCustomMetadata(id) { it.copy(hidden = true) }
-    hidden.emit(HiddenBooks(listOf(id), book.name, series = false))
+  internal suspend fun hide(ids: List<BookId>) {
+    // the undo leaves the books that were hidden before hidden
+    val books = ids.mapNotNull { repo.get(it) }.filterNot { it.custom.hidden }
+    if (books.isEmpty()) return
+    books.forEach { book -> repo.updateCustomMetadata(book.id) { it.copy(hidden = true) } }
+    hidden.emit(HiddenBooks(books.map { it.id }, books.singleOrNull()?.name, series = false))
   }
 
   internal suspend fun hideSeries(name: String) {
@@ -44,6 +46,6 @@ class BookHider(private val repo: BookRepository) {
 
 internal data class HiddenBooks(
   val ids: List<BookId>,
-  val name: String,
+  val name: String?,
   val series: Boolean,
 )

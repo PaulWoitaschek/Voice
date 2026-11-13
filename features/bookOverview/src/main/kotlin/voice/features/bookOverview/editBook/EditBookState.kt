@@ -13,7 +13,7 @@ internal data class EditBookState(
   val part: String = "",
   val saving: Boolean = false,
   val serverResult: ServerEdit? = null,
-  val allSeries: List<SeriesSuggestion> = emptyList(),
+  val allSeries: List<NameSuggestion> = emptyList(),
   val initialTitle: String = title,
   val initialAuthor: String = author,
   val initialSeries: String = series,
@@ -24,22 +24,6 @@ internal data class EditBookState(
 
   val confirmButtonEnabled: Boolean = title.trim().isNotEmpty()
 
-  val suggestions: List<SeriesSuggestion> =
-    series.trim().let { typed ->
-      if (typed.isEmpty() || series == initialSeries) {
-        emptyList()
-      } else {
-        allSeries
-          .filter {
-            it.name.contains(typed, ignoreCase = true) && !it.name.equals(typed, ignoreCase = true)
-          }
-          .sortedByDescending { it.name.startsWith(typed, ignoreCase = true) }
-          .take(3)
-      }
-    }
+  val suggestions: List<NameSuggestion> =
+    if (series == initialSeries) emptyList() else allSeries.matching(series)
 }
-
-internal data class SeriesSuggestion(
-  val name: String,
-  val bookCount: Int,
-)

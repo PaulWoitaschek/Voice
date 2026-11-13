@@ -89,6 +89,7 @@
     <string name="book.edit.server.not_allowed">Twoje konto na serwerze nie może zmieniać książek.</string>
     <string name="book.edit.title.label">Tytuł</string>
     <string name="book.hide">Ukryj w bibliotece</string>
+    <string name="book.select">Zaznacz</string>
     <string name="book.show">Pokaż w bibliotece</string>
     <string name="book.source.device">Na tym urządzeniu</string>
     <string name="book.source.server_downloaded">%s · pobrano</string>
@@ -347,6 +348,39 @@
     <string name="library.search.recent.clear_all">Wyczyść wszystko</string>
     <string name="library.search.recent.remove">Usuń %s</string>
     <string name="library.search.recent.title">Ostatnie</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Ustawiono autora dla %d książki</item>
+        <item quantity="few">Ustawiono autora dla %d książek</item>
+        <item quantity="many">Ustawiono autora dla %d książek</item>
+        <item quantity="other">Ustawiono autora dla %d książek</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">Zaznaczono: %d</item>
+        <item quantity="few">Zaznaczono: %d</item>
+        <item quantity="many">Zaznaczono: %d</item>
+        <item quantity="other">Zaznaczono: %d</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">Ukryto %d książkę</item>
+        <item quantity="few">Ukryto %d książki</item>
+        <item quantity="many">Ukryto %d książek</item>
+        <item quantity="other">Ukryto %d książek</item>
+    </plurals>
+    <string name="library.selection.hide">Ukryj</string>
+    <string name="library.selection.select_all">Zaznacz wszystko</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Ustawiono serię dla %d książki</item>
+        <item quantity="few">Ustawiono serię dla %d książek</item>
+        <item quantity="many">Ustawiono serię dla %d książek</item>
+        <item quantity="other">Ustawiono serię dla %d książek</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Nie udało się zapisać %d książki na serwerze</item>
+        <item quantity="few">Nie udało się zapisać %d książek na serwerze</item>
+        <item quantity="many">Nie udało się zapisać %d książek na serwerze</item>
+        <item quantity="other">Nie udało się zapisać %d książek na serwerze</item>
+    </plurals>
+    <string name="library.selection.show">Pokaż</string>
     <string name="library.series.hidden.message">Ukryto serię „%1$s”</string>
     <string name="library.storage_permission_bug.action">Przyznaj uprawnienie</string>
     <string name="library.storage_permission_bug.message">W przypadku niektórych urządzeń aplikacja systemowa nie ma uprawnień niezbędnych do uzyskania dostępu do pamięci zewnętrznej. Dostęp ten jest niezbędny, aby aplikacja Voice mogła odczytywać książki audio.</string>

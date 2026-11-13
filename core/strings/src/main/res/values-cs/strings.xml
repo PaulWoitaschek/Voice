@@ -89,6 +89,7 @@
     <string name="book.edit.server.not_allowed">Váš účet na serveru nemůže měnit knihy.</string>
     <string name="book.edit.title.label">Název</string>
     <string name="book.hide">Skrýt z knihovny</string>
+    <string name="book.select">Vybrat</string>
     <string name="book.show">Zobrazit v knihovně</string>
     <string name="book.source.device">Na tomto zařízení</string>
     <string name="book.source.server_downloaded">%s · staženo</string>
@@ -347,6 +348,39 @@
     <string name="library.search.recent.clear_all">Vymazat vše</string>
     <string name="library.search.recent.remove">Odstranit %s</string>
     <string name="library.search.recent.title">Nedávné</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Autor nastaven u %d knihy</item>
+        <item quantity="few">Autor nastaven u %d knih</item>
+        <item quantity="many">Autor nastaven u %d knih</item>
+        <item quantity="other">Autor nastaven u %d knih</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">Vybráno: %d</item>
+        <item quantity="few">Vybráno: %d</item>
+        <item quantity="many">Vybráno: %d</item>
+        <item quantity="other">Vybráno: %d</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d kniha je skrytá</item>
+        <item quantity="few">%d knihy jsou skryté</item>
+        <item quantity="many">%d knih je skrytých</item>
+        <item quantity="other">%d knih je skrytých</item>
+    </plurals>
+    <string name="library.selection.hide">Skrýt</string>
+    <string name="library.selection.select_all">Vybrat vše</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Série nastavena u %d knihy</item>
+        <item quantity="few">Série nastavena u %d knih</item>
+        <item quantity="many">Série nastavena u %d knih</item>
+        <item quantity="other">Série nastavena u %d knih</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">%d knihu se nepodařilo uložit na váš server</item>
+        <item quantity="few">%d knihy se nepodařilo uložit na váš server</item>
+        <item quantity="many">%d knih se nepodařilo uložit na váš server</item>
+        <item quantity="other">%d knih se nepodařilo uložit na váš server</item>
+    </plurals>
+    <string name="library.selection.show">Zobrazit</string>
     <string name="library.series.hidden.message">Série „%1$s“ je skrytá</string>
     <string name="library.storage_permission_bug.action">Udělit oprávnění</string>
     <string name="library.storage_permission_bug.message">U některých zařízení chybí systémové aplikaci potřebná oprávnění pro přístup k externímu úložišti. Tento přístup je nezbytný, aby Voice mohl číst vaše audioknihy.</string>

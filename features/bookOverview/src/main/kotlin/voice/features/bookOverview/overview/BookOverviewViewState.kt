@@ -4,6 +4,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import voice.core.data.BookCategory
 import voice.core.data.BookId
+import voice.features.bookOverview.select.SelectionEditViewState
+import voice.features.bookOverview.select.SelectionViewState
 
 @Immutable
 data class BookOverviewViewState(
@@ -28,6 +30,8 @@ data class BookOverviewViewState(
   val sources: List<LibrarySourceViewState> = emptyList(),
   val grouping: LibraryGrouping = LibraryGrouping.Series,
   val showFilterIcon: Boolean = false,
+  val selection: SelectionViewState? = null,
+  val selectionEdit: SelectionEditViewState? = null,
 ) {
 
   // a switch only shows once it has something to filter, so a library without it stays as it was
@@ -114,6 +118,7 @@ data class SeriesStackViewState(
   val progress: List<Float>,
   val category: BookCategory,
   val hidden: Boolean = false,
+  val bookIds: List<BookId> = emptyList(),
 )
 
 internal fun Series.toStackViewState() =
@@ -127,6 +132,7 @@ internal fun Series.toStackViewState() =
     progress = progress,
     category = category,
     hidden = hidden,
+    bookIds = books.map { it.id },
   )
 
 @Immutable
@@ -138,6 +144,7 @@ data class AuthorEntryViewState(
   val bookCount: Int,
   val category: BookCategory,
   val hidden: Boolean = false,
+  val bookIds: List<BookId> = emptyList(),
 )
 
 internal fun AuthorGroup.toEntryViewState(category: BookCategory) =
@@ -149,4 +156,5 @@ internal fun AuthorGroup.toEntryViewState(category: BookCategory) =
     bookCount = books.size,
     category = category,
     hidden = hidden,
+    bookIds = books.map { it.id },
   )

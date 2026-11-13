@@ -80,6 +80,7 @@
     <string name="book.edit.server.not_allowed">您在服务器上的账号无权修改书籍。</string>
     <string name="book.edit.title.label">书名</string>
     <string name="book.hide">从书库中隐藏</string>
+    <string name="book.select">选择</string>
     <string name="book.show">在书库中显示</string>
     <string name="book.source.device">在本设备上</string>
     <string name="book.source.server_downloaded">%s · 已下载</string>
@@ -290,6 +291,24 @@
     <string name="library.search.recent.clear_all">全部清除</string>
     <string name="library.search.recent.remove">移除 %s</string>
     <string name="library.search.recent.title">最近搜索</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="other">已为 %d 本书设置作者</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="other">已选择 %d 本</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="other">已隐藏 %d 本书</item>
+    </plurals>
+    <string name="library.selection.hide">隐藏</string>
+    <string name="library.selection.select_all">全选</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="other">已为 %d 本书设置系列</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="other">有 %d 本书无法保存到您的服务器</item>
+    </plurals>
+    <string name="library.selection.show">显示</string>
     <string name="library.series.hidden.message">《%1$s》已隐藏</string>
     <string name="library.storage_permission_bug.action">给予权限</string>
     <string name="library.storage_permission_bug.message">对于某些设备，系统应用程序缺少访问外部存储的必要权限。此访问对于 Voice 读取您的有声书至关重要。</string>

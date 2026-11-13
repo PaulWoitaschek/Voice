@@ -27,6 +27,7 @@ import voice.core.playback.PlayerController
 import voice.core.playback.overlay
 import voice.features.bookOverview.di.BookActionsScope
 import voice.features.bookOverview.overview.toItemViewState
+import voice.features.bookOverview.select.BookSelectionRequests
 import voice.navigation.Destination
 import voice.navigation.Navigator
 
@@ -42,6 +43,7 @@ class BottomSheetViewModel(
   private val playerController: PlayerController,
   private val experimentalPlaybackPersistenceFeatureFlag:
     ExperimentalPlaybackPersistenceFeatureFlag,
+  private val bookSelectionRequests: BookSelectionRequests,
 ) {
 
   private val scope = MainScope()
@@ -80,11 +82,21 @@ class BottomSheetViewModel(
           value = bookId.isRemote && serverDownloads.shouldAskForNotifications()
         }
         .value
-    if (book == null || items == null || server == null || askForNotifications == null) return null
+    val canSelect = remember { bookSelectionRequests.canSelect }.collectAsState(null).value
+    if (
+      book == null ||
+        items == null ||
+        server == null ||
+        askForNotifications == null ||
+        canSelect == null
+    ) {
+      return null
+    }
+    val select = listOfNotNull(BottomSheetItem.Select.takeIf { canSelect })
     return EditBookBottomSheetState(
       book = book.toItemViewState(),
       category = book.category,
-      items = (items + download?.items().orEmpty()).toSet().sorted(),
+      items = (items + download?.items().orEmpty() + select).toSet().sorted(),
       source = source(server.name, download),
       download = download,
       bookSize =
@@ -141,6 +153,7 @@ class BottomSheetViewModel(
           BottomSheetItem.RetryDownload -> serverDownloads.download(bookId)
           BottomSheetItem.StopDownload,
           BottomSheetItem.RemoveDownload -> serverDownloads.remove(bookId)
+          BottomSheetItem.Select -> bookSelectionRequests.select(listOf(bookId))
           else ->
             viewModels.forEach {
               it.onItemClick(bookId, item)

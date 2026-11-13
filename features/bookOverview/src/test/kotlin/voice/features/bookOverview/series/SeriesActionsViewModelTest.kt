@@ -16,8 +16,10 @@ import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
@@ -30,6 +32,7 @@ import voice.features.bookOverview.bottomSheet.BottomSheetItem
 import voice.features.bookOverview.editBookCategory.BookCategoryChanger
 import voice.features.bookOverview.hideBook.BookHider
 import voice.features.bookOverview.hideBook.HiddenBooks
+import voice.features.bookOverview.select.BookSelectionRequests
 import voice.navigation.Destination
 import voice.navigation.Navigator
 
@@ -52,12 +55,14 @@ class SeriesActionsViewModelTest {
     }
   private val bookHider = BookHider(repo)
   private val bookCategoryChanger = mockk<BookCategoryChanger>(relaxUnitFun = true)
+  private val bookSelectionRequests = BookSelectionRequests()
   private val viewModel =
     SeriesActionsViewModel(
       repo,
       bookHider,
       bookCategoryChanger,
       navigator,
+      bookSelectionRequests,
       dispatcherProvider,
       "Saga",
     )
@@ -196,6 +201,38 @@ class SeriesActionsViewModelTest {
       coVerify { bookCategoryChanger.change(book.id, BookCategory.NOT_STARTED) }
     }
     coVerify(exactly = 3) { bookCategoryChanger.change(any(), any()) }
+  }
+
+  @Test
+  fun `select only shows while a screen under the sheet can select`() = runTest {
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) {
+        viewModel.state()
+      }
+      .map { it?.canSelect }
+      .test {
+        assertEquals(expected = null, actual = awaitItem())
+        assertEquals(expected = false, actual = awaitItem())
+
+        backgroundScope.launch { bookSelectionRequests.requests.collect {} }
+
+        assertEquals(expected = true, actual = awaitItem())
+      }
+  }
+
+  @Test
+  fun `select asks the screen to select the books of the series`() = runTest {
+    val requests = mutableListOf<List<BookId>>()
+    backgroundScope.launch { bookSelectionRequests.requests.collect { requests += it } }
+    runCurrent()
+
+    viewModel.onItemClick(BottomSheetItem.Select)
+    runCurrent()
+
+    assertEquals(
+      expected = setOf(first.id, second.id, hidden.id),
+      actual = requests.single().toSet(),
+    )
   }
 
   private fun TestScope.statuses(): Flow<List<SeriesActionsViewState.Status>?> =

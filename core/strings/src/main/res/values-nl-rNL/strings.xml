@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Je account op de server mag geen boeken wijzigen.</string>
     <string name="book.edit.title.label">Titel</string>
     <string name="book.hide">Verbergen uit bibliotheek</string>
+    <string name="book.select">Selecteren</string>
     <string name="book.show">Tonen in bibliotheek</string>
     <string name="book.source.device">Op dit apparaat</string>
     <string name="book.source.server_downloaded">%s · gedownload</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Alles wissen</string>
     <string name="library.search.recent.remove">%s verwijderen</string>
     <string name="library.search.recent.title">Recent</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Auteur ingesteld voor %d boek</item>
+        <item quantity="other">Auteur ingesteld voor %d boeken</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d geselecteerd</item>
+        <item quantity="other">%d geselecteerd</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d boek is verborgen</item>
+        <item quantity="other">%d boeken zijn verborgen</item>
+    </plurals>
+    <string name="library.selection.hide">Verbergen</string>
+    <string name="library.selection.select_all">Alles selecteren</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Reeks ingesteld voor %d boek</item>
+        <item quantity="other">Reeks ingesteld voor %d boeken</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Opslaan van %d boek op je server is niet gelukt</item>
+        <item quantity="other">Opslaan van %d boeken op je server is niet gelukt</item>
+    </plurals>
+    <string name="library.selection.show">Tonen</string>
     <string name="library.series.hidden.message">%1$s is verborgen</string>
     <string name="library.storage_permission_bug.action">Toegang geven</string>
     <string name="library.storage_permission_bug.message">Op sommige apparaten mist een systeemapp toegang tot de externe opslag. Voice heeft die toegang nodig om je luisterboeken te kunnen lezen.</string>

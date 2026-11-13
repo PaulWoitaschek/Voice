@@ -86,6 +86,7 @@
     <string name="book.edit.server.not_allowed">El vostre compte del servidor no pot canviar llibres.</string>
     <string name="book.edit.title.label">Títol</string>
     <string name="book.hide">Amaga de la biblioteca</string>
+    <string name="book.select">Selecciona</string>
     <string name="book.show">Mostra a la biblioteca</string>
     <string name="book.source.device">En aquest dispositiu</string>
     <string name="book.source.server_downloaded">%s · baixat</string>
@@ -328,6 +329,34 @@
     <string name="library.search.recent.clear_all">Esborra-ho tot</string>
     <string name="library.search.recent.remove">Suprimeix %s</string>
     <string name="library.search.recent.title">Recents</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">S\'ha definit l\'autor de %d llibre</item>
+        <item quantity="many">S\'ha definit l\'autor de %d llibres</item>
+        <item quantity="other">S\'ha definit l\'autor de %d llibres</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d seleccionat</item>
+        <item quantity="many">%d seleccionats</item>
+        <item quantity="other">%d seleccionats</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">S\'ha amagat %d llibre</item>
+        <item quantity="many">S\'han amagat %d llibres</item>
+        <item quantity="other">S\'han amagat %d llibres</item>
+    </plurals>
+    <string name="library.selection.hide">Amaga</string>
+    <string name="library.selection.select_all">Selecciona-ho tot</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">S\'ha definit la sèrie de %d llibre</item>
+        <item quantity="many">S\'ha definit la sèrie de %d llibres</item>
+        <item quantity="other">S\'ha definit la sèrie de %d llibres</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">No s\'ha pogut desar %d llibre al vostre servidor</item>
+        <item quantity="many">No s\'han pogut desar %d llibres al vostre servidor</item>
+        <item quantity="other">No s\'han pogut desar %d llibres al vostre servidor</item>
+    </plurals>
+    <string name="library.selection.show">Mostra</string>
     <string name="library.series.hidden.message">S\'ha amagat %1$s</string>
     <string name="library.storage_permission_bug.action">Concedeix el permís</string>
     <string name="library.storage_permission_bug.message">Per a determinats dispositius, a una aplicació del sistema li falta el permís necessari per accedir a l\'emmagatzematge extern. Aquest accés és essencial perquè Voice llegeixi els audiollibres.</string>

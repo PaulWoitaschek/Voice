@@ -56,5 +56,6 @@ data class ServerBookEdit(
 enum class ServerEdit {
   Saved,
   NotAllowed,
+  Unreachable,
   Failed,
 }

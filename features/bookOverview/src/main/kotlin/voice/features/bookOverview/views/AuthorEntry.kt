@@ -3,7 +3,6 @@
 package voice.features.bookOverview.views
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,17 +53,26 @@ internal fun ListAuthorRow(
   modifier: Modifier = Modifier,
   shape: Shape = MaterialTheme.shapes.largeIncreased,
   flies: Boolean = false,
+  selected: Boolean? = null,
+  onLongClick: (() -> Unit)? = null,
 ) {
+  val colors = MaterialTheme.colorScheme
+  val containerColor = selectedContainerColor(selected, colors.surfaceContainer)
   Surface(
-    modifier = modifier.fillMaxWidth().clip(shape).clickable(onClick = onClick),
+    modifier =
+      modifier.fillMaxWidth().clip(shape).libraryItemClickable(selected, onClick, onLongClick),
     shape = shape,
-    color = MaterialTheme.colorScheme.surfaceContainer,
+    color = containerColor,
+    contentColor = contentColorFor(containerColor),
   ) {
     Row(
       modifier = Modifier.padding(10.dp),
       verticalAlignment = Alignment.CenterVertically,
     ) {
-      AuthorCovers(covers = author.covers, modifier = Modifier.size(64.dp).flying(author, flies))
+      Box(Modifier.size(64.dp).flying(author, flies)) {
+        AuthorCovers(covers = author.covers, modifier = Modifier.fillMaxSize())
+        SelectionBadge(selected)
+      }
       Spacer(Modifier.width(16.dp))
       Column(Modifier.weight(1F)) {
         Text(
@@ -94,10 +103,14 @@ internal fun GridAuthor(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
   flies: Boolean = false,
+  selected: Boolean? = null,
+  onLongClick: (() -> Unit)? = null,
 ) {
-  Column(
-    modifier =
-      modifier.clip(MaterialTheme.shapes.largeIncreased).clickable(onClick = onClick).padding(6.dp),
+  LibraryTile(
+    selected = selected,
+    onClick = onClick,
+    modifier = modifier,
+    onLongClick = onLongClick,
   ) {
     // the badge flies along, or the flying covers would hide it
     Box(Modifier.fillMaxWidth().aspectRatio(1F).flying(author, flies)) {
@@ -109,6 +122,7 @@ internal fun GridAuthor(
         description = authorCounts(author.seriesCount, author.bookCount),
         modifier = Modifier.align(Alignment.BottomEnd).offset(x = 4.dp, y = 4.dp),
       )
+      SelectionBadge(selected)
     }
     Spacer(Modifier.height(8.dp))
     Text(
@@ -129,7 +143,7 @@ private fun Modifier.flying(
 
 // a grid and not a stack, so an author doesn't look like a series
 @Composable
-private fun AuthorCovers(
+internal fun AuthorCovers(
   covers: List<String?>,
   modifier: Modifier = Modifier,
 ) {
@@ -173,14 +187,14 @@ private fun AuthorCover(
 }
 
 @Composable
-private fun authorName(author: AuthorEntryViewState): String =
+internal fun authorName(author: AuthorEntryViewState): String =
   author.name ?: stringResource(StringsR.string.library_no_author)
 
 // "No author" is Voice's own words, not the book's
 internal fun TextStyle.nameText(name: String?): TextStyle = if (name != null) bookText() else this
 
 @Composable
-private fun authorCounts(
+internal fun authorCounts(
   seriesCount: Int,
   bookCount: Int,
 ): String {

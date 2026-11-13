@@ -50,6 +50,7 @@ internal fun BookCover(
   unavailable: Boolean = false,
   download: DownloadBadge? = null,
   hidden: Boolean = false,
+  selected: Boolean? = null,
 ) {
   Box(modifier = modifier) {
     AsyncImage(
@@ -96,6 +97,7 @@ internal fun BookCover(
           modifier = badgeModifier,
         )
     }
+    SelectionBadge(selected)
   }
 }
 

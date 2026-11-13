@@ -25,6 +25,7 @@ import voice.features.bookOverview.overview.SeriesStackViewState
 import voice.features.bookOverview.overview.inSeries
 import voice.features.bookOverview.overview.series
 import voice.features.bookOverview.overview.toStackViewState
+import voice.features.bookOverview.select.BookSelectionRequests
 import voice.navigation.Destination
 import voice.navigation.Navigator
 
@@ -34,6 +35,7 @@ class SeriesActionsViewModel(
   private val bookHider: BookHider,
   private val bookCategoryChanger: BookCategoryChanger,
   private val navigator: Navigator,
+  private val bookSelectionRequests: BookSelectionRequests,
   dispatcherProvider: DispatcherProvider,
   @Assisted private val name: String,
 ) {
@@ -43,6 +45,8 @@ class SeriesActionsViewModel(
   @Composable
   internal fun state(): SeriesActionsViewState? {
     val books = remember { repo.flow() }.collectAsState(initial = null).value ?: return null
+    val canSelect =
+      remember { bookSelectionRequests.canSelect }.collectAsState(null).value ?: return null
     val series = remember(books) { books.inSeries(name).series().singleOrNull() }
     // with no series there is no menu to show, and an invisible one would swallow the next back
     // press
@@ -52,6 +56,7 @@ class SeriesActionsViewModel(
     if (series == null) return null
     return SeriesActionsViewState(
       series = series.toStackViewState(),
+      canSelect = canSelect,
       statuses =
         StatusOrder.mapNotNull { category ->
           val changes = series.books.filter { it.category != category }
@@ -75,6 +80,8 @@ class SeriesActionsViewModel(
         when (item) {
           BottomSheetItem.Hide -> bookHider.hideSeries(name)
           BottomSheetItem.Show -> bookHider.showSeries(name)
+          BottomSheetItem.Select ->
+            bookSelectionRequests.select(repo.all().inSeries(name).map { it.id })
           else -> item.category?.let { markSeries(it) }
         }
       }
@@ -110,6 +117,7 @@ private val StatusOrder = listOf(BookCategory.NOT_STARTED, BookCategory.FINISHED
 internal data class SeriesActionsViewState(
   val series: SeriesStackViewState,
   val statuses: List<Status>,
+  val canSelect: Boolean = false,
 ) {
 
   data class Status(

@@ -89,6 +89,7 @@
     <string name="book.edit.server.not_allowed">Ваша учётная запись на сервере не может изменять книги.</string>
     <string name="book.edit.title.label">Название</string>
     <string name="book.hide">Скрыть из библиотеки</string>
+    <string name="book.select">Выбрать</string>
     <string name="book.show">Показать в библиотеке</string>
     <string name="book.source.device">На этом устройстве</string>
     <string name="book.source.server_downloaded">%s · скачано</string>
@@ -347,6 +348,39 @@
     <string name="library.search.recent.clear_all">Очистить всё</string>
     <string name="library.search.recent.remove">Удалить %s</string>
     <string name="library.search.recent.title">Недавние</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Автор указан для %d книги</item>
+        <item quantity="few">Автор указан для %d книг</item>
+        <item quantity="many">Автор указан для %d книг</item>
+        <item quantity="other">Автор указан для %d книг</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">Выбрано: %d</item>
+        <item quantity="few">Выбрано: %d</item>
+        <item quantity="many">Выбрано: %d</item>
+        <item quantity="other">Выбрано: %d</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d книга скрыта</item>
+        <item quantity="few">%d книги скрыты</item>
+        <item quantity="many">%d книг скрыто</item>
+        <item quantity="other">%d книг скрыто</item>
+    </plurals>
+    <string name="library.selection.hide">Скрыть</string>
+    <string name="library.selection.select_all">Выбрать все</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Серия указана для %d книги</item>
+        <item quantity="few">Серия указана для %d книг</item>
+        <item quantity="many">Серия указана для %d книг</item>
+        <item quantity="other">Серия указана для %d книг</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Не удалось сохранить %d книгу на вашем сервере</item>
+        <item quantity="few">Не удалось сохранить %d книги на вашем сервере</item>
+        <item quantity="many">Не удалось сохранить %d книг на вашем сервере</item>
+        <item quantity="other">Не удалось сохранить %d книг на вашем сервере</item>
+    </plurals>
+    <string name="library.selection.show">Показать</string>
     <string name="library.series.hidden.message">Серия «%1$s» скрыта</string>
     <string name="library.storage_permission_bug.action">Предоставить разрешение</string>
     <string name="library.storage_permission_bug.message">На некоторых устройствах системное приложение не имеет необходимого разрешения для доступа к внешнему хранилищу. Этот доступ необходим для того, чтобы Voice мог читать ваши аудиокниги.</string>

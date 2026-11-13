@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Din konto på serveren kan ikke ændre bøger.</string>
     <string name="book.edit.title.label">Titel</string>
     <string name="book.hide">Skjul fra biblioteket</string>
+    <string name="book.select">Vælg</string>
     <string name="book.show">Vis i biblioteket</string>
     <string name="book.source.device">På denne enhed</string>
     <string name="book.source.server_downloaded">%s · downloadet</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Ryd alle</string>
     <string name="library.search.recent.remove">Fjern %s</string>
     <string name="library.search.recent.title">Seneste</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Forfatter ændret for %d bog</item>
+        <item quantity="other">Forfatter ændret for %d bøger</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d valgt</item>
+        <item quantity="other">%d valgt</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d bog er skjult</item>
+        <item quantity="other">%d bøger er skjult</item>
+    </plurals>
+    <string name="library.selection.hide">Skjul</string>
+    <string name="library.selection.select_all">Vælg alle</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Serie ændret for %d bog</item>
+        <item quantity="other">Serie ændret for %d bøger</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Kunne ikke gemme %d bog på din server</item>
+        <item quantity="other">Kunne ikke gemme %d bøger på din server</item>
+    </plurals>
+    <string name="library.selection.show">Vis</string>
     <string name="library.series.hidden.message">%1$s er skjult</string>
     <string name="library.storage_permission_bug.action">Giv tilladelse</string>
     <string name="library.storage_permission_bug.message">På visse enheder mangler en system-app den nødvendige tilladelse til at få adgang til det eksterne lager. Denne adgang er afgørende for, at Voice kan læse dine lydbøger.</string>

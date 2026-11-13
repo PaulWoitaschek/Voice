@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Ditt konto på servern får inte ändra böcker.</string>
     <string name="book.edit.title.label">Titel</string>
     <string name="book.hide">Dölj från biblioteket</string>
+    <string name="book.select">Välj</string>
     <string name="book.show">Visa i biblioteket</string>
     <string name="book.source.device">På den här enheten</string>
     <string name="book.source.server_downloaded">%s · nedladdad</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Rensa alla</string>
     <string name="library.search.recent.remove">Ta bort %s</string>
     <string name="library.search.recent.title">Senaste</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Författaren har ändrats för %d bok</item>
+        <item quantity="other">Författaren har ändrats för %d böcker</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d vald</item>
+        <item quantity="other">%d valda</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d bok är dold</item>
+        <item quantity="other">%d böcker är dolda</item>
+    </plurals>
+    <string name="library.selection.hide">Dölj</string>
+    <string name="library.selection.select_all">Välj alla</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Serien har ändrats för %d bok</item>
+        <item quantity="other">Serien har ändrats för %d böcker</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Det gick inte att spara %d bok på din server</item>
+        <item quantity="other">Det gick inte att spara %d böcker på din server</item>
+    </plurals>
+    <string name="library.selection.show">Visa</string>
     <string name="library.series.hidden.message">%1$s är dold</string>
     <string name="library.storage_permission_bug.action">Ge behörighet</string>
     <string name="library.storage_permission_bug.message">På vissa enheter saknar en systemapp den behörighet som krävs för att komma åt den externa lagringen. Den åtkomsten är nödvändig för att Voice ska kunna läsa dina ljudböcker.</string>

@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">حساب شما در سرور اجازهٔ تغییر کتاب‌ها را ندارد.</string>
     <string name="book.edit.title.label">عنوان</string>
     <string name="book.hide">پنهان کردن از کتابخانه</string>
+    <string name="book.select">انتخاب</string>
     <string name="book.show">نمایش در کتابخانه</string>
     <string name="book.source.device">در این دستگاه</string>
     <string name="book.source.server_downloaded">%s · دانلودشده</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">پاک کردن همه</string>
     <string name="library.search.recent.remove">حذف %s</string>
     <string name="library.search.recent.title">جستجوهای اخیر</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">نویسندهٔ %d کتاب تنظیم شد</item>
+        <item quantity="other">نویسندهٔ %d کتاب تنظیم شد</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d مورد انتخاب شد</item>
+        <item quantity="other">%d مورد انتخاب شد</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d کتاب پنهان شد</item>
+        <item quantity="other">%d کتاب پنهان شد</item>
+    </plurals>
+    <string name="library.selection.hide">پنهان کردن</string>
+    <string name="library.selection.select_all">انتخاب همه</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">مجموعهٔ %d کتاب تنظیم شد</item>
+        <item quantity="other">مجموعهٔ %d کتاب تنظیم شد</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">%d کتاب در سرورتان ذخیره نشد</item>
+        <item quantity="other">%d کتاب در سرورتان ذخیره نشد</item>
+    </plurals>
+    <string name="library.selection.show">نمایش</string>
     <string name="library.series.hidden.message">مجموعهٔ %1$s پنهان شد</string>
     <string name="library.storage_permission_bug.action">اعطای مجوز</string>
     <string name="library.storage_permission_bug.message">در برخی دستگاه‌ها، یک برنامهٔ سیستمی مجوز لازم برای دسترسی به حافظهٔ خارجی را ندارد. Voice برای خواندن کتاب‌های صوتی شما به این دسترسی نیاز دارد.</string>

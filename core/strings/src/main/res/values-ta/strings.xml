@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">சர்வரில் உள்ள உங்கள் கணக்கால் புத்தகங்களை மாற்ற முடியாது.</string>
     <string name="book.edit.title.label">தலைப்பு</string>
     <string name="book.hide">நூலகத்திலிருந்து மறை</string>
+    <string name="book.select">தேர்ந்தெடு</string>
     <string name="book.show">நூலகத்தில் காட்டு</string>
     <string name="book.source.device">இந்தச் சாதனத்தில்</string>
     <string name="book.source.server_downloaded">%s · பதிவிறக்கப்பட்டது</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">அனைத்தையும் அழி</string>
     <string name="library.search.recent.remove">%s ஐ அகற்று</string>
     <string name="library.search.recent.title">அண்மையவை</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">%d புத்தகத்திற்கு ஆசிரியர் அமைக்கப்பட்டது</item>
+        <item quantity="other">%d புத்தகங்களுக்கு ஆசிரியர் அமைக்கப்பட்டது</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d தேர்ந்தெடுக்கப்பட்டது</item>
+        <item quantity="other">%d தேர்ந்தெடுக்கப்பட்டன</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d புத்தகம் மறைக்கப்பட்டது</item>
+        <item quantity="other">%d புத்தகங்கள் மறைக்கப்பட்டன</item>
+    </plurals>
+    <string name="library.selection.hide">மறை</string>
+    <string name="library.selection.select_all">அனைத்தையும் தேர்ந்தெடு</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">%d புத்தகத்திற்குத் தொடர் அமைக்கப்பட்டது</item>
+        <item quantity="other">%d புத்தகங்களுக்குத் தொடர் அமைக்கப்பட்டது</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">%d புத்தகத்தை உங்கள் சர்வரில் சேமிக்க முடியவில்லை</item>
+        <item quantity="other">%d புத்தகங்களை உங்கள் சர்வரில் சேமிக்க முடியவில்லை</item>
+    </plurals>
+    <string name="library.selection.show">காட்டு</string>
     <string name="library.series.hidden.message">%1$s மறைக்கப்பட்டது</string>
     <string name="library.storage_permission_bug.action">அனுமதி வழங்கு</string>
     <string name="library.storage_permission_bug.message">சில சாதனங்களுக்கு, ஒரு கணினி பயன்பாடு வெளிப்புற சேமிப்பிடத்தை அணுக தேவையான அனுமதியைக் காணவில்லை. உங்கள் ஆடியோபுக்குகளைப் படிக்க Voice-க்கு இந்த அணுகல் தேவை.</string>

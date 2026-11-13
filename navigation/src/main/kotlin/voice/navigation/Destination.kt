@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import voice.core.common.serialization.UriSerializer
 import voice.core.data.BookId
 import voice.core.data.folders.FolderType
@@ -103,6 +104,17 @@ sealed interface Destination {
   data class Author(val name: String?) : Compose {
     override val trackingName: String
       get() = "Author"
+  }
+
+  // an author's entry in the library holds only the books of its section. They can be thousands.
+  // That is too many for the saved state, so after a restore the sheet has no books and closes.
+  @Serializable
+  data class AuthorActions(
+    val name: String?,
+    @Transient val bookIds: List<BookId> = emptyList(),
+  ) : Compose {
+    override val trackingName: String
+      get() = "AuthorActions"
   }
 
   @Serializable

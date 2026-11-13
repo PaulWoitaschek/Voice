@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Dein Konto auf dem Server darf keine Bücher ändern.</string>
     <string name="book.edit.title.label">Titel</string>
     <string name="book.hide">Aus der Bibliothek ausblenden</string>
+    <string name="book.select">Auswählen</string>
     <string name="book.show">In der Bibliothek anzeigen</string>
     <string name="book.source.device">Auf diesem Gerät</string>
     <string name="book.source.server_downloaded">%s · heruntergeladen</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Alle löschen</string>
     <string name="library.search.recent.remove">%s entfernen</string>
     <string name="library.search.recent.title">Zuletzt gesucht</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Autor für %d Buch festgelegt</item>
+        <item quantity="other">Autor für %d Bücher festgelegt</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d ausgewählt</item>
+        <item quantity="other">%d ausgewählt</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d Buch ist ausgeblendet</item>
+        <item quantity="other">%d Bücher sind ausgeblendet</item>
+    </plurals>
+    <string name="library.selection.hide">Ausblenden</string>
+    <string name="library.selection.select_all">Alle auswählen</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Reihe für %d Buch festgelegt</item>
+        <item quantity="other">Reihe für %d Bücher festgelegt</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">%d Buch konnte nicht auf Deinem Server gespeichert werden</item>
+        <item quantity="other">%d Bücher konnten nicht auf Deinem Server gespeichert werden</item>
+    </plurals>
+    <string name="library.selection.show">Anzeigen</string>
     <string name="library.series.hidden.message">%1$s ist ausgeblendet</string>
     <string name="library.storage_permission_bug.action">Berechtigung erteilen</string>
     <string name="library.storage_permission_bug.message">Auf manchen Geräten fehlt einer System-App die nötige Berechtigung für den externen Speicher. Voice braucht diesen Zugriff, um Deine Hörbücher zu lesen.</string>
