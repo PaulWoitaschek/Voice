@@ -49,20 +49,31 @@ class SelectedBooksEditor(
     val books = repo.all().filter { it.id in values }
     val undo = mutableMapOf<BookId, String?>()
     val failed = mutableSetOf<BookId>()
-    var serverError: ServerEdit? = null
+    var notAllowed = false
+    var failedInARow = 0
     books.forEach { book ->
       val value = values.getValue(book.id)
       if (book.id.isRemote) {
-        // the other books would fail the same way, each one only after the timeout
-        when (
-          val result =
-            serverError ?: serverLibrary.updateBook(book.id, serverEdit(book, field, value))
-        ) {
-          ServerEdit.Saved -> undo[book.id] = field.of(book)
-          ServerEdit.NotAllowed,
+        // one book can fail on its own, but several in a row mean the server can't be reached, and
+        // each of the others would only fail after the timeout
+        val result =
+          if (notAllowed || failedInARow >= MAX_FAILED_IN_A_ROW) {
+            ServerEdit.Failed
+          } else {
+            serverLibrary.updateBook(book.id, serverEdit(book, field, value))
+          }
+        when (result) {
+          ServerEdit.Saved -> {
+            undo[book.id] = field.of(book)
+            failedInARow = 0
+          }
+          ServerEdit.NotAllowed -> {
+            failed += book.id
+            notAllowed = true
+          }
           ServerEdit.Failed -> {
             failed += book.id
-            serverError = result
+            failedInARow++
           }
         }
       } else {
@@ -75,11 +86,13 @@ class SelectedBooksEditor(
       field = field,
       count = undo.size,
       failed = failed,
-      notAllowed = serverError == ServerEdit.NotAllowed,
+      notAllowed = notAllowed,
       undo = undo,
     )
   }
 }
+
+private const val MAX_FAILED_IN_A_ROW = 3
 
 // the server has no "follow the files", so an empty name takes the series or author off
 private fun serverEdit(

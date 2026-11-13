@@ -37,7 +37,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import voice.core.ui.R as UiR
 
-// while selecting, a tap adds or removes the item, and it reads as a checkbox
 internal fun Modifier.libraryItemClickable(
   selected: Boolean?,
   onClick: () -> Unit,

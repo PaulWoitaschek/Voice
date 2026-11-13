@@ -291,7 +291,22 @@ internal fun BookOverview(
         }
       }
     },
-    snackbarHost = { SnackbarHost(snackbarHostState) },
+    snackbarHost = {
+      SnackbarHost(
+        hostState = snackbarHostState,
+        // the toolbar isn't the Scaffold's own, so the Scaffold doesn't keep the snackbar above it
+        modifier =
+          if (viewState.selection != null) {
+            Modifier.navigationBarsPadding()
+              .padding(
+                bottom =
+                  FloatingToolbarDefaults.ScreenOffset + FloatingToolbarDefaults.ContainerSize,
+              )
+          } else {
+            Modifier
+          },
+      )
+    },
     floatingActionButton = {
       val playButtonState = viewState.playButtonState
       AnimatedVisibility(

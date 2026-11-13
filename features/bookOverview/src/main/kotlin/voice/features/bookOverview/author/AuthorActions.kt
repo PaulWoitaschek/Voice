@@ -66,7 +66,8 @@ object AuthorActionsProvider {
   @IntoSet
   fun authorActionsNavEntryProvider(): NavEntryProvider<*> =
     NavEntryProvider<Destination.AuthorActions> { key ->
-      NavEntry(key, metadata = OverlayNav.overlay()) {
+      // the default content key holds every book id, too much for the saved state
+      NavEntry(key, contentKey = "AuthorActions:${key.name}", metadata = OverlayNav.overlay()) {
         AuthorActionsScreen(key)
       }
     }

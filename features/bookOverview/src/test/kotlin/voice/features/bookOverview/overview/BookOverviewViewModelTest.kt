@@ -1334,28 +1334,33 @@ class BookOverviewViewModelTest {
     }
 
   @Test
-  fun `an undo that fails on the server tells the listener, with no undo of its own`() = runTest {
-    val book = serverBook("library")
-    coEvery { serverLibrary.updateBook(book.id, any()) } returns
-      ServerEdit.Saved andThen
-      ServerEdit.Failed
-    val viewModel = viewModel(repo = libraryRepo(book))
-    val state = viewModel.stateIn(backgroundScope)
-    val edits = mutableListOf<BooksEdited>()
-    backgroundScope.launch(testDispatcher) { viewModel.booksEdited.collect { edits += it } }
-    state.first { it.sections.isNotEmpty() }
+  fun `an undo that fails on the server selects the books it left, with no undo of its own`() =
+    runTest {
+      val book = serverBook("library")
+      coEvery { serverLibrary.updateBook(book.id, any()) } returns
+        ServerEdit.Saved andThen
+        ServerEdit.Failed
+      val viewModel = viewModel(repo = libraryRepo(book))
+      val state = viewModel.stateIn(backgroundScope)
+      val edits = mutableListOf<BooksEdited>()
+      backgroundScope.launch(testDispatcher) { viewModel.booksEdited.collect { edits += it } }
+      state.first { it.sections.isNotEmpty() }
 
-    viewModel.onSelectionStart(listOf(book.id))
-    viewModel.onSelectionEdit(BookField.Series)
-    state.first { it.selectionEdit != null }
-    viewModel.onSelectionEditSave("Saga")
-    state.first { it.selectionEdit?.saved == true }
-    viewModel.onUndoEdit(edits.single())
+      viewModel.onSelectionStart(listOf(book.id))
+      viewModel.onSelectionEdit(BookField.Series)
+      state.first { it.selectionEdit != null }
+      viewModel.onSelectionEditSave("Saga")
+      state.first { it.selectionEdit?.saved == true }
+      viewModel.onUndoEdit(edits.single())
 
-    val undone = edits.last()
-    assertEquals(expected = setOf(book.id), actual = undone.failed)
-    assertEquals(expected = 0, actual = undone.count)
-  }
+      val undone = edits.last()
+      assertEquals(expected = setOf(book.id), actual = undone.failed)
+      assertEquals(expected = 0, actual = undone.count)
+      assertEquals(
+        expected = setOf(book.id),
+        actual = state.first { it.selection != null }.selection?.ids,
+      )
+    }
 
   @Test
   fun `a second edit while the sheet is open keeps the first`() = runTest {
