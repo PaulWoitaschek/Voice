@@ -325,6 +325,7 @@ private fun EditBookContent(
     val error =
       when (viewState.serverResult) {
         ServerEdit.NotAllowed -> StringsR.string.book_edit_server_not_allowed
+        ServerEdit.Unreachable,
         ServerEdit.Failed -> StringsR.string.book_edit_server_failed
         ServerEdit.Saved,
         null -> null

@@ -257,12 +257,12 @@ class ServerBookUpdateTest {
   }
 
   @Test
-  fun `a server that can't be reached fails`() = runTest {
+  fun `a server that can't be reached is unreachable`() = runTest {
     val repo = MemoryBookRepository(book(emptyList()))
     server.close()
 
     assertEquals(
-      ServerEdit.Failed,
+      ServerEdit.Unreachable,
       bookUpdate(repo).update(bookId, ServerBookEdit(series = "Expanse", part = "")),
     )
   }

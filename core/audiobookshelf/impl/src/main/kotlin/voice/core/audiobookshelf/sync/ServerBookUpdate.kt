@@ -71,7 +71,7 @@ internal class ServerBookUpdate(
         }
       }
     } catch (_: IOException) {
-      ServerEdit.Failed
+      ServerEdit.Unreachable
     } catch (e: HttpException) {
       Logger.w(e, "Could not read the book from the server: HTTP ${e.code()}")
       ServerEdit.Failed

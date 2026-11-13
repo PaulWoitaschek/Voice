@@ -161,7 +161,7 @@
     <string name="book.edit.title.label">Title</string>
     <!-- Action in the book actions sheet. Takes the book out of the library, Continue listening, the widgets and Android Auto, without deleting its files. Search still finds it. Also in the sheet of a series, where it hides all of its books. -->
     <string name="book.hide">Hide from library</string>
-    <!-- Action in the book actions sheet of a book in the library. Starts selecting books, with this one selected, to change several books at once. -->
+    <!-- Action in the sheet of a book, a series or an author in the library. Starts selecting books to change several at once. The book, or all books of the series or author, start selected. -->
     <string name="book.select">Select</string>
     <!-- Action in the book actions sheet of a hidden book. Brings it back into the library. Also in the sheet of a series whose books are all hidden, where it brings all of them back. -->
     <string name="book.show">Show in library</string>
@@ -469,7 +469,7 @@
     <string name="library.no_author">No author</string>
     <!-- Header above the browse section of the library search, which lists the library by authors, series, narrators or genres. -->
     <string name="library.search.browse.title">Browse</string>
-    <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. Also below a series or an author in the library, on the screen of a series, below each series suggested while editing a book, and below Hidden books in the library filter. -->
+    <!-- Number of books by an author, in a series, by a narrator or in a genre, in the browse section of the library search. Also below a series or an author in the library, on the screen of a series, below each series suggested while editing a book, and below Hidden books in the library filter. Also the header of the sheet that sets the series or author of several selected books. -->
     <plurals name="library.search.browse.book_count">
         <item quantity="one">%d book</item>
         <item quantity="other">%d books</item>
@@ -544,7 +544,7 @@
         <item quantity="one">Series set for %d book</item>
         <item quantity="other">Series set for %d books</item>
     </plurals>
-    <!-- Snackbar after the listener set the series or author of several selected books, or undid that, when some of them are from an Audiobookshelf server and saving them there failed, for example without a connection. %d is the number of books that didn't change on the server. -->
+    <!-- Snackbar after the listener set the series or author of several selected books, or undid that. Some of the books are from an Audiobookshelf server, and saving them there failed, for example without a connection. %d is the number of books that didn't change on the server. -->
     <plurals name="library.selection.server_failed">
         <item quantity="one">Couldn\'t save %d book on your server</item>
         <item quantity="other">Couldn\'t save %d books on your server</item>

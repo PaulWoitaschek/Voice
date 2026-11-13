@@ -106,8 +106,8 @@ sealed interface Destination {
       get() = "Author"
   }
 
-  // an author's entry in the library holds only the books of its section. They can be thousands,
-  // too many for the saved state, so after a restore the sheet has no books and closes.
+  // an author's entry in the library holds only the books of its section. They can be thousands.
+  // That is too many for the saved state, so after a restore the sheet has no books and closes.
   @Serializable
   data class AuthorActions(
     val name: String?,

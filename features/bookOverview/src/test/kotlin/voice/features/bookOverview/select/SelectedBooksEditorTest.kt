@@ -32,15 +32,15 @@ class SelectedBooksEditorTest {
   }
 
   @Test
-  fun `after three failures in a row, the other server books are not sent`() = runTest {
-    val books = List(5) { serverBook() }
-    coEvery { serverLibrary.updateBook(any(), any()) } returns ServerEdit.Failed
+  fun `once the server can't be reached, the other server books are not sent`() = runTest {
+    val books = List(3) { serverBook() }
+    coEvery { serverLibrary.updateBook(any(), any()) } returns ServerEdit.Unreachable
 
     val edited = editor(*books.toTypedArray()).set(BookField.Author, books.map { it.id }, "New")
 
     assertEquals(expected = books.map { it.id }.toSet(), actual = edited.failed)
     assertEquals(expected = false, actual = edited.notAllowed)
-    coVerify(exactly = 3) {
+    coVerify(exactly = 1) {
       val _ = serverLibrary.updateBook(any(), any())
     }
   }

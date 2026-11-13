@@ -474,7 +474,8 @@ class BookOverviewViewModel(
   }
 
   internal fun onSelectAll() {
-    selection = shownBookIds
+    // the top bar still takes taps while it fades out
+    if (selection != null) selection = shownBookIds
   }
 
   internal fun onSelectionClose() {
