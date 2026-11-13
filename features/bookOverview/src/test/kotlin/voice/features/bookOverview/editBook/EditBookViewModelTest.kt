@@ -103,9 +103,9 @@ class EditBookViewModelTest {
       assertEquals(
         expected =
           listOf(
-            SeriesSuggestion("Expeditionary Force", bookCount = 1),
-            SeriesSuggestion("Alien Explorers", bookCount = 1),
-            SeriesSuggestion("The Expanse", bookCount = 3),
+            NameSuggestion("Expeditionary Force", bookCount = 1),
+            NameSuggestion("Alien Explorers", bookCount = 1),
+            NameSuggestion("The Expanse", bookCount = 3),
           ),
         actual = viewModel.state.value?.suggestions,
       )
@@ -152,7 +152,7 @@ class EditBookViewModelTest {
       viewModel.onSeriesChange("foundation ")
 
       assertEquals(
-        expected = listOf(SeriesSuggestion("Foundation Sequels", bookCount = 1)),
+        expected = listOf(NameSuggestion("Foundation Sequels", bookCount = 1)),
         actual = viewModel.state.value?.suggestions,
       )
     }

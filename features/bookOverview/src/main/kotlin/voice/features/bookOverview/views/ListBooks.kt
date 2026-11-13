@@ -3,7 +3,6 @@
 package voice.features.bookOverview.views
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +19,7 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -51,24 +51,33 @@ internal fun ListBookRow(
   part: String? = null,
   current: Boolean = false,
   playing: Boolean = false,
+  selected: Boolean? = null,
 ) {
   val colors = MaterialTheme.colorScheme
-  val secondaryColor = if (current) colors.onPrimaryContainer else colors.onSurfaceVariant
+  val containerColor =
+    selectedContainerColor(
+      selected,
+      if (current) colors.primaryContainer else colors.surfaceContainer,
+    )
+  val contentColor = contentColorFor(containerColor)
+  val secondaryColor = if (selected == true || current) contentColor else colors.onSurfaceVariant
   Surface(
     modifier =
       modifier
         .fillMaxWidth()
         .clip(shape)
-        .combinedClickable(
+        .libraryItemClickable(
+          selected = selected,
           onClick = { onBookClick(book.id) },
           onLongClick = { onBookLongClick(book.id) },
         )
         .semantics {
-          if (current) selected = true
+          // while selecting, selected means in the selection
+          if (current && selected == null) this.selected = true
         },
     shape = shape,
-    color = if (current) colors.primaryContainer else colors.surfaceContainer,
-    contentColor = if (current) colors.onPrimaryContainer else colors.onSurface,
+    color = containerColor,
+    contentColor = contentColor,
   ) {
     Row(
       modifier = Modifier.padding(10.dp),
@@ -101,6 +110,7 @@ internal fun ListBookRow(
         finished = finished,
         unavailable = book.unavailable,
         download = book.download,
+        selected = selected,
         modifier = Modifier.size(64.dp),
       )
       Spacer(Modifier.width(16.dp))
@@ -127,6 +137,7 @@ internal fun ListBookRow(
               LinearProgressIndicator(
                 progress = { book.progress },
                 modifier = Modifier.weight(1F).padding(end = 12.dp),
+                trackColor = progressTrackColor(selected),
                 gapSize = 0.dp,
                 drawStopIndicator = {},
               )

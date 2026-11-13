@@ -45,6 +45,7 @@ enum class BottomSheetItem(
   FileCover(StringsR.string.book_edit_cover_file, UiR.drawable.ic_image),
   Hide(StringsR.string.book_hide, UiR.drawable.ic_visibility_off),
   Show(StringsR.string.book_show, UiR.drawable.ic_visibility),
+  Select(StringsR.string.book_select, UiR.drawable.ic_check_circle),
   Download(StringsR.string.book_download_action, UiR.drawable.ic_download),
   StopDownload(StringsR.string.book_download_stop, UiR.drawable.ic_close),
   RetryDownload(StringsR.string.book_download_retry, UiR.drawable.ic_replay),

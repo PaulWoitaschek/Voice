@@ -161,6 +161,8 @@
     <string name="book.edit.title.label">Title</string>
     <!-- Action in the book actions sheet. Takes the book out of the library, Continue listening, the widgets and Android Auto, without deleting its files. Search still finds it. Also in the sheet of a series, where it hides all of its books. -->
     <string name="book.hide">Hide from library</string>
+    <!-- Action in the book actions sheet of a book in the library. Starts selecting books, with this one selected, to change several books at once. -->
+    <string name="book.select">Select</string>
     <!-- Action in the book actions sheet of a hidden book. Brings it back into the library. Also in the sheet of a series whose books are all hidden, where it brings all of them back. -->
     <string name="book.show">Show in library</string>
     <!-- Shown under the title in the book actions sheet for a book whose files are on the phone, once a server is connected too. -->
@@ -518,6 +520,37 @@
     <string name="library.search.recent.remove">Remove %s</string>
     <!-- Header above the recent searches in the library search. -->
     <string name="library.search.recent.title">Recent</string>
+    <!-- Snackbar after the listener set the author of several selected books at once, with a button to undo it. %d is the number of books. -->
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Author set for %d book</item>
+        <item quantity="other">Author set for %d books</item>
+    </plurals>
+    <!-- Title of the top bar while the listener selects books in the library. %d is the number of selected books. -->
+    <plurals name="library.selection.count">
+        <item quantity="one">%d selected</item>
+        <item quantity="other">%d selected</item>
+    </plurals>
+    <!-- Snackbar after the listener hid several selected books at once, with a button to undo it. %d is the number of books. -->
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d book is hidden</item>
+        <item quantity="other">%d books are hidden</item>
+    </plurals>
+    <!-- Short label of a button in the toolbar while selecting books. Takes the selected books out of the library, without deleting their files. -->
+    <string name="library.selection.hide">Hide</string>
+    <!-- Button in the top bar while selecting books. Selects every book the library shows. -->
+    <string name="library.selection.select_all">Select all</string>
+    <!-- Snackbar after the listener set the series of several selected books at once, with a button to undo it. %d is the number of books. -->
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Series set for %d book</item>
+        <item quantity="other">Series set for %d books</item>
+    </plurals>
+    <!-- Snackbar after the listener set the series or author of several selected books, or undid that, when some of them are from an Audiobookshelf server and saving them there failed, for example without a connection. %d is the number of books that didn't change on the server. -->
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Couldn\'t save %d book on your server</item>
+        <item quantity="other">Couldn\'t save %d books on your server</item>
+    </plurals>
+    <!-- Short label of a button in the toolbar while selecting books that are all hidden. Brings the selected books back into the library. -->
+    <string name="library.selection.show">Show</string>
     <!-- Snackbar message after a series was hidden from the library, with a button to undo it. %1$s is the name of the series. -->
     <string name="library.series.hidden.message">%1$s is hidden</string>
     <!-- Button label for granting the storage permission workaround. -->

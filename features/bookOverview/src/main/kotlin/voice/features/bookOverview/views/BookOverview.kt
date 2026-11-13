@@ -1,21 +1,31 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 
 package voice.features.bookOverview.views
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FloatingToolbarDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
@@ -35,6 +45,7 @@ import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
@@ -70,6 +81,11 @@ import voice.features.bookOverview.overview.LibraryGrouping
 import voice.features.bookOverview.overview.LibraryItem
 import voice.features.bookOverview.overview.LibrarySource
 import voice.features.bookOverview.overview.SeriesStackViewState
+import voice.features.bookOverview.select.BookField
+import voice.features.bookOverview.select.SelectionEditSheet
+import voice.features.bookOverview.select.SelectionToolbar
+import voice.features.bookOverview.select.SelectionTopBar
+import voice.features.bookOverview.select.SelectionViewState
 import voice.navigation.Destination
 import voice.navigation.NavEntryProvider
 
@@ -105,15 +121,18 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
   val undoLabel = stringResource(StringsR.string.common_action_undo)
   LaunchedEffect(bookOverviewViewModel) {
     bookOverviewViewModel.hiddenBooks.collect { hidden ->
+      val count = hidden.ids.size
       val message =
-        if (hidden.series) {
-          StringsR.string.library_series_hidden_message
-        } else {
-          StringsR.string.library_book_hidden_message
+        when {
+          hidden.name == null ->
+            resources.getQuantityString(StringsR.plurals.library_selection_hidden, count, count)
+          hidden.series ->
+            resources.getString(StringsR.string.library_series_hidden_message, hidden.name)
+          else -> resources.getString(StringsR.string.library_book_hidden_message, hidden.name)
         }
       val result =
         snackbarHostState.showSnackbar(
-          message = resources.getString(message, hidden.name),
+          message = message,
           actionLabel = undoLabel,
           duration = SnackbarDuration.Short,
         )
@@ -121,6 +140,42 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
         bookOverviewViewModel.onUndoHide(hidden.ids)
       }
     }
+  }
+  LaunchedEffect(bookOverviewViewModel) {
+    bookOverviewViewModel.booksEdited.collect { edited ->
+      val failed = edited.failed.size
+      val message =
+        when {
+          edited.notAllowed -> resources.getString(StringsR.string.book_edit_server_not_allowed)
+          failed > 0 ->
+            resources.getQuantityString(
+              StringsR.plurals.library_selection_server_failed,
+              failed,
+              failed,
+            )
+          else -> {
+            val saved =
+              when (edited.field) {
+                BookField.Series -> StringsR.plurals.library_selection_series_saved
+                BookField.Author -> StringsR.plurals.library_selection_author_saved
+              }
+            resources.getQuantityString(saved, edited.count, edited.count)
+          }
+        }
+      val result =
+        snackbarHostState.showSnackbar(
+          message = message,
+          // the books that were saved can still go back
+          actionLabel = undoLabel.takeIf { edited.count > 0 },
+          duration = if (failed > 0) SnackbarDuration.Long else SnackbarDuration.Short,
+        )
+      if (result == SnackbarResult.ActionPerformed) {
+        bookOverviewViewModel.onUndoEdit(edited)
+      }
+    }
+  }
+  LaunchedEffect(bookOverviewViewModel) {
+    bookOverviewViewModel.selectionRequests.collect(bookOverviewViewModel::onSelectionStart)
   }
 
   BookOverview(
@@ -131,6 +186,7 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onSeriesClick = bookOverviewViewModel::onSeriesClick,
     onSeriesLongClick = bookOverviewViewModel::onSeriesLongClick,
     onAuthorClick = bookOverviewViewModel::onAuthorClick,
+    onAuthorLongClick = bookOverviewViewModel::onAuthorLongClick,
     onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
     onFolderPickerMovedDialogDismiss = bookOverviewViewModel::onFolderPickerMovedDialogDismiss,
     onPlayButtonClick = bookOverviewViewModel::playPause,
@@ -143,9 +199,22 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onGroupingChange = bookOverviewViewModel::onGroupingChange,
     onShowNotDownloadedBooksChange = bookOverviewViewModel::onShowNotDownloadedBooksChange,
     onSourceChange = bookOverviewViewModel::onSourceChange,
+    onSelectionToggle = bookOverviewViewModel::onSelectionToggle,
+    onSelectAll = bookOverviewViewModel::onSelectAll,
+    onSelectionClose = bookOverviewViewModel::onSelectionClose,
+    onSelectionEdit = bookOverviewViewModel::onSelectionEdit,
+    onSelectionHide = bookOverviewViewModel::onSelectionHide,
+    onSelectionShow = bookOverviewViewModel::onSelectionShow,
     snackbarHostState = snackbarHostState,
     modifier = modifier,
   )
+  viewState.selectionEdit?.let { edit ->
+    SelectionEditSheet(
+      viewState = edit,
+      onSave = bookOverviewViewModel::onSelectionEditSave,
+      onDismiss = bookOverviewViewModel::onSelectionEditDismiss,
+    )
+  }
 }
 
 @Composable
@@ -157,6 +226,7 @@ internal fun BookOverview(
   onSeriesClick: (String) -> Unit,
   onSeriesLongClick: (String) -> Unit,
   onAuthorClick: (String?) -> Unit,
+  onAuthorLongClick: (AuthorEntryViewState) -> Unit,
   onBookFolderClick: () -> Unit,
   onFolderPickerMovedDialogDismiss: () -> Unit,
   onPlayButtonClick: () -> Unit,
@@ -169,9 +239,16 @@ internal fun BookOverview(
   onGroupingChange: (LibraryGrouping) -> Unit,
   onShowNotDownloadedBooksChange: (Boolean) -> Unit,
   onSourceChange: (LibrarySource, Boolean) -> Unit,
+  onSelectionToggle: (List<BookId>) -> Unit,
+  onSelectAll: () -> Unit,
+  onSelectionClose: () -> Unit,
+  onSelectionEdit: (BookField) -> Unit,
+  onSelectionHide: () -> Unit,
+  onSelectionShow: () -> Unit,
   modifier: Modifier = Modifier,
   snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
+  BackHandler(enabled = viewState.selection != null, onBack = onSelectionClose)
   val scrollBehavior = SearchBarDefaults.enterAlwaysSearchBarScrollBehavior()
   val gridState = rememberLazyGridState()
   var showFilterSheet by rememberSaveable { mutableStateOf(false) }
@@ -186,24 +263,42 @@ internal fun BookOverview(
   Scaffold(
     modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     topBar = {
-      LibraryTopBar(
-        showSearch = viewState.showSearchIcon,
-        showFolderPickerIcon = viewState.showFolderPickerIcon,
-        showFolderAccessBadge = viewState.showFolderAccessBadge,
-        showFilter = viewState.showFilterIcon,
-        isLoading = viewState.isLoading,
-        scrollBehavior = scrollBehavior,
-        onSearchClick = onSearchClick,
-        onBookFolderClick = onBookFolderClick,
-        onFilterClick = { showFilterSheet = true },
-        onSettingsClick = onSettingsClick,
-      )
+      // while selecting, a new count doesn't swap the bar
+      AnimatedContent(
+        targetState = viewState.selection,
+        contentKey = { it != null },
+        transitionSpec = { fadeIn() togetherWith fadeOut() },
+      ) { selection ->
+        if (selection == null) {
+          LibraryTopBar(
+            showSearch = viewState.showSearchIcon,
+            showFolderPickerIcon = viewState.showFolderPickerIcon,
+            showFolderAccessBadge = viewState.showFolderAccessBadge,
+            showFilter = viewState.showFilterIcon,
+            isLoading = viewState.isLoading,
+            scrollBehavior = scrollBehavior,
+            onSearchClick = onSearchClick,
+            onBookFolderClick = onBookFolderClick,
+            onFilterClick = { showFilterSheet = true },
+            onSettingsClick = onSettingsClick,
+          )
+        } else {
+          SelectionTopBar(
+            selection = selection,
+            onClose = onSelectionClose,
+            onSelectAll = onSelectAll,
+          )
+        }
+      }
     },
     snackbarHost = { SnackbarHost(snackbarHostState) },
     floatingActionButton = {
       val playButtonState = viewState.playButtonState
       AnimatedVisibility(
-        visible = playButtonState != null && !gridState.heroPlayButtonVisible(),
+        visible =
+          playButtonState != null &&
+            viewState.selection == null &&
+            !gridState.heroPlayButtonVisible(),
         enter = scaleIn() + fadeIn(),
         exit = scaleOut() + fadeOut(),
       ) {
@@ -217,22 +312,47 @@ internal fun BookOverview(
     },
     contentWindowInsets = WindowInsets(0, 0, 0, 0),
   ) { contentPadding ->
-    Library(
-      viewState = viewState,
-      gridState = gridState,
-      onBookClick = onBookClick,
-      onBookLongClick = onBookLongClick,
-      onSeriesClick = onSeriesClick,
-      onSeriesLongClick = onSeriesLongClick,
-      onAuthorClick = onAuthorClick,
-      onPlayClick = onPlayButtonClick,
-      onPermissionBugCardClick = onPermissionBugCardClick,
-      onSurveyClick = onSurveyClick,
-      onSurveyDismiss = onSurveyDismiss,
-      onShowFoldersClick = onShowFoldersClick,
-      onHiddenBooksClick = { showFilterSheet = true },
-      modifier = Modifier.padding(contentPadding).consumeWindowInsets(contentPadding),
-    )
+    Box(Modifier.fillMaxSize().padding(contentPadding).consumeWindowInsets(contentPadding)) {
+      Library(
+        viewState = viewState,
+        gridState = gridState,
+        onBookClick = onBookClick,
+        onBookLongClick = onBookLongClick,
+        onSeriesClick = onSeriesClick,
+        onSeriesLongClick = onSeriesLongClick,
+        onAuthorClick = onAuthorClick,
+        onAuthorLongClick = onAuthorLongClick,
+        onPlayClick = onPlayButtonClick,
+        onPermissionBugCardClick = onPermissionBugCardClick,
+        onSurveyClick = onSurveyClick,
+        onSurveyDismiss = onSurveyDismiss,
+        onShowFoldersClick = onShowFoldersClick,
+        onHiddenBooksClick = { showFilterSheet = true },
+        onSelectionToggle = onSelectionToggle,
+      )
+      AnimatedContent(
+        targetState = viewState.selection,
+        contentKey = { it != null },
+        modifier =
+          Modifier.align(Alignment.BottomCenter)
+            .navigationBarsPadding()
+            .padding(bottom = FloatingToolbarDefaults.ScreenOffset),
+        transitionSpec = {
+          (slideInVertically { it } + fadeIn()) togetherWith
+            (slideOutVertically { it } + fadeOut()) using
+            SizeTransform(clip = false)
+        },
+      ) { selection ->
+        if (selection != null) {
+          SelectionToolbar(
+            allHidden = selection.allHidden,
+            onEdit = onSelectionEdit,
+            onHide = onSelectionHide,
+            onShow = onSelectionShow,
+          )
+        }
+      }
+    }
   }
   Dialog(
     dialog = viewState.dialog,
@@ -317,6 +437,7 @@ fun BookOverviewPreview(
       onSeriesClick = {},
       onSeriesLongClick = {},
       onAuthorClick = {},
+      onAuthorLongClick = {},
       onBookFolderClick = {},
       onFolderPickerMovedDialogDismiss = {},
       onPlayButtonClick = {},
@@ -329,6 +450,12 @@ fun BookOverviewPreview(
       onGroupingChange = {},
       onShowNotDownloadedBooksChange = {},
       onSourceChange = { _, _ -> },
+      onSelectionToggle = {},
+      onSelectAll = {},
+      onSelectionClose = {},
+      onSelectionEdit = {},
+      onSelectionHide = {},
+      onSelectionShow = {},
     )
   }
 }
@@ -365,6 +492,7 @@ internal class BookOverviewPreviewParameterProvider :
                     finishedCount = 1,
                     progress = listOf(1F, 0.6F, 0F, 0F),
                     category = BookCategory.CURRENT,
+                    bookIds = List(4) { BookId(Uuid.random().toString()) },
                   ),
                 ),
               )
@@ -394,6 +522,24 @@ internal class BookOverviewPreviewParameterProvider :
       dialog = null,
     )
 
+  private val authors =
+    library.copy(
+      grouping = LibraryGrouping.Author,
+      hero = null,
+      sections =
+        mapOf(
+          BookCategory.CURRENT to library.sections.getValue(BookCategory.CURRENT).take(2),
+          BookCategory.NOT_STARTED to
+            listOf(
+                author("Lena Morgan", 1, 4),
+                author("Nora Whitfield", 0, 1),
+                author(null, 0, 3),
+              )
+              .map { LibraryItem.Author(it.copy(category = BookCategory.NOT_STARTED)) },
+          BookCategory.FINISHED to listOf(LibraryItem.Author(author("Daniel Hartwell", 0, 2))),
+        ),
+    )
+
   override val values =
     sequenceOf(
       library,
@@ -411,23 +557,20 @@ internal class BookOverviewPreviewParameterProvider :
         playButtonState = null,
         hiddenBookCount = 3,
       ),
-      library.copy(
-        grouping = LibraryGrouping.Author,
-        hero = null,
-        sections =
-          mapOf(
-            BookCategory.CURRENT to library.sections.getValue(BookCategory.CURRENT).take(2),
-            BookCategory.NOT_STARTED to
-              listOf(
-                  author("Lena Morgan", 1, 4),
-                  author("Nora Whitfield", 0, 1),
-                  author(null, 0, 3),
-                )
-                .map { LibraryItem.Author(it.copy(category = BookCategory.NOT_STARTED)) },
-            BookCategory.FINISHED to listOf(LibraryItem.Author(author("Daniel Hartwell", 0, 2))),
-          ),
-      ),
+      authors,
+      library.copy(selection = selecting(library)),
+      library.copy(layoutMode = BookOverviewLayoutMode.Grid, selection = selecting(library)),
+      authors.copy(layoutMode = BookOverviewLayoutMode.Grid, selection = selecting(authors)),
     )
+
+  private fun selecting(state: BookOverviewViewState): SelectionViewState {
+    val items = state.sections.values.flatten()
+    val ids =
+      listOfNotNull(state.hero?.value?.id) +
+        items.filterIsInstance<LibraryItem.Book>().take(1).map { it.id } +
+        items.filterIsInstance<LibraryItem.Author>().take(1).flatMap { it.author.bookIds }
+    return SelectionViewState(ids = ids.toSet(), allSelected = false, allHidden = false)
+  }
 
   private fun author(
     name: String?,
@@ -441,5 +584,6 @@ internal class BookOverviewPreviewParameterProvider :
       seriesCount = seriesCount,
       bookCount = bookCount,
       category = BookCategory.FINISHED,
+      bookIds = List(bookCount) { BookId(Uuid.random().toString()) },
     )
 }

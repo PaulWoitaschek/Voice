@@ -95,6 +95,7 @@
     <string name="book.edit.server.not_allowed">لا يملك حسابك على الخادم صلاحية تعديل الكتب.</string>
     <string name="book.edit.title.label">العنوان</string>
     <string name="book.hide">إخفاء من المكتبة</string>
+    <string name="book.select">تحديد</string>
     <string name="book.show">إظهار في المكتبة</string>
     <string name="book.source.device">على هذا الجهاز</string>
     <string name="book.source.server_downloaded">تم التنزيل من %s</string>
@@ -385,6 +386,49 @@
     <string name="library.search.recent.clear_all">مسح الكل</string>
     <string name="library.search.recent.remove">إزالة %s</string>
     <string name="library.search.recent.title">الأخيرة</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="zero">تم تعيين المؤلف لـ %d كتاب</item>
+        <item quantity="one">تم تعيين المؤلف لـ %d كتاب</item>
+        <item quantity="two">تم تعيين المؤلف لـ %d كتابين</item>
+        <item quantity="few">تم تعيين المؤلف لـ %d كتب</item>
+        <item quantity="many">تم تعيين المؤلف لـ %d كتابًا</item>
+        <item quantity="other">تم تعيين المؤلف لـ %d كتاب</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="zero">تم تحديد %d</item>
+        <item quantity="one">تم تحديد %d</item>
+        <item quantity="two">تم تحديد %d</item>
+        <item quantity="few">تم تحديد %d</item>
+        <item quantity="many">تم تحديد %d</item>
+        <item quantity="other">تم تحديد %d</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="zero">تم إخفاء %d كتاب</item>
+        <item quantity="one">تم إخفاء %d كتاب</item>
+        <item quantity="two">تم إخفاء %d كتابين</item>
+        <item quantity="few">تم إخفاء %d كتب</item>
+        <item quantity="many">تم إخفاء %d كتابًا</item>
+        <item quantity="other">تم إخفاء %d كتاب</item>
+    </plurals>
+    <string name="library.selection.hide">إخفاء</string>
+    <string name="library.selection.select_all">تحديد الكل</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="zero">تم تعيين السلسلة لـ %d كتاب</item>
+        <item quantity="one">تم تعيين السلسلة لـ %d كتاب</item>
+        <item quantity="two">تم تعيين السلسلة لـ %d كتابين</item>
+        <item quantity="few">تم تعيين السلسلة لـ %d كتب</item>
+        <item quantity="many">تم تعيين السلسلة لـ %d كتابًا</item>
+        <item quantity="other">تم تعيين السلسلة لـ %d كتاب</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="zero">تعذّر حفظ %d كتاب على خادمك</item>
+        <item quantity="one">تعذّر حفظ %d كتاب على خادمك</item>
+        <item quantity="two">تعذّر حفظ %d كتابين على خادمك</item>
+        <item quantity="few">تعذّر حفظ %d كتب على خادمك</item>
+        <item quantity="many">تعذّر حفظ %d كتابًا على خادمك</item>
+        <item quantity="other">تعذّر حفظ %d كتاب على خادمك</item>
+    </plurals>
+    <string name="library.selection.show">إظهار</string>
     <string name="library.series.hidden.message">تم إخفاء %1$s</string>
     <string name="library.storage_permission_bug.action">منح الإذن</string>
     <string name="library.storage_permission_bug.message">في بعض الأجهزة، يفتقد أحد تطبيقات النظام الإذن اللازم للوصول إلى وحدة التخزين الخارجية، وهذا الوصول ضروري ليتمكن Voice من قراءة كتبك الصوتية.</string>

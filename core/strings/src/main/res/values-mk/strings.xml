@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Вашата сметка на серверот нема дозвола да менува книги.</string>
     <string name="book.edit.title.label">Наслов</string>
     <string name="book.hide">Скриј од библиотеката</string>
+    <string name="book.select">Избери</string>
     <string name="book.show">Прикажи во библиотеката</string>
     <string name="book.source.device">На овој уред</string>
     <string name="book.source.server_downloaded">%s · преземено</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Избриши сè</string>
     <string name="library.search.recent.remove">Отстрани %s</string>
     <string name="library.search.recent.title">Скорешни</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Авторот е поставен за %d книга</item>
+        <item quantity="other">Авторот е поставен за %d книги</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d избрана</item>
+        <item quantity="other">%d избрани</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d книга е скриена</item>
+        <item quantity="other">%d книги се скриени</item>
+    </plurals>
+    <string name="library.selection.hide">Скриј</string>
+    <string name="library.selection.select_all">Избери ги сите</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Серијалот е поставен за %d книга</item>
+        <item quantity="other">Серијалот е поставен за %d книги</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Не успеавме да зачуваме %d книга на вашиот сервер</item>
+        <item quantity="other">Не успеавме да зачуваме %d книги на вашиот сервер</item>
+    </plurals>
+    <string name="library.selection.show">Прикажи</string>
     <string name="library.series.hidden.message">Серијалот „%1$s“ е скриен</string>
     <string name="library.storage_permission_bug.action">Дај дозвола</string>
     <string name="library.storage_permission_bug.message">Кај некои уреди, на една системска апликација ѝ недостасува потребната дозвола за пристап до надворешната меморија. Овој пристап му е потребен на Voice за да ги вчита вашите аудио книги.</string>

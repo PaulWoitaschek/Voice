@@ -49,6 +49,7 @@ import voice.core.ui.R as UiR
 import voice.core.ui.entrance
 import voice.core.ui.rememberEntranceState
 import voice.core.ui.segmentedShape
+import voice.features.bookOverview.overview.AuthorEntryViewState
 import voice.features.bookOverview.overview.BookOverviewLayoutMode
 import voice.features.bookOverview.overview.BookOverviewViewState
 import voice.features.bookOverview.overview.LibraryItem
@@ -66,12 +67,14 @@ internal fun Library(
   onSeriesClick: (String) -> Unit,
   onSeriesLongClick: (String) -> Unit,
   onAuthorClick: (String?) -> Unit,
+  onAuthorLongClick: (AuthorEntryViewState) -> Unit,
   onPlayClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
   onSurveyClick: () -> Unit,
   onSurveyDismiss: () -> Unit,
   onShowFoldersClick: () -> Unit,
   onHiddenBooksClick: () -> Unit,
+  onSelectionToggle: (List<BookId>) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   var entered by rememberSaveable { mutableStateOf(false) }
@@ -85,6 +88,11 @@ internal fun Library(
   LaunchedEffect(Unit) { entered = true }
   val grid = viewState.layoutMode == BookOverviewLayoutMode.Grid
   val hero = viewState.hero
+  val selection = viewState.selection
+  val selected: (List<BookId>) -> Boolean? = { ids -> selection?.ids?.containsAll(ids) }
+  val onItemClick: (List<BookId>, open: () -> Unit) -> Unit = { ids, open ->
+    if (selection != null) onSelectionToggle(ids) else open()
+  }
 
   CenteredContent(modifier = modifier) { centeredPadding ->
     val horizontalPadding = if (grid) 16.dp else centeredPadding
@@ -102,8 +110,8 @@ internal fun Library(
           start = horizontalPadding,
           end = horizontalPadding,
           top = 8.dp,
-          // room to scroll the last books above the floating play button
-          bottom = if (viewState.playButtonState != null) 104.dp else 24.dp,
+          // room to scroll the last books above the floating play button or toolbar
+          bottom = if (viewState.playButtonState != null || selection != null) 104.dp else 24.dp,
         ),
       horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -134,9 +142,10 @@ internal fun Library(
           ContinueListeningCard(
             book = hero.value,
             playing = viewState.playButtonState == BookOverviewViewState.PlayButtonState.Playing,
-            onClick = { onBookClick(hero.value.id) },
+            onClick = { onItemClick(listOf(hero.value.id)) { onBookClick(hero.value.id) } },
             onLongClick = { onBookLongClick(hero.value.id) },
             onPlayClick = onPlayClick,
+            selected = selected(listOf(hero.value.id)),
             modifier = cardWidth.entrance(entrance, index),
           )
         }
@@ -185,26 +194,34 @@ internal fun Library(
               is LibraryItem.Book ->
                 GridBook(
                   book = item.state.value,
-                  onBookClick = onBookClick,
+                  onBookClick = { id -> onItemClick(listOf(id)) { onBookClick(id) } },
                   onBookLongClick = onBookLongClick,
                   finished = finished,
+                  selected = selected(listOf(item.id)),
                   modifier = itemModifier,
                 )
               is LibraryItem.Series ->
                 GridSeries(
                   series = item.series,
-                  onClick = { onSeriesClick(item.series.name) },
+                  onClick = {
+                    onItemClick(item.series.bookIds) { onSeriesClick(item.series.name) }
+                  },
                   onLongClick = { onSeriesLongClick(item.series.name) },
+                  selected = selected(item.series.bookIds),
                   modifier = itemModifier,
                 )
               is LibraryItem.Author ->
                 GridAuthor(
                   author = item.author,
                   onClick = {
-                    openedAuthor = item.key
-                    onAuthorClick(item.author.name)
+                    onItemClick(item.author.bookIds) {
+                      openedAuthor = item.key
+                      onAuthorClick(item.author.name)
+                    }
                   },
                   flies = item.key == openedAuthor,
+                  selected = selected(item.author.bookIds),
+                  onLongClick = { onAuthorLongClick(item.author) },
                   modifier = itemModifier,
                 )
             }
@@ -228,29 +245,37 @@ internal fun Library(
               is LibraryItem.Book ->
                 ListBookRow(
                   book = item.state.value,
-                  onBookClick = onBookClick,
+                  onBookClick = { id -> onItemClick(listOf(id)) { onBookClick(id) } },
                   onBookLongClick = onBookLongClick,
                   finished = finished,
                   shape = shape,
+                  selected = selected(listOf(item.id)),
                   modifier = itemModifier,
                 )
               is LibraryItem.Series ->
                 ListSeriesRow(
                   series = item.series,
-                  onClick = { onSeriesClick(item.series.name) },
+                  onClick = {
+                    onItemClick(item.series.bookIds) { onSeriesClick(item.series.name) }
+                  },
                   onLongClick = { onSeriesLongClick(item.series.name) },
                   shape = shape,
+                  selected = selected(item.series.bookIds),
                   modifier = itemModifier,
                 )
               is LibraryItem.Author ->
                 ListAuthorRow(
                   author = item.author,
                   onClick = {
-                    openedAuthor = item.key
-                    onAuthorClick(item.author.name)
+                    onItemClick(item.author.bookIds) {
+                      openedAuthor = item.key
+                      onAuthorClick(item.author.name)
+                    }
                   },
                   flies = item.key == openedAuthor,
                   shape = shape,
+                  selected = selected(item.author.bookIds),
+                  onLongClick = { onAuthorLongClick(item.author) },
                   modifier = itemModifier,
                 )
             }

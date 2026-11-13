@@ -3,7 +3,6 @@
 package voice.features.bookOverview.views
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,6 +50,7 @@ internal fun ContinueListeningCard(
   onLongClick: () -> Unit,
   onPlayClick: () -> Unit,
   modifier: Modifier = Modifier,
+  selected: Boolean? = null,
 ) {
   CoverTheme(cover = book.cover) {
     val colors = MaterialTheme.colorScheme
@@ -72,7 +72,7 @@ internal fun ContinueListeningCard(
               ),
             ),
           )
-          .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+          .libraryItemClickable(selected, onClick = onClick, onLongClick = onLongClick)
           .padding(20.dp),
     ) {
       CompositionLocalProvider(LocalContentColor provides colors.onSurface) {
@@ -83,6 +83,7 @@ internal fun ContinueListeningCard(
               cover = book.cover,
               unavailable = book.unavailable,
               download = book.download,
+              selected = selected,
               modifier = Modifier.size(112.dp),
             )
             Spacer(Modifier.width(16.dp))
@@ -173,13 +174,16 @@ internal fun ContinueListeningCard(
                 )
               }
             }
-            Spacer(Modifier.width(16.dp))
-            PlayButton(
-              playing = playing,
-              onClick = onPlayClick,
-              modifier = Modifier.playButtonSharedElementModifier(book.id),
-              size = 72.dp,
-            )
+            // while selecting, a tap on the card selects it, but a play button would play
+            if (selected == null) {
+              Spacer(Modifier.width(16.dp))
+              PlayButton(
+                playing = playing,
+                onClick = onPlayClick,
+                modifier = Modifier.playButtonSharedElementModifier(book.id),
+                size = 72.dp,
+              )
+            }
           }
         }
       }

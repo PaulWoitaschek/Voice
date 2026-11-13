@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Sunucudaki hesabınız kitapları değiştiremez.</string>
     <string name="book.edit.title.label">Başlık</string>
     <string name="book.hide">Kitaplıktan gizle</string>
+    <string name="book.select">Seç</string>
     <string name="book.show">Kitaplıkta göster</string>
     <string name="book.source.device">Bu cihazda</string>
     <string name="book.source.server_downloaded">%s · indirildi</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Tümünü temizle</string>
     <string name="library.search.recent.remove">Kaldır: %s</string>
     <string name="library.search.recent.title">Son aramalar</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">%d kitabın yazarı güncellendi</item>
+        <item quantity="other">%d kitabın yazarı güncellendi</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d seçildi</item>
+        <item quantity="other">%d seçildi</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d kitap gizlendi</item>
+        <item quantity="other">%d kitap gizlendi</item>
+    </plurals>
+    <string name="library.selection.hide">Gizle</string>
+    <string name="library.selection.select_all">Tümünü seç</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">%d kitabın serisi güncellendi</item>
+        <item quantity="other">%d kitabın serisi güncellendi</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">%d kitap sunucunuza kaydedilemedi</item>
+        <item quantity="other">%d kitap sunucunuza kaydedilemedi</item>
+    </plurals>
+    <string name="library.selection.show">Göster</string>
     <string name="library.series.hidden.message">%1$s gizlendi</string>
     <string name="library.storage_permission_bug.action">İzin ver</string>
     <string name="library.storage_permission_bug.message">Belirli cihazlarda, bir sistem uygulamasının harici depolamaya erişim için gerekli izni yoktur. Bu erişim, Voice\'un sesli kitaplarınızı okuyabilmesi için gereklidir.</string>

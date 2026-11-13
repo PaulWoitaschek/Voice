@@ -24,6 +24,7 @@ class HideBookViewModelTest {
     mockk<BookRepository> {
       coEvery { get(book.id) } returns book
       coEvery { get(hiddenBook.id) } returns hiddenBook
+      coEvery { all() } returns listOf(book, hiddenBook)
       coEvery { updateCustomMetadata(any(), any()) } just runs
     }
 
@@ -51,6 +52,18 @@ class HideBookViewModelTest {
     val update = slot<(CustomMetadata) -> CustomMetadata>()
     coVerify { repo.updateCustomMetadata(book.id, capture(update)) }
     assertEquals(true, update.captured(book.custom).hidden)
+  }
+
+  @Test
+  fun `hiding several books leaves out the hidden ones, so the undo keeps them hidden`() = runTest {
+    val other = book()
+    coEvery { repo.all() } returns listOf(book, hiddenBook, other)
+    bookHider.hidden.test {
+      bookHider.hide(listOf(book.id, hiddenBook.id, other.id))
+
+      assertEquals(HiddenBooks(listOf(book.id, other.id), name = null, series = false), awaitItem())
+    }
+    coVerify(exactly = 0) { repo.updateCustomMetadata(hiddenBook.id, any()) }
   }
 
   @Test

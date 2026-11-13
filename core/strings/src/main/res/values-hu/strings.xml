@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">A szerveren lévő fiókja nem módosíthat könyveket.</string>
     <string name="book.edit.title.label">Cím</string>
     <string name="book.hide">Elrejtés a könyvtárból</string>
+    <string name="book.select">Kijelölés</string>
     <string name="book.show">Megjelenítés a könyvtárban</string>
     <string name="book.source.device">Ezen az eszközön</string>
     <string name="book.source.server_downloaded">%s · letöltve</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Összes törlése</string>
     <string name="library.search.recent.remove">%s eltávolítása</string>
     <string name="library.search.recent.title">Legutóbbiak</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">%d könyv szerzője beállítva</item>
+        <item quantity="other">%d könyv szerzője beállítva</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d kijelölve</item>
+        <item quantity="other">%d kijelölve</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d könyv elrejtve</item>
+        <item quantity="other">%d könyv elrejtve</item>
+    </plurals>
+    <string name="library.selection.hide">Elrejtés</string>
+    <string name="library.selection.select_all">Összes kijelölése</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">%d könyv sorozata beállítva</item>
+        <item quantity="other">%d könyv sorozata beállítva</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">%d könyvet nem sikerült menteni a szerverre</item>
+        <item quantity="other">%d könyvet nem sikerült menteni a szerverre</item>
+    </plurals>
+    <string name="library.selection.show">Megjelenítés</string>
     <string name="library.series.hidden.message">„%1$s” elrejtve</string>
     <string name="library.storage_permission_bug.action">Hozzáférés engedélyezése</string>
     <string name="library.storage_permission_bug.message">Egyes eszközökön egy rendszeralkalmazásnak nincs meg a külső tárhely eléréséhez szükséges engedélye. Erre szükség van ahhoz, hogy a Voice be tudja olvasni az Ön hangoskönyveit.</string>

@@ -303,7 +303,7 @@ private fun EditBookContent(
         )
         if (seriesFocused && !readOnly && viewState.suggestions.isNotEmpty()) {
           Spacer(Modifier.height(8.dp))
-          SeriesSuggestions(
+          NameSuggestions(
             suggestions = viewState.suggestions,
             onClick = { name ->
               series = TextFieldValue(name, selection = TextRange(name.length))
@@ -370,8 +370,8 @@ private fun EditBookContent(
 }
 
 @Composable
-private fun SeriesSuggestions(
-  suggestions: List<SeriesSuggestion>,
+internal fun NameSuggestions(
+  suggestions: List<NameSuggestion>,
   onClick: (String) -> Unit,
 ) {
   Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -462,14 +462,14 @@ private fun EditServerBookPreview() {
 
 @Composable
 @Preview(widthDp = 280)
-private fun SeriesSuggestionsPreview() {
+private fun NameSuggestionsPreview() {
   VoiceTheme {
     Surface(color = MaterialTheme.colorScheme.surfaceContainerLow) {
-      SeriesSuggestions(
+      NameSuggestions(
         suggestions =
           listOf(
-            SeriesSuggestion("The Signal Saga", bookCount = 4),
-            SeriesSuggestion("Signals from the Deep Sky Survey Expedition", bookCount = 1),
+            NameSuggestion("The Signal Saga", bookCount = 4),
+            NameSuggestion("Signals from the Deep Sky Survey Expedition", bookCount = 1),
           ),
         onClick = {},
       )

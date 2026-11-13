@@ -91,6 +91,7 @@ private val EditItems =
     BottomSheetItem.StopDownload,
     BottomSheetItem.RetryDownload,
     BottomSheetItem.RemoveDownload,
+    BottomSheetItem.Select,
     BottomSheetItem.Edit,
     BottomSheetItem.InternetCover,
     BottomSheetItem.FileCover,
@@ -480,6 +481,8 @@ internal fun BottomSheetItem.style(): ActionStyle {
     BottomSheetItem.Hide,
     BottomSheetItem.Show ->
       ActionStyle(MaterialShapes.Ghostish, colors.secondaryContainer, colors.onSecondaryContainer)
+    BottomSheetItem.Select ->
+      ActionStyle(MaterialShapes.Clover8Leaf, colors.primaryContainer, colors.onPrimaryContainer)
     BottomSheetItem.DeleteBook ->
       ActionStyle(MaterialShapes.Cookie9Sided, colors.errorContainer, colors.onErrorContainer)
     BottomSheetItem.Download,

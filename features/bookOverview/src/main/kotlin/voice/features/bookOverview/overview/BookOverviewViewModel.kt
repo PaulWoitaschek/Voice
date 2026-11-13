@@ -5,6 +5,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -18,6 +19,8 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -42,6 +45,7 @@ import voice.core.documentfile.nameWithoutExtension
 import voice.core.kioskmode.DemoAudiobook
 import voice.core.kioskmode.KioskModeDemoData
 import voice.core.kioskmode.KioskModeFeatureFlag
+import voice.core.logging.api.Logger
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
 import voice.core.playback.LivePlaybackState
 import voice.core.playback.PlayerController
@@ -53,8 +57,16 @@ import voice.core.ui.GridCount
 import voice.core.ui.GridMode
 import voice.core.ui.GridModeStore
 import voice.features.bookOverview.di.BookOverviewScope
+import voice.features.bookOverview.editBook.nameSuggestions
 import voice.features.bookOverview.hideBook.BookHider
 import voice.features.bookOverview.hideBook.HiddenBooks
+import voice.features.bookOverview.select.BookField
+import voice.features.bookOverview.select.BookSelectionRequests
+import voice.features.bookOverview.select.BooksEdited
+import voice.features.bookOverview.select.SelectedBooksEditor
+import voice.features.bookOverview.select.SelectionEditViewState
+import voice.features.bookOverview.select.SelectionViewState
+import voice.features.bookOverview.select.of
 import voice.features.bookOverview.survey.Survey
 import voice.navigation.Destination
 import voice.navigation.Navigator
@@ -88,13 +100,26 @@ class BookOverviewViewModel(
   private val showNotDownloadedBooksStore: ShowNotDownloadedBooksStore,
   private val hiddenSourcesStore: HiddenSourcesStore,
   private val bookHider: BookHider,
+  private val bookSelectionRequests: BookSelectionRequests,
+  private val selectedBooksEditor: SelectedBooksEditor,
 ) {
 
   private val scope = MainScope(dispatcherProvider)
   private var dialog by mutableStateOf<BookOverviewViewState.Dialog?>(null)
+  private var selection by mutableStateOf<Set<BookId>?>(null)
+  private var selectionEdit by mutableStateOf<SelectionEditViewState?>(null)
+
+  // the books on screen, so Select all takes what the listener sees
+  private var shownBookIds: Set<BookId> = emptySet()
 
   internal val hiddenBooks: Flow<HiddenBooks>
     get() = bookHider.hidden
+
+  internal val selectionRequests: Flow<List<BookId>>
+    get() = bookSelectionRequests.requests
+
+  internal val booksEdited: SharedFlow<BooksEdited>
+    field = MutableSharedFlow<BooksEdited>(extraBufferCapacity = 1)
 
   fun attach() {
     mediaScanner.scan()
@@ -195,6 +220,15 @@ class BookOverviewViewModel(
       }
     // a deleted book can stay the current one
     val currentBookId = currentBook.id?.takeIf { id -> books.any { it.id == id } }
+    val bookIds = remember(books) { books.mapTo(mutableSetOf()) { it.id } }
+    SideEffect { shownBookIds = bookIds }
+    // books that leave the library, like hidden ones, leave the selection too
+    val selected = selection?.intersect(bookIds)?.takeIf { it.isNotEmpty() }
+    // or selecting would start again by itself once the books come back
+    val selectionGone = selection != null && selected == null
+    LaunchedEffect(selectionGone) {
+      if (selectionGone) selection = null
+    }
 
     // with every book hidden, the folders still have books, so there's nothing to add
     val showEmptyLibrary = !hasStoragePermissionBug && !scannerActive && library.books.isEmpty()
@@ -289,6 +323,15 @@ class BookOverviewViewModel(
       showNotDownloadedBooks = showNotDownloadedBooks,
       sources = library.sources,
       grouping = grouping,
+      selection =
+        selected?.let { ids ->
+          SelectionViewState(
+            ids = ids,
+            allSelected = ids.size == bookIds.size,
+            allHidden = books.all { it.id !in ids || it.custom.hidden },
+          )
+        },
+      selectionEdit = selectionEdit,
     )
   }
 
@@ -383,6 +426,10 @@ class BookOverviewViewModel(
     navigator.goTo(Destination.Author(name))
   }
 
+  fun onAuthorLongClick(author: AuthorEntryViewState) {
+    navigator.goTo(Destination.AuthorActions(author.name, author.bookIds))
+  }
+
   fun onGroupingChange(grouping: LibraryGrouping) {
     scope.launch {
       libraryGroupingStore.updateData { grouping }
@@ -415,6 +462,88 @@ class BookOverviewViewModel(
       bookHider.show(ids)
     }
   }
+
+  internal fun onSelectionStart(ids: List<BookId>) {
+    selection = ids.toSet()
+  }
+
+  internal fun onSelectionToggle(ids: List<BookId>) {
+    val selected = selectedIds()
+    val toggled = if (selected.containsAll(ids)) selected - ids.toSet() else selected + ids
+    selection = toggled.takeIf { it.isNotEmpty() }
+  }
+
+  internal fun onSelectAll() {
+    selection = shownBookIds
+  }
+
+  internal fun onSelectionClose() {
+    selection = null
+  }
+
+  internal fun onSelectionHide() {
+    val ids = selectedIds().toList()
+    selection = null
+    scope.launch {
+      bookHider.hide(ids)
+    }
+  }
+
+  internal fun onSelectionShow() {
+    val ids = selectedIds().toList()
+    selection = null
+    scope.launch {
+      bookHider.show(ids)
+    }
+  }
+
+  internal fun onSelectionEdit(field: BookField) {
+    scope.launch {
+      val books = repo.all()
+      // while the books load, a second tap or an action that ends selecting can come in
+      val ids = selectedIds()
+      if (ids.isEmpty() || selectionEdit != null) return@launch
+      val selectedBooks = books.filter { it.id in ids }
+      selectionEdit =
+        SelectionEditViewState(
+          field = field,
+          ids = selectedBooks.mapTo(mutableSetOf()) { it.id },
+          // a value all of them share is likely what the listener wants to fix
+          value = selectedBooks.map { field.of(it) }.distinct().singleOrNull().orEmpty(),
+          suggestions = books.nameSuggestions { field.of(it) },
+        )
+    }
+  }
+
+  internal fun onSelectionEditSave(value: String) {
+    val edit = selectionEdit?.takeUnless { it.saving || it.saved } ?: return
+    selectionEdit = edit.copy(saving = true)
+    scope.launch {
+      val edited = selectedBooksEditor.set(edit.field, edit.ids, value)
+      // the books that failed stay selected, so the listener can try again
+      selection = edited.failed.takeIf { it.isNotEmpty() }
+      selectionEdit = selectionEdit?.copy(saving = false, saved = true)
+      Logger.d("Set the ${edit.field} of ${edited.count} books, ${edited.failed.size} failed")
+      booksEdited.emit(edited)
+    }
+  }
+
+  internal fun onSelectionEditDismiss() {
+    selectionEdit = null
+  }
+
+  internal fun onUndoEdit(edited: BooksEdited) {
+    scope.launch {
+      val undone = selectedBooksEditor.undo(edited)
+      if (undone.failed.isNotEmpty()) {
+        Logger.d("Undo of the ${edited.field} failed for ${undone.failed.size} books")
+        // an undo of the undo would go in circles
+        booksEdited.emit(undone.copy(count = 0, undo = emptyMap()))
+      }
+    }
+  }
+
+  private fun selectedIds(): Set<BookId> = selection.orEmpty() intersect shownBookIds
 
   fun onBookFolderClick() {
     dialog = BookOverviewViewState.Dialog.FolderPickerMovedToSettings

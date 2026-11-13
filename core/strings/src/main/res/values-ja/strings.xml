@@ -80,6 +80,7 @@
     <string name="book.edit.server.not_allowed">このアカウントには、サーバー上の本を変更する権限がありません。</string>
     <string name="book.edit.title.label">タイトル</string>
     <string name="book.hide">ライブラリで非表示</string>
+    <string name="book.select">選択</string>
     <string name="book.show">ライブラリに表示</string>
     <string name="book.source.device">この端末</string>
     <string name="book.source.server_downloaded">%s · ダウンロード済み</string>
@@ -290,6 +291,24 @@
     <string name="library.search.recent.clear_all">すべて消去</string>
     <string name="library.search.recent.remove">「%s」を削除</string>
     <string name="library.search.recent.title">最近の検索</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="other">%d 冊の著者を設定しました</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="other">%d 冊を選択中</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="other">%d 冊を非表示にしました</item>
+    </plurals>
+    <string name="library.selection.hide">非表示</string>
+    <string name="library.selection.select_all">すべて選択</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="other">%d 冊のシリーズを設定しました</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="other">%d 冊をサーバーに保存できませんでした</item>
+    </plurals>
+    <string name="library.selection.show">表示</string>
     <string name="library.series.hidden.message">「%1$s」を非表示にしました</string>
     <string name="library.storage_permission_bug.action">権限を付与</string>
     <string name="library.storage_permission_bug.message">一部のデバイスでは、システムアプリに外部ストレージへアクセスするために必要な権限がありません。このアクセスは、Voice がオーディオブックを読み取るために必要です。</string>

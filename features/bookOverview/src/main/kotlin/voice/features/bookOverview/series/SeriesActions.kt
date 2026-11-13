@@ -218,13 +218,18 @@ private fun SeriesActionRows(
       Spacer(Modifier.height(20.dp))
     }
     val visibility = if (state.series.hidden) BottomSheetItem.Show else BottomSheetItem.Hide
-    ActionRow(
-      item = visibility,
-      style = visibility.style(),
-      shape = MaterialTheme.shapes.largeIncreased,
-      onClick = { onItemClick(visibility) },
-      modifier = Modifier.entrance(entrance, 1 + state.statuses.size),
-    )
+    val items = listOfNotNull(BottomSheetItem.Select.takeIf { state.canSelect }, visibility)
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+      items.forEachIndexed { index, item ->
+        ActionRow(
+          item = item,
+          style = item.style(),
+          shape = segmentedShape(index, items.size),
+          onClick = { onItemClick(item) },
+          modifier = Modifier.entrance(entrance, 1 + state.statuses.size + index),
+        )
+      }
+    }
   }
 }
 
@@ -359,6 +364,7 @@ private fun SeriesActionsContentPreview() {
                   resets = 1,
                 ),
               ),
+            canSelect = true,
           ),
         onItemClick = {},
       )

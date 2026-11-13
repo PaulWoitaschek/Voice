@@ -86,6 +86,7 @@
     <string name="book.edit.server.not_allowed">Contul tău de pe server nu poate modifica cărți.</string>
     <string name="book.edit.title.label">Titlu</string>
     <string name="book.hide">Ascunde din bibliotecă</string>
+    <string name="book.select">Selectează</string>
     <string name="book.show">Afișează în bibliotecă</string>
     <string name="book.source.device">Pe acest dispozitiv</string>
     <string name="book.source.server_downloaded">%s · descărcată</string>
@@ -328,6 +329,34 @@
     <string name="library.search.recent.clear_all">Șterge tot</string>
     <string name="library.search.recent.remove">Elimină %s</string>
     <string name="library.search.recent.title">Recente</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Autor stabilit pentru %d carte</item>
+        <item quantity="few">Autor stabilit pentru %d cărți</item>
+        <item quantity="other">Autor stabilit pentru %d de cărți</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d carte selectată</item>
+        <item quantity="few">%d cărți selectate</item>
+        <item quantity="other">%d de cărți selectate</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">Ai ascuns %d carte</item>
+        <item quantity="few">Ai ascuns %d cărți</item>
+        <item quantity="other">Ai ascuns %d de cărți</item>
+    </plurals>
+    <string name="library.selection.hide">Ascunde</string>
+    <string name="library.selection.select_all">Selectează tot</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Serie stabilită pentru %d carte</item>
+        <item quantity="few">Serie stabilită pentru %d cărți</item>
+        <item quantity="other">Serie stabilită pentru %d de cărți</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Nu s-a putut salva %d carte pe serverul tău</item>
+        <item quantity="few">Nu s-au putut salva %d cărți pe serverul tău</item>
+        <item quantity="other">Nu s-au putut salva %d de cărți pe serverul tău</item>
+    </plurals>
+    <string name="library.selection.show">Afișează</string>
     <string name="library.series.hidden.message">Ai ascuns %1$s</string>
     <string name="library.storage_permission_bug.action">Acordă permisiune</string>
     <string name="library.storage_permission_bug.message">Pe anumite dispozitive, o aplicație de sistem are nevoie de anumite permisiuni pentru a accesa stocarea externă. Aceste permisiuni sunt esențiale pentru ca Voice să poată citi cărțile tale audio.</string>

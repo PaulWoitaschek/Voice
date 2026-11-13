@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Kontoen din på serveren kan ikke endre bøker.</string>
     <string name="book.edit.title.label">Tittel</string>
     <string name="book.hide">Skjul fra biblioteket</string>
+    <string name="book.select">Velg</string>
     <string name="book.show">Vis i biblioteket</string>
     <string name="book.source.device">På denne enheten</string>
     <string name="book.source.server_downloaded">%s · lastet ned</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Tøm alt</string>
     <string name="library.search.recent.remove">Fjern %s</string>
     <string name="library.search.recent.title">Nylig</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Forfatter endret for %d bok</item>
+        <item quantity="other">Forfatter endret for %d bøker</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d valgt</item>
+        <item quantity="other">%d valgt</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d bok er skjult</item>
+        <item quantity="other">%d bøker er skjult</item>
+    </plurals>
+    <string name="library.selection.hide">Skjul</string>
+    <string name="library.selection.select_all">Velg alle</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Serie endret for %d bok</item>
+        <item quantity="other">Serie endret for %d bøker</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Kunne ikke lagre %d bok på serveren din</item>
+        <item quantity="other">Kunne ikke lagre %d bøker på serveren din</item>
+    </plurals>
+    <string name="library.selection.show">Vis</string>
     <string name="library.series.hidden.message">%1$s er skjult</string>
     <string name="library.storage_permission_bug.action">Innvilg tillatelse</string>
     <string name="library.storage_permission_bug.message">På enkelte enheter mangler en systemapp den nødvendige tillatelsen for å få tilgang til det eksterne lagringsmediet. Denne tilgangen er avgjørende for at Voice skal kunne lese lydbøkene dine.</string>

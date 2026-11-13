@@ -86,6 +86,7 @@
     <string name="book.edit.server.not_allowed">Votre compte sur le serveur ne peut pas modifier les livres.</string>
     <string name="book.edit.title.label">Titre</string>
     <string name="book.hide">Masquer de la bibliothèque</string>
+    <string name="book.select">Sélectionner</string>
     <string name="book.show">Afficher dans la bibliothèque</string>
     <string name="book.source.device">Sur cet appareil</string>
     <string name="book.source.server_downloaded">%s · téléchargé</string>
@@ -328,6 +329,34 @@
     <string name="library.search.recent.clear_all">Tout effacer</string>
     <string name="library.search.recent.remove">Supprimer %s</string>
     <string name="library.search.recent.title">Recherches récentes</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Auteur défini pour %d livre</item>
+        <item quantity="many">Auteur défini pour %d livres</item>
+        <item quantity="other">Auteur défini pour %d livres</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d sélectionné</item>
+        <item quantity="many">%d sélectionnés</item>
+        <item quantity="other">%d sélectionnés</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">Vous avez masqué %d livre</item>
+        <item quantity="many">Vous avez masqué %d livres</item>
+        <item quantity="other">Vous avez masqué %d livres</item>
+    </plurals>
+    <string name="library.selection.hide">Masquer</string>
+    <string name="library.selection.select_all">Tout sélectionner</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Série définie pour %d livre</item>
+        <item quantity="many">Série définie pour %d livres</item>
+        <item quantity="other">Série définie pour %d livres</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Impossible d\'enregistrer %d livre sur votre serveur</item>
+        <item quantity="many">Impossible d\'enregistrer %d livres sur votre serveur</item>
+        <item quantity="other">Impossible d\'enregistrer %d livres sur votre serveur</item>
+    </plurals>
+    <string name="library.selection.show">Afficher</string>
     <string name="library.series.hidden.message">Vous avez masqué %1$s</string>
     <string name="library.storage_permission_bug.action">Accorder la permission</string>
     <string name="library.storage_permission_bug.message">Sur certains appareils, il manque les permissions nécessaires à une application système pour accéder au stockage externe. Cet accès est essentiel pour que Voice puisse lire les livres audio.</string>

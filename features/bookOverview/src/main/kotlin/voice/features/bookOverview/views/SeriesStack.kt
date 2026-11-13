@@ -5,7 +5,6 @@ package voice.features.bookOverview.views
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -28,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -70,15 +70,19 @@ internal fun ListSeriesRow(
   onLongClick: () -> Unit,
   modifier: Modifier = Modifier,
   shape: Shape = MaterialTheme.shapes.largeIncreased,
+  selected: Boolean? = null,
 ) {
+  val colors = MaterialTheme.colorScheme
+  val containerColor = selectedContainerColor(selected, colors.surfaceContainer)
   Surface(
     modifier =
       modifier
         .fillMaxWidth()
         .clip(shape)
-        .combinedClickable(onClick = onClick, onLongClick = onLongClick),
+        .libraryItemClickable(selected, onClick = onClick, onLongClick = onLongClick),
     shape = shape,
-    color = MaterialTheme.colorScheme.surfaceContainer,
+    color = containerColor,
+    contentColor = contentColorFor(containerColor),
   ) {
     Row(
       modifier = Modifier.padding(10.dp),
@@ -87,9 +91,10 @@ internal fun ListSeriesRow(
       SeriesCover(
         seriesKey = series.key,
         covers = series.covers,
-        gapColor = MaterialTheme.colorScheme.surfaceContainer,
+        gapColor = containerColor,
         modifier = Modifier.size(64.dp),
       ) {
+        SelectionBadge(selected)
         SeriesBadge(
           series = series,
           // in a series in progress, the bar takes the place of the counts, and the row has its own
@@ -120,6 +125,7 @@ internal fun ListSeriesRow(
           Spacer(Modifier.height(10.dp))
           SeriesProgress(
             progress = series.progress,
+            trackColor = progressTrackColor(selected),
             modifier = Modifier.fillMaxWidth(),
           )
         } else {
@@ -146,19 +152,21 @@ internal fun GridSeries(
   onClick: () -> Unit,
   onLongClick: () -> Unit,
   modifier: Modifier = Modifier,
+  selected: Boolean? = null,
 ) {
-  Column(
-    modifier =
-      modifier
-        .clip(MaterialTheme.shapes.largeIncreased)
-        .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-        .padding(6.dp),
+  LibraryTile(
+    selected = selected,
+    onClick = onClick,
+    onLongClick = onLongClick,
+    modifier = modifier,
   ) {
     SeriesCover(
       seriesKey = series.key,
       covers = series.covers,
+      gapColor = selectedContainerColor(selected, MaterialTheme.colorScheme.surface),
       modifier = Modifier.fillMaxWidth().aspectRatio(1F),
     ) {
+      SelectionBadge(selected)
       SeriesBadge(
         series = series,
         describe = true,
@@ -171,6 +179,7 @@ internal fun GridSeries(
       Spacer(Modifier.height(8.dp))
       SeriesProgress(
         progress = series.progress,
+        trackColor = progressTrackColor(selected),
         modifier = Modifier.fillMaxWidth(),
       )
     }
@@ -196,10 +205,10 @@ internal fun GridSeries(
 @Composable
 private fun SeriesProgress(
   progress: List<Float>,
+  trackColor: Color,
   modifier: Modifier = Modifier,
 ) {
   val color = ProgressIndicatorDefaults.linearColor
-  val trackColor = ProgressIndicatorDefaults.linearTrackColor
   val average = progress.average().toFloat()
   Canvas(
     modifier.height(4.dp).progressSemantics(average),

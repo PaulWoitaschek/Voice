@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Tililläsi ei ole palvelimella oikeutta muuttaa kirjoja.</string>
     <string name="book.edit.title.label">Nimi</string>
     <string name="book.hide">Piilota kirjastosta</string>
+    <string name="book.select">Valitse</string>
     <string name="book.show">Näytä kirjastossa</string>
     <string name="book.source.device">Tällä laitteella</string>
     <string name="book.source.server_downloaded">%s · ladattu</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Tyhjennä kaikki</string>
     <string name="library.search.recent.remove">Poista %s</string>
     <string name="library.search.recent.title">Viimeisimmät</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Tekijä asetettu %d kirjalle</item>
+        <item quantity="other">Tekijä asetettu %d kirjalle</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d valittu</item>
+        <item quantity="other">%d valittua</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d kirja on piilotettu</item>
+        <item quantity="other">%d kirjaa on piilotettu</item>
+    </plurals>
+    <string name="library.selection.hide">Piilota</string>
+    <string name="library.selection.select_all">Valitse kaikki</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Sarja asetettu %d kirjalle</item>
+        <item quantity="other">Sarja asetettu %d kirjalle</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">%d kirjan tallennus palvelimellesi epäonnistui</item>
+        <item quantity="other">%d kirjan tallennus palvelimellesi epäonnistui</item>
+    </plurals>
+    <string name="library.selection.show">Näytä</string>
     <string name="library.series.hidden.message">%1$s on piilotettu</string>
     <string name="library.storage_permission_bug.action">Anna käyttöoikeus</string>
     <string name="library.storage_permission_bug.message">Eräillä laitteilla joltakin järjestelmän sovellukselta puuttuu tarvittava käyttöoikeus ulkoiseen tallennustilaan. Tämä oikeus on välttämätön jotta Voice voi lukea äänikirjojasi.</string>

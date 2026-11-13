@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">सर्वर पर आपके खाते को पुस्तकें बदलने की अनुमति नहीं है।</string>
     <string name="book.edit.title.label">शीर्षक</string>
     <string name="book.hide">लाइब्रेरी से छिपाएँ</string>
+    <string name="book.select">चुनें</string>
     <string name="book.show">लाइब्रेरी में दिखाएँ</string>
     <string name="book.source.device">इस डिवाइस पर</string>
     <string name="book.source.server_downloaded">%s · डाउनलोड की गई</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">सभी साफ़ करें</string>
     <string name="library.search.recent.remove">%s हटाएँ</string>
     <string name="library.search.recent.title">हालिया</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">%d पुस्तक के लिए लेखक सेट किया गया</item>
+        <item quantity="other">%d पुस्तकों के लिए लेखक सेट किया गया</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d चुनी गई</item>
+        <item quantity="other">%d चुनी गईं</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d पुस्तक को छिपा दिया गया</item>
+        <item quantity="other">%d पुस्तकों को छिपा दिया गया</item>
+    </plurals>
+    <string name="library.selection.hide">छिपाएँ</string>
+    <string name="library.selection.select_all">सभी चुनें</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">%d पुस्तक के लिए सीरीज़ सेट की गई</item>
+        <item quantity="other">%d पुस्तकों के लिए सीरीज़ सेट की गई</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">%d पुस्तक को आपके सर्वर पर सहेजा नहीं जा सका</item>
+        <item quantity="other">%d पुस्तकों को आपके सर्वर पर सहेजा नहीं जा सका</item>
+    </plurals>
+    <string name="library.selection.show">दिखाएँ</string>
     <string name="library.series.hidden.message">%1$s को छिपा दिया गया</string>
     <string name="library.storage_permission_bug.action">अनुमति प्रदान करें</string>
     <string name="library.storage_permission_bug.message">कुछ डिवाइस पर, एक सिस्टम ऐप के पास बाहरी स्टोरेज तक पहुँचने की ज़रूरी अनुमति नहीं होती। Voice को आपकी ऑडियोबुक पढ़ने के लिए यह पहुँच चाहिए।</string>

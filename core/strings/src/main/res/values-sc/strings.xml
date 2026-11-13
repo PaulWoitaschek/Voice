@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Su contu tuo in su serbidore non podet cambiare libros.</string>
     <string name="book.edit.title.label">Tìtulu</string>
     <string name="book.hide">Cua dae sa biblioteca</string>
+    <string name="book.select">Seletziona</string>
     <string name="book.show">Mustra in sa biblioteca</string>
     <string name="book.source.device">In custu dispositivu</string>
     <string name="book.source.server_downloaded">%s · iscarrigadu</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Isbòida totu</string>
     <string name="library.search.recent.remove">Boga %s</string>
     <string name="library.search.recent.title">Reghentes</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Autore impostadu pro %d libru</item>
+        <item quantity="other">Autore impostadu pro %d libros</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d seletzionadu</item>
+        <item quantity="other">%d seletzionados</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">As cuadu %d libru</item>
+        <item quantity="other">As cuadu %d libros</item>
+    </plurals>
+    <string name="library.selection.hide">Cua</string>
+    <string name="library.selection.select_all">Seletziona totu</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Sèrie impostada pro %d libru</item>
+        <item quantity="other">Sèrie impostada pro %d libros</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">No est istadu possìbile sarvare %d libru in su serbidore tuo</item>
+        <item quantity="other">No est istadu possìbile sarvare %d libros in su serbidore tuo</item>
+    </plurals>
+    <string name="library.selection.show">Mustra</string>
     <string name="library.series.hidden.message">As cuadu %1$s</string>
     <string name="library.storage_permission_bug.action">Dae su permissu</string>
     <string name="library.storage_permission_bug.message">Pro unos cantos dispositivos, un\'aplicatzione de sistema non tenet s\'autorizatzione netzessària pro atzèdere a sa memòria esterna. Bisòngiat a tènnere custu atzessu pro chi Voice potzat lèghere sos audiolibros tuos.</string>

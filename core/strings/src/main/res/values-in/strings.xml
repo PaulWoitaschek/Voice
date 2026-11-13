@@ -80,6 +80,7 @@
     <string name="book.edit.server.not_allowed">Akun Anda di server tidak dapat mengubah buku.</string>
     <string name="book.edit.title.label">Judul</string>
     <string name="book.hide">Sembunyikan dari pustaka</string>
+    <string name="book.select">Pilih</string>
     <string name="book.show">Tampilkan di pustaka</string>
     <string name="book.source.device">Di perangkat ini</string>
     <string name="book.source.server_downloaded">%s · sudah diunduh</string>
@@ -290,6 +291,24 @@
     <string name="library.search.recent.clear_all">Hapus semua</string>
     <string name="library.search.recent.remove">Hapus %s</string>
     <string name="library.search.recent.title">Terbaru</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="other">Penulis %d buku diperbarui</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="other">%d dipilih</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="other">%d buku disembunyikan</item>
+    </plurals>
+    <string name="library.selection.hide">Sembunyikan</string>
+    <string name="library.selection.select_all">Pilih semua</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="other">Seri %d buku diperbarui</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="other">Tidak dapat menyimpan %d buku ke server Anda</item>
+    </plurals>
+    <string name="library.selection.show">Tampilkan</string>
     <string name="library.series.hidden.message">%1$s disembunyikan</string>
     <string name="library.storage_permission_bug.action">Berikan izin</string>
     <string name="library.storage_permission_bug.message">Untuk perangkat tertentu, aplikasi sistem tidak memiliki izin yang diperlukan untuk mengakses penyimpanan eksternal. Akses ini penting agar Voice dapat membaca buku audio Anda.</string>

@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Ο λογαριασμός σας στον διακομιστή δεν μπορεί να αλλάζει βιβλία.</string>
     <string name="book.edit.title.label">Τίτλος</string>
     <string name="book.hide">Απόκρυψη από τη βιβλιοθήκη</string>
+    <string name="book.select">Επιλογή</string>
     <string name="book.show">Εμφάνιση στη βιβλιοθήκη</string>
     <string name="book.source.device">Σε αυτή τη συσκευή</string>
     <string name="book.source.server_downloaded">%s · έγινε λήψη</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Εκκαθάριση όλων</string>
     <string name="library.search.recent.remove">Αφαίρεση %s</string>
     <string name="library.search.recent.title">Πρόσφατα</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Ορίστηκε συγγραφέας σε %d βιβλίο</item>
+        <item quantity="other">Ορίστηκε συγγραφέας σε %d βιβλία</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d επιλεγμένο</item>
+        <item quantity="other">%d επιλεγμένα</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d βιβλίο αποκρύφθηκε</item>
+        <item quantity="other">%d βιβλία αποκρύφθηκαν</item>
+    </plurals>
+    <string name="library.selection.hide">Απόκρυψη</string>
+    <string name="library.selection.select_all">Επιλογή όλων</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Ορίστηκε σειρά σε %d βιβλίο</item>
+        <item quantity="other">Ορίστηκε σειρά σε %d βιβλία</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">Δεν ήταν δυνατή η αποθήκευση %d βιβλίου στον διακομιστή σας</item>
+        <item quantity="other">Δεν ήταν δυνατή η αποθήκευση %d βιβλίων στον διακομιστή σας</item>
+    </plurals>
+    <string name="library.selection.show">Εμφάνιση</string>
     <string name="library.series.hidden.message">Η σειρά «%1$s» αποκρύφθηκε</string>
     <string name="library.storage_permission_bug.action">Παραχώρηση άδειας</string>
     <string name="library.storage_permission_bug.message">Σε ορισμένες συσκευές, σε μια εφαρμογή συστήματος λείπει η άδεια πρόσβασης στον εξωτερικό αποθηκευτικό χώρο. Το Voice τη χρειάζεται για να διαβάζει τα ηχητικά σας βιβλία.</string>

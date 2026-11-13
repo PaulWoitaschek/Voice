@@ -83,6 +83,7 @@
     <string name="book.edit.server.not_allowed">Sinu kontol pole serveris luba raamatuid muuta.</string>
     <string name="book.edit.title.label">Pealkiri</string>
     <string name="book.hide">Peida raamatukogust</string>
+    <string name="book.select">Vali</string>
     <string name="book.show">Näita raamatukogus</string>
     <string name="book.source.device">Selles seadmes</string>
     <string name="book.source.server_downloaded">%s · alla laaditud</string>
@@ -309,6 +310,29 @@
     <string name="library.search.recent.clear_all">Tühjenda kõik</string>
     <string name="library.search.recent.remove">Eemalda %s</string>
     <string name="library.search.recent.title">Hiljutised</string>
+    <plurals name="library.selection.author_saved">
+        <item quantity="one">Autor on määratud %d raamatule</item>
+        <item quantity="other">Autor on määratud %d raamatule</item>
+    </plurals>
+    <plurals name="library.selection.count">
+        <item quantity="one">%d valitud</item>
+        <item quantity="other">%d valitud</item>
+    </plurals>
+    <plurals name="library.selection.hidden">
+        <item quantity="one">%d raamat on peidetud</item>
+        <item quantity="other">%d raamatut on peidetud</item>
+    </plurals>
+    <string name="library.selection.hide">Peida</string>
+    <string name="library.selection.select_all">Vali kõik</string>
+    <plurals name="library.selection.series_saved">
+        <item quantity="one">Sari on määratud %d raamatule</item>
+        <item quantity="other">Sari on määratud %d raamatule</item>
+    </plurals>
+    <plurals name="library.selection.server_failed">
+        <item quantity="one">%d raamatut ei õnnestunud sinu serverisse salvestada</item>
+        <item quantity="other">%d raamatut ei õnnestunud sinu serverisse salvestada</item>
+    </plurals>
+    <string name="library.selection.show">Näita</string>
     <string name="library.series.hidden.message">%1$s on peidetud</string>
     <string name="library.storage_permission_bug.action">Anna õigused</string>
     <string name="library.storage_permission_bug.message">Mõnedes seadmetes puudub ühel süsteemirakendusel vajalik õigus lugeda andmeid väliselt andmekandjalt. See ligipääs on vajalik, et Voice saaks lugeda sinu heliraamatute faile.</string>
