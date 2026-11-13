@@ -1,7 +1,10 @@
 #!/usr/bin/env kotlin
 
 import java.io.File
+import java.time.Duration
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneOffset
 
 data class Version(val major: Int, val minor: Int, val patch: Int) : Comparable<Version> {
 
@@ -39,23 +42,25 @@ fun runCommand(vararg args: String): String {
 }
 
 fun existingVersions(): List<Version> {
-  // A draft gets its tag only when it's published, but its version code may already be on Play.
+  // A draft gets its tag only when it's published, but its version name is already taken.
   val releaseTags = runCommand("gh", "release", "list", "--json", "tagName", "--jq", ".[].tagName").lines()
   return (runCommand("git", "tag").lines() + releaseTags)
     .mapNotNull(Version::parse)
 }
 
-fun Version.calculateVersionCode(): Int {
-  val majorPart = major + 28
-  val minorPart = "%02d".format(minor)
-  val patchPart = "%03d".format(patch)
-  return "$majorPart$minorPart$patchPart".toInt()
-}
+// Codes count the minutes since the switch from codes derived from the version name, whose
+// highest one on Play or on a tester's phone was 5411002. So each build gets a higher code than
+// every build before it, without looking up which codes are taken.
+val minuteCodesStart: Instant = Instant.parse("2026-11-13T20:00:00Z")
+val firstMinuteCode = 5411003
 
-fun Version.calculateGitTag(): String {
-  val versionName = toVersionString()
-  val versionCode = this.calculateVersionCode()
-  return "$versionName-$versionCode"
+// A clock that is far ahead would hand out codes that later builds can't go above.
+val latestPlausibleBuild: Instant = Instant.parse("2040-01-01T00:00:00Z")
+
+fun versionCode(now: Instant): Int {
+  check(now >= minuteCodesStart) { "The clock says $now, before the version codes start at $minuteCodesStart." }
+  check(now < latestPlausibleBuild) { "The clock says $now, which is after $latestPlausibleBuild. Is the clock wrong?" }
+  return firstMinuteCode + Duration.between(minuteCodesStart, now).toMinutes().toInt()
 }
 
 fun newVersion(today: LocalDate, existingVersions: List<Version>): Version {
@@ -84,17 +89,34 @@ fun newVersionTests() {
   test(today = LocalDate.of(2025, 2, 5), versions = listOf("25.1.5"), expectedVersion = "25.2.1")
   test(today = LocalDate.of(2024, 12, 1), versions = listOf("24.11.2", "25.1.1"), expectedVersion = "24.12.1")
 
-  val tag = Version(25, 1, 6).calculateGitTag()
-  if (tag != "25.1.6-5301006") {
-    throw IllegalStateException("Expected 25.1.6-5301006 but got $tag")
+  fun testCode(now: String, expectedCode: Int) {
+    val code = versionCode(Instant.parse(now))
+    if (code != expectedCode) {
+      throw IllegalStateException("Expected $expectedCode at $now but got $code")
+    }
   }
+  testCode(now = "2026-11-13T20:00:00Z", expectedCode = 5411003)
+  testCode(now = "2026-11-13T20:00:59Z", expectedCode = 5411003)
+  testCode(now = "2026-11-14T20:00:00Z", expectedCode = 5412443)
+  testCode(now = "2039-12-31T23:59:00Z", expectedCode = 12317482)
+
+  fun testRejected(now: String) {
+    val result = runCatching { versionCode(Instant.parse(now)) }
+    if (result.isSuccess) {
+      throw IllegalStateException("Expected no code at $now but got ${result.getOrNull()}")
+    }
+  }
+  testRejected("2026-11-13T19:59:59Z")
+  testRejected("2040-01-01T00:00:00Z")
 }
 
 if ("--test" in args) {
   newVersionTests()
 } else {
-  val newVersion = newVersion(LocalDate.now(), existingVersions())
-  val tag = newVersion.calculateGitTag()
+  val now = Instant.now()
+  val versionCode = versionCode(now)
+  val newVersion = newVersion(LocalDate.ofInstant(now, ZoneOffset.UTC), existingVersions())
+  val tag = "${newVersion.toVersionString()}-$versionCode"
   val githubOutput = System.getenv("GITHUB_OUTPUT")
 
   println("Release tag: $tag")
@@ -104,7 +126,7 @@ if ("--test" in args) {
       """
       |tag=$tag
       |version_name=${newVersion.toVersionString()}
-      |version_code=${newVersion.calculateVersionCode()}
+      |version_code=$versionCode
       |
       """.trimMargin(),
     )
