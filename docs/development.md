@@ -116,8 +116,7 @@ days later, and IzzyDroid picks up the APK from the published release. Neither h
 draft only once the Play rollout has reached 100%.
 
 A version that turns out broken on Play is never published. Keep its draft until the next release is published: the
-next version is counted from the tags and the drafts, so deleting it earlier hands its version code out again, which
-Play rejects.
+next version name is counted from the tags and the drafts, so deleting it earlier hands its version name out again.
 
 #### Checking on F-Droid
 
@@ -139,7 +138,7 @@ To send a build to testers, trigger the
 [Firebase App Distribution Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/firebase_app_distribution.yml)
 on the branch to test. Testers install the build through the Firebase App Tester app.
 
-The workflow builds a `playRelease` APK with the version code of the upcoming release and a version name suffixed
+The workflow builds a `playRelease` APK with a version code below the next release and a version name suffixed
 with the commit, then uploads it with the Firebase CLI. It notifies the `beta-testers` group by default; clear the
 `groups` input to only upload.
 The APK is signed with the GitHub key, which is the app signing key Google Play re-signs with, so tester builds install
@@ -186,20 +185,25 @@ Voice uses [calendar versioning (CalVer)](https://calver.org/).
   - `M`: release month (1–12)
   - `RELEASE`: counter for releases within the same month (starting at 1)
 - Tag format (used by CI): `YY.M.RELEASE-CODE`
-  - `CODE` is the numeric Android versionCode derived from the version name using the formula below.
+  - `CODE` is the Android versionCode, see below.
 
 Examples:
 
-- First release in September 2025 → version name `25.9.1`
-- Tag includes version code → `25.9.1-5309001`
+- First release in December 2026 → version name `26.12.1`
+- Built on 2026-12-01 at 09:00 UTC → tag `26.12.1-5436263`
 
 ### Version code
 
-The Android `versionCode` is calculated from the version name with:
+The Android `versionCode` counts the minutes since 2026-11-13 20:00 UTC, starting at `5411003`:
 
-`CODE = (YY + 28)(MM as 2 digits)(RELEASE as 3 digits)`
+`CODE = 5411003 + minutes since 2026-11-13 20:00 UTC`
 
-Example: `25.9.1` → `(25+28)=53`, `MM=09`, `RELEASE=001` → `5309001`.
+So every build gets a higher code than all builds before it. Tester builds and Play internal uploads use the same
+formula, so each later release replaces them on Play. A deleted draft can't hand out its code again.
+`determine_release_tag.main.kts` refuses to run when the clock is before the start or after 2039, because a code from a
+wrong clock can't be taken back on Play.
+
+Before, the code came from the version name, like `5309001` for `25.9.1`. The last of those was `5411002`.
 
 This code is embedded in the git tag by `determine_release_tag.main.kts` and used by CI and Fastlane.
 

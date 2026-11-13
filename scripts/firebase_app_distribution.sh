@@ -43,7 +43,7 @@ for required_file in "$main_checkout/signing/signing.properties" "app/src/play/g
   fi
 done
 
-# Tester builds carry the version code of the upcoming release, so Play updates can replace them.
+# Tester builds get a lower version code than the next release, so Play updates can replace them.
 git fetch --tags --quiet origin
 version_output=$(mktemp)
 trap 'rm -f "$version_output"' EXIT
