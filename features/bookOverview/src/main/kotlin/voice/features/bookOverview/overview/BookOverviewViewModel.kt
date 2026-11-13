@@ -538,7 +538,7 @@ class BookOverviewViewModel(
       if (undone.failed.isNotEmpty()) {
         Logger.d("Undo of the ${edited.field} failed for ${undone.failed.size} books")
         // like after a failed edit, so the listener sees which books kept the new value
-        selection = undone.failed
+        selection = selection.orEmpty() + undone.failed
         // an undo of the undo would go in circles
         booksEdited.emit(undone.copy(count = 0, undo = emptyMap()))
       }

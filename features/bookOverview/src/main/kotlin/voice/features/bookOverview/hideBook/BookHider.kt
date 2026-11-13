@@ -20,8 +20,7 @@ class BookHider(private val repo: BookRepository) {
 
   internal suspend fun hide(ids: List<BookId>) {
     // the undo leaves the books that were hidden before hidden
-    val selected = ids.toSet()
-    val books = repo.all().filter { it.id in selected && !it.custom.hidden }
+    val books = ids.mapNotNull { repo.get(it) }.filterNot { it.custom.hidden }
     if (books.isEmpty()) return
     books.forEach { book -> repo.updateCustomMetadata(book.id) { it.copy(hidden = true) } }
     hidden.emit(HiddenBooks(books.map { it.id }, books.singleOrNull()?.name, series = false))

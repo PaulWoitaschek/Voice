@@ -127,7 +127,7 @@ private fun SelectionEditContent(
         TextFieldValue(viewState.value, selection = TextRange(0, viewState.value.length)),
       )
     }
-  val canSave = value.text.isNotBlank() && !readOnly
+  val canSave = value.text.isNotBlank() && value.text.trim() != viewState.value && !readOnly
   val label =
     when (viewState.field) {
       BookField.Series -> StringsR.string.book_edit_series_label
