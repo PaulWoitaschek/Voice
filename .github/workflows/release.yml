@@ -38,7 +38,9 @@ jobs:
         id: tag
         env:
           GH_TOKEN: ${{ github.token }}
-        run: ./scripts/determine_release_tag.main.kts
+        run: |
+          ./scripts/determine_release_tag.main.kts --test
+          ./scripts/determine_release_tag.main.kts
 
       - uses: ./.github/actions/build_setup
 

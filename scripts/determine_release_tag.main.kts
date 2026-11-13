@@ -59,7 +59,7 @@ val latestPlausibleBuild: Instant = Instant.parse("2040-01-01T00:00:00Z")
 
 fun versionCode(now: Instant): Int {
   check(now >= minuteCodesStart) { "The clock says $now, before the version codes start at $minuteCodesStart." }
-  check(now < latestPlausibleBuild) { "The clock says $now, which is after $latestPlausibleBuild. Is the clock wrong?" }
+  check(now < latestPlausibleBuild) { "The clock says $now, not before $latestPlausibleBuild. Is the clock wrong?" }
   return firstMinuteCode + Duration.between(minuteCodesStart, now).toMinutes().toInt()
 }
 
