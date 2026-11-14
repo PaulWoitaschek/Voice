@@ -8,6 +8,7 @@ plugins {
   id("voice.compose")
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
+  alias(libs.plugins.baselineProfile)
 }
 
 val playGoogleServicesJson = layout.projectDirectory.file("src/play/google-services.json")
@@ -142,7 +143,9 @@ val validatePlayGoogleServices =
   }
 
 tasks
-  .matching { it.name in setOf("prePlayDebugBuild", "prePlayReleaseBuild") }
+  .matching {
+    it.name in setOf("prePlayDebugBuild", "prePlayReleaseBuild", "prePlayNonMinifiedReleaseBuild")
+  }
   .configureEach {
     dependsOn(validatePlayGoogleServices)
   }
@@ -196,6 +199,9 @@ dependencies {
   implementation(libs.navigation3.ui)
 
   implementation(libs.coil)
+
+  implementation(libs.profileInstaller)
+  baselineProfile(projects.baselineprofile)
 
   add("playImplementation", libs.firebase.crashlytics)
   add("playImplementation", libs.firebase.analytics)

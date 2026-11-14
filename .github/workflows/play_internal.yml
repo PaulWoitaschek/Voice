@@ -13,7 +13,7 @@ concurrency:
 jobs:
   upload:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     environment: release
     steps:
       - uses: actions/checkout@v7
@@ -45,6 +45,15 @@ jobs:
         with:
           ruby-version: '4.0'
           bundler-cache: true
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Generate Baseline Profile
+        run: ./gradlew :app:generatePlayReleaseBaselineProfile -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
 
       - name: Build Play AAB
         env:

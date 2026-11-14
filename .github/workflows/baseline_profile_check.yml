@@ -1,0 +1,53 @@
+# Throwaway: checks that baseline profile generation works on CI. Remove before merging.
+name: Baseline Profile Check
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment: release
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/build_setup
+
+      - name: Setup Google Services
+        env:
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        run: |
+          mkdir -p app/src/play
+          echo "$GOOGLE_SERVICES" | base64 --decode > app/src/play/google-services.json
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Generate Baseline Profiles
+        run: ./gradlew :app:generateBaselineProfile -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+
+      - name: Build Play AAB and free APK
+        run: ./gradlew :app:bundlePlayRelease :app:assembleFreeRelease
+
+      - name: Check both builds contain their profile
+        run: |
+          unzip -l app/build/outputs/bundle/playRelease/app-play-release.aab | grep baseline.prof
+          unzip -l app/build/outputs/apk/free/release/*.apk | grep baseline.prof
+          grep -c firebase app/src/playRelease/generated/baselineProfiles/baseline-prof.txt
+          ! grep -q firebase app/src/freeRelease/generated/baselineProfiles/baseline-prof.txt
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: baseline-profile
+          path: |
+            app/src/*/generated/baselineProfiles/
+            baselineprofile/build/outputs/
+          if-no-files-found: ignore
