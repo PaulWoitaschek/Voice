@@ -101,17 +101,10 @@ jobs:
           mkdir -p artifacts
           cp app/build/outputs/apk/free/release/app-free-release.apk artifacts/app-free-release.apk
 
-      - name: Upload to INTERNAL
-        if: inputs.submit_to_stores
-        run: bundle exec fastlane android upload_internal aab_path:artifacts/app-play-release.aab
-
-      - name: Promote INTERNAL -> PRODUCTION (0.1%)
-        if: inputs.submit_to_stores
-        run: bundle exec fastlane android promote version_code:${{ steps.tag.outputs.version_code }}
-
       # F-Droid builds the tag from source, so the tag points to a commit with the free profile. It stays off main.
       # The tag ruleset needs passing checks on that commit, so CI runs on the release branch.
       - name: Commit Free Baseline Profile
+        id: release_branch
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.tag.outputs.tag }}
@@ -122,6 +115,15 @@ jobs:
           git commit -m "Add the baseline profile for $TAG"
           git push origin "HEAD:refs/heads/release/$TAG"
           gh workflow run ci.yml --ref "release/$TAG"
+
+      - name: Upload to INTERNAL
+        id: upload
+        if: inputs.submit_to_stores
+        run: bundle exec fastlane android upload_internal aab_path:artifacts/app-play-release.aab
+
+      - name: Promote INTERNAL -> PRODUCTION (0.1%)
+        if: inputs.submit_to_stores
+        run: bundle exec fastlane android promote version_code:${{ steps.tag.outputs.version_code }}
 
       - name: Create GitHub Release
         env:
@@ -140,3 +142,8 @@ jobs:
           name: release-${{ steps.tag.outputs.tag }}
           path: artifacts/
           if-no-files-found: ignore
+
+      # Once Play has the build, the release is finished by hand and needs the branch.
+      - name: Delete the release branch of a failed run
+        if: failure() && steps.release_branch.outcome == 'success' && steps.upload.outcome != 'success'
+        run: git push origin --delete "release/${{ steps.tag.outputs.tag }}"

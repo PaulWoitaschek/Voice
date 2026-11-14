@@ -92,10 +92,15 @@ it also uploads the AAB to the Play Store’s internal track and promotes it to 
 Before it builds, the workflow generates a baseline profile for each flavor on an emulator, so the app starts faster.
 The play profile needs `app/src/play/google-services.json`. The Upload Play Internal workflow generates it too.
 
-The profiles are not checked in on `main`. F-Droid builds the tag from source, so the workflow puts the free profile in
-one more commit on top of `main`, pushes it to the branch `release/<tag>`, and points the draft at that commit. It also
-runs CI on that branch, because the tag ruleset needs passing checks before publishing can create the tag. When the
-release is published, a workflow deletes the branch. To generate the profiles locally, run:
+`main` has no profiles. F-Droid builds the tag from source, so the tag must point to a commit with the free profile:
+
+1. The workflow adds the free profile in one more commit on top of `main`.
+2. It pushes that commit to the branch `release/<tag>` and points the draft at it.
+3. It runs CI on that branch. The tag ruleset needs these checks to create the tag when you publish.
+4. When you publish the release, a workflow deletes the branch. A release run that fails before the Play upload deletes it too. If you delete a
+   draft, delete its branch by hand.
+
+To generate the profiles locally, run:
 
 ```sh
 ./gradlew :app:generateBaselineProfile

@@ -29,7 +29,8 @@ android {
 
   testOptions.managedDevices.localDevices.register("baselineProfileDevice") {
     device = "Pixel 6"
-    apiLevel = 34
+    // From API 34 the profile rule reinstalls the app before it records, which removes the library.
+    apiLevel = 33
     systemImageSource = "aosp"
   }
 }
