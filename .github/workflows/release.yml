@@ -104,7 +104,6 @@ jobs:
       # F-Droid builds the tag from source, so the tag points to a commit with the free profile. It stays off main.
       # The tag ruleset needs passing checks on that commit, so CI runs on the release branch.
       - name: Commit Free Baseline Profile
-        id: release_branch
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.tag.outputs.tag }}
@@ -117,7 +116,6 @@ jobs:
           gh workflow run ci.yml --ref "release/$TAG"
 
       - name: Upload to INTERNAL
-        id: upload
         if: inputs.submit_to_stores
         run: bundle exec fastlane android upload_internal aab_path:artifacts/app-play-release.aab
 
@@ -142,8 +140,3 @@ jobs:
           name: release-${{ steps.tag.outputs.tag }}
           path: artifacts/
           if-no-files-found: ignore
-
-      # Once Play has the build, the release is finished by hand and needs the branch.
-      - name: Delete the release branch of a failed run
-        if: failure() && steps.release_branch.outcome == 'success' && steps.upload.outcome != 'success'
-        run: git push origin --delete "release/${{ steps.tag.outputs.tag }}"

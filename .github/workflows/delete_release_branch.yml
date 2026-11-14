@@ -16,4 +16,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.event.release.tag_name }}
-        run: gh api --method DELETE "repos/${{ github.repository }}/git/refs/heads/release/$TAG" || true
+        run: gh api --method DELETE "repos/${{ github.repository }}/git/refs/heads/release/$TAG"

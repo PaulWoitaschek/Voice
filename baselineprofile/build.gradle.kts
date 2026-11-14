@@ -31,7 +31,8 @@ android {
     device = "Pixel 6"
     // From API 34 the profile rule reinstalls the app before it records, which removes the library.
     apiLevel = 33
-    systemImageSource = "aosp"
+    // With Google Play services, so Firebase runs the same code as on listeners' phones.
+    systemImageSource = "google"
   }
 }
 

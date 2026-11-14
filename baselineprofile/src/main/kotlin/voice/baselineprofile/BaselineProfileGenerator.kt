@@ -10,6 +10,7 @@ import androidx.test.uiautomator.StaleObjectException
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import java.io.ByteArrayOutputStream
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.regex.Pattern
 import org.junit.Before
@@ -34,15 +35,30 @@ class BaselineProfileGenerator {
     copyBookToDevice()
     device.executeShellCommand("pm grant $PACKAGE android.permission.POST_NOTIFICATIONS")
     device.executeShellCommand("am start -W -n $PACKAGE/voice.app.MainActivity")
-    completeOnboarding()
+    val startScreen = By.pkg(PACKAGE).text(Pattern.compile("Let's go|$BOOK"))
+    check(device.wait(Until.hasObject(startScreen), TIMEOUT)) {
+      "The app did not start:\n${hierarchy()}"
+    }
+    if (device.hasObject(app("Let's go"))) completeOnboarding()
   }
 
   @Test
-  fun generate() {
+  fun startup() {
     rule.collect(packageName = PACKAGE, includeInStartupProfile = true) {
       pressHome()
       startActivityAndWait()
-      openBook()
+      check(device.wait(Until.hasObject(app(BOOK)), TIMEOUT)) {
+        "The library does not show the book:\n${hierarchy()}"
+      }
+    }
+  }
+
+  @Test
+  fun openBook() {
+    rule.collect(packageName = PACKAGE) {
+      pressHome()
+      startActivityAndWait()
+      openBookAndGoBack()
     }
   }
 
@@ -57,6 +73,8 @@ class BaselineProfileGenerator {
         instrumentation.uiAutomation.executeShellCommandRw("dd of=/sdcard/$folder/$file")
       FileOutputStream(input.fileDescriptor).use { assets.open("$folder/$file").copyTo(it) }
       input.close()
+      // dd closes its output when it exits, so this waits until the file is written.
+      FileInputStream(output.fileDescriptor).use { it.readBytes() }
       output.close()
     }
   }
@@ -103,7 +121,7 @@ class BaselineProfileGenerator {
     }
   }
 
-  private fun openBook() {
+  private fun openBookAndGoBack() {
     val book = device.wait(Until.findObject(app(BOOK)), TIMEOUT)
     checkNotNull(book) { "The library does not show the book:\n${hierarchy()}" }.click()
     val playButton = By.pkg(PACKAGE).desc(Pattern.compile("Play|Pause"))

@@ -97,8 +97,8 @@ The play profile needs `app/src/play/google-services.json`. The Upload Play Inte
 1. The workflow adds the free profile in one more commit on top of `main`.
 2. It pushes that commit to the branch `release/<tag>` and points the draft at it.
 3. It runs CI on that branch. The tag ruleset needs these checks to create the tag when you publish.
-4. When you publish the release, a workflow deletes the branch. A release run that fails before the Play upload deletes it too. If you delete a
-   draft, delete its branch by hand.
+4. When you publish the release, a workflow deletes the branch. If a release run fails or you delete a draft, delete its
+   branch by hand.
 
 To generate the profiles locally, run:
 
