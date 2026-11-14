@@ -8,6 +8,7 @@ plugins {
   id("voice.compose")
   alias(libs.plugins.crashlytics) apply false
   alias(libs.plugins.googleServices) apply false
+  alias(libs.plugins.baselineProfile)
 }
 
 val playGoogleServicesJson = layout.projectDirectory.file("src/play/google-services.json")
@@ -129,6 +130,12 @@ android {
   }
 }
 
+baselineProfile {
+  mergeIntoMain = true
+  // Only play generates it, so Firebase's startup is covered. The free flavor ignores those rules.
+  variants.register("play") { from(project(":baselineprofile")) }
+}
+
 val validatePlayGoogleServices =
   tasks.register("validatePlayGoogleServices") {
     val playGoogleServicesJsonPath = playGoogleServicesJson.asFile.absolutePath
@@ -142,7 +149,9 @@ val validatePlayGoogleServices =
   }
 
 tasks
-  .matching { it.name in setOf("prePlayDebugBuild", "prePlayReleaseBuild") }
+  .matching {
+    it.name in setOf("prePlayDebugBuild", "prePlayReleaseBuild", "prePlayNonMinifiedReleaseBuild")
+  }
   .configureEach {
     dependsOn(validatePlayGoogleServices)
   }
@@ -196,6 +205,8 @@ dependencies {
   implementation(libs.navigation3.ui)
 
   implementation(libs.coil)
+
+  implementation(libs.profileInstaller)
 
   add("playImplementation", libs.firebase.crashlytics)
   add("playImplementation", libs.firebase.analytics)

@@ -23,3 +23,4 @@ releases
 reports
 testResults
 /plugins/.idea/workspace.xml
+/app/src/main/generated
