@@ -224,8 +224,8 @@ Before, the code came from the version name, like `5309001` for `25.9.1`. The la
 
 This code is embedded in the git tag by `determine_release_tag.main.kts` and used by CI and Fastlane.
 
-Builds without `-Pvoice.versionCode` take the code of the newest release tag. So a local build installs over that
-release from Play, and Play replaces it with the next release.
+Builds without `-Pvoice.versionCode` take the minute code of the end of the current UTC day. So a local build
+installs over every release from Play so far, and Play replaces it with a release from a later day.
 
 ## Website
 

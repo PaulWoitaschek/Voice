@@ -1,6 +1,10 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
 import java.util.Properties
 
 plugins {
@@ -18,22 +22,18 @@ if (playGoogleServicesJson.asFile.canRead()) {
   pluginManager.apply(libs.plugins.crashlytics.get().pluginId)
 }
 
-val releaseCode =
-  providers
-    .exec {
-      commandLine(
-        "git",
-        "for-each-ref",
-        "--count=1",
-        "--sort=-v:refname",
-        "--format=%(refname:short)",
-        "refs/tags/[0-9]*-[0-9]*",
-      )
-      isIgnoreExitValue = true
-    }
-    .standardOutput
-    .asText
-    .map { it.trim().substringAfterLast('-').toIntOrNull() ?: Int.MAX_VALUE }
+// Must match the minute codes in scripts/determine_release_tag.main.kts. It rounds up to the end
+// of the UTC day, so the configuration cache lasts all day and the code stays above today's
+// releases.
+abstract class LocalVersionCode : ValueSource<Int, ValueSourceParameters.None> {
+  override fun obtain(): Int {
+    val endOfDay = LocalDate.now(ZoneOffset.UTC).plusDays(1).atStartOfDay(ZoneOffset.UTC)
+    val minutes = Duration.between(Instant.parse("2026-11-13T20:00:00Z"), endOfDay).toMinutes()
+    return 5411003 + minutes.toInt()
+  }
+}
+
+val localVersionCode = providers.of(LocalVersionCode::class.java) {}
 
 android {
   namespace = "voice.app"
@@ -48,7 +48,8 @@ android {
     applicationId = "de.ph1b.audiobook"
     versionName = providers.gradleProperty("voice.versionName").orNull ?: "1.0.0"
     // F-Droid replaces the next line with sed, keep it on one line.
-    versionCode = providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: releaseCode.get()
+    versionCode =
+      providers.gradleProperty("voice.versionCode").orNull?.toInt() ?: localVersionCode.get()
   }
 
   val distributionFlavor = "distribution"
