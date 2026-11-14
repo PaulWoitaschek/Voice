@@ -10,6 +10,8 @@ internal fun Player.seekBackBy(
   rewind: Duration,
   crossMediaItems: Boolean,
 ) {
+  // a seek in a long VBR MP3 can land minutes away, even when it targets the current position
+  if (rewind <= ZERO) return
   var currentPosition =
     currentPosition.takeUnless { it == C.TIME_UNSET }?.milliseconds?.coerceAtLeast(ZERO) ?: return
   var remaining = rewind

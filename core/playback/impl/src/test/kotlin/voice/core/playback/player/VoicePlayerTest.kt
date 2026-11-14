@@ -685,6 +685,35 @@ class VoicePlayerTest {
   }
 
   @Test
+  fun `pausing without auto rewind does not seek`() = scope.runTest {
+    setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
+    autoRewindAmountStore.updateData { 0 }
+
+    player.seekTo(0, 15_000)
+    player.prepare()
+    awaitReady()
+
+    var seeks = 0
+    player.addListener(
+      object : Player.Listener {
+        override fun onPositionDiscontinuity(
+          oldPosition: Player.PositionInfo,
+          newPosition: Player.PositionInfo,
+          reason: Int,
+        ) {
+          if (reason == Player.DISCONTINUITY_REASON_SEEK) seeks++
+        }
+      },
+    )
+    player.play()
+    player.pause()
+    scope.advanceUntilIdle()
+    shadowOf(Looper.getMainLooper()).idle()
+
+    assertEquals(0, seeks)
+  }
+
+  @Test
   fun `pausing a finished book keeps it at its end`() = scope.runTest {
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 10_000, name = null))))
     autoRewindAmountStore.updateData { 5 }
