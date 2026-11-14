@@ -1,0 +1,176 @@
+---
+import Prose from '../layouts/Prose.astro'
+---
+
+<Prose
+  description="Convert a long MP3 audiobook to M4B in your browser, so skipping and resuming land on the right second."
+  title="Convert MP3 to M4B"
+>
+  <h1>Convert an MP3 audiobook to M4B</h1>
+  <p class="lead">
+    In a long MP3 audiobook, a skip or a resume can land minutes away from the time Voice shows. Convert the book to
+    M4B, and every second is where it should be.
+  </p>
+
+  <div class="converter" data-state="idle">
+    <label class="button primary pick">
+      Choose an MP3 file
+      <input accept=".mp3,audio/mpeg" hidden type="file" />
+    </label>
+    <div class="working">
+      <p class="file"></p>
+      <progress max="1"></progress>
+      <p class="muted status"></p>
+      <button class="button tonal small cancel" type="button">Cancel</button>
+    </div>
+    <div class="done">
+      <p class="file"></p>
+      <p class="muted status"></p>
+      <a class="button primary download">Download</a>
+      <button class="button tonal small again" type="button">Convert another book</button>
+    </div>
+    <p class="error" role="alert"></p>
+  </div>
+
+  <h2 id="why">Why MP3 books jump</h2>
+  <p>
+    Most audiobook MP3 files change their bitrate as they go. To find a time in such a file, a player has only a rough
+    map with 100 points. In a book of 10 hours, that map can be off by minutes. M4B files have an exact map, so Voice can
+    always go to the right place.
+  </p>
+
+  <h2 id="how">How it works</h2>
+  <ul>
+    <li>Your book doesn't leave your device. Your browser does the conversion.</li>
+    <li>The title, author, cover and chapters stay in the new file.</li>
+    <li>The audio becomes AAC at 64 kbps, which is about 29 MB per hour.</li>
+    <li>
+      The whole book has to fit in memory. For very long books, use a computer, and keep the tab open until the download
+      starts.
+    </li>
+  </ul>
+  <p>Then copy the M4B file into your audiobook folder and remove the MP3 file, so Voice doesn't show the book twice.</p>
+</Prose>
+
+<script>
+  import { startConversion } from '../scripts/convert'
+
+  const root = document.querySelector<HTMLElement>('.converter')!
+  const input = root.querySelector<HTMLInputElement>('input')!
+  const progress = root.querySelector('progress')!
+  const download = root.querySelector<HTMLAnchorElement>('.download')!
+  const error = root.querySelector('.error')!
+  let cancel: (() => Promise<void>) | undefined
+
+  const show = (state: string, status = '') => {
+    root.dataset.state = state
+    root.querySelectorAll(`.${state} .status`).forEach((element) => (element.textContent = status))
+  }
+
+  input.addEventListener('change', async () => {
+    const file = input.files?.[0]
+    if (!file) return
+    input.value = ''
+    root.querySelectorAll('.file').forEach((element) => (element.textContent = file.name))
+    error.textContent = ''
+    progress.removeAttribute('value')
+    show('working', 'Starting…')
+    const started = performance.now()
+    try {
+      const { conversion, result } = await startConversion(file, (value) => {
+        progress.value = value
+        const left = value > 0.01 ? ((performance.now() - started) / value) * (1 - value) : NaN
+        show('working', `${Math.floor(value * 100)} %` + (isNaN(left) ? '' : ` · about ${minutes(left)} left`))
+      })
+      cancel = () => conversion.cancel()
+      const { blob, chapters } = await result
+      URL.revokeObjectURL(download.href)
+      download.href = URL.createObjectURL(blob)
+      download.download = file.name.replace(/\.mp3$/i, '') + '.m4b'
+      show('done', `${(blob.size / 1e6).toFixed(0)} MB, ${chapters} ${chapters === 1 ? 'chapter' : 'chapters'}`)
+    } catch (e) {
+      if (root.dataset.state !== 'idle') {
+        show('idle')
+        error.textContent = "This file couldn't be converted. Is it an MP3 file?"
+        console.error(e)
+      }
+    } finally {
+      cancel = undefined
+    }
+  })
+
+  root.querySelector('.cancel')!.addEventListener('click', () => {
+    show('idle')
+    cancel?.()
+  })
+
+  root.querySelector('.again')!.addEventListener('click', () => {
+    URL.revokeObjectURL(download.href)
+    download.removeAttribute('href')
+    show('idle')
+  })
+
+  const minutes = (ms: number) => {
+    const value = Math.max(1, Math.round(ms / 60_000))
+    return `${value} ${value === 1 ? 'minute' : 'minutes'}`
+  }
+</script>
+
+<style>
+  .converter {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+    margin-block: 32px 48px;
+    padding: clamp(20px, 4vw, 32px);
+    border: 1px solid var(--card-line);
+    border-radius: 28px;
+    background: var(--card);
+  }
+
+  .converter p {
+    margin: 0;
+  }
+
+  .pick {
+    cursor: pointer;
+  }
+
+  .pick:focus-within {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+  }
+
+  .working,
+  .done {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+    width: 100%;
+  }
+
+  .converter:not([data-state='idle']) .pick,
+  .converter:not([data-state='working']) .working,
+  .converter:not([data-state='done']) .done {
+    display: none;
+  }
+
+  .file {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  progress {
+    width: 100%;
+    height: 8px;
+    accent-color: var(--primary);
+  }
+
+  .error:empty {
+    display: none;
+  }
+
+  .error {
+    color: light-dark(#ba1a1a, #ffb4ab);
+  }
+</style>
