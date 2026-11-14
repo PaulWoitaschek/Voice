@@ -14,6 +14,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   release:
@@ -21,6 +22,7 @@ jobs:
     environment: release
     permissions:
       contents: write
+      actions: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -69,8 +71,22 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Generate Baseline Profile
+      - name: Generate Baseline Profiles
         run: ./gradlew :app:generateBaselineProfile -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+
+      # F-Droid builds the tag from source, so the tag points to a commit with the free profile. It stays off main.
+      # The tag ruleset needs passing checks on that commit, so CI runs on the release branch.
+      - name: Commit Free Baseline Profile
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --force app/src/freeRelease/generated/baselineProfiles
+          git commit -m "Add the baseline profile for $TAG"
+          git push origin "HEAD:refs/heads/release/$TAG"
+          gh workflow run ci.yml --ref "release/$TAG"
 
       - name: Build Play AAB
         env:
@@ -120,7 +136,7 @@ jobs:
             artifacts/*.apk \
             --draft \
             --notes-file .github/release_notes_template.md \
-            --target "$GITHUB_SHA"
+            --target "$(git rev-parse HEAD)"
 
       # Once Play has the version code it can't be released again, so keep the builds to finish by hand.
       - uses: actions/upload-artifact@v7

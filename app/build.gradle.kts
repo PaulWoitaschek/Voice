@@ -130,12 +130,6 @@ android {
   }
 }
 
-baselineProfile {
-  mergeIntoMain = true
-  // Only play generates it, so Firebase's startup is covered. The free flavor ignores those rules.
-  variants.register("play") { from(project(":baselineprofile")) }
-}
-
 val validatePlayGoogleServices =
   tasks.register("validatePlayGoogleServices") {
     val playGoogleServicesJsonPath = playGoogleServicesJson.asFile.absolutePath
@@ -207,6 +201,7 @@ dependencies {
   implementation(libs.coil)
 
   implementation(libs.profileInstaller)
+  baselineProfile(projects.baselineprofile)
 
   add("playImplementation", libs.firebase.crashlytics)
   add("playImplementation", libs.firebase.analytics)

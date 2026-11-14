@@ -1,0 +1,19 @@
+# The release workflow keeps the commit with the free baseline profile on a branch until the tag exists.
+name: Delete Release Branch
+
+on:
+  release:
+    types: [ published ]
+
+permissions:
+  contents: write
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete the release branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: gh api --method DELETE "repos/${{ github.repository }}/git/refs/heads/release/$TAG" || true

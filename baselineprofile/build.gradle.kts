@@ -16,7 +16,10 @@ android {
   }
 
   flavorDimensions += "distribution"
-  productFlavors { register("play") { dimension = "distribution" } }
+  productFlavors {
+    register("free") { dimension = "distribution" }
+    register("play") { dimension = "distribution" }
+  }
 
   compileOptions {
     val bytecode = JavaVersion.toVersion(libs.versions.jvm.bytecode.get())

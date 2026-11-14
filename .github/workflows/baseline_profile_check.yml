@@ -30,20 +30,24 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Generate Baseline Profile
+      - name: Generate Baseline Profiles
         run: ./gradlew :app:generateBaselineProfile -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
 
-      - name: Build Play AAB
-        run: ./gradlew :app:bundlePlayRelease
+      - name: Build Play AAB and free APK
+        run: ./gradlew :app:bundlePlayRelease :app:assembleFreeRelease
 
-      - name: Check the AAB contains the profile
-        run: unzip -l app/build/outputs/bundle/playRelease/app-play-release.aab | grep baseline.prof
+      - name: Check both builds contain their profile
+        run: |
+          unzip -l app/build/outputs/bundle/playRelease/app-play-release.aab | grep baseline.prof
+          unzip -l app/build/outputs/apk/free/release/*.apk | grep baseline.prof
+          grep -c firebase app/src/playRelease/generated/baselineProfiles/baseline-prof.txt
+          ! grep -q firebase app/src/freeRelease/generated/baselineProfiles/baseline-prof.txt
 
       - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: baseline-profile
           path: |
-            app/src/main/generated/baselineProfiles/
+            app/src/*/generated/baselineProfiles/
             baselineprofile/build/outputs/
           if-no-files-found: ignore
