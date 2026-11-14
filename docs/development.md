@@ -89,21 +89,14 @@ To release a new version, trigger the [Release Workflow](https://github.com/Paul
 This creates a draft GitHub release with the APK and keeps the Play AAB as a workflow artifact. With `submit_to_stores` enabled,
 it also uploads the AAB to the Play Store’s internal track and promotes it to a 0.1% production rollout.
 
-Before it builds, the workflow generates a baseline profile for each flavor on an emulator, so the app starts faster.
-The play profile needs `app/src/play/google-services.json`. The Upload Play Internal workflow generates it too.
+Before it builds, the workflow generates a baseline profile on an emulator, so the app starts faster. Only the Play build
+gets it, because F-Droid builds from source and the profile is not checked in. The profile needs
+`app/src/play/google-services.json`. The Upload Play Internal workflow generates it too.
 
-`main` has no profiles. F-Droid builds the tag from source, so the tag must point to a commit with the free profile:
-
-1. The workflow adds the free profile in one more commit on top of `main`.
-2. It pushes that commit to the branch `release/<tag>` and points the draft at it.
-3. It runs CI on that branch. The tag ruleset needs these checks to create the tag when you publish.
-4. When you publish the release, a workflow deletes the branch. If a release run fails or you delete a draft, delete its
-   branch by hand.
-
-To generate the profiles locally, run:
+To generate the profile locally, run:
 
 ```sh
-./gradlew :app:generateBaselineProfile
+./gradlew :app:generatePlayReleaseBaselineProfile
 ```
 
 The release workflow uses the protected `release` GitHub environment. CI signs through Gradle's injected signing properties,

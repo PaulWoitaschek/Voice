@@ -208,7 +208,6 @@ dependencies {
   implementation(libs.coil)
 
   implementation(libs.profileInstaller)
-  baselineProfile(projects.baselineprofile)
 
   add("playImplementation", libs.firebase.crashlytics)
   add("playImplementation", libs.firebase.analytics)
@@ -243,4 +242,9 @@ fun mainCheckoutDir(rootDir: File): File {
   val commonDirFile = gitDir.resolve("commondir")
   if (!commonDirFile.isFile) return rootDir
   return gitDir.resolve(commonDirFile.readText().trim()).canonicalFile.parentFile
+}
+
+baselineProfile {
+  // F-Droid builds from source, and the profile is not checked in.
+  variants { register("play") { from(project(":baselineprofile")) } }
 }
