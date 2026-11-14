@@ -1,5 +1,7 @@
 package voice.baselineprofile
 
+import android.os.ParcelFileDescriptor.AutoCloseInputStream
+import android.os.ParcelFileDescriptor.AutoCloseOutputStream
 import android.os.SystemClock
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -10,8 +12,6 @@ import androidx.test.uiautomator.StaleObjectException
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import java.io.ByteArrayOutputStream
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.util.regex.Pattern
 import org.junit.Before
 import org.junit.Rule
@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
 
 private const val PACKAGE = "de.ph1b.audiobook"
 private const val BOOK = "Book"
-private const val TIMEOUT = 10_000L
+private const val TIMEOUT = 30_000L
 
 // Listeners start on their library, so a book is added before the profile is recorded.
 @RunWith(AndroidJUnit4::class)
@@ -71,11 +71,9 @@ class BaselineProfileGenerator {
       // UiAutomation runs commands without a shell, so dd writes the file instead of a redirect.
       val (output, input) =
         instrumentation.uiAutomation.executeShellCommandRw("dd of=/sdcard/$folder/$file")
-      FileOutputStream(input.fileDescriptor).use { assets.open("$folder/$file").copyTo(it) }
-      input.close()
+      AutoCloseOutputStream(input).use { assets.open("$folder/$file").copyTo(it) }
       // dd closes its output when it exits, so this waits until the file is written.
-      FileInputStream(output.fileDescriptor).use { it.readBytes() }
-      output.close()
+      AutoCloseInputStream(output).use { it.readBytes() }
     }
   }
 

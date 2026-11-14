@@ -66,6 +66,7 @@ jobs:
           bundler-cache: true
 
       - uses: ./.github/actions/generate_baseline_profile
+        timeout-minutes: 30
         with:
           task: :app:generateBaselineProfile
 

@@ -16,4 +16,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.event.release.tag_name }}
-        run: gh api --method DELETE "repos/${{ github.repository }}/git/refs/heads/release/$TAG"
+        # Releases made before the branches existed, or by hand, have none.
+        run: |
+          ref="repos/${{ github.repository }}/git/refs/heads/release/$TAG"
+          if gh api "$ref" > /dev/null 2>&1; then
+            gh api --method DELETE "$ref"
+          fi

@@ -25,6 +25,7 @@ jobs:
           echo "$GOOGLE_SERVICES" | base64 --decode > app/src/play/google-services.json
 
       - uses: ./.github/actions/generate_baseline_profile
+        timeout-minutes: 30
         with:
           task: :app:generateBaselineProfile
 
