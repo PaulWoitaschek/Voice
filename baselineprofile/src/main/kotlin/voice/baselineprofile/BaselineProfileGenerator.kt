@@ -35,11 +35,13 @@ class BaselineProfileGenerator {
     copyBookToDevice()
     device.executeShellCommand("pm grant $PACKAGE android.permission.POST_NOTIFICATIONS")
     device.executeShellCommand("am start -W -n $PACKAGE/voice.app.MainActivity")
-    val startScreen = By.pkg(PACKAGE).text(Pattern.compile("Let's go|$BOOK"))
+    // The Play build asks for analytics on its first screen.
+    val startScreen =
+      By.pkg(PACKAGE).text(Pattern.compile("Let's go|Continue without analytics|$BOOK"))
     check(device.wait(Until.hasObject(startScreen), TIMEOUT)) {
       "The app did not start:\n${hierarchy()}"
     }
-    if (device.hasObject(app("Let's go"))) completeOnboarding()
+    if (!device.hasObject(app(BOOK))) completeOnboarding()
   }
 
   @Test
