@@ -18,6 +18,7 @@ retrofit = "3.0.0"
 metro = "1.5.2"
 navigation3 = "1.2.1"
 androidx-lifecycle = "2.11.0"
+benchmark = "1.5.0"
 
 [libraries]
 androidPluginForGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -67,6 +68,9 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
 androidX-test-junit = "androidx.test.ext:junit:1.3.0"
+benchmark-macro = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "benchmark" }
+profileInstaller = "androidx.profileinstaller:profileinstaller:1.4.1"
+uiautomator = "androidx.test.uiautomator:uiautomator:2.4.1"
 androidX-test-core = "androidx.test:core-ktx:1.7.0"
 
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
@@ -140,6 +144,7 @@ retrofit = [
 [plugins]
 android-app = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+baselineProfile = { id = "androidx.baselineprofile", version.ref = "benchmark" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.8" }
 googleServices = { id = "com.google.gms.google-services", version = "4.6.0" }

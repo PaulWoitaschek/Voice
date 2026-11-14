@@ -89,6 +89,16 @@ To release a new version, trigger the [Release Workflow](https://github.com/Paul
 This creates a draft GitHub release with the APK and keeps the Play AAB as a workflow artifact. With `submit_to_stores` enabled,
 it also uploads the AAB to the Play Store’s internal track and promotes it to a 0.1% production rollout.
 
+Before it builds, the workflow generates a baseline profile on an emulator, so the app starts faster. Only the Play build
+gets it, because F-Droid builds from source and the profile is not checked in. The profile needs
+`app/src/play/google-services.json`. The Upload Play Internal workflow generates it too.
+
+To generate the profile locally, run:
+
+```sh
+./gradlew :app:generatePlayReleaseBaselineProfile
+```
+
 The release workflow uses the protected `release` GitHub environment. CI signs through Gradle's injected signing properties,
 keeps keystores as base64 file secrets, and passes store passwords, key aliases, and key passwords as environment variables;
 no checked-in or generated signing properties files are required.
@@ -207,8 +217,8 @@ Before, the code came from the version name, like `5309001` for `25.9.1`. The la
 
 This code is embedded in the git tag by `determine_release_tag.main.kts` and used by CI and Fastlane.
 
-Builds without `-Pvoice.versionCode` take the code of the newest release tag. So a local build installs over that
-release from Play, and Play replaces it with the next release.
+Builds without `-Pvoice.versionCode` take the minute code of the end of the current UTC day. So a local build
+installs over every release from Play so far, and Play replaces it with a release from a later day.
 
 ## Website
 

@@ -1,0 +1,17 @@
+name: "Generate Baseline Profile"
+inputs:
+  task:
+    description: The Gradle task that generates the profile.
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Enable KVM
+      shell: bash
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+    - name: Generate Baseline Profile
+      shell: bash
+      run: ./gradlew ${{ inputs.task }} -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect

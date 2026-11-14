@@ -63,6 +63,11 @@ jobs:
           ruby-version: '4.0'
           bundler-cache: true
 
+      - uses: ./.github/actions/generate_baseline_profile
+        timeout-minutes: 30
+        with:
+          task: :app:generatePlayReleaseBaselineProfile
+
       - name: Build Play AAB
         env:
           PLAY_SIGNING_STORE_PASSWORD: ${{ secrets.PLAY_SIGNING_STORE_PASSWORD }}

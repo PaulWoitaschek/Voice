@@ -57,6 +57,8 @@ develocity {
 
 include(":app")
 
+include(":baselineprofile")
+
 include(":navigation")
 
 include(":core:analytics:api")
