@@ -144,7 +144,13 @@ val validatePlayGoogleServices =
 
 tasks
   .matching {
-    it.name in setOf("prePlayDebugBuild", "prePlayReleaseBuild", "prePlayNonMinifiedReleaseBuild")
+    it.name in
+      setOf(
+        "prePlayDebugBuild",
+        "prePlayReleaseBuild",
+        "prePlayNonMinifiedReleaseBuild",
+        "prePlayBenchmarkReleaseBuild",
+      )
   }
   .configureEach {
     dependsOn(validatePlayGoogleServices)

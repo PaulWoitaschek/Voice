@@ -24,14 +24,9 @@ jobs:
           mkdir -p app/src/play
           echo "$GOOGLE_SERVICES" | base64 --decode > app/src/play/google-services.json
 
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-      - name: Generate Baseline Profiles
-        run: ./gradlew :app:generateBaselineProfile -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect
+      - uses: ./.github/actions/generate_baseline_profile
+        with:
+          task: :app:generateBaselineProfile
 
       - name: Build Play AAB and free APK
         run: ./gradlew :app:bundlePlayRelease :app:assembleFreeRelease
