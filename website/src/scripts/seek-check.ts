@@ -36,9 +36,13 @@ export async function checkSeeking(file: File, onProgress: (progress: number) =>
 
   await load(0)
   let pos = 0
-  if (chunk.byteLength >= 10 && chunk.getUint32(0) >>> 8 === 0x494433) {
-    const size = [6, 7, 8, 9].reduce((sum, i) => (sum << 7) | (chunk.getUint8(i) & 0x7f), 0)
-    pos = 10 + size + (chunk.getUint8(5) & 0x10 ? 10 : 0)
+  // Like Media3, skip every ID3 tag in front of the audio, not only the first.
+  while (true) {
+    if (pos + 10 > chunkStart + chunk.byteLength) await load(pos)
+    const at = pos - chunkStart
+    if (chunk.byteLength - at < 10 || chunk.getUint32(at) >>> 8 !== 0x494433) break
+    const size = [6, 7, 8, 9].reduce((sum, i) => (sum << 7) | (chunk.getUint8(at + i) & 0x7f), 0)
+    pos += 10 + size + (chunk.getUint8(at + 5) & 0x10 ? 10 : 0)
   }
 
   const audioStart = pos
@@ -101,9 +105,10 @@ export async function checkSeeking(file: File, onProgress: (progress: number) =>
     const xingDuration = frames ? frames * frameSeconds : duration
     if (seekFrame === 'Xing' && flags & 4 && at + 100 <= first.bytes.length) {
       const toc = first.bytes.subarray(at, at + 100)
-      seek = (time) => {
+      seek = (target) => {
+        const time = Math.min(target, xingDuration)
         const percent = (time * 100) / xingDuration
-        const index = Math.floor(percent)
+        const index = Math.min(Math.floor(percent), 99)
         const next = index === 99 ? 256 : toc[index + 1]
         const scaled = toc[index] + (percent - index) * (next - toc[index])
         return { time, pos: first.pos + Math.min(Math.max(Math.round((scaled / 256) * dataSize), first.size), dataSize - 1) }

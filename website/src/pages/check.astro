@@ -279,7 +279,7 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
     font-weight: 600;
   }
 
-  .pick:focus-within {
+  .pick:has(:focus-visible) {
     outline: 3px solid var(--primary);
     outline-offset: 3px;
   }
