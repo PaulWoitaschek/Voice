@@ -1,5 +1,6 @@
 import { ALL_FORMATS, type AudioCodec, BlobSource, Input, Mp3InputFormat, PCM_AUDIO_CODECS } from 'mediabunny'
 import { id3Chapters, id3Version } from './chapters'
+import { plural } from './plural'
 import { checkSeeking } from './seek-check'
 
 export type Verdict = 'unreadable' | 'format' | 'seek' | 'fine'
@@ -94,8 +95,6 @@ const clock = (seconds: number) => {
   const pad = (value: number) => String(value).padStart(2, '0')
   return `${Math.floor(s / 3600)}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`
 }
-
-export const plural = (value: number, word: string) => `${value} ${value === 1 ? word : `${word}s`}`
 
 const duration = (seconds: number) =>
   seconds < 90 ? plural(Math.max(1, Math.round(seconds)), 'second') : plural(Math.round(seconds / 60), 'minute')

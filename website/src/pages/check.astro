@@ -125,7 +125,8 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
 </Prose>
 
 <script>
-  import { checkFile, plural } from '../scripts/check'
+  import type { FileCheck } from '../scripts/check'
+  import { plural } from '../scripts/plural'
 
   const root = document.querySelector<HTMLElement>('.tool')!
   const input = root.querySelector<HTMLInputElement>('input')!
@@ -153,6 +154,25 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
     if (changed) focusFor[state]?.focus()
   }
 
+  // Mediabunny parses the index of a long book in one go, which blocks the page on the main thread.
+  const checkInWorker = (file: File) =>
+    new Promise<FileCheck>((resolve, reject) => {
+      const worker = new Worker(new URL('../scripts/check-worker.ts', import.meta.url), { type: 'module' })
+      worker.onmessage = ({ data }) => {
+        if ('progress' in data) {
+          checkProgress.value = data.progress
+        } else {
+          worker.terminate()
+          resolve(data.result)
+        }
+      }
+      worker.onerror = (e) => {
+        worker.terminate()
+        reject(e)
+      }
+      worker.postMessage(file)
+    })
+
   const showResult = () => {
     show('result')
     const verdict = [...root.querySelectorAll<HTMLElement>('.result p:not(.file)')].find((p) => p.checkVisibility())
@@ -168,7 +188,15 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
     announce.textContent = ''
     checkProgress.removeAttribute('value')
     show('checking')
-    const check = await checkFile(file, (value) => (checkProgress.value = value))
+    let check: FileCheck
+    try {
+      check = await checkInWorker(file)
+    } catch (e) {
+      console.error(e)
+      error.textContent = "This page couldn't check the file."
+      show('idle')
+      return
+    }
     root.querySelector('.format')!.textContent = check.format ?? ''
     root.querySelector('.amount')!.textContent = check.amount ?? ''
     details.value = check.details
