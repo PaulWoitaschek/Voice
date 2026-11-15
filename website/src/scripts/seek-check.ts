@@ -42,7 +42,7 @@ export async function checkSeeking(file: File, onProgress: (progress: number) =>
     const at = pos - chunkStart
     if (chunk.byteLength - at < 10 || chunk.getUint32(at) >>> 8 !== 0x494433) break
     const size = [6, 7, 8, 9].reduce((sum, i) => (sum << 7) | (chunk.getUint8(at + i) & 0x7f), 0)
-    pos += 10 + size + (chunk.getUint8(at + 5) & 0x10 ? 10 : 0)
+    pos += 10 + size + (chunk.getUint8(at + 3) === 4 && chunk.getUint8(at + 5) & 0x10 ? 10 : 0)
   }
 
   const audioStart = pos

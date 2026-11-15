@@ -79,7 +79,7 @@ export async function checkFile(file: File, onProgress: (progress: number) => vo
 }
 
 // Only known extensions, so that no part of a file name ends up in a public bug report.
-const EXTENSIONS = ['aac', 'aax', 'aaxc', 'ac3', 'aiff', 'alac', 'amr', 'ape', 'flac', 'm4a', 'm4b', 'm4p', 'mka', 'mkv', 'mp3', 'mp4', 'ogg', 'opus', 'wav', 'webm', 'wma']
+const EXTENSIONS = ['aa', 'aac', 'aax', 'aaxc', 'ac3', 'aif', 'aiff', 'amr', 'ape', 'caf', 'flac', 'm4a', 'm4b', 'm4p', 'mka', 'mkv', 'mp2', 'mp3', 'mp4', 'oga', 'ogg', 'opus', 'wav', 'webm', 'wma']
 
 function unreadable(file: File): FileCheck {
   const extension = file.name.match(/\.([^.]+)$/)?.[1].toLowerCase()
