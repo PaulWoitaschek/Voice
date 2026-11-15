@@ -2,8 +2,8 @@ package voice.core.data.repo
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import java.time.Instant
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Instant
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
 import voice.core.data.repo.internals.dao.ListeningSessionDao
@@ -22,14 +22,14 @@ public class ListeningStatsRepoImpl internal constructor(private val dao: Listen
     from: Instant,
     to: Instant,
   ): ListeningSummary {
-    val fromMillis = from.toEpochMilli()
-    val toMillis = to.toEpochMilli()
+    val fromMillis = from.toEpochMilliseconds()
+    val toMillis = to.toEpochMilliseconds()
     return ListeningSummary(
       listened = dao.listenedMillis(fromMillis, toMillis).milliseconds,
       listeningDays = dao.listeningDays(fromMillis, toMillis),
       finishedBooks =
         dao.finishedBooks(fromMillis, toMillis).map {
-          FinishedBook(bookId = it.bookId, at = Instant.ofEpochMilli(it.atMillis))
+          FinishedBook(bookId = it.bookId, at = Instant.fromEpochMilliseconds(it.atMillis))
         },
     )
   }

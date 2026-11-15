@@ -3,9 +3,9 @@ package voice.core.data.repo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.runner.RunWith
@@ -79,8 +79,8 @@ class BookRepositoryImplTest {
       playbackSpeed = 1F,
       skipSilence = false,
       isActive = true,
-      lastPlayedAt = Instant.EPOCH,
-      addedAt = Instant.EPOCH,
+      lastPlayedAt = Instant.fromEpochMilliseconds(0),
+      addedAt = Instant.fromEpochMilliseconds(0),
       chapters = listOf(ChapterId("chapter")),
       currentChapter = ChapterId("chapter"),
       positionInChapter = 0,

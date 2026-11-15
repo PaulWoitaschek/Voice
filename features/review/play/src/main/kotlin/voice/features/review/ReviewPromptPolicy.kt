@@ -1,11 +1,10 @@
 package voice.features.review
 
-import java.time.Instant
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.toJavaDuration
+import kotlin.time.Instant
 import voice.core.data.BookId
 import voice.core.data.repo.FinishedBook
 
@@ -64,14 +63,16 @@ internal object ReviewPromptPolicy {
     if (signals.now < signals.installedAt + MIN_INSTALL_AGE) return null
     if (signals.listened < MIN_LISTENED || signals.listeningDays < MIN_LISTENING_DAYS) return null
     val snoozedUntil = state.snoozedUntilMillis
-    if (snoozedUntil != null && signals.now.toEpochMilli() < snoozedUntil) return null
+    if (snoozedUntil != null && signals.now.toEpochMilliseconds() < snoozedUntil) return null
     if (
       state.asks > 0 &&
         signals.listened - state.listenedAtLastAskMillis.milliseconds < LISTENED_BETWEEN_ASKS
     )
       return null
 
-    val lastAsked = state.lastAskedAtMillis?.let(Instant::ofEpochMilli) ?: Instant.EPOCH
+    val lastAsked =
+      state.lastAskedAtMillis?.let(Instant::fromEpochMilliseconds)
+        ?: Instant.fromEpochMilliseconds(0)
     val finished =
       signals.finishedBooks.firstOrNull {
         it.at > lastAsked && it.at >= signals.now - RECENTLY_FINISHED
@@ -88,7 +89,7 @@ internal object ReviewPromptPolicy {
     state: ReviewPromptState,
     signals: ReviewSignals,
   ): ReviewPromptState {
-    val now = signals.now.toEpochMilli()
+    val now = signals.now.toEpochMilliseconds()
     return state.copy(
       asks = state.asks + 1,
       lastAskedAtMillis = now,
@@ -112,14 +113,10 @@ internal object ReviewPromptPolicy {
         ReviewAnswer.Email -> LONG_SNOOZE
         ReviewAnswer.Later -> if (state.asks >= 2) LONG_SNOOZE else SNOOZE
       }
-    return state.copy(snoozedUntilMillis = (now + snooze).toEpochMilli())
+    return state.copy(snoozedUntilMillis = (now + snooze).toEpochMilliseconds())
   }
 
   private fun reachedMilestone(listened: Duration): Int {
     return MILESTONE_HOURS.lastOrNull { listened >= it.hours } ?: 0
   }
 }
-
-private operator fun Instant.plus(duration: Duration): Instant = plus(duration.toJavaDuration())
-
-private operator fun Instant.minus(duration: Duration): Instant = minus(duration.toJavaDuration())

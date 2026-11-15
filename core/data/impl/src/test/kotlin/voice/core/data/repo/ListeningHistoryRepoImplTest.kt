@@ -3,11 +3,11 @@ package voice.core.data.repo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -48,13 +48,13 @@ class ListeningHistoryRepoImplTest {
       bookId = bookId,
       type = type,
       source = ListeningEvent.Source.App,
-      atMillis = at.toEpochMilli(),
+      atMillis = at.toEpochMilliseconds(),
       chapterId = chapterId,
       time = 0,
       toChapterId = toChapterId,
     )
 
-  private fun ago(duration: Duration): Instant = now.minusMillis(duration.inWholeMilliseconds)
+  private fun ago(duration: Duration): Instant = now - duration
 
   private suspend fun types(): List<ListeningEvent.Type> =
     repo.events(bookId).first().map { it.type }

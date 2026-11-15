@@ -3,8 +3,8 @@ package voice.core.playback.history
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import java.time.Clock
-import java.time.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,7 +51,7 @@ class ListeningHistoryRecorder(
         bookId = position.bookId,
         type = type,
         source = source,
-        atMillis = clock.millis(),
+        atMillis = clock.now().toEpochMilliseconds(),
         chapterId = position.chapterId,
         time = position.time,
         toChapterId = to?.chapterId,
@@ -81,7 +81,7 @@ class ListeningHistoryRecorder(
             from = from,
             to = to,
             type = event.type,
-            at = Instant.ofEpochMilli(event.atMillis),
+            at = Instant.fromEpochMilliseconds(event.atMillis),
           )
     }
   }

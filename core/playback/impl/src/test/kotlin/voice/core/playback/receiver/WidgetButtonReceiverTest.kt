@@ -8,9 +8,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.Instant
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.time.Instant
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
 import voice.core.common.rootGraph
@@ -37,7 +37,7 @@ class WidgetButtonReceiverTest {
             id = ChapterId("chapter"),
             name = "Chapter",
             duration = 10_000,
-            fileLastModified = Instant.EPOCH,
+            fileLastModified = Instant.fromEpochMilliseconds(0),
             markData = emptyList(),
             fileSize = 0,
           ),

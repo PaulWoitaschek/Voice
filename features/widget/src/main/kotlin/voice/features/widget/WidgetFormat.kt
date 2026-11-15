@@ -6,11 +6,11 @@ import android.icu.util.Measure
 import android.icu.util.MeasureUnit
 import android.text.format.DateFormat
 import java.text.DecimalFormat
-import java.time.Instant
 import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import voice.core.strings.R as StringsR
 
 internal fun Context.formatDuration(
@@ -49,7 +49,7 @@ internal fun Context.formatTimeLeft(
 }
 
 internal fun Context.formatClockTime(instant: Instant): String {
-  return DateFormat.getTimeFormat(this).format(Date.from(instant))
+  return DateFormat.getTimeFormat(this).format(Date(instant.toEpochMilliseconds()))
 }
 
 internal fun formatSpeed(speed: Float): String = DecimalFormat("0.0#").format(speed) + "×"

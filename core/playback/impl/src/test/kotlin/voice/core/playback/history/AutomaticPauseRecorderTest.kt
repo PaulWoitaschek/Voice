@@ -6,11 +6,10 @@ import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.just
 import io.mockk.mockk
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -37,7 +36,10 @@ class AutomaticPauseRecorderTest {
     AutomaticPauseRecorder(
         ListeningHistoryRecorder(
           repo = repo,
-          clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+          clock =
+            object : Clock {
+              override fun now(): Instant = Instant.parse("2026-10-07T10:00:00Z")
+            },
           scope = scope,
         ),
       )

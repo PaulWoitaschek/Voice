@@ -1,9 +1,9 @@
 package voice.core.data.repo.internals
 
 import java.io.File
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Clock
 import kotlin.uuid.Uuid
 import voice.core.data.MarkData
 
@@ -11,7 +11,7 @@ class ConvertersTest {
 
   @Test
   fun instant() {
-    test(Instant.now(), Converters::fromInstant, Converters::toInstant)
+    test(Clock.System.now(), Converters::fromInstant, Converters::toInstant)
   }
 
   @Test

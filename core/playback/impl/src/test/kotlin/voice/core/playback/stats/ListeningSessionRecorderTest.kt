@@ -2,15 +2,16 @@ package voice.core.playback.stats
 
 import androidx.media3.common.Player
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.time.Clock
-import java.time.Instant
 import java.time.ZoneId
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
@@ -26,9 +27,10 @@ class ListeningSessionRecorderTest {
 
   private val scope = TestScope()
   private val start = Instant.parse("2026-10-07T18:00:00Z")
-  private val clock = SchedulerClock(scope.testScheduler, start, ZoneId.of("Europe/Berlin"))
+  private val clock = SchedulerClock(scope.testScheduler, start)
   private val repo = MemoryListeningStatsRepo()
-  private val recorder = ListeningSessionRecorder(repo, clock, scope.backgroundScope)
+  private val recorder =
+    ListeningSessionRecorder(repo, clock, ZoneId.of("Europe/Berlin"), scope.backgroundScope)
   private val dune = BookId("dune")
   private val hyperion = BookId("hyperion")
 
@@ -43,8 +45,8 @@ class ListeningSessionRecorderTest {
   ) =
     ListeningSession(
       bookId = bookId,
-      startedAtMillis = start.toEpochMilli() + started.inWholeMilliseconds,
-      endedAtMillis = start.toEpochMilli() + ended.inWholeMilliseconds,
+      startedAtMillis = start.toEpochMilliseconds() + started.inWholeMilliseconds,
+      endedAtMillis = start.toEpochMilliseconds() + ended.inWholeMilliseconds,
       listenedMillis = listened.inWholeMilliseconds,
       audioMillis = audio.inWholeMilliseconds,
       // summer time in Berlin
@@ -256,17 +258,11 @@ class ListeningSessionRecorderTest {
   private class SchedulerClock(
     private val scheduler: TestCoroutineScheduler,
     private val start: Instant,
-    private val zone: ZoneId,
-  ) : Clock() {
+  ) : Clock {
 
     // how far the wall clock was moved, e.g. by the listener
     var moved: Duration = Duration.ZERO
 
-    override fun instant(): Instant =
-      start.plusMillis(scheduler.currentTime + moved.inWholeMilliseconds)
-
-    override fun getZone(): ZoneId = zone
-
-    override fun withZone(zone: ZoneId): Clock = SchedulerClock(scheduler, start, zone)
+    override fun now(): Instant = start + scheduler.currentTime.milliseconds + moved
   }
 }

@@ -1,6 +1,6 @@
 package voice.core.data.repo
 
-import java.time.Instant
+import kotlin.time.Instant
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 

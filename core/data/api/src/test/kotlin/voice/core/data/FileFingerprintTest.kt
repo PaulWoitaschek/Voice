@@ -2,11 +2,11 @@ package voice.core.data
 
 import android.provider.DocumentsContract
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
+import kotlin.time.Instant
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -85,7 +85,7 @@ class FileFingerprintTest {
       id = ChapterId(id),
       name = null,
       duration = 1000,
-      fileLastModified = Instant.EPOCH,
+      fileLastModified = Instant.fromEpochMilliseconds(0),
       fileSize = size,
       markData = emptyList(),
     )

@@ -9,9 +9,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import java.time.Clock
 import java.time.Instant
 import java.time.YearMonth
+import java.time.ZoneId
 import kotlinx.coroutines.flow.map
 import voice.core.data.supporter.SupporterStatus
 import voice.core.data.supporter.SupporterStatusStore
@@ -25,7 +25,7 @@ class SupportViewModel(
   private val navigator: Navigator,
   private val supporterStatusStore: SupporterStatusStore,
   private val supporterNoteFeatureFlag: SupporterNoteFeatureFlag,
-  private val clock: Clock,
+  private val zone: ZoneId,
 ) : SupportListener {
 
   private var chosenFrequency by mutableStateOf<SupportFrequency?>(null)
@@ -68,7 +68,7 @@ class SupportViewModel(
       badge = status.badge,
       supporterSince =
         status.supporterSince?.let {
-          YearMonth.from(Instant.ofEpochMilli(it).atZone(clock.zone))
+          YearMonth.from(Instant.ofEpochMilli(it).atZone(zone))
         },
       thankYou = thankYou,
       message = message,

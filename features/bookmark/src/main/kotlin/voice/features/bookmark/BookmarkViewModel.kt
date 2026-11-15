@@ -11,7 +11,8 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import java.time.Clock
+import java.time.ZoneId
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -48,6 +49,7 @@ class BookmarkViewModel(
   private val sleepTimer: SleepTimer,
   private val navigator: Navigator,
   private val clock: Clock,
+  private val zone: ZoneId,
   dispatcherProvider: DispatcherProvider,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   private val experimentalPlaybackPersistenceFeatureFlag:
@@ -128,7 +130,7 @@ class BookmarkViewModel(
     val index = remember(book) { BookIndex(book) }
     val category = selectedCategory?.takeIf { selected -> bookmarks.any { it.kind == selected } }
     val visible = if (category == null) bookmarks else bookmarks.filter { it.kind == category }
-    val now = clock.instant()
+    val now = clock.now()
     return BookmarkViewState(
       bookTitle = book.name,
       bookAuthor = book.author,
@@ -140,7 +142,7 @@ class BookmarkViewModel(
       sort = sort,
       categories = categoryCounts(bookmarks),
       selectedCategory = category,
-      items = bookmarkListItems(index, visible, sort, now, clock.zone),
+      items = bookmarkListItems(index, visible, sort, now, zone),
       totalCount = bookmarks.size,
       editor = draft?.let { editorViewState(index, it) },
       tab =

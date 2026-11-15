@@ -6,7 +6,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.io.File
-import java.time.Instant
+import kotlin.time.Instant
 
 @Entity(tableName = "content2")
 public data class BookContent(

@@ -1,11 +1,11 @@
 package voice.core.audiobookshelf.download
 
 import androidx.media3.exoplayer.offline.Download
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
+import kotlin.time.Instant
 import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
@@ -154,7 +154,7 @@ class BookDownloadStateTest {
       id = ChapterId(id),
       name = null,
       duration = 60_000,
-      fileLastModified = Instant.EPOCH,
+      fileLastModified = Instant.fromEpochMilliseconds(0),
       fileSize = size,
       markData = emptyList(),
     )

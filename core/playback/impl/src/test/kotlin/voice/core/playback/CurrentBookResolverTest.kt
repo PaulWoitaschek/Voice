@@ -2,9 +2,9 @@ package voice.core.playback
 
 import io.mockk.coEvery
 import io.mockk.mockk
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import kotlinx.coroutines.test.runTest
 import voice.core.data.BookId
 import voice.core.data.Chapter
@@ -23,7 +23,7 @@ class CurrentBookResolverTest {
             id = ChapterId("chapter-1"),
             name = "Chapter 1",
             duration = 10_000,
-            fileLastModified = Instant.EPOCH,
+            fileLastModified = Instant.fromEpochMilliseconds(0),
             markData = emptyList(),
             fileSize = 0,
           ),
@@ -31,7 +31,7 @@ class CurrentBookResolverTest {
             id = ChapterId("chapter-2"),
             name = "Chapter 2",
             duration = 10_000,
-            fileLastModified = Instant.EPOCH,
+            fileLastModified = Instant.fromEpochMilliseconds(0),
             markData = emptyList(),
             fileSize = 0,
           ),

@@ -1,15 +1,13 @@
 package voice.features.widget
 
 import android.graphics.Bitmap
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toJavaDuration
+import kotlin.time.Instant
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.displayName
@@ -150,7 +148,7 @@ internal fun sleepTimerEnd(
     SleepTimerState.Disabled -> null
     is SleepTimerState.Enabled.WithDuration ->
       if (playing) {
-        SleepTimerEnd.At((now + state.leftDuration.toJavaDuration()).roundToMinute())
+        SleepTimerEnd.At((now + state.leftDuration).roundToMinute())
       } else {
         SleepTimerEnd.After(state.leftDuration.roundUpToMinutes())
       }
@@ -159,8 +157,7 @@ internal fun sleepTimerEnd(
         val leftInChapter =
           (book.currentMark.endMs - book.content.positionInChapter).coerceAtLeast(0).milliseconds
         SleepTimerEnd.At(
-          (now + (leftInChapter / book.content.playbackSpeed.atSpeed()).toJavaDuration())
-            .roundToMinute(),
+          (now + leftInChapter / book.content.playbackSpeed.atSpeed()).roundToMinute(),
         )
       } else {
         SleepTimerEnd.EndOfChapter
@@ -211,6 +208,7 @@ private fun Float.atSpeed(): Double = coerceAtLeast(0.1F).toDouble()
 
 private fun Duration.roundUpToMinutes(): Duration = ceil(this / 1.minutes).minutes
 
-private fun Instant.roundToMinute(): Instant = plusSeconds(30).truncatedTo(ChronoUnit.MINUTES)
+private fun Instant.roundToMinute(): Instant =
+  Instant.fromEpochSeconds((epochSeconds + 30).floorDiv(60) * 60)
 
 private const val MINUTE_MS = 60_000L

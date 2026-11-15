@@ -11,10 +11,10 @@ import io.mockk.mockk
 import java.io.Closeable
 import java.io.File
 import java.nio.file.Files
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
@@ -252,8 +252,8 @@ class MediaScannerTest {
         playbackSpeed = 1F,
         skipSilence = false,
         isActive = true,
-        lastPlayedAt = Instant.EPOCH,
-        addedAt = Instant.EPOCH,
+        lastPlayedAt = Instant.fromEpochMilliseconds(0),
+        addedAt = Instant.fromEpochMilliseconds(0),
         chapters = listOf(serverChapter),
         currentChapter = serverChapter,
         positionInChapter = 0,
@@ -434,7 +434,7 @@ class MediaScannerTest {
         chapterId = ChapterId(chapter.toUri()),
         title = null,
         time = 100,
-        addedAt = Instant.EPOCH,
+        addedAt = Instant.fromEpochMilliseconds(0),
         id = Bookmark.Id.random(),
       )
     coEvery { bookmarkRepo.bookmarks(match { it.id == oldId }) } returns listOf(bookmark)
@@ -492,7 +492,7 @@ class MediaScannerTest {
         chapterId = ChapterId(chapter2.toUri()),
         title = null,
         time = 50,
-        addedAt = Instant.EPOCH,
+        addedAt = Instant.fromEpochMilliseconds(0),
         id = Bookmark.Id.random(),
       )
     coEvery { bookmarkRepo.bookmarks(match { it.id == oldId }) } returns listOf(bookmark)
@@ -562,7 +562,7 @@ class MediaScannerTest {
     scan(FolderType.Root, internal)
 
     assertEquals(
-      expected = Instant.EPOCH,
+      expected = Instant.fromEpochMilliseconds(0),
       actual = bookContentRepo.get(BookId(copy.toUri()))!!.lastPlayedAt,
     )
   }

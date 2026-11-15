@@ -2,7 +2,7 @@ package voice.core.data.repo
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import java.time.Clock
+import kotlin.time.Clock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -41,7 +41,7 @@ internal constructor(
           title = title,
           time = book.content.positionInChapter,
           id = Bookmark.Id.random(),
-          addedAt = clock.instant(),
+          addedAt = clock.now(),
           chapterId = book.content.currentChapter,
           bookId = book.id,
         )

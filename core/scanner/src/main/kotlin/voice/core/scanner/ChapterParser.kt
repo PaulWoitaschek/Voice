@@ -2,8 +2,8 @@ package voice.core.scanner
 
 import androidx.media3.inspector.MetadataRetriever
 import dev.zacsweers.metro.Inject
-import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Instant
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -43,7 +43,7 @@ internal class ChapterParser(
               val id = ChapterId(file.uri)
               chapterRepo.getOrPut(
                 id = id,
-                lastModified = Instant.ofEpochMilli(file.lastModified),
+                lastModified = Instant.fromEpochMilliseconds(file.lastModified),
                 fileSize = file.length,
               ) {
                 val metaData = mediaAnalyzer.analyze(file) ?: return@getOrPut null
@@ -51,7 +51,7 @@ internal class ChapterParser(
                 Chapter(
                   id = id,
                   duration = metaData.duration,
-                  fileLastModified = Instant.ofEpochMilli(file.lastModified),
+                  fileLastModified = Instant.fromEpochMilliseconds(file.lastModified),
                   name = metaData.title ?: metaData.fileName,
                   markData = metaData.chapters,
                   fileSize = file.length,

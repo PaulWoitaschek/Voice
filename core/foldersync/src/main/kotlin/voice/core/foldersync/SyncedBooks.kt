@@ -1,6 +1,6 @@
 package voice.core.foldersync
 
-import java.time.Instant
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -56,12 +56,12 @@ private fun SyncedText.isFrom(files: String?): Boolean = value != null && value 
 private fun List<Book>.played(): Book = maxBy { it.content.lastPlayedAt }
 
 private fun BookContent.place(): SyncedPlace? {
-  if (lastPlayedAt == Instant.EPOCH) return null
+  if (lastPlayedAt == Instant.fromEpochMilliseconds(0)) return null
   return SyncedPlace(
     file = currentChapterIndex,
     position = positionInChapter,
     speed = playbackSpeed,
-    playedAt = lastPlayedAt.toEpochMilli(),
+    playedAt = lastPlayedAt.toEpochMilliseconds(),
   )
 }
 
@@ -106,8 +106,8 @@ private fun Bookmark.synced(
       time = time,
       title = title,
       kind = kind,
-      addedAt = addedAt.toEpochMilli(),
-      changedAt = known?.changedAt ?: addedAt.toEpochMilli(),
+      addedAt = addedAt.toEpochMilliseconds(),
+      changedAt = known?.changedAt ?: addedAt.toEpochMilliseconds(),
     )
   // undoing a delete brings back a bookmark this device wrote as deleted
   val changed =

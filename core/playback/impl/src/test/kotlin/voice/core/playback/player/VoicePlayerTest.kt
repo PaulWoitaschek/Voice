@@ -18,9 +18,6 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verifyOrder
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,7 +25,9 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -137,7 +136,10 @@ class VoicePlayerTest {
       historyRecorder =
         ListeningHistoryRecorder(
           repo = historyRepo,
-          clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+          clock =
+            object : Clock {
+              override fun now(): Instant = Instant.parse("2026-10-07T10:00:00Z")
+            },
           scope = scope,
         ),
       commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
@@ -450,7 +452,10 @@ class VoicePlayerTest {
     player.play()
     runCurrent()
 
-    assertNotEquals(illegal = Instant.EPOCH, actual = currentBook.content.lastPlayedAt)
+    assertNotEquals(
+      illegal = Instant.fromEpochMilliseconds(0),
+      actual = currentBook.content.lastPlayedAt,
+    )
   }
 
   @Test
@@ -458,7 +463,7 @@ class VoicePlayerTest {
     setMediaItems(
       listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))),
       playbackSpeed = 1.75F,
-      lastPlayedAt = Instant.ofEpochSecond(1),
+      lastPlayedAt = Instant.fromEpochSeconds(1),
     )
 
     player.play()
@@ -482,7 +487,7 @@ class VoicePlayerTest {
     setMediaItems(
       listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))),
       playbackSpeed = 1.75F,
-      lastPlayedAt = Instant.ofEpochSecond(1),
+      lastPlayedAt = Instant.fromEpochSeconds(1),
     )
 
     assertEquals(expected = 1F, actual = lastPlaybackSpeedStore.data.first())
@@ -834,7 +839,7 @@ class VoicePlayerTest {
     currentChapter: Chapter = chapters.first(),
     positionInChapter: Long = 0,
     playbackSpeed: Float = 1F,
-    lastPlayedAt: Instant = Instant.EPOCH,
+    lastPlayedAt: Instant = Instant.fromEpochMilliseconds(0),
     gain: Float = 0F,
     skipSilence: Boolean = false,
   ) {
@@ -888,7 +893,7 @@ class VoicePlayerTest {
       id = ChapterId(Uuid.random().toString()),
       name = "chapter",
       duration = marks.maxOf { it.endMs },
-      fileLastModified = Instant.EPOCH,
+      fileLastModified = Instant.fromEpochMilliseconds(0),
       markData =
         marks.map {
           MarkData(it.startMs, it.name ?: "mark ")

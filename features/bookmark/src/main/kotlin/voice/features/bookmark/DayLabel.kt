@@ -1,11 +1,12 @@
 package voice.features.bookmark
 
 import java.time.DayOfWeek
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 
 /** When something happened, in the words people use: "Just now", "Last night", "Thu", "28 Sep". */
 internal sealed interface DayLabel {
@@ -41,14 +42,11 @@ internal fun savedAtLabel(
   now: Instant,
   zone: ZoneId,
 ): DayLabel {
-  if (
-    at.isAfter(now) ||
-      java.time.Duration.between(at, now).toMillis() < 1.minutes.inWholeMilliseconds
-  ) {
+  if (at > now || now - at < 1.minutes) {
     return DayLabel.JustNow
   }
-  val dateTime = at.atZone(zone)
-  val today = now.atZone(zone).toLocalDate()
+  val dateTime = at.toJavaInstant().atZone(zone)
+  val today = now.toJavaInstant().atZone(zone).toLocalDate()
   if (dateTime.toLocalDate() == today) {
     return DayLabel.Today(dateTime.toLocalTime().withSecond(0).withNano(0))
   }
@@ -60,10 +58,10 @@ internal fun sessionLabel(
   now: Instant,
   zone: ZoneId,
 ): DayLabel {
-  val dateTime = at.atZone(zone)
+  val dateTime = at.toJavaInstant().atZone(zone)
   val date = dateTime.toLocalDate()
   val time = dateTime.toLocalTime()
-  val today = now.atZone(zone).toLocalDate()
+  val today = now.toJavaInstant().atZone(zone).toLocalDate()
   return when {
     isLastNight(date, time, today) -> DayLabel.LastNight
     date == today && time < afternoonStart -> DayLabel.ThisMorning

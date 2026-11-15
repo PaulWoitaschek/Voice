@@ -223,10 +223,10 @@ class HistoryTimelineTest {
       timeline(
         testEvent(Type.Play, today(9), arrival, 1.minutes),
         testEvent(Type.SkipBack, today(9, 1), arrival, 2.minutes),
-        testEvent(Type.SkipBack, today(9, 1).plusSeconds(20), arrival, 2.minutes),
-        testEvent(Type.SkipBack, today(9, 1).plusSeconds(40), arrival, 2.minutes),
+        testEvent(Type.SkipBack, today(9, 1) + 20.seconds, arrival, 2.minutes),
+        testEvent(Type.SkipBack, today(9, 1) + 40.seconds, arrival, 2.minutes),
         testEvent(Type.SkipForward, today(9, 2), arrival, 2.minutes),
-        testEvent(Type.SkipForward, today(9, 2).plusSeconds(30), arrival, 2.minutes),
+        testEvent(Type.SkipForward, today(9, 2) + 30.seconds, arrival, 2.minutes),
         testEvent(Type.SkipForward, today(9, 20), arrival, 5.minutes),
       )
 

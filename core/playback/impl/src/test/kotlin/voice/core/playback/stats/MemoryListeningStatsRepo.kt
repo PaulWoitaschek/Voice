@@ -1,6 +1,6 @@
 package voice.core.playback.stats
 
-import java.time.Instant
+import kotlin.time.Instant
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
 import voice.core.data.repo.ListeningStatsRepo

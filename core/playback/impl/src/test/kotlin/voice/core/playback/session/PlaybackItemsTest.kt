@@ -1,8 +1,8 @@
 package voice.core.playback.session
 
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
@@ -87,7 +87,7 @@ class PlaybackItemsTest {
       id = ChapterId(Uuid.random().toString()),
       name = "chapter",
       duration = duration,
-      fileLastModified = Instant.EPOCH,
+      fileLastModified = Instant.fromEpochMilliseconds(0),
       markData = marks.toList(),
       fileSize = 0,
     )

@@ -1,10 +1,12 @@
 package voice.features.support
 
-import java.time.Instant
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
+import kotlin.time.toKotlinInstant
 import voice.core.data.supporter.SupporterBadge
 import voice.core.data.supporter.SupporterStatus
 
@@ -19,7 +21,7 @@ class SupporterStatusUpdatesTest {
 
     assertEquals(expected = 0, actual = status.subscribedMonths)
     assertEquals(expected = SupporterBadge.FirstCup, actual = status.badge)
-    assertEquals(expected = now.toEpochMilli(), actual = status.supporterSince)
+    assertEquals(expected = now.toEpochMilliseconds(), actual = status.supporterSince)
   }
 
   @Test
@@ -38,10 +40,10 @@ class SupporterStatusUpdatesTest {
   @Test
   fun `switching tiers keeps counting from the first subscription`() {
     val status =
-      SupporterStatus(subscribedSince = monthsAgo(5).toEpochMilli(), subscribedMonths = 5)
+      SupporterStatus(subscribedSince = monthsAgo(5).toEpochMilliseconds(), subscribedMonths = 5)
         .withSubscription(activeSince = monthsAgo(1), now = now, zone = ZoneOffset.UTC)
 
-    assertEquals(expected = monthsAgo(5).toEpochMilli(), actual = status.subscribedSince)
+    assertEquals(expected = monthsAgo(5).toEpochMilliseconds(), actual = status.subscribedSince)
     assertEquals(expected = 5, actual = status.subscribedMonths)
   }
 
@@ -69,7 +71,7 @@ class SupporterStatusUpdatesTest {
   @Test
   fun `a tip earns the tip jar and keeps an earlier start`() {
     assertEquals(
-      expected = SupporterStatus(supporterSince = now.toEpochMilli(), tipped = true),
+      expected = SupporterStatus(supporterSince = now.toEpochMilliseconds(), tipped = true),
       actual = SupporterStatus().withTip(now),
     )
     assertEquals(
@@ -79,5 +81,5 @@ class SupporterStatusUpdatesTest {
   }
 
   private fun monthsAgo(months: Long): Instant =
-    now.atZone(ZoneOffset.UTC).minusMonths(months).toInstant()
+    now.toJavaInstant().atZone(ZoneOffset.UTC).minusMonths(months).toInstant().toKotlinInstant()
 }

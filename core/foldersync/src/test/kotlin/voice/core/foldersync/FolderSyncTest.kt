@@ -8,15 +8,14 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -82,7 +81,7 @@ class FolderSyncTest {
     val content = repo.get(book.id)!!.content
     assertEquals(book.chapters[1].id, content.currentChapter)
     assertEquals(3000, content.positionInChapter)
-    assertEquals(Instant.ofEpochMilli(2000), content.lastPlayedAt)
+    assertEquals(Instant.fromEpochMilliseconds(2000), content.lastPlayedAt)
     assertEquals(1.5F, content.playbackSpeed)
     verify(exactly = 0) { playerController.setPosition(any(), any(), any(), any()) }
   }
@@ -515,7 +514,10 @@ class FolderSyncTest {
       playStateManager = playStateManager,
       mediaScanTrigger = mediaScanTrigger,
       currentBookStore = CurrentBookStore(currentBookStore),
-      clock = Clock.fixed(Instant.ofEpochMilli(NOW), ZoneOffset.UTC),
+      clock =
+        object : Clock {
+          override fun now(): Instant = Instant.fromEpochMilliseconds(NOW)
+        },
       dispatcherProvider =
         DispatcherProvider(main = dispatcher, io = dispatcher, mainImmediate = dispatcher),
     )

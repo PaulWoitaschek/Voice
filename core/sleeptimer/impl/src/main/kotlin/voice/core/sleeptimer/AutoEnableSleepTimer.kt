@@ -3,7 +3,9 @@ package voice.core.sleeptimer
 import android.app.Application
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import java.time.Clock
+import java.time.ZoneId
+import kotlin.time.Clock
+import kotlin.time.toJavaInstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -21,6 +23,7 @@ class AutoEnableSleepTimer(
   private val playStateManager: PlayStateManager,
   private val sleepTimer: SleepTimer,
   private val clock: Clock,
+  private val zone: ZoneId,
   private val scope: CoroutineScope,
 ) : AppInitializer {
 
@@ -51,7 +54,7 @@ class AutoEnableSleepTimer(
     return autoSleepTimer.autoSleepTimerEnabled &&
       !sleepTimerActive &&
       isTimeInRange(
-        currentTime = clock.instant().atZone(clock.zone).toLocalTime(),
+        currentTime = clock.now().toJavaInstant().atZone(zone).toLocalTime(),
         startTime = autoSleepTimer.autoSleepStartTime,
         endTime = autoSleepTimer.autoSleepEndTime,
       )

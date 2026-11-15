@@ -2,10 +2,10 @@ package voice.core.foldersync
 
 import android.provider.DocumentsContract
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import org.junit.runner.RunWith
 import voice.core.data.Book
@@ -46,7 +46,7 @@ class PositionsTest {
         TakenOverPosition(
           book.chapters[1].id,
           positionInChapter = 3000,
-          playedAt = Instant.ofEpochMilli(2000),
+          playedAt = Instant.fromEpochMilliseconds(2000),
         ),
       actual = book.positionFrom(place(file = 1, position = 3000, playedAt = 2000)),
     )

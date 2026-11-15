@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
-import java.time.Clock
 import java.time.Instant
 import java.time.LocalTime
 import java.time.YearMonth
+import java.time.ZoneId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -66,7 +66,7 @@ class SettingsViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val supportDevelopmentFeatureFlag: SupportDevelopmentFeatureFlag,
   private val supporterStatusStore: SupporterStatusStore,
-  private val clock: Clock,
+  private val zone: ZoneId,
   private val dispatcherProvider: DispatcherProvider,
   private val serverAccount: ServerAccount,
   private val audiobookshelfFeatureFlag: AudiobookshelfFeatureFlag,
@@ -202,7 +202,7 @@ class SettingsViewModel(
       supporterBadge = supporterStatus.badge,
       supporterSince =
         supporterStatus.supporterSince?.let {
-          YearMonth.from(Instant.ofEpochMilli(it).atZone(clock.zone))
+          YearMonth.from(Instant.ofEpochMilli(it).atZone(zone))
         },
       folderNames = folderNames,
       foldersWithoutAccess = foldersWithoutAccess,

@@ -6,7 +6,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import java.time.Instant
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -283,7 +283,7 @@ class VoicePlayer(
     val bookId = player.currentBookId() ?: return
     scope.launch {
       repo.updateBook(bookId) {
-        it.copy(lastPlayedAt = Instant.now())
+        it.copy(lastPlayedAt = Clock.System.now())
       }
     }
   }

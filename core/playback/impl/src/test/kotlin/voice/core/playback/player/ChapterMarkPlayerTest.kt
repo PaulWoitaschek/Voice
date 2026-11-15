@@ -10,12 +10,12 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockk
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import org.junit.runner.RunWith
 import voice.core.data.Book
@@ -311,7 +311,7 @@ class ChapterMarkPlayerTest {
       id = ChapterId(Uuid.random().toString()),
       name = "file",
       duration = duration,
-      fileLastModified = Instant.EPOCH,
+      fileLastModified = Instant.fromEpochMilliseconds(0),
       markData = marks.toList(),
       fileSize = 0,
     )

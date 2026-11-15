@@ -8,9 +8,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -105,9 +105,9 @@ class SeriesViewModelTest {
   @Test
   fun `the button continues the book in progress played last`() = runTest {
     val first =
-      book(series = "Saga", part = "1", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(2))
+      book(series = "Saga", part = "1", time = 1_000, lastPlayedAt = Instant.fromEpochSeconds(2))
     val second =
-      book(series = "Saga", part = "2", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(1))
+      book(series = "Saga", part = "2", time = 1_000, lastPlayedAt = Instant.fromEpochSeconds(1))
     books.value = listOf(first, second)
 
     testState {
@@ -151,7 +151,7 @@ class SeriesViewModelTest {
   @Test
   fun `while a book of the series plays, the button pauses it and its row shows it`() = runTest {
     val first =
-      book(series = "Saga", part = "1", time = 1_000, lastPlayedAt = Instant.ofEpochSecond(2))
+      book(series = "Saga", part = "1", time = 1_000, lastPlayedAt = Instant.fromEpochSeconds(2))
     val second = book(series = "Saga", part = "2", time = 0)
     books.value = listOf(first, second)
     currentBookStore.updateData { second.id }

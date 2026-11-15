@@ -4,7 +4,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import java.time.Instant
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CoroutineScope
@@ -109,7 +109,7 @@ class PositionUpdater(
         content.copy(
           currentChapter = chapterId,
           positionInChapter = positionInChapter,
-          lastPlayedAt = Instant.now(),
+          lastPlayedAt = Clock.System.now(),
         )
       } else {
         Logger.v("Media item not in the current book")

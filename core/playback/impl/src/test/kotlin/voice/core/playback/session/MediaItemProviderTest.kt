@@ -9,9 +9,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.mockk
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.runner.RunWith
@@ -57,8 +57,8 @@ class MediaItemProviderTest {
     books += libraryBook("B", position = 0)
     books += libraryBook("A", position = 0)
     books += libraryBook("Hidden", position = 0, hidden = true)
-    books += libraryBook("Old", position = 30_000, lastPlayedAt = Instant.ofEpochSecond(1))
-    books += libraryBook("New", position = 30_000, lastPlayedAt = Instant.ofEpochSecond(2))
+    books += libraryBook("Old", position = 30_000, lastPlayedAt = Instant.fromEpochSeconds(1))
+    books += libraryBook("New", position = 30_000, lastPlayedAt = Instant.fromEpochSeconds(2))
 
     assertEquals(
       expected = listOf("A", "B"),
@@ -123,7 +123,7 @@ class MediaItemProviderTest {
           id = ChapterId(it),
           name = it,
           duration = 60_000,
-          fileLastModified = Instant.EPOCH,
+          fileLastModified = Instant.fromEpochMilliseconds(0),
           markData = emptyList(),
           fileSize = 0,
         )
@@ -146,7 +146,7 @@ class MediaItemProviderTest {
           id = ChapterId(it),
           name = it,
           duration = 60_000,
-          fileLastModified = Instant.EPOCH,
+          fileLastModified = Instant.fromEpochMilliseconds(0),
           markData = emptyList(),
           fileSize = 0,
         )
@@ -172,7 +172,7 @@ class MediaItemProviderTest {
         id = ChapterId("Track 01.mp3"),
         name = "Track 01.mp3",
         duration = 60_000,
-        fileLastModified = Instant.EPOCH,
+        fileLastModified = Instant.fromEpochMilliseconds(0),
         markData = emptyList(),
         fileSize = 0,
       )
@@ -190,7 +190,7 @@ class MediaItemProviderTest {
         id = ChapterId("file"),
         name = "file",
         duration = 20_000,
-        fileLastModified = Instant.EPOCH,
+        fileLastModified = Instant.fromEpochMilliseconds(0),
         markData = listOf(MarkData(0, "One"), MarkData(12_000, "Two")),
         fileSize = 0,
       )
@@ -210,7 +210,7 @@ class MediaItemProviderTest {
         id = ChapterId("file"),
         name = "file",
         duration = 20_000,
-        fileLastModified = Instant.EPOCH,
+        fileLastModified = Instant.fromEpochMilliseconds(0),
         markData = listOf(MarkData(0, "One"), MarkData(12_000, "Two")),
         fileSize = 0,
       )
@@ -231,7 +231,7 @@ class MediaItemProviderTest {
         id = ChapterId("file"),
         name = "file",
         duration = 20_000,
-        fileLastModified = Instant.EPOCH,
+        fileLastModified = Instant.fromEpochMilliseconds(0),
         markData = listOf(MarkData(0, "One"), MarkData(12_000, "Two")),
         fileSize = 0,
       )
@@ -252,7 +252,7 @@ class MediaItemProviderTest {
   private fun libraryBook(
     name: String,
     position: Long,
-    lastPlayedAt: Instant = Instant.EPOCH,
+    lastPlayedAt: Instant = Instant.fromEpochMilliseconds(0),
     hidden: Boolean = false,
   ): Book {
     val chapter =
@@ -260,7 +260,7 @@ class MediaItemProviderTest {
         id = ChapterId(name),
         name = name,
         duration = 60_000,
-        fileLastModified = Instant.EPOCH,
+        fileLastModified = Instant.fromEpochMilliseconds(0),
         markData = emptyList(),
         fileSize = 0,
       )

@@ -1,6 +1,6 @@
 package voice.features.widget
 
-import java.time.Instant
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -16,7 +16,7 @@ fun book(
   positionInChapter: Long = 0,
   currentChapter: ChapterId = chapters.first().id,
   speed: Float = 1F,
-  lastPlayedAt: Instant = Instant.EPOCH,
+  lastPlayedAt: Instant = Instant.fromEpochMilliseconds(0),
   id: BookId = BookId(Uuid.random().toString()),
   hidden: Boolean = false,
 ): Book {
@@ -25,7 +25,7 @@ fun book(
       BookContent(
         positionInChapter = positionInChapter,
         playbackSpeed = speed,
-        addedAt = Instant.EPOCH,
+        addedAt = Instant.fromEpochMilliseconds(0),
         chapters = chapters.map { it.id },
         currentChapter = currentChapter,
         isActive = true,
@@ -61,7 +61,7 @@ fun chapter(
     id = ChapterId(Uuid.random().toString()),
     name = name,
     duration = duration,
-    fileLastModified = Instant.EPOCH,
+    fileLastModified = Instant.fromEpochMilliseconds(0),
     markData = marks,
     fileSize = 0,
   )

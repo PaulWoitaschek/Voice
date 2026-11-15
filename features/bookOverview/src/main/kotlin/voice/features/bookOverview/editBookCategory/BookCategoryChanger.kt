@@ -1,7 +1,7 @@
 package voice.features.bookOverview.editBookCategory
 
 import dev.zacsweers.metro.Inject
-import java.time.Instant
+import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlinx.coroutines.flow.first
 import voice.core.data.BookCategory
@@ -42,7 +42,7 @@ class BookCategoryChanger(
         currentChapter = currentChapter,
         positionInChapter = positionInChapter,
         // newer than the place other devices wrote, so their place doesn't undo this
-        lastPlayedAt = Instant.now(),
+        lastPlayedAt = Clock.System.now(),
         playbackSpeed = speed,
       )
     }

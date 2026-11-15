@@ -2,7 +2,6 @@ package voice.features.widget
 
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -10,6 +9,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import voice.core.data.MarkData
 import voice.core.sleeptimer.SleepTimerState
 
@@ -152,17 +152,17 @@ class WidgetModelsTest {
 
   @Test
   fun `the shelf shows started books, the current one first and then the most recently played`() {
-    val started = book(positionInChapter = 1_000, lastPlayedAt = Instant.ofEpochSecond(3))
-    val recent = book(positionInChapter = 1_000, lastPlayedAt = Instant.ofEpochSecond(5))
-    val notStarted = book(lastPlayedAt = Instant.ofEpochSecond(9))
+    val started = book(positionInChapter = 1_000, lastPlayedAt = Instant.fromEpochSeconds(3))
+    val recent = book(positionInChapter = 1_000, lastPlayedAt = Instant.fromEpochSeconds(5))
+    val notStarted = book(lastPlayedAt = Instant.fromEpochSeconds(9))
     val single = chapter()
     val finished =
       book(
         chapters = listOf(single),
         positionInChapter = single.duration,
-        lastPlayedAt = Instant.ofEpochSecond(8),
+        lastPlayedAt = Instant.fromEpochSeconds(8),
       )
-    val current = book(lastPlayedAt = Instant.ofEpochSecond(1))
+    val current = book(lastPlayedAt = Instant.fromEpochSeconds(1))
 
     val shelf =
       shelfBooks(

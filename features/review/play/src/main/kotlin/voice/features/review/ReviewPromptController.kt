@@ -3,10 +3,9 @@ package voice.features.review
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import java.time.Clock
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toJavaInstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -85,7 +84,7 @@ class ReviewPromptController(
   ) {
     showing = null
     if (prompt.forced) return
-    val now = clock.instant()
+    val now = clock.now()
     scope.launch {
       store.updateData { ReviewPromptPolicy.answered(it, answer, now) }
     }
@@ -112,8 +111,8 @@ class ReviewPromptController(
   ): ReviewSignals {
     val existing = books.mapTo(mutableSetOf()) { it.id }
     return ReviewSignals(
-      now = clock.instant(),
-      installedAt = appInfoProvider.installTime.toJavaInstant(),
+      now = clock.now(),
+      installedAt = appInfoProvider.installTime,
       listened = summary.listened,
       listeningDays = summary.listeningDays,
       // a book that's gone since is nothing to celebrate

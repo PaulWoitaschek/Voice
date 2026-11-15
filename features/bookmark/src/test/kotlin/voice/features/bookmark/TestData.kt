@@ -1,10 +1,11 @@
 package voice.features.bookmark
 
-import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
+import kotlin.time.toKotlinInstant
 import kotlin.uuid.Uuid
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -23,12 +24,14 @@ internal val testZone: ZoneId = ZoneId.of("Europe/Berlin")
 internal fun today(
   hour: Int,
   minute: Int = 0,
-): Instant = ZonedDateTime.of(2026, 10, 7, hour, minute, 0, 0, testZone).toInstant()
+): Instant =
+  ZonedDateTime.of(2026, 10, 7, hour, minute, 0, 0, testZone).toInstant().toKotlinInstant()
 
 internal fun yesterday(
   hour: Int,
   minute: Int = 0,
-): Instant = ZonedDateTime.of(2026, 10, 6, hour, minute, 0, 0, testZone).toInstant()
+): Instant =
+  ZonedDateTime.of(2026, 10, 6, hour, minute, 0, 0, testZone).toInstant().toKotlinInstant()
 
 internal fun testChapter(
   duration: Duration = 10.minutes,
@@ -39,7 +42,7 @@ internal fun testChapter(
     id = ChapterId("http://${Uuid.random()}"),
     name = name,
     duration = duration.inWholeMilliseconds,
-    fileLastModified = Instant.EPOCH,
+    fileLastModified = Instant.fromEpochMilliseconds(0),
     fileSize = 0,
     markData =
       marks.map { (start, markName) ->
@@ -57,11 +60,11 @@ internal fun testBook(
       BookContent(
         positionInChapter = positionInChapter.inWholeMilliseconds,
         playbackSpeed = 1F,
-        addedAt = Instant.EPOCH,
+        addedAt = Instant.fromEpochMilliseconds(0),
         chapters = chapters.map { it.id },
         currentChapter = currentChapter,
         isActive = true,
-        lastPlayedAt = Instant.EPOCH,
+        lastPlayedAt = Instant.fromEpochMilliseconds(0),
         skipSilence = false,
         id = BookId("echoes"),
         gain = 0F,
@@ -114,7 +117,7 @@ internal fun testEvent(
     bookId = BookId("echoes"),
     type = type,
     source = source,
-    atMillis = at.toEpochMilli(),
+    atMillis = at.toEpochMilliseconds(),
     chapterId = chapter.id,
     time = time.inWholeMilliseconds,
     toChapterId = to?.first?.id,

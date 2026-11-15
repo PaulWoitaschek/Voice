@@ -6,11 +6,13 @@ import androidx.media3.common.Player
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import java.time.Clock
-import java.time.Instant
+import java.time.ZoneId
 import kotlin.math.roundToLong
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -34,6 +36,7 @@ import voice.core.playback.session.toMediaIdOrNull
 class ListeningSessionRecorder(
   private val repo: ListeningStatsRepo,
   private val clock: Clock,
+  private val zone: ZoneId,
   private val scope: CoroutineScope,
 ) {
 
@@ -90,7 +93,7 @@ class ListeningSessionRecorder(
       return
     }
     stopped()
-    val now = clock.millis()
+    val now = clock.now().toEpochMilliseconds()
     val previous = session
     session =
       if (
@@ -103,7 +106,8 @@ class ListeningSessionRecorder(
         OpenSession(
           bookId = bookId,
           startedAtMillis = now,
-          utcOffsetSeconds = clock.zone.rules.getOffset(Instant.ofEpochMilli(now)).totalSeconds,
+          utcOffsetSeconds =
+            zone.rules.getOffset(Instant.fromEpochMilliseconds(now).toJavaInstant()).totalSeconds,
         )
       }
     this.speed = speed
@@ -137,7 +141,8 @@ class ListeningSessionRecorder(
     val session = session ?: return
     // A book that is opened at its end was not finished just now, and neither was the last one
     // listened to.
-    val justListened = playing || clock.millis() - session.endedAtMillis <= CONTINUE_WITHIN
+    val justListened =
+      playing || clock.now().toEpochMilliseconds() - session.endedAtMillis <= CONTINUE_WITHIN
     if (session.bookId != bookId || !justListened) return
     count()
     session.reachedEnd = true
@@ -147,7 +152,7 @@ class ListeningSessionRecorder(
   private fun count() {
     if (!playing) return
     val session = session ?: return
-    val now = clock.millis()
+    val now = clock.now().toEpochMilliseconds()
     // the clock can be changed, so only count what fits in between two checkpoints
     val elapsed = (now - countedUntil).coerceIn(0, MAX_COUNTED_AT_ONCE)
     session.listenedMillis += elapsed

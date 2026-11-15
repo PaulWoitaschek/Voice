@@ -1,8 +1,8 @@
 package voice.features.bookOverview.overview
 
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import voice.core.data.Book
 import voice.core.data.BookCategory
 import voice.features.bookOverview.book
@@ -132,15 +132,15 @@ class LibrarySeriesTest {
 
   @Test
   fun `the front is the book in progress played last`() {
-    val first = inProgress(series = "Saga", part = "1", lastPlayedAt = Instant.ofEpochSecond(1))
-    val second = inProgress(series = "Saga", part = "2", lastPlayedAt = Instant.ofEpochSecond(3))
-    val third = finished(series = "Saga", part = "3", lastPlayedAt = Instant.ofEpochSecond(5))
+    val first = inProgress(series = "Saga", part = "1", lastPlayedAt = Instant.fromEpochSeconds(1))
+    val second = inProgress(series = "Saga", part = "2", lastPlayedAt = Instant.fromEpochSeconds(3))
+    val third = finished(series = "Saga", part = "3", lastPlayedAt = Instant.fromEpochSeconds(5))
 
     val series = listOf(first, second, third).series().single()
 
     assertEquals(expected = second, actual = series.front)
     assertEquals(expected = second, actual = series.inProgress)
-    assertEquals(expected = Instant.ofEpochSecond(5), actual = series.lastPlayedAt)
+    assertEquals(expected = Instant.fromEpochSeconds(5), actual = series.lastPlayedAt)
   }
 
   @Test
@@ -158,13 +158,13 @@ class LibrarySeriesTest {
 
   @Test
   fun `hidden books aren't the ones to continue`() {
-    val first = inProgress(series = "Saga", part = "1", lastPlayedAt = Instant.ofEpochSecond(1))
+    val first = inProgress(series = "Saga", part = "1", lastPlayedAt = Instant.fromEpochSeconds(1))
     val second =
       book(
         series = "Saga",
         part = "2",
         time = 5_000,
-        lastPlayedAt = Instant.ofEpochSecond(3),
+        lastPlayedAt = Instant.fromEpochSeconds(3),
         hidden = true,
       )
     val third = book(series = "Saga", part = "3", time = 0, hidden = true)
@@ -256,10 +256,10 @@ class LibrarySeriesTest {
 
   @Test
   fun `current stacks and books are sorted by when they were played last`() {
-    val book = inProgress(name = "Book", lastPlayedAt = Instant.ofEpochSecond(2))
-    val sagaFirst = finished(series = "Saga", lastPlayedAt = Instant.ofEpochSecond(1))
-    val sagaSecond = inProgress(series = "Saga", lastPlayedAt = Instant.ofEpochSecond(3))
-    val newest = inProgress(name = "Newest", lastPlayedAt = Instant.ofEpochSecond(4))
+    val book = inProgress(name = "Book", lastPlayedAt = Instant.fromEpochSeconds(2))
+    val sagaFirst = finished(series = "Saga", lastPlayedAt = Instant.fromEpochSeconds(1))
+    val sagaSecond = inProgress(series = "Saga", lastPlayedAt = Instant.fromEpochSeconds(3))
+    val newest = inProgress(name = "Newest", lastPlayedAt = Instant.fromEpochSeconds(4))
 
     val current =
       libraryEntries(listOf(book, sagaFirst, sagaSecond, newest)).getValue(BookCategory.CURRENT)
@@ -304,7 +304,7 @@ class LibrarySeriesTest {
     series: String? = null,
     part: String? = null,
     name: String = "Book",
-    lastPlayedAt: Instant = Instant.EPOCH,
+    lastPlayedAt: Instant = Instant.fromEpochMilliseconds(0),
   ): Book =
     book(
       series = series,
@@ -319,7 +319,7 @@ class LibrarySeriesTest {
   private fun finished(
     series: String? = null,
     part: String? = null,
-    lastPlayedAt: Instant = Instant.EPOCH,
+    lastPlayedAt: Instant = Instant.fromEpochMilliseconds(0),
   ): Book =
     book(
       series = series,

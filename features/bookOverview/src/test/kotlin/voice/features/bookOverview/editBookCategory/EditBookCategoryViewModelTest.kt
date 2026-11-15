@@ -8,10 +8,10 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlinx.coroutines.test.runTest
 import voice.core.data.BookContent
@@ -70,7 +70,7 @@ class EditBookCategoryViewModelTest {
   @Test
   fun `a marked book counts as played now and keeps the speed it would have started at`() =
     runTest {
-      val before = Instant.now()
+      val before = Clock.System.now()
 
       viewModel.onItemClick(book.id, BottomSheetItem.BookCategoryMarkAsCurrent)
 

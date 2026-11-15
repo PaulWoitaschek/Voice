@@ -3,9 +3,9 @@ package voice.core.data
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.time.Instant
 import kotlin.math.absoluteValue
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 /**
  * Something that happened while listening to a book. The history turns these into stretches of
@@ -70,7 +70,7 @@ public data class ListeningEvent(
 }
 
 public val ListeningEvent.at: Instant
-  get() = Instant.ofEpochMilli(atMillis)
+  get() = Instant.fromEpochMilliseconds(atMillis)
 
 private val minimumJump = 30.seconds
 

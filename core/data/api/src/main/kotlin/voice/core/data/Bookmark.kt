@@ -3,7 +3,7 @@ package voice.core.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.Instant
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 @Entity(tableName = "bookmark2")

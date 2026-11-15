@@ -1,7 +1,7 @@
 package voice.core.audiobookshelf.sync
 
-import java.time.Instant
 import kotlin.math.roundToLong
+import kotlin.time.Instant
 import voice.core.audiobookshelf.AudiobookshelfIds
 import voice.core.audiobookshelf.api.AbsChapter
 import voice.core.audiobookshelf.api.AbsLibraryItem
@@ -29,7 +29,7 @@ internal fun AbsLibraryItem.chapters(): List<Chapter> {
         name = marks.singleOrNull()?.name?.takeIf { it.isNotBlank() } ?: track.name(),
         duration = (track.duration * 1000).roundToLong().coerceAtLeast(1),
         // tells the sync whether the item changed since it was stored
-        fileLastModified = Instant.ofEpochMilli(updatedAt),
+        fileLastModified = Instant.fromEpochMilliseconds(updatedAt),
         fileSize = track.metadata?.size ?: 0L,
         markData = marks,
       )
@@ -88,8 +88,8 @@ internal fun AbsLibraryItem.toBookContent(
     playbackSpeed = existing?.playbackSpeed ?: 1F,
     skipSilence = existing?.skipSilence ?: false,
     isActive = true,
-    lastPlayedAt = existing?.lastPlayedAt ?: Instant.EPOCH,
-    addedAt = existing?.addedAt ?: Instant.ofEpochMilli(addedAt),
+    lastPlayedAt = existing?.lastPlayedAt ?: Instant.fromEpochMilliseconds(0),
+    addedAt = existing?.addedAt ?: Instant.fromEpochMilliseconds(addedAt),
     chapters = chapterIds,
     currentChapter = position.chapterId,
     positionInChapter =

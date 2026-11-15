@@ -3,10 +3,10 @@ package voice.core.playback.session.search
 import android.provider.MediaStore
 import io.mockk.coEvery
 import io.mockk.mockk
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.test.runTest
 import voice.core.data.Book
@@ -117,11 +117,11 @@ fun book(
       BookContent(
         positionInChapter = positionInChapter,
         playbackSpeed = 1F,
-        addedAt = Instant.EPOCH,
+        addedAt = Instant.fromEpochMilliseconds(0),
         chapters = chapters.map { it.id },
         currentChapter = chapters.first().id,
         isActive = true,
-        lastPlayedAt = Instant.EPOCH,
+        lastPlayedAt = Instant.fromEpochMilliseconds(0),
         skipSilence = false,
         id = id,
         gain = 0F,
@@ -149,7 +149,7 @@ private fun chapter(): Chapter {
     id = ChapterId(Uuid.random().toString()),
     name = Uuid.random().toString(),
     duration = 10000,
-    fileLastModified = Instant.EPOCH,
+    fileLastModified = Instant.fromEpochMilliseconds(0),
     markData = emptyList(),
     fileSize = 0,
   )

@@ -13,11 +13,11 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import java.time.Clock
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
+import kotlin.time.Clock
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.CoroutineScope
@@ -270,7 +270,7 @@ class BookOverviewViewModelTest {
         series = "Saga",
         part = "1",
         time = 20_000,
-        lastPlayedAt = java.time.Instant.ofEpochSecond(1),
+        lastPlayedAt = Instant.fromEpochSeconds(1),
       )
     val second =
       book(
@@ -278,10 +278,9 @@ class BookOverviewViewModelTest {
         series = "Saga",
         part = "2",
         time = 1_000,
-        lastPlayedAt = java.time.Instant.ofEpochSecond(3),
+        lastPlayedAt = Instant.fromEpochSeconds(3),
       )
-    val single =
-      book(name = "Single", time = 1_000, lastPlayedAt = java.time.Instant.ofEpochSecond(2))
+    val single = book(name = "Single", time = 1_000, lastPlayedAt = Instant.fromEpochSeconds(2))
     val viewModel = viewModel(books = listOf(first, second, single), currentBookId = second.id)
 
     backgroundScope
@@ -1603,7 +1602,11 @@ class BookOverviewViewModelTest {
         mockk {
           coEvery { url() } returns null
         },
-      clock = Clock.fixed(java.time.Instant.parse("2026-10-20T10:00:00Z"), ZoneOffset.UTC),
+      clock =
+        object : Clock {
+          override fun now(): Instant = Instant.parse("2026-10-20T10:00:00Z")
+        },
+      zone = ZoneOffset.UTC,
       appInfoProvider =
         mockk {
           every { versionName } returns "1.2.3"

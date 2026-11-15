@@ -6,10 +6,10 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import java.io.File
-import java.time.Clock
-import java.time.Instant
 import java.util.UUID
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
@@ -107,7 +107,7 @@ internal constructor(
     val book =
       bookRepository
         .all()
-        .filter { it.content.lastPlayedAt != Instant.EPOCH }
+        .filter { it.content.lastPlayedAt != Instant.fromEpochMilliseconds(0) }
         .maxByOrNull { it.content.lastPlayedAt } ?: return
     currentBookStore.updateData { it ?: book.id }
   }
@@ -125,7 +125,7 @@ internal constructor(
     val ownFile = files[ownFileName]
     val own = ownFile?.books.orEmpty()
     val others = (files - ownFileName).values
-    val now = clock.millis()
+    val now = clock.now().toEpochMilliseconds()
     val synced =
       books.groupBy(keySelector = { it.key }, valueTransform = { it.book }).mapValues {
         (key, copies) ->
@@ -183,7 +183,7 @@ internal constructor(
           chapterId = chapter.id,
           title = bookmark.title,
           time = bookmark.time.coerceIn(0, chapter.duration),
-          addedAt = Instant.ofEpochMilli(bookmark.addedAt),
+          addedAt = Instant.fromEpochMilliseconds(bookmark.addedAt),
           id = Bookmark.Id(id),
           kind = bookmark.kind,
         ),

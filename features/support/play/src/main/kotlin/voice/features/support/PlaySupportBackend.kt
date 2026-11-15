@@ -4,8 +4,9 @@ import android.app.Activity
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
-import java.time.Clock
-import java.time.Instant
+import java.time.ZoneId
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,6 +30,7 @@ class PlaySupportBackend(
   private val navigator: Navigator,
   private val analytics: Analytics,
   private val clock: Clock,
+  private val zone: ZoneId,
   private val scope: CoroutineScope,
 ) : SupportBackend {
 
@@ -175,9 +177,10 @@ class PlaySupportBackend(
     activePurchase = subscriptions.maxByOrNull { it.purchaseTime }
     supporterStatusStore.updateData { status ->
       status.withSubscription(
-        activeSince = subscriptions.minOfOrNull { it.purchaseTime }?.let(Instant::ofEpochMilli),
-        now = clock.instant(),
-        zone = clock.zone,
+        activeSince =
+          subscriptions.minOfOrNull { it.purchaseTime }?.let(Instant::fromEpochMilliseconds),
+        now = clock.now(),
+        zone = zone,
       )
     }
   }
@@ -198,7 +201,7 @@ class PlaySupportBackend(
         in SupportProducts.tips -> {
           // credited first, as a consumed tip is gone even when the result doesn't make it back
           supporterStatusStore.updateData {
-            it.withTip(Instant.ofEpochMilli(purchase.purchaseTime))
+            it.withTip(Instant.fromEpochMilliseconds(purchase.purchaseTime))
           }
           if (!billing.consume(purchase.purchaseToken)) {
             Logger.w("Consuming ${purchase.productId} failed")

@@ -59,7 +59,7 @@ internal class LibrarySync(
     val changed = items.filter { item ->
       val content = stored[AudiobookshelfIds.bookId(item.id)] ?: return@filter true
       val firstChapter = chapterRepo.get(content.chapters.first())
-      firstChapter == null || firstChapter.fileLastModified.toEpochMilli() != item.updatedAt
+      firstChapter == null || firstChapter.fileLastModified.toEpochMilliseconds() != item.updatedAt
     }
     Logger.d("Audiobookshelf has ${items.size} books, ${changed.size} of them changed")
 

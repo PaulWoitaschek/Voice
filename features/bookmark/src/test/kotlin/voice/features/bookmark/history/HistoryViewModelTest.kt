@@ -9,10 +9,11 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
-import java.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -54,7 +55,10 @@ class HistoryViewModelTest {
       every { flow(bookId) } returns book
       coEvery { get(bookId) } answers { book.value }
     }
-  private val clock = Clock.fixed(today(10), testZone)
+  private val clock =
+    object : Clock {
+      override fun now(): Instant = today(10)
+    }
   private val historyEvents = mutableListOf<ListeningEvent>()
   private val historyRepo =
     mockk<ListeningHistoryRepo> {
@@ -74,6 +78,7 @@ class HistoryViewModelTest {
       playerController = playerController,
       navigator = navigator,
       clock = clock,
+      zone = testZone,
       dispatcherProvider =
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),
