@@ -11,6 +11,8 @@
   "dependencies": {
     "@fontsource-variable/literata": "^5.3.0",
     "@fontsource-variable/roboto": "^5.3.0",
-    "astro": "^7.4.2"
+    "@mediabunny/aac-encoder": "1.65.0",
+    "astro": "^7.4.2",
+    "mediabunny": "1.65.0"
   }
 }

@@ -14,6 +14,10 @@ body:
       required: true
   - type: textarea
     attributes:
+      label: File check
+      description: If a book doesn't play right, check its file at https://voice.woitaschek.de/check/ and paste the details here.
+  - type: textarea
+    attributes:
       label: How to reproduce
       description: |
         Describe step by step, how to reproduce the bug. For example:

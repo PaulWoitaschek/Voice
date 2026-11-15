@@ -105,8 +105,15 @@ Voice relies on the media formats that are natively supported by the Android pla
 
 You can review the currently supported file extensions [here](https://developer.android.com/media/media3/exoplayer/supported-formats).
 If a file that should be supported is not displayed, it is most likely either corrupted or incompatible with your Android version.
+[Check the file](/check/) to find out why it doesn't play.
 
 Books from stores that lock them to their own app with DRM, like Audible, can't be played in Voice. Books without DRM work.
+
+## Why does my MP3 book jump to the wrong place?
+
+Most MP3 audiobooks have a variable bitrate. Such a file only has a rough map of where each time is, so in a long book a skip
+or a resume can land minutes away from the time Voice shows. [Check your book](/check/) to see if it's affected. The same
+page converts it to M4B in your browser, which fixes it, and lists other ways to fix it.
 
 ## Why isn’t feature xyz available in the app?
 
