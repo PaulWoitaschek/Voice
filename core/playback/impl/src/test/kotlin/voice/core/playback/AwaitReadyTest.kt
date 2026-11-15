@@ -37,6 +37,17 @@ class AwaitReadyTest {
   }
 
   @Test
+  fun `a loading player returns true when it ends, as a finished book does`() = runTest {
+    loading()
+    val result = async { player.awaitReady(Player.COMMAND_SEEK_BACK) }
+    runCurrent()
+
+    player.update { it.setPlaybackState(Player.STATE_ENDED) }
+
+    assertTrue(result.await())
+  }
+
+  @Test
   fun `a player that never gets ready returns false, also with the seek commands of the book before`() =
     runTest {
       loading()

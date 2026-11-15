@@ -129,13 +129,17 @@ class PlayerControllerImpl(
   ) {
     scope.launch {
       val controller = awaitConnect() ?: return@launch
-      when (maybePrepare(controller)) {
-        Preparation.NoBook -> return@launch
-        Preparation.Loaded -> if (!controller.awaitReady(command)) return@launch
-        Preparation.AlreadyLoaded -> Unit
+      val canSeek =
+        when (maybePrepare(controller)) {
+          Preparation.NoBook -> false
+          Preparation.Loaded -> controller.awaitReady(command)
+          Preparation.AlreadyLoaded ->
+            controller.isCommandAvailable(command) || controller.awaitReady(command)
+        }
+      if (canSeek) {
+        controller.record(type, source)
+        seek(controller)
       }
-      controller.record(type, source)
-      seek(controller)
     }
   }
 
@@ -367,7 +371,10 @@ internal suspend fun Player.awaitReady(command: Int): Boolean =
       send(Unit)
       awaitClose { removeListener(listener) }
     }
-      .first { playbackState == Player.STATE_READY && isCommandAvailable(command) }
+      .first {
+        playbackState in listOf(Player.STATE_READY, Player.STATE_ENDED) &&
+          isCommandAvailable(command)
+      }
   } != null
 
 /**
