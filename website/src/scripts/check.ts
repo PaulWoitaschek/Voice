@@ -36,6 +36,7 @@ export async function checkFile(file: File, onProgress: (progress: number) => vo
     let verdict: Verdict = PLAYABLE.includes(codec) ? 'fine' : 'format'
     let result = verdict === 'fine' ? 'no known problem' : `Voice can't play ${name}`
     let amount: string | undefined
+    let tagsReadable = true
 
     if (format instanceof Mp3InputFormat) {
       const seek = await checkSeeking(file, onProgress)
@@ -53,11 +54,13 @@ export async function checkFile(file: File, onProgress: (progress: number) => vo
         chapters = [`Chapters: ${id3Chapters(tags.raw?.CHAP, await id3Version(file)).length}`]
       } catch (e) {
         console.error(e)
+        tagsReadable = false
       }
     }
     length ??= await track.computeDuration()
 
-    const canConvert = verdict !== 'fine' && (await track.canDecode())
+    // The converter reads the same tags and fails on them.
+    const canConvert = verdict !== 'fine' && tagsReadable && (await track.canDecode())
     const details = [
       `Type: ${format.name}`,
       `Audio: ${audio}`,
