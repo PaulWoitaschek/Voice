@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.os.Looper
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.test.utils.FakeMediaSource
@@ -27,6 +26,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
@@ -58,6 +58,7 @@ import voice.core.playback.history.PlaybackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.misc.VolumeGainSetter
+import voice.core.playback.nextChapterTarget
 import voice.core.playback.previousChapterIndex
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.realChapterId
@@ -239,16 +240,107 @@ class VoicePlayerTest {
     awaitReady()
     player.shouldHavePosition(0, 0)
 
-    player.seekTo(player.nextMediaItemIndex, 0)
+    player.next()
     player.shouldHavePosition(1, 0)
 
-    player.seekTo(player.nextMediaItemIndex, 0)
+    player.next()
     player.shouldHavePosition(2, 0)
 
-    player.seekTo(player.nextMediaItemIndex, 0)
+    player.next()
     player.shouldHavePosition(3, 0)
+  }
 
-    assertEquals(expected = C.INDEX_UNSET, actual = player.nextMediaItemIndex)
+  @Test
+  fun `last chapter, playing, next goes to the end, completed, playback stops`() = scope.runTest {
+    setMediaItems(listOf(twelveChapters()))
+    player.seekTo(11, 5_000)
+    player.prepare()
+    awaitReady()
+    player.play()
+
+    player.next()
+    TestPlayerRunHelper.advance(internalPlayer).untilPendingCommandsAreFullyHandled()
+    assertEquals(expected = 19_999, actual = player.duration)
+    player.shouldHavePosition(11, 19_999)
+
+    TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
+    shadowOf(Looper.getMainLooper()).idle()
+    player.shouldHavePosition(11, 19_999)
+    assertFalse(player.isPlaying)
+  }
+
+  @Test
+  fun `last chapter, already at its end, next does nothing`() = scope.runTest {
+    setMediaItems(listOf(twelveChapters()))
+    player.seekTo(11, 19_999)
+    player.prepare()
+    awaitReady()
+
+    assertNull(player.nextChapterTarget())
+  }
+
+  @Test
+  fun `last chapter, next on headphones or in the car skips by the skip amount`() = scope.runTest {
+    setMediaItems(listOf(twelveChapters()))
+    seekTimeStore.updateData { 7 }
+    player.seekTo(11, 5_000)
+    player.prepare()
+    awaitReady()
+
+    player.seekToNext()
+    player.shouldHavePosition(11, 12_000)
+
+    player.seekToNextMediaItem()
+    player.shouldHavePosition(11, 19_000)
+  }
+
+  @Test
+  fun `last chapter, paused, next goes to the end, completed, stays paused`() = scope.runTest {
+    setMediaItems(listOf(twelveChapters()))
+    player.seekTo(11, 5_000)
+    player.prepare()
+    awaitReady()
+
+    player.next()
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(internalPlayer)
+    shadowOf(Looper.getMainLooper()).idle()
+
+    player.shouldHavePosition(11, 19_999)
+    assertFalse(player.playWhenReady)
+  }
+
+  @Test
+  fun `last chapter, end of chapter sleep timer on, next goes to the end, playback stops, the timer turns off`() =
+    scope.runTest {
+      setMediaItems(listOf(twelveChapters()))
+      player.seekTo(11, 5_000)
+      player.prepare()
+      awaitReady()
+      sleepTimer.enable(SleepTimerMode.EndOfChapter)
+      player.play()
+
+      player.next()
+      TestPlayerRunHelper.advance(internalPlayer).untilPendingCommandsAreFullyHandled()
+      player.shouldHavePosition(11, 19_999)
+
+      TestPlayerRunHelper.advance(internalPlayer).untilPlayWhenReadyIs(false)
+      shadowOf(Looper.getMainLooper()).idle()
+
+      player.shouldHavePosition(11, 19_999)
+      assertFalse(player.isPlaying)
+      assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+    }
+
+  private fun twelveChapters(): Chapter {
+    return chapter(
+      *Array(11) { ChapterMark(startMs = it * 1_000L, endMs = it * 1_000L + 999, name = null) },
+      ChapterMark(startMs = 11_000, endMs = 31_000, name = null),
+    )
+  }
+
+  private fun Player.next() {
+    val (index, positionMs) = nextChapterTarget() ?: return
+    seekTo(index, positionMs)
   }
 
   @Test

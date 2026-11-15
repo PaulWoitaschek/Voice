@@ -140,10 +140,12 @@ class PlayerControllerImpl(
   }
 
   override fun next() = executeAfterPrepare { controller ->
-    val index = controller.nextMediaItemIndex
-    if (index == C.INDEX_UNSET) return@executeAfterPrepare
-    controller.record(ListeningEvent.Type.ChapterChange, to = controller.playbackPosition(index, 0))
-    controller.seekTo(index, 0)
+    val (index, positionMs) = controller.nextChapterTarget() ?: return@executeAfterPrepare
+    controller.record(
+      ListeningEvent.Type.ChapterChange,
+      to = controller.playbackPosition(index, positionMs),
+    )
+    controller.seekTo(index, positionMs)
   }
 
   override fun play(source: ListeningEvent.Source?) = executeAfterPrepare { controller ->
@@ -342,6 +344,16 @@ internal fun previousJumpType(
     sameItem -> ListeningEvent.Type.Seek
     else -> ListeningEvent.Type.ChapterChange
   }
+
+// In the last chapter, it goes to the end, so the listener can finish the book. Headsets and cars
+// skip instead, see VoicePlayer.seekToNext.
+internal fun Player.nextChapterTarget(): Pair<Int, Long>? {
+  val nextIndex = nextMediaItemIndex
+  if (nextIndex != C.INDEX_UNSET) return nextIndex to 0L
+  val endMs = duration.takeUnless { it == C.TIME_UNSET } ?: return null
+  if (currentPosition >= endMs) return null
+  return currentMediaItemIndex to endMs
+}
 
 // Like seekToPrevious, which VoicePlayer turns into a skip for headsets and cars.
 internal fun Player.previousChapterIndex(): Int {
