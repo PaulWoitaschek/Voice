@@ -13,6 +13,7 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,7 @@ import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
@@ -115,12 +117,33 @@ class PlayerControllerImpl(
 
   override fun fastForward(source: ListeningEvent.Source) = executeAfterPrepare { controller ->
     controller.record(ListeningEvent.Type.SkipForward, source)
+    controller.awaitCommand(Player.COMMAND_SEEK_FORWARD)
     controller.seekForward()
   }
 
   override fun rewind(source: ListeningEvent.Source) = executeAfterPrepare { controller ->
     controller.record(ListeningEvent.Type.SkipBack, source)
+    controller.awaitCommand(Player.COMMAND_SEEK_BACK)
     controller.seekBack()
+  }
+
+  // Right after a book is loaded, the controller still has the commands from before, and drops a
+  // skip until the file is ready.
+  private suspend fun MediaController.awaitCommand(command: Int) {
+    withTimeoutOrNull(5.seconds) {
+      callbackFlow {
+        val listener =
+          object : Player.Listener {
+            override fun onAvailableCommandsChanged(availableCommands: Player.Commands) {
+              trySend(Unit)
+            }
+          }
+        addListener(listener)
+        send(Unit)
+        awaitClose { removeListener(listener) }
+      }
+        .first { isCommandAvailable(command) }
+    }
   }
 
   override fun previous() = executeAfterPrepare { controller ->
