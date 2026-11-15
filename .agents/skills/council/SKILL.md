@@ -6,7 +6,8 @@ description: Reviewing a branch with a council of independent reviewers, each wi
 # Council
 
 Each seat reviews the branch from one view and doesn't know the reasons of the author. You are the chair: you start
-the seats, rate and fix their findings, and review again. Don't ask before you fix a high or medium finding.
+the seats, keep the ledger, rate and fix the findings, and review again. Don't ask before you fix a high or medium
+finding.
 
 ## 1. Prepare
 
@@ -16,11 +17,13 @@ the seats, rate and fix their findings, and review again. Don't ask before you f
 - Find the brief: the text that says what the change must do for listeners, and what it leaves out. It can be an
   issue, a file or the request of the user. With none, write it in three sentences from the commits, and say so in
   your report.
+- Open the [ledger](#the-ledger). If the branch has one, continue it.
 
 ## 2. Seats
 
-Give each seat to its own subagent, all at the same time. A seat gets the brief, the diff against `origin/main` and
-its task below. It doesn't get this chat or your reasons. Without subagents, do the seats yourself, one after another.
+Give each seat to its own subagent, all at the same time. A seat gets the brief, the diff against `origin/main`, the
+ledger and its task below. It doesn't get this chat or your reasons. Without subagents, do the seats yourself, one
+after another.
 
 | Seat | When | Task |
 |---|---|---|
@@ -37,7 +40,8 @@ A finding has:
   the behavior stays the same,
 - a rating.
 
-A seat without a concrete case for a finding leaves it out.
+A seat without a concrete case for a finding leaves it out. A seat doesn't report a finding that is in the ledger
+again. When a fix didn't work, or a seat has a new argument against a `wrong`, it names the row.
 
 ## 3. Rate
 
@@ -51,21 +55,46 @@ Merge findings that are the same. Check each one in the code yourself before you
 
 If you are not sure, take the higher rating. Don't talk a finding down.
 
+Give each finding a row in the ledger, with the state `open`, before you fix anything.
+
 ## 4. Fix
 
-- Fix all high and medium findings. If one is wrong, don't fix it and write down why. When it comes back in a later
-  round with no new argument, it is not open.
-- Fix a low finding only when the fix is small and clearly makes the code better.
+- Fix all high and medium findings. If one is wrong, don't fix it. Set its row to `wrong` with the reason.
+- Fix a low finding only when the fix is small and clearly makes the code better. If not, set its row to `skipped`.
 - When a finding says the brief is wrong, don't change the brief. Stop and ask.
-- Run the format-and-test skill, then commit the fixes.
+- Run the format-and-test skill, then commit the fixes. Set each fixed row to `fixed` with the commit.
 
 ## 5. Repeat
 
-Go back to step 2 with the seats that had a high or medium finding. They review the whole diff again. Stop when a
-round has no new high or medium finding. Run at most four rounds. If round four still has one, stop, list the open
-findings and ask.
+Go back to step 2 with the seats that had a high or medium finding. They review the whole diff again. Stop when the
+ledger has no open row and the round had no new high or medium finding. Run at most four rounds. If round four still
+has one, stop, show the open rows and ask.
 
 ## 6. Report
 
-A short table, one row per finding: round, seat, rating, finding, and fixed, skipped or wrong with the reason. The
-rounds don't go into the pull request.
+Show the ledger. The rounds don't go into the pull request.
+
+## The ledger
+
+The ledger is the list of all findings of the branch, over all rounds. It keeps a fixed finding fixed and a wrong
+finding wrong, also after a long run or in a new session.
+
+Keep it in the Git directory of the worktree, so that it stays with the branch and can't be committed:
+
+```sh
+echo "$(git rev-parse --git-dir)/council.md"
+```
+
+One row for each finding. A finding from several seats gets one row that names them all.
+
+```markdown
+| # | Round | Seat | Rating | Finding | State |
+|---|---|---|---|---|---|
+| 1 | 1 | Bugs | High | `PlayerViewModel.kt:120`: Next in the last chapter of a paused book starts playback. | fixed in `1a2b3c4` |
+| 2 | 1 | Simplicity | Medium | The new store can go, the book has the value already. | wrong: the car reads it before the book loads |
+| 3 | 2 | Rules | Low | The log line in the scanner has no use. | skipped |
+```
+
+- **State:** `open`, `fixed in <commit>`, `wrong: <reason>` or `skipped`.
+- Never delete a row. When a seat shows that a fix didn't work, set the row back to `open` and add the round.
+- A `wrong` row only opens again when a seat gives an argument that the reason doesn't answer.
