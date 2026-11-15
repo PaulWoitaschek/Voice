@@ -40,12 +40,15 @@ import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.player.seekBackBy
 import voice.core.playback.session.CustomCommand
+import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.PlaybackService
 import voice.core.playback.session.currentBookId
+import voice.core.playback.session.durationMs
 import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.sendCustomCommand
+import voice.core.playback.session.toMediaIdOrNull
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -345,14 +348,14 @@ internal fun previousJumpType(
     else -> ListeningEvent.Type.ChapterChange
   }
 
-// In the last chapter, it goes to the end, so the listener can finish the book. Headsets and cars
-// skip instead, see VoicePlayer.seekToNext.
+// Headsets and cars skip instead, see VoicePlayer.seekToNext.
 internal fun Player.nextChapterTarget(): Pair<Int, Long>? {
   val nextIndex = nextMediaItemIndex
   if (nextIndex != C.INDEX_UNSET) return nextIndex to 0L
-  val endMs = duration.takeUnless { it == C.TIME_UNSET } ?: return null
-  if (currentPosition >= endMs) return null
-  return currentMediaItemIndex to endMs
+  // Not the duration of the player: right after the book is loaded, it isn't known yet.
+  val mark = currentMediaItem?.mediaId?.toMediaIdOrNull() as? MediaId.ChapterMark ?: return null
+  if (currentPosition >= mark.durationMs) return null
+  return currentMediaItemIndex to mark.durationMs
 }
 
 // Like seekToPrevious, which VoicePlayer turns into a skip for headsets and cars.

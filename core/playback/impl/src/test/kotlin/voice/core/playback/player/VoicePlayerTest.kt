@@ -260,7 +260,6 @@ class VoicePlayerTest {
 
     player.next()
     TestPlayerRunHelper.advance(internalPlayer).untilPendingCommandsAreFullyHandled()
-    assertEquals(expected = 19_999, actual = player.duration)
     player.shouldHavePosition(11, 19_999)
 
     TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
@@ -330,18 +329,6 @@ class VoicePlayerTest {
       assertFalse(player.isPlaying)
       assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
     }
-
-  private fun twelveChapters(): Chapter {
-    return chapter(
-      *Array(11) { ChapterMark(startMs = it * 1_000L, endMs = it * 1_000L + 999, name = null) },
-      ChapterMark(startMs = 11_000, endMs = 31_000, name = null),
-    )
-  }
-
-  private fun Player.next() {
-    val (index, positionMs) = nextChapterTarget() ?: return
-    seekTo(index, positionMs)
-  }
 
   @Test
   fun `previous restarts the chapter and then goes back chapter by chapter`() = scope.runTest {
@@ -923,5 +910,17 @@ class VoicePlayerTest {
     assertEquals(expected = currentMediaItemIndex, actual = this.currentMediaItemIndex)
     assertEquals(expected = currentPosition, actual = this.currentPosition)
     return this
+  }
+
+  private fun twelveChapters(): Chapter {
+    return chapter(
+      *Array(11) { ChapterMark(startMs = it * 1_000L, endMs = it * 1_000L + 999, name = null) },
+      ChapterMark(startMs = 11_000, endMs = 31_000, name = null),
+    )
+  }
+
+  private fun Player.next() {
+    val (index, positionMs) = nextChapterTarget() ?: return
+    seekTo(index, positionMs)
   }
 }
