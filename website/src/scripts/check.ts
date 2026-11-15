@@ -5,6 +5,7 @@ import { checkSeeking } from './seek-check'
 export type Verdict = 'unreadable' | 'format' | 'seek' | 'fine'
 export type FileCheck = { verdict: Verdict; format?: string; amount?: string; canConvert: boolean; details: string }
 
+const DRM = ['aavd', 'enca', 'drms']
 const PLAYABLE: AudioCodec[] = ['aac', 'mp3', 'opus', 'vorbis', 'flac', ...PCM_AUDIO_CODECS]
 const NAMES: Partial<Record<AudioCodec, string>> = {
   aac: 'AAC',
@@ -23,12 +24,12 @@ export async function checkFile(file: File, onProgress: (progress: number) => vo
   try {
     const track = (await input.canRead()) ? await input.getPrimaryAudioTrack() : null
     const codec = await track?.getCodec()
-    if (!track || !codec) return unreadable(file)
+    if (!track || !codec || DRM.includes(String(await track.getInternalCodecId()))) return unreadable(file)
 
     const format = await input.getFormat()
     const sampleRate = await track.getSampleRate()
     const channels = await track.getNumberOfChannels()
-    const length = await track.computeDuration()
+    let length: number | undefined
     const name = NAMES[codec] ?? 'PCM'
     let audio = `${name}, ${sampleRate / 1000} kHz, ${plural(channels, 'channel')}`
     let chapters: string[] = []
@@ -40,17 +41,21 @@ export async function checkFile(file: File, onProgress: (progress: number) => vo
       const seek = await checkSeeking(file, onProgress)
       if (seek.kind === 'mp3') {
         audio += seek.variableBitrate ? ', variable bitrate' : ', constant bitrate'
-        amount = duration(seek.errorSeconds)
+        length = seek.duration
         if (seek.errorSeconds >= 5) {
           verdict = 'seek'
+          amount = duration(seek.errorSeconds)
           result = `a jump can land up to ${amount} off`
-        } else {
-          result = `no known problem, a jump lands at most ${amount} off`
         }
       }
-      const tags = await input.getMetadataTags()
-      chapters = [`Chapters: ${id3Chapters(tags.raw?.CHAP, await id3Version(file)).length}`]
+      try {
+        const tags = await input.getMetadataTags()
+        chapters = [`Chapters: ${id3Chapters(tags.raw?.CHAP, await id3Version(file)).length}`]
+      } catch (e) {
+        console.error(e)
+      }
     }
+    length ??= await track.computeDuration()
 
     const canConvert = verdict !== 'fine' && (await track.canDecode())
     const details = [
@@ -71,7 +76,7 @@ export async function checkFile(file: File, onProgress: (progress: number) => vo
 }
 
 function unreadable(file: File): FileCheck {
-  const type = file.name.match(/\.([^.]+)$/)?.[1].toUpperCase() ?? 'unknown'
+  const type = file.name.match(/\.([a-z0-9]{1,5})$/i)?.[1].toUpperCase() ?? 'unknown'
   return { verdict: 'unreadable', canConvert: false, details: [`Type: ${type}`, size(file), "Result: can't read"].join('\n') }
 }
 

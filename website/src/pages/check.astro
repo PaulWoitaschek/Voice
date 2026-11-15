@@ -17,11 +17,11 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
   <div class="tool" data-state="idle">
     <label class="button primary pick">
       Choose an audiobook file
-      <input hidden type="file" />
+      <input type="file" />
     </label>
     <div class="checking">
       <p class="file"></p>
-      <progress class="check-progress" max="1"></progress>
+      <progress aria-label="Checking" class="check-progress" max="1"></progress>
     </div>
     <div class="result">
       <p class="file"></p>
@@ -45,13 +45,13 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
       <textarea id="details" readonly></textarea>
       <div class="actions">
         <button class="button tonal small copy" type="button">Copy</button>
-        <button class="button primary convert" type="button">Convert to M4B</button>
+        <button class="button primary small convert" type="button">Convert to M4B</button>
         <button class="button tonal small again" type="button">Check another file</button>
       </div>
     </div>
     <div class="working">
       <p class="file"></p>
-      <progress class="convert-progress" max="1"></progress>
+      <progress aria-label="Converting" class="convert-progress" max="1"></progress>
       <p class="muted status"></p>
       <button class="button tonal small cancel" type="button">Cancel</button>
     </div>
@@ -62,6 +62,7 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
       <button class="button tonal small again" type="button">Check another file</button>
     </div>
     <p class="error" role="alert"></p>
+    <p aria-live="polite" class="announce"></p>
   </div>
 
   <h2 id="why">Why MP3 books jump</h2>
@@ -88,7 +89,7 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
   <p>The converter above turns the book into an M4B file.</p>
   <ul>
     <li>Your book doesn't leave your device. Your browser does the conversion.</li>
-    <li>The title, author, cover and chapters stay in the new file.</li>
+    <li>The title, author and cover stay in the new file. So do the chapters of an MP3 file.</li>
     <li>The audio becomes AAC at 64 kbps, which is about 29 MB per hour.</li>
     <li>
       The whole book has to fit in memory. For very long books, use a computer, and keep the tab open until the download
@@ -134,12 +135,28 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
   const copy = root.querySelector<HTMLButtonElement>('.copy')!
   const download = root.querySelector<HTMLAnchorElement>('.download')!
   const error = root.querySelector('.error')!
+  const announce = root.querySelector('.announce')!
+  const focusFor: Record<string, HTMLElement | null> = {
+    idle: input,
+    result: copy,
+    working: root.querySelector('.cancel'),
+    done: download,
+  }
   let file: File | undefined
   let cancel: (() => Promise<void>) | undefined
+  let conversionId = 0
 
   const show = (state: string, status = '') => {
+    const changed = root.dataset.state !== state
     root.dataset.state = state
     root.querySelectorAll(`.${state} .status`).forEach((element) => (element.textContent = status))
+    if (changed) focusFor[state]?.focus()
+  }
+
+  const showResult = () => {
+    show('result')
+    const verdict = [...root.querySelectorAll<HTMLElement>('.result p:not(.file)')].find((p) => p.checkVisibility())
+    announce.textContent = verdict?.innerText ?? ''
   }
 
   input.addEventListener('change', async () => {
@@ -148,6 +165,7 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
     input.value = ''
     root.querySelectorAll('.file').forEach((element) => (element.textContent = file!.name))
     error.textContent = ''
+    announce.textContent = ''
     checkProgress.removeAttribute('value')
     show('checking')
     const check = await checkFile(file, (value) => (checkProgress.value = value))
@@ -157,7 +175,7 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
     details.rows = check.details.split('\n').length
     root.dataset.verdict = check.verdict
     root.dataset.convert = String(check.canConvert)
-    show('result')
+    showResult()
   })
 
   copy.addEventListener('click', async () => {
@@ -169,36 +187,45 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
   root.querySelector('.convert')!.addEventListener('click', async () => {
     if (!file) return
     const name = file.name
+    const id = ++conversionId
+    error.textContent = ''
+    announce.textContent = ''
     convertProgress.removeAttribute('value')
     show('working', 'Starting…')
     const started = performance.now()
     try {
       const { startConversion } = await import('../scripts/convert')
       const { conversion, result } = await startConversion(file, (value) => {
+        if (id !== conversionId) return
         convertProgress.value = value
         const left = value > 0.01 ? ((performance.now() - started) / value) * (1 - value) : NaN
         show('working', `${Math.floor(value * 100)} %` + (isNaN(left) ? '' : ` · about ${minutes(left)} left`))
       })
-      cancel = () => conversion.cancel()
+      const stop = () => conversion.cancel()
+      if (id === conversionId) cancel = stop
+      else stop()
       const { blob, chapters } = await result
+      if (id !== conversionId) return
+      cancel = undefined
       URL.revokeObjectURL(download.href)
       download.href = URL.createObjectURL(blob)
       download.download = name.replace(/\.[^.]*$/, '') + '.m4b'
       show('done', `${(blob.size / 1e6).toFixed(0)} MB, ${plural(chapters, 'chapter')}`)
+      announce.textContent = `Converted. ${root.querySelector('.done .status')!.textContent}`
     } catch (e) {
-      if (root.dataset.state !== 'idle') {
-        show('idle')
-        error.textContent = "This file couldn't be converted."
-        console.error(e)
-      }
-    } finally {
+      if (id !== conversionId) return
       cancel = undefined
+      error.textContent = "This file couldn't be converted."
+      show('result')
+      console.error(e)
     }
   })
 
   root.querySelector('.cancel')!.addEventListener('click', () => {
-    show('idle')
+    conversionId++
     cancel?.()
+    cancel = undefined
+    showResult()
   })
 
   root.querySelectorAll('.again').forEach((button) =>
@@ -206,6 +233,7 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
       URL.revokeObjectURL(download.href)
       download.removeAttribute('href')
       file = undefined
+      error.textContent = ''
       show('idle')
     }),
   )
@@ -234,6 +262,21 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
     border: 0;
     font-family: inherit;
     cursor: pointer;
+  }
+
+  .pick input,
+  .announce {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .tool .download {
+    color: var(--on-primary);
+    font-weight: 600;
   }
 
   .pick:focus-within {

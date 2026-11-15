@@ -1,4 +1,4 @@
-export type SeekCheck = { kind: 'not-mp3' } | { kind: 'mp3'; errorSeconds: number; variableBitrate: boolean }
+export type SeekCheck = { kind: 'not-mp3' } | { kind: 'mp3'; errorSeconds: number; variableBitrate: boolean; duration: number }
 
 type Header = { mpeg1: boolean; sampleRate: number; bitrate: number; size: number; mono: boolean }
 
@@ -146,5 +146,5 @@ export async function checkSeeking(file: File, onProgress: (progress: number) =>
     errorSeconds = Math.max(errorSeconds, Math.abs(low * frameSeconds - target.time))
   }
   onProgress(1)
-  return { kind: 'mp3', errorSeconds, variableBitrate }
+  return { kind: 'mp3', errorSeconds, variableBitrate, duration }
 }
