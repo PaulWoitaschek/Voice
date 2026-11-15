@@ -129,6 +129,9 @@ class PlayerControllerImpl(
   ) {
     scope.launch {
       val controller = awaitConnect() ?: return@launch
+      // At the end of the book the player still wants to play, so a seek out of it would start
+      // playback.
+      if (controller.playbackState == Player.STATE_ENDED) controller.pause()
       val canSeek =
         when (maybePrepare(controller)) {
           Preparation.NoBook -> false
