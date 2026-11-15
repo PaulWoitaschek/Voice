@@ -157,6 +157,18 @@ const description = frontmatter?.description ?? Astro.props.description
     font-weight: 650;
   }
 
+  .prose :global(blockquote) {
+    margin: 0 0 2em;
+    padding: 20px 24px;
+    border-radius: 24px;
+    background: var(--tonal);
+    color: var(--on-tonal);
+  }
+
+  .prose :global(blockquote > :last-child) {
+    margin-bottom: 0;
+  }
+
   .prose :global(hr) {
     margin: 3em 0;
     border: 0;

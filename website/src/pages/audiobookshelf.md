@@ -6,6 +6,15 @@ description: Connect Voice to your Audiobookshelf server to stream, download and
 
 # Voice with Audiobookshelf
 
+> **Feature preview.** Audiobookshelf is in Voice 26.10.8 and newer, but it's still hidden. To try it now:
+>
+> 1. Open **Settings** and tap **App version** at the bottom 13 times.
+> 2. Open the **Developer Menu** that shows up below it.
+> 3. Turn on **audiobookshelf**, then go back to **Settings » Library » Audiobookshelf**.
+>
+> Whether it works great or not at all, tell me in the
+> [feature preview discussion](https://github.com/PaulWoitaschek/Voice/discussions/3863).
+
 [Audiobookshelf](https://www.audiobookshelf.org) is a self-hosted audiobook server. Connect Voice to it and the books of your server
 join your library next to the books on your device. Play them right away, or download them to listen without a connection. Your
 position and your bookmarks stay in step with the web app and your other devices.

@@ -13,6 +13,7 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,7 @@ import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import voice.core.data.BookId
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
@@ -116,14 +118,35 @@ class PlayerControllerImpl(
     controller.sendCustomCommand(CustomCommand.SetSkipSilence(skip))
   }
 
-  override fun fastForward(source: ListeningEvent.Source) = executeAfterPrepare { controller ->
-    controller.record(ListeningEvent.Type.SkipForward, source)
-    controller.seekForward()
-  }
+  override fun fastForward(source: ListeningEvent.Source) =
+    skip(Player.COMMAND_SEEK_FORWARD, ListeningEvent.Type.SkipForward, source) { it.seekForward() }
 
-  override fun rewind(source: ListeningEvent.Source) = executeAfterPrepare { controller ->
-    controller.record(ListeningEvent.Type.SkipBack, source)
-    controller.seekBack()
+  override fun rewind(source: ListeningEvent.Source) =
+    skip(Player.COMMAND_SEEK_BACK, ListeningEvent.Type.SkipBack, source) { it.seekBack() }
+
+  private fun skip(
+    command: Int,
+    type: ListeningEvent.Type,
+    source: ListeningEvent.Source,
+    seek: (MediaController) -> Unit,
+  ) {
+    scope.launch {
+      val controller = awaitConnect() ?: return@launch
+      // At the end of the book the player still wants to play, so a seek out of it would start
+      // playback.
+      if (controller.playbackState == Player.STATE_ENDED) controller.pause()
+      val canSeek =
+        when (maybePrepare(controller)) {
+          Preparation.NoBook -> false
+          Preparation.Loaded -> controller.awaitReady(command)
+          Preparation.AlreadyLoaded ->
+            controller.isCommandAvailable(command) || controller.awaitReady(command)
+        }
+      if (canSeek) {
+        controller.record(type, source)
+        seek(controller)
+      }
+    }
   }
 
   override fun previous() = executeAfterPrepare { controller ->
@@ -198,22 +221,28 @@ class PlayerControllerImpl(
     return PlaybackPosition(bookId, content.currentChapter, content.positionInChapter)
   }
 
-  private suspend fun maybePrepare(controller: MediaController): Boolean {
-    val bookId = currentBookStoreId.data.first() ?: return false
+  private enum class Preparation {
+    NoBook,
+    AlreadyLoaded,
+    Loaded,
+  }
+
+  private suspend fun maybePrepare(controller: MediaController): Preparation {
+    val bookId = currentBookStoreId.data.first() ?: return Preparation.NoBook
     if (
       controller.currentBookId() == bookId &&
         controller.playbackState in listOf(Player.STATE_READY, Player.STATE_BUFFERING)
     ) {
-      return true
+      return Preparation.AlreadyLoaded
     }
-    val book = bookRepository.get(bookId) ?: return false
+    val book = bookRepository.get(bookId) ?: return Preparation.NoBook
     // Not the book as one item: the player replaces it with the chapter marks, and commands sent in
     // between, like from dragging the speed slider, crash the controller with "Invalid PlayerInfo
     // update".
     val items = mediaItemProvider.mediaItemsWithStartPosition(book)
     controller.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
     controller.prepare()
-    return true
+    return Preparation.Loaded
   }
 
   override fun pauseWithRewind(rewind: Duration) = executeAfterPrepare { controller ->
@@ -314,7 +343,7 @@ class PlayerControllerImpl(
   private inline fun executeAfterPrepare(crossinline action: suspend (MediaController) -> Unit) {
     scope.launch {
       val controller = awaitConnect() ?: return@launch
-      if (maybePrepare(controller)) {
+      if (maybePrepare(controller) != Preparation.NoBook) {
         action(controller)
       }
     }
@@ -331,6 +360,30 @@ class PlayerControllerImpl(
     }
   }
 }
+
+// A book that Voice just loaded can't seek before it is ready, and the session drops a skip until
+// then. The controller can still show the seek commands of the book it held before.
+internal suspend fun Player.awaitReady(command: Int): Boolean =
+  withTimeoutOrNull(5.seconds) {
+    callbackFlow {
+      val listener =
+        object : Player.Listener {
+          override fun onEvents(
+            player: Player,
+            events: Player.Events,
+          ) {
+            trySend(Unit)
+          }
+        }
+      addListener(listener)
+      send(Unit)
+      awaitClose { removeListener(listener) }
+    }
+      .first {
+        playbackState in listOf(Player.STATE_READY, Player.STATE_ENDED) &&
+          isCommandAvailable(command)
+      }
+  } != null
 
 /**
  * Skipping back restarts the current chapter when it already played for a while, or when there is

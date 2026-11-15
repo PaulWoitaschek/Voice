@@ -46,14 +46,9 @@ class WidgetButtonReceiver : BroadcastReceiver() {
           player.awaitConnect()
           when (action) {
             Action.PlayPause -> player.playPause(ListeningEvent.Source.Widget)
-            Action.FastForward -> {
-              player.fastForward(ListeningEvent.Source.Widget)
-              player.play(ListeningEvent.Source.Widget)
-            }
-            Action.Rewind -> {
-              player.rewind(ListeningEvent.Source.Widget)
-              player.play(ListeningEvent.Source.Widget)
-            }
+            Action.Play -> player.play(ListeningEvent.Source.Widget)
+            Action.FastForward -> player.fastForward(ListeningEvent.Source.Widget)
+            Action.Rewind -> player.rewind(ListeningEvent.Source.Widget)
             Action.PlayBook -> {
               val bookId = intent?.getStringExtra(BOOK_ID_KEY)?.let(::BookId)
               if (bookId != null) {
@@ -96,6 +91,7 @@ class WidgetButtonReceiver : BroadcastReceiver() {
   // the names are sent by automation apps like Tasker, so they must not change
   enum class Action {
     PlayPause,
+    Play,
     FastForward,
     Rewind,
     PlayBook,

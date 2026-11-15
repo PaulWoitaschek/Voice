@@ -1,6 +1,7 @@
 package voice.core.playback.receiver
 
 import android.app.Application
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
@@ -8,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.time.Instant
@@ -86,6 +88,64 @@ class WidgetButtonReceiverTest {
     send(intents.playBook(book.id))
 
     verify { player.pauseIfCurrentBookDifferentFrom(book.id, ListeningEvent.Source.Widget) }
+  }
+
+  @Test
+  fun `fast forward on the widget skips from the widget and sends no play`() {
+    send(intents.fastForward())
+
+    verify { player.fastForward(ListeningEvent.Source.Widget) }
+    verify(exactly = 0) {
+      player.play(any())
+      player.playPause(any())
+    }
+  }
+
+  @Test
+  fun `rewind on the widget skips back from the widget and sends no play`() {
+    send(intents.rewind())
+
+    verify { player.rewind(ListeningEvent.Source.Widget) }
+    verify(exactly = 0) {
+      player.play(any())
+      player.playPause(any())
+    }
+  }
+
+  @Test
+  fun `automation rewind skips back from the widget and sends no play`() {
+    send(automation("Rewind"))
+
+    verify { player.rewind(ListeningEvent.Source.Widget) }
+    verify(exactly = 0) {
+      player.play(any())
+      player.playPause(any())
+    }
+  }
+
+  @Test
+  fun `automation rewind, then play, plays from the widget after the skip back`() {
+    send(automation("Rewind"))
+    send(automation("Play"))
+
+    verifyOrder {
+      player.rewind(ListeningEvent.Source.Widget)
+      player.play(ListeningEvent.Source.Widget)
+    }
+  }
+
+  @Test
+  fun `automation play is a play from the widget`() {
+    send(automation("Play"))
+
+    verify { player.play(ListeningEvent.Source.Widget) }
+    verify(exactly = 0) { player.playPause(any()) }
+  }
+
+  private fun automation(action: String): Intent {
+    return Intent("voice.WidgetAction")
+      .setComponent(ComponentName(context, WidgetButtonReceiver::class.java))
+      .putExtra("action", action)
   }
 
   private fun send(intent: Intent) {
