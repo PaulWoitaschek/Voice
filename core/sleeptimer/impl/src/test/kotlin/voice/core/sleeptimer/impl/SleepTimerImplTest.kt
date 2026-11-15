@@ -11,6 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
@@ -125,6 +126,31 @@ class SleepTimerImplTest {
       actual = sleepTimer.state.value,
     )
   }
+
+  @Test
+  fun `no timer chosen yet, play gives a 20-minute timer`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    runCurrent()
+
+    assertEquals(
+      expected = SleepTimerState.Enabled.WithDuration(20.minutes),
+      actual = sleepTimer.state.value,
+    )
+  }
+
+  @Test
+  fun `the last timer was the 30-minute preset, play gives a 30-minute timer`() =
+    testScope.runTest {
+      sleepTimerPreferenceStore.updateData { it.copy(autoSleepDuration = 30.minutes) }
+
+      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+      runCurrent()
+
+      assertEquals(
+        expected = SleepTimerState.Enabled.WithDuration(30.minutes),
+        actual = sleepTimer.state.value,
+      )
+    }
 
   @Test
   fun `turning the timer on goes into the history`() = testScope.runTest {

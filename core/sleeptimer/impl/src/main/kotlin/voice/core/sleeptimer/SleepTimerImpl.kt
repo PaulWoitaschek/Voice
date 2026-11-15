@@ -65,7 +65,8 @@ internal constructor(
         is SleepTimerMode.TimedWithDuration -> startCountdown(mode.duration)
         SleepTimerMode.TimedWithDefault -> {
           // the default duration is only used when the sleep timer turns on by itself
-          startCountdown(sleepTimerPreferenceStore.data.first().duration)
+          val preference = sleepTimerPreferenceStore.data.first()
+          startCountdown(preference.autoSleepDuration ?: preference.duration)
         }
         SleepTimerMode.EndOfChapter -> state.value = SleepTimerState.Enabled.WithEndOfChapter
       }
