@@ -128,7 +128,7 @@ class SleepTimerImplTest {
   }
 
   @Test
-  fun `no timer chosen yet, play gives a 20-minute timer`() = testScope.runTest {
+  fun `the automatic timer with no choice yet uses the custom time`() = testScope.runTest {
     sleepTimer.enable(SleepTimerMode.TimedWithDefault)
     runCurrent()
 
@@ -139,18 +139,17 @@ class SleepTimerImplTest {
   }
 
   @Test
-  fun `the last timer was the 30-minute preset, play gives a 30-minute timer`() =
-    testScope.runTest {
-      sleepTimerPreferenceStore.updateData { it.copy(autoSleepDuration = 30.minutes) }
+  fun `the automatic timer uses the automatic minutes`() = testScope.runTest {
+    sleepTimerPreferenceStore.updateData { it.copy(autoSleepDuration = 30.minutes) }
 
-      sleepTimer.enable(SleepTimerMode.TimedWithDefault)
-      runCurrent()
+    sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    runCurrent()
 
-      assertEquals(
-        expected = SleepTimerState.Enabled.WithDuration(30.minutes),
-        actual = sleepTimer.state.value,
-      )
-    }
+    assertEquals(
+      expected = SleepTimerState.Enabled.WithDuration(30.minutes),
+      actual = sleepTimer.state.value,
+    )
+  }
 
   @Test
   fun `turning the timer on goes into the history`() = testScope.runTest {
