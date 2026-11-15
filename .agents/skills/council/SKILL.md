@@ -1,0 +1,100 @@
+---
+name: council
+description: Reviewing a branch with a council of independent reviewers, each with one view (bugs, the brief, simplicity, the listener), then fixing the findings and reviewing again until no high or medium finding is left. Use when asked for a council review, a full or thorough review of a branch before its pull request, or when another skill names the council.
+---
+
+# Council
+
+Each seat reviews the branch from one view and doesn't know the reasons of the author. You are the chair: you start
+the seats, keep the ledger, rate and fix the findings, and review again. Don't ask before you fix a high or medium
+finding.
+
+## 1. Prepare
+
+- Commit all work.
+- `git fetch origin main`. Review against `origin/main`, not the local branch. In worktrees the local `main` is often
+  stale.
+- Find the brief: the text that says what the change must do for listeners, and what it leaves out. It can be an
+  issue, a file or the request of the user. With none, write it in three sentences from the commits, and say so in
+  your report.
+- Open the [ledger](#the-ledger). If the branch has one, continue it.
+
+## 2. Seats
+
+Give each seat to its own subagent, all at the same time. A seat gets the brief, the diff against `origin/main`, the
+ledger and its task below. It doesn't get this chat or your reasons. Without subagents, do the seats yourself, one
+after another.
+
+| Seat | When | Task |
+|---|---|---|
+| Bugs | Always | Find what breaks: crashes, lost data, wrong behavior, races, broken tests. Run `/code-review high origin/main` where the tool has it. |
+| Brief | Always | Each rule and example of the brief has a test that checks it. The diff builds nothing that the brief leaves out, and nothing it doesn't ask for. |
+| Simplicity | Always | Find what can go, by the complexity rule in `AGENTS.md`: stored data, a migration, a setting, a library, an abstraction with one user, code for a case that can't happen. Name the smaller version. |
+| Rules | Always | Find breaks of `AGENTS.md` and the skills that apply to the changed files: architecture, logging, comments, format-and-test, translate-strings. |
+| Listener | When listeners can see or hear the change | Install the branch with the emulator skill and do each example of the brief by hand. For UI, check it against the design skill, in the app and in the previews. When the media session changes, check the notification, and the car with the android-auto skill. |
+
+A finding has:
+
+- the file and the line,
+- the case: where the listener is, what they do, and what goes wrong. For the simplicity seat: what can go, and why
+  the behavior stays the same,
+- a rating.
+
+A seat without a concrete case for a finding leaves it out. A seat doesn't report a finding that is in the ledger
+again. When a fix didn't work, or a seat has a new argument against a `wrong`, it names the row.
+
+## 3. Rate
+
+Merge findings that are the same. Check each one in the code yourself before you rate it.
+
+- **High:** a crash, lost data or a lost place, a security or privacy problem, wrong behavior in a normal flow, a
+  broken build or broken tests, an example of the brief that doesn't work.
+- **Medium:** wrong behavior in an edge case that can really happen, no test for new logic, something built that the
+  brief leaves out, code that can go without a change for listeners, a break of a rule in `AGENTS.md`.
+- **Low:** naming, style, a small cleanup, or a case that can't really happen.
+
+If you are not sure, take the higher rating. Don't talk a finding down.
+
+Give each finding a row in the ledger, with the state `open`, before you fix anything.
+
+## 4. Fix
+
+- Fix all high and medium findings. If one is wrong, don't fix it. Set its row to `wrong` with the reason.
+- Fix a low finding only when the fix is small and clearly makes the code better. If not, set its row to `skipped`.
+- When a finding says the brief is wrong, don't change the brief. Stop and ask.
+- Run the format-and-test skill, then commit the fixes. Set each fixed row to `fixed` with the commit.
+
+## 5. Repeat
+
+Go back to step 2 with the seats that had a high or medium finding. They review the whole diff again. Stop when the
+ledger has no open row and the round had no new high or medium finding. Run at most four rounds. If round four still
+has one, stop, show the open rows and ask.
+
+## 6. Report
+
+Show the ledger. The rounds don't go into the pull request.
+
+## The ledger
+
+The ledger is the list of all findings of the branch, over all rounds. It keeps a fixed finding fixed and a wrong
+finding wrong, also after a long run or in a new session.
+
+Keep it in the Git directory of the worktree, so that it stays with the branch and can't be committed:
+
+```sh
+echo "$(git rev-parse --git-dir)/council.md"
+```
+
+One row for each finding. A finding from several seats gets one row that names them all.
+
+```markdown
+| # | Round | Seat | Rating | Finding | State |
+|---|---|---|---|---|---|
+| 1 | 1 | Bugs | High | `PlayerViewModel.kt:120`: Next in the last chapter of a paused book starts playback. | fixed in `1a2b3c4` |
+| 2 | 1 | Simplicity | Medium | The new store can go, the book has the value already. | wrong: the car reads it before the book loads |
+| 3 | 2 | Rules | Low | The log line in the scanner has no use. | skipped |
+```
+
+- **State:** `open`, `fixed in <commit>`, `wrong: <reason>` or `skipped`.
+- Never delete a row. When a seat shows that a fix didn't work, set the row back to `open` and add the round.
+- A `wrong` row only opens again when a seat gives an argument that the reason doesn't answer.
