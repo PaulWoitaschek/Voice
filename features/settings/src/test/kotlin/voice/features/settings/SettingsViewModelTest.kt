@@ -131,7 +131,7 @@ class SettingsViewModelTest {
       audiobookFolders = audiobookFolders,
       supportDevelopmentFeatureFlag = SupportDevelopmentFeatureFlag(supportDevelopmentFeatureFlag),
       supporterStatusStore = SupporterStatusStore(supporterStatusStore),
-      zone = ZoneOffset.UTC,
+      zone = { ZoneOffset.UTC },
       dispatcherProvider =
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
       serverAccount = serverAccount,

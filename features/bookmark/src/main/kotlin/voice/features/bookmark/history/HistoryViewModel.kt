@@ -39,7 +39,7 @@ class HistoryViewModel(
   private val playerController: PlayerController,
   private val navigator: Navigator,
   private val clock: Clock,
-  private val zone: ZoneId,
+  private val zone: () -> ZoneId,
   private val dispatcherProvider: DispatcherProvider,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   @Assisted private val bookId: BookId,
@@ -74,7 +74,7 @@ class HistoryViewModel(
               events = events,
               index = index,
               now = clock.now(),
-              zone = zone,
+              zone = zone(),
             )
           }
         }

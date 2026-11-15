@@ -16,7 +16,7 @@ class Survey(
   private val handledSurveysStore: HandledSurveysStore,
   private val localSurvey: LocalSurvey,
   private val clock: Clock,
-  private val zone: ZoneId,
+  private val zone: () -> ZoneId,
   private val appInfoProvider: AppInfoProvider,
   private val analytics: Analytics,
 ) {
@@ -63,5 +63,5 @@ class Survey(
     analytics.event(name = "survey_card", params = mapOf("action" to action))
   }
 
-  private fun today(): Long = clock.now().toJavaInstant().atZone(zone).toLocalDate().toEpochDay()
+  private fun today(): Long = clock.now().toJavaInstant().atZone(zone()).toLocalDate().toEpochDay()
 }

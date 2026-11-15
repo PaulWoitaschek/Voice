@@ -78,7 +78,7 @@ class HistoryViewModelTest {
       playerController = playerController,
       navigator = navigator,
       clock = clock,
-      zone = testZone,
+      zone = { testZone },
       dispatcherProvider =
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),

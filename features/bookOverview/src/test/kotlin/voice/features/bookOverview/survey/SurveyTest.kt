@@ -125,7 +125,7 @@ class SurveyTest {
         object : Clock {
           override fun now(): Instant = Instant.parse("2026-10-20T10:00:00Z")
         },
-      zone = ZoneOffset.UTC,
+      zone = { ZoneOffset.UTC },
       appInfoProvider =
         mockk<AppInfoProvider> {
           every { versionName } returns "1.2.3"

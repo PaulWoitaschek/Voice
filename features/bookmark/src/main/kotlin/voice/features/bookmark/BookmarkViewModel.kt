@@ -49,7 +49,7 @@ class BookmarkViewModel(
   private val sleepTimer: SleepTimer,
   private val navigator: Navigator,
   private val clock: Clock,
-  private val zone: ZoneId,
+  private val zone: () -> ZoneId,
   dispatcherProvider: DispatcherProvider,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   private val experimentalPlaybackPersistenceFeatureFlag:
@@ -142,7 +142,7 @@ class BookmarkViewModel(
       sort = sort,
       categories = categoryCounts(bookmarks),
       selectedCategory = category,
-      items = bookmarkListItems(index, visible, sort, now, zone),
+      items = bookmarkListItems(index, visible, sort, now, zone()),
       totalCount = bookmarks.size,
       editor = draft?.let { editorViewState(index, it) },
       tab =

@@ -25,7 +25,7 @@ class SupportViewModel(
   private val navigator: Navigator,
   private val supporterStatusStore: SupporterStatusStore,
   private val supporterNoteFeatureFlag: SupporterNoteFeatureFlag,
-  private val zone: ZoneId,
+  private val zone: () -> ZoneId,
 ) : SupportListener {
 
   private var chosenFrequency by mutableStateOf<SupportFrequency?>(null)
@@ -68,7 +68,7 @@ class SupportViewModel(
       badge = status.badge,
       supporterSince =
         status.supporterSince?.let {
-          YearMonth.from(Instant.ofEpochMilli(it).atZone(zone))
+          YearMonth.from(Instant.ofEpochMilli(it).atZone(zone()))
         },
       thankYou = thankYou,
       message = message,

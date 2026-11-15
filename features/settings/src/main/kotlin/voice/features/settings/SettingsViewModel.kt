@@ -66,7 +66,7 @@ class SettingsViewModel(
   private val audiobookFolders: AudiobookFolders,
   private val supportDevelopmentFeatureFlag: SupportDevelopmentFeatureFlag,
   private val supporterStatusStore: SupporterStatusStore,
-  private val zone: ZoneId,
+  private val zone: () -> ZoneId,
   private val dispatcherProvider: DispatcherProvider,
   private val serverAccount: ServerAccount,
   private val audiobookshelfFeatureFlag: AudiobookshelfFeatureFlag,
@@ -202,7 +202,7 @@ class SettingsViewModel(
       supporterBadge = supporterStatus.badge,
       supporterSince =
         supporterStatus.supporterSince?.let {
-          YearMonth.from(Instant.ofEpochMilli(it).atZone(zone))
+          YearMonth.from(Instant.ofEpochMilli(it).atZone(zone()))
         },
       folderNames = folderNames,
       foldersWithoutAccess = foldersWithoutAccess,

@@ -53,7 +53,7 @@ class SupportViewModelTest {
       navigator = navigator,
       supporterStatusStore = SupporterStatusStore(supporterStatusStore),
       supporterNoteFeatureFlag = SupporterNoteFeatureFlag(supporterNoteFeatureFlag),
-      zone = ZoneOffset.UTC,
+      zone = { ZoneOffset.UTC },
     )
 
   private val offers =
