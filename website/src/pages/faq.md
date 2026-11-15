@@ -111,8 +111,8 @@ Books from stores that lock them to their own app with DRM, like Audible, can't 
 ## Why does my MP3 book jump to the wrong place?
 
 Most MP3 audiobooks have a variable bitrate. Such a file only has a rough map of where each time is, so in a long book a skip
-or a resume can land minutes away from the time Voice shows. [Convert the book to M4B](/convert/) in your browser to fix
-this. The title, cover and chapters stay.
+or a resume can land minutes away from the time Voice shows. [Check your book](/mp3/) to see if it's affected. The same
+page converts it to M4B in your browser, which fixes it, and lists other ways to fix it.
 
 ## Why isn’t feature xyz available in the app?
 
