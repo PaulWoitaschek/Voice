@@ -23,7 +23,7 @@ class AutoEnableSleepTimer(
   private val playStateManager: PlayStateManager,
   private val sleepTimer: SleepTimer,
   private val clock: Clock,
-  private val zone: ZoneId,
+  private val zone: () -> ZoneId,
   private val scope: CoroutineScope,
 ) : AppInitializer {
 
@@ -54,7 +54,7 @@ class AutoEnableSleepTimer(
     return autoSleepTimer.autoSleepTimerEnabled &&
       !sleepTimerActive &&
       isTimeInRange(
-        currentTime = clock.now().toJavaInstant().atZone(zone).toLocalTime(),
+        currentTime = clock.now().toJavaInstant().atZone(zone()).toLocalTime(),
         startTime = autoSleepTimer.autoSleepStartTime,
         endTime = autoSleepTimer.autoSleepEndTime,
       )

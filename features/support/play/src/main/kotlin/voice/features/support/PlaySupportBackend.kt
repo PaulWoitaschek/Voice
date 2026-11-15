@@ -30,7 +30,7 @@ class PlaySupportBackend(
   private val navigator: Navigator,
   private val analytics: Analytics,
   private val clock: Clock,
-  private val zone: ZoneId,
+  private val zone: () -> ZoneId,
   private val scope: CoroutineScope,
 ) : SupportBackend {
 
@@ -180,7 +180,7 @@ class PlaySupportBackend(
         activeSince =
           subscriptions.minOfOrNull { it.purchaseTime }?.let(Instant::fromEpochMilliseconds),
         now = clock.now(),
-        zone = zone,
+        zone = zone(),
       )
     }
   }

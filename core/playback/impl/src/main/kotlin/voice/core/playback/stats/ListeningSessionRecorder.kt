@@ -11,7 +11,6 @@ import kotlin.math.roundToLong
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.Instant
 import kotlin.time.toJavaInstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -36,7 +35,7 @@ import voice.core.playback.session.toMediaIdOrNull
 class ListeningSessionRecorder(
   private val repo: ListeningStatsRepo,
   private val clock: Clock,
-  private val zone: ZoneId,
+  private val zone: () -> ZoneId,
   private val scope: CoroutineScope,
 ) {
 
@@ -93,7 +92,8 @@ class ListeningSessionRecorder(
       return
     }
     stopped()
-    val now = clock.now().toEpochMilliseconds()
+    val nowInstant = clock.now()
+    val now = nowInstant.toEpochMilliseconds()
     val previous = session
     session =
       if (
@@ -106,8 +106,7 @@ class ListeningSessionRecorder(
         OpenSession(
           bookId = bookId,
           startedAtMillis = now,
-          utcOffsetSeconds =
-            zone.rules.getOffset(Instant.fromEpochMilliseconds(now).toJavaInstant()).totalSeconds,
+          utcOffsetSeconds = zone().rules.getOffset(nowInstant.toJavaInstant()).totalSeconds,
         )
       }
     this.speed = speed

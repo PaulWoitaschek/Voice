@@ -211,6 +211,6 @@ private fun BookContent.withoutPlaybackNoise(): BookContent =
     positionInChapter = positionInChapter / 60_000,
     // whether the book was played stays, because a book that never was shows the last speed
     lastPlayedAt =
-      if (lastPlayedAt == Instant.fromEpochMilliseconds(0)) Instant.fromEpochMilliseconds(0)
+      if (lastPlayedAt == Instant.fromEpochMilliseconds(0)) lastPlayedAt
       else Instant.DISTANT_FUTURE,
   )

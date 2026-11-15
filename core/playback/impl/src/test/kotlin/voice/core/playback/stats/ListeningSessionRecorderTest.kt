@@ -30,7 +30,7 @@ class ListeningSessionRecorderTest {
   private val clock = SchedulerClock(scope.testScheduler, start)
   private val repo = MemoryListeningStatsRepo()
   private val recorder =
-    ListeningSessionRecorder(repo, clock, ZoneId.of("Europe/Berlin"), scope.backgroundScope)
+    ListeningSessionRecorder(repo, clock, { ZoneId.of("Europe/Berlin") }, scope.backgroundScope)
   private val dune = BookId("dune")
   private val hyperion = BookId("hyperion")
 

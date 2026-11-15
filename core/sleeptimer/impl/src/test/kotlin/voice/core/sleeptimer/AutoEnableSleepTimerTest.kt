@@ -52,7 +52,7 @@ class AutoEnableSleepTimerMinimalTest {
         object : Clock {
           override fun now() = Instant.parse("2020-01-01T23:00:00Z")
         },
-      zone = ZoneId.of("UTC"),
+      zone = { ZoneId.of("UTC") },
       scope = testScope.backgroundScope,
     )
 

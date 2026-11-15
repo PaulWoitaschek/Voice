@@ -289,7 +289,7 @@ class PlaySupportBackendTest {
         object : Clock {
           override fun now(): Instant = now
         },
-      zone = ZoneOffset.UTC,
+      zone = { ZoneOffset.UTC },
       scope = backgroundScope,
     )
   }
