@@ -42,7 +42,7 @@ internal fun savedAtLabel(
   now: Instant,
   zone: ZoneId,
 ): DayLabel {
-  if (at > now || now - at < 1.minutes) {
+  if (now - at < 1.minutes) {
     return DayLabel.JustNow
   }
   val dateTime = at.toJavaInstant().atZone(zone)

@@ -4,6 +4,7 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Clock
+import kotlin.time.toKotlinInstant
 import kotlin.uuid.Uuid
 import voice.core.data.MarkData
 
@@ -12,6 +13,23 @@ class ConvertersTest {
   @Test
   fun instant() {
     test(Clock.System.now(), Converters::fromInstant, Converters::toInstant)
+  }
+
+  @Test
+  fun `instants stored by java time stay the same`() {
+    val converters = Converters()
+    listOf(
+        "1970-01-01T00:00:00Z",
+        "2026-10-07T10:00:00.123Z",
+        "2026-10-07T10:00:00.123456Z",
+        "2026-10-07T10:00:00.123456789Z",
+        "+12000-01-01T00:00:00Z",
+      )
+      .forEach { stored ->
+        val instant = converters.toInstant(stored)
+        assertEquals(java.time.Instant.parse(stored).toKotlinInstant(), instant)
+        assertEquals(stored, converters.fromInstant(instant))
+      }
   }
 
   @Test
