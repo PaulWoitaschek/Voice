@@ -40,12 +40,15 @@ import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.player.seekBackBy
 import voice.core.playback.session.CustomCommand
+import voice.core.playback.session.MediaId
 import voice.core.playback.session.MediaItemProvider
 import voice.core.playback.session.PlaybackService
 import voice.core.playback.session.currentBookId
+import voice.core.playback.session.durationMs
 import voice.core.playback.session.playbackItemForPosition
 import voice.core.playback.session.positionInMediaItem
 import voice.core.playback.session.sendCustomCommand
+import voice.core.playback.session.toMediaIdOrNull
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -140,10 +143,12 @@ class PlayerControllerImpl(
   }
 
   override fun next() = executeAfterPrepare { controller ->
-    val index = controller.nextMediaItemIndex
-    if (index == C.INDEX_UNSET) return@executeAfterPrepare
-    controller.record(ListeningEvent.Type.ChapterChange, to = controller.playbackPosition(index, 0))
-    controller.seekTo(index, 0)
+    val (index, positionMs) = controller.nextChapterTarget() ?: return@executeAfterPrepare
+    controller.record(
+      ListeningEvent.Type.ChapterChange,
+      to = controller.playbackPosition(index, positionMs),
+    )
+    controller.seekTo(index, positionMs)
   }
 
   override fun play(source: ListeningEvent.Source?) = executeAfterPrepare { controller ->
@@ -342,6 +347,16 @@ internal fun previousJumpType(
     sameItem -> ListeningEvent.Type.Seek
     else -> ListeningEvent.Type.ChapterChange
   }
+
+// Headsets and cars skip instead, see VoicePlayer.seekToNext.
+internal fun Player.nextChapterTarget(): Pair<Int, Long>? {
+  val nextIndex = nextMediaItemIndex
+  if (nextIndex != C.INDEX_UNSET) return nextIndex to 0L
+  // Not the duration of the player: right after the book is loaded, it isn't known yet.
+  val mark = currentMediaItem?.mediaId?.toMediaIdOrNull() as? MediaId.ChapterMark ?: return null
+  if (currentPosition >= mark.durationMs) return null
+  return currentMediaItemIndex to mark.durationMs
+}
 
 // Like seekToPrevious, which VoicePlayer turns into a skip for headsets and cars.
 internal fun Player.previousChapterIndex(): Int {
