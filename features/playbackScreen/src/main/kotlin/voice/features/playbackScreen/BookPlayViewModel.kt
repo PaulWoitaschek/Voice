@@ -243,7 +243,7 @@ class BookPlayViewModel(
       val customTime = it.customSleepTime
       val newTime = customTime + 1
       sleepTimerPreferenceStore.updateData { preference ->
-        preference.copy(duration = newTime.minutes)
+        preference.copy(duration = newTime.minutes, autoSleepDuration = newTime.minutes)
       }
       SleepTimerViewState(newTime)
     }
@@ -254,7 +254,7 @@ class BookPlayViewModel(
       val customTime = it.customSleepTime
       val newTime = (customTime - 1).coerceAtLeast(1)
       sleepTimerPreferenceStore.updateData { preference ->
-        preference.copy(duration = newTime.minutes)
+        preference.copy(duration = newTime.minutes, autoSleepDuration = newTime.minutes)
       }
       SleepTimerViewState(newTime)
     }
@@ -263,6 +263,7 @@ class BookPlayViewModel(
   fun onAcceptSleepTime(time: Int) {
     updateSleepTimeViewState {
       sleepTimer.enable(TimedWithDuration(time.minutes))
+      sleepTimerPreferenceStore.updateData { it.copy(autoSleepDuration = time.minutes) }
       null
     }
   }

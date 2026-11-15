@@ -222,6 +222,116 @@ class BookPlayViewModelTest {
   }
 
   @Test
+  fun `the 30-minute preset sets the automatic minutes to 30`() = scope.runTest {
+    viewModel.toggleSleepTimer()
+    viewModel.onAcceptSleepTime(30)
+    runCurrent()
+
+    assertEquals(expected = 30.minutes, actual = sleepTimerDataStore.data.first().autoSleepDuration)
+  }
+
+  @Test
+  fun `the custom time of 25 minutes sets the automatic minutes to 25`() = scope.runTest {
+    sleepTimerDataStore.updateData { it.copy(duration = 25.minutes) }
+    viewModel.toggleSleepTimer()
+    runCurrent()
+    val customTime =
+      assertIs<BookPlayDialogViewState.SleepTimer>(viewModel.dialogState.value)
+        .viewState
+        .customSleepTime
+    viewModel.onAcceptSleepTime(customTime)
+    runCurrent()
+
+    assertEquals(
+      expected = 25.minutes,
+      actual = sleepTimerDataStore.data.first().autoSleepDuration,
+    )
+  }
+
+  @Test
+  fun `the 30-minute preset, then plus to 25 and the sheet closed without a start, sets the automatic minutes to 25`() =
+    scope.runTest {
+      sleepTimerDataStore.updateData { it.copy(duration = 24.minutes) }
+      viewModel.toggleSleepTimer()
+      viewModel.onAcceptSleepTime(30)
+      runCurrent()
+      viewModel.toggleSleepTimer()
+      runCurrent()
+
+      viewModel.toggleSleepTimer()
+      runCurrent()
+      viewModel.incrementSleepTime()
+      runCurrent()
+      viewModel.dismissDialog()
+
+      assertEquals(
+        expected = 25.minutes,
+        actual = sleepTimerDataStore.data.first().autoSleepDuration,
+      )
+    }
+
+  @Test
+  fun `minus to 4 and the sheet closed without a start, sets the automatic minutes to 4`() =
+    scope.runTest {
+      viewModel.toggleSleepTimer()
+      runCurrent()
+      viewModel.decrementSleepTime()
+      runCurrent()
+      viewModel.dismissDialog()
+
+      assertEquals(
+        expected = 4.minutes,
+        actual = sleepTimerDataStore.data.first().autoSleepDuration,
+      )
+    }
+
+  @Test
+  fun `plus to 25, then the 30-minute preset, the custom time stays 25`() = scope.runTest {
+    sleepTimerDataStore.updateData { it.copy(duration = 24.minutes) }
+    viewModel.toggleSleepTimer()
+    runCurrent()
+    viewModel.incrementSleepTime()
+    runCurrent()
+    viewModel.onAcceptSleepTime(30)
+    runCurrent()
+
+    assertEquals(expected = 25.minutes, actual = sleepTimerDataStore.data.first().duration)
+  }
+
+  @Test
+  fun `plus to 25, then the 30-minute preset, sets the automatic minutes to 30`() = scope.runTest {
+    sleepTimerDataStore.updateData { it.copy(duration = 24.minutes) }
+    viewModel.toggleSleepTimer()
+    runCurrent()
+    viewModel.incrementSleepTime()
+    runCurrent()
+    viewModel.onAcceptSleepTime(30)
+    runCurrent()
+
+    assertEquals(expected = 30.minutes, actual = sleepTimerDataStore.data.first().autoSleepDuration)
+  }
+
+  @Test
+  fun `the 30-minute preset, then end of chapter, keeps the automatic minutes at 30`() =
+    scope.runTest {
+      viewModel.toggleSleepTimer()
+      viewModel.onAcceptSleepTime(30)
+      runCurrent()
+      viewModel.toggleSleepTimer()
+      runCurrent()
+
+      viewModel.toggleSleepTimer()
+      runCurrent()
+      viewModel.onAcceptSleepAtEndOfChapter()
+      runCurrent()
+
+      assertEquals(
+        expected = 30.minutes,
+        actual = sleepTimerDataStore.data.first().autoSleepDuration,
+      )
+    }
+
+  @Test
   fun onCurrentChapterClickShowsDialogWithCorrectState() = scope.runTest {
     viewModel.onCurrentChapterClick()
     yield()

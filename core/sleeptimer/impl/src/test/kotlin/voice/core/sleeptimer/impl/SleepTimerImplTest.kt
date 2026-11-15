@@ -11,6 +11,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
@@ -122,6 +123,30 @@ class SleepTimerImplTest {
     advanceTimeBy(1)
     assertEquals(
       expected = SleepTimerState.Enabled.WithEndOfChapter,
+      actual = sleepTimer.state.value,
+    )
+  }
+
+  @Test
+  fun `the automatic timer with no choice yet uses the custom time`() = testScope.runTest {
+    sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    runCurrent()
+
+    assertEquals(
+      expected = SleepTimerState.Enabled.WithDuration(20.minutes),
+      actual = sleepTimer.state.value,
+    )
+  }
+
+  @Test
+  fun `the automatic timer uses the automatic minutes`() = testScope.runTest {
+    sleepTimerPreferenceStore.updateData { it.copy(autoSleepDuration = 30.minutes) }
+
+    sleepTimer.enable(SleepTimerMode.TimedWithDefault)
+    runCurrent()
+
+    assertEquals(
+      expected = SleepTimerState.Enabled.WithDuration(30.minutes),
       actual = sleepTimer.state.value,
     )
   }
