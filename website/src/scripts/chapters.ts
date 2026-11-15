@@ -1,5 +1,10 @@
 export type Chapter = { startMs: number; title: string }
 
+export async function id3Version(file: Blob): Promise<number> {
+  const header = new Uint8Array(await file.slice(0, 4).arrayBuffer())
+  return String.fromCharCode(...header.subarray(0, 3)) === 'ID3' ? header[3] : 0
+}
+
 export function id3Chapters(frames: unknown, id3Version: number): Chapter[] {
   const list = frames instanceof Uint8Array ? [frames] : Array.isArray(frames) ? frames : []
   const chapters = list

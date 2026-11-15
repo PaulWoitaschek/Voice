@@ -5,19 +5,19 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
 ---
 
 <Prose
-  description="Check if your MP3 audiobook makes skips and resumes land in the wrong place, and fix it in your browser."
-  title="MP3 books that jump"
+  description="Find out why an audiobook doesn't play right in Voice, and fix it in your browser."
+  title="Check an audiobook file"
 >
-  <h1>Does your MP3 book jump?</h1>
+  <h1>Does your book play right?</h1>
   <p class="lead">
-    In some long MP3 audiobooks, a skip or a resume lands minutes away from the time Voice shows. Check your book here,
-    and fix it if it's affected.
+    If a book doesn't show up in Voice, doesn't start, stops early or jumps to the wrong place, the cause is often the
+    file. Check it here. Your file doesn't leave your device.
   </p>
 
   <div class="tool" data-state="idle">
     <label class="button primary pick">
       Choose an audiobook file
-      <input accept=".mp3,audio/*" hidden type="file" />
+      <input hidden type="file" />
     </label>
     <div class="checking">
       <p class="file"></p>
@@ -25,20 +25,29 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
     </div>
     <div class="result">
       <p class="file"></p>
-      <p data-verdict="other">
-        This isn't an MP3 file, so it doesn't have this problem. If Voice still jumps in it,
-        please <a href={bugReport}>report a bug</a>.
+      <p data-verdict="unreadable">
+        This page can't read the file. It may be damaged, locked with DRM like Audible's AAX files, or in a format Voice
+        doesn't play, like WMA. See the <a href="#fix">ways to fix it</a>.
+      </p>
+      <p class="problem">
+        <span data-verdict="format">Voice can't play the audio in this file. It's <span class="format"></span>.</span>
+        <span data-verdict="seek">
+          In this file, a jump can land up to <span class="amount"></span> away from where it should.
+        </span>{' '}
+        <span class="here">Convert it to M4B to fix this, here or in one of the <a href="#fix">other ways</a>.</span>
+        <span class="elsewhere">Convert it to M4B to fix this. See the <a href="#fix">ways to fix it</a>.</span>
       </p>
       <p data-verdict="fine">
-        This file is fine: a jump lands at most <span class="amount"></span> off. If Voice still jumps in it,
-        please <a href={bugReport}>report a bug</a>.
+        No known problem found. If Voice still doesn't play it right, please <a href={bugReport}>report a bug</a> and
+        paste the details below.
       </p>
-      <p data-verdict="broken">
-        In this file, a jump can land up to <span class="amount"></span> away from where it should. Convert it to M4B to
-        fix this, here or in one of the <a href="#fix">other ways</a>.
-      </p>
-      <button class="button primary convert" type="button">Convert to M4B</button>
-      <button class="button tonal small again" type="button">Check another file</button>
+      <label class="details-label" for="details">Details for a bug report</label>
+      <textarea id="details" readonly></textarea>
+      <div class="actions">
+        <button class="button tonal small copy" type="button">Copy</button>
+        <button class="button primary convert" type="button">Convert to M4B</button>
+        <button class="button tonal small again" type="button">Check another file</button>
+      </div>
     </div>
     <div class="working">
       <p class="file"></p>
@@ -71,8 +80,8 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
 
   <h2 id="fix">Ways to fix it</h2>
   <p>
-    After each of them, put the new file in your audiobook folder and remove the old MP3 file, so Voice doesn't show the
-    book twice.
+    After each of them, put the new file in your audiobook folder and remove the old file, so Voice doesn't show the book
+    twice.
   </p>
 
   <h3>In your browser</h3>
@@ -94,22 +103,35 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
   </p>
 
   <h3>With ffmpeg</h3>
-  <p>On a computer with <a href="https://ffmpeg.org/download.html">ffmpeg</a>, this makes an M4B file with the chapters and the cover:</p>
+  <p>
+    A damaged M4B file often plays again after <a href="https://ffmpeg.org/download.html">ffmpeg</a> writes it new. This
+    keeps the audio and the chapters as they are:
+  </p>
+  <pre><code>ffmpeg -i "book.m4b" -map 0:a -map_chapters 0 -c copy "fixed.m4b"</code></pre>
+  <p>To convert any other book to M4B:</p>
   <pre><code>ffmpeg -i "book.mp3" -map 0:a -map "0:v?" -c:a aac -b:a 64k -c:v copy -disposition:v attached_pic "book.m4b"</code></pre>
   <p>
     To keep the MP3 audio as it is, split the book into 10 minute files instead. Voice plays all files in a folder as
     one book, but the chapter names are lost. Make the folder <code>book</code> first:
   </p>
   <pre><code>ffmpeg -i "book.mp3" -map 0:a -c copy -f segment -segment_time 600 -reset_timestamps 1 "book/part %03d.mp3"</code></pre>
+
+  <h3>Books with DRM</h3>
+  <p>
+    A book from a store that locks it with DRM, like Audible, only plays in the store's app. Voice can't play it, and
+    this page can't convert it.
+  </p>
 </Prose>
 
 <script>
-  import { checkSeeking } from '../scripts/seek-check'
+  import { checkFile, plural } from '../scripts/check'
 
   const root = document.querySelector<HTMLElement>('.tool')!
   const input = root.querySelector<HTMLInputElement>('input')!
   const checkProgress = root.querySelector<HTMLProgressElement>('.check-progress')!
   const convertProgress = root.querySelector<HTMLProgressElement>('.convert-progress')!
+  const details = root.querySelector<HTMLTextAreaElement>('#details')!
+  const copy = root.querySelector<HTMLButtonElement>('.copy')!
   const download = root.querySelector<HTMLAnchorElement>('.download')!
   const error = root.querySelector('.error')!
   let file: File | undefined
@@ -120,30 +142,28 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
     root.querySelectorAll(`.${state} .status`).forEach((element) => (element.textContent = status))
   }
 
-  const fail = (message: string, e: unknown) => {
-    show('idle')
-    error.textContent = message
-    console.error(e)
-  }
-
   input.addEventListener('change', async () => {
     file = input.files?.[0]
     if (!file) return
     input.value = ''
     root.querySelectorAll('.file').forEach((element) => (element.textContent = file!.name))
     error.textContent = ''
+    checkProgress.removeAttribute('value')
     show('checking')
-    try {
-      const result = await checkSeeking(file, (value) => (checkProgress.value = value))
-      const verdict = result.kind === 'not-mp3' ? 'other' : result.errorSeconds < 5 ? 'fine' : 'broken'
-      if (result.kind === 'mp3') {
-        root.querySelectorAll('.amount').forEach((element) => (element.textContent = amount(result.errorSeconds)))
-      }
-      root.dataset.verdict = verdict
-      show('result')
-    } catch (e) {
-      fail("This file couldn't be read.", e)
-    }
+    const check = await checkFile(file, (value) => (checkProgress.value = value))
+    root.querySelector('.format')!.textContent = check.format ?? ''
+    root.querySelector('.amount')!.textContent = check.amount ?? ''
+    details.value = check.details
+    details.rows = check.details.split('\n').length
+    root.dataset.verdict = check.verdict
+    root.dataset.convert = String(check.canConvert)
+    show('result')
+  })
+
+  copy.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(details.value)
+    copy.textContent = 'Copied'
+    setTimeout(() => (copy.textContent = 'Copy'), 2000)
   })
 
   root.querySelector('.convert')!.addEventListener('click', async () => {
@@ -163,10 +183,14 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
       const { blob, chapters } = await result
       URL.revokeObjectURL(download.href)
       download.href = URL.createObjectURL(blob)
-      download.download = name.replace(/\.mp3$/i, '') + '.m4b'
+      download.download = name.replace(/\.[^.]*$/, '') + '.m4b'
       show('done', `${(blob.size / 1e6).toFixed(0)} MB, ${plural(chapters, 'chapter')}`)
     } catch (e) {
-      if (root.dataset.state !== 'idle') fail("This file couldn't be converted.", e)
+      if (root.dataset.state !== 'idle') {
+        show('idle')
+        error.textContent = "This file couldn't be converted."
+        console.error(e)
+      }
     } finally {
       cancel = undefined
     }
@@ -186,9 +210,6 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
     }),
   )
 
-  const plural = (value: number, word: string) => `${value} ${value === 1 ? word : `${word}s`}`
-  const amount = (seconds: number) =>
-    seconds < 90 ? plural(Math.max(1, Math.round(seconds)), 'second') : plural(Math.round(seconds / 60), 'minute')
   const minutes = (ms: number) => plural(Math.max(1, Math.round(ms / 60_000)), 'minute')
 </script>
 
@@ -235,10 +256,39 @@ const bugReport = 'https://github.com/PaulWoitaschek/Voice/issues/new?template=b
   .tool:not([data-state='result']) .result,
   .tool:not([data-state='working']) .working,
   .tool:not([data-state='done']) .done,
-  .tool:not([data-verdict='other']) [data-verdict='other'],
+  .tool:not([data-verdict='unreadable']) [data-verdict='unreadable'],
+  .tool:not([data-verdict='format']) [data-verdict='format'],
+  .tool:not([data-verdict='seek']) [data-verdict='seek'],
   .tool:not([data-verdict='fine']) [data-verdict='fine'],
-  .tool:not([data-verdict='broken']) :is([data-verdict='broken'], .convert) {
+  .tool:not([data-verdict='format'], [data-verdict='seek']) .problem,
+  .tool:not([data-convert='true']) :is(.here, .convert),
+  .tool[data-convert='true'] .elsewhere {
     display: none;
+  }
+
+  .details-label {
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
+  textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--card-line);
+    border-radius: 16px;
+    background: var(--page);
+    color: var(--text);
+    font: 0.95rem/1.5 ui-monospace, monospace;
+    resize: none;
+    field-sizing: content;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
   }
 
   .file {

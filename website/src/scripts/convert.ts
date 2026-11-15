@@ -8,7 +8,7 @@ import {
   Mp4OutputFormat,
   Output,
 } from 'mediabunny'
-import { type Chapter, chplBox, id3Chapters, withBox } from './chapters'
+import { type Chapter, chplBox, id3Chapters, id3Version, withBox } from './chapters'
 
 export async function startConversion(file: File, onProgress: (progress: number) => void) {
   if (!(await canEncodeAudio('aac'))) {
@@ -16,8 +16,7 @@ export async function startConversion(file: File, onProgress: (progress: number)
     registerAacEncoder()
   }
 
-  const header = new Uint8Array(await file.slice(0, 4).arrayBuffer())
-  const id3Version = String.fromCharCode(...header.subarray(0, 3)) === 'ID3' ? header[3] : 0
+  const version = await id3Version(file)
   let chapters: Chapter[] = []
   let moov: { data: Uint8Array; position: number } | undefined
   const target = new BufferTarget()
@@ -40,7 +39,7 @@ export async function startConversion(file: File, onProgress: (progress: number)
     }),
     // Raw ID3 frames would end up as unknown MP4 tags, and MP4 only stores a front cover.
     tags: ({ raw, images, ...tags }) => {
-      chapters = id3Chapters(raw?.CHAP, id3Version)
+      chapters = id3Chapters(raw?.CHAP, version)
       const cover = images?.find((image) => image.kind === 'coverFront') ?? images?.[0]
       return { ...tags, images: cover && [{ ...cover, kind: 'coverFront' }] }
     },
