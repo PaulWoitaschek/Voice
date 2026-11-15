@@ -116,33 +116,16 @@ class PlayerControllerImpl(
   }
 
   override fun fastForward(source: ListeningEvent.Source) = executeAfterPrepare { controller ->
-    controller.record(ListeningEvent.Type.SkipForward, source)
-    controller.awaitCommand(Player.COMMAND_SEEK_FORWARD)
-    controller.seekForward()
+    if (controller.awaitCommand(Player.COMMAND_SEEK_FORWARD)) {
+      controller.record(ListeningEvent.Type.SkipForward, source)
+      controller.seekForward()
+    }
   }
 
   override fun rewind(source: ListeningEvent.Source) = executeAfterPrepare { controller ->
-    controller.record(ListeningEvent.Type.SkipBack, source)
-    controller.awaitCommand(Player.COMMAND_SEEK_BACK)
-    controller.seekBack()
-  }
-
-  // Right after a book is loaded, the controller still has the commands from before, and drops a
-  // skip until the file is ready.
-  private suspend fun MediaController.awaitCommand(command: Int) {
-    withTimeoutOrNull(5.seconds) {
-      callbackFlow {
-        val listener =
-          object : Player.Listener {
-            override fun onAvailableCommandsChanged(availableCommands: Player.Commands) {
-              trySend(Unit)
-            }
-          }
-        addListener(listener)
-        send(Unit)
-        awaitClose { removeListener(listener) }
-      }
-        .first { isCommandAvailable(command) }
+    if (controller.awaitCommand(Player.COMMAND_SEEK_BACK)) {
+      controller.record(ListeningEvent.Type.SkipBack, source)
+      controller.seekBack()
     }
   }
 
@@ -349,6 +332,24 @@ class PlayerControllerImpl(
     }
   }
 }
+
+// A book that Voice just loaded can't seek before its file is ready, and the controller drops a
+// skip until then.
+internal suspend fun Player.awaitCommand(command: Int): Boolean =
+  withTimeoutOrNull(5.seconds) {
+    callbackFlow {
+      val listener =
+        object : Player.Listener {
+          override fun onAvailableCommandsChanged(availableCommands: Player.Commands) {
+            trySend(Unit)
+          }
+        }
+      addListener(listener)
+      send(Unit)
+      awaitClose { removeListener(listener) }
+    }
+      .first { isCommandAvailable(command) }
+  } != null
 
 /**
  * Skipping back restarts the current chapter when it already played for a while, or when there is

@@ -91,7 +91,7 @@ class WidgetButtonReceiverTest {
   }
 
   @Test
-  fun `fast forward on the widget only skips from the widget, so a paused book stays paused`() {
+  fun `fast forward on the widget skips from the widget and sends no play`() {
     send(intents.fastForward())
 
     verify { player.fastForward(ListeningEvent.Source.Widget) }
@@ -102,7 +102,7 @@ class WidgetButtonReceiverTest {
   }
 
   @Test
-  fun `rewind on the widget only skips back from the widget, so a paused book stays paused`() {
+  fun `rewind on the widget skips back from the widget and sends no play`() {
     send(intents.rewind())
 
     verify { player.rewind(ListeningEvent.Source.Widget) }
@@ -113,7 +113,7 @@ class WidgetButtonReceiverTest {
   }
 
   @Test
-  fun `automation rewind only skips back from the widget, so a paused book stays paused`() {
+  fun `automation rewind skips back from the widget and sends no play`() {
     send(automation("Rewind"))
 
     verify { player.rewind(ListeningEvent.Source.Widget) }
@@ -135,7 +135,7 @@ class WidgetButtonReceiverTest {
   }
 
   @Test
-  fun `automation play on a paused book is a play from the widget`() {
+  fun `automation play is a play from the widget`() {
     send(automation("Play"))
 
     verify { player.play(ListeningEvent.Source.Widget) }
