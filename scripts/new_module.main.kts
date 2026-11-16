@@ -1,5 +1,5 @@
 #!/usr/bin/env kotlin
-@file:DependsOn("com.github.ajalt.clikt:clikt-jvm:5.1.0")
+@file:DependsOn("com.github.ajalt.clikt:clikt-jvm:5.2.0")
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.Context
