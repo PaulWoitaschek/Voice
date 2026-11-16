@@ -56,7 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import kotlin.math.max
 import kotlin.math.min
 import voice.core.strings.R as StringsR
@@ -99,9 +99,9 @@ internal fun CoverCropper(
             .clip(RoundedCornerShape(IMAGE_CORNER_RADIUS))
             .background(MaterialTheme.colorScheme.surfaceContainerHighest),
         onSuccess = { state ->
-          val drawable = state.result.drawable
-          if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
-            aspectRatio = drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight
+          val image = state.result.image
+          if (image.width > 0 && image.height > 0) {
+            aspectRatio = image.width.toFloat() / image.height
           }
         },
         onError = { failed = true },

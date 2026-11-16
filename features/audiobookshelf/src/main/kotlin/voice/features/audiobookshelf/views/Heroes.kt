@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import java.io.File
 import kotlin.math.PI
 import kotlin.math.abs

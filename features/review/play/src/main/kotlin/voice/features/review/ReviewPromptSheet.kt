@@ -82,7 +82,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.graphics.shapes.Morph
 import androidx.graphics.shapes.RoundedPolygon
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import java.text.NumberFormat
 import kotlin.math.roundToInt
 import kotlin.math.sin

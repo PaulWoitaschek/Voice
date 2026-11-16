@@ -3,7 +3,9 @@ package voice.core.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import coil.request.ImageRequest
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import coil3.request.placeholder
 
 private const val THUMBNAIL_SIZE_PX = 480
 

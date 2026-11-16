@@ -64,7 +64,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.Morph
 import androidx.graphics.shapes.RoundedPolygon
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import java.text.NumberFormat
 import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.download.BookDownloadState

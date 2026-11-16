@@ -2,12 +2,12 @@ package voice.features.cover.crop
 
 import android.graphics.Bitmap
 import androidx.compose.ui.geometry.Rect
-import coil.size.Size
-import coil.transform.Transformation
+import coil3.size.Size
+import coil3.transform.Transformation
 import kotlin.math.roundToInt
 
 /** Cuts a square out of the image. [crop] is relative to the image, from 0 to 1 on both axes. */
-internal class CropTransformation(private val crop: Rect) : Transformation {
+internal class CropTransformation(private val crop: Rect) : Transformation() {
 
   override val cacheKey: String = "crop(${crop.left},${crop.top},${crop.right},${crop.bottom})"
 

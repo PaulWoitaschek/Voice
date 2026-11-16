@@ -19,10 +19,12 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toBitmap
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.toPath
-import coil.imageLoader
-import coil.request.CachePolicy
-import coil.request.ImageRequest
-import coil.request.SuccessResult
+import coil3.imageLoader
+import coil3.request.CachePolicy
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowHardware
+import coil3.toBitmap
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -95,7 +97,7 @@ class WidgetImages(private val context: Context) {
         .memoryCachePolicy(CachePolicy.DISABLED)
         .build()
     val result = context.imageLoader.execute(request) as? SuccessResult ?: return null
-    return result.drawable.toBitmap()
+    return result.image.toBitmap()
   }
 
   internal fun shapedCover(
