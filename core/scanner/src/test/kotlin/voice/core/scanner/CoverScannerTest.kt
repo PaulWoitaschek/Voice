@@ -8,10 +8,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import java.io.File
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.time.Instant
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
@@ -244,7 +244,7 @@ class CoverScannerTest {
       id = ChapterId(file.toUri()),
       name = "Chapter",
       duration = 1000L,
-      fileLastModified = Instant.EPOCH,
+      fileLastModified = Instant.fromEpochMilliseconds(0),
       markData = emptyList(),
       fileSize = 0,
     )

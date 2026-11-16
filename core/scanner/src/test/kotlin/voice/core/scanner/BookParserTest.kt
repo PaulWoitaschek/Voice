@@ -4,9 +4,9 @@ import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.mockk
 import java.io.File
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
@@ -125,7 +125,7 @@ class BookParserTest {
       id = ChapterId(file.toUri()),
       name = "Chapter",
       duration = 1000L,
-      fileLastModified = Instant.EPOCH,
+      fileLastModified = Instant.fromEpochMilliseconds(0),
       markData = emptyList(),
       fileSize = 0,
     )

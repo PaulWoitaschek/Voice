@@ -14,14 +14,15 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
-import java.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -52,7 +53,10 @@ class BookmarkViewModelTest {
   private val signal = testChapter()
   private val book =
     testBook(listOf(arrival, signal), currentChapter = signal.id, positionInChapter = 5.minutes)
-  private val clock = Clock.fixed(today(10), testZone)
+  private val clock =
+    object : Clock {
+      override fun now(): Instant = today(10)
+    }
   private val bookmarkRepo = FakeBookmarkRepo(clock)
   private val playStateManager = PlayStateManager()
   private val livePlaybackState = MutableStateFlow<LivePlaybackState?>(null)
@@ -91,6 +95,7 @@ class BookmarkViewModelTest {
         },
       navigator = navigator,
       clock = clock,
+      zone = { testZone },
       dispatcherProvider =
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
       kioskModeFeatureFlag = KioskModeFeatureFlag(MemoryFeatureFlag(false)),

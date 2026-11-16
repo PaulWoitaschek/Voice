@@ -4,8 +4,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import java.io.IOException
-import java.time.Instant
 import kotlin.math.abs
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -108,7 +108,9 @@ internal class ProgressSync(
     when {
       serverChanged && !localChanged -> applyServer(book, server)
       serverChanged && localChanged -> {
-        if (isPlaying(bookId) || book.content.lastPlayedAt.toEpochMilli() > server.lastUpdate) {
+        if (
+          isPlaying(bookId) || book.content.lastPlayedAt.toEpochMilliseconds() > server.lastUpdate
+        ) {
           @Suppress("RETURN_VALUE_NOT_USED") send(account, book, server.lastUpdate)
         } else {
           applyServer(book, server)
@@ -144,7 +146,7 @@ internal class ProgressSync(
         it.copy(
           currentChapter = position.chapterId,
           positionInChapter = position.positionInChapter,
-          lastPlayedAt = maxOf(it.lastPlayedAt, Instant.ofEpochMilli(server.lastUpdate)),
+          lastPlayedAt = maxOf(it.lastPlayedAt, Instant.fromEpochMilliseconds(server.lastUpdate)),
         )
       }
     }

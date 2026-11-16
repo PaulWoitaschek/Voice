@@ -6,7 +6,8 @@ import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import java.time.Clock
+import java.time.ZoneId
+import kotlin.time.Clock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -38,6 +39,7 @@ class HistoryViewModel(
   private val playerController: PlayerController,
   private val navigator: Navigator,
   private val clock: Clock,
+  private val zone: () -> ZoneId,
   private val dispatcherProvider: DispatcherProvider,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
   @Assisted private val bookId: BookId,
@@ -71,8 +73,8 @@ class HistoryViewModel(
             historyViewState(
               events = events,
               index = index,
-              now = clock.instant(),
-              zone = clock.zone,
+              now = clock.now(),
+              zone = zone(),
             )
           }
         }

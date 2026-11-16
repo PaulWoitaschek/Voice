@@ -1,12 +1,14 @@
 package voice.features.bookmark
 
 import java.time.DayOfWeek
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZonedDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
+import kotlin.time.toKotlinInstant
 
 class DayLabelTest {
 
@@ -16,7 +18,7 @@ class DayLabelTest {
 
   @Test
   fun `under a minute ago is just now`() {
-    assertEquals(expected = DayLabel.JustNow, actual = saved(now.minusSeconds(30)))
+    assertEquals(expected = DayLabel.JustNow, actual = saved(now - 30.seconds))
   }
 
   @Test
@@ -26,22 +28,26 @@ class DayLabelTest {
 
   @Test
   fun `bookmarks from the night are yesterday`() {
-    val yesterdayLate = ZonedDateTime.of(2026, 10, 6, 23, 42, 0, 0, testZone).toInstant()
+    val yesterdayLate =
+      ZonedDateTime.of(2026, 10, 6, 23, 42, 0, 0, testZone).toInstant().toKotlinInstant()
     assertEquals(expected = DayLabel.Yesterday, actual = saved(yesterdayLate))
   }
 
   @Test
   fun `this week shows the weekday, older the date`() {
-    val thursday = ZonedDateTime.of(2026, 10, 1, 12, 0, 0, 0, testZone).toInstant()
+    val thursday =
+      ZonedDateTime.of(2026, 10, 1, 12, 0, 0, 0, testZone).toInstant().toKotlinInstant()
     assertEquals(expected = DayLabel.Weekday(DayOfWeek.THURSDAY), actual = saved(thursday))
 
-    val september = ZonedDateTime.of(2026, 9, 28, 12, 0, 0, 0, testZone).toInstant()
+    val september =
+      ZonedDateTime.of(2026, 9, 28, 12, 0, 0, 0, testZone).toInstant().toKotlinInstant()
     assertEquals(
       expected = DayLabel.Date(LocalDate.of(2026, 9, 28), withYear = false),
       actual = saved(september),
     )
 
-    val lastYear = ZonedDateTime.of(2025, 12, 24, 12, 0, 0, 0, testZone).toInstant()
+    val lastYear =
+      ZonedDateTime.of(2025, 12, 24, 12, 0, 0, 0, testZone).toInstant().toKotlinInstant()
     assertEquals(
       expected = DayLabel.Date(LocalDate.of(2025, 12, 24), withYear = true),
       actual = saved(lastYear),
@@ -63,7 +69,8 @@ class DayLabelTest {
       expected = DayLabel.ThisEvening,
       actual = sessionLabel(today(19), evening, testZone),
     )
-    val yesterdayLate = ZonedDateTime.of(2026, 10, 6, 22, 10, 0, 0, testZone).toInstant()
+    val yesterdayLate =
+      ZonedDateTime.of(2026, 10, 6, 22, 10, 0, 0, testZone).toInstant().toKotlinInstant()
     assertEquals(
       expected = DayLabel.LastNight,
       actual = sessionLabel(yesterdayLate, evening, testZone),

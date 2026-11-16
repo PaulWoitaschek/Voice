@@ -6,9 +6,9 @@ import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import org.junit.Rule
 import org.junit.runner.RunWith
 import voice.core.data.repo.internals.AppDb
@@ -44,7 +44,7 @@ class Migration61to62Test {
           Event(
             type = "SleepTimerSet",
             source = "SleepTimer",
-            atMillis = night.toEpochMilli(),
+            atMillis = night.toEpochMilliseconds(),
             time = 4_000,
           ),
         ),
@@ -66,7 +66,7 @@ class Migration61to62Test {
   fun `a night the history already has isn't added twice`() {
     val migrated = migrate {
       insertBookmark(id = "a", title = null, setBySleepTimer = true)
-      insertSleepTimerEvent(atMillis = night.toEpochMilli() + 1_000)
+      insertSleepTimerEvent(atMillis = night.toEpochMilliseconds() + 1_000)
     }
 
     assertEquals(expected = emptyList(), actual = migrated.bookmarkIds())
@@ -153,7 +153,7 @@ class Migration61to62Test {
         put("bookId", "book")
         put("type", "BookmarkDeleted")
         put("source", "App")
-        put("atMillis", night.toEpochMilli())
+        put("atMillis", night.toEpochMilliseconds())
         put("chapterId", "chapter")
         put("time", 1_000L)
         put("bookmarkSetBySleepTimer", setBySleepTimer)

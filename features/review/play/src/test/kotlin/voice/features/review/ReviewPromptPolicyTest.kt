@@ -1,13 +1,12 @@
 package voice.features.review
 
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.toJavaDuration
+import kotlin.time.Instant
 import voice.core.data.BookId
 import voice.core.data.repo.FinishedBook
 
@@ -101,10 +100,10 @@ class ReviewPromptPolicyTest {
       expected =
         ReviewPromptState(
           asks = 1,
-          lastAskedAtMillis = now.toEpochMilli(),
+          lastAskedAtMillis = now.toEpochMilliseconds(),
           listenedAtLastAskMillis = 12.hours.inWholeMilliseconds,
           celebratedMilestoneHours = 10,
-          snoozedUntilMillis = (now + 30.days).toEpochMilli(),
+          snoozedUntilMillis = (now + 30.days).toEpochMilliseconds(),
         ),
       actual = state,
     )
@@ -141,7 +140,8 @@ class ReviewPromptPolicyTest {
 
   @Test
   fun `a book finished before the last ask is not celebrated again`() {
-    val state = ReviewPromptState(asks = 1, lastAskedAtMillis = (now - 1.days).toEpochMilli())
+    val state =
+      ReviewPromptState(asks = 1, lastAskedAtMillis = (now - 1.days).toEpochMilliseconds())
     val finished = listOf(FinishedBook(dune, at = now - 2.days))
 
     assertEquals(
@@ -165,11 +165,11 @@ class ReviewPromptPolicyTest {
     val asked = ReviewPromptPolicy.asked(ReviewPromptState(), signals())
 
     assertEquals(
-      expected = (now + 90.days).toEpochMilli(),
+      expected = (now + 90.days).toEpochMilliseconds(),
       actual = ReviewPromptPolicy.answered(asked, ReviewAnswer.Idea, now).snoozedUntilMillis,
     )
     assertEquals(
-      expected = (now + 30.days).toEpochMilli(),
+      expected = (now + 30.days).toEpochMilliseconds(),
       actual = ReviewPromptPolicy.answered(asked, ReviewAnswer.Later, now).snoozedUntilMillis,
     )
   }
@@ -179,7 +179,7 @@ class ReviewPromptPolicyTest {
     val state = ReviewPromptState(asks = 2)
 
     assertEquals(
-      expected = (now + 90.days).toEpochMilli(),
+      expected = (now + 90.days).toEpochMilliseconds(),
       actual = ReviewPromptPolicy.answered(state, ReviewAnswer.Later, now).snoozedUntilMillis,
     )
   }
@@ -191,7 +191,3 @@ class ReviewPromptPolicyTest {
     assertNull(trigger(state, signals(listened = 1000.hours)))
   }
 }
-
-private operator fun Instant.plus(duration: Duration): Instant = plus(duration.toJavaDuration())
-
-private operator fun Instant.minus(duration: Duration): Instant = minus(duration.toJavaDuration())

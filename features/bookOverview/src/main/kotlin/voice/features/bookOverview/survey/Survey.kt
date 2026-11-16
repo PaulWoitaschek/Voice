@@ -2,9 +2,8 @@ package voice.features.bookOverview.survey
 
 import dev.zacsweers.metro.Inject
 import java.net.URLEncoder
-import java.time.Clock
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
+import java.time.ZoneId
+import kotlin.time.Clock
 import kotlin.time.toJavaInstant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -17,6 +16,7 @@ class Survey(
   private val handledSurveysStore: HandledSurveysStore,
   private val localSurvey: LocalSurvey,
   private val clock: Clock,
+  private val zone: () -> ZoneId,
   private val appInfoProvider: AppInfoProvider,
   private val analytics: Analytics,
 ) {
@@ -41,9 +41,7 @@ class Survey(
       listOf(
           "app_version" to appInfoProvider.versionName,
           "source" to (appInfoProvider.installer ?: "unknown"),
-          "days_installed" to
-            ChronoUnit.DAYS.between(appInfoProvider.installTime.toJavaInstant(), clock.instant())
-              .toString(),
+          "days_installed" to (clock.now() - appInfoProvider.installTime).inWholeDays.toString(),
         )
         .joinToString(separator = "&") { (key, value) ->
           "$key=${URLEncoder.encode(value, "UTF-8")}"
@@ -65,5 +63,5 @@ class Survey(
     analytics.event(name = "survey_card", params = mapOf("action" to action))
   }
 
-  private fun today(): Long = LocalDate.now(clock).toEpochDay()
+  private fun today(): Long = clock.now().toJavaInstant().atZone(zone()).toLocalDate().toEpochDay()
 }

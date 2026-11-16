@@ -1,7 +1,8 @@
 package voice.core.scanner
 
 import dev.zacsweers.metro.Inject
-import java.time.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.BookId
@@ -70,8 +71,8 @@ internal class BookParser(
     return BookContent(
         id = id,
         isActive = true,
-        addedAt = Instant.now(),
-        lastPlayedAt = Instant.EPOCH,
+        addedAt = Clock.System.now(),
+        lastPlayedAt = Instant.fromEpochMilliseconds(0),
         playbackSpeed = 1F,
         skipSilence = false,
         chapters = chapters.map { it.id },

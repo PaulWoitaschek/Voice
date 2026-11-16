@@ -3,12 +3,12 @@ package voice.core.data.repo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.runner.RunWith
@@ -44,7 +44,7 @@ class ListeningStatsRepoImplTest {
     // Berlin in summer
     utcOffset: Duration = 2.hours,
   ): ListeningSession {
-    val started = Instant.parse(startedAt).toEpochMilli()
+    val started = Instant.parse(startedAt).toEpochMilliseconds()
     return ListeningSession(
       bookId = bookId,
       startedAtMillis = started,

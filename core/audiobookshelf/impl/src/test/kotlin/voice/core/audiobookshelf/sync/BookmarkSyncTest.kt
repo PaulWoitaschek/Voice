@@ -4,10 +4,10 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.slot
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -210,7 +210,7 @@ class BookmarkSyncTest {
       chapterId = chapters[chapter].id,
       title = title,
       time = timeMs,
-      addedAt = Instant.EPOCH,
+      addedAt = Instant.fromEpochMilliseconds(0),
       id = Bookmark.Id.random(),
     )
 }

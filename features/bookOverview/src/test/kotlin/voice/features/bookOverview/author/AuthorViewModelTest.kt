@@ -10,9 +10,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import java.io.IOException
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -44,7 +44,7 @@ class AuthorViewModelTest {
   fun `the books of the author are listed with their series as a stack`() = runTest {
     val first = book(name = "First", series = "Saga", part = "1", author = "Author", time = 20_000)
     val second = book(name = "Second", series = "Saga", part = "2", author = "author ", time = 0)
-    val alone = book(name = "Alone", author = "Author", lastPlayedAt = Instant.ofEpochSecond(10))
+    val alone = book(name = "Alone", author = "Author", lastPlayedAt = Instant.fromEpochSeconds(10))
     val other = book(name = "Other", author = "Someone else")
     books.value = listOf(first, second, alone, other)
 

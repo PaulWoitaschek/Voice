@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import java.time.Clock
+import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
@@ -201,10 +201,10 @@ class BookPlayViewModel(
         chapter.chapterMarks.indexOf(mark) +
         1
     return BookPlayViewState.JumpBackViewState(
-      id = jump.at.toEpochMilli(),
+      id = jump.at.toEpochMilliseconds(),
       time = formatTime(jump.from.time - mark.startMs, mark.durationMs),
       chapterNumber = number.takeIf { it != currentChapterNumber },
-      elapsed = (clock.millis() - jump.at.toEpochMilli()).milliseconds.coerceAtLeast(Duration.ZERO),
+      elapsed = (clock.now() - jump.at).coerceAtLeast(Duration.ZERO),
     )
   }
 
@@ -450,7 +450,7 @@ class BookPlayViewModel(
 
   /** The jump the pill with [id] was showing, unless a newer jump replaced it. */
   private fun jump(id: Long): Jump? =
-    historyRecorder.lastJump.value?.takeIf { it.at.toEpochMilli() == id }
+    historyRecorder.lastJump.value?.takeIf { it.at.toEpochMilliseconds() == id }
 
   fun seekTo(position: Duration) {
     inOrder {

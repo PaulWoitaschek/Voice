@@ -9,8 +9,6 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.Clock
-import java.time.Instant as JavaInstant
 import java.time.YearMonth
 import java.time.ZoneOffset
 import kotlin.test.Test
@@ -133,7 +131,7 @@ class SettingsViewModelTest {
       audiobookFolders = audiobookFolders,
       supportDevelopmentFeatureFlag = SupportDevelopmentFeatureFlag(supportDevelopmentFeatureFlag),
       supporterStatusStore = SupporterStatusStore(supporterStatusStore),
-      clock = Clock.fixed(JavaInstant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+      zone = { ZoneOffset.UTC },
       dispatcherProvider =
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
       serverAccount = serverAccount,
@@ -348,7 +346,7 @@ class SettingsViewModelTest {
   fun `view state shows the supporter badge`() = scope.runTest {
     supporterStatusStore.updateData {
       SupporterStatus(
-        supporterSince = JavaInstant.parse("2025-11-02T00:00:00Z").toEpochMilli(),
+        supporterSince = Instant.parse("2025-11-02T00:00:00Z").toEpochMilliseconds(),
         subscribedMonths = 12,
       )
     }

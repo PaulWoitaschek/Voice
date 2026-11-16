@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.room.TypeConverter
 import java.io.File
-import java.time.Instant
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json

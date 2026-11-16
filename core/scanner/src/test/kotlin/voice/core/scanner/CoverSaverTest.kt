@@ -8,12 +8,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.mockk
 import java.io.File
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Instant
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
@@ -113,8 +113,8 @@ class CoverSaverTest {
         playbackSpeed = 1F,
         skipSilence = false,
         isActive = true,
-        lastPlayedAt = Instant.EPOCH,
-        addedAt = Instant.EPOCH,
+        lastPlayedAt = Instant.fromEpochMilliseconds(0),
+        addedAt = Instant.fromEpochMilliseconds(0),
         chapters = listOf(chapter),
         currentChapter = chapter,
         positionInChapter = 0,

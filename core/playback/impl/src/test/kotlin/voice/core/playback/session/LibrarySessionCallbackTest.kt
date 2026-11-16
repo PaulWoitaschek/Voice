@@ -19,7 +19,6 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import io.mockk.verify
 import io.mockk.verifyOrder
-import java.time.Instant
 import java.util.concurrent.ExecutionException
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,6 +27,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -256,7 +256,9 @@ class LibrarySessionCallbackTest {
   @Test
   fun `a played book starts at its own speed`() = scope.runTest {
     lastPlaybackSpeedStore.updateData { 1.5F }
-    val book = addBook { it.copy(playbackSpeed = 1.25F, lastPlayedAt = Instant.ofEpochSecond(1)) }
+    val book = addBook {
+      it.copy(playbackSpeed = 1.25F, lastPlayedAt = Instant.fromEpochSeconds(1))
+    }
 
     setChapterMarksFromApp(book)
 
@@ -329,7 +331,7 @@ class LibrarySessionCallbackTest {
         id = ChapterId(Uuid.random().toString()),
         name = "file",
         duration = 20_000,
-        fileLastModified = Instant.EPOCH,
+        fileLastModified = Instant.fromEpochMilliseconds(0),
         markData = listOf(MarkData(0, "One"), MarkData(10_000, "Two")),
         fileSize = 0,
       )

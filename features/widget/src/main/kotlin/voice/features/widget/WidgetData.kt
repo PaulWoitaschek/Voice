@@ -5,8 +5,9 @@ import androidx.compose.ui.graphics.toArgb
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import java.time.Instant
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -110,7 +111,7 @@ class WidgetData(
         libraryEmpty(),
       ) { book, playing, sleepTimerState, colorSettings, libraryEmpty ->
         NowPlayingModel(
-          book = book?.let { nowPlayingBook(it, playing, sleepTimerState, Instant.now()) },
+          book = book?.let { nowPlayingBook(it, playing, sleepTimerState, Clock.System.now()) },
           libraryEmpty = libraryEmpty,
           colorSettings = colorSettings,
         )
@@ -209,5 +210,7 @@ private fun BookContent.withoutPlaybackNoise(): BookContent =
   copy(
     positionInChapter = positionInChapter / 60_000,
     // whether the book was played stays, because a book that never was shows the last speed
-    lastPlayedAt = if (lastPlayedAt == Instant.EPOCH) Instant.EPOCH else Instant.MAX,
+    lastPlayedAt =
+      if (lastPlayedAt == Instant.fromEpochMilliseconds(0)) lastPlayedAt
+      else Instant.DISTANT_FUTURE,
   )

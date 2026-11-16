@@ -1,7 +1,7 @@
 package voice.features.bookmark
 
-import java.time.Instant
 import java.time.ZoneId
+import kotlin.time.Instant
 import voice.core.data.Bookmark
 import voice.core.ui.BookBarPin
 import voice.core.ui.formatTime

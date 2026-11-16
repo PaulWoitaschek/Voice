@@ -1,7 +1,7 @@
 package voice.core.data.repo
 
-import java.time.Instant
 import kotlin.time.Duration
+import kotlin.time.Instant
 import voice.core.data.BookId
 import voice.core.data.ListeningSession
 
@@ -13,8 +13,8 @@ public interface ListeningStatsRepo {
 
   /** Sums up the sessions that started in between [from] (inclusive) and [to] (exclusive). */
   public suspend fun summary(
-    from: Instant = Instant.EPOCH,
-    to: Instant = Instant.ofEpochMilli(Long.MAX_VALUE),
+    from: Instant = Instant.fromEpochMilliseconds(0),
+    to: Instant = Instant.fromEpochMilliseconds(Long.MAX_VALUE),
   ): ListeningSummary
 
   /** Hands the sessions over when a book shows up under a new id. */

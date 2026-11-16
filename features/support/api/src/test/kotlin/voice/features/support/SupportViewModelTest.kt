@@ -10,8 +10,6 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.Clock
-import java.time.Instant
 import java.time.YearMonth
 import java.time.ZoneOffset
 import kotlin.test.Test
@@ -20,6 +18,7 @@ import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,7 +53,7 @@ class SupportViewModelTest {
       navigator = navigator,
       supporterStatusStore = SupporterStatusStore(supporterStatusStore),
       supporterNoteFeatureFlag = SupporterNoteFeatureFlag(supporterNoteFeatureFlag),
-      clock = Clock.fixed(Instant.parse("2026-10-07T10:00:00Z"), ZoneOffset.UTC),
+      zone = { ZoneOffset.UTC },
     )
 
   private val offers =
@@ -277,7 +276,7 @@ class SupportViewModelTest {
   fun `the badge and start come from the supporter status`() = scope.runTest {
     supporterStatusStore.updateData {
       SupporterStatus(
-        supporterSince = Instant.parse("2026-03-15T00:00:00Z").toEpochMilli(),
+        supporterSince = Instant.parse("2026-03-15T00:00:00Z").toEpochMilliseconds(),
         subscribedMonths = 6,
       )
     }

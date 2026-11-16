@@ -1,10 +1,11 @@
 package voice.features.bookmark.history
 
-import java.time.Instant
 import java.time.ZoneId
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 import voice.core.data.ChapterId
 import voice.core.data.ListeningEvent
 import voice.core.data.ListeningEvent.Source
@@ -170,7 +171,8 @@ private class Timeline(
     )
   }
 
-  private fun ListeningEvent.localTime() = at.atZone(zone).toLocalTime().withSecond(0).withNano(0)
+  private fun ListeningEvent.localTime() =
+    at.toJavaInstant().atZone(zone).toLocalTime().withSecond(0).withNano(0)
 }
 
 private fun ListeningEvent.skipsBack(): Boolean? =

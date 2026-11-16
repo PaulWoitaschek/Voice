@@ -1,6 +1,6 @@
 package voice.core.data
 
-import java.time.Instant
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 fun book(
@@ -17,11 +17,11 @@ fun book(
       BookContent(
         positionInChapter = time,
         playbackSpeed = 1F,
-        addedAt = Instant.ofEpochMilli(addedAtMillis),
+        addedAt = Instant.fromEpochMilliseconds(addedAtMillis),
         chapters = chapters.map { it.id },
         currentChapter = currentChapter,
         isActive = true,
-        lastPlayedAt = Instant.ofEpochMilli(lastPlayedAtMillis),
+        lastPlayedAt = Instant.fromEpochMilliseconds(lastPlayedAtMillis),
         skipSilence = false,
         id = id,
         gain = 0F,
@@ -52,7 +52,7 @@ fun chapter(
     id = id,
     name = Uuid.random().toString(),
     duration = duration,
-    fileLastModified = Instant.EPOCH,
+    fileLastModified = Instant.fromEpochMilliseconds(0),
     markData = emptyList(),
     fileSize = 0,
   )

@@ -4,7 +4,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import java.io.IOException
-import java.time.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -146,7 +147,8 @@ private fun Book.bookmarkAt(bookmark: AbsBookmark): Bookmark {
     title = bookmark.title?.takeIf { it.isNotBlank() },
     time = position.positionInChapter,
     addedAt =
-      if (bookmark.createdAt > 0) Instant.ofEpochMilli(bookmark.createdAt) else Instant.now(),
+      if (bookmark.createdAt > 0) Instant.fromEpochMilliseconds(bookmark.createdAt)
+      else Clock.System.now(),
     id = Bookmark.Id.random(),
   )
 }

@@ -9,14 +9,16 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.Clock
-import java.time.Instant
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
+import kotlin.time.toKotlinInstant
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -89,7 +91,8 @@ class PlaySupportBackendTest {
 
   @Test
   fun `a running subscription is acknowledged and grows the badge`() = scope.runTest {
-    val purchaseTime = now.atZone(ZoneOffset.UTC).minusMonths(4).toInstant()
+    val purchaseTime =
+      now.toJavaInstant().atZone(ZoneOffset.UTC).minusMonths(4).toInstant().toKotlinInstant()
     coEvery { billing.purchases() } returns
       listOf(purchase("supporter_honey_tea_yearly", purchaseTime, acknowledged = false))
     val backend = backend()
@@ -110,7 +113,7 @@ class PlaySupportBackendTest {
     }
     val status = supporterStatusStore.data.first()
     assertEquals(expected = 4, actual = status.subscribedMonths)
-    assertEquals(expected = purchaseTime.toEpochMilli(), actual = status.supporterSince)
+    assertEquals(expected = purchaseTime.toEpochMilliseconds(), actual = status.supporterSince)
     assertEquals(expected = SupporterBadge.ThreeMonths, actual = status.badge)
   }
 
@@ -282,7 +285,11 @@ class PlaySupportBackendTest {
       supporterStatusStore = SupporterStatusStore(supporterStatusStore),
       navigator = navigator,
       analytics = mockk<Analytics>(relaxUnitFun = true),
-      clock = Clock.fixed(now, ZoneOffset.UTC),
+      clock =
+        object : Clock {
+          override fun now(): Instant = now
+        },
+      zone = { ZoneOffset.UTC },
       scope = backgroundScope,
     )
   }
@@ -296,7 +303,7 @@ class PlaySupportBackendTest {
     BillingPurchase(
       productId = productId,
       purchaseToken = "token_$productId",
-      purchaseTime = purchaseTime.toEpochMilli(),
+      purchaseTime = purchaseTime.toEpochMilliseconds(),
       state = state,
       acknowledged = acknowledged,
     )

@@ -2,11 +2,11 @@ package voice.core.audiobookshelf.sync
 
 import io.mockk.coEvery
 import io.mockk.mockk
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -256,7 +256,7 @@ class ProgressSyncTest {
     val content =
       item
         .toBookContent(chapters, existing = null)
-        .copy(lastPlayedAt = Instant.ofEpochMilli(lastPlayedAt))
+        .copy(lastPlayedAt = Instant.fromEpochMilliseconds(lastPlayedAt))
     return Book(content, chapters, CustomMetadata(content.id)).let { book ->
       val position = book.positionAt(positionMs)
       book.update {

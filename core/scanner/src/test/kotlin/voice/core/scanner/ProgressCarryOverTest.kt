@@ -7,10 +7,10 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import java.io.File
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
@@ -100,7 +100,7 @@ class ProgressCarryOverTest {
         chapterId = oldChapters[1],
         title = "Twist",
         time = 7,
-        addedAt = Instant.EPOCH,
+        addedAt = Instant.fromEpochMilliseconds(0),
         id = Bookmark.Id.random(),
       )
     coEvery { bookmarkRepo.bookmarks(old) } returns listOf(bookmark)
@@ -358,7 +358,7 @@ class ProgressCarryOverTest {
         chapterId = oldChapters[1],
         title = "Twist",
         time = 7,
-        addedAt = Instant.EPOCH,
+        addedAt = Instant.fromEpochMilliseconds(0),
         id = Bookmark.Id.random(),
       )
     coEvery { bookmarkRepo.bookmarks(old) } returns listOf(bookmark)
@@ -637,7 +637,7 @@ class ProgressCarryOverTest {
         id = id,
         name = null,
         duration = 1000,
-        fileLastModified = Instant.EPOCH,
+        fileLastModified = Instant.fromEpochMilliseconds(0),
         fileSize = size,
         markData = emptyList(),
       )
@@ -662,7 +662,7 @@ class ProgressCarryOverTest {
       playbackSpeed = 1F,
       skipSilence = false,
       isActive = true,
-      lastPlayedAt = Instant.EPOCH,
+      lastPlayedAt = Instant.fromEpochMilliseconds(0),
       addedAt = Instant.parse("2026-02-01T10:00:00Z"),
       chapters = chapters,
       currentChapter = chapters.first(),

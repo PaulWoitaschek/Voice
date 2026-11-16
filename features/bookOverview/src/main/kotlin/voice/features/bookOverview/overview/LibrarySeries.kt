@@ -1,7 +1,7 @@
 package voice.features.bookOverview.overview
 
 import java.text.Normalizer
-import java.time.Instant
+import kotlin.time.Instant
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
 import voice.core.data.BookCategory

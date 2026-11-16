@@ -8,7 +8,8 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
-import java.time.Clock
+import java.time.ZoneId
+import kotlin.time.Clock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
 import voice.app.misc.AppInfoProviderImpl
@@ -52,5 +53,7 @@ object AndroidModule {
     return DispatcherProvider()
   }
 
-  @Provides fun clock(): Clock = Clock.systemDefaultZone()
+  @Provides fun clock(): Clock = Clock.System
+
+  @Provides fun zone(): ZoneId = ZoneId.systemDefault()
 }

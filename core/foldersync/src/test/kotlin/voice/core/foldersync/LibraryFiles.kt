@@ -2,7 +2,7 @@ package voice.core.foldersync
 
 import android.net.Uri
 import android.provider.DocumentsContract
-import java.time.Instant
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 import voice.core.data.Book
 import voice.core.data.BookContent
@@ -43,7 +43,7 @@ fun book(
       id = ChapterId(fileUri.toString()),
       name = null,
       duration = 60_000,
-      fileLastModified = Instant.EPOCH,
+      fileLastModified = Instant.fromEpochMilliseconds(0),
       fileSize = size,
       markData = emptyList(),
     )
@@ -56,8 +56,8 @@ fun book(
         playbackSpeed = playbackSpeed,
         skipSilence = false,
         isActive = true,
-        lastPlayedAt = Instant.ofEpochMilli(lastPlayedAt),
-        addedAt = Instant.EPOCH,
+        lastPlayedAt = Instant.fromEpochMilliseconds(lastPlayedAt),
+        addedAt = Instant.fromEpochMilliseconds(0),
         chapters = chapters.map { it.id },
         currentChapter = chapters[currentFile].id,
         positionInChapter = position,
@@ -108,19 +108,19 @@ internal fun Book.bookmark(
     chapterId = chapters[file].id,
     title = title,
     time = time,
-    addedAt = Instant.ofEpochMilli(addedAt),
+    addedAt = Instant.fromEpochMilliseconds(addedAt),
     id = Bookmark.Id(id),
   )
 
 internal fun Bookmark.synced(
   file: Int = 1,
-  changedAt: Long = addedAt.toEpochMilli(),
+  changedAt: Long = addedAt.toEpochMilliseconds(),
 ): SyncedBookmark =
   SyncedBookmark(
     file = file,
     time = time,
     title = title,
     kind = kind,
-    addedAt = addedAt.toEpochMilli(),
+    addedAt = addedAt.toEpochMilliseconds(),
     changedAt = changedAt,
   )

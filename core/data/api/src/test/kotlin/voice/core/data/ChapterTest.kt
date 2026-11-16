@@ -1,8 +1,8 @@
 package voice.core.data
 
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Clock
 
 class ChapterTest {
 
@@ -175,7 +175,7 @@ class ChapterTest {
     val actualPositions =
       Chapter(
           duration = duration,
-          fileLastModified = Instant.now(),
+          fileLastModified = Clock.System.now(),
           id = ChapterId(""),
           markData = marks,
           name = "Chapter",
@@ -207,7 +207,7 @@ class ChapterTest {
   ): Chapter {
     return Chapter(
       duration = duration,
-      fileLastModified = Instant.now(),
+      fileLastModified = Clock.System.now(),
       id = ChapterId(""),
       markData = marks.toList(),
       name = "Chapter",

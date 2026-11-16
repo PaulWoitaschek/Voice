@@ -1,8 +1,8 @@
 package voice.core.audiobookshelf.sync
 
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import voice.core.audiobookshelf.AudiobookshelfIds
 import voice.core.audiobookshelf.api.AbsBookMedia
 import voice.core.audiobookshelf.api.AbsBookMetadata
@@ -133,7 +133,7 @@ class BookMappingTest {
     assertEquals("Series", content.metadata.series)
     assertEquals("2", content.metadata.part)
     assertEquals("Fantasy, Adventure", content.metadata.genre)
-    assertEquals(Instant.ofEpochMilli(1_000), content.addedAt)
+    assertEquals(Instant.fromEpochMilliseconds(1_000), content.addedAt)
     assertEquals("library", content.serverLibraryId)
   }
 
@@ -148,7 +148,7 @@ class BookMappingTest {
           currentChapter = chapters[1].id,
           positionInChapter = 4_000,
           playbackSpeed = 1.5F,
-          lastPlayedAt = Instant.ofEpochMilli(5_000),
+          lastPlayedAt = Instant.fromEpochMilliseconds(5_000),
         )
 
     val updated =
@@ -160,7 +160,7 @@ class BookMappingTest {
     assertEquals(chapters[1].id, updated.currentChapter)
     assertEquals(4_000, updated.positionInChapter)
     assertEquals(1.5F, updated.playbackSpeed)
-    assertEquals(Instant.ofEpochMilli(5_000), updated.lastPlayedAt)
+    assertEquals(Instant.fromEpochMilliseconds(5_000), updated.lastPlayedAt)
   }
 
   @Test

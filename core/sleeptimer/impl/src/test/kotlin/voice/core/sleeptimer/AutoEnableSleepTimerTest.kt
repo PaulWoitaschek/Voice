@@ -3,13 +3,13 @@ package voice.core.sleeptimer
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import java.time.Clock
-import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
 import kotlin.test.Test
+import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -48,7 +48,11 @@ class AutoEnableSleepTimerMinimalTest {
       sleepTimerPreferenceStore = SleepTimerPreferenceStore(sleepTimerPreferenceStore),
       playStateManager = playStateManager,
       sleepTimer = sleepTimer,
-      clock = Clock.fixed(Instant.parse("2020-01-01T23:00:00Z"), ZoneId.of("UTC")),
+      clock =
+        object : Clock {
+          override fun now() = Instant.parse("2020-01-01T23:00:00Z")
+        },
+      zone = { ZoneId.of("UTC") },
       scope = testScope.backgroundScope,
     )
 

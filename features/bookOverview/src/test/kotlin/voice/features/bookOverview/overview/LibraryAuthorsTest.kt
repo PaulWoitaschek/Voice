@@ -1,10 +1,10 @@
 package voice.features.bookOverview.overview
 
 import java.io.File
-import java.time.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Instant
 import voice.core.data.Book
 import voice.core.data.BookCategory
 import voice.features.bookOverview.book
@@ -119,10 +119,10 @@ class LibraryAuthorsTest {
   fun `completed authors are sorted by the book listened to last`() {
     val authors =
       groups(
-        finished(author = "Old", lastPlayedAt = Instant.ofEpochSecond(1)),
-        finished(author = "New", lastPlayedAt = Instant.ofEpochSecond(3)),
-        finished(author = "Old", lastPlayedAt = Instant.ofEpochSecond(2)),
-        finished(author = null, lastPlayedAt = Instant.ofEpochSecond(4)),
+        finished(author = "Old", lastPlayedAt = Instant.fromEpochSeconds(1)),
+        finished(author = "New", lastPlayedAt = Instant.fromEpochSeconds(3)),
+        finished(author = "Old", lastPlayedAt = Instant.fromEpochSeconds(2)),
+        finished(author = null, lastPlayedAt = Instant.fromEpochSeconds(4)),
       )
 
     assertEquals(
@@ -190,7 +190,7 @@ class LibraryAuthorsTest {
   // the default book has two chapters of 10 seconds
   private fun finished(
     author: String?,
-    lastPlayedAt: Instant = Instant.EPOCH,
+    lastPlayedAt: Instant = Instant.fromEpochMilliseconds(0),
   ): Book = book(author = author, time = 20_000, lastPlayedAt = lastPlayedAt)
 
   private fun Book.withCover(cover: String?): Book =

@@ -7,8 +7,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.binding
-import java.time.Instant
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import voice.core.data.repo.internals.getLong
 import voice.core.data.repo.internals.getString
 import voice.core.data.repo.internals.getStringOrNull
@@ -44,7 +44,7 @@ public class Migration61 : IncrementalMigration(61) {
             put("bookId", bookmark.bookId)
             put("type", "SleepTimerSet")
             put("source", "SleepTimer")
-            put("atMillis", addedAt.toEpochMilli())
+            put("atMillis", addedAt.toEpochMilliseconds())
             put("chapterId", bookmark.chapterId)
             put("time", bookmark.time)
           },
@@ -64,7 +64,7 @@ public class Migration61 : IncrementalMigration(61) {
     at: Instant,
   ): Boolean {
     val margin = 2.minutes.inWholeMilliseconds
-    val millis = at.toEpochMilli()
+    val millis = at.toEpochMilliseconds()
     return query(
         "SELECT 1 FROM listening_event WHERE bookId = ? AND type = 'SleepTimerSet' AND atMillis BETWEEN ? AND ? LIMIT 1",
         arrayOf<Any>(bookId, millis - margin, millis + margin),

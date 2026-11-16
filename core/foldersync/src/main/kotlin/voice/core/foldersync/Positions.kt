@@ -1,8 +1,8 @@
 package voice.core.foldersync
 
 import android.net.Uri
-import java.time.Instant
 import kotlin.math.abs
+import kotlin.time.Instant
 import voice.core.data.Book
 import voice.core.data.ChapterId
 import voice.core.data.isIn
@@ -31,7 +31,7 @@ internal data class TakenOverPosition(
  * Where [remote] moves this book to, or null if it was played here since or is at the same place.
  */
 internal fun Book.positionFrom(remote: SyncedPlace): TakenOverPosition? {
-  if (remote.playedAt <= content.lastPlayedAt.toEpochMilli()) return null
+  if (remote.playedAt <= content.lastPlayedAt.toEpochMilliseconds()) return null
   val chapter = chapters.getOrNull(remote.file) ?: return null
   val position = remote.position.coerceIn(0, chapter.duration)
   // taking over a place seeks, which makes it newer here, so a small difference would go back and
@@ -43,7 +43,7 @@ internal fun Book.positionFrom(remote: SyncedPlace): TakenOverPosition? {
   return TakenOverPosition(
     chapterId = chapter.id,
     positionInChapter = position,
-    playedAt = Instant.ofEpochMilli(remote.playedAt),
+    playedAt = Instant.fromEpochMilliseconds(remote.playedAt),
   )
 }
 

@@ -5,15 +5,14 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.toKotlinInstant
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
@@ -85,9 +84,12 @@ class ReviewPromptControllerTest {
       playStateManager = playStateManager,
       appInfoProvider =
         mockk {
-          every { installTime } returns Instant.parse("2026-06-01T00:00:00Z").toKotlinInstant()
+          every { installTime } returns Instant.parse("2026-06-01T00:00:00Z")
         },
-      clock = Clock.fixed(now, ZoneOffset.UTC),
+      clock =
+        object : Clock {
+          override fun now(): Instant = now
+        },
       analytics = analytics,
       enabled = ReviewEnabledFeatureFlag(enabled),
       force = ReviewPromptForceFeatureFlag(force),
@@ -102,7 +104,7 @@ class ReviewPromptControllerTest {
   @Test
   fun `a finished book is celebrated with the library stats`() = runTest {
     books = listOf(dune, hyperion, emma)
-    listenedEnough(finishedBooks = listOf(FinishedBook(dune.id, at = now.minusSeconds(60))))
+    listenedEnough(finishedBooks = listOf(FinishedBook(dune.id, at = now - 60.seconds)))
 
     val prompt = controller().prompt()
 
@@ -148,7 +150,7 @@ class ReviewPromptControllerTest {
   @Test
   fun `a finished book that's gone from the library is not celebrated`() = runTest {
     books = listOf(hyperion)
-    listenedEnough(finishedBooks = listOf(FinishedBook(dune.id, at = now.minusSeconds(60))))
+    listenedEnough(finishedBooks = listOf(FinishedBook(dune.id, at = now - 60.seconds)))
 
     assertEquals(
       expected = ReviewPrompt.Headline.Milestone,
@@ -233,7 +235,7 @@ class ReviewPromptControllerTest {
         id = ChapterId("$id-chapter"),
         name = null,
         duration = durationMinutes.minutes.inWholeMilliseconds,
-        fileLastModified = Instant.EPOCH,
+        fileLastModified = Instant.fromEpochMilliseconds(0),
         markData = emptyList(),
         fileSize = 0,
       )
@@ -244,8 +246,8 @@ class ReviewPromptControllerTest {
           playbackSpeed = 1F,
           skipSilence = false,
           isActive = true,
-          lastPlayedAt = Instant.EPOCH,
-          addedAt = Instant.EPOCH,
+          lastPlayedAt = Instant.fromEpochMilliseconds(0),
+          addedAt = Instant.fromEpochMilliseconds(0),
           chapters = listOf(chapter.id),
           currentChapter = chapter.id,
           positionInChapter = listenedMinutes.minutes.inWholeMilliseconds,

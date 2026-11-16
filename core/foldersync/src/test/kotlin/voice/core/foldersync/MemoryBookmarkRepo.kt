@@ -1,6 +1,6 @@
 package voice.core.foldersync
 
-import java.time.Instant
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -32,7 +32,7 @@ class MemoryBookmarkRepo(vararg bookmarks: Bookmark) : BookmarkRepo {
         chapterId = book.content.currentChapter,
         title = title,
         time = book.content.positionInChapter,
-        addedAt = Instant.EPOCH,
+        addedAt = Instant.fromEpochMilliseconds(0),
         id = Bookmark.Id.random(),
       )
     addBookmark(bookmark)

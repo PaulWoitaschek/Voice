@@ -1,6 +1,6 @@
 package voice.core.playback
 
-import java.time.Instant
+import kotlin.time.Instant
 import voice.core.data.Book
 
 /**
@@ -10,7 +10,9 @@ import voice.core.data.Book
  */
 inline fun Book.withDefaultSpeed(speed: () -> Float): Book {
   // books from before lastPlayedAt existed have none but can have a speed of their own
-  return if (content.lastPlayedAt == Instant.EPOCH && content.playbackSpeed == 1F) {
+  return if (
+    content.lastPlayedAt == Instant.fromEpochMilliseconds(0) && content.playbackSpeed == 1F
+  ) {
     update { it.copy(playbackSpeed = speed()) }
   } else {
     this

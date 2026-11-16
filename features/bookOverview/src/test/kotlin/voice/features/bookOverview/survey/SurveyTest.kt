@@ -4,14 +4,13 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.Clock
-import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
-import kotlin.time.toKotlinInstant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import voice.core.analytics.api.Analytics
@@ -122,12 +121,16 @@ class SurveyTest {
         mockk {
           coEvery { url() } returns localUrl
         },
-      clock = Clock.fixed(Instant.parse("2026-10-20T10:00:00Z"), ZoneOffset.UTC),
+      clock =
+        object : Clock {
+          override fun now(): Instant = Instant.parse("2026-10-20T10:00:00Z")
+        },
+      zone = { ZoneOffset.UTC },
       appInfoProvider =
         mockk<AppInfoProvider> {
           every { versionName } returns "1.2.3"
           every { this@mockk.installer } returns installer
-          every { installTime } returns Instant.parse("2026-10-06T10:00:00Z").toKotlinInstant()
+          every { installTime } returns Instant.parse("2026-10-06T10:00:00Z")
         },
       analytics = analytics,
     )
