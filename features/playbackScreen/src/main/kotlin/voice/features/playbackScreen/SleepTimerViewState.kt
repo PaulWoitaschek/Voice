@@ -1,3 +1,5 @@
 package voice.features.playbackScreen
 
-data class SleepTimerViewState(val customSleepTime: Int)
+import kotlin.time.Duration
+
+data class SleepTimerViewState(val customSleepTime: Duration)

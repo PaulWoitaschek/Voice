@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
+import kotlin.time.Duration
 import kotlinx.coroutines.launch
 import voice.core.strings.R
 import voice.core.ui.R as UiR
@@ -48,7 +49,7 @@ import voice.core.ui.animationsEnabled
 @Composable
 internal fun SkipButton(
   forward: Boolean,
-  seconds: Int,
+  amount: Duration,
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -117,7 +118,7 @@ internal fun SkipButton(
     bursts.forEach { id ->
       key(id) {
         SkipBurst(
-          text = if (forward) "+$seconds" else "−$seconds",
+          text = if (forward) "+${amount.inWholeSeconds}" else "−${amount.inWholeSeconds}",
           onFinish = { bursts = bursts - id },
           modifier = Modifier.align(Alignment.TopCenter),
         )

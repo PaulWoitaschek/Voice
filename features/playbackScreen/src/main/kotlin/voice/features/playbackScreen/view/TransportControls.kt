@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlin.time.Duration
 import voice.core.data.BookId
 import voice.core.ui.PlayButton
 import voice.core.ui.playButtonSharedElementModifier
@@ -16,7 +17,7 @@ import voice.core.ui.playButtonSharedElementModifier
 internal fun TransportControls(
   bookId: BookId,
   playing: Boolean,
-  skipSeconds: Int,
+  skipAmount: Duration,
   onRewindClick: () -> Unit,
   onPlayClick: () -> Unit,
   onFastForwardClick: () -> Unit,
@@ -29,7 +30,7 @@ internal fun TransportControls(
   ) {
     SkipButton(
       forward = false,
-      seconds = skipSeconds,
+      amount = skipAmount,
       onClick = onRewindClick,
       modifier = Modifier.fillMaxHeight(0.72F),
     )
@@ -43,7 +44,7 @@ internal fun TransportControls(
     )
     SkipButton(
       forward = true,
-      seconds = skipSeconds,
+      amount = skipAmount,
       onClick = onFastForwardClick,
       modifier = Modifier.fillMaxHeight(0.72F),
     )

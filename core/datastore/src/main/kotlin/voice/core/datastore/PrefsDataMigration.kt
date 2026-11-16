@@ -3,6 +3,8 @@ package voice.core.datastore
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.datastore.core.DataMigration
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class PrefsDataMigration<T>(
   private val sharedPreferences: SharedPreferences,
@@ -24,15 +26,15 @@ class PrefsDataMigration<T>(
   }
 }
 
-fun intPrefsDataMigration(
+fun secondsPrefsDataMigration(
   sharedPreferences: SharedPreferences,
   key: String,
-): DataMigration<Int> {
+): DataMigration<Duration> {
   return PrefsDataMigration(
     sharedPreferences = sharedPreferences,
     key = key,
     getFromSharedPreferences = {
-      sharedPreferences.getInt(key, 0)
+      sharedPreferences.getInt(key, 0).seconds
     },
   )
 }

@@ -30,6 +30,7 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -161,7 +162,7 @@ class BookPlayViewTest {
       bookPlayedTime = 4.hours + 12.minutes,
       bookDuration = 9.hours + 30.minutes,
       chapterSegments = List(12) { 1F / 12 },
-      skipSeconds = 20,
+      skipAmount = 20.seconds,
       jumpBack = null,
     )
 }

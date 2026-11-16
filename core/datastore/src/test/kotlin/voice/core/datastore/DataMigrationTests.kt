@@ -8,6 +8,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -29,18 +31,19 @@ class DataMigrationTests {
   }
 
   @Test
-  fun `intPrefsDataMigration migrates and cleans up arbitrary key`() = runTest {
+  fun `secondsPrefsDataMigration migrates and cleans up arbitrary key`() = runTest {
     sharedPreferences.edit {
       clear()
       putInt("TEST_INT_KEY", 123)
     }
     val dataStore =
-      factory.int(
-        fileName = "testInt",
-        defaultValue = 0,
-        migrations = listOf(intPrefsDataMigration(sharedPreferences, "TEST_INT_KEY")),
+      factory.create(
+        serializer = DurationInSecondsSerializer,
+        fileName = "testSeconds",
+        defaultValue = Duration.ZERO,
+        migrations = listOf(secondsPrefsDataMigration(sharedPreferences, "TEST_INT_KEY")),
       )
-    assertEquals(expected = 123, actual = dataStore.data.first())
+    assertEquals(expected = 123.seconds, actual = dataStore.data.first())
     assertEquals(expected = false, actual = sharedPreferences.contains("TEST_INT_KEY"))
   }
 }

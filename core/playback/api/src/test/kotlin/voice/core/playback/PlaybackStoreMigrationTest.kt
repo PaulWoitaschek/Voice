@@ -8,6 +8,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -26,7 +27,10 @@ class PlaybackStoreMigrationTest {
   fun `seekTime migrates from SharedPreferences and cleans up`() = runTest {
     sharedPreferences.edit { putInt("SEEK_TIME", 15) }
 
-    assertEquals(expected = 15, actual = SeekTimeStore(factory, sharedPreferences).data.first())
+    assertEquals(
+      expected = 15.seconds,
+      actual = SeekTimeStore(factory, sharedPreferences).data.first(),
+    )
     assertEquals(expected = false, actual = sharedPreferences.contains("SEEK_TIME"))
   }
 
@@ -35,7 +39,7 @@ class PlaybackStoreMigrationTest {
     sharedPreferences.edit { putInt("AUTO_REWIND", 5) }
 
     assertEquals(
-      expected = 5,
+      expected = 5.seconds,
       actual = AutoRewindAmountStore(factory, sharedPreferences).data.first(),
     )
     assertEquals(expected = false, actual = sharedPreferences.contains("AUTO_REWIND"))
@@ -43,9 +47,12 @@ class PlaybackStoreMigrationTest {
 
   @Test
   fun `defaults are used when SharedPreferences empty`() = runTest {
-    assertEquals(expected = 20, actual = SeekTimeStore(factory, sharedPreferences).data.first())
     assertEquals(
-      expected = 2,
+      expected = 20.seconds,
+      actual = SeekTimeStore(factory, sharedPreferences).data.first(),
+    )
+    assertEquals(
+      expected = 2.seconds,
       actual = AutoRewindAmountStore(factory, sharedPreferences).data.first(),
     )
   }
@@ -57,11 +64,14 @@ class PlaybackStoreMigrationTest {
       putInt("AUTO_REWIND", 5)
     }
 
-    assertEquals(expected = 15, actual = SeekTimeStore(factory, sharedPreferences).data.first())
+    assertEquals(
+      expected = 15.seconds,
+      actual = SeekTimeStore(factory, sharedPreferences).data.first(),
+    )
     assertEquals(expected = 5, actual = sharedPreferences.getInt("AUTO_REWIND", 0))
 
     assertEquals(
-      expected = 5,
+      expected = 5.seconds,
       actual = AutoRewindAmountStore(factory, sharedPreferences).data.first(),
     )
     assertEquals(expected = false, actual = sharedPreferences.contains("SEEK_TIME"))
@@ -72,7 +82,10 @@ class PlaybackStoreMigrationTest {
   fun `migration is skipped when unrelated key present`() = runTest {
     sharedPreferences.edit { putInt("OTHER_KEY", 50) }
 
-    assertEquals(expected = 20, actual = SeekTimeStore(factory, sharedPreferences).data.first())
+    assertEquals(
+      expected = 20.seconds,
+      actual = SeekTimeStore(factory, sharedPreferences).data.first(),
+    )
     assertEquals(expected = true, actual = sharedPreferences.contains("OTHER_KEY"))
   }
 }

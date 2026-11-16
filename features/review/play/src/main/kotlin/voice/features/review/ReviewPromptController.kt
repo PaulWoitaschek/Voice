@@ -100,7 +100,7 @@ class ReviewPromptController(
       if (finished != null) {
         ReviewTrigger.BookFinished(finished.bookId)
       } else {
-        ReviewTrigger.Milestone(ReviewPromptPolicy.MILESTONE_HOURS.first())
+        ReviewTrigger.Milestone(ReviewPromptPolicy.MILESTONES.first())
       }
     return prompt(trigger, books, summary, forced = true)
   }
@@ -168,7 +168,7 @@ private val ReviewTrigger.analyticsName: String
   get() =
     when (this) {
       is ReviewTrigger.BookFinished -> "book_finished"
-      is ReviewTrigger.Milestone -> "milestone_$hours"
+      is ReviewTrigger.Milestone -> "milestone_${listened.inWholeHours}"
     }
 
 private val ReviewAnswer.analyticsName: String
