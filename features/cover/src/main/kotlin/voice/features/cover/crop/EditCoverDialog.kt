@@ -44,7 +44,6 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
-import kotlin.math.max
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -143,9 +142,7 @@ fun EditCoverDialog(
                     ImageRequest.Builder(context)
                       .data(coverUri)
                       // without a size, Coil 3 decodes at the original size of up to 4096 px
-                      .size(
-                        context.resources.displayMetrics.run { max(widthPixels, heightPixels) },
-                      )
+                      .size(CROP_DECODE_SIZE_PX)
                       .transformations(CropTransformation(selected))
                       .build(),
                   )
@@ -179,3 +176,6 @@ fun EditCoverDialog(
     }
   }
 }
+
+// half of the image cropped still fills the saved cover, which is at most 1200 px
+private const val CROP_DECODE_SIZE_PX = 2400
