@@ -33,16 +33,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.scene.DialogSceneStrategy
-import coil.imageLoader
-import coil.request.ImageRequest
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.request.transformations
+import coil3.toBitmap
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.IntoSet
 import dev.zacsweers.metro.Provides
+import kotlin.math.max
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -140,10 +142,14 @@ fun EditCoverDialog(
                   .execute(
                     ImageRequest.Builder(context)
                       .data(coverUri)
+                      // without a size, Coil 3 decodes at the original size of up to 4096 px
+                      .size(
+                        context.resources.displayMetrics.run { max(widthPixels, heightPixels) },
+                      )
                       .transformations(CropTransformation(selected))
                       .build(),
                   )
-                  .drawable
+                  .image
                   ?.toBitmap()
               if (bitmap != null) {
                 // leaving the dialog mid-save would leave the book pointing at a deleted cover

@@ -8,12 +8,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
-import coil.imageLoader
-import coil.request.CachePolicy
-import coil.request.ImageRequest
-import coil.request.SuccessResult
+import coil3.imageLoader
+import coil3.request.CachePolicy
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.materialkolor.ktx.themeColorOrNull
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
@@ -103,7 +104,7 @@ class CoverSeedColors(
     val result = application.imageLoader.execute(request) as? SuccessResult ?: return null
     val color =
       withContext(Dispatchers.Default) {
-        result.drawable.toBitmap().asImageBitmap().themeColorOrNull()
+        result.image.toBitmap().asImageBitmap().themeColorOrNull()
       } ?: Color.Unspecified
     memory[cover] = color
     scope.launch {

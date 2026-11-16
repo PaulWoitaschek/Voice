@@ -12,5 +12,6 @@ dependencies {
   implementation(libs.lifecycle.compose)
   implementation(libs.materialKolor)
   implementation(libs.coil)
+  implementation(libs.coil.network)
   implementation(libs.navigation3.ui)
 }

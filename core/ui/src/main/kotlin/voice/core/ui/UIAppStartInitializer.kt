@@ -2,8 +2,9 @@ package voice.core.ui
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import coil.Coil
-import coil.ImageLoader
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import kotlinx.coroutines.CoroutineScope
@@ -21,12 +22,11 @@ class UIAppStartInitializer(
 ) : AppInitializer {
 
   override fun onAppStart(application: Application) {
-    Coil.setImageLoader(
-      ImageLoader.Builder(application)
-        .okHttpClient { okHttpClient.value }
-        .addLastModifiedToFileCacheKey(false)
-        .build(),
-    )
+    SingletonImageLoader.setSafe { context ->
+      ImageLoader.Builder(context)
+        .components { add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient.value })) }
+        .build()
+    }
     themeModeStore.data
       .distinctUntilChanged()
       .onEach { themeMode ->
