@@ -70,8 +70,8 @@ class SettingsViewModelTest {
   private val themeColorSchemeStore = MemoryDataStore(ThemeColorScheme.VoiceBlue)
   private val pureBlackStore = MemoryDataStore(false)
   private val coverColorsStore = MemoryDataStore(true)
-  private val autoRewindAmountStore = MemoryDataStore(10)
-  private val seekTimeStore = MemoryDataStore(30)
+  private val autoRewindAmountStore = MemoryDataStore(10.seconds)
+  private val seekTimeStore = MemoryDataStore(30.seconds)
   private val lockScreenSliderStore = MemoryDataStore(true)
   private val gridModeStore = MemoryDataStore(GridMode.GRID)
   private val sleepTimerPreferenceStore = MemoryDataStore(SleepTimerPreference.Default)
@@ -463,17 +463,17 @@ class SettingsViewModelTest {
 
   @Test
   fun `skip amount stays within its range`() = scope.runTest {
-    viewModel.seekAmountChanged(15)
+    viewModel.seekAmountChanged(15.seconds)
     runCurrent()
-    assertEquals(expected = 15, actual = seekTimeStore.data.first())
+    assertEquals(expected = 15.seconds, actual = seekTimeStore.data.first())
 
-    viewModel.seekAmountChanged(1)
+    viewModel.seekAmountChanged(1.seconds)
     runCurrent()
-    assertEquals(expected = 3, actual = seekTimeStore.data.first())
+    assertEquals(expected = 3.seconds, actual = seekTimeStore.data.first())
 
-    viewModel.seekAmountChanged(90)
+    viewModel.seekAmountChanged(90.seconds)
     runCurrent()
-    assertEquals(expected = 60, actual = seekTimeStore.data.first())
+    assertEquals(expected = 60.seconds, actual = seekTimeStore.data.first())
   }
 
   @Test
@@ -500,45 +500,45 @@ class SettingsViewModelTest {
 
   @Test
   fun `quick steps of the skip amount add up and stay within its range`() = scope.runTest {
-    viewModel.seekAmountStepped(1)
-    viewModel.seekAmountStepped(1)
+    viewModel.seekAmountStepped(1.seconds)
+    viewModel.seekAmountStepped(1.seconds)
     runCurrent()
-    assertEquals(expected = 32, actual = seekTimeStore.data.first())
+    assertEquals(expected = 32.seconds, actual = seekTimeStore.data.first())
 
-    seekTimeStore.updateData { 59 }
-    viewModel.seekAmountStepped(1)
-    viewModel.seekAmountStepped(1)
+    seekTimeStore.updateData { 59.seconds }
+    viewModel.seekAmountStepped(1.seconds)
+    viewModel.seekAmountStepped(1.seconds)
     runCurrent()
-    assertEquals(expected = 60, actual = seekTimeStore.data.first())
+    assertEquals(expected = 60.seconds, actual = seekTimeStore.data.first())
   }
 
   @Test
   fun `quick steps of auto rewind add up and stay within its range`() = scope.runTest {
-    viewModel.autoRewindAmountStepped(-1)
-    viewModel.autoRewindAmountStepped(-1)
+    viewModel.autoRewindAmountStepped(-1.seconds)
+    viewModel.autoRewindAmountStepped(-1.seconds)
     runCurrent()
-    assertEquals(expected = 8, actual = autoRewindAmountStore.data.first())
+    assertEquals(expected = 8.seconds, actual = autoRewindAmountStore.data.first())
 
-    autoRewindAmountStore.updateData { 1 }
-    viewModel.autoRewindAmountStepped(-1)
-    viewModel.autoRewindAmountStepped(-1)
+    autoRewindAmountStore.updateData { 1.seconds }
+    viewModel.autoRewindAmountStepped(-1.seconds)
+    viewModel.autoRewindAmountStepped(-1.seconds)
     runCurrent()
-    assertEquals(expected = 0, actual = autoRewindAmountStore.data.first())
+    assertEquals(expected = 0.seconds, actual = autoRewindAmountStore.data.first())
   }
 
   @Test
   fun `auto rewind stays within its range`() = scope.runTest {
-    viewModel.autoRewindAmountChanged(0)
+    viewModel.autoRewindAmountChanged(0.seconds)
     runCurrent()
-    assertEquals(expected = 0, actual = autoRewindAmountStore.data.first())
+    assertEquals(expected = 0.seconds, actual = autoRewindAmountStore.data.first())
 
-    viewModel.autoRewindAmountChanged(-1)
+    viewModel.autoRewindAmountChanged(-1.seconds)
     runCurrent()
-    assertEquals(expected = 0, actual = autoRewindAmountStore.data.first())
+    assertEquals(expected = 0.seconds, actual = autoRewindAmountStore.data.first())
 
-    viewModel.autoRewindAmountChanged(25)
+    viewModel.autoRewindAmountChanged(25.seconds)
     runCurrent()
-    assertEquals(expected = 20, actual = autoRewindAmountStore.data.first())
+    assertEquals(expected = 20.seconds, actual = autoRewindAmountStore.data.first())
   }
 
   @Test

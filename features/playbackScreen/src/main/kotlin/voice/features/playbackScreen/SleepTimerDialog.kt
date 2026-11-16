@@ -68,12 +68,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.delay
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 
-private val PRESETS = listOf(5, 15, 30, 60)
+private val PRESETS = listOf(5, 15, 30, 60).map { it.minutes }
 
 @Composable
 internal fun SleepTimerDialog(
@@ -81,7 +83,7 @@ internal fun SleepTimerDialog(
   onDismiss: () -> Unit,
   onIncrementSleepTime: () -> Unit,
   onDecrementSleepTime: () -> Unit,
-  onAcceptSleepTime: (Int) -> Unit,
+  onAcceptSleepTime: (Duration) -> Unit,
   onAcceptSleepAtEndOfChapter: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -118,7 +120,7 @@ internal fun SleepTimerDialog(
       ) {
         PRESETS.forEachIndexed { index, time ->
           PresetButton(
-            minutes = time,
+            time = time,
             polygon = presetShapes[index],
             containerColor =
               if (index % 2 == 0) {
@@ -168,7 +170,7 @@ internal fun SleepTimerDialog(
           ) { time ->
             Text(
               modifier = Modifier.fillMaxWidth(),
-              text = minutes(minutes = time),
+              text = minutes(time),
               style = MaterialTheme.typography.titleLargeEmphasized,
               textAlign = TextAlign.Center,
             )
@@ -186,7 +188,7 @@ internal fun SleepTimerDialog(
           ) {
             Icon(
               painter = painterResource(UiR.drawable.ic_check),
-              contentDescription = minutes(minutes = viewState.customSleepTime),
+              contentDescription = minutes(viewState.customSleepTime),
             )
           }
         }
@@ -215,7 +217,7 @@ internal fun SleepTimerDialog(
 
 @Composable
 private fun PresetButton(
-  minutes: Int,
+  time: Duration,
   polygon: RoundedPolygon,
   containerColor: Color,
   contentColor: Color,
@@ -237,7 +239,7 @@ private fun PresetButton(
       label = "presetScale",
     )
   val shape = polygon.toShape()
-  val description = minutes(minutes = minutes)
+  val description = minutes(time)
   Box(
     modifier =
       modifier
@@ -267,7 +269,7 @@ private fun PresetButton(
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
       Text(
-        text = minutes.toString(),
+        text = time.inWholeMinutes.toString(),
         style = MaterialTheme.typography.titleLargeEmphasized,
         color = contentColor,
       )
@@ -324,6 +326,7 @@ private fun ContinuousPressIcon(
 
 @Composable
 @ReadOnlyComposable
-private fun minutes(minutes: Int): String {
+private fun minutes(time: Duration): String {
+  val minutes = time.inWholeMinutes.toInt()
   return pluralStringResource(StringsR.plurals.duration_minutes, minutes, minutes)
 }

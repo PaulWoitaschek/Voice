@@ -13,8 +13,8 @@ public interface ListeningStatsRepo {
 
   /** Sums up the sessions that started in between [from] (inclusive) and [to] (exclusive). */
   public suspend fun summary(
-    from: Instant = Instant.fromEpochMilliseconds(0),
-    to: Instant = Instant.fromEpochMilliseconds(Long.MAX_VALUE),
+    from: Instant = Instant.DISTANT_PAST,
+    to: Instant = Instant.DISTANT_FUTURE,
   ): ListeningSummary
 
   /** Hands the sessions over when a book shows up under a new id. */

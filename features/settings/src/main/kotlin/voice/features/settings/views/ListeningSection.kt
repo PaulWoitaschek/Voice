@@ -44,7 +44,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -79,6 +78,8 @@ import androidx.compose.ui.unit.sp
 import java.text.NumberFormat
 import kotlin.math.PI
 import kotlin.math.sin
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import voice.core.strings.R as StringsR
 import voice.core.ui.R as UiR
 import voice.core.ui.ShapedIcon
@@ -86,17 +87,18 @@ import voice.core.ui.rememberAnimationClock
 import voice.features.settings.AUTO_REWIND_RANGE
 import voice.features.settings.SEEK_TIME_RANGE
 
-private val SEEK_TIME_PRESETS = listOf(10, 15, 20, 30, 60)
-private val AUTO_REWIND_PRESETS = listOf(0, 2, 5, 10, 20)
+private val SEEK_TIME_PRESETS = listOf(10, 15, 20, 30, 60).map { it.seconds }
+private val AUTO_REWIND_PRESETS = listOf(0, 2, 5, 10, 20).map { it.seconds }
+private val STEP = 1.seconds
 
 @Composable
 internal fun ListeningSection(
-  seekTimeInSeconds: Int,
-  autoRewindInSeconds: Int,
-  onSeekTimeChange: (Int) -> Unit,
-  onSeekTimeStep: (Int) -> Unit,
-  onAutoRewindChange: (Int) -> Unit,
-  onAutoRewindStep: (Int) -> Unit,
+  seekTime: Duration,
+  autoRewind: Duration,
+  onSeekTimeChange: (Duration) -> Unit,
+  onSeekTimeStep: (Duration) -> Unit,
+  onAutoRewindChange: (Duration) -> Unit,
+  onAutoRewindStep: (Duration) -> Unit,
   lockScreenSlider: Boolean,
   onLockScreenSliderToggle: () -> Unit,
   modifier: Modifier = Modifier,
@@ -109,25 +111,23 @@ internal fun ListeningSection(
     SecondsSetting(
       title = stringResource(StringsR.string.settings_playback_seek_time_title),
       summary = stringResource(StringsR.string.settings_playback_seek_time_summary),
-      seconds = seekTimeInSeconds,
+      value = seekTime,
       range = SEEK_TIME_RANGE,
       presets = SEEK_TIME_PRESETS,
-      onSecondsChange = onSeekTimeChange,
+      onValueChange = onSeekTimeChange,
       onStep = onSeekTimeStep,
-      illustration = { SkipIllustration(seekTimeInSeconds) },
+      illustration = { SkipIllustration(seekTime) },
     )
     Spacer(Modifier.height(28.dp))
     SecondsSetting(
       title = stringResource(StringsR.string.settings_playback_auto_rewind_title),
       summary = stringResource(StringsR.string.settings_playback_auto_rewind_summary),
-      seconds = autoRewindInSeconds,
+      value = autoRewind,
       range = AUTO_REWIND_RANGE,
       presets = AUTO_REWIND_PRESETS,
-      onSecondsChange = onAutoRewindChange,
+      onValueChange = onAutoRewindChange,
       onStep = onAutoRewindStep,
-      illustration = {
-        RewindIllustration(autoRewindInSeconds, maxSeconds = AUTO_REWIND_RANGE.last)
-      },
+      illustration = { RewindIllustration(autoRewind, max = AUTO_REWIND_RANGE.endInclusive) },
     )
     Spacer(Modifier.height(20.dp))
     IslandSwitchRow(
@@ -153,11 +153,11 @@ internal fun ListeningSection(
 private fun SecondsSetting(
   title: String,
   summary: String,
-  seconds: Int,
-  range: IntRange,
-  presets: List<Int>,
-  onSecondsChange: (Int) -> Unit,
-  onStep: (Int) -> Unit,
+  value: Duration,
+  range: ClosedRange<Duration>,
+  presets: List<Duration>,
+  onValueChange: (Duration) -> Unit,
+  onStep: (Duration) -> Unit,
   illustration: @Composable () -> Unit,
 ) {
   Column {
@@ -181,8 +181,8 @@ private fun SecondsSetting(
       Stepper(
         increase = false,
         settingTitle = title,
-        enabled = seconds > range.first,
-        onClick = { onStep(-1) },
+        enabled = value > range.start,
+        onClick = { onStep(-STEP) },
       )
       Column(
         modifier = Modifier.weight(1F).padding(horizontal = 8.dp),
@@ -195,20 +195,20 @@ private fun SecondsSetting(
           illustration()
         }
         Spacer(Modifier.height(6.dp))
-        SecondsValue(seconds)
+        SecondsValue(value)
       }
       Stepper(
         increase = true,
         settingTitle = title,
-        enabled = seconds < range.last,
-        onClick = { onStep(1) },
+        enabled = value < range.endInclusive,
+        onClick = { onStep(STEP) },
       )
     }
     Spacer(Modifier.height(12.dp))
     SecondsPresets(
-      seconds = seconds,
+      value = value,
       presets = presets,
-      onSecondsChange = onSecondsChange,
+      onValueChange = onValueChange,
     )
   }
 }
@@ -244,7 +244,8 @@ private fun Stepper(
 }
 
 @Composable
-private fun secondsText(seconds: Int): String {
+private fun secondsText(value: Duration): String {
+  val seconds = value.inWholeSeconds.toInt()
   return if (seconds == 0) {
     stringResource(StringsR.string.settings_playback_auto_rewind_off)
   } else {
@@ -253,8 +254,8 @@ private fun secondsText(seconds: Int): String {
 }
 
 @Composable
-private fun SecondsValue(seconds: Int) {
-  val text = secondsText(seconds)
+private fun SecondsValue(value: Duration) {
+  val text = secondsText(value)
   AnimatedContent(
     // while rolling, both the old and the new value are shown, but only the new one is announced
     modifier =
@@ -262,7 +263,7 @@ private fun SecondsValue(seconds: Int) {
         contentDescription = text
         liveRegion = LiveRegionMode.Polite
       },
-    targetState = seconds,
+    targetState = value,
     transitionSpec = {
       val up = targetState > initialState
       (slideInVertically { if (up) it else -it } + fadeIn()) togetherWith
@@ -270,9 +271,9 @@ private fun SecondsValue(seconds: Int) {
         SizeTransform(clip = false)
     },
     label = "secondsValue",
-  ) { value ->
+  ) { shown ->
     Text(
-      text = secondsText(value),
+      text = secondsText(shown),
       style = MaterialTheme.typography.titleLargeEmphasized,
       maxLines = 1,
       autoSize =
@@ -286,9 +287,9 @@ private fun SecondsValue(seconds: Int) {
 
 @Composable
 private fun SecondsPresets(
-  seconds: Int,
-  presets: List<Int>,
-  onSecondsChange: (Int) -> Unit,
+  value: Duration,
+  presets: List<Duration>,
+  onValueChange: (Duration) -> Unit,
 ) {
   val numberFormat = remember { NumberFormat.getIntegerInstance() }
   Row(
@@ -301,8 +302,8 @@ private fun SecondsPresets(
       // "Off" is a long word in some languages. When it doesn't fit, the number says the same.
       var wordFits by remember(description, LocalDensity.current.fontScale) { mutableStateOf(true) }
       ToggleButton(
-        checked = seconds == preset,
-        onCheckedChange = { onSecondsChange(preset) },
+        checked = value == preset,
+        onCheckedChange = { onValueChange(preset) },
         modifier =
           Modifier.weight(1F).semantics {
             role = Role.RadioButton
@@ -324,13 +325,15 @@ private fun SecondsPresets(
         contentPadding = PaddingValues(horizontal = 4.dp),
       ) {
         Text(
-          text = if (preset == 0 && wordFits) description else numberFormat.format(preset),
+          text =
+            if (preset == Duration.ZERO && wordFits) description
+            else numberFormat.format(preset.inWholeSeconds),
           style = labelStyle,
           maxLines = 1,
           softWrap = false,
           autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = labelStyle.fontSize),
           onTextLayout = { layout ->
-            if (preset == 0 && layout.hasVisualOverflow) wordFits = false
+            if (preset == Duration.ZERO && layout.hasVisualOverflow) wordFits = false
           },
         )
       }
@@ -340,19 +343,19 @@ private fun SecondsPresets(
 
 private class SkipBurst(
   val id: Long,
-  val seconds: Int,
+  val amount: Duration,
 )
 
 @Composable
-private fun SkipIllustration(seconds: Int) {
+private fun SkipIllustration(amount: Duration) {
   val nudge = remember { Animatable(0F) }
   var bursts by remember { mutableStateOf(emptyList<SkipBurst>()) }
   var nextBurstId by remember { mutableLongStateOf(0L) }
-  var shownSeconds by remember { mutableIntStateOf(seconds) }
-  LaunchedEffect(seconds) {
-    if (seconds == shownSeconds) return@LaunchedEffect
-    shownSeconds = seconds
-    bursts = bursts + SkipBurst(nextBurstId++, seconds)
+  var shownAmount by remember { mutableStateOf(amount) }
+  LaunchedEffect(amount) {
+    if (amount == shownAmount) return@LaunchedEffect
+    shownAmount = amount
+    bursts = bursts + SkipBurst(nextBurstId++, amount)
     nudge.snapTo(0F)
     nudge.animateTo(1F, tween(durationMillis = 90, easing = FastOutSlowInEasing))
     nudge.animateTo(0F, spring(dampingRatio = 0.35F, stiffness = Spring.StiffnessMediumLow))
@@ -417,7 +420,8 @@ private fun MiniSkipButton(
     bursts.forEach { burst ->
       key(burst.id) {
         FloatingAmount(
-          text = if (forward) "+${burst.seconds}" else "−${burst.seconds}",
+          text =
+            if (forward) "+${burst.amount.inWholeSeconds}" else "−${burst.amount.inWholeSeconds}",
           onFinish = { onBurstFinish(burst) },
         )
       }
@@ -453,11 +457,11 @@ private fun FloatingAmount(
 
 @Composable
 private fun RewindIllustration(
-  seconds: Int,
-  maxSeconds: Int,
+  amount: Duration,
+  max: Duration,
 ) {
   val clock = rememberAnimationClock(running = true)
-  val target = seconds.toFloat() / maxSeconds
+  val target = (amount / max).toFloat()
   val rewind = remember { Animatable(target) }
   LaunchedEffect(target) {
     if (rewind.value == target) return@LaunchedEffect

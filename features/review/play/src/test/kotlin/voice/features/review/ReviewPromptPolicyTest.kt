@@ -37,13 +37,13 @@ class ReviewPromptPolicyTest {
 
   @Test
   fun `a milestone is celebrated once the listener got to know Voice`() {
-    assertEquals(expected = ReviewTrigger.Milestone(5), actual = trigger())
+    assertEquals(expected = ReviewTrigger.Milestone(5.hours), actual = trigger())
   }
 
   @Test
   fun `the highest milestone reached is celebrated`() {
     assertEquals(
-      expected = ReviewTrigger.Milestone(25),
+      expected = ReviewTrigger.Milestone(25.hours),
       actual = trigger(signals = signals(listened = 31.hours)),
     )
   }
@@ -78,14 +78,14 @@ class ReviewPromptPolicyTest {
     val finished = FinishedBook(dune, at = now - 4.days)
 
     assertEquals(
-      expected = ReviewTrigger.Milestone(5),
+      expected = ReviewTrigger.Milestone(5.hours),
       actual = trigger(signals = signals(finishedBooks = listOf(finished))),
     )
   }
 
   @Test
   fun `a celebrated milestone is not celebrated again`() {
-    val state = ReviewPromptState(celebratedMilestoneHours = 5)
+    val state = ReviewPromptState(celebratedMilestone = 5.hours)
 
     assertNull(trigger(state))
   }
@@ -100,10 +100,10 @@ class ReviewPromptPolicyTest {
       expected =
         ReviewPromptState(
           asks = 1,
-          lastAskedAtMillis = now.toEpochMilliseconds(),
-          listenedAtLastAskMillis = 12.hours.inWholeMilliseconds,
-          celebratedMilestoneHours = 10,
-          snoozedUntilMillis = (now + 30.days).toEpochMilliseconds(),
+          lastAskedAt = now,
+          listenedAtLastAsk = 12.hours,
+          celebratedMilestone = 10.hours,
+          snoozedUntil = now + 30.days,
         ),
       actual = state,
     )
@@ -140,12 +140,11 @@ class ReviewPromptPolicyTest {
 
   @Test
   fun `a book finished before the last ask is not celebrated again`() {
-    val state =
-      ReviewPromptState(asks = 1, lastAskedAtMillis = (now - 1.days).toEpochMilliseconds())
+    val state = ReviewPromptState(asks = 1, lastAskedAt = now - 1.days)
     val finished = listOf(FinishedBook(dune, at = now - 2.days))
 
     assertEquals(
-      expected = ReviewTrigger.Milestone(5),
+      expected = ReviewTrigger.Milestone(5.hours),
       actual = trigger(state, signals(finishedBooks = finished)),
     )
   }
@@ -165,12 +164,12 @@ class ReviewPromptPolicyTest {
     val asked = ReviewPromptPolicy.asked(ReviewPromptState(), signals())
 
     assertEquals(
-      expected = (now + 90.days).toEpochMilliseconds(),
-      actual = ReviewPromptPolicy.answered(asked, ReviewAnswer.Idea, now).snoozedUntilMillis,
+      expected = now + 90.days,
+      actual = ReviewPromptPolicy.answered(asked, ReviewAnswer.Idea, now).snoozedUntil,
     )
     assertEquals(
-      expected = (now + 30.days).toEpochMilliseconds(),
-      actual = ReviewPromptPolicy.answered(asked, ReviewAnswer.Later, now).snoozedUntilMillis,
+      expected = now + 30.days,
+      actual = ReviewPromptPolicy.answered(asked, ReviewAnswer.Later, now).snoozedUntil,
     )
   }
 
@@ -179,8 +178,8 @@ class ReviewPromptPolicyTest {
     val state = ReviewPromptState(asks = 2)
 
     assertEquals(
-      expected = (now + 90.days).toEpochMilliseconds(),
-      actual = ReviewPromptPolicy.answered(state, ReviewAnswer.Later, now).snoozedUntilMillis,
+      expected = now + 90.days,
+      actual = ReviewPromptPolicy.answered(state, ReviewAnswer.Later, now).snoozedUntil,
     )
   }
 

@@ -169,7 +169,7 @@ private class BookPlayViewStatePreviewProvider : PreviewParameterProvider<BookPl
         bookPlayedTime = 4.hours + 12.minutes,
         bookDuration = 9.hours + 30.minutes,
         chapterSegments = List(12) { 1F / 12 },
-        skipSeconds = 20,
+        skipAmount = 20.seconds,
         jumpBack =
           BookPlayViewState.JumpBackViewState(
             id = 1,

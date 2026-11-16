@@ -183,8 +183,8 @@ private fun LazyListScope.sections(
   section("listening") { modifier ->
     ListeningSection(
       modifier = modifier,
-      seekTimeInSeconds = viewState.seekTimeInSeconds,
-      autoRewindInSeconds = viewState.autoRewindInSeconds,
+      seekTime = viewState.seekTime,
+      autoRewind = viewState.autoRewind,
       onSeekTimeChange = listener::seekAmountChanged,
       onSeekTimeStep = listener::seekAmountStepped,
       onAutoRewindChange = listener::autoRewindAmountChanged,

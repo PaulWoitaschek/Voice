@@ -3,7 +3,6 @@ package voice.features.review
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Instant
 import voice.core.data.BookId
 import voice.core.data.repo.FinishedBook
@@ -22,7 +21,7 @@ internal data class ReviewSignals(
 internal sealed interface ReviewTrigger {
   data class BookFinished(val bookId: BookId) : ReviewTrigger
 
-  data class Milestone(val hours: Int) : ReviewTrigger
+  data class Milestone(val listened: Duration) : ReviewTrigger
 }
 
 internal enum class ReviewAnswer {
@@ -51,7 +50,7 @@ internal object ReviewPromptPolicy {
 
   // a book finished a while ago is no reason to celebrate anymore
   val RECENTLY_FINISHED = 3.days
-  val MILESTONE_HOURS = listOf(5, 10, 25, 50, 100, 250, 500, 1000)
+  val MILESTONES = listOf(5, 10, 25, 50, 100, 250, 500, 1000).map { it.hours }
   val SNOOZE = 30.days
   val LONG_SNOOZE = 90.days
 
@@ -62,17 +61,12 @@ internal object ReviewPromptPolicy {
     if (state.done || state.asks >= MAX_ASKS) return null
     if (signals.now < signals.installedAt + MIN_INSTALL_AGE) return null
     if (signals.listened < MIN_LISTENED || signals.listeningDays < MIN_LISTENING_DAYS) return null
-    val snoozedUntil = state.snoozedUntilMillis
-    if (snoozedUntil != null && signals.now.toEpochMilliseconds() < snoozedUntil) return null
-    if (
-      state.asks > 0 &&
-        signals.listened - state.listenedAtLastAskMillis.milliseconds < LISTENED_BETWEEN_ASKS
-    )
+    val snoozedUntil = state.snoozedUntil
+    if (snoozedUntil != null && signals.now < snoozedUntil) return null
+    if (state.asks > 0 && signals.listened - state.listenedAtLastAsk < LISTENED_BETWEEN_ASKS)
       return null
 
-    val lastAsked =
-      state.lastAskedAtMillis?.let(Instant::fromEpochMilliseconds)
-        ?: Instant.fromEpochMilliseconds(0)
+    val lastAsked = state.lastAskedAt ?: Instant.DISTANT_PAST
     val finished =
       signals.finishedBooks.firstOrNull {
         it.at > lastAsked && it.at >= signals.now - RECENTLY_FINISHED
@@ -80,7 +74,7 @@ internal object ReviewPromptPolicy {
     if (finished != null) return ReviewTrigger.BookFinished(finished.bookId)
 
     val milestone = reachedMilestone(signals.listened)
-    if (milestone > state.celebratedMilestoneHours) return ReviewTrigger.Milestone(milestone)
+    if (milestone > state.celebratedMilestone) return ReviewTrigger.Milestone(milestone)
     return null
   }
 
@@ -89,14 +83,12 @@ internal object ReviewPromptPolicy {
     state: ReviewPromptState,
     signals: ReviewSignals,
   ): ReviewPromptState {
-    val now = signals.now.toEpochMilliseconds()
     return state.copy(
       asks = state.asks + 1,
-      lastAskedAtMillis = now,
-      listenedAtLastAskMillis = signals.listened.inWholeMilliseconds,
-      celebratedMilestoneHours =
-        maxOf(state.celebratedMilestoneHours, reachedMilestone(signals.listened)),
-      snoozedUntilMillis = now + SNOOZE.inWholeMilliseconds,
+      lastAskedAt = signals.now,
+      listenedAtLastAsk = signals.listened,
+      celebratedMilestone = maxOf(state.celebratedMilestone, reachedMilestone(signals.listened)),
+      snoozedUntil = signals.now + SNOOZE,
     )
   }
 
@@ -113,10 +105,10 @@ internal object ReviewPromptPolicy {
         ReviewAnswer.Email -> LONG_SNOOZE
         ReviewAnswer.Later -> if (state.asks >= 2) LONG_SNOOZE else SNOOZE
       }
-    return state.copy(snoozedUntilMillis = (now + snooze).toEpochMilliseconds())
+    return state.copy(snoozedUntil = now + snooze)
   }
 
-  private fun reachedMilestone(listened: Duration): Int {
-    return MILESTONE_HOURS.lastOrNull { listened >= it.hours } ?: 0
+  private fun reachedMilestone(listened: Duration): Duration {
+    return MILESTONES.lastOrNull { listened >= it } ?: Duration.ZERO
   }
 }

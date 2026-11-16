@@ -146,7 +146,7 @@ internal fun BookPlayContent(
           TransportControls(
             bookId = bookId,
             playing = viewState.playing,
-            skipSeconds = viewState.skipSeconds,
+            skipAmount = viewState.skipAmount,
             onRewindClick = onRewindClick,
             onPlayClick = onPlayClick,
             onFastForwardClick = onFastForwardClick,

@@ -70,8 +70,8 @@ import voice.core.sleeptimer.SleepTimerState
 @RunWith(AndroidJUnit4::class)
 class VoicePlayerTest {
 
-  private val seekTimeStore = MemoryDataStore(2)
-  private val autoRewindAmountStore = MemoryDataStore(2)
+  private val seekTimeStore = MemoryDataStore(2.seconds)
+  private val autoRewindAmountStore = MemoryDataStore(2.seconds)
   private val lastPlaybackSpeedStore = MemoryDataStore(1F)
 
   private val internalPlayer =
@@ -160,7 +160,7 @@ class VoicePlayerTest {
       ),
     )
 
-    seekTimeStore.updateData { 7 }
+    seekTimeStore.updateData { 7.seconds }
 
     player.prepare()
     awaitReady()
@@ -201,7 +201,7 @@ class VoicePlayerTest {
       ),
     )
 
-    seekTimeStore.updateData { 5 }
+    seekTimeStore.updateData { 5.seconds }
 
     player.seekTo(1, 12_000)
     player.prepare()
@@ -283,7 +283,7 @@ class VoicePlayerTest {
   @Test
   fun `last chapter, next on headphones or in the car skips by the skip amount`() = scope.runTest {
     setMediaItems(listOf(twelveChapters()))
-    seekTimeStore.updateData { 7 }
+    seekTimeStore.updateData { 7.seconds }
     player.seekTo(11, 5_000)
     player.prepare()
     awaitReady()
@@ -552,7 +552,7 @@ class VoicePlayerTest {
   @Test
   fun `end of chapter sleep timer keeps a finished book at its end`() = scope.runTest {
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 10_000, name = null))))
-    autoRewindAmountStore.updateData { 5 }
+    autoRewindAmountStore.updateData { 5.seconds }
 
     player.seekTo(0, 9_000)
     player.prepare()
@@ -700,7 +700,7 @@ class VoicePlayerTest {
       ),
     )
 
-    autoRewindAmountStore.updateData { 5 }
+    autoRewindAmountStore.updateData { 5.seconds }
 
     player.seekTo(1, 3_000)
     player.prepare()
@@ -754,7 +754,7 @@ class VoicePlayerTest {
   @Test
   fun `pausing while already paused does not rewind again`() = scope.runTest {
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
-    autoRewindAmountStore.updateData { 5 }
+    autoRewindAmountStore.updateData { 5.seconds }
 
     player.seekTo(0, 15_000)
     player.prepare()
@@ -771,7 +771,7 @@ class VoicePlayerTest {
   @Test
   fun `pausing without auto rewind does not seek`() = scope.runTest {
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
-    autoRewindAmountStore.updateData { 0 }
+    autoRewindAmountStore.updateData { 0.seconds }
 
     player.seekTo(0, 15_000)
     player.prepare()
@@ -800,7 +800,7 @@ class VoicePlayerTest {
   @Test
   fun `pausing a finished book keeps it at its end`() = scope.runTest {
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 10_000, name = null))))
-    autoRewindAmountStore.updateData { 5 }
+    autoRewindAmountStore.updateData { 5.seconds }
 
     player.seekTo(0, 9_000)
     player.prepare()
@@ -816,7 +816,7 @@ class VoicePlayerTest {
   @Test
   fun `unplugging headphones rewinds`() = scope.runTest {
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))))
-    autoRewindAmountStore.updateData { 5 }
+    autoRewindAmountStore.updateData { 5.seconds }
     internalPlayer.setHandleAudioBecomingNoisy(true)
 
     player.seekTo(0, 8_000)

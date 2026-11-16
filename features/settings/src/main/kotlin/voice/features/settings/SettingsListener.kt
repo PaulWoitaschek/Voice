@@ -1,6 +1,7 @@
 package voice.features.settings
 
 import java.time.LocalTime
+import kotlin.time.Duration
 import voice.core.ui.ThemeColorScheme
 import voice.core.ui.ThemeMode
 
@@ -17,13 +18,13 @@ interface SettingsListener {
 
   fun setUseGrid(useGrid: Boolean)
 
-  fun seekAmountChanged(seconds: Int)
+  fun seekAmountChanged(amount: Duration)
 
-  fun seekAmountStepped(step: Int)
+  fun seekAmountStepped(step: Duration)
 
-  fun autoRewindAmountChanged(seconds: Int)
+  fun autoRewindAmountChanged(amount: Duration)
 
-  fun autoRewindAmountStepped(step: Int)
+  fun autoRewindAmountStepped(step: Duration)
 
   fun toggleLockScreenSlider()
 
@@ -68,13 +69,13 @@ interface SettingsListener {
 
         override fun setUseGrid(useGrid: Boolean) {}
 
-        override fun seekAmountChanged(seconds: Int) {}
+        override fun seekAmountChanged(amount: Duration) {}
 
-        override fun seekAmountStepped(step: Int) {}
+        override fun seekAmountStepped(step: Duration) {}
 
-        override fun autoRewindAmountChanged(seconds: Int) {}
+        override fun autoRewindAmountChanged(amount: Duration) {}
 
-        override fun autoRewindAmountStepped(step: Int) {}
+        override fun autoRewindAmountStepped(step: Duration) {}
 
         override fun toggleLockScreenSlider() {}
 

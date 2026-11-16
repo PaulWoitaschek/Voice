@@ -144,7 +144,7 @@ class BookPlayViewModelTest {
       volumeGainFormatter = mockk(),
       batteryOptimization = mockk(),
       sleepTimerPreferenceStore = SleepTimerPreferenceStore(sleepTimerDataStore),
-      seekTimeStore = SeekTimeStore(MemoryDataStore(20)),
+      seekTimeStore = SeekTimeStore(MemoryDataStore(20.seconds)),
       bookId = book.id,
       dispatcherProvider =
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),
@@ -159,7 +159,7 @@ class BookPlayViewModelTest {
 
   @Test
   fun sleepTimerValueChanging() = scope.runTest {
-    fun assertDialogSleepTime(expected: Int) {
+    fun assertDialogSleepTime(expected: Duration) {
       assertEquals(
         expected = BookPlayDialogViewState.SleepTimer(SleepTimerViewState(expected)),
         actual = viewModel.dialogState.value,
@@ -168,35 +168,35 @@ class BookPlayViewModelTest {
 
     viewModel.toggleSleepTimer()
     yield()
-    assertDialogSleepTime(5)
+    assertDialogSleepTime(5.minutes)
 
-    suspend fun incrementAndAssert(time: Int) {
+    suspend fun incrementAndAssert(time: Duration) {
       viewModel.incrementSleepTime()
       yield()
       assertDialogSleepTime(time)
     }
 
-    suspend fun decrementAndAssert(time: Int) {
+    suspend fun decrementAndAssert(time: Duration) {
       viewModel.decrementSleepTime()
       yield()
       assertDialogSleepTime(time)
     }
 
-    decrementAndAssert(4)
-    decrementAndAssert(3)
-    decrementAndAssert(2)
-    decrementAndAssert(1)
+    decrementAndAssert(4.minutes)
+    decrementAndAssert(3.minutes)
+    decrementAndAssert(2.minutes)
+    decrementAndAssert(1.minutes)
 
-    decrementAndAssert(1)
+    decrementAndAssert(1.minutes)
 
-    incrementAndAssert(2)
-    incrementAndAssert(3)
+    incrementAndAssert(2.minutes)
+    incrementAndAssert(3.minutes)
   }
 
   @Test
   fun sleepTimerSettingFixedValue() = scope.runTest {
     viewModel.toggleSleepTimer()
-    viewModel.onAcceptSleepTime(10)
+    viewModel.onAcceptSleepTime(10.minutes)
     assertEquals(expected = 5.minutes, actual = sleepTimerDataStore.data.first().duration)
     yield()
     verify(exactly = 1) {
@@ -210,7 +210,7 @@ class BookPlayViewModelTest {
   @Test
   fun deactivateSleepTimer() = scope.runTest {
     viewModel.toggleSleepTimer()
-    viewModel.onAcceptSleepTime(10)
+    viewModel.onAcceptSleepTime(10.minutes)
     viewModel.toggleSleepTimer()
     yield()
     verifyOrder {
@@ -223,7 +223,7 @@ class BookPlayViewModelTest {
   @Test
   fun `the 30-minute preset sets the automatic minutes to 30`() = scope.runTest {
     viewModel.toggleSleepTimer()
-    viewModel.onAcceptSleepTime(30)
+    viewModel.onAcceptSleepTime(30.minutes)
     runCurrent()
 
     assertEquals(expected = 30.minutes, actual = sleepTimerDataStore.data.first().autoSleepDuration)
@@ -252,7 +252,7 @@ class BookPlayViewModelTest {
     scope.runTest {
       sleepTimerDataStore.updateData { it.copy(duration = 24.minutes) }
       viewModel.toggleSleepTimer()
-      viewModel.onAcceptSleepTime(30)
+      viewModel.onAcceptSleepTime(30.minutes)
       runCurrent()
       viewModel.toggleSleepTimer()
       runCurrent()
@@ -291,7 +291,7 @@ class BookPlayViewModelTest {
     runCurrent()
     viewModel.incrementSleepTime()
     runCurrent()
-    viewModel.onAcceptSleepTime(30)
+    viewModel.onAcceptSleepTime(30.minutes)
     runCurrent()
 
     assertEquals(expected = 25.minutes, actual = sleepTimerDataStore.data.first().duration)
@@ -304,7 +304,7 @@ class BookPlayViewModelTest {
     runCurrent()
     viewModel.incrementSleepTime()
     runCurrent()
-    viewModel.onAcceptSleepTime(30)
+    viewModel.onAcceptSleepTime(30.minutes)
     runCurrent()
 
     assertEquals(expected = 30.minutes, actual = sleepTimerDataStore.data.first().autoSleepDuration)
@@ -314,7 +314,7 @@ class BookPlayViewModelTest {
   fun `the 30-minute preset, then end of chapter, keeps the automatic minutes at 30`() =
     scope.runTest {
       viewModel.toggleSleepTimer()
-      viewModel.onAcceptSleepTime(30)
+      viewModel.onAcceptSleepTime(30.minutes)
       runCurrent()
       viewModel.toggleSleepTimer()
       runCurrent()
@@ -846,7 +846,7 @@ class BookPlayViewModelTest {
       volumeGainFormatter = mockk(),
       batteryOptimization = mockk { coEvery { shouldRequest() } returns false },
       sleepTimerPreferenceStore = SleepTimerPreferenceStore(sleepTimerDataStore),
-      seekTimeStore = SeekTimeStore(MemoryDataStore(20)),
+      seekTimeStore = SeekTimeStore(MemoryDataStore(20.seconds)),
       bookId = book.id,
       dispatcherProvider =
         DispatcherProvider(scope.coroutineContext, scope.coroutineContext, scope.coroutineContext),

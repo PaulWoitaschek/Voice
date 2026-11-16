@@ -25,6 +25,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
@@ -101,13 +102,13 @@ class SkipButtonTest {
         Row {
           SkipButton(
             forward = false,
-            seconds = 10,
+            amount = 10.seconds,
             onClick = {},
             modifier = Modifier.height(72.dp).testTag("rewind"),
           )
           SkipButton(
             forward = true,
-            seconds = 10,
+            amount = 10.seconds,
             onClick = {},
             modifier = Modifier.height(72.dp).testTag("forward"),
           )
