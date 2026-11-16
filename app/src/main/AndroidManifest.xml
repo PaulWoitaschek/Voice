@@ -12,7 +12,9 @@
     android:name="com.google.android.gms.permission.AD_ID"
     tools:node="remove" />
 
+  <!-- Media3 keeps the whole MP4 sample table in memory, so long books need a large heap: https://github.com/androidx/media/issues/3555 -->
   <application
+    android:largeHeap="true"
     android:enableOnBackInvokedCallback="true"
     android:name=".di.App"
     android:icon="@drawable/ic_launcher"
