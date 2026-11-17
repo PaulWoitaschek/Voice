@@ -1,6 +1,8 @@
 package voice.core.search
 
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import voice.core.common.DispatcherProvider
 import voice.core.common.comparator.NaturalOrderComparator
@@ -32,40 +34,59 @@ class BookSearch(
       }
       searchableBooks = books.associateBy { it.book.id }
       // typos only count when nothing matches as typed, so similar words don't pile up below the
-      // right books
-      books
-        .mapNotNull { rank(it, terms, typos = false) }
-        .ifEmpty { books.mapNotNull { rank(it, terms, typos = true) } }
-        .sortedWith(resultComparator)
+      // right books. Chapters have so many words that they would often stop the typos of a title.
+      val asTyped = books.mapNotNull { rank(it, terms, typos = null) }
+      val results =
+        if (asTyped.any { it.chapter == null }) {
+          asTyped
+        } else {
+          // the words of chapters repeat a lot over the library
+          val typos = terms.associateWith { HashMap<String, Int>() }
+          books.mapNotNull { rank(it, terms, typos) }
+        }
+      results.sortedWith(resultComparator)
     }
   }
 
-  private fun rank(
+  private fun CoroutineScope.rank(
     book: SearchableBook,
     terms: List<String>,
-    typos: Boolean,
+    typos: Map<String, MutableMap<String, Int>>?,
   ): BookSearchResult? {
+    // a new keystroke or position update starts a new search
+    ensureActive()
     val matches = mutableMapOf<Int, MutableList<IntRange>>()
     val matchedTerms = mutableMapOf<BookSearchField, MutableSet<String>>()
     var score = 0
+    var foundThroughChapter = false
     for (term in terms) {
       var bestTermScore = 0
+      var matchesOutsideChapters = false
       book.texts.forEachIndexed { index, (field, _) ->
         book.words[index].forEach { word ->
-          val match = match(word.text, term, typos)
+          val match = match(word.text, term, typos?.getValue(term))
           if (match != null) {
             matches.getOrPut(index) { mutableListOf() } += word.originalRange(match.length)
             matchedTerms.getOrPut(field) { mutableSetOf() } += term
             bestTermScore = maxOf(bestTermScore, field.score(match.quality))
+            if (field != BookSearchField.Chapters) matchesOutsideChapters = true
           }
         }
       }
-      if (bestTermScore == 0 && book.fileWords.none { match(it.text, term, typos) != null })
+      if (
+        bestTermScore == 0 &&
+          book.fileWords.none { match(it.text, term, typos?.getValue(term)) != null }
+      )
         return null
+      if (bestTermScore > 0 && !matchesOutsideChapters) foundThroughChapter = true
       score += bestTermScore
     }
-    // of the chapters, the first one that matched is shown
-    val shown = matches.keys.sorted().distinctBy { book.texts[it].first }
+    // a chapter line under a book that the other fields already explain is only noise
+    val shown =
+      matches.keys
+        .sorted()
+        .distinctBy { book.texts[it].first }
+        .filter { foundThroughChapter || book.texts[it].first != BookSearchField.Chapters }
     return BookSearchResult(
       book = book.book,
       matches =
@@ -85,13 +106,16 @@ class BookSearch(
   private fun match(
     word: String,
     term: String,
-    typos: Boolean,
+    typos: MutableMap<String, Int>?,
   ): WordMatch? =
     when {
       word.startsWith(term) ->
         WordMatch(term.length, if (word.length == term.length) WHOLE_WORD else WORD_START)
-      typos && term.length >= MIN_TYPO_LENGTH ->
-        word.typoPrefixLength(term)?.let { WordMatch(it, TYPO) }
+      typos != null && term.length >= MIN_TYPO_LENGTH ->
+        typos
+          .getOrPut(word) { word.typoPrefixLength(term) ?: 0 }
+          .takeIf { it > 0 }
+          ?.let { WordMatch(it, TYPO) }
       else -> null
     }
 

@@ -8,7 +8,7 @@ data class BookSearchResult(
   val matches: Map<BookSearchField, List<IntRange>>,
   val fieldsMatchingAllWords: Set<BookSearchField>,
   val score: Int,
-  // the first chapter of the book that matched, the text of the chapter matches
+  // the chapter that explains why the search found the book, null when the other fields do
   val chapter: String? = null,
 ) {
 

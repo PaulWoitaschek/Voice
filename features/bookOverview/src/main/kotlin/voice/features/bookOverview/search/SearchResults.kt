@@ -375,7 +375,8 @@ private fun MatchTagText(
       ),
     modifier = modifier,
     style = MaterialTheme.typography.labelMedium,
-    maxLines = 1,
+    // chapter names are long, and the line must still show the matched words
+    maxLines = if (tag.field == BookSearchField.Chapters) 2 else 1,
     overflow = TextOverflow.Ellipsis,
   )
 }

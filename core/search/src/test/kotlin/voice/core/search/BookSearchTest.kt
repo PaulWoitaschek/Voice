@@ -390,7 +390,7 @@ class BookSearchTest {
   }
 
   @Test
-  fun `league with the chapters The Red-Headed League and then The League of Five shows The Red-Headed League`() {
+  fun `league shows the first chapter that matches, The Red-Headed League`() {
     val book =
       book(
         name = "The Adventures",
@@ -406,6 +406,55 @@ class BookSearchTest {
         expected = mapOf(BookSearchField.Chapters to listOf(15..20)),
         actual = result.matches,
       )
+    }
+  }
+
+  @Test
+  fun `the start of a word and a word without accents find a chapter`() {
+    val book =
+      book(
+        name = "The Journey",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Intro"), chapter(name = "Capítulo del mar")),
+      )
+    test(book) {
+      assertEquals(expected = "Capítulo del mar", actual = search.search("capit").single().chapter)
+      assertEquals(
+        expected = "Capítulo del mar",
+        actual = search.search("capitulo").single().chapter,
+      )
+    }
+  }
+
+  @Test
+  fun `a typo in a title still finds the book when a chapter matches as typed`() {
+    val dragon = book(name = "Dragon Rider", genre = null, narrator = null)
+    val other =
+      book(
+        name = "The Adventures",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Intro"), chapter(name = "Dragnet Night")),
+      )
+    test(dragon, other) {
+      expectSearchResult("dragn", dragon, other)
+    }
+  }
+
+  @Test
+  fun `a book found by its title shows no chapter`() {
+    val book =
+      book(
+        name = "Dune",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Dune - Part 01"), chapter(name = "Dune - Part 02")),
+      )
+    test(book) {
+      val result = search.search("dune").single()
+      assertEquals(expected = null, actual = result.chapter)
+      assertEquals(expected = setOf(BookSearchField.Title), actual = result.matches.keys)
     }
   }
 
