@@ -133,7 +133,7 @@ internal fun nowPlayingBook(
     duration = book.duration.milliseconds,
     speed = speed,
     playing = playing,
-    finished = book.finished(),
+    finished = !playing && book.finished(),
     sleepTimerEnd = sleepTimerEnd(sleepTimer, playing, book, now),
   )
 }
