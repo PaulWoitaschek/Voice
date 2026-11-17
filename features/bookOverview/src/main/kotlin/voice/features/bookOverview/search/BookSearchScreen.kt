@@ -365,6 +365,7 @@ internal fun BookSearchField.label(): String {
       BookSearchField.Series -> StringsR.string.library_search_field_series
       BookSearchField.Narrator -> StringsR.string.library_search_field_narrators
       BookSearchField.Genre -> StringsR.string.library_search_field_genres
+      BookSearchField.Chapters -> StringsR.string.library_search_field_chapters
     },
   )
 }

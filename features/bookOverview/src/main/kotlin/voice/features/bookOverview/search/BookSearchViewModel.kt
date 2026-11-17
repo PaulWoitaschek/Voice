@@ -372,7 +372,12 @@ private fun BrowseCategory.value(book: Book): String? {
 }
 
 private val TagFields =
-  listOf(BookSearchField.Series, BookSearchField.Narrator, BookSearchField.Genre)
+  listOf(
+    BookSearchField.Series,
+    BookSearchField.Narrator,
+    BookSearchField.Genre,
+    BookSearchField.Chapters,
+  )
 
 private fun BookSearchResult.toViewState(
   livePlaybackState: LivePlaybackState?,
@@ -391,7 +396,7 @@ private fun BookSearchResult.toViewState(
     matchTag =
       TagFields.firstNotNullOfOrNull { field ->
         val highlights = matches[field] ?: return@firstNotNullOfOrNull null
-        val text = field.text(book) ?: return@firstNotNullOfOrNull null
+        val text = text(field) ?: return@firstNotNullOfOrNull null
         MatchTag(field, HighlightedText(text, highlights))
       },
     hidden = item.hidden,

@@ -353,6 +353,7 @@ private fun MatchTagText(
       when (tag.field) {
         BookSearchField.Series -> StringsR.string.library_search_match_series
         BookSearchField.Narrator -> StringsR.string.library_search_match_narrator
+        BookSearchField.Chapters -> StringsR.string.library_search_match_chapter
         else -> StringsR.string.library_search_match_genre
       },
       tag.text.text,
@@ -421,7 +422,7 @@ private fun SearchResultsPreview() {
           BookSearchViewState.Results(
             filters =
               listOf(
-                BookSearchViewState.Filter(field = null, count = 5, selected = true),
+                BookSearchViewState.Filter(field = null, count = 6, selected = true),
                 BookSearchViewState.Filter(
                   field = BookSearchField.Title,
                   count = 2,
@@ -434,6 +435,11 @@ private fun SearchResultsPreview() {
                 ),
                 BookSearchViewState.Filter(
                   field = BookSearchField.Series,
+                  count = 1,
+                  selected = false,
+                ),
+                BookSearchViewState.Filter(
+                  field = BookSearchField.Chapters,
                   count = 1,
                   selected = false,
                 ),
@@ -474,6 +480,16 @@ private fun SearchResultsPreview() {
                     MatchTag(
                       BookSearchField.Series,
                       HighlightedText("Kingkiller Chronicle 1", listOf(0..3)),
+                    ),
+                ),
+                result(
+                  title = "The Adventures of Sherlock Holmes",
+                  author = "Arthur Conan Doyle",
+                  category = BookCategory.NOT_STARTED,
+                  matchTag =
+                    MatchTag(
+                      BookSearchField.Chapters,
+                      HighlightedText("The King of Bohemia", listOf(4..7)),
                     ),
                 ),
               ),

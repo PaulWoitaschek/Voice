@@ -8,16 +8,24 @@ data class BookSearchResult(
   val matches: Map<BookSearchField, List<IntRange>>,
   val fieldsMatchingAllWords: Set<BookSearchField>,
   val score: Int,
-)
+  // the first chapter of the book that matched, the text of the chapter matches
+  val chapter: String? = null,
+) {
+
+  fun text(field: BookSearchField): String? =
+    if (field == BookSearchField.Chapters) chapter else field.text(book)
+}
 
 enum class BookSearchField {
   Title,
   Author,
   Series,
   Narrator,
-  Genre;
+  Genre,
+  Chapters;
 
-  fun text(book: Book): String? {
+  // a book has many chapters, which BookSearch gets from its chapter list
+  internal fun text(book: Book): String? {
     val text =
       when (this) {
         Title -> book.name
@@ -28,6 +36,7 @@ enum class BookSearchField {
           }
         Narrator -> book.content.metadata.narrator
         Genre -> book.content.metadata.genre
+        Chapters -> null
       }
     return text?.takeIf { it.isNotBlank() }
   }
