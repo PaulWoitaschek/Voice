@@ -31,7 +31,7 @@ after another.
 | Brief | Always | Each rule and example of the brief has a test that checks it. The diff builds nothing that the brief leaves out, and nothing it doesn't ask for. |
 | Simplicity | Always | Find what can go, by the complexity rule in `AGENTS.md`: stored data, a migration, a setting, a library, an abstraction with one user, code for a case that can't happen. Name the smaller version. |
 | Rules | Always | Find breaks of `AGENTS.md` and the skills that apply to the changed files: architecture, logging, comments, format-and-test, translate-strings. |
-| Listener | When listeners can see or hear the change | Install the branch with the emulator skill and do each example of the brief by hand. For UI, check it against the design skill, in the app and in the previews. When the media session changes, check the notification, and the car with the android-auto skill. |
+| Listener | Only with a [reason](#the-listener-seat) | Check what its reasons name. |
 
 A finding has:
 
@@ -42,6 +42,22 @@ A finding has:
 
 A seat without a concrete case for a finding leaves it out. A seat doesn't report a finding that is in the ledger
 again. When a fix didn't work, or a seat has a new argument against a `wrong`, it names the row.
+
+### The Listener seat
+
+This seat costs the most: it builds the branch, starts an emulator and does the examples by hand. Start it only with
+a reason from this table, and tell the seat its reasons. The seat checks what they name, and not the rest of the
+brief.
+
+| Reason | Check |
+|---|---|
+| The diff changes the layout of a screen, a sheet, a list row, a widget or the notification. | Render the previews of the changed UI and check them against the design skill. Use the emulator skill only for what previews can't show, like a flow, motion, the widget or the notification. |
+| No unit test can show an example of the brief, like a widget tap or a cold start. | Install the branch with the emulator skill and do these examples by hand. |
+| The diff changes the media session. | Check the notification on the emulator, and the car with the android-auto skill. |
+| The diff changes a page of the website. | Build the website and look at the page in a browser, also at phone width. |
+
+With no reason, the seat doesn't run. That is so for logic that unit tests show in full, a changed string, a
+refactoring and a build file.
 
 ## 3. Rate
 
@@ -72,7 +88,7 @@ has one, stop, show the open rows and ask.
 
 ## 6. Report
 
-Show the ledger. The rounds don't go into the pull request.
+Show the ledger. When the Listener seat didn't run, say so. The rounds don't go into the pull request.
 
 ## The ledger
 
