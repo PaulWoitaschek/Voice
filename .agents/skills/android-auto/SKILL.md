@@ -6,10 +6,10 @@ description: Showing Voice in Android Auto on the Desktop Head Unit (DHU), conne
 # Running Voice in Android Auto
 
 Android Auto runs on your agent emulator from the emulator skill and shows up on the DHU, Google's head unit for the
-desktop. Start your emulator first. Every command here needs its `ANDROID_SERIAL`.
+desktop. Start your emulator first. Every command here needs the export line that `emulator.py start` printed.
 
 ```sh
-export ANDROID_SERIAL=emulator-55xx; .agents/skills/android-auto/scripts/car.py start
+export ANDROID_SERIAL=…; .agents/skills/android-auto/scripts/car.py start
 ```
 
 - The first `start` on a booted emulator takes about 45 seconds. It installs the real Android Auto over the stub in
@@ -44,7 +44,7 @@ car.py send keycode back    # any DHU console command
   corner, or from the bar at the bottom once it's there.
 - The first time a car connects, an Assistant tip covers the bottom left of the screen for a while.
 - Media keys go to the app that played last, so play something in Voice before you test them.
-- The phone screen still works with `ui.py`, and `adb shell dumpsys media_session` shows the playback state.
+- The phone screen still works with agent-device, and `adb shell dumpsys media_session` shows the playback state.
 - `./gradlew :app:installFreeDebug` works while the car is connected. The car picks up the new build within a few
   seconds.
 
