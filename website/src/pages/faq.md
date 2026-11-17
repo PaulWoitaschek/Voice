@@ -1,12 +1,15 @@
 ---
 layout: ../layouts/Prose.astro
 title: FAQ
+toc: true
 description: Answers to common questions about Voice, the audiobook player for Android, and how it finds the books in your folders.
 ---
 
 # Questions and answers
 
-<h2 id="folders">How does Voice find the books in my folder?</h2>
+<span id="folders"></span>
+
+## How does Voice find the books in my folder?
 
 In Voice, a book is always one folder or one file. All audio files in a book's folder are its chapters, also those in
 folders inside it, in the order of their names.

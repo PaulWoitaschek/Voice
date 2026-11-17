@@ -3,14 +3,17 @@ import Decor from '../components/Decor.astro'
 import Base from './Base.astro'
 
 // Markdown pages pass their frontmatter, Astro pages pass title and description directly.
+// A page with `toc: true` in its frontmatter gets a side menu of its sections.
 type Props = {
   title?: string
   description?: string
-  frontmatter?: { title: string; description?: string }
+  frontmatter?: { title: string; description?: string; toc?: boolean }
+  headings?: { depth: number; slug: string; text: string }[]
 }
 const { frontmatter } = Astro.props
 const title = frontmatter?.title ?? Astro.props.title
 const description = frontmatter?.description ?? Astro.props.description
+const sections = frontmatter?.toc ? (Astro.props.headings ?? []).filter((heading) => heading.depth === 2) : []
 ---
 
 <Base description={description} title={title}>
@@ -22,9 +25,29 @@ const description = frontmatter?.description ?? Astro.props.description
       ]}
     />
   </div>
-  <article class="wrap prose">
-    <slot />
-  </article>
+  {
+    sections.length > 0 ? (
+      <div class="wrap with-toc">
+        <nav aria-label="On this page" class="toc">
+          <p class="toc-title">On this page</p>
+          <ol>
+            {sections.map((section) => (
+              <li>
+                <a href={`#${section.slug}`}>{section.text}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <article class="prose">
+          <slot />
+        </article>
+      </div>
+    ) : (
+      <article class="wrap prose">
+        <slot />
+      </article>
+    )
+  }
 </Base>
 
 <script>
@@ -34,6 +57,32 @@ const description = frontmatter?.description ?? Astro.props.description
     link.href = `#${heading.id}`
     link.append(...heading.childNodes)
     heading.append(link)
+  }
+
+  // Marks the section being read in the side menu: the last one whose heading scrolled past the top third.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')]
+  const targets = links.flatMap((link) => {
+    const target = document.getElementById(decodeURIComponent(link.hash.slice(1)))
+    return target ? [{ link, target }] : []
+  })
+  if (targets.length > 0) {
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const line = window.innerHeight / 3
+      let current = targets.findLast(({ target }) => target.getBoundingClientRect().top <= line) ?? targets[0]
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) current = targets.at(-1)!
+      for (const { link } of targets) {
+        if (link === current.link) link.setAttribute('aria-current', 'location')
+        else link.removeAttribute('aria-current')
+      }
+    }
+    const schedule = () => {
+      if (frame === 0) frame = requestAnimationFrame(update)
+    }
+    addEventListener('scroll', schedule, { passive: true })
+    addEventListener('resize', schedule)
+    update()
   }
 </script>
 
@@ -50,6 +99,125 @@ const description = frontmatter?.description ?? Astro.props.description
     max-width: 800px;
     padding-top: calc(var(--header-height) + clamp(32px, 6vw, 72px));
     padding-bottom: 32px;
+  }
+
+  .with-toc {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 800px);
+    justify-content: center;
+    padding-top: calc(var(--header-height) + clamp(32px, 6vw, 72px));
+    padding-bottom: 32px;
+  }
+
+  .with-toc .prose {
+    padding-bottom: 0;
+  }
+
+  .with-toc .prose {
+    padding-top: 0;
+  }
+
+  /* On narrow screens the menu sits under the title, so the article's children join the grid to place it there. */
+  @media (max-width: 1099px) {
+    .with-toc .prose {
+      display: contents;
+    }
+
+    .with-toc .prose > :global(*) {
+      order: 2;
+    }
+
+    .with-toc .prose > :global(h1) {
+      order: 0;
+    }
+
+    .toc {
+      order: 1;
+    }
+
+    .toc a[aria-current]:not(:hover) {
+      background: none;
+      color: var(--text-muted);
+      font-weight: inherit;
+    }
+  }
+
+  .toc {
+    margin-bottom: 40px;
+    padding: 20px 24px;
+    border-radius: 24px;
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+
+  .toc-title {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    font-weight: 650;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+  }
+
+  .toc ol {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc a {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: background-color 150ms ease;
+  }
+
+  .toc a:hover {
+    background: var(--tonal);
+    color: var(--on-tonal);
+  }
+
+  .toc a[aria-current] {
+    background: var(--tonal);
+    color: var(--on-tonal);
+    font-weight: 600;
+  }
+
+  /* Beside the text once both fit, and it stays in view while reading. */
+  @media (min-width: 1100px) {
+    .with-toc {
+      grid-template-columns: 280px minmax(0, 800px);
+      gap: 56px;
+    }
+
+    .toc {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      margin-top: 8px;
+      margin-bottom: 0;
+      padding: 16px 12px;
+      background: none;
+      border: 0;
+    }
+
+    .toc-title {
+      padding-inline: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toc a {
+      transition: none;
+    }
   }
 
   .prose :global(h1) {
