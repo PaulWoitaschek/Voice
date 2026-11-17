@@ -17,6 +17,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verifyOrder
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
@@ -52,6 +53,7 @@ import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.SeekTimeStore
 import voice.core.playback.history.AutomaticPauseRecorder
+import voice.core.playback.history.CommandSource
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
@@ -116,6 +118,8 @@ class VoicePlayerTest {
     }
   private val analytics = mockk<Analytics>(relaxUnitFun = true)
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer)
+  private val commandSourceResolver =
+    spyk(CommandSourceResolver(ApplicationProvider.getApplicationContext()))
   private val historyRecorder =
     ListeningHistoryRecorder(
       repo = historyRepo,
@@ -144,7 +148,7 @@ class VoicePlayerTest {
       sleepTimer = sleepTimer,
       analytics = analytics,
       historyRecorder = historyRecorder,
-      commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
+      commandSourceResolver = commandSourceResolver,
     )
 
   @Test
@@ -414,43 +418,53 @@ class VoicePlayerTest {
 
   @Test
   fun `last chapter, at the end of the book, skip forward does nothing`() = scope.runTest {
+    AutomaticPauseRecorder(historyRecorder).attachTo(player)
     setMediaItems(twoChaptersOfAMinute())
     seekTimeStore.updateData { 20.seconds }
-    player.seekTo(1, 59_999)
+    player.seekTo(1, 49_999)
     player.prepare()
     awaitReady()
-
+    player.play()
     player.seekForward()
+    TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
+    shadowOf(Looper.getMainLooper()).idle()
+    advanceUntilIdle()
+    val eventsAtTheEnd = historyEvents.toList()
+
+    player.seekToNext()
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(internalPlayer)
+    shadowOf(Looper.getMainLooper()).idle()
+    advanceUntilIdle()
 
     player.shouldHavePosition(1, 59_999)
+    assertEquals(expected = Player.STATE_ENDED, actual = player.playbackState)
+    assertEquals(expected = eventsAtTheEnd, actual = historyEvents)
   }
 
   @Test
-  fun `last chapter, 10 seconds before the end, on headphones, in the car or in the notification, skip forward goes to the end, completed, playback stops`() =
+  fun `last chapter, 10 seconds before the end, on headphones, in the car or in the notification, skip forward goes to the end, completed, playback stops, no jump back`() =
     scope.runTest {
-      setMediaItems(twoChaptersOfAMinute())
+      val chapters = twoChaptersOfAMinute()
+      setMediaItems(chapters, currentChapter = chapters[1], positionInChapter = 49_999)
       seekTimeStore.updateData { 20.seconds }
       player.prepare()
       awaitReady()
+      every { commandSourceResolver.current() } returns
+        CommandSource(ListeningEvent.Source.Bluetooth)
+      player.play()
 
-      listOf(
-          { player.seekToNext() },
-          { player.seekToNextMediaItem() },
-          { player.seekForward() },
-        )
-        .forEach { skipForward ->
-          player.seekTo(1, 49_999)
-          awaitReady()
-          player.play()
+      player.seekToNext()
+      player.shouldHavePosition(1, 59_999)
 
-          skipForward()
-          player.shouldHavePosition(1, 59_999)
-
-          TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
-          shadowOf(Looper.getMainLooper()).idle()
-          player.shouldHavePosition(1, 59_999)
-          assertFalse(player.isPlaying)
-        }
+      TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
+      shadowOf(Looper.getMainLooper()).idle()
+      player.shouldHavePosition(1, 59_999)
+      assertFalse(player.isPlaying)
+      assertEquals(
+        expected = listOf(ListeningEvent.Type.Play, ListeningEvent.Type.SkipForward),
+        actual = historyEvents.map { it.type },
+      )
+      assertNull(historyRecorder.lastJump.value)
     }
 
   @Test
