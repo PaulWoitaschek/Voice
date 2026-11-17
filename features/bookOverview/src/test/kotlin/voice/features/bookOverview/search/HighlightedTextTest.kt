@@ -32,9 +32,9 @@ class HighlightedTextTest {
   @Test
   fun `without a space before the match the cut starts at the match`() {
     assertEquals(
-      expected = HighlightedText("…Red Headed", listOf(1..3, 5..10)),
+      expected = HighlightedText("…Red-Headed", listOf(1..3, 5..10)),
       actual =
-        HighlightedText("Introduction-to-the-Methodology Red Headed", listOf(32..34, 36..41))
+        HighlightedText("Introduction-to-the-Methodology-of-the-Red-Headed", listOf(39..41, 43..48))
           .nearFirstHighlight(),
     )
   }

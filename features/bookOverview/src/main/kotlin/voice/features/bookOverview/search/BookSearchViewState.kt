@@ -83,7 +83,8 @@ data class HighlightedText(
   val highlights: List<IntRange> = emptyList(),
 )
 
-// the label itself can hold the name, e.g. "Chapter · Chapter", so the name goes in after
+// the label can hold the name itself, e.g. "Chapter · Chapter", so the name goes in at this mark
+// after the label is formatted
 internal const val PLACEHOLDER = "\uE000"
 
 internal fun HighlightedText.inLabel(template: String): HighlightedText {
@@ -100,7 +101,7 @@ internal fun HighlightedText.nearFirstHighlight(): HighlightedText {
   val first = highlights.minOfOrNull { it.first } ?: return this
   if (first <= CHAPTER_CUT_AFTER) return this
   var start = text.indexOf(' ', first - CHAPTER_LEAD).let { if (it in 0..<first) it + 1 else first }
-  // separators like the dash in "Book - 05 - Name" don't start the line
+  // "…- The Five" after a dash reads as if a word was cut
   while (start < first && !text[start].isLetterOrDigit()) start++
   return HighlightedText(
     text = "…" + text.substring(start),
