@@ -34,7 +34,7 @@ class WidgetDataTest {
   private val theEnd = 599_999L
 
   @Test
-  fun `paused, skip forward on the widget to the end, the widget shows finished`() = scope.runTest {
+  fun `paused, the position moves to the end, the widget shows finished`() = scope.runTest {
     currentBook.value = book(positionInChapter = tenSecondsBeforeTheEnd)
 
     widgetData().nowPlaying.test {

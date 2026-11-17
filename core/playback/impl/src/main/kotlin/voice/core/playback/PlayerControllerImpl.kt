@@ -401,7 +401,8 @@ internal fun previousJumpType(
     else -> ListeningEvent.Type.ChapterChange
   }
 
-// Headsets and cars skip instead, see VoicePlayer.seekToNext.
+// Headsets and cars skip instead, see VoicePlayer.seekToNext. A skip past the end of the book uses
+// this end too.
 internal fun Player.nextChapterTarget(): Pair<Int, Long>? {
   val nextIndex = nextMediaItemIndex
   if (nextIndex != C.INDEX_UNSET) return nextIndex to 0L

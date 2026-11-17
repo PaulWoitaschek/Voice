@@ -441,7 +441,7 @@ class VoicePlayerTest {
   }
 
   @Test
-  fun `last chapter, 10 seconds before the end, on headphones, in the car or in the notification, skip forward goes to the end, completed, playback stops, no jump back`() =
+  fun `last chapter, 10 seconds before the end, next on headphones goes to the end, completed, playback stops, no jump back`() =
     scope.runTest {
       val chapters = twoChaptersOfAMinute()
       setMediaItems(chapters, currentChapter = chapters[1], positionInChapter = 49_999)
