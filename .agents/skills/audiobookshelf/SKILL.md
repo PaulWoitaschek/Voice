@@ -9,9 +9,9 @@ description: Running a real Audiobookshelf server in Docker on this Mac, with th
 Docker, one container per worktree. You may start, change and remove your own server at any time without asking.
 Never touch another container. Run the script from the repository root.
 
-It needs the Docker daemon. When the script says it isn't running, ask the user to start Docker Desktop, or run
-`open -a Docker` and try again once it's up. It doesn't need anything else: the image comes from `ghcr.io`, and the
-test books come from `scripts/populate_test_files.py`, which needs `ffmpeg`.
+It needs a running Docker daemon. When the script says the daemon is down, run `open -a Docker`. When Docker Desktop
+is up, try again. The image comes from `ghcr.io`. The test books come from `scripts/populate_test_files.py`, which
+needs `ffmpeg`.
 
 How Voice works with a server is in `behavior/audiobookshelf.md` of the voice-strategy repository. The code is in
 `core/audiobookshelf` and `features/audiobookshelf`.
@@ -22,9 +22,9 @@ How Voice works with a server is in `behavior/audiobookshelf.md` of the voice-st
 .agents/skills/audiobookshelf/scripts/audiobookshelf.py start
 ```
 
-- The first start takes a few seconds. It copies the six test books to `build/audiobookshelf/audiobooks`, starts
-  Audiobookshelf 2.37.2 on a free port of `127.0.0.1`, creates the accounts and the library "Audiobooks", and waits
-  for the scan. All six books have covers, four have chapters.
+- The first start takes a few seconds. It copies the six test books to `build/audiobookshelf/audiobooks`. It starts
+  Audiobookshelf 2.37.2 on a free port of `127.0.0.1`. Then it creates the accounts and the library "Audiobooks", and
+  waits for the scan. All six books have covers, four have chapters.
 - It prints the address for this Mac and for the emulator (`http://10.0.2.2:<port>`, the emulator's name for the
   Mac). The port changes when the container starts again, so take it from `status`.
 - `start` again keeps the server and its state. `stop` removes the container and all its data, and the next `start`
@@ -70,8 +70,8 @@ audiobookshelf.py api POST '/api/libraries' '{"name": "More", "folders": [{"full
 - Files: add, change or remove them in `build/audiobookshelf/audiobooks`, then scan with
   `api POST '/api/libraries/<library id>/scan'`.
 - The web app at the address for this Mac shows the same server, for a look with the built-in browser.
-- The server away: `docker stop <container>`, the name is in `status`. `start` brings it back on a new port, so Voice
-  sees another address. To keep the port, use `docker pause <container>` and `docker unpause <container>`.
+- The server away: `docker pause <container>`, with the name from `status`. `start` brings it back on the same port.
+  `docker stop <container>` also works, but `start` then gives the server a new port.
 - `logs` prints the end of the server log.
 
 ## Done

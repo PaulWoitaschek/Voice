@@ -2,6 +2,7 @@
 """Runs a local Audiobookshelf server in Docker with the Voice test books, one server per worktree."""
 
 import argparse
+import functools
 import hashlib
 import json
 import shutil
@@ -15,7 +16,6 @@ from pathlib import Path
 # Voice needs 2.26 or newer. Pass --version to try another one, e.g. 2.20.0 for a server that is too old.
 VERSION = "2.37.2"
 IMAGE = "ghcr.io/advplyr/audiobookshelf"
-LABEL = "voice.audiobookshelf.worktree"
 LIBRARY = "Audiobooks"
 # Test accounts of this local server only.
 ADMIN = ("root", "voice")
@@ -47,6 +47,8 @@ def container_state():
   return result.stdout.strip() if result.returncode == 0 else None
 
 
+# The port stays the same while the container runs, so one run of the script looks it up once.
+@functools.cache
 def port():
   out = docker("port", NAME, "80/tcp").stdout.strip().splitlines()[0]
   return int(out.rsplit(":", 1)[1])
@@ -124,23 +126,31 @@ def start(args):
   if state is None:
     version = args.version or VERSION
     shutil.rmtree(DATA, ignore_errors=True)
-    shutil.copytree(test_books(), DATA / "audiobooks")
+    shutil.copytree(test_books(), DATA / "audiobooks", ignore=shutil.ignore_patterns(".*"))
     (DATA / "config").mkdir(parents=True)
     (DATA / "metadata").mkdir(parents=True)
     docker(
-      "run", "-d", "--name", NAME, "--label", f"{LABEL}={ROOT}",
+      "run", "-d", "--name", NAME,
       "-p", "127.0.0.1::80",
       "-v", f"{DATA / 'audiobooks'}:/audiobooks",
       "-v", f"{DATA / 'config'}:/config",
       "-v", f"{DATA / 'metadata'}:/metadata",
       f"{IMAGE}:{version}",
     )
+  elif state == "paused":
+    docker("unpause", NAME)
   elif state != "running":
     docker("start", NAME)
   status = wait_until_up()
   if not status.get("isInit"):
-    request("POST", "/init", {"newRoot": {"username": ADMIN[0], "password": ADMIN[1]}})
-    print(f"Set up with {set_up(login(*ADMIN))} books")
+    try:
+      request("POST", "/init", {"newRoot": {"username": ADMIN[0], "password": ADMIN[1]}})
+      print(f"Set up with {set_up(login(*ADMIN))} books")
+    except BaseException:
+      # A half set-up server would skip the setup on the next start, so the next start begins again.
+      remove()
+      print(f"The setup failed, so {NAME} is removed. Run `start` again.", file=sys.stderr)
+      raise
   print_status()
 
 
@@ -155,11 +165,15 @@ def stop(_args):
   print(f"Removed {NAME} and its data")
 
 
-def print_status(_args=None):
+def require_running():
   require_docker()
   state = container_state()
   if state != "running":
     sys.exit(f"No server runs for this worktree ({state or 'none'}). Run `start`.")
+
+
+def print_status(_args=None):
+  require_running()
   version = request("GET", "/status").get("serverVersion")
   p = port()
   print(f"Audiobookshelf {version} in {NAME}")
@@ -170,7 +184,7 @@ def print_status(_args=None):
 
 
 def api(args):
-  require_docker()
+  require_running()
   body = json.loads(args.body) if args.body else None
   try:
     result = request(args.method.upper(), args.path, body, login(*ADMIN))
@@ -180,6 +194,9 @@ def api(args):
 
 
 def logs(_args):
+  require_docker()
+  if container_state() is None:
+    sys.exit("No server for this worktree. Run `start`.")
   sys.stdout.write(docker("logs", "--tail", "200", NAME).stdout)
 
 
