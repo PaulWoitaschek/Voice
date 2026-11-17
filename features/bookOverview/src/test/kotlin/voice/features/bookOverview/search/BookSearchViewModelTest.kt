@@ -378,27 +378,6 @@ class BookSearchViewModelTest {
   }
 
   @Test
-  fun `a long chapter line starts shortly before the word that found the book`() = runTest {
-    val name = "Harry Potter and the Chamber of Secrets - Chapter 17 - The Heir of Slytherin"
-    coEvery { search.search("slytherin") } returns
-      listOf(shining.chapterResult(name, listOf(67..75)))
-    val viewModel = viewModel()
-
-    testState(viewModel) {
-      viewModel.onRecentSearchClick("slytherin")
-
-      assertEquals(
-        expected =
-          MatchTag(
-            BookSearchField.Chapters,
-            HighlightedText("…Heir of Slytherin", listOf(9..17)),
-          ),
-        actual = awaitState<BookSearchViewState.Results>().topResult.matchTag,
-      )
-    }
-  }
-
-  @Test
   fun `a book that also matches in its series shows the series line`() = runTest {
     coEvery { search.search("kingkiller wind") } returns
       listOf(

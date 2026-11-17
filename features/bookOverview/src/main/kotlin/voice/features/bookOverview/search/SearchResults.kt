@@ -28,7 +28,10 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -348,7 +351,7 @@ private fun MatchTagText(
   tag: MatchTag,
   modifier: Modifier = Modifier,
 ) {
-  val label =
+  val template =
     stringResource(
       when (tag.field) {
         BookSearchField.Series -> StringsR.string.library_search_match_series
@@ -356,16 +359,19 @@ private fun MatchTagText(
         BookSearchField.Chapters -> StringsR.string.library_search_match_chapter
         else -> StringsR.string.library_search_match_genre
       },
-      tag.text.text,
+      PLACEHOLDER,
     )
+  // a long chapter name loses its first words until the matched words show
+  var lead by remember(tag) { mutableStateOf<Int?>(null) }
   val text =
-    remember(label, tag) {
-      val offset = label.indexOf(tag.text.text)
+    remember(template, tag, lead) {
+      val shown = lead?.let(tag.text::nearFirstHighlight) ?: tag.text
+      val offset = template.indexOf(PLACEHOLDER)
       HighlightedText(
-        text = label,
+        text = template.replace(PLACEHOLDER, shown.text),
         highlights =
           if (offset < 0) emptyList()
-          else tag.text.highlights.map { it.first + offset..it.last + offset },
+          else shown.highlights.map { it.first + offset..it.last + offset },
       )
     }
   Text(
@@ -375,9 +381,34 @@ private fun MatchTagText(
       ),
     modifier = modifier,
     style = MaterialTheme.typography.labelMedium,
-    // chapter names are long, and the line must still show the matched words
     maxLines = if (tag.field == BookSearchField.Chapters) 2 else 1,
     overflow = TextOverflow.Ellipsis,
+    onTextLayout = { layout ->
+      val firstHighlight = text.highlights.minByOrNull { it.first }
+      if (
+        tag.field == BookSearchField.Chapters &&
+          lead != 0 &&
+          firstHighlight != null &&
+          layout.hasVisualOverflow &&
+          layout.getLineEnd(layout.lineCount - 1, visibleEnd = true) <= firstHighlight.last
+      ) {
+        lead = if (lead == null) CHAPTER_LEAD else 0
+      }
+    },
+  )
+}
+
+// the label itself can hold the name, e.g. "Chapter · Chapter", so the name goes in after
+private const val PLACEHOLDER = "\uE000"
+private const val CHAPTER_LEAD = 12
+
+internal fun HighlightedText.nearFirstHighlight(lead: Int): HighlightedText {
+  val first = highlights.minOfOrNull { it.first } ?: return this
+  if (first <= lead) return this
+  val start = text.indexOf(' ', first - lead).let { if (it in 0..<first) it + 1 else first }
+  return HighlightedText(
+    text = "…" + text.substring(start),
+    highlights = highlights.map { it.first - start + 1..it.last - start + 1 },
   )
 }
 
