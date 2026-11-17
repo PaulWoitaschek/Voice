@@ -34,15 +34,18 @@ class BookSearch(
       }
       searchableBooks = books.associateBy { it.book.id }
       // typos only count when nothing matches as typed, so similar words don't pile up below the
-      // right books. Chapters have so many words that they would often stop the typos of a title.
+      // right books. A chapter only counts there when no other field matches, because chapters have
+      // many words and a chapter word often starts with a typo of a title.
       val asTyped = books.mapNotNull { rank(it, terms, typos = null) }
       val results =
         if (asTyped.any { it.chapter == null }) {
           asTyped
         } else {
-          // the words of chapters repeat a lot over the library
+          // chapter words repeat a lot over the library, so each typo check runs once per word
           val typos = terms.associateWith { HashMap<String, Int>() }
-          books.mapNotNull { rank(it, terms, typos) }
+          // with a chapter that matches as typed, typos in other chapters only add wrong books
+          val chapterTypos = asTyped.isEmpty()
+          books.mapNotNull { rank(it, terms, typos, chapterTypos) }
         }
       results.sortedWith(resultComparator)
     }
@@ -52,6 +55,7 @@ class BookSearch(
     book: SearchableBook,
     terms: List<String>,
     typos: Map<String, MutableMap<String, Int>>?,
+    chapterTypos: Boolean = false,
   ): BookSearchResult? {
     // a new keystroke or position update starts a new search
     ensureActive()
@@ -64,7 +68,9 @@ class BookSearch(
       var matchesOutsideChapters = false
       book.texts.forEachIndexed { index, (field, _) ->
         book.words[index].forEach { word ->
-          val match = match(word.text, term, typos?.getValue(term))
+          val fieldTypos =
+            typos?.getValue(term)?.takeIf { field != BookSearchField.Chapters || chapterTypos }
+          val match = match(word.text, term, fieldTypos)
           if (match != null) {
             matches.getOrPut(index) { mutableListOf() } += word.originalRange(match.length)
             matchedTerms.getOrPut(field) { mutableSetOf() } += term
@@ -94,7 +100,13 @@ class BookSearch(
           val (field, text) = book.texts[index]
           field to matches.getValue(index).merged(text)
         },
-      fieldsMatchingAllWords = matchedTerms.filterValues { it.size == terms.size }.keys,
+      fieldsMatchingAllWords =
+        matchedTerms
+          .filter { (field, fieldTerms) ->
+            fieldTerms.size == terms.size &&
+              (foundThroughChapter || field != BookSearchField.Chapters)
+          }
+          .keys,
       score = score,
       chapter =
         shown.firstNotNullOfOrNull { index ->

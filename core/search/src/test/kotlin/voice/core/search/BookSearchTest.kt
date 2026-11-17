@@ -443,6 +443,28 @@ class BookSearchTest {
   }
 
   @Test
+  fun `a chapter that matches as typed keeps typos out of other chapters`() {
+    val night =
+      book(
+        name = "Watchmen",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Intro"), chapter(name = "The Night Watch")),
+      )
+    val light =
+      book(
+        name = "Stories",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Intro"), chapter(name = "Into the Light")),
+      )
+    val fight = book(name = "Fight Club", genre = null, narrator = null)
+    test(night, light, fight) {
+      expectSearchResult("night", fight, night)
+    }
+  }
+
+  @Test
   fun `a book found by its title shows no chapter`() {
     val book =
       book(
@@ -455,6 +477,10 @@ class BookSearchTest {
       val result = search.search("dune").single()
       assertEquals(expected = null, actual = result.chapter)
       assertEquals(expected = setOf(BookSearchField.Title), actual = result.matches.keys)
+      assertEquals(
+        expected = setOf(BookSearchField.Title),
+        actual = result.fieldsMatchingAllWords,
+      )
     }
   }
 
