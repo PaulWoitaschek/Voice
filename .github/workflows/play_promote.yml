@@ -18,6 +18,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Ensure promote runs from default branch
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "Promote must be dispatched from the default branch (${{ github.event.repository.default_branch }}); got ${GITHUB_REF_NAME}." >&2
+          exit 1
+
       # Drafts don't count: only a published release is on GitHub and F-Droid.
       - name: Find the latest published release
         id: release

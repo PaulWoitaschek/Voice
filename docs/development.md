@@ -97,7 +97,7 @@ production rollout. A release that was never promoted is skipped on Play.
 
 Before it builds, the workflow generates a baseline profile on an emulator, so the app starts faster. Only the Play build
 gets it, because F-Droid builds from source and the profile is not checked in. The profile needs
-`app/src/play/google-services.json`. The Upload Play Internal workflow generates it too.
+`app/src/play/google-services.json`.
 
 To generate the profile locally, run:
 
