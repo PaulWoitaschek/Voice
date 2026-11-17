@@ -408,17 +408,3 @@ private fun BookSearchResult.toViewState(
     download = item.download,
   )
 }
-
-// the screen width is unknown here, so a long chapter name starts a few words before the match
-internal fun HighlightedText.nearFirstHighlight(): HighlightedText {
-  val first = highlights.minOfOrNull { it.first } ?: return this
-  if (first <= CHAPTER_CUT_AFTER) return this
-  val start = text.indexOf(' ', first - CHAPTER_LEAD).let { if (it in 0..<first) it + 1 else first }
-  return HighlightedText(
-    text = "…" + text.substring(start),
-    highlights = highlights.map { it.first - start + 1..it.last - start + 1 },
-  )
-}
-
-private const val CHAPTER_CUT_AFTER = 30
-private const val CHAPTER_LEAD = 12

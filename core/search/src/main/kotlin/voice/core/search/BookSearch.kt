@@ -36,7 +36,7 @@ class BookSearch(
       // typos only count when nothing matches as typed, so similar words don't pile up below the
       // right books. A chapter only counts there when no other field matches, because chapters have
       // many words and a chapter word often starts with a typo of a title.
-      val asTyped = books.mapNotNull { rank(it, terms, typos = null) }
+      val asTyped = books.mapNotNull { rank(it, terms, typos = null, chapterTypos = false) }
       val results =
         if (asTyped.any { it.chapter == null }) {
           asTyped
@@ -55,7 +55,7 @@ class BookSearch(
     book: SearchableBook,
     terms: List<String>,
     typos: Map<String, MutableMap<String, Int>>?,
-    chapterTypos: Boolean = false,
+    chapterTypos: Boolean,
   ): BookSearchResult? {
     // a new keystroke or position update starts a new search
     ensureActive()

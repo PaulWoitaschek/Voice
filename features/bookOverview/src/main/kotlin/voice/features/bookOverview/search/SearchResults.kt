@@ -358,16 +358,7 @@ private fun MatchTagText(
       },
       PLACEHOLDER,
     )
-  val text =
-    remember(template, tag) {
-      val offset = template.indexOf(PLACEHOLDER)
-      HighlightedText(
-        text = template.replace(PLACEHOLDER, tag.text.text),
-        highlights =
-          if (offset < 0) emptyList()
-          else tag.text.highlights.map { it.first + offset..it.last + offset },
-      )
-    }
+  val text = remember(template, tag) { tag.text.inLabel(template) }
   Text(
     text =
       text.annotated(
@@ -379,9 +370,6 @@ private fun MatchTagText(
     overflow = TextOverflow.Ellipsis,
   )
 }
-
-// the label itself can hold the name, e.g. "Chapter · Chapter", so the name goes in after
-private const val PLACEHOLDER = "\uE000"
 
 @Composable
 private fun HighlightedText.annotated(style: SpanStyle): AnnotatedString {
