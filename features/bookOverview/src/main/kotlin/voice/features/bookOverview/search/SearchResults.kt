@@ -28,10 +28,7 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -361,17 +358,14 @@ private fun MatchTagText(
       },
       PLACEHOLDER,
     )
-  // a long chapter name loses its first words until the matched words show
-  var lead by remember(tag) { mutableStateOf<Int?>(null) }
   val text =
-    remember(template, tag, lead) {
-      val shown = lead?.let(tag.text::nearFirstHighlight) ?: tag.text
+    remember(template, tag) {
       val offset = template.indexOf(PLACEHOLDER)
       HighlightedText(
-        text = template.replace(PLACEHOLDER, shown.text),
+        text = template.replace(PLACEHOLDER, tag.text.text),
         highlights =
           if (offset < 0) emptyList()
-          else shown.highlights.map { it.first + offset..it.last + offset },
+          else tag.text.highlights.map { it.first + offset..it.last + offset },
       )
     }
   Text(
@@ -383,34 +377,11 @@ private fun MatchTagText(
     style = MaterialTheme.typography.labelMedium,
     maxLines = if (tag.field == BookSearchField.Chapters) 2 else 1,
     overflow = TextOverflow.Ellipsis,
-    onTextLayout = { layout ->
-      val firstHighlight = text.highlights.minByOrNull { it.first }
-      if (
-        tag.field == BookSearchField.Chapters &&
-          lead != 0 &&
-          firstHighlight != null &&
-          layout.hasVisualOverflow &&
-          layout.getLineEnd(layout.lineCount - 1, visibleEnd = true) <= firstHighlight.last
-      ) {
-        lead = if (lead == null) CHAPTER_LEAD else 0
-      }
-    },
   )
 }
 
 // the label itself can hold the name, e.g. "Chapter · Chapter", so the name goes in after
 private const val PLACEHOLDER = "\uE000"
-private const val CHAPTER_LEAD = 12
-
-internal fun HighlightedText.nearFirstHighlight(lead: Int): HighlightedText {
-  val first = highlights.minOfOrNull { it.first } ?: return this
-  if (first <= lead) return this
-  val start = text.indexOf(' ', first - lead).let { if (it in 0..<first) it + 1 else first }
-  return HighlightedText(
-    text = "…" + text.substring(start),
-    highlights = highlights.map { it.first - start + 1..it.last - start + 1 },
-  )
-}
 
 @Composable
 private fun HighlightedText.annotated(style: SpanStyle): AnnotatedString {

@@ -378,6 +378,29 @@ class BookSearchViewModelTest {
   }
 
   @Test
+  fun `a long chapter name whose match starts late shows from a few words before the match`() =
+    runTest {
+      val name =
+        "In which our heroes travel very far across the moors and the city at night to meet the clockmaker"
+      coEvery { search.search("clockmaker") } returns
+        listOf(shining.chapterResult(name, listOf(87..96)))
+      val viewModel = viewModel()
+
+      testState(viewModel) {
+        viewModel.onRecentSearchClick("clockmaker")
+
+        assertEquals(
+          expected =
+            MatchTag(
+              BookSearchField.Chapters,
+              HighlightedText("…meet the clockmaker", listOf(10..19)),
+            ),
+          actual = awaitState<BookSearchViewState.Results>().topResult.matchTag,
+        )
+      }
+    }
+
+  @Test
   fun `a book that also matches in its series shows the series line`() = runTest {
     coEvery { search.search("kingkiller wind") } returns
       listOf(
