@@ -88,8 +88,12 @@ Compose rules come from Slack's [compose-lints](https://slackhq.github.io/compos
 
 To release a new version, trigger the [Release Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/release.yml)
 
-This creates a draft GitHub release with the APK and keeps the Play AAB as a workflow artifact. With `submit_to_stores` enabled,
-it also uploads the AAB to the Play Store’s internal track and promotes it to a 0.1% production rollout.
+This creates a draft GitHub release with the APK and uploads the Play AAB to the Play Store's internal track. Publishing the
+draft creates the tag, and F-Droid builds from the tag.
+
+Google Play has its own pace, because its review takes days. To send the latest published release to review, trigger the
+[Promote to Play Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/play_promote.yml). It starts a 0.1%
+production rollout. A release that was never promoted is skipped on Play.
 
 Before it builds, the workflow generates a baseline profile on an emulator, so the app starts faster. Only the Play build
 gets it, because F-Droid builds from source and the profile is not checked in. The profile needs
