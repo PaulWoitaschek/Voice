@@ -1,0 +1,52 @@
+name: Promote to Play
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: release
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Ensure promote runs from default branch
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "Promote must be dispatched from the default branch (${{ github.event.repository.default_branch }}); got ${GITHUB_REF_NAME}." >&2
+          exit 1
+
+      # Drafts don't count: only a published release is on GitHub and F-Droid.
+      - name: Find the latest published release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag=$(gh release view --json tagName --jq .tagName)
+          if [[ ! "$tag" =~ ^[0-9]+\.[0-9]+\.[0-9]+-([0-9]+)$ ]]; then
+            echo "The latest release has the tag '$tag', which has no version code." >&2
+            exit 1
+          fi
+          echo "Promoting $tag"
+          echo "version_code=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Play Access
+        env:
+          PLAY_SERVICE_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT }}
+        run: ./scripts/ci_setup_play_access.sh
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0'
+          bundler-cache: true
+
+      - name: Promote to PRODUCTION (0.1%)
+        run: bundle exec fastlane android promote version_code:${{ steps.release.outputs.version_code }}
