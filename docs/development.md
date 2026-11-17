@@ -48,10 +48,12 @@ Debug builds can start on any back stack of `Destination.Compose`s, passed as JS
 The emulator skill's script builds it for you:
 
 ```sh
-ANDROID_SERIAL=<serial from adb devices> .agents/skills/emulator/scripts/ui.py open BookOverview Settings DeveloperSettings
+ANDROID_SERIAL=<serial from adb devices> .agents/skills/emulator/scripts/emulator.py open BookOverview Settings DeveloperSettings
 ```
 
-Agents use this through the emulator skill in `.agents/skills/emulator`, which also gives every agent its own emulator.
+Agents use this through the emulator skill in `.agents/skills/emulator`, which also leases every agent its own emulator
+from [simlock](https://incubator.callstack.com/simlock/docs/getting-started) and drives it with
+[agent-device](https://agent-device.dev).
 
 ## Formatting
 

@@ -1,356 +1,325 @@
 #!/usr/bin/env python3
-"""Gives every agent its own emulator, cloned read-only from one prepared AVD with a real test library."""
+"""Leases every agent its own emulator from simlock, a copy of the voice baseline with the app and a real test library."""
 
 import argparse
-import fcntl
 import json
 import os
-import platform
+import shlex
 import shutil
-import socket
+import sqlite3
 import subprocess
 import sys
+import tempfile
 import time
-from contextlib import contextmanager
-from datetime import datetime
 from pathlib import Path
 
-sys.dont_write_bytecode = True
-sys.path.insert(0, str(Path(__file__).parent))
-import ui  # noqa: E402
-
-AVD_NAME = "voice-agent"
-API_LEVEL = 36
-DEVICE = "pixel_9"
-PORTS = range(5560, 5586, 2)
-STATE_DIR = Path.home() / ".android" / "voice-agent"
-INSTANCES_DIR = STATE_DIR / "instances"
-PREPARED_FILE = STATE_DIR / "prepared.json"
-MAX_INSTANCES = int(os.environ.get("VOICE_EMULATOR_MAX", "4"))
-IDLE_HOURS = float(os.environ.get("VOICE_EMULATOR_IDLE_HOURS", "3"))
-# The software renderer that -no-window picks on its own reboots the guest after a snapshot restore.
-EMULATOR_FLAGS = ["-gpu", "host", "-no-audio", "-no-boot-anim"]
+BASELINE = "voice"
+DEVICE = "Pixel 9"
+API_LEVEL = "36"
+# simlock's longest lease. `start` again renews it.
+TTL = "4h"
+PACKAGE = "de.ph1b.audiobook"
+ACTIVITY = f"{PACKAGE}/voice.app.MainActivity"
+DESTINATION_PREFIX = "voice.navigation.Destination."
+INSTALL_HINT = "Install it with: npm install -g simlock agent-device"
 
 
 def repo_root():
   return Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip())
 
 
-def sdk_root():
-  emulator = shutil.which("emulator")
-  if emulator:
-    return Path(emulator).resolve().parent.parent
-  for variable in ["ANDROID_HOME", "ANDROID_SDK_ROOT"]:
-    if os.environ.get(variable):
-      return Path(os.environ[variable])
-  properties = repo_root() / "local.properties"
-  if properties.is_file():
-    for line in properties.read_text().splitlines():
-      if line.startswith("sdk.dir="):
-        return Path(line.removeprefix("sdk.dir="))
-  sys.exit("No Android SDK found. Put the emulator on the PATH or set ANDROID_HOME.")
+def require_tools():
+  for tool in ["simlock", "agent-device"]:
+    if not shutil.which(tool):
+      sys.exit(f"{tool} is missing. {INSTALL_HINT}")
 
 
-def sdk_tool(*relative_paths):
-  for relative_path in relative_paths:
-    tool = sdk_root() / relative_path
-    if tool.exists():
-      return str(tool)
-  sys.exit(f"{relative_paths[0]} is missing in the SDK at {sdk_root()}.")
+class SimlockError(Exception):
+  def __init__(self, code, message):
+    super().__init__(f"{code}: {message}")
+    self.code = code
 
 
-def sdk_env():
-  return {**os.environ, "ANDROID_HOME": str(sdk_root()), "ANDROID_SDK_ROOT": str(sdk_root())}
+def simlock(*args):
+  result = subprocess.run(["simlock", *args], capture_output=True, text=True)
+  if result.returncode != 0:
+    # Every failure writes one JSON line on stderr.
+    for line in reversed(result.stderr.strip().splitlines()):
+      try:
+        error = json.loads(line)["error"]
+      except (ValueError, KeyError, TypeError):
+        continue
+      raise SimlockError(error.get("code", "UNKNOWN"), error.get("message", ""))
+    raise SimlockError("UNKNOWN", result.stderr.strip() or f"simlock {' '.join(args)} failed")
+  return result.stdout
 
 
-def system_image():
-  abi = "arm64-v8a" if platform.machine() in ("arm64", "aarch64") else "x86_64"
-  return f"system-images;android-{API_LEVEL};google_apis_playstore;{abi}"
+def simlock_json(*args):
+  return json.loads(simlock(*args, "--json"))
 
 
-def avd_home():
-  return Path(os.environ.get("ANDROID_AVD_HOME", Path.home() / ".android" / "avd"))
+def adb_server_port():
+  try:
+    return str(json.loads(simlock("config", "get", "drivers.android.adbServerPort")))
+  except (SimlockError, ValueError):
+    return "5038"
 
 
-def prepared():
-  return PREPARED_FILE.is_file() and (avd_home() / f"{AVD_NAME}.ini").is_file()
+def own_lease():
+  """The lease this agent holds, with the serial of its emulator, or None."""
+  principal = simlock_json("whoami")["principal"]
+  status = simlock_json("status")
+  # status leaves out the serials, list has them
+  addresses = {device["id"]: device.get("address") for device in json.loads(simlock("list"))}
+  for lease in status["leases"]:
+    if lease.get("ownerId") == principal:
+      return {"id": lease["id"], "serial": addresses.get(lease["deviceId"])}
+  return None
 
 
-@contextmanager
-def lock():
-  STATE_DIR.mkdir(parents=True, exist_ok=True)
-  with open(STATE_DIR / "lock", "w") as file:
-    try:
-      fcntl.flock(file, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError:
-      print("Waiting for another emulator.py run, e.g. a prepare, which takes about 90 seconds.", flush=True)
-      fcntl.flock(file, fcntl.LOCK_EX)
-    yield
+def session_name(lease):
+  # One agent-device session per lease, so a later lease on the same serial starts clean.
+  return f"voice-{lease['id'].removeprefix('lse_')[:8]}"
 
 
-def alive(instance):
-  # After a reboot, the pid of a stale instance can belong to an unrelated process.
-  command = subprocess.run(["ps", "-o", "command=", "-p", str(instance["pid"])], capture_output=True, text=True).stdout
-  return f"-avd {AVD_NAME}" in command and f"-port {instance['port']}" in command
+def device_env(lease):
+  return {
+    "ANDROID_SERIAL": lease["serial"],
+    "ANDROID_ADB_SERVER_PORT": adb_server_port(),
+    "AGENT_DEVICE_ANDROID_DEVICE_ALLOWLIST": lease["serial"],
+    "AGENT_DEVICE_SESSION": session_name(lease),
+    "AGENT_DEVICE_SCREENSHOT_SCALE": "0.5",
+  }
 
 
-def instances():
-  INSTANCES_DIR.mkdir(parents=True, exist_ok=True)
-  result = []
-  for file in sorted(INSTANCES_DIR.glob("*.json")):
-    instance = json.loads(file.read_text())
-    instance["file"] = file
-    instance["idle_hours"] = (time.time() - file.stat().st_mtime) / 3600
-    if alive(instance):
-      result.append(instance)
-    else:
-      file.unlink()
+def lease_device(baseline=None):
+  args = ["lease", "--platform", "android", "--device", DEVICE, "--os", API_LEVEL, "--detach", "--ttl", TTL]
+  if baseline:
+    args += ["--baseline", baseline]
+  grant = json.loads(simlock(*args))
+  return {"id": grant["lease"]["id"], "serial": grant["device"]["address"]}
+
+
+# Everything below works on the emulator in ANDROID_SERIAL, through simlock's adb server.
+
+
+def serial():
+  value = os.environ.get("ANDROID_SERIAL")
+  if not value:
+    sys.exit("Run the export line that emulator.py start printed first. It sets ANDROID_SERIAL and simlock's adb port.")
+  return value
+
+
+def adb(*args, check=True):
+  result = subprocess.run(["adb", "-s", serial(), *args], capture_output=True)
+  if check and result.returncode != 0:
+    sys.exit(f"adb {' '.join(args)} failed: {result.stderr.decode(errors='replace').strip()}")
   return result
 
 
-def owner_key(args):
-  return args.name or str(repo_root())
+def agent(*args, check=True):
+  """Runs agent-device on the emulator in ANDROID_SERIAL and returns its output."""
+  result = subprocess.run(["agent-device", *args], capture_output=True, text=True)
+  if check and result.returncode != 0:
+    sys.exit(f"agent-device {shlex.join(args)} failed:\n{(result.stdout + result.stderr).strip()}")
+  return result
 
 
-def port_free(port):
-  for candidate in [port, port + 1]:
-    with socket.socket() as probe:
-      if probe.connect_ex(("127.0.0.1", candidate)) == 0:
-        return False
-  return True
+def nodes():
+  """The screen as agent-device's JSON nodes: label, identifier, checked, rect and more."""
+  # The full tree, as -i leaves out a checkbox when its row takes the click.
+  return json.loads(agent("snapshot", "--json").stdout)["data"]["nodes"]
 
 
-def kill(instance, reason=None):
-  serial = instance["serial"]
-  if reason:
-    print(f"Stopping {serial} of {instance['owner']}: {reason}")
-  subprocess.run(["adb", "-s", serial, "emu", "kill"], capture_output=True)
-  deadline = time.monotonic() + 20
-  while alive(instance) and time.monotonic() < deadline:
-    time.sleep(0.5)
-  if alive(instance):
-    os.kill(instance["pid"], 9)
-  instance["file"].unlink(missing_ok=True)
+def label(text):
+  return f'label="{text}"'
 
 
-def reap():
-  for instance in instances():
-    if not Path(instance["owner"]).exists() and instance["owner"].startswith("/"):
-      kill(instance, "its worktree is gone")
-    elif instance["idle_hours"] > IDLE_HOURS:
-      kill(instance, f"unused for {instance['idle_hours']:.1f} hours")
+def wait(text, timeout=30):
+  if agent("wait", label(text), str(timeout * 1000), check=False).returncode != 0:
+    sys.exit(f'"{text}" didn\'t show up. Look with agent-device screenshot.')
 
 
-def adb_ok(serial, *args):
-  result = subprocess.run(["adb", "-s", serial, *args], capture_output=True, text=True)
-  return result.returncode == 0, result.stdout.strip()
-
-
-def wait_for_boot(serial, process, timeout=240):
-  deadline = time.monotonic() + timeout
-  stable_since = None
-  while time.monotonic() < deadline:
-    if process.poll() is not None:
-      return False
-    ok, value = adb_ok(serial, "shell", "getprop", "sys.boot_completed")
-    if ok and value == "1":
-      stable_since = stable_since or time.monotonic()
-      # adb reconnects once right after a snapshot restore
-      if time.monotonic() - stable_since > 2:
-        return True
-    else:
-      stable_since = None
-    time.sleep(0.5)
-  return False
-
-
-def launch(port, extra_flags, log_file):
-  emulator = sdk_tool("emulator/emulator")
-  command = [emulator, "-avd", AVD_NAME, "-port", str(port), *EMULATOR_FLAGS, *extra_flags]
-  with open(log_file, "w") as log:
-    return subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, env=sdk_env(), start_new_session=True)
-
-
-def command_start(args):
-  owner = owner_key(args)
-  if not prepared():
-    print(f"The {AVD_NAME} AVD isn't prepared yet, preparing it first.")
-    prepare(args, only_if_missing=True)
-  with lock():
-    reap()
-    running = instances()
-    own = next((instance for instance in running if instance["owner"] == owner), None)
-    if own:
-      own["file"].touch()
-      print(f"Reusing your running emulator.\nANDROID_SERIAL={own['serial']}")
-      return
-    if len(running) >= MAX_INSTANCES:
-      listing = "\n".join(f"  {instance['serial']}  {instance['owner']}" for instance in running)
-      sys.exit(
-        f"All {MAX_INSTANCES} agent emulators are taken:\n{listing}\n"
-        "Wait for one to stop, or raise VOICE_EMULATOR_MAX if the machine has memory to spare.",
-      )
-    taken = {instance["port"] for instance in running}
-    port = next((port for port in PORTS if port not in taken and port_free(port)), None)
-    if port is None:
-      sys.exit("No free emulator port left.")
-    flags = ["-read-only"]
-    if not args.window:
-      flags.append("-no-window")
-    log_file = INSTANCES_DIR / f"{port}.log"
-    process = launch(port, flags, log_file)
-    serial = f"emulator-{port}"
-    state_file = INSTANCES_DIR / f"{port}.json"
-    started = datetime.now().isoformat(timespec="seconds")
-    state_file.write_text(json.dumps({"serial": serial, "port": port, "pid": process.pid, "owner": owner, "started": started}))
-  if not wait_for_boot(serial, process):
-    subprocess.run(["adb", "-s", serial, "emu", "kill"], capture_output=True)
-    process.kill()
-    state_file.unlink(missing_ok=True)
-    sys.exit(f"{serial} didn't boot. Log: {log_file}")
-  print(f"Booted with the test library and the app from {json.loads(PREPARED_FILE.read_text())['commit']}.\nANDROID_SERIAL={serial}")
-
-
-def command_stop(args):
-  with lock():
-    running = instances()
-    if args.all:
-      targets = running
-    else:
-      owner = owner_key(args)
-      targets = [instance for instance in running if instance["owner"] == owner]
-    if not targets:
-      print("No agent emulator to stop.")
-    for instance in targets:
-      kill(instance)
-      print(f"Stopped {instance['serial']}.")
-
-
-def command_list(args):
-  running = instances()
-  if not running:
-    print("No agent emulators are running.")
-  for instance in running:
-    print(f"{instance['serial']}  started {instance['started']}  idle {instance['idle_hours']:.1f}h  {instance['owner']}")
-  if prepared():
-    state = json.loads(PREPARED_FILE.read_text())
-    print(f"Base AVD {AVD_NAME} prepared {state['date']} from {state['commit']}.")
-  else:
-    print(f"Base AVD {AVD_NAME} isn't prepared yet.")
-
-
-def run(command, **kwargs):
-  if not shutil.which(command[0]):
-    sys.exit(f"{command[0]} is missing. Install it and run prepare again.")
-  print("$ " + " ".join(command), flush=True)
-  result = subprocess.run(command, capture_output=True, text=True, **kwargs)
-  if result.returncode != 0:
-    sys.exit(f"{result.stdout}{result.stderr}\n{command[0]} failed.")
-
-
-def create_avd():
-  image = system_image()
-  sdkmanager = sdk_tool("cmdline-tools/latest/bin/sdkmanager", "tools/bin/sdkmanager")
-  avdmanager = sdk_tool("cmdline-tools/latest/bin/avdmanager", "tools/bin/avdmanager")
-  if not (sdk_root() / image.replace(";", "/")).is_dir():
-    run([sdkmanager, image], env=sdk_env())
-  run([avdmanager, "create", "avd", "--force", "-n", AVD_NAME, "-k", image, "-d", DEVICE], input="no\n", env=sdk_env())
-  config = avd_home() / f"{AVD_NAME}.avd" / "config.ini"
-  overrides = {"hw.keyboard": "yes", "hw.gpu.enabled": "yes", "hw.gpu.mode": "host"}
-  lines = [line for line in config.read_text().splitlines() if line.split("=", 1)[0] not in overrides]
-  lines += [f"{key}={value}" for key, value in overrides.items()]
-  config.write_text("\n".join(lines) + "\n")
+def tap(text):
+  wait(text)
+  print(f"tap {text}", flush=True)
+  agent("press", label(text), "--settle")
 
 
 def set_up_library():
-  for query in ["Let's go", "Next", "Choose a folder", "testfiles"]:
-    tap_when_visible(query)
-  # The picker lags behind the taps, and the folders above have an Audiobooks folder and the button as well.
-  wait_until_visible("SingleAudiobook")
-  tap_when_visible("Audiobooks")
-  wait_until_visible("Dream in a Boat")
-  for query in ["Use this folder", "Allow", "Add 6 books", "Start listening", "Dream in a Boat", "Play"]:
-    tap_when_visible(query)
+  for text in ["Let's go", "Next", "Choose a folder", "testfiles"]:
+    tap(text)
+  # The folders above testfiles have an Audiobooks folder as well.
+  wait("SingleAudiobook")
+  tap("Audiobooks")
+  wait("Dream in a Boat")
+  for text in ["Use this folder", "Allow", "Add 6 books", "Start listening", "Dream in a Boat", "Play"]:
+    tap(text)
   time.sleep(2)
-  tap_when_visible("Pause")
-  ui.adb("shell", "input", "keyevent", "KEYCODE_BACK")
-  time.sleep(1)
+  tap("Pause")
+  agent("back", "--system", "--settle")
 
 
-def wait_until_visible(query, timeout=30):
-  deadline = time.monotonic() + timeout
-  while time.monotonic() < deadline:
-    matches = ui.find(ui.dump(), query, exact=True)
-    if matches:
-      return matches[0]
-    time.sleep(0.5)
-  sys.exit(f'"{query}" didn\'t show up while setting up the library. Take a screenshot with ui.py to see where it got stuck.')
-
-
-def tap_when_visible(query):
-  x, y = wait_until_visible(query).center
-  print(f"tap {query}", flush=True)
-  ui.adb("shell", "input", "tap", str(x), str(y))
-  time.sleep(0.3)
-
-
-def prepare(args, only_if_missing=False):
+def prepare(args=None):
   root = repo_root()
-  with lock():
-    if only_if_missing and prepared():
-      return
-    running = instances()
-    if running:
-      sys.exit(f"{len(running)} agent emulator(s) still run from the old base. Stop them first (emulator.py stop --all).")
-    PREPARED_FILE.unlink(missing_ok=True)
-    create_avd()
-    port = next(port for port in PORTS if port_free(port))
-    serial = f"emulator-{port}"
-    os.environ["ANDROID_SERIAL"] = serial
-    STATE_DIR.mkdir(parents=True, exist_ok=True)
-    process = launch(port, ["-no-window", "-no-snapshot-load", "-wipe-data"], STATE_DIR / "prepare.log")
-    try:
-      # builds while the emulator boots
-      run([sys.executable, "scripts/populate_test_files.py", "--skip-adb"], cwd=root)
-      run([str(root / "gradlew"), ":app:assembleFreeDebug", "-q"], cwd=root)
-      if not wait_for_boot(serial, process):
-        sys.exit(f"The base AVD didn't boot. Log: {STATE_DIR / 'prepare.log'}")
-      run(["adb", "-s", serial, "push", "build/testfiles", "/sdcard/testfiles"], cwd=root)
-      run(["adb", "-s", serial, "install", "-r", "app/build/outputs/apk/free/debug/app-free-debug.apk"], cwd=root)
-      ui.adb("shell", "am", "start", "-W", "-n", ui.ACTIVITY)
-      set_up_library()
-    except BaseException:
-      subprocess.run(["adb", "-s", serial, "emu", "kill"], capture_output=True)
-      raise
+  if own_lease():
+    sys.exit("You hold an emulator. prepare needs a lease of its own: run emulator.py stop first.")
+  print("Leasing a plain emulator and building the app and test library meanwhile", flush=True)
+  lease_process = subprocess.Popen(
+    ["simlock", "lease", "--platform", "android", "--device", DEVICE, "--os", API_LEVEL, "--detach", "--ttl", "1h"],
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    text=True,
+  )
+  build = [
+    [sys.executable, "scripts/populate_test_files.py", "--skip-adb"],
+    [str(root / "gradlew"), ":app:assembleFreeDebug", "-q"],
+  ]
+  for command in build:
+    result = subprocess.run(command, cwd=root, capture_output=True, text=True)
+    if result.returncode != 0:
+      lease_process.kill()
+      sys.exit(f"{result.stdout}{result.stderr}\n{shlex.join(command)} failed.")
+  stdout, stderr = lease_process.communicate()
+  if lease_process.returncode != 0:
+    sys.exit(f"simlock couldn't lease an emulator: {stderr.strip().splitlines()[-1] if stderr.strip() else 'no output'}")
+  grant = json.loads(stdout)
+  lease = {"id": grant["lease"]["id"], "serial": grant["device"]["address"]}
+  os.environ.update(device_env(lease))
+  os.environ["AGENT_DEVICE_SESSION"] = f"voice-prepare-{session_name(lease).removeprefix('voice-')}"
+  saved = False
+  try:
+    adb("push", str(root / "build" / "testfiles"), "/sdcard/testfiles")
+    adb("install", "-r", str(root / "app/build/outputs/apk/free/debug/app-free-debug.apk"))
+    agent("open", PACKAGE, "--platform", "android")
+    set_up_library()
+    agent("close")
     commit = subprocess.run(["git", "log", "-1", "--format=%h %s"], cwd=root, capture_output=True, text=True).stdout.strip()
     if subprocess.run(["git", "status", "--porcelain"], cwd=root, capture_output=True, text=True).stdout.strip():
       commit += " with local changes"
-    # killing it saves the quick boot snapshot that every agent emulator starts from
-    subprocess.run(["adb", "-s", serial, "emu", "kill"], capture_output=True)
-    process.wait()
-    PREPARED_FILE.write_text(json.dumps({"commit": commit, "date": datetime.now().isoformat(timespec="seconds")}))
-  print(f"Prepared {AVD_NAME} with the app from {commit}.")
+    print(simlock("baseline", "save", BASELINE, "--lease", lease["id"], "--note", f"app from {commit}"[:200]).strip())
+    saved = True
+  except SimlockError as error:
+    if error.code == "FORBIDDEN":
+      sys.exit("Saving a baseline needs simlock's admin role. Ask the user to run emulator.py prepare.")
+    sys.exit(f"simlock failed: {error}")
+  finally:
+    if not saved:
+      agent("close", check=False)
+      try:
+        simlock("release", lease["id"])
+      except SimlockError:
+        pass
+
+
+def print_env(lease):
+  exports = " ".join(f"{key}={value}" for key, value in device_env(lease).items())
+  print(f"export {exports}")
+
+
+def command_start(args):
+  require_tools()
+  lease = own_lease()
+  if lease:
+    simlock("lease", "renew", lease["id"], "--ttl", TTL)
+    print(f"Reusing your emulator, renewed for {TTL}.")
+    print_env(lease)
+    return
+  try:
+    lease = lease_device(BASELINE)
+  except SimlockError as error:
+    if error.code not in ("UNKNOWN_BASELINE", "BASELINE_STALE"):
+      sys.exit(f"simlock couldn't lease an emulator: {error}")
+    print(f"The {BASELINE} baseline is missing or stale, preparing it first. That takes about 3 minutes.", flush=True)
+    prepare()
+    lease = lease_device(BASELINE)
+  os.environ.update(device_env(lease))
+  agent("open", PACKAGE, "--platform", "android")
+  print_env(lease)
+
+
+def command_stop(args):
+  lease = own_lease()
+  if not lease:
+    print("You hold no emulator.")
+    return
+  os.environ.update(device_env(lease))
+  agent("close", check=False)
+  simlock("release", lease["id"])
+  print(f"Released {lease['serial']}.")
+
+
+def command_prepare(args):
+  require_tools()
+  prepare(args)
+
+
+def destination_json(entry):
+  destination = json.loads(entry) if entry.startswith("{") else {"type": entry}
+  if "." not in destination["type"]:
+    destination["type"] = DESTINATION_PREFIX + destination["type"]
+  return destination
+
+
+def command_open(args):
+  back_stack = json.dumps([destination_json(entry) for entry in args.destinations], separators=(",", ":"))
+  adb("logcat", "-b", "crash", "-c")
+  command = ["am", "start", "-W", "-S", "-n", ACTIVITY, "--es", "debugBackStack", back_stack]
+  adb("shell", shlex.join(command))
+  time.sleep(1)
+  crash = adb("logcat", "-b", "crash", "-d").stdout.decode(errors="replace")
+  if crash.strip():
+    reason = next((line for line in crash.splitlines() if "Exception" in line and "FATAL" not in line), crash)
+    sys.exit(f"The app crashed on start: {reason.split('AndroidRuntime: ', 1)[-1]}")
+  print(f"Opened {back_stack}")
+
+
+def command_books(args):
+  with tempfile.TemporaryDirectory() as directory:
+    for suffix in ["", "-wal", "-shm"]:
+      name = f"autoBookDB{suffix}"
+      result = adb("exec-out", "run-as", PACKAGE, "cat", f"databases/{name}", check=False)
+      if result.returncode == 0 and result.stdout:
+        Path(directory, name).write_bytes(result.stdout)
+    database = Path(directory, "autoBookDB")
+    if not database.exists():
+      sys.exit("No database yet. Is the debug app installed and was it started once?")
+    connection = sqlite3.connect(database)
+    columns = {column[1] for column in connection.execute("PRAGMA table_info(content2)")}
+    # databases from before the listener's name was stored apart have no customName
+    name = "coalesce(customName, name)" if "customName" in columns else "name"
+    rows = connection.execute(f"SELECT id, {name}, author, isActive FROM content2 ORDER BY lastPlayedAt DESC").fetchall()
+    connection.close()
+  for book_id, name, author, active in rows:
+    if active or args.all:
+      print(f"{name} | {author or '-'} | {book_id}")
 
 
 def main():
   parser = argparse.ArgumentParser(description=__doc__)
-  owner = argparse.ArgumentParser(add_help=False)
-  owner.add_argument("--name", help="who owns the emulator, defaults to the git worktree")
   subparsers = parser.add_subparsers(required=True)
 
-  start_parser = subparsers.add_parser("start", parents=[owner], help="start or reuse your emulator and print its ANDROID_SERIAL")
-  start_parser.add_argument("--window", action="store_true", help="show the emulator window, e.g. so the user can watch")
-  start_parser.set_defaults(func=command_start)
+  subparsers.add_parser("start", help="lease or reuse your emulator and print the export line for it").set_defaults(func=command_start)
+  subparsers.add_parser("stop", help="give your emulator back").set_defaults(func=command_stop)
+  subparsers.add_parser("prepare", help=f"(re)build the {BASELINE} baseline from your worktree's app").set_defaults(func=command_prepare)
 
-  stop_parser = subparsers.add_parser("stop", parents=[owner], help="stop your emulator")
-  stop_parser.add_argument("--all", action="store_true", help="stop every agent emulator")
-  stop_parser.set_defaults(func=command_stop)
+  open_parser = subparsers.add_parser("open", help="restart the debug app on a back stack: open BookOverview Settings")
+  open_parser.add_argument(
+    "destinations",
+    nargs="+",
+    help='Destination names, or JSON for one with arguments: \'{"type":"Playback","bookId":"…"}\'',
+  )
+  open_parser.set_defaults(func=command_open)
 
-  subparsers.add_parser("list", help="show the running agent emulators").set_defaults(func=command_list)
-  subparsers.add_parser("prepare", help=f"(re)build the {AVD_NAME} AVD that every agent emulator is cloned from").set_defaults(func=prepare)
+  books_parser = subparsers.add_parser("books", help="list the library with book ids, last played first")
+  books_parser.add_argument("--all", action="store_true", help="also books whose files are gone")
+  books_parser.set_defaults(func=command_books)
 
   args = parser.parse_args()
-  args.func(args)
+  try:
+    args.func(args)
+  except SimlockError as error:
+    sys.exit(f"simlock failed: {error}")
 
 
 if __name__ == "__main__":

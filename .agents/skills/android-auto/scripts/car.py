@@ -14,7 +14,7 @@ from pathlib import Path
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "emulator" / "scripts"))
-import ui  # noqa: E402
+import emulator  # noqa: E402
 
 GEARHEAD = "com.google.android.projection.gearhead"
 NOTIFICATION_LISTENER = f"{GEARHEAD}/com.google.android.gearhead.notifications.SharedNotificationListenerManager$ListenerService"
@@ -40,7 +40,7 @@ def dhu_binary():
 
 
 def instance_dir():
-  return STATE_DIR / ui.serial()
+  return STATE_DIR / emulator.serial()
 
 
 def read_state():
@@ -56,7 +56,7 @@ def read_state():
 
 
 def shell(command):
-  return ui.adb("shell", command, check=False).stdout.decode(errors="replace")
+  return emulator.adb("shell", command, check=False).stdout.decode(errors="replace")
 
 
 def head_unit_server_running():
@@ -67,35 +67,20 @@ def head_unit_server_running():
   return False
 
 
-def wait_for(query, timeout=15):
-  deadline = time.monotonic() + timeout
-  while time.monotonic() < deadline:
-    matches = ui.find(ui.dump(), query, exact=True)
-    if matches:
-      return matches[0]
-    time.sleep(0.5)
-  sys.exit(f'"{query}" didn\'t show up while setting up Android Auto. Take a screenshot with ui.py to see where it got stuck.')
+def center(node):
+  rect = node["rect"]
+  return rect["x"] + rect["width"] // 2, rect["y"] + rect["height"] // 2
 
 
-def tap(node):
-  x, y = node.center
-  ui.adb("shell", "input", "tap", str(x), str(y))
-  time.sleep(0.5)
-
-
-def scroll_to(query):
-  for _ in range(10):
-    matches = ui.find(ui.dump(), query, exact=True)
-    if matches:
-      return matches[0]
-    ui.command_scroll(argparse.Namespace(direction="down"))
-  sys.exit(f'"{query}" isn\'t in the Android Auto settings.')
+def scroll_to(text):
+  if emulator.agent("scroll", "down", "--until", emulator.label(text), check=False).returncode != 0:
+    sys.exit(f'"{text}" isn\'t in the Android Auto settings.')
 
 
 def open_menu():
-  tap(wait_for("More options"))
-  wait_for("Help & feedback")
-  return {node.label for node in ui.dump()}
+  emulator.tap("More options")
+  emulator.wait("Help & feedback")
+  return {node.get("label") for node in emulator.nodes()}
 
 
 def install_android_auto():
@@ -106,9 +91,9 @@ def install_android_auto():
       "Ask the user to connect a phone with Android Auto from Play, then, with their OK, run: car.py pull <phone serial>",
     )
   print("Installing Android Auto", flush=True)
-  ui.adb("install-multiple", "-r", *map(str, apks))
+  emulator.adb("install-multiple", "-r", *map(str, apks))
   # Voice granted its cover uris to the stub, and the car shows no covers until Voice grants them again.
-  ui.adb("shell", "am", "force-stop", ui.PACKAGE)
+  emulator.adb("shell", "am", "force-stop", emulator.PACKAGE)
 
 
 def set_up():
@@ -118,29 +103,30 @@ def set_up():
   shell("pm disable-user --user 0 com.android.vending")
   shell(f"cmd notification allow_listener {shlex.quote(NOTIFICATION_LISTENER)}")
   print("Turning on Android Auto's developer settings and head unit server", flush=True)
-  ui.adb("shell", "am", "start", "-W", "-a", f"{GEARHEAD}.SETTINGS")
+  emulator.adb("shell", "am", "start", "-W", "-a", f"{GEARHEAD}.SETTINGS")
   if "Developer settings" not in open_menu():
-    ui.adb("shell", "input", "keyevent", "KEYCODE_BACK")
-    x, y = scroll_to("Version").center
-    for _ in range(10):
-      ui.adb("shell", "input", "tap", str(x), str(y))
-    tap(wait_for("OK"))
+    emulator.agent("back", "--system", "--settle")
+    scroll_to("Version")
+    emulator.agent("press", emulator.label("Version"), "--count", "10", "--interval-ms", "100")
+    emulator.tap("OK")
     open_menu()
-  tap(wait_for("Developer settings"))
-  unknown_sources = scroll_to("Unknown sources")
-  checkboxes = [node for node in ui.dump() if node.resource_id == "checkbox"]
-  checkbox = min(checkboxes, key=lambda node: abs(node.center[1] - unknown_sources.center[1]))
-  if not checkbox.checked:
-    tap(unknown_sources)
-  ui.adb("shell", "input", "keyevent", "KEYCODE_BACK")
+  emulator.tap("Developer settings")
+  scroll_to("Unknown sources")
+  screen = emulator.nodes()
+  unknown_sources = next(node for node in screen if (node.get("label") or "").lower() == "unknown sources")
+  checkboxes = [node for node in screen if (node.get("identifier") or "").endswith(":id/checkbox")]
+  checkbox = min(checkboxes, key=lambda node: abs(center(node)[1] - center(unknown_sources)[1]))
+  if not checkbox.get("checked"):
+    emulator.tap("Unknown sources")
+  emulator.agent("back", "--system", "--settle")
   open_menu()
-  tap(wait_for("Start head unit server"))
+  emulator.tap("Start head unit server")
   deadline = time.monotonic() + 10
   while not head_unit_server_running():
     if time.monotonic() > deadline:
       sys.exit("The head unit server didn't start.")
     time.sleep(0.5)
-  ui.adb("shell", "input", "keyevent", "KEYCODE_HOME")
+  emulator.adb("shell", "input", "keyevent", "KEYCODE_HOME")
 
 
 def launch_dhu(port, args):
@@ -174,11 +160,12 @@ def wait_until_projecting(process):
     if '"GhFacetBar"' in shell("dumpsys display"):
       return
     # Android Auto asks to accept its terms on the phone the first time a car connects.
-    welcome = [node for node in ui.dump() if node.resource_id == "continue_button" and node.package == GEARHEAD]
+    welcome = [node for node in emulator.nodes() if node.get("identifier") == f"{GEARHEAD}:id/continue_button"]
     if welcome:
-      tap(welcome[0])
+      # agent-device refuses a tap that leaves the session's app, and this one hands the screen to the car.
+      emulator.adb("shell", "input", "tap", *map(str, center(welcome[0])))
     time.sleep(1)
-  sys.exit("Android Auto didn't connect to Voice within 60 seconds. Look with car.py screenshot and ui.py screenshot.")
+  sys.exit("Android Auto didn't connect to Voice within 60 seconds. Look with car.py screenshot and agent-device screenshot.")
 
 
 def command_start(args):
@@ -188,7 +175,7 @@ def command_start(args):
   dhu_binary()
   if not head_unit_server_running():
     set_up()
-  port = ui.adb("forward", "tcp:0", f"tcp:{HEAD_UNIT_PORT}").stdout.decode().strip()
+  port = emulator.adb("forward", "tcp:0", f"tcp:{HEAD_UNIT_PORT}").stdout.decode().strip()
   process = launch_dhu(port, args)
   wait_until_projecting(process)
   print("Android Auto runs on the DHU. car.py screenshot shows the car screen.")
@@ -237,7 +224,7 @@ def command_stop(args):
     time.sleep(0.3)
   if read_state():
     os.kill(state["pid"], 9)
-  ui.adb("forward", "--remove", f"tcp:{state['port']}", check=False)
+  emulator.adb("forward", "--remove", f"tcp:{state['port']}", check=False)
   shutil.rmtree(instance_dir(), ignore_errors=True)
   print("Stopped the DHU.")
 
@@ -292,8 +279,6 @@ def main():
   pull_parser.set_defaults(func=command_pull)
 
   args = parser.parse_args()
-  if args.func is not command_pull:
-    ui.mark_used()
   args.func(args)
 
 
