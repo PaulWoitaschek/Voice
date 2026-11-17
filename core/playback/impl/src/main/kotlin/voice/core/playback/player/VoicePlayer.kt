@@ -168,7 +168,6 @@ class VoicePlayer(
         player.duration.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: return@launch
 
       if (newPosition > duration) {
-        val nextMediaItemIndex = nextMediaItemIndex
         if (nextMediaItemIndex == C.INDEX_UNSET) {
           val (index, endMs) = player.nextChapterTarget() ?: return@launch
           player.seekTo(index, endMs)

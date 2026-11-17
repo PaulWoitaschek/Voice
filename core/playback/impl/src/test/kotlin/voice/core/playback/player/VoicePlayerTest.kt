@@ -17,7 +17,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.spyk
 import io.mockk.verifyOrder
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
@@ -119,7 +118,7 @@ class VoicePlayerTest {
   private val analytics = mockk<Analytics>(relaxUnitFun = true)
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer)
   private val commandSourceResolver =
-    spyk(CommandSourceResolver(ApplicationProvider.getApplicationContext()))
+    mockk<CommandSourceResolver> { every { current() } returns null }
   private val historyRecorder =
     ListeningHistoryRecorder(
       repo = historyRepo,
