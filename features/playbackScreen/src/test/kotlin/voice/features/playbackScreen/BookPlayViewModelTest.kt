@@ -29,6 +29,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.yield
+import voice.core.analytics.api.Analytics
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
@@ -101,6 +102,7 @@ class BookPlayViewModelTest {
     }
 
   private val player = mockk<PlayerController>()
+  private val analytics = mockk<Analytics>(relaxUnitFun = true)
   private val playStateManager =
     mockk<PlayStateManager> {
       every { playStateFlow } returns MutableStateFlow(PlayStateManager.PlayState.Paused)
@@ -155,6 +157,7 @@ class BookPlayViewModelTest {
       clock = clock,
       serverLibrary = serverLibrary,
       lastPlaybackSpeedStore = LastPlaybackSpeedStore(MemoryDataStore(1F)),
+      analytics = analytics,
     )
 
   @Test
@@ -191,6 +194,14 @@ class BookPlayViewModelTest {
 
     incrementAndAssert(2.minutes)
     incrementAndAssert(3.minutes)
+  }
+
+  @Test
+  fun `player, long-press the bookmark button, bookmark saved from the player`() = scope.runTest {
+    viewModel.onBookmarkLongClick()
+    runCurrent()
+
+    verify(exactly = 1) { analytics.event("bookmark_saved", mapOf("from" to "player")) }
   }
 
   @Test
@@ -859,6 +870,7 @@ class BookPlayViewModelTest {
       clock = clock,
       serverLibrary = serverLibrary,
       lastPlaybackSpeedStore = LastPlaybackSpeedStore(MemoryDataStore(lastPlaybackSpeed)),
+      analytics = analytics,
     )
   }
 }

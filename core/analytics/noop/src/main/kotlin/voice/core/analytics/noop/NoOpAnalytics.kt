@@ -18,4 +18,11 @@ class NoOpAnalytics : Analytics {
   ) {
     Logger.v("event(name=$name, params=$params)")
   }
+
+  override fun setUserProperty(
+    name: String,
+    value: String,
+  ) {
+    Logger.v("setUserProperty(name=$name, value=$value)")
+  }
 }

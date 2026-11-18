@@ -40,6 +40,9 @@ class ListeningHistoryRecorder(
   val lastJump: StateFlow<Jump?>
     field = MutableStateFlow<Jump?>(null)
 
+  var lastSource: ListeningEvent.Source? = null
+    private set
+
   fun record(
     type: ListeningEvent.Type,
     source: ListeningEvent.Source,
@@ -57,6 +60,7 @@ class ListeningHistoryRecorder(
         toChapterId = to?.chapterId,
         toTime = to?.time,
       )
+    lastSource = source
     updateLastJump(event, position, to)
     scope.launch {
       repo.add(event)
