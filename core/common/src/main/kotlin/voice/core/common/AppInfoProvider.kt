@@ -7,8 +7,6 @@ interface AppInfoProvider {
 
   val analyticsIncluded: Boolean
 
-  val supportDevelopmentIncluded: Boolean
-
   val installTime: Instant
 
   val installer: String?
