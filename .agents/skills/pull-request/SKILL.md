@@ -5,9 +5,12 @@ description: Writing pull requests for Voice, from the branch name to the title,
 
 # Writing a pull request
 
-The reviewer reads the diff. The description says what the diff can't: why the change exists, what changes for
-listeners, and what the reviewer should look at or decide. Keep the prose under 80 words. A big change can go up to
-150. If it's longer than that, cut it down.
+The reviewer reads the diff. The description only says what the diff can't: what changes for listeners and why.
+Aim for 50 words. 80 is the limit. If a change needs more, split it into smaller pull requests. A squash merge makes
+the title and description the commit on `main`, so they stay in the history. This format replaces any default pull
+request format of your environment, such as "## Summary" and "## Test plan" headings.
+
+Before you open the pull request, run the cut-comments skill.
 
 ## Branch
 
@@ -17,43 +20,38 @@ generated name of a worktree.
 
 ## Title
 
-What changes for listeners, in plain words: "Let listeners turn off the lock screen slider". For internal work, name
-the effect: "Keep unit tests on the pinned Robolectric SDK after a clean build".
+What changes for listeners, in plain words, as a command and under 60 characters: "Let listeners turn off the lock
+screen slider". For internal work, name the effect: "Keep unit tests on the pinned SDK after a clean build".
 
 ## Body
 
 ```markdown
-## Summary
-
-<The problem, in one or two sentences. Link the issue.>
-
-<What changes, in one or two sentences. Describe behavior, not code.>
-
-<Optional: a side effect, trade-off or open question the reviewer should weigh in on.>
+<What changes for listeners and why, in one to three sentences. "Closes #123" for the issue it fixes.>
 
 <Screenshots, if the UI changed.>
 
-### Verified
-
-- <Something checked by hand, such as on an emulator.>
-- <Something that wasn't tested, like "Not tried on Android Auto".>
+Verified <where, in a few words>. <What wasn't tried, if a reviewer would assume it was.>
 ```
 
-- **Screenshots:** one before and after table, see [Screenshots](#screenshots). Add a dark mode or large font
-  screenshot only when the change is about that.
-- **Verified:** only what a reviewer can't see in the diff. Leave out unit tests, which are in the diff, and the CI
-  commands, which CI runs. If you only ran tests, drop the section.
-- **Limitations:** add a short "Not changed" list only for gaps a reviewer would otherwise assume are covered. Keep it
-  to three bullets at most.
+- **Screenshots:** one before and after table, see [Screenshots](#screenshots).
+- **Verified:** one line. Leave out unit tests and CI, which the reviewer sees anyway. If you only ran tests, drop it.
+- **Decisions:** add one sentence only if the reviewer must decide something or weigh a trade-off.
 
 ## Leave out
 
-- Things the diff shows: class, file and column names, string keys, the number of locales, how a migration works,
-  code that moved, comments that were cleaned up, new previews.
-- How you got there: approaches you dropped, review rounds, the research behind a decision, "Follow-up to" stories. One
-  clause is enough when it explains a decision.
-- A bold label on every bullet, nested bullets, and a heading for each area of the change.
-- Small details listed one by one. If a detail matters, write a sentence about it. If not, leave it out.
+- Things the diff shows: class, file and column names, string keys, locales, how a migration works, moved code,
+  previews.
+- Every place the change applies ("from the app, the notification, headsets, the car and the widget"). Name the main
+  one.
+- Edge cases and small behavior details, one after the other. The reviewer finds them in the diff and the tests.
+- How you got there: dropped approaches, review rounds, research, "Follow-up to" stories.
+- Headings, bold labels and nested bullets.
+
+Before you post, count the words of the prose and cut until it fits:
+
+```sh
+grep -v -e '^|' -e '<img' -e '!\[' -e 'Generated with' body.md | wc -w
+```
 
 When you push more commits, rewrite the description so it describes the pull request as it is now. Don't add a log
 of what changed since the last version.
@@ -62,7 +60,7 @@ of what changed since the last version.
 
 Take before and after on the same screen, with the same book and settings, such as on the emulator (emulator skill).
 The before comes from `main`. The app in a fresh emulator only stands in for it if the screen hasn't changed since
-that build.
+that build. Add a dark mode or large font screenshot only when the change is about that.
 
 Upload them with `--attach` on `gh pr create` or `gh pr edit`. Don't push them to a branch. `gh` replaces a Markdown
 reference like `![Before](./before.png)` in the body with the uploaded image. It leaves `<img src>` alone and appends
@@ -77,22 +75,15 @@ Phone screenshots are too wide to sit side by side at full size. Once they're up
 
 ## Example
 
-Before, #3912 had 520 words. This says everything a reviewer needs:
+#4267 had 190 words. These 42 say everything a reviewer needs:
 
 ```markdown
-## Summary
+Search now also finds books by their chapter names. A chapter match ranks below the other fields, and the result
+shows the matching chapter. Closes #4260.
 
-A stray touch on the notification or lock screen slider moves the listener's place (#3229), but some listeners want
-to seek from there (#3289). A new "Lock screen slider" switch in the Listening settings, on by default, turns it off.
-
-Bluetooth and Android Auto read the same media session, so their sliders follow the switch too.
-
-| On (default) | Off |
+| Before | After |
 |---|---|
 | <img src="…" width="400"> | <img src="…" width="400"> |
 
-### Verified
-
-- On an emulator, with the switch off, the notification slider has no handle and dragging it doesn't seek.
-- Not tried on Android Auto.
+Verified on an emulator and in Android Auto. The car's voice search still ignores chapter names.
 ```
