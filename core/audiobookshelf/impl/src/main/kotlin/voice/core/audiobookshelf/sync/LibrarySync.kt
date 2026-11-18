@@ -1,13 +1,9 @@
 package voice.core.audiobookshelf.sync
 
-import android.content.Context
 import dev.zacsweers.metro.Inject
-import java.io.File
 import java.io.IOException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
-import okhttp3.Request
 import retrofit2.HttpException
 import voice.core.audiobookshelf.AudiobookshelfIds
 import voice.core.audiobookshelf.account.Account
@@ -16,7 +12,6 @@ import voice.core.audiobookshelf.api.AbsLibraryItem
 import voice.core.audiobookshelf.api.AudiobookshelfApi
 import voice.core.audiobookshelf.api.BatchGetRequest
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
-import voice.core.audiobookshelf.itemId
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.Chapter
@@ -31,7 +26,6 @@ import voice.core.logging.api.Logger
 private const val PAGE_SIZE = 200
 private const val DETAILS_CHUNK_SIZE = 50
 private const val BOOKS_PER_WRITE = 1_000
-private const val COVERS_PER_WRITE = 100
 
 @Inject
 internal class LibrarySync(
@@ -41,7 +35,6 @@ internal class LibrarySync(
   private val chapterRepo: ChapterRepo,
   private val bookmarkRepo: BookmarkRepo,
   private val accountStore: AccountStore,
-  private val context: Context,
 ) {
 
   suspend fun sync(account: Account) {
@@ -89,18 +82,23 @@ internal class LibrarySync(
 
     val onServer = items.map { AudiobookshelfIds.bookId(it.id) }.toSet()
     val libraryOf = books.associate { AudiobookshelfIds.bookId(it.id) to it.libraryId }
+    val remote = contentRepo.all().filter { it.id.isRemote }
+    // a backup leaves out the cover files of older versions, the cover then loads from the server
+    val missingCovers = remote.filter { it.metadata.cover?.exists() == false }.map { it.id }.toSet()
     fun BookContent.synced(): BookContent {
       val active = if (id in flagged) isActive else id in onServer
       // unchanged books aren't stored again, so they get their library here
-      return copy(isActive = active, serverLibraryId = libraryOf[id] ?: serverLibraryId)
+      return copy(
+        isActive = active,
+        serverLibraryId = libraryOf[id] ?: serverLibraryId,
+        metadata = if (id in missingCovers) metadata.copy(cover = null) else metadata,
+      )
     }
-    val outdated = contentRepo.all().filter { it.id.isRemote && it.synced() != it }.map { it.id }
+    val outdated = remote.filter { it.synced() != it }.map { it.id }
     bookRepository.updateBooks(outdated.toSet()) { it.synced() }
     // stored after the books got their library, so a library never shows without its books
     val libraryNames = api.libraries().libraries.associate { it.id to it.name }
     accountStore.updateData { it?.copy(libraryNames = libraryNames) }
-
-    downloadMissingCovers(account, items)
   }
 
   private suspend fun allItems(
@@ -147,8 +145,7 @@ internal class LibrarySync(
         knownById.getValue(current.id).content(current) ?: current
       }
       known.forEach { book ->
-        val cover = book.existing!!.metadata.cover
-        if (cover != null && cover.name != book.item.coverFileName()) cover.delete()
+        book.existing!!.metadata.cover?.delete()
         // the books point at the new files right away, their bookmarks have to follow
         moveBookmarks(book.existing, book.previousChapters, book.chapters)
       }
@@ -175,61 +172,6 @@ internal class LibrarySync(
         )
       }
   }
-
-  private suspend fun downloadMissingCovers(
-    account: Account,
-    items: List<AbsLibraryItem>,
-  ) {
-    val itemsById = items.associateBy { it.id }
-    val missing =
-      contentRepo
-        .all()
-        .filter { it.id.isRemote && it.isActive && it.metadata.cover?.exists() != true }
-        .mapNotNull { content -> content.id.itemId?.let(itemsById::get) }
-        .filter { it.media.coverPath != null }
-    missing.chunked(COVERS_PER_WRITE).forEach { chunk ->
-      val covers =
-        chunk
-          .mapNotNull { item ->
-            downloadCover(account, item)?.let { AudiobookshelfIds.bookId(item.id) to it }
-          }
-          .toMap()
-      bookRepository.updateBooks(covers.keys) {
-        it.copy(metadata = it.metadata.copy(cover = covers.getValue(it.id)))
-      }
-    }
-  }
-
-  private suspend fun downloadCover(
-    account: Account,
-    item: AbsLibraryItem,
-  ): File? =
-    withContext(Dispatchers.IO) {
-      val folder = File(context.filesDir, "bookCovers").apply { mkdirs() }
-      val file = File(folder, item.coverFileName())
-      val urls =
-        listOf(
-          "${account.serverUrl}api/items/${item.id}/cover?width=800&format=jpeg",
-          "${account.serverUrl}api/items/${item.id}/cover?raw=1",
-        )
-      for (url in urls) {
-        try {
-          http.authenticatedClient.newCall(Request.Builder().url(url).build()).execute().use {
-            response ->
-            val body = response.body
-            if (
-              response.isSuccessful && response.header("Content-Type")?.startsWith("image/") == true
-            ) {
-              file.outputStream().use { body.byteStream().copyTo(it) }
-              return@withContext file
-            }
-          }
-        } catch (_: IOException) {
-          return@withContext null
-        }
-      }
-      null
-    }
 }
 
 private class FetchedBook(
@@ -245,9 +187,8 @@ private class FetchedBook(
     return skipBroken {
       val content =
         item.toBookContent(chapters, current, previousChapters).let {
-          // an update of the item can bring a new cover, so the next pass downloads it again
-          val cover = it.metadata.cover?.takeIf { cover -> cover.name == item.coverFileName() }
-          it.copy(metadata = it.metadata.copy(cover = cover))
+          // a change on the server can bring a new cover, older versions kept the old one in a file
+          it.copy(metadata = it.metadata.copy(cover = null))
         }
       // the init block checks that the chapters and the position fit together
       @Suppress("RETURN_VALUE_NOT_USED") Book(content, chapters, CustomMetadata(content.id))
@@ -266,5 +207,3 @@ private inline fun <T> skipBroken(block: () -> T): T? =
     Logger.w(e, "Skipping a server book")
     null
   }
-
-private fun AbsLibraryItem.coverFileName(): String = "abs-$id-$updatedAt.jpg"

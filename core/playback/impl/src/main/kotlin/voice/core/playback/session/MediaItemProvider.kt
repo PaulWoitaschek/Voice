@@ -12,7 +12,6 @@ import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_NOT
 import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_PARTIALLY_PLAYED
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import dev.zacsweers.metro.Inject
-import java.io.File
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import voice.core.data.Book
@@ -163,7 +162,7 @@ class MediaItemProvider(
       mediaId = MediaId.Book(book.id),
       browsable = false,
       isPlayable = true,
-      imageUri = book.cover?.toProvidedUri(),
+      imageUri = book.imageUri(),
       artist = book.author,
       subtitle = book.subtitle(),
       mediaType = MediaType.AudioBook,
@@ -210,14 +209,15 @@ class MediaItemProvider(
       browsable = false,
       isPlayable = true,
       sourceUri = playbackItem.chapter.id.toUri(),
-      imageUri = book.cover?.toProvidedUri(),
+      imageUri = book.imageUri(),
       artist = book.author,
       durationMs = playbackItem.mark.durationMs,
       mediaType = MediaType.AudioBookChapter,
     )
   }
 
-  private fun File.toProvidedUri(): Uri = imageFileProvider.uri(this)
+  private fun Book.imageUri(): Uri? =
+    cover?.let(imageFileProvider::uri) ?: serverCoverUrl?.let(imageFileProvider::uri)
 }
 
 // the same order as in the library

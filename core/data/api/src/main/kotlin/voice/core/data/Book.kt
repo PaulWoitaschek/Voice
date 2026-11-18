@@ -38,7 +38,16 @@ public data class Book(
     get() = custom.part ?: content.metadata.part
 
   val coverUrl: String?
-    get() = cover?.toURI()?.toString()
+    get() = cover?.toURI()?.toString() ?: serverCoverUrl
+
+  // each change of the book on the server can bring a new cover, so it gets a new url
+  val serverCoverUrl: String?
+    get() =
+      if (id.isRemote) {
+        "${id.value}/cover?ts=${chapters.first().fileLastModified.toEpochMilliseconds()}"
+      } else {
+        null
+      }
 
   val currentChapter: Chapter = chapters[content.currentChapterIndex]
   val currentMark: ChapterMark = currentChapter.markForPosition(content.positionInChapter)

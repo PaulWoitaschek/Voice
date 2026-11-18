@@ -81,7 +81,7 @@
     </service>
 
     <provider
-      android:name="androidx.core.content.FileProvider"
+      android:name="voice.core.playback.session.CoverProvider"
       android:authorities="${applicationId}.coverprovider"
       android:exported="false"
       android:grantUriPermissions="true">

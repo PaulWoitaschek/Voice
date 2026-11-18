@@ -107,7 +107,8 @@ class VoicePlayerTest {
       .build()
 
   private val scope = TestScope()
-  private val mediaItemProvider = MediaItemProvider(mockk(), mockk(), mockk(), mockk())
+  private val mediaItemProvider =
+    MediaItemProvider(mockk(), mockk(), mockk(relaxed = true), mockk())
   private val bookId = BookId(Uuid.random().toString())
   private val currentBookStore = MemoryDataStore<BookId?>(bookId)
   private lateinit var currentBook: Book
