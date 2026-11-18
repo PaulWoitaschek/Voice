@@ -44,6 +44,7 @@ public class ChapterRepoImpl(private val dao: ChapterDao) : ChapterRepo {
   }
 
   override suspend fun put(chapters: List<Chapter>) {
+    if (chapters.isEmpty()) return
     dao.insertAll(chapters)
     chapters.forEach { cache[it.id] = it }
   }

@@ -16,6 +16,7 @@ import mockwebserver3.Dispatcher
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import mockwebserver3.RecordedRequest
+import mockwebserver3.SocketEffect.CloseSocket
 import okhttp3.Headers.Companion.headersOf
 import okhttp3.OkHttpClient
 import org.junit.After
@@ -216,15 +217,24 @@ class LibrarySyncTest {
   }
 
   @Test
-  fun `books that got through before the connection failed are kept`() = runTest {
+  fun `books that got through before the connection dropped are kept`() = runTest {
+    assertEquals(50, booksKeptAfter(MockResponse.Builder().onResponseStart(CloseSocket()).build()))
+  }
+
+  @Test
+  fun `books that got through before the server failed are kept`() = runTest {
+    assertEquals(50, booksKeptAfter(MockResponse(code = 503)))
+  }
+
+  private suspend fun booksKeptAfter(failure: MockResponse): Int {
     val written = mutableListOf<List<BookContent>>()
     val contentRepo = emptyContentRepo()
     coEvery { contentRepo.put(capture(written)) } returns Unit
 
-    val sync = runCatching { syncLargeLibrary(contentRepo, items(120), answeredBatches = 1) }
+    val sync = runCatching { syncLargeLibrary(contentRepo, items(120), failure = failure) }
 
     assertTrue(sync.isFailure)
-    assertEquals(50, written.sumOf { it.size })
+    return written.sumOf { it.size }
   }
 
   // writes like the real repository, which reads each book again under its lock
@@ -251,7 +261,7 @@ class LibrarySyncTest {
   private suspend fun syncLargeLibrary(
     contentRepo: BookContentRepo,
     items: List<AbsLibraryItem>,
-    answeredBatches: Int = Int.MAX_VALUE,
+    failure: MockResponse? = null,
   ) {
     val itemsById = items.associateBy { it.id }
     var batches = 0
@@ -270,9 +280,7 @@ class LibrarySyncTest {
                 ),
               )
             }
-            path == "/api/items/batch/get" && ++batches > answeredBatches -> {
-              MockResponse(code = 503)
-            }
+            path == "/api/items/batch/get" && failure != null && ++batches > 1 -> failure
             path == "/api/items/batch/get" -> {
               val ids =
                 audiobookshelfJson
