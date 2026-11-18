@@ -21,6 +21,11 @@ public interface BookRepository {
     update: (BookContent) -> BookContent,
   )
 
+  public suspend fun updateBooks(
+    ids: Set<BookId>,
+    update: (BookContent) -> BookContent,
+  )
+
   public suspend fun updateCustomMetadata(
     id: BookId,
     update: (CustomMetadata) -> CustomMetadata,

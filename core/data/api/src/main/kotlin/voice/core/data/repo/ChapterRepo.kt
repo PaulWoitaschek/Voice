@@ -10,6 +10,8 @@ public interface ChapterRepo {
   public suspend fun get(ids: List<ChapterId>): List<Chapter>
 
   public suspend fun put(chapter: Chapter)
+
+  public suspend fun put(chapters: List<Chapter>)
 }
 
 public suspend inline fun ChapterRepo.getOrPut(

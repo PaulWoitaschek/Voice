@@ -31,6 +31,15 @@ class MemoryBookRepository(vararg books: Book) : BookRepository {
     }
   }
 
+  override suspend fun updateBooks(
+    ids: Set<BookId>,
+    update: (BookContent) -> BookContent,
+  ) {
+    books.update { books ->
+      books.map { if (it.id in ids) it.update(update) else it }
+    }
+  }
+
   override suspend fun updateCustomMetadata(
     id: BookId,
     update: (CustomMetadata) -> CustomMetadata,

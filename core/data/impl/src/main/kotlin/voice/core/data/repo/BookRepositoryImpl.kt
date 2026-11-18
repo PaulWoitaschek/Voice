@@ -65,12 +65,19 @@ public class BookRepositoryImpl(
     id: BookId,
     update: (BookContent) -> BookContent,
   ) {
+    updateBooks(setOf(id), update)
+  }
+
+  override suspend fun updateBooks(
+    ids: Set<BookId>,
+    update: (BookContent) -> BookContent,
+  ) {
     mutex.withLock {
-      val content = contentRepo.get(id) ?: return
-      val updated = update(content)
-      if (updated != content) {
-        contentRepo.put(updated)
+      val updated = ids.mapNotNull { id ->
+        val content = contentRepo.get(id) ?: return@mapNotNull null
+        update(content).takeIf { it != content }
       }
+      contentRepo.put(updated)
     }
   }
 

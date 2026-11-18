@@ -605,11 +605,9 @@ class BookSearchTest {
         customMetadataRepo = customMetadataRepo,
       )
     suspend fun addBook(book: Book) {
-      db.bookContentDao().insert(book.content)
+      db.bookContentDao().insertAll(listOf(book.content))
       customMetadataRepo.put(book.custom)
-      book.chapters.forEach {
-        db.chapterDao().insert(it)
-      }
+      db.chapterDao().insertAll(book.chapters)
     }
 
     runTest {
@@ -625,7 +623,7 @@ class BookSearchTest {
         )
       val testBase =
         TestBase(search) { book ->
-          book.chapters.forEach { db.chapterDao().insert(it) }
+          db.chapterDao().insertAll(book.chapters)
           contentRepo.put(book.content)
           customMetadataRepo.put(book.custom)
         }

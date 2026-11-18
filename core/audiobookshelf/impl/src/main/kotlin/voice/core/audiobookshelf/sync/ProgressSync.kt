@@ -17,6 +17,7 @@ import voice.core.audiobookshelf.api.ProgressUpdate
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.audiobookshelf.itemId
 import voice.core.data.Book
+import voice.core.data.BookContent
 import voice.core.data.BookId
 import voice.core.data.ListeningEvent
 import voice.core.data.isRemote
@@ -45,18 +46,25 @@ internal class ProgressSync(
   suspend fun syncAll(
     account: Account,
     serverProgress: List<AbsMediaProgress>,
-  ) {
+  ) = mutex.withLock {
     val progressByItem =
       serverProgress
         .filter { it.episodeId == null && it.libraryItemId != null }
         .associateBy { it.libraryItemId!! }
+    val syncedProgress = syncedProgressStore.data.first()
+    val changes = Changes()
     bookRepository
       .all()
       .filter { it.id.isRemote }
-      .forEach { book ->
-        val itemId = book.id.itemId ?: return@forEach
-        sync(account, book.id, progressByItem[itemId])
+      .forEach { stale ->
+        val itemId = stale.id.itemId ?: return@forEach
+        // read right before deciding, as sending the books before can take a while
+        val book = bookRepository.get(stale.id) ?: return@forEach
+        sync(account, book, syncedProgress[book.id.value], progressByItem[itemId], changes)
       }
+    // one write each, as each write of a book updates the whole library
+    bookRepository.updateBooks(changes.positions.keys) { changes.positions.getValue(it.id)(it) }
+    if (changes.synced.isNotEmpty()) syncedProgressStore.updateData { it + changes.synced }
   }
 
   /**
@@ -69,8 +77,10 @@ internal class ProgressSync(
   ): Boolean = mutex.withLock {
     val book = bookRepository.get(bookId) ?: return@withLock true
     val synced = syncedProgressStore.data.first()[bookId.value]
-    if (!book.movedAwayFrom(synced)) return@withLock true
-    send(account, book, serverLastUpdate = synced?.serverLastUpdate ?: 0)
+    if (!book.movedAwayFrom(synced) || book.id.itemId == null) return@withLock true
+    val sent = send(account, book, serverLastUpdate = synced?.serverLastUpdate ?: 0)
+    if (sent != null) remember(bookId, sent)
+    sent != null
   }
 
   /**
@@ -83,11 +93,11 @@ internal class ProgressSync(
 
   private suspend fun sync(
     account: Account,
-    bookId: BookId,
+    book: Book,
+    synced: SyncedProgress?,
     server: AbsMediaProgress?,
-  ) = mutex.withLock {
-    val book = bookRepository.get(bookId) ?: return@withLock
-    val synced = syncedProgressStore.data.first()[bookId.value]
+    changes: Changes,
+  ) {
     val localChanged = book.movedAwayFrom(synced)
     val serverProgress = server?.let(book::progressOnServer)
     // what Voice sent itself comes back with a newer time, which isn't a change of another device
@@ -102,22 +112,24 @@ internal class ProgressSync(
         !serverChanged &&
         server.lastUpdate > synced.serverLastUpdate
     ) {
-      remember(bookId, synced.copy(serverLastUpdate = server.lastUpdate))
+      changes.synced[book.id.value] = synced.copy(serverLastUpdate = server.lastUpdate)
     }
 
     when {
-      serverChanged && !localChanged -> applyServer(book, server)
+      serverChanged && !localChanged -> applyServer(book, server, changes)
       serverChanged && localChanged -> {
         if (
-          isPlaying(bookId) || book.content.lastPlayedAt.toEpochMilliseconds() > server.lastUpdate
+          isPlaying(book.id) || book.content.lastPlayedAt.toEpochMilliseconds() > server.lastUpdate
         ) {
-          @Suppress("RETURN_VALUE_NOT_USED") send(account, book, server.lastUpdate)
+          send(account, book, server.lastUpdate)?.let { changes.synced[book.id.value] = it }
         } else {
-          applyServer(book, server)
+          applyServer(book, server, changes)
         }
       }
       localChanged -> {
-        @Suppress("RETURN_VALUE_NOT_USED") send(account, book, synced?.serverLastUpdate ?: 0)
+        send(account, book, synced?.serverLastUpdate ?: 0)?.let {
+          changes.synced[book.id.value] = it
+        }
       }
     }
   }
@@ -125,6 +137,7 @@ internal class ProgressSync(
   private suspend fun applyServer(
     book: Book,
     server: AbsMediaProgress,
+    changes: Changes,
   ) {
     val serverProgress = book.progressOnServer(server)
     if (isPlaying(book.id)) {
@@ -142,23 +155,32 @@ internal class ProgressSync(
           source = ListeningEvent.Source.OtherDevice,
         )
       }
-      bookRepository.updateBook(book.id) {
-        it.copy(
-          currentChapter = position.chapterId,
-          positionInChapter = position.positionInChapter,
-          lastPlayedAt = maxOf(it.lastPlayedAt, Instant.fromEpochMilliseconds(server.lastUpdate)),
-        )
+      changes.positions[book.id] = { content ->
+        // a pause or a seek since then is newer
+        if (
+          content.currentChapter != book.content.currentChapter ||
+            content.positionInChapter != book.content.positionInChapter
+        ) {
+          content
+        } else {
+          content.copy(
+            currentChapter = position.chapterId,
+            positionInChapter = position.positionInChapter,
+            lastPlayedAt =
+              maxOf(content.lastPlayedAt, Instant.fromEpochMilliseconds(server.lastUpdate)),
+          )
+        }
       }
     }
-    remember(book.id, serverProgress)
+    changes.synced[book.id.value] = serverProgress
   }
 
   private suspend fun send(
     account: Account,
     book: Book,
     serverLastUpdate: Long,
-  ): Boolean {
-    val itemId = book.id.itemId ?: return true
+  ): SyncedProgress? {
+    val itemId = book.id.itemId ?: return null
     val durationSeconds = book.duration / 1000.0
     val finished = book.isFinished
     val update =
@@ -179,14 +201,13 @@ internal class ProgressSync(
     return try {
       val response = http.authenticatedApi(account.serverUrl).updateProgress(itemId, update)
       if (response.isSuccessful) {
-        remember(book.id, book.syncedProgress(serverLastUpdate))
-        true
+        book.syncedProgress(serverLastUpdate)
       } else {
         Logger.w("Could not send the progress: HTTP ${response.code()}")
-        false
+        null
       }
     } catch (_: IOException) {
-      false
+      null
     }
   }
 
@@ -243,3 +264,8 @@ private fun SyncedProgress.differsFrom(other: SyncedProgress): Boolean {
 private const val POSITION_TOLERANCE_MS = 1_500
 
 private const val BOOK_START_MS = 1_000
+
+private class Changes {
+  val synced = mutableMapOf<String, SyncedProgress>()
+  val positions = mutableMapOf<BookId, (BookContent) -> BookContent>()
+}
