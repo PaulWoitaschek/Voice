@@ -122,6 +122,7 @@ class VoicePlayer(
           STATE_ENDED,
           STATE_IDLE -> stopped = true
           STATE_READY -> stopped = false
+          STATE_BUFFERING -> Unit
         }
       }
     }
