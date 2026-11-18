@@ -359,7 +359,6 @@ class BookPlayViewModel(
                 BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
                   number = number,
                   name = chapterMark.displayName(number, chapterCount),
-                  active = chapterMark == book.currentMark && chapter == book.currentChapter,
                   time = formatTime(previousChapters.sumOf { it.duration } + chapterMark.startMs),
                 )
               }
