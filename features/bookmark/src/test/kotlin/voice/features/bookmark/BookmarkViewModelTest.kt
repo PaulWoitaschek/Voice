@@ -23,6 +23,8 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -30,6 +32,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import voice.core.analytics.api.Analytics
 import voice.core.common.DispatcherProvider
 import voice.core.data.BookId
 import voice.core.data.Bookmark
@@ -69,6 +72,11 @@ class BookmarkViewModelTest {
       every { goBack() } just Runs
     }
   private var currentBookStore = MemoryDataStore<BookId?>(book.id)
+  private val tabsSeen = mutableListOf<Map<String, String>>()
+  private val analytics =
+    mockk<Analytics>(relaxUnitFun = true) {
+      every { event("bookmarks_tab", capture(tabsSeen)) } just Runs
+    }
 
   private fun viewModel(
     editBookmarkId: String? = null,
@@ -105,6 +113,7 @@ class BookmarkViewModelTest {
         ),
       lastPlaybackSpeedStore = LastPlaybackSpeedStore(MemoryDataStore(lastPlaybackSpeed)),
       historyTabOpenStore = HistoryTabOpenStore(historyTabOpenStore),
+      analytics = analytics,
       bookId = book.id,
       editBookmarkId = editBookmarkId,
     )
@@ -463,6 +472,226 @@ class BookmarkViewModelTest {
       val editor = awaitState { it.editor?.canMoveEarlier == false }.editor!!
       assertEquals(expected = chapterTime(0.seconds), actual = editor.time)
       assertNull(editor.chapterName)
+    }
+  }
+
+  private fun tabsSeen(): List<String?> {
+    scope.testScheduler.runCurrent()
+    return tabsSeen.map { it["tab"] }
+  }
+
+  @Test
+  fun `player, the screen was last left on history, open bookmarks and history, history seen`() {
+    viewModel(historyTabOpenStore = MemoryDataStore(true)).test {
+      awaitState()
+      assertEquals(expected = listOf("history"), actual = tabsSeen())
+    }
+  }
+
+  @Test
+  fun `player, the screen was last left on bookmarks, open bookmarks and history, bookmarks seen`() {
+    viewModel(historyTabOpenStore = MemoryDataStore(false)).test {
+      awaitState()
+      assertEquals(expected = listOf("bookmarks"), actual = tabsSeen())
+    }
+  }
+
+  @Test
+  fun `bookmarks tab, switch to the history tab, history seen`() {
+    val viewModel = viewModel(historyTabOpenStore = MemoryDataStore(false))
+    viewModel.test {
+      awaitState()
+      viewModel.onTabChange(BookmarkTab.History)
+      awaitState { it.tab == BookmarkTab.History }
+      assertEquals(expected = listOf("bookmarks", "history"), actual = tabsSeen())
+    }
+  }
+
+  @Test
+  fun `history tab, switch to the bookmarks tab, bookmarks seen`() {
+    val viewModel = viewModel(historyTabOpenStore = MemoryDataStore(true))
+    viewModel.test {
+      awaitState()
+      viewModel.onTabChange(BookmarkTab.Bookmarks)
+      awaitState { it.tab == BookmarkTab.Bookmarks }
+      assertEquals(expected = listOf("history", "bookmarks"), actual = tabsSeen())
+    }
+  }
+
+  @Test
+  fun `the tab seen counts once when the same tab is tapped again`() {
+    val viewModel = viewModel(historyTabOpenStore = MemoryDataStore(true))
+    viewModel.test {
+      awaitState()
+      viewModel.onTabChange(BookmarkTab.History)
+      assertEquals(expected = listOf("history"), actual = tabsSeen())
+    }
+  }
+
+  @Test
+  fun `the screen comes back after a rotation, the tab seen counts once`() = scope.runTest {
+    val viewModel = viewModel(historyTabOpenStore = MemoryDataStore(true))
+    val firstComposition = Job(backgroundScope.coroutineContext[Job])
+    CoroutineScope(backgroundScope.coroutineContext + firstComposition)
+      .launchMolecule(RecompositionMode.Immediate) { viewModel.viewState() }
+      .test {
+        awaitState()
+        cancelAndIgnoreRemainingEvents()
+      }
+    testScheduler.runCurrent()
+
+    // a rotation keeps the view model, but composes its view state again
+    firstComposition.cancel()
+    backgroundScope
+      .launchMolecule(RecompositionMode.Immediate) { viewModel.viewState() }
+      .test {
+        awaitState()
+        cancelAndIgnoreRemainingEvents()
+      }
+
+    assertEquals(expected = listOf("history"), actual = tabsSeen())
+  }
+
+  @Test
+  fun `bookmark editor, change only the kind of a bookmark with an old note, details added without a note`() {
+    val bookmark = testBookmark(signal, 2.minutes, title = "Static")
+    bookmarkRepo.bookmarks.value = listOf(bookmark)
+    val viewModel = viewModel()
+    viewModel.test {
+      awaitState { it.totalCount == 1 }
+      viewModel.onBookmarkLongClick(bookmark.id)
+      awaitState { it.editor != null }
+      viewModel.onKindChange(Bookmark.Kind.Favorite)
+      awaitState { it.editor?.kind == Bookmark.Kind.Favorite }
+      viewModel.onEditorDone()
+      verify(exactly = 1) {
+        analytics.event("bookmark_details", mapOf("kind" to "favorite", "note" to "no"))
+      }
+    }
+  }
+
+  @Test
+  fun `bookmarks screen, tap save, bookmark saved from the bookmarks screen`() {
+    val viewModel = viewModel()
+    viewModel.test {
+      awaitState()
+      viewModel.onSaveClick()
+      awaitState { it.editor != null }
+      verify(exactly = 1) {
+        analytics.event("bookmark_saved", mapOf("from" to "bookmarks_screen"))
+      }
+    }
+  }
+
+  @Test
+  fun `bookmark editor, pick a kind, write a note, tap done, details added with the kind and that a note was written`() {
+    val viewModel = viewModel()
+    viewModel.test {
+      awaitState()
+      viewModel.onSaveClick()
+      awaitState { it.editor != null }
+      viewModel.onKindChange(Bookmark.Kind.Quote)
+      viewModel.onNoteChange("Mira finds the signal")
+      awaitState { it.editor?.kind == Bookmark.Kind.Quote }
+      viewModel.onEditorDone()
+      verify(exactly = 1) {
+        analytics.event("bookmark_details", mapOf("kind" to "quote", "note" to "yes"))
+      }
+    }
+  }
+
+  @Test
+  fun `bookmark details report each kind`() {
+    val viewModel = viewModel()
+    viewModel.test {
+      awaitState()
+      listOf(Bookmark.Kind.Note, Bookmark.Kind.Favorite, Bookmark.Kind.Quote, Bookmark.Kind.Revisit)
+        .forEach { kind ->
+          viewModel.onSaveClick()
+          awaitState { it.editor != null }
+          viewModel.onKindChange(kind)
+          viewModel.onNoteChange("A note")
+          awaitState { it.editor.let { editor -> editor?.kind == kind && editor.note == "A note" } }
+          viewModel.onEditorDone()
+          awaitState { it.editor == null }
+        }
+      val details = mutableListOf<Map<String, String>>()
+      verify { analytics.event("bookmark_details", capture(details)) }
+      assertEquals(
+        expected = listOf("note", "favorite", "quote", "revisit"),
+        actual = details.map { it["kind"] },
+      )
+    }
+  }
+
+  @Test
+  fun `bookmark editor, tap done without a change, nothing`() {
+    val viewModel = viewModel()
+    viewModel.test {
+      awaitState()
+      viewModel.onSaveClick()
+      awaitState { it.editor != null }
+      viewModel.onEditorDone()
+      scope.testScheduler.advanceUntilIdle()
+      verify(exactly = 0) { analytics.event("bookmark_details", any()) }
+    }
+  }
+
+  @Test
+  fun `bookmark editor, clear the note, tap done, nothing`() {
+    val bookmark = testBookmark(signal, 2.minutes, title = "Static")
+    bookmarkRepo.bookmarks.value = listOf(bookmark)
+    val viewModel = viewModel()
+    viewModel.test {
+      awaitState { it.totalCount == 1 }
+      viewModel.onBookmarkLongClick(bookmark.id)
+      awaitState { it.editor != null }
+      viewModel.onNoteChange("")
+      awaitState { it.editor?.note == "" }
+      viewModel.onEditorDone()
+      scope.testScheduler.advanceUntilIdle()
+      assertNull(bookmarkRepo.bookmarks.value.single().title)
+      verify(exactly = 0) { analytics.event("bookmark_details", any()) }
+    }
+  }
+
+  @Test
+  fun `audiobookshelf, a bookmark from another device arrives, nothing`() {
+    viewModel().test {
+      awaitState()
+      bookmarkRepo.bookmarks.value = listOf(testBookmark(signal, 2.minutes, title = "Static"))
+      awaitState { it.totalCount == 1 }
+      scope.testScheduler.runCurrent()
+      verify(exactly = 0) { analytics.event(neq("bookmarks_tab"), any()) }
+    }
+  }
+
+  @Test
+  fun `bookmarks screen, playing, tap a bookmark, jumped to a bookmark`() {
+    val bookmark = testBookmark(arrival, 2.minutes)
+    bookmarkRepo.bookmarks.value = listOf(bookmark)
+    playStateManager.playState = PlayStateManager.PlayState.Playing(book.id)
+    val viewModel = viewModel()
+    viewModel.test {
+      awaitState { it.totalCount == 1 }
+      viewModel.onBookmarkClick(bookmark.id)
+      scope.testScheduler.advanceUntilIdle()
+      verify(exactly = 1) { analytics.event("bookmark_jump") }
+      verify { playerController.play() }
+    }
+  }
+
+  @Test
+  fun `bookmarks screen, paused, tap a bookmark, jumped to a bookmark, still paused`() {
+    val bookmark = testBookmark(arrival, 2.minutes)
+    bookmarkRepo.bookmarks.value = listOf(bookmark)
+    val viewModel = viewModel()
+    viewModel.test {
+      awaitState { it.totalCount == 1 }
+      viewModel.onBookmarkClick(bookmark.id)
+      scope.testScheduler.advanceUntilIdle()
+      verify(exactly = 1) { analytics.event("bookmark_jump") }
+      verify(exactly = 0) { playerController.play(any()) }
     }
   }
 }

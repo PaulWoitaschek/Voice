@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import voice.core.analytics.api.Analytics
 import voice.core.data.BookContent
 import voice.core.data.ListeningEvent
+import voice.core.data.isRemote
 import voice.core.data.repo.BookRepository
 import voice.core.data.store.CurrentBookStore
 import voice.core.logging.api.Logger
@@ -30,7 +31,9 @@ import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
 import voice.core.playback.nextChapterTarget
+import voice.core.playback.session.bookId
 import voice.core.playback.session.currentBookId
+import voice.core.playback.session.toMediaIdOrNull
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerState
 
@@ -108,9 +111,26 @@ class VoicePlayer(
       }
     }
 
+  // At the end of the book, after an error or with another book, play starts playback although
+  // the player may still want to play.
+  private var stopped = false
+
+  private val stoppedListener =
+    object : Player.Listener {
+      override fun onPlaybackStateChanged(playbackState: Int) {
+        when (playbackState) {
+          STATE_ENDED,
+          STATE_IDLE -> stopped = true
+          STATE_READY -> stopped = false
+          STATE_BUFFERING -> Unit
+        }
+      }
+    }
+
   init {
     player.addListener(endOfChapterSleepTimerListener)
     player.addListener(autoRewindListener)
+    player.addListener(stoppedListener)
     // ExoPlayer adds skipped silence to the position as soon as it processes it, while the audio
     // before it still
     // plays. So the position would reach the end of the chapter, and the sleep timer would pause,
@@ -239,27 +259,56 @@ class VoicePlayer(
     playWhenReady = true
   }
 
+  override fun setMediaItems(
+    mediaItems: List<MediaItem>,
+    startIndex: Int,
+    startPositionMs: Long,
+  ) {
+    if (mediaItems.firstOrNull()?.mediaId?.toMediaIdOrNull()?.bookId != player.currentBookId()) {
+      stopped = true
+    }
+    super.setMediaItems(mediaItems, startIndex, startPositionMs)
+  }
+
   override fun setPlayWhenReady(playWhenReady: Boolean) {
     Logger.d("setPlayWhenReady=$playWhenReady")
+    val source = commandSourceResolver.current()
     if (playWhenReady != getPlayWhenReady()) {
       recordExternalCommand(
-        source = commandSourceResolver.current(),
+        source = source,
         type = if (playWhenReady) ListeningEvent.Type.Play else ListeningEvent.Type.Pause,
         position = player.playbackPosition(),
       )
     }
+    if (playWhenReady && (!getPlayWhenReady() || stopped)) {
+      stopped = false
+      trackPlay(source)
+    }
 
     if (playWhenReady) {
-      analytics.event(
-        "play",
-        mapOf("volume_boost" to if (volumeGain.gain > Decibel.Zero) "on" else "off"),
-      )
       updateLastPlayedAt()
       rememberSpeed(playbackParameters.speed)
     } else {
       analytics.event("pause")
     }
     super.setPlayWhenReady(playWhenReady)
+  }
+
+  private fun trackPlay(commandSource: CommandSource?) {
+    // without a book, play from a headset or a car still reaches the player, but nothing plays
+    val bookId = player.currentBookId() ?: return
+    // the app's own controllers resolve to no source, but record theirs right before they play
+    val source = commandSource?.source ?: historyRecorder.lastSource
+    analytics.event(
+      "play",
+      mapOf(
+        "volume_boost" to (volumeGain.gain > Decibel.Zero).onOff(),
+        "skip_silence" to skipSilence.onOff(),
+        "speed" to speedRange(playbackParameters.speed),
+        "source" to source.analyticsName(),
+        "book_from" to if (bookId.isRemote) "audiobookshelf" else "folder",
+      ),
+    )
   }
 
   private fun autoRewind() {
@@ -344,3 +393,31 @@ private val autoRewindReasons =
     Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS,
     Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY,
   )
+
+private fun Boolean.onOff(): String = if (this) "on" else "off"
+
+private fun speedRange(speed: Float): String =
+  when {
+    speed < 1F -> "slower"
+    speed == 1F -> "1x"
+    speed <= 1.5F -> "up_to_1_5x"
+    else -> "faster"
+  }
+
+private fun ListeningEvent.Source?.analyticsName(): String =
+  when (this) {
+    ListeningEvent.Source.Widget -> "widget"
+    ListeningEvent.Source.Notification -> "notification"
+    ListeningEvent.Source.Headset -> "headset"
+    ListeningEvent.Source.Bluetooth -> "bluetooth"
+    ListeningEvent.Source.Car -> "car"
+    ListeningEvent.Source.Watch -> "watch"
+    ListeningEvent.Source.OtherApp,
+    ListeningEvent.Source.Unknown -> "other_app"
+    ListeningEvent.Source.SleepTimer -> "sleep_timer"
+    ListeningEvent.Source.App,
+    ListeningEvent.Source.AudioFocus,
+    ListeningEvent.Source.Unplugged,
+    ListeningEvent.Source.OtherDevice,
+    null -> "app"
+  }

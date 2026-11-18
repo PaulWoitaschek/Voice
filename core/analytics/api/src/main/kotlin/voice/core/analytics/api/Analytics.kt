@@ -7,4 +7,9 @@ interface Analytics {
     name: String,
     params: Map<String, String> = emptyMap(),
   )
+
+  fun setUserProperty(
+    name: String,
+    value: String,
+  )
 }

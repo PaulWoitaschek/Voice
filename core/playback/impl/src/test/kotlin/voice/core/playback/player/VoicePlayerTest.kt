@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.os.Looper
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.util.Util
 import androidx.media3.test.utils.FakeMediaSource
 import androidx.media3.test.utils.FakeTimeline
 import androidx.media3.test.utils.TestExoPlayerBuilder
@@ -17,7 +20,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.verifyOrder
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -115,7 +117,11 @@ class VoicePlayerTest {
     mockk<ListeningHistoryRepo> {
       coEvery { add(capture(historyEvents)) } just Runs
     }
-  private val analytics = mockk<Analytics>(relaxUnitFun = true)
+  private val plays = mutableListOf<Map<String, String>>()
+  private val analytics =
+    mockk<Analytics>(relaxUnitFun = true) {
+      every { event("play", capture(plays)) } just Runs
+    }
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer)
   private val commandSourceResolver =
     mockk<CommandSourceResolver> { every { current() } returns null }
@@ -133,7 +139,7 @@ class VoicePlayerTest {
       player = chapterMarkPlayer,
       repo =
         mockk {
-          coEvery { updateBook(bookId, any()) } answers
+          coEvery { updateBook(any(), any()) } answers
             {
               currentBook = currentBook.update(secondArg<(BookContent) -> BookContent>())
             }
@@ -632,13 +638,282 @@ class VoicePlayerTest {
     setMediaItems(listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null))), gain = 3F)
 
     player.play()
+    player.pause()
     player.setGain(Decibel.Zero)
     player.play()
 
-    verifyOrder {
-      analytics.event("play", mapOf("volume_boost" to "on"))
-      analytics.event("play", mapOf("volume_boost" to "off"))
+    assertEquals(expected = listOf("on", "off"), actual = plays.map { it["volume_boost"] })
+  }
+
+  @Test
+  fun `player, skip silence on, 1_3x, press play, play with volume boost, skip silence on, faster up to 1_5x, from the app, from a folder`() =
+    scope.runTest {
+      setMediaItems(oneChapter(), playbackSpeed = 1.3F, skipSilence = true)
+
+      playFromTheApp(ListeningEvent.Source.App)
+
+      assertEquals(
+        expected =
+          listOf(
+            mapOf(
+              "volume_boost" to "off",
+              "skip_silence" to "on",
+              "speed" to "up_to_1_5x",
+              "source" to "app",
+              "book_from" to "folder",
+            ),
+          ),
+        actual = plays,
+      )
     }
+
+  @Test
+  fun `player, 1x, skip silence off, press play, play with skip silence off, 1x`() = scope.runTest {
+    setMediaItems(oneChapter(), playbackSpeed = 1F, skipSilence = false)
+
+    playFromTheApp(ListeningEvent.Source.App)
+
+    assertEquals(expected = "off", actual = plays.single()["skip_silence"])
+    assertEquals(expected = "1x", actual = plays.single()["speed"])
+  }
+
+  @Test
+  fun `the speed ranges are slower than 1x, 1x, faster up to 1_5x and faster than 1_5x`() =
+    scope.runTest {
+      setMediaItems(oneChapter())
+
+      listOf(0.95F, 1F, 1.05F, 1.5F, 1.55F).forEach { speed ->
+        player.setPlaybackSpeed(speed)
+        player.play()
+        player.pause()
+      }
+
+      assertEquals(
+        expected = listOf("slower", "1x", "up_to_1_5x", "up_to_1_5x", "faster"),
+        actual = plays.map { it["speed"] },
+      )
+    }
+
+  @Test
+  fun `phone locked, play in the notification, play from the notification`() = scope.runTest {
+    setMediaItems(oneChapter())
+
+    playFromOutside(ListeningEvent.Source.Notification)
+
+    assertEquals(expected = "notification", actual = plays.single()["source"])
+  }
+
+  @Test
+  fun `headphones on, press the headphone button, play from the headset`() = scope.runTest {
+    setMediaItems(oneChapter())
+
+    playFromOutside(ListeningEvent.Source.Headset)
+
+    assertEquals(expected = "headset", actual = plays.single()["source"])
+  }
+
+  @Test
+  fun `android auto, press play in the car, play from the car`() = scope.runTest {
+    setMediaItems(oneChapter())
+
+    playFromOutside(ListeningEvent.Source.Car)
+
+    assertEquals(expected = "car", actual = plays.single()["source"])
+  }
+
+  @Test
+  fun `play from bluetooth, a watch, another app or an unknown controller`() = scope.runTest {
+    setMediaItems(oneChapter())
+
+    listOf(
+        ListeningEvent.Source.Bluetooth,
+        ListeningEvent.Source.Watch,
+        ListeningEvent.Source.OtherApp,
+        ListeningEvent.Source.Unknown,
+      )
+      .forEach {
+        playFromOutside(it)
+        player.pause()
+      }
+
+    assertEquals(
+      expected = listOf("bluetooth", "watch", "other_app", "other_app"),
+      actual = plays.map { it["source"] },
+    )
+  }
+
+  @Test
+  fun `the end of the book, press play, play counts again`() = scope.runTest {
+    setMediaItems(oneChapter())
+    player.seekTo(0, 19_000)
+    player.prepare()
+    awaitReady()
+    playFromTheApp(ListeningEvent.Source.App)
+    TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
+    shadowOf(Looper.getMainLooper()).idle()
+    assertEquals(expected = Player.STATE_ENDED, actual = player.playbackState)
+    assertTrue(player.playWhenReady)
+
+    Util.handlePlayButtonAction(player)
+
+    assertEquals(expected = 2, actual = plays.size)
+  }
+
+  @Test
+  fun `the book ended, a seek plays on, tap a bookmark while it plays, no second play`() =
+    scope.runTest {
+      setMediaItems(oneChapter())
+      player.seekTo(0, 19_000)
+      player.prepare()
+      awaitReady()
+      playFromTheApp(ListeningEvent.Source.App)
+      TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
+      shadowOf(Looper.getMainLooper()).idle()
+
+      player.seekTo(0, 5_000)
+      awaitReady()
+      shadowOf(Looper.getMainLooper()).idle()
+      assertTrue(player.isPlaying)
+      player.seekTo(0, 10_000)
+      player.play()
+
+      assertEquals(expected = 1, actual = plays.size)
+    }
+
+  @Test
+  fun `android auto, pick another book while one plays, play from the car`() = scope.runTest {
+    setMediaItems(oneChapter())
+    player.prepare()
+    awaitReady()
+    playFromTheApp(ListeningEvent.Source.App)
+    TestPlayerRunHelper.advance(internalPlayer).untilPendingCommandsAreFullyHandled()
+
+    // like the session, which sets the items of the picked book and then plays
+    setMediaItems(oneChapter(), bookId = BookId("another book"))
+    player.prepare()
+    playFromOutside(ListeningEvent.Source.Car)
+
+    assertEquals(expected = listOf("app", "car"), actual = plays.map { it["source"] })
+  }
+
+  @Test
+  fun `android auto, a book plays, pick the same book again, no second play`() = scope.runTest {
+    setMediaItems(oneChapter())
+    player.prepare()
+    awaitReady()
+    playFromTheApp(ListeningEvent.Source.App)
+    TestPlayerRunHelper.advance(internalPlayer).untilPendingCommandsAreFullyHandled()
+
+    // like the session, which sets the items of the picked book and then plays
+    val items = mediaItemProvider.mediaItemsWithStartPosition(currentBook)
+    player.setMediaItems(items.mediaItems, items.startIndex, items.startPositionMs)
+    player.prepare()
+    playFromOutside(ListeningEvent.Source.Car)
+
+    assertEquals(expected = 1, actual = plays.size)
+  }
+
+  @Test
+  fun `after a playback error, press play to retry, play counts again`() = scope.runTest {
+    setMediaItems(oneChapter())
+    player.prepare()
+    awaitReady()
+    playFromTheApp(ListeningEvent.Source.App)
+    // like an error, stop leaves the player idle while it still wants to play
+    player.stop()
+    assertEquals(expected = Player.STATE_IDLE, actual = player.playbackState)
+    assertTrue(player.playWhenReady)
+
+    Util.handlePlayButtonAction(player)
+
+    assertEquals(expected = 2, actual = plays.size)
+  }
+
+  @Test
+  fun `no book loaded, play from a headset, no play`() = scope.runTest {
+    playFromOutside(ListeningEvent.Source.Headset)
+
+    assertEquals(expected = emptyList(), actual = plays)
+  }
+
+  @Test
+  fun `home screen, play on the widget, play from the widget`() = scope.runTest {
+    setMediaItems(oneChapter())
+
+    playFromTheApp(ListeningEvent.Source.Widget)
+
+    assertEquals(expected = "widget", actual = plays.single()["source"])
+  }
+
+  @Test
+  fun `shaking the phone after the sleep timer stopped, the timer starts again, play from the sleep timer`() =
+    scope.runTest {
+      setMediaItems(oneChapter())
+
+      // like the sleep timer, which records that it starts again, and then plays without a record
+      historyRecorder.record(
+        type = ListeningEvent.Type.SleepTimerExtended,
+        source = ListeningEvent.Source.SleepTimer,
+        position = startOfTheBook(),
+      )
+      player.play()
+
+      assertEquals(expected = "sleep_timer", actual = plays.single()["source"])
+    }
+
+  @Test
+  fun `after a call, voice carries on by itself, nothing`() = scope.runTest {
+    setMediaItems(oneChapter())
+    internalPlayer.setAudioAttributes(
+      AudioAttributes.Builder()
+        .setUsage(C.USAGE_MEDIA)
+        .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
+        .build(),
+      true,
+    )
+    player.prepare()
+    awaitReady()
+    playFromTheApp(ListeningEvent.Source.App)
+    TestPlayerRunHelper.advance(internalPlayer).untilPendingCommandsAreFullyHandled()
+    val audioManager =
+      ApplicationProvider.getApplicationContext<Context>()
+        .getSystemService(AudioManager::class.java)
+    val focusListener = shadowOf(audioManager).lastAudioFocusRequest.listener
+
+    focusListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
+    TestPlayerRunHelper.advance(internalPlayer).untilPendingCommandsAreFullyHandled()
+    assertEquals(
+      expected = Player.PLAYBACK_SUPPRESSION_REASON_TRANSIENT_AUDIO_FOCUS_LOSS,
+      actual = player.playbackSuppressionReason,
+    )
+    focusListener.onAudioFocusChange(AudioManager.AUDIOFOCUS_GAIN)
+    TestPlayerRunHelper.advance(internalPlayer).untilPendingCommandsAreFullyHandled()
+
+    assertTrue(player.isPlaying)
+    assertEquals(expected = 1, actual = plays.size)
+  }
+
+  @Test
+  fun `an audiobookshelf book, press play, play from audiobookshelf`() = scope.runTest {
+    setMediaItems(oneChapter(), bookId = BookId("abs://item/an-item"))
+
+    playFromTheApp(ListeningEvent.Source.App)
+
+    assertEquals(expected = "audiobookshelf", actual = plays.single()["book_from"])
+  }
+
+  @Test
+  fun `bookmarks screen, playing, tap a bookmark, no second play`() = scope.runTest {
+    setMediaItems(oneChapter())
+    player.prepare()
+    awaitReady()
+    playFromTheApp(ListeningEvent.Source.App)
+
+    player.seekTo(0, 10_000)
+    // the app doesn't record a play while it already plays
+    player.play()
+
+    assertEquals(expected = 1, actual = plays.size)
   }
 
   @Test
@@ -968,6 +1243,23 @@ class VoicePlayerTest {
     player.shouldHavePosition(0, pausedAt - 5_000)
   }
 
+  private fun oneChapter(): List<Chapter> =
+    listOf(chapter(ChapterMark(startMs = 0, endMs = 20_000, name = null)))
+
+  private fun startOfTheBook(): PlaybackPosition =
+    PlaybackPosition(currentBook.id, currentBook.content.currentChapter, 0)
+
+  // like PlayerControllerImpl, which records where a play comes from right before it sends it
+  private fun playFromTheApp(source: ListeningEvent.Source) {
+    historyRecorder.record(ListeningEvent.Type.Play, source, startOfTheBook())
+    player.play()
+  }
+
+  private fun playFromOutside(source: ListeningEvent.Source) {
+    every { commandSourceResolver.current() } returns CommandSource(source)
+    player.play()
+  }
+
   private fun TestScope.setMediaItems(
     chapters: List<Chapter>,
     currentChapter: Chapter = chapters.first(),
@@ -976,6 +1268,7 @@ class VoicePlayerTest {
     lastPlayedAt: Instant = Instant.fromEpochMilliseconds(0),
     gain: Float = 0F,
     skipSilence: Boolean = false,
+    bookId: BookId = this@VoicePlayerTest.bookId,
   ) {
     currentBook =
       book(chapters, bookId).update {

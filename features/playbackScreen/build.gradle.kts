@@ -10,6 +10,7 @@ dependencies {
   implementation(projects.core.featureflag)
   implementation(projects.core.kioskmode)
   implementation(projects.core.sleeptimer.api)
+  implementation(projects.core.analytics.api)
 
   implementation(libs.coil)
   implementation(libs.navigation3.ui)

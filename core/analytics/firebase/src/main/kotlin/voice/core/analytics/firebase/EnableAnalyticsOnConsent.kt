@@ -1,7 +1,6 @@
 package voice.core.analytics.firebase
 
 import android.app.Application
-import com.google.firebase.analytics.FirebaseAnalytics as GmsFirebaseAnalytics
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import kotlinx.coroutines.MainScope
@@ -12,7 +11,7 @@ import voice.core.initializer.AppInitializer
 @ContributesIntoSet(AppScope::class)
 class EnableAnalyticsOnConsent(
   private val analyticsConsentStore: AnalyticsConsentStore,
-  private val analytics: GmsFirebaseAnalytics,
+  internal val analytics: FirebaseAnalytics,
 ) : AppInitializer {
 
   private val scope = MainScope()
@@ -20,7 +19,7 @@ class EnableAnalyticsOnConsent(
   override fun onAppStart(application: Application) {
     scope.launch {
       analyticsConsentStore.data.collect {
-        analytics.setAnalyticsCollectionEnabled(it)
+        analytics.setCollectionEnabled(it)
       }
     }
   }

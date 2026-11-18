@@ -18,6 +18,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import voice.core.analytics.api.Analytics
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.Book
@@ -56,6 +57,7 @@ class BookmarkViewModel(
     ExperimentalPlaybackPersistenceFeatureFlag,
   private val lastPlaybackSpeedStore: LastPlaybackSpeedStore,
   private val historyTabOpenStore: HistoryTabOpenStore,
+  private val analytics: Analytics,
   @Assisted private val bookId: BookId,
   @Assisted private val editBookmarkId: String?,
 ) {
@@ -73,6 +75,9 @@ class BookmarkViewModel(
   // only once the listener picks a tab here, so that until then it follows the stored one
   private var pickedTab by mutableStateOf<BookmarkTab?>(null)
   private var saving = false
+
+  // the view model outlives a rotation, so the same tab doesn't count again
+  private var trackedTab: BookmarkTab? = null
 
   // a jump or close leaves the screen, so a second tap must not go back once more
   private var leaving = false
@@ -131,6 +136,29 @@ class BookmarkViewModel(
     val category = selectedCategory?.takeIf { selected -> bookmarks.any { it.kind == selected } }
     val visible = if (category == null) bookmarks else bookmarks.filter { it.kind == category }
     val now = clock.now()
+    val tab =
+      pickedTab
+        ?: when {
+          // the bookmark to edit is in the list of bookmarks
+          editBookmarkId != null -> BookmarkTab.Bookmarks
+          historyTabOpen -> BookmarkTab.History
+          else -> BookmarkTab.Bookmarks
+        }
+    LaunchedEffect(tab) {
+      if (tab != trackedTab) {
+        trackedTab = tab
+        analytics.event(
+          "bookmarks_tab",
+          mapOf(
+            "tab" to
+              when (tab) {
+                BookmarkTab.Bookmarks -> "bookmarks"
+                BookmarkTab.History -> "history"
+              },
+          ),
+        )
+      }
+    }
     return BookmarkViewState(
       bookTitle = book.name,
       bookAuthor = book.author,
@@ -145,14 +173,7 @@ class BookmarkViewModel(
       items = bookmarkListItems(index, visible, sort, now, zone()),
       totalCount = bookmarks.size,
       editor = draft?.let { editorViewState(index, it) },
-      tab =
-        pickedTab
-          ?: when {
-            // the bookmark to edit is in the list of bookmarks
-            editBookmarkId != null -> BookmarkTab.Bookmarks
-            historyTabOpen -> BookmarkTab.History
-            else -> BookmarkTab.Bookmarks
-          },
+      tab = tab,
     )
   }
 
@@ -197,6 +218,7 @@ class BookmarkViewModel(
     val bookmark = bookmarks.find { it.id == id } ?: return
     leaving = true
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.Playing(bookId)
+    analytics.event("bookmark_jump")
     scope.launch {
       playerController.pauseIfCurrentBookDifferentFrom(bookId)
       currentBookStore.updateData { bookId }
@@ -230,6 +252,7 @@ class BookmarkViewModel(
             book = book,
             title = null,
           )
+        analytics.event("bookmark_saved", mapOf("from" to "bookmarks_screen"))
         // a filter for another kind would hide the new bookmark
         selectedCategory = null
         edit(bookmark, isNew = true)
@@ -276,6 +299,22 @@ class BookmarkViewModel(
       scope.launch {
         bookmarkRepo.addBookmark(updated)
       }
+    }
+    val noteWritten = updated.title != null && updated.title != draft.bookmark.title
+    if (updated.kind != draft.bookmark.kind || noteWritten) {
+      analytics.event(
+        "bookmark_details",
+        mapOf(
+          "kind" to
+            when (updated.kind) {
+              Bookmark.Kind.Note -> "note"
+              Bookmark.Kind.Favorite -> "favorite"
+              Bookmark.Kind.Quote -> "quote"
+              Bookmark.Kind.Revisit -> "revisit"
+            },
+          "note" to if (noteWritten) "yes" else "no",
+        ),
+      )
     }
   }
 

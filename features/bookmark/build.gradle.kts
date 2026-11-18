@@ -9,4 +9,5 @@ dependencies {
   implementation(projects.core.datastore)
   implementation(projects.core.featureflag)
   implementation(projects.core.kioskmode)
+  implementation(projects.core.analytics.api)
 }
