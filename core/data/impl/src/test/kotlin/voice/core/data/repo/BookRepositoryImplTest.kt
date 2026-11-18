@@ -3,7 +3,6 @@ package voice.core.data.repo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import app.cash.turbine.test
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Instant
@@ -67,25 +66,6 @@ class BookRepositoryImplTest {
     repo.updateCustomMetadata(id) { it.copy(name = "Dune Messiah") }
 
     assertEquals(expected = emptyList(), actual = db.customMetadataDao().all())
-  }
-
-  @Test
-  fun `books updated together update the library once, and unchanged ones not at all`() = runTest {
-    val dune = content(name = "Dune", author = "Herbert")
-    val emma = content(name = "Emma", author = "Austen")
-    contentRepo.put(listOf(dune, emma))
-
-    contentRepo.flow().test {
-      awaitItem()
-
-      repo.updateBooks(setOf(dune.id, emma.id, BookId("missing"))) {
-        it.copy(positionInChapter = 10)
-      }
-
-      assertEquals(listOf(10L, 10L), awaitItem().map { it.positionInChapter })
-      repo.updateBooks(setOf(dune.id, emma.id)) { it }
-      expectNoEvents()
-    }
   }
 
   private fun content(

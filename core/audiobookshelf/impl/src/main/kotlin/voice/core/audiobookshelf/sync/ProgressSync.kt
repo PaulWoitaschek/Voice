@@ -156,11 +156,10 @@ internal class ProgressSync(
         )
       }
       changes.positions[book.id] = { content ->
-        // a pause, a seek or a play since then is newer
+        // a pause or a seek since then is newer
         if (
           content.currentChapter != book.content.currentChapter ||
-            content.positionInChapter != book.content.positionInChapter ||
-            content.lastPlayedAt != book.content.lastPlayedAt
+            content.positionInChapter != book.content.positionInChapter
         ) {
           content
         } else {

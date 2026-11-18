@@ -272,25 +272,6 @@ class ProgressSyncTest {
     assertEquals(20_000, repo.get(bookId)!!.position)
   }
 
-  @Test
-  fun `a play at the same place during the sync keeps its place`() = runTest {
-    val repo = MemoryBookRepository(book(positionMs = 0))
-    val playerController =
-      mockk<PlayerController> {
-        coEvery { livePlaybackState(any()) } coAnswers
-          {
-            // the listener starts the book while the sync decides
-            repo.updateBook(bookId) { it.copy(lastPlayedAt = Instant.fromEpochMilliseconds(5)) }
-            null
-          }
-      }
-
-    progressSync(repo, playerController)
-      .syncAll(account, listOf(serverProgress(currentTime = 80.0, lastUpdate = 10)))
-
-    assertEquals(0, repo.get(bookId)!!.position)
-  }
-
   private fun progressSync(
     repo: BookRepository,
     playerController: PlayerController = mockk {

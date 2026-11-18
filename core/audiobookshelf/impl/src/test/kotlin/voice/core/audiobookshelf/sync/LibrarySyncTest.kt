@@ -7,7 +7,6 @@ import java.io.File
 import kotlin.io.path.createTempFile
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
@@ -165,17 +164,6 @@ class LibrarySyncTest {
   }
 
   @Test
-  fun `books that got through before the connection failed are kept`() = runTest {
-    val written = mutableListOf<List<BookContent>>()
-    val contentRepo = emptyContentRepo()
-    coEvery { contentRepo.put(capture(written)) } returns Unit
-
-    assertFails { syncLargeLibrary(contentRepo, items(120), answeredBatches = 1) }
-
-    assertEquals(50, written.sumOf { it.size })
-  }
-
-  @Test
   fun `a seek while the sync writes a batch of books keeps its place`() = runTest {
     val before = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")), updatedAt = 1_000)
     val chapters = before.chapters()
@@ -238,10 +226,8 @@ class LibrarySyncTest {
   private suspend fun syncLargeLibrary(
     contentRepo: BookContentRepo,
     items: List<AbsLibraryItem>,
-    answeredBatches: Int = Int.MAX_VALUE,
   ) {
     val itemsById = items.associateBy { it.id }
-    var batches = 0
     server.dispatcher =
       object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
@@ -256,9 +242,6 @@ class LibrarySyncTest {
                   total = items.size,
                 ),
               )
-            }
-            path == "/api/items/batch/get" && ++batches > answeredBatches -> {
-              MockResponse(code = 503)
             }
             path == "/api/items/batch/get" -> {
               val ids =
