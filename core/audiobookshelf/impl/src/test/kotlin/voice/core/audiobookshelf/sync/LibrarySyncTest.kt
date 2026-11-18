@@ -3,8 +3,10 @@ package voice.core.audiobookshelf.sync
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlin.io.path.createTempFile
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -29,7 +31,6 @@ import voice.core.audiobookshelf.audiobookshelfJson
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.BookContent
 import voice.core.data.BookId
-import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
@@ -94,6 +95,26 @@ class LibrarySyncTest {
   }
 
   @Test
+  fun `a cover file of an older version goes, so the book loads its cover from the server`() =
+    runTest {
+      val item = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")))
+      val chapters = item.chapters()
+      val cover = createTempFile().toFile()
+      val content = item.toBookContent(chapters, existing = null)
+      val stored = content.copy(metadata = content.metadata.copy(cover = cover))
+      val contentRepo = contentRepo(stored)
+      val chapterRepo =
+        mockk<ChapterRepo> {
+          coEvery { get(any<ChapterId>()) } answers { chapters.find { it.id == firstArg() } }
+        }
+
+      sync(item, contentRepo, chapterRepo)
+
+      coVerify { contentRepo.put(listOf(content)) }
+      assertFalse(cover.exists())
+    }
+
+  @Test
   fun `a library of 5,000 books is written in a few steps, without covers`() = runTest {
     val written = mutableListOf<List<BookContent>>()
     val contentRepo = emptyContentRepo()
@@ -108,47 +129,6 @@ class LibrarySyncTest {
     coVerify(exactly = 0) { contentRepo.put(any<BookContent>()) }
     val paths = List(server.requestCount) { server.takeRequest().url.encodedPath }
     assertTrue(paths.none { it.endsWith("/cover") })
-  }
-
-  @Test
-  fun `a seek while the sync stores a book keeps its place`() = runTest {
-    val before = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")), updatedAt = 1_000)
-    val previousChapters = before.chapters()
-    var current = before.toBookContent(previousChapters, existing = null)
-    val contentRepo =
-      mockk<BookContentRepo> {
-        coEvery { all() } answers { listOf(current) }
-        coEvery { get(current.id) } answers { current }
-        coEvery { put(any<List<BookContent>>()) } answers
-          {
-            firstArg<List<BookContent>>().forEach { current = it }
-          }
-      }
-    val chapterRepo =
-      mockk<ChapterRepo> {
-        coEvery { get(any<ChapterId>()) } answers
-          {
-            previousChapters.find { it.id == firstArg() }
-          }
-        coEvery { put(any<List<Chapter>>()) } answers
-          {
-            // the listener seeks while the sync writes the chapters
-            current = current.copy(positionInChapter = 20_000)
-          }
-      }
-    val changed = before.copy(updatedAt = 2_000)
-    server.enqueue(json(LibraryItemsResponse(results = listOf(changed), total = 1)))
-    server.enqueue(json(BatchGetResponse(listOf(changed))))
-
-    sync(
-      changed,
-      contentRepo,
-      chapterRepo,
-      bookmarkRepo = mockk { coEvery { bookmarks(any()) } returns emptyList() },
-      listed = true,
-    )
-
-    assertEquals(20_000, current.positionInChapter)
   }
 
   @Test

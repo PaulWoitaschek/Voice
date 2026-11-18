@@ -261,7 +261,7 @@ class MediaItemProviderTest {
   }
 
   @Test
-  fun `the car gets the cover file of a downloaded server book, which works offline`() {
+  fun `the car gets the cover file of a server book that has one`() {
     val file = File("abs-item-2000.jpg")
     val fileUri = Uri.parse("content://cover/file")
     val imageFileProvider = mockk<ImageFileProvider> { every { uri(file) } returns fileUri }

@@ -8,11 +8,13 @@ import coil3.decode.DataSource
 import coil3.disk.DiskCache
 import coil3.fetch.SourceFetchResult
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.request.ImageRequest
 import coil3.request.Options
 import coil3.toUri
 import kotlin.io.path.createTempDirectory
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
@@ -92,6 +94,18 @@ class ServerCoversTest {
 
     assertEquals(DataSource.NETWORK, fetch(updatedAt = 3_000).dataSource)
     assertEquals(2, server.requestCount)
+  }
+
+  @Test
+  fun `a cover shown in the app is kept where the car reads it`() = runTest {
+    server.enqueue(cover())
+    val cover = "abs://item/item/cover?ts=2000"
+
+    withContext(Dispatchers.IO) {
+      imageLoader.execute(ImageRequest.Builder(context).data(cover).build())
+    }
+
+    assertNotNull(imageLoader.diskCache!!.openSnapshot(cover)).close()
   }
 
   private fun cover() =

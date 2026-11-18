@@ -21,8 +21,8 @@ private const val CACHED_PATH = "cache"
 // Android Auto only reads artwork from content uris, so server covers go through the image cache
 class CoverProvider : FileProvider() {
 
-  // Android can call a provider before Application.onCreate set up the image loader. That runs in
-  // one message of the main thread, so a message after it waits until it is done.
+  // Android can call a provider before Application.onCreate sets up the image loader on the main
+  // thread
   private val appStarted = lazy {
     val started = CountDownLatch(1)
     Handler(Looper.getMainLooper()).post(started::countDown)
