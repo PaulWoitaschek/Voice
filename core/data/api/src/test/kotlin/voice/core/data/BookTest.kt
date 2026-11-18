@@ -1,7 +1,10 @@
 package voice.core.data
 
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.time.Instant
 
 class BookTest {
 
@@ -224,6 +227,37 @@ class BookTest {
 
     assertEquals(expected = secondChapter.id, actual = updated.content.currentChapter)
     assertEquals(expected = secondChapter.duration, actual = updated.content.positionInChapter)
+  }
+
+  @Test
+  fun `a server book loads its cover from the server, and a new one after a change there`() {
+    assertEquals(
+      expected = "abs://item/item/cover?ts=1000",
+      actual = serverBook(updatedAt = 1000).coverUrl,
+    )
+    assertNotEquals(serverBook(updatedAt = 1000).coverUrl, serverBook(updatedAt = 2000).coverUrl)
+  }
+
+  @Test
+  fun `a server book with a cover file on the phone shows that file`() {
+    val cover = File("cover.jpg")
+    val book = serverBook(updatedAt = 1000)
+    val withCover =
+      book.copy(content = book.content.copy(metadata = book.content.metadata.copy(cover = cover)))
+
+    assertEquals(expected = cover.toURI().toString(), actual = withCover.coverUrl)
+  }
+
+  private fun serverBook(updatedAt: Long): Book {
+    val id = BookId("abs://item/item")
+    val chapter =
+      chapter()
+        .copy(
+          id = ChapterId("abs://item/item/track/1/1"),
+          fileLastModified = Instant.fromEpochMilliseconds(updatedAt),
+        )
+    val book = book(chapters = listOf(chapter))
+    return book.copy(content = book.content.copy(id = id), custom = CustomMetadata(id))
   }
 
   @Suppress("SameParameterValue")

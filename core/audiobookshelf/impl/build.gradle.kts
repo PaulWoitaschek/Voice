@@ -12,9 +12,11 @@ dependencies {
   implementation(projects.core.strings)
 
   implementation(libs.bundles.retrofit)
+  implementation(libs.coil.core)
   implementation(libs.okhttp)
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.datasource.okhttp)
 
+  testImplementation(libs.coil.network)
   testImplementation(libs.okhttp.mockwebserver)
 }

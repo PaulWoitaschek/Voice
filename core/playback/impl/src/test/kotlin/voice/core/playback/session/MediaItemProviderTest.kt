@@ -1,5 +1,7 @@
 package voice.core.playback.session
 
+import android.app.Application
+import android.net.Uri
 import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_PERCENTAGE
 import androidx.media3.session.MediaConstants.EXTRAS_KEY_COMPLETION_STATUS
 import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_FULLY_PLAYED
@@ -8,7 +10,9 @@ import androidx.media3.session.MediaConstants.EXTRAS_VALUE_COMPLETION_STATUS_PAR
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Instant
@@ -17,6 +21,7 @@ import kotlinx.serialization.json.Json
 import org.junit.runner.RunWith
 import voice.core.data.Book
 import voice.core.data.BookCategory
+import voice.core.data.BookId
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.MarkData
@@ -27,6 +32,7 @@ import voice.core.playback.session.search.book
 class MediaItemProviderTest {
 
   private val books = mutableListOf<Book>()
+  private val application = ApplicationProvider.getApplicationContext<Application>()
   private val provider =
     MediaItemProvider(
       bookRepository =
@@ -34,8 +40,8 @@ class MediaItemProviderTest {
           coEvery { all() } answers { books }
           coEvery { this@mockk.get(any()) } answers { books.find { it.id == firstArg() } }
         },
-      application = ApplicationProvider.getApplicationContext(),
-      imageFileProvider = mockk(),
+      application = application,
+      imageFileProvider = ImageFileProvider(application),
       currentBookStoreId = mockk(),
     )
 
@@ -241,6 +247,51 @@ class MediaItemProviderTest {
 
     assertEquals(expected = 1, actual = items.startIndex)
     assertEquals(expected = 3_000, actual = items.startPositionMs)
+  }
+
+  @Test
+  fun `the car gets the cover of a server book from Voice, never from the server`() {
+    val cover = provider.mediaItem(serverBook()).mediaMetadata.artworkUri!!
+
+    assertEquals(
+      "content://${application.packageName}.coverprovider",
+      "${cover.scheme}://${cover.authority}",
+    )
+    assertEquals(listOf("cache", "abs://item/item/cover?ts=2000"), cover.pathSegments)
+  }
+
+  @Test
+  fun `the car gets the cover file of a downloaded server book, which works offline`() {
+    val file = File("abs-item-2000.jpg")
+    val fileUri = Uri.parse("content://cover/file")
+    val imageFileProvider = mockk<ImageFileProvider> { every { uri(file) } returns fileUri }
+    val book =
+      serverBook().let {
+        it.copy(content = it.content.copy(metadata = it.content.metadata.copy(cover = file)))
+      }
+
+    val provider =
+      MediaItemProvider(
+        bookRepository = mockk(),
+        application = application,
+        imageFileProvider = imageFileProvider,
+        currentBookStoreId = mockk(),
+      )
+
+    assertEquals(fileUri, provider.mediaItem(book).mediaMetadata.artworkUri)
+  }
+
+  private fun serverBook(): Book {
+    val chapter =
+      Chapter(
+        id = ChapterId("abs://item/item/track/1/ino"),
+        name = "Track",
+        duration = 60_000,
+        fileLastModified = Instant.fromEpochMilliseconds(2_000),
+        markData = emptyList(),
+        fileSize = 0,
+      )
+    return book(chapters = listOf(chapter), id = BookId("abs://item/item"))
   }
 
   private suspend fun titles(category: BookCategory): List<String> =

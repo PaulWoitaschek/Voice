@@ -1,11 +1,8 @@
 package voice.core.audiobookshelf.sync
 
-import android.content.Context
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
-import kotlin.io.path.createTempDirectory
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -16,7 +13,6 @@ import mockwebserver3.Dispatcher
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import mockwebserver3.RecordedRequest
-import okhttp3.Headers.Companion.headersOf
 import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Before
@@ -98,7 +94,7 @@ class LibrarySyncTest {
   }
 
   @Test
-  fun `a library of 5,000 books is written in a few steps`() = runTest {
+  fun `a library of 5,000 books is written in a few steps, without covers`() = runTest {
     val written = mutableListOf<List<BookContent>>()
     val contentRepo = emptyContentRepo()
     coEvery { contentRepo.put(capture(written)) } returns Unit
@@ -110,29 +106,8 @@ class LibrarySyncTest {
     assertEquals(5_000, books)
     assertTrue(steps <= 5)
     coVerify(exactly = 0) { contentRepo.put(any<BookContent>()) }
-  }
-
-  @Test
-  fun `the covers of 250 books are written in a few steps`() = runTest {
-    var stored = emptyList<BookContent>()
-    val written = mutableListOf<List<BookContent>>()
-    val contentRepo =
-      mockk<BookContentRepo> {
-        coEvery { all() } answers { stored }
-        coEvery { this@mockk.get(any()) } answers { stored.find { it.id == firstArg() } }
-        coEvery { put(capture(written)) } answers
-          {
-            val ids = written.last().map { it.id }.toSet()
-            stored = stored.filterNot { it.id in ids } + written.last()
-          }
-      }
-    val items = items(250).map { it.copy(media = it.media.copy(coverPath = "cover.jpg")) }
-
-    syncLargeLibrary(contentRepo, items)
-
-    assertEquals(250, stored.count { it.metadata.cover?.exists() == true })
-    val coversPerWrite = written.map { books -> books.count { it.metadata.cover != null } }
-    assertEquals(listOf(100, 100, 50), coversPerWrite.filter { it > 0 })
+    val paths = List(server.requestCount) { server.takeRequest().url.encodedPath }
+    assertTrue(paths.none { it.endsWith("/cover") })
   }
 
   @Test
@@ -264,8 +239,6 @@ class LibrarySyncTest {
               json(BatchGetResponse(ids.map(itemsById::getValue)))
             }
             path == "/api/libraries" -> json(LibrariesResponse(emptyList()))
-            path.endsWith("/cover") ->
-              MockResponse(headers = headersOf("Content-Type", "image/jpeg"), body = "cover")
             else -> MockResponse(code = 404)
           }
         }
@@ -277,14 +250,8 @@ class LibrarySyncTest {
         chapterRepo = mockk(relaxUnitFun = true),
         bookmarkRepo = mockk(),
         accountStore = accountStore,
-        context = context(),
       )
       .sync(accountStore.data.first()!!)
-  }
-
-  private fun context(): Context {
-    val filesDir = createTempDirectory().toFile()
-    return mockk { every { this@mockk.filesDir } returns filesDir }
   }
 
   private fun contentRepo(stored: BookContent) =
@@ -313,7 +280,6 @@ class LibrarySyncTest {
         chapterRepo = chapterRepo,
         bookmarkRepo = bookmarkRepo,
         accountStore = accountStore,
-        context = context(),
       )
       .sync(accountStore.data.first()!!)
   }

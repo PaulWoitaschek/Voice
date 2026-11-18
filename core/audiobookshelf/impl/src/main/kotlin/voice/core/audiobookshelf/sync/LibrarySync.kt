@@ -1,13 +1,8 @@
 package voice.core.audiobookshelf.sync
 
-import android.content.Context
 import dev.zacsweers.metro.Inject
-import java.io.File
-import java.io.IOException
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
-import okhttp3.Request
 import retrofit2.HttpException
 import voice.core.audiobookshelf.AudiobookshelfIds
 import voice.core.audiobookshelf.account.Account
@@ -16,7 +11,6 @@ import voice.core.audiobookshelf.api.AbsLibraryItem
 import voice.core.audiobookshelf.api.AudiobookshelfApi
 import voice.core.audiobookshelf.api.BatchGetRequest
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
-import voice.core.audiobookshelf.itemId
 import voice.core.data.Book
 import voice.core.data.BookContent
 import voice.core.data.Chapter
@@ -31,7 +25,6 @@ import voice.core.logging.api.Logger
 private const val PAGE_SIZE = 200
 private const val DETAILS_CHUNK_SIZE = 50
 private const val BOOKS_PER_WRITE = 1_000
-private const val COVERS_PER_WRITE = 100
 
 @Inject
 internal class LibrarySync(
@@ -41,7 +34,6 @@ internal class LibrarySync(
   private val chapterRepo: ChapterRepo,
   private val bookmarkRepo: BookmarkRepo,
   private val accountStore: AccountStore,
-  private val context: Context,
 ) {
 
   suspend fun sync(account: Account) {
@@ -89,8 +81,6 @@ internal class LibrarySync(
     // stored after the books got their library, so a library never shows without its books
     val libraryNames = api.libraries().libraries.associate { it.id to it.name }
     accountStore.updateData { it?.copy(libraryNames = libraryNames) }
-
-    downloadMissingCovers(account, items)
   }
 
   private suspend fun allItems(
@@ -165,61 +155,6 @@ internal class LibrarySync(
         )
       }
   }
-
-  private suspend fun downloadMissingCovers(
-    account: Account,
-    items: List<AbsLibraryItem>,
-  ) {
-    val itemsById = items.associateBy { it.id }
-    val missing =
-      contentRepo
-        .all()
-        .filter { it.id.isRemote && it.isActive && it.metadata.cover?.exists() != true }
-        .mapNotNull { content -> content.id.itemId?.let(itemsById::get) }
-        .filter { it.media.coverPath != null }
-    missing.chunked(COVERS_PER_WRITE).forEach { chunk ->
-      val covers =
-        chunk
-          .mapNotNull { item ->
-            downloadCover(account, item)?.let { AudiobookshelfIds.bookId(item.id) to it }
-          }
-          .toMap()
-      bookRepository.updateBooks(covers.keys) {
-        it.copy(metadata = it.metadata.copy(cover = covers.getValue(it.id)))
-      }
-    }
-  }
-
-  private suspend fun downloadCover(
-    account: Account,
-    item: AbsLibraryItem,
-  ): File? =
-    withContext(Dispatchers.IO) {
-      val folder = File(context.filesDir, "bookCovers").apply { mkdirs() }
-      val file = File(folder, item.coverFileName())
-      val urls =
-        listOf(
-          "${account.serverUrl}api/items/${item.id}/cover?width=800&format=jpeg",
-          "${account.serverUrl}api/items/${item.id}/cover?raw=1",
-        )
-      for (url in urls) {
-        try {
-          http.authenticatedClient.newCall(Request.Builder().url(url).build()).execute().use {
-            response ->
-            val body = response.body
-            if (
-              response.isSuccessful && response.header("Content-Type")?.startsWith("image/") == true
-            ) {
-              file.outputStream().use { body.byteStream().copyTo(it) }
-              return@withContext file
-            }
-          }
-        } catch (_: IOException) {
-          return@withContext null
-        }
-      }
-      null
-    }
 }
 
 private class FetchedBook(

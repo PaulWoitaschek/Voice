@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
+import coil3.Uri
+import coil3.fetch.Fetcher
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
@@ -19,12 +21,16 @@ class UIAppStartInitializer(
   private val themeModeStore: ThemeModeStore,
   private val scope: CoroutineScope,
   private val okHttpClient: Lazy<OkHttpClient>,
+  private val fetchers: Set<Fetcher.Factory<Uri>>,
 ) : AppInitializer {
 
   override fun onAppStart(application: Application) {
     SingletonImageLoader.setSafe { context ->
       ImageLoader.Builder(context)
-        .components { add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient.value })) }
+        .components {
+          fetchers.forEach { add(it, Uri::class) }
+          add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient.value }))
+        }
         .build()
     }
     themeModeStore.data
