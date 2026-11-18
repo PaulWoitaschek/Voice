@@ -5,14 +5,17 @@ import androidx.media3.common.Player
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.time.Clock
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import voice.core.analytics.api.Analytics
 import voice.core.data.repo.BookRepository
 import voice.core.logging.api.Logger
 import voice.core.playback.ExperimentalPlaybackPersistenceFeatureFlag
@@ -32,6 +35,8 @@ class PositionUpdater(
   private val experimentalPlaybackPersistenceFeatureFlag:
     ExperimentalPlaybackPersistenceFeatureFlag,
   private val playbackPersistenceIntervalFeatureFlag: PlaybackPersistenceIntervalFeatureFlag,
+  private val playingSaveIntervalStore: PlayingSaveIntervalStore,
+  private val analytics: Analytics,
 ) : Player.Listener {
 
   private var player: Player? = null
@@ -43,25 +48,37 @@ class PositionUpdater(
     player.addListener(this)
 
     updateJob = scope.launch {
+      reportKilledPlayback()
       playStateManager.playStateFlow
         .map { it is PlayStateManager.PlayState.Playing }
         .distinctUntilChanged()
         .collectLatest { playing ->
+          val interval = saveInterval()
+          playingSaveIntervalStore.updateData {
+            if (playing) interval.inWholeMilliseconds else null
+          }
           if (playing) {
             while (true) {
-              delay(
-                if (experimentalPlaybackPersistenceFeatureFlag.get()) {
-                  playbackPersistenceIntervalFeatureFlag.interval()
-                } else {
-                  400.milliseconds
-                },
-              )
+              delay(interval)
               flushPositionNow()
             }
           }
         }
     }
   }
+
+  private suspend fun reportKilledPlayback() {
+    val interval = playingSaveIntervalStore.data.first() ?: return
+    analytics.event("playback_killed", mapOf("save_interval_ms" to interval.toString()))
+    playingSaveIntervalStore.updateData { null }
+  }
+
+  private fun saveInterval(): Duration =
+    if (experimentalPlaybackPersistenceFeatureFlag.get()) {
+      playbackPersistenceIntervalFeatureFlag.interval()
+    } else {
+      400.milliseconds
+    }
 
   override fun onPositionDiscontinuity(
     oldPosition: Player.PositionInfo,
@@ -119,8 +136,10 @@ class PositionUpdater(
     }
   }
 
-  fun release() {
-    player?.removeListener(this)
+  suspend fun release() {
     updateJob?.cancel()
+    flushPositionNow()
+    playingSaveIntervalStore.updateData { null }
+    player?.removeListener(this)
   }
 }

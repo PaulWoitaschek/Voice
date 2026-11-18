@@ -31,9 +31,8 @@ class PlaybackService : MediaLibraryService() {
 
   private fun release() {
     runBlocking {
-      positionUpdater.flushPositionNow()
+      positionUpdater.release()
     }
-    positionUpdater.release()
     listeningSessionRecorder.stopped()
     player.release()
     session.release()
