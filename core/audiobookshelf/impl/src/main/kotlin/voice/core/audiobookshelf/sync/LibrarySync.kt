@@ -71,20 +71,20 @@ internal class LibrarySync(
 
     val onServer = items.map { AudiobookshelfIds.bookId(it.id) }.toSet()
     val libraryOf = books.associate { AudiobookshelfIds.bookId(it.id) to it.libraryId }
+    val remote = contentRepo.all().filter { it.id.isRemote }
+    // a backup leaves out the cover files of older versions, the cover then loads from the server
+    val missingCovers = remote.filter { it.metadata.cover?.exists() == false }.map { it.id }.toSet()
     fun BookContent.synced(): BookContent {
       val active = if (id in flagged) isActive else id in onServer
       // unchanged books aren't stored again, so they get their library here
       return copy(
         isActive = active,
         serverLibraryId = libraryOf[id] ?: serverLibraryId,
-        // covers load from the server now, older versions downloaded them to files
-        metadata = metadata.copy(cover = null),
+        metadata = if (id in missingCovers) metadata.copy(cover = null) else metadata,
       )
     }
-    val remote = contentRepo.all().filter { it.id.isRemote }
     val outdated = remote.filter { it.synced() != it }.map { it.id }
     bookRepository.updateBooks(outdated.toSet()) { it.synced() }
-    remote.forEach { it.metadata.cover?.delete() }
     // stored after the books got their library, so a library never shows without its books
     val libraryNames = api.libraries().libraries.associate { it.id to it.name }
     accountStore.updateData { it?.copy(libraryNames = libraryNames) }
@@ -133,9 +133,10 @@ internal class LibrarySync(
       bookRepository.updateBooks(knownById.keys) { current ->
         knownById.getValue(current.id).content(current) ?: current
       }
-      // the books point at the new files right away, their bookmarks have to follow
       known.forEach { book ->
-        moveBookmarks(book.existing!!, book.previousChapters, book.chapters)
+        book.existing!!.metadata.cover?.delete()
+        // the books point at the new files right away, their bookmarks have to follow
+        moveBookmarks(book.existing, book.previousChapters, book.chapters)
       }
     }
   }
@@ -173,7 +174,11 @@ private class FetchedBook(
 
   fun content(current: BookContent?): BookContent? {
     return skipBroken {
-      val content = item.toBookContent(chapters, current, previousChapters)
+      val content =
+        item.toBookContent(chapters, current, previousChapters).let {
+          // a change on the server can bring a new cover, older versions kept the old one in a file
+          it.copy(metadata = it.metadata.copy(cover = null))
+        }
       // the init block checks that the chapters and the position fit together
       @Suppress("RETURN_VALUE_NOT_USED") Book(content, chapters, CustomMetadata(content.id))
       content

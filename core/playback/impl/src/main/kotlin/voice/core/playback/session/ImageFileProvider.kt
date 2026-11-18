@@ -26,11 +26,7 @@ class ImageFileProvider(private val application: Application) {
     uris.computeIfAbsent(cover) { granted(cachedCoverUri(authority, cover)) }
 
   private fun granted(uri: Uri): Uri {
-    // These are necessary to grant the cover uri file permissions.
-    // systemui is related to this one:
-    // https://github.com/PaulWoitaschek/Voice/issues/1860
-    //
-    // The others are related to watch and car
+    // systemui (#1860), the car and the watch read the cover, see
     // https://github.com/android/uamp/blob/2136c37bcef54da1ee350fd642fc61a744e86654/common/src/main/res/xml/allowed_media_browser_callers.xml
     listOf(
         "com.android.systemui",

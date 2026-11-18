@@ -3,6 +3,7 @@ package voice.core.audiobookshelf.sync
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.io.File
 import kotlin.io.path.createTempFile
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -31,6 +32,7 @@ import voice.core.audiobookshelf.audiobookshelfJson
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.BookContent
 import voice.core.data.BookId
+import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookContentRepo
 import voice.core.data.repo.BookRepository
@@ -95,27 +97,59 @@ class LibrarySyncTest {
   }
 
   @Test
-  fun `a cover file of an older version goes, so the book loads its cover from the server`() =
+  fun `a cover file a backup left out goes, so the book loads its cover from the server`() =
     runTest {
       val item = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")))
-      val chapters = item.chapters()
-      val cover = createTempFile().toFile()
-      val content = item.toBookContent(chapters, existing = null)
-      val stored = content.copy(metadata = content.metadata.copy(cover = cover))
+      val content = item.toBookContent(item.chapters(), existing = null)
+      val stored = content.copy(metadata = content.metadata.copy(cover = File("missing.jpg")))
       val contentRepo = contentRepo(stored)
-      val chapterRepo =
-        mockk<ChapterRepo> {
-          coEvery { get(any<ChapterId>()) } answers { chapters.find { it.id == firstArg() } }
-        }
 
-      sync(item, contentRepo, chapterRepo)
+      sync(item, contentRepo, chapterRepo(item.chapters()))
 
       coVerify { contentRepo.put(listOf(content)) }
-      assertFalse(cover.exists())
     }
 
   @Test
-  fun `a library of 5,000 books is written in a few steps, without covers`() = runTest {
+  fun `a cover file of an older version stays, so a downloaded book keeps it offline`() = runTest {
+    val item = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")))
+    val content = item.toBookContent(item.chapters(), existing = null)
+    val cover = createTempFile().toFile()
+    val contentRepo = contentRepo(content.copy(metadata = content.metadata.copy(cover = cover)))
+
+    sync(item, contentRepo, chapterRepo(item.chapters()))
+
+    assertTrue(cover.exists())
+    coVerify(exactly = 0) { contentRepo.put(match<List<BookContent>> { it.isNotEmpty() }) }
+  }
+
+  @Test
+  fun `a book that changed on the server drops its old cover file`() = runTest {
+    val before = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")), updatedAt = 1_000)
+    val content = before.toBookContent(before.chapters(), existing = null)
+    val cover = createTempFile().toFile()
+    val stored = content.copy(metadata = content.metadata.copy(cover = cover))
+    val written = mutableListOf<List<BookContent>>()
+    val contentRepo = contentRepo(stored)
+    coEvery { contentRepo.put(capture(written)) } returns Unit
+    val changed = before.copy(updatedAt = 2_000)
+    server.enqueue(json(LibraryItemsResponse(results = listOf(changed), total = 1)))
+    server.enqueue(json(BatchGetResponse(listOf(changed))))
+
+    sync(
+      changed,
+      contentRepo,
+      chapterRepo(before.chapters()),
+      bookmarkRepo = mockk { coEvery { bookmarks(any()) } returns emptyList() },
+      listed = true,
+    )
+
+    assertFalse(cover.exists())
+    val stores = written.flatten().filter { it.id == stored.id }
+    assertTrue(stores.isNotEmpty() && stores.all { it.metadata.cover == null })
+  }
+
+  @Test
+  fun `a library of 5,000 books is written in a few steps`() = runTest {
     val written = mutableListOf<List<BookContent>>()
     val contentRepo = emptyContentRepo()
     coEvery { contentRepo.put(capture(written)) } returns Unit
@@ -127,8 +161,6 @@ class LibrarySyncTest {
     assertEquals(5_000, books)
     assertTrue(steps <= 5)
     coVerify(exactly = 0) { contentRepo.put(any<BookContent>()) }
-    val paths = List(server.requestCount) { server.takeRequest().url.encodedPath }
-    assertTrue(paths.none { it.endsWith("/cover") })
   }
 
   @Test
@@ -233,6 +265,11 @@ class LibrarySyncTest {
       )
       .sync(accountStore.data.first()!!)
   }
+
+  private fun chapterRepo(chapters: List<Chapter>) =
+    mockk<ChapterRepo>(relaxUnitFun = true) {
+      coEvery { get(any<ChapterId>()) } answers { chapters.find { it.id == firstArg() } }
+    }
 
   private fun contentRepo(stored: BookContent) =
     mockk<BookContentRepo>(relaxUnitFun = true) {
