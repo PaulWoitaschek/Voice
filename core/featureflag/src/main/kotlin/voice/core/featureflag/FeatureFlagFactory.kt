@@ -65,6 +65,25 @@ class FeatureFlagFactory(
     )
   }
 
+  fun long(
+    key: String,
+    description: String,
+    defaultValue: Long,
+  ): FeatureFlag<Long> {
+    return create(
+      key = key,
+      description = description,
+      type = Long::class,
+      readRemoteConfig = {
+        remoteConfig.long(key = key, defaultValue = defaultValue)
+      },
+      createOverride = FeatureFlagOverride::LongValue,
+      getOverrideValue = { override ->
+        (override as? FeatureFlagOverride.LongValue)?.value
+      },
+    )
+  }
+
   fun <E : Enum<E>> enum(
     key: String,
     description: String,

@@ -36,6 +36,17 @@ class FirebaseRemoteConfigImpl : RemoteConfig {
     )
   }
 
+  override fun long(
+    key: String,
+    defaultValue: Long,
+  ): Long {
+    return valueIfRemote(
+      key = key,
+      default = defaultValue,
+      get = FirebaseRemoteConfigValue::asLong,
+    )
+  }
+
   private fun <T> valueIfRemote(
     key: String,
     default: T,

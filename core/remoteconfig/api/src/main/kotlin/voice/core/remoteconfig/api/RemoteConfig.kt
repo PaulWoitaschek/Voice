@@ -11,5 +11,10 @@ interface RemoteConfig {
     defaultValue: String,
   ): String
 
+  fun long(
+    key: String,
+    defaultValue: Long,
+  ): Long
+
   suspend fun refresh()
 }
