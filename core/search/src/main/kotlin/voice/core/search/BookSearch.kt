@@ -1,12 +1,16 @@
 package voice.core.search
 
 import dev.zacsweers.metro.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import voice.core.common.DispatcherProvider
 import voice.core.common.comparator.NaturalOrderComparator
 import voice.core.data.Book
 import voice.core.data.BookCategory
+import voice.core.data.BookId
 import voice.core.data.category
+import voice.core.data.displayName
 import voice.core.data.repo.BookRepository
 
 @Inject
@@ -16,88 +20,122 @@ class BookSearch(
 ) {
 
   // splitting texts into words takes longer than matching them, and the search runs again on every
-  // keystroke and
-  // every position update of the playing book
-  private var wordsByText = emptyMap<String, List<SearchText.Word>>()
+  // keystroke and every position update of the playing book
+  private var searchableBooks = emptyMap<BookId, SearchableBook>()
 
   suspend fun search(query: String): List<BookSearchResult> {
     val terms = SearchText(query).words.map { it.text }.distinct()
     if (terms.isEmpty()) return emptyList()
     val allBooks = repo.all()
     return withContext(dispatcherProvider.default) {
-      val previousWords = wordsByText
-      val words = HashMap<String, List<SearchText.Word>>()
+      val previous = searchableBooks
       val books = allBooks.map { book ->
-        SearchableBook(book) { text ->
-          words.getOrPut(text) { previousWords[text] ?: SearchText(text).words }
-        }
+        previous[book.id]?.takeIf { it.book == book } ?: SearchableBook(book)
       }
-      wordsByText = words
+      searchableBooks = books.associateBy { it.book.id }
       // typos only count when nothing matches as typed, so similar words don't pile up below the
-      // right books
-      books
-        .mapNotNull { rank(it, terms, typos = false) }
-        .ifEmpty { books.mapNotNull { rank(it, terms, typos = true) } }
-        .sortedWith(resultComparator)
+      // right books. A chapter only counts there when no other field matches, because chapters have
+      // many words and a chapter word often starts with a typo of a title.
+      val asTyped = books.mapNotNull { rank(it, terms, typos = null, chapterTypos = false) }
+      val results =
+        if (asTyped.any { it.chapter == null }) {
+          asTyped
+        } else {
+          // chapter words repeat a lot over the library, so each typo check runs once per word
+          val typos = terms.associateWith { HashMap<String, Int>() }
+          // with a chapter that matches as typed, typos in other chapters only add wrong books
+          val chapterTypos = asTyped.isEmpty()
+          books.mapNotNull { rank(it, terms, typos, chapterTypos) }
+        }
+      results.sortedWith(resultComparator)
     }
   }
 
-  private fun rank(
+  private fun CoroutineScope.rank(
     book: SearchableBook,
     terms: List<String>,
-    typos: Boolean,
+    typos: Map<String, MutableMap<String, Int>>?,
+    chapterTypos: Boolean,
   ): BookSearchResult? {
-    val matches = mutableMapOf<BookSearchField, MutableList<IntRange>>()
+    // a new keystroke or position update starts a new search
+    ensureActive()
+    val matches = mutableMapOf<Int, MutableList<IntRange>>()
     val matchedTerms = mutableMapOf<BookSearchField, MutableSet<String>>()
     var score = 0
+    var foundThroughChapter = false
     for (term in terms) {
       var bestTermScore = 0
-      book.words.forEach { (field, fieldWords) ->
-        fieldWords.forEach { word ->
-          val match = match(word.text, term, typos)
+      var matchesOutsideChapters = false
+      book.texts.forEachIndexed { index, (field, _) ->
+        book.words[index].forEach { word ->
+          val fieldTypos =
+            typos?.getValue(term)?.takeIf { field != BookSearchField.Chapters || chapterTypos }
+          val match = match(word.text, term, fieldTypos)
           if (match != null) {
-            matches.getOrPut(field) { mutableListOf() } += word.originalRange(match.length)
+            matches.getOrPut(index) { mutableListOf() } += word.originalRange(match.length)
             matchedTerms.getOrPut(field) { mutableSetOf() } += term
-            bestTermScore = maxOf(bestTermScore, match.quality + field.weight)
+            bestTermScore = maxOf(bestTermScore, field.score(match.quality))
+            if (field != BookSearchField.Chapters) matchesOutsideChapters = true
           }
         }
       }
-      if (bestTermScore == 0 && book.fileWords.none { match(it.text, term, typos) != null })
+      if (
+        bestTermScore == 0 &&
+          book.fileWords.none { match(it.text, term, typos?.getValue(term)) != null }
+      )
         return null
+      if (bestTermScore > 0 && !matchesOutsideChapters) foundThroughChapter = true
       score += bestTermScore
     }
+    // a chapter line under a book that the other fields already explain is only noise
+    val shown =
+      matches.keys
+        .sorted()
+        .distinctBy { book.texts[it].first }
+        .filter { foundThroughChapter || book.texts[it].first != BookSearchField.Chapters }
     return BookSearchResult(
       book = book.book,
-      matches = matches.mapValues { (field, ranges) -> ranges.merged(book.texts.getValue(field)) },
-      fieldsMatchingAllWords = matchedTerms.filterValues { it.size == terms.size }.keys,
+      matches =
+        shown.associate { index ->
+          val (field, text) = book.texts[index]
+          field to matches.getValue(index).merged(text)
+        },
+      fieldsMatchingAllWords =
+        matchedTerms
+          .filter { (field, fieldTerms) ->
+            fieldTerms.size == terms.size &&
+              (foundThroughChapter || field != BookSearchField.Chapters)
+          }
+          .keys,
       score = score,
+      chapter =
+        shown.firstNotNullOfOrNull { index ->
+          book.texts[index].takeIf { it.first == BookSearchField.Chapters }?.second
+        },
     )
   }
 
   private fun match(
     word: String,
     term: String,
-    typos: Boolean,
+    typos: MutableMap<String, Int>?,
   ): WordMatch? =
     when {
       word.startsWith(term) ->
         WordMatch(term.length, if (word.length == term.length) WHOLE_WORD else WORD_START)
-      typos && term.length >= MIN_TYPO_LENGTH ->
-        word.typoPrefixLength(term)?.let { WordMatch(it, TYPO) }
+      typos != null && term.length >= MIN_TYPO_LENGTH ->
+        typos
+          .getOrPut(word) { word.typoPrefixLength(term) ?: 0 }
+          .takeIf { it > 0 }
+          ?.let { WordMatch(it, TYPO) }
       else -> null
     }
 
-  private class SearchableBook(
-    val book: Book,
-    split: (String) -> List<SearchText.Word>,
-  ) {
+  private class SearchableBook(val book: Book) {
     val texts =
-      BookSearchField.entries
-        .mapNotNull { field ->
-          field.text(book)?.let { field to it }
-        }
-        .toMap()
-    val words = texts.mapValues { (_, text) -> split(text) }
+      BookSearchField.entries.mapNotNull { field -> field.text(book)?.let { field to it } } +
+        book.chapterNames().map { BookSearchField.Chapters to it }
+    val words = texts.map { (_, text) -> SearchText(text).words }
 
     // a book the listener edited is still found by what its files say, which isn't shown, so it
     // ranks below
@@ -107,7 +145,7 @@ class BookSearch(
           book.content.metadata.name.takeIf { book.custom.name != null },
           book.content.metadata.author?.takeIf { book.custom.author != null },
         )
-        .flatMap(split)
+        .flatMap { SearchText(it).words }
   }
 
   private class WordMatch(
@@ -132,15 +170,22 @@ class BookSearch(
   }
 }
 
-private val BookSearchField.weight: Int
-  get() =
-    when (this) {
-      BookSearchField.Title -> 5
-      BookSearchField.Author -> 4
-      BookSearchField.Series -> 3
-      BookSearchField.Narrator -> 2
-      BookSearchField.Genre -> 1
-    }
+private fun BookSearchField.score(quality: Int): Int =
+  when (this) {
+    BookSearchField.Title -> quality + 5
+    BookSearchField.Author -> quality + 4
+    BookSearchField.Series -> quality + 3
+    BookSearchField.Narrator -> quality + 2
+    BookSearchField.Genre -> quality + 1
+    // below a typo in any other field, but still above zero, which is no match
+    BookSearchField.Chapters -> quality / 5
+  }
+
+// the names the chapter list shows, so a chapter it calls "Chapter 3" isn't found by that
+private fun Book.chapterNames(): List<String> {
+  val marks = chapters.flatMap { it.chapterMarks }
+  return marks.mapIndexedNotNull { index, mark -> mark.displayName(index + 1, marks.size) }
+}
 
 // ranges only apart by spaces are joined too, so "stephen king" is highlighted as one
 private fun List<IntRange>.merged(text: String): List<IntRange> {

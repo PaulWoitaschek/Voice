@@ -9,6 +9,7 @@ import voice.core.data.BookMetadata
 import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.CustomMetadata
+import voice.core.data.MarkData
 
 fun book(
   chapters: List<Chapter> = listOf(chapter(), chapter()),
@@ -58,13 +59,15 @@ fun book(
 fun chapter(
   duration: Long = 10000,
   id: ChapterId = ChapterId(Uuid.random().toString()),
+  name: String? = null,
+  marks: List<MarkData> = emptyList(),
 ): Chapter {
   return Chapter(
     id = id,
-    name = Uuid.random().toString(),
+    name = name,
     duration = duration,
     fileLastModified = Instant.fromEpochMilliseconds(0),
-    markData = emptyList(),
+    markData = marks,
     fileSize = 0,
   )
 }

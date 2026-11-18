@@ -490,6 +490,8 @@
     <string name="library.search.field.all">All</string>
     <!-- Browse tab and filter chip in the library search for book authors. -->
     <string name="library.search.field.authors">Authors</string>
+    <!-- Filter chip in the library search for the chapter names of books. -->
+    <string name="library.search.field.chapters">Chapters</string>
     <!-- Browse tab and filter chip in the library search for book genres. -->
     <string name="library.search.field.genres">Genres</string>
     <!-- Browse tab and filter chip in the library search for book narrators. -->
@@ -500,6 +502,8 @@
     <string name="library.search.field.titles">Titles</string>
     <!-- Placeholder of the library search field. -->
     <string name="library.search.hint">Search your library</string>
+    <!-- Tag on a library search result that matched by the name of one of its chapters. %s is the chapter name. -->
+    <string name="library.search.match.chapter">Chapter · %s</string>
     <!-- Tag on a library search result that matched by its genre. %s is the genre. -->
     <string name="library.search.match.genre">Genre · %s</string>
     <!-- Tag on a library search result that matched by its narrator. %s is the narrator. -->
@@ -509,7 +513,7 @@
     <!-- Hint below the audiobook folders button when the library search finds nothing. -->
     <string name="library.search.no_results.folders_hint">Not on the list? Its folder may not be added to Voice yet.</string>
     <!-- Explanation when the library search finds nothing. -->
-    <string name="library.search.no_results.message">Search looks through titles, authors, narrators, series and genres.</string>
+    <string name="library.search.no_results.message">Search looks through titles, authors, narrators, series, genres and chapters.</string>
     <!-- Button when the library search finds nothing with a filter on. Removes the filter. -->
     <string name="library.search.no_results.search_everything">Search everything</string>
     <!-- Title when the library search finds nothing. %s is what was searched for. -->

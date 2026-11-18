@@ -7,6 +7,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
+import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -357,6 +358,124 @@ class BookSearchViewModelTest {
   }
 
   @Test
+  fun `red headed shows the book with the line Chapter The Red-Headed League`() = runTest {
+    coEvery { search.search("red headed") } returns
+      listOf(shining.chapterResult("The Red-Headed League", listOf(4..6, 8..13)))
+    val viewModel = viewModel()
+
+    testState(viewModel) {
+      viewModel.onRecentSearchClick("red headed")
+
+      assertEquals(
+        expected =
+          MatchTag(
+            BookSearchField.Chapters,
+            HighlightedText("The Red-Headed League", listOf(4..6, 8..13)),
+          ),
+        actual = awaitState<BookSearchViewState.Results>().topResult.matchTag,
+      )
+    }
+  }
+
+  @Test
+  fun `a long chapter name whose match starts late shows from a few words before the match`() =
+    runTest {
+      val name =
+        "In which our heroes travel very far across the moors and the city at night to meet the clockmaker"
+      coEvery { search.search("clockmaker") } returns
+        listOf(shining.chapterResult(name, listOf(87..96)))
+      val viewModel = viewModel()
+
+      testState(viewModel) {
+        viewModel.onRecentSearchClick("clockmaker")
+
+        assertEquals(
+          expected =
+            MatchTag(
+              BookSearchField.Chapters,
+              HighlightedText("…meet the clockmaker", listOf(10..19)),
+            ),
+          actual = awaitState<BookSearchViewState.Results>().topResult.matchTag,
+        )
+      }
+    }
+
+  @Test
+  fun `a book that also matches in its series shows the series line`() = runTest {
+    coEvery { search.search("kingkiller wind") } returns
+      listOf(
+        kingkiller.chapterResult("The Wind", listOf(4..7)).let { result ->
+          result.copy(
+            matches = result.matches + (BookSearchField.Series to listOf(0..9)),
+            fieldsMatchingAllWords = emptySet(),
+          )
+        },
+      )
+    val viewModel = viewModel()
+
+    testState(viewModel) {
+      viewModel.onRecentSearchClick("kingkiller wind")
+
+      assertEquals(
+        expected = MatchTag(BookSearchField.Series, HighlightedText("Kingkiller", listOf(0..9))),
+        actual = awaitState<BookSearchViewState.Results>().topResult.matchTag,
+      )
+    }
+  }
+
+  @Test
+  fun `results that match in titles and in chapters show a Chapters chip with its count`() =
+    runTest {
+      coEvery { search.search("league") } returns
+        listOf(
+          shining.result(BookSearchField.Title),
+          carrie.chapterResult("The Red-Headed League", listOf(15..20)),
+          kingkiller.chapterResult("The League of Five", listOf(4..9)),
+        )
+      val viewModel = viewModel()
+
+      testState(viewModel) {
+        viewModel.onRecentSearchClick("league")
+
+        assertEquals(
+          expected =
+            listOf(
+              BookSearchViewState.Filter(field = null, count = 3, selected = true),
+              BookSearchViewState.Filter(
+                field = BookSearchField.Title,
+                count = 1,
+                selected = false,
+              ),
+              BookSearchViewState.Filter(
+                field = BookSearchField.Chapters,
+                count = 2,
+                selected = false,
+              ),
+            ),
+          actual = awaitState<BookSearchViewState.Results>().filters,
+        )
+      }
+    }
+
+  @Test
+  fun `tapping a book found through a chapter opens the book and the place stays`() = runTest {
+    coEvery { search.search("red headed") } returns
+      listOf(shining.chapterResult("The Red-Headed League", listOf(4..6, 8..13)))
+    val viewModel = viewModel()
+
+    testState(viewModel) {
+      viewModel.onRecentSearchClick("red headed")
+      val state = awaitState<BookSearchViewState.Results>()
+
+      viewModel.onBookClick(state.topResult.id)
+
+      verify { navigator.goTo(Destination.Playback(shining.id)) }
+      verify { playerController wasNot Called }
+      assertEquals(expected = null, actual = currentBookStore.data.first())
+    }
+  }
+
+  @Test
   fun `play click switches to the book and plays it`() = runTest {
     currentBookStore.updateData { kingkiller.id }
     val viewModel = viewModel()
@@ -442,6 +561,19 @@ private fun Book.result(vararg fieldsMatchingAllWords: BookSearchField): BookSea
     matches = fieldsMatchingAllWords.associateWith { emptyList() },
     fieldsMatchingAllWords = fieldsMatchingAllWords.toSet(),
     score = 0,
+  )
+}
+
+private fun Book.chapterResult(
+  chapter: String,
+  highlights: List<IntRange>,
+): BookSearchResult {
+  return BookSearchResult(
+    book = this,
+    matches = mapOf(BookSearchField.Chapters to highlights),
+    fieldsMatchingAllWords = setOf(BookSearchField.Chapters),
+    score = 0,
+    chapter = chapter,
   )
 }
 

@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 import voice.core.common.DispatcherProvider
 import voice.core.data.Book
 import voice.core.data.BookId
+import voice.core.data.MarkData
 import voice.core.data.repo.BookContentRepoImpl
 import voice.core.data.repo.BookRepositoryImpl
 import voice.core.data.repo.ChapterRepoImpl
@@ -313,6 +314,269 @@ class BookSearchTest {
     }
   }
 
+  private val redHeadedLeague =
+    book(
+      name = "The Adventures",
+      author = "Arthur Conan Doyle",
+      genre = null,
+      narrator = null,
+      chapters =
+        listOf(chapter(name = "A Scandal in Bohemia"), chapter(name = "The Red-Headed League")),
+    )
+
+  @Test
+  fun `red headed finds the book with the chapter The Red-Headed League and shows the chapter`() {
+    test(redHeadedLeague) {
+      expectSearchResult("red headed", redHeadedLeague)
+      val result = search.search("red headed").single()
+      assertEquals(expected = "The Red-Headed League", actual = result.chapter)
+      assertEquals(
+        expected = mapOf(BookSearchField.Chapters to listOf(4..6, 8..13)),
+        actual = result.matches,
+      )
+      assertEquals(
+        expected = setOf(BookSearchField.Chapters),
+        actual = result.fieldsMatchingAllWords,
+      )
+    }
+  }
+
+  @Test
+  fun `sherlock league finds Sherlock Holmes with the chapter The Red-Headed League`() {
+    val sherlock =
+      book(
+        name = "Sherlock Holmes",
+        chapters =
+          listOf(chapter(name = "A Scandal in Bohemia"), chapter(name = "The Red-Headed League")),
+      )
+    test(sherlock, redHeadedLeague) {
+      expectSearchResult("sherlock league", sherlock)
+    }
+  }
+
+  @Test
+  fun `red-heded finds the book with the chapter The Red-Headed League with one typo forgiven`() {
+    test(redHeadedLeague) {
+      expectSearchResult("red-heded", redHeadedLeague)
+      assertEquals(
+        expected = "The Red-Headed League",
+        actual = search.search("red-heded").single().chapter,
+      )
+    }
+  }
+
+  @Test
+  fun `league finds League of Legends first and then the other book with the chapter`() {
+    val legends = book(name = "League of Legends", author = "Riot", genre = null, narrator = null)
+    test(redHeadedLeague, legends) {
+      expectSearchResult("league", legends, redHeadedLeague)
+    }
+  }
+
+  @Test
+  fun `a chapter ranks below the start of a word in any other field`() {
+    val title = book(name = "Leaguers United", genre = null, narrator = null)
+    val genre = book(name = "Unrelated", genre = "Leaguers", narrator = null)
+    val chapter =
+      book(
+        name = "The Adventures",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Intro"), chapter(name = "League")),
+      )
+    test(title, genre, chapter) {
+      expectSearchResult("league", title, genre, chapter)
+    }
+  }
+
+  @Test
+  fun `league shows the first chapter that matches, The Red-Headed League`() {
+    val book =
+      book(
+        name = "The Adventures",
+        genre = null,
+        narrator = null,
+        chapters =
+          listOf(chapter(name = "The Red-Headed League"), chapter(name = "The League of Five")),
+      )
+    test(book) {
+      val result = search.search("league").single()
+      assertEquals(expected = "The Red-Headed League", actual = result.chapter)
+      assertEquals(
+        expected = mapOf(BookSearchField.Chapters to listOf(15..20)),
+        actual = result.matches,
+      )
+    }
+  }
+
+  @Test
+  fun `the start of a word and a word without accents find a chapter`() {
+    val book =
+      book(
+        name = "The Journey",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Intro"), chapter(name = "Capítulo del mar")),
+      )
+    test(book) {
+      assertEquals(expected = "Capítulo del mar", actual = search.search("capit").single().chapter)
+      assertEquals(
+        expected = "Capítulo del mar",
+        actual = search.search("capitulo").single().chapter,
+      )
+    }
+  }
+
+  @Test
+  fun `a typo in a title still finds the book when a chapter matches as typed`() {
+    val dragon = book(name = "Dragon Rider", genre = null, narrator = null)
+    val other =
+      book(
+        name = "The Adventures",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Intro"), chapter(name = "Dragnet Night")),
+      )
+    test(dragon, other) {
+      expectSearchResult("dragn", dragon, other)
+    }
+  }
+
+  @Test
+  fun `a chapter that matches as typed keeps typos out of other chapters`() {
+    val night =
+      book(
+        name = "Watchmen",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Intro"), chapter(name = "The Night Watch")),
+      )
+    val light =
+      book(
+        name = "Stories",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Intro"), chapter(name = "Into the Light")),
+      )
+    val fight = book(name = "Fight Club", genre = null, narrator = null)
+    test(night, light, fight) {
+      expectSearchResult("night", fight, night)
+    }
+  }
+
+  @Test
+  fun `a book found by its title shows no chapter`() {
+    val book =
+      book(
+        name = "Dune",
+        genre = null,
+        narrator = null,
+        chapters = listOf(chapter(name = "Dune - Part 01"), chapter(name = "Dune - Part 02")),
+      )
+    test(book) {
+      val result = search.search("dune").single()
+      assertEquals(expected = null, actual = result.chapter)
+      assertEquals(expected = setOf(BookSearchField.Title), actual = result.matches.keys)
+      assertEquals(
+        expected = setOf(BookSearchField.Title),
+        actual = result.fieldsMatchingAllWords,
+      )
+    }
+  }
+
+  @Test
+  fun `chapter marks are found by their names`() {
+    val book =
+      book(
+        name = "The Adventures",
+        genre = null,
+        narrator = null,
+        chapters =
+          listOf(
+            chapter(
+              name = "adventures.m4b",
+              marks =
+                listOf(
+                  MarkData(0, "A Scandal in Bohemia"),
+                  MarkData(5000, "The Red-Headed League"),
+                ),
+            ),
+          ),
+      )
+    test(book) {
+      assertEquals(
+        expected = "The Red-Headed League",
+        actual = search.search("red headed").single().chapter,
+      )
+      expectSearchResult("m4b")
+    }
+  }
+
+  @Test
+  fun `escape finds a file without a title tag named 03 Escape mp3`() {
+    val book =
+      book(
+        name = "The Journey",
+        genre = null,
+        narrator = null,
+        chapters =
+          listOf(
+            chapter(name = "01 Arrival.mp3"),
+            chapter(name = "02 Storm.mp3"),
+            chapter(name = "03 Escape.mp3"),
+          ),
+      )
+    test(book) {
+      expectSearchResult("escape", book)
+      val result = search.search("escape").single()
+      assertEquals(expected = "Escape", actual = result.chapter)
+      assertEquals(
+        expected = mapOf(BookSearchField.Chapters to listOf(0..5)),
+        actual = result.matches,
+      )
+    }
+  }
+
+  @Test
+  fun `chapter finds nothing in a book with a chapter without a name`() {
+    val book =
+      book(
+        name = "The Journey",
+        genre = null,
+        narrator = null,
+        chapters =
+          listOf(chapter(name = null), chapter(name = "Chapter 2"), chapter(name = "Track 03.mp3")),
+      )
+    test(book) {
+      expectSearchResult("chapter")
+      expectSearchResult("track")
+    }
+  }
+
+  @Test
+  fun `a changed book is found by what changed`() {
+    val book =
+      book(name = "Dune", chapters = listOf(chapter(name = "Arrakis"), chapter(name = "Spice")))
+    test(book) {
+      expectSearchResult("arrakis", book)
+      val chapters = listOf(chapter(name = "Caladan"), chapter(name = "Spice"))
+      putBook(
+        Book(
+          content =
+            book.content.copy(
+              chapters = chapters.map { it.id },
+              currentChapter = chapters.first().id,
+            ),
+          chapters = chapters,
+          custom = book.custom.copy(name = "Dune Messiah"),
+        ),
+      )
+      expectSearchResult("arrakis")
+      assertEquals(expected = "Caladan", actual = search.search("caladan").single().chapter)
+      assertEquals(expected = "Dune Messiah", actual = search.search("messiah").single().book.name)
+    }
+  }
+
   private fun test(run: suspend TestBase.() -> Unit) =
     test(
       commendatore,
@@ -359,7 +623,12 @@ class BookSearchTest {
             coroutineContext,
           ),
         )
-      val testBase = TestBase(search)
+      val testBase =
+        TestBase(search) { book ->
+          book.chapters.forEach { db.chapterDao().insert(it) }
+          contentRepo.put(book.content)
+          customMetadataRepo.put(book.custom)
+        }
       books.forEach { addBook(it) }
 
       // this ensures that inactive books are never accounted for
@@ -376,7 +645,10 @@ private fun Book.withNewIdAndInactive(): Book {
   return copy(content = content.copy(id = id, isActive = false), custom = custom.copy(bookId = id))
 }
 
-private class TestBase(val search: BookSearch) {
+private class TestBase(
+  val search: BookSearch,
+  val putBook: suspend (Book) -> Unit,
+) {
 
   suspend fun expectSearchResult(
     query: String,

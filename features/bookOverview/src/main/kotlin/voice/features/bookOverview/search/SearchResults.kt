@@ -348,25 +348,17 @@ private fun MatchTagText(
   tag: MatchTag,
   modifier: Modifier = Modifier,
 ) {
-  val label =
+  val template =
     stringResource(
       when (tag.field) {
         BookSearchField.Series -> StringsR.string.library_search_match_series
         BookSearchField.Narrator -> StringsR.string.library_search_match_narrator
+        BookSearchField.Chapters -> StringsR.string.library_search_match_chapter
         else -> StringsR.string.library_search_match_genre
       },
-      tag.text.text,
+      PLACEHOLDER,
     )
-  val text =
-    remember(label, tag) {
-      val offset = label.indexOf(tag.text.text)
-      HighlightedText(
-        text = label,
-        highlights =
-          if (offset < 0) emptyList()
-          else tag.text.highlights.map { it.first + offset..it.last + offset },
-      )
-    }
+  val text = remember(template, tag) { tag.text.inLabel(template) }
   Text(
     text =
       text.annotated(
@@ -374,7 +366,7 @@ private fun MatchTagText(
       ),
     modifier = modifier,
     style = MaterialTheme.typography.labelMedium,
-    maxLines = 1,
+    maxLines = if (tag.field == BookSearchField.Chapters) 2 else 1,
     overflow = TextOverflow.Ellipsis,
   )
 }
@@ -421,7 +413,7 @@ private fun SearchResultsPreview() {
           BookSearchViewState.Results(
             filters =
               listOf(
-                BookSearchViewState.Filter(field = null, count = 5, selected = true),
+                BookSearchViewState.Filter(field = null, count = 6, selected = true),
                 BookSearchViewState.Filter(
                   field = BookSearchField.Title,
                   count = 2,
@@ -434,6 +426,11 @@ private fun SearchResultsPreview() {
                 ),
                 BookSearchViewState.Filter(
                   field = BookSearchField.Series,
+                  count = 1,
+                  selected = false,
+                ),
+                BookSearchViewState.Filter(
+                  field = BookSearchField.Chapters,
                   count = 1,
                   selected = false,
                 ),
@@ -474,6 +471,16 @@ private fun SearchResultsPreview() {
                     MatchTag(
                       BookSearchField.Series,
                       HighlightedText("Kingkiller Chronicle 1", listOf(0..3)),
+                    ),
+                ),
+                result(
+                  title = "The Adventures of Sherlock Holmes",
+                  author = "Arthur Conan Doyle",
+                  category = BookCategory.NOT_STARTED,
+                  matchTag =
+                    MatchTag(
+                      BookSearchField.Chapters,
+                      HighlightedText("The King of Bohemia", listOf(4..7)),
                     ),
                 ),
               ),

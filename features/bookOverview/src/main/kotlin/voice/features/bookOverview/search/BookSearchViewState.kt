@@ -82,3 +82,31 @@ data class HighlightedText(
   val text: String,
   val highlights: List<IntRange> = emptyList(),
 )
+
+// the label can hold the name itself, e.g. "Chapter · Chapter", so the name replaces this mark
+internal const val PLACEHOLDER = "\uE000"
+
+internal fun HighlightedText.inLabel(template: String): HighlightedText {
+  val offset = template.indexOf(PLACEHOLDER)
+  return HighlightedText(
+    text = template.replace(PLACEHOLDER, text),
+    highlights =
+      if (offset < 0) emptyList() else highlights.map { it.first + offset..it.last + offset },
+  )
+}
+
+// the view model doesn't know the screen width, so the cut counts characters
+internal fun HighlightedText.nearFirstHighlight(): HighlightedText {
+  val first = highlights.minOfOrNull { it.first } ?: return this
+  if (first <= CHAPTER_CUT_AFTER) return this
+  var start = text.indexOf(' ', first - CHAPTER_LEAD).let { if (it in 0..<first) it + 1 else first }
+  // a line that starts "…- The Five" seems to cut a word
+  while (start < first && !text[start].isLetterOrDigit()) start++
+  return HighlightedText(
+    text = "…" + text.substring(start),
+    highlights = highlights.map { it.first - start + 1..it.last - start + 1 },
+  )
+}
+
+private const val CHAPTER_CUT_AFTER = 30
+private const val CHAPTER_LEAD = 12
