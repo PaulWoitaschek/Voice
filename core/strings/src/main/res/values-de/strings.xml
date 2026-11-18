@@ -261,8 +261,6 @@
     <string name="library.filter.not_downloaded">Nicht heruntergeladen</string>
     <string name="library.filter.show">Anzeigen</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
-    <string name="library.folders.moved.dialog.title">Hörbuch-Ordner verschoben</string>
-    <string name="library.folders.moved.dialog.message">Du kannst Hörbuch-Ordner jetzt in den Einstellungen verwalten.</string>
     <string name="library.folders.no_access">Kein Zugriff</string>
     <string name="library.folders.no_access.action">Zugriff erlauben</string>
     <string name="library.folders.no_access.badge">Zugriff auf Deine Ordner wieder erlauben</string>

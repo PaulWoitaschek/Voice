@@ -17,7 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -29,7 +28,6 @@ import kotlinx.coroutines.launch
 import voice.core.audiobookshelf.ServerDownloads
 import voice.core.audiobookshelf.ServerLibrary
 import voice.core.audiobookshelf.download.BookDownloadState
-import voice.core.common.AppInfoProvider
 import voice.core.common.DispatcherProvider
 import voice.core.common.MainScope
 import voice.core.data.Book
@@ -79,13 +77,10 @@ class BookOverviewViewModel(
   private val playStateManager: PlayStateManager,
   private val playerController: PlayerController,
   private val currentBookStoreDataStore: CurrentBookStore,
-  private val folderPickerMovedDialogShownStore: FolderPickerMovedDialogShownStore,
   private val gridModeStore: GridModeStore,
   private val gridCount: GridCount,
   private val navigator: Navigator,
-  private val appInfoProvider: AppInfoProvider,
   private val deviceHasStoragePermissionBug: DeviceHasStoragePermissionBug,
-  private val folderPickerInSettingsFeatureFlag: FolderPickerInSettingsFeatureFlag,
   private val experimentalPlaybackPersistenceFeatureFlag:
     ExperimentalPlaybackPersistenceFeatureFlag,
   private val kioskModeFeatureFlag: KioskModeFeatureFlag,
@@ -105,7 +100,6 @@ class BookOverviewViewModel(
 ) {
 
   private val scope = MainScope(dispatcherProvider)
-  private var dialog by mutableStateOf<BookOverviewViewState.Dialog?>(null)
   private var selection by mutableStateOf<Set<BookId>?>(null)
   private var selectionEdit by mutableStateOf<SelectionEditViewState?>(null)
 
@@ -154,11 +148,6 @@ class BookOverviewViewModel(
     val scannerActive = scanning || syncing
     val serverStates = rememberServerBookStates(serverLibrary, serverDownloads)
     val downloadStates = serverStates.downloads
-    val folderPickerMovedDialogShown = remember {
-      folderPickerMovedDialogShownStore.data
-    }
-      .collectAsState(initial = null)
-      .value
     val gridMode = remember { gridModeStore.data }.collectAsState(initial = null).value
     val hasFoldersWithoutAccess = remember {
       audiobookFolders.withoutAccess().map { folders -> folders.values.any { it.isNotEmpty() } }
@@ -184,7 +173,6 @@ class BookOverviewViewModel(
     if (
       library == null ||
         currentBook == null ||
-        folderPickerMovedDialogShown == null ||
         gridMode == null ||
         hasFoldersWithoutAccess == null ||
         hasSurvey == null ||
@@ -311,11 +299,6 @@ class BookOverviewViewModel(
       // adding books comes first
       showSurveyCard = hasSurvey && !showEmptyLibrary,
       showFolderAccessBadge = hasFoldersWithoutAccess,
-      showFolderPickerIcon =
-        !folderPickerInSettingsFeatureFlag.get() &&
-          !folderPickerMovedDialogShown &&
-          appInfoProvider.installTime < FolderPickerMigrationInstallTimeCutoff,
-      dialog = dialog,
       hiddenBookCount = hiddenBookCount,
       showHiddenBooks = showHiddenBooks,
       notDownloadedBookCount = notDownloadedBookCount,
@@ -392,8 +375,6 @@ class BookOverviewViewModel(
       showStoragePermissionBugCard = false,
       showSurveyCard = false,
       showFolderAccessBadge = false,
-      showFolderPickerIcon = false,
-      dialog = null,
     )
   }
 
@@ -547,17 +528,6 @@ class BookOverviewViewModel(
 
   private fun selectedIds(): Set<BookId> = selection.orEmpty() intersect shownBookIds
 
-  fun onBookFolderClick() {
-    dialog = BookOverviewViewState.Dialog.FolderPickerMovedToSettings
-  }
-
-  fun onFolderPickerMovedDialogDismiss() {
-    dialog = null
-    scope.launch {
-      folderPickerMovedDialogShownStore.updateData { true }
-    }
-  }
-
   fun playPause() {
     playerController.playPause()
   }
@@ -591,8 +561,6 @@ class BookOverviewViewModel(
     }
   }
 }
-
-private val FolderPickerMigrationInstallTimeCutoff = Instant.parse("2026-06-17T00:00:00Z")
 
 @Composable
 private fun Book.itemViewState(

@@ -261,8 +261,6 @@
     <string name="library.filter.not_downloaded">Nem letöltött</string>
     <string name="library.filter.show">Megjelenítés</string>
     <string name="library.folders.title">Hangoskönyv mappák</string>
-    <string name="library.folders.moved.dialog.title">Új helyen a hangoskönyv mappák</string>
-    <string name="library.folders.moved.dialog.message">A hangoskönyv mappákat mostantól a Beállításokban kezelheti.</string>
     <string name="library.folders.no_access">Nincs hozzáférés</string>
     <string name="library.folders.no_access.action">Hozzáférés engedélyezése</string>
     <string name="library.folders.no_access.badge">Engedélyezze újra a hozzáférést a mappáihoz</string>

@@ -52,13 +52,11 @@ import voice.features.bookOverview.search.searchBarSharedBounds
 @Composable
 internal fun LibraryTopBar(
   showSearch: Boolean,
-  showFolderPickerIcon: Boolean,
   showFolderAccessBadge: Boolean,
   showFilter: Boolean,
   isLoading: Boolean,
   scrollBehavior: SearchBarScrollBehavior?,
   onSearchClick: () -> Unit,
-  onBookFolderClick: () -> Unit,
   onFilterClick: () -> Unit,
   onSettingsClick: () -> Unit,
   modifier: Modifier = Modifier,
@@ -83,9 +81,6 @@ internal fun LibraryTopBar(
         }
       },
       actions = {
-        if (showFolderPickerIcon) {
-          BookFolderIcon(onClick = onBookFolderClick)
-        }
         if (showFilter) {
           IconButton(onClick = onFilterClick) {
             Icon(
@@ -166,13 +161,11 @@ private fun LibraryTopBarPreview() {
   VoiceTheme {
     LibraryTopBar(
       showSearch = true,
-      showFolderPickerIcon = true,
       showFolderAccessBadge = true,
       showFilter = true,
       isLoading = false,
       scrollBehavior = null,
       onSearchClick = {},
-      onBookFolderClick = {},
       onFilterClick = {},
       onSettingsClick = {},
     )

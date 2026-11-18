@@ -437,10 +437,6 @@
     <string name="library.filter.show">Show</string>
     <!-- Title for screens and rows that manage audiobook folders. -->
     <string name="library.folders.title">Audiobook folders</string>
-    <!-- Title for the one-time dialog shown from the old audiobook folders shortcut. -->
-    <string name="library.folders.moved.dialog.title">Audiobook folders moved</string>
-    <!-- Body for the one-time dialog shown from the old audiobook folders shortcut. -->
-    <string name="library.folders.moved.dialog.message">You can now manage audiobook folders in Settings.</string>
     <!-- Label on a row of the audiobook folders screen for a folder or file Voice can no longer open, for example after a restore from a backup on a new phone. -->
     <string name="library.folders.no_access">No access</string>
     <!-- Button on a folder row without access. Opens the system picker so Voice may open the folder or file again. -->

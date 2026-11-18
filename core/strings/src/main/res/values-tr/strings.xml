@@ -261,8 +261,6 @@
     <string name="library.filter.not_downloaded">İndirilmemiş</string>
     <string name="library.filter.show">Göster</string>
     <string name="library.folders.title">Sesli kitap klasörleri</string>
-    <string name="library.folders.moved.dialog.title">Sesli kitap klasörleri taşındı</string>
-    <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Ayarlar\'da yönetebilirsiniz.</string>
     <string name="library.folders.no_access">Erişim yok</string>
     <string name="library.folders.no_access.action">Erişime izin ver</string>
     <string name="library.folders.no_access.badge">Klasörlerinize yeniden erişim izni verin</string>

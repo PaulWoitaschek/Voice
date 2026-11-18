@@ -247,8 +247,6 @@
     <string name="library.filter.not_downloaded">未下載</string>
     <string name="library.filter.show">顯示</string>
     <string name="library.folders.title">有聲書資料夾</string>
-    <string name="library.folders.moved.dialog.title">有聲書資料夾換地方了</string>
-    <string name="library.folders.moved.dialog.message">現在可以在「設定」中管理有聲書資料夾了。</string>
     <string name="library.folders.no_access">無法存取</string>
     <string name="library.folders.no_access.action">允許存取</string>
     <string name="library.folders.no_access.badge">請重新允許存取你的資料夾</string>

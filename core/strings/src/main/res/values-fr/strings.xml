@@ -275,8 +275,6 @@
     <string name="library.filter.not_downloaded">Non téléchargés</string>
     <string name="library.filter.show">Afficher</string>
     <string name="library.folders.title">Dossiers de livres audio</string>
-    <string name="library.folders.moved.dialog.title">Dossiers de livres audio déplacés</string>
-    <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Paramètres.</string>
     <string name="library.folders.no_access">Aucun accès</string>
     <string name="library.folders.no_access.action">Autoriser l\'accès</string>
     <string name="library.folders.no_access.badge">Autorisez à nouveau l\'accès à vos dossiers</string>

@@ -261,8 +261,6 @@
     <string name="library.filter.not_downloaded">Ikke lastet ned</string>
     <string name="library.filter.show">Vis</string>
     <string name="library.folders.title">Lydbokmapper</string>
-    <string name="library.folders.moved.dialog.title">Lydbokmapper flyttet</string>
-    <string name="library.folders.moved.dialog.message">Du kan nå administrere lydbokmapper i Innstillinger.</string>
     <string name="library.folders.no_access">Ingen tilgang</string>
     <string name="library.folders.no_access.action">Tillat tilgang</string>
     <string name="library.folders.no_access.badge">Tillat tilgang til mappene dine igjen</string>

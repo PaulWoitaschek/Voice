@@ -261,8 +261,6 @@
     <string name="library.filter.not_downloaded">Χωρίς λήψη</string>
     <string name="library.filter.show">Εμφάνιση</string>
     <string name="library.folders.title">Φάκελοι ηχητικών βιβλίων</string>
-    <string name="library.folders.moved.dialog.title">Οι φάκελοι ηχητικών βιβλίων μετακινήθηκαν</string>
-    <string name="library.folders.moved.dialog.message">Μπορείτε πλέον να διαχειρίζεστε τους φακέλους ηχητικών βιβλίων στις Ρυθμίσεις.</string>
     <string name="library.folders.no_access">Χωρίς πρόσβαση</string>
     <string name="library.folders.no_access.action">Παραχώρηση πρόσβασης</string>
     <string name="library.folders.no_access.badge">Επιτρέψτε ξανά την πρόσβαση στους φακέλους σας</string>

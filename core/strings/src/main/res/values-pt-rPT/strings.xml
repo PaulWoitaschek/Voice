@@ -275,8 +275,6 @@
     <string name="library.filter.not_downloaded">Não transferidos</string>
     <string name="library.filter.show">Mostrar</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
-    <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
-    <string name="library.folders.moved.dialog.message">Agora pode gerir as pastas de audiolivros nas Definições.</string>
     <string name="library.folders.no_access">Sem acesso</string>
     <string name="library.folders.no_access.action">Permitir acesso</string>
     <string name="library.folders.no_access.badge">Volte a permitir o acesso às suas pastas</string>

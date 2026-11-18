@@ -21,8 +21,6 @@ data class BookOverviewViewState(
   val showStoragePermissionBugCard: Boolean,
   val showSurveyCard: Boolean,
   val showFolderAccessBadge: Boolean,
-  val showFolderPickerIcon: Boolean,
-  val dialog: Dialog?,
   val hiddenBookCount: Int = 0,
   val showHiddenBooks: Boolean = false,
   val notDownloadedBookCount: Int = 0,
@@ -56,18 +54,12 @@ data class BookOverviewViewState(
         showStoragePermissionBugCard = false,
         showSurveyCard = false,
         showFolderAccessBadge = false,
-        showFolderPickerIcon = true,
-        dialog = null,
       )
   }
 
   enum class PlayButtonState {
     Playing,
     Paused,
-  }
-
-  enum class Dialog {
-    FolderPickerMovedToSettings,
   }
 }
 

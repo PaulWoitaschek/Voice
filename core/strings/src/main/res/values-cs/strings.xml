@@ -289,8 +289,6 @@
     <string name="library.filter.not_downloaded">Nestažené</string>
     <string name="library.filter.show">Zobrazit</string>
     <string name="library.folders.title">Složky s audioknihami</string>
-    <string name="library.folders.moved.dialog.title">Složky audioknih přesunuty</string>
-    <string name="library.folders.moved.dialog.message">Složky audioknih teď můžete spravovat v Nastavení.</string>
     <string name="library.folders.no_access">Bez přístupu</string>
     <string name="library.folders.no_access.action">Povolit přístup</string>
     <string name="library.folders.no_access.badge">Znovu povolte přístup ke svým složkám</string>

@@ -261,8 +261,6 @@
     <string name="library.filter.not_downloaded">Inte nedladdade</string>
     <string name="library.filter.show">Visa</string>
     <string name="library.folders.title">Ljudboksmappar</string>
-    <string name="library.folders.moved.dialog.title">Ljudboksmapparna har flyttats</string>
-    <string name="library.folders.moved.dialog.message">Du kan nu hantera ljudboksmappar under Inställningar.</string>
     <string name="library.folders.no_access">Ingen åtkomst</string>
     <string name="library.folders.no_access.action">Tillåt åtkomst</string>
     <string name="library.folders.no_access.badge">Tillåt åtkomst till dina mappar igen</string>

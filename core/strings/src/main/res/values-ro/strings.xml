@@ -275,8 +275,6 @@
     <string name="library.filter.not_downloaded">Nedescărcate</string>
     <string name="library.filter.show">Afișează</string>
     <string name="library.folders.title">Directoare cărți</string>
-    <string name="library.folders.moved.dialog.title">Directoarele cu cărți audio s-au mutat</string>
-    <string name="library.folders.moved.dialog.message">Acum poți gestiona directoarele cu cărți audio din Setări.</string>
     <string name="library.folders.no_access">Fără acces</string>
     <string name="library.folders.no_access.action">Permite accesul</string>
     <string name="library.folders.no_access.badge">Permite din nou accesul la directoarele tale</string>

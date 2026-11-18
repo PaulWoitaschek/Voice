@@ -247,8 +247,6 @@
     <string name="library.filter.not_downloaded">Belum diunduh</string>
     <string name="library.filter.show">Tampilkan</string>
     <string name="library.folders.title">Folder buku audio</string>
-    <string name="library.folders.moved.dialog.title">Folder buku audio dipindahkan</string>
-    <string name="library.folders.moved.dialog.message">Sekarang Anda dapat mengelola folder buku audio di Setelan.</string>
     <string name="library.folders.no_access">Tidak ada akses</string>
     <string name="library.folders.no_access.action">Izinkan akses</string>
     <string name="library.folders.no_access.badge">Izinkan akses ke folder Anda lagi</string>

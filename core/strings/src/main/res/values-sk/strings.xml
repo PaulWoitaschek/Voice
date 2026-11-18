@@ -289,8 +289,6 @@
     <string name="library.filter.not_downloaded">Nestiahnuté</string>
     <string name="library.filter.show">Zobraziť</string>
     <string name="library.folders.title">Priečinky so zvukovými knihami</string>
-    <string name="library.folders.moved.dialog.title">Priečinky audiokníh presunuté</string>
-    <string name="library.folders.moved.dialog.message">Priečinky audiokníh teraz môžete spravovať v nastaveniach.</string>
     <string name="library.folders.no_access">Bez prístupu</string>
     <string name="library.folders.no_access.action">Povoliť prístup</string>
     <string name="library.folders.no_access.badge">Znova povoľte prístup k svojim priečinkom</string>

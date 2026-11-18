@@ -247,8 +247,6 @@
     <string name="library.filter.not_downloaded">未ダウンロード</string>
     <string name="library.filter.show">表示</string>
     <string name="library.folders.title">オーディオブック フォルダー</string>
-    <string name="library.folders.moved.dialog.title">オーディオブックフォルダーを移動しました</string>
-    <string name="library.folders.moved.dialog.message">オーディオブックフォルダーは設定で管理できるようになりました。</string>
     <string name="library.folders.no_access">アクセスできません</string>
     <string name="library.folders.no_access.action">アクセスを許可</string>
     <string name="library.folders.no_access.badge">フォルダーへのアクセスをもう一度許可してください</string>

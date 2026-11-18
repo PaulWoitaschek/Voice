@@ -261,8 +261,6 @@
     <string name="library.filter.not_downloaded">Lataamattomat</string>
     <string name="library.filter.show">Näytä</string>
     <string name="library.folders.title">Äänikirjakansiot</string>
-    <string name="library.folders.moved.dialog.title">Äänikirjakansiot siirretty</string>
-    <string name="library.folders.moved.dialog.message">Voit nyt hallita äänikirjakansioita asetuksissa.</string>
     <string name="library.folders.no_access">Ei pääsyä</string>
     <string name="library.folders.no_access.action">Salli pääsy</string>
     <string name="library.folders.no_access.badge">Salli taas pääsy kansioihisi</string>
