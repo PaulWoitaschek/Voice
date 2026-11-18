@@ -25,6 +25,9 @@ Give each seat to its own subagent, all at the same time. A seat gets the brief,
 ledger and its task below. It doesn't get this chat or your reasons. Without subagents, do the seats yourself, one
 after another.
 
+Where the tool lets you set the model of a subagent, run the Rules seat on Sonnet. It compares the diff with written
+rules, and you check each finding in step 3. The other seats keep your model.
+
 | Seat | When | Task |
 |---|---|---|
 | Bugs | Always | Find what breaks: crashes, lost data, wrong behavior, races, broken tests. Run `/code-review high origin/main` where the tool has it. |
