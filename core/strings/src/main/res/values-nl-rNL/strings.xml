@@ -131,7 +131,6 @@
     <string name="common.action.save">Opslaan</string>
     <string name="common.dialog.cancel">Annuleren</string>
     <string name="common.dialog.confirm">Instellen</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Er is iets fout gegaan 😢</string>
     <string name="common.error.generic.retry">Opnieuw proberen</string>
     <string name="cover.crop.hint">Sleep om te verplaatsen; knijp of sleep een hoek om het formaat te wijzigen.</string>

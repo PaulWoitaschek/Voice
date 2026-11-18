@@ -131,7 +131,6 @@
     <string name="common.action.save">Tallenna</string>
     <string name="common.dialog.cancel">Peruuta</string>
     <string name="common.dialog.confirm">Aseta</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Jotakin meni pieleen 😢</string>
     <string name="common.error.generic.retry">Yritä uudelleen</string>
     <string name="cover.crop.hint">Siirrä vetämällä; muuta kokoa nipistämällä tai vetämällä kulmasta.</string>

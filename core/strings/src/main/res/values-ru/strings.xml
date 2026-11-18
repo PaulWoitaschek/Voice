@@ -137,7 +137,6 @@
     <string name="common.action.save">Сохранить</string>
     <string name="common.dialog.cancel">Отмена</string>
     <string name="common.dialog.confirm">Установить</string>
-    <string name="common.dialog.ok">ОК</string>
     <string name="common.error.generic.message">Что-то пошло не так 😢</string>
     <string name="common.error.generic.retry">Повторить</string>
     <string name="cover.crop.hint">Перетащите, чтобы переместить; сведите пальцы или потяните за угол, чтобы изменить размер.</string>

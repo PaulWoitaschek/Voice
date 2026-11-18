@@ -131,7 +131,6 @@
     <string name="common.action.save">Speichern</string>
     <string name="common.dialog.cancel">Abbrechen</string>
     <string name="common.dialog.confirm">Okay</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Etwas ist schiefgelaufen 😢</string>
     <string name="common.error.generic.retry">Erneut versuchen</string>
     <string name="cover.crop.hint">Zum Verschieben ziehen. Zum Ändern der Größe mit zwei Fingern zoomen oder an einer Ecke ziehen.</string>

@@ -131,7 +131,6 @@
     <string name="common.action.save">Mentés</string>
     <string name="common.dialog.cancel">Mégse</string>
     <string name="common.dialog.confirm">Beállítás</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Valami balul sült el 😢</string>
     <string name="common.error.generic.retry">Újra</string>
     <string name="cover.crop.hint">Húzza a mozgatáshoz; csippentsen vagy húzzon egy sarkot az átméretezéshez.</string>

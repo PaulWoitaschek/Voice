@@ -128,7 +128,6 @@
     <string name="common.action.save">Simpan</string>
     <string name="common.dialog.cancel">Batalkan</string>
     <string name="common.dialog.confirm">Atur</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Terjadi kesalahan 😢</string>
     <string name="common.error.generic.retry">Coba lagi</string>
     <string name="cover.crop.hint">Seret untuk memindahkan; cubit atau tarik sudut untuk mengubah ukuran.</string>

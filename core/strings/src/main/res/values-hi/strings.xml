@@ -131,7 +131,6 @@
     <string name="common.action.save">सहेजें</string>
     <string name="common.dialog.cancel">रद्द</string>
     <string name="common.dialog.confirm">सेट करें</string>
-    <string name="common.dialog.ok">ठीक है</string>
     <string name="common.error.generic.message">कुछ गलत हो गया 😢</string>
     <string name="common.error.generic.retry">पुन: प्रयास करें</string>
     <string name="cover.crop.hint">खिसकाने के लिए खींचें। साइज़ बदलने के लिए पिंच करें या कोना खींचें।</string>

@@ -131,7 +131,6 @@
     <string name="common.action.save">Spara</string>
     <string name="common.dialog.cancel">Avbryt</string>
     <string name="common.dialog.confirm">Bekräfta</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Något gick fel 😢</string>
     <string name="common.error.generic.retry">Försök igen</string>
     <string name="cover.crop.hint">Dra för att flytta; nyp eller dra i ett hörn för att ändra storlek.</string>

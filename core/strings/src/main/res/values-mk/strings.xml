@@ -131,7 +131,6 @@
     <string name="common.action.save">Зачувај</string>
     <string name="common.dialog.cancel">Откажи</string>
     <string name="common.dialog.confirm">Намести</string>
-    <string name="common.dialog.ok">ОК</string>
     <string name="common.error.generic.message">Настана грешка 😢</string>
     <string name="common.error.generic.retry">Пробај повторно</string>
     <string name="cover.crop.hint">Повлечете за поместување. Стиснете со два прста или повлечете агол за промена на големината.</string>

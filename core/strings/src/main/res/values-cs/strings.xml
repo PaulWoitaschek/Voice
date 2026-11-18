@@ -137,7 +137,6 @@
     <string name="common.action.save">Uložit</string>
     <string name="common.dialog.cancel">Zrušit</string>
     <string name="common.dialog.confirm">Nastavit</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Něco se pokazilo 😢</string>
     <string name="common.error.generic.retry">Znovu</string>
     <string name="cover.crop.hint">Přetažením posunete, sevřením prstů nebo tažením za roh změníte velikost.</string>

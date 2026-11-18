@@ -131,7 +131,6 @@
     <string name="common.action.save">சேமி</string>
     <string name="common.dialog.cancel">ரத்துசெய்</string>
     <string name="common.dialog.confirm">அமை</string>
-    <string name="common.dialog.ok">சரி</string>
     <string name="common.error.generic.message">ஏதோ தவறு நடந்தது 😢</string>
     <string name="common.error.generic.retry">மீண்டும் முயற்சிக்கவும்</string>
     <string name="cover.crop.hint">நகர்த்த இழுக்கவும்; அளவை மாற்ற பிஞ்ச் செய்யவும் அல்லது ஒரு மூலையை இழுக்கவும்.</string>

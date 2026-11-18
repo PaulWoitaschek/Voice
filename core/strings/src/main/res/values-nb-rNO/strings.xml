@@ -131,7 +131,6 @@
     <string name="common.action.save">Lagre</string>
     <string name="common.dialog.cancel">Avbryt</string>
     <string name="common.dialog.confirm">Sett</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Noe gikk galt 😢</string>
     <string name="common.error.generic.retry">Prøv igjen</string>
     <string name="cover.crop.hint">Dra for å flytte; knip eller dra i et hjørne for å endre størrelsen.</string>

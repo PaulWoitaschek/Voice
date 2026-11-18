@@ -131,7 +131,6 @@
     <string name="common.action.save">Αποθήκευση</string>
     <string name="common.dialog.cancel">Ακύρωση</string>
     <string name="common.dialog.confirm">Ορισμός</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Κάτι πήγε στραβά 😢</string>
     <string name="common.error.generic.retry">Επανάληψη</string>
     <string name="cover.crop.hint">Σύρετε για μετακίνηση. Αλλάξτε το μέγεθος με δύο δάχτυλα ή από μια γωνία.</string>

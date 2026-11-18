@@ -128,7 +128,6 @@
     <string name="common.action.save">儲存</string>
     <string name="common.dialog.cancel">取消</string>
     <string name="common.dialog.confirm">確定</string>
-    <string name="common.dialog.ok">確定</string>
     <string name="common.error.generic.message">出了點問題 😢</string>
     <string name="common.error.generic.retry">重試</string>
     <string name="cover.crop.hint">拖曳即可移動，用雙指縮放或拖曳邊角即可調整大小。</string>

@@ -131,7 +131,6 @@
     <string name="common.action.save">Kaydet</string>
     <string name="common.dialog.cancel">İptal</string>
     <string name="common.dialog.confirm">Ayarla</string>
-    <string name="common.dialog.ok">Tamam</string>
     <string name="common.error.generic.message">Bir şeyler ters gitti 😢</string>
     <string name="common.error.generic.retry">Tekrar dene</string>
     <string name="cover.crop.hint">Taşımak için sürükleyin; boyutlandırmak için sıkıştırın veya bir köşeyi sürükleyin.</string>

@@ -131,7 +131,6 @@
     <string name="common.action.save">Gem</string>
     <string name="common.dialog.cancel">Annuller</string>
     <string name="common.dialog.confirm">Angiv</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Noget gik galt 😢</string>
     <string name="common.error.generic.retry">Prøv igen</string>
     <string name="cover.crop.hint">Træk for at flytte. Knib eller træk i et hjørne for at ændre størrelsen.</string>

@@ -134,7 +134,6 @@
     <string name="common.action.save">Salvar</string>
     <string name="common.dialog.cancel">Cancelar</string>
     <string name="common.dialog.confirm">Definir</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Algo deu errado 😢</string>
     <string name="common.error.generic.retry">Tentar novamente</string>
     <string name="cover.crop.hint">Arraste para mover; faça pinça ou arraste um canto para redimensionar.</string>

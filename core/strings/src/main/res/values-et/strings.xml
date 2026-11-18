@@ -131,7 +131,6 @@
     <string name="common.action.save">Salvesta</string>
     <string name="common.dialog.cancel">Katkesta</string>
     <string name="common.dialog.confirm">Salvesta</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Midagi läks valesti 😢</string>
     <string name="common.error.generic.retry">Proovi uuesti</string>
     <string name="cover.crop.hint">Lohista liigutamiseks; suuruse muutmiseks näpista või tõmba nurgast.</string>

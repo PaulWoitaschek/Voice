@@ -128,7 +128,6 @@
     <string name="common.action.save">保存</string>
     <string name="common.dialog.cancel">取消</string>
     <string name="common.dialog.confirm">确定</string>
-    <string name="common.dialog.ok">确定</string>
     <string name="common.error.generic.message">发生了错误😢</string>
     <string name="common.error.generic.retry">重试</string>
     <string name="cover.crop.hint">拖动以移动，双指缩放或拖动边角以调整大小。</string>

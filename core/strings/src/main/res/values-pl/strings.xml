@@ -137,7 +137,6 @@
     <string name="common.action.save">Zapisz</string>
     <string name="common.dialog.cancel">Anuluj</string>
     <string name="common.dialog.confirm">Ustaw</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Coś poszło nie tak 😢</string>
     <string name="common.error.generic.retry">Ponów</string>
     <string name="cover.crop.hint">Przeciągnij, aby przesunąć; zsuń palce lub przeciągnij róg, aby zmienić rozmiar.</string>

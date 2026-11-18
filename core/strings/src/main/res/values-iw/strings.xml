@@ -134,7 +134,6 @@
     <string name="common.action.save">שמירה</string>
     <string name="common.dialog.cancel">ביטול</string>
     <string name="common.dialog.confirm">אישור</string>
-    <string name="common.dialog.ok">אישור</string>
     <string name="common.error.generic.message">משהו השתבש 😢</string>
     <string name="common.error.generic.retry">ניסיון חוזר</string>
     <string name="cover.crop.hint">גררו כדי להזיז; צבטו או גררו פינה כדי לשנות את הגודל.</string>

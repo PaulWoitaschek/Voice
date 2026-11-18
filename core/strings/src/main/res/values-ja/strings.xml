@@ -128,7 +128,6 @@
     <string name="common.action.save">保存</string>
     <string name="common.dialog.cancel">キャンセル</string>
     <string name="common.dialog.confirm">設定</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">問題が発生しました 😢</string>
     <string name="common.error.generic.retry">再試行</string>
     <string name="cover.crop.hint">ドラッグで移動、ピンチまたは角をドラッグしてサイズを変更します。</string>

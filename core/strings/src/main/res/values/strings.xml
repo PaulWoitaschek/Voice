@@ -227,8 +227,6 @@
     <string name="common.dialog.cancel">Cancel</string>
     <!-- Generic confirmation action in dialogs that apply a value. -->
     <string name="common.dialog.confirm">Set</string>
-    <!-- Generic action for acknowledging a dialog message. -->
-    <string name="common.dialog.ok">OK</string>
     <!-- Generic error message shown when cover search or loading fails. -->
     <string name="common.error.generic.message">Something went wrong 😢</string>
     <!-- Retry action shown after a generic error. -->
