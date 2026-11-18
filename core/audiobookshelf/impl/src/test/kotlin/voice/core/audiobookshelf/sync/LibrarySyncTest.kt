@@ -1,17 +1,22 @@
 package voice.core.audiobookshelf.sync
 
-import io.mockk.Runs
+import android.content.Context
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.just
+import io.mockk.every
 import io.mockk.mockk
+import kotlin.io.path.createTempDirectory
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
+import mockwebserver3.Dispatcher
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
+import mockwebserver3.RecordedRequest
+import okhttp3.Headers.Companion.headersOf
 import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Before
@@ -20,13 +25,19 @@ import voice.core.audiobookshelf.account.Account
 import voice.core.audiobookshelf.account.AccountStore
 import voice.core.audiobookshelf.api.AbsLibrary
 import voice.core.audiobookshelf.api.AbsLibraryItem
+import voice.core.audiobookshelf.api.BatchGetRequest
+import voice.core.audiobookshelf.api.BatchGetResponse
 import voice.core.audiobookshelf.api.LibrariesResponse
 import voice.core.audiobookshelf.api.LibraryItemsResponse
 import voice.core.audiobookshelf.audiobookshelfJson
 import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.BookContent
+import voice.core.data.BookId
+import voice.core.data.Chapter
 import voice.core.data.ChapterId
 import voice.core.data.repo.BookContentRepo
+import voice.core.data.repo.BookRepository
+import voice.core.data.repo.BookmarkRepo
 import voice.core.data.repo.ChapterRepo
 
 class LibrarySyncTest {
@@ -71,7 +82,7 @@ class LibrarySyncTest {
 
     sync(item, contentRepo, chapterRepo)
 
-    coVerify { contentRepo.put(stored.copy(serverLibraryId = "library")) }
+    coVerify { contentRepo.put(listOf(stored.copy(serverLibraryId = "library"))) }
     assertEquals(mapOf("library" to "Kids"), accountStore.data.first()?.libraryNames)
   }
 
@@ -83,22 +94,213 @@ class LibrarySyncTest {
 
     sync(item.copy(isMissing = true), contentRepo, chapterRepo = mockk())
 
-    coVerify { contentRepo.put(stored.copy(serverLibraryId = "library")) }
+    coVerify { contentRepo.put(listOf(stored.copy(serverLibraryId = "library"))) }
+  }
+
+  @Test
+  fun `a library of 5,000 books is written in a few steps`() = runTest {
+    val written = mutableListOf<List<BookContent>>()
+    val contentRepo = emptyContentRepo()
+    coEvery { contentRepo.put(capture(written)) } returns Unit
+
+    syncLargeLibrary(contentRepo, items(5_000))
+
+    val books = written.sumOf { it.size }
+    val steps = written.count { it.isNotEmpty() }
+    assertEquals(5_000, books)
+    assertTrue(steps <= 5)
+    coVerify(exactly = 0) { contentRepo.put(any<BookContent>()) }
+  }
+
+  @Test
+  fun `the covers of 250 books are written in a few steps`() = runTest {
+    var stored = emptyList<BookContent>()
+    val written = mutableListOf<List<BookContent>>()
+    val contentRepo =
+      mockk<BookContentRepo> {
+        coEvery { all() } answers { stored }
+        coEvery { this@mockk.get(any()) } answers { stored.find { it.id == firstArg() } }
+        coEvery { put(capture(written)) } answers
+          {
+            val ids = written.last().map { it.id }.toSet()
+            stored = stored.filterNot { it.id in ids } + written.last()
+          }
+      }
+    val items = items(250).map { it.copy(media = it.media.copy(coverPath = "cover.jpg")) }
+
+    syncLargeLibrary(contentRepo, items)
+
+    assertEquals(250, stored.count { it.metadata.cover?.exists() == true })
+    val coversPerWrite = written.map { books -> books.count { it.metadata.cover != null } }
+    assertEquals(listOf(100, 100, 50), coversPerWrite.filter { it > 0 })
+  }
+
+  @Test
+  fun `a seek while the sync stores a book keeps its place`() = runTest {
+    val before = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")), updatedAt = 1_000)
+    val previousChapters = before.chapters()
+    var current = before.toBookContent(previousChapters, existing = null)
+    val contentRepo =
+      mockk<BookContentRepo> {
+        coEvery { all() } answers { listOf(current) }
+        coEvery { get(current.id) } answers { current }
+        coEvery { put(any<List<BookContent>>()) } answers
+          {
+            firstArg<List<BookContent>>().forEach { current = it }
+          }
+      }
+    val chapterRepo =
+      mockk<ChapterRepo> {
+        coEvery { get(any<ChapterId>()) } answers
+          {
+            previousChapters.find { it.id == firstArg() }
+          }
+        coEvery { put(any<List<Chapter>>()) } answers
+          {
+            // the listener seeks while the sync writes the chapters
+            current = current.copy(positionInChapter = 20_000)
+          }
+      }
+    val changed = before.copy(updatedAt = 2_000)
+    server.enqueue(json(LibraryItemsResponse(results = listOf(changed), total = 1)))
+    server.enqueue(json(BatchGetResponse(listOf(changed))))
+
+    sync(
+      changed,
+      contentRepo,
+      chapterRepo,
+      bookmarkRepo = mockk { coEvery { bookmarks(any()) } returns emptyList() },
+      listed = true,
+    )
+
+    assertEquals(20_000, current.positionInChapter)
+  }
+
+  @Test
+  fun `a seek while the sync writes a batch of books keeps its place`() = runTest {
+    val before = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")), updatedAt = 1_000)
+    val chapters = before.chapters()
+    var current = before.toBookContent(chapters, existing = null)
+    val added = item(tracks = listOf(track(1, 0.0, 60.0, "b.mp3")), id = "added")
+    val contentRepo =
+      mockk<BookContentRepo> {
+        coEvery { all() } answers { listOf(current) }
+        coEvery { this@mockk.get(any()) } answers { current.takeIf { it.id == firstArg() } }
+        coEvery { put(any<List<BookContent>>()) } answers
+          {
+            val written = firstArg<List<BookContent>>()
+            // the listener seeks while the sync writes the new books
+            if (written.any { it.id.value == "abs://item/added" }) {
+              current = current.copy(positionInChapter = 20_000)
+            }
+            written.filter { it.id == current.id }.forEach { current = it }
+          }
+      }
+    val chapterRepo =
+      mockk<ChapterRepo>(relaxUnitFun = true) {
+        coEvery { get(any<ChapterId>()) } answers { chapters.find { it.id == firstArg() } }
+      }
+    val changed = before.copy(updatedAt = 2_000)
+    server.enqueue(json(LibraryItemsResponse(results = listOf(changed, added), total = 2)))
+    server.enqueue(json(BatchGetResponse(listOf(changed, added))))
+
+    sync(
+      changed,
+      contentRepo,
+      chapterRepo,
+      bookmarkRepo = mockk { coEvery { bookmarks(any()) } returns emptyList() },
+      listed = true,
+    )
+
+    assertEquals(20_000, current.positionInChapter)
+  }
+
+  // writes like the real repository, which reads each book again under its lock
+  private fun bookRepository(contentRepo: BookContentRepo): BookRepository {
+    val bookRepository = mockk<BookRepository>()
+    coEvery { bookRepository.updateBooks(any(), any()) } coAnswers
+      {
+        val update = secondArg<(BookContent) -> BookContent>()
+        contentRepo.put(firstArg<Set<BookId>>().mapNotNull { contentRepo.get(it)?.let(update) })
+      }
+    return bookRepository
+  }
+
+  private fun emptyContentRepo(): BookContentRepo {
+    val contentRepo = mockk<BookContentRepo>(relaxUnitFun = true)
+    coEvery { contentRepo.all() } returns emptyList()
+    coEvery { contentRepo.get(any()) } returns null
+    return contentRepo
+  }
+
+  private fun items(count: Int) =
+    List(count) { item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")), id = "item$it") }
+
+  private suspend fun syncLargeLibrary(
+    contentRepo: BookContentRepo,
+    items: List<AbsLibraryItem>,
+  ) {
+    val itemsById = items.associateBy { it.id }
+    server.dispatcher =
+      object : Dispatcher() {
+        override fun dispatch(request: RecordedRequest): MockResponse {
+          val path = request.url.encodedPath
+          return when {
+            path.endsWith("/items") && request.method == "GET" -> {
+              val page = request.url.queryParameter("page")!!.toInt()
+              val limit = request.url.queryParameter("limit")!!.toInt()
+              json(
+                LibraryItemsResponse(
+                  results = items.drop(page * limit).take(limit),
+                  total = items.size,
+                ),
+              )
+            }
+            path == "/api/items/batch/get" -> {
+              val ids =
+                audiobookshelfJson
+                  .decodeFromString<BatchGetRequest>(request.body!!.utf8())
+                  .libraryItemIds
+              json(BatchGetResponse(ids.map(itemsById::getValue)))
+            }
+            path == "/api/libraries" -> json(LibrariesResponse(emptyList()))
+            path.endsWith("/cover") ->
+              MockResponse(headers = headersOf("Content-Type", "image/jpeg"), body = "cover")
+            else -> MockResponse(code = 404)
+          }
+        }
+      }
+    LibrarySync(
+        http = AudiobookshelfHttp(accountStore, OkHttpClient()),
+        contentRepo = contentRepo,
+        bookRepository = bookRepository(contentRepo),
+        chapterRepo = mockk(relaxUnitFun = true),
+        bookmarkRepo = mockk(),
+        accountStore = accountStore,
+        context = context(),
+      )
+      .sync(accountStore.data.first()!!)
+  }
+
+  private fun context(): Context {
+    val filesDir = createTempDirectory().toFile()
+    return mockk { every { this@mockk.filesDir } returns filesDir }
   }
 
   private fun contentRepo(stored: BookContent) =
-    mockk<BookContentRepo> {
+    mockk<BookContentRepo>(relaxUnitFun = true) {
       coEvery { all() } returns listOf(stored)
       coEvery { get(stored.id) } returns stored
-      coEvery { put(any()) } just Runs
     }
 
   private suspend fun sync(
     item: AbsLibraryItem,
     contentRepo: BookContentRepo,
     chapterRepo: ChapterRepo,
+    bookmarkRepo: BookmarkRepo = mockk(),
+    listed: Boolean = false,
   ) {
-    server.enqueue(json(LibraryItemsResponse(results = listOf(item), total = 1)))
+    if (!listed) server.enqueue(json(LibraryItemsResponse(results = listOf(item), total = 1)))
     server.enqueue(
       json(
         LibrariesResponse(listOf(AbsLibrary(id = "library", name = "Kids", mediaType = "book"))),
@@ -107,10 +309,11 @@ class LibrarySyncTest {
     LibrarySync(
         http = AudiobookshelfHttp(accountStore, OkHttpClient()),
         contentRepo = contentRepo,
+        bookRepository = bookRepository(contentRepo),
         chapterRepo = chapterRepo,
-        bookmarkRepo = mockk(),
+        bookmarkRepo = bookmarkRepo,
         accountStore = accountStore,
-        context = mockk(),
+        context = context(),
       )
       .sync(accountStore.data.first()!!)
   }

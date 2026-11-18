@@ -73,17 +73,20 @@ public class BookContentRepoImpl(private val dao: BookContentDao) : BookContentR
       }
     }
     // only the changed books, so a position written meanwhile isn't overwritten with an older one
-    changed.forEach { dao.insert(it) }
+    dao.insertAll(changed)
   }
 
   override suspend fun put(content: BookContent) {
+    put(listOf(content))
+  }
+
+  override suspend fun put(contents: List<BookContent>) {
+    if (contents.isEmpty()) return
     fillCache()
-    cache.update { contents ->
-      val newContents = contents!!.toMutableList()
-      newContents.removeAll { it.id == content.id }
-      newContents.add(content)
-      dao.insert(content)
-      newContents
+    val ids = contents.mapTo(mutableSetOf()) { it.id }
+    cache.update { current ->
+      dao.insertAll(contents)
+      current!!.filterNot { it.id in ids } + contents
     }
   }
 }

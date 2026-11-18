@@ -3,6 +3,7 @@ package voice.core.data.repo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import app.cash.turbine.test
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -82,5 +83,23 @@ class BookContentRepoImplTest {
     repo.put(book)
 
     assertEquals(listOf(book), BookContentRepoImpl(db.bookContentDao()).all())
+  }
+
+  @Test
+  fun `books written together update the library once`() = runTest {
+    val stored = content(name = "Stored")
+    repo.put(stored)
+    val changed = stored.copy(positionInChapter = 10)
+    val added = content(name = "Added")
+
+    repo.flow().test {
+      assertEquals(listOf(stored), awaitItem())
+
+      repo.put(listOf(changed, added))
+
+      assertEquals(listOf(changed, added), awaitItem())
+      expectNoEvents()
+    }
+    assertEquals(setOf(changed, added), BookContentRepoImpl(db.bookContentDao()).all().toSet())
   }
 }

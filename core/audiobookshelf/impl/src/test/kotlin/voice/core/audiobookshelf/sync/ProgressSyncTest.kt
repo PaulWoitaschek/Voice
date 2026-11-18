@@ -1,11 +1,14 @@
 package voice.core.audiobookshelf.sync
 
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.spyk
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -30,6 +33,8 @@ import voice.core.audiobookshelf.http.AudiobookshelfHttp
 import voice.core.data.Book
 import voice.core.data.BookId
 import voice.core.data.CustomMetadata
+import voice.core.data.repo.BookRepository
+import voice.core.playback.PlayerController
 import voice.core.playback.playstate.PlayStateManager
 
 class ProgressSyncTest {
@@ -231,7 +236,48 @@ class ProgressSyncTest {
     assertEquals(0, server.requestCount)
   }
 
-  private fun progressSync(repo: MemoryBookRepository): ProgressSync {
+  @Test
+  fun `the places of 1,000 books from another app are taken over in one write`() = runTest {
+    val books = List(1_000) { book(positionMs = 0, itemId = "item$it") }
+    val repo = spyk(MemoryBookRepository(*books.toTypedArray()))
+    val progress =
+      List(1_000) {
+        serverProgress(currentTime = 80.0, lastUpdate = 10, itemId = "item$it")
+      }
+
+    progressSync(repo).syncAll(account, progress)
+
+    assertTrue(repo.all().all { it.position == 80_000L })
+    assertEquals(1_000, syncedProgress.data.first().size)
+    coVerify(exactly = 1) { repo.updateBooks(any(), any()) }
+    coVerify(exactly = 0) { repo.updateBook(any(), any()) }
+  }
+
+  @Test
+  fun `a seek during the sync keeps its place`() = runTest {
+    val repo = MemoryBookRepository(book(positionMs = 0))
+    val playerController =
+      mockk<PlayerController> {
+        coEvery { livePlaybackState(any()) } coAnswers
+          {
+            // the listener seeks while the sync decides
+            repo.updateBook(bookId) { it.copy(positionInChapter = 20_000) }
+            null
+          }
+      }
+
+    progressSync(repo, playerController)
+      .syncAll(account, listOf(serverProgress(currentTime = 80.0, lastUpdate = 10)))
+
+    assertEquals(20_000, repo.get(bookId)!!.position)
+  }
+
+  private fun progressSync(
+    repo: BookRepository,
+    playerController: PlayerController = mockk {
+      coEvery { livePlaybackState(any()) } returns null
+    },
+  ): ProgressSync {
     val accountStore = MemoryDataStore<Account?>(account)
     return ProgressSync(
       http =
@@ -242,19 +288,19 @@ class ProgressSyncTest {
       bookRepository = repo,
       syncedProgressStore = SyncedProgressStore(syncedProgress),
       playStateManager = PlayStateManager(),
-      playerController =
-        mockk {
-          coEvery { livePlaybackState(any()) } returns null
-        },
+      playerController = playerController,
     )
   }
 
   private fun book(
     positionMs: Long,
     lastPlayedAt: Long = 0,
+    itemId: String = "item",
   ): Book {
+    val serverItem = item.copy(id = itemId)
+    val chapters = serverItem.chapters()
     val content =
-      item
+      serverItem
         .toBookContent(chapters, existing = null)
         .copy(lastPlayedAt = Instant.fromEpochMilliseconds(lastPlayedAt))
     return Book(content, chapters, CustomMetadata(content.id)).let { book ->
@@ -269,9 +315,10 @@ class ProgressSyncTest {
     currentTime: Double,
     lastUpdate: Long,
     isFinished: Boolean = false,
+    itemId: String = "item",
   ) =
     AbsMediaProgress(
-      libraryItemId = "item",
+      libraryItemId = itemId,
       duration = 120.0,
       currentTime = currentTime,
       isFinished = isFinished,

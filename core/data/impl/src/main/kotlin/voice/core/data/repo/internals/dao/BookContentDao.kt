@@ -9,7 +9,8 @@ import voice.core.data.BookContent
 @Dao
 public interface BookContentDao {
 
-  @Insert(onConflict = OnConflictStrategy.REPLACE) public suspend fun insert(content: BookContent)
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  public suspend fun insertAll(contents: List<BookContent>)
 
   @Query("SELECT * FROM content2") public suspend fun all(): List<BookContent>
 }

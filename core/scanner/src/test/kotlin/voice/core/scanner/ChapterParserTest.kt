@@ -134,7 +134,7 @@ class ChapterParserTest {
               chapter(any())
             } returns null
             coEvery {
-              insert(any())
+              insertAll(any())
             } just Runs
           },
         ),

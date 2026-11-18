@@ -41,8 +41,7 @@ class ChapterRepoImplTest {
     val repo = ChapterRepoImpl(db.chapterDao())
     val first = chapter("1")
     val second = chapter("2")
-    db.chapterDao().insert(first)
-    db.chapterDao().insert(second)
+    db.chapterDao().insertAll(listOf(first, second))
 
     val chapters = repo.get(listOf(second.id, ChapterId("missing"), first.id))
 
