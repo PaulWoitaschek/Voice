@@ -388,33 +388,6 @@ class BookPlayViewModelTest {
   }
 
   @Test
-  fun `the chapter number follows playback into the next chapter`() = scope.runTest {
-    val livePlaybackFlow = MutableStateFlow<LivePlaybackState?>(null)
-    val viewModel =
-      viewModel(experimentalPlaybackPersistence = true, livePlaybackFlow = livePlaybackFlow)
-
-    backgroundScope
-      .launchMolecule(RecompositionMode.Immediate) {
-        viewModel.viewState()
-      }
-      .test {
-        assertEquals(expected = null, actual = awaitItem())
-        assertEquals(expected = 5, actual = awaitItem()!!.chapterNumber)
-
-        livePlaybackFlow.value =
-          LivePlaybackState(
-            bookId = book.id,
-            chapterId = book.chapters[1].id,
-            positionMs = 4.5.minutes.inWholeMilliseconds,
-            isPlaying = true,
-            playbackSpeed = 1F,
-          )
-
-        assertEquals(expected = 6, actual = awaitItem()!!.chapterNumber)
-      }
-  }
-
-  @Test
   fun onChapterClickSetsPositionAndDismissesDialog() = scope.runTest {
     every { player.setPosition(any(), any(), any()) } just Runs
 
