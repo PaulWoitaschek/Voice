@@ -12,7 +12,6 @@ import voice.core.common.AppInfoProvider
 class AppInfoProviderImpl(private val application: Application) : AppInfoProvider {
   override val versionName: String = BuildConfig.VERSION_NAME
   override val analyticsIncluded: Boolean = BuildConfig.INCLUDE_ANALYTICS
-  override val supportDevelopmentIncluded: Boolean = BuildConfig.SUPPORT_DEVELOPMENT_INCLUDED
   override val installTime: Instant by lazy {
     val packageManager = application.packageManager
     val packageInfo =

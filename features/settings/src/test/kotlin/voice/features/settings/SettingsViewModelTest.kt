@@ -92,7 +92,6 @@ class SettingsViewModelTest {
       every { useGridAsDefault() } returns true
     }
   private val kioskModeFeatureFlag = MemoryFeatureFlag(false)
-  private val supportDevelopmentFeatureFlag = MemoryFeatureFlag(true)
   private val audiobookshelfFeatureFlag = MemoryFeatureFlag(false)
   private val serverName = MutableStateFlow<String?>(null)
   private val serverAccount =
@@ -129,7 +128,6 @@ class SettingsViewModelTest {
       developerMenuUnlockedStore = DeveloperMenuUnlockedStore(developerMenuUnlockedStore),
       dynamicColorAvailability = dynamicColorAvailability,
       audiobookFolders = audiobookFolders,
-      supportDevelopmentFeatureFlag = SupportDevelopmentFeatureFlag(supportDevelopmentFeatureFlag),
       supporterStatusStore = SupporterStatusStore(supporterStatusStore),
       zone = { ZoneOffset.UTC },
       dispatcherProvider =
@@ -272,34 +270,6 @@ class SettingsViewModelTest {
     verify(exactly = 1) {
       navigator.goTo(Destination.FolderPicker)
     }
-  }
-
-  @Test
-  fun `view state shows support development when turned on`() = scope.runTest {
-    supportDevelopmentFeatureFlag.value = true
-
-    backgroundScope
-      .launchMolecule(RecompositionMode.Immediate) {
-        viewModel.viewState()
-      }
-      .filterNotNull()
-      .test {
-        assertEquals(expected = true, actual = awaitItem().showSupportDevelopment)
-      }
-  }
-
-  @Test
-  fun `view state hides support development when turned off`() = scope.runTest {
-    supportDevelopmentFeatureFlag.value = false
-
-    backgroundScope
-      .launchMolecule(RecompositionMode.Immediate) {
-        viewModel.viewState()
-      }
-      .filterNotNull()
-      .test {
-        assertEquals(expected = false, actual = awaitItem().showSupportDevelopment)
-      }
   }
 
   @Test

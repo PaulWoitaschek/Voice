@@ -66,7 +66,6 @@ class SettingsViewModel(
   private val developerMenuUnlockedStore: DeveloperMenuUnlockedStore,
   private val dynamicColorAvailability: DynamicColorAvailability,
   private val audiobookFolders: AudiobookFolders,
-  private val supportDevelopmentFeatureFlag: SupportDevelopmentFeatureFlag,
   private val supporterStatusStore: SupporterStatusStore,
   private val zone: () -> ZoneId,
   private val dispatcherProvider: DispatcherProvider,
@@ -131,11 +130,6 @@ class SettingsViewModel(
     }
       .collectAsState(initial = null)
       .value
-    val showSupportDevelopment = remember {
-      supportDevelopmentFeatureFlag.flow.map { it.value }
-    }
-      .collectAsState(initial = null)
-      .value
     val supporterStatus = remember {
       supporterStatusStore.data
     }
@@ -168,7 +162,6 @@ class SettingsViewModel(
         folderNames == null ||
         foldersWithoutAccess == null ||
         showDeveloperMenu == null ||
-        showSupportDevelopment == null ||
         supporterStatus == null ||
         audiobookshelfServer == null ||
         audiobookshelfEnabled == null
@@ -200,7 +193,6 @@ class SettingsViewModel(
       analyticsEnabled = analyticsEnabled,
       showAnalyticSetting = appInfoProvider.analyticsIncluded,
       showDeveloperMenu = showDeveloperMenu,
-      showSupportDevelopment = showSupportDevelopment,
       supporterBadge = supporterStatus.badge,
       supporterSince =
         supporterStatus.supporterSince?.let {
