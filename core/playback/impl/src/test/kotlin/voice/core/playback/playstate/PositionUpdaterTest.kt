@@ -36,7 +36,7 @@ class PositionUpdaterTest {
         experimentalPlaybackPersistenceFeatureFlag =
           ExperimentalPlaybackPersistenceFeatureFlag(MemoryFeatureFlag(true)),
         playbackPersistenceIntervalFeatureFlag =
-          PlaybackPersistenceIntervalFeatureFlag(MemoryFeatureFlag("30")),
+          PlaybackPersistenceIntervalFeatureFlag(MemoryFeatureFlag(30L)),
         playingSaveIntervalStore = PlayingSaveIntervalStore(store),
         analytics = analytics,
       )
