@@ -133,7 +133,7 @@ internal fun nowPlayingBook(
     duration = book.duration.milliseconds,
     speed = speed,
     playing = playing,
-    finished = book.finished(),
+    finished = !playing && book.finished(),
     sleepTimerEnd = sleepTimerEnd(sleepTimer, playing, book, now),
   )
 }
@@ -201,7 +201,7 @@ private fun progress(
 }
 
 // the same rule the library uses to show a book as completed
-private fun Book.finished(): Boolean =
+internal fun Book.finished(): Boolean =
   position > 0 && position >= duration - 5.seconds.inWholeMilliseconds
 
 private fun Float.atSpeed(): Double = coerceAtLeast(0.1F).toDouble()

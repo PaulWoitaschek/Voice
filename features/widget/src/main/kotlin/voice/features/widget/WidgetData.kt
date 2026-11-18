@@ -83,7 +83,7 @@ class WidgetData(
         } else {
           combine(
             bookRepository.flow(id).distinctUntilChangedBy { book ->
-              book?.let { it.content.withoutPlaybackNoise() to it.custom }
+              book?.let { Triple(it.content.withoutPlaybackNoise(), it.custom, it.finished()) }
             },
             playing,
             refreshWhilePlaying(),

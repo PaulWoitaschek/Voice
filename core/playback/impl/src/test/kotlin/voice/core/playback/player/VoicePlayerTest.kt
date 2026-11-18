@@ -51,6 +51,8 @@ import voice.core.playback.AutoRewindAmountStore
 import voice.core.playback.LastPlaybackSpeedStore
 import voice.core.playback.MemoryDataStore
 import voice.core.playback.SeekTimeStore
+import voice.core.playback.history.AutomaticPauseRecorder
+import voice.core.playback.history.CommandSource
 import voice.core.playback.history.CommandSourceResolver
 import voice.core.playback.history.ListeningHistoryRecorder
 import voice.core.playback.history.PlaybackPosition
@@ -115,6 +117,17 @@ class VoicePlayerTest {
     }
   private val analytics = mockk<Analytics>(relaxUnitFun = true)
   private val chapterMarkPlayer = ChapterMarkPlayer(internalPlayer)
+  private val commandSourceResolver =
+    mockk<CommandSourceResolver> { every { current() } returns null }
+  private val historyRecorder =
+    ListeningHistoryRecorder(
+      repo = historyRepo,
+      clock =
+        object : Clock {
+          override fun now(): Instant = Instant.parse("2026-10-07T10:00:00Z")
+        },
+      scope = scope,
+    )
   private val player =
     VoicePlayer(
       player = chapterMarkPlayer,
@@ -133,16 +146,8 @@ class VoicePlayerTest {
       volumeGain = VolumeGain(VolumeGainSetter()),
       sleepTimer = sleepTimer,
       analytics = analytics,
-      historyRecorder =
-        ListeningHistoryRecorder(
-          repo = historyRepo,
-          clock =
-            object : Clock {
-              override fun now(): Instant = Instant.parse("2026-10-07T10:00:00Z")
-            },
-          scope = scope,
-        ),
-      commandSourceResolver = CommandSourceResolver(ApplicationProvider.getApplicationContext()),
+      historyRecorder = historyRecorder,
+      commandSourceResolver = commandSourceResolver,
     )
 
   @Test
@@ -330,6 +335,135 @@ class VoicePlayerTest {
       player.shouldHavePosition(11, 19_999)
       assertFalse(player.isPlaying)
       assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+    }
+
+  @Test
+  fun `last chapter, 30 seconds before the end, skip forward goes to 10 seconds before the end`() =
+    scope.runTest {
+      setMediaItems(twoChaptersOfAMinute())
+      seekTimeStore.updateData { 20.seconds }
+      player.seekTo(1, 29_999)
+      player.prepare()
+      awaitReady()
+
+      player.seekForward()
+
+      player.shouldHavePosition(1, 49_999)
+    }
+
+  @Test
+  fun `last chapter, 10 seconds before the end, playing, skip forward goes to the end, completed, playback stops`() =
+    scope.runTest {
+      AutomaticPauseRecorder(historyRecorder).attachTo(player)
+      setMediaItems(twoChaptersOfAMinute())
+      seekTimeStore.updateData { 20.seconds }
+      player.seekTo(1, 49_999)
+      player.prepare()
+      awaitReady()
+      player.play()
+
+      player.seekForward()
+      player.shouldHavePosition(1, 59_999)
+
+      TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
+      shadowOf(Looper.getMainLooper()).idle()
+      advanceUntilIdle()
+      player.shouldHavePosition(1, 59_999)
+      assertFalse(player.isPlaying)
+      assertEquals(
+        expected = listOf(ListeningEvent.Type.Pause to 59_999L),
+        actual = historyEvents.map { it.type to it.time },
+      )
+    }
+
+  @Test
+  fun `last chapter, 10 seconds before the end, paused, skip forward goes to the end, completed, stays paused`() =
+    scope.runTest {
+      setMediaItems(twoChaptersOfAMinute())
+      seekTimeStore.updateData { 20.seconds }
+      player.seekTo(1, 49_999)
+      player.prepare()
+      awaitReady()
+
+      player.seekForward()
+      player.shouldHavePosition(1, 59_999)
+
+      TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(internalPlayer)
+      shadowOf(Looper.getMainLooper()).idle()
+      player.shouldHavePosition(1, 59_999)
+      assertFalse(player.playWhenReady)
+    }
+
+  @Test
+  fun `last chapter, 10 seconds before the end, end of chapter sleep timer on, skip forward goes to the end, completed, playback stops, the timer turns off`() =
+    scope.runTest {
+      setMediaItems(twoChaptersOfAMinute())
+      seekTimeStore.updateData { 20.seconds }
+      player.seekTo(1, 49_999)
+      player.prepare()
+      awaitReady()
+      sleepTimer.enable(SleepTimerMode.EndOfChapter)
+      player.play()
+
+      player.seekForward()
+      player.shouldHavePosition(1, 59_999)
+
+      TestPlayerRunHelper.advance(internalPlayer).untilPlayWhenReadyIs(false)
+      shadowOf(Looper.getMainLooper()).idle()
+      player.shouldHavePosition(1, 59_999)
+      assertFalse(player.isPlaying)
+      assertEquals(expected = SleepTimerState.Disabled, actual = sleepTimer.state.value)
+    }
+
+  @Test
+  fun `last chapter, at the end of the book, skip forward does nothing`() = scope.runTest {
+    AutomaticPauseRecorder(historyRecorder).attachTo(player)
+    setMediaItems(twoChaptersOfAMinute())
+    seekTimeStore.updateData { 20.seconds }
+    player.seekTo(1, 49_999)
+    player.prepare()
+    awaitReady()
+    player.play()
+    player.seekForward()
+    TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
+    shadowOf(Looper.getMainLooper()).idle()
+    advanceUntilIdle()
+    val eventsAtTheEnd = historyEvents.toList()
+
+    player.seekToNext()
+    TestPlayerRunHelper.runUntilPendingCommandsAreFullyHandled(internalPlayer)
+    shadowOf(Looper.getMainLooper()).idle()
+    advanceUntilIdle()
+
+    player.shouldHavePosition(1, 59_999)
+    assertEquals(expected = Player.STATE_ENDED, actual = player.playbackState)
+    assertEquals(expected = eventsAtTheEnd, actual = historyEvents)
+  }
+
+  @Test
+  fun `last chapter, 10 seconds before the end, next on headphones goes to the end, completed, playback stops, no jump back`() =
+    scope.runTest {
+      val chapters = twoChaptersOfAMinute()
+      setMediaItems(chapters, currentChapter = chapters[1], positionInChapter = 49_999)
+      seekTimeStore.updateData { 20.seconds }
+      player.prepare()
+      awaitReady()
+      every { commandSourceResolver.current() } returns
+        CommandSource(ListeningEvent.Source.Bluetooth)
+      player.play()
+
+      player.seekToNext()
+      player.shouldHavePosition(1, 59_999)
+
+      TestPlayerRunHelper.advance(internalPlayer).untilState(Player.STATE_ENDED)
+      shadowOf(Looper.getMainLooper()).idle()
+      player.shouldHavePosition(1, 59_999)
+      assertFalse(player.isPlaying)
+      assertEquals(
+        expected = listOf(ListeningEvent.Type.Play, ListeningEvent.Type.SkipForward),
+        actual = historyEvents.map { it.type },
+      )
+      assertNull(historyRecorder.lastJump.value)
     }
 
   @Test
@@ -922,6 +1056,10 @@ class VoicePlayerTest {
       *Array(11) { ChapterMark(startMs = it * 1_000L, endMs = it * 1_000L + 999, name = null) },
       ChapterMark(startMs = 11_000, endMs = 31_000, name = null),
     )
+  }
+
+  private fun twoChaptersOfAMinute(): List<Chapter> {
+    return List(2) { chapter(ChapterMark(startMs = 0, endMs = 60_000, name = null)) }
   }
 
   private fun Player.next() {

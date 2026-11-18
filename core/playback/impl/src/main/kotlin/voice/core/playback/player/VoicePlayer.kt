@@ -29,6 +29,7 @@ import voice.core.playback.history.PlaybackPosition
 import voice.core.playback.history.playbackPosition
 import voice.core.playback.misc.Decibel
 import voice.core.playback.misc.VolumeGain
+import voice.core.playback.nextChapterTarget
 import voice.core.playback.session.currentBookId
 import voice.core.sleeptimer.SleepTimer
 import voice.core.sleeptimer.SleepTimerState
@@ -167,12 +168,15 @@ class VoicePlayer(
         player.duration.takeUnless { it == C.TIME_UNSET }?.milliseconds ?: return@launch
 
       if (newPosition > duration) {
-        val nextMediaItemIndex =
-          nextMediaItemIndex.takeUnless { it == C.INDEX_UNSET } ?: return@launch
-        player.seekTo(
-          nextMediaItemIndex,
-          (duration - newPosition).absoluteValue.inWholeMilliseconds,
-        )
+        if (nextMediaItemIndex == C.INDEX_UNSET) {
+          val (index, endMs) = player.nextChapterTarget() ?: return@launch
+          player.seekTo(index, endMs)
+        } else {
+          player.seekTo(
+            nextMediaItemIndex,
+            (duration - newPosition).absoluteValue.inWholeMilliseconds,
+          )
+        }
       } else {
         player.seekTo(newPosition.inWholeMilliseconds)
       }
