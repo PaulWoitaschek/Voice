@@ -20,4 +20,6 @@ dependencies {
 
   testImplementation(libs.media3.testUtils.core)
   testImplementation(libs.media3.testUtils.robolectric)
+  testImplementation(libs.coil.network)
+  testImplementation(libs.okhttp.mockwebserver)
 }

@@ -54,6 +54,7 @@ internal constructor(
   private val bookRepository: BookRepository,
   private val preferencesStore: PreferencesStore,
   private val notifications: DownloadNotifications,
+  private val covers: DownloadedCovers,
 ) : ServerDownloads {
 
   private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -202,6 +203,7 @@ internal constructor(
 
   override suspend fun download(bookId: BookId) {
     if (addMissingFiles(bookId)) startService()
+    scope.launch { bookRepository.get(bookId)?.let { covers.keep(it) } }
   }
 
   override suspend fun remove(bookId: BookId) {
@@ -225,11 +227,9 @@ internal constructor(
     notifications.cancelResults()
   }
 
-  /**
-   * Removes the downloads of files that are no longer part of a book on the server, and downloads
-   * the new files of books that were downloaded.
-   */
   internal suspend fun reconcile() {
+    // without the stored downloads, every book would look streamed and lose its cover
+    initialized.first { it }
     val books = bookRepository.all().filter { it.id.isRemote }
     val current = books.flatMap { book -> book.chapters.map { it.id.value } }.toSet()
     val present = files.value
@@ -246,6 +246,7 @@ internal constructor(
         }
         .map { addMissingFiles(it.id) }
     if (added.any { it } && appVisible) startService()
+    covers.sync(books, downloadedBooks)
   }
 
   internal fun onNotificationAction(

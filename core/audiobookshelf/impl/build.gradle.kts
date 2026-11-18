@@ -12,6 +12,8 @@ dependencies {
   implementation(projects.core.strings)
 
   implementation(libs.bundles.retrofit)
+  implementation(libs.coil.network)
+  implementation(libs.coil.singleton)
   implementation(libs.okhttp)
   implementation(libs.media3.exoplayer)
   implementation(libs.media3.datasource.okhttp)
