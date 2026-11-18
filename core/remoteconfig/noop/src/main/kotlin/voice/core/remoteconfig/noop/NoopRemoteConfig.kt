@@ -17,5 +17,10 @@ class NoopRemoteConfig : RemoteConfig {
     defaultValue: String,
   ): String = defaultValue
 
+  override fun long(
+    key: String,
+    defaultValue: Long,
+  ): Long = defaultValue
+
   override suspend fun refresh() {}
 }

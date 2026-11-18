@@ -70,6 +70,20 @@ class FeatureFlagFactoryTest {
     assertEquals(FeatureFlagValue(Style.Calm, isOverridden = false), flag.flow.first())
   }
 
+  @Test
+  fun `long flag reads the remote config and an override wins`() = runTest {
+    every { remoteConfig.long("seconds", 30) } returns 60
+    val flag =
+      FeatureFlagFactory(remoteConfig, FeatureFlagOverridesStore(overridesStore), backgroundScope)
+        .long(key = "seconds", description = "", defaultValue = 30)
+    assertEquals(60, flag.get())
+
+    flag.overwrite(90)
+    runCurrent()
+
+    assertEquals(FeatureFlagValue(90L, isOverridden = true), flag.flow.first())
+  }
+
   @Test(timeout = 10_000)
   fun `get does not wait for a read that resumes on the calling thread`() {
     every { remoteConfig.boolean("flag", false) } returns true

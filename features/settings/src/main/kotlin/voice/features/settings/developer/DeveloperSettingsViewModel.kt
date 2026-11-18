@@ -76,6 +76,13 @@ class DeveloperSettingsViewModel(
                   value = value.value as String,
                   isOverridden = value.isOverridden,
                 )
+              featureFlag.type == Long::class ->
+                DeveloperSettingsViewState.FeatureFlagViewState.StringFlag(
+                  key = featureFlag.key,
+                  description = featureFlag.description,
+                  value = value.value.toString(),
+                  isOverridden = value.isOverridden,
+                )
               else -> error("Invalid feature flag type: ${featureFlag.type}")
             }
           },
@@ -115,8 +122,12 @@ class DeveloperSettingsViewModel(
     value: String,
   ) {
     featureFlags.forEach {
-      if (it.key == key) {
-        @Suppress("UNCHECKED_CAST") (it as FeatureFlag<String>).overwrite(value)
+      if (it.key != key) return@forEach
+      @Suppress("UNCHECKED_CAST")
+      if (it.type == Long::class) {
+        value.toLongOrNull()?.let { long -> (it as FeatureFlag<Long>).overwrite(long) }
+      } else {
+        (it as FeatureFlag<String>).overwrite(value)
       }
     }
   }
