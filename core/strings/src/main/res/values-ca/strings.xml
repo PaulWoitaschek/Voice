@@ -134,7 +134,6 @@
     <string name="common.action.save">Desa</string>
     <string name="common.dialog.cancel">Cancel·la</string>
     <string name="common.dialog.confirm">Estableix</string>
-    <string name="common.dialog.ok">D\'acord</string>
     <string name="common.error.generic.message">Alguna cosa ha anat malament 😢</string>
     <string name="common.error.generic.retry">Torna-ho a provar</string>
     <string name="cover.crop.hint">Arrossegueu per moure. Pessigueu o estireu una cantonada per canviar la mida.</string>
@@ -275,8 +274,6 @@
     <string name="library.filter.not_downloaded">No baixats</string>
     <string name="library.filter.show">Mostra</string>
     <string name="library.folders.title">Carpetes d\'audiollibres</string>
-    <string name="library.folders.moved.dialog.title">Les carpetes d\'audiollibres han canviat de lloc</string>
-    <string name="library.folders.moved.dialog.message">Ara podeu gestionar les carpetes d\'audiollibres a Configuració.</string>
     <string name="library.folders.no_access">Sense accés</string>
     <string name="library.folders.no_access.action">Permet l\'accés</string>
     <string name="library.folders.no_access.badge">Torneu a permetre l\'accés a les vostres carpetes</string>

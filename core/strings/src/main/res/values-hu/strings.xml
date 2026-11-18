@@ -131,7 +131,6 @@
     <string name="common.action.save">Mentés</string>
     <string name="common.dialog.cancel">Mégse</string>
     <string name="common.dialog.confirm">Beállítás</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Valami balul sült el 😢</string>
     <string name="common.error.generic.retry">Újra</string>
     <string name="cover.crop.hint">Húzza a mozgatáshoz; csippentsen vagy húzzon egy sarkot az átméretezéshez.</string>
@@ -261,8 +260,6 @@
     <string name="library.filter.not_downloaded">Nem letöltött</string>
     <string name="library.filter.show">Megjelenítés</string>
     <string name="library.folders.title">Hangoskönyv mappák</string>
-    <string name="library.folders.moved.dialog.title">Új helyen a hangoskönyv mappák</string>
-    <string name="library.folders.moved.dialog.message">A hangoskönyv mappákat mostantól a Beállításokban kezelheti.</string>
     <string name="library.folders.no_access">Nincs hozzáférés</string>
     <string name="library.folders.no_access.action">Hozzáférés engedélyezése</string>
     <string name="library.folders.no_access.badge">Engedélyezze újra a hozzáférést a mappáihoz</string>

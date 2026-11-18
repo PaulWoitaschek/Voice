@@ -14,7 +14,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,19 +21,15 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingToolbarDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -50,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -70,7 +64,6 @@ import voice.core.data.BookCategory
 import voice.core.data.BookId
 import voice.core.strings.R as StringsR
 import voice.core.ui.PlayButton
-import voice.core.ui.R as UiR
 import voice.core.ui.VoiceTheme
 import voice.features.bookOverview.di.BookOverviewGraph
 import voice.features.bookOverview.overview.AuthorEntryViewState
@@ -187,8 +180,6 @@ fun BookOverviewScreen(modifier: Modifier = Modifier) {
     onSeriesLongClick = bookOverviewViewModel::onSeriesLongClick,
     onAuthorClick = bookOverviewViewModel::onAuthorClick,
     onAuthorLongClick = bookOverviewViewModel::onAuthorLongClick,
-    onBookFolderClick = bookOverviewViewModel::onBookFolderClick,
-    onFolderPickerMovedDialogDismiss = bookOverviewViewModel::onFolderPickerMovedDialogDismiss,
     onPlayButtonClick = bookOverviewViewModel::playPause,
     onSearchClick = bookOverviewViewModel::onSearchClick,
     onPermissionBugCardClick = bookOverviewViewModel::onPermissionBugCardClick,
@@ -227,8 +218,6 @@ internal fun BookOverview(
   onSeriesLongClick: (String) -> Unit,
   onAuthorClick: (String?) -> Unit,
   onAuthorLongClick: (AuthorEntryViewState) -> Unit,
-  onBookFolderClick: () -> Unit,
-  onFolderPickerMovedDialogDismiss: () -> Unit,
   onPlayButtonClick: () -> Unit,
   onSearchClick: () -> Unit,
   onPermissionBugCardClick: () -> Unit,
@@ -272,13 +261,11 @@ internal fun BookOverview(
         if (selection == null) {
           LibraryTopBar(
             showSearch = viewState.showSearchIcon,
-            showFolderPickerIcon = viewState.showFolderPickerIcon,
             showFolderAccessBadge = viewState.showFolderAccessBadge,
             showFilter = viewState.showFilterIcon,
             isLoading = viewState.isLoading,
             scrollBehavior = scrollBehavior,
             onSearchClick = onSearchClick,
-            onBookFolderClick = onBookFolderClick,
             onFilterClick = { showFilterSheet = true },
             onSettingsClick = onSettingsClick,
           )
@@ -369,10 +356,6 @@ internal fun BookOverview(
       }
     }
   }
-  Dialog(
-    dialog = viewState.dialog,
-    onFolderPickerMovedDialogDismiss = onFolderPickerMovedDialogDismiss,
-  )
   if (showFilterSheet) {
     LibraryFilterSheet(
       viewState = viewState,
@@ -401,42 +384,6 @@ private fun LazyGridState.heroPlayButtonVisible(): Boolean {
   return visible
 }
 
-@Composable
-private fun Dialog(
-  dialog: BookOverviewViewState.Dialog?,
-  onFolderPickerMovedDialogDismiss: () -> Unit,
-) {
-  when (dialog) {
-    BookOverviewViewState.Dialog.FolderPickerMovedToSettings -> {
-      AlertDialog(
-        onDismissRequest = onFolderPickerMovedDialogDismiss,
-        icon = {
-          Row {
-            Icon(
-              painter = painterResource(UiR.drawable.ic_arrow_forward),
-              contentDescription = null,
-            )
-            Icon(painter = painterResource(UiR.drawable.ic_settings), contentDescription = null)
-            Icon(painter = painterResource(UiR.drawable.ic_arrow_back), contentDescription = null)
-          }
-        },
-        title = {
-          Text(stringResource(StringsR.string.library_folders_moved_dialog_title))
-        },
-        text = {
-          Text(stringResource(StringsR.string.library_folders_moved_dialog_message))
-        },
-        confirmButton = {
-          TextButton(onClick = onFolderPickerMovedDialogDismiss) {
-            Text(stringResource(StringsR.string.common_dialog_ok))
-          }
-        },
-      )
-    }
-    null -> Unit
-  }
-}
-
 @Suppress("ComposePreviewPublic")
 @Preview
 @Composable
@@ -453,8 +400,6 @@ fun BookOverviewPreview(
       onSeriesLongClick = {},
       onAuthorClick = {},
       onAuthorLongClick = {},
-      onBookFolderClick = {},
-      onFolderPickerMovedDialogDismiss = {},
       onPlayButtonClick = {},
       onSearchClick = {},
       onPermissionBugCardClick = {},
@@ -533,8 +478,6 @@ internal class BookOverviewPreviewParameterProvider :
       showStoragePermissionBugCard = false,
       showSurveyCard = false,
       showFolderAccessBadge = false,
-      showFolderPickerIcon = true,
-      dialog = null,
     )
 
   private val authors =
@@ -563,7 +506,6 @@ internal class BookOverviewPreviewParameterProvider :
         isLoading = false,
         showEmptyLibrary = true,
         showFolderAccessBadge = true,
-        showFolderPickerIcon = false,
       ),
       library.copy(
         sections = emptyMap(),

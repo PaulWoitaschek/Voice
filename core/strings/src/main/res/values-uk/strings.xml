@@ -137,7 +137,6 @@
     <string name="common.action.save">Зберегти</string>
     <string name="common.dialog.cancel">Скасувати</string>
     <string name="common.dialog.confirm">Установити</string>
-    <string name="common.dialog.ok">ОК</string>
     <string name="common.error.generic.message">Щось пішло не так 😢</string>
     <string name="common.error.generic.retry">Повторити</string>
     <string name="cover.crop.hint">Перетягніть, щоб перемістити; зведіть пальці або потягніть за кут, щоб змінити розмір.</string>
@@ -289,8 +288,6 @@
     <string name="library.filter.not_downloaded">Не завантажені</string>
     <string name="library.filter.show">Показувати</string>
     <string name="library.folders.title">Папки з аудіокнигами</string>
-    <string name="library.folders.moved.dialog.title">Папки аудіокниг переміщено</string>
-    <string name="library.folders.moved.dialog.message">Тепер папками аудіокниг можна керувати в налаштуваннях.</string>
     <string name="library.folders.no_access">Немає доступу</string>
     <string name="library.folders.no_access.action">Дозволити доступ</string>
     <string name="library.folders.no_access.badge">Знову дозвольте доступ до своїх папок</string>

@@ -227,8 +227,6 @@
     <string name="common.dialog.cancel">Cancel</string>
     <!-- Generic confirmation action in dialogs that apply a value. -->
     <string name="common.dialog.confirm">Set</string>
-    <!-- Generic action for acknowledging a dialog message. -->
-    <string name="common.dialog.ok">OK</string>
     <!-- Generic error message shown when cover search or loading fails. -->
     <string name="common.error.generic.message">Something went wrong 😢</string>
     <!-- Retry action shown after a generic error. -->
@@ -437,10 +435,6 @@
     <string name="library.filter.show">Show</string>
     <!-- Title for screens and rows that manage audiobook folders. -->
     <string name="library.folders.title">Audiobook folders</string>
-    <!-- Title for the one-time dialog shown from the old audiobook folders shortcut. -->
-    <string name="library.folders.moved.dialog.title">Audiobook folders moved</string>
-    <!-- Body for the one-time dialog shown from the old audiobook folders shortcut. -->
-    <string name="library.folders.moved.dialog.message">You can now manage audiobook folders in Settings.</string>
     <!-- Label on a row of the audiobook folders screen for a folder or file Voice can no longer open, for example after a restore from a backup on a new phone. -->
     <string name="library.folders.no_access">No access</string>
     <!-- Button on a folder row without access. Opens the system picker so Voice may open the folder or file again. -->

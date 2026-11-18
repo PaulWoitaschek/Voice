@@ -134,7 +134,6 @@
     <string name="common.action.save">Enregistrer</string>
     <string name="common.dialog.cancel">Annuler</string>
     <string name="common.dialog.confirm">Définir</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Une erreur s\'est produite 😢</string>
     <string name="common.error.generic.retry">Réessayer</string>
     <string name="cover.crop.hint">Faites glisser pour déplacer ; pincez ou tirez un coin pour redimensionner.</string>
@@ -275,8 +274,6 @@
     <string name="library.filter.not_downloaded">Non téléchargés</string>
     <string name="library.filter.show">Afficher</string>
     <string name="library.folders.title">Dossiers de livres audio</string>
-    <string name="library.folders.moved.dialog.title">Dossiers de livres audio déplacés</string>
-    <string name="library.folders.moved.dialog.message">Vous pouvez désormais gérer les dossiers de livres audio dans les Paramètres.</string>
     <string name="library.folders.no_access">Aucun accès</string>
     <string name="library.folders.no_access.action">Autoriser l\'accès</string>
     <string name="library.folders.no_access.badge">Autorisez à nouveau l\'accès à vos dossiers</string>

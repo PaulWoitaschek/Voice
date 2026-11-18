@@ -128,7 +128,6 @@
     <string name="common.action.save">儲存</string>
     <string name="common.dialog.cancel">取消</string>
     <string name="common.dialog.confirm">確定</string>
-    <string name="common.dialog.ok">確定</string>
     <string name="common.error.generic.message">出了點問題 😢</string>
     <string name="common.error.generic.retry">重試</string>
     <string name="cover.crop.hint">拖曳即可移動，用雙指縮放或拖曳邊角即可調整大小。</string>
@@ -247,8 +246,6 @@
     <string name="library.filter.not_downloaded">未下載</string>
     <string name="library.filter.show">顯示</string>
     <string name="library.folders.title">有聲書資料夾</string>
-    <string name="library.folders.moved.dialog.title">有聲書資料夾換地方了</string>
-    <string name="library.folders.moved.dialog.message">現在可以在「設定」中管理有聲書資料夾了。</string>
     <string name="library.folders.no_access">無法存取</string>
     <string name="library.folders.no_access.action">允許存取</string>
     <string name="library.folders.no_access.badge">請重新允許存取你的資料夾</string>

@@ -131,7 +131,6 @@
     <string name="common.action.save">Gem</string>
     <string name="common.dialog.cancel">Annuller</string>
     <string name="common.dialog.confirm">Angiv</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Noget gik galt 😢</string>
     <string name="common.error.generic.retry">Prøv igen</string>
     <string name="cover.crop.hint">Træk for at flytte. Knib eller træk i et hjørne for at ændre størrelsen.</string>
@@ -261,8 +260,6 @@
     <string name="library.filter.not_downloaded">Ikke downloadet</string>
     <string name="library.filter.show">Vis</string>
     <string name="library.folders.title">Lydbogsmapper</string>
-    <string name="library.folders.moved.dialog.title">Lydbogsmapper er flyttet</string>
-    <string name="library.folders.moved.dialog.message">Du kan nu administrere lydbogsmapper under Indstillinger.</string>
     <string name="library.folders.no_access">Ingen adgang</string>
     <string name="library.folders.no_access.action">Tillad adgang</string>
     <string name="library.folders.no_access.badge">Tillad adgang til dine mapper igen</string>

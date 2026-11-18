@@ -134,7 +134,6 @@
     <string name="common.action.save">Guardar</string>
     <string name="common.dialog.cancel">Cancelar</string>
     <string name="common.dialog.confirm">Definir</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Algo correu mal 😢</string>
     <string name="common.error.generic.retry">Tentar novamente</string>
     <string name="cover.crop.hint">Arraste para mover. Use dois dedos ou puxe um canto para redimensionar.</string>
@@ -275,8 +274,6 @@
     <string name="library.filter.not_downloaded">Não transferidos</string>
     <string name="library.filter.show">Mostrar</string>
     <string name="library.folders.title">Pastas de audiolivros</string>
-    <string name="library.folders.moved.dialog.title">Pastas de audiolivros movidas</string>
-    <string name="library.folders.moved.dialog.message">Agora pode gerir as pastas de audiolivros nas Definições.</string>
     <string name="library.folders.no_access">Sem acesso</string>
     <string name="library.folders.no_access.action">Permitir acesso</string>
     <string name="library.folders.no_access.badge">Volte a permitir o acesso às suas pastas</string>

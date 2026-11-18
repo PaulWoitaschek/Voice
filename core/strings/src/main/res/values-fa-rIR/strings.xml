@@ -131,7 +131,6 @@
     <string name="common.action.save">ذخیره</string>
     <string name="common.dialog.cancel">لغو</string>
     <string name="common.dialog.confirm">انتخاب</string>
-    <string name="common.dialog.ok">باشه</string>
     <string name="common.error.generic.message">مشکلی پیش آمد 😢</string>
     <string name="common.error.generic.retry">تلاش مجدد</string>
     <string name="cover.crop.hint">برای جابه‌جایی بکشید؛ برای تغییر اندازه، دو انگشت را جمع کنید یا گوشه‌ای را بکشید.</string>
@@ -261,8 +260,6 @@
     <string name="library.filter.not_downloaded">دانلودنشده</string>
     <string name="library.filter.show">نمایش</string>
     <string name="library.folders.title">پوشه‌های کتاب صوتی</string>
-    <string name="library.folders.moved.dialog.title">پوشه‌های کتاب صوتی منتقل شدند</string>
-    <string name="library.folders.moved.dialog.message">اکنون می‌توانید پوشه‌های کتاب صوتی را در تنظیمات مدیریت کنید.</string>
     <string name="library.folders.no_access">بدون دسترسی</string>
     <string name="library.folders.no_access.action">اجازه دسترسی</string>
     <string name="library.folders.no_access.badge">دوباره اجازه دسترسی به پوشه‌هایتان را بدهید</string>

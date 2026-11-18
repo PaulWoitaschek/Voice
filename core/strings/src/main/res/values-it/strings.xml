@@ -134,7 +134,6 @@
     <string name="common.action.save">Salva</string>
     <string name="common.dialog.cancel">Annulla</string>
     <string name="common.dialog.confirm">Conferma</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Qualcosa è andato storto 😢</string>
     <string name="common.error.generic.retry">Riprova</string>
     <string name="cover.crop.hint">Trascina per spostare; pizzica o trascina un angolo per ridimensionare.</string>
@@ -275,8 +274,6 @@
     <string name="library.filter.not_downloaded">Non scaricati</string>
     <string name="library.filter.show">Mostra</string>
     <string name="library.folders.title">Cartelle audiolibri</string>
-    <string name="library.folders.moved.dialog.title">Cartelle degli audiolibri spostate</string>
-    <string name="library.folders.moved.dialog.message">Ora puoi gestire le cartelle degli audiolibri nelle Impostazioni.</string>
     <string name="library.folders.no_access">Nessun accesso</string>
     <string name="library.folders.no_access.action">Consenti l\'accesso</string>
     <string name="library.folders.no_access.badge">Consenti di nuovo l\'accesso alle tue cartelle</string>

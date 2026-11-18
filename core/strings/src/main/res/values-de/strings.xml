@@ -131,7 +131,6 @@
     <string name="common.action.save">Speichern</string>
     <string name="common.dialog.cancel">Abbrechen</string>
     <string name="common.dialog.confirm">Okay</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Etwas ist schiefgelaufen 😢</string>
     <string name="common.error.generic.retry">Erneut versuchen</string>
     <string name="cover.crop.hint">Zum Verschieben ziehen. Zum Ändern der Größe mit zwei Fingern zoomen oder an einer Ecke ziehen.</string>
@@ -261,8 +260,6 @@
     <string name="library.filter.not_downloaded">Nicht heruntergeladen</string>
     <string name="library.filter.show">Anzeigen</string>
     <string name="library.folders.title">Hörbuch-Ordner</string>
-    <string name="library.folders.moved.dialog.title">Hörbuch-Ordner verschoben</string>
-    <string name="library.folders.moved.dialog.message">Du kannst Hörbuch-Ordner jetzt in den Einstellungen verwalten.</string>
     <string name="library.folders.no_access">Kein Zugriff</string>
     <string name="library.folders.no_access.action">Zugriff erlauben</string>
     <string name="library.folders.no_access.badge">Zugriff auf Deine Ordner wieder erlauben</string>

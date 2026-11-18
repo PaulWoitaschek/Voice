@@ -134,7 +134,6 @@
     <string name="common.action.save">Guardar</string>
     <string name="common.dialog.cancel">Cancelar</string>
     <string name="common.dialog.confirm">Establecer</string>
-    <string name="common.dialog.ok">Aceptar</string>
     <string name="common.error.generic.message">Algo salió mal 😢</string>
     <string name="common.error.generic.retry">Reintentar</string>
     <string name="cover.crop.hint">Arrastra para mover; pellizca o tira de una esquina para cambiar el tamaño.</string>
@@ -275,8 +274,6 @@
     <string name="library.filter.not_downloaded">No descargados</string>
     <string name="library.filter.show">Mostrar</string>
     <string name="library.folders.title">Carpetas de audiolibros</string>
-    <string name="library.folders.moved.dialog.title">Carpetas de audiolibros trasladadas</string>
-    <string name="library.folders.moved.dialog.message">Ahora puedes gestionar las carpetas de audiolibros en Ajustes.</string>
     <string name="library.folders.no_access">Sin acceso</string>
     <string name="library.folders.no_access.action">Permitir acceso</string>
     <string name="library.folders.no_access.badge">Vuelve a permitir el acceso a tus carpetas</string>

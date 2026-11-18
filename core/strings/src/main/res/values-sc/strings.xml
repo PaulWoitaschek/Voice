@@ -131,7 +131,6 @@
     <string name="common.action.save">Sarva</string>
     <string name="common.dialog.cancel">Annulla</string>
     <string name="common.dialog.confirm">Cunfirma</string>
-    <string name="common.dialog.ok">AB</string>
     <string name="common.error.generic.message">B\'at àpidu carchi problema 😢</string>
     <string name="common.error.generic.retry">Torra a proare</string>
     <string name="cover.crop.hint">Trìsina pro mòere. Imprea duos pòddighes o trìsina un\'àngulu pro cambiare sa mannària.</string>
@@ -261,8 +260,6 @@
     <string name="library.filter.not_downloaded">No iscarrigados</string>
     <string name="library.filter.show">Mustra</string>
     <string name="library.folders.title">Cartellas de sos audiolibros</string>
-    <string name="library.folders.moved.dialog.title">Cartellas de audiolibros tramudadas</string>
-    <string name="library.folders.moved.dialog.message">Como podes manigiare sas cartellas de audiolibros in sas Impostatziones.</string>
     <string name="library.folders.no_access">Chene atzessu</string>
     <string name="library.folders.no_access.action">Permite s\'atzessu</string>
     <string name="library.folders.no_access.badge">Torra a permìtere s\'atzessu a sas cartellas tuas</string>

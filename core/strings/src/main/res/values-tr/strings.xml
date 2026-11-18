@@ -131,7 +131,6 @@
     <string name="common.action.save">Kaydet</string>
     <string name="common.dialog.cancel">İptal</string>
     <string name="common.dialog.confirm">Ayarla</string>
-    <string name="common.dialog.ok">Tamam</string>
     <string name="common.error.generic.message">Bir şeyler ters gitti 😢</string>
     <string name="common.error.generic.retry">Tekrar dene</string>
     <string name="cover.crop.hint">Taşımak için sürükleyin; boyutlandırmak için sıkıştırın veya bir köşeyi sürükleyin.</string>
@@ -261,8 +260,6 @@
     <string name="library.filter.not_downloaded">İndirilmemiş</string>
     <string name="library.filter.show">Göster</string>
     <string name="library.folders.title">Sesli kitap klasörleri</string>
-    <string name="library.folders.moved.dialog.title">Sesli kitap klasörleri taşındı</string>
-    <string name="library.folders.moved.dialog.message">Sesli kitap klasörlerini artık Ayarlar\'da yönetebilirsiniz.</string>
     <string name="library.folders.no_access">Erişim yok</string>
     <string name="library.folders.no_access.action">Erişime izin ver</string>
     <string name="library.folders.no_access.badge">Klasörlerinize yeniden erişim izni verin</string>

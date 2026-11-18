@@ -137,7 +137,6 @@
     <string name="common.action.save">Uložiť</string>
     <string name="common.dialog.cancel">Zrušiť</string>
     <string name="common.dialog.confirm">Nastaviť</string>
-    <string name="common.dialog.ok">OK</string>
     <string name="common.error.generic.message">Niečo sa pokazilo 😢</string>
     <string name="common.error.generic.retry">Skúsiť znovu</string>
     <string name="cover.crop.hint">Potiahnutím posuniete, stiahnutím prstov alebo potiahnutím za roh zmeníte veľkosť.</string>
@@ -289,8 +288,6 @@
     <string name="library.filter.not_downloaded">Nestiahnuté</string>
     <string name="library.filter.show">Zobraziť</string>
     <string name="library.folders.title">Priečinky so zvukovými knihami</string>
-    <string name="library.folders.moved.dialog.title">Priečinky audiokníh presunuté</string>
-    <string name="library.folders.moved.dialog.message">Priečinky audiokníh teraz môžete spravovať v nastaveniach.</string>
     <string name="library.folders.no_access">Bez prístupu</string>
     <string name="library.folders.no_access.action">Povoliť prístup</string>
     <string name="library.folders.no_access.badge">Znova povoľte prístup k svojim priečinkom</string>
