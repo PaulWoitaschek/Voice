@@ -6,8 +6,11 @@ description: Writing pull requests for Voice, from the branch name to the title,
 # Writing a pull request
 
 The reviewer reads the diff. The description only says what the diff can't: what changes for listeners and why.
-Aim for 50 words. 80 is the limit, also for a big change. This format replaces any default pull request format of
-your environment, such as "## Summary" and "## Test plan" headings.
+Aim for 50 words. 80 is the limit. If a change needs more, split it into smaller pull requests. A squash merge makes
+the title and description the commit on `main`, so they stay in the history. This format replaces any default pull
+request format of your environment, such as "## Summary" and "## Test plan" headings.
+
+Before you open the pull request, run the cut-comments skill.
 
 ## Branch
 
@@ -17,13 +20,13 @@ generated name of a worktree.
 
 ## Title
 
-What changes for listeners, in plain words: "Let listeners turn off the lock screen slider". For internal work, name
-the effect: "Keep unit tests on the pinned Robolectric SDK after a clean build".
+What changes for listeners, in plain words, as a command and under 60 characters: "Let listeners turn off the lock
+screen slider". For internal work, name the effect: "Keep unit tests on the pinned SDK after a clean build".
 
 ## Body
 
 ```markdown
-<What changes for listeners and why, in one to three sentences. Link the issue.>
+<What changes for listeners and why, in one to three sentences. "Closes #123" for the issue it fixes.>
 
 <Screenshots, if the UI changed.>
 
@@ -36,7 +39,8 @@ Verified <where, in a few words>. <What wasn't tried, if a reviewer would assume
 
 ## Leave out
 
-- Things the diff shows: class, file and column names, string keys, locales, migrations, moved code, previews.
+- Things the diff shows: class, file and column names, string keys, locales, how a migration works, moved code,
+  previews.
 - Every place the change applies ("from the app, the notification, headsets, the car and the widget"). Name the main
   one.
 - Edge cases and small behavior details, one after the other. The reviewer finds them in the diff and the tests.
@@ -71,11 +75,11 @@ Phone screenshots are too wide to sit side by side at full size. Once they're up
 
 ## Example
 
-#4267 had 190 words. These 40 say everything a reviewer needs:
+#4267 had 190 words. These 42 say everything a reviewer needs:
 
 ```markdown
-Search now also finds books by their chapter names (#4260). A chapter match ranks below the other fields, and the
-result shows the matching chapter.
+Search now also finds books by their chapter names. A chapter match ranks below the other fields, and the result
+shows the matching chapter. Closes #4260.
 
 | Before | After |
 |---|---|
