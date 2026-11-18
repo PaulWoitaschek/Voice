@@ -10,16 +10,16 @@ class PlaybackPersistenceIntervalFeatureFlagTest {
 
   @Test
   fun readsSeconds() {
-    assertEquals(120.seconds, interval("120"))
+    assertEquals(120.seconds, interval(120))
   }
 
   @Test
-  fun fallsBackToThirtySecondsOnInvalidValues() {
-    listOf("", "abc", "0", "-5").forEach {
-      assertEquals(30.seconds, interval(it), it)
+  fun fallsBackToThirtySecondsWithoutAPositiveValue() {
+    listOf(0L, -5L).forEach {
+      assertEquals(30.seconds, interval(it), it.toString())
     }
   }
 
-  private fun interval(value: String): Duration =
+  private fun interval(value: Long): Duration =
     PlaybackPersistenceIntervalFeatureFlag(MemoryFeatureFlag(value)).interval()
 }
