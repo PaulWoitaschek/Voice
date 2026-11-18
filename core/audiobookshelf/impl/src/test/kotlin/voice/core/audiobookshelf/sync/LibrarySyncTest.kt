@@ -16,6 +16,7 @@ import mockwebserver3.Dispatcher
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import mockwebserver3.RecordedRequest
+import mockwebserver3.SocketEffect.CloseSocket
 import okhttp3.OkHttpClient
 import org.junit.After
 import org.junit.Before
@@ -243,6 +244,27 @@ class LibrarySyncTest {
     assertEquals(20_000, current.positionInChapter)
   }
 
+  @Test
+  fun `books that got through before the connection dropped are kept`() = runTest {
+    assertEquals(50, booksKeptAfter(MockResponse.Builder().onResponseStart(CloseSocket()).build()))
+  }
+
+  @Test
+  fun `books that got through before the server failed are kept`() = runTest {
+    assertEquals(50, booksKeptAfter(MockResponse(code = 503)))
+  }
+
+  private suspend fun booksKeptAfter(failure: MockResponse): Int {
+    val written = mutableListOf<List<BookContent>>()
+    val contentRepo = emptyContentRepo()
+    coEvery { contentRepo.put(capture(written)) } returns Unit
+
+    val sync = runCatching { syncLargeLibrary(contentRepo, items(120), failure = failure) }
+
+    assertTrue(sync.isFailure)
+    return written.sumOf { it.size }
+  }
+
   // writes like the real repository, which reads each book again under its lock
   private fun bookRepository(contentRepo: BookContentRepo): BookRepository {
     val bookRepository = mockk<BookRepository>()
@@ -267,8 +289,10 @@ class LibrarySyncTest {
   private suspend fun syncLargeLibrary(
     contentRepo: BookContentRepo,
     items: List<AbsLibraryItem>,
+    failure: MockResponse? = null,
   ) {
     val itemsById = items.associateBy { it.id }
+    var batches = 0
     server.dispatcher =
       object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
@@ -284,6 +308,7 @@ class LibrarySyncTest {
                 ),
               )
             }
+            path == "/api/items/batch/get" && failure != null && ++batches > 1 -> failure
             path == "/api/items/batch/get" -> {
               val ids =
                 audiobookshelfJson
