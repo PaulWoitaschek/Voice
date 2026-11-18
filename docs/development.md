@@ -88,8 +88,8 @@ Compose rules come from Slack's [compose-lints](https://slackhq.github.io/compos
 
 To release a new version, trigger the [Release Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/release.yml)
 
-This creates a draft GitHub release with the APK and uploads the Play AAB to the Play Store's internal track. Publishing the
-draft creates the tag, and F-Droid builds from the tag.
+This creates a draft GitHub release with the free and the Play APK. It also uploads the Play AAB to the Play Store's
+internal track. Publishing the draft creates the tag, and F-Droid builds from the tag.
 
 Google Play has its own pace, because its review takes days. To send the latest published release to review, trigger the
 [Promote to Play Workflow](https://github.com/PaulWoitaschek/Voice/actions/workflows/play_promote.yml). It starts a 0.1%
@@ -119,16 +119,16 @@ The `release` environment requires these secrets:
 | `PLAY_SIGNING_STORE_PASSWORD`               | Play release keystore password.                                 |
 | `PLAY_SIGNING_KEY_ALIAS`                    | Play release key alias.                                         |
 | `PLAY_SIGNING_KEY_PASSWORD`                 | Play release key password.                                      |
-| `GH_SIGNING_KEYSTORE`                       | GitHub/free release keystore, base64 encoded.                   |
-| `GH_SIGNING_STORE_PASSWORD`                 | GitHub/free release keystore password.                          |
-| `GH_SIGNING_KEY_ALIAS`                      | GitHub/free release key alias.                                  |
-| `GH_SIGNING_KEY_PASSWORD`                   | GitHub/free release key password.                               |
+| `GH_SIGNING_KEYSTORE`                       | GitHub release keystore, base64 encoded.                        |
+| `GH_SIGNING_STORE_PASSWORD`                 | GitHub release keystore password.                               |
+| `GH_SIGNING_KEY_ALIAS`                      | GitHub release key alias.                                       |
+| `GH_SIGNING_KEY_PASSWORD`                   | GitHub release key password.                                    |
 | `FIREBASE_APP_DISTRIBUTION_SERVICE_ACCOUNT` | Firebase App Distribution service account JSON, base64 encoded. |
 
 ### Releasing to F-Droid, IzzyDroid and GitHub
 
 The draft gets its git tag only when it's published. F-Droid builds every tag that matches `^[\d.]+-\d+$`, usually a few
-days later, and IzzyDroid picks up the APK from the published release. Neither has a staged rollout, so publish the
+days later, and IzzyDroid picks up the free APK from the published release. Neither has a staged rollout, so publish the
 draft only once the Play rollout has reached 100%.
 
 A version that turns out broken on Play is never published. Keep its draft until the next release is published: the

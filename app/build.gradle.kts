@@ -136,7 +136,7 @@ val validatePlayGoogleServices =
     doLast {
       check(File(playGoogleServicesJsonPath).canRead()) {
         "app/src/play/google-services.json is required for Play builds. " +
-          "Use the free variant for F-Droid/GitHub builds."
+          "Use the free variant to build without Firebase."
       }
     }
   }

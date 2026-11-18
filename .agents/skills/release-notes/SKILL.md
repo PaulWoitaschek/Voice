@@ -6,7 +6,7 @@ description: Writing the GitHub release notes for a Voice release. Use when aske
 # Release notes
 
 The release workflow creates a draft release from `.github/release_notes_template.md`. Fill in its title and its
-`## What's New`, and keep the "Support Voice" block below it as it is.
+`## What's New`, and keep the "Which APK?" and "Support Voice" blocks below it as they are.
 
 Find the changes with `git log <previous tag>..<tag>` and read the pull requests behind them.
 
