@@ -68,13 +68,23 @@ internal class LibrarySync(
 
     // each write updates the whole library, so a large one shows in a few steps
     changed.chunked(BOOKS_PER_WRITE).forEach { books ->
-      store(
-        books.chunked(DETAILS_CHUNK_SIZE).flatMap { chunk ->
-          api.items(BatchGetRequest(chunk.map { it.id })).libraryItems.filter {
-            !it.media.tracks.isNullOrEmpty()
-          }
-        },
-      )
+      val fetched = mutableListOf<AbsLibraryItem>()
+      try {
+        books.chunked(DETAILS_CHUNK_SIZE).forEach { chunk ->
+          fetched +=
+            api.items(BatchGetRequest(chunk.map { it.id })).libraryItems.filter {
+              !it.media.tracks.isNullOrEmpty()
+            }
+        }
+      } catch (e: IOException) {
+        // on a weak connection, the next sync continues from the books that got through
+        store(fetched)
+        throw e
+      } catch (e: HttpException) {
+        store(fetched)
+        throw e
+      }
+      store(fetched)
     }
 
     val onServer = items.map { AudiobookshelfIds.bookId(it.id) }.toSet()
