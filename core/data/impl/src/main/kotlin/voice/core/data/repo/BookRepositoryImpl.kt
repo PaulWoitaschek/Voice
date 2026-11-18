@@ -73,10 +73,11 @@ public class BookRepositoryImpl(
     update: (BookContent) -> BookContent,
   ) {
     mutex.withLock {
-      val updated = ids.mapNotNull { id ->
-        val content = contentRepo.get(id) ?: return@mapNotNull null
-        update(content).takeIf { it != content }
-      }
+      val updated =
+        contentRepo.all().mapNotNull { content ->
+          if (content.id !in ids) return@mapNotNull null
+          update(content).takeIf { it != content }
+        }
       contentRepo.put(updated)
     }
   }

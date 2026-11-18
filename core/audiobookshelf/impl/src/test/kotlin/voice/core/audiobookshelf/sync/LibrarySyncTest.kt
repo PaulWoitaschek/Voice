@@ -215,6 +215,18 @@ class LibrarySyncTest {
     assertEquals(20_000, current.positionInChapter)
   }
 
+  @Test
+  fun `books that got through before the connection failed are kept`() = runTest {
+    val written = mutableListOf<List<BookContent>>()
+    val contentRepo = emptyContentRepo()
+    coEvery { contentRepo.put(capture(written)) } returns Unit
+
+    val sync = runCatching { syncLargeLibrary(contentRepo, items(120), answeredBatches = 1) }
+
+    assertTrue(sync.isFailure)
+    assertEquals(50, written.sumOf { it.size })
+  }
+
   // writes like the real repository, which reads each book again under its lock
   private fun bookRepository(contentRepo: BookContentRepo): BookRepository {
     val bookRepository = mockk<BookRepository>()
@@ -239,8 +251,10 @@ class LibrarySyncTest {
   private suspend fun syncLargeLibrary(
     contentRepo: BookContentRepo,
     items: List<AbsLibraryItem>,
+    answeredBatches: Int = Int.MAX_VALUE,
   ) {
     val itemsById = items.associateBy { it.id }
+    var batches = 0
     server.dispatcher =
       object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
@@ -255,6 +269,9 @@ class LibrarySyncTest {
                   total = items.size,
                 ),
               )
+            }
+            path == "/api/items/batch/get" && ++batches > answeredBatches -> {
+              MockResponse(code = 503)
             }
             path == "/api/items/batch/get" -> {
               val ids =
