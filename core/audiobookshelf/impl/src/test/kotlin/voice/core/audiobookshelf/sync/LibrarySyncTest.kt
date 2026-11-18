@@ -164,6 +164,47 @@ class LibrarySyncTest {
   }
 
   @Test
+  fun `a seek while the sync stores a book keeps its place`() = runTest {
+    val before = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")), updatedAt = 1_000)
+    val previousChapters = before.chapters()
+    var current = before.toBookContent(previousChapters, existing = null)
+    val contentRepo =
+      mockk<BookContentRepo> {
+        coEvery { all() } answers { listOf(current) }
+        coEvery { get(current.id) } answers { current }
+        coEvery { put(any<List<BookContent>>()) } answers
+          {
+            firstArg<List<BookContent>>().forEach { current = it }
+          }
+      }
+    val chapterRepo =
+      mockk<ChapterRepo> {
+        coEvery { get(any<ChapterId>()) } answers
+          {
+            previousChapters.find { it.id == firstArg() }
+          }
+        coEvery { put(any<List<Chapter>>()) } answers
+          {
+            // the listener seeks while the sync writes the chapters
+            current = current.copy(positionInChapter = 20_000)
+          }
+      }
+    val changed = before.copy(updatedAt = 2_000)
+    server.enqueue(json(LibraryItemsResponse(results = listOf(changed), total = 1)))
+    server.enqueue(json(BatchGetResponse(listOf(changed))))
+
+    sync(
+      changed,
+      contentRepo,
+      chapterRepo,
+      bookmarkRepo = mockk { coEvery { bookmarks(any()) } returns emptyList() },
+      listed = true,
+    )
+
+    assertEquals(20_000, current.positionInChapter)
+  }
+
+  @Test
   fun `a seek while the sync writes a batch of books keeps its place`() = runTest {
     val before = item(tracks = listOf(track(1, 0.0, 60.0, "a.mp3")), updatedAt = 1_000)
     val chapters = before.chapters()
