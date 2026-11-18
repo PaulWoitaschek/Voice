@@ -111,6 +111,7 @@ fun BookPlayScreen(bookId: BookId) {
       is BookPlayDialogViewState.SelectChapterDialog -> {
         ChapterSheet(
           dialogState = dialogState,
+          currentChapterNumber = viewState.chapterNumber,
           playing = viewState.playing,
           onChapterClick = viewModel::onChapterClick,
           onDismiss = viewModel::dismissDialog,

@@ -44,12 +44,13 @@ import voice.core.ui.segmentedShape
 @Composable
 internal fun ChapterSheet(
   dialogState: BookPlayDialogViewState.SelectChapterDialog,
+  currentChapterNumber: Int,
   playing: Boolean,
   onChapterClick: (number: Int) -> Unit,
   onDismiss: () -> Unit,
 ) {
   val items = dialogState.items
-  val selectedIndex = items.indexOfFirst { it.active }
+  val selectedIndex = items.indexOfFirst { it.number == currentChapterNumber }
   ModalBottomSheet(
     onDismissRequest = onDismiss,
     sheetState =
@@ -85,6 +86,7 @@ internal fun ChapterSheet(
       itemsIndexed(items, key = { _, item -> item.number }) { index, chapter ->
         ChapterItem(
           chapter = chapter,
+          active = index == selectedIndex,
           played = selectedIndex >= 0 && index < selectedIndex,
           playing = playing,
           shape = segmentedShape(index = index, count = items.size),
@@ -98,6 +100,7 @@ internal fun ChapterSheet(
 @Composable
 private fun ChapterItem(
   chapter: BookPlayDialogViewState.SelectChapterDialog.ItemViewState,
+  active: Boolean,
   played: Boolean,
   playing: Boolean,
   shape: Shape,
@@ -111,12 +114,12 @@ private fun ChapterItem(
     onClick = onClick,
     modifier =
       modifier.fillMaxWidth().semantics {
-        selected = chapter.active
-        if (chapter.active) contentDescription = currentDescription
+        selected = active
+        if (active) contentDescription = currentDescription
       },
     shape = shape,
-    color = if (chapter.active) colors.primaryContainer else colors.surfaceContainerHigh,
-    contentColor = if (chapter.active) colors.onPrimaryContainer else colors.onSurface,
+    color = if (active) colors.primaryContainer else colors.surfaceContainerHigh,
+    contentColor = if (active) colors.onPrimaryContainer else colors.onSurface,
   ) {
     Row(
       modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
@@ -126,12 +129,12 @@ private fun ChapterItem(
         modifier =
           Modifier.size(44.dp)
             .background(
-              color = if (chapter.active) colors.primary else colors.secondaryContainer,
-              shape = if (chapter.active) MaterialShapes.Cookie9Sided.toShape() else CircleShape,
+              color = if (active) colors.primary else colors.secondaryContainer,
+              shape = if (active) MaterialShapes.Cookie9Sided.toShape() else CircleShape,
             ),
         contentAlignment = Alignment.Center,
       ) {
-        if (chapter.active) {
+        if (active) {
           NowPlayingBars(playing = playing, color = colors.onPrimary)
         } else {
           Text(
@@ -143,7 +146,7 @@ private fun ChapterItem(
       }
       Spacer(Modifier.width(16.dp))
       val nameStyle =
-        if (chapter.active) MaterialTheme.typography.titleMediumEmphasized
+        if (active) MaterialTheme.typography.titleMediumEmphasized
         else MaterialTheme.typography.bodyLarge
       Text(
         modifier = Modifier.weight(1F),
@@ -157,7 +160,7 @@ private fun ChapterItem(
       Text(
         text = chapter.time,
         style = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum"),
-        color = if (chapter.active) colors.onPrimaryContainer else colors.onSurfaceVariant,
+        color = if (active) colors.onPrimaryContainer else colors.onSurfaceVariant,
       )
     }
   }

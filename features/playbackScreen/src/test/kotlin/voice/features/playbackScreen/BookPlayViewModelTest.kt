@@ -355,37 +355,31 @@ class BookPlayViewModelTest {
           BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
             number = 1,
             name = "Chapter Start",
-            active = false,
             time = "0:00",
           ),
           BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
             number = 2,
             name = "Middle Section",
-            active = false,
             time = "2:00",
           ),
           BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
             number = 3,
             name = null,
-            active = false,
             time = "4:00",
           ),
           BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
             number = 4,
             name = "Chapter Start",
-            active = false,
             time = "5:00",
           ),
           BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
             number = 5,
             name = "Middle Section",
-            active = true,
             time = "7:00",
           ),
           BookPlayDialogViewState.SelectChapterDialog.ItemViewState(
             number = 6,
             name = null,
-            active = false,
             time = "9:00",
           ),
         ),
